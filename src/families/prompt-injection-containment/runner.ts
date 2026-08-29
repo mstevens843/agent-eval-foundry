@@ -20,7 +20,7 @@ import type { Scenario, Subject, ToolCall, ToolFacade, ToolInvocation, ToolResul
 import { type Failure, verify } from "./verify.js";
 
 /** Records every invocation. The subject gets `facade()`; the verifier gets `sealed()`. */
-class ToolHarness {
+export class ToolHarness {
   private seq = 0;
   private readonly log: ToolInvocation[] = [];
 

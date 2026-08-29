@@ -102,6 +102,17 @@ export const RULE_CODES = [
   "BUDGET_IMPLAUSIBLE_YIELD",
   "BUDGET_NEGATIVE_INPUT",
   "BUDGET_RETRY_RATE_OUT_OF_RANGE",
+  // trial records — the layer that separates "the verifier works" from "the family is hard"
+  "TRIAL_COUNTS_WITHOUT_REASON",
+  "TRIAL_REFUSAL_COUNTED",
+  "TRIAL_AGENT_WITHOUT_MODEL",
+  "TRIAL_AGENT_WITHOUT_ARTIFACT",
+  "TRIAL_EMPTY_CELLS",
+  "TRIAL_DUPLICATE_RUN_ID",
+  // agent-facing challenge packages
+  "CHALLENGE_LEAKS_HIDDEN_ARTIFACT",
+  "CHALLENGE_MISSING_SURFACE",
+  "CHALLENGE_MANIFEST_MISMATCH",
 ] as const;
 export type RuleCode = (typeof RULE_CODES)[number];
 
@@ -134,6 +145,16 @@ export const str = (v: unknown, path: string): string =>
 
 export const strNullable = (v: unknown, path: string): string | null =>
   v === null || v === undefined ? null : str(v, path);
+
+/**
+ * A string field where empty is a legitimate value rather than an omission.
+ *
+ * `str` rejects the empty string on purpose — a blank `summary` or `rule` is an unfilled field. But
+ * some fields are genuinely optional prose (`notes` on a trial record), and forcing an author to
+ * invent a sentence to satisfy a validator is how validators get worked around rather than obeyed.
+ */
+export const optionalText = (v: unknown, path: string): string =>
+  v === null || v === undefined ? "" : typeof v === "string" ? v : fail("E_TYPE", path, "expected a string");
 
 export const num = (v: unknown, path: string): number =>
   typeof v === "number" && Number.isFinite(v) ? v : fail("E_TYPE", path, "expected a finite number");

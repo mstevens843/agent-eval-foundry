@@ -14,6 +14,8 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { measure } from "./axis-meter.js";
+import { checkChallengePackage } from "./challenge/package-check.js";
+import { buildChallengePackage } from "./challenge/package.js";
 import {
   ALL_SUBJECTS,
   referenceFailures,
@@ -40,7 +42,9 @@ import { renderCrossFamilyReport, renderFamilyReport } from "./reports/family-re
 import { renderFamilyDiversityReport, renderLedgerReport } from "./reports/ledger-report.js";
 import { renderMechanismReport, renderMutantReport } from "./reports/registry-report.js";
 import { renderShipReport } from "./reports/ship-report.js";
+import { computeEvidence, renderTrialReadinessReport } from "./reports/trial-report.js";
 import { SOURCES, getSource } from "./sources/index.js";
+import { importAgentTrials, measuredScenarios, runLocalTrials, scenarioSetId } from "./trials/orchestrate.js";
 
 const USAGE = `agent-eval-foundry — discover, screen and select agent-benchmark task families
 
@@ -67,7 +71,11 @@ FAMILIES (run a measured mini-benchmark)
   family run [--out f]           run reference + mutants, emit the result matrix
   family report [--out f]        family report: policy, mutants, axis structure
   family axis [--out f]          axis report for the family matrix
-  cross-family [--out f]         compare measured families; refuses to add their axes
+  cross-family [--out f]         compare measured families; verdict refused/partial/measured
+  family trials [--out f]        trial-readiness: what mutants prove, what they do not
+  challenge build [--out dir]    emit the agent-facing package (hidden artifacts excluded)
+  trials local [--out f]         run every checked-in subject, emit trial records
+  trials import <dir> [--out f]  ingest agent attempts from <dir>/<run>/metadata.json
 
 PRODUCTION
   scaffold --shape <file> [--out dir]
@@ -218,6 +226,7 @@ function budgetCommand(argv: readonly string[]): string {
 }
 
 function familyCommand(sub: string, root: string): string {
+  void root;
   const run = runFamily(ALL_SUBJECTS);
   const failures = referenceFailures(run);
   if (failures.length > 0 && sub !== "scenarios") {
@@ -248,9 +257,53 @@ function familyCommand(sub: string, root: string): string {
       return renderFamilyReport({ run, axis: measure(toMatrix(run), { nullTrials: 3 }) });
     case "axis":
       return renderReport(measure(toMatrix(run), { nullTrials: 3 }));
+    case "trials": {
+      const { run: r, trials, evidence } = familyEvidenceFor(root);
+      return renderTrialReadinessReport(r, trials, evidence);
+    }
     default:
       throw new Error(`unknown family subcommand "${sub}"; expected scenarios | run | report | axis`);
   }
+}
+
+function challengeCommand(argv: readonly string[], root: string): string {
+  const typesSource = readFileSync(join(root, "src/families/prompt-injection-containment/types.ts"), "utf8");
+  const pkg = buildChallengePackage(typesSource, scenarioSetId(measuredScenarios()));
+  // Grade the package before writing it. The checker does not import the builder.
+  const check = checkChallengePackage(pkg.files);
+  const dir = flag(argv, "--out");
+  if (dir !== null) {
+    for (const f of pkg.files) {
+      const target = join(dir, f.path);
+      mkdirSync(dirname(target), { recursive: true });
+      writeFileSync(target, f.content, "utf8");
+    }
+    process.stderr.write(`wrote ${pkg.files.length} files to ${dir}/\n`);
+  }
+  return [
+    `# Challenge package: ${pkg.familyId}`,
+    "",
+    `${check.files} visible files, ${check.bytes} bytes, ${check.examples} worked example(s),`,
+    `all ${check.specCodesFound} policy rule codes present in SPEC.md.`,
+    "",
+    "| file |",
+    "|---|",
+    ...pkg.files.map((f) => `| \`${f.path}\` |`),
+    "",
+    `Hidden and verified absent: ${pkg.manifest.hiddenArtifacts.map((h) => `\`${h}\``).join(", ")}.`,
+    "Checked by content as well as filename, so renaming a leaked file does not defeat it.",
+    "",
+    dir === null ? "_Not written — pass `--out <dir>`._" : `Written to \`${dir}/\`.`,
+    "",
+  ].join("\n");
+}
+
+function familyEvidenceFor(root: string) {
+  const run = runFamily(ALL_SUBJECTS);
+  const trials = runLocalTrials();
+  const agent = importAgentTrials(join(root, "trials/prompt-injection-containment"));
+  const all = { ...trials, records: [...trials.records, ...agent] };
+  return { run, trials: all, evidence: computeEvidence(run, all) };
 }
 
 function crossFamilyCommand(root: string): string {
@@ -306,7 +359,15 @@ function allCommand(argv: readonly string[], root: string): string {
   write("mutant-bank.md", renderMutantReport(registry, cov));
   write("candidate-ledger.md", renderLedgerReport(registry));
   write("family-diversity.md", renderFamilyDiversityReport(registry.shapes));
-  write("ship-recommendation.md", renderShipReport(registry.shapes, registry));
+  const ev = familyEvidenceFor(root);
+  write(
+    "ship-recommendation.md",
+    renderShipReport(registry.shapes, registry, { "prompt-injection-containment": ev.evidence }),
+  );
+  write(
+    "prompt-injection-containment-trial-readiness.md",
+    renderTrialReadinessReport(ev.run, ev.trials, ev.evidence),
+  );
   const inputs = { ...MEASURED_DEFAULTS, totalUsd: 100_000, labourRateUsdPerHour: 120 };
   assertBudgetInputs(inputs);
   assertPlanHonest(planBudget(inputs));
@@ -355,6 +416,29 @@ export function main(argv: readonly string[]): number {
       case "cross-family":
         emit(argv, crossFamilyCommand(root));
         return 0;
+      case "challenge": {
+        // Not `emit`: --out names a DIRECTORY here, as it does for `scaffold`. Summary to stdout.
+        process.stdout.write(challengeCommand(argv, root));
+        return 0;
+      }
+      case "trials": {
+        const sub = positional(argv, 1) ?? "local";
+        if (sub === "local") {
+          emit(argv, `${JSON.stringify(runLocalTrials(), null, 2)}\n`);
+          return 0;
+        }
+        if (sub === "import") {
+          const dir = positional(argv, 2);
+          if (dir === undefined) throw new Error("trials import needs a directory");
+          const records = importAgentTrials(dir);
+          emit(
+            argv,
+            `${JSON.stringify({ familyId: "prompt-injection-containment", scenarioSetId: scenarioSetId(measuredScenarios()), records }, null, 2)}\n`,
+          );
+          return 0;
+        }
+        throw new Error(`unknown trials subcommand "${sub}"; expected local | import`);
+      }
       case "mechanisms": {
         const r = loadRegistry(root);
         emit(argv, renderMechanismReport(r, coverage(r)));

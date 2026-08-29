@@ -13,6 +13,7 @@
 
 import { RULES } from "../families/prompt-injection-containment/policy.js";
 import type { CellResult, RunResult } from "../families/prompt-injection-containment/runner.js";
+import { type FamilyBank, computeOverlap } from "../trials/bank.js";
 import type { AxisReport, Matrix } from "../types.js";
 
 const pct = (n: number, d: number): string => (d === 0 ? "n/a" : `${((100 * n) / d).toFixed(0)}%`);
@@ -161,19 +162,18 @@ export function renderCrossFamilyReport(families: readonly FamilyAxis[]): string
   const allMech = new Set(families.flatMap((f) => f.mechanisms));
   const shared = [...allMech].filter((m) => families.filter((f) => f.mechanisms.includes(m)).length > 1);
 
-  // Do the banks overlap at all? This is the question that decides whether a combined number means
-  // anything, so it is computed rather than assumed.
-  const banks = families.map((f) => new Set(f.matrix.subjects.map((s) => s.id)));
-  const overlaps: string[] = [];
-  for (let i = 0; i < banks.length; i += 1) {
-    for (let j = i + 1; j < banks.length; j += 1) {
-      const a = banks[i];
-      const b = banks[j];
-      if (a === undefined || b === undefined) continue;
-      const both = [...a].filter((x) => b.has(x));
-      if (both.length > 0) overlaps.push(`${families[i]?.name} ∩ ${families[j]?.name}: ${both.join(", ")}`);
-    }
-  }
+  // The verdict is computed against a stated threshold rather than being a permanent refusal:
+  // refused / partial / measured, depending on how many subjects attempted every family.
+  const overlap = computeOverlap(
+    families.map(
+      (f): FamilyBank => ({
+        familyId: f.name,
+        matrix: f.matrix,
+        provenance: f.provenance,
+        agentDerived: /frontier|submitted/.test(f.provenance),
+      }),
+    ),
+  );
 
   return [
     "# Cross-family diversity",
@@ -190,25 +190,27 @@ export function renderCrossFamilyReport(families: readonly FamilyAxis[]): string
         `| \`${f.name}\` | ${f.axis.instanceCount} | ${f.axis.subjectCount} | ${f.axis.blindInstances.length} | ${f.axis.distinctMeasurements} | **${f.axis.independentAxes}** | ${f.provenance} |`,
     ),
     "",
-    "## Why the axes cannot simply be added",
+    "## Can the axes be combined?",
     "",
-    `Naively the portfolio measures ${totalAxes} things. That number is arithmetic, not evidence.`,
+    "| | |",
+    "|---|---|",
+    `| verdict | **${overlap.verdict.toUpperCase()}** |`,
+    `| subjects shared by every family | ${overlap.sharedSubjects.length} |`,
+    `| threshold for a measured claim | ${overlap.threshold} |`,
+    `| naive sum (not a result) | ${totalAxes} |`,
     "",
-    "An axis count is a property of a suite **paired with the bank it is graded against**. A catch set",
-    "is the set of subjects an instance separates from correct, so comparing catch sets across two",
-    "families requires the same subjects to appear in both. Here they do not:",
+    overlap.rationale,
     "",
-    overlaps.length === 0
-      ? "**The banks are completely disjoint.** No subject appears in more than one family."
-      : `Overlapping subjects: ${overlaps.join("; ")}`,
-    "",
-    "Build the union matrix and every cross cell is `null` — not measured. Each family's instances",
-    "separate only its own subjects, so the union's antichain width is exactly the sum of the parts by",
-    "construction, whatever the families actually measure. Two families testing the *identical*",
-    "mechanism against disjoint banks would also 'add', which is the reductio.",
-    "",
-    "So the honest statement is: **each family independently yields the axis count above, against its",
-    "own bank, and no combined figure is available.**",
+    overlap.verdict === "refused"
+      ? [
+          "An axis count is a property of a suite **paired with the bank it is graded against**. A catch",
+          "set is the set of subjects an instance separates from correct, so comparing catch sets across",
+          "families requires the same subjects to appear in both.",
+          "",
+          "**So the honest statement is: each family independently yields the axis count above, against",
+          "its own bank, and no combined figure is available.**",
+        ].join("\n")
+      : `Shared subjects: ${overlap.sharedSubjects.join(", ")}.`,
     "",
     "## What can be compared",
     "",

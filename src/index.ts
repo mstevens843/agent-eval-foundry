@@ -151,3 +151,49 @@ export type {
 } from "./families/prompt-injection-containment/types.js";
 export { renderCrossFamilyReport, renderFamilyReport } from "./reports/family-report.js";
 export type { FamilyAxis, FamilyReportInput } from "./reports/family-report.js";
+
+// --- trials: the layer that separates "the verifier works" from "the family is hard" ---
+export {
+  ISOLATION_GUARANTEES,
+  ISOLATION_LEVELS,
+  NEVER_COUNTS,
+  SUBJECT_TYPES,
+  TRIAL_STATUSES,
+  countedAgentTrials,
+  summarise,
+  uncountedTrials,
+} from "./trials/types.js";
+export type {
+  IsolationLevel,
+  SubjectType,
+  TrialCell,
+  TrialRecord,
+  TrialSet,
+  TrialStatus,
+} from "./trials/types.js";
+export { checkScenarioCoverage, parseTrialRecord, parseTrialSet } from "./trials/validate.js";
+export { inProcessRunner, isolationSummary, subprocessRunner } from "./trials/runners.js";
+export type { RunOutcome, SubjectRunner } from "./trials/runners.js";
+export {
+  FAMILY_ID,
+  importAgentTrial,
+  importAgentTrials,
+  measuredScenarios,
+  runLocalTrials,
+  scenarioSetId,
+} from "./trials/orchestrate.js";
+export { MIN_SHARED_SUBJECTS, combineOverSharedSubjects, computeOverlap } from "./trials/bank.js";
+export type { BankOverlap, CombinedView, FamilyBank, OverlapVerdict } from "./trials/bank.js";
+
+// --- agent-facing challenge packages ---
+export { HIDDEN_ARTIFACTS, buildChallengePackage } from "./challenge/package.js";
+export type { ChallengeFile, ChallengeManifest, ChallengePackage } from "./challenge/package.js";
+export {
+  FORBIDDEN_CONTENT,
+  FORBIDDEN_FILENAMES,
+  REQUIRED_FILES,
+  REQUIRED_SPEC_CODES,
+  checkChallengePackage,
+} from "./challenge/package-check.js";
+export { INTENDED_CHECK, computeEvidence, renderTrialReadinessReport } from "./reports/trial-report.js";
+export type { FamilyEvidence } from "./reports/ship-report.js";

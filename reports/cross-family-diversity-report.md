@@ -10,23 +10,23 @@ portfolio total. **They do not, and the reason is worth more than the number wou
 | `durable-approval-outbox` | 24 | 10 | 7 | 9 | **3** | 10 engines submitted by frontier models attempting the task |
 | `prompt-injection-containment` | 128 | 9 | 4 | 7 | **4** | 9 mutants written alongside the verifier |
 
-## Why the axes cannot simply be added
+## Can the axes be combined?
 
-Naively the portfolio measures 7 things. That number is arithmetic, not evidence.
+| | |
+|---|---|
+| verdict | **REFUSED** |
+| subjects shared by every family | 0 |
+| threshold for a measured claim | 3 |
+| naive sum (not a result) | 7 |
 
-An axis count is a property of a suite **paired with the bank it is graded against**. A catch set
-is the set of subjects an instance separates from correct, so comparing catch sets across two
-families requires the same subjects to appear in both. Here they do not:
+No subject attempted more than one family, so co-failure across families is unobservable. The union matrix is null in every cross cell and its antichain width is the sum of the parts by construction — two families testing the identical mechanism would also 'add'. No combined count is available.
 
-**The banks are completely disjoint.** No subject appears in more than one family.
+An axis count is a property of a suite **paired with the bank it is graded against**. A catch
+set is the set of subjects an instance separates from correct, so comparing catch sets across
+families requires the same subjects to appear in both.
 
-Build the union matrix and every cross cell is `null` — not measured. Each family's instances
-separate only its own subjects, so the union's antichain width is exactly the sum of the parts by
-construction, whatever the families actually measure. Two families testing the *identical*
-mechanism against disjoint banks would also 'add', which is the reductio.
-
-So the honest statement is: **each family independently yields the axis count above, against its
-own bank, and no combined figure is available.**
+**So the honest statement is: each family independently yields the axis count above, against
+its own bank, and no combined figure is available.**
 
 ## What can be compared
 

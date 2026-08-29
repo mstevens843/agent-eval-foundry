@@ -8,9 +8,11 @@ anything. It does not run evals against foundation models. It decides what is wo
 you spend model budget on it, produces the family, measures what the family actually separates, and
 grades its own graders.
 
-Two families are now measured end to end. One was inherited from a shipped Terminal-Bench 3 task; the
-**second was produced by this repository** — reference implementation, nine mutants, generated
-scenarios, verifier, matrix and axis report, all runnable with `node dist/cli.js family run`.
+Two families are measured end to end. One was inherited from a shipped Terminal-Bench 3 task; the
+**second was produced by this repository** and is now **agent-trial-ready**: it emits a challenge
+package with the answer key verifiably excluded, runs submitted artifacts under real subprocess
+isolation, and ingests the results through counting rules that refuse to turn a provider refusal into
+a zero.
 
 ---
 
@@ -66,6 +68,27 @@ first and third are statements about difficulty. The second is a statement about
 that could plausibly fail the containment family has attempted it yet, which is why the ship gate
 holds it at **HOLD** rather than SHIP.
 
+## The lifecycle
+
+Every command below is real; nothing in this list is aspirational.
+
+| # | step | command | what it produces |
+|---|---|---|---|
+| 1 | define the mechanism | `foundry mechanisms` | 14 mechanisms, each with a mutant that can detect it |
+| 2 | define the task shape | `foundry ship` | 17-gate readiness table per family |
+| 3 | generate scenarios | `foundry family scenarios` | 432-point space → 128 measured |
+| 4 | run reference + mutants | `foundry trials local` | normalized trial records |
+| 5 | verify the hidden checks fire | `foundry family trials` | trial-readiness report |
+| 6 | package the agent-facing challenge | `foundry challenge build --out d` | 8 visible files, hidden artifacts excluded and checked |
+| 7 | run or import real trials | `foundry trials import <dir>` | agent artifacts graded under subprocess isolation |
+| 8 | measure axes | `foundry family axis` | antichain width + null-model calibration |
+| 9 | apply the ship gate | `foundry ship` | SHIP / HOLD / NOT-READY |
+| 10 | budget the next work | `foundry budget --total N --rate R` | families, instances, axes, and what is not affordable |
+
+**Step 7 is the one that matters and the one not yet done.** Steps 1–6 and 8–10 have run; no model
+has attempted the containment family, so it sits at HOLD. `plans/prompt-injection-agent-trials.md`
+is the executable plan; the ingestion path is built and tested.
+
 ## Architecture
 
 ```
@@ -95,6 +118,13 @@ holds it at **HOLD** rather than SHIP.
                      └───────────────┬──────────────────────────────┘
                                      ▼
                      ┌──────────────────────────────────────────────┐
+  TRIAL              │  challenge/  agent-facing package + leak check │
+                     │  trials/     records · runners · import · bank │
+                     │    in-process → subprocess → (container)      │
+                     │    refusals and timeouts can never count      │
+                     └───────────────┬──────────────────────────────┘
+                                     ▼
+                     ┌──────────────────────────────────────────────┐
   EVIDENCE           │  sources/  manual · durable-outbox · swebench │
                      │            + 4 declared, unimplemented       │
                      └───────────────┬──────────────────────────────┘
@@ -106,7 +136,7 @@ holds it at **HOLD** rather than SHIP.
                      └───────────────┬──────────────────────────────┘
                                      ▼
                      ┌──────────────────────────────────────────────┐
-  DECISION           │  ship-report.ts   11-gate ship/no-ship table │
+  DECISION           │  ship-report.ts   17-gate ship/no-ship table │
                      │  budget.ts        what does $100k buy?       │
                      │  budget-check.ts  ← rejects fake plans       │
                      └──────────────────────────────────────────────┘
@@ -160,6 +190,23 @@ node dist/cli.js families     # axes, not task count
 node dist/cli.js ship         # the gate table, per family
 node dist/cli.js sources      # every matrix source, implemented and planned
 ```
+
+### Take a family to an agent
+
+```bash
+node dist/cli.js challenge build --out /tmp/pic    # visible package; answer key excluded and checked
+node dist/cli.js trials local                      # reference + mutants as normalized records
+node dist/cli.js family trials                     # what mutants prove, and what they do not
+node dist/cli.js trials import trials/prompt-injection-containment
+```
+
+Imported artifacts always run at `subprocess` isolation — not configurable. An agent-written module
+must not execute in the same memory as the thing grading it, which is how all three of the source
+project's verifier bypasses would have worked.
+
+A refusal, timeout or infrastructure error **can never count**: `TRIAL_REFUSAL_COUNTED` is a hard
+validation error, not a convention. The source project recorded three provider-level refusals as
+reward 0.0 and had to explain in prose that the zero meant no attempt was made.
 
 ### Build and measure a family
 
@@ -271,7 +318,7 @@ into one.
 pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm verify
 ```
 
-**145 tests** across five files. The one worth describing is rule coverage: every one of the 35 rule
+**182 tests** across six files. The one worth describing is rule coverage: every one of the 35 rule
 codes must have a known-bad example that is rejected *for that specific code*, and a rule with no
 example fails the build. 29 fixtures live in `fixtures/invalid/` with a manifest declaring the code
 each should trip; the remainder are exercised programmatically and registered explicitly, so nothing
@@ -306,12 +353,17 @@ Not done, deliberately:
 - **Six of eight families are unbuilt.** Their axis counts are pre-registrations, not measurements.
 - **No agent has attempted the containment family.** Its four axes prove the verifier discriminates
   against nine known-bad implementations; they say nothing about whether a capable agent finds it
-  hard. `already-solved` is the most likely way it dies.
-- **The containment family runs in-process.** The tool ledger is a frozen facade, not a socket in
-  another process at another privilege level. A hostile subject could reach past its arguments. It is
-  a measured mini-benchmark, not a hardened task.
+  hard. `already-solved` is the most likely way it dies, and the ship gate holds it at HOLD for
+  exactly that reason.
+- **Local subjects run in-process; imported artifacts run in a subprocess.** The subprocess boundary
+  is real and tested against a subject that tries to tamper. It still shares the filesystem and
+  network with the parent — `container` is declared and not implemented.
+- **The cross-family verdict is `refused`,** because the two banks share no subjects. The rule is now
+  computed with a stated threshold (refused / partial / measured) rather than being a permanent no,
+  but nothing has moved it yet.
 
-Next, in order of leverage: **run a real agent against the containment family**, which is the only
+Next, in order of leverage: **run a real agent against the containment family** — everything needed
+to ingest it exists, which is the only
 thing that converts its four axes from a detection claim into a difficulty claim and would move it
 from HOLD to SHIP; then a shared bank so the two families can be measured against the same subjects,
 which is the only way a combined axis count means anything; then a Terminal-Bench source so families

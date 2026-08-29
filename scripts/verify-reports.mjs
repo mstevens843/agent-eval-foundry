@@ -46,6 +46,22 @@ for (const [path, args] of [
   } else console.log(`ok     ${path}`);
 }
 
+// The challenge package is generated too. Regenerate into a temp dir and diff every file, because a
+// package that silently drifts from the family it fronts is how an answer key leaks.
+const chalTmp = mkdtempSync(join(tmpdir(), "foundry-chal-"));
+run(["challenge", "build", "--out", chalTmp]);
+const walk = (dir, prefix = "") =>
+  readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+    e.isDirectory() ? walk(join(dir, e.name), `${prefix}${e.name}/`) : [`${prefix}${e.name}`],
+  );
+for (const rel of walk(chalTmp).sort()) {
+  const committed = join("examples/families/prompt-injection-containment/challenge", rel);
+  if (readFileSync(join(chalTmp, rel), "utf8") !== readFileSync(committed, "utf8")) {
+    console.error(`STALE  ${committed}`);
+    failures += 1;
+  } else console.log(`ok     ${committed}`);
+}
+
 run(["all", "--out", tmp]);
 for (const name of readdirSync(tmp).sort()) {
   const committed = join("reports", name);

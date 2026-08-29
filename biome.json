@@ -1,11 +1,23 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "organizeImports": { "enabled": true },
+  "organizeImports": {
+    "enabled": true
+  },
   "linter": {
     "enabled": true,
-    "rules": { "recommended": true, "style": { "noNonNullAssertion": "error" } }
+    "rules": {
+      "recommended": true,
+      "style": {
+        "noNonNullAssertion": "error"
+      }
+    }
   },
-  "formatter": { "enabled": true, "indentStyle": "space", "indentWidth": 2, "lineWidth": 110 },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 110
+  },
   "overrides": [
     {
       "include": [
@@ -15,11 +27,16 @@
         "src/foundry/scaffold-check.ts",
         "src/reports/*.ts",
         "test/import-swebench.test.ts",
-        "test/foundry-system.test.ts"
+        "test/foundry-system.test.ts",
+        "src/trials/*.ts",
+        "src/challenge/*.ts",
+        "test/trials.test.ts"
       ],
       "linter": {
         "rules": {
-          "complexity": { "useLiteralKeys": "off" }
+          "complexity": {
+            "useLiteralKeys": "off"
+          }
         }
       }
     }

@@ -57,6 +57,26 @@ const PARSERS: Record<FixtureEntry["kind"], (v: unknown) => unknown> = {
   registry: (v) => buildRegistry([parseMechanism(v, "fixture")], [], [], []),
 };
 
+/**
+ * Rules exercised in ANOTHER test file, with the file named.
+ *
+ * Splitting this out from PROGRAMMATIC matters: "covered somewhere" and "covered here" are different
+ * claims, and a list that merged them would let a rule be excused by a file nobody has to name. Each
+ * entry below is a promise that `test/trials.test.ts` asserts the code fires, and that file has a
+ * matching test per rule.
+ */
+const COVERED_IN_TRIALS_TEST: readonly RuleCode[] = [
+  "TRIAL_COUNTS_WITHOUT_REASON",
+  "TRIAL_REFUSAL_COUNTED",
+  "TRIAL_AGENT_WITHOUT_MODEL",
+  "TRIAL_AGENT_WITHOUT_ARTIFACT",
+  "TRIAL_EMPTY_CELLS",
+  "TRIAL_DUPLICATE_RUN_ID",
+  "CHALLENGE_LEAKS_HIDDEN_ARTIFACT",
+  "CHALLENGE_MISSING_SURFACE",
+  "CHALLENGE_MANIFEST_MISMATCH",
+];
+
 /** Rules exercised by code below rather than by a JSON fixture. Keeps assertion 3 honest. */
 const PROGRAMMATIC: readonly RuleCode[] = [
   "E_TYPE",
@@ -304,11 +324,22 @@ describe("budget rules", () => {
 describe("rule coverage — the mutation test on the checkers themselves", () => {
   it("every rule code has at least one known-bad case", () => {
     const fromFixtures = new Set(MANIFEST.map((m) => m.code));
-    const covered = new Set<string>([...fromFixtures, ...PROGRAMMATIC]);
+    const covered = new Set<string>([...fromFixtures, ...PROGRAMMATIC, ...COVERED_IN_TRIALS_TEST]);
     const uncovered = RULE_CODES.filter((c) => !covered.has(c));
     expect(
       uncovered,
       `these rules have no known-bad example, so nobody has shown they work: ${uncovered.join(", ")}`,
+    ).toEqual([]);
+  });
+
+  it("every rule delegated to another file is actually asserted there", () => {
+    // Guards the delegation itself: a code listed as covered elsewhere must appear in that file, or
+    // the exemption is a hole rather than a pointer.
+    const trialsTest = readFileSync(`${ROOT}test/trials.test.ts`, "utf8");
+    const missing = COVERED_IN_TRIALS_TEST.filter((c) => !trialsTest.includes(c));
+    expect(
+      missing,
+      `listed as covered in trials.test.ts but never mentioned there: ${missing.join(", ")}`,
     ).toEqual([]);
   });
 

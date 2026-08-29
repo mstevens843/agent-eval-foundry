@@ -19,6 +19,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { measure } from "../src/axis-meter.js";
+import { runFamily as runPicFamily } from "../src/families/prompt-injection-containment/runner.js";
 import { handAuthoredComparison, planBudget } from "../src/foundry/budget.js";
 import { loadRegistry } from "../src/foundry/load.js";
 import { assertCoverage, coverage } from "../src/foundry/registry.js";
@@ -29,12 +30,18 @@ import { renderBudgetReport } from "../src/reports/budget-report.js";
 import { renderFamilyDiversityReport, renderLedgerReport } from "../src/reports/ledger-report.js";
 import { renderMechanismReport, renderMutantReport } from "../src/reports/registry-report.js";
 import { assessFamily, renderShipReport } from "../src/reports/ship-report.js";
+import { computeEvidence } from "../src/reports/trial-report.js";
 import { antichainWidth } from "../src/similarity.js";
 import { SOURCES, getSource } from "../src/sources/index.js";
+import { runLocalTrials } from "../src/trials/orchestrate.js";
 import type { Cell } from "../src/types.js";
 
 const ROOT = new URL("..", import.meta.url).pathname;
 const registry = loadRegistry(ROOT);
+
+// The ship report is rendered WITH computed family evidence by `foundry all`, so the determinism
+// checks must render it the same way or they compare two different documents.
+const picEvidence = { "prompt-injection-containment": computeEvidence(runPicFamily(), runLocalTrials()) };
 
 const F = { failed: ["x"] } satisfies Cell;
 const P = { failed: [] } satisfies Cell;
@@ -320,7 +327,7 @@ describe("report determinism", () => {
     ["mutants", () => renderMutantReport(registry, cov)],
     ["ledger", () => renderLedgerReport(registry)],
     ["families", () => renderFamilyDiversityReport(registry.shapes)],
-    ["ship", () => renderShipReport(registry.shapes, registry)],
+    ["ship", () => renderShipReport(registry.shapes, registry, picEvidence)],
     [
       "budget",
       () =>
@@ -354,7 +361,7 @@ describe("report determinism", () => {
       ["reports/mutant-bank.md", renderMutantReport(registry, cov)],
       ["reports/candidate-ledger.md", renderLedgerReport(registry)],
       ["reports/family-diversity.md", renderFamilyDiversityReport(registry.shapes)],
-      ["reports/ship-recommendation.md", renderShipReport(registry.shapes, registry)],
+      ["reports/ship-recommendation.md", renderShipReport(registry.shapes, registry, picEvidence)],
     ];
     for (const [path, fresh] of pairs) {
       expect(readFileSync(`${ROOT}${path}`, "utf8"), `${path} is stale — run \`foundry all\``).toBe(fresh);
