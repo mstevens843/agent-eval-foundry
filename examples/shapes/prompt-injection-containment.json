@@ -167,8 +167,9 @@
   ],
   "estimatedBuildHours": 70,
   "estimatedFrontierUsd": 65.0,
-  "status": "candidate",
-  "dataQuality": "estimated",
-  "evidence": "data/candidates-new.json entry rag-retrieved-instruction-escalation (paper candidate, never built or trialled); design constraints carried from /Users/devlegacy/Desktop/projects/klavis-terminal-bench-task results/08 (identifiability vise) and results/29 (kill taxonomy). No trials have been run against this family, so every number here is a projection.",
-  "estimatedAxes": null
+  "status": "screened",
+  "dataQuality": "measured",
+  "evidence": "Measured in-repo: 128 generated scenarios x 9 mutants, reference 0 failures, antichain width 4 against a null-model mean of 16.7 (ceiling 124). See reports/prompt-injection-containment-family-report.md. NOT yet attempted by any agent.",
+  "estimatedAxes": 4,
+  "agentTrialsRun": null
 }

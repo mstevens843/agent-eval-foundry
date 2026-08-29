@@ -2,10 +2,15 @@
 
 **A thousand benchmark tasks are only useful if they measure more than one thing.**
 
-This is a system for discovering, screening and selecting agent-benchmark task families by
-transferable failure mechanism — and for refusing the ones that cannot demonstrate they measure
-anything. It does not run evals. It decides what is worth building before you spend model budget on
-it, and it grades its own graders.
+This is a system for discovering, screening, **building** and selecting agent-benchmark task families
+by transferable failure mechanism — and for refusing the ones that cannot demonstrate they measure
+anything. It does not run evals against foundation models. It decides what is worth building before
+you spend model budget on it, produces the family, measures what the family actually separates, and
+grades its own graders.
+
+Two families are now measured end to end. One was inherited from a shipped Terminal-Bench 3 task; the
+**second was produced by this repository** — reference implementation, nine mutants, generated
+scenarios, verifier, matrix and axis report, all runnable with `node dist/cli.js family run`.
 
 ---
 
@@ -48,13 +53,26 @@ noisy bank.
 
 ---
 
+## The three measured corpora
+
+| corpus | instances | subjects | axes | what the bank is | what the number means |
+|---|---:|---:|---:|---|---|
+| `durable-approval-outbox` | 24 | 10 | **3** | engines written by frontier models attempting the task | how real implementations fail |
+| `prompt-injection-containment` | 128 | 9 | **4** | mutants written alongside the verifier | a lower bound on what the verifier detects |
+| SWE-bench Verified | 500 | 134 | **215** | 134 independent leaderboard submissions | how real systems fail, at scale |
+
+Those three columns are not the same kind of number and the reports say so wherever they appear. The
+first and third are statements about difficulty. The second is a statement about detection: nothing
+that could plausibly fail the containment family has attempted it yet, which is why the ship gate
+holds it at **HOLD** rather than SHIP.
+
 ## Architecture
 
 ```
                      ┌──────────────────────────────────────────────┐
   IDEAS              │  data/mechanisms.json    14 mechanisms       │
                      │  data/mutants.json       13 known-bad impls  │
-                     │  data/candidates*.json   30 ledger rows      │
+                     │  data/candidates*.json   31 ledger rows      │
                      └───────────────┬──────────────────────────────┘
                                      │  validate.ts  ← 35 coded rules
                                      │  registry.ts  ← cross-refs + coverage
@@ -68,6 +86,15 @@ noisy bank.
                                      │                       imports nothing
                                      ▼                       from the generator
                      ┌──────────────────────────────────────────────┐
+  BUILD              │  families/prompt-injection-containment/       │
+                     │    policy.ts    8 rules, published order      │
+                     │    scenarios.ts 432-point space → 128 measured│
+                     │    reference.ts + mutants.ts (9 known-bad)    │
+                     │    verify.ts    ← grades against the LEDGER,  │
+                     │    runner.ts       never the subject's report │
+                     └───────────────┬──────────────────────────────┘
+                                     ▼
+                     ┌──────────────────────────────────────────────┐
   EVIDENCE           │  sources/  manual · durable-outbox · swebench │
                      │            + 4 declared, unimplemented       │
                      └───────────────┬──────────────────────────────┘
@@ -79,7 +106,7 @@ noisy bank.
                      └───────────────┬──────────────────────────────┘
                                      ▼
                      ┌──────────────────────────────────────────────┐
-  DECISION           │  ship-report.ts   10-gate ship/no-ship table │
+  DECISION           │  ship-report.ts   11-gate ship/no-ship table │
                      │  budget.ts        what does $100k buy?       │
                      │  budget-check.ts  ← rejects fake plans       │
                      └──────────────────────────────────────────────┘
@@ -108,7 +135,7 @@ registry OK
   mechanisms  14 (6 measured)
   mutants     13
   families    8
-  candidates  30
+  candidates  31
   coverage    every mechanism has a mutant; no mutant is orphaned
 ```
 
@@ -133,6 +160,20 @@ node dist/cli.js families     # axes, not task count
 node dist/cli.js ship         # the gate table, per family
 node dist/cli.js sources      # every matrix source, implemented and planned
 ```
+
+### Build and measure a family
+
+```bash
+node dist/cli.js family scenarios   # the 432-point space and the 128 measured selection
+node dist/cli.js family run         # reference + 9 mutants -> a normalized matrix
+node dist/cli.js family report      # policy table, mutant bank, axis structure
+node dist/cli.js family axis        # the axis report for that matrix
+node dist/cli.js cross-family       # compare measured families
+```
+
+The family emits a standard `matrix@1` document, so the axis meter grades it with no special-casing
+whatever. That is the point of the exercise: a family the foundry builds produces evidence the
+foundry already knows how to measure.
 
 ### Produce
 
@@ -230,7 +271,7 @@ into one.
 pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm verify
 ```
 
-**113 tests** across four files. The one worth describing is rule coverage: every one of the 35 rule
+**145 tests** across five files. The one worth describing is rule coverage: every one of the 35 rule
 codes must have a known-bad example that is rejected *for that specific code*, and a rule with no
 example fails the build. 29 fixtures live in `fixtures/invalid/` with a manifest declaring the code
 each should trip; the remainder are exercised programmatically and registered explicitly, so nothing
@@ -246,10 +287,11 @@ no timestamps, and the null model is seeded — so `reports/` is diffable rather
 **Pre-1.0.** What is true is stated with the command that reproduces it; what is not done is listed
 here as not done.
 
-Built and working: the mechanism registry (14), mutant bank (13), candidate ledger (30 rows, 16
-kills), 8 task-family shapes with long-form sketches, the scaffold generator and its independent
-checker, three matrix sources, the axis meter with null-model calibration, the budget planner and its
-sanity checker, six generated reports, and the known-bad fixture corpus.
+Built and working: the mechanism registry (14), mutant bank (13), candidate ledger (31 rows, 16
+kills), 8 task-family shapes with long-form sketches, **one fully runnable family** (policy model,
+scenario generator, reference, 9 mutants, verifier, runner), the scaffold generator and its
+independent checker, three matrix sources, the axis meter with null-model calibration, the budget
+planner and its sanity checker, nine generated reports, and the known-bad fixture corpus.
 
 Not done, deliberately:
 
@@ -261,11 +303,19 @@ Not done, deliberately:
   time. It does not emit a runnable verifier, and it says so in its own README. Building the shipped
   family's three-process verifier took roughly 45 hours; no generator produces that from a mechanism
   id, and claiming otherwise would be the dishonest version of this module.
-- **Seven of eight families are unbuilt.** Their axis counts are pre-registrations, not measurements.
+- **Six of eight families are unbuilt.** Their axis counts are pre-registrations, not measurements.
+- **No agent has attempted the containment family.** Its four axes prove the verifier discriminates
+  against nine known-bad implementations; they say nothing about whether a capable agent finds it
+  hard. `already-solved` is the most likely way it dies.
+- **The containment family runs in-process.** The tool ledger is a frozen facade, not a socket in
+  another process at another privilege level. A hostile subject could reach past its arguments. It is
+  a measured mini-benchmark, not a hardened task.
 
-Next, in order of leverage: measure a second family end-to-end so there are two measured axis counts
-rather than one; a Terminal-Bench source so families produce their own matrices; and cross-family
-axis measurement, since axes across families almost certainly do not simply add.
+Next, in order of leverage: **run a real agent against the containment family**, which is the only
+thing that converts its four axes from a detection claim into a difficulty claim and would move it
+from HOLD to SHIP; then a shared bank so the two families can be measured against the same subjects,
+which is the only way a combined axis count means anything; then a Terminal-Bench source so families
+emit their own trial matrices.
 
 ---
 

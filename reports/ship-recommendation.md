@@ -29,6 +29,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `is-a-family` | yes | Does it have at least 3 knobs, so instances are cheaper than authoring? |
 | `hidden-region-declared` | yes | Is the hidden graded region stated as a sampling of the declared space? |
 | `measured-axes` | advisory | Has it measured at least 2 independent axes? |
+| `difficulty-evidenced` | advisory | Has any real agent or model been measured against this family? |
 | `priced` | advisory | Is the build cost recorded? |
 
 ## Per family
@@ -46,6 +47,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `is-a-family` | pass | 6 knob(s): correctionLag, retroAuthorityTiming, delegationDepth, reversalChainLength, asOfQueryDensity, seed |
 | `hidden-region-declared` | pass | Hidden instances are sampled from the same declared grammar as the shipped fixtu |
 | `measured-axes` | n/a | estimated — axes; not measured |
+| `difficulty-evidenced` | **FAIL** | no agent trials recorded |
 | `priced` | pass | 45h build, $60 frontier |
 
 ### `browser-action-replay` — HOLD
@@ -61,6 +63,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `is-a-family` | pass | 7 knob(s): seed, mutation_class, mutation_depth, viewport, locale, feature_flags, state_delta |
 | `hidden-region-declared` | pass | The hidden suite samples the declared mutation grammar rather than extending it: |
 | `measured-axes` | n/a | estimated — axes; not measured |
+| `difficulty-evidenced` | **FAIL** | no agent trials recorded |
 | `priced` | pass | 90h build, $80 frontier |
 
 ### `deployment-rollback-partial-effects` — HOLD
@@ -76,6 +79,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `is-a-family` | pass | 6 knob(s): regionTopology, reversibilityMix, faultPoint, abortArrivalStep, ledgerSettleDelay, seed |
 | `hidden-region-declared` | pass | Hidden instances are sampled from the same declared grammar as the shipped ones  |
 | `measured-axes` | n/a | estimated — axes; not measured |
+| `difficulty-evidenced` | **FAIL** | no agent trials recorded |
 | `priced` | pass | 60h build, $75 frontier |
 
 ### `durable-approval-outbox` — SHIP
@@ -91,6 +95,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `is-a-family` | pass | 7 knob(s): seed, n_workers, crash_point, withdrawal_after_invoke, receipt_after_invokes, key_index, unknown_landed |
 | `hidden-region-declared` | pass | The hidden suite samples 24 points out of the declared space of schedules x seed |
 | `measured-axes` | pass | 3 measured axes |
+| `difficulty-evidenced` | pass | 6 agent trial(s) |
 | `priced` | pass | 120h build, $48.66 frontier |
 
 ### `model-alias-drift-sentinel` — HOLD
@@ -106,6 +111,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `is-a-family` | pass | 5 knob(s): drift_schedule, missing_resolved_id_rate, undeclared_dep, alias_count, seed |
 | `hidden-region-declared` | pass | Hidden instances sample the declared drift-event space — which of the five docum |
 | `measured-axes` | n/a | estimated 2 axes; not measured |
+| `difficulty-evidenced` | **FAIL** | no agent trials recorded |
 | `priced` | pass | 55h build, $50 frontier |
 
 ### `permission-boundary-tools` — HOLD
@@ -121,6 +127,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `is-a-family` | pass | 5 knob(s): chain_depth, amplifying_hop, permitted_path_share, confused_deputy_present, seed |
 | `hidden-region-declared` | pass | Hidden instances sample the declared chain grammar — chain depth one through fou |
 | `measured-axes` | n/a | estimated 1 axes; not measured |
+| `difficulty-evidenced` | **FAIL** | no agent trials recorded |
 | `priced` | pass | 45h build, $50 frontier |
 
 ### `prompt-injection-containment` — HOLD
@@ -135,7 +142,8 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `cheat-resistance` | pass | 5 requirement(s) |
 | `is-a-family` | pass | 7 knob(s): seed, carrier_surface, derivation_hops, injection_aligns_with_task, confirmation_budget, corpus_size, capability_scope |
 | `hidden-region-declared` | pass | The hidden suite samples the declared injection space rather than adding rules t |
-| `measured-axes` | n/a | estimated — axes; not measured |
+| `measured-axes` | pass | 4 measured axes |
+| `difficulty-evidenced` | **FAIL** | no agent trials recorded |
 | `priced` | pass | 70h build, $65 frontier |
 
 ### `stale-crm-ticket-automation` — HOLD
@@ -151,6 +159,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `is-a-family` | pass | 6 knob(s): mutation_point, duplicate_delivery_multiplicity, ack_true_outcome, crash_point, terminal_state_present, seed |
 | `hidden-region-declared` | pass | Hidden instances sample the declared mutation-point space: which of the four doc |
 | `measured-axes` | n/a | estimated 2 axes; not measured |
+| `difficulty-evidenced` | **FAIL** | no agent trials recorded |
 | `priced` | pass | 70h build, $55 frontier |
 
 ## Why these gates
@@ -164,6 +173,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 - **`is-a-family`** — A family with no parameter space is a single task wearing a family's name, and the entire economic argument depends on instances being nearly free once the family exists.
 - **`hidden-region-declared`** — Hidden tests that add rules are unfair; hidden tests that sample a declared space are not. The difference has to be written down or nobody can tell which one was built.
 - **`measured-axes`** — The point of the whole exercise. A family yielding one axis is one measurement however many instances it generates. Advisory rather than blocking, because an unbuilt family cannot have measured anything yet — but it must not ship on an estimate.
+- **`difficulty-evidenced`** — A measured axis count against a bank of hand-written mutants proves the VERIFIER discriminates. It says nothing about whether the family is hard, because nothing that could plausibly fail it has attempted it. This gate was added after the second family scored four measured axes with zero agent trials and would otherwise have been marked SHIP.
 - **`priced`** — An unpriced family cannot enter the budget model, so the plan built on it is fiction.
 
 ---

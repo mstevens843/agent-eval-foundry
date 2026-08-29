@@ -170,5 +170,6 @@
   "status": "idea",
   "dataQuality": "estimated",
   "evidence": "data/candidates-new.json entry browser-checkout-confirmation-lost is the nearest prior paper candidate; this family reuses its tool surface and none of its mechanism. Nothing here has been built, screened or trialled, and the kill-taxonomy reasoning follows /Users/devlegacy/Desktop/projects/klavis-terminal-bench-task results/29.",
-  "estimatedAxes": null
+  "estimatedAxes": null,
+  "agentTrialsRun": null
 }

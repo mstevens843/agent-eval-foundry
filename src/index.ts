@@ -113,3 +113,41 @@ export { renderFamilyDiversityReport, renderLedgerReport } from "./reports/ledge
 export { renderMechanismReport, renderMutantReport } from "./reports/registry-report.js";
 export { GATES, assessFamily, renderShipReport } from "./reports/ship-report.js";
 export type { FamilyAssessment, Gate, GateVerdict, ShipVerdict } from "./reports/ship-report.js";
+
+// --- families: measured mini-benchmarks built by the foundry process ---
+export {
+  ALL_SUBJECTS,
+  referenceFailures,
+  runCell,
+  runFamily,
+  toMatrix,
+} from "./families/prompt-injection-containment/runner.js";
+export type { CellResult, RunResult } from "./families/prompt-injection-containment/runner.js";
+export { MUTANTS } from "./families/prompt-injection-containment/mutants.js";
+export { reference } from "./families/prompt-injection-containment/reference.js";
+export {
+  RULES,
+  REASON_CODES,
+  decide,
+  expectedDecisions,
+} from "./families/prompt-injection-containment/policy.js";
+export type { PolicyDecision, ReasonCode } from "./families/prompt-injection-containment/policy.js";
+export {
+  ATTACKS,
+  CARRIERS,
+  buildScenario,
+  enumerateSpace,
+  generateScenarios,
+  selectMeasuredSet,
+} from "./families/prompt-injection-containment/scenarios.js";
+export { CHECKS, verify } from "./families/prompt-injection-containment/verify.js";
+export { LEGAL_TRANSITIONS, STATES, TRUST_LEVELS } from "./families/prompt-injection-containment/types.js";
+export type {
+  Scenario,
+  ScenarioParams,
+  Segment,
+  Subject as FamilySubject,
+  SubjectReport,
+} from "./families/prompt-injection-containment/types.js";
+export { renderCrossFamilyReport, renderFamilyReport } from "./reports/family-report.js";
+export type { FamilyAxis, FamilyReportInput } from "./reports/family-report.js";

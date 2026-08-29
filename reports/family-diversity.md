@@ -12,7 +12,7 @@ a column mixing the two without labels is how an estimate becomes a fact.
 | `durable-approval-outbox` | shipped | uncertain-external-effects, duplicate-side-effects, false-audit-history, liveness-stall, tool-result-ambiguity | 3 | 120 | 49 | measured |
 | `model-alias-drift-sentinel` | idea | model-alias-drift, hidden-environment-dependency | 2 | 55 | 50 | est. |
 | `permission-boundary-tools` | idea | permission-boundary, grader-privilege-boundary | 1 | 45 | 50 | est. |
-| `prompt-injection-containment` | candidate | prompt-injection-via-retrieval, context-contamination, permission-boundary | — | 70 | 65 | est. |
+| `prompt-injection-containment` | screened | prompt-injection-via-retrieval, context-contamination, permission-boundary | 4 | 70 | 65 | measured |
 | `stale-crm-ticket-automation` | candidate | stale-state, tool-result-ambiguity, duplicate-side-effects | 2 | 70 | 55 | est. |
 
 ## Totals
@@ -20,8 +20,8 @@ a column mixing the two without labels is how an estimate becomes a fact.
 | | |
 |---|---:|
 | families | 8 |
-| expected axes (all) | 8 |
-| of which measured | **3** |
+| expected axes (all) | 12 |
+| of which measured | **7** |
 | of which estimated | 5 |
 | declared build hours | 555 |
 | declared frontier spend | $483.66 |

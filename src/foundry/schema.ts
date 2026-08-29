@@ -264,6 +264,15 @@ export interface TaskShape {
   readonly dataQuality: DataQuality;
   readonly evidence: string | null;
   readonly estimatedAxes: number | null;
+  /**
+   * How many real agent/model trials this family has been run against. Null means none.
+   *
+   * Added after the second family was built and exposed the gap: a family can have a MEASURED axis
+   * count against a bank of hand-written mutants and still be completely unevidenced as a
+   * difficulty, because nothing that could actually fail it has ever attempted it. Those are two
+   * different claims and the ship gate now separates them.
+   */
+  readonly agentTrialsRun: number | null;
 }
 
 export interface CandidateResults {

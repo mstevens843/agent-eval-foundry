@@ -14,6 +14,17 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { measure } from "./axis-meter.js";
+import {
+  ALL_SUBJECTS,
+  referenceFailures,
+  runFamily,
+  toMatrix,
+} from "./families/prompt-injection-containment/runner.js";
+import {
+  enumerateSpace,
+  generateScenarios,
+  selectMeasuredSet,
+} from "./families/prompt-injection-containment/scenarios.js";
 import { assertBudgetInputs, assertPlanHonest } from "./foundry/budget-check.js";
 import { MEASURED_DEFAULTS, planBudget } from "./foundry/budget.js";
 import { loadRegistry } from "./foundry/load.js";
@@ -25,6 +36,7 @@ import { parseTaskShape } from "./foundry/validate.js";
 import { MatrixError, parseMatrix } from "./matrix.js";
 import { renderReport } from "./report.js";
 import { renderBudgetReport } from "./reports/budget-report.js";
+import { renderCrossFamilyReport, renderFamilyReport } from "./reports/family-report.js";
 import { renderFamilyDiversityReport, renderLedgerReport } from "./reports/ledger-report.js";
 import { renderMechanismReport, renderMutantReport } from "./reports/registry-report.js";
 import { renderShipReport } from "./reports/ship-report.js";
@@ -49,6 +61,13 @@ REGISTRY (what could be built, and can we detect it?)
   families [--out f]             family diversity: axes, not task count
   ship [--out f]                 ship / no-ship gate table per family
   sources                        list every matrix source, implemented and planned
+
+FAMILIES (run a measured mini-benchmark)
+  family scenarios [--out f]     generate and emit the measured scenario set
+  family run [--out f]           run reference + mutants, emit the result matrix
+  family report [--out f]        family report: policy, mutants, axis structure
+  family axis [--out f]          axis report for the family matrix
+  cross-family [--out f]         compare measured families; refuses to add their axes
 
 PRODUCTION
   scaffold --shape <file> [--out dir]
@@ -198,6 +217,67 @@ function budgetCommand(argv: readonly string[]): string {
   return renderBudgetReport(inputs, numeric(argv, "--target") ?? 1000);
 }
 
+function familyCommand(sub: string, root: string): string {
+  const run = runFamily(ALL_SUBJECTS);
+  const failures = referenceFailures(run);
+  if (failures.length > 0 && sub !== "scenarios") {
+    // A family whose reference fails is measuring its own bugs. Refuse rather than emit a matrix
+    // that looks like evidence.
+    throw new Error(
+      `reference fails ${failures.length} scenario(s); the family is not solvable as written and must not emit a matrix. First: ${failures[0]?.scenarioId} — ${failures[0]?.failures[0]?.detail}`,
+    );
+  }
+  switch (sub) {
+    case "scenarios": {
+      const space = enumerateSpace();
+      const measured = selectMeasuredSet(space);
+      return `${JSON.stringify(
+        {
+          declaredSpace: space.length,
+          measured: measured.length,
+          dropped: space.length - measured.length,
+          scenarios: generateScenarios(measured),
+        },
+        null,
+        2,
+      )}\n`;
+    }
+    case "run":
+      return `${JSON.stringify(toMatrix(run), null, 2)}\n`;
+    case "report":
+      return renderFamilyReport({ run, axis: measure(toMatrix(run), { nullTrials: 3 }) });
+    case "axis":
+      return renderReport(measure(toMatrix(run), { nullTrials: 3 }));
+    default:
+      throw new Error(`unknown family subcommand "${sub}"; expected scenarios | run | report | axis`);
+  }
+}
+
+function crossFamilyCommand(root: string): string {
+  const registry = loadRegistry(root);
+  const outboxRaw = readJson(join(root, "examples/durable-outbox/matrix.json"));
+  const outbox = parseMatrix(outboxRaw);
+  const run = runFamily(ALL_SUBJECTS);
+  const pic = toMatrix(run);
+  const shapeOf = (id: string) => registry.shapes.find((s) => s.familyId === id)?.mechanisms ?? [];
+  return renderCrossFamilyReport([
+    {
+      name: "durable-approval-outbox",
+      matrix: outbox,
+      axis: measure(outbox),
+      mechanisms: [...shapeOf("durable-approval-outbox")],
+      provenance: "10 engines submitted by frontier models attempting the task",
+    },
+    {
+      name: "prompt-injection-containment",
+      matrix: pic,
+      axis: measure(pic),
+      mechanisms: [...shapeOf("prompt-injection-containment")],
+      provenance: "9 mutants written alongside the verifier",
+    },
+  ]);
+}
+
 function checkCommand(root: string): string {
   const registry = loadRegistry(root);
   const cov = assertCoverage(registry);
@@ -231,6 +311,12 @@ function allCommand(argv: readonly string[], root: string): string {
   assertBudgetInputs(inputs);
   assertPlanHonest(planBudget(inputs));
   write("budget-plan.md", renderBudgetReport(inputs, 1000));
+  const run = runFamily(ALL_SUBJECTS);
+  const picMatrix = toMatrix(run);
+  const picAxis = measure(picMatrix, { nullTrials: 3 });
+  write("prompt-injection-containment-family-report.md", renderFamilyReport({ run, axis: picAxis }));
+  write("prompt-injection-containment-axis-report.md", renderReport(picAxis));
+  write("cross-family-diversity-report.md", crossFamilyCommand(root));
   return `${written.map((w) => `wrote ${dir}/${w}`).join("\n")}\n`;
 }
 
@@ -260,6 +346,14 @@ export function main(argv: readonly string[]): number {
       }
       case "check":
         process.stdout.write(checkCommand(root));
+        return 0;
+      case "family": {
+        const sub = positional(argv, 1) ?? "run";
+        emit(argv, familyCommand(sub, root));
+        return 0;
+      }
+      case "cross-family":
+        emit(argv, crossFamilyCommand(root));
         return 0;
       case "mechanisms": {
         const r = loadRegistry(root);

@@ -159,6 +159,25 @@ export const GATES: readonly Gate[] = [
     },
   },
   {
+    id: "difficulty-evidenced",
+    question: "Has any real agent or model been measured against this family?",
+    rationale:
+      "A measured axis count against a bank of hand-written mutants proves the VERIFIER discriminates. " +
+      "It says nothing about whether the family is hard, because nothing that could plausibly fail it " +
+      "has attempted it. This gate was added after the second family scored four measured axes with " +
+      "zero agent trials and would otherwise have been marked SHIP.",
+    blocking: false,
+    evaluate: (s) => {
+      if (s.agentTrialsRun === null) {
+        return { verdict: "fail", detail: "no agent trials recorded" };
+      }
+      return {
+        verdict: s.agentTrialsRun > 0 ? "pass" : "fail",
+        detail: `${s.agentTrialsRun} agent trial(s)`,
+      };
+    },
+  },
+  {
     id: "priced",
     question: "Is the build cost recorded?",
     rationale: "An unpriced family cannot enter the budget model, so the plan built on it is fiction.",
@@ -188,8 +207,15 @@ export function assessFamily(shape: TaskShape, registry: Registry): FamilyAssess
     .filter((r) => r.gate.blocking && r.verdict === "fail")
     .map((r) => r.gate.id);
   const measured = results.find((r) => r.gate.id === "measured-axes");
+  const evidenced = results.find((r) => r.gate.id === "difficulty-evidenced");
+  // SHIP needs both: the verifier discriminates (measured axes) AND something that could fail the
+  // family has tried. Either alone is a different, weaker claim.
   const verdict: ShipVerdict =
-    blockingFailures.length > 0 ? "NOT-READY" : measured?.verdict === "pass" ? "SHIP" : "HOLD";
+    blockingFailures.length > 0
+      ? "NOT-READY"
+      : measured?.verdict === "pass" && evidenced?.verdict === "pass"
+        ? "SHIP"
+        : "HOLD";
   return { familyId: shape.familyId, verdict, results, blockingFailures };
 }
 

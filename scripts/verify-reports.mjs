@@ -35,6 +35,17 @@ for (const [path, args] of axis) {
   } else console.log(`ok     ${path}`);
 }
 
+// The family artifacts are generated too, so they get the same treatment: regenerate and diff.
+for (const [path, args] of [
+  ["examples/families/prompt-injection-containment/matrix.json", ["family", "run"]],
+  ["examples/families/prompt-injection-containment/scenarios.json", ["family", "scenarios"]],
+]) {
+  if (run(args) !== readFileSync(path, "utf8")) {
+    console.error(`STALE  ${path}`);
+    failures += 1;
+  } else console.log(`ok     ${path}`);
+}
+
 run(["all", "--out", tmp]);
 for (const name of readdirSync(tmp).sort()) {
   const committed = join("reports", name);

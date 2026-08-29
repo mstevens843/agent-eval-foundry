@@ -2,7 +2,11 @@
   "familyId": "deployment-rollback-partial-effects",
   "name": "Deployment Rollback With Partial External Effects",
   "domain": "multi-region release orchestration",
-  "mechanisms": ["uncertain-external-effects", "duplicate-side-effects", "liveness-stall"],
+  "mechanisms": [
+    "uncertain-external-effects",
+    "duplicate-side-effects",
+    "liveness-stall"
+  ],
   "visibleRules": [
     "A release is a DAG of per-region stages. Each stage applies an ordered list of effects drawn from a shipped effect catalog, and each effect carries a declared reversibility class: REVERSIBLE (a stated inverse operation exists), COMPENSABLE (a distinct compensating effect exists, which is itself an external effect), or IRREVERSIBLE (no inverse and no compensation; it can only be recorded).",
     "An apply call may return APPLIED, REJECTED, or UNKNOWN. UNKNOWN means the effect may or may not have fired. The region's effect ledger is the only thing that settles it, and the orchestrator must take no rollback, compensation or re-apply decision on that effect until the ledger settles it.",
@@ -13,59 +17,95 @@
     "The release report states, per effect, whether it fired, whether it was compensated, and whether it is permanently un-compensable. Every one of those three facts must be derived from the region effect ledgers, never inferred from the orchestrator's own plan state.",
     "Effects are ordered within a stage and dependency-ordered across stages. Rollback runs the reverse order within a stage and reverse topological order across stages; an effect may not be compensated while a downstream effect that depends on it is still live."
   ],
-  "hiddenGradedRegion": "Hidden instances are sampled from the same declared grammar as the shipped ones — region topology x reversibility-class mix x fault point x abort-arrival step x seed — with sampling weight concentrated on two under-covered corners of that space: abort commands arriving inside the window between an effect firing and the orchestrator durably recording that it fired, and regions holding a fired IRREVERSIBLE effect whose topological predecessor is simultaneously being rolled back. No rule is withheld; the shipped fixtures simply sample the easy interior of a space the instruction states in full.",
+  "hiddenGradedRegion": "Hidden instances are sampled from the same declared grammar as the shipped ones \u2014 region topology x reversibility-class mix x fault point x abort-arrival step x seed \u2014 with sampling weight concentrated on two under-covered corners of that space: abort commands arriving inside the window between an effect firing and the orchestrator durably recording that it fired, and regions holding a fired IRREVERSIBLE effect whose topological predecessor is simultaneously being rolled back. No rule is withheld; the shipped fixtures simply sample the easy interior of a space the instruction states in full.",
   "knobs": [
     {
       "name": "regionTopology",
       "type": "enum",
-      "values": ["independent", "chain", "fan-out", "diamond", "chain-with-shared-tail"],
+      "values": [
+        "independent",
+        "chain",
+        "fan-out",
+        "diamond",
+        "chain-with-shared-tail"
+      ],
       "purpose": "Varies which stages must be rolled back in a forced order and which may proceed concurrently, so that a blast-radius error (halting unrelated regions behind one blocked one) is separable from a correctness error."
     },
     {
       "name": "reversibilityMix",
       "type": "enum",
-      "values": ["all-reversible", "compensable-heavy", "one-irreversible-midchain", "irreversible-terminal", "mixed-per-stage"],
+      "values": [
+        "all-reversible",
+        "compensable-heavy",
+        "one-irreversible-midchain",
+        "irreversible-terminal",
+        "mixed-per-stage"
+      ],
       "purpose": "Controls whether the correct terminal for a region is rollback, compensation, or roll-forward, which is the decision with no analogue in a plain durable-execution task."
     },
     {
       "name": "faultPoint",
       "type": "enum",
-      "values": ["before-effect", "after-effect-before-record", "during-compensation", "after-compensation-before-record", "during-rollback-reentry"],
+      "values": [
+        "before-effect",
+        "after-effect-before-record",
+        "during-compensation",
+        "after-compensation-before-record",
+        "during-rollback-reentry"
+      ],
       "purpose": "Separates an implementation whose durability boundary is drawn before the external call from one that records intent first; only after-effect-before-record and after-compensation-before-record distinguish stable keying from per-attempt keying."
     },
     {
       "name": "abortArrivalStep",
       "type": "int",
-      "values": [0, 2, 5, 9, 14, 21],
+      "values": [
+        0,
+        2,
+        5,
+        9,
+        14,
+        21
+      ],
       "purpose": "Moves the abort command relative to the apply front, so that some instances abort a release that has not started, some abort mid-region, and some abort after every effect has fired and only the recording is outstanding."
     },
     {
       "name": "ledgerSettleDelay",
       "type": "int",
-      "values": [0, 1, 3, 8],
+      "values": [
+        0,
+        1,
+        3,
+        8
+      ],
       "purpose": "Varies how many steps pass before a region effect ledger can settle an UNKNOWN, exercising the difference between an implementation that parks and drains and one that either guesses immediately or parks forever."
     },
     {
       "name": "seed",
       "type": "seed",
-      "values": [11, 23, 47, 101, 337],
+      "values": [
+        11,
+        23,
+        47,
+        101,
+        337
+      ],
       "purpose": "Regenerates effect ids, region names, stage ordering within the chosen topology and fault jitter, so that an implementation cannot recognise a specific fixture and special-case it."
     }
   ],
   "authoritativeSources": [
     {
       "name": "Per-region effect ledger",
-      "whatItSettles": "Which external effects actually fired in that region, in what order, and under which idempotency key — including effects whose apply call returned UNKNOWN to the orchestrator.",
+      "whatItSettles": "Which external effects actually fired in that region, in what order, and under which idempotency key \u2014 including effects whose apply call returned UNKNOWN to the orchestrator.",
       "whyEngineCannotForge": "Each ledger lives in its own region process with its own credentials that are never present in the orchestrator's environment; the orchestrator's only interface is an append-nothing read RPC, and the verifier reads the ledger from the region process rather than through anything the orchestrator returns."
     },
     {
       "name": "Control-plane reversibility catalog",
-      "whatItSettles": "The reversibility class of every effect and the pinned repair version for each irreversible watermark — the facts that decide whether rollback, compensation or roll-forward is correct for a region.",
+      "whatItSettles": "The reversibility class of every effect and the pinned repair version for each irreversible watermark \u2014 the facts that decide whether rollback, compensation or roll-forward is correct for a region.",
       "whyEngineCannotForge": "The orchestrator holds only a read-only cached copy served over the control-plane API; the verifier grades against the control plane's own copy, so an implementation that edits its cache to make a hard case easy is caught by a direct mismatch rather than by inspection of its code."
     },
     {
       "name": "Downstream confirmation feed",
-      "whatItSettles": "Whether an irreversible effect's consequence was observed outside the release system at all — a partner notification counter, a published schema version, a CDN cutover observed by a probe.",
+      "whatItSettles": "Whether an irreversible effect's consequence was observed outside the release system at all \u2014 a partner notification counter, a published schema version, a CDN cutover observed by a probe.",
       "whyEngineCannotForge": "The feed is produced by an observer process that the orchestrator has no network path to and no write credential for; it is the independent second opinion that catches a release report which agrees perfectly with the orchestrator's own plan state and with nothing else."
     }
   ],
@@ -107,20 +147,21 @@
     "Side effects are bounded from below as well as above: the verifier computes an expected effect count from the plan and the abort step, so an orchestrator that performs no external work cannot reach a clean terminal state for free.",
     "The verifier reads region ledgers and the downstream feed from their own processes, and resolves them before the orchestrator is loaded, so no import-time rebinding of a harness symbol can reach the code computing expected values.",
     "The orchestrator's credentials are provisioned so that a password-authenticated connection attempt to any ledger-writing role fails, and that attempt is itself part of the test suite rather than an assumption stated in a GRANT.",
-    "Scenario identity — region names, effect ids, schedule filenames, seeds — is randomised between any discovery run and the graded run, and results must be unchanged, so an implementation that special-cases a recognised fixture is separated from one that generalises.",
+    "Scenario identity \u2014 region names, effect ids, schedule filenames, seeds \u2014 is randomised between any discovery run and the graded run, and results must be unchanged, so an implementation that special-cases a recognised fixture is separated from one that generalises.",
     "The no-op orchestrator and the per-attempt-keyed orchestrator are kept in the suite as standing negative oracles, and every verifier change must leave both at reward 0."
   ],
   "expectedFailureModes": [
     "Treating rollback as inverse-apply: the implementation walks the applied effects backwards and emits an inverse for each, including for IRREVERSIBLE ones, producing a report that claims a reversion that did not and could not occur.",
     "Downgrading a region past its irreversible watermark instead of rolling forward to the pinned repair version, because the abort command reads as an instruction to reach the prior version and the watermark is a second rule that has to be remembered at the point of decision.",
-    "Compensating an effect whose apply returned UNKNOWN, on the reasoning that compensating a non-existent effect is harmless — which the spec explicitly declares a violation, and which is the same eager-resolution shape measured in five of six frontier trials on the source task.",
+    "Compensating an effect whose apply returned UNKNOWN, on the reasoning that compensating a non-existent effect is harmless \u2014 which the spec explicitly declares a violation, and which is the same eager-resolution shape measured in five of six frontier trials on the source task.",
     "Keying compensation by the rollback attempt rather than by the effect, so that an interrupted-and-resumed rollback double-compensates; this passes every single-pass test because within one clean rollback both keys are unique per effect.",
-    "Halting the whole release on one region parked on an unsettled ledger, satisfying every safety check while stranding dependency-independent regions — the liveness half, which is silent where safety violations are loud."
+    "Halting the whole release on one region parked on an unsettled ledger, satisfying every safety check while stranding dependency-independent regions \u2014 the liveness half, which is silent where safety violations are loud."
   ],
   "estimatedBuildHours": 60,
   "estimatedFrontierUsd": 75,
   "status": "candidate",
   "dataQuality": "estimated",
-  "evidence": "Derived, not measured. Grounded in the durable-outbox result set: FINDINGS.md §1 (six frontier trials at reward 0, five eager-resolving and one stalling), results/15-outbox-verifier-audit.md (the no-op and ledger-rebinding bypasses that motivate the effect floor and process separation), and results/29-boundary-synthesis.md (public rules, large behaviour space, hidden graded region). No instance of this family has been built or trialed; every number here is an estimate.",
-  "estimatedAxes": null
+  "evidence": "Derived, not measured. Grounded in the durable-outbox result set: FINDINGS.md \u00a71 (six frontier trials at reward 0, five eager-resolving and one stalling), results/15-outbox-verifier-audit.md (the no-op and ledger-rebinding bypasses that motivate the effect floor and process separation), and results/29-boundary-synthesis.md (public rules, large behaviour space, hidden graded region). No instance of this family has been built or trialed; every number here is an estimate.",
+  "estimatedAxes": null,
+  "agentTrialsRun": null
 }

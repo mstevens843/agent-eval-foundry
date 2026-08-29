@@ -176,5 +176,6 @@
   "status": "shipped",
   "dataQuality": "measured",
   "evidence": "/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task -- tasks/durable-approval-outbox/ (instruction.md, task.toml, environment/app/spec/SEMANTICS.md, tests/), FINDINGS.md, and results/29, results/33, results/34; six-trial matrix at commit c0e04eb, 24 scenarios / 15 schedules / 267 checks, reference 267/267 and all six frontier trials reward 0.",
-  "estimatedAxes": 3
+  "estimatedAxes": 3,
+  "agentTrialsRun": 6
 }

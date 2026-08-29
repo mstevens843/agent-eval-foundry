@@ -269,6 +269,7 @@ export function parseTaskShape(v: unknown, path = "shape"): TaskShape {
     dataQuality: oneOf(o["dataQuality"], `${path}.dataQuality`, DATA_QUALITY),
     evidence: strNullable(o["evidence"], `${path}.evidence`),
     estimatedAxes: numNullable(o["estimatedAxes"], `${path}.estimatedAxes`),
+    agentTrialsRun: numNullable(o["agentTrialsRun"], `${path}.agentTrialsRun`),
   };
 }
 

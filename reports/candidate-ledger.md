@@ -8,13 +8,14 @@ number you can only get by writing the failures down.
 
 | | |
 |---|---:|
-| candidates | **30** |
-| status `idea` | 4 |
-| status `candidate` | 6 |
+| candidates | **31** |
+| status `idea` | 3 |
+| status `candidate` | 7 |
+| status `screened` | 1 |
 | status `trialed` | 1 |
 | status `shipped` | 3 |
 | status `killed` | 16 |
-| measured (a real result exists) | 17 |
+| measured (a real result exists) | 18 |
 | estimated | 13 |
 | recorded model spend | $107.57 |
 | kills that demonstrably cost $0 | 8 of 16 |
@@ -57,6 +58,7 @@ an error, but it is a row whose lesson has not been made transferable yet.
 | `stale-policy-authority-gate` | killed | kill | stale-state, permission-boundary | $0.00 | measured |
 | `replay-sufficient-log-gate` | killed | kill | false-audit-history | $0.00 | measured |
 | `authorization-justification-gate` | killed | kill | permission-boundary, false-audit-history | $0.00 | measured |
+| `prompt-injection-containment-built` | screened | promote | prompt-injection-via-retrieval, context-contamination, permission-boundary | $0.00 | measured |
 | `browser-checkout-confirmation-lost` | candidate | open | ui-replay-mismatch, uncertain-external-effects, duplicate-side-effects | — | est. |
 | `support-ticket-merge-audit-chain` | candidate | open | false-audit-history, stale-state, duplicate-side-effects | — | est. |
 | `deploy-rollback-unknown-apply` | candidate | open | uncertain-external-effects, liveness-stall, false-audit-history | — | est. |
@@ -65,7 +67,7 @@ an error, but it is a row whose lesson has not been made transferable yet.
 | `clinical-order-amendment-audit` | idea | open | false-audit-history, permission-boundary, liveness-stall | — | est. |
 | `acl-revocation-with-live-sessions` | idea | open | permission-boundary, stale-state, liveness-stall | — | est. |
 | `handoff-partial-plan-double-commit` | candidate | open | context-contamination, duplicate-side-effects, tool-result-ambiguity | — | est. |
-| `rag-retrieved-instruction-escalation` | idea | open | prompt-injection-via-retrieval, context-contamination, permission-boundary | — | est. |
+| `rag-retrieved-instruction-escalation` | candidate | promote | prompt-injection-via-retrieval, context-contamination, permission-boundary | — | est. |
 | `calendar-invite-send-uncertain` | candidate | open | uncertain-external-effects, stale-state, duplicate-side-effects | — | est. |
 | `iac-drift-reconcile-untracked` | candidate | open | stale-state, hidden-environment-dependency, false-audit-history | — | est. |
 | `model-alias-pin-drift` | killed | kill | model-alias-drift, hidden-environment-dependency, stale-state | — | est. |
@@ -405,6 +407,24 @@ an error, but it is a row whose lesson has not been made transferable yet.
 
 **Evidence.** `results/28-f2-auth-justification-gate.md`, `results/29-boundary-synthesis.md`
 
+### Prompt-injection containment: the second family, built and measured by the foundry `prompt-injection-containment-built`
+
+**Status** screened · **Decision** promote · **Domain** agent tool platforms / MCP-style tool surfaces · **Data** measured
+
+**Hypothesis.** An implementation may read untrusted content but must not let it grant tool authority. If the family is built around argument PROVENANCE rather than text, a verifier can separate implementations that track where a value came from from ones that only see the value.
+
+**Why it should be hard.** Every interesting attack here is invisible to text inspection. The scope-expansion case is a legitimate tool, a legitimate recipient and a plausible amount whose only defect is that the number traces back to a retrieved email. An implementation that filters strings catches none of it, and one that blocks aggressively fails the liveness half instead.
+
+**Why it might be unfair.** The declared policy is unusually explicit — eight numbered rules evaluated in a published order — so a careful implementation can satisfy it mechanically. That is deliberate for fairness but it lowers the ceiling on difficulty: the family may turn out to be already-solved by capable agents, which is the first category in the kill taxonomy and has not been tested.
+
+**Results.** 1 passed / 9 failed against reference, injection-follower, provenance-blind, over-blocker, audit-liar, scope-expander, tool-output-commander, secret-exfiltrator, approval-confuser, nop-faker. 128 generated scenarios from a 432-point declared space. Reference passes 128/128. All nine mutants are caught, each failing between 8 and 124 scenarios. Antichain width 4 against a null-model mean of 16.7 (ceiling 124), so the compression is structural. Two mutants initially scored 0/128 because the scenarios blocked at P2_CAPABILITY_NOT_GRANTED before reaching the rules they claimed to test; the generator was corrected and mechanism_fired now asserts each attack is blocked by its governing rule.
+
+**Decision rationale.** Promoted to screened, not shipped. The verifier demonstrably discriminates — nine known-bad implementations, all caught, four independent axes — but no agent has attempted it, so its difficulty is unevidenced. Building it added a `difficulty-evidenced` gate to the ship report, which is why it reads HOLD rather than SHIP.
+
+**Transferability.** The provenance-over-text framing transfers to any tool-using agent that reads external data: MCP servers, RAG pipelines, browser agents, email and ticket automation. The specific policy table does not transfer unchanged, but the four structural pieces — trust labels on segments, provenance on arguments, capability plus approval binding, and an audit trail that must name the governing rule — appear to be domain-independent.
+
+**Evidence.** `src/families/prompt-injection-containment/`, `reports/prompt-injection-containment-family-report.md`, `reports/prompt-injection-containment-axis-report.md`, `reports/cross-family-diversity-report.md`, `examples/families/prompt-injection-containment/matrix.json`
+
 ### Lost confirmation page on a flaky checkout `browser-checkout-confirmation-lost`
 
 **Status** candidate · **Decision** open · **Domain** browser and UI automation · **Data** est.
@@ -555,7 +575,7 @@ an error, but it is a row whose lesson has not been made transferable yet.
 
 ### A retrieved document that asks for a refund `rag-retrieved-instruction-escalation`
 
-**Status** idea · **Decision** open · **Domain** retrieval-augmented tool use · **Data** est.
+**Status** candidate · **Decision** promote · **Domain** retrieval-augmented tool use · **Data** est.
 
 **Hypothesis.** We believe the interesting case is not the crude injection every frontier model already refuses, but a retrieved document whose instruction is indistinguishable in form from a legitimate customer request, where the only thing separating them is that one arrived through a channel with no authority.
 
@@ -565,11 +585,11 @@ an error, but it is a row whose lesson has not been made transferable yet.
 
 **Results.** _none — not run_
 
-**Decision rationale.** Kept as an idea rather than promoted because the fairness window has not been shown to exist, and this family is where enthusiasm most reliably outruns measurement. The deciding screen is cheap: hand three fresh agents the corpus with no grader and count how many act on the retrieved instruction, following the mini-trial method that killed a full design for about an hour of work.
+**Decision rationale.** Subsumed by the built family. The mechanism it proposed is now covered by prompt-injection-containment-built, which was constructed and measured; this row is kept as the idea that preceded it rather than deleted, because the ledger is a record and not a portfolio.
 
 **Transferability.** If a window exists, it transfers everywhere a model reads text it did not solicit — tickets, emails, code comments, tool output, other agents — which makes it the highest-leverage mechanism in this ledger and also the most likely to be already covered by existing safety evaluations. Base rates from public injection benchmarks should be checked before spending anything, since a mechanism that is already measured elsewhere adds no axis.
 
-**Evidence.** `/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task/FINDINGS.md`, `/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task/results/08-mechanism-screens.md`
+**Evidence.** `reports/prompt-injection-containment-family-report.md`
 
 ### Rescheduling when you cannot tell if the invite went out `calendar-invite-send-uncertain`
 

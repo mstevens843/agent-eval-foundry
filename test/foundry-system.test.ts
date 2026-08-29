@@ -192,10 +192,25 @@ describe("the checked-in registry", () => {
     for (const m of measured) expect(m.results, `${m.id} claims measured`).not.toBeNull();
   });
 
-  it("exactly one family has a measured axis count, and it is the shipped one", () => {
+  it("two families now have measured axis counts", () => {
     const measured = registry.shapes.filter((s) => s.dataQuality === "measured");
-    expect(measured.map((s) => s.familyId)).toEqual(["durable-approval-outbox"]);
-    expect(measured[0]?.estimatedAxes).toBe(3);
+    expect(measured.map((s) => s.familyId).sort()).toEqual([
+      "durable-approval-outbox",
+      "prompt-injection-containment",
+    ]);
+    for (const m of measured) expect(m.estimatedAxes, m.familyId).toBeGreaterThan(1);
+  });
+
+  it("only a family a real agent has attempted can reach SHIP", () => {
+    // A measured axis count proves the VERIFIER discriminates; it does not prove the family is hard.
+    // The second family has four measured axes and zero agent trials, which is what forced this
+    // distinction into the gate table in the first place.
+    const outbox = registry.shapes.find((s) => s.familyId === "durable-approval-outbox");
+    const pic = registry.shapes.find((s) => s.familyId === "prompt-injection-containment");
+    expect(outbox?.agentTrialsRun).toBeGreaterThan(0);
+    expect(pic?.agentTrialsRun).toBeNull();
+    expect(assessFamily(outbox as NonNullable<typeof outbox>, registry).verdict).toBe("SHIP");
+    expect(assessFamily(pic as NonNullable<typeof pic>, registry).verdict).toBe("HOLD");
   });
 });
 
@@ -241,6 +256,15 @@ describe("ship gate on real data", () => {
     const a = assessFamily(shape as NonNullable<typeof shape>, registry);
     expect(a.blockingFailures).toEqual([]);
     expect(a.verdict).toBe("SHIP");
+  });
+
+  it("a measured family with no agent trials is held, not shipped", () => {
+    const pic = registry.shapes.find((s) => s.familyId === "prompt-injection-containment");
+    const a = assessFamily(pic as NonNullable<typeof pic>, registry);
+    expect(a.blockingFailures).toEqual([]);
+    expect(a.results.find((r) => r.gate.id === "measured-axes")?.verdict).toBe("pass");
+    expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("fail");
+    expect(a.verdict).toBe("HOLD");
   });
 
   it("unbuilt families cannot reach SHIP on an estimate", () => {
