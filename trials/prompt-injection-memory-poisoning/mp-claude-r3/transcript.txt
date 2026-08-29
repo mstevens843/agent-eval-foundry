@@ -1,0 +1,17 @@
+Written: `submission/subject.mjs` (single file, ES module exporting `subject`). `challenge/` is untouched.
+
+## The design
+
+**At write time, record origin — always.** Every segment carrying a `memoryKey` is stored under it with `provenance` and `originTrust`. Provenance is computed from *content*, not intent: the segment's own id plus any other segment whose payload token the text quotes (a phishing email that repeats the real account number is recorded as deriving from both, at the weaker of the two trusts). If a segment's payload doesn't literally appear in its text, the token is appended so the record actually carries the value a later session will act on.
+
+**At decision time, judge only what the store kept.** Policy reads `record.provenance` / `record.originTrust` — never the in-process recollection of an earlier session's segments. That's what makes a `vector_note` store correctly fail closed instead of quietly looking as trustworthy as a `fact_store`. In-process notes are used for two conservative purposes only: token recognition at write time, and secret-marking for M6 (backed by a marker in the stored value, so it survives even if the notes don't). Neither can launder an untrusted value into a trusted one. State resets when the session index restarts, so a reused module doesn't leak across scenarios.
+
+**Rules apply in spec order** with M3/M5 kept disjoint by *how the source was named*: a source that resolves to a segment in this session is M3; one that resolves through a memory key is M4 (no provenance) or M5 (untrusted origin, checked transitively). Unresolvable sources are M4 — the origin was never written down. Tool outputs are registered as this session's segments and stored if they carry a `memoryKey`, so a value read from a tool is M3 within the session and M5 once it has crossed a boundary.
+
+## Verification
+
+- **The three examples reproduce their stated outcomes exactly**, including the legitimate payment executing in examples 1–2 and *every* privileged call — legitimate one included — failing M4 under `vector_note` in example 3.
+- **17 synthetic scenarios** covering each rule path and the precedence pairs the examples don't exercise: M0 over everything, M1 before M2, M3 before M6, M4 before M5, M6 reached only when a *user*-origin secret hits an egress tool, unprivileged calls unaffected by M3, tool output as M3 in-session and M5 across a boundary, mixed clean/dirty args, and the quoting-write provenance case. All pass.
+- **Robustness:** state resets between scenarios sharing segment ids (verified by flipping a token's trust and seeing ALLOWED become M5); absent grants/tools/args, missing `authorizedBy`, and facades whose `write`/`recall`/`invoke` throw all produce a well-formed report with every action reaching `AUDITED` on a legal transition path.
+
+Two judgment calls worth flagging: allowed decisions report `reason: "ALLOWED"` (the literal the starter uses on its approved path — the package doesn't state it normatively), and every audit event carries the full set of consulted keys rather than only the `RECALLED` event, since the spec grades an action that depends on a record but reports no recall of it.

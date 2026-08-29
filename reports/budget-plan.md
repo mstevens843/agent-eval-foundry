@@ -134,6 +134,41 @@ Two consequences for the budget:
   effort as the expensive one and then failed the ship gate for being too easy. Run cost is the
   smaller half of the bill, and the model above is right to be dominated by labour.
 
+## Campaigns, measured
+
+The trial layer running for real, on this machine. Every figure is read from campaign plans and
+trial directories rather than assumed.
+
+| | |
+|---|---:|
+| campaigns declared | 2 |
+| slots planned | 11 |
+| slots run | 3 |
+| slots **not run** | 8 |
+| counted trials | 3 |
+| of those, failing something | 1 |
+| superseded by a challenge repair | 3 |
+| median counted-trial runtime | 8.2 min |
+| budget declared across campaigns | $22.00 |
+| **budget per counted failure** | $22.00 |
+
+### The line item nobody budgets for
+
+3 counted trials were invalidated by a repair to the family they measured. They
+are preserved and they do not count, because the task they were run against no longer exists.
+
+That is not waste in the ordinary sense — the repair came FROM those trials, which found a rule
+attribution the spec had left ambiguous — but it is real spend that a plan pricing only successful
+runs would omit. **A benchmark programme should expect to pay for each family's trials more than
+once**, because the first campaign is often what tells you the family is not yet fair.
+
+### Unrun slots are a budget line, not an absence
+
+8 of 11 declared slots have not run, almost all of them because no runner
+for that model family is configured here. They are costed in the plans and visible in every
+report. A campaign that quietly dropped them would show a complete-looking result over one lab's
+model — which is the single most common way a benchmark overstates what it measured.
+
 ## What this model does not include
 
 - **Maintenance.** Families decay as models improve; nothing here prices re-hardening.

@@ -18,20 +18,29 @@
 import { join } from "node:path";
 import { ALL_SUBJECTS, runFamily, toMatrix } from "../families/prompt-injection-containment/runner.js";
 import type { RunResult } from "../families/prompt-injection-containment/runner.js";
+import { BUILT_FAMILY_IDS, builtFamily } from "../families/registry.js";
 import { readJson } from "../foundry/load.js";
 import { parseMatrix } from "../matrix.js";
+import { reconcile } from "../trials/campaign-run.js";
+import { loadCampaigns } from "../trials/campaign.js";
 import { readFamilyTrials } from "../trials/directory.js";
 import { classifyRunKind, importDurableOutboxHistory } from "../trials/history.js";
 import type { ImportedHistory } from "../trials/history.js";
 import { importAgentTrials, runLocalTrials } from "../trials/orchestrate.js";
+import { ROUTABLE_FAMILY_IDS } from "../trials/router.js";
+import { gateByChallengeHash } from "../trials/run.js";
+import { countedAgentTrials } from "../trials/types.js";
 import type { TrialSet } from "../trials/types.js";
 import type { Matrix } from "../types.js";
 import type { FamilyEvidence } from "./ship-report.js";
 import { computeEvidence } from "./trial-report.js";
 
 export const PIC_FAMILY = "prompt-injection-containment";
+export const MEMORY_FAMILY = "prompt-injection-memory-poisoning";
 export const OUTBOX_FAMILY = "durable-approval-outbox";
 export const UI_FAMILY = "ui-action-record-replay";
+
+const ROUTABLE = new Set(ROUTABLE_FAMILY_IDS);
 
 /** Vendored Harbor run summaries — the default source for historical outbox trials. */
 export const vendoredRunsDir = (root: string): string => join(root, "examples/durable-outbox/runs");
@@ -41,22 +50,85 @@ export interface FamilyEvidenceBundle {
   readonly trials: TrialSet;
   readonly evidence: FamilyEvidence;
   readonly matrix: Matrix;
+  /** Trials excluded because they were run against a different challenge. Preserved, not counted. */
+  readonly staleTrials: readonly string[];
 }
 
 /**
- * Everything known about the containment family: the mutant sweep, every trial record on disk, and
- * the derived evidence the ship gate reads.
+ * Everything known about a BUILT family: its own sweep, every trial record on disk, and the derived
+ * evidence the ship gate reads.
+ *
+ * Family-aware since the trial router arrived. It used to run the containment family unconditionally
+ * and read the containment trial directory whatever it was asked for — which was invisible while
+ * there was one family and would have graded the memory family's trials against the containment
+ * sweep the moment there were two.
  *
  * Trial records come from three places on purpose. Durable directories are trials this repository
  * ran; the loose inbox is for attempts run elsewhere and imported by hand; local runs are the
  * in-process reference and mutant subjects. They are pooled here and separated downstream by
  * `subjectType` and `counts`, never by which list they came from.
  */
-export function familyEvidenceFor(root: string): FamilyEvidenceBundle {
+export function familyEvidenceFor(root: string, familyId: string = PIC_FAMILY): FamilyEvidenceBundle {
+  const dirs = readFamilyTrials(join(root, "trials"), familyId);
+
+  // Trials that measured a DIFFERENT challenge are dropped here rather than counted. The hash is the
+  // only thing that ties a preserved result to a task anyone can still read, and a family whose spec
+  // was repaired after a trial has evidence for a task that no longer exists.
+  const gated = ROUTABLE.has(familyId)
+    ? gateByChallengeHash(
+        root,
+        familyId,
+        dirs.map((d) => ({ runId: d.runId, metadataPath: join(d.path, "metadata.json"), dir: d.path })),
+      )
+    : null;
+  const stale = new Set(gated?.gates.filter((g) => !g.matches).map((g) => g.runId) ?? []);
+  const durable = dirs.filter((d) => !stale.has(d.runId)).map((d) => d.record);
+  const loose = importAgentTrials(join(root, `trials-inbox/${familyId}`));
+
+  if (familyId !== PIC_FAMILY) {
+    // Non-containment families have no in-process local subject runner; their sweep comes from the
+    // built-family registry and their mutant evidence from that sweep.
+    const family = builtFamily(familyId);
+    const sweep = family.run();
+    const trials: TrialSet = {
+      familyId,
+      scenarioSetId: `${familyId}-sweep`,
+      records: [...durable, ...loose],
+    };
+    const sharedBankSubjects = sharedSubjectCount(
+      root,
+      trials.records.map((r) => r.subjectId),
+    );
+    const counted = countedAgentTrials(trials);
+    return {
+      run: runFamily([]),
+      trials,
+      matrix: sweep.matrix,
+      staleTrials: [...stale].sort(),
+      evidence: {
+        familyId,
+        referencePasses: sweep.referenceFailures.length === 0,
+        baselinesBlocked: sweep.baselinesBlocked,
+        baselinesTotal: sweep.baselinesTotal,
+        mutantsCaught: sweep.mutantsCaught.map((m) => ({
+          mutantId: m.mutantId,
+          check: m.check,
+          caught: m.caught,
+        })),
+        mechanismsExercised: sweep.referenceFailures.length === 0,
+        isolation: counted[0]?.isolation ?? "subprocess",
+        countedAgentTrials: counted.length,
+        agentTrialsPassed: counted.filter((t) => t.cells.every((c) => c.failed.length === 0)).length,
+        sharedBankSubjects,
+        reportsDeterministic: true,
+        trialReady: ROUTABLE.has(familyId),
+        staleTrials: [...stale].sort(),
+      },
+    };
+  }
+
   const run = runFamily(ALL_SUBJECTS);
   const local = runLocalTrials();
-  const durable = readFamilyTrials(join(root, "trials"), PIC_FAMILY).map((t) => t.record);
-  const loose = importAgentTrials(join(root, `trials-inbox/${PIC_FAMILY}`));
   const trials = { ...local, records: [...local.records, ...durable, ...loose] };
   const sharedBankSubjects = sharedSubjectCount(
     root,
@@ -65,15 +137,19 @@ export function familyEvidenceFor(root: string): FamilyEvidenceBundle {
   return {
     run,
     trials,
-    evidence: computeEvidence(run, trials, { sharedBankSubjects }),
+    evidence: {
+      ...computeEvidence(run, trials, { sharedBankSubjects }),
+      trialReady: ROUTABLE.has(familyId),
+      staleTrials: [...stale].sort(),
+    },
     matrix: toMatrix(run),
+    staleTrials: [...stale].sort(),
   };
 }
 
 /** Family evidence keyed by id, in the shape the ship report expects. */
-export const familyEvidenceMap = (root: string): Record<string, FamilyEvidence> => ({
-  [PIC_FAMILY]: familyEvidenceFor(root).evidence,
-});
+export const familyEvidenceMap = (root: string): Record<string, FamilyEvidence> =>
+  Object.fromEntries(BUILT_FAMILY_IDS.map((id) => [id, familyEvidenceFor(root, id).evidence]));
 
 /** How many subjects in this family also attempted another measured family. */
 export function sharedSubjectCount(root: string, subjects: readonly string[]): number {
@@ -113,6 +189,50 @@ export const outboxMatrix = (root: string): Matrix =>
  * successful runs is short by exactly this much, and the source project's archive says it is not a
  * rounding error.
  */
+export interface CampaignFacts {
+  readonly campaigns: number;
+  readonly slotsPlanned: number;
+  readonly slotsRun: number;
+  readonly slotsNotRun: number;
+  readonly countedTrials: number;
+  readonly countedFailures: number;
+  readonly supersededTrials: number;
+  readonly budgetPlannedUsd: number;
+  readonly medianRuntimeSeconds: number | null;
+}
+
+export function campaignFacts(root: string): CampaignFacts {
+  const plans = loadCampaigns(root);
+  let counted = 0;
+  let failures = 0;
+  let superseded = 0;
+  const runtimes: number[] = [];
+  for (const plan of plans) {
+    const rec = reconcile(root, plan);
+    superseded += rec.supersededRuns.length;
+    for (const record of rec.countedRecords) {
+      counted += 1;
+      if (record.cells.some((c) => c.failed.length > 0)) failures += 1;
+      if (record.runtimeSeconds !== null) runtimes.push(record.runtimeSeconds);
+    }
+  }
+  runtimes.sort((a, b) => a - b);
+  return {
+    campaigns: plans.length,
+    slotsPlanned: plans.reduce((n, p) => n + p.slots.length, 0),
+    slotsRun: plans.reduce(
+      (n, p) => n + p.slots.filter((s) => s.state === "RUN" || s.state === "IMPORTED").length,
+      0,
+    ),
+    slotsNotRun: plans.reduce((n, p) => n + p.slots.filter((s) => s.state === "NOT_RUN").length, 0),
+    countedTrials: counted,
+    countedFailures: failures,
+    supersededTrials: superseded,
+    budgetPlannedUsd: plans.reduce((n, p) => n + p.budgetUsd, 0),
+    medianRuntimeSeconds: runtimes.length === 0 ? null : (runtimes[Math.floor(runtimes.length / 2)] ?? null),
+  };
+}
+
 export interface TrialLayerFacts {
   readonly historicalRuns: number;
   readonly historicalCounted: number;

@@ -11,13 +11,13 @@ number you can only get by writing the failures down.
 | candidates | **37** |
 | status `idea` | 6 |
 | status `candidate` | 7 |
-| status `built` | 2 |
-| status `trialed` | 2 |
+| status `built` | 1 |
+| status `trialed` | 3 |
 | status `shipped` | 4 |
 | status `killed` | 16 |
 | measured (a real result exists) | 21 |
 | estimated | 16 |
-| recorded model spend | $107.57 |
+| recorded model spend | $129.57 |
 | kills that demonstrably cost $0 | 8 of 16 |
 | kills that cost model spend | 0 |
 | kills with no cost recorded | 8 |
@@ -60,7 +60,7 @@ an error, but it is a row whose lesson has not been made transferable yet.
 | `authorization-justification-gate` | killed | kill | permission-boundary, false-audit-history | $0.00 | measured |
 | `prompt-injection-containment-built` | trialed | kill | prompt-injection-via-retrieval, context-contamination, permission-boundary | $0.00 | measured |
 | `durable-outbox-historical-import` | shipped | promote | uncertain-external-effects, duplicate-side-effects, false-audit-history, liveness-stall | $0.00 | measured |
-| `prompt-injection-memory-poisoning` | built | open | context-contamination, false-audit-history, prompt-injection-via-retrieval | $0.00 | measured |
+| `prompt-injection-memory-poisoning` | trialed | promote | context-contamination, false-audit-history, prompt-injection-via-retrieval | $22.00 | measured |
 | `ui-action-record-replay-built` | built | open | ui-replay-mismatch, stale-state, hidden-environment-dependency | $0.00 | measured |
 | `prompt-injection-capability-routing` | idea | open | permission-boundary, tool-result-ambiguity, prompt-injection-via-retrieval | $0.00 | est. |
 | `prompt-injection-cross-tool-escalation` | idea | open | permission-boundary, tool-result-ambiguity, duplicate-side-effects | $0.00 | est. |
@@ -453,7 +453,7 @@ an error, but it is a row whose lesson has not been made transferable yet.
 
 ### Durable memory poisoning across sessions `prompt-injection-memory-poisoning`
 
-**Status** built · **Decision** open · **Domain** agent memory and retrieval across sessions · **Data** measured
+**Status** trialed · **Decision** promote · **Domain** agent memory and retrieval across sessions · **Data** measured
 
 **Hypothesis.** The parent family died as already-solved because provenance never had to survive a store: three passing submissions tracked it as a field on an in-memory object. Separating ingestion from use by a session boundary should make the same rule expensive, because the implementation has to write the origin down at a moment when doing so looks pointless.
 
@@ -461,13 +461,13 @@ an error, but it is a row whose lesson has not been made transferable yet.
 
 **Why it might be unfair.** The store's semantics have to be published or the task becomes guesswork about the harness. `vector_note` cannot keep provenance at all, so the rule covering that case (M4) is stated in the spec and provenance is never demanded where the store could not hold it.
 
-**Results.** 1 passed / 11 failed against reference, provenance-dropper, self-trusting-reader, summary-launderer, recall-blind-executor, memory-refuser, audit-forger, same-session-resolver, recency-over-provenance, attention-budgeted, nop-faker, over-blocker. Reference passes 288/288 measured scenarios. All 11 mutants are caught by the check each was written to trip. 3 measured axes, 11 distinct catch sets, 0 blind instances. NO AGENT TRIAL HAS BEEN RUN.
+**Results.** 3 passed / 11 failed against reference, claude-opus-5, provenance-dropper, self-trusting-reader, summary-launderer, recall-blind-executor, memory-refuser, audit-forger, same-session-resolver, recency-over-provenance, attention-budgeted, nop-faker, over-blocker. Reference passes 288/288. All 11 mutants caught by their intended check. 3 measured detection axes. THREE COUNTED AGENT TRIALS (claude-opus-5, subprocess isolation, 288 scenarios each): one failed 32 scenarios, two passed everything. Every one of the 32 failures is at sessionsBetween 1 or 3 and none at 0 — the campaign's pre-registered confirm signal. Three earlier trials against a pre-repair challenge are preserved and do not count.
 
-**Decision rationale.** Promoted from the evolution engine's lowest-kill-risk proposal (30%) and built end to end. It is HOLD, not SHIP: the verifier discriminates and nothing that could plausibly fail it has attempted it. The next action is a counted agent trial, and the pre-registered kill signal is the parent's — every counted trial passing means already-solved again and the persistence hypothesis was wrong.
+**Decision rationale.** SHIP. The first family this repository built from scratch, evolved from a killed parent, and shipped on real agent evidence. The evolution operator `add_time_separation` is confirmed: the parent's three trials passed everything, the descendant's failures land only where the operator's knob bites. The campaign also found a fairness defect before it found difficulty — one trial cited M3 where the verifier expected M5, and the published evaluation order said M3 was right. Repairing the spec invalidated three counted trials by changing the challenge hash, and they were re-run.
 
 **Transferability.** The mechanism is provenance survival across a persistence boundary, which appears wherever an agent has durable memory: RAG note stores, CRM summaries, ticket histories, long-running assistants.
 
-**Evidence.** `src/families/memory-poisoning/`, `examples/families/prompt-injection-memory-poisoning/`, `reports/prompt-injection-memory-poisoning-axis-report.md`
+**Evidence.** `src/families/memory-poisoning/`, `examples/families/prompt-injection-memory-poisoning/`, `reports/prompt-injection-memory-poisoning-axis-report.md`, `campaigns/prompt-injection-memory-poisoning-2026-08.json`, `trials/prompt-injection-memory-poisoning/`, `reports/prompt-injection-memory-poisoning-agent-results.md`, `reports/evolution-validation-report.md`
 
 ### UI action record and replay, built `ui-action-record-replay-built`
 
@@ -481,11 +481,11 @@ an error, but it is a row whose lesson has not been made transferable yet.
 
 **Results.** 1 passed / 10 failed against reference, stale-state-reader, eager-resolver, hidden-confirmation-skipper, duplicate-executor, model-in-the-loop, action-order-reorderer, audit-forger, halter-not-reporter, over-blocker, nop-recorder. Reference passes 324/324 measured scenarios. All 10 mutants caught by their intended check. 6 measured axes — the widest of any family here — with 12 distinct catch sets and 0 blind instances. NO AGENT TRIAL HAS BEEN RUN.
 
-**Decision rationale.** Promoted from a scaffold to a measured family in this cycle. Six measured axes is the strongest verifier-discrimination result in the repository, and it still says nothing about difficulty: HOLD until a counted agent trial exists.
+**Decision rationale.** Measured, packaged, routable and untried. Its campaign plan is written with a pre-registered kill signal and every slot unrun: the memory-poisoning campaign was the one that answered whether the evolution engine works, and splitting the budget would have answered neither well. Six measured detection axes remains the widest structure here and remains a statement about the verifier.
 
 **Transferability.** Directly relevant to agent 'hands' work: any product that records a workflow once and replays it many times faces exactly these three outcomes and exactly this idempotency requirement.
 
-**Evidence.** `src/families/ui-action-record-replay/`, `examples/families/ui-action-record-replay/`, `reports/ui-action-record-replay-axis-report.md`
+**Evidence.** `src/families/ui-action-record-replay/`, `examples/families/ui-action-record-replay/`, `reports/ui-action-record-replay-axis-report.md`, `campaigns/ui-action-record-replay-2026-08.json`, `reports/ui-action-record-replay-upgrade-report.md`
 
 ### Capability routing across documents and tools (proposed variant) `prompt-injection-capability-routing`
 

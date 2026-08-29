@@ -446,11 +446,11 @@ describe("UI action record/replay family", () => {
     expect(shape?.expectedMutants.length).toBeGreaterThanOrEqual(4);
   });
 
-  it("passes every structural gate but is not difficulty-evidenced", () => {
+  it("passes every structural gate and is blocked only for want of a trial", () => {
     const a = assessFamily(shape as NonNullable<typeof shape>, registry);
-    expect(a.blockingFailures).toEqual([]);
+    expect(a.blockingFailures).toEqual(["difficulty-evidenced"]);
     expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("fail");
-    expect(a.verdict).toBe("HOLD");
+    expect(a.verdict).toBe("NOT-READY");
   });
 
   it("declares both halves so refusing to replay cannot pass", () => {

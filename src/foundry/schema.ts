@@ -111,6 +111,18 @@ export const RULE_CODES = [
   "TRIAL_AGENT_WITHOUT_ARTIFACT",
   "TRIAL_EMPTY_CELLS",
   "TRIAL_DUPLICATE_RUN_ID",
+  "TRIAL_CHALLENGE_HASH_MISSING",
+  "TRIAL_CHALLENGE_HASH_MISMATCH",
+  // campaign plans — a trial run declared before it happens
+  "CAMPAIGN_NO_KILL_SIGNAL",
+  "CAMPAIGN_COUNTING_CONTRADICTS_CODE",
+  "CAMPAIGN_SLOT_WITHOUT_RUN",
+  "CAMPAIGN_CHALLENGE_HASH_MISMATCH",
+  "CAMPAIGN_RETRY_ON_REFUSAL",
+  // family status coherence
+  "STATUS_SHIP_WITHOUT_TRIALS",
+  "STATUS_SHIP_ALREADY_SOLVED",
+  "STATUS_STAGE_WITHOUT_EVIDENCE",
   // durable trial directories
   "TRIALDIR_MISSING_FILE",
   "TRIALDIR_COUNTED_WITHOUT_VERIFIER",
@@ -120,6 +132,7 @@ export const RULE_CODES = [
   // shared subject bank
   "BANK_ADDITIVE_WITHOUT_OVERLAP",
   "BANK_INCOMPARABLE_SCENARIO_SET",
+  "BANK_KIND_MISMATCH",
   // scenario-space sampling
   "SAMPLE_KNOB_FROZEN",
   // family kill analysis — a family may not die for a reason nobody wrote down

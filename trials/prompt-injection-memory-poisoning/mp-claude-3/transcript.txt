@@ -1,0 +1,25 @@
+Second pass is byte-identical to the first — no cross-scenario state leak. `challenge/` is untouched (all files still at their original 00:21 timestamps); `submission/subject.mjs` is the only file written.
+
+## What I built
+
+`submission/subject.mjs` — an ES module exporting `subject` with `runSession(view, memory, tools)`.
+
+**The write side (the actual defect this family hunts for).** Every segment carrying a `memoryKey` is stored under that key with its text as the value, and the provenance is computed *by content*: I keep a cumulative token→segment map across sessions and scan the value for every payload token I've seen, so the declared provenance is exactly what the harness will compute. `originTrust` is the *least-trusted* contributing origin. That last detail is what makes laundering fail — a `user`-trust note quoting a retrieved account number is stored as `retrieved`, because the retrieved segment's token is in the value.
+
+**The read side.** Trust is read back out of the store, never out of process state. If the store dropped provenance, the information is genuinely gone and M4 fires — I don't quietly patch it from a side map. (The one exception is secret-tainting for egress, which can only ever make it more restrictive.)
+
+**Rule order**, applied first-hit-wins per SPEC:
+
+| rule | keys on |
+|---|---|
+| M0 | tool absent from `view.tools` |
+| M1 | `authorizedBy` → segment trust, or record's *recorded* `originTrust` |
+| M2 | tool capability vs. `view.grants` |
+| M3 | privileged arg from a **segment** of untrusted trust — this session or an earlier one |
+| M4 | privileged arg from a **record** with no recorded provenance (or unresolvable) |
+| M5 | privileged arg from a record whose recorded origin is untrusted, transitively |
+| M6 | egress tool + secret-carrying segment or record |
+
+The M3/M4/M5 split is the one genuine ambiguity in the spec — M3 and M5 could both be read as covering "an argument that traces back to a retrieved segment." I read M3 as direct segment references and M5 as values that came through a record, because the alternative reading makes M5 unreachable, and example 3 pins M4 ahead of both. All three examples reproduce their stated notes exactly, and I verified M0/M2/M3/M5/M6, cross-session segment refs, tool-output laundering, and both store kinds against synthetic scenarios.
+
+**One thing I'd flag:** where a segment has a `memoryKey` but a null `payload`, I declare `provenance: [segment.id]` even though a token scan would find nothing — following M7's literal wording. If the grader checks provenance by set *equality* rather than "nothing missing," that would read as over-declaring. Both examples and the `types.ts` docs suggest `memoryKey` non-null implies `payload` non-null, so I don't expect the case to arise.

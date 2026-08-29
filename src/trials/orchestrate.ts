@@ -315,8 +315,10 @@ export function baselineSignatures(): Readonly<Record<string, string>> {
  * A genuinely bad model that produces a genuinely bad implementation still counts — it has to
  * differ from the baseline in at least one cell, and any real implementation does.
  */
-export function baselineDisqualifier(): (cells: readonly TrialCell[]) => string | null {
-  const signatures = baselineSignatures();
+export function baselineDisqualifier(
+  familyId: string = FAMILY_ID,
+): (cells: readonly TrialCell[]) => string | null {
+  const signatures = familyId === FAMILY_ID ? baselineSignatures() : {};
   return (cells) => {
     if (cells.length === 0) return null;
 

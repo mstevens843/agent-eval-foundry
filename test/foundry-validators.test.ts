@@ -114,6 +114,24 @@ const COVERED_IN_EVOLUTION_TEST: readonly RuleCode[] = [
   "LEDGER_KILL_WITHOUT_ANALYSIS",
 ];
 
+/**
+ * Rules whose known-bad case lives in `trials-routing.test.ts`: the campaign plan format, the
+ * challenge hash, bank kinds and status coherence. Same delegation contract as above.
+ */
+const COVERED_IN_ROUTING_TEST: readonly RuleCode[] = [
+  "TRIAL_CHALLENGE_HASH_MISSING",
+  "TRIAL_CHALLENGE_HASH_MISMATCH",
+  "CAMPAIGN_NO_KILL_SIGNAL",
+  "CAMPAIGN_COUNTING_CONTRADICTS_CODE",
+  "CAMPAIGN_SLOT_WITHOUT_RUN",
+  "CAMPAIGN_CHALLENGE_HASH_MISMATCH",
+  "CAMPAIGN_RETRY_ON_REFUSAL",
+  "STATUS_SHIP_WITHOUT_TRIALS",
+  "STATUS_SHIP_ALREADY_SOLVED",
+  "STATUS_STAGE_WITHOUT_EVIDENCE",
+  "BANK_KIND_MISMATCH",
+];
+
 /** Rules exercised by code below rather than by a JSON fixture. Keeps assertion 3 honest. */
 const PROGRAMMATIC: readonly RuleCode[] = [
   "E_TYPE",
@@ -370,6 +388,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ...COVERED_IN_TRIALS_TEST,
       ...COVERED_IN_ORCHESTRATION_TEST,
       ...COVERED_IN_EVOLUTION_TEST,
+      ...COVERED_IN_ROUTING_TEST,
     ]);
     const uncovered = RULE_CODES.filter((c) => !covered.has(c));
     expect(
@@ -385,6 +404,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ["test/trials.test.ts", COVERED_IN_TRIALS_TEST],
       ["test/orchestration.test.ts", COVERED_IN_ORCHESTRATION_TEST],
       ["test/evolution.test.ts", COVERED_IN_EVOLUTION_TEST],
+      ["test/trials-routing.test.ts", COVERED_IN_ROUTING_TEST],
     ];
     for (const [file, codes] of delegated) {
       const source = readFileSync(`${ROOT}${file}`, "utf8");

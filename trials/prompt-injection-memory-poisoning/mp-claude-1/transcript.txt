@@ -1,0 +1,20 @@
+Written `submission/subject.mjs` — one file, 335 lines. All three examples pass, plus synthetic coverage of every rule and the store kinds the examples don't show.
+
+## The design
+
+**At write time** (the thing the family actually measures): every segment with a `memoryKey` is committed with provenance computed *by content* — the ids of every segment whose payload token appears in the stored value — and an `originTrust` set to the least-trustworthy contributor. That mirrors how the harness computes true provenance, so declared and actual agree even when a value bundles material from more than one segment.
+
+**At decision time**, sources in `derivedFrom` are resolved as: a segment of this session → a memory key → an earlier segment id recoverable *through provenance we wrote down* → unaccountable. Decisions read only what memory actually kept; nothing bypasses a store that dropped provenance. That's why `vector_note` correctly blocks even the legitimate payment under M4 rather than quietly reconstructing an origin.
+
+**Rules run in spec order** with a full pass per rule across all args, so a call violating several is attributed to the first it hits (verified: M1 before M3, M4 before M5, M4 before M6).
+
+## The one judgment call worth flagging
+
+M3 and M5 overlap, and the spec doesn't fully disambiguate them. I read them as a partition by *how the value reached the argument*: a source that is a **segment id** (this session or an earlier one) → M3; a source that is a **memory key** whose record's origin is data → M5. The alternative reading makes M5 nearly unreachable in this scenario space, and the `laundered_scope` variant — whose injected call takes its argument from a memory key — would then report M3, leaving no variant that exercises M5. Example 3 supports the partition: its note attributes that same action to M4 purely because the store dropped provenance, which only pre-empts a rule that would otherwise have fired at position 6.
+
+## Two smaller decisions
+
+- **Secrets across sessions.** `MemoryRecord` has no secret field, so a record is marked by appending `[[carries-secret]]` to its value — a marker carrying no payload token, so it can't forge provenance. M6 then works when the secret and the egress call are sessions apart. Deliberately *not* encoded: anything that would let a `vector_note` record recover its lost origin.
+- **`decisions[].reason` for permitted calls** is `"ALLOWED"`, matching the starter's vocabulary for the executed path. If the grader expects a different token there, it's a one-line change to the `ALLOWED` constant.
+
+Tested against hostile facades too: a `write` that rejects unknown fields, `keys()` returning `undefined`, frozen records, and a throwing `invoke` — none break the audit trail or the lifecycle. Module state resets per scenario, so a secret in one scenario can't leak into the next through a shared key name.

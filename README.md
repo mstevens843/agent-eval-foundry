@@ -10,22 +10,28 @@ typed form and generates the next candidate from that reason.
 
 **This foundry does not just produce benchmark-looking tasks. It kills weak ones and records why.**
 
-The clearest thing in here is a negative result the system produced about its own work, and what it
-did next:
+**The loop has now closed once, with real evidence at both ends:**
 
-1. Built `prompt-injection-containment` end to end — 128 measured scenarios, 9 mutants, 4 measured axes.
-2. Ran three real Claude trials through its own trial layer. All three produced genuine 231–318 line
-   implementations. **All three passed 128 of 128.**
+1. Built `prompt-injection-containment` — 128 scenarios, 9 mutants, 4 measured axes.
+2. Ran three real Claude trials. All three wrote genuine 231–318 line implementations.
+   **All three passed 128 of 128.**
 3. Killed it: `already_solved`, derived from the trial records, disposition `harden`.
-4. Generated four variants from named evolution operators, each with a pre-registered kill risk.
-5. Built the lowest-risk one — `prompt-injection-memory-poisoning` — end to end: 288 measured
-   scenarios, 11 mutants, 3 measured axes, reference clean.
-6. Promoted `ui-action-record-replay` from a scaffold to a measured family: 324 scenarios, 10
-   mutants, **6 measured axes**, the widest structure here.
+4. Generated four variants from named operators, each with a pre-registered kill risk.
+5. Built the lowest-risk one, `prompt-injection-memory-poisoning` — 288 scenarios, 11 mutants,
+   reference clean.
+6. **Ran a real campaign against it.** One of three counted trials failed, on 32 scenarios.
+7. **Every one of those failures is at `sessionsBetween` 1 and 3, and none at 0** — the exact pattern
+   the campaign pre-registered as its confirm signal, three weeks of work before the run.
 
-**The loop has not closed.** Neither new family has been attempted by a real agent, so both carry
-exactly the caveat that killed their ancestor. `reports/foundry-evolution-report.md` says so in the
-same table as the good news, and lists what would falsify the whole approach.
+The operator `add_time_separation` produced difficulty that the parent did not have. The same model
+family, the same harness, the same isolation: what changed is that provenance had to survive a store.
+
+**And the campaign found a defect in the family first.** One trial cited `M3` on 47 scenarios — the
+correct rule by the spec's own published evaluation order — and the verifier marked every one wrong.
+The model was right and the family was ambiguous. Repairing the spec changed the challenge package,
+which changed its hash, which **automatically stopped all three trials from counting**. They are
+preserved under `trials/` and the campaign was re-run. That is the system working, and it is the
+most expensive thing in the repository to have got right.
 
 ---
 
@@ -73,13 +79,17 @@ gets tuned until the answer flatters.
 
 ## The corpora, and what each number is allowed to mean
 
-| corpus | instances | subjects | axes | what the bank is | what the number means |
+| corpus | instances | subjects | axes | bank kind | what the number means |
 |---|---:|---:|---:|---|---|
-| `durable-approval-outbox` | 24 | 10 | **3** | engines written by frontier models attempting the task | how real implementations fail |
-| `prompt-injection-containment` | 128 | 9 | **4** | mutants written alongside the verifier | a lower bound on what the verifier detects |
-| `prompt-injection-memory-poisoning` | 288 | 11 | **3** | mutants, one per plausible engineering decision | as above — and no agent has attempted it |
-| `ui-action-record-replay` | 324 | 10 | **6** | mutants, each a one-line diff from the reference | as above — and no agent has attempted it |
-| SWE-bench Verified | 500 | 134 | **215** | 134 independent leaderboard submissions | how real systems fail, at scale |
+| `durable-approval-outbox` | 24 | 10 | **3** | imported | how real implementations fail |
+| `prompt-injection-containment` | 128 | 9 | **4** | mutant | a lower bound on what the verifier detects |
+| `prompt-injection-memory-poisoning` | 288 | 11 | **3** | mutant | as above — **and 3 counted agent trials exist, 1 of which failed** |
+| `ui-action-record-replay` | 324 | 10 | **6** | mutant | as above — no agent has attempted it |
+| SWE-bench Verified | 500 | 134 | **215** | imported | how real systems fail, at scale |
+
+`kind` is a type, not a caption. `assertComparableKinds` refuses to compare a mutant bank with an
+agent bank in code, because the two answer different questions and adding them produces the most
+quotable wrong number this repository could emit.
 
 Two kinds of claim in one table, and the reports say which is which wherever they appear. The outbox
 row and the SWE-bench row are statements about **difficulty**: the bank is implementations somebody
@@ -240,30 +250,44 @@ which one it read.
 
 ## The lifecycle
 
-Every command below is real; nothing in this list is aspirational.
+The whole loop, and every command is real.
 
 | # | step | command | what it produces |
 |---|---|---|---|
-| 1 | define the mechanism | `foundry mechanisms` | 14 mechanisms, each with a mutant that can detect it |
-| 2 | define the task shape | `foundry ship` | 19-gate readiness table per family |
-| 3 | generate scenarios | `foundry family scenarios` | 432-point space → 128 measured |
-| 4 | run reference + mutants | `foundry trials local` | normalized trial records |
-| 5 | verify the hidden checks fire | `foundry family trials` | trial-readiness report |
-| 6 | package the agent-facing challenge | `foundry challenge build --out d` | 8 visible files, hidden artifacts excluded and checked |
-| 7 | **run real trials** | `foundry trials run --run-id … --model …` | durable trial directories, counted or refused |
-| 8 | import trials run elsewhere | `foundry trials import <dir>` | the same records, same counting rules |
-| 9 | measure axes | `foundry family axis` | antichain width + null-model calibration |
-| 10 | check the shared bank | `foundry shared-bank` | refused / partial / measured, with the threshold stated |
-| 11 | apply the ship gate | `foundry ship` | SHIP / HOLD / NOT-READY |
-| 12 | budget the next work | `foundry budget --total N --rate R` | families, instances, axes, and what is not affordable |
-| 13 | **analyse the kill** | `foundry kill analyze <family>` | a typed reason with cited evidence and a disposition |
-| 14 | **evolve** | `foundry evolve <family>` | variants from named operators, each with a kill risk |
-| 15 | **promote** | `foundry family promote <variant>` | refuses unless the variant actually executes |
+| 1 | register the mechanism | `foundry mechanisms` | 14 mechanisms, each with a mutant that can detect it |
+| 2 | define the task shape | `foundry family shape --family <id>` | a shape generated from the family's own code |
+| 3 | generate scenarios | `foundry family sweep --family <id>` | the declared space, and the measured subset drawn from it |
+| 4 | build reference and mutants | `foundry family sweep --family <id>` | reference clean, every mutant caught by its intended check |
+| 5 | verify the hidden checks fire | `foundry family trials` | which checks fire, and which have never fired |
+| 6 | package the agent challenge | `foundry challenge build --family <id> --out d` | visible files, hidden artifacts excluded and content-checked |
+| 7 | **run or import a campaign** | `foundry trials campaign --plan f --run` | durable trial directories, counted or refused |
+| 8 | normalize trials | `foundry trials matrix --family <id>` | the agent bank: counted trials as a matrix |
+| 9 | measure axes | `foundry family axis --family <id>` | antichain width with null-model calibration |
+| 10 | apply the ship gate | `foundry ship` | SHIP / NOT-READY / HOLD, per family, per gate |
+| 11 | kill or evolve if weak | `foundry kill analyze <f>`, `foundry evolve <f>` | a typed reason with citations, and variants from named operators |
+| 12 | budget the next round | `foundry budget --total N --rate R` | families, axes, campaign spend, and what is not affordable |
 
-Every step has run. Steps 13–15 are what this phase added, and step 4 → 13 is the join that makes it
-a loop rather than a pipeline.
+Steps 7 and 8 are what this phase added. Before them, step 6 produced a package nobody could run
+against a second family, and "no agent has attempted it" was a fact about the tooling.
 
----
+### Running a campaign
+
+```bash
+foundry trials campaign                                   # every plan, and its state
+foundry trials campaign --plan campaigns/<plan>.json      # validate and reconcile — no spend
+foundry trials campaign --plan campaigns/<plan>.json --run # execute the runnable slots
+foundry trials verify --family <id> <run-id>              # re-grade a preserved submission
+foundry trials prepare --family <id> --out dir            # the exact bundle, for running elsewhere
+```
+
+A plan pre-registers the hypothesis, the kill signal, the confirm signal, the counting rules and the
+challenge hash. `assertPlanHonest` refuses a plan with no kill signal, a plan that redefines what
+counts, and a plan that permits re-running a slot until the provider stops refusing.
+
+Slots that cannot run here are `NOT_RUN` and say why. Eight of the eleven declared slots are unrun
+because no Codex or Gemini runner is configured on this machine — visible in every report rather
+than quietly missing, because a clean-looking result over one lab's model is the most common way a
+benchmark overstates itself.
 
 ## Architecture
 
@@ -339,7 +363,7 @@ is valid.**
 pnpm install && pnpm build
 
 node dist/cli.js check      # load + validate everything, assert coverage. The CI gate.
-node dist/cli.js all        # regenerate all 19 reports under reports/
+node dist/cli.js all        # regenerate all 27 reports under reports/
 ```
 
 ```
@@ -512,7 +536,7 @@ auditable by someone who does not trust whatever produced the data.
 pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm verify
 ```
 
-**287 tests** across eight files. The one worth describing is rule coverage: every one of the 66 rule
+**326 tests** across nine files. The one worth describing is rule coverage: every one of the 77 rule
 codes must have a known-bad example rejected *for that specific code*, and a rule with no example
 fails the build. 30 fixtures live in `fixtures/invalid/` with a manifest naming the code each should
 trip; the rest are exercised programmatically and registered explicitly — and a second test asserts
@@ -533,12 +557,16 @@ path, which made every checked-in report unverifiable for anyone but me.
 here as not done.
 
 Built and working: the mechanism registry (14), mutant bank (36), candidate ledger (37 rows), 13
-task-family shapes, **three fully runnable families**, the challenge packager and its per-family leak
-profiles, the trial orchestrator with two implemented providers and three declared ones, durable
-trial directories, the historical importer, the shared-bank rule, the kill taxonomy and its checker,
-the fifteen-operator evolution engine, the ledger/gate consistency checks, three matrix sources, the
-axis meter with null-model calibration, the budget planner (now pricing post-build deaths), 19
-generated reports, and the known-bad fixture corpus.
+task-family shapes, **three fully runnable families**, the challenge packager with per-family leak
+profiles, **the trial router** (three families, one command set), **campaign plans with
+pre-registered kill signals**, **content-hashed challenges that invalidate their own stale
+evidence**, durable trial directories, the historical importer, the kind-aware shared bank, the kill
+taxonomy, the fifteen-operator evolution engine with a validation report, the ledger/gate consistency
+checks, the axis meter with null-model calibration, the budget planner (pricing post-build deaths and
+campaign spend), 27 generated reports, and the known-bad fixture corpus.
+
+**Real agent evidence:** 6 counted trials across 2 families, plus 20 imported historical trials.
+3 trials preserved-but-not-counted because the family they measured was repaired.
 
 Not done, deliberately:
 
@@ -554,8 +582,13 @@ Not done, deliberately:
   time. Building the shipped family's three-process verifier took roughly 45 hours; no generator
   produces that from a mechanism id.
 - **Ten of thirteen families are unbuilt.** Their axis counts are pre-registrations, not measurements.
-- **Neither evolved family has been trialed.** Both are HOLD, and the evolution claim is therefore
-  half-demonstrated: the loop produced a descendant, and nothing yet shows the descendant is harder.
+- **Only one model family has ever been trialed.** Every counted trial in this repository is Claude.
+  Eight campaign slots for Codex and Gemini are written and unrun; one lab's model has no measured
+  variance, and the evolution result rests on it.
+- **The UI family has never been trialed** and runs against a deterministic tree rather than a
+  browser. Six measured axes says the verifier separates ten mutants; it says nothing about a real
+  DOM. `reports/ui-action-record-replay-upgrade-report.md` lists exactly what is real, what is
+  simulated and what is absent.
 - **The evolution engine is a fixed table.** Fifteen operators and four recipes, hand-written. It
   cannot invent an operator it does not have, and its kill risks are arguments rather than
   frequencies — there is no historical base rate to calibrate them against yet.
@@ -576,8 +609,12 @@ Not done, deliberately:
   collapse to a handful of axes and still be exactly the right eval, because what is under test is
   whether an agent handles a surface it has not memorised. Do not use an axis count as a ship gate
   for that kind of suite without a surface-coverage metric beside it.
-- **Three trials is a small bank.** "Already-solved" on three counted attempts by one model family is
-  a strong signal, not a proof. The correct response is to harden the family, not to average it away.
+- **Three trials is a small bank.** Both the parent's already-solved verdict and the descendant's
+  operator-confirmed verdict rest on three counted attempts by one model family. Strong signals, not
+  proofs.
+- **One of three trials failing is not a difficulty curve.** It says the family separates something;
+  it does not say how hard it is, and a paired re-run of the parent on the same day would make the
+  comparison stronger than it currently is.
 - **The post-build kill rate is 1 in 2, on a sample of 2.** The budget model uses it because it is
   the only measured rate available and because assuming 100% survival is worse. It should not be
   quoted as a rate.

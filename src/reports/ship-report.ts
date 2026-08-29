@@ -15,7 +15,7 @@
 // should pretend otherwise.
 
 import type { Registry } from "../foundry/registry.js";
-import type { TaskShape } from "../foundry/schema.js";
+import { type TaskShape, fail } from "../foundry/schema.js";
 import type { IsolationLevel } from "../trials/types.js";
 
 /**
@@ -45,6 +45,10 @@ export interface FamilyEvidence {
   readonly agentTrialsPassed: number;
   readonly sharedBankSubjects: number;
   readonly reportsDeterministic: boolean;
+  /** True when the family emits a leak-checked challenge package and the router can grade it. */
+  readonly trialReady?: boolean;
+  /** Trials excluded because they measured a different challenge. Preserved, never counted. */
+  readonly staleTrials?: readonly string[];
 }
 
 export type GateVerdict = "pass" | "fail" | "n/a";
@@ -313,14 +317,32 @@ export const GATES: readonly Gate[] = [
           },
   },
   {
+    id: "trial-ready",
+    question: "Can a real agent actually be run against this family today?",
+    rationale:
+      "The gap between 'measured' and 'trialable' is where families sit for months. A family is " +
+      "trial-ready when it emits a challenge package that passes its own leak check and the router " +
+      "knows how to grade a submission for it — at which point the only thing between it and " +
+      "difficulty evidence is model time.",
+    blocking: false,
+    evaluate: (s, _r, e) => {
+      if (e === undefined) return { verdict: "n/a", detail: "family not built" };
+      return e.trialReady === true
+        ? { verdict: "pass", detail: "challenge package builds, leak check passes, router can grade it" }
+        : { verdict: "fail", detail: "no route: this family cannot be handed to an agent as it stands" };
+    },
+  },
+  {
     id: "difficulty-evidenced",
     question: "Has any real agent or model been measured against this family?",
     rationale:
       "A measured axis count against a bank of hand-written mutants proves the VERIFIER discriminates. " +
       "It says nothing about whether the family is hard, because nothing that could plausibly fail it " +
       "has attempted it. This gate was added after the second family scored four measured axes with " +
-      "zero agent trials and would otherwise have been marked SHIP.",
-    blocking: false,
+      "zero agent trials and would otherwise have been marked SHIP. It is BLOCKING as of the campaign " +
+      "layer: with a trial router and a runnable challenge package for every built family, 'nobody has " +
+      "tried it' stopped being a fact about the tooling and became a decision not to look.",
+    blocking: true,
     evaluate: (s, _r, e) => {
       // Prefer measured evidence over the shape's declaration. The shape is a claim; a counted trial
       // record is a fact, and when the two disagree the fact wins.
@@ -469,4 +491,127 @@ export function renderShipReport(
     "",
   );
   return lines.join("\n");
+}
+
+// ---------------------------------------------------------------- readiness stages
+
+/**
+ * The stages a family passes through, and the decision at the end.
+ *
+ * `verdict` answers "may this ship". It cannot answer "what should happen to this", and the two got
+ * conflated every time a family sat at HOLD for two different reasons: one waiting for a trial, one
+ * waiting to be rebuilt. A stage says how far the family got; a decision says what to do next.
+ */
+export const READINESS_STAGES = [
+  "declared",
+  "verifier-valid",
+  "mutant-discriminating",
+  "challenge-packaged",
+  "trial-ready",
+  "difficulty-evidenced",
+  "shared-bank-measured",
+] as const;
+export type ReadinessStage = (typeof READINESS_STAGES)[number];
+
+export const FAMILY_DECISIONS = ["SHIP", "EVOLVE", "KILL", "HOLD", "REPAIR"] as const;
+export type FamilyDecision = (typeof FAMILY_DECISIONS)[number];
+
+export interface FamilyStatus {
+  readonly familyId: string;
+  /** The furthest stage reached. Stages are ordered and a family reaches them in order. */
+  readonly stage: ReadinessStage;
+  readonly decision: FamilyDecision;
+  readonly reason: string;
+  readonly blockingFailures: readonly string[];
+}
+
+const passed = (a: FamilyAssessment, id: string): boolean =>
+  a.results.find((r) => r.gate.id === id)?.verdict === "pass";
+
+/**
+ * Derive the stage and the decision from the gate table and the kill disposition.
+ *
+ * The decision is NOT a fourth verdict invented here: it reads the kill analysis for a family that
+ * failed something, which is where the taxonomy already decided whether a failure is a defect to
+ * repair, a weakness to evolve, or an absence to measure.
+ */
+export function familyStatus(
+  familyId: string,
+  assessment: FamilyAssessment,
+  disposition: string | null,
+): FamilyStatus {
+  const stage: ReadinessStage = passed(assessment, "shared-bank-ready")
+    ? "shared-bank-measured"
+    : passed(assessment, "difficulty-evidenced")
+      ? "difficulty-evidenced"
+      : passed(assessment, "trial-ready")
+        ? "trial-ready"
+        : passed(assessment, "mutants-caught-by-intended-check")
+          ? "mutant-discriminating"
+          : passed(assessment, "reference-passes")
+            ? "verifier-valid"
+            : "declared";
+
+  const decision: FamilyDecision =
+    assessment.verdict === "SHIP"
+      ? "SHIP"
+      : disposition === "harden" || disposition === "mutate"
+        ? "EVOLVE"
+        : disposition === "repair"
+          ? "REPAIR"
+          : disposition === "abandon"
+            ? "KILL"
+            : "HOLD";
+
+  return {
+    familyId,
+    stage,
+    decision,
+    blockingFailures: assessment.blockingFailures,
+    reason:
+      decision === "SHIP"
+        ? "every blocking gate passes and a counted agent trial failed something"
+        : decision === "EVOLVE"
+          ? "the family works and does not measure enough; the kill analysis says harden or mutate"
+          : decision === "REPAIR"
+            ? "a defect in the family itself must be fixed before any evidence from it counts"
+            : decision === "KILL"
+              ? "nothing here is salvageable"
+              : `waiting on ${assessment.blockingFailures.join(", ") || "evidence"}`,
+  };
+}
+
+/**
+ * Contradictions a status must never express.
+ *
+ * Each of these was reachable at some point in this repository's history, which is why they are
+ * assertions rather than documentation.
+ */
+export function assertStatusCoherent(status: FamilyStatus, evidence: FamilyEvidence | undefined): void {
+  if (status.decision === "SHIP" && (evidence?.countedAgentTrials ?? 0) === 0) {
+    fail(
+      "STATUS_SHIP_WITHOUT_TRIALS",
+      `status.${status.familyId}`,
+      "SHIP with zero counted agent trials: the only evidence is mutants the author wrote, which is a statement about the verifier",
+    );
+  }
+  if (
+    status.decision === "SHIP" &&
+    evidence !== undefined &&
+    evidence.countedAgentTrials > 0 &&
+    evidence.agentTrialsPassed === evidence.countedAgentTrials
+  ) {
+    fail(
+      "STATUS_SHIP_ALREADY_SOLVED",
+      `status.${status.familyId}`,
+      "SHIP with every counted trial passing: a family nothing fails separates nothing",
+    );
+  }
+  if (status.stage === "difficulty-evidenced" && (evidence?.countedAgentTrials ?? 0) === 0) {
+    fail(
+      "STATUS_STAGE_WITHOUT_EVIDENCE",
+      `status.${status.familyId}`,
+      "claims the difficulty-evidenced stage with no counted agent trial",
+    );
+  }
 }

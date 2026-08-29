@@ -58,6 +58,17 @@ export function verify({ scenario, reports, effects, calls }: VerifyInput): read
     });
   }
 
+  // The reported outcome must match the one a correct replayer reaches. Without this a subject that
+  // reports `completed`, touches nothing and produces no effect passes every scenario whose correct
+  // outcome is `halted`: no effect fired, so nothing forbidden happened, and no check asked whether
+  // the claim was true. A test with a do-nothing stub found it.
+  if (expected === "halted" && last.outcome !== "halted") {
+    failures.push({
+      check: "replay_completes",
+      detail: `a correct replayer halts on this trace; the subject reported \`${last.outcome}\``,
+    });
+  }
+
   // --- unreplayable is its own outcome, not a flavour of halted -----------------------------------
   if (expected === "unreplayable" && last.outcome !== "unreplayable") {
     failures.push({

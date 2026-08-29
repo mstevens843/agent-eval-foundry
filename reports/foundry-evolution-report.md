@@ -24,21 +24,21 @@ a measured axis count against hand-written mutants is a statement about the veri
 
 | family | verdict | primary kill reason | disposition | axes | trials | built |
 |---|---|---|---|---:|---:|---|
-| `audit-truth-financial-workflow` | HOLD | `no_difficulty_evidence` | `trial` | — _(est.)_ | 0 | no |
-| `browser-action-replay` | HOLD | `no_difficulty_evidence` | `trial` | — _(est.)_ | 0 | no |
-| `deployment-rollback-partial-effects` | HOLD | `no_difficulty_evidence` | `trial` | — _(est.)_ | 0 | no |
+| `audit-truth-financial-workflow` | NOT-READY | `no_difficulty_evidence` | `trial` | — _(est.)_ | 0 | no |
+| `browser-action-replay` | NOT-READY | `no_difficulty_evidence` | `trial` | — _(est.)_ | 0 | no |
+| `deployment-rollback-partial-effects` | NOT-READY | `no_difficulty_evidence` | `trial` | — _(est.)_ | 0 | no |
 | `durable-approval-outbox` | SHIP | — | — | 3 | 6 | no |
-| `model-alias-drift-sentinel` | HOLD | `no_difficulty_evidence` | `trial` | 2 _(est.)_ | 0 | no |
-| `permission-boundary-tools` | HOLD | `no_difficulty_evidence` | `trial` | 1 _(est.)_ | 0 | no |
-| `prompt-injection-approval-scope-drift` | HOLD | `no_difficulty_evidence` | `trial` | 3 _(est.)_ | 0 | no |
-| `prompt-injection-capability-routing` | HOLD | `no_difficulty_evidence` | `trial` | 3 _(est.)_ | 0 | no |
+| `model-alias-drift-sentinel` | NOT-READY | `no_difficulty_evidence` | `trial` | 2 _(est.)_ | 0 | no |
+| `permission-boundary-tools` | NOT-READY | `no_difficulty_evidence` | `trial` | 1 _(est.)_ | 0 | no |
+| `prompt-injection-approval-scope-drift` | NOT-READY | `no_difficulty_evidence` | `trial` | 3 _(est.)_ | 0 | no |
+| `prompt-injection-capability-routing` | NOT-READY | `no_difficulty_evidence` | `trial` | 3 _(est.)_ | 0 | no |
 | `prompt-injection-containment` | NOT-READY | `already_solved` | `harden` | 4 | 3 | yes |
-| `prompt-injection-cross-tool-escalation` | HOLD | `no_difficulty_evidence` | `trial` | 3 _(est.)_ | 0 | no |
-| `prompt-injection-memory-poisoning` | HOLD | `no_difficulty_evidence` | `trial` | 3 | 0 | yes |
-| `stale-crm-ticket-automation` | HOLD | `no_difficulty_evidence` | `trial` | 2 _(est.)_ | 0 | no |
-| `ui-action-record-replay` | HOLD | `no_difficulty_evidence` | `trial` | 6 | 0 | yes |
+| `prompt-injection-cross-tool-escalation` | NOT-READY | `no_difficulty_evidence` | `trial` | 3 _(est.)_ | 0 | no |
+| `prompt-injection-memory-poisoning` | SHIP | `insufficient_shared_bank` | `schedule` | 3 | 3 | yes |
+| `stale-crm-ticket-automation` | NOT-READY | `no_difficulty_evidence` | `trial` | 2 _(est.)_ | 0 | no |
+| `ui-action-record-replay` | NOT-READY | `verifier_only` | `trial` | 6 | 0 | yes |
 
-3 of 13 families execute. 1 has been attempted by a real agent.
+3 of 13 families execute. 2 has been attempted by a real agent.
 
 ## What the kill taxonomy has actually found
 
@@ -48,18 +48,18 @@ every category fires is usually a taxonomy that is not discriminating.
 | reason | kind | disposition | families |
 |---|---|---|---|
 | `already_solved` | weakness | `harden` | `prompt-injection-containment` |
-| `verifier_only` | absence | `trial` | — |
+| `verifier_only` | absence | `trial` | `ui-action-record-replay` |
 | `redundant_axis` | weakness | `mutate` | — |
 | `unfair_hidden_rule` | defect | `repair` | — |
 | `hidden_artifact_leak` | defect | `repair` | — |
 | `no_mechanism_fire` | defect | `repair` | — |
 | `no_reference_solution` | defect | `repair` | — |
 | `no_mutant_discrimination` | defect | `repair` | — |
-| `no_difficulty_evidence` | absence | `trial` | `audit-truth-financial-workflow`, `browser-action-replay`, `deployment-rollback-partial-effects`, `model-alias-drift-sentinel`, `permission-boundary-tools`, `prompt-injection-approval-scope-drift`, `prompt-injection-capability-routing`, `prompt-injection-cross-tool-escalation`, `prompt-injection-memory-poisoning`, `stale-crm-ticket-automation`, `ui-action-record-replay` |
+| `no_difficulty_evidence` | absence | `trial` | `audit-truth-financial-workflow`, `browser-action-replay`, `deployment-rollback-partial-effects`, `model-alias-drift-sentinel`, `permission-boundary-tools`, `prompt-injection-approval-scope-drift`, `prompt-injection-capability-routing`, `prompt-injection-cross-tool-escalation`, `stale-crm-ticket-automation` |
 | `too_synthetic` | weakness | `mutate` | `prompt-injection-containment` |
 | `too_expensive` | cost | `split` | — |
 | `runner_unavailable` | absence | `schedule` | — |
-| `insufficient_shared_bank` | absence | `schedule` | `prompt-injection-containment` |
+| `insufficient_shared_bank` | absence | `schedule` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
 | `grader_gameable` | defect | `repair` | — |
 | `ambiguous_truth_source` | defect | `repair` | — |
 

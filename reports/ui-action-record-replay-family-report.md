@@ -8,8 +8,8 @@ Every figure below is measured: produced by running the family, not by declaring
 
 | | |
 |---|---|
-| ship gate | **HOLD** |
-| blocking failures | none |
+| ship gate | **NOT-READY** |
+| blocking failures | `difficulty-evidenced` |
 | data quality | `measured` |
 | status | `built` |
 | agent trials run | none |
@@ -32,7 +32,8 @@ Every figure below is measured: produced by running the family, not by declaring
 | `isolation-level` | no | n/a | family not built |
 | `shared-bank-ready` | no | n/a | family not built |
 | `deterministic-reports` | no | n/a | family not built |
-| `difficulty-evidenced` | no | fail | no counted agent trials |
+| `trial-ready` | no | n/a | family not built |
+| `difficulty-evidenced` | yes | fail | no counted agent trials |
 | `not-already-solved` | yes | n/a | no counted agent trials yet |
 | `priced` | no | pass | 55h build, $40 frontier |
 

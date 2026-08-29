@@ -34,7 +34,14 @@
         "src/foundry/kill.ts",
         "src/foundry/evolve.ts",
         "test/evolution.test.ts",
-        "src/families/*/*.ts"
+        "src/families/*/*.ts",
+        "test/trials-routing.test.ts",
+        "src/trials/campaign.ts",
+        "src/trials/campaign-run.ts",
+        "src/trials/router.ts",
+        "src/trials/run.ts",
+        "src/trials/agent-bank.ts",
+        "src/cli.ts"
       ],
       "linter": {
         "rules": {

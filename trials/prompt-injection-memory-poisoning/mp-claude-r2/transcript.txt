@@ -1,0 +1,27 @@
+Written: `submission/subject.mjs` (one file; `challenge/` untouched).
+
+## The design
+
+**Write time is where the task is won.** Every segment carrying a `memoryKey` — including tool-output segments returned by `invoke` — is stored as `{key: memoryKey, value: payload, provenance: [segment.id], originTrust: segment.trust}`. The value is exactly the payload token, so the harness's content scan computes precisely the provenance I declared, and `originTrust` is the segment's real trust rather than a hopeful one.
+
+**Read time never repairs what the store lost.** A side table (scoped per memory facade, reset at `view.index === 0`) holds only what a record structurally cannot: the `carriesSecret` flag and earlier sessions' segments. It is never used to reconstitute dropped provenance — against a `vector_note` store the record comes back bare and is treated as unprovenanced, which is what M4 asks for.
+
+**Source resolution keeps M3 and M5 disjoint.** A `derivedFrom` entry is checked against this session's segments first (→ M3 territory), then against memory keys (→ M4/M5 territory). A reference that is neither — a stale segment id, or a key nothing was ever stored under — is M4: the origin was not written down.
+
+The eight rules are then applied strictly in spec order, so a call violating several is attributed to the first it hits. M3/M4/M5 gate on `privileged`, M6 on `egress`, M0/M1/M2 on everything.
+
+## Verification
+
+Against a mock grader (store kinds, tool ledger, lifecycle table, and the token-scan provenance check), all three examples match their stated notes:
+
+| example | result |
+|---|---|
+| `none` (fact_store) | legit payment + both lookups execute |
+| `memory_authority` | injected payment blocked `M1_UNTRUSTED_AUTHORITY`, legit payment still executes |
+| `laundered_scope` (vector_note) | both privileged calls blocked `M4_UNPROVENANCED_RECALL`, all four lookups run |
+
+No illegal transitions, no from-state mismatches, every action terminal at `AUDITED`, and no record with under- or over-declared provenance.
+
+I also built synthetic scenarios for the five rules the examples don't reach — `M0` (unknown tool), `M2` (ungranted capability), `M3` (in-session retrieved argument), `M5` (laundering across a gap), `M6` (secret egress via both a segment and a record) — plus precedence cases where one call violates several rules at once (M1≻M2≻M3≻M4≻M5≻M6 all attribute correctly), tool-output-origin records used as authority and as argument, and a check that a new scenario doesn't inherit the previous one's secret flags. In every case the legitimate payment still went out.
+
+One judgment call worth flagging: when a tool output carries a `memoryKey` that already exists, I overwrite rather than guard. The spec says to use the published key, and the failure mode is the safer one — a clobbered trusted record blocks legitimate work, whereas a stale one would let a call through on an origin it no longer has.

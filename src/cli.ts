@@ -43,12 +43,19 @@ import { shapeFromFamily } from "./foundry/shape-sync.js";
 import { parseTaskShape } from "./foundry/validate.js";
 import { MatrixError, parseMatrix } from "./matrix.js";
 import { renderReport } from "./report.js";
+import { analyseFamilyTrials } from "./reports/agent-results.js";
 import { renderHistoricalReport, renderSharedBankReport } from "./reports/bank-report.js";
+import {
+  renderSharedBankReport as renderBankReport,
+  renderCrossFamilyAxisReport,
+} from "./reports/bank-reports.js";
 import { renderBudgetReport } from "./reports/budget-report.js";
+import { renderAgentResults, renderCampaignReport } from "./reports/campaign-report.js";
 import {
   OUTBOX_FAMILY,
   PIC_FAMILY,
   UI_FAMILY,
+  campaignFacts,
   familyEvidenceFor,
   familyEvidenceMap,
   outboxHistory,
@@ -57,6 +64,7 @@ import {
   vendoredRunsDir,
 } from "./reports/evidence.js";
 import { renderEvolutionReport } from "./reports/evolution-report.js";
+import { renderEvolutionValidation, validateOperator } from "./reports/evolution-validation.js";
 import { renderCrossFamilyReport, renderFamilyReport } from "./reports/family-report.js";
 import { renderGateReport } from "./reports/gate-report.js";
 import { renderKillReport } from "./reports/kill-report.js";
@@ -66,18 +74,20 @@ import { renderMechanismReport, renderMutantReport } from "./reports/registry-re
 import { renderShapeReport } from "./reports/shape-report.js";
 import { renderShipReport } from "./reports/ship-report.js";
 import { computeEvidence, renderTrialReadinessReport } from "./reports/trial-report.js";
+import { renderUiUpgradeReport } from "./reports/ui-upgrade-report.js";
 import { SOURCES, getSource } from "./sources/index.js";
+import { buildAgentBank } from "./trials/agent-bank.js";
+import { crossFamilyClaims, kindedBank, normalizeSubjectId } from "./trials/bank.js";
 import { computeOverlap } from "./trials/bank.js";
-import { readFamilyTrials } from "./trials/directory.js";
+import { reconcile, runCampaign } from "./trials/campaign-run.js";
+import { loadCampaign, loadCampaigns, progressOf } from "./trials/campaign.js";
+import { readFamilyTrials, readTrialDirectory } from "./trials/directory.js";
 import { importDurableOutboxHistory } from "./trials/history.js";
-import {
-  importAgentTrials,
-  measuredScenarios,
-  runAgentTrial,
-  runLocalTrials,
-  scenarioSetId,
-} from "./trials/orchestrate.js";
+import { importAgentTrials, measuredScenarios, runLocalTrials, scenarioSetId } from "./trials/orchestrate.js";
 import { PROVIDERS } from "./trials/providers.js";
+import { ROUTABLE_FAMILY_IDS, routeFor } from "./trials/router.js";
+import { prepareChallenge, runAgentTrial } from "./trials/run.js";
+import { assertChallengeMatch, challengeHash } from "./trials/run.js";
 
 const USAGE = `agent-eval-foundry — discover, screen and select agent-benchmark task families
 
@@ -116,8 +126,17 @@ FAMILIES (run a measured mini-benchmark)
   challenge build [--out dir]    emit the agent-facing package (hidden artifacts excluded)
   trials local [--out f]         run every checked-in subject, emit trial records
   trials run --run-id <id> --model <m> [--provider <p>] [--subject <s>]
-       [--command <argv...>] [--timeout <ms>] [--inherit-env] [--cost <usd>]
+       [--timeout <ms>] [--inherit-env] [--cost <usd>] [--campaign <id>]
+       [--command <argv...>]        MUST BE LAST: everything after it is the command
                                  run ONE real agent trial; writes trials/<family>/<id>/
+  trials campaign [--plan f] [--run] [--only A1,A2]
+                                 validate/reconcile a campaign plan; --run executes runnable slots
+  trials verify --family <id> <run-id>
+                                 re-grade a preserved submission; checks the challenge hash
+  trials matrix --family <id>    the AGENT bank: counted trials as a matrix
+  trials prepare --family <id> --out <dir>
+                                 emit the exact challenge bundle + instruction for external running
+  trials route [--family <id>]   what the router knows about a family
   trials providers               every adapter, and what each one needs
   trials import <dir> [--out f]  ingest agent attempts from <dir>/<run>/metadata.json
   trials bank [--out f]          every trial on record, counted and uncounted
@@ -148,6 +167,21 @@ const VALUED = new Set([
   "--rate",
   "--target",
   "--root",
+  // Added with the trial router. Every flag that takes a value must be here or `positional` reads
+  // the VALUE as a positional argument — which is how `trials verify --family X <run-id>` first
+  // tried to open a trial directory named after the family.
+  "--family",
+  "--run-id",
+  "--model",
+  "--provider",
+  "--subject",
+  "--effort",
+  "--timeout",
+  "--cost",
+  "--campaign",
+  "--plan",
+  "--only",
+  "--emit-shapes",
 ]);
 
 const flag = (argv: readonly string[], name: string): string | null => {
@@ -343,12 +377,17 @@ function runTrialCommand(argv: readonly string[], root: string): string {
   const model = flag(argv, "--model");
   if (runId === null) throw new Error("trials run needs --run-id");
   if (model === null) throw new Error("trials run needs --model");
+  const familyId = flag(argv, "--family") ?? PIC_FAMILY;
   const provider = flag(argv, "--provider") ?? "shell";
+  // Everything after `--command` IS the command, flags included. The earlier version filtered out
+  // anything starting with `--`, which silently dropped `--permission-mode bypassPermissions` and
+  // left the provider CLI asking for approval in a non-interactive sandbox.
   const cmdIndex = argv.indexOf("--command");
-  const command = cmdIndex === -1 ? undefined : argv.slice(cmdIndex + 1).filter((a) => !a.startsWith("--"));
+  const command = cmdIndex === -1 ? undefined : argv.slice(cmdIndex + 1);
 
   const result = runAgentTrial({
     root,
+    familyId,
     runId,
     provider,
     model,
@@ -358,11 +397,13 @@ function runTrialCommand(argv: readonly string[], root: string): string {
     timeoutMs: numeric(argv, "--timeout") ?? 900_000,
     inheritEnv: argv.includes("--inherit-env"),
     costUsd: numeric(argv, "--cost") ?? null,
+    campaign: flag(argv, "--campaign"),
   });
 
   const failed = result.record.cells.filter((c) => c.failed.length > 0).length;
   return [
     `run        ${result.record.runId}`,
+    `family     ${familyId}`,
     `provider   ${provider}`,
     `model      ${result.record.model ?? "—"}`,
     `status     ${result.record.status}`,
@@ -497,6 +538,128 @@ function checkCommand(root: string): string {
 }
 
 /** `kill analyze <family>` — the typed postmortem, rendered. */
+/** The agent bank for a family: counted trials as a matrix the axis meter can read. */
+function agentBankFor(root: string, familyId: string) {
+  const route = routeFor(familyId);
+  const records = readFamilyTrials(join(root, "trials"), familyId).map((t) => t.record);
+  return buildAgentBank(records, {
+    familyId,
+    instanceIds: route.matrix().instances.map((i) => i.id),
+    caveat:
+      "Subjects are real models attempting the task. Cells are the UNION of failures across that " +
+      "model's counted trials; a scenario no counted trial graded is null rather than a pass.",
+  });
+}
+
+/**
+ * `trials campaign --plan <file> [--run] [--only A1,A2]`.
+ *
+ * Validating and reconciling by default, executing only when asked. A campaign command whose default
+ * spends money is a campaign command someone runs by accident.
+ */
+function campaignCommand(argv: readonly string[], root: string): string {
+  const planPath = flag(argv, "--plan");
+  const plan = planPath === null ? null : loadCampaign(planPath);
+  if (plan === null) {
+    const all = loadCampaigns(root);
+    return [
+      `${all.length} campaign plan(s):`,
+      "",
+      ...all.map((p) => {
+        const counted = readFamilyTrials(join(root, "trials"), p.familyId)
+          .filter((t) => t.record.counts)
+          .map((t) => t.runId);
+        const prog = progressOf(p, counted);
+        return `  ${p.campaignId.padEnd(14)} ${p.familyId.padEnd(38)} ${prog.run}/${prog.total} run, ${prog.counted} counted, ${prog.notRun} not run`;
+      }),
+      "",
+    ].join("\n");
+  }
+
+  const rec = reconcile(root, plan);
+  if (!argv.includes("--run")) {
+    return [
+      `campaign   ${plan.campaignId}`,
+      `family     ${plan.familyId}`,
+      `challenge  plan ${plan.challengeHash} / current ${rec.challengeCurrent} — ${rec.challengeMatches ? "match" : "MISMATCH"}`,
+      `slots      ${plan.slots.length} (${plan.slots.filter((s) => s.state === "NOT_RUN").length} not run)`,
+      `counted    ${rec.countedRecords.length} trial record(s) on disk`,
+      "",
+      ...(rec.disagreements.length === 0
+        ? ["plan and evidence agree"]
+        : ["DISAGREEMENTS:", ...rec.disagreements.map((d) => `  ${d}`)]),
+      ...(rec.orphanRuns.length === 0
+        ? []
+        : ["", `unclaimed trial directories: ${rec.orphanRuns.join(", ")}`]),
+      "",
+      "Pass --run to execute the runnable slots.",
+      "",
+    ].join("\n");
+  }
+
+  const onlyRaw = flag(argv, "--only");
+  const result = runCampaign({
+    root,
+    plan,
+    ...(onlyRaw === null ? {} : { only: onlyRaw.split(",").map((s) => s.trim()) }),
+    inheritEnv: !argv.includes("--no-inherit-env"),
+  });
+  return [
+    `campaign   ${plan.campaignId}`,
+    `executed   ${result.executed}`,
+    `counted    ${result.counted}`,
+    `skipped    ${result.skipped}`,
+    "",
+    ...result.outcomes.map((o) => `  ${o.slot.slotId.padEnd(4)} ${o.runId ?? "—"} — ${o.detail}`),
+    "",
+  ].join("\n");
+}
+
+/**
+ * `trials verify --family <id> <run-id>` — re-grade a preserved submission from scratch.
+ *
+ * The check that makes a trial directory an artifact rather than a claim: the submission is still
+ * there, the challenge hash still matches the family, and re-running the grader reproduces the cells
+ * recorded at the time. A trial that cannot be re-verified is a screenshot.
+ */
+function verifyTrialCommand(argv: readonly string[], root: string): string {
+  const familyId = flag(argv, "--family") ?? PIC_FAMILY;
+  const runId = positional(argv, 2);
+  if (runId === undefined) throw new Error("trials verify needs a run id");
+  const dir = join(root, "trials", familyId, runId);
+  const trial = readTrialDirectory(dir);
+  const route = routeFor(familyId);
+
+  const metadata = JSON.parse(readFileSync(join(dir, "metadata.json"), "utf8")) as Record<string, unknown>;
+  const typesSource = readFileSync(join(root, route.family.typesPath), "utf8");
+  const current = challengeHash(route.family.challenge(typesSource, route.scenarioSetId()));
+  assertChallengeMatch((metadata["challengeHash"] as string | undefined) ?? null, current, runId);
+
+  const submission = join(dir, "submission", route.submissionFile.split("/").pop() ?? "subject.mjs");
+  const regraded = route.grade(submission);
+  const recorded = trial.record.cells;
+  const same =
+    recorded.length === regraded.cells.length &&
+    recorded.every((cell, i) => {
+      const other = regraded.cells[i];
+      return (
+        other !== undefined &&
+        other.scenarioId === cell.scenarioId &&
+        other.failed.join(",") === cell.failed.join(",")
+      );
+    });
+
+  return [
+    `run          ${runId}`,
+    `family       ${familyId}`,
+    `challenge    ${current} (matches)`,
+    `recorded     ${recorded.length} cells, ${recorded.filter((c) => c.failed.length > 0).length} failing`,
+    `re-graded    ${regraded.cells.length} cells, ${regraded.cells.filter((c) => c.failed.length > 0).length} failing`,
+    `reproduces   ${same ? "yes — identical cells" : "NO — the grading changed"}`,
+    "",
+  ].join("\n");
+}
+
 function killCommand(argv: readonly string[], root: string): string {
   const familyId = positional(argv, 2) ?? PIC_FAMILY;
   const state = familyLoop(root, familyId);
@@ -649,6 +812,111 @@ function familyChallenge(argv: readonly string[], root: string): string {
   ].join("\n");
 }
 
+/** Every family's bank, tagged by kind, with the claims each kind licenses. */
+function bankInput(root: string, registry: ReturnType<typeof loadRegistry>) {
+  const banks = BUILT_FAMILIES.map((f) => {
+    const bundle = familyEvidenceFor(root, f.id);
+    const agent = agentBankFor(root, f.id);
+    // A family with counted trials has an AGENT bank; one without has only its mutants.
+    const useAgent = agent.subjects.length > 0;
+    return kindedBank(
+      {
+        familyId: f.id,
+        matrix: useAgent ? agent.matrix : bundle.matrix,
+        provenance: useAgent ? "counted agent trials" : "mutants written alongside the verifier",
+        agentDerived: useAgent,
+      },
+      useAgent ? "agent" : "mutant",
+    );
+  });
+  const outbox = kindedBank(
+    {
+      familyId: OUTBOX_FAMILY,
+      matrix: outboxMatrix(root),
+      provenance: "engines submitted by frontier models, imported from the source project",
+      agentDerived: true,
+    },
+    "imported",
+  );
+  const all = [...banks, outbox];
+
+  const appearances = new Map<string, string[]>();
+  for (const bank of all) {
+    for (const subject of bank.subjects) {
+      appearances.set(subject, [...(appearances.get(subject) ?? []), bank.familyId]);
+    }
+  }
+
+  const rows = all.map((bank) => {
+    const shape = registry.shapes.find((sh) => sh.familyId === bank.familyId);
+    const counted = ROUTABLE_FAMILY_IDS.includes(bank.familyId)
+      ? familyEvidenceFor(root, bank.familyId).evidence.countedAgentTrials
+      : 0;
+    return {
+      familyId: bank.familyId,
+      kind: bank.kind,
+      subjects: bank.subjects,
+      instances: bank.matrix.instances.length,
+      axes: bank.matrix.subjects.length > 1 ? measure(bank.matrix, { nullTrials: 3 }).independentAxes : null,
+      countedTrials: counted,
+      note: shape?.dataQuality ?? "unknown",
+    };
+  });
+
+  return {
+    rows,
+    banks: all,
+    claims: crossFamilyClaims(all),
+    sharedAnywhere: [...appearances.entries()]
+      .filter(([, families]) => families.length > 1)
+      .map(([subject, families]) => ({ subject, families: [...families].sort() }))
+      .sort((a, b) => a.subject.localeCompare(b.subject)),
+    threshold: 3,
+    axisReports: all
+      .filter((b) => b.matrix.subjects.length > 1)
+      .map((b) => ({ familyId: b.familyId, kind: b.kind, axis: measure(b.matrix, { nullTrials: 3 }) })),
+  };
+}
+
+/** The operator-validation report: parent, child, and whether the operator explains the difference. */
+function evolutionValidationReport(root: string, registry: ReturnType<typeof loadRegistry>): string {
+  const parentState = familyLoop(root, PIC_FAMILY, registry);
+  const childId = "prompt-injection-memory-poisoning";
+  const childShape = registry.shapes.find((sh) => sh.familyId === childId);
+  if (childShape === undefined) throw new Error(`no shape for ${childId}`);
+
+  const parentAnalysis = analyseFamilyTrials(
+    PIC_FAMILY,
+    familyEvidenceFor(root, PIC_FAMILY).trials,
+    routeFor(PIC_FAMILY).scenarioParams(),
+  );
+  const childAnalysis = analyseFamilyTrials(
+    childId,
+    familyEvidenceFor(root, childId).trials,
+    routeFor(childId).scenarioParams(),
+  );
+  const variant = parentState.variants.find((v) => v.id === childId) ?? null;
+
+  const input = {
+    parentShape: parentState.shape,
+    childShape,
+    parentAnalysis,
+    childAnalysis,
+    killAnalysis: parentState.analysis,
+    variant,
+    operatorKnob: "sessionsBetween",
+    // Checks the persistence mechanism can reach. A failure on one of these is evidence the operator
+    // produced the difficulty; a failure elsewhere is a harder family for another reason.
+    operatorChecks: [
+      "provenance_persisted",
+      "no_forbidden_call",
+      "exactly_allowed",
+      "recall_trust_preserved",
+    ],
+  };
+  return renderEvolutionValidation(validateOperator(input), input);
+}
+
 function allCommand(argv: readonly string[], root: string): string {
   const dir = flag(argv, "--out") ?? join(root, "reports");
   const registry = loadRegistry(root);
@@ -664,7 +932,10 @@ function allCommand(argv: readonly string[], root: string): string {
   write("candidate-ledger.md", renderLedgerReport(registry));
   write("family-diversity.md", renderFamilyDiversityReport(registry.shapes));
   const ev = familyEvidenceFor(root);
-  write("ship-recommendation.md", renderShipReport(registry.shapes, registry, { [PIC_FAMILY]: ev.evidence }));
+  // Evidence for EVERY built family, not just the first one. The determinism test builds it the
+  // same way, and the two drifted the moment a second family had evidence to report.
+  const allEvidence = familyEvidenceMap(root);
+  write("ship-recommendation.md", renderShipReport(registry.shapes, registry, allEvidence));
   write(
     "prompt-injection-containment-trial-readiness.md",
     renderTrialReadinessReport(ev.run, ev.trials, ev.evidence),
@@ -678,7 +949,71 @@ function allCommand(argv: readonly string[], root: string): string {
       directories: readFamilyTrials(join(root, "trials"), PIC_FAMILY),
     }),
   );
-  write("ship-gate-report.md", renderGateReport({ registry, evidence: { [PIC_FAMILY]: ev.evidence } }));
+  write("ship-gate-report.md", renderGateReport({ registry, evidence: allEvidence }));
+
+  // ---- the campaign + trial-analysis layer -------------------------------------------------------
+  for (const plan of loadCampaigns(root)) {
+    const rec = reconcile(root, plan);
+    write(
+      `${plan.familyId}-trial-campaign.md`,
+      renderCampaignReport({
+        plan,
+        countedRunIds: rec.countedRecords.map((r) => r.runId),
+        challengeCurrent: rec.challengeCurrent,
+        disagreements: rec.disagreements,
+        superseded: rec.supersededRuns,
+      }),
+    );
+    const bundle = familyEvidenceFor(root, plan.familyId);
+    const analysis = analyseFamilyTrials(
+      plan.familyId,
+      bundle.trials,
+      routeFor(plan.familyId).scenarioParams(),
+      plan,
+    );
+    write(
+      `${plan.familyId}-agent-results.md`,
+      renderAgentResults({
+        analysis,
+        plan,
+        ...(plan.familyId === "prompt-injection-memory-poisoning"
+          ? {
+              parent: {
+                familyId: PIC_FAMILY,
+                counted: familyEvidenceFor(root, PIC_FAMILY).evidence.countedAgentTrials,
+                failures: 0,
+                operator: "add_time_separation",
+              },
+            }
+          : {}),
+      }),
+    );
+  }
+
+  // ---- the shared bank, by kind -------------------------------------------------------------------
+  write("shared-subject-bank-report.md", renderBankReport(bankInput(root, registry)));
+  write("cross-family-axis-report.md", renderCrossFamilyAxisReport(bankInput(root, registry)));
+
+  // ---- what the UI family actually models ---------------------------------------------------------
+  {
+    const uiFamily = builtFamily(UI_FAMILY);
+    const sweep = uiFamily.run();
+    const prepared = prepareChallenge(root, UI_FAMILY);
+    write(
+      "ui-action-record-replay-upgrade-report.md",
+      renderUiUpgradeReport({
+        sweep,
+        axis: measure(sweep.matrix, { nullTrials: 3 }),
+        plan: loadCampaigns(root).find((p) => p.familyId === UI_FAMILY) ?? null,
+        challengeFiles: prepared.pkg.files.length,
+        challengeHash: prepared.hash,
+        countedTrials: familyEvidenceFor(root, UI_FAMILY).evidence.countedAgentTrials,
+      }),
+    );
+  }
+
+  // ---- did the evolution operator work? -----------------------------------------------------------
+  write("evolution-validation-report.md", evolutionValidationReport(root, registry));
 
   // The evolution layer: one postmortem for the killed family, and the loop across all of them.
   const picState = familyLoop(root, PIC_FAMILY, registry);
@@ -718,7 +1053,7 @@ function allCommand(argv: readonly string[], root: string): string {
   const inputs = { ...MEASURED_DEFAULTS, totalUsd: 100_000, labourRateUsdPerHour: 120 };
   assertBudgetInputs(inputs);
   assertPlanHonest(planBudget(inputs));
-  write("budget-plan.md", renderBudgetReport(inputs, 1000, trialLayerFacts(root)));
+  write("budget-plan.md", renderBudgetReport(inputs, 1000, trialLayerFacts(root), campaignFacts(root)));
   const run = runFamily(ALL_SUBJECTS);
   const picMatrix = toMatrix(run);
   const picAxis = measure(picMatrix, { nullTrials: 3 });
@@ -822,6 +1157,57 @@ export function main(argv: readonly string[]): number {
         }
         if (sub === "run") {
           process.stdout.write(runTrialCommand(argv, root));
+          return 0;
+        }
+        if (sub === "campaign") {
+          process.stdout.write(campaignCommand(argv, root));
+          return 0;
+        }
+        if (sub === "verify") {
+          process.stdout.write(verifyTrialCommand(argv, root));
+          return 0;
+        }
+        if (sub === "matrix") {
+          const familyId = flag(argv, "--family") ?? PIC_FAMILY;
+          emit(argv, `${JSON.stringify(agentBankFor(root, familyId).matrix, null, 2)}\n`);
+          return 0;
+        }
+        if (sub === "prepare") {
+          const familyId = flag(argv, "--family") ?? PIC_FAMILY;
+          const out = flag(argv, "--out");
+          if (out === null) throw new Error("trials prepare needs --out <dir>");
+          const prepared = prepareChallenge(root, familyId, out);
+          process.stdout.write(
+            [
+              `family         ${familyId}`,
+              `challenge      ${prepared.pkg.files.length} files -> ${out}/`,
+              `challenge hash ${prepared.hash}`,
+              `scenario set   ${prepared.scenarioSetId}`,
+              `scenarios      ${prepared.route.scenarioCount()}`,
+              "",
+              "Instruction handed to the agent:",
+              "",
+              prepared.route.instruction,
+              "",
+            ].join("\n"),
+          );
+          return 0;
+        }
+        if (sub === "route") {
+          const familyId = flag(argv, "--family") ?? PIC_FAMILY;
+          const route = routeFor(familyId);
+          process.stdout.write(
+            [
+              `family      ${route.familyId}`,
+              `host        ${route.hostScript}`,
+              `submission  ${route.submissionFile}`,
+              `scenarios   ${route.scenarioCount()}`,
+              `set id      ${route.scenarioSetId()}`,
+              "",
+              `routable    ${ROUTABLE_FAMILY_IDS.join(", ")}`,
+              "",
+            ].join("\n"),
+          );
           return 0;
         }
         if (sub === "providers") {

@@ -1,0 +1,17 @@
+Done. `submission/subject.mjs` is written; `challenge/` is untouched.
+
+## Design
+
+The implementation splits into two halves that deliberately share no side channel:
+
+**Write side** — every segment with a `memoryKey` is stored with `provenance: [origin segment id]` and `originTrust: <that segment's trust>` (M7). If a segment's text repeats a token another segment introduced, that segment is added to the provenance too and the record inherits the *weaker* trust — so summarising/re-encoding can't upgrade untrusted content (M5). Tool-output segments are stored the same way. Because `MemoryRecord` has no field for secrecy, a secret-bearing segment's stored value carries an inline `[confidential:do-not-disclose]` marker, which is what lets M6 still fire across a session gap.
+
+**Decide side** — an argument source is resolved using *only* the current session's segments plus what `recall()` actually returns: a record's own `provenance`, or a record whose provenance vouches for an earlier-session segment id. Nothing from the in-process view of earlier sessions is consulted. That's the point of the family, and it's why example 3 comes out right: with a `vector_note` store the provenance field is gone, recall hands back a value with no origin, and even the legitimate payment is refused under `M4_UNPROVENANCED_RECALL`. Recovering that origin from private bookkeeping would be exactly the defect being tested, so the in-process token index is used only to declare provenance on writes, never to authorize a call.
+
+Rules are evaluated strictly in spec order across all sources (all sources checked for M3 before any for M4), so a call violating several is attributed to the first it hits. Every action walks `PROPOSED → RECALLED → POLICY_CHECKED → APPROVED → EXECUTED → AUDITED` or `→ BLOCKED → AUDITED`, and every event carries the memory keys that decision consulted.
+
+## Verification
+
+All three examples reproduce their stated outcomes exactly. I also ran 12 synthetic scenarios covering the rule codes the examples don't exercise — M0, M2, M3 (both via a provenanced record and via a direct cross-session segment id), M6 (same-session and across a gap), authority carried by a user-origin record, `memory_authority` on a `vector_note` store (M1 correctly beats M4 because `originTrust` survives), unprivileged calls on untrusted data still running, and an ingestion-only session. All pass, with legal transitions, decisions matching the tool ledger, and no under-declared provenance.
+
+One judgment call worth flagging: when a segment has a `memoryKey` but no `payload` of its own, I still name it in the record's provenance, since its text *is* the stored value and M7 says material from a segment must be recorded. A verifier comparing token-scan provenance for strict equality rather than containment would read that as over-declaration. Every example segment with a `memoryKey` also has a `payload`, so the case likely doesn't arise; I took the spec's literal wording, which is also the safer direction for the decision logic.

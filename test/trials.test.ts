@@ -441,10 +441,12 @@ describe("ship gate with computed evidence", () => {
       agentTrialsPassed: null,
     };
     const a = assessFamily(untried, registry, evidence);
-    expect(a.blockingFailures).toEqual([]);
+    // Blocking since the campaign layer: mutant evidence alone cannot ship a family, and the gate
+    // now says so by refusing rather than by noting it.
+    expect(a.blockingFailures).toEqual(["difficulty-evidenced"]);
     expect(a.results.find((r) => r.gate.id === "mutants-caught-by-intended-check")?.verdict).toBe("pass");
     expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("fail");
-    expect(a.verdict).toBe("HOLD");
+    expect(a.verdict).toBe("NOT-READY");
   });
 
   it("a shape declaring trials that all passed is blocked even with no live evidence attached", () => {

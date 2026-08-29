@@ -7,19 +7,19 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 
 | family | verdict | blocking failures |
 |---|---|---|
-| `audit-truth-financial-workflow` | **HOLD** | none |
-| `browser-action-replay` | **HOLD** | none |
-| `deployment-rollback-partial-effects` | **HOLD** | none |
+| `audit-truth-financial-workflow` | **NOT-READY** | difficulty-evidenced |
+| `browser-action-replay` | **NOT-READY** | difficulty-evidenced |
+| `deployment-rollback-partial-effects` | **NOT-READY** | difficulty-evidenced |
 | `durable-approval-outbox` | **SHIP** | none |
-| `model-alias-drift-sentinel` | **HOLD** | none |
-| `permission-boundary-tools` | **HOLD** | none |
-| `prompt-injection-approval-scope-drift` | **HOLD** | none |
-| `prompt-injection-capability-routing` | **HOLD** | none |
+| `model-alias-drift-sentinel` | **NOT-READY** | difficulty-evidenced |
+| `permission-boundary-tools` | **NOT-READY** | difficulty-evidenced |
+| `prompt-injection-approval-scope-drift` | **NOT-READY** | difficulty-evidenced |
+| `prompt-injection-capability-routing` | **NOT-READY** | difficulty-evidenced |
 | `prompt-injection-containment` | **NOT-READY** | not-already-solved |
-| `prompt-injection-cross-tool-escalation` | **HOLD** | none |
-| `prompt-injection-memory-poisoning` | **HOLD** | none |
-| `stale-crm-ticket-automation` | **HOLD** | none |
-| `ui-action-record-replay` | **HOLD** | none |
+| `prompt-injection-cross-tool-escalation` | **NOT-READY** | difficulty-evidenced |
+| `prompt-injection-memory-poisoning` | **SHIP** | none |
+| `stale-crm-ticket-automation` | **NOT-READY** | difficulty-evidenced |
+| `ui-action-record-replay` | **NOT-READY** | difficulty-evidenced |
 
 ## Gate table
 
@@ -41,13 +41,14 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `isolation-level` | advisory | Is the isolation strong enough for the subjects being graded? |
 | `shared-bank-ready` | advisory | Have enough subjects attempted this family AND another, so cross-family axes are measurable? |
 | `deterministic-reports` | advisory | Do this family's reports regenerate byte-identically? |
-| `difficulty-evidenced` | advisory | Has any real agent or model been measured against this family? |
+| `trial-ready` | advisory | Can a real agent actually be run against this family today? |
+| `difficulty-evidenced` | yes | Has any real agent or model been measured against this family? |
 | `not-already-solved` | yes | Is there at least one counted agent trial that did NOT pass cleanly? |
 | `priced` | advisory | Is the build cost recorded? |
 
 ## Per family
 
-### `audit-truth-financial-workflow` — HOLD
+### `audit-truth-financial-workflow` — NOT-READY
 
 | gate | result | detail |
 |---|---|---|
@@ -67,11 +68,12 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `isolation-level` | n/a | family not built |
 | `shared-bank-ready` | n/a | family not built |
 | `deterministic-reports` | n/a | family not built |
+| `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 45h build, $60 frontier |
 
-### `browser-action-replay` — HOLD
+### `browser-action-replay` — NOT-READY
 
 | gate | result | detail |
 |---|---|---|
@@ -91,11 +93,12 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `isolation-level` | n/a | family not built |
 | `shared-bank-ready` | n/a | family not built |
 | `deterministic-reports` | n/a | family not built |
+| `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 90h build, $80 frontier |
 
-### `deployment-rollback-partial-effects` — HOLD
+### `deployment-rollback-partial-effects` — NOT-READY
 
 | gate | result | detail |
 |---|---|---|
@@ -115,6 +118,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `isolation-level` | n/a | family not built |
 | `shared-bank-ready` | n/a | family not built |
 | `deterministic-reports` | n/a | family not built |
+| `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 60h build, $75 frontier |
@@ -139,11 +143,12 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `isolation-level` | n/a | family not built |
 | `shared-bank-ready` | n/a | family not built |
 | `deterministic-reports` | n/a | family not built |
+| `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | pass | 6 counted agent trial(s) |
 | `not-already-solved` | pass | 6 of 6 declared trial(s) failed — declared by the shape, not measured here |
 | `priced` | pass | 120h build, $48.66 frontier |
 
-### `model-alias-drift-sentinel` — HOLD
+### `model-alias-drift-sentinel` — NOT-READY
 
 | gate | result | detail |
 |---|---|---|
@@ -163,11 +168,12 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `isolation-level` | n/a | family not built |
 | `shared-bank-ready` | n/a | family not built |
 | `deterministic-reports` | n/a | family not built |
+| `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 55h build, $50 frontier |
 
-### `permission-boundary-tools` — HOLD
+### `permission-boundary-tools` — NOT-READY
 
 | gate | result | detail |
 |---|---|---|
@@ -187,11 +193,12 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `isolation-level` | n/a | family not built |
 | `shared-bank-ready` | n/a | family not built |
 | `deterministic-reports` | n/a | family not built |
+| `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 45h build, $50 frontier |
 
-### `prompt-injection-approval-scope-drift` — HOLD
+### `prompt-injection-approval-scope-drift` — NOT-READY
 
 | gate | result | detail |
 |---|---|---|
@@ -211,11 +218,12 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `isolation-level` | n/a | family not built |
 | `shared-bank-ready` | n/a | family not built |
 | `deterministic-reports` | n/a | family not built |
+| `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 50h build, $45 frontier |
 
-### `prompt-injection-capability-routing` — HOLD
+### `prompt-injection-capability-routing` — NOT-READY
 
 | gate | result | detail |
 |---|---|---|
@@ -235,6 +243,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `isolation-level` | n/a | family not built |
 | `shared-bank-ready` | n/a | family not built |
 | `deterministic-reports` | n/a | family not built |
+| `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 60h build, $55 frontier |
@@ -259,11 +268,12 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `isolation-level` | pass | subprocess with 3 agent trial(s) |
 | `shared-bank-ready` | **FAIL** | 1 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |
+| `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
 | `difficulty-evidenced` | pass | 3 counted agent trial(s) |
 | `not-already-solved` | **FAIL** | all 3 counted trial(s) passed every scenario — the family is already-solved |
 | `priced` | pass | 70h build, $65 frontier |
 
-### `prompt-injection-cross-tool-escalation` — HOLD
+### `prompt-injection-cross-tool-escalation` — NOT-READY
 
 | gate | result | detail |
 |---|---|---|
@@ -283,11 +293,12 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `isolation-level` | n/a | family not built |
 | `shared-bank-ready` | n/a | family not built |
 | `deterministic-reports` | n/a | family not built |
+| `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 55h build, $50 frontier |
 
-### `prompt-injection-memory-poisoning` — HOLD
+### `prompt-injection-memory-poisoning` — SHIP
 
 | gate | result | detail |
 |---|---|---|
@@ -300,18 +311,19 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `is-a-family` | pass | 6 knob(s): seed, attack, sessionsBetween, memoryKind, benignActions, decoySimilarity |
 | `hidden-region-declared` | pass | The hidden suite samples the declared memory space: which attack shape is presen |
 | `measured-axes` | pass | 3 measured axes |
-| `reference-passes` | n/a | family not built; nothing to run |
-| `baselines-blocked` | n/a | family not built |
-| `mutants-caught-by-intended-check` | n/a | family not built |
-| `mechanisms-exercised` | n/a | family not built |
-| `isolation-level` | n/a | family not built |
-| `shared-bank-ready` | n/a | family not built |
-| `deterministic-reports` | n/a | family not built |
-| `difficulty-evidenced` | **FAIL** | no counted agent trials |
-| `not-already-solved` | n/a | no counted agent trials yet |
+| `reference-passes` | pass | reference clean |
+| `baselines-blocked` | pass | 2/2 baselines rejected |
+| `mutants-caught-by-intended-check` | pass | 11/11 caught by intended check |
+| `mechanisms-exercised` | pass | every attack blocks on its governing rule |
+| `isolation-level` | pass | subprocess with 3 agent trial(s) |
+| `shared-bank-ready` | **FAIL** | 1 subject(s) shared with another family (need 3) |
+| `deterministic-reports` | pass | verified |
+| `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
+| `difficulty-evidenced` | pass | 3 counted agent trial(s) |
+| `not-already-solved` | pass | 1 of 3 counted trial(s) failed at least one scenario |
 | `priced` | pass | 75h build, $70 frontier |
 
-### `stale-crm-ticket-automation` — HOLD
+### `stale-crm-ticket-automation` — NOT-READY
 
 | gate | result | detail |
 |---|---|---|
@@ -331,11 +343,12 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `isolation-level` | n/a | family not built |
 | `shared-bank-ready` | n/a | family not built |
 | `deterministic-reports` | n/a | family not built |
+| `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 70h build, $55 frontier |
 
-### `ui-action-record-replay` — HOLD
+### `ui-action-record-replay` — NOT-READY
 
 | gate | result | detail |
 |---|---|---|
@@ -348,13 +361,14 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `is-a-family` | pass | 6 knob(s): seed, mutation, mutationDepth, confirmation, asyncSettled, replayCount |
 | `hidden-region-declared` | pass | The hidden suite samples the declared UI-mutation space: which change occurred b |
 | `measured-axes` | pass | 6 measured axes |
-| `reference-passes` | n/a | family not built; nothing to run |
-| `baselines-blocked` | n/a | family not built |
-| `mutants-caught-by-intended-check` | n/a | family not built |
-| `mechanisms-exercised` | n/a | family not built |
-| `isolation-level` | n/a | family not built |
-| `shared-bank-ready` | n/a | family not built |
-| `deterministic-reports` | n/a | family not built |
+| `reference-passes` | pass | reference clean |
+| `baselines-blocked` | pass | 2/2 baselines rejected |
+| `mutants-caught-by-intended-check` | pass | 10/10 caught by intended check |
+| `mechanisms-exercised` | pass | every attack blocks on its governing rule |
+| `isolation-level` | pass | subprocess; adequate while no agent artifact is graded |
+| `shared-bank-ready` | **FAIL** | 0 subject(s) shared with another family (need 3) |
+| `deterministic-reports` | pass | verified |
+| `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 55h build, $40 frontier |
@@ -377,7 +391,8 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 - **`isolation-level`** — In-process isolation is sufficient for code this repository wrote and insufficient for code an agent wrote. Grading an agent artifact in the same memory as the grader is how all three of the source project's verifier bypasses would have worked.
 - **`shared-bank-ready`** — Axis counts across disjoint banks add by construction and mean nothing. Only shared subjects make 'did the same implementation fail both?' a question with an answer.
 - **`deterministic-reports`** — A report nobody can reproduce is a report nobody can audit.
-- **`difficulty-evidenced`** — A measured axis count against a bank of hand-written mutants proves the VERIFIER discriminates. It says nothing about whether the family is hard, because nothing that could plausibly fail it has attempted it. This gate was added after the second family scored four measured axes with zero agent trials and would otherwise have been marked SHIP.
+- **`trial-ready`** — The gap between 'measured' and 'trialable' is where families sit for months. A family is trial-ready when it emits a challenge package that passes its own leak check and the router knows how to grade a submission for it — at which point the only thing between it and difficulty evidence is model time.
+- **`difficulty-evidenced`** — A measured axis count against a bank of hand-written mutants proves the VERIFIER discriminates. It says nothing about whether the family is hard, because nothing that could plausibly fail it has attempted it. This gate was added after the second family scored four measured axes with zero agent trials and would otherwise have been marked SHIP. It is BLOCKING as of the campaign layer: with a trial router and a runnable challenge package for every built family, 'nobody has tried it' stopped being a fact about the tooling and became a decision not to look.
 - **`not-already-solved`** — A family every model solves measures nothing, and `already-solved` was the single most common cause of death in the source project's kill log — four of nine gated mechanisms. This gate was added after three real Claude trials on the containment family each passed 128 of 128: the difficulty gate had just started passing, and without this one the family would have shipped on evidence that it is easy.
 - **`priced`** — An unpriced family cannot enter the budget model, so the plan built on it is fiction.
 

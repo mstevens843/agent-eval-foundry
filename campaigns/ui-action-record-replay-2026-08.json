@@ -1,0 +1,97 @@
+{
+  "campaignId": "ui-2026-08",
+  "familyId": "ui-action-record-replay",
+  "hypothesis": "A model can discover a UI workflow; the capability worth shipping is a recording that replays deterministically without the model in the loop. If the family measures that distinction, counted trials should fail on `no_model_in_loop`, `replay_idempotent` or `unreplayable_reported` rather than on the mechanics of clicking.",
+  "killSignal": "Every counted trial passes every graded scenario, which means the replay contract is obvious to a capable model and the family measures nothing. Alternatively, every counted trial fails `replay_completes` on the async-pending scenarios only, which would mean the family is measuring a harness convention rather than a capability.",
+  "confirmSignal": "At least one counted trial fails at least one scenario, with failures spread across more than one check \u2014 in particular `replay_idempotent` at replayCount 2, or `no_model_in_loop`, which no amount of care about clicking prevents.",
+  "challengeHash": "1050e79f4804a96a5327d50dd81765b0",
+  "scenarioSetId": "replay-324-2255de40",
+  "scenariosExpected": 324,
+  "timeoutMs": 1500000,
+  "artifactPath": "submission/subject.mjs",
+  "isolation": "subprocess",
+  "counting": {
+    "neverCounts": [
+      "refused",
+      "timeout",
+      "infrastructure_error"
+    ],
+    "onRefusal": "Recorded as REFUSED with the transcript preserved, and never counted. A provider refusal is the absence of an attempt: the reward of 0 it produces is not evidence in either direction. The slot is NOT re-run.",
+    "onInfraFailure": "Recorded as FAILED_INFRA, transcript preserved, uncounted. May be re-run up to the declared retry limit because the failure is in the harness rather than in the subject.",
+    "onCrash": "Recorded as `crashed` and NOT counted by default. Promoting a crash to a failure automatically would let a harness bug read as a capability finding; re-classify by hand only if the crash is demonstrably inside the submitted artifact.",
+    "retriesOnInfra": 2,
+    "retryOnRefusal": false
+  },
+  "preservation": [
+    "Every slot writes a durable trial directory under trials/<family>/<run-id>/ whether or not it counts.",
+    "metadata.json records the provider, the command, the challenge hash and the scenario-set id.",
+    "transcript.txt is preserved verbatim, including for refusals and crashes.",
+    "challenge/ holds the exact bundle the model saw; submission/ holds the artifact it produced.",
+    "verifier-output.json holds the graded cells; countability.json holds the counting decision and its reason."
+  ],
+  "budgetUsd": 10.0,
+  "slots": [
+    {
+      "slotId": "A1",
+      "model": "anthropic/claude-opus-5",
+      "subjectId": "claude-opus-5",
+      "effort": null,
+      "runner": "shell",
+      "command": [
+        "claude",
+        "-p",
+        "{instruction}",
+        "--permission-mode",
+        "bypassPermissions"
+      ],
+      "state": "NOT_RUN",
+      "runId": null,
+      "note": "Runnable here. Not run in this phase: the memory-poisoning campaign is the one that answers whether the evolution engine works, and spending the budget on both at once would answer neither well."
+    },
+    {
+      "slotId": "A2",
+      "model": "anthropic/claude-opus-5",
+      "subjectId": "claude-opus-5",
+      "effort": null,
+      "runner": "shell",
+      "command": [
+        "claude",
+        "-p",
+        "{instruction}",
+        "--permission-mode",
+        "bypassPermissions"
+      ],
+      "state": "NOT_RUN",
+      "runId": null,
+      "note": "As A1."
+    },
+    {
+      "slotId": "A3",
+      "model": "anthropic/claude-opus-5",
+      "subjectId": "claude-opus-5",
+      "effort": null,
+      "runner": "shell",
+      "command": [
+        "claude",
+        "-p",
+        "{instruction}",
+        "--permission-mode",
+        "bypassPermissions"
+      ],
+      "state": "NOT_RUN",
+      "runId": null,
+      "note": "As A1."
+    },
+    {
+      "slotId": "B1",
+      "model": "openai/gpt-5.6-sol",
+      "subjectId": "gpt-5.6-sol@xhigh",
+      "effort": "xhigh",
+      "runner": "external",
+      "command": null,
+      "state": "NOT_RUN",
+      "runId": null,
+      "note": "External: no Codex CLI configured here."
+    }
+  ]
+}

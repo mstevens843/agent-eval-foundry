@@ -258,9 +258,33 @@ removes it. The engine is deterministic and rule-based rather than a model call,
 the rest of this repository is: a generator whose output cannot be checked is the failure mode in
 every row of my kill log.
 
-What it has NOT shown is that the descendant is harder. No agent has attempted it. The loop has run
-one full turn and stopped exactly where the evidence stops, and `reports/foundry-evolution-report.md`
-lists what would falsify the approach — starting with the descendant also passing 128 of 128.
+### The descendant was then trialed, and the operator held
+
+Three counted Claude trials against the evolved family, same harness and same isolation as the
+parent's. **One of the three failed, on 32 scenarios.** Every one of those failures sits at
+`sessionsBetween` 1 or 3, and not one at 0 — which is the pattern the campaign plan pre-registered as
+its confirm signal before anything ran. The parent's three trials had failed nothing at all.
+
+So the operator did what it claimed: the same implementation is correct within a session and wrong
+across one, and the difficulty came from the persistence boundary rather than from the family being
+bigger.
+
+**The campaign found a defect before it found difficulty, which is the part I would lead with.** One
+trial cited rule `M3` on 47 scenarios and the verifier demanded `M5`. Reading the published spec, the
+model was right: the rules were listed in evaluation order and M3 explicitly covered content read in
+an earlier session. The family was ambiguous and had been marking a correct answer wrong. Repairing
+the spec changed the challenge package, which changed its content hash, which automatically stopped
+all three counted trials from counting — they measured a task that no longer exists. They are
+preserved, the campaign was re-run, and the numbers above are from the repaired version.
+
+That sequence is the argument for the whole apparatus. A benchmark programme without a challenge
+hash would have kept the old trials, and a benchmark programme without real trials would never have
+found the ambiguity at all.
+
+What it still has NOT shown is anything about a second lab's models. Every counted trial here is
+Claude, eight campaign slots for Codex and Gemini are written and unrun, and one model family has no
+measured variance. `reports/evolution-validation-report.md` lists that first among the things that
+would falsify the result.
 
 Underneath it is the constraint from `results/08`: fairness requires the rules be fully stated;
 solvability requires the answer be derivable from the rules plus the shipped data; and anything a
@@ -372,9 +396,12 @@ That changes the unit of production:
    rest are HOLD because a family must not ship on an estimate.
 4. **Make the kill produce the next candidate.** A typed reason with cited evidence, a disposition,
    and an operator table that turns "this family was too easy" into a specific structural change with
-   a pre-registered kill risk. Two of the four operators applied to the dead family have now produced
-   a built, measured descendant.
-5. **Spend frontier budget only on what survives 1–4.** `node dist/cli.js budget --total 100000
+   a pre-registered kill risk. The descendant is built, trialed, and the operator is confirmed.
+5. **Pre-register every campaign and hash every challenge.** The plan says what would kill the family
+   before it runs; the hash says which task each preserved trial actually measured. Both earned their
+   place on the first campaign: the plan's confirm signal is what makes the result a finding rather
+   than a story, and the hash is what invalidated three trials the moment the family was repaired.
+6. **Spend frontier budget only on what survives 1–5.** `node dist/cli.js budget --total 100000
    --rate 120` prices it, and `budget-check.ts` refuses a plan that omits labour — the exact fake
    this section argues against.
 

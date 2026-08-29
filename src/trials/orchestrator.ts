@@ -64,6 +64,8 @@ export interface OrchestrateOptions {
    * blocking difficulty gate.
    */
   readonly disqualify?: (cells: readonly TrialCell[]) => string | null;
+  /** Extra metadata merged into the trial directory's `metadata.json`. */
+  readonly extraMetadata?: Readonly<Record<string, unknown>>;
 }
 
 export interface OrchestrateResult {
@@ -204,6 +206,7 @@ export function orchestrateTrial(options: OrchestrateOptions): OrchestrateResult
       classification: providerResult.classification,
       classificationDetail: providerResult.detail,
       command: options.command ?? null,
+      ...(options.extraMetadata ?? {}),
     },
   });
 

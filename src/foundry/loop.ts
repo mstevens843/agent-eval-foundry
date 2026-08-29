@@ -51,15 +51,24 @@ export interface FamilyLoopState {
   }[];
 }
 
-/** Families with measured evidence available. Everything else is graded on its shape alone. */
-const MEASURED_FAMILIES = new Set(["prompt-injection-containment"]);
+/**
+ * Families whose evidence is computed by running them, rather than read off their shape.
+ *
+ * Every routable family belongs here once it has been built: the gate must read a sweep and the
+ * trial directories, not a number somebody typed into a JSON file.
+ */
+const MEASURED_FAMILIES = new Set([
+  "prompt-injection-containment",
+  "prompt-injection-memory-poisoning",
+  "ui-action-record-replay",
+]);
 
 export function familyLoop(root: string, familyId: string, registry?: Registry): FamilyLoopState {
   const reg = registry ?? loadRegistry(root);
   const shape = reg.shapes.find((s) => s.familyId === familyId);
   if (shape === undefined) throw new Error(`no task shape for family "${familyId}"`);
 
-  const bundle = MEASURED_FAMILIES.has(familyId) ? familyEvidenceFor(root) : null;
+  const bundle = MEASURED_FAMILIES.has(familyId) ? familyEvidenceFor(root, familyId) : null;
   const evidence = bundle?.evidence;
   const assessment = assessFamily(shape, reg, evidence);
   const analysis = analyzeFamily(shape, assessment, evidence, DECLARED_CONCERNS[familyId] ?? {});

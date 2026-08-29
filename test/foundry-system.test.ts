@@ -224,8 +224,11 @@ describe("the checked-in registry", () => {
     expect(outbox?.agentTrialsRun).toBeGreaterThan(0);
     expect(assessFamily(outbox as NonNullable<typeof outbox>, registry).verdict).toBe("SHIP");
 
+    // `difficulty-evidenced` became BLOCKING with the campaign layer, so an untried family is
+    // NOT-READY rather than HOLD: with a router and a challenge package for every built family,
+    // "nobody has tried it" stopped being a fact about the tooling.
     const untried = { ...(pic as NonNullable<typeof pic>), agentTrialsRun: null };
-    expect(assessFamily(untried, registry).verdict).toBe("HOLD");
+    expect(assessFamily(untried, registry).verdict).toBe("NOT-READY");
     expect(
       assessFamily(untried, registry).results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict,
     ).toBe("fail");
@@ -279,10 +282,10 @@ describe("ship gate on real data", () => {
   it("a measured family with no agent trials is held, not shipped", () => {
     const pic = registry.shapes.find((s) => s.familyId === "prompt-injection-containment");
     const a = assessFamily({ ...(pic as NonNullable<typeof pic>), agentTrialsRun: null }, registry);
-    expect(a.blockingFailures).toEqual([]);
+    expect(a.blockingFailures).toEqual(["difficulty-evidenced"]);
     expect(a.results.find((r) => r.gate.id === "measured-axes")?.verdict).toBe("pass");
     expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("fail");
-    expect(a.verdict).toBe("HOLD");
+    expect(a.verdict).toBe("NOT-READY");
   });
 
   it("the family that HAS been attempted is blocked for the opposite reason", () => {

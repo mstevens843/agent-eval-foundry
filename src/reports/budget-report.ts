@@ -11,7 +11,7 @@
 
 import { shortfallForTarget } from "../foundry/budget-check.js";
 import { type BudgetInputs, type BudgetPlan, handAuthoredComparison, planBudget } from "../foundry/budget.js";
-import type { TrialLayerFacts } from "./evidence.js";
+import type { CampaignFacts, TrialLayerFacts } from "./evidence.js";
 
 const usd = (n: number): string =>
   !Number.isFinite(n) ? "—" : n >= 1000 ? `$${Math.round(n).toLocaleString("en-US")}` : `$${n.toFixed(2)}`;
@@ -34,6 +34,7 @@ export function renderBudgetReport(
   inputs: BudgetInputs,
   targetTasks: number,
   trials?: TrialLayerFacts,
+  campaigns?: CampaignFacts,
 ): string {
   const plan = planBudget(inputs);
   const hand = handAuthoredComparison(inputs);
@@ -105,6 +106,7 @@ export function renderBudgetReport(
       .map((k) => `| \`${String(k)}\` | ${String(inputs[k])} | ${PROVENANCE[String(k)]} |`),
     "",
     ...(trials === undefined ? [] : trialLayerSection(inputs, trials)),
+    ...(campaigns === undefined ? [] : campaignSection(inputs, campaigns)),
     "## What this model does not include",
     "",
     "- **Maintenance.** Families decay as models improve; nothing here prices re-hardening.",
@@ -222,6 +224,57 @@ function trialLayerSection(inputs: BudgetInputs, t: TrialLayerFacts): readonly s
     "- **Cheap to run is not cheap to build.** The containment family took roughly the same authoring",
     "  effort as the expensive one and then failed the ship gate for being too easy. Run cost is the",
     "  smaller half of the bill, and the model above is right to be dominated by labour.",
+    "",
+  ];
+}
+
+/**
+ * What a trial campaign actually costs, measured on this machine rather than estimated.
+ *
+ * The number worth reading is the last one: cost per counted FAILURE. A counted solve tells you the
+ * family is solvable, which the reference already told you. A counted failure is the only kind of
+ * trial that moves a family toward shipping, and it is the unit a benchmark programme is really
+ * buying.
+ */
+function campaignSection(inputs: BudgetInputs, c: CampaignFacts): readonly string[] {
+  const runtimeMinutes = c.medianRuntimeSeconds === null ? null : c.medianRuntimeSeconds / 60;
+  const perCountedFailure = c.countedFailures === 0 ? null : c.budgetPlannedUsd / c.countedFailures;
+
+  return [
+    "## Campaigns, measured",
+    "",
+    "The trial layer running for real, on this machine. Every figure is read from campaign plans and",
+    "trial directories rather than assumed.",
+    "",
+    "| | |",
+    "|---|---:|",
+    `| campaigns declared | ${c.campaigns} |`,
+    `| slots planned | ${c.slotsPlanned} |`,
+    `| slots run | ${c.slotsRun} |`,
+    `| slots **not run** | ${c.slotsNotRun} |`,
+    `| counted trials | ${c.countedTrials} |`,
+    `| of those, failing something | ${c.countedFailures} |`,
+    `| superseded by a challenge repair | ${c.supersededTrials} |`,
+    `| median counted-trial runtime | ${runtimeMinutes === null ? "—" : `${runtimeMinutes.toFixed(1)} min`} |`,
+    `| budget declared across campaigns | ${usd(c.budgetPlannedUsd)} |`,
+    `| **budget per counted failure** | ${perCountedFailure === null ? "— (no counted failure yet)" : usd(perCountedFailure)} |`,
+    "",
+    "### The line item nobody budgets for",
+    "",
+    `${c.supersededTrials} counted trials were invalidated by a repair to the family they measured. They`,
+    "are preserved and they do not count, because the task they were run against no longer exists.",
+    "",
+    "That is not waste in the ordinary sense — the repair came FROM those trials, which found a rule",
+    "attribution the spec had left ambiguous — but it is real spend that a plan pricing only successful",
+    "runs would omit. **A benchmark programme should expect to pay for each family's trials more than",
+    "once**, because the first campaign is often what tells you the family is not yet fair.",
+    "",
+    "### Unrun slots are a budget line, not an absence",
+    "",
+    `${c.slotsNotRun} of ${c.slotsPlanned} declared slots have not run, almost all of them because no runner`,
+    "for that model family is configured here. They are costed in the plans and visible in every",
+    "report. A campaign that quietly dropped them would show a complete-looking result over one lab's",
+    "model — which is the single most common way a benchmark overstates what it measured.",
     "",
   ];
 }

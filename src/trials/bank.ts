@@ -121,7 +121,13 @@ export function computeOverlap(banks: readonly FamilyBank[]): BankOverlap {
 
   const counts = new Map<string, number>();
   for (const b of banks) {
-    for (const id of new Set(subjectIds(b.matrix))) counts.set(id, (counts.get(id) ?? 0) + 1);
+    // A kinded bank carries normalized (and, for mutants, namespaced) subject ids. Falling back to
+    // the raw matrix ids would undo both.
+    const ids =
+      "subjects" in b && Array.isArray((b as { subjects?: unknown }).subjects)
+        ? (b as unknown as { subjects: readonly string[] }).subjects
+        : subjectIds(b.matrix);
+    for (const id of new Set(ids)) counts.set(id, (counts.get(id) ?? 0) + 1);
   }
   const shared = [...counts.entries()]
     .filter(([, n]) => n === banks.length)
@@ -202,4 +208,149 @@ export function assertBankCoherent(familyId: string, records: readonly TrialReco
       `counted trials were graded against ${sets.length} different scenario sets (${sets.join(", ")}); their cells are not comparable and must not be pooled into one bank`,
     );
   }
+}
+
+// ---------------------------------------------------------------- bank kinds
+
+/**
+ * What a bank is made of, and therefore what its axis count is a statement about.
+ *
+ * This distinction was prose in the reports and is now a type, because prose does not stop anyone
+ * adding the numbers. An axis count over MUTANTS says how many distinct defects the verifier can
+ * detect — it is bounded by how many the author wrote. An axis count over AGENTS says how many
+ * distinct ways real implementations fail. They answer different questions, and a combined figure
+ * across the two is not a bigger measurement, it is a category error.
+ */
+export const BANK_KINDS = ["agent", "mutant", "imported"] as const;
+export type BankKind = (typeof BANK_KINDS)[number];
+
+export const BANK_KIND_MEANING: Readonly<Record<BankKind, string>> = {
+  agent: "real submissions from models attempting the task — a statement about DIFFICULTY",
+  mutant: "known-bad implementations written alongside the verifier — a statement about DETECTION",
+  imported: "trial records normalized from another harness — difficulty, at that harness's fidelity",
+};
+
+/**
+ * Normalize a subject id so the same model is one subject across families and harnesses.
+ *
+ * Without this, `anthropic/claude-opus-5` from a locally-run trial and `claude-opus-5` from an
+ * imported Harbor run are two subjects, the shared bank looks empty, and the cross-family verdict is
+ * `refused` for a reason that is entirely clerical.
+ */
+export function normalizeSubjectId(raw: string): string {
+  const stripped = raw.trim().toLowerCase();
+  const withoutVendor = stripped.includes("/") ? (stripped.split("/").pop() ?? stripped) : stripped;
+  // Effort suffixes are kept: `gpt-5.6-sol@xhigh` and `gpt-5.6-sol@low` are genuinely different
+  // subjects, and merging them would hide the one variable most likely to explain a difference.
+  return withoutVendor.replace(/\s+/g, "-");
+}
+
+export interface KindedBank extends FamilyBank {
+  readonly kind: BankKind;
+  /** Subjects, normalized. The identity used for every overlap computation. */
+  readonly subjects: readonly string[];
+}
+
+/**
+ * Tag a bank with its kind and normalize its subject identities.
+ *
+ * Mutant subjects are namespaced by family and model subjects are not, and the asymmetry is the
+ * point. `claude-opus-5` attempting two families IS one subject — that is what makes a shared bank
+ * possible. `over-blocker` in two families is two different implementations that happen to share a
+ * name, and treating them as one subject reported two disjoint mutant banks as overlapping, which a
+ * test caught by asking for a refusal and getting `partial`.
+ */
+export const kindedBank = (bank: FamilyBank, kind: BankKind): KindedBank => ({
+  ...bank,
+  kind,
+  subjects: [
+    ...new Set(
+      bank.matrix.subjects.map((s) =>
+        kind === "mutant" ? `${bank.familyId}::${s.id}` : normalizeSubjectId(s.id),
+      ),
+    ),
+  ].sort(),
+});
+
+/**
+ * Two banks may only be compared when they are made of the same kind of thing.
+ *
+ * The check that stops the most attractive wrong number in the repository: three families, twelve
+ * measured axes, one headline. Two of those counts are detection and one is difficulty.
+ */
+export function assertComparableKinds(banks: readonly KindedBank[]): void {
+  const kinds = [...new Set(banks.map((b) => b.kind))].sort();
+  if (kinds.length > 1) {
+    fail(
+      "BANK_KIND_MISMATCH",
+      "bank.kinds",
+      `banks of different kinds cannot be compared or combined: ${banks
+        .map((b) => `${b.familyId} is \`${b.kind}\``)
+        .join(", ")}. ${kinds.map((k) => `\`${k}\` means ${BANK_KIND_MEANING[k]}`).join("; ")}.`,
+    );
+  }
+}
+
+export interface CrossFamilyClaim {
+  readonly kind: BankKind;
+  readonly families: readonly string[];
+  readonly overlap: BankOverlap;
+  /** The claim this evidence licenses, in one sentence. */
+  readonly licensed: string;
+  /** What would have to be true to license the next stronger claim. */
+  readonly toStrengthen: readonly string[];
+}
+
+/**
+ * What the current banks license, per kind.
+ *
+ * Grouped by kind first and overlap second, because the kind decides which question is being asked
+ * and the overlap decides whether it can be answered.
+ */
+export function crossFamilyClaims(banks: readonly KindedBank[]): readonly CrossFamilyClaim[] {
+  const byKind = new Map<BankKind, KindedBank[]>();
+  for (const bank of banks) byKind.set(bank.kind, [...(byKind.get(bank.kind) ?? []), bank]);
+
+  const claims: CrossFamilyClaim[] = [];
+  for (const kind of [...byKind.keys()].sort()) {
+    const group = byKind.get(kind) ?? [];
+    if (group.length < 2) {
+      claims.push({
+        kind,
+        families: group.map((b) => b.familyId),
+        overlap: computeOverlap(group),
+        licensed:
+          group.length === 0
+            ? "nothing: no bank of this kind exists"
+            : `nothing cross-family: only one \`${kind}\` bank exists, so there is nothing to compare it with`,
+        toStrengthen: [
+          `Build or trial a second family whose bank is \`${kind}\`.`,
+          kind === "agent"
+            ? "For an agent bank that means counted trials, not mutants."
+            : "For a mutant bank that means a second family with a written mutant set.",
+        ],
+      });
+      continue;
+    }
+    const overlap = computeOverlap(group);
+    claims.push({
+      kind,
+      families: group.map((b) => b.familyId),
+      overlap,
+      licensed:
+        overlap.verdict === "refused"
+          ? "nothing: the banks share no subject, so co-failure across families is unobservable and the union's width is the sum by construction"
+          : overlap.verdict === "partial"
+            ? `a qualitative comparison over ${overlap.sharedSubjects.length} shared subject(s); no combined axis count, because the width is bounded by the shared bank size`
+            : `a combined axis count over the ${overlap.sharedSubjects.length} shared subjects`,
+      toStrengthen:
+        overlap.verdict === "measured"
+          ? ["Nothing: the claim is available. Widen the bank to narrow the confidence interval."]
+          : [
+              `Run the same subjects against every \`${kind}\` family until ${overlap.threshold} share all of them.`,
+              `Currently shared: ${overlap.sharedSubjects.join(", ") || "none"}.`,
+            ],
+    });
+  }
+  return claims;
 }
