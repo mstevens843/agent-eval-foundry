@@ -201,6 +201,22 @@ export function parseTaskShape(v: unknown, path = "shape"): TaskShape {
   const status = oneOf(o["status"], `${path}.status`, TASK_STATUS);
   const buildHours = num(o["estimatedBuildHours"], `${path}.estimatedBuildHours`);
   const frontierUsd = num(o["estimatedFrontierUsd"], `${path}.estimatedFrontierUsd`);
+  const trialsRun = numNullable(o["agentTrialsRun"], `${path}.agentTrialsRun`);
+  const trialsPassed = numNullable(o["agentTrialsPassed"], `${path}.agentTrialsPassed`);
+  if (trialsRun !== null && trialsRun > 0 && trialsPassed === null) {
+    fail(
+      "SHAPE_TRIAL_OUTCOME_MISSING",
+      `${path}.agentTrialsPassed`,
+      "a family claiming agent trials must declare how many of them passed; a trial count with no outcome cannot be told apart from no trials at all, and the ship gate has to fail closed on it",
+    );
+  }
+  if (trialsPassed !== null && trialsRun !== null && trialsPassed > trialsRun) {
+    fail(
+      "SHAPE_TRIAL_OUTCOME_MISSING",
+      `${path}.agentTrialsPassed`,
+      `${trialsPassed} trials passed out of ${trialsRun} run`,
+    );
+  }
   const built = status === "built" || status === "screened" || status === "trialed" || status === "shipped";
   if (built && buildHours <= 0) {
     fail(
@@ -269,7 +285,8 @@ export function parseTaskShape(v: unknown, path = "shape"): TaskShape {
     dataQuality: oneOf(o["dataQuality"], `${path}.dataQuality`, DATA_QUALITY),
     evidence: strNullable(o["evidence"], `${path}.evidence`),
     estimatedAxes: numNullable(o["estimatedAxes"], `${path}.estimatedAxes`),
-    agentTrialsRun: numNullable(o["agentTrialsRun"], `${path}.agentTrialsRun`),
+    agentTrialsRun: trialsRun,
+    agentTrialsPassed: trialsPassed,
   };
 }
 

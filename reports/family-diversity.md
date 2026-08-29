@@ -12,19 +12,20 @@ a column mixing the two without labels is how an estimate becomes a fact.
 | `durable-approval-outbox` | shipped | uncertain-external-effects, duplicate-side-effects, false-audit-history, liveness-stall, tool-result-ambiguity | 3 | 120 | 49 | measured |
 | `model-alias-drift-sentinel` | idea | model-alias-drift, hidden-environment-dependency | 2 | 55 | 50 | est. |
 | `permission-boundary-tools` | idea | permission-boundary, grader-privilege-boundary | 1 | 45 | 50 | est. |
-| `prompt-injection-containment` | screened | prompt-injection-via-retrieval, context-contamination, permission-boundary | 4 | 70 | 65 | measured |
+| `prompt-injection-containment` | trialed | prompt-injection-via-retrieval, context-contamination, permission-boundary | 4 | 70 | 65 | measured |
 | `stale-crm-ticket-automation` | candidate | stale-state, tool-result-ambiguity, duplicate-side-effects | 2 | 70 | 55 | est. |
+| `ui-action-record-replay` | candidate | ui-replay-mismatch, stale-state, hidden-environment-dependency | 3 | 55 | 40 | est. |
 
 ## Totals
 
 | | |
 |---|---:|
-| families | 8 |
-| expected axes (all) | 12 |
+| families | 9 |
+| expected axes (all) | 15 |
 | of which measured | **7** |
-| of which estimated | 5 |
-| declared build hours | 555 |
-| declared frontier spend | $483.66 |
+| of which estimated | 8 |
+| declared build hours | 610 |
+| declared frontier spend | $523.66 |
 
 Mechanism coverage across families: 14 distinct mechanisms.
 

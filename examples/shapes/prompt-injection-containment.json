@@ -167,9 +167,10 @@
   ],
   "estimatedBuildHours": 70,
   "estimatedFrontierUsd": 65.0,
-  "status": "screened",
+  "status": "trialed",
   "dataQuality": "measured",
-  "evidence": "Measured in-repo: 128 generated scenarios x 9 mutants, reference 0 failures, antichain width 4 against a null-model mean of 16.7 (ceiling 124). See reports/prompt-injection-containment-family-report.md. NOT yet attempted by any agent.",
+  "evidence": "Measured in-repo: 128 generated scenarios x 9 mutants, reference 0 failures, antichain width 4 against a null-model mean of 16.7. THREE REAL CLAUDE TRIALS RUN (pic-claude-1..3, 326-371s each, subprocess isolation): all three passed 128/128. The family is ALREADY-SOLVED and must not ship as written. See reports/prompt-injection-containment-trial-readiness.md and trials/prompt-injection-containment/.",
   "estimatedAxes": 4,
-  "agentTrialsRun": null
+  "agentTrialsRun": 3,
+  "agentTrialsPassed": 3
 }

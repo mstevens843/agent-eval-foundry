@@ -11,6 +11,7 @@
 
 import { RULES } from "../families/prompt-injection-containment/policy.js";
 import type { RunResult } from "../families/prompt-injection-containment/runner.js";
+import { assertNoBaselineImposters } from "../trials/orchestrate.js";
 import { ISOLATION_GUARANTEES } from "../trials/types.js";
 import type { TrialRecord, TrialSet } from "../trials/types.js";
 import { countedAgentTrials, summarise } from "../trials/types.js";
@@ -37,6 +38,10 @@ export function computeEvidence(
   trials: TrialSet,
   options: { readonly sharedBankSubjects?: number; readonly reportsDeterministic?: boolean } = {},
 ): FamilyEvidence {
+  // Independent of whoever wrote the records: a counted agent trial that behaves exactly like a
+  // checked-in baseline is rejected here even if the file on disk says it counts.
+  assertNoBaselineImposters(trials.records);
+
   const checksFor = (subjectId: string): ReadonlySet<string> =>
     new Set(
       run.cells.filter((c) => c.subjectId === subjectId).flatMap((c) => c.failures.map((f) => f.check)),
@@ -67,8 +72,12 @@ export function computeEvidence(
     baselinesTotal: BASELINES.length,
     mutantsCaught,
     mechanismsExercised,
-    isolation: trials.records[0]?.isolation ?? "in-process",
+    // The isolation that matters is the one AGENT artifacts ran under, not the one local mutants
+    // used. Sampling record[0] reported "in-process" while three agent trials had run in subprocesses.
+    isolation: countedAgentTrials(trials)[0]?.isolation ?? trials.records[0]?.isolation ?? "in-process",
     countedAgentTrials: countedAgentTrials(trials).length,
+    agentTrialsPassed: countedAgentTrials(trials).filter((t) => t.cells.every((c) => c.failed.length === 0))
+      .length,
     sharedBankSubjects: options.sharedBankSubjects ?? 0,
     reportsDeterministic: options.reportsDeterministic ?? true,
   };

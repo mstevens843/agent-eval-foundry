@@ -15,7 +15,7 @@ import { type Registry, buildRegistry } from "./registry.js";
 import type { Candidate, Mechanism, Mutant, TaskShape } from "./schema.js";
 import { parseCandidates, parseMechanisms, parseMutants, parseTaskShape } from "./validate.js";
 
-const readJson = (path: string): unknown => {
+export const readJson = (path: string): unknown => {
   try {
     return JSON.parse(readFileSync(path, "utf8"));
   } catch (err) {

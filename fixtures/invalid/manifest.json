@@ -172,5 +172,11 @@
     "kind": "matrix",
     "code": "E_REFERENCE_IN_SUBJECTS",
     "note": "The oracle is not evidence about difficulty."
+  },
+  {
+    "file": "shapes/trials-without-outcome.json",
+    "kind": "shape",
+    "code": "SHAPE_TRIAL_OUTCOME_MISSING",
+    "note": "Claims six frontier attempts and says nothing about how they went. The blocking already-solved gate cannot tell that from a family nobody has ever run, so the ambiguous state is rejected at load."
   }
 ]

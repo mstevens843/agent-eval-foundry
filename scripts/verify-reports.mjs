@@ -62,7 +62,35 @@ for (const rel of walk(chalTmp).sort()) {
   } else console.log(`ok     ${committed}`);
 }
 
+// The scaffolded family artifacts are generated too. Regenerating into a temp directory and diffing
+// catches the case where a shape changes and its checked-in scaffold silently does not.
+const uiTmp = mkdtempSync(join(tmpdir(), "foundry-ui-"));
+run(["scaffold", "--shape", "examples/shapes/ui-action-record-replay.json", "--out", uiTmp]);
+for (const rel of readdirSync(uiTmp).sort()) {
+  const committed = join("examples/families/ui-action-record-replay/package", rel);
+  if (readFileSync(join(uiTmp, rel), "utf8") !== readFileSync(committed, "utf8")) {
+    console.error(`STALE  ${committed}`);
+    failures += 1;
+  } else console.log(`ok     ${committed}`);
+}
+
+// Every report `all` writes, diffed against what is committed. New reports are covered automatically
+// by being written here, but the count is asserted so a report that stops being generated is caught
+// rather than silently skipped.
 run(["all", "--out", tmp]);
+const EXPECTED_REPORTS = 15;
+const generated = readdirSync(tmp);
+if (generated.length !== EXPECTED_REPORTS) {
+  console.error(`WRONG COUNT  \`all\` wrote ${generated.length} reports, expected ${EXPECTED_REPORTS}`);
+  failures += 1;
+}
+// Nothing may sit in reports/ that no command regenerates: an orphan is a document that has stopped
+// being checked and starts drifting the moment the code under it changes.
+const covered = new Set([...generated, ...axis.map(([path]) => path.replace("reports/", ""))]);
+for (const name of readdirSync("reports").filter((n) => !covered.has(n))) {
+  console.error(`ORPHAN ${join("reports", name)} is committed but nothing regenerates it`);
+  failures += 1;
+}
 for (const name of readdirSync(tmp).sort()) {
   const committed = join("reports", name);
   if (readFileSync(join(tmp, name), "utf8") !== readFileSync(committed, "utf8")) {

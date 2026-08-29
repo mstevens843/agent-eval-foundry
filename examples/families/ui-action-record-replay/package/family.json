@@ -1,0 +1,28 @@
+{
+  "familyId": "ui-action-record-replay",
+  "name": "UI action record and replay",
+  "domain": "browser and desktop UI automation without an API",
+  "mechanisms": [
+    "ui-replay-mismatch",
+    "stale-state",
+    "hidden-environment-dependency"
+  ],
+  "mutants": [
+    "nop-faker",
+    "eager-resolver",
+    "audit-liar",
+    "duplicate-executor",
+    "stale-state-reader"
+  ],
+  "generatedFrom": "shape",
+  "artifacts": [
+    "family.json",
+    "instruction.draft.md",
+    "hidden-test-plan.md",
+    "reference-checklist.md",
+    "mutant-plan.md",
+    "fairness-checklist.md",
+    "cheat-resistance-checklist.md",
+    "README.md"
+  ]
+}

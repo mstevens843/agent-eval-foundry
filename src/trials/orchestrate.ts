@@ -10,8 +10,10 @@
 // actually can, preserve the artifact, and import it here where the counting rules are enforced.
 // `plans/prompt-injection-agent-trials.md` is the executable half of that.
 
-import { existsSync, readFileSync, readdirSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join } from "node:path";
+import { buildChallengePackage } from "../challenge/package.js";
 import { MUTANTS } from "../families/prompt-injection-containment/mutants.js";
 import { reference } from "../families/prompt-injection-containment/reference.js";
 import {
@@ -22,6 +24,7 @@ import {
 import type { Scenario, Subject } from "../families/prompt-injection-containment/types.js";
 import { verify } from "../families/prompt-injection-containment/verify.js";
 import { fail, isRecord, numNullable, optionalText, str, strNullable } from "../foundry/schema.js";
+import { type OrchestrateResult, PIC_INSTRUCTION, orchestrateTrial } from "./orchestrator.js";
 import { type SubjectRunner, inProcessRunner, subprocessRunner } from "./runners.js";
 import type { IsolationLevel, SubjectType, TrialCell, TrialRecord, TrialSet } from "./types.js";
 import { parseTrialRecord } from "./validate.js";
@@ -52,7 +55,7 @@ function gradeWithRunner(
     const outcome = runner.run(scenario);
     if (outcome.error !== null) {
       errors += 1;
-      cells.push({ scenarioId: scenario.id, failed: ["subject_error"] });
+      cells.push({ scenarioId: scenario.id, failed: [SUBJECT_ERROR] });
       continue;
     }
     const failures = verify({ scenario, ledger: outcome.ledger, report: outcome.report });
@@ -192,4 +195,155 @@ export function importAgentTrials(root: string): readonly TrialRecord[] {
     .map((e) => e.name)
     .sort()
     .map((name) => importAgentTrial(join(root, name)));
+}
+
+// ---------------------------------------------------------------- running a real agent trial
+
+/**
+ * Grade an agent-submitted module. Subprocess-isolated, always.
+ *
+ * Exported so the orchestrator can be handed a family grader without knowing anything about this
+ * family, and so the CLI's `trials run` path and the checked-in trials are graded by identical code.
+ */
+export function gradeSubmission(modulePath: string): { cells: readonly TrialCell[]; detail: string } {
+  const scenarios = measuredScenarios();
+  const { cells, errors } = gradeWithRunner(scenarios, subprocessRunner({ modulePath }));
+  const failed = cells.filter((c) => c.failed.length > 0).length;
+  return {
+    cells,
+    detail: `${failed}/${cells.length} scenarios failed (${errors} subject errors) under subprocess isolation`,
+  };
+}
+
+export interface AgentTrialOptions {
+  readonly root: string;
+  readonly runId: string;
+  readonly provider: string;
+  readonly model: string;
+  readonly subjectId: string;
+  readonly effort?: string | null;
+  readonly command?: readonly string[];
+  readonly timeoutMs?: number;
+  readonly inheritEnv?: boolean;
+  readonly costUsd?: number | null;
+}
+
+/**
+ * Build the challenge package, hand it to a provider, grade whatever comes back, and write a durable
+ * trial directory.
+ *
+ * The challenge is rebuilt from the family rather than copied from `examples/`, so a trial can never
+ * be run against a stale package — and the package builder is the same one whose output is diffed by
+ * `verify`, which is what makes "the model saw exactly this" a checkable claim rather than a promise.
+ */
+export function runAgentTrial(options: AgentTrialOptions): OrchestrateResult {
+  const typesSource = readFileSync(
+    join(options.root, "src/families/prompt-injection-containment/types.ts"),
+    "utf8",
+  );
+  const scenarios = measuredScenarios();
+  const setId = scenarioSetId(scenarios);
+  const pkg = buildChallengePackage(typesSource, setId);
+
+  const challengeDir = mkdtempSync(join(tmpdir(), "foundry-challenge-"));
+  for (const file of pkg.files) {
+    const dest = join(challengeDir, file.path);
+    mkdirSync(dirname(dest), { recursive: true });
+    writeFileSync(dest, file.content, "utf8");
+  }
+
+  return orchestrateTrial({
+    familyId: FAMILY_ID,
+    runId: options.runId,
+    challengeDir,
+    trialsRoot: join(options.root, "trials"),
+    instruction: PIC_INSTRUCTION,
+    provider: options.provider,
+    model: options.model,
+    effort: options.effort ?? null,
+    subjectId: options.subjectId,
+    scenarioSetId: setId,
+    timeoutMs: options.timeoutMs ?? 900_000,
+    ...(options.command === undefined ? {} : { command: options.command }),
+    ...(options.inheritEnv === undefined ? {} : { inheritEnv: options.inheritEnv }),
+    costUsd: options.costUsd ?? null,
+    grade: gradeSubmission,
+    disqualify: baselineDisqualifier(),
+  });
+}
+
+// ---------------------------------------------------------------- baseline indistinguishability
+
+/**
+ * A content signature for a trial's graded cells: which scenarios failed, and on which checks.
+ *
+ * Two subjects with the same signature are indistinguishable to this suite. That is the property
+ * the disqualifier below turns on, and it is exact rather than thresholded — no "close enough".
+ */
+/** The check the grader records when the subject host could not run the artifact at all. */
+export const SUBJECT_ERROR = "subject_error";
+
+export function cellSignature(cells: readonly TrialCell[]): string {
+  return [...cells]
+    .sort((a, b) => a.scenarioId.localeCompare(b.scenarioId))
+    .map((c) => `${c.scenarioId}:${[...c.failed].sort().join("+")}`)
+    .join("|");
+}
+
+/** Signatures of the checked-in baselines — the subjects this repository wrote to do nothing useful. */
+export function baselineSignatures(): Readonly<Record<string, string>> {
+  const local = runLocalTrials();
+  return Object.fromEntries(
+    local.records
+      .filter((r) => r.subjectType === "baseline")
+      .map((r) => [r.subjectId, cellSignature(r.cells)]),
+  );
+}
+
+/**
+ * The guard that a smoke test found, before a real trial could exploit it.
+ *
+ * `trials run` will happily drive any command, and a command that writes a five-line do-nothing
+ * module produces a trial that fails all 128 scenarios. That record then satisfies the blocking
+ * `not-already-solved` gate — "an agent attempted this family and did not pass" — and the family
+ * flips from NOT-READY to SHIP on the strength of a stub. Running the smoke test did exactly that.
+ *
+ * The rule that closes it is the same one the counting rules already use everywhere else: the
+ * absence of an attempt is not a result. A submission whose behaviour is byte-identical to a
+ * checked-in baseline is not an attempt, whoever or whatever produced it, so it does not count.
+ *
+ * A genuinely bad model that produces a genuinely bad implementation still counts — it has to
+ * differ from the baseline in at least one cell, and any real implementation does.
+ */
+export function baselineDisqualifier(): (cells: readonly TrialCell[]) => string | null {
+  const signatures = baselineSignatures();
+  return (cells) => {
+    if (cells.length === 0) return null;
+
+    // Case one, found first by the smoke test: the artifact never ran. Every cell failed on
+    // `subject_error`, which means the subprocess host could not even import and drive it. That is
+    // a broken file, not an implementation, and it is indistinguishable from submitting nothing.
+    if (cells.every((c) => c.failed.length === 1 && c.failed[0] === SUBJECT_ERROR)) {
+      return `the submission failed to run at all: every one of the ${cells.length} scenarios errored inside the subject host. A file that never executes is the absence of an attempt, not a measured failure.`;
+    }
+
+    // Case two: it ran, and behaved exactly like a subject this repository wrote to do nothing.
+    const sig = cellSignature(cells);
+    const match = Object.entries(signatures).find(([, s]) => s === sig);
+    return match === undefined
+      ? null
+      : `the submission is indistinguishable from the checked-in \`${match[0]}\` baseline: identical failures on all ${cells.length} scenarios. An artifact that does nothing is the absence of an attempt, not a measured failure.`;
+  };
+}
+
+/** The checker half: independently reject counted agent records that match a baseline. */
+export function assertNoBaselineImposters(records: readonly TrialRecord[]): void {
+  const disqualify = baselineDisqualifier();
+  for (const r of records) {
+    if (!r.counts || r.subjectType !== "agent") continue;
+    const reason = disqualify(r.cells);
+    if (reason !== null) {
+      fail("TRIAL_BASELINE_IMPOSTER", `trials.${r.runId}`, reason);
+    }
+  }
 }

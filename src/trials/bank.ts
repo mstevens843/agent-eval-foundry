@@ -16,7 +16,9 @@
 // The threshold is a judgement and is therefore a named constant with an argument attached rather
 // than a magic number buried in a conditional.
 
+import { fail } from "../foundry/schema.js";
 import type { Matrix } from "../types.js";
+import type { TrialRecord } from "./types.js";
 
 /**
  * Below this many shared subjects, a cross-family axis count is noise.
@@ -163,4 +165,41 @@ export function computeOverlap(banks: readonly FamilyBank[]): BankOverlap {
     rationale: `${shared.length} subject(s) attempted every family, so "did the same implementation fail both?" is a question with an answer. The combined axis count below is computed over the shared subjects only, and is the number that says whether the families measure different things.`,
     combined: combineOverSharedSubjects(banks, shared),
   };
+}
+
+/**
+ * The guarded way to obtain a combined matrix. Every caller that is about to quote a cross-family
+ * number must come through here.
+ *
+ * `combineOverSharedSubjects` will happily build a union matrix from disjoint banks — it has to, so
+ * the report can show what the union would look like — and that matrix's antichain width is the sum
+ * of the parts by construction. Publishing it as a measurement is the single most tempting mistake
+ * available in this repository, because the number is large and looks like a portfolio total. This
+ * function is the checker that refuses it.
+ */
+export function combinedMatrixFor(overlap: BankOverlap): Matrix {
+  if (overlap.verdict === "refused" || overlap.combined === null) {
+    fail(
+      "BANK_ADDITIVE_WITHOUT_OVERLAP",
+      "bank.combined",
+      `a combined axis count was requested for ${overlap.families.join(" + ")} with ${overlap.sharedSubjects.length} shared subject(s); with no overlap the union's width is the sum of the parts by construction and measures nothing`,
+    );
+  }
+  return overlap.combined.matrix;
+}
+
+/**
+ * A family's bank is only a bank if every counted trial in it was graded against the same scenario
+ * set. Merging a 128-scenario run with a later 256-scenario run produces cells that look uniform and
+ * are not: an instance absent from the smaller set reads as "never caught" rather than "never run".
+ */
+export function assertBankCoherent(familyId: string, records: readonly TrialRecord[]): void {
+  const sets = [...new Set(records.filter((r) => r.counts).map((r) => r.scenarioSetId))].sort();
+  if (sets.length > 1) {
+    fail(
+      "BANK_INCOMPARABLE_SCENARIO_SET",
+      `bank.${familyId}`,
+      `counted trials were graded against ${sets.length} different scenario sets (${sets.join(", ")}); their cells are not comparable and must not be pooled into one bank`,
+    );
+  }
 }

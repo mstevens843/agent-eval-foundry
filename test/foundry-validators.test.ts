@@ -77,6 +77,22 @@ const COVERED_IN_TRIALS_TEST: readonly RuleCode[] = [
   "CHALLENGE_MANIFEST_MISMATCH",
 ];
 
+/**
+ * Rules whose known-bad case lives in `orchestration.test.ts`, because building one takes a real
+ * trial directory on disk rather than a JSON fixture. Same delegation contract as above: the guard
+ * below asserts each of these actually appears in that file.
+ */
+const COVERED_IN_ORCHESTRATION_TEST: readonly RuleCode[] = [
+  "TRIALDIR_MISSING_FILE",
+  "TRIALDIR_COUNTED_WITHOUT_VERIFIER",
+  "TRIALDIR_COUNTED_WITHOUT_SUBMISSION",
+  "TRIALDIR_CHALLENGE_LEAK",
+  "TRIALDIR_SET_MISMATCH",
+  "BANK_ADDITIVE_WITHOUT_OVERLAP",
+  "BANK_INCOMPARABLE_SCENARIO_SET",
+  "TRIAL_BASELINE_IMPOSTER",
+];
+
 /** Rules exercised by code below rather than by a JSON fixture. Keeps assertion 3 honest. */
 const PROGRAMMATIC: readonly RuleCode[] = [
   "E_TYPE",
@@ -324,7 +340,12 @@ describe("budget rules", () => {
 describe("rule coverage — the mutation test on the checkers themselves", () => {
   it("every rule code has at least one known-bad case", () => {
     const fromFixtures = new Set(MANIFEST.map((m) => m.code));
-    const covered = new Set<string>([...fromFixtures, ...PROGRAMMATIC, ...COVERED_IN_TRIALS_TEST]);
+    const covered = new Set<string>([
+      ...fromFixtures,
+      ...PROGRAMMATIC,
+      ...COVERED_IN_TRIALS_TEST,
+      ...COVERED_IN_ORCHESTRATION_TEST,
+    ]);
     const uncovered = RULE_CODES.filter((c) => !covered.has(c));
     expect(
       uncovered,
@@ -335,12 +356,18 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
   it("every rule delegated to another file is actually asserted there", () => {
     // Guards the delegation itself: a code listed as covered elsewhere must appear in that file, or
     // the exemption is a hole rather than a pointer.
-    const trialsTest = readFileSync(`${ROOT}test/trials.test.ts`, "utf8");
-    const missing = COVERED_IN_TRIALS_TEST.filter((c) => !trialsTest.includes(c));
-    expect(
-      missing,
-      `listed as covered in trials.test.ts but never mentioned there: ${missing.join(", ")}`,
-    ).toEqual([]);
+    const delegated: readonly (readonly [string, readonly RuleCode[]])[] = [
+      ["test/trials.test.ts", COVERED_IN_TRIALS_TEST],
+      ["test/orchestration.test.ts", COVERED_IN_ORCHESTRATION_TEST],
+    ];
+    for (const [file, codes] of delegated) {
+      const source = readFileSync(`${ROOT}${file}`, "utf8");
+      const missing = codes.filter((c) => !source.includes(c));
+      expect(
+        missing,
+        `listed as covered in ${file} but never mentioned there: ${missing.join(", ")}`,
+      ).toEqual([]);
+    }
   });
 
   it("no fixture declares a code outside the rule table or the matrix loader's codes", () => {

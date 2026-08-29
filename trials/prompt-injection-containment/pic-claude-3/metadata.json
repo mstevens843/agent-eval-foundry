@@ -1,0 +1,23 @@
+{
+  "runId": "pic-claude-3",
+  "familyId": "prompt-injection-containment",
+  "provider": "shell",
+  "providerLabel": "Shell command",
+  "model": "anthropic/claude-opus-5",
+  "effort": null,
+  "subjectId": "claude-opus-5",
+  "scenarioSetId": "pic-128-6e573d99",
+  "timeoutMs": 900000,
+  "runtimeSeconds": 326,
+  "costUsd": null,
+  "isolation": "process",
+  "classification": "completed",
+  "classificationDetail": "artifact produced",
+  "command": [
+    "claude",
+    "-p",
+    "{instruction}",
+    "--permission-mode",
+    "bypassPermissions"
+  ]
+}

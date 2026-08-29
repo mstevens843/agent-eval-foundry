@@ -210,6 +210,33 @@ did the thing correctly.** That is n=1, and I should not inflate it into "the mo
 category and `self-verifiable` get *worse* with capability, so it is a rate limit on task discovery
 rather than a bug to engineer around.
 
+### The same category killed a family I built to test this argument
+
+Since writing the above I built a second family end to end — prompt-injection containment, 128
+measured scenarios, nine known-bad implementations, a verifier that catches all nine, four measured
+axes — and then ran three real Claude trials against it through this repository's own trial layer.
+Each produced a genuine 231–318 line implementation citing all eight policy rule codes and tracking
+argument provenance. **All three passed 128 of 128.**
+
+That is `already-solved`, the same cause of death as four of the nine gated mechanisms above,
+arriving for a family whose verifier evidence was as good as I could make it. Two things follow, and
+the second is the one I would want argued with:
+
+1. **The kill rate is not a story about my earlier taste.** The category that dominates the source
+   project's kill log dominated the next family too, and it was invisible until a model attempted it.
+   Verifier quality and difficulty are independent, and no amount of the first substitutes for the
+   second.
+2. **The gate has to be able to kill the author's own work, and it has to be blocking.** The family
+   was one advisory gate away from SHIP before the trials ran. `not-already-solved` is now blocking,
+   was added *after* the evidence arrived, and its stated rationale is that this family would
+   otherwise have shipped on evidence that it is easy. A gate table that has never rejected the
+   person maintaining it is a formality, and `reports/ship-gate-report.md` prints which gates have
+   actually rejected something for exactly that reason.
+
+The trials cost minutes and single-digit dollars. The family cost roughly 70 hours. That ratio — the
+kill is cheap, the build is not — is the whole argument for gating before building, made against my
+own work rather than someone else's.
+
 Underneath it is the constraint from `results/08`: fairness requires the rules be fully stated;
 solvability requires the answer be derivable from the rules plus the shipped data; and anything a
 human can compute that way, a program can compute, so the agent can write that program and use it as
@@ -313,11 +340,11 @@ That changes the unit of production:
    this in 793 lines across nine scripts (`fuzz`, `classify`, `minimize`, `pick`, `select`,
    `robust`, `diversify`, `validate`, `family`; the directory totals 1,363 lines including the tool
    harness they call into).
-3. **Gate every family on axis count, not check count** — the tool in this repository, which I did
-   not have when I built the outbox task. `node dist/cli.js ship` runs the gate: ten checks per
-   family, blocking versus advisory, verdict a pure function of the gates. Of the eight families
-   declared here, exactly one reaches SHIP — the one with a measured axis count. The other seven are
-   HOLD, because a family must not ship on an estimate.
+3. **Gate every family on axis count and on trial evidence, not on check count** — the tool in this
+   repository, which I did not have when I built the outbox task. `node dist/cli.js ship` runs the
+   gate: 19 checks per family, 13 blocking, verdict a pure function of the gates. Of the nine
+   families declared here, one reaches SHIP, one is NOT-READY because real agents solved it, and
+   seven are HOLD because a family must not ship on an estimate.
 4. **Spend frontier budget only on what survives 1–3.** `node dist/cli.js budget --total 100000
    --rate 120` prices it, and `budget-check.ts` refuses a plan that omits labour — the exact fake
    this section argues against.
@@ -349,10 +376,13 @@ without a surface-coverage metric beside it.
 
 ## 6. Limits
 
-- **n = 2 corpora, and only one of them independent.** The internal example is mine end to end; the
-  SWE-bench example is independent but coarse (one bit per instance, single unreplicated runs).
-- **Seven of the eight declared families are unbuilt**, so their axis counts are pre-registrations
+- **n = 3 corpora, and only one of them independent.** Two are mine end to end; the SWE-bench example
+  is independent but coarse (one bit per instance, single unreplicated runs).
+- **Seven of the nine declared families are unbuilt**, so their axis counts are pre-registrations
   rather than measurements, and the report labels every one of them.
+- **The already-solved finding rests on three trials by one model family.** It is a strong signal and
+  not a proof; the right response is to harden the family, which is what the gate forces, rather than
+  to average it away with more runs of the same kind.
 - **Half the recorded kills have no cost attached**, so "screening is nearly free" rests on a floor
   rather than a total. `reports/candidate-ledger.md` states that in the same table as the claim.
 - **The bank bounds the answer.** Ten subjects containing roughly two defect families cannot exhibit

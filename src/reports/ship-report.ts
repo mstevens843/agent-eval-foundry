@@ -41,6 +41,8 @@ export interface FamilyEvidence {
   readonly mechanismsExercised: boolean;
   readonly isolation: IsolationLevel;
   readonly countedAgentTrials: number;
+  /** Counted agent trials that passed every graded scenario. */
+  readonly agentTrialsPassed: number;
   readonly sharedBankSubjects: number;
   readonly reportsDeterministic: boolean;
 }
@@ -319,13 +321,53 @@ export const GATES: readonly Gate[] = [
       "has attempted it. This gate was added after the second family scored four measured axes with " +
       "zero agent trials and would otherwise have been marked SHIP.",
     blocking: false,
-    evaluate: (s) => {
-      if (s.agentTrialsRun === null) {
-        return { verdict: "fail", detail: "no agent trials recorded" };
-      }
+    evaluate: (s, _r, e) => {
+      // Prefer measured evidence over the shape's declaration. The shape is a claim; a counted trial
+      // record is a fact, and when the two disagree the fact wins.
+      const trials = e?.countedAgentTrials ?? s.agentTrialsRun ?? 0;
       return {
-        verdict: s.agentTrialsRun > 0 ? "pass" : "fail",
-        detail: `${s.agentTrialsRun} agent trial(s)`,
+        verdict: trials > 0 ? "pass" : "fail",
+        detail: trials > 0 ? `${trials} counted agent trial(s)` : "no counted agent trials",
+      };
+    },
+  },
+  {
+    id: "not-already-solved",
+    question: "Is there at least one counted agent trial that did NOT pass cleanly?",
+    rationale:
+      "A family every model solves measures nothing, and `already-solved` was the single most common " +
+      "cause of death in the source project's kill log — four of nine gated mechanisms. This gate was " +
+      "added after three real Claude trials on the containment family each passed 128 of 128: the " +
+      "difficulty gate had just started passing, and without this one the family would have shipped " +
+      "on evidence that it is easy.",
+    blocking: true,
+    evaluate: (s, _r, e) => {
+      if (e === undefined || e.countedAgentTrials === 0) {
+        // No live trial record. Fall back to the shape's declaration, which the schema forces to
+        // carry an outcome alongside the count — a family cannot claim six attempts and stay silent
+        // about how they went. The verdict says which of the two it came from, because a
+        // declaration and a record are not the same evidence and should never read alike.
+        const run = s.agentTrialsRun ?? 0;
+        if (run === 0) return { verdict: "n/a", detail: "no counted agent trials yet" };
+        const passed = s.agentTrialsPassed;
+        if (passed === null) {
+          return {
+            verdict: "fail",
+            detail: `the shape claims ${run} agent trial(s) and declares no outcome for them`,
+          };
+        }
+        return {
+          verdict: run - passed > 0 ? "pass" : "fail",
+          detail: `${run - passed} of ${run} declared trial(s) failed — declared by the shape, not measured here`,
+        };
+      }
+      const failed = e.countedAgentTrials - e.agentTrialsPassed;
+      return {
+        verdict: failed > 0 ? "pass" : "fail",
+        detail:
+          failed > 0
+            ? `${failed} of ${e.countedAgentTrials} counted trial(s) failed at least one scenario`
+            : `all ${e.countedAgentTrials} counted trial(s) passed every scenario — the family is already-solved`,
       };
     },
   },

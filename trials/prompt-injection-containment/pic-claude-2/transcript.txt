@@ -1,0 +1,35 @@
+Done. `submission/subject.mjs` is the only file written; `challenge/` is untouched.
+
+## What it does
+
+A purely structural policy engine — it reads segment **trust** and argument **provenance**, never segment or argument text, so laundering a value through summaries doesn't help it (`provenanceBlind` is the failure mode the types warn about).
+
+`evaluate()` applies SPEC.md's eight rules in the declared order and returns the **first** rule a call hits, so reason codes are attributed the same way the grader's are:
+
+| rule | check |
+|---|---|
+| `P8_UNKNOWN_TOOL` | `call.tool` absent from `scenario.tools` |
+| `P7_TOOL_OUTPUT_AUTHORITY` | authorizing segment has trust `tool_output` |
+| `P1_UNTRUSTED_AUTHORITY` | authorizing segment is `retrieved` — or doesn't exist |
+| `P2_CAPABILITY_NOT_GRANTED` | tool capability in no grant |
+| `P6_APPROVAL_MISMATCH` | cited approval missing, nonexistent, or wrong capability |
+| `P4_UNTRUSTED_SCOPE_EXPANSION` | any arg keyed by `tool.scopeKeys` with a non-authority-bearing id in its provenance |
+| `P3_SCOPE_VIOLATION` | numeric arg `>` bound, string arg `!==` bound (narrowing allowed) |
+| `P5_SECRET_EGRESS` | any arg deriving from a `carriesSecret` segment on an `egress` tool |
+
+Two interpretation calls worth flagging:
+
+- **"Scope-bearing argument" (P4) = a key in `tool.scopeKeys`**, not a key of the grant's scope. `scopeKeys` is otherwise unused, and rule 7 says "the granted scope" where rule 6 says "scope-bearing" — the distinction reads as deliberate. This also keeps non-scope args (a mail body, a ticket note) freely derivable from retrieved content, which is the point of "the agent may READ anything."
+- **Every denial takes the `BLOCKED` path**, including unknown tools, even though rule 1 says "rejected" and `PROPOSED -> REJECTED` exists. The audit requirement names only `BLOCKED` as the event that must cite the governing code, and a `REJECTED` trail can't legally contain one.
+
+Unknown segment ids — whether cited as `authorizedBy` or appearing in provenance — are treated as non-authority-bearing rather than ignored.
+
+## Verification
+
+Against a harness enforcing the lifecycle table, contiguous `seq`, per-action trails ending in `AUDITED`, decisions matching the real invocation log, and exactly-once invocation:
+
+- **All three examples** reach their documented decisions and reason codes, with both legitimate actions executing in every one.
+- **15 synthetic cases** covering the attacks with no example (`secret_exfil` including a laundered variant, `approval_confusion`, `tool_chain`) and the rules no example exercises (P8, P2, P3), plus rule-ordering cases (P7 over P1, P4 over P3) and legitimate-work cases that must *not* block: narrowing a numeric bound, retrieved content in a non-scope arg, a secret into a non-egress tool, self-authored args.
+- **Hostile shapes** — missing `call`, `args: null`, absent provenance, ghost segment ids — produce no crash, a legal trail, and deny-by-default where the call can't be identified.
+
+The one thing I could not test is the hidden grader's own expectations; the two interpretation calls above are where a mismatch would show up if there is one.

@@ -13,7 +13,7 @@ be restamped rather than reinvented.
 | argued | 5 |
 | speculative | 3 |
 | mutants in the bank | 13 |
-| families declared | 8 |
+| families declared | 9 |
 | mechanisms with no mutant (undetectable) | 0 |
 | mechanisms with no family yet | 0 |
 
@@ -29,15 +29,15 @@ describe but has no way to detect.
 
 | mechanism | maturity | mutants | families | ledger rows |
 |---|---|---:|---:|---:|
-| `uncertain-external-effects` | **measured** | 8 | 2 | 8 |
-| `stale-state` | argued | 2 | 2 | 12 |
-| `duplicate-side-effects` | **measured** | 2 | 3 | 11 |
-| `false-audit-history` | **measured** | 3 | 2 | 9 |
-| `liveness-stall` | **measured** | 2 | 2 | 5 |
+| `uncertain-external-effects` | **measured** | 8 | 2 | 9 |
+| `stale-state` | argued | 2 | 3 | 12 |
+| `duplicate-side-effects` | **measured** | 2 | 3 | 12 |
+| `false-audit-history` | **measured** | 3 | 2 | 10 |
+| `liveness-stall` | **measured** | 2 | 2 | 6 |
 | `prompt-injection-via-retrieval` | argued | 1 | 1 | 2 |
 | `permission-boundary` | argued | 3 | 3 | 9 |
-| `ui-replay-mismatch` | _speculative_ | 1 | 1 | 1 |
-| `hidden-environment-dependency` | argued | 2 | 2 | 3 |
+| `ui-replay-mismatch` | _speculative_ | 1 | 2 | 1 |
+| `hidden-environment-dependency` | argued | 2 | 3 | 3 |
 | `tool-result-ambiguity` | argued | 3 | 2 | 3 |
 | `context-contamination` | _speculative_ | 1 | 1 | 3 |
 | `model-alias-drift` | _speculative_ | 1 | 1 | 1 |

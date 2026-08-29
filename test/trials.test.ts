@@ -432,12 +432,32 @@ describe("ship gate with computed evidence", () => {
   });
 
   it("a verifier-only family cannot be SHIP however good its mutant evidence is", () => {
+    // The trial-free case, constructed rather than taken from the registry: the checked-in shape now
+    // declares three real trials, so isolating "mutants only" means saying so explicitly.
     const shape = registry.shapes.find((s) => s.familyId === "prompt-injection-containment");
-    const a = assessFamily(shape as NonNullable<typeof shape>, registry, evidence);
+    const untried = {
+      ...(shape as NonNullable<typeof shape>),
+      agentTrialsRun: null,
+      agentTrialsPassed: null,
+    };
+    const a = assessFamily(untried, registry, evidence);
     expect(a.blockingFailures).toEqual([]);
     expect(a.results.find((r) => r.gate.id === "mutants-caught-by-intended-check")?.verdict).toBe("pass");
     expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("fail");
     expect(a.verdict).toBe("HOLD");
+  });
+
+  it("a shape declaring trials that all passed is blocked even with no live evidence attached", () => {
+    // The fallback path. `foundry ship` used to render SHIP for a family the generated report called
+    // NOT-READY, because the standalone command passed no evidence and the gate read n/a. The gate
+    // now falls back to the shape's declared outcome, and the schema forces that outcome to exist.
+    const shape = registry.shapes.find((s) => s.familyId === "prompt-injection-containment");
+    const a = assessFamily(shape as NonNullable<typeof shape>, registry, evidence);
+    expect(a.blockingFailures).toContain("not-already-solved");
+    expect(a.results.find((r) => r.gate.id === "not-already-solved")?.detail).toMatch(
+      /declared by the shape, not measured here/,
+    );
+    expect(a.verdict).toBe("NOT-READY");
   });
 
   it("a family whose reference fails is NOT-READY whatever else passes", () => {

@@ -105,10 +105,21 @@ export const RULE_CODES = [
   // trial records — the layer that separates "the verifier works" from "the family is hard"
   "TRIAL_COUNTS_WITHOUT_REASON",
   "TRIAL_REFUSAL_COUNTED",
+  "TRIAL_BASELINE_IMPOSTER",
+  "SHAPE_TRIAL_OUTCOME_MISSING",
   "TRIAL_AGENT_WITHOUT_MODEL",
   "TRIAL_AGENT_WITHOUT_ARTIFACT",
   "TRIAL_EMPTY_CELLS",
   "TRIAL_DUPLICATE_RUN_ID",
+  // durable trial directories
+  "TRIALDIR_MISSING_FILE",
+  "TRIALDIR_COUNTED_WITHOUT_VERIFIER",
+  "TRIALDIR_COUNTED_WITHOUT_SUBMISSION",
+  "TRIALDIR_CHALLENGE_LEAK",
+  "TRIALDIR_SET_MISMATCH",
+  // shared subject bank
+  "BANK_ADDITIVE_WITHOUT_OVERLAP",
+  "BANK_INCOMPARABLE_SCENARIO_SET",
   // agent-facing challenge packages
   "CHALLENGE_LEAKS_HIDDEN_ARTIFACT",
   "CHALLENGE_MISSING_SURFACE",
@@ -294,6 +305,16 @@ export interface TaskShape {
    * different claims and the ship gate now separates them.
    */
   readonly agentTrialsRun: number | null;
+  /**
+   * How many of those trials passed every graded scenario. Null only when no trials were run.
+   *
+   * A trial count without an outcome is the ambiguous state that let a family claiming six frontier
+   * attempts sit at the same gate verdict as one claiming none: `SHAPE_TRIAL_OUTCOME_MISSING` makes
+   * it unrepresentable. The outcome declared here is still a claim, and a measured trial record
+   * always overrides it — but a claim with a number attached can at least be checked against the
+   * repository it cites.
+   */
+  readonly agentTrialsPassed: number | null;
 }
 
 export interface CandidateResults {

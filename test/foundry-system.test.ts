@@ -27,6 +27,7 @@ import { EXPECTED_ARTIFACTS, checkScaffold } from "../src/foundry/scaffold-check
 import { ARTIFACT_PLAN, generateScaffold, scaffoldFromShape } from "../src/foundry/scaffold.js";
 import { parseMatrix } from "../src/matrix.js";
 import { renderBudgetReport } from "../src/reports/budget-report.js";
+import { PIC_FAMILY, familyEvidenceMap } from "../src/reports/evidence.js";
 import { renderFamilyDiversityReport, renderLedgerReport } from "../src/reports/ledger-report.js";
 import { renderMechanismReport, renderMutantReport } from "../src/reports/registry-report.js";
 import { assessFamily, renderShipReport } from "../src/reports/ship-report.js";
@@ -40,8 +41,11 @@ const ROOT = new URL("..", import.meta.url).pathname;
 const registry = loadRegistry(ROOT);
 
 // The ship report is rendered WITH computed family evidence by `foundry all`, so the determinism
-// checks must render it the same way or they compare two different documents.
-const picEvidence = { "prompt-injection-containment": computeEvidence(runPicFamily(), runLocalTrials()) };
+// checks must render it the same way or they compare two different documents. That is not a comment
+// about care: the test built its own evidence from local runs only, the CLI built it from the trial
+// directories too, and the resulting mismatch reported the checked-in report as stale. Both now call
+// the same builder, so drifting apart again requires changing shared code.
+const picEvidence = familyEvidenceMap(ROOT);
 
 const F = { failed: ["x"] } satisfies Cell;
 const P = { failed: [] } satisfies Cell;
@@ -210,14 +214,19 @@ describe("the checked-in registry", () => {
 
   it("only a family a real agent has attempted can reach SHIP", () => {
     // A measured axis count proves the VERIFIER discriminates; it does not prove the family is hard.
-    // The second family has four measured axes and zero agent trials, which is what forced this
-    // distinction into the gate table in the first place.
+    // That distinction was forced into the gate table when the second family had four measured axes
+    // and zero agent trials. It has trials now, so the no-trials case is constructed rather than
+    // taken from the registry — the invariant outlives the example.
     const outbox = registry.shapes.find((s) => s.familyId === "durable-approval-outbox");
     const pic = registry.shapes.find((s) => s.familyId === "prompt-injection-containment");
     expect(outbox?.agentTrialsRun).toBeGreaterThan(0);
-    expect(pic?.agentTrialsRun).toBeNull();
     expect(assessFamily(outbox as NonNullable<typeof outbox>, registry).verdict).toBe("SHIP");
-    expect(assessFamily(pic as NonNullable<typeof pic>, registry).verdict).toBe("HOLD");
+
+    const untried = { ...(pic as NonNullable<typeof pic>), agentTrialsRun: null };
+    expect(assessFamily(untried, registry).verdict).toBe("HOLD");
+    expect(
+      assessFamily(untried, registry).results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict,
+    ).toBe("fail");
   });
 });
 
@@ -267,11 +276,21 @@ describe("ship gate on real data", () => {
 
   it("a measured family with no agent trials is held, not shipped", () => {
     const pic = registry.shapes.find((s) => s.familyId === "prompt-injection-containment");
-    const a = assessFamily(pic as NonNullable<typeof pic>, registry);
+    const a = assessFamily({ ...(pic as NonNullable<typeof pic>), agentTrialsRun: null }, registry);
     expect(a.blockingFailures).toEqual([]);
     expect(a.results.find((r) => r.gate.id === "measured-axes")?.verdict).toBe("pass");
     expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("fail");
     expect(a.verdict).toBe("HOLD");
+  });
+
+  it("the family that HAS been attempted is blocked for the opposite reason", () => {
+    // Three real trials, every one of them a clean pass. The gate that fails is `not-already-solved`,
+    // and it fails BECAUSE the evidence arrived — which is the whole point of collecting it.
+    const pic = registry.shapes.find((s) => s.familyId === "prompt-injection-containment");
+    const a = assessFamily(pic as NonNullable<typeof pic>, registry, picEvidence[PIC_FAMILY]);
+    expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("pass");
+    expect(a.blockingFailures).toContain("not-already-solved");
+    expect(a.verdict).toBe("NOT-READY");
   });
 
   it("unbuilt families cannot reach SHIP on an estimate", () => {

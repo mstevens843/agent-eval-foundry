@@ -37,14 +37,39 @@ import { SchemaError } from "./foundry/schema.js";
 import { parseTaskShape } from "./foundry/validate.js";
 import { MatrixError, parseMatrix } from "./matrix.js";
 import { renderReport } from "./report.js";
+import { renderHistoricalReport, renderSharedBankReport } from "./reports/bank-report.js";
 import { renderBudgetReport } from "./reports/budget-report.js";
+import {
+  OUTBOX_FAMILY,
+  PIC_FAMILY,
+  UI_FAMILY,
+  familyEvidenceFor,
+  familyEvidenceMap,
+  outboxHistory,
+  outboxMatrix,
+  trialLayerFacts,
+  vendoredRunsDir,
+} from "./reports/evidence.js";
 import { renderCrossFamilyReport, renderFamilyReport } from "./reports/family-report.js";
+import { renderGateReport } from "./reports/gate-report.js";
 import { renderFamilyDiversityReport, renderLedgerReport } from "./reports/ledger-report.js";
+import { renderOrchestrationReport } from "./reports/orchestration-report.js";
 import { renderMechanismReport, renderMutantReport } from "./reports/registry-report.js";
+import { renderShapeReport } from "./reports/shape-report.js";
 import { renderShipReport } from "./reports/ship-report.js";
 import { computeEvidence, renderTrialReadinessReport } from "./reports/trial-report.js";
 import { SOURCES, getSource } from "./sources/index.js";
-import { importAgentTrials, measuredScenarios, runLocalTrials, scenarioSetId } from "./trials/orchestrate.js";
+import { computeOverlap } from "./trials/bank.js";
+import { readFamilyTrials } from "./trials/directory.js";
+import { importDurableOutboxHistory } from "./trials/history.js";
+import {
+  importAgentTrials,
+  measuredScenarios,
+  runAgentTrial,
+  runLocalTrials,
+  scenarioSetId,
+} from "./trials/orchestrate.js";
+import { PROVIDERS } from "./trials/providers.js";
 
 const USAGE = `agent-eval-foundry — discover, screen and select agent-benchmark task families
 
@@ -75,7 +100,14 @@ FAMILIES (run a measured mini-benchmark)
   family trials [--out f]        trial-readiness: what mutants prove, what they do not
   challenge build [--out dir]    emit the agent-facing package (hidden artifacts excluded)
   trials local [--out f]         run every checked-in subject, emit trial records
+  trials run --run-id <id> --model <m> [--provider <p>] [--subject <s>]
+       [--command <argv...>] [--timeout <ms>] [--inherit-env] [--cost <usd>]
+                                 run ONE real agent trial; writes trials/<family>/<id>/
+  trials providers               every adapter, and what each one needs
   trials import <dir> [--out f]  ingest agent attempts from <dir>/<run>/metadata.json
+  trials bank [--out f]          every trial on record, counted and uncounted
+  shared-bank [--out f]          cross-family subject overlap and what it permits
+  history import [path] [--out f]  normalize Harbor runs from the Durable Outbox repo
 
 PRODUCTION
   scaffold --shape <file> [--out dir]
@@ -266,6 +298,66 @@ function familyCommand(sub: string, root: string): string {
   }
 }
 
+/** Every adapter, with what it needs to be usable. Answers "why did my provider refuse?". */
+function providersCommand(): string {
+  return [
+    "provider     status        isolation    requires",
+    ...PROVIDERS.map(
+      (p) => `${p.id.padEnd(13)}${p.status.padEnd(14)}${p.isolation.padEnd(13)}${p.requires ?? "—"}`,
+    ),
+    "",
+    "A declared adapter throws `provider not configured` rather than returning an empty submission.",
+    "",
+  ].join("\n");
+}
+
+/**
+ * Run one real agent trial end to end and write a durable directory.
+ *
+ * `--inherit-env` is the flag worth explaining. The sandbox environment is redacted by default,
+ * because the SUBJECT is hostile — it should not receive this machine's credentials. But a provider
+ * CLI is not the subject; it is trusted infrastructure that needs its own login. The first real trial
+ * run through this layer died in two seconds with "Not logged in" for exactly this reason, and the
+ * fix is a flag the caller sets deliberately rather than a default that quietly leaks the environment
+ * into every sandbox.
+ */
+function runTrialCommand(argv: readonly string[], root: string): string {
+  const runId = flag(argv, "--run-id");
+  const model = flag(argv, "--model");
+  if (runId === null) throw new Error("trials run needs --run-id");
+  if (model === null) throw new Error("trials run needs --model");
+  const provider = flag(argv, "--provider") ?? "shell";
+  const cmdIndex = argv.indexOf("--command");
+  const command = cmdIndex === -1 ? undefined : argv.slice(cmdIndex + 1).filter((a) => !a.startsWith("--"));
+
+  const result = runAgentTrial({
+    root,
+    runId,
+    provider,
+    model,
+    subjectId: flag(argv, "--subject") ?? model.split("/").pop() ?? model,
+    effort: flag(argv, "--effort"),
+    ...(command === undefined || command.length === 0 ? {} : { command }),
+    timeoutMs: numeric(argv, "--timeout") ?? 900_000,
+    inheritEnv: argv.includes("--inherit-env"),
+    costUsd: numeric(argv, "--cost") ?? null,
+  });
+
+  const failed = result.record.cells.filter((c) => c.failed.length > 0).length;
+  return [
+    `run        ${result.record.runId}`,
+    `provider   ${provider}`,
+    `model      ${result.record.model ?? "—"}`,
+    `status     ${result.record.status}`,
+    `isolation  ${result.record.isolation}`,
+    `runtime    ${result.record.runtimeSeconds === null ? "—" : `${Math.round(result.record.runtimeSeconds)}s`}`,
+    `counts     ${result.countability.counts ? "yes" : "NO"} — ${result.countability.reason}`,
+    `graded     ${result.record.cells.length} scenarios, ${failed} failed`,
+    `directory  ${result.directory}`,
+    "",
+  ].join("\n");
+}
+
 function challengeCommand(argv: readonly string[], root: string): string {
   const typesSource = readFileSync(join(root, "src/families/prompt-injection-containment/types.ts"), "utf8");
   const pkg = buildChallengePackage(typesSource, scenarioSetId(measuredScenarios()));
@@ -298,12 +390,31 @@ function challengeCommand(argv: readonly string[], root: string): string {
   ].join("\n");
 }
 
-function familyEvidenceFor(root: string) {
-  const run = runFamily(ALL_SUBJECTS);
-  const trials = runLocalTrials();
-  const agent = importAgentTrials(join(root, "trials/prompt-injection-containment"));
-  const all = { ...trials, records: [...trials.records, ...agent] };
-  return { run, trials: all, evidence: computeEvidence(run, all) };
+function sharedBankCommand(root: string): string {
+  const matrix = outboxMatrix(root);
+  const history = outboxHistory(root);
+  const { trials, run } = familyEvidenceFor(root);
+  const picMatrix = toMatrix(run);
+  return renderSharedBankReport({
+    history,
+    outboxMatrix: matrix,
+    picMatrix,
+    picTrials: trials,
+    overlap: computeOverlap([
+      {
+        familyId: OUTBOX_FAMILY,
+        matrix,
+        provenance: "engines submitted by frontier models",
+        agentDerived: true,
+      },
+      {
+        familyId: PIC_FAMILY,
+        matrix: picMatrix,
+        provenance: "mutants written alongside the verifier",
+        agentDerived: false,
+      },
+    ]),
+  });
 }
 
 function crossFamilyCommand(root: string): string {
@@ -360,18 +471,30 @@ function allCommand(argv: readonly string[], root: string): string {
   write("candidate-ledger.md", renderLedgerReport(registry));
   write("family-diversity.md", renderFamilyDiversityReport(registry.shapes));
   const ev = familyEvidenceFor(root);
-  write(
-    "ship-recommendation.md",
-    renderShipReport(registry.shapes, registry, { "prompt-injection-containment": ev.evidence }),
-  );
+  write("ship-recommendation.md", renderShipReport(registry.shapes, registry, { [PIC_FAMILY]: ev.evidence }));
   write(
     "prompt-injection-containment-trial-readiness.md",
     renderTrialReadinessReport(ev.run, ev.trials, ev.evidence),
   );
+  write("shared-bank-report.md", sharedBankCommand(root));
+  write(
+    "trial-orchestration-report.md",
+    renderOrchestrationReport({
+      familyId: PIC_FAMILY,
+      trials: ev.trials,
+      directories: readFamilyTrials(join(root, "trials"), PIC_FAMILY),
+    }),
+  );
+  write("ship-gate-report.md", renderGateReport({ registry, evidence: { [PIC_FAMILY]: ev.evidence } }));
+  const uiShape = registry.shapes.find((s) => s.familyId === UI_FAMILY);
+  if (uiShape !== undefined) {
+    write(`${UI_FAMILY}-family-report.md`, renderShapeReport(uiShape, registry));
+  }
+  write("historical-durable-outbox-trials.md", renderHistoricalReport(outboxHistory(root)));
   const inputs = { ...MEASURED_DEFAULTS, totalUsd: 100_000, labourRateUsdPerHour: 120 };
   assertBudgetInputs(inputs);
   assertPlanHonest(planBudget(inputs));
-  write("budget-plan.md", renderBudgetReport(inputs, 1000));
+  write("budget-plan.md", renderBudgetReport(inputs, 1000, trialLayerFacts(root)));
   const run = runFamily(ALL_SUBJECTS);
   const picMatrix = toMatrix(run);
   const picAxis = measure(picMatrix, { nullTrials: 3 });
@@ -416,6 +539,14 @@ export function main(argv: readonly string[]): number {
       case "cross-family":
         emit(argv, crossFamilyCommand(root));
         return 0;
+      case "shared-bank":
+        emit(argv, sharedBankCommand(root));
+        return 0;
+      case "history": {
+        const path = positional(argv, 2);
+        emit(argv, renderHistoricalReport(outboxHistory(root, path)));
+        return 0;
+      }
       case "challenge": {
         // Not `emit`: --out names a DIRECTORY here, as it does for `scaffold`. Summary to stdout.
         process.stdout.write(challengeCommand(argv, root));
@@ -425,6 +556,11 @@ export function main(argv: readonly string[]): number {
         const sub = positional(argv, 1) ?? "local";
         if (sub === "local") {
           emit(argv, `${JSON.stringify(runLocalTrials(), null, 2)}\n`);
+          return 0;
+        }
+        if (sub === "bank") {
+          const { trials } = familyEvidenceFor(root);
+          emit(argv, `${JSON.stringify(trials, null, 2)}\n`);
           return 0;
         }
         if (sub === "import") {
@@ -437,7 +573,17 @@ export function main(argv: readonly string[]): number {
           );
           return 0;
         }
-        throw new Error(`unknown trials subcommand "${sub}"; expected local | import`);
+        if (sub === "run") {
+          process.stdout.write(runTrialCommand(argv, root));
+          return 0;
+        }
+        if (sub === "providers") {
+          process.stdout.write(providersCommand());
+          return 0;
+        }
+        throw new Error(
+          `unknown trials subcommand "${sub}"; expected local | run | providers | import | bank`,
+        );
       }
       case "mechanisms": {
         const r = loadRegistry(root);
@@ -456,8 +602,11 @@ export function main(argv: readonly string[]): number {
         emit(argv, renderFamilyDiversityReport(loadRegistry(root).shapes));
         return 0;
       case "ship": {
+        // Same evidence the report writer uses. A standalone `ship` that skipped it said SHIP for a
+        // family the generated report called NOT-READY, which is the worst possible failure for a
+        // gate: two commands, one repository, opposite answers.
         const r = loadRegistry(root);
-        emit(argv, renderShipReport(r.shapes, r));
+        emit(argv, renderShipReport(r.shapes, r, familyEvidenceMap(root)));
         return 0;
       }
       case "sources":

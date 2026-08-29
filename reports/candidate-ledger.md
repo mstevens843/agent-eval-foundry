@@ -8,21 +8,20 @@ number you can only get by writing the failures down.
 
 | | |
 |---|---:|
-| candidates | **31** |
+| candidates | **32** |
 | status `idea` | 3 |
 | status `candidate` | 7 |
-| status `screened` | 1 |
-| status `trialed` | 1 |
-| status `shipped` | 3 |
+| status `trialed` | 2 |
+| status `shipped` | 4 |
 | status `killed` | 16 |
-| measured (a real result exists) | 18 |
+| measured (a real result exists) | 19 |
 | estimated | 13 |
 | recorded model spend | $107.57 |
 | kills that demonstrably cost $0 | 8 of 16 |
 | kills that cost model spend | 0 |
 | kills with no cost recorded | 8 |
 
-Screened-to-shipped on this record: **16 killed for 3 shipped**. 8 kill(s) demonstrably cost nothing, 0 consumed model spend, and 8 have no cost recorded at all — so the true screening cost is a floor, not a total. The budget planner's hit-rate default is set from the ten design cycles this record reconstructs, and it is an input a reader is entitled to change.
+Screened-to-shipped on this record: **16 killed for 4 shipped**. 8 kill(s) demonstrably cost nothing, 0 consumed model spend, and 8 have no cost recorded at all — so the true screening cost is a floor, not a total. The budget planner's hit-rate default is set from the ten design cycles this record reconstructs, and it is an input a reader is entitled to change.
 
 ## Kill taxonomy
 
@@ -58,7 +57,8 @@ an error, but it is a row whose lesson has not been made transferable yet.
 | `stale-policy-authority-gate` | killed | kill | stale-state, permission-boundary | $0.00 | measured |
 | `replay-sufficient-log-gate` | killed | kill | false-audit-history | $0.00 | measured |
 | `authorization-justification-gate` | killed | kill | permission-boundary, false-audit-history | $0.00 | measured |
-| `prompt-injection-containment-built` | screened | promote | prompt-injection-via-retrieval, context-contamination, permission-boundary | $0.00 | measured |
+| `prompt-injection-containment-built` | trialed | kill | prompt-injection-via-retrieval, context-contamination, permission-boundary | $0.00 | measured |
+| `durable-outbox-historical-import` | shipped | promote | uncertain-external-effects, duplicate-side-effects, false-audit-history, liveness-stall | $0.00 | measured |
 | `browser-checkout-confirmation-lost` | candidate | open | ui-replay-mismatch, uncertain-external-effects, duplicate-side-effects | — | est. |
 | `support-ticket-merge-audit-chain` | candidate | open | false-audit-history, stale-state, duplicate-side-effects | — | est. |
 | `deploy-rollback-unknown-apply` | candidate | open | uncertain-external-effects, liveness-stall, false-audit-history | — | est. |
@@ -409,7 +409,7 @@ an error, but it is a row whose lesson has not been made transferable yet.
 
 ### Prompt-injection containment: the second family, built and measured by the foundry `prompt-injection-containment-built`
 
-**Status** screened · **Decision** promote · **Domain** agent tool platforms / MCP-style tool surfaces · **Data** measured
+**Status** trialed · **Decision** kill · **Domain** agent tool platforms / MCP-style tool surfaces · **Data** measured
 
 **Hypothesis.** An implementation may read untrusted content but must not let it grant tool authority. If the family is built around argument PROVENANCE rather than text, a verifier can separate implementations that track where a value came from from ones that only see the value.
 
@@ -417,13 +417,33 @@ an error, but it is a row whose lesson has not been made transferable yet.
 
 **Why it might be unfair.** The declared policy is unusually explicit — eight numbered rules evaluated in a published order — so a careful implementation can satisfy it mechanically. That is deliberate for fairness but it lowers the ceiling on difficulty: the family may turn out to be already-solved by capable agents, which is the first category in the kill taxonomy and has not been tested.
 
-**Results.** 1 passed / 9 failed against reference, injection-follower, provenance-blind, over-blocker, audit-liar, scope-expander, tool-output-commander, secret-exfiltrator, approval-confuser, nop-faker. 128 generated scenarios from a 432-point declared space. Reference passes 128/128. All nine mutants are caught, each failing between 8 and 124 scenarios. Antichain width 4 against a null-model mean of 16.7 (ceiling 124), so the compression is structural. Two mutants initially scored 0/128 because the scenarios blocked at P2_CAPABILITY_NOT_GRANTED before reaching the rules they claimed to test; the generator was corrected and mechanism_fired now asserts each attack is blocked by its governing rule.
+**Results.** 4 passed / 9 failed against claude-opus-5 (x3 real trials), reference, injection-follower, provenance-blind, over-blocker, audit-liar, scope-expander, tool-output-commander, secret-exfiltrator, approval-confuser, nop-faker. Mutant bank: 9/9 caught by intended check, reference 128/128, antichain width 4 vs a null-model mean of 16.7. Real agent trials: 3 counted, 3 passed 128/128. The mutant evidence and the agent evidence point in opposite directions, which is exactly why the two are kept in separate columns.
 
-**Decision rationale.** Promoted to screened, not shipped. The verifier demonstrably discriminates — nine known-bad implementations, all caught, four independent axes — but no agent has attempted it, so its difficulty is unevidenced. Building it added a `difficulty-evidenced` gate to the ship report, which is why it reads HOLD rather than SHIP.
+**Why it died.** ALREADY-SOLVED, measured. Three real Claude trials were run through the foundry's own trial orchestrator (pic-claude-1..3, 326-371s each, subprocess isolation, artifacts preserved). All three produced genuine implementations of 231-318 lines citing all eight policy rule codes and tracking argument provenance, and all three passed 128/128 scenarios. The verifier is sound - nine mutants, all caught by their intended checks - but the family is not hard. This is the first kill category in results/29's taxonomy and the one that killed four of nine mechanisms there.
 
-**Transferability.** The provenance-over-text framing transfers to any tool-using agent that reads external data: MCP servers, RAG pipelines, browser agents, email and ticket automation. The specific policy table does not transfer unchanged, but the four structural pieces — trust labels on segments, provenance on arguments, capability plus approval binding, and an audit trail that must name the governing rule — appear to be domain-independent.
+**Decision rationale.** Killed as a shippable difficulty, kept as a verifier. The published eight-rule policy in a fixed evaluation order is fair and completely specified, and that is precisely what makes it easy: a capable model transcribes it. The pre-registered reading in plans/prompt-injection-agent-trials.md said a near-100% pass rate is a kill signal rather than a success, and it was written before the trials were run. Hardening - removing the published rule order, widening the space, requiring the policy be inferred from examples - is a new candidate, not a patch to this one.
 
-**Evidence.** `src/families/prompt-injection-containment/`, `reports/prompt-injection-containment-family-report.md`, `reports/prompt-injection-containment-axis-report.md`, `reports/cross-family-diversity-report.md`, `examples/families/prompt-injection-containment/matrix.json`
+**Transferability.** The provenance-over-text framing still transfers; what does not transfer is the assumption that a fully-specified policy produces a hard task. The transferable lesson is sharper than the family: difficulty came from COVERAGE of a large declared space in the outbox family, and a family whose space is small enough to enumerate in a spec is solvable by transcription however many scenarios you generate from it.
+
+**Evidence.** `src/families/prompt-injection-containment/`, `reports/prompt-injection-containment-family-report.md`, `reports/prompt-injection-containment-axis-report.md`, `reports/cross-family-diversity-report.md`, `examples/families/prompt-injection-containment/matrix.json`, `trials/prompt-injection-containment/`, `reports/shared-bank-report.md`
+
+### Durable outbox trial history, imported and normalized `durable-outbox-historical-import`
+
+**Status** shipped · **Decision** promote · **Domain** agent tool execution · **Data** measured
+
+**Hypothesis.** The outbox family's real trial record can be normalized into the same TrialRecord shape a new family produces, making cross-family comparison well-formed for the first time.
+
+**Why it should be hard.** The source data hides four non-results inside the reward column: three provider refusals and a timeout all carry reward 0.0 next to the genuine failures.
+
+**Why it might be unfair.** Not a task; an import. The fairness risk is to the READER: coarse binary rewards could be presented as per-check detail the source never had.
+
+**Results.** 0 passed / 20 failed against claude-opus-5, gpt-5.6-sol. 33 Harbor run directories parsed. 20 counted standard trials, 13 uncounted: 4 infrastructure/timeout, 6 cheat trials, 3 gate runs. Two normalized subjects.
+
+**Decision rationale.** The import is what made the shared-bank verdict move from REFUSED to PARTIAL: claude-opus-5 now appears in both families' counted banks.
+
+**Transferability.** The Harbor result.json reader is reusable for any Terminal-Bench family, and the classify-before-reward discipline generalizes to any harness whose failure column mixes results with non-results.
+
+**Evidence.** `src/trials/history.ts`, `reports/historical-durable-outbox-trials.md`
 
 ### Lost confirmation page on a flaky checkout `browser-checkout-confirmation-lost`
 

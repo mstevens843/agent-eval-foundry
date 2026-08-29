@@ -11,6 +11,7 @@
 
 import { shortfallForTarget } from "../foundry/budget-check.js";
 import { type BudgetInputs, type BudgetPlan, handAuthoredComparison, planBudget } from "../foundry/budget.js";
+import type { TrialLayerFacts } from "./evidence.js";
 
 const usd = (n: number): string =>
   !Number.isFinite(n) ? "—" : n >= 1000 ? `$${Math.round(n).toLocaleString("en-US")}` : `$${n.toFixed(2)}`;
@@ -29,7 +30,11 @@ const PROVENANCE: Readonly<Record<string, string>> = {
   totalUsd: "the question",
 };
 
-export function renderBudgetReport(inputs: BudgetInputs, targetTasks: number): string {
+export function renderBudgetReport(
+  inputs: BudgetInputs,
+  targetTasks: number,
+  trials?: TrialLayerFacts,
+): string {
   const plan = planBudget(inputs);
   const hand = handAuthoredComparison(inputs);
   const shortfall = shortfallForTarget(plan, targetTasks);
@@ -99,6 +104,7 @@ export function renderBudgetReport(inputs: BudgetInputs, targetTasks: number): s
       .filter((k) => k in inputs)
       .map((k) => `| \`${String(k)}\` | ${String(inputs[k])} | ${PROVENANCE[String(k)]} |`),
     "",
+    ...(trials === undefined ? [] : trialLayerSection(inputs, trials)),
     "## What this model does not include",
     "",
     "- **Maintenance.** Families decay as models improve; nothing here prices re-hardening.",
@@ -117,4 +123,76 @@ export function renderBudgetReport(inputs: BudgetInputs, targetTasks: number): s
 
 export function renderPlanSummary(plan: BudgetPlan): string {
   return `${plan.families} families / ${plan.shippedTasks} instances / ${plan.expectedAxes} axes at ${usd(plan.inputs.totalUsd)}`;
+}
+
+/**
+ * The trial layer, priced from what it actually cost rather than from what it should cost.
+ *
+ * The number this section exists for is the waste rate. A budget assembled from the cost of runs
+ * that worked is short by the cost of the runs that did not, and "did not" here includes provider
+ * refusals, timeouts and infrastructure failures — every one of which arrives in the source data as
+ * a reward of 0.0 and is therefore free to misread as a cheap failure.
+ */
+function trialLayerSection(inputs: BudgetInputs, t: TrialLayerFacts): readonly string[] {
+  const pct = (n: number): string => `${(n * 100).toFixed(0)}%`;
+  const measuredRetry = t.standardWasteRate;
+  const understated = measuredRetry > inputs.retryRate;
+  const corrected = planBudget({ ...inputs, retryRate: measuredRetry });
+  const asPlanned = planBudget(inputs);
+
+  return [
+    "## Trial-layer assumptions, measured",
+    "",
+    "Everything above prices *building* families. This section prices *running* them, from the trial",
+    "records this repository holds rather than from an estimate.",
+    "",
+    "| | |",
+    "|---|---:|",
+    `| historical runs imported | ${t.historicalRuns} |`,
+    `| of those, counted | ${t.historicalCounted} |`,
+    `| total recorded spend | ${usd(t.historicalSpendUsd)} |`,
+    `| spend on runs that produced a counted result | ${usd(t.countedSpendUsd)} |`,
+    `| spend on standard attempts that produced nothing | ${usd(t.wastedSpendUsd)} |`,
+    `| **effective $ per counted run** | **${t.usdPerCountedRun === null ? "—" : usd(t.usdPerCountedRun)}** |`,
+    `| counted agent trials on the second family | ${t.picCountedTrials} |`,
+    `| median runtime of those trials | ${t.picMedianRuntimeSeconds === null ? "—" : `${Math.round(t.picMedianRuntimeSeconds)}s`} |`,
+    "",
+    "### The waste rate",
+    "",
+    `Of ${t.standardRuns} genuine attempts at the task — cheat and gate runs excluded, because those are`,
+    `deliberate and not waste — ${t.standardCounted} produced a usable result. That is a waste rate of`,
+    `**${pct(measuredRetry)}**, against the \`retryRate\` input of ${pct(inputs.retryRate)}.`,
+    "",
+    understated
+      ? [
+          `**The measured rate is above the \`retryRate\` input of ${pct(inputs.retryRate)}.** Re-planning at ${pct(measuredRetry)}`,
+          asPlanned.shippedTasks === corrected.shippedTasks
+            ? `changes nothing: ${corrected.families} families and ${corrected.shippedTasks} instances either way, and ${usd(corrected.usdPerShippedTask - asPlanned.usdPerShippedTask)} more per shipped task. That is worth stating plainly — at this scale the plan is dominated by labour, and the trial budget is small enough that a several-point error in the retry rate does not move the family count. The place to be careful about model spend is a plan whose labour is cheap, and this is not one.`
+            : `yields ${corrected.families} families and ${corrected.shippedTasks} instances instead of ${asPlanned.families} and ${asPlanned.shippedTasks}, at ${usd(corrected.usdPerShippedTask - asPlanned.usdPerShippedTask)} more per shipped task.`,
+          "",
+          `The waste that did occur was ${Object.entries(t.standardUncountedByStatus)
+            .sort()
+            .map(([k, n]) => `${n} \`${k}\``)
+            .join(
+              ", ",
+            )} — not model failure, and not something a better prompt fixes. The input is left at its`,
+          "documented value rather than quietly raised to the measured one: 24 standard attempts is a small",
+          "sample, and tuning an input until the plan flatters itself is the failure mode this whole",
+          "repository is arguing against.",
+        ].join("\n")
+      : "The measured rate is at or below the input, so the plan above is not optimistic on this axis.",
+    "",
+    "### What a second family costs to run",
+    "",
+    "The containment family's trials cost minutes and cents rather than hours and tens of dollars: the",
+    "subject is a single module graded against 128 in-memory scenarios, not a service under a workload.",
+    "Two consequences for the budget:",
+    "",
+    "- **Cheap families are how you fill a shared bank.** Cross-family axis measurement needs the same",
+    "  models to attempt both families, and the binding cost is the expensive family, not the cheap one.",
+    "- **Cheap to run is not cheap to build.** The containment family took roughly the same authoring",
+    "  effort as the expensive one and then failed the ship gate for being too easy. Run cost is the",
+    "  smaller half of the bill, and the model above is right to be dominated by labour.",
+    "",
+  ];
 }

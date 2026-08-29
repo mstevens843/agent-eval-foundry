@@ -197,3 +197,44 @@ export {
 } from "./challenge/package-check.js";
 export { INTENDED_CHECK, computeEvidence, renderTrialReadinessReport } from "./reports/trial-report.js";
 export type { FamilyEvidence } from "./reports/ship-report.js";
+export {
+  readFamilyTrials,
+  readTrialDirectory,
+  writeTrialDirectory,
+  assertComparable,
+  HIDDEN_IN_CHALLENGE,
+  TRIAL_FILES,
+} from "./trials/directory.js";
+export type { Countability, TrialDirectory } from "./trials/directory.js";
+export {
+  PROVIDERS,
+  classifyRun,
+  claudeCliAdapter,
+  dockerPlan,
+  getProvider,
+  makeSandbox,
+  shellAdapter,
+} from "./trials/providers.js";
+export type {
+  DockerPlan,
+  ProviderAdapter,
+  ProviderRunRequest,
+  ProviderRunResult,
+} from "./trials/providers.js";
+export {
+  classifyHistorical,
+  importDurableOutboxHistory,
+  normalizeModel,
+  parseHarborResult,
+} from "./trials/history.js";
+export type { HistoricalRun, ImportedHistory } from "./trials/history.js";
+export { PIC_INSTRUCTION, decideCountability, orchestrateTrial } from "./trials/orchestrator.js";
+export type {
+  FamilyGrader,
+  GradeResult,
+  OrchestrateOptions,
+  OrchestrateResult,
+} from "./trials/orchestrator.js";
+export { classifyRunKind } from "./trials/history.js";
+export { renderHistoricalReport, renderSharedBankReport } from "./reports/bank-report.js";
+export type { SharedBankInput } from "./reports/bank-report.js";

@@ -1,11 +1,22 @@
 # Agent trial plan — prompt-injection containment
 
-**Status: executable, not executed.** The import path is built and tested; what is missing is
-credentials and budget, not code. Nothing in this repository fabricates a trial.
+**Status: EXECUTED, and the pre-registered kill signal fired.**
 
-The family currently sits at **HOLD**: its verifier discriminates (nine mutants, all caught by their
-intended checks) and nothing that could plausibly fail it has attempted it. One counted agent trial
-is the difference.
+Three of the six planned trials have run — slots A1–A3, `anthropic/claude-opus-5` through this
+repository's own trial orchestrator, subprocess isolation, 326–371 seconds each, artifacts preserved
+under `trials/prompt-injection-containment/`. Each produced a genuine implementation of 231–318 lines
+citing all eight policy rule codes and tracking argument provenance.
+
+**All three passed 128 of 128.**
+
+The outcome table below was written before the trials ran, and its first row says what to do about
+it: *all pass cleanly → already-solved → kill, or harden.* The family is now **NOT-READY**, blocked
+by `not-already-solved`, a gate that did not exist until this evidence arrived. The remaining B slots
+have not been run, because a second lab confirming a family is easy would cost money to learn nothing
+that changes the decision — harden first, then re-trial.
+
+The rest of this document is unchanged from before the run. That is deliberate: a plan edited after
+the fact to match its own result is not a pre-registration.
 
 ---
 
@@ -146,12 +157,17 @@ question is what the trials show:
 nothing, and `already-solved` was the single most common cause of death in the source project's kill
 log — four of nine gated mechanisms.
 
-## Why this has not been run here
+## Contamination, and how the executed trials avoided it
 
-No model credentials are available in this environment, and running one would require money and
-network access this repository does not assume. Equally: **the author of the verifier cannot be the
-subject.** Any implementation written by someone who has read `verify.ts` and `policy.ts` is
-contaminated and would not be a trial at all — it would be the reference wearing a different name.
+**The author of the verifier cannot be the subject.** Any implementation written by someone who has
+read `verify.ts` and `policy.ts` is contaminated and would not be a trial at all — it would be the
+reference wearing a different name.
 
-The honest position is that the plan is executable and the ingestion path is tested, and the family
-stays HOLD until someone runs it.
+The three executed trials satisfy this: each ran in a sandbox outside the repository containing only
+the generated challenge package, whose contents are checked by an independent package checker for
+leaked hidden artifacts — by content as well as by filename. The transcripts are preserved, so the
+claim is auditable rather than asserted.
+
+What remains contaminated is the *design*: I wrote the family and I chose the scenarios. That is a
+limit on what these trials can establish, and it is the reason `already-solved` is a finding about
+the family rather than about the models.
