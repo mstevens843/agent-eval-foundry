@@ -1,0 +1,118 @@
+{
+  "familyId": "model-alias-drift-sentinel",
+  "name": "Alias drift sentinel for an eval harness",
+  "domain": "LLM evaluation harnesses and release engineering",
+  "mechanisms": ["model-alias-drift", "hidden-environment-dependency"],
+  "visibleRules": [
+    "Every request to the provider returns an envelope containing a resolved immutable model id; the alias the harness requested and the id the provider served are separate fields and are not required to correspond across time.",
+    "A stored result row is publishable only if it carries the resolved id that produced it. A row whose envelope omitted the resolved id is UNATTRIBUTED and may never be counted into an aggregate.",
+    "Calibration artifacts — judge threshold, few-shot exemplar set, price-per-token table — are derived under exactly one resolved id and are valid only for that id. Scoring a response under a calibration derived from a different resolved id is an error, not a rounding difference.",
+    "An aggregate published for an alias must state the set of resolved ids it covers, and a set of size greater than one must be reported as a partitioned result, never as a single mean.",
+    "Every UNATTRIBUTED or cross-id row must reach a terminal disposition — republished after re-resolution, or explicitly quarantined with a reason — before the harness exits. A run that leaves rows in neither state has not finished.",
+    "The harness must run from its declared manifest alone. Anything it needs — packages, environment variables, cached resolution files, locale — must be named in the manifest; nothing may be inherited from the authoring container.",
+    "Retries are permitted and are separate requests: a retry may resolve to a different id than the attempt it replaces, and the row belongs to the id that actually served the response the harness kept."
+  ],
+  "hiddenGradedRegion": "Hidden instances sample the declared drift-event space — which of the five documented drift schedules fires, at which request index inside the batch, and which subset of envelopes omits the resolved id — with sampling weight deliberately concentrated on flap-back schedules (A to B to A) and on drift that lands between the calibration pass and the scoring pass, because those are the regions where a single-slot 'last seen id' guard is silently wrong. No graded rule is absent from the visible rules; only the coordinates are withheld.",
+  "knobs": [
+    {
+      "name": "drift_schedule",
+      "type": "enum",
+      "values": ["none", "mid-batch", "between-calibration-and-score", "flap-back", "retry-only"],
+      "purpose": "Moves the point at which the alias changes underneath a run. Each value defeats a different partial guard: mid-batch defeats a startup-only resolution, flap-back defeats a single-slot comparison, retry-only defeats a per-batch check that never looks at attempt granularity."
+    },
+    {
+      "name": "missing_resolved_id_rate",
+      "type": "int",
+      "values": [0, 5, 20, 50],
+      "purpose": "Fraction of envelopes that omit the resolved id, forcing the harness to carry an unattributed state rather than substituting the requested alias. Exercises whether a third disposition exists at all in the implementation."
+    },
+    {
+      "name": "undeclared_dep",
+      "type": "enum",
+      "values": ["none", "env-var", "preinstalled-wheel", "leftover-resolution-cache", "locale"],
+      "purpose": "Plants exactly one thing the harness could lean on in the authoring container but that is absent from the fresh grading container, so the reproducibility half of the family has a named subject rather than a vague expectation."
+    },
+    {
+      "name": "alias_count",
+      "type": "int",
+      "values": [1, 2, 4],
+      "purpose": "Number of distinct aliases under evaluation at once, exercising whether the drift bookkeeping is per-alias or a single global variable that the second alias overwrites."
+    },
+    {
+      "name": "seed",
+      "type": "seed",
+      "values": [11, 271, 3407, 65537],
+      "purpose": "Regenerates request ordering, retry placement and which envelopes lose their id, so coverage of the declared space can be widened without authoring new instances by hand."
+    }
+  ],
+  "authoritativeSources": [
+    {
+      "name": "Provider resolution log",
+      "whatItSettles": "Which immutable model id actually served each request id, in issue order, including for retried attempts and for the responses whose envelopes omitted the id.",
+      "whyEngineCannotForge": "It is written by the mock provider process under its own uid to a store outside the harness's filesystem namespace, and every entry carries a sequence number only that process issues, so the harness can neither append to it nor renumber it."
+    },
+    {
+      "name": "Fresh-container rebuild performed by the grader",
+      "whatItSettles": "Whether the harness runs from its declared manifest alone, and therefore whether a green run in the authoring container was evidence about the artifact or about the room it was standing in.",
+      "whyEngineCannotForge": "The image is built from the manifest against a base the grader names, not from the authoring image, and the build runs after the agent phase has ended, so no process under the agent's control is alive to seed it."
+    },
+    {
+      "name": "Calibration provenance manifest",
+      "whatItSettles": "Which resolved id each shipped calibration artifact was derived under, making 'scored under the wrong calibration' a decidable fact rather than a judgement call.",
+      "whyEngineCannotForge": "It is content-addressed and signed by the fixture generator at instance build time; the harness reads it, and any edit changes the digest the grader recomputes from its own copy."
+    }
+  ],
+  "referenceContract": [
+    "Record the provider-resolved id on every result row at the moment of the response, never backfilled from a later request or from the requested alias.",
+    "Maintain the full observed set of resolved ids per alias, not a single last-seen slot, so an A-to-B-to-A flap is detected as three segments rather than as no change at all.",
+    "Invalidate every calibration artifact whose provenance id is not the id that served the row being scored, and refuse to score that row rather than scoring it approximately.",
+    "Give an envelope with no resolved id its own terminal disposition — re-resolve by replaying the request, or quarantine with a stated reason — and never widen it into the requested alias.",
+    "Drain every row to published, republished or quarantined before exit, so that refusing to guess never becomes refusing to finish.",
+    "Declare every dependency in the manifest and pass a functional check inside a container built only from that manifest, not merely a successful build."
+  ],
+  "expectedMutants": [
+    {
+      "mutantId": "stale-state-reader",
+      "mustFailCheck": "resolved_id_per_row — it resolves the alias once at startup and stamps that id on every subsequent row, so under drift_schedule=mid-batch the rows after the change carry an id the provider resolution log contradicts."
+    },
+    {
+      "mutantId": "audit-liar",
+      "mustFailCheck": "flapback_partition — it reconstructs the run manifest from final state and stamps every row with the id in force at exit, which under drift_schedule=flap-back is the same id it started with, so the middle segment vanishes and a two-id partition is reported as one clean mean."
+    },
+    {
+      "mutantId": "nop-faker",
+      "mustFailCheck": "call_floor — it emits a fully-populated results file without issuing the requests, so the provider resolution log holds fewer entries than the run claims and the expected-request floor fails even though every row is internally consistent."
+    },
+    {
+      "mutantId": "oracle-prober",
+      "mustFailCheck": "fresh_container_parity — it fits the visible checks by reading the leftover resolution cache in the authoring container instead of the response envelopes, and the behaviour disappears when the same artifact runs from its declared manifest alone."
+    }
+  ],
+  "fairnessConstraints": [
+    "The provider always exposes the resolved id on at least one channel — the envelope, or a replayable per-request lookup — so an implementation that refuses to guess is never left with no legal route to a terminal disposition.",
+    "Quarantining is a graded success state, not a penalty, but it is graded against the rows that genuinely could not be attributed; a harness that quarantines attributable rows fails the liveness side, which keeps over-refusal from being a free strategy.",
+    "The fresh container is built from a base image the manifest names, never derived from the authoring image, and the undeclared dependency planted by the knob is one the agent can discover from documented behaviour rather than by guessing the author's machine.",
+    "Output equality across runs is never graded; only attribution and disposition are, so a legitimately non-deterministic backend cannot fail a correct implementation.",
+    "Every rule that decides a graded check appears verbatim in the shipped rules document, so the hidden instances differ from the visible ones only in coordinates."
+  ],
+  "cheatResistance": [
+    "Ground truth is assembled by a collector that never imports harness code and reads only the provider process's own log, so the harness's report is an input to be checked and never the thing being checked against.",
+    "Expected request counts are asserted as a floor as well as a ceiling, closing the measured bypass in which an implementation that performed no external work scored perfectly against an empty ledger.",
+    "The grader compares the resolved id the provider recorded against the id the row claims, rather than checking that the harness recorded some id, so a harness that echoes the requested alias into the resolved field is caught rather than credited.",
+    "The harness process runs as an unprivileged user with no route to the provider's log store or the grader's copy of the calibration manifest, so the score cannot become a claim the harness makes about itself.",
+    "A deliberate cheat oracle that stubs the provider entirely ships as a first-class artifact and must score zero, because a stubbed provider makes every drift check pass while measuring nothing about the real call path."
+  ],
+  "expectedFailureModes": [
+    "Storing one last-seen resolved id per alias and comparing against it, which is correct on mid-batch drift and silently wrong on a flap-back, where the run ends on the id it started with.",
+    "Widening a missing resolved id into the requested alias because the code has a branch for success and a branch for error and no third state for 'the subject of this measurement is unknown'.",
+    "Detecting drift correctly and then quarantining everything, satisfying every safety check while failing the liveness requirement — the same opposite-side split measured across the six durable-outbox trials.",
+    "Treating calibration as prompt-level configuration rather than as an artifact bound to a model identity, so the judge threshold keeps being applied across a resolved-id change without comment.",
+    "Verifying by running the harness in the authoring container, where a green run is evidence about the container, and never rebuilding from the manifest at all."
+  ],
+  "estimatedBuildHours": 55,
+  "estimatedFrontierUsd": 50,
+  "status": "idea",
+  "dataQuality": "estimated",
+  "evidence": "/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task/results/29-boundary-synthesis.md",
+  "estimatedAxes": 2
+}

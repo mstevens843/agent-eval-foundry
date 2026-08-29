@@ -1,0 +1,169 @@
+// Mechanism registry and coverage reports.
+//
+// The coverage table is the one that earns its place. A registry naturally accretes mechanisms
+// faster than mutants, because describing a way agents fail is cheap and writing a known-bad
+// implementation that exercises it is not. The result is a registry that looks like broad coverage
+// and is actually a list of opinions, most of which nothing can detect.
+//
+// So every mechanism row carries three counts -- mutants that exercise it, families built on it,
+// ledger rows exploring it -- and the report leads with the mechanisms that have none. Detection
+// first, because a mechanism with no mutant is the one that cannot be verified at all.
+//
+// Deterministic: no timestamps, stable ordering, so `reports/` stays diffable.
+
+import type { CoverageReport, Registry } from "../foundry/registry.js";
+import type { Mechanism } from "../foundry/schema.js";
+
+const MATURITY_MARK: Readonly<Record<string, string>> = {
+  measured: "**measured**",
+  argued: "argued",
+  speculative: "_speculative_",
+};
+
+const list = (items: readonly string[], empty = "—"): string =>
+  items.length === 0 ? empty : items.join(", ");
+
+function mechanismDetail(m: Mechanism): readonly string[] {
+  return [
+    `### ${m.name} \`${m.id}\``,
+    "",
+    `*${m.summary}*`,
+    "",
+    "| | |",
+    "|---|---|",
+    `| maturity | ${MATURITY_MARK[m.maturity] ?? m.maturity} |`,
+    `| evidence | ${m.evidence ?? "_none — this is a judgement, not a measurement_"} |`,
+    `| domains | ${list([...m.exampleDomains])} |`,
+    `| mutants | ${list([...m.suggestedMutants])} |`,
+    "",
+    `**Why agents fail.** ${m.whyAgentsFail}`,
+    "",
+    `**What correct systems do.** ${m.whatCorrectSystemsDo}`,
+    "",
+    `**The false-positive shape.** ${m.falsePositiveShape}`,
+    "",
+    "**Fairness risks**",
+    ...m.fairnessRisks.map((r) => `- ${r}`),
+    "",
+    "**Cheat risks**",
+    ...m.cheatRisks.map((r) => `- ${r}`),
+    "",
+    "**Measurable signals**",
+    ...m.measurableSignals.map((r) => `- ${r}`),
+    "",
+  ];
+}
+
+export function renderMechanismReport(r: Registry, cov: CoverageReport): string {
+  const byMaturity = (m: string) => r.mechanisms.filter((x) => x.maturity === m).length;
+  const lines: string[] = [
+    "# Mechanism registry",
+    "",
+    "Transferable ways agents get things wrong. A mechanism is the unit a task family is designed",
+    "around: the claim is that the same failure appears across domains, so a family built on it can",
+    "be restamped rather than reinvented.",
+    "",
+    "## Summary",
+    "",
+    "| | |",
+    "|---|---:|",
+    `| mechanisms | **${r.mechanisms.length}** |`,
+    `| measured (evidenced by a real trial) | ${byMaturity("measured")} |`,
+    `| argued | ${byMaturity("argued")} |`,
+    `| speculative | ${byMaturity("speculative")} |`,
+    `| mutants in the bank | ${r.mutants.length} |`,
+    `| families declared | ${r.shapes.length} |`,
+    `| mechanisms with no mutant (undetectable) | ${cov.mechanismsWithoutDetection.length} |`,
+    `| mechanisms with no family yet | ${cov.mechanismsWithoutFamily.length} |`,
+    "",
+    "Maturity is not a quality score. `measured` means a real trial produced evidence for it in the",
+    "source project; `argued` means the reasoning is laid out but nothing has been run; `speculative`",
+    "means it is a hypothesis. Most of a healthy registry is not measured, and pretending otherwise",
+    "is how a registry starts lying.",
+    "",
+    "## Coverage",
+    "",
+    "`mutants` is the column that matters: a mechanism with none is a difficulty this foundry can",
+    "describe but has no way to detect.",
+    "",
+    "| mechanism | maturity | mutants | families | ledger rows |",
+    "|---|---|---:|---:|---:|",
+  ];
+
+  for (const c of cov.mechanisms) {
+    const m = r.mechanisms.find((x) => x.id === c.mechanismId);
+    lines.push(
+      `| \`${c.mechanismId}\` | ${MATURITY_MARK[m?.maturity ?? ""] ?? "?"} | ${c.mutants.length} | ${c.shapes.length} | ${c.candidates.length} |`,
+    );
+  }
+  lines.push("");
+
+  if (cov.mechanismsWithoutDetection.length > 0) {
+    lines.push(
+      `> **Undetectable mechanisms.** ${list([...cov.mechanismsWithoutDetection])} have no mutant that exercises them. Until they do, any family built on them cannot demonstrate its verifier works.`,
+      "",
+    );
+  }
+  if (cov.orphanedMutants.length > 0) {
+    lines.push(
+      `> **Orphaned mutants.** ${list([...cov.orphanedMutants])} are in the bank but no mechanism suggests them and no family expects them, so they will never be run.`,
+      "",
+    );
+  }
+  if (cov.mechanismsWithoutFamily.length > 0) {
+    lines.push(
+      `> **No family yet.** ${list([...cov.mechanismsWithoutFamily])}. This is the backlog, not a defect.`,
+      "",
+    );
+  }
+
+  lines.push("## Mechanisms", "");
+  for (const m of r.mechanisms) lines.push(...mechanismDetail(m));
+
+  lines.push("---", "", "Generated by `agent-eval-foundry`. Deterministic — no timestamp, diffable.", "");
+  return lines.join("\n");
+}
+
+export function renderMutantReport(r: Registry, cov: CoverageReport): string {
+  const lines: string[] = [
+    "# Mutant bank",
+    "",
+    "Deliberately broken implementations. Their job is to grade the verifier, not the agent: a suite",
+    "that passes a known-bad implementation is not a suite, and the only way to know is to run one.",
+    "",
+    "This is the practice that separated the strongest engine in the source project's trials from the",
+    "rest. Of six frontier engines, the one that avoided the central defect was the one that wrote a",
+    "legal-transition table and mutation-tested its own checker against planted bugs. Two others built",
+    "checkers too weak to express the rule, so their own fuzzers ran clean over the bug.",
+    "",
+    "| mutant | mechanisms | caught by | referenced |",
+    "|---|---|---:|---|",
+  ];
+  const orphan = new Set(cov.orphanedMutants);
+  for (const m of r.mutants) {
+    lines.push(
+      `| \`${m.id}\` | ${list([...m.mechanisms])} | ${m.caughtBy.length} | ${orphan.has(m.id) ? "**orphaned**" : "yes"} |`,
+    );
+  }
+  lines.push("");
+
+  for (const m of r.mutants) {
+    lines.push(
+      `### ${m.name} \`${m.id}\``,
+      "",
+      `**Bug.** ${m.bug}`,
+      "",
+      `**False confidence.** ${m.falseConfidence}`,
+      "",
+      "**Must be caught by**",
+      ...m.caughtBy.map((c) => `- ${c}`),
+      "",
+      "```",
+      m.sketch,
+      "```",
+      "",
+    );
+  }
+  lines.push("---", "", "Generated by `agent-eval-foundry`. Deterministic — no timestamp, diffable.", "");
+  return lines.join("\n");
+}

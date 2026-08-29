@@ -1,0 +1,174 @@
+{
+  "familyId": "browser-action-replay",
+  "name": "Browser Action Replay",
+  "domain": "browser and UI automation",
+  "mechanisms": [
+    "ui-replay-mismatch",
+    "stale-state",
+    "hidden-environment-dependency"
+  ],
+  "visibleRules": [
+    "A recorded plan is a sequence of steps, each naming a semantic intent, the selector and accessible-name of the element it was captured against, the DOM revision it was captured at, and an expected-state assertion about the application data it acted on.",
+    "The plan also carries a capture manifest naming the environment it was recorded in: viewport width, locale, and the feature-flag set served at capture time. The replayer must reconcile a declared environment delta rather than assume the environment it happens to find.",
+    "Replay must invoke the semantic action the step names. Re-binding a step to a different element is permitted and expected; invoking a different semantic action is a failure whatever the DOM looked like.",
+    "The application has no API. The only way to cause an effect is through the rendered interface, and the only record of what happened is the server's own action ledger.",
+    "A step whose expected-state assertion does not hold must be re-derived from the current application state or refused with a reason. Continuing past a failed assertion is a failure even when the click happens to work.",
+    "A step whose correct binding is genuinely ambiguous under the declared mutation classes must be refused with a reason. Refusing a step that is not ambiguous is also a failure, so refusal is not a safe default.",
+    "The replayer must emit a per-step outcome record -- replayed, re-derived, or refused with a reason -- and that record is graded against ground truth for which steps were actually ambiguous.",
+    "The declared mutation classes are exhaustive and published: renamed classes and ids, reordered siblings, an inserted interstitial, a control relocated into a different container, a control hidden behind a collapsed disclosure, a relabelled control with identical semantics, and a semantic swap in which two adjacent controls exchange both position and meaning."
+  ],
+  "hiddenGradedRegion": "The hidden suite samples the declared mutation grammar rather than extending it: which of the seven mutation classes are applied, how many are composed on one page, which steps of the plan they land on, and which environment deltas accompany them. It concentrates on compositions where a benign class and the semantic swap are applied to the same neighbourhood -- so that a rebinding heuristic strong enough to survive the benign mutations is exactly the heuristic that confidently binds the swapped control -- and on steps whose expected-state assertion has gone stale between capture and replay.",
+  "knobs": [
+    {
+      "name": "seed",
+      "type": "seed",
+      "values": [
+        3001,
+        3011,
+        3023,
+        3037
+      ],
+      "purpose": "Fixes the recorded plan, the application data behind it, and which nodes the mutation generator touches, so a scenario is reproducible byte for byte on any machine."
+    },
+    {
+      "name": "mutation_class",
+      "type": "enum",
+      "values": [
+        "rename-selectors",
+        "reorder-siblings",
+        "insert-interstitial",
+        "relocate-container",
+        "collapse-disclosure",
+        "relabel-identical",
+        "semantic-swap"
+      ],
+      "purpose": "Selects which declared mutation is applied. Six of the seven should be survivable by a competent replayer; semantic-swap is the one where survival by heuristic is the wrong answer."
+    },
+    {
+      "name": "mutation_depth",
+      "type": "int",
+      "values": [
+        1,
+        2,
+        3
+      ],
+      "purpose": "Composes several mutations on one page. Composition is where the family's difficulty lives: each class alone is defeated by a known technique, and it is the interaction that removes the anchor the technique relied on."
+    },
+    {
+      "name": "viewport",
+      "type": "enum",
+      "values": [
+        "1440",
+        "1024",
+        "760"
+      ],
+      "purpose": "Crosses the responsive breakpoint that folds the navigation into a disclosure, so a plan captured wide replays into a layout where the recorded element is present but not reachable by the recorded route."
+    },
+    {
+      "name": "locale",
+      "type": "enum",
+      "values": [
+        "en-US",
+        "de-DE",
+        "ja-JP"
+      ],
+      "purpose": "Changes date order, decimal separator and control labels without changing semantics, exercising whether expected-state assertions are compared on parsed values or on rendered strings."
+    },
+    {
+      "name": "feature_flags",
+      "type": "enum",
+      "values": [
+        "capture-set",
+        "one-added",
+        "one-removed"
+      ],
+      "purpose": "Serves a flag set different from the one recorded in the capture manifest, which adds or removes a step's target entirely and forces the delta to be reconciled rather than assumed away."
+    },
+    {
+      "name": "state_delta",
+      "type": "enum",
+      "values": [
+        "none",
+        "price-changed",
+        "item-unavailable",
+        "status-advanced"
+      ],
+      "purpose": "Moves the application data between capture and replay so that expected-state assertions go stale, separating a replayer that re-derives from one that clicks through a failed assertion."
+    }
+  ],
+  "authoritativeSources": [
+    {
+      "name": "Server-side action ledger",
+      "whatItSettles": "Which semantic actions the application actually performed, in order, with their parameters -- the ground truth for whether the replayer invoked the intent the step named or a neighbouring one.",
+      "whyEngineCannotForge": "It is written by the application server process, which the replayer reaches only through rendered pages and form submissions; there is no endpoint that reads, edits or replays the ledger, and it is sealed by the harness once the run's browser context is torn down."
+    },
+    {
+      "name": "Mutation manifest",
+      "whatItSettles": "Exactly which mutation classes were applied to which nodes, and therefore which steps were genuinely ambiguous and which had a unique correct binding.",
+      "whyEngineCannotForge": "It is generated by the harness before the page is served and never leaves the harness process; the served DOM contains the result of the mutations and no description of them, so the replayer can observe the effect and never the label."
+    },
+    {
+      "name": "Signed capture manifest",
+      "whatItSettles": "The environment the plan was recorded in -- DOM revision, viewport, locale, flag set -- and therefore what delta the replayer was obliged to reconcile.",
+      "whyEngineCannotForge": "It is signed alongside the plan and re-verified by the harness at grading time, so editing it to declare the environment actually found invalidates the signature and is recorded as a tampering attempt."
+    }
+  ],
+  "referenceContract": [
+    "Bind each step by semantic intent -- role, accessible name, and position within the labelled region -- and treat the recorded CSS selector as a hint that may be stale rather than as identity.",
+    "Read the capture manifest, compute the environment delta against the live environment, and reconcile it explicitly, including opening a disclosure the narrower viewport introduced.",
+    "Evaluate every expected-state assertion against parsed values rather than rendered strings, so a locale change is not mistaken for a data change and a data change is not hidden by formatting.",
+    "Re-derive a step whose assertion has gone stale from current application state, and refuse it when re-derivation is not determined, recording the reason either way.",
+    "Detect that a candidate binding's semantics differ from the recorded intent -- a relabelled control is not a swapped one -- and refuse rather than click when the two cannot be told apart from the page alone.",
+    "Dismiss an inserted interstitial as a navigation obstacle without treating it as a step, and never let it consume a step's click.",
+    "Emit a complete per-step outcome record whose claims match what was actually attempted, including for steps that were skipped."
+  ],
+  "expectedMutants": [
+    {
+      "mutantId": "stale-state-reader",
+      "mustFailCheck": "assertion-honoured -- continuing past a failed expected-state assertion and acting on the item as captured, which the ledger records as an action on data that has since moved."
+    },
+    {
+      "mutantId": "eager-resolver",
+      "mustFailCheck": "semantic-action-match -- resolving an ambiguous binding to the nearest plausible control, which on the semantic-swap cells invokes the neighbouring intent and lands the wrong action in the ledger."
+    },
+    {
+      "mutantId": "nop-faker",
+      "mustFailCheck": "step-completion -- refusing every step is perfectly safe, produces an empty ledger, and must score zero, so the suite has to require the actions the plan legitimately calls for."
+    },
+    {
+      "mutantId": "audit-liar",
+      "mustFailCheck": "outcome-record-agreement -- reporting a step as replayed when the ledger shows no corresponding action, or as refused when an action was in fact performed."
+    },
+    {
+      "mutantId": "duplicate-executor",
+      "mustFailCheck": "exactly-once-per-step -- retrying a step after a navigation that was lost rather than failed, which the ledger records as two submissions of one intent."
+    }
+  ],
+  "fairnessConstraints": [
+    "The mutation grammar is published and exhaustive, and no mutation outside it is ever applied, so a replayer that handles all seven declared classes is never surprised by an eighth.",
+    "Every step the suite requires to be replayed must have a unique correct binding derivable from the served page plus the plan plus the capture manifest; genuinely ambiguous steps are graded as refusals, never as failures to act.",
+    "Assertions are graded on the server ledger and the outcome record, never on screenshots, timing or the route taken through the interface, so a slower or differently-navigated but correct replay passes.",
+    "Environment deltas are always declared in the capture manifest and always reconcilable -- a flag that removes a step's target must leave a documented alternative or make the step legitimately refusable.",
+    "The application must be deterministic under the seed, with no wall-clock or network dependence in the pages the plan touches, so a correct replayer is never failed by a page that rendered differently on a slow machine."
+  ],
+  "cheatResistance": [
+    "Ground truth comes from the server ledger and the harness's mutation manifest, both produced by processes the replayer cannot reach; the replayer's own log is graded as a claim and is never the source of an expected value.",
+    "The served DOM carries no mutation labels, no stable test ids for the semantically swapped controls, and no side channel naming which steps are ambiguous, so the answer cannot be read off the page.",
+    "The capture manifest is signed and re-verified at grading, so editing the declared environment to match the live one is detected rather than rewarded.",
+    "Scoring requires positive work -- the ledger must contain the actions the plan legitimately calls for -- so a total-refusal run and an empty ledger both score zero, and both are kept as standing oracles.",
+    "The browser context is torn down and the ledger sealed before assertions run, in a process that never loads the replayer's code, so nothing the replayer left running can append to or truncate the record."
+  ],
+  "expectedFailureModes": [
+    "Binding by accessible name and role -- the technique that correctly survives six of the seven mutation classes -- and therefore binding confidently to the swapped control, which is the one case where confident binding is the wrong answer.",
+    "Reconciling the environment implicitly by adapting to what is on screen, which works until a flag change removes a target and the replayer silently drops or substitutes a step instead of reporting the delta.",
+    "Comparing expected-state assertions against rendered strings, so a locale change reads as a data change and a real data change is masked by reformatting.",
+    "Treating an inserted interstitial as the step's target, consuming the click on a dismissal control and reporting the step as replayed.",
+    "Producing an outcome record from intention rather than observation, so the per-step claims are coherent and disagree with the ledger exactly where the replay went wrong."
+  ],
+  "estimatedBuildHours": 90,
+  "estimatedFrontierUsd": 80.0,
+  "status": "idea",
+  "dataQuality": "estimated",
+  "evidence": "data/candidates-new.json entry browser-checkout-confirmation-lost is the nearest prior paper candidate; this family reuses its tool surface and none of its mechanism. Nothing here has been built, screened or trialled, and the kill-taxonomy reasoning follows /Users/devlegacy/Desktop/projects/klavis-terminal-bench-task results/29.",
+  "estimatedAxes": null
+}

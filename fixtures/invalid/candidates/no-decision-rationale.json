@@ -1,0 +1,19 @@
+{
+  "id": "example-candidate",
+  "title": "Example candidate",
+  "mechanisms": [
+    "stale-state"
+  ],
+  "domain": "payments",
+  "status": "idea",
+  "hypothesis": "Agents trust stale reads.",
+  "whyHard": "The window is narrow and invisible serially.",
+  "whyMightBeUnfair": "The window may be unreachable, making the task impossible rather than hard.",
+  "results": null,
+  "costUsd": null,
+  "failureNotes": null,
+  "decision": "open",
+  "transferability": "The pattern recurs wherever a read precedes a write.",
+  "links": [],
+  "dataQuality": "estimated"
+}

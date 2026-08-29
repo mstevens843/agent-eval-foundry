@@ -1,0 +1,11 @@
+{
+  "id": "example-mutant",
+  "name": "Example mutant",
+  "bug": "Reads state once and trusts it forever.",
+  "mechanisms": [],
+  "caughtBy": [
+    "assert no write commits under a version older than the current one"
+  ],
+  "falseConfidence": "Passes all single-threaded tests.",
+  "sketch": "v = read()\n# ... window ...\nwrite(v)  # never re-checked"
+}

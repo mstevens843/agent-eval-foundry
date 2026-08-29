@@ -1,0 +1,73 @@
+{
+  "schema": "agent-eval-foundry/matrix@1",
+  "suite": "fixture",
+  "provenance": {
+    "repo": null,
+    "artifact_commit": null,
+    "task_sha256": null,
+    "suite_shape": null,
+    "checks_total": 2,
+    "extracted_from": []
+  },
+  "reference_subject": null,
+  "subjects": [
+    {
+      "id": "s1",
+      "label": "S1",
+      "family": "t",
+      "model": null,
+      "effort": null,
+      "note": null
+    },
+    {
+      "id": "s2",
+      "label": "S2",
+      "family": "t",
+      "model": null,
+      "effort": null,
+      "note": null
+    }
+  ],
+  "instances": [
+    {
+      "id": "i1",
+      "schedule": "i1",
+      "seed": null,
+      "keys": null,
+      "family": "t",
+      "source": null,
+      "note": null
+    },
+    {
+      "id": "i2",
+      "schedule": "i2",
+      "seed": null,
+      "keys": null,
+      "family": "t",
+      "source": null,
+      "note": null
+    }
+  ],
+  "results": {
+    "i1": {
+      "s1": {
+        "failed": [
+          "x"
+        ]
+      },
+      "s2": {
+        "failed": []
+      }
+    },
+    "i2": {
+      "s1": {
+        "failed": []
+      },
+      "s2": {
+        "failed": [
+          "y"
+        ]
+      }
+    }
+  }
+}

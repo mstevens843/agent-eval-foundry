@@ -1,0 +1,74 @@
+{
+  "familyId": "example-family",
+  "name": "Example family",
+  "domain": "payments",
+  "mechanisms": [
+    "stale-state"
+  ],
+  "visibleRules": [
+    "Writes must not commit under a stale read."
+  ],
+  "hiddenGradedRegion": "Samples interleavings from the declared schedule grammar at varying window widths.",
+  "knobs": [
+    {
+      "name": "seed",
+      "type": "seed",
+      "values": [
+        1,
+        2,
+        3
+      ],
+      "purpose": "determines the request sequence"
+    },
+    {
+      "name": "workers",
+      "type": "int",
+      "values": [
+        2,
+        3,
+        4
+      ],
+      "purpose": "widens the stale window"
+    },
+    {
+      "name": "delay",
+      "type": "int",
+      "values": [
+        0,
+        2,
+        4
+      ],
+      "purpose": "controls window width"
+    }
+  ],
+  "authoritativeSources": [],
+  "referenceContract": [
+    "Re-read version at write time",
+    "Condition the write on the version"
+  ],
+  "expectedMutants": [
+    {
+      "mutantId": "stale-state-reader",
+      "mustFailCheck": "stale_write_rejected"
+    },
+    {
+      "mutantId": "duplicate-executor",
+      "mustFailCheck": "exactly_once"
+    }
+  ],
+  "fairnessConstraints": [
+    "Every graded rule appears in the visible rules."
+  ],
+  "cheatResistance": [
+    "Ground truth lives outside the engine's process."
+  ],
+  "expectedFailureModes": [
+    "Trusting the lease-time read."
+  ],
+  "estimatedBuildHours": 40,
+  "estimatedFrontierUsd": 150,
+  "status": "idea",
+  "dataQuality": "estimated",
+  "evidence": null,
+  "estimatedAxes": 2
+}

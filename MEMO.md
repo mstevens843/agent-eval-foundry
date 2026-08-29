@@ -25,6 +25,12 @@ systems — it reports **215 axes**, against a chance baseline of 500.
 This memo is that measurement, what it implies for the thousand-task question, and what I would
 actually do with the budget.
 
+> **Where this sits.** The memo is the argument; the repository around it is the system that acts on
+> it. The mechanism registry, mutant bank, candidate ledger, task-family shapes, scaffold generator,
+> ship gate and budget planner are all runnable — `node dist/cli.js check` validates them and
+> `node dist/cli.js all` regenerates every report cited below. See [`README.md`](./README.md) for the
+> architecture. Everything in section 5 that used to be a recommendation is now a command.
+
 ---
 
 ## 1. The caveats on my own headline, before anything else
@@ -288,7 +294,8 @@ years of engineering. **$100k does not buy it at any token price.**
 
 ## 5. What I would actually do with $100k
 
-**Stop counting tasks. Count families.**
+**Stop counting tasks. Count families.** Every step below is implemented in this repository, and the
+numbers come from its generated reports rather than from this document.
 
 The one mechanism that survived every constraint in my kill log has a specific shape: *public rules,
 an enormous behaviour space, a hidden graded region inside it.* Difficulty comes from coverage of
@@ -307,12 +314,20 @@ That changes the unit of production:
    `robust`, `diversify`, `validate`, `family`; the directory totals 1,363 lines including the tool
    harness they call into).
 3. **Gate every family on axis count, not check count** — the tool in this repository, which I did
-   not have when I built the outbox task.
-4. **Spend frontier budget only on what survives 1–3.**
+   not have when I built the outbox task. `node dist/cli.js ship` runs the gate: ten checks per
+   family, blocking versus advisory, verdict a pure function of the gates. Of the eight families
+   declared here, exactly one reaches SHIP — the one with a measured axis count. The other seven are
+   HOLD, because a family must not ship on an estimate.
+4. **Spend frontier budget only on what survives 1–3.** `node dist/cli.js budget --total 100000
+   --rate 120` prices it, and `budget-check.ts` refuses a plan that omits labour — the exact fake
+   this section argues against.
 
 **And here is the number my own argument forces, which I would rather state than leave implicit.**
-At ~$221 of trials and weeks of authoring per family, $100k is roughly six months of one engineer.
-That buys **three to five families**, not forty. The thousand-task program is a multi-year, multi-
+The planner in this repository, run at $120/h against the measured screening and trial rates, returns
+**10 families / 240 generated instances / ~30 independent axes** for $100k, with labour at 99% of
+spend. Priced as hand-authored tasks instead — one task per family, one axis per task — the same
+money buys **10 tasks**. Both rows are in `reports/budget-plan.md`, and the gap between them is the
+answer to the question. The thousand-task program is a multi-year, multi-
 person effort whose first year's deliverable is 25–40 well-instrumented families plus the tooling
 that proves they measure different things. If someone quotes you a thousand tasks for $100k, the
 tasks are instances of a handful of families and the interesting question is how many axes they
@@ -336,6 +351,10 @@ without a surface-coverage metric beside it.
 
 - **n = 2 corpora, and only one of them independent.** The internal example is mine end to end; the
   SWE-bench example is independent but coarse (one bit per instance, single unreplicated runs).
+- **Seven of the eight declared families are unbuilt**, so their axis counts are pre-registrations
+  rather than measurements, and the report labels every one of them.
+- **Half the recorded kills have no cost attached**, so "screening is nearly free" rests on a floor
+  rather than a total. `reports/candidate-ledger.md` states that in the same table as the claim.
 - **The bank bounds the answer.** Ten subjects containing roughly two defect families cannot exhibit
   many axes however good the suite is. The honest internal headline is "three *against this bank*."
   The SWE-bench run is the experiment that addresses this, and it is why the null model exists: at

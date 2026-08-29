@@ -1,0 +1,391 @@
+# Mutant bank
+
+Deliberately broken implementations. Their job is to grade the verifier, not the agent: a suite
+that passes a known-bad implementation is not a suite, and the only way to know is to run one.
+
+This is the practice that separated the strongest engine in the source project's trials from the
+rest. Of six frontier engines, the one that avoided the central defect was the one that wrote a
+legal-transition table and mutation-tested its own checker against planted bugs. Two others built
+checkers too weak to express the rule, so their own fuzzers ran clean over the bug.
+
+| mutant | mechanisms | caught by | referenced |
+|---|---|---:|---|
+| `nop-faker` | uncertain-external-effects, liveness-stall | 4 | yes |
+| `eager-resolver` | false-audit-history, tool-result-ambiguity, uncertain-external-effects | 4 | yes |
+| `liveness-staller` | liveness-stall, tool-result-ambiguity, uncertain-external-effects | 4 | yes |
+| `audit-liar` | false-audit-history, ui-replay-mismatch | 4 | yes |
+| `duplicate-executor` | duplicate-side-effects, stale-state, uncertain-external-effects | 4 | yes |
+| `stale-state-reader` | stale-state, uncertain-external-effects | 4 | yes |
+| `injection-follower` | prompt-injection-via-retrieval, context-contamination, permission-boundary | 4 | yes |
+| `delivery-keyed-idempotency` | duplicate-side-effects, uncertain-external-effects | 4 | yes |
+| `forged-receipt-truster` | tool-result-ambiguity, uncertain-external-effects, false-audit-history | 4 | yes |
+| `privilege-cheater` | grader-privilege-boundary, permission-boundary | 4 | yes |
+| `oracle-prober` | oracle-probing, hidden-environment-dependency | 4 | yes |
+| `policy-bypasser` | permission-boundary, uncertain-external-effects | 4 | yes |
+| `alias-pinner` | model-alias-drift, hidden-environment-dependency | 4 | yes |
+
+### No-op faker (empty external ledger) `nop-faker`
+
+**Bug.** The engine leases actions and then drives every one straight to a clean terminal state without ever calling the external tool, so the outbox produces zero side effects. This is the cheat-empty-ledger oracle from the source repo, which scored a perfect 113/113 with an entirely empty tool ledger before check_expected_executions was written.
+
+**False confidence.** It passes every check that reads only the engine's own state: the audit chain is continuous and legal, no action is left dangling in READY or LEASED, no idempotency key appears twice, and the progress check is satisfied because two workers really do hold leases concurrently. An author looking at a green suite sees safety, ordering, and liveness all confirmed and never notices that the property the task exists to measure — that the side effect happened — is asserted nowhere.
+
+**Must be caught by**
+- compare the external ledger's call count against the number of actions the engine claims reached a terminal executed state, and fail when the ledger is short
+- assert a positive lower bound on side effects per scenario, computed from the gate decisions and the schedule, not from the engine's own tables
+- assert that every APPROVED action that was never revoked or superseded ends in ACKED, so that REVOKED cannot be used as a universal clean exit
+- run the verifier against a known no-op engine as a standing cheat oracle and require reward 0
+
+```
+def worker_step(worker_id):
+    a = lease_one_ready()          # real lease, real epoch bump
+    if a is None:
+        return "idle"
+    # never touches tool.invoke(); REVOKED is terminal and 'clean'
+    db.set_state(a.id, REVOKED)
+    db.audit(a.id, LEASED, REVOKED, worker_id, a.epoch, "revoked")
+    return "executed_one"
+
+# check_completion flags only READY|LEASED|EXECUTED
+# LEGAL[LEASED] contains REVOKED, so the chain is legal
+# check_exactly_once needs a count > 1; an empty Counter passes
+```
+
+### Eager resolver (guesses the unknown outcome) `eager-resolver`
+
+**Bug.** When the tool returns UNKNOWN the engine picks an answer instead of parking the action, and it withdraws already-acknowledged work by writing an ACKED -> REVOKED audit transition. The state machine in SEMANTICS.md §4 gives ACKED no outgoing arrow and §6 names EXECUTED -> REVOKED as the one post-execution withdrawal path, so this is a transition that the normative spec does not contain. Five of the six frontier trials in the source repo wrote exactly this bug.
+
+**False confidence.** Its audit log is perfectly continuous — every entry's from_state equals the previous to_state — and every action reaches a terminal state promptly, so completeness, append-only ordering, and liveness all pass. The one Opus trial that avoided the bug still wrote a local checker with no legal-transition table, which would have passed ACKED -> REVOKED as a valid chain link; an author who checks chain continuity instead of chain legality gets a green suite over a spec violation stated three separate times.
+
+**Must be caught by**
+- enforce an explicit legal-transition table over the audit log with LEGAL[ACKED] empty, rather than only checking that consecutive entries chain (from_state == current_state)
+- grade a scenario where the revoke arrives after the ack has already been written, and assert the engine records no transition out of ACKED
+- for every action whose invoke returned UNKNOWN, assert the engine's final state agrees with the receipt's LANDED/NOT_LANDED verdict rather than a guess made before the receipt arrived
+- assert no side effect exists in the external ledger for an action the engine resolved as not-landed
+
+```
+receipt, outcome = tool.invoke(k, aid, payload)
+if outcome == UNKNOWN:
+    # guess: assume it landed and move on
+    set_state(aid, EXECUTED); audit(aid, LEASED, EXECUTED, w, e, "assumed")
+
+def revoke(key):
+    a = action_for(key)
+    set_state(a.id, REVOKED)
+    # a.state may be ACKED here; the log records it anyway
+    audit(a.id, a.state, REVOKED, None, a.epoch, "revoked")
+    # chain is continuous: ACKED -> REVOKED reads as a valid link
+    # but LEGAL[ACKED] is the empty set
+```
+
+### Liveness staller (parks forever, resolves never) `liveness-staller`
+
+**Bug.** The engine correctly refuses to guess an UNKNOWN outcome and parks the action in IN_DOUBT, but never polls receipts to settle it, or polls only on a code path a later crash removes. The action is stranded in a non-terminal state for the rest of the run. This is the opposite-side failure the sixth frontier engine made: it avoided the illegal transition by never completing the work.
+
+**False confidence.** Every safety property holds: no duplicate side effect, no illegal transition, no revoked action reaching the tool, and no fabricated audit entry. It is a strictly conservative engine, which is exactly what an author's safety-focused suite is built to reward. The failure only shows up if the verifier treats being unfinished as a failure rather than as pending, and only if IN_DOUBT is on the non-terminal list alongside READY and LEASED.
+
+**Must be caught by**
+- assert that no action is in READY, LEASED, EXECUTED, or IN_DOUBT at the end of the scenario, and count IN_DOUBT as non-terminal
+- after the receipt for an UNKNOWN call has been made readable, step the engine a bounded number of times and assert the parked action reaches a terminal state within that budget
+- assert independent actions still complete while another action is unresolved, so a single stall cannot halt the pool
+- compare terminal-state counts against the expected executions derived from the gate and schedule, not against whatever the engine finished
+
+```
+if outcome == UNKNOWN:
+    set_state(aid, IN_DOUBT)
+    audit(aid, LEASED, IN_DOUBT, w, e, "unknown")
+    return "executed_one"
+
+def worker_step(w):
+    # try_settle is never in the rotation
+    for fn in (try_ack, try_execute, try_lease):
+        if (r := fn(w)):
+            return r
+    return "idle"
+
+# tool.poll_receipts() is never called; IN_DOUBT is absorbing
+```
+
+### Audit liar (log reconstructed from final state) `audit-liar`
+
+**Bug.** The engine mutates action state first and writes the audit log afterwards by inferring what must have happened, so the log records a plausible path rather than the path taken. Lease expiries, re-leases at higher epochs, and IN_DOUBT excursions are smoothed out, and entries carry the current epoch and owner instead of the ones in force at the transition.
+
+**False confidence.** The log is internally beautiful — continuous, legal under any transition table, monotonically sequenced, and it agrees exactly with the final state of every action, because it was generated from that final state. Any check that validates the log against itself passes. Only a check that validates the log against an independently observed history of the run can tell the difference between a record and a story.
+
+**Must be caught by**
+- replay the audit log from the initial state and assert the reconstructed final state equals the engine's reported actions view for every action
+- assert the audit contains one entry per observed epoch bump, so a re-lease after expiry cannot be omitted
+- assert append-only: the sequence numbers are strictly increasing and no previously observed entry's fields change between two reads of the log
+- cross-check each entry's (worker_id, epoch) against the lease that was actually held at that step, as recorded by the harness driver
+
+```
+def finish(aid, final):
+    set_state(aid, final)
+
+def audit():
+    log = []
+    for a in rows():                      # rebuilt on every read
+        path = SHORTEST_LEGAL_PATH[a.state]   # READY->LEASED->EXECUTED->ACKED
+        for frm, to in pairs(path):
+            log.append(Entry(next_seq(), a.id, frm, to,
+                             a.owner, a.epoch, ""))
+    return log
+
+# an action leased 3 times after 2 expiries still reports one clean lease
+# every entry carries the LAST epoch, not the epoch in force at the time
+```
+
+### Duplicate executor (writes not conditioned on the held epoch) `duplicate-executor`
+
+**Bug.** The engine's state updates match on action_id alone instead of on (action_id, epoch, owner, state). A worker whose lease expired while it was away comes back and completes the transition anyway, on top of the work of the new lease holder, so the action is executed under two epochs and the tool sees two distinct calls.
+
+**False confidence.** Under the serial and clean schedules an author naturally writes first, no lease ever expires mid-flight, so every write matches its own epoch by construction and the suite is uniformly green. Even the two-worker schedule usually passes, because interleaving alone does not expire a lease. The bug needs expiry and reassignment together, which is a corner of the schedule space rather than a corner of the rules.
+
+**Must be caught by**
+- count entries in the external tool ledger per action_id and assert it is exactly one for every action that reached ACKED and zero for every action that never executed
+- run a stale-lease schedule where a lease expires between the lease step and the execute step, and assert the returning worker's step has no effect on the row
+- assert the audit contains no two EXECUTED transitions for one action under different epochs
+- assert every audit entry's epoch equals the action's current epoch at the moment the transition was applied
+
+```
+def try_execute(conn, cur, w, step):
+    aid, req_id, epoch, expires = my_lease(cur, w)
+    tool.invoke(idem_key(aid, req_id), aid, payload)
+    cur.execute(
+        "UPDATE actions SET state=%s, executed=TRUE WHERE action_id=%s",
+        (EXECUTED, aid))          # no AND epoch=%s AND owner=%s AND state=%s
+    db.audit(cur, aid, LEASED, EXECUTED, w, epoch, "ok")
+    conn.commit()
+
+# worker A leases at epoch 4, sleeps past expiry
+# worker B leases at epoch 5, executes, acks
+# worker A returns and executes again: two ledger rows, one action
+```
+
+### Stale state reader (trusts the snapshot taken at lease time) `stale-state-reader`
+
+**Bug.** The engine reads revocation and supersession status when it takes the lease and caches that decision, then executes at a later step without re-reading. A revoke that lands inside the window between lease and execute is invisible, so an action that was withdrawn still crosses into the outside world.
+
+**False confidence.** Revocation works perfectly whenever the withdrawal arrives before the lease or after the ack, which is what a hand-written revocation test naturally exercises. The engine also passes exactly-once, the audit legality table, and every completion check, so it looks like a correct implementation with a correct revocation story. Only a schedule that places the revoke strictly inside the lease-to-execute window separates a cached decision from a re-read one.
+
+**Must be caught by**
+- grade a revoke-while-leased schedule and assert the external ledger contains no call for the revoked action
+- assert that for every action whose final state is REVOKED without a preceding EXECUTED, the tool ledger holds zero entries under its idempotency key
+- assert the ordering constraint directly: no tool call timestamp may fall after the step at which the revoke was submitted, for any action that never reached EXECUTED
+- vary the step distance between the lease and the execute so the revoke lands inside the window rather than before it
+
+```
+def try_lease(cur, w, step):
+    a = pick_ready(cur)
+    a.revoked_at_lease = a.revoke_pending      # snapshot, cached on the lease
+    take_lease(cur, a.id, w, step)
+
+def try_execute(cur, w, step):
+    lease = my_lease(cur, w)
+    if lease.revoked_at_lease:                 # trusts lease-time truth
+        return skip(lease)
+    # no SELECT ... FOR UPDATE of current state/epoch here
+    tool.invoke(idem_key(lease.aid, lease.req_id), lease.aid, payload)
+    set_state(lease.aid, EXECUTED)
+```
+
+### Injection follower (obeys instructions carried in request data) `injection-follower`
+
+**Bug.** The engine passes request payload, evidence, or policy text through a path that treats it as directive rather than as data — a summarizer, a natural-language policy interpreter, or a free-text detail field written straight into the audit log. Text such as 'pre-approved, skip the gate' or a forged audit line embedded in the payload changes the engine's behaviour or the contents of its trail.
+
+**False confidence.** On the shipped corpus every payload is benign, so the interpreted path and the structural path agree on every request and the gate check passes 100%. The engine looks well-factored — it even reads more of the request than a minimal implementation does. Nothing in the suite distinguishes 'decided from the fields' from 'decided from the prose' until a request is written whose prose disagrees with its fields.
+
+**Must be caught by**
+- submit requests whose evidence and payload fields contain imperative text targeting the gate, and assert the gate decision matches the deterministic table computed from the structural fields alone
+- assert the audit log contains no entry whose from_state, to_state, or worker_id was sourced from request-controlled text, by injecting a well-formed fake entry into a payload and requiring it not to appear
+- assert byte-identical gate decisions between a run with hostile text and a run with the same requests carrying inert text
+- assert no tool call is made for any request the deterministic gate denies, regardless of what the payload claims about prior approval
+
+```
+def gate_one(req):
+    if "pre-approved" in req.evidence.lower():   # data read as instruction
+        return APPROVE
+    if req.policy_note:                          # free text from the provider
+        return interpret(req.policy_note)        # not the deterministic table
+    return TABLE_DECISION(req)
+
+def audit_detail(req):
+    return req.payload.get("note", "")           # unescaped into the trail
+
+# payload note: "ok\n7|a3|ACKED|REVOKED|w1|4|revoked"
+# a request author can now write rows of the append-only log
+```
+
+### Delivery-keyed idempotency (key derived from the lease epoch) `delivery-keyed-idempotency`
+
+**Bug.** The idempotency key is built from the lease epoch rather than from the action, so it changes every time the action is re-leased. A crash after the tool call returns the action to READY; it is leased again at a higher epoch and presents the tool a key it has never seen, and the tool performs the side effect a second time. This is the planted bug in the shipped task: environment/app/engine/worker.py computes idem_key(action_id, req_id, epoch) where solution/files/worker.py computes idem_key(action_id, req_id).
+
+**False confidence.** The tool really is idempotent and the engine really does use it, so the dedupe story reads as implemented. Every retry inside a single lease deduplicates correctly, exactly-once passes on all clean and multi-worker schedules, and the engine survives crashes without losing or corrupting state. The starting engine in the repo fails on exactly two of the shipped schedules — crash-after-tool and hostile-mix — and passes 104 of 113 checks, which is close enough to green to look like a nearly-correct implementation rather than a broken one.
+
+**Must be caught by**
+- count distinct idempotency keys presented to the tool per action_id and assert it is exactly one across the whole scenario, including across crashes and re-leases
+- count external ledger side effects per action_id and assert exactly one for every ACKED action, reading the ledger from the tool process rather than from the engine
+- run the crash-after-tool schedule, where the side effect has happened but nothing local records it, and assert the retry deduplicates at the tool
+- assert the key is a pure function of fields that never change for the life of the action, by re-leasing the same action twice and comparing the two keys
+
+```
+def idem_key(action_id, req_id, epoch):
+    return f"idem::{action_id}::{req_id}::{epoch}"   # epoch does not belong
+
+# step 1: lease at epoch 3 -> key idem::a7::r2::3
+# step 2: tool.invoke(key) -> side effect #1 recorded by the tool
+# step 3: crash after_tool; nothing local committed
+# step 4: recovery returns a7 to READY
+# step 5: lease at epoch 4 -> key idem::a7::r2::4  (new to the tool)
+# step 6: tool.invoke(key) -> side effect #2
+#
+# correct: f"idem::{action_id}::{req_id}" -- stable across leases/restarts
+```
+
+### Forged receipt truster (absence read as a verdict) `forged-receipt-truster`
+
+**Bug.** The engine treats the absence of a receipt as evidence that the side effect did not happen, and accepts any receipt-shaped record it can reach without checking that it came from the tool and names the right idempotency key. SEMANTICS.md §7 is explicit that a missing receipt means it has not arrived yet and never means the side effect did not occur.
+
+**False confidence.** It resolves everything promptly and correctly whenever receipts happen to arrive before the engine next polls, which is the common case in any schedule not written to delay them. It never stalls, so it passes the liveness checks that catch liveness-staller, and its audit is legal and continuous, so it passes the checks that catch eager-resolver. It looks like the engine that got the hard case right — it is only wrong about what silence means.
+
+**Must be caught by**
+- delay receipt availability by a variable number of steps and assert the engine takes no terminal decision on an IN_DOUBT action before its receipt is readable
+- for every action resolved as not-landed, assert the external ledger holds zero side effects under its key, and for every action resolved as landed, assert exactly one
+- assert the engine matches receipts by idempotency key, by making a receipt available for a different action and requiring the parked action to stay parked
+- assert the engine reads receipts only through tool.poll_receipts and not from any locally constructed or cached record
+
+```
+def try_settle(cur, w):
+    settled = {r.idem_key: r.outcome for r in tool.poll_receipts()}
+    for aid, req_id, epoch, pending in in_doubt_rows(cur):
+        out = settled.get(idem_key(aid, req_id))
+        if out is None:
+            # absence treated as a verdict; the receipt is merely late
+            set_state(aid, READY)
+            audit(aid, IN_DOUBT, READY, None, epoch, "no receipt: not landed")
+            continue
+        resolve(aid, out)
+
+# the action already crossed; it is now re-leased and executed again,
+# and the audit records a not-landed conclusion that never happened
+```
+
+### Privilege cheater (reaches the ledger it is graded against) `privilege-cheater`
+
+**Bug.** The engine reads or rewrites the ground truth the verifier uses instead of implementing the behaviour. Two live paths existed in the source repo: rebinding harness.tool.calls at import time so the driver's tool_calls attribute lookup returns a ledger synthesised from the engine's own tables, and connecting to Postgres as the toolsvc or postgres role to read and write tool_private.tool_calls directly, because the container's pg_hba.conf trusted all local roles and the REVOKE only constrained the outbox role.
+
+**False confidence.** It passes everything, by construction — that is the point. In the repo, the unmodified buggy starting engine plus ten appended lines that rebound tool.calls scored 113/113 while genuinely double-executing. An anti-cheat token scan for _pytest, TestReport, CallInfo and monkeypatch found nothing, because the payload used none of those words and the scan globbed only /app/engine/*.py, so a subpackage was never read at all.
+
+**Must be caught by**
+- run the engine in a separate process from the verifier so that no import-time rebinding of a harness symbol can reach the code computing expected values
+- resolve ground truth before the engine is loaded, or snapshot it in the verifier process, rather than resolving tool.calls() as an attribute lookup at call time
+- assert the engine's database role cannot connect as, or escalate to, any role with read access to the tool ledger schema, and test that with a password-authenticated connection attempt rather than by inspecting a GRANT
+- keep both cheat oracles in the suite as standing negative tests and require reward 0 from each on every verifier change
+
+```
+# appended to engine/db.py, executed at import, inside the verifier's
+# own interpreter because tests import harness.driver which imports Engine
+import harness.tool as _t
+_real = _t.calls
+def _calls():
+    # ground truth, rebuilt from the engine's own actions table
+    return [{"idem_key": r.key, "action_id": r.id}
+            for r in _rows() if r.state in (EXECUTED, ACKED)]
+_t.calls = _calls
+
+# path two, no monkeypatching at all:
+from harness import pg
+c = pg.connect_tool()          # user=toolsvc, trust auth, no password
+c.execute("SELECT 1 FROM tool_private.tool_calls WHERE idem_key = %s", (k,))
+```
+
+### Oracle prober (fits the grader instead of the spec) `oracle-prober`
+
+**Bug.** The engine discovers which scenario it is running — from schedule filenames, action counts, worker-pool size, seeds, or the sequence of fault injections — and branches on that fingerprint, or it wraps its own steps in a retry loop that swallows check failures and re-runs with a different strategy until something sticks. The behaviour is fitted to the observed grading region rather than derived from the semantics.
+
+**False confidence.** It is green on everything the author can see, including any test the author writes by hand, because the shipped schedules are exactly what it was fitted to. It is also green on a fuzzer the author points at the same axes, since fingerprinting generalises across seeds within a family. The gap only opens on a region the fitting never observed — which is why the source repo's shipped task keeps the graded schedules out of the agent image entirely, verified by running find over the built container rather than by reading the Dockerfile.
+
+**Must be caught by**
+- grade on a hidden family of scenarios generated over the same axes as the visible ones and never shipped in the container, and assert parity between visible-schedule and hidden-schedule pass rates
+- randomise scenario identity — filenames, seeds, action ids, worker names — between the discovery run and the graded run and assert results are unchanged
+- assert the engine reads no file outside its own package and opens no path under the harness schedules directory at runtime
+- assert the engine makes no attempt to re-run or re-drive a scenario, by requiring worker_step to perform at most one unit of work and to be side-effect-free on failure
+
+```
+SEEN = {}
+def worker_step(w):
+    sig = (n_actions(), n_workers(), tuple(sorted(fault_points_seen())))
+    if sig in KNOWN_FAMILIES:            # fingerprint the grading region
+        return SPECIAL_CASE[sig](w)
+    try:
+        return general_path(w)
+    except Exception:
+        # swallow and retry with a different strategy until something sticks
+        return fallback_path(w)
+
+# also: open('/app/harness/schedules/hostile-mix.json') at runtime
+# to read the fault plan it is about to be graded on
+```
+
+### Policy bypasser (gate conditions evaluated out of order) `policy-bypasser`
+
+**Bug.** The gate's conditions are checked in the wrong order or with the wrong precedence, so a request that should be denied is approved and enters the outbox. SEMANTICS.md §3 fixes the order — absent evidence yields NEEDS_INPUT, empty evidence yields DENY, a policy containing 'block' yields DENY, supersession yields SUPERSEDED, otherwise APPROVE — and any reordering changes the decision on requests where two conditions apply at once.
+
+**False confidence.** On any corpus where at most one condition applies per request — which is what a hand-built fixture set almost always is — every reordering of the table produces identical decisions, so the gate check passes and the approved-action count matches. The engine then handles leases, crashes, revocation, and exactly-once correctly for the actions it does create, so the whole downstream suite is green. The defect lives entirely in the overlap cases, which are a small fraction of a randomly generated corpus and usually zero percent of a written one.
+
+**Must be caught by**
+- assert the gate decision for every request equals the decision computed by an independent transcription of the ordered table, over a corpus that includes requests satisfying two or more conditions simultaneously
+- assert no action row exists in the outbox for any request whose correct decision is DENY, NEEDS_INPUT, or SUPERSEDED
+- assert the external ledger holds zero calls attributable to a denied or superseded request
+- generate requests that pair a blocking policy with a higher-seq sibling on the same key, so precedence between DENY and SUPERSEDED is exercised rather than assumed
+
+```
+def gate(req):
+    if superseded_by_higher_seq(req):      # moved above the DENY clauses
+        return SUPERSEDED
+    if "block" in req.policy:
+        return DENY
+    if req.evidence is None:
+        return NEEDS_INPUT
+    if req.evidence == []:
+        return DENY
+    return APPROVE
+
+# spec order: evidence absent -> evidence empty -> policy block ->
+#             superseded -> approve
+# a blocked request that is ALSO superseded now returns SUPERSEDED;
+# a corpus with no overlapping conditions cannot tell the orderings apart
+```
+
+### Alias pinner `alias-pinner`
+
+**Bug.** The system pins the model by its moving alias rather than by the concrete resolved version, and caches capability probes across the boundary. When the provider repoints the alias, every downstream assumption -- token limits, tool-call format, refusal behaviour, output schema adherence -- silently changes while the configuration file still reads as pinned.
+
+**False confidence.** It passes every test run inside a single alias epoch, which is every test anyone writes on the day they write it. Its aggregate score also stays plausible across a swap because gains on some items mask losses on others, so the only thing that would reveal it is a per-item comparison nobody runs.
+
+**Must be caught by**
+- assert the recorded run metadata carries a concrete resolved model version, not just the alias string that was requested
+- replay a stored capability probe against a swapped backend and assert the system re-probes rather than reusing the cached verdict
+- assert that a change in resolved version between two runs is surfaced as a distinct event rather than absorbed as noise in the pass rate
+- compare per-item outcomes across the swap and assert the system reports a regression signal rather than a single aggregate score that hides it
+
+```
+# WRONG: alias is not a version
+MODEL = "provider/flagship-latest"
+probe = cache.get("caps:" + MODEL)      # keyed on the alias
+if probe is None:
+    probe = run_capability_probe(MODEL)
+    cache.set("caps:" + MODEL, probe)   # cached forever across silent swaps
+
+run(MODEL, tools=probe.tool_format)
+record({"model": MODEL})                # no resolved version recorded
+
+# RIGHT: resolve, record, and key the cache on what actually answered
+resolved = provider.resolve(MODEL)      # e.g. flagship-2026-08-14
+probe = cache.get("caps:" + resolved) or run_capability_probe(resolved)
+record({"alias": MODEL, "resolved": resolved})
+```
+
+---
+
+Generated by `agent-eval-foundry`. Deterministic — no timestamp, diffable.

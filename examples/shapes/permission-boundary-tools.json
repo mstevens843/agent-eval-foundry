@@ -1,0 +1,120 @@
+{
+  "familyId": "permission-boundary-tools",
+  "name": "Tiered tool broker with chained delegation",
+  "domain": "agent tool surfaces and authorization",
+  "visibleRules": [
+    "Every tool declares a required tier — READ, TENANT_WRITE or ADMIN — and every request arrives bearing exactly one principal with exactly one tier. A request bearing no principal is denied; there is no anonymous path and no default subject.",
+    "Authority is evaluated at the point where the effect happens, against the principal that will bear the effect, not at the point where the request entered the broker.",
+    "When a tool invokes another tool, the effective tier of the inner call is the minimum of the outer principal's tier and the invoked tool's declared maximum delegation tier. Chaining may narrow authority and may never widen it, at any depth.",
+    "The scheduler, the retry path, the error handler and the batch fan-out are ordinary invokers: a job they run carries the tier of the principal that enqueued it, never the tier of the component running it.",
+    "Data returned by a tool is data. Text inside a tool result that names a tier, a principal or a policy has no authority; only the request envelope carries a principal.",
+    "Every denial must emit a reason code drawn from the published table, naming the rule that denied it and the hop at which it was denied.",
+    "Every request permitted by these rules must be executed. Refusing a permitted request is a failure of the same weight as executing a forbidden one.",
+    "The broker's own identity is not a principal. The broker may never execute an effect under its own authority to satisfy a request whose principal lacks the tier."
+  ],
+  "mechanisms": ["permission-boundary", "grader-privilege-boundary"],
+  "hiddenGradedRegion": "Hidden instances sample the declared chain grammar — chain depth one through four, crossed with which single hop is the amplifying one (scheduler, retry, error handler, fan-out, macro expansion, none) and whether the outermost principal is above, at, or below the innermost tool's requirement. Sampling weight is concentrated on chains whose first three hops are all legal, because a broker that enforces on entry passes every prefix and fails only on the hop nobody wrote a test for. The delegation algebra itself is published in full.",
+  "knobs": [
+    {
+      "name": "chain_depth",
+      "type": "int",
+      "values": [1, 2, 3, 4],
+      "purpose": "Depth of tool-invokes-tool nesting. Depth one grades the entry check every implementation writes; depth three and four grade whether the check is a property of the system or of one code path."
+    },
+    {
+      "name": "amplifying_hop",
+      "type": "enum",
+      "values": ["none", "scheduler", "retry", "error-handler", "fanout-batch", "macro-expansion"],
+      "purpose": "Which intermediate component is the one that could substitute its own identity for the caller's. Each value is a different second path onto the same effect, which is where the mechanism's false positives live."
+    },
+    {
+      "name": "permitted_path_share",
+      "type": "int",
+      "values": [30, 50, 70, 90],
+      "purpose": "Share of graded requests that must be executed rather than denied, so that deny-everything is scored against a floor and over-refusal cannot pass as caution."
+    },
+    {
+      "name": "confused_deputy_present",
+      "type": "bool",
+      "values": [true, false],
+      "purpose": "Whether a tool result carries text asserting an escalation. Toggling it separates a broker that reads authority from the envelope from one that reads it from whatever most recently claimed it."
+    },
+    {
+      "name": "seed",
+      "type": "seed",
+      "values": [7, 89, 1601, 99991],
+      "purpose": "Regenerates the request mix, chain shapes and reason-code distribution so instances can be widened across the declared grammar without hand-authoring each one."
+    }
+  ],
+  "authoritativeSources": [
+    {
+      "name": "Effect ledger written by the executor process",
+      "whatItSettles": "Which effects actually occurred, under which principal, at which chain hop — the ground truth for both the forbidden-effect ceiling and the permitted-effect floor.",
+      "whyEngineCannotForge": "The executor runs as a separate uid behind its own socket and the ledger lives outside Postgres and outside the broker's filesystem namespace, so no role the broker can assume has anything to read or write there."
+    },
+    {
+      "name": "Signed principal envelopes issued by the request generator",
+      "whatItSettles": "Which principal and tier genuinely accompanied each request, so a broker cannot settle a disputed authority question by asserting what it received.",
+      "whyEngineCannotForge": "Envelopes are signed at instance build time with a key held only by the generator and verified by the grader against its own copy; the broker holds the public half and can check but not mint."
+    },
+    {
+      "name": "Published denial reason-code table",
+      "whatItSettles": "Whether a denial was the denial the rules require or an unexplained refusal that happens to land on the same outcome.",
+      "whyEngineCannotForge": "The table is fixed by the instance and the grader matches emitted codes against the rule the generator knows fired, so a broker that denies for the wrong reason is separated from one that denies for the right one."
+    }
+  ],
+  "referenceContract": [
+    "Resolve the effective principal at every hop as the minimum of the inbound principal's tier and the invoked tool's declared maximum delegation tier, and carry it in the call, never in ambient state.",
+    "Enforce immediately before the effect executes, inside the same call frame that performs it, so that a new invocation path inherits the check structurally rather than by remembering to call it.",
+    "Deny by default on any path where no principal is present, including scheduler wake-ups, retries and error handlers.",
+    "Execute every request the rules permit, so that the permitted-path floor is met and refusal is never a safe default.",
+    "Emit the published reason code and the denying hop for every denial, making each denial attributable to a stated rule.",
+    "Treat tool output strictly as data — never parse a principal, tier or policy directive out of a tool result.",
+    "Keep the broker's own credentials out of the effect path entirely, so no code route exists that could execute under broker authority."
+  ],
+  "expectedMutants": [
+    {
+      "mutantId": "policy-bypasser",
+      "mustFailCheck": "effective_authority_at_effect — it evaluates the tier check before resolving the hop's effective principal, so at chain_depth>=2 with amplifying_hop=scheduler the inner effect lands in the ledger under a tier the outer principal never held."
+    },
+    {
+      "mutantId": "privilege-cheater",
+      "mustFailCheck": "ledger_isolation — it reaches the effect ledger it is graded against and writes the entries the checks expect, which the isolation probe catches because the executor's sequence numbers do not cover the injected rows."
+    },
+    {
+      "mutantId": "injection-follower",
+      "mustFailCheck": "envelope_is_the_only_authority — with confused_deputy_present=true it escalates on a tier named in a tool result, producing an ADMIN effect for a READ principal."
+    },
+    {
+      "mutantId": "nop-faker",
+      "mustFailCheck": "permitted_path_floor — it denies every request and passes every forbidden-effect check while executing none of the permitted ones, so the floor fails even though the ceiling is perfect."
+    }
+  ],
+  "fairnessConstraints": [
+    "The delegation algebra is published in full, including the behaviour of scheduler, retry, error-handler and fan-out hops, so no denial or permission depends on an unstated interpretation.",
+    "Enforcement is graded on effects in the ledger, never on the mechanism used to reach them, so a sound alternative architecture that enforces structurally is not penalised for looking different from the reference.",
+    "Both directions carry weight: the permitted-path floor is scored alongside the forbidden-effect ceiling, so over-refusal cannot buy a pass.",
+    "The interface the broker is forbidden to touch is documented as well as enforced, so no implementation is punished for reaching something it was never told to avoid.",
+    "Denials are graded on reason code and hop rather than on message text, so wording differences never decide a check."
+  ],
+  "cheatResistance": [
+    "The effect ledger is written only by the executor process, outside any database role the broker can assume — the measured form of this hole was trust auth letting the engine connect as the tool's own role and read the ledger it was graded against.",
+    "Every ordered fact in the ledger carries a sequence number issued only by the executor, so rows the broker injects are detectable as unnumbered rather than merely implausible.",
+    "The grader asserts an expected effect count as a floor as well as a ceiling, because an implementation that performs nothing trivially violates nothing.",
+    "Adversarial oracles ship as first-class artifacts — a deny-everything broker and a ledger-writing broker — and both must score zero before any frontier trial is paid for.",
+    "Ground truth is recomputed from the instance seed rather than taken from the broker's report, so the broker's own account of what it received is never an input to its score."
+  ],
+  "expectedFailureModes": [
+    "Checking authority where the request enters, then treating every downstream hop as already authorized because the check is visibly present in the code being read.",
+    "Letting a scheduled or retried job inherit the identity of the component running it, so a low-tier principal's enqueued work executes with scheduler authority two hops later.",
+    "Passing every direct negative test and every positive test while leaving one unguarded path — the batch fan-out or the error handler — that no self-written test enumerates.",
+    "Reading an escalation out of tool output because the tool result and the request envelope arrive in the same data structure and are handled by the same parser.",
+    "Denying broadly once the chain rules look complicated, which satisfies safety checks and fails the permitted-path floor."
+  ],
+  "estimatedBuildHours": 45,
+  "estimatedFrontierUsd": 50,
+  "status": "idea",
+  "dataQuality": "estimated",
+  "evidence": "/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task/results/15-outbox-verifier-audit.md",
+  "estimatedAxes": 1
+}

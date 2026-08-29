@@ -1,0 +1,26 @@
+{
+  "id": "example-mechanism",
+  "name": "Example",
+  "summary": "A mechanism used only as a test base.",
+  "whyAgentsFail": "The agent trusts a fact read at one moment at a later moment.",
+  "whatCorrectSystemsDo": "Re-read the fact at the point of use and condition the write on it.",
+  "falsePositiveShape": "Passes every serial test because the window never opens without concurrency.",
+  "exampleDomains": [
+    "payments",
+    "deployments"
+  ],
+  "suggestedMutants": [
+    "stale-state-reader"
+  ],
+  "fairnessRisks": [
+    "The window may not be reliably reachable."
+  ],
+  "cheatRisks": [
+    "The agent could detect the harness and special-case it."
+  ],
+  "measurableSignals": [
+    "count of writes committed under a stale read"
+  ],
+  "maturity": "measured",
+  "evidence": null
+}

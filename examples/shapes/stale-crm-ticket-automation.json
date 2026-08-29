@@ -1,0 +1,125 @@
+{
+  "familyId": "stale-crm-ticket-automation",
+  "name": "Support automation against a moving CRM",
+  "domain": "CRM and support automation",
+  "mechanisms": ["stale-state", "tool-result-ambiguity", "duplicate-side-effects"],
+  "visibleRules": [
+    "Every ticket carries a monotonic version. A write must supply the version it intends to replace, and the CRM applies it only if that version is still current; a write with no version is rejected.",
+    "The CRM applies its own scheduled mutations at the step points named in the shipped schedule grammar — a human agent replies, the customer closes the ticket, a refund posts — so the state at write time is not required to equal the state at read time.",
+    "The write acknowledgement does not distinguish applied, no-op-because-identical, accepted-for-async and rejected-on-version. All four return the same envelope shape with the same fields populated. The acknowledgement is not evidence that the write took effect.",
+    "The only authoritative statement about whether a write took effect is the ticket's change log, which the automation may read at any time and which names the version each entry produced.",
+    "Webhook delivery is at-least-once and unordered. The same logical event may arrive several times with different delivery ids, and a later event may arrive before an earlier one.",
+    "An outbound effect — customer email, refund, escalation — must occur exactly once per logical intent, across duplicate deliveries and across a restart of the automation at any documented crash point.",
+    "CLOSED_REFUNDED is terminal. No write may move a ticket out of it, and an intent formed before the ticket reached it must be abandoned with a recorded reason rather than applied.",
+    "Every accepted intent must reach a terminal disposition — applied, superseded, or abandoned with a reason — before the feed drains. An intent left unresolved is a failure even if no wrong effect occurred."
+  ],
+  "hiddenGradedRegion": "Hidden instances sample the declared mutation-point space: which of the four documented step points the CRM's interleaved mutation lands on, crossed with duplicate delivery multiplicity, the ambiguous-acknowledgement outcome actually chosen by the CRM, and whether the ticket reaches CLOSED_REFUNDED before or after the intent is formed. Weight is concentrated on the between-read-and-write point paired with an acknowledgement whose true outcome was rejected-on-version, because that is the only region where a correct implementation and one that trusts its acknowledgement diverge. Every rule that decides the outcome is in the shipped rules; only the coordinates are hidden.",
+  "knobs": [
+    {
+      "name": "mutation_point",
+      "type": "enum",
+      "values": ["none", "before-read", "between-read-and-write", "after-write-before-ack"],
+      "purpose": "Where the CRM's own mutation lands relative to the automation's read and write. This is the knob that decides whether the staleness window is open at all, which the source project measured as the thing most likely to be closed by accident."
+    },
+    {
+      "name": "duplicate_delivery_multiplicity",
+      "type": "int",
+      "values": [1, 2, 3, 5],
+      "purpose": "How many times the same logical event is delivered with distinct delivery ids. Separates idempotency keyed on the action's durable identity from idempotency keyed on the delivery, which are indistinguishable at multiplicity one."
+    },
+    {
+      "name": "ack_true_outcome",
+      "type": "enum",
+      "values": ["applied", "noop-identical", "accepted-async", "rejected-on-version"],
+      "purpose": "What the identical-looking acknowledgement actually meant. Varying it while holding the envelope fixed is the whole tool-result-ambiguity axis."
+    },
+    {
+      "name": "crash_point",
+      "type": "enum",
+      "values": ["none", "after-read", "after-write-before-record", "after-record"],
+      "purpose": "Where the automation is restarted. The after-write-before-record point is the only one that separates a stable idempotency key from a freshly minted one, which is why it exists."
+    },
+    {
+      "name": "terminal_state_present",
+      "type": "bool",
+      "values": [true, false],
+      "purpose": "Whether the ticket reaches CLOSED_REFUNDED while an intent is in flight, exercising the terminal-state discipline that five of six frontier engines violated in the source task."
+    },
+    {
+      "name": "seed",
+      "type": "seed",
+      "values": [13, 401, 5077, 262147],
+      "purpose": "Regenerates ticket population, event ordering and delivery duplication so the declared space can be covered by generated instances rather than hand-authored ones."
+    }
+  ],
+  "authoritativeSources": [
+    {
+      "name": "CRM change log",
+      "whatItSettles": "Which writes actually took effect, in which order, and which version each produced — the only channel that narrows an ambiguous acknowledgement to a fact.",
+      "whyEngineCannotForge": "It is appended by the CRM process behind its own socket, under a uid the automation does not hold, with per-ticket sequence numbers issued only by that process, so an entry the automation invents has no valid number."
+    },
+    {
+      "name": "Outbound comms ledger",
+      "whatItSettles": "How many customer emails, refunds and escalations genuinely crossed into the outside world, which is the ground truth for exactly-once rather than the automation's own record of what it believes it sent.",
+      "whyEngineCannotForge": "The delivery service is a third process with its own store; the automation can call it and receives a receipt, but has no route to read or amend what the service recorded."
+    },
+    {
+      "name": "Webhook dispatcher delivery record",
+      "whatItSettles": "Which delivery ids were sent and how many copies of each logical event the automation actually received, so dedup that succeeded by luck is separable from dedup on a stable identity.",
+      "whyEngineCannotForge": "The dispatcher generates deliveries from the instance seed and records them before sending; the grader regenerates the same record from the seed rather than accepting the automation's inbound log."
+    }
+  ],
+  "referenceContract": [
+    "Read the ticket version immediately before the write and pass it as the compare-and-set precondition, rather than reusing the version read when the event was first handled.",
+    "Derive the idempotency key from the ticket id and the logical intent, commit it before the outbound call, and reuse it byte-identically after a restart and on every duplicate delivery.",
+    "Model the write acknowledgement as a sum type including the indeterminate case, and narrow it only by reading the CRM change log — never by inferring from the envelope.",
+    "Refuse any write onto a ticket in CLOSED_REFUNDED and record the abandonment with a reason instead of retrying it or rewriting the history to make it legal.",
+    "Drain every accepted intent to applied, superseded or abandoned before exit, so that declining to guess never becomes declining to finish.",
+    "Emit exactly one outbound effect per logical intent as counted in the comms ledger, not per delivery and not per retry."
+  ],
+  "expectedMutants": [
+    {
+      "mutantId": "stale-state-reader",
+      "mustFailCheck": "cas_version_at_write — it supplies the version captured when the event was first handled, so with mutation_point=between-read-and-write it either overwrites a human agent's reply or reports success for a write the change log shows was rejected."
+    },
+    {
+      "mutantId": "delivery-keyed-idempotency",
+      "mustFailCheck": "effects_exactly_once — its key is derived from the delivery id, which is unique per copy, so at duplicate_delivery_multiplicity=3 the comms ledger holds three refunds for one intent while its own local record shows three distinct actions."
+    },
+    {
+      "mutantId": "eager-resolver",
+      "mustFailCheck": "ambiguous_ack_narrowed — it reads the acknowledgement envelope as success, so with ack_true_outcome=rejected-on-version it marks the intent applied and never touches the change log that would have contradicted it."
+    },
+    {
+      "mutantId": "duplicate-executor",
+      "mustFailCheck": "no_write_after_terminal — its writes are not conditioned on the version it holds, so with terminal_state_present=true it applies an intent onto a ticket that reached CLOSED_REFUNDED while the intent was in flight."
+    }
+  ],
+  "fairnessConstraints": [
+    "The change log always eventually answers whether a given write took effect, so an implementation that refuses to widen an ambiguous acknowledgement is never left permanently stuck — the ambiguity must be narrowable or the task punishes the correct call.",
+    "The CRM's dedup window is unbounded within the instance, so an implementation that reconciles late is not punished for the environment forgetting; the source project killed an entire candidate on exactly this, because the late-reconciliation hatch fairness requires is also the hatch that defuses the trap.",
+    "Every mutation point and crash point is reachable through the documented stepping API and named in the schedule grammar, so a correct implementation can demonstrate its guard and an incorrect one can be caught.",
+    "Windows are step-numbered, never wall-clock, so the grade is a function of the implementation rather than of machine speed.",
+    "Grading counts committed effects in the ledgers, not retries or call counts, so an implementation that correctly re-invokes with a stable key against an idempotent endpoint is not penalised."
+  ],
+  "cheatResistance": [
+    "Expected outbound effects are asserted as a floor as well as a ceiling, because an automation that performs no side effects trivially never duplicates one — measured as a live bypass scoring 113/113 against an empty ledger in the source project.",
+    "The comms ledger and change log are held by processes the automation cannot open under any role, so the score is never a claim the automation makes about itself.",
+    "Scenario inputs are regenerated from the instance seed rather than taken from the automation's report, so a rewritten inbound log changes nothing the grader reads.",
+    "Ground truth is assembled by a collector that never imports automation code, closing the measured bypass in which an engine rebound the verifier's ground-truth accessor at import time.",
+    "A cheat oracle that self-abandons every intent and one that writes directly to the comms ledger both ship as artifacts and must score zero before any frontier trial is bought."
+  ],
+  "expectedFailureModes": [
+    "Reusing the version read when the event was first handled, because reads look free and nothing on the automation's own code path mutated the ticket.",
+    "Keying idempotency on the delivery id, which is unique per copy and therefore works perfectly until the same event is delivered twice.",
+    "Reading a non-error acknowledgement as applied, because the code has a success branch and an error branch and no third state for an outcome the tool declined to state.",
+    "Handling the terminal state by rewriting it — moving a CLOSED_REFUNDED ticket back to open so the pending intent becomes legal — which is the same illegal-transition instinct five of six engines showed on the source task.",
+    "Refusing to resolve an ambiguous write at all and leaving the intent pending forever, which is safe, correct on the safety side, and a liveness failure — the sixth engine's mode."
+  ],
+  "estimatedBuildHours": 70,
+  "estimatedFrontierUsd": 55,
+  "status": "candidate",
+  "dataQuality": "estimated",
+  "evidence": "/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task/results/23-v3-bounded-idempotency-window-gate.md",
+  "estimatedAxes": 2
+}

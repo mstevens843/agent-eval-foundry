@@ -1,0 +1,180 @@
+{
+  "familyId": "durable-approval-outbox",
+  "name": "Durable Approval Outbox",
+  "domain": "distributed systems and agent tool execution",
+  "mechanisms": [
+    "uncertain-external-effects",
+    "duplicate-side-effects",
+    "false-audit-history",
+    "liveness-stall",
+    "tool-result-ambiguity"
+  ],
+  "visibleRules": [
+    "A deterministic gate decides every request from the request alone, in a fixed order of conditions (missing evidence -> NEEDS_INPUT, empty evidence -> DENY, blocking policy -> DENY, superseded by a higher seq on the same key -> SUPERSEDED, otherwise APPROVE); only APPROVE puts an action in the outbox.",
+    "Exactly one external side effect per action that completes, and none for an action that never runs; the external tool deduplicates on the idempotency key it is handed, and nothing recorded there can be undone by local bookkeeping.",
+    "An action revoked or superseded before it reaches the tool must never reach it; one revoked after it has already crossed is recorded as having done both, and is never executed a second time.",
+    "A tool call may return UNKNOWN, which says nothing about whether the side effect happened. A later receipt is authoritative and a receipt exists for every UNKNOWN call, for the ones that landed and the ones that did not. The engine may not decide for itself in the meantime.",
+    "Leases carry an epoch that increments on every lease, ever, and expire by step number rather than by clock; a worker acting under a stale epoch must have no effect on the action a peer has since taken from it.",
+    "Every approved action nobody revoked must eventually reach ACKED, including while other actions sit unresolved; holding doubt durably is required, holding it forever is a failure.",
+    "The audit log is append-only, appends exactly one entry per transition an action actually made, and contains no transition that did not occur; the state machine in SEMANTICS.md section 4 gives ACKED no outgoing edge.",
+    "Independent actions must not queue behind one another: two workers have to be able to hold leases on different actions at the same time, and progress is graded yes/no per scenario rather than scored."
+  ],
+  "hiddenGradedRegion": "The hidden suite samples 24 points out of the declared space of schedules x seeds x key counts x fault points x withdrawal timings x receipt delays: 15 schedules, seeds {1009, 1013, 1021, 1031, 1049}, key counts {12, 16, 20}. It concentrates on two sub-regions of behaviour the rules already cover -- withdrawals that arrive after the first subject (key_index 0) is reliably already ACKED, sampled at after_invoke 3/5/8/11 with 2, 3 and 4 workers and receipt delays 0/2/4; and a pair of scenarios identical in everything the engine can observe that differ only in whether the unknown call actually landed inside the tool process. No rule is graded that is not stated in the agent-visible SEMANTICS.md.",
+  "knobs": [
+    {
+      "name": "seed",
+      "type": "seed",
+      "values": [
+        1009,
+        1013,
+        1021,
+        1031,
+        1049
+      ],
+      "purpose": "Fixes the whole request sequence: which keys get supersessions, which get missing or empty evidence or a blocking policy, the delivery shuffle, and which deliveries are duplicated. Varying it moves which subject is in flight when a fault fires."
+    },
+    {
+      "name": "n_workers",
+      "type": "int",
+      "values": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "purpose": "Sets how finely worker steps interleave and whether concurrent leases are reachable at all; one worker exercises the serial path the buggy engine already passes, four exercises reclaim races and the progress check."
+    },
+    {
+      "name": "crash_point",
+      "type": "enum",
+      "values": [
+        "after_lease",
+        "after_tool",
+        "after_audit",
+        "after_ack"
+      ],
+      "purpose": "Chooses which logical point the worker dies at. after_tool is the one that matters: the side effect has happened and nothing local records it, so a lease-derived idempotency key produces a second side effect on reclaim."
+    },
+    {
+      "name": "withdrawal_after_invoke",
+      "type": "int",
+      "values": [
+        3,
+        5,
+        8,
+        11
+      ],
+      "purpose": "Fires the withdrawal on the Nth call the tool itself has seen, so it is deterministic and originates outside the engine. It selects whether the target is still READY, mid-flight, in doubt, or already acknowledged."
+    },
+    {
+      "name": "receipt_after_invokes",
+      "type": "int",
+      "values": [
+        0,
+        2,
+        4
+      ],
+      "purpose": "Delays the settlement receipt for an UNKNOWN call by N further calls, widening the window in which the engine must carry doubt without guessing while continuing to drain unrelated work."
+    },
+    {
+      "name": "key_index",
+      "type": "int",
+      "values": [
+        0,
+        3,
+        7
+      ],
+      "purpose": "Names which subject the withdrawal targets. This is the controlling parameter for the post-acknowledgement branch: k000 is decided and worked first and is reliably ACKED when the withdrawal lands, whereas later subjects are usually still in flight and the branch is never reached."
+    },
+    {
+      "name": "unknown_landed",
+      "type": "bool",
+      "values": [
+        true,
+        false
+      ],
+      "purpose": "Decides, inside the tool process only, whether an UNKNOWN call actually took effect. It is the sole difference between the two scenarios of the pair and is invisible to the engine until the receipt arrives."
+    }
+  ],
+  "authoritativeSources": [
+    {
+      "name": "External tool process ledger",
+      "whatItSettles": "What actually happened in the outside world: every call the tool received, its idempotency key and action id, which calls landed, when receipts were created and delivered, and anything arriving after the scenario was closed -- all carrying a sequence number only that process increments.",
+      "whyEngineCannotForge": "It lives in a separate process that owns the only copy of the record; the engine can reach the public invoke socket but the arm/dump/seal control socket sits inside a root-only directory the unprivileged scenario child cannot open, and the public socket has no verb that reads the log, withdraws anything or advances a receipt."
+    },
+    {
+      "name": "Seed-regenerated request sequence",
+      "whatItSettles": "What inputs the engine was actually given, and therefore what the gate should have decided and which actions were obliged to finish.",
+      "whyEngineCannotForge": "It is regenerated from the seed by a separate child process that loads no engine code, so an engine cannot quietly shrink or rewrite its own input set to make its output look complete."
+    },
+    {
+      "name": "Baseline spec and types checksum",
+      "whatItSettles": "That the interfaces and the normative document the grading assumes are the ones that shipped, rather than ones the agent edited under itself.",
+      "whyEngineCannotForge": "The comparison is against a baseline copy baked into the verifier image, not the /app copy the agent can write to, and it runs in a process that never imports engine code."
+    },
+    {
+      "name": "Privileged collector report",
+      "whatItSettles": "Which scenarios ran, that each was armed and sealed around a short-lived child, and that the interleaving a scenario names actually fired -- including which calls were meant to return UNKNOWN and whether they were meant to land.",
+      "whyEngineCannotForge": "The collector arms and seals the tool from outside the scenario child, is killed by process group afterwards, and never imports engine code; the engine's own output is recorded as a claim about itself and is never the source of an expected value."
+    }
+  ],
+  "referenceContract": [
+    "Derive the tool's idempotency key from the action, never from the lease or epoch, so every retry after any crash or reassignment presents the same key and is deduplicated by the tool.",
+    "Commit the intent to call, under the epoch the worker holds, before making the call, so a restart can tell that the call may already have gone out.",
+    "Re-read revocation state and the current epoch inside the execute step rather than trusting what was seen at lease time, and condition every write on the held epoch so a stale lease is a no-op.",
+    "Lease with FOR UPDATE SKIP LOCKED so two workers take different actions instead of queueing, satisfying the progress property without a global lock.",
+    "Carry an UNKNOWN outcome in a durable IN_DOUBT state that no local rule may collapse, record a pending withdrawal against it rather than acting on the withdrawal, and let the receipt decide -- including deciding that a landed action withdrawn afterwards is recorded as having done both.",
+    "Drain every IN_DOUBT action to a terminal state once its receipt arrives, and keep unrelated actions moving the whole time.",
+    "Treat ACKED as terminal: a withdrawal arriving after acknowledgement changes no state and appends no audit entry, because the state machine has no ACKED -> REVOKED edge.",
+    "Append exactly one audit entry per transition actually made, with the acting worker and epoch, and never rewrite or renumber."
+  ],
+  "expectedMutants": [
+    {
+      "mutantId": "delivery-keyed-idempotency",
+      "mustFailCheck": "check_exactly_once -- keying the tool call on the lease epoch means a crash after_tool followed by reclaim at a higher epoch presents a key the tool has never seen, and the ledger records two side effects for one action."
+    },
+    {
+      "mutantId": "eager-resolver",
+      "mustFailCheck": "check_audit_explains and check_revocation_ordering -- collapsing an UNKNOWN outcome by local rule writes either a side effect that never happened or an ACKED -> REVOKED transition the legal state machine does not contain, and the two paired unknown scenarios cannot both be satisfied by any such rule."
+    },
+    {
+      "mutantId": "liveness-staller",
+      "mustFailCheck": "check_completion and check_expected_executions -- refusing to resolve doubt at all leaves an approved, unwithdrawn action permanently IN_DOUBT instead of ACKED, which is the failure the one engine that avoided the audit bug produced instead."
+    },
+    {
+      "mutantId": "nop-faker",
+      "mustFailCheck": "check_expected_executions -- leasing every action and driving it straight to REVOKED satisfies every safety and progress check vacuously with an entirely empty tool ledger, so the suite must require the side effects the feed asked for, not merely forbid extra ones."
+    },
+    {
+      "mutantId": "privilege-cheater",
+      "mustFailCheck": "test_tool_saw_no_duplicate_keys and the collector's own sealing -- an engine that reaches the ledger it is graded against, or rebinds the verifier's ground-truth accessor at import, must score exactly what its behaviour scores; both attacks are inert once ground truth is assembled by processes that never import engine code."
+    }
+  ],
+  "fairnessConstraints": [
+    "A receipt must exist for every call whose outcome was UNKNOWN -- for the ones that landed and for the ones that did not -- otherwise refusing to guess is undecidable and a correct engine is punished for correctness.",
+    "Nothing is graded on how fast doubt resolves, only on terminal state and recorded side-effect count, so an implementation that correctly waits for the authority is not penalised against one that guessed right.",
+    "Every graded rule appears in the agent-visible SEMANTICS.md, which is declared normative and complete; hidden material is a sample of that declared space, never an additional rule.",
+    "Every hidden point is validated against the reference before shipping: the reference passes it and the interleaving it names actually fires. One candidate at (1009, after_invoke 11, key_index 0) was rejected because the withdrawal never fired there, which would have had the reference pass a scenario that never happened.",
+    "Lease length, restart delay and step budget are fixed constants chosen with headroom (LEASE_STEPS comfortably exceeds twice the worker count) so that a correct engine is never starved by the harness rather than by its own design."
+  ],
+  "cheatResistance": [
+    "Split the verifier across three processes: the scenario child is the only one that imports the engine and its output is treated as a claim, the collector arms and seals from outside, and assertions run in a process that never loads engine code.",
+    "Originate every graded fact in the tool process, including withdrawals fired off the tool's own call count and receipt timing, so an engine can neither forge a withdrawal to excuse itself from work nor suppress one to hide a later call.",
+    "Require positive work, not merely absence of extra work: every winning unrevoked request must end ACKED with exactly one recorded call, every recorded call must belong to a real action, no idempotency key may span two actions, and an action reported executed must have been attempted.",
+    "Keep the ledger append-only with nothing on the public socket consuming it, so an engine draining its own delivery queues erases no evidence, and seal the tool after the child is gone so post-scenario traffic is still recorded.",
+    "Maintain standing cheat oracles -- an engine that never calls the tool, and one that rebinds the ground-truth accessor at import -- and require reward 0 from both on every change to the suite."
+  ],
+  "expectedFailureModes": [
+    "Resolving doubt too eagerly and writing the illegal ACKED -> REVOKED audit transition: measured in 5 of 6 frontier trials, and present even in an engine that scored 245/245 on an earlier, sparser hidden family.",
+    "Refusing to resolve doubt at all and stranding an approved action in IN_DOUBT forever: measured in the sixth trial, which independently derived that ACKED is terminal and then failed liveness instead. The two modes sit on opposite sides of one requirement.",
+    "Writing a self-check whose transition table omits the rule under test, so a self-written fuzzer runs clean over a buggy engine; two of three Opus trials did this, and all three Codex trials built no verification tooling at all.",
+    "Deriving the idempotency key from the lease rather than the action -- a reasonable implementation that stays correct until a worker dies between the call and the local record of it.",
+    "Trusting a withdrawal read at lease time, or acknowledging without conditioning on the held epoch, so a worker whose lease expired overwrites the state of the peer that took the action from it."
+  ],
+  "estimatedBuildHours": 120,
+  "estimatedFrontierUsd": 48.66,
+  "status": "shipped",
+  "dataQuality": "measured",
+  "evidence": "/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task -- tasks/durable-approval-outbox/ (instruction.md, task.toml, environment/app/spec/SEMANTICS.md, tests/), FINDINGS.md, and results/29, results/33, results/34; six-trial matrix at commit c0e04eb, 24 scenarios / 15 schedules / 267 checks, reference 267/267 and all six frontier trials reward 0.",
+  "estimatedAxes": 3
+}

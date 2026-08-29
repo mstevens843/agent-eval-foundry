@@ -1,0 +1,176 @@
+[
+  {
+    "file": "mechanisms/no-false-positive-shape.json",
+    "kind": "mechanism",
+    "code": "MECH_NO_FALSE_POSITIVE_SHAPE",
+    "note": "A mechanism nobody can describe a false positive for is one an ordinary test already catches."
+  },
+  {
+    "file": "mechanisms/no-measurable-signal.json",
+    "kind": "mechanism",
+    "code": "MECH_NO_MEASURABLE_SIGNAL",
+    "note": "Describable but not gradable."
+  },
+  {
+    "file": "mechanisms/measured-without-evidence.json",
+    "kind": "mechanism",
+    "code": "MECH_MEASURED_WITHOUT_EVIDENCE",
+    "note": "Claims a measurement with nothing to cite \u2014 the exact laundering the registry exists to stop."
+  },
+  {
+    "file": "mechanisms/no-suggested-mutant.json",
+    "kind": "mechanism",
+    "code": "MECH_NO_SUGGESTED_MUTANT",
+    "note": "No known-bad implementation, so nothing can verify it."
+  },
+  {
+    "file": "mechanisms/bad-id.json",
+    "kind": "mechanism",
+    "code": "E_BAD_ID",
+    "note": "Ids become filenames and CLI arguments."
+  },
+  {
+    "file": "mechanisms/dangling-mutant-ref.json",
+    "kind": "registry",
+    "code": "E_DANGLING_REF",
+    "note": "Points at a mutant that does not exist. Cross-collection refs are the registry's job, not the row validator's \u2014 which is exactly why this fixture is routed differently."
+  },
+  {
+    "file": "mutants/no-mechanism.json",
+    "kind": "mutant",
+    "code": "MUTANT_NO_MECHANISM",
+    "note": "A bug with no theory behind it."
+  },
+  {
+    "file": "mutants/not-caught-by-anything.json",
+    "kind": "mutant",
+    "code": "MUTANT_NOT_CAUGHT_BY_ANYTHING",
+    "note": "Will silently pass every suite it is added to."
+  },
+  {
+    "file": "shapes/no-hidden-region.json",
+    "kind": "shape",
+    "code": "SHAPE_NO_HIDDEN_REGION",
+    "note": "Without a stated sampling region the hidden tests are indistinguishable from secret rules."
+  },
+  {
+    "file": "shapes/no-reference-contract.json",
+    "kind": "shape",
+    "code": "SHAPE_NO_REFERENCE_CONTRACT",
+    "note": "No evidence the family is solvable at all."
+  },
+  {
+    "file": "shapes/no-authoritative-source.json",
+    "kind": "shape",
+    "code": "SHAPE_NO_AUTHORITATIVE_SOURCE",
+    "note": "Nothing to grade against that the implementation cannot produce itself."
+  },
+  {
+    "file": "shapes/unforgeability-unstated.json",
+    "kind": "shape",
+    "code": "SHAPE_UNFORGEABILITY_UNSTATED",
+    "note": "Every real bypass found in the source project was a ground truth the engine could reach."
+  },
+  {
+    "file": "shapes/no-fairness-constraint.json",
+    "kind": "shape",
+    "code": "SHAPE_NO_FAIRNESS_CONSTRAINT",
+    "note": "Will eventually punish a correct implementation and nobody will notice."
+  },
+  {
+    "file": "shapes/no-cheat-resistance.json",
+    "kind": "shape",
+    "code": "SHAPE_NO_CHEAT_RESISTANCE",
+    "note": "An ungamed grader is an assumption until it is a requirement."
+  },
+  {
+    "file": "shapes/no-knobs.json",
+    "kind": "shape",
+    "code": "SHAPE_NO_KNOBS",
+    "note": "A single task wearing a family's name."
+  },
+  {
+    "file": "shapes/no-expected-mutants.json",
+    "kind": "shape",
+    "code": "SHAPE_NO_EXPECTED_MUTANTS",
+    "note": "No way to show its verifier works."
+  },
+  {
+    "file": "shapes/built-without-cost.json",
+    "kind": "shape",
+    "code": "SHAPE_BUILT_WITHOUT_COST",
+    "note": "A shipped family priced at zero hours breaks the budget model."
+  },
+  {
+    "file": "candidates/no-decision-rationale.json",
+    "kind": "candidate",
+    "code": "LEDGER_NO_DECISION_RATIONALE",
+    "note": "An unexplained decision cannot be revisited."
+  },
+  {
+    "file": "candidates/trialed-without-cost.json",
+    "kind": "candidate",
+    "code": "LEDGER_TRIALED_WITHOUT_COST",
+    "note": "Frontier budget was spent and not recorded."
+  },
+  {
+    "file": "candidates/killed-without-failure-notes.json",
+    "kind": "candidate",
+    "code": "LEDGER_KILLED_WITHOUT_FAILURE_NOTES",
+    "note": "An unclassified kill teaches nothing."
+  },
+  {
+    "file": "candidates/promoted-without-evidence.json",
+    "kind": "candidate",
+    "code": "LEDGER_PROMOTED_WITHOUT_EVIDENCE",
+    "note": "Promotion on vibes."
+  },
+  {
+    "file": "candidates/measured-without-results.json",
+    "kind": "candidate",
+    "code": "LEDGER_MEASURED_WITHOUT_RESULTS",
+    "note": "The exact measured/estimated confusion the ledger exists to prevent."
+  },
+  {
+    "file": "candidates/results-without-subjects.json",
+    "kind": "candidate",
+    "code": "LEDGER_RESULTS_WITHOUT_SUBJECTS",
+    "note": "A result with no named subject cannot be reproduced."
+  },
+  {
+    "file": "matrices/missing-cell.json",
+    "kind": "matrix",
+    "code": "E_MISSING_CELL",
+    "note": "An omitted cell is not a pass; imputing one inflates every number."
+  },
+  {
+    "file": "matrices/duplicate-subject.json",
+    "kind": "matrix",
+    "code": "E_DUP",
+    "note": "Two columns for one implementation."
+  },
+  {
+    "file": "matrices/unknown-instance.json",
+    "kind": "matrix",
+    "code": "E_UNKNOWN_INSTANCE",
+    "note": "Inconsistent task ids."
+  },
+  {
+    "file": "matrices/unknown-subject.json",
+    "kind": "matrix",
+    "code": "E_UNKNOWN_SUBJECT",
+    "note": "Result for an undeclared subject."
+  },
+  {
+    "file": "matrices/no-caveat.json",
+    "kind": "matrix",
+    "code": "E_NO_CAVEAT",
+    "note": "Selection provenance must be stated, even if only to assert independence."
+  },
+  {
+    "file": "matrices/reference-in-bank.json",
+    "kind": "matrix",
+    "code": "E_REFERENCE_IN_SUBJECTS",
+    "note": "The oracle is not evidence about difficulty."
+  }
+]
