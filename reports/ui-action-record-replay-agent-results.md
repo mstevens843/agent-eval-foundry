@@ -1,6 +1,6 @@
 # Agent trial results — ui-action-record-replay
 
-**3 counted agent trial(s): 3 failed at least one scenario, 0 passed everything.**
+**5 counted agent trial(s): 5 failed at least one scenario, 0 passed everything.**
 
 The family **discriminates**: at least one real attempt failed, so the suite separates something.
 
@@ -9,7 +9,7 @@ The family **discriminates**: at least one real attempt failed, so the suite sep
 | kind | count | what it means |
 |---|---:|---|
 | `counted_solve` | 0 | **counted solve** — a real attempt that passed every graded scenario |
-| `counted_failure` | 3 | **counted failure** — a real attempt that failed at least one scenario |
+| `counted_failure` | 5 | **counted failure** — a real attempt that failed at least one scenario |
 | `provider_refusal` | 0 | provider refusal — no attempt was made; never counted |
 | `infra_failure` | 0 | infrastructure failure — the harness, not the subject; never counted |
 | `not_run` | 1 | not run — a declared slot with no attempt yet |
@@ -25,6 +25,8 @@ it never measured.
 | `ui-claude-1` | anthropic/claude-opus-5 | counted_failure | 324 | 46 | 791s |
 | `ui-claude-2` | anthropic/claude-opus-5 | counted_failure | 324 | 33 | 964s |
 | `ui-codex-1` | openai/gpt-5.6-sol | counted_failure | 324 | 90 | 552s |
+| `ui-haiku-1` | anthropic/claude-haiku-4-5 | counted_failure | 324 | 62 | 167s |
+| `ui-sonnet-1` | anthropic/claude-sonnet-5 | counted_failure | 324 | 62 | 320s |
 | `ui-2026-08:not-run-1` | anthropic/claude-opus-5 | not_run | 0 | 0 | — |
 
 ## Which checks failed
@@ -33,9 +35,9 @@ Pooled across counted trials. A check that never fires is not evidence it cannot
 
 | check | scenarios |
 |---|---:|
-| `no_forbidden_effect` | 127 |
-| `replay_idempotent` | 63 |
-| `unreplayable_reported` | 44 |
+| `no_forbidden_effect` | 193 |
+| `replay_idempotent` | 119 |
+| `unreplayable_reported` | 76 |
 
 ## Where the failures fall
 
@@ -47,50 +49,50 @@ came from somewhere else.
 
 | value | scenarios | failed | rate |
 |---|---:|---:|---:|
-| `false` | 504 | 27 | 5% |
-| `true` | 468 | 142 | 30% |
+| `false` | 840 | 59 | 7% |
+| `true` | 780 | 234 | 30% |
 
 ### `confirmation` — **the failure rate moves with this knob**
 
 | value | scenarios | failed | rate |
 |---|---:|---:|---:|
-| `absent` | 333 | 16 | 5% |
-| `present` | 318 | 38 | 12% |
-| `suppressed` | 321 | 115 | 36% |
+| `absent` | 555 | 26 | 5% |
+| `present` | 530 | 74 | 14% |
+| `suppressed` | 535 | 193 | 36% |
 
 ### `mutation` — **the failure rate moves with this knob**
 
 | value | scenarios | failed | rate |
 |---|---:|---:|---:|
-| `attribute_renamed` | 162 | 36 | 22% |
-| `node_removed` | 162 | 8 | 5% |
-| `node_reordered` | 162 | 34 | 21% |
-| `node_wrapped` | 162 | 25 | 15% |
-| `none` | 162 | 30 | 19% |
-| `text_changed` | 162 | 36 | 22% |
+| `attribute_renamed` | 270 | 52 | 19% |
+| `node_removed` | 270 | 24 | 9% |
+| `node_reordered` | 270 | 60 | 22% |
+| `node_wrapped` | 270 | 43 | 16% |
+| `none` | 270 | 52 | 19% |
+| `text_changed` | 270 | 62 | 23% |
 
 ### `mutationDepth`
 
 | value | scenarios | failed | rate |
 |---|---:|---:|---:|
-| `0` | 324 | 47 | 15% |
-| `2` | 324 | 53 | 16% |
-| `4` | 324 | 69 | 21% |
+| `0` | 540 | 81 | 15% |
+| `2` | 540 | 79 | 15% |
+| `4` | 540 | 133 | 25% |
 
 ### `replayCount`
 
 | value | scenarios | failed | rate |
 |---|---:|---:|---:|
-| `1` | 501 | 79 | 16% |
-| `2` | 471 | 90 | 19% |
+| `1` | 835 | 133 | 16% |
+| `2` | 785 | 160 | 20% |
 
 ### `seed`
 
 | value | scenarios | failed | rate |
 |---|---:|---:|---:|
-| `11` | 339 | 70 | 21% |
-| `23` | 312 | 48 | 15% |
-| `41` | 321 | 51 | 16% |
+| `11` | 565 | 122 | 22% |
+| `23` | 520 | 86 | 17% |
+| `41` | 535 | 85 | 16% |
 
 **3 knob(s) move the failure rate: `asyncSettled`, `confirmation`, `mutation`.**
 

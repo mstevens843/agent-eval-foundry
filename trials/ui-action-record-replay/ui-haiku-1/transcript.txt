@@ -1,0 +1,25 @@
+Done! I've implemented the UI action record and replay system. Here's what the solution handles:
+
+## Key Features
+
+1. **R1 - Live Selector Resolution**: Uses `app.query()` to resolve selectors against the current DOM tree, not the recorded node IDs.
+
+2. **R2 - Observed Preconditions**: Reads actual attribute values from the app before running steps, rather than assuming recorded values still hold.
+
+3. **R3 - Observed Postconditions**: Records what the app actually shows after each step, not what was expected.
+
+4. **R4 - Confirmation Dialogs**: Automatically accepts confirmations when `data-opens-confirmation` is present on a node.
+
+5. **R5 - Idempotent Replays**: Tracks completed traces and steps in the subject object. On a second replay, it skips irreversible steps that already ran, preventing duplicate effects (like charging twice).
+
+6. **R6 - No Model in Loop**: Never calls `app.askModel()`.
+
+7. **R7 - Audit Trail**: Each step records what was actually observed at replay time.
+
+## Outcomes
+
+- **`completed`**: All steps ran successfully
+- **`halted`**: A step can't proceed right now (pending nodes, failed preconditions) but might work later
+- **`unreplayable`**: The trace can never be replayed as recorded (missing nodes, ambiguous selectors)
+
+The implementation stops processing when it encounters an unreplayable or halted condition to avoid taking irreversible actions in incorrect states.

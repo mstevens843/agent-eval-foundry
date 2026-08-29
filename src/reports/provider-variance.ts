@@ -305,8 +305,11 @@ export function renderProviderVariance(input: ProviderVarianceInput): string {
       "|---|---:|---:|---:|---:|---:|---:|---|",
       ...f.curve.providers.map(providerRow),
       "",
-      f.curve.underpowered && f.curve.totalCounted > 0 ? `_${underpoweredCaveat(f.curve.totalCounted)}_` : "",
-      "",
+      // The caveat disappears once a family crosses the threshold, so it is spread rather than
+      // emitted as an empty string — an empty entry leaves a stray blank line behind it.
+      ...(f.curve.underpowered && f.curve.totalCounted > 0
+        ? [`_${underpoweredCaveat(f.curve.totalCounted)}_`, ""]
+        : []),
       ...(f.curve.providers.filter((p) => p.checks.length > 0).length === 0
         ? []
         : [

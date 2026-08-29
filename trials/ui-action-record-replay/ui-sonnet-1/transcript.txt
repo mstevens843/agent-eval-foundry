@@ -1,0 +1,16 @@
+I'm unable to delete those scratch files in this sandbox (the `rm` calls are being denied and I shouldn't keep retrying). The important deliverable is in place and verified: **`submission/subject.mjs`** is written and correctly handles all three worked examples plus edge cases I tested (pending regions, precondition mismatches, suppressed confirmations, ambiguous selectors, and idempotent replay even when the target node disappears after firing).
+
+Two leftover scratch files remain in `submission/` from my own testing (not part of the answer — I used them to simulate the app facade and verify behavior against the examples):
+- `submission/_test_harness.mjs`
+- `submission/_test_edge.mjs`
+
+Please delete them manually, or re-run the `rm` command yourself if your permission settings block it from me.
+
+**Summary of the implementation** (`submission/subject.mjs`):
+- Resolves every step's selector live via `app.query()`, never trusting `recordedNodeId` (R1).
+- Reads preconditions live via `app.attr()` before running each step; a mismatch halts with `PRECONDITION_NOT_MET` (R2).
+- Distinguishes `unreplayable` (node genuinely gone / ambiguous — `SELECTOR_UNRESOLVED`, `SELECTOR_AMBIGUOUS`) from `halted` (region still loading — `REGION_PENDING`; confirmation not yet shown — `CONFIRMATION_NOT_OBSERVED`), matching the "try later" vs. "re-record" distinction in SPEC.md.
+- Requires an observed-and-accepted confirmation for any target with `data-opens-confirmation` (or an explicit `confirm` step) before considering the step done (R4).
+- Keeps a module-level set of `${traceId}::${stepIndex}` for irreversible steps that already fired, so a second `replay()` call on the same trace skips re-invoking the mutating action entirely — verified this doesn't throw even if the target node is later removed (R5).
+- Never calls `app.askModel` (R6).
+- Every step audit reports the live-resolved node id, the observed pre/postcondition, and a named halt reason when applicable (R7).

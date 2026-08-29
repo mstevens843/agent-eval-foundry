@@ -1,6 +1,6 @@
 # The ship gate
 
-20 gates, 14 of them blocking. A family ships when every blocking gate
+21 gates, 14 of them blocking. A family ships when every blocking gate
 passes; there is no score, no weighting and no override. This document is generated from the gate
 definitions themselves, so a gate that exists in the code cannot be missing here.
 
@@ -36,6 +36,7 @@ An advisory gate is one where a reasonable author might disagree. Reported, neve
 | `shared-bank-ready` | Have enough subjects attempted this family AND another, so cross-family axes are measurable? | 0 | 3 | 10 |
 | `deterministic-reports` | Do this family's reports regenerate byte-identically? | 3 | 0 | 10 |
 | `trial-ready` | Can a real agent actually be run against this family today? | 3 | 0 | 10 |
+| `agent-axes-independent` | Do the counted agents fail in more than one direction, or do their failure sets nest? | 1 | 1 | 11 |
 | `priced` | Is the build cost recorded? | 13 | 0 | 0 |
 
 ## Which gates have actually stopped something
@@ -47,6 +48,7 @@ fail. These are the ones that currently reject at least one family:
 |---|---|---|---|
 | `shared-bank-ready` | no | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` | Axis counts across disjoint banks add by construction and mean nothing. Only shared subjects make 'did the same implementation fail both?' a question with an answer. |
 | `difficulty-evidenced` | yes | `audit-truth-financial-workflow`, `browser-action-replay`, `deployment-rollback-partial-effects`, `model-alias-drift-sentinel`, `permission-boundary-tools`, `prompt-injection-approval-scope-drift`, `prompt-injection-capability-routing`, `prompt-injection-cross-tool-escalation`, `stale-crm-ticket-automation` | A measured axis count against a bank of hand-written mutants proves the VERIFIER discriminates. It says nothing about whether the family is hard, because nothing that could plausibly fail it has attempted it. This gate was added after the second family scored four measured axes with zero agent trials and would otherwise have been marked SHIP. It is BLOCKING as of the campaign layer: with a trial router and a runnable challenge package for every built family, 'nobody has tried it' stopped being a fact about the tooling and became a decision not to look. |
+| `agent-axes-independent` | no | `ui-action-record-replay` | The measured-axes gate counts axes over the MUTANT bank: a statement about what the verifier detects, bounded by how many known-bad implementations the author wrote. This one counts axes over real agents, and the two can disagree sharply. If every subject's failure set nests inside the next, the family separates subjects perfectly and measures ONE thing at several sensitivities — and no additional subject can change that, because a chain stays a chain. Advisory rather than blocking: a one-axis family is a legitimate benchmark component, and the cost of pretending otherwise would be killing useful families. What it must not do is read as breadth. The UI family scores six mutant axes, one agent axis, and five counted trials across four subjects and two labs whose failure counts are 33, 46, 62, 62 and 90 — five different numbers that are one measurement. |
 | `not-already-solved` | yes | `prompt-injection-containment` | A family every model solves measures nothing, and `already-solved` was the single most common cause of death in the source project's kill log — four of nine gated mechanisms. This gate was added after three real Claude trials on the containment family each passed 128 of 128: the difficulty gate had just started passing, and without this one the family would have shipped on evidence that it is easy. |
 
 **9 gate(s) pass for every family and have never rejected anything here:**
@@ -360,11 +362,11 @@ In-process isolation is sufficient for code this repository wrote and insufficie
 | `permission-boundary-tools` | n/a | family not built |
 | `prompt-injection-approval-scope-drift` | n/a | family not built |
 | `prompt-injection-capability-routing` | n/a | family not built |
-| `prompt-injection-containment` | pass | subprocess with 4 agent trial(s) |
+| `prompt-injection-containment` | pass | subprocess with 6 agent trial(s) |
 | `prompt-injection-cross-tool-escalation` | n/a | family not built |
-| `prompt-injection-memory-poisoning` | pass | subprocess with 6 agent trial(s) |
+| `prompt-injection-memory-poisoning` | pass | subprocess with 8 agent trial(s) |
 | `stale-crm-ticket-automation` | n/a | family not built |
-| `ui-action-record-replay` | pass | subprocess with 3 agent trial(s) |
+| `ui-action-record-replay` | pass | subprocess with 5 agent trial(s) |
 
 ### `shared-bank-ready` — advisory
 
@@ -448,11 +450,33 @@ A measured axis count against a bank of hand-written mutants proves the VERIFIER
 | `permission-boundary-tools` | fail | no counted agent trials |
 | `prompt-injection-approval-scope-drift` | fail | no counted agent trials |
 | `prompt-injection-capability-routing` | fail | no counted agent trials |
-| `prompt-injection-containment` | pass | 4 counted agent trial(s) |
+| `prompt-injection-containment` | pass | 6 counted agent trial(s) |
 | `prompt-injection-cross-tool-escalation` | fail | no counted agent trials |
-| `prompt-injection-memory-poisoning` | pass | 6 counted agent trial(s) |
+| `prompt-injection-memory-poisoning` | pass | 8 counted agent trial(s) |
 | `stale-crm-ticket-automation` | fail | no counted agent trials |
-| `ui-action-record-replay` | pass | 3 counted agent trial(s) |
+| `ui-action-record-replay` | pass | 5 counted agent trial(s) |
+
+### `agent-axes-independent` — advisory
+
+**Do the counted agents fail in more than one direction, or do their failure sets nest?**
+
+The measured-axes gate counts axes over the MUTANT bank: a statement about what the verifier detects, bounded by how many known-bad implementations the author wrote. This one counts axes over real agents, and the two can disagree sharply. If every subject's failure set nests inside the next, the family separates subjects perfectly and measures ONE thing at several sensitivities — and no additional subject can change that, because a chain stays a chain. Advisory rather than blocking: a one-axis family is a legitimate benchmark component, and the cost of pretending otherwise would be killing useful families. What it must not do is read as breadth. The UI family scores six mutant axes, one agent axis, and five counted trials across four subjects and two labs whose failure counts are 33, 46, 62, 62 and 90 — five different numbers that are one measurement.
+
+| family | verdict | detail |
+|---|---|---|
+| `audit-truth-financial-workflow` | n/a | family not built |
+| `browser-action-replay` | n/a | family not built |
+| `deployment-rollback-partial-effects` | n/a | family not built |
+| `durable-approval-outbox` | n/a | family not built |
+| `model-alias-drift-sentinel` | n/a | family not built |
+| `permission-boundary-tools` | n/a | family not built |
+| `prompt-injection-approval-scope-drift` | n/a | family not built |
+| `prompt-injection-capability-routing` | n/a | family not built |
+| `prompt-injection-containment` | n/a | no counted agent trial has failed anything yet |
+| `prompt-injection-cross-tool-escalation` | n/a | family not built |
+| `prompt-injection-memory-poisoning` | pass | counted subjects fail in more than one direction (>= 2 difficulty axes) |
+| `stale-crm-ticket-automation` | n/a | family not built |
+| `ui-action-record-replay` | fail | every counted subject's failures nest (claude-opus-5 ⊂ claude-haiku-4-5 ⊂ claude-sonnet-5 ⊂ gpt-5.6-sol); one difficulty axis however many subjects attempt it. Only new scenarios with a genuine trade-off can raise it — see reports/scenario-diversity-report.md |
 
 ### `not-already-solved` — **blocking**
 
@@ -470,11 +494,11 @@ A family every model solves measures nothing, and `already-solved` was the singl
 | `permission-boundary-tools` | n/a | no counted agent trials yet |
 | `prompt-injection-approval-scope-drift` | n/a | no counted agent trials yet |
 | `prompt-injection-capability-routing` | n/a | no counted agent trials yet |
-| `prompt-injection-containment` | fail | all 4 counted trial(s) passed every scenario — the family is already-solved |
+| `prompt-injection-containment` | fail | all 6 counted trial(s) passed every scenario — the family is already-solved |
 | `prompt-injection-cross-tool-escalation` | n/a | no counted agent trials yet |
-| `prompt-injection-memory-poisoning` | pass | 3 of 6 counted trial(s) failed at least one scenario |
+| `prompt-injection-memory-poisoning` | pass | 5 of 8 counted trial(s) failed at least one scenario |
 | `stale-crm-ticket-automation` | n/a | no counted agent trials yet |
-| `ui-action-record-replay` | pass | 3 of 3 counted trial(s) failed at least one scenario |
+| `ui-action-record-replay` | pass | 5 of 5 counted trial(s) failed at least one scenario |
 
 ### `priced` — advisory
 

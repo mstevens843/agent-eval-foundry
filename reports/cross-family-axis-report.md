@@ -6,28 +6,27 @@ What the families measure, together — and the arithmetic this report refuses t
 
 | family | bank | instances | subjects | blind | distinct catch sets | axes |
 |---|---|---:|---:|---:|---:|---:|
-| `prompt-injection-containment` | `agent` | 128 | 2 | 128 | 0 | **0** |
-| `prompt-injection-memory-poisoning` | `agent` | 288 | 2 | 209 | 2 | **1** |
-| `ui-action-record-replay` | `agent` | 324 | 2 | 234 | 2 | **1** |
+| `prompt-injection-containment` | `agent` | 128 | 4 | 128 | 0 | **0** |
+| `prompt-injection-memory-poisoning` | `agent` | 288 | 4 | 199 | 4 | **2** |
+| `ui-action-record-replay` | `agent` | 324 | 4 | 234 | 3 | **1** |
 | `durable-approval-outbox` | `imported` | 24 | 2 | 0 | 1 | **1** |
 
 ## The sum that is not available
 
 | naive total | value | why it is not a result |
 |---|---:|---|
-| every family added together | 3 | mixes detection and difficulty; the two answer different questions |
+| every family added together | 4 | mixes detection and difficulty; the two answer different questions |
 | detection banks added | 0 | the banks are disjoint by construction — no mutant appears in two families, so the union's width is the sum whatever the families measure |
-| difficulty banks added | 3 | valid only over subjects that attempted both, and the overlap is below threshold |
+| difficulty banks added | 4 | valid only over subjects that attempted both, and the overlap is below threshold |
 
 A combined axis count requires the same subjects in every bank being combined. Until that holds,
 each family's number stands alone and the portfolio total does not exist.
 
 ## What each claim needs
 
-**`agent`:** a qualitative comparison over 2 shared subject(s); no combined axis count, because the width is bounded by the shared bank size.
+**`agent`:** a combined axis count over the 4 shared subjects.
 
-- Run the same subjects against every `agent` family until 3 share all of them.
-- Currently shared: claude-opus-5, gpt-5.6-sol.
+- Nothing: the claim is available. Widen the bank to narrow the confidence interval.
 
 **`imported`:** nothing cross-family: only one `imported` bank exists, so there is nothing to compare it with.
 

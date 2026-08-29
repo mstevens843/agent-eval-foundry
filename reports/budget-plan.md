@@ -105,8 +105,8 @@ records this repository holds rather than from an estimate.
 | spend on runs that produced a counted result | $215.60 |
 | spend on standard attempts that produced nothing | $27.92 |
 | **effective $ per counted run** | **$12.63** |
-| counted agent trials on the second family | 4 |
-| median runtime of those trials | 340s |
+| counted agent trials on the second family | 6 |
+| median runtime of those trials | 326s |
 
 ### The waste rate
 
@@ -145,12 +145,12 @@ trial directories rather than assumed.
 | slots planned | 11 |
 | slots run | 9 |
 | slots **not run** | 1 |
-| counted trials | 9 |
-| of those, failing something | 6 |
+| counted trials | 13 |
+| of those, failing something | 10 |
 | superseded by a challenge repair | 3 |
-| median counted-trial runtime | 8.4 min |
+| median counted-trial runtime | 7.9 min |
 | budget declared across campaigns | $22.00 |
-| **budget per counted failure** | $3.67 |
+| **budget per counted failure** | $2.20 |
 
 ### The line item nobody budgets for
 
@@ -176,17 +176,17 @@ not counted now: the family they measured was repaired.
 
 | provider | counted | of those failed | refused | infra | superseded | model-minutes |
 |---|---:|---:|---:|---:|---:|---:|
-| `anthropic` | 8 | 3 | 0 | 0 | 3 | 101 |
+| `anthropic` | 14 | 7 | 0 | 0 | 3 | 122 |
 | `google` | 0 | 0 | 0 | 1 | 0 | 0 |
 | `openai` | 5 | 3 | 0 | 0 | 0 | 34 |
 
 | | |
 |---|---:|
-| runs attempted | 17 |
-| counted | 13 |
-| **produced no usable evidence** | **4** (24%) |
+| runs attempted | 23 |
+| counted | 19 |
+| **produced no usable evidence** | **4** (17%) |
 | at $3.50 per run, spend on runs that produced nothing | $14.00 |
-| **cost per counted FAILURE** | $9.92 |
+| **cost per counted FAILURE** | $8.05 |
 
 **Cost per counted failure is the number to plan against.** A counted solve tells you the family
 is solvable, which the reference already told you. A counted failure is the only kind of trial

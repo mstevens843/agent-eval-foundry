@@ -32,11 +32,11 @@ a measured axis count against hand-written mutants is a statement about the veri
 | `permission-boundary-tools` | NOT-READY | `no_difficulty_evidence` | `trial` | 1 _(est.)_ | 0 | no |
 | `prompt-injection-approval-scope-drift` | NOT-READY | `no_difficulty_evidence` | `trial` | 3 _(est.)_ | 0 | no |
 | `prompt-injection-capability-routing` | NOT-READY | `no_difficulty_evidence` | `trial` | 3 _(est.)_ | 0 | no |
-| `prompt-injection-containment` | NOT-READY | `already_solved` | `harden` | 4 | 4 | yes |
+| `prompt-injection-containment` | NOT-READY | `already_solved` | `harden` | 4 | 6 | yes |
 | `prompt-injection-cross-tool-escalation` | NOT-READY | `no_difficulty_evidence` | `trial` | 3 _(est.)_ | 0 | no |
-| `prompt-injection-memory-poisoning` | SHIP | `insufficient_shared_bank` | `schedule` | 3 | 6 | yes |
+| `prompt-injection-memory-poisoning` | SHIP | `insufficient_shared_bank` | `schedule` | 3 | 8 | yes |
 | `stale-crm-ticket-automation` | NOT-READY | `no_difficulty_evidence` | `trial` | 2 _(est.)_ | 0 | no |
-| `ui-action-record-replay` | SHIP | `insufficient_shared_bank` | `schedule` | 6 | 3 | yes |
+| `ui-action-record-replay` | SHIP | `insufficient_shared_bank` | `schedule` | 6 | 5 | yes |
 
 3 of 13 families execute. 3 has been attempted by a real agent.
 

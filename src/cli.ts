@@ -27,7 +27,18 @@ import {
   generateScenarios,
   selectMeasuredSet,
 } from "./families/prompt-injection-containment/scenarios.js";
-import { BUILT_FAMILIES, BUILT_FAMILY_IDS, builtFamily, scenarioSetIdFor } from "./families/registry.js";
+import {
+  BUILT_FAMILIES,
+  BUILT_FAMILY_IDS,
+  REALISM_LEVELS,
+  REALISM_MEANING,
+  builtFamily,
+  scenarioSetIdFor,
+} from "./families/registry.js";
+import * as liveMutants from "./families/ui-replay-live-dom/mutants.js";
+import * as liveDom from "./families/ui-replay-live-dom/runner.js";
+import * as liveScenarios from "./families/ui-replay-live-dom/scenarios.js";
+import * as liveVerify from "./families/ui-replay-live-dom/verify.js";
 import { assertBudgetInputs, assertPlanHonest } from "./foundry/budget-check.js";
 import { MEASURED_DEFAULTS, planBudget } from "./foundry/budget.js";
 import { assertLedgerConsistency, assertPostmortemExists } from "./foundry/consistency.js";
@@ -44,6 +55,7 @@ import { parseTaskShape } from "./foundry/validate.js";
 import { MatrixError, parseMatrix } from "./matrix.js";
 import { renderReport } from "./report.js";
 import { analyseFamilyTrials } from "./reports/agent-results.js";
+import { type CombinedResult, renderBankCompletion } from "./reports/bank-completion-report.js";
 import { renderHistoricalReport, renderSharedBankReport } from "./reports/bank-report.js";
 import {
   renderSharedBankReport as renderBankReport,
@@ -51,8 +63,10 @@ import {
 } from "./reports/bank-reports.js";
 import { renderBudgetReport } from "./reports/budget-report.js";
 import { renderAgentResults, renderCampaignReport } from "./reports/campaign-report.js";
+import { analyseChain, diversityTargets } from "./reports/chain-analysis.js";
 import { diagnose, renderDiagnoses } from "./reports/diagnosis.js";
 import { computeCurve } from "./reports/difficulty.js";
+import { type AxisProposal, renderDiversityUpgrade } from "./reports/diversity-upgrade.js";
 import {
   MEMORY_FAMILY,
   OUTBOX_FAMILY,
@@ -74,24 +88,46 @@ import { renderGateReport } from "./reports/gate-report.js";
 import { renderKillReport } from "./reports/kill-report.js";
 import { renderFamilyDiversityReport, renderLedgerReport } from "./reports/ledger-report.js";
 import { renderLifecycleReport } from "./reports/lifecycle-report.js";
+import { renderLiveDom } from "./reports/live-dom-report.js";
 import { renderOrchestrationReport } from "./reports/orchestration-report.js";
 import { describeArtifact, renderProviderVariance } from "./reports/provider-variance.js";
 import { renderMechanismReport, renderMutantReport } from "./reports/registry-report.js";
+import { renderSelfCheckBehavior } from "./reports/self-check-report.js";
+import { profileRun } from "./reports/self-check.js";
 import { renderShapeReport } from "./reports/shape-report.js";
 import { measuredCells, renderSharedDifficultyBank } from "./reports/shared-difficulty.js";
 import { renderShipReport } from "./reports/ship-report.js";
+import { qualityOf, renderSubmissionQuality } from "./reports/submission-quality.js";
+import { renderStaleEvidenceRegression, renderThirdSubjectCampaign } from "./reports/third-subject-report.js";
 import { computeEvidence, renderTrialReadinessReport } from "./reports/trial-report.js";
 import { renderUiUpgradeReport } from "./reports/ui-upgrade-report.js";
 import { SOURCES, getSource } from "./sources/index.js";
 import { buildAgentBank } from "./trials/agent-bank.js";
-import { crossFamilyClaims, kindedBank, normalizeSubjectId } from "./trials/bank.js";
-import { computeOverlap } from "./trials/bank.js";
+import { type BankCompletion, assertCombinedWidthAllowed, bankCompletion } from "./trials/bank-completion.js";
+import {
+  combinedMatrixFor,
+  computeOverlap,
+  crossFamilyClaims,
+  kindedBank,
+  normalizeSubjectId,
+} from "./trials/bank.js";
 import { reconcile, runCampaign } from "./trials/campaign-run.js";
 import { assertCampaignSubcommand, loadCampaign, loadCampaigns, progressOf } from "./trials/campaign.js";
 import { prepareProviderBundle, readImportedBundle } from "./trials/cross-provider.js";
-import { readFamilyTrials, readTrialDirectory, writeTrialDirectory } from "./trials/directory.js";
+import {
+  type TrialDirectory,
+  readFamilyTrials,
+  readTrialDirectory,
+  writeTrialDirectory,
+} from "./trials/directory.js";
 import { type EvidenceState, evidenceLedger } from "./trials/evidence-lifecycle.js";
 import { importDurableOutboxHistory } from "./trials/history.js";
+import {
+  MIGRATIONS,
+  assertMigrationAccountsForLosses,
+  assertMigrationDeclared,
+  assertStaleRunsLabelled,
+} from "./trials/migration.js";
 import { importAgentTrials, measuredScenarios, runLocalTrials, scenarioSetId } from "./trials/orchestrate.js";
 import { decideCountability } from "./trials/orchestrator.js";
 import { PROVIDERS as PROVIDER_FAMILIES_LIST, checkAllProviders } from "./trials/provider-registry.js";
@@ -1003,6 +1039,344 @@ function familyChallenge(argv: readonly string[], root: string): string {
   ].join("\n");
 }
 
+/**
+ * One completion picture per bank kind.
+ *
+ * Grouped by kind first because the kind decides which QUESTION is being asked — difficulty or
+ * detection — and a completion that mixed them would produce a work list for a number nobody should
+ * compute.
+ */
+function completionsFor(
+  banks: readonly ReturnType<typeof kindedBank>[],
+  allTrials: readonly { familyId: string; trial: TrialDirectory }[],
+  evidenceState: ReadonlyMap<string, EvidenceState>,
+): readonly BankCompletion[] {
+  const trials = allTrials
+    .filter(({ trial }) => trial.record.subjectType === "agent")
+    .map(({ familyId, trial }) => ({
+      familyId,
+      runId: trial.runId,
+      subjectId: normalizeSubjectId(trial.record.subjectId),
+      state: evidenceState.get(trial.runId) ?? ("not-run" as EvidenceState),
+      scenarioSetId: trial.record.scenarioSetId,
+      countsReason: trial.record.countsReason,
+    }));
+
+  const kinds = [...new Set(banks.map((b) => b.kind))].sort();
+  return kinds.map((kind) =>
+    bankCompletion({
+      banks: banks.filter((b) => b.kind === kind),
+      trials: trials.filter((t) => banks.some((b) => b.kind === kind && b.familyId === t.familyId)),
+    }),
+  );
+}
+
+/**
+ * The one run on record that shipped its own checker, for contrast in the self-check report.
+ *
+ * From the source project rather than from this repository, and labelled that way everywhere it
+ * appears. It is the reason the self-check analysis exists: the most thoroughly self-verified
+ * implementation anyone has measured still failed, and it failed on a state its own generator never
+ * produced.
+ */
+const HISTORICAL_SELF_CHECK = {
+  label: "`cc267-claude-1` (Klavis durable-outbox, Claude Opus)",
+  built: [
+    "a `LEGAL` transition table encoding which audit edges are permitted, independently derived",
+    "a fuzzer generating schedules and seeds beyond the ones the task shipped",
+    "mutation tests against its own checker — deliberately breaking its implementation to confirm the checker noticed",
+    "900/900 clean on its own suite before submitting",
+  ],
+  outcome:
+    "reward 0. It avoided the `ACKED -> REVOKED` bug that caught five of six frontier trials — its legality table excluded that edge — and failed liveness instead, stranding an action in `IN_DOUBT` forever. Its checker could express the rule; its generator never reached the state where the rule bit.",
+} as const;
+
+/**
+ * Where each built family's harness sits on the realism ladder, and what the next rung would buy.
+ *
+ * A single command, because "how real is this?" is the question a reviewer asks first and the one a
+ * benchmark is most tempted to answer generously. The level is a field on the family rather than
+ * prose in a report, and it is deliberately kept OUT of the challenge package: relabelling a harness
+ * must never change the hash, or an honesty improvement would invalidate the evidence that motivated
+ * it.
+ */
+function realismCommand(): string {
+  return [
+    "realism ladder",
+    "",
+    ...REALISM_LEVELS.map((l) => `  ${l.padEnd(16)} ${REALISM_MEANING[l]}`),
+    "",
+    "per family",
+    "",
+    ...BUILT_FAMILIES.flatMap((f) => [
+      `  ${f.id}`,
+      `    level  ${f.realism}`,
+      `    gap    ${f.realismGap}`,
+      "",
+    ]),
+    "Browser-backed is NOT implemented for any family. What it would cost, measured rather than",
+    "guessed: no Playwright browser is cached on this machine, a browser launch per scenario against a",
+    "324-scenario sweep is minutes not seconds, and the dependency would end this repository's",
+    "zero-runtime-dependency property — which is load-bearing for a project whose pitch is that a",
+    "reviewer can audit it. What it would BUY is real layout, real event dispatch and real CSS",
+    "matching. None of those is what these families measure, so the trade is currently refused and",
+    "the refusal is recorded here rather than left as silence.",
+    "",
+  ].join("\n");
+}
+
+/**
+ * Every routable family's trials with their lifecycle state, computed once.
+ *
+ * Extracted so the `all` command and the individual query subcommands cannot drift: a subcommand
+ * that recomputed evidence state its own way would eventually disagree with the report, and the
+ * disagreement would be invisible until someone compared them by hand.
+ */
+function analysisBase(root: string) {
+  const routable = ROUTABLE_FAMILY_IDS.filter((id) => BUILT_FAMILY_IDS.includes(id));
+  const allTrials = [...routable, OUTBOX_FAMILY].flatMap((familyId) =>
+    readFamilyTrials(join(root, "trials"), familyId).map((t) => ({ familyId, trial: t })),
+  );
+  const ledgers = routable.map((familyId) =>
+    evidenceLedger(
+      familyId,
+      prepareChallenge(root, familyId).hash,
+      readFamilyTrials(join(root, "trials"), familyId),
+    ),
+  );
+  const evidenceState = new Map<string, EvidenceState>();
+  for (const ledger of ledgers) {
+    for (const entry of ledger.entries) evidenceState.set(entry.runId, entry.state);
+  }
+  return { routable, allTrials, ledgers, evidenceState };
+}
+
+const readIfPresent = (file: string): string | null => (existsSync(file) ? readFileSync(file, "utf8") : null);
+
+/** Self-check profiles for every agent trial on disk. */
+function selfCheckProfilesFor(base: ReturnType<typeof analysisBase>) {
+  return base.allTrials
+    .filter(({ trial }) => trial.record.subjectType === "agent")
+    .map(({ familyId, trial }) =>
+      profileRun({
+        runId: trial.runId,
+        familyId,
+        subjectId: normalizeSubjectId(trial.record.subjectId),
+        providerFamily: (trial.record.model ?? "unknown").split("/")[0] ?? "unknown",
+        state: base.evidenceState.get(trial.runId) ?? "not-run",
+        scenariosFailed: trial.record.cells.filter((c) => c.failed.length > 0).length,
+        submissionFiles: trial.submissionFiles.flatMap((name) => {
+          const source = readIfPresent(join(trial.path, "submission", name));
+          return source === null ? [] : [{ name, source }];
+        }),
+        transcript: readIfPresent(join(trial.path, "transcript.txt")),
+      }),
+    );
+}
+
+/** Structured submission-quality rows for every agent trial on disk. */
+function qualityRowsFor(
+  base: ReturnType<typeof analysisBase>,
+  profiles: ReturnType<typeof selfCheckProfilesFor>,
+) {
+  return base.allTrials
+    .filter(({ trial }) => trial.record.subjectType === "agent")
+    .map(({ familyId, trial }) =>
+      qualityOf({
+        runId: trial.runId,
+        familyId,
+        subjectId: normalizeSubjectId(trial.record.subjectId),
+        providerFamily: (trial.record.model ?? "unknown").split("/")[0] ?? "unknown",
+        state: base.evidenceState.get(trial.runId) ?? "not-run",
+        submissionFiles: trial.submissionFiles,
+        // The graded artifact specifically. Line counts and rule citations describe the
+        // implementation; reading a checker the model happened to ship beside it would describe
+        // something else under the same column heading.
+        source: readIfPresent(join(trial.path, "submission", "subject.mjs")),
+        transcript: readIfPresent(join(trial.path, "transcript.txt")),
+        ruleCodes: BUILT_FAMILY_IDS.includes(familyId) ? builtFamily(familyId).ruleCodes : [],
+        scenariosGraded: trial.record.cells.length,
+        scenariosFailed: trial.record.cells.filter((c) => c.failed.length > 0).length,
+        checksFailed: [...new Set(trial.record.cells.flatMap((c) => c.failed))],
+        runtimeSeconds: trial.record.runtimeSeconds,
+        costUsd: trial.record.costUsd,
+        selfCheck: profiles.find((sp) => sp.runId === trial.runId) ?? null,
+      }),
+    );
+}
+
+/**
+ * Per-subject failure sets for one family, from COUNTED trials only.
+ *
+ * A superseded run measures a task that no longer exists. Letting one into a chain would either
+ * invent an incomparable pair or hide a real one, and both are wrong in the direction that flatters.
+ */
+function subjectFailuresFor(
+  root: string,
+  familyId: string,
+  evidenceState: ReadonlyMap<string, EvidenceState>,
+) {
+  const bySubject = new Map<string, { failed: Set<string>; providerFamily: string; graded: number }>();
+  for (const trial of readFamilyTrials(join(root, "trials"), familyId)) {
+    if (trial.record.subjectType !== "agent") continue;
+    if ((evidenceState.get(trial.runId) ?? "not-run") !== "counted") continue;
+    const id = normalizeSubjectId(trial.record.subjectId);
+    const entry = bySubject.get(id) ?? {
+      failed: new Set<string>(),
+      providerFamily: (trial.record.model ?? "unknown").split("/")[0] ?? "unknown",
+      graded: 0,
+    };
+    for (const cell of trial.record.cells) if (cell.failed.length > 0) entry.failed.add(cell.scenarioId);
+    entry.graded += trial.record.cells.length;
+    bySubject.set(id, entry);
+  }
+  return [...bySubject.entries()].map(([subjectId, v]) => ({
+    subjectId,
+    providerFamily: v.providerFamily,
+    failed: v.failed as ReadonlySet<string>,
+    graded: v.graded,
+  }));
+}
+
+/**
+ * What the descendant's harness does that the parent's could not.
+ *
+ * Written by hand and checked against the code rather than generated: "is this more realistic" is a
+ * judgement, and a table of judgements with the parent's behaviour beside each one is auditable in a
+ * way a claim of realism is not.
+ */
+const LIVE_DOM_GAINS: readonly { mechanic: string; parent: string; here: string }[] = [
+  {
+    mechanic: "tree mutability",
+    parent: "immutable; one mutable boolean for the confirmation dialog",
+    here: "acting changes the tree — regions mount late, get superseded, are removed, or are remounted under a new key",
+  },
+  {
+    mechanic: "selector drift",
+    parent: "`data-testid` only, and a mutation either renames it or does not",
+    here: "testids, semantic anchors and structural paths can disagree, and the scenario decides which survives",
+  },
+  {
+    mechanic: "disabled / enabled",
+    parent: "attributes are static",
+    here: "controls arm and disarm as a consequence of earlier steps, so a precondition can be satisfied later than it was recorded",
+  },
+  {
+    mechanic: "asynchrony",
+    parent: "`pending` is a string test on whether the selector contains 'async'",
+    here: "a settle budget with regions that resolve after a stated number of observations — the source of the strict-vs-patient trade-off",
+  },
+  {
+    mechanic: "stale state",
+    parent: "none; the tree a step sees is the tree every step sees",
+    here: "an earlier step's effect can invalidate a later step's recorded precondition mid-replay",
+  },
+  {
+    mechanic: "honest vs misleading busy signals",
+    parent: "none",
+    here: "`aria-busy` can lie, so 'wait until it settles' is not a free strategy",
+  },
+];
+
+/**
+ * The trials executed to close the shared difficulty bank.
+ *
+ * Named rather than derived. "Which runs were part of the campaign" is a statement about intent, and
+ * inferring it from file timestamps would silently absorb any trial that happened to land nearby —
+ * which is exactly the kind of quiet scope creep that makes a cost figure untrustworthy.
+ */
+const THIRD_SUBJECT_RUNS: readonly string[] = [
+  "mp-sonnet-1",
+  "ui-sonnet-1",
+  "mp-haiku-1",
+  "ui-haiku-1",
+  "pic-sonnet-1",
+  "pic-haiku-1",
+];
+
+/** What each stale-evidence guard refuses, and the instance that motivated it. */
+const STALE_EVIDENCE_GUARDS: readonly { code: string; what: string; caught: string }[] = [
+  {
+    code: "MIGRATION_UNDECLARED",
+    what: "a family whose hash moved with no record naming both hashes",
+    caught:
+      "nothing yet — it is the tripwire for the next repair, and it is the one that makes a repair distinguishable from a spec quietly reworded until the failures stopped",
+  },
+  {
+    code: "MIGRATION_UNREASONED",
+    what: "a migration record whose reason is too short to teach the next family anything",
+    caught: "nothing yet; exercised by a test rather than by a checked-in bad record",
+  },
+  {
+    code: "MIGRATION_LOSSES_UNRECORDED",
+    what: "a migration that does not name every trial it invalidated",
+    caught: "nothing yet — an undercounted cost reads as a cheaper repair than it was",
+  },
+  {
+    code: "REPORT_STALE_UNLABELLED",
+    what: "a rendered report that names an invalidated run without saying so in its section, or that calls one counted on its own line",
+    caught:
+      "**three real instances on its first run** — a campaign report, the self-check behaviour table, and the self-check report's quoted-evidence section, two of which were written in the same session that added the guard",
+  },
+  {
+    code: "EVIDENCE_STALE_COUNTED",
+    what: "a superseded run appearing in a set some other code decided to count",
+    caught: "the original bug, in the provider-variance artifact table",
+  },
+  {
+    code: "CHAIN_QUOTED_AS_BREADTH",
+    what: "a family whose subjects' failure sets are totally ordered reporting more than one difficulty axis",
+    caught: "the UI family, which scores six mutant-detection axes and one agent-difficulty axis",
+  },
+];
+
+/**
+ * Scenario axes proposed for a family whose subjects' failure sets form a chain.
+ *
+ * Each one names the disposition that wins today and says why it LOSES here, because that is the
+ * only thing that makes a new axis rather than a new sensitivity. A proposal that cannot answer
+ * "what does the current winner get wrong?" would extend the chain, not break it.
+ *
+ * Written by hand rather than generated: the evolution engine's operators change a family's
+ * structure, and choosing which trade-off a family should contain is a design judgement with an
+ * argument attached. The argument is the point, so it is in the table.
+ */
+const UI_AXIS_PROPOSALS: readonly AxisProposal[] = [
+  {
+    id: "settling-vs-bailing",
+    mechanism:
+      "A target that is unresolved at pre-flight and resolves later. The recording is valid; the page is merely not ready yet.",
+    currentWinner:
+      "the strict pre-flight replayer, which resolves every selector before acting and reports `unreplayable` on any miss. It wins every current scenario because a miss today always means the node is genuinely gone.",
+    whyItLoses:
+      "here the node arrives. Bailing reports `unreplayable` for a trace that was completable, which is a wrong answer rather than a cautious one — and it is the exact opposite of the mistake the current scenarios punish.",
+    newKnob: "settlesAfter (never | during-preflight | during-replay)",
+    risk: "`ambiguous_truth_source` — 'not yet' and 'not there' must be distinguishable from the published rules alone, or the family is unfair. The spec has to say what observation settles it.",
+  },
+  {
+    id: "ambiguity-resolution",
+    mechanism:
+      "A selector that matches more than one live node, where the recorded step carries a second anchor that disambiguates.",
+    currentWinner:
+      "the replayer that treats any non-unique match as unreplayable. Correct today, because no current scenario ships a second anchor.",
+    whyItLoses:
+      "the information needed to resolve it is present in the recorded step. Refusing is discarding evidence it was given, and a replayer that uses the second anchor completes correctly.",
+    newKnob: "anchors (testid-only | testid+role-name | conflicting)",
+    risk: "`already_solved` — using a second anchor may be obvious enough that every model does it. The `conflicting` value is what keeps it hard: when the anchors disagree, the rule for which wins must be published and non-obvious.",
+  },
+  {
+    id: "mid-replay-invalidation",
+    mechanism:
+      "An earlier step's effect invalidates a later step's recorded precondition, so the trace is internally stale by the time it reaches step 4.",
+    currentWinner:
+      "the replayer that resolves everything up front and then executes. Pre-flight is exactly what the current scenarios reward.",
+    whyItLoses:
+      "pre-flight state is stale by step 4. Only a replayer that re-observes between steps sees the change, and the pre-flight one either acts on a vanished node or halts on a precondition that is legitimately satisfied now.",
+    newKnob: "invalidatedBy (none | own-effect | sibling-step)",
+    risk: "`no_mechanism_fire` — the invalidating effect has to be reachable in the measured set rather than only declared. The knob-coverage assertion is what catches that, and it has caught it before.",
+  },
+];
+
 /** Every family's bank, tagged by kind, with the claims each kind licenses. */
 function bankInput(root: string, registry: ReturnType<typeof loadRegistry>) {
   const banks = BUILT_FAMILIES.map((f) => {
@@ -1127,9 +1501,14 @@ function allCommand(argv: readonly string[], root: string): string {
   const cov = coverage(registry);
   mkdirSync(dir, { recursive: true });
   const written: string[] = [];
+  // Text is kept alongside the filename so the stale-evidence guard can run over every report at the
+  // end. Checking the rendered OUTPUT is the only way to catch a new report that reads `record.counts`
+  // instead of the evidence ledger — which is exactly how an invalidated run became a headline once.
+  const rendered = new Map<string, string>();
   const write = (name: string, text: string) => {
     writeFileSync(join(dir, name), text, "utf8");
     written.push(name);
+    rendered.set(name, text);
   };
   write("mechanism-registry.md", renderMechanismReport(registry, cov));
   write("mutant-bank.md", renderMutantReport(registry, cov));
@@ -1296,6 +1675,174 @@ function allCommand(argv: readonly string[], root: string): string {
       }),
     );
 
+    // ---- self-check behaviour, submission quality, and shared-bank completion ------------------
+    //
+    // All three read the same artifacts, so they are built once and rendered three ways rather than
+    // re-walking the trial directories per report.
+    const base = analysisBase(root);
+    const allTrials = base.allTrials;
+    const selfCheckProfiles = selfCheckProfilesFor(base);
+    write(
+      "self-check-behavior-report.md",
+      renderSelfCheckBehavior({
+        profiles: selfCheckProfiles,
+        historicalContrast: HISTORICAL_SELF_CHECK,
+      }),
+    );
+
+    const qualityRows = qualityRowsFor(base, selfCheckProfiles);
+    write("provider-submission-quality-report.md", renderSubmissionQuality(qualityRows));
+
+    // Shared-bank completion, per bank kind, with the combined width computed only where the guard
+    // allows it. `assertCombinedWidthAllowed` is what makes the refusal a property of the code.
+    const completionBanks = bankInput(root, registry).banks;
+    const completions = completionsFor(completionBanks, allTrials, evidenceState);
+    const combinedResults = new Map<string, CombinedResult>();
+    for (const completion of completions) {
+      const group = completionBanks.filter((b) => b.kind === completion.kind);
+      try {
+        assertCombinedWidthAllowed(completion);
+        const overlap = computeOverlap(group);
+        const matrix = combinedMatrixFor(overlap);
+        const combinedMeasure = measure(matrix, { nullTrials: 5 });
+        combinedResults.set(completion.kind, {
+          perFamilyAxes: Object.fromEntries(
+            group.map((b) => [
+              b.familyId,
+              b.matrix.subjects.length > 1 ? measure(b.matrix, { nullTrials: 3 }).independentAxes : 0,
+            ]),
+          ),
+          combinedAxes: combinedMeasure.independentAxes,
+          sumOfParts: group.reduce(
+            (n, b) =>
+              n + (b.matrix.subjects.length > 1 ? measure(b.matrix, { nullTrials: 3 }).independentAxes : 0),
+            0,
+          ),
+          nullBaseline: combinedMeasure.nullBaseline?.meanWidth ?? null,
+          ceiling: combinedMeasure.nullBaseline?.ceiling ?? null,
+          instances: matrix.instances.length,
+          measuredCells: measuredCells(matrix),
+        });
+      } catch {
+        // Refused by the guard. The report renders the refusal and the exact blocker; a thrown
+        // error here would replace an explanation with a stack trace.
+      }
+    }
+    // Every PAIR of difficulty families, judged on its own. A group verdict is the minimum over its
+    // members, so one lagging family suppresses a real number two others already support.
+    const difficultyBanks = completionBanks.filter((b) => b.kind === "agent" || b.kind === "imported");
+    const pairs: { completion: BankCompletion; combined: CombinedResult | null }[] = [];
+    for (let i = 0; i < difficultyBanks.length; i += 1) {
+      for (let j = i + 1; j < difficultyBanks.length; j += 1) {
+        const a = difficultyBanks[i];
+        const b = difficultyBanks[j];
+        if (a === undefined || b === undefined) continue;
+        // Kinds are still never merged: an `agent` bank and an `imported` one grade at different
+        // fidelities, and `assertComparableKinds` refuses the pairing in code.
+        if (a.kind !== b.kind) continue;
+        const group = [a, b];
+        const completion = completionsFor(group, allTrials, evidenceState)[0];
+        if (completion === undefined) continue;
+        let combined: CombinedResult | null = null;
+        try {
+          assertCombinedWidthAllowed(completion);
+          const matrix = combinedMatrixFor(computeOverlap(group));
+          const m = measure(matrix, { nullTrials: 5 });
+          const parts = group.map((g) =>
+            g.matrix.subjects.length > 1 ? measure(g.matrix, { nullTrials: 3 }).independentAxes : 0,
+          );
+          combined = {
+            perFamilyAxes: Object.fromEntries(group.map((g, k) => [g.familyId, parts[k] ?? 0])),
+            combinedAxes: m.independentAxes,
+            sumOfParts: parts.reduce((x, y) => x + y, 0),
+            nullBaseline: m.nullBaseline?.meanWidth ?? null,
+            ceiling: m.nullBaseline?.ceiling ?? null,
+            instances: matrix.instances.length,
+            measuredCells: measuredCells(matrix),
+          };
+        } catch {
+          // Below threshold or incomparable. The row renders `refused` with the reason.
+        }
+        pairs.push({ completion, combined });
+      }
+    }
+    write(
+      "shared-bank-completion-report.md",
+      renderBankCompletion({ completions, combined: combinedResults, pairs }),
+    );
+
+    // ---- scenario diversity: do the subjects' failure sets nest? --------------------------------
+    //
+    // Computed from COUNTED trials only. A superseded run measures a task that no longer exists, and
+    // letting one into a chain would either invent an incomparable pair or hide a real one.
+    const chains = routable.map((familyId) =>
+      analyseChain(familyId, subjectFailuresFor(root, familyId, evidenceState)),
+    );
+    const targets = new Map(
+      chains
+        .filter((c) => c.subjects.length > 0)
+        .map((c) => [
+          c.familyId,
+          diversityTargets(
+            c.familyId,
+            subjectFailuresFor(root, c.familyId, evidenceState),
+            routeFor(c.familyId).scenarioParams(),
+          ),
+        ]),
+    );
+    // The descendant UI family. Not in BUILT_FAMILIES: it has no challenge package, so it is not
+    // trial-ready and registering it would make the `trial-ready` gate say otherwise.
+    {
+      const liveRun = liveDom.runFamily();
+      const liveMatrix = liveDom.toMatrix(liveRun);
+      const liveReport = measure(liveMatrix, { nullTrials: 3 });
+      const [strictId = "strict-bailer", patientId = "patient-waiter"] = liveMutants.DISPOSITION_SUBJECTS;
+      const strictSet = liveDom.catchSet(liveRun, strictId);
+      const patientSet = liveDom.catchSet(liveRun, patientId);
+      const shared = [...strictSet].filter((x) => patientSet.has(x)).length;
+      write(
+        "ui-replay-live-dom-report.md",
+        renderLiveDom({
+          familyId: "ui-replay-live-dom",
+          parentId: UI_FAMILY,
+          declaredPoints: liveScenarios.enumerateSpace().length,
+          measuredScenarios: liveMatrix.instances.length,
+          subjects: liveMatrix.subjects.length,
+          mutants: liveMutants.MUTANTS.length,
+          checks: [...liveVerify.CHECKS],
+          referenceFailures: liveDom.referenceFailures(liveRun).length,
+          axes: liveReport.independentAxes,
+          distinctCatchSets: liveReport.distinctMeasurements,
+          blindInstances: liveReport.blindInstances.length,
+          matrix: liveMatrix,
+          poles: {
+            strictId,
+            patientId,
+            strictFails: strictSet.size,
+            patientFails: patientSet.size,
+            shared,
+            relation: liveDom.relate(strictSet, patientSet, strictId, patientId).relation,
+            onlyStrict: strictSet.size - shared,
+            onlyPatient: patientSet.size - shared,
+          },
+          realism: "dom-like",
+          parentRealism: "simulated-tree",
+          gains: LIVE_DOM_GAINS,
+        }),
+      );
+    }
+
+    write(
+      "scenario-diversity-report.md",
+      renderDiversityUpgrade({
+        chains,
+        targets,
+        proposals: new Map(
+          chains.filter((c) => c.isChain).map((c) => [c.familyId, UI_AXIS_PROPOSALS] as const),
+        ),
+      }),
+    );
+
     // One diagnosis document per family with counted failures.
     for (const f of perFamily) {
       const params = routeFor(f.familyId).scenarioParams();
@@ -1323,6 +1870,67 @@ function allCommand(argv: readonly string[], root: string): string {
       "spec-ambiguity-and-stale-evidence-report.md",
       renderLifecycleReport({ ledgers, plans: loadCampaigns(root), usdPerTrial: 3.5 }),
     );
+
+    // Every migration must be declared with both hashes and a written reason, and must account for
+    // the trials it invalidated. A hash that moved with no record behind it is indistinguishable
+    // from a spec quietly reworded until the failures stopped.
+    for (const ledger of ledgers) {
+      for (const entry of ledger.entries) {
+        if (entry.state === "superseded" && entry.ranAgainst !== null) {
+          assertMigrationDeclared(ledger.familyId, entry.ranAgainst, ledger.currentHash);
+        }
+      }
+      assertMigrationAccountsForLosses(ledger.familyId, ledger);
+    }
+
+    // The campaign that closed the shared bank, and the guards that keep it from rotting.
+    //
+    // `THIRD_SUBJECT_RUNS` names the runs that were executed to reach the threshold rather than
+    // deriving them by date: "which trials were part of the campaign" is a fact about intent, and
+    // inferring it from mtimes would silently absorb any trial that happened to land nearby.
+    // The agent bank is the one this campaign was run to close. If it does not exist, neither does
+    // the report — writing one against a mutant bank would describe a different question entirely.
+    const agentCompletion = completions.find((c) => c.kind === "agent");
+    if (agentCompletion === undefined) {
+      throw new Error("no agent bank exists; the third-subject report has nothing to describe");
+    }
+    write(
+      "third-subject-campaign-report.md",
+      renderThirdSubjectCampaign({
+        completion: agentCompletion,
+        availability: checkAllProviders(),
+        campaign: allTrials
+          .filter(({ trial }) => THIRD_SUBJECT_RUNS.includes(trial.runId))
+          .map(({ familyId, trial }) => ({
+            runId: trial.runId,
+            familyId,
+            subjectId: normalizeSubjectId(trial.record.subjectId),
+            providerFamily: (trial.record.model ?? "unknown").split("/")[0] ?? "unknown",
+            scenariosGraded: trial.record.cells.length,
+            scenariosFailed: trial.record.cells.filter((c) => c.failed.length > 0).length,
+            runtimeSeconds: trial.record.runtimeSeconds,
+            counted: (evidenceState.get(trial.runId) ?? "not-run") === "counted",
+          }))
+          .sort((a, b) => a.runId.localeCompare(b.runId)),
+        usdPerTrial: 3.5,
+      }),
+    );
+    write(
+      "spec-stale-evidence-regression-report.md",
+      renderStaleEvidenceRegression({
+        migrations: MIGRATIONS,
+        ledgers,
+        reportsChecked: rendered.size + 2,
+        guards: STALE_EVIDENCE_GUARDS,
+      }),
+    );
+
+    // The general guard, run over the rendered text of every report this command produced. It is
+    // checked on output rather than on inputs because the bug it catches lived inside a report
+    // builder that had the right data and read the wrong field.
+    for (const [name, text] of rendered) {
+      assertStaleRunsLabelled(name, text, ledgers);
+    }
   }
 
   // ---- what the UI family actually models ---------------------------------------------------------
@@ -1444,6 +2052,95 @@ export function main(argv: readonly string[]): number {
           process.stdout.write(promoteCommand(argv, root));
           return 0;
         }
+        if (sub === "diagnose") {
+          const familyId = flag(argv, "--family") ?? MEMORY_FAMILY;
+          const base = analysisBase(root);
+          const chain = analyseChain(familyId, subjectFailuresFor(root, familyId, base.evidenceState));
+          const plan = loadCampaigns(root).find((c) => c.familyId === familyId);
+          const params = routeFor(familyId).scenarioParams();
+          const diagnoses = readFamilyTrials(join(root, "trials"), familyId)
+            .filter((t) => t.record.subjectType === "agent")
+            .filter((t) => (base.evidenceState.get(t.runId) ?? "not-run") === "counted")
+            .map((t) =>
+              diagnose({
+                familyId,
+                record: t.record,
+                params,
+                hypothesisChecks:
+                  familyId === MEMORY_FAMILY
+                    ? [
+                        "provenance_persisted",
+                        "no_forbidden_call",
+                        "exactly_allowed",
+                        "recall_trust_preserved",
+                      ]
+                    : builtFamily(familyId).checks,
+                hypothesisKnob: familyId === MEMORY_FAMILY ? "sessionsBetween" : null,
+              }),
+            );
+          process.stdout.write(
+            [
+              `family      ${familyId}`,
+              `subjects    ${chain.subjects.join(", ") || "none with failures"}`,
+              `chain       ${chain.isChain ? "YES — one axis at several sensitivities" : `no — ${chain.incomparable.length} incomparable pair(s)`}`,
+              `agent axes  ${chain.isChain ? "1" : `>= ${chain.agentAxes}`}`,
+              "",
+              chain.reading,
+              "",
+              ...diagnoses.map(
+                (d) =>
+                  `${d.runId.padEnd(14)} ${d.reading.padEnd(20)} ${d.scenariosFailed}/${d.scenariosGraded} failed, hypothesis ${d.matchesHypothesis ? "matched" : "not matched"}`,
+              ),
+              "",
+              `Full report: reports/${familyId}-agent-diagnosis.md`,
+              "",
+            ].join("\n"),
+          );
+          if (plan === undefined) process.stdout.write("No campaign plan on record for this family.\n");
+          return 0;
+        }
+        if (sub === "evolve-scenarios") {
+          const familyId = flag(argv, "--family") ?? UI_FAMILY;
+          const base = analysisBase(root);
+          const chain = analyseChain(familyId, subjectFailuresFor(root, familyId, base.evidenceState));
+          const target = diversityTargets(
+            familyId,
+            subjectFailuresFor(root, familyId, base.evidenceState),
+            routeFor(familyId).scenarioParams(),
+          );
+          process.stdout.write(
+            [
+              `family      ${familyId}`,
+              `chain       ${chain.isChain ? "YES" : "no"}`,
+              "",
+              chain.isChain
+                ? "Adding subjects cannot raise the width. Only scenarios with a genuine trade-off can."
+                : "The family already separates in more than one direction; new scenarios would widen rather than unlock.",
+              "",
+              `saturated   ${target.saturated.map((r) => `${r.knob}=${r.value}`).join(", ") || "none"}`,
+              `untouched   ${target.untouched.map((r) => `${r.knob}=${r.value}`).join(", ") || "none"}`,
+              "",
+              ...(chain.isChain
+                ? UI_AXIS_PROPOSALS.flatMap((prop) => [
+                    `${prop.id}`,
+                    `  mechanism  ${prop.mechanism}`,
+                    `  wins today ${prop.currentWinner}`,
+                    `  loses here ${prop.whyItLoses}`,
+                    `  new knob   ${prop.newKnob}`,
+                    `  kill risk  ${prop.risk}`,
+                    "",
+                  ])
+                : []),
+              "Full report: reports/scenario-diversity-report.md",
+              "",
+            ].join("\n"),
+          );
+          return 0;
+        }
+        if (sub === "realism") {
+          process.stdout.write(realismCommand());
+          return 0;
+        }
         const requested = flag(argv, "--family");
         if (requested !== null && requested !== PIC_FAMILY && (sub === "run" || sub === "axis")) {
           emit(argv, builtFamilyCommand(argv, root, sub));
@@ -1548,8 +2245,81 @@ export function main(argv: readonly string[]): number {
           process.stdout.write(providersCommand());
           return 0;
         }
+        if (sub === "shared-bank") {
+          const base = analysisBase(root);
+          const banks = bankInput(root, loadRegistry(root)).banks;
+          const completions = completionsFor(banks, base.allTrials, base.evidenceState);
+          process.stdout.write(
+            [
+              ...completions.flatMap((c) => [
+                `kind        ${c.kind} (${c.axisKind})`,
+                `families    ${c.families.join(", ")}`,
+                `shared      ${c.sharedSubjects.join(", ") || "none"}`,
+                `labs        ${c.sharedProviderFamilies.join(", ") || "none"}`,
+                `verdict     ${c.verdict.toUpperCase()}`,
+                `comparable  ${c.comparability.verdict}`,
+                `still need  ${c.minimumAdditionalTrials} counted trial(s)`,
+                "",
+                c.rationale,
+                "",
+              ]),
+            ].join("\n"),
+          );
+          return 0;
+        }
+        if (sub === "third-subject-plan") {
+          const base = analysisBase(root);
+          const banks = bankInput(root, loadRegistry(root)).banks;
+          const completions = completionsFor(banks, base.allTrials, base.evidenceState);
+          const agentCompletion = completions.find((c) => c.kind === "agent");
+          if (agentCompletion === undefined) throw new Error("no agent bank exists");
+          process.stdout.write(
+            [
+              `verdict     ${agentCompletion.verdict.toUpperCase()} (${agentCompletion.sharedSubjects.length}/${agentCompletion.threshold} shared subjects, ${agentCompletion.sharedProviderFamilies.length} lab(s))`,
+              `still need  ${agentCompletion.minimumAdditionalTrials} counted trial(s)`,
+              "",
+              ...(agentCompletion.unlocks.length === 0
+                ? ["Nothing: the bank is at or above threshold."]
+                : agentCompletion.unlocks.flatMap((u) => [
+                    `${u.subjectId} on ${u.familyId} via ${u.providerId} — ${u.runnableHere ? "runnable here" : `NOT runnable: ${u.availability}`}`,
+                    ...(u.runnableHere && u.command !== null
+                      ? [
+                          `  foundry trials run --family ${u.familyId} --run-id ${u.familyId.split("-").pop()}-${u.providerId}-1 \\`,
+                          `    --model ${u.providerFamily}/${u.subjectId} --provider shell --inherit-env \\`,
+                          `    --command ${u.command.map((a) => (a === "{instruction}" ? "'{instruction}'" : a)).join(" ")}`,
+                        ]
+                      : [
+                          `  foundry trials campaign prepare --family ${u.familyId} --provider external --out bundles/${u.familyId}-external`,
+                        ]),
+                    "",
+                  ])),
+              "",
+              ...agentCompletion.holes.map(
+                (h) => `hole  ${h.subjectId} / ${h.familyId}: ${h.reason} — ${h.detail}`,
+              ),
+              "",
+            ].join("\n"),
+          );
+          return 0;
+        }
+        if (sub === "quality") {
+          const base = analysisBase(root);
+          emit(argv, renderSubmissionQuality(qualityRowsFor(base, selfCheckProfilesFor(base))));
+          return 0;
+        }
+        if (sub === "self-check") {
+          const base = analysisBase(root);
+          emit(
+            argv,
+            renderSelfCheckBehavior({
+              profiles: selfCheckProfilesFor(base),
+              historicalContrast: HISTORICAL_SELF_CHECK,
+            }),
+          );
+          return 0;
+        }
         throw new Error(
-          `unknown trials subcommand "${sub}"; expected local | run | providers | import | bank`,
+          `unknown trials subcommand "${sub}"; expected local | run | providers | import | bank | campaign | verify | matrix | prepare | route | shared-bank | third-subject-plan | quality | self-check`,
         );
       }
       case "mechanisms": {
@@ -1608,6 +2378,22 @@ export function main(argv: readonly string[]): number {
       case "budget":
         emit(argv, budgetCommand(argv));
         return 0;
+      case "reports": {
+        // `reports all` is an alias for `all`: the report layer got large enough that people look for
+        // it under a noun rather than under a bare verb.
+        const sub = positional(argv, 1) ?? "all";
+        if (sub !== "all") throw new Error(`unknown reports subcommand "${sub}"; expected all`);
+        process.stdout.write(allCommand(argv.slice(1), root));
+        return 0;
+      }
+      case "ui": {
+        const sub = `${positional(argv, 1) ?? ""} ${positional(argv, 2) ?? ""}`.trim();
+        if (sub !== "replay upgrade") {
+          throw new Error(`unknown ui subcommand "${sub}"; expected \`ui replay upgrade\``);
+        }
+        process.stdout.write(realismCommand());
+        return 0;
+      }
       case "all":
         process.stdout.write(allCommand(argv, root));
         return 0;

@@ -1,0 +1,23 @@
+{
+  "familyId": "prompt-injection-containment",
+  "scenarioSetId": "pic-128-6e573d99",
+  "visibleFiles": [
+    "README.md",
+    "SPEC.md",
+    "examples/example-1-none.json",
+    "examples/example-2-authority_grab.json",
+    "examples/example-3-scope_expansion.json",
+    "starter/subject.mjs",
+    "types.ts"
+  ],
+  "hiddenArtifacts": [
+    "verify.ts",
+    "reference.ts",
+    "mutants.ts",
+    "policy.ts",
+    "runner.ts",
+    "matrix.json",
+    "scenarios.json"
+  ],
+  "submissionFormat": "an ES module exporting `subject` with a run(scenario, tools) method"
+}

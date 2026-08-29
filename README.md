@@ -2,58 +2,123 @@
 
 **A thousand benchmark tasks are only useful if they measure more than one thing.**
 
-This is a system for discovering, screening, **building**, **running**, **killing** and **evolving**
-agent-benchmark task families by transferable failure mechanism. It decides what is worth building
-before you spend model budget on it, produces the family, puts real models in front of it, measures
-what the family actually separates — and when the family turns out to be weak, it records why in a
-typed form and generates the next candidate from that reason.
+Task count is the wrong unit. The right one is **independent failure axes**: the number of distinct
+ways an implementation can be wrong that the suite can actually tell apart. This repository measures
+that number, and everything else it does follows from taking it seriously.
 
-**This foundry does not just produce benchmark-looking tasks. It kills weak ones and records why.**
+It is a system for discovering, screening, **building**, **running**, **killing** and **evolving**
+agent-benchmark task families. It decides what is worth building before you spend model budget on it,
+produces the family, puts real models in front of it, measures what the family separates — and when a
+family turns out to be weak, it records why in a typed form and generates the next candidate from
+that reason.
 
-**The loop has closed, and the mechanism it produced transfers across labs:**
+**It kills weak families, including its own, and refuses claims its evidence does not support.**
 
-1. Built `prompt-injection-containment` — 128 scenarios, 9 mutants, 4 measured axes.
-2. Ran three real Claude trials. **All three passed 128 of 128.**
-3. Killed it: `already_solved`, derived from the trial records, disposition `harden`.
-4. Generated four variants from named operators, each with a pre-registered kill risk.
-5. Built the lowest-risk one, `prompt-injection-memory-poisoning`.
-6. Ran a campaign against it — and one trial exposed a **spec ambiguity**: the model cited the rule
-   the published evaluation order said was correct and the verifier demanded another. Repairing the
-   spec changed the challenge hash, which **automatically stopped three counted trials from
-   counting**. They are preserved; the campaign was reissued.
-7. **Ran the reissued campaign across two labs.** Claude Opus 5 and GPT-5.6 Sol, three counted
-   trials each.
+---
 
-**The result: 3 of 6 counted trials failed, and one Claude run and one Codex run failed the
-identical 32 scenarios.** Not 32 each — the same 32: same ids, same check pair, same attack shape,
-every one at `sessionsBetween` 1 or 3 and **none at 0**, which is the pattern the campaign
-pre-registered as its confirm signal before anything ran.
+## Where the evidence stands
 
-A failure mechanism that appears in two labs' models on the same inputs, at exactly the knob an
-evolution operator introduced, is a property of the task rather than of one lab's model. Claim
-strength: **generalises**.
+Four model subjects across two labs have attempted all three built families. Every trial is
+preserved with its transcript, artifact, verifier output and the content hash of the exact challenge
+it was graded against.
 
-The third failing run is a separate finding rather than more of the same: a Codex trial failed 13
-scenarios on a **different check**, disjoint from those 32, concentrated on one attack at
-`sessionsBetween: 0` only. The diagnosis module reads it as a capability finding that does *not*
-match the pre-registered hypothesis, so it is recorded as a second failure mode instead of being
-folded into the confirmed one.
+| family | scenarios | subjects | counted trials | failed ≥1 | agent difficulty axes | verdict |
+|---|---:|---:|---:|---:|---|---|
+| `prompt-injection-containment` | 128 | 4 | 6 | **0** | 0 — nothing to separate | **NOT-READY** — already-solved |
+| `prompt-injection-memory-poisoning` | 288 | 4 | 6 | 4 | **≥2** — one incomparable pair | **SHIP** |
+| `ui-action-record-replay` | 324 | 4 | 5 | **5** | **1** — the failure sets form a chain | **SHIP** (one axis) |
+| `durable-approval-outbox` (imported) | 24 | 2 | 20 | 20 | 1 | **SHIP** |
+| `ui-replay-live-dom` (descendant, no trials) | 432 | 22 mutants | 0 | — | **10** (mutant bank) | not trial-ready |
 
-`ui-action-record-replay` was trialed for the first time in the same phase and **all three counted
-trials failed** — two Claude, one Codex — on duplicate irreversible effects and unreported
-unreplayable steps rather than on selector mechanics. Both models now have counted trials on all
-three built families, which is what makes any cross-family comparison possible at all.
+**19 counted trials. 3 superseded** by a spec repair that a trial exposed. **1 infrastructure
+failure**, counted for nothing. **0 refusals.**
 
-The containment kill got stronger in the same round: a Codex trial also passed 128 of 128, so
-`already_solved` is a property of the task rather than a quirk of one lab.
+### The three results worth leading with
 
-**What is still not true.** Two shared subjects is not three, so the combined cross-family width is
-a bound (2) rather than a measurement and no combined axis count is quoted. The UI family's three
-trials **nest** — 33 ⊂ 46 ⊂ 90 failing scenarios — which under this repository's own axis meter is
-one axis observed at three sensitivities, not three failure modes. Every per-provider rate is below
-the five-trial threshold the reports use before quoting one, and each carries its Wilson interval.
-And Gemini could not be run at all: an account-tier error, recorded as an infrastructure failure,
-counted for nothing, and the reason the third subject the combined count needs does not exist.
+**1. A failure mechanism transferred across labs, on the identical scenarios.** On memory-poisoning,
+a Claude run and a Codex run failed **the same 32 scenarios** — same ids, same check pair, every one
+at `sessionsBetween` 1 or 3 and none at 0, which is what the campaign pre-registered as its confirm
+signal before anything ran. A second Codex run then failed 13 scenarios on a *different* check,
+disjoint from those 32: a second failure mode, recorded separately rather than folded in.
+
+**2. The UI family measures exactly one thing, and no amount of models will change that.** Five
+counted trials, four subjects, two labs, failing 33, 46, 62, 62 and 90 of 324 scenarios. Five
+different numbers reads as breadth. **Every pair nests** — 33 ⊂ 46 ⊂ 62 ⊂ 90, with two Anthropic
+models failing the *identical* 62. Under this repository's own axis meter a chain has width 1: one
+defect observed at four sensitivities. Adding a fifth subject cannot help, because a chain stays a
+chain. Only scenarios containing a genuine trade-off can, and
+[`reports/scenario-diversity-report.md`](reports/scenario-diversity-report.md) names three with the
+disposition each one has to punish.
+
+**3. The chain has a fix, and it is built and measured.** `ui-replay-live-dom` is the parent's
+descendant: a mutable tree where acting reveals regions, arms controls and replaces the form, with a
+settle budget, conflicting anchors and `aria-busy` signals that can lie. Its point is not realism for
+its own sake — it is that two opposed strategies, `strict-bailer` and `patient-waiter`, produce
+**incomparable** catch sets (148 and 46 failures, 18 shared, neither containing the other). That is
+the structure the parent could not express and the only thing that lifts an antichain width above 1.
+432 measured scenarios, 22 subjects, reference clean, **10 independent axes** over the mutant bank.
+It has **no agent trials and no challenge package**, so it is honestly not trial-ready; the next step
+is a spec, and rushing that spec is how the parent lost three trials to an ambiguity.
+
+**4. One model shipped its checker; no other did.** The task asks for one file and does not forbid a
+second. `claude-sonnet-5` shipped `_test.mjs` and `_test_harness.mjs` beside its submissions on two
+families — a real transition table and a reimplemented app facade. Every other subject on every other
+family shipped the artifact alone, while **15 of 22 transcripts describe building a checker and
+discarding it**. That gap is a fact about the submission format we asked for as much as about the
+models, and an artifact-only scan cannot see it. See
+[`reports/self-check-behavior-report.md`](reports/self-check-behavior-report.md).
+
+### What is proven, what is refused
+
+| claim | status |
+|---|---|
+| a mechanism transfers across model families | **proven** — identical 32-scenario failure across two labs |
+| the foundry can run multiple providers | **proven** — 4 subjects, 2 labs, one command set |
+| refusals and infra failures stay out of the counted set | **proven** — enforced in code, not convention |
+| a spec repair invalidates the evidence that motivated it | **proven** — 3 trials preserved, uncounted, and named |
+| the three built families measure different things | **measured** — combined width 3 over 4 shared subjects, against a null of 6.0 |
+| the UI family measures more than one thing | **refused** — its trials form a chain |
+| any per-provider pass rate | **refused** — every interval is wide enough to overlap the others |
+| a third lab | **refused** — Google is installed and not entitled; the slot is an infrastructure failure, never a zero |
+
+The refusals are enforced by code rather than by discipline. `assertCombinedWidthAllowed` throws for
+a bank below threshold or one whose families are incomparable; `combinedMatrixFor` throws for a bank
+with no overlap; `assertStaleRunsLabelled` runs over the rendered text of **every** report and
+refuses one that presents an invalidated run as live.
+
+### The cross-family number, and its caveat
+
+Four subjects — `claude-opus-5`, `claude-sonnet-5`, `claude-haiku-4-5`, `gpt-5.6-sol` — have counted
+trials on all three built families, which is what makes a combined axis count possible at all.
+
+| | |
+|---|---:|
+| shared subjects | **4** (threshold 3) |
+| provider families among them | **2** |
+| memory-poisoning alone | 2 |
+| ui-action-record-replay alone | 1 |
+| containment alone | 0 |
+| **combined over the shared subjects** | **3** |
+| null-model mean | 6.0 |
+| ceiling for this bank | 179 |
+
+The axes add: no instance in one family is failed by the same subject set as an instance in another,
+so over these subjects the families measure different things. The null model — which keeps each
+subject's failure count and redraws *which* instances it fails — scores 6.0, so the real corpus is
+twice as compressible as chance and the structure is not an artifact of bank size.
+
+**Two things this does not show.** Four subjects is a small bank, and three of them are from one lab,
+so the width is partly a statement about Anthropic's model family. And additivity is also what a
+*disjoint* bank produces by construction — which is exactly why the count is restricted to subjects
+that attempted every family, and why that restriction is the load-bearing part rather than a detail.
+
+### The exact trial that unlocks the next claim
+
+`foundry trials third-subject-plan` computes it. Today the answer is **none for the bank** — it is at
+threshold — and the binding constraint has moved to a different question: a third *lab*. Google's CLI
+is present and its account is not entitled, so prepared bundles with pinned challenge hashes are
+checked in under [`bundles/`](bundles/) for anyone who can run one. An imported result either
+measures this exact task or is refused on import.
 
 ---
 
@@ -254,7 +319,7 @@ a winning strategy.
 
 ## The ship gate
 
-20 gates, 14 blocking. A family ships when every blocking gate passes: no score, no weighting, no
+21 gates, 14 blocking. A family ships when every blocking gate passes: no score, no weighting, no
 override. `reports/ship-gate-report.md` is generated from the gate definitions themselves, so a gate
 that exists in code cannot be missing from the documentation — and it prints which gates have ever
 actually rejected anything, because a gate that cannot fail is not evidence of discipline.
@@ -265,7 +330,8 @@ The three that currently reject something:
 |---|---|---|---|
 | `not-already-solved` | yes | `prompt-injection-containment` | added after three real Claude trials each passed 128/128. A Codex trial has since passed 128/128 too, so the kill is now cross-lab. Without this gate the family ships on evidence that it is easy. |
 | `difficulty-evidenced` | yes | 9 unbuilt families | a measured axis count against hand-written mutants proves the *verifier* discriminates, not that the family is hard. Blocking as of the campaign layer: every built family is routable, so "nobody has tried it" became a decision rather than a limitation. |
-| `shared-bank-ready` | no | all three built families | axis counts across disjoint banks add by construction and mean nothing. Two shared subjects against a threshold of three. |
+| `shared-bank-ready` | no | — | axis counts across disjoint banks add by construction and mean nothing. Now passing: four shared subjects against a threshold of three. |
+| `agent-axes-independent` | no | `ui-action-record-replay` | the measured-axes gate counts axes over the MUTANT bank. This one counts them over real agents, and the two disagree sharply here: six mutant axes, one agent axis, five trials whose failure sets form a chain. |
 
 Nine gates pass for every family and have never rejected anything, and the report says so in the
 same table rather than letting fourteen rows of green read as fourteen decisions.
@@ -309,6 +375,15 @@ foundry trials campaign --plan <f> --run             # execute the runnable slot
 foundry trials campaign prepare --family <id> --provider codex --out dir
 foundry trials campaign import --family <id> dir     # strict: hash, transcript, artifact, or it does not count
 foundry trials verify --family <id> <run-id>         # re-grade a preserved submission from scratch
+
+foundry trials shared-bank                           # refused / partial / measured, per bank kind
+foundry trials third-subject-plan                    # the exact trials that would unlock the next claim
+foundry trials quality                               # structured description of every submission
+foundry trials self-check                            # what each model shipped, and what it only claimed
+foundry family diagnose --family <id>                # chain? capability or spec defect? per counted trial
+foundry family evolve-scenarios --family <id>        # where a new axis could live, and what it must punish
+foundry ui replay upgrade                            # the realism ladder, each family's rung, the next one's cost
+foundry reports all                                  # every report (alias for `foundry all`)
 ```
 
 Three provider families are declared with their exact invocation; availability is decided by running
@@ -499,8 +574,8 @@ output with a checker that declares the artifact list independently.
 
 ## The reports, and the question each one answers
 
-`node dist/cli.js all` writes 33 of these; the two axis reports over external corpora are written by
-`report`. All 35 are regenerated and diffed by `pnpm verify`, so a report that stops matching its
+`node dist/cli.js all` writes 40 of these; the two axis reports over external corpora are written by
+`report`. All 42 are regenerated and diffed by `pnpm verify`, so a report that stops matching its
 code is a build failure rather than something a reader notices later.
 
 **Does the mechanism transfer, or is it one lab's model?**
@@ -508,6 +583,8 @@ code is a build failure rather than something a reader notices later.
 | report | the question |
 |---|---|
 | `provider-variance-report.md` | per-provider counted/failed/refused/infra with Wilson intervals; which checks each lab failed; whether two labs failed the **same scenarios**; what each model actually wrote |
+| `shared-bank-completion-report.md` | what is missing before a cross-family number exists, how many trials that is, which model would produce them, and the combined width where the guards allow it |
+| `third-subject-campaign-report.md` | the campaign that closed the bank: what was available, what was run, what it cost, and what it bought and did not buy |
 | `shared-difficulty-bank-report.md` | which real subjects attempted which families, and why a combined axis count is still refused |
 | `cross-family-axis-report.md` | the portfolio sum that is not available, and exactly what would make it available |
 | `shared-subject-bank-report.md` | the same question over every bank kind, with `agent` and `mutant` never pooled |
@@ -518,6 +595,10 @@ code is a build failure rather than something a reader notices later.
 |---|---|
 | `<family>-agent-diagnosis.md` | per counted failing trial: `capability`, `likely-spec-defect`, `mixed` or `clean`, and which knob values the failures sat on |
 | `spec-ambiguity-and-stale-evidence-report.md` | every trial's lifecycle state, what the M3/M5 repair cost, and which invalidated runs are still being named |
+| `spec-stale-evidence-regression-report.md` | the guards that stop an invalidated run being quoted as live, and the instances each has caught |
+| `scenario-diversity-report.md` | whether a family's subjects fail in more than one direction, where an independent axis could live, and what a new scenario would have to punish |
+| `self-check-behavior-report.md` | did the model verify its own work, what it shipped, what it only claimed, and whether that predicts anything |
+| `provider-submission-quality-report.md` | structured description of every submission — files, size, rule citations, commands run, stated confidence against measured outcome |
 | `<family>-agent-results.md` | the counted trials for one family, with the hypothesis they were run against |
 | `<family>-trial-campaign.md` | the pre-registered plan: hypothesis, kill signal, confirm signal, counting rules, challenge hash |
 | `evolution-validation-report.md` | did the operator do what it claimed, or did the descendant get harder for other reasons |
@@ -543,35 +624,44 @@ code is a build failure rather than something a reader notices later.
 | `trial-orchestration-report.md` | every trial on record, counted and uncounted, and why |
 | `historical-durable-outbox-trials.md` | the 33 imported runs and the $252.51 they cost |
 | `mechanism-registry.md`, `mutant-bank.md`, `shared-bank-report.md` | the inputs the rest of the system is built on |
-| `ui-action-record-replay-upgrade-report.md` | what is real, what is `dom-like`, and what a browser-backed version would newly measure |
+| `ui-action-record-replay-upgrade-report.md` | what is real, what is `simulated-tree`, and what a browser-backed version would newly measure |
+| `ui-replay-live-dom-report.md` | the descendant family: why it exists, whether its opposed strategies are incomparable, what it measures, and what it is not |
 
 ---
 
-## The shared bank: **PARTIAL**
+## The shared bank: **MEASURED**
 
 An axis count is a property of a suite **paired with the bank it is graded against**, so combining
-two families requires the same subjects in both. The verdict was a permanent refusal; it is now
-computed against a stated threshold, and importing the historical outbox trials moved it:
+two families requires the same subjects in both. The verdict was a permanent refusal, then a computed
+one against a stated threshold. It is now met:
 
 | | |
 |---|---|
-| subjects attempting every difficulty family | `claude-opus-5`, `gpt-5.6-sol` |
+| subjects attempting every difficulty family | `claude-opus-5`, `claude-sonnet-5`, `claude-haiku-4-5`, `gpt-5.6-sol` |
+| provider families among them | 2 |
 | threshold for a combined claim | 3 |
-| **verdict** | **PARTIAL** |
+| **verdict** | **MEASURED** |
+| combined width | **3**, against a null-model mean of 6.0 |
 
-Two shared subjects bound the combined width at 2, and a bound that small cannot distinguish "these
-families measure the same thing" from "they measure different things", so no combined number is
-quoted. `reports/shared-difficulty-bank-report.md` covers only banks whose subjects are real models;
-mutant banks measure what a verifier detects and are never pooled with them.
+`reports/shared-difficulty-bank-report.md` covers only banks whose subjects are real models; mutant
+banks measure what a verifier detects and are never pooled with them.
 
-The remaining gap is a missing **subject**, not a missing trial. Both models already have counted
-trials on all four difficulty families, so re-running them cannot widen the bound — a third lab has
-to attempt all four. The report says which providers in the registry have no counted trial and why,
-and emits the `campaign prepare` commands for the ones that cannot run here.
+**Two gates, not one, and they are different questions.** The threshold on shared subjects asks
+whether co-failure across families is OBSERVABLE — below it the width is bounded by the bank size and
+cannot distinguish complete overlap from independence. The null model asks whether the observed
+structure BEATS NOISE. A bank can pass either and fail the other, and an earlier version of this
+report collapsed them and read the null backwards, flagging its own strongest evidence as
+chance-level. Both are now printed side by side.
 
-What the overlap does support is a direct comparison, and it is stark: both models fail the outbox
-family and pass the containment family cleanly. That is a statement about the two families, not
-about either model.
+**What is still missing is a third lab, not a fourth subject.** Three of the four subjects are
+Anthropic models, so the width is partly a statement about one lab's family. Google's CLI is present
+and its account is not entitled; the slot is an infrastructure failure and counts for nothing.
+`foundry trials third-subject-plan` prints which providers have no counted trial and why, and emits
+the `campaign prepare` commands for the ones that cannot run here.
+
+The overlap also supports a direct comparison, and it is stark: every subject fails the outbox family
+and passes the containment family cleanly — including Haiku 4.5, the smallest model available here.
+That is a statement about the two families, not about any model.
 
 ---
 
@@ -660,7 +750,7 @@ auditable by someone who does not trust whatever produced the data.
 pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm verify
 ```
 
-**375 tests** across ten files. The one worth describing is rule coverage: every one of the 86 rule
+**432 tests** across twelve files. The one worth describing is rule coverage: every one of the 86 rule
 codes must have a known-bad example rejected *for that specific code*, and a rule with no example
 fails the build. 30 fixtures live in `fixtures/invalid/` with a manifest naming the code each should
 trip; the rest are exercised programmatically and registered explicitly — and a second test asserts
@@ -692,11 +782,12 @@ bundles with pinned challenge hashes, strict import, the evidence lifecycle, per
 with Wilson intervals, failure-set overlap, and capability-vs-spec-defect diagnosis), 33 generated
 reports, 3 checked-in external bundles, and the known-bad fixture corpus.
 
-**Real agent evidence:** 13 counted trials across 3 families and 2 model families, plus 20 imported
-historical trials. 3 trials preserved-but-not-counted because the family they measured was repaired;
-1 recorded as an infrastructure failure because a provider's account was not entitled. The
-strongest single result: two labs' models failed the **identical** 32 scenarios on the
-memory-poisoning family.
+**Real agent evidence:** 19 counted trials across 3 families, 4 model subjects and 2 labs, plus 20
+imported historical trials. 3 trials preserved-but-not-counted because the family they measured was
+repaired; 1 recorded as an infrastructure failure because a provider's account was not entitled; 0
+refusals. The strongest single result: two labs' models failed the **identical** 32 scenarios on the
+memory-poisoning family. The most useful negative result: the UI family's five trials form a chain,
+so it measures one thing however many models attempt it.
 
 Not done, deliberately:
 
@@ -714,28 +805,52 @@ Not done, deliberately:
   time. Building the shipped family's three-process verifier took roughly 45 hours; no generator
   produces that from a mechanism id.
 - **Ten of thirteen families are unbuilt.** Their axis counts are pre-registrations, not measurements.
-- **Two model families have been trialed, not three.** Anthropic and OpenAI both have counted
-  trials on all three built families. Google is installed and its account is not entitled, so its
-  slot is an `infrastructure_error` rather than a zero, and the third subject a combined
-  cross-family axis count needs does not exist. Prepared external bundles are checked in under
-  `bundles/` with the challenge hash pinned.
-- **The UI family runs against a DOM-like tree, not a browser.** It now has three counted trials
-  across two labs and all three failed, so the verifier separating ten mutants is no longer the only
-  evidence for it — but a pass here still does not transfer to a real page.
-  `reports/ui-action-record-replay-upgrade-report.md` lists exactly what is real, what is simulated
-  and what is absent.
-- **The UI family's three trials nest.** 33 ⊂ 46 ⊂ 90 failing scenarios, so under this repository's
-  own axis meter they are one axis observed at three sensitivities. The family separates subjects;
-  it has not been shown to measure more than one thing.
+- **Four subjects, two labs, and three of the four are Anthropic.** The combined cross-family width
+  is therefore partly a statement about one lab's model family. Google is installed and its account
+  is not entitled, so its slot is an `infrastructure_error` rather than a zero. Prepared external
+  bundles are checked in under `bundles/` with the challenge hash pinned.
+- **Sibling models are separate subjects and not separate labs.** `claude-opus-5` and
+  `claude-sonnet-5` are different weights with different failure sets, so the bank counts them as two
+  subjects — which is the right unit for an antichain width. They are one provider family, which is
+  the right unit for a transfer claim. Every report that quotes one prints the other beside it, and
+  the tests assert that the two numbers are computed separately.
+- **The UI family is a `simulated-tree`, and used to claim `dom-like`.** It is an immutable
+  seven-node tree with one mutable boolean, resolved by `data-testid` only: nothing can drift, and
+  nothing an action does changes what a later action sees. Those are exactly the mechanics
+  `dom-like` names, so the label was a claim the code did not support and it has been corrected
+  down. `foundry ui replay upgrade` prints the ladder, each family's rung, and what the next one
+  would cost.
+- **`browser-backed` is not implemented and the refusal is recorded rather than left silent.** No
+  cached browser on this machine, a launch per scenario against a 324-scenario sweep is minutes not
+  seconds, and the dependency would end this repository's zero-runtime-dependency property — which
+  is load-bearing for a project whose pitch is that a reviewer can audit it. What it would buy is
+  real layout, event dispatch and CSS matching, none of which is what this family measures.
+- **`ui-replay-live-dom` has no agent trials and no challenge package.** Everything measured about it
+  is mutant-bank evidence: the verifier distinguishes ten kinds of wrong, which says nothing about
+  whether a model finds it hard. It is not registered as a built family precisely because that would
+  make the `trial-ready` gate claim something false.
+- **Its anti-nesting mechanism is partly ordinal.** The strict/patient trade-off runs along a settle
+  budget, and ordinal axes are the kind that nest. The design review that chose it recommended
+  grafting in a categorical axis — three recorded anchors (testid, role+name, structural path) that
+  resolve to *different* live nodes, so testid-loyalist, semantics-loyalist and path-loyalist are
+  each right where the others are wrong and no ordering of strictness arranges them into a chain.
+  The knob exists (`anchorFidelity`); making the anchors genuinely disagree is the next change.
+- **The UI family's five trials nest.** 33 ⊂ 46 ⊂ 62 ⊂ 90 failing scenarios across four subjects and
+  two labs, with two Anthropic models failing the identical 62. Under this repository's own axis
+  meter that is one axis at four sensitivities. The family separates subjects perfectly and has not
+  been shown to measure more than one thing — and no additional subject can change that.
 - **The evolution engine is a fixed table.** Fifteen operators and four recipes, hand-written. It
   cannot invent an operator it does not have, and its kill risks are arguments rather than
   frequencies — there is no historical base rate to calibrate them against yet.
 - **The containment family is already-solved and stays NOT-READY** until it is hardened. More trials
   on the same family will not change that; `reports/ship-gate-report.md` says why.
-- **The shared bank is PARTIAL, not measured.** Two shared subjects against a threshold of three,
-  so the combined width is bounded above by two and a bound that small cannot tell complete overlap
-  from independence. The gap is a missing SUBJECT, not a missing trial: re-running the two models
-  already present cannot widen it.
+- **The shared bank is MEASURED and small.** Four shared subjects against a threshold of three, and
+  three of them from one lab. The combined width of 3 beats a null model of 6.0, so the structure is
+  real; the bank is still narrow enough that the number should be read with its sample size attached,
+  which is why every report that prints it prints the null beside it.
+- **Self-check evidence is mostly the models' own account.** Two submissions ship a checker and can
+  be re-read by anyone; fifteen transcripts describe one that was never shipped. Nothing here re-ran
+  those harnesses, and the report never merges the two columns.
 
 ---
 

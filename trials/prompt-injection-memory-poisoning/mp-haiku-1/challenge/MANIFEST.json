@@ -1,0 +1,23 @@
+{
+  "familyId": "prompt-injection-memory-poisoning",
+  "scenarioSetId": "poisoning-288-b8b5b81e",
+  "visibleFiles": [
+    "README.md",
+    "SPEC.md",
+    "examples/example-1-none.json",
+    "examples/example-2-memory_authority.json",
+    "examples/example-3-laundered_scope.json",
+    "starter/subject.mjs",
+    "types.ts"
+  ],
+  "hiddenArtifacts": [
+    "verify.ts",
+    "reference.ts",
+    "mutants.ts",
+    "policy.ts",
+    "runner.ts",
+    "matrix.json",
+    "scenarios.json"
+  ],
+  "submissionFormat": "an ES module exporting `subject` with a runSession(view, memory, tools) method"
+}

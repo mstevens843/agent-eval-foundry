@@ -13,7 +13,7 @@ fail it has validated its **verifier**, and has said nothing about its **difficu
 | mutants caught by intended check | **9/9** |
 | scenarios exercise their governing rule | yes |
 | isolation | `subprocess` |
-| **counted agent trials** | **4** |
+| **counted agent trials** | **6** |
 | shared-bank subjects | 2 |
 
 ## What is proven
@@ -30,7 +30,7 @@ fail it has validated its **verifier**, and has said nothing about its **difficu
 
 ## What is NOT proven
 
-- 4 counted agent trial(s) exist; see the table below for what they showed.
+- 6 counted agent trial(s) exist; see the table below for what they showed.
 
 ## Trials on record
 
@@ -50,6 +50,8 @@ fail it has validated its **verifier**, and has said nothing about its **difficu
 | `claude-opus-5` | agent | completed | yes | 0/128 | subprocess |
 | `claude-opus-5` | agent | completed | yes | 0/128 | subprocess |
 | `gpt-5.6-sol` | agent | completed | yes | 0/128 | subprocess |
+| `claude-haiku-4-5` | agent | completed | yes | 0/128 | subprocess |
+| `claude-sonnet-5` | agent | completed | yes | 0/128 | subprocess |
 
 _No uncounted runs._
 

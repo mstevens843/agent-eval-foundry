@@ -21,6 +21,7 @@ import type { RunResult } from "../families/prompt-injection-containment/runner.
 import { BUILT_FAMILY_IDS, builtFamily } from "../families/registry.js";
 import { readJson } from "../foundry/load.js";
 import { parseMatrix } from "../matrix.js";
+import { normalizeSubjectId } from "../trials/bank.js";
 import { reconcile } from "../trials/campaign-run.js";
 import { loadCampaigns } from "../trials/campaign.js";
 import { readFamilyTrials } from "../trials/directory.js";
@@ -30,8 +31,9 @@ import { importAgentTrials, runLocalTrials } from "../trials/orchestrate.js";
 import { ROUTABLE_FAMILY_IDS } from "../trials/router.js";
 import { gateByChallengeHash } from "../trials/run.js";
 import { countedAgentTrials } from "../trials/types.js";
-import type { TrialSet } from "../trials/types.js";
+import type { TrialRecord, TrialSet } from "../trials/types.js";
 import type { Matrix } from "../types.js";
+import { analyseChain } from "./chain-analysis.js";
 import type { FamilyEvidence } from "./ship-report.js";
 import { computeEvidence } from "./trial-report.js";
 
@@ -44,6 +46,42 @@ const ROUTABLE = new Set(ROUTABLE_FAMILY_IDS);
 
 /** Vendored Harbor run summaries — the default source for historical outbox trials. */
 export const vendoredRunsDir = (root: string): string => join(root, "examples/durable-outbox/runs");
+
+/**
+ * Difficulty-axis facts for the ship gate: do the counted subjects fail in more than one direction?
+ *
+ * Computed from counted trials only, and from the SUBJECT's union rather than per-run, because three
+ * runs of one model are three samples of one subject. Stale trials are excluded upstream — a
+ * superseded run would either invent an incomparable pair or hide a real one, and both err toward
+ * flattering the family.
+ */
+function agentAxisFacts(records: readonly TrialRecord[], stale: ReadonlySet<string>) {
+  const bySubject = new Map<string, { failed: Set<string>; providerFamily: string }>();
+  for (const r of records) {
+    if (r.subjectType !== "agent" || !r.counts || stale.has(r.runId)) continue;
+    const id = normalizeSubjectId(r.subjectId);
+    const entry = bySubject.get(id) ?? {
+      failed: new Set<string>(),
+      providerFamily: (r.model ?? "unknown").split("/")[0] ?? "unknown",
+    };
+    for (const cell of r.cells) if (cell.failed.length > 0) entry.failed.add(cell.scenarioId);
+    bySubject.set(id, entry);
+  }
+  const chain = analyseChain(
+    "",
+    [...bySubject.entries()].map(([subjectId, v]) => ({
+      subjectId,
+      providerFamily: v.providerFamily,
+      failed: v.failed as ReadonlySet<string>,
+      graded: 0,
+    })),
+  );
+  return {
+    agentAxes: chain.subjects.length === 0 ? null : chain.agentAxes,
+    agentFailuresChain: chain.isChain,
+    agentChainOrder: chain.order,
+  };
+}
 
 export interface FamilyEvidenceBundle {
   readonly run: RunResult;
@@ -123,6 +161,7 @@ export function familyEvidenceFor(root: string, familyId: string = PIC_FAMILY): 
         reportsDeterministic: true,
         trialReady: ROUTABLE.has(familyId),
         staleTrials: [...stale].sort(),
+        ...agentAxisFacts(trials.records, stale),
       },
     };
   }
@@ -141,6 +180,7 @@ export function familyEvidenceFor(root: string, familyId: string = PIC_FAMILY): 
       ...computeEvidence(run, trials, { sharedBankSubjects }),
       trialReady: ROUTABLE.has(familyId),
       staleTrials: [...stale].sort(),
+      ...agentAxisFacts(trials.records, stale),
     },
     matrix: toMatrix(run),
     staleTrials: [...stale].sort(),

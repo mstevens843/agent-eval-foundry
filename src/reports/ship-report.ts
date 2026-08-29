@@ -49,6 +49,17 @@ export interface FamilyEvidence {
   readonly trialReady?: boolean;
   /** Trials excluded because they measured a different challenge. Preserved, never counted. */
   readonly staleTrials?: readonly string[];
+  /**
+   * Number of independent DIFFICULTY axes over counted agent trials, or null when nothing has failed.
+   *
+   * Distinct from the measured axis count everywhere else in the ship report, which is over the
+   * MUTANT bank and is a statement about what the verifier detects. A family can score six
+   * mutant-detection axes and one agent-difficulty axis, and the UI family does exactly that.
+   */
+  readonly agentAxes?: number | null;
+  /** True when every counted subject's failure set nests inside the next — one axis, any bank size. */
+  readonly agentFailuresChain?: boolean;
+  readonly agentChainOrder?: readonly string[];
 }
 
 export type GateVerdict = "pass" | "fail" | "n/a";
@@ -350,6 +361,38 @@ export const GATES: readonly Gate[] = [
       return {
         verdict: trials > 0 ? "pass" : "fail",
         detail: trials > 0 ? `${trials} counted agent trial(s)` : "no counted agent trials",
+      };
+    },
+  },
+  {
+    id: "agent-axes-independent",
+    question: "Do the counted agents fail in more than one direction, or do their failure sets nest?",
+    rationale:
+      "The measured-axes gate counts axes over the MUTANT bank: a statement about what the verifier " +
+      "detects, bounded by how many known-bad implementations the author wrote. This one counts axes " +
+      "over real agents, and the two can disagree sharply. If every subject's failure set nests inside " +
+      "the next, the family separates subjects perfectly and measures ONE thing at several " +
+      "sensitivities — and no additional subject can change that, because a chain stays a chain. " +
+      "Advisory rather than blocking: a one-axis family is a legitimate benchmark component, and the " +
+      "cost of pretending otherwise would be killing useful families. What it must not do is read as " +
+      "breadth. The UI family scores six mutant axes, one agent axis, and five counted trials across " +
+      "four subjects and two labs whose failure counts are 33, 46, 62, 62 and 90 — five different " +
+      "numbers that are one measurement.",
+    blocking: false,
+    evaluate: (_s, _r, e) => {
+      if (e === undefined) return { verdict: "n/a", detail: "family not built" };
+      if (e.agentAxes === undefined || e.agentAxes === null) {
+        return { verdict: "n/a", detail: "no counted agent trial has failed anything yet" };
+      }
+      if (e.agentFailuresChain === true) {
+        return {
+          verdict: "fail",
+          detail: `every counted subject's failures nest (${(e.agentChainOrder ?? []).join(" ⊂ ")}); one difficulty axis however many subjects attempt it. Only new scenarios with a genuine trade-off can raise it — see reports/scenario-diversity-report.md`,
+        };
+      }
+      return {
+        verdict: "pass",
+        detail: `counted subjects fail in more than one direction (>= ${e.agentAxes} difficulty axes)`,
       };
     },
   },

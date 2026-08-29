@@ -57,18 +57,29 @@ export interface FamilySweep {
  * spec would change the package hash and invalidate every trial in flight. It is metadata about the
  * family, carried in the registry and printed in every report that quotes the family's numbers.
  *
- *   simulated      a hand-built model of the domain; faithful to the rules, not to any implementation
- *   dom-like       models the structural mechanics of the real surface (selectors, state, identity)
- *                  without a renderer
+ *   simulated-tree  a hand-built model of the domain; faithful to the rules, not to any implementation
+ *   dom-like        models the structural mechanics of the real surface — selectors that can drift,
+ *                   element identity, state that CHANGES in response to action — without a renderer
  *   browser-backed  a real engine drives a real page
+ *
+ * The middle rung was renamed and re-applied after the UI family's harness was read closely for the
+ * realism report. It was labelled `dom-like` and it is an IMMUTABLE seven-node tree with one mutable
+ * boolean, resolved by `data-testid` only. Nothing about it can drift, and nothing an action does
+ * changes what a later action sees — so it is a simulated tree, and calling it DOM-like was the kind
+ * of generous self-description this ladder exists to prevent.
+ *
+ * Relabelling is deliberately SAFE: the realism level is a property of the family record and is kept
+ * out of the challenge package, so an honesty correction can never change a hash and invalidate the
+ * evidence that motivated it.
  */
-export const REALISM_LEVELS = ["simulated", "dom-like", "browser-backed"] as const;
+export const REALISM_LEVELS = ["simulated-tree", "dom-like", "browser-backed"] as const;
 export type RealismLevel = (typeof REALISM_LEVELS)[number];
 
 export const REALISM_MEANING: Readonly<Record<RealismLevel, string>> = {
-  simulated: "a hand-built model of the domain: faithful to the rules, not to any implementation",
+  "simulated-tree":
+    "a hand-built model of the domain: faithful to the rules, not to any implementation. Structure is fixed; nothing an action does changes what a later action sees",
   "dom-like":
-    "models the structural mechanics of the real surface — selectors, element identity, state and confirmation — with no renderer, no layout and no timing",
+    "models the structural mechanics of the real surface — selectors that can drift, element identity, and state that CHANGES in response to action — with no renderer, no layout and no compositing",
   "browser-backed": "a real browser engine drives a real page",
 };
 
@@ -169,7 +180,7 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     typesPath: "src/families/prompt-injection-containment/types.ts",
     estimatedBuildHours: 70,
     estimatedFrontierUsd: 65,
-    realism: "simulated",
+    realism: "simulated-tree",
     realismGap:
       "The tool boundary is a frozen facade rather than a service. Real fidelity would mean tools with latency, partial failure and their own state — which is the durable-outbox family's territory, not this one's.",
   },
@@ -198,7 +209,7 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     typesPath: "src/families/memory-poisoning/types.ts",
     estimatedBuildHours: 75,
     estimatedFrontierUsd: 70,
-    realism: "simulated",
+    realism: "simulated-tree",
     realismGap:
       "The store is a Map with declared semantics. A real vector store would add retrieval ranking and embedding drift — genuinely different failure modes, and a different family rather than a more realistic version of this one.",
   },
@@ -231,9 +242,9 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     // DOM-like rather than simulated: the harness models element identity across re-mounts, live
     // selector resolution with ambiguity, attribute-level preconditions, a pending-vs-absent
     // distinction and a confirmation state the tree declares. What it does not have is a renderer.
-    realism: "dom-like",
+    realism: "simulated-tree",
     realismGap:
-      "A headless browser would add layout, timing, focus, scroll and shadow DOM — roughly 25–40 hours plus a browser dependency in the trial sandbox. It is worth doing AFTER a counted agent trial: if the dom-like version already discriminates, the browser adds fidelity to a real measurement; if every model passes, it buys a more realistic version of a task nobody fails.",
+      "Two rungs are missing, and the first matters more than the second. `dom-like` needs a tree that CHANGES: acting reveals regions, enables controls and replaces the form with a receipt, so a later step meets a page the recording never saw, and selectors can drift rather than merely being renamed. That is where the trade-off between a strict and a patient replayer comes from — and without a trade-off the failure sets are forced to nest, which is exactly what five counted trials across four subjects and two labs produced here. `browser-backed` needs a real engine and is refused for now with the reason recorded in `foundry ui replay upgrade`: no cached browser, minutes-per-sweep launch cost, and a dependency that would end this repository's zero-runtime-dependency property. Neither rung is what this family currently measures, so the honest label is the low one.",
   },
 ];
 

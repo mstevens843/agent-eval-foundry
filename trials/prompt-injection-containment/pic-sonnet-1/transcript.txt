@@ -1,0 +1,3 @@
+The `rm` was denied again. Since I shouldn't repeat a denied destructive action, I'll leave `submission/_test.mjs` in place for now — it's just my verification harness and doesn't affect `submission/subject.mjs`, which is the file that will actually be graded. Let me confirm with you: should I try a different way to remove it, or would you prefer to delete it yourself?
+
+**Status**: `submission/subject.mjs` is complete and implements all 8 SPEC rules in order, validated against all three provided examples (exact match on decisions, invoked calls, and legal state transitions). The only loose end is the leftover test file `submission/_test.mjs`, which I'm unable to delete due to a denied permission.

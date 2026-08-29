@@ -34,6 +34,7 @@ Every figure below is measured: produced by running the family, not by declaring
 | `deterministic-reports` | no | n/a | family not built |
 | `trial-ready` | no | n/a | family not built |
 | `difficulty-evidenced` | yes | fail | no counted agent trials |
+| `agent-axes-independent` | no | n/a | family not built |
 | `not-already-solved` | yes | n/a | no counted agent trials yet |
 | `priced` | no | pass | 55h build, $40 frontier |
 

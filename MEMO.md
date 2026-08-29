@@ -318,6 +318,89 @@ never a zero, and the third subject the cross-family count needs is still missin
 for an external runner are checked in under `bundles/` with the challenge hash pinned, so a result
 someone else produces either measures this exact task or is refused on import.
 
+### And then four subjects across two labs produced one axis, on purpose
+
+The obvious next move after a cross-lab confirmation is more models. So: four subjects — Opus 5,
+Sonnet 5, Haiku 4.5 and GPT-5.6 Sol — against all three built families, nineteen counted trials.
+
+**On the UI family all five counted trials failed, and every pair of failure sets nests.** 33 ⊂ 46 ⊂
+62 ⊂ 90 of 324 scenarios, with the two mid-sized runs — different Anthropic models — failing the
+*identical* 62. Five runs, four subjects, two labs, five different numbers, and under this
+repository's own axis meter a chain has width one. The family separates implementations perfectly
+and has never been shown to measure more than one thing.
+
+That is the most useful negative result the project has produced, because of what follows from it:
+**adding subjects cannot fix it.** A chain stays a chain however many implementations are laid along
+it. The lever is scenarios, and only scenarios of one shape — ones where the strategy that wins
+today loses. Every current scenario rewards the same disposition (bail out early when a target does
+not resolve), so a stricter replayer dominates a looser one everywhere and the catch sets are
+*forced* into a total order. Nesting was not bad luck; it is what a family with no trade-off in it
+must produce.
+
+The same measurement says the memory-poisoning family is fine: one of its pairs is genuinely
+incomparable — Sonnet fails 42, Codex fails 45, and only 32 are shared — so it separates in more
+than one direction.
+
+**The combined cross-family number is now available and it is small.** Four subjects attempted all
+three families, past the threshold of three, so the width can be computed at all: **3 axes**, against
+a null model of 6.0 and a ceiling of 179. The axes add — no instance in one family is failed by the
+same subject set as an instance in another — and the corpus is twice as compressible as chance, so
+the structure is real. Three of the four subjects are from one lab, which is the caveat that belongs
+in the same sentence as the number.
+
+**Two gates, not one.** The threshold on shared subjects asks whether co-failure is *observable*; the
+null model asks whether the observed structure *beats noise*. I collapsed them at first and read the
+null backwards — the null is an upper bound, so a real corpus far below it is the good case — and
+briefly flagged the project's strongest cross-family evidence as chance-level. Both gates are now
+computed and printed side by side, which is the only reason that error is recoverable rather than
+permanent.
+
+### The chain has a fix, and the fix is a family
+
+A chain is a fact about the family, so the fix has to be structural. `ui-replay-live-dom` is the
+descendant: a mutable tree where acting reveals regions, arms controls and replaces the form, with a
+settle budget, conflicting anchors, and `aria-busy` signals that are allowed to lie.
+
+The realism is not the point. The point is that the family contains a **trade-off**, so that no single
+disposition wins everywhere. Two opposed implementations are graded alongside the mutant bank rather
+than argued about: `strict-bailer`, which refuses anything it cannot resolve on first observation, and
+`patient-waiter`, which waits out every unsettled region. They fail 148 and 46 scenarios, share 18,
+and **neither set contains the other**. That is the structure the parent could not express, and the
+only structure that lifts an antichain width above 1.
+
+432 measured scenarios, 22 subjects, reference clean, ten independent axes over the mutant bank — and
+**no agent trials and no challenge package**, so it is honestly not trial-ready. The package's spec is
+the fairness contract, and this family's contract is harder to write than its parent's: a settle
+budget, an anchor-conflict resolution order, and what counts as "observed" for a region that is still
+loading all have to be stated precisely enough that a model can derive the answer. The parent already
+cost three counted trials to one ambiguity a real model exposed. Writing that spec quickly is how it
+happens again, so the order is spec, package, leak check, campaign — and the family is marked
+not-trial-ready until then.
+
+A descendant rather than an edit, for the reason the whole apparatus exists: changing the parent
+would change its hash, and the five trials that produced this finding would be the first casualties
+of acting on it.
+
+### One model shipped its checker
+
+A smaller finding that changed what I think the next family should ask for. The task requests one
+file, `submission/subject.mjs`, and does not forbid a second. Fifteen of twenty-two transcripts
+describe building a local harness, running the published examples through it, writing synthetic
+scenarios — and then shipping one file. **Two submissions shipped the checker anyway, and both are
+`claude-sonnet-5`**: a real transition table in one, a reimplemented app facade in the other. No
+other subject did this on any family.
+
+The first version of that analysis grepped submissions for `assert|invariant|sanity`, found nothing,
+and concluded that models do not verify themselves. It was measuring our own submission format. It
+also credited `auditAlreadyCompleted` — ordinary implementation logic in a family whose *domain* is
+auditing — as a self-check, which is why the source patterns are now narrow enough to be boring and a
+shipped file that imports the graded artifact is detected structurally instead.
+
+So the proposal I would actually fund: a family whose submission is `subject.mjs` **and** `check.mjs`,
+where the checker is run against the reference and against held-out known-bad implementations. A
+checker that passes the reference and catches none of the mutants cannot fail, and that is a named,
+measurable failure mode nothing here currently grades.
+
 Underneath it is the constraint from `results/08`: fairness requires the rules be fully stated;
 solvability requires the answer be derivable from the rules plus the shipped data; and anything a
 human can compute that way, a program can compute, so the agent can write that program and use it as
@@ -471,14 +554,19 @@ without a surface-coverage metric beside it.
   is independent but coarse (one bit per instance, single unreplicated runs).
 - **Ten of the thirteen declared families are unbuilt**, so their axis counts are pre-registrations
   rather than measurements, and the report labels every one of them.
-- **The already-solved finding now rests on four trials across two model families**, all of which
-  passed every scenario. That is a stronger kill than the original one-lab version and still not a
-  proof; the right response is to harden the family, which is what the gate forces, rather than to
-  average it away with more runs of the same kind.
-- **Two labs is not many labs.** Every counted trial here is Anthropic or OpenAI. The third provider
-  in the registry is installed and its account is not entitled, so the cross-family combined axis
-  count stays refused: with two shared subjects the width is bounded above by two, and a bound that
-  small cannot tell complete overlap from independence.
+- **The already-solved finding now rests on six trials across four subjects and two labs**, all of
+  which passed all 128 scenarios — including Haiku 4.5, the smallest model available here. That is a
+  much stronger kill than the original one-lab version and still not a proof; the right response is
+  to harden the family, which is what the gate forces, rather than to average it away with more runs
+  of the same kind.
+- **Two labs is not many labs, and three of the four subjects are one lab's.** The combined
+  cross-family width of 3 is therefore partly a statement about Anthropic's model family. The third
+  provider in the registry is installed and its account is not entitled, so its slot is an
+  infrastructure failure and counts for nothing.
+- **A chain is a fact about the family, not about the models.** The UI result — four subjects, one
+  axis — is the strongest evidence in this document that subject count and measurement count are
+  different quantities. It is also the clearest case for spending the next dollar on scenarios rather
+  than on model time.
 - **Half the recorded kills have no cost attached**, so "screening is nearly free" rests on a floor
   rather than a total. `reports/candidate-ledger.md` states that in the same table as the claim.
 - **The bank bounds the answer.** Ten subjects containing roughly two defect families cannot exhibit

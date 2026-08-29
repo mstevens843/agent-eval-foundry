@@ -148,6 +148,20 @@ const COVERED_IN_CROSS_PROVIDER_TEST: readonly RuleCode[] = [
   "EVIDENCE_AMBIGUITY_UNDOCUMENTED",
 ];
 
+/**
+ * Rules whose known-bad case lives in `cross-family-evidence.test.ts`: challenge migrations, the
+ * stale-evidence guard that runs over rendered report text, and the chain detector.
+ */
+const COVERED_IN_CROSS_FAMILY_TEST: readonly RuleCode[] = [
+  "MIGRATION_UNDECLARED",
+  "MIGRATION_UNREASONED",
+  "MIGRATION_LOSSES_UNRECORDED",
+  "REPORT_STALE_UNLABELLED",
+  "CHAIN_QUOTED_AS_BREADTH",
+  "BANK_BELOW_THRESHOLD",
+  "BANK_INCOMPARABLE",
+];
+
 /** Rules exercised by code below rather than by a JSON fixture. Keeps assertion 3 honest. */
 const PROGRAMMATIC: readonly RuleCode[] = [
   "E_TYPE",
@@ -406,6 +420,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ...COVERED_IN_EVOLUTION_TEST,
       ...COVERED_IN_ROUTING_TEST,
       ...COVERED_IN_CROSS_PROVIDER_TEST,
+      ...COVERED_IN_CROSS_FAMILY_TEST,
     ]);
     const uncovered = RULE_CODES.filter((c) => !covered.has(c));
     expect(
@@ -423,6 +438,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ["test/evolution.test.ts", COVERED_IN_EVOLUTION_TEST],
       ["test/trials-routing.test.ts", COVERED_IN_ROUTING_TEST],
       ["test/cross-provider.test.ts", COVERED_IN_CROSS_PROVIDER_TEST],
+      ["test/cross-family-evidence.test.ts", COVERED_IN_CROSS_FAMILY_TEST],
     ];
     for (const [file, codes] of delegated) {
       const source = readFileSync(`${ROOT}${file}`, "utf8");

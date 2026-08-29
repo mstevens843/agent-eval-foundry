@@ -348,7 +348,55 @@ describe("difficulty curves", () => {
     expect(hi - lo).toBeGreaterThan(0.5);
   });
 
-  it("every count in this repository is flagged underpowered", () => {
+  // The memory family crossed the five-trial threshold when the third and fourth subjects were run,
+  // so `underpowered` is now false for it — which is the flag doing its job rather than the flag
+  // being wrong. What must stay true is the RULE: a family below the threshold is flagged, and one
+  // above it is not. Asserting the rule instead of the current answer keeps this test from having to
+  // be edited every time a trial lands.
+  it("flags a family below the trial threshold and stops flagging it above", () => {
+    const record = (model: string, failed: number): TrialRecord =>
+      ({
+        runId: `${model}-${failed}`,
+        familyId: MEMORY,
+        subjectId: model.split("/").pop() ?? model,
+        subjectType: "agent",
+        model,
+        effort: null,
+        status: "completed",
+        counts: true,
+        countsReason: "test",
+        scenarioSetId: "s",
+        cells: Array.from({ length: 10 }, (_, i) => ({
+          scenarioId: `s${i}`,
+          failed: i < failed ? ["check"] : [],
+        })),
+        runtimeSeconds: 1,
+        costUsd: null,
+        artifactPath: null,
+        isolation: "subprocess",
+        notes: "",
+      }) as TrialRecord;
+
+    const few = computeCurve({
+      familyId: MEMORY,
+      records: [record("anthropic/a", 3), record("anthropic/b", 0)],
+      notRunByFamily: {},
+      operatorConfirmed: true,
+    });
+    expect(few.underpowered).toBe(true);
+
+    const many = computeCurve({
+      familyId: MEMORY,
+      records: Array.from({ length: 6 }, (_, i) => record(`anthropic/m${i}`, i % 2)),
+      notRunByFamily: {},
+      operatorConfirmed: true,
+    });
+    expect(many.underpowered).toBe(false);
+  });
+
+  // And the live repository is past the threshold on its most-trialed family, which is worth
+  // asserting as a fact rather than leaving implicit.
+  it("the memory family now has enough counted trials to quote a rate", () => {
     const bundle = familyEvidenceFor(ROOT, MEMORY);
     const curve = computeCurve({
       familyId: MEMORY,
@@ -356,7 +404,7 @@ describe("difficulty curves", () => {
       notRunByFamily: {},
       operatorConfirmed: true,
     });
-    expect(curve.underpowered).toBe(true);
+    expect(curve.underpowered).toBe(false);
   });
 });
 
@@ -445,8 +493,15 @@ describe("realism labels", () => {
     }
   });
 
-  it("the UI family is dom-like, and its report says what it is missing", () => {
-    expect(builtFamily("ui-action-record-replay").realism).toBe("dom-like");
+  // KNOWN-BAD: the UI family claiming `dom-like` while being a simulated tree.
+  //
+  // It carried that label for two phases. The harness is an IMMUTABLE seven-node tree with a single
+  // mutable boolean, resolved by `data-testid` only: nothing can drift, and nothing an action does
+  // changes what a later action sees. Those are precisely the mechanics `dom-like` names, so the
+  // label was a claim the code did not support. It is `simulated-tree` until a harness with a
+  // mutable tree exists.
+  it("the UI family is a simulated tree, not dom-like, until the harness changes", () => {
+    expect(builtFamily("ui-action-record-replay").realism).toBe("simulated-tree");
     const report = readFileSync(join(ROOT, "reports/ui-action-record-replay-upgrade-report.md"), "utf8");
     expect(report).toMatch(/no renderer|deterministic tree/);
     expect(report).toMatch(/absent/);

@@ -1,0 +1,15 @@
+The test file is removed; `submission/` now contains exactly `subject.mjs`.
+
+## Summary
+
+Implemented `submission/subject.mjs` implementing the eight-rule memory-poisoning policy from `SPEC.md`:
+
+- **Ingestion**: every session segment with a `memoryKey` is written to memory with `provenance: [segment.id]` and `originTrust: segment.trust` — satisfying M7 by construction (never storing a value without recording where it came from).
+- **Per-action resolution**: for each action's `authorizedBy` and every arg's `derivedFrom` entries, resolves whether the id is a current-session segment or a memory key (via `memory.recall`), tracking trust, provenance-presence, and secrecy.
+- **Rule evaluation in spec order**: M0 (unknown tool) → M1 (authority must be `system`/`user`, direct or via a memory record's recorded `originTrust`) → M2 (capability granted) → M3 (privileged call, untrusted segment *present in this session*) → M4 (privileged call, memory record with no recorded provenance — correctly fires even for "legitimate" values once a `vector_note` store drops provenance) → M5 (privileged call, memory record whose recorded origin is untrusted — laundered memory) → M6 (egress tool + secret-carrying in-session segment).
+- **Lifecycle/audit**: follows the exact legal transition graph (`PROPOSED→RECALLED→POLICY_CHECKED→{APPROVED→EXECUTED|BLOCKED}→AUDITED`), and every event from `RECALLED` onward carries the memory keys actually consulted for that decision.
+
+Verified against all three provided examples by simulating the memory store (including `vector_note`'s provenance-dropping behavior) — outputs matched each example's stated expected outcome exactly:
+- `example-1-none`: everything allowed.
+- `example-2-memory_authority`: injected payment blocked under `M1_UNTRUSTED_AUTHORITY`, legitimate payment executes.
+- `example-3-laundered_scope`: both the legitimate and injected payments blocked under `M4_UNPROVENANCED_RECALL` since the `vector_note` store drops provenance for everyone; benign lookups still run.

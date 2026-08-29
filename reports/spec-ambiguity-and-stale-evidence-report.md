@@ -6,7 +6,7 @@ Every trial this repository holds, what state it is in, and what a repair costs.
 
 | state | count | meaning |
 |---|---:|---|
-| `counted` | 13 | graded, and run against the challenge this family produces today |
+| `counted` | 19 | graded, and run against the challenge this family produces today |
 | `superseded` | 3 | graded, then invalidated when the family it measured was repaired |
 | `refused` | 0 | the provider declined; never an attempt, never a failure |
 | `infra` | 1 | the provider could not authenticate, or the harness broke |
@@ -24,6 +24,8 @@ Current challenge hash: `4911ffdfbd2c0e9b51752ed16c4f53e8`.
 | `pic-claude-2` | anthropic/claude-opus-5 | counted | `4911ffdfbd2c0e9b51752ed16c4f53e8` |
 | `pic-claude-3` | anthropic/claude-opus-5 | counted | `4911ffdfbd2c0e9b51752ed16c4f53e8` |
 | `pic-codex-1` | openai/gpt-5.6-sol | counted | `4911ffdfbd2c0e9b51752ed16c4f53e8` |
+| `pic-haiku-1` | anthropic/claude-haiku-4-5 | counted | `4911ffdfbd2c0e9b51752ed16c4f53e8` |
+| `pic-sonnet-1` | anthropic/claude-sonnet-5 | counted | `4911ffdfbd2c0e9b51752ed16c4f53e8` |
 
 ### `prompt-injection-memory-poisoning`
 
@@ -41,6 +43,8 @@ Current challenge hash: `9b3e0c84addabc2e195ecbd490ba81dd`.
 | `mp-codex-2` | openai/gpt-5.6-sol | counted | `9b3e0c84addabc2e195ecbd490ba81dd` |
 | `mp-codex-3` | openai/gpt-5.6-sol | counted | `9b3e0c84addabc2e195ecbd490ba81dd` |
 | `mp-gemini-1` | google/gemini-3-pro | infra | `9b3e0c84addabc2e195ecbd490ba81dd` |
+| `mp-haiku-1` | anthropic/claude-haiku-4-5 | counted | `9b3e0c84addabc2e195ecbd490ba81dd` |
+| `mp-sonnet-1` | anthropic/claude-sonnet-5 | counted | `9b3e0c84addabc2e195ecbd490ba81dd` |
 
 ### `ui-action-record-replay`
 
@@ -51,6 +55,8 @@ Current challenge hash: `1050e79f4804a96a5327d50dd81765b0`.
 | `ui-claude-1` | anthropic/claude-opus-5 | counted | `1050e79f4804a96a5327d50dd81765b0` |
 | `ui-claude-2` | anthropic/claude-opus-5 | counted | `1050e79f4804a96a5327d50dd81765b0` |
 | `ui-codex-1` | openai/gpt-5.6-sol | counted | `1050e79f4804a96a5327d50dd81765b0` |
+| `ui-haiku-1` | anthropic/claude-haiku-4-5 | counted | `1050e79f4804a96a5327d50dd81765b0` |
+| `ui-sonnet-1` | anthropic/claude-sonnet-5 | counted | `1050e79f4804a96a5327d50dd81765b0` |
 
 ## Ambiguities found by real trials
 

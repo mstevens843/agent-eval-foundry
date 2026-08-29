@@ -43,6 +43,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `deterministic-reports` | advisory | Do this family's reports regenerate byte-identically? |
 | `trial-ready` | advisory | Can a real agent actually be run against this family today? |
 | `difficulty-evidenced` | yes | Has any real agent or model been measured against this family? |
+| `agent-axes-independent` | advisory | Do the counted agents fail in more than one direction, or do their failure sets nest? |
 | `not-already-solved` | yes | Is there at least one counted agent trial that did NOT pass cleanly? |
 | `priced` | advisory | Is the build cost recorded? |
 
@@ -70,6 +71,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `deterministic-reports` | n/a | family not built |
 | `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
+| `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 45h build, $60 frontier |
 
@@ -95,6 +97,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `deterministic-reports` | n/a | family not built |
 | `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
+| `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 90h build, $80 frontier |
 
@@ -120,6 +123,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `deterministic-reports` | n/a | family not built |
 | `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
+| `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 60h build, $75 frontier |
 
@@ -145,6 +149,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `deterministic-reports` | n/a | family not built |
 | `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | pass | 6 counted agent trial(s) |
+| `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | pass | 6 of 6 declared trial(s) failed — declared by the shape, not measured here |
 | `priced` | pass | 120h build, $48.66 frontier |
 
@@ -170,6 +175,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `deterministic-reports` | n/a | family not built |
 | `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
+| `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 55h build, $50 frontier |
 
@@ -195,6 +201,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `deterministic-reports` | n/a | family not built |
 | `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
+| `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 45h build, $50 frontier |
 
@@ -220,6 +227,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `deterministic-reports` | n/a | family not built |
 | `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
+| `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 50h build, $45 frontier |
 
@@ -245,6 +253,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `deterministic-reports` | n/a | family not built |
 | `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
+| `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 60h build, $55 frontier |
 
@@ -265,12 +274,13 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `baselines-blocked` | pass | 2/2 baselines rejected |
 | `mutants-caught-by-intended-check` | pass | 9/9 caught by intended check |
 | `mechanisms-exercised` | pass | every attack blocks on its governing rule |
-| `isolation-level` | pass | subprocess with 4 agent trial(s) |
+| `isolation-level` | pass | subprocess with 6 agent trial(s) |
 | `shared-bank-ready` | **FAIL** | 2 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
-| `difficulty-evidenced` | pass | 4 counted agent trial(s) |
-| `not-already-solved` | **FAIL** | all 4 counted trial(s) passed every scenario — the family is already-solved |
+| `difficulty-evidenced` | pass | 6 counted agent trial(s) |
+| `agent-axes-independent` | n/a | no counted agent trial has failed anything yet |
+| `not-already-solved` | **FAIL** | all 6 counted trial(s) passed every scenario — the family is already-solved |
 | `priced` | pass | 70h build, $65 frontier |
 
 ### `prompt-injection-cross-tool-escalation` — NOT-READY
@@ -295,6 +305,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `deterministic-reports` | n/a | family not built |
 | `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
+| `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 55h build, $50 frontier |
 
@@ -315,12 +326,13 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `baselines-blocked` | pass | 2/2 baselines rejected |
 | `mutants-caught-by-intended-check` | pass | 11/11 caught by intended check |
 | `mechanisms-exercised` | pass | every attack blocks on its governing rule |
-| `isolation-level` | pass | subprocess with 6 agent trial(s) |
+| `isolation-level` | pass | subprocess with 8 agent trial(s) |
 | `shared-bank-ready` | **FAIL** | 2 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
-| `difficulty-evidenced` | pass | 6 counted agent trial(s) |
-| `not-already-solved` | pass | 3 of 6 counted trial(s) failed at least one scenario |
+| `difficulty-evidenced` | pass | 8 counted agent trial(s) |
+| `agent-axes-independent` | pass | counted subjects fail in more than one direction (>= 2 difficulty axes) |
+| `not-already-solved` | pass | 5 of 8 counted trial(s) failed at least one scenario |
 | `priced` | pass | 75h build, $70 frontier |
 
 ### `stale-crm-ticket-automation` — NOT-READY
@@ -345,6 +357,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `deterministic-reports` | n/a | family not built |
 | `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
+| `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 70h build, $55 frontier |
 
@@ -365,12 +378,13 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `baselines-blocked` | pass | 2/2 baselines rejected |
 | `mutants-caught-by-intended-check` | pass | 10/10 caught by intended check |
 | `mechanisms-exercised` | pass | every attack blocks on its governing rule |
-| `isolation-level` | pass | subprocess with 3 agent trial(s) |
+| `isolation-level` | pass | subprocess with 5 agent trial(s) |
 | `shared-bank-ready` | **FAIL** | 2 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
-| `difficulty-evidenced` | pass | 3 counted agent trial(s) |
-| `not-already-solved` | pass | 3 of 3 counted trial(s) failed at least one scenario |
+| `difficulty-evidenced` | pass | 5 counted agent trial(s) |
+| `agent-axes-independent` | **FAIL** | every counted subject's failures nest (claude-opus-5 ⊂ claude-haiku-4-5 ⊂ claude-sonnet-5 ⊂ gpt-5.6-sol); one difficulty axis however many subjects attempt it. Only new scenarios with a genuine trade-off can raise it — see reports/scenario-diversity-report.md |
+| `not-already-solved` | pass | 5 of 5 counted trial(s) failed at least one scenario |
 | `priced` | pass | 55h build, $40 frontier |
 
 ## Why these gates
@@ -393,6 +407,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 - **`deterministic-reports`** — A report nobody can reproduce is a report nobody can audit.
 - **`trial-ready`** — The gap between 'measured' and 'trialable' is where families sit for months. A family is trial-ready when it emits a challenge package that passes its own leak check and the router knows how to grade a submission for it — at which point the only thing between it and difficulty evidence is model time.
 - **`difficulty-evidenced`** — A measured axis count against a bank of hand-written mutants proves the VERIFIER discriminates. It says nothing about whether the family is hard, because nothing that could plausibly fail it has attempted it. This gate was added after the second family scored four measured axes with zero agent trials and would otherwise have been marked SHIP. It is BLOCKING as of the campaign layer: with a trial router and a runnable challenge package for every built family, 'nobody has tried it' stopped being a fact about the tooling and became a decision not to look.
+- **`agent-axes-independent`** — The measured-axes gate counts axes over the MUTANT bank: a statement about what the verifier detects, bounded by how many known-bad implementations the author wrote. This one counts axes over real agents, and the two can disagree sharply. If every subject's failure set nests inside the next, the family separates subjects perfectly and measures ONE thing at several sensitivities — and no additional subject can change that, because a chain stays a chain. Advisory rather than blocking: a one-axis family is a legitimate benchmark component, and the cost of pretending otherwise would be killing useful families. What it must not do is read as breadth. The UI family scores six mutant axes, one agent axis, and five counted trials across four subjects and two labs whose failure counts are 33, 46, 62, 62 and 90 — five different numbers that are one measurement.
 - **`not-already-solved`** — A family every model solves measures nothing, and `already-solved` was the single most common cause of death in the source project's kill log — four of nine gated mechanisms. This gate was added after three real Claude trials on the containment family each passed 128 of 128: the difficulty gate had just started passing, and without this one the family would have shipped on evidence that it is easy.
 - **`priced`** — An unpriced family cannot enter the budget model, so the plan built on it is fiction.
 

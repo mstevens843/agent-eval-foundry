@@ -9,7 +9,7 @@ reference clean, every mutant caught by its intended check, **6 independent axes
 the widest structure in this repository. Challenge package builds and passes its leak check
 (8 files, hash `1050e79f4804a96a5327d50dd81765b0`).
 
-3 counted agent trial(s) exist.
+5 counted agent trial(s) exist.
 
 ## What the family models, and how honestly
 

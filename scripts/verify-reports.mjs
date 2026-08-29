@@ -99,6 +99,48 @@ for (const rel of walk(chalTmp).sort()) {
   } else console.log(`ok     ${committed}`);
 }
 
+// CLI smoke paths. Not a diff — a check that every command the README documents still exists, exits
+// zero, and says something. A query command that silently stopped working would be invisible to the
+// report diffs above, because nothing regenerates from it.
+//
+// `trials campaign statsu` is here deliberately: a mistyped subcommand used to fall through to the
+// plan listing and exit zero, which is worse than failing, and this asserts it now fails.
+const SMOKE = [
+  [["trials", "shared-bank"], /MEASURED|PARTIAL|REFUSED/],
+  [["trials", "third-subject-plan"], /verdict/],
+  [["trials", "quality"], /Submission quality/],
+  [["trials", "self-check"], /Self-check behaviour/],
+  [["trials", "providers"], /claude/],
+  [["trials", "campaign", "status"], /campaign/],
+  [["family", "diagnose", "--family", "ui-action-record-replay"], /chain/],
+  [["family", "evolve-scenarios", "--family", "ui-action-record-replay"], /chain/],
+  [["ui", "replay", "upgrade"], /realism ladder/],
+  [["check"], /registry OK/],
+  [["ship"], /SHIP|NOT-READY|HOLD/],
+];
+for (const [args, expected] of SMOKE) {
+  const label = args.join(" ");
+  let out;
+  try {
+    out = run(args);
+  } catch (err) {
+    console.error(`SMOKE  \`${label}\` exited non-zero: ${String(err).split("\n")[0]}`);
+    failures += 1;
+    continue;
+  }
+  if (!expected.test(out)) {
+    console.error(`SMOKE  \`${label}\` ran but its output does not match ${expected}`);
+    failures += 1;
+  } else console.log(`ok     cli: ${label}`);
+}
+try {
+  run(["trials", "campaign", "statsu"]);
+  console.error("SMOKE  a mistyped campaign subcommand exited zero instead of failing");
+  failures += 1;
+} catch {
+  console.log("ok     cli: a mistyped campaign subcommand fails loudly");
+}
+
 // The prepared external bundles are generated too, and they are the artifact a third party actually
 // runs. A bundle that has drifted from the family it fronts would send someone off to measure a task
 // this repository no longer produces, and its pinned challengeHash would then refuse the result they
@@ -150,7 +192,7 @@ for (const variant of [
 // by being written here, but the count is asserted so a report that stops being generated is caught
 // rather than silently skipped.
 run(["all", "--out", tmp]);
-const EXPECTED_REPORTS = 33;
+const EXPECTED_REPORTS = 40;
 const generated = readdirSync(tmp);
 if (generated.length !== EXPECTED_REPORTS) {
   console.error(`WRONG COUNT  \`all\` wrote ${generated.length} reports, expected ${EXPECTED_REPORTS}`);

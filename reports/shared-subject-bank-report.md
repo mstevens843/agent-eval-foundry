@@ -16,9 +16,9 @@ Which subjects have attempted which families, and what that permits.
 
 | family | subjects | counted trials | instances | axes |
 |---|---|---:|---:|---:|
-| `prompt-injection-containment` | `claude-opus-5`, `gpt-5.6-sol` | 4 | 128 | 0 |
-| `prompt-injection-memory-poisoning` | `claude-opus-5`, `gpt-5.6-sol` | 6 | 288 | 1 |
-| `ui-action-record-replay` | `claude-opus-5`, `gpt-5.6-sol` | 3 | 324 | 1 |
+| `prompt-injection-containment` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 6 | 128 | 0 |
+| `prompt-injection-memory-poisoning` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 8 | 288 | 2 |
+| `ui-action-record-replay` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 5 | 324 | 1 |
 | `durable-approval-outbox` | `claude-opus-5`, `gpt-5.6-sol` | 0 | 24 | 1 |
 
 ## Detection banks — written mutants
@@ -34,21 +34,22 @@ and it is not a measurement of difficulty.
 
 | subject | families |
 |---|---|
+| `claude-haiku-4-5` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
 | `claude-opus-5` | `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
+| `claude-sonnet-5` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
 | `gpt-5.6-sol` | `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
 
 ## What each kind of bank currently licenses
 
 ### `agent` banks — 3 family(ies)
 
-**Verdict:** PARTIAL. a qualitative comparison over 2 shared subject(s); no combined axis count, because the width is bounded by the shared bank size.
+**Verdict:** MEASURED. a combined axis count over the 4 shared subjects.
 
-Only 2 subject(s) attempted every family, below the threshold of 3. The combined width is bounded above by the shared bank size, so it cannot distinguish complete overlap from independence. Overlap is reported; no combined axis count is quoted as a headline.
+4 subject(s) attempted every family, so "did the same implementation fail both?" is a question with an answer. The combined axis count below is computed over the shared subjects only, and is the number that says whether the families measure different things.
 
 **To strengthen this:**
 
-- Run the same subjects against every `agent` family until 3 share all of them.
-- Currently shared: claude-opus-5, gpt-5.6-sol.
+- Nothing: the claim is available. Widen the bank to narrow the confidence interval.
 
 ### `imported` banks — 1 family(ies)
 

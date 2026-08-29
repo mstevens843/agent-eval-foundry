@@ -10,9 +10,9 @@ what a verifier detects and are a different question; they are in
 
 | family | subjects | counted trials | instances | measured cells | axes | realism |
 |---|---|---:|---:|---:|---:|---|
-| `prompt-injection-containment` | `claude-opus-5`, `gpt-5.6-sol` | 4 | 128 | 256 | 0 | simulated |
-| `prompt-injection-memory-poisoning` | `claude-opus-5`, `gpt-5.6-sol` | 6 | 288 | 576 | 1 | simulated |
-| `ui-action-record-replay` | `claude-opus-5`, `gpt-5.6-sol` | 3 | 324 | 648 | 1 | dom-like |
+| `prompt-injection-containment` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 6 | 128 | 512 | 0 | simulated-tree |
+| `prompt-injection-memory-poisoning` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 8 | 288 | 1152 | 2 | simulated-tree |
+| `ui-action-record-replay` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 5 | 324 | 1296 | 1 | simulated-tree |
 | `durable-approval-outbox` | `claude-opus-5`, `gpt-5.6-sol` | 20 | 24 | 48 | 1 | imported from another harness |
 
 An axis count over a bank of one subject is not meaningful — a single subject cannot separate
@@ -23,7 +23,9 @@ axis column empty rather than reporting a degenerate 1.
 
 | subject | families |
 |---|---|
+| `claude-haiku-4-5` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
 | `claude-opus-5` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `durable-approval-outbox` |
+| `claude-sonnet-5` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
 | `gpt-5.6-sol` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `durable-approval-outbox` |
 
 ## The verdict
@@ -43,33 +45,13 @@ measure different things', so the number above is reported and not quoted.
 
 ## Are these families independent?
 
-`claude-opus-5` has attempted 4 families, which makes a qualitative
+`claude-haiku-4-5` has attempted 3 families, which makes a qualitative
 comparison possible: how the same model fares on each. That is a real observation and it is
 not an axis count — for that, 3 shared subjects are needed.
 
 ## The exact trial that unlocks the next claim
 
-**Every subject that exists is already in every bank.** The gap is not a missing trial, it is a
-missing SUBJECT: 1 more model family has to attempt all 4 families before a combined
-width means anything. Re-running the two models already here cannot help — the width is bounded
-by how many distinct subjects the banks share, not by how many trials they contain.
-
-Providers in the registry with no counted trial:
-
-| provider | family | why not yet |
-|---|---|---|
-| `gemini` | google | declared and runnable; see the refusals and infrastructure table for what happened |
-| `external` | external | no local CLI: external by declaration |
-
-For a provider that cannot run here, prepare a bundle and have someone with access run it.
-The bundle pins the challenge hash, so an imported result either measures this exact task or
-is refused:
-
-```bash
-foundry trials campaign prepare --family prompt-injection-containment --provider external --out bundles/prompt-injection-containment-external
-foundry trials campaign prepare --family prompt-injection-memory-poisoning --provider external --out bundles/prompt-injection-memory-poisoning-external
-foundry trials campaign prepare --family ui-action-record-replay --provider external --out bundles/ui-action-record-replay-external
-```
+Nothing: the combined count is available. Widen the bank to narrow it.
 
 ---
 

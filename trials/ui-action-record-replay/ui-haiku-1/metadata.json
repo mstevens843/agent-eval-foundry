@@ -1,0 +1,30 @@
+{
+  "runId": "ui-haiku-1",
+  "familyId": "ui-action-record-replay",
+  "provider": "shell",
+  "providerLabel": "Shell command",
+  "model": "anthropic/claude-haiku-4-5",
+  "effort": null,
+  "subjectId": "claude-haiku-4-5",
+  "scenarioSetId": "replay-324-2255de40",
+  "timeoutMs": 1500000,
+  "runtimeSeconds": 167,
+  "costUsd": null,
+  "isolation": "process",
+  "classification": "completed",
+  "classificationDetail": "artifact produced",
+  "command": [
+    "claude",
+    "--model",
+    "haiku",
+    "-p",
+    "{instruction}",
+    "--permission-mode",
+    "bypassPermissions"
+  ],
+  "challengeHash": "1050e79f4804a96a5327d50dd81765b0",
+  "challengeFiles": 8,
+  "campaign": null,
+  "hostScript": "ui-host.mjs",
+  "scenariosExpected": 324
+}

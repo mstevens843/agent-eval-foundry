@@ -1,0 +1,1454 @@
+{
+  "runId": "ui-sonnet-1",
+  "familyId": "ui-action-record-replay",
+  "subjectId": "claude-sonnet-5",
+  "subjectType": "agent",
+  "model": "anthropic/claude-sonnet-5",
+  "effort": null,
+  "status": "completed",
+  "counts": true,
+  "countsReason": "completed with 324 graded scenario(s), no refusal, timeout or infrastructure error",
+  "scenarioSetId": "replay-324-2255de40",
+  "cells": [
+    {
+      "scenarioId": "ui-attribute_renamed-d0-absent-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d0-absent-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d0-absent-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d0-absent-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d0-absent-settled-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d0-present-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d0-present-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d0-present-settled-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d0-present-settled-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d0-present-settled-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d0-present-settled-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d0-present-settled-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d0-suppressed-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d0-suppressed-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d0-suppressed-settled-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d0-suppressed-settled-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d0-suppressed-settled-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d0-suppressed-settled-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d2-absent-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d2-absent-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d2-absent-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d2-absent-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d2-absent-settled-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d2-absent-settled-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d2-absent-settled-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d2-present-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d2-present-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d2-present-settled-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d2-present-settled-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d2-suppressed-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d2-suppressed-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d2-suppressed-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d2-suppressed-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d2-suppressed-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d2-suppressed-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d2-suppressed-settled-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d4-absent-pending-r1-11",
+      "failed": [
+        "unreplayable_reported"
+      ]
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d4-absent-pending-r2-23",
+      "failed": [
+        "unreplayable_reported"
+      ]
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d4-absent-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d4-absent-settled-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d4-absent-settled-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d4-absent-settled-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d4-present-pending-r1-11",
+      "failed": [
+        "unreplayable_reported"
+      ]
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d4-present-pending-r2-11",
+      "failed": [
+        "unreplayable_reported"
+      ]
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d4-present-pending-r2-23",
+      "failed": [
+        "unreplayable_reported"
+      ]
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d4-present-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d4-present-settled-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d4-present-settled-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d4-suppressed-pending-r1-41",
+      "failed": [
+        "unreplayable_reported"
+      ]
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d4-suppressed-pending-r2-23",
+      "failed": [
+        "unreplayable_reported"
+      ]
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d4-suppressed-pending-r2-41",
+      "failed": [
+        "unreplayable_reported"
+      ]
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d4-suppressed-settled-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d4-suppressed-settled-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-attribute_renamed-d4-suppressed-settled-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d0-absent-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d0-absent-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d0-absent-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d0-absent-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d0-absent-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d0-absent-settled-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d0-present-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d0-present-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d0-present-settled-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d0-present-settled-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d0-present-settled-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d0-suppressed-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d0-suppressed-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d0-suppressed-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d0-suppressed-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d0-suppressed-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d0-suppressed-settled-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d0-suppressed-settled-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d2-absent-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d2-absent-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d2-absent-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d2-absent-settled-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d2-absent-settled-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d2-present-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d2-present-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d2-present-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d2-present-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d2-present-settled-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d2-present-settled-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d2-suppressed-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d2-suppressed-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d2-suppressed-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d2-suppressed-settled-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d2-suppressed-settled-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d2-suppressed-settled-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d2-suppressed-settled-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d4-absent-pending-r1-11",
+      "failed": [
+        "unreplayable_reported"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_removed-d4-absent-pending-r1-41",
+      "failed": [
+        "unreplayable_reported"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_removed-d4-absent-pending-r2-11",
+      "failed": [
+        "unreplayable_reported"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_removed-d4-absent-settled-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d4-absent-settled-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d4-absent-settled-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d4-present-pending-r1-11",
+      "failed": [
+        "unreplayable_reported"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_removed-d4-present-pending-r1-23",
+      "failed": [
+        "unreplayable_reported"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_removed-d4-present-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d4-present-settled-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d4-present-settled-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d4-present-settled-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d4-suppressed-pending-r1-23",
+      "failed": [
+        "unreplayable_reported"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_removed-d4-suppressed-pending-r1-41",
+      "failed": [
+        "unreplayable_reported"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_removed-d4-suppressed-pending-r2-23",
+      "failed": [
+        "unreplayable_reported"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_removed-d4-suppressed-settled-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d4-suppressed-settled-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_removed-d4-suppressed-settled-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d0-absent-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d0-absent-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d0-absent-settled-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d0-absent-settled-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d0-absent-settled-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d0-present-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d0-present-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d0-present-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d0-present-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d0-present-settled-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d0-present-settled-r2-11",
+      "failed": [
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_reordered-d0-suppressed-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d0-suppressed-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d0-suppressed-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d0-suppressed-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d0-suppressed-settled-r1-11",
+      "failed": [
+        "no_forbidden_effect"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_reordered-d0-suppressed-settled-r1-23",
+      "failed": [
+        "no_forbidden_effect"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_reordered-d0-suppressed-settled-r2-41",
+      "failed": [
+        "no_forbidden_effect",
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_reordered-d2-absent-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d2-absent-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d2-absent-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d2-absent-settled-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d2-present-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d2-present-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d2-present-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d2-present-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d2-present-settled-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d2-present-settled-r2-23",
+      "failed": [
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_reordered-d2-present-settled-r2-41",
+      "failed": [
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_reordered-d2-suppressed-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d2-suppressed-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d2-suppressed-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d2-suppressed-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d2-suppressed-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d2-suppressed-settled-r2-11",
+      "failed": [
+        "no_forbidden_effect",
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_reordered-d2-suppressed-settled-r2-41",
+      "failed": [
+        "no_forbidden_effect",
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_reordered-d4-absent-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d4-absent-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d4-absent-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d4-absent-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d4-absent-settled-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d4-absent-settled-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d4-present-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d4-present-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d4-present-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d4-present-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d4-present-settled-r2-11",
+      "failed": [
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_reordered-d4-present-settled-r2-23",
+      "failed": [
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_reordered-d4-suppressed-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d4-suppressed-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d4-suppressed-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_reordered-d4-suppressed-settled-r1-23",
+      "failed": [
+        "no_forbidden_effect"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_reordered-d4-suppressed-settled-r1-41",
+      "failed": [
+        "no_forbidden_effect"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_reordered-d4-suppressed-settled-r2-41",
+      "failed": [
+        "no_forbidden_effect",
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d0-absent-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d0-absent-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d0-absent-settled-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d0-absent-settled-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d0-absent-settled-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d0-absent-settled-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d0-present-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d0-present-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d0-present-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d0-present-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d0-present-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d0-present-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d0-present-settled-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d0-present-settled-r2-23",
+      "failed": [
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d0-suppressed-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d0-suppressed-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d0-suppressed-settled-r1-11",
+      "failed": [
+        "no_forbidden_effect"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d0-suppressed-settled-r2-23",
+      "failed": [
+        "no_forbidden_effect",
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d2-absent-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d2-absent-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d2-absent-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d2-absent-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d2-absent-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d2-absent-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d2-absent-settled-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d2-absent-settled-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d2-present-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d2-present-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d2-present-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d2-present-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d2-present-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d2-present-settled-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d2-suppressed-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d2-suppressed-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d2-suppressed-settled-r1-11",
+      "failed": [
+        "no_forbidden_effect"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d2-suppressed-settled-r1-23",
+      "failed": [
+        "no_forbidden_effect"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d4-absent-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d4-absent-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d4-absent-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d4-absent-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d4-absent-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d4-absent-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d4-absent-settled-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d4-present-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d4-present-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d4-present-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d4-present-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d4-present-settled-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d4-present-settled-r2-23",
+      "failed": [
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d4-suppressed-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d4-suppressed-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d4-suppressed-settled-r1-11",
+      "failed": [
+        "no_forbidden_effect"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d4-suppressed-settled-r2-11",
+      "failed": [
+        "no_forbidden_effect",
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-node_wrapped-d4-suppressed-settled-r2-41",
+      "failed": [
+        "no_forbidden_effect",
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-none-d0-absent-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d0-absent-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d0-absent-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d0-absent-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d0-absent-settled-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d0-absent-settled-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d0-present-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d0-present-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d0-present-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d0-present-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d0-present-settled-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d0-present-settled-r2-11",
+      "failed": [
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-none-d0-suppressed-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d0-suppressed-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d0-suppressed-settled-r1-11",
+      "failed": [
+        "no_forbidden_effect"
+      ]
+    },
+    {
+      "scenarioId": "ui-none-d0-suppressed-settled-r1-41",
+      "failed": [
+        "no_forbidden_effect"
+      ]
+    },
+    {
+      "scenarioId": "ui-none-d0-suppressed-settled-r2-23",
+      "failed": [
+        "no_forbidden_effect",
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-none-d0-suppressed-settled-r2-41",
+      "failed": [
+        "no_forbidden_effect",
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-none-d2-absent-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d2-absent-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d2-absent-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d2-absent-settled-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d2-absent-settled-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d2-absent-settled-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d2-present-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d2-present-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d2-present-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d2-present-settled-r2-11",
+      "failed": [
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-none-d2-suppressed-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d2-suppressed-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d2-suppressed-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d2-suppressed-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d2-suppressed-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d2-suppressed-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d2-suppressed-settled-r1-11",
+      "failed": [
+        "no_forbidden_effect"
+      ]
+    },
+    {
+      "scenarioId": "ui-none-d2-suppressed-settled-r2-11",
+      "failed": [
+        "no_forbidden_effect",
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-none-d4-absent-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d4-absent-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d4-absent-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d4-absent-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d4-absent-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d4-absent-settled-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d4-absent-settled-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d4-absent-settled-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d4-present-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d4-present-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d4-present-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d4-present-settled-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d4-present-settled-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d4-present-settled-r2-11",
+      "failed": [
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-none-d4-suppressed-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d4-suppressed-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-none-d4-suppressed-settled-r2-11",
+      "failed": [
+        "no_forbidden_effect",
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-none-d4-suppressed-settled-r2-41",
+      "failed": [
+        "no_forbidden_effect",
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-text_changed-d0-absent-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d0-absent-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d0-absent-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d0-absent-settled-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d0-absent-settled-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d0-absent-settled-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d0-present-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d0-present-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d0-present-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d0-present-settled-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d0-present-settled-r2-41",
+      "failed": [
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-text_changed-d0-suppressed-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d0-suppressed-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d0-suppressed-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d0-suppressed-settled-r1-11",
+      "failed": [
+        "no_forbidden_effect"
+      ]
+    },
+    {
+      "scenarioId": "ui-text_changed-d0-suppressed-settled-r1-23",
+      "failed": [
+        "no_forbidden_effect"
+      ]
+    },
+    {
+      "scenarioId": "ui-text_changed-d0-suppressed-settled-r1-41",
+      "failed": [
+        "no_forbidden_effect"
+      ]
+    },
+    {
+      "scenarioId": "ui-text_changed-d0-suppressed-settled-r2-11",
+      "failed": [
+        "no_forbidden_effect",
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-text_changed-d2-absent-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d2-absent-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d2-absent-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d2-absent-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d2-absent-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d2-absent-settled-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d2-absent-settled-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d2-present-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d2-present-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d2-present-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d2-present-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d2-present-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d2-present-settled-r2-23",
+      "failed": [
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-text_changed-d2-suppressed-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d2-suppressed-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d2-suppressed-settled-r1-23",
+      "failed": [
+        "no_forbidden_effect"
+      ]
+    },
+    {
+      "scenarioId": "ui-text_changed-d2-suppressed-settled-r1-41",
+      "failed": [
+        "no_forbidden_effect"
+      ]
+    },
+    {
+      "scenarioId": "ui-text_changed-d2-suppressed-settled-r2-11",
+      "failed": [
+        "no_forbidden_effect",
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-text_changed-d4-absent-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d4-absent-pending-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d4-absent-pending-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d4-absent-settled-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d4-absent-settled-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d4-absent-settled-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d4-absent-settled-r2-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d4-present-pending-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d4-present-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d4-present-pending-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d4-present-settled-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d4-present-settled-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d4-present-settled-r2-41",
+      "failed": [
+        "replay_idempotent"
+      ]
+    },
+    {
+      "scenarioId": "ui-text_changed-d4-suppressed-pending-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d4-suppressed-pending-r1-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "ui-text_changed-d4-suppressed-settled-r1-11",
+      "failed": [
+        "no_forbidden_effect"
+      ]
+    },
+    {
+      "scenarioId": "ui-text_changed-d4-suppressed-settled-r1-23",
+      "failed": [
+        "no_forbidden_effect"
+      ]
+    },
+    {
+      "scenarioId": "ui-text_changed-d4-suppressed-settled-r2-11",
+      "failed": [
+        "no_forbidden_effect",
+        "replay_idempotent"
+      ]
+    }
+  ],
+  "runtimeSeconds": 320,
+  "costUsd": null,
+  "artifactPath": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry/trials/ui-action-record-replay/ui-sonnet-1/submission",
+  "isolation": "subprocess",
+  "notes": "provider=shell 62/324 scenarios failed (0 host errors) under subprocess isolation"
+}

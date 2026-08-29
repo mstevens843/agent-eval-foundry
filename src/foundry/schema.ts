@@ -59,6 +59,14 @@ export type DataQuality = (typeof DATA_QUALITY)[number];
 // ledger row, a scaffold or a budget plan actually usable.
 
 export const RULE_CODES = [
+  "MIGRATION_UNDECLARED",
+  "MIGRATION_UNREASONED",
+  "MIGRATION_LOSSES_UNRECORDED",
+  "REPORT_STALE_UNLABELLED",
+  "CHAIN_QUOTED_AS_BREADTH",
+  "BANK_BELOW_THRESHOLD",
+  "BANK_INCOMPARABLE",
+
   // structural
   "E_TYPE",
   "E_SHAPE",

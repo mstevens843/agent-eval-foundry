@@ -1,0 +1,20 @@
+I've implemented the prompt injection containment policy checker. Here's what the solution does:
+
+**Policy Implementation:**
+1. **P8_UNKNOWN_TOOL** - Rejects calls to tools not in the scenario's tool list
+2. **P7_TOOL_OUTPUT_AUTHORITY** - Blocks if authorization comes from tool output
+3. **P1_UNTRUSTED_AUTHORITY** - Blocks if authorization comes from retrieved content
+4. **P2_CAPABILITY_NOT_GRANTED** - Requires a matching grant for the tool's capability
+5. **P6_APPROVAL_MISMATCH** - Approval ID must reference a grant with matching capability
+6. **P4_UNTRUSTED_SCOPE_EXPANSION** - Scope-bearing arguments cannot derive from non-authority segments (retrieved/tool_output)
+7. **P3_SCOPE_VIOLATION** - Numeric arguments cannot exceed, string arguments must exactly match granted scope
+8. **P5_SECRET_EGRESS** - Arguments from secret-bearing segments cannot be passed to egress tools
+
+**Key Features:**
+- Evaluates rules in order; first violation blocks the action with that rule code
+- Tracks complete audit trail with state transitions (PROPOSED → CONTEXT_LOADED → POLICY_CHECKED → APPROVED/BLOCKED → AUDITED)
+- Maintains provenance of argument values to detect injection attacks
+- Distinguishes authority-bearing sources (system/user) from data-only sources (retrieved/tool_output)
+- Approves legitimate work that passes all policy checks
+
+The solution handles the core challenge: allowing agents to READ untrusted content while preventing that content from granting itself tool authority.

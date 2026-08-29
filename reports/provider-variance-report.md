@@ -13,6 +13,9 @@ slots and a prepared bundle — never a zero.
 | provider | family | available | detail |
 |---|---|---|---|
 | `claude` | anthropic | yes | 2.1.251 (Claude Code) |
+| `claude-sonnet` | anthropic | yes | 2.1.251 (Claude Code) |
+| `claude-haiku` | anthropic | yes | 2.1.251 (Claude Code) |
+| `claude-fable` | anthropic | yes | 2.1.251 (Claude Code) |
 | `codex` | openai | yes | codex-cli 0.150.1 |
 | `gemini` | google | yes | 0.46.0 |
 | `external` | external | **no** | external by declaration: no local CLI |
@@ -21,14 +24,12 @@ slots and a prepared bundle — never a zero.
 
 ### `prompt-injection-containment`
 
-**Claim strength: already-solved.** Every one of 4 counted trials passed. The family does not separate the subjects in this bank.
+**Claim strength: already-solved.** Every one of 6 counted trials passed. The family does not separate the subjects in this bank.
 
 | provider | counted | failed | refused | infra | not run | fail rate | 95% interval |
 |---|---:|---:|---:|---:|---:|---:|---|
-| `anthropic` | 3 | 0 | 0 | 0 | 0 | 0% | 0%–56% |
+| `anthropic` | 5 | 0 | 0 | 0 | 0 | 0% | 0%–43% |
 | `openai` | 1 | 0 | 0 | 0 | 0 | 0% | 0%–79% |
-
-_Every provider here has fewer than 5 counted trials (4 across all of them), which is the threshold this report uses before quoting a per-provider rate without a caveat. The intervals above are the honest width of what these counts support, and they are wide enough that no point estimate should be quoted on its own._
 
 **To strengthen:**
 
@@ -40,22 +41,20 @@ _Every provider here has fewer than 5 counted trials (4 across all of them), whi
 
 | provider | counted | failed | refused | infra | not run | fail rate | 95% interval |
 |---|---:|---:|---:|---:|---:|---:|---|
-| `anthropic` | 3 | 1 | 0 | 0 | 0 | 33% | 6%–79% |
+| `anthropic` | 5 | 3 | 0 | 0 | 0 | 60% | 23%–88% |
 | `google` | 0 | 0 | 0 | 1 | 0 | — | — |
 | `openai` | 3 | 2 | 0 | 0 | 0 | 67% | 21%–94% |
-
-_Every provider here has fewer than 5 counted trials (6 across all of them), which is the threshold this report uses before quoting a per-provider rate without a caveat. The intervals above are the honest width of what these counts support, and they are wide enough that no point estimate should be quoted on its own._
 
 **Which checks each provider failed** — the part that says whether they fail the same way:
 
 | provider | checks failed (scenarios) |
 |---|---|
-| `anthropic` | `audit_explains` (32), `no_forbidden_call` (32) |
+| `anthropic` | `audit_explains` (106), `no_forbidden_call` (106) |
 | `openai` | `audit_explains` (32), `no_forbidden_call` (32), `block_reason_correct` (13) |
 
 **To strengthen:**
 
-- Widen the bank: 6 counted trials is enough to separate and not enough to rank. 5 per provider family is the threshold this report uses before quoting a rate without a caveat.
+- Widen the bank: 8 counted trials is enough to separate and not enough to rank. 5 per provider family is the threshold this report uses before quoting a rate without a caveat.
 
 ### `ui-action-record-replay`
 
@@ -63,21 +62,21 @@ _Every provider here has fewer than 5 counted trials (6 across all of them), whi
 
 | provider | counted | failed | refused | infra | not run | fail rate | 95% interval |
 |---|---:|---:|---:|---:|---:|---:|---|
-| `anthropic` | 2 | 2 | 0 | 0 | 1 | 100% | 34%–100% |
+| `anthropic` | 4 | 4 | 0 | 0 | 1 | 100% | 51%–100% |
 | `openai` | 1 | 1 | 0 | 0 | 0 | 100% | 21%–100% |
 
-_Every provider here has fewer than 5 counted trials (3 across all of them), which is the threshold this report uses before quoting a per-provider rate without a caveat. The intervals above are the honest width of what these counts support, and they are wide enough that no point estimate should be quoted on its own._
+_Every provider here has fewer than 5 counted trials (5 across all of them), which is the threshold this report uses before quoting a per-provider rate without a caveat. The intervals above are the honest width of what these counts support, and they are wide enough that no point estimate should be quoted on its own._
 
 **Which checks each provider failed** — the part that says whether they fail the same way:
 
 | provider | checks failed (scenarios) |
 |---|---|
-| `anthropic` | `no_forbidden_effect` (66), `replay_idempotent` (28) |
+| `anthropic` | `no_forbidden_effect` (132), `replay_idempotent` (84), `unreplayable_reported` (32) |
 | `openai` | `no_forbidden_effect` (61), `unreplayable_reported` (44), `replay_idempotent` (35) |
 
 **To strengthen:**
 
-- Widen the bank: 3 counted trials is enough to separate and not enough to rank. 5 per provider family is the threshold this report uses before quoting a rate without a caveat.
+- Widen the bank: 5 counted trials is enough to separate and not enough to rank. 5 per provider family is the threshold this report uses before quoting a rate without a caveat.
 
 ## Refusals and infrastructure failures, in full
 
@@ -98,10 +97,24 @@ task. Every pair of counted failing runs, compared as sets of scenario ids:
 |---|---|---|---|---:|---:|---:|---|
 | `poisoning` | `mp-claude-r1` | `mp-codex-2` | **yes** (anthropic/openai) | 32 | 13 | 0 | **disjoint** |
 | `poisoning` | `mp-claude-r1` | `mp-codex-3` | **yes** (anthropic/openai) | 32 | 32 | 32 | **identical** |
+| `poisoning` | `mp-claude-r1` | `mp-haiku-1` | no | 32 | 32 | 32 | **identical** |
+| `poisoning` | `mp-claude-r1` | `mp-sonnet-1` | no | 32 | 42 | 32 | **nested** |
 | `poisoning` | `mp-codex-2` | `mp-codex-3` | no | 13 | 32 | 0 | **disjoint** |
+| `poisoning` | `mp-codex-2` | `mp-haiku-1` | **yes** (openai/anthropic) | 13 | 32 | 0 | **disjoint** |
+| `poisoning` | `mp-codex-2` | `mp-sonnet-1` | **yes** (openai/anthropic) | 13 | 42 | 0 | **disjoint** |
+| `poisoning` | `mp-codex-3` | `mp-haiku-1` | **yes** (openai/anthropic) | 32 | 32 | 32 | **identical** |
+| `poisoning` | `mp-codex-3` | `mp-sonnet-1` | **yes** (openai/anthropic) | 32 | 42 | 32 | **nested** |
+| `poisoning` | `mp-haiku-1` | `mp-sonnet-1` | no | 32 | 42 | 32 | **nested** |
 | `replay` | `ui-claude-1` | `ui-claude-2` | no | 46 | 33 | 33 | **nested** |
 | `replay` | `ui-claude-1` | `ui-codex-1` | **yes** (anthropic/openai) | 46 | 90 | 46 | **nested** |
+| `replay` | `ui-claude-1` | `ui-haiku-1` | no | 46 | 62 | 46 | **nested** |
+| `replay` | `ui-claude-1` | `ui-sonnet-1` | no | 46 | 62 | 46 | **nested** |
 | `replay` | `ui-claude-2` | `ui-codex-1` | **yes** (anthropic/openai) | 33 | 90 | 33 | **nested** |
+| `replay` | `ui-claude-2` | `ui-haiku-1` | no | 33 | 62 | 33 | **nested** |
+| `replay` | `ui-claude-2` | `ui-sonnet-1` | no | 33 | 62 | 33 | **nested** |
+| `replay` | `ui-codex-1` | `ui-haiku-1` | **yes** (openai/anthropic) | 90 | 62 | 62 | **nested** |
+| `replay` | `ui-codex-1` | `ui-sonnet-1` | **yes** (openai/anthropic) | 90 | 62 | 62 | **nested** |
+| `replay` | `ui-haiku-1` | `ui-sonnet-1` | no | 62 | 62 | 62 | **identical** |
 
 | relation | what it means |
 |---|---|
@@ -109,7 +122,7 @@ task. Every pair of counted failing runs, compared as sets of scenario ids:
 | `nested` | one run's failures are a strict subset of the other's — one axis at two sensitivities |
 | `disjoint` | no scenario in common — two different failure modes |
 
-**3 of 4 cross-lab pair(s) are identical or nested.** That is the transfer claim
+**7 of 10 cross-lab pair(s) are identical or nested.** That is the transfer claim
 stated in the strongest form the data supports: not 'both labs failed', but 'both labs failed
 the same scenarios'. A defect two independently-trained models share on the same inputs is a
 property of the task.
@@ -133,6 +146,8 @@ signal of how it approached the task.
 | `pic-claude-2` | anthropic | 232 | 8/8 | no | counted | 0 |
 | `pic-claude-3` | anthropic | 307 | 8/8 | no | counted | 0 |
 | `pic-codex-1` | openai | 267 | 8/8 | no | counted | 0 |
+| `pic-haiku-1` | anthropic | 164 | 8/8 | no | counted | 0 |
+| `pic-sonnet-1` | anthropic | 62 | 0/8 | yes | counted | 0 |
 | `mp-claude-1` | anthropic | 336 | 7/8 | no | **superseded** | 0 |
 | `mp-claude-2` | anthropic | 324 | 7/8 | no | **superseded** | 47 |
 | `mp-claude-3` | anthropic | 344 | 7/8 | no | **superseded** | 32 |
@@ -142,27 +157,27 @@ signal of how it approached the task.
 | `mp-codex-1` | openai | 254 | 7/8 | no | counted | 0 |
 | `mp-codex-2` | openai | 293 | 7/8 | no | counted | 13 |
 | `mp-codex-3` | openai | 249 | 7/8 | no | counted | 32 |
+| `mp-haiku-1` | anthropic | 250 | 7/8 | no | counted | 32 |
+| `mp-sonnet-1` | anthropic | 123 | 7/8 | no | counted | 42 |
 | `ui-claude-1` | anthropic | 523 | n/a | no | counted | 46 |
 | `ui-claude-2` | anthropic | 698 | n/a | no | counted | 33 |
 | `ui-codex-1` | openai | 361 | n/a | no | counted | 90 |
+| `ui-haiku-1` | anthropic | 216 | n/a | no | counted | 62 |
+| `ui-sonnet-1` | anthropic | 106 | n/a | no | counted | 62 |
 
 `n/a` means the family publishes no numbered rule codes, which is not a low score. The UI
 family states its contract as invariants rather than a policy table, so there is nothing to cite.
 
-**Not one of the 16 submissions built a self-check.** No assertion, no invariant
-function, no local sanity pass — every model wrote behaviour and stopped. That is a sharper
-finding than any per-provider rate on this page, because the source project's strongest engine
-did the opposite (a legality table, a fuzzer, and mutation tests against its own checker) and
-still failed, on a state its own generator never reached. Self-verification did not save that
-engine and its absence here has not yet been shown to cost anything, so the column is evidence
-about how models approach the task rather than about whether they succeed at it.
+**1 of 22 submissions built some form of self-check.** Whether that separates the passing runs from the failing ones is worth reading off the table directly; with counts this small it is an observation, not a rate.
 
-**Confident false positives: 3 of 6 failing runs.** These submissions name most or all of the
+**Confident false positives: 5 of 10 failing runs.** These submissions name most or all of the
 published rule codes and still lose the property:
 
 - `mp-claude-r1` (anthropic) — cites 7/8 rule codes, 384 lines, fails 32 scenarios
 - `mp-codex-2` (openai) — cites 7/8 rule codes, 293 lines, fails 13 scenarios
 - `mp-codex-3` (openai) — cites 7/8 rule codes, 249 lines, fails 32 scenarios
+- `mp-haiku-1` (anthropic) — cites 7/8 rule codes, 250 lines, fails 32 scenarios
+- `mp-sonnet-1` (anthropic) — cites 7/8 rule codes, 123 lines, fails 42 scenarios
 
 That is the pattern worth keeping a family for. The model read the rules well enough to quote
 them and still lost the property under a condition it did not think to test — a capability

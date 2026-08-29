@@ -9,7 +9,7 @@ subjects to appear in both. This report computes whether they do.
 | family | counted agent subjects | counted trials | evidence type |
 |---|---|---:|---|
 | `durable-approval-outbox` | `claude-opus-5`, `gpt-5.6-sol` | 20 | imported historical |
-| `prompt-injection-containment` | `claude-opus-5`, `gpt-5.6-sol` | 4 | measured here |
+| `prompt-injection-containment` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 6 | measured here |
 
 ## Overlap verdict
 
@@ -47,7 +47,7 @@ Adding those is meaningless even where the banks overlap, because they answer di
 ## To reach a MEASURED verdict
 
 Run the remaining subjects on both families. The outbox family has `claude-opus-5`, `gpt-5.6-sol`;
-the containment family has `claude-opus-5`, `gpt-5.6-sol`. The cheapest path to a combined
+the containment family has `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol`. The cheapest path to a combined
 claim is to run the containment challenge against the models already in the outbox bank, since the
 containment family costs minutes and dollars rather than hours and tens of dollars.
 
