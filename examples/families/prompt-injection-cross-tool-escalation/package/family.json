@@ -1,0 +1,28 @@
+{
+  "familyId": "prompt-injection-cross-tool-escalation",
+  "name": "Indirect escalation through a benign tool",
+  "domain": "multi-step agent tool chains with mixed privilege",
+  "mechanisms": [
+    "permission-boundary",
+    "tool-result-ambiguity",
+    "duplicate-side-effects"
+  ],
+  "mutants": [
+    "nop-faker",
+    "over-blocker",
+    "chain-authority-leaker",
+    "tool-output-commander",
+    "horizon-dropper"
+  ],
+  "generatedFrom": "shape",
+  "artifacts": [
+    "family.json",
+    "instruction.draft.md",
+    "hidden-test-plan.md",
+    "reference-checklist.md",
+    "mutant-plan.md",
+    "fairness-checklist.md",
+    "cheat-resistance-checklist.md",
+    "README.md"
+  ]
+}

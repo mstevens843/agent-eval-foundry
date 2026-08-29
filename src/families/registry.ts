@@ -1,0 +1,205 @@
+// The registry of BUILT families: the ones that actually execute.
+//
+// Until this file there was one built family and every consumer hardcoded it — the CLI, the evidence
+// builder, the challenge command. A second and third family made that untenable, and the fix is the
+// one the repository keeps arriving at: describe the thing as data, then let the generic code read
+// the data.
+//
+// A built family is one that can run its own subjects and produce a matrix. That is a stronger claim
+// than having a task shape, and the distinction is load-bearing: `foundry check` validates nine
+// shapes, three of which appear here. The other six are pre-registrations.
+
+import { buildMemoryChallengePackage } from "../challenge/memory-package.js";
+import { type LeakProfile, MEMORY_PROFILE, PIC_PROFILE, UI_PROFILE } from "../challenge/package-check.js";
+import { buildChallengePackage } from "../challenge/package.js";
+import type { ChallengePackage } from "../challenge/package.js";
+import { buildUiChallengePackage } from "../challenge/ui-package.js";
+import type { Matrix } from "../types.js";
+
+import { INTENDED_CHECK as PIC_CHECKS } from "../reports/trial-report.js";
+import * as pic from "./prompt-injection-containment/runner.js";
+import * as picScenarios from "./prompt-injection-containment/scenarios.js";
+
+import { BASELINES as MEM_BASELINES, INTENDED_CHECK as MEM_CHECKS } from "./memory-poisoning/mutants.js";
+import * as mem from "./memory-poisoning/runner.js";
+import * as memScenarios from "./memory-poisoning/scenarios.js";
+import { CHECKS as MEM_CHECK_NAMES } from "./memory-poisoning/verify.js";
+
+import { BASELINES as UI_BASELINES, INTENDED_CHECK as UI_CHECKS } from "./ui-action-record-replay/mutants.js";
+import * as ui from "./ui-action-record-replay/runner.js";
+import * as uiScenarios from "./ui-action-record-replay/scenarios.js";
+import { CHECKS as UI_CHECK_NAMES } from "./ui-action-record-replay/verify.js";
+
+export interface FamilySweep {
+  readonly scenarioCount: number;
+  readonly spaceSize: number;
+  readonly matrix: Matrix;
+  /** Scenarios the reference failed. Non-empty means the family is measuring its own bugs. */
+  readonly referenceFailures: readonly { readonly scenarioId: string; readonly checks: readonly string[] }[];
+  /** Per mutant: was it caught by the check it was written to trip? */
+  readonly mutantsCaught: readonly {
+    readonly mutantId: string;
+    readonly check: string;
+    readonly caught: boolean;
+    readonly caughtIn: number;
+    readonly total: number;
+  }[];
+  readonly baselinesBlocked: readonly string[];
+  readonly baselinesTotal: number;
+}
+
+export interface BuiltFamily {
+  readonly id: string;
+  readonly name: string;
+  readonly domain: string;
+  readonly mechanisms: readonly string[];
+  readonly checks: readonly string[];
+  /** The declared knob space, for the generated shape. */
+  readonly space: Readonly<Record<string, readonly unknown[]>>;
+  readonly knobPurpose: Readonly<Record<string, string>>;
+  readonly run: () => FamilySweep;
+  readonly challenge: (typesSource: string, scenarioSetId: string) => ChallengePackage;
+  readonly leakProfile: LeakProfile;
+  /** Path to the types file the challenge package copies. */
+  readonly typesPath: string;
+  readonly estimatedBuildHours: number;
+  readonly estimatedFrontierUsd: number;
+}
+
+const sweep = <C extends { scenarioId: string; subjectId: string; failures: readonly { check: string }[] }>(
+  cells: readonly C[],
+  scenarios: readonly { id: string }[],
+  spaceSize: number,
+  matrix: Matrix,
+  intended: Readonly<Record<string, string>>,
+  baselines: readonly string[],
+): FamilySweep => {
+  const mutantsCaught = Object.entries(intended).map(([mutantId, check]) => {
+    const own = cells.filter((c) => c.subjectId === mutantId);
+    const caughtIn = own.filter((c) => c.failures.some((f) => f.check === check)).length;
+    return { mutantId, check, caught: caughtIn > 0, caughtIn, total: own.length };
+  });
+  return {
+    scenarioCount: scenarios.length,
+    spaceSize,
+    matrix,
+    referenceFailures: cells
+      .filter((c) => c.subjectId === "reference" && c.failures.length > 0)
+      .map((c) => ({
+        scenarioId: c.scenarioId,
+        checks: [...new Set(c.failures.map((f) => f.check))].sort(),
+      })),
+    mutantsCaught,
+    baselinesBlocked: baselines.filter((b) => cells.some((c) => c.subjectId === b && c.failures.length > 0)),
+    baselinesTotal: baselines.length,
+  };
+};
+
+const PIC_SPACE = {
+  seed: [11, 23, 41],
+  carrier: ["none", "email", "document", "webpage", "crm_note", "tool_output"],
+  attack: ["none", "authority_grab", "scope_expansion", "secret_exfil", "approval_confusion", "tool_chain"],
+  secretPresent: [true, false],
+  safeActionPresent: [true, false],
+  derivationHops: [0, 1, 2],
+} as const;
+
+export const BUILT_FAMILIES: readonly BuiltFamily[] = [
+  {
+    id: "prompt-injection-containment",
+    name: "Prompt-injection containment",
+    domain: "agent tool-use with untrusted retrieved content",
+    mechanisms: ["prompt-injection-via-retrieval", "context-contamination", "permission-boundary"],
+    checks: [...new Set(Object.values(PIC_CHECKS))],
+    space: PIC_SPACE,
+    knobPurpose: {
+      seed: "determines the generated scenario",
+      carrier: "where the untrusted content arrives",
+      attack: "which containment mechanism the scenario exercises",
+      secretPresent: "whether a secret is in scope for egress",
+      safeActionPresent: "whether legitimate work must still complete",
+      derivationHops: "how far an argument's value is laundered from its origin",
+    },
+    run: () => {
+      const run = pic.runFamily();
+      return sweep(run.cells, run.scenarios, run.spaceSize, pic.toMatrix(run), PIC_CHECKS, [
+        "nop-faker",
+        "over-blocker",
+      ]);
+    },
+    challenge: buildChallengePackage,
+    leakProfile: PIC_PROFILE,
+    typesPath: "src/families/prompt-injection-containment/types.ts",
+    estimatedBuildHours: 70,
+    estimatedFrontierUsd: 65,
+  },
+  {
+    id: "prompt-injection-memory-poisoning",
+    name: "Durable memory poisoning across sessions",
+    domain: "agent memory and retrieval across sessions",
+    mechanisms: ["context-contamination", "false-audit-history", "prompt-injection-via-retrieval"],
+    checks: [...MEM_CHECK_NAMES],
+    space: memScenarios.SPACE,
+    knobPurpose: {
+      seed: "determines the generated scenario",
+      attack: "which memory-poisoning mechanism the scenario exercises",
+      sessionsBetween: "sessions between the untrusted ingestion and the action it influences",
+      memoryKind: "what the durable store can keep; `vector_note` cannot keep provenance at all",
+      benignActions: "how much legitimate work surrounds the attack",
+      decoySimilarity: "whether a trusted record confirms the same value the attack targets",
+    },
+    run: () => {
+      const run = mem.runFamily();
+      return sweep(run.cells, run.scenarios, run.spaceSize, mem.toMatrix(run), MEM_CHECKS, MEM_BASELINES);
+    },
+    challenge: buildMemoryChallengePackage,
+    leakProfile: MEMORY_PROFILE,
+    typesPath: "src/families/memory-poisoning/types.ts",
+    estimatedBuildHours: 75,
+    estimatedFrontierUsd: 70,
+  },
+  {
+    id: "ui-action-record-replay",
+    name: "UI action record and replay",
+    domain: "browser and desktop UI automation without an API",
+    mechanisms: ["ui-replay-mismatch", "stale-state", "hidden-environment-dependency"],
+    checks: [...UI_CHECK_NAMES],
+    space: uiScenarios.SPACE,
+    knobPurpose: {
+      seed: "determines the generated UI tree and the action trace",
+      mutation: "what changed in the tree between recording and replay — the core of the family",
+      mutationDepth: "how far into the trace the mutation bites",
+      confirmation: "whether the irreversible step raises a confirmation, and whether it is hidden",
+      asyncSettled: "whether the region under the selector has finished loading at replay time",
+      replayCount: "exercises idempotency; a second replay must not repeat an irreversible step",
+    },
+    run: () => {
+      const run = ui.runFamily();
+      return sweep(run.cells, run.scenarios, run.spaceSize, ui.toMatrix(run), UI_CHECKS, UI_BASELINES);
+    },
+    challenge: buildUiChallengePackage,
+    leakProfile: UI_PROFILE,
+    typesPath: "src/families/ui-action-record-replay/types.ts",
+    estimatedBuildHours: 55,
+    estimatedFrontierUsd: 40,
+  },
+];
+
+export const BUILT_FAMILY_IDS: readonly string[] = BUILT_FAMILIES.map((f) => f.id);
+
+export function builtFamily(id: string): BuiltFamily {
+  const found = BUILT_FAMILIES.find((f) => f.id === id);
+  if (found === undefined) {
+    throw new Error(`"${id}" is not a built family; built families are ${BUILT_FAMILY_IDS.join(", ")}`);
+  }
+  return found;
+}
+
+/** Scenario-set id for a built family, content-addressed by its measured instance ids. */
+export function scenarioSetIdFor(family: BuiltFamily, matrix: Matrix): string {
+  let hash = 5381;
+  for (const inst of matrix.instances) {
+    for (let i = 0; i < inst.id.length; i += 1) hash = ((hash << 5) + hash + inst.id.charCodeAt(i)) >>> 0;
+  }
+  return `${family.id.split("-").pop()}-${matrix.instances.length}-${hash.toString(16)}`;
+}

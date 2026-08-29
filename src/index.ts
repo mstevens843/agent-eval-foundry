@@ -238,3 +238,39 @@ export type {
 export { classifyRunKind } from "./trials/history.js";
 export { renderHistoricalReport, renderSharedBankReport } from "./reports/bank-report.js";
 export type { SharedBankInput } from "./reports/bank-report.js";
+
+// ---------------------------------------------------------------- the evolution layer
+export {
+  KILL_REASONS,
+  KILL_REASON_SPECS,
+  DISPOSITIONS,
+  analyzeFamily,
+  assertKillAnalysis,
+  killReasonSpec,
+} from "./foundry/kill.js";
+export type { KillAnalysis, KillFinding, KillReason, Disposition, DeclaredConcerns } from "./foundry/kill.js";
+export {
+  OPERATORS,
+  OPERATOR_IDS,
+  evolve,
+  operator,
+  variantToShape,
+  assertVariantNovel,
+  assertPromotionEvidence,
+} from "./foundry/evolve.js";
+export type { EvolutionOperator, OperatorId, VariantProposal } from "./foundry/evolve.js";
+export { familyLoop, loopAll, DECLARED_CONCERNS } from "./foundry/loop.js";
+export type { FamilyLoopState } from "./foundry/loop.js";
+export { assertLedgerConsistency, assertPostmortemExists, familyIdOf } from "./foundry/consistency.js";
+export { sampleSpace, assertKnobCoverage, hash32 } from "./foundry/sample.js";
+export { shapeFromFamily } from "./foundry/shape-sync.js";
+export type { ShapeProse } from "./foundry/shape-sync.js";
+export { SHAPE_PROSE } from "./foundry/shape-prose.js";
+export { BUILT_FAMILIES, BUILT_FAMILY_IDS, builtFamily, scenarioSetIdFor } from "./families/registry.js";
+export type { BuiltFamily, FamilySweep } from "./families/registry.js";
+export { renderKillReport } from "./reports/kill-report.js";
+export { renderEvolutionReport } from "./reports/evolution-report.js";
+export { buildMemoryChallengePackage } from "./challenge/memory-package.js";
+export { buildUiChallengePackage } from "./challenge/ui-package.js";
+export { MEMORY_PROFILE, PIC_PROFILE, UI_PROFILE } from "./challenge/package-check.js";
+export type { LeakProfile } from "./challenge/package-check.js";

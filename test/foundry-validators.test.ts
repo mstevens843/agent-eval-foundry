@@ -93,6 +93,27 @@ const COVERED_IN_ORCHESTRATION_TEST: readonly RuleCode[] = [
   "TRIAL_BASELINE_IMPOSTER",
 ];
 
+/**
+ * Rules whose known-bad case lives in `evolution.test.ts`: the kill taxonomy, the evolution engine,
+ * the sampler and the ledger-consistency checks. Same delegation contract — the guard below asserts
+ * each of these actually appears in that file.
+ */
+const COVERED_IN_EVOLUTION_TEST: readonly RuleCode[] = [
+  "SAMPLE_KNOB_FROZEN",
+  "KILL_WITHOUT_REASON",
+  "KILL_WITHOUT_EVIDENCE",
+  "KILL_REASON_UNSUPPORTED",
+  "KILL_DISPOSITION_MISSING",
+  "KILL_UNKNOWN_REASON",
+  "VARIANT_IDENTICAL_TO_PARENT",
+  "VARIANT_WITHOUT_OPERATOR",
+  "VARIANT_NO_MECHANISM_DELTA",
+  "VARIANT_UNKNOWN_MECHANISM",
+  "VARIANT_PROMOTED_WITHOUT_BUILD",
+  "LEDGER_STATUS_CONTRADICTS_GATE",
+  "LEDGER_KILL_WITHOUT_ANALYSIS",
+];
+
 /** Rules exercised by code below rather than by a JSON fixture. Keeps assertion 3 honest. */
 const PROGRAMMATIC: readonly RuleCode[] = [
   "E_TYPE",
@@ -296,6 +317,9 @@ describe("budget rules", () => {
     retryRate: 0.15,
     instancesPerFamily: 24,
     axesPerFamily: 3,
+    postBuildKillRate: 0.5,
+    evolutionCyclesPerSurvivor: 2,
+    descendantReuse: 0.35,
   };
 
   it("a sane plan passes both checkers", () => {
@@ -345,6 +369,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ...PROGRAMMATIC,
       ...COVERED_IN_TRIALS_TEST,
       ...COVERED_IN_ORCHESTRATION_TEST,
+      ...COVERED_IN_EVOLUTION_TEST,
     ]);
     const uncovered = RULE_CODES.filter((c) => !covered.has(c));
     expect(
@@ -359,6 +384,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
     const delegated: readonly (readonly [string, readonly RuleCode[]])[] = [
       ["test/trials.test.ts", COVERED_IN_TRIALS_TEST],
       ["test/orchestration.test.ts", COVERED_IN_ORCHESTRATION_TEST],
+      ["test/evolution.test.ts", COVERED_IN_EVOLUTION_TEST],
     ];
     for (const [file, codes] of delegated) {
       const source = readFileSync(`${ROOT}${file}`, "utf8");

@@ -203,11 +203,13 @@ describe("the checked-in registry", () => {
     for (const m of measured) expect(m.results, `${m.id} claims measured`).not.toBeNull();
   });
 
-  it("two families now have measured axis counts", () => {
+  it("four families now have measured axis counts", () => {
     const measured = registry.shapes.filter((s) => s.dataQuality === "measured");
     expect(measured.map((s) => s.familyId).sort()).toEqual([
       "durable-approval-outbox",
       "prompt-injection-containment",
+      "prompt-injection-memory-poisoning",
+      "ui-action-record-replay",
     ]);
     for (const m of measured) expect(m.estimatedAxes, m.familyId).toBeGreaterThan(1);
   });
@@ -312,6 +314,9 @@ describe("budget model", () => {
     retryRate: 0.15,
     instancesPerFamily: 24,
     axesPerFamily: 3,
+    postBuildKillRate: 0.5,
+    evolutionCyclesPerSurvivor: 2,
+    descendantReuse: 0.35,
   };
 
   it("labour dominates, which is the finding", () => {
@@ -362,6 +367,9 @@ describe("report determinism", () => {
             retryRate: 0.15,
             instancesPerFamily: 24,
             axesPerFamily: 3,
+            postBuildKillRate: 0.5,
+            evolutionCyclesPerSurvivor: 2,
+            descendantReuse: 0.35,
           },
           1000,
         ),

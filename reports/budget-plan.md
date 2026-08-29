@@ -6,23 +6,23 @@ What $100,000 buys, priced against the measured rates from the source project.
 
 | | families | shipped tasks | independent axes | $ / task |
 |---|---:|---:|---:|---:|
-| **parameterized families** | **10** | **240** | **30** | $381.99 |
-| hand-authored tasks | 10 | 10 | 10 | $9,168 |
+| **parameterized families** | **7** | **168** | **21** | $535.24 |
+| hand-authored tasks | 7 | 7 | 7 | $12,846 |
 
-**$100,000 does not buy 1,000 tasks.** Reaching that count under these assumptions needs a further $285,051. What it does buy is **10 families yielding about 240 graded instances and 30 independent axes** — and the axes are the number worth quoting, because a thousand tasks measuring three things is three measurements.
+**$100,000 does not buy 1,000 tasks.** Reaching that count under these assumptions needs a further $439,522. What it does buy is **7 families yielding about 168 graded instances and 21 independent axes** — and the axes are the number worth quoting, because a thousand tasks measuring three things is three measurements.
 
 ## Where the money goes
 
 | cost centre | per family | total | share |
 |---|---:|---:|---:|
-| screening (candidates killed to find one) | $3,600 | $36,000 | 39% |
-| authoring the family | $5,400 | $54,000 | 59% |
-| frontier trials | $167.88 | $1,679 | 2% |
+| screening (candidates killed to find one) | $3,600 | $25,200 | 28% |
+| authoring the family | $8,910 | $62,370 | 69% |
+| frontier trials | $335.75 | $2,350 | 3% |
 | generating instances | $0.00 | $0.00 | 0% |
 
-**Labour is 98% of spend.** Model spend is $1,679 of $91,679. This is the finding: the budget is an engineering budget with a rounding error of GPU time attached, and any plan that prices only the trials is wrong by the size of the rest of the table.
+**Labour is 97% of spend.** Model spend is $2,350 of $89,920. This is the finding: the budget is an engineering budget with a rounding error of GPU time attached, and any plan that prices only the trials is wrong by the size of the rest of the table.
 
-The plan implies **0.42 engineer-years** and **100 candidates screened** to yield 10 families.
+The plan implies **0.41 engineer-years** and **70 candidates screened** to yield 7 families.
 
 ## Sensitivity to the labour rate
 
@@ -30,11 +30,11 @@ The one input that is purely an assumption, so here is the whole column instead 
 
 | rate | families | tasks | axes |
 |---|---:|---:|---:|
-| $60.00/h | 21 | 504 | 63 |
-| $90.00/h | 14 | 336 | 42 |
-| $120.00/h | 10 | 240 | 30 |
-| $180.00/h | 7 | 168 | 21 |
-| $240.00/h | 5 | 120 | 15 |
+| $60.00/h | 15 | 360 | 45 |
+| $90.00/h | 10 | 240 | 30 |
+| $120.00/h | 7 | 168 | 21 |
+| $180.00/h | 5 | 120 | 15 |
+| $240.00/h | 3 | 72 | 9 |
 
 ## Sensitivity to instances per family
 
@@ -43,11 +43,11 @@ makes the literal reading of the question unaffordable.
 
 | instances/family | families | tasks | $ / task |
 |---|---:|---:|---:|
-| 1 | 10 | 10 | $9,168 |
-| 6 | 10 | 60 | $1,528 |
-| 12 | 10 | 120 | $763.99 |
-| 24 | 10 | 240 | $381.99 |
-| 48 | 10 | 480 | $191.00 |
+| 1 | 7 | 7 | $12,846 |
+| 6 | 7 | 42 | $2,141 |
+| 12 | 7 | 84 | $1,070 |
+| 24 | 7 | 168 | $535.24 |
+| 48 | 7 | 336 | $267.62 |
 
 ## Inputs, with provenance
 
@@ -63,6 +63,34 @@ makes the literal reading of the question unaffordable.
 | `axesPerFamily` | 3 | measured — antichain width 3 against a 10-engine bank |
 | `labourRateUsdPerHour` | 120 | ASSUMPTION — caller-supplied, and the dominant term |
 | `totalUsd` | 100000 | the question |
+
+## Families die after they are built, and that is priced
+
+The earlier version of this model priced one build per shipped family. That is the same mistake as
+pricing only the trial runs that produced a result: it charges for the work that survived and
+omits the work that produced it.
+
+| | |
+|---|---:|
+| families actually built | 14 |
+| of those, killed after being built | 7 |
+| families that survive to ship | 7 |
+| builds per survivor | 2 |
+| a descendant's reuse of its parent | 35% |
+
+**Why killing prompt-injection early was the good outcome.** The family cost roughly 70 hours to
+build and three counted trials — about seventeen minutes of model time — to kill. Had it shipped,
+the cost would have been every downstream hour spent maintaining a benchmark that separates
+nothing, plus the credibility of every number quoted beside it. The gate that killed it cost
+nothing to run.
+
+That asymmetry is the argument for the whole screening layer: **a kill is cheap and a build is
+not**, so the discipline that pays is moving evidence earlier, not building faster.
+
+What the numbers above do NOT say is that the kill rate is 50%. One of two families built here
+died after being built. That is a sample of two, it is the only post-build kill rate this
+repository has measured, and a plan resting on it is resting on very little — but a plan assuming
+100% survival is resting on less, and `budget-check.ts` rejects that one.
 
 ## Trial-layer assumptions, measured
 
@@ -87,7 +115,7 @@ deliberate and not waste — 20 produced a usable result. That is a waste rate o
 **17%**, against the `retryRate` input of 15%.
 
 **The measured rate is above the `retryRate` input of 15%.** Re-planning at 17%
-changes nothing: 10 families and 240 instances either way, and $0.10 more per shipped task. That is worth stating plainly — at this scale the plan is dominated by labour, and the trial budget is small enough that a several-point error in the retry rate does not move the family count. The place to be careful about model spend is a plan whose labour is cheap, and this is not one.
+changes nothing: 7 families and 168 instances either way, and $0.20 more per shipped task. That is worth stating plainly — at this scale the plan is dominated by labour, and the trial budget is small enough that a several-point error in the retry rate does not move the family count. The place to be careful about model spend is a plan whose labour is cheap, and this is not one.
 
 The waste that did occur was 3 `infrastructure_error`, 1 `timeout` — not model failure, and not something a better prompt fixes. The input is left at its
 documented value rather than quietly raised to the measured one: 24 standard attempts is a small

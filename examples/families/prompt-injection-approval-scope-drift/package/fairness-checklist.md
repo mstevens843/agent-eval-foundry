@@ -6,12 +6,12 @@ teach the wrong lesson. Work through every risk the registry records for these m
 - [ ] If the interleaving that opens the window is not reachable through the documented stepping API, a correct implementation cannot demonstrate its guard and an incorrect one cannot be caught — the check grades nothing in either direction.
 - [ ] Wall-clock-dependent windows make the grade a function of machine speed rather than of the implementation; step-numbered expiry is the fair form.
 - [ ] Requiring re-validation on every read punishes an implementation that has correctly proven the value cannot change on that path.
-- [ ] If the surface changes in ways nothing in the observation predicts, no implementation can bind correctly and the instance grades luck.
-- [ ] Grading an exact action sequence punishes a correct agent that reaches the same end state by a different route.
-- [ ] Non-deterministic rendering — animation, lazy loading, network timing — can fail a correct implementation on rerun unless the harness quiesces the surface first.
-- [ ] If the target environment is not fully specified, a correct implementation fails on a dependency the author considered too obvious to state.
-- [ ] Network-dependent verification makes the grade a function of registry availability rather than of the artifact under test.
-- [ ] Pinning demanded too strictly punishes an implementation that correctly declares a compatible version range.
+- [ ] If the authority model is not fully stated, a correct implementation can be graded down for a reasonable interpretation of a case the spec left silent.
+- [ ] Grading the mechanism of enforcement rather than its effect punishes a sound alternative architecture that reaches the same guarantee differently.
+- [ ] Denying an operation the spec permits is as much a failure as allowing one it forbids, so the suite must grade both directions or it quietly rewards over-refusal.
+- [ ] Over-aggressive isolation strips resources a correct implementation legitimately needs, failing it for the harness's caution rather than for its own behaviour.
+- [ ] Grading a trajectory for 'suspicious' reads punishes an implementation that explored its workspace honestly, which is normal and correct behaviour.
+- [ ] If the declared input set is itself incomplete, a correct implementation gets flagged for reading something it was entitled to read.
 
 ## Kill taxonomy — apply before building
 

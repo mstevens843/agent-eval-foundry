@@ -8,14 +8,15 @@ number you can only get by writing the failures down.
 
 | | |
 |---|---:|
-| candidates | **32** |
-| status `idea` | 3 |
+| candidates | **37** |
+| status `idea` | 6 |
 | status `candidate` | 7 |
+| status `built` | 2 |
 | status `trialed` | 2 |
 | status `shipped` | 4 |
 | status `killed` | 16 |
-| measured (a real result exists) | 19 |
-| estimated | 13 |
+| measured (a real result exists) | 21 |
+| estimated | 16 |
 | recorded model spend | $107.57 |
 | kills that demonstrably cost $0 | 8 of 16 |
 | kills that cost model spend | 0 |
@@ -59,6 +60,11 @@ an error, but it is a row whose lesson has not been made transferable yet.
 | `authorization-justification-gate` | killed | kill | permission-boundary, false-audit-history | $0.00 | measured |
 | `prompt-injection-containment-built` | trialed | kill | prompt-injection-via-retrieval, context-contamination, permission-boundary | $0.00 | measured |
 | `durable-outbox-historical-import` | shipped | promote | uncertain-external-effects, duplicate-side-effects, false-audit-history, liveness-stall | $0.00 | measured |
+| `prompt-injection-memory-poisoning` | built | open | context-contamination, false-audit-history, prompt-injection-via-retrieval | $0.00 | measured |
+| `ui-action-record-replay-built` | built | open | ui-replay-mismatch, stale-state, hidden-environment-dependency | $0.00 | measured |
+| `prompt-injection-capability-routing` | idea | open | permission-boundary, tool-result-ambiguity, prompt-injection-via-retrieval | $0.00 | est. |
+| `prompt-injection-cross-tool-escalation` | idea | open | permission-boundary, tool-result-ambiguity, duplicate-side-effects | $0.00 | est. |
+| `prompt-injection-approval-scope-drift` | idea | open | permission-boundary, stale-state, context-contamination | $0.00 | est. |
 | `browser-checkout-confirmation-lost` | candidate | open | ui-replay-mismatch, uncertain-external-effects, duplicate-side-effects | — | est. |
 | `support-ticket-merge-audit-chain` | candidate | open | false-audit-history, stale-state, duplicate-side-effects | — | est. |
 | `deploy-rollback-unknown-apply` | candidate | open | uncertain-external-effects, liveness-stall, false-audit-history | — | est. |
@@ -444,6 +450,96 @@ an error, but it is a row whose lesson has not been made transferable yet.
 **Transferability.** The Harbor result.json reader is reusable for any Terminal-Bench family, and the classify-before-reward discipline generalizes to any harness whose failure column mixes results with non-results.
 
 **Evidence.** `src/trials/history.ts`, `reports/historical-durable-outbox-trials.md`
+
+### Durable memory poisoning across sessions `prompt-injection-memory-poisoning`
+
+**Status** built · **Decision** open · **Domain** agent memory and retrieval across sessions · **Data** measured
+
+**Hypothesis.** The parent family died as already-solved because provenance never had to survive a store: three passing submissions tracked it as a field on an in-memory object. Separating ingestion from use by a session boundary should make the same rule expensive, because the implementation has to write the origin down at a moment when doing so looks pointless.
+
+**Why it should be hard.** At decision time the originating segment is gone. An implementation that stored the value without its origin cannot distinguish an account number the user gave it from one an email supplied, and no amount of care at decision time recovers the information. The correct behaviour also has a second half: refusing everything remembered fails the permitted work.
+
+**Why it might be unfair.** The store's semantics have to be published or the task becomes guesswork about the harness. `vector_note` cannot keep provenance at all, so the rule covering that case (M4) is stated in the spec and provenance is never demanded where the store could not hold it.
+
+**Results.** 1 passed / 11 failed against reference, provenance-dropper, self-trusting-reader, summary-launderer, recall-blind-executor, memory-refuser, audit-forger, same-session-resolver, recency-over-provenance, attention-budgeted, nop-faker, over-blocker. Reference passes 288/288 measured scenarios. All 11 mutants are caught by the check each was written to trip. 3 measured axes, 11 distinct catch sets, 0 blind instances. NO AGENT TRIAL HAS BEEN RUN.
+
+**Decision rationale.** Promoted from the evolution engine's lowest-kill-risk proposal (30%) and built end to end. It is HOLD, not SHIP: the verifier discriminates and nothing that could plausibly fail it has attempted it. The next action is a counted agent trial, and the pre-registered kill signal is the parent's — every counted trial passing means already-solved again and the persistence hypothesis was wrong.
+
+**Transferability.** The mechanism is provenance survival across a persistence boundary, which appears wherever an agent has durable memory: RAG note stores, CRM summaries, ticket histories, long-running assistants.
+
+**Evidence.** `src/families/memory-poisoning/`, `examples/families/prompt-injection-memory-poisoning/`, `reports/prompt-injection-memory-poisoning-axis-report.md`
+
+### UI action record and replay, built `ui-action-record-replay-built`
+
+**Status** built · **Decision** open · **Domain** browser and desktop UI automation without an API · **Data** measured
+
+**Hypothesis.** A model can discover a UI workflow; the capability worth shipping is a recording that replays deterministically without the model in the loop. Grading the recording rather than the discovery should separate implementations that carry state properly from ones that improvise.
+
+**Why it should be hard.** The live tree has changed since recording, and the three correct answers — complete, halt, re-record — are operationally different instructions. A replayer must also stay idempotent across a repeated replay and must not reach for a model when the deterministic path gets hard, which is the shortcut that works and destroys the capability.
+
+**Why it might be unfair.** Every mutation kind is published, the tree is a deterministic function of the seed, and a genuinely unreplayable trace scores as correct when reported as such. The risk that remains is fidelity: the application is simulated, so a pass here does not transfer to a real DOM without further evidence.
+
+**Results.** 1 passed / 10 failed against reference, stale-state-reader, eager-resolver, hidden-confirmation-skipper, duplicate-executor, model-in-the-loop, action-order-reorderer, audit-forger, halter-not-reporter, over-blocker, nop-recorder. Reference passes 324/324 measured scenarios. All 10 mutants caught by their intended check. 6 measured axes — the widest of any family here — with 12 distinct catch sets and 0 blind instances. NO AGENT TRIAL HAS BEEN RUN.
+
+**Decision rationale.** Promoted from a scaffold to a measured family in this cycle. Six measured axes is the strongest verifier-discrimination result in the repository, and it still says nothing about difficulty: HOLD until a counted agent trial exists.
+
+**Transferability.** Directly relevant to agent 'hands' work: any product that records a workflow once and replays it many times faces exactly these three outcomes and exactly this idempotency requirement.
+
+**Evidence.** `src/families/ui-action-record-replay/`, `examples/families/ui-action-record-replay/`, `reports/ui-action-record-replay-axis-report.md`
+
+### Capability routing across documents and tools (proposed variant) `prompt-injection-capability-routing`
+
+**Status** idea · **Decision** open · **Domain** agent tool routing over mixed-trust document sets · **Data** est.
+
+**Hypothesis.** Tracking authority across a chain of tool hops is harder than blocking an injection at one call site.
+
+**Why it should be hard.** The single-call check that passes today applies at one boundary; a chain has n boundaries and the defect appears at the seam, where each call looks authorized because the previous one was.
+
+**Why it might be unfair.** A blanket refusal of chained calls passes containment, so the liveness check has to be strong enough to punish it. Fetching more than the decision needs must be gradable without becoming a guessing game about what 'needs' means.
+
+**Results.** _none — not run_
+
+**Decision rationale.** Generated by the evolution engine from `already_solved` on the parent, with a pre-registered 50% kill risk: routing is still a within-request property and a model that tracks provenance per argument may extend it across hops without new insight. Not built.
+
+**Transferability.** Multi-tool agents with mixed-trust inputs, which is most of them.
+
+**Evidence.** `examples/shapes/prompt-injection-capability-routing.json`, `reports/foundry-evolution-report.md`
+
+### Indirect escalation through a benign tool (proposed variant) `prompt-injection-cross-tool-escalation`
+
+**Status** idea · **Decision** open · **Domain** multi-step agent tool chains with mixed privilege · **Data** est.
+
+**Hypothesis.** Authority accumulating along a chain is a distinct defect from obeying untrusted text.
+
+**Why it should be hard.** Over a long horizon an implementation re-derives authority from the most recent step rather than from the original grant, and the drop only appears past the horizon it carries.
+
+**Why it might be unfair.** The horizon must be declared, and no rule may appear only at the last step.
+
+**Results.** _none — not run_
+
+**Decision rationale.** Generated by the evolution engine with a 45% pre-registered kill risk: the parent already contains a `tool_chain` attack shape and every counted trial handled it, so the mechanism is partly demonstrated as solved. Only the horizon extension is untested. Not built.
+
+**Transferability.** Any agent that composes tools, especially where a read tool feeds a write tool.
+
+**Evidence.** `examples/shapes/prompt-injection-cross-tool-escalation.json`, `reports/foundry-evolution-report.md`
+
+### Approval scope drift after the fact (proposed variant) `prompt-injection-approval-scope-drift`
+
+**Status** idea · **Decision** open · **Domain** human-in-the-loop approval for agent actions · **Data** est.
+
+**Hypothesis.** An approval that binds a scope is harder to honour when the scope drifts later and the rule order is not published.
+
+**Why it should be hard.** The action type still matches, the approval still exists, and only the parameters moved. Withholding the evaluation order makes attribution a derivation rather than a lookup.
+
+**Why it might be unfair.** High: if two rules can both legitimately govern one action, grading on a single expected code punishes a defensible answer. The variant cannot be built until the precedence is provably unambiguous or the verifier accepts any genuinely applicable rule.
+
+**Results.** _none — not run_
+
+**Decision rationale.** Generated by the evolution engine with a 40% pre-registered kill risk. It carries the highest fairness risk of the four, which is recorded here rather than discovered after the build.
+
+**Transferability.** Any approval workflow where the approved thing and the executed thing are separated in time.
+
+**Evidence.** `examples/shapes/prompt-injection-approval-scope-drift.json`, `reports/foundry-evolution-report.md`
 
 ### Lost confirmation page on a flaky checkout `browser-checkout-confirmation-lost`
 

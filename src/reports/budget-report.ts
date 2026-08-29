@@ -135,12 +135,41 @@ export function renderPlanSummary(plan: BudgetPlan): string {
  */
 function trialLayerSection(inputs: BudgetInputs, t: TrialLayerFacts): readonly string[] {
   const pct = (n: number): string => `${(n * 100).toFixed(0)}%`;
+  const plan = planBudget(inputs);
   const measuredRetry = t.standardWasteRate;
   const understated = measuredRetry > inputs.retryRate;
   const corrected = planBudget({ ...inputs, retryRate: measuredRetry });
   const asPlanned = planBudget(inputs);
 
   return [
+    "## Families die after they are built, and that is priced",
+    "",
+    "The earlier version of this model priced one build per shipped family. That is the same mistake as",
+    "pricing only the trial runs that produced a result: it charges for the work that survived and",
+    "omits the work that produced it.",
+    "",
+    "| | |",
+    "|---|---:|",
+    `| families actually built | ${plan.familiesBuilt} |`,
+    `| of those, killed after being built | ${plan.familiesKilledAfterBuild} |`,
+    `| families that survive to ship | ${plan.families} |`,
+    `| builds per survivor | ${inputs.evolutionCyclesPerSurvivor} |`,
+    `| a descendant's reuse of its parent | ${(inputs.descendantReuse * 100).toFixed(0)}% |`,
+    "",
+    "**Why killing prompt-injection early was the good outcome.** The family cost roughly 70 hours to",
+    "build and three counted trials — about seventeen minutes of model time — to kill. Had it shipped,",
+    "the cost would have been every downstream hour spent maintaining a benchmark that separates",
+    "nothing, plus the credibility of every number quoted beside it. The gate that killed it cost",
+    "nothing to run.",
+    "",
+    "That asymmetry is the argument for the whole screening layer: **a kill is cheap and a build is",
+    "not**, so the discipline that pays is moving evidence earlier, not building faster.",
+    "",
+    "What the numbers above do NOT say is that the kill rate is 50%. One of two families built here",
+    "died after being built. That is a sample of two, it is the only post-build kill rate this",
+    "repository has measured, and a plan resting on it is resting on very little — but a plan assuming",
+    "100% survival is resting on less, and `budget-check.ts` rejects that one.",
+    "",
     "## Trial-layer assumptions, measured",
     "",
     "Everything above prices *building* families. This section prices *running* them, from the trial",

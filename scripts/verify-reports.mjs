@@ -36,9 +36,27 @@ for (const [path, args] of axis) {
 }
 
 // The family artifacts are generated too, so they get the same treatment: regenerate and diff.
+// Every built family's matrix and shape are here: a family whose axis count moves and whose shape
+// does not is a build failure rather than a discrepancy someone notices in six months.
 for (const [path, args] of [
   ["examples/families/prompt-injection-containment/matrix.json", ["family", "run"]],
   ["examples/families/prompt-injection-containment/scenarios.json", ["family", "scenarios"]],
+  [
+    "examples/families/prompt-injection-memory-poisoning/matrix.json",
+    ["family", "run", "--family", "prompt-injection-memory-poisoning"],
+  ],
+  [
+    "examples/families/ui-action-record-replay/matrix.json",
+    ["family", "run", "--family", "ui-action-record-replay"],
+  ],
+  [
+    "examples/shapes/prompt-injection-memory-poisoning.json",
+    ["family", "shape", "--family", "prompt-injection-memory-poisoning"],
+  ],
+  [
+    "examples/shapes/ui-action-record-replay.json",
+    ["family", "shape", "--family", "ui-action-record-replay"],
+  ],
 ]) {
   if (run(args) !== readFileSync(path, "utf8")) {
     console.error(`STALE  ${path}`);
@@ -48,6 +66,25 @@ for (const [path, args] of [
 
 // The challenge package is generated too. Regenerate into a temp dir and diff every file, because a
 // package that silently drifts from the family it fronts is how an answer key leaks.
+for (const [familyId, committedDir] of [
+  ["prompt-injection-memory-poisoning", "examples/families/prompt-injection-memory-poisoning/challenge"],
+  ["ui-action-record-replay", "examples/families/ui-action-record-replay/challenge"],
+]) {
+  const tmpDir = mkdtempSync(join(tmpdir(), "foundry-fam-"));
+  run(["challenge", "build", "--family", familyId, "--out", tmpDir]);
+  const walkDir = (dir, prefix = "") =>
+    readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+      e.isDirectory() ? walkDir(join(dir, e.name), `${prefix}${e.name}/`) : [`${prefix}${e.name}`],
+    );
+  for (const rel of walkDir(tmpDir).sort()) {
+    const committed = join(committedDir, rel);
+    if (readFileSync(join(tmpDir, rel), "utf8") !== readFileSync(committed, "utf8")) {
+      console.error(`STALE  ${committed}`);
+      failures += 1;
+    } else console.log(`ok     ${committed}`);
+  }
+}
+
 const chalTmp = mkdtempSync(join(tmpdir(), "foundry-chal-"));
 run(["challenge", "build", "--out", chalTmp]);
 const walk = (dir, prefix = "") =>
@@ -64,21 +101,31 @@ for (const rel of walk(chalTmp).sort()) {
 
 // The scaffolded family artifacts are generated too. Regenerating into a temp directory and diffing
 // catches the case where a shape changes and its checked-in scaffold silently does not.
-const uiTmp = mkdtempSync(join(tmpdir(), "foundry-ui-"));
-run(["scaffold", "--shape", "examples/shapes/ui-action-record-replay.json", "--out", uiTmp]);
-for (const rel of readdirSync(uiTmp).sort()) {
-  const committed = join("examples/families/ui-action-record-replay/package", rel);
-  if (readFileSync(join(uiTmp, rel), "utf8") !== readFileSync(committed, "utf8")) {
-    console.error(`STALE  ${committed}`);
-    failures += 1;
-  } else console.log(`ok     ${committed}`);
+// The scaffold's job is the paperwork an UNBUILT family needs before it earns build time, so the
+// families scaffolded here are the three proposed variants nobody has built. The UI family used to
+// be scaffolded too; it is a built family now, and a scaffold beside a real implementation is a
+// second source of truth waiting to disagree with the first.
+for (const variant of [
+  "prompt-injection-capability-routing",
+  "prompt-injection-cross-tool-escalation",
+  "prompt-injection-approval-scope-drift",
+]) {
+  const varTmp = mkdtempSync(join(tmpdir(), "foundry-var-"));
+  run(["scaffold", "--shape", `examples/shapes/${variant}.json`, "--out", varTmp]);
+  for (const rel of readdirSync(varTmp).sort()) {
+    const committed = join("examples/families", variant, "package", rel);
+    if (readFileSync(join(varTmp, rel), "utf8") !== readFileSync(committed, "utf8")) {
+      console.error(`STALE  ${committed}`);
+      failures += 1;
+    } else console.log(`ok     ${committed}`);
+  }
 }
 
 // Every report `all` writes, diffed against what is committed. New reports are covered automatically
 // by being written here, but the count is asserted so a report that stops being generated is caught
 // rather than silently skipped.
 run(["all", "--out", tmp]);
-const EXPECTED_REPORTS = 15;
+const EXPECTED_REPORTS = 19;
 const generated = readdirSync(tmp);
 if (generated.length !== EXPECTED_REPORTS) {
   console.error(`WRONG COUNT  \`all\` wrote ${generated.length} reports, expected ${EXPECTED_REPORTS}`);

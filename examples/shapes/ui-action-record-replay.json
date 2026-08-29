@@ -2,80 +2,183 @@
   "familyId": "ui-action-record-replay",
   "name": "UI action record and replay",
   "domain": "browser and desktop UI automation without an API",
-  "mechanisms": ["ui-replay-mismatch", "stale-state", "hidden-environment-dependency"],
-  "visibleRules": [
-    "A recorded capability is a typed artifact: an ordered action trace, each action carrying a selector, a precondition that must hold before it runs, and a postcondition that must hold after.",
-    "Replay executes the artifact with no model in the loop. If replay needs the model to decide anything, the recording was incomplete and must fail rather than improvise.",
-    "A selector must be resolved against the live UI state at replay time, never against the state captured during recording.",
-    "When a precondition does not hold at replay time, the action must halt with a named reason. Proceeding on the assumption that the UI looks the way it did during recording is the defect this family exists to catch.",
-    "Any step whose effect is irreversible (submit, pay, delete, send) must record a confirmation state, and replay must observe that state rather than assume it.",
-    "Replay must be idempotent under retry: replaying a trace that already completed must not repeat an irreversible step.",
-    "The replay audit must record, per action, the selector resolved, the precondition observed, and the postcondition observed — not merely that the step ran.",
-    "A trace that cannot be replayed deterministically must be reported as unrecordable rather than stored as a capability."
+  "mechanisms": [
+    "ui-replay-mismatch",
+    "stale-state",
+    "hidden-environment-dependency"
   ],
-  "hiddenGradedRegion": "The hidden suite samples the declared UI-mutation space: which selector attribute changes between record and replay, how deep in the trace the change occurs, whether a confirmation dialog appears or is suppressed, whether an async region has settled, and whether the trace is replayed once or twice. Every parameter is declared in the knobs below; the hidden set samples it more densely than the visible examples, and adds no rule.",
+  "visibleRules": [
+    "A recorded capability is a typed artifact: an ordered trace whose every step carries a selector, a precondition and a postcondition.",
+    "Replay executes the artifact with no model in the loop. Calling the model is a rule violation even when it works.",
+    "A selector is resolved against the live tree at replay time. The recorded node id is a hint and may be stale.",
+    "A precondition is observed, never assumed, and the audit records the observed value.",
+    "A step whose target declares a confirmation must observe and accept one before completing. An absent dialog is not a confirmation.",
+    "Replay is idempotent under retry: a completed irreversible step must not repeat.",
+    "A trace that can never replay as recorded is reported unreplayable; a trace blocked by the current state is halted. Those are different instructions.",
+    "The audit records, per step, the node resolved and the conditions observed — not merely that the step ran."
+  ],
+  "hiddenGradedRegion": "The hidden suite samples the declared UI-mutation space: which change occurred between record and replay, how deep in the trace it bites, whether a confirmation is absent, present or suppressed, whether an async region has settled, and whether the trace is replayed once or twice. Every parameter is a declared knob; the hidden set samples it more densely and adds no rule.",
   "knobs": [
-    { "name": "seed", "type": "seed", "values": [11, 23, 41], "purpose": "determines the generated UI tree and the action trace" },
-    { "name": "mutation", "type": "enum", "values": ["none", "attribute_renamed", "node_reordered", "node_wrapped", "text_changed", "node_removed"], "purpose": "what changed in the DOM between recording and replay — the core of the family" },
-    { "name": "mutation_depth", "type": "int", "values": [0, 2, 5], "purpose": "how far into the trace the mutation bites; a defect at step 5 survives naive smoke tests that only replay step 1" },
-    { "name": "confirmation", "type": "enum", "values": ["absent", "present", "suppressed"], "purpose": "whether the irreversible step raises a confirmation, and whether it is hidden" },
-    { "name": "async_settled", "type": "bool", "values": [true, false], "purpose": "whether the region under the selector has finished loading at replay time" },
-    { "name": "replay_count", "type": "int", "values": [1, 2], "purpose": "exercises idempotency; a second replay must not repeat an irreversible step" }
+    {
+      "name": "seed",
+      "type": "seed",
+      "values": [
+        11,
+        23,
+        41
+      ],
+      "purpose": "determines the generated UI tree and the action trace"
+    },
+    {
+      "name": "mutation",
+      "type": "enum",
+      "values": [
+        "none",
+        "attribute_renamed",
+        "node_reordered",
+        "node_wrapped",
+        "text_changed",
+        "node_removed"
+      ],
+      "purpose": "what changed in the tree between recording and replay — the core of the family"
+    },
+    {
+      "name": "mutationDepth",
+      "type": "int",
+      "values": [
+        0,
+        2,
+        4
+      ],
+      "purpose": "how far into the trace the mutation bites"
+    },
+    {
+      "name": "confirmation",
+      "type": "enum",
+      "values": [
+        "absent",
+        "present",
+        "suppressed"
+      ],
+      "purpose": "whether the irreversible step raises a confirmation, and whether it is hidden"
+    },
+    {
+      "name": "asyncSettled",
+      "type": "bool",
+      "values": [
+        true,
+        false
+      ],
+      "purpose": "whether the region under the selector has finished loading at replay time"
+    },
+    {
+      "name": "replayCount",
+      "type": "int",
+      "values": [
+        1,
+        2
+      ],
+      "purpose": "exercises idempotency; a second replay must not repeat an irreversible step"
+    }
   ],
   "authoritativeSources": [
     {
       "name": "effect ledger",
-      "whatItSettles": "which irreversible effects actually occurred — submissions, payments, deletions — and in what order",
-      "whyEngineCannotForge": "It is owned by the simulated application, not by the replayer. The replayer receives a facade with no read method, so it can cause effects and can never observe or edit the record of them. Under container isolation the ledger is in the grading process and the subject is in the container."
+      "whatItSettles": "which irreversible effects actually fired, in what order, on which replay pass",
+      "whyEngineCannotForge": "It is owned by the simulated application and the facade exposes no read method. A replayer can cause a payment and can never observe or edit the record of payments, so `replay_idempotent` is decided by what happened rather than by what was reported."
     },
     {
-      "name": "live DOM state",
-      "whatItSettles": "what the UI actually contained at the moment each selector was resolved",
-      "whyEngineCannotForge": "The harness snapshots the tree before and after every action and stores the snapshots outside the subject's reach, so a replayer that claims a precondition held is checked against what was really there rather than against its own report."
+      "name": "facade call ledger",
+      "whatItSettles": "every call the replayer made, including calls to the model",
+      "whyEngineCannotForge": "The harness records each call as it is made. This is what makes `no_model_in_loop` a measurement: a replayer that improvises past a renamed attribute may well complete the flow, and the improvisation is still visible."
+    },
+    {
+      "name": "live tree",
+      "whatItSettles": "what the page actually contained when a selector was resolved",
+      "whyEngineCannotForge": "The verifier re-resolves each recorded selector against the live tree itself, so a step claiming to have resolved a node the selector cannot reach is caught regardless of what the audit says."
     }
   ],
   "referenceContract": [
-    "Record a trace whose every action carries a selector, a precondition and a postcondition.",
-    "Resolve each selector against the live tree at replay time.",
-    "Halt with a named reason when a precondition fails, rather than continuing on the recorded assumption.",
-    "Observe the confirmation state for irreversible steps instead of assuming it.",
-    "Guard irreversible steps so a second replay is a no-op.",
-    "Emit a replay audit naming the resolved selector and the observed pre/postconditions per action.",
-    "Refuse to store a trace that cannot replay deterministically."
+    "Resolve each selector against the live tree, and treat more than one match as ambiguous rather than picking the first.",
+    "Observe each precondition and halt with a named reason when it does not hold.",
+    "Distinguish a region that has not loaded from a node that is gone.",
+    "Observe the confirmation state for a step that declares one.",
+    "Keep a durable record of completed irreversible steps so a repeat replay is a no-op.",
+    "Report a trace whose target no longer exists as unreplayable rather than half-running it.",
+    "Emit an audit naming the resolved node and the observed conditions per step."
   ],
   "expectedMutants": [
-    { "mutantId": "stale-state-reader", "mustFailCheck": "selector_resolved_live" },
-    { "mutantId": "audit-liar", "mustFailCheck": "replay_audit_explains" },
-    { "mutantId": "duplicate-executor", "mustFailCheck": "replay_idempotent" },
-    { "mutantId": "nop-faker", "mustFailCheck": "replay_completes" },
-    { "mutantId": "eager-resolver", "mustFailCheck": "precondition_observed" }
+    {
+      "mutantId": "stale-state-reader",
+      "mustFailCheck": "selector_resolved_live"
+    },
+    {
+      "mutantId": "eager-resolver",
+      "mustFailCheck": "precondition_observed"
+    },
+    {
+      "mutantId": "hidden-confirmation-skipper",
+      "mustFailCheck": "confirmation_observed"
+    },
+    {
+      "mutantId": "duplicate-executor",
+      "mustFailCheck": "replay_idempotent"
+    },
+    {
+      "mutantId": "model-in-the-loop",
+      "mustFailCheck": "no_model_in_loop"
+    },
+    {
+      "mutantId": "action-order-reorderer",
+      "mustFailCheck": "replay_order_preserved"
+    },
+    {
+      "mutantId": "audit-forger",
+      "mustFailCheck": "replay_audit_explains"
+    },
+    {
+      "mutantId": "halter-not-reporter",
+      "mustFailCheck": "unreplayable_reported"
+    },
+    {
+      "mutantId": "over-blocker",
+      "mustFailCheck": "replay_completes"
+    },
+    {
+      "mutantId": "nop-recorder",
+      "mustFailCheck": "replay_completes"
+    }
   ],
   "fairnessConstraints": [
-    "Every mutation kind the hidden suite uses appears in the knob list, so no replay failure depends on a UI change the author could not have anticipated.",
-    "The simulated UI is deterministic given the seed: no wall-clock, no randomness the subject cannot see.",
-    "A trace that is genuinely unreplayable must be reportable as such and scores as correct, so the family does not punish an implementation for refusing an impossible recording.",
-    "Both halves are graded: refusing to replay anything fails `replay_completes` exactly as blindly replaying fails `selector_resolved_live`.",
-    "Selectors are structural rather than textual, so the family measures state handling and not string matching."
+    "Every mutation kind the hidden suite uses is published, so no failure depends on a change the author could not anticipate.",
+    "The tree is a deterministic function of the seed: no wall clock, no randomness the subject cannot see.",
+    "A trace that is genuinely unreplayable is reportable as such and scores as correct.",
+    "Both halves are graded: declaring every trace unreplayable fails `replay_completes` exactly as blindly replaying fails `selector_resolved_live`.",
+    "Selectors are structural rather than textual, so the family measures state handling and not string matching.",
+    "A pending region is distinguishable from a missing node, so 'wait' and 're-record' are separable answers."
   ],
   "cheatResistance": [
     "The effect ledger lives outside the subject and exposes no read method.",
-    "DOM snapshots are taken by the harness before and after each action and are never passed to the subject.",
-    "The replay audit is cross-checked against the harness snapshots, so a subject that claims a precondition held is compared with what was actually there.",
-    "Scenario inputs are regenerated from the seed rather than taken from the subject's own report.",
-    "A subject that performs no actions scores zero rather than passing the no-forbidden-effect checks vacuously."
+    "The verifier re-resolves selectors against the live tree instead of trusting the replay audit.",
+    "Calls to the model are recorded by the harness, so improvising cannot be hidden by a clean report.",
+    "A subject that performs no actions fails `replay_completes` rather than passing the no-forbidden-effect checks vacuously.",
+    "Scenario trees are regenerated from the seed rather than taken from the subject's report."
   ],
   "expectedFailureModes": [
-    "Replaying against the recorded tree rather than the live one, so a renamed attribute silently targets the wrong node.",
-    "Treating a missing confirmation dialog as confirmation, and firing the irreversible step anyway.",
-    "Repeating the irreversible step on a second replay because completion was never recorded durably.",
-    "Halting correctly but producing an audit that says the step ran without saying what was observed.",
-    "Refusing to replay anything once any mutation is detected, which passes every safety check and completes no work."
+    "Replaying against the recorded node id, which is stale the moment the framework re-creates the element.",
+    "Running a step without observing its precondition, so a disabled control is clicked anyway.",
+    "Treating a suppressed confirmation as a confirmation and firing the irreversible step.",
+    "Repeating the payment on a second replay because completion was never recorded durably.",
+    "Halting on a missing target instead of reporting the trace unreplayable, so an operator waits for something that will never happen.",
+    "Improvising past a mutation by asking a model, which completes the flow and destroys the capability.",
+    "Producing an audit that says a step ran without saying what was observed."
   ],
   "estimatedBuildHours": 55,
   "estimatedFrontierUsd": 40,
-  "status": "candidate",
-  "dataQuality": "estimated",
-  "evidence": null,
-  "estimatedAxes": 3,
-  "agentTrialsRun": null
+  "status": "built",
+  "dataQuality": "measured",
+  "evidence": "Built and measured in this repository: src/families/ui-action-record-replay/ (simulated app with an effect ledger, generator, reference replayer, 10 mutants, verifier, runner), examples/families/ui-action-record-replay/matrix.json. The reference passes every measured scenario and every mutant is caught by its intended check. NO AGENT TRIAL HAS BEEN RUN.",
+  "estimatedAxes": 6,
+  "agentTrialsRun": null,
+  "agentTrialsPassed": null
 }

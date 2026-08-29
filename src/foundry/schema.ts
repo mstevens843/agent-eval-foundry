@@ -120,6 +120,23 @@ export const RULE_CODES = [
   // shared subject bank
   "BANK_ADDITIVE_WITHOUT_OVERLAP",
   "BANK_INCOMPARABLE_SCENARIO_SET",
+  // scenario-space sampling
+  "SAMPLE_KNOB_FROZEN",
+  // family kill analysis — a family may not die for a reason nobody wrote down
+  "KILL_WITHOUT_REASON",
+  "KILL_WITHOUT_EVIDENCE",
+  "KILL_REASON_UNSUPPORTED",
+  "KILL_DISPOSITION_MISSING",
+  "KILL_UNKNOWN_REASON",
+  // family evolution — a variant must differ from its parent
+  "VARIANT_IDENTICAL_TO_PARENT",
+  "VARIANT_WITHOUT_OPERATOR",
+  "VARIANT_NO_MECHANISM_DELTA",
+  "VARIANT_UNKNOWN_MECHANISM",
+  "VARIANT_PROMOTED_WITHOUT_BUILD",
+  // ledger consistency against the ship gate
+  "LEDGER_STATUS_CONTRADICTS_GATE",
+  "LEDGER_KILL_WITHOUT_ANALYSIS",
   // agent-facing challenge packages
   "CHALLENGE_LEAKS_HIDDEN_ARTIFACT",
   "CHALLENGE_MISSING_SURFACE",

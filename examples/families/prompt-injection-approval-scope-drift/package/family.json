@@ -1,18 +1,18 @@
 {
-  "familyId": "ui-action-record-replay",
-  "name": "UI action record and replay",
-  "domain": "browser and desktop UI automation without an API",
+  "familyId": "prompt-injection-approval-scope-drift",
+  "name": "Approval scope drift after the fact",
+  "domain": "human-in-the-loop approval for agent actions",
   "mechanisms": [
-    "ui-replay-mismatch",
+    "permission-boundary",
     "stale-state",
-    "hidden-environment-dependency"
+    "context-contamination"
   ],
   "mutants": [
     "nop-faker",
-    "eager-resolver",
-    "audit-liar",
-    "duplicate-executor",
-    "stale-state-reader"
+    "over-blocker",
+    "approval-reuser",
+    "scope-widener",
+    "stale-approval-follower"
   ],
   "generatedFrom": "shape",
   "artifacts": [

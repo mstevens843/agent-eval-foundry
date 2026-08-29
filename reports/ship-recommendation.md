@@ -13,7 +13,11 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `durable-approval-outbox` | **SHIP** | none |
 | `model-alias-drift-sentinel` | **HOLD** | none |
 | `permission-boundary-tools` | **HOLD** | none |
+| `prompt-injection-approval-scope-drift` | **HOLD** | none |
+| `prompt-injection-capability-routing` | **HOLD** | none |
 | `prompt-injection-containment` | **NOT-READY** | not-already-solved |
+| `prompt-injection-cross-tool-escalation` | **HOLD** | none |
+| `prompt-injection-memory-poisoning` | **HOLD** | none |
 | `stale-crm-ticket-automation` | **HOLD** | none |
 | `ui-action-record-replay` | **HOLD** | none |
 
@@ -187,6 +191,54 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 45h build, $50 frontier |
 
+### `prompt-injection-approval-scope-drift` — HOLD
+
+| gate | result | detail |
+|---|---|---|
+| `solvable` | pass | 5 contract item(s) |
+| `verifier-graded` | pass | 5 expected mutant(s) |
+| `trust-boundary` | pass | 1/1 source(s) state unforgeability |
+| `detectable` | pass | all mechanisms detectable |
+| `fairness` | pass | 4 constraint(s) |
+| `cheat-resistance` | pass | 4 requirement(s) |
+| `is-a-family` | pass | 4 knob(s): seed, sessions_between, memory_kind, rule_collision |
+| `hidden-region-declared` | pass | The hidden suite samples which scope parameter drifts, how far, how many session |
+| `measured-axes` | n/a | estimated 3 axes; not measured |
+| `reference-passes` | n/a | family not built; nothing to run |
+| `baselines-blocked` | n/a | family not built |
+| `mutants-caught-by-intended-check` | n/a | family not built |
+| `mechanisms-exercised` | n/a | family not built |
+| `isolation-level` | n/a | family not built |
+| `shared-bank-ready` | n/a | family not built |
+| `deterministic-reports` | n/a | family not built |
+| `difficulty-evidenced` | **FAIL** | no counted agent trials |
+| `not-already-solved` | n/a | no counted agent trials yet |
+| `priced` | pass | 50h build, $45 frontier |
+
+### `prompt-injection-capability-routing` — HOLD
+
+| gate | result | detail |
+|---|---|---|
+| `solvable` | pass | 5 contract item(s) |
+| `verifier-graded` | pass | 5 expected mutant(s) |
+| `trust-boundary` | pass | 2/2 source(s) state unforgeability |
+| `detectable` | pass | all mechanisms detectable |
+| `fairness` | pass | 5 constraint(s) |
+| `cheat-resistance` | pass | 5 requirement(s) |
+| `is-a-family` | pass | 5 knob(s): seed, chain_length, hidden_facts, benign_actions, decoy_similarity |
+| `hidden-region-declared` | pass | The hidden suite samples the declared routing space: chain length, how many poli |
+| `measured-axes` | n/a | estimated 3 axes; not measured |
+| `reference-passes` | n/a | family not built; nothing to run |
+| `baselines-blocked` | n/a | family not built |
+| `mutants-caught-by-intended-check` | n/a | family not built |
+| `mechanisms-exercised` | n/a | family not built |
+| `isolation-level` | n/a | family not built |
+| `shared-bank-ready` | n/a | family not built |
+| `deterministic-reports` | n/a | family not built |
+| `difficulty-evidenced` | **FAIL** | no counted agent trials |
+| `not-already-solved` | n/a | no counted agent trials yet |
+| `priced` | pass | 60h build, $55 frontier |
+
 ### `prompt-injection-containment` — NOT-READY
 
 | gate | result | detail |
@@ -210,6 +262,54 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `difficulty-evidenced` | pass | 3 counted agent trial(s) |
 | `not-already-solved` | **FAIL** | all 3 counted trial(s) passed every scenario — the family is already-solved |
 | `priced` | pass | 70h build, $65 frontier |
+
+### `prompt-injection-cross-tool-escalation` — HOLD
+
+| gate | result | detail |
+|---|---|---|
+| `solvable` | pass | 5 contract item(s) |
+| `verifier-graded` | pass | 5 expected mutant(s) |
+| `trust-boundary` | pass | 1/1 source(s) state unforgeability |
+| `detectable` | pass | all mechanisms detectable |
+| `fairness` | pass | 4 constraint(s) |
+| `cheat-resistance` | pass | 4 requirement(s) |
+| `is-a-family` | pass | 3 knob(s): seed, chain_length, horizon |
+| `hidden-region-declared` | pass | The hidden suite samples chain length and horizon depth, and where in the chain  |
+| `measured-axes` | n/a | estimated 3 axes; not measured |
+| `reference-passes` | n/a | family not built; nothing to run |
+| `baselines-blocked` | n/a | family not built |
+| `mutants-caught-by-intended-check` | n/a | family not built |
+| `mechanisms-exercised` | n/a | family not built |
+| `isolation-level` | n/a | family not built |
+| `shared-bank-ready` | n/a | family not built |
+| `deterministic-reports` | n/a | family not built |
+| `difficulty-evidenced` | **FAIL** | no counted agent trials |
+| `not-already-solved` | n/a | no counted agent trials yet |
+| `priced` | pass | 55h build, $50 frontier |
+
+### `prompt-injection-memory-poisoning` — HOLD
+
+| gate | result | detail |
+|---|---|---|
+| `solvable` | pass | 6 contract item(s) |
+| `verifier-graded` | pass | 11 expected mutant(s) |
+| `trust-boundary` | pass | 3/3 source(s) state unforgeability |
+| `detectable` | pass | all mechanisms detectable |
+| `fairness` | pass | 5 constraint(s) |
+| `cheat-resistance` | pass | 4 requirement(s) |
+| `is-a-family` | pass | 6 knob(s): seed, attack, sessionsBetween, memoryKind, benignActions, decoySimilarity |
+| `hidden-region-declared` | pass | The hidden suite samples the declared memory space: which attack shape is presen |
+| `measured-axes` | pass | 3 measured axes |
+| `reference-passes` | n/a | family not built; nothing to run |
+| `baselines-blocked` | n/a | family not built |
+| `mutants-caught-by-intended-check` | n/a | family not built |
+| `mechanisms-exercised` | n/a | family not built |
+| `isolation-level` | n/a | family not built |
+| `shared-bank-ready` | n/a | family not built |
+| `deterministic-reports` | n/a | family not built |
+| `difficulty-evidenced` | **FAIL** | no counted agent trials |
+| `not-already-solved` | n/a | no counted agent trials yet |
+| `priced` | pass | 75h build, $70 frontier |
 
 ### `stale-crm-ticket-automation` — HOLD
 
@@ -240,14 +340,14 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | gate | result | detail |
 |---|---|---|
 | `solvable` | pass | 7 contract item(s) |
-| `verifier-graded` | pass | 5 expected mutant(s) |
-| `trust-boundary` | pass | 2/2 source(s) state unforgeability |
+| `verifier-graded` | pass | 10 expected mutant(s) |
+| `trust-boundary` | pass | 3/3 source(s) state unforgeability |
 | `detectable` | pass | all mechanisms detectable |
-| `fairness` | pass | 5 constraint(s) |
+| `fairness` | pass | 6 constraint(s) |
 | `cheat-resistance` | pass | 5 requirement(s) |
-| `is-a-family` | pass | 6 knob(s): seed, mutation, mutation_depth, confirmation, async_settled, replay_count |
-| `hidden-region-declared` | pass | The hidden suite samples the declared UI-mutation space: which selector attribut |
-| `measured-axes` | n/a | estimated 3 axes; not measured |
+| `is-a-family` | pass | 6 knob(s): seed, mutation, mutationDepth, confirmation, asyncSettled, replayCount |
+| `hidden-region-declared` | pass | The hidden suite samples the declared UI-mutation space: which change occurred b |
+| `measured-axes` | pass | 6 measured axes |
 | `reference-passes` | n/a | family not built; nothing to run |
 | `baselines-blocked` | n/a | family not built |
 | `mutants-caught-by-intended-check` | n/a | family not built |

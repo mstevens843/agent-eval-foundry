@@ -11,7 +11,7 @@
 // `foundry check` is the gate: it loads every registry file, runs every validator, asserts coverage,
 // and regenerates nothing. It is what CI would run.
 
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { measure } from "./axis-meter.js";
 import { checkChallengePackage } from "./challenge/package-check.js";
@@ -27,13 +27,19 @@ import {
   generateScenarios,
   selectMeasuredSet,
 } from "./families/prompt-injection-containment/scenarios.js";
+import { BUILT_FAMILIES, BUILT_FAMILY_IDS, builtFamily, scenarioSetIdFor } from "./families/registry.js";
 import { assertBudgetInputs, assertPlanHonest } from "./foundry/budget-check.js";
 import { MEASURED_DEFAULTS, planBudget } from "./foundry/budget.js";
+import { assertLedgerConsistency, assertPostmortemExists } from "./foundry/consistency.js";
+import { assertPromotionEvidence, variantToShape } from "./foundry/evolve.js";
 import { loadRegistry } from "./foundry/load.js";
+import { familyLoop, loopAll } from "./foundry/loop.js";
 import { assertCoverage, coverage } from "./foundry/registry.js";
 import { checkScaffold } from "./foundry/scaffold-check.js";
 import { generateScaffold, scaffoldFromShape } from "./foundry/scaffold.js";
 import { SchemaError } from "./foundry/schema.js";
+import { SHAPE_PROSE } from "./foundry/shape-prose.js";
+import { shapeFromFamily } from "./foundry/shape-sync.js";
 import { parseTaskShape } from "./foundry/validate.js";
 import { MatrixError, parseMatrix } from "./matrix.js";
 import { renderReport } from "./report.js";
@@ -50,8 +56,10 @@ import {
   trialLayerFacts,
   vendoredRunsDir,
 } from "./reports/evidence.js";
+import { renderEvolutionReport } from "./reports/evolution-report.js";
 import { renderCrossFamilyReport, renderFamilyReport } from "./reports/family-report.js";
 import { renderGateReport } from "./reports/gate-report.js";
+import { renderKillReport } from "./reports/kill-report.js";
 import { renderFamilyDiversityReport, renderLedgerReport } from "./reports/ledger-report.js";
 import { renderOrchestrationReport } from "./reports/orchestration-report.js";
 import { renderMechanismReport, renderMutantReport } from "./reports/registry-report.js";
@@ -84,6 +92,9 @@ ANALYSIS (how many things does an existing suite measure?)
 
 REGISTRY (what could be built, and can we detect it?)
   check                          load and validate everything; assert coverage. The CI gate.
+  kill analyze <family>          why a family failed the gate, with evidence and disposition
+  evolve <family> [--emit-shapes d]  variants the kill analysis justifies
+  families-built                 the families that actually execute
   mechanisms [--out f]           mechanism registry report
   mutants [--out f]              mutant bank report
   ledger [--out f]               candidate ledger, led by kills
@@ -96,6 +107,10 @@ FAMILIES (run a measured mini-benchmark)
   family run [--out f]           run reference + mutants, emit the result matrix
   family report [--out f]        family report: policy, mutants, axis structure
   family axis [--out f]          axis report for the family matrix
+  family sweep --family <id>     reference + mutants for any built family
+  family shape --family <id>     regenerate a built family's task shape from its own code
+  family postmortem <family>     the typed kill analysis for a family
+  family promote <variant>       assert a proposed variant is now a built family
   cross-family [--out f]         compare measured families; verdict refused/partial/measured
   family trials [--out f]        trial-readiness: what mutants prove, what they do not
   challenge build [--out dir]    emit the agent-facing package (hidden artifacts excluded)
@@ -294,7 +309,9 @@ function familyCommand(sub: string, root: string): string {
       return renderTrialReadinessReport(r, trials, evidence);
     }
     default:
-      throw new Error(`unknown family subcommand "${sub}"; expected scenarios | run | report | axis`);
+      throw new Error(
+        `unknown family subcommand "${sub}"; expected scenarios | run | report | axis | sweep | shape | postmortem | promote`,
+      );
   }
 }
 
@@ -359,6 +376,8 @@ function runTrialCommand(argv: readonly string[], root: string): string {
 }
 
 function challengeCommand(argv: readonly string[], root: string): string {
+  const requested = flag(argv, "--family");
+  if (requested !== null && requested !== PIC_FAMILY) return familyChallenge(argv, root);
   const typesSource = readFileSync(join(root, "src/families/prompt-injection-containment/types.ts"), "utf8");
   const pkg = buildChallengePackage(typesSource, scenarioSetId(measuredScenarios()));
   // Grade the package before writing it. The checker does not import the builder.
@@ -445,13 +464,187 @@ function crossFamilyCommand(root: string): string {
 function checkCommand(root: string): string {
   const registry = loadRegistry(root);
   const cov = assertCoverage(registry);
+
+  // The gate and the ledger must agree, and a killed family must have a postmortem. Both run inside
+  // `check` so CI fails on a contradiction rather than a reader finding one.
+  const states = loopAll(root, registry);
+  assertLedgerConsistency({
+    candidates: registry.candidates,
+    shapes: registry.shapes,
+    verdicts: Object.fromEntries(states.map((st) => [st.shape.familyId, st.assessment.verdict])),
+    analyses: Object.fromEntries(states.map((st) => [st.shape.familyId, st.analysis])),
+    builtFamilyIds: BUILT_FAMILY_IDS,
+  });
+  for (const st of states) {
+    assertPostmortemExists(
+      st.shape.familyId,
+      st.assessment,
+      existsSync(join(root, "reports", `${st.shape.familyId}-kill-analysis.md`)),
+    );
+  }
+
   return [
     "registry OK",
     `  mechanisms  ${registry.mechanisms.length} (${cov.measuredMechanisms} measured)`,
     `  mutants     ${registry.mutants.length}`,
     `  families    ${registry.shapes.length}`,
     `  candidates  ${registry.candidates.length}`,
+    `  built       ${BUILT_FAMILY_IDS.length} families execute`,
     "  coverage    every mechanism has a mutant; no mutant is orphaned",
+    "  consistency ledger statuses agree with the ship gate; every kill has a postmortem",
+    "",
+  ].join("\n");
+}
+
+/** `kill analyze <family>` — the typed postmortem, rendered. */
+function killCommand(argv: readonly string[], root: string): string {
+  const familyId = positional(argv, 2) ?? PIC_FAMILY;
+  const state = familyLoop(root, familyId);
+  return renderKillReport({
+    shape: state.shape,
+    analysis: state.analysis,
+    ...(state.evidence === undefined ? {} : { evidence: state.evidence }),
+    variants: state.variants,
+    trials: state.trials,
+  });
+}
+
+/** `evolve <family> [--emit-shapes <dir>]` — proposals, and optionally their draft shapes. */
+function evolveCommand(argv: readonly string[], root: string): string {
+  const familyId = positional(argv, 1) ?? PIC_FAMILY;
+  const state = familyLoop(root, familyId);
+  const dir = flag(argv, "--emit-shapes");
+  if (dir !== null) {
+    mkdirSync(dir, { recursive: true });
+    for (const v of state.variants) {
+      const shape = parseTaskShape(variantToShape(v), `variant:${v.id}`);
+      writeFileSync(
+        join(dir, `${shape.familyId}.json`),
+        `${JSON.stringify(variantToShape(v), null, 2)}\n`,
+        "utf8",
+      );
+    }
+    process.stderr.write(`wrote ${state.variants.length} draft shape(s) to ${dir}/\n`);
+  }
+  return [
+    `family     ${familyId}`,
+    `verdict    ${state.assessment.verdict}`,
+    `primary    ${state.analysis.primary?.reason ?? "none"}`,
+    `disposition ${state.analysis.disposition ?? "none"}`,
+    "",
+    ...(state.variants.length === 0
+      ? [
+          `No variants: disposition \`${state.analysis.disposition ?? "none"}\` does not call for descendants.`,
+        ]
+      : state.variants.map(
+          (v) =>
+            `${v.id.padEnd(42)} risk ${(v.killRisk * 100).toFixed(0).padStart(3)}%  ${v.estimatedBuildHours}h  ops: ${v.operators.join(", ")}`,
+        )),
+    "",
+  ].join("\n");
+}
+
+/** `family shape --family <id>` — regenerate a built family's shape from its own code. */
+function shapeCommand(argv: readonly string[], root: string): string {
+  const id = flag(argv, "--family") ?? PIC_FAMILY;
+  const prose = SHAPE_PROSE[id];
+  if (prose === undefined) {
+    throw new Error(
+      `no shape prose for "${id}"; generated shapes exist for ${Object.keys(SHAPE_PROSE).join(", ")}`,
+    );
+  }
+  const shape = shapeFromFamily(builtFamily(id), prose);
+  parseTaskShape(shape, `shape:${id}`);
+  const out = flag(argv, "--out");
+  const text = `${JSON.stringify(shape, null, 2)}\n`;
+  if (out !== null) {
+    writeFileSync(out, text, "utf8");
+    process.stderr.write(`wrote ${out}\n`);
+  }
+  return text;
+}
+
+/** `family promote <variant>` — assert a proposal has actually become a built family. */
+function promoteCommand(argv: readonly string[], root: string): string {
+  const variantId = positional(argv, 2);
+  if (variantId === undefined) throw new Error("family promote needs a variant id");
+  const registry = loadRegistry(root);
+  assertPromotionEvidence(
+    variantId,
+    BUILT_FAMILY_IDS,
+    registry.shapes.map((s) => s.familyId),
+  );
+  const family = builtFamily(variantId);
+  const sweep = family.run();
+  return [
+    `promoted   ${variantId}`,
+    `scenarios  ${sweep.scenarioCount} measured of ${sweep.spaceSize} declared`,
+    `reference  ${sweep.referenceFailures.length === 0 ? "passes every scenario" : `FAILS ${sweep.referenceFailures.length}`}`,
+    `mutants    ${sweep.mutantsCaught.filter((m) => m.caught).length}/${sweep.mutantsCaught.length} caught by their intended check`,
+    `axes       ${measure(sweep.matrix, { nullTrials: 3 }).independentAxes} measured`,
+    "",
+    "A promotion is only a claim until a counted agent trial exists. None has been run for this family.",
+    "",
+  ].join("\n");
+}
+
+/** `family run|axis|report|challenge --family <id>` for any BUILT family. */
+function builtFamilyCommand(argv: readonly string[], root: string, sub: string): string {
+  const id = flag(argv, "--family") ?? PIC_FAMILY;
+  const family = builtFamily(id);
+  const sweep = family.run();
+  switch (sub) {
+    case "run":
+      return `${JSON.stringify(sweep.matrix, null, 2)}\n`;
+    case "axis":
+      return renderReport(measure(sweep.matrix, { nullTrials: 3 }));
+    case "sweep":
+      return [
+        `family     ${family.id}`,
+        `scenarios  ${sweep.scenarioCount} of ${sweep.spaceSize} declared points`,
+        `reference  ${sweep.referenceFailures.length} failing scenario(s)`,
+        "",
+        ...sweep.mutantsCaught.map(
+          (m) =>
+            `  ${m.mutantId.padEnd(28)} ${m.check.padEnd(24)} ${m.caught ? "caught" : "MISSED"} ${m.caughtIn}/${m.total}`,
+        ),
+        "",
+        `baselines  ${sweep.baselinesBlocked.length}/${sweep.baselinesTotal} rejected`,
+        "",
+      ].join("\n");
+    default:
+      throw new Error(`unknown built-family subcommand "${sub}"`);
+  }
+}
+
+/** Emit a built family's challenge package and grade it with the independent checker. */
+function familyChallenge(argv: readonly string[], root: string): string {
+  const id = flag(argv, "--family") ?? PIC_FAMILY;
+  const family = builtFamily(id);
+  const sweep = family.run();
+  const typesSource = readFileSync(join(root, family.typesPath), "utf8");
+  const pkg = family.challenge(typesSource, scenarioSetIdFor(family, sweep.matrix));
+  const check = checkChallengePackage(pkg.files, family.leakProfile);
+  const dir = flag(argv, "--out");
+  if (dir !== null) {
+    for (const f of pkg.files) {
+      const target = join(dir, f.path);
+      mkdirSync(dirname(target), { recursive: true });
+      writeFileSync(target, f.content, "utf8");
+    }
+    process.stderr.write(`wrote ${pkg.files.length} files to ${dir}/\n`);
+  }
+  return [
+    `# Challenge package: ${pkg.familyId}`,
+    "",
+    `${check.files} visible files, ${check.bytes} bytes, ${check.examples} worked example(s),`,
+    `all ${check.specCodesFound} rule codes present in SPEC.md.`,
+    "",
+    "| file |",
+    "|---|",
+    ...pkg.files.map((f) => `| \`${f.path}\` |`),
+    "",
+    `Hidden and verified absent: ${pkg.manifest.hiddenArtifacts.map((h) => `\`${h}\``).join(", ")}.`,
     "",
   ].join("\n");
 }
@@ -486,6 +679,37 @@ function allCommand(argv: readonly string[], root: string): string {
     }),
   );
   write("ship-gate-report.md", renderGateReport({ registry, evidence: { [PIC_FAMILY]: ev.evidence } }));
+
+  // The evolution layer: one postmortem for the killed family, and the loop across all of them.
+  const picState = familyLoop(root, PIC_FAMILY, registry);
+  write(
+    `${PIC_FAMILY}-kill-analysis.md`,
+    renderKillReport({
+      shape: picState.shape,
+      analysis: picState.analysis,
+      ...(picState.evidence === undefined ? {} : { evidence: picState.evidence }),
+      variants: picState.variants,
+      trials: picState.trials,
+    }),
+  );
+  write(
+    "foundry-evolution-report.md",
+    renderEvolutionReport({
+      registry,
+      states: loopAll(root, registry),
+      builtFamilyIds: BUILT_FAMILY_IDS,
+      promoted: ["prompt-injection-memory-poisoning"],
+      sharedBankSubjects: ev.evidence.sharedBankSubjects,
+      sharedBankThreshold: 3,
+    }),
+  );
+
+  // Every built family gets its own axis report and sweep summary.
+  for (const family of BUILT_FAMILIES) {
+    if (family.id === PIC_FAMILY) continue;
+    const sweep = family.run();
+    write(`${family.id}-axis-report.md`, renderReport(measure(sweep.matrix, { nullTrials: 3 })));
+  }
   const uiShape = registry.shapes.find((s) => s.familyId === UI_FAMILY);
   if (uiShape !== undefined) {
     write(`${UI_FAMILY}-family-report.md`, renderShapeReport(uiShape, registry));
@@ -533,6 +757,29 @@ export function main(argv: readonly string[]): number {
         return 0;
       case "family": {
         const sub = positional(argv, 1) ?? "run";
+        // Subcommands that work for ANY built family. The originals below keep their behaviour, so
+        // `family run` with no flag is still the first family and every existing script still works.
+        if (sub === "sweep") {
+          process.stdout.write(builtFamilyCommand(argv, root, "sweep"));
+          return 0;
+        }
+        if (sub === "shape") {
+          emit(argv, shapeCommand(argv, root));
+          return 0;
+        }
+        if (sub === "postmortem") {
+          emit(argv, killCommand(argv, root));
+          return 0;
+        }
+        if (sub === "promote") {
+          process.stdout.write(promoteCommand(argv, root));
+          return 0;
+        }
+        const requested = flag(argv, "--family");
+        if (requested !== null && requested !== PIC_FAMILY && (sub === "run" || sub === "axis")) {
+          emit(argv, builtFamilyCommand(argv, root, sub));
+          return 0;
+        }
         emit(argv, familyCommand(sub, root));
         return 0;
       }
@@ -609,6 +856,20 @@ export function main(argv: readonly string[]): number {
         emit(argv, renderShipReport(r.shapes, r, familyEvidenceMap(root)));
         return 0;
       }
+      case "kill": {
+        const sub = positional(argv, 1) ?? "analyze";
+        if (sub !== "analyze") throw new Error(`unknown kill subcommand "${sub}"; expected analyze`);
+        emit(argv, killCommand(argv, root));
+        return 0;
+      }
+      case "evolve":
+        process.stdout.write(evolveCommand(argv, root));
+        return 0;
+      case "families-built":
+        process.stdout.write(
+          `${BUILT_FAMILIES.map((f) => `${f.id.padEnd(38)} ${f.checks.length} checks  ${f.mechanisms.join(", ")}`).join("\n")}\n`,
+        );
+        return 0;
       case "sources":
         process.stdout.write(
           `${SOURCES.map(

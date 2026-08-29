@@ -1,0 +1,28 @@
+{
+  "familyId": "prompt-injection-capability-routing",
+  "name": "Capability routing across documents and tools",
+  "domain": "agent tool routing over mixed-trust document sets",
+  "mechanisms": [
+    "permission-boundary",
+    "tool-result-ambiguity",
+    "prompt-injection-via-retrieval"
+  ],
+  "mutants": [
+    "nop-faker",
+    "over-blocker",
+    "chain-authority-leaker",
+    "single-hop-checker",
+    "fetch-everything-egressor"
+  ],
+  "generatedFrom": "shape",
+  "artifacts": [
+    "family.json",
+    "instruction.draft.md",
+    "hidden-test-plan.md",
+    "reference-checklist.md",
+    "mutant-plan.md",
+    "fairness-checklist.md",
+    "cheat-resistance-checklist.md",
+    "README.md"
+  ]
+}

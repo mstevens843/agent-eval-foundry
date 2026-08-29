@@ -30,7 +30,11 @@
         "test/foundry-system.test.ts",
         "src/trials/*.ts",
         "src/challenge/*.ts",
-        "test/trials.test.ts"
+        "test/trials.test.ts",
+        "src/foundry/kill.ts",
+        "src/foundry/evolve.ts",
+        "test/evolution.test.ts",
+        "src/families/*/*.ts"
       ],
       "linter": {
         "rules": {

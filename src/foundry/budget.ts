@@ -44,6 +44,25 @@ export interface BudgetInputs {
   readonly instancesPerFamily: number;
   /** Independent axes a family is expected to yield. 3 measured for the durable outbox. */
   readonly axesPerFamily: number;
+  /**
+   * Fraction of BUILT families that die after they are built.
+   *
+   * Distinct from `cycleHitRate`, which prices the candidates killed before anyone writes code. This
+   * is the expensive kind of death: the family exists, its verifier works, its axis count is
+   * measured, and a trial says every model solves it. One of the two families this repository built
+   * died that way, so the measured rate is 1 in 2 — on a sample of two, which the report says.
+   */
+  readonly postBuildKillRate: number;
+  /**
+   * Families built per surviving family, counting descendants.
+   *
+   * A family that dies as `already_solved` is not a total loss: it produces a kill analysis and a set
+   * of evolved variants, and one of those gets built. So the cost of a shipped family is the cost of
+   * the whole lineage, not of the last member.
+   */
+  readonly evolutionCyclesPerSurvivor: number;
+  /** Fraction of authoring hours a descendant reuses from its parent — harness, checker, packaging. */
+  readonly descendantReuse: number;
 }
 
 export interface BudgetPlan {
@@ -62,6 +81,9 @@ export interface BudgetPlan {
   readonly labourShare: number;
   readonly impliedEngineerYears: number;
   readonly candidatesScreened: number;
+  /** Families actually built, including the ones that die after being built. */
+  readonly familiesBuilt: number;
+  readonly familiesKilledAfterBuild: number;
 }
 
 /** Working hours in an engineer-year. Stated rather than buried so the reader can disagree with it. */
@@ -70,8 +92,22 @@ export const HOURS_PER_ENGINEER_YEAR = 1800;
 export function planBudget(inputs: BudgetInputs): BudgetPlan {
   const screeningHours = (1 / inputs.cycleHitRate) * inputs.hoursPerScreenedCandidate;
   const screeningUsdPerFamily = screeningHours * inputs.labourRateUsdPerHour;
-  const authoringUsdPerFamily = inputs.hoursPerFamily * inputs.labourRateUsdPerHour;
-  const trialUsdPerFamily = inputs.matricesPerFamily * inputs.usdPerMatrix * (1 + inputs.retryRate);
+
+  // Authoring now prices the LINEAGE rather than the family. A survivor costs one full build plus
+  // `evolutionCyclesPerSurvivor - 1` descendants, each of which reuses part of its parent's harness.
+  // Pricing only the survivor is the same error as pricing only the counted trial runs: it charges
+  // for the work that succeeded and omits the work that produced it.
+  const descendants = Math.max(0, inputs.evolutionCyclesPerSurvivor - 1);
+  const lineageHours =
+    inputs.hoursPerFamily + descendants * inputs.hoursPerFamily * (1 - inputs.descendantReuse);
+  const authoringUsdPerFamily = lineageHours * inputs.labourRateUsdPerHour;
+
+  // Every family in the lineage is trialed, including the ones that die — that is HOW they die.
+  const trialUsdPerFamily =
+    inputs.evolutionCyclesPerSurvivor *
+    inputs.matricesPerFamily *
+    inputs.usdPerMatrix *
+    (1 + inputs.retryRate);
   const loadedUsdPerFamily = screeningUsdPerFamily + authoringUsdPerFamily + trialUsdPerFamily;
 
   const families = loadedUsdPerFamily > 0 ? Math.floor(inputs.totalUsd / loadedUsdPerFamily) : 0;
@@ -96,8 +132,10 @@ export function planBudget(inputs: BudgetInputs): BudgetPlan {
     labourUsd,
     modelUsd,
     labourShare: spent > 0 ? labourUsd / spent : 0,
-    impliedEngineerYears: (families * (screeningHours + inputs.hoursPerFamily)) / HOURS_PER_ENGINEER_YEAR,
+    impliedEngineerYears: (families * (screeningHours + lineageHours)) / HOURS_PER_ENGINEER_YEAR,
     candidatesScreened: Math.round(families / inputs.cycleHitRate),
+    familiesBuilt: Math.round(families * inputs.evolutionCyclesPerSurvivor),
+    familiesKilledAfterBuild: Math.round(families * (inputs.evolutionCyclesPerSurvivor - 1)),
   };
 }
 
@@ -136,4 +174,13 @@ export const MEASURED_DEFAULTS: Omit<BudgetInputs, "totalUsd" | "labourRateUsdPe
   retryRate: 0.15,
   instancesPerFamily: 24,
   axesPerFamily: 3,
+  // 1 of 2 families built here died after being built. A sample of two, stated as such wherever it
+  // is used, and the direction is the one that matters: the rate is not zero, and a plan assuming
+  // 100% survival is the optimistic fiction `budget-check.ts` exists to reject.
+  postBuildKillRate: 0.5,
+  // One survivor cost two builds in this repository: the parent and its promoted descendant.
+  evolutionCyclesPerSurvivor: 2,
+  // The descendant reused the trial layer, the challenge packager, the axis meter and the report
+  // pipeline, and reused none of the domain model. Roughly a third, measured by neither of us.
+  descendantReuse: 0.35,
 };

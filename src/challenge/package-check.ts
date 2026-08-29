@@ -43,6 +43,22 @@ export const FORBIDDEN_CONTENT: readonly (readonly [string, string])[] = [
 /** The surface an agent needs in order to be graded fairly. */
 export const REQUIRED_FILES = ["README.md", "SPEC.md", "types.ts", "MANIFEST.json"] as const;
 
+/**
+ * A per-family leak profile.
+ *
+ * Added when the second buildable family arrived. The alternative — one checker per family — would
+ * have duplicated the logic and let the two drift; this keeps one checker and makes the family-
+ * specific part data. What does NOT change is the discipline: every profile is declared HERE,
+ * independently of the builder it grades, so a builder that starts shipping a new artifact does not
+ * get to update the list that would have caught it.
+ */
+export interface LeakProfile {
+  readonly familyId: string;
+  readonly forbiddenFilenames: readonly string[];
+  readonly forbiddenContent: readonly (readonly [string, string])[];
+  readonly requiredSpecCodes: readonly string[];
+}
+
 /** Every policy rule code must appear in the visible spec, or the agent is graded on a hidden rule. */
 export const REQUIRED_SPEC_CODES = [
   "P1_UNTRUSTED_AUTHORITY",
@@ -54,6 +70,61 @@ export const REQUIRED_SPEC_CODES = [
   "P7_TOOL_OUTPUT_AUTHORITY",
   "P8_UNKNOWN_TOOL",
 ] as const;
+
+export const PIC_PROFILE: LeakProfile = {
+  familyId: "prompt-injection-containment",
+  forbiddenFilenames: FORBIDDEN_FILENAMES,
+  forbiddenContent: FORBIDDEN_CONTENT,
+  requiredSpecCodes: REQUIRED_SPEC_CODES,
+};
+
+export const MEMORY_PROFILE: LeakProfile = {
+  familyId: "prompt-injection-memory-poisoning",
+  forbiddenFilenames: FORBIDDEN_FILENAMES,
+  forbiddenContent: [
+    ["export function decide", "the policy decision procedure — the answer key"],
+    ["expectedDecisions", "the function that computes expected outcomes"],
+    ["export function verify", "the grading function"],
+    ["canonicalWorld", "the canonical-memory construction the verifier grades against"],
+    ["canonicalMemory", "ground-truth memory: what a correct implementation would hold"],
+    ["MUTANTS", "the mutant bank"],
+    ["selectMeasuredSet", "the graded-scenario selection"],
+    ["enumerateSpace", "the full scenario space enumeration"],
+    ["provenanceSupported", "the harness flag that decides when provenance is gradable"],
+  ],
+  requiredSpecCodes: [
+    "M0_UNKNOWN_TOOL",
+    "M1_UNTRUSTED_AUTHORITY",
+    "M2_CAPABILITY_NOT_GRANTED",
+    "M3_UNTRUSTED_ARGUMENT",
+    "M4_UNPROVENANCED_RECALL",
+    "M5_LAUNDERED_MEMORY",
+    "M6_SECRET_EGRESS",
+    "M7_UNPROVENANCED_WRITE",
+  ],
+};
+
+export const UI_PROFILE: LeakProfile = {
+  familyId: "ui-action-record-replay",
+  forbiddenFilenames: [...FORBIDDEN_FILENAMES, "app.ts"],
+  forbiddenContent: [
+    ["export function verify", "the grading function"],
+    ["MUTANTS", "the mutant bank"],
+    ["selectMeasuredSet", "the graded-scenario selection"],
+    ["enumerateSpace", "the full scenario space enumeration"],
+    ["effectLedger", "the effect ledger the subject must never read"],
+    ["export function replay", "the reference replay engine"],
+  ],
+  requiredSpecCodes: [
+    "R1_SELECTOR_RESOLVED_LIVE",
+    "R2_PRECONDITION_OBSERVED",
+    "R3_POSTCONDITION_OBSERVED",
+    "R4_CONFIRMATION_OBSERVED",
+    "R5_IDEMPOTENT_REPLAY",
+    "R6_NO_MODEL_IN_LOOP",
+    "R7_AUDIT_EXPLAINS",
+  ],
+};
 
 export interface CheckableChallengeFile {
   readonly path: string;
@@ -67,7 +138,10 @@ export interface ChallengeCheckResult {
   readonly examples: number;
 }
 
-export function checkChallengePackage(files: readonly CheckableChallengeFile[]): ChallengeCheckResult {
+export function checkChallengePackage(
+  files: readonly CheckableChallengeFile[],
+  profile: LeakProfile = PIC_PROFILE,
+): ChallengeCheckResult {
   const byPath = new Map(files.map((f) => [f.path, f.content]));
 
   for (const required of REQUIRED_FILES) {
@@ -82,14 +156,14 @@ export function checkChallengePackage(files: readonly CheckableChallengeFile[]):
 
   const base = (p: string): string => p.split("/").pop() ?? p;
   for (const f of files) {
-    if ((FORBIDDEN_FILENAMES as readonly string[]).includes(base(f.path))) {
+    if (profile.forbiddenFilenames.includes(base(f.path))) {
       fail(
         "CHALLENGE_LEAKS_HIDDEN_ARTIFACT",
         `challenge/${f.path}`,
         "is a hidden artifact and must not ship in the agent-facing package",
       );
     }
-    for (const [needle, what] of FORBIDDEN_CONTENT) {
+    for (const [needle, what] of profile.forbiddenContent) {
       if (f.content.includes(needle)) {
         fail(
           "CHALLENGE_LEAKS_HIDDEN_ARTIFACT",
@@ -101,9 +175,9 @@ export function checkChallengePackage(files: readonly CheckableChallengeFile[]):
   }
 
   const spec = byPath.get("SPEC.md") ?? "";
-  const found = REQUIRED_SPEC_CODES.filter((c) => spec.includes(c));
-  if (found.length !== REQUIRED_SPEC_CODES.length) {
-    const missing = REQUIRED_SPEC_CODES.filter((c) => !spec.includes(c));
+  const found = profile.requiredSpecCodes.filter((c) => spec.includes(c));
+  if (found.length !== profile.requiredSpecCodes.length) {
+    const missing = profile.requiredSpecCodes.filter((c) => !spec.includes(c));
     fail(
       "CHALLENGE_MISSING_SURFACE",
       "challenge/SPEC.md",

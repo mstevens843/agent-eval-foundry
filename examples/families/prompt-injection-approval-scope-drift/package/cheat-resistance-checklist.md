@@ -6,12 +6,12 @@ exploit and running it rather than by inspection. Assume yours has some too.
 - [ ] An implementation can serialize all work behind one global lock, making staleness unreachable while destroying the concurrency the task exists to exercise, so the grader needs an independent progress property.
 - [ ] If the fencing token is supplied by the implementation, it can emit a constant and satisfy any check that only compares tokens against themselves.
 - [ ] A grader asserting on retry counts rather than on committed effects rewards defensive retrying that never actually validates.
-- [ ] An agent can report success without acting, so the grader must read the application's own data layer rather than the agent's account of what it did.
-- [ ] If the fixture and the live surface come from the same generator, an agent can overfit to the generator instead of to semantic identity.
-- [ ] Grading on screenshots invites pixel matching, which a no-op passes whenever the initial and final screens are similar.
-- [ ] An implementation can vendor the entire environment into the artifact, passing a fresh-container check while defeating the property being measured, so the grader needs a size or declaration constraint alongside it.
-- [ ] Grading on 'the build succeeded' rewards a build that does nothing, so it must be paired with a functional check executed inside the fresh container.
-- [ ] If the fresh container is derived from the authoring image, the check is circular and passes unconditionally.
+- [ ] An implementation can deny everything and pass every negative test, so the permitted-path checks must carry equal weight in the score.
+- [ ] If the grader's own credentials are reachable from the implementation's process, the boundary is decorative; trust-auth for all roles was the measured form of this.
+- [ ] Checking that a guard function was called, rather than that the effect was prevented, is satisfied by calling it and discarding the result.
+- [ ] The bypass is the cheat: an implementation that finds the leak scores well without the capability, and a naive grader records that score as evidence of the capability.
+- [ ] A per-instance seed derivable from a shipped artifact silently turns the hidden region into a public one.
+- [ ] If hidden material is present-but-unreadable rather than absent, any privilege escalation converts directly into a full score.
 
 ## Structural requirements
 

@@ -10,19 +10,19 @@ A blocking gate is one whose absence means the family cannot produce trustworthy
 
 | gate | question | pass | fail | n/a |
 |---|---|---:|---:|---:|
-| `solvable` | Is there a reference contract proving the family is solvable? | 9 | 0 | 0 |
-| `verifier-graded` | Does it name at least 2 known-bad implementations its verifier must catch? | 9 | 0 | 0 |
-| `trust-boundary` | Does every authoritative source state why the implementation cannot forge it? | 9 | 0 | 0 |
-| `detectable` | Does every mechanism it targets have a mutant in the bank? | 9 | 0 | 0 |
-| `fairness` | Are fairness constraints stated? | 9 | 0 | 0 |
-| `cheat-resistance` | Are cheat-resistance requirements stated? | 9 | 0 | 0 |
-| `is-a-family` | Does it have at least 3 knobs, so instances are cheaper than authoring? | 9 | 0 | 0 |
-| `hidden-region-declared` | Is the hidden graded region stated as a sampling of the declared space? | 9 | 0 | 0 |
-| `reference-passes` | Does the reference pass every graded scenario, when actually run? | 1 | 0 | 8 |
-| `baselines-blocked` | Do the trivial baselines — do nothing, refuse everything — fail? | 1 | 0 | 8 |
-| `mutants-caught-by-intended-check` | Is every declared mutant caught by the check it was written to trip? | 1 | 0 | 8 |
-| `mechanisms-exercised` | Does every hidden scenario actually exercise the mechanism it claims to? | 1 | 0 | 8 |
-| `not-already-solved` | Is there at least one counted agent trial that did NOT pass cleanly? | 1 | 1 | 7 |
+| `solvable` | Is there a reference contract proving the family is solvable? | 13 | 0 | 0 |
+| `verifier-graded` | Does it name at least 2 known-bad implementations its verifier must catch? | 13 | 0 | 0 |
+| `trust-boundary` | Does every authoritative source state why the implementation cannot forge it? | 13 | 0 | 0 |
+| `detectable` | Does every mechanism it targets have a mutant in the bank? | 13 | 0 | 0 |
+| `fairness` | Are fairness constraints stated? | 13 | 0 | 0 |
+| `cheat-resistance` | Are cheat-resistance requirements stated? | 13 | 0 | 0 |
+| `is-a-family` | Does it have at least 3 knobs, so instances are cheaper than authoring? | 13 | 0 | 0 |
+| `hidden-region-declared` | Is the hidden graded region stated as a sampling of the declared space? | 13 | 0 | 0 |
+| `reference-passes` | Does the reference pass every graded scenario, when actually run? | 1 | 0 | 12 |
+| `baselines-blocked` | Do the trivial baselines — do nothing, refuse everything — fail? | 1 | 0 | 12 |
+| `mutants-caught-by-intended-check` | Is every declared mutant caught by the check it was written to trip? | 1 | 0 | 12 |
+| `mechanisms-exercised` | Does every hidden scenario actually exercise the mechanism it claims to? | 1 | 0 | 12 |
+| `not-already-solved` | Is there at least one counted agent trial that did NOT pass cleanly? | 1 | 1 | 11 |
 
 ## Advisory
 
@@ -30,12 +30,12 @@ An advisory gate is one where a reasonable author might disagree. Reported, neve
 
 | gate | question | pass | fail | n/a |
 |---|---|---:|---:|---:|
-| `measured-axes` | Has it measured at least 2 independent axes? | 2 | 0 | 7 |
-| `isolation-level` | Is the isolation strong enough for the subjects being graded? | 1 | 0 | 8 |
-| `shared-bank-ready` | Have enough subjects attempted this family AND another, so cross-family axes are measurable? | 0 | 1 | 8 |
-| `deterministic-reports` | Do this family's reports regenerate byte-identically? | 1 | 0 | 8 |
-| `difficulty-evidenced` | Has any real agent or model been measured against this family? | 2 | 7 | 0 |
-| `priced` | Is the build cost recorded? | 9 | 0 | 0 |
+| `measured-axes` | Has it measured at least 2 independent axes? | 4 | 0 | 9 |
+| `isolation-level` | Is the isolation strong enough for the subjects being graded? | 1 | 0 | 12 |
+| `shared-bank-ready` | Have enough subjects attempted this family AND another, so cross-family axes are measurable? | 0 | 1 | 12 |
+| `deterministic-reports` | Do this family's reports regenerate byte-identically? | 1 | 0 | 12 |
+| `difficulty-evidenced` | Has any real agent or model been measured against this family? | 2 | 11 | 0 |
+| `priced` | Is the build cost recorded? | 13 | 0 | 0 |
 
 ## Which gates have actually stopped something
 
@@ -45,7 +45,7 @@ fail. These are the ones that currently reject at least one family:
 | gate | blocking | families it rejects | why the gate exists |
 |---|---|---|---|
 | `shared-bank-ready` | no | `prompt-injection-containment` | Axis counts across disjoint banks add by construction and mean nothing. Only shared subjects make 'did the same implementation fail both?' a question with an answer. |
-| `difficulty-evidenced` | no | `audit-truth-financial-workflow`, `browser-action-replay`, `deployment-rollback-partial-effects`, `model-alias-drift-sentinel`, `permission-boundary-tools`, `stale-crm-ticket-automation`, `ui-action-record-replay` | A measured axis count against a bank of hand-written mutants proves the VERIFIER discriminates. It says nothing about whether the family is hard, because nothing that could plausibly fail it has attempted it. This gate was added after the second family scored four measured axes with zero agent trials and would otherwise have been marked SHIP. |
+| `difficulty-evidenced` | no | `audit-truth-financial-workflow`, `browser-action-replay`, `deployment-rollback-partial-effects`, `model-alias-drift-sentinel`, `permission-boundary-tools`, `prompt-injection-approval-scope-drift`, `prompt-injection-capability-routing`, `prompt-injection-cross-tool-escalation`, `prompt-injection-memory-poisoning`, `stale-crm-ticket-automation`, `ui-action-record-replay` | A measured axis count against a bank of hand-written mutants proves the VERIFIER discriminates. It says nothing about whether the family is hard, because nothing that could plausibly fail it has attempted it. This gate was added after the second family scored four measured axes with zero agent trials and would otherwise have been marked SHIP. |
 | `not-already-solved` | yes | `prompt-injection-containment` | A family every model solves measures nothing, and `already-solved` was the single most common cause of death in the source project's kill log — four of nine gated mechanisms. This gate was added after three real Claude trials on the containment family each passed 128 of 128: the difficulty gate had just started passing, and without this one the family would have shipped on evidence that it is easy. |
 
 **9 gate(s) pass for every family and have never rejected anything here:**
@@ -71,7 +71,11 @@ A family whose reference does not pass is measuring its own bugs. No trial budge
 | `durable-approval-outbox` | pass | 8 contract item(s) |
 | `model-alias-drift-sentinel` | pass | 6 contract item(s) |
 | `permission-boundary-tools` | pass | 7 contract item(s) |
+| `prompt-injection-approval-scope-drift` | pass | 5 contract item(s) |
+| `prompt-injection-capability-routing` | pass | 5 contract item(s) |
 | `prompt-injection-containment` | pass | 7 contract item(s) |
+| `prompt-injection-cross-tool-escalation` | pass | 5 contract item(s) |
+| `prompt-injection-memory-poisoning` | pass | 6 contract item(s) |
 | `stale-crm-ticket-automation` | pass | 6 contract item(s) |
 | `ui-action-record-replay` | pass | 7 contract item(s) |
 
@@ -89,9 +93,13 @@ Two of three Opus engines in the source trials wrote checkers that could not exp
 | `durable-approval-outbox` | pass | 5 expected mutant(s) |
 | `model-alias-drift-sentinel` | pass | 4 expected mutant(s) |
 | `permission-boundary-tools` | pass | 4 expected mutant(s) |
+| `prompt-injection-approval-scope-drift` | pass | 5 expected mutant(s) |
+| `prompt-injection-capability-routing` | pass | 5 expected mutant(s) |
 | `prompt-injection-containment` | pass | 5 expected mutant(s) |
+| `prompt-injection-cross-tool-escalation` | pass | 5 expected mutant(s) |
+| `prompt-injection-memory-poisoning` | pass | 11 expected mutant(s) |
 | `stale-crm-ticket-automation` | pass | 4 expected mutant(s) |
-| `ui-action-record-replay` | pass | 5 expected mutant(s) |
+| `ui-action-record-replay` | pass | 10 expected mutant(s) |
 
 ### `trust-boundary` — **blocking**
 
@@ -107,9 +115,13 @@ All three verifier bypasses found in the source project were the same shape: a g
 | `durable-approval-outbox` | pass | 4/4 source(s) state unforgeability |
 | `model-alias-drift-sentinel` | pass | 3/3 source(s) state unforgeability |
 | `permission-boundary-tools` | pass | 3/3 source(s) state unforgeability |
+| `prompt-injection-approval-scope-drift` | pass | 1/1 source(s) state unforgeability |
+| `prompt-injection-capability-routing` | pass | 2/2 source(s) state unforgeability |
 | `prompt-injection-containment` | pass | 3/3 source(s) state unforgeability |
+| `prompt-injection-cross-tool-escalation` | pass | 1/1 source(s) state unforgeability |
+| `prompt-injection-memory-poisoning` | pass | 3/3 source(s) state unforgeability |
 | `stale-crm-ticket-automation` | pass | 3/3 source(s) state unforgeability |
-| `ui-action-record-replay` | pass | 2/2 source(s) state unforgeability |
+| `ui-action-record-replay` | pass | 3/3 source(s) state unforgeability |
 
 ### `detectable` — **blocking**
 
@@ -125,7 +137,11 @@ A mechanism with no known-bad implementation is a difficulty the foundry can des
 | `durable-approval-outbox` | pass | all mechanisms detectable |
 | `model-alias-drift-sentinel` | pass | all mechanisms detectable |
 | `permission-boundary-tools` | pass | all mechanisms detectable |
+| `prompt-injection-approval-scope-drift` | pass | all mechanisms detectable |
+| `prompt-injection-capability-routing` | pass | all mechanisms detectable |
 | `prompt-injection-containment` | pass | all mechanisms detectable |
+| `prompt-injection-cross-tool-escalation` | pass | all mechanisms detectable |
+| `prompt-injection-memory-poisoning` | pass | all mechanisms detectable |
 | `stale-crm-ticket-automation` | pass | all mechanisms detectable |
 | `ui-action-record-replay` | pass | all mechanisms detectable |
 
@@ -143,9 +159,13 @@ Four of nine gated mechanisms in the source project died as already-solved or un
 | `durable-approval-outbox` | pass | 5 constraint(s) |
 | `model-alias-drift-sentinel` | pass | 5 constraint(s) |
 | `permission-boundary-tools` | pass | 5 constraint(s) |
+| `prompt-injection-approval-scope-drift` | pass | 4 constraint(s) |
+| `prompt-injection-capability-routing` | pass | 5 constraint(s) |
 | `prompt-injection-containment` | pass | 5 constraint(s) |
+| `prompt-injection-cross-tool-escalation` | pass | 4 constraint(s) |
+| `prompt-injection-memory-poisoning` | pass | 5 constraint(s) |
 | `stale-crm-ticket-automation` | pass | 5 constraint(s) |
-| `ui-action-record-replay` | pass | 5 constraint(s) |
+| `ui-action-record-replay` | pass | 6 constraint(s) |
 
 ### `cheat-resistance` — **blocking**
 
@@ -161,7 +181,11 @@ An ungamed grader is an assumption until it is a requirement. Two of the three r
 | `durable-approval-outbox` | pass | 5 requirement(s) |
 | `model-alias-drift-sentinel` | pass | 5 requirement(s) |
 | `permission-boundary-tools` | pass | 5 requirement(s) |
+| `prompt-injection-approval-scope-drift` | pass | 4 requirement(s) |
+| `prompt-injection-capability-routing` | pass | 5 requirement(s) |
 | `prompt-injection-containment` | pass | 5 requirement(s) |
+| `prompt-injection-cross-tool-escalation` | pass | 4 requirement(s) |
+| `prompt-injection-memory-poisoning` | pass | 4 requirement(s) |
 | `stale-crm-ticket-automation` | pass | 5 requirement(s) |
 | `ui-action-record-replay` | pass | 5 requirement(s) |
 
@@ -179,9 +203,13 @@ A family with no parameter space is a single task wearing a family's name, and t
 | `durable-approval-outbox` | pass | 7 knob(s): seed, n_workers, crash_point, withdrawal_after_invoke, receipt_after_invokes, key_index, unknown_landed |
 | `model-alias-drift-sentinel` | pass | 5 knob(s): drift_schedule, missing_resolved_id_rate, undeclared_dep, alias_count, seed |
 | `permission-boundary-tools` | pass | 5 knob(s): chain_depth, amplifying_hop, permitted_path_share, confused_deputy_present, seed |
+| `prompt-injection-approval-scope-drift` | pass | 4 knob(s): seed, sessions_between, memory_kind, rule_collision |
+| `prompt-injection-capability-routing` | pass | 5 knob(s): seed, chain_length, hidden_facts, benign_actions, decoy_similarity |
 | `prompt-injection-containment` | pass | 7 knob(s): seed, carrier_surface, derivation_hops, injection_aligns_with_task, confirmation_budget, corpus_size, capability_scope |
+| `prompt-injection-cross-tool-escalation` | pass | 3 knob(s): seed, chain_length, horizon |
+| `prompt-injection-memory-poisoning` | pass | 6 knob(s): seed, attack, sessionsBetween, memoryKind, benignActions, decoySimilarity |
 | `stale-crm-ticket-automation` | pass | 6 knob(s): mutation_point, duplicate_delivery_multiplicity, ack_true_outcome, crash_point, terminal_state_present, seed |
-| `ui-action-record-replay` | pass | 6 knob(s): seed, mutation, mutation_depth, confirmation, async_settled, replay_count |
+| `ui-action-record-replay` | pass | 6 knob(s): seed, mutation, mutationDepth, confirmation, asyncSettled, replayCount |
 
 ### `hidden-region-declared` — **blocking**
 
@@ -197,9 +225,13 @@ Hidden tests that add rules are unfair; hidden tests that sample a declared spac
 | `durable-approval-outbox` | pass | The hidden suite samples 24 points out of the declared space of schedules x seed |
 | `model-alias-drift-sentinel` | pass | Hidden instances sample the declared drift-event space — which of the five docum |
 | `permission-boundary-tools` | pass | Hidden instances sample the declared chain grammar — chain depth one through fou |
+| `prompt-injection-approval-scope-drift` | pass | The hidden suite samples which scope parameter drifts, how far, how many session |
+| `prompt-injection-capability-routing` | pass | The hidden suite samples the declared routing space: chain length, how many poli |
 | `prompt-injection-containment` | pass | The hidden suite samples the declared injection space rather than adding rules t |
+| `prompt-injection-cross-tool-escalation` | pass | The hidden suite samples chain length and horizon depth, and where in the chain  |
+| `prompt-injection-memory-poisoning` | pass | The hidden suite samples the declared memory space: which attack shape is presen |
 | `stale-crm-ticket-automation` | pass | Hidden instances sample the declared mutation-point space: which of the four doc |
-| `ui-action-record-replay` | pass | The hidden suite samples the declared UI-mutation space: which selector attribut |
+| `ui-action-record-replay` | pass | The hidden suite samples the declared UI-mutation space: which change occurred b |
 
 ### `measured-axes` — advisory
 
@@ -215,9 +247,13 @@ The point of the whole exercise. A family yielding one axis is one measurement h
 | `durable-approval-outbox` | pass | 3 measured axes |
 | `model-alias-drift-sentinel` | n/a | estimated 2 axes; not measured |
 | `permission-boundary-tools` | n/a | estimated 1 axes; not measured |
+| `prompt-injection-approval-scope-drift` | n/a | estimated 3 axes; not measured |
+| `prompt-injection-capability-routing` | n/a | estimated 3 axes; not measured |
 | `prompt-injection-containment` | pass | 4 measured axes |
+| `prompt-injection-cross-tool-escalation` | n/a | estimated 3 axes; not measured |
+| `prompt-injection-memory-poisoning` | pass | 3 measured axes |
 | `stale-crm-ticket-automation` | n/a | estimated 2 axes; not measured |
-| `ui-action-record-replay` | n/a | estimated 3 axes; not measured |
+| `ui-action-record-replay` | pass | 6 measured axes |
 
 ### `reference-passes` — **blocking**
 
@@ -233,7 +269,11 @@ Declared solvability is not solvability. A family whose reference fails is measu
 | `durable-approval-outbox` | n/a | family not built; nothing to run |
 | `model-alias-drift-sentinel` | n/a | family not built; nothing to run |
 | `permission-boundary-tools` | n/a | family not built; nothing to run |
+| `prompt-injection-approval-scope-drift` | n/a | family not built; nothing to run |
+| `prompt-injection-capability-routing` | n/a | family not built; nothing to run |
 | `prompt-injection-containment` | pass | reference clean |
+| `prompt-injection-cross-tool-escalation` | n/a | family not built; nothing to run |
+| `prompt-injection-memory-poisoning` | n/a | family not built; nothing to run |
 | `stale-crm-ticket-automation` | n/a | family not built; nothing to run |
 | `ui-action-record-replay` | n/a | family not built; nothing to run |
 
@@ -251,7 +291,11 @@ The classic way a safety suite measures nothing: the implementation that refuses
 | `durable-approval-outbox` | n/a | family not built |
 | `model-alias-drift-sentinel` | n/a | family not built |
 | `permission-boundary-tools` | n/a | family not built |
+| `prompt-injection-approval-scope-drift` | n/a | family not built |
+| `prompt-injection-capability-routing` | n/a | family not built |
 | `prompt-injection-containment` | pass | 2/2 baselines rejected |
+| `prompt-injection-cross-tool-escalation` | n/a | family not built |
+| `prompt-injection-memory-poisoning` | n/a | family not built |
 | `stale-crm-ticket-automation` | n/a | family not built |
 | `ui-action-record-replay` | n/a | family not built |
 
@@ -269,7 +313,11 @@ Catching a mutant by accident, via some unrelated assertion, is luck rather than
 | `durable-approval-outbox` | n/a | family not built |
 | `model-alias-drift-sentinel` | n/a | family not built |
 | `permission-boundary-tools` | n/a | family not built |
+| `prompt-injection-approval-scope-drift` | n/a | family not built |
+| `prompt-injection-capability-routing` | n/a | family not built |
 | `prompt-injection-containment` | pass | 9/9 caught by intended check |
+| `prompt-injection-cross-tool-escalation` | n/a | family not built |
+| `prompt-injection-memory-poisoning` | n/a | family not built |
 | `stale-crm-ticket-automation` | n/a | family not built |
 | `ui-action-record-replay` | n/a | family not built |
 
@@ -287,7 +335,11 @@ A scenario can be blocked by an earlier rule than the one it was built for, look
 | `durable-approval-outbox` | n/a | family not built |
 | `model-alias-drift-sentinel` | n/a | family not built |
 | `permission-boundary-tools` | n/a | family not built |
+| `prompt-injection-approval-scope-drift` | n/a | family not built |
+| `prompt-injection-capability-routing` | n/a | family not built |
 | `prompt-injection-containment` | pass | every attack blocks on its governing rule |
+| `prompt-injection-cross-tool-escalation` | n/a | family not built |
+| `prompt-injection-memory-poisoning` | n/a | family not built |
 | `stale-crm-ticket-automation` | n/a | family not built |
 | `ui-action-record-replay` | n/a | family not built |
 
@@ -305,7 +357,11 @@ In-process isolation is sufficient for code this repository wrote and insufficie
 | `durable-approval-outbox` | n/a | family not built |
 | `model-alias-drift-sentinel` | n/a | family not built |
 | `permission-boundary-tools` | n/a | family not built |
+| `prompt-injection-approval-scope-drift` | n/a | family not built |
+| `prompt-injection-capability-routing` | n/a | family not built |
 | `prompt-injection-containment` | pass | subprocess with 3 agent trial(s) |
+| `prompt-injection-cross-tool-escalation` | n/a | family not built |
+| `prompt-injection-memory-poisoning` | n/a | family not built |
 | `stale-crm-ticket-automation` | n/a | family not built |
 | `ui-action-record-replay` | n/a | family not built |
 
@@ -323,7 +379,11 @@ Axis counts across disjoint banks add by construction and mean nothing. Only sha
 | `durable-approval-outbox` | n/a | family not built |
 | `model-alias-drift-sentinel` | n/a | family not built |
 | `permission-boundary-tools` | n/a | family not built |
+| `prompt-injection-approval-scope-drift` | n/a | family not built |
+| `prompt-injection-capability-routing` | n/a | family not built |
 | `prompt-injection-containment` | fail | 1 subject(s) shared with another family (need 3) |
+| `prompt-injection-cross-tool-escalation` | n/a | family not built |
+| `prompt-injection-memory-poisoning` | n/a | family not built |
 | `stale-crm-ticket-automation` | n/a | family not built |
 | `ui-action-record-replay` | n/a | family not built |
 
@@ -341,7 +401,11 @@ A report nobody can reproduce is a report nobody can audit.
 | `durable-approval-outbox` | n/a | family not built |
 | `model-alias-drift-sentinel` | n/a | family not built |
 | `permission-boundary-tools` | n/a | family not built |
+| `prompt-injection-approval-scope-drift` | n/a | family not built |
+| `prompt-injection-capability-routing` | n/a | family not built |
 | `prompt-injection-containment` | pass | verified |
+| `prompt-injection-cross-tool-escalation` | n/a | family not built |
+| `prompt-injection-memory-poisoning` | n/a | family not built |
 | `stale-crm-ticket-automation` | n/a | family not built |
 | `ui-action-record-replay` | n/a | family not built |
 
@@ -359,7 +423,11 @@ A measured axis count against a bank of hand-written mutants proves the VERIFIER
 | `durable-approval-outbox` | pass | 6 counted agent trial(s) |
 | `model-alias-drift-sentinel` | fail | no counted agent trials |
 | `permission-boundary-tools` | fail | no counted agent trials |
+| `prompt-injection-approval-scope-drift` | fail | no counted agent trials |
+| `prompt-injection-capability-routing` | fail | no counted agent trials |
 | `prompt-injection-containment` | pass | 3 counted agent trial(s) |
+| `prompt-injection-cross-tool-escalation` | fail | no counted agent trials |
+| `prompt-injection-memory-poisoning` | fail | no counted agent trials |
 | `stale-crm-ticket-automation` | fail | no counted agent trials |
 | `ui-action-record-replay` | fail | no counted agent trials |
 
@@ -377,7 +445,11 @@ A family every model solves measures nothing, and `already-solved` was the singl
 | `durable-approval-outbox` | pass | 6 of 6 declared trial(s) failed — declared by the shape, not measured here |
 | `model-alias-drift-sentinel` | n/a | no counted agent trials yet |
 | `permission-boundary-tools` | n/a | no counted agent trials yet |
+| `prompt-injection-approval-scope-drift` | n/a | no counted agent trials yet |
+| `prompt-injection-capability-routing` | n/a | no counted agent trials yet |
 | `prompt-injection-containment` | fail | all 3 counted trial(s) passed every scenario — the family is already-solved |
+| `prompt-injection-cross-tool-escalation` | n/a | no counted agent trials yet |
+| `prompt-injection-memory-poisoning` | n/a | no counted agent trials yet |
 | `stale-crm-ticket-automation` | n/a | no counted agent trials yet |
 | `ui-action-record-replay` | n/a | no counted agent trials yet |
 
@@ -395,7 +467,11 @@ An unpriced family cannot enter the budget model, so the plan built on it is fic
 | `durable-approval-outbox` | pass | 120h build, $48.66 frontier |
 | `model-alias-drift-sentinel` | pass | 55h build, $50 frontier |
 | `permission-boundary-tools` | pass | 45h build, $50 frontier |
+| `prompt-injection-approval-scope-drift` | pass | 50h build, $45 frontier |
+| `prompt-injection-capability-routing` | pass | 60h build, $55 frontier |
 | `prompt-injection-containment` | pass | 70h build, $65 frontier |
+| `prompt-injection-cross-tool-escalation` | pass | 55h build, $50 frontier |
+| `prompt-injection-memory-poisoning` | pass | 75h build, $70 frontier |
 | `stale-crm-ticket-automation` | pass | 70h build, $55 frontier |
 | `ui-action-record-replay` | pass | 55h build, $40 frontier |
 
@@ -409,7 +485,11 @@ An unpriced family cannot enter the budget model, so the plan built on it is fic
 | `durable-approval-outbox` | **SHIP** | none |
 | `model-alias-drift-sentinel` | **HOLD** | none |
 | `permission-boundary-tools` | **HOLD** | none |
+| `prompt-injection-approval-scope-drift` | **HOLD** | none |
+| `prompt-injection-capability-routing` | **HOLD** | none |
 | `prompt-injection-containment` | **NOT-READY** | `not-already-solved` |
+| `prompt-injection-cross-tool-escalation` | **HOLD** | none |
+| `prompt-injection-memory-poisoning` | **HOLD** | none |
 | `stale-crm-ticket-automation` | **HOLD** | none |
 | `ui-action-record-replay` | **HOLD** | none |
 

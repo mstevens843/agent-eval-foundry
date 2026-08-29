@@ -12,8 +12,8 @@ be restamped rather than reinvented.
 | measured (evidenced by a real trial) | 6 |
 | argued | 5 |
 | speculative | 3 |
-| mutants in the bank | 13 |
-| families declared | 9 |
+| mutants in the bank | 36 |
+| families declared | 13 |
 | mechanisms with no mutant (undetectable) | 0 |
 | mechanisms with no family yet | 0 |
 
@@ -30,16 +30,16 @@ describe but has no way to detect.
 | mechanism | maturity | mutants | families | ledger rows |
 |---|---|---:|---:|---:|
 | `uncertain-external-effects` | **measured** | 8 | 2 | 9 |
-| `stale-state` | argued | 2 | 3 | 12 |
-| `duplicate-side-effects` | **measured** | 2 | 3 | 12 |
-| `false-audit-history` | **measured** | 3 | 2 | 10 |
-| `liveness-stall` | **measured** | 2 | 2 | 6 |
-| `prompt-injection-via-retrieval` | argued | 1 | 1 | 2 |
-| `permission-boundary` | argued | 3 | 3 | 9 |
-| `ui-replay-mismatch` | _speculative_ | 1 | 2 | 1 |
-| `hidden-environment-dependency` | argued | 2 | 3 | 3 |
-| `tool-result-ambiguity` | argued | 3 | 2 | 3 |
-| `context-contamination` | _speculative_ | 1 | 1 | 3 |
+| `stale-state` | argued | 10 | 4 | 14 |
+| `duplicate-side-effects` | **measured** | 2 | 4 | 13 |
+| `false-audit-history` | **measured** | 5 | 3 | 11 |
+| `liveness-stall` | **measured** | 3 | 2 | 6 |
+| `prompt-injection-via-retrieval` | argued | 3 | 3 | 4 |
+| `permission-boundary` | argued | 11 | 6 | 12 |
+| `ui-replay-mismatch` | _speculative_ | 6 | 2 | 2 |
+| `hidden-environment-dependency` | argued | 3 | 3 | 4 |
+| `tool-result-ambiguity` | argued | 5 | 4 | 5 |
+| `context-contamination` | _speculative_ | 9 | 3 | 5 |
 | `model-alias-drift` | _speculative_ | 1 | 1 | 1 |
 | `grader-privilege-boundary` | **measured** | 1 | 1 | 2 |
 | `oracle-probing` | **measured** | 1 | 1 | 6 |

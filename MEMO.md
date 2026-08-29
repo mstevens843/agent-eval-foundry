@@ -237,6 +237,31 @@ The trials cost minutes and single-digit dollars. The family cost roughly 70 hou
 kill is cheap, the build is not — is the whole argument for gating before building, made against my
 own work rather than someone else's.
 
+### And then the kill produced the next family
+
+A kill is only worth its cost if something is built on it. So the reason was typed rather than
+narrated — `already_solved`, derived from the trial records, disposition `harden` — and fed to a
+table of fifteen evolution operators, each of which states what it changes, what it must hold fixed,
+and what new way it could be unfair. Four variants came out, each with a pre-registered kill risk.
+
+The lowest-risk one is now built and measured. Its argument is specific: all three passing
+submissions tracked argument provenance correctly *within a request*, where it costs nothing because
+the value never leaves memory, and none of them was ever asked to write it down and read it back. So
+the descendant separates the injection from the tool call by a session boundary. By the time the call
+arrives, the originating content is gone; the only thing that crossed is what the implementation
+chose to store; and an implementation that stored the value without its origin must now either refuse
+work the policy permits or permit work it refuses. There is no third option.
+
+**That is what I would want the thousand-task program to look like.** Not a backlog of task ideas —
+a loop where each dead family names the crutch its subjects were leaning on, and the next family
+removes it. The engine is deterministic and rule-based rather than a model call, for the same reason
+the rest of this repository is: a generator whose output cannot be checked is the failure mode in
+every row of my kill log.
+
+What it has NOT shown is that the descendant is harder. No agent has attempted it. The loop has run
+one full turn and stopped exactly where the evidence stops, and `reports/foundry-evolution-report.md`
+lists what would falsify the approach — starting with the descendant also passing 128 of 128.
+
 Underneath it is the constraint from `results/08`: fairness requires the rules be fully stated;
 solvability requires the answer be derivable from the rules plus the shipped data; and anything a
 human can compute that way, a program can compute, so the agent can write that program and use it as
@@ -342,17 +367,22 @@ That changes the unit of production:
    harness they call into).
 3. **Gate every family on axis count and on trial evidence, not on check count** — the tool in this
    repository, which I did not have when I built the outbox task. `node dist/cli.js ship` runs the
-   gate: 19 checks per family, 13 blocking, verdict a pure function of the gates. Of the nine
-   families declared here, one reaches SHIP, one is NOT-READY because real agents solved it, and
-   seven are HOLD because a family must not ship on an estimate.
-4. **Spend frontier budget only on what survives 1–3.** `node dist/cli.js budget --total 100000
+   gate: 19 checks per family, 13 blocking, verdict a pure function of the gates. Of the thirteen
+   families declared here, one reaches SHIP, one is NOT-READY because real agents solved it, and the
+   rest are HOLD because a family must not ship on an estimate.
+4. **Make the kill produce the next candidate.** A typed reason with cited evidence, a disposition,
+   and an operator table that turns "this family was too easy" into a specific structural change with
+   a pre-registered kill risk. Two of the four operators applied to the dead family have now produced
+   a built, measured descendant.
+5. **Spend frontier budget only on what survives 1–4.** `node dist/cli.js budget --total 100000
    --rate 120` prices it, and `budget-check.ts` refuses a plan that omits labour — the exact fake
    this section argues against.
 
 **And here is the number my own argument forces, which I would rather state than leave implicit.**
 The planner in this repository, run at $120/h against the measured screening and trial rates, returns
-**10 families / 240 generated instances / ~30 independent axes** for $100k, with labour at 99% of
-spend. Priced as hand-authored tasks instead — one task per family, one axis per task — the same
+**7 families / 168 generated instances / ~21 independent axes** for $100k, with labour at 99% of
+spend — down from ten families once the model prices the families that die AFTER being built, which
+one of the two built here did. Priced as hand-authored tasks instead — one task per family, one axis per task — the same
 money buys **10 tasks**. Both rows are in `reports/budget-plan.md`, and the gap between them is the
 answer to the question. The thousand-task program is a multi-year, multi-
 person effort whose first year's deliverable is 25–40 well-instrumented families plus the tooling

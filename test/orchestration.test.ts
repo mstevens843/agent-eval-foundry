@@ -454,8 +454,11 @@ describe("UI action record/replay family", () => {
   });
 
   it("declares both halves so refusing to replay cannot pass", () => {
-    const modes = (shape?.expectedFailureModes ?? []).join(" ");
-    expect(modes).toMatch(/[Rr]efusing to replay/);
+    // The family is built now, so its shape is generated from the code and its fairness constraints
+    // are where the two-sided contract is stated. The over-blocking half is named there.
+    const fairness = (shape?.fairnessConstraints ?? []).join(" ");
+    expect(fairness).toMatch(/unreplayable fails `replay_completes`/);
+    expect((shape?.expectedFailureModes ?? []).join(" ")).toMatch(/[Ii]mprovising|halting/i);
   });
 });
 
