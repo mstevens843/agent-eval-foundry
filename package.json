@@ -1,0 +1,37 @@
+{
+  "name": "agent-eval-foundry",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Measure how many independent things a benchmark suite actually measures, given the bank of subjects it was graded against.",
+  "type": "module",
+  "engines": { "node": ">=20 <25" },
+  "bin": { "axis": "./dist/cli.js" },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "biome check src test",
+    "axis": "node dist/cli.js",
+    "report": "node dist/cli.js report examples/durable-outbox/matrix.json --out reports/durable-outbox-axis-report.md",
+    "verify": "node dist/cli.js report examples/durable-outbox/matrix.json > /tmp/axis-verify.md && diff -u reports/durable-outbox-axis-report.md /tmp/axis-verify.md && echo 'report is reproducible'"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@types/node": "^22.10.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

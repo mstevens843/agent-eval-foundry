@@ -1,0 +1,1258 @@
+{
+  "schema": "agent-eval-foundry/matrix@1",
+  "suite": "terminal-bench/durable-approval-outbox",
+  "provenance": {
+    "repo": "github.com/mstevens843/terminal-bench-durable-outbox",
+    "artifact_commit": "c0e04eb",
+    "task_sha256": "dbca1f37e6b3bc4297b59a14fbae7d81c71eeb731220722f48cbe020ddabfc02",
+    "suite_shape": "24 scenarios / 15 schedules / 267 checks",
+    "checks_total": 267,
+    "extracted_from": [
+      "prototype/screenM/matrix.txt",
+      "tasks/durable-approval-outbox/tests/collect.py"
+    ],
+    "caveat": "Subjects were not sampled independently of the instances. The six revoke-after-ack instances were SELECTED against seven of these ten engines by prototype/screenM/diversify.py, which gates on len(catch)>=6 over exactly the engines then known to carry the ACKED->REVOKED bug. Read the axis count for this suite as an upper bound."
+  },
+  "reference_subject": "v2ref",
+  "subjects": [
+    {
+      "id": "e1",
+      "label": "as-shipped defective engine",
+      "family": "baseline",
+      "model": null,
+      "effort": null,
+      "note": "The engine handed to the agent in environment/app/engine/. Not an agent product: it carries the planted defects."
+    },
+    {
+      "id": "opus1",
+      "label": "v2-opus-1",
+      "family": "opus",
+      "model": "anthropic/claude-opus-5",
+      "effort": "max",
+      "note": "counted trial, reward 0"
+    },
+    {
+      "id": "opus2",
+      "label": "v2-opus-2",
+      "family": "opus",
+      "model": "anthropic/claude-opus-5",
+      "effort": "max",
+      "note": "counted trial, reward 0"
+    },
+    {
+      "id": "opus3b",
+      "label": "v2-opus-3b",
+      "family": "opus",
+      "model": "anthropic/claude-opus-5",
+      "effort": "max",
+      "note": "scored 201/201 on the older suite and was recorded as a solve; carried ACKED->REVOKED"
+    },
+    {
+      "id": "fhc1",
+      "label": "fh-claude-1",
+      "family": "opus",
+      "model": "anthropic/claude-opus-5",
+      "effort": "max",
+      "note": "reward 0 on the 245-check suite"
+    },
+    {
+      "id": "fhc2",
+      "label": "fh-claude-2",
+      "family": "opus",
+      "model": "anthropic/claude-opus-5",
+      "effort": "max",
+      "note": "reward 0 on the 245-check suite"
+    },
+    {
+      "id": "fhc3",
+      "label": "fh-claude-3",
+      "family": "opus",
+      "model": "anthropic/claude-opus-5",
+      "effort": "max",
+      "note": "scored 245/245 and was recorded as a solve; source audit found ACKED->REVOKED intact"
+    },
+    {
+      "id": "codex1",
+      "label": "v2-codex-1",
+      "family": "codex",
+      "model": "openai/gpt-5.6-sol",
+      "effort": "xhigh",
+      "note": "counted trial, reward 0"
+    },
+    {
+      "id": "codex2b",
+      "label": "v2-codex-2b",
+      "family": "codex",
+      "model": "openai/gpt-5.6-sol",
+      "effort": "xhigh",
+      "note": "counted trial, reward 0"
+    },
+    {
+      "id": "codex3b",
+      "label": "v2-codex-3b",
+      "family": "codex",
+      "model": "openai/gpt-5.6-sol",
+      "effort": "xhigh",
+      "note": "counted trial, reward 0"
+    }
+  ],
+  "instances": [
+    {
+      "id": "serial-clean-1009-12",
+      "schedule": "serial-clean",
+      "seed": 1009,
+      "keys": 12,
+      "family": "pre-existing",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "serial-clean-1013-16",
+      "schedule": "serial-clean",
+      "seed": 1013,
+      "keys": 16,
+      "family": "pre-existing",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "two-workers-1009-12",
+      "schedule": "two-workers",
+      "seed": 1009,
+      "keys": 12,
+      "family": "pre-existing",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "two-workers-1021-16",
+      "schedule": "two-workers",
+      "seed": 1021,
+      "keys": 16,
+      "family": "pre-existing",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "revoke-while-leased-1009-12",
+      "schedule": "revoke-while-leased",
+      "seed": 1009,
+      "keys": 12,
+      "family": "pre-existing",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "revoke-while-leased-1031-16",
+      "schedule": "revoke-while-leased",
+      "seed": 1031,
+      "keys": 16,
+      "family": "pre-existing",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "crash-after-tool-1009-12",
+      "schedule": "crash-after-tool",
+      "seed": 1009,
+      "keys": 12,
+      "family": "pre-existing",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "crash-after-tool-1013-16",
+      "schedule": "crash-after-tool",
+      "seed": 1013,
+      "keys": 16,
+      "family": "pre-existing",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "crash-after-tool-1031-20",
+      "schedule": "crash-after-tool",
+      "seed": 1031,
+      "keys": 20,
+      "family": "pre-existing",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "crash-after-lease-1009-12",
+      "schedule": "crash-after-lease",
+      "seed": 1009,
+      "keys": 12,
+      "family": "pre-existing",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "crash-after-lease-1021-16",
+      "schedule": "crash-after-lease",
+      "seed": 1021,
+      "keys": 16,
+      "family": "pre-existing",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "stale-lease-1009-12",
+      "schedule": "stale-lease",
+      "seed": 1009,
+      "keys": 12,
+      "family": "pre-existing",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "stale-lease-1013-16",
+      "schedule": "stale-lease",
+      "seed": 1013,
+      "keys": 16,
+      "family": "pre-existing",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "hostile-mix-1009-12",
+      "schedule": "hostile-mix",
+      "seed": 1009,
+      "keys": 12,
+      "family": "pre-existing",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "hostile-mix-1021-16",
+      "schedule": "hostile-mix",
+      "seed": 1021,
+      "keys": 16,
+      "family": "pre-existing",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "hostile-mix-1031-20",
+      "schedule": "hostile-mix",
+      "seed": 1031,
+      "keys": 20,
+      "family": "pre-existing",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "unknown-then-revoke-1009-12",
+      "schedule": "unknown-then-revoke",
+      "seed": 1009,
+      "keys": 12,
+      "family": "pre-existing",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "unknown-then-revoke-noop-1009-12",
+      "schedule": "unknown-then-revoke-noop",
+      "seed": 1009,
+      "keys": 12,
+      "family": "pre-existing",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "revoke-after-ack-a-1009-12",
+      "schedule": "revoke-after-ack-a",
+      "seed": 1009,
+      "keys": 12,
+      "family": "revoke-after-ack",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "revoke-after-ack-b-1009-12",
+      "schedule": "revoke-after-ack-b",
+      "seed": 1009,
+      "keys": 12,
+      "family": "revoke-after-ack",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "revoke-after-ack-c-1009-12",
+      "schedule": "revoke-after-ack-c",
+      "seed": 1009,
+      "keys": 12,
+      "family": "revoke-after-ack",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "revoke-after-ack-d-1021-12",
+      "schedule": "revoke-after-ack-d",
+      "seed": 1021,
+      "keys": 12,
+      "family": "revoke-after-ack",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "revoke-after-ack-e-1049-12",
+      "schedule": "revoke-after-ack-e",
+      "seed": 1049,
+      "keys": 12,
+      "family": "revoke-after-ack",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    },
+    {
+      "id": "revoke-after-ack-f-1049-12",
+      "schedule": "revoke-after-ack-f",
+      "seed": 1049,
+      "keys": 12,
+      "family": "revoke-after-ack",
+      "source": "prototype/screenM/matrix.txt",
+      "note": null
+    }
+  ],
+  "results": {
+    "serial-clean-1009-12": {
+      "e1": {
+        "failed": []
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": []
+      },
+      "opus3b": {
+        "failed": []
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": []
+      },
+      "fhc3": {
+        "failed": []
+      },
+      "codex1": {
+        "failed": []
+      },
+      "codex2b": {
+        "failed": []
+      },
+      "codex3b": {
+        "failed": []
+      }
+    },
+    "serial-clean-1013-16": {
+      "e1": {
+        "failed": []
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": []
+      },
+      "opus3b": {
+        "failed": []
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "fhc3": {
+        "failed": []
+      },
+      "codex1": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex2b": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex3b": {
+        "failed": [
+          "audit_explains"
+        ]
+      }
+    },
+    "two-workers-1009-12": {
+      "e1": {
+        "failed": []
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": []
+      },
+      "opus3b": {
+        "failed": []
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": []
+      },
+      "fhc3": {
+        "failed": []
+      },
+      "codex1": {
+        "failed": []
+      },
+      "codex2b": {
+        "failed": []
+      },
+      "codex3b": {
+        "failed": []
+      }
+    },
+    "two-workers-1021-16": {
+      "e1": {
+        "failed": []
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": []
+      },
+      "opus3b": {
+        "failed": []
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": []
+      },
+      "fhc3": {
+        "failed": []
+      },
+      "codex1": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex2b": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex3b": {
+        "failed": [
+          "audit_explains"
+        ]
+      }
+    },
+    "revoke-while-leased-1009-12": {
+      "e1": {
+        "failed": []
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": []
+      },
+      "opus3b": {
+        "failed": []
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": []
+      },
+      "fhc3": {
+        "failed": []
+      },
+      "codex1": {
+        "failed": []
+      },
+      "codex2b": {
+        "failed": []
+      },
+      "codex3b": {
+        "failed": []
+      }
+    },
+    "revoke-while-leased-1031-16": {
+      "e1": {
+        "failed": []
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": []
+      },
+      "opus3b": {
+        "failed": []
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "fhc3": {
+        "failed": []
+      },
+      "codex1": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex2b": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex3b": {
+        "failed": [
+          "audit_explains"
+        ]
+      }
+    },
+    "crash-after-tool-1009-12": {
+      "e1": {
+        "failed": [
+          "exactly_once",
+          "executed_iff_called",
+          "expected_executions",
+          "revocation_ordering"
+        ]
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": []
+      },
+      "opus3b": {
+        "failed": []
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": []
+      },
+      "fhc3": {
+        "failed": []
+      },
+      "codex1": {
+        "failed": []
+      },
+      "codex2b": {
+        "failed": []
+      },
+      "codex3b": {
+        "failed": []
+      }
+    },
+    "crash-after-tool-1013-16": {
+      "e1": {
+        "failed": [
+          "exactly_once",
+          "revocation_ordering"
+        ]
+      },
+      "opus1": {
+        "failed": [
+          "completion"
+        ]
+      },
+      "opus2": {
+        "failed": [
+          "completion"
+        ]
+      },
+      "opus3b": {
+        "failed": []
+      },
+      "fhc1": {
+        "failed": [
+          "completion"
+        ]
+      },
+      "fhc2": {
+        "failed": []
+      },
+      "fhc3": {
+        "failed": []
+      },
+      "codex1": {
+        "failed": []
+      },
+      "codex2b": {
+        "failed": []
+      },
+      "codex3b": {
+        "failed": [
+          "executed_iff_called"
+        ]
+      }
+    },
+    "crash-after-tool-1031-20": {
+      "e1": {
+        "failed": []
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": []
+      },
+      "opus3b": {
+        "failed": []
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": []
+      },
+      "fhc3": {
+        "failed": []
+      },
+      "codex1": {
+        "failed": []
+      },
+      "codex2b": {
+        "failed": []
+      },
+      "codex3b": {
+        "failed": []
+      }
+    },
+    "crash-after-lease-1009-12": {
+      "e1": {
+        "failed": []
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": []
+      },
+      "opus3b": {
+        "failed": []
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": []
+      },
+      "fhc3": {
+        "failed": []
+      },
+      "codex1": {
+        "failed": []
+      },
+      "codex2b": {
+        "failed": []
+      },
+      "codex3b": {
+        "failed": []
+      }
+    },
+    "crash-after-lease-1021-16": {
+      "e1": {
+        "failed": []
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": []
+      },
+      "opus3b": {
+        "failed": []
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": []
+      },
+      "fhc3": {
+        "failed": []
+      },
+      "codex1": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex2b": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex3b": {
+        "failed": [
+          "audit_explains"
+        ]
+      }
+    },
+    "stale-lease-1009-12": {
+      "e1": {
+        "failed": [
+          "exactly_once",
+          "executed_iff_called",
+          "expected_executions",
+          "revocation_ordering"
+        ]
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": []
+      },
+      "opus3b": {
+        "failed": []
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": []
+      },
+      "fhc3": {
+        "failed": []
+      },
+      "codex1": {
+        "failed": []
+      },
+      "codex2b": {
+        "failed": []
+      },
+      "codex3b": {
+        "failed": []
+      }
+    },
+    "stale-lease-1013-16": {
+      "e1": {
+        "failed": [
+          "exactly_once",
+          "executed_iff_called",
+          "expected_executions",
+          "revocation_ordering"
+        ]
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": []
+      },
+      "opus3b": {
+        "failed": []
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": []
+      },
+      "fhc3": {
+        "failed": []
+      },
+      "codex1": {
+        "failed": []
+      },
+      "codex2b": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex3b": {
+        "failed": []
+      }
+    },
+    "hostile-mix-1009-12": {
+      "e1": {
+        "failed": [
+          "exactly_once",
+          "executed_iff_called",
+          "expected_executions",
+          "revocation_ordering"
+        ]
+      },
+      "opus1": {
+        "failed": [
+          "completion"
+        ]
+      },
+      "opus2": {
+        "failed": [
+          "completion"
+        ]
+      },
+      "opus3b": {
+        "failed": []
+      },
+      "fhc1": {
+        "failed": [
+          "completion"
+        ]
+      },
+      "fhc2": {
+        "failed": []
+      },
+      "fhc3": {
+        "failed": []
+      },
+      "codex1": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex2b": {
+        "failed": []
+      },
+      "codex3b": {
+        "failed": [
+          "audit_explains"
+        ]
+      }
+    },
+    "hostile-mix-1021-16": {
+      "e1": {
+        "failed": [
+          "exactly_once",
+          "executed_iff_called",
+          "expected_executions",
+          "revocation_ordering"
+        ]
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": [
+          "completion"
+        ]
+      },
+      "opus3b": {
+        "failed": []
+      },
+      "fhc1": {
+        "failed": [
+          "completion"
+        ]
+      },
+      "fhc2": {
+        "failed": []
+      },
+      "fhc3": {
+        "failed": []
+      },
+      "codex1": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex2b": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex3b": {
+        "failed": [
+          "audit_explains",
+          "executed_iff_called"
+        ]
+      }
+    },
+    "hostile-mix-1031-20": {
+      "e1": {
+        "failed": []
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": []
+      },
+      "opus3b": {
+        "failed": []
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": []
+      },
+      "fhc3": {
+        "failed": []
+      },
+      "codex1": {
+        "failed": []
+      },
+      "codex2b": {
+        "failed": []
+      },
+      "codex3b": {
+        "failed": []
+      }
+    },
+    "unknown-then-revoke-1009-12": {
+      "e1": {
+        "failed": []
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": []
+      },
+      "opus3b": {
+        "failed": []
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": []
+      },
+      "fhc3": {
+        "failed": []
+      },
+      "codex1": {
+        "failed": []
+      },
+      "codex2b": {
+        "failed": []
+      },
+      "codex3b": {
+        "failed": []
+      }
+    },
+    "unknown-then-revoke-noop-1009-12": {
+      "e1": {
+        "failed": [
+          "executed_iff_called"
+        ]
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": []
+      },
+      "opus3b": {
+        "failed": []
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": []
+      },
+      "fhc3": {
+        "failed": []
+      },
+      "codex1": {
+        "failed": []
+      },
+      "codex2b": {
+        "failed": []
+      },
+      "codex3b": {
+        "failed": []
+      }
+    },
+    "revoke-after-ack-a-1009-12": {
+      "e1": {
+        "failed": []
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "opus3b": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "fhc3": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex1": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex2b": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex3b": {
+        "failed": [
+          "audit_explains"
+        ]
+      }
+    },
+    "revoke-after-ack-b-1009-12": {
+      "e1": {
+        "failed": []
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": []
+      },
+      "opus3b": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "fhc3": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex1": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex2b": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex3b": {
+        "failed": [
+          "audit_explains"
+        ]
+      }
+    },
+    "revoke-after-ack-c-1009-12": {
+      "e1": {
+        "failed": []
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "opus3b": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "fhc3": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex1": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex2b": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex3b": {
+        "failed": [
+          "audit_explains"
+        ]
+      }
+    },
+    "revoke-after-ack-d-1021-12": {
+      "e1": {
+        "failed": []
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "opus3b": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "fhc3": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex1": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex2b": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex3b": {
+        "failed": [
+          "audit_explains"
+        ]
+      }
+    },
+    "revoke-after-ack-e-1049-12": {
+      "e1": {
+        "failed": []
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "opus3b": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "fhc3": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex1": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex2b": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex3b": {
+        "failed": [
+          "audit_explains"
+        ]
+      }
+    },
+    "revoke-after-ack-f-1049-12": {
+      "e1": {
+        "failed": []
+      },
+      "opus1": {
+        "failed": []
+      },
+      "opus2": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "opus3b": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "fhc1": {
+        "failed": []
+      },
+      "fhc2": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "fhc3": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex1": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex2b": {
+        "failed": [
+          "audit_explains"
+        ]
+      },
+      "codex3b": {
+        "failed": [
+          "audit_explains"
+        ]
+      }
+    }
+  }
+}
