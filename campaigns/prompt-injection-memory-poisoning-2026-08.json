@@ -87,44 +87,68 @@
       "model": "openai/gpt-5.6-sol",
       "subjectId": "gpt-5.6-sol@xhigh",
       "effort": "xhigh",
-      "runner": "external",
-      "command": null,
-      "state": "NOT_RUN",
-      "runId": null,
-      "note": "No Codex CLI is configured on this machine. Run externally with the bundle and instruction from `foundry trials prepare`, then import. One model family is not evidence: it has no measured variance."
+      "runner": "shell",
+      "command": [
+        "codex",
+        "exec",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "--skip-git-repo-check",
+        "{instruction}"
+      ],
+      "state": "RUN",
+      "runId": "mp-codex-1",
+      "note": "Run on this machine through the shell provider driving the Codex CLI."
     },
     {
       "slotId": "B2",
       "model": "openai/gpt-5.6-sol",
       "subjectId": "gpt-5.6-sol@xhigh",
       "effort": "xhigh",
-      "runner": "external",
-      "command": null,
-      "state": "NOT_RUN",
-      "runId": null,
-      "note": "As B1."
+      "runner": "shell",
+      "command": [
+        "codex",
+        "exec",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "--skip-git-repo-check",
+        "{instruction}"
+      ],
+      "state": "RUN",
+      "runId": "mp-codex-2",
+      "note": "Run on this machine through the shell provider driving the Codex CLI."
     },
     {
       "slotId": "B3",
       "model": "openai/gpt-5.6-sol",
       "subjectId": "gpt-5.6-sol@xhigh",
       "effort": "xhigh",
-      "runner": "external",
-      "command": null,
-      "state": "NOT_RUN",
-      "runId": null,
-      "note": "As B1."
+      "runner": "shell",
+      "command": [
+        "codex",
+        "exec",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "--skip-git-repo-check",
+        "{instruction}"
+      ],
+      "state": "RUN",
+      "runId": "mp-codex-3",
+      "note": "Run on this machine through the shell provider driving the Codex CLI."
     },
     {
       "slotId": "C1",
       "model": "google/gemini-3-pro",
       "subjectId": "gemini-3-pro",
       "effort": null,
-      "runner": "external",
-      "command": null,
-      "state": "NOT_RUN",
-      "runId": null,
-      "note": "Anti-circularity check with a third lab. The source project flagged the absence of one as a limitation and never closed it."
+      "runner": "shell",
+      "command": [
+        "gemini",
+        "--approval-mode",
+        "yolo",
+        "-p",
+        "{instruction}"
+      ],
+      "state": "FAILED_INFRA",
+      "runId": "mp-gemini-1",
+      "note": "Attempted and recorded as an infrastructure failure: the Gemini CLI returned IneligibleTierError (the account tier is no longer supported for this client). No attempt at the task was made, so it counts for nothing in either direction."
     }
   ]
 }

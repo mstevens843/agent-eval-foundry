@@ -105,7 +105,7 @@ records this repository holds rather than from an estimate.
 | spend on runs that produced a counted result | $215.60 |
 | spend on standard attempts that produced nothing | $27.92 |
 | **effective $ per counted run** | **$12.63** |
-| counted agent trials on the second family | 3 |
+| counted agent trials on the second family | 4 |
 | median runtime of those trials | 340s |
 
 ### The waste rate
@@ -143,14 +143,14 @@ trial directories rather than assumed.
 |---|---:|
 | campaigns declared | 2 |
 | slots planned | 11 |
-| slots run | 3 |
-| slots **not run** | 8 |
-| counted trials | 3 |
-| of those, failing something | 1 |
+| slots run | 9 |
+| slots **not run** | 1 |
+| counted trials | 9 |
+| of those, failing something | 6 |
 | superseded by a challenge repair | 3 |
-| median counted-trial runtime | 8.2 min |
+| median counted-trial runtime | 8.4 min |
 | budget declared across campaigns | $22.00 |
-| **budget per counted failure** | $22.00 |
+| **budget per counted failure** | $3.67 |
 
 ### The line item nobody budgets for
 
@@ -164,10 +164,46 @@ once**, because the first campaign is often what tells you the family is not yet
 
 ### Unrun slots are a budget line, not an absence
 
-8 of 11 declared slots have not run, almost all of them because no runner
+1 of 11 declared slots have not run, almost all of them because no runner
 for that model family is configured here. They are costed in the plans and visible in every
 report. A campaign that quietly dropped them would show a complete-looking result over one lab's
 model — which is the single most common way a benchmark overstates what it measured.
+
+## Spend by provider, measured
+
+Every row read from the trial directories on disk. `superseded` runs were counted once and are
+not counted now: the family they measured was repaired.
+
+| provider | counted | of those failed | refused | infra | superseded | model-minutes |
+|---|---:|---:|---:|---:|---:|---:|
+| `anthropic` | 8 | 3 | 0 | 0 | 3 | 101 |
+| `google` | 0 | 0 | 0 | 1 | 0 | 0 |
+| `openai` | 5 | 3 | 0 | 0 | 0 | 34 |
+
+| | |
+|---|---:|
+| runs attempted | 17 |
+| counted | 13 |
+| **produced no usable evidence** | **4** (24%) |
+| at $3.50 per run, spend on runs that produced nothing | $14.00 |
+| **cost per counted FAILURE** | $9.92 |
+
+**Cost per counted failure is the number to plan against.** A counted solve tells you the family
+is solvable, which the reference already told you. A counted failure is the only kind of trial
+that moves a family toward shipping, and at the observed rates it costs several times what a
+single run does.
+
+### The three kinds of waste, which are not the same
+
+| kind | count | can it be engineered away? |
+|---|---:|---|
+| provider refusal | 0 | no — it is a property of the provider, and re-running until it complies would fabricate a sample |
+| infrastructure / auth | 1 | partly — an account-tier error is fixable by paying; a harness bug is fixable by fixing it |
+| superseded by repair | 3 | no, and it should not be. These runs found the defect that invalidated them |
+
+Priced into the plan, 4 wasted runs against 3 matrices per family is
+a real multiplier on trial cost — and still a rounding error beside labour, which is the finding
+the whole budget model exists to make.
 
 ## What this model does not include
 

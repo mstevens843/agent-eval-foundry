@@ -17,10 +17,12 @@ import { buildUiChallengePackage } from "../challenge/ui-package.js";
 import type { Matrix } from "../types.js";
 
 import { INTENDED_CHECK as PIC_CHECKS } from "../reports/trial-report.js";
+import { RULES as PIC_RULES } from "./prompt-injection-containment/policy.js";
 import * as pic from "./prompt-injection-containment/runner.js";
 import * as picScenarios from "./prompt-injection-containment/scenarios.js";
 
 import { BASELINES as MEM_BASELINES, INTENDED_CHECK as MEM_CHECKS } from "./memory-poisoning/mutants.js";
+import { RULES as MEM_RULES } from "./memory-poisoning/policy.js";
 import * as mem from "./memory-poisoning/runner.js";
 import * as memScenarios from "./memory-poisoning/scenarios.js";
 import { CHECKS as MEM_CHECK_NAMES } from "./memory-poisoning/verify.js";
@@ -48,12 +50,42 @@ export interface FamilySweep {
   readonly baselinesTotal: number;
 }
 
+/**
+ * How faithful a family's harness is to the world it models.
+ *
+ * A label rather than a claim, and deliberately NOT part of the challenge package: adding it to the
+ * spec would change the package hash and invalidate every trial in flight. It is metadata about the
+ * family, carried in the registry and printed in every report that quotes the family's numbers.
+ *
+ *   simulated      a hand-built model of the domain; faithful to the rules, not to any implementation
+ *   dom-like       models the structural mechanics of the real surface (selectors, state, identity)
+ *                  without a renderer
+ *   browser-backed  a real engine drives a real page
+ */
+export const REALISM_LEVELS = ["simulated", "dom-like", "browser-backed"] as const;
+export type RealismLevel = (typeof REALISM_LEVELS)[number];
+
+export const REALISM_MEANING: Readonly<Record<RealismLevel, string>> = {
+  simulated: "a hand-built model of the domain: faithful to the rules, not to any implementation",
+  "dom-like":
+    "models the structural mechanics of the real surface — selectors, element identity, state and confirmation — with no renderer, no layout and no timing",
+  "browser-backed": "a real browser engine drives a real page",
+};
+
 export interface BuiltFamily {
   readonly id: string;
   readonly name: string;
   readonly domain: string;
   readonly mechanisms: readonly string[];
   readonly checks: readonly string[];
+  /**
+   * Policy rule codes the family's SPEC.md publishes verbatim.
+   *
+   * A submission that names them is quoting the spec back rather than reimplementing it from
+   * intuition, which is the closest thing to "did the model read the rules" that source text
+   * supports. Empty for a family that publishes no codes — reported as n/a, never as zero.
+   */
+  readonly ruleCodes: readonly string[];
   /** The declared knob space, for the generated shape. */
   readonly space: Readonly<Record<string, readonly unknown[]>>;
   readonly knobPurpose: Readonly<Record<string, string>>;
@@ -64,6 +96,10 @@ export interface BuiltFamily {
   readonly typesPath: string;
   readonly estimatedBuildHours: number;
   readonly estimatedFrontierUsd: number;
+  /** How faithful the harness is. Never upgraded without saying what changed. */
+  readonly realism: RealismLevel;
+  /** What would have to be built to reach the next level, and what it would newly measure. */
+  readonly realismGap: string;
 }
 
 const sweep = <C extends { scenarioId: string; subjectId: string; failures: readonly { check: string }[] }>(
@@ -111,6 +147,7 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     domain: "agent tool-use with untrusted retrieved content",
     mechanisms: ["prompt-injection-via-retrieval", "context-contamination", "permission-boundary"],
     checks: [...new Set(Object.values(PIC_CHECKS))],
+    ruleCodes: PIC_RULES.map((r) => r.code),
     space: PIC_SPACE,
     knobPurpose: {
       seed: "determines the generated scenario",
@@ -132,6 +169,9 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     typesPath: "src/families/prompt-injection-containment/types.ts",
     estimatedBuildHours: 70,
     estimatedFrontierUsd: 65,
+    realism: "simulated",
+    realismGap:
+      "The tool boundary is a frozen facade rather than a service. Real fidelity would mean tools with latency, partial failure and their own state — which is the durable-outbox family's territory, not this one's.",
   },
   {
     id: "prompt-injection-memory-poisoning",
@@ -139,6 +179,7 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     domain: "agent memory and retrieval across sessions",
     mechanisms: ["context-contamination", "false-audit-history", "prompt-injection-via-retrieval"],
     checks: [...MEM_CHECK_NAMES],
+    ruleCodes: MEM_RULES.map((r) => r.code),
     space: memScenarios.SPACE,
     knobPurpose: {
       seed: "determines the generated scenario",
@@ -157,6 +198,9 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     typesPath: "src/families/memory-poisoning/types.ts",
     estimatedBuildHours: 75,
     estimatedFrontierUsd: 70,
+    realism: "simulated",
+    realismGap:
+      "The store is a Map with declared semantics. A real vector store would add retrieval ranking and embedding drift — genuinely different failure modes, and a different family rather than a more realistic version of this one.",
   },
   {
     id: "ui-action-record-replay",
@@ -164,6 +208,8 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     domain: "browser and desktop UI automation without an API",
     mechanisms: ["ui-replay-mismatch", "stale-state", "hidden-environment-dependency"],
     checks: [...UI_CHECK_NAMES],
+    // No published rule codes: the UI family states its contract as invariants, not a numbered policy.
+    ruleCodes: [],
     space: uiScenarios.SPACE,
     knobPurpose: {
       seed: "determines the generated UI tree and the action trace",
@@ -182,6 +228,12 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     typesPath: "src/families/ui-action-record-replay/types.ts",
     estimatedBuildHours: 55,
     estimatedFrontierUsd: 40,
+    // DOM-like rather than simulated: the harness models element identity across re-mounts, live
+    // selector resolution with ambiguity, attribute-level preconditions, a pending-vs-absent
+    // distinction and a confirmation state the tree declares. What it does not have is a renderer.
+    realism: "dom-like",
+    realismGap:
+      "A headless browser would add layout, timing, focus, scroll and shadow DOM — roughly 25–40 hours plus a browser dependency in the trial sandbox. It is worth doing AFTER a counted agent trial: if the dom-like version already discriminates, the browser adds fidelity to a real measurement; if every model passes, it buys a more realistic version of a task nobody fails.",
   },
 ];
 

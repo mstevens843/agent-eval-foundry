@@ -41,7 +41,11 @@
         "src/trials/router.ts",
         "src/trials/run.ts",
         "src/trials/agent-bank.ts",
-        "src/cli.ts"
+        "src/cli.ts",
+        "test/cross-provider.test.ts",
+        "src/trials/cross-provider.ts",
+        "src/trials/evidence-lifecycle.ts",
+        "src/trials/provider-registry.ts"
       ],
       "linter": {
         "rules": {

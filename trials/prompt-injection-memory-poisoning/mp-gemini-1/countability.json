@@ -1,0 +1,5 @@
+{
+  "counts": false,
+  "classification": "infrastructure_error",
+  "reason": "infrastructure_error: provider could not authenticate or is not entitled (\"ineligibletiererror\"); no attempt was made. A refusal, timeout or infrastructure failure is the absence of an attempt, not a result."
+}

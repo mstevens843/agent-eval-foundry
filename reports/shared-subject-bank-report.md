@@ -16,15 +16,15 @@ Which subjects have attempted which families, and what that permits.
 
 | family | subjects | counted trials | instances | axes |
 |---|---|---:|---:|---:|
-| `prompt-injection-containment` | `claude-opus-5` | 3 | 128 | — |
-| `prompt-injection-memory-poisoning` | `claude-opus-5` | 3 | 288 | — |
-| `durable-approval-outbox` | `codex1`, `codex2b`, `codex3b`, `e1`, `fhc1`, `fhc2`, `fhc3`, `opus1`, `opus2`, `opus3b` | 0 | 24 | 3 |
+| `prompt-injection-containment` | `claude-opus-5`, `gpt-5.6-sol` | 4 | 128 | 0 |
+| `prompt-injection-memory-poisoning` | `claude-opus-5`, `gpt-5.6-sol` | 6 | 288 | 1 |
+| `ui-action-record-replay` | `claude-opus-5`, `gpt-5.6-sol` | 3 | 324 | 1 |
+| `durable-approval-outbox` | `claude-opus-5`, `gpt-5.6-sol` | 0 | 24 | 1 |
 
 ## Detection banks — written mutants
 
 | family | subjects | instances | axes |
 |---|---:|---:|---:|
-| `ui-action-record-replay` | 10 | 324 | 6 |
 
 **These numbers may not be added to the ones above, or to each other as a portfolio total.** A
 detection axis says the verifier can tell two hand-written defects apart. That is worth knowing
@@ -34,41 +34,31 @@ and it is not a measurement of difficulty.
 
 | subject | families |
 |---|---|
-| `claude-opus-5` | `prompt-injection-containment`, `prompt-injection-memory-poisoning` |
+| `claude-opus-5` | `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
+| `gpt-5.6-sol` | `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
 
 ## What each kind of bank currently licenses
 
-### `agent` banks — 2 family(ies)
+### `agent` banks — 3 family(ies)
 
-**Verdict:** PARTIAL. a qualitative comparison over 1 shared subject(s); no combined axis count, because the width is bounded by the shared bank size.
+**Verdict:** PARTIAL. a qualitative comparison over 2 shared subject(s); no combined axis count, because the width is bounded by the shared bank size.
 
-Only 1 subject(s) attempted every family, below the threshold of 3. The combined width is bounded above by the shared bank size, so it cannot distinguish complete overlap from independence. Overlap is reported; no combined axis count is quoted as a headline.
+Only 2 subject(s) attempted every family, below the threshold of 3. The combined width is bounded above by the shared bank size, so it cannot distinguish complete overlap from independence. Overlap is reported; no combined axis count is quoted as a headline.
 
 **To strengthen this:**
 
 - Run the same subjects against every `agent` family until 3 share all of them.
-- Currently shared: claude-opus-5.
+- Currently shared: claude-opus-5, gpt-5.6-sol.
 
 ### `imported` banks — 1 family(ies)
 
-**Verdict:** MEASURED. nothing cross-family: only one `imported` bank exists, so there is nothing to compare it with.
+**Verdict:** PARTIAL. nothing cross-family: only one `imported` bank exists, so there is nothing to compare it with.
 
-10 subject(s) attempted every family, so "did the same implementation fail both?" is a question with an answer. The combined axis count below is computed over the shared subjects only, and is the number that says whether the families measure different things.
+Only 2 subject(s) attempted every family, below the threshold of 3. The combined width is bounded above by the shared bank size, so it cannot distinguish complete overlap from independence. Overlap is reported; no combined axis count is quoted as a headline.
 
 **To strengthen this:**
 
 - Build or trial a second family whose bank is `imported`.
-- For a mutant bank that means a second family with a written mutant set.
-
-### `mutant` banks — 1 family(ies)
-
-**Verdict:** MEASURED. nothing cross-family: only one `mutant` bank exists, so there is nothing to compare it with.
-
-10 subject(s) attempted every family, so "did the same implementation fail both?" is a question with an answer. The combined axis count below is computed over the shared subjects only, and is the number that says whether the families measure different things.
-
-**To strengthen this:**
-
-- Build or trial a second family whose bank is `mutant`.
 - For a mutant bank that means a second family with a written mutant set.
 
 ---

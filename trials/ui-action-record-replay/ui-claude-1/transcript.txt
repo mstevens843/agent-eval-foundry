@@ -1,0 +1,26 @@
+Done. `submission/subject.mjs` is the only file written; `challenge/` is untouched (all timestamps still 01:32).
+
+## What it does
+
+**Resolution (R1)** — every step calls `app.query(selector)` against the live tree. `recordedNodeId` is never used as an address, so `node_wrapped` resolves to the remounted id (`total-remounted`, not `total`).
+
+**Pre-flight before acting** — a read-only pass resolves *every* step's selector before the first click. If a target is gone or a selector matches more than one node, the trace is reported `unreplayable` with nothing run, rather than discovered half-way through. `pending` is deliberately *not* fatal there: "not yet" is decided at run time, "not there" is decided up front.
+
+**Outcome split** — target gone / `attribute_renamed` / ambiguous → `unreplayable` (re-record); region loading, precondition unmet, promised dialog missing → `halted` (try later).
+
+**Observation, not assumption (R2/R3/R7)** — preconditions and postconditions go through `app.attr()` on the live node and the audit carries the *observed value* (`"disabled"`), never a verdict.
+
+**Confirmation (R4)** — `data-opens-confirmation` is read off the live node. The dialog is observed before acting (so a standing dialog is accepted first) and after; an absent dialog halts with `CONFIRMATION_NOT_PRESENTED` and the effect does not fire. If the trace carries its own `confirm` step, acceptance is deferred to it.
+
+**Idempotency (R5)** — a `globalThis`-anchored ledger keyed by trace id records applied irreversible steps. A second replay re-resolves and re-observes everything live, re-runs only reversible steps, and never re-fires. It stays `completed` even if the page moved on after payment (pay disabled, removed, or the form replaced by a receipt).
+
+**R6** — `askModel` appears once in the file, in a comment.
+
+## Verification
+
+Three scratch suites (in `/tmp`, not in the graded tree):
+- **158 checks** across all six mutation kinds × all five depths × confirmation present/absent/suppressed × pending × single/double replay — all pass, including the three shipped examples with their documented outcomes.
+- **25 edge-case checks**: ambiguous selectors, explicit `confirm` steps, `nodeExists: false`, state-only precondition failures, a facade where every method throws, exact report/audit key shape, and `UPPER_SNAKE` reason vocabulary.
+- **6120-scenario fuzz** over two mutations at independent depths × confirmation × async × replay count × two plausible app models: 0 violations of the invariants (payment never fires twice, never fires without `completed`, `completed` never without payment, outcomes stable across replays, no `askModel`).
+
+One judgement call worth flagging: the hidden app's confirmation model is unobservable from here. I assumed the dialog opens *in response to* the action (which `data-opens-confirmation` and "an absent dialog is not a confirmation" both imply) and act-then-observe. The pre-check makes it also safe under a static-flag model when the dialog is present; the only residual gap is a static-flag app that fires the effect on `submit` regardless of confirmation — no strategy avoids that without failing every `present` scenario, which is the far more common case.

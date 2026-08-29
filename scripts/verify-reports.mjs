@@ -99,6 +99,31 @@ for (const rel of walk(chalTmp).sort()) {
   } else console.log(`ok     ${committed}`);
 }
 
+// The prepared external bundles are generated too, and they are the artifact a third party actually
+// runs. A bundle that has drifted from the family it fronts would send someone off to measure a task
+// this repository no longer produces, and its pinned challengeHash would then refuse the result they
+// came back with -- after they had spent the money. So it gets the same regenerate-and-diff gate as
+// everything else, including the challenge/ tree it carries.
+for (const familyId of [
+  "prompt-injection-containment",
+  "prompt-injection-memory-poisoning",
+  "ui-action-record-replay",
+]) {
+  const bunTmp = mkdtempSync(join(tmpdir(), "foundry-bundle-"));
+  run(["trials", "campaign", "prepare", "--family", familyId, "--provider", "external", "--out", bunTmp]);
+  const walkBundle = (dir, prefix = "") =>
+    readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+      e.isDirectory() ? walkBundle(join(dir, e.name), `${prefix}${e.name}/`) : [`${prefix}${e.name}`],
+    );
+  for (const rel of walkBundle(bunTmp).sort()) {
+    const committed = join("bundles", `${familyId}-external`, rel);
+    if (readFileSync(join(bunTmp, rel), "utf8") !== readFileSync(committed, "utf8")) {
+      console.error(`STALE  ${committed}`);
+      failures += 1;
+    } else console.log(`ok     ${committed}`);
+  }
+}
+
 // The scaffolded family artifacts are generated too. Regenerating into a temp directory and diffing
 // catches the case where a shape changes and its checked-in scaffold silently does not.
 // The scaffold's job is the paperwork an UNBUILT family needs before it earns build time, so the
@@ -125,7 +150,7 @@ for (const variant of [
 // by being written here, but the count is asserted so a report that stops being generated is caught
 // rather than silently skipped.
 run(["all", "--out", tmp]);
-const EXPECTED_REPORTS = 27;
+const EXPECTED_REPORTS = 33;
 const generated = readdirSync(tmp);
 if (generated.length !== EXPECTED_REPORTS) {
   console.error(`WRONG COUNT  \`all\` wrote ${generated.length} reports, expected ${EXPECTED_REPORTS}`);

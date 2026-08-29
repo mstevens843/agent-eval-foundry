@@ -19,7 +19,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `prompt-injection-cross-tool-escalation` | **NOT-READY** | difficulty-evidenced |
 | `prompt-injection-memory-poisoning` | **SHIP** | none |
 | `stale-crm-ticket-automation` | **NOT-READY** | difficulty-evidenced |
-| `ui-action-record-replay` | **NOT-READY** | difficulty-evidenced |
+| `ui-action-record-replay` | **SHIP** | none |
 
 ## Gate table
 
@@ -265,12 +265,12 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `baselines-blocked` | pass | 2/2 baselines rejected |
 | `mutants-caught-by-intended-check` | pass | 9/9 caught by intended check |
 | `mechanisms-exercised` | pass | every attack blocks on its governing rule |
-| `isolation-level` | pass | subprocess with 3 agent trial(s) |
-| `shared-bank-ready` | **FAIL** | 1 subject(s) shared with another family (need 3) |
+| `isolation-level` | pass | subprocess with 4 agent trial(s) |
+| `shared-bank-ready` | **FAIL** | 2 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
-| `difficulty-evidenced` | pass | 3 counted agent trial(s) |
-| `not-already-solved` | **FAIL** | all 3 counted trial(s) passed every scenario — the family is already-solved |
+| `difficulty-evidenced` | pass | 4 counted agent trial(s) |
+| `not-already-solved` | **FAIL** | all 4 counted trial(s) passed every scenario — the family is already-solved |
 | `priced` | pass | 70h build, $65 frontier |
 
 ### `prompt-injection-cross-tool-escalation` — NOT-READY
@@ -315,12 +315,12 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `baselines-blocked` | pass | 2/2 baselines rejected |
 | `mutants-caught-by-intended-check` | pass | 11/11 caught by intended check |
 | `mechanisms-exercised` | pass | every attack blocks on its governing rule |
-| `isolation-level` | pass | subprocess with 3 agent trial(s) |
-| `shared-bank-ready` | **FAIL** | 1 subject(s) shared with another family (need 3) |
+| `isolation-level` | pass | subprocess with 6 agent trial(s) |
+| `shared-bank-ready` | **FAIL** | 2 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
-| `difficulty-evidenced` | pass | 3 counted agent trial(s) |
-| `not-already-solved` | pass | 1 of 3 counted trial(s) failed at least one scenario |
+| `difficulty-evidenced` | pass | 6 counted agent trial(s) |
+| `not-already-solved` | pass | 3 of 6 counted trial(s) failed at least one scenario |
 | `priced` | pass | 75h build, $70 frontier |
 
 ### `stale-crm-ticket-automation` — NOT-READY
@@ -348,7 +348,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 70h build, $55 frontier |
 
-### `ui-action-record-replay` — NOT-READY
+### `ui-action-record-replay` — SHIP
 
 | gate | result | detail |
 |---|---|---|
@@ -365,12 +365,12 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `baselines-blocked` | pass | 2/2 baselines rejected |
 | `mutants-caught-by-intended-check` | pass | 10/10 caught by intended check |
 | `mechanisms-exercised` | pass | every attack blocks on its governing rule |
-| `isolation-level` | pass | subprocess; adequate while no agent artifact is graded |
-| `shared-bank-ready` | **FAIL** | 0 subject(s) shared with another family (need 3) |
+| `isolation-level` | pass | subprocess with 3 agent trial(s) |
+| `shared-bank-ready` | **FAIL** | 2 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
-| `difficulty-evidenced` | **FAIL** | no counted agent trials |
-| `not-already-solved` | n/a | no counted agent trials yet |
+| `difficulty-evidenced` | pass | 3 counted agent trial(s) |
+| `not-already-solved` | pass | 3 of 3 counted trial(s) failed at least one scenario |
 | `priced` | pass | 55h build, $40 frontier |
 
 ## Why these gates

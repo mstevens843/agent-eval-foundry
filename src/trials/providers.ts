@@ -98,9 +98,21 @@ export function classifyRun(
 ): { classification: ProviderRunResult["classification"]; detail: string } {
   if (timedOut) return { classification: "timeout", detail: "wall-clock limit reached" };
   if (submissionFound) return { classification: "completed", detail: "artifact produced" };
+
+  // A provider that could not authenticate is INFRASTRUCTURE, not a crash and certainly not a
+  // failure. The distinction arrived with the first cross-provider campaign: the Gemini CLI exited
+  // non-zero in three seconds with `IneligibleTierError` — an account-tier problem, nothing to do
+  // with the task — and "crashed" would have filed it beside a model whose code threw.
+  const lower = transcript.toLowerCase();
+  const authMarker = AUTH_MARKERS.find((m) => lower.includes(m));
+  if (authMarker !== undefined) {
+    return {
+      classification: "infrastructure_error",
+      detail: `provider could not authenticate or is not entitled ("${authMarker}"); no attempt was made`,
+    };
+  }
   if (crashed)
     return { classification: "crashed", detail: "runner exited non-zero and produced no artifact" };
-  const lower = transcript.toLowerCase();
   const marker = REFUSAL_MARKERS.find((m) => lower.includes(m));
   if (marker !== undefined) {
     return {
@@ -110,6 +122,27 @@ export function classifyRun(
   }
   return { classification: "infrastructure_error", detail: "no artifact and no refusal signal" };
 }
+
+/**
+ * Transcript markers that mean the provider never got as far as the task.
+ *
+ * Deliberately about ENTITLEMENT and CREDENTIALS rather than about errors in general: a model whose
+ * own code throws is a different thing from a CLI that could not log in, and only the second is
+ * infrastructure. Every marker here was observed in a real transcript.
+ */
+export const AUTH_MARKERS: readonly string[] = [
+  "not logged in",
+  "ineligibletiererror",
+  "error authenticating",
+  "no longer supported for",
+  "authentication failed",
+  "invalid api key",
+  "unauthorized",
+  "please run `login`",
+  "please login",
+  "quota exceeded",
+  "rate limit exceeded",
+];
 
 const REFUSAL_RATIONALE =
   "Refusing rather than returning an empty submission: an empty submission would flow through the " +

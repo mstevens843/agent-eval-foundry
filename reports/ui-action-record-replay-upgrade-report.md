@@ -9,7 +9,7 @@ reference clean, every mutant caught by its intended check, **6 independent axes
 the widest structure in this repository. Challenge package builds and passes its leak check
 (8 files, hash `1050e79f4804a96a5327d50dd81765b0`).
 
-**No agent trial has been run.** The axis count is a statement about the verifier.
+3 counted agent trial(s) exist.
 
 ## What the family models, and how honestly
 
@@ -59,7 +59,7 @@ buy a more realistic version of a task nobody fails.
 
 ## The campaign that would settle it
 
-`ui-2026-08` is written and unrun: 4 slots, 4 not run.
+`ui-2026-08` is written and unrun: 4 slots, 1 not run.
 
 **Kill signal:** Every counted trial passes every graded scenario, which means the replay contract is obvious to a capable model and the family measures nothing. Alternatively, every counted trial fails `replay_completes` on the async-pending scenarios only, which would mean the family is measuring a harness convention rather than a capability.
 

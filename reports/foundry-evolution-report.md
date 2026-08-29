@@ -32,13 +32,13 @@ a measured axis count against hand-written mutants is a statement about the veri
 | `permission-boundary-tools` | NOT-READY | `no_difficulty_evidence` | `trial` | 1 _(est.)_ | 0 | no |
 | `prompt-injection-approval-scope-drift` | NOT-READY | `no_difficulty_evidence` | `trial` | 3 _(est.)_ | 0 | no |
 | `prompt-injection-capability-routing` | NOT-READY | `no_difficulty_evidence` | `trial` | 3 _(est.)_ | 0 | no |
-| `prompt-injection-containment` | NOT-READY | `already_solved` | `harden` | 4 | 3 | yes |
+| `prompt-injection-containment` | NOT-READY | `already_solved` | `harden` | 4 | 4 | yes |
 | `prompt-injection-cross-tool-escalation` | NOT-READY | `no_difficulty_evidence` | `trial` | 3 _(est.)_ | 0 | no |
-| `prompt-injection-memory-poisoning` | SHIP | `insufficient_shared_bank` | `schedule` | 3 | 3 | yes |
+| `prompt-injection-memory-poisoning` | SHIP | `insufficient_shared_bank` | `schedule` | 3 | 6 | yes |
 | `stale-crm-ticket-automation` | NOT-READY | `no_difficulty_evidence` | `trial` | 2 _(est.)_ | 0 | no |
-| `ui-action-record-replay` | NOT-READY | `verifier_only` | `trial` | 6 | 0 | yes |
+| `ui-action-record-replay` | SHIP | `insufficient_shared_bank` | `schedule` | 6 | 3 | yes |
 
-3 of 13 families execute. 2 has been attempted by a real agent.
+3 of 13 families execute. 3 has been attempted by a real agent.
 
 ## What the kill taxonomy has actually found
 
@@ -48,7 +48,7 @@ every category fires is usually a taxonomy that is not discriminating.
 | reason | kind | disposition | families |
 |---|---|---|---|
 | `already_solved` | weakness | `harden` | `prompt-injection-containment` |
-| `verifier_only` | absence | `trial` | `ui-action-record-replay` |
+| `verifier_only` | absence | `trial` | — |
 | `redundant_axis` | weakness | `mutate` | — |
 | `unfair_hidden_rule` | defect | `repair` | — |
 | `hidden_artifact_leak` | defect | `repair` | — |
@@ -293,7 +293,7 @@ on the author's own work; what it does not yet demonstrate is that the descendan
 
 ## Shared bank
 
-1 subject(s) have attempted more than one family, against a threshold of 3.
+2 subject(s) have attempted more than one family, against a threshold of 3.
 
 Cross-family axis counts are not available until that clears, and the two new families make it
 harder rather than easier: three built families and one trialed family is a wider bank to fill.

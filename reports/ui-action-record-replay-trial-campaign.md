@@ -1,6 +1,6 @@
 # Trial campaign — ui-action-record-replay
 
-`ui-2026-08` · 4 slots · 0 run · 0 counted · 4 not run
+`ui-2026-08` · 4 slots · 3 run · 3 counted · 1 not run
 
 ## Pre-registration
 
@@ -28,17 +28,14 @@ Written before any slot ran, so the result below cannot be reinterpreted into a 
 
 | slot | model | runner | state | run |
 |---|---|---|---|---|
-| A1 | `anthropic/claude-opus-5` | shell | **NOT_RUN** | — |
-| A2 | `anthropic/claude-opus-5` | shell | **NOT_RUN** | — |
+| A1 | `anthropic/claude-opus-5` | shell | RUN | `ui-claude-1` |
+| A2 | `anthropic/claude-opus-5` | shell | RUN | `ui-claude-2` |
 | A3 | `anthropic/claude-opus-5` | shell | **NOT_RUN** | — |
-| B1 | `openai/gpt-5.6-sol` | external | **NOT_RUN** | — |
+| B1 | `openai/gpt-5.6-sol` | shell | RUN | `ui-codex-1` |
 
 ### Why the unrun slots are unrun
 
-- **A1** (anthropic/claude-opus-5): Runnable here. Not run in this phase: the memory-poisoning campaign is the one that answers whether the evolution engine works, and spending the budget on both at once would answer neither well.
-- **A2** (anthropic/claude-opus-5): As A1.
 - **A3** (anthropic/claude-opus-5): As A1.
-- **B1** (openai/gpt-5.6-sol): External: no Codex CLI configured here.
 
 ## Counting rules
 

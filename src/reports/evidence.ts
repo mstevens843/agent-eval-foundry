@@ -201,6 +201,59 @@ export interface CampaignFacts {
   readonly medianRuntimeSeconds: number | null;
 }
 
+export interface ProviderSpendRow {
+  readonly providerFamily: string;
+  readonly counted: number;
+  readonly failed: number;
+  readonly refused: number;
+  readonly infra: number;
+  readonly superseded: number;
+  readonly runtimeSeconds: number;
+}
+
+/** Spend and yield per provider family, read from the trial directories. */
+export function providerSpend(root: string): readonly ProviderSpendRow[] {
+  const rows = new Map<
+    string,
+    { counted: number; failed: number; refused: number; infra: number; superseded: number; runtime: number }
+  >();
+  for (const familyId of ROUTABLE_FAMILY_IDS) {
+    const dirs = readFamilyTrials(join(root, "trials"), familyId);
+    const gated = gateByChallengeHash(
+      root,
+      familyId,
+      dirs.map((d) => ({ runId: d.runId, metadataPath: join(d.path, "metadata.json"), dir: d.path })),
+    );
+    const stale = new Set(gated.gates.filter((g) => !g.matches).map((g) => g.runId));
+    for (const dir of dirs) {
+      const record = dir.record;
+      if (record.subjectType !== "agent") continue;
+      const key = (record.model ?? "unknown").split("/")[0] ?? "unknown";
+      const row = rows.get(key) ?? { counted: 0, failed: 0, refused: 0, infra: 0, superseded: 0, runtime: 0 };
+      row.runtime += record.runtimeSeconds ?? 0;
+      if (stale.has(dir.runId)) row.superseded += 1;
+      else if (record.status === "refused") row.refused += 1;
+      else if (record.status === "infrastructure_error" || record.status === "timeout") row.infra += 1;
+      else if (record.counts) {
+        row.counted += 1;
+        if (record.cells.some((c) => c.failed.length > 0)) row.failed += 1;
+      } else row.infra += 1;
+      rows.set(key, row);
+    }
+  }
+  return [...rows.entries()]
+    .map(([providerFamily, r]) => ({
+      providerFamily,
+      counted: r.counted,
+      failed: r.failed,
+      refused: r.refused,
+      infra: r.infra,
+      superseded: r.superseded,
+      runtimeSeconds: r.runtime,
+    }))
+    .sort((a, b) => a.providerFamily.localeCompare(b.providerFamily));
+}
+
 export function campaignFacts(root: string): CampaignFacts {
   const plans = loadCampaigns(root);
   let counted = 0;

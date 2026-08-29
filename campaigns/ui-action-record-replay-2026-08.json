@@ -44,9 +44,9 @@
         "--permission-mode",
         "bypassPermissions"
       ],
-      "state": "NOT_RUN",
-      "runId": null,
-      "note": "Runnable here. Not run in this phase: the memory-poisoning campaign is the one that answers whether the evolution engine works, and spending the budget on both at once would answer neither well."
+      "state": "RUN",
+      "runId": "ui-claude-1",
+      "note": "Run on this machine through the shell provider driving the Claude CLI. The first counted agent trial for this family, and the first subject shared with another difficulty bank."
     },
     {
       "slotId": "A2",
@@ -61,9 +61,9 @@
         "--permission-mode",
         "bypassPermissions"
       ],
-      "state": "NOT_RUN",
-      "runId": null,
-      "note": "As A1."
+      "state": "RUN",
+      "runId": "ui-claude-2",
+      "note": "Second independent Claude attempt, same configuration."
     },
     {
       "slotId": "A3",
@@ -85,13 +85,19 @@
     {
       "slotId": "B1",
       "model": "openai/gpt-5.6-sol",
-      "subjectId": "gpt-5.6-sol@xhigh",
-      "effort": "xhigh",
-      "runner": "external",
-      "command": null,
-      "state": "NOT_RUN",
-      "runId": null,
-      "note": "External: no Codex CLI configured here."
+      "subjectId": "gpt-5.6-sol",
+      "effort": null,
+      "runner": "shell",
+      "command": [
+        "codex",
+        "exec",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "--skip-git-repo-check",
+        "{instruction}"
+      ],
+      "state": "RUN",
+      "runId": "ui-codex-1",
+      "note": "Declared NOT_RUN because no Codex runner was thought to be configured here; that was wrong, the CLI was present, and the slot was executed as declared. Second model family on this family, and the run that turned the claim from `separates` to `generalises`. Run at the provider's default effort, not xhigh as the slot originally specified \u2014 the effort field was corrected to what was actually run rather than the reverse."
     }
   ]
 }

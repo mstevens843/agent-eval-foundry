@@ -281,10 +281,42 @@ That sequence is the argument for the whole apparatus. A benchmark programme wit
 hash would have kept the old trials, and a benchmark programme without real trials would never have
 found the ambiguity at all.
 
-What it still has NOT shown is anything about a second lab's models. Every counted trial here is
-Claude, eight campaign slots for Codex and Gemini are written and unrun, and one model family has no
-measured variance. `reports/evolution-validation-report.md` lists that first among the things that
-would falsify the result.
+### Then a second lab ran it, and failed the same 32 scenarios
+
+The obvious objection to everything above was that every counted trial was Claude. A failure mode
+one lab's model exhibits is a fact about that model until a second lab's model exhibits it too. So
+the campaign was run again on GPT-5.6 Sol through the same router, the same challenge package, and
+the same content hash.
+
+**It failed the identical 32 scenarios.** Not 32 scenarios — the same 32, the same set of ids, the
+same two checks, the same split across the persistence boundary and zero at `sessionsBetween: 0`.
+Two independently trained models, from two labs, losing the same property on the same inputs. That
+is the strongest form of the transfer claim the data can carry, and it is the one the memo's
+headline was missing.
+
+It also found a **second, unrelated failure mode**: another Codex run failed 13 scenarios on a
+different check, disjoint from the first 32, concentrated on one attack at `sessionsBetween: 0`
+only. The diagnosis module reads it as a capability finding that does *not* match the pre-registered
+hypothesis, so it is recorded as a new finding rather than folded into the confirmed one.
+
+The picture across three families, all trials run through the same harness:
+
+| family | anthropic | openai | reading |
+|---|---|---|---|
+| `prompt-injection-containment` | 3 counted, 0 failed | 1 counted, 0 failed | **already-solved, confirmed across two labs** |
+| `prompt-injection-memory-poisoning` | 3 counted, 1 failed | 3 counted, 2 failed | **generalises** — one cross-lab pair identical, one disjoint |
+| `ui-action-record-replay` | 2 counted, 2 failed | 1 counted, 1 failed | **generalises** — but all three runs nest |
+
+Three things I would flag rather than bury. **The already-solved kill got stronger, not weaker**: a
+second lab also passed all 128, so the containment family is easy for reasons that are not specific
+to Claude. **The UI family's three trials form a chain** — 33 ⊂ 46 ⊂ 90 scenarios — which in this
+repository's own terms is one axis observed at three sensitivities, not three failure modes; the
+family separates subjects and has not yet been shown to measure more than one thing, and
+`reports/provider-variance-report.md` says so under its own headline. And **Gemini never ran**: the
+CLI is installed and the account is not entitled to it, so the slot is an `infrastructure_error`,
+never a zero, and the third subject the cross-family count needs is still missing. Prepared bundles
+for an external runner are checked in under `bundles/` with the challenge hash pinned, so a result
+someone else produces either measures this exact task or is refused on import.
 
 Underneath it is the constraint from `results/08`: fairness requires the rules be fully stated;
 solvability requires the answer be derivable from the rules plus the shipped data; and anything a
@@ -391,9 +423,11 @@ That changes the unit of production:
    harness they call into).
 3. **Gate every family on axis count and on trial evidence, not on check count** — the tool in this
    repository, which I did not have when I built the outbox task. `node dist/cli.js ship` runs the
-   gate: 19 checks per family, 13 blocking, verdict a pure function of the gates. Of the thirteen
-   families declared here, one reaches SHIP, one is NOT-READY because real agents solved it, and the
-   rest are HOLD because a family must not ship on an estimate.
+   gate: 20 checks per family, 14 blocking, verdict a pure function of the gates. Of the thirteen
+   families declared here, three reach SHIP, one is NOT-READY because real agents from two labs
+   solved it, and the other nine are NOT-READY because nothing has attempted them — a family must
+   not ship on an estimate, and `difficulty-evidenced` became blocking once every built family was
+   routable and "nobody has tried it" stopped being a fact about the tooling.
 4. **Make the kill produce the next candidate.** A typed reason with cited evidence, a disposition,
    and an operator table that turns "this family was too easy" into a specific structural change with
    a pre-registered kill risk. The descendant is built, trialed, and the operator is confirmed.
@@ -435,11 +469,16 @@ without a surface-coverage metric beside it.
 
 - **n = 3 corpora, and only one of them independent.** Two are mine end to end; the SWE-bench example
   is independent but coarse (one bit per instance, single unreplicated runs).
-- **Seven of the nine declared families are unbuilt**, so their axis counts are pre-registrations
+- **Ten of the thirteen declared families are unbuilt**, so their axis counts are pre-registrations
   rather than measurements, and the report labels every one of them.
-- **The already-solved finding rests on three trials by one model family.** It is a strong signal and
-  not a proof; the right response is to harden the family, which is what the gate forces, rather than
-  to average it away with more runs of the same kind.
+- **The already-solved finding now rests on four trials across two model families**, all of which
+  passed every scenario. That is a stronger kill than the original one-lab version and still not a
+  proof; the right response is to harden the family, which is what the gate forces, rather than to
+  average it away with more runs of the same kind.
+- **Two labs is not many labs.** Every counted trial here is Anthropic or OpenAI. The third provider
+  in the registry is installed and its account is not entitled, so the cross-family combined axis
+  count stays refused: with two shared subjects the width is bounded above by two, and a bound that
+  small cannot tell complete overlap from independence.
 - **Half the recorded kills have no cost attached**, so "screening is nearly free" rests on a floor
   rather than a total. `reports/candidate-ledger.md` states that in the same table as the claim.
 - **The bank bounds the answer.** Ten subjects containing roughly two defect families cannot exhibit

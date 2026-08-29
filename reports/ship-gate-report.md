@@ -22,8 +22,8 @@ A blocking gate is one whose absence means the family cannot produce trustworthy
 | `baselines-blocked` | Do the trivial baselines — do nothing, refuse everything — fail? | 3 | 0 | 10 |
 | `mutants-caught-by-intended-check` | Is every declared mutant caught by the check it was written to trip? | 3 | 0 | 10 |
 | `mechanisms-exercised` | Does every hidden scenario actually exercise the mechanism it claims to? | 3 | 0 | 10 |
-| `difficulty-evidenced` | Has any real agent or model been measured against this family? | 3 | 10 | 0 |
-| `not-already-solved` | Is there at least one counted agent trial that did NOT pass cleanly? | 2 | 1 | 10 |
+| `difficulty-evidenced` | Has any real agent or model been measured against this family? | 4 | 9 | 0 |
+| `not-already-solved` | Is there at least one counted agent trial that did NOT pass cleanly? | 3 | 1 | 9 |
 
 ## Advisory
 
@@ -46,7 +46,7 @@ fail. These are the ones that currently reject at least one family:
 | gate | blocking | families it rejects | why the gate exists |
 |---|---|---|---|
 | `shared-bank-ready` | no | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` | Axis counts across disjoint banks add by construction and mean nothing. Only shared subjects make 'did the same implementation fail both?' a question with an answer. |
-| `difficulty-evidenced` | yes | `audit-truth-financial-workflow`, `browser-action-replay`, `deployment-rollback-partial-effects`, `model-alias-drift-sentinel`, `permission-boundary-tools`, `prompt-injection-approval-scope-drift`, `prompt-injection-capability-routing`, `prompt-injection-cross-tool-escalation`, `stale-crm-ticket-automation`, `ui-action-record-replay` | A measured axis count against a bank of hand-written mutants proves the VERIFIER discriminates. It says nothing about whether the family is hard, because nothing that could plausibly fail it has attempted it. This gate was added after the second family scored four measured axes with zero agent trials and would otherwise have been marked SHIP. It is BLOCKING as of the campaign layer: with a trial router and a runnable challenge package for every built family, 'nobody has tried it' stopped being a fact about the tooling and became a decision not to look. |
+| `difficulty-evidenced` | yes | `audit-truth-financial-workflow`, `browser-action-replay`, `deployment-rollback-partial-effects`, `model-alias-drift-sentinel`, `permission-boundary-tools`, `prompt-injection-approval-scope-drift`, `prompt-injection-capability-routing`, `prompt-injection-cross-tool-escalation`, `stale-crm-ticket-automation` | A measured axis count against a bank of hand-written mutants proves the VERIFIER discriminates. It says nothing about whether the family is hard, because nothing that could plausibly fail it has attempted it. This gate was added after the second family scored four measured axes with zero agent trials and would otherwise have been marked SHIP. It is BLOCKING as of the campaign layer: with a trial router and a runnable challenge package for every built family, 'nobody has tried it' stopped being a fact about the tooling and became a decision not to look. |
 | `not-already-solved` | yes | `prompt-injection-containment` | A family every model solves measures nothing, and `already-solved` was the single most common cause of death in the source project's kill log — four of nine gated mechanisms. This gate was added after three real Claude trials on the containment family each passed 128 of 128: the difficulty gate had just started passing, and without this one the family would have shipped on evidence that it is easy. |
 
 **9 gate(s) pass for every family and have never rejected anything here:**
@@ -360,11 +360,11 @@ In-process isolation is sufficient for code this repository wrote and insufficie
 | `permission-boundary-tools` | n/a | family not built |
 | `prompt-injection-approval-scope-drift` | n/a | family not built |
 | `prompt-injection-capability-routing` | n/a | family not built |
-| `prompt-injection-containment` | pass | subprocess with 3 agent trial(s) |
+| `prompt-injection-containment` | pass | subprocess with 4 agent trial(s) |
 | `prompt-injection-cross-tool-escalation` | n/a | family not built |
-| `prompt-injection-memory-poisoning` | pass | subprocess with 3 agent trial(s) |
+| `prompt-injection-memory-poisoning` | pass | subprocess with 6 agent trial(s) |
 | `stale-crm-ticket-automation` | n/a | family not built |
-| `ui-action-record-replay` | pass | subprocess; adequate while no agent artifact is graded |
+| `ui-action-record-replay` | pass | subprocess with 3 agent trial(s) |
 
 ### `shared-bank-ready` — advisory
 
@@ -382,11 +382,11 @@ Axis counts across disjoint banks add by construction and mean nothing. Only sha
 | `permission-boundary-tools` | n/a | family not built |
 | `prompt-injection-approval-scope-drift` | n/a | family not built |
 | `prompt-injection-capability-routing` | n/a | family not built |
-| `prompt-injection-containment` | fail | 1 subject(s) shared with another family (need 3) |
+| `prompt-injection-containment` | fail | 2 subject(s) shared with another family (need 3) |
 | `prompt-injection-cross-tool-escalation` | n/a | family not built |
-| `prompt-injection-memory-poisoning` | fail | 1 subject(s) shared with another family (need 3) |
+| `prompt-injection-memory-poisoning` | fail | 2 subject(s) shared with another family (need 3) |
 | `stale-crm-ticket-automation` | n/a | family not built |
-| `ui-action-record-replay` | fail | 0 subject(s) shared with another family (need 3) |
+| `ui-action-record-replay` | fail | 2 subject(s) shared with another family (need 3) |
 
 ### `deterministic-reports` — advisory
 
@@ -448,11 +448,11 @@ A measured axis count against a bank of hand-written mutants proves the VERIFIER
 | `permission-boundary-tools` | fail | no counted agent trials |
 | `prompt-injection-approval-scope-drift` | fail | no counted agent trials |
 | `prompt-injection-capability-routing` | fail | no counted agent trials |
-| `prompt-injection-containment` | pass | 3 counted agent trial(s) |
+| `prompt-injection-containment` | pass | 4 counted agent trial(s) |
 | `prompt-injection-cross-tool-escalation` | fail | no counted agent trials |
-| `prompt-injection-memory-poisoning` | pass | 3 counted agent trial(s) |
+| `prompt-injection-memory-poisoning` | pass | 6 counted agent trial(s) |
 | `stale-crm-ticket-automation` | fail | no counted agent trials |
-| `ui-action-record-replay` | fail | no counted agent trials |
+| `ui-action-record-replay` | pass | 3 counted agent trial(s) |
 
 ### `not-already-solved` — **blocking**
 
@@ -470,11 +470,11 @@ A family every model solves measures nothing, and `already-solved` was the singl
 | `permission-boundary-tools` | n/a | no counted agent trials yet |
 | `prompt-injection-approval-scope-drift` | n/a | no counted agent trials yet |
 | `prompt-injection-capability-routing` | n/a | no counted agent trials yet |
-| `prompt-injection-containment` | fail | all 3 counted trial(s) passed every scenario — the family is already-solved |
+| `prompt-injection-containment` | fail | all 4 counted trial(s) passed every scenario — the family is already-solved |
 | `prompt-injection-cross-tool-escalation` | n/a | no counted agent trials yet |
-| `prompt-injection-memory-poisoning` | pass | 1 of 3 counted trial(s) failed at least one scenario |
+| `prompt-injection-memory-poisoning` | pass | 3 of 6 counted trial(s) failed at least one scenario |
 | `stale-crm-ticket-automation` | n/a | no counted agent trials yet |
-| `ui-action-record-replay` | n/a | no counted agent trials yet |
+| `ui-action-record-replay` | pass | 3 of 3 counted trial(s) failed at least one scenario |
 
 ### `priced` — advisory
 
@@ -514,7 +514,7 @@ An unpriced family cannot enter the budget model, so the plan built on it is fic
 | `prompt-injection-cross-tool-escalation` | **NOT-READY** | `difficulty-evidenced` |
 | `prompt-injection-memory-poisoning` | **SHIP** | none |
 | `stale-crm-ticket-automation` | **NOT-READY** | `difficulty-evidenced` |
-| `ui-action-record-replay` | **NOT-READY** | `difficulty-evidenced` |
+| `ui-action-record-replay` | **SHIP** | none |
 
 ---
 

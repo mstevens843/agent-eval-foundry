@@ -257,3 +257,21 @@ export function progressOf(plan: CampaignPlan, countedRunIds: readonly string[])
     counted: plan.slots.filter((s) => s.runId !== null && countedRunIds.includes(s.runId)).length,
   };
 }
+
+/**
+ * The campaign subcommands, and the guard that stops a typo reading as success.
+ *
+ * `trials campaign statsu` used to fall through to the plan listing, which prints a tidy summary and
+ * exits zero. A wrong command that produces confident-looking output is worse than one that fails:
+ * the reader concludes the thing they asked for happened.
+ */
+export const CAMPAIGN_SUBCOMMANDS = ["prepare", "import", "status", "providers", "run", "reconcile"] as const;
+
+export function assertCampaignSubcommand(sub: string | undefined): void {
+  if (sub === undefined || sub === "" || sub.startsWith("--")) return;
+  if (!(CAMPAIGN_SUBCOMMANDS as readonly string[]).includes(sub)) {
+    throw new Error(
+      `"${sub}" is not a campaign subcommand; valid ones are ${CAMPAIGN_SUBCOMMANDS.join(", ")}`,
+    );
+  }
+}

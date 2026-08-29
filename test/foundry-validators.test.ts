@@ -132,6 +132,22 @@ const COVERED_IN_ROUTING_TEST: readonly RuleCode[] = [
   "BANK_KIND_MISMATCH",
 ];
 
+/**
+ * Rules whose known-bad case lives in `cross-provider.test.ts`: strict import of externally-run
+ * bundles, and the evidence lifecycle that invalidates trials when a family is repaired.
+ */
+const COVERED_IN_CROSS_PROVIDER_TEST: readonly RuleCode[] = [
+  "IMPORT_MISSING_METADATA",
+  "IMPORT_FAMILY_MISMATCH",
+  "IMPORT_CHALLENGE_MISMATCH",
+  "IMPORT_MISSING_TRANSCRIPT",
+  "IMPORT_MISSING_SUBMISSION",
+  "EVIDENCE_STALE_COUNTED",
+  "EVIDENCE_CAMPAIGN_NOT_REISSUED",
+  "EVIDENCE_SUPERSEDED_HIDDEN",
+  "EVIDENCE_AMBIGUITY_UNDOCUMENTED",
+];
+
 /** Rules exercised by code below rather than by a JSON fixture. Keeps assertion 3 honest. */
 const PROGRAMMATIC: readonly RuleCode[] = [
   "E_TYPE",
@@ -389,6 +405,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ...COVERED_IN_ORCHESTRATION_TEST,
       ...COVERED_IN_EVOLUTION_TEST,
       ...COVERED_IN_ROUTING_TEST,
+      ...COVERED_IN_CROSS_PROVIDER_TEST,
     ]);
     const uncovered = RULE_CODES.filter((c) => !covered.has(c));
     expect(
@@ -405,6 +422,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ["test/orchestration.test.ts", COVERED_IN_ORCHESTRATION_TEST],
       ["test/evolution.test.ts", COVERED_IN_EVOLUTION_TEST],
       ["test/trials-routing.test.ts", COVERED_IN_ROUTING_TEST],
+      ["test/cross-provider.test.ts", COVERED_IN_CROSS_PROVIDER_TEST],
     ];
     for (const [file, codes] of delegated) {
       const source = readFileSync(`${ROOT}${file}`, "utf8");

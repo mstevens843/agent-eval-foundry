@@ -1,0 +1,198 @@
+{
+  "trace": {
+    "id": "ui-none-d0-present-settled-r1-11",
+    "steps": [
+      {
+        "index": 0,
+        "kind": "type",
+        "selector": {
+          "kind": "testid",
+          "value": "qty",
+          "qualifier": null
+        },
+        "recordedNodeId": "qty",
+        "value": "qty-value",
+        "precondition": {
+          "nodeExists": true,
+          "attr": "data-state",
+          "attrValue": "editable"
+        },
+        "postcondition": {
+          "effect": null,
+          "attr": null,
+          "attrValue": null
+        },
+        "irreversible": false
+      },
+      {
+        "index": 1,
+        "kind": "type",
+        "selector": {
+          "kind": "testid",
+          "value": "addr",
+          "qualifier": null
+        },
+        "recordedNodeId": "addr",
+        "value": "addr-value",
+        "precondition": {
+          "nodeExists": true,
+          "attr": "data-state",
+          "attrValue": "editable"
+        },
+        "postcondition": {
+          "effect": null,
+          "attr": null,
+          "attrValue": null
+        },
+        "irreversible": false
+      },
+      {
+        "index": 2,
+        "kind": "click",
+        "selector": {
+          "kind": "testid",
+          "value": "total",
+          "qualifier": null
+        },
+        "recordedNodeId": "total",
+        "value": null,
+        "precondition": {
+          "nodeExists": true,
+          "attr": "data-state",
+          "attrValue": "ready"
+        },
+        "postcondition": {
+          "effect": null,
+          "attr": null,
+          "attrValue": null
+        },
+        "irreversible": false
+      },
+      {
+        "index": 3,
+        "kind": "click",
+        "selector": {
+          "kind": "testid",
+          "value": "review",
+          "qualifier": null
+        },
+        "recordedNodeId": "review",
+        "value": null,
+        "precondition": {
+          "nodeExists": true,
+          "attr": "data-state",
+          "attrValue": "enabled"
+        },
+        "postcondition": {
+          "effect": null,
+          "attr": null,
+          "attrValue": null
+        },
+        "irreversible": false
+      },
+      {
+        "index": 4,
+        "kind": "submit",
+        "selector": {
+          "kind": "testid",
+          "value": "pay",
+          "qualifier": null
+        },
+        "recordedNodeId": "pay",
+        "value": null,
+        "precondition": {
+          "nodeExists": true,
+          "attr": "data-state",
+          "attrValue": "enabled"
+        },
+        "postcondition": {
+          "effect": "payment",
+          "attr": null,
+          "attrValue": null
+        },
+        "irreversible": true
+      }
+    ]
+  },
+  "liveTree": {
+    "id": "root",
+    "role": "document",
+    "attrs": {},
+    "text": "",
+    "children": [
+      {
+        "id": "nav",
+        "role": "navigation",
+        "attrs": {
+          "data-testid": "nav"
+        },
+        "text": "Home",
+        "children": []
+      },
+      {
+        "id": "form",
+        "role": "form",
+        "attrs": {
+          "data-testid": "checkout"
+        },
+        "text": "",
+        "children": [
+          {
+            "id": "qty",
+            "role": "textbox",
+            "attrs": {
+              "data-testid": "qty",
+              "data-state": "editable"
+            },
+            "text": "1",
+            "children": []
+          },
+          {
+            "id": "addr",
+            "role": "textbox",
+            "attrs": {
+              "data-testid": "addr",
+              "data-state": "editable"
+            },
+            "text": "12 Example St",
+            "children": []
+          },
+          {
+            "id": "total",
+            "role": "status",
+            "attrs": {
+              "data-testid": "total",
+              "data-state": "ready"
+            },
+            "text": "42.00",
+            "children": []
+          },
+          {
+            "id": "review",
+            "role": "button",
+            "attrs": {
+              "data-testid": "review",
+              "data-state": "enabled"
+            },
+            "text": "Review",
+            "children": []
+          },
+          {
+            "id": "pay",
+            "role": "button",
+            "attrs": {
+              "data-testid": "pay",
+              "data-state": "enabled",
+              "data-effect": "payment",
+              "data-opens-confirmation": "true"
+            },
+            "text": "Pay now",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "replayCount": 1,
+  "note": "Nothing changed. The trace completes and the payment fires exactly once."
+}

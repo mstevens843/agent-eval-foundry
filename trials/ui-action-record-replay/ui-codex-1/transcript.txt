@@ -1,0 +1,6 @@
+Implemented [submission/subject.mjs](/private/var/folders/8b/blch34j914xbz9lc1wv387f80000gn/T/foundry-trial-RaLdsA/submission/subject.mjs).
+
+I verified it with a local harness against the visible examples:
+`example-1-none` completed, `example-2-node_wrapped` completed and stayed idempotent on the second replay, and `example-3-node_removed` returned `unreplayable`.
+
+Final checks passed: `node --check submission/subject.mjs`, and `submission/` contains exactly that one file.

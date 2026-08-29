@@ -1,0 +1,5 @@
+Implemented [submission/subject.mjs](/private/var/folders/8b/blch34j914xbz9lc1wv387f80000gn/T/foundry-trial-dL1cgW/submission/subject.mjs).
+
+Verification run:
+- `node --check submission/subject.mjs`
+- Local harness against all three public examples, including simulated `vector_note` provenance dropping. Expected allow/block outcomes matched.

@@ -1,18 +1,18 @@
 # Agent trial results — ui-action-record-replay
 
-**No counted agent trial exists.** Nothing below is difficulty evidence.
+**3 counted agent trial(s): 3 failed at least one scenario, 0 passed everything.**
 
-**No evidence either way.**
+The family **discriminates**: at least one real attempt failed, so the suite separates something.
 
 ## Outcomes, kept apart
 
 | kind | count | what it means |
 |---|---:|---|
 | `counted_solve` | 0 | **counted solve** — a real attempt that passed every graded scenario |
-| `counted_failure` | 0 | **counted failure** — a real attempt that failed at least one scenario |
+| `counted_failure` | 3 | **counted failure** — a real attempt that failed at least one scenario |
 | `provider_refusal` | 0 | provider refusal — no attempt was made; never counted |
 | `infra_failure` | 0 | infrastructure failure — the harness, not the subject; never counted |
-| `not_run` | 4 | not run — a declared slot with no attempt yet |
+| `not_run` | 1 | not run — a declared slot with no attempt yet |
 
 A refusal is not a failure and an unrun slot is not a pass. The two rows most often merged are
 `provider_refusal` and `counted_failure`, and merging them is how a benchmark reports difficulty
@@ -22,14 +22,81 @@ it never measured.
 
 | run | model | outcome | graded | failed | runtime |
 |---|---|---|---:|---:|---:|
+| `ui-claude-1` | anthropic/claude-opus-5 | counted_failure | 324 | 46 | 791s |
+| `ui-claude-2` | anthropic/claude-opus-5 | counted_failure | 324 | 33 | 964s |
+| `ui-codex-1` | openai/gpt-5.6-sol | counted_failure | 324 | 90 | 552s |
 | `ui-2026-08:not-run-1` | anthropic/claude-opus-5 | not_run | 0 | 0 | — |
-| `ui-2026-08:not-run-2` | anthropic/claude-opus-5 | not_run | 0 | 0 | — |
-| `ui-2026-08:not-run-3` | anthropic/claude-opus-5 | not_run | 0 | 0 | — |
-| `ui-2026-08:not-run-4` | openai/gpt-5.6-sol | not_run | 0 | 0 | — |
+
+## Which checks failed
+
+Pooled across counted trials. A check that never fires is not evidence it cannot.
+
+| check | scenarios |
+|---|---:|
+| `no_forbidden_effect` | 127 |
+| `replay_idempotent` | 63 |
+| `unreplayable_reported` | 44 |
+
+## Where the failures fall
+
+The analysis that decides whether an evolution operator worked. A knob whose values produce
+different failure rates is a knob that is doing something; a flat split means the difficulty
+came from somewhere else.
+
+### `asyncSettled` — **the failure rate moves with this knob**
+
+| value | scenarios | failed | rate |
+|---|---:|---:|---:|
+| `false` | 504 | 27 | 5% |
+| `true` | 468 | 142 | 30% |
+
+### `confirmation` — **the failure rate moves with this knob**
+
+| value | scenarios | failed | rate |
+|---|---:|---:|---:|
+| `absent` | 333 | 16 | 5% |
+| `present` | 318 | 38 | 12% |
+| `suppressed` | 321 | 115 | 36% |
+
+### `mutation` — **the failure rate moves with this knob**
+
+| value | scenarios | failed | rate |
+|---|---:|---:|---:|
+| `attribute_renamed` | 162 | 36 | 22% |
+| `node_removed` | 162 | 8 | 5% |
+| `node_reordered` | 162 | 34 | 21% |
+| `node_wrapped` | 162 | 25 | 15% |
+| `none` | 162 | 30 | 19% |
+| `text_changed` | 162 | 36 | 22% |
+
+### `mutationDepth`
+
+| value | scenarios | failed | rate |
+|---|---:|---:|---:|
+| `0` | 324 | 47 | 15% |
+| `2` | 324 | 53 | 16% |
+| `4` | 324 | 69 | 21% |
+
+### `replayCount`
+
+| value | scenarios | failed | rate |
+|---|---:|---:|---:|
+| `1` | 501 | 79 | 16% |
+| `2` | 471 | 90 | 19% |
+
+### `seed`
+
+| value | scenarios | failed | rate |
+|---|---:|---:|---:|
+| `11` | 339 | 70 | 21% |
+| `23` | 312 | 48 | 15% |
+| `41` | 321 | 51 | 16% |
+
+**3 knob(s) move the failure rate: `asyncSettled`, `confirmation`, `mutation`.**
 
 ## Model coverage
 
-Counted trials come from **one model family** (none). One family has no measured variance: a result here says what that lab's model does, not what models do. The unrun slots in the campaign are the fix, and they are unrun.
+Counted trials span 2 model families: anthropic, openai.
 
 ## Against the pre-registration
 
@@ -37,7 +104,7 @@ Counted trials come from **one model family** (none). One family has no measured
 
 **Confirm signal was:** At least one counted trial fails at least one scenario, with failures spread across more than one check — in particular `replay_idempotent` at replayCount 2, or `no_model_in_loop`, which no amount of care about clicking prevents.
 
-Neither signal fired: there is no counted evidence.
+**The kill signal did not fire.** Read the knob splits above against the confirm signal: the claim is only as strong as the pattern, not the pass rate.
 
 ---
 

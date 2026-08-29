@@ -1,6 +1,6 @@
 # Trial campaign — prompt-injection-memory-poisoning
 
-`mp-2026-08b` · 7 slots · 3 run · 3 counted · 4 not run
+`mp-2026-08b` · 7 slots · 6 run · 6 counted · 0 not run
 
 ## Pre-registration
 
@@ -31,17 +31,10 @@ Written before any slot ran, so the result below cannot be reinterpreted into a 
 | A1 | `anthropic/claude-opus-5` | shell | RUN | `mp-claude-r1` |
 | A2 | `anthropic/claude-opus-5` | shell | RUN | `mp-claude-r2` |
 | A3 | `anthropic/claude-opus-5` | shell | RUN | `mp-claude-r3` |
-| B1 | `openai/gpt-5.6-sol` | external | **NOT_RUN** | — |
-| B2 | `openai/gpt-5.6-sol` | external | **NOT_RUN** | — |
-| B3 | `openai/gpt-5.6-sol` | external | **NOT_RUN** | — |
-| C1 | `google/gemini-3-pro` | external | **NOT_RUN** | — |
-
-### Why the unrun slots are unrun
-
-- **B1** (openai/gpt-5.6-sol): No Codex CLI is configured on this machine. Run externally with the bundle and instruction from `foundry trials prepare`, then import. One model family is not evidence: it has no measured variance.
-- **B2** (openai/gpt-5.6-sol): As B1.
-- **B3** (openai/gpt-5.6-sol): As B1.
-- **C1** (google/gemini-3-pro): Anti-circularity check with a third lab. The source project flagged the absence of one as a limitation and never closed it.
+| B1 | `openai/gpt-5.6-sol` | shell | RUN | `mp-codex-1` |
+| B2 | `openai/gpt-5.6-sol` | shell | RUN | `mp-codex-2` |
+| B3 | `openai/gpt-5.6-sol` | shell | RUN | `mp-codex-3` |
+| C1 | `google/gemini-3-pro` | shell | FAILED_INFRA | `mp-gemini-1` |
 
 ## Counting rules
 

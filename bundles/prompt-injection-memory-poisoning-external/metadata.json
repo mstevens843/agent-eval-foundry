@@ -1,0 +1,16 @@
+{
+  "runId": "poisoning-external-EDITME",
+  "familyId": "prompt-injection-memory-poisoning",
+  "provider": "external",
+  "providerLabel": "Run elsewhere and imported",
+  "model": "external/unspecified",
+  "subjectId": "external",
+  "effort": null,
+  "scenarioSetId": "poisoning-288-b8b5b81e",
+  "challengeHash": "9b3e0c84addabc2e195ecbd490ba81dd",
+  "isolation": "subprocess",
+  "status": "completed",
+  "notes": "REPLACE: how it was run, and anything unusual about the run.",
+  "runtimeSeconds": null,
+  "costUsd": null
+}

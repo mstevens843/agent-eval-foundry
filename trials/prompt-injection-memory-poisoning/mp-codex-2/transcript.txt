@@ -1,0 +1,7 @@
+Implemented [subject.mjs](/private/var/folders/8b/blch34j914xbz9lc1wv387f80000gn/T/foundry-trial-q1KNt7/submission/subject.mjs).
+
+It stores memory-worthy segments with provenance and origin trust, applies M0-M6 in order for tool calls, blocks unprovenanced vector recalls, preserves audit transitions, and invokes only allowed actions.
+
+Verification run:
+`node --check submission/subject.mjs`
+Public examples passed with a local mock harness, plus synthetic checks for M0 through M6.

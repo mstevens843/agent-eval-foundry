@@ -51,7 +51,10 @@ import {
 } from "./reports/bank-reports.js";
 import { renderBudgetReport } from "./reports/budget-report.js";
 import { renderAgentResults, renderCampaignReport } from "./reports/campaign-report.js";
+import { diagnose, renderDiagnoses } from "./reports/diagnosis.js";
+import { computeCurve } from "./reports/difficulty.js";
 import {
+  MEMORY_FAMILY,
   OUTBOX_FAMILY,
   PIC_FAMILY,
   UI_FAMILY,
@@ -60,6 +63,7 @@ import {
   familyEvidenceMap,
   outboxHistory,
   outboxMatrix,
+  providerSpend,
   trialLayerFacts,
   vendoredRunsDir,
 } from "./reports/evidence.js";
@@ -69,9 +73,12 @@ import { renderCrossFamilyReport, renderFamilyReport } from "./reports/family-re
 import { renderGateReport } from "./reports/gate-report.js";
 import { renderKillReport } from "./reports/kill-report.js";
 import { renderFamilyDiversityReport, renderLedgerReport } from "./reports/ledger-report.js";
+import { renderLifecycleReport } from "./reports/lifecycle-report.js";
 import { renderOrchestrationReport } from "./reports/orchestration-report.js";
+import { describeArtifact, renderProviderVariance } from "./reports/provider-variance.js";
 import { renderMechanismReport, renderMutantReport } from "./reports/registry-report.js";
 import { renderShapeReport } from "./reports/shape-report.js";
+import { measuredCells, renderSharedDifficultyBank } from "./reports/shared-difficulty.js";
 import { renderShipReport } from "./reports/ship-report.js";
 import { computeEvidence, renderTrialReadinessReport } from "./reports/trial-report.js";
 import { renderUiUpgradeReport } from "./reports/ui-upgrade-report.js";
@@ -80,14 +87,19 @@ import { buildAgentBank } from "./trials/agent-bank.js";
 import { crossFamilyClaims, kindedBank, normalizeSubjectId } from "./trials/bank.js";
 import { computeOverlap } from "./trials/bank.js";
 import { reconcile, runCampaign } from "./trials/campaign-run.js";
-import { loadCampaign, loadCampaigns, progressOf } from "./trials/campaign.js";
-import { readFamilyTrials, readTrialDirectory } from "./trials/directory.js";
+import { assertCampaignSubcommand, loadCampaign, loadCampaigns, progressOf } from "./trials/campaign.js";
+import { prepareProviderBundle, readImportedBundle } from "./trials/cross-provider.js";
+import { readFamilyTrials, readTrialDirectory, writeTrialDirectory } from "./trials/directory.js";
+import { type EvidenceState, evidenceLedger } from "./trials/evidence-lifecycle.js";
 import { importDurableOutboxHistory } from "./trials/history.js";
 import { importAgentTrials, measuredScenarios, runLocalTrials, scenarioSetId } from "./trials/orchestrate.js";
+import { decideCountability } from "./trials/orchestrator.js";
+import { PROVIDERS as PROVIDER_FAMILIES_LIST, checkAllProviders } from "./trials/provider-registry.js";
 import { PROVIDERS } from "./trials/providers.js";
 import { ROUTABLE_FAMILY_IDS, routeFor } from "./trials/router.js";
 import { prepareChallenge, runAgentTrial } from "./trials/run.js";
 import { assertChallengeMatch, challengeHash } from "./trials/run.js";
+import { parseTrialRecord } from "./trials/validate.js";
 
 const USAGE = `agent-eval-foundry — discover, screen and select agent-benchmark task families
 
@@ -551,6 +563,155 @@ function agentBankFor(root: string, familyId: string) {
   });
 }
 
+/** Provider availability, checked by execution rather than assumed. */
+function providerStatus(): string {
+  return [
+    "provider   family      available  detail",
+    ...checkAllProviders().map(
+      (a) =>
+        `${a.provider.id.padEnd(11)}${a.provider.family.padEnd(12)}${(a.available ? "yes" : "NO").padEnd(11)}${a.detail}`,
+    ),
+    "",
+    "A provider that is not available produces NOT_RUN slots and a prepared bundle, never a zero.",
+    "",
+  ].join("\n");
+}
+
+/** `trials campaign prepare --family <id> --provider <p> --out <dir>` */
+function campaignPrepare(argv: readonly string[], root: string): string {
+  const familyId = flag(argv, "--family");
+  const providerId = flag(argv, "--provider") ?? "external";
+  const out = flag(argv, "--out");
+  if (familyId === null) throw new Error("trials campaign prepare needs --family");
+  if (out === null) throw new Error("trials campaign prepare needs --out <dir>");
+  const bundle = prepareProviderBundle(root, familyId, providerId, out);
+  return [
+    `family      ${bundle.familyId}`,
+    `provider    ${bundle.provider.id} (${bundle.provider.label})`,
+    `available   ${bundle.available ? "yes" : "NO"} — ${bundle.availability}`,
+    `challenge   ${bundle.challenge.pkg.files.length} files, hash ${bundle.challenge.hash}`,
+    `bundle      ${bundle.dir}/  (${bundle.files.join(", ")})`,
+    "",
+    bundle.command === null
+      ? "No CLI declared: give INSTRUCTION.txt to the model however you run it."
+      : `Command: ${bundle.command.map((a) => (a.includes(" ") ? "<instruction>" : a)).join(" ")}`,
+    "",
+    `Import with:  foundry trials campaign import --family ${bundle.familyId} ${bundle.dir}`,
+    "",
+  ].join("\n");
+}
+
+/** `trials campaign import --family <id> <dir>` — strict, and it grades what it accepts. */
+function campaignImport(argv: readonly string[], root: string): string {
+  const familyId = flag(argv, "--family");
+  const dir = positional(argv, 3);
+  if (familyId === null) throw new Error("trials campaign import needs --family");
+  if (dir === undefined) throw new Error("trials campaign import needs a bundle directory");
+
+  const route = routeFor(familyId);
+  const prepared = prepareChallenge(root, familyId);
+  const bundle = readImportedBundle(dir, familyId, prepared.hash);
+
+  const graded =
+    bundle.submissionPath === null
+      ? { cells: [], detail: "no artifact to grade" }
+      : route.grade(bundle.submissionPath);
+  const countability = decideCountability(
+    bundle.status as never,
+    bundle.notes || "imported bundle",
+    graded.cells.length,
+  );
+
+  const record = parseTrialRecord({
+    runId: bundle.runId,
+    familyId,
+    subjectId: bundle.subjectId,
+    subjectType: "agent",
+    model: bundle.model,
+    effort: bundle.effort,
+    status: bundle.status,
+    counts: countability.counts,
+    countsReason: countability.reason,
+    scenarioSetId: prepared.scenarioSetId,
+    cells: countability.counts ? graded.cells : [],
+    runtimeSeconds: bundle.runtimeSeconds,
+    costUsd: bundle.costUsd,
+    artifactPath: countability.counts ? join("trials", familyId, bundle.runId, "submission") : null,
+    isolation: "subprocess",
+    notes: `imported from ${dir}; provider=${bundle.provider}`,
+  });
+
+  const written = writeTrialDirectory({
+    root: join(root, "trials"),
+    familyId,
+    runId: bundle.runId,
+    record,
+    countability,
+    transcript: bundle.transcript,
+    challengeFiles: prepared.pkg.files.map((f) => ({ path: f.path, content: f.content })),
+    submissionFiles:
+      bundle.submissionPath === null
+        ? []
+        : [{ path: "subject.mjs", content: readFileSync(bundle.submissionPath, "utf8") }],
+    verifierOutput: { cells: graded.cells, detail: graded.detail },
+    metadata: {
+      runId: bundle.runId,
+      familyId,
+      provider: bundle.provider,
+      model: bundle.model,
+      subjectId: bundle.subjectId,
+      effort: bundle.effort,
+      scenarioSetId: prepared.scenarioSetId,
+      challengeHash: bundle.challengeHash,
+      importedFrom: dir,
+      classification: bundle.status,
+      notes: bundle.notes,
+    },
+  });
+
+  return [
+    `imported   ${bundle.runId}`,
+    `family     ${familyId}`,
+    `provider   ${bundle.provider} (${bundle.model})`,
+    `status     ${bundle.status}`,
+    `counts     ${countability.counts ? "yes" : "NO"} — ${countability.reason}`,
+    `graded     ${graded.cells.length} scenarios, ${graded.cells.filter((c) => c.failed.length > 0).length} failed`,
+    `directory  ${written}`,
+    "",
+  ].join("\n");
+}
+
+/** `trials campaign status` — every plan, every slot, every provider, in one table. */
+function campaignStatus(root: string): string {
+  const availability = new Map(checkAllProviders().map((a) => [a.provider.id, a]));
+  const lines: string[] = [
+    "campaign        family                                  slot  provider  state      run",
+  ];
+  for (const plan of loadCampaigns(root)) {
+    const rec = reconcile(root, plan);
+    const counted = new Set(rec.countedRecords.map((r) => r.runId));
+    for (const slot of plan.slots) {
+      // Provider identity comes from the SUBJECT, not the runner: several providers are driven
+      // through the same `shell` adapter and printing "shell" for all of them hides the comparison
+      // the table exists to make.
+      const provider =
+        PROVIDER_FAMILIES_LIST.find((p) => p.subjectId === slot.subjectId)?.id ??
+        PROVIDER_FAMILIES_LIST.find((p) => p.model === slot.model)?.id ??
+        slot.runner;
+      const state = slot.runId !== null && counted.has(slot.runId) ? "COUNTED" : slot.state;
+      lines.push(
+        `${plan.campaignId.padEnd(16)}${plan.familyId.padEnd(40)}${slot.slotId.padEnd(6)}${provider.padEnd(10)}${state.padEnd(13)}${slot.runId ?? "—"}`,
+      );
+    }
+  }
+  lines.push("");
+  for (const a of availability.values()) {
+    lines.push(`${a.provider.id.padEnd(10)} ${a.available ? "available" : "UNAVAILABLE"} — ${a.detail}`);
+  }
+  lines.push("");
+  return lines.join("\n");
+}
+
 /**
  * `trials campaign --plan <file> [--run] [--only A1,A2]`.
  *
@@ -558,6 +719,27 @@ function agentBankFor(root: string, familyId: string) {
  * spends money is a campaign command someone runs by accident.
  */
 function campaignCommand(argv: readonly string[], root: string): string {
+  // Cross-provider subcommands. `trials campaign` with no subcommand keeps its old listing.
+  const sub = positional(argv, 2);
+  if (sub === "prepare") return campaignPrepare(argv, root);
+  if (sub === "import") return campaignImport(argv, root);
+  if (sub === "status") return campaignStatus(root);
+  if (sub === "providers") return providerStatus();
+  if (sub === "run" || sub === "reconcile") {
+    // Both are the existing plan-driven paths; `run` adds --run.
+    const family = flag(argv, "--family");
+    if (family !== null) {
+      const plan = loadCampaigns(root).find((p) => p.familyId === family);
+      if (plan === undefined) throw new Error(`no campaign plan for family "${family}"`);
+      return campaignForPlan(argv, root, plan, sub === "run");
+    }
+  }
+
+  // A mistyped subcommand must not fall through to the listing. `trials campaign statsu` printing a
+  // tidy summary of two plans is indistinguishable from success, and the reader concludes the thing
+  // they asked for happened.
+  assertCampaignSubcommand(sub);
+
   const planPath = flag(argv, "--plan");
   const plan = planPath === null ? null : loadCampaign(planPath);
   if (plan === null) {
@@ -576,8 +758,17 @@ function campaignCommand(argv: readonly string[], root: string): string {
     ].join("\n");
   }
 
+  return campaignForPlan(argv, root, plan, argv.includes("--run"));
+}
+
+function campaignForPlan(
+  argv: readonly string[],
+  root: string,
+  plan: ReturnType<typeof loadCampaign>,
+  execute: boolean,
+): string {
   const rec = reconcile(root, plan);
-  if (!argv.includes("--run")) {
+  if (!execute) {
     return [
       `campaign   ${plan.campaignId}`,
       `family     ${plan.familyId}`,
@@ -829,11 +1020,24 @@ function bankInput(root: string, registry: ReturnType<typeof loadRegistry>) {
       useAgent ? "agent" : "mutant",
     );
   });
+  // The outbox bank is built from its imported MODEL trials, not from its engine matrix. The engine
+  // matrix's subjects are named `fhc1`, `opus3b` and so on — artifacts, not models — so using it made
+  // cross-family overlap structurally impossible: no model could ever appear in it, and the shared
+  // bank reported REFUSED while also reporting that one model had attempted three families.
+  const outboxRecords = outboxHistory(root).records;
+  const outboxAgent = buildAgentBank(outboxRecords, {
+    familyId: OUTBOX_FAMILY,
+    instanceIds: outboxMatrix(root).instances.map((i) => i.id),
+    caveat:
+      "Imported from the source project's Harbor runs. Cells are coarse — the archive preserved a " +
+      "binary reward per run rather than per-check detail — so this bank supports subject overlap and " +
+      "not a fine-grained axis count.",
+  });
   const outbox = kindedBank(
     {
       familyId: OUTBOX_FAMILY,
-      matrix: outboxMatrix(root),
-      provenance: "engines submitted by frontier models, imported from the source project",
+      matrix: outboxAgent.matrix,
+      provenance: "counted frontier trials imported from the source project",
       agentDerived: true,
     },
     "imported",
@@ -990,9 +1194,136 @@ function allCommand(argv: readonly string[], root: string): string {
     );
   }
 
+  // ---- the shared DIFFICULTY bank: agent banks only ------------------------------------------------
+  {
+    const bi = bankInput(root, registry);
+    const difficulty = bi.banks.filter((b) => b.kind === "agent" || b.kind === "imported");
+    write(
+      "shared-difficulty-bank-report.md",
+      renderSharedDifficultyBank({
+        banks: bi.banks,
+        threshold: 3,
+        rows: difficulty.map((bank) => {
+          const family = BUILT_FAMILIES.find((f) => f.id === bank.familyId);
+          return {
+            familyId: bank.familyId,
+            subjects: bank.subjects,
+            countedTrials: ROUTABLE_FAMILY_IDS.includes(bank.familyId)
+              ? familyEvidenceFor(root, bank.familyId).evidence.countedAgentTrials
+              : 20,
+            instances: bank.matrix.instances.length,
+            measuredCells: measuredCells(bank.matrix),
+            axes:
+              bank.matrix.subjects.length > 1
+                ? measure(bank.matrix, { nullTrials: 3 }).independentAxes
+                : null,
+            realism: family?.realism ?? "imported from another harness",
+          };
+        }),
+      }),
+    );
+  }
+
   // ---- the shared bank, by kind -------------------------------------------------------------------
   write("shared-subject-bank-report.md", renderBankReport(bankInput(root, registry)));
   write("cross-family-axis-report.md", renderCrossFamilyAxisReport(bankInput(root, registry)));
+
+  // ---- difficulty curves, provider variance, diagnosis, evidence lifecycle -------------------------
+  {
+    const routable = ROUTABLE_FAMILY_IDS.filter((id) => BUILT_FAMILY_IDS.includes(id));
+    const perFamily = routable.map((familyId) => {
+      const bundle = familyEvidenceFor(root, familyId);
+      const plan = loadCampaigns(root).find((p) => p.familyId === familyId) ?? null;
+      const notRunByFamily: Record<string, number> = {};
+      for (const slot of plan?.slots ?? []) {
+        if (slot.state !== "NOT_RUN") continue;
+        const key = slot.model.split("/")[0] ?? "unknown";
+        notRunByFamily[key] = (notRunByFamily[key] ?? 0) + 1;
+      }
+      const validation = familyId === MEMORY_FAMILY;
+      return {
+        familyId,
+        records: bundle.trials.records,
+        curve: computeCurve({
+          familyId,
+          records: bundle.trials.records,
+          notRunByFamily,
+          operatorConfirmed: validation,
+        }),
+        plan,
+      };
+    });
+
+    // The evidence lifecycle: what is counted, superseded, refused, infra, unrun. Computed BEFORE
+    // any report that says "counted", so a superseded run cannot be described as counted by a report
+    // that happens to render earlier — which is exactly how mp-claude-2 briefly reappeared as
+    // evidence after the repair that invalidated it.
+    const ledgers = routable.map((familyId) =>
+      evidenceLedger(
+        familyId,
+        prepareChallenge(root, familyId).hash,
+        readFamilyTrials(join(root, "trials"), familyId),
+      ),
+    );
+    const evidenceState = new Map<string, EvidenceState>();
+    for (const ledger of ledgers) {
+      for (const entry of ledger.entries) evidenceState.set(entry.runId, entry.state);
+    }
+
+    // Provider variance, across every routable family at once.
+    const artifacts = routable.flatMap((familyId) =>
+      readFamilyTrials(join(root, "trials"), familyId)
+        .filter((t) => t.record.subjectType === "agent" && t.submissionFiles.length > 0)
+        .map((t) => {
+          const file = join(t.path, "submission", t.submissionFiles[0] ?? "subject.mjs");
+          const source = existsSync(file) ? readFileSync(file, "utf8") : "";
+          return describeArtifact(
+            t.runId,
+            (t.record.model ?? "unknown").split("/")[0] ?? "unknown",
+            source,
+            builtFamily(familyId).ruleCodes,
+            evidenceState.get(t.runId) ?? "not-run",
+            t.record.cells.filter((c) => c.failed.length > 0).length,
+          );
+        }),
+    );
+    write(
+      "provider-variance-report.md",
+      renderProviderVariance({
+        families: perFamily.map((f) => ({ familyId: f.familyId, curve: f.curve, records: f.records })),
+        availability: checkAllProviders(),
+        artifacts,
+      }),
+    );
+
+    // One diagnosis document per family with counted failures.
+    for (const f of perFamily) {
+      const params = routeFor(f.familyId).scenarioParams();
+      const diagnoses = f.records
+        .filter((r) => r.subjectType === "agent")
+        .map((record) =>
+          diagnose({
+            familyId: f.familyId,
+            record,
+            params,
+            hypothesisChecks:
+              f.familyId === MEMORY_FAMILY
+                ? ["provenance_persisted", "no_forbidden_call", "exactly_allowed", "recall_trust_preserved"]
+                : builtFamily(f.familyId).checks,
+            hypothesisKnob: f.familyId === MEMORY_FAMILY ? "sessionsBetween" : null,
+          }),
+        );
+      write(
+        `${f.familyId}-agent-diagnosis.md`,
+        renderDiagnoses(f.familyId, diagnoses, f.plan?.hypothesis ?? "No campaign plan on record."),
+      );
+    }
+
+    write(
+      "spec-ambiguity-and-stale-evidence-report.md",
+      renderLifecycleReport({ ledgers, plans: loadCampaigns(root), usdPerTrial: 3.5 }),
+    );
+  }
 
   // ---- what the UI family actually models ---------------------------------------------------------
   {
@@ -1053,7 +1384,10 @@ function allCommand(argv: readonly string[], root: string): string {
   const inputs = { ...MEASURED_DEFAULTS, totalUsd: 100_000, labourRateUsdPerHour: 120 };
   assertBudgetInputs(inputs);
   assertPlanHonest(planBudget(inputs));
-  write("budget-plan.md", renderBudgetReport(inputs, 1000, trialLayerFacts(root), campaignFacts(root)));
+  write(
+    "budget-plan.md",
+    renderBudgetReport(inputs, 1000, trialLayerFacts(root), campaignFacts(root), providerSpend(root)),
+  );
   const run = runFamily(ALL_SUBJECTS);
   const picMatrix = toMatrix(run);
   const picAxis = measure(picMatrix, { nullTrials: 3 });

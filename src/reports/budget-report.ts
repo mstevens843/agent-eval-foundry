@@ -11,7 +11,7 @@
 
 import { shortfallForTarget } from "../foundry/budget-check.js";
 import { type BudgetInputs, type BudgetPlan, handAuthoredComparison, planBudget } from "../foundry/budget.js";
-import type { CampaignFacts, TrialLayerFacts } from "./evidence.js";
+import type { CampaignFacts, ProviderSpendRow, TrialLayerFacts } from "./evidence.js";
 
 const usd = (n: number): string =>
   !Number.isFinite(n) ? "—" : n >= 1000 ? `$${Math.round(n).toLocaleString("en-US")}` : `$${n.toFixed(2)}`;
@@ -35,6 +35,7 @@ export function renderBudgetReport(
   targetTasks: number,
   trials?: TrialLayerFacts,
   campaigns?: CampaignFacts,
+  spend?: readonly ProviderSpendRow[],
 ): string {
   const plan = planBudget(inputs);
   const hand = handAuthoredComparison(inputs);
@@ -107,6 +108,7 @@ export function renderBudgetReport(
     "",
     ...(trials === undefined ? [] : trialLayerSection(inputs, trials)),
     ...(campaigns === undefined ? [] : campaignSection(inputs, campaigns)),
+    ...(spend === undefined ? [] : providerSpendSection(inputs, spend, 3.5)),
     "## What this model does not include",
     "",
     "- **Maintenance.** Families decay as models improve; nothing here prices re-hardening.",
@@ -275,6 +277,74 @@ function campaignSection(inputs: BudgetInputs, c: CampaignFacts): readonly strin
     "for that model family is configured here. They are costed in the plans and visible in every",
     "report. A campaign that quietly dropped them would show a complete-looking result over one lab's",
     "model — which is the single most common way a benchmark overstates what it measured.",
+    "",
+  ];
+}
+
+/**
+ * What a counted trial costs by provider, and what the waste actually was.
+ *
+ * The line this section exists for is `superseded`. A programme that repairs specs pays for some
+ * trials twice, and a budget that prices only the runs that survived is understating the cost of
+ * being careful. The repair came FROM those runs, so the spend bought a finding — it just did not
+ * buy a difficulty measurement.
+ */
+function providerSpendSection(
+  inputs: BudgetInputs,
+  rows: readonly ProviderSpendRow[],
+  usdPerTrial: number,
+): readonly string[] {
+  const total = rows.reduce(
+    (acc, r) => ({
+      counted: acc.counted + r.counted,
+      failed: acc.failed + r.failed,
+      refused: acc.refused + r.refused,
+      infra: acc.infra + r.infra,
+      superseded: acc.superseded + r.superseded,
+      runs: acc.runs + r.counted + r.refused + r.infra + r.superseded,
+    }),
+    { counted: 0, failed: 0, refused: 0, infra: 0, superseded: 0, runs: 0 },
+  );
+  const wasted = total.refused + total.infra + total.superseded;
+  const perCountedFailure = total.failed === 0 ? null : (total.runs * usdPerTrial) / total.failed;
+
+  return [
+    "## Spend by provider, measured",
+    "",
+    "Every row read from the trial directories on disk. `superseded` runs were counted once and are",
+    "not counted now: the family they measured was repaired.",
+    "",
+    "| provider | counted | of those failed | refused | infra | superseded | model-minutes |",
+    "|---|---:|---:|---:|---:|---:|---:|",
+    ...rows.map(
+      (r) =>
+        `| \`${r.providerFamily}\` | ${r.counted} | ${r.failed} | ${r.refused} | ${r.infra} | ${r.superseded} | ${(r.runtimeSeconds / 60).toFixed(0)} |`,
+    ),
+    "",
+    "| | |",
+    "|---|---:|",
+    `| runs attempted | ${total.runs} |`,
+    `| counted | ${total.counted} |`,
+    `| **produced no usable evidence** | **${wasted}** (${total.runs === 0 ? "—" : `${((wasted / total.runs) * 100).toFixed(0)}%`}) |`,
+    `| at ${usd(usdPerTrial)} per run, spend on runs that produced nothing | ${usd(wasted * usdPerTrial)} |`,
+    `| **cost per counted FAILURE** | ${perCountedFailure === null ? "— (no counted failure)" : usd(perCountedFailure)} |`,
+    "",
+    "**Cost per counted failure is the number to plan against.** A counted solve tells you the family",
+    "is solvable, which the reference already told you. A counted failure is the only kind of trial",
+    "that moves a family toward shipping, and at the observed rates it costs several times what a",
+    "single run does.",
+    "",
+    "### The three kinds of waste, which are not the same",
+    "",
+    "| kind | count | can it be engineered away? |",
+    "|---|---:|---|",
+    `| provider refusal | ${total.refused} | no — it is a property of the provider, and re-running until it complies would fabricate a sample |`,
+    `| infrastructure / auth | ${total.infra} | partly — an account-tier error is fixable by paying; a harness bug is fixable by fixing it |`,
+    `| superseded by repair | ${total.superseded} | no, and it should not be. These runs found the defect that invalidated them |`,
+    "",
+    `Priced into the plan, ${wasted} wasted runs against ${inputs.matricesPerFamily} matrices per family is`,
+    "a real multiplier on trial cost — and still a rounding error beside labour, which is the finding",
+    "the whole budget model exists to make.",
     "",
   ];
 }

@@ -1,0 +1,7 @@
+Implemented `submission/subject.mjs` as the required ES module exporting `subject`.
+
+Verified:
+- Visible examples produce the expected allow/block decisions and invoke only permitted calls.
+- Synthetic checks cover all eight policy rejection codes in order.
+- Audit transitions stay within the legal lifecycle table.
+- `submission/` contains exactly one file: `submission/subject.mjs`.

@@ -1,0 +1,23 @@
+{
+  "familyId": "ui-action-record-replay",
+  "scenarioSetId": "replay-324-2255de40",
+  "visibleFiles": [
+    "README.md",
+    "SPEC.md",
+    "examples/example-1-none.json",
+    "examples/example-2-node_wrapped.json",
+    "examples/example-3-node_removed.json",
+    "starter/subject.mjs",
+    "types.ts"
+  ],
+  "hiddenArtifacts": [
+    "verify.ts",
+    "reference.ts",
+    "mutants.ts",
+    "runner.ts",
+    "app.ts",
+    "matrix.json",
+    "scenarios.json"
+  ],
+  "submissionFormat": "an ES module exporting `subject` with a replay(trace, app) method"
+}

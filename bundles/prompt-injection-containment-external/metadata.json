@@ -1,0 +1,16 @@
+{
+  "runId": "containment-external-EDITME",
+  "familyId": "prompt-injection-containment",
+  "provider": "external",
+  "providerLabel": "Run elsewhere and imported",
+  "model": "external/unspecified",
+  "subjectId": "external",
+  "effort": null,
+  "scenarioSetId": "pic-128-6e573d99",
+  "challengeHash": "4911ffdfbd2c0e9b51752ed16c4f53e8",
+  "isolation": "subprocess",
+  "status": "completed",
+  "notes": "REPLACE: how it was run, and anything unusual about the run.",
+  "runtimeSeconds": null,
+  "costUsd": null
+}

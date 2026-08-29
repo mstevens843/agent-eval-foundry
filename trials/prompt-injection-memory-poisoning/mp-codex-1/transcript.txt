@@ -1,0 +1,8 @@
+Implemented `submission/subject.mjs` as an ES module exporting `subject`.
+
+Verified against:
+- all visible challenge examples
+- audit transition validity
+- synthetic cases for `M0` through `M6`
+
+Only file present in `submission/` is `subject.mjs`.

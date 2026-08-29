@@ -6,35 +6,32 @@ What the families measure, together — and the arithmetic this report refuses t
 
 | family | bank | instances | subjects | blind | distinct catch sets | axes |
 |---|---|---:|---:|---:|---:|---:|
-| `ui-action-record-replay` | `mutant` | 324 | 10 | 0 | 12 | **6** |
-| `durable-approval-outbox` | `imported` | 24 | 10 | 7 | 9 | **3** |
+| `prompt-injection-containment` | `agent` | 128 | 2 | 128 | 0 | **0** |
+| `prompt-injection-memory-poisoning` | `agent` | 288 | 2 | 209 | 2 | **1** |
+| `ui-action-record-replay` | `agent` | 324 | 2 | 234 | 2 | **1** |
+| `durable-approval-outbox` | `imported` | 24 | 2 | 0 | 1 | **1** |
 
 ## The sum that is not available
 
 | naive total | value | why it is not a result |
 |---|---:|---|
-| every family added together | 9 | mixes detection and difficulty; the two answer different questions |
-| detection banks added | 6 | the banks are disjoint by construction — no mutant appears in two families, so the union's width is the sum whatever the families measure |
-| difficulty banks added | 3 | fewer than two difficulty banks exist |
+| every family added together | 3 | mixes detection and difficulty; the two answer different questions |
+| detection banks added | 0 | the banks are disjoint by construction — no mutant appears in two families, so the union's width is the sum whatever the families measure |
+| difficulty banks added | 3 | valid only over subjects that attempted both, and the overlap is below threshold |
 
 A combined axis count requires the same subjects in every bank being combined. Until that holds,
 each family's number stands alone and the portfolio total does not exist.
 
 ## What each claim needs
 
-**`agent`:** a qualitative comparison over 1 shared subject(s); no combined axis count, because the width is bounded by the shared bank size.
+**`agent`:** a qualitative comparison over 2 shared subject(s); no combined axis count, because the width is bounded by the shared bank size.
 
 - Run the same subjects against every `agent` family until 3 share all of them.
-- Currently shared: claude-opus-5.
+- Currently shared: claude-opus-5, gpt-5.6-sol.
 
 **`imported`:** nothing cross-family: only one `imported` bank exists, so there is nothing to compare it with.
 
 - Build or trial a second family whose bank is `imported`.
-- For a mutant bank that means a second family with a written mutant set.
-
-**`mutant`:** nothing cross-family: only one `mutant` bank exists, so there is nothing to compare it with.
-
-- Build or trial a second family whose bank is `mutant`.
 - For a mutant bank that means a second family with a written mutant set.
 
 ## The cheapest path to a real cross-family number

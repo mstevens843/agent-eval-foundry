@@ -9,18 +9,18 @@ subjects to appear in both. This report computes whether they do.
 | family | counted agent subjects | counted trials | evidence type |
 |---|---|---:|---|
 | `durable-approval-outbox` | `claude-opus-5`, `gpt-5.6-sol` | 20 | imported historical |
-| `prompt-injection-containment` | `claude-opus-5` | 3 | measured here |
+| `prompt-injection-containment` | `claude-opus-5`, `gpt-5.6-sol` | 4 | measured here |
 
 ## Overlap verdict
 
 | | |
 |---|---|
-| subjects attempting **both** families | `claude-opus-5` |
-| count | 1 |
+| subjects attempting **both** families | `claude-opus-5`, `gpt-5.6-sol` |
+| count | 2 |
 | threshold for a combined axis claim | 3 |
 | **verdict** | **PARTIAL** |
 
-**1 subject overlaps, below the threshold of 3.**
+**2 subject overlaps, below the threshold of 3.**
 
 This is real progress and not yet a measurement. A combined antichain width is bounded above
 by the size of the shared bank, so with one shared subject the combined count can only be 0
@@ -47,7 +47,7 @@ Adding those is meaningless even where the banks overlap, because they answer di
 ## To reach a MEASURED verdict
 
 Run the remaining subjects on both families. The outbox family has `claude-opus-5`, `gpt-5.6-sol`;
-the containment family has `claude-opus-5`. The cheapest path to a combined
+the containment family has `claude-opus-5`, `gpt-5.6-sol`. The cheapest path to a combined
 claim is to run the containment challenge against the models already in the outbox bank, since the
 containment family costs minutes and dollars rather than hours and tens of dollars.
 

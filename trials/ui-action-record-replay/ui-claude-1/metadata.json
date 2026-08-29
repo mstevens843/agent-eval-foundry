@@ -1,0 +1,28 @@
+{
+  "runId": "ui-claude-1",
+  "familyId": "ui-action-record-replay",
+  "provider": "shell",
+  "providerLabel": "Shell command",
+  "model": "anthropic/claude-opus-5",
+  "effort": null,
+  "subjectId": "claude-opus-5",
+  "scenarioSetId": "replay-324-2255de40",
+  "timeoutMs": 1500000,
+  "runtimeSeconds": 791,
+  "costUsd": null,
+  "isolation": "process",
+  "classification": "completed",
+  "classificationDetail": "artifact produced",
+  "command": [
+    "claude",
+    "-p",
+    "{instruction}",
+    "--permission-mode",
+    "bypassPermissions"
+  ],
+  "challengeHash": "1050e79f4804a96a5327d50dd81765b0",
+  "challengeFiles": 8,
+  "campaign": "ui-2026-08",
+  "hostScript": "ui-host.mjs",
+  "scenariosExpected": 324
+}

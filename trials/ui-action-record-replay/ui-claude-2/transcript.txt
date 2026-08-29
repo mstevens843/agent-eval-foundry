@@ -1,0 +1,21 @@
+Done. `submission/subject.mjs` is the only file written; `challenge/` is untouched.
+
+## What the replayer does
+
+**Resolution (R1)** — every target comes from `app.query(step.selector)` at the moment the step runs. `step.recordedNodeId` is never read, so a wrapped-and-remounted node (example 2) resolves to its new id.
+
+**Observation (R2/R3/R7)** — preconditions are read with `app.attr` and the *observed value* goes in the audit (`"editable"`, `"enabled"`, `"absent"`), not a verdict. Postconditions are read back off the page after the action and recorded, never asserted.
+
+**Confirmation (R4)** — `data-opens-confirmation` is read live off the resolved node. When declared, the step performs its action, observes `confirmationPresent()`, and only completes after accepting. No dialog ⇒ the step does not complete and the trace halts. Because the declaration is read live, a page that has suppressed the confirmation (attribute gone) proceeds, and one that declares it but never shows the dialog halts.
+
+**Idempotency (R5)** — an effect ledger scoped to `(app instance, trace)` and parked on a global symbol, so it survives a second `replay()` call and a second module load. It is app-scoped rather than trace-id-scoped so two scenarios sharing a trace id cannot suppress each other's work; a fresh facade over the same application is recognised via a read-only state fingerprint (positive evidence of a continuation). An already-completed irreversible step is still resolved and observed, then reported `ran: false / ALREADY_APPLIED` with outcome `completed`.
+
+**Outcomes** — `unreplayable` for a target that is gone or no longer uniquely identified (waiting cannot fix either); `halted` for pending regions, precondition mismatches, and unpresented confirmations. Unreplayability is found in a side-effect-free pre-flight pass, so such a trace is *reported* rather than half-run — no typing into a form whose submit button no longer exists.
+
+**R6** — `askModel` is not referenced anywhere in the file.
+
+## Verification
+
+Against a mock facade built from the spec: all three examples reach their stated outcomes (ex1 completes, one payment; ex2 completes twice with exactly one payment and resolves `total-remounted`; ex3 is `unreplayable` with **zero** actions performed). A 360-case synthetic matrix over the declared mutation space × dialog mode × settled × replay count: 0 `askModel` calls, 0 double payments, 0 payments in any run that halted. Edge cases covered: mid-trace pending region, ambiguous selector, explicit `confirm` steps under all three dialog modes, `role_index`/`attr` selectors, re-wrapped facade, two module instances sharing the ledger, and hostile/nonsense facades (every facade call is guarded — a throwing app yields a report, never an exception).
+
+Two judgment calls worth flagging, both argued from the spec and the starter stub: `pending` is consulted where the starter consults it (when the node did not resolve), and a step whose target declares a confirmation acts first, then observes — which is the only ordering under which a confirmation flow can ever complete, given that a dialog cannot be observed before the action that opens it.
