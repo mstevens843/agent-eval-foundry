@@ -130,8 +130,30 @@ export interface AxisReport {
    * explained that way.
    */
   readonly independentAxes: number;
-  readonly chains: readonly (readonly string[])[];
+  /**
+   * A minimum chain cover: each chain is a nested sequence of catch sets, weakest first. Kept as
+   * data rather than pre-formatted text so the reporter owns rendering and can truncate a
+   * hundred-member catch set instead of emitting it in full.
+   */
+  readonly chains: readonly (readonly (readonly string[])[])[];
   readonly subjectStats: readonly SubjectStat[];
   readonly curve: readonly CurvePoint[];
   readonly redundancy: number;
+  /**
+   * Optional significance test. Present only when explicitly requested, because it costs a full
+   * re-measurement per trial. It calibrates `independentAxes` rather than replacing it: a corpus
+   * whose real width sits near the null width has an axis count explained by bank size and run
+   * noise, not by structure.
+   */
+  readonly nullBaseline?: NullBaselineSummary;
+}
+
+/** Null-model result, summarised for reporting. See `src/null-model.ts`. */
+export interface NullBaselineSummary {
+  readonly seed: number;
+  readonly trials: number;
+  readonly widths: readonly number[];
+  readonly meanWidth: number;
+  /** One axis per discriminating instance: the largest width the corpus could report. */
+  readonly ceiling: number;
 }

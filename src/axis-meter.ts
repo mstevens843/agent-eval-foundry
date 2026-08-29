@@ -20,6 +20,7 @@
 // curve accepts an explicit order for exactly that reason.
 
 import { cluster, blindInstances, catchSets, subjectStats } from "./catch-sets.js";
+import { nullBaseline } from "./null-model.js";
 import { antichainWidth } from "./similarity.js";
 import type { AxisReport, CurvePoint, Matrix } from "./types.js";
 
@@ -59,8 +60,15 @@ export function axisCurve(matrix: Matrix, explicitOrder?: readonly string[]): re
   return points;
 }
 
-/** Run the full measurement over a matrix. Pure: no I/O, no clock, no randomness. */
-export function measure(matrix: Matrix): AxisReport {
+export interface MeasureOptions {
+  /** Run the null-model significance test with this many trials. 0 (default) skips it. */
+  readonly nullTrials?: number;
+  /** Seed for the null model. Fixed by default so reports regenerate byte-identically. */
+  readonly nullSeed?: number;
+}
+
+/** Run the full measurement over a matrix. Pure: no I/O, no clock, no unseeded randomness. */
+export function measure(matrix: Matrix, options: MeasureOptions = {}): AxisReport {
   const scope = matrix.subjects.map((s) => s.id);
   const sets = catchSets(matrix, scope);
   const clusters = cluster(sets);
@@ -80,6 +88,24 @@ export function measure(matrix: Matrix): AxisReport {
   const blind = blindInstances(sets);
   const discriminatingCount = matrix.instances.length - blind.length;
 
+  const trials = options.nullTrials ?? 0;
+  const nullSummary =
+    trials > 0
+      ? (() => {
+          const nb = nullBaseline(matrix, {
+            trials,
+            ...(options.nullSeed === undefined ? {} : { seed: options.nullSeed }),
+          });
+          return {
+            seed: nb.seed,
+            trials: nb.trials,
+            widths: nb.widths,
+            meanWidth: nb.widths.reduce((a, b) => a + b, 0) / nb.widths.length,
+            ceiling: nb.ceiling,
+          };
+        })()
+      : undefined;
+
   return {
     suite: matrix.suite,
     provenance: matrix.provenance,
@@ -91,9 +117,10 @@ export function measure(matrix: Matrix): AxisReport {
     clusters,
     distinctMeasurements: distinct.length,
     independentAxes: width,
-    chains: chains.map((chain) => chain.map((s) => `{${s.join(",")}}`)),
+    chains,
     subjectStats: subjectStats(matrix, sets),
     curve: axisCurve(matrix),
     redundancy: distinct.length === 0 ? 0 : discriminatingCount / distinct.length,
+    ...(nullSummary === undefined ? {} : { nullBaseline: nullSummary }),
   };
 }

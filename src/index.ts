@@ -3,6 +3,8 @@
 
 export { measure, axisCurve } from "./axis-meter.js";
 export { catchSets, cluster, blindInstances, subjectStats } from "./catch-sets.js";
+export { importSweBenchVerified } from "./import-swebench.js";
+export type { SweBenchImportOptions } from "./import-swebench.js";
 export { MatrixError, parseMatrix } from "./matrix.js";
 export { renderReport } from "./report.js";
 export {

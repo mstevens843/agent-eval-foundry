@@ -18,7 +18,9 @@ cost **$252.51** in recorded frontier spend. It cost weeks of my time. The money
 out.
 
 **And my 24-scenario, 267-check suite contains three independent measurements.** Not 24, not 267. I
-built the tool in this repository to find that out, and the number is worse than I expected.
+built the tool in this repository to find that out, and the number is worse than I expected. Pointed
+at a public corpus afterwards — SWE-bench Verified, 500 instances against 134 independently submitted
+systems — it reports **215 axes**, against a chance baseline of 500.
 
 This memo is that measurement, what it implies for the thousand-task question, and what I would
 actually do with the budget.
@@ -139,13 +141,51 @@ identifying which parameter controls it.* I made it again, one layer up, in the 
 traps. The meter prints this caveat above its own headline for that reason, and the loader rejects
 any matrix that does not carry a provenance statement.
 
+### Does this transfer, or is it a fact about my own suite?
+
+The obvious objection to everything above is that I built the suite, I built the bank, and I selected
+six of the twenty-four instances against seven of the ten subjects. So the same meter, unchanged, is
+pointed at a corpus nobody assembled for this purpose: **SWE-bench Verified**, 500 instances graded
+against **134 leaderboard submissions** made independently by different teams between October 2023
+and December 2025, spanning 2/500 to 396/500 resolved.
+
+| | |
+|---|---|
+| graded instances | **500** |
+| subjects in the bank | 134 |
+| measured cells | 66,784 (216 recorded as not measured) |
+| distinct catch sets | **474** |
+| **independent axes** | **215** |
+| instances separating nothing | 0 |
+
+At this scale the width needs a significance test, and this is the honest reason why: exact subset
+nesting is unforgiving, so on a large bank of single-run results one stray disagreement splits one
+axis into two, and a big noisy corpus could report a high axis count for no reason but its size.
+
+So destroy the structure and keep the noise. Give every system its exact resolve count and its exact
+unmeasured cells, but redraw *which* instances it passes at random. **Randomised data scores 500 —
+the maximum possible, one axis per instance — on every trial. The real corpus scores 215.**
+
+That is the external validation. 500 tasks compress to 215 independent axes, a 2.3× reduction that
+chance does not produce. Tasks in this corpus genuinely fail together, and the method detects it on
+data I had no hand in generating.
+
+Two things it does not show. It does not show 215 is the "right" number of capabilities in SWE-bench
+Verified: one-bit grading coarsens the signal, run noise inflates the count by an unknown amount, and
+231 of the 500 instances come from a single repository, so instances may fail together because they
+share a codebase rather than a capability. And a benchmark being compressible is not the same as it
+being *bad* — it is a fact to price, not a verdict. Full limitations in
+`examples/public-swebench-verified/PROVENANCE.md`.
+
 ---
 
 ## 3. What this implies for a thousand tasks
 
 If a hand-built, twice-hardened, fuzzer-corrected 24-scenario suite yields three independent axes,
-the naive plan — author a thousand tasks, ship a thousand measurements — is off by orders of
-magnitude.
+and a 500-task public benchmark with a 134-system bank yields 215, the naive plan — author a thousand
+tasks, ship a thousand measurements — is off by a large factor in both regimes. The SWE-bench ratio
+is the more useful of the two for planning, because its bank is independent: **roughly 2.3 tasks per
+independent axis, at 500 tasks and a very wide bank.**
 
 The reason is structural, and my own kill log says so. `results/29` carries a nine-row gate table
 (its prose says "seven" — the table is right and the prose is stale, which I should fix at the
@@ -294,11 +334,13 @@ without a surface-coverage metric beside it.
 
 ## 6. Limits
 
-- **n = 1.** One suite, one domain, one author.
+- **n = 2 corpora, and only one of them independent.** The internal example is mine end to end; the
+  SWE-bench example is independent but coarse (one bit per instance, single unreplicated runs).
 - **The bank bounds the answer.** Ten subjects containing roughly two defect families cannot exhibit
-  many axes however good the suite is. The honest headline is "three *against this bank*." The
-  experiment that would make this general — measuring against engines drawn from outside the task —
-  is cheaper than the one I ran, and I have not run it.
+  many axes however good the suite is. The honest internal headline is "three *against this bank*."
+  The SWE-bench run is the experiment that addresses this, and it is why the null model exists: at
+  134 subjects the constraint runs the other way, and the width has to be shown to beat chance rather
+  than assumed to.
 - **The instances are not independent of the bank.** Six of twenty-four were selected against seven
   of the ten engines. Read the axis count as an upper bound.
 - **Cost figures are imputed**, nine runs recorded none, `jobs/` is excluded, and every labour

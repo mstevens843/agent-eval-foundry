@@ -4,8 +4,12 @@
   "private": true,
   "description": "Measure how many independent things a benchmark suite actually measures, given the bank of subjects it was graded against.",
   "type": "module",
-  "engines": { "node": ">=20 <25" },
-  "bin": { "axis": "./dist/cli.js" },
+  "engines": {
+    "node": ">=20 <25"
+  },
+  "bin": {
+    "axis": "./dist/cli.js"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -16,7 +20,9 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsup",
@@ -24,8 +30,8 @@
     "test": "vitest run",
     "lint": "biome check src test",
     "axis": "node dist/cli.js",
-    "report": "node dist/cli.js report examples/durable-outbox/matrix.json --out reports/durable-outbox-axis-report.md",
-    "verify": "node dist/cli.js report examples/durable-outbox/matrix.json > /tmp/axis-verify.md && diff -u reports/durable-outbox-axis-report.md /tmp/axis-verify.md && echo 'report is reproducible'"
+    "report": "node dist/cli.js report examples/durable-outbox/matrix.json --out reports/durable-outbox-axis-report.md && node dist/cli.js report --import swebench --null-trials 3 examples/public-swebench-verified/swebench-verified.raw.json --out reports/public-swebench-verified-axis-report.md",
+    "verify": "node dist/cli.js report examples/durable-outbox/matrix.json > /tmp/axis-a.md && diff -u reports/durable-outbox-axis-report.md /tmp/axis-a.md && node dist/cli.js report --import swebench --null-trials 3 examples/public-swebench-verified/swebench-verified.raw.json > /tmp/axis-b.md && diff -u reports/public-swebench-verified-axis-report.md /tmp/axis-b.md && echo 'both reports reproducible'"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",

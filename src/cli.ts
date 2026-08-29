@@ -10,16 +10,34 @@
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { measure } from "./axis-meter.js";
+import { importSweBenchVerified } from "./import-swebench.js";
 import { MatrixError, parseMatrix } from "./matrix.js";
 import { renderReport } from "./report.js";
 
 const USAGE = `agent-eval-foundry — measure how many things a benchmark suite actually measures
 
-  axis report <matrix.json> [--out <file.md>]   render the markdown report
-  axis json   <matrix.json> [--out <file.json>] emit the raw AxisReport
+  axis report <file.json> [--out <file.md>]     render the markdown report
+  axis json   <file.json> [--out <file.json>]   emit the raw AxisReport
 
-A matrix is a JSON document of schema agent-eval-foundry/matrix@1. See examples/durable-outbox/.
+  --import swebench     read a swebench-verified.raw.json produced by
+                        examples/public-swebench-verified/fetch.py instead of a native matrix
+  --min-resolved <n>    swebench only: drop submissions resolving fewer than n instances
+  --limit <n>           swebench only: keep only the n strongest submissions
+  --null-trials <n>     run the null-model significance test with n trials (default 0, off)
+  --null-seed <n>       seed for the null model (default fixed, so reports stay reproducible)
+
+A native matrix is a JSON document of schema agent-eval-foundry/matrix@1. See examples/.
 `;
+
+/** Every flag this CLI accepts takes exactly one value, which keeps positional parsing trivial. */
+const VALUED_FLAGS = new Set([
+  "--out",
+  "--import",
+  "--min-resolved",
+  "--limit",
+  "--null-trials",
+  "--null-seed",
+]);
 
 function flag(argv: readonly string[], name: string): string | null {
   const i = argv.indexOf(name);
@@ -27,11 +45,33 @@ function flag(argv: readonly string[], name: string): string | null {
   return argv[i + 1] ?? null;
 }
 
+/** The first argument that is neither a flag nor a flag's value. Order-independent, so
+ * `report --import swebench file.json` and `report file.json --import swebench` both work. */
+function positional(argv: readonly string[], skip: number): string | undefined {
+  let seen = 0;
+  for (let i = 0; i < argv.length; i += 1) {
+    const arg = argv[i];
+    if (arg === undefined) continue;
+    if (arg.startsWith("--")) {
+      if (VALUED_FLAGS.has(arg)) i += 1;
+      continue;
+    }
+    if (seen === skip) return arg;
+    seen += 1;
+  }
+  return undefined;
+}
+
 export function main(argv: readonly string[]): number {
-  const [command, path] = argv;
-  if (command === undefined || command === "--help" || command === "-h") {
+  if (argv.includes("--help") || argv.includes("-h")) {
     process.stdout.write(USAGE);
-    return command === undefined ? 2 : 0;
+    return 0;
+  }
+  const command = positional(argv, 0);
+  const path = positional(argv, 1);
+  if (command === undefined) {
+    process.stdout.write(USAGE);
+    return 2;
   }
   if (command !== "report" && command !== "json") {
     process.stderr.write(`unknown command "${command}"\n\n${USAGE}`);
@@ -58,9 +98,33 @@ export function main(argv: readonly string[]): number {
     return 1;
   }
 
+  const importer = flag(argv, "--import");
+  if (importer !== null && importer !== "swebench") {
+    process.stderr.write(`unknown importer "${importer}"; supported: swebench\n`);
+    return 2;
+  }
+  const numeric = (name: string): number | undefined => {
+    const raw = flag(argv, name);
+    if (raw === null) return undefined;
+    const n = Number(raw);
+    return Number.isFinite(n) ? n : undefined;
+  };
+
   let output: string;
   try {
-    const report = measure(parseMatrix(parsed));
+    const matrix =
+      importer === "swebench"
+        ? importSweBenchVerified(parsed, {
+            ...(numeric("--min-resolved") === undefined
+              ? {}
+              : { minResolved: numeric("--min-resolved") as number }),
+            ...(numeric("--limit") === undefined ? {} : { limit: numeric("--limit") as number }),
+          })
+        : parseMatrix(parsed);
+    const report = measure(matrix, {
+      ...(numeric("--null-trials") === undefined ? {} : { nullTrials: numeric("--null-trials") as number }),
+      ...(numeric("--null-seed") === undefined ? {} : { nullSeed: numeric("--null-seed") as number }),
+    });
     output = command === "report" ? renderReport(report) : `${JSON.stringify(report, null, 2)}\n`;
   } catch (err) {
     if (err instanceof MatrixError) {

@@ -13,7 +13,21 @@
 
 import type { AxisReport } from "./types.js";
 
-const set = (ids: readonly string[]): string => (ids.length === 0 ? "{}" : `{${ids.join(", ")}}`);
+// Detail sections are capped. A 500-instance corpus with a 134-system bank produces 474 clusters
+// whose catch sets run to a hundred members each, which is a 1.8 MB report nobody reads. Every cap
+// below announces what it dropped: a silent truncation would read as "that is all there was", which
+// is exactly the kind of quiet inflation this package exists to refuse.
+const MAX_SET_MEMBERS = 12;
+const MAX_ROWS = 25;
+
+const set = (ids: readonly string[]): string => {
+  if (ids.length === 0) return "{}";
+  if (ids.length <= MAX_SET_MEMBERS) return `{${ids.join(", ")}}`;
+  return `{${ids.slice(0, MAX_SET_MEMBERS).join(", ")}, … +${ids.length - MAX_SET_MEMBERS} more}`;
+};
+
+const elided = (shown: number, total: number, noun: string): readonly string[] =>
+  total <= shown ? [] : ["", `*Showing ${shown} of ${total} ${noun}; ${total - shown} not listed.*`];
 
 const pct = (n: number, d: number): string => (d === 0 ? "n/a" : `${((100 * n) / d).toFixed(0)}%`);
 
@@ -83,13 +97,23 @@ function clusters(r: AxisReport): readonly string[] {
     "| catch set | size | instances |",
     "|---|---:|---|",
   ];
-  for (const c of r.clusters) {
-    lines.push(`| \`${set(c.caught)}\` | ${c.instanceIds.length} | ${c.instanceIds.join(", ")} |`);
+  const shownClusters = r.clusters.slice(0, MAX_ROWS);
+  for (const c of shownClusters) {
+    const ids =
+      c.instanceIds.length <= MAX_SET_MEMBERS
+        ? c.instanceIds.join(", ")
+        : `${c.instanceIds.slice(0, MAX_SET_MEMBERS).join(", ")}, … +${c.instanceIds.length - MAX_SET_MEMBERS} more`;
+    lines.push(`| \`${set(c.caught)}\` | ${c.instanceIds.length} | ${ids} |`);
   }
+  lines.push(...elided(shownClusters.length, r.clusters.length, "distinct catch sets"));
   if (r.blindInstances.length > 0) {
     lines.push(
       "",
-      `**Separating nothing (${r.blindInstances.length}):** ${r.blindInstances.join(", ")}`,
+      `**Separating nothing (${r.blindInstances.length}):** ${
+        r.blindInstances.length <= MAX_ROWS
+          ? r.blindInstances.join(", ")
+          : `${r.blindInstances.slice(0, MAX_ROWS).join(", ")}, … +${r.blindInstances.length - MAX_ROWS} more`
+      }`,
       "",
       "An empty catch set is a statement about the bank as much as about the instance. These may be",
       "redundant, or they may be correctness anchors doing their job by confirming that everything",
@@ -109,10 +133,22 @@ function chains(r: AxisReport): readonly string[] {
     "underlying defect observed at increasing sensitivity, so the number of chains — not the number",
     "of catch sets — is the count of things the suite demonstrably measures separately.",
     "",
+    "The cover is a minimum one but not a unique one: the width is canonical, which instance lands in",
+    "which chain is not. Where catch sets are too wide to print, chains are shown as the sizes of",
+    "their nested sets; full membership is in the `json` output.",
+    "",
   ];
-  r.chains.forEach((chain, i) => {
-    lines.push(`${i + 1}. ${chain.join("  ⊂  ")}`);
+  const shownChains = [...r.chains].sort((a, b) => b.length - a.length).slice(0, 10);
+  shownChains.forEach((chain, i) => {
+    // Large banks make membership lists useless: a chain of 130-member catch sets says nothing a
+    // reader can hold. Cardinalities carry the actual claim -- one defect seen at rising
+    // sensitivity -- so switch to sizes once any set in the chain is too wide to print.
+    const wide = chain.some((s) => s.length > MAX_SET_MEMBERS);
+    const parts = wide ? chain.map((s) => `${s.length}`) : chain.map((s) => `\`${set(s)}\``);
+    const shown = parts.length <= 6 ? parts : [...parts.slice(0, 6), `… (+${parts.length - 6})`];
+    lines.push(`${i + 1}. ${shown.join(" ⊂ ")}${wide ? " subjects" : ""}`);
   });
+  lines.push(...elided(shownChains.length, r.chains.length, "chains (longest first)"));
   lines.push("");
   return lines;
 }
@@ -127,11 +163,43 @@ function subjects(r: AxisReport): readonly string[] {
     "| subject | caught by | measured on | role |",
     "|---|---:|---:|---|",
   ];
-  for (const s of r.subjectStats) {
+  const shownSubjects = r.subjectStats.slice(0, MAX_ROWS);
+  for (const s of shownSubjects) {
     lines.push(`| ${s.subjectId} | ${s.caughtBy} | ${s.measuredOn} | ${s.role} |`);
   }
+  lines.push(...elided(shownSubjects.length, r.subjectStats.length, "subjects (most-caught first)"));
   lines.push("");
   return lines;
+}
+
+function calibration(r: AxisReport): readonly string[] {
+  const nb = r.nullBaseline;
+  if (nb === undefined) return [];
+  const pct = nb.ceiling === 0 ? 0 : (100 * r.independentAxes) / nb.ceiling;
+  return [
+    "## Calibration — is the axis count distinguishable from noise?",
+    "",
+    "Exact subset nesting is unforgiving: on a large bank of single-run results, one stray",
+    "disagreement between two otherwise-identical instances splits one axis into two. So a big noisy",
+    "corpus could report a high axis count for no reason but its size. The test below destroys the",
+    "structure and keeps the noise — each subject keeps its own pass count and its own unmeasured",
+    "cells, but which instances it passes is redrawn at random.",
+    "",
+    "| | axes |",
+    "|---|---:|",
+    `| **measured** | **${r.independentAxes}** |`,
+    `| null model, mean of ${nb.trials} trial(s) (seed ${nb.seed}) | ${nb.meanWidth.toFixed(1)} |`,
+    `| ceiling (one axis per discriminating instance) | ${nb.ceiling} |`,
+    "",
+    nb.meanWidth - r.independentAxes > (nb.ceiling - r.independentAxes) / 2
+      ? `The measured width is **${pct.toFixed(0)}% of the ceiling** while randomised data with identical subject marginals scores ${nb.meanWidth.toFixed(1)}. The compression is structural: instances genuinely fail together, and the axis count is not an artifact of bank size.`
+      : "The measured width sits close to the null. On this corpus the axis count is largely explained " +
+        "by bank size and run-to-run noise rather than by shared structure, and should not be read as " +
+        "a count of distinct capabilities.",
+    "",
+    `Null trials: ${nb.widths.join(", ")}.`,
+    "",
+  ];
 }
 
 function coverage(r: AxisReport): readonly string[] {
@@ -152,6 +220,7 @@ export function renderReport(r: AxisReport): string {
     ...curve(r),
     ...clusters(r),
     ...chains(r),
+    ...calibration(r),
     ...subjects(r),
     ...coverage(r),
     "---",

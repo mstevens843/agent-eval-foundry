@@ -19,9 +19,32 @@ independent axes (antichain width)               3
 ```
 
 Three — **against that bank.** The number is a property of the suite paired with the subjects it is
-graded against, never of the suite alone, and this bank is ten engines all produced against this one
+graded against, never of the suite alone, and that bank is ten engines all produced against this one
 task. Read it as an upper bound. The write-up is in [`MEMO.md`](./MEMO.md); the generated report is
 [`reports/durable-outbox-axis-report.md`](./reports/durable-outbox-axis-report.md).
+
+## Does the method transfer?
+
+That example proves nothing on its own: I built the suite, I built the bank, and I selected six of
+the instances against seven of the subjects. So the same meter is pointed at a public corpus nobody
+assembled for this purpose — **SWE-bench Verified**, 500 instances against **134 leaderboard
+submissions** made independently by different teams between 2023 and 2025:
+
+```
+graded instances                               500
+subjects in the bank                           134
+measured cells                              66,784   (216 recorded as not measured)
+distinct catch sets                            474
+independent axes (antichain width)             215
+null model, same marginals, 3 trials      500 / 500 / 500
+```
+
+500 tasks, 215 independent axes — and randomised data preserving every system's resolve count scores
+the maximum possible 500, every trial. **The 2.3× compression is structural, not an artifact of
+having a big noisy bank.** Report:
+[`reports/public-swebench-verified-axis-report.md`](./reports/public-swebench-verified-axis-report.md);
+data, licence and limitations:
+[`examples/public-swebench-verified/PROVENANCE.md`](./examples/public-swebench-verified/PROVENANCE.md).
 
 ## Why
 
@@ -63,36 +86,43 @@ Three rules are enforced in code rather than in review:
 pnpm install
 pnpm build
 
-node dist/cli.js report examples/durable-outbox/matrix.json          # markdown
-node dist/cli.js json   examples/durable-outbox/matrix.json          # raw AxisReport
+# internal worked example: a native matrix
+node dist/cli.js report examples/durable-outbox/matrix.json
+node dist/cli.js json   examples/durable-outbox/matrix.json
+
+# external validation: a public corpus, through the importer, with the significance test
+node dist/cli.js report --import swebench --null-trials 3 \
+  examples/public-swebench-verified/swebench-verified.raw.json
 ```
 
-Input is one JSON document of schema `agent-eval-foundry/matrix@1` — subjects, instances, and a
-cell per pair carrying the named checks that failed. See
-[`examples/durable-outbox/`](./examples/durable-outbox/) for a real one and
-[`PROVENANCE.md`](./examples/durable-outbox/PROVENANCE.md) for how it was extracted.
+Native input is one JSON document of schema `agent-eval-foundry/matrix@1` — subjects, instances, and
+a cell per pair carrying the named checks that failed; see
+[`examples/durable-outbox/`](./examples/durable-outbox/). Public corpora come in through an importer
+instead; see [`examples/public-swebench-verified/`](./examples/public-swebench-verified/), whose
+`fetch.py` rebuilds the raw file from public sources.
 
-`pnpm verify` regenerates the checked-in report and fails if it changed — output is deterministic,
-with no timestamp, so runs are diffable rather than narrated.
+`pnpm verify` regenerates both checked-in reports and fails if either changed. Output is
+deterministic — no timestamp, and the null model is seeded — so runs are diffable rather than
+narrated.
 
 ## Status
 
-**Pre-1.0. One suite measured, one domain, n=1.** What is true is stated with the command that
-reproduces it; what is not done is listed here as not done.
+**Pre-1.0. Two corpora measured: one internal, one public.** What is true is stated with the command
+that reproduces it; what is not done is listed here as not done.
 
-Done: the meter, the loader, the report, 21 tests, and one real matrix extracted from a shipped
-benchmark — a complete 24×10 sweep with no unmeasured cells.
+Done: the meter, the loader, the null-model calibration, the report, 35 tests, one internal matrix
+extracted from a shipped benchmark (a complete 24×10 sweep, no unmeasured cells), and one external
+public corpus (500×134, fetched reproducibly from public sources).
 
 Not done, deliberately — each was scoped out rather than left half-built:
 
 - **No runner.** This reads matrices other systems produced. The boundary is the point: the
   measurement should be auditable by someone who does not trust what generated the data.
-- **No adapters for public benchmark corpora.** The obvious next step, and the one that would turn
-  an n=1 finding into a general one, is an importer for a public suite with per-instance,
-  per-model results. Gated on data availability, not on effort.
-- **No candidate generator, scaffold emitter, or trial orchestrator.** All ~44 candidates in the
-  source project were hand-authored prose. Building a generator now would be speculation dressed as
-  infrastructure.
+- **Only one importer.** `--import swebench` reads the SWE-bench leaderboard format. Other corpora
+  (Terminal-Bench, AgentDojo, Inspect logs) would each need their own normalizer; none is written.
+- **No candidate generator, scaffold emitter, or trial orchestrator.** Every candidate mechanism in
+  the source project was hand-authored prose. Building a generator now would be speculation dressed
+  as infrastructure.
 
 ## Limits
 

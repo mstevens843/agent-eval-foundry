@@ -8,7 +8,7 @@
   "formatter": { "enabled": true, "indentStyle": "space", "indentWidth": 2, "lineWidth": 110 },
   "overrides": [
     {
-      "include": ["src/matrix.ts"],
+      "include": ["src/matrix.ts", "src/import-swebench.ts", "test/import-swebench.test.ts"],
       "linter": {
         "rules": {
           "complexity": { "useLiteralKeys": "off" }

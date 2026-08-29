@@ -66,9 +66,13 @@ A minimum cover of the distinct catch sets by nested chains. Each chain is consi
 underlying defect observed at increasing sensitivity, so the number of chains — not the number
 of catch sets — is the count of things the suite demonstrably measures separately.
 
-1. {e1}  ⊂  {codex2b,e1}  ⊂  {codex1,codex2b,codex3b,e1,fhc1,opus2}
-2. {codex1,codex2b,codex3b}  ⊂  {codex1,codex2b,codex3b,fhc2}  ⊂  {codex1,codex2b,codex3b,fhc2,fhc3,opus3b}  ⊂  {codex1,codex2b,codex3b,fhc2,fhc3,opus2,opus3b}
-3. {codex3b,e1,fhc1,opus1,opus2}  ⊂  {codex1,codex3b,e1,fhc1,opus1,opus2}
+The cover is a minimum one but not a unique one: the width is canonical, which instance lands in
+which chain is not. Where catch sets are too wide to print, chains are shown as the sizes of
+their nested sets; full membership is in the `json` output.
+
+1. `{codex1, codex2b, codex3b}` ⊂ `{codex1, codex2b, codex3b, fhc2}` ⊂ `{codex1, codex2b, codex3b, fhc2, fhc3, opus3b}` ⊂ `{codex1, codex2b, codex3b, fhc2, fhc3, opus2, opus3b}`
+2. `{e1}` ⊂ `{codex2b, e1}` ⊂ `{codex1, codex2b, codex3b, e1, fhc1, opus2}`
+3. `{codex3b, e1, fhc1, opus1, opus2}` ⊂ `{codex1, codex3b, e1, fhc1, opus1, opus2}`
 
 ## Subjects
 
