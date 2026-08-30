@@ -1,0 +1,5 @@
+{
+  "counts": false,
+  "classification": "crashed",
+  "reason": "crashed: runner exited non-zero and produced no artifact. Recorded as not counting by default — promoting a crash to a failure automatically would let a harness bug read as a capability finding. Re-classify by hand if the crash is genuinely in the subject's code."
+}

@@ -47,8 +47,15 @@ export interface Policy {
   readonly guardIrreversible: boolean;
   /** L1. False acts on `step.recordedNodeId` — correct on `stable`, wrong the instant anything re-mounts. */
   readonly live: boolean;
-  /** Which stored address to prefer. `path` is the structural-loyalist pole. */
-  readonly resolveVia: "primary" | "path";
+  /**
+   * Which stored address to trust for the recorded capture action.
+   *
+   * `validated` is the reference behaviour: compare the test id, semantic anchor and structural path
+   * against visible live facts and use the one candidate still carrying the recorded entity/effect.
+   * The other values are the categorical anchor-loyal mutants. They stay validated for prerequisite
+   * form fields so the mutant's one defect is address loyalty at the step where the anchors diverge.
+   */
+  readonly resolveVia: "validated" | "testid" | "semantic" | "path";
   /** L11. False cannot tell a torn-down region from one that has not finished mounting. */
   readonly checkRegionPresence: boolean;
   /** L8. False never spends a tick, so "not mounted yet" reads as "gone". */
@@ -81,7 +88,7 @@ export const REFERENCE_POLICY: Policy = {
   readTxnState: true,
   guardIrreversible: true,
   live: true,
-  resolveVia: "primary",
+  resolveVia: "validated",
   checkRegionPresence: true,
   settleAllowed: true,
   spinPastExhaustion: false,
@@ -132,6 +139,168 @@ const blank = (index: number): StepAudit => ({
 const actionable = (node: UiNode | null, policy: Policy): boolean =>
   node !== null && (!policy.checkPrecondition || node.attrs["aria-disabled"] !== "true");
 
+interface Candidate {
+  readonly node: UiNode;
+  readonly via: string;
+  readonly tick: number;
+  readonly version: number;
+}
+
+type Resolution =
+  | { readonly kind: "candidate"; readonly candidate: Candidate }
+  | { readonly kind: "none"; readonly tick: number | null }
+  | {
+      readonly kind: "unreplayable";
+      readonly reason: "ANCHOR_AMBIGUOUS" | "ENTITY_SUPERSEDED";
+      readonly tick: number | null;
+      readonly entityObserved: string | null;
+    };
+
+const mergeCandidates = (items: readonly Candidate[]): readonly Candidate[] => {
+  const byId = new Map<string, Candidate>();
+  for (const item of items) {
+    if (!byId.has(item.node.id)) byId.set(item.node.id, item);
+  }
+  return [...byId.values()];
+};
+
+const entityOf = (node: UiNode): string | null => node.attrs["data-entity"] ?? null;
+
+const matchesRecordedTarget = (step: RecordedStep, node: UiNode, policy: Policy): boolean => {
+  const entity = entityOf(node);
+  if (entity?.startsWith("pending:")) return false;
+  if (policy.entityGuard && entity !== step.anchor.entity) return false;
+  const expectedEffect = step.postcondition.effect;
+  if (expectedEffect !== null && node.attrs["data-effect"] !== expectedEffect) return false;
+  return true;
+};
+
+const definitelyWrongObject = (step: RecordedStep, node: UiNode): boolean => {
+  const entity = entityOf(node);
+  if (entity === null || entity.startsWith("pending:")) return false;
+  const expectedEffect = step.postcondition.effect;
+  return (
+    entity !== step.anchor.entity || (expectedEffect !== null && node.attrs["data-effect"] !== expectedEffect)
+  );
+};
+
+function resolveByDeclaredAddress(
+  step: RecordedStep,
+  app: AppFacade,
+  policy: Policy,
+  ctx: PassContext,
+): Resolution {
+  if (policy.resolveVia === "semantic") {
+    const a = app.queryAnchor(step.anchor);
+    if (ctx.firstVersion === null) ctx.firstVersion = a.treeVersion;
+    if (a.matches > 1 && policy.refuseAmbiguous) {
+      return { kind: "unreplayable", reason: "ANCHOR_AMBIGUOUS", tick: a.tick, entityObserved: null };
+    }
+    const node = a.nodes[0];
+    return node === undefined
+      ? { kind: "none", tick: a.tick }
+      : { kind: "candidate", candidate: { node, via: "anchor", tick: a.tick, version: a.treeVersion } };
+  }
+
+  const selector = policy.resolveVia === "path" ? step.path : step.selector;
+  const q = app.query(selector);
+  if (ctx.firstVersion === null) ctx.firstVersion = q.treeVersion;
+  return q.node === null
+    ? { kind: "none", tick: q.tick }
+    : {
+        kind: "candidate",
+        candidate: {
+          node: q.node,
+          via: policy.resolveVia === "path" ? "path" : "primary",
+          tick: q.tick,
+          version: q.treeVersion,
+        },
+      };
+}
+
+function resolveValidated(step: RecordedStep, app: AppFacade, policy: Policy, ctx: PassContext): Resolution {
+  const candidates: Candidate[] = [];
+
+  const primary = app.query(step.selector);
+  if (ctx.firstVersion === null) ctx.firstVersion = primary.treeVersion;
+  const primaryCandidate =
+    primary.node === null
+      ? null
+      : { node: primary.node, via: "primary", tick: primary.tick, version: primary.treeVersion };
+  if (primary.node !== null) {
+    candidates.push(primaryCandidate as Candidate);
+  }
+
+  const path = app.query(step.path);
+  const pathCandidate =
+    path.node === null ? null : { node: path.node, via: "path", tick: path.tick, version: path.treeVersion };
+  if (path.node !== null) {
+    candidates.push(pathCandidate as Candidate);
+  }
+
+  if (
+    primaryCandidate !== null &&
+    pathCandidate !== null &&
+    primaryCandidate.node.id === pathCandidate.node.id &&
+    matchesRecordedTarget(step, primaryCandidate.node, policy)
+  ) {
+    return { kind: "candidate", candidate: primaryCandidate };
+  }
+
+  const addressUnresolved = !mergeCandidates(candidates).some((c) =>
+    matchesRecordedTarget(step, c.node, policy),
+  );
+  if (addressUnresolved && policy.askModelOnUnresolved) {
+    app.askModel(`the ${step.anchor.name} in ${step.anchor.region} is gone; what should I click?`);
+  }
+  if (addressUnresolved && policy.probeOnUnresolved) {
+    // Exploration in a tree that reacts to being touched. The account menu is a real control with a
+    // real effect, which is why this is damage rather than an untidy trace.
+    app.click("acct-menu");
+    app.click(step.anchor.region);
+  }
+
+  if (policy.rederiveAllowed) {
+    const anchor = app.queryAnchor(step.anchor);
+    for (const node of anchor.nodes) {
+      candidates.push({ node, via: "anchor", tick: anchor.tick, version: anchor.treeVersion });
+    }
+  }
+
+  const unique = mergeCandidates(candidates);
+  const eligible = unique.filter((c) => matchesRecordedTarget(step, c.node, policy));
+  if (eligible.length > 1 && policy.refuseAmbiguous) {
+    if (eligible.every((c) => !actionable(c.node, policy))) {
+      return { kind: "candidate", candidate: eligible[0] as Candidate };
+    }
+    return {
+      kind: "unreplayable",
+      reason: "ANCHOR_AMBIGUOUS",
+      tick: eligible[0]?.tick ?? null,
+      entityObserved: null,
+    };
+  }
+  const chosen = eligible[0];
+  if (chosen !== undefined) return { kind: "candidate", candidate: chosen };
+
+  const wrong = unique.find((c) => definitelyWrongObject(step, c.node));
+  if (wrong !== undefined) {
+    return {
+      kind: "unreplayable",
+      reason: "ENTITY_SUPERSEDED",
+      tick: wrong.tick,
+      entityObserved: entityOf(wrong.node),
+    };
+  }
+
+  return { kind: "none", tick: primary.tick };
+}
+
+const resolveOnce = (step: RecordedStep, app: AppFacade, policy: Policy, ctx: PassContext): Resolution =>
+  policy.resolveVia === "validated" || step.postcondition.effect !== "capture_funds"
+    ? resolveValidated(step, app, policy, ctx)
+    : resolveByDeclaredAddress(step, app, policy, ctx);
+
 export function runStep(
   step: RecordedStep,
   trace: ActionTrace,
@@ -167,12 +336,7 @@ export function runStep(
     };
   }
 
-  // ---- L1 --------------------------------------------------------------------------------------
-  let via: string | null = "primary";
-  let node: UiNode | null = null;
-  let version: number | undefined;
-  let tick: number | null = null;
-
+  // ---- L1 / L11 / L8 / L10 / L7 ---------------------------------------------------------------
   if (!policy.live) {
     // The recording legitimately stored this id. Using it as an ADDRESS rather than a hint is the
     // whole of `stale-id-replayer`: correct on `stable`, wrong the instant a framework re-mounts.
@@ -186,31 +350,28 @@ export function runStep(
     });
   }
 
-  const selector = policy.resolveVia === "path" ? step.path : step.selector;
-  let q = app.query(selector);
-  node = q.node;
-  version = q.treeVersion;
-  tick = q.tick;
-  if (ctx.firstVersion === null) ctx.firstVersion = q.treeVersion;
+  let resolution = resolveOnce(step, app, policy, ctx);
 
-  // ---- L11 -------------------------------------------------------------------------------------
   // The published tell that separates GONE from NOT YET without a `pending` oracle: a region that is
   // waiting is present and holds a skeleton whose `data-entity` is `pending:<entity>`; a region that
   // was torn down is absent from the tree entirely.
-  if (node === null && policy.checkRegionPresence) {
+  if (resolution.kind === "none" && policy.checkRegionPresence) {
     const region = app.regionState(step.anchor.region);
     if (!region.present) {
       return {
         kind: "unreplayable",
         reason: "REGION_REMOVED",
-        audit: { ...blank(step.index), resolvedTick: tick, haltReason: "REGION_REMOVED" },
+        audit: { ...blank(step.index), resolvedTick: resolution.tick, haltReason: "REGION_REMOVED" },
       };
     }
   }
 
-  // ---- L8 --------------------------------------------------------------------------------------
   let spins = 0;
-  while (policy.settleAllowed && !actionable(node, policy)) {
+  while (
+    policy.settleAllowed &&
+    (resolution.kind === "none" ||
+      (resolution.kind === "candidate" && !actionable(resolution.candidate.node, policy)))
+  ) {
     if (ctx.budgetExhausted && !policy.spinPastExhaustion) break;
     const s = app.settle();
     if (!s.advanced) {
@@ -221,10 +382,7 @@ export function runStep(
       // that followed a settle reporting no time remaining.
       if (spins > 2) break;
     }
-    q = app.query(selector);
-    node = q.node;
-    version = q.treeVersion;
-    tick = q.tick;
+    resolution = resolveOnce(step, app, policy, ctx);
   }
 
   // A replayer that refuses to spend time is, by its own policy, out of time. Saying so keeps the
@@ -233,65 +391,37 @@ export function runStep(
   // available and caught only where the budget would have paid.
   const outOfTime = ctx.budgetExhausted || !policy.settleAllowed;
 
-  // ---- L10 / L7 --------------------------------------------------------------------------------
-  if (node === null) {
-    if (!policy.rederiveAllowed) {
-      return {
-        kind: "unreplayable",
-        reason: "ANCHOR_UNRESOLVED",
-        audit: { ...blank(step.index), resolvedTick: tick, haltReason: "ANCHOR_UNRESOLVED" },
-      };
-    }
-    if (policy.askModelOnUnresolved) {
-      app.askModel(`the ${step.anchor.name} in ${step.anchor.region} is gone; what should I click?`);
-    }
-    if (policy.probeOnUnresolved) {
-      // Exploration in a tree that reacts to being touched. The account menu is a real control with a
-      // real effect, which is why this is damage rather than an untidy trace.
-      app.click("acct-menu");
-      app.click(step.anchor.region);
-    }
-    const a = app.queryAnchor(step.anchor);
-    if (a.matches > 1 && policy.refuseAmbiguous) {
-      return {
-        kind: "unreplayable",
-        reason: "ANCHOR_AMBIGUOUS",
-        audit: { ...blank(step.index), resolvedTick: a.tick, haltReason: "ANCHOR_AMBIGUOUS" },
-      };
-    }
-    const candidate = a.nodes[0];
-    if (candidate === undefined) {
-      return outOfTime
-        ? {
-            kind: "halt",
-            audit: { ...blank(step.index), resolvedTick: a.tick, haltReason: "SETTLE_BUDGET_EXHAUSTED" },
-          }
-        : {
-            kind: "unreplayable",
-            reason: "ANCHOR_UNRESOLVED",
-            audit: { ...blank(step.index), resolvedTick: a.tick, haltReason: "ANCHOR_UNRESOLVED" },
-          };
-    }
-    if (policy.entityGuard && candidate.attrs["data-entity"] !== step.anchor.entity) {
-      // Something that looks exactly like the target is standing where it was. The anchor survived
-      // the supersede; the object did not.
-      return {
-        kind: "unreplayable",
-        reason: "ENTITY_SUPERSEDED",
-        audit: {
-          ...blank(step.index),
-          resolvedTick: a.tick,
-          entityObserved: candidate.attrs["data-entity"] ?? null,
-          haltReason: "ENTITY_SUPERSEDED",
-        },
-      };
-    }
-    node = candidate;
-    via = "anchor";
-    version = a.treeVersion;
-    tick = a.tick;
+  if (resolution.kind === "unreplayable") {
+    return {
+      kind: "unreplayable",
+      reason: resolution.reason,
+      audit: {
+        ...blank(step.index),
+        resolvedTick: resolution.tick,
+        entityObserved: resolution.entityObserved,
+        haltReason: resolution.reason,
+      },
+    };
   }
 
+  if (resolution.kind === "none") {
+    return outOfTime
+      ? {
+          kind: "halt",
+          audit: {
+            ...blank(step.index),
+            resolvedTick: resolution.tick,
+            haltReason: "SETTLE_BUDGET_EXHAUSTED",
+          },
+        }
+      : {
+          kind: "unreplayable",
+          reason: "ANCHOR_UNRESOLVED",
+          audit: { ...blank(step.index), resolvedTick: resolution.tick, haltReason: "ANCHOR_UNRESOLVED" },
+        };
+  }
+
+  const { node, via, tick, version } = resolution.candidate;
   if (!actionable(node, policy)) {
     return {
       kind: "halt",

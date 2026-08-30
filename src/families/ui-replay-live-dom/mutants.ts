@@ -69,6 +69,16 @@ const staleIdReplayer = from("stale-id-replayer", "Acts on the recorded node id 
   live: false,
 });
 
+/** Always trusts the recorded `data-testid` for the capture step, even when visible live facts identify a different node. */
+const testidLoyalist = from("testid-loyalist", "Always prefers the recorded test id", {
+  resolveVia: "testid",
+});
+
+/** Always trusts role + accessible name + region for the capture step, even when a decoy now wears that semantic shape. */
+const semanticLoyalist = from("semantic-loyalist", "Always prefers the semantic anchor", {
+  resolveVia: "semantic",
+});
+
 /**
  * Loyal to the stored structural path rather than the stored testid.
  *
@@ -238,7 +248,7 @@ const strictBailer: Subject = {
     replayWith(
       trace,
       app,
-      { ...REFERENCE_POLICY, settleAllowed: false, rederiveAllowed: false },
+      { ...REFERENCE_POLICY, settleAllowed: false, resolveVia: "testid" },
       completionRecord(`strict:${trace.id}`),
     ),
 };
@@ -267,6 +277,8 @@ export const MUTANTS: readonly Subject[] = [
   anchorCredulous,
   txnBlind,
   staleIdReplayer,
+  testidLoyalist,
+  semanticLoyalist,
   pathLoyalist,
   regionBlind,
   preconditionAssumer,
@@ -301,6 +313,8 @@ export const POLICY_MUTANTS: Readonly<Record<string, Policy>> = {
   "anchor-credulous": { ...REFERENCE_POLICY, entityGuard: false },
   "txn-blind": { ...REFERENCE_POLICY, readTxnState: false },
   "stale-id-replayer": { ...REFERENCE_POLICY, live: false },
+  "testid-loyalist": { ...REFERENCE_POLICY, resolveVia: "testid" },
+  "semantic-loyalist": { ...REFERENCE_POLICY, resolveVia: "semantic" },
   "path-loyalist": { ...REFERENCE_POLICY, resolveVia: "path" },
   "region-blind": { ...REFERENCE_POLICY, checkRegionPresence: false },
   "precondition-assumer": { ...REFERENCE_POLICY, checkPrecondition: false },
@@ -319,7 +333,9 @@ export const INTENDED_CHECK: Readonly<Record<string, string>> = {
   "anchor-credulous": "effect_targets_recorded_entity",
   "txn-blind": "no_forbidden_effect",
   "stale-id-replayer": "selector_resolved_live",
-  "path-loyalist": "selector_resolved_live",
+  "testid-loyalist": "correct_anchor_resolution",
+  "semantic-loyalist": "correct_anchor_resolution",
+  "path-loyalist": "correct_anchor_resolution",
   "region-blind": "unreplayable_reported",
   "precondition-assumer": "precondition_observed",
   "confirmation-skipper": "confirmation_observed",
@@ -341,3 +357,10 @@ export const BASELINES: readonly string[] = ["nop-recorder", "over-blocker"];
 
 /** Subjects that are dispositions rather than one-field mutants, exempt from the single-diff gate. */
 export const DISPOSITION_SUBJECTS: readonly string[] = ["strict-bailer", "patient-waiter"];
+
+/** The three address-loyal subjects used to prove the categorical anchor axis. */
+export const ANCHOR_LOYAL_SUBJECTS: readonly string[] = [
+  "testid-loyalist",
+  "semantic-loyalist",
+  "path-loyalist",
+];

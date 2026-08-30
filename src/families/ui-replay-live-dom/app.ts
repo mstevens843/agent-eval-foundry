@@ -118,6 +118,13 @@ export function settlesNeededFor(params: ScenarioParams): number {
   return Math.max(params.priorState === "arming" ? 1 : 0, settlesAtFor(params.regionFate, params.seed));
 }
 
+const conflictApplies = (params: ScenarioParams): boolean =>
+  params.anchorConflict !== "none" &&
+  (params.regionFate === "stable" ||
+    params.regionFate === "late_mount" ||
+    params.regionFate === "remount_rekeyed" ||
+    params.regionFate === "disabled_then_enabled");
+
 const reactionsFor = (params: ScenarioParams): string => {
   const at = settlesAtFor(params.regionFate, params.seed);
   const fate: readonly string[] =
@@ -132,9 +139,13 @@ const reactionsFor = (params: ScenarioParams): string => {
             : params.regionFate === "removed"
               ? ["remove_region:capture"]
               : [];
+  const conflictAt = params.regionFate === "late_mount" || params.regionFate === "remount_rekeyed" ? at : 0;
+  const conflict = conflictApplies(params) ? [`anchor_conflict:${params.anchorConflict}@${conflictAt}`] : [];
+  const ordered =
+    params.regionFate === "disabled_then_enabled" ? [...conflict, ...fate] : [...fate, ...conflict];
   // `arming` is a state the PAGE is in, and the thing that lifts it is the replay's own step 1. That
   // is the family's premise in one line: the replayer causes the state it then has to reason about.
-  return [...fate, ...(params.priorState === "arming" ? ["enable:hold@1"] : [])].join(";");
+  return [...ordered, ...(params.priorState === "arming" ? ["enable:hold@1"] : [])].join(";");
 };
 
 // ------------------------------------------------------------------ the tree
@@ -329,6 +340,7 @@ export const buildRecordedTree = (seed: number): MutNode =>
     priorState: "clean",
     settleBudget: 6,
     anchorFidelity: "exact",
+    anchorConflict: "none",
     busyFidelity: "honest",
     replayCount: 1,
   });
@@ -337,23 +349,29 @@ export const buildInitialTree = (params: ScenarioParams): UiNode => freeze(build
 
 // ------------------------------------------------------------------ selector resolution
 
-const cssPath = (root: MutNode, id: string): string => {
-  const search = (node: MutNode, trail: number[]): number[] | null => {
-    if (node.id === id) return trail;
+const structuralPaths = (root: MutNode): Map<string, string> => {
+  const paths = new Map<string, string>();
+  const visit = (node: MutNode, trail: number[]): void => {
+    paths.set(node.id, trail.join("/"));
     for (let i = 0; i < node.children.length; i += 1) {
       const child = node.children[i];
-      if (child === undefined) continue;
-      const found = search(child, [...trail, i]);
-      if (found !== null) return found;
+      if (child !== undefined) visit(child, [...trail, i]);
     }
-    return null;
   };
-  return (search(root, []) ?? []).join("/");
+  visit(root, []);
+  return paths;
 };
+
+const cssPath = (root: MutNode, id: string): string => structuralPaths(root).get(id) ?? "";
 
 export const pathOf = (root: UiNode, id: string): string => cssPath(root as unknown as MutNode, id);
 
-function matchesSelector(node: MutNode, selector: Selector, root: MutNode): boolean {
+function matchesSelector(
+  node: MutNode,
+  selector: Selector,
+  root: MutNode,
+  paths: ReadonlyMap<string, string> = structuralPaths(root),
+): boolean {
   switch (selector.kind) {
     case "testid":
       return node.attrs["data-testid"] === selector.value;
@@ -367,7 +385,7 @@ function matchesSelector(node: MutNode, selector: Selector, root: MutNode): bool
     case "role_index":
       return node.role === selector.value;
     case "css_path":
-      return cssPath(root, node.id) === selector.value;
+      return paths.get(node.id) === selector.value;
     default:
       return false;
   }
@@ -378,7 +396,8 @@ export function resolveSelector(
   root: MutNode,
   selector: Selector,
 ): { node: MutNode | null; matches: number } {
-  const all = walk(root).filter((n) => matchesSelector(n, selector, root));
+  const paths = structuralPaths(root);
+  const all = walk(root).filter((n) => matchesSelector(n, selector, root, paths));
   if (selector.kind === "role_index") {
     const index = Number(selector.qualifier ?? "0");
     return { node: all[index] ?? null, matches: all.length };
@@ -473,6 +492,11 @@ export class App {
     const [verb, rest] = op.split(":");
     const [target, arg] = (rest ?? "").split("#");
     const region = this.captureRegion();
+
+    if (verb === "anchor_conflict") {
+      this.applyAnchorConflict(target as ScenarioParams["anchorConflict"]);
+      return;
+    }
 
     if (verb === "remove_region" && target === "capture") {
       // The ONLY fate that takes the container itself. That is the published tell (L11) separating
@@ -576,6 +600,51 @@ export class App {
   }
 
   /**
+   * Categorical anchor conflicts for the capture step.
+   *
+   * Three recorded addresses all resolve, and they resolve to DIFFERENT nodes:
+   *
+   *   test id        -> `cap-testid`
+   *   semantic anchor -> `cap-semantic`
+   *   structural path -> `cap-path`
+   *
+   * The correct node is not hidden. It is the one whose visible facts still satisfy the recorded
+   * target: same entity, same irreversible effect, and the live precondition. A replayer loyal to
+   * one address kind is therefore right in one scenario class and wrong in the other two.
+   */
+  private applyAnchorConflict(kind: ScenarioParams["anchorConflict"]): void {
+    if (kind === "none") return;
+    const region = this.captureRegion();
+    if (region === null) return;
+
+    const attrsFor = (addr: "testid" | "semantic" | "path"): Record<string, string> => {
+      const correct =
+        (kind === "testid_wins" && addr === "testid") ||
+        (kind === "semantic_wins" && addr === "semantic") ||
+        (kind === "path_wins" && addr === "path");
+      return {
+        "aria-label":
+          addr === "semantic" ? CAPTURE_NAME : addr === "testid" ? "Capture saved method" : "Submit payment",
+        ...(addr === "testid" ? { "data-testid": "capture" } : {}),
+        "data-entity": correct ? ORDER_ENTITY : SUCCESSOR_ENTITY,
+        "data-effect": correct ? "capture_funds" : "preview_capture",
+        "data-opens-confirmation": "true",
+        "aria-disabled": "false",
+        "data-region": "capture",
+      };
+    };
+
+    // `cap-path` must be first: the recorded structural path for the capture control is the first
+    // child of the capture region. The other two addresses resolve elsewhere.
+    region.children = [
+      mut("cap-path", "button", attrsFor("path"), "Submit"),
+      mut("cap-testid", "button", attrsFor("testid"), "Capture"),
+      mut("cap-semantic", "button", attrsFor("semantic"), "Capture"),
+      mut("cap-note", "note", {}, "Closes the hold."),
+    ];
+  }
+
+  /**
    * Keep the duplicate twin in sync with whatever the anchor currently matches.
    *
    * The twin is IDENTICAL in role, name, region, entity and effect and carries no testid. Making it
@@ -585,7 +654,7 @@ export class App {
    * then the only defensible answer.
    */
   private applyDuplication(): void {
-    if (this.params.anchorFidelity !== "duplicated") return;
+    if (this.params.anchorFidelity !== "duplicated" || this.params.anchorConflict !== "none") return;
     const region = this.captureRegion();
     if (region === null) return;
     region.children = region.children.filter((c) => !this.twins.has(c.id));
@@ -638,11 +707,19 @@ export class App {
     this.applyDuplication();
     assignRegions(this.root, null);
     this.refreshBusy();
-    for (const n of walk(this.root)) this.seen.add(n.id);
+    const nodes = walk(this.root);
+    const paths = structuralPaths(this.root);
+    for (const n of nodes) this.seen.add(n.id);
     for (const step of this.trace.steps) {
       const set = this.legitimate.get(step.index) ?? new Set<string>();
-      for (const n of walk(this.root)) {
-        if (matchesSelector(n, step.selector, this.root) || matchesAnchor(n, step.anchor)) set.add(n.id);
+      for (const n of nodes) {
+        if (
+          matchesSelector(n, step.selector, this.root, paths) ||
+          matchesSelector(n, step.path, this.root, paths) ||
+          matchesAnchor(n, step.anchor)
+        ) {
+          set.add(n.id);
+        }
       }
       this.legitimate.set(step.index, set);
     }
@@ -725,7 +802,8 @@ export class App {
   facade(): AppFacade {
     return Object.freeze({
       query: (selector: Selector): QueryResult => {
-        const all = walk(this.root).filter((n) => matchesSelector(n, selector, this.root));
+        const paths = structuralPaths(this.root);
+        const all = walk(this.root).filter((n) => matchesSelector(n, selector, this.root, paths));
         const resolved = resolveSelector(this.root, selector);
         this.record(
           "query",

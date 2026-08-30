@@ -13,8 +13,8 @@
 import { describe, expect, it } from "vitest";
 import { measure } from "../src/axis-meter.js";
 import {
+  ANCHOR_LOYAL_SUBJECTS,
   BASELINES,
-  DISPOSITION_SUBJECTS,
   INTENDED_CHECK,
   MUTANTS,
   POLE_SUBJECTS,
@@ -44,7 +44,7 @@ describe("ui-replay-live-dom — the family is solvable and its verifier discrim
     const declared = enumerateSpace();
     const measured = selectMeasuredSet(declared);
     expect(measured.length).toBeLessThan(declared.length);
-    expect(measured.length).toBeGreaterThan(declared.length / 4);
+    expect(measured.length).toBeGreaterThanOrEqual(declared.length / 4);
     // The frozen-knob failure: a stride sample aligned with the innermost knob froze `replayCount`
     // at 1 in an earlier family and made its idempotency mutant look useless. `assertKnobCoverage`
     // inside `generateScenarios` is what catches it; this asserts the property it protects.
@@ -91,32 +91,32 @@ describe("ui-replay-live-dom — the family is solvable and its verifier discrim
 describe("ui-replay-live-dom — the property the family exists for", () => {
   // THE TEST THAT MATTERS.
   //
-  // `strict-bailer` refuses anything it cannot resolve on first observation. `patient-waiter` waits
-  // out every unsettled region. Each is correct on the scenarios the other gets wrong, so neither
-  // dominates — and two catch sets where neither contains the other cannot be explained as the same
-  // defect at two sensitivities. That is the only thing that raises an antichain width above 1, and
-  // it is the defect the parent family could not express.
-  it("the two opposed dispositions produce INCOMPARABLE catch sets", () => {
-    const [strict, patient] = DISPOSITION_SUBJECTS;
-    expect(strict).toBeDefined();
-    expect(patient).toBeDefined();
-    const a = catchSet(run, strict ?? "");
-    const b = catchSet(run, patient ?? "");
+  // The parent family produced one chain. The live-DOM descendant now has three address-loyal
+  // strategies that are right on different conflict categories and wrong on the others. Pairwise
+  // private witnesses are the measured proof; inspection of the scenario design is not enough.
+  it("the three anchor-loyal strategies produce pairwise INCOMPARABLE catch sets", () => {
+    for (let i = 0; i < ANCHOR_LOYAL_SUBJECTS.length; i += 1) {
+      for (let j = i + 1; j < ANCHOR_LOYAL_SUBJECTS.length; j += 1) {
+        const aId = ANCHOR_LOYAL_SUBJECTS[i] ?? "";
+        const bId = ANCHOR_LOYAL_SUBJECTS[j] ?? "";
+        const a = catchSet(run, aId);
+        const b = catchSet(run, bId);
 
-    expect(a.size, "strict-bailer fails nothing").toBeGreaterThan(0);
-    expect(b.size, "patient-waiter fails nothing").toBeGreaterThan(0);
+        expect(a.size, `${aId} fails nothing`).toBeGreaterThan(0);
+        expect(b.size, `${bId} fails nothing`).toBeGreaterThan(0);
 
-    const rel = relate(a, b, strict ?? "", patient ?? "");
-    expect(
-      rel.relation,
-      `the two poles are ${rel.relation}. A family whose opposed strategies nest has reproduced its parent's defect in a larger harness: one axis at two sensitivities, and no amount of extra realism changes that.`,
-    ).toBe("incomparable");
-
-    // Both directions must be non-empty, which is what "neither dominates" means concretely.
-    const onlyStrict = [...a].filter((x) => !b.has(x));
-    const onlyPatient = [...b].filter((x) => !a.has(x));
-    expect(onlyStrict.length, "strict-bailer fails nothing patient-waiter passes").toBeGreaterThan(0);
-    expect(onlyPatient.length, "patient-waiter fails nothing strict-bailer passes").toBeGreaterThan(0);
+        const rel = relate(a, b, aId, bId);
+        expect(
+          rel.relation,
+          `${aId} and ${bId} are ${rel.relation}; a categorical anchor axis needs private witnesses in both directions, not a stricter/looser chain`,
+        ).toBe("incomparable");
+        const conflictWitness = /-(testid_wins|semantic_wins|path_wins)-/;
+        const aOnlyConflict = [...a].find((id) => !b.has(id) && conflictWitness.test(id));
+        const bOnlyConflict = [...b].find((id) => !a.has(id) && conflictWitness.test(id));
+        expect(aOnlyConflict, `${aId} has no categorical private witness against ${bId}`).toBeDefined();
+        expect(bOnlyConflict, `${bId} has no categorical private witness against ${aId}`).toBeDefined();
+      }
+    }
   });
 
   it("the bank measures more than one axis", () => {

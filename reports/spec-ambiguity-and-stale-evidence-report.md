@@ -6,10 +6,10 @@ Every trial this repository holds, what state it is in, and what a repair costs.
 
 | state | count | meaning |
 |---|---:|---|
-| `counted` | 19 | graded, and run against the challenge this family produces today |
+| `counted` | 20 | graded, and run against the challenge this family produces today |
 | `superseded` | 3 | graded, then invalidated when the family it measured was repaired |
 | `refused` | 0 | the provider declined; never an attempt, never a failure |
-| `infra` | 1 | the provider could not authenticate, or the harness broke |
+| `infra` | 2 | the provider could not authenticate, or the harness broke |
 | `not-run` | 0 | a declared slot nobody has executed |
 
 ## Per family
@@ -57,6 +57,15 @@ Current challenge hash: `1050e79f4804a96a5327d50dd81765b0`.
 | `ui-codex-1` | openai/gpt-5.6-sol | counted | `1050e79f4804a96a5327d50dd81765b0` |
 | `ui-haiku-1` | anthropic/claude-haiku-4-5 | counted | `1050e79f4804a96a5327d50dd81765b0` |
 | `ui-sonnet-1` | anthropic/claude-sonnet-5 | counted | `1050e79f4804a96a5327d50dd81765b0` |
+
+### `ui-replay-live-dom`
+
+Current challenge hash: `18c3f5afc5973604205cd7df23ce4cad`.
+
+| run | model | state | ran against |
+|---|---|---|---|
+| `live-dom-2026-08-o1` | openai/gpt-5.6-sol | infra | `18c3f5afc5973604205cd7df23ce4cad` |
+| `live-dom-2026-08-o2` | openai/gpt-5.6-sol | counted | `18c3f5afc5973604205cd7df23ce4cad` |
 
 ## Ambiguities found by real trials
 

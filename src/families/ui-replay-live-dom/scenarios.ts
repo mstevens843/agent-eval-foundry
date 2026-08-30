@@ -22,6 +22,7 @@ export const SPACE = {
   priorState: ["clean", "arming", "foreign_hold"],
   settleBudget: [0, 2, 6],
   anchorFidelity: ["exact", "duplicated"],
+  anchorConflict: ["none", "testid_wins", "semantic_wins", "path_wins"],
   busyFidelity: ["honest", "misleading"],
   replayCount: [1, 2],
 } as const;
@@ -33,17 +34,20 @@ export function enumerateSpace(): readonly ScenarioParams[] {
       for (const priorState of SPACE.priorState) {
         for (const settleBudget of SPACE.settleBudget) {
           for (const anchorFidelity of SPACE.anchorFidelity) {
-            for (const busyFidelity of SPACE.busyFidelity) {
-              for (const replayCount of SPACE.replayCount) {
-                out.push({
-                  seed,
-                  regionFate,
-                  priorState,
-                  settleBudget,
-                  anchorFidelity,
-                  busyFidelity,
-                  replayCount,
-                });
+            for (const anchorConflict of SPACE.anchorConflict) {
+              for (const busyFidelity of SPACE.busyFidelity) {
+                for (const replayCount of SPACE.replayCount) {
+                  out.push({
+                    seed,
+                    regionFate,
+                    priorState,
+                    settleBudget,
+                    anchorFidelity,
+                    anchorConflict,
+                    busyFidelity,
+                    replayCount,
+                  });
+                }
               }
             }
           }
@@ -55,10 +59,11 @@ export function enumerateSpace(): readonly ScenarioParams[] {
 }
 
 const keyOf = (p: ScenarioParams): string =>
-  `${p.regionFate}|${p.priorState}|${p.settleBudget}|${p.anchorFidelity}|${p.busyFidelity}|${p.replayCount}|${p.seed}`;
+  `${p.regionFate}|${p.priorState}|${p.settleBudget}|${p.anchorFidelity}|${p.anchorConflict}|${p.busyFidelity}|${p.replayCount}|${p.seed}`;
 
 /**
- * Half the declared space, sampled by content hash within each `regionFate/priorState` stratum.
+ * A quarter of the declared space, sampled by content hash within each
+ * `regionFate/priorState/anchorConflict` stratum.
  *
  * `groupOf` is declared rather than defaulted on purpose. The two grouped knobs are the ones that
  * decide the answer, so every outcome class survives selection by construction; leaving the group
@@ -68,8 +73,8 @@ const keyOf = (p: ScenarioParams): string =>
 export function selectMeasuredSet(space: readonly ScenarioParams[]): readonly ScenarioParams[] {
   const selected = sampleSpace(space, {
     keyOf,
-    groupOf: (p) => `${p.regionFate}/${p.priorState}`,
-    fraction: 1 / 2,
+    groupOf: (p) => `${p.regionFate}/${p.priorState}/${p.anchorConflict}`,
+    fraction: 1 / 4,
   });
   assertKnobCoverage(
     selected,
@@ -283,10 +288,13 @@ function adjudicate(params: ScenarioParams): Verdict {
   const affordable = params.settleBudget >= settlesNeededFor(params);
   const held: readonly string[] = [HOLD];
   const done: readonly string[] = [HOLD, CAPTURE];
+  const duplicatedAmbiguous = params.anchorFidelity === "duplicated" && params.anchorConflict === "none";
 
   switch (params.regionFate) {
     case "stable":
-      return { outcome: "completed", reason: null, effects: done };
+      return duplicatedAmbiguous
+        ? { outcome: "unreplayable", reason: "ANCHOR_AMBIGUOUS", effects: held }
+        : { outcome: "completed", reason: null, effects: done };
     case "removed":
       // L11. The container itself is gone: no amount of waiting brings it back, and telling an
       // operator to wait would be the wrong operational instruction.
@@ -301,18 +309,22 @@ function adjudicate(params: ScenarioParams): Verdict {
     case "late_mount":
       // The opposite pole. The node was merely not settled yet; bailing out strands an open hold.
       return affordable
-        ? { outcome: "completed", reason: null, effects: done }
+        ? duplicatedAmbiguous
+          ? { outcome: "unreplayable", reason: "ANCHOR_AMBIGUOUS", effects: held }
+          : { outcome: "completed", reason: null, effects: done }
         : { outcome: "halted", reason: "SETTLE_BUDGET_EXHAUSTED", effects: held };
     case "disabled_then_enabled":
       return affordable
-        ? { outcome: "completed", reason: null, effects: done }
+        ? duplicatedAmbiguous
+          ? { outcome: "unreplayable", reason: "ANCHOR_AMBIGUOUS", effects: held }
+          : { outcome: "completed", reason: null, effects: done }
         : { outcome: "halted", reason: "SETTLE_BUDGET_EXHAUSTED", effects: held };
     case "remount_rekeyed":
       // Needs BOTH poles: wait for the re-mount, then re-derive by anchor because the framework did
       // not carry the testid across. Re-deriving is right here and wrong on `superseded`, which is
       // why no ordering of strictness arranges these two into a chain.
       if (!affordable) return { outcome: "halted", reason: "SETTLE_BUDGET_EXHAUSTED", effects: held };
-      return params.anchorFidelity === "duplicated"
+      return duplicatedAmbiguous
         ? { outcome: "unreplayable", reason: "ANCHOR_AMBIGUOUS", effects: held }
         : { outcome: "completed", reason: null, effects: done };
     default:
@@ -321,7 +333,7 @@ function adjudicate(params: ScenarioParams): Verdict {
 }
 
 export const scenarioId = (p: ScenarioParams): string =>
-  `live-${p.regionFate}-${p.priorState}-b${p.settleBudget}-${p.anchorFidelity}-${p.busyFidelity}-r${p.replayCount}-s${p.seed}`;
+  `live-${p.regionFate}-${p.priorState}-b${p.settleBudget}-${p.anchorFidelity}-${p.anchorConflict}-${p.busyFidelity}-r${p.replayCount}-s${p.seed}`;
 
 export function buildScenario(params: ScenarioParams): Scenario {
   const id = scenarioId(params);
@@ -330,6 +342,7 @@ export function buildScenario(params: ScenarioParams): Scenario {
     regionFate: "stable",
     priorState: "clean",
     anchorFidelity: "exact",
+    anchorConflict: "none",
     busyFidelity: "honest",
   });
   const verdict = adjudicate(params);

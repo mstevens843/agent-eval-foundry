@@ -26,6 +26,9 @@ const PROVENANCE: Readonly<Record<string, string>> = {
   retryRate: "measured — 3 of 20 matrix runs discarded for infrastructure reasons",
   instancesPerFamily: "measured — the shipped family grades 24 scenarios",
   axesPerFamily: "measured — antichain width 3 against a 10-engine bank",
+  postBuildKillRate: "measured but tiny sample — one of two locally built families died after trials",
+  evolutionCyclesPerSurvivor: "measured locally — the UI line now has a parent plus descendant",
+  descendantReuse: "estimated — live-DOM reused the router, packager, axis meter and report loop",
   labourRateUsdPerHour: "ASSUMPTION — caller-supplied, and the dominant term",
   totalUsd: "the question",
 };
@@ -109,6 +112,7 @@ export function renderBudgetReport(
     ...(trials === undefined ? [] : trialLayerSection(inputs, trials)),
     ...(campaigns === undefined ? [] : campaignSection(inputs, campaigns)),
     ...(spend === undefined ? [] : providerSpendSection(inputs, spend, 3.5)),
+    ...pipelineConversionSection(inputs, trials, campaigns),
     "## What this model does not include",
     "",
     "- **Maintenance.** Families decay as models improve; nothing here prices re-hardening.",
@@ -228,6 +232,64 @@ function trialLayerSection(inputs: BudgetInputs, t: TrialLayerFacts): readonly s
     "  smaller half of the bill, and the model above is right to be dominated by labour.",
     "",
   ];
+}
+
+/**
+ * The cost questions this phase added.
+ *
+ * These are estimates except where the row says it is read from trial directories or campaign
+ * plans. They are derived from the same public inputs as the rest of the report so changing the
+ * labour rate moves the line items consistently.
+ */
+function pipelineConversionSection(
+  inputs: BudgetInputs,
+  trials?: TrialLayerFacts,
+  campaigns?: CampaignFacts,
+): readonly string[] {
+  const challengePackagingHours = inputs.hoursPerFamily * 0.25;
+  const specHardeningHours = inputs.hoursPerFamily * 0.2;
+  const campaignPrepHours = 3;
+  const mutantMeasuredToTrialReadyHours = challengePackagingHours + specHardeningHours + campaignPrepHours;
+  const mutantMeasuredToTrialReadyUsd = mutantMeasuredToTrialReadyHours * inputs.labourRateUsdPerHour;
+  const oneTrialModelUsd = (inputs.usdPerMatrix / 6) * (1 + inputs.retryRate);
+  const trialOpsHours = 2;
+  const trialReadyToEvidenceUsd = trialOpsHours * inputs.labourRateUsdPerHour + oneTrialModelUsd;
+  const supersededTrials = campaigns?.supersededTrials ?? 0;
+  const specRepairHours = supersededTrials === 0 ? 0 : 6;
+  const specAmbiguityUsd =
+    supersededTrials * oneTrialModelUsd + specRepairHours * inputs.labourRateUsdPerHour;
+  const plan = planBudget(inputs);
+
+  return [
+    "## Pipeline conversion costs",
+    "",
+    "This is the cost model for the exact live-DOM phase: turning a mutant-measured descendant into",
+    "a trial-ready family, then turning trial-ready into real-agent difficulty evidence. Rows marked",
+    "`estimated` are planning figures; rows marked `measured` come from checked-in campaigns or trial",
+    "directories.",
+    "",
+    "| question | cost at current inputs | label | what is included |",
+    "|---|---:|---|---|",
+    `| mutant-measured -> trial-ready | ${usd(mutantMeasuredToTrialReadyUsd)} (${mutantMeasuredToTrialReadyHours.toFixed(1)} h) | estimated | fairness SPEC, challenge package, leak tests, route, campaign plan |`,
+    `| trial-ready -> difficulty-evidenced | ${usd(trialReadyToEvidenceUsd)} + provider availability | estimated | one counted provider run, grading, reconcile, report update |`,
+    `| spec ambiguity waste already observed | ${supersededTrials === 0 ? "not observed in supplied campaign facts" : usd(specAmbiguityUsd)} | ${supersededTrials === 0 ? "not-run" : "measured trials + estimated repair"} | stale/superseded trials plus repair time |`,
+    `| checker-required package-ready draft | ${usd(inputs.hoursPerFamily * 0.35 * inputs.labourRateUsdPerHour)} (${(inputs.hoursPerFamily * 0.35).toFixed(1)} h) | estimated | checker contract, held-out checker mutant plan, draft package |`,
+    "",
+    "Trial-ready is not SHIP. Trial-ready means the package builds, the leak checker passes, the hash",
+    "is pinned and the router can grade an artifact. Difficulty-evidenced means at least one counted",
+    "real agent trial exists under that hash. SHIP still requires the family not to be already solved",
+    "and all blocking gates to pass.",
+    "",
+    campaigns === undefined
+      ? "Provider unavailability is represented when campaign facts are supplied."
+      : `Provider unavailability is visible as ${campaigns.slotsNotRun} not-run slot(s) out of ${campaigns.slotsPlanned}; those slots do not become failures or passes.`,
+    trials === undefined
+      ? ""
+      : `The current observed pipeline also carries a ${((trials.standardWasteRate ?? 0) * 100).toFixed(0)}% standard-attempt waste rate from historical trials.`,
+    "",
+    `Under the current observed pipeline, ${usd(inputs.totalUsd)} buys ${plan.families} shipped family line(s), about ${plan.shippedTasks} generated instances and ${plan.expectedAxes} independent axes. It does not buy ${plan.shippedTasks} independent tasks; the axis meter is the guard against that phrasing.`,
+    "",
+  ].filter((line) => line !== "");
 }
 
 /**

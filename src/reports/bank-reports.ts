@@ -116,6 +116,8 @@ export interface CrossFamilyAxisInput extends BankReportInput {
     readonly familyId: string;
     readonly kind: BankKind;
     readonly axis: AxisReport;
+    /** Null when the bank is too small for a meaningful within-family axis count. */
+    readonly axes: number | null;
   }[];
 }
 
@@ -123,9 +125,9 @@ export function renderCrossFamilyAxisReport(input: CrossFamilyAxisInput): string
   const byKind = new Map<BankKind, typeof input.axisReports>();
   for (const r of input.axisReports) byKind.set(r.kind, [...(byKind.get(r.kind) ?? []), r]);
 
-  const mutantTotal = (byKind.get("mutant") ?? []).reduce((n, r) => n + r.axis.independentAxes, 0);
+  const mutantTotal = (byKind.get("mutant") ?? []).reduce((n, r) => n + (r.axes ?? 0), 0);
   const agentTotal = [...(byKind.get("agent") ?? []), ...(byKind.get("imported") ?? [])].reduce(
-    (n, r) => n + r.axis.independentAxes,
+    (n, r) => n + (r.axes ?? 0),
     0,
   );
 
@@ -140,7 +142,7 @@ export function renderCrossFamilyAxisReport(input: CrossFamilyAxisInput): string
     "|---|---|---:|---:|---:|---:|---:|",
     ...input.axisReports.map(
       (r) =>
-        `| \`${r.familyId}\` | \`${r.kind}\` | ${r.axis.instanceCount} | ${r.axis.subjectCount} | ${r.axis.blindInstances.length} | ${r.axis.distinctMeasurements} | **${r.axis.independentAxes}** |`,
+        `| \`${r.familyId}\` | \`${r.kind}\` | ${r.axis.instanceCount} | ${r.axis.subjectCount} | ${r.axis.blindInstances.length} | ${r.axis.distinctMeasurements} | ${r.axes === null ? "—" : `**${r.axes}**`} |`,
     ),
     "",
     "## The sum that is not available",
@@ -149,7 +151,7 @@ export function renderCrossFamilyAxisReport(input: CrossFamilyAxisInput): string
     "|---|---:|---|",
     `| every family added together | ${mutantTotal + agentTotal} | mixes detection and difficulty; the two answer different questions |`,
     `| detection banks added | ${mutantTotal} | the banks are disjoint by construction — no mutant appears in two families, so the union's width is the sum whatever the families measure |`,
-    `| difficulty banks added | ${agentTotal} | ${(byKind.get("agent") ?? []).length + (byKind.get("imported") ?? []).length < 2 ? "fewer than two difficulty banks exist" : "valid only over subjects that attempted both, and the overlap is below threshold"} |`,
+    `| difficulty banks added | ${agentTotal} | ${(byKind.get("agent") ?? []).length + (byKind.get("imported") ?? []).length < 2 ? "fewer than two difficulty banks exist" : "excludes one-subject banks; valid only over subjects that attempted both, and the overlap is below threshold"} |`,
     "",
     "A combined axis count requires the same subjects in every bank being combined. Until that holds,",
     "each family's number stands alone and the portfolio total does not exist.",
@@ -164,16 +166,17 @@ export function renderCrossFamilyAxisReport(input: CrossFamilyAxisInput): string
     ]),
     "## The cheapest path to a real cross-family number",
     "",
-    "Run the same models against two families. Every challenge package is already built and every",
-    "family is routable, so the cost is model time rather than engineering:",
+    "Run the same models against the descendant family until three subjects overlap every difficulty",
+    "bank. The local Codex/OpenAI path is executable now; Anthropic/Claude is import-only in this phase",
+    "and Gemini remains entitlement-blocked unless that changes:",
     "",
     "```bash",
-    "foundry trials run --family ui-action-record-replay --run-id ui-claude-1 \\",
-    "  --model anthropic/claude-opus-5 --provider shell --inherit-env \\",
-    "  --command claude -p '{instruction}' --permission-mode bypassPermissions",
+    "node dist/cli.js trials campaign run --family ui-replay-live-dom --only O2",
+    "node dist/cli.js trials campaign prepare --family ui-replay-live-dom --provider external --out bundles/ui-replay-live-dom-external",
+    "node dist/cli.js trials campaign import --family ui-replay-live-dom bundles/ui-replay-live-dom-external",
     "```",
     "",
-    `That would put one subject in two difficulty banks. ${input.threshold} shared subjects are needed`,
+    `That would put additional subjects into the live-DOM descendant bank. ${input.threshold} shared subjects are needed`,
     "before a combined width is worth quoting, because the width is bounded above by the size of the",
     "shared bank and a bound is not a measurement.",
     "",

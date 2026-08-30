@@ -7,8 +7,9 @@ What the families measure, together — and the arithmetic this report refuses t
 | family | bank | instances | subjects | blind | distinct catch sets | axes |
 |---|---|---:|---:|---:|---:|---:|
 | `prompt-injection-containment` | `agent` | 128 | 4 | 128 | 0 | **0** |
-| `prompt-injection-memory-poisoning` | `agent` | 288 | 4 | 199 | 4 | **2** |
+| `prompt-injection-memory-poisoning` | `agent` | 288 | 4 | 233 | 3 | **2** |
 | `ui-action-record-replay` | `agent` | 324 | 4 | 234 | 3 | **1** |
+| `ui-replay-live-dom` | `agent` | 864 | 1 | 645 | 1 | — |
 | `durable-approval-outbox` | `imported` | 24 | 2 | 0 | 1 | **1** |
 
 ## The sum that is not available
@@ -17,16 +18,17 @@ What the families measure, together — and the arithmetic this report refuses t
 |---|---:|---|
 | every family added together | 4 | mixes detection and difficulty; the two answer different questions |
 | detection banks added | 0 | the banks are disjoint by construction — no mutant appears in two families, so the union's width is the sum whatever the families measure |
-| difficulty banks added | 4 | valid only over subjects that attempted both, and the overlap is below threshold |
+| difficulty banks added | 4 | excludes one-subject banks; valid only over subjects that attempted both, and the overlap is below threshold |
 
 A combined axis count requires the same subjects in every bank being combined. Until that holds,
 each family's number stands alone and the portfolio total does not exist.
 
 ## What each claim needs
 
-**`agent`:** a combined axis count over the 4 shared subjects.
+**`agent`:** a qualitative comparison over 1 shared subject(s); no combined axis count, because the width is bounded by the shared bank size.
 
-- Nothing: the claim is available. Widen the bank to narrow the confidence interval.
+- Run the same subjects against every `agent` family until 3 share all of them.
+- Currently shared: gpt-5.6-sol.
 
 **`imported`:** nothing cross-family: only one `imported` bank exists, so there is nothing to compare it with.
 
@@ -35,16 +37,17 @@ each family's number stands alone and the portfolio total does not exist.
 
 ## The cheapest path to a real cross-family number
 
-Run the same models against two families. Every challenge package is already built and every
-family is routable, so the cost is model time rather than engineering:
+Run the same models against the descendant family until three subjects overlap every difficulty
+bank. The local Codex/OpenAI path is executable now; Anthropic/Claude is import-only in this phase
+and Gemini remains entitlement-blocked unless that changes:
 
 ```bash
-foundry trials run --family ui-action-record-replay --run-id ui-claude-1 \
-  --model anthropic/claude-opus-5 --provider shell --inherit-env \
-  --command claude -p '{instruction}' --permission-mode bypassPermissions
+node dist/cli.js trials campaign run --family ui-replay-live-dom --only O2
+node dist/cli.js trials campaign prepare --family ui-replay-live-dom --provider external --out bundles/ui-replay-live-dom-external
+node dist/cli.js trials campaign import --family ui-replay-live-dom bundles/ui-replay-live-dom-external
 ```
 
-That would put one subject in two difficulty banks. 3 shared subjects are needed
+That would put additional subjects into the live-DOM descendant bank. 3 shared subjects are needed
 before a combined width is worth quoting, because the width is bounded above by the size of the
 shared bank and a bound is not a measurement.
 

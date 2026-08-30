@@ -1,0 +1,18 @@
+{
+  "runId": "live-dom-2026-08-o1",
+  "familyId": "ui-replay-live-dom",
+  "subjectId": "gpt-5.6-sol",
+  "subjectType": "agent",
+  "model": "openai/gpt-5.6-sol",
+  "effort": null,
+  "status": "crashed",
+  "counts": false,
+  "countsReason": "crashed: runner exited non-zero and produced no artifact. Recorded as not counting by default — promoting a crash to a failure automatically would let a harness bug read as a capability finding. Re-classify by hand if the crash is genuinely in the subject's code.",
+  "scenarioSetId": "dom-864-3a8cb30a",
+  "cells": [],
+  "runtimeSeconds": 0,
+  "costUsd": null,
+  "artifactPath": null,
+  "isolation": "subprocess",
+  "notes": "provider=shell no artifact produced"
+}

@@ -538,5 +538,299 @@
     ],
     "falseConfidence": "Nothing in the immediate context mentions time, so the omission is invisible in review.",
     "sketch": "Check that an approval exists; do not check when."
+  },
+  {
+    "id": "impatient-halter",
+    "name": "Impatient live-DOM halter",
+    "bug": "Treats a temporarily absent or disabled live target as permanently unreplayable.",
+    "mechanisms": [
+      "ui-replay-mismatch",
+      "liveness-stall",
+      "hidden-environment-dependency"
+    ],
+    "caughtBy": [
+      "replay_completes"
+    ],
+    "falseConfidence": "It looks safe because it never fires a wrong effect, but it drops valid work when the tree would settle.",
+    "sketch": "resolve once, never call settle, and report unreplayable on a miss."
+  },
+  {
+    "id": "anchor-credulous",
+    "name": "Anchor-credulous replay",
+    "bug": "Acts on a live node with the right role/name/region while ignoring that its entity changed.",
+    "mechanisms": [
+      "ui-replay-mismatch",
+      "stale-state"
+    ],
+    "caughtBy": [
+      "effect_targets_recorded_entity"
+    ],
+    "falseConfidence": "Accessible-name matching survives a re-render, so it passes remount cases and fails only when a superseded object wears the same label.",
+    "sketch": "query by semantic anchor and click without comparing data-entity."
+  },
+  {
+    "id": "txn-blind",
+    "name": "Transaction-state blind replay",
+    "bug": "Never reads the live transaction state before opening a two-phase replay.",
+    "mechanisms": [
+      "stale-state",
+      "duplicate-side-effects",
+      "hidden-environment-dependency"
+    ],
+    "caughtBy": [
+      "no_forbidden_effect"
+    ],
+    "falseConfidence": "Its module-level memory says it did not open the hold, but the live page already contains one from a different run.",
+    "sketch": "skip regionState and proceed into hold/capture."
+  },
+  {
+    "id": "stale-id-replayer",
+    "name": "Stale recorded id replay",
+    "bug": "Uses recorded node ids as live addresses after the tree has remounted.",
+    "mechanisms": [
+      "ui-replay-mismatch",
+      "stale-state"
+    ],
+    "caughtBy": [
+      "selector_resolved_live"
+    ],
+    "falseConfidence": "Stable ids pass the clean case, hiding that framework remounts make the handle meaningless.",
+    "sketch": "call click(recordedNodeId) instead of resolving the selector."
+  },
+  {
+    "id": "testid-loyalist",
+    "name": "Testid-loyal replay",
+    "bug": "Always chooses the live node carrying the recorded test id even when visible live facts identify another node.",
+    "mechanisms": [
+      "ui-replay-mismatch",
+      "stale-state"
+    ],
+    "caughtBy": [
+      "correct_anchor_resolution"
+    ],
+    "falseConfidence": "Test ids are usually the most stable automation handle, so the rule looks disciplined until the id is inherited by a decoy.",
+    "sketch": "prefer data-testid over semantic anchor and structural path in every conflict."
+  },
+  {
+    "id": "semantic-loyalist",
+    "name": "Semantic-anchor-loyal replay",
+    "bug": "Always chooses role plus accessible name plus region even when that semantic anchor now points at a decoy.",
+    "mechanisms": [
+      "ui-replay-mismatch",
+      "stale-state"
+    ],
+    "caughtBy": [
+      "correct_anchor_resolution"
+    ],
+    "falseConfidence": "Semantic anchors survive localization-free DOM churn, which makes the wrong global priority attractive.",
+    "sketch": "prefer role/name/region over test id and structural path in every conflict."
+  },
+  {
+    "id": "path-loyalist",
+    "name": "Structural-path-loyal replay",
+    "bug": "Always chooses the node at the recorded child path even when the live re-render changes what that path denotes.",
+    "mechanisms": [
+      "ui-replay-mismatch",
+      "stale-state"
+    ],
+    "caughtBy": [
+      "correct_anchor_resolution"
+    ],
+    "falseConfidence": "The path is right in scenarios where ids and names drift, so its failures are incomparable with the other anchor loyalties.",
+    "sketch": "prefer css_path over test id and semantic anchor in every conflict."
+  },
+  {
+    "id": "region-blind",
+    "name": "Region-blind replay",
+    "bug": "Cannot distinguish a region that is gone forever from a region that is still present and waiting.",
+    "mechanisms": [
+      "hidden-environment-dependency",
+      "liveness-stall"
+    ],
+    "caughtBy": [
+      "unreplayable_reported"
+    ],
+    "falseConfidence": "Both cases present as unresolved selectors unless the subject reads the region state.",
+    "sketch": "on selector miss, halt and wait regardless of regionState."
+  },
+  {
+    "id": "precondition-assumer",
+    "name": "Precondition-assuming replay",
+    "bug": "Uses the recorded enabled/value state instead of reading the live precondition before acting.",
+    "mechanisms": [
+      "stale-state",
+      "ui-replay-mismatch"
+    ],
+    "caughtBy": [
+      "precondition_observed"
+    ],
+    "falseConfidence": "It passes when attributes stay stable and misses only the cases where the live page changed under the recording.",
+    "sketch": "skip attr(node, precondition.attr) and reuse the recorded value."
+  },
+  {
+    "id": "confirmation-skipper",
+    "name": "Hidden-confirmation skipper",
+    "bug": "Accepts a confirmation without resolving the live confirmation dialog mounted by the action.",
+    "mechanisms": [
+      "hidden-environment-dependency",
+      "duplicate-side-effects"
+    ],
+    "caughtBy": [
+      "confirmation_observed"
+    ],
+    "falseConfidence": "Hard-coded confirmation ids work in the visible flow and look like successful automation.",
+    "sketch": "submit the target and call acceptConfirmation with a guessed id."
+  },
+  {
+    "id": "first-match-picker",
+    "name": "First-match anchor picker",
+    "bug": "When the semantic anchor returns indistinguishable candidates, it picks the first instead of refusing ambiguity.",
+    "mechanisms": [
+      "ui-replay-mismatch"
+    ],
+    "caughtBy": [
+      "anchor_ambiguity_refused"
+    ],
+    "falseConfidence": "The first DOM match is deterministic, so the run is reproducible while still being a guess.",
+    "sketch": "queryAnchor(anchor).nodes[0]."
+  },
+  {
+    "id": "budget-spinner",
+    "name": "Settle-budget spinner",
+    "bug": "Keeps settling after the logical clock reports no budget remains.",
+    "mechanisms": [
+      "liveness-stall",
+      "hidden-environment-dependency"
+    ],
+    "caughtBy": [
+      "settle_budget_respected"
+    ],
+    "falseConfidence": "Waiting is the correct move in some scenarios, so unbounded waiting looks like extra patience rather than a replay bug.",
+    "sketch": "while unresolved, call settle even after advanced:false."
+  },
+  {
+    "id": "dom-prober",
+    "name": "Speculative DOM prober",
+    "bug": "Clicks neighboring live nodes to discover what the page has become.",
+    "mechanisms": [
+      "ui-replay-mismatch",
+      "uncertain-external-effects"
+    ],
+    "caughtBy": [
+      "no_speculative_write"
+    ],
+    "falseConfidence": "Exploration can find the right node in a simulated tree, but a real page can fire irreversible effects during the probe.",
+    "sketch": "when unresolved, click siblings until something changes."
+  },
+  {
+    "id": "silent-abandoner",
+    "name": "Silent mid-transaction abandoner",
+    "bug": "Stops after opening a hold without reporting the pending irreversible effect.",
+    "mechanisms": [
+      "uncertain-external-effects",
+      "duplicate-side-effects",
+      "false-audit-history"
+    ],
+    "caughtBy": [
+      "no_orphaned_transaction"
+    ],
+    "falseConfidence": "The final outcome is halted, which looks conservative, while the operator loses the fact that money is already held.",
+    "sketch": "return halted with pendingEffects: [] after hold_funds."
+  },
+  {
+    "id": "stale-handle-holder",
+    "name": "Stale handle holder",
+    "bug": "Queries once and reuses a handle after the live tree version has changed.",
+    "mechanisms": [
+      "stale-state",
+      "ui-replay-mismatch"
+    ],
+    "caughtBy": [
+      "action_applied"
+    ],
+    "falseConfidence": "The selected id looks correct in the audit, but the write is rejected because the handle version is stale.",
+    "sketch": "cache treeVersion from the first query and pass it to every later action."
+  },
+  {
+    "id": "step-reorderer",
+    "name": "Step reordering replay",
+    "bug": "Runs the trace out of recorded order.",
+    "mechanisms": [
+      "ui-replay-mismatch",
+      "duplicate-side-effects"
+    ],
+    "caughtBy": [
+      "replay_order_preserved"
+    ],
+    "falseConfidence": "Independent selectors may still resolve, hiding that the page mutations are caused by earlier steps.",
+    "sketch": "sort or reverse trace.steps before replay."
+  },
+  {
+    "id": "vacuous-checker",
+    "name": "Vacuous checker",
+    "bug": "Exports the required checker interface but returns pass for every subject and every case.",
+    "mechanisms": [
+      "checker-quality-gap"
+    ],
+    "caughtBy": [
+      "checker_mutants_rejected",
+      "checker_has_negative_cases"
+    ],
+    "falseConfidence": "File presence and a green checker run look like self-verification unless the grader runs held-out known-bad subjects against it.",
+    "sketch": "export const check = { run(){ return { ok: true, failures: [] }; } };"
+  },
+  {
+    "id": "visible-only-checker",
+    "name": "Visible-only checker",
+    "bug": "Checks only the example cases shipped in the challenge and never exercises the hidden rule combinations.",
+    "mechanisms": [
+      "checker-quality-gap",
+      "oracle-probing"
+    ],
+    "caughtBy": [
+      "checker_generalises_beyond_examples"
+    ],
+    "falseConfidence": "Every visible example passes, so the checker looks relevant while held-out mutants sail through.",
+    "sketch": "if (VISIBLE_IDS.has(case.id)) assertExpected(case); else return pass();"
+  },
+  {
+    "id": "checker-never-invokes-subject",
+    "name": "Checker never invokes subject",
+    "bug": "The checker inspects metadata or source text and reports pass without executing the submitted subject on a generated case.",
+    "mechanisms": [
+      "checker-quality-gap",
+      "grader-privilege-boundary"
+    ],
+    "caughtBy": [
+      "checker_invokes_subject"
+    ],
+    "falseConfidence": "The checker can emit a detailed-looking report while never observing behavior.",
+    "sketch": "readFileSync('subject.mjs'); return { ok: true, failures: [] };"
+  },
+  {
+    "id": "inexpressive-checker",
+    "name": "Inexpressive checker",
+    "bug": "The checker can express liveness or no-forbidden-call, but cannot express the core provenance or live-anchor rule.",
+    "mechanisms": [
+      "checker-quality-gap"
+    ],
+    "caughtBy": [
+      "checker_expresses_core_rule"
+    ],
+    "falseConfidence": "It catches obvious no-ops and over-blockers, then misses the actual family-specific bug.",
+    "sketch": "assert some action ran; assert no crash; never compare provenance/entity/anchor facts."
+  },
+  {
+    "id": "accepts-all-checker",
+    "name": "Accepts-all checker",
+    "bug": "Treats every subject outcome as acceptable by widening the allowed set until no mutant can fail.",
+    "mechanisms": [
+      "checker-quality-gap"
+    ],
+    "caughtBy": [
+      "checker_mutants_rejected"
+    ],
+    "falseConfidence": "The checker never flakes and never rejects a correct reference, which can be mistaken for robustness.",
+    "sketch": "allowed = new Set(['completed','halted','unreplayable']); return allowed.has(report.outcome);"
   }
 ]

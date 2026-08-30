@@ -24,10 +24,10 @@ it never measured.
 |---|---|---|---:|---:|---:|
 | `ui-claude-1` | anthropic/claude-opus-5 | counted_failure | 324 | 46 | 791s |
 | `ui-claude-2` | anthropic/claude-opus-5 | counted_failure | 324 | 33 | 964s |
+| `ui-2026-08:a3:not_run` | anthropic/claude-opus-5 | not_run | 0 | 0 | — |
 | `ui-codex-1` | openai/gpt-5.6-sol | counted_failure | 324 | 90 | 552s |
 | `ui-haiku-1` | anthropic/claude-haiku-4-5 | counted_failure | 324 | 62 | 167s |
 | `ui-sonnet-1` | anthropic/claude-sonnet-5 | counted_failure | 324 | 62 | 320s |
-| `ui-2026-08:not-run-1` | anthropic/claude-opus-5 | not_run | 0 | 0 | — |
 
 ## Which checks failed
 

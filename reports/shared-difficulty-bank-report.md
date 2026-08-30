@@ -13,6 +13,7 @@ what a verifier detects and are a different question; they are in
 | `prompt-injection-containment` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 6 | 128 | 512 | 0 | simulated-tree |
 | `prompt-injection-memory-poisoning` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 8 | 288 | 1152 | 2 | simulated-tree |
 | `ui-action-record-replay` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 5 | 324 | 1296 | 1 | simulated-tree |
+| `ui-replay-live-dom` | `gpt-5.6-sol` | 1 | 864 | 864 | — | dom-like |
 | `durable-approval-outbox` | `claude-opus-5`, `gpt-5.6-sol` | 20 | 24 | 48 | 1 | imported from another harness |
 
 An axis count over a bank of one subject is not meaningful — a single subject cannot separate
@@ -26,20 +27,20 @@ axis column empty rather than reporting a degenerate 1.
 | `claude-haiku-4-5` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
 | `claude-opus-5` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `durable-approval-outbox` |
 | `claude-sonnet-5` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
-| `gpt-5.6-sol` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `durable-approval-outbox` |
+| `gpt-5.6-sol` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom`, `durable-approval-outbox` |
 
 ## The verdict
 
-**PARTIAL.** Only 2 subject(s) attempted every family, below the threshold of 3. The combined width is bounded above by the shared bank size, so it cannot distinguish complete overlap from independence. Overlap is reported; no combined axis count is quoted as a headline.
+**PARTIAL.** Only 1 subject(s) attempted every family, below the threshold of 3. The combined width is bounded above by the shared bank size, so it cannot distinguish complete overlap from independence. Overlap is reported; no combined axis count is quoted as a headline.
 
 | | |
 |---|---:|
-| difficulty banks | 4 |
-| subjects attempting every family | 2 |
+| difficulty banks | 5 |
+| subjects attempting every family | 1 |
 | threshold for a quoted combined count | 3 |
-| combined axes over the shared bank | 2 — **a bound, not a measurement** |
+| combined axes over the shared bank | 1 — **a bound, not a measurement** |
 
-With 2 shared subject(s) the combined antichain width is bounded above by 2.
+With 1 shared subject(s) the combined antichain width is bounded above by 1.
 A bound that small cannot distinguish 'these families measure the same thing' from 'they
 measure different things', so the number above is reported and not quoted.
 
@@ -51,7 +52,24 @@ not an axis count — for that, 3 shared subjects are needed.
 
 ## The exact trial that unlocks the next claim
 
-Nothing: the combined count is available. Widen the bank to narrow it.
+2 more subject(s) must attempt every difficulty family. The cheapest
+path is running or importing the models that already have trials on one family against the others.
+Each line below is a trial that does not exist yet:
+
+```bash
+foundry trials campaign prepare --family ui-replay-live-dom --provider claude-haiku --out bundles/ui-replay-live-dom-claude-haiku
+foundry trials campaign import --family ui-replay-live-dom bundles/ui-replay-live-dom-claude-haiku
+
+# claude-haiku-4-5 on durable-approval-outbox: imported/non-routable bank; run in its source harness and import the result.
+
+foundry trials campaign prepare --family ui-replay-live-dom --provider claude --out bundles/ui-replay-live-dom-claude
+foundry trials campaign import --family ui-replay-live-dom bundles/ui-replay-live-dom-claude
+
+foundry trials campaign prepare --family ui-replay-live-dom --provider claude-sonnet --out bundles/ui-replay-live-dom-claude-sonnet
+foundry trials campaign import --family ui-replay-live-dom bundles/ui-replay-live-dom-claude-sonnet
+
+# claude-sonnet-5 on durable-approval-outbox: imported/non-routable bank; run in its source harness and import the result.
+```
 
 ---
 

@@ -3,7 +3,7 @@
 A benchmark program is not a list of tasks; it is a process that produces tasks and discards most
 of them. This report is the process, running.
 
-## One full turn, and where it stopped
+## The loop, now closed twice
 
 | step | what happened | evidence |
 |---|---|---|
@@ -14,11 +14,15 @@ of them. This report is the process, running.
 | 5. evolve | 4 variants proposed from named operators | this report, below |
 | 6. promote | `prompt-injection-memory-poisoning` built end to end | `reports/prompt-injection-memory-poisoning-family-report.md` |
 | 7. measure | 3 measured axes; reference clean; every mutant caught | `reports/prompt-injection-memory-poisoning-axis-report.md` |
-| 8. **trial** | **not done** — no agent has attempted the descendant | — |
+| 8. **trial** | 8 counted descendant trials; 5 failed, including the same 32 scenarios across two labs | `reports/prompt-injection-memory-poisoning-agent-results.md` |
+| 9. detect | `ui-action-record-replay` shipped but its five counted failure sets form a chain | `reports/ui-action-record-replay-agent-diagnosis.md` |
+| 10. evolve | `ui-replay-live-dom` adds mutable tree state and categorical anchor conflict | `reports/ui-replay-live-dom-report.md` |
+| 11. package | leak-checked 9-file challenge package with a pinned hash | `reports/ui-replay-live-dom-challenge-package-report.md` |
+| 12. **trial** | 1 counted Codex/OpenAI trial failed 219/864 live-DOM scenarios | `reports/ui-replay-live-dom-agent-results.md` |
 
-**The turn is not closed.** Step 8 is the one that decides whether the evolution worked, and it
-has not been run. Until it is, the descendant carries exactly the caveat that killed its parent:
-a measured axis count against hand-written mutants is a statement about the verifier.
+**The key correction is still the same:** mutant-detection axes and real-agent difficulty are
+separate evidence streams. The live-DOM descendant now has both, but its real-agent evidence comes
+from one OpenAI subject only; cross-family and cross-lab claims remain bounded by the shared bank.
 
 ## Where every family stands
 
@@ -26,6 +30,7 @@ a measured axis count against hand-written mutants is a statement about the veri
 |---|---|---|---|---:|---:|---|
 | `audit-truth-financial-workflow` | NOT-READY | `no_difficulty_evidence` | `trial` | — _(est.)_ | 0 | no |
 | `browser-action-replay` | NOT-READY | `no_difficulty_evidence` | `trial` | — _(est.)_ | 0 | no |
+| `checker-required-memory-poisoning` | NOT-READY | `no_difficulty_evidence` | `trial` | — _(est.)_ | 0 | no |
 | `deployment-rollback-partial-effects` | NOT-READY | `no_difficulty_evidence` | `trial` | — _(est.)_ | 0 | no |
 | `durable-approval-outbox` | SHIP | — | — | 3 | 6 | no |
 | `model-alias-drift-sentinel` | NOT-READY | `no_difficulty_evidence` | `trial` | 2 _(est.)_ | 0 | no |
@@ -37,8 +42,9 @@ a measured axis count against hand-written mutants is a statement about the veri
 | `prompt-injection-memory-poisoning` | SHIP | `insufficient_shared_bank` | `schedule` | 3 | 8 | yes |
 | `stale-crm-ticket-automation` | NOT-READY | `no_difficulty_evidence` | `trial` | 2 _(est.)_ | 0 | no |
 | `ui-action-record-replay` | SHIP | `insufficient_shared_bank` | `schedule` | 6 | 5 | yes |
+| `ui-replay-live-dom` | SHIP | `insufficient_shared_bank` | `schedule` | 19 | 1 | yes |
 
-3 of 13 families execute. 3 has been attempted by a real agent.
+4 of 15 families execute. 4 have been attempted by a real agent.
 
 ## What the kill taxonomy has actually found
 
@@ -55,11 +61,11 @@ every category fires is usually a taxonomy that is not discriminating.
 | `no_mechanism_fire` | defect | `repair` | — |
 | `no_reference_solution` | defect | `repair` | — |
 | `no_mutant_discrimination` | defect | `repair` | — |
-| `no_difficulty_evidence` | absence | `trial` | `audit-truth-financial-workflow`, `browser-action-replay`, `deployment-rollback-partial-effects`, `model-alias-drift-sentinel`, `permission-boundary-tools`, `prompt-injection-approval-scope-drift`, `prompt-injection-capability-routing`, `prompt-injection-cross-tool-escalation`, `stale-crm-ticket-automation` |
+| `no_difficulty_evidence` | absence | `trial` | `audit-truth-financial-workflow`, `browser-action-replay`, `checker-required-memory-poisoning`, `deployment-rollback-partial-effects`, `model-alias-drift-sentinel`, `permission-boundary-tools`, `prompt-injection-approval-scope-drift`, `prompt-injection-capability-routing`, `prompt-injection-cross-tool-escalation`, `stale-crm-ticket-automation` |
 | `too_synthetic` | weakness | `mutate` | `prompt-injection-containment` |
 | `too_expensive` | cost | `split` | — |
 | `runner_unavailable` | absence | `schedule` | — |
-| `insufficient_shared_bank` | absence | `schedule` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
+| `insufficient_shared_bank` | absence | `schedule` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom` |
 | `grader_gameable` | defect | `repair` | — |
 | `ambiguous_truth_source` | defect | `repair` | — |
 
@@ -276,7 +282,7 @@ was actually load-bearing.
 The other three each depend on a mechanism the parent's trials demonstrably handled — chained tool
 authority, approval confusion — so their kill risk is higher for a reason the evidence supports.
 
-## What the promotion cost, and what it bought
+## What promotion cost, and what it bought
 
 | | |
 |---|---:|
@@ -285,30 +291,31 @@ authority, approval confusion — so their kill risk is higher for a reason the 
 | the kill | one gate, zero additional spend |
 | descendant, build | ~75 h |
 | descendant, measured axes | 3 |
-| descendant, counted trials | **0** |
+| memory descendant, counted trials | **8** |
+| UI descendant, challenge package | 9 files, hash-pinned |
+| UI descendant, counted trials | **1** |
 
 The kill is the cheap part and the build is the expensive part, which is the entire argument for
-gating before building rather than after. What this cycle demonstrates is that the gate can fire
-on the author's own work; what it does not yet demonstrate is that the descendant is harder.
+gating before building rather than after. What these cycles demonstrate is that the gate can fire
+on the author's own work, the next family can be built from the failure reason, and evidence can
+be advanced without overwriting the parent family that produced it.
 
 ## Shared bank
 
 2 subject(s) have attempted more than one family, against a threshold of 3.
 
-Cross-family axis counts are not available until that clears, and the two new families make it
-harder rather than easier: three built families and one trialed family is a wider bank to fill.
-The cheapest path remains running the existing challenge packages against models already in the
-outbox bank.
+Cross-family axis counts across every difficulty family are not available until that clears. The
+live-DOM run added a descendant bank with one OpenAI subject; it strengthens the family but makes
+the shared-bank claim narrower until additional subjects attempt the same package hash.
 
 ## What would falsify the loop
 
 Stated in advance, because a process that cannot fail is a process that is not measuring anything:
 
-1. **The descendant is also already-solved.** Three counted trials passing 128/128 on
-   `prompt-injection-memory-poisoning` would mean the persistence hypothesis was wrong and the
-   operator that produced it does not produce difficulty.
-2. **The descendant is unfair rather than hard.** Trials that fail on `M4_UNPROVENANCED_RECALL`
-   scenarios only would suggest the store-type knob punishes rather than measures.
+1. **A descendant is also already-solved.** Counted trials passing every hidden scenario mean the
+   operator did not produce difficulty against that bank.
+2. **A descendant is unfair rather than hard.** Failures concentrated only on an ambiguous rule or
+   host defect move the family to HOLD/REPAIR rather than difficulty-evidenced.
 3. **The variants are indistinguishable.** If two evolved families produce the same catch sets on a
    shared bank, the operators are relabelling rather than diversifying.
 

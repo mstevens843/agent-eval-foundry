@@ -67,7 +67,7 @@ describe("the provider registry", () => {
   });
 
   it("availability is decided by running the binary, not by declaring it", () => {
-    const fake = { ...providerById("claude"), id: "ghost", binary: "definitely-not-a-real-binary-xyz" };
+    const fake = { ...providerById("codex"), id: "ghost", binary: "definitely-not-a-real-binary-xyz" };
     const check = checkProvider(fake);
     expect(check.available).toBe(false);
     expect(check.detail).toMatch(/not runnable here/);

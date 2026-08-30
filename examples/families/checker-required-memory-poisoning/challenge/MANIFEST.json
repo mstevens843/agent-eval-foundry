@@ -1,0 +1,22 @@
+{
+  "familyId": "checker-required-memory-poisoning",
+  "status": "package-ready-draft",
+  "visibleFiles": [
+    "README.md",
+    "SPEC.md",
+    "types.ts",
+    "starter/subject.mjs",
+    "starter/check.mjs",
+    "examples/example-visible-case.json"
+  ],
+  "hiddenArtifacts": [
+    "verifier",
+    "reference subject",
+    "held-out subject mutants",
+    "held-out checker mutants",
+    "answer matrix",
+    "generated reports"
+  ],
+  "submissionFormat": "a directory containing subject.mjs and check.mjs"
+}
+

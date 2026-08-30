@@ -8,12 +8,12 @@ be restamped rather than reinvented.
 
 | | |
 |---|---:|
-| mechanisms | **14** |
+| mechanisms | **15** |
 | measured (evidenced by a real trial) | 6 |
-| argued | 5 |
+| argued | 6 |
 | speculative | 3 |
-| mutants in the bank | 36 |
-| families declared | 13 |
+| mutants in the bank | 57 |
+| families declared | 15 |
 | mechanisms with no mutant (undetectable) | 0 |
 | mechanisms with no family yet | 0 |
 
@@ -29,20 +29,21 @@ describe but has no way to detect.
 
 | mechanism | maturity | mutants | families | ledger rows |
 |---|---|---:|---:|---:|
-| `uncertain-external-effects` | **measured** | 8 | 2 | 9 |
-| `stale-state` | argued | 10 | 4 | 14 |
-| `duplicate-side-effects` | **measured** | 2 | 4 | 13 |
-| `false-audit-history` | **measured** | 5 | 3 | 11 |
-| `liveness-stall` | **measured** | 3 | 2 | 6 |
-| `prompt-injection-via-retrieval` | argued | 3 | 3 | 4 |
+| `uncertain-external-effects` | **measured** | 10 | 2 | 9 |
+| `stale-state` | argued | 18 | 5 | 15 |
+| `duplicate-side-effects` | **measured** | 6 | 5 | 14 |
+| `false-audit-history` | **measured** | 6 | 4 | 12 |
+| `liveness-stall` | **measured** | 6 | 2 | 6 |
+| `prompt-injection-via-retrieval` | argued | 3 | 4 | 5 |
 | `permission-boundary` | argued | 11 | 6 | 12 |
-| `ui-replay-mismatch` | _speculative_ | 6 | 2 | 2 |
-| `hidden-environment-dependency` | argued | 3 | 3 | 4 |
+| `ui-replay-mismatch` | _speculative_ | 17 | 3 | 3 |
+| `hidden-environment-dependency` | argued | 8 | 4 | 5 |
 | `tool-result-ambiguity` | argued | 5 | 4 | 5 |
-| `context-contamination` | _speculative_ | 9 | 3 | 5 |
+| `context-contamination` | _speculative_ | 9 | 4 | 6 |
 | `model-alias-drift` | _speculative_ | 1 | 1 | 1 |
-| `grader-privilege-boundary` | **measured** | 1 | 1 | 2 |
-| `oracle-probing` | **measured** | 1 | 1 | 6 |
+| `grader-privilege-boundary` | **measured** | 2 | 1 | 2 |
+| `oracle-probing` | **measured** | 2 | 1 | 6 |
+| `checker-quality-gap` | argued | 5 | 1 | 1 |
 
 ## Mechanisms
 
@@ -507,6 +508,40 @@ describe but has no way to detect.
 - hidden-set score plotted against probe count, since a fuzzer's curve rises with samples and an insight's does not
 - hidden-set score on inputs drawn from a region structurally disjoint from the probeable one
 - presence of probe-harness or disassembly artifacts in the workspace, noting that these were absent in all three screen-E samples
+
+### Checker Quality Gap `checker-quality-gap`
+
+*A submission implements behavior but ships no independent checker strong enough to reject known-bad behavior, so self-verification is described rather than operationalized.*
+
+| | |
+|---|---|
+| maturity | argued |
+| evidence | reports/self-check-behavior-report.md: models often described checkers but did not ship executable verifier artifacts. This mechanism is the first package-ready pattern to measure that gap directly. |
+| domains | agent benchmark submissions, policy engines with self-tests, UI replay libraries with replay validators, memory and provenance systems, workflow engines with local checkers |
+| mutants | vacuous-checker, visible-only-checker, checker-never-invokes-subject, inexpressive-checker, accepts-all-checker |
+
+**Why agents fail.** Models often describe a verification strategy in prose and then submit only the implementation, or submit a checker that exercises visible examples and never calls the subject on held-out mutants. The failure is not knowing the rule; it is turning the rule into a test oracle with negative cases.
+
+**What correct systems do.** Ship the implementation and an independent checker, run the checker against the reference and held-out known-bad subjects, require the checker to invoke the subject, and fail vacuous or visible-only tests even when the submitted implementation itself happens to pass.
+
+**The false-positive shape.** A family that grades only subject behavior cannot distinguish a solver that built no verifier from one that built a verifier and caught its own wrong turns. The self-check report found exactly this gap: agents frequently narrated checkers without shipping executable ones, so the evidence loop had no artifact to grade.
+
+**Fairness risks**
+- If the checker contract does not state what inputs it receives and what it must return, a correct checker can be marked wrong for interface mismatch rather than weakness.
+- If hidden known-bad subjects exercise rules absent from the visible spec, checker failures are unfair rather than informative.
+- If the task requires a perfect checker over an unbounded domain, it measures formal-methods capacity rather than the intended self-verification gap.
+
+**Cheat risks**
+- A checker that always returns pass can satisfy a harness that only checks file presence.
+- A checker that compares against visible example ids can pass examples while expressing none of the core rule.
+- A checker that never invokes the subject under test can report success over any implementation.
+- A submission can make `check.mjs` import `subject.mjs` and whitelist its own source instead of testing behavior unless held-out mutants are run.
+
+**Measurable signals**
+- checker rejects every held-out known-bad subject
+- checker accepts the reference behavior
+- checker invokes the subject on generated cases rather than only inspecting source text
+- vacuous, visible-only, never-invokes-subject and accepts-all checker mutants score zero
 
 ---
 

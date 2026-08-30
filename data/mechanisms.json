@@ -520,5 +520,46 @@
     ],
     "maturity": "measured",
     "evidence": "results/13-screenF-cleanroom.md: 3/3 agents solved screen E by decompiling the shipped .pyc, and 3/3 solved the stripped-binary screen F at 25/25 on the hidden set by pure differential probing. results/08-mechanism-screens.md states the identifiability vise the result generalises to \u2014 fair implies probeable, probeable implies differentially fuzzable, differentially fuzzable implies solved."
+  },
+  {
+    "id": "checker-quality-gap",
+    "name": "Checker Quality Gap",
+    "summary": "A submission implements behavior but ships no independent checker strong enough to reject known-bad behavior, so self-verification is described rather than operationalized.",
+    "whyAgentsFail": "Models often describe a verification strategy in prose and then submit only the implementation, or submit a checker that exercises visible examples and never calls the subject on held-out mutants. The failure is not knowing the rule; it is turning the rule into a test oracle with negative cases.",
+    "whatCorrectSystemsDo": "Ship the implementation and an independent checker, run the checker against the reference and held-out known-bad subjects, require the checker to invoke the subject, and fail vacuous or visible-only tests even when the submitted implementation itself happens to pass.",
+    "falsePositiveShape": "A family that grades only subject behavior cannot distinguish a solver that built no verifier from one that built a verifier and caught its own wrong turns. The self-check report found exactly this gap: agents frequently narrated checkers without shipping executable ones, so the evidence loop had no artifact to grade.",
+    "exampleDomains": [
+      "agent benchmark submissions",
+      "policy engines with self-tests",
+      "UI replay libraries with replay validators",
+      "memory and provenance systems",
+      "workflow engines with local checkers"
+    ],
+    "suggestedMutants": [
+      "vacuous-checker",
+      "visible-only-checker",
+      "checker-never-invokes-subject",
+      "inexpressive-checker",
+      "accepts-all-checker"
+    ],
+    "fairnessRisks": [
+      "If the checker contract does not state what inputs it receives and what it must return, a correct checker can be marked wrong for interface mismatch rather than weakness.",
+      "If hidden known-bad subjects exercise rules absent from the visible spec, checker failures are unfair rather than informative.",
+      "If the task requires a perfect checker over an unbounded domain, it measures formal-methods capacity rather than the intended self-verification gap."
+    ],
+    "cheatRisks": [
+      "A checker that always returns pass can satisfy a harness that only checks file presence.",
+      "A checker that compares against visible example ids can pass examples while expressing none of the core rule.",
+      "A checker that never invokes the subject under test can report success over any implementation.",
+      "A submission can make `check.mjs` import `subject.mjs` and whitelist its own source instead of testing behavior unless held-out mutants are run."
+    ],
+    "measurableSignals": [
+      "checker rejects every held-out known-bad subject",
+      "checker accepts the reference behavior",
+      "checker invokes the subject on generated cases rather than only inspecting source text",
+      "vacuous, visible-only, never-invokes-subject and accepts-all checker mutants score zero"
+    ],
+    "maturity": "argued",
+    "evidence": "reports/self-check-behavior-report.md: models often described checkers but did not ship executable verifier artifacts. This mechanism is the first package-ready pattern to measure that gap directly."
   }
 ]

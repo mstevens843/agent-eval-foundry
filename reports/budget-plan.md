@@ -61,6 +61,9 @@ makes the literal reading of the question unaffordable.
 | `retryRate` | 0.15 | measured — 3 of 20 matrix runs discarded for infrastructure reasons |
 | `instancesPerFamily` | 24 | measured — the shipped family grades 24 scenarios |
 | `axesPerFamily` | 3 | measured — antichain width 3 against a 10-engine bank |
+| `postBuildKillRate` | 0.5 | measured but tiny sample — one of two locally built families died after trials |
+| `evolutionCyclesPerSurvivor` | 2 | measured locally — the UI line now has a parent plus descendant |
+| `descendantReuse` | 0.35 | estimated — live-DOM reused the router, packager, axis meter and report loop |
 | `labourRateUsdPerHour` | 120 | ASSUMPTION — caller-supplied, and the dominant term |
 | `totalUsd` | 100000 | the question |
 
@@ -141,16 +144,16 @@ trial directories rather than assumed.
 
 | | |
 |---|---:|
-| campaigns declared | 2 |
-| slots planned | 11 |
-| slots run | 9 |
-| slots **not run** | 1 |
-| counted trials | 13 |
-| of those, failing something | 10 |
+| campaigns declared | 3 |
+| slots planned | 16 |
+| slots run | 12 |
+| slots **not run** | 4 |
+| counted trials | 14 |
+| of those, failing something | 11 |
 | superseded by a challenge repair | 3 |
-| median counted-trial runtime | 7.9 min |
-| budget declared across campaigns | $22.00 |
-| **budget per counted failure** | $2.20 |
+| median counted-trial runtime | 8.2 min |
+| budget declared across campaigns | $37.00 |
+| **budget per counted failure** | $3.36 |
 
 ### The line item nobody budgets for
 
@@ -164,7 +167,7 @@ once**, because the first campaign is often what tells you the family is not yet
 
 ### Unrun slots are a budget line, not an absence
 
-1 of 11 declared slots have not run, almost all of them because no runner
+4 of 16 declared slots have not run, almost all of them because no runner
 for that model family is configured here. They are costed in the plans and visible in every
 report. A campaign that quietly dropped them would show a complete-looking result over one lab's
 model — which is the single most common way a benchmark overstates what it measured.
@@ -178,15 +181,15 @@ not counted now: the family they measured was repaired.
 |---|---:|---:|---:|---:|---:|---:|
 | `anthropic` | 14 | 7 | 0 | 0 | 3 | 122 |
 | `google` | 0 | 0 | 0 | 1 | 0 | 0 |
-| `openai` | 5 | 3 | 0 | 0 | 0 | 34 |
+| `openai` | 6 | 4 | 0 | 1 | 0 | 47 |
 
 | | |
 |---|---:|
-| runs attempted | 23 |
-| counted | 19 |
-| **produced no usable evidence** | **4** (17%) |
-| at $3.50 per run, spend on runs that produced nothing | $14.00 |
-| **cost per counted FAILURE** | $8.05 |
+| runs attempted | 25 |
+| counted | 20 |
+| **produced no usable evidence** | **5** (20%) |
+| at $3.50 per run, spend on runs that produced nothing | $17.50 |
+| **cost per counted FAILURE** | $7.95 |
 
 **Cost per counted failure is the number to plan against.** A counted solve tells you the family
 is solvable, which the reference already told you. A counted failure is the only kind of trial
@@ -198,13 +201,31 @@ single run does.
 | kind | count | can it be engineered away? |
 |---|---:|---|
 | provider refusal | 0 | no — it is a property of the provider, and re-running until it complies would fabricate a sample |
-| infrastructure / auth | 1 | partly — an account-tier error is fixable by paying; a harness bug is fixable by fixing it |
+| infrastructure / auth | 2 | partly — an account-tier error is fixable by paying; a harness bug is fixable by fixing it |
 | superseded by repair | 3 | no, and it should not be. These runs found the defect that invalidated them |
 
-Priced into the plan, 4 wasted runs against 3 matrices per family is
+Priced into the plan, 5 wasted runs against 3 matrices per family is
 a real multiplier on trial cost — and still a rounding error beside labour, which is the finding
 the whole budget model exists to make.
 
+## Pipeline conversion costs
+This is the cost model for the exact live-DOM phase: turning a mutant-measured descendant into
+a trial-ready family, then turning trial-ready into real-agent difficulty evidence. Rows marked
+`estimated` are planning figures; rows marked `measured` come from checked-in campaigns or trial
+directories.
+| question | cost at current inputs | label | what is included |
+|---|---:|---|---|
+| mutant-measured -> trial-ready | $2,790 (23.3 h) | estimated | fairness SPEC, challenge package, leak tests, route, campaign plan |
+| trial-ready -> difficulty-evidenced | $249.33 + provider availability | estimated | one counted provider run, grading, reconcile, report update |
+| spec ambiguity waste already observed | $747.98 | measured trials + estimated repair | stale/superseded trials plus repair time |
+| checker-required package-ready draft | $1,890 (15.7 h) | estimated | checker contract, held-out checker mutant plan, draft package |
+Trial-ready is not SHIP. Trial-ready means the package builds, the leak checker passes, the hash
+is pinned and the router can grade an artifact. Difficulty-evidenced means at least one counted
+real agent trial exists under that hash. SHIP still requires the family not to be already solved
+and all blocking gates to pass.
+Provider unavailability is visible as 4 not-run slot(s) out of 16; those slots do not become failures or passes.
+The current observed pipeline also carries a 17% standard-attempt waste rate from historical trials.
+Under the current observed pipeline, $100,000 buys 7 shipped family line(s), about 168 generated instances and 21 independent axes. It does not buy 168 independent tasks; the axis meter is the guard against that phrasing.
 ## What this model does not include
 
 - **Maintenance.** Families decay as models improve; nothing here prices re-hardening.

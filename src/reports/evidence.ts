@@ -76,8 +76,15 @@ function agentAxisFacts(records: readonly TrialRecord[], stale: ReadonlySet<stri
       graded: 0,
     })),
   );
+  if (chain.subjects.length < 2) {
+    return {
+      agentAxes: null,
+      agentFailuresChain: false,
+      agentChainOrder: [],
+    };
+  }
   return {
-    agentAxes: chain.subjects.length === 0 ? null : chain.agentAxes,
+    agentAxes: chain.agentAxes,
     agentFailuresChain: chain.isChain,
     agentChainOrder: chain.order,
   };
@@ -314,7 +321,15 @@ export function campaignFacts(root: string): CampaignFacts {
     campaigns: plans.length,
     slotsPlanned: plans.reduce((n, p) => n + p.slots.length, 0),
     slotsRun: plans.reduce(
-      (n, p) => n + p.slots.filter((s) => s.state === "RUN" || s.state === "IMPORTED").length,
+      (n, p) =>
+        n +
+        p.slots.filter(
+          (s) =>
+            s.state === "RUN" ||
+            s.state === "IMPORTED" ||
+            s.state === "FAILED_INFRA" ||
+            s.state === "REFUSED",
+        ).length,
       0,
     ),
     slotsNotRun: plans.reduce((n, p) => n + p.slots.filter((s) => s.state === "NOT_RUN").length, 0),

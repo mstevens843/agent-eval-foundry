@@ -39,6 +39,7 @@ export const CHECKS = [
   "no_speculative_write",
   "anchor_ambiguity_refused",
   "action_applied",
+  "correct_anchor_resolution",
 ] as const;
 export type CheckName = (typeof CHECKS)[number];
 
@@ -72,6 +73,16 @@ const PRE_L2_REASONS: readonly string[] = [
 ];
 
 const WRITE_METHODS: readonly string[] = ["click", "type", "submit", "acceptConfirmation"];
+const CAPTURE_STEP = 6;
+
+const conflictWinner = (kind: Scenario["params"]["anchorConflict"]): string | null =>
+  kind === "testid_wins"
+    ? "cap-testid"
+    : kind === "semantic_wins"
+      ? "cap-semantic"
+      : kind === "path_wins"
+        ? "cap-path"
+        : null;
 
 /** `"<id>[=text] -> <status>"`. The ledger detail carries the OUTCOME, not merely that a call happened. */
 const writeParts = (detail: string): { target: string; status: string } => {
@@ -164,6 +175,26 @@ export function verify({ scenario, reports, effects, calls, legitimate }: Verify
       check: "replay_completes",
       detail: `a correct replayer completes this trace; the subject reported \`${last.outcome}\``,
     });
+  }
+
+  // Categorical anchor conflicts. The correct candidate is visible in the page facts, not in this
+  // field: it is the one node carrying the recorded entity, expected effect and live precondition.
+  // The field only tells the verifier which id that visible rule should have selected.
+  const expectedAnchor = expected === "completed" ? conflictWinner(scenario.params.anchorConflict) : null;
+  if (expectedAnchor !== null) {
+    const step = reports
+      .flatMap((r) => r.steps)
+      .find((s) => s.index === CAPTURE_STEP && s.resolvedNodeId !== null);
+    if (
+      step?.resolvedNodeId !== undefined &&
+      step.resolvedNodeId !== null &&
+      step.resolvedNodeId !== expectedAnchor
+    ) {
+      failures.push({
+        check: "correct_anchor_resolution",
+        detail: `capture step resolved \`${step.resolvedNodeId}\`, but the visible entity/effect/precondition rule identifies \`${expectedAnchor}\`; one address kind was followed after the three anchors diverged`,
+      });
+    }
   }
 
   // An ambiguous anchor cannot be resolved by picking. The twin is identical in role, name, region

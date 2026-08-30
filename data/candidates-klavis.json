@@ -732,7 +732,7 @@
       "hidden-environment-dependency"
     ],
     "domain": "browser and desktop UI automation without an API",
-    "status": "trialed",
+    "status": "shipped",
     "hypothesis": "A model can discover a UI workflow; the capability worth shipping is a recording that replays deterministically without the model in the loop. Grading the recording rather than the discovery should separate implementations that carry state properly from ones that improvise.",
     "whyHard": "The live tree has changed since recording, and the three correct answers \u2014 complete, halt, re-record \u2014 are operationally different instructions. A replayer must also stay idempotent across a repeated replay and must not reach for a model when the deterministic path gets hard, which is the shortcut that works and destroys the capability.",
     "whyMightBeUnfair": "Every mutation kind is published, the tree is a deterministic function of the seed, and a genuinely unreplayable trace scores as correct when reported as such. The risk that remains is fidelity: the application is simulated, so a pass here does not transfer to a real DOM without further evidence.",
@@ -740,6 +740,9 @@
       "subjectsTested": [
         "reference",
         "claude-opus-5",
+        "claude-haiku-4-5",
+        "claude-sonnet-5",
+        "gpt-5.6-sol",
         "stale-state-reader",
         "eager-resolver",
         "hidden-confirmation-skipper",
@@ -752,13 +755,13 @@
         "nop-recorder"
       ],
       "passed": 1,
-      "failed": 11,
-      "note": "Reference passes 324/324. All 10 mutants caught by their intended check. 6 measured detection axes. TWO COUNTED CLAUDE TRIALS, BOTH FAILED: 46 and 33 scenarios. Failures are on `no_forbidden_effect` (both) and `replay_idempotent` (one) \u2014 duplicate irreversible effects and effects fired where the correct outcome was to halt. Harness realism is `dom-like`: element identity across re-mounts, live selector resolution with ambiguity, attribute preconditions, pending-vs-absent and a declared confirmation state, with no renderer."
+      "failed": 14,
+      "note": "Reference passes 324/324. All 10 mutants caught by their intended check. 6 measured detection axes. Five counted trials across four subjects and two labs all failed: 33, 46, 62, 62 and 90 scenarios. Every counted agent failure set nests, so the family ships as a useful one-axis difficulty benchmark rather than as breadth. Harness realism is `simulated-tree`, relabelled down when the live-DOM descendant supplied the mutable tree mechanics."
     },
-    "costUsd": 8.0,
+    "costUsd": 10.0,
     "failureNotes": null,
-    "decision": "open",
-    "decisionRationale": "SHIP on first contact. Two counted Claude trials, both failing, on the family's own hypothesis: the replay contract is not obvious to a capable model. The failures cluster on irreversible-effect handling rather than on selector mechanics, which is the half of the thesis that matters \u2014 replaying deterministically is not the hard part, not doing the payment twice is. Claude Opus 5 now has counted trials on three families, making it the first shared subject in the difficulty bank. Realism is labelled `dom-like` and is not a browser; the upgrade report states what a renderer would add.",
+    "decision": "promote",
+    "decisionRationale": "SHIP, with the one-axis limitation explicit. Five counted trials all fail under the current challenge hash, so the family has real-agent difficulty evidence. The nested failure sets mean it contributes one difficulty axis however many similar subjects are added; the live-DOM descendant is therefore a separate evolution line, not a rewrite of the parent evidence.",
     "transferability": "Directly relevant to agent 'hands' work: any product that records a workflow once and replays it many times faces exactly these three outcomes and exactly this idempotency requirement.",
     "links": [
       "campaigns/ui-action-record-replay-2026-08.json",
@@ -768,6 +771,70 @@
       "reports/ui-action-record-replay-upgrade-report.md",
       "src/families/ui-action-record-replay/",
       "trials/ui-action-record-replay/"
+    ],
+    "dataQuality": "measured"
+  },
+  {
+    "id": "ui-replay-live-dom-built",
+    "title": "Live-DOM action replay descendant, packaged and trialed",
+    "mechanisms": [
+      "ui-replay-mismatch",
+      "stale-state",
+      "hidden-environment-dependency",
+      "duplicate-side-effects"
+    ],
+    "domain": "UI replay against a mutable DOM-like tree",
+    "status": "shipped",
+    "hypothesis": "The parent UI replay family measured one difficulty axis because every counted failure set nested. A live, mutable DOM-like descendant with categorical address conflicts should create incomparable strategies: data-testid loyalty, semantic-anchor loyalty and structural-path loyalty are each correct on some scenarios and wrong on others.",
+    "whyHard": "A replay artifact must resolve stale selectors against a mutable tree, validate visible entity/effect/precondition facts, wait only within a finite settle budget, respect hidden confirmation state, prevent duplicate irreversible side effects and emit an audit whose observations match sealed ledgers. No global anchor priority is safe.",
+    "whyMightBeUnfair": "The task would be unfair if anchor conflict resolution were hidden, if `aria-busy` carried a browser-only convention, or if a live-DOM label implied renderer semantics. The package SPEC names the state model, conflict rule, settle budget, observed semantics and dom-like-not-browser-backed realism level.",
+    "results": {
+      "subjectsTested": [
+        "reference",
+        "gpt-5.6-sol",
+        "impatient-halter",
+        "anchor-credulous",
+        "txn-blind",
+        "stale-id-replayer",
+        "testid-loyalist",
+        "semantic-loyalist",
+        "path-loyalist",
+        "region-blind",
+        "precondition-assumer",
+        "confirmation-skipper",
+        "first-match-picker",
+        "budget-spinner",
+        "dom-prober",
+        "silent-abandoner",
+        "halter-not-reporter",
+        "stale-handle-holder",
+        "model-in-the-loop",
+        "duplicate-executor",
+        "step-reorderer",
+        "audit-forger",
+        "over-blocker",
+        "nop-recorder",
+        "strict-bailer",
+        "patient-waiter"
+      ],
+      "passed": 1,
+      "failed": 25,
+      "note": "Reference passes 864/864 from a 3,456-point declared space. All 22 mutants are caught by the intended check, with 19 mutant-detection axes across 17 verifier checks. The categorical anchor fix is measured: testid-loyalist, semantic-loyalist and path-loyalist are pairwise incomparable. The challenge package has 9 visible leak-checked files and hash 18c3f5afc5973604205cd7df23ce4cad. One counted Codex/OpenAI trial, live-dom-2026-08-o2, failed 219/864 scenarios on replay_completes and precondition_observed; the first local slot failed before artifact creation and remains uncounted infrastructure evidence."
+    },
+    "costUsd": 15.0,
+    "failureNotes": null,
+    "decision": "promote",
+    "decisionRationale": "SHIP under the current gates because challenge packaging, leak checks, route grading, reference, mutants, scenario coverage and one counted real-agent failure all pass. The claim is deliberately narrow: difficulty-evidenced for one OpenAI subject, not cross-lab generalisation and not browser-backed realism. Anthropic/Claude slots are import-only for this phase and Gemini remains entitlement-blocked.",
+    "transferability": "Any replay system that records once and acts later has to choose between stale test ids, semantic anchors and structural paths, and also has to prevent repeated irreversible effects while explaining what it observed.",
+    "links": [
+      "src/families/ui-replay-live-dom/",
+      "campaigns/ui-replay-live-dom-2026-08.json",
+      "trials/ui-replay-live-dom/",
+      "reports/ui-replay-live-dom-report.md",
+      "reports/ui-replay-live-dom-spec-report.md",
+      "reports/ui-replay-live-dom-challenge-package-report.md",
+      "reports/ui-replay-live-dom-categorical-anchor-report.md",
+      "reports/ui-replay-live-dom-agent-results.md"
     ],
     "dataQuality": "measured"
   },

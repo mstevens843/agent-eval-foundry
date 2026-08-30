@@ -8,11 +8,11 @@ Every figure below is measured: produced by running the family, not by declaring
 
 | | |
 |---|---|
-| ship gate | **NOT-READY** |
-| blocking failures | `difficulty-evidenced` |
+| ship gate | **SHIP** |
+| blocking failures | none |
 | data quality | `measured` |
-| status | `built` |
-| agent trials run | none |
+| status | `shipped` |
+| agent trials run | 5 |
 
 | gate | blocking | verdict | detail |
 |---|---|---|---|
@@ -33,18 +33,18 @@ Every figure below is measured: produced by running the family, not by declaring
 | `shared-bank-ready` | no | n/a | family not built |
 | `deterministic-reports` | no | n/a | family not built |
 | `trial-ready` | no | n/a | family not built |
-| `difficulty-evidenced` | yes | fail | no counted agent trials |
+| `difficulty-evidenced` | yes | pass | 5 counted agent trial(s) |
 | `agent-axes-independent` | no | n/a | family not built |
-| `not-already-solved` | yes | n/a | no counted agent trials yet |
+| `not-already-solved` | yes | pass | 5 of 5 declared trial(s) failed — declared by the shape, not measured here |
 | `priced` | no | pass | 55h build, $40 frontier |
 
 ## Mechanisms
 
 | mechanism | what it is | mutants in the bank |
 |---|---|---|
-| `ui-replay-mismatch` | A recorded interaction with an interface replays cleanly against a snapshot but not against the live surface, because it bound to coordinates, ordering or transient text instead of to stable identity. | `audit-liar`, `model-in-the-loop`, `hidden-confirmation-skipper`, `action-order-reorderer`, `halter-not-reporter`, `nop-recorder` |
-| `stale-state` | A decision is taken against a snapshot of state that has since changed, so the action is correct for a world that no longer exists at the moment it takes effect. | `duplicate-executor`, `stale-state-reader`, `provenance-dropper`, `recall-blind-executor`, `recency-over-provenance`, `same-session-resolver`, `hidden-confirmation-skipper`, `halter-not-reporter`, `approval-reuser`, `stale-approval-follower` |
-| `hidden-environment-dependency` | The implementation works because of something in the authoring environment that was never declared — a preinstalled package, a set variable, network egress, a locale, a file left behind by an earlier step. | `oracle-prober`, `alias-pinner`, `model-in-the-loop` |
+| `ui-replay-mismatch` | A recorded interaction with an interface replays cleanly against a snapshot but not against the live surface, because it bound to coordinates, ordering or transient text instead of to stable identity. | `audit-liar`, `model-in-the-loop`, `hidden-confirmation-skipper`, `action-order-reorderer`, `halter-not-reporter`, `nop-recorder`, `impatient-halter`, `anchor-credulous`, `stale-id-replayer`, `testid-loyalist`, `semantic-loyalist`, `path-loyalist`, `precondition-assumer`, `first-match-picker`, `dom-prober`, `stale-handle-holder`, `step-reorderer` |
+| `stale-state` | A decision is taken against a snapshot of state that has since changed, so the action is correct for a world that no longer exists at the moment it takes effect. | `duplicate-executor`, `stale-state-reader`, `provenance-dropper`, `recall-blind-executor`, `recency-over-provenance`, `same-session-resolver`, `hidden-confirmation-skipper`, `halter-not-reporter`, `approval-reuser`, `stale-approval-follower`, `anchor-credulous`, `txn-blind`, `stale-id-replayer`, `testid-loyalist`, `semantic-loyalist`, `path-loyalist`, `precondition-assumer`, `stale-handle-holder` |
+| `hidden-environment-dependency` | The implementation works because of something in the authoring environment that was never declared — a preinstalled package, a set variable, network egress, a locale, a file left behind by an earlier step. | `oracle-prober`, `alias-pinner`, `model-in-the-loop`, `impatient-halter`, `txn-blind`, `region-blind`, `confirmation-skipper`, `budget-spinner` |
 
 ## The declared space
 

@@ -17,42 +17,42 @@ cannot produce incomparable catch sets.**
 So the descendant's design requirement was not 'more realistic'. It was: contain a genuine
 trade-off, such that the strategy winning the parent's scenarios LOSES on some of these.
 
-## Did that work?
+## Did the categorical anchor fix work?
 
-Two opposed implementations are graded alongside the mutant bank so the trade-off is measured
-rather than asserted:
+Three address-loyal implementations are graded alongside the mutant bank. Each is right on the
+scenario class where its preferred address still names the recorded object, and wrong on the
+classes where another address carries the visible entity/effect/precondition facts.
 
-| | |
-|---|---:|
-| `strict-bailer` fails | 148 |
-| `patient-waiter` fails | 46 |
-| shared | 18 |
-| only `strict-bailer` | 130 |
-| only `patient-waiter` | 28 |
-| **relation** | **INCOMPARABLE** |
+| pair | relation | private witness for first | private witness for second |
+|---|---|---|---|
+| `testid-loyalist` / `semantic-loyalist` | **incomparable** | `live-disabled_then_enabled-arming-b2-duplicated-none-honest-r1-s11` | `live-disabled_then_enabled-arming-b2-duplicated-none-misleading-r1-s41` |
+| `testid-loyalist` / `path-loyalist` | **incomparable** | `live-disabled_then_enabled-arming-b2-duplicated-path_wins-honest-r1-s11` | `live-disabled_then_enabled-arming-b2-duplicated-testid_wins-honest-r2-s11` |
+| `semantic-loyalist` / `path-loyalist` | **incomparable** | `live-disabled_then_enabled-arming-b2-duplicated-none-misleading-r1-s41` | `live-disabled_then_enabled-arming-b2-duplicated-none-honest-r1-s11` |
 
-**Incomparable.** Neither set contains the other, so neither strategy can be described as a
-more-sensitive version of the other. That is the only structure that raises an antichain
-width above 1, and it is exactly what the parent could not express — a scenario class where
-bailing out early is *wrong* sitting beside the class where it is right.
+**Measured categorical axis: pass.** Every pair has a private witness in each direction, so
+the address strategies do not reduce to a stricter/looser chain. This is the design-review
+fix: testid-loyal, semantic-loyal and path-loyal replay are incomparable under the measured
+scenario set.
 
 ## What it measures
 
 | | |
 |---|---:|
-| declared space | 864 points |
-| measured scenarios | 432 |
-| subjects in the bank | 22 (20 mutants + reference + 2 poles) |
-| checks | 16 |
+| declared space | 3456 points |
+| measured scenarios | 864 |
+| subjects in the bank | 24 (22 mutants + 2 poles; reference checked separately) |
+| checks | 17 |
 | reference failures | 0 |
-| distinct catch sets | 34 |
-| **independent axes** | **10** |
+| distinct catch sets | 56 |
+| **independent axes** | **19** |
 | instances separating nothing | 0 |
+| challenge package | 9 files, hash `18c3f5afc5973604205cd7df23ce4cad` |
+| counted real-agent trials | 1 |
+| live-DOM status | **SHIP** |
 
-The axis count is over a MUTANT bank: it says the verifier can distinguish 10 kinds of
-wrong, and it is bounded by how many kinds were written. It says nothing about whether the family
-is hard, because nothing that could plausibly fail it has attempted it yet. That distinction is a
-gate in this repository, not a footnote.
+The axis count is over a MUTANT bank: it says the verifier can distinguish 19 kinds of
+wrong, and it is bounded by how many kinds were written.
+Because at least one real agent trial now counts, difficulty evidence is present. The report still keeps mutant-detection axes and real-agent difficulty separate.
 
 ## The realism upgrade, mechanic by mechanic
 
@@ -79,21 +79,12 @@ correction can never change a hash and invalidate the evidence that motivated it
 | | |
 |---|---|
 | browser-backed | **no.** No renderer, no layout, no compositing, no real CSS matching |
-| trialed | **no counted agent trial exists.** Everything above is mutant-bank evidence |
-| shippable | **no.** It has no challenge package, so it is not trial-ready and the gate says so |
+| challenge package | **yes.** 9 leak-checked visible files, hash `18c3f5afc5973604205cd7df23ce4cad` |
+| trialed | **yes.** 1 counted real-agent trial(s) |
+| shippable | **yes**. SHIP requires counted agent evidence, not only mutant-detection evidence |
 
-**Why there is no challenge package yet, stated rather than left as an omission.** The package's
-`SPEC.md` is the fairness contract: it has to publish every rule an implementation is graded
-against, in full, with no hidden clause. This family's contract is materially harder to write
-than its parent's — a settle budget, an anchor-conflict resolution order, and what counts as
-'observed' for a region that is loading all have to be stated precisely enough that a model can
-derive the answer and imprecisely nowhere. `unfair_hidden_rule` and `ambiguous_truth_source` are
-two of the fifteen kill reasons in this repository's taxonomy, and the parent family has already
-cost three counted trials to one ambiguity that a real model exposed. Writing that spec quickly
-is how it happens again.
-
-So the next step is a spec, then a package, then a leak check, then a campaign — in that order,
-and the family is honestly marked not-trial-ready until then.
+The package exists now, and its hash is the stale-evidence guard. Any spec or visible-example
+edit changes that hash and invalidates trials run against the older package.
 
 ---
 

@@ -126,6 +126,44 @@ export const UI_PROFILE: LeakProfile = {
   ],
 };
 
+export const LIVE_DOM_PROFILE: LeakProfile = {
+  familyId: "ui-replay-live-dom",
+  forbiddenFilenames: [...FORBIDDEN_FILENAMES, "app.ts", "truth.ts", "invariants.ts", "answer-matrix.json"],
+  forbiddenContent: [
+    ["export function verify", "the grading function"],
+    ["REFERENCE_POLICY", "the reference replay policy"],
+    ["MUTANTS", "the mutant bank"],
+    ["POLICY_MUTANTS", "the policy-mutant answer map"],
+    ["selectMeasuredSet", "the graded-scenario selection"],
+    ["enumerateSpace", "the full scenario space enumeration"],
+    ["ScenarioParams", "the hidden scenario-parameter type"],
+    ["expectedOutcome", "the hidden answer field"],
+    ["expectedReason", "the hidden answer field"],
+    ["expectedEffects", "the hidden answer field"],
+    ["anchorConflict", "the hidden scenario knob field name"],
+    ["conflictWinner", "the hidden verifier mapping for categorical anchors"],
+    ["sealedEffects", "the private effect ledger"],
+    ["sealedCalls", "the private call ledger"],
+    ["sealedLegitimate", "the private legitimacy map"],
+    ["runBuildGates", "the build-gate implementation"],
+  ],
+  requiredSpecCodes: [
+    "L1_RESOLVE_LIVE",
+    "L2_PRECONDITION_OBSERVED",
+    "L3_CONFIRMATION_OBSERVED",
+    "L4_COMPLETION_RECORD",
+    "L5_ANCHOR_CONFLICT_RESOLUTION",
+    "L6_NO_MODEL_IN_LOOP",
+    "L7_ENTITY_GUARD",
+    "L8_SETTLE_BUDGET",
+    "L9_NO_SPECULATIVE_WRITE",
+    "L10_ANCHOR_AMBIGUITY",
+    "L11_REGION_PRESENCE",
+    "L12_TRANSACTION_STATE",
+    "L13_PENDING_EFFECTS",
+  ],
+};
+
 export interface CheckableChallengeFile {
   readonly path: string;
   readonly content: string;

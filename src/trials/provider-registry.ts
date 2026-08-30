@@ -169,6 +169,7 @@ export const providerById = (id: string): ProviderSpec => {
 export interface ProviderAvailability {
   readonly provider: ProviderSpec;
   readonly available: boolean;
+  readonly state: "configured" | "unavailable" | "entitlement-blocked" | "not-installed" | "import-only";
   /** Version string when the binary answered, or the reason it did not. */
   readonly detail: string;
 }
@@ -182,7 +183,21 @@ export interface ProviderAvailability {
  */
 export function checkProvider(spec: ProviderSpec): ProviderAvailability {
   if (spec.binary === null) {
-    return { provider: spec, available: false, detail: "external by declaration: no local CLI" };
+    return {
+      provider: spec,
+      available: false,
+      state: "import-only",
+      detail: "external by declaration: prepare a bundle and import the result",
+    };
+  }
+  if (spec.family === "anthropic") {
+    return {
+      provider: spec,
+      available: false,
+      state: "import-only",
+      detail:
+        "Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles",
+    };
   }
   try {
     const out = execFileSync(spec.binary, ["--version"], {
@@ -190,12 +205,33 @@ export function checkProvider(spec: ProviderSpec): ProviderAvailability {
       timeout: 20_000,
       stdio: ["ignore", "pipe", "pipe"],
     });
-    return { provider: spec, available: true, detail: out.trim().split("\n")[0] ?? "present" };
+    if (spec.family === "google") {
+      return {
+        provider: spec,
+        available: false,
+        state: "entitlement-blocked",
+        detail: `${out.trim().split("\n")[0] ?? "present"}; entitlement previously blocked with IneligibleTierError, so this phase treats Gemini as import-only until a real authenticated run changes that`,
+      };
+    }
+    return {
+      provider: spec,
+      available: true,
+      state: "configured",
+      detail: out.trim().split("\n")[0] ?? "present",
+    };
   } catch (err) {
+    const msg = (err as Error).message.split("\n")[0] ?? "";
+    const lower = msg.toLowerCase();
+    const entitlement =
+      lower.includes("ineligibletiererror") ||
+      lower.includes("quota") ||
+      lower.includes("not entitled") ||
+      lower.includes("unauthorized");
     return {
       provider: spec,
       available: false,
-      detail: `not runnable here: ${(err as Error).message.split("\n")[0]}`,
+      state: entitlement ? "entitlement-blocked" : "not-installed",
+      detail: `not runnable here: ${msg}`,
     };
   }
 }

@@ -1,0 +1,782 @@
+{
+  "trace": {
+    "id": "live-removed-clean-b2-exact-none-misleading-r1-s11",
+    "entities": [
+      "ord-201"
+    ],
+    "steps": [
+      {
+        "index": 0,
+        "kind": "type",
+        "selector": {
+          "kind": "testid",
+          "value": "qty",
+          "qualifier": null
+        },
+        "path": {
+          "kind": "css_path",
+          "value": "2/1",
+          "qualifier": null
+        },
+        "anchor": {
+          "role": "textbox",
+          "name": "Quantity",
+          "region": "checkout",
+          "entity": "ord-201"
+        },
+        "recordedNodeId": "qty",
+        "value": "3",
+        "precondition": {
+          "attr": "data-state",
+          "attrValue": "editable"
+        },
+        "postcondition": {
+          "effect": null
+        },
+        "irreversible": false,
+        "opensTransaction": false,
+        "closesTransaction": false
+      },
+      {
+        "index": 1,
+        "kind": "click",
+        "selector": {
+          "kind": "testid",
+          "value": "ship",
+          "qualifier": null
+        },
+        "path": {
+          "kind": "css_path",
+          "value": "2/4",
+          "qualifier": null
+        },
+        "anchor": {
+          "role": "combobox",
+          "name": "Shipping option",
+          "region": "checkout",
+          "entity": "ord-201"
+        },
+        "recordedNodeId": "ship",
+        "value": null,
+        "precondition": {
+          "attr": "aria-disabled",
+          "attrValue": "false"
+        },
+        "postcondition": {
+          "effect": null
+        },
+        "irreversible": false,
+        "opensTransaction": false,
+        "closesTransaction": false
+      },
+      {
+        "index": 2,
+        "kind": "type",
+        "selector": {
+          "kind": "testid",
+          "value": "addr",
+          "qualifier": null
+        },
+        "path": {
+          "kind": "css_path",
+          "value": "2/3",
+          "qualifier": null
+        },
+        "anchor": {
+          "role": "textbox",
+          "name": "Shipping address",
+          "region": "checkout",
+          "entity": "ord-201"
+        },
+        "recordedNodeId": "addr",
+        "value": "40 Reference Way",
+        "precondition": {
+          "attr": "data-state",
+          "attrValue": "editable"
+        },
+        "postcondition": {
+          "effect": null
+        },
+        "irreversible": false,
+        "opensTransaction": false,
+        "closesTransaction": false
+      },
+      {
+        "index": 3,
+        "kind": "click",
+        "selector": {
+          "kind": "testid",
+          "value": "review-ord-201",
+          "qualifier": null
+        },
+        "path": {
+          "kind": "css_path",
+          "value": "1/1/0/3",
+          "qualifier": null
+        },
+        "anchor": {
+          "role": "button",
+          "name": "Review order",
+          "region": "orders",
+          "entity": "ord-201"
+        },
+        "recordedNodeId": "btn-review-ord-201",
+        "value": null,
+        "precondition": {
+          "attr": "aria-disabled",
+          "attrValue": "false"
+        },
+        "postcondition": {
+          "effect": null
+        },
+        "irreversible": false,
+        "opensTransaction": false,
+        "closesTransaction": false
+      },
+      {
+        "index": 4,
+        "kind": "submit",
+        "selector": {
+          "kind": "testid",
+          "value": "hold",
+          "qualifier": null
+        },
+        "path": {
+          "kind": "css_path",
+          "value": "2/7",
+          "qualifier": null
+        },
+        "anchor": {
+          "role": "button",
+          "name": "Hold funds",
+          "region": "checkout",
+          "entity": "ord-201"
+        },
+        "recordedNodeId": "hold",
+        "value": null,
+        "precondition": {
+          "attr": "aria-disabled",
+          "attrValue": "false"
+        },
+        "postcondition": {
+          "effect": "hold_funds"
+        },
+        "irreversible": true,
+        "opensTransaction": true,
+        "closesTransaction": false
+      },
+      {
+        "index": 5,
+        "kind": "click",
+        "selector": {
+          "kind": "testid",
+          "value": "recalc",
+          "qualifier": null
+        },
+        "path": {
+          "kind": "css_path",
+          "value": "2/6",
+          "qualifier": null
+        },
+        "anchor": {
+          "role": "button",
+          "name": "Recalculate total",
+          "region": "checkout",
+          "entity": "ord-201"
+        },
+        "recordedNodeId": "recalc",
+        "value": null,
+        "precondition": {
+          "attr": "aria-disabled",
+          "attrValue": "false"
+        },
+        "postcondition": {
+          "effect": null
+        },
+        "irreversible": false,
+        "opensTransaction": false,
+        "closesTransaction": false
+      },
+      {
+        "index": 6,
+        "kind": "submit",
+        "selector": {
+          "kind": "testid",
+          "value": "capture",
+          "qualifier": null
+        },
+        "path": {
+          "kind": "css_path",
+          "value": "3/0",
+          "qualifier": null
+        },
+        "anchor": {
+          "role": "button",
+          "name": "Capture payment",
+          "region": "capture",
+          "entity": "ord-201"
+        },
+        "recordedNodeId": "cap",
+        "value": null,
+        "precondition": {
+          "attr": "aria-disabled",
+          "attrValue": "false"
+        },
+        "postcondition": {
+          "effect": "capture_funds"
+        },
+        "irreversible": true,
+        "opensTransaction": false,
+        "closesTransaction": true
+      }
+    ]
+  },
+  "initialTree": {
+    "id": "root",
+    "role": "document",
+    "attrs": {},
+    "text": "",
+    "children": [
+      {
+        "id": "banner",
+        "role": "banner",
+        "attrs": {
+          "data-region": "banner"
+        },
+        "text": "",
+        "children": [
+          {
+            "id": "nav-home",
+            "role": "link",
+            "attrs": {
+              "aria-label": "Home",
+              "data-region": "banner"
+            },
+            "text": "Home",
+            "children": []
+          },
+          {
+            "id": "nav-orders",
+            "role": "link",
+            "attrs": {
+              "aria-label": "Orders",
+              "data-region": "banner"
+            },
+            "text": "Orders",
+            "children": []
+          },
+          {
+            "id": "nav-reports",
+            "role": "link",
+            "attrs": {
+              "aria-label": "Reports",
+              "data-region": "banner"
+            },
+            "text": "Reports",
+            "children": []
+          },
+          {
+            "id": "acct-menu",
+            "role": "button",
+            "attrs": {
+              "aria-label": "Account menu",
+              "data-effect": "sign_out",
+              "data-region": "banner"
+            },
+            "text": "Account",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "main",
+        "role": "main",
+        "attrs": {
+          "data-region": "orders"
+        },
+        "text": "",
+        "children": [
+          {
+            "id": "orders-toolbar",
+            "role": "toolbar",
+            "attrs": {
+              "data-region": "orders"
+            },
+            "text": "",
+            "children": [
+              {
+                "id": "filter-open",
+                "role": "button",
+                "attrs": {
+                  "aria-label": "Filter open",
+                  "data-region": "orders"
+                },
+                "text": "Open",
+                "children": []
+              },
+              {
+                "id": "filter-all",
+                "role": "button",
+                "attrs": {
+                  "aria-label": "Filter all",
+                  "data-region": "orders"
+                },
+                "text": "All",
+                "children": []
+              },
+              {
+                "id": "search",
+                "role": "textbox",
+                "attrs": {
+                  "aria-label": "Search orders",
+                  "data-state": "editable",
+                  "data-region": "orders"
+                },
+                "text": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "orders-table",
+            "role": "table",
+            "attrs": {
+              "data-region": "orders"
+            },
+            "text": "",
+            "children": [
+              {
+                "id": "row-ord-201",
+                "role": "row",
+                "attrs": {
+                  "data-entity": "ord-201",
+                  "data-region": "orders"
+                },
+                "text": "",
+                "children": [
+                  {
+                    "id": "cell-ord-201-id",
+                    "role": "cell",
+                    "attrs": {
+                      "data-region": "orders"
+                    },
+                    "text": "ord-201",
+                    "children": []
+                  },
+                  {
+                    "id": "cell-ord-201-amount",
+                    "role": "cell",
+                    "attrs": {
+                      "data-region": "orders"
+                    },
+                    "text": "131",
+                    "children": []
+                  },
+                  {
+                    "id": "badge-ord-201",
+                    "role": "status",
+                    "attrs": {
+                      "aria-label": "Order status",
+                      "data-entity": "ord-201",
+                      "data-region": "orders"
+                    },
+                    "text": "open",
+                    "children": []
+                  },
+                  {
+                    "id": "btn-review-ord-201",
+                    "role": "button",
+                    "attrs": {
+                      "aria-label": "Review order",
+                      "data-testid": "review-ord-201",
+                      "data-entity": "ord-201",
+                      "aria-disabled": "false",
+                      "data-region": "orders"
+                    },
+                    "text": "Review",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "row-ord-202",
+                "role": "row",
+                "attrs": {
+                  "data-entity": "ord-202",
+                  "data-region": "orders"
+                },
+                "text": "",
+                "children": [
+                  {
+                    "id": "cell-ord-202-id",
+                    "role": "cell",
+                    "attrs": {
+                      "data-region": "orders"
+                    },
+                    "text": "ord-202",
+                    "children": []
+                  },
+                  {
+                    "id": "cell-ord-202-amount",
+                    "role": "cell",
+                    "attrs": {
+                      "data-region": "orders"
+                    },
+                    "text": "131",
+                    "children": []
+                  },
+                  {
+                    "id": "badge-ord-202",
+                    "role": "status",
+                    "attrs": {
+                      "aria-label": "Order status",
+                      "data-entity": "ord-202",
+                      "data-region": "orders"
+                    },
+                    "text": "open",
+                    "children": []
+                  },
+                  {
+                    "id": "btn-review-ord-202",
+                    "role": "button",
+                    "attrs": {
+                      "aria-label": "Review order",
+                      "data-testid": "review-ord-202",
+                      "data-entity": "ord-202",
+                      "aria-disabled": "false",
+                      "data-region": "orders"
+                    },
+                    "text": "Review",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "row-ord-203",
+                "role": "row",
+                "attrs": {
+                  "data-entity": "ord-203",
+                  "data-region": "orders"
+                },
+                "text": "",
+                "children": [
+                  {
+                    "id": "cell-ord-203-id",
+                    "role": "cell",
+                    "attrs": {
+                      "data-region": "orders"
+                    },
+                    "text": "ord-203",
+                    "children": []
+                  },
+                  {
+                    "id": "cell-ord-203-amount",
+                    "role": "cell",
+                    "attrs": {
+                      "data-region": "orders"
+                    },
+                    "text": "131",
+                    "children": []
+                  },
+                  {
+                    "id": "badge-ord-203",
+                    "role": "status",
+                    "attrs": {
+                      "aria-label": "Order status",
+                      "data-entity": "ord-203",
+                      "data-region": "orders"
+                    },
+                    "text": "open",
+                    "children": []
+                  },
+                  {
+                    "id": "btn-review-ord-203",
+                    "role": "button",
+                    "attrs": {
+                      "aria-label": "Review order",
+                      "data-testid": "review-ord-203",
+                      "data-entity": "ord-203",
+                      "aria-disabled": "false",
+                      "data-region": "orders"
+                    },
+                    "text": "Review",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "row-ord-204",
+                "role": "row",
+                "attrs": {
+                  "data-entity": "ord-204",
+                  "data-region": "orders"
+                },
+                "text": "",
+                "children": [
+                  {
+                    "id": "cell-ord-204-id",
+                    "role": "cell",
+                    "attrs": {
+                      "data-region": "orders"
+                    },
+                    "text": "ord-204",
+                    "children": []
+                  },
+                  {
+                    "id": "cell-ord-204-amount",
+                    "role": "cell",
+                    "attrs": {
+                      "data-region": "orders"
+                    },
+                    "text": "131",
+                    "children": []
+                  },
+                  {
+                    "id": "badge-ord-204",
+                    "role": "status",
+                    "attrs": {
+                      "aria-label": "Order status",
+                      "data-entity": "ord-204",
+                      "data-region": "orders"
+                    },
+                    "text": "open",
+                    "children": []
+                  },
+                  {
+                    "id": "btn-review-ord-204",
+                    "role": "button",
+                    "attrs": {
+                      "aria-label": "Review order",
+                      "data-testid": "review-ord-204",
+                      "data-entity": "ord-204",
+                      "aria-disabled": "false",
+                      "data-region": "orders"
+                    },
+                    "text": "Review",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "checkout",
+        "role": "region",
+        "attrs": {
+          "data-region": "checkout",
+          "aria-label": "Checkout",
+          "data-txn-state": "idle",
+          "data-txn-entity": ""
+        },
+        "text": "",
+        "children": [
+          {
+            "id": "lbl-qty",
+            "role": "label",
+            "attrs": {
+              "data-region": "checkout"
+            },
+            "text": "Quantity",
+            "children": []
+          },
+          {
+            "id": "qty",
+            "role": "textbox",
+            "attrs": {
+              "aria-label": "Quantity",
+              "data-testid": "qty",
+              "data-entity": "ord-201",
+              "data-state": "editable",
+              "data-region": "checkout"
+            },
+            "text": "1",
+            "children": []
+          },
+          {
+            "id": "lbl-addr",
+            "role": "label",
+            "attrs": {
+              "data-region": "checkout"
+            },
+            "text": "Shipping address",
+            "children": []
+          },
+          {
+            "id": "addr",
+            "role": "textbox",
+            "attrs": {
+              "aria-label": "Shipping address",
+              "data-testid": "addr",
+              "data-entity": "ord-201",
+              "data-state": "editable",
+              "data-region": "checkout"
+            },
+            "text": "12 Example St",
+            "children": []
+          },
+          {
+            "id": "ship",
+            "role": "combobox",
+            "attrs": {
+              "aria-label": "Shipping option",
+              "data-testid": "ship",
+              "data-entity": "ord-201",
+              "aria-disabled": "false",
+              "data-on-click": "remove_region:capture",
+              "data-region": "checkout"
+            },
+            "text": "Standard",
+            "children": [
+              {
+                "id": "opt-std",
+                "role": "option",
+                "attrs": {
+                  "aria-label": "Standard",
+                  "data-region": "checkout"
+                },
+                "text": "Standard",
+                "children": []
+              },
+              {
+                "id": "opt-exp",
+                "role": "option",
+                "attrs": {
+                  "aria-label": "Express",
+                  "data-region": "checkout"
+                },
+                "text": "Express",
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "total",
+            "role": "status",
+            "attrs": {
+              "aria-label": "Order total",
+              "data-entity": "ord-201",
+              "data-region": "checkout"
+            },
+            "text": "42.00",
+            "children": []
+          },
+          {
+            "id": "recalc",
+            "role": "button",
+            "attrs": {
+              "aria-label": "Recalculate total",
+              "data-testid": "recalc",
+              "data-entity": "ord-201",
+              "aria-disabled": "false",
+              "data-region": "checkout"
+            },
+            "text": "Recalculate",
+            "children": []
+          },
+          {
+            "id": "hold",
+            "role": "button",
+            "attrs": {
+              "aria-label": "Hold funds",
+              "data-testid": "hold",
+              "data-entity": "ord-201",
+              "data-effect": "hold_funds",
+              "data-opens-confirmation": "true",
+              "aria-disabled": "false",
+              "data-region": "checkout"
+            },
+            "text": "",
+            "children": []
+          },
+          {
+            "id": "hold-note",
+            "role": "note",
+            "attrs": {
+              "data-region": "checkout"
+            },
+            "text": "Funds are held, then captured.",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "capture",
+        "role": "region",
+        "attrs": {
+          "data-region": "capture",
+          "aria-label": "Capture"
+        },
+        "text": "",
+        "children": [
+          {
+            "id": "cap",
+            "role": "button",
+            "attrs": {
+              "aria-label": "Capture payment",
+              "data-testid": "capture",
+              "data-entity": "ord-201",
+              "data-effect": "capture_funds",
+              "data-opens-confirmation": "true",
+              "aria-disabled": "false",
+              "data-region": "capture"
+            },
+            "text": "Capture",
+            "children": []
+          },
+          {
+            "id": "cap-note",
+            "role": "note",
+            "attrs": {
+              "data-region": "capture"
+            },
+            "text": "Closes the hold.",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "footer",
+        "role": "contentinfo",
+        "attrs": {
+          "data-region": "footer"
+        },
+        "text": "",
+        "children": [
+          {
+            "id": "foot-status",
+            "role": "status",
+            "attrs": {
+              "aria-label": "Connection",
+              "data-region": "footer"
+            },
+            "text": "online",
+            "children": []
+          },
+          {
+            "id": "foot-link",
+            "role": "link",
+            "attrs": {
+              "aria-label": "Support",
+              "data-region": "footer"
+            },
+            "text": "Support",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "dialog-host",
+        "role": "group",
+        "attrs": {
+          "data-region": "dialog"
+        },
+        "text": "",
+        "children": []
+      }
+    ]
+  },
+  "replayCount": 1,
+  "note": "The target region is permanently torn down after an earlier step; waiting is the wrong operator instruction."
+}

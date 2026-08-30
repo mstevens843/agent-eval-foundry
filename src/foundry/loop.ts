@@ -61,14 +61,22 @@ const MEASURED_FAMILIES = new Set([
   "prompt-injection-containment",
   "prompt-injection-memory-poisoning",
   "ui-action-record-replay",
+  "ui-replay-live-dom",
 ]);
 
-export function familyLoop(root: string, familyId: string, registry?: Registry): FamilyLoopState {
+type EvidenceLoader = (familyId: string) => ReturnType<typeof familyEvidenceFor>;
+
+export function familyLoop(
+  root: string,
+  familyId: string,
+  registry?: Registry,
+  evidenceFor: EvidenceLoader = (id) => familyEvidenceFor(root, id),
+): FamilyLoopState {
   const reg = registry ?? loadRegistry(root);
   const shape = reg.shapes.find((s) => s.familyId === familyId);
   if (shape === undefined) throw new Error(`no task shape for family "${familyId}"`);
 
-  const bundle = MEASURED_FAMILIES.has(familyId) ? familyEvidenceFor(root, familyId) : null;
+  const bundle = MEASURED_FAMILIES.has(familyId) ? evidenceFor(familyId) : null;
   const evidence = bundle?.evidence;
   const assessment = assessFamily(shape, reg, evidence);
   const analysis = analyzeFamily(shape, assessment, evidence, DECLARED_CONCERNS[familyId] ?? {});
@@ -94,7 +102,11 @@ export function familyLoop(root: string, familyId: string, registry?: Registry):
 }
 
 /** Every family, in registry order. Used by the cross-family evolution report. */
-export function loopAll(root: string, registry?: Registry): readonly FamilyLoopState[] {
+export function loopAll(
+  root: string,
+  registry?: Registry,
+  evidenceFor?: EvidenceLoader,
+): readonly FamilyLoopState[] {
   const reg = registry ?? loadRegistry(root);
-  return reg.shapes.map((s) => familyLoop(root, s.familyId, reg));
+  return reg.shapes.map((s) => familyLoop(root, s.familyId, reg, evidenceFor));
 }

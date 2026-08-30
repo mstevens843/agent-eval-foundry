@@ -299,13 +299,14 @@ different check, disjoint from the first 32, concentrated on one attack at `sess
 only. The diagnosis module reads it as a capability finding that does *not* match the pre-registered
 hypothesis, so it is recorded as a new finding rather than folded into the confirmed one.
 
-The picture across three families, all trials run through the same harness:
+The picture across the current routable families, all counted trials run through the same harness:
 
 | family | anthropic | openai | reading |
 |---|---|---|---|
-| `prompt-injection-containment` | 3 counted, 0 failed | 1 counted, 0 failed | **already-solved, confirmed across two labs** |
-| `prompt-injection-memory-poisoning` | 3 counted, 1 failed | 3 counted, 2 failed | **generalises** — one cross-lab pair identical, one disjoint |
-| `ui-action-record-replay` | 2 counted, 2 failed | 1 counted, 1 failed | **generalises** — but all three runs nest |
+| `prompt-injection-containment` | 5 counted, 0 failed | 1 counted, 0 failed | **already-solved, confirmed across two labs** |
+| `prompt-injection-memory-poisoning` | 5 counted, 4 failed | 3 counted, 2 failed | **generalises** — one cross-lab pair identical, one disjoint |
+| `ui-action-record-replay` | 4 counted, 4 failed | 1 counted, 1 failed | **difficulty-evidenced** — but all five runs nest |
+| `ui-replay-live-dom` | import-only this phase | 1 counted, 1 failed | **difficulty-evidenced** for one OpenAI subject; cross-lab not measured |
 
 Three things I would flag rather than bury. **The already-solved kill got stronger, not weaker**: a
 second lab also passed all 128, so the containment family is easy for reasons that are not specific
@@ -314,14 +315,15 @@ repository's own terms is one axis observed at three sensitivities, not three fa
 family separates subjects and has not yet been shown to measure more than one thing, and
 `reports/provider-variance-report.md` says so under its own headline. And **Gemini never ran**: the
 CLI is installed and the account is not entitled to it, so the slot is an `infrastructure_error`,
-never a zero, and the third subject the cross-family count needs is still missing. Prepared bundles
-for an external runner are checked in under `bundles/` with the challenge hash pinned, so a result
-someone else produces either measures this exact task or is refused on import.
+never a zero. The live-DOM descendant reopens the shared-bank work: only GPT-5.6 Sol has attempted
+that package hash so far. Prepared bundles for an external runner are checked in under `bundles/`
+with the challenge hash pinned, so a result someone else produces either measures this exact task or
+is refused on import.
 
-### And then four subjects across two labs produced one axis, on purpose
+### And then four subjects across two labs produced one UI axis, on purpose
 
 The obvious next move after a cross-lab confirmation is more models. So: four subjects — Opus 5,
-Sonnet 5, Haiku 4.5 and GPT-5.6 Sol — against all three built families, nineteen counted trials.
+Sonnet 5, Haiku 4.5 and GPT-5.6 Sol — against the first three built families.
 
 **On the UI family all five counted trials failed, and every pair of failure sets nests.** 33 ⊂ 46 ⊂
 62 ⊂ 90 of 324 scenarios, with the two mid-sized runs — different Anthropic models — failing the
@@ -341,12 +343,17 @@ The same measurement says the memory-poisoning family is fine: one of its pairs 
 incomparable — Sonnet fails 42, Codex fails 45, and only 32 are shared — so it separates in more
 than one direction.
 
-**The combined cross-family number is now available and it is small.** Four subjects attempted all
-three families, past the threshold of three, so the width can be computed at all: **3 axes**, against
-a null model of 6.0 and a ceiling of 179. The axes add — no instance in one family is failed by the
-same subject set as an instance in another — and the corpus is twice as compressible as chance, so
-the structure is real. Three of the four subjects are from one lab, which is the caveat that belongs
-in the same sentence as the number.
+**The old three-family cross-family number is available and it is small.** Four subjects attempted
+containment, memory-poisoning and parent UI replay, past the threshold of three, so the width can be
+computed there: **3 axes**, against a null model of 6.0 and a ceiling of 179. The axes add — no
+instance in one family is failed by the same subject set as an instance in another — and the corpus is
+twice as compressible as chance, so the structure is real. Three of the four subjects are from one
+lab, which is the caveat that belongs in the same sentence as the number.
+
+After live-DOM, the all-family bank is deliberately **partial** again. GPT-5.6 Sol has attempted the
+descendant; the Anthropic subjects have not, because Claude is import-only in this phase. That does
+not weaken the live-DOM trial, but it does mean a portfolio-wide axis count over the current family
+set is refused until at least three subjects share the same package hashes.
 
 **Two gates, not one.** The threshold on shared subjects asks whether co-failure is *observable*; the
 null model asks whether the observed structure *beats noise*. I collapsed them at first and read the
@@ -368,14 +375,18 @@ than argued about: `strict-bailer`, which refuses anything it cannot resolve on 
 and **neither set contains the other**. That is the structure the parent could not express, and the
 only structure that lifts an antichain width above 1.
 
-432 measured scenarios, 22 subjects, reference clean, ten independent axes over the mutant bank — and
-**no agent trials and no challenge package**, so it is honestly not trial-ready. The package's spec is
-the fairness contract, and this family's contract is harder to write than its parent's: a settle
-budget, an anchor-conflict resolution order, and what counts as "observed" for a region that is still
-loading all have to be stated precisely enough that a model can derive the answer. The parent already
-cost three counted trials to one ambiguity a real model exposed. Writing that spec quickly is how it
-happens again, so the order is spec, package, leak check, campaign — and the family is marked
-not-trial-ready until then.
+The next phase hardened that into a categorical anchor axis rather than only a strict/patient
+trade-off. The measured set is now 864 scenarios from a 3,456-point declared space, with 22 mutants
+plus two poles, 17 verifier checks, a clean reference and **19 independent axes** over the mutant
+bank. The three address-loyal strategies — testid, semantic anchor and structural path — are
+pairwise incomparable, so the fix no longer reduces to "wait longer" or "be stricter."
+
+It also has the missing agent-facing surface now: a leak-checked 9-file challenge package with a
+precise fairness spec, hash `18c3f5afc5973604205cd7df23ce4cad`, and a campaign plan that treats
+Anthropic as import-only and Gemini as entitlement-blocked. One real Codex/OpenAI trial counted:
+`live-dom-2026-08-o2`, 864 scenarios graded, 219 failed on `replay_completes` and
+`precondition_observed`. That is real-agent difficulty evidence for one OpenAI subject. It is not a
+cross-lab generalisation claim, and it is still dom-like rather than browser-backed.
 
 A descendant rather than an edit, for the reason the whole apparatus exists: changing the parent
 would change its hash, and the five trials that produced this finding would be the first casualties
@@ -552,17 +563,18 @@ without a surface-coverage metric beside it.
 
 - **n = 3 corpora, and only one of them independent.** Two are mine end to end; the SWE-bench example
   is independent but coarse (one bit per instance, single unreplicated runs).
-- **Ten of the thirteen declared families are unbuilt**, so their axis counts are pre-registrations
+- **Most declared families are still unbuilt**, so their axis counts are pre-registrations
   rather than measurements, and the report labels every one of them.
 - **The already-solved finding now rests on six trials across four subjects and two labs**, all of
   which passed all 128 scenarios — including Haiku 4.5, the smallest model available here. That is a
   much stronger kill than the original one-lab version and still not a proof; the right response is
   to harden the family, which is what the gate forces, rather than to average it away with more runs
   of the same kind.
-- **Two labs is not many labs, and three of the four subjects are one lab's.** The combined
-  cross-family width of 3 is therefore partly a statement about Anthropic's model family. The third
-  provider in the registry is installed and its account is not entitled, so its slot is an
-  infrastructure failure and counts for nothing.
+- **Two labs is not many labs, and three of the four shared subjects are one lab's.** The old
+  three-family combined width of 3 is therefore partly a statement about Anthropic's model family.
+  The all-family bank is partial again after live-DOM because only GPT-5.6 Sol has attempted the
+  descendant. The third provider in the registry is installed and its account is not entitled, so its
+  slot is an infrastructure failure and counts for nothing.
 - **A chain is a fact about the family, not about the models.** The UI result — four subjects, one
   axis — is the strongest evidence in this document that subject count and measurement count are
   different quantities. It is also the clearest case for spending the next dollar on scenarios rather

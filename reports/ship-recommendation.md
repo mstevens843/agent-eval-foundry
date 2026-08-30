@@ -9,6 +9,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 |---|---|---|
 | `audit-truth-financial-workflow` | **NOT-READY** | difficulty-evidenced |
 | `browser-action-replay` | **NOT-READY** | difficulty-evidenced |
+| `checker-required-memory-poisoning` | **NOT-READY** | difficulty-evidenced |
 | `deployment-rollback-partial-effects` | **NOT-READY** | difficulty-evidenced |
 | `durable-approval-outbox` | **SHIP** | none |
 | `model-alias-drift-sentinel` | **NOT-READY** | difficulty-evidenced |
@@ -20,6 +21,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `prompt-injection-memory-poisoning` | **SHIP** | none |
 | `stale-crm-ticket-automation` | **NOT-READY** | difficulty-evidenced |
 | `ui-action-record-replay` | **SHIP** | none |
+| `ui-replay-live-dom` | **SHIP** | none |
 
 ## Gate table
 
@@ -100,6 +102,32 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 90h build, $80 frontier |
+
+### `checker-required-memory-poisoning` — NOT-READY
+
+| gate | result | detail |
+|---|---|---|
+| `solvable` | pass | 6 contract item(s) |
+| `verifier-graded` | pass | 7 expected mutant(s) |
+| `trust-boundary` | pass | 3/3 source(s) state unforgeability |
+| `detectable` | pass | all mechanisms detectable |
+| `fairness` | pass | 4 constraint(s) |
+| `cheat-resistance` | pass | 4 requirement(s) |
+| `is-a-family` | pass | 5 knob(s): seed, attack, checkerProbe, memoryKind, visibleCoverage |
+| `hidden-region-declared` | pass | The hidden suite samples the memory-poisoning state space and a checker-mutant s |
+| `measured-axes` | n/a | estimated — axes; not measured |
+| `reference-passes` | n/a | family not built; nothing to run |
+| `baselines-blocked` | n/a | family not built |
+| `mutants-caught-by-intended-check` | n/a | family not built |
+| `mechanisms-exercised` | n/a | family not built |
+| `isolation-level` | n/a | family not built |
+| `shared-bank-ready` | n/a | family not built |
+| `deterministic-reports` | n/a | family not built |
+| `trial-ready` | n/a | family not built |
+| `difficulty-evidenced` | **FAIL** | no counted agent trials |
+| `agent-axes-independent` | n/a | family not built |
+| `not-already-solved` | n/a | no counted agent trials yet |
+| `priced` | pass | 45h build, $20 frontier |
 
 ### `deployment-rollback-partial-effects` — NOT-READY
 
@@ -279,7 +307,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `deterministic-reports` | pass | verified |
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
 | `difficulty-evidenced` | pass | 6 counted agent trial(s) |
-| `agent-axes-independent` | n/a | no counted agent trial has failed anything yet |
+| `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
 | `not-already-solved` | **FAIL** | all 6 counted trial(s) passed every scenario — the family is already-solved |
 | `priced` | pass | 70h build, $65 frontier |
 
@@ -386,6 +414,32 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `agent-axes-independent` | **FAIL** | every counted subject's failures nest (claude-opus-5 ⊂ claude-haiku-4-5 ⊂ claude-sonnet-5 ⊂ gpt-5.6-sol); one difficulty axis however many subjects attempt it. Only new scenarios with a genuine trade-off can raise it — see reports/scenario-diversity-report.md |
 | `not-already-solved` | pass | 5 of 5 counted trial(s) failed at least one scenario |
 | `priced` | pass | 55h build, $40 frontier |
+
+### `ui-replay-live-dom` — SHIP
+
+| gate | result | detail |
+|---|---|---|
+| `solvable` | pass | 7 contract item(s) |
+| `verifier-graded` | pass | 22 expected mutant(s) |
+| `trust-boundary` | pass | 4/4 source(s) state unforgeability |
+| `detectable` | pass | all mechanisms detectable |
+| `fairness` | pass | 6 constraint(s) |
+| `cheat-resistance` | pass | 5 requirement(s) |
+| `is-a-family` | pass | 8 knob(s): seed, regionFate, priorState, settleBudget, anchorFidelity, anchorConflict, busyFidelity, replayCount |
+| `hidden-region-declared` | pass | The hidden suite samples the declared live-DOM state space: region fate, prior t |
+| `measured-axes` | pass | 19 measured axes |
+| `reference-passes` | pass | reference clean |
+| `baselines-blocked` | pass | 2/2 baselines rejected |
+| `mutants-caught-by-intended-check` | pass | 22/22 caught by intended check |
+| `mechanisms-exercised` | pass | every attack blocks on its governing rule |
+| `isolation-level` | pass | subprocess with 1 agent trial(s) |
+| `shared-bank-ready` | **FAIL** | 1 subject(s) shared with another family (need 3) |
+| `deterministic-reports` | pass | verified |
+| `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
+| `difficulty-evidenced` | pass | 1 counted agent trial(s) |
+| `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
+| `not-already-solved` | pass | 1 of 1 counted trial(s) failed at least one scenario |
+| `priced` | pass | 95h build, $55 frontier |
 
 ## Why these gates
 

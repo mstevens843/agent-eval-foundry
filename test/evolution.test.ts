@@ -77,7 +77,7 @@ describe("the kill taxonomy", () => {
   });
 
   it("a family with no counted trials reports absence, not weakness", () => {
-    const shape = registry.shapes.find((s) => s.familyId === "ui-action-record-replay");
+    const shape = registry.shapes.find((s) => s.familyId === "checker-required-memory-poisoning");
     const target = shape as NonNullable<typeof shape>;
     const analysis = analyzeFamily(target, assessFamily(target, registry));
     expect(analysis.findings.some((f) => f.reason === "already_solved")).toBe(false);
@@ -423,7 +423,7 @@ describe("the evolution reports", () => {
     expect(render()).toMatch(/What it did \*\*not\*\* prove/);
   });
 
-  it("the evolution report is deterministic and admits the loop is not closed", () => {
+  it("the evolution report is deterministic and records the second closed loop", () => {
     const render = (): string =>
       renderEvolutionReport({
         registry,
@@ -434,7 +434,8 @@ describe("the evolution reports", () => {
         sharedBankThreshold: 3,
       });
     expect(render()).toBe(render());
-    expect(render()).toMatch(/The turn is not closed/);
+    expect(render()).toMatch(/loop, now closed twice/);
+    expect(render()).toMatch(/cross-family and cross-lab claims remain bounded/);
     expect(render()).toMatch(/What would falsify the loop/);
   });
 

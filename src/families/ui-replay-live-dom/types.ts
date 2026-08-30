@@ -41,9 +41,9 @@ export interface UiNode {
    * Attributes. The load-bearing ones are `data-entity`, `data-region`, `aria-label`,
    * `aria-disabled`, `data-txn-state`, `data-txn-entity`, `data-testid` and `aria-busy`.
    *
-   * `aria-busy` is EVIDENCE, NOT AN ORACLE. The `busyFidelity` knob is allowed to lie with it — a
-   * spinner over content that will never mount, or no spinner over content that genuinely mounts
-   * late. No scenario's correct answer depends on it, and the reference never reads it.
+   * `aria-busy` is EVIDENCE, NOT AN ORACLE. A page may show a spinner over content that will never
+   * mount, or show no spinner over content that genuinely mounts late. No scenario's correct answer
+   * depends on it.
    */
   readonly attrs: Readonly<Record<string, string>>;
   readonly text: string;
@@ -55,9 +55,9 @@ export interface UiNode {
  *
  * Five kinds, because a recording made by a real tool stores whatever the page offered and the kinds
  * DISAGREE once the page moves. `css_path` is deliberately brittle under reorder and wrap; `testid`
- * dies when a framework re-mounts without one; `role_name` survives both and cannot tell two
- * renderings of the same row apart. A replayer that is loyal to exactly one kind is wrong wherever
- * that kind is the one that drifted — and those wrongs do not nest, which is the point.
+ * dies when a framework re-mounts without one; `role_name` survives both and can also point at a
+ * superseded object. A replayer that is loyal to exactly one kind is wrong wherever that kind is
+ * the one that drifted — and those wrongs do not nest, which is the point.
  */
 export interface Selector {
   readonly kind: "testid" | "role_name" | "attr" | "role_index" | "css_path";
@@ -233,7 +233,7 @@ export interface StepAudit {
   readonly index: number;
   /** The id actually acted on, or null. Must be a node the step could legitimately have identified. */
   readonly resolvedNodeId: string | null;
-  /** `primary` | `anchor` | null — how it was found. An audit that cannot say this explains nothing. */
+  /** `primary` | `anchor` | `path` | null — how it was found. An audit that cannot say this explains nothing. */
   readonly resolvedVia: string | null;
   readonly resolvedTick: number | null;
   /** The OBSERVED precondition value. Not "ok" — the value read off the live node. */

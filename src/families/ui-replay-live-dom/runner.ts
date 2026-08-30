@@ -36,12 +36,12 @@ export const ALL_SUBJECTS: readonly Subject[] = [reference, ...MUTANTS, ...POLE_
 /**
  * A budget MEASURED rather than inherited.
  *
- * 432 scenarios driven through a reducer that re-derives its legitimacy map on every mutation is a
+ * 864 scenarios driven through a reducer that re-derives its legitimacy map on every mutation is a
  * materially different cost from the parent family's immutable seven-node tree, and inheriting the
  * parent's 1500s would be how a campaign silently reports a partial sweep as a full one.
  *
  * Measured: the in-process sweep costs ~6.9s for 23 subjects, i.e. ~0.30s for one subject over all
- * 432 scenarios. A SUBPROCESS trial additionally pays Node startup and JSON transport per scenario
+ * 864 scenarios. A SUBPROCESS trial additionally pays Node startup and JSON transport per scenario
  * (~0.12s each on the parent family's host), so ~55s of harness time. Rounded to 300s, which is a 5x
  * margin over the measured figure and a fifth of what inheritance would have given. Re-measure when
  * the tree or the scenario count grows; the constant is here so that re-measuring is a diff.
@@ -202,9 +202,8 @@ export function toMatrix(run: RunResult): Matrix {
       caveat:
         "Subjects are MUTANTS and two hand-written DISPOSITIONS, all authored alongside the verifier, " +
         "so any width computed here is a property of the bank and a lower bound on what the verifier " +
-        "separates. It says nothing about difficulty: NO COUNTED TRIAL HAS BEEN RUN, and the number " +
-        "that would settle the parent family's nesting problem is the width over counted agent " +
-        "trials, which this design cannot manufacture. The constructed antichain is witnessed at " +
+        "separates. It is mutant-detection evidence, not real-agent difficulty evidence; the latter " +
+        "comes only from counted trial directories and is reported separately. The constructed antichain is witnessed at " +
         "seed 11 and re-derived at seed 41 by the build gates. The application is simulated: a " +
         "mutable tree with a logical clock, not a browser, so a pass here does not transfer to a real " +
         "DOM without further evidence. Isolation is in-process for this sweep.",

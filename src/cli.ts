@@ -13,7 +13,7 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { measure } from "./axis-meter.js";
+import { type MeasureOptions, measure } from "./axis-meter.js";
 import { checkChallengePackage } from "./challenge/package-check.js";
 import { buildChallengePackage } from "./challenge/package.js";
 import {
@@ -38,6 +38,7 @@ import {
 import * as liveMutants from "./families/ui-replay-live-dom/mutants.js";
 import * as liveDom from "./families/ui-replay-live-dom/runner.js";
 import * as liveScenarios from "./families/ui-replay-live-dom/scenarios.js";
+import * as liveSpec from "./families/ui-replay-live-dom/spec.js";
 import * as liveVerify from "./families/ui-replay-live-dom/verify.js";
 import { assertBudgetInputs, assertPlanHonest } from "./foundry/budget-check.js";
 import { MEASURED_DEFAULTS, planBudget } from "./foundry/budget.js";
@@ -96,7 +97,7 @@ import { renderSelfCheckBehavior } from "./reports/self-check-report.js";
 import { profileRun } from "./reports/self-check.js";
 import { renderShapeReport } from "./reports/shape-report.js";
 import { measuredCells, renderSharedDifficultyBank } from "./reports/shared-difficulty.js";
-import { renderShipReport } from "./reports/ship-report.js";
+import { assessFamily, renderShipReport } from "./reports/ship-report.js";
 import { qualityOf, renderSubmissionQuality } from "./reports/submission-quality.js";
 import { renderStaleEvidenceRegression, renderThirdSubjectCampaign } from "./reports/third-subject-report.js";
 import { computeEvidence, renderTrialReadinessReport } from "./reports/trial-report.js";
@@ -131,11 +132,11 @@ import {
 import { importAgentTrials, measuredScenarios, runLocalTrials, scenarioSetId } from "./trials/orchestrate.js";
 import { decideCountability } from "./trials/orchestrator.js";
 import { PROVIDERS as PROVIDER_FAMILIES_LIST, checkAllProviders } from "./trials/provider-registry.js";
-import { PROVIDERS } from "./trials/providers.js";
 import { ROUTABLE_FAMILY_IDS, routeFor } from "./trials/router.js";
 import { prepareChallenge, runAgentTrial } from "./trials/run.js";
 import { assertChallengeMatch, challengeHash } from "./trials/run.js";
 import { parseTrialRecord } from "./trials/validate.js";
+import type { AxisReport, Matrix } from "./types.js";
 
 const USAGE = `agent-eval-foundry — discover, screen and select agent-benchmark task families
 
@@ -397,15 +398,24 @@ function familyCommand(sub: string, root: string): string {
   }
 }
 
-/** Every adapter, with what it needs to be usable. Answers "why did my provider refuse?". */
+/** Every model provider, with what can run locally and what is import-only. */
 function providersCommand(): string {
+  const rows = checkAllProviders();
   return [
-    "provider     status        isolation    requires",
-    ...PROVIDERS.map(
-      (p) => `${p.id.padEnd(13)}${p.status.padEnd(14)}${p.isolation.padEnd(13)}${p.requires ?? "—"}`,
+    "provider        family       state                 configured  model",
+    ...rows.map(
+      (r) =>
+        `${r.provider.id.padEnd(16)}${r.provider.family.padEnd(13)}${r.state.padEnd(22)}${String(
+          r.available,
+        ).padEnd(12)}${r.provider.model}`,
     ),
     "",
-    "A declared adapter throws `provider not configured` rather than returning an empty submission.",
+    "details",
+    ...rows.map((r) => `  ${r.provider.id}: ${r.detail}`),
+    "",
+    "Anthropic/Claude is import-only for this phase. Gemini remains entitlement-blocked unless a",
+    "future authenticated run changes that. Codex/OpenAI is the only provider this phase may execute",
+    "locally.",
     "",
   ].join("\n");
 }
@@ -602,13 +612,14 @@ function agentBankFor(root: string, familyId: string) {
 /** Provider availability, checked by execution rather than assumed. */
 function providerStatus(): string {
   return [
-    "provider   family      available  detail",
+    "provider   family      state                 available  detail",
     ...checkAllProviders().map(
       (a) =>
-        `${a.provider.id.padEnd(11)}${a.provider.family.padEnd(12)}${(a.available ? "yes" : "NO").padEnd(11)}${a.detail}`,
+        `${a.provider.id.padEnd(11)}${a.provider.family.padEnd(12)}${a.state.padEnd(22)}${(a.available ? "yes" : "NO").padEnd(11)}${a.detail}`,
     ),
     "",
-    "A provider that is not available produces NOT_RUN slots and a prepared bundle, never a zero.",
+    "A provider that is not available produces NOT_RUN or import-only slots and a prepared bundle,",
+    "never a zero. Anthropic/Claude is not executed in this phase.",
     "",
   ].join("\n");
 }
@@ -720,9 +731,7 @@ function campaignImport(argv: readonly string[], root: string): string {
 /** `trials campaign status` — every plan, every slot, every provider, in one table. */
 function campaignStatus(root: string): string {
   const availability = new Map(checkAllProviders().map((a) => [a.provider.id, a]));
-  const lines: string[] = [
-    "campaign        family                                  slot  provider  state      run",
-  ];
+  const lines: string[] = ["campaign | family | slot | provider | state | run"];
   for (const plan of loadCampaigns(root)) {
     const rec = reconcile(root, plan);
     const counted = new Set(rec.countedRecords.map((r) => r.runId));
@@ -736,7 +745,7 @@ function campaignStatus(root: string): string {
         slot.runner;
       const state = slot.runId !== null && counted.has(slot.runId) ? "COUNTED" : slot.state;
       lines.push(
-        `${plan.campaignId.padEnd(16)}${plan.familyId.padEnd(40)}${slot.slotId.padEnd(6)}${provider.padEnd(10)}${state.padEnd(13)}${slot.runId ?? "—"}`,
+        `${plan.campaignId} | ${plan.familyId} | ${slot.slotId} | ${provider} | ${state} | ${slot.runId ?? "—"}`,
       );
     }
   }
@@ -1378,10 +1387,22 @@ const UI_AXIS_PROPOSALS: readonly AxisProposal[] = [
 ];
 
 /** Every family's bank, tagged by kind, with the claims each kind licenses. */
-function bankInput(root: string, registry: ReturnType<typeof loadRegistry>) {
+function bankInput(
+  root: string,
+  registry: ReturnType<typeof loadRegistry>,
+  evidenceFor: (familyId: string) => ReturnType<typeof familyEvidenceFor> = (familyId) =>
+    familyEvidenceFor(root, familyId),
+  measureFor: (matrix: Matrix, options?: MeasureOptions) => AxisReport = measure,
+) {
   const banks = BUILT_FAMILIES.map((f) => {
-    const bundle = familyEvidenceFor(root, f.id);
-    const agent = agentBankFor(root, f.id);
+    const bundle = evidenceFor(f.id);
+    const agent = buildAgentBank(bundle.trials.records, {
+      familyId: f.id,
+      instanceIds: bundle.matrix.instances.map((i) => i.id),
+      caveat:
+        "Subjects are real models attempting the task. Cells are the UNION of failures across that " +
+        "model's counted trials; a scenario no counted trial graded is null rather than a pass.",
+    });
     // A family with counted trials has an AGENT bank; one without has only its mutants.
     const useAgent = agent.subjects.length > 0;
     return kindedBank(
@@ -1428,14 +1449,15 @@ function bankInput(root: string, registry: ReturnType<typeof loadRegistry>) {
   const rows = all.map((bank) => {
     const shape = registry.shapes.find((sh) => sh.familyId === bank.familyId);
     const counted = ROUTABLE_FAMILY_IDS.includes(bank.familyId)
-      ? familyEvidenceFor(root, bank.familyId).evidence.countedAgentTrials
+      ? evidenceFor(bank.familyId).evidence.countedAgentTrials
       : 0;
     return {
       familyId: bank.familyId,
       kind: bank.kind,
       subjects: bank.subjects,
       instances: bank.matrix.instances.length,
-      axes: bank.matrix.subjects.length > 1 ? measure(bank.matrix, { nullTrials: 3 }).independentAxes : null,
+      axes:
+        bank.matrix.subjects.length > 1 ? measureFor(bank.matrix, { nullTrials: 3 }).independentAxes : null,
       countedTrials: counted,
       note: shape?.dataQuality ?? "unknown",
     };
@@ -1450,27 +1472,38 @@ function bankInput(root: string, registry: ReturnType<typeof loadRegistry>) {
       .map(([subject, families]) => ({ subject, families: [...families].sort() }))
       .sort((a, b) => a.subject.localeCompare(b.subject)),
     threshold: 3,
-    axisReports: all
-      .filter((b) => b.matrix.subjects.length > 1)
-      .map((b) => ({ familyId: b.familyId, kind: b.kind, axis: measure(b.matrix, { nullTrials: 3 }) })),
+    axisReports: all.map((b) => {
+      const axis = measureFor(b.matrix, { nullTrials: 3 });
+      return {
+        familyId: b.familyId,
+        kind: b.kind,
+        axis,
+        axes: b.matrix.subjects.length > 1 ? axis.independentAxes : null,
+      };
+    }),
   };
 }
 
 /** The operator-validation report: parent, child, and whether the operator explains the difference. */
-function evolutionValidationReport(root: string, registry: ReturnType<typeof loadRegistry>): string {
-  const parentState = familyLoop(root, PIC_FAMILY, registry);
+function evolutionValidationReport(
+  root: string,
+  registry: ReturnType<typeof loadRegistry>,
+  evidenceFor: (familyId: string) => ReturnType<typeof familyEvidenceFor> = (familyId) =>
+    familyEvidenceFor(root, familyId),
+): string {
+  const parentState = familyLoop(root, PIC_FAMILY, registry, evidenceFor);
   const childId = "prompt-injection-memory-poisoning";
   const childShape = registry.shapes.find((sh) => sh.familyId === childId);
   if (childShape === undefined) throw new Error(`no shape for ${childId}`);
 
   const parentAnalysis = analyseFamilyTrials(
     PIC_FAMILY,
-    familyEvidenceFor(root, PIC_FAMILY).trials,
+    evidenceFor(PIC_FAMILY).trials,
     routeFor(PIC_FAMILY).scenarioParams(),
   );
   const childAnalysis = analyseFamilyTrials(
     childId,
-    familyEvidenceFor(root, childId).trials,
+    evidenceFor(childId).trials,
     routeFor(childId).scenarioParams(),
   );
   const variant = parentState.variants.find((v) => v.id === childId) ?? null;
@@ -1499,6 +1532,29 @@ function allCommand(argv: readonly string[], root: string): string {
   const dir = flag(argv, "--out") ?? join(root, "reports");
   const registry = loadRegistry(root);
   const cov = coverage(registry);
+  const evidenceCache = new Map<string, ReturnType<typeof familyEvidenceFor>>();
+  const evidenceFor = (familyId: string = PIC_FAMILY) => {
+    const cached = evidenceCache.get(familyId);
+    if (cached !== undefined) return cached;
+    const computed = familyEvidenceFor(root, familyId);
+    evidenceCache.set(familyId, computed);
+    return computed;
+  };
+  const measureCache = new Map<string, AxisReport>();
+  const measureFor = (matrix: Matrix, options: MeasureOptions = {}) => {
+    const key = [
+      matrix.suite,
+      matrix.subjects.map((s) => s.id).join(","),
+      matrix.instances.map((i) => i.id).join(","),
+      options.nullTrials ?? 0,
+      options.nullSeed ?? "default",
+    ].join("|");
+    const cached = measureCache.get(key);
+    if (cached !== undefined) return cached;
+    const computed = measure(matrix, options);
+    measureCache.set(key, computed);
+    return computed;
+  };
   mkdirSync(dir, { recursive: true });
   const written: string[] = [];
   // Text is kept alongside the filename so the stale-evidence guard can run over every report at the
@@ -1514,10 +1570,10 @@ function allCommand(argv: readonly string[], root: string): string {
   write("mutant-bank.md", renderMutantReport(registry, cov));
   write("candidate-ledger.md", renderLedgerReport(registry));
   write("family-diversity.md", renderFamilyDiversityReport(registry.shapes));
-  const ev = familyEvidenceFor(root);
+  const ev = evidenceFor(PIC_FAMILY);
   // Evidence for EVERY built family, not just the first one. The determinism test builds it the
   // same way, and the two drifted the moment a second family had evidence to report.
-  const allEvidence = familyEvidenceMap(root);
+  const allEvidence = Object.fromEntries(BUILT_FAMILY_IDS.map((id) => [id, evidenceFor(id).evidence]));
   write("ship-recommendation.md", renderShipReport(registry.shapes, registry, allEvidence));
   write(
     "prompt-injection-containment-trial-readiness.md",
@@ -1547,7 +1603,7 @@ function allCommand(argv: readonly string[], root: string): string {
         superseded: rec.supersededRuns,
       }),
     );
-    const bundle = familyEvidenceFor(root, plan.familyId);
+    const bundle = evidenceFor(plan.familyId);
     const analysis = analyseFamilyTrials(
       plan.familyId,
       bundle.trials,
@@ -1563,7 +1619,7 @@ function allCommand(argv: readonly string[], root: string): string {
           ? {
               parent: {
                 familyId: PIC_FAMILY,
-                counted: familyEvidenceFor(root, PIC_FAMILY).evidence.countedAgentTrials,
+                counted: evidenceFor(PIC_FAMILY).evidence.countedAgentTrials,
                 failures: 0,
                 operator: "add_time_separation",
               },
@@ -1575,7 +1631,7 @@ function allCommand(argv: readonly string[], root: string): string {
 
   // ---- the shared DIFFICULTY bank: agent banks only ------------------------------------------------
   {
-    const bi = bankInput(root, registry);
+    const bi = bankInput(root, registry, evidenceFor, measureFor);
     const difficulty = bi.banks.filter((b) => b.kind === "agent" || b.kind === "imported");
     write(
       "shared-difficulty-bank-report.md",
@@ -1588,13 +1644,13 @@ function allCommand(argv: readonly string[], root: string): string {
             familyId: bank.familyId,
             subjects: bank.subjects,
             countedTrials: ROUTABLE_FAMILY_IDS.includes(bank.familyId)
-              ? familyEvidenceFor(root, bank.familyId).evidence.countedAgentTrials
+              ? evidenceFor(bank.familyId).evidence.countedAgentTrials
               : 20,
             instances: bank.matrix.instances.length,
             measuredCells: measuredCells(bank.matrix),
             axes:
               bank.matrix.subjects.length > 1
-                ? measure(bank.matrix, { nullTrials: 3 }).independentAxes
+                ? measureFor(bank.matrix, { nullTrials: 3 }).independentAxes
                 : null,
             realism: family?.realism ?? "imported from another harness",
           };
@@ -1604,14 +1660,20 @@ function allCommand(argv: readonly string[], root: string): string {
   }
 
   // ---- the shared bank, by kind -------------------------------------------------------------------
-  write("shared-subject-bank-report.md", renderBankReport(bankInput(root, registry)));
-  write("cross-family-axis-report.md", renderCrossFamilyAxisReport(bankInput(root, registry)));
+  write(
+    "shared-subject-bank-report.md",
+    renderBankReport(bankInput(root, registry, evidenceFor, measureFor)),
+  );
+  write(
+    "cross-family-axis-report.md",
+    renderCrossFamilyAxisReport(bankInput(root, registry, evidenceFor, measureFor)),
+  );
 
   // ---- difficulty curves, provider variance, diagnosis, evidence lifecycle -------------------------
   {
     const routable = ROUTABLE_FAMILY_IDS.filter((id) => BUILT_FAMILY_IDS.includes(id));
     const perFamily = routable.map((familyId) => {
-      const bundle = familyEvidenceFor(root, familyId);
+      const bundle = evidenceFor(familyId);
       const plan = loadCampaigns(root).find((p) => p.familyId === familyId) ?? null;
       const notRunByFamily: Record<string, number> = {};
       for (const slot of plan?.slots ?? []) {
@@ -1695,7 +1757,7 @@ function allCommand(argv: readonly string[], root: string): string {
 
     // Shared-bank completion, per bank kind, with the combined width computed only where the guard
     // allows it. `assertCombinedWidthAllowed` is what makes the refusal a property of the code.
-    const completionBanks = bankInput(root, registry).banks;
+    const completionBanks = bankInput(root, registry, evidenceFor, measureFor).banks;
     const completions = completionsFor(completionBanks, allTrials, evidenceState);
     const combinedResults = new Map<string, CombinedResult>();
     for (const completion of completions) {
@@ -1704,18 +1766,19 @@ function allCommand(argv: readonly string[], root: string): string {
         assertCombinedWidthAllowed(completion);
         const overlap = computeOverlap(group);
         const matrix = combinedMatrixFor(overlap);
-        const combinedMeasure = measure(matrix, { nullTrials: 5 });
+        const combinedMeasure = measureFor(matrix, { nullTrials: 5 });
         combinedResults.set(completion.kind, {
           perFamilyAxes: Object.fromEntries(
             group.map((b) => [
               b.familyId,
-              b.matrix.subjects.length > 1 ? measure(b.matrix, { nullTrials: 3 }).independentAxes : 0,
+              b.matrix.subjects.length > 1 ? measureFor(b.matrix, { nullTrials: 3 }).independentAxes : 0,
             ]),
           ),
           combinedAxes: combinedMeasure.independentAxes,
           sumOfParts: group.reduce(
             (n, b) =>
-              n + (b.matrix.subjects.length > 1 ? measure(b.matrix, { nullTrials: 3 }).independentAxes : 0),
+              n +
+              (b.matrix.subjects.length > 1 ? measureFor(b.matrix, { nullTrials: 3 }).independentAxes : 0),
             0,
           ),
           nullBaseline: combinedMeasure.nullBaseline?.meanWidth ?? null,
@@ -1747,9 +1810,9 @@ function allCommand(argv: readonly string[], root: string): string {
         try {
           assertCombinedWidthAllowed(completion);
           const matrix = combinedMatrixFor(computeOverlap(group));
-          const m = measure(matrix, { nullTrials: 5 });
+          const m = measureFor(matrix, { nullTrials: 5 });
           const parts = group.map((g) =>
-            g.matrix.subjects.length > 1 ? measure(g.matrix, { nullTrials: 3 }).independentAxes : 0,
+            g.matrix.subjects.length > 1 ? measureFor(g.matrix, { nullTrials: 3 }).independentAxes : 0,
           );
           combined = {
             perFamilyAxes: Object.fromEntries(group.map((g, k) => [g.familyId, parts[k] ?? 0])),
@@ -1790,16 +1853,43 @@ function allCommand(argv: readonly string[], root: string): string {
           ),
         ]),
     );
-    // The descendant UI family. Not in BUILT_FAMILIES: it has no challenge package, so it is not
-    // trial-ready and registering it would make the `trial-ready` gate say otherwise.
+    // The descendant UI family. It is a built family now, but it still gets a purpose-built report
+    // because its central claim is the categorical anchor fix for the parent chain defect.
     {
-      const liveRun = liveDom.runFamily();
-      const liveMatrix = liveDom.toMatrix(liveRun);
-      const liveReport = measure(liveMatrix, { nullTrials: 3 });
-      const [strictId = "strict-bailer", patientId = "patient-waiter"] = liveMutants.DISPOSITION_SUBJECTS;
-      const strictSet = liveDom.catchSet(liveRun, strictId);
-      const patientSet = liveDom.catchSet(liveRun, patientId);
-      const shared = [...strictSet].filter((x) => patientSet.has(x)).length;
+      const liveBundle = evidenceFor("ui-replay-live-dom");
+      const liveMatrix = liveBundle.matrix;
+      const liveReport = measureFor(liveMatrix, { nullTrials: 3 });
+      const prepared = prepareChallenge(root, "ui-replay-live-dom");
+      const pkgCheck = checkChallengePackage(
+        prepared.pkg.files,
+        builtFamily("ui-replay-live-dom").leakProfile,
+      );
+      const evidence = liveBundle.evidence;
+      const liveShape = registry.shapes.find((s) => s.familyId === "ui-replay-live-dom");
+      if (liveShape === undefined) throw new Error("no task shape for ui-replay-live-dom");
+      const assessment = assessFamily(liveShape, registry, evidence);
+      const status =
+        assessment.verdict === "SHIP"
+          ? "SHIP"
+          : evidence.countedAgentTrials > 0
+            ? "difficulty-evidenced"
+            : evidence.trialReady === true
+              ? "trial-ready"
+              : "HOLD";
+      const anchorPairs = [];
+      for (let i = 0; i < liveMutants.ANCHOR_LOYAL_SUBJECTS.length; i += 1) {
+        for (let j = i + 1; j < liveMutants.ANCHOR_LOYAL_SUBJECTS.length; j += 1) {
+          const a = liveMutants.ANCHOR_LOYAL_SUBJECTS[i] ?? "";
+          const b = liveMutants.ANCHOR_LOYAL_SUBJECTS[j] ?? "";
+          const catchSet = (subjectId: string) =>
+            new Set(
+              liveMatrix.instances
+                .filter((instance) => (liveMatrix.results[instance.id]?.[subjectId]?.failed.length ?? 0) > 0)
+                .map((instance) => instance.id),
+            );
+          anchorPairs.push(liveDom.relate(catchSet(a), catchSet(b), a, b));
+        }
+      }
       write(
         "ui-replay-live-dom-report.md",
         renderLiveDom({
@@ -1810,25 +1900,143 @@ function allCommand(argv: readonly string[], root: string): string {
           subjects: liveMatrix.subjects.length,
           mutants: liveMutants.MUTANTS.length,
           checks: [...liveVerify.CHECKS],
-          referenceFailures: liveDom.referenceFailures(liveRun).length,
+          referenceFailures: evidence.referencePasses ? 0 : 1,
           axes: liveReport.independentAxes,
           distinctCatchSets: liveReport.distinctMeasurements,
           blindInstances: liveReport.blindInstances.length,
           matrix: liveMatrix,
-          poles: {
-            strictId,
-            patientId,
-            strictFails: strictSet.size,
-            patientFails: patientSet.size,
-            shared,
-            relation: liveDom.relate(strictSet, patientSet, strictId, patientId).relation,
-            onlyStrict: strictSet.size - shared,
-            onlyPatient: patientSet.size - shared,
-          },
+          challengeFiles: prepared.pkg.files.length,
+          challengeHash: prepared.hash,
+          countedAgentTrials: evidence.countedAgentTrials,
+          status,
+          anchorPairs,
           realism: "dom-like",
           parentRealism: "simulated-tree",
           gains: LIVE_DOM_GAINS,
         }),
+      );
+      const specText = prepared.pkg.files.find((f) => f.path === "SPEC.md")?.content ?? "";
+      const requiredSections = [
+        "Realism level",
+        "Expected submission interface",
+        "UI state model",
+        "Action trace format",
+        "Selector and anchor types",
+        "Precedence",
+        "What observed means",
+        "Hidden confirmation state",
+        "Disabled and enabled transitions",
+        "Duplicate side-effect prevention",
+        "Audit trail requirements",
+        "Outcomes",
+        "Replaying twice",
+        "The facade",
+      ];
+      write(
+        "ui-replay-live-dom-spec-report.md",
+        [
+          "# ui-replay-live-dom SPEC report",
+          "",
+          "| item | value |",
+          "|---|---:|",
+          "| realism label | dom-like |",
+          `| visible rule codes | ${liveSpec.RULE_CODES.length} |`,
+          `| required sections present | ${requiredSections.filter((s) => specText.includes(s)).length}/${requiredSections.length} |`,
+          `| spec bytes | ${specText.length} |`,
+          `| challenge hash | \`${prepared.hash}\` |`,
+          "",
+          "## Rule codes",
+          "",
+          ...liveSpec.RULE_CODES.map((c) => `- \`${c}\` — visible in SPEC.md`),
+          "",
+          "## Label",
+          "",
+          "Measured: SPEC completeness and package hash. Mutant-detection and real-agent difficulty are not inferred from this report.",
+          "",
+          "---",
+          "",
+          "Generated by `agent-eval-foundry`. Deterministic — no timestamp, diffable.",
+          "",
+        ].join("\n"),
+      );
+      write(
+        "ui-replay-live-dom-challenge-package-report.md",
+        [
+          "# ui-replay-live-dom challenge package",
+          "",
+          "| item | value |",
+          "|---|---:|",
+          `| visible files | ${pkgCheck.files} |`,
+          `| bytes | ${pkgCheck.bytes} |`,
+          `| worked examples | ${pkgCheck.examples} |`,
+          `| visible rule codes found | ${pkgCheck.specCodesFound} |`,
+          `| hash | \`${prepared.hash}\` |`,
+          "",
+          "## Visible files",
+          "",
+          ...prepared.pkg.files.map((f) => `- \`${f.path}\``),
+          "",
+          "## Hidden from package",
+          "",
+          ...prepared.pkg.manifest.hiddenArtifacts.map((f) => `- \`${f}\``),
+          "",
+          "Measured: package builds, leak check passes, hash is deterministic. Not-run: no result is inferred from package readiness alone.",
+          "",
+          "---",
+          "",
+          "Generated by `agent-eval-foundry`. Deterministic — no timestamp, diffable.",
+          "",
+        ].join("\n"),
+      );
+      write(
+        "ui-replay-live-dom-categorical-anchor-report.md",
+        [
+          "# ui-replay-live-dom categorical anchor axis",
+          "",
+          "| pair | relation | private witness A | private witness B |",
+          "|---|---|---|---|",
+          ...anchorPairs.map(
+            (p) =>
+              `| \`${p.a}\` / \`${p.b}\` | **${p.relation}** | \`${p.aOnly ?? "none"}\` | \`${p.bOnly ?? "none"}\` |`,
+          ),
+          "",
+          `Categorical anchor axis proven: **${anchorPairs.every((p) => p.relation === "incomparable") ? "yes" : "no"}**.`,
+          "",
+          `Declared space: ${liveScenarios.enumerateSpace().length}. Measured set: ${liveMatrix.instances.length}.`,
+          "",
+          "Measured: mutant-detection catch sets over address-loyal known-bad subjects. Real-agent difficulty remains separate and requires counted trials.",
+          "",
+          "---",
+          "",
+          "Generated by `agent-eval-foundry`. Deterministic — no timestamp, diffable.",
+          "",
+        ].join("\n"),
+      );
+      write(
+        "ui-replay-live-dom-trial-readiness.md",
+        [
+          "# ui-replay-live-dom trial readiness",
+          "",
+          `Status: **${status}**.`,
+          "",
+          "| gate | value |",
+          "|---|---|",
+          `| challenge package | ${prepared.pkg.files.length} files |`,
+          `| challenge hash | \`${prepared.hash}\` |`,
+          `| scenario set | \`${prepared.scenarioSetId}\` |`,
+          `| scenarios expected | ${liveMatrix.instances.length} |`,
+          `| route | ${ROUTABLE_FAMILY_IDS.includes("ui-replay-live-dom") ? "present" : "missing"} |`,
+          `| counted real-agent trials | ${evidence.countedAgentTrials} |`,
+          "",
+          "Provider handling: Codex/OpenAI is runnable locally when configured. Anthropic/Claude is import-only for this phase. Gemini is entitlement-blocked unless a future authenticated run changes that.",
+          "",
+          "Measured: package and route readiness. Not-run/refused/infrastructure_error/stale states remain no-count evidence until a counted trial exists.",
+          "",
+          "---",
+          "",
+          "Generated by `agent-eval-foundry`. Deterministic — no timestamp, diffable.",
+          "",
+        ].join("\n"),
       );
     }
 
@@ -1942,20 +2150,20 @@ function allCommand(argv: readonly string[], root: string): string {
       "ui-action-record-replay-upgrade-report.md",
       renderUiUpgradeReport({
         sweep,
-        axis: measure(sweep.matrix, { nullTrials: 3 }),
+        axis: measureFor(sweep.matrix, { nullTrials: 3 }),
         plan: loadCampaigns(root).find((p) => p.familyId === UI_FAMILY) ?? null,
         challengeFiles: prepared.pkg.files.length,
         challengeHash: prepared.hash,
-        countedTrials: familyEvidenceFor(root, UI_FAMILY).evidence.countedAgentTrials,
+        countedTrials: evidenceFor(UI_FAMILY).evidence.countedAgentTrials,
       }),
     );
   }
 
   // ---- did the evolution operator work? -----------------------------------------------------------
-  write("evolution-validation-report.md", evolutionValidationReport(root, registry));
+  write("evolution-validation-report.md", evolutionValidationReport(root, registry, evidenceFor));
 
   // The evolution layer: one postmortem for the killed family, and the loop across all of them.
-  const picState = familyLoop(root, PIC_FAMILY, registry);
+  const picState = familyLoop(root, PIC_FAMILY, registry, evidenceFor);
   write(
     `${PIC_FAMILY}-kill-analysis.md`,
     renderKillReport({
@@ -1970,19 +2178,78 @@ function allCommand(argv: readonly string[], root: string): string {
     "foundry-evolution-report.md",
     renderEvolutionReport({
       registry,
-      states: loopAll(root, registry),
+      states: loopAll(root, registry, evidenceFor),
       builtFamilyIds: BUILT_FAMILY_IDS,
       promoted: ["prompt-injection-memory-poisoning"],
       sharedBankSubjects: ev.evidence.sharedBankSubjects,
       sharedBankThreshold: 3,
     }),
   );
+  {
+    const checkerShape = registry.shapes.find((s) => s.familyId === "checker-required-memory-poisoning");
+    const checkerCandidate = registry.candidates.find((c) => c.id === "checker-required-memory-poisoning");
+    if (checkerShape === undefined || checkerCandidate === undefined) {
+      throw new Error("checker-required-memory-poisoning shape and candidate ledger row must both exist");
+    }
+    const packageFiles = [
+      "README.md",
+      "SPEC.md",
+      "types.ts",
+      "starter/subject.mjs",
+      "starter/check.mjs",
+      "examples/example-visible-case.json",
+      "MANIFEST.json",
+    ];
+    const challengeDir = join(root, "examples/families/checker-required-memory-poisoning/challenge");
+    const present = packageFiles.filter((f) => existsSync(join(challengeDir, f)));
+    write(
+      "checker-required-family-report.md",
+      [
+        "# checker-required family report",
+        "",
+        `Family: \`${checkerShape.familyId}\`.`,
+        "",
+        "| item | value |",
+        "|---|---|",
+        `| status | HOLD / ${checkerCandidate.status} |`,
+        `| data quality | ${checkerShape.dataQuality} |`,
+        `| challenge package draft | ${present.length}/${packageFiles.length} files present |`,
+        "| required artifacts | `subject.mjs`, `check.mjs` |",
+        `| expected checker mutants | ${checkerShape.expectedMutants.length} |`,
+        "| real-agent trials | not-run |",
+        "| mutant-detection evidence | not-run |",
+        "",
+        "## Checker-mutant gates",
+        "",
+        "| mutant | intended check |",
+        "|---|---|",
+        ...checkerShape.expectedMutants.map((m) => `| \`${m.mutantId}\` | \`${m.mustFailCheck}\` |`),
+        "",
+        "## Status",
+        "",
+        "This is a package-ready draft produced from the self-check behavior gap. It remains HOLD until",
+        "the checker verifier, held-out checker mutants and at least one counted checker-required trial",
+        "exist. A subject-only submission, a vacuous checker, a visible-example-only checker and an",
+        "accepts-all checker are declared known-bad cases, not measured failures yet.",
+        "",
+        "Measured: none. Estimated: package shape and cost. Not-run: checker mutants, verifier sweep and",
+        "real-agent difficulty.",
+        "",
+        "---",
+        "",
+        "Generated by `agent-eval-foundry`. Deterministic — no timestamp, diffable.",
+        "",
+      ].join("\n"),
+    );
+  }
 
   // Every built family gets its own axis report and sweep summary.
   for (const family of BUILT_FAMILIES) {
     if (family.id === PIC_FAMILY) continue;
-    const sweep = family.run();
-    write(`${family.id}-axis-report.md`, renderReport(measure(sweep.matrix, { nullTrials: 3 })));
+    write(
+      `${family.id}-axis-report.md`,
+      renderReport(measureFor(evidenceFor(family.id).matrix, { nullTrials: 3 })),
+    );
   }
   const uiShape = registry.shapes.find((s) => s.familyId === UI_FAMILY);
   if (uiShape !== undefined) {
@@ -1996,9 +2263,9 @@ function allCommand(argv: readonly string[], root: string): string {
     "budget-plan.md",
     renderBudgetReport(inputs, 1000, trialLayerFacts(root), campaignFacts(root), providerSpend(root)),
   );
-  const run = runFamily(ALL_SUBJECTS);
-  const picMatrix = toMatrix(run);
-  const picAxis = measure(picMatrix, { nullTrials: 3 });
+  const run = ev.run;
+  const picMatrix = ev.matrix;
+  const picAxis = measureFor(picMatrix, { nullTrials: 3 });
   write("prompt-injection-containment-family-report.md", renderFamilyReport({ run, axis: picAxis }));
   write("prompt-injection-containment-axis-report.md", renderReport(picAxis));
   write("cross-family-diversity-report.md", crossFamilyCommand(root));

@@ -25,17 +25,18 @@ export interface LiveDomInput {
   readonly distinctCatchSets: number;
   readonly blindInstances: number;
   readonly matrix: Matrix;
-  /** The two opposed strategies and how their catch sets relate. */
-  readonly poles: {
-    readonly strictId: string;
-    readonly patientId: string;
-    readonly strictFails: number;
-    readonly patientFails: number;
-    readonly shared: number;
+  readonly challengeFiles: number;
+  readonly challengeHash: string;
+  readonly countedAgentTrials: number;
+  readonly status: "HOLD" | "trial-ready" | "difficulty-evidenced" | "SHIP";
+  /** Pairwise address-loyal comparisons proving the categorical anchor axis. */
+  readonly anchorPairs: readonly {
+    readonly a: string;
+    readonly b: string;
     readonly relation: string;
-    readonly onlyStrict: number;
-    readonly onlyPatient: number;
-  };
+    readonly aOnly: string | null;
+    readonly bOnly: string | null;
+  }[];
   readonly realism: string;
   readonly parentRealism: string;
   /** What the harness now does that the parent's did not. */
@@ -43,8 +44,8 @@ export interface LiveDomInput {
 }
 
 export function renderLiveDom(input: LiveDomInput): string {
-  const p = input.poles;
-  const incomparable = p.relation === "incomparable";
+  const categoricalProven =
+    input.anchorPairs.length > 0 && input.anchorPairs.every((p) => p.relation === "incomparable");
 
   return [
     `# ${input.familyId}`,
@@ -66,31 +67,29 @@ export function renderLiveDom(input: LiveDomInput): string {
     "So the descendant's design requirement was not 'more realistic'. It was: contain a genuine",
     "trade-off, such that the strategy winning the parent's scenarios LOSES on some of these.",
     "",
-    "## Did that work?",
+    "## Did the categorical anchor fix work?",
     "",
-    "Two opposed implementations are graded alongside the mutant bank so the trade-off is measured",
-    "rather than asserted:",
+    "Three address-loyal implementations are graded alongside the mutant bank. Each is right on the",
+    "scenario class where its preferred address still names the recorded object, and wrong on the",
+    "classes where another address carries the visible entity/effect/precondition facts.",
     "",
-    "| | |",
-    "|---|---:|",
-    `| \`${p.strictId}\` fails | ${p.strictFails} |`,
-    `| \`${p.patientId}\` fails | ${p.patientFails} |`,
-    `| shared | ${p.shared} |`,
-    `| only \`${p.strictId}\` | ${p.onlyStrict} |`,
-    `| only \`${p.patientId}\` | ${p.onlyPatient} |`,
-    `| **relation** | **${p.relation.toUpperCase()}** |`,
+    "| pair | relation | private witness for first | private witness for second |",
+    "|---|---|---|---|",
+    ...input.anchorPairs.map(
+      (p) =>
+        `| \`${p.a}\` / \`${p.b}\` | **${p.relation}** | \`${p.aOnly ?? "none"}\` | \`${p.bOnly ?? "none"}\` |`,
+    ),
     "",
-    incomparable
+    categoricalProven
       ? [
-          "**Incomparable.** Neither set contains the other, so neither strategy can be described as a",
-          "more-sensitive version of the other. That is the only structure that raises an antichain",
-          "width above 1, and it is exactly what the parent could not express — a scenario class where",
-          "bailing out early is *wrong* sitting beside the class where it is right.",
+          "**Measured categorical axis: pass.** Every pair has a private witness in each direction, so",
+          "the address strategies do not reduce to a stricter/looser chain. This is the design-review",
+          "fix: testid-loyal, semantic-loyal and path-loyal replay are incomparable under the measured",
+          "scenario set.",
         ].join("\n")
       : [
-          `**${p.relation}, not incomparable.** The two opposed strategies still nest, which means this`,
-          "family has reproduced its parent's defect in a larger harness. The extra realism has not",
-          "bought a second axis, and saying so is more useful than the realism.",
+          "**Measured categorical axis: fail.** At least one address-loyal pair still nests. The",
+          "family would be bigger than its parent without fixing the parent chain defect.",
         ].join("\n"),
     "",
     "## What it measures",
@@ -99,17 +98,21 @@ export function renderLiveDom(input: LiveDomInput): string {
     "|---|---:|",
     `| declared space | ${input.declaredPoints} points |`,
     `| measured scenarios | ${input.measuredScenarios} |`,
-    `| subjects in the bank | ${input.subjects} (${input.mutants} mutants + reference + 2 poles) |`,
+    `| subjects in the bank | ${input.subjects} (${input.mutants} mutants + 2 poles; reference checked separately) |`,
     `| checks | ${input.checks.length} |`,
     `| reference failures | ${input.referenceFailures} |`,
     `| distinct catch sets | ${input.distinctCatchSets} |`,
     `| **independent axes** | **${input.axes}** |`,
     `| instances separating nothing | ${input.blindInstances} |`,
+    `| challenge package | ${input.challengeFiles} files, hash \`${input.challengeHash}\` |`,
+    `| counted real-agent trials | ${input.countedAgentTrials} |`,
+    `| live-DOM status | **${input.status}** |`,
     "",
     `The axis count is over a MUTANT bank: it says the verifier can distinguish ${input.axes} kinds of`,
-    "wrong, and it is bounded by how many kinds were written. It says nothing about whether the family",
-    "is hard, because nothing that could plausibly fail it has attempted it yet. That distinction is a",
-    "gate in this repository, not a footnote.",
+    "wrong, and it is bounded by how many kinds were written.",
+    input.countedAgentTrials > 0
+      ? "Because at least one real agent trial now counts, difficulty evidence is present. The report still keeps mutant-detection axes and real-agent difficulty separate."
+      : "It says nothing about whether the family is hard, because no counted real-agent trial has attempted it yet. That distinction is a gate in this repository, not a footnote.",
     "",
     "## The realism upgrade, mechanic by mechanic",
     "",
@@ -131,21 +134,12 @@ export function renderLiveDom(input: LiveDomInput): string {
     "| | |",
     "|---|---|",
     "| browser-backed | **no.** No renderer, no layout, no compositing, no real CSS matching |",
-    "| trialed | **no counted agent trial exists.** Everything above is mutant-bank evidence |",
-    "| shippable | **no.** It has no challenge package, so it is not trial-ready and the gate says so |",
+    `| challenge package | **yes.** ${input.challengeFiles} leak-checked visible files, hash \`${input.challengeHash}\` |`,
+    `| trialed | ${input.countedAgentTrials > 0 ? `**yes.** ${input.countedAgentTrials} counted real-agent trial(s)` : "**not yet.** campaign prepared, no counted real-agent trial"} |`,
+    `| shippable | **${input.status === "SHIP" ? "yes" : "no"}**. SHIP requires counted agent evidence, not only mutant-detection evidence |`,
     "",
-    "**Why there is no challenge package yet, stated rather than left as an omission.** The package's",
-    "`SPEC.md` is the fairness contract: it has to publish every rule an implementation is graded",
-    "against, in full, with no hidden clause. This family's contract is materially harder to write",
-    "than its parent's — a settle budget, an anchor-conflict resolution order, and what counts as",
-    "'observed' for a region that is loading all have to be stated precisely enough that a model can",
-    "derive the answer and imprecisely nowhere. `unfair_hidden_rule` and `ambiguous_truth_source` are",
-    "two of the fifteen kill reasons in this repository's taxonomy, and the parent family has already",
-    "cost three counted trials to one ambiguity that a real model exposed. Writing that spec quickly",
-    "is how it happens again.",
-    "",
-    "So the next step is a spec, then a package, then a leak check, then a campaign — in that order,",
-    "and the family is honestly marked not-trial-ready until then.",
+    "The package exists now, and its hash is the stale-evidence guard. Any spec or visible-example",
+    "edit changes that hash and invalidates trials run against the older package.",
     "",
     "---",
     "",

@@ -6,13 +6,13 @@ Did the model verify its own work — and can we actually tell?
 
 | | |
 |---|---:|
-| submissions held | 22 |
+| submissions held | 23 |
 | **submissions containing an executable self-check** | **2** |
-| **transcripts describing one** | **15** |
+| **transcripts describing one** | **16** |
 | **submissions shipping a checker as a separate file** | **2** |
-| runs that neither shipped nor described one | 6 |
+| runs that neither shipped nor described one | 7 |
 
-**2 of 22 submissions contain an executable self-check.** The rows below name the exact construct and the line it sits on.
+**2 of 23 submissions contain an executable self-check.** The rows below name the exact construct and the line it sits on.
 
 ## What each run did
 
@@ -45,6 +45,8 @@ that it happened. The two columns are never added together.
 | `ui-codex-1` | replay | `gpt-5.6-sol` | **none** | subject only | example-harness | counted | 90 |
 | `ui-haiku-1` | replay | `claude-haiku-4-5` | **none** | subject only | — | counted | 62 |
 | `ui-sonnet-1` | replay | `claude-sonnet-5` | example-harness | **+`_test_edge.mjs`, `_test_harness.mjs`** | — | counted | 62 |
+| `live-dom-2026-08-o1` | dom | `gpt-5.6-sol` | **none** | subject only | — | **infra** | 0 |
+| `live-dom-2026-08-o2` | dom | `gpt-5.6-sol` | **none** | subject only | syntax-only | counted | 219 |
 
 ### The strongest self-reported behaviours, quoted
 
@@ -110,7 +112,7 @@ about a task that no longer exists — so those rows carry the state and omit th
 
 ## Who shipped their checker
 
-2 of 23 runs left a file beside `subject.mjs`. The task asks for one file and
+2 of 25 runs left a file beside `subject.mjs`. The task asks for one file and
 does not forbid a second; almost every model ships one anyway. A model that ships its checker has
 made its verification auditable by somebody else — a different act from verifying and discarding,
 and the only self-check evidence on this page that does not rest on the model's own account.
@@ -126,7 +128,7 @@ and the only self-check evidence on this page that does not rest on the model's 
 
 | kind | runs | what it means |
 |---|---:|---|
-| `syntax-only` | 3 | `node --check` or equivalent: the file parses, and nothing else was established |
+| `syntax-only` | 4 | `node --check` or equivalent: the file parses, and nothing else was established |
 | `example-harness` | 3 | the published examples, run through a driver the model wrote |
 | `assertions` | 1 | executable assertions or invariant checks that fail loudly |
 | `legality-table` | 5 | an explicit table of permitted states or transitions, consulted rather than reasoned about each time |
@@ -145,8 +147,8 @@ _None._ No submission defines a checking routine it never invokes. That is worth
 | arm | counted runs | failed something |
 |---|---:|---:|
 | described verification at or above an example harness | 15 | 7 |
-| did not | 4 | 3 |
-**Decidable, barely.** 7/15 of the self-verifying runs failed something, against 3/4 of the rest. With arms this small the comparison is suggestive at best and no test is applied to it.
+| did not | 5 | 4 |
+**Decidable, barely.** 7/15 of the self-verifying runs failed something, against 4/5 of the rest. With arms this small the comparison is suggestive at best and no test is applied to it.
 
 ## The contrast that makes this worth measuring
 

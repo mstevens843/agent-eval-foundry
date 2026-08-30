@@ -382,7 +382,10 @@ export const GATES: readonly Gate[] = [
     evaluate: (_s, _r, e) => {
       if (e === undefined) return { verdict: "n/a", detail: "family not built" };
       if (e.agentAxes === undefined || e.agentAxes === null) {
-        return { verdict: "n/a", detail: "no counted agent trial has failed anything yet" };
+        return {
+          verdict: "n/a",
+          detail: "fewer than two counted failing subjects; no real-agent axis breadth claim yet",
+        };
       }
       if (e.agentFailuresChain === true) {
         return {

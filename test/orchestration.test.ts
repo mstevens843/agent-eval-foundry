@@ -15,6 +15,7 @@ import { describe, expect, it } from "vitest";
 import { buildChallengePackage } from "../src/challenge/package.js";
 import { runFamily } from "../src/families/prompt-injection-containment/runner.js";
 import { loadRegistry } from "../src/foundry/load.js";
+import { familyEvidenceFor } from "../src/reports/evidence.js";
 import { assessFamily } from "../src/reports/ship-report.js";
 import { computeEvidence } from "../src/reports/trial-report.js";
 import { assertBankCoherent, combinedMatrixFor, computeOverlap } from "../src/trials/bank.js";
@@ -41,6 +42,7 @@ import {
 } from "../src/trials/orchestrate.js";
 import { runLocalTrials } from "../src/trials/orchestrate.js";
 import { decideCountability } from "../src/trials/orchestrator.js";
+import { checkProvider, providerById } from "../src/trials/provider-registry.js";
 import { PROVIDERS, classifyRun, dockerPlan, getProvider, shellAdapter } from "../src/trials/providers.js";
 
 const ROOT = new URL("..", import.meta.url).pathname;
@@ -224,6 +226,17 @@ describe("providers", () => {
 
   it("unknown providers are rejected", () => {
     expect(() => getProvider("nope")).toThrow(/unknown provider/);
+  });
+
+  it("provider registry keeps Anthropic import-only and external import-only for this phase", () => {
+    const claude = checkProvider(providerById("claude"));
+    expect(claude.available).toBe(false);
+    expect(claude.state).toBe("import-only");
+    expect(claude.detail).toMatch(/out of tokens|import-only/i);
+
+    const external = checkProvider(providerById("external"));
+    expect(external.available).toBe(false);
+    expect(external.state).toBe("import-only");
   });
 });
 
@@ -446,11 +459,13 @@ describe("UI action record/replay family", () => {
     expect(shape?.expectedMutants.length).toBeGreaterThanOrEqual(4);
   });
 
-  it("passes every structural gate and is blocked only for want of a trial", () => {
-    const a = assessFamily(shape as NonNullable<typeof shape>, registry);
-    expect(a.blockingFailures).toEqual(["difficulty-evidenced"]);
-    expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("fail");
-    expect(a.verdict).toBe("NOT-READY");
+  it("ships with counted trials while preserving the advisory chain limitation", () => {
+    const evidence = familyEvidenceFor(ROOT, "ui-action-record-replay").evidence;
+    const a = assessFamily(shape as NonNullable<typeof shape>, registry, evidence);
+    expect(a.blockingFailures).toEqual([]);
+    expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("pass");
+    expect(a.results.find((r) => r.gate.id === "agent-axes-independent")?.verdict).toBe("fail");
+    expect(a.verdict).toBe("SHIP");
   });
 
   it("declares both halves so refusing to replay cannot pass", () => {

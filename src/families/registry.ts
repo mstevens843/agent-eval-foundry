@@ -9,8 +9,15 @@
 // than having a task shape, and the distinction is load-bearing: `foundry check` validates nine
 // shapes, three of which appear here. The other six are pre-registrations.
 
+import { buildLiveDomChallengePackage } from "../challenge/live-dom-package.js";
 import { buildMemoryChallengePackage } from "../challenge/memory-package.js";
-import { type LeakProfile, MEMORY_PROFILE, PIC_PROFILE, UI_PROFILE } from "../challenge/package-check.js";
+import {
+  LIVE_DOM_PROFILE,
+  type LeakProfile,
+  MEMORY_PROFILE,
+  PIC_PROFILE,
+  UI_PROFILE,
+} from "../challenge/package-check.js";
 import { buildChallengePackage } from "../challenge/package.js";
 import type { ChallengePackage } from "../challenge/package.js";
 import { buildUiChallengePackage } from "../challenge/ui-package.js";
@@ -31,6 +38,12 @@ import { BASELINES as UI_BASELINES, INTENDED_CHECK as UI_CHECKS } from "./ui-act
 import * as ui from "./ui-action-record-replay/runner.js";
 import * as uiScenarios from "./ui-action-record-replay/scenarios.js";
 import { CHECKS as UI_CHECK_NAMES } from "./ui-action-record-replay/verify.js";
+
+import { BASELINES as LIVE_BASELINES, INTENDED_CHECK as LIVE_CHECKS } from "./ui-replay-live-dom/mutants.js";
+import * as live from "./ui-replay-live-dom/runner.js";
+import * as liveScenarios from "./ui-replay-live-dom/scenarios.js";
+import { RULE_CODES as LIVE_RULE_CODES } from "./ui-replay-live-dom/spec.js";
+import { CHECKS as LIVE_CHECK_NAMES } from "./ui-replay-live-dom/verify.js";
 
 export interface FamilySweep {
   readonly scenarioCount: number;
@@ -245,6 +258,43 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     realism: "simulated-tree",
     realismGap:
       "Two rungs are missing, and the first matters more than the second. `dom-like` needs a tree that CHANGES: acting reveals regions, enables controls and replaces the form with a receipt, so a later step meets a page the recording never saw, and selectors can drift rather than merely being renamed. That is where the trade-off between a strict and a patient replayer comes from — and without a trade-off the failure sets are forced to nest, which is exactly what five counted trials across four subjects and two labs produced here. `browser-backed` needs a real engine and is refused for now with the reason recorded in `foundry ui replay upgrade`: no cached browser, minutes-per-sweep launch cost, and a dependency that would end this repository's zero-runtime-dependency property. Neither rung is what this family currently measures, so the honest label is the low one.",
+  },
+  {
+    id: "ui-replay-live-dom",
+    name: "Live-DOM action replay",
+    domain: "UI replay against a mutable DOM-like tree",
+    mechanisms: [
+      "ui-replay-mismatch",
+      "stale-state",
+      "hidden-environment-dependency",
+      "duplicate-side-effects",
+    ],
+    checks: [...LIVE_CHECK_NAMES],
+    ruleCodes: LIVE_RULE_CODES,
+    space: liveScenarios.SPACE,
+    knobPurpose: {
+      seed: "selects settle thresholds and relocatable witnesses",
+      regionFate: "how an earlier recorded action changes the later capture region",
+      priorState: "state already present before replay, including foreign open transactions",
+      settleBudget: "finite logical ticks available during the pass",
+      anchorFidelity: "whether semantic anchor re-derivation is unique or indistinguishable",
+      anchorConflict:
+        "hidden categorical axis: test id, semantic anchor and structural path can name different live nodes",
+      busyFidelity: "`aria-busy` may be honest or misleading and is not load-bearing",
+      replayCount: "one or two fresh-page passes sharing an irreversible side-effect ledger",
+    },
+    run: () => {
+      const run = live.runFamily();
+      return sweep(run.cells, run.scenarios, run.spaceSize, live.toMatrix(run), LIVE_CHECKS, LIVE_BASELINES);
+    },
+    challenge: buildLiveDomChallengePackage,
+    leakProfile: LIVE_DOM_PROFILE,
+    typesPath: "src/families/ui-replay-live-dom/types.ts",
+    estimatedBuildHours: 95,
+    estimatedFrontierUsd: 55,
+    realism: "dom-like",
+    realismGap:
+      "The reducer models live selector drift, region presence, disabled/enabled transitions, stale handles, dialogs, and side effects, but it is not browser-backed. A browser-backed descendant would add a real renderer, focus/event semantics, layout/hit testing, actual ARIA tree computation, and asynchronous browser scheduling.",
   },
 ];
 

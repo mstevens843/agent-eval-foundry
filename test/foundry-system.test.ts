@@ -22,6 +22,7 @@ import { measure } from "../src/axis-meter.js";
 import { runFamily as runPicFamily } from "../src/families/prompt-injection-containment/runner.js";
 import { handAuthoredComparison, planBudget } from "../src/foundry/budget.js";
 import { loadRegistry } from "../src/foundry/load.js";
+import { familyLoop } from "../src/foundry/loop.js";
 import { assertCoverage, coverage } from "../src/foundry/registry.js";
 import { EXPECTED_ARTIFACTS, checkScaffold } from "../src/foundry/scaffold-check.js";
 import { ARTIFACT_PLAN, generateScaffold, scaffoldFromShape } from "../src/foundry/scaffold.js";
@@ -203,13 +204,14 @@ describe("the checked-in registry", () => {
     for (const m of measured) expect(m.results, `${m.id} claims measured`).not.toBeNull();
   });
 
-  it("four families now have measured axis counts", () => {
+  it("five families now have measured axis counts", () => {
     const measured = registry.shapes.filter((s) => s.dataQuality === "measured");
     expect(measured.map((s) => s.familyId).sort()).toEqual([
       "durable-approval-outbox",
       "prompt-injection-containment",
       "prompt-injection-memory-poisoning",
       "ui-action-record-replay",
+      "ui-replay-live-dom",
     ]);
     for (const m of measured) expect(m.estimatedAxes, m.familyId).toBeGreaterThan(1);
   });
@@ -232,6 +234,18 @@ describe("the checked-in registry", () => {
     expect(
       assessFamily(untried, registry).results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict,
     ).toBe("fail");
+  });
+
+  it("one live-DOM subject is difficulty evidence, not an agent-axis breadth claim", () => {
+    const state = familyLoop(ROOT, "ui-replay-live-dom", registry);
+    const shape = registry.shapes.find((s) => s.familyId === "ui-replay-live-dom");
+    expect(state.evidence?.countedAgentTrials).toBe(1);
+    expect(state.evidence?.agentAxes).toBeNull();
+    const assessment = assessFamily(shape as NonNullable<typeof shape>, registry, state.evidence);
+    expect(assessment.verdict).toBe("SHIP");
+    const agentAxes = assessment.results.find((r) => r.gate.id === "agent-axes-independent");
+    expect(agentAxes?.verdict).toBe("n/a");
+    expect(agentAxes?.detail).toMatch(/fewer than two counted failing subjects/);
   });
 });
 
@@ -302,6 +316,18 @@ describe("ship gate on real data", () => {
     for (const s of registry.shapes.filter((x) => x.dataQuality === "estimated")) {
       expect(assessFamily(s, registry).verdict, s.familyId).not.toBe("SHIP");
     }
+  });
+
+  it("parent UI replay and live-DOM descendant keep separate ledger evidence", () => {
+    const parent = registry.candidates.find((c) => c.id === "ui-action-record-replay-built");
+    const child = registry.candidates.find((c) => c.id === "ui-replay-live-dom-built");
+    expect(parent?.status).toBe("shipped");
+    expect(child?.status).toBe("shipped");
+    expect(parent?.results?.note).toMatch(/failure set nests/);
+    expect(child?.results?.note).toMatch(/categorical anchor fix is measured/);
+    expect(parent?.links).toContain("src/families/ui-action-record-replay/");
+    expect(parent?.links).not.toContain("src/families/ui-replay-live-dom/");
+    expect(child?.links).toContain("src/families/ui-replay-live-dom/");
   });
 });
 

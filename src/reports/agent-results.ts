@@ -14,7 +14,7 @@
 // The six outcome categories are kept apart everywhere, because collapsing any two of them is how a
 // benchmark reports something it did not measure.
 
-import type { CampaignPlan } from "../trials/campaign.js";
+import type { CampaignPlan, CampaignSlot } from "../trials/campaign.js";
 import type { TrialRecord, TrialSet } from "../trials/types.js";
 import { countedAgentTrials } from "../trials/types.js";
 
@@ -77,22 +77,33 @@ export interface FamilyTrialAnalysis {
 const modelFamilyOf = (model: string | null): string =>
   model === null ? "unknown" : (model.split("/")[0] ?? model);
 
-function outcomeOf(record: TrialRecord): TrialOutcome {
+function plannedKindFor(slot: CampaignSlot | undefined): OutcomeKind | null {
+  return slot?.state === "REFUSED"
+    ? "provider_refusal"
+    : slot?.state === "FAILED_INFRA"
+      ? "infra_failure"
+      : null;
+}
+
+function outcomeOf(record: TrialRecord, slot?: CampaignSlot): TrialOutcome {
   const graded = record.cells.length;
   const failedCells = record.cells.filter((c) => c.failed.length > 0);
   const byCheck = new Map<string, number>();
   for (const cell of record.cells) {
     for (const check of new Set(cell.failed)) byCheck.set(check, (byCheck.get(check) ?? 0) + 1);
   }
-  const kind: OutcomeKind = !record.counts
-    ? record.status === "refused"
-      ? "provider_refusal"
-      : record.status === "timeout" || record.status === "infrastructure_error"
-        ? "infra_failure"
-        : "not_run"
-    : failedCells.length === 0
-      ? "counted_solve"
-      : "counted_failure";
+  const kind: OutcomeKind =
+    !record.counts && plannedKindFor(slot) !== null
+      ? (plannedKindFor(slot) as OutcomeKind)
+      : !record.counts
+        ? record.status === "refused"
+          ? "provider_refusal"
+          : record.status === "timeout" || record.status === "infrastructure_error"
+            ? "infra_failure"
+            : "not_run"
+        : failedCells.length === 0
+          ? "counted_solve"
+          : "counted_failure";
 
   return {
     runId: record.runId,
@@ -107,6 +118,31 @@ function outcomeOf(record: TrialRecord): TrialOutcome {
     runtimeSeconds: record.runtimeSeconds,
     costUsd: record.costUsd,
     reason: record.countsReason,
+  };
+}
+
+function plannedNonCountedOutcome(campaignId: string, slot: CampaignSlot): TrialOutcome | null {
+  const kind =
+    slot.state === "NOT_RUN"
+      ? "not_run"
+      : slot.state === "REFUSED"
+        ? "provider_refusal"
+        : slot.state === "FAILED_INFRA"
+          ? "infra_failure"
+          : null;
+
+  if (kind === null) return null;
+  return {
+    runId: slot.runId ?? `${campaignId}:${slot.slotId.toLowerCase()}:${slot.state.toLowerCase()}`,
+    subjectId: slot.subjectId,
+    model: slot.model,
+    kind,
+    scenariosGraded: 0,
+    scenariosFailed: 0,
+    failedChecks: [],
+    runtimeSeconds: null,
+    costUsd: null,
+    reason: slot.note === "" ? `planned slot state ${slot.state}` : slot.note,
   };
 }
 
@@ -168,7 +204,23 @@ export function analyseFamilyTrials(
   plan?: CampaignPlan,
 ): FamilyTrialAnalysis {
   const agents = trials.records.filter((r) => r.subjectType === "agent");
-  const outcomes = agents.map(outcomeOf);
+  const recordedByRunId = new Map(agents.map((r) => [r.runId, r]));
+  const plannedRunIds = new Set(
+    plan?.slots.map((s) => s.runId).filter((runId): runId is string => runId !== null) ?? [],
+  );
+  const outcomes =
+    plan === undefined
+      ? agents.map((record) => outcomeOf(record))
+      : [
+          ...plan.slots.flatMap((slot) => {
+            if (slot.runId !== null && recordedByRunId.has(slot.runId)) {
+              return [outcomeOf(recordedByRunId.get(slot.runId) as TrialRecord, slot)];
+            }
+            const planned = plannedNonCountedOutcome(plan.campaignId, slot);
+            return planned === null ? [] : [planned];
+          }),
+          ...agents.filter((record) => !plannedRunIds.has(record.runId)).map((record) => outcomeOf(record)),
+        ];
   const counted = countedAgentTrials(trials);
 
   const checkTotals = new Map<string, number>();
@@ -184,26 +236,11 @@ export function analyseFamilyTrials(
   // `not_run` slots are part of the picture and are read from the plan rather than invented: a
   // campaign with four unrun slots is a different state from one with none, and the difference is
   // invisible if only executed trials are counted.
-  const notRun = plan?.slots.filter((s) => s.state === "NOT_RUN").length ?? 0;
   const planned = plan?.slots.length ?? outcomes.length;
 
   return {
     familyId,
-    outcomes: [
-      ...outcomes,
-      ...Array.from({ length: notRun }, (_, i) => ({
-        runId: `${plan?.campaignId ?? "campaign"}:not-run-${i + 1}`,
-        subjectId: plan?.slots.filter((s) => s.state === "NOT_RUN")[i]?.subjectId ?? "unknown",
-        model: plan?.slots.filter((s) => s.state === "NOT_RUN")[i]?.model ?? null,
-        kind: "not_run" as const,
-        scenariosGraded: 0,
-        scenariosFailed: 0,
-        failedChecks: [],
-        runtimeSeconds: null,
-        costUsd: null,
-        reason: plan?.slots.filter((s) => s.state === "NOT_RUN")[i]?.note ?? "slot not run",
-      })),
-    ],
+    outcomes,
     counted: counted.length,
     solves,
     failures,
@@ -216,6 +253,6 @@ export function analyseFamilyTrials(
       .sort((a, b) => b.scenarios - a.scenarios || a.check.localeCompare(b.check)),
     verdict: counted.length === 0 ? "no-evidence" : failures === 0 ? "already-solved" : "discriminates",
     plannedSlots: planned,
-    notRunSlots: notRun,
+    notRunSlots: outcomes.filter((o) => o.kind === "not_run").length,
   };
 }

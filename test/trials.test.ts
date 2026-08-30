@@ -10,15 +10,24 @@
 // passes, mutants caught, agent scores 100% — while the family has quietly become a transcription
 // exercise. So the leak check is tested against a renamed file as well as a named one.
 
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { measure } from "../src/axis-meter.js";
-import { FORBIDDEN_FILENAMES, checkChallengePackage } from "../src/challenge/package-check.js";
+import {
+  LIVE_DOM_HIDDEN_ARTIFACTS,
+  buildLiveDomChallengePackage,
+} from "../src/challenge/live-dom-package.js";
+import {
+  FORBIDDEN_FILENAMES,
+  LIVE_DOM_PROFILE,
+  checkChallengePackage,
+} from "../src/challenge/package-check.js";
 import { buildChallengePackage } from "../src/challenge/package.js";
 import { HIDDEN_ARTIFACTS } from "../src/challenge/package.js";
 import { runFamily, toMatrix } from "../src/families/prompt-injection-containment/runner.js";
+import { RULE_CODES as LIVE_DOM_RULE_CODES } from "../src/families/ui-replay-live-dom/spec.js";
 import { loadRegistry } from "../src/foundry/load.js";
 import { parseMatrix } from "../src/matrix.js";
 import { assessFamily } from "../src/reports/ship-report.js";
@@ -30,11 +39,13 @@ import {
   runLocalTrials,
   scenarioSetId,
 } from "../src/trials/orchestrate.js";
+import { challengeHash } from "../src/trials/run.js";
 import { inProcessRunner, subprocessRunner } from "../src/trials/runners.js";
 import { countedAgentTrials, summarise } from "../src/trials/types.js";
 import { parseTrialRecord, parseTrialSet } from "../src/trials/validate.js";
 
 const ROOT = new URL("..", import.meta.url).pathname;
+const registry = loadRegistry(ROOT);
 
 const baseRecord = {
   runId: "r1",
@@ -349,6 +360,110 @@ describe("challenge package", () => {
 
   it("the builder and the checker agree on the hidden list without importing each other", () => {
     expect([...HIDDEN_ARTIFACTS].sort()).toEqual([...FORBIDDEN_FILENAMES].sort());
+  });
+});
+
+describe("live-DOM challenge package", () => {
+  const typesSource = readFileSync(join(ROOT, "src/families/ui-replay-live-dom/types.ts"), "utf8");
+  const pkg = buildLiveDomChallengePackage(typesSource, "live-set-test");
+  const spec = pkg.files.find((f) => f.path === "SPEC.md")?.content ?? "";
+  const packageText = pkg.files.map((f) => `${f.path}\n${f.content}`).join("\n");
+
+  it("passes the live-DOM leak profile and states every visible rule code", () => {
+    expect(() => checkChallengePackage(pkg.files, LIVE_DOM_PROFILE)).not.toThrow();
+    for (const code of LIVE_DOM_RULE_CODES) expect(spec, code).toContain(code);
+  });
+
+  it("states the fairness contract sections whose absence caused parent-family ambiguity", () => {
+    for (const section of [
+      "## UI state model",
+      "## Action trace format",
+      "## Selector and anchor types",
+      "## Precedence",
+      "## What observed means",
+      "## Hidden confirmation state",
+      "## Disabled and enabled transitions",
+      "## Duplicate side-effect prevention",
+      "## Audit trail requirements",
+      "## Outcomes",
+      "## Replaying twice",
+    ]) {
+      expect(spec, section).toContain(section);
+    }
+    expect(spec).toContain("aria-busy");
+    expect(spec).toContain("No address kind has a global priority");
+  });
+
+  it("keeps hidden implementation concepts out of visible files", () => {
+    for (const hidden of LIVE_DOM_HIDDEN_ARTIFACTS) {
+      expect(pkg.files.map((f) => f.path)).not.toContain(hidden);
+    }
+    for (const forbidden of [
+      "anchorConflict",
+      "expectedOutcome",
+      "REFERENCE_POLICY",
+      "conflictWinner",
+      "sealedLegitimate",
+      "runBuildGates",
+    ]) {
+      expect(packageText, forbidden).not.toContain(forbidden);
+    }
+  });
+
+  it("has a deterministic package hash and spec edits invalidate stale trials", () => {
+    const again = buildLiveDomChallengePackage(typesSource, "live-set-test");
+    expect(challengeHash(again)).toBe(challengeHash(pkg));
+    const edited = {
+      ...pkg,
+      files: pkg.files.map((f) => (f.path === "SPEC.md" ? { ...f, content: `${f.content}\n` } : f)),
+    };
+    expect(challengeHash(edited)).not.toBe(challengeHash(pkg));
+  });
+
+  it("the leak checker catches helper-file leaks by content, not only path", () => {
+    const leaked = [
+      ...pkg.files,
+      { path: "helpers/selector-map.ts", content: "const anchorConflict = 'x';" },
+    ];
+    expect(() => checkChallengePackage(leaked, LIVE_DOM_PROFILE)).toThrowError(
+      expect.objectContaining({ code: "CHALLENGE_LEAKS_HIDDEN_ARTIFACT" }),
+    );
+  });
+});
+
+describe("checker-required challenge draft", () => {
+  const base = join(ROOT, "examples/families/checker-required-memory-poisoning/challenge");
+
+  it("requires both submitted artifacts and publishes the checker contract", () => {
+    for (const file of [
+      "README.md",
+      "SPEC.md",
+      "types.ts",
+      "starter/subject.mjs",
+      "starter/check.mjs",
+      "MANIFEST.json",
+    ]) {
+      expect(existsSync(join(base, file)), file).toBe(true);
+    }
+    const spec = readFileSync(join(base, "SPEC.md"), "utf8");
+    expect(spec).toContain("`subject.mjs`, exporting `subject`");
+    expect(spec).toContain("`check.mjs`, exporting `check`");
+    expect(spec).toContain("never invokes the subject");
+    expect(spec).toContain("Passing every subject fails");
+  });
+
+  it("declares the known-bad checker mutants that keep the family on HOLD until measured", () => {
+    const shape = registry.shapes.find((s) => s.familyId === "checker-required-memory-poisoning");
+    expect(shape?.dataQuality).toBe("estimated");
+    expect(shape?.expectedMutants.map((m) => m.mutantId).sort()).toEqual([
+      "accepts-all-checker",
+      "checker-never-invokes-subject",
+      "inexpressive-checker",
+      "provenance-dropper",
+      "self-trusting-reader",
+      "vacuous-checker",
+      "visible-only-checker",
+    ]);
   });
 });
 

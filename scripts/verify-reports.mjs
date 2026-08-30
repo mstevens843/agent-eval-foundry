@@ -9,7 +9,8 @@ import { mkdtempSync, readFileSync, readdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const run = (args) => execFileSync("node", ["dist/cli.js", ...args], { encoding: "utf8" });
+const run = (args) =>
+  execFileSync("node", ["dist/cli.js", ...args], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
 const tmp = mkdtempSync(join(tmpdir(), "foundry-verify-"));
 let failures = 0;
 
@@ -50,12 +51,20 @@ for (const [path, args] of [
     ["family", "run", "--family", "ui-action-record-replay"],
   ],
   [
+    "examples/families/ui-replay-live-dom/matrix.json",
+    ["family", "run", "--family", "ui-replay-live-dom"],
+  ],
+  [
     "examples/shapes/prompt-injection-memory-poisoning.json",
     ["family", "shape", "--family", "prompt-injection-memory-poisoning"],
   ],
   [
     "examples/shapes/ui-action-record-replay.json",
     ["family", "shape", "--family", "ui-action-record-replay"],
+  ],
+  [
+    "examples/shapes/ui-replay-live-dom.json",
+    ["family", "shape", "--family", "ui-replay-live-dom"],
   ],
 ]) {
   if (run(args) !== readFileSync(path, "utf8")) {
@@ -69,6 +78,7 @@ for (const [path, args] of [
 for (const [familyId, committedDir] of [
   ["prompt-injection-memory-poisoning", "examples/families/prompt-injection-memory-poisoning/challenge"],
   ["ui-action-record-replay", "examples/families/ui-action-record-replay/challenge"],
+  ["ui-replay-live-dom", "examples/families/ui-replay-live-dom/challenge"],
 ]) {
   const tmpDir = mkdtempSync(join(tmpdir(), "foundry-fam-"));
   run(["challenge", "build", "--family", familyId, "--out", tmpDir]);
@@ -150,6 +160,7 @@ for (const familyId of [
   "prompt-injection-containment",
   "prompt-injection-memory-poisoning",
   "ui-action-record-replay",
+  "ui-replay-live-dom",
 ]) {
   const bunTmp = mkdtempSync(join(tmpdir(), "foundry-bundle-"));
   run(["trials", "campaign", "prepare", "--family", familyId, "--provider", "external", "--out", bunTmp]);
@@ -192,7 +203,7 @@ for (const variant of [
 // by being written here, but the count is asserted so a report that stops being generated is caught
 // rather than silently skipped.
 run(["all", "--out", tmp]);
-const EXPECTED_REPORTS = 40;
+const EXPECTED_REPORTS = 49;
 const generated = readdirSync(tmp);
 if (generated.length !== EXPECTED_REPORTS) {
   console.error(`WRONG COUNT  \`all\` wrote ${generated.length} reports, expected ${EXPECTED_REPORTS}`);

@@ -14,6 +14,7 @@ A chain stays a chain however many implementations are laid along it.
 |---|---:|---:|---:|---|---:|
 | `prompt-injection-memory-poisoning` | 4 | 6 | 1 | no | ≥2 |
 | `ui-action-record-replay` | 4 | 6 | 0 | **YES — one axis** | 1 |
+| `ui-replay-live-dom` | 1 | 0 | 0 | no | ≥2 |
 
 ### `prompt-injection-memory-poisoning`
 
@@ -55,6 +56,18 @@ takes their union. The only lever is scenarios.
 strategy dominates another everywhere, the weaker strategy's failures are a superset of the
 stronger one's by construction, and the catch sets are forced into a total order. Nesting is
 not bad luck here — it is what a family with no trade-off in it must produce.
+
+### `ui-replay-live-dom`
+
+Fewer than two subjects have failed anything, so there is no chain to detect yet. This is not evidence of breadth.
+
+| subject A | subject B | \|A\| | \|B\| | shared | relation | cross-lab |
+|---|---|---:|---:|---:|---|---|
+
+**0 incomparable pair(s)**, so the family separates subjects in more than one
+direction. That is what a family measuring several things looks like, and it is the state the
+chained families above need to reach.
+
 
 ## Where an independent axis could live
 
@@ -112,6 +125,37 @@ target rather than an intention.
 | `seed` | `23` | 104 | `claude-haiku-4-5` 18%, `claude-opus-5` 13%, `claude-sonnet-5` 18%, `gpt-5.6-sol` 26% | **yes** |
 | `seed` | `41` | 107 | `claude-haiku-4-5` 16%, `claude-opus-5` 12%, `claude-sonnet-5` 16%, `gpt-5.6-sol` 26% | **yes** |
 
+
+### `ui-replay-live-dom`
+
+| knob | value | scenarios | per-subject failure rate | separating? |
+|---|---|---:|---|---|
+| `anchorConflict` | `none` | 216 | `gpt-5.6-sol` 11% | no |
+| `anchorConflict` | `path_wins` | 216 | `gpt-5.6-sol` 40% | no |
+| `anchorConflict` | `semantic_wins` | 216 | `gpt-5.6-sol` 10% | no |
+| `anchorConflict` | `testid_wins` | 216 | `gpt-5.6-sol` 41% | no |
+| `anchorFidelity` | `duplicated` | 445 | `gpt-5.6-sol` 28% | no |
+| `anchorFidelity` | `exact` | 419 | `gpt-5.6-sol` 23% | no |
+| `busyFidelity` | `honest` | 426 | `gpt-5.6-sol` 26% | no |
+| `busyFidelity` | `misleading` | 438 | `gpt-5.6-sol` 25% | no |
+| `priorState` | `arming` | 288 | `gpt-5.6-sol` 32% | no |
+| `priorState` | `clean` | 288 | `gpt-5.6-sol` 44% | no |
+| `priorState` | `foreign_hold` | 288 | `gpt-5.6-sol` 0% | no |
+| `regionFate` | `disabled_then_enabled` | 144 | `gpt-5.6-sol` 32% | no |
+| `regionFate` | `late_mount` | 144 | `gpt-5.6-sol` 17% | no |
+| `regionFate` | `remount_rekeyed` | 144 | `gpt-5.6-sol` 21% | no |
+| `regionFate` | `removed` | 144 | `gpt-5.6-sol` 0% | no |
+| `regionFate` | `stable` | 144 | `gpt-5.6-sol` 27% | no |
+| `regionFate` | `superseded` | 144 | `gpt-5.6-sol` 56% | no |
+| `replayCount` | `1` | 427 | `gpt-5.6-sol` 24% | no |
+| `replayCount` | `2` | 437 | `gpt-5.6-sol` 27% | no |
+| `seed` | `11` | 436 | `gpt-5.6-sol` 22% | no |
+| `seed` | `41` | 428 | `gpt-5.6-sol` 29% | no |
+| `settleBudget` | `0` | 269 | `gpt-5.6-sol` 13% | no |
+| `settleBudget` | `2` | 292 | `gpt-5.6-sol` 32% | no |
+| `settleBudget` | `6` | 303 | `gpt-5.6-sol` 30% | no |
+
+**Untouched** — declared, measured, and no subject has ever failed here: `priorState=foreign_hold`, `regionFate=removed`. A region nothing fails is either genuinely easy or not being reached.
 
 ## The fix, and why it has to be a trade-off
 

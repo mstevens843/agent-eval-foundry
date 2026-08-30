@@ -37,6 +37,15 @@ export interface ScenarioParams {
   readonly settleBudget: number;
   /** `duplicated` mounts a twin of whatever the anchor matches, making re-derivation ambiguous. */
   readonly anchorFidelity: "exact" | "duplicated";
+  /**
+   * Internal scenario knob for the categorical anchor axis.
+   *
+   * `none` leaves the target addressed normally. The other values make the recorded test id,
+   * semantic anchor, and structural path resolve to three different live nodes; exactly one of those
+   * nodes still carries the recorded entity/effect/precondition. The field name is ground-truth
+   * metadata and is never shipped in the challenge package.
+   */
+  readonly anchorConflict: "none" | "testid_wins" | "semantic_wins" | "path_wins";
   /** Whether `aria-busy` tells the truth. Declared, never load-bearing. */
   readonly busyFidelity: "honest" | "misleading";
   /** 1 or 2. Two replays, FRESH TREE each pass, one accumulating money ledger. */

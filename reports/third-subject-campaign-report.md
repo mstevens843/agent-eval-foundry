@@ -15,13 +15,13 @@ Three CLIs are installed here and exactly one of them was a new LAB:
 
 | provider | family | available | detail |
 |---|---|---|---|
-| `claude` | anthropic | yes | 2.1.251 (Claude Code) |
-| `claude-sonnet` | anthropic | yes | 2.1.251 (Claude Code) |
-| `claude-haiku` | anthropic | yes | 2.1.251 (Claude Code) |
-| `claude-fable` | anthropic | yes | 2.1.251 (Claude Code) |
-| `codex` | openai | yes | codex-cli 0.150.1 |
-| `gemini` | google | yes | 0.46.0 |
-| `external` | external | **no** | external by declaration: no local CLI |
+| `claude` | anthropic | **no** | Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles |
+| `claude-sonnet` | anthropic | **no** | Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles |
+| `claude-haiku` | anthropic | **no** | Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles |
+| `claude-fable` | anthropic | **no** | Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles |
+| `codex` | openai | yes | codex-cli 0.138.0 |
+| `gemini` | google | **no** | 0.46.0; entitlement previously blocked with IneligibleTierError, so this phase treats Gemini as import-only until a real authenticated run changes that |
+| `external` | external | **no** | external by declaration: prepare a bundle and import the result |
 
 Google's binary answers `--version` and its account is not entitled: authentication fails with
 `IneligibleTierError`. That is an infrastructure failure, never a model result, and it counts for
@@ -55,14 +55,14 @@ separately.
 
 ## The constraint, after
 
-**MEASURED.** 4 shared subject(s) across 2 provider family(ies). "Did the same implementation fail both?" has an answer, and the combined width below is computed over the shared subjects only.
+**PARTIAL.** 1 shared subject(s) against a threshold of 3. The combined width is bounded above by 1, which cannot distinguish complete overlap from independence. 2 more counted trial(s) would reach the threshold.
 
 | | |
 |---|---:|
-| shared subjects | 4 |
+| shared subjects | 1 |
 | threshold | 3 |
-| provider families among them | 2 |
-| counted trials still needed | 0 |
+| provider families among them | 1 |
+| counted trials still needed | 2 |
 
 ## What it bought, and what it did not
 

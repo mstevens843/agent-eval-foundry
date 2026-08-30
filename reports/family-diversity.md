@@ -8,6 +8,7 @@ a column mixing the two without labels is how an estimate becomes a fact.
 |---|---|---|---:|---:|---:|---|
 | `audit-truth-financial-workflow` | candidate | false-audit-history, oracle-probing, permission-boundary | — | 45 | 60 | est. |
 | `browser-action-replay` | idea | ui-replay-mismatch, stale-state, hidden-environment-dependency | — | 90 | 80 | est. |
+| `checker-required-memory-poisoning` | candidate | checker-quality-gap, context-contamination, false-audit-history, prompt-injection-via-retrieval | — | 45 | 20 | est. |
 | `deployment-rollback-partial-effects` | candidate | uncertain-external-effects, duplicate-side-effects, liveness-stall | — | 60 | 75 | est. |
 | `durable-approval-outbox` | shipped | uncertain-external-effects, duplicate-side-effects, false-audit-history, liveness-stall, tool-result-ambiguity | 3 | 120 | 49 | measured |
 | `model-alias-drift-sentinel` | idea | model-alias-drift, hidden-environment-dependency | 2 | 55 | 50 | est. |
@@ -16,22 +17,23 @@ a column mixing the two without labels is how an estimate becomes a fact.
 | `prompt-injection-capability-routing` | idea | permission-boundary, tool-result-ambiguity, prompt-injection-via-retrieval | 3 | 60 | 55 | est. |
 | `prompt-injection-containment` | trialed | prompt-injection-via-retrieval, context-contamination, permission-boundary | 4 | 70 | 65 | measured |
 | `prompt-injection-cross-tool-escalation` | idea | permission-boundary, tool-result-ambiguity, duplicate-side-effects | 3 | 55 | 50 | est. |
-| `prompt-injection-memory-poisoning` | built | context-contamination, false-audit-history, prompt-injection-via-retrieval | 3 | 75 | 70 | measured |
+| `prompt-injection-memory-poisoning` | shipped | context-contamination, false-audit-history, prompt-injection-via-retrieval | 3 | 75 | 70 | measured |
 | `stale-crm-ticket-automation` | candidate | stale-state, tool-result-ambiguity, duplicate-side-effects | 2 | 70 | 55 | est. |
-| `ui-action-record-replay` | built | ui-replay-mismatch, stale-state, hidden-environment-dependency | 6 | 55 | 40 | measured |
+| `ui-action-record-replay` | shipped | ui-replay-mismatch, stale-state, hidden-environment-dependency | 6 | 55 | 40 | measured |
+| `ui-replay-live-dom` | shipped | ui-replay-mismatch, stale-state, hidden-environment-dependency, duplicate-side-effects | 19 | 95 | 55 | measured |
 
 ## Totals
 
 | | |
 |---|---:|
-| families | 13 |
-| expected axes (all) | 30 |
-| of which measured | **16** |
+| families | 15 |
+| expected axes (all) | 49 |
+| of which measured | **35** |
 | of which estimated | 14 |
-| declared build hours | 850 |
-| declared frontier spend | $743.66 |
+| declared build hours | 990 |
+| declared frontier spend | $818.66 |
 
-Mechanism coverage across families: 14 distinct mechanisms.
+Mechanism coverage across families: 15 distinct mechanisms.
 
 **How to read the axes column.** For the measured family it is the antichain width computed from
 a real result matrix against a real bank of engines. For every other row it is an author's

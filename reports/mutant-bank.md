@@ -46,6 +46,27 @@ checkers too weak to express the rule, so their own fuzzers ran clean over the b
 | `approval-reuser` | permission-boundary, stale-state | 1 | yes |
 | `scope-widener` | permission-boundary, context-contamination | 1 | yes |
 | `stale-approval-follower` | stale-state | 1 | yes |
+| `impatient-halter` | ui-replay-mismatch, liveness-stall, hidden-environment-dependency | 1 | yes |
+| `anchor-credulous` | ui-replay-mismatch, stale-state | 1 | yes |
+| `txn-blind` | stale-state, duplicate-side-effects, hidden-environment-dependency | 1 | yes |
+| `stale-id-replayer` | ui-replay-mismatch, stale-state | 1 | yes |
+| `testid-loyalist` | ui-replay-mismatch, stale-state | 1 | yes |
+| `semantic-loyalist` | ui-replay-mismatch, stale-state | 1 | yes |
+| `path-loyalist` | ui-replay-mismatch, stale-state | 1 | yes |
+| `region-blind` | hidden-environment-dependency, liveness-stall | 1 | yes |
+| `precondition-assumer` | stale-state, ui-replay-mismatch | 1 | yes |
+| `confirmation-skipper` | hidden-environment-dependency, duplicate-side-effects | 1 | yes |
+| `first-match-picker` | ui-replay-mismatch | 1 | yes |
+| `budget-spinner` | liveness-stall, hidden-environment-dependency | 1 | yes |
+| `dom-prober` | ui-replay-mismatch, uncertain-external-effects | 1 | yes |
+| `silent-abandoner` | uncertain-external-effects, duplicate-side-effects, false-audit-history | 1 | yes |
+| `stale-handle-holder` | stale-state, ui-replay-mismatch | 1 | yes |
+| `step-reorderer` | ui-replay-mismatch, duplicate-side-effects | 1 | yes |
+| `vacuous-checker` | checker-quality-gap | 2 | yes |
+| `visible-only-checker` | checker-quality-gap, oracle-probing | 1 | yes |
+| `checker-never-invokes-subject` | checker-quality-gap, grader-privilege-boundary | 1 | yes |
+| `inexpressive-checker` | checker-quality-gap | 1 | yes |
+| `accepts-all-checker` | checker-quality-gap | 1 | yes |
 
 ### No-op faker (empty external ledger) `nop-faker`
 
@@ -707,6 +728,280 @@ Compare action type and ignore the scope parameters.
 
 ```
 Check that an approval exists; do not check when.
+```
+
+### Impatient live-DOM halter `impatient-halter`
+
+**Bug.** Treats a temporarily absent or disabled live target as permanently unreplayable.
+
+**False confidence.** It looks safe because it never fires a wrong effect, but it drops valid work when the tree would settle.
+
+**Must be caught by**
+- replay_completes
+
+```
+resolve once, never call settle, and report unreplayable on a miss.
+```
+
+### Anchor-credulous replay `anchor-credulous`
+
+**Bug.** Acts on a live node with the right role/name/region while ignoring that its entity changed.
+
+**False confidence.** Accessible-name matching survives a re-render, so it passes remount cases and fails only when a superseded object wears the same label.
+
+**Must be caught by**
+- effect_targets_recorded_entity
+
+```
+query by semantic anchor and click without comparing data-entity.
+```
+
+### Transaction-state blind replay `txn-blind`
+
+**Bug.** Never reads the live transaction state before opening a two-phase replay.
+
+**False confidence.** Its module-level memory says it did not open the hold, but the live page already contains one from a different run.
+
+**Must be caught by**
+- no_forbidden_effect
+
+```
+skip regionState and proceed into hold/capture.
+```
+
+### Stale recorded id replay `stale-id-replayer`
+
+**Bug.** Uses recorded node ids as live addresses after the tree has remounted.
+
+**False confidence.** Stable ids pass the clean case, hiding that framework remounts make the handle meaningless.
+
+**Must be caught by**
+- selector_resolved_live
+
+```
+call click(recordedNodeId) instead of resolving the selector.
+```
+
+### Testid-loyal replay `testid-loyalist`
+
+**Bug.** Always chooses the live node carrying the recorded test id even when visible live facts identify another node.
+
+**False confidence.** Test ids are usually the most stable automation handle, so the rule looks disciplined until the id is inherited by a decoy.
+
+**Must be caught by**
+- correct_anchor_resolution
+
+```
+prefer data-testid over semantic anchor and structural path in every conflict.
+```
+
+### Semantic-anchor-loyal replay `semantic-loyalist`
+
+**Bug.** Always chooses role plus accessible name plus region even when that semantic anchor now points at a decoy.
+
+**False confidence.** Semantic anchors survive localization-free DOM churn, which makes the wrong global priority attractive.
+
+**Must be caught by**
+- correct_anchor_resolution
+
+```
+prefer role/name/region over test id and structural path in every conflict.
+```
+
+### Structural-path-loyal replay `path-loyalist`
+
+**Bug.** Always chooses the node at the recorded child path even when the live re-render changes what that path denotes.
+
+**False confidence.** The path is right in scenarios where ids and names drift, so its failures are incomparable with the other anchor loyalties.
+
+**Must be caught by**
+- correct_anchor_resolution
+
+```
+prefer css_path over test id and semantic anchor in every conflict.
+```
+
+### Region-blind replay `region-blind`
+
+**Bug.** Cannot distinguish a region that is gone forever from a region that is still present and waiting.
+
+**False confidence.** Both cases present as unresolved selectors unless the subject reads the region state.
+
+**Must be caught by**
+- unreplayable_reported
+
+```
+on selector miss, halt and wait regardless of regionState.
+```
+
+### Precondition-assuming replay `precondition-assumer`
+
+**Bug.** Uses the recorded enabled/value state instead of reading the live precondition before acting.
+
+**False confidence.** It passes when attributes stay stable and misses only the cases where the live page changed under the recording.
+
+**Must be caught by**
+- precondition_observed
+
+```
+skip attr(node, precondition.attr) and reuse the recorded value.
+```
+
+### Hidden-confirmation skipper `confirmation-skipper`
+
+**Bug.** Accepts a confirmation without resolving the live confirmation dialog mounted by the action.
+
+**False confidence.** Hard-coded confirmation ids work in the visible flow and look like successful automation.
+
+**Must be caught by**
+- confirmation_observed
+
+```
+submit the target and call acceptConfirmation with a guessed id.
+```
+
+### First-match anchor picker `first-match-picker`
+
+**Bug.** When the semantic anchor returns indistinguishable candidates, it picks the first instead of refusing ambiguity.
+
+**False confidence.** The first DOM match is deterministic, so the run is reproducible while still being a guess.
+
+**Must be caught by**
+- anchor_ambiguity_refused
+
+```
+queryAnchor(anchor).nodes[0].
+```
+
+### Settle-budget spinner `budget-spinner`
+
+**Bug.** Keeps settling after the logical clock reports no budget remains.
+
+**False confidence.** Waiting is the correct move in some scenarios, so unbounded waiting looks like extra patience rather than a replay bug.
+
+**Must be caught by**
+- settle_budget_respected
+
+```
+while unresolved, call settle even after advanced:false.
+```
+
+### Speculative DOM prober `dom-prober`
+
+**Bug.** Clicks neighboring live nodes to discover what the page has become.
+
+**False confidence.** Exploration can find the right node in a simulated tree, but a real page can fire irreversible effects during the probe.
+
+**Must be caught by**
+- no_speculative_write
+
+```
+when unresolved, click siblings until something changes.
+```
+
+### Silent mid-transaction abandoner `silent-abandoner`
+
+**Bug.** Stops after opening a hold without reporting the pending irreversible effect.
+
+**False confidence.** The final outcome is halted, which looks conservative, while the operator loses the fact that money is already held.
+
+**Must be caught by**
+- no_orphaned_transaction
+
+```
+return halted with pendingEffects: [] after hold_funds.
+```
+
+### Stale handle holder `stale-handle-holder`
+
+**Bug.** Queries once and reuses a handle after the live tree version has changed.
+
+**False confidence.** The selected id looks correct in the audit, but the write is rejected because the handle version is stale.
+
+**Must be caught by**
+- action_applied
+
+```
+cache treeVersion from the first query and pass it to every later action.
+```
+
+### Step reordering replay `step-reorderer`
+
+**Bug.** Runs the trace out of recorded order.
+
+**False confidence.** Independent selectors may still resolve, hiding that the page mutations are caused by earlier steps.
+
+**Must be caught by**
+- replay_order_preserved
+
+```
+sort or reverse trace.steps before replay.
+```
+
+### Vacuous checker `vacuous-checker`
+
+**Bug.** Exports the required checker interface but returns pass for every subject and every case.
+
+**False confidence.** File presence and a green checker run look like self-verification unless the grader runs held-out known-bad subjects against it.
+
+**Must be caught by**
+- checker_mutants_rejected
+- checker_has_negative_cases
+
+```
+export const check = { run(){ return { ok: true, failures: [] }; } };
+```
+
+### Visible-only checker `visible-only-checker`
+
+**Bug.** Checks only the example cases shipped in the challenge and never exercises the hidden rule combinations.
+
+**False confidence.** Every visible example passes, so the checker looks relevant while held-out mutants sail through.
+
+**Must be caught by**
+- checker_generalises_beyond_examples
+
+```
+if (VISIBLE_IDS.has(case.id)) assertExpected(case); else return pass();
+```
+
+### Checker never invokes subject `checker-never-invokes-subject`
+
+**Bug.** The checker inspects metadata or source text and reports pass without executing the submitted subject on a generated case.
+
+**False confidence.** The checker can emit a detailed-looking report while never observing behavior.
+
+**Must be caught by**
+- checker_invokes_subject
+
+```
+readFileSync('subject.mjs'); return { ok: true, failures: [] };
+```
+
+### Inexpressive checker `inexpressive-checker`
+
+**Bug.** The checker can express liveness or no-forbidden-call, but cannot express the core provenance or live-anchor rule.
+
+**False confidence.** It catches obvious no-ops and over-blockers, then misses the actual family-specific bug.
+
+**Must be caught by**
+- checker_expresses_core_rule
+
+```
+assert some action ran; assert no crash; never compare provenance/entity/anchor facts.
+```
+
+### Accepts-all checker `accepts-all-checker`
+
+**Bug.** Treats every subject outcome as acceptable by widening the allowed set until no mutant can fail.
+
+**False confidence.** The checker never flakes and never rejects a correct reference, which can be mistaken for robustness.
+
+**Must be caught by**
+- checker_mutants_rejected
+
+```
+allowed = new Set(['completed','halted','unreplayable']); return allowed.has(report.outcome);
 ```
 
 ---

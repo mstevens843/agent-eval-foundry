@@ -15,7 +15,8 @@
 import { measure } from "../axis-meter.js";
 import type { KindedBank } from "../trials/bank.js";
 import { combineOverSharedSubjects, computeOverlap } from "../trials/bank.js";
-import { PROVIDERS } from "../trials/provider-registry.js";
+import { PROVIDERS, checkProvider } from "../trials/provider-registry.js";
+import { ROUTABLE_FAMILY_IDS } from "../trials/router.js";
 import type { Matrix } from "../types.js";
 
 export interface DifficultyBankRow {
@@ -80,8 +81,26 @@ function runCommands(missing: readonly MissingTrial[]): readonly string[] {
   return missing.flatMap((m, i) => {
     const provider = providerFor(m.subject);
     const slug = m.familyId.split("-").pop() ?? m.familyId;
+    if (!(ROUTABLE_FAMILY_IDS as readonly string[]).includes(m.familyId)) {
+      return [
+        ...(i === 0 ? [] : [""]),
+        `# ${m.subject} on ${m.familyId}: imported/non-routable bank; run in its source harness and import the result.`,
+      ];
+    }
     if (provider === null || provider.command === null) {
-      return [`# ${m.subject} on ${m.familyId}: no CLI in the provider registry — prepare a bundle instead.`];
+      return [
+        ...(i === 0 ? [] : [""]),
+        `foundry trials campaign prepare --family ${m.familyId} --provider external --out bundles/${m.familyId}-external`,
+        `foundry trials campaign import --family ${m.familyId} bundles/${m.familyId}-external`,
+      ];
+    }
+    const availability = checkProvider(provider);
+    if (!availability.available) {
+      return [
+        ...(i === 0 ? [] : [""]),
+        `foundry trials campaign prepare --family ${m.familyId} --provider ${provider.id} --out bundles/${m.familyId}-${provider.id}`,
+        `foundry trials campaign import --family ${m.familyId} bundles/${m.familyId}-${provider.id}`,
+      ];
     }
     const rest = provider.command
       .slice(1)
@@ -242,7 +261,7 @@ export function renderSharedDifficultyBank(input: SharedDifficultyInput): string
     "",
     "## The exact trial that unlocks the next claim",
     "",
-    ...(multi.length >= input.threshold
+    ...(shared.length >= input.threshold
       ? ["Nothing: the combined count is available. Widen the bank to narrow it."]
       : difficulty.length < 2
         ? [
@@ -256,7 +275,7 @@ export function renderSharedDifficultyBank(input: SharedDifficultyInput): string
         : missingPairs(difficulty, appearances).length > 0
           ? [
               `${input.threshold - shared.length} more subject(s) must attempt every difficulty family. The cheapest`,
-              "path is running the models that already have trials on one family against the others.",
+              "path is running or importing the models that already have trials on one family against the others.",
               "Each line below is a trial that does not exist yet:",
               "",
               "```bash",

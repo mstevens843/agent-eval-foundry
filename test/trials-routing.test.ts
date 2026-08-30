@@ -34,6 +34,7 @@ import {
   kindedBank,
   normalizeSubjectId,
 } from "../src/trials/bank.js";
+import type { CampaignPlan } from "../src/trials/campaign.js";
 import {
   assertCampaignChallenge,
   assertPlanHonest,
@@ -49,6 +50,7 @@ import {
   hashChallengeDir,
   prepareChallenge,
 } from "../src/trials/run.js";
+import type { TrialSet } from "../src/trials/types.js";
 
 const ROOT = new URL("..", import.meta.url).pathname;
 const registry = loadRegistry(ROOT);
@@ -81,6 +83,13 @@ describe("the trial router", () => {
     expect(mem.size).toBeGreaterThan(100);
     const first = [...mem.values()][0] as Record<string, unknown>;
     expect(Object.keys(first)).toContain("sessionsBetween");
+
+    const live = routeFor("ui-replay-live-dom").scenarioParams();
+    expect(live.size).toBe(864);
+    const liveParams = [...live.values()] as Record<string, unknown>[];
+    expect(new Set(liveParams.map((p) => p.anchorConflict))).toEqual(
+      new Set(["none", "testid_wins", "semantic_wins", "path_wins"]),
+    );
   });
 });
 
@@ -230,6 +239,23 @@ describe("campaign plans", () => {
     expect(() => assertCampaignChallenge(plan, "0000")).toThrowError(
       expect.objectContaining({ code: "CAMPAIGN_CHALLENGE_HASH_MISMATCH" }),
     );
+  });
+
+  it("the live-DOM campaign is pinned to the current package hash and import-only external slots", () => {
+    const plan = plans.find((p) => p.familyId === "ui-replay-live-dom");
+    expect(plan).toBeDefined();
+    const current = prepareChallenge(ROOT, "ui-replay-live-dom").hash;
+    expect((plan as NonNullable<typeof plan>).challengeHash).toBe(current);
+    expect(() => assertCampaignChallenge(plan as NonNullable<typeof plan>, current)).not.toThrow();
+
+    const slots = (plan as NonNullable<typeof plan>).slots;
+    expect(slots.find((s) => s.slotId === "O1")?.runner).toBe("shell");
+    for (const slotId of ["A1", "A2", "G1"]) {
+      const slot = slots.find((s) => s.slotId === slotId);
+      expect(slot?.runner, slotId).toBe("external");
+      expect(slot?.command, slotId).toBeNull();
+      expect(slot?.state, slotId).toBe("NOT_RUN");
+    }
   });
 
   it("a malformed plan is rejected rather than half-read", () => {
@@ -437,6 +463,116 @@ describe("trial analysis", () => {
         split.rows.length > 1 && max > 0 && (min === 0 || max / min >= 2),
       );
     }
+  });
+
+  it("projects planned refusal and infrastructure slots without counting them", () => {
+    const trials: TrialSet = {
+      familyId: "example-family",
+      scenarioSetId: "set-1",
+      records: [
+        {
+          runId: "campaign-o2",
+          familyId: "example-family",
+          subjectId: "agent-o2",
+          subjectType: "agent",
+          model: "openai/test",
+          effort: null,
+          status: "completed",
+          counts: true,
+          countsReason: "completed and graded",
+          scenarioSetId: "set-1",
+          cells: [{ scenarioId: "s1", failed: ["intended_check"] }],
+          runtimeSeconds: 12,
+          costUsd: null,
+          artifactPath: "trials/example-family/campaign-o2/submission",
+          isolation: "subprocess",
+          notes: "",
+        },
+      ],
+    };
+    const plan: CampaignPlan = {
+      campaignId: "campaign",
+      familyId: "example-family",
+      hypothesis: "example",
+      killSignal: "example",
+      confirmSignal: "example",
+      challengeHash: "abc",
+      scenarioSetId: "set-1",
+      scenariosExpected: 1,
+      timeoutMs: 1000,
+      artifactPath: "campaigns/example",
+      isolation: "subprocess",
+      counting: {
+        neverCounts: ["refused", "timeout", "infrastructure_error"],
+        onRefusal: "record but do not count",
+        onInfraFailure: "record but do not count",
+        onCrash: "judge subject-owned crashes explicitly",
+        retriesOnInfra: 1,
+        retryOnRefusal: false,
+      },
+      preservation: ["preserve transcript, submission and verifier output"],
+      budgetUsd: 0,
+      slots: [
+        {
+          slotId: "O1",
+          model: "openai/test",
+          subjectId: "agent-o1",
+          effort: null,
+          runner: "shell",
+          command: ["codex"],
+          state: "FAILED_INFRA",
+          runId: "campaign-o1",
+          note: "sandbox failed before artifact",
+        },
+        {
+          slotId: "O2",
+          model: "openai/test",
+          subjectId: "agent-o2",
+          effort: null,
+          runner: "shell",
+          command: ["codex"],
+          state: "RUN",
+          runId: "campaign-o2",
+          note: "counted run",
+        },
+        {
+          slotId: "A1",
+          model: "anthropic/import-only",
+          subjectId: "agent-a1",
+          effort: null,
+          runner: "external",
+          command: null,
+          state: "REFUSED",
+          runId: null,
+          note: "provider refusal",
+        },
+        {
+          slotId: "G1",
+          model: "gemini/import-only",
+          subjectId: "agent-g1",
+          effort: null,
+          runner: "external",
+          command: null,
+          state: "NOT_RUN",
+          runId: null,
+          note: "entitlement blocked",
+        },
+      ],
+    };
+
+    const analysis = analyseFamilyTrials("example-family", trials, new Map([["s1", {}]]), plan);
+
+    expect(analysis.counted).toBe(1);
+    expect(analysis.failures).toBe(1);
+    expect(analysis.infra).toBe(1);
+    expect(analysis.refusals).toBe(1);
+    expect(analysis.notRunSlots).toBe(1);
+    expect(analysis.outcomes.map((o) => [o.runId, o.kind])).toEqual([
+      ["campaign-o1", "infra_failure"],
+      ["campaign-o2", "counted_failure"],
+      ["campaign:a1:refused", "provider_refusal"],
+      ["campaign:g1:not_run", "not_run"],
+    ]);
   });
 });
 

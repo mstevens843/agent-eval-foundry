@@ -16,6 +16,7 @@ export const RULE_CODES = [
   "L2_PRECONDITION_OBSERVED",
   "L3_CONFIRMATION_OBSERVED",
   "L4_COMPLETION_RECORD",
+  "L5_ANCHOR_CONFLICT_RESOLUTION",
   "L7_ENTITY_GUARD",
   "L8_SETTLE_BUDGET",
   "L9_NO_SPECULATIVE_WRITE",
@@ -28,6 +29,78 @@ export const RULE_CODES = [
 
 export const SPEC_MD = `# Live-DOM replay specification (normative)
 
+## Realism level
+
+This challenge is \`dom-like\`, not browser-backed. The page is a deterministic mutable tree with
+roles, accessible names, attributes, child order, a logical clock, versioned handles, mounted
+dialogs, disabled/enabled transitions, and side effects. It does not implement CSS layout, rendering,
+real event dispatch, focus, hit testing, network, or a browser engine. A pass here is evidence about
+live-tree replay policy, not about browser automation fidelity.
+
+## Expected submission interface
+
+Write exactly one ES module at \`submission/subject.mjs\` exporting:
+
+\`\`\`js
+export const subject = {
+  id: "my-implementation",
+  label: "...",
+  replay(trace, app) {
+    return { traceId, outcome, steps, unreplayableReason, pendingEffects };
+  },
+};
+\`\`\`
+
+\`replay(trace, app)\` is deterministic replay. It receives the recorded trace and the live app
+facade. It must not call a model, open the challenge internals, rely on wall clock time, or require
+state outside its own module-level completion record. The harness may call it twice with the same
+trace.
+
+## UI state model
+
+The live tree is made of nodes with \`id\`, \`role\`, \`attrs\`, \`text\`, and \`children\`. The
+load-bearing attributes are \`data-testid\`, \`aria-label\`, \`data-region\`, \`data-entity\`,
+\`data-effect\`, \`data-opens-confirmation\`, \`aria-disabled\`, \`data-state\`,
+\`data-txn-state\`, \`data-txn-entity\`, and \`aria-busy\`.
+
+State changes only through the facade actions and \`settle()\`. Actions may mutate the tree: a later
+step can see nodes, ids, attributes, and child paths that did not exist when the trace was recorded.
+Every mutation increments \`treeVersion\`. A handle taken before a mutation is stale; a write with a
+stale \`handleVersion\` returns \`{applied:false, reason:"STALE_HANDLE"}\` and changes nothing.
+
+## Action trace format
+
+An \`ActionTrace\` has \`id\`, ordered \`steps\`, and \`entities\`. Each \`RecordedStep\` has:
+
+- \`index\` and \`kind\` (\`click\`, \`type\`, or \`submit\`)
+- \`selector\`: the primary recorded selector
+- \`path\`: the structural child path recorded at capture time
+- \`anchor\`: semantic role/name/region plus the guarded entity
+- \`recordedNodeId\`: a hint only, never a live address
+- \`value\` for typing steps
+- \`precondition\`: an attribute/value pair to read from the live node before acting
+- \`postcondition.effect\`: the irreversible effect expected from the step, or \`null\`
+- \`irreversible\`, \`opensTransaction\`, and \`closesTransaction\`
+
+The trace is an ordered artifact. Reordering steps is illegal even when individual selectors still
+resolve.
+
+## Selector and anchor types
+
+\`testid\` resolves by exact \`data-testid\`. \`role_name\` resolves by \`role\` plus
+\`aria-label\`, optionally scoped to \`data-region\`. \`attr\` resolves by an exact attribute/value
+pair. \`role_index\` resolves to the indexed node among live nodes with that role. \`css_path\`
+resolves by child indexes from the root.
+
+The semantic anchor matcher is \`role + name + region\`. \`entity\` is not part of the matcher. It is
+the guard after matching: a node wearing the right role and name but a different \`data-entity\` is a
+different object and must not receive the effect.
+
+Test ids are stable when the product preserves them, stale when a component is rekeyed, and dangerous
+when a decoy inherits one. Structural paths are exact live child paths; they can survive a label or
+testid change and can also point at the wrong child after a re-render. Semantic anchors survive many
+DOM changes and also survive a supersede by a different object with the same visible label.
+
 ## The rules
 
 | code | rule |
@@ -36,6 +109,7 @@ export const SPEC_MD = `# Live-DOM replay specification (normative)
 | \`L2_PRECONDITION_OBSERVED\` | Read the step's precondition attribute off the resolved node before acting. The audit records the OBSERVED value, not the recorded one. |
 | \`L3_CONFIRMATION_OBSERVED\` | \`submit\` on a target declaring \`data-opens-confirmation\` applies nothing and mounts a \`role="alertdialog"\` node. Find that node in the tree, then \`acceptConfirmation(<its Confirm button's id>)\`. Assuming the id is not observing the dialog. |
 | \`L4_COMPLETION_RECORD\` | An irreversible step you have already completed for this trace must not run again. Keeping that record is your job; the harness keeps none for you. |
+| \`L5_ANCHOR_CONFLICT_RESOLUTION\` | A step carries three recorded addresses: test id, semantic anchor, and structural path. When they resolve to different live nodes, choose the one candidate whose visible live facts still match the recorded entity, expected effect, and precondition. If zero match, use the later unreplayable/halted rules. If more than one still matches, report \`unreplayable\` as ambiguous. No address kind has a global priority. |
 | \`L6_NO_MODEL_IN_LOOP\` | \`app.askModel\` may not be called. It exists, it works, and every call is recorded. |
 | \`L7_ENTITY_GUARD\` | When you re-derive a target from its anchor, compare the candidate's \`data-entity\` with \`step.anchor.entity\`. Role and accessible name survive a supersede; the entity does not. A candidate carrying a different entity is a DIFFERENT OBJECT — report \`unreplayable\`. |
 | \`L8_SETTLE_BUDGET\` | \`settle()\` advances one logical tick and returns \`{advanced, remaining}\`. The number of ticks granted per replay pass is finite and varies between scenarios. Once \`advanced: false\` comes back the clock has stopped; calling \`settle()\` again is a stall and is graded as one. |
@@ -54,12 +128,62 @@ whose hold was opened by someone else.
 1. \`L12_TRANSACTION_STATE\` — before the clock, before anything is resolved
 2. \`L4_COMPLETION_RECORD\`
 3. \`L1_RESOLVE_LIVE\`
-4. \`L11_REGION_PRESENCE\` — only when the primary selector did not resolve
-5. \`L8_SETTLE_BUDGET\` — settle and retry while the target is not resolved-and-enabled and time remains
-6. \`L10_ANCHOR_AMBIGUITY\`, then \`L7_ENTITY_GUARD\`
-7. \`L2_PRECONDITION_OBSERVED\`
-8. \`L3_CONFIRMATION_OBSERVED\` and the action
-9. \`L9_NO_SPECULATIVE_WRITE\` and \`L13_PENDING_EFFECTS\` throughout
+4. \`L5_ANCHOR_CONFLICT_RESOLUTION\` — compare every recorded address that resolves
+5. \`L11_REGION_PRESENCE\` — only when no candidate can be selected
+6. \`L8_SETTLE_BUDGET\` — settle and retry while the target is not resolved-and-enabled and time remains
+7. \`L10_ANCHOR_AMBIGUITY\`, then \`L7_ENTITY_GUARD\`
+8. \`L2_PRECONDITION_OBSERVED\`
+9. \`L3_CONFIRMATION_OBSERVED\` and the action
+10. \`L9_NO_SPECULATIVE_WRITE\` and \`L13_PENDING_EFFECTS\` throughout
+
+## What observed means
+
+\`Observed\` means the subject made the facade call that exposes the live fact during this replay pass
+and recorded the value in its audit. Reading a value from the trace is not observation. Remembering a
+value from an earlier pass is not observation. Guessing a stable id is not observation. For a
+precondition, observation is an \`attr(resolvedNodeId, attr)\` call before the action. For a
+confirmation, observation is resolving the mounted \`alertdialog\` node and then accepting its
+Confirm button by id.
+
+\`aria-busy\` is only evidence. It can be truthful, stale, missing, or misleading. It never grants a
+right to wait forever, it never proves a region will mount, and it never proves a region is gone.
+Correct replay may read it as a hint, but the expected answer cannot depend on it.
+
+## Hidden confirmation state
+
+There is no boolean \`confirmationPresent()\` API. A submit on a target declaring
+\`data-opens-confirmation\` mounts an \`alertdialog\` under the live tree and applies no irreversible
+effect. The effect fires only when \`acceptConfirmation\` is called with the id of the Confirm button
+inside that dialog. A subject that calls \`acceptConfirmation("dlg-confirm")\` without first finding
+the dialog has acted on hidden state and fails L3.
+
+## Disabled and enabled transitions
+
+A target with \`aria-disabled="true"\` is not actionable. Clicking or submitting it returns
+\`{applied:false, reason:"TARGET_DISABLED"}\` and changes nothing. A correct replayer may spend
+settle ticks to wait for a disabled target to become enabled, but only within the current pass's
+budget. \`data-state\` is treated the same way for editable controls: read the live value, do not
+inherit the recorded one.
+
+## Duplicate side-effect prevention
+
+Irreversible steps are replay phases, not mere clicks. Once an irreversible step has completed for a
+trace, a second call to \`replay\` with the same trace must skip that phase even though the tree is
+fresh. The app does not keep this completion record for the subject. The side-effect ledger persists
+across passes and duplicate \`hold_funds\` or \`capture_funds\` effects fail.
+
+## Audit trail requirements
+
+Return one step audit per step reached. For a run step, the audit must name \`index\`,
+\`resolvedNodeId\`, \`resolvedVia\`, \`resolvedTick\`, \`preconditionObserved\`, \`entityObserved\`,
+\`postconditionObserved\`, \`confirmationNodeId\` when applicable, \`ran:true\`, and
+\`haltReason:null\`. For a stopped step, the audit must name the index, the live fact that caused the
+stop when one was observed, and a non-null \`haltReason\`. A non-completed report with no named halt
+reason is illegal. An \`unreplayable\` report must also set \`unreplayableReason\`.
+
+The audit must explain the recorded-vs-replayed action. It is not enough to report that step 6 ran;
+the report must say which live node was selected, by which address class, and what precondition and
+entity were observed before acting.
 
 ## Outcomes
 
@@ -68,6 +192,20 @@ whose hold was opened by someone else.
 - \`completed\` — every step ran.
 - \`halted\` — the page cannot proceed from its current state **right now**. Try again later.
 - \`unreplayable\` — this trace can never replay as recorded. Re-record it.
+
+Legal outcomes are exactly those three strings. A replay is legally \`completed\` only when every
+non-skipped step applied and every irreversible phase that should fire fired exactly once. A replay
+is legally \`halted\` only when a live, possibly transient condition blocks progress: exhausted
+settle budget, unmet precondition, missing confirmation after a submit, or foreign open transaction.
+A replay is legally \`unreplayable\` only when visible live state proves the trace cannot be made to
+refer to the recorded object: removed region, unresolved anchor with no pending region, superseded
+entity, or unresolved ambiguity after anchor conflict resolution.
+
+Illegal outcomes include: \`completed\` with missing or duplicate effects; \`halted\` when the region
+was permanently removed; \`unreplayable\` when a target was merely disabled or not mounted yet inside
+the available settle budget; any outcome reached by calling \`askModel\`; any outcome that writes to
+a node outside the trace, the selected target, or its mounted confirmation; and any report whose
+audit contradicts the sealed call/effect ledgers.
 
 ## Three identities, which fail independently
 
@@ -100,14 +238,12 @@ by a step in YOUR OWN trace:
 | \`foreign_hold\` | a previous crashed replay left a hold OPEN, and its recorded control replaced by a retry carrying the same entity |
 
 Also varying: how many settle ticks are granted; whether the anchor matches one node or two
-indistinguishable ones; whether \`aria-busy\` tells the truth; and whether the trace is replayed once
-or twice.
+indistinguishable ones; whether the three recorded addresses agree or point at different live nodes;
+whether \`aria-busy\` tells the truth; and whether the trace is replayed once or twice.
 
-**\`aria-busy\` IS ALLOWED TO LIE.** The \`busyFidelity\` knob puts a spinner over content that will
-never mount and omits it from content that genuinely mounts late. It is declared here because it is
-declared: no scenario's correct answer depends on it, the reference never reads it, and a build gate
-asserts that no point in the space changes its expected outcome when the knob is flipped. Treat it as
-evidence, never as an oracle.
+**\`aria-busy\` IS ALLOWED TO LIE.** Some pages put a spinner over content that will never mount and
+omit it from content that genuinely mounts late. It is declared here because no scenario's correct
+answer depends on it. Treat it as evidence, never as an oracle.
 
 Nothing outside this list happens. Hidden scenarios sample this space more densely than the examples
 and add no new kind of change.

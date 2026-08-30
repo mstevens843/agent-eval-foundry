@@ -11,7 +11,7 @@
 // reader can see WHICH property was re-derived rather than being told the suite is healthy.
 
 import { App } from "./app.js";
-import { BASELINES, INTENDED_CHECK, MUTANTS, POLICY_MUTANTS } from "./mutants.js";
+import { ANCHOR_LOYAL_SUBJECTS, BASELINES, INTENDED_CHECK, MUTANTS, POLICY_MUTANTS } from "./mutants.js";
 import { REFERENCE_POLICY, reference, resetCompletionRecords } from "./reference.js";
 import { type RunResult, catchSet, relate, runFamily } from "./runner.js";
 import {
@@ -29,9 +29,8 @@ export interface GateResult {
   readonly detail: string;
 }
 
-/** The three one-field subjects the incomparability argument names, plus the two dispositions. */
+/** The three one-field subjects the original incomparability argument names. */
 const PROOF_SUBJECTS = ["impatient-halter", "anchor-credulous", "txn-blind"] as const;
-const POLES = ["strict-bailer", "patient-waiter"] as const;
 
 const ok = (gate: string, detail: string): GateResult => ({ gate, passed: true, detail });
 const bad = (gate: string, detail: string): GateResult => ({ gate, passed: false, detail });
@@ -159,25 +158,47 @@ export function runBuildGates(run: RunResult = runFamily()): readonly GateResult
     }
   }
 
-  // ---- build:poles_incomparable -----------------------------------------------------------------
+  // ---- build:categorical_anchor_axis ------------------------------------------------------------
+  const conflictCounts = new Map<string, number>();
+  for (const scenario of run.scenarios) {
+    const key = scenario.params.anchorConflict;
+    conflictCounts.set(key, (conflictCounts.get(key) ?? 0) + 1);
+  }
+  const missingConflicts = ["testid_wins", "semantic_wins", "path_wins"].filter(
+    (key) => (conflictCounts.get(key) ?? 0) === 0,
+  );
+  gates.push(
+    missingConflicts.length === 0
+      ? ok(
+          "build:categorical_anchor_categories_covered",
+          [...conflictCounts].map(([k, v]) => `${k}=${v}`).join(", "),
+        )
+      : bad(
+          "build:categorical_anchor_categories_covered",
+          `${missingConflicts.join(", ")} absent from the measured set; address-loyal strategies cannot be compared categorically`,
+        ),
+  );
+
+  // ---- build:anchor_loyalists_incomparable ------------------------------------------------------
   for (const seed of [11, 41]) {
-    const rel = relate(
-      catchSetForSeed(run, POLES[0], seed),
-      catchSetForSeed(run, POLES[1], seed),
-      POLES[0],
-      POLES[1],
-    );
-    gates.push(
-      rel.relation === "incomparable"
-        ? ok(
-            `build:poles_incomparable[seed${seed}]`,
-            `strict fails ${rel.aOnly} which patient passes; patient fails ${rel.bOnly} which strict passes`,
-          )
-        : bad(
-            `build:poles_incomparable[seed${seed}]`,
-            `strict and patient catch sets are ${rel.relation}: bailing out early dominates again and this family measures what its parent measured`,
-          ),
-    );
+    for (let i = 0; i < ANCHOR_LOYAL_SUBJECTS.length; i += 1) {
+      for (let j = i + 1; j < ANCHOR_LOYAL_SUBJECTS.length; j += 1) {
+        const a = ANCHOR_LOYAL_SUBJECTS[i] ?? "";
+        const b = ANCHOR_LOYAL_SUBJECTS[j] ?? "";
+        const rel = relate(catchSetForSeed(run, a, seed), catchSetForSeed(run, b, seed), a, b);
+        gates.push(
+          rel.relation === "incomparable"
+            ? ok(
+                `build:anchor_loyalists_incomparable[${a}|${b}|seed${seed}]`,
+                `private witnesses ${rel.aOnly} and ${rel.bOnly}`,
+              )
+            : bad(
+                `build:anchor_loyalists_incomparable[${a}|${b}|seed${seed}]`,
+                `the two catch sets are ${rel.relation}: address preference has collapsed back into an ordinal chain`,
+              ),
+        );
+      }
+    }
   }
 
   // ---- build:anti_correlation_distinct ----------------------------------------------------------
@@ -200,8 +221,8 @@ export function runBuildGates(run: RunResult = runFamily()): readonly GateResult
       ]
         .sort()
         .join(",");
-    const strict = checksOf(POLES[0]);
-    const patient = checksOf(POLES[1]);
+    const strict = checksOf("strict-bailer");
+    const patient = checksOf("patient-waiter");
     gates.push(
       strict !== "" && patient !== "" && strict !== patient
         ? ok(

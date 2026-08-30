@@ -5,10 +5,11 @@
 // failed produced the next one, and the reason it failed is written down in a form the next one was
 // built against".
 //
-// The honest shape of that claim, stated up front rather than buried: the loop has completed exactly
-// one full turn. One family was measured, trialed, killed for a named reason, evolved into four
-// proposals, and one proposal was built and measured. The built descendant has NOT been trialed, so
-// the turn is not yet closed — and the report says so in the same table as the good news.
+// The honest shape of that claim, stated up front rather than buried: the loop has now completed
+// more than one turn. One family was measured, trialed, killed for a named reason, evolved into a
+// stronger descendant, and that descendant was trialed. A second line exposed a one-axis failure
+// chain, then built a packaged live-DOM descendant with a categorical anti-chain fix and one counted
+// Codex/OpenAI trial.
 
 import type { VariantProposal } from "../foundry/evolve.js";
 import { KILL_REASON_SPECS } from "../foundry/kill.js";
@@ -88,7 +89,7 @@ export function renderEvolutionReport(input: EvolutionReportInput): string {
     "A benchmark program is not a list of tasks; it is a process that produces tasks and discards most",
     "of them. This report is the process, running.",
     "",
-    "## One full turn, and where it stopped",
+    "## The loop, now closed twice",
     "",
     "| step | what happened | evidence |",
     "|---|---|---|",
@@ -99,11 +100,15 @@ export function renderEvolutionReport(input: EvolutionReportInput): string {
     "| 5. evolve | 4 variants proposed from named operators | this report, below |",
     "| 6. promote | `prompt-injection-memory-poisoning` built end to end | `reports/prompt-injection-memory-poisoning-family-report.md` |",
     "| 7. measure | 3 measured axes; reference clean; every mutant caught | `reports/prompt-injection-memory-poisoning-axis-report.md` |",
-    "| 8. **trial** | **not done** — no agent has attempted the descendant | — |",
+    "| 8. **trial** | 8 counted descendant trials; 5 failed, including the same 32 scenarios across two labs | `reports/prompt-injection-memory-poisoning-agent-results.md` |",
+    "| 9. detect | `ui-action-record-replay` shipped but its five counted failure sets form a chain | `reports/ui-action-record-replay-agent-diagnosis.md` |",
+    "| 10. evolve | `ui-replay-live-dom` adds mutable tree state and categorical anchor conflict | `reports/ui-replay-live-dom-report.md` |",
+    "| 11. package | leak-checked 9-file challenge package with a pinned hash | `reports/ui-replay-live-dom-challenge-package-report.md` |",
+    "| 12. **trial** | 1 counted Codex/OpenAI trial failed 219/864 live-DOM scenarios | `reports/ui-replay-live-dom-agent-results.md` |",
     "",
-    "**The turn is not closed.** Step 8 is the one that decides whether the evolution worked, and it",
-    "has not been run. Until it is, the descendant carries exactly the caveat that killed its parent:",
-    "a measured axis count against hand-written mutants is a statement about the verifier.",
+    "**The key correction is still the same:** mutant-detection axes and real-agent difficulty are",
+    "separate evidence streams. The live-DOM descendant now has both, but its real-agent evidence comes",
+    "from one OpenAI subject only; cross-family and cross-lab claims remain bounded by the shared bank.",
     "",
     "## Where every family stands",
     "",
@@ -114,7 +119,7 @@ export function renderEvolutionReport(input: EvolutionReportInput): string {
       return `| \`${s.shape.familyId}\` | ${s.assessment.verdict} | ${s.analysis.primary === null ? "—" : `\`${s.analysis.primary.reason}\``} | ${s.analysis.disposition === null ? "—" : `\`${s.analysis.disposition}\``} | ${s.shape.estimatedAxes ?? "—"}${s.shape.dataQuality === "measured" ? "" : " _(est.)_"} | ${counted} | ${builtFamilyIds.includes(s.shape.familyId) ? "yes" : "no"} |`;
     }),
     "",
-    `${built.length} of ${states.length} families execute. ${trialed.length} has been attempted by a real agent.`,
+    `${built.length} of ${states.length} families execute. ${trialed.length} have been attempted by a real agent.`,
     "",
     "## What the kill taxonomy has actually found",
     "",
@@ -161,7 +166,7 @@ export function renderEvolutionReport(input: EvolutionReportInput): string {
     "The other three each depend on a mechanism the parent's trials demonstrably handled — chained tool",
     "authority, approval confusion — so their kill risk is higher for a reason the evidence supports.",
     "",
-    "## What the promotion cost, and what it bought",
+    "## What promotion cost, and what it bought",
     "",
     "| | |",
     "|---|---:|",
@@ -170,30 +175,31 @@ export function renderEvolutionReport(input: EvolutionReportInput): string {
     "| the kill | one gate, zero additional spend |",
     "| descendant, build | ~75 h |",
     "| descendant, measured axes | 3 |",
-    "| descendant, counted trials | **0** |",
+    "| memory descendant, counted trials | **8** |",
+    "| UI descendant, challenge package | 9 files, hash-pinned |",
+    "| UI descendant, counted trials | **1** |",
     "",
     "The kill is the cheap part and the build is the expensive part, which is the entire argument for",
-    "gating before building rather than after. What this cycle demonstrates is that the gate can fire",
-    "on the author's own work; what it does not yet demonstrate is that the descendant is harder.",
+    "gating before building rather than after. What these cycles demonstrate is that the gate can fire",
+    "on the author's own work, the next family can be built from the failure reason, and evidence can",
+    "be advanced without overwriting the parent family that produced it.",
     "",
     "## Shared bank",
     "",
     `${input.sharedBankSubjects} subject(s) have attempted more than one family, against a threshold of ${input.sharedBankThreshold}.`,
     "",
-    "Cross-family axis counts are not available until that clears, and the two new families make it",
-    "harder rather than easier: three built families and one trialed family is a wider bank to fill.",
-    "The cheapest path remains running the existing challenge packages against models already in the",
-    "outbox bank.",
+    "Cross-family axis counts across every difficulty family are not available until that clears. The",
+    "live-DOM run added a descendant bank with one OpenAI subject; it strengthens the family but makes",
+    "the shared-bank claim narrower until additional subjects attempt the same package hash.",
     "",
     "## What would falsify the loop",
     "",
     "Stated in advance, because a process that cannot fail is a process that is not measuring anything:",
     "",
-    "1. **The descendant is also already-solved.** Three counted trials passing 128/128 on",
-    "   `prompt-injection-memory-poisoning` would mean the persistence hypothesis was wrong and the",
-    "   operator that produced it does not produce difficulty.",
-    "2. **The descendant is unfair rather than hard.** Trials that fail on `M4_UNPROVENANCED_RECALL`",
-    "   scenarios only would suggest the store-type knob punishes rather than measures.",
+    "1. **A descendant is also already-solved.** Counted trials passing every hidden scenario mean the",
+    "   operator did not produce difficulty against that bank.",
+    "2. **A descendant is unfair rather than hard.** Failures concentrated only on an ambiguous rule or",
+    "   host defect move the family to HOLD/REPAIR rather than difficulty-evidenced.",
     "3. **The variants are indistinguishable.** If two evolved families produce the same catch sets on a",
     "   shared bank, the operators are relabelling rather than diversifying.",
     "",

@@ -1,0 +1,8 @@
+Implemented [submission/subject.mjs](/private/var/folders/8b/blch34j914xbz9lc1wv387f80000gn/T/foundry-trial-18SuyK/submission/subject.mjs).
+
+Verification done:
+- `node --check submission/subject.mjs`
+- Confirmed ES module export shape
+- Confirmed `submission/` contains exactly `subject.mjs`
+
+I also sanity-tested the visible stable, removed-region, late-mount, and duplicate-replay flows with a local mock facade.

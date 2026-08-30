@@ -1,0 +1,28 @@
+{
+  "runId": "live-dom-2026-08-o1",
+  "familyId": "ui-replay-live-dom",
+  "provider": "shell",
+  "providerLabel": "Shell command",
+  "model": "openai/gpt-5.6-sol",
+  "effort": null,
+  "subjectId": "gpt-5.6-sol",
+  "scenarioSetId": "dom-864-3a8cb30a",
+  "timeoutMs": 1800000,
+  "runtimeSeconds": 0,
+  "costUsd": null,
+  "isolation": "process",
+  "classification": "crashed",
+  "classificationDetail": "runner exited non-zero and produced no artifact",
+  "command": [
+    "codex",
+    "exec",
+    "--dangerously-bypass-approvals-and-sandbox",
+    "--skip-git-repo-check",
+    "{instruction}"
+  ],
+  "challengeHash": "18c3f5afc5973604205cd7df23ce4cad",
+  "challengeFiles": 9,
+  "campaign": "live-dom-2026-08",
+  "hostScript": "live-dom-host.mjs",
+  "scenariosExpected": 864
+}

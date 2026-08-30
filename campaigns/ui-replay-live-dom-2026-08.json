@@ -1,0 +1,103 @@
+{
+  "campaignId": "live-dom-2026-08",
+  "familyId": "ui-replay-live-dom",
+  "hypothesis": "The parent UI replay family measured one difficulty axis because every counted agent failure set nested. The live-DOM descendant should force a real trade-off: recorded test id, semantic anchor and structural path can each be right in different scenarios, while settle budget, hidden confirmations, stale handles and duplicate side effects remain independently graded. If the categorical anchor operator worked, a counted agent should fail on at least one live-DOM check that was not reducible to the parent chain.",
+  "killSignal": "Every counted Codex/OpenAI trial passes every graded live-DOM scenario, which means the fairness spec made the benchmark obvious to the available model and the family is already solved. Alternatively, the counted trial fails only through a package ambiguity or host error, which means the family is HOLD/REPAIR rather than difficulty-evidenced.",
+  "confirmSignal": "At least one counted Codex/OpenAI trial fails at least one scenario under the current challenge hash, with transcript, submission and verifier output preserved. A stronger confirmation is failure on a categorical anchor check (`correct_anchor_resolution`) or on an independently live-DOM-only mechanism such as hidden confirmation, duplicate side effects, stale handles or model-in-loop replay.",
+  "challengeHash": "18c3f5afc5973604205cd7df23ce4cad",
+  "scenarioSetId": "dom-864-3a8cb30a",
+  "scenariosExpected": 864,
+  "timeoutMs": 1800000,
+  "artifactPath": "submission/subject.mjs",
+  "isolation": "subprocess",
+  "counting": {
+    "neverCounts": [
+      "refused",
+      "timeout",
+      "infrastructure_error"
+    ],
+    "onRefusal": "Recorded as REFUSED with the transcript preserved, and never counted. A provider refusal is the absence of an attempt: the reward of 0 it produces is not evidence in either direction. The slot is NOT re-run.",
+    "onInfraFailure": "Recorded as FAILED_INFRA, transcript preserved, uncounted. May be re-run up to the declared retry limit because the failure is in the harness rather than in the subject.",
+    "onCrash": "Recorded as `crashed` and NOT counted by default. Promoting a crash to a failure automatically would let a harness bug read as a capability finding; re-classify by hand only if the crash is demonstrably inside the submitted artifact.",
+    "retriesOnInfra": 2,
+    "retryOnRefusal": false
+  },
+  "preservation": [
+    "Every slot writes a durable trial directory under trials/<family>/<run-id>/ whether or not it counts.",
+    "metadata.json records the provider, the command, the challenge hash and the scenario-set id.",
+    "transcript.txt is preserved verbatim, including for refusals, entitlement failures and crashes.",
+    "challenge/ holds the exact bundle the model saw; submission/ holds the artifact it produced.",
+    "verifier-output.json holds the graded cells; countability.json holds the counting decision and its reason.",
+    "A stale challenge hash invalidates a run rather than letting old evidence count for a repaired spec."
+  ],
+  "budgetUsd": 15.0,
+  "slots": [
+    {
+      "slotId": "O1",
+      "model": "openai/gpt-5.6-sol",
+      "subjectId": "gpt-5.6-sol",
+      "effort": null,
+      "runner": "shell",
+      "command": [
+        "codex",
+        "exec",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "--skip-git-repo-check",
+        "{instruction}"
+      ],
+      "state": "FAILED_INFRA",
+      "runId": "live-dom-2026-08-o1",
+      "note": "First local Codex attempt failed before artifact creation with Operation not permitted while initializing the Codex app-server client under the sandbox. Preserved and uncounted."
+    },
+    {
+      "slotId": "O2",
+      "model": "openai/gpt-5.6-sol",
+      "subjectId": "gpt-5.6-sol",
+      "effort": null,
+      "runner": "shell",
+      "command": [
+        "codex",
+        "exec",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "--skip-git-repo-check",
+        "{instruction}"
+      ],
+      "state": "RUN",
+      "runId": "live-dom-2026-08-o2",
+      "note": "Escalated Codex/OpenAI retry. Counted completed run: 864 scenarios graded, 219 failed, checks replay_completes and precondition_observed."
+    },
+    {
+      "slotId": "A1",
+      "model": "anthropic/claude-opus-5",
+      "subjectId": "claude-opus-5",
+      "effort": null,
+      "runner": "external",
+      "command": null,
+      "state": "NOT_RUN",
+      "runId": null,
+      "note": "Import-only in this phase. Do not execute Anthropic/Claude locally because the account is out of tokens."
+    },
+    {
+      "slotId": "A2",
+      "model": "anthropic/claude-sonnet-5",
+      "subjectId": "claude-sonnet-5",
+      "effort": null,
+      "runner": "external",
+      "command": null,
+      "state": "NOT_RUN",
+      "runId": null,
+      "note": "Import-only in this phase. Prepared bundle only; no Anthropic quota should be consumed."
+    },
+    {
+      "slotId": "G1",
+      "model": "google/gemini-3-pro",
+      "subjectId": "gemini-3-pro",
+      "effort": null,
+      "runner": "external",
+      "command": null,
+      "state": "NOT_RUN",
+      "runId": null,
+      "note": "Import-only unless entitlement changes. Prior Gemini runs were blocked by IneligibleTierError and count as infrastructure, not model evidence."
+    }
+  ]
+}
