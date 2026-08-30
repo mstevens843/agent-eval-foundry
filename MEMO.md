@@ -407,10 +407,16 @@ also credited `auditAlreadyCompleted` — ordinary implementation logic in a fam
 auditing — as a self-check, which is why the source patterns are now narrow enough to be boring and a
 shipped file that imports the graded artifact is detected structurally instead.
 
-So the proposal I would actually fund: a family whose submission is `subject.mjs` **and** `check.mjs`,
-where the checker is run against the reference and against held-out known-bad implementations. A
-checker that passes the reference and catches none of the mutants cannot fail, and that is a named,
-measurable failure mode nothing here currently grades.
+That proposal is now implemented as `checker-required-memory-poisoning`: the visible package
+requires `subject.mjs` **and** `checker.mjs`, and the hidden verifier grades the implementation and
+the checker separately. The checker is run against reference traces and held-out bad traces covering
+false success, missing audit history, liveness stalls, duplicate effects, late cancellation,
+provenance loss, status-only checking, forged receipts, no-checker/stub-checker cases and
+nondeterminism. The measured sweep is 792 scenarios from a 2,376-point declared space, 20/20
+known-bad submissions are caught by intended checks, and the first counted Codex/OpenAI trial
+(`checker-required-2026-08-o1`) failed 614/792 under hash
+`448f2f816c51030cc97a374816226168`. That is difficulty evidence for one OpenAI subject only, not a
+cross-lab breadth claim.
 
 Underneath it is the constraint from `results/08`: fairness requires the rules be fully stated;
 solvability requires the answer be derivable from the rules plus the shipped data; and anything a
@@ -517,8 +523,8 @@ That changes the unit of production:
    harness they call into).
 3. **Gate every family on axis count and on trial evidence, not on check count** — the tool in this
    repository, which I did not have when I built the outbox task. `node dist/cli.js ship` runs the
-   gate: 20 checks per family, 14 blocking, verdict a pure function of the gates. Of the thirteen
-   families declared here, three reach SHIP, one is NOT-READY because real agents from two labs
+   gate: 20 checks per family, 14 blocking, verdict a pure function of the gates. Of the fifteen
+   families declared here, five reach SHIP, one is NOT-READY because real agents from two labs
    solved it, and the other nine are NOT-READY because nothing has attempted them — a family must
    not ship on an estimate, and `difficulty-evidenced` became blocking once every built family was
    routable and "nobody has tried it" stopped being a fact about the tooling.

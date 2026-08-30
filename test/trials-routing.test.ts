@@ -120,6 +120,21 @@ describe("host equivalence — the subprocess host grades like the family does",
       for (const cell of graded.cells) expect(ids.has(cell.scenarioId), cell.scenarioId).toBe(true);
     });
   }
+
+  it("checker-required: a subject-only artifact is complete enough to grade and fails checker_present", () => {
+    const dir = mkdtempSync(join(tmpdir(), "checker-host-"));
+    const subject = join(dir, "subject.mjs");
+    writeFileSync(
+      subject,
+      "export const subject = { id:'subject-only', label:'subject-only', runSession(){ return { decisions: [], audit: [] }; } };",
+      "utf8",
+    );
+    const route = routeFor("checker-required-memory-poisoning");
+    const graded = route.grade(subject);
+    expect(graded.cells.length).toBe(route.scenarioCount());
+    expect(graded.hostErrors).toBe(0);
+    expect(graded.cells.some((c) => c.failed.includes("checker_present"))).toBe(true);
+  });
 });
 
 describe("challenge hashing", () => {

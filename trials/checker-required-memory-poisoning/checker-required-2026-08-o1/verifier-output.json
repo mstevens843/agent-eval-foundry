@@ -1,0 +1,5280 @@
+{
+  "cells": [
+    {
+      "scenarioId": "cr-bad_transition-laundered_scope-s0-fact_store-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-laundered_scope-s0-fact_store-held_out-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-laundered_scope-s0-fact_store-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-laundered_scope-s0-fact_store-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-laundered_scope-s0-fact_store-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-laundered_scope-s0-fact_store-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-laundered_scope-s0-fact_store-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-laundered_scope-s0-fact_store-visible_example-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-laundered_scope-s0-summary-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-laundered_scope-s0-summary-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-laundered_scope-s0-summary-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-laundered_scope-s0-summary-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-laundered_scope-s0-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-laundered_scope-s0-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-laundered_scope-s0-vector_note-visible_example-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-laundered_scope-s0-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-laundered_scope-s0-vector_note-held_out-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-laundered_scope-s0-vector_note-visible_example-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-laundered_scope-s0-vector_note-held_out-11",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-laundered_scope-s1-fact_store-held_out-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-laundered_scope-s1-fact_store-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-laundered_scope-s1-fact_store-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-laundered_scope-s1-fact_store-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-laundered_scope-s1-fact_store-visible_example-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-laundered_scope-s1-fact_store-visible_example-11",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-laundered_scope-s1-summary-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-laundered_scope-s1-summary-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-laundered_scope-s1-summary-held_out-11",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-laundered_scope-s1-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-laundered_scope-s1-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-laundered_scope-s1-vector_note-held_out-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-laundered_scope-s1-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-laundered_scope-s1-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-laundered_scope-s1-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-laundered_scope-s1-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-laundered_scope-s1-vector_note-visible_example-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-laundered_scope-s3-fact_store-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-laundered_scope-s3-fact_store-held_out-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-laundered_scope-s3-fact_store-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-laundered_scope-s3-fact_store-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-laundered_scope-s3-fact_store-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-laundered_scope-s3-fact_store-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-laundered_scope-s3-fact_store-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-laundered_scope-s3-fact_store-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-laundered_scope-s3-summary-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-laundered_scope-s3-summary-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-laundered_scope-s3-summary-held_out-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-laundered_scope-s3-summary-visible_example-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-laundered_scope-s3-summary-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-laundered_scope-s3-summary-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-laundered_scope-s3-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-laundered_scope-s3-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-laundered_scope-s3-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-laundered_scope-s3-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-laundered_scope-s3-vector_note-visible_example-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-laundered_scope-s3-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-memory_authority-s0-fact_store-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-late_cancel-memory_authority-s0-fact_store-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-late_cancel-memory_authority-s0-fact_store-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-status_only-memory_authority-s0-fact_store-visible_example-11",
+      "failed": [
+        "checker_rejects_status_only_trace"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-memory_authority-s0-summary-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-memory_authority-s0-summary-held_out-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-memory_authority-s0-summary-visible_example-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-memory_authority-s0-summary-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-liveness_stall-memory_authority-s0-summary-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-liveness_stall-memory_authority-s0-summary-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-memory_authority-s0-summary-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-memory_authority-s0-summary-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-memory_authority-s0-summary-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-reference_accept-memory_authority-s0-summary-visible_example-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-memory_authority-s0-summary-visible_example-11",
+      "failed": [
+        "checker_rejects_status_only_trace"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-memory_authority-s0-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-memory_authority-s0-vector_note-visible_example-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-memory_authority-s0-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-memory_authority-s0-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-memory_authority-s0-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-memory_authority-s0-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-memory_authority-s0-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-memory_authority-s0-vector_note-held_out-11",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-memory_authority-s1-fact_store-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-false_success-memory_authority-s1-fact_store-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-memory_authority-s1-fact_store-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-late_cancel-memory_authority-s1-fact_store-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-reference_accept-memory_authority-s1-fact_store-held_out-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-memory_authority-s1-fact_store-visible_example-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-memory_authority-s1-fact_store-visible_example-11",
+      "failed": [
+        "checker_rejects_status_only_trace"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-memory_authority-s1-summary-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-memory_authority-s1-summary-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-memory_authority-s1-summary-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-reference_accept-memory_authority-s1-summary-visible_example-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-memory_authority-s1-vector_note-held_out-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-memory_authority-s1-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-memory_authority-s1-vector_note-visible_example-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-memory_authority-s1-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-memory_authority-s3-fact_store-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-memory_authority-s3-fact_store-visible_example-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-memory_authority-s3-fact_store-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-liveness_stall-memory_authority-s3-fact_store-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-reference_accept-memory_authority-s3-fact_store-held_out-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-memory_authority-s3-fact_store-visible_example-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-memory_authority-s3-summary-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-false_success-memory_authority-s3-summary-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-late_cancel-memory_authority-s3-summary-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-liveness_stall-memory_authority-s3-summary-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-liveness_stall-memory_authority-s3-summary-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-bad_transition-memory_authority-s3-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-memory_authority-s3-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-memory_authority-s3-vector_note-held_out-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-memory_authority-s3-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-memory_authority-s3-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-memory_authority-s3-vector_note-held_out-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-memory_authority-s3-vector_note-visible_example-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-memory_authority-s3-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-memory_authority-s3-vector_note-visible_example-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-memory_authority-s3-vector_note-held_out-11",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-memory_authority-s3-vector_note-visible_example-11",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-none-s0-fact_store-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-none-s0-fact_store-held_out-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-none-s0-fact_store-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-false_success-none-s0-fact_store-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-late_cancel-none-s0-fact_store-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-liveness_stall-none-s0-fact_store-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-none-s0-fact_store-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-reference_accept-none-s0-fact_store-held_out-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-none-s0-fact_store-visible_example-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-none-s0-fact_store-visible_example-11",
+      "failed": [
+        "checker_rejects_status_only_trace"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-none-s0-summary-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-none-s0-summary-visible_example-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-none-s0-summary-held_out-11",
+      "failed": [
+        "checker_rejects_held_out_mutant"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-none-s0-summary-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-none-s0-summary-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-none-s0-summary-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-none-s0-summary-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-reference_accept-none-s0-summary-held_out-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-none-s0-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-none-s0-vector_note-visible_example-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_held_out_mutant",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-none-s0-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-none-s0-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-none-s0-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-none-s0-vector_note-held_out-11",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-none-s0-vector_note-visible_example-11",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-none-s1-fact_store-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-audit_gap-none-s1-fact_store-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-none-s1-fact_store-visible_example-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-none-s1-fact_store-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-none-s1-fact_store-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-status_only-none-s1-fact_store-visible_example-11",
+      "failed": [
+        "checker_rejects_status_only_trace"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-none-s1-summary-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-false_success-none-s1-summary-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-none-s1-summary-held_out-11",
+      "failed": [
+        "checker_rejects_held_out_mutant"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-none-s1-summary-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-none-s1-summary-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-none-s1-summary-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-reference_accept-none-s1-summary-held_out-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-none-s1-summary-visible_example-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-none-s1-summary-held_out-11",
+      "failed": [
+        "checker_rejects_status_only_trace"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-none-s1-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-none-s1-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-none-s1-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-none-s1-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-none-s1-vector_note-held_out-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_held_out_mutant",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-none-s1-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-none-s1-vector_note-held_out-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-none-s1-vector_note-visible_example-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-none-s3-fact_store-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-bad_transition-none-s3-fact_store-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-none-s3-fact_store-visible_example-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-none-s3-fact_store-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-none-s3-fact_store-visible_example-11",
+      "failed": [
+        "checker_rejects_held_out_mutant"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-none-s3-fact_store-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-audit_gap-none-s3-summary-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-bad_transition-none-s3-summary-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-none-s3-summary-visible_example-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-none-s3-summary-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-false_success-none-s3-summary-visible_example-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-none-s3-summary-held_out-11",
+      "failed": [
+        "checker_rejects_held_out_mutant"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-none-s3-summary-visible_example-11",
+      "failed": [
+        "checker_rejects_held_out_mutant"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-none-s3-summary-held_out-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-status_only-none-s3-summary-visible_example-11",
+      "failed": [
+        "checker_rejects_status_only_trace"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-none-s3-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-none-s3-vector_note-held_out-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-none-s3-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-none-s3-vector_note-visible_example-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_held_out_mutant",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-none-s3-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-none-s3-vector_note-held_out-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-none-s3-vector_note-visible_example-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-secret_recall-s0-fact_store-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-secret_recall-s0-fact_store-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-secret_recall-s0-fact_store-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-secret_recall-s0-fact_store-visible_example-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-secret_recall-s0-fact_store-held_out-11",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-secret_recall-s0-summary-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-secret_recall-s0-summary-visible_example-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-secret_recall-s0-summary-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-secret_recall-s0-summary-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-secret_recall-s0-summary-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-secret_recall-s0-summary-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-secret_recall-s0-summary-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-secret_recall-s0-summary-held_out-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-secret_recall-s0-summary-visible_example-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-secret_recall-s0-summary-held_out-11",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-secret_recall-s0-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-secret_recall-s0-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-secret_recall-s0-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-secret_recall-s0-vector_note-visible_example-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-secret_recall-s0-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-secret_recall-s0-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-secret_recall-s0-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-secret_recall-s0-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-secret_recall-s0-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-secret_recall-s0-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-secret_recall-s1-fact_store-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-secret_recall-s1-fact_store-visible_example-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-secret_recall-s1-fact_store-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-secret_recall-s1-fact_store-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-secret_recall-s1-fact_store-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-secret_recall-s1-fact_store-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-secret_recall-s1-fact_store-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-secret_recall-s1-summary-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-secret_recall-s1-summary-held_out-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-secret_recall-s1-summary-visible_example-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-secret_recall-s1-summary-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-secret_recall-s1-summary-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-secret_recall-s1-summary-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-secret_recall-s1-summary-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-secret_recall-s1-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-secret_recall-s1-vector_note-held_out-11",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-secret_recall-s3-fact_store-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-secret_recall-s3-fact_store-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-secret_recall-s3-fact_store-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-secret_recall-s3-fact_store-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-secret_recall-s3-fact_store-held_out-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-secret_recall-s3-summary-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-secret_recall-s3-summary-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-secret_recall-s3-summary-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-secret_recall-s3-summary-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-secret_recall-s3-summary-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-secret_recall-s3-summary-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-secret_recall-s3-summary-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-secret_recall-s3-summary-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-secret_recall-s3-summary-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-secret_recall-s3-summary-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-secret_recall-s3-summary-visible_example-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-secret_recall-s3-vector_note-held_out-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-secret_recall-s3-vector_note-visible_example-11",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-secret_recall-s3-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-secret_recall-s3-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-secret_recall-s3-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-secret_recall-s3-vector_note-held_out-11",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-secret_recall-s3-vector_note-visible_example-11",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-secret_recall-s3-vector_note-visible_example-11",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-laundered_scope-s0-fact_store-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-laundered_scope-s0-fact_store-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-laundered_scope-s0-fact_store-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-laundered_scope-s0-fact_store-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-laundered_scope-s0-fact_store-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-laundered_scope-s0-fact_store-held_out-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-laundered_scope-s0-fact_store-visible_example-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-laundered_scope-s0-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-laundered_scope-s0-summary-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-laundered_scope-s0-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-laundered_scope-s0-summary-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-laundered_scope-s0-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-laundered_scope-s0-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-laundered_scope-s0-summary-held_out-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-laundered_scope-s0-summary-held_out-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-laundered_scope-s0-summary-visible_example-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-laundered_scope-s0-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-laundered_scope-s0-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-laundered_scope-s0-vector_note-visible_example-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-laundered_scope-s0-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-laundered_scope-s0-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-laundered_scope-s0-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-laundered_scope-s0-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-laundered_scope-s0-vector_note-visible_example-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-laundered_scope-s0-vector_note-held_out-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-laundered_scope-s1-fact_store-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-laundered_scope-s1-fact_store-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-laundered_scope-s1-fact_store-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-laundered_scope-s1-fact_store-visible_example-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-laundered_scope-s1-fact_store-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-laundered_scope-s1-fact_store-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-laundered_scope-s1-fact_store-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-laundered_scope-s1-fact_store-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-laundered_scope-s1-fact_store-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-laundered_scope-s1-fact_store-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-laundered_scope-s1-fact_store-held_out-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-laundered_scope-s1-fact_store-visible_example-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-laundered_scope-s1-fact_store-visible_example-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-laundered_scope-s1-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-laundered_scope-s1-summary-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-laundered_scope-s1-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-laundered_scope-s1-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-laundered_scope-s1-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-laundered_scope-s1-summary-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-laundered_scope-s1-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-laundered_scope-s1-summary-visible_example-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-laundered_scope-s1-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-laundered_scope-s1-vector_note-held_out-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-laundered_scope-s1-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-laundered_scope-s1-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-laundered_scope-s1-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-laundered_scope-s1-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-laundered_scope-s1-vector_note-visible_example-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-laundered_scope-s3-fact_store-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-laundered_scope-s3-fact_store-held_out-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-laundered_scope-s3-fact_store-visible_example-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-laundered_scope-s3-fact_store-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-laundered_scope-s3-fact_store-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-laundered_scope-s3-fact_store-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-laundered_scope-s3-fact_store-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-laundered_scope-s3-fact_store-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-laundered_scope-s3-fact_store-visible_example-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-laundered_scope-s3-summary-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-laundered_scope-s3-summary-held_out-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-laundered_scope-s3-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-laundered_scope-s3-summary-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-laundered_scope-s3-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-laundered_scope-s3-summary-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-laundered_scope-s3-summary-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-laundered_scope-s3-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-laundered_scope-s3-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-laundered_scope-s3-vector_note-visible_example-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-laundered_scope-s3-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-laundered_scope-s3-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-laundered_scope-s3-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-laundered_scope-s3-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-laundered_scope-s3-vector_note-visible_example-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-laundered_scope-s3-vector_note-held_out-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-laundered_scope-s3-vector_note-visible_example-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-memory_authority-s0-fact_store-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-memory_authority-s0-fact_store-visible_example-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-memory_authority-s0-fact_store-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-liveness_stall-memory_authority-s0-fact_store-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-memory_authority-s0-fact_store-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-memory_authority-s0-fact_store-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-reference_accept-memory_authority-s0-fact_store-visible_example-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-memory_authority-s0-summary-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-audit_gap-memory_authority-s0-summary-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-bad_transition-memory_authority-s0-summary-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-false_success-memory_authority-s0-summary-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-memory_authority-s0-summary-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-late_cancel-memory_authority-s0-summary-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-liveness_stall-memory_authority-s0-summary-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-liveness_stall-memory_authority-s0-summary-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-memory_authority-s0-summary-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-reference_accept-memory_authority-s0-summary-held_out-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-memory_authority-s0-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-memory_authority-s0-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-memory_authority-s0-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-memory_authority-s0-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-memory_authority-s0-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-memory_authority-s0-vector_note-held_out-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-memory_authority-s1-fact_store-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-audit_gap-memory_authority-s1-fact_store-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-memory_authority-s1-fact_store-held_out-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-memory_authority-s1-fact_store-visible_example-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-memory_authority-s1-fact_store-held_out-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-memory_authority-s1-fact_store-held_out-23",
+      "failed": [
+        "checker_rejects_status_only_trace"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-memory_authority-s1-summary-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-memory_authority-s1-summary-held_out-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-memory_authority-s1-summary-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-memory_authority-s1-summary-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-late_cancel-memory_authority-s1-summary-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-memory_authority-s1-summary-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-audit_gap-memory_authority-s1-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-memory_authority-s1-vector_note-visible_example-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-memory_authority-s1-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-memory_authority-s1-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-memory_authority-s1-vector_note-visible_example-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-memory_authority-s1-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-memory_authority-s1-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-memory_authority-s1-vector_note-visible_example-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-memory_authority-s1-vector_note-held_out-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-memory_authority-s1-vector_note-visible_example-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-memory_authority-s3-fact_store-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-bad_transition-memory_authority-s3-fact_store-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-memory_authority-s3-fact_store-visible_example-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-memory_authority-s3-fact_store-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-memory_authority-s3-fact_store-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-liveness_stall-memory_authority-s3-fact_store-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-status_only-memory_authority-s3-fact_store-visible_example-23",
+      "failed": [
+        "checker_rejects_status_only_trace"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-memory_authority-s3-summary-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-memory_authority-s3-summary-visible_example-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-memory_authority-s3-summary-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-late_cancel-memory_authority-s3-summary-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-liveness_stall-memory_authority-s3-summary-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-memory_authority-s3-summary-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-reference_accept-memory_authority-s3-summary-held_out-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-memory_authority-s3-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-memory_authority-s3-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-memory_authority-s3-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-memory_authority-s3-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-memory_authority-s3-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-memory_authority-s3-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-memory_authority-s3-vector_note-held_out-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-memory_authority-s3-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-memory_authority-s3-vector_note-held_out-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-memory_authority-s3-vector_note-visible_example-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-none-s0-fact_store-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-none-s0-fact_store-held_out-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-none-s0-fact_store-visible_example-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-none-s0-fact_store-visible_example-23",
+      "failed": [
+        "checker_rejects_held_out_mutant"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-none-s0-fact_store-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-none-s0-fact_store-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-late_cancel-none-s0-summary-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-late_cancel-none-s0-summary-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-liveness_stall-none-s0-summary-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-none-s0-summary-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-none-s0-summary-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-status_only-none-s0-summary-held_out-23",
+      "failed": [
+        "checker_rejects_status_only_trace"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-none-s0-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-none-s0-vector_note-visible_example-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_held_out_mutant",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-none-s0-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-none-s0-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-none-s0-vector_note-held_out-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-none-s0-vector_note-visible_example-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-none-s0-vector_note-held_out-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-none-s1-fact_store-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-audit_gap-none-s1-fact_store-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-bad_transition-none-s1-fact_store-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-bad_transition-none-s1-fact_store-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-false_success-none-s1-fact_store-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-late_cancel-none-s1-fact_store-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-late_cancel-none-s1-fact_store-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-liveness_stall-none-s1-fact_store-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-liveness_stall-none-s1-fact_store-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-none-s1-fact_store-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-reference_accept-none-s1-fact_store-held_out-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-none-s1-fact_store-held_out-23",
+      "failed": [
+        "checker_rejects_status_only_trace"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-none-s1-fact_store-visible_example-23",
+      "failed": [
+        "checker_rejects_status_only_trace"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-none-s1-summary-visible_example-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-none-s1-summary-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-none-s1-summary-visible_example-23",
+      "failed": [
+        "checker_rejects_held_out_mutant"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-none-s1-summary-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-liveness_stall-none-s1-summary-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-reference_accept-none-s1-summary-visible_example-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-none-s1-summary-visible_example-23",
+      "failed": [
+        "checker_rejects_status_only_trace"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-none-s1-vector_note-held_out-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-none-s1-vector_note-visible_example-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_held_out_mutant",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-none-s1-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-none-s1-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-none-s3-fact_store-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-none-s3-fact_store-visible_example-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-none-s3-fact_store-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-false_success-none-s3-fact_store-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-none-s3-fact_store-held_out-23",
+      "failed": [
+        "checker_rejects_held_out_mutant"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-none-s3-fact_store-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-late_cancel-none-s3-fact_store-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-liveness_stall-none-s3-fact_store-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-none-s3-fact_store-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-none-s3-fact_store-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-reference_accept-none-s3-fact_store-visible_example-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-none-s3-fact_store-visible_example-23",
+      "failed": [
+        "checker_rejects_status_only_trace"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-none-s3-summary-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-none-s3-summary-visible_example-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-none-s3-summary-held_out-23",
+      "failed": [
+        "checker_rejects_held_out_mutant"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-none-s3-summary-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-none-s3-summary-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-none-s3-summary-held_out-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-none-s3-summary-visible_example-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-reference_accept-none-s3-summary-visible_example-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-none-s3-summary-held_out-23",
+      "failed": [
+        "checker_rejects_status_only_trace"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-none-s3-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-none-s3-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-none-s3-vector_note-visible_example-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-none-s3-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-none-s3-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-none-s3-vector_note-visible_example-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-none-s3-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-none-s3-vector_note-held_out-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-none-s3-vector_note-visible_example-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-secret_recall-s0-fact_store-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-secret_recall-s0-fact_store-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-secret_recall-s0-fact_store-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-secret_recall-s0-fact_store-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-secret_recall-s0-fact_store-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-secret_recall-s0-fact_store-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-secret_recall-s0-summary-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-secret_recall-s0-summary-visible_example-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-secret_recall-s0-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-secret_recall-s0-summary-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-secret_recall-s0-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-secret_recall-s0-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-secret_recall-s0-vector_note-held_out-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-secret_recall-s0-vector_note-visible_example-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-secret_recall-s0-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-secret_recall-s0-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-secret_recall-s0-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-secret_recall-s0-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-secret_recall-s0-vector_note-held_out-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-secret_recall-s0-vector_note-visible_example-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-secret_recall-s0-vector_note-visible_example-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-secret_recall-s1-fact_store-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-secret_recall-s1-fact_store-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-secret_recall-s1-fact_store-held_out-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-secret_recall-s1-fact_store-visible_example-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-secret_recall-s1-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-secret_recall-s1-summary-held_out-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-secret_recall-s1-summary-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-secret_recall-s1-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-secret_recall-s1-summary-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-secret_recall-s1-summary-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-secret_recall-s1-summary-held_out-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-secret_recall-s1-summary-visible_example-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-secret_recall-s1-summary-held_out-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-secret_recall-s1-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-secret_recall-s1-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-secret_recall-s1-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-secret_recall-s1-vector_note-visible_example-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-secret_recall-s1-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-secret_recall-s1-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-secret_recall-s3-fact_store-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-secret_recall-s3-fact_store-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-secret_recall-s3-fact_store-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-secret_recall-s3-fact_store-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-secret_recall-s3-fact_store-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-secret_recall-s3-fact_store-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-secret_recall-s3-fact_store-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-secret_recall-s3-fact_store-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-secret_recall-s3-fact_store-held_out-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-secret_recall-s3-fact_store-held_out-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-secret_recall-s3-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-secret_recall-s3-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-secret_recall-s3-summary-held_out-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-secret_recall-s3-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-secret_recall-s3-summary-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-secret_recall-s3-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-secret_recall-s3-summary-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-secret_recall-s3-summary-held_out-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-secret_recall-s3-summary-visible_example-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-secret_recall-s3-vector_note-visible_example-23",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-secret_recall-s3-vector_note-visible_example-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-secret_recall-s3-vector_note-held_out-23",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-secret_recall-s3-vector_note-held_out-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-secret_recall-s3-vector_note-visible_example-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-secret_recall-s3-vector_note-visible_example-23",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-secret_recall-s3-vector_note-visible_example-23",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-laundered_scope-s0-fact_store-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-laundered_scope-s0-fact_store-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-laundered_scope-s0-fact_store-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-laundered_scope-s0-fact_store-visible_example-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-laundered_scope-s0-fact_store-held_out-41",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-laundered_scope-s0-summary-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-laundered_scope-s0-summary-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-laundered_scope-s0-summary-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-laundered_scope-s0-summary-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-laundered_scope-s0-summary-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-laundered_scope-s0-summary-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-laundered_scope-s0-summary-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-laundered_scope-s0-summary-held_out-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-laundered_scope-s0-summary-held_out-41",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-laundered_scope-s0-summary-visible_example-41",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-laundered_scope-s0-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-laundered_scope-s0-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-laundered_scope-s0-vector_note-held_out-41",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-laundered_scope-s0-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-laundered_scope-s0-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-laundered_scope-s0-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-laundered_scope-s0-vector_note-visible_example-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-laundered_scope-s0-vector_note-held_out-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-laundered_scope-s0-vector_note-visible_example-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-laundered_scope-s0-vector_note-visible_example-41",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-laundered_scope-s1-fact_store-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-laundered_scope-s1-fact_store-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-laundered_scope-s1-fact_store-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-laundered_scope-s1-fact_store-held_out-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-laundered_scope-s1-fact_store-held_out-41",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-laundered_scope-s1-summary-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-laundered_scope-s1-summary-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-laundered_scope-s1-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-laundered_scope-s1-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-laundered_scope-s1-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-laundered_scope-s1-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-laundered_scope-s1-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-laundered_scope-s1-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-laundered_scope-s3-fact_store-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-laundered_scope-s3-fact_store-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-laundered_scope-s3-fact_store-held_out-41",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-laundered_scope-s3-fact_store-visible_example-41",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-laundered_scope-s3-fact_store-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-laundered_scope-s3-fact_store-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-laundered_scope-s3-fact_store-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-laundered_scope-s3-fact_store-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-laundered_scope-s3-fact_store-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-laundered_scope-s3-fact_store-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-laundered_scope-s3-fact_store-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-laundered_scope-s3-fact_store-held_out-41",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-laundered_scope-s3-summary-held_out-41",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-laundered_scope-s3-summary-visible_example-41",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-laundered_scope-s3-summary-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-laundered_scope-s3-summary-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-laundered_scope-s3-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-laundered_scope-s3-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-laundered_scope-s3-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-laundered_scope-s3-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-laundered_scope-s3-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-laundered_scope-s3-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-laundered_scope-s3-vector_note-visible_example-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-laundered_scope-s3-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-laundered_scope-s3-vector_note-held_out-41",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-memory_authority-s0-fact_store-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-memory_authority-s0-fact_store-visible_example-41",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-memory_authority-s0-fact_store-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-memory_authority-s0-fact_store-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-memory_authority-s0-fact_store-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-late_cancel-memory_authority-s0-fact_store-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-memory_authority-s0-fact_store-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-reference_accept-memory_authority-s0-fact_store-visible_example-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-memory_authority-s0-summary-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-memory_authority-s0-summary-held_out-41",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-memory_authority-s0-summary-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-false_success-memory_authority-s0-summary-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-memory_authority-s0-summary-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-liveness_stall-memory_authority-s0-summary-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-memory_authority-s0-summary-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-memory_authority-s0-summary-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-status_only-memory_authority-s0-summary-held_out-41",
+      "failed": [
+        "checker_rejects_status_only_trace"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-memory_authority-s0-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-memory_authority-s0-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-memory_authority-s0-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-memory_authority-s0-vector_note-visible_example-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-memory_authority-s0-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-memory_authority-s0-vector_note-held_out-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-memory_authority-s0-vector_note-held_out-41",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-memory_authority-s0-vector_note-visible_example-41",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-memory_authority-s1-fact_store-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-audit_gap-memory_authority-s1-fact_store-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-bad_transition-memory_authority-s1-fact_store-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-bad_transition-memory_authority-s1-fact_store-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-memory_authority-s1-fact_store-held_out-41",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-memory_authority-s1-fact_store-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-liveness_stall-memory_authority-s1-fact_store-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-memory_authority-s1-fact_store-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-memory_authority-s1-fact_store-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-memory_authority-s1-fact_store-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-status_only-memory_authority-s1-fact_store-visible_example-41",
+      "failed": [
+        "checker_rejects_status_only_trace"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-memory_authority-s1-summary-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-false_success-memory_authority-s1-summary-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-false_success-memory_authority-s1-summary-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-late_cancel-memory_authority-s1-summary-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-memory_authority-s1-summary-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-audit_gap-memory_authority-s1-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-memory_authority-s1-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-memory_authority-s1-vector_note-held_out-41",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-memory_authority-s1-vector_note-held_out-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-memory_authority-s1-vector_note-visible_example-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-memory_authority-s1-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-memory_authority-s1-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-memory_authority-s1-vector_note-held_out-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-memory_authority-s1-vector_note-visible_example-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-memory_authority-s3-fact_store-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-memory_authority-s3-fact_store-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-late_cancel-memory_authority-s3-fact_store-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-liveness_stall-memory_authority-s3-fact_store-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-memory_authority-s3-fact_store-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-reference_accept-memory_authority-s3-fact_store-held_out-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-memory_authority-s3-fact_store-visible_example-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-memory_authority-s3-fact_store-held_out-41",
+      "failed": [
+        "checker_rejects_status_only_trace"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-memory_authority-s3-summary-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-memory_authority-s3-summary-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-late_cancel-memory_authority-s3-summary-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-audit_gap-memory_authority-s3-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-memory_authority-s3-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-memory_authority-s3-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-memory_authority-s3-vector_note-held_out-41",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-memory_authority-s3-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-memory_authority-s3-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-memory_authority-s3-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-memory_authority-s3-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-none-s0-fact_store-visible_example-41",
+      "failed": [
+        "checker_rejects_held_out_mutant"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-none-s0-fact_store-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-reference_accept-none-s0-fact_store-visible_example-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-none-s0-summary-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-none-s0-summary-visible_example-41",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-none-s0-summary-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-none-s0-summary-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-none-s0-summary-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-audit_gap-none-s0-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-none-s0-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-none-s0-vector_note-visible_example-41",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-none-s0-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-none-s0-vector_note-held_out-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-none-s0-vector_note-held_out-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-none-s0-vector_note-held_out-41",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-none-s1-fact_store-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-bad_transition-none-s1-fact_store-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-false_success-none-s1-fact_store-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-none-s1-fact_store-visible_example-41",
+      "failed": [
+        "checker_rejects_held_out_mutant"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-none-s1-fact_store-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-liveness_stall-none-s1-fact_store-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-none-s1-fact_store-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-bad_transition-none-s1-summary-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-bad_transition-none-s1-summary-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-false_success-none-s1-summary-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-late_cancel-none-s1-summary-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-late_cancel-none-s1-summary-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-none-s1-summary-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-provenance_loss-none-s1-summary-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-none-s1-summary-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-reference_accept-none-s1-summary-held_out-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-none-s1-summary-visible_example-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-none-s1-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-none-s1-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-none-s1-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-none-s1-vector_note-visible_example-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-none-s1-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-none-s3-fact_store-held_out-41",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-none-s3-fact_store-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-none-s3-fact_store-visible_example-41",
+      "failed": [
+        "checker_rejects_held_out_mutant"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-none-s3-fact_store-held_out-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-none-s3-fact_store-held_out-41",
+      "failed": [
+        "checker_rejects_status_only_trace"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-none-s3-summary-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-bad_transition-none-s3-summary-visible_example-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-none-s3-summary-visible_example-41",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-none-s3-summary-visible_example-41",
+      "failed": [
+        "checker_rejects_held_out_mutant"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-none-s3-summary-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-none-s3-summary-held_out-41",
+      "failed": []
+    },
+    {
+      "scenarioId": "cr-audit_gap-none-s3-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-none-s3-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-none-s3-vector_note-held_out-41",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-none-s3-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-none-s3-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-none-s3-vector_note-visible_example-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-none-s3-vector_note-visible_example-41",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-secret_recall-s0-fact_store-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-secret_recall-s0-fact_store-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-secret_recall-s0-fact_store-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-secret_recall-s0-fact_store-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-secret_recall-s0-fact_store-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-secret_recall-s0-fact_store-held_out-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-secret_recall-s0-summary-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-secret_recall-s0-summary-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-secret_recall-s0-summary-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-secret_recall-s0-summary-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-secret_recall-s0-summary-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-secret_recall-s0-summary-held_out-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-secret_recall-s0-summary-visible_example-41",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-secret_recall-s0-vector_note-visible_example-41",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-secret_recall-s0-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-secret_recall-s0-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-secret_recall-s0-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-secret_recall-s0-vector_note-held_out-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-secret_recall-s0-vector_note-visible_example-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-secret_recall-s0-vector_note-visible_example-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-secret_recall-s0-vector_note-visible_example-41",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-secret_recall-s1-fact_store-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-secret_recall-s1-fact_store-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-secret_recall-s1-fact_store-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-secret_recall-s1-fact_store-visible_example-41",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-secret_recall-s1-fact_store-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-secret_recall-s1-fact_store-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-secret_recall-s1-fact_store-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-secret_recall-s1-fact_store-held_out-41",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-secret_recall-s1-fact_store-visible_example-41",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-secret_recall-s1-summary-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-secret_recall-s1-summary-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-secret_recall-s1-summary-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-secret_recall-s1-summary-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-secret_recall-s1-summary-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-secret_recall-s1-summary-held_out-41",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-secret_recall-s1-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-secret_recall-s1-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-secret_recall-s1-vector_note-visible_example-41",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-secret_recall-s1-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-secret_recall-s1-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-secret_recall-s1-vector_note-visible_example-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-secret_recall-s1-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-secret_recall-s1-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-secret_recall-s1-vector_note-visible_example-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-audit_gap-secret_recall-s3-fact_store-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-secret_recall-s3-fact_store-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-secret_recall-s3-fact_store-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-secret_recall-s3-fact_store-visible_example-41",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-secret_recall-s3-fact_store-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-false_success-secret_recall-s3-fact_store-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-secret_recall-s3-fact_store-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-secret_recall-s3-fact_store-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-secret_recall-s3-fact_store-held_out-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-secret_recall-s3-fact_store-visible_example-41",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-bad_transition-secret_recall-s3-summary-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-duplicate_effect-secret_recall-s3-summary-held_out-41",
+      "failed": [
+        "checker_names_failed_rule",
+        "checker_rejects_duplicate_execution",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-secret_recall-s3-summary-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-liveness_stall-secret_recall-s3-summary-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-secret_recall-s3-summary-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-provenance_loss-secret_recall-s3-summary-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-secret_recall-s3-summary-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-reference_accept-secret_recall-s3-summary-visible_example-41",
+      "failed": [
+        "checker_accepts_reference_trace",
+        "checker_independent_of_subject",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-status_only-secret_recall-s3-summary-held_out-41",
+      "failed": [
+        "checker_rejects_status_only_trace",
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-held_out_bad_subject-secret_recall-s3-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-late_cancel-secret_recall-s3-vector_note-held_out-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    },
+    {
+      "scenarioId": "cr-receipt_forgery-secret_recall-s3-vector_note-visible_example-41",
+      "failed": [
+        "subject_applies_named_rules",
+        "subject_solves_cases"
+      ]
+    }
+  ],
+  "detail": "614/792 scenarios failed (0 host errors) under subprocess isolation"
+}

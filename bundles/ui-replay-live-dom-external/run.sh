@@ -2,8 +2,8 @@
 # Run this trial. Produced by `foundry trials campaign prepare`.
 #
 # The command below is EXACTLY what the foundry would run for this provider. Run it with this
-# directory as the working directory; the model must write submission/subject.mjs and nothing
-# else. Then hand the whole directory back to `foundry trials campaign import`.
+# directory as the working directory; the model must write submission/subject.mjs.
+# Then hand the whole directory back to `foundry trials campaign import`.
 set -euo pipefail
 cd "$(dirname "$0")"
 mkdir -p submission

@@ -144,16 +144,16 @@ trial directories rather than assumed.
 
 | | |
 |---|---:|
-| campaigns declared | 3 |
-| slots planned | 16 |
-| slots run | 12 |
-| slots **not run** | 4 |
-| counted trials | 14 |
-| of those, failing something | 11 |
+| campaigns declared | 4 |
+| slots planned | 22 |
+| slots run | 13 |
+| slots **not run** | 9 |
+| counted trials | 15 |
+| of those, failing something | 12 |
 | superseded by a challenge repair | 3 |
 | median counted-trial runtime | 8.2 min |
-| budget declared across campaigns | $37.00 |
-| **budget per counted failure** | $3.36 |
+| budget declared across campaigns | $52.00 |
+| **budget per counted failure** | $4.33 |
 
 ### The line item nobody budgets for
 
@@ -167,7 +167,7 @@ once**, because the first campaign is often what tells you the family is not yet
 
 ### Unrun slots are a budget line, not an absence
 
-4 of 16 declared slots have not run, almost all of them because no runner
+9 of 22 declared slots have not run, almost all of them because no runner
 for that model family is configured here. They are costed in the plans and visible in every
 report. A campaign that quietly dropped them would show a complete-looking result over one lab's
 model — which is the single most common way a benchmark overstates what it measured.
@@ -181,15 +181,15 @@ not counted now: the family they measured was repaired.
 |---|---:|---:|---:|---:|---:|---:|
 | `anthropic` | 14 | 7 | 0 | 0 | 3 | 122 |
 | `google` | 0 | 0 | 0 | 1 | 0 | 0 |
-| `openai` | 6 | 4 | 0 | 1 | 0 | 47 |
+| `openai` | 7 | 5 | 0 | 1 | 0 | 60 |
 
 | | |
 |---|---:|
-| runs attempted | 25 |
-| counted | 20 |
-| **produced no usable evidence** | **5** (20%) |
+| runs attempted | 26 |
+| counted | 21 |
+| **produced no usable evidence** | **5** (19%) |
 | at $3.50 per run, spend on runs that produced nothing | $17.50 |
-| **cost per counted FAILURE** | $7.95 |
+| **cost per counted FAILURE** | $7.58 |
 
 **Cost per counted failure is the number to plan against.** A counted solve tells you the family
 is solvable, which the reference already told you. A counted failure is the only kind of trial
@@ -209,8 +209,8 @@ a real multiplier on trial cost — and still a rounding error beside labour, wh
 the whole budget model exists to make.
 
 ## Pipeline conversion costs
-This is the cost model for the exact live-DOM phase: turning a mutant-measured descendant into
-a trial-ready family, then turning trial-ready into real-agent difficulty evidence. Rows marked
+This is the cost model for the exact live-DOM and checker-required phases: turning a
+mutant-measured descendant into a trial-ready family, then turning trial-ready into real-agent difficulty evidence. Rows marked
 `estimated` are planning figures; rows marked `measured` come from checked-in campaigns or trial
 directories.
 | question | cost at current inputs | label | what is included |
@@ -218,12 +218,12 @@ directories.
 | mutant-measured -> trial-ready | $2,790 (23.3 h) | estimated | fairness SPEC, challenge package, leak tests, route, campaign plan |
 | trial-ready -> difficulty-evidenced | $249.33 + provider availability | estimated | one counted provider run, grading, reconcile, report update |
 | spec ambiguity waste already observed | $747.98 | measured trials + estimated repair | stale/superseded trials plus repair time |
-| checker-required package-ready draft | $1,890 (15.7 h) | estimated | checker contract, held-out checker mutant plan, draft package |
+| checker-required package-ready -> difficulty-evidenced | $15 campaign budget; provider cost not recorded | measured campaign | package, route, two submitted artifacts, 792 graded scenarios and one counted Codex/OpenAI failure; no cross-lab breadth |
 Trial-ready is not SHIP. Trial-ready means the package builds, the leak checker passes, the hash
 is pinned and the router can grade an artifact. Difficulty-evidenced means at least one counted
 real agent trial exists under that hash. SHIP still requires the family not to be already solved
 and all blocking gates to pass.
-Provider unavailability is visible as 4 not-run slot(s) out of 16; those slots do not become failures or passes.
+Provider unavailability is visible as 9 not-run slot(s) out of 22; those slots do not become failures or passes.
 The current observed pipeline also carries a 17% standard-attempt waste rate from historical trials.
 Under the current observed pipeline, $100,000 buys 7 shipped family line(s), about 168 generated instances and 21 independent axes. It does not buy 168 independent tasks; the axis meter is the guard against that phrasing.
 ## What this model does not include

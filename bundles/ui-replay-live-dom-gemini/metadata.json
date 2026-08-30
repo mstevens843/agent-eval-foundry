@@ -1,0 +1,16 @@
+{
+  "runId": "dom-gemini-EDITME",
+  "familyId": "ui-replay-live-dom",
+  "provider": "gemini",
+  "providerLabel": "Gemini via the Gemini CLI",
+  "model": "google/gemini-3-pro",
+  "subjectId": "gemini-3-pro",
+  "effort": null,
+  "scenarioSetId": "dom-864-3a8cb30a",
+  "challengeHash": "18c3f5afc5973604205cd7df23ce4cad",
+  "isolation": "subprocess",
+  "status": "completed",
+  "notes": "REPLACE: how it was run, and anything unusual about the run.",
+  "runtimeSeconds": null,
+  "costUsd": null
+}

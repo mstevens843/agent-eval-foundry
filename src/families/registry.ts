@@ -9,9 +9,11 @@
 // than having a task shape, and the distinction is load-bearing: `foundry check` validates nine
 // shapes, three of which appear here. The other six are pre-registrations.
 
+import { buildCheckerRequiredChallengePackage } from "../challenge/checker-required-package.js";
 import { buildLiveDomChallengePackage } from "../challenge/live-dom-package.js";
 import { buildMemoryChallengePackage } from "../challenge/memory-package.js";
 import {
+  CHECKER_REQUIRED_PROFILE,
   LIVE_DOM_PROFILE,
   type LeakProfile,
   MEMORY_PROFILE,
@@ -44,6 +46,15 @@ import * as live from "./ui-replay-live-dom/runner.js";
 import * as liveScenarios from "./ui-replay-live-dom/scenarios.js";
 import { RULE_CODES as LIVE_RULE_CODES } from "./ui-replay-live-dom/spec.js";
 import { CHECKS as LIVE_CHECK_NAMES } from "./ui-replay-live-dom/verify.js";
+
+import {
+  BASELINES as CHECKER_BASELINES,
+  INTENDED_CHECK as CHECKER_INTENDED_CHECK,
+} from "./checker-required-memory-poisoning/mutants.js";
+import * as checker from "./checker-required-memory-poisoning/runner.js";
+import * as checkerScenarios from "./checker-required-memory-poisoning/scenarios.js";
+import { RULE_CODES as CHECKER_RULE_CODES } from "./checker-required-memory-poisoning/spec.js";
+import { CHECKS as CHECKER_CHECK_NAMES } from "./checker-required-memory-poisoning/verify.js";
 
 export interface FamilySweep {
   readonly scenarioCount: number;
@@ -295,6 +306,47 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     realism: "dom-like",
     realismGap:
       "The reducer models live selector drift, region presence, disabled/enabled transitions, stale handles, dialogs, and side effects, but it is not browser-backed. A browser-backed descendant would add a real renderer, focus/event semantics, layout/hit testing, actual ARIA tree computation, and asynchronous browser scheduling.",
+  },
+  {
+    id: "checker-required-memory-poisoning",
+    name: "Checker-required memory poisoning",
+    domain: "agent memory control with a submitted verifier artifact",
+    mechanisms: [
+      "checker-quality-gap",
+      "context-contamination",
+      "false-audit-history",
+      "prompt-injection-via-retrieval",
+    ],
+    checks: [...CHECKER_CHECK_NAMES],
+    ruleCodes: CHECKER_RULE_CODES,
+    space: checkerScenarios.SPACE,
+    knobPurpose: {
+      seed: "selects generated sessions and held-out checker cases",
+      attack: "which memory-poisoning mechanism the subject and checker must exercise",
+      sessionsBetween: "distance between untrusted ingestion and memory-derived action",
+      memoryKind: "whether stored provenance can physically survive recall",
+      checkerProbe: "which submitted-checker obligation is being exercised by the trace",
+      visibleCoverage: "separates visible-example-like cases from held-out cases",
+    },
+    run: () => {
+      const run = checker.runFamily();
+      return sweep(
+        run.cells,
+        run.scenarios,
+        run.spaceSize,
+        checker.toMatrix(run),
+        CHECKER_INTENDED_CHECK,
+        CHECKER_BASELINES,
+      );
+    },
+    challenge: buildCheckerRequiredChallengePackage,
+    leakProfile: CHECKER_REQUIRED_PROFILE,
+    typesPath: "src/families/checker-required-memory-poisoning/types.ts",
+    estimatedBuildHours: 85,
+    estimatedFrontierUsd: 35,
+    realism: "simulated-tree",
+    realismGap:
+      "The checker is graded over a simulated memory/tool harness. A browser-backed or service-backed descendant would add real persistence, asynchronous tool effects and independent process isolation for untrusted checker code.",
   },
 ];
 

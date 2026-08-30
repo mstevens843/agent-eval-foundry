@@ -9,7 +9,7 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 |---|---|---|
 | `audit-truth-financial-workflow` | **NOT-READY** | difficulty-evidenced |
 | `browser-action-replay` | **NOT-READY** | difficulty-evidenced |
-| `checker-required-memory-poisoning` | **NOT-READY** | difficulty-evidenced |
+| `checker-required-memory-poisoning` | **SHIP** | none |
 | `deployment-rollback-partial-effects` | **NOT-READY** | difficulty-evidenced |
 | `durable-approval-outbox` | **SHIP** | none |
 | `model-alias-drift-sentinel` | **NOT-READY** | difficulty-evidenced |
@@ -103,31 +103,31 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 90h build, $80 frontier |
 
-### `checker-required-memory-poisoning` — NOT-READY
+### `checker-required-memory-poisoning` — SHIP
 
 | gate | result | detail |
 |---|---|---|
-| `solvable` | pass | 6 contract item(s) |
-| `verifier-graded` | pass | 7 expected mutant(s) |
-| `trust-boundary` | pass | 3/3 source(s) state unforgeability |
+| `solvable` | pass | 7 contract item(s) |
+| `verifier-graded` | pass | 20 expected mutant(s) |
+| `trust-boundary` | pass | 4/4 source(s) state unforgeability |
 | `detectable` | pass | all mechanisms detectable |
-| `fairness` | pass | 4 constraint(s) |
-| `cheat-resistance` | pass | 4 requirement(s) |
-| `is-a-family` | pass | 5 knob(s): seed, attack, checkerProbe, memoryKind, visibleCoverage |
-| `hidden-region-declared` | pass | The hidden suite samples the memory-poisoning state space and a checker-mutant s |
-| `measured-axes` | n/a | estimated — axes; not measured |
-| `reference-passes` | n/a | family not built; nothing to run |
-| `baselines-blocked` | n/a | family not built |
-| `mutants-caught-by-intended-check` | n/a | family not built |
-| `mechanisms-exercised` | n/a | family not built |
-| `isolation-level` | n/a | family not built |
-| `shared-bank-ready` | n/a | family not built |
-| `deterministic-reports` | n/a | family not built |
-| `trial-ready` | n/a | family not built |
-| `difficulty-evidenced` | **FAIL** | no counted agent trials |
-| `agent-axes-independent` | n/a | family not built |
-| `not-already-solved` | n/a | no counted agent trials yet |
-| `priced` | pass | 45h build, $20 frontier |
+| `fairness` | pass | 6 constraint(s) |
+| `cheat-resistance` | pass | 6 requirement(s) |
+| `is-a-family` | pass | 6 knob(s): seed, attack, sessionsBetween, memoryKind, checkerProbe, visibleCoverage |
+| `hidden-region-declared` | pass | The hidden suite samples the declared memory and checker space: seed, attack, se |
+| `measured-axes` | pass | 12 measured axes |
+| `reference-passes` | pass | reference clean |
+| `baselines-blocked` | pass | 5/5 baselines rejected |
+| `mutants-caught-by-intended-check` | pass | 20/20 caught by intended check |
+| `mechanisms-exercised` | pass | every attack blocks on its governing rule |
+| `isolation-level` | pass | subprocess with 1 agent trial(s) |
+| `shared-bank-ready` | **FAIL** | 1 subject(s) shared with another family (need 3) |
+| `deterministic-reports` | pass | verified |
+| `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
+| `difficulty-evidenced` | pass | 1 counted agent trial(s) |
+| `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
+| `not-already-solved` | pass | 1 of 1 counted trial(s) failed at least one scenario |
+| `priced` | pass | 85h build, $35 frontier |
 
 ### `deployment-rollback-partial-effects` — NOT-READY
 

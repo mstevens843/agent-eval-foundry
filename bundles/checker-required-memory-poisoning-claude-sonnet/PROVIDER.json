@@ -1,0 +1,19 @@
+{
+  "provider": "claude-sonnet",
+  "family": "anthropic",
+  "label": "Claude Sonnet 5 via the Claude CLI",
+  "model": "anthropic/claude-sonnet-5",
+  "subjectId": "claude-sonnet-5",
+  "availableHere": false,
+  "availabilityDetail": "Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles",
+  "invocationNote": "Same CLI and same flags as `claude`, with `--model sonnet`. A different model is a different SUBJECT — different weights and, as the trials show, a different failure set — and it is not a different lab. The bank counts it as a subject; the transfer claim does not count it as a provider family.",
+  "command": [
+    "claude",
+    "--model",
+    "sonnet",
+    "-p",
+    "You are attempting a benchmark task. Your working directory contains:\n  challenge/   — read this. README.md explains the task, SPEC.md is the normative contract.\n  submission/  — write your answer here.\n\nRead challenge/README.md and challenge/SPEC.md in full, then implement both artifacts they\ndescribe:\n  submission/subject.mjs   exporting `subject` with runSession(view, memory, tools)\n  submission/checker.mjs   exporting `checker` with run({ cases, runCase, makeCase })\n\nThe checker must invoke runCase and validate observed traces independently. A subject-only\nsubmission is incomplete.\n\nDo not modify anything in challenge/. Write exactly those two files under submission/.",
+    "--permission-mode",
+    "bypassPermissions"
+  ]
+}

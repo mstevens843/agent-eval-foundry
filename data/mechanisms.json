@@ -540,7 +540,7 @@
       "visible-only-checker",
       "checker-never-invokes-subject",
       "inexpressive-checker",
-      "accepts-all-checker"
+      "accept-all-checker"
     ],
     "fairnessRisks": [
       "If the checker contract does not state what inputs it receives and what it must return, a correct checker can be marked wrong for interface mismatch rather than weakness.",
@@ -551,7 +551,7 @@
       "A checker that always returns pass can satisfy a harness that only checks file presence.",
       "A checker that compares against visible example ids can pass examples while expressing none of the core rule.",
       "A checker that never invokes the subject under test can report success over any implementation.",
-      "A submission can make `check.mjs` import `subject.mjs` and whitelist its own source instead of testing behavior unless held-out mutants are run."
+      "A submission can make `checker.mjs` import `subject.mjs` and whitelist its own source instead of testing behavior unless held-out mutants are run."
     ],
     "measurableSignals": [
       "checker rejects every held-out known-bad subject",

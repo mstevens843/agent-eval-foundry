@@ -1,0 +1,16 @@
+{
+  "runId": "poisoning-gemini-EDITME",
+  "familyId": "checker-required-memory-poisoning",
+  "provider": "gemini",
+  "providerLabel": "Gemini via the Gemini CLI",
+  "model": "google/gemini-3-pro",
+  "subjectId": "gemini-3-pro",
+  "effort": null,
+  "scenarioSetId": "poisoning-792-67126f04",
+  "challengeHash": "448f2f816c51030cc97a374816226168",
+  "isolation": "subprocess",
+  "status": "completed",
+  "notes": "REPLACE: how it was run, and anything unusual about the run.",
+  "runtimeSeconds": null,
+  "costUsd": null
+}

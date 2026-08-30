@@ -27,9 +27,11 @@ runs never count.
 | `prompt-injection-memory-poisoning` | 288 | 8 | 5 | 3 | >=2 | **SHIP**: cross-lab failure generalises |
 | `ui-action-record-replay` | 324 | 5 | 5 | 6 | 1 | **SHIP**: useful but chain-limited |
 | `ui-replay-live-dom` | 864 | 1 | 1 | 19 | not claimed yet | **SHIP**: descendant, packaged and difficulty-evidenced |
+| `checker-required-memory-poisoning` | 792 | 1 | 1 | 12 | not claimed yet | **SHIP**: required-checker gap, OpenAI-only |
 | `durable-approval-outbox` | 24 | 20 imported | 20 | 3 | 1 | **SHIP**: imported historical bank |
 
 Current live-DOM package hash: `18c3f5afc5973604205cd7df23ce4cad`.
+Current checker-required package hash: `448f2f816c51030cc97a374816226168`.
 
 ## What Changed In This Phase
 
@@ -62,12 +64,18 @@ node dist/cli.js check
 node dist/cli.js all
 
 node dist/cli.js family sweep --family ui-replay-live-dom
+node dist/cli.js family sweep --family checker-required-memory-poisoning
 node dist/cli.js challenge build --family ui-replay-live-dom
+node dist/cli.js challenge build --family checker-required-memory-poisoning
 node dist/cli.js trials campaign providers
 node dist/cli.js trials campaign prepare --family ui-replay-live-dom --provider external --out bundles/ui-replay-live-dom-external
+node dist/cli.js trials campaign prepare --family checker-required-memory-poisoning --provider external --out bundles/checker-required-memory-poisoning-external
 node dist/cli.js trials campaign run --family ui-replay-live-dom --only O2
+node dist/cli.js trials campaign run --family checker-required-memory-poisoning --only O1
 node dist/cli.js trials campaign reconcile --family ui-replay-live-dom
 node dist/cli.js trials verify --family ui-replay-live-dom live-dom-2026-08-o2
+node dist/cli.js trials verify --family checker-required-memory-poisoning checker-required-2026-08-o1
+pnpm bundles
 ```
 
 Provider reality is explicit. Codex/OpenAI is configured locally. Anthropic/Claude is import-only in
@@ -95,19 +103,27 @@ event loop. A browser-backed descendant would be a new family with new evidence.
 ## Checker-Required Variant
 
 The self-check reports found a separate gap: models often describe checkers but do not ship them.
-The first checker-required descendant is drafted as `checker-required-memory-poisoning`.
+The first checker-required descendant is now built, packaged and trialed as
+`checker-required-memory-poisoning`.
 
-The package draft requires:
+The visible package requires:
 
 - `subject.mjs`
-- `check.mjs`
+- `checker.mjs`
 
-The planned verifier will grade `check.mjs` against reference behavior, held-out known-bad subjects,
-a vacuous checker, a visible-examples-only checker, a checker that never invokes the subject, an
-inexpressive checker and an accepts-all checker.
+The hidden verifier grades both the implementation and the submitted checker. It tests reference
+behavior, held-out bad traces, bad transitions, false success, missing audit evidence, liveness
+stalls, duplicated effects, late cancellation, provenance loss, status-only checking, receipt
+trusting, no-checker/stub-checker cases and nondeterminism.
 
-Status: **HOLD / candidate**. The package shape and checker contract exist; no checker-required
-mutant sweep or real-agent trial has run.
+The measured set is 792 scenarios from a 2,376-point declared space. The reference is clean, 20/20
+known-bad checker/subject submissions fail by intended named checks, and the mutant bank yields 12
+independent mutant-detection axes. One counted Codex/OpenAI trial ran under hash
+`448f2f816c51030cc97a374816226168` and failed 614/792 scenarios.
+
+Status: **SHIP** under the current gate table. This is real-agent difficulty evidence for one
+OpenAI subject only. It is not cross-lab breadth, and repeated OpenAI runs stay repeated trials
+unless a genuinely different model subject is available.
 
 ## Reports
 
@@ -118,8 +134,12 @@ Key generated reports:
 - `reports/ui-replay-live-dom-categorical-anchor-report.md`
 - `reports/ui-replay-live-dom-trial-campaign.md`
 - `reports/ui-replay-live-dom-agent-results.md`
+- `reports/ui-replay-live-dom-codex-diagnosis.md`
 - `reports/ui-replay-live-dom-axis-report.md`
 - `reports/checker-required-family-report.md`
+- `reports/checker-required-memory-poisoning-agent-results.md`
+- `reports/checker-required-memory-poisoning-axis-report.md`
+- `reports/ui-replay-browser-backed-scaffold.md`
 - `reports/shared-difficulty-bank-report.md`
 - `reports/cross-family-axis-report.md`
 - `reports/ship-gate-report.md`
@@ -153,7 +173,7 @@ node dist/cli.js all
 ```
 
 The tests include known-bad cases for missing SPEC sections, challenge leaks, nested anchor
-strategies, stale hashes, verifier-only SHIP claims, missing `check.mjs`, vacuous checkers, provider
+strategies, stale hashes, verifier-only SHIP claims, missing `checker.mjs`, vacuous checkers, provider
 unavailability, candidate ledger drift and deterministic reports.
 
 ## Current Claim
@@ -164,6 +184,7 @@ prepare real provider campaigns, and preserve the distinction between mutant-det
 real-agent difficulty evidence.
 
 The strongest current result is still memory-poisoning generalisation across labs. The newest result
-is that live-DOM is now package-backed and difficulty-evidenced by one counted Codex/OpenAI failure.
-The next highest-leverage work is to import or run additional non-OpenAI live-DOM trials under the
-same hash, then build the checker-required verifier.
+is that checker-required is now package-backed, mutant-measured and difficulty-evidenced by one
+counted Codex/OpenAI failure. The next highest-leverage work is to import or run non-OpenAI
+live-DOM and checker-required trials under the same hashes, then implement the browser-backed UI
+descendant scaffold.

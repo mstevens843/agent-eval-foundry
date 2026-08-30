@@ -1,0 +1,16 @@
+{
+  "runId": "dom-claude-haiku-EDITME",
+  "familyId": "ui-replay-live-dom",
+  "provider": "claude-haiku",
+  "providerLabel": "Claude Haiku 4.5 via the Claude CLI",
+  "model": "anthropic/claude-haiku-4-5",
+  "subjectId": "claude-haiku-4-5",
+  "effort": null,
+  "scenarioSetId": "dom-864-3a8cb30a",
+  "challengeHash": "18c3f5afc5973604205cd7df23ce4cad",
+  "isolation": "subprocess",
+  "status": "completed",
+  "notes": "REPLACE: how it was run, and anything unusual about the run.",
+  "runtimeSeconds": null,
+  "costUsd": null
+}

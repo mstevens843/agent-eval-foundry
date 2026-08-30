@@ -62,6 +62,7 @@ import {
   renderSharedBankReport as renderBankReport,
   renderCrossFamilyAxisReport,
 } from "./reports/bank-reports.js";
+import { renderBrowserBackedScaffold } from "./reports/browser-backed-scaffold.js";
 import { renderBudgetReport } from "./reports/budget-report.js";
 import { renderAgentResults, renderCampaignReport } from "./reports/campaign-report.js";
 import { analyseChain, diversityTargets } from "./reports/chain-analysis.js";
@@ -89,6 +90,7 @@ import { renderGateReport } from "./reports/gate-report.js";
 import { renderKillReport } from "./reports/kill-report.js";
 import { renderFamilyDiversityReport, renderLedgerReport } from "./reports/ledger-report.js";
 import { renderLifecycleReport } from "./reports/lifecycle-report.js";
+import { renderLiveDomCodexDiagnosis } from "./reports/live-dom-diagnosis.js";
 import { renderLiveDom } from "./reports/live-dom-report.js";
 import { renderOrchestrationReport } from "./reports/orchestration-report.js";
 import { describeArtifact, renderProviderVariance } from "./reports/provider-variance.js";
@@ -612,10 +614,10 @@ function agentBankFor(root: string, familyId: string) {
 /** Provider availability, checked by execution rather than assumed. */
 function providerStatus(): string {
   return [
-    "provider   family      state                 available  detail",
+    "provider        family      state                 available  detail",
     ...checkAllProviders().map(
       (a) =>
-        `${a.provider.id.padEnd(11)}${a.provider.family.padEnd(12)}${a.state.padEnd(22)}${(a.available ? "yes" : "NO").padEnd(11)}${a.detail}`,
+        `${a.provider.id.padEnd(16)}${a.provider.family.padEnd(12)}${a.state.padEnd(22)}${(a.available ? "yes" : "NO").padEnd(11)}${a.detail}`,
     ),
     "",
     "A provider that is not available produces NOT_RUN or import-only slots and a prepared bundle,",
@@ -696,10 +698,7 @@ function campaignImport(argv: readonly string[], root: string): string {
     countability,
     transcript: bundle.transcript,
     challengeFiles: prepared.pkg.files.map((f) => ({ path: f.path, content: f.content })),
-    submissionFiles:
-      bundle.submissionPath === null
-        ? []
-        : [{ path: "subject.mjs", content: readFileSync(bundle.submissionPath, "utf8") }],
+    submissionFiles: bundle.submissionPath === null ? [] : bundle.submissionFiles,
     verifierOutput: { cells: graded.cells, detail: graded.detail },
     metadata: {
       runId: bundle.runId,
@@ -1166,21 +1165,26 @@ const readIfPresent = (file: string): string | null => (existsSync(file) ? readF
 function selfCheckProfilesFor(base: ReturnType<typeof analysisBase>) {
   return base.allTrials
     .filter(({ trial }) => trial.record.subjectType === "agent")
-    .map(({ familyId, trial }) =>
-      profileRun({
+    .map(({ familyId, trial }) => {
+      const submissionFiles = trial.submissionFiles.flatMap((name) => {
+        const source = readIfPresent(join(trial.path, "submission", name));
+        return source === null ? [] : [{ name, source }];
+      });
+      const selfCheckFiles =
+        familyId === "checker-required-memory-poisoning"
+          ? submissionFiles.filter((f) => f.name !== "checker.mjs")
+          : submissionFiles;
+      return profileRun({
         runId: trial.runId,
         familyId,
         subjectId: normalizeSubjectId(trial.record.subjectId),
         providerFamily: (trial.record.model ?? "unknown").split("/")[0] ?? "unknown",
         state: base.evidenceState.get(trial.runId) ?? "not-run",
         scenariosFailed: trial.record.cells.filter((c) => c.failed.length > 0).length,
-        submissionFiles: trial.submissionFiles.flatMap((name) => {
-          const source = readIfPresent(join(trial.path, "submission", name));
-          return source === null ? [] : [{ name, source }];
-        }),
+        submissionFiles: selfCheckFiles,
         transcript: readIfPresent(join(trial.path, "transcript.txt")),
-      }),
-    );
+      });
+    });
 }
 
 /** Structured submission-quality rows for every agent trial on disk. */
@@ -1890,6 +1894,7 @@ function allCommand(argv: readonly string[], root: string): string {
           anchorPairs.push(liveDom.relate(catchSet(a), catchSet(b), a, b));
         }
       }
+      const categoricalAnchorAxisProven = anchorPairs.every((p) => p.relation === "incomparable");
       write(
         "ui-replay-live-dom-report.md",
         renderLiveDom({
@@ -2000,7 +2005,7 @@ function allCommand(argv: readonly string[], root: string): string {
               `| \`${p.a}\` / \`${p.b}\` | **${p.relation}** | \`${p.aOnly ?? "none"}\` | \`${p.bOnly ?? "none"}\` |`,
           ),
           "",
-          `Categorical anchor axis proven: **${anchorPairs.every((p) => p.relation === "incomparable") ? "yes" : "no"}**.`,
+          `Categorical anchor axis proven: **${categoricalAnchorAxisProven ? "yes" : "no"}**.`,
           "",
           `Declared space: ${liveScenarios.enumerateSpace().length}. Measured set: ${liveMatrix.instances.length}.`,
           "",
@@ -2011,6 +2016,14 @@ function allCommand(argv: readonly string[], root: string): string {
           "Generated by `agent-eval-foundry`. Deterministic — no timestamp, diffable.",
           "",
         ].join("\n"),
+      );
+      write(
+        "ui-replay-live-dom-codex-diagnosis.md",
+        renderLiveDomCodexDiagnosis({
+          records: liveBundle.trials.records,
+          params: routeFor("ui-replay-live-dom").scenarioParams(),
+          categoricalAnchorAxisProvenByMutants: categoricalAnchorAxisProven,
+        }),
       );
       write(
         "ui-replay-live-dom-trial-readiness.md",
@@ -2158,6 +2171,7 @@ function allCommand(argv: readonly string[], root: string): string {
       }),
     );
   }
+  write("ui-replay-browser-backed-scaffold.md", renderBrowserBackedScaffold());
 
   // ---- did the evolution operator work? -----------------------------------------------------------
   write("evolution-validation-report.md", evolutionValidationReport(root, registry, evidenceFor));
@@ -2186,54 +2200,98 @@ function allCommand(argv: readonly string[], root: string): string {
     }),
   );
   {
-    const checkerShape = registry.shapes.find((s) => s.familyId === "checker-required-memory-poisoning");
-    const checkerCandidate = registry.candidates.find((c) => c.id === "checker-required-memory-poisoning");
-    if (checkerShape === undefined || checkerCandidate === undefined) {
-      throw new Error("checker-required-memory-poisoning shape and candidate ledger row must both exist");
-    }
-    const packageFiles = [
-      "README.md",
-      "SPEC.md",
-      "types.ts",
-      "starter/subject.mjs",
-      "starter/check.mjs",
-      "examples/example-visible-case.json",
-      "MANIFEST.json",
-    ];
-    const challengeDir = join(root, "examples/families/checker-required-memory-poisoning/challenge");
-    const present = packageFiles.filter((f) => existsSync(join(challengeDir, f)));
+    const checkerId = "checker-required-memory-poisoning";
+    const checkerFamily = builtFamily(checkerId);
+    const checkerSweep = checkerFamily.run();
+    const checkerBundle = evidenceFor(checkerId);
+    const checkerAxis = measureFor(checkerSweep.matrix, { nullTrials: 3 });
+    const prepared = prepareChallenge(root, checkerId);
+    const pkgCheck = checkChallengePackage(prepared.pkg.files, checkerFamily.leakProfile);
+    const checkerShape = registry.shapes.find((s) => s.familyId === checkerId);
+    if (checkerShape === undefined) throw new Error("checker-required-memory-poisoning shape must exist");
+    const assessment = assessFamily(checkerShape, registry, checkerBundle.evidence);
+    const status =
+      assessment.verdict === "SHIP"
+        ? "SHIP"
+        : checkerBundle.evidence.countedAgentTrials > 0
+          ? "difficulty-evidenced"
+          : checkerBundle.evidence.trialReady === true
+            ? "trial-ready"
+            : "HOLD";
     write(
       "checker-required-family-report.md",
       [
         "# checker-required family report",
         "",
-        `Family: \`${checkerShape.familyId}\`.`,
+        `Family: \`${checkerId}\`.`,
         "",
         "| item | value |",
         "|---|---|",
-        `| status | HOLD / ${checkerCandidate.status} |`,
-        `| data quality | ${checkerShape.dataQuality} |`,
-        `| challenge package draft | ${present.length}/${packageFiles.length} files present |`,
-        "| required artifacts | `subject.mjs`, `check.mjs` |",
-        `| expected checker mutants | ${checkerShape.expectedMutants.length} |`,
-        "| real-agent trials | not-run |",
-        "| mutant-detection evidence | not-run |",
+        `| current status | **${status}** |`,
+        `| ship verdict | **${assessment.verdict}** |`,
+        `| declared space | ${checkerSweep.spaceSize} |`,
+        `| measured scenarios | ${checkerSweep.scenarioCount} |`,
+        `| known-bad submissions | ${checkerSweep.matrix.subjects.length} |`,
+        `| checks | ${checkerFamily.checks.length} |`,
+        `| reference failures | ${checkerSweep.referenceFailures.length} |`,
+        `| baselines rejected | ${checkerSweep.baselinesBlocked.length}/${checkerSweep.baselinesTotal} |`,
+        `| intended mutants caught | ${checkerSweep.mutantsCaught.filter((m) => m.caught).length}/${checkerSweep.mutantsCaught.length} |`,
+        `| distinct catch sets | ${checkerAxis.distinctMeasurements} |`,
+        `| mutant-detection axes | ${checkerAxis.independentAxes} |`,
+        `| challenge package | ${pkgCheck.files} files, hash \`${prepared.hash}\` |`,
+        "| required artifacts | `subject.mjs`, `checker.mjs` |",
+        `| counted real-agent trials | ${checkerBundle.evidence.countedAgentTrials} |`,
+        `| stale/superseded trials | ${checkerBundle.staleTrials.length} |`,
         "",
         "## Checker-mutant gates",
         "",
         "| mutant | intended check |",
         "|---|---|",
-        ...checkerShape.expectedMutants.map((m) => `| \`${m.mutantId}\` | \`${m.mustFailCheck}\` |`),
+        ...checkerSweep.mutantsCaught.map(
+          (m) =>
+            `| \`${m.mutantId}\` | \`${m.check}\` — ${m.caught ? `caught ${m.caughtIn}/${m.total}` : "MISSED"} |`,
+        ),
         "",
         "## Status",
         "",
-        "This is a package-ready draft produced from the self-check behavior gap. It remains HOLD until",
-        "the checker verifier, held-out checker mutants and at least one counted checker-required trial",
-        "exist. A subject-only submission, a vacuous checker, a visible-example-only checker and an",
-        "accepts-all checker are declared known-bad cases, not measured failures yet.",
+        "Measured mutant-detection evidence exists now: the reference is clean, known-bad checker and",
+        "subject submissions fail by intended checks, and the package is leak checked. This still does",
+        "not imply real-agent difficulty; that requires counted trial directories with the current",
+        "challenge hash.",
         "",
-        "Measured: none. Estimated: package shape and cost. Not-run: checker mutants, verifier sweep and",
-        "real-agent difficulty.",
+        `Measured: checker verifier/mutant bank and package readiness. Real-agent difficulty: ${checkerBundle.evidence.countedAgentTrials > 0 ? "measured" : "not-run"}.`,
+        "Repeated OpenAI trials remain repeated trials unless a different model subject is actually available.",
+        "",
+        "---",
+        "",
+        "Generated by `agent-eval-foundry`. Deterministic — no timestamp, diffable.",
+        "",
+      ].join("\n"),
+    );
+    write(
+      "checker-required-memory-poisoning-trial-readiness.md",
+      [
+        "# checker-required memory poisoning trial readiness",
+        "",
+        `Status: **${status}**.`,
+        "",
+        "| gate | value |",
+        "|---|---|",
+        `| challenge hash | \`${prepared.hash}\` |`,
+        `| scenario set | \`${prepared.scenarioSetId}\` |`,
+        `| visible package files | ${pkgCheck.files} |`,
+        "| required submission files | `subject.mjs`, `checker.mjs` |",
+        `| route present | ${ROUTABLE_FAMILY_IDS.includes(checkerId) ? "yes" : "no"} |`,
+        `| scenarios expected | ${checkerSweep.scenarioCount} |`,
+        `| counted real-agent trials | ${checkerBundle.evidence.countedAgentTrials} |`,
+        `| agent-difficulty axes | ${checkerBundle.evidence.agentAxes ?? "not measured"} |`,
+        "",
+        "Countability rules: provider refusal, entitlement failure, infrastructure failure, timeout,",
+        "missing challenge hash, stale challenge hash, missing submission artifact, and contaminated",
+        "manual runs do not count.",
+        "",
+        "Provider handling for this phase: Codex/OpenAI may run locally. Anthropic/Claude is import-only.",
+        "Gemini remains entitlement-blocked/import-only unless an authenticated run changes that state.",
         "",
         "---",
         "",

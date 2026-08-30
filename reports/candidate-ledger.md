@@ -10,18 +10,18 @@ number you can only get by writing the failures down.
 |---|---:|
 | candidates | **39** |
 | status `idea` | 6 |
-| status `candidate` | 8 |
+| status `candidate` | 7 |
 | status `trialed` | 3 |
-| status `shipped` | 6 |
+| status `shipped` | 7 |
 | status `killed` | 16 |
-| measured (a real result exists) | 22 |
-| estimated | 17 |
-| recorded model spend | $172.57 |
+| measured (a real result exists) | 23 |
+| estimated | 16 |
+| recorded model spend | $187.57 |
 | kills that demonstrably cost $0 | 8 of 16 |
 | kills that cost model spend | 0 |
 | kills with no cost recorded | 8 |
 
-Screened-to-shipped on this record: **16 killed for 6 shipped**. 8 kill(s) demonstrably cost nothing, 0 consumed model spend, and 8 have no cost recorded at all — so the true screening cost is a floor, not a total. The budget planner's hit-rate default is set from the ten design cycles this record reconstructs, and it is an input a reader is entitled to change.
+Screened-to-shipped on this record: **16 killed for 7 shipped**. 8 kill(s) demonstrably cost nothing, 0 consumed model spend, and 8 have no cost recorded at all — so the true screening cost is a floor, not a total. The budget planner's hit-rate default is set from the ten design cycles this record reconstructs, and it is an input a reader is entitled to change.
 
 ## Kill taxonomy
 
@@ -40,7 +40,7 @@ an error, but it is a row whose lesson has not been made transferable yet.
 
 | id | status | decision | mechanisms | cost | quality |
 |---|---|---|---|---:|---|
-| `checker-required-memory-poisoning` | candidate | open | checker-quality-gap, context-contamination, false-audit-history, prompt-injection-via-retrieval | — | est. |
+| `checker-required-memory-poisoning` | shipped | open | checker-quality-gap, context-contamination, false-audit-history, prompt-injection-via-retrieval | $15.00 | measured |
 | `reorg-safe-settlement-planted-defects` | killed | kill | oracle-probing, stale-state | — | measured |
 | `bounded-work-budget-settlement` | killed | kill | oracle-probing, stale-state | — | measured |
 | `reachable-terminal-observables` | killed | kill | duplicate-side-effects, stale-state | $0.00 | measured |
@@ -82,21 +82,21 @@ an error, but it is a row whose lesson has not been made transferable yet.
 
 ### Memory poisoning with required submitted checker `checker-required-memory-poisoning`
 
-**Status** candidate · **Decision** open · **Domain** agent memory and self-verification · **Data** est.
+**Status** shipped · **Decision** open · **Domain** agent memory and self-verification · **Data** measured
 
-**Hypothesis.** A model may implement the memory-poisoning subject behavior while failing to ship a checker strong enough to reject known-bad subjects. Requiring `check.mjs` should measure the gap between describing validation and building an executable verifier.
+**Hypothesis.** A model may implement the memory-poisoning subject behavior while failing to ship a checker strong enough to reject known-bad subjects. Requiring `checker.mjs` should measure the gap between describing validation and building an executable verifier.
 
 **Why it should be hard.** The checker has to generalize from visible examples to held-out wrong subjects, invoke the submitted subject through an instrumented harness, and express provenance rules rather than only asserting liveness or source-shape checks.
 
-**Why it might be unfair.** If the checker contract is underspecified, failures become interface ambiguity rather than checker weakness. The first phase is therefore package-ready only and must stay HOLD until the verifier/checker contract is measured.
+**Why it might be unfair.** If the checker contract is underspecified, failures become interface ambiguity rather than checker weakness. The family is now measured against known-bad checker submissions, but still needs counted real-agent evidence before any difficulty claim.
 
-**Results.** _none — not run_
+**Results.** 1 passed / 21 failed against reference, vacuous-checker, accept-all-checker, reject-all-checker, own-output-only-checker, status-only-checker, same-bug-coupled-checker, audit-blind-checker, liveness-blind-checker, duplicate-blind-checker, late-cancel-blind-checker, receipt-trusting-checker, visible-only-checker, checker-never-invokes-subject, inexpressive-checker, nondeterministic-checker, stub-checker, no-checker, implementation-correct-checker-useless, checker-correct-implementation-wrong, subject-over-blocker, gpt-5.6-sol. Reference passes 792/792 from a 2,376-point declared space. All 20 known-bad checker/subject submissions are caught by intended checks, including accept-all, reject-all, status-only, checker-never-invokes-subject, no-checker, nondeterministic checker, correct-implementation/useless-checker and correct-checker/wrong-implementation cases. The counted Codex/OpenAI trial checker-required-2026-08-o1 preserved subject.mjs and checker.mjs and failed 614/792 scenarios under challenge hash 448f2f816c51030cc97a374816226168. This is real-agent difficulty evidence for one OpenAI subject only, not cross-lab breadth.
 
-**Decision rationale.** Add as a HOLD candidate because the self-check report surfaced a repeated gap: models narrate checkers without shipping them. Do not promote until checker mutants are implemented and measured.
+**Decision rationale.** SHIP under the current gates because the family has a leak-checked challenge package, clean reference, intended-check mutant coverage, route grading and one counted Codex/OpenAI failure. The claim is narrow: one OpenAI subject struggled with the required-checker contract; no Anthropic run was executed and no cross-lab generalisation is claimed.
 
 **Transferability.** The mechanism should transfer across memory, UI replay and workflow families, but the memory-poisoning descendant is the cleanest first version because the underlying policy and known-bad subjects already exist.
 
-**Evidence.** `reports/self-check-behavior-report.md`, `examples/shapes/checker-required-memory-poisoning.json`
+**Evidence.** `reports/self-check-behavior-report.md`, `reports/checker-required-family-report.md`, `reports/checker-required-memory-poisoning-trial-readiness.md`, `campaigns/checker-required-memory-poisoning-2026-08.json`, `examples/families/checker-required-memory-poisoning/challenge/`, `examples/shapes/checker-required-memory-poisoning.json`, `trials/checker-required-memory-poisoning/checker-required-2026-08-o1/`
 
 ### Settlement engine with six planted defects `reorg-safe-settlement-planted-defects`
 

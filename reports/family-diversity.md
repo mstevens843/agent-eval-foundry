@@ -8,7 +8,7 @@ a column mixing the two without labels is how an estimate becomes a fact.
 |---|---|---|---:|---:|---:|---|
 | `audit-truth-financial-workflow` | candidate | false-audit-history, oracle-probing, permission-boundary | — | 45 | 60 | est. |
 | `browser-action-replay` | idea | ui-replay-mismatch, stale-state, hidden-environment-dependency | — | 90 | 80 | est. |
-| `checker-required-memory-poisoning` | candidate | checker-quality-gap, context-contamination, false-audit-history, prompt-injection-via-retrieval | — | 45 | 20 | est. |
+| `checker-required-memory-poisoning` | shipped | checker-quality-gap, context-contamination, false-audit-history, prompt-injection-via-retrieval | 12 | 85 | 35 | measured |
 | `deployment-rollback-partial-effects` | candidate | uncertain-external-effects, duplicate-side-effects, liveness-stall | — | 60 | 75 | est. |
 | `durable-approval-outbox` | shipped | uncertain-external-effects, duplicate-side-effects, false-audit-history, liveness-stall, tool-result-ambiguity | 3 | 120 | 49 | measured |
 | `model-alias-drift-sentinel` | idea | model-alias-drift, hidden-environment-dependency | 2 | 55 | 50 | est. |
@@ -27,11 +27,11 @@ a column mixing the two without labels is how an estimate becomes a fact.
 | | |
 |---|---:|
 | families | 15 |
-| expected axes (all) | 49 |
-| of which measured | **35** |
+| expected axes (all) | 61 |
+| of which measured | **47** |
 | of which estimated | 14 |
-| declared build hours | 990 |
-| declared frontier spend | $818.66 |
+| declared build hours | 1030 |
+| declared frontier spend | $833.66 |
 
 Mechanism coverage across families: 15 distinct mechanisms.
 

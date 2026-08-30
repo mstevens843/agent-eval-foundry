@@ -1,0 +1,115 @@
+{
+  "campaignId": "checker-required-2026-08",
+  "familyId": "checker-required-memory-poisoning",
+  "hypothesis": "Models often narrate verification but do not ship an executable independent checker. The checker-required memory-poisoning family should distinguish subject behavior from checker strength: a counted Codex/OpenAI run may solve the memory policy, fail to provide checker.mjs, or ship a checker that misses held-out bad traces. A stronger confirmation is a failure concentrated on checker_* checks rather than only subject_* checks.",
+  "killSignal": "Every counted Codex/OpenAI trial passes both artifacts cleanly under the current challenge hash, which means the available OpenAI subject already solves the required-checker variant. Alternatively, failures are caused by an ambiguous checker interface or host/package defect, which means HOLD/REPAIR rather than difficulty-evidenced.",
+  "confirmSignal": "At least one counted Codex/OpenAI trial fails at least one checker-required scenario under the current challenge hash, with transcript, subject.mjs, checker.mjs and verifier output preserved. Repeated OpenAI runs are repeated trials only and do not create cross-lab or agent-axis breadth evidence.",
+  "challengeHash": "448f2f816c51030cc97a374816226168",
+  "scenarioSetId": "poisoning-792-67126f04",
+  "scenariosExpected": 792,
+  "timeoutMs": 1800000,
+  "artifactPath": "submission/subject.mjs + submission/checker.mjs",
+  "isolation": "subprocess",
+  "counting": {
+    "neverCounts": [
+      "refused",
+      "timeout",
+      "infrastructure_error"
+    ],
+    "onRefusal": "Recorded as REFUSED with transcript preserved, and never counted. A provider refusal is the absence of an attempt, not a checker failure.",
+    "onInfraFailure": "Recorded as FAILED_INFRA, transcript preserved, uncounted. May be re-run up to the declared retry limit because the failure is in the harness or provider, not the subject.",
+    "onCrash": "Recorded as `crashed` and NOT counted by default. Promote by hand only if the crash is demonstrably inside the submitted artifact rather than in the checker harness.",
+    "retriesOnInfra": 2,
+    "retryOnRefusal": false
+  },
+  "preservation": [
+    "Every slot writes a durable trial directory under trials/<family>/<run-id>/ whether or not it counts.",
+    "metadata.json records the provider, command, challenge hash and scenario-set id.",
+    "transcript.txt is preserved verbatim, including refusals, entitlement failures and crashes.",
+    "challenge/ holds the exact package the model saw.",
+    "submission/ holds both subject.mjs and checker.mjs for counted completed runs.",
+    "verifier-output.json holds the graded cells; countability.json holds the counting decision and its reason.",
+    "A stale challenge hash invalidates a run rather than letting old evidence count for a repaired spec."
+  ],
+  "budgetUsd": 15.0,
+  "slots": [
+    {
+      "slotId": "O1",
+      "model": "openai/gpt-5.6-sol",
+      "subjectId": "gpt-5.6-sol",
+      "effort": null,
+      "runner": "shell",
+      "command": [
+        "codex",
+        "exec",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "--skip-git-repo-check",
+        "{instruction}"
+      ],
+      "state": "RUN",
+      "runId": "checker-required-2026-08-o1",
+      "note": "Counted local Codex/OpenAI run. Completed under the pinned challenge hash with subject.mjs and checker.mjs preserved; failed 614/792 scenarios. This is OpenAI-only difficulty evidence, not cross-lab breadth."
+    },
+    {
+      "slotId": "O2",
+      "model": "openai/gpt-5.6-sol",
+      "subjectId": "gpt-5.6-sol",
+      "effort": null,
+      "runner": "shell",
+      "command": [
+        "codex",
+        "exec",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "--skip-git-repo-check",
+        "{instruction}"
+      ],
+      "state": "NOT_RUN",
+      "runId": null,
+      "note": "Optional repeated OpenAI trial. Counts as a repeated trial of the same subject only; it does not add a new subject, lab or cross-family breadth."
+    },
+    {
+      "slotId": "A1",
+      "model": "anthropic/claude-opus-5",
+      "subjectId": "claude-opus-5",
+      "effort": null,
+      "runner": "external",
+      "command": null,
+      "state": "NOT_RUN",
+      "runId": null,
+      "note": "Import-only in this phase. Do not execute Anthropic/Claude locally because the account is out of tokens."
+    },
+    {
+      "slotId": "A2",
+      "model": "anthropic/claude-sonnet-5",
+      "subjectId": "claude-sonnet-5",
+      "effort": null,
+      "runner": "external",
+      "command": null,
+      "state": "NOT_RUN",
+      "runId": null,
+      "note": "Import-only in this phase. Prepared bundle only; no Anthropic quota should be consumed."
+    },
+    {
+      "slotId": "G1",
+      "model": "google/gemini-3-pro",
+      "subjectId": "gemini-3-pro",
+      "effort": null,
+      "runner": "external",
+      "command": null,
+      "state": "NOT_RUN",
+      "runId": null,
+      "note": "Import-only unless entitlement changes. Prior Gemini runs were blocked by IneligibleTierError and count as infrastructure, not model evidence."
+    },
+    {
+      "slotId": "X1",
+      "model": "external/unspecified",
+      "subjectId": "external",
+      "effort": null,
+      "runner": "external",
+      "command": null,
+      "state": "NOT_RUN",
+      "runId": null,
+      "note": "Generic external-subject bundle for later imported runs with transcript, metadata and both submission artifacts preserved."
+    }
+  ]
+}

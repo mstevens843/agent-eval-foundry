@@ -164,6 +164,39 @@ export const LIVE_DOM_PROFILE: LeakProfile = {
   ],
 };
 
+export const CHECKER_REQUIRED_PROFILE: LeakProfile = {
+  familyId: "checker-required-memory-poisoning",
+  forbiddenFilenames: [...FORBIDDEN_FILENAMES, "truth.ts", "answer-matrix.json", "checker-matrix.json"],
+  forbiddenContent: [
+    ["export function verify", "the hidden grading function"],
+    ["referenceSubmission", "the reference submission"],
+    ["strongChecker", "the checker answer key"],
+    ["MUTANTS", "the known-bad submission bank"],
+    ["MEMORY_MUTANTS", "the inherited hidden memory mutant bank"],
+    ["selectMeasuredSet", "the graded-scenario selection"],
+    ["enumerateSpace", "the full scenario space enumeration"],
+    ["probeTrace", "the hidden trace-mutator bank"],
+    ["traceViolations", "the hidden checker decision procedure"],
+    ["hiddenBadSubject", "the held-out bad subject selector"],
+  ],
+  requiredSpecCodes: [
+    "C0_CHECKER_PRESENT",
+    "C1_CHECKER_RETURNS_REPORT",
+    "C2_BAD_TRANSITION",
+    "C3_PROVENANCE_LOSS",
+    "C4_FALSE_SUCCESS",
+    "C5_AUDIT_GAP",
+    "C6_LIVENESS_STALLED",
+    "C7_DUPLICATE_EFFECT",
+    "C8_LATE_CANCELLATION",
+    "C9_SUBJECT_INVOKED",
+    "C10_RECEIPT_FORGERY",
+    "C11_STATUS_ONLY",
+    "C12_HELD_OUT_MUTANT",
+    "C13_REFERENCE_ACCEPTED",
+  ],
+};
+
 export interface CheckableChallengeFile {
   readonly path: string;
   readonly content: string;

@@ -1,0 +1,16 @@
+{
+  "runId": "poisoning-claude-sonnet-EDITME",
+  "familyId": "checker-required-memory-poisoning",
+  "provider": "claude-sonnet",
+  "providerLabel": "Claude Sonnet 5 via the Claude CLI",
+  "model": "anthropic/claude-sonnet-5",
+  "subjectId": "claude-sonnet-5",
+  "effort": null,
+  "scenarioSetId": "poisoning-792-67126f04",
+  "challengeHash": "448f2f816c51030cc97a374816226168",
+  "isolation": "subprocess",
+  "status": "completed",
+  "notes": "REPLACE: how it was run, and anything unusual about the run.",
+  "runtimeSeconds": null,
+  "costUsd": null
+}

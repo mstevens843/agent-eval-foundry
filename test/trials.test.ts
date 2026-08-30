@@ -15,18 +15,27 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { measure } from "../src/axis-meter.js";
+import { buildCheckerRequiredChallengePackage } from "../src/challenge/checker-required-package.js";
 import {
   LIVE_DOM_HIDDEN_ARTIFACTS,
   buildLiveDomChallengePackage,
 } from "../src/challenge/live-dom-package.js";
 import {
+  CHECKER_REQUIRED_PROFILE,
   FORBIDDEN_FILENAMES,
   LIVE_DOM_PROFILE,
   checkChallengePackage,
 } from "../src/challenge/package-check.js";
 import { buildChallengePackage } from "../src/challenge/package.js";
 import { HIDDEN_ARTIFACTS } from "../src/challenge/package.js";
+import {
+  SPACE as CHECKER_SPACE,
+  enumerateSpace as enumerateCheckerSpace,
+  selectMeasuredSet as selectCheckerMeasuredSet,
+} from "../src/families/checker-required-memory-poisoning/scenarios.js";
+import { CHECKER_RULE_CODES } from "../src/families/checker-required-memory-poisoning/types.js";
 import { runFamily, toMatrix } from "../src/families/prompt-injection-containment/runner.js";
+import { builtFamily } from "../src/families/registry.js";
 import { RULE_CODES as LIVE_DOM_RULE_CODES } from "../src/families/ui-replay-live-dom/spec.js";
 import { loadRegistry } from "../src/foundry/load.js";
 import { parseMatrix } from "../src/matrix.js";
@@ -431,39 +440,109 @@ describe("live-DOM challenge package", () => {
   });
 });
 
-describe("checker-required challenge draft", () => {
-  const base = join(ROOT, "examples/families/checker-required-memory-poisoning/challenge");
+describe("checker-required challenge package", () => {
+  const typesSource = readFileSync(
+    join(ROOT, "src/families/checker-required-memory-poisoning/types.ts"),
+    "utf8",
+  );
+  const pkg = buildCheckerRequiredChallengePackage(typesSource, "checker-set-test");
+  const spec = pkg.files.find((f) => f.path === "SPEC.md")?.content ?? "";
+  const packageText = pkg.files.map((f) => `${f.path}\n${f.content}`).join("\n");
 
   it("requires both submitted artifacts and publishes the checker contract", () => {
+    expect(() => checkChallengePackage(pkg.files, CHECKER_REQUIRED_PROFILE)).not.toThrow();
     for (const file of [
       "README.md",
       "SPEC.md",
       "types.ts",
       "starter/subject.mjs",
-      "starter/check.mjs",
+      "starter/checker.mjs",
       "MANIFEST.json",
     ]) {
-      expect(existsSync(join(base, file)), file).toBe(true);
+      expect(
+        pkg.files.map((f) => f.path),
+        file,
+      ).toContain(file);
     }
-    const spec = readFileSync(join(base, "SPEC.md"), "utf8");
     expect(spec).toContain("`subject.mjs`, exporting `subject`");
-    expect(spec).toContain("`check.mjs`, exporting `check`");
-    expect(spec).toContain("never invokes the subject");
-    expect(spec).toContain("Passing every subject fails");
+    expect(spec).toContain("`checker.mjs`, exporting `checker`");
+    expect(spec).toContain("checker actually invokes harness cases");
+    expect(spec).toContain("accepts clean reference traces");
+    for (const code of CHECKER_RULE_CODES) expect(spec, code).toContain(code);
+    expect(packageText).not.toContain("check.mjs");
   });
 
-  it("declares the known-bad checker mutants that keep the family on HOLD until measured", () => {
+  it("keeps hidden checker/verifier implementation concepts out of visible files", () => {
+    for (const forbidden of ["referenceSubmission", "strongChecker", "probeTrace", "traceViolations"]) {
+      expect(packageText, forbidden).not.toContain(forbidden);
+    }
+    const leaked = [
+      ...pkg.files,
+      { path: "helpers/trace-tools.ts", content: "export const probeTrace = () => null;" },
+    ];
+    expect(() => checkChallengePackage(leaked, CHECKER_REQUIRED_PROFILE)).toThrowError(
+      expect.objectContaining({ code: "CHALLENGE_LEAKS_HIDDEN_ARTIFACT" }),
+    );
+  });
+
+  it("has a deterministic package hash and spec edits invalidate stale trials", () => {
+    const again = buildCheckerRequiredChallengePackage(typesSource, "checker-set-test");
+    expect(challengeHash(again)).toBe(challengeHash(pkg));
+    const edited = {
+      ...pkg,
+      files: pkg.files.map((f) => (f.path === "SPEC.md" ? { ...f, content: `${f.content}\n` } : f)),
+    };
+    expect(challengeHash(edited)).not.toBe(challengeHash(pkg));
+  });
+});
+
+describe("checker-required measured family", () => {
+  const sweep = builtFamily("checker-required-memory-poisoning").run();
+
+  it("has full knob coverage in the measured scenario set", () => {
+    const measured = selectCheckerMeasuredSet(enumerateCheckerSpace());
+    expect(measured.length).toBe(792);
+    for (const [knob, values] of Object.entries(CHECKER_SPACE)) {
+      const seen = new Set(measured.map((p) => String((p as unknown as Record<string, unknown>)[knob])));
+      expect(seen, knob).toEqual(new Set(values.map(String)));
+    }
+  });
+
+  it("has a clean reference and rejects every known-bad checker by intended check", () => {
+    expect(sweep.referenceFailures).toEqual([]);
+    expect(sweep.mutantsCaught.length).toBe(20);
+    expect(sweep.mutantsCaught.every((m) => m.caught)).toBe(true);
+    expect(sweep.baselinesBlocked.length).toBe(sweep.baselinesTotal);
+    for (const row of sweep.mutantsCaught) {
+      expect(row.caughtIn, row.mutantId).toBeGreaterThan(0);
+      expect(row.check, row.mutantId).not.toBe("fails_somewhere");
+    }
+  });
+
+  it("is measured in the ledger but not shipped without real-agent difficulty", () => {
     const shape = registry.shapes.find((s) => s.familyId === "checker-required-memory-poisoning");
-    expect(shape?.dataQuality).toBe("estimated");
-    expect(shape?.expectedMutants.map((m) => m.mutantId).sort()).toEqual([
-      "accepts-all-checker",
-      "checker-never-invokes-subject",
-      "inexpressive-checker",
-      "provenance-dropper",
-      "self-trusting-reader",
-      "vacuous-checker",
-      "visible-only-checker",
-    ]);
+    expect(shape?.dataQuality).toBe("measured");
+    expect(shape?.expectedMutants).toHaveLength(20);
+    const assessment = assessFamily(shape as NonNullable<typeof shape>, registry, {
+      familyId: "checker-required-memory-poisoning",
+      referencePasses: true,
+      baselinesBlocked: sweep.baselinesBlocked,
+      baselinesTotal: sweep.baselinesTotal,
+      mutantsCaught: sweep.mutantsCaught.map((m) => ({
+        mutantId: m.mutantId,
+        check: m.check,
+        caught: m.caught,
+      })),
+      mechanismsExercised: true,
+      isolation: "subprocess",
+      countedAgentTrials: 0,
+      agentTrialsPassed: 0,
+      sharedBankSubjects: 0,
+      reportsDeterministic: true,
+      trialReady: true,
+    });
+    expect(assessment.blockingFailures).toContain("difficulty-evidenced");
+    expect(assessment.verdict).not.toBe("SHIP");
   });
 });
 

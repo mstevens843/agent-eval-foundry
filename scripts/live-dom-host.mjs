@@ -12,7 +12,7 @@ var freeze = (n) => ({
   role: n.role,
   attrs: { ...n.attrs },
   text: n.text,
-  children: n.children.map(freeze)
+  children: n.children.map(freeze),
 });
 var parentOf = (root, id) => {
   for (const n of walk(root)) if (n.children.some((c) => c.id === id)) return n;
@@ -41,58 +41,75 @@ function settlesAtFor(fate, seed) {
       return 0;
   }
 }
-var conflictApplies = (params) => params.anchorConflict !== "none" && (params.regionFate === "stable" || params.regionFate === "late_mount" || params.regionFate === "remount_rekeyed" || params.regionFate === "disabled_then_enabled");
+var conflictApplies = (params) =>
+  params.anchorConflict !== "none" &&
+  (params.regionFate === "stable" ||
+    params.regionFate === "late_mount" ||
+    params.regionFate === "remount_rekeyed" ||
+    params.regionFate === "disabled_then_enabled");
 var reactionsFor = (params) => {
   const at = settlesAtFor(params.regionFate, params.seed);
-  const fate = params.regionFate === "late_mount" ? ["unmount:capture", `mount:capture@${at}`] : params.regionFate === "remount_rekeyed" ? ["unmount:capture", `mount:capture_rekeyed@${at}`] : params.regionFate === "superseded" ? [`supersede:capture#${SUCCESSOR_ENTITY}`] : params.regionFate === "disabled_then_enabled" ? ["disable:capture", `enable:capture@${at}`] : params.regionFate === "removed" ? ["remove_region:capture"] : [];
+  const fate =
+    params.regionFate === "late_mount"
+      ? ["unmount:capture", `mount:capture@${at}`]
+      : params.regionFate === "remount_rekeyed"
+        ? ["unmount:capture", `mount:capture_rekeyed@${at}`]
+        : params.regionFate === "superseded"
+          ? [`supersede:capture#${SUCCESSOR_ENTITY}`]
+          : params.regionFate === "disabled_then_enabled"
+            ? ["disable:capture", `enable:capture@${at}`]
+            : params.regionFate === "removed"
+              ? ["remove_region:capture"]
+              : [];
   const conflictAt = params.regionFate === "late_mount" || params.regionFate === "remount_rekeyed" ? at : 0;
   const conflict = conflictApplies(params) ? [`anchor_conflict:${params.anchorConflict}@${conflictAt}`] : [];
-  const ordered = params.regionFate === "disabled_then_enabled" ? [...conflict, ...fate] : [...fate, ...conflict];
-  return [...ordered, ...params.priorState === "arming" ? ["enable:hold@1"] : []].join(";");
+  const ordered =
+    params.regionFate === "disabled_then_enabled" ? [...conflict, ...fate] : [...fate, ...conflict];
+  return [...ordered, ...(params.priorState === "arming" ? ["enable:hold@1"] : [])].join(";");
 };
 var ORDERS = ["ord-201", "ord-202", "ord-203", "ord-204"];
 function buildTree(params) {
   const foreign = params.priorState === "foreign_hold";
   const armed = params.priorState === "arming";
-  const holdNode = foreign ? (
-    // The situation a replayer actually meets after a crashed submit: the recorded control is gone,
-    // an enabled retry stands where it was carrying the SAME entity and a matching anchor, and the
-    // only thing that says the work is already done is `data-txn-state` on the region.
-    mut("hold-retry", "button", {
-      "aria-label": HOLD_NAME,
-      "data-entity": ORDER_ENTITY,
-      "data-effect": "hold_funds",
-      "data-opens-confirmation": "true",
-      "aria-disabled": "false"
-    })
-  ) : mut("hold", "button", {
-    "aria-label": HOLD_NAME,
-    "data-testid": "hold",
-    "data-entity": ORDER_ENTITY,
-    "data-effect": "hold_funds",
-    "data-opens-confirmation": "true",
-    "aria-disabled": armed ? "true" : "false"
-  });
+  const holdNode = foreign
+    ? // The situation a replayer actually meets after a crashed submit: the recorded control is gone,
+      // an enabled retry stands where it was carrying the SAME entity and a matching anchor, and the
+      // only thing that says the work is already done is `data-txn-state` on the region.
+      mut("hold-retry", "button", {
+        "aria-label": HOLD_NAME,
+        "data-entity": ORDER_ENTITY,
+        "data-effect": "hold_funds",
+        "data-opens-confirmation": "true",
+        "aria-disabled": "false",
+      })
+    : mut("hold", "button", {
+        "aria-label": HOLD_NAME,
+        "data-testid": "hold",
+        "data-entity": ORDER_ENTITY,
+        "data-effect": "hold_funds",
+        "data-opens-confirmation": "true",
+        "aria-disabled": armed ? "true" : "false",
+      });
   const root = mut("root", "document", {}, "", [
     mut("banner", "banner", { "data-region": "banner" }, "", [
       mut("nav-home", "link", { "aria-label": "Home" }, "Home"),
       mut("nav-orders", "link", { "aria-label": "Orders" }, "Orders"),
       mut("nav-reports", "link", { "aria-label": "Reports" }, "Reports"),
-      mut("acct-menu", "button", { "aria-label": "Account menu", "data-effect": "sign_out" }, "Account")
+      mut("acct-menu", "button", { "aria-label": "Account menu", "data-effect": "sign_out" }, "Account"),
     ]),
     mut("main", "main", { "data-region": "orders" }, "", [
       mut("orders-toolbar", "toolbar", {}, "", [
         mut("filter-open", "button", { "aria-label": "Filter open" }, "Open"),
         mut("filter-all", "button", { "aria-label": "Filter all" }, "All"),
-        mut("search", "textbox", { "aria-label": "Search orders", "data-state": "editable" }, "")
+        mut("search", "textbox", { "aria-label": "Search orders", "data-state": "editable" }, ""),
       ]),
       mut(
         "orders-table",
         "table",
         {},
         "",
-        ORDERS.map(
-          (entity) => mut(`row-${entity}`, "row", { "data-entity": entity }, "", [
+        ORDERS.map((entity) =>
+          mut(`row-${entity}`, "row", { "data-entity": entity }, "", [
             mut(`cell-${entity}-id`, "cell", {}, entity),
             mut(`cell-${entity}-amount`, "cell", {}, String(120 + params.seed)),
             mut(`badge-${entity}`, "status", { "aria-label": "Order status", "data-entity": entity }, "open"),
@@ -103,13 +120,13 @@ function buildTree(params) {
                 "aria-label": "Review order",
                 "data-testid": `review-${entity}`,
                 "data-entity": entity,
-                "aria-disabled": "false"
+                "aria-disabled": "false",
               },
-              "Review"
-            )
-          ])
-        )
-      )
+              "Review",
+            ),
+          ]),
+        ),
+      ),
     ]),
     mut(
       "checkout",
@@ -121,7 +138,7 @@ function buildTree(params) {
         // half-finished work, and it is answerable ONLY by reading the page: the subject never ran
         // that pass, so its own memory is silent.
         "data-txn-state": foreign ? "open" : "idle",
-        "data-txn-entity": foreign ? ORDER_ENTITY : ""
+        "data-txn-entity": foreign ? ORDER_ENTITY : "",
       },
       "",
       [
@@ -133,9 +150,9 @@ function buildTree(params) {
             "aria-label": "Quantity",
             "data-testid": "qty",
             "data-entity": ORDER_ENTITY,
-            "data-state": "editable"
+            "data-state": "editable",
           },
-          String(params.seed % 5)
+          String(params.seed % 5),
         ),
         mut("lbl-addr", "label", {}, "Shipping address"),
         mut(
@@ -145,9 +162,9 @@ function buildTree(params) {
             "aria-label": "Shipping address",
             "data-testid": "addr",
             "data-entity": ORDER_ENTITY,
-            "data-state": "editable"
+            "data-state": "editable",
           },
-          "12 Example St"
+          "12 Example St",
         ),
         mut(
           "ship",
@@ -157,13 +174,13 @@ function buildTree(params) {
             "data-testid": "ship",
             "data-entity": ORDER_ENTITY,
             "aria-disabled": "false",
-            "data-on-click": reactionsFor(params)
+            "data-on-click": reactionsFor(params),
           },
           "Standard",
           [
             mut("opt-std", "option", { "aria-label": "Standard" }, "Standard"),
-            mut("opt-exp", "option", { "aria-label": "Express" }, "Express")
-          ]
+            mut("opt-exp", "option", { "aria-label": "Express" }, "Express"),
+          ],
         ),
         mut("total", "status", { "aria-label": "Order total", "data-entity": ORDER_ENTITY }, "42.00"),
         mut(
@@ -173,13 +190,13 @@ function buildTree(params) {
             "aria-label": "Recalculate total",
             "data-testid": "recalc",
             "data-entity": ORDER_ENTITY,
-            "aria-disabled": "false"
+            "aria-disabled": "false",
           },
-          "Recalculate"
+          "Recalculate",
         ),
         holdNode,
-        mut("hold-note", "note", {}, "Funds are held, then captured.")
-      ]
+        mut("hold-note", "note", {}, "Funds are held, then captured."),
+      ],
     ),
     mut("capture", "region", { "data-region": "capture", "aria-label": "Capture" }, "", [
       mut(
@@ -191,17 +208,17 @@ function buildTree(params) {
           "data-entity": ORDER_ENTITY,
           "data-effect": "capture_funds",
           "data-opens-confirmation": "true",
-          "aria-disabled": "false"
+          "aria-disabled": "false",
         },
-        "Capture"
+        "Capture",
       ),
-      mut("cap-note", "note", {}, "Closes the hold.")
+      mut("cap-note", "note", {}, "Closes the hold."),
     ]),
     mut("footer", "contentinfo", { "data-region": "footer" }, "", [
       mut("foot-status", "status", { "aria-label": "Connection" }, "online"),
-      mut("foot-link", "link", { "aria-label": "Support" }, "Support")
+      mut("foot-link", "link", { "aria-label": "Support" }, "Support"),
     ]),
-    mut("dialog-host", "group", { "data-region": "dialog" }, "")
+    mut("dialog-host", "group", { "data-region": "dialog" }, ""),
   ]);
   assignRegions(root, null);
   return root;
@@ -249,9 +266,10 @@ function resolveSelector(root, selector) {
     const index = Number(selector.qualifier ?? "0");
     return { node: all[index] ?? null, matches: all.length };
   }
-  return { node: all.length === 1 ? all[0] ?? null : null, matches: all.length };
+  return { node: all.length === 1 ? (all[0] ?? null) : null, matches: all.length };
 }
-var matchesAnchor = (n, a) => n.role === a.role && n.attrs["aria-label"] === a.name && n.attrs["data-region"] === a.region;
+var matchesAnchor = (n, a) =>
+  n.role === a.role && n.attrs["aria-label"] === a.name && n.attrs["data-region"] === a.region;
 var resolveAnchor = (root, anchor) => walk(root).filter((n) => matchesAnchor(n, anchor));
 var App = class {
   constructor(params, trace) {
@@ -340,10 +358,10 @@ var App = class {
               {
                 "aria-label": "Loading capture",
                 "data-entity": `pending:${ORDER_ENTITY}`,
-                "data-region": "capture"
+                "data-region": "capture",
               },
-              "\u2026"
-            )
+              "\u2026",
+            ),
           );
         }
         break;
@@ -360,15 +378,15 @@ var App = class {
               // A framework re-mount that preserved the testid (`late_mount`) leaves the primary
               // selector working once time passes; one that did not (`remount_rekeyed`) forces anchor
               // re-derivation even after settling. Two different failures of the same identity.
-              ...rekeyed ? {} : { "data-testid": "capture" },
+              ...(rekeyed ? {} : { "data-testid": "capture" }),
               "data-entity": ORDER_ENTITY,
               "data-effect": "capture_funds",
               "data-opens-confirmation": "true",
               "aria-disabled": "false",
-              "data-region": "capture"
+              "data-region": "capture",
             },
-            "Capture"
-          )
+            "Capture",
+          ),
         );
         break;
       }
@@ -384,10 +402,10 @@ var App = class {
               "data-effect": "capture_funds",
               "data-opens-confirmation": "true",
               "aria-disabled": "false",
-              "data-region": "capture"
+              "data-region": "capture",
             },
-            "Capture"
-          )
+            "Capture",
+          ),
         );
         break;
       }
@@ -419,22 +437,26 @@ var App = class {
     const region = this.captureRegion();
     if (region === null) return;
     const attrsFor = (addr) => {
-      const correct = kind === "testid_wins" && addr === "testid" || kind === "semantic_wins" && addr === "semantic" || kind === "path_wins" && addr === "path";
+      const correct =
+        (kind === "testid_wins" && addr === "testid") ||
+        (kind === "semantic_wins" && addr === "semantic") ||
+        (kind === "path_wins" && addr === "path");
       return {
-        "aria-label": addr === "semantic" ? CAPTURE_NAME : addr === "testid" ? "Capture saved method" : "Submit payment",
-        ...addr === "testid" ? { "data-testid": "capture" } : {},
+        "aria-label":
+          addr === "semantic" ? CAPTURE_NAME : addr === "testid" ? "Capture saved method" : "Submit payment",
+        ...(addr === "testid" ? { "data-testid": "capture" } : {}),
         "data-entity": correct ? ORDER_ENTITY : SUCCESSOR_ENTITY,
         "data-effect": correct ? "capture_funds" : "preview_capture",
         "data-opens-confirmation": "true",
         "aria-disabled": "false",
-        "data-region": "capture"
+        "data-region": "capture",
       };
     };
     region.children = [
       mut("cap-path", "button", attrsFor("path"), "Submit"),
       mut("cap-testid", "button", attrsFor("testid"), "Capture"),
       mut("cap-semantic", "button", attrsFor("semantic"), "Capture"),
-      mut("cap-note", "note", {}, "Closes the hold.")
+      mut("cap-note", "note", {}, "Closes the hold."),
     ];
   }
   /**
@@ -452,7 +474,7 @@ var App = class {
     if (region === null) return;
     region.children = region.children.filter((c) => !this.twins.has(c.id));
     const originals = region.children.filter(
-      (c) => c.role === "button" && c.attrs["aria-label"] === CAPTURE_NAME
+      (c) => c.role === "button" && c.attrs["aria-label"] === CAPTURE_NAME,
     );
     const only = originals.length === 1 ? originals[0] : void 0;
     if (only === void 0) return;
@@ -497,7 +519,11 @@ var App = class {
     for (const step of this.trace.steps) {
       const set = this.legitimate.get(step.index) ?? /* @__PURE__ */ new Set();
       for (const n of walk(this.root)) {
-        if (matchesSelector(n, step.selector, this.root) || matchesSelector(n, step.path, this.root) || matchesAnchor(n, step.anchor)) {
+        if (
+          matchesSelector(n, step.selector, this.root) ||
+          matchesSelector(n, step.path, this.root) ||
+          matchesAnchor(n, step.anchor)
+        ) {
           set.add(n.id);
         }
       }
@@ -513,7 +539,7 @@ var App = class {
       detail,
       replayIndex: this.replayIndex,
       tick: this.tick,
-      permitted
+      permitted,
     });
   }
   /**
@@ -555,7 +581,7 @@ var App = class {
       nodeId: target.id,
       entity,
       replayIndex: this.replayIndex,
-      tick: this.tick
+      tick: this.tick,
     });
     const checkout = this.find("checkout");
     if (checkout === void 0) return;
@@ -575,26 +601,26 @@ var App = class {
         const resolved = resolveSelector(this.root, selector);
         this.record(
           "query",
-          `${selector.kind}:${selector.value}@${selector.qualifier ?? "-"} -> ${all.map((n) => n.id).join("+") || "none"}`
+          `${selector.kind}:${selector.value}@${selector.qualifier ?? "-"} -> ${all.map((n) => n.id).join("+") || "none"}`,
         );
         return {
           node: resolved.node === null ? null : freeze(resolved.node),
           matches: resolved.matches,
           tick: this.tick,
-          treeVersion: this.treeVersion
+          treeVersion: this.treeVersion,
         };
       },
       queryAnchor: (anchor) => {
         const nodes = resolveAnchor(this.root, anchor);
         this.record(
           "queryAnchor",
-          `${anchor.role}|${anchor.name}|${anchor.region} -> ${nodes.map((n) => n.id).join("+") || "none"}`
+          `${anchor.role}|${anchor.name}|${anchor.region} -> ${nodes.map((n) => n.id).join("+") || "none"}`,
         );
         return {
           nodes: nodes.map(freeze),
           matches: nodes.length,
           tick: this.tick,
-          treeVersion: this.treeVersion
+          treeVersion: this.treeVersion,
         };
       },
       attr: (nodeId, name) => {
@@ -603,7 +629,7 @@ var App = class {
       },
       regionState: (region) => {
         const node = walk(this.root).find(
-          (n) => n.attrs["data-region"] === region && n.attrs["aria-label"] !== void 0 && n.role !== "button"
+          (n) => n.attrs["data-region"] === region && n.attrs["aria-label"] !== void 0 && n.role !== "button",
         );
         const container = node ?? walk(this.root).find((n) => n.attrs["data-region"] === region);
         this.record("regionState", region);
@@ -611,7 +637,7 @@ var App = class {
         return {
           present: true,
           txnState: container.attrs["data-txn-state"] ?? "idle",
-          txnEntity: container.attrs["data-txn-entity"] ?? ""
+          txnEntity: container.attrs["data-txn-entity"] ?? "",
         };
       },
       settle: () => {
@@ -693,7 +719,7 @@ var App = class {
                   "aria-modal": "true",
                   "aria-label": `Confirm ${node.attrs["data-effect"] ?? "action"}`,
                   "data-region": "dialog",
-                  "data-for": node.id
+                  "data-for": node.id,
                 },
                 "",
                 [
@@ -701,11 +727,11 @@ var App = class {
                     "dlg-confirm",
                     "button",
                     { "aria-label": "Confirm", "aria-disabled": "false" },
-                    "Confirm"
+                    "Confirm",
                   ),
-                  mut("dlg-cancel", "button", { "aria-label": "Cancel", "aria-disabled": "false" }, "Cancel")
-                ]
-              )
+                  mut("dlg-cancel", "button", { "aria-label": "Cancel", "aria-disabled": "false" }, "Cancel"),
+                ],
+              ),
             );
           }
           this.afterMutation();
@@ -725,7 +751,7 @@ var App = class {
           return blocked;
         }
         const dialog = walk(this.root).find(
-          (n) => n.role === "alertdialog" && n.children.some((c) => c.id === nodeId)
+          (n) => n.role === "alertdialog" && n.children.some((c) => c.id === nodeId),
         );
         if (dialog === void 0) {
           this.record("acceptConfirmation", `${nodeId} -> NOT_A_CONFIRMATION`, permitted);
@@ -747,7 +773,7 @@ var App = class {
       askModel: (question) => {
         this.record("askModel", question.slice(0, 60));
         return "click whichever capture button is showing";
-      }
+      },
     });
   }
   // ---------------------------------------------------------------- sealed, unreachable from the facade
@@ -806,10 +832,10 @@ try {
       effects: app.sealedEffects(),
       calls: app.sealedCalls(),
       legitimate: Object.fromEntries(
-        [...app.sealedLegitimate()].map(([step, ids]) => [String(step), [...ids].sort()])
+        [...app.sealedLegitimate()].map(([step, ids]) => [String(step), [...ids].sort()]),
       ),
-      error: `subject threw: ${err.message}`
-    })
+      error: `subject threw: ${err.message}`,
+    }),
   );
   process.exit(0);
 }
@@ -819,8 +845,8 @@ process.stdout.write(
     effects: app.sealedEffects(),
     calls: app.sealedCalls(),
     legitimate: Object.fromEntries(
-      [...app.sealedLegitimate()].map(([step, ids]) => [String(step), [...ids].sort()])
+      [...app.sealedLegitimate()].map(([step, ids]) => [String(step), [...ids].sort()]),
     ),
-    error: null
-  })
+    error: null,
+  }),
 );

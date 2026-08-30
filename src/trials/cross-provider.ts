@@ -36,20 +36,29 @@ export interface PreparedProviderBundle {
   readonly files: readonly string[];
 }
 
-const RUN_SCRIPT = (spec: ProviderSpec, command: readonly string[] | null): string =>
+const submissionFilesFor = (familyId: string): readonly string[] =>
+  familyId === "checker-required-memory-poisoning" ? ["subject.mjs", "checker.mjs"] : ["subject.mjs"];
+
+const RUN_SCRIPT = (familyId: string, spec: ProviderSpec, command: readonly string[] | null): string =>
   [
     "#!/usr/bin/env bash",
     "# Run this trial. Produced by `foundry trials campaign prepare`.",
     "#",
     "# The command below is EXACTLY what the foundry would run for this provider. Run it with this",
-    "# directory as the working directory; the model must write submission/subject.mjs and nothing",
-    "# else. Then hand the whole directory back to `foundry trials campaign import`.",
+    `# directory as the working directory; the model must write ${submissionFilesFor(familyId)
+      .map((f) => `submission/${f}`)
+      .join(" and ")}.`,
+    "# Then hand the whole directory back to `foundry trials campaign import`.",
     "set -euo pipefail",
     'cd "$(dirname "$0")"',
     "mkdir -p submission",
     "",
     command === null
-      ? "# No CLI is declared for this provider. Give INSTRUCTION.txt to the model however you run it,\n# and save its answer to submission/subject.mjs."
+      ? `# No CLI is declared for this provider. Give INSTRUCTION.txt to the model however you run it,\n# and save its answer to ${submissionFilesFor(
+          familyId,
+        )
+          .map((f) => `submission/${f}`)
+          .join(" and ")}.`
       : command.map((arg, i) => (i === 0 ? arg : `  ${JSON.stringify(arg)}`)).join(" \\\n"),
     "",
   ].join("\n");
@@ -85,7 +94,9 @@ const IMPORT_README = (familyId: string, spec: ProviderSpec, challenge: Prepared
     "## What to do",
     "",
     "1. Run `./run.sh`, or give `INSTRUCTION.txt` to the model any way you like.",
-    "2. The model must write **exactly one file**: `submission/subject.mjs`.",
+    `2. The model must write: ${submissionFilesFor(familyId)
+      .map((f) => `\`submission/${f}\``)
+      .join(", ")}.`,
     "3. Save the model's full output to `transcript.txt` — including a refusal, if that is what happened.",
     "4. Fill in `metadata.json`. Do not change `challengeHash` or `scenarioSetId`.",
     "5. Hand the directory back:",
@@ -100,7 +111,9 @@ const IMPORT_README = (familyId: string, spec: ProviderSpec, challenge: Prepared
     "|---|---|",
     `| \`challengeHash\` equals \`${challenge.hash}\` | a trial run against a different version of the task is evidence about that version, not this one |`,
     "| `transcript.txt` exists and is non-empty | a run with no transcript cannot be audited, so it cannot count |",
-    "| `submission/subject.mjs` exists | a counted trial needs the artifact it was graded on |",
+    `| ${submissionFilesFor(familyId)
+      .map((f) => `\`submission/${f}\``)
+      .join(", ")} exist | a counted trial needs every artifact it was graded on |`,
     "| the submission is not a checked-in baseline | an artifact that does nothing is the absence of an attempt |",
     "| `status` is one of the declared classifications | a refusal is not a failure and must not be filed as one |",
     "",
@@ -141,7 +154,7 @@ export function prepareProviderBundle(
     { name: "INSTRUCTION.txt", content: `${route.instruction}\n` },
     { name: "README.md", content: IMPORT_README(familyId, spec, challenge) },
     { name: "metadata.json", content: METADATA_TEMPLATE(familyId, spec, challenge) },
-    { name: "run.sh", content: RUN_SCRIPT(spec, command), exec: true },
+    { name: "run.sh", content: RUN_SCRIPT(familyId, spec, command), exec: true },
     { name: "transcript.txt", content: "" },
     {
       name: "PROVIDER.json",
@@ -195,6 +208,7 @@ export interface ImportedBundle {
   readonly challengeHash: string;
   readonly transcript: string;
   readonly submissionPath: string | null;
+  readonly submissionFiles: readonly { readonly path: string; readonly content: string }[];
   readonly notes: string;
   readonly runtimeSeconds: number | null;
   readonly costUsd: number | null;
@@ -253,9 +267,11 @@ export function readImportedBundle(
   const transcript = existsSync(transcriptPath) ? readFileSync(transcriptPath, "utf8") : "";
   const status = String(meta["status"]);
   const submissionDir = join(dir, "submission");
-  const submissionFile = existsSync(submissionDir)
-    ? readdirSync(submissionDir).find((f) => f.endsWith(".mjs") || f.endsWith(".js"))
-    : undefined;
+  const submissionNames = existsSync(submissionDir) ? readdirSync(submissionDir).sort() : [];
+  const requiredSubmissions = submissionFilesFor(expectedFamilyId);
+  const submissionFile = submissionNames.includes("subject.mjs")
+    ? "subject.mjs"
+    : submissionNames.find((f) => f.endsWith(".mjs") || f.endsWith(".js"));
 
   // A run that claims to have completed must have both halves of its evidence. A refusal or an
   // infrastructure failure legitimately has neither artifact nor much transcript, and is imported
@@ -268,14 +284,19 @@ export function readImportedBundle(
         "status is `completed` and transcript.txt is empty; a run nobody can read cannot be counted",
       );
     }
-    if (submissionFile === undefined) {
+    const missing = requiredSubmissions.filter((f) => !submissionNames.includes(f));
+    if (missing.length > 0) {
       fail(
         "IMPORT_MISSING_SUBMISSION",
         path,
-        "status is `completed` and submission/ holds no module; there is nothing to grade",
+        `status is \`completed\` and submission/ is missing ${missing.join(", ")}; there is nothing complete to grade`,
       );
     }
   }
+  const submissionFiles = submissionNames.map((name) => ({
+    path: name,
+    content: readFileSync(join(submissionDir, name), "utf8"),
+  }));
 
   return {
     runId: String(meta["runId"]),
@@ -288,6 +309,7 @@ export function readImportedBundle(
     challengeHash: String(meta["challengeHash"]),
     transcript,
     submissionPath: submissionFile === undefined ? null : join(submissionDir, submissionFile),
+    submissionFiles,
     notes: typeof meta["notes"] === "string" ? meta["notes"] : "",
     runtimeSeconds: typeof meta["runtimeSeconds"] === "number" ? meta["runtimeSeconds"] : null,
     costUsd: typeof meta["costUsd"] === "number" ? meta["costUsd"] : null,

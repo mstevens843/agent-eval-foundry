@@ -7,7 +7,7 @@ would produce them. Every number here is computed from the trial directories; no
 
 | kind | what an axis count over it means | families | shared subjects | labs | verdict | trials still needed |
 |---|---|---:|---:|---:|---|---:|
-| `agent` | difficulty | 4 | 1 | 1 | **PARTIAL** | 2 |
+| `agent` | difficulty | 5 | 1 | 1 | **PARTIAL** | 4 |
 | `imported` | difficulty | 1 | 2 | 2 | **REFUSED** | 1 |
 
 **Subjects and labs are different numbers and answer different questions.** Four models from one
@@ -17,14 +17,14 @@ reporting, it is choosing. Both columns are above.
 
 ## `agent` — difficulty
 
-1 shared subject(s) against a threshold of 3. The combined width is bounded above by 1, which cannot distinguish complete overlap from independence. 2 more counted trial(s) would reach the threshold.
+1 shared subject(s) against a threshold of 3. The combined width is bounded above by 1, which cannot distinguish complete overlap from independence. 4 more counted trial(s) would reach the threshold.
 
 | subject | lab | present in | missing from |
 |---|---|---|---|
-| `claude-haiku-4-5` | anthropic | `containment`, `poisoning`, `replay` | `dom` (never-attempted) |
-| `claude-opus-5` | anthropic | `containment`, `poisoning`, `replay` | `dom` (never-attempted) |
-| `claude-sonnet-5` | anthropic | `containment`, `poisoning`, `replay` | `dom` (never-attempted) |
-| `gpt-5.6-sol` **(shared)** | openai | `containment`, `poisoning`, `replay`, `dom` | — |
+| `claude-haiku-4-5` | anthropic | `containment`, `poisoning`, `replay` | `dom` (never-attempted), `poisoning` (never-attempted) |
+| `claude-opus-5` | anthropic | `containment`, `poisoning`, `replay` | `dom` (never-attempted), `poisoning` (never-attempted) |
+| `claude-sonnet-5` | anthropic | `containment`, `poisoning`, `replay` | `dom` (never-attempted), `poisoning` (never-attempted) |
+| `gpt-5.6-sol` **(shared)** | openai | `containment`, `poisoning`, `replay`, `dom`, `poisoning` | — |
 
 ## `imported` — difficulty
 
@@ -46,9 +46,13 @@ number exists, so it is computed and quoted here rather than suppressed by a thi
 | `containment` + `poisoning` | 4 | 2 | **MEASURED** | **2** | 2 | 5.8 |
 | `containment` + `replay` | 4 | 2 | **MEASURED** | **1** | 1 | 6.0 |
 | `containment` + `dom` | 1 | 1 | **PARTIAL** | refused | — | — |
+| `containment` + `poisoning` | 1 | 1 | **PARTIAL** | refused | — | — |
 | `poisoning` + `replay` | 4 | 2 | **MEASURED** | **2** | 3 | 6.0 |
 | `poisoning` + `dom` | 1 | 1 | **PARTIAL** | refused | — | — |
+| `poisoning` + `poisoning` | 1 | 1 | **PARTIAL** | refused | — | — |
 | `replay` + `dom` | 1 | 1 | **PARTIAL** | refused | — | — |
+| `replay` + `poisoning` | 1 | 1 | **PARTIAL** | refused | — | — |
+| `dom` + `poisoning` | 1 | 1 | **PARTIAL** | refused | — | — |
 
 **3 pair(s) reach the threshold**, so a combined width is available for them and quoted above.
 
@@ -142,12 +146,14 @@ The shared subjects span 2 labs (anthropic, openai), so the width is not an arti
 
 ## The exact work remaining
 
-2 counted trial(s), listed exactly. Each line is a trial that does not exist yet:
+4 counted trial(s), listed exactly. Each line is a trial that does not exist yet:
 
 | subject | family | provider | runnable here | what it unlocks |
 |---|---|---|---|---|
-| `claude-haiku-4-5` | `ui-replay-live-dom` | `claude-haiku` | no — Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles | `claude-haiku-4-5` is already counted in prompt-injection-containment, prompt-injection-memory-poisoning, ui-action-record-replay; this is the last trial it needs |
-| `claude-opus-5` | `ui-replay-live-dom` | `claude` | no — Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles | `claude-opus-5` is already counted in prompt-injection-containment, prompt-injection-memory-poisoning, ui-action-record-replay; this is the last trial it needs |
+| `claude-haiku-4-5` | `ui-replay-live-dom` | `claude-haiku` | no — Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles | `claude-haiku-4-5` is already counted in prompt-injection-containment, prompt-injection-memory-poisoning, ui-action-record-replay; this is the last 2 trials it needs |
+| `claude-haiku-4-5` | `checker-required-memory-poisoning` | `claude-haiku` | no — Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles | `claude-haiku-4-5` is already counted in prompt-injection-containment, prompt-injection-memory-poisoning, ui-action-record-replay; this is the last 2 trials it needs |
+| `claude-opus-5` | `ui-replay-live-dom` | `claude` | no — Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles | `claude-opus-5` is already counted in prompt-injection-containment, prompt-injection-memory-poisoning, ui-action-record-replay; this is the last 2 trials it needs |
+| `claude-opus-5` | `checker-required-memory-poisoning` | `claude` | no — Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles | `claude-opus-5` is already counted in prompt-injection-containment, prompt-injection-memory-poisoning, ui-action-record-replay; this is the last 2 trials it needs |
 
 For the subjects that cannot run here, prepare a bundle. The bundle pins the challenge
 hash, so a result someone else produces either measures this exact task or is refused on
@@ -155,6 +161,7 @@ import:
 
 ```bash
 foundry trials campaign prepare --family ui-replay-live-dom --provider external --out bundles/ui-replay-live-dom-external
+foundry trials campaign prepare --family checker-required-memory-poisoning --provider external --out bundles/checker-required-memory-poisoning-external
 ```
 
 
@@ -175,8 +182,11 @@ money. Collapsing them into 'missing' is how a work list becomes a wish.
 
 | subject | family | reason | detail |
 |---|---|---|---|
+| `claude-haiku-4-5` | `checker-required-memory-poisoning` | `never-attempted` | no trial record exists |
 | `claude-haiku-4-5` | `ui-replay-live-dom` | `never-attempted` | no trial record exists |
+| `claude-opus-5` | `checker-required-memory-poisoning` | `never-attempted` | no trial record exists |
 | `claude-opus-5` | `ui-replay-live-dom` | `never-attempted` | no trial record exists |
+| `claude-sonnet-5` | `checker-required-memory-poisoning` | `never-attempted` | no trial record exists |
 | `claude-sonnet-5` | `ui-replay-live-dom` | `never-attempted` | no trial record exists |
 
 ## Are the families even comparable?

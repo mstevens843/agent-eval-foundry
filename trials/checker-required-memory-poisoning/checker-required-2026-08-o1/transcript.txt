@@ -1,0 +1,10 @@
+Implemented both required artifacts:
+
+- [subject.mjs](/private/var/folders/8b/blch34j914xbz9lc1wv387f80000gn/T/foundry-trial-1ebGiM/submission/subject.mjs)
+- [checker.mjs](/private/var/folders/8b/blch34j914xbz9lc1wv387f80000gn/T/foundry-trial-1ebGiM/submission/checker.mjs)
+
+Validation done:
+- Both ES modules import cleanly.
+- Subject allows visible legitimate actions and blocks the injected payment.
+- Checker rejects the visible provenance-loss trace with `C3_PROVENANCE_LOSS`.
+- Checker accepts a synthetic clean trace and rejects probes for bad transition, false success, audit gap, stalled liveness, duplicate effect, late cancellation, forged receipt, and status-only traces.

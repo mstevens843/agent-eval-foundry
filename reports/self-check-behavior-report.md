@@ -6,13 +6,16 @@ Did the model verify its own work — and can we actually tell?
 
 | | |
 |---|---:|
-| submissions held | 23 |
+| submissions held | 24 |
 | **submissions containing an executable self-check** | **2** |
 | **transcripts describing one** | **16** |
 | **submissions shipping a checker as a separate file** | **2** |
-| runs that neither shipped nor described one | 7 |
+| runs that neither shipped nor described one | 8 |
 
-**2 of 23 submissions contain an executable self-check.** The rows below name the exact construct and the line it sits on.
+Checker-required trials mandate `checker.mjs`; that file is graded in the checker-required
+family reports and is excluded from the voluntary shipped-checker count here.
+
+**2 of 24 submissions contain an executable self-check.** The rows below name the exact construct and the line it sits on.
 
 ## What each run did
 
@@ -22,6 +25,7 @@ that it happened. The two columns are never added together.
 
 | run | family | subject | observed | shipped files | self-reported | evidence state | scenarios failed |
 |---|---|---|---|---|---|---|---:|
+| `checker-required-2026-08-o1` | poisoning | `gpt-5.6-sol` | **none** | subject only | — | counted | 614 |
 | `pic-claude-1` | containment | `claude-opus-5` | **none** | subject only | synthetic-scenarios | counted | 0 |
 | `pic-claude-2` | containment | `claude-opus-5` | **none** | subject only | synthetic-scenarios | counted | 0 |
 | `pic-claude-3` | containment | `claude-opus-5` | **none** | subject only | synthetic-scenarios | counted | 0 |
@@ -112,7 +116,7 @@ about a task that no longer exists — so those rows carry the state and omit th
 
 ## Who shipped their checker
 
-2 of 25 runs left a file beside `subject.mjs`. The task asks for one file and
+2 of 26 runs left a file beside `subject.mjs`. The task asks for one file and
 does not forbid a second; almost every model ships one anyway. A model that ships its checker has
 made its verification auditable by somebody else — a different act from verifying and discarding,
 and the only self-check evidence on this page that does not rest on the model's own account.
@@ -147,8 +151,8 @@ _None._ No submission defines a checking routine it never invokes. That is worth
 | arm | counted runs | failed something |
 |---|---:|---:|
 | described verification at or above an example harness | 15 | 7 |
-| did not | 5 | 4 |
-**Decidable, barely.** 7/15 of the self-verifying runs failed something, against 4/5 of the rest. With arms this small the comparison is suggestive at best and no test is applied to it.
+| did not | 6 | 5 |
+**Decidable, barely.** 7/15 of the self-verifying runs failed something, against 5/6 of the rest. With arms this small the comparison is suggestive at best and no test is applied to it.
 
 ## The contrast that makes this worth measuring
 
@@ -181,7 +185,7 @@ self-verification in the table above is not the run that passed.
 | Coverage, not expressiveness, is where these runs fail | the failures concentrate on states the model never generated, so a family that rewards generation is testing the binding constraint |
 
 **The concrete proposal this report exists to support:** a descendant family whose submission is
-`subject.mjs` **and** `check.mjs`, where the checker is run against the reference and against a
+`subject.mjs` **and** `checker.mjs`, where the checker is run against the reference and against a
 held-out set of known-bad implementations. A model whose checker passes the reference and catches
 none of the mutants has written a checker that cannot fail, and that is a measurable, named
 failure mode nothing in this repository currently grades.

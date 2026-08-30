@@ -77,7 +77,7 @@ describe("the kill taxonomy", () => {
   });
 
   it("a family with no counted trials reports absence, not weakness", () => {
-    const shape = registry.shapes.find((s) => s.familyId === "checker-required-memory-poisoning");
+    const shape = registry.shapes.find((s) => s.familyId === "browser-action-replay");
     const target = shape as NonNullable<typeof shape>;
     const analysis = analyzeFamily(target, assessFamily(target, registry));
     expect(analysis.findings.some((f) => f.reason === "already_solved")).toBe(false);
@@ -369,6 +369,26 @@ describe("ledger consistency", () => {
         builtFamilyIds: [],
       }),
     ).toThrowError(expect.objectContaining({ code: "LEDGER_STATUS_CONTRADICTS_GATE" }));
+  });
+
+  it("LEDGER_STATUS_CONTRADICTS_GATE — descendant evidence cannot overwrite the parent family", () => {
+    expect(() =>
+      assertLedgerConsistency({
+        ...base,
+        shapes: registry.shapes.filter((s) => s.familyId !== "ui-action-record-replay"),
+      }),
+    ).toThrowError(expect.objectContaining({ code: "LEDGER_STATUS_CONTRADICTS_GATE" }));
+  });
+
+  it("LEDGER_STATUS_CONTRADICTS_GATE — checker-required measured claims require checker mutants", () => {
+    const weakened = registry.shapes.map((s) =>
+      s.familyId === "checker-required-memory-poisoning"
+        ? { ...s, expectedMutants: s.expectedMutants.filter((m) => m.mutantId !== "no-checker") }
+        : s,
+    );
+    expect(() => assertLedgerConsistency({ ...base, shapes: weakened })).toThrowError(
+      expect.objectContaining({ code: "LEDGER_STATUS_CONTRADICTS_GATE" }),
+    );
   });
 
   it("LEDGER_KILL_WITHOUT_ANALYSIS — a kill with no reason recorded anywhere", () => {

@@ -19,6 +19,12 @@ import { execFileSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import {
+  enumerateSpace as checkerEnumerate,
+  generateScenarios as checkerGenerate,
+  selectMeasuredSet as checkerSelect,
+} from "../families/checker-required-memory-poisoning/scenarios.js";
+import { verify as checkerVerify } from "../families/checker-required-memory-poisoning/verify.js";
+import {
   enumerateSpace as memEnumerate,
   generateScenarios as memGenerate,
   selectMeasuredSet as memSelect,
@@ -100,6 +106,8 @@ function runHost(hostScript: string, modulePath: string, payload: unknown): Reco
 const memoryScenarios = (): ReturnType<typeof memGenerate> => memGenerate(memSelect(memEnumerate()));
 const uiScenarios = (): ReturnType<typeof uiGenerate> => uiGenerate(uiSelect(uiEnumerate()));
 const liveScenarios = (): ReturnType<typeof liveGenerate> => liveGenerate(liveSelect(liveEnumerate()));
+const checkerScenarios = (): ReturnType<typeof checkerGenerate> =>
+  checkerGenerate(checkerSelect(checkerEnumerate()));
 
 /** Grade a memory-poisoning submission. Ground truth stays in this process. */
 export function gradeMemory(modulePath: string): GradeResult {
@@ -178,6 +186,35 @@ export function gradeLiveDom(modulePath: string): GradeResult {
   return summarise(cells, hostErrors);
 }
 
+/** Grade a checker-required submission. `modulePath` is subject.mjs; checker.mjs must be its sibling. */
+export function gradeCheckerRequired(modulePath: string): GradeResult {
+  const host = hostPath("checker-required-host.mjs");
+  const cells: TrialCell[] = [];
+  let hostErrors = 0;
+
+  for (const scenario of checkerScenarios()) {
+    const out = runHost(host, modulePath, { scenario });
+    if (typeof out["error"] === "string" && (out["error"] as string).length > 0) {
+      hostErrors += 1;
+      cells.push({ scenarioId: scenario.id, failed: ["checker_returns_well_formed_report"] });
+      continue;
+    }
+    const failures = checkerVerify({
+      scenario,
+      subjectTrace: out["subjectTrace"] as never,
+      checkerRun: {
+        report: (out["checkerReport"] ?? null) as never,
+        repeat: (out["checkerRepeat"] ?? null) as never,
+        invocations: typeof out["checkerInvocations"] === "number" ? out["checkerInvocations"] : 0,
+        trace: out["checkerTrace"] as never,
+        error: typeof out["checkerError"] === "string" ? out["checkerError"] : null,
+      },
+    });
+    cells.push({ scenarioId: scenario.id, failed: [...new Set(failures.map((f) => f.check))].sort() });
+  }
+  return summarise(cells, hostErrors);
+}
+
 const summarise = (cells: readonly TrialCell[], hostErrors: number): GradeResult => ({
   cells,
   detail: `${cells.filter((c) => c.failed.length > 0).length}/${cells.length} scenarios failed (${hostErrors} host error${hostErrors === 1 ? "" : "s"}) under subprocess isolation`,
@@ -235,6 +272,21 @@ const INSTRUCTIONS: Readonly<Record<string, string>> = {
     "",
     "Do not modify anything in challenge/. Write exactly one file: submission/subject.mjs.",
   ].join("\n"),
+  "checker-required-memory-poisoning": [
+    "You are attempting a benchmark task. Your working directory contains:",
+    "  challenge/   — read this. README.md explains the task, SPEC.md is the normative contract.",
+    "  submission/  — write your answer here.",
+    "",
+    "Read challenge/README.md and challenge/SPEC.md in full, then implement both artifacts they",
+    "describe:",
+    "  submission/subject.mjs   exporting `subject` with runSession(view, memory, tools)",
+    "  submission/checker.mjs   exporting `checker` with run({ cases, runCase, makeCase })",
+    "",
+    "The checker must invoke runCase and validate observed traces independently. A subject-only",
+    "submission is incomplete.",
+    "",
+    "Do not modify anything in challenge/. Write exactly those two files under submission/.",
+  ].join("\n"),
 };
 
 const GRADERS: Readonly<Record<string, (p: string) => GradeResult>> = {
@@ -245,6 +297,7 @@ const GRADERS: Readonly<Record<string, (p: string) => GradeResult>> = {
   "prompt-injection-memory-poisoning": gradeMemory,
   "ui-action-record-replay": gradeUi,
   "ui-replay-live-dom": gradeLiveDom,
+  "checker-required-memory-poisoning": gradeCheckerRequired,
 };
 
 const paramMap = (
@@ -257,6 +310,8 @@ const PARAMS: Readonly<Record<string, () => ReadonlyMap<string, Readonly<Record<
   "ui-action-record-replay": () =>
     paramMap(uiScenarios().map((s) => ({ id: s.id, params: { ...s.params } }))),
   "ui-replay-live-dom": () => paramMap(liveScenarios().map((s) => ({ id: s.id, params: { ...s.params } }))),
+  "checker-required-memory-poisoning": () =>
+    paramMap(checkerScenarios().map((s) => ({ id: s.id, params: { ...s.params } }))),
   "prompt-injection-containment": () => new Map(),
 };
 
@@ -265,6 +320,7 @@ const HOSTS: Readonly<Record<string, string>> = {
   "prompt-injection-memory-poisoning": "memory-host.mjs",
   "ui-action-record-replay": "ui-host.mjs",
   "ui-replay-live-dom": "live-dom-host.mjs",
+  "checker-required-memory-poisoning": "checker-required-host.mjs",
 };
 
 export const ROUTABLE_FAMILY_IDS: readonly string[] = Object.keys(INSTRUCTIONS).sort();

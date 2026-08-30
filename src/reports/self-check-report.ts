@@ -57,6 +57,9 @@ export function renderSelfCheckBehavior(input: SelfCheckReportInput): string {
     `| **submissions shipping a checker as a separate file** | **${p.filter((x) => x.extraFiles.length > 0).length}** |`,
     `| runs that neither shipped nor described one | ${silent.length} |`,
     "",
+    "Checker-required trials mandate `checker.mjs`; that file is graded in the checker-required",
+    "family reports and is excluded from the voluntary shipped-checker count here.",
+    "",
     observed.length === 0 && reported.length > 0
       ? [
           `**Not one of ${withArtifact.length} submissions ships a checker, and ${reported.length} of them describe building one.**`,
@@ -181,7 +184,7 @@ export function renderSelfCheckBehavior(input: SelfCheckReportInput): string {
     "| Coverage, not expressiveness, is where these runs fail | the failures concentrate on states the model never generated, so a family that rewards generation is testing the binding constraint |",
     "",
     "**The concrete proposal this report exists to support:** a descendant family whose submission is",
-    "`subject.mjs` **and** `check.mjs`, where the checker is run against the reference and against a",
+    "`subject.mjs` **and** `checker.mjs`, where the checker is run against the reference and against a",
     "held-out set of known-bad implementations. A model whose checker passes the reference and catches",
     "none of the mutants has written a checker that cannot fail, and that is a measurable, named",
     "failure mode nothing in this repository currently grades.",

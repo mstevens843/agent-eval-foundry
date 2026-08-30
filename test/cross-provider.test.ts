@@ -10,14 +10,19 @@
 // kinds, four separate buckets, and a real campaign that produced three of them inside twenty
 // minutes: Claude counted, Codex counted, Gemini hit an account-tier error in three seconds.
 
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { BUILT_FAMILIES, REALISM_LEVELS, builtFamily } from "../src/families/registry.js";
+import {
+  BROWSER_HARNESS_REQUIREMENTS,
+  browserHarnessPlanFailures,
+} from "../src/families/ui-replay-browser-backed/harness.js";
 import { diagnose } from "../src/reports/diagnosis.js";
 import { computeCurve, wilson } from "../src/reports/difficulty.js";
 import { familyEvidenceFor } from "../src/reports/evidence.js";
+import { renderLiveDomCodexDiagnosis } from "../src/reports/live-dom-diagnosis.js";
 import {
   type ArtifactQuality,
   describeArtifact,
@@ -71,6 +76,15 @@ describe("the provider registry", () => {
     const check = checkProvider(fake);
     expect(check.available).toBe(false);
     expect(check.detail).toMatch(/not runnable here/);
+  });
+
+  it("declares Anthropic providers import-only in this phase", () => {
+    for (const id of ["claude", "claude-sonnet", "claude-haiku", "claude-fable"]) {
+      const status = checkProvider(providerById(id));
+      expect(status.available, id).toBe(false);
+      expect(status.state, id).toBe("import-only");
+      expect(status.detail, id).toMatch(/out of tokens|import-only/);
+    }
   });
 });
 
@@ -128,6 +142,67 @@ describe("prepared bundles for providers that cannot run here", () => {
       expect(files).not.toContain(hidden);
     }
     expect(spec.leakProfile.familyId).toBe(MEMORY);
+  });
+});
+
+describe("checker-required prepared bundles and imports", () => {
+  const familyId = "checker-required-memory-poisoning";
+  const dir = mkdtempSync(join(tmpdir(), "checker-bundle-"));
+  const bundle = prepareProviderBundle(ROOT, familyId, "external", dir);
+  const currentHash = prepareChallenge(ROOT, familyId).hash;
+
+  const makeBundle = (files: Record<string, string>) => {
+    const runDir = mkdtempSync(join(tmpdir(), "checker-import-"));
+    writeFileSync(
+      join(runDir, "metadata.json"),
+      JSON.stringify({
+        runId: "checker-import-1",
+        familyId,
+        provider: "external",
+        model: "openai/gpt-5.6-sol",
+        subjectId: "gpt-5.6-sol",
+        status: "completed",
+        challengeHash: currentHash,
+      }),
+      "utf8",
+    );
+    for (const [name, content] of Object.entries(files)) {
+      const target = join(runDir, name);
+      mkdirSync(target.split("/").slice(0, -1).join("/") || runDir, { recursive: true });
+      writeFileSync(target, content, "utf8");
+    }
+    return runDir;
+  };
+
+  it("tells external runners to preserve both artifacts", () => {
+    expect(bundle.challenge.hash).toBe(currentHash);
+    const readme = readFileSync(join(dir, "README.md"), "utf8");
+    const runScript = readFileSync(join(dir, "run.sh"), "utf8");
+    expect(readme).toContain("submission/subject.mjs");
+    expect(readme).toContain("submission/checker.mjs");
+    expect(runScript).toContain("submission/subject.mjs");
+    expect(runScript).toContain("submission/checker.mjs");
+  });
+
+  it("refuses a completed checker-required import missing checker.mjs", () => {
+    const runDir = makeBundle({
+      "transcript.txt": "model wrote only the subject",
+      "submission/subject.mjs": "export const subject = {};",
+    });
+    expect(() => readImportedBundle(runDir, familyId, currentHash)).toThrowError(
+      expect.objectContaining({ code: "IMPORT_MISSING_SUBMISSION" }),
+    );
+  });
+
+  it("accepts a completed checker-required import with both artifacts preserved", () => {
+    const runDir = makeBundle({
+      "transcript.txt": "model wrote both files",
+      "submission/subject.mjs": "export const subject = {};",
+      "submission/checker.mjs": "export const checker = {};",
+    });
+    const imported = readImportedBundle(runDir, familyId, currentHash);
+    expect(imported.submissionFiles.map((f) => f.path).sort()).toEqual(["checker.mjs", "subject.mjs"]);
+    expect(imported.submissionPath?.endsWith("subject.mjs")).toBe(true);
   });
 });
 
@@ -475,6 +550,33 @@ describe("failure diagnosis", () => {
     });
     expect(d.reading).toBe("clean");
   });
+
+  it("Live-DOM diagnosis keeps categorical mutant evidence separate from agent evidence", () => {
+    const record = {
+      ...make([0, 1], "replay_completes"),
+      runId: "live-dom-test",
+      familyId: "ui-replay-live-dom",
+      model: "openai/gpt-5.6-sol",
+      cells: [
+        { scenarioId: "s0", failed: ["replay_completes"] },
+        { scenarioId: "s1", failed: ["precondition_observed"] },
+        { scenarioId: "s2", failed: [] },
+      ],
+    } as TrialRecord;
+    const text = renderLiveDomCodexDiagnosis({
+      records: [record],
+      params: new Map([
+        ["s0", { anchorConflict: "testid_wins", settleBudget: 0 }],
+        ["s1", { anchorConflict: "semantic_wins", settleBudget: 2 }],
+        ["s2", { anchorConflict: "path_wins", settleBudget: 6 }],
+      ]),
+      categoricalAnchorAxisProvenByMutants: true,
+    });
+    expect(text).toContain("categorical anchor axis proven by mutant bank | yes");
+    expect(text).toContain("`replay_completes`");
+    expect(text).toContain("`precondition_observed`");
+    expect(text).toContain("did not fail `correct_anchor_resolution`");
+  });
 });
 
 describe("realism labels", () => {
@@ -505,6 +607,33 @@ describe("realism labels", () => {
     const report = readFileSync(join(ROOT, "reports/ui-action-record-replay-upgrade-report.md"), "utf8");
     expect(report).toMatch(/no renderer|deterministic tree/);
     expect(report).toMatch(/absent/);
+  });
+
+  it("the browser-backed scaffold encodes the next harness obligations without changing current labels", () => {
+    expect(BROWSER_HARNESS_REQUIREMENTS.join(" ")).toMatch(/real DOM/);
+    expect(BROWSER_HARNESS_REQUIREMENTS.join(" ")).toMatch(/effect ledger owned by the harness/);
+    expect(
+      browserHarnessPlanFailures({
+        driver: "playwright",
+        ownsEffectLedger: true,
+        exposesPersistentHandlesToSubject: false,
+        recordsModelCalls: true,
+        finiteSettleBudget: true,
+        sealsBeforeGrading: true,
+        preservesBrowserTrace: true,
+      }),
+    ).toEqual([]);
+    expect(
+      browserHarnessPlanFailures({
+        driver: "playwright",
+        ownsEffectLedger: false,
+        exposesPersistentHandlesToSubject: true,
+        recordsModelCalls: false,
+        finiteSettleBudget: false,
+        sealsBeforeGrading: false,
+        preservesBrowserTrace: false,
+      }),
+    ).toContain("effect ledger is not harness-owned");
   });
 });
 

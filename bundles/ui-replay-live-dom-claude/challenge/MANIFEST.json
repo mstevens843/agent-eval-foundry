@@ -1,0 +1,28 @@
+{
+  "familyId": "ui-replay-live-dom",
+  "scenarioSetId": "dom-864-3a8cb30a",
+  "visibleFiles": [
+    "README.md",
+    "SPEC.md",
+    "examples/example-1-stable-completes.json",
+    "examples/example-2-removed-region.json",
+    "examples/example-3-late-mount.json",
+    "examples/example-4-address-conflict.json",
+    "starter/subject.mjs",
+    "types.ts"
+  ],
+  "hiddenArtifacts": [
+    "verify.ts",
+    "reference.ts",
+    "mutants.ts",
+    "runner.ts",
+    "app.ts",
+    "truth.ts",
+    "invariants.ts",
+    "matrix.json",
+    "scenarios.json",
+    "answer-matrix.json",
+    "reports/"
+  ],
+  "submissionFormat": "an ES module exporting `subject` with a replay(trace, app) method"
+}

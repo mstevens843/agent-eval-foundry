@@ -62,7 +62,11 @@ function resolveSelector(root, selector) {
     const index = Number(selector.qualifier ?? "0");
     return { node: matches[index] ?? null, matches: matches.length, pending: false };
   }
-  return { node: matches.length === 1 ? (matches[0] ?? null) : null, matches: matches.length, pending: false };
+  return {
+    node: matches.length === 1 ? (matches[0] ?? null) : null,
+    matches: matches.length,
+    pending: false,
+  };
 }
 
 const effects = [];

@@ -50,9 +50,10 @@ for (const [path, args] of [
     "examples/families/ui-action-record-replay/matrix.json",
     ["family", "run", "--family", "ui-action-record-replay"],
   ],
+  ["examples/families/ui-replay-live-dom/matrix.json", ["family", "run", "--family", "ui-replay-live-dom"]],
   [
-    "examples/families/ui-replay-live-dom/matrix.json",
-    ["family", "run", "--family", "ui-replay-live-dom"],
+    "examples/families/checker-required-memory-poisoning/matrix.json",
+    ["family", "run", "--family", "checker-required-memory-poisoning"],
   ],
   [
     "examples/shapes/prompt-injection-memory-poisoning.json",
@@ -62,9 +63,10 @@ for (const [path, args] of [
     "examples/shapes/ui-action-record-replay.json",
     ["family", "shape", "--family", "ui-action-record-replay"],
   ],
+  ["examples/shapes/ui-replay-live-dom.json", ["family", "shape", "--family", "ui-replay-live-dom"]],
   [
-    "examples/shapes/ui-replay-live-dom.json",
-    ["family", "shape", "--family", "ui-replay-live-dom"],
+    "examples/shapes/checker-required-memory-poisoning.json",
+    ["family", "shape", "--family", "checker-required-memory-poisoning"],
   ],
 ]) {
   if (run(args) !== readFileSync(path, "utf8")) {
@@ -79,6 +81,7 @@ for (const [familyId, committedDir] of [
   ["prompt-injection-memory-poisoning", "examples/families/prompt-injection-memory-poisoning/challenge"],
   ["ui-action-record-replay", "examples/families/ui-action-record-replay/challenge"],
   ["ui-replay-live-dom", "examples/families/ui-replay-live-dom/challenge"],
+  ["checker-required-memory-poisoning", "examples/families/checker-required-memory-poisoning/challenge"],
 ]) {
   const tmpDir = mkdtempSync(join(tmpdir(), "foundry-fam-"));
   run(["challenge", "build", "--family", familyId, "--out", tmpDir]);
@@ -156,20 +159,30 @@ try {
 // this repository no longer produces, and its pinned challengeHash would then refuse the result they
 // came back with -- after they had spent the money. So it gets the same regenerate-and-diff gate as
 // everything else, including the challenge/ tree it carries.
-for (const familyId of [
-  "prompt-injection-containment",
-  "prompt-injection-memory-poisoning",
-  "ui-action-record-replay",
-  "ui-replay-live-dom",
-]) {
+const BUNDLE_TARGETS = [
+  ["prompt-injection-containment", "external", "prompt-injection-containment-external"],
+  ["prompt-injection-memory-poisoning", "external", "prompt-injection-memory-poisoning-external"],
+  ["ui-action-record-replay", "external", "ui-action-record-replay-external"],
+  ["ui-replay-live-dom", "external", "ui-replay-live-dom-external"],
+  ["ui-replay-live-dom", "claude", "ui-replay-live-dom-claude"],
+  ["ui-replay-live-dom", "claude-sonnet", "ui-replay-live-dom-claude-sonnet"],
+  ["ui-replay-live-dom", "claude-haiku", "ui-replay-live-dom-claude-haiku"],
+  ["ui-replay-live-dom", "gemini", "ui-replay-live-dom-gemini"],
+  ["checker-required-memory-poisoning", "external", "checker-required-memory-poisoning-external"],
+  ["checker-required-memory-poisoning", "claude", "checker-required-memory-poisoning-claude"],
+  ["checker-required-memory-poisoning", "claude-sonnet", "checker-required-memory-poisoning-claude-sonnet"],
+  ["checker-required-memory-poisoning", "claude-haiku", "checker-required-memory-poisoning-claude-haiku"],
+  ["checker-required-memory-poisoning", "gemini", "checker-required-memory-poisoning-gemini"],
+];
+for (const [familyId, providerId, bundleDir] of BUNDLE_TARGETS) {
   const bunTmp = mkdtempSync(join(tmpdir(), "foundry-bundle-"));
-  run(["trials", "campaign", "prepare", "--family", familyId, "--provider", "external", "--out", bunTmp]);
+  run(["trials", "campaign", "prepare", "--family", familyId, "--provider", providerId, "--out", bunTmp]);
   const walkBundle = (dir, prefix = "") =>
     readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
       e.isDirectory() ? walkBundle(join(dir, e.name), `${prefix}${e.name}/`) : [`${prefix}${e.name}`],
     );
   for (const rel of walkBundle(bunTmp).sort()) {
-    const committed = join("bundles", `${familyId}-external`, rel);
+    const committed = join("bundles", bundleDir, rel);
     if (readFileSync(join(bunTmp, rel), "utf8") !== readFileSync(committed, "utf8")) {
       console.error(`STALE  ${committed}`);
       failures += 1;
@@ -203,7 +216,7 @@ for (const variant of [
 // by being written here, but the count is asserted so a report that stops being generated is caught
 // rather than silently skipped.
 run(["all", "--out", tmp]);
-const EXPECTED_REPORTS = 49;
+const EXPECTED_REPORTS = 56;
 const generated = readdirSync(tmp);
 if (generated.length !== EXPECTED_REPORTS) {
   console.error(`WRONG COUNT  \`all\` wrote ${generated.length} reports, expected ${EXPECTED_REPORTS}`);
@@ -225,7 +238,9 @@ for (const name of readdirSync(tmp).sort()) {
 }
 
 if (failures > 0) {
-  console.error(`\n${failures} report(s) differ from a fresh render. Run \`pnpm report\`.`);
+  console.error(
+    `\n${failures} generated artifact(s) differ from a fresh render. Run \`pnpm report && pnpm bundles\`.`,
+  );
   process.exit(1);
 }
 console.log("\nall reports reproducible");

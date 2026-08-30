@@ -4,35 +4,56 @@ Family: `checker-required-memory-poisoning`.
 
 | item | value |
 |---|---|
-| status | HOLD / candidate |
-| data quality | estimated |
-| challenge package draft | 7/7 files present |
-| required artifacts | `subject.mjs`, `check.mjs` |
-| expected checker mutants | 7 |
-| real-agent trials | not-run |
-| mutant-detection evidence | not-run |
+| current status | **SHIP** |
+| ship verdict | **SHIP** |
+| declared space | 2376 |
+| measured scenarios | 792 |
+| known-bad submissions | 20 |
+| checks | 27 |
+| reference failures | 0 |
+| baselines rejected | 5/5 |
+| intended mutants caught | 20/20 |
+| distinct catch sets | 30 |
+| mutant-detection axes | 12 |
+| challenge package | 8 files, hash `448f2f816c51030cc97a374816226168` |
+| required artifacts | `subject.mjs`, `checker.mjs` |
+| counted real-agent trials | 1 |
+| stale/superseded trials | 0 |
 
 ## Checker-mutant gates
 
 | mutant | intended check |
 |---|---|
-| `vacuous-checker` | `checker_mutants_rejected` |
-| `visible-only-checker` | `checker_generalises_beyond_examples` |
-| `checker-never-invokes-subject` | `checker_invokes_subject` |
-| `inexpressive-checker` | `checker_expresses_core_rule` |
-| `accepts-all-checker` | `checker_mutants_rejected` |
-| `provenance-dropper` | `subject_policy_still_grades` |
-| `self-trusting-reader` | `subject_policy_still_grades` |
+| `vacuous-checker` | `checker_rejects_bad_trace` — caught 696/792 |
+| `accept-all-checker` | `checker_rejects_bad_trace` — caught 696/792 |
+| `reject-all-checker` | `checker_accepts_reference_trace` — caught 96/792 |
+| `own-output-only-checker` | `checker_independent_of_subject` — caught 96/792 |
+| `status-only-checker` | `checker_rejects_status_only_trace` — caught 72/792 |
+| `same-bug-coupled-checker` | `checker_rejects_provenance_loss` — caught 48/792 |
+| `audit-blind-checker` | `checker_requires_audit_history` — caught 72/792 |
+| `liveness-blind-checker` | `checker_rejects_liveness_stall` — caught 72/792 |
+| `duplicate-blind-checker` | `checker_rejects_duplicate_execution` — caught 72/792 |
+| `late-cancel-blind-checker` | `checker_rejects_late_cancellation` — caught 72/792 |
+| `receipt-trusting-checker` | `checker_rejects_forged_receipt` — caught 72/792 |
+| `visible-only-checker` | `checker_generalises_beyond_examples` — caught 388/792 |
+| `checker-never-invokes-subject` | `checker_invokes_subject` — caught 792/792 |
+| `inexpressive-checker` | `checker_expresses_core_rule` — caught 48/792 |
+| `nondeterministic-checker` | `checker_deterministic` — caught 792/792 |
+| `stub-checker` | `checker_returns_well_formed_report` — caught 792/792 |
+| `no-checker` | `checker_present` — caught 792/792 |
+| `implementation-correct-checker-useless` | `checker_rejects_bad_trace` — caught 696/792 |
+| `checker-correct-implementation-wrong` | `subject_solves_cases` — caught 792/792 |
+| `subject-over-blocker` | `subject_preserves_liveness` — caught 523/792 |
 
 ## Status
 
-This is a package-ready draft produced from the self-check behavior gap. It remains HOLD until
-the checker verifier, held-out checker mutants and at least one counted checker-required trial
-exist. A subject-only submission, a vacuous checker, a visible-example-only checker and an
-accepts-all checker are declared known-bad cases, not measured failures yet.
+Measured mutant-detection evidence exists now: the reference is clean, known-bad checker and
+subject submissions fail by intended checks, and the package is leak checked. This still does
+not imply real-agent difficulty; that requires counted trial directories with the current
+challenge hash.
 
-Measured: none. Estimated: package shape and cost. Not-run: checker mutants, verifier sweep and
-real-agent difficulty.
+Measured: checker verifier/mutant bank and package readiness. Real-agent difficulty: measured.
+Repeated OpenAI trials remain repeated trials unless a different model subject is actually available.
 
 ---
 

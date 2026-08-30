@@ -33,6 +33,13 @@ const ASSERTS_SHIPPED: ReadonlySet<string> = new Set(["shipped"]);
 /** Ledger statuses that assert the family executes. */
 const ASSERTS_BUILT: ReadonlySet<string> = new Set(["built", "screened", "trialed", "shipped"]);
 
+const CHECKER_REQUIRED_CORE_MUTANTS = [
+  "accept-all-checker",
+  "status-only-checker",
+  "checker-never-invokes-subject",
+  "no-checker",
+] as const;
+
 /**
  * The family a ledger row is about.
  *
@@ -46,6 +53,38 @@ export const familyIdOf = (candidateId: string): string => candidateId.replace(/
 
 export function assertLedgerConsistency(input: ConsistencyInput): void {
   const shapeIds = new Set(input.shapes.map((s) => s.familyId));
+  const shapesById = new Map(input.shapes.map((s) => [s.familyId, s]));
+  const candidatesById = new Map(input.candidates.map((c) => [c.id, c]));
+
+  const liveDom = shapesById.get("ui-replay-live-dom");
+  if (liveDom !== undefined) {
+    const parent = shapesById.get("ui-action-record-replay");
+    const parentLedger = candidatesById.get("ui-action-record-replay-built");
+    if (parent === undefined || parent.dataQuality !== "measured" || parentLedger === undefined) {
+      fail(
+        "LEDGER_STATUS_CONTRADICTS_GATE",
+        "family.ui-replay-live-dom",
+        "live-DOM is a descendant, not a rewrite: the parent UI replay evidence must remain present and measured",
+      );
+    }
+  }
+
+  const checkerShape = shapesById.get("checker-required-memory-poisoning");
+  const checkerLedger = candidatesById.get("checker-required-memory-poisoning");
+  if (checkerShape?.dataQuality === "measured" || checkerLedger?.dataQuality === "measured") {
+    const shapeMutants = new Set(checkerShape?.expectedMutants.map((m) => m.mutantId) ?? []);
+    const resultSubjects = new Set(checkerLedger?.results?.subjectsTested ?? []);
+    const missing = CHECKER_REQUIRED_CORE_MUTANTS.filter(
+      (id) => !shapeMutants.has(id) || !resultSubjects.has(id),
+    );
+    if (missing.length > 0) {
+      fail(
+        "LEDGER_STATUS_CONTRADICTS_GATE",
+        "candidate.checker-required-memory-poisoning",
+        `checker-required measured claims require checker mutants in both shape and ledger results; missing ${missing.join(", ")}`,
+      );
+    }
+  }
 
   for (const candidate of input.candidates) {
     const path = `candidate.${candidate.id}`;

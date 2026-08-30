@@ -10,6 +10,7 @@ What the families measure, together — and the arithmetic this report refuses t
 | `prompt-injection-memory-poisoning` | `agent` | 288 | 4 | 233 | 3 | **2** |
 | `ui-action-record-replay` | `agent` | 324 | 4 | 234 | 3 | **1** |
 | `ui-replay-live-dom` | `agent` | 864 | 1 | 645 | 1 | — |
+| `checker-required-memory-poisoning` | `agent` | 792 | 1 | 178 | 1 | — |
 | `durable-approval-outbox` | `imported` | 24 | 2 | 0 | 1 | **1** |
 
 ## The sum that is not available

@@ -1,0 +1,17 @@
+{
+  "provider": "claude",
+  "family": "anthropic",
+  "label": "Claude Opus 5 via the Claude CLI",
+  "model": "anthropic/claude-opus-5",
+  "subjectId": "claude-opus-5",
+  "availableHere": false,
+  "availabilityDetail": "Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles",
+  "invocationNote": "`-p` is non-interactive. `bypassPermissions` is required because the sandbox is a fresh temp directory with nothing in it but the challenge; the model must be able to write its submission without a prompt nobody is there to answer.",
+  "command": [
+    "claude",
+    "-p",
+    "You are attempting a benchmark task. Your working directory contains:\n  challenge/   — read this. README.md explains the task, SPEC.md is the normative rules.\n  submission/  — write your answer here.\n\nRead challenge/README.md and challenge/SPEC.md in full, then implement the subject they describe\nand write it to submission/subject.mjs as an ES module exporting `subject` with a\nreplay(trace, app) method.\n\nThe live app is DOM-like, mutable, and deterministic. Replay must not call a model. It may be\ncalled twice with the same trace, and irreversible effects must not repeat.\n\nDo not modify anything in challenge/. Write exactly one file: submission/subject.mjs.",
+    "--permission-mode",
+    "bypassPermissions"
+  ]
+}

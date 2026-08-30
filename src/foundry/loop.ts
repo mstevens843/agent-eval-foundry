@@ -62,6 +62,7 @@ const MEASURED_FAMILIES = new Set([
   "prompt-injection-memory-poisoning",
   "ui-action-record-replay",
   "ui-replay-live-dom",
+  "checker-required-memory-poisoning",
 ]);
 
 type EvidenceLoader = (familyId: string) => ReturnType<typeof familyEvidenceFor>;
