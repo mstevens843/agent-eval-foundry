@@ -1,6 +1,6 @@
 # The ship gate
 
-21 gates, 14 of them blocking. A family ships when every blocking gate
+24 gates, 14 of them blocking. A family ships when every blocking gate
 passes; there is no score, no weighting and no override. This document is generated from the gate
 definitions themselves, so a gate that exists in the code cannot be missing here.
 
@@ -38,6 +38,9 @@ An advisory gate is one where a reasonable author might disagree. Reported, neve
 | `trial-ready` | Can a real agent actually be run against this family today? | 5 | 0 | 10 |
 | `agent-axes-independent` | Do the counted agents fail in more than one direction, or do their failure sets nest? | 1 | 1 | 13 |
 | `priced` | Is the build cost recorded? | 15 | 0 | 0 |
+| `human-package-ready` | Can the public package be handed to an independent human without hidden context? | 5 | 1 | 9 |
+| `human-solvability-evidenced` | Has an independent human solved the current public package clean-room? | 0 | 6 | 9 |
+| `human-ambiguity-reviewed` | Are human ambiguity findings resolved or explicitly absent? | 6 | 0 | 9 |
 
 ## Which gates have actually stopped something
 
@@ -50,6 +53,8 @@ fail. These are the ones that currently reject at least one family:
 | `difficulty-evidenced` | yes | `audit-truth-financial-workflow`, `browser-action-replay`, `deployment-rollback-partial-effects`, `model-alias-drift-sentinel`, `permission-boundary-tools`, `prompt-injection-approval-scope-drift`, `prompt-injection-capability-routing`, `prompt-injection-cross-tool-escalation`, `stale-crm-ticket-automation` | A measured axis count against a bank of hand-written mutants proves the VERIFIER discriminates. It says nothing about whether the family is hard, because nothing that could plausibly fail it has attempted it. This gate was added after the second family scored four measured axes with zero agent trials and would otherwise have been marked SHIP. It is BLOCKING as of the campaign layer: with a trial router and a runnable challenge package for every built family, 'nobody has tried it' stopped being a fact about the tooling and became a decision not to look. |
 | `agent-axes-independent` | no | `ui-action-record-replay` | The measured-axes gate counts axes over the MUTANT bank: a statement about what the verifier detects, bounded by how many known-bad implementations the author wrote. This one counts axes over real agents, and the two can disagree sharply. If every subject's failure set nests inside the next, the family separates subjects perfectly and measures ONE thing at several sensitivities — and no additional subject can change that, because a chain stays a chain. Advisory rather than blocking: a one-axis family is a legitimate benchmark component, and the cost of pretending otherwise would be killing useful families. What it must not do is read as breadth. The UI family scores six mutant axes, one agent axis, and five counted trials across four subjects and two labs whose failure counts are 33, 46, 62, 62 and 90 — five different numbers that are one measurement. |
 | `not-already-solved` | yes | `prompt-injection-containment` | A family every model solves measures nothing, and `already-solved` was the single most common cause of death in the source project's kill log — four of nine gated mechanisms. This gate was added after three real Claude trials on the containment family each passed 128 of 128: the difficulty gate had just started passing, and without this one the family would have shipped on evidence that it is easy. |
+| `human-package-ready` | no | `durable-approval-outbox` | Reference solvability only proves the author can solve the internal task. The public package must also state the rules, examples, scoring contract and hidden sampling boundary clearly enough for a clean-room engineer. |
+| `human-solvability-evidenced` | no | `checker-required-memory-poisoning`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom` | A task can be mechanically solvable and still be ambiguous to anyone who did not write it. This gate counts only independent, current-hash, unassisted solves with notes and verifier output. |
 
 **9 gate(s) pass for every family and have never rejected anything here:**
 `solvable`, `verifier-graded`, `trust-boundary`, `detectable`, `fairness`, `cheat-resistance`, `is-a-family`, `hidden-region-declared`, `priced`.
@@ -563,6 +568,78 @@ An unpriced family cannot enter the budget model, so the plan built on it is fic
 | `stale-crm-ticket-automation` | pass | 70h build, $55 frontier |
 | `ui-action-record-replay` | pass | 55h build, $40 frontier |
 | `ui-replay-live-dom` | pass | 95h build, $55 frontier |
+
+### `human-package-ready` — advisory
+
+**Can the public package be handed to an independent human without hidden context?**
+
+Reference solvability only proves the author can solve the internal task. The public package must also state the rules, examples, scoring contract and hidden sampling boundary clearly enough for a clean-room engineer.
+
+| family | verdict | detail |
+|---|---|---|
+| `audit-truth-financial-workflow` | n/a | no human-readiness audit |
+| `browser-action-replay` | n/a | no human-readiness audit |
+| `checker-required-memory-poisoning` | pass | public package passed human-readiness audit |
+| `deployment-rollback-partial-effects` | n/a | no human-readiness audit |
+| `durable-approval-outbox` | fail | public package is incomplete or not generated here |
+| `model-alias-drift-sentinel` | n/a | no human-readiness audit |
+| `permission-boundary-tools` | n/a | no human-readiness audit |
+| `prompt-injection-approval-scope-drift` | n/a | no human-readiness audit |
+| `prompt-injection-capability-routing` | n/a | no human-readiness audit |
+| `prompt-injection-containment` | pass | public package passed human-readiness audit |
+| `prompt-injection-cross-tool-escalation` | n/a | no human-readiness audit |
+| `prompt-injection-memory-poisoning` | pass | public package passed human-readiness audit |
+| `stale-crm-ticket-automation` | n/a | no human-readiness audit |
+| `ui-action-record-replay` | pass | public package passed human-readiness audit |
+| `ui-replay-live-dom` | pass | public package passed human-readiness audit |
+
+### `human-solvability-evidenced` — advisory
+
+**Has an independent human solved the current public package clean-room?**
+
+A task can be mechanically solvable and still be ambiguous to anyone who did not write it. This gate counts only independent, current-hash, unassisted solves with notes and verifier output.
+
+| family | verdict | detail |
+|---|---|---|
+| `audit-truth-financial-workflow` | n/a | no human evidence layer |
+| `browser-action-replay` | n/a | no human evidence layer |
+| `checker-required-memory-poisoning` | fail | no clean independent human solve on record |
+| `deployment-rollback-partial-effects` | n/a | no human evidence layer |
+| `durable-approval-outbox` | fail | no clean independent human solve on record |
+| `model-alias-drift-sentinel` | n/a | no human evidence layer |
+| `permission-boundary-tools` | n/a | no human evidence layer |
+| `prompt-injection-approval-scope-drift` | n/a | no human evidence layer |
+| `prompt-injection-capability-routing` | n/a | no human evidence layer |
+| `prompt-injection-containment` | fail | no clean independent human solve on record |
+| `prompt-injection-cross-tool-escalation` | n/a | no human evidence layer |
+| `prompt-injection-memory-poisoning` | fail | no clean independent human solve on record |
+| `stale-crm-ticket-automation` | n/a | no human evidence layer |
+| `ui-action-record-replay` | fail | no clean independent human solve on record |
+| `ui-replay-live-dom` | fail | no clean independent human solve on record |
+
+### `human-ambiguity-reviewed` — advisory
+
+**Are human ambiguity findings resolved or explicitly absent?**
+
+The fastest way to make a fair-looking benchmark unfair is to leave a human's clarifying question unresolved and keep counting failures. Open ambiguity findings are reported separately.
+
+| family | verdict | detail |
+|---|---|---|
+| `audit-truth-financial-workflow` | n/a | no human review records |
+| `browser-action-replay` | n/a | no human review records |
+| `checker-required-memory-poisoning` | pass | 0 human review record(s), no open ambiguity |
+| `deployment-rollback-partial-effects` | n/a | no human review records |
+| `durable-approval-outbox` | pass | 0 human review record(s), no open ambiguity |
+| `model-alias-drift-sentinel` | n/a | no human review records |
+| `permission-boundary-tools` | n/a | no human review records |
+| `prompt-injection-approval-scope-drift` | n/a | no human review records |
+| `prompt-injection-capability-routing` | n/a | no human review records |
+| `prompt-injection-containment` | pass | 1 human review record(s), no open ambiguity |
+| `prompt-injection-cross-tool-escalation` | n/a | no human review records |
+| `prompt-injection-memory-poisoning` | pass | 0 human review record(s), no open ambiguity |
+| `stale-crm-ticket-automation` | n/a | no human review records |
+| `ui-action-record-replay` | pass | 0 human review record(s), no open ambiguity |
+| `ui-replay-live-dom` | pass | 0 human review record(s), no open ambiguity |
 
 ## Verdicts
 

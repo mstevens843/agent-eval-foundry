@@ -25,18 +25,21 @@ Every figure below is measured: produced by running the family, not by declaring
 | `is-a-family` | yes | pass | 6 knob(s): seed, mutation, mutationDepth, confirmation, asyncSettled, replayCount |
 | `hidden-region-declared` | yes | pass | The hidden suite samples the declared UI-mutation space: which change occurred b |
 | `measured-axes` | no | pass | 6 measured axes |
-| `reference-passes` | yes | n/a | family not built; nothing to run |
-| `baselines-blocked` | yes | n/a | family not built |
-| `mutants-caught-by-intended-check` | yes | n/a | family not built |
-| `mechanisms-exercised` | yes | n/a | family not built |
-| `isolation-level` | no | n/a | family not built |
-| `shared-bank-ready` | no | n/a | family not built |
-| `deterministic-reports` | no | n/a | family not built |
-| `trial-ready` | no | n/a | family not built |
+| `reference-passes` | yes | pass | reference clean |
+| `baselines-blocked` | yes | pass | 2/2 baselines rejected |
+| `mutants-caught-by-intended-check` | yes | pass | 10/10 caught by intended check |
+| `mechanisms-exercised` | yes | pass | every attack blocks on its governing rule |
+| `isolation-level` | no | pass | subprocess with 5 agent trial(s) |
+| `shared-bank-ready` | no | fail | 2 subject(s) shared with another family (need 3) |
+| `deterministic-reports` | no | pass | verified |
+| `trial-ready` | no | pass | challenge package builds, leak check passes, router can grade it |
 | `difficulty-evidenced` | yes | pass | 5 counted agent trial(s) |
-| `agent-axes-independent` | no | n/a | family not built |
-| `not-already-solved` | yes | pass | 5 of 5 declared trial(s) failed — declared by the shape, not measured here |
+| `agent-axes-independent` | no | fail | every counted subject's failures nest (claude-opus-5 ⊂ claude-haiku-4-5 ⊂ claude-sonnet-5 ⊂ gpt-5.6-sol); one difficulty axis however many subjects attempt it. Only new scenarios with a genuine trade-off can raise it — see reports/scenario-diversity-report.md |
+| `not-already-solved` | yes | pass | 5 of 5 counted trial(s) failed at least one scenario |
 | `priced` | no | pass | 55h build, $40 frontier |
+| `human-package-ready` | no | pass | public package passed human-readiness audit |
+| `human-solvability-evidenced` | no | fail | no clean independent human solve on record |
+| `human-ambiguity-reviewed` | no | pass | 0 human review record(s), no open ambiguity |
 
 ## Mechanisms
 

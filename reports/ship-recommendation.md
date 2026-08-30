@@ -5,6 +5,9 @@ weighting, no score, no override. **SHIP** means every blocking gate passes and 
 measured axis count of at least 2; **HOLD** means it is structurally sound but its diversity is still an
 estimate; **NOT-READY** means at least one blocking gate fails.
 
+The human layer is reported as advisory claim levels. `reference-solvable`, `human-ready` and
+`human-evidenced` are separate claims and do not silently rewrite the model/verifier verdict.
+
 | family | verdict | blocking failures |
 |---|---|---|
 | `audit-truth-financial-workflow` | **NOT-READY** | difficulty-evidenced |
@@ -48,6 +51,29 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `agent-axes-independent` | advisory | Do the counted agents fail in more than one direction, or do their failure sets nest? |
 | `not-already-solved` | yes | Is there at least one counted agent trial that did NOT pass cleanly? |
 | `priced` | advisory | Is the build cost recorded? |
+| `human-package-ready` | advisory | Can the public package be handed to an independent human without hidden context? |
+| `human-solvability-evidenced` | advisory | Has an independent human solved the current public package clean-room? |
+| `human-ambiguity-reviewed` | advisory | Are human ambiguity findings resolved or explicitly absent? |
+
+## Human claim levels
+
+| family | reference-solvable | human-ready | human-evidenced | claim level |
+|---|---|---|---|---|
+| `audit-truth-financial-workflow` | yes | n/a | n/a | reference-solvable |
+| `browser-action-replay` | yes | n/a | n/a | reference-solvable |
+| `checker-required-memory-poisoning` | yes | yes | pending | human-ready |
+| `deployment-rollback-partial-effects` | yes | n/a | n/a | reference-solvable |
+| `durable-approval-outbox` | yes | no | pending | reference-solvable |
+| `model-alias-drift-sentinel` | yes | n/a | n/a | reference-solvable |
+| `permission-boundary-tools` | yes | n/a | n/a | reference-solvable |
+| `prompt-injection-approval-scope-drift` | yes | n/a | n/a | reference-solvable |
+| `prompt-injection-capability-routing` | yes | n/a | n/a | reference-solvable |
+| `prompt-injection-containment` | yes | yes | pending | human-ready |
+| `prompt-injection-cross-tool-escalation` | yes | n/a | n/a | reference-solvable |
+| `prompt-injection-memory-poisoning` | yes | yes | pending | human-ready |
+| `stale-crm-ticket-automation` | yes | n/a | n/a | reference-solvable |
+| `ui-action-record-replay` | yes | yes | pending | human-ready |
+| `ui-replay-live-dom` | yes | yes | pending | human-ready |
 
 ## Per family
 
@@ -76,6 +102,9 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 45h build, $60 frontier |
+| `human-package-ready` | n/a | no human-readiness audit |
+| `human-solvability-evidenced` | n/a | no human evidence layer |
+| `human-ambiguity-reviewed` | n/a | no human review records |
 
 ### `browser-action-replay` — NOT-READY
 
@@ -102,6 +131,9 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 90h build, $80 frontier |
+| `human-package-ready` | n/a | no human-readiness audit |
+| `human-solvability-evidenced` | n/a | no human evidence layer |
+| `human-ambiguity-reviewed` | n/a | no human review records |
 
 ### `checker-required-memory-poisoning` — SHIP
 
@@ -128,6 +160,9 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
 | `not-already-solved` | pass | 1 of 1 counted trial(s) failed at least one scenario |
 | `priced` | pass | 85h build, $35 frontier |
+| `human-package-ready` | pass | public package passed human-readiness audit |
+| `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
+| `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
 
 ### `deployment-rollback-partial-effects` — NOT-READY
 
@@ -154,6 +189,9 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 60h build, $75 frontier |
+| `human-package-ready` | n/a | no human-readiness audit |
+| `human-solvability-evidenced` | n/a | no human evidence layer |
+| `human-ambiguity-reviewed` | n/a | no human review records |
 
 ### `durable-approval-outbox` — SHIP
 
@@ -180,6 +218,9 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | pass | 6 of 6 declared trial(s) failed — declared by the shape, not measured here |
 | `priced` | pass | 120h build, $48.66 frontier |
+| `human-package-ready` | **FAIL** | public package is incomplete or not generated here |
+| `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
+| `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
 
 ### `model-alias-drift-sentinel` — NOT-READY
 
@@ -206,6 +247,9 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 55h build, $50 frontier |
+| `human-package-ready` | n/a | no human-readiness audit |
+| `human-solvability-evidenced` | n/a | no human evidence layer |
+| `human-ambiguity-reviewed` | n/a | no human review records |
 
 ### `permission-boundary-tools` — NOT-READY
 
@@ -232,6 +276,9 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 45h build, $50 frontier |
+| `human-package-ready` | n/a | no human-readiness audit |
+| `human-solvability-evidenced` | n/a | no human evidence layer |
+| `human-ambiguity-reviewed` | n/a | no human review records |
 
 ### `prompt-injection-approval-scope-drift` — NOT-READY
 
@@ -258,6 +305,9 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 50h build, $45 frontier |
+| `human-package-ready` | n/a | no human-readiness audit |
+| `human-solvability-evidenced` | n/a | no human evidence layer |
+| `human-ambiguity-reviewed` | n/a | no human review records |
 
 ### `prompt-injection-capability-routing` — NOT-READY
 
@@ -284,6 +334,9 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 60h build, $55 frontier |
+| `human-package-ready` | n/a | no human-readiness audit |
+| `human-solvability-evidenced` | n/a | no human evidence layer |
+| `human-ambiguity-reviewed` | n/a | no human review records |
 
 ### `prompt-injection-containment` — NOT-READY
 
@@ -310,6 +363,9 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
 | `not-already-solved` | **FAIL** | all 6 counted trial(s) passed every scenario — the family is already-solved |
 | `priced` | pass | 70h build, $65 frontier |
+| `human-package-ready` | pass | public package passed human-readiness audit |
+| `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
+| `human-ambiguity-reviewed` | pass | 1 human review record(s), no open ambiguity |
 
 ### `prompt-injection-cross-tool-escalation` — NOT-READY
 
@@ -336,6 +392,9 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 55h build, $50 frontier |
+| `human-package-ready` | n/a | no human-readiness audit |
+| `human-solvability-evidenced` | n/a | no human evidence layer |
+| `human-ambiguity-reviewed` | n/a | no human review records |
 
 ### `prompt-injection-memory-poisoning` — SHIP
 
@@ -362,6 +421,9 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `agent-axes-independent` | pass | counted subjects fail in more than one direction (>= 2 difficulty axes) |
 | `not-already-solved` | pass | 5 of 8 counted trial(s) failed at least one scenario |
 | `priced` | pass | 75h build, $70 frontier |
+| `human-package-ready` | pass | public package passed human-readiness audit |
+| `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
+| `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
 
 ### `stale-crm-ticket-automation` — NOT-READY
 
@@ -388,6 +450,9 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `agent-axes-independent` | n/a | family not built |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 70h build, $55 frontier |
+| `human-package-ready` | n/a | no human-readiness audit |
+| `human-solvability-evidenced` | n/a | no human evidence layer |
+| `human-ambiguity-reviewed` | n/a | no human review records |
 
 ### `ui-action-record-replay` — SHIP
 
@@ -414,6 +479,9 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `agent-axes-independent` | **FAIL** | every counted subject's failures nest (claude-opus-5 ⊂ claude-haiku-4-5 ⊂ claude-sonnet-5 ⊂ gpt-5.6-sol); one difficulty axis however many subjects attempt it. Only new scenarios with a genuine trade-off can raise it — see reports/scenario-diversity-report.md |
 | `not-already-solved` | pass | 5 of 5 counted trial(s) failed at least one scenario |
 | `priced` | pass | 55h build, $40 frontier |
+| `human-package-ready` | pass | public package passed human-readiness audit |
+| `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
+| `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
 
 ### `ui-replay-live-dom` — SHIP
 
@@ -440,6 +508,9 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
 | `not-already-solved` | pass | 1 of 1 counted trial(s) failed at least one scenario |
 | `priced` | pass | 95h build, $55 frontier |
+| `human-package-ready` | pass | public package passed human-readiness audit |
+| `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
+| `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
 
 ## Why these gates
 
@@ -464,6 +535,9 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 - **`agent-axes-independent`** — The measured-axes gate counts axes over the MUTANT bank: a statement about what the verifier detects, bounded by how many known-bad implementations the author wrote. This one counts axes over real agents, and the two can disagree sharply. If every subject's failure set nests inside the next, the family separates subjects perfectly and measures ONE thing at several sensitivities — and no additional subject can change that, because a chain stays a chain. Advisory rather than blocking: a one-axis family is a legitimate benchmark component, and the cost of pretending otherwise would be killing useful families. What it must not do is read as breadth. The UI family scores six mutant axes, one agent axis, and five counted trials across four subjects and two labs whose failure counts are 33, 46, 62, 62 and 90 — five different numbers that are one measurement.
 - **`not-already-solved`** — A family every model solves measures nothing, and `already-solved` was the single most common cause of death in the source project's kill log — four of nine gated mechanisms. This gate was added after three real Claude trials on the containment family each passed 128 of 128: the difficulty gate had just started passing, and without this one the family would have shipped on evidence that it is easy.
 - **`priced`** — An unpriced family cannot enter the budget model, so the plan built on it is fiction.
+- **`human-package-ready`** — Reference solvability only proves the author can solve the internal task. The public package must also state the rules, examples, scoring contract and hidden sampling boundary clearly enough for a clean-room engineer.
+- **`human-solvability-evidenced`** — A task can be mechanically solvable and still be ambiguous to anyone who did not write it. This gate counts only independent, current-hash, unassisted solves with notes and verifier output.
+- **`human-ambiguity-reviewed`** — The fastest way to make a fair-looking benchmark unfair is to leave a human's clarifying question unresolved and keep counting failures. Open ambiguity findings are reported separately.
 
 ---
 

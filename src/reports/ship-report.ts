@@ -60,6 +60,24 @@ export interface FamilyEvidence {
   /** True when every counted subject's failure set nests inside the next — one axis, any bank size. */
   readonly agentFailuresChain?: boolean;
   readonly agentChainOrder?: readonly string[];
+  /** Human clean-room layer: package can be handed to a person without hidden context. */
+  readonly humanPackageReady?: boolean;
+  readonly humanPackageReadyDetail?: string;
+  /** Counted independent human clean-room solves against the current package hash. */
+  readonly cleanHumanSolves?: number;
+  readonly humanReviewRecords?: number;
+  readonly unresolvedHumanAmbiguities?: number;
+  readonly humanClaimLevel?: "reference-solvable" | "human-ready" | "human-evidenced";
+}
+
+export interface HumanGateEvidence {
+  readonly familyId: string;
+  readonly humanPackageReady: boolean;
+  readonly humanPackageReadyDetail: string;
+  readonly cleanHumanSolves: number;
+  readonly humanReviewRecords: number;
+  readonly unresolvedHumanAmbiguities: number;
+  readonly humanClaimLevel: "reference-solvable" | "human-ready" | "human-evidenced";
 }
 
 export type GateVerdict = "pass" | "fail" | "n/a";
@@ -74,6 +92,7 @@ export interface Gate {
     shape: TaskShape,
     registry: Registry,
     evidence?: FamilyEvidence,
+    humanEvidence?: HumanGateEvidence,
   ) => { verdict: GateVerdict; detail: string };
 }
 
@@ -83,6 +102,8 @@ const MIN_SHARED_BANK = 3;
 const MIN_MUTANTS = 2;
 const MIN_KNOBS = 3;
 const MIN_MEASURED_AXES = 2;
+
+const humanFor = (e: FamilyEvidence | undefined, h: HumanGateEvidence | undefined) => h ?? e;
 
 export const GATES: readonly Gate[] = [
   {
@@ -449,6 +470,65 @@ export const GATES: readonly Gate[] = [
       detail: `${s.estimatedBuildHours}h build, $${s.estimatedFrontierUsd} frontier`,
     }),
   },
+  {
+    id: "human-package-ready",
+    question: "Can the public package be handed to an independent human without hidden context?",
+    rationale:
+      "Reference solvability only proves the author can solve the internal task. The public package " +
+      "must also state the rules, examples, scoring contract and hidden sampling boundary clearly " +
+      "enough for a clean-room engineer.",
+    blocking: false,
+    evaluate: (_s, _r, e, h) => {
+      const human = humanFor(e, h);
+      if (human?.humanPackageReady === undefined)
+        return { verdict: "n/a", detail: "no human-readiness audit" };
+      return {
+        verdict: human.humanPackageReady ? "pass" : "fail",
+        detail:
+          human.humanPackageReadyDetail ?? (human.humanPackageReady ? "human-ready" : "not human-ready"),
+      };
+    },
+  },
+  {
+    id: "human-solvability-evidenced",
+    question: "Has an independent human solved the current public package clean-room?",
+    rationale:
+      "A task can be mechanically solvable and still be ambiguous to anyone who did not write it. " +
+      "This gate counts only independent, current-hash, unassisted solves with notes and verifier output.",
+    blocking: false,
+    evaluate: (_s, _r, e, h) => {
+      const human = humanFor(e, h);
+      if (human?.cleanHumanSolves === undefined) return { verdict: "n/a", detail: "no human evidence layer" };
+      return {
+        verdict: human.cleanHumanSolves > 0 ? "pass" : "fail",
+        detail:
+          human.cleanHumanSolves > 0
+            ? `${human.cleanHumanSolves} clean independent human solve(s)`
+            : "no clean independent human solve on record",
+      };
+    },
+  },
+  {
+    id: "human-ambiguity-reviewed",
+    question: "Are human ambiguity findings resolved or explicitly absent?",
+    rationale:
+      "The fastest way to make a fair-looking benchmark unfair is to leave a human's clarifying " +
+      "question unresolved and keep counting failures. Open ambiguity findings are reported separately.",
+    blocking: false,
+    evaluate: (_s, _r, e, h) => {
+      const human = humanFor(e, h);
+      if (human?.unresolvedHumanAmbiguities === undefined) {
+        return { verdict: "n/a", detail: "no human review records" };
+      }
+      return {
+        verdict: human.unresolvedHumanAmbiguities === 0 ? "pass" : "fail",
+        detail:
+          human.unresolvedHumanAmbiguities === 0
+            ? `${human.humanReviewRecords ?? 0} human review record(s), no open ambiguity`
+            : `${human.unresolvedHumanAmbiguities} unresolved ambiguity finding(s)`,
+      };
+    },
+  },
 ];
 
 export type ShipVerdict = "SHIP" | "HOLD" | "NOT-READY";
@@ -464,9 +544,10 @@ export function assessFamily(
   shape: TaskShape,
   registry: Registry,
   evidence?: FamilyEvidence,
+  humanEvidence?: HumanGateEvidence,
 ): FamilyAssessment {
   const results = GATES.map((gate) => {
-    const { verdict, detail } = gate.evaluate(shape, registry, evidence);
+    const { verdict, detail } = gate.evaluate(shape, registry, evidence, humanEvidence);
     return { gate, verdict, detail };
   });
   const blockingFailures = results
@@ -491,8 +572,11 @@ export function renderShipReport(
   shapes: readonly TaskShape[],
   registry: Registry,
   evidence: Readonly<Record<string, FamilyEvidence>> = {},
+  humanEvidence: Readonly<Record<string, HumanGateEvidence>> = {},
 ): string {
-  const assessments = shapes.map((s) => assessFamily(s, registry, evidence[s.familyId]));
+  const assessments = shapes.map((s) =>
+    assessFamily(s, registry, evidence[s.familyId], humanEvidence[s.familyId]),
+  );
   const lines: string[] = [
     "# Ship / no-ship",
     "",
@@ -500,6 +584,9 @@ export function renderShipReport(
     "weighting, no score, no override. **SHIP** means every blocking gate passes and the family has a",
     `measured axis count of at least ${String(MIN_MEASURED_AXES)}; **HOLD** means it is structurally sound but its diversity is still an`,
     "estimate; **NOT-READY** means at least one blocking gate fails.",
+    "",
+    "The human layer is reported as advisory claim levels. `reference-solvable`, `human-ready` and",
+    "`human-evidenced` are separate claims and do not silently rewrite the model/verifier verdict.",
     "",
     "| family | verdict | blocking failures |",
     "|---|---|---|",
@@ -513,6 +600,18 @@ export function renderShipReport(
     "| gate | blocking | question |",
     "|---|---|---|",
     ...GATES.map((g) => `| \`${g.id}\` | ${g.blocking ? "yes" : "advisory"} | ${g.question} |`),
+    "",
+    "## Human claim levels",
+    "",
+    "| family | reference-solvable | human-ready | human-evidenced | claim level |",
+    "|---|---|---|---|---|",
+    ...shapes.map((s) => {
+      const e = evidence[s.familyId];
+      const h = humanEvidence[s.familyId] ?? e;
+      const ready = h?.humanPackageReady;
+      const solves = h?.cleanHumanSolves;
+      return `| \`${s.familyId}\` | ${s.referenceContract.length > 0 ? "yes" : "no"} | ${ready === undefined ? "n/a" : ready ? "yes" : "no"} | ${solves === undefined ? "n/a" : solves > 0 ? `yes (${solves})` : "pending"} | ${h?.humanClaimLevel ?? "reference-solvable"} |`;
+    }),
     "",
     "## Per family",
     "",

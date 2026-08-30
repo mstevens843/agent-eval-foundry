@@ -6,12 +6,14 @@ This repository builds, packages, trials, kills and evolves agent benchmark fami
 unit that matters: independent failure axes. A scenario count says how much was generated; an axis
 count says how many distinct ways the suite can tell implementations apart.
 
-The foundry keeps three evidence streams separate:
+The foundry keeps evidence streams separate:
 
 - **mutant-detection evidence**: a reference and known-bad implementations prove the verifier
   distinguishes specific defects.
 - **real-agent difficulty evidence**: counted model trials prove capable agents actually miss the
   family.
+- **human-solvability evidence**: clean-room human records prove the public package is understandable
+  and solvable without hidden context.
 - **cross-family evidence**: shared subjects prove whether different families measure different
   things.
 
@@ -19,21 +21,30 @@ Every counted trial preserves the transcript, submission, verifier output, scena
 challenge hash. Refusals, entitlement failures, infra failures, stale hashes and contaminated manual
 runs never count.
 
+The foundry now separates three claims: a reference can solve it, a clean public package can be
+handed to a human, and an independent human has actually solved it. Those are different evidence
+levels and the reports do not merge them.
+
 ## Evidence Snapshot
 
-| family | scenarios | counted trials | failed >=1 | mutant axes | agent axes | verdict |
-|---|---:|---:|---:|---:|---|---|
-| `prompt-injection-containment` | 128 | 6 | 0 | 4 | 0 | **NOT-READY**: already-solved |
-| `prompt-injection-memory-poisoning` | 288 | 8 | 5 | 3 | >=2 | **SHIP**: cross-lab failure generalises |
-| `ui-action-record-replay` | 324 | 5 | 5 | 6 | 1 | **SHIP**: useful but chain-limited |
-| `ui-replay-live-dom` | 864 | 1 | 1 | 19 | not claimed yet | **SHIP**: descendant, packaged and difficulty-evidenced |
-| `checker-required-memory-poisoning` | 792 | 1 | 1 | 12 | not claimed yet | **SHIP**: required-checker gap, OpenAI-only |
-| `durable-approval-outbox` | 24 | 20 imported | 20 | 3 | 1 | **SHIP**: imported historical bank |
+| family | scenarios | counted trials | failed >=1 | mutant axes | agent axes | human claim | verdict |
+|---|---:|---:|---:|---:|---|---|---|
+| `prompt-injection-containment` | 128 | 6 | 0 | 4 | 0 | human-ready | **NOT-READY**: already-solved |
+| `prompt-injection-memory-poisoning` | 288 | 8 | 5 | 3 | >=2 | human-ready | **SHIP**: cross-lab failure generalises |
+| `ui-action-record-replay` | 324 | 5 | 5 | 6 | 1 | human-ready | **SHIP**: useful but chain-limited |
+| `ui-replay-live-dom` | 864 | 1 | 1 | 19 | not claimed yet | human-ready | **SHIP**: descendant, packaged and difficulty-evidenced |
+| `checker-required-memory-poisoning` | 792 | 1 | 1 | 12 | not claimed yet | human-ready | **SHIP**: required-checker gap, OpenAI-only |
+| `durable-approval-outbox` | 24 | 20 imported | 20 | 3 | 1 | reference-solvable | **SHIP**: imported historical bank |
 
 Current live-DOM package hash: `18c3f5afc5973604205cd7df23ce4cad`.
 Current checker-required package hash: `448f2f816c51030cc97a374816226168`.
 
 ## What Changed In This Phase
+
+The new human-solvability layer audits challenge packages for clean-room human review and validates
+future human solve records against stable rule codes. Package-backed built families are
+`human-ready`; none are `human-evidenced` yet because no independent clean human solve is on record.
+A contaminated author walkthrough is preserved only as a format example.
 
 `ui-action-record-replay` shipped, but its five counted agent failure sets form a chain: 33, 46, 62,
 62 and 90 failed scenarios, all nested. That means one difficulty axis at several sensitivities, not
@@ -75,6 +86,8 @@ node dist/cli.js trials campaign run --family checker-required-memory-poisoning 
 node dist/cli.js trials campaign reconcile --family ui-replay-live-dom
 node dist/cli.js trials verify --family ui-replay-live-dom live-dom-2026-08-o2
 node dist/cli.js trials verify --family checker-required-memory-poisoning checker-required-2026-08-o1
+node dist/cli.js human readiness
+node dist/cli.js human solvability
 pnpm bundles
 ```
 
@@ -140,6 +153,8 @@ Key generated reports:
 - `reports/checker-required-memory-poisoning-agent-results.md`
 - `reports/checker-required-memory-poisoning-axis-report.md`
 - `reports/ui-replay-browser-backed-scaffold.md`
+- `reports/human-readiness-report.md`
+- `reports/human-solvability-report.md`
 - `reports/shared-difficulty-bank-report.md`
 - `reports/cross-family-axis-report.md`
 - `reports/ship-gate-report.md`
@@ -173,8 +188,9 @@ node dist/cli.js all
 ```
 
 The tests include known-bad cases for missing SPEC sections, challenge leaks, nested anchor
-strategies, stale hashes, verifier-only SHIP claims, missing `checker.mjs`, vacuous checkers, provider
-unavailability, candidate ledger drift and deterministic reports.
+strategies, stale hashes, verifier-only SHIP claims, missing `checker.mjs`, vacuous checkers,
+invalid counted human reviews, provider unavailability, candidate ledger drift and deterministic
+reports.
 
 ## Current Claim
 

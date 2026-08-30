@@ -26,6 +26,7 @@ import { familyLoop } from "../src/foundry/loop.js";
 import { assertCoverage, coverage } from "../src/foundry/registry.js";
 import { EXPECTED_ARTIFACTS, checkScaffold } from "../src/foundry/scaffold-check.js";
 import { ARTIFACT_PLAN, generateScaffold, scaffoldFromShape } from "../src/foundry/scaffold.js";
+import { humanEvidenceForFamilies, humanGateEvidenceMap } from "../src/human-solvability/records.js";
 import { parseMatrix } from "../src/matrix.js";
 import { renderBudgetReport } from "../src/reports/budget-report.js";
 import { PIC_FAMILY, familyEvidenceMap } from "../src/reports/evidence.js";
@@ -47,6 +48,7 @@ const registry = loadRegistry(ROOT);
 // directories too, and the resulting mismatch reported the checked-in report as stale. Both now call
 // the same builder, so drifting apart again requires changing shared code.
 const picEvidence = familyEvidenceMap(ROOT);
+const humanEvidence = humanGateEvidenceMap(humanEvidenceForFamilies(ROOT));
 
 const F = { failed: ["x"] } satisfies Cell;
 const P = { failed: [] } satisfies Cell;
@@ -381,7 +383,7 @@ describe("report determinism", () => {
     ["mutants", () => renderMutantReport(registry, cov)],
     ["ledger", () => renderLedgerReport(registry)],
     ["families", () => renderFamilyDiversityReport(registry.shapes)],
-    ["ship", () => renderShipReport(registry.shapes, registry, picEvidence)],
+    ["ship", () => renderShipReport(registry.shapes, registry, picEvidence, humanEvidence)],
     [
       "budget",
       () =>
@@ -418,7 +420,10 @@ describe("report determinism", () => {
       ["reports/mutant-bank.md", renderMutantReport(registry, cov)],
       ["reports/candidate-ledger.md", renderLedgerReport(registry)],
       ["reports/family-diversity.md", renderFamilyDiversityReport(registry.shapes)],
-      ["reports/ship-recommendation.md", renderShipReport(registry.shapes, registry, picEvidence)],
+      [
+        "reports/ship-recommendation.md",
+        renderShipReport(registry.shapes, registry, picEvidence, humanEvidence),
+      ],
     ];
     for (const [path, fresh] of pairs) {
       expect(readFileSync(`${ROOT}${path}`, "utf8"), `${path} is stale — run \`foundry all\``).toBe(fresh);

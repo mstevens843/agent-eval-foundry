@@ -53,6 +53,16 @@ import { SchemaError } from "./foundry/schema.js";
 import { SHAPE_PROSE } from "./foundry/shape-prose.js";
 import { shapeFromFamily } from "./foundry/shape-sync.js";
 import { parseTaskShape } from "./foundry/validate.js";
+import { auditHumanReadinessForFamilies } from "./human-solvability/readiness.js";
+import {
+  assertHumanReviewsValid,
+  augmentFamilyEvidenceMap,
+  humanEvidenceForFamilies,
+  humanGateEvidenceMap,
+  loadHumanReviewRecords,
+  summarizeHumanEvidence,
+} from "./human-solvability/records.js";
+import { renderHumanReadinessReport, renderHumanSolvabilityReport } from "./human-solvability/report.js";
 import { MatrixError, parseMatrix } from "./matrix.js";
 import { renderReport } from "./report.js";
 import { analyseFamilyTrials } from "./reports/agent-results.js";
@@ -193,6 +203,8 @@ FAMILIES (run a measured mini-benchmark)
   trials bank [--out f]          every trial on record, counted and uncounted
   shared-bank [--out f]          cross-family subject overlap and what it permits
   history import [path] [--out f]  normalize Harbor runs from the Durable Outbox repo
+  human readiness [--out f]      public-package audit for clean-room human review
+  human solvability [--out f]    counted independent human solve evidence
 
 PRODUCTION
   scaffold --shape <file> [--out dir]
@@ -537,6 +549,13 @@ function sharedBankCommand(root: string): string {
   });
 }
 
+function humanCommand(argv: readonly string[], root: string): string {
+  const sub = positional(argv, 1) ?? "readiness";
+  if (sub === "readiness") return renderHumanReadinessReport(auditHumanReadinessForFamilies(root));
+  if (sub === "solvability") return renderHumanSolvabilityReport(humanEvidenceForFamilies(root));
+  throw new Error(`unknown human subcommand "${sub}"; expected readiness | solvability`);
+}
+
 function crossFamilyCommand(root: string): string {
   const registry = loadRegistry(root);
   const outboxRaw = readJson(join(root, "examples/durable-outbox/matrix.json"));
@@ -583,6 +602,7 @@ function checkCommand(root: string): string {
       existsSync(join(root, "reports", `${st.shape.familyId}-kill-analysis.md`)),
     );
   }
+  assertHumanReviewsValid(root);
 
   return [
     "registry OK",
@@ -593,6 +613,7 @@ function checkCommand(root: string): string {
     `  built       ${BUILT_FAMILY_IDS.length} families execute`,
     "  coverage    every mechanism has a mutant; no mutant is orphaned",
     "  consistency ledger statuses agree with the ship gate; every kill has a postmortem",
+    "  human       counted clean-room reviews validate against current package hashes",
     "",
   ].join("\n");
 }
@@ -1575,10 +1596,19 @@ function allCommand(argv: readonly string[], root: string): string {
   write("candidate-ledger.md", renderLedgerReport(registry));
   write("family-diversity.md", renderFamilyDiversityReport(registry.shapes));
   const ev = evidenceFor(PIC_FAMILY);
+  const humanAudits = auditHumanReadinessForFamilies(root);
+  const humanSummaries = summarizeHumanEvidence(humanAudits, loadHumanReviewRecords(root));
+  const humanGateEvidence = humanGateEvidenceMap(humanSummaries);
   // Evidence for EVERY built family, not just the first one. The determinism test builds it the
   // same way, and the two drifted the moment a second family had evidence to report.
-  const allEvidence = Object.fromEntries(BUILT_FAMILY_IDS.map((id) => [id, evidenceFor(id).evidence]));
-  write("ship-recommendation.md", renderShipReport(registry.shapes, registry, allEvidence));
+  const allEvidence = augmentFamilyEvidenceMap(
+    root,
+    Object.fromEntries(BUILT_FAMILY_IDS.map((id) => [id, evidenceFor(id).evidence])),
+  );
+  write(
+    "ship-recommendation.md",
+    renderShipReport(registry.shapes, registry, allEvidence, humanGateEvidence),
+  );
   write(
     "prompt-injection-containment-trial-readiness.md",
     renderTrialReadinessReport(ev.run, ev.trials, ev.evidence),
@@ -1592,7 +1622,12 @@ function allCommand(argv: readonly string[], root: string): string {
       directories: readFamilyTrials(join(root, "trials"), PIC_FAMILY),
     }),
   );
-  write("ship-gate-report.md", renderGateReport({ registry, evidence: allEvidence }));
+  write(
+    "ship-gate-report.md",
+    renderGateReport({ registry, evidence: allEvidence, humanEvidence: humanGateEvidence }),
+  );
+  write("human-readiness-report.md", renderHumanReadinessReport(humanAudits));
+  write("human-solvability-report.md", renderHumanSolvabilityReport(humanSummaries));
 
   // ---- the campaign + trial-analysis layer -------------------------------------------------------
   for (const plan of loadCampaigns(root)) {
@@ -2311,7 +2346,7 @@ function allCommand(argv: readonly string[], root: string): string {
   }
   const uiShape = registry.shapes.find((s) => s.familyId === UI_FAMILY);
   if (uiShape !== undefined) {
-    write(`${UI_FAMILY}-family-report.md`, renderShapeReport(uiShape, registry));
+    write(`${UI_FAMILY}-family-report.md`, renderShapeReport(uiShape, registry, allEvidence[UI_FAMILY]));
   }
   write("historical-durable-outbox-trials.md", renderHistoricalReport(outboxHistory(root)));
   const inputs = { ...MEASURED_DEFAULTS, totalUsd: 100_000, labourRateUsdPerHour: 120 };
@@ -2485,6 +2520,9 @@ export function main(argv: readonly string[]): number {
         emit(argv, renderHistoricalReport(outboxHistory(root, path)));
         return 0;
       }
+      case "human":
+        emit(argv, humanCommand(argv, root));
+        return 0;
       case "challenge": {
         // Not `emit`: --out names a DIRECTORY here, as it does for `scaffold`. Summary to stdout.
         process.stdout.write(challengeCommand(argv, root));
@@ -2668,7 +2706,15 @@ export function main(argv: readonly string[]): number {
         // family the generated report called NOT-READY, which is the worst possible failure for a
         // gate: two commands, one repository, opposite answers.
         const r = loadRegistry(root);
-        emit(argv, renderShipReport(r.shapes, r, familyEvidenceMap(root)));
+        emit(
+          argv,
+          renderShipReport(
+            r.shapes,
+            r,
+            familyEvidenceMap(root),
+            humanGateEvidenceMap(humanEvidenceForFamilies(root)),
+          ),
+        );
         return 0;
       }
       case "kill": {

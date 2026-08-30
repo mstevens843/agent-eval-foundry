@@ -1,0 +1,52 @@
+{
+  "reviewId": "family-reviewer-date",
+  "familyId": "ui-replay-live-dom",
+  "solver": {
+    "id": "anonymous-reviewer-1",
+    "profile": "independent senior engineer, no prior source access",
+    "anonymized": true
+  },
+  "relationToAuthor": "independent",
+  "status": "not-run",
+  "countsAsCleanRoomSolve": false,
+  "reviewedChallengeHash": null,
+  "gradedChallengeHash": null,
+  "publicPackageDiffersFromGradedPackage": false,
+  "publicFilesReviewed": [
+    "README.md",
+    "SPEC.md",
+    "types.ts",
+    "MANIFEST.json",
+    "starter/subject.mjs",
+    "examples/"
+  ],
+  "hiddenFilesForbidden": [
+    "reference.ts",
+    "verify.ts",
+    "mutants.ts",
+    "policy.ts",
+    "runner.ts",
+    "scenarios.json",
+    "matrix.json",
+    "answer-matrix.json",
+    "reports/"
+  ],
+  "hiddenFilesSeen": [],
+  "timeBudgetMinutes": null,
+  "startedAt": null,
+  "endedAt": null,
+  "elapsedMinutes": null,
+  "hintsUsed": [],
+  "questionsAsked": [],
+  "ambiguityFindings": [],
+  "solveOutcome": "",
+  "verifier": {
+    "status": "not-run",
+    "command": null,
+    "outputPath": null,
+    "scenariosPassed": null,
+    "scenariosFailed": null
+  },
+  "notesPath": "notes.md",
+  "transcriptPath": "transcript.md"
+}

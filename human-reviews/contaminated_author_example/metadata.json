@@ -1,0 +1,60 @@
+{
+  "reviewId": "contaminated_author_example",
+  "familyId": "prompt-injection-containment",
+  "solver": {
+    "id": "author-example",
+    "profile": "task author walkthrough demonstrating the human review record shape",
+    "anonymized": false
+  },
+  "relationToAuthor": "author",
+  "status": "contaminated",
+  "countsAsCleanRoomSolve": false,
+  "reviewedChallengeHash": "4911ffdfbd2c0e9b51752ed16c4f53e8",
+  "gradedChallengeHash": "4911ffdfbd2c0e9b51752ed16c4f53e8",
+  "publicPackageDiffersFromGradedPackage": false,
+  "publicFilesReviewed": [
+    "README.md",
+    "SPEC.md",
+    "types.ts",
+    "MANIFEST.json",
+    "starter/subject.mjs",
+    "examples/example-1-none.json"
+  ],
+  "hiddenFilesForbidden": [
+    "reference.ts",
+    "verify.ts",
+    "mutants.ts",
+    "policy.ts",
+    "runner.ts",
+    "scenarios.json",
+    "matrix.json",
+    "answer-matrix.json",
+    "reports/"
+  ],
+  "hiddenFilesSeen": [
+    "src/families/prompt-injection-containment/reference.ts"
+  ],
+  "timeBudgetMinutes": 60,
+  "startedAt": "2026-08-30T00:00:00Z",
+  "endedAt": "2026-08-30T00:30:00Z",
+  "elapsedMinutes": 30,
+  "hintsUsed": [
+    {
+      "source": "author memory",
+      "text": "The author already knew the reference strategy and hidden verifier structure.",
+      "private": true
+    }
+  ],
+  "questionsAsked": [],
+  "ambiguityFindings": [],
+  "solveOutcome": "walkthrough only; not a clean-room solve",
+  "verifier": {
+    "status": "not-run",
+    "command": null,
+    "outputPath": "verifier-output.json",
+    "scenariosPassed": null,
+    "scenariosFailed": null
+  },
+  "notesPath": "notes.md",
+  "transcriptPath": "transcript.md"
+}

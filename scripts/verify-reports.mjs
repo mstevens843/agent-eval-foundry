@@ -125,6 +125,8 @@ const SMOKE = [
   [["trials", "self-check"], /Self-check behaviour/],
   [["trials", "providers"], /claude/],
   [["trials", "campaign", "status"], /campaign/],
+  [["human", "readiness"], /Human readiness/],
+  [["human", "solvability"], /Human solvability/],
   [["family", "diagnose", "--family", "ui-action-record-replay"], /chain/],
   [["family", "evolve-scenarios", "--family", "ui-action-record-replay"], /chain/],
   [["ui", "replay", "upgrade"], /realism ladder/],
@@ -216,7 +218,7 @@ for (const variant of [
 // by being written here, but the count is asserted so a report that stops being generated is caught
 // rather than silently skipped.
 run(["all", "--out", tmp]);
-const EXPECTED_REPORTS = 56;
+const EXPECTED_REPORTS = 58;
 const generated = readdirSync(tmp);
 if (generated.length !== EXPECTED_REPORTS) {
   console.error(`WRONG COUNT  \`all\` wrote ${generated.length} reports, expected ${EXPECTED_REPORTS}`);

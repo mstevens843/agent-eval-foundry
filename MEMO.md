@@ -31,6 +31,12 @@ actually do with the budget.
 > `node dist/cli.js all` regenerates every report cited below. See [`README.md`](./README.md) for the
 > architecture. Everything in section 5 that used to be a recommendation is now a command.
 
+The foundry now separates three claims: a reference can solve it, a clean public package can be
+handed to a human, and an independent human has actually solved it. Those are different evidence
+levels and the reports do not merge them. The current human layer is deterministic: it audits
+public challenge packages, preserves contaminated walkthroughs as non-counting records, and leaves
+independent human solves pending until a clean-room reviewer actually submits one.
+
 ---
 
 ## 1. The caveats on my own headline, before anything else
@@ -523,7 +529,8 @@ That changes the unit of production:
    harness they call into).
 3. **Gate every family on axis count and on trial evidence, not on check count** — the tool in this
    repository, which I did not have when I built the outbox task. `node dist/cli.js ship` runs the
-   gate: 20 checks per family, 14 blocking, verdict a pure function of the gates. Of the fifteen
+   gate: 24 gates per family, 14 blocking and three human-solvability gates advisory, with verdict
+   a pure function of the blocking gates. Of the fifteen
    families declared here, five reach SHIP, one is NOT-READY because real agents from two labs
    solved it, and the other nine are NOT-READY because nothing has attempted them — a family must
    not ship on an estimate, and `difficulty-evidenced` became blocking once every built family was

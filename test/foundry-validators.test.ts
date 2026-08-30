@@ -162,6 +162,23 @@ const COVERED_IN_CROSS_FAMILY_TEST: readonly RuleCode[] = [
   "BANK_INCOMPARABLE",
 ];
 
+/**
+ * Rules whose known-bad case lives in `human-solvability.test.ts`: clean-room human solve
+ * countability and human-evidenced claim coherence.
+ */
+const COVERED_IN_HUMAN_SOLVABILITY_TEST: readonly RuleCode[] = [
+  "HUMAN_COUNTED_HASH_MISSING",
+  "HUMAN_COUNTED_HASH_STALE",
+  "HUMAN_COUNTED_AUTHOR",
+  "HUMAN_COUNTED_SAW_HIDDEN",
+  "HUMAN_COUNTED_PRIVATE_HINT",
+  "HUMAN_COUNTED_NO_NOTES",
+  "HUMAN_COUNTED_NO_TIME_RECORD",
+  "HUMAN_COUNTED_VERIFIER_NOT_RUN",
+  "HUMAN_COUNTED_PACKAGE_DIFFERS",
+  "HUMAN_CLAIM_WITHOUT_CLEAN_RECORD",
+];
+
 /** Rules exercised by code below rather than by a JSON fixture. Keeps assertion 3 honest. */
 const PROGRAMMATIC: readonly RuleCode[] = [
   "E_TYPE",
@@ -421,6 +438,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ...COVERED_IN_ROUTING_TEST,
       ...COVERED_IN_CROSS_PROVIDER_TEST,
       ...COVERED_IN_CROSS_FAMILY_TEST,
+      ...COVERED_IN_HUMAN_SOLVABILITY_TEST,
     ]);
     const uncovered = RULE_CODES.filter((c) => !covered.has(c));
     expect(
@@ -439,6 +457,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ["test/trials-routing.test.ts", COVERED_IN_ROUTING_TEST],
       ["test/cross-provider.test.ts", COVERED_IN_CROSS_PROVIDER_TEST],
       ["test/cross-family-evidence.test.ts", COVERED_IN_CROSS_FAMILY_TEST],
+      ["test/human-solvability.test.ts", COVERED_IN_HUMAN_SOLVABILITY_TEST],
     ];
     for (const [file, codes] of delegated) {
       const source = readFileSync(`${ROOT}${file}`, "utf8");

@@ -11,11 +11,12 @@
 
 import type { Registry } from "../foundry/registry.js";
 import type { TaskShape } from "../foundry/schema.js";
-import { type FamilyEvidence, GATES, assessFamily } from "./ship-report.js";
+import { type FamilyEvidence, GATES, type HumanGateEvidence, assessFamily } from "./ship-report.js";
 
 export interface GateReportInput {
   readonly registry: Registry;
   readonly evidence: Readonly<Record<string, FamilyEvidence>>;
+  readonly humanEvidence?: Readonly<Record<string, HumanGateEvidence>>;
 }
 
 const esc = (s: string): string => s.replace(/\|/g, "\\|");
@@ -24,7 +25,12 @@ export function renderGateReport(input: GateReportInput): string {
   const shapes: readonly TaskShape[] = input.registry.shapes;
   const assessments = shapes.map((s) => ({
     shape: s,
-    assessment: assessFamily(s, input.registry, input.evidence[s.familyId]),
+    assessment: assessFamily(
+      s,
+      input.registry,
+      input.evidence[s.familyId],
+      input.humanEvidence?.[s.familyId],
+    ),
   }));
 
   const perGate = GATES.map((gate) => {

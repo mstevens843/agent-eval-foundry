@@ -114,6 +114,52 @@ export { renderMechanismReport, renderMutantReport } from "./reports/registry-re
 export { GATES, assessFamily, renderShipReport } from "./reports/ship-report.js";
 export type { FamilyAssessment, Gate, GateVerdict, ShipVerdict } from "./reports/ship-report.js";
 
+// --- human solvability: reference-solvable vs human-ready vs human-evidenced ---
+export {
+  HUMAN_AUDITED_FAMILIES,
+  auditHumanReadiness,
+  auditHumanReadinessForFamilies,
+} from "./human-solvability/readiness.js";
+export {
+  assertHumanReviewsValid,
+  augmentFamilyEvidenceMap,
+  humanEvidenceForFamilies,
+  humanGateEvidenceMap,
+  loadHumanReviewRecords,
+  summarizeHumanEvidence,
+} from "./human-solvability/records.js";
+export type { LoadedHumanReview } from "./human-solvability/records.js";
+export { renderHumanReadinessReport, renderHumanSolvabilityReport } from "./human-solvability/report.js";
+export {
+  HUMAN_CLAIM_LEVELS,
+  HUMAN_REVIEW_STATUSES,
+  HUMAN_VERIFIER_STATUSES,
+  SOLVER_RELATIONS,
+} from "./human-solvability/types.js";
+export type {
+  HumanAmbiguityFinding,
+  HumanClaimLevel,
+  HumanEvidenceSummary,
+  HumanHint,
+  HumanQuestion,
+  HumanReadinessAudit,
+  HumanReadinessCheck,
+  HumanReviewRecord,
+  HumanReviewStatus,
+  HumanSolverProfile,
+  HumanValidationFailure,
+  HumanVerifierOutcome,
+  HumanVerifierStatus,
+  SolverRelation,
+} from "./human-solvability/types.js";
+export {
+  assertHumanReviewRecordCounts,
+  assertHumanSolvabilityClaim,
+  humanReviewFailures,
+  isCleanHumanSolve,
+  parseHumanReviewRecord,
+} from "./human-solvability/validate.js";
+
 // --- families: measured mini-benchmarks built by the foundry process ---
 export {
   ALL_SUBJECTS,
