@@ -244,5 +244,83 @@
     "kind": "transfer",
     "code": "FUNNEL_TRANSFER_NO_EVIDENCE_REQUIREMENT",
     "note": "Transfer is not proven until the required evidence is declared."
+  },
+  {
+    "file": "discovery-candidates/no-truth-source.json",
+    "kind": "discovery-candidate",
+    "code": "DISCOVERY_CANDIDATE_NO_TRUTH_SOURCE",
+    "note": "Discovery candidates need an independent truth source before they can enter the queue."
+  },
+  {
+    "file": "discovery-candidates/hidden-rules-undeclared.json",
+    "kind": "discovery-candidate",
+    "code": "DISCOVERY_CANDIDATE_HIDDEN_RULES_UNDECLARED",
+    "note": "Hidden regions may sample declared behavior, but may not add secret rules."
+  },
+  {
+    "file": "discovery-candidates/no-reference-path.json",
+    "kind": "discovery-candidate",
+    "code": "DISCOVERY_CANDIDATE_NO_REFERENCE_PATH",
+    "note": "A candidate with no plausible reference path should not enter validation."
+  },
+  {
+    "file": "discovery-candidates/no-expected-mutants.json",
+    "kind": "discovery-candidate",
+    "code": "DISCOVERY_CANDIDATE_NO_EXPECTED_MUTANTS",
+    "note": "A candidate with no known-bad shape cannot prove its verifier."
+  },
+  {
+    "file": "discovery-candidates/no-baseline-cheat.json",
+    "kind": "discovery-candidate",
+    "code": "DISCOVERY_CANDIDATE_NO_BASELINE_CHEAT",
+    "note": "Cheap screens need a baseline cheat to fail."
+  },
+  {
+    "file": "discovery-candidates/no-transfer.json",
+    "kind": "discovery-candidate",
+    "code": "DISCOVERY_CANDIDATE_NO_TRANSFER",
+    "note": "A candidate with no transfer target is not ready for the adaptive funnel."
+  },
+  {
+    "file": "discovery-candidates/no-promotion-criteria.json",
+    "kind": "discovery-candidate",
+    "code": "DISCOVERY_CANDIDATE_NO_PROMOTION_CRITERIA",
+    "note": "Promotion and kill criteria must be stated before probe results."
+  },
+  {
+    "file": "discovery-candidates/wording-only.json",
+    "kind": "discovery-candidate",
+    "code": "DISCOVERY_CANDIDATE_WORDING_ONLY",
+    "note": "Changing nouns without mechanism pressure is not a discovery candidate."
+  },
+  {
+    "file": "discovery-candidates/requires-private-context.json",
+    "kind": "discovery-candidate",
+    "code": "DISCOVERY_CANDIDATE_REQUIRES_PRIVATE_CONTEXT",
+    "note": "A candidate requiring author memory cannot become a public benchmark."
+  },
+  {
+    "file": "discovery-candidates/no-cheap-screen.json",
+    "kind": "discovery-candidate",
+    "code": "DISCOVERY_CANDIDATE_NO_CHEAP_SCREEN",
+    "note": "Discovery Workbench must spend paper/static/local/mutant evidence before trials."
+  },
+  {
+    "file": "discovery-candidates/high-cheat-no-isolation.json",
+    "kind": "discovery-candidate",
+    "code": "DISCOVERY_CANDIDATE_HIGH_CHEAT_NO_ISOLATION",
+    "note": "High-cheat-risk candidates need an isolation plan before promotion."
+  },
+  {
+    "file": "discovery-candidates/low-axis-high-build.json",
+    "kind": "discovery-candidate",
+    "code": "DISCOVERY_CANDIDATE_LOW_AXIS_HIGH_BUILD",
+    "note": "Expensive low-axis candidates should be held or killed before validation work."
+  },
+  {
+    "file": "discovery-candidates/solved-no-evolution.json",
+    "kind": "discovery-candidate",
+    "code": "DISCOVERY_CANDIDATE_SOLVED_NO_EVOLUTION",
+    "note": "High already-solved risk needs a named evolution operator or a cheap kill."
   }
 ]

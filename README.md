@@ -18,6 +18,12 @@ one-agent smoke trials, and only evidence-backed families enter **Production Mod
 tests, cross-provider matrices, human review and adversarial audit. The next action is computed from
 evidence, not a fixed checklist.
 
+Discovery Workbench v1 feeds that funnel. It scores a 50-candidate pool, applies deterministic cheap
+screens, builds a promotion queue, separates surface coverage from defect-axis diversity and can
+emit a task-shape draft from a promoted candidate. See
+[`reports/discovery-workbench-report.md`](reports/discovery-workbench-report.md). Candidate scores
+are routing evidence only; they are not difficulty evidence until a built family has counted trials.
+
 The foundry keeps evidence streams separate:
 
 - **mutant-detection evidence**: a reference and known-bad implementations prove the verifier
@@ -64,6 +70,13 @@ validated mechanism probes, `data/transfer-tests.json` holds seven transfer test
 and production modes. The planner refuses to treat repeated OpenAI trials as cross-lab breadth,
 keeps provider refusals/no-count records from advancing claims, sends stale hashes to repair, and
 sends collapsed failure chains to evolve or hold before full matrices.
+
+Discovery Workbench v1 adds the machine that feeds the funnel: `data/candidate-pool.json` contains
+50 candidate family ideas, `node dist/cli.js discovery score` ranks them through fairness/verifier
+and cost gates, `node dist/cli.js discovery next` prints the stable promotion queue, and
+`node dist/cli.js discovery scaffold --candidate <id> --out <dir>` emits a draft task shape.
+Surface coverage is reported separately from failure-axis diversity so broad API/product coverage
+does not masquerade as independent defect axes.
 
 Adversarial Audit v2 upgrades verifier-integrity from preserved attack records to mechanical triage.
 Attack packets now carry an execution profile, an isolation profile, an exploit-artifact schema, an
@@ -127,6 +140,11 @@ node dist/cli.js trials verify --family ui-replay-live-dom live-dom-2026-08-o2
 node dist/cli.js trials verify --family checker-required-memory-poisoning checker-required-2026-08-o1
 node dist/cli.js human readiness
 node dist/cli.js human solvability
+node dist/cli.js discovery report
+node dist/cli.js discovery candidates
+node dist/cli.js discovery score
+node dist/cli.js discovery next
+node dist/cli.js discovery scaffold --candidate payment-unknown-capture-receipt --out /tmp/payment-task-shape
 node dist/cli.js funnel report
 node dist/cli.js funnel probes
 node dist/cli.js funnel next
@@ -212,6 +230,7 @@ Key generated reports:
 - `reports/checker-required-family-report.md`
 - `reports/checker-required-memory-poisoning-agent-results.md`
 - `reports/checker-required-memory-poisoning-axis-report.md`
+- `reports/discovery-workbench-report.md`
 - `reports/adaptive-funnel-report.md`
 - `reports/ui-replay-browser-backed-scaffold.md`
 - `reports/ui-replay-browser-backed-readiness.md`

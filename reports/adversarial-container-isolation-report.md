@@ -9,7 +9,7 @@ artifact directories.
 |---|---|
 | runtime | docker |
 | available locally | no |
-| detail | docker daemon unavailable: failed to connect to the docker API at unix:///Users/devlegacy/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/devlegacy/.docker/run/docker.sock: connect: no such file or directory |
+| detail | docker daemon unavailable: permission denied while trying to connect to the docker API at unix:///Users/devlegacy/.docker/run/docker.sock |
 
 ## Prepared Bundles
 

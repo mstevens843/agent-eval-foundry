@@ -1,0 +1,46 @@
+{
+  "id": "bad-candidate",
+  "title": "Bad candidate",
+  "domain": "test",
+  "failureMechanisms": ["stale-state"],
+  "taskFamilyHypothesis": "A test hypothesis exists.",
+  "whyAgentsMightFail": "Agents might fail.",
+  "authoritativeTruthSource": { "name": "truth", "whatItSettles": "Expected state.", "whyIndependent": "Harness-owned." },
+  "visibleRulesSketch": ["Public rule."],
+  "hiddenRegionSketch": { "samplingStatement": "Adds a secret rule.", "addsUndeclaredRules": true },
+  "expectedKnobs": [
+    { "name": "knob-one", "values": ["a"], "purpose": "First variation." },
+    { "name": "knob-two", "values": ["b"], "purpose": "Second variation." }
+  ],
+  "expectedMutants": ["stale-state-reader"],
+  "baselineCheats": ["cheat"],
+  "transferPotential": { "targetDomains": ["other"], "linkedTransferTests": [], "rationale": "Transfers." },
+  "surfaceCoverageTags": {
+    "domains": ["test"],
+    "toolActionTypes": ["act"],
+    "statePatterns": ["state"],
+    "authorityModels": ["ledger"],
+    "externalSystems": ["system"],
+    "uiApiWorkflowSurfaces": ["api"],
+    "riskCategories": ["risk"]
+  },
+  "expectedBuildHours": 8,
+  "expectedTrialCostUsd": 0,
+  "riskNotes": {
+    "fairnessRisk": { "level": "low", "note": "Fair.", "mitigation": "Visible rules." },
+    "verifierRisk": { "level": "low", "note": "Verifiable.", "mitigation": "Ledger." },
+    "cheatRisk": { "level": "low", "note": "Low.", "mitigation": "Boundary." },
+    "alreadySolvedRisk": { "level": "low", "note": "Low.", "mitigation": "Probe." },
+    "humanSolvabilityRisk": { "level": "low", "note": "Low.", "mitigation": "Examples." }
+  },
+  "proposedNextStep": "mechanism_probe",
+  "cheapScreens": [{ "id": "screen", "cost": "paper", "check": "Cheap screen." }],
+  "promotionCriteria": ["Promote."],
+  "killCriteria": ["Kill."],
+  "referenceSolvability": { "plausible": true, "sketch": "Reference path." },
+  "expectedAxisPotential": 3,
+  "mechanismOnlyWordingVariation": false,
+  "requiresPrivateContext": false,
+  "isolationPlan": "Boundary.",
+  "evolutionOperator": null
+}

@@ -1,0 +1,27 @@
+{
+  "id": "bad-candidate",
+  "title": "Bad candidate",
+  "domain": "test",
+  "failureMechanisms": ["stale-state"],
+  "taskFamilyHypothesis": "A test hypothesis exists.",
+  "whyAgentsMightFail": "Agents might fail.",
+  "expectedBuildHours": 8,
+  "expectedTrialCostUsd": 0,
+  "riskNotes": {
+    "fairnessRisk": { "level": "low", "note": "Fair.", "mitigation": "Visible rules." },
+    "verifierRisk": { "level": "low", "note": "Verifiable.", "mitigation": "Ledger." },
+    "cheatRisk": { "level": "high", "note": "High.", "mitigation": null },
+    "alreadySolvedRisk": { "level": "low", "note": "Low.", "mitigation": "Probe." },
+    "humanSolvabilityRisk": { "level": "low", "note": "Low.", "mitigation": "Examples." }
+  },
+  "proposedNextStep": "mechanism_probe",
+  "cheapScreens": [{ "id": "screen", "cost": "paper", "check": "Cheap screen." }],
+  "promotionCriteria": ["Promote."],
+  "killCriteria": ["Kill."],
+  "referenceSolvability": { "plausible": true, "sketch": "Reference path." },
+  "expectedAxisPotential": 3,
+  "mechanismOnlyWordingVariation": false,
+  "requiresPrivateContext": false,
+  "isolationPlan": null,
+  "evolutionOperator": null
+}

@@ -192,6 +192,43 @@ So the old rule "each stage spends the least expensive evidence first" becomes s
 cheapest useful evidence first, and do not buy the next evidence tier until the current one changes
 the decision.
 
+### Discovery Workbench v1
+
+The adaptive funnel now has an execution-oriented intake layer: Discovery Workbench v1.
+
+It implements the missing machine before task families exist:
+
+- a 50-candidate pool in `data/candidate-pool.json`
+- deterministic cheap screens for truth sources, hidden-rule fairness, reference plausibility,
+  mutants, baseline cheats, private-context dependence, verifier feasibility, transfer potential and
+  cost/axis tradeoffs
+- a scoring model that balances expected agent difficulty against fairness, solvability, verifier
+  feasibility, cheat resistance, transfer value, surface coverage, axis potential and cost
+- a stable promotion queue that recommends probe, task-shape, hold, kill, evolve or transfer actions
+- a probe-to-family bridge that emits a draft task shape from a promoted candidate
+- a surface-coverage metric for domains, tool/action types, state patterns, authority models,
+  external systems, UI/API/workflow surfaces and risk categories
+
+This layer answers the operational question "what should we build next?" It does not prove a
+candidate is difficult. A candidate score is planning evidence. Difficulty evidence begins only
+after a built family has a current challenge hash, preserved submission, transcript, verifier output
+and counted trial.
+
+The new report is `reports/discovery-workbench-report.md`, and the CLI exposes:
+
+```bash
+node dist/cli.js discovery report
+node dist/cli.js discovery candidates
+node dist/cli.js discovery score
+node dist/cli.js discovery next
+node dist/cli.js discovery scaffold --candidate payment-unknown-capture-receipt --out /tmp/payment-task-shape
+```
+
+Discovery Workbench v1 is deliberately separate from axis analysis. Surface breadth can show that a
+program touches many products or APIs, but it is not independent defect-axis evidence. A pool with
+many domains and one repeated mechanism still needs transfer tests and agent trials before it earns
+production-mode spend.
+
 ### Stage 0: Candidate Pool
 
 Start broad. A reasonable first pass is 50 to 100 candidate family ideas, not 1000 concrete tasks.
@@ -608,6 +645,8 @@ The 1000-task program should be priced after this pilot, not before.
 
 The repository already implements the core evidence machinery:
 
+- Discovery Workbench v1: candidate pool, cheap screens, scoring, promotion queue, surface coverage
+  and task-shape draft generation
 - task shape declarations
 - mechanism registry
 - candidate ledger
@@ -629,7 +668,7 @@ The repository already implements the core evidence machinery:
 
 What is still being built is broader measured use of that funnel:
 
-- candidate queue management beyond the validated probe and transfer registries
+- outcome tracking over completed discovery probes and promoted task-shape drafts
 - promotion/kill dashboards over completed probe outcomes
 - stronger automated diagnosis from transcripts
 - broader cross-provider and human evidence

@@ -22,6 +22,41 @@ A **benchmark suite** is the selected set of scenarios the verifier grades.
 
 A **model trial** is one subject attempting that suite under a pinned challenge hash.
 
+## Before Task Families: Discovery Workbench
+
+The foundry now has a pre-family layer for ideas that have not earned a full build yet.
+
+A **discovery candidate** is a task-family idea with a domain, failure mechanisms, a public-rule
+sketch, a hidden-region sketch, expected knobs, expected mutants, baseline cheats, transfer
+potential, surface-coverage tags, cost estimates and risk notes. It is planning input, not
+difficulty evidence.
+
+A **mechanism probe** is smaller than a family. It tests whether a proposed failure mechanism has a
+cheap signal before the foundry pays for a reference, verifier, challenge package and model trial.
+
+A **transfer test** asks whether a mechanism that worked in one family still works when carried to a
+different domain. The mechanism transfers; the exact task does not.
+
+The pre-family path is:
+
+```text
+candidate pool
+  -> cheap screen
+  -> mechanism probe
+  -> transfer test
+  -> task shape
+  -> family build
+```
+
+Discovery Workbench v1 makes that path executable. It validates the candidate pool, scores each
+candidate, chooses the cheapest next evidence, reports a promotion queue, tracks surface coverage
+separately from defect mechanisms and can emit a task-shape draft scaffold. Those outputs route
+engineering attention; they are not evidence that a model will fail.
+
+This layer is intentionally separate from the existing candidate ledger. The ledger records
+historical promote/kill decisions. Discovery Workbench v1 manages the forward-looking pool and
+computes which idea should be built, probed, killed, transferred or repaired next.
+
 Durable Approval Outbox is the first concrete example:
 
 Family: Durable Approval Outbox.

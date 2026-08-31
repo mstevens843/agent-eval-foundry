@@ -1,0 +1,208 @@
+# Discovery Workbench v1
+
+Discovery Workbench v1 is the machine that feeds the adaptive funnel. It keeps candidate ideas
+cheap and comparable before they become task shapes, packages, trials or ship claims.
+
+```text
+Candidate -> mechanism probe -> transfer test -> task shape -> family -> trials -> axis analysis -> ship/kill/evolve
+```
+
+Candidate score is not difficulty evidence. Probe-ready is not trialed. Surface coverage is not
+axis diversity. The workbench routes evidence; it does not prove a benchmark is hard.
+
+## Summary
+
+| item | value |
+|---|---:|
+| total candidates | 50 |
+| mechanisms referenced | 15 |
+| domains represented | 21 |
+| expected next-batch build hours | 158 |
+| expected next-batch trial cost | $307 |
+| expected next-batch axes | 37 |
+| registry mechanisms available | 15 |
+
+## Recommended Actions
+
+| action | candidates |
+|---|---:|
+| paper_screen | 5 |
+| mechanism_probe | 26 |
+| task_shape | 9 |
+| hold | 2 |
+| kill | 1 |
+| evolve_existing | 3 |
+| transfer_existing | 4 |
+
+## Top 10 Build/Probe Candidates
+
+| candidate | domain | score | confidence | recommended action | cheapest evidence | blockers |
+|---|---|---:|---:|---|---|---|
+| `deployment-model-alias-rollout-drift` | deployment rollback | 78.1 | 0.69 | mechanism_probe | static | none |
+| `crm-permission-cancel-race` | CRM automation | 77.7 | 0.69 | task_shape | local | none |
+| `long-horizon-recurring-task-cancel` | memory and long-horizon state | 77.4 | 0.69 | mechanism_probe | local | none |
+| `memory-poisoned-cross-session-approval` | memory and long-horizon state | 76.1 | 0.69 | transfer_existing | static | none |
+| `verifier-integrity-import-hijack-probe` | verifier integrity | 75.9 | 0.69 | task_shape | local | none |
+| `email-calendar-invite-authority` | email and calendar workflows | 75.6 | 0.69 | mechanism_probe | static | none |
+| `prompt-injection-ticket-attachment` | prompt injection | 75.6 | 0.69 | mechanism_probe | static | none |
+| `schema-drift-enum-default-danger` | schema drift | 75.4 | 0.69 | mechanism_probe | local | none |
+| `deployment-bluegreen-stale-health` | deployment rollback | 75.2 | 0.69 | mechanism_probe | static | none |
+| `multi-worker-idempotency-key-collision` | multi-worker concurrency | 75.2 | 0.69 | mechanism_probe | static | none |
+
+## Candidates By Domain
+
+| domain | candidates |
+|---|---:|
+| API pagination and rate limits | 2 |
+| audit history | 2 |
+| browser UI automation | 3 |
+| checker-required families | 1 |
+| CRM automation | 3 |
+| deployment rollback | 3 |
+| duplicate side effects | 2 |
+| email and calendar workflows | 3 |
+| external payments | 3 |
+| hidden dependency discovery | 2 |
+| memory and long-horizon state | 3 |
+| model alias drift | 2 |
+| multi-worker concurrency | 2 |
+| permissions and access control | 2 |
+| production approval flows | 2 |
+| prompt injection | 3 |
+| schema drift | 2 |
+| tool-result ambiguity | 3 |
+| trading order reconciliation | 3 |
+| verifier integrity | 1 |
+| wallet and transaction signing | 3 |
+
+## Candidates By Mechanism
+
+| mechanism | candidates |
+|---|---:|
+| checker-quality-gap | 5 |
+| context-contamination | 7 |
+| duplicate-side-effects | 13 |
+| false-audit-history | 22 |
+| grader-privilege-boundary | 2 |
+| hidden-environment-dependency | 6 |
+| liveness-stall | 11 |
+| model-alias-drift | 4 |
+| oracle-probing | 1 |
+| permission-boundary | 17 |
+| prompt-injection-via-retrieval | 7 |
+| stale-state | 24 |
+| tool-result-ambiguity | 17 |
+| ui-replay-mismatch | 4 |
+| uncertain-external-effects | 9 |
+
+## Cheap Kills
+
+- `hidden-dependency-private-helper` (hidden dependency discovery, score 33.0, paper): no plausible reference solution is recorded; difficulty cannot promote a candidate whose public rules are not yet fair; cheat-prone candidates need an isolation plan before promotion; already-solved risk is high and no evolution operator is named
+
+## Needs Repair Or More Paper Evidence
+
+- `checker-required-ui-replay` (checker-required families, score 63.1, paper): high surface coverage does not help if no independent verifier can grade it
+- `hidden-dependency-env-feature-flag` (hidden dependency discovery, score 49.1, paper): difficulty cannot promote a candidate whose public rules are not yet fair
+- `hidden-dependency-private-helper` (hidden dependency discovery, score 33.0, paper): no plausible reference solution is recorded; difficulty cannot promote a candidate whose public rules are not yet fair; cheat-prone candidates need an isolation plan before promotion; already-solved risk is high and no evolution operator is named
+
+## Transfer Opportunities
+
+- `crm-permission-cancel-race` -> wallet signing, deployment approval (`outbox-to-crm-permission-update`, `permission-to-deployment-scope-drift`)
+- `long-horizon-recurring-task-cancel` -> calendar booking, approval flows (`outbox-to-crm-permission-update`)
+- `memory-poisoned-cross-session-approval` -> cross-tool authority laundering, email workflows (`memory-to-cross-tool-authority-laundering`)
+- `verifier-integrity-import-hijack-probe` -> Live-DOM, checker-required memory (`checker-required-to-hidden-dependency`)
+- `email-calendar-invite-authority` -> CRM email automation, memory poisoning (`memory-to-cross-tool-authority-laundering`)
+- `prompt-injection-ticket-attachment` -> email calendar, CRM automation (`memory-to-cross-tool-authority-laundering`)
+- `schema-drift-enum-default-danger` -> OAuth scopes, deployment policy (`permission-to-deployment-scope-drift`)
+- `deployment-bluegreen-stale-health` -> CRM permission update, trading risk limits (`permission-to-deployment-scope-drift`)
+- `multi-worker-idempotency-key-collision` -> payments, queue consumers (`outbox-to-deployment-rollback`)
+- `production-approval-late-cancel` -> deployment rollback, wallet signing (`permission-to-deployment-scope-drift`, `outbox-to-deployment-rollback`)
+- `duplicate-side-effect-webhook-retry` -> payments, event bus (`outbox-to-deployment-rollback`)
+- `prompt-injection-tool-output-cross-scope` -> memory poisoning, email/calendar (`memory-to-cross-tool-authority-laundering`)
+
+## Surface Coverage
+
+Surface coverage is separate from defect-axis diversity. A broad product/API surface can still
+measure one defect, and a strong defect axis can still cover one narrow product surface.
+
+| coverage group | distinct tags | tags |
+|---|---:|---|
+| domains | 40 | `access-control`, `admin`, `api`, `approval`, `audit`, `browser-ui`, `calendar`, `checker-required`, `commerce`, `compliance`, `concurrency`, `cost-control`, `crm`, `dependencies`, `deployment`, `email`, `environment`, `idempotency`, `memory`, `model-routing`, `notifications`, `oauth`, `package`, `pagination`, `payments`, `production`, `prompt-injection`, `queues`, `rate-limit`, `resource-booking`, `retrieval`, `scheduler`, `schema`, `support`, `tools`, `trading`, `verifier-integrity`, `wallet`, `webhooks`, `workflow` |
+| toolActionTypes | 67 | `approve`, `attack-verifier`, `audit`, `authorize`, `backoff`, `broadcast`, `call-tool`, `cancel`, `cancel-order`, `capture`, `check`, `click`, `confirm`, `create-event`, `decide-policy`, `dedupe`, `deliver`, `deploy`, `execute`, `grant-token`, `health-check`, `import`, `join`, `lease`, `list`, `merge-record`, `notify`, `parse-response`, `place-order`, `poll`, `promote`, `read`, `read-attachment`, `read-env`, `read-message`, `read-tool-output`, `reconcile`, `redact`, `refund`, `release`, `replace`, `replace-order`, `replay`, `replay-exploit`, `reserve`, `resolve-alias`, `retrieve`, `retry`, `revoke`, `rollback`, `rollout`, `route`, `route-task`, `scan`, `schedule`, `send-email`, `send-message`, `sign`, `store-memory`, `submit`, `summarize`, `update-event`, `update-record`, `validate-manifest`, `verify-package`, `wait`, `webhook` |
+| statePatterns | 52 | `alias-drift`, `ambiguous-result`, `anchor-conflict`, `artifact-substitution`, `async-settle`, `audit-edge`, `audit-evidence`, `checker-vacuity`, `conflicting-authority`, `context-contamination`, `cross-context`, `cross-tool`, `disabled-transition`, `duplicate-logical-effect`, `durable-memory`, `epoch-change`, `eventual-consistency`, `fail-closed`, `hash-confusion`, `hidden-confirmation`, `hidden-dependency`, `key-collision`, `late-cancel`, `late-receipt`, `liveness-drain`, `long-horizon`, `null-empty`, `package-boundary`, `pagination`, `partial-effect`, `payload-mutation`, `policy-conflict`, `provenance`, `provenance-loss`, `rate-limit`, `recurrence`, `redelivery`, `resource-conflict`, `restart`, `retrieval`, `schema-drift`, `scope-drift`, `source-hierarchy`, `stale-capability`, `stale-generation`, `stale-handle`, `stale-lease`, `stale-policy`, `status-only`, `terminal-state`, `transient-error`, `unknown-effect` |
+| authorityModels | 42 | `approval-ledger`, `browser-effect-ledger`, `capability-registry`, `commitment-ledger`, `confirmation-token`, `controller-ledger`, `convergence-ledger`, `effect-ledger`, `environment-manifest`, `exchange-ledger`, `full-index`, `generation-ledger`, `harness-ledger`, `harness-precondition`, `hidden-trace-bank`, `immutable-event-ledger`, `lease-ledger`, `ledger-state`, `lineage-ledger`, `manifest`, `page-ledger`, `permission-ledger`, `policy-epoch`, `policy-ledger`, `policy-manifest`, `policy-registry`, `policy-snapshot`, `precondition-ledger`, `principal-acl`, `receiver-ledger`, `registry-snapshot`, `risk-ledger`, `routing-policy`, `schedule-ledger`, `schema-manifest`, `semantics-table`, `snapshot-ledger`, `source-priority`, `source-provenance`, `tool-scope-manifest`, `transition-table`, `verifier-boundary` |
+| externalSystems | 36 | `api-tool`, `approval-system`, `audit-log`, `broker`, `browser`, `calendar`, `clearing-feed`, `crm`, `deployment-controller`, `directory-service`, `document-store`, `exchange`, `external-effect-api`, `local-runner`, `mailbox`, `mailer`, `memory-store`, `model-provider`, `model-registry`, `multi-tool-harness`, `multisig-policy-service`, `oauth-server`, `package-manager`, `payment-processor`, `production-control`, `rate-limited-api`, `refund-api`, `room-service`, `runtime-env`, `scheduler`, `synthetic-chain`, `ticket-system`, `versioned-api`, `wallet-signer`, `webhook-receiver`, `worker-harness` |
+| uiApiWorkflowSurfaces | 3 | `api`, `ui`, `workflow` |
+| riskCategories | 22 | `asset-loss`, `audit-history`, `authorization`, `checker-quality`, `data-access`, `duplicate-effect`, `fairness`, `hidden-dependency`, `idempotency`, `liveness`, `long-horizon-state`, `missing-work`, `model-drift`, `money`, `notification-loss`, `production-impact`, `prompt-injection`, `schema-drift`, `stale-data`, `tool-ambiguity`, `ui-replay`, `verifier-integrity` |
+| defect mechanisms | 15 | `checker-quality-gap`, `context-contamination`, `duplicate-side-effects`, `false-audit-history`, `grader-privilege-boundary`, `hidden-environment-dependency`, `liveness-stall`, `model-alias-drift`, `oracle-probing`, `permission-boundary`, `prompt-injection-via-retrieval`, `stale-state`, `tool-result-ambiguity`, `ui-replay-mismatch`, `uncertain-external-effects` |
+
+## Warnings
+
+- some broad-surface candidates have weak verifier feasibility and should not promote
+
+## Full Queue
+
+| candidate | domain | score | confidence | recommended action | cheapest evidence | blockers |
+|---|---|---:|---:|---|---|---|
+| `deployment-model-alias-rollout-drift` | deployment rollback | 78.1 | 0.69 | mechanism_probe | static | none |
+| `crm-permission-cancel-race` | CRM automation | 77.7 | 0.69 | task_shape | local | none |
+| `long-horizon-recurring-task-cancel` | memory and long-horizon state | 77.4 | 0.69 | mechanism_probe | local | none |
+| `memory-poisoned-cross-session-approval` | memory and long-horizon state | 76.1 | 0.69 | transfer_existing | static | none |
+| `verifier-integrity-import-hijack-probe` | verifier integrity | 75.9 | 0.69 | task_shape | local | none |
+| `email-calendar-invite-authority` | email and calendar workflows | 75.6 | 0.69 | mechanism_probe | static | none |
+| `prompt-injection-ticket-attachment` | prompt injection | 75.6 | 0.69 | mechanism_probe | static | none |
+| `schema-drift-enum-default-danger` | schema drift | 75.4 | 0.69 | mechanism_probe | local | none |
+| `deployment-bluegreen-stale-health` | deployment rollback | 75.2 | 0.69 | mechanism_probe | static | none |
+| `multi-worker-idempotency-key-collision` | multi-worker concurrency | 75.2 | 0.69 | mechanism_probe | static | none |
+| `production-approval-late-cancel` | production approval flows | 75.0 | 0.69 | task_shape | local | none |
+| `duplicate-side-effect-webhook-retry` | duplicate side effects | 74.7 | 0.69 | mechanism_probe | local | none |
+| `prompt-injection-tool-output-cross-scope` | prompt injection | 74.5 | 0.69 | task_shape | local | none |
+| `calendar-cancel-stale-room-booking` | email and calendar workflows | 73.9 | 0.69 | mechanism_probe | local | none |
+| `email-thread-injection-memory` | email and calendar workflows | 73.9 | 0.69 | transfer_existing | static | none |
+| `tool-result-null-vs-empty` | tool-result ambiguity | 72.9 | 0.69 | mechanism_probe | paper | none |
+| `access-token-scope-expansion` | permissions and access control | 72.2 | 0.69 | mechanism_probe | static | none |
+| `prompt-injection-doc-retrieval-policy` | prompt injection | 72.0 | 0.69 | evolve_existing | static | none |
+| `tool-result-partial-error` | tool-result ambiguity | 71.9 | 0.69 | mechanism_probe | local | none |
+| `api-rate-limit-backoff-liveness` | API pagination and rate limits | 71.7 | 0.69 | mechanism_probe | local | none |
+| `payment-refund-idempotency-replay` | external payments | 71.6 | 0.69 | mechanism_probe | static | none |
+| `trading-settlement-receipt-ambiguity` | trading order reconciliation | 71.6 | 0.69 | transfer_existing | static | none |
+| `model-alias-capability-regression` | model alias drift | 70.8 | 0.69 | mechanism_probe | static | none |
+| `multi-worker-lease-expiry` | multi-worker concurrency | 69.9 | 0.69 | mechanism_probe | local | none |
+| `schema-drift-status-field-rename` | schema drift | 69.5 | 0.69 | mechanism_probe | static | none |
+| `access-revocation-eventual-lag` | permissions and access control | 69.1 | 0.69 | mechanism_probe | local | none |
+| `browser-aria-busy-false-ready` | browser UI automation | 69.1 | 0.69 | task_shape | local | none |
+| `api-pagination-rate-limit-window` | API pagination and rate limits | 67.9 | 0.69 | paper_screen | paper | none |
+| `crm-assignment-pagination-drop` | CRM automation | 67.9 | 0.69 | paper_screen | paper | none |
+| `payment-webhook-outbox-reconcile` | external payments | 67.6 | 0.69 | mechanism_probe | paper | none |
+| `model-alias-cost-aware-routing` | model alias drift | 66.9 | 0.69 | paper_screen | paper | none |
+| `trading-order-replace-stale-risk` | trading order reconciliation | 66.7 | 0.69 | mechanism_probe | local | none |
+| `browser-checkout-stale-selector` | browser UI automation | 65.9 | 0.69 | task_shape | local | none |
+| `deployment-rollback-unknown-apply` | deployment rollback | 65.9 | 0.69 | task_shape | local | none |
+| `browser-admin-hidden-confirmation` | browser UI automation | 65.7 | 0.69 | task_shape | local | none |
+| `production-approval-audit-chain` | production approval flows | 65.5 | 0.69 | transfer_existing | static | none |
+| `trading-partial-fill-cancel` | trading order reconciliation | 65.2 | 0.69 | task_shape | local | none |
+| `wallet-nonce-stale-rebroadcast` | wallet and transaction signing | 65.1 | 0.69 | mechanism_probe | local | none |
+| `duplicate-ticket-merge-notification` | duplicate side effects | 64.7 | 0.69 | mechanism_probe | static | none |
+| `memory-summarizer-provenance-loss` | memory and long-horizon state | 64.2 | 0.69 | mechanism_probe | static | none |
+| `tool-result-pagination-race` | tool-result ambiguity | 63.7 | 0.69 | mechanism_probe | static | none |
+| `audit-redaction-provenance-loss` | audit history | 63.6 | 0.69 | paper_screen | paper | none |
+| `wallet-multisig-hidden-threshold` | wallet and transaction signing | 63.4 | 0.69 | paper_screen | paper | none |
+| `checker-required-ui-replay` | checker-required families | 63.1 | 0.63 | hold | paper | weak-verifier-plan |
+| `payment-unknown-capture-receipt` | external payments | 63.1 | 0.69 | mechanism_probe | static | none |
+| `wallet-signing-scope-drift` | wallet and transaction signing | 61.7 | 0.69 | mechanism_probe | local | none |
+| `audit-history-rewrite-approval` | audit history | 60.0 | 0.69 | evolve_existing | static | none |
+| `crm-merge-audit-legality` | CRM automation | 59.0 | 0.69 | evolve_existing | static | none |
+| `hidden-dependency-env-feature-flag` | hidden dependency discovery | 49.1 | 0.54 | hold | paper | low-fairness |
+| `hidden-dependency-private-helper` | hidden dependency discovery | 33.0 | 0.20 | kill | paper | no-reference-path, low-fairness, high-cheat-no-isolation, already-solved-no-evolution |
+
+## Evidence Routing Rules
+
+- Do not promote raw difficulty if fairness or verifier feasibility is low.
+- Do not run model trials when paper/static/local/mutant evidence can decide the next step.
+- Do not treat repeated same-provider runs as cross-lab breadth.
+- Do not call a transfer path proven until the target domain has required evidence.
+- Do not treat surface breadth as independent failure-axis breadth.
+
+---
+
+Generated by `agent-eval-foundry`. Deterministic - no timestamp, diffable.

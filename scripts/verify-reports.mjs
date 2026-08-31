@@ -131,6 +131,10 @@ const SMOKE = [
   [["funnel", "probes"], /Mechanism probes/],
   [["funnel", "next"], /adaptive funnel next actions/],
   [["funnel", "transfer"], /Transfer tests/],
+  [["discovery", "report"], /Discovery Workbench v1/],
+  [["discovery", "candidates"], /Discovery candidates/],
+  [["discovery", "score"], /Discovery candidate scores/],
+  [["discovery", "next"], /discovery workbench next actions/],
   [["adversarial", "readiness"], /Adversarial verifier-integrity readiness/],
   [["adversarial", "report"], /Adversarial verifier-integrity audit/],
   [["adversarial", "v2", "report"], /Adversarial Audit v2/],
@@ -176,6 +180,27 @@ try {
 } catch {
   console.log("ok     cli: a mistyped campaign subcommand fails loudly");
 }
+
+const discoveryScaffoldTmp = mkdtempSync(join(tmpdir(), "foundry-discovery-scaffold-"));
+const discoveryScaffoldOut = run([
+  "discovery",
+  "scaffold",
+  "--candidate",
+  "payment-unknown-capture-receipt",
+  "--out",
+  discoveryScaffoldTmp,
+]);
+if (!/family\s+payment-unknown-capture-receipt/.test(discoveryScaffoldOut)) {
+  console.error("SMOKE  `discovery scaffold` ran but did not print the expected family summary");
+  failures += 1;
+} else if (
+  !readFileSync(join(discoveryScaffoldTmp, "task-shape-draft.json"), "utf8").includes(
+    "\"sourceCandidateId\": \"payment-unknown-capture-receipt\"",
+  )
+) {
+  console.error("SMOKE  `discovery scaffold` did not preserve the source candidate id");
+  failures += 1;
+} else console.log("ok     cli: discovery scaffold");
 
 // The adversarial campaign files are generated artifacts too. They are the threat model that
 // decides what the attacker saw and which hashes can count, so a stale campaign file is a stale
@@ -299,7 +324,7 @@ for (const variant of [
 // by being written here, but the count is asserted so a report that stops being generated is caught
 // rather than silently skipped.
 run(["all", "--out", tmp]);
-const EXPECTED_REPORTS = 71;
+const EXPECTED_REPORTS = 72;
 const generated = readdirSync(tmp);
 if (generated.length !== EXPECTED_REPORTS) {
   console.error(`WRONG COUNT  \`all\` wrote ${generated.length} reports, expected ${EXPECTED_REPORTS}`);

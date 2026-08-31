@@ -21,6 +21,7 @@ import { describe, expect, it } from "vitest";
 import { parseMechanismProbe, parseTransferTest } from "../src/foundry/adaptive-funnel.js";
 import { assertBudgetInputs, assertPlanHonest } from "../src/foundry/budget-check.js";
 import { planBudget } from "../src/foundry/budget.js";
+import { parseDiscoveryCandidate } from "../src/foundry/discovery-workbench.js";
 import { assertCoverage, buildRegistry } from "../src/foundry/registry.js";
 import { checkScaffold } from "../src/foundry/scaffold-check.js";
 import { generateScaffold } from "../src/foundry/scaffold.js";
@@ -47,7 +48,8 @@ interface FixtureEntry {
     | "matrix"
     | "registry"
     | "probe"
-    | "transfer";
+    | "transfer"
+    | "discovery-candidate";
   readonly code: string;
   readonly note: string;
 }
@@ -62,6 +64,7 @@ const PARSERS: Record<FixtureEntry["kind"], (v: unknown) => unknown> = {
   matrix: (v) => parseMatrix(v),
   probe: (v) => parseMechanismProbe(v, "fixture"),
   transfer: (v) => parseTransferTest(v, "fixture"),
+  "discovery-candidate": (v) => parseDiscoveryCandidate(v, "fixture"),
   // Cross-collection references are checked when the registry is assembled, not when a single row
   // is parsed. Routing this fixture differently is the point: a dangling id is invisible to the row
   // validator by design, and a corpus that hid that would be testing the wrong layer.

@@ -17,6 +17,11 @@ import {
   parseMechanismProbes,
   parseTransferTests,
 } from "./adaptive-funnel.js";
+import {
+  type DiscoveryWorkbench,
+  assertDiscoveryWorkbenchValid,
+  parseDiscoveryCandidates,
+} from "./discovery-workbench.js";
 import { type Registry, buildRegistry } from "./registry.js";
 import type { Candidate, Mechanism, Mutant, TaskShape } from "./schema.js";
 import { parseCandidates, parseMechanisms, parseMutants, parseTaskShape } from "./validate.js";
@@ -90,4 +95,19 @@ export function loadAdaptiveFunnel(root: string, registry = loadRegistry(root)):
   };
   assertAdaptiveFunnelValid(funnel, registry);
   return funnel;
+}
+
+export function loadDiscoveryWorkbench(
+  root: string,
+  registry = loadRegistry(root),
+  funnel = loadAdaptiveFunnel(root, registry),
+): DiscoveryWorkbench {
+  const workbench = {
+    candidates: parseDiscoveryCandidates(
+      readJson(join(root, "data", "candidate-pool.json")),
+      "data/candidate-pool.json",
+    ),
+  };
+  assertDiscoveryWorkbenchValid(workbench, registry, funnel);
+  return workbench;
 }
