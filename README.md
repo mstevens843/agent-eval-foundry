@@ -12,6 +12,12 @@ For the conceptual model behind task families, task shapes, scenarios, knobs, ax
 For the rough paper on the most efficient way to run a $100K task-production program, read
 [`docs/100K-TASK-PRODUCTION-STRATEGY.md`](docs/100K-TASK-PRODUCTION-STRATEGY.md).
 
+The production funnel is now adaptive. Candidate mechanisms enter **Discovery Mode** as tiny
+mechanism probes, survivors enter **Validation Mode** as full families with references/verifiers and
+one-agent smoke trials, and only evidence-backed families enter **Production Mode** for transfer
+tests, cross-provider matrices, human review and adversarial audit. The next action is computed from
+evidence, not a fixed checklist.
+
 The foundry keeps evidence streams separate:
 
 - **mutant-detection evidence**: a reference and known-bad implementations prove the verifier
@@ -51,6 +57,13 @@ Current live-DOM package hash: `18c3f5afc5973604205cd7df23ce4cad`.
 Current checker-required package hash: `448f2f816c51030cc97a374816226168`.
 
 ## What Changed In This Phase
+
+The foundry now has a first-class adaptive funnel layer. `data/mechanism-probes.json` holds eight
+validated mechanism probes, `data/transfer-tests.json` holds seven transfer tests, and
+`node dist/cli.js funnel report` computes the cheapest next evidence across discovery, validation
+and production modes. The planner refuses to treat repeated OpenAI trials as cross-lab breadth,
+keeps provider refusals/no-count records from advancing claims, sends stale hashes to repair, and
+sends collapsed failure chains to evolve or hold before full matrices.
 
 Adversarial Audit v2 upgrades verifier-integrity from preserved attack records to mechanical triage.
 Attack packets now carry an execution profile, an isolation profile, an exploit-artifact schema, an
@@ -114,6 +127,10 @@ node dist/cli.js trials verify --family ui-replay-live-dom live-dom-2026-08-o2
 node dist/cli.js trials verify --family checker-required-memory-poisoning checker-required-2026-08-o1
 node dist/cli.js human readiness
 node dist/cli.js human solvability
+node dist/cli.js funnel report
+node dist/cli.js funnel probes
+node dist/cli.js funnel next
+node dist/cli.js funnel transfer
 node dist/cli.js adversarial readiness
 node dist/cli.js adversarial campaign ui-replay-live-dom
 node dist/cli.js adversarial prepare ui-replay-live-dom --provider external --out bundles/ui-replay-live-dom-adversarial
@@ -195,6 +212,7 @@ Key generated reports:
 - `reports/checker-required-family-report.md`
 - `reports/checker-required-memory-poisoning-agent-results.md`
 - `reports/checker-required-memory-poisoning-axis-report.md`
+- `reports/adaptive-funnel-report.md`
 - `reports/ui-replay-browser-backed-scaffold.md`
 - `reports/ui-replay-browser-backed-readiness.md`
 - `reports/human-readiness-report.md`
@@ -257,7 +275,9 @@ package the agent-facing challenge without leaks, add categorical anti-nesting s
 prepare real provider campaigns, pre-register verifier-bypass audits, replay claimed exploits, run
 deterministic verifier-integrity hardening probes, and preserve the distinction between
 mutant-detection axes, real-agent difficulty evidence, human solvability and adversarial
-verifier-integrity evidence.
+verifier-integrity evidence. It can now also decide what to do before a full family exists: paper
+screen a mechanism, run a tiny probe, promote only after cheap evidence, require a smoke trial before
+`/6`, and test transfer before production-mode matrix spend.
 
 The strongest current result is still memory-poisoning generalisation across labs. The newest result
 is that verifier-integrity now has explicit container/no-network bundle and countability rules,

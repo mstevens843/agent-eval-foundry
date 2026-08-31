@@ -18,6 +18,7 @@
 
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { parseMechanismProbe, parseTransferTest } from "../src/foundry/adaptive-funnel.js";
 import { assertBudgetInputs, assertPlanHonest } from "../src/foundry/budget-check.js";
 import { planBudget } from "../src/foundry/budget.js";
 import { assertCoverage, buildRegistry } from "../src/foundry/registry.js";
@@ -38,7 +39,15 @@ const read = (p: string): unknown => JSON.parse(readFileSync(`${ROOT}fixtures/in
 
 interface FixtureEntry {
   readonly file: string;
-  readonly kind: "mechanism" | "mutant" | "shape" | "candidate" | "matrix" | "registry";
+  readonly kind:
+    | "mechanism"
+    | "mutant"
+    | "shape"
+    | "candidate"
+    | "matrix"
+    | "registry"
+    | "probe"
+    | "transfer";
   readonly code: string;
   readonly note: string;
 }
@@ -51,6 +60,8 @@ const PARSERS: Record<FixtureEntry["kind"], (v: unknown) => unknown> = {
   shape: (v) => parseTaskShape(v, "fixture"),
   candidate: (v) => parseCandidate(v, "fixture"),
   matrix: (v) => parseMatrix(v),
+  probe: (v) => parseMechanismProbe(v, "fixture"),
+  transfer: (v) => parseTransferTest(v, "fixture"),
   // Cross-collection references are checked when the registry is assembled, not when a single row
   // is parsed. Routing this fixture differently is the point: a dangling id is invisible to the row
   // validator by design, and a corpus that hid that would be testing the wrong layer.

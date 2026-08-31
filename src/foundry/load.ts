@@ -11,6 +11,12 @@
 
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
+import {
+  type AdaptiveFunnel,
+  assertAdaptiveFunnelValid,
+  parseMechanismProbes,
+  parseTransferTests,
+} from "./adaptive-funnel.js";
 import { type Registry, buildRegistry } from "./registry.js";
 import type { Candidate, Mechanism, Mutant, TaskShape } from "./schema.js";
 import { parseCandidates, parseMechanisms, parseMutants, parseTaskShape } from "./validate.js";
@@ -69,4 +75,19 @@ export function loadRegistry(root: string, options: LoadOptions = {}): Registry 
     loadShapes(shapesDir),
     loadCandidates(dataDir),
   );
+}
+
+export function loadAdaptiveFunnel(root: string, registry = loadRegistry(root)): AdaptiveFunnel {
+  const funnel = {
+    probes: parseMechanismProbes(
+      readJson(join(root, "data", "mechanism-probes.json")),
+      "data/mechanism-probes.json",
+    ),
+    transfers: parseTransferTests(
+      readJson(join(root, "data", "transfer-tests.json")),
+      "data/transfer-tests.json",
+    ),
+  };
+  assertAdaptiveFunnelValid(funnel, registry);
+  return funnel;
 }

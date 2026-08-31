@@ -1,0 +1,15 @@
+{
+  "id": "bad-transfer",
+  "sourceKind": "probe",
+  "sourceId": "some-probe",
+  "transferredMechanism": "stale-state",
+  "targetDomain": "domain",
+  "status": "ready",
+  "whatStaysFixed": [],
+  "whatChanges": ["domain words"],
+  "expectedFailurePreservation": "same failure",
+  "expectedFairnessRisks": ["risk"],
+  "expectedVerifierRisks": ["risk"],
+  "requiredEvidenceBeforeDeclaringTransfer": ["evidence"],
+  "nextEvidence": "static"
+}

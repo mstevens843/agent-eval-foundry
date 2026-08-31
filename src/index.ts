@@ -54,6 +54,7 @@ export {
 } from "./foundry/budget-check.js";
 export {
   loadCandidates,
+  loadAdaptiveFunnel,
   loadMechanisms,
   loadMutants,
   loadRegistry,
@@ -93,6 +94,39 @@ export type {
   TaskShape,
   TaskStatus,
 } from "./foundry/schema.js";
+export {
+  EVIDENCE_COSTS,
+  FUNNEL_DECISIONS,
+  FUNNEL_MODES,
+  FUNNEL_STAGES,
+  TRANSFER_SOURCE_KINDS,
+  TRANSFER_STATUSES,
+  assertAdaptiveFunnelValid,
+  evidenceCostRank,
+  parseMechanismProbe,
+  parseMechanismProbes,
+  parseTransferTest,
+  parseTransferTests,
+  planAdaptiveFunnel,
+} from "./foundry/adaptive-funnel.js";
+export type {
+  AdaptiveFunnel,
+  AdaptiveFunnelSummary,
+  CheapValidationCheck,
+  EvidenceCost,
+  FamilyFunnelEvidence,
+  FunnelDecision,
+  FunnelMode,
+  FunnelNextAction,
+  FunnelStage,
+  MechanismProbe,
+  ProbeCostEstimate,
+  ProbeScenario,
+  ProbeTruthSource,
+  TransferSourceKind,
+  TransferStatus,
+  TransferTest,
+} from "./foundry/adaptive-funnel.js";
 export {
   parseCandidate,
   parseCandidates,

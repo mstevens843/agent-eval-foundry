@@ -121,7 +121,9 @@ So the efficient use of $100,000 is not "run a thousand agents." It is:
 
 ## 4. The Funnel
 
-The proposed production funnel has eight stages.
+The original proposed production funnel had eight stages. That was directionally right, but too
+linear: it still implied that a family naturally marches from candidate to full matrix once each box
+is checked.
 
 ```text
 candidate pool
@@ -135,7 +137,60 @@ candidate pool
   -> ship, hold, kill or evolve
 ```
 
-Each stage is designed to spend the least expensive evidence first.
+The refined version is adaptive and is now modeled in the repository by
+`src/foundry/adaptive-funnel.ts`, `data/mechanism-probes.json`, `data/transfer-tests.json` and
+`reports/adaptive-funnel-report.md`.
+
+### Refinement: Adaptive Funnel
+
+The improved funnel has three modes.
+
+**Discovery Mode**
+
+- start with many mechanisms
+- paper-screen aggressively
+- build tiny probes
+- identify cheap evidence
+- kill closed-world, self-verifiable, unfair or author-context-dependent ideas
+
+**Validation Mode**
+
+- build a full family only after a probe survives
+- write the reference, verifier, mutants and challenge package
+- run one counted smoke trial
+- diagnose failure by check, knob and transcript
+- repair ambiguous specs or stale package hashes before any broader claim
+
+**Production Mode**
+
+- transfer the mechanism to another domain
+- run cross-provider trials only after smoke evidence is on target
+- run the full `/6` only after smoke and transfer evidence
+- collect human clean-room and adversarial verifier-integrity evidence
+- ship only after evidence streams are separated and current
+
+The current adaptive funnel is:
+
+```text
+candidate mechanisms
+  -> Discovery Mode probes
+  -> Validation Mode full family build
+  -> one-agent smoke trial
+  -> transfer test across a second domain/family
+  -> Production Mode matrix
+  -> human/adversarial evidence
+  -> ship / kill / evolve / hold
+```
+
+The key principle is:
+
+> The funnel is adaptive: a pass, failure, refusal, ambiguity, stale hash or axis collapse sends the
+> family to a different next action. The next step is computed from evidence, not from a fixed
+> checklist.
+
+So the old rule "each stage spends the least expensive evidence first" becomes stricter: spend the
+cheapest useful evidence first, and do not buy the next evidence tier until the current one changes
+the decision.
 
 ### Stage 0: Candidate Pool
 
@@ -569,14 +624,13 @@ The repository already implements the core evidence machinery:
 - provider/submission-quality reports
 - human-solvability readiness and clean-room record validation
 - adversarial verifier-integrity packets, replay and no-bypass evidence
+- adaptive discovery/validation/production funnel with mechanism probes and transfer tests
 - budget model
 
-What is still being built is the fully explicit discovery funnel:
+What is still being built is broader measured use of that funnel:
 
-- a first-class funnel document
-- a machine-readable stage model
-- candidate queue management
-- promotion/kill dashboards
+- candidate queue management beyond the validated probe and transfer registries
+- promotion/kill dashboards over completed probe outcomes
 - stronger automated diagnosis from transcripts
 - broader cross-provider and human evidence
 - more measured families

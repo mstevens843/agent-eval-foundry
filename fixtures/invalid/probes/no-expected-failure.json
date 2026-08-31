@@ -1,0 +1,48 @@
+{
+  "id": "bad-probe",
+  "mechanismId": "stale-state",
+  "mode": "discovery",
+  "currentStage": "mechanism_probe",
+  "decision": "hold",
+  "hypothesis": "h",
+  "domain": "d",
+  "expectedAgentFailure": "",
+  "authoritativeTruthSource": {
+    "name": "truth",
+    "whatItSettles": "settles",
+    "hiddenBehaviorDeclared": "hidden",
+    "whyNoPrivateKnowledge": "public"
+  },
+  "minimumPublicRules": ["rule"],
+  "requiresPrivateKnowledge": false,
+  "probeScenarios": [
+    {
+      "id": "a",
+      "publicSetup": "setup",
+      "hiddenBehavior": "hidden",
+      "mechanismVariation": "a"
+    },
+    {
+      "id": "b",
+      "publicSetup": "setup",
+      "hiddenBehavior": "hidden",
+      "mechanismVariation": "b"
+    }
+  ],
+  "expectedMutantsOrBaselines": ["mutant"],
+  "cheapValidationChecks": [
+    {
+      "id": "screen",
+      "cost": "static",
+      "description": "screen"
+    }
+  ],
+  "costEstimate": {
+    "firstEvidence": "static",
+    "engineerHours": 1,
+    "frontierUsd": 0
+  },
+  "promotionCriteria": ["promote"],
+  "killCriteria": ["kill"],
+  "transferCandidates": ["some-transfer"]
+}

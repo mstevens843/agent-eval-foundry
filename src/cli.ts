@@ -99,11 +99,12 @@ import * as liveDom from "./families/ui-replay-live-dom/runner.js";
 import * as liveScenarios from "./families/ui-replay-live-dom/scenarios.js";
 import * as liveSpec from "./families/ui-replay-live-dom/spec.js";
 import * as liveVerify from "./families/ui-replay-live-dom/verify.js";
+import { type FamilyFunnelEvidence, planAdaptiveFunnel } from "./foundry/adaptive-funnel.js";
 import { assertBudgetInputs, assertPlanHonest } from "./foundry/budget-check.js";
 import { MEASURED_DEFAULTS, planBudget } from "./foundry/budget.js";
 import { assertLedgerConsistency, assertPostmortemExists } from "./foundry/consistency.js";
 import { assertPromotionEvidence, variantToShape } from "./foundry/evolve.js";
-import { loadRegistry } from "./foundry/load.js";
+import { loadAdaptiveFunnel, loadRegistry } from "./foundry/load.js";
 import { familyLoop, loopAll } from "./foundry/loop.js";
 import { assertCoverage, coverage } from "./foundry/registry.js";
 import { checkScaffold } from "./foundry/scaffold-check.js";
@@ -123,6 +124,11 @@ import {
 import { renderHumanReadinessReport, renderHumanSolvabilityReport } from "./human-solvability/report.js";
 import { MatrixError, parseMatrix } from "./matrix.js";
 import { renderReport } from "./report.js";
+import {
+  renderAdaptiveFunnelReport,
+  renderFunnelProbes,
+  renderFunnelTransfers,
+} from "./reports/adaptive-funnel-report.js";
 import { analyseFamilyTrials } from "./reports/agent-results.js";
 import { type CombinedResult, renderBankCompletion } from "./reports/bank-completion-report.js";
 import { renderHistoricalReport, renderSharedBankReport } from "./reports/bank-report.js";
@@ -231,6 +237,10 @@ REGISTRY (what could be built, and can we detect it?)
   ledger [--out f]               candidate ledger, led by kills
   families [--out f]             family diversity: axes, not task count
   ship [--out f]                 ship / no-ship gate table per family
+  funnel report [--out f]        adaptive discovery/validation/production funnel report
+  funnel probes                  validated mechanism probes
+  funnel next                    cheapest next evidence actions
+  funnel transfer                transfer tests: mechanism carried across domains
   sources                        list every matrix source, implemented and planned
 
 FAMILIES (run a measured mini-benchmark)
@@ -641,6 +651,68 @@ function humanCommand(argv: readonly string[], root: string): string {
   if (sub === "readiness") return renderHumanReadinessReport(auditHumanReadinessForFamilies(root));
   if (sub === "solvability") return renderHumanSolvabilityReport(humanEvidenceForFamilies(root));
   throw new Error(`unknown human subcommand "${sub}"; expected readiness | solvability`);
+}
+
+function adaptiveFamilyEvidenceInputs(
+  root: string,
+  evidence: Readonly<Record<string, ReturnType<typeof familyEvidenceMap>[string]>>,
+): readonly FamilyFunnelEvidence[] {
+  return Object.values(evidence)
+    .map((e) => {
+      const stale = new Set(e.staleTrials ?? []);
+      const records = readFamilyTrials(join(root, "trials"), e.familyId).map((t) => t.record);
+      const counted = records.filter(
+        (r) => r.subjectType === "agent" && r.counts && r.status === "completed" && !stale.has(r.runId),
+      );
+      const sharedProviderFamilies = [
+        ...new Set(counted.map((r) => (r.model ?? r.subjectId).split("/")[0] ?? "unknown")),
+      ].sort();
+      return {
+        familyId: e.familyId,
+        countedAgentTrials: e.countedAgentTrials,
+        sharedProviderFamilies,
+        staleTrials: e.staleTrials ?? [],
+        providerRefusals: records.filter((r) => r.subjectType === "agent" && r.status === "refused").length,
+        ...(e.trialReady === undefined ? {} : { trialReady: e.trialReady }),
+        ...(e.agentFailuresChain === undefined ? {} : { agentFailuresChain: e.agentFailuresChain }),
+        ...(e.agentAxes === undefined ? {} : { agentAxes: e.agentAxes }),
+        ...(e.cleanHumanSolves === undefined ? {} : { cleanHumanSolves: e.cleanHumanSolves }),
+        ...(e.countedNoBypassAudits === undefined ? {} : { countedNoBypassAudits: e.countedNoBypassAudits }),
+      };
+    })
+    .sort((a, b) => a.familyId.localeCompare(b.familyId));
+}
+
+function adaptiveFunnelInputs(root: string) {
+  const registry = loadRegistry(root);
+  const funnel = loadAdaptiveFunnel(root, registry);
+  const evidence = familyEvidenceMap(root);
+  const summary = planAdaptiveFunnel(funnel, registry, adaptiveFamilyEvidenceInputs(root, evidence));
+  return { registry, funnel, summary };
+}
+
+function funnelNextReport(summary: ReturnType<typeof planAdaptiveFunnel>): string {
+  return [
+    "adaptive funnel next actions",
+    "target | type | mode | stage | decision | cost | action",
+    ...summary.nextActions.map(
+      (a) =>
+        `${a.targetId} | ${a.targetType} | ${a.mode} | ${a.stage} | ${a.decision} | ${a.evidenceCost} | ${a.action}`,
+    ),
+    "",
+    "Do not run /6 first. Full matrix is earned after smoke and transfer evidence.",
+    "",
+  ].join("\n");
+}
+
+function funnelCommand(argv: readonly string[], root: string): string {
+  const sub = positional(argv, 1) ?? "report";
+  const input = adaptiveFunnelInputs(root);
+  if (sub === "report") return renderAdaptiveFunnelReport(input);
+  if (sub === "probes") return renderFunnelProbes(input.funnel.probes);
+  if (sub === "transfer") return renderFunnelTransfers(input.funnel.transfers);
+  if (sub === "next") return funnelNextReport(input.summary);
+  throw new Error(`unknown funnel subcommand "${sub}"; expected report | probes | next | transfer`);
 }
 
 function browserBackedCommand(argv: readonly string[], root: string): string {
@@ -1073,6 +1145,7 @@ function checkCommand(root: string): string {
   }
   assertHumanReviewsValid(root);
   assertAdversarialAuditsValid(root);
+  loadAdaptiveFunnel(root, registry);
 
   return [
     "registry OK",
@@ -1085,6 +1158,7 @@ function checkCommand(root: string): string {
     "  consistency ledger statuses agree with the ship gate; every kill has a postmortem",
     "  human       counted clean-room reviews validate against current package hashes",
     "  adversarial counted verifier-integrity audits validate against current package hashes",
+    "  funnel      mechanism probes and transfer tests validate against the registry",
     "",
   ].join("\n");
 }
@@ -2084,6 +2158,20 @@ function allCommand(argv: readonly string[], root: string): string {
   // Evidence for EVERY built family, not just the first one. The determinism test builds it the
   // same way, and the two drifted the moment a second family had evidence to report.
   const allEvidence = familyEvidenceMap(root);
+  const adaptiveFunnel = loadAdaptiveFunnel(root, registry);
+  const adaptiveSummary = planAdaptiveFunnel(
+    adaptiveFunnel,
+    registry,
+    adaptiveFamilyEvidenceInputs(root, allEvidence),
+  );
+  write(
+    "adaptive-funnel-report.md",
+    renderAdaptiveFunnelReport({
+      registry,
+      funnel: adaptiveFunnel,
+      summary: adaptiveSummary,
+    }),
+  );
   write(
     "ship-recommendation.md",
     renderShipReport(registry.shapes, registry, allEvidence, humanGateEvidence, adversarialGateEvidence),
@@ -3251,6 +3339,12 @@ export function main(argv: readonly string[]): number {
             adversarialGateEvidenceMap(summarizeAdversarialEvidence(root)),
           ),
         );
+        return 0;
+      }
+      case "funnel": {
+        const sub = positional(argv, 1) ?? "report";
+        if (sub === "report" || sub === "probes" || sub === "transfer") emit(argv, funnelCommand(argv, root));
+        else process.stdout.write(funnelCommand(argv, root));
         return 0;
       }
       case "kill": {

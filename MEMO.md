@@ -27,9 +27,15 @@ actually do with the budget.
 
 > **Where this sits.** The memo is the argument; the repository around it is the system that acts on
 > it. The mechanism registry, mutant bank, candidate ledger, task-family shapes, scaffold generator,
-> ship gate and budget planner are all runnable — `node dist/cli.js check` validates them and
+> adaptive funnel, ship gate and budget planner are all runnable — `node dist/cli.js check` validates them and
 > `node dist/cli.js all` regenerates every report cited below. See [`README.md`](./README.md) for the
 > architecture. Everything in section 5 that used to be a recommendation is now a command.
+
+The foundry now separates three production modes as well as evidence types. Discovery Mode runs
+paper/static/local/mutant probes before full builds. Validation Mode builds references, verifiers,
+packages and one-agent smoke trials. Production Mode is earned only after smoke and transfer
+evidence justify cross-provider matrices, human review and adversarial audit. The next step is
+computed from evidence rather than from a fixed linear checklist.
 
 The foundry now separates three claims: a reference can solve it, a clean public package can be
 handed to a human, and an independent human has actually solved it. Those are different evidence

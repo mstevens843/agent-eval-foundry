@@ -178,5 +178,71 @@
     "kind": "shape",
     "code": "SHAPE_TRIAL_OUTCOME_MISSING",
     "note": "Claims six frontier attempts and says nothing about how they went. The blocking already-solved gate cannot tell that from a family nobody has ever run, so the ambiguous state is rejected at load."
+  },
+  {
+    "file": "probes/no-truth-source.json",
+    "kind": "probe",
+    "code": "FUNNEL_PROBE_NO_TRUTH_SOURCE",
+    "note": "A probe without an independent truth source is a prompt idea, not a screen."
+  },
+  {
+    "file": "probes/no-expected-failure.json",
+    "kind": "probe",
+    "code": "FUNNEL_PROBE_NO_EXPECTED_FAILURE",
+    "note": "The probe must state the agent failure it is trying to elicit."
+  },
+  {
+    "file": "probes/no-promotion-criteria.json",
+    "kind": "probe",
+    "code": "FUNNEL_PROBE_NO_PROMOTION_CRITERIA",
+    "note": "Promotion cannot be decided after seeing the outcome."
+  },
+  {
+    "file": "probes/hidden-behavior-undeclared.json",
+    "kind": "probe",
+    "code": "FUNNEL_PROBE_HIDDEN_BEHAVIOR_UNDECLARED",
+    "note": "Hidden probe cases may sample declared behavior, but may not add secret rules."
+  },
+  {
+    "file": "probes/no-transfer-candidate.json",
+    "kind": "probe",
+    "code": "FUNNEL_PROBE_NO_TRANSFER_CANDIDATE",
+    "note": "A mechanism probe must name where transfer could be tested next."
+  },
+  {
+    "file": "probes/wording-only.json",
+    "kind": "probe",
+    "code": "FUNNEL_PROBE_WORDING_ONLY",
+    "note": "Changing wording without changing mechanism pressure does not discover a family."
+  },
+  {
+    "file": "probes/requires-private-knowledge.json",
+    "kind": "probe",
+    "code": "FUNNEL_PROBE_REQUIRES_PRIVATE_KNOWLEDGE",
+    "note": "A probe requiring author memory is not a public benchmark candidate."
+  },
+  {
+    "file": "probes/no-cheap-screen.json",
+    "kind": "probe",
+    "code": "FUNNEL_PROBE_NO_CHEAP_SCREEN",
+    "note": "Discovery must have a paper/static/local/mutant screen before model spend."
+  },
+  {
+    "file": "transfers/no-fixed.json",
+    "kind": "transfer",
+    "code": "FUNNEL_TRANSFER_NO_FIXED",
+    "note": "A transfer test must say what mechanism stays fixed."
+  },
+  {
+    "file": "transfers/no-changed.json",
+    "kind": "transfer",
+    "code": "FUNNEL_TRANSFER_NO_CHANGED",
+    "note": "A transfer test must say what domain surface changes."
+  },
+  {
+    "file": "transfers/no-evidence-requirement.json",
+    "kind": "transfer",
+    "code": "FUNNEL_TRANSFER_NO_EVIDENCE_REQUIREMENT",
+    "note": "Transfer is not proven until the required evidence is declared."
   }
 ]
