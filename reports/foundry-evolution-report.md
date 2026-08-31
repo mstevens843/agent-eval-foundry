@@ -28,6 +28,7 @@ from one OpenAI subject only; cross-family and cross-lab claims remain bounded b
 
 | family | verdict | primary kill reason | disposition | axes | trials | built |
 |---|---|---|---|---:|---:|---|
+| `access-token-scope-expansion` | NOT-READY | `no_difficulty_evidence` | `trial` | 3 | 0 | yes |
 | `audit-truth-financial-workflow` | NOT-READY | `no_difficulty_evidence` | `trial` | — _(est.)_ | 0 | no |
 | `browser-action-replay` | NOT-READY | `no_difficulty_evidence` | `trial` | — _(est.)_ | 0 | no |
 | `checker-required-memory-poisoning` | SHIP | `insufficient_shared_bank` | `schedule` | 12 | 1 | yes |
@@ -44,7 +45,7 @@ from one OpenAI subject only; cross-family and cross-lab claims remain bounded b
 | `ui-action-record-replay` | SHIP | `insufficient_shared_bank` | `schedule` | 6 | 5 | yes |
 | `ui-replay-live-dom` | SHIP | `insufficient_shared_bank` | `schedule` | 19 | 1 | yes |
 
-5 of 15 families execute. 5 have been attempted by a real agent.
+6 of 16 families execute. 5 have been attempted by a real agent.
 
 ## What the kill taxonomy has actually found
 
@@ -61,7 +62,7 @@ every category fires is usually a taxonomy that is not discriminating.
 | `no_mechanism_fire` | defect | `repair` | — |
 | `no_reference_solution` | defect | `repair` | — |
 | `no_mutant_discrimination` | defect | `repair` | — |
-| `no_difficulty_evidence` | absence | `trial` | `audit-truth-financial-workflow`, `browser-action-replay`, `deployment-rollback-partial-effects`, `model-alias-drift-sentinel`, `permission-boundary-tools`, `prompt-injection-approval-scope-drift`, `prompt-injection-capability-routing`, `prompt-injection-cross-tool-escalation`, `stale-crm-ticket-automation` |
+| `no_difficulty_evidence` | absence | `trial` | `access-token-scope-expansion`, `audit-truth-financial-workflow`, `browser-action-replay`, `deployment-rollback-partial-effects`, `model-alias-drift-sentinel`, `permission-boundary-tools`, `prompt-injection-approval-scope-drift`, `prompt-injection-capability-routing`, `prompt-injection-cross-tool-escalation`, `stale-crm-ticket-automation` |
 | `too_synthetic` | weakness | `mutate` | `prompt-injection-containment` |
 | `too_expensive` | cost | `split` | — |
 | `runner_unavailable` | absence | `schedule` | — |

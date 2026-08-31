@@ -260,6 +260,16 @@ export const RULE_CODES = [
   // discovery calibration: backtest scoring against known family outcomes
   "CALIBRATION_NO_KNOWN_OUTCOME",
   "CALIBRATION_MISSING_FEATURES",
+  // probe-to-family promotion: the bridge from cheap executable evidence to validation build
+  "PROMOTION_NO_SOURCE_PROBE",
+  "PROMOTION_SOURCE_NOT_PROMOTED",
+  "PROMOTION_NO_FIXED",
+  "PROMOTION_NO_CHANGED",
+  "PROMOTION_NO_TRUTH_SOURCE",
+  "PROMOTION_NO_EXPECTED_MUTANTS",
+  "PROMOTION_NO_KILL_SIGNAL",
+  "PROMOTION_CLAIMS_DIFFICULTY_PRETRIAL",
+  "PROMOTION_HIDDEN_RULE_SURFACE_UNDECLARED",
 ] as const;
 export type RuleCode = (typeof RULE_CODES)[number];
 

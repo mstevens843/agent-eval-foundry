@@ -34,6 +34,7 @@ import {
   assertProbeDefinitionsValid,
   runMechanismProbes,
 } from "./probe-runner.js";
+import { type ProbeToFamilyPromotion, assertPromotionsValid, parsePromotions } from "./promotion.js";
 import { type Registry, buildRegistry } from "./registry.js";
 import type { Candidate, Mechanism, Mutant, TaskShape } from "./schema.js";
 import { parseCandidates, parseMechanisms, parseMutants, parseTaskShape } from "./validate.js";
@@ -154,4 +155,14 @@ export function loadDiscoveryCalibration(
     loadProbeRunSummary(root, registry, workbench),
     KNOWN_DISCOVERY_OUTCOMES,
   );
+}
+
+export function loadPromotions(
+  root: string,
+  registry = loadRegistry(root),
+  workbench = loadDiscoveryWorkbench(root, registry),
+): readonly ProbeToFamilyPromotion[] {
+  const promotions = parsePromotions(readJson(join(root, "data", "promotions.json")), "data/promotions.json");
+  assertPromotionsValid(promotions, loadProbeRunSummary(root, registry, workbench), workbench);
+  return promotions;
 }

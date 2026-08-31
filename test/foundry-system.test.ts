@@ -211,9 +211,10 @@ describe("the checked-in registry", () => {
     for (const m of measured) expect(m.results, `${m.id} claims measured`).not.toBeNull();
   });
 
-  it("six families now have measured axis counts", () => {
+  it("seven families now have measured axis counts", () => {
     const measured = registry.shapes.filter((s) => s.dataQuality === "measured");
     expect(measured.map((s) => s.familyId).sort()).toEqual([
+      "access-token-scope-expansion",
       "checker-required-memory-poisoning",
       "durable-approval-outbox",
       "prompt-injection-containment",

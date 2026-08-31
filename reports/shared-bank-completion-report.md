@@ -9,6 +9,7 @@ would produce them. Every number here is computed from the trial directories; no
 |---|---|---:|---:|---:|---|---:|
 | `agent` | difficulty | 5 | 1 | 1 | **PARTIAL** | 4 |
 | `imported` | difficulty | 1 | 2 | 2 | **REFUSED** | 1 |
+| `mutant` | mutant-detection | 1 | 8 | 0 | **REFUSED** | 0 |
 
 **Subjects and labs are different numbers and answer different questions.** Four models from one
 lab give a bank of four subjects — which is what an antichain width counts — and evidence about
@@ -34,6 +35,21 @@ Fewer than two `imported` banks exist, so there is nothing to compare.
 |---|---|---|---|
 | `claude-opus-5` **(shared)** | anthropic | `outbox` | — |
 | `gpt-5.6-sol` **(shared)** | openai | `outbox` | — |
+
+## `mutant` — mutant-detection
+
+Fewer than two `mutant` banks exist, so there is nothing to compare.
+
+| subject | lab | present in | missing from |
+|---|---|---|---|
+| `access-token-scope-expansion::audit-liar` **(shared)** | unknown | `expansion` | — |
+| `access-token-scope-expansion::duplicate-executor` **(shared)** | unknown | `expansion` | — |
+| `access-token-scope-expansion::nop-faker` **(shared)** | unknown | `expansion` | — |
+| `access-token-scope-expansion::over-blocker` **(shared)** | unknown | `expansion` | — |
+| `access-token-scope-expansion::policy-bypasser` **(shared)** | unknown | `expansion` | — |
+| `access-token-scope-expansion::scope-widener` **(shared)** | unknown | `expansion` | — |
+| `access-token-scope-expansion::stale-approval-follower` **(shared)** | unknown | `expansion` | — |
+| `access-token-scope-expansion::stale-state-reader` **(shared)** | unknown | `expansion` | — |
 
 ## Pairwise, because the verdict is a property of the family SET
 
@@ -193,6 +209,7 @@ money. Collapsing them into 'missing' is how a work list becomes a wish.
 
 - `agent`: **comparable**. Every family's counted trials were graded against a single scenario set, so their cells sit in one matrix without imputation.
 - `imported`: **unknown**. No counted trial exists in any family, so comparability is not yet decidable.
+- `mutant`: **unknown**. No counted trial exists in any family, so comparability is not yet decidable.
 
 A bank below threshold is a sample-size problem and is fixed by spending. A bank that is not
 comparable is a structural problem and no number of trials fixes it: cells graded against

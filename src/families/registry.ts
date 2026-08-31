@@ -9,10 +9,12 @@
 // than having a task shape, and the distinction is load-bearing: `foundry check` validates nine
 // shapes, three of which appear here. The other six are pre-registrations.
 
+import { buildAccessTokenChallengePackage } from "../challenge/access-token-package.js";
 import { buildCheckerRequiredChallengePackage } from "../challenge/checker-required-package.js";
 import { buildLiveDomChallengePackage } from "../challenge/live-dom-package.js";
 import { buildMemoryChallengePackage } from "../challenge/memory-package.js";
 import {
+  ACCESS_TOKEN_PROFILE,
   CHECKER_REQUIRED_PROFILE,
   LIVE_DOM_PROFILE,
   type LeakProfile,
@@ -55,6 +57,15 @@ import * as checker from "./checker-required-memory-poisoning/runner.js";
 import * as checkerScenarios from "./checker-required-memory-poisoning/scenarios.js";
 import { RULE_CODES as CHECKER_RULE_CODES } from "./checker-required-memory-poisoning/spec.js";
 import { CHECKS as CHECKER_CHECK_NAMES } from "./checker-required-memory-poisoning/verify.js";
+
+import {
+  BASELINES as ACCESS_BASELINES,
+  INTENDED_CHECK as ACCESS_CHECKS,
+} from "./access-token-scope-expansion/mutants.js";
+import * as access from "./access-token-scope-expansion/runner.js";
+import * as accessScenarios from "./access-token-scope-expansion/scenarios.js";
+import { RULES as ACCESS_RULES } from "./access-token-scope-expansion/spec.js";
+import { CHECKS as ACCESS_CHECK_NAMES } from "./access-token-scope-expansion/verify.js";
 
 export interface FamilySweep {
   readonly scenarioCount: number;
@@ -347,6 +358,43 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     realism: "simulated-tree",
     realismGap:
       "The checker is graded over a simulated memory/tool harness. A browser-backed or service-backed descendant would add real persistence, asynchronous tool effects and independent process isolation for untrusted checker code.",
+  },
+  {
+    id: "access-token-scope-expansion",
+    name: "Access token scope expansion",
+    domain: "permissions and access control",
+    mechanisms: ["permission-boundary", "stale-state", "false-audit-history"],
+    checks: [...ACCESS_CHECK_NAMES],
+    ruleCodes: ACCESS_RULES.map((r) => r.code),
+    space: accessScenarios.SPACE,
+    knobPurpose: {
+      seed: "selects deterministic ids and surface variations",
+      approvalDrift: "whether the approval remains current, is revoked, is superseded, or reduces scope",
+      tokenDrift:
+        "whether the token remains exact, broadens scope/resource, changes principal, is revoked, or disappears",
+      cacheFreshness: "whether cached public snapshots match current authority state",
+      requestSurface: "API, worker and delegated request surfaces with the same authority rule",
+      repeatCount: "one or two attempts sharing a verifier-owned irreversible grant ledger",
+    },
+    run: () => {
+      const run = access.runFamily();
+      return sweep(
+        run.cells,
+        run.scenarios,
+        run.spaceSize,
+        access.toMatrix(run),
+        ACCESS_CHECKS,
+        ACCESS_BASELINES,
+      );
+    },
+    challenge: buildAccessTokenChallengePackage,
+    leakProfile: ACCESS_TOKEN_PROFILE,
+    typesPath: "src/families/access-token-scope-expansion/types.ts",
+    estimatedBuildHours: 18,
+    estimatedFrontierUsd: 35,
+    realism: "simulated-tree",
+    realismGap:
+      "The authority ledger and token server are deterministic in-process facades. A service-backed descendant would add real OAuth grant payloads, asynchronous revocation propagation and process isolation around token issuance.",
   },
 ];
 

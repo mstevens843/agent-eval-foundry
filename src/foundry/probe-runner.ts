@@ -1684,7 +1684,7 @@ function verdictRank(verdict: ProbeVerdict): number {
 
 function discoveryStatusFor(verdict: ProbeVerdict): DiscoveryCandidateEvidence["status"] {
   if (verdict === "promote_to_task_shape") return "task-shape-ready";
-  if (verdict === "evolve_existing" || verdict === "transfer_existing") return "family-build-ready";
+  if (verdict === "evolve_existing" || verdict === "transfer_existing") return "probe-promoted";
   if (verdict === "needs_repair" || verdict === "hold_needs_transfer") return "probe-run";
   if (verdict.startsWith("kill_")) return "probe-killed";
   return "probe-run";

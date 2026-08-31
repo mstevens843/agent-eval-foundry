@@ -46,6 +46,11 @@ families in the same direction as later evidence. The current calibration is n=6
 A **promotion queue** is the ordered next-work list after applying scores, cheap screens and probe
 evidence. Probe evidence is allowed to outrank score-only intuition.
 
+A **promotion record** is the bridge from a surviving probe into a family build. It names the source
+candidate and probe, what stays fixed, what changes, the carried-forward authority source and
+mutants, new risks, and pre-registered confirm/kill signals. It is build-routing evidence, not
+real-agent difficulty evidence.
+
 ## Before Task Families: Discovery Workbench
 
 The foundry now has a pre-family layer for ideas that have not earned a full build yet.
@@ -67,6 +72,7 @@ The pre-family path is:
 candidate pool
   -> cheap screen
   -> mechanism probe
+  -> promotion record
   -> transfer test
   -> task shape
   -> family build
@@ -81,6 +87,12 @@ Mechanism Probe Runner v1 makes the next step executable. A promoted candidate c
 probe before becoming a full task family. The runner proves only that the proposed mechanism has a
 fair, independently checkable signal against reference-like and known-bad probe subjects. It does not
 prove real-agent difficulty, human solvability or verifier-integrity resistance.
+
+Promoted Family Build Pipeline v1 turns a successful probe into validation-mode build work. The first
+completed bridge is `access-token-scope-expansion`: selected from the top of `probes next`, recorded
+in `data/promotions.json`, scaffoldable through `promotion scaffold`, and built as a full family with
+reference, scenarios, verifier, mutants, package and reports. Its local evidence proves the bridge
+works; a counted smoke trial is still required before difficulty claims.
 
 This layer is intentionally separate from the existing candidate ledger. The ledger records
 historical promote/kill decisions. Discovery Workbench v1 manages the forward-looking pool and

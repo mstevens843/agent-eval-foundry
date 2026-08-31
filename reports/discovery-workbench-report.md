@@ -17,9 +17,9 @@ axis diversity. The workbench routes evidence; it does not prove a benchmark is 
 | total candidates | 50 |
 | mechanisms referenced | 15 |
 | domains represented | 21 |
-| expected next-batch build hours | 172 |
-| expected next-batch trial cost | $338 |
-| expected next-batch axes | 38 |
+| expected next-batch build hours | 176 |
+| expected next-batch trial cost | $355 |
+| expected next-batch axes | 40 |
 | registry mechanisms available | 15 |
 
 ## Recommended Actions
@@ -38,9 +38,7 @@ axis diversity. The workbench routes evidence; it does not prove a benchmark is 
 
 | candidate | domain | score | confidence | recommended action | cheapest evidence | probe status | blockers |
 |---|---|---:|---:|---|---|---|---|
-| `memory-poisoned-cross-session-approval` | memory and long-horizon state | 76.1 | 0.69 | transfer_existing | static | family-build-ready | none |
-| `browser-checkout-stale-selector` | browser UI automation | 65.9 | 0.69 | task_shape | local | family-build-ready | none |
-| `audit-history-rewrite-approval` | audit history | 60.0 | 0.69 | evolve_existing | static | family-build-ready | none |
+| `access-token-scope-expansion` | permissions and access control | 72.2 | 0.69 | mechanism_probe | static | family-build-ready | none |
 | `deployment-model-alias-rollout-drift` | deployment rollback | 78.1 | 0.69 | mechanism_probe | static | task-shape-ready | none |
 | `crm-permission-cancel-race` | CRM automation | 77.7 | 0.69 | task_shape | local | task-shape-ready | none |
 | `long-horizon-recurring-task-cancel` | memory and long-horizon state | 77.4 | 0.69 | mechanism_probe | local | task-shape-ready | none |
@@ -48,19 +46,22 @@ axis diversity. The workbench routes evidence; it does not prove a benchmark is 
 | `email-calendar-invite-authority` | email and calendar workflows | 75.6 | 0.69 | mechanism_probe | static | task-shape-ready | none |
 | `prompt-injection-ticket-attachment` | prompt injection | 75.6 | 0.69 | mechanism_probe | static | task-shape-ready | none |
 | `prompt-injection-tool-output-cross-scope` | prompt injection | 74.5 | 0.69 | task_shape | local | task-shape-ready | none |
+| `trading-partial-fill-cancel` | trading order reconciliation | 65.2 | 0.69 | task_shape | local | task-shape-ready | none |
+| `payment-unknown-capture-receipt` | external payments | 63.1 | 0.69 | mechanism_probe | static | task-shape-ready | none |
 
 ## Probe Evidence Overlay
 
 | candidate | status | probe | verdict | queue reason |
 |---|---|---|---|---|
 | `access-token-scope-expansion` | task-shape-ready | `access-token-scope-expansion-probe` | promote_to_task_shape | cheap probe caught 2/2 non-reference subjects across 7 named checks |
-| `audit-history-rewrite-approval` | family-build-ready | `audit-history-rewrite-approval-probe` | evolve_existing | cheap probe supports evolving an existing family line |
-| `browser-checkout-stale-selector` | family-build-ready | `browser-checkout-stale-selector-probe` | evolve_existing | cheap probe supports evolving an existing family line |
+| `access-token-scope-expansion` | family-build-ready | `access-token-scope-expansion-from-probe` | family-built | The first ranked promoted probe caught scope-widening and stale-token known-bad subjects while the reference-like subject passed. |
+| `audit-history-rewrite-approval` | probe-promoted | `audit-history-rewrite-approval-probe` | evolve_existing | cheap probe supports evolving an existing family line |
+| `browser-checkout-stale-selector` | probe-promoted | `browser-checkout-stale-selector-probe` | evolve_existing | cheap probe supports evolving an existing family line |
 | `crm-permission-cancel-race` | task-shape-ready | `crm-permission-cancel-race-probe` | promote_to_task_shape | cheap probe caught 2/2 non-reference subjects across 8 named checks |
 | `deployment-model-alias-rollout-drift` | task-shape-ready | `deployment-model-alias-rollout-drift-probe` | promote_to_task_shape | cheap probe caught 2/2 non-reference subjects across 7 named checks |
 | `email-calendar-invite-authority` | task-shape-ready | `email-calendar-invite-authority-probe` | promote_to_task_shape | cheap probe caught 2/2 non-reference subjects across 7 named checks |
 | `long-horizon-recurring-task-cancel` | task-shape-ready | `long-horizon-recurring-task-cancel-probe` | promote_to_task_shape | cheap probe caught 2/2 non-reference subjects across 9 named checks |
-| `memory-poisoned-cross-session-approval` | family-build-ready | `memory-poisoned-cross-session-approval-probe` | transfer_existing | cheap probe supports transfer testing before a new family build |
+| `memory-poisoned-cross-session-approval` | probe-promoted | `memory-poisoned-cross-session-approval-probe` | transfer_existing | cheap probe supports transfer testing before a new family build |
 | `payment-unknown-capture-receipt` | task-shape-ready | `payment-unknown-capture-receipt-probe` | promote_to_task_shape | cheap probe caught 3/3 non-reference subjects across 6 named checks |
 | `prompt-injection-ticket-attachment` | task-shape-ready | `prompt-injection-ticket-attachment-probe` | promote_to_task_shape | cheap probe caught 2/2 non-reference subjects across 7 named checks |
 | `prompt-injection-tool-output-cross-scope` | task-shape-ready | `prompt-injection-tool-output-cross-scope-probe` | promote_to_task_shape | cheap probe caught 2/2 non-reference subjects across 7 named checks |

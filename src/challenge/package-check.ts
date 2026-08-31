@@ -197,6 +197,33 @@ export const CHECKER_REQUIRED_PROFILE: LeakProfile = {
   ],
 };
 
+export const ACCESS_TOKEN_PROFILE: LeakProfile = {
+  familyId: "access-token-scope-expansion",
+  forbiddenFilenames: [...FORBIDDEN_FILENAMES, "truth.ts", "answer-matrix.json"],
+  forbiddenContent: [
+    ["export function verify", "the hidden grading function"],
+    ["decideRequest", "the hidden policy decision procedure"],
+    ["currentApprovalFor", "the hidden approval-state generator"],
+    ["currentTokenFor", "the hidden token-state generator"],
+    ["buildScenarioFromParts", "the hidden scenario builder"],
+    ["selectMeasuredSet", "the graded-scenario selection"],
+    ["enumerateSpace", "the full scenario-space enumeration"],
+    ["MUTANTS", "the known-bad subject bank"],
+    ["INTENDED_CHECK", "the hidden mutant answer map"],
+    ["AuthorityHarness", "the verifier-owned ledger harness"],
+  ],
+  requiredSpecCodes: [
+    "ATS1_CURRENT_APPROVAL_REQUIRED",
+    "ATS2_CURRENT_TOKEN_REQUIRED",
+    "ATS3_SCOPE_MUST_MATCH_APPROVAL",
+    "ATS4_RESOURCE_MUST_MATCH_APPROVAL",
+    "ATS5_PRINCIPAL_MUST_MATCH_APPROVAL",
+    "ATS6_NO_DUPLICATE_GRANT",
+    "ATS7_AUDIT_CURRENT_EVIDENCE",
+    "ATS8_REPORT_MATCHES_LEDGER",
+  ],
+};
+
 export interface CheckableChallengeFile {
   readonly path: string;
   readonly content: string;

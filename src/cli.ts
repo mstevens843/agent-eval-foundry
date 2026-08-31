@@ -115,10 +115,16 @@ import {
   loadDiscoveryWorkbench,
   loadProbeDefinitions,
   loadProbeRunSummary,
+  loadPromotions,
   loadRegistry,
 } from "./foundry/load.js";
 import { familyLoop, loopAll } from "./foundry/loop.js";
 import { probeEvidenceForDiscovery, probeToTaskShapeDraft } from "./foundry/probe-runner.js";
+import {
+  promotedFamilyRecords,
+  promotionEvidenceForDiscovery,
+  promotionToFamilyScaffold,
+} from "./foundry/promotion.js";
 import { assertCoverage, coverage } from "./foundry/registry.js";
 import { checkScaffold } from "./foundry/scaffold-check.js";
 import { generateScaffold, scaffoldFromShape } from "./foundry/scaffold.js";
@@ -196,6 +202,11 @@ import {
   renderProbeRun,
   renderProbeScaffoldSummary,
 } from "./reports/probe-runner-report.js";
+import {
+  renderPromotionNext,
+  renderPromotionReport,
+  renderPromotionScaffoldSummary,
+} from "./reports/promotion-report.js";
 import { describeArtifact, renderProviderVariance } from "./reports/provider-variance.js";
 import { renderMechanismReport, renderMutantReport } from "./reports/registry-report.js";
 import { renderSelfCheckBehavior } from "./reports/self-check-report.js";
@@ -280,6 +291,10 @@ REGISTRY (what could be built, and can we detect it?)
   probes next                     next actions from probe evidence
   probes scaffold --probe <id> --out <dir>
                                   draft task-shape artifact from a promoted probe
+  promotion report [--out f]      promoted-family build pipeline report
+  promotion next                  next promoted-family build actions
+  promotion scaffold --promotion <id> --out <dir>
+                                  draft family skeleton from a promotion record
   sources                        list every matrix source, implemented and planned
 
 FAMILIES (run a measured mini-benchmark)
@@ -379,6 +394,7 @@ const VALUED = new Set([
   "--campaign",
   "--candidate",
   "--probe",
+  "--promotion",
   "--plan",
   "--only",
   "--emit-shapes",
@@ -761,11 +777,25 @@ function discoveryInputs(root: string) {
   const funnel = loadAdaptiveFunnel(root, registry);
   const workbench = loadDiscoveryWorkbench(root, registry, funnel);
   const probeSummary = loadProbeRunSummary(root, registry, workbench);
-  const probeEvidence = probeEvidenceForDiscovery(probeSummary);
+  const promotions = loadPromotions(root, registry, workbench);
+  const probeEvidence = [
+    ...probeEvidenceForDiscovery(probeSummary),
+    ...promotionEvidenceForDiscovery(promotions),
+  ];
   const summary = summarizeDiscoveryWorkbench(workbench, probeEvidence);
   const scores = scoreDiscoveryCandidates(workbench.candidates);
   const calibration = loadDiscoveryCalibration(root, registry, workbench);
-  return { registry, funnel, workbench, summary, scores, probeSummary, probeEvidence, calibration };
+  return {
+    registry,
+    funnel,
+    workbench,
+    summary,
+    scores,
+    probeSummary,
+    probeEvidence,
+    promotions,
+    calibration,
+  };
 }
 
 function discoveryCommand(argv: readonly string[], root: string): string {
@@ -859,6 +889,40 @@ function probesCommand(argv: readonly string[], root: string): string {
     return renderProbeScaffoldSummary(draft);
   }
   throw new Error(`unknown probes subcommand "${sub}"; expected run | report | next | scaffold`);
+}
+
+function promotionInputs(root: string) {
+  const registry = loadRegistry(root);
+  const workbench = loadDiscoveryWorkbench(root, registry);
+  const definitions = loadProbeDefinitions(root, registry, workbench);
+  const summary = loadProbeRunSummary(root, registry, workbench);
+  const promotions = loadPromotions(root, registry, workbench);
+  const records = promotedFamilyRecords(promotions, definitions, summary, workbench);
+  return { registry, workbench, definitions, summary, promotions, records };
+}
+
+function promotionCommand(argv: readonly string[], root: string): string {
+  const sub = positional(argv, 1) ?? "report";
+  const input = promotionInputs(root);
+  if (sub === "report") return renderPromotionReport(input.records, input.summary, BUILT_FAMILIES);
+  if (sub === "next") return renderPromotionNext(input.promotions);
+  if (sub === "scaffold") {
+    const promotionId = flag(argv, "--promotion");
+    const out = flag(argv, "--out");
+    if (promotionId === null) throw new Error("promotion scaffold needs --promotion <id>");
+    if (out === null) throw new Error("promotion scaffold needs --out <dir>");
+    const record = input.records.find((item) => item.promotion.id === promotionId);
+    if (record === undefined) throw new Error(`unknown promotion "${promotionId}"`);
+    const scaffold = promotionToFamilyScaffold(record);
+    for (const file of scaffold.files) {
+      const target = join(out, file.path);
+      mkdirSync(dirname(target), { recursive: true });
+      writeFileSync(target, file.content, "utf8");
+    }
+    process.stderr.write(`wrote promotion scaffold to ${out}/\n`);
+    return renderPromotionScaffoldSummary(scaffold);
+  }
+  throw new Error(`unknown promotion subcommand "${sub}"; expected report | next | scaffold`);
 }
 
 function browserBackedCommand(argv: readonly string[], root: string): string {
@@ -1294,6 +1358,7 @@ function checkCommand(root: string): string {
   const adaptiveFunnel = loadAdaptiveFunnel(root, registry);
   const discoveryWorkbench = loadDiscoveryWorkbench(root, registry, adaptiveFunnel);
   const probeSummary = loadProbeRunSummary(root, registry, discoveryWorkbench);
+  const promotions = loadPromotions(root, registry, discoveryWorkbench);
 
   return [
     "registry OK",
@@ -1310,6 +1375,7 @@ function checkCommand(root: string): string {
     "  funnel      mechanism probes and transfer tests validate against the registry",
     "  workbench   discovery scoring inputs validate against mechanisms and transfers",
     `  probes     ${probeSummary.probes.length} executable mechanism probes run locally`,
+    `  promotions ${promotions.length} probe-to-family promotion record(s) validate`,
     "",
   ].join("\n");
 }
@@ -2317,7 +2383,6 @@ function allCommand(argv: readonly string[], root: string): string {
   );
   const probeDefinitions = loadProbeDefinitions(root, registry);
   const probeSummary = loadProbeRunSummary(root, registry);
-  const probeEvidence = probeEvidenceForDiscovery(probeSummary);
   const calibration = loadDiscoveryCalibration(root, registry);
   write(
     "adaptive-funnel-report.md",
@@ -2328,6 +2393,11 @@ function allCommand(argv: readonly string[], root: string): string {
     }),
   );
   const discoveryWorkbench = loadDiscoveryWorkbench(root, registry, adaptiveFunnel);
+  const promotions = loadPromotions(root, registry, discoveryWorkbench);
+  const probeEvidence = [
+    ...probeEvidenceForDiscovery(probeSummary),
+    ...promotionEvidenceForDiscovery(promotions),
+  ];
   const discoverySummary = summarizeDiscoveryWorkbench(discoveryWorkbench, probeEvidence);
   write(
     "discovery-workbench-report.md",
@@ -2342,6 +2412,13 @@ function allCommand(argv: readonly string[], root: string): string {
     "mechanism-probe-report.md",
     renderMechanismProbeReport(probeSummary, probeDefinitions, discoveryWorkbench.candidates),
   );
+  const promotionRecords = promotedFamilyRecords(
+    promotions,
+    probeDefinitions,
+    probeSummary,
+    discoveryWorkbench,
+  );
+  write("promotion-report.md", renderPromotionReport(promotionRecords, probeSummary, BUILT_FAMILIES));
   write(
     "ship-recommendation.md",
     renderShipReport(registry.shapes, registry, allEvidence, humanGateEvidence, adversarialGateEvidence),
@@ -3530,6 +3607,12 @@ export function main(argv: readonly string[]): number {
         const sub = positional(argv, 1) ?? "report";
         if (sub === "report") emit(argv, probesCommand(argv, root));
         else process.stdout.write(probesCommand(argv, root));
+        return 0;
+      }
+      case "promotion": {
+        const sub = positional(argv, 1) ?? "report";
+        if (sub === "report") emit(argv, promotionCommand(argv, root));
+        else process.stdout.write(promotionCommand(argv, root));
         return 0;
       }
       case "kill": {

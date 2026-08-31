@@ -268,6 +268,31 @@ The set is intentionally labelled n=6 and directional. It can say "this routing 
 wrong" or "probe evidence should dominate this score"; it cannot estimate the true yield of future
 families. That estimate still needs more completed probes, promoted shapes and counted trials.
 
+### Refinement: Promote From Probe To Family
+
+Promoted Family Build Pipeline v1 closes the next link in the funnel:
+
+```text
+candidate
+  -> discovery score
+  -> executable mechanism probe
+  -> promotion record
+  -> full family build
+  -> local reference/mutant/package evidence
+```
+
+A promotion record preserves what the probe proved, what mechanism pressure carries forward, what
+changes in the larger family, the authority source, expected mutants, risks introduced, and
+pre-registered confirm/kill signals. It also forbids a common evidence error: calling a promoted
+family "difficult" before a counted agent has attempted the current package hash.
+
+The first exercised promotion is `access-token-scope-expansion`. The selected source was the first
+ranked promoted probe in the executable queue. The full family expands three token-scope probe cases
+into a 1,152-point declared state space and a 384-scenario measured set. Its reference passes, eight
+known-bad subjects/baselines fail intended checks, and the challenge package is leak-checked. That is
+validation-mode local evidence. The next earned evidence is a one-agent smoke trial, not a full `/6`
+matrix.
+
 ### Stage 0: Candidate Pool
 
 Start broad. A reasonable first pass is 50 to 100 candidate family ideas, not 1000 concrete tasks.

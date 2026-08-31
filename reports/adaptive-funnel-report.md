@@ -34,7 +34,7 @@ candidate mechanisms
 |---|---:|
 | static | 10 |
 | local | 4 |
-| one-agent | 1 |
+| one-agent | 2 |
 | cross-provider | 2 |
 
 | target | type | mode | stage | decision | evidence cost | next action |
@@ -98,6 +98,7 @@ candidate mechanisms
 |---|---|---|---|
 | `prompt-injection-memory-poisoning` | task_shape | repair | stale challenge hashes cannot feed production-mode claims |
 | `ui-action-record-replay` | transfer_test | evolve | nested failure sets are one axis at multiple sensitivities, not breadth |
+| `access-token-scope-expansion` | smoke_trial | promote | mutant-detection evidence does not prove real-agent difficulty |
 | `prompt-injection-containment` | smoke_trial | hold | provider refusals, infrastructure errors and no-count trials do not advance the funnel |
 | `checker-required-memory-poisoning` | transfer_test | transfer | repeated same-provider trials estimate stability, not cross-lab transfer |
 | `ui-replay-live-dom` | transfer_test | transfer | repeated same-provider trials estimate stability, not cross-lab transfer |
@@ -112,13 +113,14 @@ No family is automatically recommended for a fresh full matrix by this planner p
 |---|---|---|
 | `prompt-injection-memory-poisoning` | static at `task_shape` | stale challenge hashes cannot feed production-mode claims |
 | `ui-action-record-replay` | static at `transfer_test` | nested failure sets are one axis at multiple sensitivities, not breadth |
+| `access-token-scope-expansion` | one-agent at `smoke_trial` | mutant-detection evidence does not prove real-agent difficulty |
 | `prompt-injection-containment` | one-agent at `smoke_trial` | provider refusals, infrastructure errors and no-count trials do not advance the funnel |
 | `checker-required-memory-poisoning` | cross-provider at `transfer_test` | repeated same-provider trials estimate stability, not cross-lab transfer |
 | `ui-replay-live-dom` | cross-provider at `transfer_test` | repeated same-provider trials estimate stability, not cross-lab transfer |
 
 ## Registry Link
 
-This report was generated against 15 mechanisms and 15 family shapes. Probe and transfer references are checked against that registry, so a stale mechanism id or family id fails `node dist/cli.js check`.
+This report was generated against 15 mechanisms and 16 family shapes. Probe and transfer references are checked against that registry, so a stale mechanism id or family id fails `node dist/cli.js check`.
 
 ---
 

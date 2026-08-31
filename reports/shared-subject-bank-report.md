@@ -27,6 +27,7 @@ Which subjects have attempted which families, and what that permits.
 
 | family | subjects | instances | axes |
 |---|---:|---:|---:|
+| `access-token-scope-expansion` | 8 | 384 | 3 |
 
 **These numbers may not be added to the ones above, or to each other as a portfolio total.** A
 detection axis says the verifier can tell two hand-written defects apart. That is worth knowing
@@ -63,6 +64,17 @@ Only 2 subject(s) attempted every family, below the threshold of 3. The combined
 **To strengthen this:**
 
 - Build or trial a second family whose bank is `imported`.
+- For a mutant bank that means a second family with a written mutant set.
+
+### `mutant` banks — 1 family(ies)
+
+**Verdict:** MEASURED. nothing cross-family: only one `mutant` bank exists, so there is nothing to compare it with.
+
+8 subject(s) attempted every family, so "did the same implementation fail both?" is a question with an answer. The combined axis count below is computed over the shared subjects only, and is the number that says whether the families measure different things.
+
+**To strengthen this:**
+
+- Build or trial a second family whose bank is `mutant`.
 - For a mutant bank that means a second family with a written mutant set.
 
 ---

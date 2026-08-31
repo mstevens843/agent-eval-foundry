@@ -11,14 +11,15 @@ What the families measure, together — and the arithmetic this report refuses t
 | `ui-action-record-replay` | `agent` | 324 | 4 | 234 | 3 | **1** |
 | `ui-replay-live-dom` | `agent` | 864 | 1 | 645 | 1 | — |
 | `checker-required-memory-poisoning` | `agent` | 792 | 1 | 178 | 1 | — |
+| `access-token-scope-expansion` | `mutant` | 384 | 8 | 0 | 6 | **3** |
 | `durable-approval-outbox` | `imported` | 24 | 2 | 0 | 1 | **1** |
 
 ## The sum that is not available
 
 | naive total | value | why it is not a result |
 |---|---:|---|
-| every family added together | 4 | mixes detection and difficulty; the two answer different questions |
-| detection banks added | 0 | the banks are disjoint by construction — no mutant appears in two families, so the union's width is the sum whatever the families measure |
+| every family added together | 7 | mixes detection and difficulty; the two answer different questions |
+| detection banks added | 3 | the banks are disjoint by construction — no mutant appears in two families, so the union's width is the sum whatever the families measure |
 | difficulty banks added | 4 | excludes one-subject banks; valid only over subjects that attempted both, and the overlap is below threshold |
 
 A combined axis count requires the same subjects in every bank being combined. Until that holds,
@@ -34,6 +35,11 @@ each family's number stands alone and the portfolio total does not exist.
 **`imported`:** nothing cross-family: only one `imported` bank exists, so there is nothing to compare it with.
 
 - Build or trial a second family whose bank is `imported`.
+- For a mutant bank that means a second family with a written mutant set.
+
+**`mutant`:** nothing cross-family: only one `mutant` bank exists, so there is nothing to compare it with.
+
+- Build or trial a second family whose bank is `mutant`.
 - For a mutant bank that means a second family with a written mutant set.
 
 ## The cheapest path to a real cross-family number

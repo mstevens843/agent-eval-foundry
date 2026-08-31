@@ -6,6 +6,7 @@ a column mixing the two without labels is how an estimate becomes a fact.
 
 | family | status | mechanisms | axes | build h | frontier $ | data |
 |---|---|---|---:|---:|---:|---|
+| `access-token-scope-expansion` | built | permission-boundary, stale-state, false-audit-history | 3 | 18 | 35 | measured |
 | `audit-truth-financial-workflow` | candidate | false-audit-history, oracle-probing, permission-boundary | — | 45 | 60 | est. |
 | `browser-action-replay` | idea | ui-replay-mismatch, stale-state, hidden-environment-dependency | — | 90 | 80 | est. |
 | `checker-required-memory-poisoning` | shipped | checker-quality-gap, context-contamination, false-audit-history, prompt-injection-via-retrieval | 12 | 85 | 35 | measured |
@@ -26,12 +27,12 @@ a column mixing the two without labels is how an estimate becomes a fact.
 
 | | |
 |---|---:|
-| families | 15 |
-| expected axes (all) | 61 |
-| of which measured | **47** |
+| families | 16 |
+| expected axes (all) | 64 |
+| of which measured | **50** |
 | of which estimated | 14 |
-| declared build hours | 1030 |
-| declared frontier spend | $833.66 |
+| declared build hours | 1048 |
+| declared frontier spend | $868.66 |
 
 Mechanism coverage across families: 15 distinct mechanisms.
 

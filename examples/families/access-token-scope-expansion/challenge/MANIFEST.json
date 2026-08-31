@@ -1,0 +1,25 @@
+{
+  "familyId": "access-token-scope-expansion",
+  "scenarioSetId": "expansion-384-138574b0",
+  "visibleFiles": [
+    "README.md",
+    "SPEC.md",
+    "examples/example-1-stable-grant.json",
+    "examples/example-2-scope-expanded.json",
+    "examples/example-3-duplicate-replay.json",
+    "starter/subject.mjs",
+    "types.ts"
+  ],
+  "hiddenArtifacts": [
+    "verify.ts",
+    "reference.ts",
+    "mutants.ts",
+    "runner.ts",
+    "truth.ts",
+    "matrix.json",
+    "scenarios.json",
+    "answer-matrix.json",
+    "reports/"
+  ],
+  "submissionFormat": "an ES module exporting `subject` with run(view, authority)"
+}

@@ -31,6 +31,12 @@ probes before full family build. See
 can promote, repair, transfer, evolve, hold or kill a candidate, but it is still not real-agent
 difficulty evidence.
 
+Promoted Family Build Pipeline v1 closes the upstream loop for one probe. The first ranked promoted
+probe, `access-token-scope-expansion-probe`, now has a promotion record, reusable scaffold bridge and
+a full validation-mode family with local reference/mutant/package evidence. See
+[`reports/promotion-report.md`](reports/promotion-report.md). This proves candidate -> probe ->
+promotion -> family local evidence, not agent difficulty.
+
 The foundry keeps evidence streams separate:
 
 - **mutant-detection evidence**: a reference and known-bad implementations prove the verifier
@@ -64,10 +70,12 @@ requirement; adversarial audit is the attempted exploit record.
 | `ui-action-record-replay` | 324 | 5 | 5 | 6 | 1 | human-ready | adversarial-ready | **SHIP**: useful but chain-limited |
 | `ui-replay-live-dom` | 864 | 1 | 1 | 19 | not claimed yet | human-ready | adversarial-audited; OpenAI-only | **SHIP**: descendant, packaged and difficulty-evidenced |
 | `checker-required-memory-poisoning` | 792 | 1 | 1 | 12 | not claimed yet | human-ready | adversarial-audited; OpenAI-only | **SHIP**: required-checker gap, OpenAI-only |
+| `access-token-scope-expansion` | 384 | 0 | 0 | 3 | not-run | pending | audit-pending | **NOT-READY**: promoted family with local evidence only |
 | `durable-approval-outbox` | 24 | 20 imported | 20 | 3 | 1 | reference-solvable | audit-pending; imported historical no-count | **SHIP**: imported historical bank |
 
 Current live-DOM package hash: `18c3f5afc5973604205cd7df23ce4cad`.
 Current checker-required package hash: `448f2f816c51030cc97a374816226168`.
+Current access-token-scope-expansion package hash: `33cc98364ce2a6b3f9490e54937955d8`.
 
 ## What Changed In This Phase
 
@@ -92,6 +100,12 @@ authority laundering. The probes run 42 tiny scenarios against reference-like an
 subjects, catch 29/29 non-reference probe subjects by intended named checks, and produce a
 probe-aware next-action queue. The discovery calibration report backtests the scoring model against
 six known family outcomes; it is directional n=6 calibration, not a yield estimate.
+
+Promoted Family Build Pipeline v1 takes the first promoted probe from that queue and builds it
+through the validation stack. `access-token-scope-expansion` has 384 measured scenarios from a
+1,152-point declared space, 8/8 intended mutants caught, both baselines blocked, a leak-checked
+8-file challenge package, trial routing, and no counted real-agent trials yet. Full `/6` matrix
+spend remains blocked until a one-agent smoke trial and diagnosis exist.
 
 Adversarial Audit v2 upgrades verifier-integrity from preserved attack records to mechanical triage.
 Attack packets now carry an execution profile, an isolation profile, an exploit-artifact schema, an

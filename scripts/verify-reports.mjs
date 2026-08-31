@@ -56,6 +56,10 @@ for (const [path, args] of [
     ["family", "run", "--family", "checker-required-memory-poisoning"],
   ],
   [
+    "examples/families/access-token-scope-expansion/matrix.json",
+    ["family", "run", "--family", "access-token-scope-expansion"],
+  ],
+  [
     "examples/shapes/prompt-injection-memory-poisoning.json",
     ["family", "shape", "--family", "prompt-injection-memory-poisoning"],
   ],
@@ -67,6 +71,10 @@ for (const [path, args] of [
   [
     "examples/shapes/checker-required-memory-poisoning.json",
     ["family", "shape", "--family", "checker-required-memory-poisoning"],
+  ],
+  [
+    "examples/shapes/access-token-scope-expansion.json",
+    ["family", "shape", "--family", "access-token-scope-expansion"],
   ],
 ]) {
   if (run(args) !== readFileSync(path, "utf8")) {
@@ -82,6 +90,7 @@ for (const [familyId, committedDir] of [
   ["ui-action-record-replay", "examples/families/ui-action-record-replay/challenge"],
   ["ui-replay-live-dom", "examples/families/ui-replay-live-dom/challenge"],
   ["checker-required-memory-poisoning", "examples/families/checker-required-memory-poisoning/challenge"],
+  ["access-token-scope-expansion", "examples/families/access-token-scope-expansion/challenge"],
 ]) {
   const tmpDir = mkdtempSync(join(tmpdir(), "foundry-fam-"));
   run(["challenge", "build", "--family", familyId, "--out", tmpDir]);
@@ -139,6 +148,8 @@ const SMOKE = [
   [["probes", "run"], /mechanism probe run/],
   [["probes", "report"], /Mechanism Probe Runner v1/],
   [["probes", "next"], /mechanism probe next actions/],
+  [["promotion", "report"], /Promoted Family Build Pipeline v1/],
+  [["promotion", "next"], /promotion next actions/],
   [["adversarial", "readiness"], /Adversarial verifier-integrity readiness/],
   [["adversarial", "report"], /Adversarial verifier-integrity audit/],
   [["adversarial", "v2", "report"], /Adversarial Audit v2/],
@@ -226,6 +237,28 @@ if (!/family\s+payment-unknown-capture-receipt/.test(probeScaffoldOut)) {
   console.error("SMOKE  `probes scaffold` did not preserve the source candidate id");
   failures += 1;
 } else console.log("ok     cli: probes scaffold");
+
+const promotionScaffoldTmp = mkdtempSync(join(tmpdir(), "foundry-promotion-scaffold-"));
+const promotionScaffoldOut = run([
+  "promotion",
+  "scaffold",
+  "--promotion",
+  "access-token-scope-expansion-from-probe",
+  "--out",
+  promotionScaffoldTmp,
+]);
+if (!/family\s+access-token-scope-expansion/.test(promotionScaffoldOut)) {
+  console.error("SMOKE  `promotion scaffold` ran but did not print the expected family summary");
+  failures += 1;
+} else if (
+  !readFileSync(
+    join(promotionScaffoldTmp, "access-token-scope-expansion", "example-shape.json"),
+    "utf8",
+  ).includes('"sourceCandidateId": "access-token-scope-expansion"')
+) {
+  console.error("SMOKE  `promotion scaffold` did not preserve the source candidate id");
+  failures += 1;
+} else console.log("ok     cli: promotion scaffold");
 
 // The adversarial campaign files are generated artifacts too. They are the threat model that
 // decides what the attacker saw and which hashes can count, so a stale campaign file is a stale
@@ -349,7 +382,7 @@ for (const variant of [
 // by being written here, but the count is asserted so a report that stops being generated is caught
 // rather than silently skipped.
 run(["all", "--out", tmp]);
-const EXPECTED_REPORTS = 74;
+const EXPECTED_REPORTS = 77;
 const generated = readdirSync(tmp);
 if (generated.length !== EXPECTED_REPORTS) {
   console.error(`WRONG COUNT  \`all\` wrote ${generated.length} reports, expected ${EXPECTED_REPORTS}`);

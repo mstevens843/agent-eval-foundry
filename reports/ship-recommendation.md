@@ -12,6 +12,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 
 | family | verdict | blocking failures |
 |---|---|---|
+| `access-token-scope-expansion` | **NOT-READY** | difficulty-evidenced |
 | `audit-truth-financial-workflow` | **NOT-READY** | difficulty-evidenced |
 | `browser-action-replay` | **NOT-READY** | difficulty-evidenced |
 | `checker-required-memory-poisoning` | **SHIP** | none |
@@ -73,6 +74,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 
 | family | reference-solvable | human-ready | human-evidenced | claim level |
 |---|---|---|---|---|
+| `access-token-scope-expansion` | yes | n/a | n/a | reference-solvable |
 | `audit-truth-financial-workflow` | yes | n/a | n/a | reference-solvable |
 | `browser-action-replay` | yes | n/a | n/a | reference-solvable |
 | `checker-required-memory-poisoning` | yes | yes | pending | human-ready |
@@ -93,6 +95,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 
 | family | threat model | attack package | fs/container isolation | replay | probes | no-bypass audits | container audits | imports | unrepaired bypasses | claim level |
 |---|---|---|---|---|---|---|---:|---:|---:|---|
+| `access-token-scope-expansion` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 0 | audit-pending |
 | `audit-truth-financial-workflow` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 0 | audit-pending |
 | `browser-action-replay` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 0 | audit-pending |
 | `checker-required-memory-poisoning` | yes | yes | yes | yes | pass | 1 | 0 | 0 | 0 | adversarial-audited |
@@ -110,6 +113,47 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `ui-replay-live-dom` | yes | yes | yes | yes | pass | 1 | 0 | 0 | 0 | adversarial-audited |
 
 ## Per family
+
+### `access-token-scope-expansion` — NOT-READY
+
+| gate | result | detail |
+|---|---|---|
+| `solvable` | pass | 7 contract item(s) |
+| `verifier-graded` | pass | 8 expected mutant(s) |
+| `trust-boundary` | pass | 3/3 source(s) state unforgeability |
+| `detectable` | pass | all mechanisms detectable |
+| `fairness` | pass | 5 constraint(s) |
+| `cheat-resistance` | pass | 5 requirement(s) |
+| `is-a-family` | pass | 6 knob(s): seed, approvalDrift, tokenDrift, cacheFreshness, requestSurface, repeatCount |
+| `hidden-region-declared` | pass | The hidden suite samples the declared access-token state space: approval drift,  |
+| `measured-axes` | pass | 3 measured axes |
+| `reference-passes` | pass | reference clean |
+| `baselines-blocked` | pass | 2/2 baselines rejected |
+| `mutants-caught-by-intended-check` | pass | 8/8 caught by intended check |
+| `mechanisms-exercised` | pass | every attack blocks on its governing rule |
+| `isolation-level` | pass | subprocess; adequate while no agent artifact is graded |
+| `shared-bank-ready` | **FAIL** | 0 subject(s) shared with another family (need 3) |
+| `deterministic-reports` | pass | verified |
+| `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
+| `difficulty-evidenced` | **FAIL** | no counted agent trials |
+| `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
+| `not-already-solved` | n/a | no counted agent trials yet |
+| `priced` | pass | 18h build, $35 frontier |
+| `human-package-ready` | n/a | no human-readiness audit |
+| `human-solvability-evidenced` | n/a | no human evidence layer |
+| `human-ambiguity-reviewed` | n/a | no human review records |
+| `adversarial-threat-model-declared` | n/a | no adversarial audit layer |
+| `adversarial-package-ready` | n/a | no adversarial package audit |
+| `adversarial-audit-evidenced` | n/a | no adversarial audit evidence |
+| `no-known-unrepaired-bypass` | n/a | no adversarial audit evidence |
+| `adversarial-isolation-adequate` | n/a | no adversarial isolation profile |
+| `adversarial-exploit-replay-ready` | n/a | no exploit replay path |
+| `adversarial-hardening-probes-pass` | n/a | no deterministic hardening probes |
+| `adversarial-container-isolation-ready` | n/a | no container isolation layer |
+| `adversarial-container-no-network` | n/a | no container/no-network audit field |
+| `adversarial-import-replay-valid` | n/a | no counted imported adversarial audit |
+| `browser-backed-ready` | n/a | no browser-backed layer |
+| `browser-backed-measured` | n/a | no browser-backed layer |
 
 ### `audit-truth-financial-workflow` — NOT-READY
 

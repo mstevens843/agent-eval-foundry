@@ -14,6 +14,13 @@ Every trial this repository holds, what state it is in, and what a repair costs.
 
 ## Per family
 
+### `access-token-scope-expansion`
+
+Current challenge hash: `33cc98364ce2a6b3f9490e54937955d8`.
+
+| run | model | state | ran against |
+|---|---|---|---|
+
 ### `checker-required-memory-poisoning`
 
 Current challenge hash: `448f2f816c51030cc97a374816226168`.

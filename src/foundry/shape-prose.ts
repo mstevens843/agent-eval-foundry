@@ -318,4 +318,77 @@ export const SHAPE_PROSE: Readonly<Record<string, ShapeProse>> = {
       "Implementing the checker correctly while the subject itself fails the memory policy.",
     ],
   },
+
+  "access-token-scope-expansion": {
+    status: "built",
+    agentTrialsRun: 0,
+    agentTrialsPassed: 0,
+    evidence:
+      "Promoted from the first ranked executable mechanism probe, access-token-scope-expansion-probe. The full family is built and locally measured in src/families/access-token-scope-expansion/: 384 measured scenarios from a 1,152-point declared space, a clean reference, eight known-bad subjects/baselines, an authority-ledger verifier and a leak-checked challenge package. This is validation-mode local evidence only; no counted real-agent smoke trial has run.",
+    visibleRules: [
+      "A token grant may use only the current approval generation; cached approval state may be stale.",
+      "A token grant may use only a current active token.",
+      "The requested scope, current token scope and current approval scope must match exactly.",
+      "The requested resource, current token resource and current approval resource must match exactly.",
+      "The requested principal, current token principal and current approval principal must match exactly.",
+      "A completed irreversible grant may not execute again on a repeated attempt.",
+      "The audit cites current approval and token facts observed from the authority facade.",
+      "Reported decisions must match the verifier-owned effect ledger.",
+    ],
+    hiddenGradedRegion:
+      "The hidden suite samples the declared access-token state space: approval drift, token drift, cache freshness, request surface, repeat count and seed. Hidden scenarios add no rule beyond exact current approval/token binding and duplicate-effect prevention.",
+    referenceContract: [
+      "Read current approval and token state from the authority facade before deciding.",
+      "Block missing, revoked, superseded or stale approval generations.",
+      "Block missing or revoked tokens.",
+      "Block broader token scope, wildcard resource expansion and principal drift.",
+      "Issue exactly one grant effect when current authority facts match the request.",
+      "Keep a completion record so a repeated attempt does not duplicate the irreversible grant.",
+      "Return an audit whose observed facts match current authority state.",
+    ],
+    authoritativeSources: [
+      {
+        name: "token scope ledger",
+        whatItSettles: "the current token status, generation, principal, resource and scope",
+        whyEngineCannotForge:
+          "The subject receives only an authority facade. Calls are recorded by the harness and the current token record is generated outside the subject's report.",
+      },
+      {
+        name: "approval ledger",
+        whatItSettles: "the current approval status, generation, principal, resource and scope",
+        whyEngineCannotForge:
+          "Approval state is owned by the verifier harness. Cached snapshots may be passed to the subject, but the hidden verifier grades against current ledger observations.",
+      },
+      {
+        name: "grant-effect ledger",
+        whatItSettles: "which token grants actually executed and whether an irreversible grant duplicated",
+        whyEngineCannotForge:
+          "The subject can request a grant through `authority.issueToken`, but cannot read or edit the sealed effect ledger the verifier grades.",
+      },
+    ],
+    fairnessConstraints: [
+      "Every rule code the verifier grades is visible in SPEC.md.",
+      "The hidden set samples declared knobs and adds no OAuth-provider private behavior.",
+      "The exact equality rule is public: broader scopes and wildcard resources require reauthorization.",
+      "Cached state is explicitly documented as potentially stale.",
+      "Refusing everything fails liveness on valid grants, and trusting everything fails forbidden-effect checks.",
+    ],
+    cheatResistance: [
+      "The challenge package omits truth, verifier, runner, mutants, measured scenarios and answer matrix.",
+      "The verifier compares decisions to harness-owned authority calls and effects, not subject-written receipts.",
+      "A no-op subject fails when it reports grants without ledger effects.",
+      "An audit-only subject fails when it cites observations the call ledger does not support.",
+      "Trial records, when run later, must preserve challenge hash, transcript, submission and verifier output.",
+    ],
+    expectedFailureModes: [
+      "Trusting cached exact token state after current scope has expanded.",
+      "Treating wildcard or admin scope as a superset that authorizes the narrower request.",
+      "Using a token after revocation because the approval summary still looks valid.",
+      "Following a stale approval generation after supersession or scope reduction.",
+      "Executing a grant twice on repeated attempts.",
+      "Reporting success without issuing the authority-owned effect.",
+      "Blocking every request to avoid over-granting.",
+      "Writing an audit that cites cached or subject-written facts rather than current authority observations.",
+    ],
+  },
 };

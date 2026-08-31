@@ -1,0 +1,67 @@
+[
+  {
+    "id": "access-token-scope-expansion-from-probe",
+    "familyId": "access-token-scope-expansion",
+    "sourceCandidateId": "access-token-scope-expansion",
+    "sourceProbeId": "access-token-scope-expansion-probe",
+    "sourceMechanismIds": ["permission-boundary", "stale-state", "false-audit-history"],
+    "decision": "promote",
+    "status": "family-built",
+    "promotionReason": "The first ranked promoted probe caught scope-widening and stale-token known-bad subjects while the reference-like subject passed.",
+    "evidence": {
+      "sourceProbeVerdict": "promote_to_task_shape",
+      "referencePassed": true,
+      "badSubjectsCaught": "2/2",
+      "distinctChecks": ["current_state_observed", "decision_matches_truth", "no_forbidden_effect"],
+      "claimedEvidenceLevel": "local-evidence",
+      "countedAgentTrials": 0
+    },
+    "delta": {
+      "whatStaysFixed": [
+        "Approval binds exact principal, resource and scope.",
+        "Current authority state, not cached display state, decides grant legality.",
+        "Broader token authority is a denial until reauthorization."
+      ],
+      "whatChanges": [
+        "The probe's three cases expand into a cross-product of approval drift, token drift, cache freshness, request surface and repeat count.",
+        "The full family adds duplicate-effect prevention, audit-current-evidence checks and no-op/over-blocker baselines.",
+        "The verifier grades authority calls and effects outside the subject process."
+      ],
+      "hiddenRuleSurfaceChange": "expanded",
+      "hiddenRuleSurfaceNote": "Expanded hidden coverage is public in the SPEC as declared approval/token/request/repeat knobs; it samples more combinations but adds no private rule."
+    },
+    "visibleRulesCarriedForward": [
+      "A grant may use only the current approval generation.",
+      "A grant may use only a current active token.",
+      "Requested scope, token scope and approval scope must match exactly.",
+      "Requested resource, token resource and approval resource must match exactly.",
+      "Requested principal, token principal and approval principal must match exactly.",
+      "Duplicate grants must not execute on repeated attempts.",
+      "The audit must cite current authority facts.",
+      "Reported decisions must match verifier-owned effects."
+    ],
+    "knobsExpanded": ["approvalDrift", "tokenDrift", "cacheFreshness", "requestSurface", "repeatCount"],
+    "authoritativeTruthSourceCarriedForward": "OAuth policy manifest and token scope ledger",
+    "expectedMutantsCarriedForward": [
+      "scope-widener",
+      "stale-state-reader",
+      "stale-approval-follower",
+      "policy-bypasser",
+      "duplicate-executor",
+      "audit-liar",
+      "nop-faker",
+      "over-blocker"
+    ],
+    "expectedBaselinesCarriedForward": ["trust cached token state", "refuse every grant"],
+    "risksIntroduced": {
+      "fairness": ["The hidden cross-product must remain sampling of public state knobs, not private OAuth semantics."],
+      "verifier": ["A final success status is insufficient; the verifier must own the grant-effect ledger."],
+      "adversarial": ["Challenge package must not ship truth, measured scenarios or authority-ledger implementation."],
+      "humanSolvability": ["Public spec must explain exact scope/resource/principal equality and repeat-attempt behavior."]
+    },
+    "preRegisteredConfirmSignal": "Reference passes all measured scenarios and every carried-forward mutant fails its intended named check.",
+    "preRegisteredKillSignal": "A counted smoke trial solves every scenario or failures concentrate only on ambiguous public wording.",
+    "expectedBuildHours": 18,
+    "expectedFirstSmokeTrialProvider": "OpenAI/Codex only"
+  }
+]

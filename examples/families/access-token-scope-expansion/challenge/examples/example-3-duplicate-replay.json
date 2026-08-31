@@ -1,0 +1,33 @@
+{
+  "view": {
+    "id": "ats-stable-exact-cache-fresh-delegated-r2-41",
+    "request": {
+      "id": "grant-invoice-7",
+      "approvalId": "approval-42",
+      "tokenId": "token-42",
+      "approvalGeneration": 3,
+      "principal": "agent-bot",
+      "resource": "invoice-7",
+      "scope": "write:invoice",
+      "surface": "delegated"
+    },
+    "cachedApproval": {
+      "id": "approval-42",
+      "generation": 3,
+      "principal": "agent-bot",
+      "resource": "invoice-7",
+      "scope": "write:invoice",
+      "status": "active"
+    },
+    "cachedToken": {
+      "id": "token-42",
+      "generation": 3,
+      "principal": "agent-bot",
+      "resource": "invoice-7",
+      "scope": "write:invoice",
+      "status": "active"
+    }
+  },
+  "replayCount": 2,
+  "note": "The first attempt can grant. The second must not issue a duplicate effect."
+}

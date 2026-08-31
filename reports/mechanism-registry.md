@@ -13,7 +13,7 @@ be restamped rather than reinvented.
 | argued | 6 |
 | speculative | 3 |
 | mutants in the bank | 72 |
-| families declared | 15 |
+| families declared | 16 |
 | mechanisms with no mutant (undetectable) | 0 |
 | mechanisms with no family yet | 0 |
 
@@ -30,12 +30,12 @@ describe but has no way to detect.
 | mechanism | maturity | mutants | families | ledger rows |
 |---|---|---:|---:|---:|
 | `uncertain-external-effects` | **measured** | 10 | 2 | 9 |
-| `stale-state` | argued | 19 | 5 | 15 |
+| `stale-state` | argued | 19 | 6 | 15 |
 | `duplicate-side-effects` | **measured** | 7 | 5 | 14 |
-| `false-audit-history` | **measured** | 9 | 4 | 12 |
+| `false-audit-history` | **measured** | 9 | 5 | 12 |
 | `liveness-stall` | **measured** | 8 | 2 | 6 |
 | `prompt-injection-via-retrieval` | argued | 4 | 4 | 5 |
-| `permission-boundary` | argued | 11 | 6 | 12 |
+| `permission-boundary` | argued | 11 | 7 | 12 |
 | `ui-replay-mismatch` | _speculative_ | 17 | 3 | 3 |
 | `hidden-environment-dependency` | argued | 8 | 4 | 5 |
 | `tool-result-ambiguity` | argued | 5 | 4 | 5 |

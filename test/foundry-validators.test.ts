@@ -249,6 +249,19 @@ const COVERED_IN_PROBE_RUNNER_TEST: readonly RuleCode[] = [
   "CALIBRATION_MISSING_FEATURES",
 ];
 
+/** Rules whose known-bad case lives in `promotion.test.ts`: probe-to-family promotion validation. */
+const COVERED_IN_PROMOTION_TEST: readonly RuleCode[] = [
+  "PROMOTION_NO_SOURCE_PROBE",
+  "PROMOTION_SOURCE_NOT_PROMOTED",
+  "PROMOTION_NO_FIXED",
+  "PROMOTION_NO_CHANGED",
+  "PROMOTION_NO_TRUTH_SOURCE",
+  "PROMOTION_NO_EXPECTED_MUTANTS",
+  "PROMOTION_NO_KILL_SIGNAL",
+  "PROMOTION_CLAIMS_DIFFICULTY_PRETRIAL",
+  "PROMOTION_HIDDEN_RULE_SURFACE_UNDECLARED",
+];
+
 /** Rules exercised by code below rather than by a JSON fixture. Keeps assertion 3 honest. */
 const PROGRAMMATIC: readonly RuleCode[] = [
   "E_TYPE",
@@ -511,6 +524,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ...COVERED_IN_HUMAN_SOLVABILITY_TEST,
       ...COVERED_IN_ADVERSARIAL_AUDIT_TEST,
       ...COVERED_IN_PROBE_RUNNER_TEST,
+      ...COVERED_IN_PROMOTION_TEST,
     ]);
     const uncovered = RULE_CODES.filter((c) => !covered.has(c));
     expect(
@@ -532,6 +546,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ["test/human-solvability.test.ts", COVERED_IN_HUMAN_SOLVABILITY_TEST],
       ["test/adversarial-audit.test.ts", COVERED_IN_ADVERSARIAL_AUDIT_TEST],
       ["test/probe-runner.test.ts", COVERED_IN_PROBE_RUNNER_TEST],
+      ["test/promotion.test.ts", COVERED_IN_PROMOTION_TEST],
     ];
     for (const [file, codes] of delegated) {
       const source = readFileSync(`${ROOT}${file}`, "utf8");
