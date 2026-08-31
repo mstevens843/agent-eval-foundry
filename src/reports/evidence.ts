@@ -16,6 +16,7 @@
 // default path. A live archive can still be passed explicitly.
 
 import { join } from "node:path";
+import { augmentAdversarialEvidenceMap } from "../adversarial-audit/records.js";
 import { ALL_SUBJECTS, runFamily, toMatrix } from "../families/prompt-injection-containment/runner.js";
 import type { RunResult } from "../families/prompt-injection-containment/runner.js";
 import { BUILT_FAMILY_IDS, builtFamily } from "../families/registry.js";
@@ -197,9 +198,12 @@ export function familyEvidenceFor(root: string, familyId: string = PIC_FAMILY): 
 
 /** Family evidence keyed by id, in the shape the ship report expects. */
 export const familyEvidenceMap = (root: string): Record<string, FamilyEvidence> =>
-  augmentFamilyEvidenceMap(
+  augmentAdversarialEvidenceMap(
     root,
-    Object.fromEntries(BUILT_FAMILY_IDS.map((id) => [id, familyEvidenceFor(root, id).evidence])),
+    augmentFamilyEvidenceMap(
+      root,
+      Object.fromEntries(BUILT_FAMILY_IDS.map((id) => [id, familyEvidenceFor(root, id).evidence])),
+    ),
   );
 
 /** How many subjects in this family also attempted another measured family. */

@@ -11,12 +11,19 @@
 
 import type { Registry } from "../foundry/registry.js";
 import type { TaskShape } from "../foundry/schema.js";
-import { type FamilyEvidence, GATES, type HumanGateEvidence, assessFamily } from "./ship-report.js";
+import {
+  type FamilyEvidence,
+  GATES,
+  type HumanGateEvidence,
+  type VerifierIntegrityEvidence,
+  assessFamily,
+} from "./ship-report.js";
 
 export interface GateReportInput {
   readonly registry: Registry;
   readonly evidence: Readonly<Record<string, FamilyEvidence>>;
   readonly humanEvidence?: Readonly<Record<string, HumanGateEvidence>>;
+  readonly verifierIntegrity?: Readonly<Record<string, VerifierIntegrityEvidence>>;
 }
 
 const esc = (s: string): string => s.replace(/\|/g, "\\|");
@@ -30,6 +37,7 @@ export function renderGateReport(input: GateReportInput): string {
       input.registry,
       input.evidence[s.familyId],
       input.humanEvidence?.[s.familyId],
+      input.verifierIntegrity?.[s.familyId],
     ),
   }));
 

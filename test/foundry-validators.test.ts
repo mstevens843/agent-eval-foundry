@@ -179,6 +179,28 @@ const COVERED_IN_HUMAN_SOLVABILITY_TEST: readonly RuleCode[] = [
   "HUMAN_CLAIM_WITHOUT_CLEAN_RECORD",
 ];
 
+/**
+ * Rules whose known-bad case lives in `adversarial-audit.test.ts`: verifier-integrity audit
+ * countability, bypass repair lifecycle and adversarial-audited claim coherence.
+ */
+const COVERED_IN_ADVERSARIAL_AUDIT_TEST: readonly RuleCode[] = [
+  "ADV_COUNTED_HASH_MISSING",
+  "ADV_COUNTED_HASH_STALE",
+  "ADV_COUNTED_NO_TRANSCRIPT",
+  "ADV_COUNTED_NO_ATTACK_SURFACE",
+  "ADV_COUNTED_NO_ACCESS_BOUNDARY",
+  "ADV_COUNTED_PROVIDER_REFUSAL",
+  "ADV_COUNTED_INFRA_ERROR",
+  "ADV_COUNTED_TIMEOUT",
+  "ADV_COUNTED_NO_COUNTABILITY_REASON",
+  "ADV_COUNTED_NO_BYPASS_WITHOUT_VERIFIER",
+  "ADV_COUNTED_BYPASS_WITHOUT_EXPLOIT",
+  "ADV_BYPASS_FIXED_WITHOUT_REPAIR",
+  "ADV_REPAIR_CHANGED_PACKAGE_WITHOUT_INVALIDATION",
+  "ADV_CLAIM_WITHOUT_NO_BYPASS_AUDIT",
+  "ADV_HIDDEN_ARTIFACT_IN_ATTACKER_CONTEXT",
+];
+
 /** Rules exercised by code below rather than by a JSON fixture. Keeps assertion 3 honest. */
 const PROGRAMMATIC: readonly RuleCode[] = [
   "E_TYPE",
@@ -439,6 +461,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ...COVERED_IN_CROSS_PROVIDER_TEST,
       ...COVERED_IN_CROSS_FAMILY_TEST,
       ...COVERED_IN_HUMAN_SOLVABILITY_TEST,
+      ...COVERED_IN_ADVERSARIAL_AUDIT_TEST,
     ]);
     const uncovered = RULE_CODES.filter((c) => !covered.has(c));
     expect(
@@ -458,6 +481,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ["test/cross-provider.test.ts", COVERED_IN_CROSS_PROVIDER_TEST],
       ["test/cross-family-evidence.test.ts", COVERED_IN_CROSS_FAMILY_TEST],
       ["test/human-solvability.test.ts", COVERED_IN_HUMAN_SOLVABILITY_TEST],
+      ["test/adversarial-audit.test.ts", COVERED_IN_ADVERSARIAL_AUDIT_TEST],
     ];
     for (const [file, codes] of delegated) {
       const source = readFileSync(`${ROOT}${file}`, "utf8");

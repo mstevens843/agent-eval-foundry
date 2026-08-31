@@ -16,7 +16,7 @@ slots and a prepared bundle — never a zero.
 | `claude-sonnet` | anthropic | **no** | Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles |
 | `claude-haiku` | anthropic | **no** | Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles |
 | `claude-fable` | anthropic | **no** | Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles |
-| `codex` | openai | yes | codex-cli 0.138.0 |
+| `codex` | openai | yes | codex-cli 0.151.0 |
 | `gemini` | google | **no** | 0.46.0; entitlement previously blocked with IneligibleTierError, so this phase treats Gemini as import-only until a real authenticated run changes that |
 | `external` | external | **no** | external by declaration: prepare a bundle and import the result |
 

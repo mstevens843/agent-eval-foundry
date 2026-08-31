@@ -68,6 +68,21 @@ export interface FamilyEvidence {
   readonly humanReviewRecords?: number;
   readonly unresolvedHumanAmbiguities?: number;
   readonly humanClaimLevel?: "reference-solvable" | "human-ready" | "human-evidenced";
+  /** Verifier-integrity layer: has the grader been attacked under a declared threat model? */
+  readonly adversarialThreatModelDeclared?: boolean;
+  readonly adversarialPackageReady?: boolean;
+  readonly adversarialPackageReadyDetail?: string;
+  readonly countedNoBypassAudits?: number;
+  readonly countedBypassAudits?: number;
+  readonly unrepairedBypasses?: number;
+  readonly repairedBypasses?: number;
+  readonly adversarialAuditRecords?: number;
+  readonly adversarialClaimLevel?:
+    | "adversarial-ready"
+    | "adversarial-audited"
+    | "bypass-found"
+    | "bypass-repaired"
+    | "audit-pending";
 }
 
 export interface HumanGateEvidence {
@@ -78,6 +93,24 @@ export interface HumanGateEvidence {
   readonly humanReviewRecords: number;
   readonly unresolvedHumanAmbiguities: number;
   readonly humanClaimLevel: "reference-solvable" | "human-ready" | "human-evidenced";
+}
+
+export interface VerifierIntegrityEvidence {
+  readonly familyId: string;
+  readonly adversarialThreatModelDeclared: boolean;
+  readonly adversarialPackageReady: boolean;
+  readonly adversarialPackageReadyDetail: string;
+  readonly countedNoBypassAudits: number;
+  readonly countedBypassAudits: number;
+  readonly unrepairedBypasses: number;
+  readonly repairedBypasses: number;
+  readonly adversarialAuditRecords: number;
+  readonly adversarialClaimLevel:
+    | "adversarial-ready"
+    | "adversarial-audited"
+    | "bypass-found"
+    | "bypass-repaired"
+    | "audit-pending";
 }
 
 export type GateVerdict = "pass" | "fail" | "n/a";
@@ -93,6 +126,7 @@ export interface Gate {
     registry: Registry,
     evidence?: FamilyEvidence,
     humanEvidence?: HumanGateEvidence,
+    verifierIntegrity?: VerifierIntegrityEvidence,
   ) => { verdict: GateVerdict; detail: string };
 }
 
@@ -104,6 +138,7 @@ const MIN_KNOBS = 3;
 const MIN_MEASURED_AXES = 2;
 
 const humanFor = (e: FamilyEvidence | undefined, h: HumanGateEvidence | undefined) => h ?? e;
+const adversarialFor = (e: FamilyEvidence | undefined, a: VerifierIntegrityEvidence | undefined) => a ?? e;
 
 export const GATES: readonly Gate[] = [
   {
@@ -529,6 +564,86 @@ export const GATES: readonly Gate[] = [
       };
     },
   },
+  {
+    id: "adversarial-threat-model-declared",
+    question: "Is there a declared verifier-bypass threat model for this family?",
+    rationale:
+      "Cheat resistance is a design requirement, not evidence that anyone tried to break the grader. " +
+      "The adversarial layer starts by declaring the attacker objective, surface and access boundary.",
+    blocking: false,
+    evaluate: (_s, _r, e, _h, a) => {
+      const adv = adversarialFor(e, a);
+      if (adv?.adversarialThreatModelDeclared === undefined) {
+        return { verdict: "n/a", detail: "no adversarial audit layer" };
+      }
+      return {
+        verdict: adv.adversarialThreatModelDeclared ? "pass" : "fail",
+        detail: adv.adversarialThreatModelDeclared ? "threat model declared" : "no threat model declared",
+      };
+    },
+  },
+  {
+    id: "adversarial-package-ready",
+    question: "Is a hash-pinned attack packet ready for this family?",
+    rationale:
+      "An adversarial audit without a preserved package is just a story about a task. The attacker " +
+      "packet must pin the public challenge hash and state which artifacts are forbidden.",
+    blocking: false,
+    evaluate: (_s, _r, e, _h, a) => {
+      const adv = adversarialFor(e, a);
+      if (adv?.adversarialPackageReady === undefined) {
+        return { verdict: "n/a", detail: "no adversarial package audit" };
+      }
+      return {
+        verdict: adv.adversarialPackageReady ? "pass" : "fail",
+        detail:
+          adv.adversarialPackageReadyDetail ??
+          (adv.adversarialPackageReady ? "adversarial package ready" : "adversarial package missing"),
+      };
+    },
+  },
+  {
+    id: "adversarial-audit-evidenced",
+    question: "Has a counted attacker failed to find a verifier bypass against the current package?",
+    rationale:
+      "No adversarial run yet is not the same as no bypass. This gate counts only current-hash, " +
+      "non-refusal, non-infrastructure, transcript-preserved no-bypass audits.",
+    blocking: false,
+    evaluate: (_s, _r, e, _h, a) => {
+      const adv = adversarialFor(e, a);
+      if (adv?.countedNoBypassAudits === undefined) {
+        return { verdict: "n/a", detail: "no adversarial audit evidence" };
+      }
+      return {
+        verdict: adv.countedNoBypassAudits > 0 ? "pass" : "fail",
+        detail:
+          adv.countedNoBypassAudits > 0
+            ? `${adv.countedNoBypassAudits} counted no-bypass audit(s)`
+            : "no counted no-bypass audit on record",
+      };
+    },
+  },
+  {
+    id: "no-known-unrepaired-bypass",
+    question: "Are there zero counted, known, unrepaired verifier bypasses?",
+    rationale:
+      "A counted bypass does not necessarily kill the benchmark family, but it blocks any " +
+      "verifier-integrity claim until the repair is recorded and old evidence is invalidated.",
+    blocking: false,
+    evaluate: (_s, _r, e, _h, a) => {
+      const adv = adversarialFor(e, a);
+      if (adv?.unrepairedBypasses === undefined) {
+        return { verdict: "n/a", detail: "no adversarial audit evidence" };
+      }
+      return {
+        verdict: adv.unrepairedBypasses === 0 ? "pass" : "fail",
+        detail:
+          adv.unrepairedBypasses === 0
+            ? `${adv.countedBypassAudits ?? 0} counted bypass(es), none unrepaired`
+            : `${adv.unrepairedBypasses} counted unrepaired bypass(es)`,
+      };
+    },
+  },
 ];
 
 export type ShipVerdict = "SHIP" | "HOLD" | "NOT-READY";
@@ -545,9 +660,10 @@ export function assessFamily(
   registry: Registry,
   evidence?: FamilyEvidence,
   humanEvidence?: HumanGateEvidence,
+  verifierIntegrity?: VerifierIntegrityEvidence,
 ): FamilyAssessment {
   const results = GATES.map((gate) => {
-    const { verdict, detail } = gate.evaluate(shape, registry, evidence, humanEvidence);
+    const { verdict, detail } = gate.evaluate(shape, registry, evidence, humanEvidence, verifierIntegrity);
     return { gate, verdict, detail };
   });
   const blockingFailures = results
@@ -573,9 +689,10 @@ export function renderShipReport(
   registry: Registry,
   evidence: Readonly<Record<string, FamilyEvidence>> = {},
   humanEvidence: Readonly<Record<string, HumanGateEvidence>> = {},
+  verifierIntegrity: Readonly<Record<string, VerifierIntegrityEvidence>> = {},
 ): string {
   const assessments = shapes.map((s) =>
-    assessFamily(s, registry, evidence[s.familyId], humanEvidence[s.familyId]),
+    assessFamily(s, registry, evidence[s.familyId], humanEvidence[s.familyId], verifierIntegrity[s.familyId]),
   );
   const lines: string[] = [
     "# Ship / no-ship",
@@ -587,6 +704,8 @@ export function renderShipReport(
     "",
     "The human layer is reported as advisory claim levels. `reference-solvable`, `human-ready` and",
     "`human-evidenced` are separate claims and do not silently rewrite the model/verifier verdict.",
+    "The verifier-integrity layer is also advisory here: `audit-pending`, `adversarial-ready`,",
+    "`adversarial-audited`, `bypass-found` and `bypass-repaired` are separate claims from difficulty.",
     "",
     "| family | verdict | blocking failures |",
     "|---|---|---|",
@@ -611,6 +730,20 @@ export function renderShipReport(
       const ready = h?.humanPackageReady;
       const solves = h?.cleanHumanSolves;
       return `| \`${s.familyId}\` | ${s.referenceContract.length > 0 ? "yes" : "no"} | ${ready === undefined ? "n/a" : ready ? "yes" : "no"} | ${solves === undefined ? "n/a" : solves > 0 ? `yes (${solves})` : "pending"} | ${h?.humanClaimLevel ?? "reference-solvable"} |`;
+    }),
+    "",
+    "## Verifier-integrity claim levels",
+    "",
+    "| family | threat model | attack package | no-bypass audits | unrepaired bypasses | claim level |",
+    "|---|---|---|---|---:|---|",
+    ...shapes.map((s) => {
+      const e = evidence[s.familyId];
+      const a = verifierIntegrity[s.familyId] ?? e;
+      const threat = a?.adversarialThreatModelDeclared;
+      const ready = a?.adversarialPackageReady;
+      const noBypass = a?.countedNoBypassAudits;
+      const unrepaired = a?.unrepairedBypasses;
+      return `| \`${s.familyId}\` | ${threat === undefined ? "n/a" : threat ? "yes" : "no"} | ${ready === undefined ? "n/a" : ready ? "yes" : "no"} | ${noBypass === undefined ? "n/a" : noBypass} | ${unrepaired === undefined ? 0 : unrepaired} | ${a?.adversarialClaimLevel ?? "audit-pending"} |`;
     }),
     "",
     "## Per family",

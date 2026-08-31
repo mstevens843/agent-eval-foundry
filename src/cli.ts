@@ -13,6 +13,33 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
+import {
+  importAdversarialBundle,
+  prepareAdversarialBundle,
+  runAdversarialAudit,
+} from "./adversarial-audit/bundles.js";
+import {
+  ADVERSARIAL_PACKAGE_FAMILIES,
+  adversarialBundlePath,
+  adversarialCampaignPath,
+  auditAdversarialReadinessForFamilies,
+  buildAdversarialCampaign,
+  currentAdversarialPackageHash,
+  loadAdversarialCampaigns,
+} from "./adversarial-audit/readiness.js";
+import {
+  adversarialGateEvidenceMap,
+  assertAdversarialAuditsValid,
+  augmentAdversarialEvidenceMap,
+  loadAdversarialAttackRecords,
+  summarizeAdversarialEvidence,
+} from "./adversarial-audit/records.js";
+import {
+  renderAdversarialAuditReport,
+  renderAdversarialCampaignReport,
+  renderAdversarialReadinessReport,
+} from "./adversarial-audit/report.js";
+import { adversarialAttackFailures } from "./adversarial-audit/validate.js";
 import { type MeasureOptions, measure } from "./axis-meter.js";
 import { checkChallengePackage } from "./challenge/package-check.js";
 import { buildChallengePackage } from "./challenge/package.js";
@@ -205,6 +232,15 @@ FAMILIES (run a measured mini-benchmark)
   history import [path] [--out f]  normalize Harbor runs from the Durable Outbox repo
   human readiness [--out f]      public-package audit for clean-room human review
   human solvability [--out f]    counted independent human solve evidence
+  adversarial readiness [--out f] verifier-integrity attack readiness
+  adversarial campaign <family> [--json]  threat model and campaign plan
+  adversarial prepare <family> [--provider p] [--out dir]  build attack packet
+  adversarial run <family> [--provider codex] [--run-id id] [--timeout ms]
+                                 run one local verifier-bypass audit; Anthropic is disabled
+  adversarial import <dir>       import a completed adversarial packet
+  adversarial verify <run-id>    validate one adversarial audit record
+  adversarial report [--out f]   counted verifier-integrity evidence
+  adversarial all                regenerate campaign files and attack bundles
 
 PRODUCTION
   scaffold --shape <file> [--out dir]
@@ -556,6 +592,131 @@ function humanCommand(argv: readonly string[], root: string): string {
   throw new Error(`unknown human subcommand "${sub}"; expected readiness | solvability`);
 }
 
+function writeAdversarialCampaignFiles(root: string): readonly string[] {
+  return ADVERSARIAL_PACKAGE_FAMILIES.map((familyId) => {
+    const campaign = buildAdversarialCampaign(root, familyId);
+    const out = adversarialCampaignPath(root, familyId);
+    mkdirSync(dirname(out), { recursive: true });
+    writeFileSync(out, `${JSON.stringify(campaign, null, 2)}\n`, "utf8");
+    return out;
+  });
+}
+
+function adversarialCommand(argv: readonly string[], root: string): string {
+  const sub = positional(argv, 1) ?? "readiness";
+  if (sub === "readiness")
+    return renderAdversarialReadinessReport(auditAdversarialReadinessForFamilies(root));
+  if (sub === "report") return renderAdversarialAuditReport(summarizeAdversarialEvidence(root));
+  if (sub === "campaign") {
+    const familyId = positional(argv, 2);
+    const campaigns =
+      familyId === undefined ? loadAdversarialCampaigns(root) : [buildAdversarialCampaign(root, familyId)];
+    if (argv.includes("--json")) {
+      return `${JSON.stringify(campaigns.length === 1 ? campaigns[0] : campaigns, null, 2)}\n`;
+    }
+    return renderAdversarialCampaignReport(campaigns);
+  }
+  if (sub === "prepare") {
+    const familyId = positional(argv, 2);
+    if (familyId === undefined) throw new Error("adversarial prepare needs a family id");
+    const out = flag(argv, "--out") ?? adversarialBundlePath(root, familyId);
+    const provider = flag(argv, "--provider") ?? "external";
+    const bundle = prepareAdversarialBundle(root, familyId, out, provider);
+    return [
+      `family      ${bundle.familyId}`,
+      `campaign    ${bundle.campaign.campaignId}`,
+      `provider    ${bundle.provider.id} (${bundle.provider.model})`,
+      `available   ${bundle.available ? "yes" : "NO"} — ${bundle.availability}`,
+      `challenge   hash ${bundle.campaign.challengeHash}`,
+      `bundle      ${bundle.dir}/ (${bundle.files.join(", ")})`,
+      "",
+      `Import with: foundry adversarial import ${bundle.dir}`,
+      "",
+    ].join("\n");
+  }
+  if (sub === "run") {
+    const familyId = positional(argv, 2);
+    if (familyId === undefined) throw new Error("adversarial run needs a family id");
+    const provider = flag(argv, "--provider") ?? "codex";
+    if (provider.startsWith("claude")) {
+      throw new Error("Anthropic/Claude adversarial runs are disabled for this phase; prepare/import only");
+    }
+    const runId =
+      flag(argv, "--run-id") ??
+      `${familyId}-adversarial-${provider}-${new Date().toISOString().slice(0, 10)}`;
+    const result = runAdversarialAudit({
+      root,
+      familyId,
+      providerId: provider,
+      runId,
+      timeoutMs: numeric(argv, "--timeout") ?? 900_000,
+    });
+    return [
+      `attack     ${result.record.attackId}`,
+      `family     ${result.record.familyId}`,
+      `provider   ${result.record.attacker.provider} (${result.record.attacker.model})`,
+      `status     ${result.record.status}`,
+      `counts     ${result.record.counts ? "yes" : "NO"} — ${result.record.countabilityReason}`,
+      `bypass     ${result.record.bypassClassification}`,
+      `directory  ${result.runDir}`,
+      "",
+    ].join("\n");
+  }
+  if (sub === "import") {
+    const dir = positional(argv, 2);
+    if (dir === undefined) throw new Error("adversarial import needs a bundle directory");
+    const record = importAdversarialBundle(root, dir);
+    return [
+      `imported   ${record.attackId}`,
+      `family     ${record.familyId}`,
+      `status     ${record.status}`,
+      `counts     ${record.counts ? "yes" : "NO"} — ${record.countabilityReason}`,
+      `bypass     ${record.bypassClassification}`,
+      "",
+    ].join("\n");
+  }
+  if (sub === "verify") {
+    const attackId = positional(argv, 2);
+    if (attackId === undefined) throw new Error("adversarial verify needs an attack id");
+    const loaded = loadAdversarialAttackRecords(root).find((r) => r.record.attackId === attackId);
+    if (loaded === undefined) throw new Error(`no adversarial audit record "${attackId}"`);
+    const current = currentAdversarialPackageHash(root, loaded.record.familyId);
+    const failures = adversarialAttackFailures(loaded.record, {
+      currentChallengeHash: current,
+      transcriptText: loaded.transcriptText,
+      exploitText: loaded.exploitText,
+      verifierText: loaded.verifierText,
+    });
+    return [
+      `attack     ${loaded.record.attackId}`,
+      `family     ${loaded.record.familyId}`,
+      `challenge  record ${loaded.record.challengeHash ?? "none"} / current ${current ?? "none"}`,
+      `status     ${loaded.record.status}`,
+      `counts     ${loaded.record.counts ? "yes" : "NO"} — ${loaded.record.countabilityReason}`,
+      `bypass     ${loaded.record.bypassClassification}`,
+      `verifier   ${loaded.record.verifier.status}`,
+      failures.length === 0 ? "valid      yes" : `valid      NO — ${failures.map((f) => f.code).join(", ")}`,
+      "",
+    ].join("\n");
+  }
+  if (sub === "all") {
+    const campaigns = writeAdversarialCampaignFiles(root);
+    const bundles = ADVERSARIAL_PACKAGE_FAMILIES.map((familyId) =>
+      prepareAdversarialBundle(root, familyId, adversarialBundlePath(root, familyId)),
+    );
+    return [
+      `wrote ${campaigns.length} adversarial campaign file(s)`,
+      ...campaigns.map((p) => `  ${p}`),
+      `prepared ${bundles.length} adversarial attack bundle(s)`,
+      ...bundles.map((b) => `  ${b.dir}`),
+      "",
+    ].join("\n");
+  }
+  throw new Error(
+    `unknown adversarial subcommand "${sub}"; expected readiness | campaign | prepare | run | import | verify | report | all`,
+  );
+}
+
 function crossFamilyCommand(root: string): string {
   const registry = loadRegistry(root);
   const outboxRaw = readJson(join(root, "examples/durable-outbox/matrix.json"));
@@ -603,6 +764,7 @@ function checkCommand(root: string): string {
     );
   }
   assertHumanReviewsValid(root);
+  assertAdversarialAuditsValid(root);
 
   return [
     "registry OK",
@@ -614,6 +776,7 @@ function checkCommand(root: string): string {
     "  coverage    every mechanism has a mutant; no mutant is orphaned",
     "  consistency ledger statuses agree with the ship gate; every kill has a postmortem",
     "  human       counted clean-room reviews validate against current package hashes",
+    "  adversarial counted verifier-integrity audits validate against current package hashes",
     "",
   ].join("\n");
 }
@@ -1599,15 +1762,21 @@ function allCommand(argv: readonly string[], root: string): string {
   const humanAudits = auditHumanReadinessForFamilies(root);
   const humanSummaries = summarizeHumanEvidence(humanAudits, loadHumanReviewRecords(root));
   const humanGateEvidence = humanGateEvidenceMap(humanSummaries);
+  const adversarialAudits = auditAdversarialReadinessForFamilies(root);
+  const adversarialSummaries = summarizeAdversarialEvidence(root);
+  const adversarialGateEvidence = adversarialGateEvidenceMap(adversarialSummaries);
   // Evidence for EVERY built family, not just the first one. The determinism test builds it the
   // same way, and the two drifted the moment a second family had evidence to report.
-  const allEvidence = augmentFamilyEvidenceMap(
+  const allEvidence = augmentAdversarialEvidenceMap(
     root,
-    Object.fromEntries(BUILT_FAMILY_IDS.map((id) => [id, evidenceFor(id).evidence])),
+    augmentFamilyEvidenceMap(
+      root,
+      Object.fromEntries(BUILT_FAMILY_IDS.map((id) => [id, evidenceFor(id).evidence])),
+    ),
   );
   write(
     "ship-recommendation.md",
-    renderShipReport(registry.shapes, registry, allEvidence, humanGateEvidence),
+    renderShipReport(registry.shapes, registry, allEvidence, humanGateEvidence, adversarialGateEvidence),
   );
   write(
     "prompt-injection-containment-trial-readiness.md",
@@ -1624,10 +1793,18 @@ function allCommand(argv: readonly string[], root: string): string {
   );
   write(
     "ship-gate-report.md",
-    renderGateReport({ registry, evidence: allEvidence, humanEvidence: humanGateEvidence }),
+    renderGateReport({
+      registry,
+      evidence: allEvidence,
+      humanEvidence: humanGateEvidence,
+      verifierIntegrity: adversarialGateEvidence,
+    }),
   );
   write("human-readiness-report.md", renderHumanReadinessReport(humanAudits));
   write("human-solvability-report.md", renderHumanSolvabilityReport(humanSummaries));
+  write("adversarial-readiness-report.md", renderAdversarialReadinessReport(adversarialAudits));
+  write("adversarial-audit-report.md", renderAdversarialAuditReport(adversarialSummaries));
+  write("adversarial-campaign-report.md", renderAdversarialCampaignReport(loadAdversarialCampaigns(root)));
 
   // ---- the campaign + trial-analysis layer -------------------------------------------------------
   for (const plan of loadCampaigns(root)) {
@@ -2523,6 +2700,15 @@ export function main(argv: readonly string[]): number {
       case "human":
         emit(argv, humanCommand(argv, root));
         return 0;
+      case "adversarial": {
+        const sub = positional(argv, 1) ?? "readiness";
+        if (sub === "readiness" || sub === "report" || sub === "campaign") {
+          emit(argv, adversarialCommand(argv, root));
+        } else {
+          process.stdout.write(adversarialCommand(argv, root));
+        }
+        return 0;
+      }
       case "challenge": {
         // Not `emit`: --out names a DIRECTORY here, as it does for `scaffold`. Summary to stdout.
         process.stdout.write(challengeCommand(argv, root));
@@ -2713,6 +2899,7 @@ export function main(argv: readonly string[]): number {
             r,
             familyEvidenceMap(root),
             humanGateEvidenceMap(humanEvidenceForFamilies(root)),
+            adversarialGateEvidenceMap(summarizeAdversarialEvidence(root)),
           ),
         );
         return 0;

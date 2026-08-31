@@ -40,6 +40,10 @@ Every figure below is measured: produced by running the family, not by declaring
 | `human-package-ready` | no | pass | public package passed human-readiness audit |
 | `human-solvability-evidenced` | no | fail | no clean independent human solve on record |
 | `human-ambiguity-reviewed` | no | pass | 0 human review record(s), no open ambiguity |
+| `adversarial-threat-model-declared` | no | pass | threat model declared |
+| `adversarial-package-ready` | no | pass | adversarial campaign, package hash and attack bundle are ready |
+| `adversarial-audit-evidenced` | no | fail | no counted no-bypass audit on record |
+| `no-known-unrepaired-bypass` | no | pass | 0 counted bypass(es), none unrepaired |
 
 ## Mechanisms
 

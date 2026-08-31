@@ -160,6 +160,73 @@ export {
   parseHumanReviewRecord,
 } from "./human-solvability/validate.js";
 
+// --- adversarial verifier-integrity: attempted bypass records vs cheat-resistance design ---
+export {
+  adversarialVerifierOutput,
+  importAdversarialBundle,
+  prepareAdversarialBundle,
+} from "./adversarial-audit/bundles.js";
+export type { PreparedAdversarialBundle } from "./adversarial-audit/bundles.js";
+export {
+  ADVERSARIAL_AUDITED_FAMILIES,
+  ADVERSARIAL_PACKAGE_FAMILIES,
+  adversarialBundlePath,
+  adversarialCampaignPath,
+  adversarialChallengeDir,
+  auditAdversarialReadiness,
+  auditAdversarialReadinessForFamilies,
+  buildAdversarialCampaign,
+  currentAdversarialPackageHash,
+  defaultThreatModel,
+  loadAdversarialCampaigns,
+  parseAdversarialCampaign,
+  verifierHashFor,
+} from "./adversarial-audit/readiness.js";
+export {
+  adversarialGateEvidenceMap,
+  assertAdversarialAuditsValid,
+  augmentAdversarialEvidenceMap,
+  attacksForFamily,
+  loadAdversarialAttackRecords,
+  summarizeAdversarialEvidence,
+} from "./adversarial-audit/records.js";
+export {
+  renderAdversarialAuditReport,
+  renderAdversarialCampaignReport,
+  renderAdversarialReadinessReport,
+} from "./adversarial-audit/report.js";
+export {
+  ADVERSARIAL_AUDIT_STATUSES,
+  ADVERSARIAL_CLAIM_LEVELS,
+  ADVERSARIAL_VERIFIER_STATUSES,
+  BYPASS_CLASSES,
+} from "./adversarial-audit/types.js";
+export type {
+  AdversarialAttackRecord,
+  AdversarialAttacker,
+  AdversarialAuditStatus,
+  AdversarialCampaign,
+  AdversarialClaimLevel,
+  AdversarialEvidenceSummary,
+  AdversarialReadinessAudit,
+  AdversarialReadinessCheck,
+  AdversarialRepairRecord,
+  AdversarialThreatModel,
+  AdversarialValidationFailure,
+  AdversarialVerifierResult,
+  AdversarialVerifierStatus,
+  BypassClass,
+  LoadedAdversarialAttack,
+} from "./adversarial-audit/types.js";
+export {
+  adversarialAttackFailures,
+  assertAdversarialAttackRecordCounts,
+  assertAdversarialAuditedClaim,
+  isCountedBypassAudit,
+  isCountedNoBypassAudit,
+  parseAdversarialAttackRecord,
+} from "./adversarial-audit/validate.js";
+
 // --- families: measured mini-benchmarks built by the foundry process ---
 export {
   ALL_SUBJECTS,

@@ -127,6 +127,9 @@ const SMOKE = [
   [["trials", "campaign", "status"], /campaign/],
   [["human", "readiness"], /Human readiness/],
   [["human", "solvability"], /Human solvability/],
+  [["adversarial", "readiness"], /Adversarial verifier-integrity readiness/],
+  [["adversarial", "report"], /Adversarial verifier-integrity audit/],
+  [["adversarial", "campaign", "ui-replay-live-dom"], /Threat Models/],
   [["family", "diagnose", "--family", "ui-action-record-replay"], /chain/],
   [["family", "evolve-scenarios", "--family", "ui-action-record-replay"], /chain/],
   [["ui", "replay", "upgrade"], /realism ladder/],
@@ -154,6 +157,25 @@ try {
   failures += 1;
 } catch {
   console.log("ok     cli: a mistyped campaign subcommand fails loudly");
+}
+
+// The adversarial campaign files are generated artifacts too. They are the threat model that
+// decides what the attacker saw and which hashes can count, so a stale campaign file is a stale
+// verifier-integrity claim.
+const ADVERSARIAL_FAMILIES = [
+  "checker-required-memory-poisoning",
+  "prompt-injection-containment",
+  "prompt-injection-memory-poisoning",
+  "ui-action-record-replay",
+  "ui-replay-live-dom",
+];
+for (const familyId of ADVERSARIAL_FAMILIES) {
+  const generatedCampaign = run(["adversarial", "campaign", familyId, "--json"]);
+  const committed = join("adversarial-audits", "campaigns", `${familyId}-adversarial.json`);
+  if (generatedCampaign !== readFileSync(committed, "utf8")) {
+    console.error(`STALE  ${committed}`);
+    failures += 1;
+  } else console.log(`ok     ${committed}`);
 }
 
 // The prepared external bundles are generated too, and they are the artifact a third party actually
@@ -192,6 +214,26 @@ for (const [familyId, providerId, bundleDir] of BUNDLE_TARGETS) {
   }
 }
 
+// Verifier-integrity bundles carry a different objective from model trials: attack the grader rather
+// than solve the task. They still pin the same public challenge package and must be reproducible.
+for (const familyId of ADVERSARIAL_FAMILIES) {
+  const advTmp = mkdtempSync(join(tmpdir(), "foundry-adv-bundle-"));
+  run(["adversarial", "prepare", familyId, "--out", advTmp]);
+  const walkAdversarialBundle = (dir, prefix = "") =>
+    readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+      e.isDirectory()
+        ? walkAdversarialBundle(join(dir, e.name), `${prefix}${e.name}/`)
+        : [`${prefix}${e.name}`],
+    );
+  for (const rel of walkAdversarialBundle(advTmp).sort()) {
+    const committed = join("bundles", `${familyId}-adversarial`, rel);
+    if (readFileSync(join(advTmp, rel), "utf8") !== readFileSync(committed, "utf8")) {
+      console.error(`STALE  ${committed}`);
+      failures += 1;
+    } else console.log(`ok     ${committed}`);
+  }
+}
+
 // The scaffolded family artifacts are generated too. Regenerating into a temp directory and diffing
 // catches the case where a shape changes and its checked-in scaffold silently does not.
 // The scaffold's job is the paperwork an UNBUILT family needs before it earns build time, so the
@@ -218,7 +260,7 @@ for (const variant of [
 // by being written here, but the count is asserted so a report that stops being generated is caught
 // rather than silently skipped.
 run(["all", "--out", tmp]);
-const EXPECTED_REPORTS = 58;
+const EXPECTED_REPORTS = 61;
 const generated = readdirSync(tmp);
 if (generated.length !== EXPECTED_REPORTS) {
   console.error(`WRONG COUNT  \`all\` wrote ${generated.length} reports, expected ${EXPECTED_REPORTS}`);

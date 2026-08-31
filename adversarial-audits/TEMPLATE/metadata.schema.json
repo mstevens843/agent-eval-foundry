@@ -1,0 +1,39 @@
+{
+  "schema": "agent-eval-foundry/adversarial-attack-record@1",
+  "requiredTopLevelKeys": [
+    "attackId",
+    "campaignId",
+    "familyId",
+    "status",
+    "counts",
+    "countabilityReason",
+    "challengeHash",
+    "verifierHash",
+    "attacker",
+    "attackSurface",
+    "allowedAttackerAccess",
+    "forbiddenAttackerAccess",
+    "attackerContextFiles",
+    "hiddenArtifactsInAttackerContext",
+    "transcriptPath",
+    "exploitArtifactPath",
+    "submittedBypassArtifactPath",
+    "verifier",
+    "bypassClassification",
+    "repair",
+    "startedAt",
+    "endedAt",
+    "runtimeSeconds",
+    "notes"
+  ],
+  "countedStatuses": ["no-bypass-found", "bypass-found", "exploit-attempt-blocked"],
+  "neverCountStatuses": [
+    "provider-refusal",
+    "infrastructure-error",
+    "timeout",
+    "invalid-attack",
+    "stale-hash",
+    "contaminated",
+    "superseded"
+  ]
+}

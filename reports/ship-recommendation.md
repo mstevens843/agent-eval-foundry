@@ -7,6 +7,8 @@ estimate; **NOT-READY** means at least one blocking gate fails.
 
 The human layer is reported as advisory claim levels. `reference-solvable`, `human-ready` and
 `human-evidenced` are separate claims and do not silently rewrite the model/verifier verdict.
+The verifier-integrity layer is also advisory here: `audit-pending`, `adversarial-ready`,
+`adversarial-audited`, `bypass-found` and `bypass-repaired` are separate claims from difficulty.
 
 | family | verdict | blocking failures |
 |---|---|---|
@@ -54,6 +56,10 @@ The human layer is reported as advisory claim levels. `reference-solvable`, `hum
 | `human-package-ready` | advisory | Can the public package be handed to an independent human without hidden context? |
 | `human-solvability-evidenced` | advisory | Has an independent human solved the current public package clean-room? |
 | `human-ambiguity-reviewed` | advisory | Are human ambiguity findings resolved or explicitly absent? |
+| `adversarial-threat-model-declared` | advisory | Is there a declared verifier-bypass threat model for this family? |
+| `adversarial-package-ready` | advisory | Is a hash-pinned attack packet ready for this family? |
+| `adversarial-audit-evidenced` | advisory | Has a counted attacker failed to find a verifier bypass against the current package? |
+| `no-known-unrepaired-bypass` | advisory | Are there zero counted, known, unrepaired verifier bypasses? |
 
 ## Human claim levels
 
@@ -74,6 +80,26 @@ The human layer is reported as advisory claim levels. `reference-solvable`, `hum
 | `stale-crm-ticket-automation` | yes | n/a | n/a | reference-solvable |
 | `ui-action-record-replay` | yes | yes | pending | human-ready |
 | `ui-replay-live-dom` | yes | yes | pending | human-ready |
+
+## Verifier-integrity claim levels
+
+| family | threat model | attack package | no-bypass audits | unrepaired bypasses | claim level |
+|---|---|---|---|---:|---|
+| `audit-truth-financial-workflow` | n/a | n/a | n/a | 0 | audit-pending |
+| `browser-action-replay` | n/a | n/a | n/a | 0 | audit-pending |
+| `checker-required-memory-poisoning` | yes | yes | 0 | 0 | adversarial-ready |
+| `deployment-rollback-partial-effects` | n/a | n/a | n/a | 0 | audit-pending |
+| `durable-approval-outbox` | no | no | 0 | 0 | audit-pending |
+| `model-alias-drift-sentinel` | n/a | n/a | n/a | 0 | audit-pending |
+| `permission-boundary-tools` | n/a | n/a | n/a | 0 | audit-pending |
+| `prompt-injection-approval-scope-drift` | n/a | n/a | n/a | 0 | audit-pending |
+| `prompt-injection-capability-routing` | n/a | n/a | n/a | 0 | audit-pending |
+| `prompt-injection-containment` | yes | yes | 0 | 0 | adversarial-ready |
+| `prompt-injection-cross-tool-escalation` | n/a | n/a | n/a | 0 | audit-pending |
+| `prompt-injection-memory-poisoning` | yes | yes | 0 | 0 | adversarial-ready |
+| `stale-crm-ticket-automation` | n/a | n/a | n/a | 0 | audit-pending |
+| `ui-action-record-replay` | yes | yes | 0 | 0 | adversarial-ready |
+| `ui-replay-live-dom` | yes | yes | 0 | 0 | adversarial-ready |
 
 ## Per family
 
@@ -105,6 +131,10 @@ The human layer is reported as advisory claim levels. `reference-solvable`, `hum
 | `human-package-ready` | n/a | no human-readiness audit |
 | `human-solvability-evidenced` | n/a | no human evidence layer |
 | `human-ambiguity-reviewed` | n/a | no human review records |
+| `adversarial-threat-model-declared` | n/a | no adversarial audit layer |
+| `adversarial-package-ready` | n/a | no adversarial package audit |
+| `adversarial-audit-evidenced` | n/a | no adversarial audit evidence |
+| `no-known-unrepaired-bypass` | n/a | no adversarial audit evidence |
 
 ### `browser-action-replay` — NOT-READY
 
@@ -134,6 +164,10 @@ The human layer is reported as advisory claim levels. `reference-solvable`, `hum
 | `human-package-ready` | n/a | no human-readiness audit |
 | `human-solvability-evidenced` | n/a | no human evidence layer |
 | `human-ambiguity-reviewed` | n/a | no human review records |
+| `adversarial-threat-model-declared` | n/a | no adversarial audit layer |
+| `adversarial-package-ready` | n/a | no adversarial package audit |
+| `adversarial-audit-evidenced` | n/a | no adversarial audit evidence |
+| `no-known-unrepaired-bypass` | n/a | no adversarial audit evidence |
 
 ### `checker-required-memory-poisoning` — SHIP
 
@@ -163,6 +197,10 @@ The human layer is reported as advisory claim levels. `reference-solvable`, `hum
 | `human-package-ready` | pass | public package passed human-readiness audit |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
 | `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
+| `adversarial-threat-model-declared` | pass | threat model declared |
+| `adversarial-package-ready` | pass | adversarial campaign, package hash and attack bundle are ready |
+| `adversarial-audit-evidenced` | **FAIL** | no counted no-bypass audit on record |
+| `no-known-unrepaired-bypass` | pass | 0 counted bypass(es), none unrepaired |
 
 ### `deployment-rollback-partial-effects` — NOT-READY
 
@@ -192,6 +230,10 @@ The human layer is reported as advisory claim levels. `reference-solvable`, `hum
 | `human-package-ready` | n/a | no human-readiness audit |
 | `human-solvability-evidenced` | n/a | no human evidence layer |
 | `human-ambiguity-reviewed` | n/a | no human review records |
+| `adversarial-threat-model-declared` | n/a | no adversarial audit layer |
+| `adversarial-package-ready` | n/a | no adversarial package audit |
+| `adversarial-audit-evidenced` | n/a | no adversarial audit evidence |
+| `no-known-unrepaired-bypass` | n/a | no adversarial audit evidence |
 
 ### `durable-approval-outbox` — SHIP
 
@@ -221,6 +263,10 @@ The human layer is reported as advisory claim levels. `reference-solvable`, `hum
 | `human-package-ready` | **FAIL** | public package is incomplete or not generated here |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
 | `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
+| `adversarial-threat-model-declared` | **FAIL** | no threat model declared |
+| `adversarial-package-ready` | **FAIL** | adversarial campaign or attack bundle is incomplete |
+| `adversarial-audit-evidenced` | **FAIL** | no counted no-bypass audit on record |
+| `no-known-unrepaired-bypass` | pass | 0 counted bypass(es), none unrepaired |
 
 ### `model-alias-drift-sentinel` — NOT-READY
 
@@ -250,6 +296,10 @@ The human layer is reported as advisory claim levels. `reference-solvable`, `hum
 | `human-package-ready` | n/a | no human-readiness audit |
 | `human-solvability-evidenced` | n/a | no human evidence layer |
 | `human-ambiguity-reviewed` | n/a | no human review records |
+| `adversarial-threat-model-declared` | n/a | no adversarial audit layer |
+| `adversarial-package-ready` | n/a | no adversarial package audit |
+| `adversarial-audit-evidenced` | n/a | no adversarial audit evidence |
+| `no-known-unrepaired-bypass` | n/a | no adversarial audit evidence |
 
 ### `permission-boundary-tools` — NOT-READY
 
@@ -279,6 +329,10 @@ The human layer is reported as advisory claim levels. `reference-solvable`, `hum
 | `human-package-ready` | n/a | no human-readiness audit |
 | `human-solvability-evidenced` | n/a | no human evidence layer |
 | `human-ambiguity-reviewed` | n/a | no human review records |
+| `adversarial-threat-model-declared` | n/a | no adversarial audit layer |
+| `adversarial-package-ready` | n/a | no adversarial package audit |
+| `adversarial-audit-evidenced` | n/a | no adversarial audit evidence |
+| `no-known-unrepaired-bypass` | n/a | no adversarial audit evidence |
 
 ### `prompt-injection-approval-scope-drift` — NOT-READY
 
@@ -308,6 +362,10 @@ The human layer is reported as advisory claim levels. `reference-solvable`, `hum
 | `human-package-ready` | n/a | no human-readiness audit |
 | `human-solvability-evidenced` | n/a | no human evidence layer |
 | `human-ambiguity-reviewed` | n/a | no human review records |
+| `adversarial-threat-model-declared` | n/a | no adversarial audit layer |
+| `adversarial-package-ready` | n/a | no adversarial package audit |
+| `adversarial-audit-evidenced` | n/a | no adversarial audit evidence |
+| `no-known-unrepaired-bypass` | n/a | no adversarial audit evidence |
 
 ### `prompt-injection-capability-routing` — NOT-READY
 
@@ -337,6 +395,10 @@ The human layer is reported as advisory claim levels. `reference-solvable`, `hum
 | `human-package-ready` | n/a | no human-readiness audit |
 | `human-solvability-evidenced` | n/a | no human evidence layer |
 | `human-ambiguity-reviewed` | n/a | no human review records |
+| `adversarial-threat-model-declared` | n/a | no adversarial audit layer |
+| `adversarial-package-ready` | n/a | no adversarial package audit |
+| `adversarial-audit-evidenced` | n/a | no adversarial audit evidence |
+| `no-known-unrepaired-bypass` | n/a | no adversarial audit evidence |
 
 ### `prompt-injection-containment` — NOT-READY
 
@@ -366,6 +428,10 @@ The human layer is reported as advisory claim levels. `reference-solvable`, `hum
 | `human-package-ready` | pass | public package passed human-readiness audit |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
 | `human-ambiguity-reviewed` | pass | 1 human review record(s), no open ambiguity |
+| `adversarial-threat-model-declared` | pass | threat model declared |
+| `adversarial-package-ready` | pass | adversarial campaign, package hash and attack bundle are ready |
+| `adversarial-audit-evidenced` | **FAIL** | no counted no-bypass audit on record |
+| `no-known-unrepaired-bypass` | pass | 0 counted bypass(es), none unrepaired |
 
 ### `prompt-injection-cross-tool-escalation` — NOT-READY
 
@@ -395,6 +461,10 @@ The human layer is reported as advisory claim levels. `reference-solvable`, `hum
 | `human-package-ready` | n/a | no human-readiness audit |
 | `human-solvability-evidenced` | n/a | no human evidence layer |
 | `human-ambiguity-reviewed` | n/a | no human review records |
+| `adversarial-threat-model-declared` | n/a | no adversarial audit layer |
+| `adversarial-package-ready` | n/a | no adversarial package audit |
+| `adversarial-audit-evidenced` | n/a | no adversarial audit evidence |
+| `no-known-unrepaired-bypass` | n/a | no adversarial audit evidence |
 
 ### `prompt-injection-memory-poisoning` — SHIP
 
@@ -424,6 +494,10 @@ The human layer is reported as advisory claim levels. `reference-solvable`, `hum
 | `human-package-ready` | pass | public package passed human-readiness audit |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
 | `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
+| `adversarial-threat-model-declared` | pass | threat model declared |
+| `adversarial-package-ready` | pass | adversarial campaign, package hash and attack bundle are ready |
+| `adversarial-audit-evidenced` | **FAIL** | no counted no-bypass audit on record |
+| `no-known-unrepaired-bypass` | pass | 0 counted bypass(es), none unrepaired |
 
 ### `stale-crm-ticket-automation` — NOT-READY
 
@@ -453,6 +527,10 @@ The human layer is reported as advisory claim levels. `reference-solvable`, `hum
 | `human-package-ready` | n/a | no human-readiness audit |
 | `human-solvability-evidenced` | n/a | no human evidence layer |
 | `human-ambiguity-reviewed` | n/a | no human review records |
+| `adversarial-threat-model-declared` | n/a | no adversarial audit layer |
+| `adversarial-package-ready` | n/a | no adversarial package audit |
+| `adversarial-audit-evidenced` | n/a | no adversarial audit evidence |
+| `no-known-unrepaired-bypass` | n/a | no adversarial audit evidence |
 
 ### `ui-action-record-replay` — SHIP
 
@@ -482,6 +560,10 @@ The human layer is reported as advisory claim levels. `reference-solvable`, `hum
 | `human-package-ready` | pass | public package passed human-readiness audit |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
 | `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
+| `adversarial-threat-model-declared` | pass | threat model declared |
+| `adversarial-package-ready` | pass | adversarial campaign, package hash and attack bundle are ready |
+| `adversarial-audit-evidenced` | **FAIL** | no counted no-bypass audit on record |
+| `no-known-unrepaired-bypass` | pass | 0 counted bypass(es), none unrepaired |
 
 ### `ui-replay-live-dom` — SHIP
 
@@ -511,6 +593,10 @@ The human layer is reported as advisory claim levels. `reference-solvable`, `hum
 | `human-package-ready` | pass | public package passed human-readiness audit |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
 | `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
+| `adversarial-threat-model-declared` | pass | threat model declared |
+| `adversarial-package-ready` | pass | adversarial campaign, package hash and attack bundle are ready |
+| `adversarial-audit-evidenced` | **FAIL** | no counted no-bypass audit on record |
+| `no-known-unrepaired-bypass` | pass | 0 counted bypass(es), none unrepaired |
 
 ## Why these gates
 
@@ -538,6 +624,10 @@ The human layer is reported as advisory claim levels. `reference-solvable`, `hum
 - **`human-package-ready`** — Reference solvability only proves the author can solve the internal task. The public package must also state the rules, examples, scoring contract and hidden sampling boundary clearly enough for a clean-room engineer.
 - **`human-solvability-evidenced`** — A task can be mechanically solvable and still be ambiguous to anyone who did not write it. This gate counts only independent, current-hash, unassisted solves with notes and verifier output.
 - **`human-ambiguity-reviewed`** — The fastest way to make a fair-looking benchmark unfair is to leave a human's clarifying question unresolved and keep counting failures. Open ambiguity findings are reported separately.
+- **`adversarial-threat-model-declared`** — Cheat resistance is a design requirement, not evidence that anyone tried to break the grader. The adversarial layer starts by declaring the attacker objective, surface and access boundary.
+- **`adversarial-package-ready`** — An adversarial audit without a preserved package is just a story about a task. The attacker packet must pin the public challenge hash and state which artifacts are forbidden.
+- **`adversarial-audit-evidenced`** — No adversarial run yet is not the same as no bypass. This gate counts only current-hash, non-refusal, non-infrastructure, transcript-preserved no-bypass audits.
+- **`no-known-unrepaired-bypass`** — A counted bypass does not necessarily kill the benchmark family, but it blocks any verifier-integrity claim until the repair is recorded and old evidence is invalidated.
 
 ---
 

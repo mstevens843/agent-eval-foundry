@@ -1,0 +1,77 @@
+{
+  "attackId": "checker-required-memory-poisoning-external-EDITME",
+  "campaignId": "checker-required-memory-poisoning-adversarial",
+  "familyId": "checker-required-memory-poisoning",
+  "status": "not-run",
+  "counts": false,
+  "countabilityReason": "not run yet",
+  "challengeHash": "448f2f816c51030cc97a374816226168",
+  "verifierHash": "6fc285d9426840691745d0237b598ace",
+  "attacker": {
+    "provider": "external",
+    "model": "external/unspecified",
+    "subjectId": "external"
+  },
+  "attackSurface": [
+    "checker-result trust boundary",
+    "held-out bad trace and known-bad checker bank",
+    "metadata, countability and challenge-hash gate",
+    "public challenge package split",
+    "subject.mjs/checker.mjs two-artifact contract",
+    "submission artifact shape",
+    "subprocess isolation boundary",
+    "verifier import and module resolution",
+    "verifier-output reporting path"
+  ],
+  "allowedAttackerAccess": [
+    "read and modify files inside the prepared adversarial bundle",
+    "read the public challenge package",
+    "write exploit notes, proof-of-concept files and a final attack report",
+    "attempt black-box reasoning about likely verifier mistakes from the public interface"
+  ],
+  "forbiddenAttackerAccess": [
+    "reading repository source outside the prepared bundle",
+    "reading hidden verifier/reference/scenario/mutant files",
+    "using private author hints",
+    "changing the pinned challenge hash or scenario set id",
+    "submitting a normal correct solution as the exploit",
+    "forging the adversarial audit metadata or verifier output"
+  ],
+  "attackerContextFiles": [
+    "ATTACKER-INSTRUCTION.txt",
+    "THREAT-MODEL.md",
+    "ALLOWED-FILES.txt",
+    "FORBIDDEN-FILES.txt",
+    "PROVIDER.json",
+    "run.sh",
+    "challenge/",
+    "attack-report.md",
+    "exploit/",
+    "submitted-bypass/",
+    "metadata.json",
+    "transcript.txt",
+    "verifier-output.json"
+  ],
+  "hiddenArtifactsInAttackerContext": [],
+  "transcriptPath": "transcript.txt",
+  "exploitArtifactPath": null,
+  "submittedBypassArtifactPath": null,
+  "verifier": {
+    "status": "not-run",
+    "command": null,
+    "outputPath": null,
+    "detail": "not run yet"
+  },
+  "bypassClassification": "no-bypass",
+  "repair": {
+    "status": "not-needed",
+    "repairId": null,
+    "changedChallengePackage": false,
+    "invalidatedAuditIds": [],
+    "notes": ""
+  },
+  "startedAt": null,
+  "endedAt": null,
+  "runtimeSeconds": null,
+  "notes": "Edit after the adversarial attempt. Do not set counts=true unless the countability rules pass."
+}

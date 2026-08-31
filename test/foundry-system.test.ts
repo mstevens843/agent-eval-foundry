@@ -18,6 +18,10 @@
 
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import {
+  adversarialGateEvidenceMap,
+  summarizeAdversarialEvidence,
+} from "../src/adversarial-audit/records.js";
 import { measure } from "../src/axis-meter.js";
 import { runFamily as runPicFamily } from "../src/families/prompt-injection-containment/runner.js";
 import { handAuthoredComparison, planBudget } from "../src/foundry/budget.js";
@@ -49,6 +53,7 @@ const registry = loadRegistry(ROOT);
 // the same builder, so drifting apart again requires changing shared code.
 const picEvidence = familyEvidenceMap(ROOT);
 const humanEvidence = humanGateEvidenceMap(humanEvidenceForFamilies(ROOT));
+const adversarialEvidence = adversarialGateEvidenceMap(summarizeAdversarialEvidence(ROOT));
 
 const F = { failed: ["x"] } satisfies Cell;
 const P = { failed: [] } satisfies Cell;
@@ -383,7 +388,10 @@ describe("report determinism", () => {
     ["mutants", () => renderMutantReport(registry, cov)],
     ["ledger", () => renderLedgerReport(registry)],
     ["families", () => renderFamilyDiversityReport(registry.shapes)],
-    ["ship", () => renderShipReport(registry.shapes, registry, picEvidence, humanEvidence)],
+    [
+      "ship",
+      () => renderShipReport(registry.shapes, registry, picEvidence, humanEvidence, adversarialEvidence),
+    ],
     [
       "budget",
       () =>
@@ -422,7 +430,7 @@ describe("report determinism", () => {
       ["reports/family-diversity.md", renderFamilyDiversityReport(registry.shapes)],
       [
         "reports/ship-recommendation.md",
-        renderShipReport(registry.shapes, registry, picEvidence, humanEvidence),
+        renderShipReport(registry.shapes, registry, picEvidence, humanEvidence, adversarialEvidence),
       ],
     ];
     for (const [path, fresh] of pairs) {

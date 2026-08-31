@@ -1,6 +1,6 @@
 # The ship gate
 
-24 gates, 14 of them blocking. A family ships when every blocking gate
+28 gates, 14 of them blocking. A family ships when every blocking gate
 passes; there is no score, no weighting and no override. This document is generated from the gate
 definitions themselves, so a gate that exists in the code cannot be missing here.
 
@@ -41,6 +41,10 @@ An advisory gate is one where a reasonable author might disagree. Reported, neve
 | `human-package-ready` | Can the public package be handed to an independent human without hidden context? | 5 | 1 | 9 |
 | `human-solvability-evidenced` | Has an independent human solved the current public package clean-room? | 0 | 6 | 9 |
 | `human-ambiguity-reviewed` | Are human ambiguity findings resolved or explicitly absent? | 6 | 0 | 9 |
+| `adversarial-threat-model-declared` | Is there a declared verifier-bypass threat model for this family? | 5 | 1 | 9 |
+| `adversarial-package-ready` | Is a hash-pinned attack packet ready for this family? | 5 | 1 | 9 |
+| `adversarial-audit-evidenced` | Has a counted attacker failed to find a verifier bypass against the current package? | 0 | 6 | 9 |
+| `no-known-unrepaired-bypass` | Are there zero counted, known, unrepaired verifier bypasses? | 6 | 0 | 9 |
 
 ## Which gates have actually stopped something
 
@@ -55,6 +59,9 @@ fail. These are the ones that currently reject at least one family:
 | `not-already-solved` | yes | `prompt-injection-containment` | A family every model solves measures nothing, and `already-solved` was the single most common cause of death in the source project's kill log — four of nine gated mechanisms. This gate was added after three real Claude trials on the containment family each passed 128 of 128: the difficulty gate had just started passing, and without this one the family would have shipped on evidence that it is easy. |
 | `human-package-ready` | no | `durable-approval-outbox` | Reference solvability only proves the author can solve the internal task. The public package must also state the rules, examples, scoring contract and hidden sampling boundary clearly enough for a clean-room engineer. |
 | `human-solvability-evidenced` | no | `checker-required-memory-poisoning`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom` | A task can be mechanically solvable and still be ambiguous to anyone who did not write it. This gate counts only independent, current-hash, unassisted solves with notes and verifier output. |
+| `adversarial-threat-model-declared` | no | `durable-approval-outbox` | Cheat resistance is a design requirement, not evidence that anyone tried to break the grader. The adversarial layer starts by declaring the attacker objective, surface and access boundary. |
+| `adversarial-package-ready` | no | `durable-approval-outbox` | An adversarial audit without a preserved package is just a story about a task. The attacker packet must pin the public challenge hash and state which artifacts are forbidden. |
+| `adversarial-audit-evidenced` | no | `checker-required-memory-poisoning`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom` | No adversarial run yet is not the same as no bypass. This gate counts only current-hash, non-refusal, non-infrastructure, transcript-preserved no-bypass audits. |
 
 **9 gate(s) pass for every family and have never rejected anything here:**
 `solvable`, `verifier-graded`, `trust-boundary`, `detectable`, `fairness`, `cheat-resistance`, `is-a-family`, `hidden-region-declared`, `priced`.
@@ -640,6 +647,102 @@ The fastest way to make a fair-looking benchmark unfair is to leave a human's cl
 | `stale-crm-ticket-automation` | n/a | no human review records |
 | `ui-action-record-replay` | pass | 0 human review record(s), no open ambiguity |
 | `ui-replay-live-dom` | pass | 0 human review record(s), no open ambiguity |
+
+### `adversarial-threat-model-declared` — advisory
+
+**Is there a declared verifier-bypass threat model for this family?**
+
+Cheat resistance is a design requirement, not evidence that anyone tried to break the grader. The adversarial layer starts by declaring the attacker objective, surface and access boundary.
+
+| family | verdict | detail |
+|---|---|---|
+| `audit-truth-financial-workflow` | n/a | no adversarial audit layer |
+| `browser-action-replay` | n/a | no adversarial audit layer |
+| `checker-required-memory-poisoning` | pass | threat model declared |
+| `deployment-rollback-partial-effects` | n/a | no adversarial audit layer |
+| `durable-approval-outbox` | fail | no threat model declared |
+| `model-alias-drift-sentinel` | n/a | no adversarial audit layer |
+| `permission-boundary-tools` | n/a | no adversarial audit layer |
+| `prompt-injection-approval-scope-drift` | n/a | no adversarial audit layer |
+| `prompt-injection-capability-routing` | n/a | no adversarial audit layer |
+| `prompt-injection-containment` | pass | threat model declared |
+| `prompt-injection-cross-tool-escalation` | n/a | no adversarial audit layer |
+| `prompt-injection-memory-poisoning` | pass | threat model declared |
+| `stale-crm-ticket-automation` | n/a | no adversarial audit layer |
+| `ui-action-record-replay` | pass | threat model declared |
+| `ui-replay-live-dom` | pass | threat model declared |
+
+### `adversarial-package-ready` — advisory
+
+**Is a hash-pinned attack packet ready for this family?**
+
+An adversarial audit without a preserved package is just a story about a task. The attacker packet must pin the public challenge hash and state which artifacts are forbidden.
+
+| family | verdict | detail |
+|---|---|---|
+| `audit-truth-financial-workflow` | n/a | no adversarial package audit |
+| `browser-action-replay` | n/a | no adversarial package audit |
+| `checker-required-memory-poisoning` | pass | adversarial campaign, package hash and attack bundle are ready |
+| `deployment-rollback-partial-effects` | n/a | no adversarial package audit |
+| `durable-approval-outbox` | fail | adversarial campaign or attack bundle is incomplete |
+| `model-alias-drift-sentinel` | n/a | no adversarial package audit |
+| `permission-boundary-tools` | n/a | no adversarial package audit |
+| `prompt-injection-approval-scope-drift` | n/a | no adversarial package audit |
+| `prompt-injection-capability-routing` | n/a | no adversarial package audit |
+| `prompt-injection-containment` | pass | adversarial campaign, package hash and attack bundle are ready |
+| `prompt-injection-cross-tool-escalation` | n/a | no adversarial package audit |
+| `prompt-injection-memory-poisoning` | pass | adversarial campaign, package hash and attack bundle are ready |
+| `stale-crm-ticket-automation` | n/a | no adversarial package audit |
+| `ui-action-record-replay` | pass | adversarial campaign, package hash and attack bundle are ready |
+| `ui-replay-live-dom` | pass | adversarial campaign, package hash and attack bundle are ready |
+
+### `adversarial-audit-evidenced` — advisory
+
+**Has a counted attacker failed to find a verifier bypass against the current package?**
+
+No adversarial run yet is not the same as no bypass. This gate counts only current-hash, non-refusal, non-infrastructure, transcript-preserved no-bypass audits.
+
+| family | verdict | detail |
+|---|---|---|
+| `audit-truth-financial-workflow` | n/a | no adversarial audit evidence |
+| `browser-action-replay` | n/a | no adversarial audit evidence |
+| `checker-required-memory-poisoning` | fail | no counted no-bypass audit on record |
+| `deployment-rollback-partial-effects` | n/a | no adversarial audit evidence |
+| `durable-approval-outbox` | fail | no counted no-bypass audit on record |
+| `model-alias-drift-sentinel` | n/a | no adversarial audit evidence |
+| `permission-boundary-tools` | n/a | no adversarial audit evidence |
+| `prompt-injection-approval-scope-drift` | n/a | no adversarial audit evidence |
+| `prompt-injection-capability-routing` | n/a | no adversarial audit evidence |
+| `prompt-injection-containment` | fail | no counted no-bypass audit on record |
+| `prompt-injection-cross-tool-escalation` | n/a | no adversarial audit evidence |
+| `prompt-injection-memory-poisoning` | fail | no counted no-bypass audit on record |
+| `stale-crm-ticket-automation` | n/a | no adversarial audit evidence |
+| `ui-action-record-replay` | fail | no counted no-bypass audit on record |
+| `ui-replay-live-dom` | fail | no counted no-bypass audit on record |
+
+### `no-known-unrepaired-bypass` — advisory
+
+**Are there zero counted, known, unrepaired verifier bypasses?**
+
+A counted bypass does not necessarily kill the benchmark family, but it blocks any verifier-integrity claim until the repair is recorded and old evidence is invalidated.
+
+| family | verdict | detail |
+|---|---|---|
+| `audit-truth-financial-workflow` | n/a | no adversarial audit evidence |
+| `browser-action-replay` | n/a | no adversarial audit evidence |
+| `checker-required-memory-poisoning` | pass | 0 counted bypass(es), none unrepaired |
+| `deployment-rollback-partial-effects` | n/a | no adversarial audit evidence |
+| `durable-approval-outbox` | pass | 0 counted bypass(es), none unrepaired |
+| `model-alias-drift-sentinel` | n/a | no adversarial audit evidence |
+| `permission-boundary-tools` | n/a | no adversarial audit evidence |
+| `prompt-injection-approval-scope-drift` | n/a | no adversarial audit evidence |
+| `prompt-injection-capability-routing` | n/a | no adversarial audit evidence |
+| `prompt-injection-containment` | pass | 0 counted bypass(es), none unrepaired |
+| `prompt-injection-cross-tool-escalation` | n/a | no adversarial audit evidence |
+| `prompt-injection-memory-poisoning` | pass | 0 counted bypass(es), none unrepaired |
+| `stale-crm-ticket-automation` | n/a | no adversarial audit evidence |
+| `ui-action-record-replay` | pass | 0 counted bypass(es), none unrepaired |
+| `ui-replay-live-dom` | pass | 0 counted bypass(es), none unrepaired |
 
 ## Verdicts
 

@@ -1,0 +1,26 @@
+{
+  "familyId": "checker-required-memory-poisoning",
+  "scenarioSetId": "poisoning-792-67126f04",
+  "visibleFiles": [
+    "README.md",
+    "SPEC.md",
+    "examples/example-1-reference-case.json",
+    "examples/example-2-provenance-loss-trace.json",
+    "starter/checker.mjs",
+    "starter/subject.mjs",
+    "types.ts"
+  ],
+  "hiddenArtifacts": [
+    "verify.ts",
+    "reference.ts",
+    "mutants.ts",
+    "policy.ts",
+    "runner.ts",
+    "truth.ts",
+    "matrix.json",
+    "scenarios.json",
+    "answer-matrix.json",
+    "reports/"
+  ],
+  "submissionFormat": "a directory containing subject.mjs and checker.mjs"
+}

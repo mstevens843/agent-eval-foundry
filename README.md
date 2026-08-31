@@ -14,6 +14,8 @@ The foundry keeps evidence streams separate:
   family.
 - **human-solvability evidence**: clean-room human records prove the public package is understandable
   and solvable without hidden context.
+- **adversarial verifier-integrity evidence**: attempted bypass audits test whether the grader can
+  be fooled without solving the task.
 - **cross-family evidence**: shared subjects prove whether different families measure different
   things.
 
@@ -25,24 +27,38 @@ The foundry now separates three claims: a reference can solve it, a clean public
 handed to a human, and an independent human has actually solved it. Those are different evidence
 levels and the reports do not merge them.
 
+Cheat resistance is not the same claim as no bypass found. Cheat resistance is the design
+requirement; adversarial audit is the attempted exploit record.
+
 ## Evidence Snapshot
 
-| family | scenarios | counted trials | failed >=1 | mutant axes | agent axes | human claim | verdict |
-|---|---:|---:|---:|---:|---|---|---|
-| `prompt-injection-containment` | 128 | 6 | 0 | 4 | 0 | human-ready | **NOT-READY**: already-solved |
-| `prompt-injection-memory-poisoning` | 288 | 8 | 5 | 3 | >=2 | human-ready | **SHIP**: cross-lab failure generalises |
-| `ui-action-record-replay` | 324 | 5 | 5 | 6 | 1 | human-ready | **SHIP**: useful but chain-limited |
-| `ui-replay-live-dom` | 864 | 1 | 1 | 19 | not claimed yet | human-ready | **SHIP**: descendant, packaged and difficulty-evidenced |
-| `checker-required-memory-poisoning` | 792 | 1 | 1 | 12 | not claimed yet | human-ready | **SHIP**: required-checker gap, OpenAI-only |
-| `durable-approval-outbox` | 24 | 20 imported | 20 | 3 | 1 | reference-solvable | **SHIP**: imported historical bank |
+| family | scenarios | counted trials | failed >=1 | mutant axes | agent axes | human claim | verifier integrity | verdict |
+|---|---:|---:|---:|---:|---|---|---|---|
+| `prompt-injection-containment` | 128 | 6 | 0 | 4 | 0 | human-ready | adversarial-ready | **NOT-READY**: already-solved |
+| `prompt-injection-memory-poisoning` | 288 | 8 | 5 | 3 | >=2 | human-ready | adversarial-ready | **SHIP**: cross-lab failure generalises |
+| `ui-action-record-replay` | 324 | 5 | 5 | 6 | 1 | human-ready | adversarial-ready | **SHIP**: useful but chain-limited |
+| `ui-replay-live-dom` | 864 | 1 | 1 | 19 | not claimed yet | human-ready | adversarial-ready; 1 no-count refusal | **SHIP**: descendant, packaged and difficulty-evidenced |
+| `checker-required-memory-poisoning` | 792 | 1 | 1 | 12 | not claimed yet | human-ready | adversarial-ready | **SHIP**: required-checker gap, OpenAI-only |
+| `durable-approval-outbox` | 24 | 20 imported | 20 | 3 | 1 | reference-solvable | audit-pending; imported historical no-count | **SHIP**: imported historical bank |
 
 Current live-DOM package hash: `18c3f5afc5973604205cd7df23ce4cad`.
 Current checker-required package hash: `448f2f816c51030cc97a374816226168`.
 
 ## What Changed In This Phase
 
-The new human-solvability layer audits challenge packages for clean-room human review and validates
-future human solve records against stable rule codes. Package-backed built families are
+The new adversarial verifier-integrity layer pre-registers attack campaigns against package-backed
+families. Each campaign states the threat model, attacker-visible files, forbidden hidden artifacts,
+bypass/no-bypass criteria, never-count statuses, package hash and verifier hash. Five current
+package-backed families are `adversarial-ready`; none are `adversarial-audited` yet.
+
+One real Codex/OpenAI adversarial run was attempted against `ui-replay-live-dom` under challenge
+hash `18c3f5afc5973604205cd7df23ce4cad`. The provider safety filter refused the verifier-bypass
+prompt, so `live-dom-adversarial-codex-2026-08` is preserved as `provider-refusal` and does not
+count as no-bypass evidence. Durable Outbox has a historical `/cheat` no-bypass summary imported
+with caveats, but this repo lacks the native packet/transcript/hash needed to count it.
+
+The human-solvability layer audits challenge packages for clean-room human review and validates
+future human solve records against stable rule codes. Package-backed built families remain
 `human-ready`; none are `human-evidenced` yet because no independent clean human solve is on record.
 A contaminated author walkthrough is preserved only as a format example.
 
@@ -88,6 +104,12 @@ node dist/cli.js trials verify --family ui-replay-live-dom live-dom-2026-08-o2
 node dist/cli.js trials verify --family checker-required-memory-poisoning checker-required-2026-08-o1
 node dist/cli.js human readiness
 node dist/cli.js human solvability
+node dist/cli.js adversarial readiness
+node dist/cli.js adversarial campaign ui-replay-live-dom
+node dist/cli.js adversarial prepare ui-replay-live-dom --provider external --out bundles/ui-replay-live-dom-adversarial
+node dist/cli.js adversarial run ui-replay-live-dom --provider codex --run-id live-dom-adversarial-codex-2026-08 --timeout 900000
+node dist/cli.js adversarial verify live-dom-adversarial-codex-2026-08
+node dist/cli.js adversarial report
 pnpm bundles
 ```
 
@@ -155,6 +177,9 @@ Key generated reports:
 - `reports/ui-replay-browser-backed-scaffold.md`
 - `reports/human-readiness-report.md`
 - `reports/human-solvability-report.md`
+- `reports/adversarial-readiness-report.md`
+- `reports/adversarial-audit-report.md`
+- `reports/adversarial-campaign-report.md`
 - `reports/shared-difficulty-bank-report.md`
 - `reports/cross-family-axis-report.md`
 - `reports/ship-gate-report.md`
@@ -189,18 +214,20 @@ node dist/cli.js all
 
 The tests include known-bad cases for missing SPEC sections, challenge leaks, nested anchor
 strategies, stale hashes, verifier-only SHIP claims, missing `checker.mjs`, vacuous checkers,
-invalid counted human reviews, provider unavailability, candidate ledger drift and deterministic
-reports.
+invalid counted human reviews, adversarial audit countability, stale attack hashes, hidden verifier
+leaks, provider refusal paths, candidate ledger drift and deterministic reports.
 
 ## Current Claim
 
 `agent-eval-foundry` can take a mutant-measured descendant family, write the fairness spec,
 package the agent-facing challenge without leaks, add categorical anti-nesting structure, run or
-prepare real provider campaigns, and preserve the distinction between mutant-detection axes and
-real-agent difficulty evidence.
+prepare real provider campaigns, pre-register verifier-bypass audits, and preserve the distinction
+between mutant-detection axes, real-agent difficulty evidence, human solvability and adversarial
+verifier-integrity evidence.
 
 The strongest current result is still memory-poisoning generalisation across labs. The newest result
-is that checker-required is now package-backed, mutant-measured and difficulty-evidenced by one
-counted Codex/OpenAI failure. The next highest-leverage work is to import or run non-OpenAI
-live-DOM and checker-required trials under the same hashes, then implement the browser-backed UI
+is that verifier-integrity is now a first-class, hash-gated layer with prepared attack bundles and
+a preserved no-count Codex refusal. The next highest-leverage work is to obtain a counted
+non-refusal adversarial audit for `ui-replay-live-dom` or `checker-required-memory-poisoning`, then
+import or run non-OpenAI difficulty trials under the same hashes and implement the browser-backed UI
 descendant scaffold.

@@ -529,8 +529,9 @@ That changes the unit of production:
    harness they call into).
 3. **Gate every family on axis count and on trial evidence, not on check count** — the tool in this
    repository, which I did not have when I built the outbox task. `node dist/cli.js ship` runs the
-   gate: 24 gates per family, 14 blocking and three human-solvability gates advisory, with verdict
-   a pure function of the blocking gates. Of the fifteen
+   gate: 28 gates per family, 14 blocking, three human-solvability gates advisory and four
+   adversarial verifier-integrity gates advisory, with verdict a pure function of the blocking gates.
+   Of the fifteen
    families declared here, five reach SHIP, one is NOT-READY because real agents from two labs
    solved it, and the other nine are NOT-READY because nothing has attempted them — a family must
    not ship on an estimate, and `difficulty-evidenced` became blocking once every built family was
@@ -542,6 +543,10 @@ That changes the unit of production:
    before it runs; the hash says which task each preserved trial actually measured. Both earned their
    place on the first campaign: the plan's confirm signal is what makes the result a finding rather
    than a story, and the hash is what invalidated three trials the moment the family was repaired.
+   The same discipline now applies to verifier-integrity: attack packets declare the threat model
+   and access boundary before an attacker sees the package. Cheat resistance is not the same claim as
+   no bypass found. Cheat resistance is the design requirement; adversarial audit is the attempted
+   exploit record.
 6. **Spend frontier budget only on what survives 1–5.** `node dist/cli.js budget --total 100000
    --rate 120` prices it, and `budget-check.ts` refuses a plan that omits labour — the exact fake
    this section argues against.
@@ -599,6 +604,11 @@ without a surface-coverage metric beside it.
   The SWE-bench run is the experiment that addresses this, and it is why the null model exists: at
   134 subjects the constraint runs the other way, and the width has to be shown to beat chance rather
   than assumed to.
+- **Verifier integrity is prepared, not proven.** Five package-backed families now have
+  adversarial-ready attack packets and the live-DOM packet has one preserved Codex/OpenAI adversarial
+  attempt, but that attempt was a provider refusal and does not count. Durable Outbox has only an
+  imported historical `/cheat` summary here, not the native packet, transcript and current package
+  hash needed for a counted no-bypass audit.
 - **The instances are not independent of the bank.** Six of twenty-four were selected against seven
   of the ten engines. Read the axis count as an upper bound.
 - **Cost figures are imputed**, nine runs recorded none, `jobs/` is excluded, and every labour

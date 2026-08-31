@@ -47,3 +47,5 @@ for (const [familyId, providerId, outDir] of targets) {
     { stdio: "inherit" },
   );
 }
+
+execFileSync("node", ["dist/cli.js", "adversarial", "all"], { stdio: "inherit" });
