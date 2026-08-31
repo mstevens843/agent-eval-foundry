@@ -20,6 +20,7 @@ import { augmentAdversarialEvidenceMap } from "../adversarial-audit/records.js";
 import { ALL_SUBJECTS, runFamily, toMatrix } from "../families/prompt-injection-containment/runner.js";
 import type { RunResult } from "../families/prompt-injection-containment/runner.js";
 import { BUILT_FAMILY_IDS, builtFamily } from "../families/registry.js";
+import { browserBackedReadiness } from "../families/ui-replay-browser-backed/readiness.js";
 import { readJson } from "../foundry/load.js";
 import { augmentFamilyEvidenceMap } from "../human-solvability/records.js";
 import { parseMatrix } from "../matrix.js";
@@ -35,6 +36,7 @@ import { gateByChallengeHash } from "../trials/run.js";
 import { countedAgentTrials } from "../trials/types.js";
 import type { TrialRecord, TrialSet } from "../trials/types.js";
 import type { Matrix } from "../types.js";
+import { BROWSER_BACKED_NEXT_PLAN } from "./browser-backed-scaffold.js";
 import { analyseChain } from "./chain-analysis.js";
 import type { FamilyEvidence } from "./ship-report.js";
 import { computeEvidence } from "./trial-report.js";
@@ -197,14 +199,29 @@ export function familyEvidenceFor(root: string, familyId: string = PIC_FAMILY): 
 }
 
 /** Family evidence keyed by id, in the shape the ship report expects. */
-export const familyEvidenceMap = (root: string): Record<string, FamilyEvidence> =>
-  augmentAdversarialEvidenceMap(
+export const familyEvidenceMap = (root: string): Record<string, FamilyEvidence> => {
+  const browserReadiness = browserBackedReadiness(BROWSER_BACKED_NEXT_PLAN);
+  const base = augmentAdversarialEvidenceMap(
     root,
     augmentFamilyEvidenceMap(
       root,
       Object.fromEntries(BUILT_FAMILY_IDS.map((id) => [id, familyEvidenceFor(root, id).evidence])),
     ),
   );
+  const liveDom = base["ui-replay-live-dom"];
+  if (liveDom === undefined) return base;
+  return {
+    ...base,
+    "ui-replay-live-dom": {
+      ...liveDom,
+      browserBackedReady: browserReadiness.browserBackedReady,
+      browserBackedMeasured: browserReadiness.browserBackedMeasured,
+      browserBackedDetail: browserReadiness.architectureReady
+        ? "browser-backed architecture is declared; executable Playwright driver and measured sweep are still missing"
+        : "browser-backed architecture incomplete",
+    },
+  };
+};
 
 /** How many subjects in this family also attempted another measured family. */
 export function sharedSubjectCount(root: string, subjects: readonly string[]): number {

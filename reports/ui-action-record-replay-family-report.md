@@ -44,6 +44,11 @@ Every figure below is measured: produced by running the family, not by declaring
 | `adversarial-package-ready` | no | pass | adversarial campaign, package hash and attack bundle are ready |
 | `adversarial-audit-evidenced` | no | fail | no counted no-bypass audit on record |
 | `no-known-unrepaired-bypass` | no | pass | 0 counted bypass(es), none unrepaired |
+| `adversarial-isolation-adequate` | no | pass | fs-sandbox/container isolation profile available |
+| `adversarial-exploit-replay-ready` | no | pass | exploit replay command and schema are available |
+| `adversarial-hardening-probes-pass` | no | pass | deterministic hardening probes pass |
+| `browser-backed-ready` | no | n/a | no browser-backed layer |
+| `browser-backed-measured` | no | n/a | no browser-backed layer |
 
 ## Mechanisms
 

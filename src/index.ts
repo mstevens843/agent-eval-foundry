@@ -160,6 +160,37 @@ export {
   parseHumanReviewRecord,
 } from "./human-solvability/validate.js";
 
+// --- browser-backed UI foundation: scaffolded descendant, not measured evidence ---
+export {
+  BROWSER_BACKED_PAGE_FIXTURE_MODEL,
+  BROWSER_BACKED_SCENARIO_CONTRACTS,
+  browserBackedReadiness,
+} from "./families/ui-replay-browser-backed/readiness.js";
+export type { BrowserBackedReadiness } from "./families/ui-replay-browser-backed/readiness.js";
+export {
+  BROWSER_BACKED_FAMILY_ID,
+  BROWSER_BACKED_STATUS,
+  BROWSER_HARNESS_REQUIREMENTS,
+  browserHarnessPlanFailures,
+} from "./families/ui-replay-browser-backed/harness.js";
+export type {
+  BrowserActionTrace,
+  BrowserBackedReadinessCheck,
+  BrowserBackedScenarioContract,
+  BrowserEffectRecord,
+  BrowserHarnessCall,
+  BrowserHarnessPlan,
+  BrowserNodeSnapshot,
+  BrowserPageFixture,
+  BrowserRecordedSelector,
+  BrowserRecordedStep,
+  BrowserReplayAuditStep,
+  BrowserReplayHarness,
+  BrowserReplayOutcome,
+  BrowserReplayReport,
+  BrowserTraceArtifact,
+} from "./families/ui-replay-browser-backed/harness.js";
+
 // --- adversarial verifier-integrity: attempted bypass records vs cheat-resistance design ---
 export {
   adversarialVerifierOutput,
@@ -167,6 +198,17 @@ export {
   prepareAdversarialBundle,
 } from "./adversarial-audit/bundles.js";
 export type { PreparedAdversarialBundle } from "./adversarial-audit/bundles.js";
+export {
+  ISOLATION_PROFILES,
+  isolationSummaryPath,
+  verifyIsolationBundle,
+  writeIsolationManifest,
+} from "./adversarial-audit/isolation.js";
+export type { IsolationVerification } from "./adversarial-audit/isolation.js";
+export {
+  runAdversarialHardeningProbes,
+  runAllAdversarialHardeningProbes,
+} from "./adversarial-audit/probes.js";
 export {
   ADVERSARIAL_AUDITED_FAMILIES,
   ADVERSARIAL_PACKAGE_FAMILIES,
@@ -191,23 +233,52 @@ export {
   summarizeAdversarialEvidence,
 } from "./adversarial-audit/records.js";
 export {
+  replayAdversarialExploit,
+  replayAdversarialExploitRecord,
+  renderReplayResult,
+  renderTriageResult,
+  triageAdversarialAttack,
+} from "./adversarial-audit/replay.js";
+export {
   renderAdversarialAuditReport,
   renderAdversarialCampaignReport,
+  renderAdversarialExploitReplayReport,
+  renderAdversarialHardeningProbesReport,
+  renderAdversarialIsolationReport,
   renderAdversarialReadinessReport,
+  renderAdversarialV2Report,
 } from "./adversarial-audit/report.js";
 export {
+  adversarialExploitArtifactFor,
+  triageAdversarialAttackRecord,
+} from "./adversarial-audit/triage.js";
+export {
+  ADVERSARIAL_AUDIT_VERSIONS,
   ADVERSARIAL_AUDIT_STATUSES,
   ADVERSARIAL_CLAIM_LEVELS,
   ADVERSARIAL_VERIFIER_STATUSES,
+  ATTACK_EXECUTION_PROFILE_KINDS,
+  BYPASS_TRIAGE_DECISIONS,
   BYPASS_CLASSES,
+  EXPLOIT_ARTIFACT_KINDS,
+  EXPLOIT_REPLAY_STATUSES,
+  HARDENING_PROBE_STATUSES,
+  ISOLATION_PROFILE_IDS,
 } from "./adversarial-audit/types.js";
 export type {
+  AdversarialAuditVersion,
   AdversarialAttackRecord,
   AdversarialAttacker,
   AdversarialAuditStatus,
+  AdversarialBypassTriage,
   AdversarialCampaign,
   AdversarialClaimLevel,
   AdversarialEvidenceSummary,
+  AdversarialExecutionProfile,
+  AdversarialExploitArtifact,
+  AdversarialExploitReplayResult,
+  AdversarialHardeningProbe,
+  AdversarialIsolationProfile,
   AdversarialReadinessAudit,
   AdversarialReadinessCheck,
   AdversarialRepairRecord,
@@ -215,7 +286,13 @@ export type {
   AdversarialValidationFailure,
   AdversarialVerifierResult,
   AdversarialVerifierStatus,
+  AttackExecutionProfileKind,
+  BypassTriageDecision,
   BypassClass,
+  ExploitArtifactKind,
+  ExploitReplayStatus,
+  HardeningProbeStatus,
+  IsolationProfileId,
   LoadedAdversarialAttack,
 } from "./adversarial-audit/types.js";
 export {

@@ -65,6 +65,31 @@ export interface BrowserActionTrace {
   readonly entities: readonly string[];
 }
 
+export interface BrowserPageFixture {
+  readonly fixtureId: string;
+  readonly initialHtmlPath: string;
+  readonly scriptPath: string;
+  readonly cssPath: string | null;
+  readonly initialUrl: string;
+  readonly expectedRegions: readonly string[];
+  readonly mutationSchedule: readonly {
+    readonly at: "before-replay" | "after-query" | "after-act" | "during-settle";
+    readonly replayIndex: number;
+    readonly description: string;
+  }[];
+}
+
+export interface BrowserTraceArtifact {
+  readonly traceId: string;
+  readonly challengeHash: string;
+  readonly fixtureId: string;
+  readonly pageSnapshotPath: string;
+  readonly browserTracePath: string;
+  readonly harnessCallLedgerPath: string;
+  readonly effectLedgerPath: string;
+  readonly verifierOutputPath: string;
+}
+
 export interface BrowserHarnessCall {
   readonly seq: number;
   readonly replayIndex: number;
@@ -139,6 +164,27 @@ export interface BrowserHarnessPlan {
   readonly finiteSettleBudget: boolean;
   readonly sealsBeforeGrading: boolean;
   readonly preservesBrowserTrace: boolean;
+}
+
+export interface BrowserBackedScenarioContract {
+  readonly scenarioId: string;
+  readonly fixture: BrowserPageFixture;
+  readonly trace: BrowserActionTrace;
+  readonly cases: readonly (
+    | "aria-busy-lying"
+    | "conflicting-selectors"
+    | "stale-handle"
+    | "mutation-during-replay"
+    | "hidden-confirmation"
+    | "late-enabled-control"
+    | "no-model-in-replay"
+  )[];
+}
+
+export interface BrowserBackedReadinessCheck {
+  readonly id: string;
+  readonly verdict: "pass" | "fail";
+  readonly detail: string;
 }
 
 export function browserHarnessPlanFailures(plan: BrowserHarnessPlan): readonly string[] {

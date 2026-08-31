@@ -19,6 +19,9 @@ import {
   BROWSER_HARNESS_REQUIREMENTS,
   browserHarnessPlanFailures,
 } from "../src/families/ui-replay-browser-backed/harness.js";
+import { browserBackedReadiness } from "../src/families/ui-replay-browser-backed/readiness.js";
+import { renderBrowserBackedReadiness } from "../src/reports/browser-backed-readiness.js";
+import { BROWSER_BACKED_NEXT_PLAN } from "../src/reports/browser-backed-scaffold.js";
 import { diagnose } from "../src/reports/diagnosis.js";
 import { computeCurve, wilson } from "../src/reports/difficulty.js";
 import { familyEvidenceFor } from "../src/reports/evidence.js";
@@ -634,6 +637,20 @@ describe("realism labels", () => {
         preservesBrowserTrace: false,
       }),
     ).toContain("effect ledger is not harness-owned");
+  });
+
+  it("browser-backed readiness is concrete but not measured", () => {
+    const readiness = browserBackedReadiness(BROWSER_BACKED_NEXT_PLAN);
+    expect(readiness.architectureReady).toBe(true);
+    expect(readiness.browserBackedReady).toBe(false);
+    expect(readiness.browserBackedMeasured).toBe(false);
+    expect(readiness.checks.map((check) => check.id)).toContain("playwright-driver-implemented");
+    expect(readiness.checks.find((check) => check.id === "playwright-driver-implemented")?.verdict).toBe(
+      "fail",
+    );
+    const report = renderBrowserBackedReadiness(readiness);
+    expect(report).toContain("Live-DOM remains dom-like");
+    expect(report).toContain("Status: HOLD");
   });
 });
 

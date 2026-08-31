@@ -32,11 +32,13 @@ has tried to exploit the verifier, and it does not mean no bypass exists.
 | `package-leak-check` | pass | public challenge package passes leak check |
 | `campaign-file-present` | pass | campaign checker-required-memory-poisoning-adversarial |
 | `campaign-hash-current` | pass | campaign pins current hash 448f2f816c51030cc97a374816226168 |
-| `threat-model-declared` | pass | 9 attack surface(s) |
+| `threat-model-declared` | pass | 10 attack surface(s) |
 | `access-boundary-declared` | pass | allowed and forbidden attacker access are both declared |
 | `outcome-contract-declared` | pass | bypass and no-bypass outcomes are declared separately |
 | `never-counts-declared` | pass | refusal, infrastructure errors and stale hashes never count |
 | `attack-bundle-present` | pass | bundle ./bundles/checker-required-memory-poisoning-adversarial |
+| `fs-sandbox-isolation-check` | pass | bundle declares fs-sandbox and leaks no hidden files |
+| `exploit-schema-present` | pass | exploit artifact schema is included in the attack packet |
 
 ### `durable-approval-outbox`
 
@@ -51,6 +53,8 @@ has tried to exploit the verifier, and it does not mean no bypass exists.
 | `outcome-contract-declared` | **FAIL** | campaign must define what counts as bypass and no-bypass |
 | `never-counts-declared` | **FAIL** | campaign never-counts list is incomplete |
 | `attack-bundle-present` | n/a | prepared adversarial bundle missing |
+| `fs-sandbox-isolation-check` | n/a | no attack bundle to inspect |
+| `exploit-schema-present` | n/a | no attack bundle to inspect |
 
 ### `prompt-injection-containment`
 
@@ -60,11 +64,13 @@ has tried to exploit the verifier, and it does not mean no bypass exists.
 | `package-leak-check` | pass | public challenge package passes leak check |
 | `campaign-file-present` | pass | campaign prompt-injection-containment-adversarial |
 | `campaign-hash-current` | pass | campaign pins current hash 4911ffdfbd2c0e9b51752ed16c4f53e8 |
-| `threat-model-declared` | pass | 9 attack surface(s) |
+| `threat-model-declared` | pass | 10 attack surface(s) |
 | `access-boundary-declared` | pass | allowed and forbidden attacker access are both declared |
 | `outcome-contract-declared` | pass | bypass and no-bypass outcomes are declared separately |
 | `never-counts-declared` | pass | refusal, infrastructure errors and stale hashes never count |
 | `attack-bundle-present` | pass | bundle ./bundles/prompt-injection-containment-adversarial |
+| `fs-sandbox-isolation-check` | pass | bundle declares fs-sandbox and leaks no hidden files |
+| `exploit-schema-present` | pass | exploit artifact schema is included in the attack packet |
 
 ### `prompt-injection-memory-poisoning`
 
@@ -74,11 +80,13 @@ has tried to exploit the verifier, and it does not mean no bypass exists.
 | `package-leak-check` | pass | public challenge package passes leak check |
 | `campaign-file-present` | pass | campaign prompt-injection-memory-poisoning-adversarial |
 | `campaign-hash-current` | pass | campaign pins current hash 9b3e0c84addabc2e195ecbd490ba81dd |
-| `threat-model-declared` | pass | 9 attack surface(s) |
+| `threat-model-declared` | pass | 10 attack surface(s) |
 | `access-boundary-declared` | pass | allowed and forbidden attacker access are both declared |
 | `outcome-contract-declared` | pass | bypass and no-bypass outcomes are declared separately |
 | `never-counts-declared` | pass | refusal, infrastructure errors and stale hashes never count |
 | `attack-bundle-present` | pass | bundle ./bundles/prompt-injection-memory-poisoning-adversarial |
+| `fs-sandbox-isolation-check` | pass | bundle declares fs-sandbox and leaks no hidden files |
+| `exploit-schema-present` | pass | exploit artifact schema is included in the attack packet |
 
 ### `ui-action-record-replay`
 
@@ -88,11 +96,13 @@ has tried to exploit the verifier, and it does not mean no bypass exists.
 | `package-leak-check` | pass | public challenge package passes leak check |
 | `campaign-file-present` | pass | campaign ui-action-record-replay-adversarial |
 | `campaign-hash-current` | pass | campaign pins current hash 1050e79f4804a96a5327d50dd81765b0 |
-| `threat-model-declared` | pass | 9 attack surface(s) |
+| `threat-model-declared` | pass | 10 attack surface(s) |
 | `access-boundary-declared` | pass | allowed and forbidden attacker access are both declared |
 | `outcome-contract-declared` | pass | bypass and no-bypass outcomes are declared separately |
 | `never-counts-declared` | pass | refusal, infrastructure errors and stale hashes never count |
 | `attack-bundle-present` | pass | bundle ./bundles/ui-action-record-replay-adversarial |
+| `fs-sandbox-isolation-check` | pass | bundle declares fs-sandbox and leaks no hidden files |
+| `exploit-schema-present` | pass | exploit artifact schema is included in the attack packet |
 
 ### `ui-replay-live-dom`
 
@@ -102,11 +112,13 @@ has tried to exploit the verifier, and it does not mean no bypass exists.
 | `package-leak-check` | pass | public challenge package passes leak check |
 | `campaign-file-present` | pass | campaign ui-replay-live-dom-adversarial |
 | `campaign-hash-current` | pass | campaign pins current hash 18c3f5afc5973604205cd7df23ce4cad |
-| `threat-model-declared` | pass | 10 attack surface(s) |
+| `threat-model-declared` | pass | 11 attack surface(s) |
 | `access-boundary-declared` | pass | allowed and forbidden attacker access are both declared |
 | `outcome-contract-declared` | pass | bypass and no-bypass outcomes are declared separately |
 | `never-counts-declared` | pass | refusal, infrastructure errors and stale hashes never count |
 | `attack-bundle-present` | pass | bundle ./bundles/ui-replay-live-dom-adversarial |
+| `fs-sandbox-isolation-check` | pass | bundle declares fs-sandbox and leaks no hidden files |
+| `exploit-schema-present` | pass | exploit artifact schema is included in the attack packet |
 
 ---
 

@@ -1,6 +1,6 @@
 # The ship gate
 
-28 gates, 14 of them blocking. A family ships when every blocking gate
+33 gates, 14 of them blocking. A family ships when every blocking gate
 passes; there is no score, no weighting and no override. This document is generated from the gate
 definitions themselves, so a gate that exists in the code cannot be missing here.
 
@@ -43,8 +43,13 @@ An advisory gate is one where a reasonable author might disagree. Reported, neve
 | `human-ambiguity-reviewed` | Are human ambiguity findings resolved or explicitly absent? | 6 | 0 | 9 |
 | `adversarial-threat-model-declared` | Is there a declared verifier-bypass threat model for this family? | 5 | 1 | 9 |
 | `adversarial-package-ready` | Is a hash-pinned attack packet ready for this family? | 5 | 1 | 9 |
-| `adversarial-audit-evidenced` | Has a counted attacker failed to find a verifier bypass against the current package? | 0 | 6 | 9 |
+| `adversarial-audit-evidenced` | Has a counted attacker failed to find a verifier bypass against the current package? | 2 | 4 | 9 |
 | `no-known-unrepaired-bypass` | Are there zero counted, known, unrepaired verifier bypasses? | 6 | 0 | 9 |
+| `adversarial-isolation-adequate` | Is adversarial execution isolated beyond the legacy subprocess profile? | 5 | 1 | 9 |
+| `adversarial-exploit-replay-ready` | Can a claimed bypass artifact be replayed mechanically? | 5 | 1 | 9 |
+| `adversarial-hardening-probes-pass` | Do deterministic verifier-integrity probes pass? | 5 | 1 | 9 |
+| `browser-backed-ready` | Is the browser-backed UI descendant ready for real browser trials? | 0 | 1 | 14 |
+| `browser-backed-measured` | Has a real browser-backed UI run been measured? | 0 | 1 | 14 |
 
 ## Which gates have actually stopped something
 
@@ -61,7 +66,12 @@ fail. These are the ones that currently reject at least one family:
 | `human-solvability-evidenced` | no | `checker-required-memory-poisoning`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom` | A task can be mechanically solvable and still be ambiguous to anyone who did not write it. This gate counts only independent, current-hash, unassisted solves with notes and verifier output. |
 | `adversarial-threat-model-declared` | no | `durable-approval-outbox` | Cheat resistance is a design requirement, not evidence that anyone tried to break the grader. The adversarial layer starts by declaring the attacker objective, surface and access boundary. |
 | `adversarial-package-ready` | no | `durable-approval-outbox` | An adversarial audit without a preserved package is just a story about a task. The attacker packet must pin the public challenge hash and state which artifacts are forbidden. |
-| `adversarial-audit-evidenced` | no | `checker-required-memory-poisoning`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom` | No adversarial run yet is not the same as no bypass. This gate counts only current-hash, non-refusal, non-infrastructure, transcript-preserved no-bypass audits. |
+| `adversarial-audit-evidenced` | no | `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` | No adversarial run yet is not the same as no bypass. This gate counts only current-hash, non-refusal, non-infrastructure, transcript-preserved no-bypass audits. |
+| `adversarial-isolation-adequate` | no | `durable-approval-outbox` | A no-bypass audit only means something if the attacker did not receive the repository, hidden verifier, generated reports or mutable grader state. Subprocess preservation is not the same as an attacker context boundary. |
+| `adversarial-exploit-replay-ready` | no | `durable-approval-outbox` | A bypass report without replay is a claim about an exploit. Replay turns it into evidence by rerunning the submitted artifact against the current verifier and package hash. |
+| `adversarial-hardening-probes-pass` | no | `durable-approval-outbox` | Model adversarial audits are scarce and can refuse. Local probes keep known bypass classes from regressing, but passing them is hardening evidence rather than no-bypass audit evidence. |
+| `browser-backed-ready` | no | `ui-replay-live-dom` | Live-DOM is dom-like. A browser-backed claim requires a real browser harness contract, trace format, effect-ledger boundary and readiness gate before trials can count. |
+| `browser-backed-measured` | no | `ui-replay-live-dom` | A scaffold is not a browser result. This gate only passes after a real browser driver runs a scenario sweep with preserved trace and verifier output. |
 
 **9 gate(s) pass for every family and have never rejected anything here:**
 `solvable`, `verifier-graded`, `trust-boundary`, `detectable`, `fairness`, `cheat-resistance`, `is-a-family`, `hidden-region-declared`, `priced`.
@@ -706,7 +716,7 @@ No adversarial run yet is not the same as no bypass. This gate counts only curre
 |---|---|---|
 | `audit-truth-financial-workflow` | n/a | no adversarial audit evidence |
 | `browser-action-replay` | n/a | no adversarial audit evidence |
-| `checker-required-memory-poisoning` | fail | no counted no-bypass audit on record |
+| `checker-required-memory-poisoning` | pass | 1 counted no-bypass audit(s) |
 | `deployment-rollback-partial-effects` | n/a | no adversarial audit evidence |
 | `durable-approval-outbox` | fail | no counted no-bypass audit on record |
 | `model-alias-drift-sentinel` | n/a | no adversarial audit evidence |
@@ -718,7 +728,7 @@ No adversarial run yet is not the same as no bypass. This gate counts only curre
 | `prompt-injection-memory-poisoning` | fail | no counted no-bypass audit on record |
 | `stale-crm-ticket-automation` | n/a | no adversarial audit evidence |
 | `ui-action-record-replay` | fail | no counted no-bypass audit on record |
-| `ui-replay-live-dom` | fail | no counted no-bypass audit on record |
+| `ui-replay-live-dom` | pass | 1 counted no-bypass audit(s) |
 
 ### `no-known-unrepaired-bypass` — advisory
 
@@ -743,6 +753,126 @@ A counted bypass does not necessarily kill the benchmark family, but it blocks a
 | `stale-crm-ticket-automation` | n/a | no adversarial audit evidence |
 | `ui-action-record-replay` | pass | 0 counted bypass(es), none unrepaired |
 | `ui-replay-live-dom` | pass | 0 counted bypass(es), none unrepaired |
+
+### `adversarial-isolation-adequate` — advisory
+
+**Is adversarial execution isolated beyond the legacy subprocess profile?**
+
+A no-bypass audit only means something if the attacker did not receive the repository, hidden verifier, generated reports or mutable grader state. Subprocess preservation is not the same as an attacker context boundary.
+
+| family | verdict | detail |
+|---|---|---|
+| `audit-truth-financial-workflow` | n/a | no adversarial isolation profile |
+| `browser-action-replay` | n/a | no adversarial isolation profile |
+| `checker-required-memory-poisoning` | pass | fs-sandbox/container isolation profile available |
+| `deployment-rollback-partial-effects` | n/a | no adversarial isolation profile |
+| `durable-approval-outbox` | fail | legacy subprocess profile only |
+| `model-alias-drift-sentinel` | n/a | no adversarial isolation profile |
+| `permission-boundary-tools` | n/a | no adversarial isolation profile |
+| `prompt-injection-approval-scope-drift` | n/a | no adversarial isolation profile |
+| `prompt-injection-capability-routing` | n/a | no adversarial isolation profile |
+| `prompt-injection-containment` | pass | fs-sandbox/container isolation profile available |
+| `prompt-injection-cross-tool-escalation` | n/a | no adversarial isolation profile |
+| `prompt-injection-memory-poisoning` | pass | fs-sandbox/container isolation profile available |
+| `stale-crm-ticket-automation` | n/a | no adversarial isolation profile |
+| `ui-action-record-replay` | pass | fs-sandbox/container isolation profile available |
+| `ui-replay-live-dom` | pass | fs-sandbox/container isolation profile available |
+
+### `adversarial-exploit-replay-ready` — advisory
+
+**Can a claimed bypass artifact be replayed mechanically?**
+
+A bypass report without replay is a claim about an exploit. Replay turns it into evidence by rerunning the submitted artifact against the current verifier and package hash.
+
+| family | verdict | detail |
+|---|---|---|
+| `audit-truth-financial-workflow` | n/a | no exploit replay path |
+| `browser-action-replay` | n/a | no exploit replay path |
+| `checker-required-memory-poisoning` | pass | exploit replay command and schema are available |
+| `deployment-rollback-partial-effects` | n/a | no exploit replay path |
+| `durable-approval-outbox` | fail | claimed bypasses cannot be replayed mechanically |
+| `model-alias-drift-sentinel` | n/a | no exploit replay path |
+| `permission-boundary-tools` | n/a | no exploit replay path |
+| `prompt-injection-approval-scope-drift` | n/a | no exploit replay path |
+| `prompt-injection-capability-routing` | n/a | no exploit replay path |
+| `prompt-injection-containment` | pass | exploit replay command and schema are available |
+| `prompt-injection-cross-tool-escalation` | n/a | no exploit replay path |
+| `prompt-injection-memory-poisoning` | pass | exploit replay command and schema are available |
+| `stale-crm-ticket-automation` | n/a | no exploit replay path |
+| `ui-action-record-replay` | pass | exploit replay command and schema are available |
+| `ui-replay-live-dom` | pass | exploit replay command and schema are available |
+
+### `adversarial-hardening-probes-pass` — advisory
+
+**Do deterministic verifier-integrity probes pass?**
+
+Model adversarial audits are scarce and can refuse. Local probes keep known bypass classes from regressing, but passing them is hardening evidence rather than no-bypass audit evidence.
+
+| family | verdict | detail |
+|---|---|---|
+| `audit-truth-financial-workflow` | n/a | no deterministic hardening probes |
+| `browser-action-replay` | n/a | no deterministic hardening probes |
+| `checker-required-memory-poisoning` | pass | deterministic hardening probes pass |
+| `deployment-rollback-partial-effects` | n/a | no deterministic hardening probes |
+| `durable-approval-outbox` | fail | 0 hardening probe failure(s) |
+| `model-alias-drift-sentinel` | n/a | no deterministic hardening probes |
+| `permission-boundary-tools` | n/a | no deterministic hardening probes |
+| `prompt-injection-approval-scope-drift` | n/a | no deterministic hardening probes |
+| `prompt-injection-capability-routing` | n/a | no deterministic hardening probes |
+| `prompt-injection-containment` | pass | deterministic hardening probes pass |
+| `prompt-injection-cross-tool-escalation` | n/a | no deterministic hardening probes |
+| `prompt-injection-memory-poisoning` | pass | deterministic hardening probes pass |
+| `stale-crm-ticket-automation` | n/a | no deterministic hardening probes |
+| `ui-action-record-replay` | pass | deterministic hardening probes pass |
+| `ui-replay-live-dom` | pass | deterministic hardening probes pass |
+
+### `browser-backed-ready` — advisory
+
+**Is the browser-backed UI descendant ready for real browser trials?**
+
+Live-DOM is dom-like. A browser-backed claim requires a real browser harness contract, trace format, effect-ledger boundary and readiness gate before trials can count.
+
+| family | verdict | detail |
+|---|---|---|
+| `audit-truth-financial-workflow` | n/a | no browser-backed layer |
+| `browser-action-replay` | n/a | no browser-backed layer |
+| `checker-required-memory-poisoning` | n/a | no browser-backed layer |
+| `deployment-rollback-partial-effects` | n/a | no browser-backed layer |
+| `durable-approval-outbox` | n/a | no browser-backed layer |
+| `model-alias-drift-sentinel` | n/a | no browser-backed layer |
+| `permission-boundary-tools` | n/a | no browser-backed layer |
+| `prompt-injection-approval-scope-drift` | n/a | no browser-backed layer |
+| `prompt-injection-capability-routing` | n/a | no browser-backed layer |
+| `prompt-injection-containment` | n/a | no browser-backed layer |
+| `prompt-injection-cross-tool-escalation` | n/a | no browser-backed layer |
+| `prompt-injection-memory-poisoning` | n/a | no browser-backed layer |
+| `stale-crm-ticket-automation` | n/a | no browser-backed layer |
+| `ui-action-record-replay` | n/a | no browser-backed layer |
+| `ui-replay-live-dom` | fail | browser-backed architecture is declared; executable Playwright driver and measured sweep are still missing |
+
+### `browser-backed-measured` — advisory
+
+**Has a real browser-backed UI run been measured?**
+
+A scaffold is not a browser result. This gate only passes after a real browser driver runs a scenario sweep with preserved trace and verifier output.
+
+| family | verdict | detail |
+|---|---|---|
+| `audit-truth-financial-workflow` | n/a | no browser-backed layer |
+| `browser-action-replay` | n/a | no browser-backed layer |
+| `checker-required-memory-poisoning` | n/a | no browser-backed layer |
+| `deployment-rollback-partial-effects` | n/a | no browser-backed layer |
+| `durable-approval-outbox` | n/a | no browser-backed layer |
+| `model-alias-drift-sentinel` | n/a | no browser-backed layer |
+| `permission-boundary-tools` | n/a | no browser-backed layer |
+| `prompt-injection-approval-scope-drift` | n/a | no browser-backed layer |
+| `prompt-injection-capability-routing` | n/a | no browser-backed layer |
+| `prompt-injection-containment` | n/a | no browser-backed layer |
+| `prompt-injection-cross-tool-escalation` | n/a | no browser-backed layer |
+| `prompt-injection-memory-poisoning` | n/a | no browser-backed layer |
+| `stale-crm-ticket-automation` | n/a | no browser-backed layer |
+| `ui-action-record-replay` | n/a | no browser-backed layer |
+| `ui-replay-live-dom` | fail | no browser-backed run measured |
 
 ## Verdicts
 

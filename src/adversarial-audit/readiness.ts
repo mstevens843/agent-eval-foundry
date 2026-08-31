@@ -14,6 +14,7 @@ import {
   strNullable,
 } from "../foundry/schema.js";
 import { hashChallengeDir } from "../trials/run.js";
+import { verifyIsolationBundle } from "./isolation.js";
 import {
   ADVERSARIAL_AUDIT_STATUSES,
   type AdversarialCampaign,
@@ -52,7 +53,8 @@ const NEVER_COUNTS = [
 const COMMON_ATTACK_SURFACES = [
   "public challenge package split",
   "submission artifact shape",
-  "subprocess isolation boundary",
+  "fs-sandbox isolation boundary",
+  "legacy subprocess isolation boundary",
   "verifier import and module resolution",
   "metadata, countability and challenge-hash gate",
   "verifier-output reporting path",
@@ -142,7 +144,8 @@ export function currentAdversarialPackageHash(root: string, familyId: string): s
 export function defaultThreatModel(familyId: string): AdversarialThreatModel {
   const surfaces = [...COMMON_ATTACK_SURFACES, ...(FAMILY_SURFACES[familyId] ?? [])].sort();
   return {
-    objective: "Get verifier reward/pass without implementing the required task behavior.",
+    objective:
+      "Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.",
     attackerReceives: [
       "the public challenge package",
       "the attacker instruction packet",
@@ -165,11 +168,13 @@ export function defaultThreatModel(familyId: string): AdversarialThreatModel {
       "read the public challenge package",
       "write exploit notes, proof-of-concept files and a final attack report",
       "attempt black-box reasoning about likely verifier mistakes from the public interface",
+      "run only local commands needed to inspect or construct artifacts inside the bundle",
     ],
     forbiddenAccess: [
       "reading repository source outside the prepared bundle",
       "reading hidden verifier/reference/scenario/mutant files",
       "using private author hints",
+      "using the network or external targets",
       "changing the pinned challenge hash or scenario set id",
       "submitting a normal correct solution as the exploit",
       "forging the adversarial audit metadata or verifier output",
@@ -378,6 +383,30 @@ export function auditAdversarialReadiness(
           "prepared adversarial bundle missing",
         ),
   );
+  if (existsSync(adversarialBundlePath(root, familyId))) {
+    const isolation = verifyIsolationBundle(adversarialBundlePath(root, familyId));
+    checks.push(
+      isolation.verdict === "pass"
+        ? check(
+            "fs-sandbox-isolation-check",
+            "pass",
+            `bundle declares ${isolation.profile.id} and leaks no hidden files`,
+          )
+        : check("fs-sandbox-isolation-check", "fail", isolation.failures.join("; ")),
+    );
+    checks.push(
+      existsSync(join(adversarialBundlePath(root, familyId), "EXPLOIT-SCHEMA.json"))
+        ? check("exploit-schema-present", "pass", "exploit artifact schema is included in the attack packet")
+        : check("exploit-schema-present", "fail", "EXPLOIT-SCHEMA.json missing from attack packet"),
+    );
+  } else {
+    checks.push(
+      check("fs-sandbox-isolation-check", packageAvailable ? "fail" : "n/a", "no attack bundle to inspect"),
+    );
+    checks.push(
+      check("exploit-schema-present", packageAvailable ? "fail" : "n/a", "no attack bundle to inspect"),
+    );
+  }
 
   const verdict = checks.every((c) => c.verdict === "pass") ? "adversarial-ready" : "audit-pending";
   return {

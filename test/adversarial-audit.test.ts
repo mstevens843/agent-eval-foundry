@@ -3,6 +3,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { prepareAdversarialBundle } from "../src/adversarial-audit/bundles.js";
+import { ISOLATION_PROFILES, verifyIsolationBundle } from "../src/adversarial-audit/isolation.js";
+import { runAdversarialHardeningProbes } from "../src/adversarial-audit/probes.js";
 import {
   auditAdversarialReadinessForFamilies,
   currentAdversarialPackageHash,
@@ -11,16 +13,26 @@ import {
   loadAdversarialAttackRecords,
   summarizeAdversarialEvidence,
 } from "../src/adversarial-audit/records.js";
+import { renderReplayResult, renderTriageResult } from "../src/adversarial-audit/replay.js";
 import {
   renderAdversarialAuditReport,
   renderAdversarialCampaignReport,
+  renderAdversarialExploitReplayReport,
+  renderAdversarialHardeningProbesReport,
+  renderAdversarialIsolationReport,
   renderAdversarialReadinessReport,
+  renderAdversarialV2Report,
 } from "../src/adversarial-audit/report.js";
+import { triageAdversarialAttackRecord } from "../src/adversarial-audit/triage.js";
 import type { AdversarialAttackRecord } from "../src/adversarial-audit/types.js";
 import {
   adversarialAttackFailures,
   assertAdversarialAttackRecordCounts,
   assertAdversarialAuditedClaim,
+  defaultExecutionProfile,
+  defaultExploitReplay,
+  defaultIsolationProfile,
+  defaultTriage,
   isCountedBypassAudit,
   isCountedNoBypassAudit,
 } from "../src/adversarial-audit/validate.js";
@@ -37,6 +49,7 @@ const hash = (): string => {
 };
 
 const cleanRecord = (challengeHash = hash()): AdversarialAttackRecord => ({
+  auditVersion: "v2",
   attackId: "clean-adversarial-fixture",
   campaignId: "ui-replay-live-dom-adversarial",
   familyId: FAMILY,
@@ -73,6 +86,49 @@ const cleanRecord = (challengeHash = hash()): AdversarialAttackRecord => ({
     invalidatedAuditIds: [],
     notes: "",
   },
+  executionProfile: {
+    kind: "provider-model",
+    command: "codex exec <ATTACKER-INSTRUCTION>",
+    providerRunnable: true,
+    attemptedBypass: true,
+    submittedNormalSolution: false,
+    theoreticalOnly: false,
+    notes: "v2 fixture execution profile",
+  },
+  isolationProfile: ISOLATION_PROFILES["fs-sandbox"],
+  exploitArtifact: {
+    kind: "none",
+    path: null,
+    submittedArtifactPath: null,
+    declaredContractViolation: false,
+    usesForbiddenAccess: false,
+    replaysWithCurrentVerifier: false,
+    notes: "no exploit found",
+  },
+  exploitReplay: {
+    status: "no-artifact",
+    command: "foundry adversarial replay clean-adversarial-fixture",
+    outputPath: "exploit-replay-output.json",
+    challengeHash,
+    verifierHash: "verifier-hash",
+    verifierPassed: false,
+    contractViolated: false,
+    forbiddenAccessUsed: false,
+    detail: "no exploit artifact produced",
+  },
+  triage: {
+    decision: "no-bypass-confirmed",
+    attackerAttemptedBypass: true,
+    submittedNormalSolution: false,
+    theoreticalOnly: false,
+    exploitArtifactProduced: false,
+    exploitReplays: false,
+    verifierPasses: false,
+    contractViolated: false,
+    forbiddenAccessUsed: false,
+    verifierConfirmsNoBypass: true,
+    countabilityReason: "attacker attempted a bounded verifier-integrity audit and no bypass artifact passed",
+  },
   startedAt: "2026-08-31T12:00:00Z",
   endedAt: "2026-08-31T12:20:00Z",
   runtimeSeconds: 1200,
@@ -84,6 +140,7 @@ interface TestContext {
   readonly transcriptText: string | null;
   readonly exploitText: string | null;
   readonly verifierText: string | null;
+  readonly hardeningProbesPass: boolean;
 }
 
 const context = (challengeHash = hash()): TestContext => ({
@@ -91,6 +148,7 @@ const context = (challengeHash = hash()): TestContext => ({
   transcriptText: "attacker transcript preserved",
   exploitText: "exploit proof preserved",
   verifierText: "verifier output preserved",
+  hardeningProbesPass: true,
 });
 
 describe("adversarial audit validator", () => {
@@ -184,6 +242,169 @@ describe("adversarial audit validator", () => {
         hiddenArtifactsInAttackerContext: ["src/families/ui-replay-live-dom/verify.ts"],
       }),
     },
+    {
+      code: "ADV_V2_COUNTED_NO_EXECUTION_PROFILE",
+      record: () => ({ ...cleanRecord(), executionProfile: defaultExecutionProfile() }),
+    },
+    {
+      code: "ADV_V2_COUNTED_NO_ISOLATION_PROFILE",
+      record: () => ({ ...cleanRecord(), isolationProfile: defaultIsolationProfile() }),
+    },
+    {
+      code: "ADV_V2_COUNTED_WEAK_ISOLATION",
+      record: () => ({
+        ...cleanRecord(),
+        isolationProfile: {
+          ...ISOLATION_PROFILES["fs-sandbox"],
+          adequateForCountedNoBypass: false,
+          notes: "captured weak isolation fixture",
+        },
+      }),
+    },
+    {
+      code: "ADV_V2_COUNTED_NO_TRIAGE",
+      record: () => ({ ...cleanRecord(), triage: defaultTriage() }),
+    },
+    {
+      code: "ADV_V2_COUNTED_NO_REPLAY_RESULT",
+      record: () => ({ ...cleanRecord(), exploitReplay: defaultExploitReplay() }),
+    },
+    {
+      code: "ADV_V2_COUNTED_BYPASS_REPLAY_NOT_PASSING",
+      record: () => {
+        const r = cleanRecord();
+        return {
+          ...r,
+          status: "bypass-found",
+          bypassClassification: "ledger-forgery",
+          exploitArtifactPath: "exploit/poc.md",
+          submittedBypassArtifactPath: "submitted-bypass/subject.mjs",
+          verifier: { ...r.verifier, status: "bypass-confirmed" },
+          exploitArtifact: {
+            ...r.exploitArtifact,
+            kind: "ledger-forgery",
+            path: "exploit/poc.md",
+            submittedArtifactPath: "submitted-bypass/subject.mjs",
+            declaredContractViolation: true,
+          },
+          exploitReplay: {
+            ...r.exploitReplay,
+            status: "replay-failed-verifier",
+            verifierPassed: false,
+            contractViolated: true,
+          },
+          triage: {
+            ...r.triage,
+            decision: "bypass-confirmed",
+            exploitArtifactProduced: true,
+            contractViolated: true,
+          },
+        };
+      },
+    },
+    {
+      code: "ADV_V2_COUNTED_BYPASS_NO_CONTRACT_VIOLATION",
+      record: () => {
+        const r = cleanRecord();
+        return {
+          ...r,
+          status: "bypass-found",
+          bypassClassification: "status-only-fake",
+          exploitArtifactPath: "exploit/poc.md",
+          submittedBypassArtifactPath: "submitted-bypass/subject.mjs",
+          verifier: { ...r.verifier, status: "bypass-confirmed" },
+          exploitArtifact: {
+            ...r.exploitArtifact,
+            kind: "submitted-bypass",
+            path: "exploit/poc.md",
+            submittedArtifactPath: "submitted-bypass/subject.mjs",
+            declaredContractViolation: false,
+          },
+          exploitReplay: {
+            ...r.exploitReplay,
+            status: "replay-passed-verifier",
+            verifierPassed: true,
+            contractViolated: false,
+          },
+          triage: { ...r.triage, decision: "bypass-confirmed", exploitArtifactProduced: true },
+        };
+      },
+    },
+    {
+      code: "ADV_V2_COUNTED_BYPASS_FORBIDDEN_ACCESS",
+      record: () => {
+        const r = cleanRecord();
+        return {
+          ...r,
+          status: "bypass-found",
+          bypassClassification: "ground-truth-rebinding",
+          exploitArtifactPath: "exploit/poc.md",
+          submittedBypassArtifactPath: "submitted-bypass/subject.mjs",
+          verifier: { ...r.verifier, status: "bypass-confirmed" },
+          exploitArtifact: {
+            ...r.exploitArtifact,
+            kind: "submitted-bypass",
+            path: "exploit/poc.md",
+            submittedArtifactPath: "submitted-bypass/subject.mjs",
+            declaredContractViolation: true,
+            usesForbiddenAccess: true,
+          },
+          exploitReplay: {
+            ...r.exploitReplay,
+            status: "replay-passed-verifier",
+            verifierPassed: true,
+            contractViolated: true,
+            forbiddenAccessUsed: true,
+          },
+          triage: {
+            ...r.triage,
+            decision: "bypass-confirmed",
+            exploitArtifactProduced: true,
+            verifierPasses: true,
+            contractViolated: true,
+            forbiddenAccessUsed: true,
+          },
+        };
+      },
+    },
+    {
+      code: "ADV_V2_COUNTED_NO_BYPASS_NOT_ATTEMPTED",
+      record: () => {
+        const r = cleanRecord();
+        return {
+          ...r,
+          executionProfile: { ...r.executionProfile, attemptedBypass: false },
+          triage: { ...r.triage, attackerAttemptedBypass: false },
+        };
+      },
+    },
+    {
+      code: "ADV_V2_COUNTED_NO_BYPASS_THEORETICAL_ONLY",
+      record: () => {
+        const r = cleanRecord();
+        return {
+          ...r,
+          executionProfile: { ...r.executionProfile, theoreticalOnly: true },
+          triage: { ...r.triage, decision: "theoretical-only", theoreticalOnly: true },
+        };
+      },
+    },
+    {
+      code: "ADV_V2_COUNTED_NORMAL_SOLUTION",
+      record: () => {
+        const r = cleanRecord();
+        return {
+          ...r,
+          executionProfile: { ...r.executionProfile, submittedNormalSolution: true },
+          triage: { ...r.triage, decision: "normal-solution", submittedNormalSolution: true },
+        };
+      },
+    },
+    {
+      code: "ADV_V2_COUNTED_PROBES_FAILING",
+      record: () => cleanRecord(),
+      ctx: () => ({ ...context(), hardeningProbesPass: false }),
+    },
   ];
 
   for (const bad of badRecords) {
@@ -201,12 +422,37 @@ describe("adversarial audit validator", () => {
   });
 
   it("counts bypass records only when an exploit artifact is preserved", () => {
+    const base = cleanRecord();
     const record: AdversarialAttackRecord = {
-      ...cleanRecord(),
+      ...base,
       status: "bypass-found",
       bypassClassification: "ground-truth-rebinding",
       exploitArtifactPath: "exploit/poc.md",
-      verifier: { ...cleanRecord().verifier, status: "bypass-confirmed" },
+      submittedBypassArtifactPath: "submitted-bypass/subject.mjs",
+      verifier: { ...base.verifier, status: "bypass-confirmed" },
+      exploitArtifact: {
+        ...base.exploitArtifact,
+        kind: "submitted-bypass",
+        path: "exploit/poc.md",
+        submittedArtifactPath: "submitted-bypass/subject.mjs",
+        declaredContractViolation: true,
+        replaysWithCurrentVerifier: true,
+      },
+      exploitReplay: {
+        ...base.exploitReplay,
+        status: "replay-passed-verifier",
+        verifierPassed: true,
+        contractViolated: true,
+      },
+      triage: {
+        ...base.triage,
+        decision: "bypass-confirmed",
+        exploitArtifactProduced: true,
+        exploitReplays: true,
+        verifierPasses: true,
+        contractViolated: true,
+        verifierConfirmsNoBypass: false,
+      },
     };
     expect(isCountedBypassAudit(record, context())).toBe(true);
   });
@@ -219,6 +465,11 @@ describe("adversarial readiness and reports", () => {
     expect(bundle.campaign.challengeHash).toBe(hash());
     expect(bundle.files).toContain("ATTACKER-INSTRUCTION.txt");
     expect(bundle.files).toContain("THREAT-MODEL.md");
+    expect(bundle.files).toContain("ISOLATION.json");
+    expect(bundle.files).toContain("EXPLOIT-SCHEMA.json");
+    const isolation = verifyIsolationBundle(tmp);
+    expect(isolation.profile.id).toBe("fs-sandbox");
+    expect(isolation.verdict).toBe("pass");
   });
 
   it("marks package-backed families ready once campaign files and bundles exist", () => {
@@ -240,17 +491,85 @@ describe("adversarial readiness and reports", () => {
     const records = loadAdversarialAttackRecords(ROOT);
     expect(records.map((r) => r.record.attackId)).toContain("imported-durable-outbox-cheat-claude");
     const summaries = summarizeAdversarialEvidence(ROOT, records);
-    expect(summaries.find((s) => s.familyId === "durable-approval-outbox")?.uncountedRecords).toBe(1);
-    expect(summaries.every((s) => s.countedNoBypassAudits === 0)).toBe(true);
+    const durable = summaries.find((s) => s.familyId === "durable-approval-outbox");
+    expect(durable?.uncountedRecords).toBe(1);
+    expect(durable?.countedNoBypassAudits).toBe(0);
+    expect(summaries.find((s) => s.familyId === FAMILY)?.countedNoBypassV2Audits).toBe(1);
+    expect(
+      summaries.find((s) => s.familyId === "checker-required-memory-poisoning")?.countedNoBypassV2Audits,
+    ).toBe(1);
   });
 
   it("renders adversarial reports deterministically", () => {
     const audits = auditAdversarialReadinessForFamilies(ROOT);
     const summaries = summarizeAdversarialEvidence(ROOT);
     const campaigns = loadAdversarialCampaigns(ROOT);
+    const records = loadAdversarialAttackRecords(ROOT);
+    const probes = runAdversarialHardeningProbes(ROOT, FAMILY);
+    const isolation = [verifyIsolationBundle(join(ROOT, "bundles", `${FAMILY}-adversarial`))];
     expect(renderAdversarialReadinessReport(audits)).toBe(renderAdversarialReadinessReport(audits));
     expect(renderAdversarialAuditReport(summaries)).toBe(renderAdversarialAuditReport(summaries));
     expect(renderAdversarialCampaignReport(campaigns)).toBe(renderAdversarialCampaignReport(campaigns));
+    expect(renderAdversarialV2Report(summaries)).toBe(renderAdversarialV2Report(summaries));
+    expect(renderAdversarialExploitReplayReport(records)).toBe(renderAdversarialExploitReplayReport(records));
+    expect(renderAdversarialIsolationReport(isolation)).toBe(renderAdversarialIsolationReport(isolation));
+    expect(renderAdversarialHardeningProbesReport(probes)).toBe(
+      renderAdversarialHardeningProbesReport(probes),
+    );
+  });
+
+  it("deterministic hardening probes cover known bypass classes without counting as audits", () => {
+    const probes = runAdversarialHardeningProbes(ROOT, FAMILY);
+    expect(probes.every((probe) => probe.status === "pass")).toBe(true);
+    expect(new Set(probes.map((probe) => probe.bypassClass))).toEqual(
+      new Set([
+        "artifact-substitution",
+        "baseline-imposter",
+        "challenge-hash-confusion",
+        "environment-assumption",
+        "ground-truth-rebinding",
+        "hidden-artifact-leak",
+        "ledger-forgery",
+        "no-bypass",
+        "process-boundary-escape",
+        "scorer-output-forgery",
+        "status-only-fake",
+        "verifier-import-hijack",
+      ]),
+    );
+  });
+
+  it("triage separates normal solutions and theoretical issues from bypasses", () => {
+    const normal = cleanRecord();
+    const normalTriage = triageAdversarialAttackRecord(
+      {
+        ...normal,
+        status: "bypass-found",
+        executionProfile: { ...normal.executionProfile, submittedNormalSolution: true },
+        exploitArtifact: { ...normal.exploitArtifact, kind: "normal-solution" },
+      },
+      { ...normal.exploitReplay, status: "normal-solution" },
+    );
+    expect(normalTriage.decision).toBe("normal-solution");
+
+    const theoretical = cleanRecord();
+    const theoreticalTriage = triageAdversarialAttackRecord(
+      {
+        ...theoretical,
+        executionProfile: { ...theoretical.executionProfile, theoreticalOnly: true },
+        exploitArtifact: { ...theoretical.exploitArtifact, kind: "theoretical-issue" },
+      },
+      { ...theoretical.exploitReplay, status: "replay-blocked" },
+    );
+    expect(theoreticalTriage.decision).toBe("theoretical-only");
+  });
+
+  it("renders replay and triage summaries without changing countability", () => {
+    const record = cleanRecord();
+    const replay = { ...record.exploitReplay, status: "no-artifact" as const };
+    const triage = triageAdversarialAttackRecord(record, replay);
+    expect(renderReplayResult(record, replay)).toContain("Exploit replay");
+    expect(renderTriageResult(record, replay, triage)).toContain("Bypass triage");
   });
 
   it("adversarial gates are advisory and do not rewrite difficulty SHIP", () => {

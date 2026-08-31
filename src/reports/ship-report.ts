@@ -77,6 +77,15 @@ export interface FamilyEvidence {
   readonly unrepairedBypasses?: number;
   readonly repairedBypasses?: number;
   readonly adversarialAuditRecords?: number;
+  readonly adversarialIsolationAdequate?: boolean;
+  readonly adversarialExploitReplayReady?: boolean;
+  readonly adversarialHardeningProbesPass?: boolean;
+  readonly adversarialHardeningProbeFailures?: number;
+  readonly countedNoBypassV2Audits?: number;
+  readonly countedBypassV2Audits?: number;
+  readonly browserBackedReady?: boolean;
+  readonly browserBackedMeasured?: boolean;
+  readonly browserBackedDetail?: string;
   readonly adversarialClaimLevel?:
     | "adversarial-ready"
     | "adversarial-audited"
@@ -105,6 +114,12 @@ export interface VerifierIntegrityEvidence {
   readonly unrepairedBypasses: number;
   readonly repairedBypasses: number;
   readonly adversarialAuditRecords: number;
+  readonly adversarialIsolationAdequate: boolean;
+  readonly adversarialExploitReplayReady: boolean;
+  readonly adversarialHardeningProbesPass: boolean;
+  readonly adversarialHardeningProbeFailures: number;
+  readonly countedNoBypassV2Audits: number;
+  readonly countedBypassV2Audits: number;
   readonly adversarialClaimLevel:
     | "adversarial-ready"
     | "adversarial-audited"
@@ -644,6 +659,98 @@ export const GATES: readonly Gate[] = [
       };
     },
   },
+  {
+    id: "adversarial-isolation-adequate",
+    question: "Is adversarial execution isolated beyond the legacy subprocess profile?",
+    rationale:
+      "A no-bypass audit only means something if the attacker did not receive the repository, hidden " +
+      "verifier, generated reports or mutable grader state. Subprocess preservation is not the same " +
+      "as an attacker context boundary.",
+    blocking: false,
+    evaluate: (_s, _r, e, _h, a) => {
+      const adv = adversarialFor(e, a);
+      if (adv?.adversarialIsolationAdequate === undefined) {
+        return { verdict: "n/a", detail: "no adversarial isolation profile" };
+      }
+      return {
+        verdict: adv.adversarialIsolationAdequate ? "pass" : "fail",
+        detail: adv.adversarialIsolationAdequate
+          ? "fs-sandbox/container isolation profile available"
+          : "legacy subprocess profile only",
+      };
+    },
+  },
+  {
+    id: "adversarial-exploit-replay-ready",
+    question: "Can a claimed bypass artifact be replayed mechanically?",
+    rationale:
+      "A bypass report without replay is a claim about an exploit. Replay turns it into evidence by " +
+      "rerunning the submitted artifact against the current verifier and package hash.",
+    blocking: false,
+    evaluate: (_s, _r, e, _h, a) => {
+      const adv = adversarialFor(e, a);
+      if (adv?.adversarialExploitReplayReady === undefined) {
+        return { verdict: "n/a", detail: "no exploit replay path" };
+      }
+      return {
+        verdict: adv.adversarialExploitReplayReady ? "pass" : "fail",
+        detail: adv.adversarialExploitReplayReady
+          ? "exploit replay command and schema are available"
+          : "claimed bypasses cannot be replayed mechanically",
+      };
+    },
+  },
+  {
+    id: "adversarial-hardening-probes-pass",
+    question: "Do deterministic verifier-integrity probes pass?",
+    rationale:
+      "Model adversarial audits are scarce and can refuse. Local probes keep known bypass classes " +
+      "from regressing, but passing them is hardening evidence rather than no-bypass audit evidence.",
+    blocking: false,
+    evaluate: (_s, _r, e, _h, a) => {
+      const adv = adversarialFor(e, a);
+      if (adv?.adversarialHardeningProbesPass === undefined) {
+        return { verdict: "n/a", detail: "no deterministic hardening probes" };
+      }
+      return {
+        verdict: adv.adversarialHardeningProbesPass ? "pass" : "fail",
+        detail: adv.adversarialHardeningProbesPass
+          ? "deterministic hardening probes pass"
+          : `${adv.adversarialHardeningProbeFailures ?? 0} hardening probe failure(s)`,
+      };
+    },
+  },
+  {
+    id: "browser-backed-ready",
+    question: "Is the browser-backed UI descendant ready for real browser trials?",
+    rationale:
+      "Live-DOM is dom-like. A browser-backed claim requires a real browser harness contract, trace " +
+      "format, effect-ledger boundary and readiness gate before trials can count.",
+    blocking: false,
+    evaluate: (_s, _r, e) => {
+      if (e?.browserBackedReady === undefined) return { verdict: "n/a", detail: "no browser-backed layer" };
+      return {
+        verdict: e.browserBackedReady ? "pass" : "fail",
+        detail: e.browserBackedDetail ?? (e.browserBackedReady ? "browser-backed ready" : "not ready"),
+      };
+    },
+  },
+  {
+    id: "browser-backed-measured",
+    question: "Has a real browser-backed UI run been measured?",
+    rationale:
+      "A scaffold is not a browser result. This gate only passes after a real browser driver runs a " +
+      "scenario sweep with preserved trace and verifier output.",
+    blocking: false,
+    evaluate: (_s, _r, e) => {
+      if (e?.browserBackedMeasured === undefined)
+        return { verdict: "n/a", detail: "no browser-backed layer" };
+      return {
+        verdict: e.browserBackedMeasured ? "pass" : "fail",
+        detail: e.browserBackedMeasured ? "browser-backed run measured" : "no browser-backed run measured",
+      };
+    },
+  },
 ];
 
 export type ShipVerdict = "SHIP" | "HOLD" | "NOT-READY";
@@ -734,16 +841,19 @@ export function renderShipReport(
     "",
     "## Verifier-integrity claim levels",
     "",
-    "| family | threat model | attack package | no-bypass audits | unrepaired bypasses | claim level |",
-    "|---|---|---|---|---:|---|",
+    "| family | threat model | attack package | isolation | replay | probes | no-bypass audits | unrepaired bypasses | claim level |",
+    "|---|---|---|---|---|---|---|---:|---|",
     ...shapes.map((s) => {
       const e = evidence[s.familyId];
       const a = verifierIntegrity[s.familyId] ?? e;
       const threat = a?.adversarialThreatModelDeclared;
       const ready = a?.adversarialPackageReady;
+      const isolation = a?.adversarialIsolationAdequate;
+      const replay = a?.adversarialExploitReplayReady;
+      const probes = a?.adversarialHardeningProbesPass;
       const noBypass = a?.countedNoBypassAudits;
       const unrepaired = a?.unrepairedBypasses;
-      return `| \`${s.familyId}\` | ${threat === undefined ? "n/a" : threat ? "yes" : "no"} | ${ready === undefined ? "n/a" : ready ? "yes" : "no"} | ${noBypass === undefined ? "n/a" : noBypass} | ${unrepaired === undefined ? 0 : unrepaired} | ${a?.adversarialClaimLevel ?? "audit-pending"} |`;
+      return `| \`${s.familyId}\` | ${threat === undefined ? "n/a" : threat ? "yes" : "no"} | ${ready === undefined ? "n/a" : ready ? "yes" : "no"} | ${isolation === undefined ? "n/a" : isolation ? "yes" : "no"} | ${replay === undefined ? "n/a" : replay ? "yes" : "no"} | ${probes === undefined ? "n/a" : probes ? "pass" : "fail"} | ${noBypass === undefined ? "n/a" : noBypass} | ${unrepaired === undefined ? 0 : unrepaired} | ${a?.adversarialClaimLevel ?? "audit-pending"} |`;
     }),
     "",
     "## Per family",

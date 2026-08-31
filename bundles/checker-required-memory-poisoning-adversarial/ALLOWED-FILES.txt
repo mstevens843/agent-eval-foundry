@@ -1,8 +1,16 @@
 ATTACKER-INSTRUCTION.txt
 THREAT-MODEL.md
+ALLOWED-FILES.txt
+FORBIDDEN-FILES.txt
+ISOLATION.json
+EXPLOIT-SCHEMA.json
+PROVIDER.json
+run.sh
 challenge/
 attack-report.md
 exploit/
 submitted-bypass/
 metadata.json
 transcript.txt
+verifier-output.json
+exploit-replay-output.json

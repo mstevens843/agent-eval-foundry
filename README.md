@@ -6,6 +6,12 @@ This repository builds, packages, trials, kills and evolves agent benchmark fami
 unit that matters: independent failure axes. A scenario count says how much was generated; an axis
 count says how many distinct ways the suite can tell implementations apart.
 
+For the conceptual model behind task families, task shapes, scenarios, knobs, axes and the
+1000-task methodology, read [`docs/TASK-FAMILY-MODEL.md`](docs/TASK-FAMILY-MODEL.md).
+
+For the rough paper on the most efficient way to run a $100K task-production program, read
+[`docs/100K-TASK-PRODUCTION-STRATEGY.md`](docs/100K-TASK-PRODUCTION-STRATEGY.md).
+
 The foundry keeps evidence streams separate:
 
 - **mutant-detection evidence**: a reference and known-bad implementations prove the verifier
@@ -37,8 +43,8 @@ requirement; adversarial audit is the attempted exploit record.
 | `prompt-injection-containment` | 128 | 6 | 0 | 4 | 0 | human-ready | adversarial-ready | **NOT-READY**: already-solved |
 | `prompt-injection-memory-poisoning` | 288 | 8 | 5 | 3 | >=2 | human-ready | adversarial-ready | **SHIP**: cross-lab failure generalises |
 | `ui-action-record-replay` | 324 | 5 | 5 | 6 | 1 | human-ready | adversarial-ready | **SHIP**: useful but chain-limited |
-| `ui-replay-live-dom` | 864 | 1 | 1 | 19 | not claimed yet | human-ready | adversarial-ready; 1 no-count refusal | **SHIP**: descendant, packaged and difficulty-evidenced |
-| `checker-required-memory-poisoning` | 792 | 1 | 1 | 12 | not claimed yet | human-ready | adversarial-ready | **SHIP**: required-checker gap, OpenAI-only |
+| `ui-replay-live-dom` | 864 | 1 | 1 | 19 | not claimed yet | human-ready | adversarial-audited; OpenAI-only | **SHIP**: descendant, packaged and difficulty-evidenced |
+| `checker-required-memory-poisoning` | 792 | 1 | 1 | 12 | not claimed yet | human-ready | adversarial-audited; OpenAI-only | **SHIP**: required-checker gap, OpenAI-only |
 | `durable-approval-outbox` | 24 | 20 imported | 20 | 3 | 1 | reference-solvable | audit-pending; imported historical no-count | **SHIP**: imported historical bank |
 
 Current live-DOM package hash: `18c3f5afc5973604205cd7df23ce4cad`.
@@ -46,16 +52,20 @@ Current checker-required package hash: `448f2f816c51030cc97a374816226168`.
 
 ## What Changed In This Phase
 
-The new adversarial verifier-integrity layer pre-registers attack campaigns against package-backed
-families. Each campaign states the threat model, attacker-visible files, forbidden hidden artifacts,
-bypass/no-bypass criteria, never-count statuses, package hash and verifier hash. Five current
-package-backed families are `adversarial-ready`; none are `adversarial-audited` yet.
+Adversarial Audit v2 upgrades verifier-integrity from preserved attack records to mechanical triage.
+Attack packets now carry an execution profile, an isolation profile, an exploit-artifact schema, an
+exploit replay path, deterministic hardening probes and hash/current-verifier countability rules.
+Five current package-backed families are `adversarial-ready`.
 
-One real Codex/OpenAI adversarial run was attempted against `ui-replay-live-dom` under challenge
-hash `18c3f5afc5973604205cd7df23ce4cad`. The provider safety filter refused the verifier-bypass
-prompt, so `live-dom-adversarial-codex-2026-08` is preserved as `provider-refusal` and does not
-count as no-bypass evidence. Durable Outbox has a historical `/cheat` no-bypass summary imported
-with caveats, but this repo lacks the native packet/transcript/hash needed to count it.
+Two real Codex/OpenAI adversarial audits counted as no-bypass evidence: one against
+`ui-replay-live-dom` under challenge hash `18c3f5afc5973604205cd7df23ce4cad`, and one against
+`checker-required-memory-poisoning` under hash `448f2f816c51030cc97a374816226168`. Both used the
+implemented `fs-sandbox` profile, preserved transcript/verifier/replay output, and found no
+replayable contract-violating artifact. This is OpenAI-only verifier-integrity evidence, not
+cross-lab evidence. One older Live-DOM attack is preserved as a no-count provider refusal, and one
+v2 Live-DOM run is preserved as a no-count local infrastructure error. Durable Outbox has a
+historical `/cheat` no-bypass summary imported with caveats, but this repo lacks the native packet,
+transcript and current package hash needed to count it.
 
 The human-solvability layer audits challenge packages for clean-room human review and validates
 future human solve records against stable rule codes. Package-backed built families remain
@@ -107,8 +117,13 @@ node dist/cli.js human solvability
 node dist/cli.js adversarial readiness
 node dist/cli.js adversarial campaign ui-replay-live-dom
 node dist/cli.js adversarial prepare ui-replay-live-dom --provider external --out bundles/ui-replay-live-dom-adversarial
-node dist/cli.js adversarial run ui-replay-live-dom --provider codex --run-id live-dom-adversarial-codex-2026-08 --timeout 900000
-node dist/cli.js adversarial verify live-dom-adversarial-codex-2026-08
+node dist/cli.js adversarial run ui-replay-live-dom --provider codex --run-id live-dom-adversarial-v2-codex-next --timeout 900000
+node dist/cli.js adversarial verify live-dom-adversarial-v2-codex-2026-08-escalated
+node dist/cli.js adversarial replay live-dom-adversarial-v2-codex-2026-08-escalated
+node dist/cli.js adversarial triage live-dom-adversarial-v2-codex-2026-08-escalated
+node dist/cli.js adversarial isolate verify bundles/ui-replay-live-dom-adversarial
+node dist/cli.js adversarial probe ui-replay-live-dom
+node dist/cli.js adversarial v2 report
 node dist/cli.js adversarial report
 pnpm bundles
 ```
@@ -134,6 +149,11 @@ The agent-visible live-DOM spec defines:
 
 The family is **dom-like**, not browser-backed. There is no renderer, layout, CSS matching or browser
 event loop. A browser-backed descendant would be a new family with new evidence.
+
+The browser-backed foundation now exists inside this repo as `ui-replay-browser-backed`: typed page
+fixtures, harness contract, effect-ledger boundary, trace format, selector-conflict scenarios,
+readiness gates and a report. It remains **not measured** because no Playwright/WebDriver-backed
+scenario sweep has run.
 
 ## Checker-Required Variant
 
@@ -175,11 +195,16 @@ Key generated reports:
 - `reports/checker-required-memory-poisoning-agent-results.md`
 - `reports/checker-required-memory-poisoning-axis-report.md`
 - `reports/ui-replay-browser-backed-scaffold.md`
+- `reports/ui-replay-browser-backed-readiness.md`
 - `reports/human-readiness-report.md`
 - `reports/human-solvability-report.md`
 - `reports/adversarial-readiness-report.md`
 - `reports/adversarial-audit-report.md`
 - `reports/adversarial-campaign-report.md`
+- `reports/adversarial-v2-report.md`
+- `reports/adversarial-isolation-report.md`
+- `reports/adversarial-exploit-replay-report.md`
+- `reports/adversarial-hardening-probes-report.md`
 - `reports/shared-difficulty-bank-report.md`
 - `reports/cross-family-axis-report.md`
 - `reports/ship-gate-report.md`
@@ -215,19 +240,21 @@ node dist/cli.js all
 The tests include known-bad cases for missing SPEC sections, challenge leaks, nested anchor
 strategies, stale hashes, verifier-only SHIP claims, missing `checker.mjs`, vacuous checkers,
 invalid counted human reviews, adversarial audit countability, stale attack hashes, hidden verifier
-leaks, provider refusal paths, candidate ledger drift and deterministic reports.
+leaks, provider refusal paths, v2 isolation/replay/triage failures, deterministic hardening probes,
+browser-backed readiness gates, candidate ledger drift and deterministic reports.
 
 ## Current Claim
 
 `agent-eval-foundry` can take a mutant-measured descendant family, write the fairness spec,
 package the agent-facing challenge without leaks, add categorical anti-nesting structure, run or
-prepare real provider campaigns, pre-register verifier-bypass audits, and preserve the distinction
-between mutant-detection axes, real-agent difficulty evidence, human solvability and adversarial
+prepare real provider campaigns, pre-register verifier-bypass audits, replay claimed exploits, run
+deterministic verifier-integrity hardening probes, and preserve the distinction between
+mutant-detection axes, real-agent difficulty evidence, human solvability and adversarial
 verifier-integrity evidence.
 
 The strongest current result is still memory-poisoning generalisation across labs. The newest result
-is that verifier-integrity is now a first-class, hash-gated layer with prepared attack bundles and
-a preserved no-count Codex refusal. The next highest-leverage work is to obtain a counted
-non-refusal adversarial audit for `ui-replay-live-dom` or `checker-required-memory-poisoning`, then
-import or run non-OpenAI difficulty trials under the same hashes and implement the browser-backed UI
-descendant scaffold.
+is that verifier-integrity is now a first-class, hash-gated layer with two counted Codex/OpenAI
+no-bypass audits, deterministic bypass-regression probes and explicit isolation/replay records. The
+next highest-leverage work is to move from `fs-sandbox` to real container/no-network isolation,
+import or run non-OpenAI audits under the same hashes, and then implement a measured
+browser-backed UI descendant.

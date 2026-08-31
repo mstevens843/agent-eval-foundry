@@ -1,4 +1,5 @@
 {
+  "auditVersion": "v2",
   "attackId": "ui-replay-live-dom-external-EDITME",
   "campaignId": "ui-replay-live-dom-adversarial",
   "familyId": "ui-replay-live-dom",
@@ -14,13 +15,14 @@
   },
   "attackSurface": [
     "anchor conflict resolution",
+    "fs-sandbox isolation boundary",
+    "legacy subprocess isolation boundary",
     "live DOM-like replay artifact",
     "metadata, countability and challenge-hash gate",
     "no-model-in-replay assertion",
     "private effect ledger",
     "public challenge package split",
     "submission artifact shape",
-    "subprocess isolation boundary",
     "verifier import and module resolution",
     "verifier-output reporting path"
   ],
@@ -28,12 +30,14 @@
     "read and modify files inside the prepared adversarial bundle",
     "read the public challenge package",
     "write exploit notes, proof-of-concept files and a final attack report",
-    "attempt black-box reasoning about likely verifier mistakes from the public interface"
+    "attempt black-box reasoning about likely verifier mistakes from the public interface",
+    "run only local commands needed to inspect or construct artifacts inside the bundle"
   ],
   "forbiddenAttackerAccess": [
     "reading repository source outside the prepared bundle",
     "reading hidden verifier/reference/scenario/mutant files",
     "using private author hints",
+    "using the network or external targets",
     "changing the pinned challenge hash or scenario set id",
     "submitting a normal correct solution as the exploit",
     "forging the adversarial audit metadata or verifier output"
@@ -43,6 +47,8 @@
     "THREAT-MODEL.md",
     "ALLOWED-FILES.txt",
     "FORBIDDEN-FILES.txt",
+    "ISOLATION.json",
+    "EXPLOIT-SCHEMA.json",
     "PROVIDER.json",
     "run.sh",
     "challenge/",
@@ -51,7 +57,8 @@
     "submitted-bypass/",
     "metadata.json",
     "transcript.txt",
-    "verifier-output.json"
+    "verifier-output.json",
+    "exploit-replay-output.json"
   ],
   "hiddenArtifactsInAttackerContext": [],
   "transcriptPath": "transcript.txt",
@@ -70,6 +77,61 @@
     "changedChallengePackage": false,
     "invalidatedAuditIds": [],
     "notes": ""
+  },
+  "executionProfile": {
+    "kind": "external-import",
+    "command": null,
+    "providerRunnable": false,
+    "attemptedBypass": true,
+    "submittedNormalSolution": false,
+    "theoreticalOnly": false,
+    "notes": "prepared v2 attacker instruction asks for a bounded verifier-integrity bypass attempt"
+  },
+  "isolationProfile": {
+    "id": "fs-sandbox",
+    "publicChallengeReadable": true,
+    "hiddenArtifactsExcluded": true,
+    "submissionWritable": true,
+    "noRepoRoot": true,
+    "noGeneratedReports": true,
+    "verifierOutsideAttackerContext": true,
+    "networkDisabled": false,
+    "containerized": false,
+    "adequateForCountedNoBypass": true,
+    "notes": "Prepared public bundle only: challenge files are copied, exploit/submitted-bypass are writable, hidden source and reports are absent. Network is not mechanically disabled."
+  },
+  "exploitArtifact": {
+    "kind": "none",
+    "path": null,
+    "submittedArtifactPath": null,
+    "declaredContractViolation": false,
+    "usesForbiddenAccess": false,
+    "replaysWithCurrentVerifier": null,
+    "notes": "fill only if a replayable exploit artifact is produced"
+  },
+  "exploitReplay": {
+    "status": "not-run",
+    "command": null,
+    "outputPath": null,
+    "challengeHash": "18c3f5afc5973604205cd7df23ce4cad",
+    "verifierHash": "d74382ec2d5053d555f3575f455de421",
+    "verifierPassed": null,
+    "contractViolated": false,
+    "forbiddenAccessUsed": false,
+    "detail": "not replayed yet"
+  },
+  "triage": {
+    "decision": "not-triaged",
+    "attackerAttemptedBypass": true,
+    "submittedNormalSolution": false,
+    "theoreticalOnly": false,
+    "exploitArtifactProduced": false,
+    "exploitReplays": false,
+    "verifierPasses": false,
+    "contractViolated": false,
+    "forbiddenAccessUsed": false,
+    "verifierConfirmsNoBypass": false,
+    "countabilityReason": "not triaged yet"
   },
   "startedAt": null,
   "endedAt": null,

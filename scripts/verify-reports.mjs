@@ -129,7 +129,12 @@ const SMOKE = [
   [["human", "solvability"], /Human solvability/],
   [["adversarial", "readiness"], /Adversarial verifier-integrity readiness/],
   [["adversarial", "report"], /Adversarial verifier-integrity audit/],
+  [["adversarial", "v2", "report"], /Adversarial Audit v2/],
   [["adversarial", "campaign", "ui-replay-live-dom"], /Threat Models/],
+  [["adversarial", "replay", "live-dom-adversarial-codex-2026-08"], /Exploit replay/],
+  [["adversarial", "triage", "live-dom-adversarial-codex-2026-08"], /Bypass triage/],
+  [["adversarial", "isolate", "verify", "bundles/ui-replay-live-dom-adversarial"], /Isolation verification/],
+  [["adversarial", "probe", "ui-replay-live-dom"], /Adversarial hardening probes/],
   [["family", "diagnose", "--family", "ui-action-record-replay"], /chain/],
   [["family", "evolve-scenarios", "--family", "ui-action-record-replay"], /chain/],
   [["ui", "replay", "upgrade"], /realism ladder/],
@@ -260,7 +265,7 @@ for (const variant of [
 // by being written here, but the count is asserted so a report that stops being generated is caught
 // rather than silently skipped.
 run(["all", "--out", tmp]);
-const EXPECTED_REPORTS = 61;
+const EXPECTED_REPORTS = 66;
 const generated = readdirSync(tmp);
 if (generated.length !== EXPECTED_REPORTS) {
   console.error(`WRONG COUNT  \`all\` wrote ${generated.length} reports, expected ${EXPECTED_REPORTS}`);

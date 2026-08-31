@@ -1,6 +1,7 @@
 {
-  "schema": "agent-eval-foundry/adversarial-attack-record@1",
+  "schema": "agent-eval-foundry/adversarial-attack-record@2",
   "requiredTopLevelKeys": [
+    "auditVersion",
     "attackId",
     "campaignId",
     "familyId",
@@ -21,6 +22,11 @@
     "verifier",
     "bypassClassification",
     "repair",
+    "executionProfile",
+    "isolationProfile",
+    "exploitArtifact",
+    "exploitReplay",
+    "triage",
     "startedAt",
     "endedAt",
     "runtimeSeconds",

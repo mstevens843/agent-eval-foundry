@@ -18,6 +18,11 @@ import {
   prepareAdversarialBundle,
   runAdversarialAudit,
 } from "./adversarial-audit/bundles.js";
+import { isolationSummaryPath, verifyIsolationBundle } from "./adversarial-audit/isolation.js";
+import {
+  runAdversarialHardeningProbes,
+  runAllAdversarialHardeningProbes,
+} from "./adversarial-audit/probes.js";
 import {
   ADVERSARIAL_PACKAGE_FAMILIES,
   adversarialBundlePath,
@@ -30,14 +35,23 @@ import {
 import {
   adversarialGateEvidenceMap,
   assertAdversarialAuditsValid,
-  augmentAdversarialEvidenceMap,
   loadAdversarialAttackRecords,
   summarizeAdversarialEvidence,
 } from "./adversarial-audit/records.js";
 import {
+  renderReplayResult,
+  renderTriageResult,
+  replayAdversarialExploit,
+  triageAdversarialAttack,
+} from "./adversarial-audit/replay.js";
+import {
   renderAdversarialAuditReport,
   renderAdversarialCampaignReport,
+  renderAdversarialExploitReplayReport,
+  renderAdversarialHardeningProbesReport,
+  renderAdversarialIsolationReport,
   renderAdversarialReadinessReport,
+  renderAdversarialV2Report,
 } from "./adversarial-audit/report.js";
 import { adversarialAttackFailures } from "./adversarial-audit/validate.js";
 import { type MeasureOptions, measure } from "./axis-meter.js";
@@ -62,6 +76,7 @@ import {
   builtFamily,
   scenarioSetIdFor,
 } from "./families/registry.js";
+import { browserBackedReadiness } from "./families/ui-replay-browser-backed/readiness.js";
 import * as liveMutants from "./families/ui-replay-live-dom/mutants.js";
 import * as liveDom from "./families/ui-replay-live-dom/runner.js";
 import * as liveScenarios from "./families/ui-replay-live-dom/scenarios.js";
@@ -83,7 +98,6 @@ import { parseTaskShape } from "./foundry/validate.js";
 import { auditHumanReadinessForFamilies } from "./human-solvability/readiness.js";
 import {
   assertHumanReviewsValid,
-  augmentFamilyEvidenceMap,
   humanEvidenceForFamilies,
   humanGateEvidenceMap,
   loadHumanReviewRecords,
@@ -99,7 +113,8 @@ import {
   renderSharedBankReport as renderBankReport,
   renderCrossFamilyAxisReport,
 } from "./reports/bank-reports.js";
-import { renderBrowserBackedScaffold } from "./reports/browser-backed-scaffold.js";
+import { renderBrowserBackedReadiness } from "./reports/browser-backed-readiness.js";
+import { BROWSER_BACKED_NEXT_PLAN, renderBrowserBackedScaffold } from "./reports/browser-backed-scaffold.js";
 import { renderBudgetReport } from "./reports/budget-report.js";
 import { renderAgentResults, renderCampaignReport } from "./reports/campaign-report.js";
 import { analyseChain, diversityTargets } from "./reports/chain-analysis.js";
@@ -239,6 +254,12 @@ FAMILIES (run a measured mini-benchmark)
                                  run one local verifier-bypass audit; Anthropic is disabled
   adversarial import <dir>       import a completed adversarial packet
   adversarial verify <run-id>    validate one adversarial audit record
+  adversarial replay <run-id>    replay a preserved exploit artifact, if one exists
+  adversarial triage <run-id>    classify attempt vs bypass vs normal solve vs theory
+  adversarial isolate prepare <family> [--out dir]  build fs-sandbox attack packet
+  adversarial isolate verify <bundle>  check attacker-visible bundle isolation
+  adversarial probe <family>     run deterministic verifier-integrity hardening probes
+  adversarial v2 report [--out f] v2 isolation/replay/probe evidence summary
   adversarial report [--out f]   counted verifier-integrity evidence
   adversarial all                regenerate campaign files and attack bundles
 
@@ -607,6 +628,11 @@ function adversarialCommand(argv: readonly string[], root: string): string {
   if (sub === "readiness")
     return renderAdversarialReadinessReport(auditAdversarialReadinessForFamilies(root));
   if (sub === "report") return renderAdversarialAuditReport(summarizeAdversarialEvidence(root));
+  if (sub === "v2") {
+    const mode = positional(argv, 2) ?? "report";
+    if (mode !== "report") throw new Error(`unknown adversarial v2 subcommand "${mode}"; expected report`);
+    return renderAdversarialV2Report(summarizeAdversarialEvidence(root));
+  }
   if (sub === "campaign") {
     const familyId = positional(argv, 2);
     const campaigns =
@@ -627,6 +653,7 @@ function adversarialCommand(argv: readonly string[], root: string): string {
       `campaign    ${bundle.campaign.campaignId}`,
       `provider    ${bundle.provider.id} (${bundle.provider.model})`,
       `available   ${bundle.available ? "yes" : "NO"} — ${bundle.availability}`,
+      "isolation   fs-sandbox",
       `challenge   hash ${bundle.campaign.challengeHash}`,
       `bundle      ${bundle.dir}/ (${bundle.files.join(", ")})`,
       "",
@@ -658,9 +685,69 @@ function adversarialCommand(argv: readonly string[], root: string): string {
       `status     ${result.record.status}`,
       `counts     ${result.record.counts ? "yes" : "NO"} — ${result.record.countabilityReason}`,
       `bypass     ${result.record.bypassClassification}`,
+      `isolation  ${result.record.isolationProfile.id}`,
+      `replay     ${result.record.exploitReplay.status}`,
+      `triage     ${result.record.triage.decision}`,
       `directory  ${result.runDir}`,
       "",
     ].join("\n");
+  }
+  if (sub === "replay") {
+    const attackId = positional(argv, 2);
+    if (attackId === undefined) throw new Error("adversarial replay needs an attack id");
+    const { record, replay } = replayAdversarialExploit(root, attackId);
+    return renderReplayResult(record, replay);
+  }
+  if (sub === "triage") {
+    const attackId = positional(argv, 2);
+    if (attackId === undefined) throw new Error("adversarial triage needs an attack id");
+    const { record, replay, triage } = triageAdversarialAttack(root, attackId);
+    return renderTriageResult(record, replay, triage);
+  }
+  if (sub === "isolate") {
+    const mode = positional(argv, 2);
+    if (mode === "prepare") {
+      const familyId = positional(argv, 3);
+      if (familyId === undefined) throw new Error("adversarial isolate prepare needs a family id");
+      const out = flag(argv, "--out") ?? adversarialBundlePath(root, familyId);
+      const provider = flag(argv, "--provider") ?? "external";
+      const bundle = prepareAdversarialBundle(root, familyId, out, provider, "fs-sandbox");
+      const verify = verifyIsolationBundle(bundle.dir);
+      return [
+        `family      ${bundle.familyId}`,
+        `provider    ${bundle.provider.id} (${bundle.provider.model})`,
+        `isolation   ${verify.profile.id}`,
+        `verdict     ${verify.verdict}`,
+        `challenge   hash ${bundle.campaign.challengeHash}`,
+        `bundle      ${bundle.dir}/`,
+        `failures    ${verify.failures.length === 0 ? "none" : verify.failures.join("; ")}`,
+        "",
+      ].join("\n");
+    }
+    if (mode === "verify") {
+      const bundleDir = positional(argv, 3);
+      if (bundleDir === undefined) throw new Error("adversarial isolate verify needs a bundle directory");
+      const verify = verifyIsolationBundle(bundleDir);
+      return [
+        "Isolation verification",
+        `bundle      ${isolationSummaryPath(root, verify.bundleDir)}`,
+        `profile     ${verify.profile.id}`,
+        `verdict     ${verify.verdict}`,
+        `challenge   ${verify.publicChallengePresent ? "present" : "missing"}`,
+        `hidden      ${verify.hiddenLeaks.length}`,
+        `repo        ${verify.repoRootLeaks.length}`,
+        `reports     ${verify.reportLeaks.length}`,
+        `writable    exploit:${verify.exploitDirWritable ? "yes" : "no"} submitted-bypass:${verify.submittedBypassDirWritable ? "yes" : "no"}`,
+        `failures    ${verify.failures.length === 0 ? "none" : verify.failures.join("; ")}`,
+        "",
+      ].join("\n");
+    }
+    throw new Error(`unknown adversarial isolate subcommand "${mode ?? ""}"; expected prepare | verify`);
+  }
+  if (sub === "probe") {
+    const familyId = positional(argv, 2);
+    if (familyId === undefined) throw new Error("adversarial probe needs a family id");
+    return renderAdversarialHardeningProbesReport(runAdversarialHardeningProbes(root, familyId));
   }
   if (sub === "import") {
     const dir = positional(argv, 2);
@@ -672,6 +759,9 @@ function adversarialCommand(argv: readonly string[], root: string): string {
       `status     ${record.status}`,
       `counts     ${record.counts ? "yes" : "NO"} — ${record.countabilityReason}`,
       `bypass     ${record.bypassClassification}`,
+      `isolation  ${record.isolationProfile.id}`,
+      `replay     ${record.exploitReplay.status}`,
+      `triage     ${record.triage.decision}`,
       "",
     ].join("\n");
   }
@@ -694,6 +784,9 @@ function adversarialCommand(argv: readonly string[], root: string): string {
       `status     ${loaded.record.status}`,
       `counts     ${loaded.record.counts ? "yes" : "NO"} — ${loaded.record.countabilityReason}`,
       `bypass     ${loaded.record.bypassClassification}`,
+      `isolation  ${loaded.record.isolationProfile.id}`,
+      `replay     ${loaded.record.exploitReplay.status}`,
+      `triage     ${loaded.record.triage.decision}`,
       `verifier   ${loaded.record.verifier.status}`,
       failures.length === 0 ? "valid      yes" : `valid      NO — ${failures.map((f) => f.code).join(", ")}`,
       "",
@@ -713,7 +806,7 @@ function adversarialCommand(argv: readonly string[], root: string): string {
     ].join("\n");
   }
   throw new Error(
-    `unknown adversarial subcommand "${sub}"; expected readiness | campaign | prepare | run | import | verify | report | all`,
+    `unknown adversarial subcommand "${sub}"; expected readiness | campaign | prepare | run | import | verify | replay | triage | isolate | probe | v2 | report | all`,
   );
 }
 
@@ -1765,15 +1858,15 @@ function allCommand(argv: readonly string[], root: string): string {
   const adversarialAudits = auditAdversarialReadinessForFamilies(root);
   const adversarialSummaries = summarizeAdversarialEvidence(root);
   const adversarialGateEvidence = adversarialGateEvidenceMap(adversarialSummaries);
+  const adversarialAttackRecords = loadAdversarialAttackRecords(root);
+  const adversarialHardeningProbes = runAllAdversarialHardeningProbes(root, ADVERSARIAL_PACKAGE_FAMILIES);
+  const adversarialIsolationVerifications = ADVERSARIAL_PACKAGE_FAMILIES.map((familyId) => {
+    const verification = verifyIsolationBundle(adversarialBundlePath(root, familyId));
+    return { ...verification, bundleDir: isolationSummaryPath(root, verification.bundleDir) };
+  });
   // Evidence for EVERY built family, not just the first one. The determinism test builds it the
   // same way, and the two drifted the moment a second family had evidence to report.
-  const allEvidence = augmentAdversarialEvidenceMap(
-    root,
-    augmentFamilyEvidenceMap(
-      root,
-      Object.fromEntries(BUILT_FAMILY_IDS.map((id) => [id, evidenceFor(id).evidence])),
-    ),
-  );
+  const allEvidence = familyEvidenceMap(root);
   write(
     "ship-recommendation.md",
     renderShipReport(registry.shapes, registry, allEvidence, humanGateEvidence, adversarialGateEvidence),
@@ -1805,6 +1898,19 @@ function allCommand(argv: readonly string[], root: string): string {
   write("adversarial-readiness-report.md", renderAdversarialReadinessReport(adversarialAudits));
   write("adversarial-audit-report.md", renderAdversarialAuditReport(adversarialSummaries));
   write("adversarial-campaign-report.md", renderAdversarialCampaignReport(loadAdversarialCampaigns(root)));
+  write("adversarial-v2-report.md", renderAdversarialV2Report(adversarialSummaries));
+  write(
+    "adversarial-isolation-report.md",
+    renderAdversarialIsolationReport(adversarialIsolationVerifications),
+  );
+  write(
+    "adversarial-exploit-replay-report.md",
+    renderAdversarialExploitReplayReport(adversarialAttackRecords),
+  );
+  write(
+    "adversarial-hardening-probes-report.md",
+    renderAdversarialHardeningProbesReport(adversarialHardeningProbes),
+  );
 
   // ---- the campaign + trial-analysis layer -------------------------------------------------------
   for (const plan of loadCampaigns(root)) {
@@ -2383,7 +2489,9 @@ function allCommand(argv: readonly string[], root: string): string {
       }),
     );
   }
+  const browserReadiness = browserBackedReadiness(BROWSER_BACKED_NEXT_PLAN);
   write("ui-replay-browser-backed-scaffold.md", renderBrowserBackedScaffold());
+  write("ui-replay-browser-backed-readiness.md", renderBrowserBackedReadiness(browserReadiness));
 
   // ---- did the evolution operator work? -----------------------------------------------------------
   write("evolution-validation-report.md", evolutionValidationReport(root, registry, evidenceFor));
@@ -2702,7 +2810,7 @@ export function main(argv: readonly string[]): number {
         return 0;
       case "adversarial": {
         const sub = positional(argv, 1) ?? "readiness";
-        if (sub === "readiness" || sub === "report" || sub === "campaign") {
+        if (sub === "readiness" || sub === "report" || sub === "campaign" || sub === "v2") {
           emit(argv, adversarialCommand(argv, root));
         } else {
           process.stdout.write(adversarialCommand(argv, root));

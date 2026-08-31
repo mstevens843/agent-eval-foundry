@@ -11,13 +11,24 @@ import {
 } from "../foundry/schema.js";
 import {
   ADVERSARIAL_AUDIT_STATUSES,
+  ADVERSARIAL_AUDIT_VERSIONS,
   ADVERSARIAL_VERIFIER_STATUSES,
+  ATTACK_EXECUTION_PROFILE_KINDS,
   type AdversarialAttackRecord,
   type AdversarialAttacker,
+  type AdversarialBypassTriage,
+  type AdversarialExecutionProfile,
+  type AdversarialExploitArtifact,
+  type AdversarialExploitReplayResult,
+  type AdversarialIsolationProfile,
   type AdversarialRepairRecord,
   type AdversarialValidationFailure,
   type AdversarialVerifierResult,
   BYPASS_CLASSES,
+  BYPASS_TRIAGE_DECISIONS,
+  EXPLOIT_ARTIFACT_KINDS,
+  EXPLOIT_REPLAY_STATUSES,
+  ISOLATION_PROFILE_IDS,
 } from "./types.js";
 
 const bool = (v: unknown, path: string): boolean =>
@@ -56,9 +67,159 @@ function parseRepair(v: unknown, path: string): AdversarialRepairRecord {
   };
 }
 
+export const defaultExecutionProfile = (): AdversarialExecutionProfile => ({
+  kind: "external-import",
+  command: null,
+  providerRunnable: false,
+  attemptedBypass: false,
+  submittedNormalSolution: false,
+  theoreticalOnly: false,
+  notes: "v1 record: execution profile was not captured",
+});
+
+export const defaultIsolationProfile = (): AdversarialIsolationProfile => ({
+  id: "subprocess",
+  publicChallengeReadable: true,
+  hiddenArtifactsExcluded: true,
+  submissionWritable: true,
+  noRepoRoot: false,
+  noGeneratedReports: false,
+  verifierOutsideAttackerContext: true,
+  networkDisabled: false,
+  containerized: false,
+  adequateForCountedNoBypass: false,
+  notes: "v1 record: subprocess execution only; not adequate for v2 no-bypass claims",
+});
+
+export const defaultExploitArtifact = (): AdversarialExploitArtifact => ({
+  kind: "none",
+  path: null,
+  submittedArtifactPath: null,
+  declaredContractViolation: false,
+  usesForbiddenAccess: false,
+  replaysWithCurrentVerifier: null,
+  notes: "no exploit artifact declared",
+});
+
+export const defaultExploitReplay = (): AdversarialExploitReplayResult => ({
+  status: "not-run",
+  command: null,
+  outputPath: null,
+  challengeHash: null,
+  verifierHash: null,
+  verifierPassed: null,
+  contractViolated: false,
+  forbiddenAccessUsed: false,
+  detail: "no exploit replay captured",
+});
+
+export const defaultTriage = (): AdversarialBypassTriage => ({
+  decision: "not-triaged",
+  attackerAttemptedBypass: false,
+  submittedNormalSolution: false,
+  theoreticalOnly: false,
+  exploitArtifactProduced: false,
+  exploitReplays: false,
+  verifierPasses: false,
+  contractViolated: false,
+  forbiddenAccessUsed: false,
+  verifierConfirmsNoBypass: false,
+  countabilityReason: "not triaged",
+});
+
+function parseExecutionProfile(v: unknown, path: string): AdversarialExecutionProfile {
+  if (v === null || v === undefined) return defaultExecutionProfile();
+  const o = isRecord(v) ? v : fail("E_SHAPE", path, "expected an object");
+  return {
+    kind: oneOf(o.kind, `${path}.kind`, ATTACK_EXECUTION_PROFILE_KINDS),
+    command: strNullable(o.command, `${path}.command`),
+    providerRunnable: bool(o.providerRunnable, `${path}.providerRunnable`),
+    attemptedBypass: bool(o.attemptedBypass, `${path}.attemptedBypass`),
+    submittedNormalSolution: bool(o.submittedNormalSolution, `${path}.submittedNormalSolution`),
+    theoreticalOnly: bool(o.theoreticalOnly, `${path}.theoreticalOnly`),
+    notes: optionalText(o.notes, `${path}.notes`),
+  };
+}
+
+function parseIsolationProfile(v: unknown, path: string): AdversarialIsolationProfile {
+  if (v === null || v === undefined) return defaultIsolationProfile();
+  const o = isRecord(v) ? v : fail("E_SHAPE", path, "expected an object");
+  return {
+    id: oneOf(o.id, `${path}.id`, ISOLATION_PROFILE_IDS),
+    publicChallengeReadable: bool(o.publicChallengeReadable, `${path}.publicChallengeReadable`),
+    hiddenArtifactsExcluded: bool(o.hiddenArtifactsExcluded, `${path}.hiddenArtifactsExcluded`),
+    submissionWritable: bool(o.submissionWritable, `${path}.submissionWritable`),
+    noRepoRoot: bool(o.noRepoRoot, `${path}.noRepoRoot`),
+    noGeneratedReports: bool(o.noGeneratedReports, `${path}.noGeneratedReports`),
+    verifierOutsideAttackerContext: bool(
+      o.verifierOutsideAttackerContext,
+      `${path}.verifierOutsideAttackerContext`,
+    ),
+    networkDisabled: bool(o.networkDisabled, `${path}.networkDisabled`),
+    containerized: bool(o.containerized, `${path}.containerized`),
+    adequateForCountedNoBypass: bool(o.adequateForCountedNoBypass, `${path}.adequateForCountedNoBypass`),
+    notes: optionalText(o.notes, `${path}.notes`),
+  };
+}
+
+function parseExploitArtifact(v: unknown, path: string): AdversarialExploitArtifact {
+  if (v === null || v === undefined) return defaultExploitArtifact();
+  const o = isRecord(v) ? v : fail("E_SHAPE", path, "expected an object");
+  return {
+    kind: oneOf(o.kind, `${path}.kind`, EXPLOIT_ARTIFACT_KINDS),
+    path: strNullable(o.path, `${path}.path`),
+    submittedArtifactPath: strNullable(o.submittedArtifactPath, `${path}.submittedArtifactPath`),
+    declaredContractViolation: bool(o.declaredContractViolation, `${path}.declaredContractViolation`),
+    usesForbiddenAccess: bool(o.usesForbiddenAccess, `${path}.usesForbiddenAccess`),
+    replaysWithCurrentVerifier:
+      o.replaysWithCurrentVerifier === null || o.replaysWithCurrentVerifier === undefined
+        ? null
+        : bool(o.replaysWithCurrentVerifier, `${path}.replaysWithCurrentVerifier`),
+    notes: optionalText(o.notes, `${path}.notes`),
+  };
+}
+
+function parseExploitReplay(v: unknown, path: string): AdversarialExploitReplayResult {
+  if (v === null || v === undefined) return defaultExploitReplay();
+  const o = isRecord(v) ? v : fail("E_SHAPE", path, "expected an object");
+  return {
+    status: oneOf(o.status, `${path}.status`, EXPLOIT_REPLAY_STATUSES),
+    command: strNullable(o.command, `${path}.command`),
+    outputPath: strNullable(o.outputPath, `${path}.outputPath`),
+    challengeHash: strNullable(o.challengeHash, `${path}.challengeHash`),
+    verifierHash: strNullable(o.verifierHash, `${path}.verifierHash`),
+    verifierPassed:
+      o.verifierPassed === null || o.verifierPassed === undefined
+        ? null
+        : bool(o.verifierPassed, `${path}.verifierPassed`),
+    contractViolated: bool(o.contractViolated, `${path}.contractViolated`),
+    forbiddenAccessUsed: bool(o.forbiddenAccessUsed, `${path}.forbiddenAccessUsed`),
+    detail: optionalText(o.detail, `${path}.detail`),
+  };
+}
+
+function parseTriage(v: unknown, path: string): AdversarialBypassTriage {
+  if (v === null || v === undefined) return defaultTriage();
+  const o = isRecord(v) ? v : fail("E_SHAPE", path, "expected an object");
+  return {
+    decision: oneOf(o.decision, `${path}.decision`, BYPASS_TRIAGE_DECISIONS),
+    attackerAttemptedBypass: bool(o.attackerAttemptedBypass, `${path}.attackerAttemptedBypass`),
+    submittedNormalSolution: bool(o.submittedNormalSolution, `${path}.submittedNormalSolution`),
+    theoreticalOnly: bool(o.theoreticalOnly, `${path}.theoreticalOnly`),
+    exploitArtifactProduced: bool(o.exploitArtifactProduced, `${path}.exploitArtifactProduced`),
+    exploitReplays: bool(o.exploitReplays, `${path}.exploitReplays`),
+    verifierPasses: bool(o.verifierPasses, `${path}.verifierPasses`),
+    contractViolated: bool(o.contractViolated, `${path}.contractViolated`),
+    forbiddenAccessUsed: bool(o.forbiddenAccessUsed, `${path}.forbiddenAccessUsed`),
+    verifierConfirmsNoBypass: bool(o.verifierConfirmsNoBypass, `${path}.verifierConfirmsNoBypass`),
+    countabilityReason: optionalText(o.countabilityReason, `${path}.countabilityReason`),
+  };
+}
+
 export function parseAdversarialAttackRecord(v: unknown, path: string): AdversarialAttackRecord {
   const o = isRecord(v) ? v : fail("E_SHAPE", path, "expected an object");
   return {
+    auditVersion: oneOf(o.auditVersion ?? "v1", `${path}.auditVersion`, ADVERSARIAL_AUDIT_VERSIONS),
     attackId: str(o.attackId, `${path}.attackId`),
     campaignId: strNullable(o.campaignId, `${path}.campaignId`),
     familyId: str(o.familyId, `${path}.familyId`),
@@ -85,6 +246,11 @@ export function parseAdversarialAttackRecord(v: unknown, path: string): Adversar
     verifier: parseVerifier(o.verifier, `${path}.verifier`),
     bypassClassification: oneOf(o.bypassClassification, `${path}.bypassClassification`, BYPASS_CLASSES),
     repair: parseRepair(o.repair, `${path}.repair`),
+    executionProfile: parseExecutionProfile(o.executionProfile, `${path}.executionProfile`),
+    isolationProfile: parseIsolationProfile(o.isolationProfile, `${path}.isolationProfile`),
+    exploitArtifact: parseExploitArtifact(o.exploitArtifact, `${path}.exploitArtifact`),
+    exploitReplay: parseExploitReplay(o.exploitReplay, `${path}.exploitReplay`),
+    triage: parseTriage(o.triage, `${path}.triage`),
     startedAt: strNullable(o.startedAt, `${path}.startedAt`),
     endedAt: strNullable(o.endedAt, `${path}.endedAt`),
     runtimeSeconds: maybeNum(o.runtimeSeconds, `${path}.runtimeSeconds`),
@@ -97,6 +263,7 @@ export interface AdversarialValidationContext {
   readonly transcriptText?: string | null;
   readonly exploitText?: string | null;
   readonly verifierText?: string | null;
+  readonly hardeningProbesPass?: boolean;
 }
 
 const nonEmpty = (s: string | null | undefined): boolean => typeof s === "string" && s.trim().length > 0;
@@ -108,6 +275,160 @@ const hasTextOrPath = (path: string | null, text: string | null | undefined, tex
 
 function advFailure(code: RuleCode, path: string, detail: string): AdversarialValidationFailure {
   return { code, path, detail };
+}
+
+const looksDefaultV1 = (notes: string): boolean => notes.includes("v1 record:");
+
+function pushV2CountabilityFailures(
+  record: AdversarialAttackRecord,
+  context: AdversarialValidationContext,
+  failures: AdversarialValidationFailure[],
+): void {
+  if (record.auditVersion !== "v2") return;
+
+  if (looksDefaultV1(record.executionProfile.notes)) {
+    failures.push(
+      advFailure(
+        "ADV_V2_COUNTED_NO_EXECUTION_PROFILE",
+        `adversarial.${record.attackId}.executionProfile`,
+        "a counted v2 audit must capture the execution profile instead of relying on v1 defaults",
+      ),
+    );
+  }
+  if (looksDefaultV1(record.isolationProfile.notes)) {
+    failures.push(
+      advFailure(
+        "ADV_V2_COUNTED_NO_ISOLATION_PROFILE",
+        `adversarial.${record.attackId}.isolationProfile`,
+        "a counted v2 audit must capture the isolation profile instead of relying on v1 defaults",
+      ),
+    );
+  }
+  if (!record.isolationProfile.adequateForCountedNoBypass) {
+    failures.push(
+      advFailure(
+        "ADV_V2_COUNTED_WEAK_ISOLATION",
+        `adversarial.${record.attackId}.isolationProfile.adequateForCountedNoBypass`,
+        "a counted v2 audit must use an isolation profile adequate for verifier-integrity evidence",
+      ),
+    );
+  }
+  if (looksDefaultV1(record.triage.countabilityReason) || record.triage.decision === "not-triaged") {
+    failures.push(
+      advFailure(
+        "ADV_V2_COUNTED_NO_TRIAGE",
+        `adversarial.${record.attackId}.triage`,
+        "a counted v2 audit must preserve mechanical bypass triage",
+      ),
+    );
+  }
+  if (looksDefaultV1(record.exploitReplay.detail) || record.exploitReplay.status === "not-run") {
+    failures.push(
+      advFailure(
+        "ADV_V2_COUNTED_NO_REPLAY_RESULT",
+        `adversarial.${record.attackId}.exploitReplay`,
+        "a counted v2 audit must preserve the exploit replay result, even when no exploit was found",
+      ),
+    );
+  }
+  if (context.hardeningProbesPass === false) {
+    failures.push(
+      advFailure(
+        "ADV_V2_COUNTED_PROBES_FAILING",
+        `adversarial.${record.attackId}.hardeningProbes`,
+        "a counted v2 no-bypass audit cannot stand while deterministic hardening probes fail",
+      ),
+    );
+  }
+  const normalSolution =
+    record.executionProfile.submittedNormalSolution || record.triage.submittedNormalSolution;
+  const theoreticalOnly = record.executionProfile.theoreticalOnly || record.triage.theoreticalOnly;
+  if (normalSolution) {
+    failures.push(
+      advFailure(
+        "ADV_V2_COUNTED_NORMAL_SOLUTION",
+        `adversarial.${record.attackId}.triage.submittedNormalSolution`,
+        "a normal solution attempt is model difficulty evidence, not verifier-integrity evidence",
+      ),
+    );
+  }
+  if (theoreticalOnly) {
+    failures.push(
+      advFailure(
+        "ADV_V2_COUNTED_NO_BYPASS_THEORETICAL_ONLY",
+        `adversarial.${record.attackId}.triage.theoreticalOnly`,
+        "theoretical notes without a concrete attempted bypass are preserved but do not count",
+      ),
+    );
+  }
+  if (normalSolution || theoreticalOnly) return;
+
+  if (record.status === "no-bypass-found") {
+    if (!record.executionProfile.attemptedBypass || !record.triage.attackerAttemptedBypass) {
+      failures.push(
+        advFailure(
+          "ADV_V2_COUNTED_NO_BYPASS_NOT_ATTEMPTED",
+          `adversarial.${record.attackId}.triage.attackerAttemptedBypass`,
+          "a counted no-bypass audit requires an actual bypass attempt, not a normal task solve",
+        ),
+      );
+    }
+    if (
+      record.triage.decision !== "no-bypass-confirmed" ||
+      !record.triage.verifierConfirmsNoBypass ||
+      record.triage.verifierPasses
+    ) {
+      failures.push(
+        advFailure(
+          "ADV_V2_COUNTED_NO_TRIAGE",
+          `adversarial.${record.attackId}.triage.decision`,
+          "a counted no-bypass audit must be mechanically triaged as no-bypass-confirmed",
+        ),
+      );
+    }
+  }
+
+  if (record.status === "bypass-found") {
+    if (record.triage.decision !== "bypass-confirmed") {
+      failures.push(
+        advFailure(
+          "ADV_V2_COUNTED_NO_TRIAGE",
+          `adversarial.${record.attackId}.triage.decision`,
+          "a counted bypass must be mechanically triaged as bypass-confirmed",
+        ),
+      );
+    }
+    if (
+      record.exploitReplay.status !== "replay-passed-verifier" ||
+      record.exploitReplay.verifierPassed !== true
+    ) {
+      failures.push(
+        advFailure(
+          "ADV_V2_COUNTED_BYPASS_REPLAY_NOT_PASSING",
+          `adversarial.${record.attackId}.exploitReplay.status`,
+          "a counted bypass must replay and pass the current verifier",
+        ),
+      );
+    }
+    if (!record.exploitReplay.contractViolated || !record.triage.contractViolated) {
+      failures.push(
+        advFailure(
+          "ADV_V2_COUNTED_BYPASS_NO_CONTRACT_VIOLATION",
+          `adversarial.${record.attackId}.exploitReplay.contractViolated`,
+          "a counted bypass must violate the public task contract, not merely solve it",
+        ),
+      );
+    }
+    if (record.exploitReplay.forbiddenAccessUsed || record.triage.forbiddenAccessUsed) {
+      failures.push(
+        advFailure(
+          "ADV_V2_COUNTED_BYPASS_FORBIDDEN_ACCESS",
+          `adversarial.${record.attackId}.exploitReplay.forbiddenAccessUsed`,
+          "an exploit that works only by forbidden hidden access is contamination, not a counted bypass",
+        ),
+      );
+    }
+  }
 }
 
 export function adversarialAttackFailures(
@@ -256,6 +577,8 @@ export function adversarialAttackFailures(
       ),
     );
   }
+
+  pushV2CountabilityFailures(record, context, failures);
 
   return failures;
 }

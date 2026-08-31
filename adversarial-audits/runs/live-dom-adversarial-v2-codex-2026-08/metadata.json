@@ -1,0 +1,140 @@
+{
+  "auditVersion": "v2",
+  "attackId": "live-dom-adversarial-v2-codex-2026-08",
+  "campaignId": "ui-replay-live-dom-adversarial",
+  "familyId": "ui-replay-live-dom",
+  "status": "infrastructure-error",
+  "counts": false,
+  "countabilityReason": "infrastructure-error: preserved but not counted as verifier-integrity evidence",
+  "challengeHash": "18c3f5afc5973604205cd7df23ce4cad",
+  "verifierHash": "d74382ec2d5053d555f3575f455de421",
+  "attacker": {
+    "provider": "codex",
+    "model": "openai/gpt-5.6-sol",
+    "subjectId": "gpt-5.6-sol"
+  },
+  "attackSurface": [
+    "anchor conflict resolution",
+    "fs-sandbox isolation boundary",
+    "legacy subprocess isolation boundary",
+    "live DOM-like replay artifact",
+    "metadata, countability and challenge-hash gate",
+    "no-model-in-replay assertion",
+    "private effect ledger",
+    "public challenge package split",
+    "submission artifact shape",
+    "verifier import and module resolution",
+    "verifier-output reporting path"
+  ],
+  "allowedAttackerAccess": [
+    "read and modify files inside the prepared adversarial bundle",
+    "read the public challenge package",
+    "write exploit notes, proof-of-concept files and a final attack report",
+    "attempt black-box reasoning about likely verifier mistakes from the public interface",
+    "run only local commands needed to inspect or construct artifacts inside the bundle"
+  ],
+  "forbiddenAttackerAccess": [
+    "reading repository source outside the prepared bundle",
+    "reading hidden verifier/reference/scenario/mutant files",
+    "using private author hints",
+    "using the network or external targets",
+    "changing the pinned challenge hash or scenario set id",
+    "submitting a normal correct solution as the exploit",
+    "forging the adversarial audit metadata or verifier output"
+  ],
+  "attackerContextFiles": [
+    "ATTACKER-INSTRUCTION.txt",
+    "THREAT-MODEL.md",
+    "ALLOWED-FILES.txt",
+    "FORBIDDEN-FILES.txt",
+    "ISOLATION.json",
+    "EXPLOIT-SCHEMA.json",
+    "PROVIDER.json",
+    "run.sh",
+    "challenge/",
+    "attack-report.md",
+    "exploit/",
+    "submitted-bypass/",
+    "metadata.json",
+    "transcript.txt",
+    "verifier-output.json",
+    "exploit-replay-output.json"
+  ],
+  "hiddenArtifactsInAttackerContext": [],
+  "transcriptPath": "transcript.txt",
+  "exploitArtifactPath": null,
+  "submittedBypassArtifactPath": null,
+  "verifier": {
+    "status": "infrastructure-error",
+    "command": "foundry adversarial verify live-dom-adversarial-v2-codex-2026-08",
+    "outputPath": "verifier-output.json",
+    "detail": "attack attempt did not produce countable verifier-integrity evidence"
+  },
+  "bypassClassification": "no-bypass",
+  "repair": {
+    "status": "not-needed",
+    "repairId": null,
+    "changedChallengePackage": false,
+    "invalidatedAuditIds": [],
+    "notes": ""
+  },
+  "executionProfile": {
+    "kind": "provider-model",
+    "command": "codex exec --dangerously-bypass-approvals-and-sandbox --skip-git-repo-check <ATTACKER-INSTRUCTION>",
+    "providerRunnable": true,
+    "attemptedBypass": true,
+    "submittedNormalSolution": false,
+    "theoreticalOnly": false,
+    "notes": "provider-model adversarial audit; process status 1"
+  },
+  "isolationProfile": {
+    "id": "fs-sandbox",
+    "publicChallengeReadable": true,
+    "hiddenArtifactsExcluded": true,
+    "submissionWritable": true,
+    "noRepoRoot": true,
+    "noGeneratedReports": true,
+    "verifierOutsideAttackerContext": true,
+    "networkDisabled": false,
+    "containerized": false,
+    "adequateForCountedNoBypass": true,
+    "notes": "Prepared public bundle only: challenge files are copied, exploit/submitted-bypass are writable, hidden source and reports are absent. Network is not mechanically disabled."
+  },
+  "exploitArtifact": {
+    "kind": "none",
+    "path": null,
+    "submittedArtifactPath": null,
+    "declaredContractViolation": false,
+    "usesForbiddenAccess": false,
+    "replaysWithCurrentVerifier": false,
+    "notes": "no bypass artifact reported"
+  },
+  "exploitReplay": {
+    "status": "no-artifact",
+    "command": "foundry adversarial replay live-dom-adversarial-v2-codex-2026-08",
+    "outputPath": "exploit-replay-output.json",
+    "challengeHash": "18c3f5afc5973604205cd7df23ce4cad",
+    "verifierHash": "d74382ec2d5053d555f3575f455de421",
+    "verifierPassed": false,
+    "contractViolated": false,
+    "forbiddenAccessUsed": false,
+    "detail": "attacker produced no exploit artifact"
+  },
+  "triage": {
+    "decision": "not-triaged",
+    "attackerAttemptedBypass": true,
+    "submittedNormalSolution": false,
+    "theoreticalOnly": false,
+    "exploitArtifactProduced": false,
+    "exploitReplays": false,
+    "verifierPasses": false,
+    "contractViolated": false,
+    "forbiddenAccessUsed": false,
+    "verifierConfirmsNoBypass": false,
+    "countabilityReason": "infrastructure-error: preserved but not counted"
+  },
+  "startedAt": "2026-08-31T13:05:18.755Z",
+  "endedAt": "2026-08-31T13:05:18.800Z",
+  "runtimeSeconds": 0,
+  "notes": "local adversarial runner; provider=codex; exit=1 signal=null"
+}

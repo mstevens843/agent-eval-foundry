@@ -1,0 +1,13 @@
+{
+  "id": "fs-sandbox",
+  "publicChallengeReadable": true,
+  "hiddenArtifactsExcluded": true,
+  "submissionWritable": true,
+  "noRepoRoot": true,
+  "noGeneratedReports": true,
+  "verifierOutsideAttackerContext": true,
+  "networkDisabled": false,
+  "containerized": false,
+  "adequateForCountedNoBypass": true,
+  "notes": "Prepared public bundle only: challenge files are copied, exploit/submitted-bypass are writable, hidden source and reports are absent. Network is not mechanically disabled."
+}

@@ -394,6 +394,13 @@ Anthropic as import-only and Gemini as entitlement-blocked. One real Codex/OpenA
 `precondition_observed`. That is real-agent difficulty evidence for one OpenAI subject. It is not a
 cross-lab generalisation claim, and it is still dom-like rather than browser-backed.
 
+It now has first verifier-integrity evidence too, under a separate claim. A bounded Codex/OpenAI
+attacker saw only a prepared public bundle under `fs-sandbox`, produced no replayable
+contract-violating artifact, and the v2 adversarial layer preserved transcript, verifier output,
+exploit replay output, challenge hash and verifier hash. That is one counted no-bypass audit from
+one provider family, not a proof of security and not cross-lab breadth. An older refusal and one
+local infrastructure failure are preserved and do not count.
+
 A descendant rather than an edit, for the reason the whole apparatus exists: changing the parent
 would change its hash, and the five trials that produced this finding would be the first casualties
 of acting on it.
@@ -529,8 +536,8 @@ That changes the unit of production:
    harness they call into).
 3. **Gate every family on axis count and on trial evidence, not on check count** — the tool in this
    repository, which I did not have when I built the outbox task. `node dist/cli.js ship` runs the
-   gate: 28 gates per family, 14 blocking, three human-solvability gates advisory and four
-   adversarial verifier-integrity gates advisory, with verdict a pure function of the blocking gates.
+   gate: 33 gates per family, 14 blocking, three human-solvability gates advisory and the newer
+   verifier-integrity/browser-backed gates advisory, with verdict a pure function of the blocking gates.
    Of the fifteen
    families declared here, five reach SHIP, one is NOT-READY because real agents from two labs
    solved it, and the other nine are NOT-READY because nothing has attempted them — a family must
@@ -604,11 +611,19 @@ without a surface-coverage metric beside it.
   The SWE-bench run is the experiment that addresses this, and it is why the null model exists: at
   134 subjects the constraint runs the other way, and the width has to be shown to beat chance rather
   than assumed to.
-- **Verifier integrity is prepared, not proven.** Five package-backed families now have
-  adversarial-ready attack packets and the live-DOM packet has one preserved Codex/OpenAI adversarial
-  attempt, but that attempt was a provider refusal and does not count. Durable Outbox has only an
-  imported historical `/cheat` summary here, not the native packet, transcript and current package
-  hash needed for a counted no-bypass audit.
+- **Verifier integrity is still early.** Five package-backed families have adversarial-ready attack
+  packets, deterministic hardening probes and a v2 replay/triage path. `ui-replay-live-dom` and
+  `checker-required-memory-poisoning` each have one counted Codex/OpenAI no-bypass audit, both under
+  `fs-sandbox`; that is useful verifier-integrity evidence, not a security proof and not cross-lab
+  breadth. Durable Outbox has only an imported historical `/cheat` summary here, not the native
+  packet, transcript and current package hash needed for a counted no-bypass audit.
+- **The stronger adversarial isolation is not a container.** `fs-sandbox` removes the repository,
+  hidden artifacts and generated reports from the attacker context and keeps the verifier outside
+  that context, but it does not mechanically disable network access. A container/no-network runner is
+  the next integrity upgrade before making stronger claims.
+- **Browser-backed UI is still a scaffold.** The repo now defines page fixtures, a browser harness
+  contract, trace preservation and readiness gates for `ui-replay-browser-backed`, but no Playwright
+  or WebDriver scenario sweep has run, so Live-DOM remains dom-like evidence only.
 - **The instances are not independent of the bank.** Six of twenty-four were selected against seven
   of the ten engines. Read the axis count as an upper bound.
 - **Cost figures are imputed**, nine runs recorded none, `jobs/` is excluded, and every labour

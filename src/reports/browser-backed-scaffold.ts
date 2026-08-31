@@ -7,7 +7,7 @@ import {
 } from "../families/ui-replay-browser-backed/harness.js";
 import { BROWSER_BACKED_SPEC_MD } from "../families/ui-replay-browser-backed/spec.js";
 
-const NEXT_PLAN: BrowserHarnessPlan = {
+export const BROWSER_BACKED_NEXT_PLAN: BrowserHarnessPlan = {
   driver: "playwright",
   ownsEffectLedger: true,
   exposesPersistentHandlesToSubject: false,
@@ -18,7 +18,7 @@ const NEXT_PLAN: BrowserHarnessPlan = {
 };
 
 export function renderBrowserBackedScaffold(): string {
-  const failures = browserHarnessPlanFailures(NEXT_PLAN);
+  const failures = browserHarnessPlanFailures(BROWSER_BACKED_NEXT_PLAN);
   return [
     "# ui-replay-browser-backed scaffold",
     "",
@@ -29,7 +29,7 @@ export function renderBrowserBackedScaffold(): string {
     "",
     "| item | value |",
     "|---|---|",
-    `| intended driver | ${NEXT_PLAN.driver} |`,
+    `| intended driver | ${BROWSER_BACKED_NEXT_PLAN.driver} |`,
     `| spec bytes | ${BROWSER_BACKED_SPEC_MD.length} |`,
     `| harness requirements | ${BROWSER_HARNESS_REQUIREMENTS.length} |`,
     `| plan failures | ${failures.length === 0 ? "none in scaffold plan" : failures.join("; ")} |`,
