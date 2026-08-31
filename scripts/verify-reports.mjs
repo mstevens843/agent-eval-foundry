@@ -135,6 +135,10 @@ const SMOKE = [
   [["discovery", "candidates"], /Discovery candidates/],
   [["discovery", "score"], /Discovery candidate scores/],
   [["discovery", "next"], /discovery workbench next actions/],
+  [["discovery", "calibration"], /Discovery Calibration/],
+  [["probes", "run"], /mechanism probe run/],
+  [["probes", "report"], /Mechanism Probe Runner v1/],
+  [["probes", "next"], /mechanism probe next actions/],
   [["adversarial", "readiness"], /Adversarial verifier-integrity readiness/],
   [["adversarial", "report"], /Adversarial verifier-integrity audit/],
   [["adversarial", "v2", "report"], /Adversarial Audit v2/],
@@ -195,12 +199,33 @@ if (!/family\s+payment-unknown-capture-receipt/.test(discoveryScaffoldOut)) {
   failures += 1;
 } else if (
   !readFileSync(join(discoveryScaffoldTmp, "task-shape-draft.json"), "utf8").includes(
-    "\"sourceCandidateId\": \"payment-unknown-capture-receipt\"",
+    '"sourceCandidateId": "payment-unknown-capture-receipt"',
   )
 ) {
   console.error("SMOKE  `discovery scaffold` did not preserve the source candidate id");
   failures += 1;
 } else console.log("ok     cli: discovery scaffold");
+
+const probeScaffoldTmp = mkdtempSync(join(tmpdir(), "foundry-probe-scaffold-"));
+const probeScaffoldOut = run([
+  "probes",
+  "scaffold",
+  "--probe",
+  "payment-unknown-capture-receipt-probe",
+  "--out",
+  probeScaffoldTmp,
+]);
+if (!/family\s+payment-unknown-capture-receipt/.test(probeScaffoldOut)) {
+  console.error("SMOKE  `probes scaffold` ran but did not print the expected family summary");
+  failures += 1;
+} else if (
+  !readFileSync(join(probeScaffoldTmp, "task-shape-draft.json"), "utf8").includes(
+    '"sourceCandidateId": "payment-unknown-capture-receipt"',
+  )
+) {
+  console.error("SMOKE  `probes scaffold` did not preserve the source candidate id");
+  failures += 1;
+} else console.log("ok     cli: probes scaffold");
 
 // The adversarial campaign files are generated artifacts too. They are the threat model that
 // decides what the attacker saw and which hashes can count, so a stale campaign file is a stale
@@ -324,7 +349,7 @@ for (const variant of [
 // by being written here, but the count is asserted so a report that stops being generated is caught
 // rather than silently skipped.
 run(["all", "--out", tmp]);
-const EXPECTED_REPORTS = 72;
+const EXPECTED_REPORTS = 74;
 const generated = readdirSync(tmp);
 if (generated.length !== EXPECTED_REPORTS) {
   console.error(`WRONG COUNT  \`all\` wrote ${generated.length} reports, expected ${EXPECTED_REPORTS}`);

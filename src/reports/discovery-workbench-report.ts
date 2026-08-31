@@ -1,5 +1,6 @@
 import type {
   DiscoveryCandidate,
+  DiscoveryCandidateEvidence,
   DiscoveryCandidateScore,
   DiscoveryNextStep,
   DiscoveryTaskShapeDraft,
@@ -41,6 +42,12 @@ function scoreRows(
 function scoreBrief(score: DiscoveryCandidateScore, candidates: readonly DiscoveryCandidate[]): string {
   const candidate = candidateById(candidates).get(score.candidateId);
   return `\`${score.candidateId}\` (${candidate?.domain ?? "unknown"}, score ${score.totalScore.toFixed(1)}, ${score.cheapestNextEvidence})`;
+}
+
+function evidenceByCandidate(
+  evidence: readonly DiscoveryCandidateEvidence[],
+): Map<string, DiscoveryCandidateEvidence> {
+  return new Map(evidence.map((item) => [item.candidateId, item]));
 }
 
 export function renderDiscoveryCandidates(candidates: readonly DiscoveryCandidate[]): string {
@@ -89,12 +96,14 @@ export function renderDiscoveryNext(
   summary: DiscoveryWorkbenchSummary,
   candidates: readonly DiscoveryCandidate[],
 ): string {
+  const evidence = evidenceByCandidate(summary.evidenceStatuses);
   return [
     "discovery workbench next actions",
-    "candidate | action | evidence | score | reason",
+    "candidate | action | evidence | probe status | score | reason",
     ...summary.topBuildOrProbeCandidates.map((s) => {
       const candidate = candidateById(candidates).get(s.candidateId);
-      return `${s.candidateId} | ${s.recommendedAction} | ${s.cheapestNextEvidence} | ${s.totalScore.toFixed(1)} | ${candidate?.taskFamilyHypothesis ?? "unknown"}`;
+      const status = evidence.get(s.candidateId);
+      return `${s.candidateId} | ${s.recommendedAction} | ${s.cheapestNextEvidence} | ${status?.status ?? "score-only"} | ${s.totalScore.toFixed(1)} | ${status?.reason ?? candidate?.taskFamilyHypothesis ?? "unknown"}`;
     }),
     "",
     "Candidate score is not difficulty evidence. Probe-ready is not trialed. Surface coverage is not axis diversity.",
@@ -116,6 +125,7 @@ export function renderDiscoveryScaffoldSummary(draft: DiscoveryTaskShapeDraft): 
 
 export function renderDiscoveryWorkbenchReport(input: DiscoveryWorkbenchReportInput): string {
   const { registry, summary, workbench } = input;
+  const evidence = evidenceByCandidate(summary.evidenceStatuses);
   const warnings = summary.warnings.length === 0 ? ["none"] : summary.warnings;
   const killed =
     summary.killedCheaply.length === 0
@@ -173,9 +183,28 @@ export function renderDiscoveryWorkbenchReport(input: DiscoveryWorkbenchReportIn
     "",
     "## Top 10 Build/Probe Candidates",
     "",
-    "| candidate | domain | score | confidence | recommended action | cheapest evidence | blockers |",
-    "|---|---|---:|---:|---|---|---|",
-    ...scoreRows(summary.topBuildOrProbeCandidates, workbench.candidates),
+    "| candidate | domain | score | confidence | recommended action | cheapest evidence | probe status | blockers |",
+    "|---|---|---:|---:|---|---|---|---|",
+    ...summary.topBuildOrProbeCandidates.map((s) => {
+      const candidate = candidateById(workbench.candidates).get(s.candidateId);
+      const status = evidence.get(s.candidateId);
+      return `| \`${s.candidateId}\` | ${esc(candidate?.domain ?? "unknown")} | ${s.totalScore.toFixed(1)} | ${s.confidence.toFixed(2)} | ${s.recommendedAction} | ${s.cheapestNextEvidence} | ${status?.status ?? "score-only"} | ${esc(s.blockingReasons.map((b) => b.code).join(", ") || "none")} |`;
+    }),
+    "",
+    "## Probe Evidence Overlay",
+    "",
+    summary.evidenceStatuses.length === 0
+      ? "_No executable mechanism probes have been run for the current discovery pool._"
+      : "| candidate | status | probe | verdict | queue reason |",
+    ...(summary.evidenceStatuses.length === 0
+      ? []
+      : [
+          "|---|---|---|---|---|",
+          ...summary.evidenceStatuses.map(
+            (item) =>
+              `| \`${item.candidateId}\` | ${item.status} | \`${item.sourceId}\` | ${item.verdict} | ${esc(item.reason)} |`,
+          ),
+        ]),
     "",
     "## Candidates By Domain",
     "",
@@ -231,6 +260,7 @@ export function renderDiscoveryWorkbenchReport(input: DiscoveryWorkbenchReportIn
     "- Do not treat repeated same-provider runs as cross-lab breadth.",
     "- Do not call a transfer path proven until the target domain has required evidence.",
     "- Do not treat surface breadth as independent failure-axis breadth.",
+    "- Do not let a score-only candidate outrank a lower-score candidate with better executable probe evidence.",
     "",
     "---",
     "",

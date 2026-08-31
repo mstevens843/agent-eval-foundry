@@ -56,8 +56,11 @@ export {
   loadCandidates,
   loadAdaptiveFunnel,
   loadDiscoveryWorkbench,
+  loadDiscoveryCalibration,
   loadMechanisms,
   loadMutants,
+  loadProbeDefinitions,
+  loadProbeRunSummary,
   loadRegistry,
   loadShapes,
 } from "./foundry/load.js";
@@ -129,6 +132,7 @@ export type {
   TransferTest,
 } from "./foundry/adaptive-funnel.js";
 export {
+  DISCOVERY_CANDIDATE_EVIDENCE_STATUSES,
   DISCOVERY_NEXT_STEPS,
   DISCOVERY_RISK_LEVELS,
   SURFACE_COVERAGE_GROUPS,
@@ -144,6 +148,8 @@ export {
 export type {
   DiscoveryBlockingReason,
   DiscoveryCandidate,
+  DiscoveryCandidateEvidence,
+  DiscoveryCandidateEvidenceStatus,
   DiscoveryCandidateScore,
   DiscoveryCheapScreen,
   DiscoveryHiddenRegionSketch,
@@ -163,6 +169,45 @@ export type {
   SurfaceCoverageGroup,
   SurfaceCoverageSummary,
 } from "./foundry/discovery-workbench.js";
+export {
+  CALIBRATION_MATCHES,
+  KNOWN_DISCOVERY_OUTCOMES,
+  assertDiscoveryCalibrationValid,
+  runDiscoveryCalibration,
+} from "./foundry/discovery-calibration.js";
+export type {
+  CalibrationMatch,
+  DiscoveryCalibrationKnownOutcome,
+  DiscoveryCalibrationRecord,
+  DiscoveryCalibrationSummary,
+} from "./foundry/discovery-calibration.js";
+export {
+  EXECUTABLE_PROBES,
+  PROBE_STRATEGIES,
+  PROBE_SUBJECT_KINDS,
+  PROBE_VERDICTS,
+  assertProbeDefinitionValid,
+  assertProbeDefinitionsValid,
+  probeEvidenceForDiscovery,
+  probeToTaskShapeDraft,
+  runMechanismProbes,
+  runProbe,
+} from "./foundry/probe-runner.js";
+export type {
+  ProbeCell,
+  ProbeDefinition,
+  ProbeExpectedBehavior,
+  ProbePromotionDecision,
+  ProbeResult,
+  ProbeRunSummary,
+  ProbeStrategy,
+  ProbeSubject,
+  ProbeSubjectKind,
+  ProbeSubjectResult,
+  ProbeTrace,
+  ProbeVerdict,
+  RunnerProbeScenario,
+} from "./foundry/probe-runner.js";
 export {
   parseCandidate,
   parseCandidates,

@@ -24,6 +24,13 @@ emit a task-shape draft from a promoted candidate. See
 [`reports/discovery-workbench-report.md`](reports/discovery-workbench-report.md). Candidate scores
 are routing evidence only; they are not difficulty evidence until a built family has counted trials.
 
+Mechanism Probe Runner v1 adds the next bridge: top candidates can now run tiny deterministic
+probes before full family build. See
+[`reports/mechanism-probe-report.md`](reports/mechanism-probe-report.md) and
+[`reports/discovery-calibration-report.md`](reports/discovery-calibration-report.md). Probe evidence
+can promote, repair, transfer, evolve, hold or kill a candidate, but it is still not real-agent
+difficulty evidence.
+
 The foundry keeps evidence streams separate:
 
 - **mutant-detection evidence**: a reference and known-bad implementations prove the verifier
@@ -77,6 +84,14 @@ and cost gates, `node dist/cli.js discovery next` prints the stable promotion qu
 `node dist/cli.js discovery scaffold --candidate <id> --out <dir>` emits a draft task shape.
 Surface coverage is reported separately from failure-axis diversity so broad API/product coverage
 does not masquerade as independent defect axes.
+
+Mechanism Probe Runner v1 turns selected candidate ideas into cheap executable evidence. Fourteen
+probe definitions cover the current top-ranked workbench candidates plus requested equivalents for
+payments, trading, browser replay, permissions, audit rewrite, CRM stale action and cross-tool
+authority laundering. The probes run 42 tiny scenarios against reference-like and known-bad probe
+subjects, catch 29/29 non-reference probe subjects by intended named checks, and produce a
+probe-aware next-action queue. The discovery calibration report backtests the scoring model against
+six known family outcomes; it is directional n=6 calibration, not a yield estimate.
 
 Adversarial Audit v2 upgrades verifier-integrity from preserved attack records to mechanical triage.
 Attack packets now carry an execution profile, an isolation profile, an exploit-artifact schema, an
@@ -144,7 +159,12 @@ node dist/cli.js discovery report
 node dist/cli.js discovery candidates
 node dist/cli.js discovery score
 node dist/cli.js discovery next
+node dist/cli.js discovery calibration
 node dist/cli.js discovery scaffold --candidate payment-unknown-capture-receipt --out /tmp/payment-task-shape
+node dist/cli.js probes run
+node dist/cli.js probes report
+node dist/cli.js probes next
+node dist/cli.js probes scaffold --probe payment-unknown-capture-receipt-probe --out /tmp/payment-probe-task-shape
 node dist/cli.js funnel report
 node dist/cli.js funnel probes
 node dist/cli.js funnel next
@@ -231,6 +251,8 @@ Key generated reports:
 - `reports/checker-required-memory-poisoning-agent-results.md`
 - `reports/checker-required-memory-poisoning-axis-report.md`
 - `reports/discovery-workbench-report.md`
+- `reports/mechanism-probe-report.md`
+- `reports/discovery-calibration-report.md`
 - `reports/adaptive-funnel-report.md`
 - `reports/ui-replay-browser-backed-scaffold.md`
 - `reports/ui-replay-browser-backed-readiness.md`
@@ -295,8 +317,9 @@ prepare real provider campaigns, pre-register verifier-bypass audits, replay cla
 deterministic verifier-integrity hardening probes, and preserve the distinction between
 mutant-detection axes, real-agent difficulty evidence, human solvability and adversarial
 verifier-integrity evidence. It can now also decide what to do before a full family exists: paper
-screen a mechanism, run a tiny probe, promote only after cheap evidence, require a smoke trial before
-`/6`, and test transfer before production-mode matrix spend.
+screen a mechanism, score a candidate pool, run a tiny executable probe, calibrate discovery scoring
+against known outcomes, promote only after cheap evidence, require a smoke trial before `/6`, and
+test transfer before production-mode matrix spend.
 
 The strongest current result is still memory-poisoning generalisation across labs. The newest result
 is that verifier-integrity now has explicit container/no-network bundle and countability rules,

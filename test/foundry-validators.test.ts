@@ -235,6 +235,20 @@ const COVERED_IN_ADVERSARIAL_AUDIT_TEST: readonly RuleCode[] = [
   "ADV_CONTAINER_COUNTED_READINESS_FAILED",
 ];
 
+/** Rules whose known-bad case lives in `probe-runner.test.ts`: executable mechanism probes and discovery calibration. */
+const COVERED_IN_PROBE_RUNNER_TEST: readonly RuleCode[] = [
+  "PROBE_NO_TRUTH_SOURCE",
+  "PROBE_NO_HIDDEN_BEHAVIOR",
+  "PROBE_NO_BAD_SUBJECT",
+  "PROBE_NO_PROMOTION_CRITERIA",
+  "PROBE_NO_SCENARIOS",
+  "PROBE_REFERENCE_FAILS",
+  "PROBE_BAD_SUBJECT_NOT_CAUGHT",
+  "PROBE_UNINTENDED_FAILURE",
+  "CALIBRATION_NO_KNOWN_OUTCOME",
+  "CALIBRATION_MISSING_FEATURES",
+];
+
 /** Rules exercised by code below rather than by a JSON fixture. Keeps assertion 3 honest. */
 const PROGRAMMATIC: readonly RuleCode[] = [
   "E_TYPE",
@@ -496,6 +510,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ...COVERED_IN_CROSS_FAMILY_TEST,
       ...COVERED_IN_HUMAN_SOLVABILITY_TEST,
       ...COVERED_IN_ADVERSARIAL_AUDIT_TEST,
+      ...COVERED_IN_PROBE_RUNNER_TEST,
     ]);
     const uncovered = RULE_CODES.filter((c) => !covered.has(c));
     expect(
@@ -516,6 +531,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ["test/cross-family-evidence.test.ts", COVERED_IN_CROSS_FAMILY_TEST],
       ["test/human-solvability.test.ts", COVERED_IN_HUMAN_SOLVABILITY_TEST],
       ["test/adversarial-audit.test.ts", COVERED_IN_ADVERSARIAL_AUDIT_TEST],
+      ["test/probe-runner.test.ts", COVERED_IN_PROBE_RUNNER_TEST],
     ];
     for (const [file, codes] of delegated) {
       const source = readFileSync(`${ROOT}${file}`, "utf8");

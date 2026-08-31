@@ -248,6 +248,18 @@ export const RULE_CODES = [
   "DISCOVERY_CANDIDATE_HIGH_CHEAT_NO_ISOLATION",
   "DISCOVERY_CANDIDATE_LOW_AXIS_HIGH_BUILD",
   "DISCOVERY_CANDIDATE_SOLVED_NO_EVOLUTION",
+  // executable mechanism probes: cheap local evidence before family build
+  "PROBE_NO_TRUTH_SOURCE",
+  "PROBE_NO_HIDDEN_BEHAVIOR",
+  "PROBE_NO_BAD_SUBJECT",
+  "PROBE_NO_PROMOTION_CRITERIA",
+  "PROBE_NO_SCENARIOS",
+  "PROBE_REFERENCE_FAILS",
+  "PROBE_BAD_SUBJECT_NOT_CAUGHT",
+  "PROBE_UNINTENDED_FAILURE",
+  // discovery calibration: backtest scoring against known family outcomes
+  "CALIBRATION_NO_KNOWN_OUTCOME",
+  "CALIBRATION_MISSING_FEATURES",
 ] as const;
 export type RuleCode = (typeof RULE_CODES)[number];
 

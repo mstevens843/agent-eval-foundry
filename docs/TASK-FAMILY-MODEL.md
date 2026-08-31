@@ -22,6 +22,30 @@ A **benchmark suite** is the selected set of scenarios the verifier grades.
 
 A **model trial** is one subject attempting that suite under a pinned challenge hash.
 
+A **candidate pool** is the forward-looking inventory of possible task-family ideas before any one
+idea earns validation-mode build time.
+
+A **discovery score** is a deterministic routing score over candidate features: expected difficulty,
+fairness, reference plausibility, verifier feasibility, cheat resistance, transfer potential, surface
+coverage, axis potential and cost. It is not evidence that an agent will fail.
+
+A **mechanism probe** is a tiny executable screen for one failure mechanism. It has a few scenarios,
+a reference-like probe subject, known-bad probe subjects, a deterministic checker, promotion
+criteria, kill criteria and transfer targets.
+
+A **probe subject** is a cheap stand-in implementation used inside a mechanism probe. It can be
+reference-like, baseline or known-bad, and every known-bad probe subject must fail the intended named
+checks.
+
+A **probe verdict** is the runner's next-action result: promote to task shape, repair, kill, hold,
+evolve existing or transfer existing. It is still below full-family evidence.
+
+A **calibration set** is a small known-outcome backtest used to see whether discovery scores route
+families in the same direction as later evidence. The current calibration is n=6 and directional.
+
+A **promotion queue** is the ordered next-work list after applying scores, cheap screens and probe
+evidence. Probe evidence is allowed to outrank score-only intuition.
+
 ## Before Task Families: Discovery Workbench
 
 The foundry now has a pre-family layer for ideas that have not earned a full build yet.
@@ -52,6 +76,11 @@ Discovery Workbench v1 makes that path executable. It validates the candidate po
 candidate, chooses the cheapest next evidence, reports a promotion queue, tracks surface coverage
 separately from defect mechanisms and can emit a task-shape draft scaffold. Those outputs route
 engineering attention; they are not evidence that a model will fail.
+
+Mechanism Probe Runner v1 makes the next step executable. A promoted candidate can run a small local
+probe before becoming a full task family. The runner proves only that the proposed mechanism has a
+fair, independently checkable signal against reference-like and known-bad probe subjects. It does not
+prove real-agent difficulty, human solvability or verifier-integrity resistance.
 
 This layer is intentionally separate from the existing candidate ledger. The ledger records
 historical promote/kill decisions. Discovery Workbench v1 manages the forward-looking pool and

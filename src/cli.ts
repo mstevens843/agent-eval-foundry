@@ -109,8 +109,16 @@ import {
   summarizeDiscoveryWorkbench,
 } from "./foundry/discovery-workbench.js";
 import { assertPromotionEvidence, variantToShape } from "./foundry/evolve.js";
-import { loadAdaptiveFunnel, loadDiscoveryWorkbench, loadRegistry } from "./foundry/load.js";
+import {
+  loadAdaptiveFunnel,
+  loadDiscoveryCalibration,
+  loadDiscoveryWorkbench,
+  loadProbeDefinitions,
+  loadProbeRunSummary,
+  loadRegistry,
+} from "./foundry/load.js";
 import { familyLoop, loopAll } from "./foundry/loop.js";
+import { probeEvidenceForDiscovery, probeToTaskShapeDraft } from "./foundry/probe-runner.js";
 import { assertCoverage, coverage } from "./foundry/registry.js";
 import { checkScaffold } from "./foundry/scaffold-check.js";
 import { generateScaffold, scaffoldFromShape } from "./foundry/scaffold.js";
@@ -149,6 +157,7 @@ import { renderAgentResults, renderCampaignReport } from "./reports/campaign-rep
 import { analyseChain, diversityTargets } from "./reports/chain-analysis.js";
 import { diagnose, renderDiagnoses } from "./reports/diagnosis.js";
 import { computeCurve } from "./reports/difficulty.js";
+import { renderDiscoveryCalibrationReport } from "./reports/discovery-calibration-report.js";
 import {
   renderDiscoveryCandidates,
   renderDiscoveryNext,
@@ -181,6 +190,12 @@ import { renderLifecycleReport } from "./reports/lifecycle-report.js";
 import { renderLiveDomCodexDiagnosis } from "./reports/live-dom-diagnosis.js";
 import { renderLiveDom } from "./reports/live-dom-report.js";
 import { renderOrchestrationReport } from "./reports/orchestration-report.js";
+import {
+  renderMechanismProbeReport,
+  renderProbeNext,
+  renderProbeRun,
+  renderProbeScaffoldSummary,
+} from "./reports/probe-runner-report.js";
 import { describeArtifact, renderProviderVariance } from "./reports/provider-variance.js";
 import { renderMechanismReport, renderMutantReport } from "./reports/registry-report.js";
 import { renderSelfCheckBehavior } from "./reports/self-check-report.js";
@@ -257,8 +272,14 @@ REGISTRY (what could be built, and can we detect it?)
   discovery candidates           candidate task-family ideas before probes/families
   discovery score                deterministic cheap-screen scores
   discovery next                 next build/probe/kill/transfer queue
+  discovery calibration [--out f] n=6 directional backtest against known family outcomes
   discovery scaffold --candidate <id> --out <dir>
                                   draft task-shape artifact from a promoted candidate
+  probes run                      run deterministic executable mechanism probes
+  probes report [--out f]         mechanism probe evidence and promotion queue
+  probes next                     next actions from probe evidence
+  probes scaffold --probe <id> --out <dir>
+                                  draft task-shape artifact from a promoted probe
   sources                        list every matrix source, implemented and planned
 
 FAMILIES (run a measured mini-benchmark)
@@ -357,6 +378,7 @@ const VALUED = new Set([
   "--cost",
   "--campaign",
   "--candidate",
+  "--probe",
   "--plan",
   "--only",
   "--emit-shapes",
@@ -738,9 +760,12 @@ function discoveryInputs(root: string) {
   const registry = loadRegistry(root);
   const funnel = loadAdaptiveFunnel(root, registry);
   const workbench = loadDiscoveryWorkbench(root, registry, funnel);
-  const summary = summarizeDiscoveryWorkbench(workbench);
+  const probeSummary = loadProbeRunSummary(root, registry, workbench);
+  const probeEvidence = probeEvidenceForDiscovery(probeSummary);
+  const summary = summarizeDiscoveryWorkbench(workbench, probeEvidence);
   const scores = scoreDiscoveryCandidates(workbench.candidates);
-  return { registry, funnel, workbench, summary, scores };
+  const calibration = loadDiscoveryCalibration(root, registry, workbench);
+  return { registry, funnel, workbench, summary, scores, probeSummary, probeEvidence, calibration };
 }
 
 function discoveryCommand(argv: readonly string[], root: string): string {
@@ -756,6 +781,7 @@ function discoveryCommand(argv: readonly string[], root: string): string {
   if (sub === "candidates") return renderDiscoveryCandidates(input.workbench.candidates);
   if (sub === "score") return renderDiscoveryScores(input.scores, input.workbench.candidates);
   if (sub === "next") return renderDiscoveryNext(input.summary, input.workbench.candidates);
+  if (sub === "calibration") return renderDiscoveryCalibrationReport(input.calibration);
   if (sub === "scaffold") {
     const candidateId = flag(argv, "--candidate");
     const out = flag(argv, "--out");
@@ -786,8 +812,53 @@ function discoveryCommand(argv: readonly string[], root: string): string {
     return renderDiscoveryScaffoldSummary(draft);
   }
   throw new Error(
-    `unknown discovery subcommand "${sub}"; expected report | candidates | score | next | scaffold`,
+    `unknown discovery subcommand "${sub}"; expected report | candidates | score | next | calibration | scaffold`,
   );
+}
+
+function probesCommand(argv: readonly string[], root: string): string {
+  const sub = positional(argv, 1) ?? "report";
+  const registry = loadRegistry(root);
+  const workbench = loadDiscoveryWorkbench(root, registry);
+  const definitions = loadProbeDefinitions(root, registry, workbench);
+  const summary = loadProbeRunSummary(root, registry, workbench);
+  if (sub === "run") return renderProbeRun(summary);
+  if (sub === "report") return renderMechanismProbeReport(summary, definitions, workbench.candidates);
+  if (sub === "next") return renderProbeNext(summary);
+  if (sub === "scaffold") {
+    const probeId = flag(argv, "--probe");
+    const out = flag(argv, "--out");
+    if (probeId === null) throw new Error("probes scaffold needs --probe <id>");
+    if (out === null) throw new Error("probes scaffold needs --out <dir>");
+    const definition = definitions.find((probe) => probe.id === probeId);
+    if (definition === undefined) throw new Error(`unknown mechanism probe "${probeId}"`);
+    const candidate = workbench.candidates.find((c) => c.id === definition.candidateId);
+    if (candidate === undefined) throw new Error(`probe "${probeId}" references missing candidate`);
+    const result = summary.probes.find((probe) => probe.probeId === probeId);
+    if (result === undefined) throw new Error(`probe "${probeId}" did not run`);
+    const draft = probeToTaskShapeDraft(definition, candidate, result);
+    mkdirSync(out, { recursive: true });
+    writeFileSync(join(out, "task-shape-draft.json"), `${JSON.stringify(draft, null, 2)}\n`, "utf8");
+    writeFileSync(
+      join(out, "README.md"),
+      [
+        `# ${candidate.title}`,
+        "",
+        "Generated by `agent-eval-foundry probes scaffold`.",
+        "",
+        "This is a draft task-shape bridge from executable probe evidence. It is not a challenge",
+        "package, not a verifier, and not real-agent difficulty evidence.",
+        "",
+        `Source probe: \`${definition.id}\``,
+        `Probe verdict: \`${result.verdict}\``,
+        "",
+      ].join("\n"),
+      "utf8",
+    );
+    process.stderr.write(`wrote probe scaffold to ${out}/\n`);
+    return renderProbeScaffoldSummary(draft);
+  }
+  throw new Error(`unknown probes subcommand "${sub}"; expected run | report | next | scaffold`);
 }
 
 function browserBackedCommand(argv: readonly string[], root: string): string {
@@ -1222,6 +1293,7 @@ function checkCommand(root: string): string {
   assertAdversarialAuditsValid(root);
   const adaptiveFunnel = loadAdaptiveFunnel(root, registry);
   const discoveryWorkbench = loadDiscoveryWorkbench(root, registry, adaptiveFunnel);
+  const probeSummary = loadProbeRunSummary(root, registry, discoveryWorkbench);
 
   return [
     "registry OK",
@@ -1237,6 +1309,7 @@ function checkCommand(root: string): string {
     "  adversarial counted verifier-integrity audits validate against current package hashes",
     "  funnel      mechanism probes and transfer tests validate against the registry",
     "  workbench   discovery scoring inputs validate against mechanisms and transfers",
+    `  probes     ${probeSummary.probes.length} executable mechanism probes run locally`,
     "",
   ].join("\n");
 }
@@ -2242,6 +2315,10 @@ function allCommand(argv: readonly string[], root: string): string {
     registry,
     adaptiveFamilyEvidenceInputs(root, allEvidence),
   );
+  const probeDefinitions = loadProbeDefinitions(root, registry);
+  const probeSummary = loadProbeRunSummary(root, registry);
+  const probeEvidence = probeEvidenceForDiscovery(probeSummary);
+  const calibration = loadDiscoveryCalibration(root, registry);
   write(
     "adaptive-funnel-report.md",
     renderAdaptiveFunnelReport({
@@ -2251,7 +2328,7 @@ function allCommand(argv: readonly string[], root: string): string {
     }),
   );
   const discoveryWorkbench = loadDiscoveryWorkbench(root, registry, adaptiveFunnel);
-  const discoverySummary = summarizeDiscoveryWorkbench(discoveryWorkbench);
+  const discoverySummary = summarizeDiscoveryWorkbench(discoveryWorkbench, probeEvidence);
   write(
     "discovery-workbench-report.md",
     renderDiscoveryWorkbenchReport({
@@ -2259,6 +2336,11 @@ function allCommand(argv: readonly string[], root: string): string {
       workbench: discoveryWorkbench,
       summary: discoverySummary,
     }),
+  );
+  write("discovery-calibration-report.md", renderDiscoveryCalibrationReport(calibration));
+  write(
+    "mechanism-probe-report.md",
+    renderMechanismProbeReport(probeSummary, probeDefinitions, discoveryWorkbench.candidates),
   );
   write(
     "ship-recommendation.md",
@@ -3437,11 +3519,17 @@ export function main(argv: readonly string[]): number {
       }
       case "discovery": {
         const sub = positional(argv, 1) ?? "report";
-        if (sub === "report" || sub === "candidates" || sub === "score") {
+        if (sub === "report" || sub === "candidates" || sub === "score" || sub === "calibration") {
           emit(argv, discoveryCommand(argv, root));
         } else {
           process.stdout.write(discoveryCommand(argv, root));
         }
+        return 0;
+      }
+      case "probes": {
+        const sub = positional(argv, 1) ?? "report";
+        if (sub === "report") emit(argv, probesCommand(argv, root));
+        else process.stdout.write(probesCommand(argv, root));
         return 0;
       }
       case "kill": {

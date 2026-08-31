@@ -160,6 +160,26 @@ export interface DiscoveryCandidateScore {
   readonly dimensions: DiscoveryScoreDimensions;
 }
 
+export const DISCOVERY_CANDIDATE_EVIDENCE_STATUSES = [
+  "score-only",
+  "probe-ready",
+  "probe-run",
+  "probe-promoted",
+  "probe-killed",
+  "task-shape-ready",
+  "family-build-ready",
+] as const;
+export type DiscoveryCandidateEvidenceStatus = (typeof DISCOVERY_CANDIDATE_EVIDENCE_STATUSES)[number];
+
+export interface DiscoveryCandidateEvidence {
+  readonly candidateId: string;
+  readonly status: DiscoveryCandidateEvidenceStatus;
+  readonly sourceId: string;
+  readonly verdict: string;
+  readonly rankBoost: number;
+  readonly reason: string;
+}
+
 export interface SurfaceCoverageSummary {
   readonly totalCandidates: number;
   readonly defectMechanisms: readonly string[];
@@ -186,6 +206,7 @@ export interface DiscoveryWorkbenchSummary {
   readonly expectedNextBatchAxes: number;
   readonly warnings: readonly string[];
   readonly surfaceCoverage: SurfaceCoverageSummary;
+  readonly evidenceStatuses: readonly DiscoveryCandidateEvidence[];
 }
 
 export interface DiscoveryTaskShapeDraft {
@@ -603,8 +624,12 @@ export function scoreDiscoveryCandidates(
     .sort((a, b) => b.totalScore - a.totalScore || a.candidateId.localeCompare(b.candidateId));
 }
 
-export function summarizeDiscoveryWorkbench(workbench: DiscoveryWorkbench): DiscoveryWorkbenchSummary {
+export function summarizeDiscoveryWorkbench(
+  workbench: DiscoveryWorkbench,
+  evidenceStatuses: readonly DiscoveryCandidateEvidence[] = [],
+): DiscoveryWorkbenchSummary {
   const scores = scoreDiscoveryCandidates(workbench.candidates);
+  const rankedScores = rankScoresWithEvidence(scores, evidenceStatuses);
   const byDomain = countBy(workbench.candidates.map((c) => c.domain));
   const byMechanism = countBy(workbench.candidates.flatMap((c) => c.failureMechanisms));
   const byRecommendedAction = DISCOVERY_NEXT_STEPS.reduce(
@@ -614,10 +639,11 @@ export function summarizeDiscoveryWorkbench(workbench: DiscoveryWorkbench): Disc
     },
     {} as Record<DiscoveryNextStep, number>,
   );
-  const topBuildOrProbeCandidates = scores
+  const topBuildOrProbeCandidates = rankedScores
     .filter((s) =>
       ["mechanism_probe", "task_shape", "transfer_existing", "evolve_existing"].includes(s.recommendedAction),
     )
+    .filter((s) => evidenceStatuses.find((e) => e.candidateId === s.candidateId)?.status !== "probe-killed")
     .slice(0, 10);
   const surfaceCoverage = summarizeSurfaceCoverage(workbench.candidates);
   const warnings = workbenchWarnings(workbench.candidates, scores, surfaceCoverage);
@@ -651,6 +677,7 @@ export function summarizeDiscoveryWorkbench(workbench: DiscoveryWorkbench): Disc
     ),
     warnings,
     surfaceCoverage,
+    evidenceStatuses: [...evidenceStatuses].sort((a, b) => a.candidateId.localeCompare(b.candidateId)),
   };
 }
 
@@ -902,6 +929,37 @@ function countBy(items: readonly string[]): Record<string, number> {
   const counts: Record<string, number> = {};
   for (const item of items) counts[item] = (counts[item] ?? 0) + 1;
   return Object.fromEntries(Object.entries(counts).sort(([a], [b]) => a.localeCompare(b)));
+}
+
+function evidenceRank(status: DiscoveryCandidateEvidenceStatus): number {
+  return (
+    {
+      "family-build-ready": 6,
+      "task-shape-ready": 5,
+      "probe-promoted": 4,
+      "probe-run": 3,
+      "probe-ready": 2,
+      "score-only": 1,
+      "probe-killed": -5,
+    } as const
+  )[status];
+}
+
+function rankScoresWithEvidence(
+  scores: readonly DiscoveryCandidateScore[],
+  evidence: readonly DiscoveryCandidateEvidence[],
+): readonly DiscoveryCandidateScore[] {
+  const byCandidate = new Map(evidence.map((e) => [e.candidateId, e]));
+  return [...scores].sort((a, b) => {
+    const ea = byCandidate.get(a.candidateId);
+    const eb = byCandidate.get(b.candidateId);
+    const evidenceDelta =
+      evidenceRank(eb?.status ?? "score-only") +
+      (eb?.rankBoost ?? 0) -
+      (evidenceRank(ea?.status ?? "score-only") + (ea?.rankBoost ?? 0));
+    if (evidenceDelta !== 0) return evidenceDelta;
+    return b.totalScore - a.totalScore || a.candidateId.localeCompare(b.candidateId);
+  });
 }
 
 function sumCandidateField(

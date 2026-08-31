@@ -229,6 +229,45 @@ program touches many products or APIs, but it is not independent defect-axis evi
 many domains and one repeated mechanism still needs transfer tests and agent trials before it earns
 production-mode spend.
 
+### Refinement: Probe Before Family Build
+
+Discovery scores are planning evidence. They are useful because they make candidates comparable, but
+they are still judgement calls until a candidate creates executable evidence.
+
+Mechanism Probe Runner v1 adds that missing bridge.
+
+A mechanism probe is smaller than a full benchmark family. It has a few scenarios, a reference-like
+subject, known-bad probe subjects, a deterministic checker, promotion criteria, kill criteria, a
+cost estimate and transfer targets. It answers a narrow question:
+
+> Before building the full family, does this mechanism have a fair, independently checkable signal
+> that catches realistic wrong behavior?
+
+Probe success does not mean the benchmark is hard. It means the next engineering hour can be spent
+on a task shape, transfer test or descendant build with more confidence than score alone. Probe
+failure is a cheap kill or repair signal, which is the point: a failed probe is much cheaper than a
+failed family package plus model campaign.
+
+The current runner executes probes for high-priority discovery candidates and requested equivalents:
+deployment model-alias drift, CRM stale permission action, long-horizon cancellation, memory
+authority laundering, verifier import hijack, calendar authority, ticket attachment injection,
+schema drift, unknown payment receipt, trading partial-fill reconciliation, browser stale selector,
+token scope drift, audit rewrite and cross-tool authority laundering.
+
+Discovery calibration keeps the scoring model from flattering itself. The calibration report
+backtests six known family outcomes:
+
+- durable approval outbox
+- prompt-injection containment
+- prompt-injection memory poisoning
+- UI action record replay
+- UI replay live DOM
+- checker-required memory poisoning
+
+The set is intentionally labelled n=6 and directional. It can say "this routing pressure seems
+wrong" or "probe evidence should dominate this score"; it cannot estimate the true yield of future
+families. That estimate still needs more completed probes, promoted shapes and counted trials.
+
 ### Stage 0: Candidate Pool
 
 Start broad. A reasonable first pass is 50 to 100 candidate family ideas, not 1000 concrete tasks.
@@ -647,6 +686,10 @@ The repository already implements the core evidence machinery:
 
 - Discovery Workbench v1: candidate pool, cheap screens, scoring, promotion queue, surface coverage
   and task-shape draft generation
+- Mechanism Probe Runner v1: executable pre-family probes, probe-aware discovery queue and
+  probe-to-task-shape scaffold generation
+- discovery calibration against six known family outcomes, labelled directional rather than
+  predictive
 - task shape declarations
 - mechanism registry
 - candidate ledger

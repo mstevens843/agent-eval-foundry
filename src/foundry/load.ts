@@ -18,10 +18,22 @@ import {
   parseTransferTests,
 } from "./adaptive-funnel.js";
 import {
+  type DiscoveryCalibrationSummary,
+  KNOWN_DISCOVERY_OUTCOMES,
+  runDiscoveryCalibration,
+} from "./discovery-calibration.js";
+import {
   type DiscoveryWorkbench,
   assertDiscoveryWorkbenchValid,
   parseDiscoveryCandidates,
 } from "./discovery-workbench.js";
+import {
+  EXECUTABLE_PROBES,
+  type ProbeDefinition,
+  type ProbeRunSummary,
+  assertProbeDefinitionsValid,
+  runMechanismProbes,
+} from "./probe-runner.js";
 import { type Registry, buildRegistry } from "./registry.js";
 import type { Candidate, Mechanism, Mutant, TaskShape } from "./schema.js";
 import { parseCandidates, parseMechanisms, parseMutants, parseTaskShape } from "./validate.js";
@@ -110,4 +122,36 @@ export function loadDiscoveryWorkbench(
   };
   assertDiscoveryWorkbenchValid(workbench, registry, funnel);
   return workbench;
+}
+
+export function loadProbeDefinitions(
+  root: string,
+  registry = loadRegistry(root),
+  workbench = loadDiscoveryWorkbench(root, registry),
+): readonly ProbeDefinition[] {
+  void root;
+  assertProbeDefinitionsValid(EXECUTABLE_PROBES, registry, workbench);
+  return EXECUTABLE_PROBES;
+}
+
+export function loadProbeRunSummary(
+  root: string,
+  registry = loadRegistry(root),
+  workbench = loadDiscoveryWorkbench(root, registry),
+): ProbeRunSummary {
+  const definitions = loadProbeDefinitions(root, registry, workbench);
+  return runMechanismProbes(definitions);
+}
+
+export function loadDiscoveryCalibration(
+  root: string,
+  registry = loadRegistry(root),
+  workbench = loadDiscoveryWorkbench(root, registry),
+): DiscoveryCalibrationSummary {
+  void registry;
+  return runDiscoveryCalibration(
+    workbench,
+    loadProbeRunSummary(root, registry, workbench),
+    KNOWN_DISCOVERY_OUTCOMES,
+  );
 }
