@@ -443,7 +443,7 @@ describe("the evolution reports", () => {
     expect(render()).toMatch(/What it did \*\*not\*\* prove/);
   });
 
-  it("the evolution report is deterministic and records the second closed loop", () => {
+  it("the evolution report is deterministic and records the clean-pass evolution loop", () => {
     const render = (): string =>
       renderEvolutionReport({
         registry,
@@ -454,7 +454,9 @@ describe("the evolution reports", () => {
         sharedBankThreshold: 3,
       });
     expect(render()).toBe(render());
-    expect(render()).toMatch(/loop, now closed twice/);
+    expect(render()).toMatch(/loop, now closed again/);
+    expect(render()).toMatch(/access-token-scope-expansion/);
+    expect(render()).toMatch(/clean pass blocks `\/6` matrix/);
     expect(render()).toMatch(/cross-family and cross-lab claims remain bounded/);
     expect(render()).toMatch(/What would falsify the loop/);
   });

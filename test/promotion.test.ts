@@ -55,8 +55,8 @@ describe("Promoted Family Build Pipeline v1", () => {
   it("validates the checked-in promotion record against the actual probe result", () => {
     const { promotions, summary, workbench } = loaded();
 
-    expect(promotions).toHaveLength(1);
-    expect(promotions[0]?.id).toBe(PROMOTION_ID);
+    expect(promotions.length).toBeGreaterThanOrEqual(2);
+    expect(promotions.some((promotion) => promotion.id === PROMOTION_ID)).toBe(true);
     expect(() => assertPromotionsValid(promotions, summary, workbench)).not.toThrow();
     expect(summary.promoted[0]?.probeId).toBe("access-token-scope-expansion-probe");
   });

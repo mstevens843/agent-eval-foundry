@@ -1,0 +1,186 @@
+import { describe, expect, it } from "vitest";
+import { assertVariantNovel } from "../src/foundry/evolve.js";
+import {
+  loadDiscoveryWorkbench,
+  loadProbeDefinitions,
+  loadProbeRunSummary,
+  loadPromotions,
+  loadRegistry,
+} from "../src/foundry/load.js";
+import { familyLoop } from "../src/foundry/loop.js";
+import { runProbe } from "../src/foundry/probe-runner.js";
+import { promotedFamilyRecords, promotionToFamilyScaffold } from "../src/foundry/promotion.js";
+import { evaluatePromotionSmokeGate } from "../src/foundry/smoke-gates.js";
+import {
+  ACCESS_TOKEN_EVOLUTION_FAMILY,
+  ACCESS_TOKEN_EVOLUTION_PROBE,
+  renderAccessTokenEvolutionReport,
+} from "../src/reports/access-token-evolution-report.js";
+import { familyEvidenceFor } from "../src/reports/evidence.js";
+import { prepareChallenge } from "../src/trials/run.js";
+
+const ROOT = new URL("..", import.meta.url).pathname;
+const PARENT = "access-token-scope-expansion";
+const SELECTED_VARIANT = "access-token-delegated-wallet-scope-reconciliation";
+
+function loaded() {
+  const registry = loadRegistry(ROOT);
+  const workbench = loadDiscoveryWorkbench(ROOT, registry);
+  const definitions = loadProbeDefinitions(ROOT, registry, workbench);
+  const summary = loadProbeRunSummary(ROOT, registry, workbench);
+  const promotions = loadPromotions(ROOT, registry, workbench);
+  const records = promotedFamilyRecords(promotions, definitions, summary, workbench);
+  return { registry, workbench, definitions, summary, promotions, records };
+}
+
+describe("Access-Token Evolution v1", () => {
+  it("routes the clean access-token smoke pass to evolution, not full matrix", () => {
+    const { registry } = loaded();
+    const state = familyLoop(ROOT, PARENT, registry, (familyId) => familyEvidenceFor(ROOT, familyId));
+    const bundle = familyEvidenceFor(ROOT, PARENT);
+    const gate = evaluatePromotionSmokeGate({
+      familyId: PARENT,
+      localEvidencePass: true,
+      campaignPresent: true,
+      campaignHashCurrent: true,
+      packageHashCurrent: true,
+      verifierMutantBaselinePass: true,
+      countedSmokeTrials: bundle.evidence.countedAgentTrials,
+      countedFailures: 0,
+      countedSolves: bundle.evidence.agentTrialsPassed,
+      providerRefusals: 0,
+      infraFailures: 0,
+      transferDeclared: true,
+      diagnosisStatus: "clean",
+    });
+
+    expect(bundle.evidence.countedAgentTrials).toBe(1);
+    expect(bundle.evidence.agentTrialsPassed).toBe(1);
+    expect(state.analysis.primary?.reason).toBe("already_solved");
+    expect(state.analysis.disposition).toBe("harden");
+    expect(gate.state).toBe("smoke-passed-cleanly");
+    expect(gate.fullMatrixReady).toBe(false);
+    expect(gate.nextAction).toContain("already_solved_or_needs_evolution");
+  });
+
+  it("proposes access-token-specific descendants that are novel versus the parent", () => {
+    const { registry } = loaded();
+    const state = familyLoop(ROOT, PARENT, registry, (familyId) => familyEvidenceFor(ROOT, familyId));
+    const selected = state.variants.find((variant) => variant.id === SELECTED_VARIANT);
+
+    expect(state.variants.length).toBeGreaterThanOrEqual(3);
+    expect(selected).toBeDefined();
+    expect(selected?.operators).toEqual(
+      expect.arrayContaining([
+        "add_durable_state",
+        "add_authoritative_reconciliation",
+        "add_delegation_chain",
+        "add_scope_downgrade_or_revocation",
+        "add_audit_truth_requirement",
+        "add_liveness_pressure",
+      ]),
+    );
+    expect(() =>
+      assertVariantNovel(selected as NonNullable<typeof selected>, state.shape, registry),
+    ).not.toThrow();
+  });
+
+  it("runs the delegated-wallet descendant probe and catches every intended bad subject", () => {
+    const { definitions } = loaded();
+    const probe = definitions.find((definition) => definition.id === ACCESS_TOKEN_EVOLUTION_PROBE);
+    expect(probe).toBeDefined();
+
+    const result = runProbe(probe as NonNullable<typeof probe>);
+    expect(result.verdict).toBe("evolve_existing");
+    expect(result.referencePassed).toBe(true);
+    expect(result.scenarioCount).toBeGreaterThanOrEqual(4);
+    expect(result.badSubjectsCaught).toBe(result.badSubjectsTotal);
+    expect(result.distinctFailedChecks).toEqual(
+      expect.arrayContaining([
+        "audit_matches_authority_source",
+        "current_authority_reconciled",
+        "liveness",
+        "no_overgrant",
+        "stale_scope_rejected",
+        "valid_scope_executes",
+      ]),
+    );
+
+    const cached = result.subjectResults.find((subject) => subject.subjectId === "cached-scope-truster");
+    const auditLiar = result.subjectResults.find((subject) => subject.subjectId === "audit-liar");
+    const overBlocker = result.subjectResults.find((subject) => subject.subjectId === "over-blocker");
+    expect(cached?.failedChecks).toEqual(
+      expect.arrayContaining(["current_authority_reconciled", "stale_scope_rejected"]),
+    );
+    expect(auditLiar?.failedChecks).toEqual(expect.arrayContaining(["audit_matches_authority_source"]));
+    expect(overBlocker?.failedChecks).toEqual(expect.arrayContaining(["liveness", "valid_scope_executes"]));
+  });
+
+  it("keeps the descendant as probe-promoted draft evidence, not built-family difficulty evidence", () => {
+    const { records } = loaded();
+    const record = records.find((item) => item.promotion.familyId === ACCESS_TOKEN_EVOLUTION_FAMILY);
+    expect(record).toBeDefined();
+    expect(record?.promotion.status).toBe("ready");
+    expect(record?.promotion.evidence.countedAgentTrials).toBe(0);
+    expect(record?.promotion.evidence.claimedEvidenceLevel).toBe("local-evidence");
+
+    const scaffold = promotionToFamilyScaffold(record as NonNullable<typeof record>);
+    expect(scaffold.files.map((file) => file.path)).toEqual(
+      expect.arrayContaining([
+        `${ACCESS_TOKEN_EVOLUTION_FAMILY}/types.ts`,
+        `${ACCESS_TOKEN_EVOLUTION_FAMILY}/spec.ts`,
+        `${ACCESS_TOKEN_EVOLUTION_FAMILY}/example-shape.json`,
+        `docs/families/${ACCESS_TOKEN_EVOLUTION_FAMILY}.md`,
+      ]),
+    );
+    expect(scaffold.files.find((file) => file.path.endsWith("example-shape.json"))?.content).toContain(
+      `"sourceCandidateId": "${ACCESS_TOKEN_EVOLUTION_FAMILY}"`,
+    );
+  });
+
+  it("renders the access-token evolution report deterministically", () => {
+    const { registry, summary, records } = loaded();
+    const state = familyLoop(ROOT, PARENT, registry, (familyId) => familyEvidenceFor(ROOT, familyId));
+    const probe = summary.probes.find((item) => item.probeId === ACCESS_TOKEN_EVOLUTION_PROBE) ?? null;
+    const promotion =
+      records.find((item) => item.promotion.familyId === ACCESS_TOKEN_EVOLUTION_FAMILY) ?? null;
+    const selected = state.variants.find((variant) => variant.id === SELECTED_VARIANT) ?? null;
+    const gate = evaluatePromotionSmokeGate({
+      familyId: PARENT,
+      localEvidencePass: true,
+      campaignPresent: true,
+      campaignHashCurrent: true,
+      packageHashCurrent: true,
+      verifierMutantBaselinePass: true,
+      countedSmokeTrials: 1,
+      countedFailures: 0,
+      countedSolves: 1,
+      providerRefusals: 0,
+      infraFailures: 0,
+      transferDeclared: true,
+      diagnosisStatus: "clean",
+    });
+    const challengeHash = prepareChallenge(ROOT, PARENT).hash;
+    const first = renderAccessTokenEvolutionReport({
+      parentState: state,
+      smokeGate: gate,
+      selectedVariant: selected,
+      selectedProbeResult: probe,
+      selectedPromotion: promotion,
+      challengeHash,
+    });
+    const second = renderAccessTokenEvolutionReport({
+      parentState: state,
+      smokeGate: gate,
+      selectedVariant: selected,
+      selectedProbeResult: probe,
+      selectedPromotion: promotion,
+      challengeHash,
+    });
+
+    expect(first).toBe(second);
+    expect(first).toContain("A clean smoke pass is useful evidence");
+    expect(first).toContain("Full `/6` matrix spend remains blocked");
+    expect(first).toContain(ACCESS_TOKEN_EVOLUTION_FAMILY);
+  });
+});

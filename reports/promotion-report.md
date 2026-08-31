@@ -7,7 +7,7 @@ family. Promotion evidence is separate from mutant-detection evidence and real-a
 
 | item | value |
 |---|---:|
-| promotions recorded | 1 |
+| promotions recorded | 2 |
 | family-built promotions | 1 |
 | probe-promoted sources | 1 |
 | counted real-agent trials claimed by promotions | 0 |
@@ -85,15 +85,25 @@ Next action: treat as already_solved_or_needs_evolution unless a matrix reason i
 
 No full matrix command is recommended from this gate state.
 
+## Ready Promotions
+
+Ready promotions are task-shape/family-build candidates. They are not built-family evidence and
+they carry zero real-agent difficulty unless a later counted trial exists.
+
+| promotion | family | source probe | source verdict | evidence level | counted trials | next provider |
+|---|---|---|---|---|---:|---|
+| `delegated-wallet-scope-reconciliation-from-access-token-evolution` | `delegated-wallet-scope-reconciliation` | `delegated-wallet-scope-reconciliation-probe` | evolve_existing | local-evidence | 0 | OpenAI/Codex only after full descendant package gates pass |
+
 ## Promotion Ledger
 
 | promotion | family | source candidate | source probe | decision | status | evidence level | probe verdict |
 |---|---|---|---|---|---|---|---|
 | `access-token-scope-expansion-from-probe` | `access-token-scope-expansion` | `access-token-scope-expansion` | `access-token-scope-expansion-probe` | promote | family-built | local-evidence | promote_to_task_shape |
+| `delegated-wallet-scope-reconciliation-from-access-token-evolution` | `delegated-wallet-scope-reconciliation` | `delegated-wallet-scope-reconciliation` | `delegated-wallet-scope-reconciliation-probe` | evolve | ready | local-evidence | evolve_existing |
 
 ## Current Probe Context
 
-Probe queue size: 14. First promoted probe: `access-token-scope-expansion-probe`.
+Probe queue size: 15. First promoted probe: `access-token-scope-expansion-probe`.
 
 ## Evidence Rules
 

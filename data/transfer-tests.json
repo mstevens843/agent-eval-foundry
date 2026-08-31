@@ -259,6 +259,7 @@
     ],
     "authoritativeTruthSourceInTarget": "The target authority is the harness-owned synthetic wallet allowance ledger plus signed-consent manifest.",
     "expectedMutants": [
+      "cached-scope-truster",
       "limit-widener",
       "requested-scope-truster",
       "stale-allowance-reader",
@@ -278,8 +279,8 @@
       "The verifier cannot grade without trusting subject-written receipts."
     ],
     "requiredEvidenceBeforeDeclaringTransfer": [
-      "Run a wallet-spending-limit probe before building a full target family.",
-      "Catch the limit-widener, stale-allowance-reader and over-blocker known-bad subjects locally.",
+      "Run delegated-wallet-scope-reconciliation-probe before building a full target family.",
+      "Catch cached-scope-truster, requested-scope-truster, revocation-blind-executor and over-blocker known-bad subjects locally.",
       "Do not claim transfer evidence until a counted target-domain smoke trial or measured target family exists."
     ],
     "nextEvidence": "local",

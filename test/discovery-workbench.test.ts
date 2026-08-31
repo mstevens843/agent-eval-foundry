@@ -44,10 +44,10 @@ const withRisk = (
 });
 
 describe("Discovery Workbench data", () => {
-  it("loads a validated 50-candidate pool linked to mechanisms and transfer tests", () => {
+  it("loads a validated 51-candidate pool linked to mechanisms and transfer tests", () => {
     const { registry, funnel, workbench } = loaded();
 
-    expect(workbench.candidates).toHaveLength(50);
+    expect(workbench.candidates).toHaveLength(51);
     expect(workbench.candidates.every((c) => c.expectedKnobs.length >= 2)).toBe(true);
     expect(workbench.candidates.every((c) => c.transferPotential.targetDomains.length > 0)).toBe(true);
     expect(registry.mechanisms.length).toBeGreaterThanOrEqual(15);

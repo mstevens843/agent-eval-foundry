@@ -84,7 +84,7 @@ Current access-token-scope-expansion package hash: `33cc98364ce2a6b3f9490e549379
 
 ## What Changed In This Phase
 
-The foundry now has a first-class adaptive funnel layer. `data/mechanism-probes.json` holds eight
+The foundry now has a first-class adaptive funnel layer. `data/mechanism-probes.json` holds nine
 validated mechanism probes, `data/transfer-tests.json` holds seven transfer tests, and
 `node dist/cli.js funnel report` computes the cheapest next evidence across discovery, validation
 and production modes. The planner refuses to treat repeated OpenAI trials as cross-lab breadth,
@@ -92,17 +92,18 @@ keeps provider refusals/no-count records from advancing claims, sends stale hash
 sends collapsed failure chains to evolve or hold before full matrices.
 
 Discovery Workbench v1 adds the machine that feeds the funnel: `data/candidate-pool.json` contains
-50 candidate family ideas, `node dist/cli.js discovery score` ranks them through fairness/verifier
+51 candidate family ideas, `node dist/cli.js discovery score` ranks them through fairness/verifier
 and cost gates, `node dist/cli.js discovery next` prints the stable promotion queue, and
 `node dist/cli.js discovery scaffold --candidate <id> --out <dir>` emits a draft task shape.
 Surface coverage is reported separately from failure-axis diversity so broad API/product coverage
 does not masquerade as independent defect axes.
 
-Mechanism Probe Runner v1 turns selected candidate ideas into cheap executable evidence. Fourteen
+Mechanism Probe Runner v1 turns selected candidate ideas into cheap executable evidence. Fifteen
 probe definitions cover the current top-ranked workbench candidates plus requested equivalents for
 payments, trading, browser replay, permissions, audit rewrite, CRM stale action and cross-tool
-authority laundering. The probes run 42 tiny scenarios against reference-like and known-bad probe
-subjects, catch 29/29 non-reference probe subjects by intended named checks, and produce a
+authority laundering. They now include `delegated-wallet-scope-reconciliation-probe`, the selected
+access-token descendant screen after the parent clean smoke pass. The probes run 48 tiny scenarios
+against reference-like and known-bad probe subjects, catch 36/36 non-reference probe subjects by intended named checks, and produce a
 probe-aware next-action queue. The discovery calibration report backtests the scoring model against
 six known family outcomes; it is directional n=6 calibration, not a yield estimate.
 
@@ -113,7 +114,10 @@ through the validation stack. `access-token-scope-expansion` has 384 measured sc
 one counted OpenAI/Codex smoke trial under challenge hash `33cc98364ce2a6b3f9490e54937955d8`.
 It passed 384/384, so the pre-registered kill signal fired: this is an
 already_solved_or_needs_evolution result, not difficulty-smoke evidence. Full `/6` matrix spend
-remains blocked.
+remains blocked. Access-Token Evolution v1 records the clean solve as the evolution trigger,
+generates access-token-specific descendants, runs the delegated-wallet local probe and promotes
+`delegated-wallet-scope-reconciliation` to a ready draft shape with zero descendant agent trials.
+See [`reports/access-token-evolution-report.md`](reports/access-token-evolution-report.md).
 
 Adversarial Audit v2 upgrades verifier-integrity from preserved attack records to mechanical triage.
 Attack packets now carry an execution profile, an isolation profile, an exploit-artifact schema, an
@@ -275,6 +279,7 @@ Key generated reports:
 - `reports/discovery-workbench-report.md`
 - `reports/mechanism-probe-report.md`
 - `reports/discovery-calibration-report.md`
+- `reports/access-token-evolution-report.md`
 - `reports/adaptive-funnel-report.md`
 - `reports/ui-replay-browser-backed-scaffold.md`
 - `reports/ui-replay-browser-backed-readiness.md`

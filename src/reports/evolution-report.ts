@@ -9,7 +9,8 @@
 // more than one turn. One family was measured, trialed, killed for a named reason, evolved into a
 // stronger descendant, and that descendant was trialed. A second line exposed a one-axis failure
 // chain, then built a packaged live-DOM descendant with a categorical anti-chain fix and one counted
-// Codex/OpenAI trial.
+// Codex/OpenAI trial. A third line now shows the other side of smoke evidence: a clean access-token
+// pass blocks matrix spend and routes the mechanism back into descendant probes.
 
 import type { VariantProposal } from "../foundry/evolve.js";
 import { KILL_REASON_SPECS } from "../foundry/kill.js";
@@ -89,7 +90,7 @@ export function renderEvolutionReport(input: EvolutionReportInput): string {
     "A benchmark program is not a list of tasks; it is a process that produces tasks and discards most",
     "of them. This report is the process, running.",
     "",
-    "## The loop, now closed twice",
+    "## The loop, now closed again",
     "",
     "| step | what happened | evidence |",
     "|---|---|---|",
@@ -105,10 +106,14 @@ export function renderEvolutionReport(input: EvolutionReportInput): string {
     "| 10. evolve | `ui-replay-live-dom` adds mutable tree state and categorical anchor conflict | `reports/ui-replay-live-dom-report.md` |",
     "| 11. package | leak-checked 9-file challenge package with a pinned hash | `reports/ui-replay-live-dom-challenge-package-report.md` |",
     "| 12. **trial** | 1 counted Codex/OpenAI trial failed 219/864 live-DOM scenarios | `reports/ui-replay-live-dom-agent-results.md` |",
+    "| 13. promote | `access-token-scope-expansion` was built from the top executable probe | `reports/promotion-report.md` |",
+    "| 14. **smoke** | 1 counted OpenAI/Codex smoke passed 384/384 access-token scenarios | `reports/access-token-scope-expansion-agent-diagnosis.md` |",
+    "| 15. **route** | clean pass blocks `/6` matrix and triggers `already_solved_or_needs_evolution` | `reports/access-token-scope-expansion-kill-analysis.md` |",
+    "| 16. evolve | `delegated-wallet-scope-reconciliation` descendant probe is promoted but not yet family-built | `reports/access-token-evolution-report.md` |",
     "",
     "**The key correction is still the same:** mutant-detection axes and real-agent difficulty are",
-    "separate evidence streams. The live-DOM descendant now has both, but its real-agent evidence comes",
-    "from one OpenAI subject only; cross-family and cross-lab claims remain bounded by the shared bank.",
+    "separate evidence streams. The live-DOM descendant now has both, while the access-token descendant",
+    "has only local probe evidence; cross-family and cross-lab claims remain bounded by the shared bank.",
     "",
     "## Where every family stands",
     "",

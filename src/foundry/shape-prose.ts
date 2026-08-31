@@ -321,10 +321,10 @@ export const SHAPE_PROSE: Readonly<Record<string, ShapeProse>> = {
 
   "access-token-scope-expansion": {
     status: "built",
-    agentTrialsRun: 0,
-    agentTrialsPassed: 0,
+    agentTrialsRun: 1,
+    agentTrialsPassed: 1,
     evidence:
-      "Promoted from the first ranked executable mechanism probe, access-token-scope-expansion-probe. The full family is built and locally measured in src/families/access-token-scope-expansion/: 384 measured scenarios from a 1,152-point declared space, a clean reference, eight known-bad subjects/baselines, an authority-ledger verifier and a leak-checked challenge package. This is validation-mode local evidence only; no counted real-agent smoke trial has run.",
+      "Promoted from the first ranked executable mechanism probe, access-token-scope-expansion-probe. The full family is built and locally measured in src/families/access-token-scope-expansion/: 384 measured scenarios from a 1,152-point declared space, a clean reference, eight known-bad subjects/baselines, an authority-ledger verifier and a leak-checked challenge package. One counted OpenAI/Codex smoke trial, access-token-2026-08-o1, passed 384/384 scenarios under challenge hash 33cc98364ce2a6b3f9490e54937955d8. That clean solve is an already_solved_or_needs_evolution routing signal, not difficulty evidence, and full matrix spend remains blocked.",
     visibleRules: [
       "A token grant may use only the current approval generation; cached approval state may be stale.",
       "A token grant may use only a current active token.",

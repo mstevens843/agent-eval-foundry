@@ -153,6 +153,11 @@ import {
   renderAccessTokenSmokeDiagnosis,
 } from "./reports/access-token-diagnosis.js";
 import {
+  ACCESS_TOKEN_EVOLUTION_FAMILY,
+  ACCESS_TOKEN_EVOLUTION_PROBE,
+  renderAccessTokenEvolutionReport,
+} from "./reports/access-token-evolution-report.js";
+import {
   renderAdaptiveFunnelReport,
   renderFunnelProbes,
   renderFunnelTransfers,
@@ -2515,9 +2520,29 @@ function allCommand(argv: readonly string[], root: string): string {
     probeSummary,
     discoveryWorkbench,
   );
+  const accessTokenEvolutionState = familyLoop(root, ACCESS_TOKEN_FAMILY_ID, registry, evidenceFor);
+  const accessTokenEvolutionProbe =
+    probeSummary.probes.find((probe) => probe.probeId === ACCESS_TOKEN_EVOLUTION_PROBE) ?? null;
+  const accessTokenEvolutionPromotion =
+    promotionRecords.find((record) => record.promotion.familyId === ACCESS_TOKEN_EVOLUTION_FAMILY) ?? null;
+  const accessTokenEvolutionVariant =
+    accessTokenEvolutionState.variants.find((variant) =>
+      variant.id.endsWith(ACCESS_TOKEN_EVOLUTION_FAMILY),
+    ) ?? null;
   write(
     "promotion-report.md",
     renderPromotionReport(promotionRecords, probeSummary, BUILT_FAMILIES, promotionSmokeGates),
+  );
+  write(
+    "access-token-evolution-report.md",
+    renderAccessTokenEvolutionReport({
+      parentState: accessTokenEvolutionState,
+      smokeGate: accessTokenSmoke.gate,
+      selectedVariant: accessTokenEvolutionVariant,
+      selectedProbeResult: accessTokenEvolutionProbe,
+      selectedPromotion: accessTokenEvolutionPromotion,
+      challengeHash: prepareChallenge(root, ACCESS_TOKEN_FAMILY_ID).hash,
+    }),
   );
   write(
     "ship-recommendation.md",

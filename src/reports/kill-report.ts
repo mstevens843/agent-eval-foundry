@@ -115,8 +115,9 @@ export function renderKillReport(input: KillReportInput): string {
             "measurement rather than a harness failure, and the measurement is that the task is easy for",
             "the models it was built to separate.",
             "",
-            "It also did not prove the opposite: three trials by one model family is a strong signal and not",
-            "a proof. What it forecloses is *shipping on the current evidence*.",
+            "A clean smoke pass is useful evidence. It prevents wasting a `/6` matrix and routes the family into evolution.",
+            "",
+            `It also did not prove the opposite: ${counted} counted clean pass${counted === 1 ? "" : "es"} by the available model family is a signal, not a proof about every provider. What it forecloses is *shipping on the current evidence*.`,
           ].join("\n")
         : `**Nothing outstanding on difficulty**: ${counted - passed} of ${counted} counted trials failed at least one scenario.`,
     "",

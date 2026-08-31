@@ -21,8 +21,8 @@ candidate mechanisms
 | item | value |
 |---|---:|
 | candidate mechanisms | 15 |
-| mechanism probes | 8 |
-| probes ready for validation | 2 |
+| mechanism probes | 9 |
+| probes ready for validation | 3 |
 | probes needing repair/hold | 4 |
 | transfer tests | 8 |
 | transfer tests ready | 5 |
@@ -33,7 +33,7 @@ candidate mechanisms
 | cost tier | queued actions |
 |---|---:|
 | static | 12 |
-| local | 5 |
+| local | 6 |
 | cross-provider | 2 |
 
 | target | type | mode | stage | decision | evidence cost | next action |
@@ -78,6 +78,7 @@ candidate mechanisms
 | `permission-scope-drift-probe` | `permission-boundary` | discovery | mechanism_probe | hold | static | `outbox-to-crm-permission-update`, `permission-to-deployment-scope-drift` |
 | `audit-history-rewrite-probe` | `false-audit-history` | discovery | mechanism_probe | transfer | mutant | `outbox-to-trading-reconciliation` |
 | `hidden-dependency-discovery-probe` | `hidden-environment-dependency` | discovery | paper_screen | repair | static | `checker-required-to-hidden-dependency` |
+| `delegated-wallet-scope-reconciliation-probe` | `permission-boundary` | validation | mechanism_probe | promote | local | `access-token-to-wallet-spending-limit`, `permission-to-deployment-scope-drift` |
 
 ## Transfer Tests
 

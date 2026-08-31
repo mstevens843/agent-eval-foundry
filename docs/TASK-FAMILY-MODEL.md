@@ -100,6 +100,13 @@ pass is a useful result, but it means already_solved_or_needs_evolution unless a
 matrix the family is pre-registered. Provider refusals, infrastructure errors, stale hashes and
 off-target failures stay preserved and uncounted.
 
+Access-Token Evolution v1 is the first clean-pass recovery example. `access-token-scope-expansion`
+passed its counted OpenAI/Codex smoke trial, so the matrix gate stayed blocked and the mechanism was
+re-probed as `delegated-wallet-scope-reconciliation`: requested authority still is not approved
+authority, but the descendant adds delegation, durable state, revocation/downgrade, authoritative
+reconciliation, audit truth and liveness. That descendant is probe-promoted only until a full family
+and package exist.
+
 This layer is intentionally separate from the existing candidate ledger. The ledger records
 historical promote/kill decisions. Discovery Workbench v1 manages the forward-looking pool and
 computes which idea should be built, probed, killed, transferred or repaired next.

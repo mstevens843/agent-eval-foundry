@@ -14,9 +14,9 @@ axis diversity. The workbench routes evidence; it does not prove a benchmark is 
 
 | item | value |
 |---|---:|
-| total candidates | 50 |
+| total candidates | 51 |
 | mechanisms referenced | 15 |
-| domains represented | 21 |
+| domains represented | 22 |
 | expected next-batch build hours | 176 |
 | expected next-batch trial cost | $355 |
 | expected next-batch axes | 40 |
@@ -31,7 +31,7 @@ axis diversity. The workbench routes evidence; it does not prove a benchmark is 
 | task_shape | 9 |
 | hold | 2 |
 | kill | 1 |
-| evolve_existing | 3 |
+| evolve_existing | 4 |
 | transfer_existing | 4 |
 
 ## Top 10 Build/Probe Candidates
@@ -58,6 +58,8 @@ axis diversity. The workbench routes evidence; it does not prove a benchmark is 
 | `audit-history-rewrite-approval` | probe-promoted | `audit-history-rewrite-approval-probe` | evolve_existing | cheap probe supports evolving an existing family line |
 | `browser-checkout-stale-selector` | probe-promoted | `browser-checkout-stale-selector-probe` | evolve_existing | cheap probe supports evolving an existing family line |
 | `crm-permission-cancel-race` | task-shape-ready | `crm-permission-cancel-race-probe` | promote_to_task_shape | cheap probe caught 2/2 non-reference subjects across 8 named checks |
+| `delegated-wallet-scope-reconciliation` | probe-promoted | `delegated-wallet-scope-reconciliation-probe` | evolve_existing | cheap probe supports evolving an existing family line |
+| `delegated-wallet-scope-reconciliation` | task-shape-ready | `delegated-wallet-scope-reconciliation-from-access-token-evolution` | ready | The counted access-token smoke trial passed cleanly, so full matrix spend is blocked and the requested-vs-approved-authority mechanism is carried into delegated wallet authority with time, revocation, downgrade, reconciliation, audit and liveness pressure. |
 | `deployment-model-alias-rollout-drift` | task-shape-ready | `deployment-model-alias-rollout-drift-probe` | promote_to_task_shape | cheap probe caught 2/2 non-reference subjects across 7 named checks |
 | `email-calendar-invite-authority` | task-shape-ready | `email-calendar-invite-authority-probe` | promote_to_task_shape | cheap probe caught 2/2 non-reference subjects across 7 named checks |
 | `long-horizon-recurring-task-cancel` | task-shape-ready | `long-horizon-recurring-task-cancel-probe` | promote_to_task_shape | cheap probe caught 2/2 non-reference subjects across 9 named checks |
@@ -93,6 +95,7 @@ axis diversity. The workbench routes evidence; it does not prove a benchmark is 
 | tool-result ambiguity | 3 |
 | trading order reconciliation | 3 |
 | verifier integrity | 1 |
+| wallet / transaction signing | 1 |
 | wallet and transaction signing | 3 |
 
 ## Candidates By Mechanism
@@ -101,17 +104,17 @@ axis diversity. The workbench routes evidence; it does not prove a benchmark is 
 |---|---:|
 | checker-quality-gap | 5 |
 | context-contamination | 7 |
-| duplicate-side-effects | 13 |
-| false-audit-history | 22 |
+| duplicate-side-effects | 14 |
+| false-audit-history | 23 |
 | grader-privilege-boundary | 2 |
 | hidden-environment-dependency | 6 |
-| liveness-stall | 11 |
+| liveness-stall | 12 |
 | model-alias-drift | 4 |
 | oracle-probing | 1 |
-| permission-boundary | 17 |
+| permission-boundary | 18 |
 | prompt-injection-via-retrieval | 7 |
-| stale-state | 24 |
-| tool-result-ambiguity | 17 |
+| stale-state | 25 |
+| tool-result-ambiguity | 18 |
 | ui-replay-mismatch | 4 |
 | uncertain-external-effects | 9 |
 
@@ -147,13 +150,13 @@ measure one defect, and a strong defect axis can still cover one narrow product 
 
 | coverage group | distinct tags | tags |
 |---|---:|---|
-| domains | 40 | `access-control`, `admin`, `api`, `approval`, `audit`, `browser-ui`, `calendar`, `checker-required`, `commerce`, `compliance`, `concurrency`, `cost-control`, `crm`, `dependencies`, `deployment`, `email`, `environment`, `idempotency`, `memory`, `model-routing`, `notifications`, `oauth`, `package`, `pagination`, `payments`, `production`, `prompt-injection`, `queues`, `rate-limit`, `resource-booking`, `retrieval`, `scheduler`, `schema`, `support`, `tools`, `trading`, `verifier-integrity`, `wallet`, `webhooks`, `workflow` |
-| toolActionTypes | 67 | `approve`, `attack-verifier`, `audit`, `authorize`, `backoff`, `broadcast`, `call-tool`, `cancel`, `cancel-order`, `capture`, `check`, `click`, `confirm`, `create-event`, `decide-policy`, `dedupe`, `deliver`, `deploy`, `execute`, `grant-token`, `health-check`, `import`, `join`, `lease`, `list`, `merge-record`, `notify`, `parse-response`, `place-order`, `poll`, `promote`, `read`, `read-attachment`, `read-env`, `read-message`, `read-tool-output`, `reconcile`, `redact`, `refund`, `release`, `replace`, `replace-order`, `replay`, `replay-exploit`, `reserve`, `resolve-alias`, `retrieve`, `retry`, `revoke`, `rollback`, `rollout`, `route`, `route-task`, `scan`, `schedule`, `send-email`, `send-message`, `sign`, `store-memory`, `submit`, `summarize`, `update-event`, `update-record`, `validate-manifest`, `verify-package`, `wait`, `webhook` |
-| statePatterns | 52 | `alias-drift`, `ambiguous-result`, `anchor-conflict`, `artifact-substitution`, `async-settle`, `audit-edge`, `audit-evidence`, `checker-vacuity`, `conflicting-authority`, `context-contamination`, `cross-context`, `cross-tool`, `disabled-transition`, `duplicate-logical-effect`, `durable-memory`, `epoch-change`, `eventual-consistency`, `fail-closed`, `hash-confusion`, `hidden-confirmation`, `hidden-dependency`, `key-collision`, `late-cancel`, `late-receipt`, `liveness-drain`, `long-horizon`, `null-empty`, `package-boundary`, `pagination`, `partial-effect`, `payload-mutation`, `policy-conflict`, `provenance`, `provenance-loss`, `rate-limit`, `recurrence`, `redelivery`, `resource-conflict`, `restart`, `retrieval`, `schema-drift`, `scope-drift`, `source-hierarchy`, `stale-capability`, `stale-generation`, `stale-handle`, `stale-lease`, `stale-policy`, `status-only`, `terminal-state`, `transient-error`, `unknown-effect` |
-| authorityModels | 42 | `approval-ledger`, `browser-effect-ledger`, `capability-registry`, `commitment-ledger`, `confirmation-token`, `controller-ledger`, `convergence-ledger`, `effect-ledger`, `environment-manifest`, `exchange-ledger`, `full-index`, `generation-ledger`, `harness-ledger`, `harness-precondition`, `hidden-trace-bank`, `immutable-event-ledger`, `lease-ledger`, `ledger-state`, `lineage-ledger`, `manifest`, `page-ledger`, `permission-ledger`, `policy-epoch`, `policy-ledger`, `policy-manifest`, `policy-registry`, `policy-snapshot`, `precondition-ledger`, `principal-acl`, `receiver-ledger`, `registry-snapshot`, `risk-ledger`, `routing-policy`, `schedule-ledger`, `schema-manifest`, `semantics-table`, `snapshot-ledger`, `source-priority`, `source-provenance`, `tool-scope-manifest`, `transition-table`, `verifier-boundary` |
-| externalSystems | 36 | `api-tool`, `approval-system`, `audit-log`, `broker`, `browser`, `calendar`, `clearing-feed`, `crm`, `deployment-controller`, `directory-service`, `document-store`, `exchange`, `external-effect-api`, `local-runner`, `mailbox`, `mailer`, `memory-store`, `model-provider`, `model-registry`, `multi-tool-harness`, `multisig-policy-service`, `oauth-server`, `package-manager`, `payment-processor`, `production-control`, `rate-limited-api`, `refund-api`, `room-service`, `runtime-env`, `scheduler`, `synthetic-chain`, `ticket-system`, `versioned-api`, `wallet-signer`, `webhook-receiver`, `worker-harness` |
+| domains | 41 | `access-control`, `admin`, `api`, `approval`, `audit`, `browser-ui`, `calendar`, `checker-required`, `commerce`, `compliance`, `concurrency`, `cost-control`, `crm`, `dependencies`, `deployment`, `email`, `environment`, `idempotency`, `memory`, `model-routing`, `notifications`, `oauth`, `package`, `pagination`, `payments`, `permissions`, `production`, `prompt-injection`, `queues`, `rate-limit`, `resource-booking`, `retrieval`, `scheduler`, `schema`, `support`, `tools`, `trading`, `verifier-integrity`, `wallet`, `webhooks`, `workflow` |
+| toolActionTypes | 70 | `approve`, `attack-verifier`, `audit`, `authorize`, `backoff`, `broadcast`, `call-tool`, `cancel`, `cancel-order`, `capture`, `check`, `click`, `confirm`, `create-event`, `decide-policy`, `dedupe`, `deliver`, `deploy`, `execute`, `grant-token`, `health-check`, `import`, `join`, `lease`, `list`, `merge-record`, `notify`, `parse-response`, `place-order`, `poll`, `promote`, `read`, `read-attachment`, `read-authority`, `read-env`, `read-message`, `read-tool-output`, `reconcile`, `redact`, `refund`, `release`, `replace`, `replace-order`, `replay`, `replay-exploit`, `reserve`, `resolve-alias`, `retrieve`, `retry`, `revoke`, `rollback`, `rollout`, `route`, `route-task`, `scan`, `schedule`, `send-email`, `send-message`, `sign`, `sign-transaction`, `store-memory`, `submit`, `summarize`, `update-event`, `update-record`, `validate-manifest`, `verify-package`, `wait`, `webhook`, `write-audit` |
+| statePatterns | 57 | `alias-drift`, `ambiguous-result`, `anchor-conflict`, `artifact-substitution`, `async-settle`, `audit-edge`, `audit-evidence`, `bounded-liveness`, `checker-vacuity`, `conflicting-authority`, `context-contamination`, `cross-context`, `cross-tool`, `delegation-chain`, `disabled-transition`, `duplicate-logical-effect`, `durable-memory`, `epoch-change`, `eventual-consistency`, `fail-closed`, `hash-confusion`, `hidden-confirmation`, `hidden-dependency`, `key-collision`, `late-cancel`, `late-receipt`, `liveness-drain`, `long-horizon`, `null-empty`, `package-boundary`, `pagination`, `partial-effect`, `payload-mutation`, `policy-conflict`, `provenance`, `provenance-loss`, `rate-limit`, `recurrence`, `redelivery`, `resource-conflict`, `restart`, `retrieval`, `revocation`, `schema-drift`, `scope-downgrade`, `scope-drift`, `source-hierarchy`, `stale-authority`, `stale-capability`, `stale-generation`, `stale-handle`, `stale-lease`, `stale-policy`, `status-only`, `terminal-state`, `transient-error`, `unknown-effect` |
+| authorityModels | 44 | `approval-ledger`, `browser-effect-ledger`, `capability-registry`, `commitment-ledger`, `confirmation-token`, `controller-ledger`, `convergence-ledger`, `delegated-authority-ledger`, `effect-ledger`, `environment-manifest`, `exchange-ledger`, `full-index`, `generation-ledger`, `harness-ledger`, `harness-precondition`, `hidden-trace-bank`, `immutable-event-ledger`, `lease-ledger`, `ledger-state`, `lineage-ledger`, `manifest`, `page-ledger`, `permission-ledger`, `policy-epoch`, `policy-intersection`, `policy-ledger`, `policy-manifest`, `policy-registry`, `policy-snapshot`, `precondition-ledger`, `principal-acl`, `receiver-ledger`, `registry-snapshot`, `risk-ledger`, `routing-policy`, `schedule-ledger`, `schema-manifest`, `semantics-table`, `snapshot-ledger`, `source-priority`, `source-provenance`, `tool-scope-manifest`, `transition-table`, `verifier-boundary` |
+| externalSystems | 38 | `api-tool`, `approval-system`, `audit-log`, `broker`, `browser`, `calendar`, `clearing-feed`, `crm`, `delegation-receipt-feed`, `deployment-controller`, `directory-service`, `document-store`, `exchange`, `external-effect-api`, `local-runner`, `mailbox`, `mailer`, `memory-store`, `model-provider`, `model-registry`, `multi-tool-harness`, `multisig-policy-service`, `oauth-server`, `package-manager`, `payment-processor`, `production-control`, `rate-limited-api`, `refund-api`, `room-service`, `runtime-env`, `scheduler`, `synthetic-chain`, `ticket-system`, `versioned-api`, `wallet-ledger`, `wallet-signer`, `webhook-receiver`, `worker-harness` |
 | uiApiWorkflowSurfaces | 3 | `api`, `ui`, `workflow` |
-| riskCategories | 22 | `asset-loss`, `audit-history`, `authorization`, `checker-quality`, `data-access`, `duplicate-effect`, `fairness`, `hidden-dependency`, `idempotency`, `liveness`, `long-horizon-state`, `missing-work`, `model-drift`, `money`, `notification-loss`, `production-impact`, `prompt-injection`, `schema-drift`, `stale-data`, `tool-ambiguity`, `ui-replay`, `verifier-integrity` |
+| riskCategories | 23 | `asset-loss`, `audit-history`, `authorization`, `checker-quality`, `data-access`, `duplicate-effect`, `fairness`, `hidden-dependency`, `idempotency`, `liveness`, `long-horizon-state`, `missing-work`, `model-drift`, `money`, `notification-loss`, `permission-boundary`, `production-impact`, `prompt-injection`, `schema-drift`, `stale-data`, `tool-ambiguity`, `ui-replay`, `verifier-integrity` |
 | defect mechanisms | 15 | `checker-quality-gap`, `context-contamination`, `duplicate-side-effects`, `false-audit-history`, `grader-privilege-boundary`, `hidden-environment-dependency`, `liveness-stall`, `model-alias-drift`, `oracle-probing`, `permission-boundary`, `prompt-injection-via-retrieval`, `stale-state`, `tool-result-ambiguity`, `ui-replay-mismatch`, `uncertain-external-effects` |
 
 ## Warnings
@@ -193,6 +196,7 @@ measure one defect, and a strong defect axis can still cover one narrow product 
 | `browser-aria-busy-false-ready` | browser UI automation | 69.1 | 0.69 | task_shape | local | none |
 | `api-pagination-rate-limit-window` | API pagination and rate limits | 67.9 | 0.69 | paper_screen | paper | none |
 | `crm-assignment-pagination-drop` | CRM automation | 67.9 | 0.69 | paper_screen | paper | none |
+| `delegated-wallet-scope-reconciliation` | wallet / transaction signing | 67.8 | 0.80 | evolve_existing | static | none |
 | `payment-webhook-outbox-reconcile` | external payments | 67.6 | 0.69 | mechanism_probe | paper | none |
 | `model-alias-cost-aware-routing` | model alias drift | 66.9 | 0.69 | paper_screen | paper | none |
 | `trading-order-replace-stale-risk` | trading order reconciliation | 66.7 | 0.69 | mechanism_probe | local | none |

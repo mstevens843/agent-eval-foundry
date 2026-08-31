@@ -252,7 +252,8 @@ The current runner executes probes for high-priority discovery candidates and re
 deployment model-alias drift, CRM stale permission action, long-horizon cancellation, memory
 authority laundering, verifier import hijack, calendar authority, ticket attachment injection,
 schema drift, unknown payment receipt, trading partial-fill reconciliation, browser stale selector,
-token scope drift, audit rewrite and cross-tool authority laundering.
+token scope drift, delegated-wallet authority reconciliation, audit rewrite and cross-tool authority
+laundering.
 
 Discovery calibration keeps the scoring model from flattering itself. The calibration report
 backtests six known family outcomes:
@@ -308,6 +309,14 @@ under the pinned package hash. That is a useful negative result for the funnel: 
 kill signal fired, and the next step is already_solved_or_needs_evolution, not a full `/6` matrix.
 The transfer test to wallet spending limits is declared so the mechanism can be re-probed in a
 different domain, but no transfer evidence is claimed until that target-domain probe or family runs.
+
+Access-Token Evolution v1 turns that clean pass into a concrete next artifact. The evolution engine
+now has access-token-specific operators for durable state, delegated authority, authoritative
+reconciliation, scope downgrade/revocation, truthful audit history and liveness pressure. It
+proposes `delegated-wallet-scope-reconciliation`, runs a six-scenario local probe against
+cached-scope, requested-scope, revocation-blind, audit-liar, over-blocker and receipt-trusting
+subjects, and records a ready promotion. That is still probe evidence, not a built family and not
+real-agent difficulty evidence for the descendant.
 
 ### Stage 0: Candidate Pool
 

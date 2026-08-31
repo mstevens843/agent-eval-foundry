@@ -27,8 +27,9 @@ submissions were genuine implementations, not refusals or stubs — which makes 
 measurement rather than a harness failure, and the measurement is that the task is easy for
 the models it was built to separate.
 
-It also did not prove the opposite: three trials by one model family is a strong signal and not
-a proof. What it forecloses is *shipping on the current evidence*.
+A clean smoke pass is useful evidence. It prevents wasting a `/6` matrix and routes the family into evolution.
+
+It also did not prove the opposite: 1 counted clean pass by the available model family is a signal, not a proof about every provider. What it forecloses is *shipping on the current evidence*.
 
 ### The trials
 
@@ -90,10 +91,10 @@ cause as its parent.
 
 | variant | operators | new mechanisms | axes | kill risk | build h |
 |---|---|---|---:|---:|---:|
-| `access-token-capability-routing` | `add_cross_tool_interaction`, `add_partial_observability`, `add_benign_noise` | `tool-result-ambiguity`, `prompt-injection-via-retrieval` | 3 | 50% | 60 |
-| `access-token-memory-poisoning` | `add_time_separation`, `add_stateful_memory`, `add_benign_noise` | `context-contamination`, `prompt-injection-via-retrieval` | 4 | 30% | 75 |
-| `access-token-cross-tool-escalation` | `add_cross_tool_interaction`, `lengthen_horizon` | `tool-result-ambiguity`, `duplicate-side-effects` | 3 | 45% | 55 |
-| `access-token-approval-scope-drift` | `add_time_separation`, `reduce_policy_explicitness` | `context-contamination` | 3 | 40% | 50 |
+| `access-token-delegated-wallet-scope-reconciliation` | `add_time_separation`, `add_durable_state`, `add_delegation_chain`, `add_scope_downgrade_or_revocation`, `add_authoritative_reconciliation`, `add_audit_truth_requirement`, `add_liveness_pressure` | `duplicate-side-effects`, `liveness-stall`, `tool-result-ambiguity`, `uncertain-external-effects` | 4 | 35% | 36 |
+| `access-token-stale-delegated-authority-outbox` | `add_time_separation`, `add_durable_state`, `add_authoritative_reconciliation`, `add_scope_downgrade_or_revocation`, `add_audit_truth_requirement` | `uncertain-external-effects`, `duplicate-side-effects` | 3 | 45% | 32 |
+| `access-token-delegated-token-cross-tool-execution` | `add_delegation_chain`, `add_cross_tool_interaction`, `add_partial_observability`, `add_scope_downgrade_or_revocation`, `add_liveness_pressure` | `tool-result-ambiguity`, `liveness-stall` | 3 | 50% | 28 |
+| `access-token-authorization-downgrade-liveness` | `add_durable_state`, `add_scope_downgrade_or_revocation`, `add_audit_truth_requirement`, `add_liveness_pressure` | `liveness-stall` | 2 | 55% | 22 |
 
 See `reports/foundry-evolution-report.md` for each variant in full.
 
