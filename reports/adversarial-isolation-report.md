@@ -16,8 +16,9 @@ reports absent. It is not a container and does not mechanically disable network 
 
 - `subprocess`: preservation profile only; not adequate for counted v2 no-bypass evidence.
 - `fs-sandbox`: implemented public-bundle boundary; adequate for v2 no-bypass claims when validation passes.
-- `container-planned`: required future target with no network and read-only public mount; not implemented.
-- `container`: accepted profile only when a real container runner exists.
+- `container-planned`: design placeholder only; not adequate for counted no-bypass evidence.
+- `container-no-network`: real target profile with no network and minimal mounts; counted only when container metadata passes.
+- `container`: legacy alias accepted only when a real container runner exists.
 
 ## Failures
 

@@ -54,6 +54,20 @@ export const ISOLATION_PROFILES: Readonly<Record<IsolationProfileId, Adversarial
     notes:
       "Planned profile: mount public challenge read-only, mount submission/exploit writable, disable network, run verifier outside the container.",
   },
+  "container-no-network": {
+    id: "container-no-network",
+    publicChallengeReadable: true,
+    hiddenArtifactsExcluded: true,
+    submissionWritable: true,
+    noRepoRoot: true,
+    noGeneratedReports: true,
+    verifierOutsideAttackerContext: true,
+    networkDisabled: true,
+    containerized: true,
+    adequateForCountedNoBypass: true,
+    notes:
+      "Container/no-network profile: public challenge mounted read-only, writable exploit/submission mounts, no network, no repo root, verifier outside attacker context.",
+  },
   container: {
     id: "container",
     publicChallengeReadable: true,

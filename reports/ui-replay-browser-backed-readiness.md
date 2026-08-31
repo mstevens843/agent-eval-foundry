@@ -7,8 +7,10 @@ upgrade `ui-replay-live-dom` evidence: Live-DOM remains dom-like until a real br
 |---|---|
 | family id | `ui-replay-browser-backed` |
 | architecture ready | yes |
-| browser-backed trial-ready | no |
-| browser-backed measured | no |
+| browser-backed trial-ready | yes |
+| browser-backed measured | yes |
+| measured scenarios | 3 |
+| measured subjects | 4 |
 
 ## Readiness Checks
 
@@ -22,8 +24,8 @@ upgrade `ui-replay-live-dom` evidence: Live-DOM remains dom-like until a real br
 | `async-confirmation-cases-declared` | **pass** | async settling, lying aria-busy and mounted confirmation cases are declared |
 | `no-model-in-replay-loop` | **pass** | model calls are recorded and forbidden after replay starts |
 | `finite-settle-budget` | **pass** | settle budget must be finite and recorded |
-| `playwright-driver-implemented` | **fail** | no Playwright/WebDriver executable harness is implemented in this repository yet |
-| `browser-scenario-sweep-measured` | **fail** | zero browser-backed scenarios have been run |
+| `playwright-driver-implemented` | **pass** | Playwright browser harness produced a preserved measurement artifact |
+| `browser-scenario-sweep-measured` | **pass** | 3 browser-backed scenario(s) measured |
 
 ## What Must Be True Before Trials Count
 
@@ -33,7 +35,7 @@ upgrade `ui-replay-live-dom` evidence: Live-DOM remains dom-like until a real br
 - Replay consumes recorded traces and live browser facts only; no model runs after replay starts.
 - Browser traces, transcripts, submissions and verifier output are preserved under the challenge hash.
 
-Status: HOLD. Browser-backed is a scaffold/foundation here, not measured evidence.
+Status: measured browser-backed mutant-detection spike. Real-agent difficulty remains not-run.
 
 ---
 

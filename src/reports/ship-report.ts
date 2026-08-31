@@ -83,6 +83,11 @@ export interface FamilyEvidence {
   readonly adversarialHardeningProbeFailures?: number;
   readonly countedNoBypassV2Audits?: number;
   readonly countedBypassV2Audits?: number;
+  readonly adversarialContainerIsolationReady?: boolean;
+  readonly adversarialContainerNoNetworkAudits?: number;
+  readonly adversarialContainerReadinessFailures?: readonly string[];
+  readonly adversarialImportReplayValid?: boolean;
+  readonly importedAdversarialAudits?: number;
   readonly browserBackedReady?: boolean;
   readonly browserBackedMeasured?: boolean;
   readonly browserBackedDetail?: string;
@@ -120,6 +125,11 @@ export interface VerifierIntegrityEvidence {
   readonly adversarialHardeningProbeFailures: number;
   readonly countedNoBypassV2Audits: number;
   readonly countedBypassV2Audits: number;
+  readonly adversarialContainerIsolationReady: boolean;
+  readonly adversarialContainerNoNetworkAudits: number;
+  readonly adversarialContainerReadinessFailures: readonly string[];
+  readonly adversarialImportReplayValid: boolean;
+  readonly importedAdversarialAudits: number;
   readonly adversarialClaimLevel:
     | "adversarial-ready"
     | "adversarial-audited"
@@ -721,6 +731,72 @@ export const GATES: readonly Gate[] = [
     },
   },
   {
+    id: "adversarial-container-isolation-ready",
+    question: "Is a real container/no-network adversarial isolation profile ready?",
+    rationale:
+      "The fs-sandbox boundary removes hidden files from the working directory, but it does not " +
+      "disable networking or enforce process isolation. Container/no-network evidence is a stronger " +
+      "claim and needs its own smoke record.",
+    blocking: false,
+    evaluate: (_s, _r, e, _h, a) => {
+      const adv = adversarialFor(e, a);
+      if (adv?.adversarialContainerIsolationReady === undefined) {
+        return { verdict: "n/a", detail: "no container isolation layer" };
+      }
+      return {
+        verdict: adv.adversarialContainerIsolationReady ? "pass" : "fail",
+        detail: adv.adversarialContainerIsolationReady
+          ? "container/no-network isolation readiness passed"
+          : `container/no-network isolation not ready${
+              (adv.adversarialContainerReadinessFailures ?? []).length === 0
+                ? ""
+                : `: ${(adv.adversarialContainerReadinessFailures ?? []).join("; ")}`
+            }`,
+      };
+    },
+  },
+  {
+    id: "adversarial-container-no-network",
+    question: "Is there counted adversarial evidence collected under container/no-network isolation?",
+    rationale:
+      "A no-network container audit is stronger than an fs-sandbox audit. Passing this gate requires " +
+      "the counted audit itself to carry the container profile, not merely a prepared bundle.",
+    blocking: false,
+    evaluate: (_s, _r, e, _h, a) => {
+      const adv = adversarialFor(e, a);
+      if (adv?.adversarialContainerNoNetworkAudits === undefined) {
+        return { verdict: "n/a", detail: "no container/no-network audit field" };
+      }
+      return {
+        verdict: adv.adversarialContainerNoNetworkAudits > 0 ? "pass" : "fail",
+        detail:
+          adv.adversarialContainerNoNetworkAudits > 0
+            ? `${adv.adversarialContainerNoNetworkAudits} counted container/no-network audit(s)`
+            : "no counted container/no-network audit on record",
+      };
+    },
+  },
+  {
+    id: "adversarial-import-replay-valid",
+    question: "Have imported non-local adversarial audits been replay-validated?",
+    rationale:
+      "External adversarial evidence is useful only when the transcript, provider identity, package " +
+      "hash, verifier hash and replay output survive import. Otherwise it is not cross-lab evidence.",
+    blocking: false,
+    evaluate: (_s, _r, e, _h, a) => {
+      const adv = adversarialFor(e, a);
+      if (adv?.importedAdversarialAudits === undefined || adv.importedAdversarialAudits === 0) {
+        return { verdict: "n/a", detail: "no counted imported adversarial audit" };
+      }
+      return {
+        verdict: adv.adversarialImportReplayValid ? "pass" : "fail",
+        detail: adv.adversarialImportReplayValid
+          ? `${adv.importedAdversarialAudits} imported audit(s) replay-validated`
+          : "imported adversarial audit failed replay/countability validation",
+      };
+    },
+  },
+  {
     id: "browser-backed-ready",
     question: "Is the browser-backed UI descendant ready for real browser trials?",
     rationale:
@@ -841,8 +917,8 @@ export function renderShipReport(
     "",
     "## Verifier-integrity claim levels",
     "",
-    "| family | threat model | attack package | isolation | replay | probes | no-bypass audits | unrepaired bypasses | claim level |",
-    "|---|---|---|---|---|---|---|---:|---|",
+    "| family | threat model | attack package | fs/container isolation | replay | probes | no-bypass audits | container audits | imports | unrepaired bypasses | claim level |",
+    "|---|---|---|---|---|---|---|---:|---:|---:|---|",
     ...shapes.map((s) => {
       const e = evidence[s.familyId];
       const a = verifierIntegrity[s.familyId] ?? e;
@@ -852,8 +928,10 @@ export function renderShipReport(
       const replay = a?.adversarialExploitReplayReady;
       const probes = a?.adversarialHardeningProbesPass;
       const noBypass = a?.countedNoBypassAudits;
+      const containerAudits = a?.adversarialContainerNoNetworkAudits;
+      const imports = a?.importedAdversarialAudits;
       const unrepaired = a?.unrepairedBypasses;
-      return `| \`${s.familyId}\` | ${threat === undefined ? "n/a" : threat ? "yes" : "no"} | ${ready === undefined ? "n/a" : ready ? "yes" : "no"} | ${isolation === undefined ? "n/a" : isolation ? "yes" : "no"} | ${replay === undefined ? "n/a" : replay ? "yes" : "no"} | ${probes === undefined ? "n/a" : probes ? "pass" : "fail"} | ${noBypass === undefined ? "n/a" : noBypass} | ${unrepaired === undefined ? 0 : unrepaired} | ${a?.adversarialClaimLevel ?? "audit-pending"} |`;
+      return `| \`${s.familyId}\` | ${threat === undefined ? "n/a" : threat ? "yes" : "no"} | ${ready === undefined ? "n/a" : ready ? "yes" : "no"} | ${isolation === undefined ? "n/a" : isolation ? "yes" : "no"} | ${replay === undefined ? "n/a" : replay ? "yes" : "no"} | ${probes === undefined ? "n/a" : probes ? "pass" : "fail"} | ${noBypass === undefined ? "n/a" : noBypass} | ${containerAudits === undefined ? "n/a" : containerAudits} | ${imports === undefined ? "n/a" : imports} | ${unrepaired === undefined ? 0 : unrepaired} | ${a?.adversarialClaimLevel ?? "audit-pending"} |`;
     }),
     "",
     "## Per family",

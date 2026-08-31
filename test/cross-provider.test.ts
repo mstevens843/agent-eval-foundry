@@ -19,8 +19,17 @@ import {
   BROWSER_HARNESS_REQUIREMENTS,
   browserHarnessPlanFailures,
 } from "../src/families/ui-replay-browser-backed/harness.js";
+import {
+  browserBackedMeasurementMatrix,
+  readBrowserBackedMeasurement,
+  validateBrowserBackedMeasurement,
+} from "../src/families/ui-replay-browser-backed/measurement.js";
 import { browserBackedReadiness } from "../src/families/ui-replay-browser-backed/readiness.js";
 import { renderBrowserBackedReadiness } from "../src/reports/browser-backed-readiness.js";
+import {
+  renderBrowserBackedAxisReport,
+  renderBrowserBackedReport,
+} from "../src/reports/browser-backed-report.js";
 import { BROWSER_BACKED_NEXT_PLAN } from "../src/reports/browser-backed-scaffold.js";
 import { diagnose } from "../src/reports/diagnosis.js";
 import { computeCurve, wilson } from "../src/reports/difficulty.js";
@@ -639,7 +648,7 @@ describe("realism labels", () => {
     ).toContain("effect ledger is not harness-owned");
   });
 
-  it("browser-backed readiness is concrete but not measured", () => {
+  it("browser-backed readiness stays pending without a preserved browser measurement", () => {
     const readiness = browserBackedReadiness(BROWSER_BACKED_NEXT_PLAN);
     expect(readiness.architectureReady).toBe(true);
     expect(readiness.browserBackedReady).toBe(false);
@@ -651,6 +660,51 @@ describe("realism labels", () => {
     const report = renderBrowserBackedReadiness(readiness);
     expect(report).toContain("Live-DOM remains dom-like");
     expect(report).toContain("Status: HOLD");
+  });
+
+  it("the preserved browser-backed Playwright sweep validates as measured mutant evidence", () => {
+    const measurement = readBrowserBackedMeasurement(ROOT);
+    expect(measurement).not.toBeNull();
+    const validation = validateBrowserBackedMeasurement(measurement);
+    expect(validation.valid).toBe(true);
+    expect(validation.scenariosMeasured).toBe(3);
+    expect(validation.subjectsMeasured).toBe(4);
+    if (measurement === null) throw new Error("browser-backed measurement missing");
+    const matrix = browserBackedMeasurementMatrix(measurement);
+    expect(matrix.instances).toHaveLength(3);
+    expect(matrix.subjects).toHaveLength(3);
+    const artifactBase = join(ROOT, "examples", "families", "ui-replay-browser-backed");
+    for (const cell of measurement.cells) {
+      for (const artifactPath of Object.values(cell.artifacts)) {
+        expect(existsSync(join(artifactBase, artifactPath)), artifactPath).toBe(true);
+      }
+      const calls = JSON.parse(
+        readFileSync(join(artifactBase, cell.artifacts.harnessCallLedgerPath), "utf8"),
+      ) as { method: string }[];
+      expect(
+        calls.some((call) => call.method === "askModel"),
+        `${cell.scenarioId}/${cell.subjectId}`,
+      ).toBe(false);
+    }
+    expect(
+      measurement.cells.find(
+        (cell) =>
+          cell.scenarioId === "browser-stale-handle-remount" &&
+          cell.subjectId === "stale-handle-reuser-browser-mutant",
+      )?.failures,
+    ).toContain("stale_handle_detected");
+    expect(
+      measurement.cells.find(
+        (cell) =>
+          cell.scenarioId === "browser-aria-busy-late-enable" &&
+          cell.subjectId === "aria-busy-truster-browser-mutant",
+      )?.failures,
+    ).toContain("precondition_observed");
+    const readiness = browserBackedReadiness(BROWSER_BACKED_NEXT_PLAN, measurement);
+    expect(readiness.browserBackedMeasured).toBe(true);
+    expect(readiness.browserBackedReady).toBe(true);
+    expect(renderBrowserBackedReport(measurement)).toBe(renderBrowserBackedReport(measurement));
+    expect(renderBrowserBackedAxisReport(measurement)).toContain("independent mutant-detection axes");
   });
 });
 

@@ -1,0 +1,16 @@
+[
+  {
+    "seq": 1,
+    "replayIndex": 0,
+    "method": "query",
+    "target": null,
+    "detail": "initial query observed before remount"
+  },
+  {
+    "seq": 2,
+    "replayIndex": 0,
+    "method": "query",
+    "target": null,
+    "detail": "handle refreshed after DOM remount"
+  }
+]

@@ -1,0 +1,13 @@
+<!DOCTYPE html><html><head></head><body>
+<main id="app">
+  <section id="async-panel" class="async" aria-busy="false">
+    <button id="submit-payment" data-entity="payment-3" data-effect="submit-payment" data-precondition="enabled">Submit payment</button>
+  </section>
+</main>
+<script>
+window.__effects = [];
+const button = document.querySelector('#submit-payment');
+button.addEventListener('click', () => { if (!button.disabled) window.__effects.push('submit-payment'); });
+setTimeout(() => { button.disabled = false; }, 35);
+</script>
+</body></html>

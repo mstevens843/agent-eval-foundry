@@ -1,0 +1,10 @@
+{
+  "scenarioId": "browser-aria-busy-late-enable",
+  "subjectId": "testid-loyal-browser-mutant",
+  "failures": [],
+  "intended": {
+    "testid-loyal-browser-mutant": "correct_anchor_resolution",
+    "aria-busy-truster-browser-mutant": "precondition_observed",
+    "stale-handle-reuser-browser-mutant": "stale_handle_detected"
+  }
+}

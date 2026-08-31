@@ -152,8 +152,9 @@ event loop. A browser-backed descendant would be a new family with new evidence.
 
 The browser-backed foundation now exists inside this repo as `ui-replay-browser-backed`: typed page
 fixtures, harness contract, effect-ledger boundary, trace format, selector-conflict scenarios,
-readiness gates and a report. It remains **not measured** because no Playwright/WebDriver-backed
-scenario sweep has run.
+readiness gates, reports and a small preserved Playwright sweep. The measured browser-backed slice
+has 3 scenarios, 4 subjects, 12 cells and 3 mutant-detection axes. It is **not** real-agent
+difficulty evidence and it does not relabel Live-DOM; Live-DOM remains dom-like.
 
 ## Checker-Required Variant
 
@@ -205,6 +206,10 @@ Key generated reports:
 - `reports/adversarial-isolation-report.md`
 - `reports/adversarial-exploit-replay-report.md`
 - `reports/adversarial-hardening-probes-report.md`
+- `reports/adversarial-container-isolation-report.md`
+- `reports/adversarial-import-report.md`
+- `reports/ui-replay-browser-backed-report.md`
+- `reports/ui-replay-browser-backed-axis-report.md`
 - `reports/shared-difficulty-bank-report.md`
 - `reports/cross-family-axis-report.md`
 - `reports/ship-gate-report.md`
@@ -235,13 +240,15 @@ pnpm test
 pnpm build
 node dist/cli.js check
 node dist/cli.js all
+node dist/cli.js adversarial isolate container verify bundles/ui-replay-live-dom-adversarial-container
+node dist/cli.js browser-backed verify
 ```
 
 The tests include known-bad cases for missing SPEC sections, challenge leaks, nested anchor
 strategies, stale hashes, verifier-only SHIP claims, missing `checker.mjs`, vacuous checkers,
 invalid counted human reviews, adversarial audit countability, stale attack hashes, hidden verifier
 leaks, provider refusal paths, v2 isolation/replay/triage failures, deterministic hardening probes,
-browser-backed readiness gates, candidate ledger drift and deterministic reports.
+browser-backed measurement gates, candidate ledger drift and deterministic reports.
 
 ## Current Claim
 
@@ -253,8 +260,10 @@ mutant-detection axes, real-agent difficulty evidence, human solvability and adv
 verifier-integrity evidence.
 
 The strongest current result is still memory-poisoning generalisation across labs. The newest result
-is that verifier-integrity is now a first-class, hash-gated layer with two counted Codex/OpenAI
-no-bypass audits, deterministic bypass-regression probes and explicit isolation/replay records. The
-next highest-leverage work is to move from `fs-sandbox` to real container/no-network isolation,
-import or run non-OpenAI audits under the same hashes, and then implement a measured
-browser-backed UI descendant.
+is that verifier-integrity now has explicit container/no-network bundle and countability rules,
+while the local Docker daemon is unavailable and therefore no container/no-network audit counts.
+There are still two counted Codex/OpenAI no-bypass audits under `fs-sandbox`; there is zero counted
+non-OpenAI adversarial evidence in this repo. The next highest-leverage work is to run the same
+container/no-network audit once Docker is available, import preserved non-OpenAI audits under the
+current hashes, and expand `ui-replay-browser-backed` from measured mutant slice to package-backed
+agent-trial family.

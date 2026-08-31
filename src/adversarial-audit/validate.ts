@@ -17,6 +17,7 @@ import {
   type AdversarialAttackRecord,
   type AdversarialAttacker,
   type AdversarialBypassTriage,
+  type AdversarialContainerMetadata,
   type AdversarialExecutionProfile,
   type AdversarialExploitArtifact,
   type AdversarialExploitReplayResult,
@@ -26,6 +27,7 @@ import {
   type AdversarialVerifierResult,
   BYPASS_CLASSES,
   BYPASS_TRIAGE_DECISIONS,
+  CONTAINER_NETWORK_MODES,
   EXPLOIT_ARTIFACT_KINDS,
   EXPLOIT_REPLAY_STATUSES,
   ISOLATION_PROFILE_IDS,
@@ -162,6 +164,32 @@ function parseIsolationProfile(v: unknown, path: string): AdversarialIsolationPr
   };
 }
 
+function parseContainerMetadata(v: unknown, path: string): AdversarialContainerMetadata | null {
+  if (v === null || v === undefined) return null;
+  const o = isRecord(v) ? v : fail("E_SHAPE", path, "expected an object");
+  return {
+    runtime: oneOf(o.runtime, `${path}.runtime`, ["docker", "podman", "other"] as const),
+    runtimeAvailable: bool(o.runtimeAvailable, `${path}.runtimeAvailable`),
+    image: str(o.image, `${path}.image`),
+    command: strArray(o.command, `${path}.command`),
+    networkMode: oneOf(o.networkMode, `${path}.networkMode`, CONTAINER_NETWORK_MODES),
+    user: str(o.user, `${path}.user`),
+    readOnlyRootFilesystem: bool(o.readOnlyRootFilesystem, `${path}.readOnlyRootFilesystem`),
+    capDropAll: bool(o.capDropAll, `${path}.capDropAll`),
+    noNewPrivileges: bool(o.noNewPrivileges, `${path}.noNewPrivileges`),
+    repoRootMounted: bool(o.repoRootMounted, `${path}.repoRootMounted`),
+    hiddenArtifactsMounted: bool(o.hiddenArtifactsMounted, `${path}.hiddenArtifactsMounted`),
+    generatedReportsMounted: bool(o.generatedReportsMounted, `${path}.generatedReportsMounted`),
+    verifierInsideContainer: bool(o.verifierInsideContainer, `${path}.verifierInsideContainer`),
+    publicChallengeReadOnly: bool(o.publicChallengeReadOnly, `${path}.publicChallengeReadOnly`),
+    exploitDirPreserved: bool(o.exploitDirPreserved, `${path}.exploitDirPreserved`),
+    submittedBypassDirPreserved: bool(o.submittedBypassDirPreserved, `${path}.submittedBypassDirPreserved`),
+    secretEnvKeysExposed: strArray(o.secretEnvKeysExposed, `${path}.secretEnvKeysExposed`),
+    readiness: oneOf(o.readiness, `${path}.readiness`, ["pass", "fail", "not-run"] as const),
+    readinessFailures: strArray(o.readinessFailures, `${path}.readinessFailures`),
+  };
+}
+
 function parseExploitArtifact(v: unknown, path: string): AdversarialExploitArtifact {
   if (v === null || v === undefined) return defaultExploitArtifact();
   const o = isRecord(v) ? v : fail("E_SHAPE", path, "expected an object");
@@ -248,6 +276,7 @@ export function parseAdversarialAttackRecord(v: unknown, path: string): Adversar
     repair: parseRepair(o.repair, `${path}.repair`),
     executionProfile: parseExecutionProfile(o.executionProfile, `${path}.executionProfile`),
     isolationProfile: parseIsolationProfile(o.isolationProfile, `${path}.isolationProfile`),
+    container: parseContainerMetadata(o.container, `${path}.container`),
     exploitArtifact: parseExploitArtifact(o.exploitArtifact, `${path}.exploitArtifact`),
     exploitReplay: parseExploitReplay(o.exploitReplay, `${path}.exploitReplay`),
     triage: parseTriage(o.triage, `${path}.triage`),
@@ -278,6 +307,90 @@ function advFailure(code: RuleCode, path: string, detail: string): AdversarialVa
 }
 
 const looksDefaultV1 = (notes: string): boolean => notes.includes("v1 record:");
+
+function pushContainerCountabilityFailures(
+  record: AdversarialAttackRecord,
+  failures: AdversarialValidationFailure[],
+): void {
+  const claimsContainer =
+    record.isolationProfile.id === "container-no-network" || record.isolationProfile.id === "container";
+  if (!claimsContainer) return;
+
+  const metadata = record.container ?? null;
+  if (metadata === null) {
+    failures.push(
+      advFailure(
+        "ADV_CONTAINER_COUNTED_NO_METADATA",
+        `adversarial.${record.attackId}.container`,
+        "a counted container audit must preserve container runtime metadata",
+      ),
+    );
+    return;
+  }
+  if (!metadata.runtimeAvailable || metadata.readiness !== "pass" || metadata.readinessFailures.length > 0) {
+    failures.push(
+      advFailure(
+        "ADV_CONTAINER_COUNTED_READINESS_FAILED",
+        `adversarial.${record.attackId}.container.readiness`,
+        "a counted container audit requires a passing runtime/readiness smoke",
+      ),
+    );
+  }
+  if (!record.isolationProfile.networkDisabled || metadata.networkMode !== "none") {
+    failures.push(
+      advFailure(
+        "ADV_CONTAINER_COUNTED_NETWORK_ENABLED",
+        `adversarial.${record.attackId}.container.networkMode`,
+        "a counted container/no-network audit must run with Docker/Podman network mode none",
+      ),
+    );
+  }
+  if (metadata.repoRootMounted) {
+    failures.push(
+      advFailure(
+        "ADV_CONTAINER_COUNTED_REPO_ROOT_MOUNTED",
+        `adversarial.${record.attackId}.container.repoRootMounted`,
+        "the repository root cannot be mounted in the attacker container",
+      ),
+    );
+  }
+  if (metadata.hiddenArtifactsMounted) {
+    failures.push(
+      advFailure(
+        "ADV_CONTAINER_COUNTED_HIDDEN_FILES_MOUNTED",
+        `adversarial.${record.attackId}.container.hiddenArtifactsMounted`,
+        "hidden verifier/reference/scenario files cannot be mounted in the attacker container",
+      ),
+    );
+  }
+  if (metadata.verifierInsideContainer) {
+    failures.push(
+      advFailure(
+        "ADV_CONTAINER_COUNTED_VERIFIER_INSIDE",
+        `adversarial.${record.attackId}.container.verifierInsideContainer`,
+        "the verifier must run outside the attacker container",
+      ),
+    );
+  }
+  if (!metadata.exploitDirPreserved || !metadata.submittedBypassDirPreserved) {
+    failures.push(
+      advFailure(
+        "ADV_CONTAINER_COUNTED_UNPRESERVED_DIRS",
+        `adversarial.${record.attackId}.container.exploitDirPreserved`,
+        "container audits must preserve writable exploit and submitted-bypass directories",
+      ),
+    );
+  }
+  if (metadata.secretEnvKeysExposed.length > 0) {
+    failures.push(
+      advFailure(
+        "ADV_CONTAINER_COUNTED_SECRET_ENV",
+        `adversarial.${record.attackId}.container.secretEnvKeysExposed`,
+        `secret-like environment keys were exposed: ${metadata.secretEnvKeysExposed.join(", ")}`,
+      ),
+    );
+  }
+}
 
 function pushV2CountabilityFailures(
   record: AdversarialAttackRecord,
@@ -579,6 +692,7 @@ export function adversarialAttackFailures(
   }
 
   pushV2CountabilityFailures(record, context, failures);
+  pushContainerCountabilityFailures(record, failures);
 
   return failures;
 }

@@ -15,6 +15,7 @@
   },
   "attackSurface": [
     "anchor conflict resolution",
+    "container/no-network isolation boundary",
     "fs-sandbox isolation boundary",
     "legacy subprocess isolation boundary",
     "live DOM-like replay artifact",
@@ -31,7 +32,8 @@
     "read the public challenge package",
     "write exploit notes, proof-of-concept files and a final attack report",
     "attempt black-box reasoning about likely verifier mistakes from the public interface",
-    "run only local commands needed to inspect or construct artifacts inside the bundle"
+    "run only local commands needed to inspect or construct artifacts inside the bundle",
+    "when container isolation is used, execute only inside the no-network attacker container"
   ],
   "forbiddenAttackerAccess": [
     "reading repository source outside the prepared bundle",
@@ -48,6 +50,8 @@
     "ALLOWED-FILES.txt",
     "FORBIDDEN-FILES.txt",
     "ISOLATION.json",
+    "CONTAINER.json",
+    "container-run.sh",
     "EXPLOIT-SCHEMA.json",
     "PROVIDER.json",
     "run.sh",
@@ -100,6 +104,7 @@
     "adequateForCountedNoBypass": true,
     "notes": "Prepared public bundle only: challenge files are copied, exploit/submitted-bypass are writable, hidden source and reports are absent. Network is not mechanically disabled."
   },
+  "container": null,
   "exploitArtifact": {
     "kind": "none",
     "path": null,

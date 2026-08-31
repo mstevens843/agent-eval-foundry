@@ -1,0 +1,14 @@
+{
+  "scenarioId": "browser-anchor-conflict-hidden-confirmation",
+  "subjectId": "testid-loyal-browser-mutant",
+  "driver": "playwright",
+  "calls": [
+    {
+      "seq": 1,
+      "replayIndex": 0,
+      "method": "query",
+      "target": null,
+      "detail": "selected first node matching recorded test id"
+    }
+  ]
+}

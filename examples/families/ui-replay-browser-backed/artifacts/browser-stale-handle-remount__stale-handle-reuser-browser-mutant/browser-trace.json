@@ -1,0 +1,21 @@
+{
+  "scenarioId": "browser-stale-handle-remount",
+  "subjectId": "stale-handle-reuser-browser-mutant",
+  "driver": "playwright",
+  "calls": [
+    {
+      "seq": 1,
+      "replayIndex": 0,
+      "method": "query",
+      "target": null,
+      "detail": "captured persistent ElementHandle before mutation"
+    },
+    {
+      "seq": 2,
+      "replayIndex": 0,
+      "method": "click",
+      "target": null,
+      "detail": "attempted to click stale handle after remount"
+    }
+  ]
+}

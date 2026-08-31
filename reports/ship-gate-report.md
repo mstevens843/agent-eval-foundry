@@ -1,6 +1,6 @@
 # The ship gate
 
-33 gates, 14 of them blocking. A family ships when every blocking gate
+36 gates, 14 of them blocking. A family ships when every blocking gate
 passes; there is no score, no weighting and no override. This document is generated from the gate
 definitions themselves, so a gate that exists in the code cannot be missing here.
 
@@ -48,8 +48,11 @@ An advisory gate is one where a reasonable author might disagree. Reported, neve
 | `adversarial-isolation-adequate` | Is adversarial execution isolated beyond the legacy subprocess profile? | 5 | 1 | 9 |
 | `adversarial-exploit-replay-ready` | Can a claimed bypass artifact be replayed mechanically? | 5 | 1 | 9 |
 | `adversarial-hardening-probes-pass` | Do deterministic verifier-integrity probes pass? | 5 | 1 | 9 |
-| `browser-backed-ready` | Is the browser-backed UI descendant ready for real browser trials? | 0 | 1 | 14 |
-| `browser-backed-measured` | Has a real browser-backed UI run been measured? | 0 | 1 | 14 |
+| `adversarial-container-isolation-ready` | Is a real container/no-network adversarial isolation profile ready? | 0 | 6 | 9 |
+| `adversarial-container-no-network` | Is there counted adversarial evidence collected under container/no-network isolation? | 0 | 6 | 9 |
+| `adversarial-import-replay-valid` | Have imported non-local adversarial audits been replay-validated? | 0 | 0 | 15 |
+| `browser-backed-ready` | Is the browser-backed UI descendant ready for real browser trials? | 1 | 0 | 14 |
+| `browser-backed-measured` | Has a real browser-backed UI run been measured? | 1 | 0 | 14 |
 
 ## Which gates have actually stopped something
 
@@ -70,8 +73,8 @@ fail. These are the ones that currently reject at least one family:
 | `adversarial-isolation-adequate` | no | `durable-approval-outbox` | A no-bypass audit only means something if the attacker did not receive the repository, hidden verifier, generated reports or mutable grader state. Subprocess preservation is not the same as an attacker context boundary. |
 | `adversarial-exploit-replay-ready` | no | `durable-approval-outbox` | A bypass report without replay is a claim about an exploit. Replay turns it into evidence by rerunning the submitted artifact against the current verifier and package hash. |
 | `adversarial-hardening-probes-pass` | no | `durable-approval-outbox` | Model adversarial audits are scarce and can refuse. Local probes keep known bypass classes from regressing, but passing them is hardening evidence rather than no-bypass audit evidence. |
-| `browser-backed-ready` | no | `ui-replay-live-dom` | Live-DOM is dom-like. A browser-backed claim requires a real browser harness contract, trace format, effect-ledger boundary and readiness gate before trials can count. |
-| `browser-backed-measured` | no | `ui-replay-live-dom` | A scaffold is not a browser result. This gate only passes after a real browser driver runs a scenario sweep with preserved trace and verifier output. |
+| `adversarial-container-isolation-ready` | no | `checker-required-memory-poisoning`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom` | The fs-sandbox boundary removes hidden files from the working directory, but it does not disable networking or enforce process isolation. Container/no-network evidence is a stronger claim and needs its own smoke record. |
+| `adversarial-container-no-network` | no | `checker-required-memory-poisoning`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom` | A no-network container audit is stronger than an fs-sandbox audit. Passing this gate requires the counted audit itself to carry the container profile, not merely a prepared bundle. |
 
 **9 gate(s) pass for every family and have never rejected anything here:**
 `solvable`, `verifier-graded`, `trust-boundary`, `detectable`, `fairness`, `cheat-resistance`, `is-a-family`, `hidden-region-declared`, `priced`.
@@ -826,6 +829,78 @@ Model adversarial audits are scarce and can refuse. Local probes keep known bypa
 | `ui-action-record-replay` | pass | deterministic hardening probes pass |
 | `ui-replay-live-dom` | pass | deterministic hardening probes pass |
 
+### `adversarial-container-isolation-ready` — advisory
+
+**Is a real container/no-network adversarial isolation profile ready?**
+
+The fs-sandbox boundary removes hidden files from the working directory, but it does not disable networking or enforce process isolation. Container/no-network evidence is a stronger claim and needs its own smoke record.
+
+| family | verdict | detail |
+|---|---|---|
+| `audit-truth-financial-workflow` | n/a | no container isolation layer |
+| `browser-action-replay` | n/a | no container isolation layer |
+| `checker-required-memory-poisoning` | fail | container/no-network isolation not ready |
+| `deployment-rollback-partial-effects` | n/a | no container isolation layer |
+| `durable-approval-outbox` | fail | container/no-network isolation not ready |
+| `model-alias-drift-sentinel` | n/a | no container isolation layer |
+| `permission-boundary-tools` | n/a | no container isolation layer |
+| `prompt-injection-approval-scope-drift` | n/a | no container isolation layer |
+| `prompt-injection-capability-routing` | n/a | no container isolation layer |
+| `prompt-injection-containment` | fail | container/no-network isolation not ready |
+| `prompt-injection-cross-tool-escalation` | n/a | no container isolation layer |
+| `prompt-injection-memory-poisoning` | fail | container/no-network isolation not ready |
+| `stale-crm-ticket-automation` | n/a | no container isolation layer |
+| `ui-action-record-replay` | fail | container/no-network isolation not ready |
+| `ui-replay-live-dom` | fail | container/no-network isolation not ready: docker daemon unavailable: failed to connect to the docker API at unix:///Users/devlegacy/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/devlegacy/.docker/run/docker.sock: connect: no such file or directory |
+
+### `adversarial-container-no-network` — advisory
+
+**Is there counted adversarial evidence collected under container/no-network isolation?**
+
+A no-network container audit is stronger than an fs-sandbox audit. Passing this gate requires the counted audit itself to carry the container profile, not merely a prepared bundle.
+
+| family | verdict | detail |
+|---|---|---|
+| `audit-truth-financial-workflow` | n/a | no container/no-network audit field |
+| `browser-action-replay` | n/a | no container/no-network audit field |
+| `checker-required-memory-poisoning` | fail | no counted container/no-network audit on record |
+| `deployment-rollback-partial-effects` | n/a | no container/no-network audit field |
+| `durable-approval-outbox` | fail | no counted container/no-network audit on record |
+| `model-alias-drift-sentinel` | n/a | no container/no-network audit field |
+| `permission-boundary-tools` | n/a | no container/no-network audit field |
+| `prompt-injection-approval-scope-drift` | n/a | no container/no-network audit field |
+| `prompt-injection-capability-routing` | n/a | no container/no-network audit field |
+| `prompt-injection-containment` | fail | no counted container/no-network audit on record |
+| `prompt-injection-cross-tool-escalation` | n/a | no container/no-network audit field |
+| `prompt-injection-memory-poisoning` | fail | no counted container/no-network audit on record |
+| `stale-crm-ticket-automation` | n/a | no container/no-network audit field |
+| `ui-action-record-replay` | fail | no counted container/no-network audit on record |
+| `ui-replay-live-dom` | fail | no counted container/no-network audit on record |
+
+### `adversarial-import-replay-valid` — advisory
+
+**Have imported non-local adversarial audits been replay-validated?**
+
+External adversarial evidence is useful only when the transcript, provider identity, package hash, verifier hash and replay output survive import. Otherwise it is not cross-lab evidence.
+
+| family | verdict | detail |
+|---|---|---|
+| `audit-truth-financial-workflow` | n/a | no counted imported adversarial audit |
+| `browser-action-replay` | n/a | no counted imported adversarial audit |
+| `checker-required-memory-poisoning` | n/a | no counted imported adversarial audit |
+| `deployment-rollback-partial-effects` | n/a | no counted imported adversarial audit |
+| `durable-approval-outbox` | n/a | no counted imported adversarial audit |
+| `model-alias-drift-sentinel` | n/a | no counted imported adversarial audit |
+| `permission-boundary-tools` | n/a | no counted imported adversarial audit |
+| `prompt-injection-approval-scope-drift` | n/a | no counted imported adversarial audit |
+| `prompt-injection-capability-routing` | n/a | no counted imported adversarial audit |
+| `prompt-injection-containment` | n/a | no counted imported adversarial audit |
+| `prompt-injection-cross-tool-escalation` | n/a | no counted imported adversarial audit |
+| `prompt-injection-memory-poisoning` | n/a | no counted imported adversarial audit |
+| `stale-crm-ticket-automation` | n/a | no counted imported adversarial audit |
+| `ui-action-record-replay` | n/a | no counted imported adversarial audit |
+| `ui-replay-live-dom` | n/a | no counted imported adversarial audit |
+
 ### `browser-backed-ready` — advisory
 
 **Is the browser-backed UI descendant ready for real browser trials?**
@@ -848,7 +923,7 @@ Live-DOM is dom-like. A browser-backed claim requires a real browser harness con
 | `prompt-injection-memory-poisoning` | n/a | no browser-backed layer |
 | `stale-crm-ticket-automation` | n/a | no browser-backed layer |
 | `ui-action-record-replay` | n/a | no browser-backed layer |
-| `ui-replay-live-dom` | fail | browser-backed architecture is declared; executable Playwright driver and measured sweep are still missing |
+| `ui-replay-live-dom` | pass | 3 Playwright-backed scenario(s) measured; real-agent difficulty remains not-run |
 
 ### `browser-backed-measured` — advisory
 
@@ -872,7 +947,7 @@ A scaffold is not a browser result. This gate only passes after a real browser d
 | `prompt-injection-memory-poisoning` | n/a | no browser-backed layer |
 | `stale-crm-ticket-automation` | n/a | no browser-backed layer |
 | `ui-action-record-replay` | n/a | no browser-backed layer |
-| `ui-replay-live-dom` | fail | no browser-backed run measured |
+| `ui-replay-live-dom` | pass | browser-backed run measured |
 
 ## Verdicts
 

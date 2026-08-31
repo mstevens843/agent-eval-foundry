@@ -57,8 +57,17 @@ export const ATTACK_EXECUTION_PROFILE_KINDS = [
 ] as const;
 export type AttackExecutionProfileKind = (typeof ATTACK_EXECUTION_PROFILE_KINDS)[number];
 
-export const ISOLATION_PROFILE_IDS = ["subprocess", "fs-sandbox", "container-planned", "container"] as const;
+export const ISOLATION_PROFILE_IDS = [
+  "subprocess",
+  "fs-sandbox",
+  "container-planned",
+  "container-no-network",
+  "container",
+] as const;
 export type IsolationProfileId = (typeof ISOLATION_PROFILE_IDS)[number];
+
+export const CONTAINER_NETWORK_MODES = ["none", "host", "bridge", "unknown"] as const;
+export type ContainerNetworkMode = (typeof CONTAINER_NETWORK_MODES)[number];
 
 export const EXPLOIT_ARTIFACT_KINDS = [
   "none",
@@ -173,6 +182,28 @@ export interface AdversarialIsolationProfile {
   readonly notes: string;
 }
 
+export interface AdversarialContainerMetadata {
+  readonly runtime: "docker" | "podman" | "other";
+  readonly runtimeAvailable: boolean;
+  readonly image: string;
+  readonly command: readonly string[];
+  readonly networkMode: ContainerNetworkMode;
+  readonly user: string;
+  readonly readOnlyRootFilesystem: boolean;
+  readonly capDropAll: boolean;
+  readonly noNewPrivileges: boolean;
+  readonly repoRootMounted: boolean;
+  readonly hiddenArtifactsMounted: boolean;
+  readonly generatedReportsMounted: boolean;
+  readonly verifierInsideContainer: boolean;
+  readonly publicChallengeReadOnly: boolean;
+  readonly exploitDirPreserved: boolean;
+  readonly submittedBypassDirPreserved: boolean;
+  readonly secretEnvKeysExposed: readonly string[];
+  readonly readiness: "pass" | "fail" | "not-run";
+  readonly readinessFailures: readonly string[];
+}
+
 export interface AdversarialExploitArtifact {
   readonly kind: ExploitArtifactKind;
   readonly path: string | null;
@@ -233,6 +264,7 @@ export interface AdversarialAttackRecord {
   readonly repair: AdversarialRepairRecord;
   readonly executionProfile: AdversarialExecutionProfile;
   readonly isolationProfile: AdversarialIsolationProfile;
+  readonly container?: AdversarialContainerMetadata | null;
   readonly exploitArtifact: AdversarialExploitArtifact;
   readonly exploitReplay: AdversarialExploitReplayResult;
   readonly triage: AdversarialBypassTriage;
@@ -290,6 +322,13 @@ export interface AdversarialEvidenceSummary {
   readonly exploitReplayReady: boolean;
   readonly hardeningProbesPass: boolean;
   readonly hardeningProbeFailures: number;
+  readonly containerRecords: number;
+  readonly countedContainerNoBypassAudits: number;
+  readonly countedContainerBypassAudits: number;
+  readonly containerReady: boolean;
+  readonly containerReadinessFailures: readonly string[];
+  readonly importedAdversarialAudits: number;
+  readonly invalidImportedAudits: number;
   readonly claimLevel: AdversarialClaimLevel;
   readonly isolationCounts: Readonly<Record<IsolationProfileId, number>>;
   readonly statusCounts: Readonly<Record<AdversarialAuditStatus, number>>;

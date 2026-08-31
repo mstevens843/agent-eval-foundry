@@ -1,0 +1,21 @@
+{
+  "scenarioId": "browser-anchor-conflict-hidden-confirmation",
+  "subjectId": "stale-handle-reuser-browser-mutant",
+  "driver": "playwright",
+  "calls": [
+    {
+      "seq": 1,
+      "replayIndex": 0,
+      "method": "queryAnchor",
+      "target": null,
+      "detail": "select by entity/effect/precondition, not global testid priority"
+    },
+    {
+      "seq": 2,
+      "replayIndex": 0,
+      "method": "acceptConfirmation",
+      "target": null,
+      "detail": "mounted confirmation dialog observed"
+    }
+  ]
+}

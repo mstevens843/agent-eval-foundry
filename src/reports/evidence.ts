@@ -20,6 +20,7 @@ import { augmentAdversarialEvidenceMap } from "../adversarial-audit/records.js";
 import { ALL_SUBJECTS, runFamily, toMatrix } from "../families/prompt-injection-containment/runner.js";
 import type { RunResult } from "../families/prompt-injection-containment/runner.js";
 import { BUILT_FAMILY_IDS, builtFamily } from "../families/registry.js";
+import { readBrowserBackedMeasurement } from "../families/ui-replay-browser-backed/measurement.js";
 import { browserBackedReadiness } from "../families/ui-replay-browser-backed/readiness.js";
 import { readJson } from "../foundry/load.js";
 import { augmentFamilyEvidenceMap } from "../human-solvability/records.js";
@@ -200,7 +201,10 @@ export function familyEvidenceFor(root: string, familyId: string = PIC_FAMILY): 
 
 /** Family evidence keyed by id, in the shape the ship report expects. */
 export const familyEvidenceMap = (root: string): Record<string, FamilyEvidence> => {
-  const browserReadiness = browserBackedReadiness(BROWSER_BACKED_NEXT_PLAN);
+  const browserReadiness = browserBackedReadiness(
+    BROWSER_BACKED_NEXT_PLAN,
+    readBrowserBackedMeasurement(root),
+  );
   const base = augmentAdversarialEvidenceMap(
     root,
     augmentFamilyEvidenceMap(
@@ -217,7 +221,9 @@ export const familyEvidenceMap = (root: string): Record<string, FamilyEvidence> 
       browserBackedReady: browserReadiness.browserBackedReady,
       browserBackedMeasured: browserReadiness.browserBackedMeasured,
       browserBackedDetail: browserReadiness.architectureReady
-        ? "browser-backed architecture is declared; executable Playwright driver and measured sweep are still missing"
+        ? browserReadiness.browserBackedMeasured
+          ? `${browserReadiness.measuredScenarios} Playwright-backed scenario(s) measured; real-agent difficulty remains not-run`
+          : "browser-backed architecture is declared; executable Playwright measurement is still missing"
         : "browser-backed architecture incomplete",
     },
   };

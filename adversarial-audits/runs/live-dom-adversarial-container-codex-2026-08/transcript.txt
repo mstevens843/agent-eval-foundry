@@ -1,0 +1,8 @@
+runId: live-dom-adversarial-container-codex-2026-08
+family: ui-replay-live-dom
+provider: codex
+isolation: container-no-network
+container runtime: unavailable
+detail: docker daemon unavailable: failed to connect to the docker API at unix:///Users/devlegacy/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/devlegacy/.docker/run/docker.sock: connect: no such file or directory
+
+Remote OpenAI/Codex execution was not started because the declared container profile disables network access.

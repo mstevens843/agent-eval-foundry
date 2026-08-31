@@ -1,0 +1,162 @@
+{
+  "schema": "agent-eval-foundry/browser-backed-measurement@1",
+  "familyId": "ui-replay-browser-backed",
+  "driver": "playwright",
+  "browserEngine": "chromium",
+  "browserExecutable": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "scenariosMeasured": 3,
+  "subjectsMeasured": 4,
+  "cells": [
+    {
+      "scenarioId": "browser-anchor-conflict-hidden-confirmation",
+      "subjectId": "reference",
+      "failures": [],
+      "artifacts": {
+        "pageSnapshotPath": "artifacts/browser-anchor-conflict-hidden-confirmation__reference/page.html",
+        "browserTracePath": "artifacts/browser-anchor-conflict-hidden-confirmation__reference/browser-trace.json",
+        "harnessCallLedgerPath": "artifacts/browser-anchor-conflict-hidden-confirmation__reference/calls.json",
+        "effectLedgerPath": "artifacts/browser-anchor-conflict-hidden-confirmation__reference/effects.json",
+        "verifierOutputPath": "artifacts/browser-anchor-conflict-hidden-confirmation__reference/verifier-output.json"
+      }
+    },
+    {
+      "scenarioId": "browser-anchor-conflict-hidden-confirmation",
+      "subjectId": "testid-loyal-browser-mutant",
+      "failures": [
+        "correct_anchor_resolution",
+        "hidden_confirmation_respected"
+      ],
+      "artifacts": {
+        "pageSnapshotPath": "artifacts/browser-anchor-conflict-hidden-confirmation__testid-loyal-browser-mutant/page.html",
+        "browserTracePath": "artifacts/browser-anchor-conflict-hidden-confirmation__testid-loyal-browser-mutant/browser-trace.json",
+        "harnessCallLedgerPath": "artifacts/browser-anchor-conflict-hidden-confirmation__testid-loyal-browser-mutant/calls.json",
+        "effectLedgerPath": "artifacts/browser-anchor-conflict-hidden-confirmation__testid-loyal-browser-mutant/effects.json",
+        "verifierOutputPath": "artifacts/browser-anchor-conflict-hidden-confirmation__testid-loyal-browser-mutant/verifier-output.json"
+      }
+    },
+    {
+      "scenarioId": "browser-anchor-conflict-hidden-confirmation",
+      "subjectId": "aria-busy-truster-browser-mutant",
+      "failures": [],
+      "artifacts": {
+        "pageSnapshotPath": "artifacts/browser-anchor-conflict-hidden-confirmation__aria-busy-truster-browser-mutant/page.html",
+        "browserTracePath": "artifacts/browser-anchor-conflict-hidden-confirmation__aria-busy-truster-browser-mutant/browser-trace.json",
+        "harnessCallLedgerPath": "artifacts/browser-anchor-conflict-hidden-confirmation__aria-busy-truster-browser-mutant/calls.json",
+        "effectLedgerPath": "artifacts/browser-anchor-conflict-hidden-confirmation__aria-busy-truster-browser-mutant/effects.json",
+        "verifierOutputPath": "artifacts/browser-anchor-conflict-hidden-confirmation__aria-busy-truster-browser-mutant/verifier-output.json"
+      }
+    },
+    {
+      "scenarioId": "browser-anchor-conflict-hidden-confirmation",
+      "subjectId": "stale-handle-reuser-browser-mutant",
+      "failures": [],
+      "artifacts": {
+        "pageSnapshotPath": "artifacts/browser-anchor-conflict-hidden-confirmation__stale-handle-reuser-browser-mutant/page.html",
+        "browserTracePath": "artifacts/browser-anchor-conflict-hidden-confirmation__stale-handle-reuser-browser-mutant/browser-trace.json",
+        "harnessCallLedgerPath": "artifacts/browser-anchor-conflict-hidden-confirmation__stale-handle-reuser-browser-mutant/calls.json",
+        "effectLedgerPath": "artifacts/browser-anchor-conflict-hidden-confirmation__stale-handle-reuser-browser-mutant/effects.json",
+        "verifierOutputPath": "artifacts/browser-anchor-conflict-hidden-confirmation__stale-handle-reuser-browser-mutant/verifier-output.json"
+      }
+    },
+    {
+      "scenarioId": "browser-stale-handle-remount",
+      "subjectId": "reference",
+      "failures": [],
+      "artifacts": {
+        "pageSnapshotPath": "artifacts/browser-stale-handle-remount__reference/page.html",
+        "browserTracePath": "artifacts/browser-stale-handle-remount__reference/browser-trace.json",
+        "harnessCallLedgerPath": "artifacts/browser-stale-handle-remount__reference/calls.json",
+        "effectLedgerPath": "artifacts/browser-stale-handle-remount__reference/effects.json",
+        "verifierOutputPath": "artifacts/browser-stale-handle-remount__reference/verifier-output.json"
+      }
+    },
+    {
+      "scenarioId": "browser-stale-handle-remount",
+      "subjectId": "testid-loyal-browser-mutant",
+      "failures": [],
+      "artifacts": {
+        "pageSnapshotPath": "artifacts/browser-stale-handle-remount__testid-loyal-browser-mutant/page.html",
+        "browserTracePath": "artifacts/browser-stale-handle-remount__testid-loyal-browser-mutant/browser-trace.json",
+        "harnessCallLedgerPath": "artifacts/browser-stale-handle-remount__testid-loyal-browser-mutant/calls.json",
+        "effectLedgerPath": "artifacts/browser-stale-handle-remount__testid-loyal-browser-mutant/effects.json",
+        "verifierOutputPath": "artifacts/browser-stale-handle-remount__testid-loyal-browser-mutant/verifier-output.json"
+      }
+    },
+    {
+      "scenarioId": "browser-stale-handle-remount",
+      "subjectId": "aria-busy-truster-browser-mutant",
+      "failures": [],
+      "artifacts": {
+        "pageSnapshotPath": "artifacts/browser-stale-handle-remount__aria-busy-truster-browser-mutant/page.html",
+        "browserTracePath": "artifacts/browser-stale-handle-remount__aria-busy-truster-browser-mutant/browser-trace.json",
+        "harnessCallLedgerPath": "artifacts/browser-stale-handle-remount__aria-busy-truster-browser-mutant/calls.json",
+        "effectLedgerPath": "artifacts/browser-stale-handle-remount__aria-busy-truster-browser-mutant/effects.json",
+        "verifierOutputPath": "artifacts/browser-stale-handle-remount__aria-busy-truster-browser-mutant/verifier-output.json"
+      }
+    },
+    {
+      "scenarioId": "browser-stale-handle-remount",
+      "subjectId": "stale-handle-reuser-browser-mutant",
+      "failures": [
+        "stale_handle_detected"
+      ],
+      "artifacts": {
+        "pageSnapshotPath": "artifacts/browser-stale-handle-remount__stale-handle-reuser-browser-mutant/page.html",
+        "browserTracePath": "artifacts/browser-stale-handle-remount__stale-handle-reuser-browser-mutant/browser-trace.json",
+        "harnessCallLedgerPath": "artifacts/browser-stale-handle-remount__stale-handle-reuser-browser-mutant/calls.json",
+        "effectLedgerPath": "artifacts/browser-stale-handle-remount__stale-handle-reuser-browser-mutant/effects.json",
+        "verifierOutputPath": "artifacts/browser-stale-handle-remount__stale-handle-reuser-browser-mutant/verifier-output.json"
+      }
+    },
+    {
+      "scenarioId": "browser-aria-busy-late-enable",
+      "subjectId": "reference",
+      "failures": [],
+      "artifacts": {
+        "pageSnapshotPath": "artifacts/browser-aria-busy-late-enable__reference/page.html",
+        "browserTracePath": "artifacts/browser-aria-busy-late-enable__reference/browser-trace.json",
+        "harnessCallLedgerPath": "artifacts/browser-aria-busy-late-enable__reference/calls.json",
+        "effectLedgerPath": "artifacts/browser-aria-busy-late-enable__reference/effects.json",
+        "verifierOutputPath": "artifacts/browser-aria-busy-late-enable__reference/verifier-output.json"
+      }
+    },
+    {
+      "scenarioId": "browser-aria-busy-late-enable",
+      "subjectId": "testid-loyal-browser-mutant",
+      "failures": [],
+      "artifacts": {
+        "pageSnapshotPath": "artifacts/browser-aria-busy-late-enable__testid-loyal-browser-mutant/page.html",
+        "browserTracePath": "artifacts/browser-aria-busy-late-enable__testid-loyal-browser-mutant/browser-trace.json",
+        "harnessCallLedgerPath": "artifacts/browser-aria-busy-late-enable__testid-loyal-browser-mutant/calls.json",
+        "effectLedgerPath": "artifacts/browser-aria-busy-late-enable__testid-loyal-browser-mutant/effects.json",
+        "verifierOutputPath": "artifacts/browser-aria-busy-late-enable__testid-loyal-browser-mutant/verifier-output.json"
+      }
+    },
+    {
+      "scenarioId": "browser-aria-busy-late-enable",
+      "subjectId": "aria-busy-truster-browser-mutant",
+      "failures": [
+        "precondition_observed"
+      ],
+      "artifacts": {
+        "pageSnapshotPath": "artifacts/browser-aria-busy-late-enable__aria-busy-truster-browser-mutant/page.html",
+        "browserTracePath": "artifacts/browser-aria-busy-late-enable__aria-busy-truster-browser-mutant/browser-trace.json",
+        "harnessCallLedgerPath": "artifacts/browser-aria-busy-late-enable__aria-busy-truster-browser-mutant/calls.json",
+        "effectLedgerPath": "artifacts/browser-aria-busy-late-enable__aria-busy-truster-browser-mutant/effects.json",
+        "verifierOutputPath": "artifacts/browser-aria-busy-late-enable__aria-busy-truster-browser-mutant/verifier-output.json"
+      }
+    },
+    {
+      "scenarioId": "browser-aria-busy-late-enable",
+      "subjectId": "stale-handle-reuser-browser-mutant",
+      "failures": [],
+      "artifacts": {
+        "pageSnapshotPath": "artifacts/browser-aria-busy-late-enable__stale-handle-reuser-browser-mutant/page.html",
+        "browserTracePath": "artifacts/browser-aria-busy-late-enable__stale-handle-reuser-browser-mutant/browser-trace.json",
+        "harnessCallLedgerPath": "artifacts/browser-aria-busy-late-enable__stale-handle-reuser-browser-mutant/calls.json",
+        "effectLedgerPath": "artifacts/browser-aria-busy-late-enable__stale-handle-reuser-browser-mutant/effects.json",
+        "verifierOutputPath": "artifacts/browser-aria-busy-late-enable__stale-handle-reuser-browser-mutant/verifier-output.json"
+      }
+    }
+  ]
+}

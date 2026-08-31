@@ -5,6 +5,8 @@ import type {
   BrowserPageFixture,
 } from "./harness.js";
 import { BROWSER_BACKED_FAMILY_ID, browserHarnessPlanFailures } from "./harness.js";
+import type { BrowserBackedMeasurement } from "./measurement.js";
+import { validateBrowserBackedMeasurement } from "./measurement.js";
 
 const check = (id: string, verdict: "pass" | "fail", detail: string): BrowserBackedReadinessCheck => ({
   id,
@@ -95,11 +97,18 @@ export interface BrowserBackedReadiness {
   readonly architectureReady: boolean;
   readonly browserBackedReady: boolean;
   readonly browserBackedMeasured: boolean;
+  readonly measuredScenarios: number;
+  readonly measuredSubjects: number;
+  readonly measurementFailures: readonly string[];
   readonly checks: readonly BrowserBackedReadinessCheck[];
 }
 
-export function browserBackedReadiness(plan: BrowserHarnessPlan): BrowserBackedReadiness {
+export function browserBackedReadiness(
+  plan: BrowserHarnessPlan,
+  measurement: BrowserBackedMeasurement | null = null,
+): BrowserBackedReadiness {
   const planFailures = browserHarnessPlanFailures(plan);
+  const measurementValidation = validateBrowserBackedMeasurement(measurement);
   const contracts = BROWSER_BACKED_SCENARIO_CONTRACTS;
   const allCases = new Set(contracts.flatMap((scenario) => scenario.cases));
   const checks: BrowserBackedReadinessCheck[] = [
@@ -145,16 +154,27 @@ export function browserBackedReadiness(plan: BrowserHarnessPlan): BrowserBackedR
     ),
     check(
       "playwright-driver-implemented",
-      "fail",
-      "no Playwright/WebDriver executable harness is implemented in this repository yet",
+      measurement?.driver === "playwright" ? "pass" : "fail",
+      measurement?.driver === "playwright"
+        ? "Playwright browser harness produced a preserved measurement artifact"
+        : "no Playwright/WebDriver executable harness measurement is preserved in this repository yet",
     ),
-    check("browser-scenario-sweep-measured", "fail", "zero browser-backed scenarios have been run"),
+    check(
+      "browser-scenario-sweep-measured",
+      measurementValidation.valid && measurementValidation.scenariosMeasured > 0 ? "pass" : "fail",
+      measurementValidation.valid
+        ? `${measurementValidation.scenariosMeasured} browser-backed scenario(s) measured`
+        : measurementValidation.failures.join("; "),
+    ),
   ];
   return {
     familyId: BROWSER_BACKED_FAMILY_ID,
     architectureReady: checks.slice(0, 8).every((c) => c.verdict === "pass") && planFailures.length === 0,
     browserBackedReady: checks.every((c) => c.verdict === "pass"),
-    browserBackedMeasured: false,
+    browserBackedMeasured: measurementValidation.valid && measurementValidation.scenariosMeasured > 0,
+    measuredScenarios: measurementValidation.scenariosMeasured,
+    measuredSubjects: measurementValidation.subjectsMeasured,
+    measurementFailures: measurementValidation.failures,
     checks,
   };
 }

@@ -1,0 +1,14 @@
+{
+  "scenarioId": "browser-aria-busy-late-enable",
+  "subjectId": "stale-handle-reuser-browser-mutant",
+  "driver": "playwright",
+  "calls": [
+    {
+      "seq": 1,
+      "replayIndex": 0,
+      "method": "readAttribute",
+      "target": null,
+      "detail": "aria-busy=false observed but not trusted as readiness"
+    }
+  ]
+}

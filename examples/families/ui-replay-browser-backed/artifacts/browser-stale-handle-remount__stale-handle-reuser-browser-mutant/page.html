@@ -1,0 +1,19 @@
+<!DOCTYPE html><html><head></head><body>
+<main id="app">
+  <form id="profile-panel">
+    <button id="save-remounted" type="button" data-entity="profile-9" data-effect="save-profile" data-precondition="ready">Save profile</button>
+  </form>
+</main>
+<script>
+window.__effects = [];
+function attach(el) { el.addEventListener('click', () => window.__effects.push('save-profile')); }
+attach(document.querySelector('#save'));
+window.__remountSave = () => {
+  const old = document.querySelector('#save');
+  const next = old.cloneNode(true);
+  next.id = 'save-remounted';
+  old.replaceWith(next);
+  attach(next);
+};
+</script>
+</body></html>

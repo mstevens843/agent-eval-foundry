@@ -202,6 +202,8 @@ function metadataTemplate(
       "ALLOWED-FILES.txt",
       "FORBIDDEN-FILES.txt",
       "ISOLATION.json",
+      "CONTAINER.json",
+      "container-run.sh",
       "EXPLOIT-SCHEMA.json",
       "PROVIDER.json",
       "run.sh",
@@ -242,6 +244,7 @@ function metadataTemplate(
       notes: "prepared v2 attacker instruction asks for a bounded verifier-integrity bypass attempt",
     },
     isolationProfile: isolation,
+    container: null,
     exploitArtifact: {
       kind: "none",
       path: null,
@@ -312,7 +315,7 @@ export function prepareAdversarialBundle(
     {
       name: "ALLOWED-FILES.txt",
       content:
-        "ATTACKER-INSTRUCTION.txt\nTHREAT-MODEL.md\nALLOWED-FILES.txt\nFORBIDDEN-FILES.txt\nISOLATION.json\nEXPLOIT-SCHEMA.json\nPROVIDER.json\nrun.sh\nchallenge/\nattack-report.md\nexploit/\nsubmitted-bypass/\nmetadata.json\ntranscript.txt\nverifier-output.json\nexploit-replay-output.json\n",
+        "ATTACKER-INSTRUCTION.txt\nTHREAT-MODEL.md\nALLOWED-FILES.txt\nFORBIDDEN-FILES.txt\nISOLATION.json\nCONTAINER.json\ncontainer-run.sh\nEXPLOIT-SCHEMA.json\nPROVIDER.json\nrun.sh\nchallenge/\nattack-report.md\nexploit/\nsubmitted-bypass/\nmetadata.json\ntranscript.txt\nverifier-output.json\nexploit-replay-output.json\n",
     },
     {
       name: "FORBIDDEN-FILES.txt",
@@ -493,6 +496,7 @@ export function importAdversarialBundle(root: string, dir: string): AdversarialA
   copyIfPresent(join(dir, "verifier-output.json"), join(outDir, "verifier-output.json"));
   copyIfPresent(join(dir, "exploit-replay-output.json"), join(outDir, "exploit-replay-output.json"));
   copyIfPresent(join(dir, "ISOLATION.json"), join(outDir, "ISOLATION.json"));
+  copyIfPresent(join(dir, "CONTAINER.json"), join(outDir, "CONTAINER.json"));
   copyIfPresent(join(dir, "EXPLOIT-SCHEMA.json"), join(outDir, "EXPLOIT-SCHEMA.json"));
   copyTreeIfPresent(join(dir, "exploit"), join(outDir, "exploit"));
   copyTreeIfPresent(join(dir, "submitted-bypass"), join(outDir, "submitted-bypass"));

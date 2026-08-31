@@ -130,11 +130,20 @@ const SMOKE = [
   [["adversarial", "readiness"], /Adversarial verifier-integrity readiness/],
   [["adversarial", "report"], /Adversarial verifier-integrity audit/],
   [["adversarial", "v2", "report"], /Adversarial Audit v2/],
+  [["adversarial", "container", "report"], /Adversarial container isolation/],
+  [["adversarial", "import-report"], /Adversarial import evidence/],
   [["adversarial", "campaign", "ui-replay-live-dom"], /Threat Models/],
   [["adversarial", "replay", "live-dom-adversarial-codex-2026-08"], /Exploit replay/],
   [["adversarial", "triage", "live-dom-adversarial-codex-2026-08"], /Bypass triage/],
   [["adversarial", "isolate", "verify", "bundles/ui-replay-live-dom-adversarial"], /Isolation verification/],
+  [
+    ["adversarial", "isolate", "container", "verify", "bundles/ui-replay-live-dom-adversarial-container"],
+    /Container isolation verification/,
+  ],
   [["adversarial", "probe", "ui-replay-live-dom"], /Adversarial hardening probes/],
+  [["browser-backed", "verify"], /Browser-backed measurement verification/],
+  [["browser-backed", "report"], /ui-replay-browser-backed report/],
+  [["browser-backed", "axis"], /ui-replay-browser-backed axis report/],
   [["family", "diagnose", "--family", "ui-action-record-replay"], /chain/],
   [["family", "evolve-scenarios", "--family", "ui-action-record-replay"], /chain/],
   [["ui", "replay", "upgrade"], /realism ladder/],
@@ -239,6 +248,27 @@ for (const familyId of ADVERSARIAL_FAMILIES) {
   }
 }
 
+// Container/no-network bundles are generated separately from fs-sandbox bundles. The committed
+// form deliberately records "smoke not run" so this diff is deterministic across machines where
+// Docker may or may not be running; the runtime smoke is a separate command.
+for (const familyId of ADVERSARIAL_FAMILIES) {
+  const advTmp = mkdtempSync(join(tmpdir(), "foundry-adv-container-bundle-"));
+  run(["adversarial", "isolate", "container", "prepare", familyId, "--out", advTmp]);
+  const walkContainerBundle = (dir, prefix = "") =>
+    readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+      e.isDirectory()
+        ? walkContainerBundle(join(dir, e.name), `${prefix}${e.name}/`)
+        : [`${prefix}${e.name}`],
+    );
+  for (const rel of walkContainerBundle(advTmp).sort()) {
+    const committed = join("bundles", `${familyId}-adversarial-container`, rel);
+    if (readFileSync(join(advTmp, rel), "utf8") !== readFileSync(committed, "utf8")) {
+      console.error(`STALE  ${committed}`);
+      failures += 1;
+    } else console.log(`ok     ${committed}`);
+  }
+}
+
 // The scaffolded family artifacts are generated too. Regenerating into a temp directory and diffing
 // catches the case where a shape changes and its checked-in scaffold silently does not.
 // The scaffold's job is the paperwork an UNBUILT family needs before it earns build time, so the
@@ -265,7 +295,7 @@ for (const variant of [
 // by being written here, but the count is asserted so a report that stops being generated is caught
 // rather than silently skipped.
 run(["all", "--out", tmp]);
-const EXPECTED_REPORTS = 66;
+const EXPECTED_REPORTS = 70;
 const generated = readdirSync(tmp);
 if (generated.length !== EXPECTED_REPORTS) {
   console.error(`WRONG COUNT  \`all\` wrote ${generated.length} reports, expected ${EXPECTED_REPORTS}`);

@@ -2,17 +2,17 @@
 
 Family: `ui-replay-browser-backed`. Status: **HOLD**.
 
-This is the concrete next step after `ui-replay-live-dom`. It is a scaffold, not a measured
-family. Live-DOM remains `dom-like`; no existing trial is browser-backed.
+This is the concrete descendant architecture after `ui-replay-live-dom`. Live-DOM remains
+`dom-like`; browser-backed measurements and reports are tracked separately under this family.
 
 | item | value |
 |---|---|
 | intended driver | playwright |
-| spec bytes | 2875 |
+| spec bytes | 2908 |
 | harness requirements | 10 |
 | plan failures | none in scaffold plan |
-| measured scenarios | 0 |
-| counted trials | 0 |
+| measurement report | `reports/ui-replay-browser-backed-report.md` |
+| counted real-agent trials | 0 |
 
 ## Required Properties
 
@@ -38,8 +38,8 @@ family. Live-DOM remains `dom-like`; no existing trial is browser-backed.
 - Rebuild the visible package and hash-gate every trial. Old Live-DOM trials remain evidence for
   the DOM-like descendant only.
 
-Measured: scaffold completeness only. Mutant-detection: not-run. Real-agent difficulty: not-run.
-Browser-backed: not implemented.
+Measured browser-backed evidence exists only when the preserved Playwright measurement artifact
+validates. Real-agent difficulty remains not-run.
 
 ---
 

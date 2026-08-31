@@ -1,0 +1,17 @@
+<!DOCTYPE html><html><head></head><body>
+<main id="app">
+  <section id="cart-panel">
+    <button data-testid="approve-action" data-entity="cart-17" data-effect="approve-cart" data-precondition="ready">Approve item</button>
+  </section>
+  <section id="review-panel">
+    <button data-testid="review-approve-action" data-entity="order-17" data-effect="approve-order" data-precondition="ready">Approve order</button>
+  </section>
+  <div id="confirm" role="dialog"><button id="confirm-yes">Confirm approval</button></div>
+</main>
+<script>
+window.__effects = [];
+document.querySelector('[data-effect="approve-cart"]').addEventListener('click', () => window.__effects.push('approve-cart'));
+document.querySelector('[data-effect="approve-order"]').addEventListener('click', () => { document.querySelector('#confirm').hidden = false; });
+document.querySelector('#confirm-yes').addEventListener('click', () => window.__effects.push('approve-order'));
+</script>
+</body></html>

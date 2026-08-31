@@ -24,6 +24,7 @@
     "repair",
     "executionProfile",
     "isolationProfile",
+    "container",
     "exploitArtifact",
     "exploitReplay",
     "triage",

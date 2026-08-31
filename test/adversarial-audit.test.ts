@@ -1,8 +1,12 @@
-import { mkdtempSync } from "node:fs";
+import { existsSync, mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { prepareAdversarialBundle } from "../src/adversarial-audit/bundles.js";
+import {
+  prepareContainerAdversarialBundle,
+  verifyContainerIsolationBundle,
+} from "../src/adversarial-audit/container.js";
 import { ISOLATION_PROFILES, verifyIsolationBundle } from "../src/adversarial-audit/isolation.js";
 import { runAdversarialHardeningProbes } from "../src/adversarial-audit/probes.js";
 import {
@@ -17,14 +21,19 @@ import { renderReplayResult, renderTriageResult } from "../src/adversarial-audit
 import {
   renderAdversarialAuditReport,
   renderAdversarialCampaignReport,
+  renderAdversarialContainerIsolationReport,
   renderAdversarialExploitReplayReport,
   renderAdversarialHardeningProbesReport,
+  renderAdversarialImportReport,
   renderAdversarialIsolationReport,
   renderAdversarialReadinessReport,
   renderAdversarialV2Report,
 } from "../src/adversarial-audit/report.js";
 import { triageAdversarialAttackRecord } from "../src/adversarial-audit/triage.js";
-import type { AdversarialAttackRecord } from "../src/adversarial-audit/types.js";
+import type {
+  AdversarialAttackRecord,
+  AdversarialContainerMetadata,
+} from "../src/adversarial-audit/types.js";
 import {
   adversarialAttackFailures,
   assertAdversarialAttackRecordCounts,
@@ -151,9 +160,45 @@ const context = (challengeHash = hash()): TestContext => ({
   hardeningProbesPass: true,
 });
 
+const goodContainer = (): AdversarialContainerMetadata => ({
+  runtime: "docker",
+  runtimeAvailable: true,
+  image: "node:22-alpine",
+  command: ["docker", "run", "--network", "none"],
+  networkMode: "none",
+  user: "1000:1000",
+  readOnlyRootFilesystem: true,
+  capDropAll: true,
+  noNewPrivileges: true,
+  repoRootMounted: false,
+  hiddenArtifactsMounted: false,
+  generatedReportsMounted: false,
+  verifierInsideContainer: false,
+  publicChallengeReadOnly: true,
+  exploitDirPreserved: true,
+  submittedBypassDirPreserved: true,
+  secretEnvKeysExposed: [],
+  readiness: "pass",
+  readinessFailures: [],
+});
+
+const cleanContainerRecord = (): AdversarialAttackRecord => ({
+  ...cleanRecord(),
+  countabilityReason:
+    "current-hash Codex/OpenAI adversarial attempt preserved with transcript, verifier output and container metadata",
+  isolationProfile: ISOLATION_PROFILES["container-no-network"],
+  container: goodContainer(),
+});
+
 describe("adversarial audit validator", () => {
   it("accepts a counted no-bypass audit against the current challenge hash", () => {
     const record = cleanRecord();
+    expect(() => assertAdversarialAttackRecordCounts(record, context())).not.toThrow();
+    expect(isCountedNoBypassAudit(record, context())).toBe(true);
+  });
+
+  it("accepts a counted no-bypass audit only when container/no-network metadata is clean", () => {
+    const record = cleanContainerRecord();
     expect(() => assertAdversarialAttackRecordCounts(record, context())).not.toThrow();
     expect(isCountedNoBypassAudit(record, context())).toBe(true);
   });
@@ -258,6 +303,64 @@ describe("adversarial audit validator", () => {
           ...ISOLATION_PROFILES["fs-sandbox"],
           adequateForCountedNoBypass: false,
           notes: "captured weak isolation fixture",
+        },
+      }),
+    },
+    {
+      code: "ADV_CONTAINER_COUNTED_NO_METADATA",
+      record: () => ({ ...cleanContainerRecord(), container: null }),
+    },
+    {
+      code: "ADV_CONTAINER_COUNTED_NETWORK_ENABLED",
+      record: () => ({
+        ...cleanContainerRecord(),
+        container: { ...goodContainer(), networkMode: "bridge" },
+      }),
+    },
+    {
+      code: "ADV_CONTAINER_COUNTED_REPO_ROOT_MOUNTED",
+      record: () => ({
+        ...cleanContainerRecord(),
+        container: { ...goodContainer(), repoRootMounted: true },
+      }),
+    },
+    {
+      code: "ADV_CONTAINER_COUNTED_HIDDEN_FILES_MOUNTED",
+      record: () => ({
+        ...cleanContainerRecord(),
+        container: { ...goodContainer(), hiddenArtifactsMounted: true },
+      }),
+    },
+    {
+      code: "ADV_CONTAINER_COUNTED_VERIFIER_INSIDE",
+      record: () => ({
+        ...cleanContainerRecord(),
+        container: { ...goodContainer(), verifierInsideContainer: true },
+      }),
+    },
+    {
+      code: "ADV_CONTAINER_COUNTED_UNPRESERVED_DIRS",
+      record: () => ({
+        ...cleanContainerRecord(),
+        container: { ...goodContainer(), exploitDirPreserved: false },
+      }),
+    },
+    {
+      code: "ADV_CONTAINER_COUNTED_SECRET_ENV",
+      record: () => ({
+        ...cleanContainerRecord(),
+        container: { ...goodContainer(), secretEnvKeysExposed: ["OPENAI_API_KEY"] },
+      }),
+    },
+    {
+      code: "ADV_CONTAINER_COUNTED_READINESS_FAILED",
+      record: () => ({
+        ...cleanContainerRecord(),
+        container: {
+          ...goodContainer(),
+          runtimeAvailable: false,
+          readiness: "fail",
+          readinessFailures: ["docker daemon unavailable"],
         },
       }),
     },
@@ -472,6 +575,19 @@ describe("adversarial readiness and reports", () => {
     expect(isolation.verdict).toBe("pass");
   });
 
+  it("prepares container/no-network bundles without counting them as container evidence", () => {
+    const tmp = mkdtempSync(join(tmpdir(), "foundry-adv-container-test-"));
+    const bundle = prepareContainerAdversarialBundle(ROOT, FAMILY, tmp);
+    expect(bundle.metadata.networkMode).toBe("none");
+    expect(bundle.metadata.runtimeAvailable).toBe(false);
+    expect(bundle.metadata.readiness).toBe("fail");
+    expect(existsSync(join(tmp, "CONTAINER.json"))).toBe(true);
+    expect(existsSync(join(tmp, "container-run.sh"))).toBe(true);
+    const verification = verifyContainerIsolationBundle(tmp);
+    expect(verification.metadata.networkMode).toBe("none");
+    expect(verification.failures.join("; ")).toMatch(/container smoke not run|runtime unavailable/);
+  });
+
   it("marks package-backed families ready once campaign files and bundles exist", () => {
     const audits = auditAdversarialReadinessForFamilies(ROOT);
     const byFamily = new Map(audits.map((a) => [a.familyId, a]));
@@ -500,6 +616,15 @@ describe("adversarial readiness and reports", () => {
     ).toBe(1);
   });
 
+  it("preserves container/no-network infrastructure records without counting them", () => {
+    const summaries = summarizeAdversarialEvidence(ROOT);
+    const liveDom = summaries.find((s) => s.familyId === FAMILY);
+    expect(liveDom?.containerRecords).toBeGreaterThanOrEqual(1);
+    expect(liveDom?.countedContainerNoBypassAudits).toBe(0);
+    expect(liveDom?.countedContainerBypassAudits).toBe(0);
+    expect(liveDom?.containerReadinessFailures.join("; ")).toMatch(/docker daemon unavailable/);
+  });
+
   it("renders adversarial reports deterministically", () => {
     const audits = auditAdversarialReadinessForFamilies(ROOT);
     const summaries = summarizeAdversarialEvidence(ROOT);
@@ -507,12 +632,29 @@ describe("adversarial readiness and reports", () => {
     const records = loadAdversarialAttackRecords(ROOT);
     const probes = runAdversarialHardeningProbes(ROOT, FAMILY);
     const isolation = [verifyIsolationBundle(join(ROOT, "bundles", `${FAMILY}-adversarial`))];
+    const containerTmp = mkdtempSync(join(tmpdir(), "foundry-adv-container-report-"));
+    prepareContainerAdversarialBundle(ROOT, FAMILY, containerTmp);
+    const containerIsolation = [verifyContainerIsolationBundle(containerTmp)];
     expect(renderAdversarialReadinessReport(audits)).toBe(renderAdversarialReadinessReport(audits));
     expect(renderAdversarialAuditReport(summaries)).toBe(renderAdversarialAuditReport(summaries));
     expect(renderAdversarialCampaignReport(campaigns)).toBe(renderAdversarialCampaignReport(campaigns));
     expect(renderAdversarialV2Report(summaries)).toBe(renderAdversarialV2Report(summaries));
     expect(renderAdversarialExploitReplayReport(records)).toBe(renderAdversarialExploitReplayReport(records));
     expect(renderAdversarialIsolationReport(isolation)).toBe(renderAdversarialIsolationReport(isolation));
+    expect(
+      renderAdversarialContainerIsolationReport({
+        runtime: { runtime: "docker", available: false, detail: "test runtime unavailable" },
+        verifications: containerIsolation,
+        summaries,
+      }),
+    ).toBe(
+      renderAdversarialContainerIsolationReport({
+        runtime: { runtime: "docker", available: false, detail: "test runtime unavailable" },
+        verifications: containerIsolation,
+        summaries,
+      }),
+    );
+    expect(renderAdversarialImportReport(records)).toBe(renderAdversarialImportReport(records));
     expect(renderAdversarialHardeningProbesReport(probes)).toBe(
       renderAdversarialHardeningProbesReport(probes),
     );

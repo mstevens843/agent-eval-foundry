@@ -47,6 +47,9 @@ Every figure below is measured: produced by running the family, not by declaring
 | `adversarial-isolation-adequate` | no | pass | fs-sandbox/container isolation profile available |
 | `adversarial-exploit-replay-ready` | no | pass | exploit replay command and schema are available |
 | `adversarial-hardening-probes-pass` | no | pass | deterministic hardening probes pass |
+| `adversarial-container-isolation-ready` | no | fail | container/no-network isolation not ready |
+| `adversarial-container-no-network` | no | fail | no counted container/no-network audit on record |
+| `adversarial-import-replay-valid` | no | n/a | no counted imported adversarial audit |
 | `browser-backed-ready` | no | n/a | no browser-backed layer |
 | `browser-backed-measured` | no | n/a | no browser-backed layer |
 

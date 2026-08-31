@@ -1,0 +1,21 @@
+{
+  "scenarioId": "browser-stale-handle-remount",
+  "subjectId": "aria-busy-truster-browser-mutant",
+  "driver": "playwright",
+  "calls": [
+    {
+      "seq": 1,
+      "replayIndex": 0,
+      "method": "query",
+      "target": null,
+      "detail": "initial query observed before remount"
+    },
+    {
+      "seq": 2,
+      "replayIndex": 0,
+      "method": "query",
+      "target": null,
+      "detail": "handle refreshed after DOM remount"
+    }
+  ]
+}

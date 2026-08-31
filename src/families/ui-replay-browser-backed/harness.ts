@@ -3,7 +3,7 @@ export const BROWSER_BACKED_FAMILY_ID = "ui-replay-browser-backed";
 export const BROWSER_BACKED_STATUS = {
   stage: "HOLD",
   reason:
-    "Design scaffold only: no Playwright driver, no browser-backed verifier, no scenario sweep and no counted trials.",
+    "Measured Playwright-backed mutant-detection spike exists only when the preserved artifact validates; no counted real-agent browser-backed trials.",
 } as const;
 
 export const BROWSER_HARNESS_REQUIREMENTS = [

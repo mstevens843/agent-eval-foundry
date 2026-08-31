@@ -616,14 +616,19 @@ without a surface-coverage metric beside it.
   `checker-required-memory-poisoning` each have one counted Codex/OpenAI no-bypass audit, both under
   `fs-sandbox`; that is useful verifier-integrity evidence, not a security proof and not cross-lab
   breadth. Durable Outbox has only an imported historical `/cheat` summary here, not the native
-  packet, transcript and current package hash needed for a counted no-bypass audit.
-- **The stronger adversarial isolation is not a container.** `fs-sandbox` removes the repository,
-  hidden artifacts and generated reports from the attacker context and keeps the verifier outside
-  that context, but it does not mechanically disable network access. A container/no-network runner is
-  the next integrity upgrade before making stronger claims.
-- **Browser-backed UI is still a scaffold.** The repo now defines page fixtures, a browser harness
-  contract, trace preservation and readiness gates for `ui-replay-browser-backed`, but no Playwright
-  or WebDriver scenario sweep has run, so Live-DOM remains dom-like evidence only.
+  packet, transcript and current package hash needed for a counted no-bypass audit. Container/no-network
+  bundles and validation rules now exist, but the local Docker daemon is unavailable, so the
+  preserved container preflight is an infrastructure_error and counts for nothing.
+- **The stronger adversarial isolation is implemented but not evidenced here.** `fs-sandbox` removes
+  the repository, hidden artifacts and generated reports from the attacker context and keeps the
+  verifier outside that context, but it does not mechanically disable network access.
+  `container-no-network` now declares minimal mounts, no network, dropped capabilities,
+  non-root execution where feasible and verifier-outside-container evidence. No counted audit uses
+  it until a container smoke passes and the attack runs under that profile.
+- **Browser-backed UI is measured only as a small mutant slice.** The repo now has a preserved
+  Playwright sweep for `ui-replay-browser-backed`: 3 scenarios, 4 subjects, 12 cells and 3
+  mutant-detection axes. That is browser-backed measurement, not real-agent difficulty evidence, and
+  it does not relabel Live-DOM; Live-DOM remains dom-like evidence only.
 - **The instances are not independent of the bank.** Six of twenty-four were selected against seven
   of the ten engines. Read the axis count as an upper bound.
 - **Cost figures are imputed**, nine runs recorded none, `jobs/` is excluded, and every labour

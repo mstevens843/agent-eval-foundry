@@ -54,6 +54,7 @@ const COMMON_ATTACK_SURFACES = [
   "public challenge package split",
   "submission artifact shape",
   "fs-sandbox isolation boundary",
+  "container/no-network isolation boundary",
   "legacy subprocess isolation boundary",
   "verifier import and module resolution",
   "metadata, countability and challenge-hash gate",
@@ -169,6 +170,7 @@ export function defaultThreatModel(familyId: string): AdversarialThreatModel {
       "write exploit notes, proof-of-concept files and a final attack report",
       "attempt black-box reasoning about likely verifier mistakes from the public interface",
       "run only local commands needed to inspect or construct artifacts inside the bundle",
+      "when container isolation is used, execute only inside the no-network attacker container",
     ],
     forbiddenAccess: [
       "reading repository source outside the prepared bundle",
@@ -217,6 +219,7 @@ export function buildAdversarialCampaign(root: string, familyId: string): Advers
       "exploit/",
       "submitted-bypass/",
       "verifier-output.json",
+      "CONTAINER.json when container/no-network isolation is used",
     ],
     providers: ["codex", "external", "claude-import-only", "gemini-import-only"],
     status: packageBacked ? "ready" : "pending-package",

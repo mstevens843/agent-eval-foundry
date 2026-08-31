@@ -13,6 +13,8 @@ export function renderBrowserBackedReadiness(readiness: BrowserBackedReadiness):
     `| architecture ready | ${readiness.architectureReady ? "yes" : "no"} |`,
     `| browser-backed trial-ready | ${readiness.browserBackedReady ? "yes" : "no"} |`,
     `| browser-backed measured | ${readiness.browserBackedMeasured ? "yes" : "no"} |`,
+    `| measured scenarios | ${readiness.measuredScenarios} |`,
+    `| measured subjects | ${readiness.measuredSubjects} |`,
     "",
     "## Readiness Checks",
     "",
@@ -28,7 +30,9 @@ export function renderBrowserBackedReadiness(readiness: BrowserBackedReadiness):
     "- Replay consumes recorded traces and live browser facts only; no model runs after replay starts.",
     "- Browser traces, transcripts, submissions and verifier output are preserved under the challenge hash.",
     "",
-    "Status: HOLD. Browser-backed is a scaffold/foundation here, not measured evidence.",
+    readiness.browserBackedMeasured
+      ? "Status: measured browser-backed mutant-detection spike. Real-agent difficulty remains not-run."
+      : "Status: HOLD. Browser-backed is a scaffold/foundation here, not measured evidence.",
     "",
     "---",
     "",

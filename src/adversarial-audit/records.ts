@@ -53,6 +53,17 @@ function readMaybe(path: string | null, dir: string): string | null {
   return statSync(full).isDirectory() ? readTextTree(full) : readFileSync(full, "utf8");
 }
 
+export function isImportedAdversarialRecord(record: AdversarialAttackRecord): boolean {
+  const provider = record.attacker.provider.toLowerCase();
+  return (
+    record.executionProfile.kind === "external-import" &&
+    (provider === "external" ||
+      provider.includes("import") ||
+      record.notes.toLowerCase().includes("imported") ||
+      record.countabilityReason.toLowerCase().includes("imported"))
+  );
+}
+
 export function loadAdversarialAttackRecords(root: string): readonly LoadedAdversarialAttack[] {
   const base = join(root, "adversarial-audits", "runs");
   if (!existsSync(base)) return [];
@@ -131,6 +142,12 @@ export function summarizeAdversarialEvidence(
     let invalidCountedRecords = 0;
     let unrepairedBypasses = 0;
     let repairedBypasses = 0;
+    let containerRecords = 0;
+    let countedContainerNoBypassAudits = 0;
+    let countedContainerBypassAudits = 0;
+    let importedAdversarialAudits = 0;
+    let invalidImportedAudits = 0;
+    const containerReadinessFailures = new Set<string>();
     const validationFailures: { attackId: string; codes: readonly string[] }[] = [];
     for (const item of loaded) {
       const record = item.record;
@@ -138,6 +155,14 @@ export function summarizeAdversarialEvidence(
       bypassCounts[record.bypassClassification] += 1;
       isolationCounts[record.isolationProfile.id] += 1;
       if (record.auditVersion === "v2") v2AuditRecords += 1;
+      const isContainerRecord =
+        record.isolationProfile.id === "container-no-network" || record.isolationProfile.id === "container";
+      if (isContainerRecord) {
+        containerRecords += 1;
+        for (const failure of record.container?.readinessFailures ?? []) {
+          containerReadinessFailures.add(failure);
+        }
+      }
       const context = {
         currentChallengeHash: current.get(record.familyId) ?? null,
         transcriptText: item.transcriptText,
@@ -150,14 +175,19 @@ export function summarizeAdversarialEvidence(
       else if (failures.length > 0) invalidCountedRecords += 1;
       if (failures.length > 0) {
         validationFailures.push({ attackId: record.attackId, codes: failures.map((f) => f.code) });
+        if (isImportedAdversarialRecord(record) && record.counts) invalidImportedAudits += 1;
       }
       if (isCountedNoBypassAudit(record, context)) {
         countedNoBypassAudits += 1;
         if (record.auditVersion === "v2") countedNoBypassV2Audits += 1;
+        if (isContainerRecord) countedContainerNoBypassAudits += 1;
+        if (isImportedAdversarialRecord(record)) importedAdversarialAudits += 1;
       }
       if (isCountedBypassAudit(record, context)) {
         countedBypassAudits += 1;
         if (record.auditVersion === "v2") countedBypassV2Audits += 1;
+        if (isContainerRecord) countedContainerBypassAudits += 1;
+        if (isImportedAdversarialRecord(record)) importedAdversarialAudits += 1;
         if (record.repair.status === "fixed" || record.repair.status === "superseded") repairedBypasses += 1;
         else unrepairedBypasses += 1;
       }
@@ -190,6 +220,18 @@ export function summarizeAdversarialEvidence(
       exploitReplayReady: audit.verdict === "adversarial-ready",
       hardeningProbesPass,
       hardeningProbeFailures,
+      containerRecords,
+      countedContainerNoBypassAudits,
+      countedContainerBypassAudits,
+      containerReady: loaded.some(
+        (item) =>
+          (item.record.isolationProfile.id === "container-no-network" ||
+            item.record.isolationProfile.id === "container") &&
+          item.record.container?.readiness === "pass",
+      ),
+      containerReadinessFailures: [...containerReadinessFailures].sort(),
+      importedAdversarialAudits,
+      invalidImportedAudits,
       claimLevel,
       isolationCounts,
       statusCounts,
@@ -225,6 +267,12 @@ export function adversarialGateEvidenceMap(
         adversarialHardeningProbeFailures: s.hardeningProbeFailures,
         countedNoBypassV2Audits: s.countedNoBypassV2Audits,
         countedBypassV2Audits: s.countedBypassV2Audits,
+        adversarialContainerIsolationReady: s.containerReady,
+        adversarialContainerNoNetworkAudits:
+          s.countedContainerNoBypassAudits + s.countedContainerBypassAudits,
+        adversarialContainerReadinessFailures: s.containerReadinessFailures,
+        adversarialImportReplayValid: s.importedAdversarialAudits > 0 && s.invalidImportedAudits === 0,
+        importedAdversarialAudits: s.importedAdversarialAudits,
       },
     ]),
   );

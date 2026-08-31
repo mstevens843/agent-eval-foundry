@@ -1,0 +1,13 @@
+{
+  "scenarioId": "browser-anchor-conflict-hidden-confirmation",
+  "subjectId": "testid-loyal-browser-mutant",
+  "failures": [
+    "correct_anchor_resolution",
+    "hidden_confirmation_respected"
+  ],
+  "intended": {
+    "testid-loyal-browser-mutant": "correct_anchor_resolution",
+    "aria-busy-truster-browser-mutant": "precondition_observed",
+    "stale-handle-reuser-browser-mutant": "stale_handle_detected"
+  }
+}

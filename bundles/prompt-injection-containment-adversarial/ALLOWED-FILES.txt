@@ -3,6 +3,8 @@ THREAT-MODEL.md
 ALLOWED-FILES.txt
 FORBIDDEN-FILES.txt
 ISOLATION.json
+CONTAINER.json
+container-run.sh
 EXPLOIT-SCHEMA.json
 PROVIDER.json
 run.sh

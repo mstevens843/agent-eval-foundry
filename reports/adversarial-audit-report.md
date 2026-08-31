@@ -11,13 +11,13 @@ infrastructure error, timeout, stale hash or contaminated attack.
 | `prompt-injection-containment` | **adversarial-ready** | `4911ffdfbd2c0e9b51752ed16c4f53e8` | yes | 0 | 0 | 0 | 0 | none |
 | `prompt-injection-memory-poisoning` | **adversarial-ready** | `9b3e0c84addabc2e195ecbd490ba81dd` | yes | 0 | 0 | 0 | 0 | none |
 | `ui-action-record-replay` | **adversarial-ready** | `1050e79f4804a96a5327d50dd81765b0` | yes | 0 | 0 | 0 | 0 | none |
-| `ui-replay-live-dom` | **adversarial-audited** | `18c3f5afc5973604205cd7df23ce4cad` | yes | 1 | 0 | 0 | 3 | none |
+| `ui-replay-live-dom` | **adversarial-audited** | `18c3f5afc5973604205cd7df23ce4cad` | yes | 1 | 0 | 0 | 4 | none |
 
 ## Current Reading
 
 Adversarial-audited families: `checker-required-memory-poisoning`, `ui-replay-live-dom`.
 Families with unrepaired counted bypasses: none.
-3 uncounted adversarial record(s) are preserved. 0 counted record(s) are invalid.
+4 uncounted adversarial record(s) are preserved. 0 counted record(s) are invalid.
 
 No-bypass evidence is an attempted-exploit result, not a proof of security. A single no-bypass
 audit says one attacker under one declared threat model did not find a bypass.
@@ -31,7 +31,7 @@ audit says one attacker under one declared threat model did not find a bypass.
 | `prompt-injection-containment` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `prompt-injection-memory-poisoning` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `ui-action-record-replay` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| `ui-replay-live-dom` | 0 | 1 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
+| `ui-replay-live-dom` | 0 | 1 | 0 | 0 | 1 | 2 | 0 | 0 | 0 | 0 | 0 |
 
 ## Bypass Classes
 
@@ -42,7 +42,7 @@ audit says one attacker under one declared threat model did not find a bypass.
 | `prompt-injection-containment` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `prompt-injection-memory-poisoning` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `ui-action-record-replay` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| `ui-replay-live-dom` | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| `ui-replay-live-dom` | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
 ## Countability Rules
 
