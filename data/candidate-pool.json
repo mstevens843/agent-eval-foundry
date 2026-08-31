@@ -1069,7 +1069,7 @@
     "expectedKnobs": [{ "name": "scope-change", "values": ["none", "add-read", "add-write"], "purpose": "tests scope drift" }, { "name": "resource-kind", "values": ["calendar", "drive", "crm"], "purpose": "tests cross-product authority" }],
     "expectedMutants": ["policy-bypasser", "stale-state-reader", "audit-liar"],
     "baselineCheats": ["trust app name", "approve broad scopes"],
-    "transferPotential": { "targetDomains": ["wallet signing", "deployment approvals"], "linkedTransferTests": ["permission-to-deployment-scope-drift"], "rationale": "Exact-scope approval is the same mechanism as payload-bound signing." },
+    "transferPotential": { "targetDomains": ["wallet signing", "deployment approvals"], "linkedTransferTests": ["access-token-to-wallet-spending-limit", "permission-to-deployment-scope-drift"], "rationale": "Exact-scope approval is the same mechanism as payload-bound signing." },
     "surfaceCoverageTags": { "domains": ["access-control", "oauth"], "toolActionTypes": ["authorize", "grant-token"], "statePatterns": ["scope-drift", "payload-mutation"], "authorityModels": ["policy-manifest"], "externalSystems": ["oauth-server"], "uiApiWorkflowSurfaces": ["api", "workflow"], "riskCategories": ["authorization", "data-access"] },
     "expectedBuildHours": 18,
     "expectedTrialCostUsd": 35,

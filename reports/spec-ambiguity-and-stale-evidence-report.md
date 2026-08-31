@@ -6,7 +6,7 @@ Every trial this repository holds, what state it is in, and what a repair costs.
 
 | state | count | meaning |
 |---|---:|---|
-| `counted` | 21 | graded, and run against the challenge this family produces today |
+| `counted` | 22 | graded, and run against the challenge this family produces today |
 | `superseded` | 3 | graded, then invalidated when the family it measured was repaired |
 | `refused` | 0 | the provider declined; never an attempt, never a failure |
 | `infra` | 2 | the provider could not authenticate, or the harness broke |
@@ -20,6 +20,7 @@ Current challenge hash: `33cc98364ce2a6b3f9490e54937955d8`.
 
 | run | model | state | ran against |
 |---|---|---|---|
+| `access-token-2026-08-o1` | openai/gpt-5.6-sol | counted | `33cc98364ce2a6b3f9490e54937955d8` |
 
 ### `checker-required-memory-poisoning`
 

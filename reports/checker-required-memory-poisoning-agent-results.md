@@ -110,7 +110,7 @@ came from somewhere else.
 
 ## Model coverage
 
-Counted trials come from **one model family** (openai). One family has no measured variance: a result here says what that lab's model does, not what models do. The unrun slots in the campaign are the fix, and they are unrun.
+Counted trials come from **one model family** (openai). One family has no measured variance: a result here says what that lab's model does, not what models do. The unrun slots in the campaign are the planned fix, and they are still unrun.
 
 ## Against the pre-registration
 

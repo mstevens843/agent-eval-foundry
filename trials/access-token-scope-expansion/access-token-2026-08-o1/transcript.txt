@@ -1,0 +1,8 @@
+Implemented `submission/subject.mjs`.
+
+It reads approval/token state only from the authority facade, applies ATS1-ATS6 in order, issues a grant only after exact current matches, and reports duplicates without creating a second grant when replayed.
+
+Verified with:
+- `node --check submission/subject.mjs`
+- local mock authority for allowed, replay duplicate, and scope-expanded denial
+- confirmed `submission/` contains exactly `subject.mjs`

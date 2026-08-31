@@ -55,14 +55,14 @@ separately.
 
 ## The constraint, after
 
-**PARTIAL.** 1 shared subject(s) against a threshold of 3. The combined width is bounded above by 1, which cannot distinguish complete overlap from independence. 4 more counted trial(s) would reach the threshold.
+**PARTIAL.** 1 shared subject(s) against a threshold of 3. The combined width is bounded above by 1, which cannot distinguish complete overlap from independence. 6 more counted trial(s) would reach the threshold.
 
 | | |
 |---|---:|
 | shared subjects | 1 |
 | threshold | 3 |
 | provider families among them | 1 |
-| counted trials still needed | 4 |
+| counted trials still needed | 6 |
 
 ## What it bought, and what it did not
 

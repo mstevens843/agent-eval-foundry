@@ -37,6 +37,11 @@ a full validation-mode family with local reference/mutant/package evidence. See
 [`reports/promotion-report.md`](reports/promotion-report.md). This proves candidate -> probe ->
 promotion -> family local evidence, not agent difficulty.
 
+Access-Token Smoke + Diagnosis + Transfer v1 adds the next gate. The promoted access-token family
+has a hash-pinned one-slot OpenAI/Codex smoke campaign, a family-specific diagnosis report and a
+declared wallet-spending-limit transfer test. The counted smoke trial passed cleanly, so the family
+routes to already_solved_or_needs_evolution rather than difficulty evidence or full matrix spend.
+
 The foundry keeps evidence streams separate:
 
 - **mutant-detection evidence**: a reference and known-bad implementations prove the verifier
@@ -70,7 +75,7 @@ requirement; adversarial audit is the attempted exploit record.
 | `ui-action-record-replay` | 324 | 5 | 5 | 6 | 1 | human-ready | adversarial-ready | **SHIP**: useful but chain-limited |
 | `ui-replay-live-dom` | 864 | 1 | 1 | 19 | not claimed yet | human-ready | adversarial-audited; OpenAI-only | **SHIP**: descendant, packaged and difficulty-evidenced |
 | `checker-required-memory-poisoning` | 792 | 1 | 1 | 12 | not claimed yet | human-ready | adversarial-audited; OpenAI-only | **SHIP**: required-checker gap, OpenAI-only |
-| `access-token-scope-expansion` | 384 | 0 | 0 | 3 | not-run | pending | audit-pending | **NOT-READY**: promoted family with local evidence only |
+| `access-token-scope-expansion` | 384 | 1 | 0 | 3 | already-solved by smoke | pending | audit-pending | **NOT-READY**: clean OpenAI smoke pass; evolve/repair before matrix |
 | `durable-approval-outbox` | 24 | 20 imported | 20 | 3 | 1 | reference-solvable | audit-pending; imported historical no-count | **SHIP**: imported historical bank |
 
 Current live-DOM package hash: `18c3f5afc5973604205cd7df23ce4cad`.
@@ -104,8 +109,11 @@ six known family outcomes; it is directional n=6 calibration, not a yield estima
 Promoted Family Build Pipeline v1 takes the first promoted probe from that queue and builds it
 through the validation stack. `access-token-scope-expansion` has 384 measured scenarios from a
 1,152-point declared space, 8/8 intended mutants caught, both baselines blocked, a leak-checked
-8-file challenge package, trial routing, and no counted real-agent trials yet. Full `/6` matrix
-spend remains blocked until a one-agent smoke trial and diagnosis exist.
+8-file challenge package and trial routing. Access-Token Smoke + Diagnosis + Transfer v1 then ran
+one counted OpenAI/Codex smoke trial under challenge hash `33cc98364ce2a6b3f9490e54937955d8`.
+It passed 384/384, so the pre-registered kill signal fired: this is an
+already_solved_or_needs_evolution result, not difficulty-smoke evidence. Full `/6` matrix spend
+remains blocked.
 
 Adversarial Audit v2 upgrades verifier-integrity from preserved attack records to mechanical triage.
 Attack packets now carry an execution profile, an isolation profile, an exploit-artifact schema, an
@@ -333,7 +341,9 @@ mutant-detection axes, real-agent difficulty evidence, human solvability and adv
 verifier-integrity evidence. It can now also decide what to do before a full family exists: paper
 screen a mechanism, score a candidate pool, run a tiny executable probe, calibrate discovery scoring
 against known outcomes, promote only after cheap evidence, require a smoke trial before `/6`, and
-test transfer before production-mode matrix spend.
+test transfer before production-mode matrix spend. The access-token promotion now shows the
+downstream routing behavior as well: a clean smoke pass blocks matrix spend and sends the mechanism
+back to evolution/repair instead of being reported as a difficulty win.
 
 The strongest current result is still memory-poisoning generalisation across labs. The newest result
 is that verifier-integrity now has explicit container/no-network bundle and countability rules,

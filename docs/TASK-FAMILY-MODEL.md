@@ -94,6 +94,12 @@ in `data/promotions.json`, scaffoldable through `promotion scaffold`, and built 
 reference, scenarios, verifier, mutants, package and reports. Its local evidence proves the bridge
 works; a counted smoke trial is still required before difficulty claims.
 
+Promoted families now carry a smoke-diagnosis gate before any full matrix spend. A counted smoke
+failure must be diagnosed as on-target before it becomes difficulty-smoke evidence. A counted smoke
+pass is a useful result, but it means already_solved_or_needs_evolution unless a separate reason to
+matrix the family is pre-registered. Provider refusals, infrastructure errors, stale hashes and
+off-target failures stay preserved and uncounted.
+
 This layer is intentionally separate from the existing candidate ledger. The ledger records
 historical promote/kill decisions. Discovery Workbench v1 manages the forward-looking pool and
 computes which idea should be built, probed, killed, transferred or repaired next.

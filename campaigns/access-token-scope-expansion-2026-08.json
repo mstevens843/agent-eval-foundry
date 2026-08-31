@@ -1,0 +1,55 @@
+{
+  "campaignId": "access-token-2026-08",
+  "familyId": "access-token-scope-expansion",
+  "hypothesis": "The access-token promoted family should expose scope authority drift that local mutants already model: a real agent may treat requested scope as approved scope, trust stale token or approval state, confuse user role with token authority, or accept subject-owned receipts. One smoke trial is enough to decide the next routing step, not enough to claim a full matrix or cross-lab breadth.",
+  "killSignal": "A counted OpenAI/Codex smoke trial passes every graded access-token scenario cleanly under the current challenge hash, which is an already_solved_or_needs_evolution signal rather than a reason to run a full matrix. Alternatively, failures concentrate only on ambiguous public wording or harness errors, which routes the family to repair/spec work instead of difficulty evidence.",
+  "confirmSignal": "At least one counted OpenAI/Codex smoke trial fails on an intended access-token mechanism under the current challenge hash, with transcript, submission, verifier output and scenario-set id preserved. On-target failure produces smoke-difficulty evidence only; one OpenAI run is not cross-lab evidence and does not unlock a full matrix without transfer declaration.",
+  "challengeHash": "33cc98364ce2a6b3f9490e54937955d8",
+  "scenarioSetId": "expansion-384-138574b0",
+  "scenariosExpected": 384,
+  "timeoutMs": 1800000,
+  "artifactPath": "submission/subject.mjs",
+  "isolation": "subprocess",
+  "counting": {
+    "neverCounts": [
+      "refused",
+      "timeout",
+      "infrastructure_error"
+    ],
+    "onRefusal": "Recorded as REFUSED with transcript preserved, and never counted. Provider refusal is not a difficulty finding and the slot is not re-run as part of this smoke.",
+    "onInfraFailure": "Recorded as FAILED_INFRA with transcript preserved, and never counted. It may be retried only as infrastructure repair, not as evidence selection.",
+    "onCrash": "Recorded as `crashed` and not counted by default. Count only after manual classification proves the crash is in the submitted artifact rather than in the harness.",
+    "retriesOnInfra": 1,
+    "retryOnRefusal": false
+  },
+  "preservation": [
+    "Every attempt writes a durable trial directory under trials/access-token-scope-expansion/<run-id>/ whether or not it counts.",
+    "metadata.json records provider, command, challenge hash, scenario-set id and scenario count.",
+    "transcript.txt is preserved verbatim, including refusals and infrastructure errors.",
+    "challenge/ holds the exact package the model saw.",
+    "submission/ holds the submitted subject.mjs artifact.",
+    "verifier-output.json holds graded cells and named failed checks.",
+    "countability.json records the countability decision and reason.",
+    "A stale package hash invalidates the smoke evidence rather than letting old evidence count for a repaired package."
+  ],
+  "budgetUsd": 8.0,
+  "slots": [
+    {
+      "slotId": "O1",
+      "model": "openai/gpt-5.6-sol",
+      "subjectId": "gpt-5.6-sol",
+      "effort": null,
+      "runner": "shell",
+      "command": [
+        "codex",
+        "exec",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "--skip-git-repo-check",
+        "{instruction}"
+      ],
+      "state": "RUN",
+      "runId": "access-token-2026-08-o1",
+      "note": "Single OpenAI/Codex smoke slot. Counted completed run under the pinned challenge hash: 384 scenarios graded, 0 failed. This is a clean pass and routes to already_solved_or_needs_evolution, not difficulty-smoke evidence, matrix readiness or cross-lab breadth."
+    }
+  ]
+}

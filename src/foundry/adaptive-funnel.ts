@@ -99,6 +99,8 @@ export const TRANSFER_STATUSES = ["proposed", "ready", "measured", "blocked"] as
 export type TransferStatus = (typeof TRANSFER_STATUSES)[number];
 export const TRANSFER_SOURCE_KINDS = ["family", "probe"] as const;
 export type TransferSourceKind = (typeof TRANSFER_SOURCE_KINDS)[number];
+export const TRANSFER_BUILD_MODES = ["probe-first", "full-family"] as const;
+export type TransferBuildMode = (typeof TRANSFER_BUILD_MODES)[number];
 
 export interface TransferTest {
   readonly id: string;
@@ -112,6 +114,11 @@ export interface TransferTest {
   readonly expectedFailurePreservation: string;
   readonly expectedFairnessRisks: readonly string[];
   readonly expectedVerifierRisks: readonly string[];
+  readonly authoritativeTruthSourceInTarget: string | null;
+  readonly expectedMutants: readonly string[];
+  readonly promotionCriteria: readonly string[];
+  readonly killCriteria: readonly string[];
+  readonly buildMode: TransferBuildMode | null;
   readonly requiredEvidenceBeforeDeclaringTransfer: readonly string[];
   readonly nextEvidence: EvidenceCost;
 }
@@ -125,6 +132,7 @@ export interface FamilyFunnelEvidence {
   readonly familyId: string;
   readonly trialReady?: boolean;
   readonly countedAgentTrials?: number;
+  readonly agentTrialsPassed?: number;
   readonly sharedProviderFamilies?: readonly string[];
   readonly agentFailuresChain?: boolean;
   readonly staleTrials?: readonly string[];
@@ -333,6 +341,10 @@ export function parseMechanismProbes(v: unknown, path = "mechanism-probes"): rea
 
 export function parseTransferTest(v: unknown, path: string): TransferTest {
   const o = obj(v, path);
+  const buildMode =
+    o.buildMode === undefined || o.buildMode === null
+      ? null
+      : oneOf(o.buildMode, `${path}.buildMode`, TRANSFER_BUILD_MODES);
   return {
     id: id(o.id, `${path}.id`),
     sourceKind: oneOf(o.sourceKind, `${path}.sourceKind`, TRANSFER_SOURCE_KINDS),
@@ -355,6 +367,24 @@ export function parseTransferTest(v: unknown, path: string): TransferTest {
     expectedFailurePreservation: str(o.expectedFailurePreservation, `${path}.expectedFailurePreservation`),
     expectedFairnessRisks: strArray(o.expectedFairnessRisks, `${path}.expectedFairnessRisks`),
     expectedVerifierRisks: strArray(o.expectedVerifierRisks, `${path}.expectedVerifierRisks`),
+    authoritativeTruthSourceInTarget:
+      typeof o.authoritativeTruthSourceInTarget === "string" &&
+      o.authoritativeTruthSourceInTarget.trim().length > 0
+        ? o.authoritativeTruthSourceInTarget
+        : null,
+    expectedMutants:
+      o.expectedMutants === undefined || o.expectedMutants === null
+        ? []
+        : strArray(o.expectedMutants, `${path}.expectedMutants`),
+    promotionCriteria:
+      o.promotionCriteria === undefined || o.promotionCriteria === null
+        ? []
+        : strArray(o.promotionCriteria, `${path}.promotionCriteria`),
+    killCriteria:
+      o.killCriteria === undefined || o.killCriteria === null
+        ? []
+        : strArray(o.killCriteria, `${path}.killCriteria`),
+    buildMode,
     requiredEvidenceBeforeDeclaringTransfer: requiredList(
       o.requiredEvidenceBeforeDeclaringTransfer,
       `${path}.requiredEvidenceBeforeDeclaringTransfer`,
@@ -489,6 +519,23 @@ function familyNextAction(evidence: FamilyFunnelEvidence): FunnelNextAction {
       evidenceCost: "one_agent",
       action: "run one counted smoke trial before any full matrix",
       reason: "mutant-detection evidence does not prove real-agent difficulty",
+    };
+  }
+  if (
+    (evidence.countedAgentTrials ?? 0) > 0 &&
+    evidence.agentTrialsPassed !== undefined &&
+    evidence.agentTrialsPassed === evidence.countedAgentTrials
+  ) {
+    return {
+      targetId: evidence.familyId,
+      targetType: "family",
+      mode: "validation",
+      stage: "task_shape",
+      decision: "evolve",
+      evidenceCost: "static",
+      action: "treat the clean smoke pass as already_solved_or_needs_evolution before matrix spend",
+      reason:
+        "a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty",
     };
   }
   if ((evidence.countedAgentTrials ?? 0) > 0 && evidence.agentFailuresChain === true) {

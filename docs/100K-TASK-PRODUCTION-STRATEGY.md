@@ -290,8 +290,24 @@ The first exercised promotion is `access-token-scope-expansion`. The selected so
 ranked promoted probe in the executable queue. The full family expands three token-scope probe cases
 into a 1,152-point declared state space and a 384-scenario measured set. Its reference passes, eight
 known-bad subjects/baselines fail intended checks, and the challenge package is leak-checked. That is
-validation-mode local evidence. The next earned evidence is a one-agent smoke trial, not a full `/6`
-matrix.
+validation-mode local evidence.
+
+Access-Token Smoke + Diagnosis + Transfer v1 then exercised the next gate:
+
+```text
+probe-promoted family
+  -> local evidence
+  -> one-agent smoke
+  -> family-specific diagnosis
+  -> transfer declaration
+  -> matrix gate
+```
+
+The counted OpenAI/Codex smoke trial for `access-token-scope-expansion` passed 384 of 384 scenarios
+under the pinned package hash. That is a useful negative result for the funnel: the pre-registered
+kill signal fired, and the next step is already_solved_or_needs_evolution, not a full `/6` matrix.
+The transfer test to wallet spending limits is declared so the mechanism can be re-probed in a
+different domain, but no transfer evidence is claimed until that target-domain probe or family runs.
 
 ### Stage 0: Candidate Pool
 

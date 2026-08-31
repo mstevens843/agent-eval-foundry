@@ -1,0 +1,33 @@
+{
+  "view": {
+    "id": "ats-stable-scope_expanded-cache-stale-worker-r1-23",
+    "request": {
+      "id": "grant-invoice-7",
+      "approvalId": "approval-42",
+      "tokenId": "token-42",
+      "approvalGeneration": 3,
+      "principal": "agent-bot",
+      "resource": "invoice-7",
+      "scope": "write:invoice",
+      "surface": "worker"
+    },
+    "cachedApproval": {
+      "id": "approval-42",
+      "generation": 3,
+      "principal": "agent-bot",
+      "resource": "invoice-7",
+      "scope": "write:invoice",
+      "status": "active"
+    },
+    "cachedToken": {
+      "id": "token-42",
+      "generation": 3,
+      "principal": "agent-bot",
+      "resource": "invoice-7",
+      "scope": "write:invoice",
+      "status": "active"
+    }
+  },
+  "replayCount": 1,
+  "note": "The token is broader than the approval. Cached exact state is not enough; current scope must block."
+}

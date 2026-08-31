@@ -37,6 +37,12 @@ packages and one-agent smoke trials. Production Mode is earned only after smoke 
 evidence justify cross-provider matrices, human review and adversarial audit. The next step is
 computed from evidence rather than from a fixed linear checklist.
 
+The first promoted-family smoke result is now in the same loop. `access-token-scope-expansion`
+passed its single counted OpenAI/Codex smoke trial under hash `33cc98364ce2a6b3f9490e54937955d8`
+with 384/384 scenarios clean. That is not difficulty evidence. It fires the pre-registered
+already_solved_or_needs_evolution signal, blocks full matrix spend, and routes the mechanism toward
+repair/evolution or the declared wallet-spending-limit transfer probe.
+
 The foundry now separates three claims: a reference can solve it, a clean public package can be
 handed to a human, and an independent human has actually solved it. Those are different evidence
 levels and the reports do not merge them. The current human layer is deterministic: it audits

@@ -21,13 +21,13 @@ Which subjects have attempted which families, and what that permits.
 | `ui-action-record-replay` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 5 | 324 | 1 |
 | `ui-replay-live-dom` | `gpt-5.6-sol` | 1 | 864 | — |
 | `checker-required-memory-poisoning` | `gpt-5.6-sol` | 1 | 792 | — |
+| `access-token-scope-expansion` | `gpt-5.6-sol` | 1 | 384 | — |
 | `durable-approval-outbox` | `claude-opus-5`, `gpt-5.6-sol` | 0 | 24 | 1 |
 
 ## Detection banks — written mutants
 
 | family | subjects | instances | axes |
 |---|---:|---:|---:|
-| `access-token-scope-expansion` | 8 | 384 | 3 |
 
 **These numbers may not be added to the ones above, or to each other as a portfolio total.** A
 detection axis says the verifier can tell two hand-written defects apart. That is worth knowing
@@ -40,11 +40,11 @@ and it is not a measurement of difficulty.
 | `claude-haiku-4-5` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
 | `claude-opus-5` | `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
 | `claude-sonnet-5` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
-| `gpt-5.6-sol` | `checker-required-memory-poisoning`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom` |
+| `gpt-5.6-sol` | `access-token-scope-expansion`, `checker-required-memory-poisoning`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom` |
 
 ## What each kind of bank currently licenses
 
-### `agent` banks — 5 family(ies)
+### `agent` banks — 6 family(ies)
 
 **Verdict:** PARTIAL. a qualitative comparison over 1 shared subject(s); no combined axis count, because the width is bounded by the shared bank size.
 
@@ -64,17 +64,6 @@ Only 2 subject(s) attempted every family, below the threshold of 3. The combined
 **To strengthen this:**
 
 - Build or trial a second family whose bank is `imported`.
-- For a mutant bank that means a second family with a written mutant set.
-
-### `mutant` banks — 1 family(ies)
-
-**Verdict:** MEASURED. nothing cross-family: only one `mutant` bank exists, so there is nothing to compare it with.
-
-8 subject(s) attempted every family, so "did the same implementation fail both?" is a question with an answer. The combined axis count below is computed over the shared subjects only, and is the number that says whether the families measure different things.
-
-**To strengthen this:**
-
-- Build or trial a second family whose bank is `mutant`.
 - For a mutant bank that means a second family with a written mutant set.
 
 ---

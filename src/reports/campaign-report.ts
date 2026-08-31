@@ -228,7 +228,12 @@ export function renderAgentResults(input: AgentResultsInput): string {
     "## Model coverage",
     "",
     a.modelFamilies.length <= 1
-      ? `Counted trials come from **one model family** (${a.modelFamilies.join(", ") || "none"}). One family has no measured variance: a result here says what that lab's model does, not what models do. The unrun slots in the campaign are the fix, and they are unrun.`
+      ? [
+          `Counted trials come from **one model family** (${a.modelFamilies.join(", ") || "none"}). One family has no measured variance: a result here says what that lab's model does, not what models do.`,
+          a.notRunSlots > 0
+            ? "The unrun slots in the campaign are the planned fix, and they are still unrun."
+            : "There are no remaining planned slots in this campaign; cross-lab breadth would require a separate imported or future campaign.",
+        ].join(" ")
       : `Counted trials span ${a.modelFamilies.length} model families: ${a.modelFamilies.join(", ")}.`,
     "",
     ...(input.plan === null

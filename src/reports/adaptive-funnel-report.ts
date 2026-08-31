@@ -110,6 +110,19 @@ export function renderFunnelTransfers(transfers: readonly TransferTest[]): strin
       "",
       `Changed: ${t.whatChanges.join("; ")}.`,
       "",
+      ...(t.authoritativeTruthSourceInTarget === null
+        ? []
+        : [`Target truth source: ${t.authoritativeTruthSourceInTarget}`, ""]),
+      ...(t.buildMode === null ? [] : [`Build mode: \`${t.buildMode}\`.`, ""]),
+      ...(t.expectedMutants.length === 0
+        ? []
+        : ["Expected mutants:", "", ...t.expectedMutants.map((mutant) => `- \`${mutant}\``), ""]),
+      ...(t.promotionCriteria.length === 0
+        ? []
+        : ["Promotion criteria:", "", ...t.promotionCriteria.map((criterion) => `- ${criterion}`), ""]),
+      ...(t.killCriteria.length === 0
+        ? []
+        : ["Kill criteria:", "", ...t.killCriteria.map((criterion) => `- ${criterion}`), ""]),
       "Required evidence before transfer is claimed:",
       "",
       ...t.requiredEvidenceBeforeDeclaringTransfer.map((e) => `- ${e}`),

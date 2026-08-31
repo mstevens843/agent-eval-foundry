@@ -19,8 +19,10 @@ Current evidence:
 - 8/8 carried-forward known-bad subjects and baselines fail intended named checks.
 - 3 mutant-detection axes.
 - leak-checked 8-file challenge package.
-- no counted real-agent trial yet.
+- one counted OpenAI/Codex smoke trial, `access-token-2026-08-o1`, passed all 384 scenarios.
+- transfer declaration: `access-token-to-wallet-spending-limit`.
 
-Status: validation-mode local evidence only. The next earned step is one OpenAI/Codex smoke trial
-against the current package hash, followed by diagnosis. Full matrix spend is blocked until smoke
-and transfer evidence exist.
+Status: validation-mode local evidence plus counted smoke pass. The smoke pass fires the
+pre-registered already_solved_or_needs_evolution signal, so full matrix spend remains blocked. The
+next useful step is to evolve the mechanism or run the declared wallet-spending-limit transfer probe;
+the transfer is not proved yet.

@@ -132,6 +132,17 @@ export type {
   TransferTest,
 } from "./foundry/adaptive-funnel.js";
 export {
+  PROMOTION_SMOKE_STATES,
+  SMOKE_DIAGNOSIS_STATUSES,
+  evaluatePromotionSmokeGate,
+} from "./foundry/smoke-gates.js";
+export type {
+  PromotionSmokeGateInput,
+  PromotionSmokeGateResult,
+  PromotionSmokeState,
+  SmokeDiagnosisStatus,
+} from "./foundry/smoke-gates.js";
+export {
   DISCOVERY_CANDIDATE_EVIDENCE_STATUSES,
   DISCOVERY_NEXT_STEPS,
   DISCOVERY_RISK_LEVELS,

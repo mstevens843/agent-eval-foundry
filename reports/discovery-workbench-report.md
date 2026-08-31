@@ -38,7 +38,7 @@ axis diversity. The workbench routes evidence; it does not prove a benchmark is 
 
 | candidate | domain | score | confidence | recommended action | cheapest evidence | probe status | blockers |
 |---|---|---:|---:|---|---|---|---|
-| `access-token-scope-expansion` | permissions and access control | 72.2 | 0.69 | mechanism_probe | static | family-build-ready | none |
+| `access-token-scope-expansion` | permissions and access control | 73.4 | 0.69 | mechanism_probe | static | family-build-ready | none |
 | `deployment-model-alias-rollout-drift` | deployment rollback | 78.1 | 0.69 | mechanism_probe | static | task-shape-ready | none |
 | `crm-permission-cancel-race` | CRM automation | 77.7 | 0.69 | task_shape | local | task-shape-ready | none |
 | `long-horizon-recurring-task-cancel` | memory and long-horizon state | 77.4 | 0.69 | mechanism_probe | local | task-shape-ready | none |
@@ -179,8 +179,8 @@ measure one defect, and a strong defect axis can still cover one narrow product 
 | `prompt-injection-tool-output-cross-scope` | prompt injection | 74.5 | 0.69 | task_shape | local | none |
 | `calendar-cancel-stale-room-booking` | email and calendar workflows | 73.9 | 0.69 | mechanism_probe | local | none |
 | `email-thread-injection-memory` | email and calendar workflows | 73.9 | 0.69 | transfer_existing | static | none |
+| `access-token-scope-expansion` | permissions and access control | 73.4 | 0.69 | mechanism_probe | static | none |
 | `tool-result-null-vs-empty` | tool-result ambiguity | 72.9 | 0.69 | mechanism_probe | paper | none |
-| `access-token-scope-expansion` | permissions and access control | 72.2 | 0.69 | mechanism_probe | static | none |
 | `prompt-injection-doc-retrieval-policy` | prompt injection | 72.0 | 0.69 | evolve_existing | static | none |
 | `tool-result-partial-error` | tool-result ambiguity | 71.9 | 0.69 | mechanism_probe | local | none |
 | `api-rate-limit-backoff-liveness` | API pagination and rate limits | 71.7 | 0.69 | mechanism_probe | local | none |

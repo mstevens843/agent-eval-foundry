@@ -6,6 +6,7 @@ import type {
   PromotedFamilyRecord,
   PromotionScaffold,
 } from "../foundry/promotion.js";
+import type { PromotionSmokeGateResult } from "../foundry/smoke-gates.js";
 
 const esc = (value: string): string => value.replace(/\|/g, "\\|");
 
@@ -43,6 +44,7 @@ export function renderPromotionReport(
   records: readonly PromotedFamilyRecord[],
   probeSummary: ProbeRunSummary,
   builtFamilies: readonly BuiltFamily[],
+  smokeGates: ReadonlyMap<string, PromotionSmokeGateResult> = new Map(),
 ): string {
   const builtById = new Map(builtFamilies.map((family) => [family.id, family]));
   const selected = records.find((record) => record.promotion.status === "family-built") ?? records[0] ?? null;
@@ -65,7 +67,11 @@ export function renderPromotionReport(
     "",
     ...(selected === null
       ? ["No promotion records are present.", ""]
-      : renderSelected(selected, builtById.get(selected.promotion.familyId))),
+      : renderSelected(
+          selected,
+          builtById.get(selected.promotion.familyId),
+          smokeGates.get(selected.promotion.familyId),
+        )),
     "## Promotion Ledger",
     "",
     "| promotion | family | source candidate | source probe | decision | status | evidence level | probe verdict |",
@@ -93,7 +99,11 @@ export function renderPromotionReport(
   ].join("\n");
 }
 
-function renderSelected(record: PromotedFamilyRecord, family: BuiltFamily | undefined): readonly string[] {
+function renderSelected(
+  record: PromotedFamilyRecord,
+  family: BuiltFamily | undefined,
+  smokeGate: PromotionSmokeGateResult | undefined,
+): readonly string[] {
   const p = record.promotion;
   const sweep = family?.run();
   const axis = sweep === undefined ? null : measure(sweep.matrix, { nullTrials: 3 });
@@ -150,9 +160,38 @@ function renderSelected(record: PromotedFamilyRecord, family: BuiltFamily | unde
     "",
     `Pre-registered kill signal: ${p.preRegisteredKillSignal}`,
     "",
-    "Real-agent smoke trial recommendation: prepare one OpenAI/Codex smoke trial only after package",
-    "hash is frozen. A full matrix is blocked.",
+    "### Smoke, Diagnosis And Matrix Gate",
     "",
+    ...(smokeGate === undefined
+      ? [
+          "Real-agent smoke trial recommendation: prepare one OpenAI/Codex smoke trial only after package",
+          "hash is frozen. A full matrix is blocked.",
+          "",
+        ]
+      : [
+          "| item | status |",
+          "|---|---|",
+          `| local evidence | ${smokeGate.localEvidenceStatus} |`,
+          `| smoke campaign | ${smokeGate.smokeCampaignStatus} |`,
+          `| smoke diagnosis | ${smokeGate.smokeDiagnosisStatus} |`,
+          `| transfer declaration | ${smokeGate.transferDeclarationStatus} |`,
+          `| matrix readiness | ${smokeGate.matrixReadinessStatus} |`,
+          `| pipeline state | \`${smokeGate.state}\` |`,
+          "",
+          smokeGate.blockers.length === 0
+            ? "No promotion smoke/matrix blockers remain in this gate calculation."
+            : ["Blockers:", "", ...smokeGate.blockers.map((blocker) => `- ${blocker}`)].join("\n"),
+          "",
+          `Next action: ${smokeGate.nextAction}`,
+          "",
+          smokeGate.fullMatrixReady
+            ? "Full matrix spend is allowed to be considered, not automatic."
+            : smokeGate.smokeCampaignStatus === "planned" ||
+                smokeGate.smokeCampaignStatus === "attempted-uncounted"
+              ? "Exact smoke command: `node dist/cli.js trials campaign run --family access-token-scope-expansion --only O1`."
+              : "No full matrix command is recommended from this gate state.",
+          "",
+        ]),
   ];
 }
 

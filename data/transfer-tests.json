@@ -226,5 +226,63 @@
       "A counted smoke trial fails on scope, not on deployment API knowledge."
     ],
     "nextEvidence": "paper"
+  },
+  {
+    "id": "access-token-to-wallet-spending-limit",
+    "sourceKind": "family",
+    "sourceId": "access-token-scope-expansion",
+    "transferredMechanism": "permission-boundary",
+    "targetDomain": "wallet spending limit",
+    "status": "ready",
+    "whatStaysFixed": [
+      "Authority remains an exact tuple, not a fuzzy similarity between requested and approved scope.",
+      "The requested permission is evidence of intent, not evidence that the permission was approved.",
+      "Revoked or downgraded authority at commit time denies the effect until a fresh approval exists.",
+      "The effect ledger is owned by the harness rather than by the submitted subject."
+    ],
+    "whatChanges": [
+      "The approval/token pair becomes a wallet allowance and signed spending capability.",
+      "The resource scope becomes asset, spender, limit and time-window fields.",
+      "The side effect becomes a spend or signature operation instead of an API action.",
+      "The public examples use synthetic wallet allowances and receipts, not chain-specific private rules."
+    ],
+    "expectedFailurePreservation": "A subject that treats requested scope as approved scope should widen a wallet spending limit, use a stale allowance after downgrade or revocation, or trust its own spend receipt instead of the harness-owned allowance ledger.",
+    "expectedFairnessRisks": [
+      "The wallet allowance schema must be public and synthetic.",
+      "No chain-specific gas, nonce or custody convention may be required unless it appears in the visible rules.",
+      "Valid narrow spends must still complete so the task does not reward blanket refusal."
+    ],
+    "expectedVerifierRisks": [
+      "A verifier that trusts subject-written receipts can be forged.",
+      "A final status checker misses unauthorized intermediate spend attempts.",
+      "A checker that ignores downgrade timing rewards stale allowance use."
+    ],
+    "authoritativeTruthSourceInTarget": "The target authority is the harness-owned synthetic wallet allowance ledger plus signed-consent manifest.",
+    "expectedMutants": [
+      "limit-widener",
+      "requested-scope-truster",
+      "stale-allowance-reader",
+      "revoked-token-truster",
+      "duplicate-spend-executor",
+      "receipt-liar",
+      "over-blocker"
+    ],
+    "promotionCriteria": [
+      "A probe-first screen catches scope/limit widening, stale allowance use and overblocking.",
+      "A reference implementation passes both valid narrow spends and denial cases.",
+      "The public contract explains the wallet authority tuple without private chain assumptions."
+    ],
+    "killCriteria": [
+      "Correct behavior requires private wallet or chain semantics not present in the public package.",
+      "Failures reduce to wording-only confusion rather than scope authority drift.",
+      "The verifier cannot grade without trusting subject-written receipts."
+    ],
+    "requiredEvidenceBeforeDeclaringTransfer": [
+      "Run a wallet-spending-limit probe before building a full target family.",
+      "Catch the limit-widener, stale-allowance-reader and over-blocker known-bad subjects locally.",
+      "Do not claim transfer evidence until a counted target-domain smoke trial or measured target family exists."
+    ],
+    "nextEvidence": "local",
+    "buildMode": "probe-first"
   }
 ]

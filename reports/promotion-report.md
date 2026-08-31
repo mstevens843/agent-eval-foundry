@@ -66,8 +66,24 @@ Pre-registered confirm signal: Reference passes all measured scenarios and every
 
 Pre-registered kill signal: A counted smoke trial solves every scenario or failures concentrate only on ambiguous public wording.
 
-Real-agent smoke trial recommendation: prepare one OpenAI/Codex smoke trial only after package
-hash is frozen. A full matrix is blocked.
+### Smoke, Diagnosis And Matrix Gate
+
+| item | status |
+|---|---|
+| local evidence | pass |
+| smoke campaign | counted |
+| smoke diagnosis | clean |
+| transfer declaration | declared |
+| matrix readiness | blocked |
+| pipeline state | `smoke-passed-cleanly` |
+
+Blockers:
+
+- clean smoke pass routes to already_solved_or_needs_evolution unless a matrix reason is declared
+
+Next action: treat as already_solved_or_needs_evolution unless a matrix reason is declared
+
+No full matrix command is recommended from this gate state.
 
 ## Promotion Ledger
 

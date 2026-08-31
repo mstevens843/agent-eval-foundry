@@ -99,7 +99,11 @@ import * as liveDom from "./families/ui-replay-live-dom/runner.js";
 import * as liveScenarios from "./families/ui-replay-live-dom/scenarios.js";
 import * as liveSpec from "./families/ui-replay-live-dom/spec.js";
 import * as liveVerify from "./families/ui-replay-live-dom/verify.js";
-import { type FamilyFunnelEvidence, planAdaptiveFunnel } from "./foundry/adaptive-funnel.js";
+import {
+  type FamilyFunnelEvidence,
+  type TransferTest,
+  planAdaptiveFunnel,
+} from "./foundry/adaptive-funnel.js";
 import { assertBudgetInputs, assertPlanHonest } from "./foundry/budget-check.js";
 import { MEASURED_DEFAULTS, planBudget } from "./foundry/budget.js";
 import { assertLedgerConsistency, assertPostmortemExists } from "./foundry/consistency.js";
@@ -131,6 +135,7 @@ import { generateScaffold, scaffoldFromShape } from "./foundry/scaffold.js";
 import { SchemaError } from "./foundry/schema.js";
 import { SHAPE_PROSE } from "./foundry/shape-prose.js";
 import { shapeFromFamily } from "./foundry/shape-sync.js";
+import { type PromotionSmokeGateResult, evaluatePromotionSmokeGate } from "./foundry/smoke-gates.js";
 import { parseTaskShape } from "./foundry/validate.js";
 import { auditHumanReadinessForFamilies } from "./human-solvability/readiness.js";
 import {
@@ -143,6 +148,10 @@ import {
 import { renderHumanReadinessReport, renderHumanSolvabilityReport } from "./human-solvability/report.js";
 import { MatrixError, parseMatrix } from "./matrix.js";
 import { renderReport } from "./report.js";
+import {
+  classifyAccessTokenSmoke,
+  renderAccessTokenSmokeDiagnosis,
+} from "./reports/access-token-diagnosis.js";
 import {
   renderAdaptiveFunnelReport,
   renderFunnelProbes,
@@ -229,7 +238,13 @@ import {
   normalizeSubjectId,
 } from "./trials/bank.js";
 import { reconcile, runCampaign } from "./trials/campaign-run.js";
-import { assertCampaignSubcommand, loadCampaign, loadCampaigns, progressOf } from "./trials/campaign.js";
+import {
+  type CampaignPlan,
+  assertCampaignSubcommand,
+  loadCampaign,
+  loadCampaigns,
+  progressOf,
+} from "./trials/campaign.js";
 import { prepareProviderBundle, readImportedBundle } from "./trials/cross-provider.js";
 import {
   type TrialDirectory,
@@ -727,6 +742,7 @@ function adaptiveFamilyEvidenceInputs(
       return {
         familyId: e.familyId,
         countedAgentTrials: e.countedAgentTrials,
+        agentTrialsPassed: e.agentTrialsPassed,
         sharedProviderFamilies,
         staleTrials: e.staleTrials ?? [],
         providerRefusals: records.filter((r) => r.subjectType === "agent" && r.status === "refused").length,
@@ -893,18 +909,96 @@ function probesCommand(argv: readonly string[], root: string): string {
 
 function promotionInputs(root: string) {
   const registry = loadRegistry(root);
-  const workbench = loadDiscoveryWorkbench(root, registry);
+  const funnel = loadAdaptiveFunnel(root, registry);
+  const workbench = loadDiscoveryWorkbench(root, registry, funnel);
   const definitions = loadProbeDefinitions(root, registry, workbench);
   const summary = loadProbeRunSummary(root, registry, workbench);
   const promotions = loadPromotions(root, registry, workbench);
   const records = promotedFamilyRecords(promotions, definitions, summary, workbench);
-  return { registry, workbench, definitions, summary, promotions, records };
+  const campaigns = loadCampaigns(root);
+  const smokeGates = promotionSmokeGateMap(root, campaigns, funnel.transfers);
+  return { registry, workbench, definitions, summary, promotions, records, smokeGates };
+}
+
+const ACCESS_TOKEN_FAMILY_ID = "access-token-scope-expansion";
+
+interface AccessTokenSmokeContext {
+  readonly plan: CampaignPlan | undefined;
+  readonly analysis: ReturnType<typeof analyseFamilyTrials>;
+  readonly diagnoses: ReturnType<typeof diagnose>[];
+  readonly gate: PromotionSmokeGateResult;
+  readonly records: ReturnType<typeof familyEvidenceFor>["trials"]["records"];
+}
+
+function promotionSmokeGateMap(
+  root: string,
+  campaigns: readonly CampaignPlan[],
+  transfers: readonly TransferTest[],
+): ReadonlyMap<string, PromotionSmokeGateResult> {
+  return new Map([[ACCESS_TOKEN_FAMILY_ID, accessTokenSmokeContext(root, campaigns, transfers).gate]]);
+}
+
+function accessTokenSmokeContext(
+  root: string,
+  campaigns: readonly CampaignPlan[],
+  transfers: readonly TransferTest[],
+): AccessTokenSmokeContext {
+  const familyId = ACCESS_TOKEN_FAMILY_ID;
+  const plan = campaigns.find((campaign) => campaign.familyId === familyId);
+  const bundle = familyEvidenceFor(root, familyId);
+  const params = routeFor(familyId).scenarioParams();
+  const analysis = analyseFamilyTrials(familyId, bundle.trials, params, plan);
+  const diagnoses = bundle.trials.records
+    .filter((record) => record.subjectType === "agent")
+    .map((record) =>
+      diagnose({
+        familyId,
+        record,
+        params,
+        hypothesisChecks: builtFamily(familyId).checks,
+        hypothesisKnob: null,
+      }),
+    );
+  const currentHash = prepareChallenge(root, familyId).hash;
+  const sweep = builtFamily(familyId).run();
+  const localEvidencePass =
+    sweep.referenceFailures.length === 0 &&
+    sweep.mutantsCaught.every((mutant) => mutant.caught) &&
+    sweep.baselinesBlocked.length === sweep.baselinesTotal;
+  const diagnosisStatus = classifyAccessTokenSmoke(analysis, diagnoses);
+  const transferDeclared = transfers.some(
+    (transfer) => transfer.sourceKind === "family" && transfer.sourceId === familyId,
+  );
+
+  return {
+    plan,
+    analysis,
+    diagnoses,
+    records: bundle.trials.records,
+    gate: evaluatePromotionSmokeGate({
+      familyId,
+      localEvidencePass,
+      campaignPresent: plan !== undefined,
+      campaignHashCurrent: plan === undefined ? true : plan.challengeHash === currentHash,
+      packageHashCurrent: plan === undefined ? true : plan.challengeHash === currentHash,
+      verifierMutantBaselinePass: localEvidencePass,
+      countedSmokeTrials: analysis.counted,
+      countedFailures: analysis.failures,
+      countedSolves: analysis.solves,
+      providerRefusals: analysis.refusals,
+      infraFailures: analysis.infra,
+      transferDeclared,
+      diagnosisStatus,
+    }),
+  };
 }
 
 function promotionCommand(argv: readonly string[], root: string): string {
   const sub = positional(argv, 1) ?? "report";
   const input = promotionInputs(root);
-  if (sub === "report") return renderPromotionReport(input.records, input.summary, BUILT_FAMILIES);
+  if (sub === "report") {
+    return renderPromotionReport(input.records, input.summary, BUILT_FAMILIES, input.smokeGates);
+  }
   if (sub === "next") return renderPromotionNext(input.promotions);
   if (sub === "scaffold") {
     const promotionId = flag(argv, "--promotion");
@@ -2376,6 +2470,9 @@ function allCommand(argv: readonly string[], root: string): string {
   // same way, and the two drifted the moment a second family had evidence to report.
   const allEvidence = familyEvidenceMap(root);
   const adaptiveFunnel = loadAdaptiveFunnel(root, registry);
+  const campaignPlans = loadCampaigns(root);
+  const accessTokenSmoke = accessTokenSmokeContext(root, campaignPlans, adaptiveFunnel.transfers);
+  const promotionSmokeGates = new Map([[ACCESS_TOKEN_FAMILY_ID, accessTokenSmoke.gate]]);
   const adaptiveSummary = planAdaptiveFunnel(
     adaptiveFunnel,
     registry,
@@ -2418,7 +2515,10 @@ function allCommand(argv: readonly string[], root: string): string {
     probeSummary,
     discoveryWorkbench,
   );
-  write("promotion-report.md", renderPromotionReport(promotionRecords, probeSummary, BUILT_FAMILIES));
+  write(
+    "promotion-report.md",
+    renderPromotionReport(promotionRecords, probeSummary, BUILT_FAMILIES, promotionSmokeGates),
+  );
   write(
     "ship-recommendation.md",
     renderShipReport(registry.shapes, registry, allEvidence, humanGateEvidence, adversarialGateEvidence),
@@ -2474,7 +2574,7 @@ function allCommand(argv: readonly string[], root: string): string {
   write("adversarial-import-report.md", renderAdversarialImportReport(adversarialAttackRecords));
 
   // ---- the campaign + trial-analysis layer -------------------------------------------------------
-  for (const plan of loadCampaigns(root)) {
+  for (const plan of campaignPlans) {
     const rec = reconcile(root, plan);
     write(
       `${plan.familyId}-trial-campaign.md`,
@@ -2557,7 +2657,7 @@ function allCommand(argv: readonly string[], root: string): string {
     const routable = ROUTABLE_FAMILY_IDS.filter((id) => BUILT_FAMILY_IDS.includes(id));
     const perFamily = routable.map((familyId) => {
       const bundle = evidenceFor(familyId);
-      const plan = loadCampaigns(root).find((p) => p.familyId === familyId) ?? null;
+      const plan = campaignPlans.find((p) => p.familyId === familyId) ?? null;
       const notRunByFamily: Record<string, number> = {};
       for (const slot of plan?.slots ?? []) {
         if (slot.state !== "NOT_RUN") continue;
@@ -2962,13 +3062,21 @@ function allCommand(argv: readonly string[], root: string): string {
         );
       write(
         `${f.familyId}-agent-diagnosis.md`,
-        renderDiagnoses(f.familyId, diagnoses, f.plan?.hypothesis ?? "No campaign plan on record."),
+        f.familyId === ACCESS_TOKEN_FAMILY_ID
+          ? renderAccessTokenSmokeDiagnosis({
+              analysis: accessTokenSmoke.analysis,
+              diagnoses: accessTokenSmoke.diagnoses,
+              plan: accessTokenSmoke.plan,
+              gate: accessTokenSmoke.gate,
+              records: accessTokenSmoke.records,
+            })
+          : renderDiagnoses(f.familyId, diagnoses, f.plan?.hypothesis ?? "No campaign plan on record."),
       );
     }
 
     write(
       "spec-ambiguity-and-stale-evidence-report.md",
-      renderLifecycleReport({ ledgers, plans: loadCampaigns(root), usdPerTrial: 3.5 }),
+      renderLifecycleReport({ ledgers, plans: campaignPlans, usdPerTrial: 3.5 }),
     );
 
     // Every migration must be declared with both hashes and a written reason, and must account for
@@ -3059,23 +3167,26 @@ function allCommand(argv: readonly string[], root: string): string {
   // ---- did the evolution operator work? -----------------------------------------------------------
   write("evolution-validation-report.md", evolutionValidationReport(root, registry, evidenceFor));
 
-  // The evolution layer: one postmortem for the killed family, and the loop across all of them.
-  const picState = familyLoop(root, PIC_FAMILY, registry, evidenceFor);
-  write(
-    `${PIC_FAMILY}-kill-analysis.md`,
-    renderKillReport({
-      shape: picState.shape,
-      analysis: picState.analysis,
-      ...(picState.evidence === undefined ? {} : { evidence: picState.evidence }),
-      variants: picState.variants,
-      trials: picState.trials,
-    }),
-  );
+  // The evolution layer: postmortems for families whose counted trials show they are already solved,
+  // and the loop across all of them.
+  const loopStates = loopAll(root, registry, evidenceFor);
+  for (const state of loopStates.filter((item) => item.analysis.primary?.reason === "already_solved")) {
+    write(
+      `${state.shape.familyId}-kill-analysis.md`,
+      renderKillReport({
+        shape: state.shape,
+        analysis: state.analysis,
+        ...(state.evidence === undefined ? {} : { evidence: state.evidence }),
+        variants: state.variants,
+        trials: state.trials,
+      }),
+    );
+  }
   write(
     "foundry-evolution-report.md",
     renderEvolutionReport({
       registry,
-      states: loopAll(root, registry, evidenceFor),
+      states: loopStates,
       builtFamilyIds: BUILT_FAMILY_IDS,
       promoted: ["prompt-injection-memory-poisoning"],
       sharedBankSubjects: ev.evidence.sharedBankSubjects,

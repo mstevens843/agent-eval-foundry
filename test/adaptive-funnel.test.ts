@@ -105,6 +105,26 @@ describe("adaptive funnel planning", () => {
     expect(action?.reason).toMatch(/same-provider/);
   });
 
+  it("routes a clean counted smoke pass to evolve rather than transfer or matrix", () => {
+    const { registry, funnel } = input();
+    const summary = planAdaptiveFunnel(funnel, registry, [
+      {
+        familyId: "clean-smoke-family",
+        trialReady: true,
+        countedAgentTrials: 1,
+        agentTrialsPassed: 1,
+        sharedProviderFamilies: ["openai"],
+        agentFailuresChain: false,
+        agentAxes: null,
+      },
+    ]);
+
+    const action = summary.nextActions.find((a) => a.targetId === "clean-smoke-family");
+    expect(action?.decision).toBe("evolve");
+    expect(action?.stage).toBe("task_shape");
+    expect(action?.reason).toMatch(/solved/);
+  });
+
   it("keeps provider refusals out of production-mode advancement", () => {
     const { registry, funnel } = input();
     const summary = planAdaptiveFunnel(funnel, registry, [

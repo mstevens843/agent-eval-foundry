@@ -1,0 +1,28 @@
+{
+  "runId": "access-token-2026-08-o1",
+  "familyId": "access-token-scope-expansion",
+  "provider": "shell",
+  "providerLabel": "Shell command",
+  "model": "openai/gpt-5.6-sol",
+  "effort": null,
+  "subjectId": "gpt-5.6-sol",
+  "scenarioSetId": "expansion-384-138574b0",
+  "timeoutMs": 1800000,
+  "runtimeSeconds": 260,
+  "costUsd": null,
+  "isolation": "process",
+  "classification": "completed",
+  "classificationDetail": "artifact produced",
+  "command": [
+    "codex",
+    "exec",
+    "--dangerously-bypass-approvals-and-sandbox",
+    "--skip-git-repo-check",
+    "{instruction}"
+  ],
+  "challengeHash": "33cc98364ce2a6b3f9490e54937955d8",
+  "challengeFiles": 8,
+  "campaign": "access-token-2026-08",
+  "hostScript": "access-token-host.mjs",
+  "scenariosExpected": 384
+}
