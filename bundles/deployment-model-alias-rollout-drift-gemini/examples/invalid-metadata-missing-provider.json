@@ -1,0 +1,16 @@
+{
+  "runId": "deployment-model-alias-rollout-drift-gemini-missing-provider",
+  "familyId": "deployment-model-alias-rollout-drift",
+  "providerFamily": "google",
+  "model": "google/gemini-3-pro",
+  "subjectId": "gemini-3-pro",
+  "runtime": "external-cli",
+  "runDate": "YYYY-MM-DD",
+  "scenarioSetId": "drift-339-590affe3",
+  "challengeHash": "0e9b87a5f260544cfbc1cdce8f08938c",
+  "status": "completed",
+  "countsRequested": true,
+  "relationToAuthor": "independent",
+  "privateHintsUsed": false,
+  "hiddenFilesSeen": []
+}

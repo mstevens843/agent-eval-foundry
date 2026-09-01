@@ -32,6 +32,21 @@ const targets = [
     "external",
     "bundles/delegated-wallet-scope-reconciliation-external",
   ],
+  [
+    "deployment-model-alias-rollout-drift",
+    "external",
+    "bundles/deployment-model-alias-rollout-drift-external",
+  ],
+  [
+    "deployment-model-alias-rollout-drift",
+    "claude",
+    "bundles/deployment-model-alias-rollout-drift-claude",
+  ],
+  [
+    "deployment-model-alias-rollout-drift",
+    "gemini",
+    "bundles/deployment-model-alias-rollout-drift-gemini",
+  ],
 ];
 
 for (const [familyId, providerId, outDir] of targets) {

@@ -1,0 +1,48 @@
+{
+  "reviewId": "deployment-alias-human-EDITME",
+  "familyId": "deployment-model-alias-rollout-drift",
+  "solver": {
+    "id": "anonymous-independent-engineer-EDITME",
+    "profile": "Independent engineer; did not author this benchmark family",
+    "anonymized": true
+  },
+  "relationToAuthor": "independent",
+  "status": "clean-pass",
+  "countsAsCleanRoomSolve": true,
+  "reviewedChallengeHash": "0e9b87a5f260544cfbc1cdce8f08938c",
+  "gradedChallengeHash": "0e9b87a5f260544cfbc1cdce8f08938c",
+  "publicPackageDiffersFromGradedPackage": false,
+  "publicFilesReviewed": [
+    "challenge/README.md",
+    "challenge/SPEC.md",
+    "challenge/types.ts",
+    "challenge/MANIFEST.json",
+    "challenge/starter/subject.mjs",
+    "challenge/examples/"
+  ],
+  "hiddenFilesForbidden": [
+    "src/families/deployment-model-alias-rollout-drift/verify.ts",
+    "src/families/deployment-model-alias-rollout-drift/reference.ts",
+    "src/families/deployment-model-alias-rollout-drift/mutants.ts",
+    "src/families/deployment-model-alias-rollout-drift/truth.ts",
+    "src/families/deployment-model-alias-rollout-drift/scenarios.ts"
+  ],
+  "hiddenFilesSeen": [],
+  "timeBudgetMinutes": 180,
+  "startedAt": "YYYY-MM-DDTHH:MM:SSZ",
+  "endedAt": "YYYY-MM-DDTHH:MM:SSZ",
+  "elapsedMinutes": null,
+  "hintsUsed": [],
+  "questionsAsked": [],
+  "ambiguityFindings": [],
+  "solveOutcome": "REPLACE with concise outcome",
+  "verifier": {
+    "status": "pass",
+    "command": "node dist/cli.js trials verify --family deployment-model-alias-rollout-drift <run-id>",
+    "outputPath": "verifier-output.json",
+    "scenariosPassed": 339,
+    "scenariosFailed": 0
+  },
+  "notesPath": "notes.md",
+  "transcriptPath": "transcript.md"
+}

@@ -63,6 +63,16 @@ imported under the same hash. See
 and
 [`reports/deployment-model-alias-rollout-drift-production-readiness.md`](reports/deployment-model-alias-rollout-drift-production-readiness.md).
 
+Human + External Evidence Intake v1 makes that next evidence step countable. Deployment-alias now
+has current-hash Claude, Gemini and generic external packets with run instructions, metadata
+templates, hidden-artifact warnings, hash/scenario pins and an import validator. Returned packets
+are preserved even when invalid, but missing transcripts, stale hashes, modified challenges,
+provider refusals, infrastructure errors, contamination and hidden leaks never count. See
+[`reports/deployment-model-alias-rollout-drift-external-intake.md`](reports/deployment-model-alias-rollout-drift-external-intake.md),
+[`reports/deployment-model-alias-rollout-drift-human-intake.md`](reports/deployment-model-alias-rollout-drift-human-intake.md)
+and
+[`reports/deployment-model-alias-rollout-drift-matrix-readiness-gap.md`](reports/deployment-model-alias-rollout-drift-matrix-readiness-gap.md).
+
 The foundry keeps evidence streams separate:
 
 - **mutant-detection evidence**: a reference and known-bad implementations prove the verifier
@@ -98,7 +108,7 @@ requirement; adversarial audit is the attempted exploit record.
 | `checker-required-memory-poisoning` | 792 | 1 | 1 | 12 | not claimed yet | human-ready | adversarial-audited; OpenAI-only | **SHIP**: required-checker gap, OpenAI-only |
 | `access-token-scope-expansion` | 384 | 1 | 0 | 3 | already-solved by smoke | pending | audit-pending | **NOT-READY**: clean OpenAI smoke pass; evolve/repair before matrix |
 | `delegated-wallet-scope-reconciliation` | 804 | 1 | 0 | 3 | already-solved by smoke | human-ready | adversarial-ready | **NOT-READY**: clean OpenAI smoke pass; evolve/repair before matrix |
-| `deployment-model-alias-rollout-drift` | 339 | 1 | 1 | 6 | smoke-difficulty; OpenAI-only | human-ready | adversarial-audited; OpenAI-only fs-sandbox | **SHIP**: on-target OpenAI smoke failure; production matrix blocked until non-OpenAI smoke |
+| `deployment-model-alias-rollout-drift` | 339 | 1 | 1 | 6 | smoke-difficulty; OpenAI-only | human-ready | adversarial-audited; OpenAI-only fs-sandbox | **SMOKE-EVIDENCED**: production matrix blocked until non-OpenAI smoke imports cleanly |
 | `durable-approval-outbox` | 24 | 20 imported | 20 | 3 | 1 | reference-solvable | audit-pending; imported historical no-count | **SHIP**: imported historical bank |
 
 Current live-DOM package hash: `18c3f5afc5973604205cd7df23ce4cad`.
@@ -235,6 +245,10 @@ node dist/cli.js trials verify --family ui-replay-live-dom live-dom-2026-08-o2
 node dist/cli.js trials verify --family checker-required-memory-poisoning checker-required-2026-08-o1
 node dist/cli.js human readiness
 node dist/cli.js human solvability
+node dist/cli.js external packet --family deployment-model-alias-rollout-drift --provider external --out bundles/deployment-model-alias-rollout-drift-external
+node dist/cli.js external validate <returned-packet>
+node dist/cli.js external import <returned-packet>
+node dist/cli.js external report
 node dist/cli.js discovery report
 node dist/cli.js discovery candidates
 node dist/cli.js discovery score

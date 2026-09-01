@@ -294,6 +294,29 @@ const COVERED_IN_DEPLOYMENT_ALIAS_TEST: readonly RuleCode[] = [
   "PRODUCTION_UNREPAIRED_BYPASS",
 ];
 
+/** Rules whose known-bad case lives in `external-intake.test.ts`: third-party packet countability. */
+const COVERED_IN_EXTERNAL_INTAKE_TEST: readonly RuleCode[] = [
+  "EXTERNAL_PACKET_MISSING_TEMPLATE",
+  "EXTERNAL_PACKET_LEAKS_HIDDEN",
+  "EXTERNAL_INTAKE_METADATA_MISSING",
+  "EXTERNAL_INTAKE_CHALLENGE_HASH_MISSING",
+  "EXTERNAL_INTAKE_CHALLENGE_HASH_STALE",
+  "EXTERNAL_INTAKE_MODIFIED_CHALLENGE_PACKAGE",
+  "EXTERNAL_INTAKE_PROVIDER_ID_MISSING",
+  "EXTERNAL_INTAKE_TRANSCRIPT_MISSING",
+  "EXTERNAL_INTAKE_SUBMISSION_MISSING",
+  "EXTERNAL_INTAKE_VERIFIER_OUTPUT_MISSING",
+  "EXTERNAL_INTAKE_HIDDEN_ARTIFACT_LEAK",
+  "EXTERNAL_INTAKE_PROVIDER_REFUSAL_COUNTED",
+  "EXTERNAL_INTAKE_INFRA_ERROR_COUNTED",
+  "EXTERNAL_INTAKE_AUTHOR_CONTAMINATED",
+  "EXTERNAL_INTAKE_PRIVATE_HINT",
+  "EXTERNAL_INTAKE_SCENARIO_SET_MISMATCH",
+  "EXTERNAL_INTAKE_VERIFIER_RUN_MISMATCH",
+  "EXTERNAL_INTAKE_DUPLICATE_RUN_ID",
+  "EXTERNAL_INTAKE_PROVIDER_FAMILY_MISLABELLED",
+];
+
 /** Rules exercised by code below rather than by a JSON fixture. Keeps assertion 3 honest. */
 const PROGRAMMATIC: readonly RuleCode[] = [
   "E_TYPE",
@@ -559,6 +582,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ...COVERED_IN_PROMOTION_TEST,
       ...COVERED_IN_LINEAGE_TEST,
       ...COVERED_IN_DEPLOYMENT_ALIAS_TEST,
+      ...COVERED_IN_EXTERNAL_INTAKE_TEST,
     ]);
     const uncovered = RULE_CODES.filter((c) => !covered.has(c));
     expect(
@@ -583,6 +607,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ["test/promotion.test.ts", COVERED_IN_PROMOTION_TEST],
       ["test/lineage.test.ts", COVERED_IN_LINEAGE_TEST],
       ["test/deployment-alias-family.test.ts", COVERED_IN_DEPLOYMENT_ALIAS_TEST],
+      ["test/external-intake.test.ts", COVERED_IN_EXTERNAL_INTAKE_TEST],
     ];
     for (const [file, codes] of delegated) {
       const source = readFileSync(`${ROOT}${file}`, "utf8");

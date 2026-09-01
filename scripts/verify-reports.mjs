@@ -107,8 +107,14 @@ for (const [familyId, committedDir] of [
   ["ui-replay-live-dom", "examples/families/ui-replay-live-dom/challenge"],
   ["checker-required-memory-poisoning", "examples/families/checker-required-memory-poisoning/challenge"],
   ["access-token-scope-expansion", "examples/families/access-token-scope-expansion/challenge"],
-  ["delegated-wallet-scope-reconciliation", "examples/families/delegated-wallet-scope-reconciliation/challenge"],
-  ["deployment-model-alias-rollout-drift", "examples/families/deployment-model-alias-rollout-drift/challenge"],
+  [
+    "delegated-wallet-scope-reconciliation",
+    "examples/families/delegated-wallet-scope-reconciliation/challenge",
+  ],
+  [
+    "deployment-model-alias-rollout-drift",
+    "examples/families/deployment-model-alias-rollout-drift/challenge",
+  ],
 ]) {
   const tmpDir = mkdtempSync(join(tmpdir(), "foundry-fam-"));
   run(["challenge", "build", "--family", familyId, "--out", tmpDir]);
@@ -154,6 +160,11 @@ const SMOKE = [
   [["trials", "campaign", "status"], /campaign/],
   [["human", "readiness"], /Human readiness/],
   [["human", "solvability"], /Human solvability/],
+  [["external", "report"], /external evidence intake/],
+  [
+    ["external", "validate", "bundles/deployment-model-alias-rollout-drift-external"],
+    /external intake validation/,
+  ],
   [["funnel", "report"], /Adaptive benchmark-production funnel/],
   [["funnel", "probes"], /Mechanism probes/],
   [["funnel", "next"], /adaptive funnel next actions/],
@@ -297,6 +308,31 @@ if (!/family\s+access-token-scope-expansion/.test(promotionScaffoldOut)) {
   failures += 1;
 } else console.log("ok     cli: promotion scaffold");
 
+const externalPacketTmp = mkdtempSync(join(tmpdir(), "foundry-external-packet-"));
+const externalPacketOut = run([
+  "external",
+  "packet",
+  "--family",
+  "deployment-model-alias-rollout-drift",
+  "--provider",
+  "external",
+  "--out",
+  externalPacketTmp,
+]);
+if (!/deployment-model-alias-rollout-drift/.test(externalPacketOut)) {
+  console.error("SMOKE  `external packet` ran but did not print the expected family summary");
+  failures += 1;
+} else if (
+  readFileSync(join(externalPacketTmp, "challenge_hash.txt"), "utf8").trim() !==
+  "0e9b87a5f260544cfbc1cdce8f08938c"
+) {
+  console.error("SMOKE  `external packet` did not preserve the current challenge hash");
+  failures += 1;
+} else if (!readFileSync(join(externalPacketTmp, "DO_NOT_INCLUDE.md"), "utf8").includes("hidden verifier")) {
+  console.error("SMOKE  `external packet` did not include the hidden-artifact warning");
+  failures += 1;
+} else console.log("ok     cli: external packet");
+
 // The adversarial campaign files are generated artifacts too. They are the threat model that
 // decides what the attacker saw and which hashes can count, so a stale campaign file is a stale
 // verifier-integrity claim.
@@ -337,26 +373,10 @@ const BUNDLE_TARGETS = [
   ["checker-required-memory-poisoning", "claude-sonnet", "checker-required-memory-poisoning-claude-sonnet"],
   ["checker-required-memory-poisoning", "claude-haiku", "checker-required-memory-poisoning-claude-haiku"],
   ["checker-required-memory-poisoning", "gemini", "checker-required-memory-poisoning-gemini"],
-  [
-    "delegated-wallet-scope-reconciliation",
-    "external",
-    "delegated-wallet-scope-reconciliation-external",
-  ],
-  [
-    "deployment-model-alias-rollout-drift",
-    "external",
-    "deployment-model-alias-rollout-drift-external",
-  ],
-  [
-    "deployment-model-alias-rollout-drift",
-    "claude",
-    "deployment-model-alias-rollout-drift-claude",
-  ],
-  [
-    "deployment-model-alias-rollout-drift",
-    "gemini",
-    "deployment-model-alias-rollout-drift-gemini",
-  ],
+  ["delegated-wallet-scope-reconciliation", "external", "delegated-wallet-scope-reconciliation-external"],
+  ["deployment-model-alias-rollout-drift", "external", "deployment-model-alias-rollout-drift-external"],
+  ["deployment-model-alias-rollout-drift", "claude", "deployment-model-alias-rollout-drift-claude"],
+  ["deployment-model-alias-rollout-drift", "gemini", "deployment-model-alias-rollout-drift-gemini"],
 ];
 for (const [familyId, providerId, bundleDir] of BUNDLE_TARGETS) {
   const bunTmp = mkdtempSync(join(tmpdir(), "foundry-bundle-"));
@@ -441,7 +461,7 @@ for (const variant of [
 // by being written here, but the count is asserted so a report that stops being generated is caught
 // rather than silently skipped.
 run(["all", "--out", tmp]);
-const EXPECTED_REPORTS = 98;
+const EXPECTED_REPORTS = 103;
 const generated = readdirSync(tmp);
 if (generated.length !== EXPECTED_REPORTS) {
   console.error(`WRONG COUNT  \`all\` wrote ${generated.length} reports, expected ${EXPECTED_REPORTS}`);

@@ -69,6 +69,18 @@ import { adversarialAttackFailures } from "./adversarial-audit/validate.js";
 import { type MeasureOptions, measure } from "./axis-meter.js";
 import { checkChallengePackage } from "./challenge/package-check.js";
 import { buildChallengePackage } from "./challenge/package.js";
+import { importExternalRunPacket } from "./external-intake/import.js";
+import {
+  DEPLOYMENT_ALIAS_EXTERNAL_FAMILY_ID,
+  auditExternalEvidencePacket,
+} from "./external-intake/packet.js";
+import {
+  assertExternalIntakeResultsValid,
+  auditDeploymentAliasExternalPackets,
+  loadExternalIntakeResults,
+  renderExternalIntakeReport,
+} from "./external-intake/report.js";
+import { validateExternalRunPacket } from "./external-intake/validate.js";
 import {
   ALL_SUBJECTS,
   referenceFailures,
@@ -199,6 +211,8 @@ import {
   auditDeploymentAliasCrossLabBundles,
   renderDeploymentAliasAdversarialReadiness,
   renderDeploymentAliasCrossLabReadiness,
+  renderDeploymentAliasHumanIntake,
+  renderDeploymentAliasMatrixReadinessGap,
   renderDeploymentAliasProductionReadiness,
 } from "./reports/deployment-alias-production.js";
 import { renderDeploymentAliasFamilyReport } from "./reports/deployment-alias-report.js";
@@ -378,6 +392,11 @@ FAMILIES (run a measured mini-benchmark)
   trials bank [--out f]          every trial on record, counted and uncounted
   shared-bank [--out f]          cross-family subject overlap and what it permits
   history import [path] [--out f]  normalize Harbor runs from the Durable Outbox repo
+  external packet --family <id> --provider <p> --out <dir>
+                                 build third-party evidence packet with hash-pinned templates
+  external validate <packet-dir> validate a returned external/human packet without importing it
+  external import <packet-dir>   preserve and import a returned packet if it is countable
+  external report [--out f]      external evidence intake readiness and returned-packet status
   human readiness [--out f]      public-package audit for clean-room human review
   human solvability [--out f]    counted independent human solve evidence
   browser-backed run [--out f]   run the measured Playwright-backed UI replay spike
@@ -759,6 +778,91 @@ function humanCommand(argv: readonly string[], root: string): string {
   if (sub === "readiness") return renderHumanReadinessReport(auditHumanReadinessForFamilies(root));
   if (sub === "solvability") return renderHumanSolvabilityReport(humanEvidenceForFamilies(root));
   throw new Error(`unknown human subcommand "${sub}"; expected readiness | solvability`);
+}
+
+function externalValidationSummary(result: ReturnType<typeof validateExternalRunPacket>): string {
+  const metadata = result.packet.metadata;
+  return [
+    "external intake validation",
+    `run        ${metadata?.runId ?? "missing"}`,
+    `family     ${result.packet.familyId}`,
+    `status     ${result.status}`,
+    `counts     ${result.countable ? "yes" : "NO"} — ${result.countabilityReason}`,
+    `challenge  ${result.packet.actualChallengeHash ?? "missing"} (expected ${result.packet.expectedChallengeHash})`,
+    `scenario   ${metadata?.scenarioSetId ?? "missing"} (expected ${result.packet.expectedScenarioSetId})`,
+    `provider   ${metadata?.providerFamily ?? "missing"} / ${metadata?.provider ?? "missing"} / ${metadata?.model ?? "missing"}`,
+    `transcript ${result.packet.transcriptPath === null ? "missing" : result.packet.transcriptPath}`,
+    `submission ${result.packet.submissionFiles.length === 0 ? "missing" : result.packet.submissionFiles.join(", ")}`,
+    `verifier   ${result.packet.verifierOutputPath === null ? "missing" : result.packet.verifierOutputPath}`,
+    "",
+    result.findings.length === 0
+      ? "No intake validation findings."
+      : ["Findings:", ...result.findings.map((f) => `  ${f.code} ${f.path}: ${f.detail}`), ""].join("\n"),
+  ].join("\n");
+}
+
+function externalCommand(argv: readonly string[], root: string): string {
+  const sub = positional(argv, 1) ?? "report";
+  const familyId = flag(argv, "--family") ?? DEPLOYMENT_ALIAS_EXTERNAL_FAMILY_ID;
+  if (familyId !== DEPLOYMENT_ALIAS_EXTERNAL_FAMILY_ID) {
+    throw new Error("external intake v1 is implemented for deployment-model-alias-rollout-drift");
+  }
+  if (sub === "packet") {
+    const providerId = flag(argv, "--provider") ?? "external";
+    const out = flag(argv, "--out");
+    if (out === null) throw new Error("external packet needs --out <dir>");
+    const bundle = prepareProviderBundle(root, familyId, providerId, out);
+    const audit = auditExternalEvidencePacket(root, familyId, providerId, out);
+    return [
+      `family      ${familyId}`,
+      `provider    ${providerId}`,
+      `challenge   ${bundle.challenge.hash}`,
+      `scenario    ${bundle.challenge.scenarioSetId}`,
+      `packet      ${out}`,
+      `templates   ${audit.requiredFilesPresent ? "pass" : `missing ${audit.missingRequiredFiles.join(", ")}`}`,
+      `leak check  ${audit.leakCheck} — ${audit.leakDetail}`,
+      "",
+      `Validate returned packet with: node dist/cli.js external validate ${out}`,
+      `Import returned packet with:   node dist/cli.js external import ${out}`,
+      "",
+    ].join("\n");
+  }
+  if (sub === "validate") {
+    const dir = positional(argv, 2);
+    if (dir === undefined) throw new Error("external validate needs a packet directory");
+    const prepared = prepareChallenge(root, familyId);
+    const existingRunIds = readFamilyTrials(join(root, "trials"), familyId).map((trial) => trial.runId);
+    return externalValidationSummary(
+      validateExternalRunPacket(root, dir, {
+        familyId,
+        currentChallengeHash: prepared.hash,
+        expectedScenarioSetId: prepared.scenarioSetId,
+        existingRunIds,
+      }),
+    );
+  }
+  if (sub === "import") {
+    const dir = positional(argv, 2);
+    if (dir === undefined) throw new Error("external import needs a packet directory");
+    const result = importExternalRunPacket(root, familyId, dir);
+    return [
+      externalValidationSummary(result.validation),
+      `preserved  ${result.preservedDir}`,
+      `trial dir  ${result.trialDir ?? "not written"}`,
+      "",
+    ].join("\n");
+  }
+  if (sub === "report") {
+    const prepared = prepareChallenge(root, familyId);
+    return renderExternalIntakeReport({
+      familyId,
+      expectedHash: prepared.hash,
+      expectedScenarioSetId: prepared.scenarioSetId,
+      packetAudits: auditDeploymentAliasExternalPackets(root),
+      intakeResults: loadExternalIntakeResults(root, familyId),
+    });
+  }
+  throw new Error(`unknown external subcommand "${sub}"; expected packet | validate | import | report`);
 }
 
 function adaptiveFamilyEvidenceInputs(
@@ -1634,6 +1738,7 @@ function checkCommand(root: string): string {
   }
   assertHumanReviewsValid(root);
   assertAdversarialAuditsValid(root);
+  assertExternalIntakeResultsValid(root);
   const adaptiveFunnel = loadAdaptiveFunnel(root, registry);
   const discoveryWorkbench = loadDiscoveryWorkbench(root, registry, adaptiveFunnel);
   const probeSummary = loadProbeRunSummary(root, registry, discoveryWorkbench);
@@ -1652,6 +1757,7 @@ function checkCommand(root: string): string {
     "  consistency ledger statuses agree with the ship gate; every kill has a postmortem",
     "  human       counted clean-room reviews validate against current package hashes",
     "  adversarial counted verifier-integrity audits validate against current package hashes",
+    "  external    returned third-party intake packets validate before countability",
     "  funnel      mechanism probes and transfer tests validate against the registry",
     "  workbench   discovery scoring inputs validate against mechanisms and transfers",
     `  probes     ${probeSummary.probes.length} executable mechanism probes run locally`,
@@ -2822,6 +2928,10 @@ function allCommand(argv: readonly string[], root: string): string {
       deploymentSweep.baselinesBlocked.length === deploymentSweep.baselinesTotal;
     const deploymentHuman = humanGateEvidence[DEPLOYMENT_ALIAS_FAMILY_ID];
     const deploymentAdversarial = adversarialGateEvidence[DEPLOYMENT_ALIAS_FAMILY_ID];
+    const deploymentExternalResults = loadExternalIntakeResults(root, DEPLOYMENT_ALIAS_FAMILY_ID);
+    const deploymentOpenAiHalfMatrix = campaignPlans.find(
+      (campaign) => campaign.campaignId === "deployment-model-alias-rollout-drift-openai-half-matrix-2026-09",
+    );
     const deploymentProductionReadiness = evaluateProductionReadiness({
       familyId: DEPLOYMENT_ALIAS_FAMILY_ID,
       challengeHash: deploymentPrepared.hash,
@@ -2942,6 +3052,38 @@ function allCommand(argv: readonly string[], root: string): string {
         bundlePath: adversarialBundlePath(root, DEPLOYMENT_ALIAS_FAMILY_ID).replace(`${root}/`, ""),
       }),
     );
+    write(
+      "deployment-model-alias-rollout-drift-external-intake.md",
+      renderExternalIntakeReport({
+        familyId: DEPLOYMENT_ALIAS_FAMILY_ID,
+        expectedHash: deploymentPrepared.hash,
+        expectedScenarioSetId: deploymentPrepared.scenarioSetId,
+        packetAudits: auditDeploymentAliasExternalPackets(root),
+        intakeResults: deploymentExternalResults,
+      }),
+    );
+    write(
+      "deployment-model-alias-rollout-drift-human-intake.md",
+      renderDeploymentAliasHumanIntake({
+        challengeHash: deploymentPrepared.hash,
+        scenarioSetId: deploymentPrepared.scenarioSetId,
+        human: deploymentHuman,
+        packetPath: "human-reviews/deployment-model-alias-rollout-drift",
+      }),
+    );
+    write(
+      "deployment-model-alias-rollout-drift-matrix-readiness-gap.md",
+      renderDeploymentAliasMatrixReadinessGap({
+        readiness: deploymentProductionReadiness,
+        analysis: deploymentAliasSmoke.analysis,
+        human: deploymentHuman,
+        adversarial: deploymentAdversarial,
+        externalResults: deploymentExternalResults,
+        openAiHalfMatrix: deploymentOpenAiHalfMatrix,
+        challengeHash: deploymentPrepared.hash,
+        scenarioSetId: deploymentPrepared.scenarioSetId,
+      }),
+    );
   }
   write(
     "ship-recommendation.md",
@@ -2998,10 +3140,24 @@ function allCommand(argv: readonly string[], root: string): string {
   write("adversarial-import-report.md", renderAdversarialImportReport(adversarialAttackRecords));
 
   // ---- the campaign + trial-analysis layer -------------------------------------------------------
+  const campaignCountsByFamily = new Map<string, number>();
+  for (const plan of campaignPlans) {
+    campaignCountsByFamily.set(plan.familyId, (campaignCountsByFamily.get(plan.familyId) ?? 0) + 1);
+  }
+  const firstCampaignByFamily = new Map<string, string>();
+  for (const plan of campaignPlans) {
+    if (!firstCampaignByFamily.has(plan.familyId)) firstCampaignByFamily.set(plan.familyId, plan.campaignId);
+  }
+  const campaignReportPrefix = (plan: CampaignPlan): string =>
+    (campaignCountsByFamily.get(plan.familyId) ?? 0) > 1 &&
+    firstCampaignByFamily.get(plan.familyId) !== plan.campaignId
+      ? plan.campaignId
+      : plan.familyId;
   for (const plan of campaignPlans) {
     const rec = reconcile(root, plan);
+    const reportPrefix = campaignReportPrefix(plan);
     write(
-      `${plan.familyId}-trial-campaign.md`,
+      `${reportPrefix}-trial-campaign.md`,
       renderCampaignReport({
         plan,
         countedRunIds: rec.countedRecords.map((r) => r.runId),
@@ -3018,7 +3174,7 @@ function allCommand(argv: readonly string[], root: string): string {
       plan,
     );
     write(
-      `${plan.familyId}-agent-results.md`,
+      `${reportPrefix}-agent-results.md`,
       renderAgentResults({
         analysis,
         plan,
@@ -3925,6 +4081,12 @@ export function main(argv: readonly string[]): number {
       case "human":
         emit(argv, humanCommand(argv, root));
         return 0;
+      case "external": {
+        const sub = positional(argv, 1) ?? "report";
+        if (sub === "packet") process.stdout.write(externalCommand(argv, root));
+        else emit(argv, externalCommand(argv, root));
+        return 0;
+      }
       case "browser-backed": {
         const sub = positional(argv, 1) ?? "verify";
         if (sub === "report" || sub === "axis") emit(argv, browserBackedCommand(argv, root));

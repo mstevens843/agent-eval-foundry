@@ -18,6 +18,7 @@
 
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { writeExternalPacketSupplementalFiles } from "../external-intake/packet.js";
 import { fail } from "../foundry/schema.js";
 import { type ProviderSpec, buildCommand, checkProvider, providerById } from "./provider-registry.js";
 import { routeFor } from "./router.js";
@@ -181,6 +182,7 @@ export function prepareProviderBundle(
       mode: file.exec ? 0o755 : 0o644,
     });
   }
+  const supplemental = writeExternalPacketSupplementalFiles(outDir, familyId, spec, challenge);
 
   return {
     familyId,
@@ -191,7 +193,7 @@ export function prepareProviderBundle(
     command,
     instruction: route.instruction,
     dir: outDir,
-    files: files.map((f) => f.name),
+    files: [...files.map((f) => f.name), ...supplemental],
   };
 }
 

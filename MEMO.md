@@ -67,6 +67,14 @@ OpenAI-only override is recorded. Current-hash Claude, Gemini and generic extern
 prepared for import; none of them count until returned with transcript, submission, metadata and
 verifier output.
 
+Human + External Evidence Intake v1 turns that handoff into a validator instead of an email
+convention. Deployment-alias now has current-hash external packets, metadata templates,
+hidden-artifact warnings, import/verify commands, a family-specific clean-room human review packet,
+and a matrix-readiness gap report. The OpenAI half-matrix is planned as same-provider stability
+evidence only: the existing smoke is slot 1, two OpenAI repeats are pending, and the full `/6`
+matrix remains blocked until a non-OpenAI smoke imports cleanly under hash
+`0e9b87a5f260544cfbc1cdce8f08938c`.
+
 The foundry now separates three claims: a reference can solve it, a clean public package can be
 handed to a human, and an independent human has actually solved it. Those are different evidence
 levels and the reports do not merge them. The current human layer is deterministic: it audits

@@ -286,6 +286,47 @@ export {
   parseHumanReviewRecord,
 } from "./human-solvability/validate.js";
 
+// --- external intake: third-party run packets before counted trials ---
+export { importExternalRunPacket, externalIntakeReceivedRoot } from "./external-intake/import.js";
+export {
+  DEPLOYMENT_ALIAS_EXTERNAL_FAMILY_ID,
+  auditExternalEvidencePacket,
+  externalPacketAuditFindings,
+  externalPacketSupplementalFiles,
+  writeExternalPacketSupplementalFiles,
+} from "./external-intake/packet.js";
+export {
+  assertExternalIntakeResultsValid,
+  auditDeploymentAliasExternalPackets,
+  loadExternalIntakeResults,
+  renderExternalIntakeReport,
+} from "./external-intake/report.js";
+export {
+  EXTERNAL_INTAKE_RULE_CODES,
+  EXTERNAL_INTAKE_STATUSES,
+  EXTERNAL_PACKET_REQUIRED_FILES,
+  EXTERNAL_PROVIDER_FAMILIES,
+  EXTERNAL_RUN_RELATIONS,
+} from "./external-intake/types.js";
+export type {
+  ExternalHalfMatrixPlan,
+  ExternalHalfMatrixSlot,
+  ExternalIntakeFinding,
+  ExternalIntakeImportResult,
+  ExternalIntakeRuleCode,
+  ExternalIntakeStatus,
+  ExternalIntakeValidationResult,
+  ExternalPacketAudit,
+  ExternalProviderFamily,
+  ExternalReturnedPacket,
+  ExternalRunMetadata,
+  ExternalRunRelation,
+} from "./external-intake/types.js";
+export {
+  parseExternalRunMetadata,
+  validateExternalRunPacket,
+} from "./external-intake/validate.js";
+
 // --- browser-backed UI foundation: scaffolded descendant, not measured evidence ---
 export {
   BROWSER_BACKED_PAGE_FIXTURE_MODEL,

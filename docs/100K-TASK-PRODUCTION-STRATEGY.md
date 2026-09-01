@@ -363,6 +363,16 @@ explicit OpenAI-only matrix override is recorded. The family also has one counte
 no-bypass adversarial audit under `fs-sandbox`, which is verifier-integrity evidence for one
 provider family, not cross-lab cheat-resistance evidence.
 
+Human + External Evidence Intake v1 makes the next handoff mechanical instead of informal. The
+deployment-alias branch now emits current-hash external packets for Claude, Gemini and generic
+third-party runners, plus a family-specific human clean-room packet. A returned packet must preserve
+metadata, transcript, submission, verifier output, scenario set and the exact public challenge hash;
+it must not include hidden verifier/reference/scenario artifacts or private hints. Invalid packets
+are retained as no-count evidence rather than discarded. The prepared OpenAI 3/6 half-matrix treats
+the existing counted smoke as slot 1 and leaves two OpenAI repeats planned, but that would measure
+same-provider stability only. It still cannot satisfy the non-OpenAI smoke gate or justify a full
+`/6` matrix by itself.
+
 ### Stage 0: Candidate Pool
 
 Start broad. A reasonable first pass is 50 to 100 candidate family ideas, not 1000 concrete tasks.

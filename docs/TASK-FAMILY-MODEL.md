@@ -139,6 +139,15 @@ current-hash external import bundles and added one counted Codex/OpenAI no-bypas
 under `fs-sandbox`; that is verifier-integrity evidence for one provider family, not a security
 proof and not cross-lab cheat-resistance evidence.
 
+Human + External Evidence Intake v1 adds the handoff layer for that production gate. A package-backed
+family can now emit an external packet with the public challenge, pinned challenge hash, pinned
+scenario set, run instructions, metadata template, submission template, verifier-output contract and
+hidden-artifact warnings. The intake validator preserves returned packets but refuses countability
+for stale hashes, modified public packages, missing transcript/submission/verifier output, provider
+refusal, infrastructure error, author contamination, private hints, provider-family mislabelling or
+hidden artifact leaks. For deployment-alias, the OpenAI half-matrix is now planned as same-provider
+stability evidence; it still does not satisfy cross-lab readiness or full `/6` matrix gates.
+
 Durable Approval Outbox is the first concrete example:
 
 Family: Durable Approval Outbox.
@@ -224,6 +233,7 @@ Each step exists to answer a different question.
 | hidden region | sampled subset | Is the hidden suite fair? | Adding rules the subject could not know. |
 | challenge package | public files plus hash | What did the subject actually see? | Stale evidence after the task changes. |
 | model trials | preserved submissions/transcripts | Do real agents fail this family? | Claiming difficulty from mutants only. |
+| external intake | returned packet validation | Can third-party evidence be counted under the current hash? | Importing stale, contaminated or hidden-context runs. |
 | axis analysis | catch-set matrix | Are failures independent or redundant? | Calling more tests "more diversity" without measuring it. |
 | ship / kill / evolve | gate report and kill analysis | What should happen next? | Shipping already-solved, unfair or one-axis families as broad evidence. |
 
