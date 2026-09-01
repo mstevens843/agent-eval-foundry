@@ -1,0 +1,2478 @@
+{
+  "runId": "deployment-model-alias-rollout-drift-2026-08-o1",
+  "familyId": "deployment-model-alias-rollout-drift",
+  "subjectId": "gpt-5.6-sol",
+  "subjectType": "agent",
+  "model": "openai/gpt-5.6-sol",
+  "effort": null,
+  "status": "completed",
+  "counts": true,
+  "countsReason": "completed with 339 graded scenario(s), no refusal, timeout or infrastructure error",
+  "scenarioSetId": "drift-339-590affe3",
+  "cells": [
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-fresh-window-open-reg-major-mixed_versions-none-wrong_current-provider_says_red-available-routing_service-r2-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-fresh-window-open-reg-minor-all_current-none-wrong_current-none-available-release_console-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-fresh-window-open-reg-none-misattributed-after_bad_eval-correct_previous-provider_says_green-available-routing_service-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-fresh-window-open-reg-none-mixed_versions-none-correct_previous-provider_says_green-available-release_console-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-stale_initial-window-complete-reg-minor-misattributed-none-correct_previous-provider_says_green-available-release_console-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-stale_initial-window-complete-reg-none-all_current-none-correct_previous-provider_says_red-available-routing_service-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-stale_initial-window-open-reg-none-mixed_versions-none-correct_previous-provider_says_green-available-release_console-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-stale_previous-window-complete-reg-none-mixed_versions-after_bad_eval-wrong_current-provider_says_green-unavailable-ci_worker-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-stale_previous-window-open-reg-major-misattributed-none-wrong_current-none-available-ci_worker-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-stale_previous-window-open-reg-major-misattributed-none-wrong_current-none-unavailable-release_console-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-stale_previous-window-open-reg-major-mixed_versions-none-wrong_current-provider_says_green-available-routing_service-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-fresh-window-closed-reg-none-all_current-none-correct_previous-provider_says_red-unavailable-routing_service-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-fresh-window-closed-reg-unknown-misattributed-none-wrong_current-provider_says_red-available-release_console-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-fresh-window-complete-reg-major-misattributed-after_bad_eval-wrong_current-provider_says_red-available-release_console-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-fresh-window-complete-reg-none-misattributed-after_bad_eval-correct_previous-provider_says_red-available-ci_worker-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-fresh-window-complete-reg-none-misattributed-none-wrong_current-provider_says_red-unavailable-routing_service-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-fresh-window-open-reg-major-all_current-none-wrong_current-none-available-routing_service-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-fresh-window-open-reg-major-misattributed-none-wrong_current-provider_says_red-unavailable-routing_service-r2-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-stale_initial-window-closed-reg-major-all_current-after_bad_eval-correct_previous-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-stale_initial-window-open-reg-major-all_current-after_bad_eval-correct_previous-provider_says_green-unavailable-release_console-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-stale_initial-window-open-reg-major-misattributed-none-correct_previous-provider_says_green-available-release_console-r2-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-stale_initial-window-open-reg-minor-mixed_versions-none-wrong_current-provider_says_red-unavailable-routing_service-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-stale_previous-window-complete-reg-major-mixed_versions-after_bad_eval-wrong_current-provider_says_red-available-ci_worker-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-stale_previous-window-open-reg-major-mixed_versions-after_bad_eval-wrong_current-provider_says_red-unavailable-routing_service-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-pre_canary-cache-fresh-window-closed-reg-none-all_current-none-correct_previous-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-pre_canary-cache-fresh-window-complete-reg-major-mixed_versions-after_bad_eval-correct_previous-provider_says_red-unavailable-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-pre_canary-cache-fresh-window-complete-reg-unknown-mixed_versions-after_bad_eval-correct_previous-provider_says_green-unavailable-release_console-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-pre_canary-cache-stale_initial-window-closed-reg-minor-misattributed-after_bad_eval-correct_previous-provider_says_red-unavailable-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-pre_canary-cache-stale_previous-window-closed-reg-major-mixed_versions-after_bad_eval-correct_previous-none-unavailable-ci_worker-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-fresh-window-complete-reg-none-misattributed-none-wrong_current-provider_says_red-available-release_console-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_initial-window-complete-reg-major-all_current-after_bad_eval-correct_previous-provider_says_red-available-routing_service-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_initial-window-complete-reg-major-misattributed-none-wrong_current-provider_says_red-unavailable-routing_service-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_initial-window-complete-reg-minor-misattributed-none-wrong_current-provider_says_green-available-routing_service-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_initial-window-open-reg-major-misattributed-after_bad_eval-correct_previous-provider_says_green-unavailable-routing_service-r2-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_initial-window-open-reg-major-misattributed-none-wrong_current-provider_says_green-available-ci_worker-r2-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_initial-window-open-reg-major-mixed_versions-none-wrong_current-none-unavailable-ci_worker-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_previous-window-closed-reg-major-insufficient-after_bad_eval-correct_previous-none-unavailable-ci_worker-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_previous-window-closed-reg-none-all_current-after_bad_eval-wrong_current-provider_says_red-unavailable-routing_service-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_previous-window-complete-reg-minor-misattributed-none-correct_previous-none-unavailable-release_console-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_previous-window-open-reg-minor-all_current-none-wrong_current-provider_says_green-available-ci_worker-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_previous-window-open-reg-minor-misattributed-none-wrong_current-provider_says_red-available-routing_service-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-fresh-window-open-reg-major-all_current-none-wrong_current-provider_says_red-available-routing_service-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_initial-window-closed-reg-minor-insufficient-after_bad_eval-wrong_current-none-unavailable-routing_service-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_initial-window-closed-reg-unknown-all_current-after_bad_eval-correct_previous-provider_says_red-available-routing_service-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_initial-window-closed-reg-unknown-misattributed-after_bad_eval-correct_previous-none-available-ci_worker-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_initial-window-complete-reg-major-mixed_versions-after_bad_eval-correct_previous-provider_says_green-available-release_console-r2-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_initial-window-open-reg-unknown-all_current-none-correct_previous-provider_says_red-unavailable-routing_service-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_previous-window-closed-reg-none-mixed_versions-none-correct_previous-provider_says_red-available-ci_worker-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_previous-window-complete-reg-major-all_current-none-correct_previous-provider_says_red-unavailable-routing_service-r2-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_previous-window-complete-reg-none-insufficient-after_bad_eval-correct_previous-provider_says_red-unavailable-routing_service-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_previous-window-open-reg-major-all_current-none-correct_previous-provider_says_red-unavailable-ci_worker-r2-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_previous-window-open-reg-minor-all_current-after_bad_eval-correct_previous-provider_says_green-unavailable-routing_service-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-fresh-window-complete-reg-minor-misattributed-after_bad_eval-correct_previous-provider_says_green-available-release_console-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-stale_initial-window-closed-reg-major-mixed_versions-none-correct_previous-provider_says_red-unavailable-ci_worker-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-stale_initial-window-closed-reg-none-mixed_versions-none-correct_previous-none-unavailable-ci_worker-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-stale_initial-window-complete-reg-none-insufficient-after_bad_eval-correct_previous-none-available-routing_service-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-stale_initial-window-open-reg-none-mixed_versions-none-correct_previous-provider_says_red-unavailable-routing_service-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-stale_previous-window-closed-reg-none-mixed_versions-none-wrong_current-provider_says_red-unavailable-routing_service-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-stale_previous-window-open-reg-major-all_current-none-correct_previous-provider_says_green-unavailable-routing_service-r2-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-pre_canary-cache-stale_initial-window-closed-reg-major-misattributed-after_bad_eval-correct_previous-provider_says_green-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-pre_canary-cache-stale_initial-window-complete-reg-unknown-all_current-after_bad_eval-correct_previous-provider_says_green-unavailable-ci_worker-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-pre_canary-cache-stale_previous-window-closed-reg-major-mixed_versions-none-wrong_current-provider_says_green-unavailable-release_console-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-ramp-cache-fresh-window-complete-reg-major-all_current-none-correct_previous-provider_says_red-available-routing_service-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-ramp-cache-fresh-window-complete-reg-major-misattributed-none-wrong_current-provider_says_red-available-ci_worker-r2-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-ramp-cache-stale_initial-window-closed-reg-major-misattributed-after_bad_eval-wrong_current-provider_says_green-available-routing_service-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-ramp-cache-stale_initial-window-closed-reg-major-mixed_versions-after_bad_eval-correct_previous-provider_says_green-unavailable-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-ramp-cache-stale_initial-window-closed-reg-none-mixed_versions-after_bad_eval-wrong_current-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-ramp-cache-stale_initial-window-complete-reg-major-mixed_versions-after_bad_eval-correct_previous-none-available-routing_service-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-ramp-cache-stale_initial-window-complete-reg-minor-all_current-after_bad_eval-correct_previous-provider_says_green-unavailable-release_console-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-ramp-cache-stale_initial-window-complete-reg-none-all_current-none-correct_previous-none-available-release_console-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-ramp-cache-stale_initial-window-open-reg-major-all_current-none-wrong_current-provider_says_red-unavailable-routing_service-r2-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-ramp-cache-stale_initial-window-open-reg-none-all_current-after_bad_eval-wrong_current-provider_says_red-available-ci_worker-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-ramp-cache-stale_initial-window-open-reg-none-mixed_versions-after_bad_eval-wrong_current-none-unavailable-release_console-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-ramp-cache-stale_previous-window-complete-reg-major-all_current-after_bad_eval-correct_previous-provider_says_green-available-release_console-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-ramp-cache-stale_previous-window-open-reg-minor-all_current-after_bad_eval-wrong_current-provider_says_green-available-release_console-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-canary-cache-fresh-window-closed-reg-none-all_current-none-correct_previous-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-canary-cache-fresh-window-complete-reg-major-mixed_versions-after_bad_eval-wrong_current-provider_says_green-unavailable-routing_service-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-canary-cache-fresh-window-complete-reg-none-all_current-after_bad_eval-correct_previous-none-unavailable-release_console-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-canary-cache-stale_initial-window-open-reg-minor-mixed_versions-after_bad_eval-wrong_current-none-unavailable-release_console-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-canary-cache-stale_initial-window-open-reg-unknown-all_current-none-correct_previous-provider_says_red-available-ci_worker-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-canary-cache-stale_previous-window-complete-reg-major-misattributed-none-correct_previous-provider_says_green-unavailable-release_console-r2-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-canary-cache-stale_previous-window-complete-reg-none-insufficient-none-correct_previous-none-unavailable-routing_service-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-fresh-window-closed-reg-minor-insufficient-after_bad_eval-correct_previous-provider_says_green-available-ci_worker-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-fresh-window-closed-reg-none-all_current-none-correct_previous-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-fresh-window-complete-reg-major-all_current-after_bad_eval-wrong_current-provider_says_red-unavailable-routing_service-r2-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-fresh-window-complete-reg-minor-mixed_versions-after_bad_eval-wrong_current-provider_says_red-unavailable-routing_service-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-fresh-window-complete-reg-none-mixed_versions-after_bad_eval-correct_previous-none-unavailable-release_console-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-fresh-window-open-reg-major-insufficient-after_bad_eval-correct_previous-none-unavailable-routing_service-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-fresh-window-open-reg-major-mixed_versions-none-correct_previous-provider_says_green-available-ci_worker-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-fresh-window-open-reg-minor-all_current-none-wrong_current-provider_says_green-available-ci_worker-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-fresh-window-open-reg-minor-mixed_versions-after_bad_eval-wrong_current-provider_says_green-unavailable-routing_service-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-stale_initial-window-complete-reg-major-all_current-after_bad_eval-correct_previous-provider_says_red-available-release_console-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-stale_initial-window-complete-reg-major-misattributed-none-correct_previous-provider_says_green-available-release_console-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-stale_initial-window-complete-reg-none-misattributed-none-correct_previous-provider_says_red-unavailable-routing_service-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-stale_previous-window-complete-reg-major-all_current-none-wrong_current-provider_says_green-unavailable-routing_service-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-stale_previous-window-complete-reg-major-insufficient-after_bad_eval-wrong_current-provider_says_red-available-ci_worker-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-stale_previous-window-open-reg-none-all_current-after_bad_eval-correct_previous-none-available-ci_worker-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-stale_previous-window-open-reg-none-mixed_versions-none-wrong_current-provider_says_green-unavailable-ci_worker-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-fresh-window-closed-reg-major-all_current-none-correct_previous-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-fresh-window-closed-reg-minor-all_current-none-correct_previous-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-fresh-window-closed-reg-none-all_current-after_bad_eval-correct_previous-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-fresh-window-closed-reg-none-all_current-none-correct_previous-none-available-ci_worker-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-fresh-window-closed-reg-none-all_current-none-correct_previous-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-fresh-window-closed-reg-none-all_current-none-correct_previous-none-available-release_console-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-fresh-window-closed-reg-none-all_current-none-correct_previous-none-available-routing_service-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-fresh-window-closed-reg-none-all_current-none-correct_previous-none-unavailable-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-fresh-window-closed-reg-none-all_current-none-correct_previous-provider_says_green-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-fresh-window-closed-reg-none-all_current-none-correct_previous-provider_says_red-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-fresh-window-closed-reg-none-all_current-none-wrong_current-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-fresh-window-closed-reg-none-insufficient-none-correct_previous-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-fresh-window-closed-reg-none-misattributed-none-correct_previous-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-fresh-window-closed-reg-none-mixed_versions-none-correct_previous-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-fresh-window-closed-reg-unknown-all_current-none-correct_previous-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-fresh-window-closed-reg-unknown-insufficient-after_bad_eval-wrong_current-provider_says_red-unavailable-routing_service-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-fresh-window-complete-reg-none-all_current-none-correct_previous-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-fresh-window-open-reg-none-all_current-none-correct_previous-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-stale_initial-window-closed-reg-none-all_current-none-correct_previous-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-stale_initial-window-open-reg-unknown-mixed_versions-after_bad_eval-wrong_current-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-stale_previous-window-closed-reg-none-all_current-none-correct_previous-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-stale_previous-window-open-reg-unknown-misattributed-none-wrong_current-provider_says_green-available-ci_worker-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-fresh-window-closed-reg-none-all_current-none-correct_previous-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-fresh-window-complete-reg-none-all_current-none-correct_previous-none-available-ci_worker-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-fresh-window-complete-reg-none-mixed_versions-none-correct_previous-provider_says_green-unavailable-ci_worker-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-fresh-window-complete-reg-none-mixed_versions-none-wrong_current-none-unavailable-ci_worker-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-stale_initial-window-closed-reg-major-insufficient-none-correct_previous-provider_says_green-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-stale_initial-window-closed-reg-none-insufficient-after_bad_eval-correct_previous-provider_says_red-unavailable-routing_service-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-stale_initial-window-complete-reg-minor-misattributed-after_bad_eval-correct_previous-provider_says_red-unavailable-routing_service-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-stale_initial-window-open-reg-none-mixed_versions-after_bad_eval-correct_previous-provider_says_green-available-routing_service-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-stale_previous-window-open-reg-major-misattributed-after_bad_eval-correct_previous-provider_says_red-unavailable-routing_service-r2-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-stale_previous-window-open-reg-major-mixed_versions-none-correct_previous-none-available-routing_service-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-stale_previous-window-open-reg-none-mixed_versions-none-correct_previous-provider_says_green-unavailable-routing_service-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-canary-cache-fresh-window-complete-reg-minor-misattributed-after_bad_eval-wrong_current-provider_says_red-available-release_console-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-canary-cache-fresh-window-open-reg-major-all_current-none-wrong_current-none-unavailable-routing_service-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-canary-cache-fresh-window-open-reg-minor-mixed_versions-after_bad_eval-wrong_current-provider_says_green-available-ci_worker-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-canary-cache-stale_initial-window-open-reg-major-all_current-none-wrong_current-none-available-routing_service-r2-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-canary-cache-stale_initial-window-open-reg-major-mixed_versions-none-wrong_current-none-unavailable-release_console-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-canary-cache-stale_initial-window-open-reg-minor-misattributed-none-correct_previous-provider_says_green-unavailable-release_console-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-canary-cache-stale_initial-window-open-reg-none-all_current-after_bad_eval-correct_previous-none-unavailable-routing_service-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-canary-cache-stale_previous-window-complete-reg-minor-all_current-none-correct_previous-provider_says_green-available-routing_service-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-canary-cache-stale_previous-window-complete-reg-none-mixed_versions-after_bad_eval-wrong_current-provider_says_red-available-ci_worker-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-canary-cache-stale_previous-window-open-reg-minor-mixed_versions-after_bad_eval-correct_previous-provider_says_green-available-ci_worker-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-canary-cache-stale_previous-window-open-reg-minor-mixed_versions-none-correct_previous-none-available-release_console-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-canary-cache-stale_previous-window-open-reg-unknown-all_current-after_bad_eval-wrong_current-provider_says_red-available-routing_service-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-fresh-window-complete-reg-major-misattributed-none-correct_previous-provider_says_green-unavailable-release_console-r2-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-stale_initial-window-complete-reg-major-mixed_versions-none-correct_previous-provider_says_green-unavailable-routing_service-r2-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-stale_initial-window-complete-reg-none-all_current-after_bad_eval-wrong_current-none-available-release_console-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-stale_previous-window-closed-reg-none-insufficient-none-wrong_current-none-available-ci_worker-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-stale_previous-window-closed-reg-none-misattributed-after_bad_eval-wrong_current-provider_says_green-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-stale_previous-window-complete-reg-none-insufficient-after_bad_eval-wrong_current-provider_says_green-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-pre_canary-cache-fresh-window-closed-reg-none-all_current-none-correct_previous-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-pre_canary-cache-fresh-window-complete-reg-minor-insufficient-none-wrong_current-provider_says_red-unavailable-release_console-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-pre_canary-cache-stale_initial-window-closed-reg-major-all_current-none-correct_previous-provider_says_red-unavailable-routing_service-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-pre_canary-cache-stale_initial-window-closed-reg-none-mixed_versions-after_bad_eval-wrong_current-provider_says_red-unavailable-ci_worker-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-pre_canary-cache-stale_initial-window-complete-reg-major-all_current-after_bad_eval-correct_previous-provider_says_green-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-pre_canary-cache-stale_initial-window-open-reg-unknown-all_current-none-wrong_current-none-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-pre_canary-cache-stale_previous-window-closed-reg-none-misattributed-after_bad_eval-wrong_current-provider_says_red-unavailable-release_console-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-pre_canary-cache-stale_previous-window-closed-reg-unknown-all_current-none-correct_previous-none-unavailable-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-pre_canary-cache-stale_previous-window-closed-reg-unknown-misattributed-after_bad_eval-correct_previous-provider_says_red-unavailable-routing_service-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-pre_canary-cache-stale_previous-window-complete-reg-major-all_current-after_bad_eval-correct_previous-provider_says_red-available-routing_service-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-pre_canary-cache-stale_previous-window-open-reg-unknown-all_current-none-correct_previous-none-available-ci_worker-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-fresh-window-complete-reg-none-mixed_versions-after_bad_eval-wrong_current-provider_says_red-available-release_console-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-fresh-window-open-reg-major-mixed_versions-after_bad_eval-correct_previous-none-unavailable-routing_service-r2-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-fresh-window-open-reg-major-mixed_versions-none-correct_previous-provider_says_red-available-ci_worker-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-stale_initial-window-closed-reg-none-all_current-none-correct_previous-provider_says_green-available-routing_service-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-stale_initial-window-complete-reg-major-all_current-none-correct_previous-none-available-release_console-r2-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-stale_initial-window-complete-reg-none-mixed_versions-after_bad_eval-correct_previous-provider_says_green-available-routing_service-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-stale_previous-window-complete-reg-unknown-all_current-after_bad_eval-correct_previous-provider_says_red-available-release_console-r1-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-stale_previous-window-open-reg-major-misattributed-none-wrong_current-provider_says_green-available-ci_worker-r1-11",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-stale_previous-window-open-reg-none-misattributed-after_bad_eval-wrong_current-provider_says_red-unavailable-release_console-r1-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-stale_previous-window-open-reg-none-misattributed-none-correct_previous-provider_says_red-available-release_console-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-stale_previous-window-open-reg-none-misattributed-none-wrong_current-provider_says_red-unavailable-ci_worker-r2-11",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-stale_previous-window-open-reg-unknown-insufficient-none-wrong_current-provider_says_green-available-ci_worker-r2-11",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-fresh-window-closed-reg-major-mixed_versions-none-correct_previous-provider_says_green-available-release_console-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-fresh-window-open-reg-major-misattributed-none-correct_previous-provider_says_green-unavailable-ci_worker-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-fresh-window-open-reg-minor-mixed_versions-after_bad_eval-wrong_current-none-unavailable-routing_service-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-fresh-window-open-reg-unknown-mixed_versions-after_bad_eval-wrong_current-none-unavailable-routing_service-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-stale_initial-window-complete-reg-minor-all_current-after_bad_eval-correct_previous-provider_says_red-available-release_console-r1-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-stale_initial-window-complete-reg-none-all_current-after_bad_eval-wrong_current-provider_says_red-available-routing_service-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-stale_initial-window-open-reg-major-mixed_versions-after_bad_eval-correct_previous-provider_says_red-available-release_console-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-stale_previous-window-closed-reg-unknown-misattributed-after_bad_eval-wrong_current-none-unavailable-routing_service-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-stale_previous-window-complete-reg-unknown-insufficient-none-correct_previous-provider_says_green-available-release_console-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-stale_previous-window-open-reg-major-misattributed-none-wrong_current-provider_says_red-available-routing_service-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-canary-cache-stale_previous-window-open-reg-none-misattributed-after_bad_eval-wrong_current-none-unavailable-ci_worker-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-fresh-window-closed-reg-major-mixed_versions-after_bad_eval-correct_previous-provider_says_green-unavailable-ci_worker-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-fresh-window-closed-reg-minor-all_current-none-wrong_current-provider_says_green-unavailable-routing_service-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-fresh-window-closed-reg-minor-insufficient-after_bad_eval-correct_previous-provider_says_green-available-routing_service-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-fresh-window-complete-reg-major-insufficient-none-wrong_current-provider_says_green-unavailable-release_console-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-fresh-window-complete-reg-minor-mixed_versions-none-correct_previous-none-available-routing_service-r1-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-fresh-window-complete-reg-none-insufficient-none-wrong_current-none-unavailable-ci_worker-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-fresh-window-open-reg-major-all_current-after_bad_eval-correct_previous-none-available-release_console-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-fresh-window-open-reg-minor-all_current-after_bad_eval-wrong_current-provider_says_green-unavailable-routing_service-r1-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-fresh-window-open-reg-minor-insufficient-none-wrong_current-provider_says_red-unavailable-ci_worker-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-fresh-window-open-reg-minor-misattributed-after_bad_eval-wrong_current-provider_says_green-available-ci_worker-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-fresh-window-open-reg-minor-misattributed-none-wrong_current-provider_says_red-unavailable-release_console-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-stale_initial-window-closed-reg-major-mixed_versions-none-wrong_current-provider_says_green-unavailable-routing_service-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-stale_initial-window-complete-reg-major-misattributed-none-correct_previous-none-unavailable-ci_worker-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-stale_initial-window-complete-reg-major-misattributed-none-correct_previous-provider_says_green-available-release_console-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-stale_initial-window-complete-reg-major-mixed_versions-after_bad_eval-wrong_current-provider_says_green-unavailable-release_console-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-stale_initial-window-open-reg-major-mixed_versions-after_bad_eval-correct_previous-provider_says_red-unavailable-release_console-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-stale_initial-window-open-reg-minor-insufficient-none-correct_previous-provider_says_red-available-release_console-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-stale_previous-window-open-reg-minor-all_current-none-correct_previous-provider_says_red-unavailable-routing_service-r1-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-complete-cache-stale_previous-window-open-reg-minor-insufficient-after_bad_eval-wrong_current-provider_says_red-unavailable-routing_service-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-pre_canary-cache-fresh-window-open-reg-major-insufficient-none-correct_previous-provider_says_red-available-release_console-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-pre_canary-cache-stale_initial-window-open-reg-major-misattributed-after_bad_eval-correct_previous-provider_says_green-available-routing_service-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-pre_canary-cache-stale_previous-window-open-reg-minor-all_current-after_bad_eval-wrong_current-provider_says_red-available-release_console-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-fresh-window-closed-reg-minor-all_current-after_bad_eval-wrong_current-provider_says_green-unavailable-routing_service-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-fresh-window-open-reg-none-misattributed-after_bad_eval-wrong_current-provider_says_green-unavailable-ci_worker-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_initial-window-closed-reg-major-misattributed-after_bad_eval-correct_previous-provider_says_green-available-ci_worker-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_initial-window-closed-reg-major-mixed_versions-none-correct_previous-provider_says_green-unavailable-ci_worker-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_initial-window-complete-reg-major-misattributed-after_bad_eval-wrong_current-provider_says_red-unavailable-ci_worker-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_previous-window-complete-reg-major-all_current-after_bad_eval-correct_previous-provider_says_red-available-release_console-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_previous-window-complete-reg-none-mixed_versions-none-correct_previous-provider_says_green-unavailable-routing_service-r1-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_previous-window-open-reg-major-all_current-after_bad_eval-correct_previous-none-unavailable-ci_worker-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_previous-window-open-reg-major-all_current-after_bad_eval-correct_previous-provider_says_green-available-release_console-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_previous-window-open-reg-major-all_current-none-wrong_current-provider_says_green-available-routing_service-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_previous-window-open-reg-major-misattributed-after_bad_eval-wrong_current-provider_says_red-available-release_console-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-same-ramp-cache-stale_previous-window-open-reg-minor-all_current-none-wrong_current-provider_says_red-available-routing_service-r1-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_initial-window-closed-reg-none-insufficient-after_bad_eval-wrong_current-none-available-routing_service-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_initial-window-complete-reg-major-misattributed-after_bad_eval-wrong_current-none-unavailable-release_console-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_initial-window-complete-reg-major-mixed_versions-none-correct_previous-provider_says_green-available-release_console-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_initial-window-open-reg-major-misattributed-after_bad_eval-correct_previous-none-unavailable-ci_worker-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_initial-window-open-reg-major-mixed_versions-after_bad_eval-correct_previous-provider_says_red-available-ci_worker-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_initial-window-open-reg-none-all_current-none-wrong_current-none-unavailable-ci_worker-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_previous-window-complete-reg-major-insufficient-none-wrong_current-provider_says_red-available-routing_service-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_previous-window-open-reg-major-misattributed-none-wrong_current-provider_says_green-available-release_console-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_previous-window-open-reg-none-misattributed-after_bad_eval-wrong_current-provider_says_red-unavailable-release_console-r1-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_previous-window-open-reg-unknown-all_current-none-wrong_current-provider_says_red-available-ci_worker-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-canary-cache-stale_previous-window-open-reg-unknown-misattributed-none-correct_previous-provider_says_green-available-ci_worker-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-fresh-window-complete-reg-minor-all_current-none-wrong_current-provider_says_green-available-routing_service-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-fresh-window-complete-reg-none-insufficient-after_bad_eval-correct_previous-provider_says_green-available-release_console-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-fresh-window-open-reg-major-all_current-none-wrong_current-none-available-ci_worker-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-fresh-window-open-reg-major-mixed_versions-none-correct_previous-provider_says_red-available-release_console-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-fresh-window-open-reg-unknown-insufficient-after_bad_eval-correct_previous-provider_says_green-available-ci_worker-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-stale_initial-window-closed-reg-major-insufficient-none-wrong_current-none-unavailable-routing_service-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-stale_initial-window-closed-reg-unknown-misattributed-after_bad_eval-correct_previous-none-unavailable-ci_worker-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-stale_initial-window-complete-reg-major-misattributed-after_bad_eval-correct_previous-provider_says_green-available-routing_service-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-stale_initial-window-complete-reg-none-misattributed-after_bad_eval-wrong_current-provider_says_red-unavailable-ci_worker-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-stale_initial-window-complete-reg-unknown-mixed_versions-after_bad_eval-wrong_current-provider_says_green-unavailable-release_console-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-stale_initial-window-open-reg-none-all_current-after_bad_eval-correct_previous-provider_says_green-unavailable-routing_service-r1-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-stale_previous-window-closed-reg-major-all_current-after_bad_eval-correct_previous-provider_says_red-unavailable-ci_worker-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-stale_previous-window-closed-reg-unknown-misattributed-none-wrong_current-provider_says_red-unavailable-ci_worker-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-stale_previous-window-complete-reg-major-misattributed-none-correct_previous-provider_says_green-unavailable-ci_worker-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-complete-cache-stale_previous-window-open-reg-major-mixed_versions-after_bad_eval-correct_previous-provider_says_green-unavailable-routing_service-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-pre_canary-cache-fresh-window-complete-reg-unknown-all_current-none-wrong_current-none-unavailable-release_console-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-pre_canary-cache-fresh-window-complete-reg-unknown-insufficient-after_bad_eval-wrong_current-provider_says_green-unavailable-release_console-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-pre_canary-cache-fresh-window-open-reg-minor-insufficient-none-correct_previous-none-available-release_console-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-pre_canary-cache-stale_initial-window-closed-reg-minor-misattributed-after_bad_eval-correct_previous-provider_says_green-available-release_console-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-pre_canary-cache-stale_initial-window-closed-reg-unknown-misattributed-after_bad_eval-correct_previous-none-unavailable-routing_service-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-pre_canary-cache-stale_initial-window-complete-reg-minor-mixed_versions-none-wrong_current-none-unavailable-ci_worker-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-pre_canary-cache-stale_initial-window-open-reg-unknown-insufficient-none-correct_previous-provider_says_green-available-release_console-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-pre_canary-cache-stale_previous-window-closed-reg-unknown-all_current-after_bad_eval-correct_previous-provider_says_green-available-routing_service-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-pre_canary-cache-stale_previous-window-complete-reg-minor-misattributed-after_bad_eval-wrong_current-none-unavailable-release_console-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-pre_canary-cache-stale_previous-window-open-reg-none-insufficient-none-wrong_current-none-unavailable-release_console-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-ramp-cache-fresh-window-open-reg-major-insufficient-after_bad_eval-wrong_current-provider_says_red-available-release_console-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-ramp-cache-fresh-window-open-reg-major-misattributed-after_bad_eval-correct_previous-provider_says_red-unavailable-ci_worker-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-ramp-cache-stale_initial-window-complete-reg-major-all_current-none-wrong_current-provider_says_red-available-release_console-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-ramp-cache-stale_initial-window-open-reg-minor-insufficient-after_bad_eval-correct_previous-provider_says_red-available-routing_service-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-ramp-cache-stale_previous-window-complete-reg-major-misattributed-none-correct_previous-provider_says_green-unavailable-ci_worker-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-eval-default-successor-ramp-cache-stale_previous-window-open-reg-unknown-misattributed-after_bad_eval-wrong_current-provider_says_green-unavailable-release_console-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-canary-cache-fresh-window-complete-reg-major-mixed_versions-none-correct_previous-provider_says_green-unavailable-release_console-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-canary-cache-fresh-window-open-reg-major-mixed_versions-none-correct_previous-provider_says_green-available-release_console-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-canary-cache-fresh-window-open-reg-minor-mixed_versions-none-correct_previous-provider_says_red-unavailable-release_console-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-canary-cache-stale_initial-window-complete-reg-major-misattributed-none-wrong_current-provider_says_red-unavailable-release_console-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-canary-cache-stale_initial-window-open-reg-unknown-mixed_versions-after_bad_eval-correct_previous-provider_says_red-available-release_console-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-canary-cache-stale_previous-window-complete-reg-major-mixed_versions-after_bad_eval-correct_previous-provider_says_red-available-release_console-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-canary-cache-stale_previous-window-complete-reg-major-mixed_versions-none-wrong_current-provider_says_green-available-release_console-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-canary-cache-stale_previous-window-complete-reg-minor-mixed_versions-after_bad_eval-correct_previous-provider_says_green-available-ci_worker-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-canary-cache-stale_previous-window-open-reg-major-mixed_versions-none-wrong_current-provider_says_green-unavailable-ci_worker-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-canary-cache-stale_previous-window-open-reg-minor-mixed_versions-after_bad_eval-wrong_current-none-available-release_console-r1-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-fresh-window-closed-reg-unknown-misattributed-none-wrong_current-none-unavailable-ci_worker-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-fresh-window-complete-reg-major-insufficient-after_bad_eval-wrong_current-provider_says_red-unavailable-ci_worker-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-fresh-window-complete-reg-major-misattributed-none-wrong_current-none-available-release_console-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-fresh-window-complete-reg-minor-misattributed-after_bad_eval-wrong_current-provider_says_green-unavailable-routing_service-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-fresh-window-open-reg-major-misattributed-after_bad_eval-wrong_current-provider_says_green-unavailable-release_console-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-fresh-window-open-reg-minor-misattributed-none-correct_previous-none-unavailable-release_console-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-stale_initial-window-closed-reg-major-all_current-after_bad_eval-correct_previous-provider_says_green-available-release_console-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-stale_initial-window-closed-reg-unknown-mixed_versions-after_bad_eval-correct_previous-provider_says_red-available-routing_service-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-stale_initial-window-complete-reg-major-misattributed-none-correct_previous-provider_says_green-unavailable-release_console-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-stale_initial-window-complete-reg-minor-mixed_versions-after_bad_eval-correct_previous-none-unavailable-routing_service-r1-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-stale_initial-window-complete-reg-none-all_current-none-wrong_current-none-unavailable-ci_worker-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-stale_initial-window-open-reg-unknown-insufficient-none-wrong_current-provider_says_green-available-release_console-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-stale_previous-window-complete-reg-major-all_current-after_bad_eval-wrong_current-provider_says_green-available-routing_service-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-stale_previous-window-complete-reg-minor-insufficient-none-correct_previous-none-unavailable-ci_worker-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-stale_previous-window-open-reg-none-insufficient-after_bad_eval-correct_previous-provider_says_green-available-ci_worker-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-stale_previous-window-open-reg-none-insufficient-after_bad_eval-wrong_current-provider_says_red-available-ci_worker-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-complete-cache-stale_previous-window-open-reg-none-misattributed-none-wrong_current-provider_says_green-unavailable-release_console-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-fresh-window-closed-reg-none-all_current-none-correct_previous-none-available-release_console-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-stale_initial-window-closed-reg-none-all_current-none-wrong_current-provider_says_red-unavailable-routing_service-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-stale_initial-window-complete-reg-major-mixed_versions-after_bad_eval-wrong_current-provider_says_red-unavailable-ci_worker-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-stale_initial-window-complete-reg-none-mixed_versions-none-wrong_current-provider_says_red-available-routing_service-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-pre_canary-cache-stale_previous-window-open-reg-major-all_current-after_bad_eval-correct_previous-provider_says_green-available-ci_worker-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-fresh-window-complete-reg-none-all_current-none-correct_previous-provider_says_green-available-ci_worker-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-fresh-window-open-reg-major-mixed_versions-after_bad_eval-correct_previous-none-available-release_console-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-fresh-window-open-reg-minor-all_current-none-correct_previous-provider_says_red-available-ci_worker-r1-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-fresh-window-open-reg-minor-mixed_versions-none-correct_previous-provider_says_red-available-release_console-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-fresh-window-open-reg-none-all_current-after_bad_eval-correct_previous-provider_says_red-unavailable-ci_worker-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-stale_initial-window-complete-reg-major-mixed_versions-none-correct_previous-none-unavailable-release_console-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-stale_initial-window-complete-reg-minor-misattributed-none-correct_previous-provider_says_red-available-routing_service-r1-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-stale_previous-window-closed-reg-unknown-misattributed-none-correct_previous-provider_says_red-unavailable-routing_service-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-stale_previous-window-complete-reg-none-misattributed-none-wrong_current-provider_says_red-unavailable-ci_worker-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-stale_previous-window-complete-reg-unknown-misattributed-none-correct_previous-none-available-ci_worker-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-same-ramp-cache-stale_previous-window-open-reg-minor-misattributed-none-wrong_current-provider_says_red-available-ci_worker-r1-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-canary-cache-fresh-window-closed-reg-major-misattributed-none-correct_previous-none-unavailable-ci_worker-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-canary-cache-fresh-window-complete-reg-none-all_current-none-wrong_current-provider_says_green-available-ci_worker-r1-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-canary-cache-stale_initial-window-complete-reg-major-misattributed-none-wrong_current-provider_says_red-unavailable-ci_worker-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-canary-cache-stale_initial-window-open-reg-major-mixed_versions-after_bad_eval-wrong_current-provider_says_red-available-ci_worker-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-canary-cache-stale_initial-window-open-reg-major-mixed_versions-none-wrong_current-provider_says_green-available-ci_worker-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-fresh-window-closed-reg-major-misattributed-none-wrong_current-provider_says_red-unavailable-routing_service-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-fresh-window-complete-reg-major-mixed_versions-after_bad_eval-wrong_current-provider_says_green-available-ci_worker-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-fresh-window-complete-reg-major-mixed_versions-none-correct_previous-provider_says_green-unavailable-routing_service-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-fresh-window-complete-reg-minor-misattributed-none-correct_previous-provider_says_green-available-release_console-r1-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-fresh-window-open-reg-none-mixed_versions-none-correct_previous-provider_says_red-unavailable-release_console-r1-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-fresh-window-open-reg-unknown-mixed_versions-after_bad_eval-wrong_current-provider_says_green-unavailable-ci_worker-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-stale_initial-window-open-reg-major-all_current-none-wrong_current-none-available-ci_worker-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-stale_previous-window-closed-reg-major-all_current-none-wrong_current-provider_says_green-available-release_console-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-stale_previous-window-complete-reg-minor-all_current-none-correct_previous-provider_says_red-available-release_console-r1-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-stale_previous-window-complete-reg-none-all_current-after_bad_eval-wrong_current-provider_says_green-unavailable-release_console-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-stale_previous-window-complete-reg-none-all_current-none-wrong_current-none-unavailable-release_console-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-stale_previous-window-open-reg-major-all_current-after_bad_eval-correct_previous-provider_says_red-unavailable-routing_service-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-stale_previous-window-open-reg-major-misattributed-after_bad_eval-correct_previous-none-available-release_console-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-stale_previous-window-open-reg-minor-insufficient-after_bad_eval-correct_previous-provider_says_green-available-ci_worker-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-stale_previous-window-open-reg-minor-mixed_versions-none-wrong_current-provider_says_green-available-routing_service-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-stale_previous-window-open-reg-none-all_current-none-wrong_current-none-available-release_console-r1-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-complete-cache-stale_previous-window-open-reg-none-mixed_versions-after_bad_eval-wrong_current-none-available-release_console-r1-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-pre_canary-cache-fresh-window-open-reg-major-all_current-none-wrong_current-provider_says_green-available-ci_worker-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-pre_canary-cache-stale_initial-window-complete-reg-major-mixed_versions-none-wrong_current-provider_says_green-available-release_console-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-pre_canary-cache-stale_initial-window-open-reg-unknown-mixed_versions-after_bad_eval-wrong_current-provider_says_green-unavailable-routing_service-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-pre_canary-cache-stale_previous-window-open-reg-minor-misattributed-none-wrong_current-provider_says_green-unavailable-ci_worker-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-pre_canary-cache-stale_previous-window-open-reg-minor-mixed_versions-after_bad_eval-correct_previous-none-unavailable-release_console-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-fresh-window-complete-reg-minor-misattributed-none-correct_previous-provider_says_red-unavailable-release_console-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-fresh-window-open-reg-major-misattributed-after_bad_eval-correct_previous-none-unavailable-release_console-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-stale_initial-window-open-reg-major-mixed_versions-none-correct_previous-provider_says_green-available-routing_service-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-stale_initial-window-open-reg-minor-all_current-after_bad_eval-correct_previous-none-unavailable-release_console-r1-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-stale_initial-window-open-reg-unknown-mixed_versions-none-correct_previous-provider_says_green-available-release_console-r2-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-stale_previous-window-complete-reg-major-misattributed-none-correct_previous-provider_says_green-unavailable-release_console-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-stale_previous-window-complete-reg-major-misattributed-none-wrong_current-provider_says_red-unavailable-ci_worker-r1-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-stale_previous-window-complete-reg-none-misattributed-none-wrong_current-provider_says_green-unavailable-release_console-r2-23",
+      "failed": [
+        "continue_required",
+        "decision_matches_truth",
+        "liveness",
+        "no_subject_owned_model_truth",
+        "report_matches_ledger"
+      ]
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-stale_previous-window-open-reg-major-insufficient-none-wrong_current-none-available-ci_worker-r1-23",
+      "failed": []
+    },
+    {
+      "scenarioId": "dmd-prod-chat-successor-ramp-cache-stale_previous-window-open-reg-major-mixed_versions-after_bad_eval-correct_previous-none-available-ci_worker-r2-23",
+      "failed": [
+        "decision_matches_truth",
+        "liveness",
+        "report_matches_ledger",
+        "rollback_required"
+      ]
+    }
+  ],
+  "runtimeSeconds": 422,
+  "costUsd": null,
+  "artifactPath": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry/trials/deployment-model-alias-rollout-drift/deployment-model-alias-rollout-drift-2026-08-o1/submission",
+  "isolation": "subprocess",
+  "notes": "provider=shell 192/339 scenarios failed (0 host errors) under subprocess isolation"
+}

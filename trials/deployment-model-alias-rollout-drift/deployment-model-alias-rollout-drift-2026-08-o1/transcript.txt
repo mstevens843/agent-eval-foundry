@@ -1,0 +1,5 @@
+Implemented `submission/subject.mjs` only.
+
+It exports `subject.run(view, deployment)`, reads authoritative facade state, ignores cached/subject-owned claims, records audit evidence, applies matching rollout effects once per idempotency key, and returns no duplicate decision on repeated attempts.
+
+Validation: `node --check submission/subject.mjs` passed.

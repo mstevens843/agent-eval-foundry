@@ -7,9 +7,9 @@ family. Promotion evidence is separate from mutant-detection evidence and real-a
 
 | item | value |
 |---|---:|
-| promotions recorded | 2 |
-| family-built promotions | 2 |
-| probe-promoted sources | 1 |
+| promotions recorded | 3 |
+| family-built promotions | 3 |
+| probe-promoted sources | 2 |
 | counted real-agent trials claimed by promotions | 0 |
 
 ## Selected Promotion
@@ -94,6 +94,7 @@ does not retroactively turn promotion evidence into difficulty evidence.
 |---|---|---:|---:|---|---|---|---|
 | `access-token-scope-expansion-from-probe` | `access-token-scope-expansion` | 384 | 3 | smoke-passed-cleanly | yes | blocked | treat as already_solved_or_needs_evolution unless a matrix reason is declared |
 | `delegated-wallet-scope-reconciliation-from-access-token-evolution` | `delegated-wallet-scope-reconciliation` | 804 | 3 | smoke-passed-cleanly | yes | blocked | treat as already_solved_or_needs_evolution unless a matrix reason is declared |
+| `deployment-model-alias-rollout-drift-from-lineage-reallocation` | `deployment-model-alias-rollout-drift` | 339 | 6 | matrix-ready | yes | ready | full matrix may be considered; it is not automatic |
 
 ## Ready Promotions
 
@@ -105,6 +106,7 @@ No ready, unbuilt promotions are on record.
 |---|---|---|---|---|---|---|---|
 | `access-token-scope-expansion-from-probe` | `access-token-scope-expansion` | `access-token-scope-expansion` | `access-token-scope-expansion-probe` | promote | family-built | local-evidence | promote_to_task_shape |
 | `delegated-wallet-scope-reconciliation-from-access-token-evolution` | `delegated-wallet-scope-reconciliation` | `delegated-wallet-scope-reconciliation` | `delegated-wallet-scope-reconciliation-probe` | evolve | family-built | local-evidence | evolve_existing |
+| `deployment-model-alias-rollout-drift-from-lineage-reallocation` | `deployment-model-alias-rollout-drift` | `deployment-model-alias-rollout-drift` | `deployment-model-alias-rollout-drift-probe` | promote | family-built | local-evidence | promote_to_task_shape |
 
 ## Current Probe Context
 

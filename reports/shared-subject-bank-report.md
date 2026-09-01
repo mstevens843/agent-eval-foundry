@@ -23,6 +23,7 @@ Which subjects have attempted which families, and what that permits.
 | `checker-required-memory-poisoning` | `gpt-5.6-sol` | 1 | 792 | — |
 | `access-token-scope-expansion` | `gpt-5.6-sol` | 1 | 384 | — |
 | `delegated-wallet-scope-reconciliation` | `gpt-5.6-sol` | 1 | 804 | — |
+| `deployment-model-alias-rollout-drift` | `gpt-5.6-sol` | 1 | 339 | — |
 | `durable-approval-outbox` | `claude-opus-5`, `gpt-5.6-sol` | 0 | 24 | 1 |
 
 ## Detection banks — written mutants
@@ -41,11 +42,11 @@ and it is not a measurement of difficulty.
 | `claude-haiku-4-5` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
 | `claude-opus-5` | `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
 | `claude-sonnet-5` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
-| `gpt-5.6-sol` | `access-token-scope-expansion`, `checker-required-memory-poisoning`, `delegated-wallet-scope-reconciliation`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom` |
+| `gpt-5.6-sol` | `access-token-scope-expansion`, `checker-required-memory-poisoning`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom` |
 
 ## What each kind of bank currently licenses
 
-### `agent` banks — 7 family(ies)
+### `agent` banks — 8 family(ies)
 
 **Verdict:** PARTIAL. a qualitative comparison over 1 shared subject(s); no combined axis count, because the width is bounded by the shared bank size.
 

@@ -347,6 +347,17 @@ descendant can stop spend. The goal is not to keep evolving a favorite mechanism
 buy the cheapest useful evidence and then move capital to the branch most likely to add independent
 signal.
 
+That reallocation has now been executed once. The next branch selected by the lineage report,
+`deployment-model-alias-rollout-drift`, is a full validation-mode family rather than another
+scope-authority hardening attempt. It models model aliases, concrete model versions, rollout/eval
+ledgers, canary windows, stale cached alias maps, rollback/continue/quarantine/re-evaluation
+decisions and truthful audit history. The local evidence is deliberately bounded: 339 measured
+scenarios, a clean reference, 13/13 known-bad subjects caught by intended checks, 2/2 baselines
+blocked, 6 mutant-detection axes and a leak-checked public package. Its counted OpenAI/Codex smoke
+trial failed 192/339 scenarios on target under the pinned package hash, so the branch now has
+OpenAI-only smoke-difficulty evidence. That still is not cross-lab breadth, and a production matrix
+is an earned next decision rather than automatic spend.
+
 ### Stage 0: Candidate Pool
 
 Start broad. A reasonable first pass is 50 to 100 candidate family ideas, not 1000 concrete tasks.

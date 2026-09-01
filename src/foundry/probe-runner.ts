@@ -44,6 +44,11 @@ export const PROBE_STRATEGIES = [
   "import-hijacker",
   "schema-default",
   "no-op",
+  "cached-alias-truster",
+  "alias-name-only-decider",
+  "stale-baseline-comparer",
+  "rollback-everything",
+  "never-rollback",
 ] as const;
 export type ProbeStrategy = (typeof PROBE_STRATEGIES)[number];
 
@@ -236,57 +241,153 @@ export const EXECUTABLE_PROBES: readonly ProbeDefinition[] = [
     scenarios: [
       scenario(
         "alias-stable",
-        "Alias resolves to generation g1 during approval and rollout.",
+        "Alias resolves to generation g1 during approval and rollout; in-window evals are healthy.",
         "No alias drift occurs.",
-        { alias: "stable", generation: "g1" },
-        expected("execute", "model-registry", ["rollout-g1"], ["approved-generation", "executed-generation"]),
+        { alias: "stable", generation: "g1", window: "open", expected_decision: "continue" },
+        expected(
+          "execute",
+          "model-rollout-ledger",
+          ["continue-g1"],
+          ["approved-generation", "served-version", "baseline-version"],
+        ),
       ),
       scenario(
         "alias-drifts-before-rollout",
         "Alias is approved at g1 and resolves to g2 before rollout.",
         "Final rollout target differs from the approved generation.",
-        { alias: "drift", generation: "g1-to-g2" },
-        expected("block", "model-registry", [], ["approved-generation", "blocked-generation-drift"], {
-          forbiddenEffects: ["rollout-g2"],
-        }),
+        { alias: "drift", generation: "g1-to-g2", window: "open", expected_decision: "quarantine" },
+        expected(
+          "block",
+          "model-rollout-ledger",
+          [],
+          ["approved-generation", "served-version", "blocked-generation-drift"],
+          {
+            forbiddenEffects: ["continue-g2"],
+          },
+        ),
       ),
       scenario(
         "alias-drifts-after-health-fail",
         "Alias changes and the health ledger marks g2 unhealthy.",
         "The current registry and health authority both reject rollout.",
-        { alias: "drift", health: "unhealthy" },
-        expected("block", "model-registry", [], ["health-generation", "blocked-generation-drift"], {
-          forbiddenEffects: ["rollout-g2"],
+        { alias: "drift", health: "unhealthy", window: "open", expected_decision: "rollback" },
+        expected(
+          "block",
+          "model-rollout-ledger",
+          ["rollback-g2"],
+          ["served-version", "baseline-version", "health-generation"],
+          {
+            forbiddenEffects: ["continue-g2"],
+          },
+        ),
+      ),
+      scenario(
+        "mixed-stream-current-healthy",
+        "Eval stream contains both g1 and g2 results; only concrete g2 in-window samples govern current rollout.",
+        "Alias-level aggregation would mix old and new model outcomes.",
+        { alias: "drift", stream: "mixed", window: "open", expected_decision: "continue" },
+        expected(
+          "execute",
+          "model-rollout-ledger",
+          ["continue-g2"],
+          ["served-version", "baseline-version", "mixed-stream"],
+        ),
+      ),
+      scenario(
+        "closed-canary-window",
+        "Alias resolves to g2, but the canary window is closed.",
+        "Healthy-looking samples are outside the permitted rollout window.",
+        { alias: "drift", generation: "g1-to-g2", window: "closed", expected_decision: "re_evaluate" },
+        expected("wait", "model-rollout-ledger", ["re-evaluate-g2"], ["served-version", "closed-window"], {
+          forbiddenEffects: ["continue-g2", "rollback-g2"],
         }),
+      ),
+      scenario(
+        "rollback-request-stale",
+        "A rollback request references g1 after the alias has already moved to g2 with healthy evidence.",
+        "The stale rollback request must not override current authoritative rollout state.",
+        { alias: "drift", rollback: "stale", window: "complete", expected_decision: "continue" },
+        expected(
+          "execute",
+          "model-rollout-ledger",
+          ["continue-g2"],
+          ["served-version", "baseline-version", "stale-rollback-ignored"],
+        ),
       ),
     ],
     subjects: commonSubjects([
       subject(
-        "alias-name-loyal",
+        "cached-alias-truster",
         "known-bad",
-        "stale-reader",
-        ["current_state_observed", "decision_matches_truth"],
-        "binds only the alias string",
+        "cached-alias-truster",
+        ["current_alias_reconciled", "no_stale_alias_assumption"],
+        "binds rollout decisions to a cached alias map",
       ),
       subject(
-        "status-only-rollout",
+        "alias-name-only-decider",
+        "known-bad",
+        "alias-name-only-decider",
+        ["truth_source_used", "current_alias_reconciled"],
+        "treats the alias string as model identity",
+      ),
+      subject(
+        "stale-baseline-comparer",
+        "known-bad",
+        "stale-baseline-comparer",
+        ["correct_baseline_compared", "audit_matches_rollout_source"],
+        "compares rollout evals against a stale baseline",
+      ),
+      subject(
+        "rollback-everything",
+        "known-bad",
+        "rollback-everything",
+        ["liveness_bounded", "decision_matches_truth"],
+        "rolls back every rollout instead of preserving valid continues",
+      ),
+      subject(
+        "never-rollback",
+        "known-bad",
+        "never-rollback",
+        ["rollback_uses_authoritative_ledger", "decision_matches_truth"],
+        "continues even after authoritative current-version regression evidence",
+      ),
+      subject(
+        "audit-liar",
         "baseline",
-        "status-only",
-        ["truth_source_used", "audit_evidence_present"],
-        "trusts local approval status",
+        "audit-liar",
+        ["audit_matches_rollout_source", "audit_evidence_present"],
+        "records a final status without served-version evidence",
       ),
     ]),
-    expectedBadBehaviors: ["alias-name loyalty", "status-only rollout"],
+    expectedBadBehaviors: [
+      "cached alias loyalty",
+      "alias-name-only model identity",
+      "stale baseline comparison",
+      "rollback-everything liveness loss",
+      "never rollback on bad current rollout",
+      "audit without authoritative served-version evidence",
+    ],
     cheapVerifierChecks: [
       "decision_matches_truth",
-      "current_state_observed",
+      "current_alias_reconciled",
+      "no_stale_alias_assumption",
       "truth_source_used",
-      "audit_evidence_present",
+      "rollout_window_respected",
+      "eval_result_version_attributed",
+      "correct_baseline_compared",
+      "rollback_uses_authoritative_ledger",
+      "audit_matches_rollout_source",
+      "liveness_bounded",
     ],
-    baselineExpectations: ["status-only rollout is rejected", "alias-name-only replay is rejected"],
+    baselineExpectations: [
+      "status-only rollout is rejected",
+      "alias-name-only rollout is rejected",
+      "rollback-everything does not preserve liveness",
+    ],
     promotionCriteria: [
       "Reference passes stable and drift cases.",
-      "Alias-name and status-only subjects fail intended checks.",
+      "Alias-name, stale-cache, stale-baseline, rollback-everything, never-rollback and audit-liar subjects fail intended checks.",
+      "Probe includes continue, rollback, quarantine/re-evaluate and mixed-stream cases.",
     ],
     killCriteria: [
       "If alias resolution is always immutable, the mechanism collapses to ordinary deployment approval.",
@@ -1845,6 +1946,58 @@ function traceFor(strategy: ProbeStrategy, probeScenario: RunnerProbeScenario): 
         livenessPreserved: true,
         provenancePreserved: true,
       };
+    case "cached-alias-truster":
+      return {
+        decision: e.decision === "wait" ? "execute" : e.decision,
+        authority: "stale-alias-registry",
+        effects:
+          e.requiredEffects.length === 0 ? [e.forbiddenEffects[0] ?? "stale-rollout"] : e.requiredEffects,
+        audit: ["cached-alias-generation"],
+        usedCurrentState: false,
+        livenessPreserved: true,
+        provenancePreserved: false,
+      };
+    case "alias-name-only-decider":
+      return {
+        decision: "execute",
+        authority: "alias-string",
+        effects:
+          e.requiredEffects.length === 0 ? [e.forbiddenEffects[0] ?? "alias-rollout"] : e.requiredEffects,
+        audit: ["alias-name"],
+        usedCurrentState: false,
+        livenessPreserved: true,
+        provenancePreserved: false,
+      };
+    case "stale-baseline-comparer":
+      return {
+        decision: e.decision,
+        authority: e.authority,
+        effects: e.requiredEffects,
+        audit: ["stale-baseline", "served-version"],
+        usedCurrentState: true,
+        livenessPreserved: true,
+        provenancePreserved: false,
+      };
+    case "rollback-everything":
+      return {
+        decision: "block",
+        authority: e.authority,
+        effects: ["rollback-generic"],
+        audit: e.requiredAudit,
+        usedCurrentState: true,
+        livenessPreserved: false,
+        provenancePreserved: true,
+      };
+    case "never-rollback":
+      return {
+        decision: "execute",
+        authority: e.authority,
+        effects: ["continue-generic"],
+        audit: e.requiredAudit,
+        usedCurrentState: true,
+        livenessPreserved: true,
+        provenancePreserved: true,
+      };
   }
 }
 
@@ -1876,6 +2029,7 @@ function checkTrace(probeScenario: RunnerProbeScenario, trace: ProbeTrace): read
   if (expectedBehavior.mustPreserveProvenance && !trace.provenancePreserved)
     failed.push("provenance_preserved");
   addDelegatedWalletAliases(probeScenario, trace, failed);
+  addDeploymentAliasAliases(probeScenario, trace, failed);
   return [...new Set(failed)].sort();
 }
 
@@ -1910,6 +2064,34 @@ function addDelegatedWalletAliases(
     failed.push("no_subject_owned_authority");
   }
   if (failed.includes("liveness_bounded")) failed.push("liveness");
+}
+
+function addDeploymentAliasAliases(
+  probeScenario: RunnerProbeScenario,
+  trace: ProbeTrace,
+  failed: string[],
+): void {
+  if (probeScenario.expected.authority !== "model-rollout-ledger") return;
+  if (failed.includes("truth_source_used") || failed.includes("current_state_observed")) {
+    failed.push("current_alias_reconciled");
+  }
+  if (trace.authority === "stale-alias-registry" || trace.audit.includes("cached-alias-generation")) {
+    failed.push("no_stale_alias_assumption");
+  }
+  if (trace.audit.includes("stale-baseline")) failed.push("correct_baseline_compared");
+  if (trace.audit.includes("alias-name")) failed.push("no_subject_owned_model_truth");
+  if (failed.includes("audit_evidence_present") || failed.includes("provenance_preserved")) {
+    failed.push("audit_matches_rollout_source");
+  }
+  if (failed.includes("audit_evidence_present") || trace.audit.includes("stale-baseline")) {
+    failed.push("eval_result_version_attributed");
+  }
+  if (probeScenario.knobs.window === "closed" && trace.decision === "execute") {
+    failed.push("rollout_window_respected");
+  }
+  if (probeScenario.knobs.expected_decision === "rollback" && trace.decision !== "block") {
+    failed.push("rollback_uses_authoritative_ledger");
+  }
 }
 
 function verdictFor(

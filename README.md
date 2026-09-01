@@ -53,6 +53,13 @@ local scope-comparison candidates are penalized, and the next recommended branch
 different mechanism cluster. See
 [`reports/lineage-learning-report.md`](reports/lineage-learning-report.md).
 
+That reallocation has now been exercised. `deployment-model-alias-rollout-drift` is a full
+validation-mode family for model alias drift in deployment rollout decisions: local reference,
+mutant, package and smoke-campaign gates pass, and one counted OpenAI/Codex smoke failed 192/339
+scenarios on target. That is smoke-difficulty evidence for this provider only, not cross-lab
+breadth or a full matrix. See
+[`reports/deployment-model-alias-rollout-drift-family-report.md`](reports/deployment-model-alias-rollout-drift-family-report.md).
+
 The foundry keeps evidence streams separate:
 
 - **mutant-detection evidence**: a reference and known-bad implementations prove the verifier
@@ -88,12 +95,14 @@ requirement; adversarial audit is the attempted exploit record.
 | `checker-required-memory-poisoning` | 792 | 1 | 1 | 12 | not claimed yet | human-ready | adversarial-audited; OpenAI-only | **SHIP**: required-checker gap, OpenAI-only |
 | `access-token-scope-expansion` | 384 | 1 | 0 | 3 | already-solved by smoke | pending | audit-pending | **NOT-READY**: clean OpenAI smoke pass; evolve/repair before matrix |
 | `delegated-wallet-scope-reconciliation` | 804 | 1 | 0 | 3 | already-solved by smoke | human-ready | adversarial-ready | **NOT-READY**: clean OpenAI smoke pass; evolve/repair before matrix |
+| `deployment-model-alias-rollout-drift` | 339 | 1 | 1 | 6 | smoke-difficulty; OpenAI-only | human-ready | audit-pending | **SHIP**: on-target OpenAI smoke failure; no cross-lab or adversarial audit yet |
 | `durable-approval-outbox` | 24 | 20 imported | 20 | 3 | 1 | reference-solvable | audit-pending; imported historical no-count | **SHIP**: imported historical bank |
 
 Current live-DOM package hash: `18c3f5afc5973604205cd7df23ce4cad`.
 Current checker-required package hash: `448f2f816c51030cc97a374816226168`.
 Current access-token-scope-expansion package hash: `33cc98364ce2a6b3f9490e54937955d8`.
 Current delegated-wallet-scope-reconciliation package hash: `2140032d835a87ff254d01b6b4652f21`.
+Current deployment-model-alias-rollout-drift package hash: `0e9b87a5f260544cfbc1cdce8f08938c`.
 
 ## What Changed In This Phase
 
@@ -143,6 +152,16 @@ truthful audit and liveness pressure; OpenAI still solved both packages cleanly.
 that as budget-preserving evidence: the lineage is killed/paused for now, local scope-authority
 variants are downgraded, and the next branch is reallocated to a different mechanism cluster. See
 [`reports/lineage-learning-report.md`](reports/lineage-learning-report.md).
+
+Deployment Model-Alias Rollout Drift v1 acts on that reallocation. It builds the top non-scope
+branch into a full validation-mode family with 339 measured scenarios from a 663,552-point declared
+space, 14 knobs, a clean reference, 13/13 known-bad subjects caught by intended checks, 2/2
+baselines blocked, 6 mutant-detection axes, a leak-checked 9-file package and a one-slot
+OpenAI/Codex smoke campaign. The counted smoke trial
+`deployment-model-alias-rollout-drift-2026-08-o1` failed 192/339 scenarios on target under challenge
+hash `0e9b87a5f260544cfbc1cdce8f08938c`, so this branch now has OpenAI-only smoke-difficulty
+evidence. No full `/6` matrix, non-OpenAI trial, transfer proof, human solve or adversarial audit is
+claimed from that result.
 
 Adversarial Audit v2 upgrades verifier-integrity from preserved attack records to mechanical triage.
 Attack packets now carry an execution profile, an isolation profile, an exploit-artifact schema, an
@@ -202,6 +221,9 @@ node dist/cli.js trials campaign prepare --family ui-replay-live-dom --provider 
 node dist/cli.js trials campaign prepare --family checker-required-memory-poisoning --provider external --out bundles/checker-required-memory-poisoning-external
 node dist/cli.js trials campaign run --family ui-replay-live-dom --only O2
 node dist/cli.js trials campaign run --family checker-required-memory-poisoning --only O1
+node dist/cli.js family sweep --family deployment-model-alias-rollout-drift
+node dist/cli.js challenge build --family deployment-model-alias-rollout-drift
+node dist/cli.js trials campaign run --family deployment-model-alias-rollout-drift --only O1
 node dist/cli.js trials campaign reconcile --family ui-replay-live-dom
 node dist/cli.js trials verify --family ui-replay-live-dom live-dom-2026-08-o2
 node dist/cli.js trials verify --family checker-required-memory-poisoning checker-required-2026-08-o1

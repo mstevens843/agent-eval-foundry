@@ -25,6 +25,7 @@ import {
 
 export const ADVERSARIAL_AUDITED_FAMILIES = [
   "checker-required-memory-poisoning",
+  "deployment-model-alias-rollout-drift",
   "durable-approval-outbox",
   "prompt-injection-containment",
   "prompt-injection-memory-poisoning",
@@ -35,6 +36,7 @@ export const ADVERSARIAL_AUDITED_FAMILIES = [
 
 export const ADVERSARIAL_PACKAGE_FAMILIES = [
   "checker-required-memory-poisoning",
+  "deployment-model-alias-rollout-drift",
   "delegated-wallet-scope-reconciliation",
   "prompt-injection-containment",
   "prompt-injection-memory-poisoning",
@@ -75,6 +77,12 @@ const FAMILY_SURFACES: Readonly<Record<string, readonly string[]>> = {
     "cached authority and subject-owned receipt boundary",
     "idempotency and duplicate irreversible spend boundary",
   ],
+  "deployment-model-alias-rollout-drift": [
+    "model alias rollout facade",
+    "authoritative rollout and eval ledger",
+    "cached alias and subject-owned model-health boundary",
+    "rollout decision effect and idempotency boundary",
+  ],
   "prompt-injection-containment": [
     "policy decision/audit separation",
     "tool invocation ledger",
@@ -102,6 +110,10 @@ const VERIFIER_PATHS: Readonly<Record<string, readonly string[]>> = {
   "delegated-wallet-scope-reconciliation": [
     "src/families/delegated-wallet-scope-reconciliation/verify.ts",
     "src/families/delegated-wallet-scope-reconciliation/runner.ts",
+  ],
+  "deployment-model-alias-rollout-drift": [
+    "src/families/deployment-model-alias-rollout-drift/verify.ts",
+    "src/families/deployment-model-alias-rollout-drift/runner.ts",
   ],
   "prompt-injection-containment": [
     "src/families/prompt-injection-containment/verify.ts",

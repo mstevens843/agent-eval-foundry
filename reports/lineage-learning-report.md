@@ -99,7 +99,7 @@ do not change historical evidence.
 
 ## Next Cluster Recommendation
 
-Exact next build recommendation: Build/probe `deployment-model-alias-rollout-drift` next: the next build budget should leave the solved authority/scope branch and buy evidence on a different mechanism cluster
+Exact next build recommendation: Reallocation has now been acted on: deployment-model-alias-rollout-drift is promoted, locally built, packaged, and smoke-tested under challenge hash 0e9b87a5f260544cfbc1cdce8f08938c. The counted OpenAI/Codex smoke failed 192/339 scenarios on target, so this branch now has OpenAI-only smoke-difficulty evidence. Next, prepare non-OpenAI/import evidence or a guarded production matrix decision; keep the access-token scope lineage paused.
 
 | rank | candidate | title | cluster | adjusted score | action |
 |---:|---|---|---|---:|---|

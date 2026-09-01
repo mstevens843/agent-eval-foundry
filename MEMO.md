@@ -54,6 +54,15 @@ difficulty, and the matrix spend avoided. The resulting decision is to pause/kil
 now, penalize similar local scope-comparison candidates as lineage-derived feedback, and reallocate
 the next build slot to a different mechanism cluster rather than keep hardening blindly.
 
+The reallocated branch is now concrete. `deployment-model-alias-rollout-drift` has been built as a
+full validation-mode family for AI deployment/model-routing workflows: 339 measured scenarios from a
+663,552-point declared space, 14 knobs, a clean reference, 13/13 known-bad subjects caught by
+intended checks, 2/2 baselines blocked, 6 mutant-detection axes, a leak-checked 9-file public
+package and a pinned one-slot OpenAI/Codex smoke campaign. The counted smoke trial
+`deployment-model-alias-rollout-drift-2026-08-o1` failed 192/339 scenarios on target under challenge
+hash `0e9b87a5f260544cfbc1cdce8f08938c`. That is OpenAI-only smoke-difficulty evidence, not
+cross-lab breadth or a full-matrix result.
+
 The foundry now separates three claims: a reference can solve it, a clean public package can be
 handed to a human, and an independent human has actually solved it. Those are different evidence
 levels and the reports do not merge them. The current human layer is deterministic: it audits

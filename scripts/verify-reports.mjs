@@ -64,6 +64,10 @@ for (const [path, args] of [
     ["family", "run", "--family", "delegated-wallet-scope-reconciliation"],
   ],
   [
+    "examples/families/deployment-model-alias-rollout-drift/matrix.json",
+    ["family", "run", "--family", "deployment-model-alias-rollout-drift"],
+  ],
+  [
     "examples/shapes/prompt-injection-memory-poisoning.json",
     ["family", "shape", "--family", "prompt-injection-memory-poisoning"],
   ],
@@ -84,6 +88,10 @@ for (const [path, args] of [
     "examples/shapes/delegated-wallet-scope-reconciliation.json",
     ["family", "shape", "--family", "delegated-wallet-scope-reconciliation"],
   ],
+  [
+    "examples/shapes/deployment-model-alias-rollout-drift.json",
+    ["family", "shape", "--family", "deployment-model-alias-rollout-drift"],
+  ],
 ]) {
   if (run(args) !== readFileSync(path, "utf8")) {
     console.error(`STALE  ${path}`);
@@ -100,6 +108,7 @@ for (const [familyId, committedDir] of [
   ["checker-required-memory-poisoning", "examples/families/checker-required-memory-poisoning/challenge"],
   ["access-token-scope-expansion", "examples/families/access-token-scope-expansion/challenge"],
   ["delegated-wallet-scope-reconciliation", "examples/families/delegated-wallet-scope-reconciliation/challenge"],
+  ["deployment-model-alias-rollout-drift", "examples/families/deployment-model-alias-rollout-drift/challenge"],
 ]) {
   const tmpDir = mkdtempSync(join(tmpdir(), "foundry-fam-"));
   run(["challenge", "build", "--family", familyId, "--out", tmpDir]);
@@ -399,7 +408,7 @@ for (const variant of [
 // by being written here, but the count is asserted so a report that stops being generated is caught
 // rather than silently skipped.
 run(["all", "--out", tmp]);
-const EXPECTED_REPORTS = 89;
+const EXPECTED_REPORTS = 95;
 const generated = readdirSync(tmp);
 if (generated.length !== EXPECTED_REPORTS) {
   console.error(`WRONG COUNT  \`all\` wrote ${generated.length} reports, expected ${EXPECTED_REPORTS}`);

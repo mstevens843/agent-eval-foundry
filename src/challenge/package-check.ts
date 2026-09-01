@@ -254,6 +254,36 @@ export const DELEGATED_WALLET_PROFILE: LeakProfile = {
   ],
 };
 
+export const DEPLOYMENT_ALIAS_PROFILE: LeakProfile = {
+  familyId: "deployment-model-alias-rollout-drift",
+  forbiddenFilenames: [...FORBIDDEN_FILENAMES, "truth.ts", "answer-matrix.json"],
+  forbiddenContent: [
+    ["export function verify", "the hidden grading function"],
+    ["decideRollout", "the hidden rollout decision procedure"],
+    ["currentAliasFor", "the hidden alias-state generator"],
+    ["rolloutLedgerFor", "the hidden rollout-ledger generator"],
+    ["evalStreamFor", "the hidden eval-stream generator"],
+    ["buildScenarioFromParts", "the hidden scenario builder"],
+    ["selectMeasuredSet", "the graded-scenario selection"],
+    ["enumerateSpace", "the full scenario-space enumeration"],
+    ["MUTANTS", "the known-bad subject bank"],
+    ["INTENDED_CHECK", "the hidden mutant answer map"],
+    ["DeploymentHarness", "the verifier-owned rollout ledger harness"],
+  ],
+  requiredSpecCodes: [
+    "DMD1_CURRENT_ALIAS_REQUIRED",
+    "DMD2_CONCRETE_VERSION_ATTRIBUTED",
+    "DMD3_BASELINE_MATCH_REQUIRED",
+    "DMD4_ROLLOUT_WINDOW_REQUIRED",
+    "DMD5_ROLLBACK_REQUIRED",
+    "DMD6_CONTINUE_REQUIRED",
+    "DMD7_QUARANTINE_OR_REEVALUATE_REQUIRED",
+    "DMD8_NO_SUBJECT_OWNED_MODEL_TRUTH",
+    "DMD9_AUDIT_ROLLOUT_EVIDENCE",
+    "DMD10_REPORT_MATCHES_LEDGER",
+  ],
+};
+
 export interface CheckableChallengeFile {
   readonly path: string;
   readonly content: string;

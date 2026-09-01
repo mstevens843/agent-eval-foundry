@@ -124,6 +124,16 @@ This layer is intentionally separate from the existing candidate ledger. The led
 historical promote/kill decisions. Discovery Workbench v1 manages the forward-looking pool and
 computes which idea should be built, probed, killed, transferred or repaired next.
 
+Deployment Model-Alias Rollout Drift v1 is the first acted-on reallocation branch after the
+access-token lineage pause. It is not another local scope comparison: the family models model
+aliases, concrete served versions, rollout/eval ledgers, canary windows, stale cached alias maps,
+rollback/continue/quarantine/re-evaluation choices and truthful audit. The built family has 339
+measured scenarios from a 663,552-point declared space, a clean reference, 13/13 known-bad subjects
+caught by intended checks, 2/2 baselines blocked, 6 mutant-detection axes, a leak-checked public
+package and a pinned one-slot OpenAI/Codex smoke campaign. That smoke trial now counted and failed
+192/339 scenarios on target, which is OpenAI-only smoke-difficulty evidence. It is not cross-lab
+evidence and it is not a full-matrix result.
+
 Durable Approval Outbox is the first concrete example:
 
 Family: Durable Approval Outbox.

@@ -345,5 +345,65 @@
     ],
     "nextEvidence": "paper",
     "buildMode": "probe-first"
+  },
+  {
+    "id": "deployment-alias-to-routing-incident-response",
+    "sourceKind": "family",
+    "sourceId": "deployment-model-alias-rollout-drift",
+    "transferredMechanism": "model-alias-drift",
+    "targetDomain": "model-routing incident response",
+    "status": "proposed",
+    "whatStaysFixed": [
+      "Alias name is not concrete model identity.",
+      "Cached routing or deployment state is not current truth.",
+      "Eval and incident evidence must be attributed to the concrete model version that served each request.",
+      "Subject-owned health summaries and audit claims are not authoritative.",
+      "A still-valid rollout or route must not be over-blocked."
+    ],
+    "whatChanges": [
+      "The rollout decision becomes incident response for a production routing gateway.",
+      "The authoritative source becomes a gateway routing ledger plus incident/eval event stream.",
+      "The action set expands from continue, rollback, quarantine and re-evaluate to route, drain, pin, rollback or hold traffic.",
+      "Surface coverage moves from deployment workflow state to live model-routing operations."
+    ],
+    "expectedFailurePreservation": "A subject that trusts an alias name or cached model map during deployment should also misroute, over-quarantine or falsely clear an incident when a gateway alias has moved underneath the request stream.",
+    "expectedFairnessRisks": [
+      "Routing and incident-response actions must be synthetic and finite.",
+      "The public package must declare how gateway events, eval samples and rollback requests interact.",
+      "Hidden cases must sample timing and evidence mixtures without adding private production-platform rules."
+    ],
+    "expectedVerifierRisks": [
+      "A verifier that trusts subject-written health summaries can be forged.",
+      "A final-status-only checker misses wrong concrete-version attribution.",
+      "A checker that reads alias names without the routing ledger rewards stale-cache decisions."
+    ],
+    "authoritativeTruthSourceInTarget": "The target truth is a harness-owned gateway alias ledger plus sealed request, incident, eval and routing-effect ledgers.",
+    "expectedMutants": [
+      "cached-alias-truster",
+      "alias-name-only-decider",
+      "stale-baseline-comparer",
+      "version-attribution-blind",
+      "rollback-everything",
+      "never-rollback",
+      "subject-owned-truth-truster",
+      "audit-liar"
+    ],
+    "promotionCriteria": [
+      "A routing-incident probe catches stale alias trust, concrete-version misattribution and over-quarantine.",
+      "A reference implementation passes valid routing continuation and required rollback/drain cases.",
+      "The public contract explains all routing actions without private provider operations knowledge."
+    ],
+    "killCriteria": [
+      "Correct behavior reduces to one local alias-table comparison with no delayed or mixed evidence boundary.",
+      "The verifier cannot grade without trusting subject-written incident receipts.",
+      "A counted smoke trial cleanly solves both deployment-alias and routing-incident variants with the same public strategy."
+    ],
+    "requiredEvidenceBeforeDeclaringTransfer": [
+      "Build and locally measure deployment-model-alias-rollout-drift first.",
+      "Run a routing-incident probe before building a full target family.",
+      "Do not claim transfer evidence until the target-domain probe or a counted target-domain smoke trial exists."
+    ],
+    "nextEvidence": "local",
+    "buildMode": "probe-first"
   }
 ]

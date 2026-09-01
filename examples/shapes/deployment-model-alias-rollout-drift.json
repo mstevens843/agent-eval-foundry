@@ -1,0 +1,284 @@
+{
+  "familyId": "deployment-model-alias-rollout-drift",
+  "name": "Deployment model-alias rollout drift",
+  "domain": "AI infrastructure deployment and model routing",
+  "mechanisms": [
+    "model-alias-drift",
+    "stale-state",
+    "false-audit-history",
+    "liveness-stall",
+    "tool-result-ambiguity"
+  ],
+  "visibleRules": [
+    "Alias name is not concrete model identity.",
+    "Cached alias mapping is not current rollout truth.",
+    "Eval samples must be attributed to the concrete model version that served each request.",
+    "Rollback, continue, quarantine and re-evaluation decisions must use the authoritative rollout and eval ledgers.",
+    "Canary windows and rollout phases govern when evidence can be acted on.",
+    "Regression comparisons use the authoritative baseline named by the request.",
+    "Subject-owned model-health reports, public summaries and audit claims are not truth.",
+    "Valid continue or rollback decisions must fire exactly one verifier-owned effect, and repeated attempts must not duplicate it.",
+    "Audit history must cite current alias, generation, phase, canary window, baseline and served eval versions."
+  ],
+  "hiddenGradedRegion": "The hidden suite samples the declared deployment model-alias state space: alias, current concrete version state, rollout phase, cache staleness, canary window, regression severity, eval-stream mix, rollback timing, baseline state, provider disagreement, re-evaluation availability, deployment surface, repeat count and seed. Hidden scenarios add no private provider, deployment-platform or model-routing rule.",
+  "knobs": [
+    {
+      "name": "seed",
+      "type": "seed",
+      "values": [
+        11,
+        23
+      ],
+      "purpose": "selects deterministic concrete model versions and request ids"
+    },
+    {
+      "name": "alias",
+      "type": "enum",
+      "values": [
+        "prod-chat",
+        "eval-default"
+      ],
+      "purpose": "which production/eval alias the rollout controls"
+    },
+    {
+      "name": "currentVersionState",
+      "type": "enum",
+      "values": [
+        "same",
+        "successor"
+      ],
+      "purpose": "whether the alias still points to the approved version or has drifted"
+    },
+    {
+      "name": "rolloutPhase",
+      "type": "enum",
+      "values": [
+        "pre_canary",
+        "canary",
+        "ramp",
+        "complete"
+      ],
+      "purpose": "pre-canary, canary, ramp and complete rollout phases"
+    },
+    {
+      "name": "cacheState",
+      "type": "enum",
+      "values": [
+        "fresh",
+        "stale_initial",
+        "stale_previous"
+      ],
+      "purpose": "whether public alias snapshots are current, stale-initial or stale-previous"
+    },
+    {
+      "name": "canaryWindow",
+      "type": "enum",
+      "values": [
+        "closed",
+        "open",
+        "complete"
+      ],
+      "purpose": "whether rollout evidence is closed, open or complete"
+    },
+    {
+      "name": "regressionSeverity",
+      "type": "enum",
+      "values": [
+        "none",
+        "minor",
+        "major",
+        "unknown"
+      ],
+      "purpose": "none, minor, major or unknown current-version regression evidence"
+    },
+    {
+      "name": "evalMix",
+      "type": "enum",
+      "values": [
+        "all_current",
+        "mixed_versions",
+        "misattributed",
+        "insufficient"
+      ],
+      "purpose": "whether eval samples are all current, mixed-version, publicly misattributed or insufficient"
+    },
+    {
+      "name": "rollbackTiming",
+      "type": "enum",
+      "values": [
+        "none",
+        "after_bad_eval"
+      ],
+      "purpose": "whether rollback requests are absent, stale or tied to current bad eval evidence"
+    },
+    {
+      "name": "baselineState",
+      "type": "enum",
+      "values": [
+        "correct_previous",
+        "wrong_current"
+      ],
+      "purpose": "whether cached baseline hints are correct or point at the wrong version"
+    },
+    {
+      "name": "providerDisagreement",
+      "type": "enum",
+      "values": [
+        "none",
+        "provider_says_green",
+        "provider_says_red"
+      ],
+      "purpose": "whether public summaries disagree with the authoritative eval stream"
+    },
+    {
+      "name": "reevaluation",
+      "type": "enum",
+      "values": [
+        "available",
+        "unavailable"
+      ],
+      "purpose": "whether a fresh eval run is available when evidence is insufficient"
+    },
+    {
+      "name": "surface",
+      "type": "enum",
+      "values": [
+        "release_console",
+        "ci_worker",
+        "routing_service"
+      ],
+      "purpose": "release console, CI worker and routing-service surfaces with the same truth rule"
+    },
+    {
+      "name": "repeatCount",
+      "type": "int",
+      "values": [
+        1,
+        2
+      ],
+      "purpose": "one or two attempts sharing a verifier-owned rollout-effect ledger"
+    }
+  ],
+  "authoritativeSources": [
+    {
+      "name": "model alias rollout ledger",
+      "whatItSettles": "the current alias, concrete model version, generation, rollout phase, canary window and rollout history",
+      "whyEngineCannotForge": "The hidden scenario generator owns the ledger. The subject sees only facade reads, and the verifier compares decisions and audits to the sealed current alias and rollout records."
+    },
+    {
+      "name": "eval request stream",
+      "whatItSettles": "which concrete model version served each eval request, which samples were in the rollout window, and which regression deltas were current",
+      "whyEngineCannotForge": "The subject can read the stream through the deployment facade but cannot rewrite served-version attribution or substitute public summary labels for hidden ledger facts."
+    },
+    {
+      "name": "baseline record",
+      "whatItSettles": "the authoritative baseline model version and regression thresholds for the rollout request",
+      "whyEngineCannotForge": "The requested baseline is generated outside the subject. A subject that compares against a stale cached baseline or current version is caught by the verifier."
+    },
+    {
+      "name": "rollout decision effect ledger",
+      "whatItSettles": "which continue, rollback, quarantine or re-evaluate effects actually fired and whether they duplicated",
+      "whyEngineCannotForge": "The subject can call `applyRolloutDecision`, but it cannot read, edit or invent the sealed effect ledger the verifier grades."
+    }
+  ],
+  "referenceContract": [
+    "Read current alias state, rollout ledger, eval stream and baseline through the deployment facade before deciding.",
+    "Ignore cached alias maps, public summaries and subject-owned model-health claims as authority.",
+    "Attribute every eval sample to the served concrete model version, not to the alias string or public label.",
+    "Compare current-version evidence against the authoritative baseline requested by the rollout.",
+    "Continue only when sufficient in-window evidence supports the current version.",
+    "Rollback only when sufficient in-window evidence shows a major current-version regression.",
+    "Quarantine or re-evaluate when evidence is missing, closed-window, insufficient, mixed or unknown.",
+    "Issue exactly one rollout decision effect for the request idempotency key and preserve a truthful audit."
+  ],
+  "expectedMutants": [
+    {
+      "mutantId": "cached-alias-truster",
+      "mustFailCheck": "current_alias_reconciled"
+    },
+    {
+      "mutantId": "alias-name-only-decider",
+      "mustFailCheck": "no_stale_alias_assumption"
+    },
+    {
+      "mutantId": "stale-baseline-comparer",
+      "mustFailCheck": "correct_baseline_compared"
+    },
+    {
+      "mutantId": "rollout-window-blind",
+      "mustFailCheck": "rollout_window_respected"
+    },
+    {
+      "mutantId": "version-attribution-blind",
+      "mustFailCheck": "concrete_version_attributed"
+    },
+    {
+      "mutantId": "rollback-everything",
+      "mustFailCheck": "continue_required"
+    },
+    {
+      "mutantId": "never-rollback",
+      "mustFailCheck": "rollback_required"
+    },
+    {
+      "mutantId": "subject-owned-truth-truster",
+      "mustFailCheck": "no_subject_owned_model_truth"
+    },
+    {
+      "mutantId": "audit-liar",
+      "mustFailCheck": "audit_matches_rollout_source"
+    },
+    {
+      "mutantId": "mixed-stream-collapser",
+      "mustFailCheck": "concrete_version_attributed"
+    },
+    {
+      "mutantId": "duplicate-effect-retrier",
+      "mustFailCheck": "no_duplicate_effect"
+    },
+    {
+      "mutantId": "no-op-always-quarantine",
+      "mustFailCheck": "liveness"
+    },
+    {
+      "mutantId": "always-continue",
+      "mustFailCheck": "quarantine_when_insufficient"
+    }
+  ],
+  "fairnessConstraints": [
+    "Every rule code the verifier grades is visible in SPEC.md.",
+    "All deployment and model-routing semantics are synthetic, finite and public.",
+    "Hidden scenarios sample declared knobs and do not depend on private provider behavior.",
+    "Cached alias/eval/baseline fields are visible but explicitly non-authoritative.",
+    "Refusing everything fails liveness on valid continue and rollback cases.",
+    "Continuing everything fails rollback, quarantine and stale-alias cases."
+  ],
+  "cheatResistance": [
+    "The challenge package omits truth, verifier, runner, mutants, measured scenarios and answer matrix.",
+    "The verifier grades harness-owned alias, rollout, eval, baseline, call and effect ledgers.",
+    "A subject-owned health summary cannot authorize a rollout decision.",
+    "A no-op subject fails when a required rollout effect never reaches the ledger.",
+    "An audit-only subject fails when claimed observations do not match facade calls and current truth.",
+    "Trial records, when run later, must preserve challenge hash, transcript, submission and verifier output."
+  ],
+  "expectedFailureModes": [
+    "Trusting a cached alias map after the alias moved to a new concrete model version.",
+    "Treating the alias string as the model identity and collapsing generation changes.",
+    "Comparing current rollout evidence against a stale or current-version baseline.",
+    "Ignoring closed canary windows and acting on out-of-window evidence.",
+    "Mixing old and current eval samples into one alias-level score.",
+    "Rolling back every rollout to avoid stale-state risk.",
+    "Continuing a bad rollout because a public summary says green.",
+    "Trusting subject-owned model-health claims as current truth.",
+    "Writing an audit that cites cached or public-summary facts instead of the current ledgers.",
+    "Duplicating a rollout decision effect on repeated attempts."
+  ],
+  "estimatedBuildHours": 40,
+  "estimatedFrontierUsd": 45,
+  "status": "built",
+  "dataQuality": "measured",
+  "evidence": "Built from lineage reallocation after the access-token authority branch was solved twice by OpenAI/Codex smoke trials: src/families/deployment-model-alias-rollout-drift/ contains the typed model, public spec, scenario generator, reference, mutants, verifier and runner. The local sweep measures model-alias rollout drift over a deterministic declared space, with a clean reference, known-bad mutants, baselines, a leak-checked challenge package and no counted real-agent trial yet. This is local verifier/mutant/package evidence only.",
+  "estimatedAxes": 6,
+  "agentTrialsRun": 0,
+  "agentTrialsPassed": 0
+}

@@ -12,6 +12,7 @@ export const HUMAN_AUDITED_FAMILIES = [
   "ui-action-record-replay",
   "ui-replay-live-dom",
   "checker-required-memory-poisoning",
+  "deployment-model-alias-rollout-drift",
   "delegated-wallet-scope-reconciliation",
   "prompt-injection-containment",
 ] as const;

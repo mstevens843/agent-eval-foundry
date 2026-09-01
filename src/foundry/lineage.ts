@@ -652,10 +652,7 @@ export function planPortfolioReallocation(
     penalized: applications.filter((item) => item.totalAdjustment < 0),
     boosted: applications.filter((item) => item.totalAdjustment > 0),
     nextRecommendations,
-    exactNextBuildRecommendation:
-      nextRecommendations[0] === undefined
-        ? lineage.learning.reallocation.exactNextBuildRecommendation
-        : `Build/probe \`${nextRecommendations[0].candidateId}\` next: ${lineage.learning.reallocation.reason}`,
+    exactNextBuildRecommendation: lineage.learning.reallocation.exactNextBuildRecommendation,
   };
 }
 

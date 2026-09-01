@@ -1,0 +1,39 @@
+{
+  "view": {
+    "id": "dmd-prod-chat-successor-ramp-cache-fresh-window-open-reg-none-all_current-none-correct_previous-none-unavailable-release_console-r1-11",
+    "request": {
+      "id": "rollout-prod-chat-11",
+      "alias": "prod-chat",
+      "approvedVersion": "model-alpha",
+      "approvedGeneration": 10,
+      "requiredBaselineVersion": "model-alpha",
+      "reevaluationAvailable": false,
+      "observedAt": 200,
+      "idempotencyKey": "idem-prod-chat-11-release_console",
+      "surface": "release_console"
+    },
+    "cachedAlias": {
+      "alias": "prod-chat",
+      "version": "model-beta",
+      "generation": 11,
+      "phase": "ramp",
+      "canaryWindow": "open",
+      "canaryPercent": 50
+    },
+    "cachedEvalSummary": {
+      "sampleIds": [
+        "eval-11-1",
+        "eval-11-2",
+        "eval-11-3",
+        "eval-11-4"
+      ],
+      "claimedVersion": "model-beta",
+      "claimedScoreDelta": 0,
+      "sampleCount": 4
+    },
+    "cachedBaselineVersion": "model-alpha",
+    "subjectModelClaim": null
+  },
+  "replayCount": 1,
+  "note": "Current concrete version has sufficient in-window evidence and should continue."
+}

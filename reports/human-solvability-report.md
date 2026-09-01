@@ -8,6 +8,7 @@ contaminated walkthroughs are retained but do not count.
 |---|---|---|---|---:|---:|---:|---|
 | `checker-required-memory-poisoning` | **human-ready** | `448f2f816c51030cc97a374816226168` | yes | 0 | 0 | 0 | none |
 | `delegated-wallet-scope-reconciliation` | **human-ready** | `2140032d835a87ff254d01b6b4652f21` | yes | 0 | 0 | 0 | none |
+| `deployment-model-alias-rollout-drift` | **human-ready** | `0e9b87a5f260544cfbc1cdce8f08938c` | yes | 0 | 0 | 0 | none |
 | `durable-approval-outbox` | **reference-solvable** | none | no | 0 | 0 | 0 | none |
 | `prompt-injection-containment` | **human-ready** | `4911ffdfbd2c0e9b51752ed16c4f53e8` | yes | 0 | 1 | 0 | none |
 | `prompt-injection-memory-poisoning` | **human-ready** | `9b3e0c84addabc2e195ecbd490ba81dd` | yes | 0 | 0 | 0 | none |
@@ -17,7 +18,7 @@ contaminated walkthroughs are retained but do not count.
 ## Current Reading
 
 Human-evidenced families: none.
-Ready for clean-room review, pending an independent solve: `checker-required-memory-poisoning`, `delegated-wallet-scope-reconciliation`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom`.
+Ready for clean-room review, pending an independent solve: `checker-required-memory-poisoning`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom`.
 Not human-ready in this repo: `durable-approval-outbox`.
 1 assisted or contaminated review record(s) are preserved and do not count. 0 counted record(s) are invalid.
 
@@ -30,6 +31,7 @@ ship on model/verifier gates while still being `human-ready` rather than `human-
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | `checker-required-memory-poisoning` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `delegated-wallet-scope-reconciliation` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| `deployment-model-alias-rollout-drift` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `durable-approval-outbox` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `prompt-injection-containment` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
 | `prompt-injection-memory-poisoning` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |

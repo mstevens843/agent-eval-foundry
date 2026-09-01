@@ -1,0 +1,39 @@
+{
+  "view": {
+    "id": "dmd-prod-chat-successor-pre_canary-cache-stale_previous-window-closed-reg-none-all_current-none-wrong_current-none-available-routing_service-r1-11",
+    "request": {
+      "id": "rollout-prod-chat-11",
+      "alias": "prod-chat",
+      "approvedVersion": "model-alpha",
+      "approvedGeneration": 10,
+      "requiredBaselineVersion": "model-alpha",
+      "reevaluationAvailable": true,
+      "observedAt": 200,
+      "idempotencyKey": "idem-prod-chat-11-routing_service",
+      "surface": "routing_service"
+    },
+    "cachedAlias": {
+      "alias": "prod-chat",
+      "version": "model-gamma",
+      "generation": 9,
+      "phase": "complete",
+      "canaryWindow": "complete",
+      "canaryPercent": 100
+    },
+    "cachedEvalSummary": {
+      "sampleIds": [
+        "eval-11-1",
+        "eval-11-2",
+        "eval-11-3",
+        "eval-11-4"
+      ],
+      "claimedVersion": "model-alpha",
+      "claimedScoreDelta": 0,
+      "sampleCount": 4
+    },
+    "cachedBaselineVersion": "model-beta",
+    "subjectModelClaim": null
+  },
+  "replayCount": 1,
+  "note": "Closed pre-canary evidence must not be used to continue or rollback."
+}

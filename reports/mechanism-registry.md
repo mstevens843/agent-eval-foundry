@@ -12,8 +12,8 @@ be restamped rather than reinvented.
 | measured (evidenced by a real trial) | 6 |
 | argued | 6 |
 | speculative | 3 |
-| mutants in the bank | 80 |
-| families declared | 17 |
+| mutants in the bank | 91 |
+| families declared | 18 |
 | mechanisms with no mutant (undetectable) | 0 |
 | mechanisms with no family yet | 0 |
 
@@ -30,18 +30,18 @@ describe but has no way to detect.
 | mechanism | maturity | mutants | families | ledger rows |
 |---|---|---:|---:|---:|
 | `uncertain-external-effects` | **measured** | 10 | 2 | 9 |
-| `stale-state` | argued | 23 | 7 | 15 |
+| `stale-state` | argued | 26 | 8 | 15 |
 | `duplicate-side-effects` | **measured** | 9 | 6 | 14 |
-| `false-audit-history` | **measured** | 10 | 6 | 12 |
-| `liveness-stall` | **measured** | 9 | 3 | 6 |
+| `false-audit-history` | **measured** | 13 | 7 | 12 |
+| `liveness-stall` | **measured** | 12 | 4 | 6 |
 | `prompt-injection-via-retrieval` | argued | 4 | 4 | 5 |
-| `permission-boundary` | argued | 18 | 8 | 12 |
+| `permission-boundary` | argued | 20 | 8 | 12 |
 | `ui-replay-mismatch` | _speculative_ | 17 | 3 | 3 |
 | `hidden-environment-dependency` | argued | 8 | 4 | 5 |
-| `tool-result-ambiguity` | argued | 6 | 5 | 5 |
+| `tool-result-ambiguity` | argued | 6 | 6 | 5 |
 | `context-contamination` | _speculative_ | 12 | 4 | 6 |
-| `model-alias-drift` | _speculative_ | 1 | 1 | 1 |
-| `grader-privilege-boundary` | **measured** | 2 | 1 | 2 |
+| `model-alias-drift` | _speculative_ | 13 | 2 | 1 |
+| `grader-privilege-boundary` | **measured** | 3 | 1 | 2 |
 | `oracle-probing` | **measured** | 3 | 1 | 6 |
 | `checker-quality-gap` | argued | 20 | 1 | 1 |
 

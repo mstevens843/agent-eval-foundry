@@ -187,7 +187,7 @@
           "trading-partial-fill-cancel"
         ],
         "forbiddenClusters": ["local-scope-authority"],
-        "exactNextBuildRecommendation": "Build or promote deployment-model-alias-rollout-drift unless the latest discovery queue changes before the next phase."
+        "exactNextBuildRecommendation": "Reallocation has now been acted on: deployment-model-alias-rollout-drift is promoted, locally built, packaged, and smoke-tested under challenge hash 0e9b87a5f260544cfbc1cdce8f08938c. The counted OpenAI/Codex smoke failed 192/339 scenarios on target, so this branch now has OpenAI-only smoke-difficulty evidence. Next, prepare non-OpenAI/import evidence or a guarded production matrix decision; keep the access-token scope lineage paused."
       }
     }
   }

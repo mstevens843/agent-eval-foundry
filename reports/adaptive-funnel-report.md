@@ -24,7 +24,7 @@ candidate mechanisms
 | mechanism probes | 9 |
 | probes ready for validation | 3 |
 | probes needing repair/hold | 4 |
-| transfer tests | 9 |
+| transfer tests | 10 |
 | transfer tests ready | 5 |
 | production-mode families | 0 |
 
@@ -34,7 +34,7 @@ candidate mechanisms
 |---|---:|
 | static | 13 |
 | local | 6 |
-| cross-provider | 2 |
+| cross-provider | 3 |
 
 | target | type | mode | stage | decision | evidence cost | next action |
 |---|---|---|---|---|---|---|
@@ -94,6 +94,7 @@ candidate mechanisms
 | `permission-to-deployment-scope-drift` | probe:`permission-scope-drift-probe` | `permission-boundary` | deployment permission scope | proposed | paper |
 | `access-token-to-wallet-spending-limit` | family:`access-token-scope-expansion` | `permission-boundary` | wallet spending limit | ready | local |
 | `delegated-wallet-to-deploy-approval-scope` | family:`delegated-wallet-scope-reconciliation` | `permission-boundary` | production deploy approval scope | proposed | paper |
+| `deployment-alias-to-routing-incident-response` | family:`deployment-model-alias-rollout-drift` | `model-alias-drift` | model-routing incident response | proposed | local |
 
 ## Families Not Ready For Full Matrix
 
@@ -105,6 +106,7 @@ candidate mechanisms
 | `prompt-injection-memory-poisoning` | task_shape | repair | stale challenge hashes cannot feed production-mode claims |
 | `ui-action-record-replay` | transfer_test | evolve | nested failure sets are one axis at multiple sensitivities, not breadth |
 | `checker-required-memory-poisoning` | transfer_test | transfer | repeated same-provider trials estimate stability, not cross-lab transfer |
+| `deployment-model-alias-rollout-drift` | transfer_test | transfer | repeated same-provider trials estimate stability, not cross-lab transfer |
 | `ui-replay-live-dom` | transfer_test | transfer | repeated same-provider trials estimate stability, not cross-lab transfer |
 
 ## Production-Mode Candidates
@@ -121,11 +123,12 @@ No family is automatically recommended for a fresh full matrix by this planner p
 | `prompt-injection-memory-poisoning` | static at `task_shape` | stale challenge hashes cannot feed production-mode claims |
 | `ui-action-record-replay` | static at `transfer_test` | nested failure sets are one axis at multiple sensitivities, not breadth |
 | `checker-required-memory-poisoning` | cross-provider at `transfer_test` | repeated same-provider trials estimate stability, not cross-lab transfer |
+| `deployment-model-alias-rollout-drift` | cross-provider at `transfer_test` | repeated same-provider trials estimate stability, not cross-lab transfer |
 | `ui-replay-live-dom` | cross-provider at `transfer_test` | repeated same-provider trials estimate stability, not cross-lab transfer |
 
 ## Registry Link
 
-This report was generated against 15 mechanisms and 17 family shapes. Probe and transfer references are checked against that registry, so a stale mechanism id or family id fails `node dist/cli.js check`.
+This report was generated against 15 mechanisms and 18 family shapes. Probe and transfer references are checked against that registry, so a stale mechanism id or family id fails `node dist/cli.js check`.
 
 ---
 

@@ -40,6 +40,7 @@ and cross-lab claims remain bounded by the shared bank.
 | `browser-action-replay` | NOT-READY | `no_difficulty_evidence` | `trial` | — _(est.)_ | 0 | no |
 | `checker-required-memory-poisoning` | SHIP | `insufficient_shared_bank` | `schedule` | 12 | 1 | yes |
 | `delegated-wallet-scope-reconciliation` | NOT-READY | `already_solved` | `harden` | 3 | 1 | yes |
+| `deployment-model-alias-rollout-drift` | NOT-READY | `no_difficulty_evidence` | `trial` | 6 | 0 | yes |
 | `deployment-rollback-partial-effects` | NOT-READY | `no_difficulty_evidence` | `trial` | — _(est.)_ | 0 | no |
 | `durable-approval-outbox` | SHIP | — | — | 3 | 6 | no |
 | `model-alias-drift-sentinel` | NOT-READY | `no_difficulty_evidence` | `trial` | 2 _(est.)_ | 0 | no |
@@ -53,7 +54,7 @@ and cross-lab claims remain bounded by the shared bank.
 | `ui-action-record-replay` | SHIP | `insufficient_shared_bank` | `schedule` | 6 | 5 | yes |
 | `ui-replay-live-dom` | SHIP | `insufficient_shared_bank` | `schedule` | 19 | 1 | yes |
 
-7 of 17 families execute. 7 have been attempted by a real agent.
+8 of 18 families execute. 7 have been attempted by a real agent.
 
 ## What the kill taxonomy has actually found
 
@@ -70,7 +71,7 @@ every category fires is usually a taxonomy that is not discriminating.
 | `no_mechanism_fire` | defect | `repair` | — |
 | `no_reference_solution` | defect | `repair` | — |
 | `no_mutant_discrimination` | defect | `repair` | — |
-| `no_difficulty_evidence` | absence | `trial` | `audit-truth-financial-workflow`, `browser-action-replay`, `deployment-rollback-partial-effects`, `model-alias-drift-sentinel`, `permission-boundary-tools`, `prompt-injection-approval-scope-drift`, `prompt-injection-capability-routing`, `prompt-injection-cross-tool-escalation`, `stale-crm-ticket-automation` |
+| `no_difficulty_evidence` | absence | `trial` | `audit-truth-financial-workflow`, `browser-action-replay`, `deployment-model-alias-rollout-drift`, `deployment-rollback-partial-effects`, `model-alias-drift-sentinel`, `permission-boundary-tools`, `prompt-injection-approval-scope-drift`, `prompt-injection-capability-routing`, `prompt-injection-cross-tool-escalation`, `stale-crm-ticket-automation` |
 | `too_synthetic` | weakness | `mutate` | `prompt-injection-containment` |
 | `too_expensive` | cost | `split` | — |
 | `runner_unavailable` | absence | `schedule` | — |

@@ -12,12 +12,14 @@
 import { buildAccessTokenChallengePackage } from "../challenge/access-token-package.js";
 import { buildCheckerRequiredChallengePackage } from "../challenge/checker-required-package.js";
 import { buildDelegatedWalletChallengePackage } from "../challenge/delegated-wallet-package.js";
+import { buildDeploymentAliasChallengePackage } from "../challenge/deployment-alias-package.js";
 import { buildLiveDomChallengePackage } from "../challenge/live-dom-package.js";
 import { buildMemoryChallengePackage } from "../challenge/memory-package.js";
 import {
   ACCESS_TOKEN_PROFILE,
   CHECKER_REQUIRED_PROFILE,
   DELEGATED_WALLET_PROFILE,
+  DEPLOYMENT_ALIAS_PROFILE,
   LIVE_DOM_PROFILE,
   type LeakProfile,
   MEMORY_PROFILE,
@@ -77,6 +79,15 @@ import * as wallet from "./delegated-wallet-scope-reconciliation/runner.js";
 import * as walletScenarios from "./delegated-wallet-scope-reconciliation/scenarios.js";
 import { RULES as WALLET_RULES } from "./delegated-wallet-scope-reconciliation/spec.js";
 import { CHECKS as WALLET_CHECK_NAMES } from "./delegated-wallet-scope-reconciliation/verify.js";
+
+import {
+  BASELINES as DEPLOYMENT_BASELINES,
+  INTENDED_CHECK as DEPLOYMENT_CHECKS,
+} from "./deployment-model-alias-rollout-drift/mutants.js";
+import * as deployment from "./deployment-model-alias-rollout-drift/runner.js";
+import * as deploymentScenarios from "./deployment-model-alias-rollout-drift/scenarios.js";
+import { RULES as DEPLOYMENT_RULES } from "./deployment-model-alias-rollout-drift/spec.js";
+import { CHECKS as DEPLOYMENT_CHECK_NAMES } from "./deployment-model-alias-rollout-drift/verify.js";
 
 export interface FamilySweep {
   readonly scenarioCount: number;
@@ -454,6 +465,56 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     realism: "simulated-tree",
     realismGap:
       "The wallet policy, delegation, token, budget and effect ledgers are deterministic in-process facades. A service-backed descendant would add real wallet RPC confirmation, chain reorg or settlement latency and process isolation around signing.",
+  },
+  {
+    id: "deployment-model-alias-rollout-drift",
+    name: "Deployment model-alias rollout drift",
+    domain: "AI infrastructure deployment and model routing",
+    mechanisms: [
+      "model-alias-drift",
+      "stale-state",
+      "false-audit-history",
+      "liveness-stall",
+      "tool-result-ambiguity",
+    ],
+    checks: [...DEPLOYMENT_CHECK_NAMES],
+    ruleCodes: DEPLOYMENT_RULES.map((r) => r.code),
+    space: deploymentScenarios.SPACE,
+    knobPurpose: {
+      seed: "selects deterministic concrete model versions and request ids",
+      alias: "which production/eval alias the rollout controls",
+      currentVersionState: "whether the alias still points to the approved version or has drifted",
+      rolloutPhase: "pre-canary, canary, ramp and complete rollout phases",
+      cacheState: "whether public alias snapshots are current, stale-initial or stale-previous",
+      canaryWindow: "whether rollout evidence is closed, open or complete",
+      regressionSeverity: "none, minor, major or unknown current-version regression evidence",
+      evalMix: "whether eval samples are all current, mixed-version, publicly misattributed or insufficient",
+      rollbackTiming: "whether rollback requests are absent, stale or tied to current bad eval evidence",
+      baselineState: "whether cached baseline hints are correct or point at the wrong version",
+      providerDisagreement: "whether public summaries disagree with the authoritative eval stream",
+      reevaluation: "whether a fresh eval run is available when evidence is insufficient",
+      surface: "release console, CI worker and routing-service surfaces with the same truth rule",
+      repeatCount: "one or two attempts sharing a verifier-owned rollout-effect ledger",
+    },
+    run: () => {
+      const run = deployment.runFamily();
+      return sweep(
+        run.cells,
+        run.scenarios,
+        run.spaceSize,
+        deployment.toMatrix(run),
+        DEPLOYMENT_CHECKS,
+        DEPLOYMENT_BASELINES,
+      );
+    },
+    challenge: buildDeploymentAliasChallengePackage,
+    leakProfile: DEPLOYMENT_ALIAS_PROFILE,
+    typesPath: "src/families/deployment-model-alias-rollout-drift/types.ts",
+    estimatedBuildHours: 40,
+    estimatedFrontierUsd: 45,
+    realism: "simulated-tree",
+    realismGap:
+      "The rollout registry, eval stream, baseline record and decision ledger are deterministic in-process facades. A service-backed descendant would add real model gateway traffic, delayed eval arrivals and process isolation around production routing.",
   },
 ];
 

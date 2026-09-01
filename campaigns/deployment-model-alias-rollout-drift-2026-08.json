@@ -1,0 +1,55 @@
+{
+  "campaignId": "deployment-model-alias-rollout-drift-2026-08",
+  "familyId": "deployment-model-alias-rollout-drift",
+  "hypothesis": "The deployment-alias branch was selected after the access-token authority lineage was solved twice. A real agent may trust stale alias maps, alias names, cached eval summaries, stale baselines, provider status strings or subject-owned model truth instead of reconciling the current rollout and eval ledgers. One smoke trial is enough to route the branch, not enough to claim a full matrix or cross-lab breadth.",
+  "killSignal": "A counted OpenAI/Codex smoke trial passes every graded deployment-alias scenario cleanly under the current challenge hash, which is an already_solved_or_needs_evolution or reallocation signal rather than a reason to run a full matrix. Alternatively, failures concentrate only on unclear public rollout/eval wording or harness errors, which routes the family to repair/spec work instead of difficulty evidence.",
+  "confirmSignal": "At least one counted OpenAI/Codex smoke trial fails on an intended deployment-alias mechanism under the current challenge hash, with transcript, submission, verifier output and scenario-set id preserved. On-target failure produces smoke-difficulty evidence only; one OpenAI run is not cross-lab evidence and does not unlock a full matrix without transfer evidence.",
+  "challengeHash": "0e9b87a5f260544cfbc1cdce8f08938c",
+  "scenarioSetId": "drift-339-590affe3",
+  "scenariosExpected": 339,
+  "timeoutMs": 1800000,
+  "artifactPath": "submission/subject.mjs",
+  "isolation": "subprocess",
+  "counting": {
+    "neverCounts": [
+      "refused",
+      "timeout",
+      "infrastructure_error"
+    ],
+    "onRefusal": "Recorded as REFUSED with transcript preserved, and never counted. Provider refusal is not a difficulty finding and the slot is not re-run as part of this smoke.",
+    "onInfraFailure": "Recorded as FAILED_INFRA with transcript preserved, and never counted. It may be retried only as infrastructure repair, not as evidence selection.",
+    "onCrash": "Recorded as `crashed` and not counted by default. Count only after manual classification proves the crash is in the submitted artifact rather than in the harness.",
+    "retriesOnInfra": 1,
+    "retryOnRefusal": false
+  },
+  "preservation": [
+    "Every attempt writes a durable trial directory under trials/deployment-model-alias-rollout-drift/<run-id>/ whether or not it counts.",
+    "metadata.json records provider, command, challenge hash, scenario-set id and scenario count.",
+    "transcript.txt is preserved verbatim, including refusals and infrastructure errors.",
+    "challenge/ holds the exact package the model saw.",
+    "submission/ holds the submitted subject.mjs artifact.",
+    "verifier-output.json holds graded cells and named failed checks.",
+    "countability.json records the countability decision and reason.",
+    "A stale package hash invalidates the smoke evidence rather than letting old evidence count for a repaired package."
+  ],
+  "budgetUsd": 8.0,
+  "slots": [
+    {
+      "slotId": "O1",
+      "model": "openai/gpt-5.6-sol",
+      "subjectId": "gpt-5.6-sol",
+      "effort": null,
+      "runner": "shell",
+      "command": [
+        "codex",
+        "exec",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "--skip-git-repo-check",
+        "{instruction}"
+      ],
+      "state": "RUN",
+      "runId": "deployment-model-alias-rollout-drift-2026-08-o1",
+      "note": "Single OpenAI/Codex smoke slot. Counted completed run under the pinned challenge hash: 339 scenarios graded, 192 failed. This is on-target smoke-difficulty evidence only, not matrix readiness or cross-lab breadth."
+    }
+  ]
+}
