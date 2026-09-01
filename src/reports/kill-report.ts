@@ -21,6 +21,7 @@ export interface KillReportInput {
   readonly shape: TaskShape;
   readonly analysis: KillAnalysis;
   readonly evidence?: FamilyEvidence;
+  readonly lineage?: LineageKillContext;
   /** Variants the evolution engine proposed in response. */
   readonly variants: readonly VariantProposal[];
   /** Trial rows, for the evidence table. */
@@ -32,6 +33,16 @@ export interface KillReportInput {
     readonly failed: number;
     readonly isolation: string;
   }[];
+}
+
+export interface LineageKillContext {
+  readonly lineageId: string;
+  readonly verdict: string;
+  readonly decision: string;
+  readonly reason: string;
+  readonly nextAction: string;
+  readonly estimatedMatrixSpendSavedUsd: number;
+  readonly appliesToFamilyIds: readonly string[];
 }
 
 const finding = (f: KillFinding): readonly string[] => {
@@ -53,16 +64,30 @@ const finding = (f: KillFinding): readonly string[] => {
 };
 
 export function renderKillReport(input: KillReportInput): string {
-  const { shape, analysis, evidence, variants, trials } = input;
+  const { shape, analysis, evidence, variants, trials, lineage } = input;
   const counted = evidence?.countedAgentTrials ?? 0;
   const passed = evidence?.agentTrialsPassed ?? 0;
   const mutantsCaught = (evidence?.mutantsCaught ?? []).filter((m) => m.caught).length;
   const mutantsTotal = evidence?.mutantsCaught.length ?? 0;
+  const lineageBlocksBlindHardening =
+    lineage !== undefined &&
+    [
+      "lineage_solved_twice",
+      "lineage_killed_for_now",
+      "lineage_needs_new_mechanism",
+      "lineage_requires_cross_lab_before_more_build",
+    ].includes(lineage.verdict);
+  const nextActions = lineageBlocksBlindHardening
+    ? [
+        lineage.nextAction,
+        "Build or probe the different mechanism cluster recommended in `reports/lineage-learning-report.md` before spending more on this branch.",
+      ]
+    : analysis.nextActions;
 
   return [
     `# Kill analysis — ${shape.name}`,
     "",
-    `\`${shape.familyId}\` · verdict **${analysis.verdict}** · primary reason **\`${analysis.primary?.reason ?? "none"}\`** · disposition **\`${analysis.disposition ?? "none"}\`**`,
+    `\`${shape.familyId}\` · verdict **${analysis.verdict}** · primary reason **\`${analysis.primary?.reason ?? "none"}\`** · disposition **\`${analysis.disposition ?? "none"}\`**${lineage === undefined ? "" : ` · lineage decision **\`${lineage.decision}\`**`}`,
     "",
     analysis.fullyDerived
       ? "Every finding below is derived from a gate result or a trial record. Nothing here is an opinion."
@@ -121,6 +146,24 @@ export function renderKillReport(input: KillReportInput): string {
           ].join("\n")
         : `**Nothing outstanding on difficulty**: ${counted - passed} of ${counted} counted trials failed at least one scenario.`,
     "",
+    ...(lineage === undefined
+      ? []
+      : [
+          "## Lineage Learning",
+          "",
+          `This family is part of lineage \`${lineage.lineageId}\`, which currently has verdict **\`${lineage.verdict}\`**.`,
+          "",
+          `Lineage reason: ${lineage.reason}.`,
+          "",
+          `Portfolio decision: ${lineage.nextAction}.`,
+          "",
+          `Estimated matrix spend avoided by this lineage: $${lineage.estimatedMatrixSpendSavedUsd.toFixed(2)}.`,
+          "",
+          lineageBlocksBlindHardening
+            ? "The generic `already_solved` disposition is the single-family default after a first clean pass. The lineage verdict supersedes blind hardening here because the branch already spent one descendant attempt and the same subject solved both packages cleanly."
+            : "The lineage does not currently override the single-family disposition.",
+          "",
+        ]),
     trials.length === 0
       ? ""
       : [
@@ -162,31 +205,38 @@ export function renderKillReport(input: KillReportInput): string {
     "",
     "## What would make it stronger",
     "",
-    variants.length === 0
-      ? "_No variants proposed: the disposition is not `harden` or `mutate`._"
-      : [
-          "The evolution engine proposes the following, each a composition of named operators rather than",
-          "a fresh idea. Kill risk is the pre-registered probability that the variant dies of the same",
-          "cause as its parent.",
+    lineageBlocksBlindHardening
+      ? [
+          "_Generic variants are not the next recommended spend for this lineage._",
           "",
-          "| variant | operators | new mechanisms | axes | kill risk | build h |",
-          "|---|---|---|---:|---:|---:|",
-          ...variants.map(
-            (v) =>
-              `| \`${v.id}\` | ${v.operators.map((o) => `\`${o}\``).join(", ")} | ${
-                v.mechanisms
-                  .filter((m) => !shape.mechanisms.includes(m))
-                  .map((m) => `\`${m}\``)
-                  .join(", ") || "—"
-              } | ${v.expectedAxisContribution} | ${(v.killRisk * 100).toFixed(0)}% | ${v.estimatedBuildHours} |`,
-          ),
-          "",
-          "See `reports/foundry-evolution-report.md` for each variant in full.",
-        ].join("\n"),
+          "The single-family evolution engine can still propose descendants, but the portfolio-level",
+          "lineage result says to buy evidence from a different mechanism cluster first.",
+        ].join("\n")
+      : variants.length === 0
+        ? "_No variants proposed: the disposition is not `harden` or `mutate`._"
+        : [
+            "The evolution engine proposes the following, each a composition of named operators rather than",
+            "a fresh idea. Kill risk is the pre-registered probability that the variant dies of the same",
+            "cause as its parent.",
+            "",
+            "| variant | operators | new mechanisms | axes | kill risk | build h |",
+            "|---|---|---|---:|---:|---:|",
+            ...variants.map(
+              (v) =>
+                `| \`${v.id}\` | ${v.operators.map((o) => `\`${o}\``).join(", ")} | ${
+                  v.mechanisms
+                    .filter((m) => !shape.mechanisms.includes(m))
+                    .map((m) => `\`${m}\``)
+                    .join(", ") || "—"
+                } | ${v.expectedAxisContribution} | ${(v.killRisk * 100).toFixed(0)}% | ${v.estimatedBuildHours} |`,
+            ),
+            "",
+            "See `reports/foundry-evolution-report.md` for each variant in full.",
+          ].join("\n"),
     "",
     "## Next actions",
     "",
-    ...analysis.nextActions.map((a, i) => `${i + 1}. ${a}`),
+    ...nextActions.map((a, i) => `${i + 1}. ${a}`),
     "",
     "## The taxonomy this was graded against",
     "",

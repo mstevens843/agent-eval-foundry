@@ -189,6 +189,7 @@ export function renderAdaptiveFunnelReport(input: AdaptiveFunnelReportInput): st
     "- Run the strongest available opposite provider next only if the smoke failure is on-target.",
     "- Repeated same-provider runs estimate stability, not cross-lab transfer.",
     "- Full matrix is earned, not default.",
+    "- A family and descendant that both pass clean smoke trials stop receiving blind hardening spend.",
     "- Mutant-detection evidence is not real-agent difficulty.",
     "- Provider refusal is not no-bypass evidence.",
     "- Human-ready is not human-evidenced.",

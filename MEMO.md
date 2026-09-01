@@ -47,6 +47,13 @@ descendant family: 804 measured scenarios from an 82,944-point declared space, a
 package. Its single counted OpenAI/Codex smoke trial passed 804/804 under the current package hash,
 so it also routes to already_solved_or_needs_evolution rather than full matrix spend.
 
+Lineage Kill + Portfolio Reallocation v1 makes that repeated clean solve first-class evidence. The
+access-token authority lineage now records parent and descendant smoke passes by the same OpenAI
+subject, the preserved authority mechanism, the hardening operators that failed to produce
+difficulty, and the matrix spend avoided. The resulting decision is to pause/kill that lineage for
+now, penalize similar local scope-comparison candidates as lineage-derived feedback, and reallocate
+the next build slot to a different mechanism cluster rather than keep hardening blindly.
+
 The foundry now separates three claims: a reference can solve it, a clean public package can be
 handed to a human, and an independent human has actually solved it. Those are different evidence
 levels and the reports do not merge them. The current human layer is deterministic: it audits

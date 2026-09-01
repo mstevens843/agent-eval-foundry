@@ -168,6 +168,8 @@ export const DISCOVERY_CANDIDATE_EVIDENCE_STATUSES = [
   "probe-killed",
   "task-shape-ready",
   "family-build-ready",
+  "lineage-penalized",
+  "lineage-boosted",
 ] as const;
 export type DiscoveryCandidateEvidenceStatus = (typeof DISCOVERY_CANDIDATE_EVIDENCE_STATUSES)[number];
 
@@ -940,6 +942,8 @@ function evidenceRank(status: DiscoveryCandidateEvidenceStatus): number {
       "probe-run": 3,
       "probe-ready": 2,
       "score-only": 1,
+      "lineage-boosted": 2,
+      "lineage-penalized": -2,
       "probe-killed": -5,
     } as const
   )[status];

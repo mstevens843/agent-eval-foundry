@@ -114,9 +114,18 @@ import {
 } from "./foundry/discovery-workbench.js";
 import { assertPromotionEvidence, variantToShape } from "./foundry/evolve.js";
 import {
+  type FamilyLineage,
+  type LineageEvaluation,
+  type LineageRuntimeFamilyEvidence,
+  evaluateLineages,
+  lineageFeedbackForDiscovery,
+  planPortfolioReallocation,
+} from "./foundry/lineage.js";
+import {
   loadAdaptiveFunnel,
   loadDiscoveryCalibration,
   loadDiscoveryWorkbench,
+  loadLineages,
   loadProbeDefinitions,
   loadProbeRunSummary,
   loadPromotions,
@@ -209,9 +218,10 @@ import { renderEvolutionReport } from "./reports/evolution-report.js";
 import { renderEvolutionValidation, validateOperator } from "./reports/evolution-validation.js";
 import { renderCrossFamilyReport, renderFamilyReport } from "./reports/family-report.js";
 import { renderGateReport } from "./reports/gate-report.js";
-import { renderKillReport } from "./reports/kill-report.js";
+import { type LineageKillContext, renderKillReport } from "./reports/kill-report.js";
 import { renderFamilyDiversityReport, renderLedgerReport } from "./reports/ledger-report.js";
 import { renderLifecycleReport } from "./reports/lifecycle-report.js";
+import { renderLineageLearningReport } from "./reports/lineage-report.js";
 import { renderLiveDomCodexDiagnosis } from "./reports/live-dom-diagnosis.js";
 import { renderLiveDom } from "./reports/live-dom-report.js";
 import { renderOrchestrationReport } from "./reports/orchestration-report.js";
@@ -320,6 +330,8 @@ REGISTRY (what could be built, and can we detect it?)
   promotion next                  next promoted-family build actions
   promotion scaffold --promotion <id> --out <dir>
                                   draft family skeleton from a promotion record
+  lineage report [--out f]        lineage kill/reallocation learning report
+  lineage next                    next cluster after solved lineages
   sources                        list every matrix source, implemented and planned
 
 FAMILIES (run a measured mini-benchmark)
@@ -804,9 +816,14 @@ function discoveryInputs(root: string) {
   const workbench = loadDiscoveryWorkbench(root, registry, funnel);
   const probeSummary = loadProbeRunSummary(root, registry, workbench);
   const promotions = loadPromotions(root, registry, workbench);
+  const smokeGates = promotionSmokeGateMap(root, loadCampaigns(root), funnel.transfers);
+  const lineages = loadLineages(root, registry, workbench, promotions);
+  const lineageEvaluations = evaluateLineages(lineages, lineageRuntimeEvidence(root, lineages, smokeGates));
+  const reallocation = planPortfolioReallocation(lineages, lineageEvaluations, workbench);
   const probeEvidence = [
     ...probeEvidenceForDiscovery(probeSummary),
     ...promotionEvidenceForDiscovery(promotions),
+    ...lineageFeedbackForDiscovery(reallocation),
   ];
   const summary = summarizeDiscoveryWorkbench(workbench, probeEvidence);
   const scores = scoreDiscoveryCandidates(workbench.candidates);
@@ -820,6 +837,9 @@ function discoveryInputs(root: string) {
     probeSummary,
     probeEvidence,
     promotions,
+    lineages,
+    lineageEvaluations,
+    reallocation,
     calibration,
   };
 }
@@ -1025,6 +1045,113 @@ function smokeContext(
       diagnosisStatus,
     }),
   };
+}
+
+function lineageRuntimeEvidence(
+  root: string,
+  lineages: readonly FamilyLineage[],
+  smokeGates: ReadonlyMap<string, PromotionSmokeGateResult>,
+): ReadonlyMap<string, LineageRuntimeFamilyEvidence> {
+  const familyIds = [
+    ...new Set(lineages.flatMap((lineage) => lineage.nodes.map((node) => node.familyId))),
+  ].sort();
+  const out = new Map<string, LineageRuntimeFamilyEvidence>();
+  for (const familyId of familyIds) {
+    if (!BUILT_FAMILY_IDS.includes(familyId)) continue;
+    const family = builtFamily(familyId);
+    const sweep = family.run();
+    const axis = measure(sweep.matrix, { nullTrials: 3 });
+    const bundle = familyEvidenceFor(root, familyId);
+    const counted = bundle.trials.records.filter((record) => record.subjectType === "agent" && record.counts);
+    const failed = (record: (typeof counted)[number]) => record.cells.some((cell) => cell.failed.length > 0);
+    const gate = smokeGates.get(familyId);
+    out.set(familyId, {
+      familyId,
+      currentPackageHash: ROUTABLE_FAMILY_IDS.includes(familyId)
+        ? prepareChallenge(root, familyId).hash
+        : null,
+      localEvidencePass:
+        sweep.referenceFailures.length === 0 &&
+        sweep.mutantsCaught.every((mutant) => mutant.caught) &&
+        sweep.baselinesBlocked.length === sweep.baselinesTotal,
+      countedSmokeTrials: counted.length,
+      countedSmokeSolves: counted.filter((record) => !failed(record)).length,
+      countedSmokeFailures: counted.filter((record) => failed(record)).length,
+      providerFamilies: [
+        ...new Set(counted.map((record) => (record.model ?? "unknown").split("/")[0] ?? "unknown")),
+      ].sort(),
+      subjectIds: [...new Set(counted.map((record) => normalizeSubjectId(record.subjectId)))].sort(),
+      fullMatrixReady: gate?.fullMatrixReady ?? false,
+      fullMatrixBlocked: gate?.matrixReadinessStatus !== "ready",
+      transferDeclared: gate?.transferDeclarationStatus === "declared",
+      smokeDiagnosis:
+        gate?.smokeDiagnosisStatus === undefined || gate.smokeDiagnosisStatus === "none"
+          ? "none"
+          : gate.smokeDiagnosisStatus,
+      scenarioCount: sweep.scenarioCount,
+      mutantAxes: axis.independentAxes,
+    });
+  }
+  return out;
+}
+
+function lineageInputs(root: string) {
+  const registry = loadRegistry(root);
+  const funnel = loadAdaptiveFunnel(root, registry);
+  const workbench = loadDiscoveryWorkbench(root, registry, funnel);
+  const promotions = loadPromotions(root, registry, workbench);
+  const smokeGates = promotionSmokeGateMap(root, loadCampaigns(root), funnel.transfers);
+  const lineages = loadLineages(root, registry, workbench, promotions);
+  const evaluations = evaluateLineages(lineages, lineageRuntimeEvidence(root, lineages, smokeGates));
+  const reallocation = planPortfolioReallocation(lineages, evaluations, workbench);
+  return { registry, funnel, workbench, promotions, smokeGates, lineages, evaluations, reallocation };
+}
+
+function lineageNextReport(reallocation: ReturnType<typeof planPortfolioReallocation>): string {
+  return [
+    "lineage next actions",
+    "candidate | cluster | adjusted score | action",
+    ...reallocation.nextRecommendations.map(
+      (item) =>
+        `${item.candidateId} | ${item.mechanismCluster} | ${item.adjustedScore.toFixed(1)} | ${item.recommendedAction}`,
+    ),
+    "",
+    reallocation.exactNextBuildRecommendation,
+    "",
+    "Lineage feedback is portfolio-routing evidence, not difficulty evidence.",
+    "",
+  ].join("\n");
+}
+
+function killReportLineageContexts(
+  evaluations: readonly LineageEvaluation[],
+): ReadonlyMap<string, LineageKillContext> {
+  const out = new Map<string, LineageKillContext>();
+  for (const evaluation of evaluations) {
+    const appliesToFamilyIds = evaluation.nodes.map((node) => node.familyId);
+    for (const familyId of appliesToFamilyIds) {
+      out.set(familyId, {
+        lineageId: evaluation.lineageId,
+        verdict: evaluation.verdict,
+        decision: evaluation.decision,
+        reason: evaluation.reason,
+        nextAction: evaluation.nextAction,
+        estimatedMatrixSpendSavedUsd: evaluation.estimatedMatrixSpendSavedUsd,
+        appliesToFamilyIds,
+      });
+    }
+  }
+  return out;
+}
+
+function lineageCommand(argv: readonly string[], root: string): string {
+  const sub = positional(argv, 1) ?? "report";
+  const input = lineageInputs(root);
+  if (sub === "report") {
+    return renderLineageLearningReport(input.lineages, input.evaluations, input.reallocation);
+  }
+  if (sub === "next") return lineageNextReport(input.reallocation);
+  throw new Error(`unknown lineage subcommand "${sub}"; expected report | next`);
 }
 
 function promotionCommand(argv: readonly string[], root: string): string {
@@ -1487,6 +1614,7 @@ function checkCommand(root: string): string {
   const discoveryWorkbench = loadDiscoveryWorkbench(root, registry, adaptiveFunnel);
   const probeSummary = loadProbeRunSummary(root, registry, discoveryWorkbench);
   const promotions = loadPromotions(root, registry, discoveryWorkbench);
+  const lineages = loadLineages(root, registry, discoveryWorkbench, promotions);
 
   return [
     "registry OK",
@@ -1504,6 +1632,7 @@ function checkCommand(root: string): string {
     "  workbench   discovery scoring inputs validate against mechanisms and transfers",
     `  probes     ${probeSummary.probes.length} executable mechanism probes run locally`,
     `  promotions ${promotions.length} probe-to-family promotion record(s) validate`,
+    `  lineages   ${lineages.length} lineage learning record(s) validate`,
     "",
   ].join("\n");
 }
@@ -1809,10 +1938,12 @@ function verifyTrialCommand(argv: readonly string[], root: string): string {
 function killCommand(argv: readonly string[], root: string): string {
   const familyId = positional(argv, 2) ?? PIC_FAMILY;
   const state = familyLoop(root, familyId);
+  const lineageContext = killReportLineageContexts(lineageInputs(root).evaluations).get(familyId);
   return renderKillReport({
     shape: state.shape,
     analysis: state.analysis,
     ...(state.evidence === undefined ? {} : { evidence: state.evidence }),
+    ...(lineageContext === undefined ? {} : { lineage: lineageContext }),
     variants: state.variants,
     trials: state.trials,
   });
@@ -2529,9 +2660,16 @@ function allCommand(argv: readonly string[], root: string): string {
   );
   const discoveryWorkbench = loadDiscoveryWorkbench(root, registry, adaptiveFunnel);
   const promotions = loadPromotions(root, registry, discoveryWorkbench);
+  const lineages = loadLineages(root, registry, discoveryWorkbench, promotions);
+  const lineageEvaluations = evaluateLineages(
+    lineages,
+    lineageRuntimeEvidence(root, lineages, promotionSmokeGates),
+  );
+  const reallocation = planPortfolioReallocation(lineages, lineageEvaluations, discoveryWorkbench);
   const probeEvidence = [
     ...probeEvidenceForDiscovery(probeSummary),
     ...promotionEvidenceForDiscovery(promotions),
+    ...lineageFeedbackForDiscovery(reallocation),
   ];
   const discoverySummary = summarizeDiscoveryWorkbench(discoveryWorkbench, probeEvidence);
   write(
@@ -2565,6 +2703,10 @@ function allCommand(argv: readonly string[], root: string): string {
   write(
     "promotion-report.md",
     renderPromotionReport(promotionRecords, probeSummary, BUILT_FAMILIES, promotionSmokeGates),
+  );
+  write(
+    "lineage-learning-report.md",
+    renderLineageLearningReport(lineages, lineageEvaluations, reallocation),
   );
   write(
     "access-token-evolution-report.md",
@@ -3298,13 +3440,16 @@ function allCommand(argv: readonly string[], root: string): string {
   // The evolution layer: postmortems for families whose counted trials show they are already solved,
   // and the loop across all of them.
   const loopStates = loopAll(root, registry, evidenceFor);
+  const lineageKillContexts = killReportLineageContexts(lineageEvaluations);
   for (const state of loopStates.filter((item) => item.analysis.primary?.reason === "already_solved")) {
+    const lineageContext = lineageKillContexts.get(state.shape.familyId);
     write(
       `${state.shape.familyId}-kill-analysis.md`,
       renderKillReport({
         shape: state.shape,
         analysis: state.analysis,
         ...(state.evidence === undefined ? {} : { evidence: state.evidence }),
+        ...(lineageContext === undefined ? {} : { lineage: lineageContext }),
         variants: state.variants,
         trials: state.trials,
       }),
@@ -3852,6 +3997,12 @@ export function main(argv: readonly string[]): number {
         const sub = positional(argv, 1) ?? "report";
         if (sub === "report") emit(argv, promotionCommand(argv, root));
         else process.stdout.write(promotionCommand(argv, root));
+        return 0;
+      }
+      case "lineage": {
+        const sub = positional(argv, 1) ?? "report";
+        if (sub === "report") emit(argv, lineageCommand(argv, root));
+        else process.stdout.write(lineageCommand(argv, root));
         return 0;
       }
       case "kill": {

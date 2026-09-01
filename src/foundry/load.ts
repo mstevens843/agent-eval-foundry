@@ -27,6 +27,7 @@ import {
   assertDiscoveryWorkbenchValid,
   parseDiscoveryCandidates,
 } from "./discovery-workbench.js";
+import { type FamilyLineage, assertLineagesValid, parseFamilyLineages } from "./lineage.js";
 import {
   EXECUTABLE_PROBES,
   type ProbeDefinition,
@@ -165,4 +166,15 @@ export function loadPromotions(
   const promotions = parsePromotions(readJson(join(root, "data", "promotions.json")), "data/promotions.json");
   assertPromotionsValid(promotions, loadProbeRunSummary(root, registry, workbench), workbench);
   return promotions;
+}
+
+export function loadLineages(
+  root: string,
+  registry = loadRegistry(root),
+  workbench = loadDiscoveryWorkbench(root, registry),
+  promotions = loadPromotions(root, registry, workbench),
+): readonly FamilyLineage[] {
+  const lineages = parseFamilyLineages(readJson(join(root, "data", "lineages.json")), "data/lineages.json");
+  assertLineagesValid(lineages, registry, workbench, promotions);
+  return lineages;
 }

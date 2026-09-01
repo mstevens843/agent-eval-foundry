@@ -1,6 +1,6 @@
 # Kill analysis — Delegated wallet scope reconciliation
 
-`delegated-wallet-scope-reconciliation` · verdict **NOT-READY** · primary reason **`already_solved`** · disposition **`harden`**
+`delegated-wallet-scope-reconciliation` · verdict **NOT-READY** · primary reason **`already_solved`** · disposition **`harden`** · lineage decision **`reallocate`**
 
 Every finding below is derived from a gate result or a trial record. Nothing here is an opinion.
 
@@ -30,6 +30,18 @@ the models it was built to separate.
 A clean smoke pass is useful evidence. It prevents wasting a `/6` matrix and routes the family into evolution.
 
 It also did not prove the opposite: 1 counted clean pass by the available model family is a signal, not a proof about every provider. What it forecloses is *shipping on the current evidence*.
+
+## Lineage Learning
+
+This family is part of lineage `access-token-authority-lineage`, which currently has verdict **`lineage_solved_twice`**.
+
+Lineage reason: the same subject/provider solved both parent and descendant cleanly.
+
+Portfolio decision: pause this lineage and reallocate build budget to a different mechanism cluster.
+
+Estimated matrix spend avoided by this lineage: $97.32.
+
+The generic `already_solved` disposition is the single-family default after a first clean pass. The lineage verdict supersedes blind hardening here because the branch already spent one descendant attempt and the same subject solved both packages cleanly.
 
 ### The trials
 
@@ -85,23 +97,15 @@ the spec, the data, or the absence of evidence? Each row is a hypothesis with a 
 
 ## What would make it stronger
 
-The evolution engine proposes the following, each a composition of named operators rather than
-a fresh idea. Kill risk is the pre-registered probability that the variant dies of the same
-cause as its parent.
+_Generic variants are not the next recommended spend for this lineage._
 
-| variant | operators | new mechanisms | axes | kill risk | build h |
-|---|---|---|---:|---:|---:|
-| `delegated-wallet-capability-routing` | `add_cross_tool_interaction`, `add_partial_observability`, `add_benign_noise` | `prompt-injection-via-retrieval` | 3 | 50% | 60 |
-| `delegated-wallet-memory-poisoning` | `add_time_separation`, `add_stateful_memory`, `add_benign_noise` | `context-contamination`, `prompt-injection-via-retrieval` | 4 | 30% | 75 |
-| `delegated-wallet-cross-tool-escalation` | `add_cross_tool_interaction`, `lengthen_horizon` | — | 3 | 45% | 55 |
-| `delegated-wallet-approval-scope-drift` | `add_time_separation`, `reduce_policy_explicitness` | `context-contamination` | 3 | 40% | 50 |
-
-See `reports/foundry-evolution-report.md` for each variant in full.
+The single-family evolution engine can still propose descendants, but the portfolio-level
+lineage result says to buy evidence from a different mechanism cluster first.
 
 ## Next actions
 
-1. Evolve the family with hardening operators — the mechanism is intact and the difficulty is not.
-2. Schedule infrastructure work: Too few subjects have attempted this family and another, so cross-family axes are unmeasurable.
+1. pause this lineage and reallocate build budget to a different mechanism cluster
+2. Build or probe the different mechanism cluster recommended in `reports/lineage-learning-report.md` before spending more on this branch.
 
 ## The taxonomy this was graded against
 

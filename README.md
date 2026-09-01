@@ -43,8 +43,15 @@ declared wallet-spending-limit transfer test. The counted smoke trial passed cle
 routes to already_solved_or_needs_evolution rather than difficulty evidence or full matrix spend.
 That evolution path now produced `delegated-wallet-scope-reconciliation`, a full descendant family
 with local reference/mutant/package evidence and a one-slot OpenAI/Codex smoke campaign. That smoke
-also passed cleanly, so delegated-wallet routes to harden/evolve rather than difficulty evidence or
-full matrix spend.
+also passed cleanly, so delegated-wallet routes away from difficulty evidence and full matrix
+spend.
+
+Lineage Kill + Portfolio Reallocation v1 turns those two clean smoke solves into portfolio learning.
+The access-token authority lineage is now paused rather than hardened blindly: both parent and
+descendant were solved by the same OpenAI/Codex subject, two full matrices were avoided, similar
+local scope-comparison candidates are penalized, and the next recommended branch moves to a
+different mechanism cluster. See
+[`reports/lineage-learning-report.md`](reports/lineage-learning-report.md).
 
 The foundry keeps evidence streams separate:
 
@@ -128,6 +135,14 @@ measured scenarios from an 82,944-point declared space, 10/10 known-bad subjects
 campaign. The counted smoke trial `delegated-wallet-2026-08-o1` passed 804/804, so the same
 pre-registered clean-pass route fired again: no difficulty claim and no full matrix spend.
 See [`reports/access-token-evolution-report.md`](reports/access-token-evolution-report.md).
+
+Lineage Kill + Portfolio Reallocation v1 records that result as a solved-twice lineage rather than
+an invitation to keep adding local fields. The access-token -> delegated-wallet edge preserved the
+authority mechanism and added delegation, durable cache, revocation, downgrade, reconciliation,
+truthful audit and liveness pressure; OpenAI still solved both packages cleanly. The report treats
+that as budget-preserving evidence: the lineage is killed/paused for now, local scope-authority
+variants are downgraded, and the next branch is reallocated to a different mechanism cluster. See
+[`reports/lineage-learning-report.md`](reports/lineage-learning-report.md).
 
 Adversarial Audit v2 upgrades verifier-integrity from preserved attack records to mechanical triage.
 Attack packets now carry an execution profile, an isolation profile, an exploit-artifact schema, an
@@ -291,6 +306,7 @@ Key generated reports:
 - `reports/mechanism-probe-report.md`
 - `reports/discovery-calibration-report.md`
 - `reports/access-token-evolution-report.md`
+- `reports/lineage-learning-report.md`
 - `reports/delegated-wallet-scope-reconciliation-family-report.md`
 - `reports/delegated-wallet-scope-reconciliation-trial-readiness.md`
 - `reports/delegated-wallet-scope-reconciliation-axis-report.md`
@@ -366,7 +382,8 @@ test transfer before production-mode matrix spend. The access-token promotion no
 downstream routing behavior as well: a clean smoke pass blocks matrix spend and sends the mechanism
 back to evolution/repair instead of being reported as a difficulty win. The delegated-wallet
 descendant repeats the lesson: stronger local verifier evidence still did not translate into
-OpenAI difficulty evidence, so the next step is another evolution rather than a matrix.
+OpenAI difficulty evidence. The lineage layer now stops spending on that branch for now and
+reallocates to a different mechanism cluster instead of continuing blind hardening.
 
 The strongest current result is still memory-poisoning generalisation across labs. The newest result
 is that verifier-integrity now has explicit container/no-network bundle and countability rules,

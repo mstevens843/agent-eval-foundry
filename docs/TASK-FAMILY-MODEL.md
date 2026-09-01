@@ -108,7 +108,17 @@ reconciliation, audit truth and liveness. That descendant now exists as a full v
 family with 804 measured scenarios, a clean reference, 10/10 local known-bad subjects/baselines
 caught, a leak-checked challenge package and a one-slot OpenAI/Codex smoke campaign. That counted
 smoke passed cleanly, so it is evidence that the current descendant was also solved by the available
-OpenAI subject. The correct route is harden/evolve, not real-agent difficulty or full matrix spend.
+OpenAI subject. The correct route is lineage kill/pause and portfolio reallocation, not real-agent
+difficulty or full matrix spend.
+
+Lineage Kill + Portfolio Reallocation v1 adds the next recovery rule. A **lineage** records a root
+candidate/probe/family, descendant edges, evolution operators, what stayed fixed, what changed,
+local evidence, smoke outcomes, provider/subject identity, package hashes and whether matrices were
+blocked. If a parent and descendant both pass clean counted smoke trials on the same subject/provider,
+the foundry does not keep hardening that mechanism branch blindly. It records `lineage_solved_twice`,
+preserves the matrix spend avoided, applies labelled portfolio feedback to similar candidates, and
+recommends the next branch from a different mechanism cluster. This is not a difficulty claim; it is
+negative evidence used to stop waste.
 
 This layer is intentionally separate from the existing candidate ledger. The ledger records
 historical promote/kill decisions. Discovery Workbench v1 manages the forward-looking pool and

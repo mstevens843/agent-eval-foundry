@@ -126,6 +126,7 @@ export function renderDiscoveryScaffoldSummary(draft: DiscoveryTaskShapeDraft): 
 export function renderDiscoveryWorkbenchReport(input: DiscoveryWorkbenchReportInput): string {
   const { registry, summary, workbench } = input;
   const evidence = evidenceByCandidate(summary.evidenceStatuses);
+  const lineageEvidence = summary.evidenceStatuses.filter((item) => item.sourceId.startsWith("lineage:"));
   const warnings = summary.warnings.length === 0 ? ["none"] : summary.warnings;
   const killed =
     summary.killedCheaply.length === 0
@@ -203,6 +204,21 @@ export function renderDiscoveryWorkbenchReport(input: DiscoveryWorkbenchReportIn
           ...summary.evidenceStatuses.map(
             (item) =>
               `| \`${item.candidateId}\` | ${item.status} | \`${item.sourceId}\` | ${item.verdict} | ${esc(item.reason)} |`,
+          ),
+        ]),
+    "",
+    "## Lineage Feedback Overlay",
+    "",
+    lineageEvidence.length === 0
+      ? "_No lineage-derived portfolio feedback is active._"
+      : "| candidate | lineage status | adjustment | reason |",
+    ...(lineageEvidence.length === 0
+      ? []
+      : [
+          "|---|---|---:|---|",
+          ...lineageEvidence.map(
+            (item) =>
+              `| \`${item.candidateId}\` | ${item.status} | ${item.rankBoost > 0 ? "+" : ""}${item.rankBoost.toFixed(1)} | ${esc(item.reason)} |`,
           ),
         ]),
     "",

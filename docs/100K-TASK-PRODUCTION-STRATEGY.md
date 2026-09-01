@@ -323,6 +323,30 @@ current package hash, so the descendant also routes to already_solved_or_needs_e
 second example of a clean smoke pass preventing matrix spend rather than becoming a difficulty
 claim.
 
+### Refinement: Lineage Kill And Reallocation
+
+The next refinement is lineage learning. A family is no longer judged only as a single row. The
+foundry records parent/child edges, evolution operators, what stayed fixed, what changed, local
+evidence, smoke outcomes, provider/subject identity and whether full matrix spend was blocked.
+
+The access-token branch is the first concrete example. `access-token-scope-expansion` preserved a
+local requested-vs-approved authority mechanism and passed a counted OpenAI/Codex smoke trial
+cleanly. The descendant, `delegated-wallet-scope-reconciliation`, added time separation, delegated
+authority, durable cache, revocation, downgrade, budget reconciliation, truthful audit and liveness
+pressure. It also passed a counted OpenAI/Codex smoke trial cleanly.
+
+That sequence is useful negative evidence. It says this branch is too solvable for the current
+OpenAI subject, not that the foundry should buy two full `/6` matrices. The lineage verdict is
+`lineage_solved_twice`; the portfolio action is to pause/kill that lineage for now, label the
+scoring penalty as lineage-derived feedback, and reallocate build effort toward a different
+mechanism cluster such as model-alias rollout drift, delayed external receipts, browser/live-state
+replay, persistent prompt injection or hidden dependency discovery.
+
+This keeps the funnel adaptive in both directions. A hard descendant can earn more evidence; a clean
+descendant can stop spend. The goal is not to keep evolving a favorite mechanism. The goal is to
+buy the cheapest useful evidence and then move capital to the branch most likely to add independent
+signal.
+
 ### Stage 0: Candidate Pool
 
 Start broad. A reasonable first pass is 50 to 100 candidate family ideas, not 1000 concrete tasks.
@@ -762,12 +786,16 @@ The repository already implements the core evidence machinery:
 - human-solvability readiness and clean-room record validation
 - adversarial verifier-integrity packets, replay and no-bypass evidence
 - adaptive discovery/validation/production funnel with mechanism probes and transfer tests
+- lineage learning over parent/descendant clean smoke outcomes
+- portfolio reallocation feedback that penalizes solved branches and recommends different mechanism
+  clusters
 - budget model
 
 What is still being built is broader measured use of that funnel:
 
 - outcome tracking over completed discovery probes and promoted task-shape drafts
 - promotion/kill dashboards over completed probe outcomes
+- cross-lab confirmation for branch kills and hard descendants
 - stronger automated diagnosis from transcripts
 - broader cross-provider and human evidence
 - more measured families

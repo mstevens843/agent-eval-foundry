@@ -238,7 +238,7 @@ function renderSelected(
             ? "Full matrix spend is allowed to be considered, not automatic."
             : smokeGate.smokeCampaignStatus === "planned" ||
                 smokeGate.smokeCampaignStatus === "attempted-uncounted"
-              ? "Exact smoke command: `node dist/cli.js trials campaign run --family access-token-scope-expansion --only O1`."
+              ? `Exact smoke command: \`node dist/cli.js trials campaign run --family ${p.familyId} --only O1\`.`
               : "No full matrix command is recommended from this gate state.",
           "",
         ]),

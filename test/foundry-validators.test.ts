@@ -262,6 +262,19 @@ const COVERED_IN_PROMOTION_TEST: readonly RuleCode[] = [
   "PROMOTION_HIDDEN_RULE_SURFACE_UNDECLARED",
 ];
 
+/** Rules whose known-bad case lives in `lineage.test.ts`: lineage graph, solve routing and feedback labels. */
+const COVERED_IN_LINEAGE_TEST: readonly RuleCode[] = [
+  "LINEAGE_NO_ROOT",
+  "LINEAGE_NODE_UNKNOWN_FAMILY",
+  "LINEAGE_EDGE_DANGLING_NODE",
+  "LINEAGE_NO_FIXED_DELTA",
+  "LINEAGE_NO_CHANGED_DELTA",
+  "LINEAGE_CROSS_LAB_FROM_SAME_PROVIDER",
+  "LINEAGE_MATRIX_AFTER_CLEAN_PASS",
+  "LINEAGE_FEEDBACK_UNLABELLED",
+  "LINEAGE_NO_REALLOCATION",
+];
+
 /** Rules exercised by code below rather than by a JSON fixture. Keeps assertion 3 honest. */
 const PROGRAMMATIC: readonly RuleCode[] = [
   "E_TYPE",
@@ -525,6 +538,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ...COVERED_IN_ADVERSARIAL_AUDIT_TEST,
       ...COVERED_IN_PROBE_RUNNER_TEST,
       ...COVERED_IN_PROMOTION_TEST,
+      ...COVERED_IN_LINEAGE_TEST,
     ]);
     const uncovered = RULE_CODES.filter((c) => !covered.has(c));
     expect(
@@ -547,6 +561,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ["test/adversarial-audit.test.ts", COVERED_IN_ADVERSARIAL_AUDIT_TEST],
       ["test/probe-runner.test.ts", COVERED_IN_PROBE_RUNNER_TEST],
       ["test/promotion.test.ts", COVERED_IN_PROMOTION_TEST],
+      ["test/lineage.test.ts", COVERED_IN_LINEAGE_TEST],
     ];
     for (const [file, codes] of delegated) {
       const source = readFileSync(`${ROOT}${file}`, "utf8");
