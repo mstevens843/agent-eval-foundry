@@ -213,7 +213,8 @@ export function renderDeploymentAliasCrossLabReadiness(input: DeploymentAliasCro
     ...input.audits.flatMap((audit) => [
       `### ${audit.providerId}`,
       "",
-      `Prepare: \`node dist/cli.js trials campaign prepare --family ${FAMILY_ID} --provider ${audit.providerId} --out bundles/${FAMILY_ID}-${audit.providerId}\``,
+      `Prepare: \`node dist/cli.js external packet --family ${FAMILY_ID} --provider ${audit.providerId} --out bundles/${FAMILY_ID}-${audit.providerId}\``,
+      "Validate returned packet: `node dist/cli.js external validate <returned-packet>`",
       `Import: \`${audit.importCommand}\``,
       `Verify: \`${audit.verifyCommand}\``,
       "",
@@ -450,8 +451,8 @@ function auditBundle(
   expectedScenarioSetId: string,
 ): DeploymentAliasBundleAudit {
   const relDir = dir.replace(`${root}/`, "");
-  const importCommand = `node dist/cli.js trials campaign import --family ${FAMILY_ID} ${relDir}`;
-  const verifyCommand = "node dist/cli.js check";
+  const importCommand = "node dist/cli.js external import <returned-packet>";
+  const verifyCommand = `node dist/cli.js trials verify --family ${FAMILY_ID} <run-id>`;
   if (!existsSync(dir)) {
     return {
       providerId,

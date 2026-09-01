@@ -51,6 +51,12 @@ candidate and probe, what stays fixed, what changes, the carried-forward authori
 mutants, new risks, and pre-registered confirm/kill signals. It is build-routing evidence, not
 real-agent difficulty evidence.
 
+A **provider-delta comparison** is the routing layer after one provider family fails or solves a
+smoke trial. It compares current-hash counted OpenAI and non-OpenAI smoke records, distinguishes
+cross-lab smoke presence from cross-lab difficulty, and decides whether to diagnose, evolve,
+reallocate, import a missing non-OpenAI smoke, or consider a matrix. A provider-delta report is not
+itself `/6` evidence.
+
 ## Before Task Families: Discovery Workbench
 
 The foundry now has a pre-family layer for ideas that have not earned a full build yet.
@@ -150,6 +156,9 @@ refusal, infrastructure error, author contamination, private hints, provider-fam
 hidden artifact leaks. For deployment-alias, the OpenAI half-matrix is now planned as same-provider
 stability evidence; the counted Claude clean solve gives cross-lab smoke presence but not cross-lab
 difficulty, so it still does not satisfy full `/6` matrix gates.
+
+For iteration, use the targeted command set in `docs/TARGETED-DEV-GATES.md`. Those commands are
+developer feedback for changed surfaces; they do not replace the full release reproducibility gate.
 
 Durable Approval Outbox is the first concrete example:
 

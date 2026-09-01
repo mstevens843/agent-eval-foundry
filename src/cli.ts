@@ -264,6 +264,7 @@ import {
   renderPromotionReport,
   renderPromotionScaffoldSummary,
 } from "./reports/promotion-report.js";
+import { renderDeploymentAliasProviderDeltaReport } from "./reports/provider-delta-report.js";
 import { describeArtifact, renderProviderVariance } from "./reports/provider-variance.js";
 import { renderMechanismReport, renderMutantReport } from "./reports/registry-report.js";
 import { renderSelfCheckBehavior } from "./reports/self-check-report.js";
@@ -360,6 +361,9 @@ REGISTRY (what could be built, and can we detect it?)
                                   draft family skeleton from a promotion record
   lineage report [--out f]        lineage kill/reallocation learning report
   lineage next                    next cluster after solved lineages
+  provider-delta report [--out f] deployment-alias mixed-provider smoke decision report
+  deployment-alias readiness [--out dir]
+                                  targeted deployment-alias readiness reports
   sources                        list every matrix source, implemented and planned
 
 FAMILIES (run a measured mini-benchmark)
@@ -1335,6 +1339,186 @@ function lineageCommand(argv: readonly string[], root: string): string {
   }
   if (sub === "next") return lineageNextReport(input.reallocation);
   throw new Error(`unknown lineage subcommand "${sub}"; expected report | next`);
+}
+
+function providerDeltaCommand(argv: readonly string[], root: string): string {
+  const sub = positional(argv, 1) ?? "report";
+  const familyId = flag(argv, "--family") ?? DEPLOYMENT_ALIAS_FAMILY_ID;
+  if (familyId !== DEPLOYMENT_ALIAS_FAMILY_ID) {
+    throw new Error("provider-delta v1 is implemented for deployment-model-alias-rollout-drift");
+  }
+  if (sub !== "report") throw new Error(`unknown provider-delta subcommand "${sub}"; expected report`);
+  const registry = loadRegistry(root);
+  const funnel = loadAdaptiveFunnel(root, registry);
+  const campaigns = loadCampaigns(root);
+  const context = deploymentAliasSmokeContext(root, campaigns, funnel.transfers);
+  const prepared = prepareChallenge(root, familyId);
+  return renderDeploymentAliasProviderDeltaReport({
+    challengeHash: prepared.hash,
+    scenarioSetId: prepared.scenarioSetId,
+    records: context.records,
+    externalResults: loadExternalIntakeResults(root, familyId),
+    diagnoses: context.diagnoses,
+  });
+}
+
+function deploymentAliasReadinessOutputs(root: string): readonly {
+  readonly name: string;
+  readonly text: string;
+}[] {
+  const registry = loadRegistry(root);
+  const adaptiveFunnel = loadAdaptiveFunnel(root, registry);
+  const campaignPlans = loadCampaigns(root);
+  const context = deploymentAliasSmokeContext(root, campaignPlans, adaptiveFunnel.transfers);
+  const family = builtFamily(DEPLOYMENT_ALIAS_FAMILY_ID);
+  const sweep = family.run();
+  const prepared = prepareChallenge(root, DEPLOYMENT_ALIAS_FAMILY_ID);
+  const pkgCheck = checkChallengePackage(prepared.pkg.files, family.leakProfile);
+  const localEvidencePass =
+    sweep.referenceFailures.length === 0 &&
+    sweep.mutantsCaught.every((mutant) => mutant.caught) &&
+    sweep.baselinesBlocked.length === sweep.baselinesTotal;
+  const humanAudits = auditHumanReadinessForFamilies(root);
+  const humanSummaries = summarizeHumanEvidence(humanAudits, loadHumanReviewRecords(root));
+  const human = humanGateEvidenceMap(humanSummaries)[DEPLOYMENT_ALIAS_FAMILY_ID];
+  const adversarial = adversarialGateEvidenceMap(summarizeAdversarialEvidence(root))[
+    DEPLOYMENT_ALIAS_FAMILY_ID
+  ];
+  const externalResults = loadExternalIntakeResults(root, DEPLOYMENT_ALIAS_FAMILY_ID);
+  const openAiHalfMatrix = campaignPlans.find(
+    (campaign) => campaign.campaignId === "deployment-model-alias-rollout-drift-openai-half-matrix-2026-09",
+  );
+  const readiness = evaluateProductionReadiness({
+    familyId: DEPLOYMENT_ALIAS_FAMILY_ID,
+    challengeHash: prepared.hash,
+    currentChallengeHash: prepared.hash,
+    localVerifierReady: localEvidencePass,
+    packageBacked: ROUTABLE_FAMILY_IDS.includes(DEPLOYMENT_ALIAS_FAMILY_ID) && pkgCheck.files > 0,
+    campaignPresent: context.plan !== undefined,
+    campaignHashCurrent: context.plan === undefined ? true : context.plan.challengeHash === prepared.hash,
+    packageHashCurrent: context.plan === undefined ? true : context.plan.challengeHash === prepared.hash,
+    countedSmokeTrials: context.analysis.counted,
+    countedSmokeFailures: context.analysis.failures,
+    countedSmokeSolves: context.analysis.solves,
+    providerRefusals: context.analysis.refusals,
+    infraFailures: context.analysis.infra,
+    modelFamilies: context.analysis.modelFamilies,
+    countedFailureModelFamilies: smokeFailureModelFamilies(context.analysis),
+    diagnosisStatus: context.gate.smokeDiagnosisStatus,
+    transferDeclared: context.gate.transferDeclarationStatus === "declared",
+    adversarialReady: adversarial?.adversarialPackageReady ?? false,
+    countedNoBypassAudits: adversarial?.countedNoBypassAudits ?? 0,
+    countedBypassAudits: adversarial?.countedBypassAudits ?? 0,
+    unrepairedBypasses: adversarial?.unrepairedBypasses ?? 0,
+    humanReady: human?.humanPackageReady ?? false,
+    cleanHumanSolves: human?.cleanHumanSolves ?? 0,
+  });
+  return [
+    {
+      name: "deployment-model-alias-rollout-drift-production-readiness.md",
+      text: renderDeploymentAliasProductionReadiness({
+        readiness,
+        analysis: context.analysis,
+        challengeHash: prepared.hash,
+        scenarioSetId: prepared.scenarioSetId,
+        measuredScenarios: sweep.scenarioCount,
+        declaredSpace: sweep.spaceSize,
+        mutantDetectionAxes: measure(sweep.matrix, { nullTrials: 3 }).independentAxes,
+        packageFiles: pkgCheck.files,
+        packageBytes: pkgCheck.bytes,
+      }),
+    },
+    {
+      name: "deployment-model-alias-rollout-drift-cross-lab-readiness.md",
+      text: renderDeploymentAliasCrossLabReadiness({
+        expectedHash: prepared.hash,
+        expectedScenarioSetId: prepared.scenarioSetId,
+        analysis: context.analysis,
+        audits: auditDeploymentAliasCrossLabBundles(root, prepared.hash, prepared.scenarioSetId),
+      }),
+    },
+    {
+      name: "deployment-model-alias-rollout-drift-adversarial-readiness.md",
+      text: renderDeploymentAliasAdversarialReadiness({
+        challengeHash: prepared.hash,
+        verifierHash: verifierHashFor(root, DEPLOYMENT_ALIAS_FAMILY_ID),
+        summary: adversarial,
+        campaignPath: adversarialCampaignPath(root, DEPLOYMENT_ALIAS_FAMILY_ID).replace(`${root}/`, ""),
+        bundlePath: adversarialBundlePath(root, DEPLOYMENT_ALIAS_FAMILY_ID).replace(`${root}/`, ""),
+      }),
+    },
+    {
+      name: "deployment-model-alias-rollout-drift-external-intake.md",
+      text: renderExternalIntakeReport({
+        familyId: DEPLOYMENT_ALIAS_FAMILY_ID,
+        expectedHash: prepared.hash,
+        expectedScenarioSetId: prepared.scenarioSetId,
+        packetAudits: auditDeploymentAliasExternalPackets(root),
+        intakeResults: externalResults,
+      }),
+    },
+    {
+      name: "deployment-model-alias-rollout-drift-human-intake.md",
+      text: renderDeploymentAliasHumanIntake({
+        challengeHash: prepared.hash,
+        scenarioSetId: prepared.scenarioSetId,
+        human,
+        packetPath: "human-reviews/deployment-model-alias-rollout-drift",
+      }),
+    },
+    {
+      name: "deployment-model-alias-rollout-drift-matrix-readiness-gap.md",
+      text: renderDeploymentAliasMatrixReadinessGap({
+        readiness,
+        analysis: context.analysis,
+        human,
+        adversarial,
+        externalResults,
+        openAiHalfMatrix,
+        challengeHash: prepared.hash,
+        scenarioSetId: prepared.scenarioSetId,
+      }),
+    },
+    {
+      name: "deployment-model-alias-rollout-drift-provider-delta.md",
+      text: renderDeploymentAliasProviderDeltaReport({
+        challengeHash: prepared.hash,
+        scenarioSetId: prepared.scenarioSetId,
+        records: context.records,
+        externalResults,
+        diagnoses: context.diagnoses,
+      }),
+    },
+    {
+      name: "deployment-model-alias-rollout-drift-agent-diagnosis.md",
+      text: renderDeploymentAliasSmokeDiagnosis({
+        analysis: context.analysis,
+        diagnoses: context.diagnoses,
+        plan: context.plan,
+        gate: context.gate,
+        records: context.records,
+      }),
+    },
+  ];
+}
+
+function deploymentAliasCommand(argv: readonly string[], root: string): string {
+  const sub = positional(argv, 1) ?? "readiness";
+  if (sub !== "readiness") {
+    throw new Error(`unknown deployment-alias subcommand "${sub}"; expected readiness`);
+  }
+  const dir = flag(argv, "--out") ?? join(root, "reports");
+  mkdirSync(dir, { recursive: true });
+  const outputs = deploymentAliasReadinessOutputs(root);
+  for (const output of outputs) {
+    writeFileSync(join(dir, output.name), output.text, "utf8");
+  }
+  return [
+    `wrote ${outputs.length} deployment-alias readiness report(s) to ${dir.replace(`${root}/`, "")}`,
+    "",
+    ...outputs.map((output) => `- ${output.name}`),
+    "",
+  ].join("\n");
 }
 
 function promotionCommand(argv: readonly string[], root: string): string {
@@ -3193,6 +3377,16 @@ function allCommand(argv: readonly string[], root: string): string {
         scenarioSetId: deploymentPrepared.scenarioSetId,
       }),
     );
+    write(
+      "deployment-model-alias-rollout-drift-provider-delta.md",
+      renderDeploymentAliasProviderDeltaReport({
+        challengeHash: deploymentPrepared.hash,
+        scenarioSetId: deploymentPrepared.scenarioSetId,
+        records: deploymentAliasSmoke.records,
+        externalResults: deploymentExternalResults,
+        diagnoses: deploymentAliasSmoke.diagnoses,
+      }),
+    );
   }
   write(
     "ship-recommendation.md",
@@ -4105,24 +4299,64 @@ export function main(argv: readonly string[]): number {
                 hypothesisKnob: familyId === MEMORY_FAMILY ? "sessionsBetween" : null,
               }),
             );
-          process.stdout.write(
-            [
-              `family      ${familyId}`,
-              `subjects    ${chain.subjects.join(", ") || "none with failures"}`,
-              `chain       ${chain.isChain ? "YES — one axis at several sensitivities" : `no — ${chain.incomparable.length} incomparable pair(s)`}`,
-              `agent axes  ${chain.isChain ? "1" : `>= ${chain.agentAxes}`}`,
-              "",
-              chain.reading,
-              "",
-              ...diagnoses.map(
-                (d) =>
-                  `${d.runId.padEnd(14)} ${d.reading.padEnd(20)} ${d.scenariosFailed}/${d.scenariosGraded} failed, hypothesis ${d.matchesHypothesis ? "matched" : "not matched"}`,
-              ),
-              "",
-              `Full report: reports/${familyId}-agent-diagnosis.md`,
-              "",
-            ].join("\n"),
-          );
+          const summary = [
+            `family      ${familyId}`,
+            `subjects    ${chain.subjects.join(", ") || "none with failures"}`,
+            `chain       ${chain.isChain ? "YES — one axis at several sensitivities" : `no — ${chain.incomparable.length} incomparable pair(s)`}`,
+            `agent axes  ${chain.isChain ? "1" : `>= ${chain.agentAxes}`}`,
+            "",
+            chain.reading,
+            "",
+            ...diagnoses.map(
+              (d) =>
+                `${d.runId.padEnd(14)} ${d.reading.padEnd(20)} ${d.scenariosFailed}/${d.scenariosGraded} failed, hypothesis ${d.matchesHypothesis ? "matched" : "not matched"}`,
+            ),
+            "",
+            `Full report: reports/${familyId}-agent-diagnosis.md`,
+            "",
+          ].join("\n");
+          if (flag(argv, "--out") !== null) {
+            const funnel = loadAdaptiveFunnel(root, loadRegistry(root));
+            const campaigns = loadCampaigns(root);
+            const context =
+              familyId === ACCESS_TOKEN_FAMILY_ID
+                ? accessTokenSmokeContext(root, campaigns, funnel.transfers)
+                : familyId === DELEGATED_WALLET_FAMILY_ID
+                  ? delegatedWalletSmokeContext(root, campaigns, funnel.transfers)
+                  : familyId === DEPLOYMENT_ALIAS_FAMILY_ID
+                    ? deploymentAliasSmokeContext(root, campaigns, funnel.transfers)
+                    : null;
+            emit(
+              argv,
+              context === null
+                ? renderDiagnoses(familyId, diagnoses, plan?.hypothesis ?? "No campaign plan on record.")
+                : familyId === ACCESS_TOKEN_FAMILY_ID
+                  ? renderAccessTokenSmokeDiagnosis({
+                      analysis: context.analysis,
+                      diagnoses: context.diagnoses,
+                      plan: context.plan,
+                      gate: context.gate,
+                      records: context.records,
+                    })
+                  : familyId === DELEGATED_WALLET_FAMILY_ID
+                    ? renderDelegatedWalletSmokeDiagnosis({
+                        analysis: context.analysis,
+                        diagnoses: context.diagnoses,
+                        plan: context.plan,
+                        gate: context.gate,
+                        records: context.records,
+                      })
+                    : renderDeploymentAliasSmokeDiagnosis({
+                        analysis: context.analysis,
+                        diagnoses: context.diagnoses,
+                        plan: context.plan,
+                        gate: context.gate,
+                        records: context.records,
+                      }),
+            );
+            return 0;
+          }
+          process.stdout.write(summary);
           if (plan === undefined) process.stdout.write("No campaign plan on record for this family.\n");
           return 0;
         }
@@ -4438,6 +4672,16 @@ export function main(argv: readonly string[]): number {
         const sub = positional(argv, 1) ?? "report";
         if (sub === "report") emit(argv, lineageCommand(argv, root));
         else process.stdout.write(lineageCommand(argv, root));
+        return 0;
+      }
+      case "provider-delta": {
+        const sub = positional(argv, 1) ?? "report";
+        if (sub === "report") emit(argv, providerDeltaCommand(argv, root));
+        else process.stdout.write(providerDeltaCommand(argv, root));
+        return 0;
+      }
+      case "deployment-alias": {
+        process.stdout.write(deploymentAliasCommand(argv, root));
         return 0;
       }
       case "kill": {

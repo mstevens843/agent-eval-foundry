@@ -63,6 +63,8 @@ explicit override. See
 [`reports/deployment-model-alias-rollout-drift-family-report.md`](reports/deployment-model-alias-rollout-drift-family-report.md)
 and
 [`reports/deployment-model-alias-rollout-drift-production-readiness.md`](reports/deployment-model-alias-rollout-drift-production-readiness.md).
+The dedicated provider-delta routing report is
+[`reports/deployment-model-alias-rollout-drift-provider-delta.md`](reports/deployment-model-alias-rollout-drift-provider-delta.md).
 
 Human + External Evidence Intake v1 makes that next evidence step countable. Deployment-alias now
 has current-hash Claude, Gemini and generic external packets with run instructions, metadata
@@ -253,6 +255,8 @@ node dist/cli.js external packet --family deployment-model-alias-rollout-drift -
 node dist/cli.js external validate <returned-packet>
 node dist/cli.js external import <returned-packet>
 node dist/cli.js external report
+node dist/cli.js provider-delta report
+node dist/cli.js deployment-alias readiness --out reports
 node dist/cli.js discovery report
 node dist/cli.js discovery candidates
 node dist/cli.js discovery score
@@ -280,6 +284,9 @@ node dist/cli.js adversarial v2 report
 node dist/cli.js adversarial report
 pnpm bundles
 ```
+
+For cheaper iteration on one subsystem before the release gate, see
+[`docs/TARGETED-DEV-GATES.md`](docs/TARGETED-DEV-GATES.md).
 
 Provider reality is explicit. Codex/OpenAI is configured locally. Anthropic/Claude is import-only by
 default unless an explicit token is supplied for a bounded run; the current deployment-alias phase
@@ -354,6 +361,7 @@ Key generated reports:
 - `reports/discovery-calibration-report.md`
 - `reports/access-token-evolution-report.md`
 - `reports/lineage-learning-report.md`
+- `reports/deployment-model-alias-rollout-drift-provider-delta.md`
 - `reports/delegated-wallet-scope-reconciliation-family-report.md`
 - `reports/delegated-wallet-scope-reconciliation-trial-readiness.md`
 - `reports/delegated-wallet-scope-reconciliation-axis-report.md`

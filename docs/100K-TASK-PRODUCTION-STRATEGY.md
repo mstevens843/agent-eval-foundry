@@ -363,6 +363,13 @@ solved. `/6` remains blocked pending provider-delta diagnosis, evolution or an e
 The family also has one counted Codex/OpenAI no-bypass adversarial audit under `fs-sandbox`, which
 is verifier-integrity evidence for one provider family, not cross-lab cheat-resistance evidence.
 
+Provider Delta + Reallocation Decision v1 makes this mixed state explicit. The provider-delta report
+is a decision table, not a matrix result: OpenAI fail plus no non-OpenAI record means import one;
+OpenAI fail plus non-OpenAI fail means matrix candidate; OpenAI fail plus non-OpenAI solve means
+diagnose or evolve; both solve means reallocate. Repeated OpenAI runs measure same-provider
+stability only. See `docs/TARGETED-DEV-GATES.md` for the focused commands used while iterating on
+this layer.
+
 Human + External Evidence Intake v1 makes the next handoff mechanical instead of informal. The
 deployment-alias branch now emits current-hash external packets for Claude, Gemini and generic
 third-party runners, plus a family-specific human clean-room packet. A returned packet must preserve

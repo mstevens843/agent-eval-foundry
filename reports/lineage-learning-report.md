@@ -99,7 +99,7 @@ do not change historical evidence.
 
 ## Next Cluster Recommendation
 
-Exact next build recommendation: Reallocation has now been acted on: deployment-model-alias-rollout-drift is promoted, locally built, packaged, and smoke-tested under challenge hash 0e9b87a5f260544cfbc1cdce8f08938c. The counted OpenAI/Codex smoke failed 192/339 scenarios on target, so this branch now has OpenAI-only smoke-difficulty evidence. Next, prepare non-OpenAI/import evidence or a guarded production matrix decision; keep the access-token scope lineage paused.
+Exact next build recommendation: Reallocation has now been acted on: deployment-model-alias-rollout-drift is promoted, locally built, packaged, and smoke-tested under challenge hash 0e9b87a5f260544cfbc1cdce8f08938c. The counted OpenAI/Codex smoke failed 192/339 scenarios on target. A current-hash Claude/Anthropic external smoke imported cleanly and solved 339/339, so this branch is a provider-delta diagnosis/evolution candidate rather than a production /6 matrix candidate. Keep the access-token scope lineage paused.
 
 | rank | candidate | title | cluster | adjusted score | action |
 |---:|---|---|---|---:|---|

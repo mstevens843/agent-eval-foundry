@@ -275,7 +275,7 @@ const COVERED_IN_LINEAGE_TEST: readonly RuleCode[] = [
   "LINEAGE_NO_REALLOCATION",
 ];
 
-/** Rules whose known-bad case lives in `deployment-alias-family.test.ts`: production matrix readiness. */
+/** Rules whose known-bad case lives in deployment-alias/provider-delta tests: production routing. */
 const COVERED_IN_DEPLOYMENT_ALIAS_TEST: readonly RuleCode[] = [
   "PRODUCTION_LOCAL_VERIFIER_NOT_READY",
   "PRODUCTION_PACKAGE_NOT_BACKED",
@@ -293,6 +293,14 @@ const COVERED_IN_DEPLOYMENT_ALIAS_TEST: readonly RuleCode[] = [
   "PRODUCTION_ADVERSARIAL_READY_NOT_AUDITED",
   "PRODUCTION_HUMAN_READY_NOT_EVIDENCED",
   "PRODUCTION_UNREPAIRED_BYPASS",
+  "PROVIDER_DELTA_NON_OPENAI_MISSING",
+  "PROVIDER_DELTA_UNCOUNTED_NON_OPENAI",
+  "PROVIDER_DELTA_STALE_OR_INVALID_EVIDENCE",
+  "PROVIDER_DELTA_OPENAI_ONLY_NO_CROSS_LAB",
+  "PROVIDER_DELTA_MIXED_PROVIDER_SIGNAL",
+  "PROVIDER_DELTA_MATRIX_NOT_AUTOMATIC",
+  "PROVIDER_DELTA_PROVIDER_FAILURE_NO_COUNT",
+  "PROVIDER_DELTA_INFRA_NO_COUNT",
 ];
 
 /** Rules whose known-bad case lives in `external-intake.test.ts`: third-party packet countability. */

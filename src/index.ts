@@ -143,6 +143,25 @@ export type {
   SmokeDiagnosisStatus,
 } from "./foundry/smoke-gates.js";
 export {
+  PROVIDER_DELTA_DECISIONS,
+  PROVIDER_DELTA_EVIDENCE_STATUSES,
+  PROVIDER_DELTA_RULE_CODES,
+  PROVIDER_DELTA_VERDICTS,
+  evaluateProviderDelta,
+  providerDeltaEvidenceFromTrialRecords,
+  providerFamilyFromModel,
+} from "./foundry/provider-delta.js";
+export type {
+  ProviderDeltaComparison,
+  ProviderDeltaDecision,
+  ProviderDeltaEvidence,
+  ProviderDeltaEvidenceStatus,
+  ProviderDeltaFinding,
+  ProviderDeltaInput,
+  ProviderDeltaRuleCode,
+  ProviderDeltaVerdict,
+} from "./foundry/provider-delta.js";
+export {
   DISCOVERY_CANDIDATE_EVIDENCE_STATUSES,
   DISCOVERY_NEXT_STEPS,
   DISCOVERY_RISK_LEVELS,

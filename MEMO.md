@@ -76,6 +76,12 @@ evidence only: the existing smoke is slot 1, two OpenAI repeats are pending, and
 matrix remains blocked after the Claude clean solve because the current evidence is mixed, not
 cross-lab difficulty under hash `0e9b87a5f260544cfbc1cdce8f08938c`.
 
+Provider Delta + Reallocation Decision v1 makes that mixed state executable. The new report
+`reports/deployment-model-alias-rollout-drift-provider-delta.md` reads preserved records only: it
+does not run Claude, does not run OpenAI, and classifies the current evidence as OpenAI on-target
+failure plus Claude clean solve. That routes to provider-delta diagnosis/evolution, not production
+`/6` spend.
+
 The foundry now separates three claims: a reference can solve it, a clean public package can be
 handed to a human, and an independent human has actually solved it. Those are different evidence
 levels and the reports do not merge them. The current human layer is deterministic: it audits

@@ -28,9 +28,9 @@ Campaign: `deployment-model-alias-rollout-drift-2026-08`.
 | transfer declaration | declared |
 | smoke-gate follow-up | ready |
 
-No smoke-gate blockers remain in this calculation. Production `/6` readiness is stricter and still requires non-OpenAI smoke evidence.
+No smoke-gate blockers remain, but production `/6` readiness is stricter: Claude/Anthropic solved while OpenAI/Codex failed, so this is a provider-delta state.
 
-Next action: pursue non-OpenAI smoke before production /6 matrix spend
+Next action: diagnose provider delta before production /6 matrix spend
 
 ## Failed Checks
 
@@ -123,6 +123,10 @@ Counted provider families: `anthropic`, `openai`.
 | `deployment-model-alias-rollout-drift-2026-08-o1` / `deployment-alias-2026-09-claude-1` | 0 | one clean, one failing | mixed provider result; no cross-lab difficulty claim |
 
 Claude/Anthropic solved the current smoke while OpenAI/Codex failed. This is a provider-delta finding; production `/6` stays blocked pending diagnosis or evolution.
+
+## Awaiting Non-OpenAI Comparison
+
+Not awaiting a non-OpenAI smoke: a current counted Claude/Anthropic run is present and solved. The next work is provider-delta diagnosis and possible evolution, not matrix execution.
 
 ## Evidence Boundary
 

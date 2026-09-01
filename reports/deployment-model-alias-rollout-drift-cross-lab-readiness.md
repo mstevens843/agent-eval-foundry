@@ -28,21 +28,24 @@ import cleanly under the current hash.
 
 ### claude
 
-Prepare: `node dist/cli.js trials campaign prepare --family deployment-model-alias-rollout-drift --provider claude --out bundles/deployment-model-alias-rollout-drift-claude`
-Import: `node dist/cli.js trials campaign import --family deployment-model-alias-rollout-drift bundles/deployment-model-alias-rollout-drift-claude`
-Verify: `node dist/cli.js check`
+Prepare: `node dist/cli.js external packet --family deployment-model-alias-rollout-drift --provider claude --out bundles/deployment-model-alias-rollout-drift-claude`
+Validate returned packet: `node dist/cli.js external validate <returned-packet>`
+Import: `node dist/cli.js external import <returned-packet>`
+Verify: `node dist/cli.js trials verify --family deployment-model-alias-rollout-drift <run-id>`
 
 ### gemini
 
-Prepare: `node dist/cli.js trials campaign prepare --family deployment-model-alias-rollout-drift --provider gemini --out bundles/deployment-model-alias-rollout-drift-gemini`
-Import: `node dist/cli.js trials campaign import --family deployment-model-alias-rollout-drift bundles/deployment-model-alias-rollout-drift-gemini`
-Verify: `node dist/cli.js check`
+Prepare: `node dist/cli.js external packet --family deployment-model-alias-rollout-drift --provider gemini --out bundles/deployment-model-alias-rollout-drift-gemini`
+Validate returned packet: `node dist/cli.js external validate <returned-packet>`
+Import: `node dist/cli.js external import <returned-packet>`
+Verify: `node dist/cli.js trials verify --family deployment-model-alias-rollout-drift <run-id>`
 
 ### external
 
-Prepare: `node dist/cli.js trials campaign prepare --family deployment-model-alias-rollout-drift --provider external --out bundles/deployment-model-alias-rollout-drift-external`
-Import: `node dist/cli.js trials campaign import --family deployment-model-alias-rollout-drift bundles/deployment-model-alias-rollout-drift-external`
-Verify: `node dist/cli.js check`
+Prepare: `node dist/cli.js external packet --family deployment-model-alias-rollout-drift --provider external --out bundles/deployment-model-alias-rollout-drift-external`
+Validate returned packet: `node dist/cli.js external validate <returned-packet>`
+Import: `node dist/cli.js external import <returned-packet>`
+Verify: `node dist/cli.js trials verify --family deployment-model-alias-rollout-drift <run-id>`
 
 ## Countability
 
