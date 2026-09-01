@@ -473,6 +473,33 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
     expect(refusal.fullMatrixReady).toBe(false);
   });
 
+  it("blocks promotion matrix readiness when provider-delta diagnosis is mixed", () => {
+    const gate = evaluatePromotionSmokeGate({
+      familyId: FAMILY_ID,
+      localEvidencePass: true,
+      campaignPresent: true,
+      campaignHashCurrent: true,
+      packageHashCurrent: true,
+      verifierMutantBaselinePass: true,
+      countedSmokeTrials: 2,
+      countedFailures: 1,
+      countedSolves: 1,
+      providerRefusals: 0,
+      infraFailures: 0,
+      transferDeclared: true,
+      diagnosisStatus: "on-target",
+      matrixBlockedReason:
+        "mixed provider smoke: OpenAI failed on target, Claude solved; diagnose/evolve before /6 matrix spend",
+    });
+
+    expect(gate.state).toBe("transfer-ready");
+    expect(gate.fullMatrixReady).toBe(false);
+    expect(gate.matrixReadinessStatus).toBe("blocked");
+    expect(gate.blockers).toContain(
+      "mixed provider smoke: OpenAI failed on target, Claude solved; diagnose/evolve before /6 matrix spend",
+    );
+  });
+
   it("renders the no-trial smoke diagnosis deterministically", () => {
     const plan = loadCampaigns(ROOT).find((campaign) => campaign.familyId === FAMILY_ID);
     if (plan === undefined) throw new Error("deployment-alias campaign missing");
@@ -629,7 +656,7 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
 
     expect(report).toContain("Counted provider families: `anthropic`, `openai`.");
     expect(report).toContain("mixed provider result; no cross-lab difficulty claim");
-    expect(report).toContain("production `/6` stays blocked pending diagnosis or evolution");
+    expect(report).toContain("production `/6` stays blocked while the selected evolution probe is prepared");
   });
 
   it("keeps refusal, infra and stale hashes out of production readiness", () => {

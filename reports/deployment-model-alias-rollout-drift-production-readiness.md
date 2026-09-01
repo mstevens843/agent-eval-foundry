@@ -63,6 +63,9 @@ Production matrix: **blocked**.
 
 Next action: diagnose provider delta or evolve before production /6 matrix spend
 
+Provider-delta diagnosis is present; the generated diagnosis routes the mixed smoke state to evolution rather than `/6` spend.
+Evolution options are ready; the selected next step is a mechanism probe, not a full descendant build.
+
 ## Evidence Boundary
 
 - One OpenAI/Codex on-target smoke failure is smoke-difficulty evidence for OpenAI only.

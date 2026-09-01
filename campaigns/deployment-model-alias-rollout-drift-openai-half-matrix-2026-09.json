@@ -25,6 +25,7 @@
   "preservation": [
     "The existing O1 smoke trial counts as slot 1 only while its challenge hash and scenario set remain current.",
     "O2 and O3 are planned OpenAI/Codex repeats, not a full matrix.",
+    "O2 and O3 must not run without explicit user approval after provider-delta diagnosis is reviewed.",
     "Every attempt writes a durable trial directory under trials/deployment-model-alias-rollout-drift/<run-id>/ whether or not it counts.",
     "metadata.json records provider, command, challenge hash, scenario-set id and scenario count.",
     "transcript.txt is preserved verbatim, including refusals and infrastructure errors.",

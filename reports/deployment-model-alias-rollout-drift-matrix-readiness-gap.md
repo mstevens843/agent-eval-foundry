@@ -10,6 +10,8 @@ from what is only planned or still missing.
 | scenario set current | **pass** | scenario set `drift-339-590affe3` |
 | OpenAI smoke | **pass** | 1/2 counted smoke run(s) failed on target |
 | cross-lab smoke | **mixed** | non-OpenAI smoke imported cleanly, but it solved the suite rather than failing on target |
+| provider-delta diagnosis | **present** | mixed provider smoke has a dedicated diagnosis report |
+| evolution options | **ready** | conditional descendants are declared; no descendant family is built yet |
 | external intake | **attempted** | 1 countable / 2 imported packet(s) |
 | human evidence | **pending** | human-ready, but no clean-room solve on record |
 | adversarial OpenAI fs-sandbox | **pass** | 1 counted no-bypass audit(s) |
@@ -31,7 +33,7 @@ Campaign: `deployment-model-alias-rollout-drift-openai-half-matrix-2026-09`.
 
 ## Current Answer
 
-Do not run the full `/6` matrix yet. The non-OpenAI smoke imported cleanly but solved the suite, so the next step is provider-delta diagnosis or evolution.
+Do not run the full `/6` matrix yet. The non-OpenAI smoke imported cleanly but solved the suite; provider-delta diagnosis is present and routes next work to the selected evolution probe.
 
 Countable non-OpenAI external packets currently imported: 1.
 

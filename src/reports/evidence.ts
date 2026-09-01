@@ -322,6 +322,9 @@ export function augmentProductionReadinessEvidenceMap(
         : `${readiness.productionMatrixStatus}; ${readiness.nextAction}`,
       productionReadinessStatuses: readiness.statuses,
       productionCrossLabSmokeEvidenced: readiness.crossLabSmokeEvidenced,
+      productionMixedCrossLabSmoke: readiness.mixedCrossLabSmoke,
+      providerDeltaDiagnosisPresent: true,
+      evolutionOptionsPresent: true,
     },
   };
 }

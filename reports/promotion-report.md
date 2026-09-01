@@ -94,7 +94,7 @@ does not retroactively turn promotion evidence into difficulty evidence.
 |---|---|---:|---:|---|---|---|---|
 | `access-token-scope-expansion-from-probe` | `access-token-scope-expansion` | 384 | 3 | smoke-passed-cleanly | yes | blocked | treat as already_solved_or_needs_evolution unless a matrix reason is declared |
 | `delegated-wallet-scope-reconciliation-from-access-token-evolution` | `delegated-wallet-scope-reconciliation` | 804 | 3 | smoke-passed-cleanly | yes | blocked | treat as already_solved_or_needs_evolution unless a matrix reason is declared |
-| `deployment-model-alias-rollout-drift-from-lineage-reallocation` | `deployment-model-alias-rollout-drift` | 339 | 6 | matrix-ready | yes | ready | full matrix may be considered; it is not automatic |
+| `deployment-model-alias-rollout-drift-from-lineage-reallocation` | `deployment-model-alias-rollout-drift` | 339 | 6 | transfer-ready | yes | blocked | mixed provider smoke: OpenAI failed on target, Claude solved; diagnose/evolve before /6 matrix spend |
 
 ## Ready Promotions
 

@@ -28,6 +28,10 @@ OpenAI failed on target while the current counted non-OpenAI smoke solved; this 
 
 Next action: diagnose provider delta, then evolve or repair if the mechanism is too provider-specific
 
+The follow-on diagnosis report inspects preserved OpenAI and Claude submissions/transcripts
+without running either provider. In the current mixed state it selects an evolution-probe route
+rather than production matrix spend.
+
 ## Run Evidence
 
 | run | provider family | model | status | graded | failed | on target | reason |
@@ -79,6 +83,7 @@ Use these paths when a future non-OpenAI packet needs to be prepared or imported
 - A counted non-OpenAI clean solve creates cross-lab smoke presence, not cross-lab difficulty.
 - Repeated same-provider trials estimate stability, not provider/lab breadth.
 - Provider-delta diagnosis is a routing decision; it is not a full `/6` matrix.
+- The generated diagnosis and evolution-option reports are the current routing artifacts for this mixed state.
 
 ---
 

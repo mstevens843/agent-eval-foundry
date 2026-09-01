@@ -95,6 +95,9 @@ export interface FamilyEvidence {
   readonly productionMatrixDetail?: string;
   readonly productionReadinessStatuses?: readonly string[];
   readonly productionCrossLabSmokeEvidenced?: boolean;
+  readonly productionMixedCrossLabSmoke?: boolean;
+  readonly providerDeltaDiagnosisPresent?: boolean;
+  readonly evolutionOptionsPresent?: boolean;
   readonly adversarialClaimLevel?:
     | "adversarial-ready"
     | "adversarial-audited"
@@ -878,14 +881,18 @@ export function assessFamily(
     .map((r) => r.gate.id);
   const measured = results.find((r) => r.gate.id === "measured-axes");
   const evidenced = results.find((r) => r.gate.id === "difficulty-evidenced");
+  const providerDeltaHold =
+    evidence?.productionMixedCrossLabSmoke === true && evidence?.providerDeltaDiagnosisPresent === true;
   // SHIP needs both: the verifier discriminates (measured axes) AND something that could fail the
   // family has tried. Either alone is a different, weaker claim.
   const verdict: ShipVerdict =
     blockingFailures.length > 0
       ? "NOT-READY"
-      : measured?.verdict === "pass" && evidenced?.verdict === "pass"
-        ? "SHIP"
-        : "HOLD";
+      : providerDeltaHold
+        ? "HOLD"
+        : measured?.verdict === "pass" && evidenced?.verdict === "pass"
+          ? "SHIP"
+          : "HOLD";
   return { familyId: shape.familyId, verdict, results, blockingFailures };
 }
 
@@ -907,7 +914,7 @@ export function renderShipReport(
     "Each family against a fixed gate table. The verdict is a pure function of the gates — no",
     "weighting, no score, no override. **SHIP** means every blocking gate passes and the family has a",
     `measured axis count of at least ${String(MIN_MEASURED_AXES)}; **HOLD** means it is structurally sound but its diversity is still an`,
-    "estimate; **NOT-READY** means at least one blocking gate fails.",
+    "estimate or current provider-delta routing blocks production claims; **NOT-READY** means at least one blocking gate fails.",
     "",
     "The human layer is reported as advisory claim levels. `reference-solvable`, `human-ready` and",
     "`human-evidenced` are separate claims and do not silently rewrite the model/verifier verdict.",

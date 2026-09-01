@@ -82,7 +82,7 @@ export const SHAPE_PROSE: Readonly<Record<string, ShapeProse>> = {
   "ui-action-record-replay": {
     status: "shipped",
     agentTrialsRun: 5,
-    agentTrialsPassed: 0,
+    agentTrialsPassed: 1,
     evidence:
       "Built, measured and trialed in this repository: src/families/ui-action-record-replay/ (simulated app with an effect ledger, generator, reference replayer, 10 mutants, verifier, runner), examples/families/ui-action-record-replay/matrix.json and trials/ui-action-record-replay/. The reference passes every measured scenario, every mutant is caught by its intended check, and 5 counted trials across four subjects all failed. The family ships as useful difficulty evidence, but its agent failure sets form a chain, so it contributes one difficulty axis rather than breadth.",
     visibleRules: [
@@ -478,10 +478,10 @@ export const SHAPE_PROSE: Readonly<Record<string, ShapeProse>> = {
   },
   "deployment-model-alias-rollout-drift": {
     status: "built",
-    agentTrialsRun: 0,
+    agentTrialsRun: 2,
     agentTrialsPassed: 0,
     evidence:
-      "Built from lineage reallocation after the access-token authority branch was solved twice by OpenAI/Codex smoke trials: src/families/deployment-model-alias-rollout-drift/ contains the typed model, public spec, scenario generator, reference, mutants, verifier and runner. The local sweep measures model-alias rollout drift over a deterministic declared space, with a clean reference, known-bad mutants, baselines, a leak-checked challenge package and no counted real-agent trial yet. This is local verifier/mutant/package evidence only.",
+      "Built from lineage reallocation after the access-token authority branch was solved twice by OpenAI/Codex smoke trials: src/families/deployment-model-alias-rollout-drift/ contains the typed model, public spec, scenario generator, reference, mutants, verifier and runner. The local sweep is clean and the public package is leak-checked. One counted OpenAI/Codex smoke failed on target, while one counted Claude/Anthropic external smoke solved the same current-hash package; this is mixed provider-delta evidence, not cross-lab difficulty or /6 matrix readiness.",
     visibleRules: [
       "Alias name is not concrete model identity.",
       "Cached alias mapping is not current rollout truth.",

@@ -268,11 +268,11 @@ function providerComparisonSnapshot(records: readonly TrialRecord[]): ProviderCo
   }
   if (openAiFailed && nonOpenAiSolved) {
     return {
-      nextAction: "diagnose provider delta before production /6 matrix spend",
+      nextAction: "use provider-delta diagnosis to select the next evolution probe before /6 matrix spend",
       smokeGateNoBlockerLine:
         "No smoke-gate blockers remain, but production `/6` readiness is stricter: Claude/Anthropic solved while OpenAI/Codex failed, so this is a provider-delta state.",
       awaitingLine:
-        "Not awaiting a non-OpenAI smoke: a current counted Claude/Anthropic run is present and solved. The next work is provider-delta diagnosis and possible evolution, not matrix execution.",
+        "Not awaiting a non-OpenAI smoke: a current counted Claude/Anthropic run is present and solved. Provider-delta diagnosis is now present and routes the next work to an evolution probe, not matrix execution.",
     };
   }
   return {
@@ -354,7 +354,7 @@ function crossLabPairReading(a: TrialRecord, b: TrialRecord): string {
     "",
     sharedDifficulty
       ? "Both provider families failed at least one scenario. Read this as early cross-lab smoke only, not a full matrix."
-      : "Claude/Anthropic solved the current smoke while OpenAI/Codex failed. This is a provider-delta finding; production `/6` stays blocked pending diagnosis or evolution.",
+      : "Claude/Anthropic solved the current smoke while OpenAI/Codex failed. This is a provider-delta finding; production `/6` stays blocked while the selected evolution probe is prepared.",
   ].join("\n");
 }
 

@@ -64,9 +64,10 @@ hash `0e9b87a5f260544cfbc1cdce8f08938c`. That is OpenAI-only smoke-difficulty ev
 cross-lab breadth or a full-matrix result. A current-hash Claude/Anthropic external smoke then
 imported cleanly and passed 339/339. That is cross-lab smoke presence but not cross-lab difficulty:
 OpenAI failed, Claude solved, and Deployment-Alias Production Readiness keeps `/6` matrix spend
-blocked pending provider-delta diagnosis, evolution or an explicit override. Current-hash Claude,
-Gemini and generic external bundles remain prepared for future imports; they count only when
-returned with transcript, submission, metadata and verifier output.
+blocked. Provider-delta diagnosis is now present and routes next work to evolution unless an
+explicit override is recorded. Current-hash Claude, Gemini and generic external bundles remain
+prepared for future imports; they count only when returned with transcript, submission, metadata and
+verifier output.
 
 Human + External Evidence Intake v1 turns that handoff into a validator instead of an email
 convention. Deployment-alias now has current-hash external packets, metadata templates,
@@ -81,6 +82,15 @@ Provider Delta + Reallocation Decision v1 makes that mixed state executable. The
 does not run Claude, does not run OpenAI, and classifies the current evidence as OpenAI on-target
 failure plus Claude clean solve. That routes to provider-delta diagnosis/evolution, not production
 `/6` spend.
+
+Provider Delta Diagnosis + Evolution Decision v1 now performs that diagnosis without new model
+evidence. It statically inspects preserved OpenAI and Claude submissions/transcripts, compares
+failure checks and knob correlations, records the mixed result as `openai_specific_failure` plus
+`non_openai_solver_delta`, and keeps `/6` blocked. The selected next route is the
+`provider-failover-router-alias-drift-probe`: a mechanism probe that preserves alias identity and
+authoritative ledger reconciliation while adding provider failover, router fallback drift and
+delayed receipts. Two additional OpenAI repeats remain only a same-provider stability plan and
+should not run without explicit approval.
 
 The foundry now separates three claims: a reference can solve it, a clean public package can be
 handed to a human, and an independent human has actually solved it. Those are different evidence

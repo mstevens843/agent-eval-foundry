@@ -3,7 +3,7 @@
 Each family against a fixed gate table. The verdict is a pure function of the gates — no
 weighting, no score, no override. **SHIP** means every blocking gate passes and the family has a
 measured axis count of at least 2; **HOLD** means it is structurally sound but its diversity is still an
-estimate; **NOT-READY** means at least one blocking gate fails.
+estimate or current provider-delta routing blocks production claims; **NOT-READY** means at least one blocking gate fails.
 
 The human layer is reported as advisory claim levels. `reference-solvable`, `human-ready` and
 `human-evidenced` are separate claims and do not silently rewrite the model/verifier verdict.
@@ -17,7 +17,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `browser-action-replay` | **NOT-READY** | difficulty-evidenced |
 | `checker-required-memory-poisoning` | **SHIP** | none |
 | `delegated-wallet-scope-reconciliation` | **NOT-READY** | not-already-solved |
-| `deployment-model-alias-rollout-drift` | **SHIP** | none |
+| `deployment-model-alias-rollout-drift` | **HOLD** | none |
 | `deployment-rollback-partial-effects` | **NOT-READY** | difficulty-evidenced |
 | `durable-approval-outbox` | **SHIP** | none |
 | `model-alias-drift-sentinel` | **NOT-READY** | difficulty-evidenced |
@@ -331,7 +331,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `browser-backed-ready` | n/a | no browser-backed layer |
 | `browser-backed-measured` | n/a | no browser-backed layer |
 
-### `deployment-model-alias-rollout-drift` — SHIP
+### `deployment-model-alias-rollout-drift` — HOLD
 
 | gate | result | detail |
 |---|---|---|

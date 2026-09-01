@@ -275,7 +275,19 @@ const COVERED_IN_LINEAGE_TEST: readonly RuleCode[] = [
   "LINEAGE_NO_REALLOCATION",
 ];
 
-/** Rules whose known-bad case lives in deployment-alias/provider-delta tests: production routing. */
+/** Rules whose known-bad case lives in `provider-delta.test.ts`: cross-provider smoke routing. */
+const COVERED_IN_PROVIDER_DELTA_TEST: readonly RuleCode[] = [
+  "PROVIDER_DELTA_NON_OPENAI_MISSING",
+  "PROVIDER_DELTA_UNCOUNTED_NON_OPENAI",
+  "PROVIDER_DELTA_STALE_OR_INVALID_EVIDENCE",
+  "PROVIDER_DELTA_OPENAI_ONLY_NO_CROSS_LAB",
+  "PROVIDER_DELTA_MIXED_PROVIDER_SIGNAL",
+  "PROVIDER_DELTA_MATRIX_NOT_AUTOMATIC",
+  "PROVIDER_DELTA_PROVIDER_FAILURE_NO_COUNT",
+  "PROVIDER_DELTA_INFRA_NO_COUNT",
+];
+
+/** Rules whose known-bad case lives in deployment-alias tests: production routing. */
 const COVERED_IN_DEPLOYMENT_ALIAS_TEST: readonly RuleCode[] = [
   "PRODUCTION_LOCAL_VERIFIER_NOT_READY",
   "PRODUCTION_PACKAGE_NOT_BACKED",
@@ -293,14 +305,16 @@ const COVERED_IN_DEPLOYMENT_ALIAS_TEST: readonly RuleCode[] = [
   "PRODUCTION_ADVERSARIAL_READY_NOT_AUDITED",
   "PRODUCTION_HUMAN_READY_NOT_EVIDENCED",
   "PRODUCTION_UNREPAIRED_BYPASS",
-  "PROVIDER_DELTA_NON_OPENAI_MISSING",
-  "PROVIDER_DELTA_UNCOUNTED_NON_OPENAI",
-  "PROVIDER_DELTA_STALE_OR_INVALID_EVIDENCE",
-  "PROVIDER_DELTA_OPENAI_ONLY_NO_CROSS_LAB",
-  "PROVIDER_DELTA_MIXED_PROVIDER_SIGNAL",
-  "PROVIDER_DELTA_MATRIX_NOT_AUTOMATIC",
-  "PROVIDER_DELTA_PROVIDER_FAILURE_NO_COUNT",
-  "PROVIDER_DELTA_INFRA_NO_COUNT",
+];
+
+/** Rules whose known-bad case lives in `provider-delta-diagnosis.test.ts`: mixed-provider diagnosis routing. */
+const COVERED_IN_PROVIDER_DELTA_DIAGNOSIS_TEST: readonly RuleCode[] = [
+  "PROVIDER_DELTA_DIAGNOSIS_MISSING_ARTIFACT",
+  "PROVIDER_DELTA_DIAGNOSIS_STALE_HASH",
+  "PROVIDER_DELTA_DIAGNOSIS_MIXED_MATRIX_BLOCKED",
+  "PROVIDER_DELTA_DIAGNOSIS_NOT_DIFFICULTY_EVIDENCE",
+  "PROVIDER_DELTA_DIAGNOSIS_SAME_PROVIDER_STABILITY_ONLY",
+  "PROVIDER_DELTA_EVOLUTION_PROPOSAL_INCOMPLETE",
 ];
 
 /** Rules whose known-bad case lives in `external-intake.test.ts`: third-party packet countability. */
@@ -590,7 +604,9 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ...COVERED_IN_PROBE_RUNNER_TEST,
       ...COVERED_IN_PROMOTION_TEST,
       ...COVERED_IN_LINEAGE_TEST,
+      ...COVERED_IN_PROVIDER_DELTA_TEST,
       ...COVERED_IN_DEPLOYMENT_ALIAS_TEST,
+      ...COVERED_IN_PROVIDER_DELTA_DIAGNOSIS_TEST,
       ...COVERED_IN_EXTERNAL_INTAKE_TEST,
     ]);
     const uncovered = RULE_CODES.filter((c) => !covered.has(c));
@@ -615,7 +631,9 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ["test/probe-runner.test.ts", COVERED_IN_PROBE_RUNNER_TEST],
       ["test/promotion.test.ts", COVERED_IN_PROMOTION_TEST],
       ["test/lineage.test.ts", COVERED_IN_LINEAGE_TEST],
+      ["test/provider-delta.test.ts", COVERED_IN_PROVIDER_DELTA_TEST],
       ["test/deployment-alias-family.test.ts", COVERED_IN_DEPLOYMENT_ALIAS_TEST],
+      ["test/provider-delta-diagnosis.test.ts", COVERED_IN_PROVIDER_DELTA_DIAGNOSIS_TEST],
       ["test/external-intake.test.ts", COVERED_IN_EXTERNAL_INTAKE_TEST],
     ];
     for (const [file, codes] of delegated) {

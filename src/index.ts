@@ -162,6 +162,43 @@ export type {
   ProviderDeltaVerdict,
 } from "./foundry/provider-delta.js";
 export {
+  PROVIDER_DELTA_DIAGNOSIS_CONFIDENCES,
+  PROVIDER_DELTA_DIAGNOSIS_ROUTES,
+  PROVIDER_DELTA_DIAGNOSIS_RULE_CODES,
+  PROVIDER_DELTA_DIAGNOSIS_VERDICTS,
+  diagnoseProviderDelta,
+  inspectProviderDeltaArtifact,
+} from "./foundry/provider-delta-diagnosis.js";
+export type {
+  ProviderDeltaArtifactInput,
+  ProviderDeltaArtifactInspection,
+  ProviderDeltaArtifactSignals,
+  ProviderDeltaConfidence,
+  ProviderDeltaDiagnosis,
+  ProviderDeltaDiagnosisFinding,
+  ProviderDeltaDiagnosisInput,
+  ProviderDeltaDiagnosisRuleCode,
+  ProviderDeltaDiagnosisVerdict,
+  ProviderDeltaEvidenceBoundary,
+  ProviderDeltaFailureOverlap,
+  ProviderDeltaKnobDelta,
+  ProviderDeltaMechanismReading,
+  ProviderDeltaRoute,
+  ProviderDeltaSubjectComparison,
+  ProviderDeltaTrialDiagnosisLike,
+} from "./foundry/provider-delta-diagnosis.js";
+export {
+  DEPLOYMENT_ALIAS_EVOLUTION_STARTS,
+  deploymentAliasEvolutionProposals,
+  planDeploymentAliasEvolution,
+  validateDeploymentAliasEvolutionProposals,
+} from "./foundry/deployment-alias-evolution.js";
+export type {
+  DeploymentAliasEvolutionPlan,
+  DeploymentAliasEvolutionProposal,
+  DeploymentAliasEvolutionStart,
+} from "./foundry/deployment-alias-evolution.js";
+export {
   DISCOVERY_CANDIDATE_EVIDENCE_STATUSES,
   DISCOVERY_NEXT_STEPS,
   DISCOVERY_RISK_LEVELS,

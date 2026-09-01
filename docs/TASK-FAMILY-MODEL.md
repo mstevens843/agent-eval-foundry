@@ -57,6 +57,11 @@ cross-lab smoke presence from cross-lab difficulty, and decides whether to diagn
 reallocate, import a missing non-OpenAI smoke, or consider a matrix. A provider-delta report is not
 itself `/6` evidence.
 
+A **provider-delta diagnosis** is the follow-on routing artifact when providers disagree. It reads
+preserved transcripts/submissions, failed checks, failed scenarios and knob correlations without
+running a new model. It can recommend evolution, repair, same-provider stability or a later matrix
+candidate, but it does not create new difficulty evidence.
+
 ## Before Task Families: Discovery Workbench
 
 The foundry now has a pre-family layer for ideas that have not earned a full build yet.
@@ -142,10 +147,17 @@ evidence and it is not a full-matrix result. Deployment-Alias Production Readine
 stricter production gate: a current-hash Claude/Anthropic external smoke can count only if the
 packet preserves transcript, submission, metadata and verifier output. That import now exists and
 passed 339/339, so the cross-lab smoke result is mixed rather than a cross-lab difficulty claim.
-The full `/6` matrix stays blocked pending provider-delta diagnosis, evolution or an explicit
-override. The same phase prepared current-hash external import bundles and added one counted
-Codex/OpenAI no-bypass adversarial audit under `fs-sandbox`; that is verifier-integrity evidence for
-one provider family, not a security proof and not cross-lab cheat-resistance evidence.
+The full `/6` matrix stays blocked; provider-delta diagnosis now routes the branch to evolution
+unless an explicit override is recorded. The same phase prepared current-hash external import
+bundles and added one counted Codex/OpenAI no-bypass adversarial audit under `fs-sandbox`; that is
+verifier-integrity evidence for one provider family, not a security proof and not cross-lab
+cheat-resistance evidence.
+
+Provider-delta diagnosis is now present for this mixed state. It compares the counted OpenAI failure
+with the counted Claude solve, identifies rollout phase, canary window, eval mix and regression
+severity as the strongest OpenAI failure correlates, and selects
+`provider-failover-router-alias-drift-probe` as the next evolution probe. That is a routing
+decision, not a built descendant family.
 
 Human + External Evidence Intake v1 adds the handoff layer for that production gate. A package-backed
 family can now emit an external packet with the public challenge, pinned challenge hash, pinned

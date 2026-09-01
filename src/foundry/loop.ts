@@ -65,6 +65,7 @@ const MEASURED_FAMILIES = new Set([
   "checker-required-memory-poisoning",
   "access-token-scope-expansion",
   "delegated-wallet-scope-reconciliation",
+  "deployment-model-alias-rollout-drift",
 ]);
 
 type EvidenceLoader = (familyId: string) => ReturnType<typeof familyEvidenceFor>;

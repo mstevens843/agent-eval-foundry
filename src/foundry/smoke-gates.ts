@@ -35,6 +35,7 @@ export interface PromotionSmokeGateInput {
   readonly transferDeclared: boolean;
   readonly diagnosisStatus: SmokeDiagnosisStatus;
   readonly allowMatrixAfterCleanPassReason?: string | null;
+  readonly matrixBlockedReason?: string | null;
 }
 
 export interface PromotionSmokeGateResult {
@@ -74,8 +75,11 @@ export function evaluatePromotionSmokeGate(input: PromotionSmokeGateInput): Prom
   if (input.countedFailures > 0 && input.diagnosisStatus !== "on-target") {
     blockers.push("counted smoke failure is not diagnosed as on-target");
   }
+  if ((input.matrixBlockedReason ?? "").trim().length > 0) {
+    blockers.push(input.matrixBlockedReason ?? "");
+  }
 
-  const matrixReady =
+  const baseMatrixReady =
     input.localEvidencePass &&
     input.campaignPresent &&
     input.campaignHashCurrent &&
@@ -85,6 +89,7 @@ export function evaluatePromotionSmokeGate(input: PromotionSmokeGateInput): Prom
     input.transferDeclared &&
     ((input.countedFailures > 0 && input.diagnosisStatus === "on-target") ||
       (input.countedSolves > 0 && !cleanPassNeedsReason));
+  const matrixReady = baseMatrixReady && (input.matrixBlockedReason ?? "").trim().length === 0;
 
   const attemptedUncounted = input.providerRefusals + input.infraFailures > 0;
   const baseState: PromotionSmokeState = !input.campaignPresent
@@ -130,6 +135,7 @@ function nextActionFor(
   matrixReady: boolean,
 ): string {
   if (matrixReady) return "full matrix may be considered; it is not automatic";
+  if ((input.matrixBlockedReason ?? "").trim().length > 0) return input.matrixBlockedReason ?? "";
   if (!input.localEvidencePass) return "repair local reference/verifier/mutant evidence";
   if (!input.campaignPresent) return "create a hash-pinned one-agent smoke campaign";
   if (!input.campaignHashCurrent || !input.packageHashCurrent) {

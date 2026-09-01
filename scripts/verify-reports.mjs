@@ -182,6 +182,8 @@ const SMOKE = [
   [["lineage", "report"], /Lineage Kill \+ Portfolio Reallocation v1/],
   [["lineage", "next"], /lineage next actions/],
   [["provider-delta", "report"], /deployment-model-alias-rollout-drift provider delta/],
+  [["provider-delta", "diagnosis"], /provider-delta diagnosis/],
+  [["provider-delta", "evolution"], /evolution options/],
   [["deployment-alias", "readiness"], /deployment-alias readiness report/],
   [["adversarial", "readiness"], /Adversarial verifier-integrity readiness/],
   [["adversarial", "report"], /Adversarial verifier-integrity audit/],
@@ -505,7 +507,7 @@ for (const variant of [
 // by being written here, but the count is asserted so a report that stops being generated is caught
 // rather than silently skipped.
 run(["all", "--out", tmp]);
-const EXPECTED_REPORTS = 106;
+const EXPECTED_REPORTS = 108;
 const generated = readdirSync(tmp);
 if (generated.length !== EXPECTED_REPORTS) {
   console.error(`WRONG COUNT  \`all\` wrote ${generated.length} reports, expected ${EXPECTED_REPORTS}`);

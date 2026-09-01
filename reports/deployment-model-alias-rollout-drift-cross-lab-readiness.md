@@ -53,7 +53,7 @@ Verify: `node dist/cli.js trials verify --family deployment-model-alias-rollout-
 - Gemini remains import-only/infrastructure-error unless entitlement is actually available.
 - Generic external bundles must preserve provider and model identity before any cross-lab claim.
 - A non-OpenAI smoke exists, but cross-lab difficulty is claimed only if the non-OpenAI run also fails on target.
-- Current reading: mixed provider result; full `/6` remains blocked pending provider-delta diagnosis or evolution.
+- Current reading: mixed provider result; full `/6` remains blocked by provider-delta/evolution routing.
 
 ---
 

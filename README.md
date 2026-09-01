@@ -58,13 +58,17 @@ validation-mode family for model alias drift in deployment rollout decisions: lo
 mutant, package and smoke-campaign gates pass, and one counted OpenAI/Codex smoke failed 192/339
 scenarios on target. A current-hash Claude/Anthropic external smoke then imported cleanly and passed
 339/339. That is mixed cross-lab smoke presence, not cross-lab difficulty: OpenAI failed, Claude
-solved, and production `/6` remains blocked pending provider-delta diagnosis, evolution or an
-explicit override. See
+solved, and production `/6` remains blocked. Provider-delta diagnosis now reads the preserved
+submissions/transcripts, keeps the result as routing evidence rather than new trial evidence, and
+selects `provider-failover-router-alias-drift-probe` as the next cheapest evolution route. See
 [`reports/deployment-model-alias-rollout-drift-family-report.md`](reports/deployment-model-alias-rollout-drift-family-report.md)
 and
 [`reports/deployment-model-alias-rollout-drift-production-readiness.md`](reports/deployment-model-alias-rollout-drift-production-readiness.md).
-The dedicated provider-delta routing report is
-[`reports/deployment-model-alias-rollout-drift-provider-delta.md`](reports/deployment-model-alias-rollout-drift-provider-delta.md).
+The provider-delta routing reports are
+[`reports/deployment-model-alias-rollout-drift-provider-delta.md`](reports/deployment-model-alias-rollout-drift-provider-delta.md),
+[`reports/deployment-model-alias-rollout-drift-provider-delta-diagnosis.md`](reports/deployment-model-alias-rollout-drift-provider-delta-diagnosis.md)
+and
+[`reports/deployment-model-alias-rollout-drift-evolution-options.md`](reports/deployment-model-alias-rollout-drift-evolution-options.md).
 
 Human + External Evidence Intake v1 makes that next evidence step countable. Deployment-alias now
 has current-hash Claude, Gemini and generic external packets with run instructions, metadata
@@ -113,7 +117,7 @@ requirement; adversarial audit is the attempted exploit record.
 | `checker-required-memory-poisoning` | 792 | 1 | 1 | 12 | not claimed yet | human-ready | adversarial-audited; OpenAI-only | **SHIP**: required-checker gap, OpenAI-only |
 | `access-token-scope-expansion` | 384 | 1 | 0 | 3 | already-solved by smoke | pending | audit-pending | **NOT-READY**: clean OpenAI smoke pass; evolve/repair before matrix |
 | `delegated-wallet-scope-reconciliation` | 804 | 1 | 0 | 3 | already-solved by smoke | human-ready | adversarial-ready | **NOT-READY**: clean OpenAI smoke pass; evolve/repair before matrix |
-| `deployment-model-alias-rollout-drift` | 339 | 2 | 1 | 6 | mixed smoke; no cross-lab difficulty | human-ready | adversarial-audited; OpenAI-only fs-sandbox | **PROVIDER-DELTA**: OpenAI failed, Claude solved; `/6` blocked pending diagnosis/evolution |
+| `deployment-model-alias-rollout-drift` | 339 | 2 | 1 | 6 | mixed smoke; no cross-lab difficulty | human-ready | adversarial-audited; OpenAI-only fs-sandbox | **PROVIDER-DELTA**: diagnosis present; `/6` blocked; next route is `provider-failover-router-alias-drift-probe` |
 | `durable-approval-outbox` | 24 | 20 imported | 20 | 3 | 1 | reference-solvable | audit-pending; imported historical no-count | **SHIP**: imported historical bank |
 
 Current live-DOM package hash: `18c3f5afc5973604205cd7df23ce4cad`.
@@ -256,6 +260,8 @@ node dist/cli.js external validate <returned-packet>
 node dist/cli.js external import <returned-packet>
 node dist/cli.js external report
 node dist/cli.js provider-delta report
+node dist/cli.js provider-delta diagnosis
+node dist/cli.js provider-delta evolution
 node dist/cli.js deployment-alias readiness --out reports
 node dist/cli.js discovery report
 node dist/cli.js discovery candidates

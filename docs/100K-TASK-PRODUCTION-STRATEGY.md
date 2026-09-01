@@ -359,7 +359,8 @@ OpenAI-only smoke-difficulty evidence. That still is not cross-lab breadth, and 
 is an earned next decision rather than automatic spend. Deployment-Alias Production Readiness v1
 makes that explicit. A current-hash Claude/Anthropic external smoke imported cleanly and passed
 339/339, creating a provider-delta result rather than cross-lab difficulty: OpenAI failed, Claude
-solved. `/6` remains blocked pending provider-delta diagnosis, evolution or an explicit override.
+solved. `/6` remains blocked; provider-delta diagnosis now routes the branch to evolution unless an
+explicit override is recorded.
 The family also has one counted Codex/OpenAI no-bypass adversarial audit under `fs-sandbox`, which
 is verifier-integrity evidence for one provider family, not cross-lab cheat-resistance evidence.
 
@@ -369,6 +370,14 @@ OpenAI fail plus non-OpenAI fail means matrix candidate; OpenAI fail plus non-Op
 diagnose or evolve; both solve means reallocate. Repeated OpenAI runs measure same-provider
 stability only. See `docs/TARGETED-DEV-GATES.md` for the focused commands used while iterating on
 this layer.
+
+Provider Delta Diagnosis + Evolution Decision v1 is the next refinement: once the Claude clean solve
+exists, the foundry stops asking whether a second lab was present and asks what the delta means. The
+diagnosis reads preserved submissions and transcripts only, compares failed checks, failed scenario
+sets, knob correlations and implementation strategy signals, and labels the evidence boundary. In
+the current deployment-alias state it routes to evolution rather than `/6`:
+`provider-failover-router-alias-drift-probe` is selected as the cheapest next evidence, while
+OpenAI repeats remain a same-provider stability plan that needs explicit approval.
 
 Human + External Evidence Intake v1 makes the next handoff mechanical instead of informal. The
 deployment-alias branch now emits current-hash external packets for Claude, Gemini and generic

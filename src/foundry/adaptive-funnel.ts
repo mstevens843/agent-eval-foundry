@@ -140,6 +140,9 @@ export interface FamilyFunnelEvidence {
   readonly agentAxes?: number | null;
   readonly cleanHumanSolves?: number;
   readonly countedNoBypassAudits?: number;
+  readonly productionMixedCrossLabSmoke?: boolean;
+  readonly providerDeltaDiagnosisPresent?: boolean;
+  readonly evolutionOptionsPresent?: boolean;
 }
 
 export interface FunnelNextAction {
@@ -560,6 +563,25 @@ function familyNextAction(evidence: FamilyFunnelEvidence): FunnelNextAction {
       evidenceCost: "cross_provider",
       action: "run the strongest available opposite-provider transfer check before full matrix",
       reason: "repeated same-provider trials estimate stability, not cross-lab transfer",
+    };
+  }
+  if ((evidence.countedAgentTrials ?? 0) > 0 && evidence.productionMixedCrossLabSmoke === true) {
+    return {
+      targetId: evidence.familyId,
+      targetType: "family",
+      mode: "validation",
+      stage: "transfer_test",
+      decision: "evolve",
+      evidenceCost:
+        evidence.providerDeltaDiagnosisPresent === true && evidence.evolutionOptionsPresent === true
+          ? "local"
+          : "static",
+      action:
+        evidence.providerDeltaDiagnosisPresent === true && evidence.evolutionOptionsPresent === true
+          ? "run the selected provider-delta evolution probe before any /6 matrix"
+          : "diagnose provider delta and declare an evolution or repair path before any /6 matrix",
+      reason:
+        "OpenAI failed on target but a counted non-OpenAI run solved, so cross-lab smoke is mixed rather than cross-lab difficulty",
     };
   }
   if ((evidence.countedAgentTrials ?? 0) > 0 && (evidence.agentAxes ?? 0) >= 2) {

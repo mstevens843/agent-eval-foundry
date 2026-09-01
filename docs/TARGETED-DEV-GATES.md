@@ -10,10 +10,13 @@ Use these when changing deployment-alias provider-delta logic:
 
 - `pnpm typecheck`
 - `pnpm exec vitest run test/provider-delta.test.ts`
+- `pnpm exec vitest run test/provider-delta-diagnosis.test.ts`
 - `pnpm exec vitest run test/deployment-alias-family.test.ts`
 - `pnpm build`
 - `node dist/cli.js deployment-alias readiness --out reports`
 - `node dist/cli.js provider-delta report --out reports/deployment-model-alias-rollout-drift-provider-delta.md`
+- `node dist/cli.js provider-delta diagnosis --out reports/deployment-model-alias-rollout-drift-provider-delta-diagnosis.md`
+- `node dist/cli.js provider-delta evolution --out reports/deployment-model-alias-rollout-drift-evolution-options.md`
 - `node dist/cli.js family diagnose --family deployment-model-alias-rollout-drift --out reports/deployment-model-alias-rollout-drift-agent-diagnosis.md`
 - `node dist/cli.js lineage report --out reports/lineage-learning-report.md`
 

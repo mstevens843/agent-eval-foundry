@@ -12,7 +12,7 @@
 // and regenerates nothing. It is what CI would run.
 
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import {
   importAdversarialBundle,
@@ -121,6 +121,10 @@ import { assertBudgetInputs, assertPlanHonest } from "./foundry/budget-check.js"
 import { MEASURED_DEFAULTS, planBudget } from "./foundry/budget.js";
 import { assertLedgerConsistency, assertPostmortemExists } from "./foundry/consistency.js";
 import {
+  deploymentAliasEvolutionProposals,
+  planDeploymentAliasEvolution,
+} from "./foundry/deployment-alias-evolution.js";
+import {
   candidateToTaskShapeDraft,
   scoreDiscoveryCandidates,
   summarizeDiscoveryWorkbench,
@@ -152,6 +156,7 @@ import {
   promotionEvidenceForDiscovery,
   promotionToFamilyScaffold,
 } from "./foundry/promotion.js";
+import { diagnoseProviderDelta, inspectProviderDeltaArtifact } from "./foundry/provider-delta-diagnosis.js";
 import { assertCoverage, coverage } from "./foundry/registry.js";
 import { checkScaffold } from "./foundry/scaffold-check.js";
 import { generateScaffold, scaffoldFromShape } from "./foundry/scaffold.js";
@@ -234,7 +239,7 @@ import {
   UI_FAMILY,
   campaignFacts,
   familyEvidenceFor,
-  familyEvidenceMap,
+  type familyEvidenceMap,
   familyEvidenceMapForShipReport,
   outboxHistory,
   outboxMatrix,
@@ -264,7 +269,14 @@ import {
   renderPromotionReport,
   renderPromotionScaffoldSummary,
 } from "./reports/promotion-report.js";
-import { renderDeploymentAliasProviderDeltaReport } from "./reports/provider-delta-report.js";
+import {
+  renderDeploymentAliasEvolutionOptionsReport,
+  renderDeploymentAliasProviderDeltaDiagnosisReport,
+} from "./reports/provider-delta-diagnosis-report.js";
+import {
+  deploymentAliasProviderDeltaComparison,
+  renderDeploymentAliasProviderDeltaReport,
+} from "./reports/provider-delta-report.js";
 import { describeArtifact, renderProviderVariance } from "./reports/provider-variance.js";
 import { renderMechanismReport, renderMutantReport } from "./reports/registry-report.js";
 import { renderSelfCheckBehavior } from "./reports/self-check-report.js";
@@ -362,6 +374,10 @@ REGISTRY (what could be built, and can we detect it?)
   lineage report [--out f]        lineage kill/reallocation learning report
   lineage next                    next cluster after solved lineages
   provider-delta report [--out f] deployment-alias mixed-provider smoke decision report
+  provider-delta diagnosis [--out f]
+                                  deployment-alias artifact/failure delta diagnosis
+  provider-delta evolution [--out f]
+                                  deployment-alias conditional evolution options
   deployment-alias readiness [--out dir]
                                   targeted deployment-alias readiness reports
   sources                        list every matrix source, implemented and planned
@@ -940,6 +956,15 @@ function adaptiveFamilyEvidenceInputs(
         ...(e.agentAxes === undefined ? {} : { agentAxes: e.agentAxes }),
         ...(e.cleanHumanSolves === undefined ? {} : { cleanHumanSolves: e.cleanHumanSolves }),
         ...(e.countedNoBypassAudits === undefined ? {} : { countedNoBypassAudits: e.countedNoBypassAudits }),
+        ...(e.productionMixedCrossLabSmoke === undefined
+          ? {}
+          : { productionMixedCrossLabSmoke: e.productionMixedCrossLabSmoke }),
+        ...(e.providerDeltaDiagnosisPresent === undefined
+          ? {}
+          : { providerDeltaDiagnosisPresent: e.providerDeltaDiagnosisPresent }),
+        ...(e.evolutionOptionsPresent === undefined
+          ? {}
+          : { evolutionOptionsPresent: e.evolutionOptionsPresent }),
       };
     })
     .sort((a, b) => a.familyId.localeCompare(b.familyId));
@@ -948,7 +973,7 @@ function adaptiveFamilyEvidenceInputs(
 function adaptiveFunnelInputs(root: string) {
   const registry = loadRegistry(root);
   const funnel = loadAdaptiveFunnel(root, registry);
-  const evidence = familyEvidenceMap(root);
+  const evidence = familyEvidenceMapForShipReport(root);
   const summary = planAdaptiveFunnel(funnel, registry, adaptiveFamilyEvidenceInputs(root, evidence));
   return { registry, funnel, summary };
 }
@@ -1162,7 +1187,14 @@ function deploymentAliasSmokeContext(
   campaigns: readonly CampaignPlan[],
   transfers: readonly TransferTest[],
 ): PromotionSmokeContext {
-  return smokeContext(root, campaigns, transfers, DEPLOYMENT_ALIAS_FAMILY_ID, classifyDeploymentAliasSmoke);
+  return smokeContext(
+    root,
+    campaigns,
+    transfers,
+    DEPLOYMENT_ALIAS_FAMILY_ID,
+    classifyDeploymentAliasSmoke,
+    deploymentAliasMatrixBlockedReason,
+  );
 }
 
 function smokeContext(
@@ -1174,6 +1206,10 @@ function smokeContext(
     analysis: ReturnType<typeof analyseFamilyTrials>,
     diagnoses: ReturnType<typeof diagnose>[],
   ) => PromotionSmokeGateResult["smokeDiagnosisStatus"],
+  matrixBlockedReasonFor: (
+    analysis: ReturnType<typeof analyseFamilyTrials>,
+    diagnoses: ReturnType<typeof diagnose>[],
+  ) => string | null = () => null,
 ): PromotionSmokeContext {
   const plan = campaigns.find((campaign) => campaign.familyId === familyId);
   const bundle = familyEvidenceFor(root, familyId);
@@ -1197,6 +1233,7 @@ function smokeContext(
     sweep.mutantsCaught.every((mutant) => mutant.caught) &&
     sweep.baselinesBlocked.length === sweep.baselinesTotal;
   const diagnosisStatus = classify(analysis, diagnoses);
+  const matrixBlockedReason = matrixBlockedReasonFor(analysis, diagnoses);
   const transferDeclared = transfers.some(
     (transfer) => transfer.sourceKind === "family" && transfer.sourceId === familyId,
   );
@@ -1220,8 +1257,27 @@ function smokeContext(
       infraFailures: analysis.infra,
       transferDeclared,
       diagnosisStatus,
+      matrixBlockedReason,
     }),
   };
+}
+
+function deploymentAliasMatrixBlockedReason(analysis: ReturnType<typeof analyseFamilyTrials>): string | null {
+  const counted = analysis.outcomes.filter(
+    (outcome) => outcome.kind === "counted_failure" || outcome.kind === "counted_solve",
+  );
+  const providerFamily = (model: string | null): string => model?.split("/")[0]?.toLowerCase() ?? "unknown";
+  const openAiFailed = counted.some(
+    (outcome) => outcome.kind === "counted_failure" && providerFamily(outcome.model) === "openai",
+  );
+  const nonOpenAiSolved = counted.some(
+    (outcome) =>
+      outcome.kind === "counted_solve" &&
+      !["openai", "external", "manual", "unknown"].includes(providerFamily(outcome.model)),
+  );
+  return openAiFailed && nonOpenAiSolved
+    ? "mixed provider smoke: OpenAI failed on target, Claude solved; diagnose/evolve before /6 matrix spend"
+    : null;
 }
 
 function smokeFailureModelFamilies(analysis: ReturnType<typeof analyseFamilyTrials>): readonly string[] {
@@ -1347,18 +1403,123 @@ function providerDeltaCommand(argv: readonly string[], root: string): string {
   if (familyId !== DEPLOYMENT_ALIAS_FAMILY_ID) {
     throw new Error("provider-delta v1 is implemented for deployment-model-alias-rollout-drift");
   }
-  if (sub !== "report") throw new Error(`unknown provider-delta subcommand "${sub}"; expected report`);
+  const inputs = deploymentAliasProviderDeltaInputs(root);
+  if (sub === "diagnosis") {
+    return renderDeploymentAliasProviderDeltaDiagnosisReport(inputs.diagnosis);
+  }
+  if (sub === "evolution") {
+    return renderDeploymentAliasEvolutionOptionsReport(inputs.evolutionPlan);
+  }
+  if (sub !== "report") {
+    throw new Error(`unknown provider-delta subcommand "${sub}"; expected report | diagnosis | evolution`);
+  }
+  return renderDeploymentAliasProviderDeltaReport(inputs.reportInput);
+}
+
+function deploymentAliasProviderDeltaInputs(root: string) {
+  const familyId = DEPLOYMENT_ALIAS_FAMILY_ID;
   const registry = loadRegistry(root);
   const funnel = loadAdaptiveFunnel(root, registry);
   const campaigns = loadCampaigns(root);
   const context = deploymentAliasSmokeContext(root, campaigns, funnel.transfers);
   const prepared = prepareChallenge(root, familyId);
-  return renderDeploymentAliasProviderDeltaReport({
+  const reportInput = {
     challengeHash: prepared.hash,
     scenarioSetId: prepared.scenarioSetId,
     records: context.records,
     externalResults: loadExternalIntakeResults(root, familyId),
     diagnoses: context.diagnoses,
+  };
+  const comparison = deploymentAliasProviderDeltaComparison(reportInput);
+  const diagnosis = diagnoseProviderDelta({
+    familyId,
+    challengeHash: prepared.hash,
+    scenarioSetId: prepared.scenarioSetId,
+    comparison,
+    records: context.records,
+    diagnoses: context.diagnoses,
+    artifacts: context.records
+      .filter((record) => record.subjectType === "agent")
+      .map((record) => artifactInspectionForTrial(root, familyId, record, prepared.hash)),
+    scenarioParams: routeFor(familyId).scenarioParams(),
+  });
+  return {
+    context,
+    prepared,
+    reportInput,
+    diagnosis,
+    evolutionPlan: planDeploymentAliasEvolution(diagnosis, deploymentAliasEvolutionProposals()),
+  };
+}
+
+function artifactInspectionForTrial(
+  root: string,
+  familyId: string,
+  record: ReturnType<typeof familyEvidenceFor>["trials"]["records"][number],
+  currentChallengeHash: string,
+) {
+  const trialDir = join(root, "trials", familyId, record.runId);
+  const metadata = readJsonObject(join(trialDir, "metadata.json"));
+  const artifactPath = record.artifactPath === null ? null : resolveRepoPath(root, record.artifactPath);
+  const submissionFiles = artifactPath === null ? [] : listRelativeFiles(artifactPath);
+  const subjectPath =
+    artifactPath === null
+      ? null
+      : existsSync(join(artifactPath, "subject.mjs"))
+        ? join(artifactPath, "subject.mjs")
+        : artifactPath.endsWith(".mjs")
+          ? artifactPath
+          : null;
+  const transcriptPath = join(trialDir, "transcript.txt");
+  return inspectProviderDeltaArtifact({
+    runId: record.runId,
+    artifactPath: record.artifactPath,
+    transcriptPath: existsSync(transcriptPath) ? transcriptPath.replace(`${root}/`, "") : null,
+    submissionFiles,
+    subjectSource: subjectPath === null ? null : readOptionalText(subjectPath),
+    transcriptText: readOptionalText(transcriptPath),
+    challengeHash: readString(metadata, "challengeHash"),
+    currentChallengeHash,
+  });
+}
+
+function resolveRepoPath(root: string, path: string): string {
+  return path.startsWith("/") ? path : join(root, path);
+}
+
+function readJsonObject(path: string): Record<string, unknown> | null {
+  if (!existsSync(path)) return null;
+  try {
+    const parsed = JSON.parse(readFileSync(path, "utf8")) as unknown;
+    return parsed !== null && typeof parsed === "object" && !Array.isArray(parsed)
+      ? (parsed as Record<string, unknown>)
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+function readString(value: Record<string, unknown> | null, key: string): string | null {
+  const raw = value?.[key];
+  return typeof raw === "string" ? raw : null;
+}
+
+function readOptionalText(path: string): string | null {
+  if (!existsSync(path)) return null;
+  try {
+    return readFileSync(path, "utf8");
+  } catch {
+    return null;
+  }
+}
+
+function listRelativeFiles(dir: string, prefix = ""): readonly string[] {
+  if (!existsSync(dir)) return [];
+  const entries = readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name));
+  return entries.flatMap((entry) => {
+    const rel = `${prefix}${entry.name}`;
+    const full = join(dir, entry.name);
+    return entry.isDirectory() ? listRelativeFiles(full, `${rel}/`) : [rel];
   });
 }
 
@@ -1385,6 +1546,7 @@ function deploymentAliasReadinessOutputs(root: string): readonly {
     DEPLOYMENT_ALIAS_FAMILY_ID
   ];
   const externalResults = loadExternalIntakeResults(root, DEPLOYMENT_ALIAS_FAMILY_ID);
+  const providerDeltaInputs = deploymentAliasProviderDeltaInputs(root);
   const openAiHalfMatrix = campaignPlans.find(
     (campaign) => campaign.campaignId === "deployment-model-alias-rollout-drift-openai-half-matrix-2026-09",
   );
@@ -1426,6 +1588,8 @@ function deploymentAliasReadinessOutputs(root: string): readonly {
         mutantDetectionAxes: measure(sweep.matrix, { nullTrials: 3 }).independentAxes,
         packageFiles: pkgCheck.files,
         packageBytes: pkgCheck.bytes,
+        providerDeltaDiagnosisPresent: true,
+        evolutionOptionsPresent: true,
       }),
     },
     {
@@ -1477,17 +1641,21 @@ function deploymentAliasReadinessOutputs(root: string): readonly {
         openAiHalfMatrix,
         challengeHash: prepared.hash,
         scenarioSetId: prepared.scenarioSetId,
+        providerDeltaDiagnosisPresent: true,
+        evolutionOptionsPresent: true,
       }),
     },
     {
       name: "deployment-model-alias-rollout-drift-provider-delta.md",
-      text: renderDeploymentAliasProviderDeltaReport({
-        challengeHash: prepared.hash,
-        scenarioSetId: prepared.scenarioSetId,
-        records: context.records,
-        externalResults,
-        diagnoses: context.diagnoses,
-      }),
+      text: renderDeploymentAliasProviderDeltaReport(providerDeltaInputs.reportInput),
+    },
+    {
+      name: "deployment-model-alias-rollout-drift-provider-delta-diagnosis.md",
+      text: renderDeploymentAliasProviderDeltaDiagnosisReport(providerDeltaInputs.diagnosis),
+    },
+    {
+      name: "deployment-model-alias-rollout-drift-evolution-options.md",
+      text: renderDeploymentAliasEvolutionOptionsReport(providerDeltaInputs.evolutionPlan),
     },
     {
       name: "deployment-model-alias-rollout-drift-agent-diagnosis.md",
@@ -3220,6 +3388,7 @@ function allCommand(argv: readonly string[], root: string): string {
     const deploymentHuman = humanGateEvidence[DEPLOYMENT_ALIAS_FAMILY_ID];
     const deploymentAdversarial = adversarialGateEvidence[DEPLOYMENT_ALIAS_FAMILY_ID];
     const deploymentExternalResults = loadExternalIntakeResults(root, DEPLOYMENT_ALIAS_FAMILY_ID);
+    const deploymentProviderDeltaInputs = deploymentAliasProviderDeltaInputs(root);
     const deploymentOpenAiHalfMatrix = campaignPlans.find(
       (campaign) => campaign.campaignId === "deployment-model-alias-rollout-drift-openai-half-matrix-2026-09",
     );
@@ -3320,6 +3489,8 @@ function allCommand(argv: readonly string[], root: string): string {
         mutantDetectionAxes: measureFor(deploymentSweep.matrix, { nullTrials: 3 }).independentAxes,
         packageFiles: deploymentPkgCheck.files,
         packageBytes: deploymentPkgCheck.bytes,
+        providerDeltaDiagnosisPresent: true,
+        evolutionOptionsPresent: true,
       }),
     );
     write(
@@ -3375,17 +3546,21 @@ function allCommand(argv: readonly string[], root: string): string {
         openAiHalfMatrix: deploymentOpenAiHalfMatrix,
         challengeHash: deploymentPrepared.hash,
         scenarioSetId: deploymentPrepared.scenarioSetId,
+        providerDeltaDiagnosisPresent: true,
+        evolutionOptionsPresent: true,
       }),
     );
     write(
       "deployment-model-alias-rollout-drift-provider-delta.md",
-      renderDeploymentAliasProviderDeltaReport({
-        challengeHash: deploymentPrepared.hash,
-        scenarioSetId: deploymentPrepared.scenarioSetId,
-        records: deploymentAliasSmoke.records,
-        externalResults: deploymentExternalResults,
-        diagnoses: deploymentAliasSmoke.diagnoses,
-      }),
+      renderDeploymentAliasProviderDeltaReport(deploymentProviderDeltaInputs.reportInput),
+    );
+    write(
+      "deployment-model-alias-rollout-drift-provider-delta-diagnosis.md",
+      renderDeploymentAliasProviderDeltaDiagnosisReport(deploymentProviderDeltaInputs.diagnosis),
+    );
+    write(
+      "deployment-model-alias-rollout-drift-evolution-options.md",
+      renderDeploymentAliasEvolutionOptionsReport(deploymentProviderDeltaInputs.evolutionPlan),
     );
   }
   write(
