@@ -144,16 +144,16 @@ trial directories rather than assumed.
 
 | | |
 |---|---:|
-| campaigns declared | 8 |
-| slots planned | 28 |
-| slots run | 17 |
+| campaigns declared | 9 |
+| slots planned | 29 |
+| slots run | 18 |
 | slots **not run** | 11 |
 | counted trials | 19 |
-| of those, failing something | 14 |
+| of those, failing something | 13 |
 | superseded by a challenge repair | 3 |
-| median counted-trial runtime | 7.2 min |
-| budget declared across campaigns | $92.00 |
-| **budget per counted failure** | $6.57 |
+| median counted-trial runtime | 7.9 min |
+| budget declared across campaigns | $100.00 |
+| **budget per counted failure** | $7.69 |
 
 ### The line item nobody budgets for
 
@@ -167,7 +167,7 @@ once**, because the first campaign is often what tells you the family is not yet
 
 ### Unrun slots are a budget line, not an absence
 
-11 of 28 declared slots have not run, almost all of them because no runner
+11 of 29 declared slots have not run, almost all of them because no runner
 for that model family is configured here. They are costed in the plans and visible in every
 report. A campaign that quietly dropped them would show a complete-looking result over one lab's
 model — which is the single most common way a benchmark overstates what it measured.
@@ -179,17 +179,17 @@ not counted now: the family they measured was repaired.
 
 | provider | counted | of those failed | refused | infra | superseded | model-minutes |
 |---|---:|---:|---:|---:|---:|---:|
-| `anthropic` | 14 | 7 | 0 | 0 | 3 | 122 |
+| `anthropic` | 15 | 7 | 0 | 0 | 3 | 122 |
 | `google` | 0 | 0 | 0 | 1 | 0 | 0 |
 | `openai` | 10 | 6 | 0 | 1 | 0 | 75 |
 
 | | |
 |---|---:|
-| runs attempted | 29 |
-| counted | 24 |
+| runs attempted | 30 |
+| counted | 25 |
 | **produced no usable evidence** | **5** (17%) |
 | at $3.50 per run, spend on runs that produced nothing | $17.50 |
-| **cost per counted FAILURE** | $7.81 |
+| **cost per counted FAILURE** | $8.08 |
 
 **Cost per counted failure is the number to plan against.** A counted solve tells you the family
 is solvable, which the reference already told you. A counted failure is the only kind of trial
@@ -223,7 +223,7 @@ Trial-ready is not SHIP. Trial-ready means the package builds, the leak checker 
 is pinned and the router can grade an artifact. Difficulty-evidenced means at least one counted
 real agent trial exists under that hash. SHIP still requires the family not to be already solved
 and all blocking gates to pass.
-Provider unavailability is visible as 11 not-run slot(s) out of 28; those slots do not become failures or passes.
+Provider unavailability is visible as 11 not-run slot(s) out of 29; those slots do not become failures or passes.
 The current observed pipeline also carries a 17% standard-attempt waste rate from historical trials.
 Under the current observed pipeline, $100,000 buys 7 shipped family line(s), about 168 generated instances and 21 independent axes. It does not buy 168 independent tasks; the axis meter is the guard against that phrasing.
 ## What this model does not include

@@ -348,14 +348,14 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `baselines-blocked` | pass | 2/2 baselines rejected |
 | `mutants-caught-by-intended-check` | pass | 13/13 caught by intended check |
 | `mechanisms-exercised` | pass | every attack blocks on its governing rule |
-| `isolation-level` | pass | subprocess with 1 agent trial(s) |
-| `shared-bank-ready` | **FAIL** | 1 subject(s) shared with another family (need 3) |
+| `isolation-level` | pass | subprocess with 2 agent trial(s) |
+| `shared-bank-ready` | **FAIL** | 2 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
-| `difficulty-evidenced` | pass | 1 counted agent trial(s) |
+| `difficulty-evidenced` | pass | 2 counted agent trial(s) |
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
-| `production-matrix-ready` | **FAIL** | blocked; import or run one non-OpenAI counted smoke under the current hash |
-| `not-already-solved` | pass | 1 of 1 counted trial(s) failed at least one scenario |
+| `production-matrix-ready` | **FAIL** | blocked; diagnose provider delta or evolve before production /6 matrix spend |
+| `not-already-solved` | pass | 1 of 2 counted trial(s) failed at least one scenario |
 | `priced` | pass | 40h build, $45 frontier |
 | `human-package-ready` | pass | public package passed human-readiness audit |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |

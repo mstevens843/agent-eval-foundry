@@ -191,13 +191,15 @@ export function checkProvider(spec: ProviderSpec): ProviderAvailability {
     };
   }
   if (spec.family === "anthropic") {
-    return {
-      provider: spec,
-      available: false,
-      state: "import-only",
-      detail:
-        "Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles",
-    };
+    if ((process.env["CLAUDE_CODE_OAUTH_TOKEN"] ?? "").trim().length === 0) {
+      return {
+        provider: spec,
+        available: false,
+        state: "import-only",
+        detail:
+          "Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally",
+      };
+    }
   }
   try {
     const out = execFileSync(spec.binary, ["--version"], {

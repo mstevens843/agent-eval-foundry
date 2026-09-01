@@ -5,7 +5,7 @@
   "model": "anthropic/claude-sonnet-5",
   "subjectId": "claude-sonnet-5",
   "availableHere": false,
-  "availabilityDetail": "Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles",
+  "availabilityDetail": "Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally",
   "invocationNote": "Same CLI and same flags as `claude`, with `--model sonnet`. A different model is a different SUBJECT — different weights and, as the trials show, a different failure set — and it is not a different lab. The bank counts it as a subject; the transfer claim does not count it as a provider family.",
   "command": [
     "claude",

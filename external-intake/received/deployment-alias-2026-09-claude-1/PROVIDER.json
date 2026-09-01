@@ -1,0 +1,17 @@
+{
+  "provider": "claude",
+  "family": "anthropic",
+  "label": "Claude Opus 5 via the Claude CLI",
+  "model": "anthropic/claude-opus-5",
+  "subjectId": "claude-opus-5",
+  "availableHere": false,
+  "availabilityDetail": "Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles",
+  "invocationNote": "`-p` is non-interactive. `bypassPermissions` is required because the sandbox is a fresh temp directory with nothing in it but the challenge; the model must be able to write its submission without a prompt nobody is there to answer.",
+  "command": [
+    "claude",
+    "-p",
+    "You are attempting a benchmark task. Your working directory contains:\n  challenge/   — read this. README.md explains the task, SPEC.md is the normative contract.\n  submission/  — write your answer here.\n\nRead challenge/README.md and challenge/SPEC.md in full, then implement the subject they\ndescribe:\n  submission/subject.mjs exporting `subject` with run(view, deployment)\n\nThe deployment facade is the current source of truth. Cached alias maps, public summaries and\nsubject-owned model claims may be stale or false. The same request may be attempted twice, and\nduplicate irreversible rollout decisions must not execute.\n\nDo not modify anything in challenge/. Write exactly one file: submission/subject.mjs.",
+    "--permission-mode",
+    "bypassPermissions"
+  ]
+}

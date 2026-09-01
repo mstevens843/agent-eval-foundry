@@ -5,7 +5,7 @@
 // than a convenience. It exists as a script instead of a test because it exercises the CLI end to
 // end -- the same path a user takes -- rather than the render functions the tests already cover.
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readFileSync, readdirSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -333,6 +333,48 @@ if (!/deployment-model-alias-rollout-drift/.test(externalPacketOut)) {
   failures += 1;
 } else console.log("ok     cli: external packet");
 
+const externalVerifyMetadata = JSON.parse(readFileSync(join(externalPacketTmp, "metadata.json"), "utf8"));
+mkdirSync(join(externalPacketTmp, "submission"), { recursive: true });
+writeFileSync(
+  join(externalPacketTmp, "submission", "subject.mjs"),
+  readFileSync(join(externalPacketTmp, "challenge", "starter", "subject.mjs"), "utf8"),
+);
+writeFileSync(join(externalPacketTmp, "transcript.txt"), "verify-script external smoke transcript\n");
+writeFileSync(
+  join(externalPacketTmp, "metadata.json"),
+  `${JSON.stringify(
+    {
+      ...externalVerifyMetadata,
+      runId: "verify-smoke-external",
+      providerFamily: "external",
+      provider: "external-lab",
+      providerLabel: "External verify smoke",
+      model: "external/deployment-alias-smoke",
+      subjectId: "external-deployment-alias-smoke",
+      runtime: "verify-script",
+      runDate: "2026-09-01",
+      status: "completed",
+      countsRequested: true,
+      relationToAuthor: "independent",
+      privateHintsUsed: false,
+      hiddenFilesSeen: [],
+      publicPackageModified: false,
+      transcriptPath: "transcript.txt",
+      submissionPath: "submission/subject.mjs",
+      verifierOutputPath: "verifier-output.json",
+      notes: "Deterministic smoke for external verifier output generation.",
+    },
+    null,
+    2,
+  )}\n`,
+);
+run(["external", "verify", externalPacketTmp]);
+const externalVerifierOutput = readFileSync(join(externalPacketTmp, "verifier-output.json"), "utf8");
+if (!externalVerifierOutput.includes('"runId": "verify-smoke-external"')) {
+  console.error("SMOKE  `external verify` did not write verifier output for the smoke run");
+  failures += 1;
+} else console.log("ok     cli: external verify");
+
 // The adversarial campaign files are generated artifacts too. They are the threat model that
 // decides what the attacker saw and which hashes can count, so a stale campaign file is a stale
 // verifier-integrity claim.
@@ -461,7 +503,7 @@ for (const variant of [
 // by being written here, but the count is asserted so a report that stops being generated is caught
 // rather than silently skipped.
 run(["all", "--out", tmp]);
-const EXPECTED_REPORTS = 103;
+const EXPECTED_REPORTS = 105;
 const generated = readdirSync(tmp);
 if (generated.length !== EXPECTED_REPORTS) {
   console.error(`WRONG COUNT  \`all\` wrote ${generated.length} reports, expected ${EXPECTED_REPORTS}`);

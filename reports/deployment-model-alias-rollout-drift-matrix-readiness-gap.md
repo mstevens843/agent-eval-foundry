@@ -8,16 +8,16 @@ from what is only planned or still missing.
 | local reference/verifier/mutant evidence | **pass** | reference clean; intended known-bad bank caught |
 | package hash current | **pass** | current hash `0e9b87a5f260544cfbc1cdce8f08938c` |
 | scenario set current | **pass** | scenario set `drift-339-590affe3` |
-| OpenAI smoke | **pass** | 1/1 counted smoke run(s) failed on target |
-| cross-lab smoke | **missing** | no non-OpenAI counted smoke under the current hash |
-| external intake | **ready** | packet/validator ready; no returned packet imported |
+| OpenAI smoke | **pass** | 1/2 counted smoke run(s) failed on target |
+| cross-lab smoke | **mixed** | non-OpenAI smoke imported cleanly, but it solved the suite rather than failing on target |
+| external intake | **attempted** | 1 countable / 2 imported packet(s) |
 | human evidence | **pending** | human-ready, but no clean-room solve on record |
 | adversarial OpenAI fs-sandbox | **pass** | 1 counted no-bypass audit(s) |
 | container/no-network adversarial audit | **missing** | no counted container/no-network deployment-alias audit yet |
 | transfer | **declared** | feature-flag/model-routing transfer plans exist; not proved |
 | OpenAI half-matrix | **planned** | 3 OpenAI slot(s); 1 already recorded |
 | Anthropic half-matrix | **blocked** | Anthropic quota unavailable; import only until restored |
-| full `/6` matrix | **blocked** | import or run one non-OpenAI counted smoke under the current hash |
+| full `/6` matrix | **blocked** | diagnose provider delta or evolve before production /6 matrix spend |
 
 ## OpenAI Half-Matrix Plan
 
@@ -31,9 +31,9 @@ Campaign: `deployment-model-alias-rollout-drift-openai-half-matrix-2026-09`.
 
 ## Current Answer
 
-Do not run the full `/6` matrix yet. Import or run one non-OpenAI counted smoke under the same hash first; OpenAI-only 3/6 would strengthen same-provider stability only.
+Do not run the full `/6` matrix yet. The non-OpenAI smoke imported cleanly but solved the suite, so the next step is provider-delta diagnosis or evolution.
 
-Countable non-OpenAI external packets currently imported: 0.
+Countable non-OpenAI external packets currently imported: 1.
 
 ---
 

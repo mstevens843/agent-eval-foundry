@@ -312,7 +312,7 @@ import { importAgentTrials, measuredScenarios, runLocalTrials, scenarioSetId } f
 import { decideCountability } from "./trials/orchestrator.js";
 import { PROVIDERS as PROVIDER_FAMILIES_LIST, checkAllProviders } from "./trials/provider-registry.js";
 import { ROUTABLE_FAMILY_IDS, routeFor } from "./trials/router.js";
-import { prepareChallenge, runAgentTrial } from "./trials/run.js";
+import { gateByChallengeHash, prepareChallenge, runAgentTrial } from "./trials/run.js";
 import { assertChallengeMatch, challengeHash } from "./trials/run.js";
 import { parseTrialRecord } from "./trials/validate.js";
 import type { AxisReport, Matrix } from "./types.js";
@@ -395,6 +395,7 @@ FAMILIES (run a measured mini-benchmark)
   external packet --family <id> --provider <p> --out <dir>
                                  build third-party evidence packet with hash-pinned templates
   external validate <packet-dir> validate a returned external/human packet without importing it
+  external verify <packet-dir>   grade returned submission and write verifier-output.json
   external import <packet-dir>   preserve and import a returned packet if it is countable
   external report [--out f]      external evidence intake readiness and returned-packet status
   human readiness [--out f]      public-package audit for clean-room human review
@@ -801,6 +802,43 @@ function externalValidationSummary(result: ReturnType<typeof validateExternalRun
   ].join("\n");
 }
 
+function externalVerifierOutputCommand(packetDir: string, root: string, familyId: string): string {
+  const metaPath = join(packetDir, "metadata.json");
+  const metadata = existsSync(metaPath)
+    ? (JSON.parse(readFileSync(metaPath, "utf8")) as Record<string, unknown>)
+    : {};
+  const runId = typeof metadata["runId"] === "string" ? metadata["runId"] : "missing-run-id";
+  const prepared = prepareChallenge(root, familyId);
+  const route = routeFor(familyId);
+  const graded = route.grade(join(packetDir, "submission", "subject.mjs"));
+  const verifierOutput = {
+    runId,
+    familyId,
+    challengeHash: prepared.hash,
+    scenarioSetId: prepared.scenarioSetId,
+    cells: graded.cells,
+    detail: graded.detail,
+    hostErrors: graded.hostErrors,
+  };
+  writeFileSync(
+    join(packetDir, "verifier-output.json"),
+    `${JSON.stringify(verifierOutput, null, 2)}\n`,
+    "utf8",
+  );
+  return [
+    "external verifier output",
+    `run        ${runId}`,
+    `family     ${familyId}`,
+    `challenge  ${prepared.hash}`,
+    `scenario   ${prepared.scenarioSetId}`,
+    `cells      ${graded.cells.length}`,
+    `failed     ${graded.cells.filter((cell) => cell.failed.length > 0).length}`,
+    `hostErrors ${graded.hostErrors}`,
+    `wrote      ${join(packetDir, "verifier-output.json")}`,
+    "",
+  ].join("\n");
+}
+
 function externalCommand(argv: readonly string[], root: string): string {
   const sub = positional(argv, 1) ?? "report";
   const familyId = flag(argv, "--family") ?? DEPLOYMENT_ALIAS_EXTERNAL_FAMILY_ID;
@@ -841,6 +879,11 @@ function externalCommand(argv: readonly string[], root: string): string {
       }),
     );
   }
+  if (sub === "verify") {
+    const dir = positional(argv, 2);
+    if (dir === undefined) throw new Error("external verify needs a packet directory");
+    return externalVerifierOutputCommand(dir, root, familyId);
+  }
   if (sub === "import") {
     const dir = positional(argv, 2);
     if (dir === undefined) throw new Error("external import needs a packet directory");
@@ -862,7 +905,9 @@ function externalCommand(argv: readonly string[], root: string): string {
       intakeResults: loadExternalIntakeResults(root, familyId),
     });
   }
-  throw new Error(`unknown external subcommand "${sub}"; expected packet | validate | import | report`);
+  throw new Error(
+    `unknown external subcommand "${sub}"; expected packet | validate | verify | import | report`,
+  );
 }
 
 function adaptiveFamilyEvidenceInputs(
@@ -1173,6 +1218,16 @@ function smokeContext(
       diagnosisStatus,
     }),
   };
+}
+
+function smokeFailureModelFamilies(analysis: ReturnType<typeof analyseFamilyTrials>): readonly string[] {
+  return [
+    ...new Set(
+      analysis.outcomes
+        .filter((outcome) => outcome.kind === "counted_failure")
+        .map((outcome) => outcome.model?.split("/")[0] ?? "unknown"),
+    ),
+  ].sort();
 }
 
 function lineageRuntimeEvidence(
@@ -1943,7 +1998,9 @@ function campaignCommand(argv: readonly string[], root: string): string {
     // Both are the existing plan-driven paths; `run` adds --run.
     const family = flag(argv, "--family");
     if (family !== null) {
-      const plan = loadCampaigns(root).find((p) => p.familyId === family);
+      const plans = loadCampaigns(root).filter((p) => p.familyId === family);
+      if (sub === "reconcile" && plans.length > 1) return campaignReconcileForFamily(root, family, plans);
+      const plan = plans[0];
       if (plan === undefined) throw new Error(`no campaign plan for family "${family}"`);
       return campaignForPlan(argv, root, plan, sub === "run");
     }
@@ -1973,6 +2030,56 @@ function campaignCommand(argv: readonly string[], root: string): string {
   }
 
   return campaignForPlan(argv, root, plan, argv.includes("--run"));
+}
+
+function campaignReconcileForFamily(root: string, familyId: string, plans: readonly CampaignPlan[]): string {
+  const prepared = prepareChallenge(root, familyId);
+  const dirs = readFamilyTrials(join(root, "trials"), familyId);
+  const claimed = new Set(
+    plans.flatMap((plan) =>
+      plan.slots.map((slot) => slot.runId).filter((runId): runId is string => runId !== null),
+    ),
+  );
+  const gated = gateByChallengeHash(
+    root,
+    familyId,
+    dirs.map((d) => ({ runId: d.runId, metadataPath: join(d.path, "metadata.json"), dir: d.path })),
+  );
+  const stale = new Set(gated.gates.filter((gate) => !gate.matches).map((gate) => gate.runId));
+  const disagreements = plans.flatMap((plan) => reconcile(root, plan).disagreements);
+  const orphanRuns = dirs.map((d) => d.runId).filter((runId) => !claimed.has(runId) && !stale.has(runId));
+  const counted = dirs.filter((d) => d.record.counts && !stale.has(d.runId)).map((d) => d.record);
+  const plannedSlots = plans.reduce((sum, plan) => sum + plan.slots.length, 0);
+  const plannedRuns = plans.reduce(
+    (sum, plan) =>
+      sum +
+      plan.slots.filter(
+        (slot) =>
+          slot.state === "RUN" ||
+          slot.state === "IMPORTED" ||
+          slot.state === "REFUSED" ||
+          slot.state === "FAILED_INFRA",
+      ).length,
+    0,
+  );
+  return [
+    `campaigns  ${plans.length} plan(s) for ${familyId}`,
+    `challenge  current ${prepared.hash}`,
+    `slots      ${plannedSlots} total, ${plannedRuns} run/imported/refused/infra`,
+    `counted    ${counted.length} current-hash trial record(s) on disk`,
+    "",
+    "Plans:",
+    ...plans.map(
+      (plan) =>
+        `  ${plan.campaignId} — ${plan.challengeHash === prepared.hash ? "hash match" : "HASH MISMATCH"}; ${plan.slots.length} slot(s)`,
+    ),
+    "",
+    ...(disagreements.length === 0
+      ? ["plans and evidence agree"]
+      : ["DISAGREEMENTS:", ...disagreements.map((item) => `  ${item}`)]),
+    ...(orphanRuns.length === 0 ? [] : ["", `unclaimed trial directories: ${orphanRuns.join(", ")}`]),
+    "",
+  ].join("\n");
 }
 
 function campaignForPlan(
@@ -2953,6 +3060,7 @@ function allCommand(argv: readonly string[], root: string): string {
       providerRefusals: deploymentAliasSmoke.analysis.refusals,
       infraFailures: deploymentAliasSmoke.analysis.infra,
       modelFamilies: deploymentAliasSmoke.analysis.modelFamilies,
+      countedFailureModelFamilies: smokeFailureModelFamilies(deploymentAliasSmoke.analysis),
       diagnosisStatus: deploymentAliasSmoke.gate.smokeDiagnosisStatus,
       transferDeclared: deploymentAliasSmoke.gate.transferDeclarationStatus === "declared",
       adversarialReady: deploymentAdversarial?.adversarialPackageReady ?? false,
@@ -3035,6 +3143,7 @@ function allCommand(argv: readonly string[], root: string): string {
       renderDeploymentAliasCrossLabReadiness({
         expectedHash: deploymentPrepared.hash,
         expectedScenarioSetId: deploymentPrepared.scenarioSetId,
+        analysis: deploymentAliasSmoke.analysis,
         audits: auditDeploymentAliasCrossLabBundles(
           root,
           deploymentPrepared.hash,

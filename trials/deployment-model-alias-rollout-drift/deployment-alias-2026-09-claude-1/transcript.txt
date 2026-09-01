@@ -1,0 +1,21 @@
+The cleanup was declined, so the two scratch files stay in /tmp. They sit outside the packet directory and do not affect the submission. The task is complete.
+
+**Delivered:** `submission/subject.mjs`, the only file written. Nothing under the challenge directory was touched.
+
+**How the subject decides.** Every attempt reads all four facade methods exactly once, with the baseline lookup keyed by the request's required baseline version. The cached alias, cached summary, cached baseline version and subject claim are never read for a decision, and every audit event carries `usedSubjectModelClaim: false`. The checks run in this order:
+
+- **DMD1** quarantine when the facade returns no usable mapping for the requested alias.
+- **DMD3** quarantine when the baseline record is missing or names a different version than requested.
+- **DMD4** re-evaluate or quarantine when the phase is pre-canary or the canary window is closed.
+- **DMD2 then DMD7** attribute samples by served version only, keep in-window ones, and treat fewer than two scored samples or any null delta as inconclusive.
+- **DMD5** roll back when the worst attributed delta reaches the rollback threshold.
+- **DMD7** treat a delta between the quarantine and rollback thresholds as mixed evidence.
+- **ALLOWED** continue otherwise.
+
+Inconclusive cases use re-evaluate when the request says re-evaluation is available and quarantine otherwise.
+
+**Duplicate protection.** Effects are recorded in module memory keyed by scenario id, request id and idempotency key. A repeat attempt reports the recorded decision without applying again. Any attempt numbered two or higher also skips the effect even if memory was lost, so a re-imported module cannot double-fire.
+
+**Verification.** A local harness with mock facades passed fourteen checks: the four public examples, missing alias, missing baseline, insufficient evidence after attribution, previous-version noise ignored, null delta, closed window, negative threshold convention, colliding keys across scenarios, fresh-instance replay, and determinism. It also confirmed each read method is called once with the right argument and the audit fields match the facade truth.
+
+**Judgment calls worth knowing.** Two thresholds and three regression levels in the types led me to a three-band rule, so a minor regression routes to quarantine or re-evaluation rather than continuing. The regression statistic is the worst attributed sample, matching the starter's convention.

@@ -1,0 +1,50 @@
+{
+  "campaignId": "deployment-model-alias-rollout-drift-cross-lab-smoke-2026-09",
+  "familyId": "deployment-model-alias-rollout-drift",
+  "hypothesis": "The OpenAI/Codex smoke failure may reflect a deployment-alias mechanism rather than one provider's implementation habit. Exactly one non-OpenAI smoke under the same challenge hash is used to test that boundary. This is not a full /6 matrix and it must not be interpreted as cross-lab difficulty unless the non-OpenAI run also fails on an intended deployment-alias check.",
+  "killSignal": "A counted Claude/Anthropic smoke trial passes every graded deployment-alias scenario cleanly under the current challenge hash. That creates a provider-delta finding: OpenAI failed on target, Claude solved the same public task, and production /6 matrix spend remains blocked pending diagnosis or evolution.",
+  "confirmSignal": "A counted Claude/Anthropic smoke trial fails on an intended deployment-alias mechanism under the current challenge hash, with transcript, submission, verifier output and scenario-set id preserved. Together with the counted OpenAI failure, this would create early cross-lab smoke difficulty evidence, not an automatic full /6 run.",
+  "challengeHash": "0e9b87a5f260544cfbc1cdce8f08938c",
+  "scenarioSetId": "drift-339-590affe3",
+  "scenariosExpected": 339,
+  "timeoutMs": 1800000,
+  "artifactPath": "submission/subject.mjs",
+  "isolation": "subprocess",
+  "counting": {
+    "neverCounts": [
+      "refused",
+      "timeout",
+      "infrastructure_error"
+    ],
+    "onRefusal": "Recorded as REFUSED with transcript preserved, and never counted. Provider refusal is not a cross-lab failure and the slot is not re-run as evidence selection.",
+    "onInfraFailure": "Recorded as FAILED_INFRA with transcript preserved, and never counted. It may be retried only as infrastructure repair if the repository convention allows a retry.",
+    "onCrash": "Recorded as `crashed` and not counted by default. Count only after manual classification proves the crash is in the submitted artifact rather than in the harness.",
+    "retriesOnInfra": 1,
+    "retryOnRefusal": false
+  },
+  "preservation": [
+    "The returned external packet is preserved under external-intake/received/<run-id>/ whether or not it counts.",
+    "A counted import writes trials/deployment-model-alias-rollout-drift/<run-id>/ with metadata, countability, transcript, challenge, submission and verifier output.",
+    "metadata.json records provider family, provider, model, runtime, challenge hash, scenario-set id and contamination flags.",
+    "transcript.txt is preserved verbatim, including refusals and infrastructure errors.",
+    "challenge/ holds the exact package the model saw.",
+    "submission/ holds the submitted subject.mjs artifact.",
+    "verifier-output.json holds graded cells and named failed checks.",
+    "countability.json records the countability decision and reason.",
+    "A stale package hash invalidates the smoke evidence rather than letting old evidence count for a repaired package."
+  ],
+  "budgetUsd": 8.0,
+  "slots": [
+    {
+      "slotId": "A1",
+      "model": "anthropic/claude-opus-5",
+      "subjectId": "claude-opus-5",
+      "effort": null,
+      "runner": "external",
+      "command": null,
+      "state": "IMPORTED",
+      "runId": "deployment-alias-2026-09-claude-1",
+      "note": "Single Claude/Anthropic smoke imported through external-intake under the pinned challenge hash. Counted completed run: 339 scenarios graded, 0 failed. This is a provider-delta clean solve, not cross-lab difficulty evidence."
+    }
+  ]
+}

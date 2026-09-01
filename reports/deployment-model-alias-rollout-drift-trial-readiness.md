@@ -9,7 +9,7 @@ Status: **matrix-ready**.
 | visible package files | 9 |
 | route present | yes |
 | scenarios expected | 339 |
-| counted real-agent trials | 1 |
+| counted real-agent trials | 2 |
 | diagnosis | on-target |
 | full matrix | ready |
 

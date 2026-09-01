@@ -40,6 +40,8 @@ export interface PreparedProviderBundle {
 const submissionFilesFor = (familyId: string): readonly string[] =>
   familyId === "checker-required-memory-poisoning" ? ["subject.mjs", "checker.mjs"] : ["subject.mjs"];
 
+const shellQuote = (arg: string): string => `'${arg.replace(/'/g, "'\\''")}'`;
+
 const RUN_SCRIPT = (familyId: string, spec: ProviderSpec, command: readonly string[] | null): string =>
   [
     "#!/usr/bin/env bash",
@@ -60,7 +62,7 @@ const RUN_SCRIPT = (familyId: string, spec: ProviderSpec, command: readonly stri
         )
           .map((f) => `submission/${f}`)
           .join(" and ")}.`
-      : command.map((arg, i) => (i === 0 ? arg : `  ${JSON.stringify(arg)}`)).join(" \\\n"),
+      : command.map((arg, i) => (i === 0 ? shellQuote(arg) : `  ${shellQuote(arg)}`)).join(" \\\n"),
     "",
   ].join("\n");
 

@@ -1,0 +1,37 @@
+{
+  "packet": {
+    "dir": "/private/tmp/deployment-alias-claude-smoke.H2rka5",
+    "familyId": "deployment-model-alias-rollout-drift",
+    "expectedChallengeHash": "0e9b87a5f260544cfbc1cdce8f08938c",
+    "expectedScenarioSetId": "drift-339-590affe3",
+    "actualChallengeHash": "0e9b87a5f260544cfbc1cdce8f08938c",
+    "metadata": {
+      "runId": "deployment-alias-2026-09-claude-1-infra",
+      "familyId": "deployment-model-alias-rollout-drift",
+      "providerFamily": "anthropic",
+      "provider": "claude",
+      "model": "anthropic/claude-opus-5",
+      "subjectId": "claude-opus-5",
+      "runtime": "claude-cli external packet, local sandbox network blocked before model work",
+      "runDate": "2026-09-01",
+      "scenarioSetId": "drift-339-590affe3",
+      "challengeHash": "0e9b87a5f260544cfbc1cdce8f08938c",
+      "status": "infrastructure_error",
+      "countsRequested": false,
+      "relationToAuthor": "independent",
+      "privateHintsUsed": false,
+      "hiddenFilesSeen": [],
+      "notes": "Initial local Claude smoke attempt exited before model work: generated run.sh quoted prompt unsafely and sandbox DNS blocked Claude API. Preserved as no-count infrastructure evidence; no submission was produced."
+    },
+    "transcriptPath": "/private/tmp/deployment-alias-claude-smoke.H2rka5/transcript.txt",
+    "submissionFiles": [],
+    "verifierOutputPath": null,
+    "verifierRunId": null,
+    "leakedHiddenPaths": []
+  },
+  "findings": [],
+  "countable": false,
+  "countabilityReason": "infrastructure error preserved as no-count evidence",
+  "status": "infrastructure_error",
+  "importedTrialEligible": false
+}

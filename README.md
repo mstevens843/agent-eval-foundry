@@ -56,18 +56,21 @@ different mechanism cluster. See
 That reallocation has now been exercised. `deployment-model-alias-rollout-drift` is a full
 validation-mode family for model alias drift in deployment rollout decisions: local reference,
 mutant, package and smoke-campaign gates pass, and one counted OpenAI/Codex smoke failed 192/339
-scenarios on target. That is smoke-difficulty evidence for this provider only, not cross-lab
-breadth or a full matrix. Production readiness now stays blocked until non-OpenAI smoke evidence is
-imported under the same hash. See
+scenarios on target. A current-hash Claude/Anthropic external smoke then imported cleanly and passed
+339/339. That is mixed cross-lab smoke presence, not cross-lab difficulty: OpenAI failed, Claude
+solved, and production `/6` remains blocked pending provider-delta diagnosis, evolution or an
+explicit override. See
 [`reports/deployment-model-alias-rollout-drift-family-report.md`](reports/deployment-model-alias-rollout-drift-family-report.md)
 and
 [`reports/deployment-model-alias-rollout-drift-production-readiness.md`](reports/deployment-model-alias-rollout-drift-production-readiness.md).
 
 Human + External Evidence Intake v1 makes that next evidence step countable. Deployment-alias now
 has current-hash Claude, Gemini and generic external packets with run instructions, metadata
-templates, hidden-artifact warnings, hash/scenario pins and an import validator. Returned packets
-are preserved even when invalid, but missing transcripts, stale hashes, modified challenges,
-provider refusals, infrastructure errors, contamination and hidden leaks never count. See
+templates, hidden-artifact warnings, hash/scenario pins and an import validator. The Claude packet
+imported as a counted clean solve; an earlier infrastructure-error packet is preserved as no-count
+evidence. Returned packets are preserved even when invalid, but missing transcripts, stale hashes,
+modified challenges, provider refusals, infrastructure errors, contamination and hidden leaks never
+count. See
 [`reports/deployment-model-alias-rollout-drift-external-intake.md`](reports/deployment-model-alias-rollout-drift-external-intake.md),
 [`reports/deployment-model-alias-rollout-drift-human-intake.md`](reports/deployment-model-alias-rollout-drift-human-intake.md)
 and
@@ -108,7 +111,7 @@ requirement; adversarial audit is the attempted exploit record.
 | `checker-required-memory-poisoning` | 792 | 1 | 1 | 12 | not claimed yet | human-ready | adversarial-audited; OpenAI-only | **SHIP**: required-checker gap, OpenAI-only |
 | `access-token-scope-expansion` | 384 | 1 | 0 | 3 | already-solved by smoke | pending | audit-pending | **NOT-READY**: clean OpenAI smoke pass; evolve/repair before matrix |
 | `delegated-wallet-scope-reconciliation` | 804 | 1 | 0 | 3 | already-solved by smoke | human-ready | adversarial-ready | **NOT-READY**: clean OpenAI smoke pass; evolve/repair before matrix |
-| `deployment-model-alias-rollout-drift` | 339 | 1 | 1 | 6 | smoke-difficulty; OpenAI-only | human-ready | adversarial-audited; OpenAI-only fs-sandbox | **SMOKE-EVIDENCED**: production matrix blocked until non-OpenAI smoke imports cleanly |
+| `deployment-model-alias-rollout-drift` | 339 | 2 | 1 | 6 | mixed smoke; no cross-lab difficulty | human-ready | adversarial-audited; OpenAI-only fs-sandbox | **PROVIDER-DELTA**: OpenAI failed, Claude solved; `/6` blocked pending diagnosis/evolution |
 | `durable-approval-outbox` | 24 | 20 imported | 20 | 3 | 1 | reference-solvable | audit-pending; imported historical no-count | **SHIP**: imported historical bank |
 
 Current live-DOM package hash: `18c3f5afc5973604205cd7df23ce4cad`.
@@ -173,9 +176,10 @@ baselines blocked, 6 mutant-detection axes, a leak-checked 9-file package and a 
 OpenAI/Codex smoke campaign. The counted smoke trial
 `deployment-model-alias-rollout-drift-2026-08-o1` failed 192/339 scenarios on target under challenge
 hash `0e9b87a5f260544cfbc1cdce8f08938c`, so this branch now has OpenAI-only smoke-difficulty
-evidence. No full `/6` matrix, non-OpenAI trial, transfer proof, human solve or adversarial audit is
-claimed from that smoke result. Current-hash Claude, Gemini and generic external import bundles are
-prepared in
+evidence. A counted Claude/Anthropic import under the same hash passed 339/339, so the cross-lab
+smoke result is mixed rather than confirmatory. No full `/6` matrix, transfer proof, human solve or
+cross-lab adversarial audit is claimed from those smoke results. Current-hash Claude, Gemini and
+generic external import bundles are documented in
 [`reports/deployment-model-alias-rollout-drift-cross-lab-readiness.md`](reports/deployment-model-alias-rollout-drift-cross-lab-readiness.md).
 
 Adversarial Audit v2 upgrades verifier-integrity from preserved attack records to mechanical triage.
@@ -277,9 +281,10 @@ node dist/cli.js adversarial report
 pnpm bundles
 ```
 
-Provider reality is explicit. Codex/OpenAI is configured locally. Anthropic/Claude is import-only in
-this phase because the account is out of tokens and should not be executed. Gemini is
-entitlement-blocked unless a future authenticated run changes that. External runs use prepared
+Provider reality is explicit. Codex/OpenAI is configured locally. Anthropic/Claude is import-only by
+default unless an explicit token is supplied for a bounded run; the current deployment-alias phase
+used exactly one Claude smoke import and no further Claude run is part of the checked gates. Gemini
+is entitlement-blocked unless a future authenticated run changes that. External runs use prepared
 bundles and strict import checks.
 
 ## Live-DOM SPEC Contract
@@ -427,11 +432,11 @@ descendant repeats the lesson: stronger local verifier evidence still did not tr
 OpenAI difficulty evidence. The lineage layer now stops spending on that branch for now and
 reallocates to a different mechanism cluster instead of continuing blind hardening.
 
-The strongest current result is still memory-poisoning generalisation across labs. The newest result
-is that verifier-integrity now has explicit container/no-network bundle and countability rules,
-while the local Docker daemon is unavailable and therefore no container/no-network audit counts.
-There are still two counted Codex/OpenAI no-bypass audits under `fs-sandbox`; there is zero counted
-non-OpenAI adversarial evidence in this repo. The next highest-leverage work is to run the same
-container/no-network audit once Docker is available, import preserved non-OpenAI audits under the
-current hashes, and expand `ui-replay-browser-backed` from measured mutant slice to package-backed
-agent-trial family.
+The strongest current result is still memory-poisoning generalisation across labs. The newest
+deployment-alias result is a provider delta: OpenAI failed the smoke on target, while the counted
+Claude import solved the same current-hash package. Verifier-integrity now has explicit
+container/no-network bundle and countability rules, while the local Docker daemon is unavailable and
+therefore no container/no-network audit counts. There are still two counted Codex/OpenAI no-bypass
+audits under `fs-sandbox`; there is zero counted non-OpenAI adversarial evidence in this repo. The
+next highest-leverage work is to diagnose the deployment-alias provider delta, then either evolve
+that branch or collect a current-hash non-OpenAI failure before any `/6` matrix spend.

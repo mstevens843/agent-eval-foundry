@@ -6,16 +6,16 @@ Did the model verify its own work — and can we actually tell?
 
 | | |
 |---|---:|
-| submissions held | 27 |
+| submissions held | 28 |
 | **submissions containing an executable self-check** | **2** |
-| **transcripts describing one** | **19** |
+| **transcripts describing one** | **20** |
 | **submissions shipping a checker as a separate file** | **2** |
 | runs that neither shipped nor described one | 8 |
 
 Checker-required trials mandate `checker.mjs`; that file is graded in the checker-required
 family reports and is excluded from the voluntary shipped-checker count here.
 
-**2 of 27 submissions contain an executable self-check.** The rows below name the exact construct and the line it sits on.
+**2 of 28 submissions contain an executable self-check.** The rows below name the exact construct and the line it sits on.
 
 ## What each run did
 
@@ -28,6 +28,7 @@ that it happened. The two columns are never added together.
 | `access-token-2026-08-o1` | expansion | `gpt-5.6-sol` | **none** | subject only | syntax-only | counted | 0 |
 | `checker-required-2026-08-o1` | poisoning | `gpt-5.6-sol` | **none** | subject only | — | counted | 614 |
 | `delegated-wallet-2026-08-o1` | reconciliation | `gpt-5.6-sol` | **none** | subject only | example-harness | counted | 0 |
+| `deployment-alias-2026-09-claude-1` | drift | `claude-opus-5` | **none** | subject only | example-harness | counted | 0 |
 | `deployment-model-alias-rollout-drift-2026-08-o1` | drift | `gpt-5.6-sol` | **none** | subject only | syntax-only | counted | 192 |
 | `pic-claude-1` | containment | `claude-opus-5` | **none** | subject only | synthetic-scenarios | counted | 0 |
 | `pic-claude-2` | containment | `claude-opus-5` | **none** | subject only | synthetic-scenarios | counted | 0 |
@@ -119,7 +120,7 @@ about a task that no longer exists — so those rows carry the state and omit th
 
 ## Who shipped their checker
 
-2 of 29 runs left a file beside `subject.mjs`. The task asks for one file and
+2 of 30 runs left a file beside `subject.mjs`. The task asks for one file and
 does not forbid a second; almost every model ships one anyway. A model that ships its checker has
 made its verification auditable by somebody else — a different act from verifying and discarding,
 and the only self-check evidence on this page that does not rest on the model's own account.
@@ -136,7 +137,7 @@ and the only self-check evidence on this page that does not rest on the model's 
 | kind | runs | what it means |
 |---|---:|---|
 | `syntax-only` | 6 | `node --check` or equivalent: the file parses, and nothing else was established |
-| `example-harness` | 4 | the published examples, run through a driver the model wrote |
+| `example-harness` | 5 | the published examples, run through a driver the model wrote |
 | `assertions` | 1 | executable assertions or invariant checks that fail loudly |
 | `legality-table` | 5 | an explicit table of permitted states or transitions, consulted rather than reasoned about each time |
 | `synthetic-scenarios` | 11 | inputs the model invented beyond the ones it was given |
@@ -153,9 +154,9 @@ _None._ No submission defines a checking routine it never invokes. That is worth
 
 | arm | counted runs | failed something |
 |---|---:|---:|
-| described verification at or above an example harness | 16 | 7 |
+| described verification at or above an example harness | 17 | 7 |
 | did not | 8 | 6 |
-**Decidable, barely.** 7/16 of the self-verifying runs failed something, against 6/8 of the rest. With arms this small the comparison is suggestive at best and no test is applied to it.
+**Decidable, barely.** 7/17 of the self-verifying runs failed something, against 6/8 of the rest. With arms this small the comparison is suggestive at best and no test is applied to it.
 
 ## The contrast that makes this worth measuring
 

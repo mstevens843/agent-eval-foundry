@@ -1,0 +1,39 @@
+{
+  "packet": {
+    "dir": "/private/tmp/deployment-alias-claude-smoke-retry2.qHtGQM",
+    "familyId": "deployment-model-alias-rollout-drift",
+    "expectedChallengeHash": "0e9b87a5f260544cfbc1cdce8f08938c",
+    "expectedScenarioSetId": "drift-339-590affe3",
+    "actualChallengeHash": "0e9b87a5f260544cfbc1cdce8f08938c",
+    "metadata": {
+      "runId": "deployment-alias-2026-09-claude-1",
+      "familyId": "deployment-model-alias-rollout-drift",
+      "providerFamily": "anthropic",
+      "provider": "claude",
+      "model": "anthropic/claude-opus-5",
+      "subjectId": "claude-opus-5",
+      "runtime": "claude-cli external packet in isolated temporary directory",
+      "runDate": "2026-09-01",
+      "scenarioSetId": "drift-339-590affe3",
+      "challengeHash": "0e9b87a5f260544cfbc1cdce8f08938c",
+      "status": "completed",
+      "countsRequested": true,
+      "relationToAuthor": "independent",
+      "privateHintsUsed": false,
+      "hiddenFilesSeen": [],
+      "notes": "One repaired Claude smoke attempt run from a current-hash external packet. The model saw the public challenge package and instructions only; verifier output was produced afterwards by the foundry outside the packet."
+    },
+    "transcriptPath": "/private/tmp/deployment-alias-claude-smoke-retry2.qHtGQM/transcript.txt",
+    "submissionFiles": [
+      "subject.mjs"
+    ],
+    "verifierOutputPath": "/private/tmp/deployment-alias-claude-smoke-retry2.qHtGQM/verifier-output.json",
+    "verifierRunId": "deployment-alias-2026-09-claude-1",
+    "leakedHiddenPaths": []
+  },
+  "findings": [],
+  "countable": true,
+  "countabilityReason": "completed external packet with current hash and preserved artifacts",
+  "status": "completed",
+  "importedTrialEligible": true
+}

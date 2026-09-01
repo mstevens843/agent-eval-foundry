@@ -13,16 +13,16 @@ What the families measure, together — and the arithmetic this report refuses t
 | `checker-required-memory-poisoning` | `agent` | 792 | 1 | 178 | 1 | — |
 | `access-token-scope-expansion` | `agent` | 384 | 1 | 384 | 0 | — |
 | `delegated-wallet-scope-reconciliation` | `agent` | 804 | 1 | 804 | 0 | — |
-| `deployment-model-alias-rollout-drift` | `agent` | 339 | 1 | 147 | 1 | — |
+| `deployment-model-alias-rollout-drift` | `agent` | 339 | 2 | 147 | 1 | **1** |
 | `durable-approval-outbox` | `imported` | 24 | 2 | 0 | 1 | **1** |
 
 ## The sum that is not available
 
 | naive total | value | why it is not a result |
 |---|---:|---|
-| every family added together | 4 | mixes detection and difficulty; the two answer different questions |
+| every family added together | 5 | mixes detection and difficulty; the two answer different questions |
 | detection banks added | 0 | the banks are disjoint by construction — no mutant appears in two families, so the union's width is the sum whatever the families measure |
-| difficulty banks added | 4 | excludes one-subject banks; valid only over subjects that attempted both, and the overlap is below threshold |
+| difficulty banks added | 5 | excludes one-subject banks; valid only over subjects that attempted both, and the overlap is below threshold |
 
 A combined axis count requires the same subjects in every bank being combined. Until that holds,
 each family's number stands alone and the portfolio total does not exist.

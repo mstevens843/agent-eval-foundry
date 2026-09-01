@@ -9,9 +9,9 @@ identity, transcript, submission, verifier output and no hidden artifacts.
 | expected challenge hash | `0e9b87a5f260544cfbc1cdce8f08938c` |
 | expected scenario set | `drift-339-590affe3` |
 | prepared packets | 3/3 |
-| imported returned packets | 0 |
-| countable returned packets | 0 |
-| preserved no-count packets | 0 |
+| imported returned packets | 2 |
+| countable returned packets | 1 |
+| preserved no-count packets | 1 |
 
 ## Prepared Packets
 
@@ -23,7 +23,10 @@ identity, transcript, submission, verifier output and no hidden artifacts.
 
 ## Returned Packet Results
 
-No returned external packets have been imported yet.
+| run | provider family | status | countable | reason |
+|---|---|---|---|---|
+| `deployment-alias-2026-09-claude-1` | `anthropic` | `completed` | yes | completed external packet with current hash and preserved artifacts |
+| `deployment-alias-2026-09-claude-1-infra` | `anthropic` | `infrastructure_error` | no | infrastructure error preserved as no-count evidence |
 
 ## Countability Rules
 
@@ -36,8 +39,8 @@ No returned external packets have been imported yet.
 
 ## Cross-Lab Boundary
 
-Current countable external provider families: none.
-No cross-lab claim exists until a non-OpenAI completed run imports cleanly under this hash.
+Current countable external provider families: anthropic.
+A non-OpenAI completed run has imported cleanly under this hash. That is cross-lab smoke presence; the diagnosis report decides whether it is cross-lab difficulty or a provider-delta solve.
 
 ---
 

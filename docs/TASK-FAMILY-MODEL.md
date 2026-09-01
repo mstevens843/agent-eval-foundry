@@ -133,11 +133,13 @@ caught by intended checks, 2/2 baselines blocked, 6 mutant-detection axes, a lea
 package and a pinned one-slot OpenAI/Codex smoke campaign. That smoke trial now counted and failed
 192/339 scenarios on target, which is OpenAI-only smoke-difficulty evidence. It is not cross-lab
 evidence and it is not a full-matrix result. Deployment-Alias Production Readiness v1 adds the
-stricter production gate: a full `/6` matrix stays blocked until one non-OpenAI smoke counts under
-the same package hash or an explicit OpenAI-only override is recorded. The same phase prepared
-current-hash external import bundles and added one counted Codex/OpenAI no-bypass adversarial audit
-under `fs-sandbox`; that is verifier-integrity evidence for one provider family, not a security
-proof and not cross-lab cheat-resistance evidence.
+stricter production gate: a current-hash Claude/Anthropic external smoke can count only if the
+packet preserves transcript, submission, metadata and verifier output. That import now exists and
+passed 339/339, so the cross-lab smoke result is mixed rather than a cross-lab difficulty claim.
+The full `/6` matrix stays blocked pending provider-delta diagnosis, evolution or an explicit
+override. The same phase prepared current-hash external import bundles and added one counted
+Codex/OpenAI no-bypass adversarial audit under `fs-sandbox`; that is verifier-integrity evidence for
+one provider family, not a security proof and not cross-lab cheat-resistance evidence.
 
 Human + External Evidence Intake v1 adds the handoff layer for that production gate. A package-backed
 family can now emit an external packet with the public challenge, pinned challenge hash, pinned
@@ -146,7 +148,8 @@ hidden-artifact warnings. The intake validator preserves returned packets but re
 for stale hashes, modified public packages, missing transcript/submission/verifier output, provider
 refusal, infrastructure error, author contamination, private hints, provider-family mislabelling or
 hidden artifact leaks. For deployment-alias, the OpenAI half-matrix is now planned as same-provider
-stability evidence; it still does not satisfy cross-lab readiness or full `/6` matrix gates.
+stability evidence; the counted Claude clean solve gives cross-lab smoke presence but not cross-lab
+difficulty, so it still does not satisfy full `/6` matrix gates.
 
 Durable Approval Outbox is the first concrete example:
 

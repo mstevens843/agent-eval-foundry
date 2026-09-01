@@ -49,7 +49,7 @@ import {
 import type { TrialDiagnosis } from "../src/reports/diagnosis.js";
 import { assertCampaignChallenge, loadCampaigns } from "../src/trials/campaign.js";
 import { challengeHash } from "../src/trials/run.js";
-import type { TrialSet } from "../src/trials/types.js";
+import type { TrialRecord, TrialSet } from "../src/trials/types.js";
 
 const ROOT = new URL("..", import.meta.url).pathname;
 const FAMILY_ID = "deployment-model-alias-rollout-drift";
@@ -121,6 +121,29 @@ const diagnosisFixture = (overrides: Partial<TrialDiagnosis> = {}): TrialDiagnos
   ...overrides,
 });
 
+const trialRecordFixture = (overrides: Partial<TrialRecord> = {}): TrialRecord => ({
+  runId: "deployment-alias-openai-fixture",
+  familyId: FAMILY_ID,
+  subjectId: "gpt-5.6-sol",
+  subjectType: "agent",
+  model: "openai/gpt-5.6-sol",
+  effort: null,
+  status: "completed",
+  counts: true,
+  countsReason: "fixture counted completed smoke",
+  scenarioSetId: SCENARIO_SET_ID,
+  cells: [
+    { scenarioId: "scenario-a", failed: ["current_alias_reconciled"] },
+    { scenarioId: "scenario-b", failed: [] },
+  ],
+  runtimeSeconds: null,
+  costUsd: null,
+  artifactPath: "trials/deployment-model-alias-rollout-drift/fixture/submission",
+  isolation: "subprocess",
+  notes: "fixture",
+  ...overrides,
+});
+
 type ProductionReadinessInput = Parameters<typeof evaluateProductionReadiness>[0];
 
 const productionReadinessFixture = (
@@ -140,6 +163,7 @@ const productionReadinessFixture = (
   providerRefusals: 0,
   infraFailures: 0,
   modelFamilies: ["openai", "second-lab"],
+  countedFailureModelFamilies: ["openai", "second-lab"],
   diagnosisStatus: "on-target",
   transferDeclared: true,
   adversarialReady: true,
@@ -323,6 +347,24 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
     expect(gate.blockers).toContain("no counted smoke trial");
   });
 
+  it("validates the imported Claude cross-lab smoke campaign under the same hash", () => {
+    const plan = loadCampaigns(ROOT).find(
+      (campaign) => campaign.campaignId === "deployment-model-alias-rollout-drift-cross-lab-smoke-2026-09",
+    );
+
+    expect(plan).toBeDefined();
+    expect(plan?.challengeHash).toBe(CHALLENGE_HASH);
+    expect(plan?.scenarioSetId).toBe(SCENARIO_SET_ID);
+    expect(plan?.slots).toHaveLength(1);
+    expect(plan?.slots[0]?.model).toBe("anthropic/claude-opus-5");
+    expect(plan?.slots[0]?.runner).toBe("external");
+    expect(plan?.slots[0]?.state).toBe("IMPORTED");
+    expect(plan?.slots[0]?.runId).toBe("deployment-alias-2026-09-claude-1");
+    expect(plan?.killSignal).toMatch(/provider-delta/);
+    expect(plan?.confirmSignal).toMatch(/cross-lab smoke difficulty/);
+    expect(() => assertCampaignChallenge(plan as NonNullable<typeof plan>, CHALLENGE_HASH)).not.toThrow();
+  });
+
   it("validates the transfer declaration without treating transfer as proven evidence", () => {
     const registry = loadRegistry(ROOT);
     const funnel = loadAdaptiveFunnel(ROOT, registry);
@@ -464,7 +506,7 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
 
     expect(first).toBe(second);
     expect(first).toContain("No counted smoke trial yet");
-    expect(first).toContain("One OpenAI/Codex smoke is not cross-lab evidence");
+    expect(first).toContain("No counted smoke trial exists, so no cross-lab comparison exists");
   });
 
   it("blocks production matrix readiness after one OpenAI-only on-target smoke failure", () => {
@@ -483,6 +525,7 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
       providerRefusals: 0,
       infraFailures: 0,
       modelFamilies: ["openai"],
+      countedFailureModelFamilies: ["openai"],
       diagnosisStatus: "on-target",
       transferDeclared: true,
       adversarialReady: true,
@@ -507,6 +550,88 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
     );
   });
 
+  it("keeps a counted Claude clean solve from becoming cross-lab difficulty evidence", () => {
+    const readiness = evaluateProductionReadiness({
+      familyId: FAMILY_ID,
+      challengeHash: CHALLENGE_HASH,
+      currentChallengeHash: CHALLENGE_HASH,
+      localVerifierReady: true,
+      packageBacked: true,
+      campaignPresent: true,
+      campaignHashCurrent: true,
+      packageHashCurrent: true,
+      countedSmokeTrials: 2,
+      countedSmokeFailures: 1,
+      countedSmokeSolves: 1,
+      providerRefusals: 0,
+      infraFailures: 0,
+      modelFamilies: ["anthropic", "openai"],
+      countedFailureModelFamilies: ["openai"],
+      diagnosisStatus: "on-target",
+      transferDeclared: true,
+      adversarialReady: true,
+      countedNoBypassAudits: 1,
+      countedBypassAudits: 0,
+      unrepairedBypasses: 0,
+      humanReady: true,
+      cleanHumanSolves: 0,
+    });
+
+    expect(readiness.crossLabSmokeEvidenced).toBe(true);
+    expect(readiness.crossLabDifficultyEvidenced).toBe(false);
+    expect(readiness.mixedCrossLabSmoke).toBe(true);
+    expect(readiness.fullMatrixReady).toBe(false);
+    expect(readiness.statuses).toContain("cross-lab-smoke-present");
+    expect(readiness.statuses).toContain("cross-lab-smoke-mixed");
+    expect(readiness.blockers.map((finding) => finding.code)).toContain("PRODUCTION_CROSS_LAB_SMOKE_MIXED");
+    expect(readiness.nextAction).toMatch(/provider delta|evolve/);
+  });
+
+  it("renders mixed OpenAI failure and Claude clean solve as provider-delta diagnosis", () => {
+    const openai = trialRecordFixture();
+    const claude = trialRecordFixture({
+      runId: "deployment-alias-claude-fixture",
+      subjectId: "claude-opus-5",
+      model: "anthropic/claude-opus-5",
+      cells: [
+        { scenarioId: "scenario-a", failed: [] },
+        { scenarioId: "scenario-b", failed: [] },
+      ],
+    });
+    const report = renderDeploymentAliasSmokeDiagnosis({
+      analysis: analysisFixture({
+        counted: 2,
+        solves: 1,
+        failures: 1,
+        modelFamilies: ["anthropic", "openai"],
+        checkTotals: [{ check: "current_alias_reconciled", scenarios: 1 }],
+        verdict: "discriminates",
+      }),
+      diagnoses: [diagnosisFixture()],
+      plan: undefined,
+      gate: evaluatePromotionSmokeGate({
+        familyId: FAMILY_ID,
+        localEvidencePass: true,
+        campaignPresent: true,
+        campaignHashCurrent: true,
+        packageHashCurrent: true,
+        verifierMutantBaselinePass: true,
+        countedSmokeTrials: 2,
+        countedFailures: 1,
+        countedSolves: 1,
+        providerRefusals: 0,
+        infraFailures: 0,
+        transferDeclared: true,
+        diagnosisStatus: "on-target",
+      }),
+      records: [openai, claude],
+    });
+
+    expect(report).toContain("Counted provider families: `anthropic`, `openai`.");
+    expect(report).toContain("mixed provider result; no cross-lab difficulty claim");
+    expect(report).toContain("production `/6` stays blocked pending diagnosis or evolution");
+  });
+
   it("keeps refusal, infra and stale hashes out of production readiness", () => {
     const input = {
       familyId: FAMILY_ID,
@@ -523,6 +648,7 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
       providerRefusals: 1,
       infraFailures: 1,
       modelFamilies: [],
+      countedFailureModelFamilies: [],
       diagnosisStatus: "provider-refusal",
       transferDeclared: true,
       adversarialReady: true,
@@ -541,6 +667,7 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
       providerRefusals: 0,
       infraFailures: 0,
       modelFamilies: ["openai", "anthropic"],
+      countedFailureModelFamilies: ["openai", "anthropic"],
       diagnosisStatus: "on-target",
       countedNoBypassAudits: 1,
     });
@@ -572,6 +699,7 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
       providerRefusals: 0,
       infraFailures: 0,
       modelFamilies: ["openai", "anthropic"],
+      countedFailureModelFamilies: ["openai", "anthropic"],
       diagnosisStatus: "on-target",
       transferDeclared: true,
       adversarialReady: true,
@@ -621,6 +749,11 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
       ["PRODUCTION_OFF_TARGET_SMOKE_REPAIR", { diagnosisStatus: "off-target" }, "blockers"],
       ["PRODUCTION_TRANSFER_NOT_DECLARED", { transferDeclared: false }, "blockers"],
       ["PRODUCTION_MATRIX_NEEDS_NON_OPENAI_SMOKE", { modelFamilies: ["openai"] }, "blockers"],
+      [
+        "PRODUCTION_CROSS_LAB_SMOKE_MIXED",
+        { modelFamilies: ["openai", "anthropic"], countedFailureModelFamilies: ["openai"] },
+        "blockers",
+      ],
       ["PRODUCTION_OPENAI_ONLY_NO_CROSS_LAB", { modelFamilies: ["openai"] }, "advisories"],
       ["PRODUCTION_LOCAL_MUTANTS_NOT_DIFFICULTY", {}, "advisories"],
       ["PRODUCTION_ADVERSARIAL_NOT_READY", { adversarialReady: false }, "blockers"],
@@ -657,9 +790,10 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
       expectedHash: CHALLENGE_HASH,
       expectedScenarioSetId: SCENARIO_SET_ID,
       audits,
+      analysis: analysisFixture(),
     });
-    expect(report).toContain("prepared import packets only");
-    expect(report).toContain("No cross-lab claim exists yet");
+    expect(report).toContain("prepared provider packets");
+    expect(report).toContain("No cross-lab smoke claim exists");
   });
 
   it("renders production readiness deterministically", () => {
@@ -678,6 +812,7 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
       providerRefusals: 0,
       infraFailures: 0,
       modelFamilies: ["openai"],
+      countedFailureModelFamilies: ["openai"],
       diagnosisStatus: "on-target",
       transferDeclared: true,
       adversarialReady: true,

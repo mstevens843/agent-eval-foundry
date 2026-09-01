@@ -12,11 +12,11 @@ slots and a prepared bundle — never a zero.
 
 | provider | family | available | detail |
 |---|---|---|---|
-| `claude` | anthropic | **no** | Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles |
-| `claude-sonnet` | anthropic | **no** | Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles |
-| `claude-haiku` | anthropic | **no** | Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles |
-| `claude-fable` | anthropic | **no** | Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles |
-| `codex` | openai | yes | codex-cli 0.151.0 |
+| `claude` | anthropic | **no** | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally |
+| `claude-sonnet` | anthropic | **no** | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally |
+| `claude-haiku` | anthropic | **no** | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally |
+| `claude-fable` | anthropic | **no** | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally |
+| `codex` | openai | yes | codex-cli 0.152.0 |
 | `gemini` | google | **no** | 0.46.0; entitlement previously blocked with IneligibleTierError, so this phase treats Gemini as import-only until a real authenticated run changes that |
 | `external` | external | **no** | external by declaration: prepare a bundle and import the result |
 
@@ -78,13 +78,14 @@ _Every provider here has fewer than 5 counted trials (1 across all of them), whi
 
 ### `deployment-model-alias-rollout-drift`
 
-**Claim strength: separates.** 1 of 1 counted trials failed at least one scenario, so the family separates something — on 1 model family(ies).
+**Claim strength: separates.** 1 of 2 counted trials failed at least one scenario, so the family separates something — on 2 model family(ies).
 
 | provider | counted | failed | refused | infra | not run | fail rate | 95% interval |
 |---|---:|---:|---:|---:|---:|---:|---|
+| `anthropic` | 1 | 0 | 0 | 0 | 0 | 0% | 0%–79% |
 | `openai` | 1 | 1 | 0 | 0 | 0 | 100% | 21%–100% |
 
-_Every provider here has fewer than 5 counted trials (1 across all of them), which is the threshold this report uses before quoting a per-provider rate without a caveat. The intervals above are the honest width of what these counts support, and they are wide enough that no point estimate should be quoted on its own._
+_Every provider here has fewer than 5 counted trials (2 across all of them), which is the threshold this report uses before quoting a per-provider rate without a caveat. The intervals above are the honest width of what these counts support, and they are wide enough that no point estimate should be quoted on its own._
 
 **Which checks each provider failed** — the part that says whether they fail the same way:
 
@@ -244,6 +245,7 @@ signal of how it approached the task.
 | `access-token-2026-08-o1` | openai | 140 | 6/8 | no | counted | 0 |
 | `checker-required-2026-08-o1` | openai | 462 | 11/14 | no | counted | 614 |
 | `delegated-wallet-2026-08-o1` | openai | 170 | 7/10 | no | counted | 0 |
+| `deployment-alias-2026-09-claude-1` | anthropic | 310 | 5/10 | no | counted | 0 |
 | `deployment-model-alias-rollout-drift-2026-08-o1` | openai | 229 | 6/10 | no | counted | 192 |
 | `pic-claude-1` | anthropic | 319 | 8/8 | no | counted | 0 |
 | `pic-claude-2` | anthropic | 232 | 8/8 | no | counted | 0 |
@@ -272,7 +274,7 @@ signal of how it approached the task.
 `n/a` means the family publishes no numbered rule codes, which is not a low score. The UI
 family states its contract as invariants rather than a policy table, so there is nothing to cite.
 
-**1 of 27 submissions built some form of self-check.** Whether that separates the passing runs from the failing ones is worth reading off the table directly; with counts this small it is an observation, not a rate.
+**1 of 28 submissions built some form of self-check.** Whether that separates the passing runs from the failing ones is worth reading off the table directly; with counts this small it is an observation, not a rate.
 
 **Confident false positives: 6 of 13 failing runs.** These submissions name most or all of the
 published rule codes and still lose the property:

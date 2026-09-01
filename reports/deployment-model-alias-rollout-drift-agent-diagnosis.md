@@ -10,8 +10,8 @@ just as a generic pass/fail rate.
 | item | value |
 |---|---:|
 | planned smoke slots | 1 |
-| counted smoke trials | 1 |
-| counted solves | 0 |
+| counted smoke trials | 2 |
+| counted solves | 1 |
 | counted failures | 1 |
 | provider refusals | 0 |
 | infrastructure failures | 0 |
@@ -51,20 +51,20 @@ Next action: pursue non-OpenAI smoke before production /6 matrix spend
 
 | knob | discriminates | highest failing value | failure rate |
 |---|---|---|---:|
-| `alias` | no | `eval-default` | 57% |
-| `baselineState` | no | `wrong_current` | 61% |
-| `cacheState` | no | `stale_previous` | 59% |
-| `canaryWindow` | yes | `complete` | 75% |
-| `currentVersionState` | no | `same` | 58% |
-| `evalMix` | yes | `misattributed` | 72% |
-| `providerDisagreement` | no | `provider_says_green` | 62% |
-| `reevaluation` | no | `unavailable` | 60% |
-| `regressionSeverity` | yes | `major` | 72% |
-| `repeatCount` | no | `2` | 66% |
-| `rollbackTiming` | no | `none` | 58% |
-| `rolloutPhase` | yes | `ramp` | 76% |
-| `seed` | no | `23` | 57% |
-| `surface` | no | `routing_service` | 61% |
+| `alias` | no | `eval-default` | 29% |
+| `baselineState` | no | `wrong_current` | 30% |
+| `cacheState` | no | `stale_previous` | 29% |
+| `canaryWindow` | yes | `complete` | 38% |
+| `currentVersionState` | no | `same` | 29% |
+| `evalMix` | yes | `misattributed` | 36% |
+| `providerDisagreement` | no | `provider_says_green` | 31% |
+| `reevaluation` | no | `unavailable` | 30% |
+| `regressionSeverity` | yes | `major` | 36% |
+| `repeatCount` | no | `2` | 33% |
+| `rollbackTiming` | no | `none` | 29% |
+| `rolloutPhase` | yes | `ramp` | 38% |
+| `seed` | no | `23` | 29% |
+| `surface` | no | `routing_service` | 31% |
 
 ## Deployment-Alias Mechanism Questions
 
@@ -106,14 +106,30 @@ diagnosis flags a spec or harness repair.
 
 | run | reading | matches pre-registered hypothesis | repair suspected |
 |---|---|---|---|
+| `deployment-alias-2026-09-claude-1` | clean | no | no |
 | `deployment-model-alias-rollout-drift-2026-08-o1` | capability | yes | no |
+
+## Cross-Lab Smoke
+
+Counted provider families: `anthropic`, `openai`.
+
+| run | provider family | graded | failed | reading |
+|---|---|---:|---:|---|
+| `deployment-alias-2026-09-claude-1` | `anthropic` | 339 | 0 | clean solve |
+| `deployment-model-alias-rollout-drift-2026-08-o1` | `openai` | 339 | 192 | failed |
+
+| pair | overlap | relation | difficulty reading |
+|---|---:|---|---|
+| `deployment-model-alias-rollout-drift-2026-08-o1` / `deployment-alias-2026-09-claude-1` | 0 | one clean, one failing | mixed provider result; no cross-lab difficulty claim |
+
+Claude/Anthropic solved the current smoke while OpenAI/Codex failed. This is a provider-delta finding; production `/6` stays blocked pending diagnosis or evolution.
 
 ## Evidence Boundary
 
 - The counted smoke failure is real-agent smoke evidence, not full-matrix or cross-lab evidence.
 - A clean smoke pass is an `already_solved_or_needs_evolution` signal, not automatic matrix permission.
 - An on-target smoke failure is smoke-difficulty evidence only.
-- One OpenAI/Codex smoke is not cross-lab evidence.
+- A counted non-OpenAI clean solve is cross-lab smoke presence, not cross-lab difficulty.
 - Transfer proposed from lineage reallocation is not transfer proved.
 
 ---

@@ -1,0 +1,16 @@
+{
+  "runId": "deployment-model-alias-rollout-drift-claude-missing-provider",
+  "familyId": "deployment-model-alias-rollout-drift",
+  "providerFamily": "anthropic",
+  "model": "anthropic/claude-opus-5",
+  "subjectId": "claude-opus-5",
+  "runtime": "external-cli",
+  "runDate": "YYYY-MM-DD",
+  "scenarioSetId": "drift-339-590affe3",
+  "challengeHash": "0e9b87a5f260544cfbc1cdce8f08938c",
+  "status": "completed",
+  "countsRequested": true,
+  "relationToAuthor": "independent",
+  "privateHintsUsed": false,
+  "hiddenFilesSeen": []
+}

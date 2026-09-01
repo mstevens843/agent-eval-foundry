@@ -255,9 +255,32 @@ describe("external deployment-alias evidence intake", () => {
     expect(packetAudits.every((audit) => audit.requiredFilesPresent)).toBe(true);
     expect(packetAudits.every((audit) => audit.leakCheck === "pass")).toBe(true);
     expect(external).toContain("No returned external packets have been imported yet.");
-    expect(external).toContain("No cross-lab claim exists");
+    expect(external).toContain("No cross-lab smoke claim exists");
     expect(human).toContain("human-evidenced | no");
     expect(human).toContain("Human-ready is not human-evidenced");
+  });
+
+  it("labels a countable non-OpenAI packet as smoke presence, not difficulty by itself", () => {
+    const prepared = prepareChallenge(ROOT, FAMILY_ID);
+    const anthropic = validate(
+      returnedPacket({
+        providerFamily: "anthropic",
+        provider: "claude",
+        model: "anthropic/claude-opus-5",
+        subjectId: "claude-opus-5",
+      }).dir,
+    );
+    const external = renderExternalIntakeReport({
+      familyId: FAMILY_ID,
+      expectedHash: prepared.hash,
+      expectedScenarioSetId: prepared.scenarioSetId,
+      packetAudits: auditDeploymentAliasExternalPackets(ROOT),
+      intakeResults: [anthropic],
+    });
+
+    expect(anthropic.countable).toBe(true);
+    expect(external).toContain("cross-lab smoke presence");
+    expect(external).toContain("diagnosis report decides whether it is cross-lab difficulty");
   });
 
   it("plans the OpenAI half-matrix without satisfying cross-lab or /6 readiness", () => {
@@ -280,18 +303,21 @@ describe("external deployment-alias evidence intake", () => {
         fullMatrixReady: false,
         productionMatrixStatus: "blocked",
         smokeDifficultyEvidenced: true,
-        crossLabSmokeEvidenced: false,
-        hasNonOpenAiCountedSmoke: false,
-        countedProviderFamilies: ["openai"],
+        crossLabSmokeEvidenced: true,
+        crossLabDifficultyEvidenced: false,
+        mixedCrossLabSmoke: true,
+        hasNonOpenAiCountedSmoke: true,
+        countedProviderFamilies: ["anthropic", "openai"],
+        countedFailureProviderFamilies: ["openai"],
         blockers: [
           {
-            code: "PRODUCTION_MATRIX_NEEDS_NON_OPENAI_SMOKE",
+            code: "PRODUCTION_CROSS_LAB_SMOKE_MIXED",
             severity: "blocker",
-            detail: "non-OpenAI smoke missing",
+            detail: "non-OpenAI smoke solved cleanly",
           },
         ],
         advisories: [],
-        nextAction: "import or run one non-OpenAI counted smoke under the current hash",
+        nextAction: "diagnose provider delta or evolve before production /6 matrix spend",
       },
       analysis,
       human: undefined,
@@ -306,9 +332,11 @@ describe("external deployment-alias evidence intake", () => {
     expect(half.slots[0]?.runId).toBe("deployment-model-alias-rollout-drift-2026-08-o1");
     expect(half.slots.slice(1).every((slot) => slot.state === "NOT_RUN")).toBe(true);
     expect(half.slots.some((slot) => /anthropic|claude|gemini/i.test(slot.model))).toBe(false);
-    expect(analysis.counted).toBe(1);
-    expect(analysis.modelFamilies).toEqual(["openai"]);
+    expect(analysis.counted).toBe(2);
+    expect(analysis.failures).toBe(1);
+    expect(analysis.solves).toBe(1);
+    expect(analysis.modelFamilies).toEqual(["anthropic", "openai"]);
     expect(report).toContain("OpenAI half-matrix");
-    expect(report).toContain("OpenAI-only 3/6 would strengthen same-provider stability only");
+    expect(report).toContain("non-OpenAI smoke imported cleanly but solved the suite");
   });
 });

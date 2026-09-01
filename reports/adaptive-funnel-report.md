@@ -34,7 +34,8 @@ candidate mechanisms
 |---|---:|
 | static | 13 |
 | local | 7 |
-| cross-provider | 3 |
+| one-agent | 1 |
+| cross-provider | 2 |
 
 | target | type | mode | stage | decision | evidence cost | next action |
 |---|---|---|---|---|---|---|
@@ -106,8 +107,8 @@ candidate mechanisms
 | `prompt-injection-containment` | task_shape | evolve | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
 | `prompt-injection-memory-poisoning` | task_shape | repair | stale challenge hashes cannot feed production-mode claims |
 | `ui-action-record-replay` | transfer_test | evolve | nested failure sets are one axis at multiple sensitivities, not breadth |
+| `deployment-model-alias-rollout-drift` | smoke_trial | hold | provider refusals, infrastructure errors and no-count trials do not advance the funnel |
 | `checker-required-memory-poisoning` | transfer_test | transfer | repeated same-provider trials estimate stability, not cross-lab transfer |
-| `deployment-model-alias-rollout-drift` | transfer_test | transfer | repeated same-provider trials estimate stability, not cross-lab transfer |
 | `ui-replay-live-dom` | transfer_test | transfer | repeated same-provider trials estimate stability, not cross-lab transfer |
 
 ## Production-Mode Candidates
@@ -123,8 +124,8 @@ No family is automatically recommended for a fresh full matrix by this planner p
 | `prompt-injection-containment` | static at `task_shape` | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
 | `prompt-injection-memory-poisoning` | static at `task_shape` | stale challenge hashes cannot feed production-mode claims |
 | `ui-action-record-replay` | static at `transfer_test` | nested failure sets are one axis at multiple sensitivities, not breadth |
+| `deployment-model-alias-rollout-drift` | one-agent at `smoke_trial` | provider refusals, infrastructure errors and no-count trials do not advance the funnel |
 | `checker-required-memory-poisoning` | cross-provider at `transfer_test` | repeated same-provider trials estimate stability, not cross-lab transfer |
-| `deployment-model-alias-rollout-drift` | cross-provider at `transfer_test` | repeated same-provider trials estimate stability, not cross-lab transfer |
 | `ui-replay-live-dom` | cross-provider at `transfer_test` | repeated same-provider trials estimate stability, not cross-lab transfer |
 
 ## Registry Link

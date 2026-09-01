@@ -1,0 +1,26 @@
+{
+  "familyId": "deployment-model-alias-rollout-drift",
+  "scenarioSetId": "drift-339-590affe3",
+  "visibleFiles": [
+    "README.md",
+    "SPEC.md",
+    "examples/example-1-valid-continue.json",
+    "examples/example-2-major-regression-rollback.json",
+    "examples/example-3-closed-window-reevaluate.json",
+    "examples/example-4-duplicate-attempt.json",
+    "starter/subject.mjs",
+    "types.ts"
+  ],
+  "hiddenArtifacts": [
+    "verify.ts",
+    "reference.ts",
+    "mutants.ts",
+    "runner.ts",
+    "truth.ts",
+    "matrix.json",
+    "scenarios.json",
+    "answer-matrix.json",
+    "reports/"
+  ],
+  "submissionFormat": "an ES module exporting `subject` with run(view, deployment)"
+}

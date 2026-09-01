@@ -1,19 +1,26 @@
 # deployment-model-alias-rollout-drift cross-lab readiness
 
-These are prepared import packets only. They are not evidence until an external run returns a
-transcript, submission, metadata and verifier output that import cleanly under the current hash.
+This report separates prepared provider packets from imported provider evidence. A packet is
+only evidence after it returns a transcript, submission, metadata and verifier output that
+import cleanly under the current hash.
 
 | item | value |
 |---|---|
 | expected challenge hash | `0e9b87a5f260544cfbc1cdce8f08938c` |
 | expected scenario set | `drift-339-590affe3` |
 | providers prepared | 3/3 |
+| counted smoke trials | 2 |
+| counted non-OpenAI smoke trials | 1 |
+| counted provider families | `anthropic`, `openai` |
+| counted failure provider families | `openai` |
+| cross-lab smoke present | yes |
+| cross-lab difficulty evidenced | no |
 
 ## Bundle Audit
 
 | provider | state | hash | leak check | metadata template | hidden files | reports |
 |---|---|---|---|---|---|---|
-| `claude` | Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles | `0e9b87a5f260544cfbc1cdce8f08938c` | pass | pass | absent | absent |
+| `claude` | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally | `0e9b87a5f260544cfbc1cdce8f08938c` | pass | pass | absent | absent |
 | `gemini` | 0.46.0; entitlement previously blocked with IneligibleTierError, so this phase treats Gemini as import-only until a real authenticated run changes that | `0e9b87a5f260544cfbc1cdce8f08938c` | pass | pass | absent | absent |
 | `external` | external by declaration: prepare a bundle and import the result | `0e9b87a5f260544cfbc1cdce8f08938c` | pass | pass | absent | absent |
 
@@ -39,10 +46,11 @@ Verify: `node dist/cli.js check`
 
 ## Countability
 
-- Claude/Anthropic is import-only in this phase; no local Anthropic execution was run.
+- One Claude/Anthropic smoke may be imported or run only under explicit authorization and the current hash.
 - Gemini remains import-only/infrastructure-error unless entitlement is actually available.
 - Generic external bundles must preserve provider and model identity before any cross-lab claim.
-- No cross-lab claim exists yet for deployment-alias because only OpenAI/Codex has counted smoke evidence.
+- A non-OpenAI smoke exists, but cross-lab difficulty is claimed only if the non-OpenAI run also fails on target.
+- Current reading: mixed provider result; full `/6` remains blocked pending provider-delta diagnosis or evolution.
 
 ---
 

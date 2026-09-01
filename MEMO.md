@@ -61,19 +61,20 @@ intended checks, 2/2 baselines blocked, 6 mutant-detection axes, a leak-checked 
 package and a pinned one-slot OpenAI/Codex smoke campaign. The counted smoke trial
 `deployment-model-alias-rollout-drift-2026-08-o1` failed 192/339 scenarios on target under challenge
 hash `0e9b87a5f260544cfbc1cdce8f08938c`. That is OpenAI-only smoke-difficulty evidence, not
-cross-lab breadth or a full-matrix result. Deployment-Alias Production Readiness v1 keeps `/6`
-matrix spend blocked until one non-OpenAI counted smoke exists under this same hash or an explicit
-OpenAI-only override is recorded. Current-hash Claude, Gemini and generic external bundles are
-prepared for import; none of them count until returned with transcript, submission, metadata and
-verifier output.
+cross-lab breadth or a full-matrix result. A current-hash Claude/Anthropic external smoke then
+imported cleanly and passed 339/339. That is cross-lab smoke presence but not cross-lab difficulty:
+OpenAI failed, Claude solved, and Deployment-Alias Production Readiness keeps `/6` matrix spend
+blocked pending provider-delta diagnosis, evolution or an explicit override. Current-hash Claude,
+Gemini and generic external bundles remain prepared for future imports; they count only when
+returned with transcript, submission, metadata and verifier output.
 
 Human + External Evidence Intake v1 turns that handoff into a validator instead of an email
 convention. Deployment-alias now has current-hash external packets, metadata templates,
 hidden-artifact warnings, import/verify commands, a family-specific clean-room human review packet,
 and a matrix-readiness gap report. The OpenAI half-matrix is planned as same-provider stability
 evidence only: the existing smoke is slot 1, two OpenAI repeats are pending, and the full `/6`
-matrix remains blocked until a non-OpenAI smoke imports cleanly under hash
-`0e9b87a5f260544cfbc1cdce8f08938c`.
+matrix remains blocked after the Claude clean solve because the current evidence is mixed, not
+cross-lab difficulty under hash `0e9b87a5f260544cfbc1cdce8f08938c`.
 
 The foundry now separates three claims: a reference can solve it, a clean public package can be
 handed to a human, and an independent human has actually solved it. Those are different evidence
@@ -401,7 +402,7 @@ twice as compressible as chance, so the structure is real. Three of the four sub
 lab, which is the caveat that belongs in the same sentence as the number.
 
 After live-DOM, the all-family bank is deliberately **partial** again. GPT-5.6 Sol has attempted the
-descendant; the Anthropic subjects have not, because Claude is import-only in this phase. That does
+descendant; the Anthropic subjects have not, because Claude was import-only in that phase. That does
 not weaken the live-DOM trial, but it does mean a portfolio-wide axis count over the current family
 set is refused until at least three subjects share the same package hashes.
 

@@ -8,8 +8,20 @@ set -euo pipefail
 cd "$(dirname "$0")"
 mkdir -p submission
 
-claude \
-  "-p" \
-  "You are attempting a benchmark task. Your working directory contains:\n  challenge/   — read this. README.md explains the task, SPEC.md is the normative contract.\n  submission/  — write your answer here.\n\nRead challenge/README.md and challenge/SPEC.md in full, then implement both artifacts they\ndescribe:\n  submission/subject.mjs   exporting `subject` with runSession(view, memory, tools)\n  submission/checker.mjs   exporting `checker` with run({ cases, runCase, makeCase })\n\nThe checker must invoke runCase and validate observed traces independently. A subject-only\nsubmission is incomplete.\n\nDo not modify anything in challenge/. Write exactly those two files under submission/." \
-  "--permission-mode" \
-  "bypassPermissions"
+'claude' \
+  '-p' \
+  'You are attempting a benchmark task. Your working directory contains:
+  challenge/   — read this. README.md explains the task, SPEC.md is the normative contract.
+  submission/  — write your answer here.
+
+Read challenge/README.md and challenge/SPEC.md in full, then implement both artifacts they
+describe:
+  submission/subject.mjs   exporting `subject` with runSession(view, memory, tools)
+  submission/checker.mjs   exporting `checker` with run({ cases, runCase, makeCase })
+
+The checker must invoke runCase and validate observed traces independently. A subject-only
+submission is incomplete.
+
+Do not modify anything in challenge/. Write exactly those two files under submission/.' \
+  '--permission-mode' \
+  'bypassPermissions'

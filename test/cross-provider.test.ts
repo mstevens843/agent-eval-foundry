@@ -218,6 +218,18 @@ describe("checker-required prepared bundles and imports", () => {
   });
 });
 
+describe("provider bundle shell safety", () => {
+  it("single-quotes generated Claude command args so prompt backticks are not shell-evaluated", () => {
+    const dir = mkdtempSync(join(tmpdir(), "deployment-claude-bundle-"));
+    prepareProviderBundle(ROOT, "deployment-model-alias-rollout-drift", "claude", dir);
+    const runScript = readFileSync(join(dir, "run.sh"), "utf8");
+
+    expect(runScript).toContain("'claude' \\");
+    expect(runScript).toContain("exporting `subject` with run(view, deployment)");
+    expect(runScript).not.toContain('"You are attempting a benchmark task.');
+  });
+});
+
 describe("strict import", () => {
   const currentHash = prepareChallenge(ROOT, MEMORY).hash;
 

@@ -6,7 +6,7 @@ cluster: model alias drift during deployment and eval rollout decisions.
 
 ## Status
 
-**1 counted real-agent trial(s) exist.** Read the agent-results and diagnosis reports before quoting difficulty.
+**2 counted real-agent trial(s) exist.** Read the agent-results and diagnosis reports before quoting difficulty.
 
 | item | value |
 |---|---:|
@@ -24,7 +24,7 @@ cluster: model alias drift during deployment and eval rollout decisions.
 | visible rule codes found | 10 |
 | scenario set id | `drift-339-590affe3` |
 | challenge hash | `0e9b87a5f260544cfbc1cdce8f08938c` |
-| counted real-agent trials | 1 |
+| counted real-agent trials | 2 |
 | stale/superseded trials | 0 |
 
 ## Knobs

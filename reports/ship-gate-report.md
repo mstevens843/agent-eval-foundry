@@ -451,7 +451,7 @@ In-process isolation is sufficient for code this repository wrote and insufficie
 | `browser-action-replay` | n/a | family not built |
 | `checker-required-memory-poisoning` | pass | subprocess with 1 agent trial(s) |
 | `delegated-wallet-scope-reconciliation` | pass | subprocess with 1 agent trial(s) |
-| `deployment-model-alias-rollout-drift` | pass | subprocess with 1 agent trial(s) |
+| `deployment-model-alias-rollout-drift` | pass | subprocess with 2 agent trial(s) |
 | `deployment-rollback-partial-effects` | n/a | family not built |
 | `durable-approval-outbox` | n/a | family not built |
 | `model-alias-drift-sentinel` | n/a | family not built |
@@ -478,7 +478,7 @@ Axis counts across disjoint banks add by construction and mean nothing. Only sha
 | `browser-action-replay` | n/a | family not built |
 | `checker-required-memory-poisoning` | fail | 1 subject(s) shared with another family (need 3) |
 | `delegated-wallet-scope-reconciliation` | fail | 1 subject(s) shared with another family (need 3) |
-| `deployment-model-alias-rollout-drift` | fail | 1 subject(s) shared with another family (need 3) |
+| `deployment-model-alias-rollout-drift` | fail | 2 subject(s) shared with another family (need 3) |
 | `deployment-rollback-partial-effects` | n/a | family not built |
 | `durable-approval-outbox` | n/a | family not built |
 | `model-alias-drift-sentinel` | n/a | family not built |
@@ -559,7 +559,7 @@ A measured axis count against a bank of hand-written mutants proves the VERIFIER
 | `browser-action-replay` | fail | no counted agent trials |
 | `checker-required-memory-poisoning` | pass | 1 counted agent trial(s) |
 | `delegated-wallet-scope-reconciliation` | pass | 1 counted agent trial(s) |
-| `deployment-model-alias-rollout-drift` | pass | 1 counted agent trial(s) |
+| `deployment-model-alias-rollout-drift` | pass | 2 counted agent trial(s) |
 | `deployment-rollback-partial-effects` | fail | no counted agent trials |
 | `durable-approval-outbox` | pass | 6 counted agent trial(s) |
 | `model-alias-drift-sentinel` | fail | no counted agent trials |
@@ -613,7 +613,7 @@ A one-agent smoke trial is routing evidence. It can prove a family is worth foll
 | `browser-action-replay` | n/a | no production-readiness layer for this family |
 | `checker-required-memory-poisoning` | n/a | no production-readiness layer for this family |
 | `delegated-wallet-scope-reconciliation` | n/a | no production-readiness layer for this family |
-| `deployment-model-alias-rollout-drift` | fail | blocked; import or run one non-OpenAI counted smoke under the current hash |
+| `deployment-model-alias-rollout-drift` | fail | blocked; diagnose provider delta or evolve before production /6 matrix spend |
 | `deployment-rollback-partial-effects` | n/a | no production-readiness layer for this family |
 | `durable-approval-outbox` | n/a | no production-readiness layer for this family |
 | `model-alias-drift-sentinel` | n/a | no production-readiness layer for this family |
@@ -640,7 +640,7 @@ A family every model solves measures nothing, and `already-solved` was the singl
 | `browser-action-replay` | n/a | no counted agent trials yet |
 | `checker-required-memory-poisoning` | pass | 1 of 1 counted trial(s) failed at least one scenario |
 | `delegated-wallet-scope-reconciliation` | fail | all 1 counted trial(s) passed every scenario — the family is already-solved |
-| `deployment-model-alias-rollout-drift` | pass | 1 of 1 counted trial(s) failed at least one scenario |
+| `deployment-model-alias-rollout-drift` | pass | 1 of 2 counted trial(s) failed at least one scenario |
 | `deployment-rollback-partial-effects` | n/a | no counted agent trials yet |
 | `durable-approval-outbox` | pass | 6 of 6 declared trial(s) failed — declared by the shape, not measured here |
 | `model-alias-drift-sentinel` | n/a | no counted agent trials yet |

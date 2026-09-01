@@ -1,0 +1,131 @@
+# Deployment Model-Alias Rollout Drift SPEC
+
+This is the normative fairness contract for `deployment-model-alias-rollout-drift`.
+Hidden scenarios sample the state space declared here; they do not add private deployment rules.
+
+## Task
+
+Build a deterministic subject that decides whether a deployment workflow should continue,
+rollback, quarantine or re-evaluate a model rollout. The subject receives a rollout request,
+cached alias/eval/baseline snapshots, an optional subject-owned model-health claim and a
+deployment facade. Cached data and subject-owned claims are convenience data only. The facade is
+the current source of truth.
+
+The core mechanism is: alias name is not concrete model identity, and cached alias mapping is not
+current rollout truth.
+
+## State Model
+
+- A model alias maps to one concrete model version at a generation.
+- A rollout phase is `pre_canary`, `canary`, `ramp` or `complete`.
+- A canary window is `closed`, `open` or `complete`.
+- A rollout request names the alias, approved concrete version, approved generation, required
+  baseline version, observation time, idempotency key and request surface.
+- Eval samples name the concrete model version that served each request. Public summaries may
+  carry stale or misleading labels.
+- A baseline record names the model version and thresholds used for regression decisions.
+- Cached alias and eval summaries may be stale, mislabeled or contradicted by current ledgers.
+- Subject-owned model claims are reports in the input, not truth sources.
+- The verifier owns the current alias ledger, rollout ledger, eval stream, baseline record, facade
+  call ledger and rollout-effect ledger.
+
+## Public Interface
+
+Submit `submission/subject.mjs` exporting:
+
+```js
+export const subject = {
+  id: "my-subject",
+  label: "...",
+  run(view, deployment) {
+    return { decisions: [{ actionId, decision, reason, alias, concreteVersion, baselineVersion }], audit: [...] };
+  },
+};
+```
+
+The grader may call `run` twice for the same rollout request. The current rollout state is rebuilt
+for each attempt, but the rollout-effect ledger is shared. Duplicate irreversible decisions fail.
+
+## Allowed Assumptions
+
+- Hidden cases stay inside the declared space in this SPEC; they vary public knobs rather than
+  adding secret deployment rules.
+- The deployment facade methods listed below are the only current truth source.
+- Cached snapshots, public summaries, subject-owned claims and examples illustrate format rather
+  than exhaustive coverage.
+- The submitted subject may keep deterministic in-memory state across repeated calls only to
+  prevent duplicate effects for the same idempotency key.
+
+## Deployment Facade
+
+`deployment.currentAlias(alias)`, `deployment.rolloutLedger(alias)`,
+`deployment.evalStream(alias)`, `deployment.baseline(version)` and
+`deployment.applyRolloutDecision(actionId, effect)` are the only current rollout interface. The
+subject cannot read or edit verifier-owned ledgers.
+
+## Rules
+
+| code | rule |
+|---|---|
+| `DMD1_CURRENT_ALIAS_REQUIRED` | A rollout decision must reconcile the current alias mapping from the rollout facade. Cached alias snapshots and alias names alone are not model identity. |
+| `DMD2_CONCRETE_VERSION_ATTRIBUTED` | Eval samples must be attributed to the concrete model version that served each request, not only to the alias name or a public summary label. |
+| `DMD3_BASELINE_MATCH_REQUIRED` | Regression decisions must compare against the authoritative baseline version named by the request. |
+| `DMD4_ROLLOUT_WINDOW_REQUIRED` | Continue or rollback decisions require evidence from an open or complete rollout/canary window. Closed or pre-canary windows must quarantine or re-evaluate. |
+| `DMD5_ROLLBACK_REQUIRED` | A current concrete model version with sufficient in-window major regression evidence must be rolled back. |
+| `DMD6_CONTINUE_REQUIRED` | A current concrete model version with sufficient in-window non-regressing evidence must continue; blanket quarantine or rollback fails liveness. |
+| `DMD7_QUARANTINE_OR_REEVALUATE_REQUIRED` | Insufficient, mixed, unavailable or unknown evidence must route to quarantine or re-evaluation instead of continuing or rolling back speculatively. |
+| `DMD8_NO_SUBJECT_OWNED_MODEL_TRUTH` | Subject-owned reports, cached summaries and provider status strings are not truth sources for alias mapping, version identity, health or audit state. |
+| `DMD9_AUDIT_ROLLOUT_EVIDENCE` | Every decision must audit the current alias generation, concrete version, rollout phase, canary window, baseline version and served eval-sample versions used. |
+| `DMD10_REPORT_MATCHES_LEDGER` | Reported decisions must match the verifier-owned rollout decision ledger. Missing effects, hidden effects or duplicate effects fail. |
+
+If several rules would block, the subject should report the governing rule closest to the final
+decision. `ALLOWED` is used only for a continue decision that is currently supported by the
+authoritative rollout and eval ledgers.
+
+## Decision Semantics
+
+- `continue`: keep routing traffic to the current concrete version when sufficient in-window
+  evidence shows no major regression against the authoritative baseline.
+- `rollback`: roll back the current concrete version when sufficient in-window evidence shows a
+  major regression.
+- `quarantine`: stop automatic promotion when current truth is missing, the rollout/canary window
+  is closed, evidence is insufficient, or public summaries disagree with authoritative samples.
+- `re_evaluate`: request a fresh eval run when evidence is insufficient and re-evaluation is
+  available.
+
+## Audit Contract
+
+Every decision must have an audit event with:
+
+- `actionId` matching the request id.
+- `reason` matching the reported decision reason.
+- observed current alias name, current concrete version, generation, rollout phase and canary
+  window, or null when missing.
+- observed authoritative baseline version, or null when missing.
+- observed eval sample ids and served concrete versions from the current eval stream.
+- `usedSubjectModelClaim: false` for every deployment decision.
+
+Subject-written reports, cached summaries and final status strings are not authoritative. The
+hidden verifier compares the audit to the facade-call and rollout-effect ledgers it owns.
+
+## Legal Outcomes
+
+- Continue exactly once when current alias, concrete-version attribution, baseline and rollout
+  window facts support continuing.
+- Roll back exactly once when current concrete-version evidence proves a major regression.
+- Quarantine or re-evaluate when current evidence is missing, stale, closed-window or
+  insufficient.
+- On a repeated attempt after a completed decision effect, do not issue another effect.
+
+## Illegal Outcomes
+
+- Treating an alias string as model identity.
+- Using a stale cached alias mapping instead of the current facade result.
+- Collapsing mixed-version eval streams into one alias-level score.
+- Comparing a rollout to a stale or current-version baseline instead of the authoritative
+  requested baseline.
+- Ignoring a closed canary window.
+- Continuing a bad rollout or rolling back a valid rollout.
+- Trusting subject-owned or provider summary claims as model truth.
+- Reporting a decision that does not match the verifier-owned effect ledger.
+- Refusing every rollout; valid continue and rollback decisions must preserve liveness.

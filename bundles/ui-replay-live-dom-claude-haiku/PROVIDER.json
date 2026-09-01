@@ -5,7 +5,7 @@
   "model": "anthropic/claude-haiku-4-5",
   "subjectId": "claude-haiku-4-5",
   "availableHere": false,
-  "availabilityDetail": "Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles",
+  "availabilityDetail": "Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally",
   "invocationNote": "As `claude-sonnet`, with `--model haiku`. The smallest model available here, and therefore the one most likely to produce a catch set that is a strict superset of the others — which is what a bank needs to have any width at all.",
   "command": [
     "claude",

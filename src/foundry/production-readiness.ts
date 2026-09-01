@@ -9,7 +9,10 @@ export const PRODUCTION_READINESS_STATUSES = [
   "smoke-failed-on-target",
   "smoke-passed-cleanly",
   "smoke-failed-off-target",
+  "cross-lab-smoke-present",
+  "cross-lab-smoke-mixed",
   "cross-lab-smoke-needed",
+  "cross-lab-difficulty-needed",
   "matrix-ready",
   "matrix-blocked",
   "stale-hash-blocked",
@@ -28,6 +31,7 @@ export const PRODUCTION_READINESS_RULE_CODES = [
   "PRODUCTION_OFF_TARGET_SMOKE_REPAIR",
   "PRODUCTION_TRANSFER_NOT_DECLARED",
   "PRODUCTION_MATRIX_NEEDS_NON_OPENAI_SMOKE",
+  "PRODUCTION_CROSS_LAB_SMOKE_MIXED",
   "PRODUCTION_OPENAI_ONLY_NO_CROSS_LAB",
   "PRODUCTION_LOCAL_MUTANTS_NOT_DIFFICULTY",
   "PRODUCTION_ADVERSARIAL_NOT_READY",
@@ -58,6 +62,7 @@ export interface ProductionReadinessInput {
   readonly providerRefusals: number;
   readonly infraFailures: number;
   readonly modelFamilies: readonly string[];
+  readonly countedFailureModelFamilies: readonly string[];
   readonly diagnosisStatus: SmokeDiagnosisStatus;
   readonly transferDeclared: boolean;
   readonly adversarialReady: boolean;
@@ -77,8 +82,11 @@ export interface ProductionReadinessResult {
   readonly productionMatrixStatus: "ready" | "blocked";
   readonly smokeDifficultyEvidenced: boolean;
   readonly crossLabSmokeEvidenced: boolean;
+  readonly crossLabDifficultyEvidenced: boolean;
+  readonly mixedCrossLabSmoke: boolean;
   readonly hasNonOpenAiCountedSmoke: boolean;
   readonly countedProviderFamilies: readonly string[];
+  readonly countedFailureProviderFamilies: readonly string[];
   readonly blockers: readonly ProductionReadinessFinding[];
   readonly advisories: readonly ProductionReadinessFinding[];
   readonly nextAction: string;
@@ -88,12 +96,19 @@ const NO_CROSS_LAB_PROVIDER_FAMILIES = new Set(["external", "openai", "unknown"]
 
 export function evaluateProductionReadiness(input: ProductionReadinessInput): ProductionReadinessResult {
   const providerFamilies = [...new Set(input.modelFamilies.map((family) => family.toLowerCase()))].sort();
+  const failureProviderFamilies = [
+    ...new Set(input.countedFailureModelFamilies.map((family) => family.toLowerCase())),
+  ].sort();
   const hasNonOpenAiCountedSmoke = providerFamilies.some(
     (family) => !NO_CROSS_LAB_PROVIDER_FAMILIES.has(family),
   );
   const crossLabSmokeEvidenced = providerFamilies.includes("openai") && hasNonOpenAiCountedSmoke;
   const override = (input.explicitOpenAiOnlyMatrixOverrideReason ?? "").trim();
   const smokeDifficultyEvidenced = input.countedSmokeFailures > 0 && input.diagnosisStatus === "on-target";
+  const crossLabDifficultyEvidenced =
+    smokeDifficultyEvidenced &&
+    failureProviderFamilies.filter((family) => !["external", "unknown"].includes(family)).length >= 2;
+  const mixedCrossLabSmoke = crossLabSmokeEvidenced && !crossLabDifficultyEvidenced;
   const findings: ProductionReadinessFinding[] = [];
   const add = (
     code: ProductionReadinessRuleCode,
@@ -171,6 +186,13 @@ export function evaluateProductionReadiness(input: ProductionReadinessInput): Pr
       );
     }
   }
+  if (mixedCrossLabSmoke && override.length === 0) {
+    add(
+      "PRODUCTION_CROSS_LAB_SMOKE_MIXED",
+      "blocker",
+      "a non-OpenAI smoke imported cleanly, but counted failures are not shared across provider families; diagnose provider delta or evolve before /6 spend",
+    );
+  }
   if (!input.adversarialReady) {
     add(
       "PRODUCTION_ADVERSARIAL_NOT_READY",
@@ -209,8 +231,14 @@ export function evaluateProductionReadiness(input: ProductionReadinessInput): Pr
     smokeDifficultyEvidenced &&
     input.transferDeclared &&
     input.adversarialReady &&
-    (crossLabSmokeEvidenced || override.length > 0);
-  const statuses = statusesFor(input, fullMatrixReady, smokeDifficultyEvidenced, crossLabSmokeEvidenced);
+    (crossLabDifficultyEvidenced || override.length > 0);
+  const statuses = statusesFor(
+    input,
+    fullMatrixReady,
+    smokeDifficultyEvidenced,
+    crossLabSmokeEvidenced,
+    mixedCrossLabSmoke,
+  );
   const sortedFindings = findings
     .filter(
       (finding, index, array) => array.findIndex((candidate) => candidate.code === finding.code) === index,
@@ -225,11 +253,14 @@ export function evaluateProductionReadiness(input: ProductionReadinessInput): Pr
     productionMatrixStatus: fullMatrixReady ? "ready" : "blocked",
     smokeDifficultyEvidenced,
     crossLabSmokeEvidenced,
+    crossLabDifficultyEvidenced,
+    mixedCrossLabSmoke,
     hasNonOpenAiCountedSmoke,
     countedProviderFamilies: providerFamilies,
+    countedFailureProviderFamilies: failureProviderFamilies,
     blockers: sortedFindings.filter((finding) => finding.severity === "blocker"),
     advisories: sortedFindings.filter((finding) => finding.severity === "advisory"),
-    nextAction: nextProductionAction(input, fullMatrixReady, crossLabSmokeEvidenced),
+    nextAction: nextProductionAction(input, fullMatrixReady, crossLabSmokeEvidenced, mixedCrossLabSmoke),
   };
 }
 
@@ -238,6 +269,7 @@ function statusesFor(
   fullMatrixReady: boolean,
   smokeDifficultyEvidenced: boolean,
   crossLabSmokeEvidenced: boolean,
+  mixedCrossLabSmoke: boolean,
 ): readonly ProductionReadinessStatus[] {
   const out: ProductionReadinessStatus[] = [];
   if (input.localVerifierReady) out.push("local-verifier-ready");
@@ -251,7 +283,10 @@ function statusesFor(
   if (input.countedSmokeFailures > 0 && input.diagnosisStatus !== "on-target") {
     out.push("smoke-failed-off-target");
   }
+  if (crossLabSmokeEvidenced) out.push("cross-lab-smoke-present");
+  if (mixedCrossLabSmoke) out.push("cross-lab-smoke-mixed");
   if (!crossLabSmokeEvidenced) out.push("cross-lab-smoke-needed");
+  if (mixedCrossLabSmoke) out.push("cross-lab-difficulty-needed");
   if (
     !input.packageHashCurrent ||
     !input.campaignHashCurrent ||
@@ -271,6 +306,7 @@ function nextProductionAction(
   input: ProductionReadinessInput,
   fullMatrixReady: boolean,
   crossLabSmokeEvidenced: boolean,
+  mixedCrossLabSmoke: boolean,
 ): string {
   if (fullMatrixReady) return "production /6 matrix may be scheduled; it is still not automatic";
   if (!input.localVerifierReady) return "repair local verifier, reference, mutant or baseline evidence";
@@ -292,6 +328,9 @@ function nextProductionAction(
   if (!input.transferDeclared) return "declare a transfer target before production matrix spend";
   if (!crossLabSmokeEvidenced && (input.explicitOpenAiOnlyMatrixOverrideReason ?? "").trim().length === 0) {
     return "import or run one non-OpenAI counted smoke under the current hash";
+  }
+  if (mixedCrossLabSmoke && (input.explicitOpenAiOnlyMatrixOverrideReason ?? "").trim().length === 0) {
+    return "diagnose provider delta or evolve before production /6 matrix spend";
   }
   if (!input.adversarialReady) return "prepare verifier-integrity attack campaign and bundle";
   if (input.unrepairedBypasses > 0) return "repair verifier bypass and invalidate stale audits";

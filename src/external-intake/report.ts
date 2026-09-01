@@ -69,6 +69,10 @@ export function renderExternalIntakeReport(input: {
 }): string {
   const counted = input.intakeResults.filter((result) => result.countable);
   const noCount = input.intakeResults.filter((result) => !result.countable);
+  const countedFamilies = providerFamilies(counted);
+  const nonOpenAiFamilies = countedFamilies.filter(
+    (family) => !["openai", "external", "manual", "unknown"].includes(family),
+  );
   return [
     `# ${input.familyId} external evidence intake`,
     "",
@@ -126,8 +130,10 @@ export function renderExternalIntakeReport(input: {
     "",
     "## Cross-Lab Boundary",
     "",
-    `Current countable external provider families: ${providerFamilies(counted).join(", ") || "none"}.`,
-    "No cross-lab claim exists until a non-OpenAI completed run imports cleanly under this hash.",
+    `Current countable external provider families: ${countedFamilies.join(", ") || "none"}.`,
+    nonOpenAiFamilies.length > 0
+      ? "A non-OpenAI completed run has imported cleanly under this hash. That is cross-lab smoke presence; the diagnosis report decides whether it is cross-lab difficulty or a provider-delta solve."
+      : "No cross-lab smoke claim exists until a non-OpenAI completed run imports cleanly under this hash.",
     "",
     "---",
     "",

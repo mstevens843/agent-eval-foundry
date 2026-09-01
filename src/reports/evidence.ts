@@ -299,6 +299,7 @@ export function augmentProductionReadinessEvidenceMap(
     providerRefusals: analysis.refusals,
     infraFailures: analysis.infra,
     modelFamilies: analysis.modelFamilies,
+    countedFailureModelFamilies: failureModelFamilies(analysis),
     diagnosisStatus: classifyDeploymentAliasSmoke(analysis, diagnoses),
     transferDeclared: transfers.some(
       (transfer) => transfer.sourceKind === "family" && transfer.sourceId === DEPLOYMENT_ALIAS_FAMILY_ID,
@@ -323,6 +324,18 @@ export function augmentProductionReadinessEvidenceMap(
       productionCrossLabSmokeEvidenced: readiness.crossLabSmokeEvidenced,
     },
   };
+}
+
+function failureModelFamilies(analysis: {
+  readonly outcomes: readonly { readonly kind: string; readonly model: string | null }[];
+}) {
+  return [
+    ...new Set(
+      analysis.outcomes
+        .filter((outcome) => outcome.kind === "counted_failure")
+        .map((outcome) => outcome.model?.split("/")[0] ?? "unknown"),
+    ),
+  ].sort();
 }
 
 export function familyEvidenceMapForShipReport(root: string): Record<string, FamilyEvidence> {
@@ -444,16 +457,22 @@ export function campaignFacts(root: string): CampaignFacts {
   let counted = 0;
   let failures = 0;
   let superseded = 0;
+  const countedRunIds = new Set<string>();
+  const supersededRunIds = new Set<string>();
   const runtimes: number[] = [];
   for (const plan of plans) {
     const rec = reconcile(root, plan);
-    superseded += rec.supersededRuns.length;
+    for (const runId of rec.supersededRuns) supersededRunIds.add(`${plan.familyId}:${runId}`);
     for (const record of rec.countedRecords) {
+      const key = `${record.familyId}:${record.runId}`;
+      if (countedRunIds.has(key)) continue;
+      countedRunIds.add(key);
       counted += 1;
       if (record.cells.some((c) => c.failed.length > 0)) failures += 1;
       if (record.runtimeSeconds !== null) runtimes.push(record.runtimeSeconds);
     }
   }
+  superseded = supersededRunIds.size;
   runtimes.sort((a, b) => a - b);
   return {
     campaigns: plans.length,

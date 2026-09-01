@@ -8,8 +8,20 @@ set -euo pipefail
 cd "$(dirname "$0")"
 mkdir -p submission
 
-gemini \
-  "--approval-mode" \
-  "yolo" \
-  "-p" \
-  "You are attempting a benchmark task. Your working directory contains:\n  challenge/   — read this. README.md explains the task, SPEC.md is the normative contract.\n  submission/  — write your answer here.\n\nRead challenge/README.md and challenge/SPEC.md in full, then implement the subject they\ndescribe:\n  submission/subject.mjs exporting `subject` with run(view, deployment)\n\nThe deployment facade is the current source of truth. Cached alias maps, public summaries and\nsubject-owned model claims may be stale or false. The same request may be attempted twice, and\nduplicate irreversible rollout decisions must not execute.\n\nDo not modify anything in challenge/. Write exactly one file: submission/subject.mjs."
+'gemini' \
+  '--approval-mode' \
+  'yolo' \
+  '-p' \
+  'You are attempting a benchmark task. Your working directory contains:
+  challenge/   — read this. README.md explains the task, SPEC.md is the normative contract.
+  submission/  — write your answer here.
+
+Read challenge/README.md and challenge/SPEC.md in full, then implement the subject they
+describe:
+  submission/subject.mjs exporting `subject` with run(view, deployment)
+
+The deployment facade is the current source of truth. Cached alias maps, public summaries and
+subject-owned model claims may be stale or false. The same request may be attempted twice, and
+duplicate irreversible rollout decisions must not execute.
+
+Do not modify anything in challenge/. Write exactly one file: submission/subject.mjs.'

@@ -5,7 +5,7 @@
   "model": "anthropic/claude-opus-5",
   "subjectId": "claude-opus-5",
   "availableHere": false,
-  "availabilityDetail": "Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles",
+  "availabilityDetail": "Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally",
   "invocationNote": "`-p` is non-interactive. `bypassPermissions` is required because the sandbox is a fresh temp directory with nothing in it but the challenge; the model must be able to write its submission without a prompt nobody is there to answer.",
   "command": [
     "claude",

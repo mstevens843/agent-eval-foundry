@@ -15,11 +15,11 @@ Three CLIs are installed here and exactly one of them was a new LAB:
 
 | provider | family | available | detail |
 |---|---|---|---|
-| `claude` | anthropic | **no** | Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles |
-| `claude-sonnet` | anthropic | **no** | Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles |
-| `claude-haiku` | anthropic | **no** | Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles |
-| `claude-fable` | anthropic | **no** | Anthropic execution disabled for this phase because the account is out of tokens; prepare import-only bundles |
-| `codex` | openai | yes | codex-cli 0.151.0 |
+| `claude` | anthropic | **no** | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally |
+| `claude-sonnet` | anthropic | **no** | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally |
+| `claude-haiku` | anthropic | **no** | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally |
+| `claude-fable` | anthropic | **no** | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally |
+| `codex` | openai | yes | codex-cli 0.152.0 |
 | `gemini` | google | **no** | 0.46.0; entitlement previously blocked with IneligibleTierError, so this phase treats Gemini as import-only until a real authenticated run changes that |
 | `external` | external | **no** | external by declaration: prepare a bundle and import the result |
 
@@ -55,14 +55,14 @@ separately.
 
 ## The constraint, after
 
-**PARTIAL.** 1 shared subject(s) against a threshold of 3. The combined width is bounded above by 1, which cannot distinguish complete overlap from independence. 10 more counted trial(s) would reach the threshold.
+**PARTIAL.** 1 shared subject(s) against a threshold of 3. The combined width is bounded above by 1, which cannot distinguish complete overlap from independence. 9 more counted trial(s) would reach the threshold.
 
 | | |
 |---|---:|
 | shared subjects | 1 |
 | threshold | 3 |
 | provider families among them | 1 |
-| counted trials still needed | 10 |
+| counted trials still needed | 9 |
 
 ## What it bought, and what it did not
 

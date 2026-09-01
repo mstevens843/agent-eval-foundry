@@ -120,7 +120,7 @@ Counted trials span 2 model families: anthropic, openai.
 
 **Confirm signal was:** At least one counted trial fails at least one scenario, AND the failures concentrate on `provenance_persisted`, `no_forbidden_call` or `exactly_allowed` at sessionsBetween > 0 while passing at sessionsBetween = 0. That pattern is the operator working: the same implementation is correct within a session and wrong across one.
 
-**The kill signal did not fire.** Read the knob splits above against the confirm signal: the claim is only as strong as the pattern, not the pass rate.
+**The evidence is mixed across provider families.** One counted subject failed and one solved, so the family diagnosis must decide whether this is shared difficulty, provider delta, or an evolution signal.
 
 ---
 

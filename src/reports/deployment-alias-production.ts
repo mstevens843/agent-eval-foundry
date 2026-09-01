@@ -50,6 +50,7 @@ export interface DeploymentAliasCrossLabReportInput {
   readonly expectedHash: string;
   readonly expectedScenarioSetId: string;
   readonly audits: readonly DeploymentAliasBundleAudit[];
+  readonly analysis: FamilyTrialAnalysis;
 }
 
 export interface DeploymentAliasAdversarialReadinessInput {
@@ -106,8 +107,11 @@ export function renderDeploymentAliasProductionReadiness(
     `| counted smoke failures | ${analysis.failures} |`,
     `| counted smoke solves | ${analysis.solves} |`,
     `| counted provider families | ${readiness.countedProviderFamilies.map((f) => `\`${f}\``).join(", ") || "none"} |`,
+    `| counted failure provider families | ${readiness.countedFailureProviderFamilies.map((f) => `\`${f}\``).join(", ") || "none"} |`,
     `| smoke difficulty evidenced | ${readiness.smokeDifficultyEvidenced ? "yes" : "no"} |`,
-    `| cross-lab smoke evidenced | ${readiness.crossLabSmokeEvidenced ? "yes" : "no"} |`,
+    `| cross-lab smoke present | ${readiness.crossLabSmokeEvidenced ? "yes" : "no"} |`,
+    `| cross-lab difficulty evidenced | ${readiness.crossLabDifficultyEvidenced ? "yes" : "no"} |`,
+    `| mixed cross-lab smoke | ${readiness.mixedCrossLabSmoke ? "yes" : "no"} |`,
     "",
     "## Statuses",
     "",
@@ -125,19 +129,16 @@ export function renderDeploymentAliasProductionReadiness(
     "",
     "## Matrix Plan",
     "",
-    "- Do not run a full `/6` matrix from this state.",
-    "- First import or run one non-OpenAI counted smoke under the same challenge hash.",
-    "- Preserve transcript, submission, verifier output, package hash, scenario set id and provider identity.",
-    "- A provider refusal, infrastructure error, stale hash, contaminated run or missing artifact counts nothing.",
-    "- If a non-OpenAI smoke also fails on target, production matrix spend can be considered.",
-    "- If the smoke passes cleanly, route to evolve/repair instead of buying a matrix by default.",
+    ...matrixPlanLines(readiness),
     "",
     `Next action: ${readiness.nextAction}`,
     "",
     "## Evidence Boundary",
     "",
     "- One OpenAI/Codex on-target smoke failure is smoke-difficulty evidence for OpenAI only.",
-    "- It is not cross-lab evidence, not a full matrix, and not a human-solvability solve.",
+    "- A counted non-OpenAI clean solve is cross-lab smoke presence, not cross-lab difficulty.",
+    "- Mixed cross-lab smoke routes to provider-delta diagnosis or evolution, not automatic `/6` spend.",
+    "- It is not a full matrix and not a human-solvability solve.",
     "- Local mutant axes remain verifier-discrimination evidence, not real-agent difficulty axes.",
     "- Adversarial-ready means attack materials are prepared; adversarial-audited requires a counted audit.",
     "",
@@ -160,17 +161,39 @@ export function auditDeploymentAliasCrossLabBundles(
 }
 
 export function renderDeploymentAliasCrossLabReadiness(input: DeploymentAliasCrossLabReportInput): string {
+  const countedNonOpenAi = input.analysis.outcomes.filter(
+    (outcome) =>
+      (outcome.kind === "counted_solve" || outcome.kind === "counted_failure") &&
+      !["openai", "external", "unknown"].includes(providerFamilyOf(outcome.model)),
+  );
+  const failureProviderFamilies = [
+    ...new Set(
+      input.analysis.outcomes
+        .filter((outcome) => outcome.kind === "counted_failure")
+        .map((outcome) => providerFamilyOf(outcome.model))
+        .filter((family) => !["external", "unknown"].includes(family)),
+    ),
+  ].sort();
+  const crossLabSmokePresent = input.analysis.modelFamilies.includes("openai") && countedNonOpenAi.length > 0;
+  const crossLabDifficulty = failureProviderFamilies.length >= 2;
   return [
     "# deployment-model-alias-rollout-drift cross-lab readiness",
     "",
-    "These are prepared import packets only. They are not evidence until an external run returns a",
-    "transcript, submission, metadata and verifier output that import cleanly under the current hash.",
+    "This report separates prepared provider packets from imported provider evidence. A packet is",
+    "only evidence after it returns a transcript, submission, metadata and verifier output that",
+    "import cleanly under the current hash.",
     "",
     "| item | value |",
     "|---|---|",
     `| expected challenge hash | \`${input.expectedHash}\` |`,
     `| expected scenario set | \`${input.expectedScenarioSetId}\` |`,
     `| providers prepared | ${input.audits.filter((audit) => audit.present).length}/${input.audits.length} |`,
+    `| counted smoke trials | ${input.analysis.counted} |`,
+    `| counted non-OpenAI smoke trials | ${countedNonOpenAi.length} |`,
+    `| counted provider families | ${input.analysis.modelFamilies.map((family) => `\`${family}\``).join(", ") || "none"} |`,
+    `| counted failure provider families | ${failureProviderFamilies.map((family) => `\`${family}\``).join(", ") || "none"} |`,
+    `| cross-lab smoke present | ${crossLabSmokePresent ? "yes" : "no"} |`,
+    `| cross-lab difficulty evidenced | ${crossLabDifficulty ? "yes" : "no"} |`,
     "",
     "## Bundle Audit",
     "",
@@ -197,10 +220,17 @@ export function renderDeploymentAliasCrossLabReadiness(input: DeploymentAliasCro
     ]),
     "## Countability",
     "",
-    "- Claude/Anthropic is import-only in this phase; no local Anthropic execution was run.",
+    "- One Claude/Anthropic smoke may be imported or run only under explicit authorization and the current hash.",
     "- Gemini remains import-only/infrastructure-error unless entitlement is actually available.",
     "- Generic external bundles must preserve provider and model identity before any cross-lab claim.",
-    "- No cross-lab claim exists yet for deployment-alias because only OpenAI/Codex has counted smoke evidence.",
+    crossLabSmokePresent
+      ? "- A non-OpenAI smoke exists, but cross-lab difficulty is claimed only if the non-OpenAI run also fails on target."
+      : "- No cross-lab smoke claim exists yet because only OpenAI/Codex has counted smoke evidence.",
+    crossLabSmokePresent && !crossLabDifficulty
+      ? "- Current reading: mixed provider result; full `/6` remains blocked pending provider-delta diagnosis or evolution."
+      : crossLabDifficulty
+        ? "- Current reading: early cross-lab smoke difficulty exists; production matrix may be planned but was not run."
+        : "- Current reading: cross-lab smoke remains missing.",
     "",
     "---",
     "",
@@ -336,9 +366,11 @@ export function renderDeploymentAliasMatrixReadinessGap(
     ),
     row(
       "cross-lab smoke",
-      readiness.crossLabSmokeEvidenced ? "pass" : "missing",
+      readiness.crossLabSmokeEvidenced ? (readiness.mixedCrossLabSmoke ? "mixed" : "pass") : "missing",
       readiness.crossLabSmokeEvidenced
-        ? "non-OpenAI smoke evidence exists"
+        ? readiness.mixedCrossLabSmoke
+          ? "non-OpenAI smoke imported cleanly, but it solved the suite rather than failing on target"
+          : "non-OpenAI smoke evidence exists and failure-provider evidence is shared"
         : "no non-OpenAI counted smoke under the current hash",
     ),
     row(
@@ -397,7 +429,9 @@ export function renderDeploymentAliasMatrixReadinessGap(
     "",
     readiness.fullMatrixReady
       ? "Production matrix spend is allowed by the current gate calculation."
-      : "Do not run the full `/6` matrix yet. Import or run one non-OpenAI counted smoke under the same hash first; OpenAI-only 3/6 would strengthen same-provider stability only.",
+      : readiness.mixedCrossLabSmoke
+        ? "Do not run the full `/6` matrix yet. The non-OpenAI smoke imported cleanly but solved the suite, so the next step is provider-delta diagnosis or evolution."
+        : "Do not run the full `/6` matrix yet. Import or run one non-OpenAI counted smoke under the same hash first; OpenAI-only 3/6 would strengthen same-provider stability only.",
     "",
     `Countable non-OpenAI external packets currently imported: ${nonOpenAiExternal.length}.`,
     "",
@@ -577,6 +611,37 @@ function providerState(audit: DeploymentAliasBundleAudit): string {
   if (audit.availableHere === null) return audit.providerFamily ?? "unknown";
   if (audit.availableHere) return "configured";
   return audit.availabilityDetail ?? "import-only";
+}
+
+function providerFamilyOf(model: string | null): string {
+  return model?.split("/")[0] ?? "unknown";
+}
+
+function matrixPlanLines(readiness: ProductionReadinessResult): readonly string[] {
+  if (readiness.fullMatrixReady) {
+    return [
+      "- Production `/6` matrix may be scheduled, but it is still a separate spend decision.",
+      "- Preserve the current challenge hash and scenario set for every remaining slot.",
+      "- Provider refusal, infrastructure error, stale hash, contaminated run or missing artifacts still count nothing.",
+    ];
+  }
+  if (readiness.mixedCrossLabSmoke) {
+    return [
+      "- Do not run a full `/6` matrix from this state.",
+      "- The non-OpenAI smoke imported cleanly, but it solved the suite rather than failing on target.",
+      "- Diagnose the provider delta before buying more matrix slots.",
+      "- If the mechanism is too provider-specific, evolve or repair the family instead of expanding spend.",
+      "- Preserve transcript, submission, verifier output, package hash, scenario set id and provider identity for any future run.",
+    ];
+  }
+  return [
+    "- Do not run a full `/6` matrix from this state.",
+    "- First import or run one non-OpenAI counted smoke under the same challenge hash.",
+    "- Preserve transcript, submission, verifier output, package hash, scenario set id and provider identity.",
+    "- A provider refusal, infrastructure error, stale hash, contaminated run or missing artifact counts nothing.",
+    "- If a non-OpenAI smoke also fails on target, production matrix spend can be considered.",
+    "- If the smoke passes cleanly, route to evolve/repair instead of buying a matrix by default.",
+  ];
 }
 
 function adversarialReading(summary: VerifierIntegrityEvidence | undefined): string {
