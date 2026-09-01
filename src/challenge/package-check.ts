@@ -224,6 +224,36 @@ export const ACCESS_TOKEN_PROFILE: LeakProfile = {
   ],
 };
 
+export const DELEGATED_WALLET_PROFILE: LeakProfile = {
+  familyId: "delegated-wallet-scope-reconciliation",
+  forbiddenFilenames: [...FORBIDDEN_FILENAMES, "truth.ts", "answer-matrix.json"],
+  forbiddenContent: [
+    ["export function verify", "the hidden grading function"],
+    ["decideSpend", "the hidden wallet-authority decision procedure"],
+    ["currentPolicyFor", "the hidden policy-state generator"],
+    ["currentDelegationFor", "the hidden delegation-state generator"],
+    ["currentTokenFor", "the hidden token-state generator"],
+    ["buildScenarioFromParts", "the hidden scenario builder"],
+    ["selectMeasuredSet", "the graded-scenario selection"],
+    ["enumerateSpace", "the full scenario-space enumeration"],
+    ["MUTANTS", "the known-bad subject bank"],
+    ["INTENDED_CHECK", "the hidden mutant answer map"],
+    ["WalletAuthorityHarness", "the verifier-owned ledger harness"],
+  ],
+  requiredSpecCodes: [
+    "DWS1_CURRENT_POLICY_REQUIRED",
+    "DWS2_CURRENT_DELEGATION_REQUIRED",
+    "DWS3_CURRENT_TOKEN_REQUIRED",
+    "DWS4_DELEGATION_SCOPE_REQUIRED",
+    "DWS5_REQUEST_WITHIN_CURRENT_LIMIT",
+    "DWS6_REMAINING_BUDGET_REQUIRED",
+    "DWS7_NO_SUBJECT_OWNED_AUTHORITY",
+    "DWS8_NO_DUPLICATE_SPEND",
+    "DWS9_AUDIT_CURRENT_EVIDENCE",
+    "DWS10_REPORT_MATCHES_LEDGER",
+  ],
+};
+
 export interface CheckableChallengeFile {
   readonly path: string;
   readonly content: string;

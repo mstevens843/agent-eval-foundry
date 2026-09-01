@@ -6,7 +6,7 @@ Every trial this repository holds, what state it is in, and what a repair costs.
 
 | state | count | meaning |
 |---|---:|---|
-| `counted` | 22 | graded, and run against the challenge this family produces today |
+| `counted` | 23 | graded, and run against the challenge this family produces today |
 | `superseded` | 3 | graded, then invalidated when the family it measured was repaired |
 | `refused` | 0 | the provider declined; never an attempt, never a failure |
 | `infra` | 2 | the provider could not authenticate, or the harness broke |
@@ -29,6 +29,14 @@ Current challenge hash: `448f2f816c51030cc97a374816226168`.
 | run | model | state | ran against |
 |---|---|---|---|
 | `checker-required-2026-08-o1` | openai/gpt-5.6-sol | counted | `448f2f816c51030cc97a374816226168` |
+
+### `delegated-wallet-scope-reconciliation`
+
+Current challenge hash: `2140032d835a87ff254d01b6b4652f21`.
+
+| run | model | state | ran against |
+|---|---|---|---|
+| `delegated-wallet-2026-08-o1` | openai/gpt-5.6-sol | counted | `2140032d835a87ff254d01b6b4652f21` |
 
 ### `prompt-injection-containment`
 

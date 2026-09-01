@@ -17,7 +17,7 @@ axis diversity. The workbench routes evidence; it does not prove a benchmark is 
 | total candidates | 51 |
 | mechanisms referenced | 15 |
 | domains represented | 22 |
-| expected next-batch build hours | 176 |
+| expected next-batch build hours | 194 |
 | expected next-batch trial cost | $355 |
 | expected next-batch axes | 40 |
 | registry mechanisms available | 15 |
@@ -39,6 +39,7 @@ axis diversity. The workbench routes evidence; it does not prove a benchmark is 
 | candidate | domain | score | confidence | recommended action | cheapest evidence | probe status | blockers |
 |---|---|---:|---:|---|---|---|---|
 | `access-token-scope-expansion` | permissions and access control | 73.4 | 0.69 | mechanism_probe | static | family-build-ready | none |
+| `delegated-wallet-scope-reconciliation` | wallet / transaction signing | 67.8 | 0.80 | evolve_existing | static | family-build-ready | none |
 | `deployment-model-alias-rollout-drift` | deployment rollback | 78.1 | 0.69 | mechanism_probe | static | task-shape-ready | none |
 | `crm-permission-cancel-race` | CRM automation | 77.7 | 0.69 | task_shape | local | task-shape-ready | none |
 | `long-horizon-recurring-task-cancel` | memory and long-horizon state | 77.4 | 0.69 | mechanism_probe | local | task-shape-ready | none |
@@ -47,7 +48,6 @@ axis diversity. The workbench routes evidence; it does not prove a benchmark is 
 | `prompt-injection-ticket-attachment` | prompt injection | 75.6 | 0.69 | mechanism_probe | static | task-shape-ready | none |
 | `prompt-injection-tool-output-cross-scope` | prompt injection | 74.5 | 0.69 | task_shape | local | task-shape-ready | none |
 | `trading-partial-fill-cancel` | trading order reconciliation | 65.2 | 0.69 | task_shape | local | task-shape-ready | none |
-| `payment-unknown-capture-receipt` | external payments | 63.1 | 0.69 | mechanism_probe | static | task-shape-ready | none |
 
 ## Probe Evidence Overlay
 
@@ -59,7 +59,7 @@ axis diversity. The workbench routes evidence; it does not prove a benchmark is 
 | `browser-checkout-stale-selector` | probe-promoted | `browser-checkout-stale-selector-probe` | evolve_existing | cheap probe supports evolving an existing family line |
 | `crm-permission-cancel-race` | task-shape-ready | `crm-permission-cancel-race-probe` | promote_to_task_shape | cheap probe caught 2/2 non-reference subjects across 8 named checks |
 | `delegated-wallet-scope-reconciliation` | probe-promoted | `delegated-wallet-scope-reconciliation-probe` | evolve_existing | cheap probe supports evolving an existing family line |
-| `delegated-wallet-scope-reconciliation` | task-shape-ready | `delegated-wallet-scope-reconciliation-from-access-token-evolution` | ready | The counted access-token smoke trial passed cleanly, so full matrix spend is blocked and the requested-vs-approved-authority mechanism is carried into delegated wallet authority with time, revocation, downgrade, reconciliation, audit and liveness pressure. |
+| `delegated-wallet-scope-reconciliation` | family-build-ready | `delegated-wallet-scope-reconciliation-from-access-token-evolution` | family-built | The counted access-token smoke trial passed cleanly, so full matrix spend was blocked and the requested-vs-approved-authority mechanism was carried into a full delegated-wallet authority family with time, revocation, downgrade, reconciliation, audit and liveness pressure. |
 | `deployment-model-alias-rollout-drift` | task-shape-ready | `deployment-model-alias-rollout-drift-probe` | promote_to_task_shape | cheap probe caught 2/2 non-reference subjects across 7 named checks |
 | `email-calendar-invite-authority` | task-shape-ready | `email-calendar-invite-authority-probe` | promote_to_task_shape | cheap probe caught 2/2 non-reference subjects across 7 named checks |
 | `long-horizon-recurring-task-cancel` | task-shape-ready | `long-horizon-recurring-task-cancel-probe` | promote_to_task_shape | cheap probe caught 2/2 non-reference subjects across 9 named checks |

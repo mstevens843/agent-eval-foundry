@@ -457,7 +457,10 @@ describe("the evolution reports", () => {
     expect(render()).toMatch(/loop, now closed again/);
     expect(render()).toMatch(/access-token-scope-expansion/);
     expect(render()).toMatch(/clean pass blocks `\/6` matrix/);
-    expect(render()).toMatch(/cross-family and cross-lab claims remain bounded/);
+    expect(render()).toMatch(
+      /delegated-wallet-scope-reconciliation` descendant probe was promoted into a full family/,
+    );
+    expect(render()).toMatch(/cross-family\s+and cross-lab claims remain bounded/);
     expect(render()).toMatch(/What would falsify the loop/);
   });
 

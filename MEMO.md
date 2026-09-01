@@ -41,10 +41,11 @@ The first promoted-family smoke result is now in the same loop. `access-token-sc
 passed its single counted OpenAI/Codex smoke trial under hash `33cc98364ce2a6b3f9490e54937955d8`
 with 384/384 scenarios clean. That is not difficulty evidence. It fires the pre-registered
 already_solved_or_needs_evolution signal, blocks full matrix spend, and routes the mechanism toward
-Access-Token Evolution v1: a delegated-wallet descendant probe now carries the mechanism through
-time separation, durable state, delegation, revocation/downgrade, authoritative reconciliation,
-audit truth and liveness pressure. That descendant is probe-promoted only; no descendant family or
-agent difficulty claim exists yet.
+Access-Token Evolution v1. That path now built `delegated-wallet-scope-reconciliation` as a full
+descendant family: 804 measured scenarios from an 82,944-point declared space, a clean reference,
+10/10 known-bad subjects/baselines caught, 3 mutant-detection axes and a leak-checked public
+package. Its single counted OpenAI/Codex smoke trial passed 804/804 under the current package hash,
+so it also routes to already_solved_or_needs_evolution rather than full matrix spend.
 
 The foundry now separates three claims: a reference can solve it, a clean public package can be
 handed to a human, and an independent human has actually solved it. Those are different evidence

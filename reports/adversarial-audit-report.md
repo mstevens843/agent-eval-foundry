@@ -12,6 +12,7 @@ infrastructure error, timeout, stale hash or contaminated attack.
 | `prompt-injection-memory-poisoning` | **adversarial-ready** | `9b3e0c84addabc2e195ecbd490ba81dd` | yes | 0 | 0 | 0 | 0 | none |
 | `ui-action-record-replay` | **adversarial-ready** | `1050e79f4804a96a5327d50dd81765b0` | yes | 0 | 0 | 0 | 0 | none |
 | `ui-replay-live-dom` | **adversarial-audited** | `18c3f5afc5973604205cd7df23ce4cad` | yes | 1 | 0 | 0 | 4 | none |
+| `delegated-wallet-scope-reconciliation` | **adversarial-ready** | `2140032d835a87ff254d01b6b4652f21` | yes | 0 | 0 | 0 | 0 | none |
 
 ## Current Reading
 
@@ -32,6 +33,7 @@ audit says one attacker under one declared threat model did not find a bypass.
 | `prompt-injection-memory-poisoning` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `ui-action-record-replay` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `ui-replay-live-dom` | 0 | 1 | 0 | 0 | 1 | 2 | 0 | 0 | 0 | 0 | 0 |
+| `delegated-wallet-scope-reconciliation` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
 ## Bypass Classes
 
@@ -43,6 +45,7 @@ audit says one attacker under one declared threat model did not find a bypass.
 | `prompt-injection-memory-poisoning` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `ui-action-record-replay` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `ui-replay-live-dom` | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| `delegated-wallet-scope-reconciliation` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
 ## Countability Rules
 

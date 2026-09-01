@@ -391,4 +391,89 @@ export const SHAPE_PROSE: Readonly<Record<string, ShapeProse>> = {
       "Writing an audit that cites cached or subject-written facts rather than current authority observations.",
     ],
   },
+  "delegated-wallet-scope-reconciliation": {
+    status: "built",
+    agentTrialsRun: 0,
+    agentTrialsPassed: 0,
+    evidence:
+      "Built from the access-token clean-smoke evolution path: delegated-wallet-scope-reconciliation-probe caught 7/7 non-reference probe subjects, then the full family was implemented in src/families/delegated-wallet-scope-reconciliation/. The local sweep has 804 measured scenarios from an 82,944-point declared space, a clean reference, ten known-bad subjects/baselines, a wallet-authority verifier and a leak-checked challenge package. No counted real-agent trial exists yet, so this is local verifier/mutant/package evidence only.",
+    visibleRules: [
+      "A delegated wallet spend may use only current wallet policy state; cached policy may be stale.",
+      "A delegated wallet spend may use only current delegation state for the named owner, delegate and wallet.",
+      "A delegated wallet spend may use only a current active token issued from the current delegation.",
+      "The requested action, current delegation and current token must all be the delegated spend scope; broader admin authority is not a substitute.",
+      "The requested amount must fit the current intersection of policy, delegation and token per-spend limits.",
+      "The requested amount must fit the remaining verifier-owned wallet budget after prior spends.",
+      "Subject-written authority receipts and cached claims are not truth.",
+      "A completed irreversible wallet spend may not execute again for the same idempotency key.",
+      "The audit cites current policy, delegation, token and budget facts observed from the authority facade.",
+      "Reported decisions must match the verifier-owned wallet effect ledger.",
+    ],
+    hiddenGradedRegion:
+      "The hidden suite samples the declared delegated-wallet state space: initial approved limit, requested amount, authority transition, token state, cache freshness, prior spend, policy source availability, request surface, repeat count and seed. Hidden scenarios add no wallet rule beyond current authority reconciliation, exact spend-scope binding, remaining-budget accounting, audit truth and duplicate-effect prevention.",
+    referenceContract: [
+      "Read current policy, delegation, token and remaining budget from the authority facade before deciding.",
+      "Block missing, unavailable, revoked, expired or stale-generation authority.",
+      "Block broader requested scope, admin token scope and wrong delegate/wallet token state.",
+      "Apply the current intersection of policy, delegation and token limits.",
+      "Account for prior verifier-owned spends before executing a new spend.",
+      "Issue exactly one wallet effect when current authority facts authorize the request.",
+      "Keep a completion record so repeated attempts do not duplicate irreversible wallet effects.",
+      "Return an audit whose observed facts match current authority state and never cite subject-owned claims as authority.",
+    ],
+    authoritativeSources: [
+      {
+        name: "wallet policy ledger",
+        whatItSettles:
+          "the current policy generation, owner, wallet, per-spend limit, daily limit and policy availability",
+        whyEngineCannotForge:
+          "The subject receives only a facade. The hidden scenario generator owns current policy state, and the verifier compares reported observations to facade calls and hidden policy records.",
+      },
+      {
+        name: "delegation ledger",
+        whatItSettles:
+          "the current delegate, owner, wallet, scope, generation, per-spend limit, expiry and revocation status",
+        whyEngineCannotForge:
+          "Delegation state is generated outside the subject and exposed only through `authority.currentDelegation`; cached delegation snapshots are explicitly not authoritative.",
+      },
+      {
+        name: "token ledger",
+        whatItSettles:
+          "the current token status, generation, delegate, wallet, spend scope and issued-from delegation binding",
+        whyEngineCannotForge:
+          "The verifier owns the token record. A subject can observe it through the facade but cannot write or replace the hidden token ledger.",
+      },
+      {
+        name: "wallet budget and effect ledger",
+        whatItSettles:
+          "prior spends, remaining spend budget, and which irreversible wallet effects actually executed",
+        whyEngineCannotForge:
+          "The subject can call `executeSpend`, but cannot read or edit the sealed effect ledger the verifier grades for liveness, overgrant and duplicate execution.",
+      },
+    ],
+    fairnessConstraints: [
+      "Every rule code the verifier grades is visible in SPEC.md.",
+      "The hidden set samples declared knobs and adds no private blockchain, crypto-wallet or provider behavior.",
+      "Policy, delegation, token, budget and idempotency semantics are finite and public.",
+      "Cached and subject-owned authority claims are documented as non-authoritative.",
+      "Refusing everything fails liveness on valid spends, and allowing everything fails current-authority and budget checks.",
+    ],
+    cheatResistance: [
+      "The challenge package omits truth, verifier, runner, mutants, measured scenarios and answer matrix.",
+      "The verifier grades harness-owned policy, delegation, token, budget and effect ledgers, not subject-written receipts.",
+      "A no-op subject fails when valid spends produce no ledger effect.",
+      "An audit-only subject fails when it cites observations the call ledger does not support.",
+      "Trial records, when run later, must preserve challenge hash, transcript, submission and verifier output.",
+    ],
+    expectedFailureModes: [
+      "Trusting cached delegated authority after revocation, expiry or downgrade.",
+      "Treating requested amount or requested admin scope as approval.",
+      "Using a token after current delegation authority changed.",
+      "Ignoring prior spends and over-running the remaining wallet budget.",
+      "Trusting a subject-written wallet receipt as authority.",
+      "Executing the same spend twice on repeated attempts.",
+      "Blocking every spend to avoid over-granting.",
+      "Writing an audit that cites cached or subject-owned facts rather than current facade observations.",
+    ],
+  },
 };

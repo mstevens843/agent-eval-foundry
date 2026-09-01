@@ -1,0 +1,13 @@
+You are attempting a benchmark task. Your working directory contains:
+  challenge/   — read this. README.md explains the task, SPEC.md is the normative contract.
+  submission/  — write your answer here.
+
+Read challenge/README.md and challenge/SPEC.md in full, then implement the subject they
+describe:
+  submission/subject.mjs exporting `subject` with run(view, authority)
+
+The authority facade is the current source of truth. Cached wallet authority and subject-owned
+receipts may be stale or false. The same request may be attempted twice, and duplicate
+irreversible wallet spends must not execute.
+
+Do not modify anything in challenge/. Write exactly one file: submission/subject.mjs.

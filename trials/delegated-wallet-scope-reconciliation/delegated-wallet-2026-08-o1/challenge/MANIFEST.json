@@ -1,0 +1,26 @@
+{
+  "familyId": "delegated-wallet-scope-reconciliation",
+  "scenarioSetId": "reconciliation-804-4b4cc8ff",
+  "visibleFiles": [
+    "README.md",
+    "SPEC.md",
+    "examples/example-1-valid-narrow-spend.json",
+    "examples/example-2-downgraded-after-cache.json",
+    "examples/example-3-revoked-delegation.json",
+    "examples/example-4-duplicate-retry.json",
+    "starter/subject.mjs",
+    "types.ts"
+  ],
+  "hiddenArtifacts": [
+    "verify.ts",
+    "reference.ts",
+    "mutants.ts",
+    "runner.ts",
+    "truth.ts",
+    "matrix.json",
+    "scenarios.json",
+    "answer-matrix.json",
+    "reports/"
+  ],
+  "submissionFormat": "an ES module exporting `subject` with run(view, authority)"
+}

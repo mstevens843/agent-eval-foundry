@@ -315,8 +315,13 @@ now has access-token-specific operators for durable state, delegated authority, 
 reconciliation, scope downgrade/revocation, truthful audit history and liveness pressure. It
 proposes `delegated-wallet-scope-reconciliation`, runs a six-scenario local probe against
 cached-scope, requested-scope, revocation-blind, audit-liar, over-blocker and receipt-trusting
-subjects, and records a ready promotion. That is still probe evidence, not a built family and not
-real-agent difficulty evidence for the descendant.
+subjects, and records a ready promotion. The promoted descendant is now a full validation-mode
+family with 804 measured scenarios from an 82,944-point declared space, a clean reference, 10/10
+known-bad subjects and baselines caught, 3 mutant-detection axes, a leak-checked package and a
+one-slot OpenAI/Codex smoke campaign. That smoke trial passed all 804 scenarios cleanly under the
+current package hash, so the descendant also routes to already_solved_or_needs_evolution. This is a
+second example of a clean smoke pass preventing matrix spend rather than becoming a difficulty
+claim.
 
 ### Stage 0: Candidate Pool
 

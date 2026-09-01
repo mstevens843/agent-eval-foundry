@@ -116,11 +116,11 @@ describe("Access-Token Evolution v1", () => {
     expect(overBlocker?.failedChecks).toEqual(expect.arrayContaining(["liveness", "valid_scope_executes"]));
   });
 
-  it("keeps the descendant as probe-promoted draft evidence, not built-family difficulty evidence", () => {
+  it("keeps the built descendant as local evidence, not real-agent difficulty evidence", () => {
     const { records } = loaded();
     const record = records.find((item) => item.promotion.familyId === ACCESS_TOKEN_EVOLUTION_FAMILY);
     expect(record).toBeDefined();
-    expect(record?.promotion.status).toBe("ready");
+    expect(record?.promotion.status).toBe("family-built");
     expect(record?.promotion.evidence.countedAgentTrials).toBe(0);
     expect(record?.promotion.evidence.claimedEvidenceLevel).toBe("local-evidence");
 

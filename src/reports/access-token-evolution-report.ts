@@ -130,8 +130,12 @@ export function renderAccessTokenEvolutionReport(input: AccessTokenEvolutionRepo
     "## Evidence Boundary",
     "",
     "- Parent clean smoke pass is counted real-agent evidence that the parent is solved by the available OpenAI/Codex subject.",
-    "- Descendant probe evidence is executable local evidence, not full-family evidence.",
-    "- The descendant has no challenge package, no full local matrix and no counted real-agent trial yet.",
+    selectedPromotion?.promotion.status === "family-built"
+      ? "- The descendant now has full local verifier/mutant/package evidence, but no counted real-agent trial yet."
+      : "- Descendant probe evidence is executable local evidence, not full-family evidence.",
+    selectedPromotion?.promotion.status === "family-built"
+      ? "- A challenge package exists for the descendant; its trial result remains not-run until a counted smoke is preserved."
+      : "- The descendant has no challenge package, no full local matrix and no counted real-agent trial yet.",
     "- The wallet transfer is declared and probe-supported, not transfer-proven.",
     "- Full `/6` matrix spend remains blocked until a built descendant package, one smoke diagnosis and transfer evidence justify it.",
     "",

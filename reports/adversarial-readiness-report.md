@@ -13,10 +13,11 @@ Cheat resistance is not the same claim as no bypass found. Cheat resistance is t
 | `prompt-injection-memory-poisoning` | **adversarial-ready** | `9b3e0c84addabc2e195ecbd490ba81dd` | `prompt-injection-memory-poisoning-adversarial` | `bundles/prompt-injection-memory-poisoning-adversarial` | none |
 | `ui-action-record-replay` | **adversarial-ready** | `1050e79f4804a96a5327d50dd81765b0` | `ui-action-record-replay-adversarial` | `bundles/ui-action-record-replay-adversarial` | none |
 | `ui-replay-live-dom` | **adversarial-ready** | `18c3f5afc5973604205cd7df23ce4cad` | `ui-replay-live-dom-adversarial` | `bundles/ui-replay-live-dom-adversarial` | none |
+| `delegated-wallet-scope-reconciliation` | **adversarial-ready** | `2140032d835a87ff254d01b6b4652f21` | `delegated-wallet-scope-reconciliation-adversarial` | `bundles/delegated-wallet-scope-reconciliation-adversarial` | none |
 
 ## Current Reading
 
-Adversarial-ready families: `checker-required-memory-poisoning`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom`.
+Adversarial-ready families: `checker-required-memory-poisoning`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom`, `delegated-wallet-scope-reconciliation`.
 Audit-pending families: `durable-approval-outbox`.
 
 A ready verdict means the attack campaign is prepared and hash-pinned. It does not mean anyone
@@ -117,6 +118,22 @@ has tried to exploit the verifier, and it does not mean no bypass exists.
 | `outcome-contract-declared` | pass | bypass and no-bypass outcomes are declared separately |
 | `never-counts-declared` | pass | refusal, infrastructure errors and stale hashes never count |
 | `attack-bundle-present` | pass | bundle ./bundles/ui-replay-live-dom-adversarial |
+| `fs-sandbox-isolation-check` | pass | bundle declares fs-sandbox and leaks no hidden files |
+| `exploit-schema-present` | pass | exploit artifact schema is included in the attack packet |
+
+### `delegated-wallet-scope-reconciliation`
+
+| check | result | detail |
+|---|---|---|
+| `public-package-present` | pass | checked-in challenge package hashes to 2140032d835a87ff254d01b6b4652f21 |
+| `package-leak-check` | pass | public challenge package passes leak check |
+| `campaign-file-present` | pass | campaign delegated-wallet-scope-reconciliation-adversarial |
+| `campaign-hash-current` | pass | campaign pins current hash 2140032d835a87ff254d01b6b4652f21 |
+| `threat-model-declared` | pass | 12 attack surface(s) |
+| `access-boundary-declared` | pass | allowed and forbidden attacker access are both declared |
+| `outcome-contract-declared` | pass | bypass and no-bypass outcomes are declared separately |
+| `never-counts-declared` | pass | refusal, infrastructure errors and stale hashes never count |
+| `attack-bundle-present` | pass | bundle ./bundles/delegated-wallet-scope-reconciliation-adversarial |
 | `fs-sandbox-isolation-check` | pass | bundle declares fs-sandbox and leaks no hidden files |
 | `exploit-schema-present` | pass | exploit artifact schema is included in the attack packet |
 

@@ -597,6 +597,7 @@ describe("adversarial readiness and reports", () => {
       "prompt-injection-memory-poisoning",
       "ui-action-record-replay",
       "ui-replay-live-dom",
+      "delegated-wallet-scope-reconciliation",
     ]) {
       expect(byFamily.get(familyId)?.verdict, familyId).toBe("adversarial-ready");
     }

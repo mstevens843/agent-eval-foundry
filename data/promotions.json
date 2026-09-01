@@ -71,12 +71,12 @@
     "sourceProbeId": "delegated-wallet-scope-reconciliation-probe",
     "sourceMechanismIds": ["permission-boundary", "stale-state", "false-audit-history", "duplicate-side-effects", "liveness-stall", "tool-result-ambiguity"],
     "decision": "evolve",
-    "status": "ready",
-    "promotionReason": "The counted access-token smoke trial passed cleanly, so full matrix spend is blocked and the requested-vs-approved-authority mechanism is carried into delegated wallet authority with time, revocation, downgrade, reconciliation, audit and liveness pressure.",
+    "status": "family-built",
+    "promotionReason": "The counted access-token smoke trial passed cleanly, so full matrix spend was blocked and the requested-vs-approved-authority mechanism was carried into a full delegated-wallet authority family with time, revocation, downgrade, reconciliation, audit and liveness pressure.",
     "evidence": {
       "sourceProbeVerdict": "evolve_existing",
       "referencePassed": true,
-      "badSubjectsCaught": "7/7",
+      "badSubjectsCaught": "7/7 at probe stage; 10/10 local family mutants and baselines after full build across 804 measured scenarios",
       "distinctChecks": [
         "audit_matches_authority_source",
         "current_authority_reconciled",
@@ -126,10 +126,13 @@
       "cached-scope-truster",
       "requested-scope-truster",
       "revocation-blind-executor",
-      "duplicate-spend-executor",
+      "downgrade-blind-executor",
+      "subject-owned-authority-truster",
+      "duplicate-effect-retrier",
       "audit-liar",
       "over-blocker",
-      "status-receipt-truster"
+      "no-op-refuse-everything",
+      "allow-everything-execute-everything"
     ],
     "expectedBaselinesCarriedForward": [
       "refuse every delegated spend",

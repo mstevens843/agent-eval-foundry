@@ -285,5 +285,65 @@
     ],
     "nextEvidence": "local",
     "buildMode": "probe-first"
+  },
+  {
+    "id": "delegated-wallet-to-deploy-approval-scope",
+    "sourceKind": "family",
+    "sourceId": "delegated-wallet-scope-reconciliation",
+    "transferredMechanism": "permission-boundary",
+    "targetDomain": "production deploy approval scope",
+    "status": "proposed",
+    "whatStaysFixed": [
+      "Requested authority is not approved authority.",
+      "Cached delegated authority is not current authority.",
+      "Revoked or downgraded authority at commit time denies the external effect.",
+      "A still-valid narrowed action must complete rather than be over-blocked.",
+      "The effect ledger is owned by the harness rather than by the submitted subject."
+    ],
+    "whatChanges": [
+      "The wallet spend becomes deployment promote, rollback or config-change execution.",
+      "The authority tuple becomes approver, environment, service, action and change-window.",
+      "Prior spend budget becomes prior deployment budget or active change quota.",
+      "The authoritative source becomes a deployment approval ledger and controller event stream."
+    ],
+    "expectedFailurePreservation": "A subject that trusts cached delegated wallet authority should also apply a deployment action after approval downgrade, revocation or environment narrowing, or should over-block a still-valid narrowed rollback.",
+    "expectedFairnessRisks": [
+      "Deployment-specific permission rules must be finite and visible.",
+      "The public package must not require private cloud provider conventions.",
+      "Valid narrowed rollback/promote cases must be present so blanket refusal fails."
+    ],
+    "expectedVerifierRisks": [
+      "A verifier that trusts subject-written deployment status can be forged.",
+      "A final-state-only verifier misses unauthorized intermediate controller events.",
+      "A checker that ignores approval downgrade timing rewards stale approval use."
+    ],
+    "authoritativeTruthSourceInTarget": "The target authority is a harness-owned deployment approval ledger plus sealed controller event stream.",
+    "expectedMutants": [
+      "cached-scope-truster",
+      "requested-scope-truster",
+      "revocation-blind-executor",
+      "downgrade-blind-executor",
+      "subject-owned-authority-truster",
+      "duplicate-effect-retrier",
+      "audit-liar",
+      "over-blocker"
+    ],
+    "promotionCriteria": [
+      "A probe-first screen catches cached authority, requested authority, downgrade blindness and overblocking.",
+      "A reference implementation passes both valid narrowed deployments and denial cases.",
+      "The public contract explains approval scope, environment scope and controller effects without private provider rules."
+    ],
+    "killCriteria": [
+      "Correct behavior requires private deployment platform semantics not present in the public package.",
+      "Failures reduce to wording-only confusion rather than delegated authority reconciliation.",
+      "The verifier cannot grade without trusting subject-written deployment receipts."
+    ],
+    "requiredEvidenceBeforeDeclaringTransfer": [
+      "Build and locally measure delegated-wallet-scope-reconciliation first.",
+      "Run a deploy-approval probe before building a full target family.",
+      "Do not claim transfer evidence until target-domain local evidence or a counted target-domain smoke trial exists."
+    ],
+    "nextEvidence": "paper",
+    "buildMode": "probe-first"
   }
 ]

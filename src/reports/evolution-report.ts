@@ -10,7 +10,8 @@
 // stronger descendant, and that descendant was trialed. A second line exposed a one-axis failure
 // chain, then built a packaged live-DOM descendant with a categorical anti-chain fix and one counted
 // Codex/OpenAI trial. A third line now shows the other side of smoke evidence: a clean access-token
-// pass blocks matrix spend and routes the mechanism back into descendant probes.
+// pass blocks matrix spend and routes the mechanism back into a delegated-wallet descendant, which
+// is now built and package-backed before its first smoke.
 
 import type { VariantProposal } from "../foundry/evolve.js";
 import { KILL_REASON_SPECS } from "../foundry/kill.js";
@@ -109,11 +110,14 @@ export function renderEvolutionReport(input: EvolutionReportInput): string {
     "| 13. promote | `access-token-scope-expansion` was built from the top executable probe | `reports/promotion-report.md` |",
     "| 14. **smoke** | 1 counted OpenAI/Codex smoke passed 384/384 access-token scenarios | `reports/access-token-scope-expansion-agent-diagnosis.md` |",
     "| 15. **route** | clean pass blocks `/6` matrix and triggers `already_solved_or_needs_evolution` | `reports/access-token-scope-expansion-kill-analysis.md` |",
-    "| 16. evolve | `delegated-wallet-scope-reconciliation` descendant probe is promoted but not yet family-built | `reports/access-token-evolution-report.md` |",
+    "| 16. evolve | `delegated-wallet-scope-reconciliation` descendant probe was promoted into a full family | `reports/access-token-evolution-report.md` |",
+    "| 17. measure | delegated-wallet local sweep: 804 measured scenarios, clean reference, 10/10 mutants/baselines caught | `reports/delegated-wallet-scope-reconciliation-family-report.md` |",
+    "| 18. package | delegated-wallet 9-file challenge package is leak-checked and hash-pinned; one OpenAI smoke is planned | `reports/delegated-wallet-scope-reconciliation-trial-readiness.md` |",
     "",
     "**The key correction is still the same:** mutant-detection axes and real-agent difficulty are",
-    "separate evidence streams. The live-DOM descendant now has both, while the access-token descendant",
-    "has only local probe evidence; cross-family and cross-lab claims remain bounded by the shared bank.",
+    "separate evidence streams. The live-DOM descendant now has both, while the delegated-wallet",
+    "descendant has local verifier/mutant/package evidence only until its smoke trial runs; cross-family",
+    "and cross-lab claims remain bounded by the shared bank.",
     "",
     "## Where every family stands",
     "",

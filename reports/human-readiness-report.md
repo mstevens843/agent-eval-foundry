@@ -7,6 +7,7 @@ model difficulty.
 | family | human-readiness | package hash | visible files | blockers |
 |---|---|---|---:|---|
 | `checker-required-memory-poisoning` | **human-ready** | `448f2f816c51030cc97a374816226168` | 8 | none |
+| `delegated-wallet-scope-reconciliation` | **human-ready** | `2140032d835a87ff254d01b6b4652f21` | 9 | none |
 | `durable-approval-outbox` | **not-ready** | none | 0 | `public-package-present`, `surface-complete`, `spec-rules-complete`, `hidden-sampling-visible`, `allowed-assumptions-visible`, `forbidden-assumptions-visible`, `examples-present`, `scoring-contract-visible`, `hidden-artifacts-absent`, `solvable-without-source-internals` |
 | `prompt-injection-containment` | **human-ready** | `4911ffdfbd2c0e9b51752ed16c4f53e8` | 8 | none |
 | `prompt-injection-memory-poisoning` | **human-ready** | `9b3e0c84addabc2e195ecbd490ba81dd` | 8 | none |
@@ -15,7 +16,7 @@ model difficulty.
 
 ## Current Reading
 
-Human-ready families: `checker-required-memory-poisoning`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom`.
+Human-ready families: `checker-required-memory-poisoning`, `delegated-wallet-scope-reconciliation`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom`.
 Blocked or unavailable packages: `durable-approval-outbox`.
 
 A ready verdict says the public package is complete enough for a clean-room human attempt. It does
@@ -34,6 +35,21 @@ not say that a human has solved it.
 | `allowed-assumptions-visible` | pass | declared-space or nothing-outside language is visible |
 | `forbidden-assumptions-visible` | pass | must-not/fails/illegal language is visible |
 | `examples-present` | pass | 2 visible example file(s) |
+| `scoring-contract-visible` | pass | public README/SPEC states how grading works |
+| `hidden-artifacts-absent` | pass | challenge package passed the independent leak checker |
+| `solvable-without-source-internals` | pass | public package contains the contract needed for a clean-room attempt |
+
+### `delegated-wallet-scope-reconciliation`
+
+| check | result | detail |
+|---|---|---|
+| `public-package-present` | pass | checked-in public package hashes to 2140032d835a87ff254d01b6b4652f21 |
+| `surface-complete` | pass | 9 visible file(s), including README, SPEC, API and starter |
+| `spec-rules-complete` | pass | 10 visible rule code(s) in SPEC.md |
+| `hidden-sampling-visible` | pass | hidden coverage is described as sampling the public declared space |
+| `allowed-assumptions-visible` | pass | declared-space or nothing-outside language is visible |
+| `forbidden-assumptions-visible` | pass | must-not/fails/illegal language is visible |
+| `examples-present` | pass | 4 visible example file(s) |
 | `scoring-contract-visible` | pass | public README/SPEC states how grading works |
 | `hidden-artifacts-absent` | pass | challenge package passed the independent leak checker |
 | `solvable-without-source-internals` | pass | public package contains the contract needed for a clean-room attempt |

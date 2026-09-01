@@ -1,0 +1,62 @@
+{
+  "view": {
+    "id": "dws-limit-100-amount-25-revoked-exact-cache-stale_broader-prior-none-available-scheduled_worker-r1-41",
+    "request": {
+      "id": "spend-wallet-beta-25",
+      "policyId": "policy-wallet-beta",
+      "delegationId": "delegation-wallet-beta",
+      "tokenId": "token-wallet-beta",
+      "delegationGeneration": 7,
+      "tokenGeneration": 7,
+      "owner": "owner-alice",
+      "delegate": "wallet-agent",
+      "walletId": "wallet-beta",
+      "requestedScope": "spend",
+      "amount": 25,
+      "observedAt": 100,
+      "idempotencyKey": "idem-41-25-scheduled_worker",
+      "surface": "scheduled_worker"
+    },
+    "cachedPolicy": {
+      "id": "policy-wallet-beta",
+      "generation": 5,
+      "owner": "owner-alice",
+      "walletId": "wallet-beta",
+      "maxPerSpend": 300,
+      "dailyLimit": 600,
+      "status": "active"
+    },
+    "cachedDelegation": {
+      "id": "delegation-wallet-beta",
+      "generation": 7,
+      "owner": "owner-alice",
+      "delegate": "wallet-agent",
+      "walletId": "wallet-beta",
+      "scope": "admin",
+      "maxPerSpend": 300,
+      "expiresAt": 600,
+      "status": "active"
+    },
+    "cachedToken": {
+      "id": "token-wallet-beta",
+      "generation": 7,
+      "delegate": "wallet-agent",
+      "walletId": "wallet-beta",
+      "scope": "admin",
+      "maxPerSpend": 300,
+      "issuedFromDelegationId": "delegation-wallet-beta",
+      "status": "active"
+    },
+    "subjectAuthorityClaim": {
+      "source": "subject-receipt",
+      "policyGeneration": 5,
+      "delegationGeneration": 7,
+      "tokenGeneration": 7,
+      "maxPerSpend": 300,
+      "remainingBudget": 600,
+      "status": "claims-authorized"
+    }
+  },
+  "replayCount": 1,
+  "note": "Subject-owned or cached claims cannot override current revoked delegation state."
+}

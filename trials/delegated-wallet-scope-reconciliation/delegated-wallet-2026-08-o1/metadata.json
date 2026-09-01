@@ -1,0 +1,28 @@
+{
+  "runId": "delegated-wallet-2026-08-o1",
+  "familyId": "delegated-wallet-scope-reconciliation",
+  "provider": "shell",
+  "providerLabel": "Shell command",
+  "model": "openai/gpt-5.6-sol",
+  "effort": null,
+  "subjectId": "gpt-5.6-sol",
+  "scenarioSetId": "reconciliation-804-4b4cc8ff",
+  "timeoutMs": 1800000,
+  "runtimeSeconds": 230,
+  "costUsd": null,
+  "isolation": "process",
+  "classification": "completed",
+  "classificationDetail": "artifact produced",
+  "command": [
+    "codex",
+    "exec",
+    "--dangerously-bypass-approvals-and-sandbox",
+    "--skip-git-repo-check",
+    "{instruction}"
+  ],
+  "challengeHash": "2140032d835a87ff254d01b6b4652f21",
+  "challengeFiles": 9,
+  "campaign": "delegated-wallet-2026-08",
+  "hostScript": "delegated-wallet-host.mjs",
+  "scenariosExpected": 804
+}

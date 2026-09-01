@@ -174,6 +174,7 @@ describe("human-readiness audit", () => {
       "ui-action-record-replay",
       "ui-replay-live-dom",
       "checker-required-memory-poisoning",
+      "delegated-wallet-scope-reconciliation",
     ]) {
       expect(byFamily.get(familyId)?.verdict, familyId).toBe("human-ready");
     }

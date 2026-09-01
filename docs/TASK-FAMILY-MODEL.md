@@ -104,8 +104,11 @@ Access-Token Evolution v1 is the first clean-pass recovery example. `access-toke
 passed its counted OpenAI/Codex smoke trial, so the matrix gate stayed blocked and the mechanism was
 re-probed as `delegated-wallet-scope-reconciliation`: requested authority still is not approved
 authority, but the descendant adds delegation, durable state, revocation/downgrade, authoritative
-reconciliation, audit truth and liveness. That descendant is probe-promoted only until a full family
-and package exist.
+reconciliation, audit truth and liveness. That descendant now exists as a full validation-mode
+family with 804 measured scenarios, a clean reference, 10/10 local known-bad subjects/baselines
+caught, a leak-checked challenge package and a one-slot OpenAI/Codex smoke campaign. That counted
+smoke passed cleanly, so it is evidence that the current descendant was also solved by the available
+OpenAI subject. The correct route is harden/evolve, not real-agent difficulty or full matrix spend.
 
 This layer is intentionally separate from the existing candidate ledger. The ledger records
 historical promote/kill decisions. Discovery Workbench v1 manages the forward-looking pool and

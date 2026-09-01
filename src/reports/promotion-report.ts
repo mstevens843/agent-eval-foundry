@@ -72,6 +72,13 @@ export function renderPromotionReport(
           builtById.get(selected.promotion.familyId),
           smokeGates.get(selected.promotion.familyId),
         )),
+    "## Built Promotion Smoke States",
+    "",
+    ...renderBuiltPromotionStates(
+      records.filter((record) => record.promotion.status === "family-built"),
+      builtById,
+      smokeGates,
+    ),
     "## Ready Promotions",
     "",
     ...renderReadyPromotions(records.filter((record) => record.promotion.status === "ready")),
@@ -113,6 +120,30 @@ function renderReadyPromotions(records: readonly PromotedFamilyRecord[]): readon
     ...records.map((record) => {
       const p = record.promotion;
       return `| \`${p.id}\` | \`${p.familyId}\` | \`${p.sourceProbeId}\` | ${p.evidence.sourceProbeVerdict} | ${p.evidence.claimedEvidenceLevel} | ${p.evidence.countedAgentTrials} | ${esc(p.expectedFirstSmokeTrialProvider)} |`;
+    }),
+    "",
+  ];
+}
+
+function renderBuiltPromotionStates(
+  records: readonly PromotedFamilyRecord[],
+  builtById: ReadonlyMap<string, BuiltFamily>,
+  smokeGates: ReadonlyMap<string, PromotionSmokeGateResult>,
+): readonly string[] {
+  if (records.length === 0) return ["No built promotions are on record.", ""];
+  return [
+    "Built promotions are validation-mode families. Their smoke state routes the next action, but",
+    "does not retroactively turn promotion evidence into difficulty evidence.",
+    "",
+    "| promotion | family | scenarios | mutant axes | smoke state | counted smoke | matrix | next action |",
+    "|---|---|---:|---:|---|---|---|---|",
+    ...records.map((record) => {
+      const family = builtById.get(record.promotion.familyId);
+      const sweep = family?.run();
+      const axis = sweep === undefined ? null : measure(sweep.matrix, { nullTrials: 3 });
+      const smoke = smokeGates.get(record.promotion.familyId);
+      const countedSmoke = smoke?.smokeCampaignStatus === "counted" ? "yes" : "no";
+      return `| \`${record.promotion.id}\` | \`${record.promotion.familyId}\` | ${sweep?.scenarioCount ?? "—"} | ${axis?.independentAxes ?? "—"} | ${smoke?.state ?? "not-planned"} | ${countedSmoke} | ${smoke?.matrixReadinessStatus ?? "blocked"} | ${esc(smoke?.nextAction ?? "prepare smoke campaign")} |`;
     }),
     "",
   ];

@@ -97,7 +97,7 @@ not reward blanket refusal and does not reduce to a static scope-equality wordin
 |---|---|
 | promotion | `delegated-wallet-scope-reconciliation-from-access-token-evolution` |
 | family id | `delegated-wallet-scope-reconciliation` |
-| status | `ready` |
+| status | `family-built` |
 | evidence level | `local-evidence` |
 | counted descendant trials | 0 |
 | expected first smoke provider | OpenAI/Codex only after full descendant package gates pass |
@@ -109,14 +109,14 @@ Kill signal: A counted smoke trial solving every descendant scenario, or failure
 ## Evidence Boundary
 
 - Parent clean smoke pass is counted real-agent evidence that the parent is solved by the available OpenAI/Codex subject.
-- Descendant probe evidence is executable local evidence, not full-family evidence.
-- The descendant has no challenge package, no full local matrix and no counted real-agent trial yet.
+- The descendant now has full local verifier/mutant/package evidence, but no counted real-agent trial yet.
+- A challenge package exists for the descendant; its trial result remains not-run until a counted smoke is preserved.
 - The wallet transfer is declared and probe-supported, not transfer-proven.
 - Full `/6` matrix spend remains blocked until a built descendant package, one smoke diagnosis and transfer evidence justify it.
 
 ## Next Action
 
-Build the full descendant family only after accepting this probe result as the selected evolution path.
+Run one OpenAI/Codex smoke trial only after the built descendant package and local verifier gates pass.
 
 ---
 

@@ -12,6 +12,7 @@ model evidence.
 | `prompt-injection-memory-poisoning` | 0 | 0 | 0 | 0 | 0 | none | yes | pass | adversarial-ready |
 | `ui-action-record-replay` | 0 | 0 | 0 | 0 | 0 | none | yes | pass | adversarial-ready |
 | `ui-replay-live-dom` | 3 | 1 | 0 | 0 | 0 | subprocess:1, fs-sandbox:2, container-no-network:1 | yes | pass | adversarial-audited |
+| `delegated-wallet-scope-reconciliation` | 0 | 0 | 0 | 0 | 0 | none | yes | pass | adversarial-ready |
 
 ## Evidence Boundary
 

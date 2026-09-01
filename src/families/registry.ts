@@ -11,11 +11,13 @@
 
 import { buildAccessTokenChallengePackage } from "../challenge/access-token-package.js";
 import { buildCheckerRequiredChallengePackage } from "../challenge/checker-required-package.js";
+import { buildDelegatedWalletChallengePackage } from "../challenge/delegated-wallet-package.js";
 import { buildLiveDomChallengePackage } from "../challenge/live-dom-package.js";
 import { buildMemoryChallengePackage } from "../challenge/memory-package.js";
 import {
   ACCESS_TOKEN_PROFILE,
   CHECKER_REQUIRED_PROFILE,
+  DELEGATED_WALLET_PROFILE,
   LIVE_DOM_PROFILE,
   type LeakProfile,
   MEMORY_PROFILE,
@@ -66,6 +68,15 @@ import * as access from "./access-token-scope-expansion/runner.js";
 import * as accessScenarios from "./access-token-scope-expansion/scenarios.js";
 import { RULES as ACCESS_RULES } from "./access-token-scope-expansion/spec.js";
 import { CHECKS as ACCESS_CHECK_NAMES } from "./access-token-scope-expansion/verify.js";
+
+import {
+  BASELINES as WALLET_BASELINES,
+  INTENDED_CHECK as WALLET_CHECKS,
+} from "./delegated-wallet-scope-reconciliation/mutants.js";
+import * as wallet from "./delegated-wallet-scope-reconciliation/runner.js";
+import * as walletScenarios from "./delegated-wallet-scope-reconciliation/scenarios.js";
+import { RULES as WALLET_RULES } from "./delegated-wallet-scope-reconciliation/spec.js";
+import { CHECKS as WALLET_CHECK_NAMES } from "./delegated-wallet-scope-reconciliation/verify.js";
 
 export interface FamilySweep {
   readonly scenarioCount: number;
@@ -395,6 +406,54 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     realism: "simulated-tree",
     realismGap:
       "The authority ledger and token server are deterministic in-process facades. A service-backed descendant would add real OAuth grant payloads, asynchronous revocation propagation and process isolation around token issuance.",
+  },
+  {
+    id: "delegated-wallet-scope-reconciliation",
+    name: "Delegated wallet scope reconciliation",
+    domain: "wallet spending limits and delegated authority",
+    mechanisms: [
+      "permission-boundary",
+      "stale-state",
+      "false-audit-history",
+      "duplicate-side-effects",
+      "liveness-stall",
+      "tool-result-ambiguity",
+    ],
+    checks: [...WALLET_CHECK_NAMES],
+    ruleCodes: WALLET_RULES.map((r) => r.code),
+    space: walletScenarios.SPACE,
+    knobPurpose: {
+      seed: "selects deterministic wallet owner and wallet ids",
+      initialApprovedLimit: "the originally approved delegated per-spend limit",
+      requestedAmount: "the spend amount the delegated actor asks to execute",
+      authorityTransition: "whether current delegated authority is stable, downgraded, revoked or expired",
+      tokenState:
+        "whether the current wallet token remains exact, broadens scope, is revoked or names the wrong delegate",
+      cacheFreshness: "whether cached public snapshots are current, stale or broader than current authority",
+      priorSpend: "prior verifier-owned wallet effects that reduce remaining daily budget",
+      policySource: "whether the current wallet policy source can be reconciled",
+      requestSurface: "wallet API, scheduled worker and delegated tool paths with the same authority rule",
+      repeatCount: "one or two attempts sharing a verifier-owned irreversible wallet-effect ledger",
+    },
+    run: () => {
+      const run = wallet.runFamily();
+      return sweep(
+        run.cells,
+        run.scenarios,
+        run.spaceSize,
+        wallet.toMatrix(run),
+        WALLET_CHECKS,
+        WALLET_BASELINES,
+      );
+    },
+    challenge: buildDelegatedWalletChallengePackage,
+    leakProfile: DELEGATED_WALLET_PROFILE,
+    typesPath: "src/families/delegated-wallet-scope-reconciliation/types.ts",
+    estimatedBuildHours: 36,
+    estimatedFrontierUsd: 45,
+    realism: "simulated-tree",
+    realismGap:
+      "The wallet policy, delegation, token, budget and effect ledgers are deterministic in-process facades. A service-backed descendant would add real wallet RPC confirmation, chain reorg or settlement latency and process isolation around signing.",
   },
 ];
 

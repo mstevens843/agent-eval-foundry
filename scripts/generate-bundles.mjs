@@ -27,6 +27,11 @@ const targets = [
     "bundles/checker-required-memory-poisoning-claude-haiku",
   ],
   ["checker-required-memory-poisoning", "gemini", "bundles/checker-required-memory-poisoning-gemini"],
+  [
+    "delegated-wallet-scope-reconciliation",
+    "external",
+    "bundles/delegated-wallet-scope-reconciliation-external",
+  ],
 ];
 
 for (const [familyId, providerId, outDir] of targets) {

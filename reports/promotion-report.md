@@ -8,7 +8,7 @@ family. Promotion evidence is separate from mutant-detection evidence and real-a
 | item | value |
 |---|---:|
 | promotions recorded | 2 |
-| family-built promotions | 1 |
+| family-built promotions | 2 |
 | probe-promoted sources | 1 |
 | counted real-agent trials claimed by promotions | 0 |
 
@@ -85,21 +85,26 @@ Next action: treat as already_solved_or_needs_evolution unless a matrix reason i
 
 No full matrix command is recommended from this gate state.
 
+## Built Promotion Smoke States
+
+Built promotions are validation-mode families. Their smoke state routes the next action, but
+does not retroactively turn promotion evidence into difficulty evidence.
+
+| promotion | family | scenarios | mutant axes | smoke state | counted smoke | matrix | next action |
+|---|---|---:|---:|---|---|---|---|
+| `access-token-scope-expansion-from-probe` | `access-token-scope-expansion` | 384 | 3 | smoke-passed-cleanly | yes | blocked | treat as already_solved_or_needs_evolution unless a matrix reason is declared |
+| `delegated-wallet-scope-reconciliation-from-access-token-evolution` | `delegated-wallet-scope-reconciliation` | 804 | 3 | smoke-passed-cleanly | yes | blocked | treat as already_solved_or_needs_evolution unless a matrix reason is declared |
+
 ## Ready Promotions
 
-Ready promotions are task-shape/family-build candidates. They are not built-family evidence and
-they carry zero real-agent difficulty unless a later counted trial exists.
-
-| promotion | family | source probe | source verdict | evidence level | counted trials | next provider |
-|---|---|---|---|---|---:|---|
-| `delegated-wallet-scope-reconciliation-from-access-token-evolution` | `delegated-wallet-scope-reconciliation` | `delegated-wallet-scope-reconciliation-probe` | evolve_existing | local-evidence | 0 | OpenAI/Codex only after full descendant package gates pass |
+No ready, unbuilt promotions are on record.
 
 ## Promotion Ledger
 
 | promotion | family | source candidate | source probe | decision | status | evidence level | probe verdict |
 |---|---|---|---|---|---|---|---|
 | `access-token-scope-expansion-from-probe` | `access-token-scope-expansion` | `access-token-scope-expansion` | `access-token-scope-expansion-probe` | promote | family-built | local-evidence | promote_to_task_shape |
-| `delegated-wallet-scope-reconciliation-from-access-token-evolution` | `delegated-wallet-scope-reconciliation` | `delegated-wallet-scope-reconciliation` | `delegated-wallet-scope-reconciliation-probe` | evolve | ready | local-evidence | evolve_existing |
+| `delegated-wallet-scope-reconciliation-from-access-token-evolution` | `delegated-wallet-scope-reconciliation` | `delegated-wallet-scope-reconciliation` | `delegated-wallet-scope-reconciliation-probe` | evolve | family-built | local-evidence | evolve_existing |
 
 ## Current Probe Context
 

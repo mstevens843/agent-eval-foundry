@@ -24,7 +24,7 @@ candidate mechanisms
 | mechanism probes | 9 |
 | probes ready for validation | 3 |
 | probes needing repair/hold | 4 |
-| transfer tests | 8 |
+| transfer tests | 9 |
 | transfer tests ready | 5 |
 | production-mode families | 0 |
 
@@ -32,7 +32,7 @@ candidate mechanisms
 
 | cost tier | queued actions |
 |---|---:|
-| static | 12 |
+| static | 13 |
 | local | 6 |
 | cross-provider | 2 |
 
@@ -41,6 +41,7 @@ candidate mechanisms
 | `access-token-scope-expansion` | family | validation | task_shape | evolve | static | treat the clean smoke pass as already_solved_or_needs_evolution before matrix spend |
 | `audit-history-rewrite-probe` | probe | validation | transfer_test | transfer | static | run the declared transfer test before expanding scenarios |
 | `cross-tool-authority-laundering-probe` | probe | discovery | mechanism_probe | hold | static | run or repair the cheapest declared mechanism screen |
+| `delegated-wallet-scope-reconciliation` | family | validation | task_shape | evolve | static | treat the clean smoke pass as already_solved_or_needs_evolution before matrix spend |
 | `durable-memory-injection-probe` | probe | validation | task_shape | promote | static | promote probe into a full task shape |
 | `hidden-dependency-discovery-probe` | probe | discovery | mechanism_probe | repair | static | run or repair the cheapest declared mechanism screen |
 | `memory-to-cross-tool-authority-laundering` | transfer | validation | transfer_test | transfer | static | execute the transfer test and require preserved evidence before claiming transfer |
@@ -51,7 +52,6 @@ candidate mechanisms
 | `ui-action-record-replay` | family | validation | transfer_test | evolve | static | evolve or transfer before broad ship claims |
 | `uncertain-external-receipt-probe` | probe | validation | transfer_test | transfer | static | run the declared transfer test before expanding scenarios |
 | `access-token-to-wallet-spending-limit` | transfer | validation | transfer_test | transfer | local | execute the transfer test and require preserved evidence before claiming transfer |
-| `browser-replay-stale-selector-probe` | probe | validation | task_shape | promote | local | promote probe into a full task shape |
 
 ## Rules The Planner Enforces
 
@@ -92,12 +92,14 @@ candidate mechanisms
 | `checker-required-to-hidden-dependency` | family:`checker-required-memory-poisoning` | `checker-quality-gap` | package dependency discovery | proposed | static |
 | `permission-to-deployment-scope-drift` | probe:`permission-scope-drift-probe` | `permission-boundary` | deployment permission scope | proposed | paper |
 | `access-token-to-wallet-spending-limit` | family:`access-token-scope-expansion` | `permission-boundary` | wallet spending limit | ready | local |
+| `delegated-wallet-to-deploy-approval-scope` | family:`delegated-wallet-scope-reconciliation` | `permission-boundary` | production deploy approval scope | proposed | paper |
 
 ## Families Not Ready For Full Matrix
 
 | family | stage | decision | reason |
 |---|---|---|---|
 | `access-token-scope-expansion` | task_shape | evolve | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
+| `delegated-wallet-scope-reconciliation` | task_shape | evolve | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
 | `prompt-injection-containment` | task_shape | evolve | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
 | `prompt-injection-memory-poisoning` | task_shape | repair | stale challenge hashes cannot feed production-mode claims |
 | `ui-action-record-replay` | transfer_test | evolve | nested failure sets are one axis at multiple sensitivities, not breadth |
@@ -113,6 +115,7 @@ No family is automatically recommended for a fresh full matrix by this planner p
 | family | next required evidence | reason |
 |---|---|---|
 | `access-token-scope-expansion` | static at `task_shape` | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
+| `delegated-wallet-scope-reconciliation` | static at `task_shape` | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
 | `prompt-injection-containment` | static at `task_shape` | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
 | `prompt-injection-memory-poisoning` | static at `task_shape` | stale challenge hashes cannot feed production-mode claims |
 | `ui-action-record-replay` | static at `transfer_test` | nested failure sets are one axis at multiple sensitivities, not breadth |
@@ -121,7 +124,7 @@ No family is automatically recommended for a fresh full matrix by this planner p
 
 ## Registry Link
 
-This report was generated against 15 mechanisms and 16 family shapes. Probe and transfer references are checked against that registry, so a stale mechanism id or family id fails `node dist/cli.js check`.
+This report was generated against 15 mechanisms and 17 family shapes. Probe and transfer references are checked against that registry, so a stale mechanism id or family id fails `node dist/cli.js check`.
 
 ---
 

@@ -16,6 +16,7 @@ what a verifier detects and are a different question; they are in
 | `ui-replay-live-dom` | `gpt-5.6-sol` | 1 | 864 | 864 | — | dom-like |
 | `checker-required-memory-poisoning` | `gpt-5.6-sol` | 1 | 792 | 792 | — | simulated-tree |
 | `access-token-scope-expansion` | `gpt-5.6-sol` | 1 | 384 | 384 | — | simulated-tree |
+| `delegated-wallet-scope-reconciliation` | `gpt-5.6-sol` | 1 | 804 | 804 | — | simulated-tree |
 | `durable-approval-outbox` | `claude-opus-5`, `gpt-5.6-sol` | 20 | 24 | 48 | 1 | imported from another harness |
 
 An axis count over a bank of one subject is not meaningful — a single subject cannot separate
@@ -29,7 +30,7 @@ axis column empty rather than reporting a degenerate 1.
 | `claude-haiku-4-5` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
 | `claude-opus-5` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `durable-approval-outbox` |
 | `claude-sonnet-5` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
-| `gpt-5.6-sol` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom`, `checker-required-memory-poisoning`, `access-token-scope-expansion`, `durable-approval-outbox` |
+| `gpt-5.6-sol` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom`, `checker-required-memory-poisoning`, `access-token-scope-expansion`, `delegated-wallet-scope-reconciliation`, `durable-approval-outbox` |
 
 ## The verdict
 
@@ -37,7 +38,7 @@ axis column empty rather than reporting a degenerate 1.
 
 | | |
 |---|---:|
-| difficulty banks | 7 |
+| difficulty banks | 8 |
 | subjects attempting every family | 1 |
 | threshold for a quoted combined count | 3 |
 | combined axes over the shared bank | 1 — **a bound, not a measurement** |
@@ -68,6 +69,9 @@ foundry trials campaign import --family checker-required-memory-poisoning bundle
 foundry trials campaign prepare --family access-token-scope-expansion --provider claude-haiku --out bundles/access-token-scope-expansion-claude-haiku
 foundry trials campaign import --family access-token-scope-expansion bundles/access-token-scope-expansion-claude-haiku
 
+foundry trials campaign prepare --family delegated-wallet-scope-reconciliation --provider claude-haiku --out bundles/delegated-wallet-scope-reconciliation-claude-haiku
+foundry trials campaign import --family delegated-wallet-scope-reconciliation bundles/delegated-wallet-scope-reconciliation-claude-haiku
+
 # claude-haiku-4-5 on durable-approval-outbox: imported/non-routable bank; run in its source harness and import the result.
 
 foundry trials campaign prepare --family ui-replay-live-dom --provider claude --out bundles/ui-replay-live-dom-claude
@@ -79,6 +83,9 @@ foundry trials campaign import --family checker-required-memory-poisoning bundle
 foundry trials campaign prepare --family access-token-scope-expansion --provider claude --out bundles/access-token-scope-expansion-claude
 foundry trials campaign import --family access-token-scope-expansion bundles/access-token-scope-expansion-claude
 
+foundry trials campaign prepare --family delegated-wallet-scope-reconciliation --provider claude --out bundles/delegated-wallet-scope-reconciliation-claude
+foundry trials campaign import --family delegated-wallet-scope-reconciliation bundles/delegated-wallet-scope-reconciliation-claude
+
 foundry trials campaign prepare --family ui-replay-live-dom --provider claude-sonnet --out bundles/ui-replay-live-dom-claude-sonnet
 foundry trials campaign import --family ui-replay-live-dom bundles/ui-replay-live-dom-claude-sonnet
 
@@ -87,6 +94,9 @@ foundry trials campaign import --family checker-required-memory-poisoning bundle
 
 foundry trials campaign prepare --family access-token-scope-expansion --provider claude-sonnet --out bundles/access-token-scope-expansion-claude-sonnet
 foundry trials campaign import --family access-token-scope-expansion bundles/access-token-scope-expansion-claude-sonnet
+
+foundry trials campaign prepare --family delegated-wallet-scope-reconciliation --provider claude-sonnet --out bundles/delegated-wallet-scope-reconciliation-claude-sonnet
+foundry trials campaign import --family delegated-wallet-scope-reconciliation bundles/delegated-wallet-scope-reconciliation-claude-sonnet
 
 # claude-sonnet-5 on durable-approval-outbox: imported/non-routable bank; run in its source harness and import the result.
 ```

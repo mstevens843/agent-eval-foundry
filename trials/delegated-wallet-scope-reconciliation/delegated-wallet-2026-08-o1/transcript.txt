@@ -1,0 +1,5 @@
+Implemented [submission/subject.mjs](/private/var/folders/8b/blch34j914xbz9lc1wv387f80000gn/T/foundry-trial-lGPwOS/submission/subject.mjs).
+
+It reconciles only against the authority facade, audits current policy/delegation/token/budget facts, blocks on the first governing rule, executes valid spends once, and uses an in-memory idempotency set to report `DWS8_NO_DUPLICATE_SPEND` on replay.
+
+Verified with module import and a small local harness for valid spend, duplicate replay, downgraded limit, and revoked delegation. Only `submission/subject.mjs` was written.

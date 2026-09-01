@@ -41,6 +41,10 @@ Access-Token Smoke + Diagnosis + Transfer v1 adds the next gate. The promoted ac
 has a hash-pinned one-slot OpenAI/Codex smoke campaign, a family-specific diagnosis report and a
 declared wallet-spending-limit transfer test. The counted smoke trial passed cleanly, so the family
 routes to already_solved_or_needs_evolution rather than difficulty evidence or full matrix spend.
+That evolution path now produced `delegated-wallet-scope-reconciliation`, a full descendant family
+with local reference/mutant/package evidence and a one-slot OpenAI/Codex smoke campaign. That smoke
+also passed cleanly, so delegated-wallet routes to harden/evolve rather than difficulty evidence or
+full matrix spend.
 
 The foundry keeps evidence streams separate:
 
@@ -76,11 +80,13 @@ requirement; adversarial audit is the attempted exploit record.
 | `ui-replay-live-dom` | 864 | 1 | 1 | 19 | not claimed yet | human-ready | adversarial-audited; OpenAI-only | **SHIP**: descendant, packaged and difficulty-evidenced |
 | `checker-required-memory-poisoning` | 792 | 1 | 1 | 12 | not claimed yet | human-ready | adversarial-audited; OpenAI-only | **SHIP**: required-checker gap, OpenAI-only |
 | `access-token-scope-expansion` | 384 | 1 | 0 | 3 | already-solved by smoke | pending | audit-pending | **NOT-READY**: clean OpenAI smoke pass; evolve/repair before matrix |
+| `delegated-wallet-scope-reconciliation` | 804 | 1 | 0 | 3 | already-solved by smoke | human-ready | adversarial-ready | **NOT-READY**: clean OpenAI smoke pass; evolve/repair before matrix |
 | `durable-approval-outbox` | 24 | 20 imported | 20 | 3 | 1 | reference-solvable | audit-pending; imported historical no-count | **SHIP**: imported historical bank |
 
 Current live-DOM package hash: `18c3f5afc5973604205cd7df23ce4cad`.
 Current checker-required package hash: `448f2f816c51030cc97a374816226168`.
 Current access-token-scope-expansion package hash: `33cc98364ce2a6b3f9490e54937955d8`.
+Current delegated-wallet-scope-reconciliation package hash: `2140032d835a87ff254d01b6b4652f21`.
 
 ## What Changed In This Phase
 
@@ -116,13 +122,18 @@ It passed 384/384, so the pre-registered kill signal fired: this is an
 already_solved_or_needs_evolution result, not difficulty-smoke evidence. Full `/6` matrix spend
 remains blocked. Access-Token Evolution v1 records the clean solve as the evolution trigger,
 generates access-token-specific descendants, runs the delegated-wallet local probe and promotes
-`delegated-wallet-scope-reconciliation` to a ready draft shape with zero descendant agent trials.
+`delegated-wallet-scope-reconciliation` into a full validation-mode family. The descendant has 804
+measured scenarios from an 82,944-point declared space, 10/10 known-bad subjects/baselines caught,
+3 mutant-detection axes, a leak-checked 9-file package and a hash-pinned one-slot OpenAI/Codex smoke
+campaign. The counted smoke trial `delegated-wallet-2026-08-o1` passed 804/804, so the same
+pre-registered clean-pass route fired again: no difficulty claim and no full matrix spend.
 See [`reports/access-token-evolution-report.md`](reports/access-token-evolution-report.md).
 
 Adversarial Audit v2 upgrades verifier-integrity from preserved attack records to mechanical triage.
 Attack packets now carry an execution profile, an isolation profile, an exploit-artifact schema, an
 exploit replay path, deterministic hardening probes and hash/current-verifier countability rules.
-Five current package-backed families are `adversarial-ready`.
+Six current package-backed families are `adversarial-ready`, including the new delegated-wallet
+descendant.
 
 Two real Codex/OpenAI adversarial audits counted as no-bypass evidence: one against
 `ui-replay-live-dom` under challenge hash `18c3f5afc5973604205cd7df23ce4cad`, and one against
@@ -280,6 +291,11 @@ Key generated reports:
 - `reports/mechanism-probe-report.md`
 - `reports/discovery-calibration-report.md`
 - `reports/access-token-evolution-report.md`
+- `reports/delegated-wallet-scope-reconciliation-family-report.md`
+- `reports/delegated-wallet-scope-reconciliation-trial-readiness.md`
+- `reports/delegated-wallet-scope-reconciliation-axis-report.md`
+- `reports/delegated-wallet-scope-reconciliation-agent-diagnosis.md`
+- `reports/delegated-wallet-scope-reconciliation-kill-analysis.md`
 - `reports/adaptive-funnel-report.md`
 - `reports/ui-replay-browser-backed-scaffold.md`
 - `reports/ui-replay-browser-backed-readiness.md`
@@ -348,7 +364,9 @@ screen a mechanism, score a candidate pool, run a tiny executable probe, calibra
 against known outcomes, promote only after cheap evidence, require a smoke trial before `/6`, and
 test transfer before production-mode matrix spend. The access-token promotion now shows the
 downstream routing behavior as well: a clean smoke pass blocks matrix spend and sends the mechanism
-back to evolution/repair instead of being reported as a difficulty win.
+back to evolution/repair instead of being reported as a difficulty win. The delegated-wallet
+descendant repeats the lesson: stronger local verifier evidence still did not translate into
+OpenAI difficulty evidence, so the next step is another evolution rather than a matrix.
 
 The strongest current result is still memory-poisoning generalisation across labs. The newest result
 is that verifier-integrity now has explicit container/no-network bundle and countability rules,

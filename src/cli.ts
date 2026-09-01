@@ -175,6 +175,11 @@ import { BROWSER_BACKED_NEXT_PLAN, renderBrowserBackedScaffold } from "./reports
 import { renderBudgetReport } from "./reports/budget-report.js";
 import { renderAgentResults, renderCampaignReport } from "./reports/campaign-report.js";
 import { analyseChain, diversityTargets } from "./reports/chain-analysis.js";
+import {
+  classifyDelegatedWalletSmoke,
+  renderDelegatedWalletSmokeDiagnosis,
+} from "./reports/delegated-wallet-diagnosis.js";
+import { renderDelegatedWalletFamilyReport } from "./reports/delegated-wallet-report.js";
 import { diagnose, renderDiagnoses } from "./reports/diagnosis.js";
 import { computeCurve } from "./reports/difficulty.js";
 import { renderDiscoveryCalibrationReport } from "./reports/discovery-calibration-report.js";
@@ -926,8 +931,9 @@ function promotionInputs(root: string) {
 }
 
 const ACCESS_TOKEN_FAMILY_ID = "access-token-scope-expansion";
+const DELEGATED_WALLET_FAMILY_ID = "delegated-wallet-scope-reconciliation";
 
-interface AccessTokenSmokeContext {
+interface PromotionSmokeContext {
   readonly plan: CampaignPlan | undefined;
   readonly analysis: ReturnType<typeof analyseFamilyTrials>;
   readonly diagnoses: ReturnType<typeof diagnose>[];
@@ -940,15 +946,38 @@ function promotionSmokeGateMap(
   campaigns: readonly CampaignPlan[],
   transfers: readonly TransferTest[],
 ): ReadonlyMap<string, PromotionSmokeGateResult> {
-  return new Map([[ACCESS_TOKEN_FAMILY_ID, accessTokenSmokeContext(root, campaigns, transfers).gate]]);
+  return new Map([
+    [ACCESS_TOKEN_FAMILY_ID, accessTokenSmokeContext(root, campaigns, transfers).gate],
+    [DELEGATED_WALLET_FAMILY_ID, delegatedWalletSmokeContext(root, campaigns, transfers).gate],
+  ]);
 }
 
 function accessTokenSmokeContext(
   root: string,
   campaigns: readonly CampaignPlan[],
   transfers: readonly TransferTest[],
-): AccessTokenSmokeContext {
-  const familyId = ACCESS_TOKEN_FAMILY_ID;
+): PromotionSmokeContext {
+  return smokeContext(root, campaigns, transfers, ACCESS_TOKEN_FAMILY_ID, classifyAccessTokenSmoke);
+}
+
+function delegatedWalletSmokeContext(
+  root: string,
+  campaigns: readonly CampaignPlan[],
+  transfers: readonly TransferTest[],
+): PromotionSmokeContext {
+  return smokeContext(root, campaigns, transfers, DELEGATED_WALLET_FAMILY_ID, classifyDelegatedWalletSmoke);
+}
+
+function smokeContext(
+  root: string,
+  campaigns: readonly CampaignPlan[],
+  transfers: readonly TransferTest[],
+  familyId: string,
+  classify: (
+    analysis: ReturnType<typeof analyseFamilyTrials>,
+    diagnoses: ReturnType<typeof diagnose>[],
+  ) => PromotionSmokeGateResult["smokeDiagnosisStatus"],
+): PromotionSmokeContext {
   const plan = campaigns.find((campaign) => campaign.familyId === familyId);
   const bundle = familyEvidenceFor(root, familyId);
   const params = routeFor(familyId).scenarioParams();
@@ -970,7 +999,7 @@ function accessTokenSmokeContext(
     sweep.referenceFailures.length === 0 &&
     sweep.mutantsCaught.every((mutant) => mutant.caught) &&
     sweep.baselinesBlocked.length === sweep.baselinesTotal;
-  const diagnosisStatus = classifyAccessTokenSmoke(analysis, diagnoses);
+  const diagnosisStatus = classify(analysis, diagnoses);
   const transferDeclared = transfers.some(
     (transfer) => transfer.sourceKind === "family" && transfer.sourceId === familyId,
   );
@@ -2477,7 +2506,11 @@ function allCommand(argv: readonly string[], root: string): string {
   const adaptiveFunnel = loadAdaptiveFunnel(root, registry);
   const campaignPlans = loadCampaigns(root);
   const accessTokenSmoke = accessTokenSmokeContext(root, campaignPlans, adaptiveFunnel.transfers);
-  const promotionSmokeGates = new Map([[ACCESS_TOKEN_FAMILY_ID, accessTokenSmoke.gate]]);
+  const delegatedWalletSmoke = delegatedWalletSmokeContext(root, campaignPlans, adaptiveFunnel.transfers);
+  const promotionSmokeGates = new Map([
+    [ACCESS_TOKEN_FAMILY_ID, accessTokenSmoke.gate],
+    [DELEGATED_WALLET_FAMILY_ID, delegatedWalletSmoke.gate],
+  ]);
   const adaptiveSummary = planAdaptiveFunnel(
     adaptiveFunnel,
     registry,
@@ -2544,6 +2577,68 @@ function allCommand(argv: readonly string[], root: string): string {
       challengeHash: prepareChallenge(root, ACCESS_TOKEN_FAMILY_ID).hash,
     }),
   );
+  {
+    const delegatedFamily = builtFamily(DELEGATED_WALLET_FAMILY_ID);
+    const delegatedSweep = delegatedFamily.run();
+    const delegatedPrepared = prepareChallenge(root, DELEGATED_WALLET_FAMILY_ID);
+    const delegatedPkgCheck = checkChallengePackage(delegatedPrepared.pkg.files, delegatedFamily.leakProfile);
+    const delegatedBundle = evidenceFor(DELEGATED_WALLET_FAMILY_ID);
+    write(
+      "delegated-wallet-scope-reconciliation-family-report.md",
+      renderDelegatedWalletFamilyReport({
+        sweep: delegatedSweep,
+        axis: measureFor(delegatedSweep.matrix, { nullTrials: 3 }),
+        challengeHash: delegatedPrepared.hash,
+        scenarioSetId: delegatedPrepared.scenarioSetId,
+        packageFiles: delegatedPkgCheck.files,
+        packageBytes: delegatedPkgCheck.bytes,
+        specCodesFound: delegatedPkgCheck.specCodesFound,
+        space: delegatedFamily.space,
+        countedAgentTrials: delegatedBundle.evidence.countedAgentTrials,
+        staleTrials: delegatedBundle.staleTrials,
+      }),
+    );
+    write(
+      "delegated-wallet-scope-reconciliation-trial-readiness.md",
+      [
+        "# delegated-wallet-scope-reconciliation trial readiness",
+        "",
+        `Status: **${delegatedWalletSmoke.gate.state}**.`,
+        "",
+        "| gate | value |",
+        "|---|---|",
+        `| challenge hash | \`${delegatedPrepared.hash}\` |`,
+        `| scenario set | \`${delegatedPrepared.scenarioSetId}\` |`,
+        `| visible package files | ${delegatedPkgCheck.files} |`,
+        `| route present | ${ROUTABLE_FAMILY_IDS.includes(DELEGATED_WALLET_FAMILY_ID) ? "yes" : "no"} |`,
+        `| scenarios expected | ${delegatedSweep.scenarioCount} |`,
+        `| counted real-agent trials | ${delegatedBundle.evidence.countedAgentTrials} |`,
+        `| diagnosis | ${delegatedWalletSmoke.gate.smokeDiagnosisStatus} |`,
+        `| full matrix | ${delegatedWalletSmoke.gate.matrixReadinessStatus} |`,
+        "",
+        delegatedWalletSmoke.gate.blockers.length === 0
+          ? "No smoke/matrix blockers remain in this gate calculation."
+          : [
+              "Blocking reasons:",
+              "",
+              ...delegatedWalletSmoke.gate.blockers.map((blocker) => `- ${blocker}`),
+            ].join("\n"),
+        "",
+        "Provider handling: Codex/OpenAI may run one smoke trial when configured. Anthropic/Claude is not run in this phase. Gemini remains import-only unless entitlement is available.",
+        "",
+        "Countability rules: provider refusal, entitlement failure, infrastructure failure, timeout,",
+        "missing challenge hash, stale challenge hash, missing submission artifact, and contaminated",
+        "manual runs do not count.",
+        "",
+        "Full `/6` matrix spend remains blocked unless smoke diagnosis and transfer evidence justify it.",
+        "",
+        "---",
+        "",
+        "Generated by `agent-eval-foundry`. Deterministic - no timestamp, diffable.",
+        "",
+      ].join("\n"),
+    );
+  }
   write(
     "ship-recommendation.md",
     renderShipReport(registry.shapes, registry, allEvidence, humanGateEvidence, adversarialGateEvidence),
@@ -3095,7 +3190,15 @@ function allCommand(argv: readonly string[], root: string): string {
               gate: accessTokenSmoke.gate,
               records: accessTokenSmoke.records,
             })
-          : renderDiagnoses(f.familyId, diagnoses, f.plan?.hypothesis ?? "No campaign plan on record."),
+          : f.familyId === DELEGATED_WALLET_FAMILY_ID
+            ? renderDelegatedWalletSmokeDiagnosis({
+                analysis: delegatedWalletSmoke.analysis,
+                diagnoses: delegatedWalletSmoke.diagnoses,
+                plan: delegatedWalletSmoke.plan,
+                gate: delegatedWalletSmoke.gate,
+                records: delegatedWalletSmoke.records,
+              })
+            : renderDiagnoses(f.familyId, diagnoses, f.plan?.hypothesis ?? "No campaign plan on record."),
       );
     }
 

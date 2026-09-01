@@ -64,6 +64,7 @@ const MEASURED_FAMILIES = new Set([
   "ui-replay-live-dom",
   "checker-required-memory-poisoning",
   "access-token-scope-expansion",
+  "delegated-wallet-scope-reconciliation",
 ]);
 
 type EvidenceLoader = (familyId: string) => ReturnType<typeof familyEvidenceFor>;

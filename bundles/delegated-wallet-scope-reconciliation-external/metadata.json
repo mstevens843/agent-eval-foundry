@@ -1,0 +1,16 @@
+{
+  "runId": "reconciliation-external-EDITME",
+  "familyId": "delegated-wallet-scope-reconciliation",
+  "provider": "external",
+  "providerLabel": "Run elsewhere and imported",
+  "model": "external/unspecified",
+  "subjectId": "external",
+  "effort": null,
+  "scenarioSetId": "reconciliation-804-4b4cc8ff",
+  "challengeHash": "2140032d835a87ff254d01b6b4652f21",
+  "isolation": "subprocess",
+  "status": "completed",
+  "notes": "REPLACE: how it was run, and anything unusual about the run.",
+  "runtimeSeconds": null,
+  "costUsd": null
+}

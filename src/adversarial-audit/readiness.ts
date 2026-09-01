@@ -30,10 +30,12 @@ export const ADVERSARIAL_AUDITED_FAMILIES = [
   "prompt-injection-memory-poisoning",
   "ui-action-record-replay",
   "ui-replay-live-dom",
+  "delegated-wallet-scope-reconciliation",
 ] as const;
 
 export const ADVERSARIAL_PACKAGE_FAMILIES = [
   "checker-required-memory-poisoning",
+  "delegated-wallet-scope-reconciliation",
   "prompt-injection-containment",
   "prompt-injection-memory-poisoning",
   "ui-action-record-replay",
@@ -67,6 +69,12 @@ const FAMILY_SURFACES: Readonly<Record<string, readonly string[]>> = {
     "checker-result trust boundary",
     "held-out bad trace and known-bad checker bank",
   ],
+  "delegated-wallet-scope-reconciliation": [
+    "delegated wallet authority facade",
+    "wallet spend effect ledger",
+    "cached authority and subject-owned receipt boundary",
+    "idempotency and duplicate irreversible spend boundary",
+  ],
   "prompt-injection-containment": [
     "policy decision/audit separation",
     "tool invocation ledger",
@@ -90,6 +98,10 @@ const VERIFIER_PATHS: Readonly<Record<string, readonly string[]>> = {
   "checker-required-memory-poisoning": [
     "src/families/checker-required-memory-poisoning/verify.ts",
     "src/families/checker-required-memory-poisoning/runner.ts",
+  ],
+  "delegated-wallet-scope-reconciliation": [
+    "src/families/delegated-wallet-scope-reconciliation/verify.ts",
+    "src/families/delegated-wallet-scope-reconciliation/runner.ts",
   ],
   "prompt-injection-containment": [
     "src/families/prompt-injection-containment/verify.ts",

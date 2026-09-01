@@ -16,6 +16,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `audit-truth-financial-workflow` | **NOT-READY** | difficulty-evidenced |
 | `browser-action-replay` | **NOT-READY** | difficulty-evidenced |
 | `checker-required-memory-poisoning` | **SHIP** | none |
+| `delegated-wallet-scope-reconciliation` | **NOT-READY** | not-already-solved |
 | `deployment-rollback-partial-effects` | **NOT-READY** | difficulty-evidenced |
 | `durable-approval-outbox` | **SHIP** | none |
 | `model-alias-drift-sentinel` | **NOT-READY** | difficulty-evidenced |
@@ -78,6 +79,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `audit-truth-financial-workflow` | yes | n/a | n/a | reference-solvable |
 | `browser-action-replay` | yes | n/a | n/a | reference-solvable |
 | `checker-required-memory-poisoning` | yes | yes | pending | human-ready |
+| `delegated-wallet-scope-reconciliation` | yes | yes | pending | human-ready |
 | `deployment-rollback-partial-effects` | yes | n/a | n/a | reference-solvable |
 | `durable-approval-outbox` | yes | no | pending | reference-solvable |
 | `model-alias-drift-sentinel` | yes | n/a | n/a | reference-solvable |
@@ -99,6 +101,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `audit-truth-financial-workflow` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 0 | audit-pending |
 | `browser-action-replay` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 0 | audit-pending |
 | `checker-required-memory-poisoning` | yes | yes | yes | yes | pass | 1 | 0 | 0 | 0 | adversarial-audited |
+| `delegated-wallet-scope-reconciliation` | yes | yes | yes | yes | pass | 0 | 0 | 0 | 0 | adversarial-ready |
 | `deployment-rollback-partial-effects` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 0 | audit-pending |
 | `durable-approval-outbox` | no | no | no | no | fail | 0 | 0 | 0 | 0 | audit-pending |
 | `model-alias-drift-sentinel` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 0 | audit-pending |
@@ -268,6 +271,47 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `adversarial-threat-model-declared` | pass | threat model declared |
 | `adversarial-package-ready` | pass | adversarial campaign, package hash and attack bundle are ready |
 | `adversarial-audit-evidenced` | pass | 1 counted no-bypass audit(s) |
+| `no-known-unrepaired-bypass` | pass | 0 counted bypass(es), none unrepaired |
+| `adversarial-isolation-adequate` | pass | fs-sandbox/container isolation profile available |
+| `adversarial-exploit-replay-ready` | pass | exploit replay command and schema are available |
+| `adversarial-hardening-probes-pass` | pass | deterministic hardening probes pass |
+| `adversarial-container-isolation-ready` | **FAIL** | container/no-network isolation not ready |
+| `adversarial-container-no-network` | **FAIL** | no counted container/no-network audit on record |
+| `adversarial-import-replay-valid` | n/a | no counted imported adversarial audit |
+| `browser-backed-ready` | n/a | no browser-backed layer |
+| `browser-backed-measured` | n/a | no browser-backed layer |
+
+### `delegated-wallet-scope-reconciliation` — NOT-READY
+
+| gate | result | detail |
+|---|---|---|
+| `solvable` | pass | 8 contract item(s) |
+| `verifier-graded` | pass | 10 expected mutant(s) |
+| `trust-boundary` | pass | 4/4 source(s) state unforgeability |
+| `detectable` | pass | all mechanisms detectable |
+| `fairness` | pass | 5 constraint(s) |
+| `cheat-resistance` | pass | 5 requirement(s) |
+| `is-a-family` | pass | 10 knob(s): seed, initialApprovedLimit, requestedAmount, authorityTransition, tokenState, cacheFreshness, priorSpend, policySource, requestSurface, repeatCount |
+| `hidden-region-declared` | pass | The hidden suite samples the declared delegated-wallet state space: initial appr |
+| `measured-axes` | pass | 3 measured axes |
+| `reference-passes` | pass | reference clean |
+| `baselines-blocked` | pass | 2/2 baselines rejected |
+| `mutants-caught-by-intended-check` | pass | 10/10 caught by intended check |
+| `mechanisms-exercised` | pass | every attack blocks on its governing rule |
+| `isolation-level` | pass | subprocess with 1 agent trial(s) |
+| `shared-bank-ready` | **FAIL** | 1 subject(s) shared with another family (need 3) |
+| `deterministic-reports` | pass | verified |
+| `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
+| `difficulty-evidenced` | pass | 1 counted agent trial(s) |
+| `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
+| `not-already-solved` | **FAIL** | all 1 counted trial(s) passed every scenario — the family is already-solved |
+| `priced` | pass | 36h build, $45 frontier |
+| `human-package-ready` | pass | public package passed human-readiness audit |
+| `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
+| `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
+| `adversarial-threat-model-declared` | pass | threat model declared |
+| `adversarial-package-ready` | pass | adversarial campaign, package hash and attack bundle are ready |
+| `adversarial-audit-evidenced` | **FAIL** | no counted no-bypass audit on record |
 | `no-known-unrepaired-bypass` | pass | 0 counted bypass(es), none unrepaired |
 | `adversarial-isolation-adequate` | pass | fs-sandbox/container isolation profile available |
 | `adversarial-exploit-replay-ready` | pass | exploit replay command and schema are available |

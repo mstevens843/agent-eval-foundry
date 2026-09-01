@@ -1,0 +1,9 @@
+{
+  "provider": "external",
+  "family": "external",
+  "model": "external/unspecified",
+  "subjectId": "external",
+  "availableHere": false,
+  "availabilityDetail": "external by declaration: prepare a bundle and import the result",
+  "command": null
+}

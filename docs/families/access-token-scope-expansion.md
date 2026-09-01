@@ -26,6 +26,7 @@ Status: validation-mode local evidence plus counted smoke pass. The smoke pass f
 pre-registered already_solved_or_needs_evolution signal, so full matrix spend remains blocked. The
 next useful step is now concrete: Access-Token Evolution v1 selects
 `delegated-wallet-scope-reconciliation-probe`, which adds delegated wallet authority, durable state,
-revocation/downgrade, authoritative reconciliation, audit truth and liveness pressure. The
-descendant is probe-promoted only; it is not yet a built family and has no descendant agent trials.
-The transfer is still declared, not proved.
+revocation/downgrade, authoritative reconciliation, audit truth and liveness pressure. That
+descendant is now built as `delegated-wallet-scope-reconciliation` with local verifier/mutant/package
+evidence. Its one counted OpenAI/Codex smoke trial also passed cleanly, so the descendant routes to
+harder evolution rather than matrix spend. The transfer is still declared, not proved.

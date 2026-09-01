@@ -11,6 +11,7 @@ by. Rows are sorted by run id for exactly that reason.
 |---|---|---|---:|---:|---:|---|---:|---:|
 | `access-token-2026-08-o1` | `gpt-5.6-sol` | openai | 1 | 140 | 6/8 | **none** / syntax-only | 1 | 0 |
 | `checker-required-2026-08-o1` | `gpt-5.6-sol` | openai | 2 | 248 | 0/14 | **none** / — | 0 | 614 |
+| `delegated-wallet-2026-08-o1` | `gpt-5.6-sol` | openai | 1 | 170 | 7/10 | **none** / example-harness | 0 | 0 |
 | `live-dom-2026-08-o2` | `gpt-5.6-sol` | openai | 1 | 510 | 0/13 | **none** / syntax-only | 1 | 219 |
 | `mp-claude-r1` | `claude-opus-5` | anthropic | 1 | 384 | 7/8 | **none** / synthetic-scenarios | 0 | 32 |
 | `mp-claude-r2` | `claude-opus-5` | anthropic | 1 | 336 | 7/8 | **none** / synthetic-scenarios | 0 | 0 |
@@ -43,7 +44,7 @@ Descriptive, and small. The interval on every one of these is wide enough to ove
 | lab | counted | failed ≥1 | median lines | mean runtime | subjects |
 |---|---:|---:|---:|---:|---|
 | anthropic | 14 | 7 | 307 | 401s | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5` |
-| openai | 8 | 5 | 267 | 481s | `gpt-5.6-sol` |
+| openai | 9 | 5 | 254 | 453s | `gpt-5.6-sol` |
 
 ## Stated confidence against measured outcome
 
@@ -56,6 +57,7 @@ is the most actionable thing in the record, and it is reported as a **language s
 |---|---|---|---|
 | `access-token-2026-08-o1` | assertive | passed everything | **aligned** |
 | `checker-required-2026-08-o1` | silent | 614 failed | **n/a** |
+| `delegated-wallet-2026-08-o1` | assertive | passed everything | **aligned** |
 | `live-dom-2026-08-o2` | silent | 219 failed | **n/a** |
 | `mp-claude-r1` | assertive | 32 failed | **overconfident** |
 | `mp-claude-r2` | silent | passed everything | **n/a** |
@@ -77,7 +79,7 @@ is the most actionable thing in the record, and it is reported as a **language s
 | `ui-haiku-1` | silent | 62 failed | **n/a** |
 | `ui-sonnet-1` | assertive | 62 failed | **overconfident** |
 
-**6 of 22 counted runs (27%) asserted correctness and then failed scenarios.**
+**6 of 23 counted runs (26%) asserted correctness and then failed scenarios.**
 
 - `mp-claude-r1` — 32 failed. > The implementation is complete and verified. `submission/subject.mjs` is the only file written. **The
 - `mp-haiku-1` — 32 failed. > in untrusted, even if stored in memory. The implementation correctly handles the cross-session poisoning attack: untrusted content (like

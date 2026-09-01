@@ -1,0 +1,54 @@
+{
+  "view": {
+    "id": "dws-limit-100-amount-60-stable-exact-cache-fresh-prior-none-available-wallet_api-r1-11",
+    "request": {
+      "id": "spend-wallet-alpha-60",
+      "policyId": "policy-wallet-alpha",
+      "delegationId": "delegation-wallet-alpha",
+      "tokenId": "token-wallet-alpha",
+      "delegationGeneration": 7,
+      "tokenGeneration": 7,
+      "owner": "owner-alice",
+      "delegate": "wallet-agent",
+      "walletId": "wallet-alpha",
+      "requestedScope": "spend",
+      "amount": 60,
+      "observedAt": 100,
+      "idempotencyKey": "idem-11-60-wallet_api",
+      "surface": "wallet_api"
+    },
+    "cachedPolicy": {
+      "id": "policy-wallet-alpha",
+      "generation": 5,
+      "owner": "owner-alice",
+      "walletId": "wallet-alpha",
+      "maxPerSpend": 100,
+      "dailyLimit": 200,
+      "status": "active"
+    },
+    "cachedDelegation": {
+      "id": "delegation-wallet-alpha",
+      "generation": 7,
+      "owner": "owner-alice",
+      "delegate": "wallet-agent",
+      "walletId": "wallet-alpha",
+      "scope": "spend",
+      "maxPerSpend": 100,
+      "expiresAt": 150,
+      "status": "active"
+    },
+    "cachedToken": {
+      "id": "token-wallet-alpha",
+      "generation": 7,
+      "delegate": "wallet-agent",
+      "walletId": "wallet-alpha",
+      "scope": "spend",
+      "maxPerSpend": 100,
+      "issuedFromDelegationId": "delegation-wallet-alpha",
+      "status": "active"
+    },
+    "subjectAuthorityClaim": null
+  },
+  "replayCount": 1,
+  "note": "Current policy, delegation, token and budget authorize the spend, so one effect may execute."
+}

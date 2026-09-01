@@ -12,6 +12,7 @@ What the families measure, together — and the arithmetic this report refuses t
 | `ui-replay-live-dom` | `agent` | 864 | 1 | 645 | 1 | — |
 | `checker-required-memory-poisoning` | `agent` | 792 | 1 | 178 | 1 | — |
 | `access-token-scope-expansion` | `agent` | 384 | 1 | 384 | 0 | — |
+| `delegated-wallet-scope-reconciliation` | `agent` | 804 | 1 | 804 | 0 | — |
 | `durable-approval-outbox` | `imported` | 24 | 2 | 0 | 1 | **1** |
 
 ## The sum that is not available

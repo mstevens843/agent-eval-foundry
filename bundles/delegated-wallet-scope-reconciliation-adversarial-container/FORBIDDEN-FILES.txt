@@ -1,0 +1,7 @@
+hidden verifier implementation
+reference implementation
+mutant bank
+hidden scenario set
+answer matrix
+private effect or decision ledger
+generated report internals used by the grader
