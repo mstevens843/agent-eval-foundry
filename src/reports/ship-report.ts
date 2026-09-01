@@ -91,6 +91,10 @@ export interface FamilyEvidence {
   readonly browserBackedReady?: boolean;
   readonly browserBackedMeasured?: boolean;
   readonly browserBackedDetail?: string;
+  readonly productionMatrixReady?: boolean;
+  readonly productionMatrixDetail?: string;
+  readonly productionReadinessStatuses?: readonly string[];
+  readonly productionCrossLabSmokeEvidenced?: boolean;
   readonly adversarialClaimLevel?:
     | "adversarial-ready"
     | "adversarial-audited"
@@ -477,6 +481,26 @@ export const GATES: readonly Gate[] = [
       return {
         verdict: "pass",
         detail: `counted subjects fail in more than one direction (>= ${e.agentAxes} difficulty axes)`,
+      };
+    },
+  },
+  {
+    id: "production-matrix-ready",
+    question: "Has this family earned production-mode /6 matrix spend?",
+    rationale:
+      "A one-agent smoke trial is routing evidence. It can prove a family is worth follow-up, but " +
+      "it must not silently unlock a full matrix before cross-lab smoke, current hashes and integrity " +
+      "gates are satisfied.",
+    blocking: false,
+    evaluate: (_s, _r, e) => {
+      if (e?.productionMatrixReady === undefined) {
+        return { verdict: "n/a", detail: "no production-readiness layer for this family" };
+      }
+      return {
+        verdict: e.productionMatrixReady ? "pass" : "fail",
+        detail:
+          e.productionMatrixDetail ??
+          (e.productionMatrixReady ? "production matrix ready" : "production matrix blocked"),
       };
     },
   },

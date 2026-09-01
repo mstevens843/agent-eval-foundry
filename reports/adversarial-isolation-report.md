@@ -7,7 +7,7 @@ reports absent. It is not a container and does not mechanically disable network 
 | bundle | profile | verdict | hidden leaks | repo leaks | report leaks | writable dirs |
 |---|---|---|---:|---:|---:|---|
 | `bundles/checker-required-memory-poisoning-adversarial` | `fs-sandbox` | **pass** | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes |
-| `bundles/deployment-model-alias-rollout-drift-adversarial` | `subprocess` | **fail** | 0 | 0 | 0 | exploit:no, submitted-bypass:no |
+| `bundles/deployment-model-alias-rollout-drift-adversarial` | `fs-sandbox` | **pass** | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes |
 | `bundles/delegated-wallet-scope-reconciliation-adversarial` | `fs-sandbox` | **pass** | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes |
 | `bundles/prompt-injection-containment-adversarial` | `fs-sandbox` | **pass** | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes |
 | `bundles/prompt-injection-memory-poisoning-adversarial` | `fs-sandbox` | **pass** | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes |
@@ -25,9 +25,7 @@ reports absent. It is not a container and does not mechanically disable network 
 ## Failures
 
 - `bundles/checker-required-memory-poisoning-adversarial`: none
-- `bundles/deployment-model-alias-rollout-drift-adversarial`: public challenge directory is missing
-- `bundles/deployment-model-alias-rollout-drift-adversarial`: exploit directory is not writable
-- `bundles/deployment-model-alias-rollout-drift-adversarial`: submitted-bypass directory is not writable
+- `bundles/deployment-model-alias-rollout-drift-adversarial`: none
 - `bundles/delegated-wallet-scope-reconciliation-adversarial`: none
 - `bundles/prompt-injection-containment-adversarial`: none
 - `bundles/prompt-injection-memory-poisoning-adversarial`: none

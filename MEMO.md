@@ -61,7 +61,11 @@ intended checks, 2/2 baselines blocked, 6 mutant-detection axes, a leak-checked 
 package and a pinned one-slot OpenAI/Codex smoke campaign. The counted smoke trial
 `deployment-model-alias-rollout-drift-2026-08-o1` failed 192/339 scenarios on target under challenge
 hash `0e9b87a5f260544cfbc1cdce8f08938c`. That is OpenAI-only smoke-difficulty evidence, not
-cross-lab breadth or a full-matrix result.
+cross-lab breadth or a full-matrix result. Deployment-Alias Production Readiness v1 keeps `/6`
+matrix spend blocked until one non-OpenAI counted smoke exists under this same hash or an explicit
+OpenAI-only override is recorded. Current-hash Claude, Gemini and generic external bundles are
+prepared for import; none of them count until returned with transcript, submission, metadata and
+verifier output.
 
 The foundry now separates three claims: a reference can solve it, a clean public package can be
 handed to a human, and an independent human has actually solved it. Those are different evidence
@@ -643,14 +647,15 @@ without a surface-coverage metric beside it.
   The SWE-bench run is the experiment that addresses this, and it is why the null model exists: at
   134 subjects the constraint runs the other way, and the width has to be shown to beat chance rather
   than assumed to.
-- **Verifier integrity is still early.** Five package-backed families have adversarial-ready attack
-  packets, deterministic hardening probes and a v2 replay/triage path. `ui-replay-live-dom` and
-  `checker-required-memory-poisoning` each have one counted Codex/OpenAI no-bypass audit, both under
-  `fs-sandbox`; that is useful verifier-integrity evidence, not a security proof and not cross-lab
-  breadth. Durable Outbox has only an imported historical `/cheat` summary here, not the native
-  packet, transcript and current package hash needed for a counted no-bypass audit. Container/no-network
-  bundles and validation rules now exist, but the local Docker daemon is unavailable, so the
-  preserved container preflight is an infrastructure_error and counts for nothing.
+- **Verifier integrity is still early.** Seven package-backed families have adversarial-ready attack
+  packets, deterministic hardening probes and a v2 replay/triage path. `ui-replay-live-dom`,
+  `checker-required-memory-poisoning` and `deployment-model-alias-rollout-drift` each have one
+  counted Codex/OpenAI no-bypass audit under `fs-sandbox`; that is useful verifier-integrity
+  evidence, not a security proof and not cross-lab breadth. Durable Outbox has only an imported
+  historical `/cheat` summary here, not the native packet, transcript and current package hash
+  needed for a counted no-bypass audit. Container/no-network bundles and validation rules now exist,
+  but the local Docker daemon is unavailable, so the preserved container preflight is an
+  infrastructure_error and counts for nothing.
 - **The stronger adversarial isolation is implemented but not evidenced here.** `fs-sandbox` removes
   the repository, hidden artifacts and generated reports from the attacker context and keeps the
   verifier outside that context, but it does not mechanically disable network access.

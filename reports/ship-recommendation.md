@@ -54,6 +54,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `trial-ready` | advisory | Can a real agent actually be run against this family today? |
 | `difficulty-evidenced` | yes | Has any real agent or model been measured against this family? |
 | `agent-axes-independent` | advisory | Do the counted agents fail in more than one direction, or do their failure sets nest? |
+| `production-matrix-ready` | advisory | Has this family earned production-mode /6 matrix spend? |
 | `not-already-solved` | yes | Is there at least one counted agent trial that did NOT pass cleanly? |
 | `priced` | advisory | Is the build cost recorded? |
 | `human-package-ready` | advisory | Can the public package be handed to an independent human without hidden context? |
@@ -104,7 +105,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `browser-action-replay` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 0 | audit-pending |
 | `checker-required-memory-poisoning` | yes | yes | yes | yes | pass | 1 | 0 | 0 | 0 | adversarial-audited |
 | `delegated-wallet-scope-reconciliation` | yes | yes | yes | yes | pass | 0 | 0 | 0 | 0 | adversarial-ready |
-| `deployment-model-alias-rollout-drift` | no | no | no | no | pass | 0 | 0 | 0 | 0 | audit-pending |
+| `deployment-model-alias-rollout-drift` | yes | yes | yes | yes | pass | 1 | 0 | 0 | 0 | adversarial-audited |
 | `deployment-rollback-partial-effects` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 0 | audit-pending |
 | `durable-approval-outbox` | no | no | no | no | fail | 0 | 0 | 0 | 0 | audit-pending |
 | `model-alias-drift-sentinel` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 0 | audit-pending |
@@ -143,6 +144,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
 | `difficulty-evidenced` | pass | 1 counted agent trial(s) |
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
+| `production-matrix-ready` | n/a | no production-readiness layer for this family |
 | `not-already-solved` | **FAIL** | all 1 counted trial(s) passed every scenario — the family is already-solved |
 | `priced` | pass | 18h build, $35 frontier |
 | `human-package-ready` | n/a | no human-readiness audit |
@@ -184,6 +186,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `agent-axes-independent` | n/a | family not built |
+| `production-matrix-ready` | n/a | no production-readiness layer for this family |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 45h build, $60 frontier |
 | `human-package-ready` | n/a | no human-readiness audit |
@@ -225,6 +228,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `agent-axes-independent` | n/a | family not built |
+| `production-matrix-ready` | n/a | no production-readiness layer for this family |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 90h build, $80 frontier |
 | `human-package-ready` | n/a | no human-readiness audit |
@@ -266,6 +270,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
 | `difficulty-evidenced` | pass | 1 counted agent trial(s) |
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
+| `production-matrix-ready` | n/a | no production-readiness layer for this family |
 | `not-already-solved` | pass | 1 of 1 counted trial(s) failed at least one scenario |
 | `priced` | pass | 85h build, $35 frontier |
 | `human-package-ready` | pass | public package passed human-readiness audit |
@@ -307,6 +312,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
 | `difficulty-evidenced` | pass | 1 counted agent trial(s) |
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
+| `production-matrix-ready` | n/a | no production-readiness layer for this family |
 | `not-already-solved` | **FAIL** | all 1 counted trial(s) passed every scenario — the family is already-solved |
 | `priced` | pass | 36h build, $45 frontier |
 | `human-package-ready` | pass | public package passed human-readiness audit |
@@ -348,17 +354,18 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
 | `difficulty-evidenced` | pass | 1 counted agent trial(s) |
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
+| `production-matrix-ready` | **FAIL** | blocked; import or run one non-OpenAI counted smoke under the current hash |
 | `not-already-solved` | pass | 1 of 1 counted trial(s) failed at least one scenario |
 | `priced` | pass | 40h build, $45 frontier |
 | `human-package-ready` | pass | public package passed human-readiness audit |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
 | `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
-| `adversarial-threat-model-declared` | **FAIL** | no threat model declared |
-| `adversarial-package-ready` | **FAIL** | adversarial campaign or attack bundle is incomplete |
-| `adversarial-audit-evidenced` | **FAIL** | no counted no-bypass audit on record |
+| `adversarial-threat-model-declared` | pass | threat model declared |
+| `adversarial-package-ready` | pass | adversarial campaign, package hash and attack bundle are ready |
+| `adversarial-audit-evidenced` | pass | 1 counted no-bypass audit(s) |
 | `no-known-unrepaired-bypass` | pass | 0 counted bypass(es), none unrepaired |
-| `adversarial-isolation-adequate` | **FAIL** | legacy subprocess profile only |
-| `adversarial-exploit-replay-ready` | **FAIL** | claimed bypasses cannot be replayed mechanically |
+| `adversarial-isolation-adequate` | pass | fs-sandbox/container isolation profile available |
+| `adversarial-exploit-replay-ready` | pass | exploit replay command and schema are available |
 | `adversarial-hardening-probes-pass` | pass | deterministic hardening probes pass |
 | `adversarial-container-isolation-ready` | **FAIL** | container/no-network isolation not ready |
 | `adversarial-container-no-network` | **FAIL** | no counted container/no-network audit on record |
@@ -389,6 +396,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `agent-axes-independent` | n/a | family not built |
+| `production-matrix-ready` | n/a | no production-readiness layer for this family |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 60h build, $75 frontier |
 | `human-package-ready` | n/a | no human-readiness audit |
@@ -430,6 +438,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | pass | 6 counted agent trial(s) |
 | `agent-axes-independent` | n/a | family not built |
+| `production-matrix-ready` | n/a | no production-readiness layer for this family |
 | `not-already-solved` | pass | 6 of 6 declared trial(s) failed — declared by the shape, not measured here |
 | `priced` | pass | 120h build, $48.66 frontier |
 | `human-package-ready` | **FAIL** | public package is incomplete or not generated here |
@@ -471,6 +480,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `agent-axes-independent` | n/a | family not built |
+| `production-matrix-ready` | n/a | no production-readiness layer for this family |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 55h build, $50 frontier |
 | `human-package-ready` | n/a | no human-readiness audit |
@@ -512,6 +522,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `agent-axes-independent` | n/a | family not built |
+| `production-matrix-ready` | n/a | no production-readiness layer for this family |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 45h build, $50 frontier |
 | `human-package-ready` | n/a | no human-readiness audit |
@@ -553,6 +564,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `agent-axes-independent` | n/a | family not built |
+| `production-matrix-ready` | n/a | no production-readiness layer for this family |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 50h build, $45 frontier |
 | `human-package-ready` | n/a | no human-readiness audit |
@@ -594,6 +606,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `agent-axes-independent` | n/a | family not built |
+| `production-matrix-ready` | n/a | no production-readiness layer for this family |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 60h build, $55 frontier |
 | `human-package-ready` | n/a | no human-readiness audit |
@@ -635,6 +648,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
 | `difficulty-evidenced` | pass | 6 counted agent trial(s) |
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
+| `production-matrix-ready` | n/a | no production-readiness layer for this family |
 | `not-already-solved` | **FAIL** | all 6 counted trial(s) passed every scenario — the family is already-solved |
 | `priced` | pass | 70h build, $65 frontier |
 | `human-package-ready` | pass | public package passed human-readiness audit |
@@ -676,6 +690,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `agent-axes-independent` | n/a | family not built |
+| `production-matrix-ready` | n/a | no production-readiness layer for this family |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 55h build, $50 frontier |
 | `human-package-ready` | n/a | no human-readiness audit |
@@ -717,6 +732,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
 | `difficulty-evidenced` | pass | 8 counted agent trial(s) |
 | `agent-axes-independent` | pass | counted subjects fail in more than one direction (>= 2 difficulty axes) |
+| `production-matrix-ready` | n/a | no production-readiness layer for this family |
 | `not-already-solved` | pass | 5 of 8 counted trial(s) failed at least one scenario |
 | `priced` | pass | 75h build, $70 frontier |
 | `human-package-ready` | pass | public package passed human-readiness audit |
@@ -758,6 +774,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `trial-ready` | n/a | family not built |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `agent-axes-independent` | n/a | family not built |
+| `production-matrix-ready` | n/a | no production-readiness layer for this family |
 | `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 70h build, $55 frontier |
 | `human-package-ready` | n/a | no human-readiness audit |
@@ -799,6 +816,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
 | `difficulty-evidenced` | pass | 5 counted agent trial(s) |
 | `agent-axes-independent` | **FAIL** | every counted subject's failures nest (claude-opus-5 ⊂ claude-haiku-4-5 ⊂ claude-sonnet-5 ⊂ gpt-5.6-sol); one difficulty axis however many subjects attempt it. Only new scenarios with a genuine trade-off can raise it — see reports/scenario-diversity-report.md |
+| `production-matrix-ready` | n/a | no production-readiness layer for this family |
 | `not-already-solved` | pass | 5 of 5 counted trial(s) failed at least one scenario |
 | `priced` | pass | 55h build, $40 frontier |
 | `human-package-ready` | pass | public package passed human-readiness audit |
@@ -840,6 +858,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
 | `difficulty-evidenced` | pass | 1 counted agent trial(s) |
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
+| `production-matrix-ready` | n/a | no production-readiness layer for this family |
 | `not-already-solved` | pass | 1 of 1 counted trial(s) failed at least one scenario |
 | `priced` | pass | 95h build, $55 frontier |
 | `human-package-ready` | pass | public package passed human-readiness audit |
@@ -879,6 +898,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 - **`trial-ready`** — The gap between 'measured' and 'trialable' is where families sit for months. A family is trial-ready when it emits a challenge package that passes its own leak check and the router knows how to grade a submission for it — at which point the only thing between it and difficulty evidence is model time.
 - **`difficulty-evidenced`** — A measured axis count against a bank of hand-written mutants proves the VERIFIER discriminates. It says nothing about whether the family is hard, because nothing that could plausibly fail it has attempted it. This gate was added after the second family scored four measured axes with zero agent trials and would otherwise have been marked SHIP. It is BLOCKING as of the campaign layer: with a trial router and a runnable challenge package for every built family, 'nobody has tried it' stopped being a fact about the tooling and became a decision not to look.
 - **`agent-axes-independent`** — The measured-axes gate counts axes over the MUTANT bank: a statement about what the verifier detects, bounded by how many known-bad implementations the author wrote. This one counts axes over real agents, and the two can disagree sharply. If every subject's failure set nests inside the next, the family separates subjects perfectly and measures ONE thing at several sensitivities — and no additional subject can change that, because a chain stays a chain. Advisory rather than blocking: a one-axis family is a legitimate benchmark component, and the cost of pretending otherwise would be killing useful families. What it must not do is read as breadth. The UI family scores six mutant axes, one agent axis, and five counted trials across four subjects and two labs whose failure counts are 33, 46, 62, 62 and 90 — five different numbers that are one measurement.
+- **`production-matrix-ready`** — A one-agent smoke trial is routing evidence. It can prove a family is worth follow-up, but it must not silently unlock a full matrix before cross-lab smoke, current hashes and integrity gates are satisfied.
 - **`not-already-solved`** — A family every model solves measures nothing, and `already-solved` was the single most common cause of death in the source project's kill log — four of nine gated mechanisms. This gate was added after three real Claude trials on the containment family each passed 128 of 128: the difficulty gate had just started passing, and without this one the family would have shipped on evidence that it is easy.
 - **`priced`** — An unpriced family cannot enter the budget model, so the plan built on it is fiction.
 - **`human-package-ready`** — Reference solvability only proves the author can solve the internal task. The public package must also state the rules, examples, scoring contract and hidden sampling boundary clearly enough for a clean-room engineer.

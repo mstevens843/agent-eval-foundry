@@ -1,0 +1,46 @@
+{
+  "view": {
+    "id": "dmd-eval-default-successor-canary-cache-stale_initial-window-open-reg-major-mixed_versions-after_bad_eval-correct_previous-provider_says_green-available-ci_worker-r1-23",
+    "request": {
+      "id": "rollout-eval-default-23",
+      "alias": "eval-default",
+      "approvedVersion": "model-beta",
+      "approvedGeneration": 10,
+      "requiredBaselineVersion": "model-beta",
+      "reevaluationAvailable": true,
+      "observedAt": 200,
+      "idempotencyKey": "idem-eval-default-23-ci_worker",
+      "surface": "ci_worker"
+    },
+    "cachedAlias": {
+      "alias": "eval-default",
+      "version": "model-beta",
+      "generation": 10,
+      "phase": "complete",
+      "canaryWindow": "complete",
+      "canaryPercent": 100
+    },
+    "cachedEvalSummary": {
+      "sampleIds": [
+        "eval-23-1",
+        "eval-23-2",
+        "eval-23-3",
+        "eval-23-4"
+      ],
+      "claimedVersion": "model-beta",
+      "claimedScoreDelta": 0,
+      "sampleCount": 4
+    },
+    "cachedBaselineVersion": "model-beta",
+    "subjectModelClaim": {
+      "source": "provider-summary",
+      "alias": "eval-default",
+      "version": "model-gamma",
+      "generation": 11,
+      "saysHealthy": true,
+      "note": "public status summary, not a verifier-owned rollout ledger"
+    }
+  },
+  "replayCount": 1,
+  "note": "The public summary says green, but authoritative current-version eval samples require rollback."
+}

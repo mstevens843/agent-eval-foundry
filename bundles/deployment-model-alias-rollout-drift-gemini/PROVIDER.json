@@ -1,0 +1,17 @@
+{
+  "provider": "gemini",
+  "family": "google",
+  "label": "Gemini via the Gemini CLI",
+  "model": "google/gemini-3-pro",
+  "subjectId": "gemini-3-pro",
+  "availableHere": false,
+  "availabilityDetail": "0.46.0; entitlement previously blocked with IneligibleTierError, so this phase treats Gemini as import-only until a real authenticated run changes that",
+  "invocationNote": "`-p` is headless. `--approval-mode yolo` auto-approves tool calls, which is the equivalent of the other two providers' bypass flags and is confined to the throwaway sandbox. The binary is present and answers `--version`; authentication fails with `IneligibleTierError`, which is an account entitlement rather than a model result and counts for nothing.",
+  "command": [
+    "gemini",
+    "--approval-mode",
+    "yolo",
+    "-p",
+    "You are attempting a benchmark task. Your working directory contains:\n  challenge/   — read this. README.md explains the task, SPEC.md is the normative contract.\n  submission/  — write your answer here.\n\nRead challenge/README.md and challenge/SPEC.md in full, then implement the subject they\ndescribe:\n  submission/subject.mjs exporting `subject` with run(view, deployment)\n\nThe deployment facade is the current source of truth. Cached alias maps, public summaries and\nsubject-owned model claims may be stale or false. The same request may be attempted twice, and\nduplicate irreversible rollout decisions must not execute.\n\nDo not modify anything in challenge/. Write exactly one file: submission/subject.mjs."
+  ]
+}

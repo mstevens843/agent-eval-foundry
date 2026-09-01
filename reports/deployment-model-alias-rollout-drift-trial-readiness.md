@@ -20,6 +20,7 @@ Provider handling: Codex/OpenAI may run one smoke trial when configured. Anthrop
 Countability rules: provider refusal, entitlement failure, infrastructure failure, timeout, missing challenge hash, stale challenge hash, missing submission artifact, and contaminated manual runs do not count.
 
 Full `/6` matrix spend remains blocked unless smoke diagnosis and transfer evidence justify it.
+Production `/6` readiness is stricter: one OpenAI smoke failure does not satisfy cross-lab smoke.
 
 ---
 

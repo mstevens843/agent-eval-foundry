@@ -1,0 +1,16 @@
+{
+  "runId": "drift-claude-EDITME",
+  "familyId": "deployment-model-alias-rollout-drift",
+  "provider": "claude",
+  "providerLabel": "Claude Opus 5 via the Claude CLI",
+  "model": "anthropic/claude-opus-5",
+  "subjectId": "claude-opus-5",
+  "effort": null,
+  "scenarioSetId": "drift-339-590affe3",
+  "challengeHash": "0e9b87a5f260544cfbc1cdce8f08938c",
+  "isolation": "subprocess",
+  "status": "completed",
+  "notes": "REPLACE: how it was run, and anything unusual about the run.",
+  "runtimeSeconds": null,
+  "costUsd": null
+}

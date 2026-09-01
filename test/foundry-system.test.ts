@@ -33,7 +33,7 @@ import { ARTIFACT_PLAN, generateScaffold, scaffoldFromShape } from "../src/found
 import { humanEvidenceForFamilies, humanGateEvidenceMap } from "../src/human-solvability/records.js";
 import { parseMatrix } from "../src/matrix.js";
 import { renderBudgetReport } from "../src/reports/budget-report.js";
-import { PIC_FAMILY, familyEvidenceMap } from "../src/reports/evidence.js";
+import { PIC_FAMILY, familyEvidenceMapForShipReport } from "../src/reports/evidence.js";
 import { renderFamilyDiversityReport, renderLedgerReport } from "../src/reports/ledger-report.js";
 import { renderMechanismReport, renderMutantReport } from "../src/reports/registry-report.js";
 import { assessFamily, renderShipReport } from "../src/reports/ship-report.js";
@@ -51,7 +51,7 @@ const registry = loadRegistry(ROOT);
 // about care: the test built its own evidence from local runs only, the CLI built it from the trial
 // directories too, and the resulting mismatch reported the checked-in report as stale. Both now call
 // the same builder, so drifting apart again requires changing shared code.
-const picEvidence = familyEvidenceMap(ROOT);
+const picEvidence = familyEvidenceMapForShipReport(ROOT);
 const humanEvidence = humanGateEvidenceMap(humanEvidenceForFamilies(ROOT));
 const adversarialEvidence = adversarialGateEvidenceMap(summarizeAdversarialEvidence(ROOT));
 

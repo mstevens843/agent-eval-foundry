@@ -16,29 +16,43 @@
 // default path. A live archive can still be passed explicitly.
 
 import { join } from "node:path";
-import { augmentAdversarialEvidenceMap } from "../adversarial-audit/records.js";
+import {
+  adversarialGateEvidenceMap,
+  augmentAdversarialEvidenceMap,
+  summarizeAdversarialEvidence,
+} from "../adversarial-audit/records.js";
+import { checkChallengePackage } from "../challenge/package-check.js";
 import { ALL_SUBJECTS, runFamily, toMatrix } from "../families/prompt-injection-containment/runner.js";
 import type { RunResult } from "../families/prompt-injection-containment/runner.js";
 import { BUILT_FAMILY_IDS, builtFamily } from "../families/registry.js";
 import { readBrowserBackedMeasurement } from "../families/ui-replay-browser-backed/measurement.js";
 import { browserBackedReadiness } from "../families/ui-replay-browser-backed/readiness.js";
-import { readJson } from "../foundry/load.js";
-import { augmentFamilyEvidenceMap } from "../human-solvability/records.js";
+import type { TransferTest } from "../foundry/adaptive-funnel.js";
+import { loadAdaptiveFunnel, loadRegistry, readJson } from "../foundry/load.js";
+import { evaluateProductionReadiness } from "../foundry/production-readiness.js";
+import {
+  augmentFamilyEvidenceMap,
+  humanEvidenceForFamilies,
+  humanGateEvidenceMap,
+} from "../human-solvability/records.js";
 import { parseMatrix } from "../matrix.js";
 import { normalizeSubjectId } from "../trials/bank.js";
 import { reconcile } from "../trials/campaign-run.js";
-import { loadCampaigns } from "../trials/campaign.js";
+import { type CampaignPlan, loadCampaigns } from "../trials/campaign.js";
 import { readFamilyTrials } from "../trials/directory.js";
 import { classifyRunKind, importDurableOutboxHistory } from "../trials/history.js";
 import type { ImportedHistory } from "../trials/history.js";
 import { importAgentTrials, runLocalTrials } from "../trials/orchestrate.js";
-import { ROUTABLE_FAMILY_IDS } from "../trials/router.js";
-import { gateByChallengeHash } from "../trials/run.js";
+import { ROUTABLE_FAMILY_IDS, routeFor } from "../trials/router.js";
+import { gateByChallengeHash, prepareChallenge } from "../trials/run.js";
 import { countedAgentTrials } from "../trials/types.js";
 import type { TrialRecord, TrialSet } from "../trials/types.js";
 import type { Matrix } from "../types.js";
+import { analyseFamilyTrials } from "./agent-results.js";
 import { BROWSER_BACKED_NEXT_PLAN } from "./browser-backed-scaffold.js";
 import { analyseChain } from "./chain-analysis.js";
+import { classifyDeploymentAliasSmoke } from "./deployment-alias-diagnosis.js";
+import { diagnose } from "./diagnosis.js";
 import type { FamilyEvidence } from "./ship-report.js";
 import { computeEvidence } from "./trial-report.js";
 
@@ -46,6 +60,7 @@ export const PIC_FAMILY = "prompt-injection-containment";
 export const MEMORY_FAMILY = "prompt-injection-memory-poisoning";
 export const OUTBOX_FAMILY = "durable-approval-outbox";
 export const UI_FAMILY = "ui-action-record-replay";
+export const DEPLOYMENT_ALIAS_FAMILY_ID = "deployment-model-alias-rollout-drift";
 
 const ROUTABLE = new Set(ROUTABLE_FAMILY_IDS);
 
@@ -228,6 +243,98 @@ export const familyEvidenceMap = (root: string): Record<string, FamilyEvidence> 
     },
   };
 };
+
+export function augmentProductionReadinessEvidenceMap(
+  root: string,
+  base: Readonly<Record<string, FamilyEvidence>>,
+  campaigns: readonly CampaignPlan[],
+  transfers: readonly TransferTest[],
+): Record<string, FamilyEvidence> {
+  const deploymentEvidence = base[DEPLOYMENT_ALIAS_FAMILY_ID];
+  if (deploymentEvidence === undefined) return { ...base };
+
+  const humanEvidence = humanGateEvidenceMap(humanEvidenceForFamilies(root));
+  const adversarialEvidence = adversarialGateEvidenceMap(summarizeAdversarialEvidence(root));
+  const deploymentFamily = builtFamily(DEPLOYMENT_ALIAS_FAMILY_ID);
+  const deploymentSweep = deploymentFamily.run();
+  const deploymentPrepared = prepareChallenge(root, DEPLOYMENT_ALIAS_FAMILY_ID);
+  const deploymentPackageCheck = checkChallengePackage(
+    deploymentPrepared.pkg.files,
+    deploymentFamily.leakProfile,
+  );
+  const deploymentBundle = familyEvidenceFor(root, DEPLOYMENT_ALIAS_FAMILY_ID);
+  const plan = campaigns.find((campaign) => campaign.familyId === DEPLOYMENT_ALIAS_FAMILY_ID);
+  const params = routeFor(DEPLOYMENT_ALIAS_FAMILY_ID).scenarioParams();
+  const analysis = analyseFamilyTrials(DEPLOYMENT_ALIAS_FAMILY_ID, deploymentBundle.trials, params, plan);
+  const diagnoses = deploymentBundle.trials.records
+    .filter((record) => record.subjectType === "agent")
+    .map((record) =>
+      diagnose({
+        familyId: DEPLOYMENT_ALIAS_FAMILY_ID,
+        record,
+        params,
+        hypothesisChecks: deploymentFamily.checks,
+        hypothesisKnob: null,
+      }),
+    );
+  const localEvidencePass =
+    deploymentSweep.referenceFailures.length === 0 &&
+    deploymentSweep.mutantsCaught.every((mutant) => mutant.caught) &&
+    deploymentSweep.baselinesBlocked.length === deploymentSweep.baselinesTotal;
+  const deploymentHuman = humanEvidence[DEPLOYMENT_ALIAS_FAMILY_ID];
+  const deploymentAdversarial = adversarialEvidence[DEPLOYMENT_ALIAS_FAMILY_ID];
+  const readiness = evaluateProductionReadiness({
+    familyId: DEPLOYMENT_ALIAS_FAMILY_ID,
+    challengeHash: deploymentPrepared.hash,
+    currentChallengeHash: deploymentPrepared.hash,
+    localVerifierReady: localEvidencePass,
+    packageBacked:
+      ROUTABLE_FAMILY_IDS.includes(DEPLOYMENT_ALIAS_FAMILY_ID) && deploymentPackageCheck.files > 0,
+    campaignPresent: plan !== undefined,
+    campaignHashCurrent: plan === undefined ? true : plan.challengeHash === deploymentPrepared.hash,
+    packageHashCurrent: plan === undefined ? true : plan.challengeHash === deploymentPrepared.hash,
+    countedSmokeTrials: analysis.counted,
+    countedSmokeFailures: analysis.failures,
+    countedSmokeSolves: analysis.solves,
+    providerRefusals: analysis.refusals,
+    infraFailures: analysis.infra,
+    modelFamilies: analysis.modelFamilies,
+    diagnosisStatus: classifyDeploymentAliasSmoke(analysis, diagnoses),
+    transferDeclared: transfers.some(
+      (transfer) => transfer.sourceKind === "family" && transfer.sourceId === DEPLOYMENT_ALIAS_FAMILY_ID,
+    ),
+    adversarialReady: deploymentAdversarial?.adversarialPackageReady ?? false,
+    countedNoBypassAudits: deploymentAdversarial?.countedNoBypassAudits ?? 0,
+    countedBypassAudits: deploymentAdversarial?.countedBypassAudits ?? 0,
+    unrepairedBypasses: deploymentAdversarial?.unrepairedBypasses ?? 0,
+    humanReady: deploymentHuman?.humanPackageReady ?? false,
+    cleanHumanSolves: deploymentHuman?.cleanHumanSolves ?? 0,
+  });
+
+  return {
+    ...base,
+    [DEPLOYMENT_ALIAS_FAMILY_ID]: {
+      ...deploymentEvidence,
+      productionMatrixReady: readiness.fullMatrixReady,
+      productionMatrixDetail: readiness.fullMatrixReady
+        ? "production matrix ready"
+        : `${readiness.productionMatrixStatus}; ${readiness.nextAction}`,
+      productionReadinessStatuses: readiness.statuses,
+      productionCrossLabSmokeEvidenced: readiness.crossLabSmokeEvidenced,
+    },
+  };
+}
+
+export function familyEvidenceMapForShipReport(root: string): Record<string, FamilyEvidence> {
+  const registry = loadRegistry(root);
+  const funnel = loadAdaptiveFunnel(root, registry);
+  return augmentProductionReadinessEvidenceMap(
+    root,
+    familyEvidenceMap(root),
+    loadCampaigns(root),
+    funnel.transfers,
+  );
+}
 
 /** How many subjects in this family also attempted another measured family. */
 export function sharedSubjectCount(root: string, subjects: readonly string[]): number {

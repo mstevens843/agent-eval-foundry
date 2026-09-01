@@ -405,5 +405,66 @@
     ],
     "nextEvidence": "local",
     "buildMode": "probe-first"
+  },
+  {
+    "id": "deployment-alias-to-feature-flag-rollout-drift",
+    "sourceKind": "family",
+    "sourceId": "deployment-model-alias-rollout-drift",
+    "transferredMechanism": "model-alias-drift",
+    "targetDomain": "feature-flag rollout drift",
+    "status": "ready",
+    "whatStaysFixed": [
+      "A public alias or flag key is not the concrete served behavior.",
+      "Cached rollout state is not current truth.",
+      "Decision evidence must be attributed to the concrete variant served to each request.",
+      "A still-valid rollout must not be over-blocked.",
+      "Subject-owned health reports and audit summaries are not authoritative."
+    ],
+    "whatChanges": [
+      "The deployment model alias becomes a feature flag or experiment key.",
+      "Concrete model versions become concrete feature variants.",
+      "The authoritative source becomes a flag rollout ledger plus exposure, metric and incident streams.",
+      "The action set becomes continue rollout, pause, rollback, hold experiment, or re-evaluate exposures.",
+      "Surface coverage moves from AI model deployment to product/runtime feature rollout operations."
+    ],
+    "expectedFailurePreservation": "A subject that trusts an alias name, cached routing map or subject-owned model-health summary should also continue the wrong feature variant, over-rollback a healthy canary, or misattribute metrics when a feature flag moves underneath an exposure stream.",
+    "expectedFairnessRisks": [
+      "The public package must state the finite feature rollout actions and metric thresholds.",
+      "Hidden cases must sample declared exposure/metric mixtures rather than adding private product rules.",
+      "The verifier must distinguish insufficient evidence from healthy and unhealthy rollouts."
+    ],
+    "expectedVerifierRisks": [
+      "A verifier that trusts subject-written rollout receipts can be forged.",
+      "A final-status-only checker misses concrete variant attribution.",
+      "A checker that reads flag keys without the rollout ledger rewards stale-cache decisions."
+    ],
+    "authoritativeTruthSourceInTarget": "The target truth is a harness-owned feature-flag ledger plus sealed exposure, metric, incident and rollout-effect ledgers.",
+    "expectedMutants": [
+      "cached-flag-truster",
+      "flag-key-only-decider",
+      "variant-attribution-blind",
+      "metric-window-blind",
+      "rollback-everything",
+      "never-rollback",
+      "subject-owned-truth-truster",
+      "audit-liar"
+    ],
+    "promotionCriteria": [
+      "A feature-flag probe catches stale flag trust, concrete variant misattribution and over-rollback.",
+      "A reference implementation passes valid continue, rollback and re-evaluate cases.",
+      "The public contract explains all feature rollout actions without private product-platform knowledge."
+    ],
+    "killCriteria": [
+      "Correct behavior reduces to one local flag-table comparison with no delayed or mixed evidence boundary.",
+      "The verifier cannot grade without trusting subject-written metric receipts.",
+      "A counted smoke trial cleanly solves both deployment-alias and feature-flag variants with the same public strategy."
+    ],
+    "requiredEvidenceBeforeDeclaringTransfer": [
+      "Use the current deployment-model-alias-rollout-drift smoke diagnosis as source evidence.",
+      "Run a feature-flag rollout-drift probe before building a full target family.",
+      "Do not claim transfer evidence until the target-domain probe or a counted target-domain smoke trial exists."
+    ],
+    "nextEvidence": "local",
+    "buildMode": "probe-first"
   }
 ]

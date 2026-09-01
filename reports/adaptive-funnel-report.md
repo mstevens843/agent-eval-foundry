@@ -24,8 +24,8 @@ candidate mechanisms
 | mechanism probes | 9 |
 | probes ready for validation | 3 |
 | probes needing repair/hold | 4 |
-| transfer tests | 10 |
-| transfer tests ready | 5 |
+| transfer tests | 11 |
+| transfer tests ready | 6 |
 | production-mode families | 0 |
 
 ## Cheapest Next Evidence
@@ -33,7 +33,7 @@ candidate mechanisms
 | cost tier | queued actions |
 |---|---:|
 | static | 13 |
-| local | 6 |
+| local | 7 |
 | cross-provider | 3 |
 
 | target | type | mode | stage | decision | evidence cost | next action |
@@ -95,6 +95,7 @@ candidate mechanisms
 | `access-token-to-wallet-spending-limit` | family:`access-token-scope-expansion` | `permission-boundary` | wallet spending limit | ready | local |
 | `delegated-wallet-to-deploy-approval-scope` | family:`delegated-wallet-scope-reconciliation` | `permission-boundary` | production deploy approval scope | proposed | paper |
 | `deployment-alias-to-routing-incident-response` | family:`deployment-model-alias-rollout-drift` | `model-alias-drift` | model-routing incident response | proposed | local |
+| `deployment-alias-to-feature-flag-rollout-drift` | family:`deployment-model-alias-rollout-drift` | `model-alias-drift` | feature-flag rollout drift | ready | local |
 
 ## Families Not Ready For Full Matrix
 

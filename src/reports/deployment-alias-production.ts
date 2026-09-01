@@ -1,0 +1,419 @@
+import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { join } from "node:path";
+import { DEPLOYMENT_ALIAS_PROFILE, checkChallengePackage } from "../challenge/package-check.js";
+import type {
+  ProductionReadinessResult,
+  ProductionReadinessStatus,
+} from "../foundry/production-readiness.js";
+import { hashChallengeDir } from "../trials/run.js";
+import type { FamilyTrialAnalysis } from "./agent-results.js";
+import type { VerifierIntegrityEvidence } from "./ship-report.js";
+
+const FAMILY_ID = "deployment-model-alias-rollout-drift";
+const EXTERNAL_PROVIDERS = ["claude", "gemini", "external"] as const;
+
+export interface DeploymentAliasProductionReportInput {
+  readonly readiness: ProductionReadinessResult;
+  readonly analysis: FamilyTrialAnalysis;
+  readonly challengeHash: string;
+  readonly scenarioSetId: string;
+  readonly measuredScenarios: number;
+  readonly declaredSpace: number;
+  readonly mutantDetectionAxes: number;
+  readonly packageFiles: number;
+  readonly packageBytes: number;
+}
+
+export interface DeploymentAliasBundleAudit {
+  readonly providerId: string;
+  readonly dir: string;
+  readonly present: boolean;
+  readonly providerLabel: string | null;
+  readonly providerFamily: string | null;
+  readonly availableHere: boolean | null;
+  readonly availabilityDetail: string | null;
+  readonly challengeHash: string | null;
+  readonly hashMatches: boolean;
+  readonly leakCheck: "pass" | "fail" | "missing";
+  readonly leakDetail: string;
+  readonly metadataTemplate: "pass" | "fail" | "missing";
+  readonly metadataDetail: string;
+  readonly hiddenFilesAbsent: boolean;
+  readonly generatedReportsAbsent: boolean;
+  readonly importCommand: string;
+  readonly verifyCommand: string;
+}
+
+export interface DeploymentAliasCrossLabReportInput {
+  readonly expectedHash: string;
+  readonly expectedScenarioSetId: string;
+  readonly audits: readonly DeploymentAliasBundleAudit[];
+}
+
+export interface DeploymentAliasAdversarialReadinessInput {
+  readonly challengeHash: string;
+  readonly verifierHash: string | null;
+  readonly summary: VerifierIntegrityEvidence | undefined;
+  readonly campaignPath: string;
+  readonly bundlePath: string;
+}
+
+export function renderDeploymentAliasProductionReadiness(
+  input: DeploymentAliasProductionReportInput,
+): string {
+  const { readiness, analysis } = input;
+  return [
+    "# deployment-model-alias-rollout-drift production readiness",
+    "",
+    "Deployment-alias is the first branch selected by lineage reallocation that produced an",
+    "on-target real-agent smoke failure. This report is stricter than the one-agent smoke gate:",
+    "it asks whether production-mode `/6` matrix spend is earned.",
+    "",
+    "## Verdict",
+    "",
+    `Production matrix: **${readiness.productionMatrixStatus}**.`,
+    "",
+    "| item | value |",
+    "|---|---|",
+    `| family | \`${readiness.familyId}\` |`,
+    `| challenge hash | \`${input.challengeHash}\` |`,
+    `| scenario set | \`${input.scenarioSetId}\` |`,
+    `| declared behavior space | ${input.declaredSpace} |`,
+    `| measured scenarios | ${input.measuredScenarios} |`,
+    `| package | ${input.packageFiles} files, ${input.packageBytes} bytes |`,
+    `| mutant-detection axes | ${input.mutantDetectionAxes} |`,
+    `| counted smoke trials | ${analysis.counted} |`,
+    `| counted smoke failures | ${analysis.failures} |`,
+    `| counted smoke solves | ${analysis.solves} |`,
+    `| counted provider families | ${readiness.countedProviderFamilies.map((f) => `\`${f}\``).join(", ") || "none"} |`,
+    `| smoke difficulty evidenced | ${readiness.smokeDifficultyEvidenced ? "yes" : "no"} |`,
+    `| cross-lab smoke evidenced | ${readiness.crossLabSmokeEvidenced ? "yes" : "no"} |`,
+    "",
+    "## Statuses",
+    "",
+    renderStatusList(readiness.statuses),
+    "",
+    "## Blocking Rules",
+    "",
+    readiness.blockers.length === 0
+      ? "No production-readiness blockers remain."
+      : renderFindings(readiness.blockers),
+    "",
+    "## Advisory Rules",
+    "",
+    readiness.advisories.length === 0 ? "No advisory warnings." : renderFindings(readiness.advisories),
+    "",
+    "## Matrix Plan",
+    "",
+    "- Do not run a full `/6` matrix from this state.",
+    "- First import or run one non-OpenAI counted smoke under the same challenge hash.",
+    "- Preserve transcript, submission, verifier output, package hash, scenario set id and provider identity.",
+    "- A provider refusal, infrastructure error, stale hash, contaminated run or missing artifact counts nothing.",
+    "- If a non-OpenAI smoke also fails on target, production matrix spend can be considered.",
+    "- If the smoke passes cleanly, route to evolve/repair instead of buying a matrix by default.",
+    "",
+    `Next action: ${readiness.nextAction}`,
+    "",
+    "## Evidence Boundary",
+    "",
+    "- One OpenAI/Codex on-target smoke failure is smoke-difficulty evidence for OpenAI only.",
+    "- It is not cross-lab evidence, not a full matrix, and not a human-solvability solve.",
+    "- Local mutant axes remain verifier-discrimination evidence, not real-agent difficulty axes.",
+    "- Adversarial-ready means attack materials are prepared; adversarial-audited requires a counted audit.",
+    "",
+    "---",
+    "",
+    "Generated by `agent-eval-foundry`. Deterministic - no timestamp, diffable.",
+    "",
+  ].join("\n");
+}
+
+export function auditDeploymentAliasCrossLabBundles(
+  root: string,
+  expectedHash: string,
+  expectedScenarioSetId: string,
+): readonly DeploymentAliasBundleAudit[] {
+  return EXTERNAL_PROVIDERS.map((providerId) => {
+    const dir = join(root, "bundles", `${FAMILY_ID}-${providerId}`);
+    return auditBundle(root, providerId, dir, expectedHash, expectedScenarioSetId);
+  });
+}
+
+export function renderDeploymentAliasCrossLabReadiness(input: DeploymentAliasCrossLabReportInput): string {
+  return [
+    "# deployment-model-alias-rollout-drift cross-lab readiness",
+    "",
+    "These are prepared import packets only. They are not evidence until an external run returns a",
+    "transcript, submission, metadata and verifier output that import cleanly under the current hash.",
+    "",
+    "| item | value |",
+    "|---|---|",
+    `| expected challenge hash | \`${input.expectedHash}\` |`,
+    `| expected scenario set | \`${input.expectedScenarioSetId}\` |`,
+    `| providers prepared | ${input.audits.filter((audit) => audit.present).length}/${input.audits.length} |`,
+    "",
+    "## Bundle Audit",
+    "",
+    "| provider | state | hash | leak check | metadata template | hidden files | reports |",
+    "|---|---|---|---|---|---|---|",
+    ...input.audits.map(
+      (audit) =>
+        `| \`${audit.providerId}\` | ${providerState(audit)} | ${
+          audit.challengeHash === null ? "missing" : `\`${audit.challengeHash}\``
+        } | ${audit.leakCheck} | ${audit.metadataTemplate} | ${
+          audit.hiddenFilesAbsent ? "absent" : "present"
+        } | ${audit.generatedReportsAbsent ? "absent" : "present"} |`,
+    ),
+    "",
+    "## Commands For Later",
+    "",
+    ...input.audits.flatMap((audit) => [
+      `### ${audit.providerId}`,
+      "",
+      `Prepare: \`node dist/cli.js trials campaign prepare --family ${FAMILY_ID} --provider ${audit.providerId} --out bundles/${FAMILY_ID}-${audit.providerId}\``,
+      `Import: \`${audit.importCommand}\``,
+      `Verify: \`${audit.verifyCommand}\``,
+      "",
+    ]),
+    "## Countability",
+    "",
+    "- Claude/Anthropic is import-only in this phase; no local Anthropic execution was run.",
+    "- Gemini remains import-only/infrastructure-error unless entitlement is actually available.",
+    "- Generic external bundles must preserve provider and model identity before any cross-lab claim.",
+    "- No cross-lab claim exists yet for deployment-alias because only OpenAI/Codex has counted smoke evidence.",
+    "",
+    "---",
+    "",
+    "Generated by `agent-eval-foundry`. Deterministic - no timestamp, diffable.",
+    "",
+  ].join("\n");
+}
+
+export function renderDeploymentAliasAdversarialReadiness(
+  input: DeploymentAliasAdversarialReadinessInput,
+): string {
+  const summary = input.summary;
+  const claimLevel = summary?.adversarialClaimLevel ?? "audit-pending";
+  return [
+    "# deployment-model-alias-rollout-drift adversarial readiness",
+    "",
+    "Deployment-alias now has real smoke difficulty evidence, so verifier-integrity coverage is",
+    "tracked as its own evidence stream.",
+    "",
+    "| item | value |",
+    "|---|---|",
+    `| challenge hash | \`${input.challengeHash}\` |`,
+    `| verifier hash | ${input.verifierHash === null ? "missing" : `\`${input.verifierHash}\``} |`,
+    `| campaign path | \`${input.campaignPath}\` |`,
+    `| bundle path | \`${input.bundlePath}\` |`,
+    `| claim level | \`${claimLevel}\` |`,
+    `| adversarial ready | ${summary?.adversarialPackageReady ? "yes" : "no"} |`,
+    `| counted no-bypass audits | ${summary?.countedNoBypassAudits ?? 0} |`,
+    `| counted bypass audits | ${summary?.countedBypassAudits ?? 0} |`,
+    `| unrepaired bypasses | ${summary?.unrepairedBypasses ?? 0} |`,
+    `| hardening probes | ${summary?.adversarialHardeningProbesPass ? "pass" : "pending/fail"} |`,
+    `| imported adversarial audits | ${summary?.importedAdversarialAudits ?? 0} |`,
+    `| container/no-network audits | ${summary?.adversarialContainerNoNetworkAudits ?? 0} |`,
+    "",
+    "## Reading",
+    "",
+    adversarialReading(summary),
+    "",
+    "## Evidence Boundary",
+    "",
+    "- Cheat resistance is not the same claim as no bypass found. Cheat resistance is the design requirement; adversarial audit is the attempted exploit record.",
+    "- Adversarial-ready is not adversarial-audited.",
+    "- OpenAI-only no-bypass evidence would not be cross-lab verifier integrity.",
+    "- A refusal or infrastructure error must be preserved and counted as no evidence.",
+    "",
+    "---",
+    "",
+    "Generated by `agent-eval-foundry`. Deterministic - no timestamp, diffable.",
+    "",
+  ].join("\n");
+}
+
+function auditBundle(
+  root: string,
+  providerId: string,
+  dir: string,
+  expectedHash: string,
+  expectedScenarioSetId: string,
+): DeploymentAliasBundleAudit {
+  const relDir = dir.replace(`${root}/`, "");
+  const importCommand = `node dist/cli.js trials campaign import --family ${FAMILY_ID} ${relDir}`;
+  const verifyCommand = "node dist/cli.js check";
+  if (!existsSync(dir)) {
+    return {
+      providerId,
+      dir: relDir,
+      present: false,
+      providerLabel: null,
+      providerFamily: null,
+      availableHere: null,
+      availabilityDetail: null,
+      challengeHash: null,
+      hashMatches: false,
+      leakCheck: "missing",
+      leakDetail: "bundle directory missing",
+      metadataTemplate: "missing",
+      metadataDetail: "metadata.json missing",
+      hiddenFilesAbsent: false,
+      generatedReportsAbsent: false,
+      importCommand,
+      verifyCommand,
+    };
+  }
+  const challengeDir = join(dir, "challenge");
+  const challengeFiles = existsSync(challengeDir) ? readChallengeFiles(challengeDir) : [];
+  const challengeHash = existsSync(challengeDir) ? hashChallengeDir(challengeDir) : null;
+  const hiddenFilesAbsent = challengeFiles.every((file) => !hiddenPath(file.path));
+  const generatedReportsAbsent = !readAllPaths(dir).some(
+    (path) => path.startsWith("reports/") || /^.*-report\.md$/.test(path),
+  );
+  let leakCheck: DeploymentAliasBundleAudit["leakCheck"] = "missing";
+  let leakDetail = "challenge directory missing";
+  if (challengeFiles.length > 0) {
+    try {
+      const check = checkChallengePackage(challengeFiles, DEPLOYMENT_ALIAS_PROFILE);
+      leakCheck = "pass";
+      leakDetail = `${check.files} visible files, ${check.specCodesFound} spec codes`;
+    } catch (err) {
+      leakCheck = "fail";
+      leakDetail = (err as Error).message;
+    }
+  }
+  const metadata = readJson(join(dir, "metadata.json"));
+  const provider = readJson(join(dir, "PROVIDER.json"));
+  const metadataChecks = metadataTemplateCheck(metadata, expectedHash, expectedScenarioSetId);
+
+  return {
+    providerId,
+    dir: relDir,
+    present: true,
+    providerLabel: readString(provider, "label"),
+    providerFamily: readString(provider, "family"),
+    availableHere: readBoolean(provider, "availableHere"),
+    availabilityDetail: readString(provider, "availabilityDetail"),
+    challengeHash,
+    hashMatches: challengeHash === expectedHash,
+    leakCheck,
+    leakDetail,
+    metadataTemplate: metadataChecks.ok ? "pass" : "fail",
+    metadataDetail: metadataChecks.detail,
+    hiddenFilesAbsent,
+    generatedReportsAbsent,
+    importCommand,
+    verifyCommand,
+  };
+}
+
+function readChallengeFiles(
+  dir: string,
+  prefix = "",
+): readonly { readonly path: string; readonly content: string }[] {
+  return readdirSync(dir, { withFileTypes: true })
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .flatMap((entry) => {
+      const rel = `${prefix}${entry.name}`;
+      const full = join(dir, entry.name);
+      return entry.isDirectory()
+        ? readChallengeFiles(full, `${rel}/`)
+        : [{ path: rel, content: readFileSync(full, "utf8") }];
+    });
+}
+
+function readAllPaths(dir: string, prefix = ""): readonly string[] {
+  return readdirSync(dir, { withFileTypes: true })
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .flatMap((entry) => {
+      const rel = `${prefix}${entry.name}`;
+      const full = join(dir, entry.name);
+      return entry.isDirectory() ? readAllPaths(full, `${rel}/`) : [rel];
+    });
+}
+
+function hiddenPath(path: string): boolean {
+  const base = path.split("/").pop() ?? path;
+  return [
+    "verify.ts",
+    "reference.ts",
+    "mutants.ts",
+    "truth.ts",
+    "scenarios.json",
+    "matrix.json",
+    "answer-matrix.json",
+  ].includes(base);
+}
+
+function readJson(path: string): Record<string, unknown> | null {
+  if (!existsSync(path)) return null;
+  try {
+    const parsed = JSON.parse(readFileSync(path, "utf8")) as unknown;
+    return typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)
+      ? (parsed as Record<string, unknown>)
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+function readString(record: Record<string, unknown> | null, key: string): string | null {
+  const value = record?.[key];
+  return typeof value === "string" && value.length > 0 ? value : null;
+}
+
+function readBoolean(record: Record<string, unknown> | null, key: string): boolean | null {
+  const value = record?.[key];
+  return typeof value === "boolean" ? value : null;
+}
+
+function metadataTemplateCheck(
+  metadata: Record<string, unknown> | null,
+  expectedHash: string,
+  expectedScenarioSetId: string,
+): { readonly ok: boolean; readonly detail: string } {
+  if (metadata === null) return { ok: false, detail: "metadata.json missing or invalid" };
+  const required = ["runId", "familyId", "provider", "model", "subjectId", "scenarioSetId", "challengeHash"];
+  const missing = required.filter(
+    (key) => typeof metadata[key] !== "string" || String(metadata[key]).length === 0,
+  );
+  if (missing.length > 0) return { ok: false, detail: `missing ${missing.join(", ")}` };
+  if (metadata["familyId"] !== FAMILY_ID) return { ok: false, detail: "familyId mismatch" };
+  if (metadata["challengeHash"] !== expectedHash) return { ok: false, detail: "challengeHash mismatch" };
+  if (metadata["scenarioSetId"] !== expectedScenarioSetId) {
+    return { ok: false, detail: "scenarioSetId mismatch" };
+  }
+  return { ok: true, detail: "pinned hash and scenario set present" };
+}
+
+function renderStatusList(statuses: readonly ProductionReadinessStatus[]): string {
+  return statuses.map((status) => `- \`${status}\``).join("\n");
+}
+
+function renderFindings(findings: readonly { readonly code: string; readonly detail: string }[]): string {
+  return ["| code | detail |", "|---|---|", ...findings.map((f) => `| \`${f.code}\` | ${f.detail} |`)].join(
+    "\n",
+  );
+}
+
+function providerState(audit: DeploymentAliasBundleAudit): string {
+  if (!audit.present) return "missing";
+  if (audit.availableHere === null) return audit.providerFamily ?? "unknown";
+  if (audit.availableHere) return "configured";
+  return audit.availabilityDetail ?? "import-only";
+}
+
+function adversarialReading(summary: VerifierIntegrityEvidence | undefined): string {
+  if (summary === undefined) return "No adversarial readiness summary exists for this family yet.";
+  if (summary.unrepairedBypasses > 0) {
+    return "A counted unrepaired bypass exists. Verifier-integrity claims are blocked until repair and invalidation are recorded.";
+  }
+  if (summary.countedNoBypassAudits > 0) {
+    return "At least one counted no-bypass audit exists. Scope remains bounded by provider family and isolation level.";
+  }
+  if (summary.adversarialPackageReady) {
+    return "The campaign and bundle are ready, but no counted deployment-alias adversarial audit exists yet.";
+  }
+  return "The family is not adversarial-ready yet; prepare the campaign and attack bundle before claiming verifier-integrity coverage.";
+}

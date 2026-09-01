@@ -275,6 +275,25 @@ const COVERED_IN_LINEAGE_TEST: readonly RuleCode[] = [
   "LINEAGE_NO_REALLOCATION",
 ];
 
+/** Rules whose known-bad case lives in `deployment-alias-family.test.ts`: production matrix readiness. */
+const COVERED_IN_DEPLOYMENT_ALIAS_TEST: readonly RuleCode[] = [
+  "PRODUCTION_LOCAL_VERIFIER_NOT_READY",
+  "PRODUCTION_PACKAGE_NOT_BACKED",
+  "PRODUCTION_NO_COUNTED_SMOKE",
+  "PRODUCTION_STALE_HASH_BLOCKS_MATRIX",
+  "PRODUCTION_PROVIDER_FAILURE_NO_COUNT",
+  "PRODUCTION_CLEAN_PASS_NOT_DIFFICULTY",
+  "PRODUCTION_OFF_TARGET_SMOKE_REPAIR",
+  "PRODUCTION_TRANSFER_NOT_DECLARED",
+  "PRODUCTION_MATRIX_NEEDS_NON_OPENAI_SMOKE",
+  "PRODUCTION_OPENAI_ONLY_NO_CROSS_LAB",
+  "PRODUCTION_LOCAL_MUTANTS_NOT_DIFFICULTY",
+  "PRODUCTION_ADVERSARIAL_NOT_READY",
+  "PRODUCTION_ADVERSARIAL_READY_NOT_AUDITED",
+  "PRODUCTION_HUMAN_READY_NOT_EVIDENCED",
+  "PRODUCTION_UNREPAIRED_BYPASS",
+];
+
 /** Rules exercised by code below rather than by a JSON fixture. Keeps assertion 3 honest. */
 const PROGRAMMATIC: readonly RuleCode[] = [
   "E_TYPE",
@@ -539,6 +558,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ...COVERED_IN_PROBE_RUNNER_TEST,
       ...COVERED_IN_PROMOTION_TEST,
       ...COVERED_IN_LINEAGE_TEST,
+      ...COVERED_IN_DEPLOYMENT_ALIAS_TEST,
     ]);
     const uncovered = RULE_CODES.filter((c) => !covered.has(c));
     expect(
@@ -562,6 +582,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ["test/probe-runner.test.ts", COVERED_IN_PROBE_RUNNER_TEST],
       ["test/promotion.test.ts", COVERED_IN_PROMOTION_TEST],
       ["test/lineage.test.ts", COVERED_IN_LINEAGE_TEST],
+      ["test/deployment-alias-family.test.ts", COVERED_IN_DEPLOYMENT_ALIAS_TEST],
     ];
     for (const [file, codes] of delegated) {
       const source = readFileSync(`${ROOT}${file}`, "utf8");

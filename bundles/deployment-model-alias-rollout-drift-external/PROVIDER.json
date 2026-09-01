@@ -1,0 +1,11 @@
+{
+  "provider": "external",
+  "family": "external",
+  "label": "Run elsewhere and imported",
+  "model": "external/unspecified",
+  "subjectId": "external",
+  "availableHere": false,
+  "availabilityDetail": "external by declaration: prepare a bundle and import the result",
+  "invocationNote": "No CLI. `foundry trials campaign prepare` emits the bundle and the exact instruction; the result is imported with `foundry trials campaign import`, and the challenge hash decides whether it counts.",
+  "command": null
+}

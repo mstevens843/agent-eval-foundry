@@ -183,6 +183,23 @@ const SMOKE = [
     ["adversarial", "isolate", "container", "verify", "bundles/ui-replay-live-dom-adversarial-container"],
     /Container isolation verification/,
   ],
+  [["adversarial", "campaign", "deployment-model-alias-rollout-drift"], /Threat Models/],
+  [["adversarial", "replay", "deployment-alias-adversarial-codex-2026-08"], /Exploit replay/],
+  [["adversarial", "triage", "deployment-alias-adversarial-codex-2026-08"], /Bypass triage/],
+  [
+    ["adversarial", "isolate", "verify", "bundles/deployment-model-alias-rollout-drift-adversarial"],
+    /Isolation verification/,
+  ],
+  [
+    [
+      "adversarial",
+      "isolate",
+      "container",
+      "verify",
+      "bundles/deployment-model-alias-rollout-drift-adversarial-container",
+    ],
+    /Container isolation verification/,
+  ],
   [["adversarial", "probe", "ui-replay-live-dom"], /Adversarial hardening probes/],
   [["browser-backed", "verify"], /Browser-backed measurement verification/],
   [["browser-backed", "report"], /ui-replay-browser-backed report/],
@@ -286,6 +303,7 @@ if (!/family\s+access-token-scope-expansion/.test(promotionScaffoldOut)) {
 const ADVERSARIAL_FAMILIES = [
   "checker-required-memory-poisoning",
   "delegated-wallet-scope-reconciliation",
+  "deployment-model-alias-rollout-drift",
   "prompt-injection-containment",
   "prompt-injection-memory-poisoning",
   "ui-action-record-replay",
@@ -323,6 +341,21 @@ const BUNDLE_TARGETS = [
     "delegated-wallet-scope-reconciliation",
     "external",
     "delegated-wallet-scope-reconciliation-external",
+  ],
+  [
+    "deployment-model-alias-rollout-drift",
+    "external",
+    "deployment-model-alias-rollout-drift-external",
+  ],
+  [
+    "deployment-model-alias-rollout-drift",
+    "claude",
+    "deployment-model-alias-rollout-drift-claude",
+  ],
+  [
+    "deployment-model-alias-rollout-drift",
+    "gemini",
+    "deployment-model-alias-rollout-drift-gemini",
   ],
 ];
 for (const [familyId, providerId, bundleDir] of BUNDLE_TARGETS) {
@@ -408,7 +441,7 @@ for (const variant of [
 // by being written here, but the count is asserted so a report that stops being generated is caught
 // rather than silently skipped.
 run(["all", "--out", tmp]);
-const EXPECTED_REPORTS = 95;
+const EXPECTED_REPORTS = 98;
 const generated = readdirSync(tmp);
 if (generated.length !== EXPECTED_REPORTS) {
   console.error(`WRONG COUNT  \`all\` wrote ${generated.length} reports, expected ${EXPECTED_REPORTS}`);

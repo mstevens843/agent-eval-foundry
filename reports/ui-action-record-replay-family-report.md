@@ -35,6 +35,7 @@ Every figure below is measured: produced by running the family, not by declaring
 | `trial-ready` | no | pass | challenge package builds, leak check passes, router can grade it |
 | `difficulty-evidenced` | yes | pass | 5 counted agent trial(s) |
 | `agent-axes-independent` | no | fail | every counted subject's failures nest (claude-opus-5 ⊂ claude-haiku-4-5 ⊂ claude-sonnet-5 ⊂ gpt-5.6-sol); one difficulty axis however many subjects attempt it. Only new scenarios with a genuine trade-off can raise it — see reports/scenario-diversity-report.md |
+| `production-matrix-ready` | no | n/a | no production-readiness layer for this family |
 | `not-already-solved` | yes | pass | 5 of 5 counted trial(s) failed at least one scenario |
 | `priced` | no | pass | 55h build, $40 frontier |
 | `human-package-ready` | no | pass | public package passed human-readiness audit |

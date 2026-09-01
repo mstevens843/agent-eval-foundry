@@ -57,8 +57,11 @@ That reallocation has now been exercised. `deployment-model-alias-rollout-drift`
 validation-mode family for model alias drift in deployment rollout decisions: local reference,
 mutant, package and smoke-campaign gates pass, and one counted OpenAI/Codex smoke failed 192/339
 scenarios on target. That is smoke-difficulty evidence for this provider only, not cross-lab
-breadth or a full matrix. See
-[`reports/deployment-model-alias-rollout-drift-family-report.md`](reports/deployment-model-alias-rollout-drift-family-report.md).
+breadth or a full matrix. Production readiness now stays blocked until non-OpenAI smoke evidence is
+imported under the same hash. See
+[`reports/deployment-model-alias-rollout-drift-family-report.md`](reports/deployment-model-alias-rollout-drift-family-report.md)
+and
+[`reports/deployment-model-alias-rollout-drift-production-readiness.md`](reports/deployment-model-alias-rollout-drift-production-readiness.md).
 
 The foundry keeps evidence streams separate:
 
@@ -95,7 +98,7 @@ requirement; adversarial audit is the attempted exploit record.
 | `checker-required-memory-poisoning` | 792 | 1 | 1 | 12 | not claimed yet | human-ready | adversarial-audited; OpenAI-only | **SHIP**: required-checker gap, OpenAI-only |
 | `access-token-scope-expansion` | 384 | 1 | 0 | 3 | already-solved by smoke | pending | audit-pending | **NOT-READY**: clean OpenAI smoke pass; evolve/repair before matrix |
 | `delegated-wallet-scope-reconciliation` | 804 | 1 | 0 | 3 | already-solved by smoke | human-ready | adversarial-ready | **NOT-READY**: clean OpenAI smoke pass; evolve/repair before matrix |
-| `deployment-model-alias-rollout-drift` | 339 | 1 | 1 | 6 | smoke-difficulty; OpenAI-only | human-ready | audit-pending | **SHIP**: on-target OpenAI smoke failure; no cross-lab or adversarial audit yet |
+| `deployment-model-alias-rollout-drift` | 339 | 1 | 1 | 6 | smoke-difficulty; OpenAI-only | human-ready | adversarial-audited; OpenAI-only fs-sandbox | **SHIP**: on-target OpenAI smoke failure; production matrix blocked until non-OpenAI smoke |
 | `durable-approval-outbox` | 24 | 20 imported | 20 | 3 | 1 | reference-solvable | audit-pending; imported historical no-count | **SHIP**: imported historical bank |
 
 Current live-DOM package hash: `18c3f5afc5973604205cd7df23ce4cad`.
@@ -161,17 +164,20 @@ OpenAI/Codex smoke campaign. The counted smoke trial
 `deployment-model-alias-rollout-drift-2026-08-o1` failed 192/339 scenarios on target under challenge
 hash `0e9b87a5f260544cfbc1cdce8f08938c`, so this branch now has OpenAI-only smoke-difficulty
 evidence. No full `/6` matrix, non-OpenAI trial, transfer proof, human solve or adversarial audit is
-claimed from that result.
+claimed from that smoke result. Current-hash Claude, Gemini and generic external import bundles are
+prepared in
+[`reports/deployment-model-alias-rollout-drift-cross-lab-readiness.md`](reports/deployment-model-alias-rollout-drift-cross-lab-readiness.md).
 
 Adversarial Audit v2 upgrades verifier-integrity from preserved attack records to mechanical triage.
 Attack packets now carry an execution profile, an isolation profile, an exploit-artifact schema, an
 exploit replay path, deterministic hardening probes and hash/current-verifier countability rules.
-Six current package-backed families are `adversarial-ready`, including the new delegated-wallet
-descendant.
+Seven current package-backed families are `adversarial-ready`, including the delegated-wallet and
+deployment-alias descendants.
 
-Two real Codex/OpenAI adversarial audits counted as no-bypass evidence: one against
+Three real Codex/OpenAI adversarial audits counted as no-bypass evidence: one against
 `ui-replay-live-dom` under challenge hash `18c3f5afc5973604205cd7df23ce4cad`, and one against
-`checker-required-memory-poisoning` under hash `448f2f816c51030cc97a374816226168`. Both used the
+`checker-required-memory-poisoning` under hash `448f2f816c51030cc97a374816226168`, and one against
+`deployment-model-alias-rollout-drift` under hash `0e9b87a5f260544cfbc1cdce8f08938c`. All used the
 implemented `fs-sandbox` profile, preserved transcript/verifier/replay output, and found no
 replayable contract-violating artifact. This is OpenAI-only verifier-integrity evidence, not
 cross-lab evidence. One older Live-DOM attack is preserved as a no-count provider refusal, and one

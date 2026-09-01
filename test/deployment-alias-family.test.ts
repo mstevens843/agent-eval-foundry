@@ -34,12 +34,18 @@ import { verify } from "../src/families/deployment-model-alias-rollout-drift/ver
 import { builtFamily } from "../src/families/registry.js";
 import { parseTransferTest } from "../src/foundry/adaptive-funnel.js";
 import { loadAdaptiveFunnel, loadRegistry } from "../src/foundry/load.js";
+import { evaluateProductionReadiness } from "../src/foundry/production-readiness.js";
 import { evaluatePromotionSmokeGate } from "../src/foundry/smoke-gates.js";
 import type { FamilyTrialAnalysis } from "../src/reports/agent-results.js";
 import {
   classifyDeploymentAliasSmoke,
   renderDeploymentAliasSmokeDiagnosis,
 } from "../src/reports/deployment-alias-diagnosis.js";
+import {
+  auditDeploymentAliasCrossLabBundles,
+  renderDeploymentAliasCrossLabReadiness,
+  renderDeploymentAliasProductionReadiness,
+} from "../src/reports/deployment-alias-production.js";
 import type { TrialDiagnosis } from "../src/reports/diagnosis.js";
 import { assertCampaignChallenge, loadCampaigns } from "../src/trials/campaign.js";
 import { challengeHash } from "../src/trials/run.js";
@@ -112,6 +118,36 @@ const diagnosisFixture = (overrides: Partial<TrialDiagnosis> = {}): TrialDiagnos
   matchesHypothesis: true,
   notes: [],
   repairSuspected: false,
+  ...overrides,
+});
+
+type ProductionReadinessInput = Parameters<typeof evaluateProductionReadiness>[0];
+
+const productionReadinessFixture = (
+  overrides: Partial<ProductionReadinessInput> = {},
+): ProductionReadinessInput => ({
+  familyId: FAMILY_ID,
+  challengeHash: CHALLENGE_HASH,
+  currentChallengeHash: CHALLENGE_HASH,
+  localVerifierReady: true,
+  packageBacked: true,
+  campaignPresent: true,
+  campaignHashCurrent: true,
+  packageHashCurrent: true,
+  countedSmokeTrials: 2,
+  countedSmokeFailures: 1,
+  countedSmokeSolves: 0,
+  providerRefusals: 0,
+  infraFailures: 0,
+  modelFamilies: ["openai", "second-lab"],
+  diagnosisStatus: "on-target",
+  transferDeclared: true,
+  adversarialReady: true,
+  countedNoBypassAudits: 1,
+  countedBypassAudits: 0,
+  unrepairedBypasses: 0,
+  humanReady: false,
+  cleanHumanSolves: 0,
   ...overrides,
 });
 
@@ -293,6 +329,9 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
     const transfer = funnel.transfers.find(
       (item) => item.id === "deployment-alias-to-routing-incident-response",
     );
+    const featureFlagTransfer = funnel.transfers.find(
+      (item) => item.id === "deployment-alias-to-feature-flag-rollout-drift",
+    );
 
     expect(transfer).toBeDefined();
     expect(() => parseTransferTest(transfer, "transfer")).not.toThrow();
@@ -300,6 +339,10 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
     expect(transfer?.status).toBe("proposed");
     expect(transfer?.buildMode).toBe("probe-first");
     expect(transfer?.requiredEvidenceBeforeDeclaringTransfer.join(" ")).toMatch(/Do not claim transfer/);
+    expect(featureFlagTransfer).toBeDefined();
+    expect(() => parseTransferTest(featureFlagTransfer, "feature-flag-transfer")).not.toThrow();
+    expect(featureFlagTransfer?.status).toBe("ready");
+    expect(featureFlagTransfer?.targetDomain).toBe("feature-flag rollout drift");
   });
 
   it("classifies smoke outcomes without treating a clean pass as matrix-ready", () => {
@@ -422,5 +465,249 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
     expect(first).toBe(second);
     expect(first).toContain("No counted smoke trial yet");
     expect(first).toContain("One OpenAI/Codex smoke is not cross-lab evidence");
+  });
+
+  it("blocks production matrix readiness after one OpenAI-only on-target smoke failure", () => {
+    const readiness = evaluateProductionReadiness({
+      familyId: FAMILY_ID,
+      challengeHash: CHALLENGE_HASH,
+      currentChallengeHash: CHALLENGE_HASH,
+      localVerifierReady: true,
+      packageBacked: true,
+      campaignPresent: true,
+      campaignHashCurrent: true,
+      packageHashCurrent: true,
+      countedSmokeTrials: 1,
+      countedSmokeFailures: 1,
+      countedSmokeSolves: 0,
+      providerRefusals: 0,
+      infraFailures: 0,
+      modelFamilies: ["openai"],
+      diagnosisStatus: "on-target",
+      transferDeclared: true,
+      adversarialReady: true,
+      countedNoBypassAudits: 0,
+      countedBypassAudits: 0,
+      unrepairedBypasses: 0,
+      humanReady: true,
+      cleanHumanSolves: 0,
+    });
+
+    expect(readiness.smokeDifficultyEvidenced).toBe(true);
+    expect(readiness.crossLabSmokeEvidenced).toBe(false);
+    expect(readiness.fullMatrixReady).toBe(false);
+    expect(readiness.statuses).toContain("smoke-failed-on-target");
+    expect(readiness.statuses).toContain("cross-lab-smoke-needed");
+    expect(readiness.statuses).toContain("matrix-blocked");
+    expect(readiness.blockers.map((finding) => finding.code)).toContain(
+      "PRODUCTION_MATRIX_NEEDS_NON_OPENAI_SMOKE",
+    );
+    expect(readiness.advisories.map((finding) => finding.code)).toContain(
+      "PRODUCTION_OPENAI_ONLY_NO_CROSS_LAB",
+    );
+  });
+
+  it("keeps refusal, infra and stale hashes out of production readiness", () => {
+    const input = {
+      familyId: FAMILY_ID,
+      challengeHash: CHALLENGE_HASH,
+      currentChallengeHash: CHALLENGE_HASH,
+      localVerifierReady: true,
+      packageBacked: true,
+      campaignPresent: true,
+      campaignHashCurrent: true,
+      packageHashCurrent: true,
+      countedSmokeTrials: 0,
+      countedSmokeFailures: 0,
+      countedSmokeSolves: 0,
+      providerRefusals: 1,
+      infraFailures: 1,
+      modelFamilies: [],
+      diagnosisStatus: "provider-refusal",
+      transferDeclared: true,
+      adversarialReady: true,
+      countedNoBypassAudits: 0,
+      countedBypassAudits: 0,
+      unrepairedBypasses: 0,
+      humanReady: true,
+      cleanHumanSolves: 0,
+    } as const;
+    const refusal = evaluateProductionReadiness(input);
+    const stale = evaluateProductionReadiness({
+      ...input,
+      challengeHash: "old-hash",
+      countedSmokeTrials: 1,
+      countedSmokeFailures: 1,
+      providerRefusals: 0,
+      infraFailures: 0,
+      modelFamilies: ["openai", "anthropic"],
+      diagnosisStatus: "on-target",
+      countedNoBypassAudits: 1,
+    });
+
+    expect(refusal.fullMatrixReady).toBe(false);
+    expect(refusal.statuses).toContain("smoke-attempted");
+    expect(refusal.blockers.map((finding) => finding.code)).toContain("PRODUCTION_NO_COUNTED_SMOKE");
+    expect(refusal.advisories.map((finding) => finding.code)).toContain(
+      "PRODUCTION_PROVIDER_FAILURE_NO_COUNT",
+    );
+    expect(stale.fullMatrixReady).toBe(false);
+    expect(stale.statuses).toContain("stale-hash-blocked");
+    expect(stale.blockers.map((finding) => finding.code)).toContain("PRODUCTION_STALE_HASH_BLOCKS_MATRIX");
+  });
+
+  it("requires counted no-bypass or bypass audit before calling adversarial-ready audited", () => {
+    const input = {
+      familyId: FAMILY_ID,
+      challengeHash: CHALLENGE_HASH,
+      currentChallengeHash: CHALLENGE_HASH,
+      localVerifierReady: true,
+      packageBacked: true,
+      campaignPresent: true,
+      campaignHashCurrent: true,
+      packageHashCurrent: true,
+      countedSmokeTrials: 1,
+      countedSmokeFailures: 1,
+      countedSmokeSolves: 0,
+      providerRefusals: 0,
+      infraFailures: 0,
+      modelFamilies: ["openai", "anthropic"],
+      diagnosisStatus: "on-target",
+      transferDeclared: true,
+      adversarialReady: true,
+      countedNoBypassAudits: 0,
+      countedBypassAudits: 0,
+      unrepairedBypasses: 0,
+      humanReady: true,
+      cleanHumanSolves: 0,
+    } as const;
+    const readyNotAudited = evaluateProductionReadiness(input);
+    const audited = evaluateProductionReadiness({
+      ...input,
+      countedNoBypassAudits: 1,
+    });
+
+    expect(readyNotAudited.fullMatrixReady).toBe(true);
+    expect(readyNotAudited.advisories.map((finding) => finding.code)).toContain(
+      "PRODUCTION_ADVERSARIAL_READY_NOT_AUDITED",
+    );
+    expect(audited.fullMatrixReady).toBe(true);
+    expect(audited.advisories.map((finding) => finding.code)).not.toContain(
+      "PRODUCTION_ADVERSARIAL_READY_NOT_AUDITED",
+    );
+  });
+
+  it("exercises every production-readiness rule code through intended known-bad cases", () => {
+    const cases = [
+      ["PRODUCTION_LOCAL_VERIFIER_NOT_READY", { localVerifierReady: false }, "blockers"],
+      ["PRODUCTION_PACKAGE_NOT_BACKED", { packageBacked: false }, "blockers"],
+      [
+        "PRODUCTION_NO_COUNTED_SMOKE",
+        { countedSmokeTrials: 0, countedSmokeFailures: 0, modelFamilies: [] },
+        "blockers",
+      ],
+      ["PRODUCTION_STALE_HASH_BLOCKS_MATRIX", { challengeHash: "stale" }, "blockers"],
+      ["PRODUCTION_PROVIDER_FAILURE_NO_COUNT", { providerRefusals: 1, infraFailures: 1 }, "advisories"],
+      [
+        "PRODUCTION_CLEAN_PASS_NOT_DIFFICULTY",
+        {
+          countedSmokeTrials: 1,
+          countedSmokeFailures: 0,
+          countedSmokeSolves: 1,
+          diagnosisStatus: "clean",
+        },
+        "blockers",
+      ],
+      ["PRODUCTION_OFF_TARGET_SMOKE_REPAIR", { diagnosisStatus: "off-target" }, "blockers"],
+      ["PRODUCTION_TRANSFER_NOT_DECLARED", { transferDeclared: false }, "blockers"],
+      ["PRODUCTION_MATRIX_NEEDS_NON_OPENAI_SMOKE", { modelFamilies: ["openai"] }, "blockers"],
+      ["PRODUCTION_OPENAI_ONLY_NO_CROSS_LAB", { modelFamilies: ["openai"] }, "advisories"],
+      ["PRODUCTION_LOCAL_MUTANTS_NOT_DIFFICULTY", {}, "advisories"],
+      ["PRODUCTION_ADVERSARIAL_NOT_READY", { adversarialReady: false }, "blockers"],
+      [
+        "PRODUCTION_ADVERSARIAL_READY_NOT_AUDITED",
+        { countedNoBypassAudits: 0, countedBypassAudits: 0 },
+        "advisories",
+      ],
+      ["PRODUCTION_HUMAN_READY_NOT_EVIDENCED", { humanReady: true, cleanHumanSolves: 0 }, "advisories"],
+      ["PRODUCTION_UNREPAIRED_BYPASS", { unrepairedBypasses: 1 }, "blockers"],
+    ] as const;
+
+    for (const [code, overrides, bucket] of cases) {
+      const readiness = evaluateProductionReadiness(productionReadinessFixture(overrides));
+      expect(
+        readiness[bucket].map((finding) => finding.code),
+        `${code} should be asserted by the deployment-alias known-bad case`,
+      ).toContain(code);
+    }
+  });
+
+  it("audits current-hash cross-lab bundles without treating them as evidence", () => {
+    const audits = auditDeploymentAliasCrossLabBundles(ROOT, CHALLENGE_HASH, SCENARIO_SET_ID);
+
+    expect(audits.map((audit) => audit.providerId).sort()).toEqual(["claude", "external", "gemini"]);
+    expect(audits.every((audit) => audit.present)).toBe(true);
+    expect(audits.every((audit) => audit.hashMatches)).toBe(true);
+    expect(audits.every((audit) => audit.leakCheck === "pass")).toBe(true);
+    expect(audits.every((audit) => audit.metadataTemplate === "pass")).toBe(true);
+    expect(audits.every((audit) => audit.hiddenFilesAbsent)).toBe(true);
+    expect(audits.every((audit) => audit.generatedReportsAbsent)).toBe(true);
+
+    const report = renderDeploymentAliasCrossLabReadiness({
+      expectedHash: CHALLENGE_HASH,
+      expectedScenarioSetId: SCENARIO_SET_ID,
+      audits,
+    });
+    expect(report).toContain("prepared import packets only");
+    expect(report).toContain("No cross-lab claim exists yet");
+  });
+
+  it("renders production readiness deterministically", () => {
+    const readiness = evaluateProductionReadiness({
+      familyId: FAMILY_ID,
+      challengeHash: CHALLENGE_HASH,
+      currentChallengeHash: CHALLENGE_HASH,
+      localVerifierReady: true,
+      packageBacked: true,
+      campaignPresent: true,
+      campaignHashCurrent: true,
+      packageHashCurrent: true,
+      countedSmokeTrials: 1,
+      countedSmokeFailures: 1,
+      countedSmokeSolves: 0,
+      providerRefusals: 0,
+      infraFailures: 0,
+      modelFamilies: ["openai"],
+      diagnosisStatus: "on-target",
+      transferDeclared: true,
+      adversarialReady: true,
+      countedNoBypassAudits: 0,
+      countedBypassAudits: 0,
+      unrepairedBypasses: 0,
+      humanReady: true,
+      cleanHumanSolves: 0,
+    });
+    const input = {
+      readiness,
+      analysis: analysisFixture({
+        counted: 1,
+        failures: 1,
+        modelFamilies: ["openai"],
+        checkTotals: [{ check: "decision_matches_truth", scenarios: 192 }],
+      }),
+      challengeHash: CHALLENGE_HASH,
+      scenarioSetId: SCENARIO_SET_ID,
+      measuredScenarios: 339,
+      declaredSpace: 663_552,
+      mutantDetectionAxes: 6,
+      packageFiles: 9,
+      packageBytes: 41_000,
+    };
+    const first = renderDeploymentAliasProductionReadiness(input);
+    const second = renderDeploymentAliasProductionReadiness(input);
+
+    expect(first).toBe(second);
+    expect(first).toContain("Production matrix: **blocked**");
+    expect(first).toContain("PRODUCTION_MATRIX_NEEDS_NON_OPENAI_SMOKE");
   });
 });

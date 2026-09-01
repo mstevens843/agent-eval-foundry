@@ -8,7 +8,7 @@ Cheat resistance is not the same claim as no bypass found. Cheat resistance is t
 | family | readiness | package hash | campaign | bundle | blockers |
 |---|---|---|---|---|---|
 | `checker-required-memory-poisoning` | **adversarial-ready** | `448f2f816c51030cc97a374816226168` | `checker-required-memory-poisoning-adversarial` | `bundles/checker-required-memory-poisoning-adversarial` | none |
-| `deployment-model-alias-rollout-drift` | **audit-pending** | `0e9b87a5f260544cfbc1cdce8f08938c` | none | none | `campaign-file-present`, `campaign-hash-current`, `threat-model-declared`, `access-boundary-declared`, `outcome-contract-declared`, `never-counts-declared`, `attack-bundle-present`, `fs-sandbox-isolation-check`, `exploit-schema-present` |
+| `deployment-model-alias-rollout-drift` | **adversarial-ready** | `0e9b87a5f260544cfbc1cdce8f08938c` | `deployment-model-alias-rollout-drift-adversarial` | `bundles/deployment-model-alias-rollout-drift-adversarial` | none |
 | `durable-approval-outbox` | **audit-pending** | none | none | none | `public-package-present`, `package-leak-check`, `campaign-file-present`, `threat-model-declared`, `access-boundary-declared`, `outcome-contract-declared`, `never-counts-declared` |
 | `prompt-injection-containment` | **adversarial-ready** | `4911ffdfbd2c0e9b51752ed16c4f53e8` | `prompt-injection-containment-adversarial` | `bundles/prompt-injection-containment-adversarial` | none |
 | `prompt-injection-memory-poisoning` | **adversarial-ready** | `9b3e0c84addabc2e195ecbd490ba81dd` | `prompt-injection-memory-poisoning-adversarial` | `bundles/prompt-injection-memory-poisoning-adversarial` | none |
@@ -18,8 +18,8 @@ Cheat resistance is not the same claim as no bypass found. Cheat resistance is t
 
 ## Current Reading
 
-Adversarial-ready families: `checker-required-memory-poisoning`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom`, `delegated-wallet-scope-reconciliation`.
-Audit-pending families: `deployment-model-alias-rollout-drift`, `durable-approval-outbox`.
+Adversarial-ready families: `checker-required-memory-poisoning`, `deployment-model-alias-rollout-drift`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom`, `delegated-wallet-scope-reconciliation`.
+Audit-pending families: `durable-approval-outbox`.
 
 A ready verdict means the attack campaign is prepared and hash-pinned. It does not mean anyone
 has tried to exploit the verifier, and it does not mean no bypass exists.
@@ -48,15 +48,15 @@ has tried to exploit the verifier, and it does not mean no bypass exists.
 |---|---|---|
 | `public-package-present` | pass | checked-in challenge package hashes to 0e9b87a5f260544cfbc1cdce8f08938c |
 | `package-leak-check` | pass | public challenge package passes leak check |
-| `campaign-file-present` | **FAIL** | no adversarial campaign file is checked in |
-| `campaign-hash-current` | **FAIL** | campaign hash none / current 0e9b87a5f260544cfbc1cdce8f08938c |
-| `threat-model-declared` | **FAIL** | campaign must declare the attack surface |
-| `access-boundary-declared` | **FAIL** | allowed/forbidden attacker access boundary is incomplete |
-| `outcome-contract-declared` | **FAIL** | campaign must define what counts as bypass and no-bypass |
-| `never-counts-declared` | **FAIL** | campaign never-counts list is incomplete |
-| `attack-bundle-present` | **FAIL** | prepared adversarial bundle missing |
-| `fs-sandbox-isolation-check` | **FAIL** | no attack bundle to inspect |
-| `exploit-schema-present` | **FAIL** | no attack bundle to inspect |
+| `campaign-file-present` | pass | campaign deployment-model-alias-rollout-drift-adversarial |
+| `campaign-hash-current` | pass | campaign pins current hash 0e9b87a5f260544cfbc1cdce8f08938c |
+| `threat-model-declared` | pass | 12 attack surface(s) |
+| `access-boundary-declared` | pass | allowed and forbidden attacker access are both declared |
+| `outcome-contract-declared` | pass | bypass and no-bypass outcomes are declared separately |
+| `never-counts-declared` | pass | refusal, infrastructure errors and stale hashes never count |
+| `attack-bundle-present` | pass | bundle ./bundles/deployment-model-alias-rollout-drift-adversarial |
+| `fs-sandbox-isolation-check` | pass | bundle declares fs-sandbox and leaks no hidden files |
+| `exploit-schema-present` | pass | exploit artifact schema is included in the attack packet |
 
 ### `durable-approval-outbox`
 

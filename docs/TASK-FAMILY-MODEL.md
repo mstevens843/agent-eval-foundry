@@ -132,7 +132,12 @@ measured scenarios from a 663,552-point declared space, a clean reference, 13/13
 caught by intended checks, 2/2 baselines blocked, 6 mutant-detection axes, a leak-checked public
 package and a pinned one-slot OpenAI/Codex smoke campaign. That smoke trial now counted and failed
 192/339 scenarios on target, which is OpenAI-only smoke-difficulty evidence. It is not cross-lab
-evidence and it is not a full-matrix result.
+evidence and it is not a full-matrix result. Deployment-Alias Production Readiness v1 adds the
+stricter production gate: a full `/6` matrix stays blocked until one non-OpenAI smoke counts under
+the same package hash or an explicit OpenAI-only override is recorded. The same phase prepared
+current-hash external import bundles and added one counted Codex/OpenAI no-bypass adversarial audit
+under `fs-sandbox`; that is verifier-integrity evidence for one provider family, not a security
+proof and not cross-lab cheat-resistance evidence.
 
 Durable Approval Outbox is the first concrete example:
 

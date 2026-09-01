@@ -356,7 +356,12 @@ scenarios, a clean reference, 13/13 known-bad subjects caught by intended checks
 blocked, 6 mutant-detection axes and a leak-checked public package. Its counted OpenAI/Codex smoke
 trial failed 192/339 scenarios on target under the pinned package hash, so the branch now has
 OpenAI-only smoke-difficulty evidence. That still is not cross-lab breadth, and a production matrix
-is an earned next decision rather than automatic spend.
+is an earned next decision rather than automatic spend. Deployment-Alias Production Readiness v1
+makes that explicit: current-hash Claude, Gemini and generic external bundles are prepared for
+import, but `/6` remains blocked until at least one non-OpenAI smoke counts under the same hash or an
+explicit OpenAI-only matrix override is recorded. The family also has one counted Codex/OpenAI
+no-bypass adversarial audit under `fs-sandbox`, which is verifier-integrity evidence for one
+provider family, not cross-lab cheat-resistance evidence.
 
 ### Stage 0: Candidate Pool
 

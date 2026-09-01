@@ -64,6 +64,10 @@ export function renderDeploymentAliasSmokeDiagnosis(input: DeploymentAliasSmokeD
     ),
   ].sort();
   const failedChecks = new Set(analysis.checkTotals.map((check) => check.check));
+  const displayedNextAction =
+    gate.nextAction === "full matrix may be considered; it is not automatic"
+      ? "pursue non-OpenAI smoke before production /6 matrix spend"
+      : gate.nextAction;
 
   return [
     "# deployment-model-alias-rollout-drift smoke diagnosis",
@@ -94,13 +98,13 @@ export function renderDeploymentAliasSmokeDiagnosis(input: DeploymentAliasSmokeD
     `| smoke campaign | ${gate.smokeCampaignStatus} |`,
     `| diagnosis | ${gate.smokeDiagnosisStatus} |`,
     `| transfer declaration | ${gate.transferDeclarationStatus} |`,
-    `| full matrix | ${gate.matrixReadinessStatus} |`,
+    `| smoke-gate follow-up | ${gate.matrixReadinessStatus} |`,
     "",
     gate.blockers.length === 0
-      ? "No smoke/matrix blockers remain in this gate calculation."
+      ? "No smoke-gate blockers remain in this calculation. Production `/6` readiness is stricter and still requires non-OpenAI smoke evidence."
       : ["Blocking reasons:", "", ...gate.blockers.map((blocker) => `- ${blocker}`)].join("\n"),
     "",
-    `Next action: ${gate.nextAction}`,
+    `Next action: ${displayedNextAction}`,
     "",
     "## Failed Checks",
     "",
@@ -166,6 +170,26 @@ export function renderDeploymentAliasSmokeDiagnosis(input: DeploymentAliasSmokeD
     mechanismRow("did it preserve audit truth", ["audit_matches_rollout_source"], failedChecks),
     "| did it build/preserve a self-checker | not applicable | this family requires `subject.mjs`; checker-required is a separate descendant pattern |",
     "",
+    "## Why This Is The Intended Mechanism",
+    "",
+    intendedMechanismReading(analysis, failedChecks),
+    "",
+    "The family is not asking for a deployment-status guess. It is asking the subject to reconcile",
+    "the current alias map, concrete served versions, baseline, rollout window and eval ledger before",
+    "choosing continue, rollback, quarantine or re-evaluate. Failures on decision truth, subject-owned",
+    "model truth, liveness or report/ledger mismatch are therefore mechanism failures unless the",
+    "diagnosis flags a spec or harness repair.",
+    "",
+    "## What Correct Behavior Would Have Done",
+    "",
+    "- Read the authoritative rollout ledger instead of treating the alias string as model identity.",
+    "- Attribute each eval sample to the concrete model version that served it.",
+    "- Compare against the baseline version that was actually valid for that rollout.",
+    "- Respect the canary window and quarantine or re-evaluate mixed/insufficient evidence.",
+    "- Continue healthy rollouts instead of over-blocking them.",
+    "- Roll back bad rollouts only when the authoritative evidence requires it.",
+    "- Preserve an audit trail that matches the rollout and eval ledgers rather than the subject report.",
+    "",
     "## On-Target Versus Off-Target",
     "",
     diagnoses.length === 0
@@ -210,6 +234,34 @@ function evidenceBoundarySmokeLine(analysis: FamilyTrialAnalysis): string {
   if (analysis.failures > 0)
     return "- The counted smoke failure is real-agent smoke evidence, not full-matrix or cross-lab evidence.";
   return "- The counted smoke pass is already-solved evidence, not real-agent difficulty evidence.";
+}
+
+function intendedMechanismReading(analysis: FamilyTrialAnalysis, failedChecks: ReadonlySet<string>): string {
+  if (analysis.counted === 0)
+    return "No counted smoke trial exists, so the intended mechanism is not measured.";
+  if (analysis.failures === 0) {
+    return "The counted smoke passed cleanly, so the intended mechanism was not a source of difficulty for this subject.";
+  }
+  const mechanismChecks = [
+    "decision_matches_truth",
+    "current_alias_reconciled",
+    "no_stale_alias_assumption",
+    "concrete_version_attributed",
+    "correct_baseline_compared",
+    "rollout_window_respected",
+    "rollback_required",
+    "continue_required",
+    "quarantine_when_insufficient",
+    "no_subject_owned_model_truth",
+    "audit_matches_rollout_source",
+    "report_matches_ledger",
+    "liveness",
+  ];
+  const hits = mechanismChecks.filter((check) => failedChecks.has(check));
+  if (hits.length === 0) {
+    return "The counted smoke failed, but not on a named deployment-alias mechanism check; this should route to repair.";
+  }
+  return `The counted smoke failed on ${hits.map((check) => `\`${check}\``).join(", ")}. Those checks are tied to the pre-registered alias-drift contract, so the failure is on-target rather than a generic harness failure.`;
 }
 
 function readingLine(status: SmokeDiagnosisStatus): string {

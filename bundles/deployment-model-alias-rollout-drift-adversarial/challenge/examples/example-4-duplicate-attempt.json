@@ -1,0 +1,46 @@
+{
+  "view": {
+    "id": "dmd-prod-chat-same-complete-cache-fresh-window-complete-reg-minor-all_current-stale_request-correct_previous-provider_says_red-unavailable-release_console-r2-23",
+    "request": {
+      "id": "rollout-prod-chat-23",
+      "alias": "prod-chat",
+      "approvedVersion": "model-beta",
+      "approvedGeneration": 10,
+      "requiredBaselineVersion": "model-beta",
+      "reevaluationAvailable": false,
+      "observedAt": 200,
+      "idempotencyKey": "idem-prod-chat-23-release_console",
+      "surface": "release_console"
+    },
+    "cachedAlias": {
+      "alias": "prod-chat",
+      "version": "model-beta",
+      "generation": 10,
+      "phase": "complete",
+      "canaryWindow": "complete",
+      "canaryPercent": 100
+    },
+    "cachedEvalSummary": {
+      "sampleIds": [
+        "eval-23-1",
+        "eval-23-2",
+        "eval-23-3",
+        "eval-23-4"
+      ],
+      "claimedVersion": "model-beta",
+      "claimedScoreDelta": 0.16,
+      "sampleCount": 4
+    },
+    "cachedBaselineVersion": "model-beta",
+    "subjectModelClaim": {
+      "source": "provider-summary",
+      "alias": "prod-chat",
+      "version": "model-beta",
+      "generation": 10,
+      "saysHealthy": false,
+      "note": "public status summary, not a verifier-owned rollout ledger"
+    }
+  },
+  "replayCount": 2,
+  "note": "The same rollout request may be attempted twice, but the verifier-owned effect may fire once."
+}

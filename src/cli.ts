@@ -40,6 +40,7 @@ import {
   buildAdversarialCampaign,
   currentAdversarialPackageHash,
   loadAdversarialCampaigns,
+  verifierHashFor,
 } from "./adversarial-audit/readiness.js";
 import {
   adversarialGateEvidenceMap,
@@ -133,6 +134,7 @@ import {
 } from "./foundry/load.js";
 import { familyLoop, loopAll } from "./foundry/loop.js";
 import { probeEvidenceForDiscovery, probeToTaskShapeDraft } from "./foundry/probe-runner.js";
+import { evaluateProductionReadiness } from "./foundry/production-readiness.js";
 import {
   promotedFamilyRecords,
   promotionEvidenceForDiscovery,
@@ -193,6 +195,12 @@ import {
   classifyDeploymentAliasSmoke,
   renderDeploymentAliasSmokeDiagnosis,
 } from "./reports/deployment-alias-diagnosis.js";
+import {
+  auditDeploymentAliasCrossLabBundles,
+  renderDeploymentAliasAdversarialReadiness,
+  renderDeploymentAliasCrossLabReadiness,
+  renderDeploymentAliasProductionReadiness,
+} from "./reports/deployment-alias-production.js";
 import { renderDeploymentAliasFamilyReport } from "./reports/deployment-alias-report.js";
 import { diagnose, renderDiagnoses } from "./reports/diagnosis.js";
 import { computeCurve } from "./reports/difficulty.js";
@@ -213,6 +221,7 @@ import {
   campaignFacts,
   familyEvidenceFor,
   familyEvidenceMap,
+  familyEvidenceMapForShipReport,
   outboxHistory,
   outboxMatrix,
   providerSpend,
@@ -247,7 +256,7 @@ import { renderSelfCheckBehavior } from "./reports/self-check-report.js";
 import { profileRun } from "./reports/self-check.js";
 import { renderShapeReport } from "./reports/shape-report.js";
 import { measuredCells, renderSharedDifficultyBank } from "./reports/shared-difficulty.js";
-import { assessFamily, renderShipReport } from "./reports/ship-report.js";
+import { type FamilyEvidence, assessFamily, renderShipReport } from "./reports/ship-report.js";
 import { qualityOf, renderSubmissionQuality } from "./reports/submission-quality.js";
 import { renderStaleEvidenceRegression, renderThirdSubjectCampaign } from "./reports/third-subject-report.js";
 import { computeEvidence, renderTrialReadinessReport } from "./reports/trial-report.js";
@@ -2648,12 +2657,12 @@ function allCommand(argv: readonly string[], root: string): string {
   const browserMeasurement = readBrowserBackedMeasurement(root);
   // Evidence for EVERY built family, not just the first one. The determinism test builds it the
   // same way, and the two drifted the moment a second family had evidence to report.
-  const allEvidence = familyEvidenceMap(root);
   const adaptiveFunnel = loadAdaptiveFunnel(root, registry);
   const campaignPlans = loadCampaigns(root);
   const accessTokenSmoke = accessTokenSmokeContext(root, campaignPlans, adaptiveFunnel.transfers);
   const delegatedWalletSmoke = delegatedWalletSmokeContext(root, campaignPlans, adaptiveFunnel.transfers);
   const deploymentAliasSmoke = deploymentAliasSmokeContext(root, campaignPlans, adaptiveFunnel.transfers);
+  const allEvidence = familyEvidenceMapForShipReport(root);
   const promotionSmokeGates = new Map([
     [ACCESS_TOKEN_FAMILY_ID, accessTokenSmoke.gate],
     [DELEGATED_WALLET_FAMILY_ID, delegatedWalletSmoke.gate],
@@ -2807,6 +2816,42 @@ function allCommand(argv: readonly string[], root: string): string {
       deploymentFamily.leakProfile,
     );
     const deploymentBundle = evidenceFor(DEPLOYMENT_ALIAS_FAMILY_ID);
+    const deploymentLocalEvidencePass =
+      deploymentSweep.referenceFailures.length === 0 &&
+      deploymentSweep.mutantsCaught.every((mutant) => mutant.caught) &&
+      deploymentSweep.baselinesBlocked.length === deploymentSweep.baselinesTotal;
+    const deploymentHuman = humanGateEvidence[DEPLOYMENT_ALIAS_FAMILY_ID];
+    const deploymentAdversarial = adversarialGateEvidence[DEPLOYMENT_ALIAS_FAMILY_ID];
+    const deploymentProductionReadiness = evaluateProductionReadiness({
+      familyId: DEPLOYMENT_ALIAS_FAMILY_ID,
+      challengeHash: deploymentPrepared.hash,
+      currentChallengeHash: deploymentPrepared.hash,
+      localVerifierReady: deploymentLocalEvidencePass,
+      packageBacked: ROUTABLE_FAMILY_IDS.includes(DEPLOYMENT_ALIAS_FAMILY_ID) && deploymentPkgCheck.files > 0,
+      campaignPresent: deploymentAliasSmoke.plan !== undefined,
+      campaignHashCurrent:
+        deploymentAliasSmoke.plan === undefined
+          ? true
+          : deploymentAliasSmoke.plan.challengeHash === deploymentPrepared.hash,
+      packageHashCurrent:
+        deploymentAliasSmoke.plan === undefined
+          ? true
+          : deploymentAliasSmoke.plan.challengeHash === deploymentPrepared.hash,
+      countedSmokeTrials: deploymentAliasSmoke.analysis.counted,
+      countedSmokeFailures: deploymentAliasSmoke.analysis.failures,
+      countedSmokeSolves: deploymentAliasSmoke.analysis.solves,
+      providerRefusals: deploymentAliasSmoke.analysis.refusals,
+      infraFailures: deploymentAliasSmoke.analysis.infra,
+      modelFamilies: deploymentAliasSmoke.analysis.modelFamilies,
+      diagnosisStatus: deploymentAliasSmoke.gate.smokeDiagnosisStatus,
+      transferDeclared: deploymentAliasSmoke.gate.transferDeclarationStatus === "declared",
+      adversarialReady: deploymentAdversarial?.adversarialPackageReady ?? false,
+      countedNoBypassAudits: deploymentAdversarial?.countedNoBypassAudits ?? 0,
+      countedBypassAudits: deploymentAdversarial?.countedBypassAudits ?? 0,
+      unrepairedBypasses: deploymentAdversarial?.unrepairedBypasses ?? 0,
+      humanReady: deploymentHuman?.humanPackageReady ?? false,
+      cleanHumanSolves: deploymentHuman?.cleanHumanSolves ?? 0,
+    });
     write(
       "deployment-model-alias-rollout-drift-family-report.md",
       renderDeploymentAliasFamilyReport({
@@ -2853,12 +2898,49 @@ function allCommand(argv: readonly string[], root: string): string {
         "Countability rules: provider refusal, entitlement failure, infrastructure failure, timeout, missing challenge hash, stale challenge hash, missing submission artifact, and contaminated manual runs do not count.",
         "",
         "Full `/6` matrix spend remains blocked unless smoke diagnosis and transfer evidence justify it.",
+        "Production `/6` readiness is stricter: one OpenAI smoke failure does not satisfy cross-lab smoke.",
         "",
         "---",
         "",
         "Generated by `agent-eval-foundry`. Deterministic - no timestamp, diffable.",
         "",
       ].join("\n"),
+    );
+    write(
+      "deployment-model-alias-rollout-drift-production-readiness.md",
+      renderDeploymentAliasProductionReadiness({
+        readiness: deploymentProductionReadiness,
+        analysis: deploymentAliasSmoke.analysis,
+        challengeHash: deploymentPrepared.hash,
+        scenarioSetId: deploymentPrepared.scenarioSetId,
+        measuredScenarios: deploymentSweep.scenarioCount,
+        declaredSpace: deploymentSweep.spaceSize,
+        mutantDetectionAxes: measureFor(deploymentSweep.matrix, { nullTrials: 3 }).independentAxes,
+        packageFiles: deploymentPkgCheck.files,
+        packageBytes: deploymentPkgCheck.bytes,
+      }),
+    );
+    write(
+      "deployment-model-alias-rollout-drift-cross-lab-readiness.md",
+      renderDeploymentAliasCrossLabReadiness({
+        expectedHash: deploymentPrepared.hash,
+        expectedScenarioSetId: deploymentPrepared.scenarioSetId,
+        audits: auditDeploymentAliasCrossLabBundles(
+          root,
+          deploymentPrepared.hash,
+          deploymentPrepared.scenarioSetId,
+        ),
+      }),
+    );
+    write(
+      "deployment-model-alias-rollout-drift-adversarial-readiness.md",
+      renderDeploymentAliasAdversarialReadiness({
+        challengeHash: deploymentPrepared.hash,
+        verifierHash: verifierHashFor(root, DEPLOYMENT_ALIAS_FAMILY_ID),
+        summary: deploymentAdversarial,
+        campaignPath: adversarialCampaignPath(root, DEPLOYMENT_ALIAS_FAMILY_ID).replace(`${root}/`, ""),
+        bundlePath: adversarialBundlePath(root, DEPLOYMENT_ALIAS_FAMILY_ID).replace(`${root}/`, ""),
+      }),
     );
   }
   write(
@@ -4048,16 +4130,10 @@ export function main(argv: readonly string[]): number {
         // family the generated report called NOT-READY, which is the worst possible failure for a
         // gate: two commands, one repository, opposite answers.
         const r = loadRegistry(root);
-        emit(
-          argv,
-          renderShipReport(
-            r.shapes,
-            r,
-            familyEvidenceMap(root),
-            humanGateEvidenceMap(humanEvidenceForFamilies(root)),
-            adversarialGateEvidenceMap(summarizeAdversarialEvidence(root)),
-          ),
-        );
+        const humanEvidence = humanGateEvidenceMap(humanEvidenceForFamilies(root));
+        const adversarialEvidence = adversarialGateEvidenceMap(summarizeAdversarialEvidence(root));
+        const evidence = familyEvidenceMapForShipReport(root);
+        emit(argv, renderShipReport(r.shapes, r, evidence, humanEvidence, adversarialEvidence));
         return 0;
       }
       case "funnel": {

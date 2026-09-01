@@ -16,7 +16,7 @@ artifact directories.
 | bundle | verdict | network | runtime | hidden mounted | repo mounted | verifier inside | writable dirs | failures |
 |---|---|---|---|---:|---:|---:|---|---|
 | `bundles/checker-required-memory-poisoning-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
-| `bundles/deployment-model-alias-rollout-drift-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:no, submitted-bypass:no | docker daemon unavailable: permission denied while trying to connect to the docker API at unix:///Users/devlegacy/.docker/run/docker.sock; writable exploit/submitted-bypass directories are not preserved |
+| `bundles/deployment-model-alias-rollout-drift-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
 | `bundles/delegated-wallet-scope-reconciliation-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
 | `bundles/prompt-injection-containment-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
 | `bundles/prompt-injection-memory-poisoning-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
