@@ -5,7 +5,7 @@
 // than a convenience. It exists as a script instead of a test because it exercises the CLI end to
 // end -- the same path a user takes -- rather than the render functions the tests already cover.
 import { execFileSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -314,23 +314,39 @@ if (!/family\s+access-token-scope-expansion/.test(promotionScaffoldOut)) {
 } else console.log("ok     cli: promotion scaffold");
 
 const externalPacketTmp = mkdtempSync(join(tmpdir(), "foundry-external-packet-"));
+const EXTERNAL_PACKET_FAMILY = "deployment-model-alias-rollout-drift";
+// The hash this assertion compares against is READ, not typed. It used to be a 32-character literal,
+// which meant a family repair silently turned "the packet preserves the current hash" into "the packet
+// preserves the hash somebody pasted here in August" — the check kept passing for the wrong reason and
+// then failed for the wrong reason. The snapshot's hash comes from the evidence ledger and the packet's
+// from the `external packet` command, so the two sides are still independent paths through the CLI; and
+// a stale snapshot cannot hide here, because the report diff below catches that separately.
+const snapshotHashFor = (familyId) => {
+  const row = readFileSync(join("reports", "evidence-snapshot.md"), "utf8")
+    .split("\n")
+    .find((line) => line.startsWith(`| \`${familyId}\` | \``));
+  return row?.match(/\| `([0-9a-f]{32})` \|/)?.[1] ?? null;
+};
 const externalPacketOut = run([
   "external",
   "packet",
   "--family",
-  "deployment-model-alias-rollout-drift",
+  EXTERNAL_PACKET_FAMILY,
   "--provider",
   "external",
   "--out",
   externalPacketTmp,
 ]);
+const expectedPacketHash = snapshotHashFor(EXTERNAL_PACKET_FAMILY);
 if (!/deployment-model-alias-rollout-drift/.test(externalPacketOut)) {
   console.error("SMOKE  `external packet` ran but did not print the expected family summary");
   failures += 1;
-} else if (
-  readFileSync(join(externalPacketTmp, "challenge_hash.txt"), "utf8").trim() !==
-  "0e9b87a5f260544cfbc1cdce8f08938c"
-) {
+} else if (expectedPacketHash === null) {
+  console.error(
+    `SMOKE  could not read ${EXTERNAL_PACKET_FAMILY}'s current hash out of reports/evidence-snapshot.md`,
+  );
+  failures += 1;
+} else if (readFileSync(join(externalPacketTmp, "challenge_hash.txt"), "utf8").trim() !== expectedPacketHash) {
   console.error("SMOKE  `external packet` did not preserve the current challenge hash");
   failures += 1;
 } else if (!readFileSync(join(externalPacketTmp, "DO_NOT_INCLUDE.md"), "utf8").includes("hidden verifier")) {
@@ -514,9 +530,33 @@ if (generated.length !== EXPECTED_REPORTS) {
   console.error(`WRONG COUNT  \`all\` wrote ${generated.length} reports, expected ${EXPECTED_REPORTS}`);
   failures += 1;
 }
+// A document that is deliberately hand-authored rather than generated. It is DECLARED here, with its
+// reason, rather than exempted silently — the point of the orphan check is that nothing in reports/ is
+// unaccounted for, and an allowlist entry is an account. The file must still exist: a hand-authored
+// document that quietly disappears is the other half of the same failure.
+//
+// Keep this list at one or two entries. Every addition is a document nothing can check, and the honest
+// default for anything describing current numbers is to generate it instead.
+const HAND_AUTHORED = new Map([
+  [
+    "PHASE-1-TRUTH-REPAIR.md",
+    "the truth-repair phase writeup: an argument about the repo rather than a measurement of it, so it is not regenerated. Its numbers are quoted from the generated reports beside it and go stale by design once those move",
+  ],
+]);
+for (const [name, why] of HAND_AUTHORED) {
+  if (!existsSync(join("reports", name))) {
+    console.error(`MISSING  reports/${name} is declared hand-authored but is not committed (${why})`);
+    failures += 1;
+  } else console.log(`ok     reports/${name} (hand-authored, not regenerated)`);
+}
+
 // Nothing may sit in reports/ that no command regenerates: an orphan is a document that has stopped
 // being checked and starts drifting the moment the code under it changes.
-const covered = new Set([...generated, ...axis.map(([path]) => path.replace("reports/", ""))]);
+const covered = new Set([
+  ...generated,
+  ...axis.map(([path]) => path.replace("reports/", "")),
+  ...HAND_AUTHORED.keys(),
+]);
 for (const name of readdirSync("reports").filter((n) => !covered.has(n))) {
   console.error(`ORPHAN ${join("reports", name)} is committed but nothing regenerates it`);
   failures += 1;
