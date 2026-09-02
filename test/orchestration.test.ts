@@ -43,7 +43,16 @@ import {
 import { runLocalTrials } from "../src/trials/orchestrate.js";
 import { decideCountability } from "../src/trials/orchestrator.js";
 import { checkProvider, providerById } from "../src/trials/provider-registry.js";
-import { PROVIDERS, classifyRun, dockerPlan, getProvider, shellAdapter } from "../src/trials/providers.js";
+import {
+  PROVIDERS,
+  classifyRun,
+  dockerPlan,
+  getProvider,
+  parseProviderUsage,
+  shellAdapter,
+  withUsageReporting,
+} from "../src/trials/providers.js";
+import { parseTrialRecord } from "../src/trials/validate.js";
 
 const ROOT = new URL("..", import.meta.url).pathname;
 
@@ -237,6 +246,130 @@ describe("providers", () => {
     const external = checkProvider(providerById("external"));
     expect(external.available).toBe(false);
     expect(external.state).toBe("import-only");
+  });
+});
+
+describe("what a trial cost", () => {
+  // Every assertion here reads the provider's REAL output shape out of a preserved transcript in
+  // trials/, because the point of the field is that it is measured. A fixture invented here would
+  // test the parser against my guess about the format rather than against the format.
+  const transcript = (rel: string): string => readFileSync(join(ROOT, "trials", rel), "utf8");
+
+  it("reads codex's own token report, and refuses to price it", () => {
+    // trials/durable-approval-outbox/cc267-codex-1/transcript.txt, final JSONL line:
+    //   {"type":"turn.completed","usage":{"input_tokens":4311721,"cached_input_tokens":4165376,
+    //    "cache_write_input_tokens":0,"output_tokens":62134,"reasoning_output_tokens":35512}}
+    const usage = parseProviderUsage(transcript("durable-approval-outbox/cc267-codex-1/transcript.txt"));
+    expect(usage).not.toBeNull();
+    expect(usage?.inputTokens).toBe(4_311_721);
+    expect(usage?.cachedInputTokens).toBe(4_165_376);
+    expect(usage?.outputTokens).toBe(62_134);
+    // The Codex CLI emits no price anywhere in the stream. Multiplying those tokens by a published
+    // rate would produce a number that reads exactly like the measured ones beside it.
+    expect(usage?.costUsd).toBeNull();
+    expect(usage?.source).toMatch(/never a price/);
+  });
+
+  it("reads claude's own token report and its own price", () => {
+    // trials/durable-approval-outbox/cc267-claude-1/transcript.txt, the `result` event:
+    //   {"type":"result",...,"total_cost_usd":13.805058500000003,"usage":{"input_tokens":182,
+    //    "cache_creation_input_tokens":222912,"cache_read_input_tokens":15184357,
+    //    "output_tokens":159314,...}}
+    const usage = parseProviderUsage(transcript("durable-approval-outbox/cc267-claude-1/transcript.txt"));
+    expect(usage?.costUsd).toBe(13.805058500000003);
+    expect(usage?.outputTokens).toBe(159_314);
+    // Claude reports the three input figures disjointly, so billed input is their sum.
+    expect(usage?.inputTokens).toBe(182 + 15_184_357 + 222_912);
+    expect(usage?.cachedInputTokens).toBe(15_184_357);
+  });
+
+  it("a transcript with no usage report yields null rather than a zero", () => {
+    // pic-codex-1 is seven lines of prose: the campaign ran the CLI in its human-readable mode, which
+    // is why every costUsd this repository wrote for a run it executed itself is null.
+    expect(
+      parseProviderUsage(transcript("prompt-injection-containment/pic-codex-1/transcript.txt")),
+    ).toBeNull();
+  });
+
+  it("turns on the usage stream for the exact command templates the campaigns use", () => {
+    expect(
+      withUsageReporting(["codex", "exec", "--dangerously-bypass-approvals-and-sandbox", "{instruction}"]),
+    ).toEqual(["codex", "exec", "--json", "--dangerously-bypass-approvals-and-sandbox", "{instruction}"]);
+    expect(
+      withUsageReporting(["claude", "-p", "{instruction}", "--permission-mode", "bypassPermissions"]),
+    ).toEqual([
+      "claude",
+      "--output-format",
+      "json",
+      "-p",
+      "{instruction}",
+      "--permission-mode",
+      "bypassPermissions",
+    ]);
+    // Idempotent, and it never touches a command it does not recognise.
+    const already = ["codex", "exec", "--json", "{instruction}"];
+    expect(withUsageReporting(already)).toEqual(already);
+    expect(withUsageReporting(["gemini", "--approval-mode", "yolo", "-p", "{instruction}"])).toEqual([
+      "gemini",
+      "--approval-mode",
+      "yolo",
+      "-p",
+      "{instruction}",
+    ]);
+  });
+
+  it("carries usage onto the run result without calling any provider", () => {
+    // A local node process impersonating the claude output shape. No provider is contacted, so this
+    // is runnable without spending: what is under test is the harness, not the model.
+    const chal = mkdtempSync(join(tmpdir(), "foundry-usage-"));
+    writeFileSync(join(chal, "README.md"), "task", "utf8");
+    const line = JSON.stringify({
+      type: "result",
+      total_cost_usd: 0.25,
+      usage: { input_tokens: 10, cache_read_input_tokens: 5, output_tokens: 7 },
+    });
+    const out = shellAdapter.run({
+      challengeDir: chal,
+      submissionPath: "submission/subject.mjs",
+      instruction: "",
+      timeoutMs: 10_000,
+      env: {},
+      command: ["node", "-e", `console.log(${JSON.stringify(line)})`],
+    });
+    expect(out.usage?.costUsd).toBe(0.25);
+    expect(out.usage?.inputTokens).toBe(15);
+    // The effective argv is returned so the trial metadata records what ran, not what was planned.
+    expect(out.command).toEqual(["node", "-e", `console.log(${JSON.stringify(line)})`]);
+  });
+
+  it("a cost the provider never reported cannot be recorded beside its tokens", () => {
+    const base = {
+      runId: "r1",
+      familyId: "prompt-injection-containment",
+      subjectId: "s",
+      subjectType: "agent",
+      model: "openai/gpt-5.6",
+      effort: null,
+      status: "completed",
+      counts: true,
+      countsReason: "graded",
+      scenarioSetId: "set",
+      cells: [{ scenarioId: "a", failed: [] }],
+      runtimeSeconds: 1,
+      artifactPath: "trials/x/submission",
+      isolation: "subprocess",
+      notes: "",
+      usage: {
+        inputTokens: 100,
+        cachedInputTokens: 0,
+        outputTokens: 10,
+        costUsd: null,
+        source: "codex `turn.completed` usage; the Codex CLI reports tokens and never a price",
+      },
+    };
+    // $3.50 is the literal the repository already quotes under a heading that says "measured".
+    expect(() => parseTrialRecord({ ...base, costUsd: 3.5 })).toThrow(/TRIAL_COST_CONTRADICTS_USAGE/);
+    expect(parseTrialRecord({ ...base, costUsd: null }).usage?.inputTokens).toBe(100);
   });
 });
 

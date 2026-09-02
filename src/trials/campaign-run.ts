@@ -21,6 +21,8 @@ export interface SlotOutcome {
   readonly runId: string | null;
   readonly executed: boolean;
   readonly counted: boolean;
+  /** What the provider said this slot cost. Null when it was skipped or the provider reports no price. */
+  readonly costUsd: number | null;
   readonly detail: string;
 }
 
@@ -30,6 +32,12 @@ export interface CampaignRunResult {
   readonly executed: number;
   readonly counted: number;
   readonly skipped: number;
+  /**
+   * Measured spend for the slots that ran; null when none reported a price. Null is the honest answer
+   * for an all-Codex campaign, whose CLI reports tokens and no cost: a total assembled from a rate
+   * literal is an estimate printed where a receipt belongs.
+   */
+  readonly costUsd: number | null;
 }
 
 export interface CampaignRunOptions {
@@ -63,7 +71,14 @@ export function runCampaign(options: CampaignRunOptions): CampaignRunResult {
     const selected =
       options.only === undefined || options.only.length === 0 || options.only.includes(slot.slotId);
     if (!selected) {
-      outcomes.push({ slot, runId: slot.runId, executed: false, counted: false, detail: "not selected" });
+      outcomes.push({
+        slot,
+        runId: slot.runId,
+        executed: false,
+        counted: false,
+        costUsd: null,
+        detail: "not selected",
+      });
       continue;
     }
     if (slot.runner === "external" || slot.command === null) {
@@ -72,6 +87,7 @@ export function runCampaign(options: CampaignRunOptions): CampaignRunResult {
         runId: null,
         executed: false,
         counted: false,
+        costUsd: null,
         detail: "external runner: prepare the bundle and import the result; this machine cannot run it",
       });
       continue;
@@ -82,6 +98,7 @@ export function runCampaign(options: CampaignRunOptions): CampaignRunResult {
         runId: slot.runId,
         executed: false,
         counted: false,
+        costUsd: null,
         detail: `already ${slot.state} as ${slot.runId}`,
       });
       continue;
@@ -106,16 +123,19 @@ export function runCampaign(options: CampaignRunOptions): CampaignRunResult {
       runId,
       executed: true,
       counted: result.countability.counts,
+      costUsd: result.record.costUsd,
       detail: result.countability.reason,
     });
   }
 
+  const priced = outcomes.map((o) => o.costUsd).filter((c): c is number => c !== null);
   return {
     plan,
     outcomes,
     executed: outcomes.filter((o) => o.executed).length,
     counted: outcomes.filter((o) => o.counted).length,
     skipped: outcomes.filter((o) => !o.executed).length,
+    costUsd: priced.length === 0 ? null : priced.reduce((sum, c) => sum + c, 0),
   };
 }
 

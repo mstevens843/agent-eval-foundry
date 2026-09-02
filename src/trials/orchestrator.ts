@@ -19,10 +19,10 @@
 //    "three of six refused" is a finding about the provider that disappears if you only keep the
 //    runs that worked.
 
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { type Countability, writeTrialDirectory } from "./directory.js";
-import { type ProviderAdapter, type ProviderRunResult, getProvider } from "./providers.js";
+import { type ProviderAdapter, type ProviderRunResult, getProvider, readFileTree } from "./providers.js";
 import type { TrialCell, TrialRecord } from "./types.js";
 import { NEVER_COUNTS } from "./types.js";
 import { parseTrialRecord } from "./validate.js";
@@ -74,15 +74,6 @@ export interface OrchestrateResult {
   readonly directory: string;
   readonly providerResult: ProviderRunResult;
 }
-
-const readChallengeFiles = (dir: string, rel = ""): { path: string; content: string }[] =>
-  existsSync(dir)
-    ? readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
-        e.isDirectory()
-          ? readChallengeFiles(join(dir, e.name), `${rel}${e.name}/`)
-          : [{ path: `${rel}${e.name}`, content: readFileSync(join(dir, e.name), "utf8") }],
-      )
-    : [];
 
 /**
  * Decide countability from the provider's classification.
@@ -172,7 +163,11 @@ export function orchestrateTrial(options: OrchestrateOptions): OrchestrateResult
     scenarioSetId: options.scenarioSetId,
     cells: countability.counts ? graded.cells : [],
     runtimeSeconds: providerResult.runtimeSeconds,
-    costUsd: options.costUsd ?? null,
+    // The provider's own report wins over the caller's `--cost`. A flag is an assertion about a run;
+    // the CLI's usage block is a measurement of it, and when a provider reports tokens and no price
+    // the measurement's answer is "unavailable" rather than whatever the operator typed.
+    costUsd: providerResult.usage === null ? (options.costUsd ?? null) : providerResult.usage.costUsd,
+    usage: providerResult.usage,
     artifactPath: countability.counts
       ? join(options.trialsRoot, options.familyId, options.runId, "submission")
       : null,
@@ -187,7 +182,7 @@ export function orchestrateTrial(options: OrchestrateOptions): OrchestrateResult
     record,
     countability,
     transcript: providerResult.transcript,
-    challengeFiles: readChallengeFiles(options.challengeDir),
+    challengeFiles: readFileTree(options.challengeDir),
     submissionFiles: providerResult.submission,
     verifierOutput: { cells: graded.cells, detail: graded.detail },
     metadata: {
@@ -201,11 +196,12 @@ export function orchestrateTrial(options: OrchestrateOptions): OrchestrateResult
       scenarioSetId: options.scenarioSetId,
       timeoutMs: options.timeoutMs,
       runtimeSeconds: providerResult.runtimeSeconds,
-      costUsd: options.costUsd ?? null,
+      costUsd: record.costUsd,
+      usage: providerResult.usage,
       isolation: adapter.isolation,
       classification: providerResult.classification,
       classificationDetail: providerResult.detail,
-      command: options.command ?? null,
+      command: providerResult.command.length > 0 ? providerResult.command : null,
       ...(options.extraMetadata ?? {}),
     },
   });

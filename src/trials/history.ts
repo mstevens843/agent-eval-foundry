@@ -576,9 +576,7 @@ export interface OutboxTrialImport {
  *   metadata.json  the OBSERVED model identity from the run's own config, not a registry constant,
  *                  and isolation stated as what it was rather than what this repository can do.
  */
-export function importOutboxTrialDirectories(
-  input: OutboxTrialImportInput,
-): readonly OutboxTrialImport[] {
+export function importOutboxTrialDirectories(input: OutboxTrialImportInput): readonly OutboxTrialImport[] {
   const challengeFiles = sourceFiles(join(input.taskDir, "environment", "app"));
   if (challengeFiles.length === 0) {
     fail(
@@ -610,9 +608,7 @@ export function importOutboxTrialDirectories(
     const model = String(agent["model_name"] ?? "unknown");
     const effort = typeof kwargs["reasoning_effort"] === "string" ? kwargs["reasoning_effort"] : null;
     const agentInfo: Record<string, unknown> = isRec(result["agent_info"]) ? result["agent_info"] : {};
-    const agentResult: Record<string, unknown> = isRec(result["agent_result"])
-      ? result["agent_result"]
-      : {};
+    const agentResult: Record<string, unknown> = isRec(result["agent_result"]) ? result["agent_result"] : {};
     const verifierResult: Record<string, unknown> = isRec(result["verifier_result"])
       ? result["verifier_result"]
       : {};

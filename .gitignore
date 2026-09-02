@@ -2,3 +2,11 @@ node_modules
 dist
 *.tsbuildinfo
 .DS_Store
+
+# Provider credentials. CLAUDE_CODE_OAUTH_TOKEN and the Codex CLI's auth are read from the
+# environment and from ~/.codex respectively; nothing secret belongs in the repo. These entries exist
+# so that a convenience env file cannot be committed by accident.
+.env
+.env.*
+*.local.env
+secrets.json

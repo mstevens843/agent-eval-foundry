@@ -247,9 +247,15 @@ export function assertAdversarialFamilyTablesCurrent(
   });
 
   if (root === undefined) return;
-  const stale = Object.entries(VERIFIER_PATHS)
-    .flatMap(([familyId, paths]) => paths.map((path) => ({ familyId, path })))
-    .filter(({ path }) => !existsSync(join(root, path)));
+  const stale = [
+    ...Object.entries(VERIFIER_PATHS).flatMap(([familyId, paths]) =>
+      paths.map((path) => ({ familyId, path })),
+    ),
+    // The shared harness paths need the same check and are easier to break: a lane that moves the
+    // container profile into another module leaves this list pointing at nothing, `hashFiles` skips
+    // what is missing, and the hash silently goes back to covering the verifier alone.
+    ...HARNESS_PATHS.map((path) => ({ familyId: "(shared harness)", path })),
+  ].filter(({ path }) => !existsSync(join(root, path)));
   if (stale.length > 0) {
     throw new Error(
       `VERIFIER_PATHS names ${stale.length} path(s) that do not exist, so the verifier hash silently omits them: ${stale
@@ -283,8 +289,41 @@ function hashFiles(root: string, paths: readonly string[]): string | null {
   return hash.digest("hex").slice(0, 32);
 }
 
+/**
+ * The harness half of the hash: how a trial is EXECUTED, as opposed to how it is judged.
+ *
+ * Shared rather than listed per family, because one runner and one isolation profile serve all of
+ * them. The argument is the one that put `scripts/*-host.mjs` in `VERIFIER_PATHS`: a result is a
+ * claim about a subject measured a particular way, and the way is not only the verifier. A subject
+ * that ran unsandboxed in a shared `/tmp` was measured under different conditions from one in its own
+ * no-network container, whatever the verifier said afterwards — and the difference is not theoretical
+ * here, because a preserved transcript records one trial's files being overwritten by another sharing
+ * that `/tmp`. Leave the runner out and the day a container runner lands, every trial graded under
+ * the old conditions keeps counting as though nothing changed.
+ *
+ *   src/trials/runners.ts               isolation levels, subprocess and container runners.
+ *   src/adversarial-audit/isolation.ts  the container profile: image, network, mounts, guarantees.
+ *
+ * NOT included, deliberately: `providers.ts` (how the AGENT is invoked) and `container.ts` (which
+ * runs attackers, not trials). Adding an output-format flag to a CLI call changes neither what the
+ * model saw nor how its artifact was graded, and a hash that turns over on changes like that
+ * invalidates evidence for no reason, which teaches people to ignore it.
+ */
+export const HARNESS_PATHS: readonly string[] = [
+  "src/trials/runners.ts",
+  "src/adversarial-audit/isolation.ts",
+];
+
+/**
+ * Null for a family with no `VERIFIER_PATHS` row — checked, never guessed, and load-bearing now that
+ * the harness paths are shared. The old `?? []` would have given `durable-approval-outbox` (the
+ * imported Harbor bank, which has no verifier here at all) a real hash built from this repository's
+ * runner alone, pinning six trials another project's harness executed to a runner that never touched
+ * them. A family with no verifier here has nothing to invalidate; that stays null.
+ */
 export function verifierHashFor(root: string, familyId: string): string | null {
-  return hashFiles(root, VERIFIER_PATHS[familyId] ?? []);
+  const verifier = VERIFIER_PATHS[familyId];
+  return verifier === undefined ? null : hashFiles(root, [...verifier, ...HARNESS_PATHS]);
 }
 
 export function currentAdversarialPackageHash(root: string, familyId: string): string | null {
@@ -347,6 +386,7 @@ export function defaultThreatModel(familyId: string): AdversarialThreatModel {
       "public challenge package changes",
       "submission contract changes",
       "verifier trust boundary changes",
+      "the runner or the container isolation profile changes",
       "new hidden artifacts are added to the attacker-access boundary",
     ],
   };

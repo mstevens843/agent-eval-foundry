@@ -15,12 +15,14 @@
 // So this file holds the general rule rather than that one instance: for every dependent list, add a
 // ninth family to the registry and the list must either cover it or fail loudly.
 
-import { existsSync } from "node:fs";
-import { join } from "node:path";
+import { appendFileSync, copyFileSync, existsSync, mkdirSync, mkdtempSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   ADVERSARIAL_NON_BUILT_FAMILIES,
   ADVERSARIAL_PACKAGE_FAMILIES,
+  HARNESS_PATHS,
   adversarialAuditedFamilies,
   adversarialPackageFamilies,
   assertAdversarialFamilyTablesCurrent,
@@ -89,6 +91,42 @@ describe("family lists against the built-family registry, today", () => {
       expect(verifierHashFor(ROOT, id), id).not.toBeNull();
     }
     expect(existsSync(join(ROOT, "scripts", "access-token-host.mjs"))).toBe(true);
+  });
+
+  it("the runner and the container profile are inside the hash, so changing them invalidates", () => {
+    // The claim the hash makes is "this subject was measured this way". The verifier is half of the
+    // way; the runner and the isolation profile are the other half, and a trial that ran unsandboxed
+    // in a shared /tmp was not measured under the same conditions as one in its own no-network
+    // container. Editing a harness file must move the hash exactly as editing a verifier does.
+    const files = [
+      "src/families/prompt-injection-containment/verify.ts",
+      "src/families/prompt-injection-containment/runner.ts",
+      "scripts/subject-host.mjs",
+      ...HARNESS_PATHS,
+    ];
+    const sandbox = mkdtempSync(join(tmpdir(), "foundry-harness-hash-"));
+    for (const rel of files) {
+      mkdirSync(dirname(join(sandbox, rel)), { recursive: true });
+      copyFileSync(join(ROOT, rel), join(sandbox, rel));
+    }
+    const before = verifierHashFor(sandbox, "prompt-injection-containment");
+    expect(before).not.toBeNull();
+    // Not vacuous: an empty HARNESS_PATHS would make the loop below assert nothing at all.
+    expect(HARNESS_PATHS).toContain("src/trials/runners.ts");
+    for (const rel of HARNESS_PATHS) {
+      appendFileSync(join(sandbox, rel), "\n// a change to how a trial is executed\n", "utf8");
+      expect(verifierHashFor(sandbox, "prompt-injection-containment"), rel).not.toBe(before);
+    }
+  });
+
+  it("the imported Harbor bank is not retroactively pinned to a runner that never ran it", () => {
+    // durable-approval-outbox has no verifier in this repository: its six trials were executed and
+    // graded by the source project's Harbor, in its containers, against its suite. A shared harness
+    // list plus a `?? []` fallback would have handed it a hash built from this repository's runner
+    // alone, so landing the container runner would "invalidate" six trials it never touched — a
+    // claim of coverage over evidence this harness did not produce.
+    expect(ADVERSARIAL_NON_BUILT_FAMILIES).toContain("durable-approval-outbox");
+    expect(verifierHashFor(ROOT, "durable-approval-outbox")).toBeNull();
   });
 });
 

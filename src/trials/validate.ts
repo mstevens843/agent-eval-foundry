@@ -14,6 +14,7 @@
 import {
   fail,
   isRecord,
+  num,
   numNullable,
   oneOf,
   optionalText,
@@ -29,6 +30,7 @@ import {
   type TrialCell,
   type TrialRecord,
   type TrialSet,
+  type TrialUsage,
 } from "./types.js";
 
 const obj = (v: unknown, path: string): Record<string, unknown> =>
@@ -55,6 +57,18 @@ const parseCell = (v: unknown, path: string): TrialCell => {
   }
   return { ...cell, unmeasured };
 };
+
+function parseUsage(v: unknown, path: string): TrialUsage | null {
+  if (v === undefined || v === null) return null;
+  const o = obj(v, path);
+  return {
+    inputTokens: num(o["inputTokens"], `${path}.inputTokens`),
+    cachedInputTokens: num(o["cachedInputTokens"], `${path}.cachedInputTokens`),
+    outputTokens: num(o["outputTokens"], `${path}.outputTokens`),
+    costUsd: numNullable(o["costUsd"], `${path}.costUsd`),
+    source: str(o["source"], `${path}.source`),
+  };
+}
 
 export function parseTrialRecord(v: unknown, path = "trial"): TrialRecord {
   const o = obj(v, path);
@@ -95,6 +109,22 @@ export function parseTrialRecord(v: unknown, path = "trial"): TrialRecord {
   const model = strNullable(o["model"], `${path}.model`);
   const artifactPath = strNullable(o["artifactPath"], `${path}.artifactPath`);
 
+  // A cost that disagrees with the provider's own report is an estimate wearing a measurement's
+  // clothes, and the disagreement that matters is the one against null: the Codex CLI reports tokens
+  // and no price, so any dollar figure beside its usage was computed from a rate literal rather than
+  // measured. The repository quotes a per-run cost under a heading that says "measured"; this is what
+  // stops the next such number being invented. Records with no usage block at all — the imported
+  // Harbor bank, whose costs come from the source project's own accounting — are untouched.
+  const usage = parseUsage(o["usage"], `${path}.usage`);
+  const costUsd = numNullable(o["costUsd"], `${path}.costUsd`);
+  if (usage !== null && costUsd !== usage.costUsd) {
+    fail(
+      "TRIAL_COST_CONTRADICTS_USAGE",
+      `${path}.costUsd`,
+      `records ${costUsd === null ? "no cost" : `$${costUsd}`} while the provider's own usage report (${usage.source}) says ${usage.costUsd === null ? "it does not price this run" : `$${usage.costUsd}`}; a cost the provider never reported is a rate literal multiplied by a token count, not a measurement`,
+    );
+  }
+
   if (subjectType === "agent") {
     if (model === null) {
       fail(
@@ -125,7 +155,8 @@ export function parseTrialRecord(v: unknown, path = "trial"): TrialRecord {
     scenarioSetId: str(o["scenarioSetId"], `${path}.scenarioSetId`),
     cells,
     runtimeSeconds: numNullable(o["runtimeSeconds"], `${path}.runtimeSeconds`),
-    costUsd: numNullable(o["costUsd"], `${path}.costUsd`),
+    costUsd,
+    usage,
     artifactPath,
     isolation: oneOf(o["isolation"], `${path}.isolation`, ISOLATION_LEVELS),
     notes: optionalText(o["notes"], `${path}.notes`),

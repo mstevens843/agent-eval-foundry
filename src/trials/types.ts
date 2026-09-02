@@ -83,6 +83,28 @@ export const cellPassed = (c: TrialCell): boolean => c.unmeasured === undefined 
 /** A cell that positively records a failure. */
 export const cellFailed = (c: TrialCell): boolean => c.unmeasured === undefined && c.failed.length > 0;
 
+/**
+ * What one trial consumed, read out of the provider CLI's own end-of-run report.
+ *
+ * TOKENS AND COST ARE SEPARATE FACTS, and this interface keeps them separate. Claude prices its own
+ * run; Codex reports usage with no price attached at all. Filling the Codex gap from a published rate
+ * would put a number nobody measured in the same column as numbers somebody did — the same move as
+ * recording a refusal as a zero, one layer over. So `costUsd` is null whenever the provider did not
+ * price the run, and `source` names the report it came from, so a null reads as "this provider does
+ * not say" rather than "nobody looked".
+ *
+ * `inputTokens` is the total input billed and `cachedInputTokens` the part of it served from cache —
+ * normalised, because Codex nests the cached figure inside the total and Claude reports them apart.
+ */
+export interface TrialUsage {
+  readonly inputTokens: number;
+  readonly cachedInputTokens: number;
+  readonly outputTokens: number;
+  /** Null when the provider reports tokens but not price. Never derived from a rate literal. */
+  readonly costUsd: number | null;
+  readonly source: string;
+}
+
 export interface TrialRecord {
   readonly runId: string;
   readonly familyId: string;
@@ -102,6 +124,12 @@ export interface TrialRecord {
   readonly cells: readonly TrialCell[];
   readonly runtimeSeconds: number | null;
   readonly costUsd: number | null;
+  /**
+   * Measured consumption, when the provider reported any. Mirrors `costUsd`; never contradicts it.
+   * Optional because absent and null both mean "no provider report", and a required field would have
+   * forced a `usage: null` line into every record literal in the repo to say nothing.
+   */
+  readonly usage?: TrialUsage | null;
   /** Where the submitted artifact is preserved. Required for agent trials. */
   readonly artifactPath: string | null;
   readonly isolation: IsolationLevel;

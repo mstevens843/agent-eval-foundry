@@ -20,6 +20,7 @@ import { fail } from "../foundry/schema.js";
 import { baselineDisqualifier } from "./orchestrate.js";
 import { type OrchestrateResult, orchestrateTrial } from "./orchestrator.js";
 import { type TrialRoute, routeFor } from "./router.js";
+import { containerIsolationDetail } from "./runners.js";
 
 /** Content hash of a challenge package: every visible file, path and bytes, in sorted order. */
 export function challengeHash(pkg: ChallengePackage): string {
@@ -193,6 +194,10 @@ export function runAgentTrial(options: AgentTrialOptions): OrchestrateResult {
       challengeFiles: prepared.pkg.files.length,
       campaign: options.campaign ?? null,
       hostScript: route.hostScript.split("/").pop() ?? route.hostScript,
+      // What was actually isolated, and what was not, recorded per trial rather than asserted once
+      // in a registry constant. Names the specific ways this is weaker than the source project's
+      // Harbor setup, so no reader infers a parity that does not exist.
+      isolationDetail: containerIsolationDetail(options.command ?? null),
       scenariosExpected: route.scenarioCount(),
     },
   });

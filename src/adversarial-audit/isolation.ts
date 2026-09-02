@@ -1,3 +1,4 @@
+import { spawnSync } from "node:child_process";
 import {
   constants,
   accessSync,
@@ -83,6 +84,52 @@ export const ISOLATION_PROFILES: Readonly<Record<IsolationProfileId, Adversarial
       "Containerized profile: public challenge mounted read-only, writable exploit/submission mount, no network, verifier runs outside attacker context.",
   },
 };
+
+/**
+ * The image and the runtime probe are shared by every containerized runner in this repository.
+ *
+ * They live here, beside the isolation ladder, rather than in `container.ts`, because
+ * `src/trials/runners.ts` needs them too and `container.ts` reaches back into `trials/run.ts` — one
+ * home for the concept, and no import cycle.
+ */
+export const CONTAINER_IMAGE = "node:22-alpine";
+
+export interface ContainerRuntimeReadiness {
+  readonly runtime: "docker";
+  readonly available: boolean;
+  readonly detail: string;
+}
+
+export function containerRuntimeReadiness(): ContainerRuntimeReadiness {
+  const version = spawnSync("docker", ["--version"], {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+    timeout: 20_000,
+  });
+  if (version.error !== undefined || version.status !== 0) {
+    return {
+      runtime: "docker",
+      available: false,
+      detail: `docker client unavailable: ${version.error?.message ?? version.stderr.trim()}`,
+    };
+  }
+  const info = spawnSync("docker", ["info"], {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+    timeout: 20_000,
+  });
+  if (info.error !== undefined || info.status !== 0) {
+    const detail = `${info.stderr || info.stdout || info.error?.message || "docker daemon unavailable"}`
+      .trim()
+      .split("\n")[0];
+    return { runtime: "docker", available: false, detail: `docker daemon unavailable: ${detail}` };
+  }
+  return {
+    runtime: "docker",
+    available: true,
+    detail: version.stdout.trim().split("\n")[0] ?? "docker available",
+  };
+}
 
 export interface IsolationVerification {
   readonly bundleDir: string;

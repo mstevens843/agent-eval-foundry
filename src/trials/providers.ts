@@ -24,6 +24,7 @@ import { execFileSync } from "node:child_process";
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import type { TrialUsage } from "./types.js";
 
 export type ProviderStatus = "implemented" | "declared";
 
@@ -60,6 +61,10 @@ export interface ProviderRunResult {
   readonly detail: string;
   readonly runtimeSeconds: number;
   readonly sandbox: string;
+  /** Read out of the CLI's own end-of-run report. Null when it reported none. */
+  readonly usage: TrialUsage | null;
+  /** The argv template actually executed, including any usage-reporting flag added to it. */
+  readonly command: readonly string[];
 }
 
 export interface ProviderAdapter {
@@ -144,6 +149,86 @@ export const AUTH_MARKERS: readonly string[] = [
   "rate limit exceeded",
 ];
 
+/**
+ * Read a provider CLI's own usage report out of its output.
+ *
+ * Both formats below are quoted from preserved transcripts in `trials/`, not from documentation.
+ *
+ *   Codex   `trials/durable-approval-outbox/cc267-codex-1/transcript.txt`, last JSONL line:
+ *           {"type":"turn.completed","usage":{"input_tokens":4311721,"cached_input_tokens":4165376,
+ *            "cache_write_input_tokens":0,"output_tokens":62134,"reasoning_output_tokens":35512}}
+ *           `input_tokens` is the total with `cached_input_tokens` inside it, and there is NO price
+ *           anywhere in the stream — hence `costUsd: null` and a source string that says so.
+ *
+ *   Claude  `trials/durable-approval-outbox/cc267-claude-1/transcript.txt`, the `result` event:
+ *           {"type":"result",...,"total_cost_usd":13.805058500000003,"usage":{"input_tokens":182,
+ *            "cache_creation_input_tokens":222912,"cache_read_input_tokens":15184357,
+ *            "output_tokens":159314,...}}
+ *           Here the three input figures are disjoint, so the billed input is their sum.
+ *
+ * Scanning every line and keeping the LAST match handles both `--output-format json` (one object)
+ * and `--output-format stream-json` / `codex exec --json` (an event per line) without caring which
+ * one the caller asked for.
+ */
+export function parseProviderUsage(transcript: string): TrialUsage | null {
+  const tok = (u: Record<string, unknown>, k: string): number => (typeof u[k] === "number" ? u[k] : 0);
+  let found: TrialUsage | null = null;
+  for (const line of transcript.split("\n")) {
+    const text = line.trim();
+    if (!text.startsWith("{") || !text.endsWith("}")) continue;
+    let event: Record<string, unknown>;
+    try {
+      event = JSON.parse(text) as Record<string, unknown>;
+    } catch {
+      continue;
+    }
+    const usage = event["usage"];
+    if (typeof usage !== "object" || usage === null || Array.isArray(usage)) continue;
+    const u = usage as Record<string, unknown>;
+    if (event["type"] === "turn.completed") {
+      found = {
+        inputTokens: tok(u, "input_tokens"),
+        cachedInputTokens: tok(u, "cached_input_tokens"),
+        outputTokens: tok(u, "output_tokens"),
+        costUsd: null,
+        source: "codex `turn.completed` usage; the Codex CLI reports tokens and never a price",
+      };
+    } else if (event["type"] === "result") {
+      const cached = tok(u, "cache_read_input_tokens");
+      found = {
+        inputTokens: tok(u, "input_tokens") + cached + tok(u, "cache_creation_input_tokens"),
+        cachedInputTokens: cached,
+        outputTokens: tok(u, "output_tokens"),
+        costUsd: typeof event["total_cost_usd"] === "number" ? event["total_cost_usd"] : null,
+        source: "claude `result` event `usage` and `total_cost_usd`",
+      };
+    }
+  }
+  return found;
+}
+
+/**
+ * Ask a provider CLI to print the usage report it otherwise keeps to itself.
+ *
+ * Neither CLI volunteers token counts in its human-readable mode, which is why every `costUsd` this
+ * repository wrote for a run it executed itself is null: the campaigns invoke `codex exec …` and
+ * `claude -p …`, and those emit prose. One flag each turns on the stream carrying `usage`. The flag
+ * is added HERE rather than edited into the checked-in campaign plans, because a plan is a
+ * pre-registration and quietly rewriting one is the move `reconcile` exists to catch — and the
+ * augmented argv comes back on the result, so the metadata records what ran, not what was planned.
+ */
+export function withUsageReporting(argv: readonly string[]): readonly string[] {
+  const bin = (argv[0] ?? "").split("/").pop();
+  if (bin === "codex" && argv[1] === "exec" && !argv.includes("--json")) {
+    return [argv[0] as string, "exec", "--json", ...argv.slice(2)];
+  }
+  const printing = argv.includes("-p") || argv.includes("--print");
+  if (bin === "claude" && printing && !argv.includes("--output-format")) {
+    return [argv[0] as string, "--output-format", "json", ...argv.slice(1)];
+  }
+  return argv;
+}
+
 const REFUSAL_RATIONALE =
   "Refusing rather than returning an empty submission: an empty submission would flow through the " +
   "pipeline and surface as a model that scored zero.";
@@ -160,11 +245,12 @@ export function makeSandbox(challengeDir: string): string {
   return dir;
 }
 
-const collect = (dir: string, rel = ""): { path: string; content: string }[] =>
+/** Every file under a directory, path-relative and read as text. Missing directory means no files. */
+export const readFileTree = (dir: string, rel = ""): { path: string; content: string }[] =>
   existsSync(dir)
     ? readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
         e.isDirectory()
-          ? collect(join(dir, e.name), `${rel}${e.name}/`)
+          ? readFileTree(join(dir, e.name), `${rel}${e.name}/`)
           : [{ path: `${rel}${e.name}`, content: readFileSync(join(dir, e.name), "utf8") }],
       )
     : [];
@@ -191,7 +277,8 @@ export const shellAdapter: ProviderAdapter = {
     let timedOut = false;
     let crashed = false;
 
-    const argv = req.command.map((a) =>
+    const template = withUsageReporting(req.command);
+    const argv = template.map((a) =>
       a.replaceAll("{dir}", sandbox).replaceAll("{instruction}", req.instruction),
     );
     const [bin, ...args] = argv;
@@ -223,7 +310,7 @@ export const shellAdapter: ProviderAdapter = {
       crashed = !timedOut;
     }
 
-    const submission = collect(join(sandbox, "submission"));
+    const submission = readFileTree(join(sandbox, "submission"));
     const { classification, detail } = classifyRun(transcript, submission.length > 0, timedOut, crashed);
     return {
       transcript,
@@ -232,6 +319,10 @@ export const shellAdapter: ProviderAdapter = {
       detail,
       runtimeSeconds: Math.round((Date.now() - started) / 1000),
       sandbox,
+      // Parsed even on a timeout or a crash: a run that burned tokens and produced nothing still cost
+      // money, and dropping its usage is how a budget ends up smaller than the bill.
+      usage: parseProviderUsage(transcript),
+      command: template,
     };
   },
 };

@@ -3,7 +3,14 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { providerById } from "../trials/provider-registry.js";
 import { prepareAdversarialBundle } from "./bundles.js";
-import { ISOLATION_PROFILES, isolationSummaryPath, verifyIsolationBundle } from "./isolation.js";
+import {
+  CONTAINER_IMAGE,
+  type ContainerRuntimeReadiness,
+  ISOLATION_PROFILES,
+  containerRuntimeReadiness,
+  isolationSummaryPath,
+  verifyIsolationBundle,
+} from "./isolation.js";
 import { runAdversarialHardeningProbes } from "./probes.js";
 import { currentAdversarialPackageHash, verifierHashFor } from "./readiness.js";
 import { replayAdversarialExploitRecord } from "./replay.js";
@@ -15,17 +22,15 @@ import type {
 } from "./types.js";
 import { adversarialAttackFailures, parseAdversarialAttackRecord } from "./validate.js";
 
-export const CONTAINER_IMAGE = "node:22-alpine";
+// Re-exported so every existing importer keeps its path; the definitions moved to `isolation.js`
+// because `src/trials/runners.ts` shares them and this module cannot be imported from there.
+export { CONTAINER_IMAGE, containerRuntimeReadiness } from "./isolation.js";
+export type { ContainerRuntimeReadiness } from "./isolation.js";
+
 export const CONTAINER_BUNDLE_DIR_TOKEN = "{BUNDLE_DIR}";
 
 export const adversarialContainerBundlePath = (root: string, familyId: string): string =>
   join(root, "bundles", `${familyId}-adversarial-container`);
-
-export interface ContainerRuntimeReadiness {
-  readonly runtime: "docker";
-  readonly available: boolean;
-  readonly detail: string;
-}
 
 export interface ContainerIsolationVerification {
   readonly bundleDir: string;
@@ -60,37 +65,6 @@ export interface RunContainerAdversarialAuditResult {
 }
 
 const json = (v: unknown): string => `${JSON.stringify(v, null, 2)}\n`;
-
-export function containerRuntimeReadiness(): ContainerRuntimeReadiness {
-  const version = spawnSync("docker", ["--version"], {
-    encoding: "utf8",
-    stdio: ["ignore", "pipe", "pipe"],
-    timeout: 20_000,
-  });
-  if (version.error !== undefined || version.status !== 0) {
-    return {
-      runtime: "docker",
-      available: false,
-      detail: `docker client unavailable: ${version.error?.message ?? version.stderr.trim()}`,
-    };
-  }
-  const info = spawnSync("docker", ["info"], {
-    encoding: "utf8",
-    stdio: ["ignore", "pipe", "pipe"],
-    timeout: 20_000,
-  });
-  if (info.error !== undefined || info.status !== 0) {
-    const detail = `${info.stderr || info.stdout || info.error?.message || "docker daemon unavailable"}`
-      .trim()
-      .split("\n")[0];
-    return { runtime: "docker", available: false, detail: `docker daemon unavailable: ${detail}` };
-  }
-  return {
-    runtime: "docker",
-    available: true,
-    detail: version.stdout.trim().split("\n")[0] ?? "docker available",
-  };
-}
 
 export function containerCommand(bundleDir: string): readonly string[] {
   return [
