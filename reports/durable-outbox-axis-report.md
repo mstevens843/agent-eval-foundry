@@ -92,6 +92,24 @@ their nested sets; full membership is in the `json` output.
 | fhc1 | 3 | 24 | discriminating |
 | opus1 | 2 | 24 | discriminating |
 
+## Checks
+
+6 distinct check(s) fired in this bank. The suite does not declare its
+check universe (`provenance.checks_declared`), so the firing RATE is unknown — not zero, and
+not 100%. Declare the universe and this becomes the cheapest coverage diagnostic you own.
+
+| check | cells | instances | subjects |
+|---|---:|---:|---:|
+| audit_explains | 61 | 13 | 7 |
+| completion | 8 | 3 | 3 |
+| executed_iff_called | 8 | 7 | 2 |
+| exactly_once | 6 | 6 | 1 |
+| revocation_ordering | 6 | 6 | 1 |
+| expected_executions | 5 | 5 | 1 |
+
+`subjects` is the column that matters. A check firing on every subject separates nothing; a
+check firing on one separates exactly that subject.
+
 ## Coverage
 
 240 of 240 cells measured (100%); 0 recorded as not measured. Unmeasured cells are excluded from catch sets rather than imputed as passes.

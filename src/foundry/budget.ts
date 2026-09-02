@@ -12,13 +12,21 @@
 //               pay for ten screens per shipped family, and eight of ten cost $0 in model spend.
 //   authoring   the family itself: declared behaviour space, reference, verifier, mutant bank.
 //   trials      frontier matrices, plus an infrastructure re-run tax.
-//   instances   generating graded points inside a finished family. Effectively free, and the whole
+//   instances   generating graded cells inside a finished family. Effectively free, and the whole
 //               reason families beat hand-authored tasks.
 //
-// The lever that matters is `instancesPerFamily`. At 1 it degenerates to hand-authoring every task
-// and the budget buys almost nothing; above ~20 the marginal task approaches the cost of a fuzz
-// sweep. `handAuthoredComparison` computes that degenerate case explicitly, because the contrast is
-// the answer to the question rather than a footnote to it.
+// WHAT THE UNIT IS, because this model got it wrong for three phases. A FAMILY is what gets built. A
+// DELIVERABLE TASK is an independently gradeable package a recipient can be handed, and this
+// repository emits exactly ONE per family. A GRADED CELL is one scenario-check pair inside that
+// package, and there are hundreds. The model used to multiply families by 24 cells and call the
+// product "shipped tasks", which inflated the headline 24-fold against anything anyone could
+// receive. The three are now separate fields and the report quotes all three.
+//
+// The lever that matters is therefore `deliverableTasksPerFamily`, and it is currently 1. Raising it
+// is what the deliverable exporter is for, and two instances count as distinct only if a knob
+// separates them that changes the expected answer — nine inert knobs of fourteen, as one family
+// here shipped, are not nine instances. `handAuthoredComparison` computes the degenerate case
+// explicitly, because the contrast is the answer to the question rather than a footnote to it.
 //
 // Every default here is either measured in the source project or labelled as an assumption in the
 // generated report. The planner does not invent a labour rate: the caller must supply one, and
@@ -28,7 +36,26 @@ export interface BudgetInputs {
   readonly totalUsd: number;
   /** Fully-loaded engineering cost per hour. Caller-supplied: this is the dominant term. */
   readonly labourRateUsdPerHour: number;
-  /** Authoring hours for one shippable family. ~45 h measured for the durable outbox. */
+  /**
+   * Authoring hours for one shippable family.
+   *
+   * ESTIMATED, not measured, and the report says so. No timesheet was ever kept; the shipped family
+   * took weeks.
+   *
+   * The value is 45. The eighteen task shapes this repository declares estimate their own builds at
+   * 18 to 120 hours, mean 62.4 — so 45 is NOT below the low end, it is 28% below the MEAN of the
+   * author's own estimates, and the flagship `durable-approval-outbox` declares 120, which is 2.7x
+   * it. (An earlier revision of this comment said "between 55 and 120 … below the low end". That was
+   * wrong in both halves; three shapes declare 18, 36 and 40.)
+   *
+   * Build hours are declared in two places and neither is measured: `examples/shapes/*.json` (18
+   * shapes, mean 62.4) and `BuiltFamily.estimatedBuildHours` in `src/families/registry.ts` (8 built
+   * families, mean 59.3).
+   *
+   * 45 is retained rather than raised because raising it silently would change the headline without
+   * new evidence. The sensitivity table spans the declared range, and that is where a reader should
+   * look.
+   */
   readonly hoursPerFamily: number;
   /** Hours spent screening ONE candidate before it is killed or promoted. */
   readonly hoursPerScreenedCandidate: number;
@@ -36,13 +63,43 @@ export interface BudgetInputs {
   readonly cycleHitRate: number;
   /** Frontier matrices consumed per shipped family. 3 measured (201-, 245-, 267-check rounds). */
   readonly matricesPerFamily: number;
-  /** Cost of one full matrix. $48.66 measured for the shipped six-trial matrix. */
-  readonly usdPerMatrix: number;
+  /**
+   * Cost of ONE frontier trial, measured.
+   *
+   * Replaces a per-matrix figure that hid how many runs a matrix is and what each one cost. The
+   * value is the mean of the 19 real Harbor trials over $0.50 recorded in
+   * `data/measured-trial-costs.json` (21 rows, two of them sub-$0.50 no-op probes that are preserved
+   * and excluded from the statistic). It is deliberately a MEAN and not a median: the
+   * distribution is bimodal by lab (Anthropic median $15.20, OpenAI $3.28) and a plan that buys
+   * cross-lab evidence buys both.
+   */
+  readonly usdPerTrial: number;
+  /** Runs in one matrix. 6 = 3 subjects x 2 labs, which is what a cross-lab claim costs. */
+  readonly trialsPerMatrix: number;
   /** Infrastructure re-run tax: runs discarded for API/Docker/timeout reasons. 0.15 measured. */
   readonly retryRate: number;
-  /** Graded instances generated inside a finished family. */
-  readonly instancesPerFamily: number;
-  /** Independent axes a family is expected to yield. 3 measured for the durable outbox. */
+  /**
+   * Independently gradeable packages ONE family emits.
+   *
+   * This is the deliverable unit, and it is 1. The repository emits one challenge package per
+   * family; the 24 scenarios inside it are graded cells of that one package, not 24 tasks. The old
+   * model multiplied families by 24 and called the product `shippedTasks`, which inflated the
+   * headline by a factor of 24 against anything a recipient could actually be handed.
+   *
+   * Raising this above 1 is what the deliverable exporter is for, and two instances count as
+   * distinct only if a knob separates them that changes the expected answer.
+   */
+  readonly deliverableTasksPerFamily: number;
+  /** Graded cells inside one deliverable: scenarios x checks. Scale, not deliverable count. */
+  readonly hiddenCellsPerTask: number;
+  /**
+   * Independent axes a family is expected to yield.
+   *
+   * 2, measured. The durable-approval-outbox suite — 24 scenarios, 267 checks, the best thing this
+   * project built — has an antichain width of 2 over the six agents that failed it. The previous
+   * value of 3 was the width over the per-check cells pooled ACROSS both labs; inside either lab it
+   * is 2, and 2 is what a plan should buy against.
+   */
   readonly axesPerFamily: number;
   /**
    * Fraction of BUILT families that die after they are built.
@@ -53,14 +110,6 @@ export interface BudgetInputs {
    * died that way, so the measured rate is 1 in 2 — on a sample of two, which the report says.
    */
   readonly postBuildKillRate: number;
-  /**
-   * Families built per surviving family, counting descendants.
-   *
-   * A family that dies as `already_solved` is not a total loss: it produces a kill analysis and a set
-   * of evolved variants, and one of those gets built. So the cost of a shipped family is the cost of
-   * the whole lineage, not of the last member.
-   */
-  readonly evolutionCyclesPerSurvivor: number;
   /** Fraction of authoring hours a descendant reuses from its parent — harness, checker, packaging. */
   readonly descendantReuse: number;
 }
@@ -72,9 +121,19 @@ export interface BudgetPlan {
   readonly trialUsdPerFamily: number;
   readonly loadedUsdPerFamily: number;
   readonly families: number;
-  readonly shippedTasks: number;
+  /** Independently gradeable packages a recipient could be handed. The deliverable unit. */
+  readonly deliverableTasks: number;
+  /** Graded cells across those deliverables. Scale of the hidden suite, not a deliverable count. */
+  readonly gradedCells: number;
   readonly expectedAxes: number;
-  readonly usdPerShippedTask: number;
+  readonly usdPerDeliverableTask: number;
+  /**
+   * Dollars per independent axis.
+   *
+   * The number the whole argument turns on, computed since the first version of this file and
+   * rendered by nothing. The report's own thesis is that axes are what is worth quoting; it then
+   * quoted tasks. It is now rendered.
+   */
   readonly usdPerAxis: number;
   readonly labourUsd: number;
   readonly modelUsd: number;
@@ -89,6 +148,20 @@ export interface BudgetPlan {
 /** Working hours in an engineer-year. Stated rather than buried so the reader can disagree with it. */
 export const HOURS_PER_ENGINEER_YEAR = 1800;
 
+/**
+ * How many families you must BUILD to ship one, given the rate at which built families die.
+ *
+ * These used to be two independent inputs — `postBuildKillRate` and `evolutionCyclesPerSurvivor` —
+ * and only one of them was ever read. The plan derived "7 killed of 14 built" from the cycle count
+ * while the kill rate sat unused beside it, and the two happened to agree at 50%, which is the kind
+ * of coincidence that keeps a defect invisible for three phases. They are one quantity: if half of
+ * built families die, shipping one costs two builds. Deriving it means they cannot disagree.
+ */
+export function buildsPerShippedFamily(postBuildKillRate: number): number {
+  const survival = 1 - postBuildKillRate;
+  return survival > 0 ? 1 / survival : Number.POSITIVE_INFINITY;
+}
+
 export function planBudget(inputs: BudgetInputs): BudgetPlan {
   const screeningHours = (1 / inputs.cycleHitRate) * inputs.hoursPerScreenedCandidate;
   const screeningUsdPerFamily = screeningHours * inputs.labourRateUsdPerHour;
@@ -97,21 +170,21 @@ export function planBudget(inputs: BudgetInputs): BudgetPlan {
   // `evolutionCyclesPerSurvivor - 1` descendants, each of which reuses part of its parent's harness.
   // Pricing only the survivor is the same error as pricing only the counted trial runs: it charges
   // for the work that succeeded and omits the work that produced it.
-  const descendants = Math.max(0, inputs.evolutionCyclesPerSurvivor - 1);
+  const buildsPerSurvivor = buildsPerShippedFamily(inputs.postBuildKillRate);
+  const descendants = Math.max(0, buildsPerSurvivor - 1);
   const lineageHours =
     inputs.hoursPerFamily + descendants * inputs.hoursPerFamily * (1 - inputs.descendantReuse);
   const authoringUsdPerFamily = lineageHours * inputs.labourRateUsdPerHour;
 
   // Every family in the lineage is trialed, including the ones that die — that is HOW they die.
+  const usdPerMatrix = inputs.usdPerTrial * inputs.trialsPerMatrix;
   const trialUsdPerFamily =
-    inputs.evolutionCyclesPerSurvivor *
-    inputs.matricesPerFamily *
-    inputs.usdPerMatrix *
-    (1 + inputs.retryRate);
+    buildsPerSurvivor * inputs.matricesPerFamily * usdPerMatrix * (1 + inputs.retryRate);
   const loadedUsdPerFamily = screeningUsdPerFamily + authoringUsdPerFamily + trialUsdPerFamily;
 
   const families = loadedUsdPerFamily > 0 ? Math.floor(inputs.totalUsd / loadedUsdPerFamily) : 0;
-  const shippedTasks = families * inputs.instancesPerFamily;
+  const deliverableTasks = families * inputs.deliverableTasksPerFamily;
+  const gradedCells = deliverableTasks * inputs.hiddenCellsPerTask;
   const expectedAxes = families * inputs.axesPerFamily;
 
   const labourUsd = families * (screeningUsdPerFamily + authoringUsdPerFamily);
@@ -125,17 +198,18 @@ export function planBudget(inputs: BudgetInputs): BudgetPlan {
     trialUsdPerFamily,
     loadedUsdPerFamily,
     families,
-    shippedTasks,
+    deliverableTasks,
+    gradedCells,
     expectedAxes,
-    usdPerShippedTask: shippedTasks > 0 ? spent / shippedTasks : Number.POSITIVE_INFINITY,
+    usdPerDeliverableTask: deliverableTasks > 0 ? spent / deliverableTasks : Number.POSITIVE_INFINITY,
     usdPerAxis: expectedAxes > 0 ? spent / expectedAxes : Number.POSITIVE_INFINITY,
     labourUsd,
     modelUsd,
     labourShare: spent > 0 ? labourUsd / spent : 0,
     impliedEngineerYears: (families * (screeningHours + lineageHours)) / HOURS_PER_ENGINEER_YEAR,
     candidatesScreened: Math.round(families / inputs.cycleHitRate),
-    familiesBuilt: Math.round(families * inputs.evolutionCyclesPerSurvivor),
-    familiesKilledAfterBuild: Math.round(families * (inputs.evolutionCyclesPerSurvivor - 1)),
+    familiesBuilt: Math.round(families * buildsPerSurvivor),
+    familiesKilledAfterBuild: Math.round(families * (buildsPerSurvivor - 1)),
   };
 }
 
@@ -146,19 +220,11 @@ export function planBudget(inputs: BudgetInputs): BudgetPlan {
  * route to showing why the answer has to be families rather than tasks.
  */
 export function handAuthoredComparison(inputs: BudgetInputs): BudgetPlan {
-  // `axesPerFamily: 1` as well as `instancesPerFamily: 1`, and the second is the one that is easy to
-  // forget. A family yields several axes because its instances sample different regions of one
+  // `axesPerFamily: 1` as well as the unit fields, and the axis one is easy to forget. A family yields several axes because its instances sample different regions of one
   // declared space; a single hand-authored task has no such space to sample, so it measures at most
   // one thing. Carrying the family's axis count into this comparison would flatter hand-authoring
   // with diversity it cannot have.
-  return planBudget({ ...inputs, instancesPerFamily: 1, axesPerFamily: 1 });
-}
-
-/** What it would cost to reach a target task count under these assumptions. */
-export function costOfTarget(inputs: BudgetInputs, targetTasks: number): number {
-  const perFamily = planBudget(inputs).loadedUsdPerFamily;
-  const familiesNeeded = Math.ceil(targetTasks / Math.max(1, inputs.instancesPerFamily));
-  return familiesNeeded * perFamily;
+  return planBudget({ ...inputs, deliverableTasksPerFamily: 1, hiddenCellsPerTask: 1, axesPerFamily: 1 });
 }
 
 /**
@@ -170,16 +236,22 @@ export const MEASURED_DEFAULTS: Omit<BudgetInputs, "totalUsd" | "labourRateUsdPe
   hoursPerScreenedCandidate: 3,
   cycleHitRate: 0.1,
   matricesPerFamily: 3,
-  usdPerMatrix: 48.66,
+  // Mean of 19 real trials over $0.50 in `data/measured-trial-costs.json`. The model previously
+  // carried a $3.50 literal under a heading that said "measured"; the measurement, when finally
+  // taken, was 2.8x that.
+  usdPerTrial: 9.95,
+  trialsPerMatrix: 6,
   retryRate: 0.15,
-  instancesPerFamily: 24,
-  axesPerFamily: 3,
+  // ONE package per family. This is what the repository actually emits, and it is the number the
+  // headline was inflated 24-fold by not using.
+  deliverableTasksPerFamily: 1,
+  hiddenCellsPerTask: 24,
+  // Measured on the outbox, inside a single lab. See the field docstring.
+  axesPerFamily: 2,
   // 1 of 2 families built here died after being built. A sample of two, stated as such wherever it
   // is used, and the direction is the one that matters: the rate is not zero, and a plan assuming
   // 100% survival is the optimistic fiction `budget-check.ts` exists to reject.
   postBuildKillRate: 0.5,
-  // One survivor cost two builds in this repository: the parent and its promoted descendant.
-  evolutionCyclesPerSurvivor: 2,
   // The descendant reused the trial layer, the challenge packager, the axis meter and the report
   // pipeline, and reused none of the domain model. Roughly a third, measured by neither of us.
   descendantReuse: 0.35,

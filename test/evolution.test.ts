@@ -13,7 +13,7 @@ import { describe, expect, it } from "vitest";
 import { measure } from "../src/axis-meter.js";
 import { checkChallengePackage } from "../src/challenge/package-check.js";
 import { BUILT_FAMILIES, BUILT_FAMILY_IDS, builtFamily, scenarioSetIdFor } from "../src/families/registry.js";
-import { MEASURED_DEFAULTS, planBudget } from "../src/foundry/budget.js";
+import { MEASURED_DEFAULTS, buildsPerShippedFamily, planBudget } from "../src/foundry/budget.js";
 import { assertLedgerConsistency } from "../src/foundry/consistency.js";
 import {
   OPERATORS,
@@ -407,12 +407,25 @@ describe("the budget prices death", () => {
   const inputs = { ...MEASURED_DEFAULTS, totalUsd: 100_000, labourRateUsdPerHour: 120 };
 
   it("a plan assuming every built family survives buys more than one that does not", () => {
-    // The known-bad: `evolutionCyclesPerSurvivor: 1` is the plan that prices only the survivor.
-    const optimistic = planBudget({ ...inputs, evolutionCyclesPerSurvivor: 1 });
+    // The known-bad: `postBuildKillRate: 0` is the plan that prices only the survivor. It used to be
+    // expressible two ways — a kill rate of 0 or a cycle count of 1 — and only the second was read.
+    const optimistic = planBudget({ ...inputs, postBuildKillRate: 0 });
     const honest = planBudget(inputs);
     expect(optimistic.families).toBeGreaterThan(honest.families);
     expect(optimistic.familiesKilledAfterBuild).toBe(0);
     expect(honest.familiesKilledAfterBuild).toBeGreaterThan(0);
+  });
+
+  it("builds per survivor is DERIVED from the kill rate, not declared beside it", () => {
+    // The retired `evolutionCyclesPerSurvivor: 2` and `postBuildKillRate: 0.5` agreed by luck, which
+    // is why the duplication survived three phases. Deriving one from the other is what stops them
+    // disagreeing, and at the measured rate it reproduces the retired value exactly — so correcting
+    // the defect moves no headline number.
+    expect(buildsPerShippedFamily(0.5)).toBe(2);
+    expect(buildsPerShippedFamily(0)).toBe(1);
+    expect(buildsPerShippedFamily(0.75)).toBe(4);
+    const plan = planBudget(inputs);
+    expect(plan.familiesBuilt).toBe(plan.families * buildsPerShippedFamily(inputs.postBuildKillRate));
   });
 
   it("builds exceed survivors, and the report can say by how much", () => {

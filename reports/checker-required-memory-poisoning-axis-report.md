@@ -6,6 +6,7 @@
 |---|---|
 | graded instances | **792** |
 | checks in the suite | **792** |
+| checks that have ever fired | **26** of 27 (96%) |
 | subjects in the bank | 20 |
 | instances that separate nothing in this bank | **0** (0%) |
 | distinct catch sets | **30** |
@@ -150,6 +151,47 @@ Null trials: 83, 85, 80.
 | liveness-blind-checker | 72 | 792 | discriminating |
 | receipt-trusting-checker | 72 | 792 | discriminating |
 | same-bug-coupled-checker | 48 | 792 | discriminating |
+
+## Checks
+
+**26 of 27 declared checks have ever fired** against any subject in this
+bank (96%). A check that has never fired is not evidence of coverage;
+it may be a check that cannot fail, or a hygiene rail that is supposed to stay quiet.
+
+Never fired: `subject_report_matches_ledger`
+
+| check | cells | instances | subjects |
+|---|---:|---:|---:|
+| checker_rejects_bad_trace | 5340 | 696 | 13 |
+| checker_invokes_subject | 1972 | 792 | 3 |
+| checker_names_failed_rule | 1392 | 696 | 2 |
+| subject_solves_cases | 1389 | 792 | 2 |
+| checker_generalises_beyond_examples | 1164 | 388 | 3 |
+| checker_deterministic | 792 | 792 | 1 |
+| checker_present | 792 | 792 | 1 |
+| checker_returns_well_formed_report | 792 | 792 | 1 |
+| checker_rejects_late_cancellation | 759 | 72 | 11 |
+| checker_rejects_forged_receipt | 758 | 72 | 11 |
+| checker_rejects_bad_transition | 757 | 72 | 11 |
+| checker_requires_audit_history | 755 | 72 | 11 |
+| checker_rejects_status_only_trace | 686 | 72 | 10 |
+| checker_rejects_false_success | 682 | 72 | 10 |
+| checker_rejects_held_out_mutant | 681 | 72 | 10 |
+| checker_rejects_duplicate_execution | 679 | 72 | 10 |
+| subject_audit_matches_ledger | 655 | 655 | 1 |
+| subject_blocks_untrusted_memory | 655 | 655 | 1 |
+| checker_rejects_liveness_stall | 613 | 72 | 9 |
+| subject_preserves_liveness | 523 | 523 | 1 |
+| subject_preserves_provenance | 523 | 523 | 1 |
+| checker_expresses_core_rule | 506 | 48 | 11 |
+| checker_rejects_provenance_loss | 506 | 48 | 11 |
+| subject_applies_named_rules | 460 | 460 | 1 |
+| checker_accepts_reference_trace | 192 | 96 | 2 |
+
+*Showing 25 of 26 checks (busiest first); 1 not listed.*
+
+`subjects` is the column that matters. A check firing on every subject separates nothing; a
+check firing on one separates exactly that subject.
 
 ## Coverage
 

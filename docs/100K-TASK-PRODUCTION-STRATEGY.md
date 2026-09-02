@@ -249,26 +249,18 @@ on a task shape, transfer test or descendant build with more confidence than sco
 failure is a cheap kill or repair signal, which is the point: a failed probe is much cheaper than a
 failed family package plus model campaign.
 
-The current runner executes probes for high-priority discovery candidates and requested equivalents:
-deployment model-alias drift, CRM stale permission action, long-horizon cancellation, memory
-authority laundering, verifier import hijack, calendar authority, ticket attachment injection,
-schema drift, unknown payment receipt, trading partial-fill reconciliation, browser stale selector,
-token scope drift, delegated-wallet authority reconciliation, audit rewrite and cross-tool authority
-laundering.
+The runner executes the probes a checked-in artifact still depends on: deployment model-alias
+drift, provider-failover router alias drift, unknown payment receipt, token scope drift and
+delegated-wallet authority reconciliation. Probes that nothing referenced — eleven of them, written
+for candidates no promotion, lineage or report ever consumed — were deleted rather than kept as a
+larger-looking bank. A probe is self-graded: its checker and its known-bad subjects are written by
+the same author in the same file, so a probe that promotes itself is worth exactly the artifact that
+cites it, and a probe nothing cites is worth nothing.
 
-Discovery calibration keeps the scoring model from flattering itself. The calibration report
-backtests six known family outcomes:
-
-- durable approval outbox
-- prompt-injection containment
-- prompt-injection memory poisoning
-- UI action record replay
-- UI replay live DOM
-- checker-required memory poisoning
-
-The set is intentionally labelled n=6 and directional. It can say "this routing pressure seems
-wrong" or "probe evidence should dominate this score"; it cannot estimate the true yield of future
-families. That estimate still needs more completed probes, promoted shapes and counted trials.
+The discovery calibration backtest was deleted in the same pass. It scored the discovery model
+against six family outcomes already known to its author when the rows were typed, so it could only
+ever agree with itself; `src/spec-probe/` replaces that kind of self-grading with a screen validated
+against ground truth it can fail.
 
 ### Refinement: Promote From Probe To Family
 
@@ -833,7 +825,6 @@ The repository already implements the core evidence machinery:
   and task-shape draft generation
 - Mechanism Probe Runner v1: executable pre-family probes, probe-aware discovery queue and
   probe-to-task-shape scaffold generation
-- discovery calibration against six known family outcomes, labelled directional rather than
   predictive
 - task shape declarations
 - mechanism registry

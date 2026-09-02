@@ -14,16 +14,11 @@
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import {
-  importAdversarialBundle,
-  prepareAdversarialBundle,
-  runAdversarialAudit,
-} from "./adversarial-audit/bundles.js";
+import { importAdversarialBundle, prepareAdversarialBundle } from "./adversarial-audit/bundles.js";
 import {
   adversarialContainerBundlePath,
   containerRuntimeReadiness,
   prepareContainerAdversarialBundle,
-  runContainerAdversarialAudit,
   runContainerIsolationSmoke,
   verifyContainerIsolationBundle,
 } from "./adversarial-audit/container.js";
@@ -145,7 +140,6 @@ import {
 } from "./foundry/lineage.js";
 import {
   loadAdaptiveFunnel,
-  loadDiscoveryCalibration,
   loadDiscoveryWorkbench,
   loadLineages,
   loadProbeDefinitions,
@@ -228,7 +222,6 @@ import {
 import { renderDeploymentAliasFamilyReport } from "./reports/deployment-alias-report.js";
 import { diagnose, renderDiagnoses } from "./reports/diagnosis.js";
 import { computeCurve } from "./reports/difficulty.js";
-import { renderDiscoveryCalibrationReport } from "./reports/discovery-calibration-report.js";
 import {
   renderDiscoveryCandidates,
   renderDiscoveryNext,
@@ -374,7 +367,6 @@ REGISTRY (what could be built, and can we detect it?)
   discovery candidates           candidate task-family ideas before probes/families
   discovery score                deterministic cheap-screen scores
   discovery next                 next build/probe/kill/transfer queue
-  discovery calibration [--out f] n=6 directional backtest against known family outcomes
   discovery scaffold --candidate <id> --out <dir>
                                   draft task-shape artifact from a promoted candidate
   probes run                      run deterministic executable mechanism probes
@@ -443,8 +435,6 @@ FAMILIES (run a measured mini-benchmark)
   adversarial readiness [--out f] verifier-integrity attack readiness
   adversarial campaign <family> [--json]  threat model and campaign plan
   adversarial prepare <family> [--provider p] [--out dir]  build attack packet
-  adversarial run <family> [--provider codex] [--run-id id] [--timeout ms]
-                                 run one local verifier-bypass audit; Anthropic is disabled
   adversarial import <dir>       import a completed adversarial packet
   adversarial verify <run-id>    validate one adversarial audit record
   adversarial replay <run-id>    replay a preserved exploit artifact, if one exists
@@ -454,8 +444,6 @@ FAMILIES (run a measured mini-benchmark)
   adversarial isolate container prepare <family> [--out dir]  build container/no-network attack packet
   adversarial isolate container verify <bundle>  validate container/no-network manifest
   adversarial isolate container smoke <family>  run container/no-network readiness smoke
-  adversarial run-container <family> [--provider codex] [--run-id id]
-                                 preserve a container/no-network adversarial preflight/run
   adversarial probe <family>     run deterministic verifier-integrity hardening probes
   adversarial v2 report [--out f] v2 isolation/replay/probe evidence summary
   adversarial container report [--out f] container/no-network evidence summary
@@ -1105,7 +1093,6 @@ function discoveryInputs(root: string) {
   ];
   const summary = summarizeDiscoveryWorkbench(workbench, probeEvidence);
   const scores = scoreDiscoveryCandidates(workbench.candidates);
-  const calibration = loadDiscoveryCalibration(root, registry, workbench);
   return {
     registry,
     funnel,
@@ -1118,7 +1105,6 @@ function discoveryInputs(root: string) {
     lineages,
     lineageEvaluations,
     reallocation,
-    calibration,
   };
 }
 
@@ -1136,7 +1122,6 @@ function discoveryCommand(argv: readonly string[], root: string): string {
   if (sub === "candidates") return renderDiscoveryCandidates(input.workbench.candidates);
   if (sub === "score") return renderDiscoveryScores(input.scores, input.workbench.candidates);
   if (sub === "next") return renderDiscoveryNext(input.summary, input.workbench.candidates);
-  if (sub === "calibration") return renderDiscoveryCalibrationReport(input.calibration);
   if (sub === "scaffold") {
     const candidateId = flag(argv, "--candidate");
     const out = flag(argv, "--out");
@@ -1167,7 +1152,7 @@ function discoveryCommand(argv: readonly string[], root: string): string {
     return renderDiscoveryScaffoldSummary(draft);
   }
   throw new Error(
-    `unknown discovery subcommand "${sub}"; expected report | candidates | score | next | calibration | scaffold`,
+    `unknown discovery subcommand "${sub}"; expected report | candidates | score | next | scaffold`,
   );
 }
 
@@ -1952,67 +1937,6 @@ function adversarialCommand(argv: readonly string[], root: string): string {
       "",
     ].join("\n");
   }
-  if (sub === "run") {
-    const familyId = positional(argv, 2);
-    if (familyId === undefined) throw new Error("adversarial run needs a family id");
-    const provider = flag(argv, "--provider") ?? "codex";
-    if (provider.startsWith("claude")) {
-      throw new Error("Anthropic/Claude adversarial runs are disabled for this phase; prepare/import only");
-    }
-    const runId =
-      flag(argv, "--run-id") ??
-      `${familyId}-adversarial-${provider}-${new Date().toISOString().slice(0, 10)}`;
-    const result = runAdversarialAudit({
-      root,
-      familyId,
-      providerId: provider,
-      runId,
-      timeoutMs: numeric(argv, "--timeout") ?? 900_000,
-    });
-    return [
-      `attack     ${result.record.attackId}`,
-      `family     ${result.record.familyId}`,
-      `provider   ${result.record.attacker.provider} (${result.record.attacker.model})`,
-      `status     ${result.record.status}`,
-      `counts     ${result.record.counts ? "yes" : "NO"} — ${result.record.countabilityReason}`,
-      `bypass     ${result.record.bypassClassification}`,
-      `isolation  ${result.record.isolationProfile.id}`,
-      `replay     ${result.record.exploitReplay.status}`,
-      `triage     ${result.record.triage.decision}`,
-      `directory  ${result.runDir}`,
-      "",
-    ].join("\n");
-  }
-  if (sub === "run-container") {
-    const familyId = positional(argv, 2);
-    if (familyId === undefined) throw new Error("adversarial run-container needs a family id");
-    const provider = flag(argv, "--provider") ?? "codex";
-    if (provider.startsWith("claude")) {
-      throw new Error("Anthropic/Claude adversarial runs are disabled for this phase; prepare/import only");
-    }
-    const runId =
-      flag(argv, "--run-id") ??
-      `${familyId}-adversarial-container-${provider}-${new Date().toISOString().slice(0, 10)}`;
-    const result = runContainerAdversarialAudit({
-      root,
-      familyId,
-      providerId: provider,
-      runId,
-      timeoutMs: numeric(argv, "--timeout") ?? 900_000,
-    });
-    return [
-      `attack     ${result.record.attackId}`,
-      `family     ${result.record.familyId}`,
-      `provider   ${result.record.attacker.provider} (${result.record.attacker.model})`,
-      `status     ${result.record.status}`,
-      `counts     ${result.record.counts ? "yes" : "NO"} — ${result.record.countabilityReason}`,
-      `isolation  ${result.record.isolationProfile.id}`,
-      `container  ${result.runtime.available ? "available" : "UNAVAILABLE"} — ${result.runtime.detail}`,
-      `bundle     ${result.bundleDir}`,
-      `directory  ${result.runDir}`,
-      "",
-    ].join("\n");
-  }
   if (sub === "replay") {
     const attackId = positional(argv, 2);
     if (attackId === undefined) throw new Error("adversarial replay needs an attack id");
@@ -2194,7 +2118,7 @@ function adversarialCommand(argv: readonly string[], root: string): string {
     ].join("\n");
   }
   throw new Error(
-    `unknown adversarial subcommand "${sub}"; expected readiness | campaign | prepare | run | run-container | import | import-report | verify | replay | triage | isolate | probe | v2 | container | report | all`,
+    `unknown adversarial subcommand "${sub}"; expected readiness | campaign | prepare | import | import-report | verify | replay | triage | isolate | probe | v2 | container | report | all`,
   );
 }
 
@@ -3391,7 +3315,6 @@ function allCommand(argv: readonly string[], root: string): string {
   );
   const probeDefinitions = loadProbeDefinitions(root, registry);
   const probeSummary = loadProbeRunSummary(root, registry);
-  const calibration = loadDiscoveryCalibration(root, registry);
   write(
     "adaptive-funnel-report.md",
     renderAdaptiveFunnelReport({
@@ -3423,7 +3346,6 @@ function allCommand(argv: readonly string[], root: string): string {
       ledgers: reportLedgers(root),
     }),
   );
-  write("discovery-calibration-report.md", renderDiscoveryCalibrationReport(calibration));
   write(
     "mechanism-probe-report.md",
     renderMechanismProbeReport(probeSummary, probeDefinitions, discoveryWorkbench.candidates),
@@ -5009,7 +4931,7 @@ export function main(argv: readonly string[]): number {
       }
       case "discovery": {
         const sub = positional(argv, 1) ?? "report";
-        if (sub === "report" || sub === "candidates" || sub === "score" || sub === "calibration") {
+        if (sub === "report" || sub === "candidates" || sub === "score") {
           emit(argv, discoveryCommand(argv, root));
         } else {
           process.stdout.write(discoveryCommand(argv, root));

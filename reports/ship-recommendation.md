@@ -438,14 +438,14 @@ table does.
 | `baselines-blocked` | n/a | family not built |
 | `mutants-caught-by-intended-check` | n/a | family not built |
 | `mechanisms-exercised` | n/a | family not built |
-| `isolation-level` | n/a | family not built |
-| `shared-bank-ready` | n/a | family not built |
-| `deterministic-reports` | n/a | family not built |
-| `trial-ready` | n/a | family not built |
-| `difficulty-evidenced` | **FAIL** | 6 agent trial(s) declared by the shape and no root-cause record for any of them; a declaration cannot say why a trial failed |
-| `agent-axes-independent` | n/a | family not built |
+| `isolation-level` | pass | container with 6 agent trial(s) |
+| `shared-bank-ready` | **FAIL** | 2 subject(s) shared with another family (need 3) |
+| `deterministic-reports` | pass | verified |
+| `trial-ready` | **FAIL** | no route: this family cannot be handed to an agent as it stands |
+| `difficulty-evidenced` | **FAIL** | 6 counted agent trial(s), none root-caused to `capability` (1 unlabelled); a counted failure is not a difficulty finding until somebody says why it failed |
+| `agent-axes-independent` | **FAIL** | every counted subject's failures nest (gpt-5.6-sol ⊂ claude-opus-5); one difficulty axis however many subjects attempt it. Only new scenarios with a genuine trade-off can raise it — see reports/scenario-diversity-report.md |
 | `production-matrix-ready` | n/a | no production-readiness layer for this family |
-| `not-already-solved` | pass | 6 of 6 declared trial(s) failed — declared by the shape, not measured here |
+| `not-already-solved` | pass | 6 of 6 counted trial(s) failed at least one scenario |
 | `priced` | pass | 120h build, $48.66 frontier |
 | `human-package-ready` | **FAIL** | public package is incomplete or not generated here |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |

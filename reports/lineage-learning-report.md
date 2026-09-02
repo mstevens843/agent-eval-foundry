@@ -19,7 +19,7 @@ the adjustments stay visible in this report and stop moving any score.
 | stale/blocked lineages | 0 |
 | lineages with withdrawn evidence | 1 |
 | matrix spend avoided (informative evidence only) | $0.00 |
-| matrix spend deferred and still owed | $97.32 |
+| matrix spend deferred and still owed | $119.40 |
 
 ## access-token-authority-lineage
 
@@ -57,7 +57,7 @@ The full matrix this node skipped is **deferred, not avoided**: it is still owed
 | ...backed by informative evidence (a real saving) | 0 |
 | ...backed by withdrawn, stale or absent evidence (deferred) | 2 |
 | matrix spend avoided | $0.00 |
-| matrix spend deferred and still owed | $97.32 |
+| matrix spend deferred and still owed | $119.40 |
 | next action | run one counted smoke per node against the repaired current-hash packages before any verdict, portfolio adjustment or matrix decision is derived from this lineage |
 
 ### Edge

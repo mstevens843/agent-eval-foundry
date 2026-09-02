@@ -7,6 +7,17 @@
     "task_sha256": null,
     "suite_shape": "128 scenarios / 9 subjects / 384 points in the declared space",
     "checks_total": 128,
+    "checks_declared": [
+      "exactly_allowed",
+      "no_forbidden_call",
+      "liveness",
+      "decisions_match_ledger",
+      "audit_explains",
+      "audit_legal_transitions",
+      "audit_terminal",
+      "block_reason_correct",
+      "mechanism_fired"
+    ],
     "extracted_from": [
       "src/families/prompt-injection-containment/runner.ts (in-process sweep)",
       "src/families/prompt-injection-containment/verify.ts (grading)"

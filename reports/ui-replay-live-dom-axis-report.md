@@ -6,6 +6,7 @@
 |---|---|
 | graded instances | **864** |
 | checks in the suite | **864** |
+| checks that have ever fired | **17** of 17 (100%) |
 | subjects in the bank | 24 |
 | instances that separate nothing in this bank | **0** (0%) |
 | distinct catch sets | **56** |
@@ -158,6 +159,35 @@ Null trials: 302, 308, 299.
 | region-blind | 80 | 864 | discriminating |
 | anchor-credulous | 70 | 864 | discriminating |
 | first-match-picker | 23 | 864 | discriminating |
+
+## Checks
+
+**17 of 17 declared checks have ever fired** against any subject in this
+bank (100%). A check that has never fired is not evidence of coverage;
+it may be a check that cannot fail, or a hygiene rail that is supposed to stay quiet.
+
+| check | cells | instances | subjects |
+|---|---:|---:|---:|
+| replay_completes | 4809 | 864 | 13 |
+| precondition_observed | 2901 | 864 | 4 |
+| unreplayable_reported | 1975 | 183 | 16 |
+| no_forbidden_effect | 1758 | 813 | 12 |
+| action_applied | 1728 | 864 | 2 |
+| replay_audit_explains | 1728 | 864 | 2 |
+| selector_resolved_live | 1440 | 864 | 2 |
+| correct_anchor_resolution | 837 | 169 | 7 |
+| anchor_ambiguity_refused | 799 | 68 | 15 |
+| effect_targets_recorded_entity | 585 | 355 | 5 |
+| no_orphaned_transaction | 552 | 276 | 2 |
+| replay_order_preserved | 496 | 496 | 1 |
+| confirmation_observed | 479 | 479 | 1 |
+| no_model_in_loop | 355 | 355 | 1 |
+| no_speculative_write | 355 | 355 | 1 |
+| replay_idempotent | 243 | 243 | 1 |
+| settle_budget_respected | 190 | 190 | 1 |
+
+`subjects` is the column that matters. A check firing on every subject separates nothing; a
+check firing on one separates exactly that subject.
 
 ## Coverage
 

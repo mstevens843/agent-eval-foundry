@@ -19,7 +19,7 @@ Three CLIs are installed here and exactly one of them was a new LAB:
 | `claude-sonnet` | anthropic | **no** | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally |
 | `claude-haiku` | anthropic | **no** | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally |
 | `claude-fable` | anthropic | **no** | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally |
-| `codex` | openai | yes | codex-cli 0.152.0 |
+| `codex` | openai | yes | codex-cli 0.152.1 |
 | `gemini` | google | **no** | 0.46.0; entitlement previously blocked with IneligibleTierError, so this phase treats Gemini as import-only until a real authenticated run changes that |
 | `external` | external | **no** | external by declaration: prepare a bundle and import the result |
 

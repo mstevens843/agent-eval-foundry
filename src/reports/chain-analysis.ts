@@ -198,6 +198,7 @@ function measuredAgentAxes(failing: readonly SubjectFailures[]): number | null {
         task_sha256: null,
         suite_shape: `${scenarioIds.length} failed scenario(s) / ${failing.length} counted failing subject(s)`,
         checks_total: scenarioIds.length,
+        checks_declared: null,
         extracted_from: ["counted agent trial records"],
         caveat:
           "Cells are the union of failures across a subject's counted trials, restricted to the " +

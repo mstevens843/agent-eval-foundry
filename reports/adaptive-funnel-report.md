@@ -32,7 +32,7 @@ candidate mechanisms
 
 | cost tier | queued actions |
 |---|---:|
-| static | 15 |
+| static | 16 |
 | local | 7 |
 | cross-provider | 2 |
 
@@ -43,6 +43,7 @@ candidate mechanisms
 | `cross-tool-authority-laundering-probe` | probe | discovery | mechanism_probe | hold | static | run or repair the cheapest declared mechanism screen |
 | `delegated-wallet-scope-reconciliation` | family | validation | task_shape | repair | static | repair/reissue the package and invalidate stale evidence before further trials |
 | `deployment-model-alias-rollout-drift` | family | validation | task_shape | repair | static | repair/reissue the package and invalidate stale evidence before further trials |
+| `durable-approval-outbox` | family | validation | transfer_test | evolve | static | evolve or transfer before broad ship claims |
 | `durable-memory-injection-probe` | probe | validation | task_shape | promote | static | promote probe into a full task shape |
 | `hidden-dependency-discovery-probe` | probe | discovery | mechanism_probe | repair | static | run or repair the cheapest declared mechanism screen |
 | `memory-to-cross-tool-authority-laundering` | transfer | validation | transfer_test | transfer | static | execute the transfer test and require preserved evidence before claiming transfer |
@@ -51,7 +52,6 @@ candidate mechanisms
 | `prompt-injection-containment` | family | validation | task_shape | evolve | static | treat the clean smoke pass as already_solved_or_needs_evolution before matrix spend |
 | `prompt-injection-memory-poisoning` | family | validation | task_shape | repair | static | repair/reissue the package and invalidate stale evidence before further trials |
 | `provider-failover-router-alias-drift-probe` | probe | validation | task_shape | promote | static | promote probe into a full task shape |
-| `ui-action-record-replay` | family | validation | transfer_test | evolve | static | evolve or transfer before broad ship claims |
 
 ## Rules The Planner Enforces
 
@@ -105,6 +105,7 @@ candidate mechanisms
 | `access-token-scope-expansion` | task_shape | repair | stale challenge hashes cannot feed production-mode claims |
 | `delegated-wallet-scope-reconciliation` | task_shape | repair | stale challenge hashes cannot feed production-mode claims |
 | `deployment-model-alias-rollout-drift` | task_shape | repair | stale challenge hashes cannot feed production-mode claims |
+| `durable-approval-outbox` | transfer_test | evolve | nested failure sets are one axis at multiple sensitivities, not breadth |
 | `prompt-injection-containment` | task_shape | evolve | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
 | `prompt-injection-memory-poisoning` | task_shape | repair | stale challenge hashes cannot feed production-mode claims |
 | `ui-action-record-replay` | transfer_test | evolve | nested failure sets are one axis at multiple sensitivities, not breadth |
@@ -122,6 +123,7 @@ No family is automatically recommended for a fresh full matrix by this planner p
 | `access-token-scope-expansion` | static at `task_shape` | stale challenge hashes cannot feed production-mode claims |
 | `delegated-wallet-scope-reconciliation` | static at `task_shape` | stale challenge hashes cannot feed production-mode claims |
 | `deployment-model-alias-rollout-drift` | static at `task_shape` | stale challenge hashes cannot feed production-mode claims |
+| `durable-approval-outbox` | static at `transfer_test` | nested failure sets are one axis at multiple sensitivities, not breadth |
 | `prompt-injection-containment` | static at `task_shape` | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
 | `prompt-injection-memory-poisoning` | static at `task_shape` | stale challenge hashes cannot feed production-mode claims |
 | `ui-action-record-replay` | static at `transfer_test` | nested failure sets are one axis at multiple sensitivities, not breadth |

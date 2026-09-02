@@ -17,7 +17,7 @@ import { MUTANTS } from "./mutants.js";
 import { reference } from "./reference.js";
 import { enumerateSpace, generateScenarios, selectMeasuredSet } from "./scenarios.js";
 import type { Scenario, Subject, ToolCall, ToolFacade, ToolInvocation, ToolResult } from "./types.js";
-import { type Failure, verify } from "./verify.js";
+import { CHECKS, type Failure, verify } from "./verify.js";
 
 /** Records every invocation. The subject gets `facade()`; the verifier gets `sealed()`. */
 export class ToolHarness {
@@ -120,6 +120,7 @@ export function toMatrix(run: RunResult): Matrix {
       task_sha256: null,
       suite_shape: `${run.scenarios.length} scenarios / ${graded.length} subjects / ${run.spaceSize} points in the declared space`,
       checks_total: run.scenarios.length,
+      checks_declared: [...CHECKS],
       extracted_from: [
         "src/families/prompt-injection-containment/runner.ts (in-process sweep)",
         "src/families/prompt-injection-containment/verify.ts (grading)",

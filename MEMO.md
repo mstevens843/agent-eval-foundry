@@ -203,6 +203,46 @@ identifying which parameter controls it.* I made it again, one layer up, in the 
 traps. The meter prints this caveat above its own headline for that reason, and the loader rejects
 any matrix that does not carry a provenance statement.
 
+### The cheapest version of this argument: how many of your checks have ever fired
+
+Everything above needs a bank of subjects and a catch-set computation. There is a cruder statistic
+that needs neither, that any suite owner can run against data they already have, and that almost
+nobody has run.
+
+**Of the eleven checks in the 267-check suite above, two ever fired against a real frontier agent.**
+
+The bank in §2 is ten engines, seven of which are my own known-bad implementations. Against the six
+*real* agent runs — three Anthropic, three OpenAI, the ones the `6/6 reward 0` headline was made of —
+the failing checks are `audit_explains` and `completion`. That is the complete list. Nine of eleven
+checks never fired at all.
+
+The suite was not measuring eleven things and finding two problems. It was measuring two things,
+nine times over, and the check count was never evidence of breadth.
+
+Worse, the statistic inverts depending on who you point it at. Across the eight families in this
+repository, measured against their own **mutant** banks:
+
+| suite | subjects | checks declared | ever fired |
+|---|---|---:|---:|
+| eight built families | deliberately-broken mutants | 9–27 | **56–100%** |
+| durable-approval-outbox | six real frontier agents | 11 | **18%** |
+
+Mutants exercise a suite. Real agents do not. Every mutant is written to trip a named check, so a
+mutant bank fires the suite almost completely by construction — which is exactly why "my verifier
+catches all N of my mutants" feels like coverage evidence and is not. The subjects you care about
+fail in a narrow, correlated band, and the checks outside that band have never been exercised by
+anything except the author's own imagination.
+
+So the one-line diagnostic, in the form that transfers to any suite anyone holds:
+
+> Take every check your suite declares. Take every real subject you have ever graded. How many of
+> your checks have ever fired against one of them?
+
+If the answer is most of them, this argument does not apply to you. If it is two of eleven, your
+check count is a fact about your verifier and not about your benchmark. The axis meter reports this
+alongside the axis count for exactly that reason, and `provenance.checks_declared` exists so the
+denominator is names rather than a number nobody can audit.
+
 ### Does this transfer, or is it a fact about my own suite?
 
 The obvious objection to everything above is that I built the suite, I built the bank, and I selected

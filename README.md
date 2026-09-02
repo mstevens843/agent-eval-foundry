@@ -28,8 +28,7 @@ are routing evidence only; they are not difficulty evidence until a built family
 
 Mechanism Probe Runner v1 adds the next bridge: top candidates can now run tiny deterministic
 probes before full family build. See
-[`reports/mechanism-probe-report.md`](reports/mechanism-probe-report.md) and
-[`reports/discovery-calibration-report.md`](reports/discovery-calibration-report.md). Probe evidence
+[`reports/mechanism-probe-report.md`](reports/mechanism-probe-report.md). Probe evidence
 can promote, repair, transfer, evolve, hold or kill a candidate, but it is still not real-agent
 difficulty evidence.
 
@@ -157,16 +156,13 @@ Surface coverage is reported separately from failure-axis diversity so broad API
 does not masquerade as independent defect axes.
 
 Mechanism Probe Runner v1 turns selected candidate ideas into cheap executable evidence. The probe
-definitions cover the current top-ranked workbench candidates plus requested equivalents for
-payments, trading, browser replay, permissions, audit rewrite, CRM stale action and cross-tool
-authority laundering. They include `delegated-wallet-scope-reconciliation-probe` and
+definitions are the ones a checked-in artifact depends on: the three that carry a promotion or a
+lineage, `payment-unknown-capture-receipt-probe`, and
 `provider-failover-router-alias-drift-probe`, the selected deployment-alias evolution screen. Probes
 run tiny scenarios against reference-like and known-bad probe subjects, must catch every non-reference
 probe subject by an intended named check, and produce a probe-aware next-action queue; the counts
 are the summary table of
-[`reports/mechanism-probe-report.md`](reports/mechanism-probe-report.md). The discovery calibration
-report backtests the scoring model against six known family outcomes; it is directional n=6
-calibration, not a yield estimate.
+[`reports/mechanism-probe-report.md`](reports/mechanism-probe-report.md).
 
 Promoted Family Build Pipeline v1 takes the first promoted probe from that queue and builds it
 through the validation stack. `access-token-scope-expansion` has a measured scenario set drawn from
@@ -281,7 +277,6 @@ node dist/cli.js discovery report
 node dist/cli.js discovery candidates
 node dist/cli.js discovery score
 node dist/cli.js discovery next
-node dist/cli.js discovery calibration
 node dist/cli.js discovery scaffold --candidate payment-unknown-capture-receipt --out /tmp/payment-task-shape
 node dist/cli.js probes run
 node dist/cli.js probes report
@@ -294,7 +289,7 @@ node dist/cli.js funnel transfer
 node dist/cli.js adversarial readiness
 node dist/cli.js adversarial campaign ui-replay-live-dom
 node dist/cli.js adversarial prepare ui-replay-live-dom --provider external --out bundles/ui-replay-live-dom-adversarial
-node dist/cli.js adversarial run ui-replay-live-dom --provider codex --run-id live-dom-adversarial-v2-codex-next --timeout 900000
+node dist/cli.js adversarial import bundles/ui-replay-live-dom-adversarial
 node dist/cli.js adversarial verify live-dom-adversarial-v2-codex-2026-08-escalated
 node dist/cli.js adversarial replay live-dom-adversarial-v2-codex-2026-08-escalated
 node dist/cli.js adversarial triage live-dom-adversarial-v2-codex-2026-08-escalated
@@ -389,7 +384,6 @@ Key generated reports:
 - `reports/checker-required-memory-poisoning-axis-report.md`
 - `reports/discovery-workbench-report.md`
 - `reports/mechanism-probe-report.md`
-- `reports/discovery-calibration-report.md`
 - `reports/access-token-evolution-report.md`
 - `reports/lineage-learning-report.md`
 - `reports/deployment-model-alias-rollout-drift-provider-delta.md`

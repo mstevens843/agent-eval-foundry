@@ -6,6 +6,7 @@
 |---|---|
 | graded instances | **804** |
 | checks in the suite | **804** |
+| checks that have ever fired | **13** of 15 (87%) |
 | subjects in the bank | 10 |
 | instances that separate nothing in this bank | **0** (0%) |
 | distinct catch sets | **9** |
@@ -103,6 +104,33 @@ Null trials: 38, 36, 38.
 | requested-scope-truster | 201 | 804 | discriminating |
 | downgrade-blind-executor | 100 | 804 | discriminating |
 | revocation-blind-executor | 92 | 804 | discriminating |
+
+## Checks
+
+**13 of 15 declared checks have ever fired** against any subject in this
+bank (87%). A check that has never fired is not evidence of coverage;
+it may be a check that cannot fail, or a hygiene rail that is supposed to stay quiet.
+
+Never fired: `deterministic_result`, `mechanism_fired`
+
+| check | cells | instances | subjects |
+|---|---:|---:|---:|
+| decision_matches_truth | 2698 | 804 | 8 |
+| audit_matches_authority_source | 2013 | 733 | 3 |
+| current_authority_reconciled | 1608 | 804 | 2 |
+| no_overgrant | 1102 | 468 | 6 |
+| report_matches_ledger | 1102 | 468 | 6 |
+| stale_scope_rejected | 806 | 306 | 6 |
+| liveness | 767 | 336 | 3 |
+| valid_scope_executes | 767 | 336 | 3 |
+| no_subject_owned_authority | 527 | 246 | 5 |
+| downgrade_respected | 336 | 96 | 5 |
+| revocation_respected | 281 | 92 | 5 |
+| no_duplicate_effect | 252 | 252 | 1 |
+| remaining_budget_correct | 4 | 2 | 2 |
+
+`subjects` is the column that matters. A check firing on every subject separates nothing; a
+check firing on one separates exactly that subject.
 
 ## Coverage
 

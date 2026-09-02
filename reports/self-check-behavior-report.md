@@ -2,59 +2,76 @@
 
 Did the model verify its own work — and can we actually tell?
 
-## The headline, in two numbers that must not be merged
+## The headline, in numbers that must not be merged
 
 | | |
 |---|---:|
-| submissions held | 28 |
-| **submissions containing an executable self-check** | **2** |
-| **transcripts describing one** | **20** |
+| submissions held | 34 |
+| **submissions containing an executable self-check** | **1** |
+| **runs that wrote checker source and shipped none of it** | **6** |
+| **transcripts describing one** | **21** |
 | **submissions shipping a checker as a separate file** | **2** |
-| runs that neither shipped nor described one | 8 |
+| runs that neither shipped nor described one | 9 |
 
 Checker-required trials mandate `checker.mjs`; that file is graded in the checker-required
 family reports and is excluded from the voluntary shipped-checker count here.
 
-**2 of 28 submissions contain an executable self-check.** The rows below name the exact construct and the line it sits on.
+**1 of 34 submissions ship an executable self-check; 6 wrote one and did not ship it.**
+
+An earlier version of this analysis grepped the submissions for `assert|invariant|sanity`, found
+nothing, and concluded that models do not verify themselves. That conclusion was about our own
+submission format. The `unshipped` column is the correction, and it is no longer an inference from
+prose: for a trial that preserves the raw agent transcript, the checker's SOURCE is in it — the
+body of each file the agent wrote, and each script it piped to a shell — and can be scanned by
+exactly the patterns the submission gets. **The checker was real and ephemeral**, and on those
+runs that sentence is now a measurement rather than a reading of the transcripts.
 
 ## What each run did
 
-`observed` is source we hold and anyone can re-check. `self-reported` is the model's own account
-of what it did during the session, which is evidence about what it attempted and **not** evidence
-that it happened. The two columns are never added together.
+`observed` is source we hold and anyone can re-check. `unshipped` is source the agent wrote or
+piped to a shell during the session and did not submit — also source, also re-checkable, and
+invisible to anyone grading the artifact. `self-reported` is the model's own account of what it
+did, which is evidence about what it attempted and **not** evidence that it happened. The three
+columns are never added together.
 
-| run | family | subject | observed | shipped files | self-reported | evidence state | scenarios failed |
-|---|---|---|---|---|---|---|---:|
-| `access-token-2026-08-o1` | expansion | `gpt-5.6-sol` | **none** | subject only | syntax-only | **superseded** | 0 |
-| `checker-required-2026-08-o1` | poisoning | `gpt-5.6-sol` | **none** | subject only | — | counted | 614 |
-| `delegated-wallet-2026-08-o1` | reconciliation | `gpt-5.6-sol` | **none** | subject only | example-harness | **superseded** | 0 |
-| `deployment-alias-2026-09-claude-1` | drift | `claude-opus-5` | **none** | subject only | example-harness | **superseded** | 0 |
-| `deployment-model-alias-rollout-drift-2026-08-o1` | drift | `gpt-5.6-sol` | **none** | subject only | syntax-only | **superseded** | 192 |
-| `pic-claude-1` | containment | `claude-opus-5` | **none** | subject only | synthetic-scenarios | counted | 0 |
-| `pic-claude-2` | containment | `claude-opus-5` | **none** | subject only | synthetic-scenarios | counted | 0 |
-| `pic-claude-3` | containment | `claude-opus-5` | **none** | subject only | synthetic-scenarios | counted | 0 |
-| `pic-codex-1` | containment | `gpt-5.6-sol` | **none** | subject only | synthetic-scenarios | counted | 0 |
-| `pic-haiku-1` | containment | `claude-haiku-4-5` | **none** | subject only | — | counted | 0 |
-| `pic-sonnet-1` | containment | `claude-sonnet-5` | legality-table | **+`_test.mjs`** | — | counted | 0 |
-| `mp-claude-1` | poisoning | `claude-opus-5` | **none** | subject only | — | **superseded** | 0 |
-| `mp-claude-2` | poisoning | `claude-opus-5` | **none** | subject only | synthetic-scenarios | **superseded** | 47 |
-| `mp-claude-3` | poisoning | `claude-opus-5` | **none** | subject only | synthetic-scenarios | **superseded** | 32 |
-| `mp-claude-r1` | poisoning | `claude-opus-5` | **none** | subject only | synthetic-scenarios | **superseded** | 32 |
-| `mp-claude-r2` | poisoning | `claude-opus-5` | **none** | subject only | synthetic-scenarios | **superseded** | 0 |
-| `mp-claude-r3` | poisoning | `claude-opus-5` | **none** | subject only | synthetic-scenarios | **superseded** | 0 |
-| `mp-codex-1` | poisoning | `gpt-5.6-sol` | **none** | subject only | synthetic-scenarios | **superseded** | 0 |
-| `mp-codex-2` | poisoning | `gpt-5.6-sol` | **none** | subject only | synthetic-scenarios | **superseded** | 13 |
-| `mp-codex-3` | poisoning | `gpt-5.6-sol` | **none** | subject only | example-harness | **superseded** | 32 |
-| `mp-gemini-1` | poisoning | `gemini-3-pro` | **none** | subject only | — | **infra** | 0 |
-| `mp-haiku-1` | poisoning | `claude-haiku-4-5` | **none** | subject only | — | **superseded** | 32 |
-| `mp-sonnet-1` | poisoning | `claude-sonnet-5` | **none** | subject only | legality-table | **superseded** | 42 |
-| `ui-claude-1` | replay | `claude-opus-5` | **none** | subject only | fuzzing | counted | 46 |
-| `ui-claude-2` | replay | `claude-opus-5` | **none** | subject only | — | counted | 33 |
-| `ui-codex-1` | replay | `gpt-5.6-sol` | **none** | subject only | example-harness | counted | 90 |
-| `ui-haiku-1` | replay | `claude-haiku-4-5` | **none** | subject only | — | counted | 62 |
-| `ui-sonnet-1` | replay | `claude-sonnet-5` | example-harness | **+`_test_edge.mjs`, `_test_harness.mjs`** | — | counted | 62 |
-| `live-dom-2026-08-o1` | dom | `gpt-5.6-sol` | **none** | subject only | — | **crashed** | 0 |
-| `live-dom-2026-08-o2` | dom | `gpt-5.6-sol` | **none** | subject only | syntax-only | counted | 219 |
+| run | family | subject | observed | unshipped | shipped files | self-reported | evidence state | scenarios failed |
+|---|---|---|---|---|---|---|---|---:|
+| `access-token-2026-08-o1` | expansion | `gpt-5.6-sol` | **none** | — | graded files only | syntax-only | **superseded** | 0 |
+| `checker-required-2026-08-o1` | poisoning | `gpt-5.6-sol` | **none** | — | graded files only | — | counted | 614 |
+| `delegated-wallet-2026-08-o1` | reconciliation | `gpt-5.6-sol` | **none** | — | graded files only | example-harness | **superseded** | 0 |
+| `deployment-alias-2026-09-claude-1` | drift | `claude-opus-5` | **none** | — | graded files only | example-harness | **superseded** | 0 |
+| `deployment-model-alias-rollout-drift-2026-08-o1` | drift | `gpt-5.6-sol` | **none** | — | graded files only | syntax-only | **superseded** | 192 |
+| `cc267-claude-1` | outbox | `claude-opus-5` | **none** | mutation-testing | graded files only | mutation-testing | **not-run** | 2 |
+| `cc267-claude-2` | outbox | `claude-opus-5` | **none** | example-harness | graded files only | — | **not-run** | 13 |
+| `cc267-claude-3` | outbox | `claude-opus-5` | **none** | example-harness | graded files only | — | **not-run** | 11 |
+| `cc267-codex-1` | outbox | `gpt-5.6-sol` | **none** | assertions | graded files only | — | **not-run** | 11 |
+| `cc267-codex-2` | outbox | `gpt-5.6-sol` | **none** | assertions | graded files only | — | **not-run** | 11 |
+| `cc267-codex-3` | outbox | `gpt-5.6-sol` | **none** | legality-table | graded files only | — | **not-run** | 11 |
+| `pic-claude-1` | containment | `claude-opus-5` | **none** | — | graded files only | synthetic-scenarios | counted | 0 |
+| `pic-claude-2` | containment | `claude-opus-5` | **none** | — | graded files only | synthetic-scenarios | counted | 0 |
+| `pic-claude-3` | containment | `claude-opus-5` | **none** | — | graded files only | synthetic-scenarios | counted | 0 |
+| `pic-codex-1` | containment | `gpt-5.6-sol` | **none** | — | graded files only | synthetic-scenarios | counted | 0 |
+| `pic-haiku-1` | containment | `claude-haiku-4-5` | **none** | — | graded files only | — | counted | 0 |
+| `pic-sonnet-1` | containment | `claude-sonnet-5` | legality-table | — | **+`_test.mjs`** | — | counted | 0 |
+| `mp-claude-1` | poisoning | `claude-opus-5` | **none** | — | graded files only | — | **superseded** | 0 |
+| `mp-claude-2` | poisoning | `claude-opus-5` | **none** | — | graded files only | synthetic-scenarios | **superseded** | 47 |
+| `mp-claude-3` | poisoning | `claude-opus-5` | **none** | — | graded files only | synthetic-scenarios | **superseded** | 32 |
+| `mp-claude-r1` | poisoning | `claude-opus-5` | **none** | — | graded files only | synthetic-scenarios | **superseded** | 32 |
+| `mp-claude-r2` | poisoning | `claude-opus-5` | **none** | — | graded files only | synthetic-scenarios | **superseded** | 0 |
+| `mp-claude-r3` | poisoning | `claude-opus-5` | **none** | — | graded files only | synthetic-scenarios | **superseded** | 0 |
+| `mp-codex-1` | poisoning | `gpt-5.6-sol` | **none** | — | graded files only | synthetic-scenarios | **superseded** | 0 |
+| `mp-codex-2` | poisoning | `gpt-5.6-sol` | **none** | — | graded files only | synthetic-scenarios | **superseded** | 13 |
+| `mp-codex-3` | poisoning | `gpt-5.6-sol` | **none** | — | graded files only | example-harness | **superseded** | 32 |
+| `mp-gemini-1` | poisoning | `gemini-3-pro` | **none** | — | graded files only | — | **infra** | 0 |
+| `mp-haiku-1` | poisoning | `claude-haiku-4-5` | **none** | — | graded files only | — | **superseded** | 32 |
+| `mp-sonnet-1` | poisoning | `claude-sonnet-5` | **none** | — | graded files only | legality-table | **superseded** | 42 |
+| `ui-claude-1` | replay | `claude-opus-5` | **none** | — | graded files only | fuzzing | counted | 46 |
+| `ui-claude-2` | replay | `claude-opus-5` | **none** | — | graded files only | — | counted | 33 |
+| `ui-codex-1` | replay | `gpt-5.6-sol` | **none** | — | graded files only | example-harness | counted | 90 |
+| `ui-haiku-1` | replay | `claude-haiku-4-5` | **none** | — | graded files only | — | counted | 62 |
+| `ui-sonnet-1` | replay | `claude-sonnet-5` | **none** | — | **+`_test_edge.mjs`, `_test_harness.mjs`** | — | counted | 62 |
+| `live-dom-2026-08-o1` | dom | `gpt-5.6-sol` | **none** | — | graded files only | — | **crashed** | 0 |
+| `live-dom-2026-08-o2` | dom | `gpt-5.6-sol` | **none** | — | graded files only | syntax-only | counted | 219 |
 
 ### The strongest self-reported behaviours, quoted
 
@@ -106,6 +123,10 @@ about a task that no longer exists — so those rows carry the state and omit th
 
 > passed with a local mock harness, plus synthetic checks for M0 through M6.
 
+**`cc267-claude-1`** — mutation-testing, **not-run**: outcome not quotable, behaviour still is
+
+> and confirming it catches each bug. Run mutation tests against the checker Run mutation tests against the checker
+
 **`mp-claude-r2`** — synthetic-scenarios, **superseded**: outcome not quotable, behaviour still is
 
 > over-declared provenance. I also built synthetic scenarios for the five rules the examples don't reach — `M0` (unknown
@@ -118,19 +139,41 @@ about a task that no longer exists — so those rows carry the state and omit th
 
 > examples - audit transition validity - synthetic cases for `M0` through `M6` Only file present in `submission/` i
 
-## Who shipped their checker
+## Where the checkers went
 
-2 of 30 runs left a file beside `subject.mjs`. The task asks for one file and
-does not forbid a second; almost every model ships one anyway. A model that ships its checker has
-made its verification auditable by somebody else — a different act from verifying and discarding,
-and the only self-check evidence on this page that does not rest on the model's own account.
+2 of 36 runs left a checker in the submission, where anyone grading the artifact can
+re-run it. 6 wrote verification source during the session and submitted none of it. The second
+number is the one an artifact scanner cannot produce, and the difference between them is a
+behavioural difference between runs rather than a claim about any model's ability.
 
-| run | subject | files shipped beside the artifact |
+| run | subject | shipped beside the graded files |
 |---|---|---|
 | `pic-sonnet-1` | `claude-sonnet-5` | `_test.mjs` |
 | `ui-sonnet-1` | `claude-sonnet-5` | `_test_edge.mjs`, `_test_harness.mjs` |
 
-**Every one of them is `claude-sonnet-5`.** That is a behavioural difference between models visible in the artifacts rather than in their prose, and it is the kind of thing a pass rate cannot show. With 2 run(s) it is an observation and not a rate; what makes it worth recording is that no other subject did it on any family.
+Written, run, and not submitted — paths quoted from the transcript, `found` scanned by exactly
+the patterns the submissions get:
+
+| run | lab | scaffolding | wrote, did not ship | found | failed |
+|---|---|---|---|---|---:|
+| `cc267-claude-1` | anthropic | claude-code | `/app/check.py`, `/app/fuzz.py`, `/app/scenarios.py`, `/app/mutations.py`, 1 inline shell script(s) | mutation-testing | 2 |
+| `cc267-claude-2` | anthropic | claude-code | `/app/check_invariants.py`, `/app/check_appendonly.py`, `/app/hunt.py`, 1 inline shell script(s) | example-harness | 13 |
+| `cc267-claude-3` | anthropic | claude-code | `/tmp/check/verify.py`, 10 inline shell script(s) | example-harness | 11 |
+| `cc267-codex-1` | openai | codex | 32 inline shell script(s) | assertions | 11 |
+| `cc267-codex-2` | openai | codex | 20 inline shell script(s) | assertions | 11 |
+| `cc267-codex-3` | openai | codex | 30 inline shell script(s) | legality-table | 11 |
+
+A run in that table built something, ran it, and still failed. That is why this is reported as a
+behaviour and not scored as a virtue: a checker bounds what you can EXPRESS, not what you
+EXPLORE. **Difficulty comes from coverage of the space, not from the difficulty of stating the
+rule** — the conclusion the axis meter reaches from the other direction.
+
+**The lab split there is confounded and must not be read as a model-level finding.** Each lab
+ran under its own scaffolding (claude-code for anthropic; codex for openai), so provider and agent harness are the
+same variable. A harness decides whether writing a file is cheaper than piping a script to a
+shell, how much context a session holds, and what the transcript records at all — any of which
+alone could produce that column. Separating them needs the same model under both scaffoldings,
+which no run on record provides.
 
 ## What kinds of checking were described
 
@@ -141,7 +184,8 @@ and the only self-check evidence on this page that does not rest on the model's 
 | `assertions` | 1 | executable assertions or invariant checks that fail loudly |
 | `legality-table` | 5 | an explicit table of permitted states or transitions, consulted rather than reasoned about each time |
 | `synthetic-scenarios` | 11 | inputs the model invented beyond the ones it was given |
-| `fuzzing` | 1 | randomized or exhaustive generation over an input space |
+| `fuzzing` | 2 | randomized or exhaustive generation over an input space |
+| `mutation-testing` | 1 | deliberately breaking its own code to confirm its checker notices |
 
 Ordered weakest to strongest. `syntax-only` — `node --check` — is included because several runs
 cite it as verification, and a file that parses has established nothing about its behaviour.
@@ -154,45 +198,18 @@ _None._ No submission defines a checking routine it never invokes. That is worth
 
 | arm | counted runs | failed something |
 |---|---:|---:|
-| described verification at or above an example harness | 8 | 3 |
-| did not | 5 | 4 |
-**Decidable, barely.** 3/8 of the self-verifying runs failed something, against 4/5 of the rest. With arms this small the comparison is suggestive at best and no test is applied to it.
-
-## The contrast that makes this worth measuring
-
-**`cc267-claude-1` (Klavis durable-outbox, Claude Opus)** — not a trial in this repository, and the only run on record
-that shipped its own checker. It built:
-
-- a `LEGAL` transition table encoding which audit edges are permitted, independently derived
-- a fuzzer generating schedules and seeds beyond the ones the task shipped
-- mutation tests against its own checker — deliberately breaking its implementation to confirm the checker noticed
-- 900/900 clean on its own suite before submitting
-
-And the outcome: reward 0. It avoided the `ACKED -> REVOKED` bug that caught five of six frontier trials — its legality table excluded that edge — and failed liveness instead, stranding an action in `IN_DOUBT` forever. Its checker could express the rule; its generator never reached the state where the rule bit.
-
-That is the reason this report describes a behaviour rather than scoring a virtue. The most
-thoroughly self-verified implementation on record still failed, and it failed on a state its own
-generator never reached. A checker bounds what you can express; it does not bound what you
-explore. **Difficulty comes from coverage of the space, not from the difficulty of stating the
-rule** — which is the same conclusion the axis meter reaches from the other direction.
-
-The same pattern shows up here without the contrast: the run describing the most rigorous
-self-verification in the table above is not the run that passed.
+| described verification at or above an example harness | 7 | 2 |
+| did not | 6 | 5 |
+**Decidable, barely.** 2/7 of the self-verifying runs failed something, against 5/6 of the rest. With arms this small the comparison is suggestive at best and no test is applied to it.
 
 ## Why the foundry should keep measuring this
 
 | reason | what it changes |
 |---|---|
 | A checker is the clearest signal of how a model APPROACHED the task | it separates 'wrote behaviour' from 'built a theory and tested it', which no pass rate distinguishes |
-| Ephemeral checkers are invisible to artifact grading | every benchmark that grades one file is measuring its own submission format on this axis, and does not know it |
-| It is the cheapest possible harder variant | a family that asks for the checker AND the implementation grades a different capability at no extra authoring cost |
+| Ephemeral checkers are invisible to artifact grading | every benchmark that grades one file is measuring its own submission format on this axis, and does not know it. The `unshipped` column above is that claim measured rather than argued |
+| It is the cheapest possible harder variant | `checker-required-memory-poisoning` is that variant, built: it grades `checker.mjs` against the reference and against held-out mutants, so a checker that passes the reference and catches none of them is a named, gradable failure |
 | Coverage, not expressiveness, is where these runs fail | the failures concentrate on states the model never generated, so a family that rewards generation is testing the binding constraint |
-
-**The concrete proposal this report exists to support:** a descendant family whose submission is
-`subject.mjs` **and** `checker.mjs`, where the checker is run against the reference and against a
-held-out set of known-bad implementations. A model whose checker passes the reference and catches
-none of the mutants has written a checker that cannot fail, and that is a measurable, named
-failure mode nothing in this repository currently grades.
 
 ## What this report will not claim
 

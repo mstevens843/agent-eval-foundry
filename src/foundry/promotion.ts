@@ -34,6 +34,20 @@ export interface PromotionEvidence {
   readonly distinctChecks: readonly string[];
   readonly claimedEvidenceLevel: PromotionEvidenceLevel;
   readonly countedAgentTrials: number;
+  /**
+   * Counted trials this family holds that were ROOT-CAUSED `capability`.
+   *
+   * Distinct from `countedAgentTrials`, and the distinction is the entire point. A counted trial is
+   * a trial that produced a verdict. It is not difficulty evidence until somebody has read it and
+   * said the subject was at fault rather than the specification — five of this repository's counted
+   * outbox trials are root-caused `spec-underspecified`, and they are evidence of an authoring
+   * defect, not of a hard task.
+   *
+   * Optional, defaulting to 0, so promotions written before this field existed still parse. A
+   * promotion that does not supply it therefore cannot claim `difficulty-evidenced`, which is the
+   * correct default: silence is not evidence.
+   */
+  readonly capabilityLabelledTrials: number;
 }
 
 export interface PromotionDelta {
@@ -124,6 +138,10 @@ const parseEvidence = (v: unknown, path: string): PromotionEvidence => {
       PROMOTION_EVIDENCE_LEVELS,
     ),
     countedAgentTrials: num(o.countedAgentTrials, `${path}.countedAgentTrials`),
+    capabilityLabelledTrials:
+      o.capabilityLabelledTrials === undefined
+        ? 0
+        : num(o.capabilityLabelledTrials, `${path}.capabilityLabelledTrials`),
   };
 };
 
@@ -180,6 +198,26 @@ export function parsePromotion(v: unknown, path: string): ProbeToFamilyPromotion
       "PROMOTION_CLAIMS_DIFFICULTY_PRETRIAL",
       `${path}.evidence.claimedEvidenceLevel`,
       "promotion cannot claim real-agent difficulty before a counted trial exists",
+    );
+  }
+  // A counted trial is not difficulty evidence. It is a verdict nobody has read yet.
+  //
+  // This closed a live hole. The check above asks only whether a trial EXISTS, which is the old
+  // `countedAgentTrials > 0` predicate that the root-cause layer was written to eliminate — and the
+  // root-cause layer never reached this validator. Five of this repository's counted outbox trials
+  // are root-caused `spec-underspecified`; under the old check alone they would have carried a
+  // `difficulty-evidenced` promotion, which is the exact claim the last two phases spent their time
+  // withdrawing.
+  if (
+    evidence.claimedEvidenceLevel === "difficulty-evidenced" &&
+    evidence.capabilityLabelledTrials === 0
+  ) {
+    fail(
+      "PROMOTION_DIFFICULTY_UNATTRIBUTED",
+      `${path}.evidence.capabilityLabelledTrials`,
+      "promotion claims real-agent difficulty but no counted trial is root-caused `capability`; " +
+        "a failure attributed to the specification, the harness or the package is evidence of an " +
+        "authoring defect, not of a hard task",
     );
   }
   const authoritativeTruthSourceCarriedForward =

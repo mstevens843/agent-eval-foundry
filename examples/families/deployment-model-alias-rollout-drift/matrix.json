@@ -7,6 +7,24 @@
     "task_sha256": null,
     "suite_shape": "339 scenarios / 17 subjects / 663552 points in the declared space",
     "checks_total": 339,
+    "checks_declared": [
+      "decision_matches_truth",
+      "current_alias_reconciled",
+      "no_stale_alias_assumption",
+      "concrete_version_attributed",
+      "correct_baseline_compared",
+      "rollout_window_respected",
+      "rollback_required",
+      "continue_required",
+      "quarantine_when_insufficient",
+      "no_subject_owned_model_truth",
+      "audit_matches_rollout_source",
+      "liveness",
+      "deterministic_result",
+      "report_matches_ledger",
+      "no_duplicate_effect",
+      "mechanism_fired"
+    ],
     "extracted_from": [
       "src/families/deployment-model-alias-rollout-drift/runner.ts (in-process sweep)",
       "src/families/deployment-model-alias-rollout-drift/verify.ts (rollout-ledger grading)"

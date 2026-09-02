@@ -29,7 +29,7 @@ import {
 } from "../src/challenge/package-check.js";
 import { parseMechanismProbe, parseTransferTest } from "../src/foundry/adaptive-funnel.js";
 import { assertBudgetInputs, assertPlanHonest } from "../src/foundry/budget-check.js";
-import { planBudget } from "../src/foundry/budget.js";
+import { MEASURED_DEFAULTS, planBudget } from "../src/foundry/budget.js";
 import { parseDiscoveryCandidate } from "../src/foundry/discovery-workbench.js";
 import { assertCoverage, buildRegistry } from "../src/foundry/registry.js";
 import { checkScaffold } from "../src/foundry/scaffold-check.js";
@@ -175,6 +175,7 @@ const COVERED_IN_ORCHESTRATION_TEST: readonly RuleCode[] = [
   "BANK_ADDITIVE_WITHOUT_OVERLAP",
   "BANK_INCOMPARABLE_SCENARIO_SET",
   "TRIAL_BASELINE_IMPOSTER",
+  "TRIAL_COST_CONTRADICTS_USAGE",
 ];
 
 /**
@@ -321,9 +322,24 @@ const COVERED_IN_PROBE_RUNNER_TEST: readonly RuleCode[] = [
   "PROBE_REFERENCE_FAILS",
   "PROBE_BAD_SUBJECT_NOT_CAUGHT",
   "PROBE_UNINTENDED_FAILURE",
-  "CALIBRATION_NO_KNOWN_OUTCOME",
-  "CALIBRATION_MISSING_FEATURES",
 ];
+
+/**
+ * Rules whose known-bad case lives in `outbox-import-validators.test.ts`.
+ *
+ * These four had NO case anywhere, which meant this suite had been failing since the CTRF import was
+ * written — invisibly, because the verification suite was deferred for three phases. The cases are
+ * real corruptions fed to the real import, not entries added to this list to quiet it.
+ */
+const COVERED_IN_OUTBOX_IMPORT_TEST: readonly RuleCode[] = [
+  "OUTBOX_CTRF_TUPLE_MISMATCH",
+  "OUTBOX_CTRF_FAILURE_MISCOUNT",
+  "OUTBOX_TASK_SUBTREE_MISSING",
+  "OUTBOX_RUN_WITHOUT_TRIAL",
+];
+
+/** Rules whose known-bad case lives in `label-parity.test.ts`: difficulty must be attributed. */
+const COVERED_IN_LABEL_PARITY_TEST: readonly RuleCode[] = ["PROMOTION_DIFFICULTY_UNATTRIBUTED"];
 
 /** Rules whose known-bad case lives in `promotion.test.ts`: probe-to-family promotion validation. */
 const COVERED_IN_PROMOTION_TEST: readonly RuleCode[] = [
@@ -445,6 +461,7 @@ const PROGRAMMATIC: readonly RuleCode[] = [
   "BUDGET_IMPLAUSIBLE_YIELD",
   "BUDGET_NEGATIVE_INPUT",
   "BUDGET_RETRY_RATE_OUT_OF_RANGE",
+  "BUDGET_KILL_RATE_OUT_OF_RANGE",
 ];
 
 describe("known-bad fixtures", () => {
@@ -647,21 +664,10 @@ describe("scaffold rules", () => {
 });
 
 describe("budget rules", () => {
-  const sane = {
-    totalUsd: 100_000,
-    labourRateUsdPerHour: 120,
-    hoursPerFamily: 45,
-    hoursPerScreenedCandidate: 3,
-    cycleHitRate: 0.1,
-    matricesPerFamily: 3,
-    usdPerMatrix: 48.66,
-    retryRate: 0.15,
-    instancesPerFamily: 24,
-    axesPerFamily: 3,
-    postBuildKillRate: 0.5,
-    evolutionCyclesPerSurvivor: 2,
-    descendantReuse: 0.35,
-  };
+  // Built from MEASURED_DEFAULTS rather than a hand-rolled literal. The literal it replaced had to
+  // be kept in sync by hand and was not: it still carried `usdPerMatrix`, `instancesPerFamily` and
+  // `evolutionCyclesPerSurvivor` after the budget model retired all three.
+  const sane = { ...MEASURED_DEFAULTS, totalUsd: 100_000, labourRateUsdPerHour: 120 };
 
   it("a sane plan passes both checkers", () => {
     expect(() => assertBudgetInputs(sane)).not.toThrow();
@@ -671,6 +677,15 @@ describe("budget rules", () => {
   it("BUDGET_NEGATIVE_INPUT — a non-positive input", () => {
     expect(() => assertBudgetInputs({ ...sane, hoursPerFamily: 0 })).toThrowError(
       expect.objectContaining({ code: "BUDGET_NEGATIVE_INPUT" }),
+    );
+  });
+
+  it("BUDGET_KILL_RATE_OUT_OF_RANGE — a kill rate of 1, at which nothing ever ships", () => {
+    // `buildsPerShippedFamily` is `1 / (1 - rate)`. At 1 that is infinite: every family built dies,
+    // so the cost of shipping one is unbounded. That is a statement about the pipeline, not a plan,
+    // and it used to sail through unvalidated along with `descendantReuse`.
+    expect(() => assertBudgetInputs({ ...sane, postBuildKillRate: 1 })).toThrowError(
+      expect.objectContaining({ code: "BUDGET_KILL_RATE_OUT_OF_RANGE" }),
     );
   });
 
@@ -685,7 +700,7 @@ describe("budget rules", () => {
     const fake = { ...sane, hoursPerFamily: 0.1, hoursPerScreenedCandidate: 0.01 };
     const plan = planBudget(fake);
     // It "works" arithmetically, and spectacularly: omitting the engineering multiplies the yield.
-    expect(plan.shippedTasks).toBeGreaterThan(planBudget(sane).shippedTasks * 10);
+    expect(plan.deliverableTasks).toBeGreaterThan(planBudget(sane).deliverableTasks * 10);
     expect(() => assertPlanHonest(plan)).toThrowError(
       expect.objectContaining({ code: "BUDGET_NO_LABOUR_COST" }),
     );
@@ -725,6 +740,8 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ...COVERED_IN_PROVIDER_DELTA_DIAGNOSIS_TEST,
       ...COVERED_IN_EXTERNAL_INTAKE_TEST,
       ...COVERED_IN_ROOT_CAUSE_TEST,
+      ...COVERED_IN_OUTBOX_IMPORT_TEST,
+      ...COVERED_IN_LABEL_PARITY_TEST,
     ]);
     const uncovered = RULE_CODES.filter((c) => !covered.has(c));
     expect(

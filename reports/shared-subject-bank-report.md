@@ -20,7 +20,7 @@ Which subjects have attempted which families, and what that permits.
 | `ui-action-record-replay` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 5 | 324 | 1 |
 | `ui-replay-live-dom` | `gpt-5.6-sol` | 1 | 864 | — |
 | `checker-required-memory-poisoning` | `gpt-5.6-sol` | 1 | 792 | — |
-| `durable-approval-outbox` | `claude-opus-5`, `gpt-5.6-sol` | 0 | 24 | 1 |
+| `durable-approval-outbox` | `claude-opus-5`, `gpt-5.6-sol` | 6 | 24 | 1 |
 
 ## Detection banks — written mutants
 

@@ -7,6 +7,25 @@
     "task_sha256": null,
     "suite_shape": "864 scenarios / 24 subjects / 3456 points in the declared space",
     "checks_total": 864,
+    "checks_declared": [
+      "replay_completes",
+      "selector_resolved_live",
+      "precondition_observed",
+      "confirmation_observed",
+      "replay_idempotent",
+      "replay_order_preserved",
+      "no_model_in_loop",
+      "replay_audit_explains",
+      "unreplayable_reported",
+      "no_forbidden_effect",
+      "effect_targets_recorded_entity",
+      "no_orphaned_transaction",
+      "settle_budget_respected",
+      "no_speculative_write",
+      "anchor_ambiguity_refused",
+      "action_applied",
+      "correct_anchor_resolution"
+    ],
     "extracted_from": [
       "src/families/ui-replay-live-dom/runner.ts (in-process sweep)",
       "src/families/ui-replay-live-dom/verify.ts (grading)"

@@ -110,6 +110,7 @@ export const RULE_CODES = [
   "BUDGET_IMPLAUSIBLE_YIELD",
   "BUDGET_NEGATIVE_INPUT",
   "BUDGET_RETRY_RATE_OUT_OF_RANGE",
+  "BUDGET_KILL_RATE_OUT_OF_RANGE",
   // trial records — the layer that separates "the verifier works" from "the family is hard"
   "TRIAL_COUNTS_WITHOUT_REASON",
   "TRIAL_REFUSAL_COUNTED",
@@ -276,9 +277,6 @@ export const RULE_CODES = [
   "PROBE_REFERENCE_FAILS",
   "PROBE_BAD_SUBJECT_NOT_CAUGHT",
   "PROBE_UNINTENDED_FAILURE",
-  // discovery calibration: backtest scoring against known family outcomes
-  "CALIBRATION_NO_KNOWN_OUTCOME",
-  "CALIBRATION_MISSING_FEATURES",
   // probe-to-family promotion: the bridge from cheap executable evidence to validation build
   "PROMOTION_NO_SOURCE_PROBE",
   "PROMOTION_SOURCE_NOT_PROMOTED",
@@ -288,6 +286,7 @@ export const RULE_CODES = [
   "PROMOTION_NO_EXPECTED_MUTANTS",
   "PROMOTION_NO_KILL_SIGNAL",
   "PROMOTION_CLAIMS_DIFFICULTY_PRETRIAL",
+  "PROMOTION_DIFFICULTY_UNATTRIBUTED",
   "PROMOTION_HIDDEN_RULE_SURFACE_UNDECLARED",
   // family lineage learning: clean solves and descendants route portfolio spend
   "LINEAGE_NO_ROOT",

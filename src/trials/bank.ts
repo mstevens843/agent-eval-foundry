@@ -104,6 +104,7 @@ export function combineOverSharedSubjects(
         task_sha256: null,
         suite_shape: `${instances.length} instances across ${banks.length} families / ${shared.length} shared subjects`,
         checks_total: instances.length,
+        checks_declared: null,
         extracted_from: banks.map((b) => b.familyId),
         caveat: `Restricted to the ${shared.length} subject(s) that attempted every family. Instances are prefixed by family id. A cell is null where that family never graded that subject, and nulls are excluded from catch sets rather than imputed as passes.`,
       },

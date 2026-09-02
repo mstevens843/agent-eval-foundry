@@ -1,11 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
-  KNOWN_DISCOVERY_OUTCOMES,
-  assertDiscoveryCalibrationValid,
-  runDiscoveryCalibration,
-} from "../src/foundry/discovery-calibration.js";
-import {
   type DiscoveryCandidate,
   type DiscoveryCandidateEvidence,
   parseDiscoveryCandidate,
@@ -26,17 +21,11 @@ import {
   runProbe,
 } from "../src/foundry/probe-runner.js";
 import { SchemaError } from "../src/foundry/schema.js";
-import { renderDiscoveryCalibrationReport } from "../src/reports/discovery-calibration-report.js";
 import { renderMechanismProbeReport } from "../src/reports/probe-runner-report.js";
 
 const ROOT = new URL("..", import.meta.url).pathname;
 const candidatePool = (): unknown[] =>
   JSON.parse(readFileSync(`${ROOT}data/candidate-pool.json`, "utf8")) as unknown[];
-const knownOutcome = () => {
-  const outcome = KNOWN_DISCOVERY_OUTCOMES[0];
-  if (outcome === undefined) throw new Error("expected at least one calibration outcome");
-  return outcome;
-};
 
 const loaded = () => {
   const registry = loadRegistry(ROOT);
@@ -64,7 +53,11 @@ describe("Mechanism Probe Runner v1", () => {
   it("accepts the valid executable probe bank", () => {
     const { definitions, summary } = loaded();
 
-    expect(definitions.length).toBeGreaterThanOrEqual(8);
+    // Floor lowered from 8 to 5 when eleven probes nothing referenced were deleted. It is still a
+    // floor on bank size, not an equality, and every surviving probe is one a checked-in artifact
+    // depends on: three carry promotions/lineages, one is the scaffold smoke in verify-reports, and
+    // one supplies the probe evidence in the deployment-alias evolution-options report.
+    expect(definitions.length).toBeGreaterThanOrEqual(5);
     expect(summary.probes).toHaveLength(definitions.length);
     expect(summary.totalScenarios).toBeGreaterThanOrEqual(24);
     expect(summary.totalBadSubjectsCaught).toBe(summary.totalBadSubjects);
@@ -323,59 +316,7 @@ describe("Mechanism Probe Runner v1", () => {
   });
 });
 
-describe("Discovery calibration", () => {
-  it("validates calibration records against scored candidates", () => {
-    const { workbench } = loaded();
-
-    expect(() => assertDiscoveryCalibrationValid(KNOWN_DISCOVERY_OUTCOMES, workbench)).not.toThrow();
-  });
-
-  it("rejects a calibration row with no known outcome", () => {
-    const { workbench } = loaded();
-
-    expectSchemaCode(
-      () => assertDiscoveryCalibrationValid([{ ...knownOutcome(), actualOutcome: "" }], workbench),
-      "CALIBRATION_NO_KNOWN_OUTCOME",
-    );
-  });
-
-  it("rejects a calibration row without candidate features", () => {
-    const { workbench } = loaded();
-
-    expectSchemaCode(
-      () =>
-        assertDiscoveryCalibrationValid([{ ...knownOutcome(), candidateId: "missing-candidate" }], workbench),
-      "CALIBRATION_MISSING_FEATURES",
-    );
-  });
-
-  it("known outcomes produce stable directional recommendations", () => {
-    const { workbench, summary } = loaded();
-    const calibration = runDiscoveryCalibration(workbench, summary);
-
-    expect(calibration.n).toBe(6);
-    expect(calibration.matches + calibration.partials + calibration.misses).toBe(6);
-    expect(calibration.records.map((record) => record.familyId)).toEqual([
-      "durable-approval-outbox",
-      "prompt-injection-containment",
-      "prompt-injection-memory-poisoning",
-      "ui-action-record-replay",
-      "ui-replay-live-dom",
-      "checker-required-memory-poisoning",
-    ]);
-  });
-
-  it("renders the calibration report deterministically", () => {
-    const { workbench, summary } = loaded();
-    const calibration = runDiscoveryCalibration(workbench, summary);
-    const first = renderDiscoveryCalibrationReport(calibration);
-    const second = renderDiscoveryCalibrationReport(calibration);
-
-    expect(first).toBe(second);
-    expect(first).toContain("Discovery Calibration");
-    expect(first).toContain("n=6 local calibration");
-  });
-
+describe("Probe evidence for the discovery queue", () => {
   it("exports probe evidence for discovery queue integration", () => {
     const { summary } = loaded();
     const evidence = probeEvidenceForDiscovery(summary);

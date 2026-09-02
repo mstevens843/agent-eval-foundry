@@ -6,6 +6,7 @@
 |---|---|
 | graded instances | **324** |
 | checks in the suite | **324** |
+| checks that have ever fired | **10** of 10 (100%) |
 | subjects in the bank | 10 |
 | instances that separate nothing in this bank | **0** (0%) |
 | distinct catch sets | **12** |
@@ -109,6 +110,28 @@ Null trials: 31, 34, 31.
 | halter-not-reporter | 108 | 324 | discriminating |
 | hidden-confirmation-skipper | 49 | 324 | discriminating |
 | duplicate-executor | 34 | 324 | discriminating |
+
+## Checks
+
+**10 of 10 declared checks have ever fired** against any subject in this
+bank (100%). A check that has never fired is not evidence of coverage;
+it may be a check that cannot fail, or a hygiene rail that is supposed to stay quiet.
+
+| check | cells | instances | subjects |
+|---|---:|---:|---:|
+| replay_completes | 797 | 216 | 6 |
+| selector_resolved_live | 491 | 324 | 3 |
+| precondition_observed | 441 | 324 | 2 |
+| unreplayable_reported | 432 | 108 | 4 |
+| replay_audit_explains | 324 | 324 | 1 |
+| no_forbidden_effect | 306 | 160 | 4 |
+| no_model_in_loop | 225 | 225 | 1 |
+| replay_order_preserved | 107 | 107 | 1 |
+| confirmation_observed | 34 | 34 | 1 |
+| replay_idempotent | 34 | 34 | 1 |
+
+`subjects` is the column that matters. A check firing on every subject separates nothing; a
+check firing on one separates exactly that subject.
 
 ## Coverage
 

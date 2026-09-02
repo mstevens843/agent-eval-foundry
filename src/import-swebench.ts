@@ -133,6 +133,8 @@ export function importSweBenchVerified(raw: unknown, options: SweBenchImportOpti
       task_sha256: null,
       suite_shape: `${instanceIds.length} instances / ${kept.length} submitted systems`,
       checks_total: instanceIds.length,
+      // SWE-bench records resolved/unresolved and nothing finer, so the universe is one check.
+      checks_declared: ["unresolved"],
       extracted_from: [
         "swe-bench/experiments evaluation/verified/*/results/results.json",
         "swe-bench/experiments evaluation/verified/*/metadata.yaml",

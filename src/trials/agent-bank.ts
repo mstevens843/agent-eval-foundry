@@ -81,6 +81,8 @@ export function buildAgentBank(records: readonly TrialRecord[], options: AgentBa
       task_sha256: null,
       suite_shape: `${options.instanceIds.length} instances / ${subjects.length} model subject(s) / ${counted.length} counted trial(s)`,
       checks_total: options.instanceIds.length,
+      // A trial bank inherits whatever checks its family declared; the bank itself declares none.
+      checks_declared: null,
       extracted_from: counted.map((r) => `trials/${options.familyId}/${r.runId}`),
       caveat: options.caveat,
     },

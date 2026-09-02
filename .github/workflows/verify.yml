@@ -45,7 +45,13 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      # Cheap gates first, so an obvious break fails in under a minute rather than after the
+      # Cheapest gate of all, and the one whose failure is unrecoverable. A leaked credential
+      # cannot be un-pushed; every other failure here is just a red build. It runs a self-test
+      # first, because a secret scanner that has rotted into a no-op fails GREEN.
+      - name: secret scan
+        run: node scripts/secret-scan.mjs
+
+      # Cheap gates next, so an obvious break fails in under a minute rather than after the
       # ten-minute reproduction.
       - name: typecheck
         run: pnpm typecheck

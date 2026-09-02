@@ -14,7 +14,7 @@ What the families measure, together — and the arithmetic this report refuses t
 | `access-token-scope-expansion` | `mutant` | 384 | 9 | 0 | 6 | **3** |
 | `delegated-wallet-scope-reconciliation` | `mutant` | 804 | 10 | 0 | 9 | **3** |
 | `deployment-model-alias-rollout-drift` | `mutant` | 339 | 17 | 0 | 72 | **20** |
-| `durable-approval-outbox` | `imported` | 24 | 2 | 0 | 1 | **1** |
+| `durable-approval-outbox` | `imported` | 24 | 2 | 10 | 2 | **1** |
 
 ## The sum that is not available
 

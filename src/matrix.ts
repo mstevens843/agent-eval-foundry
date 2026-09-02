@@ -61,6 +61,10 @@ function parseProvenance(v: unknown): Provenance {
     task_sha256: strOrNull(p["task_sha256"], "provenance.task_sha256"),
     suite_shape: strOrNull(p["suite_shape"], "provenance.suite_shape"),
     checks_total: numOrNull(p["checks_total"], "provenance.checks_total"),
+    checks_declared:
+      p["checks_declared"] === undefined || p["checks_declared"] === null
+        ? null
+        : strArray(p["checks_declared"], "provenance.checks_declared"),
     extracted_from:
       p["extracted_from"] === undefined ? [] : strArray(p["extracted_from"], "provenance.extracted_from"),
     caveat: strOrNull(p["caveat"], "provenance.caveat"),

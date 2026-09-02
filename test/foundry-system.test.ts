@@ -24,7 +24,7 @@ import {
 } from "../src/adversarial-audit/records.js";
 import { measure } from "../src/axis-meter.js";
 import { runFamily as runPicFamily } from "../src/families/prompt-injection-containment/runner.js";
-import { handAuthoredComparison, planBudget } from "../src/foundry/budget.js";
+import { MEASURED_DEFAULTS, handAuthoredComparison, planBudget } from "../src/foundry/budget.js";
 import { loadRegistry } from "../src/foundry/load.js";
 import { familyLoop } from "../src/foundry/loop.js";
 import { assertCoverage, coverage } from "../src/foundry/registry.js";
@@ -374,21 +374,10 @@ describe("ship gate on real data", () => {
 });
 
 describe("budget model", () => {
-  const inputs = {
-    totalUsd: 100_000,
-    labourRateUsdPerHour: 120,
-    hoursPerFamily: 45,
-    hoursPerScreenedCandidate: 3,
-    cycleHitRate: 0.1,
-    matricesPerFamily: 3,
-    usdPerMatrix: 48.66,
-    retryRate: 0.15,
-    instancesPerFamily: 24,
-    axesPerFamily: 3,
-    postBuildKillRate: 0.5,
-    evolutionCyclesPerSurvivor: 2,
-    descendantReuse: 0.35,
-  };
+  // The measured defaults rather than a copy of them. The copy that used to live here held
+  // `usdPerMatrix: 48.66` and `instancesPerFamily: 24` for three phases after the model had moved,
+  // so the tests kept passing against a version of the plan nothing shipped.
+  const inputs = { ...MEASURED_DEFAULTS, totalUsd: 100_000, labourRateUsdPerHour: 120 };
 
   it("labour dominates, which is the finding", () => {
     const plan = planBudget(inputs);
@@ -396,22 +385,51 @@ describe("budget model", () => {
     expect(plan.modelUsd).toBeLessThan(plan.labourUsd / 10);
   });
 
-  it("hand-authoring yields one axis per task, not a family's worth", () => {
+  it("the three units are three different numbers", () => {
+    const plan = planBudget(inputs);
+    // A family builds one deliverable package holding 24 graded cells. The defect this pins is the
+    // old headline, which multiplied families by cells and called the product "shipped tasks".
+    expect(plan.deliverableTasks).toBe(plan.families * MEASURED_DEFAULTS.deliverableTasksPerFamily);
+    expect(plan.deliverableTasks).toBe(plan.families);
+    expect(plan.gradedCells).toBe(plan.deliverableTasks * MEASURED_DEFAULTS.hiddenCellsPerTask);
+    expect(plan.expectedAxes).toBe(plan.families * MEASURED_DEFAULTS.axesPerFamily);
+    expect(plan.usdPerDeliverableTask).toBeGreaterThan(plan.usdPerAxis);
+  });
+
+  it("hand-authoring costs the same per deliverable and buys fewer cells and axes", () => {
+    // The comparison the report used to call two orders of magnitude. It is not: one family yields
+    // one deliverable either way, so the per-deliverable price is IDENTICAL. What the family model
+    // buys is cells and axes, and that is the honest size of the claim.
+    const plan = planBudget(inputs);
     const hand = handAuthoredComparison(inputs);
-    expect(hand.shippedTasks).toBe(hand.families);
+    expect(hand.deliverableTasks).toBe(hand.families);
     expect(hand.expectedAxes).toBe(hand.families);
-    expect(hand.usdPerShippedTask).toBeGreaterThan(planBudget(inputs).usdPerShippedTask * 10);
+    expect(hand.usdPerDeliverableTask).toBeCloseTo(plan.usdPerDeliverableTask, 6);
+    expect(plan.gradedCells / hand.gradedCells).toBe(MEASURED_DEFAULTS.hiddenCellsPerTask);
+    expect(hand.usdPerAxis / plan.usdPerAxis).toBeCloseTo(MEASURED_DEFAULTS.axesPerFamily, 6);
   });
 
-  it("instances per family is the lever", () => {
-    const few = planBudget({ ...inputs, instancesPerFamily: 1 });
-    const many = planBudget({ ...inputs, instancesPerFamily: 48 });
-    expect(many.usdPerShippedTask).toBeLessThan(few.usdPerShippedTask / 10);
+  it("deliverable tasks per family is the lever, and it is 1 until an exporter exists", () => {
+    expect(MEASURED_DEFAULTS.deliverableTasksPerFamily).toBe(1);
+    const few = planBudget({ ...inputs, deliverableTasksPerFamily: 1 });
+    const many = planBudget({ ...inputs, deliverableTasksPerFamily: 8 });
+    expect(many.usdPerDeliverableTask).toBeCloseTo(few.usdPerDeliverableTask / 8, 6);
     expect(many.families).toBe(few.families); // the lever moves yield, not family count
+    expect(many.expectedAxes).toBe(few.expectedAxes); // and it does not manufacture axes either
   });
 
-  it("$100k does not buy 1,000 tasks under measured assumptions", () => {
-    expect(planBudget(inputs).shippedTasks).toBeLessThan(1000);
+  it("graded cells are scale, not deliverables — raising them ships nothing new", () => {
+    const plan = planBudget(inputs);
+    const denser = planBudget({ ...inputs, hiddenCellsPerTask: 48 });
+    expect(denser.deliverableTasks).toBe(plan.deliverableTasks);
+    expect(denser.usdPerDeliverableTask).toBe(plan.usdPerDeliverableTask);
+    expect(denser.gradedCells).toBe(plan.gradedCells * 2);
+  });
+
+  it("$100k does not buy 1,000 tasks under measured assumptions, in either unit", () => {
+    const plan = planBudget(inputs);
+    expect(plan.deliverableTasks).toBeLessThan(1000);
+    expect(plan.gradedCells).toBeLessThan(1000); // even counting every cell as a task
   });
 });
 
@@ -428,25 +446,7 @@ describe("report determinism", () => {
     ],
     [
       "budget",
-      () =>
-        renderBudgetReport(
-          {
-            totalUsd: 100_000,
-            labourRateUsdPerHour: 120,
-            hoursPerFamily: 45,
-            hoursPerScreenedCandidate: 3,
-            cycleHitRate: 0.1,
-            matricesPerFamily: 3,
-            usdPerMatrix: 48.66,
-            retryRate: 0.15,
-            instancesPerFamily: 24,
-            axesPerFamily: 3,
-            postBuildKillRate: 0.5,
-            evolutionCyclesPerSurvivor: 2,
-            descendantReuse: 0.35,
-          },
-          1000,
-        ),
+      () => renderBudgetReport({ ...MEASURED_DEFAULTS, totalUsd: 100_000, labourRateUsdPerHour: 120 }, 1000),
     ],
   ];
 

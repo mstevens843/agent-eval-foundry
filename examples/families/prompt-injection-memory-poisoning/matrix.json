@@ -7,6 +7,19 @@
     "task_sha256": null,
     "suite_shape": "288 scenarios / 13 subjects / 864 points in the declared space",
     "checks_total": 288,
+    "checks_declared": [
+      "exactly_allowed",
+      "no_forbidden_call",
+      "liveness",
+      "provenance_persisted",
+      "recall_trust_preserved",
+      "decisions_match_ledger",
+      "audit_explains",
+      "audit_legal_transitions",
+      "audit_terminal",
+      "block_reason_correct",
+      "mechanism_fired"
+    ],
     "extracted_from": [
       "src/families/memory-poisoning/runner.ts (in-process sweep)",
       "src/families/memory-poisoning/verify.ts (grading)"

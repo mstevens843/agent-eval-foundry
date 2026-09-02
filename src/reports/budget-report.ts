@@ -1,33 +1,65 @@
 // The budget report: the direct answer to "with $100k, what do we actually buy?"
 //
-// The report is built around a comparison rather than a number, because the number alone invites the
-// wrong reading. Priced as families with generated instances, $100k buys one thing; priced as
-// hand-authored tasks -- which is what "a thousand diverse tasks" means if taken literally -- it buys
-// roughly two orders of magnitude less. Showing both in the same table is the argument.
+// The report quotes THREE units, because quoting one is how the previous version of this file got it
+// wrong. A FAMILY is what the money builds. A DELIVERABLE TASK is an independently gradeable package
+// a recipient can be handed, and this repository emits exactly one per family. A GRADED CELL is one
+// scenario-check pair inside that package, and there are 24 of them per package here. The previous
+// version multiplied families by cells, called the product "shipped tasks" and put it in the
+// headline, so the headline overstated by 24x the number of things anyone could be handed.
 //
-// Every measured input is marked. The labour rate never is, because it is always the caller's
-// assumption and it dominates the result; the sensitivity table exists so a reader who disagrees
-// with it can find their own row instead of arguing with mine.
+// Correcting that also shrinks the argument this file used to make. Priced per DELIVERABLE the
+// family model and hand-authoring cost the same at these inputs, because one family yields one
+// deliverable either way. What the family model buys for that money is 24x the graded cells and 2x
+// the independent axes. That is the claim the arithmetic supports, and it is smaller than "roughly
+// two orders of magnitude", which is what this comment used to claim.
+//
+// Every measured input is marked. `hoursPerFamily` is ESTIMATED and now says so both here and in
+// `budget.ts`; the two used to disagree, which is how an estimate spent three phases being quoted as
+// a measurement. The labour rate is never marked measured — it is always the caller's assumption and
+// it dominates the result, so the sensitivity table exists to let a reader find their own row.
 
 import { shortfallForTarget } from "../foundry/budget-check.js";
-import { type BudgetInputs, type BudgetPlan, handAuthoredComparison, planBudget } from "../foundry/budget.js";
+import {
+  type BudgetInputs,
+  buildsPerShippedFamily,
+  handAuthoredComparison,
+  planBudget,
+} from "../foundry/budget.js";
 import type { CampaignFacts, ProviderSpendRow, TrialLayerFacts } from "./evidence.js";
 
 const usd = (n: number): string =>
   !Number.isFinite(n) ? "—" : n >= 1000 ? `$${Math.round(n).toLocaleString("en-US")}` : `$${n.toFixed(2)}`;
 
+/** Integers without a decimal tail, fractions with two. Used for derived counts like builds/survivor. */
+const num = (n: number): string => (Number.isInteger(n) ? String(n) : n.toFixed(2));
+
+/**
+ * The per-trial figure this report used to print inside a section headed "measured".
+ *
+ * Nothing computes with it. It is kept so the report can state the size of its own correction rather
+ * than quietly printing a better number and hoping nobody diffs the two.
+ */
+const RETIRED_USD_PER_TRIAL_LITERAL = 3.5;
+
 /** Which inputs come from the source project rather than from an assumption. */
 const PROVENANCE: Readonly<Record<string, string>> = {
-  hoursPerFamily: "estimated (no timesheet was kept; the shipped family took weeks)",
+  hoursPerFamily:
+    "ESTIMATED — no timesheet was ever kept. It is **28% below the mean of the author's own 18 declared estimates** in `examples/shapes/*.json` (mean 62.4 h, median 57.5, range 18–120), and the flagship family `durable-approval-outbox` declares 120 — 2.7x the value this plan uses",
   hoursPerScreenedCandidate: "measured — cycle 5 killed 15 candidates in ~90 min",
   cycleHitRate: "measured — 1 family shipped from 10 design cycles",
   matricesPerFamily: "measured — the shipped family consumed 3 matrix rounds",
-  usdPerMatrix: "measured — $48.66 for the shipped six-trial matrix",
+  usdPerTrial:
+    "measured — mean of the 19 real Harbor trials over $0.50 in `data/measured-trial-costs.json` (median $7.74; Anthropic median $15.20, OpenAI $3.28). A mean, not a median, because a cross-lab plan buys both halves of a bimodal distribution",
+  trialsPerMatrix: "measured — 3 subjects x 2 labs is what one cross-lab claim costs",
   retryRate: "measured — 3 of 20 matrix runs discarded for infrastructure reasons",
-  instancesPerFamily: "measured — the shipped family grades 24 scenarios",
-  axesPerFamily: "measured — antichain width 3 against a 10-engine bank",
-  postBuildKillRate: "measured but tiny sample — one of two locally built families died after trials",
-  evolutionCyclesPerSurvivor: "measured locally — the UI line now has a parent plus descendant",
+  deliverableTasksPerFamily:
+    "measured — this repository emits ONE independently gradeable package per family. Not 24: the 24 are graded cells inside that one package",
+  hiddenCellsPerTask:
+    "measured — the shipped package grades 24 scenarios. This is SCALE inside one deliverable, not a count of deliverables",
+  axesPerFamily:
+    "measured — antichain width 2 within a single lab on the 267-check outbox suite. The retired value of 3 was the width pooled ACROSS labs",
+  postBuildKillRate:
+    "measured but tiny sample — one of two locally built families died after trials. Read via `buildsPerShippedFamily()`, which is where the retired `evolutionCyclesPerSurvivor` input used to duplicate it",
   descendantReuse: "estimated — live-DOM reused the router, packager, axis meter and report loop",
   labourRateUsdPerHour: "ASSUMPTION — caller-supplied, and the dominant term",
   totalUsd: "the question",
@@ -44,14 +76,36 @@ export function renderBudgetReport(
   const hand = handAuthoredComparison(inputs);
   const shortfall = shortfallForTarget(plan, targetTasks);
 
+  // The same target read in the other unit. Quoting only one of these is how the previous version of
+  // this report printed a shortfall of $439,522 against a headline of 168 "shipped tasks": the
+  // shortfall was priced in graded cells and the headline was labelled as deliverables.
+  const cellsPerFamily = inputs.deliverableTasksPerFamily * inputs.hiddenCellsPerTask;
+  const familiesForTargetCells = Math.ceil(targetTasks / cellsPerFamily);
+  const cellShortfall = Math.max(0, familiesForTargetCells * plan.loadedUsdPerFamily - inputs.totalUsd);
+  const trialCorrection = inputs.usdPerTrial / RETIRED_USD_PER_TRIAL_LITERAL;
+
   const sensitivity = [0.5, 0.75, 1, 1.5, 2].map((mult) => {
     const p = planBudget({ ...inputs, labourRateUsdPerHour: inputs.labourRateUsdPerHour * mult });
-    return `| ${usd(inputs.labourRateUsdPerHour * mult)}/h | ${p.families} | ${p.shippedTasks} | ${p.expectedAxes} |`;
+    return `| ${usd(inputs.labourRateUsdPerHour * mult)}/h | ${p.families} | ${p.deliverableTasks} | ${p.gradedCells} | ${p.expectedAxes} | ${usd(p.usdPerAxis)} |`;
   });
 
-  const instanceSensitivity = [1, 6, 12, 24, 48].map((n) => {
-    const p = planBudget({ ...inputs, instancesPerFamily: n });
-    return `| ${n} | ${p.families} | ${p.shippedTasks} | ${usd(p.usdPerShippedTask)} |`;
+  // The declared estimates in `examples/shapes/*.json`, which are the only evidence this repository
+  // has about how long a family takes to build. 45 is NOT below the low end of them — three shapes
+  // declare less — but it is 28% below their mean of 62.4, and the flagship family declares 120.
+  const hoursSensitivity: readonly (readonly [number, string])[] = [
+    [45, "current input"],
+    [62, "mean of the 18 declared shape estimates (62.4, rounded)"],
+    [90, "above 15 of the 18 declared estimates"],
+    [120, "the flagship family's own estimate"],
+  ];
+  const hoursRows = hoursSensitivity.map(([h, note]) => {
+    const p = planBudget({ ...inputs, hoursPerFamily: h });
+    return `| ${h} h | ${note} | ${usd(p.loadedUsdPerFamily)} | ${p.families} | ${p.deliverableTasks} | ${p.expectedAxes} | ${usd(p.usdPerAxis)} |`;
+  });
+
+  const deliverableSensitivity = [1, 2, 4, 8, 24].map((n) => {
+    const p = planBudget({ ...inputs, deliverableTasksPerFamily: n });
+    return `| ${n}${n === inputs.deliverableTasksPerFamily ? " (current — no deliverable exporter exists)" : ""} | ${p.families} | ${p.deliverableTasks} | ${usd(p.usdPerDeliverableTask)} | ${usd(p.usdPerAxis)} |`;
   });
 
   return [
@@ -61,14 +115,37 @@ export function renderBudgetReport(
     "",
     "## The answer",
     "",
-    "| | families | shipped tasks | independent axes | $ / task |",
-    "|---|---:|---:|---:|---:|",
-    `| **parameterized families** | **${plan.families}** | **${plan.shippedTasks}** | **${plan.expectedAxes}** | ${usd(plan.usdPerShippedTask)} |`,
-    `| hand-authored tasks | ${hand.families} | ${hand.shippedTasks} | ${hand.expectedAxes} | ${usd(hand.usdPerShippedTask)} |`,
+    "Three units, because they are three different numbers and the previous version of this report",
+    "printed the largest of them under the smallest one's name.",
+    "",
+    "| | families | deliverable tasks | graded cells | independent axes | $ / deliverable task | $ / axis |",
+    "|---|---:|---:|---:|---:|---:|---:|",
+    `| **parameterized families** | **${plan.families}** | **${plan.deliverableTasks}** | ${plan.gradedCells} | **${plan.expectedAxes}** | ${usd(plan.usdPerDeliverableTask)} | **${usd(plan.usdPerAxis)}** |`,
+    `| hand-authored tasks | ${hand.families} | ${hand.deliverableTasks} | ${hand.gradedCells} | ${hand.expectedAxes} | ${usd(hand.usdPerDeliverableTask)} | ${usd(hand.usdPerAxis)} |`,
+    "",
+    "**A FAMILY is what the money builds. A DELIVERABLE TASK is an independently gradeable package a",
+    "recipient can be handed, and this repository emits one per family. A GRADED CELL is one",
+    `scenario-check pair inside that package, and there are ${inputs.hiddenCellsPerTask} per package.** Those are the three columns, and`,
+    "conflating the third with the second is the defect this revision fixes.",
+    "",
+    `Read the two rows against each other and the honest gap is narrower than it used to look: per DELIVERABLE the two cost the same ${usd(plan.usdPerDeliverableTask)}, because one family yields one deliverable either way. What the family buys for that money is **${inputs.hiddenCellsPerTask}x the graded cells and ${(plan.expectedAxes / Math.max(1, hand.expectedAxes)).toFixed(0)}x the independent axes** — ${usd(plan.usdPerAxis)} per axis against ${usd(hand.usdPerAxis)}. That is a real advantage and it is not two orders of magnitude.`,
     "",
     shortfall > 0
-      ? `**${usd(inputs.totalUsd)} does not buy ${targetTasks.toLocaleString("en-US")} tasks.** Reaching that count under these assumptions needs a further ${usd(shortfall)}. What it does buy is **${plan.families} families yielding about ${plan.shippedTasks} graded instances and ${plan.expectedAxes} independent axes** — and the axes are the number worth quoting, because a thousand tasks measuring three things is three measurements.`
-      : `Under these assumptions the budget covers ${targetTasks.toLocaleString("en-US")} tasks with ${usd(inputs.totalUsd - plan.labourUsd - plan.modelUsd)} to spare.`,
+      ? `**${usd(inputs.totalUsd)} does not buy ${targetTasks.toLocaleString("en-US")} deliverable tasks.** At one deliverable per family, ${targetTasks.toLocaleString("en-US")} deliverables means ${targetTasks.toLocaleString("en-US")} families, so reaching that count needs a further ${usd(shortfall)}. What it does buy is **${plan.families} families yielding about ${plan.gradedCells} graded instances and ${plan.expectedAxes} independent axes** — and the axes are the number worth quoting, because a thousand tasks measuring two things is two measurements.`
+      : `Under these assumptions the budget covers ${targetTasks.toLocaleString("en-US")} deliverable tasks with ${usd(inputs.totalUsd - plan.labourUsd - plan.modelUsd)} to spare.`,
+    "",
+    `Read as graded CELLS instead, the same target is far cheaper and still not covered: ${targetTasks.toLocaleString("en-US")} cells at ${cellsPerFamily} per family is ${familiesForTargetCells} families and ${usd(cellShortfall)} more. The two shortfalls differ by ${inputs.hiddenCellsPerTask}x, and the previous version of this report printed the second one beside a headline labelled in the first one's unit.`,
+    "",
+    "## What this revision corrects",
+    "",
+    "| | was | is | effect |",
+    "|---|---|---|---|",
+    `| cost of one frontier trial | ${usd(RETIRED_USD_PER_TRIAL_LITERAL)}, a literal under a heading that said "measured" | ${usd(inputs.usdPerTrial)}, the mean of 19 real Harbor trials over $0.50 in \`data/measured-trial-costs.json\` | the plan was low by roughly ${trialCorrection.toFixed(1)}x on model spend |`,
+    `| the headline unit | families x ${inputs.hiddenCellsPerTask} cells, called "shipped tasks" | families x ${inputs.deliverableTasksPerFamily} deliverable package | the deliverable count was overstated ${inputs.hiddenCellsPerTask}x |`,
+    `| axes per family | 3, the antichain width pooled ACROSS both labs | ${inputs.axesPerFamily}, the width inside a single lab | the axis yield was overstated by half |`,
+    `| builds per shipped family | a second input sitting beside \`postBuildKillRate\` and agreeing with it by luck | \`buildsPerShippedFamily(${inputs.postBuildKillRate})\` = ${num(buildsPerShippedFamily(inputs.postBuildKillRate))} | the two can no longer disagree |`,
+    "",
+    `The trial correction is the one with money attached. ${usd(RETIRED_USD_PER_TRIAL_LITERAL)} per run was never measured — it was a literal, and three phases of this report printed it inside a section headed "measured". The measurement, once taken, is ${usd(inputs.usdPerTrial)}: **the plan was low by roughly ${trialCorrection.toFixed(1)}x on model spend.** It does not move the family count, because model spend is ${(100 * (1 - plan.labourShare)).toFixed(0)}% of this plan — but a plan whose labour was cheap would have been wrong by that factor on the only line it priced.`,
     "",
     "## Where the money goes",
     "",
@@ -77,29 +154,79 @@ export function renderBudgetReport(
     `| screening (candidates killed to find one) | ${usd(plan.screeningUsdPerFamily)} | ${usd(plan.screeningUsdPerFamily * plan.families)} | ${((100 * plan.screeningUsdPerFamily) / plan.loadedUsdPerFamily).toFixed(0)}% |`,
     `| authoring the family | ${usd(plan.authoringUsdPerFamily)} | ${usd(plan.authoringUsdPerFamily * plan.families)} | ${((100 * plan.authoringUsdPerFamily) / plan.loadedUsdPerFamily).toFixed(0)}% |`,
     `| frontier trials | ${usd(plan.trialUsdPerFamily)} | ${usd(plan.modelUsd)} | ${((100 * plan.trialUsdPerFamily) / plan.loadedUsdPerFamily).toFixed(0)}% |`,
-    "| generating instances | $0.00 | $0.00 | 0% |",
+    `| generating graded cells (${plan.gradedCells} of them) | $0.00 | $0.00 | 0% |`,
     "",
-    `**Labour is ${(100 * plan.labourShare).toFixed(0)}% of spend.** Model spend is ${usd(plan.modelUsd)} of ${usd(plan.labourUsd + plan.modelUsd)}. This is the finding: the budget is an engineering budget with a rounding error of GPU time attached, and any plan that prices only the trials is wrong by the size of the rest of the table.`,
+    `**Labour is ${(100 * plan.labourShare).toFixed(0)}% of spend.** Model spend is ${usd(plan.modelUsd)} of ${usd(plan.labourUsd + plan.modelUsd)}, at the corrected ${usd(inputs.usdPerTrial)} per trial. This is the finding: the budget is an engineering budget with a rounding error of GPU time attached, and any plan that prices only the trials is wrong by the size of the rest of the table.`,
     "",
     `The plan implies **${plan.impliedEngineerYears.toFixed(2)} engineer-years** and ` +
       `**${plan.candidatesScreened} candidates screened** to yield ${plan.families} families.`,
+    "",
+    "## What is not priced here at all",
+    "",
+    "`loadedUsdPerFamily` contains screening labour, authoring labour and frontier trials. It contains",
+    "nothing else. **Every family count in this report is therefore an UPPER BOUND**, and this is the",
+    "list of what would pull it down:",
+    "",
+    "| absent cost centre | why it is real | why it is absent |",
+    "|---|---|---|",
+    "| human solver baselines | a difficulty claim with no human baseline is a claim about models, not about difficulty | no solver has ever been paid to attempt a family here, so there is no rate to quote |",
+    "| provider credits and entitlements | Gemini slots in the checked-in campaigns are entitlement-blocked rather than merely unrun | the blocked capacity was never priced, only recorded as not-run |",
+    "| container and compute time | every trial builds and runs a Docker image, some for over an hour | only model spend was ever metered; wall-clock compute was not |",
+    "| triage of counted runs | someone reads each failing run to decide whether the family failed or the harness did | never timesheeted, and it scales with trials rather than with families |",
+    "| spec repair after a campaign | the superseded trials below are the proof that it happens | measured in wasted trials, never in the hours the repair took |",
+    "| refresh as models improve | a family that every model solves has stopped measuring anything | no family here is old enough to have needed it yet |",
+    "",
+    "Three of those — solvers, compute, triage — scale with the number of TRIALS rather than with the",
+    "number of families, so they get worse in exactly the region where this plan looks cheapest.",
     "",
     "## Sensitivity to the labour rate",
     "",
     "The one input that is purely an assumption, so here is the whole column instead of an argument.",
     "",
-    "| rate | families | tasks | axes |",
-    "|---|---:|---:|---:|",
+    "| rate | families | deliverable tasks | graded cells | axes | $ / axis |",
+    "|---|---:|---:|---:|---:|---:|",
     ...sensitivity,
     "",
-    "## Sensitivity to instances per family",
+    "## Sensitivity to authoring hours per family",
     "",
-    "This is the lever. At 1 instance per family you are hand-authoring every task, which is what",
-    "makes the literal reading of the question unaffordable.",
+    "**This is the dominant term.** `hoursPerFamily` is an estimate, not a measurement, and it is the",
+    "only input that moves the family count on its own. The 18 declared shapes in",
+    "`examples/shapes/*.json` estimate their own build at 18 to 120 hours — mean 62.4, median 57.5 —",
+    "so **45 is 28% below the mean of the author's own estimates**. It is not below their low end;",
+    "three shapes declare less. But the flagship family `durable-approval-outbox` declares 120, which",
+    "is 2.7x what this plan charges for it.",
     "",
-    "| instances/family | families | tasks | $ / task |",
-    "|---|---:|---:|---:|",
-    ...instanceSensitivity,
+    "| hours/family | why this row | loaded $ / family | families | deliverable tasks | axes | $ / axis |",
+    "|---|---|---:|---:|---:|---:|---:|",
+    ...hoursRows,
+    "",
+    "45 stays the default because moving a headline without new evidence is worse than reporting the",
+    "discrepancy — but read the table before quoting the headline. Charging the flagship family its own",
+    "declared 120 hours costs more than half the yield.",
+    "",
+    "One further caveat on this input: the repository declares build hours in TWO places, and neither",
+    "is a measurement. `examples/shapes/*.json` carries an estimate for all 18 declared shapes, and",
+    "`src/families/registry.ts` carries a second `estimatedBuildHours` on each of the 8 BUILT families",
+    "(18, 36, 40, 55, 70, 75, 85, 95 — mean 59.3). Two independent guesses at the same quantity is one",
+    "more guess than evidence.",
+    "",
+    "## Sensitivity to deliverable tasks per family",
+    "",
+    "**This lever moves yield per family, not the family count** — the `families` column below is",
+    "constant, and that is the honest result rather than a broken table. Authoring cost does not depend",
+    "on how many packages a finished family is sliced into, so raising this divides the same spend over",
+    "more deliverables and changes nothing else. The previous version of this report ran the same table",
+    "over `instancesPerFamily` and presented the constant column as sensitivity.",
+    "",
+    `It is ${inputs.deliverableTasksPerFamily} today, and it will stay ${inputs.deliverableTasksPerFamily} until a deliverable exporter exists. Two instances count as`,
+    "distinct deliverables only if a knob separates them that changes the expected answer; nine inert",
+    "knobs are not nine deliverables.",
+    "",
+    "| deliverables/family | families | deliverable tasks | $ / deliverable task | $ / axis |",
+    "|---|---:|---:|---:|---:|",
+    ...deliverableSensitivity,
+    "",
+    `The last row is what the previous version of this report printed as its headline: it treated all ${inputs.hiddenCellsPerTask} graded cells as ${inputs.hiddenCellsPerTask} deliverables. Nothing in the repository emits them that way.`,
     "",
     "## Inputs, with provenance",
     "",
@@ -111,26 +238,23 @@ export function renderBudgetReport(
     "",
     ...(trials === undefined ? [] : trialLayerSection(inputs, trials)),
     ...(campaigns === undefined ? [] : campaignSection(inputs, campaigns)),
-    ...(spend === undefined ? [] : providerSpendSection(inputs, spend, 3.5)),
+    ...(spend === undefined ? [] : providerSpendSection(inputs, spend)),
     ...pipelineConversionSection(inputs, trials, campaigns),
     "## What this model does not include",
     "",
-    "- **Maintenance.** Families decay as models improve; nothing here prices re-hardening.",
+    "- **Every cost centre in *What is not priced here at all*.** They are not repeated here; the",
+    "  point stands that each family count above is an upper bound.",
     "- **The first family is more expensive than the tenth**, and the model uses one flat rate.",
     "- **Axis counts do not simply add.** Two families may share an axis; the total is an upper bound",
     "  until a combined matrix is measured.",
-    "- **Instances within a family are heavily correlated** — that is exactly what the axis meter",
-    "  measures, and why shipped-task count is the wrong headline.",
+    "- **Graded cells within a family are heavily correlated** — that is exactly what the axis meter",
+    "  measures, and why the cell count is the wrong headline and the axis count is the right one.",
     "",
     "---",
     "",
     "Generated by `agent-eval-foundry`. Deterministic — no timestamp, diffable.",
     "",
   ].join("\n");
-}
-
-export function renderPlanSummary(plan: BudgetPlan): string {
-  return `${plan.families} families / ${plan.shippedTasks} instances / ${plan.expectedAxes} axes at ${usd(plan.inputs.totalUsd)}`;
 }
 
 /**
@@ -161,7 +285,7 @@ function trialLayerSection(inputs: BudgetInputs, t: TrialLayerFacts): readonly s
     `| families actually built | ${plan.familiesBuilt} |`,
     `| of those, killed after being built | ${plan.familiesKilledAfterBuild} |`,
     `| families that survive to ship | ${plan.families} |`,
-    `| builds per survivor | ${inputs.evolutionCyclesPerSurvivor} |`,
+    `| builds per survivor | ${num(buildsPerShippedFamily(inputs.postBuildKillRate))} = 1 / (1 - ${inputs.postBuildKillRate}), derived from \`postBuildKillRate\` |`,
     `| a descendant's reuse of its parent | ${(inputs.descendantReuse * 100).toFixed(0)}% |`,
     "",
     "**Why killing prompt-injection early was the good outcome.** The family cost roughly 70 hours to",
@@ -194,6 +318,8 @@ function trialLayerSection(inputs: BudgetInputs, t: TrialLayerFacts): readonly s
     `| counted agent trials on the second family | ${t.picCountedTrials} |`,
     `| median runtime of those trials | ${t.picMedianRuntimeSeconds === null ? "—" : `${Math.round(t.picMedianRuntimeSeconds)}s`} |`,
     "",
+    `The plan prices one trial at ${usd(inputs.usdPerTrial)} and this table's effective cost per COUNTED run is ${t.usdPerCountedRun === null ? "—" : usd(t.usdPerCountedRun)}. They differ because the second amortizes the runs that produced nothing over the runs that did, and both are several times the ${usd(RETIRED_USD_PER_TRIAL_LITERAL)} the plan assumed for three phases. The refutation of that literal was being printed two sections below it the whole time.`,
+    "",
     "### The waste rate",
     "",
     `Of ${t.standardRuns} genuine attempts at the task — cheat and gate runs excluded, because those are`,
@@ -203,9 +329,9 @@ function trialLayerSection(inputs: BudgetInputs, t: TrialLayerFacts): readonly s
     understated
       ? [
           `**The measured rate is above the \`retryRate\` input of ${pct(inputs.retryRate)}.** Re-planning at ${pct(measuredRetry)}`,
-          asPlanned.shippedTasks === corrected.shippedTasks
-            ? `changes nothing: ${corrected.families} families and ${corrected.shippedTasks} instances either way, and ${usd(corrected.usdPerShippedTask - asPlanned.usdPerShippedTask)} more per shipped task. That is worth stating plainly — at this scale the plan is dominated by labour, and the trial budget is small enough that a several-point error in the retry rate does not move the family count. The place to be careful about model spend is a plan whose labour is cheap, and this is not one.`
-            : `yields ${corrected.families} families and ${corrected.shippedTasks} instances instead of ${asPlanned.families} and ${asPlanned.shippedTasks}, at ${usd(corrected.usdPerShippedTask - asPlanned.usdPerShippedTask)} more per shipped task.`,
+          asPlanned.deliverableTasks === corrected.deliverableTasks
+            ? `changes nothing: ${corrected.families} families and ${corrected.gradedCells} graded cells either way, and ${usd(corrected.usdPerDeliverableTask - asPlanned.usdPerDeliverableTask)} more per deliverable task. That is worth stating plainly — at this scale the plan is dominated by labour, and the trial budget is small enough that a several-point error in the retry rate does not move the family count. The place to be careful about model spend is a plan whose labour is cheap, and this is not one.`
+            : `yields ${corrected.families} families and ${corrected.deliverableTasks} deliverable tasks instead of ${asPlanned.families} and ${asPlanned.deliverableTasks}, at ${usd(corrected.usdPerDeliverableTask - asPlanned.usdPerDeliverableTask)} more per deliverable task.`,
           "",
           `The waste that did occur was ${Object.entries(t.standardUncountedByStatus)
             .sort()
@@ -251,7 +377,7 @@ function pipelineConversionSection(
   const campaignPrepHours = 3;
   const mutantMeasuredToTrialReadyHours = challengePackagingHours + specHardeningHours + campaignPrepHours;
   const mutantMeasuredToTrialReadyUsd = mutantMeasuredToTrialReadyHours * inputs.labourRateUsdPerHour;
-  const oneTrialModelUsd = (inputs.usdPerMatrix / 6) * (1 + inputs.retryRate);
+  const oneTrialModelUsd = inputs.usdPerTrial * (1 + inputs.retryRate);
   const trialOpsHours = 2;
   const trialReadyToEvidenceUsd = trialOpsHours * inputs.labourRateUsdPerHour + oneTrialModelUsd;
   const supersededTrials = campaigns?.supersededTrials ?? 0;
@@ -283,13 +409,17 @@ function pipelineConversionSection(
     campaigns === undefined
       ? "Provider unavailability is represented when campaign facts are supplied."
       : `Provider unavailability is visible as ${campaigns.slotsNotRun} not-run slot(s) out of ${campaigns.slotsPlanned}; those slots do not become failures or passes.`,
-    trials === undefined
-      ? ""
-      : `The current observed pipeline also carries a ${((trials.standardWasteRate ?? 0) * 100).toFixed(0)}% standard-attempt waste rate from historical trials.`,
+    ...(trials === undefined
+      ? []
+      : [
+          `The current observed pipeline also carries a ${((trials.standardWasteRate ?? 0) * 100).toFixed(0)}% standard-attempt waste rate from historical trials.`,
+        ]),
     "",
-    `Under the current observed pipeline, ${usd(inputs.totalUsd)} buys ${plan.families} shipped family line(s), about ${plan.shippedTasks} generated instances and ${plan.expectedAxes} independent axes. It does not buy ${plan.shippedTasks} independent tasks; the axis meter is the guard against that phrasing.`,
+    `Under the current observed pipeline, ${usd(inputs.totalUsd)} buys ${plan.families} shipped family line(s), ${plan.deliverableTasks} independently gradeable package(s), about ${plan.gradedCells} graded cells and ${plan.expectedAxes} independent axes. It does not buy ${plan.gradedCells} independent tasks — those cells sit inside ${plan.deliverableTasks} package(s) — and the axis meter is the guard against that phrasing.`,
     "",
-  ].filter((line) => line !== "");
+    // No `.filter(line => line !== "")` here. It used to strip the optional trials line and took
+    // every paragraph break in this section with it, gluing the headings to the tables below them.
+  ];
 }
 
 /**
@@ -350,12 +480,15 @@ function campaignSection(inputs: BudgetInputs, c: CampaignFacts): readonly strin
  * trials twice, and a budget that prices only the runs that survived is understating the cost of
  * being careful. The repair came FROM those runs, so the spend bought a finding — it just did not
  * buy a difficulty measurement.
+ *
+ * The per-run price used to arrive here as a $3.50 argument from the caller, which no measurement
+ * backed. It now comes from `inputs.usdPerTrial`, so this section and the plan above cannot price
+ * the same run differently.
  */
-function providerSpendSection(
-  inputs: BudgetInputs,
-  rows: readonly ProviderSpendRow[],
-  usdPerTrial: number,
-): readonly string[] {
+function providerSpendSection(inputs: BudgetInputs, rows: readonly ProviderSpendRow[]): readonly string[] {
+  // Priced from the input rather than from a caller-supplied literal. The literal is what this
+  // section got wrong, and a parameter is how it stayed wrong while the plan above moved on.
+  const usdPerTrial = inputs.usdPerTrial;
   const total = rows.reduce(
     (acc, r) => ({
       counted: acc.counted + r.counted,
@@ -375,6 +508,8 @@ function providerSpendSection(
     "",
     "Every row read from the trial directories on disk. `superseded` runs were counted once and are",
     "not counted now: the family they measured was repaired.",
+    "",
+    `Runs are priced at the measured ${usd(usdPerTrial)} — the mean of the 19 real Harbor trials over $0.50 in \`data/measured-trial-costs.json\`. This section used to price them at ${usd(RETIRED_USD_PER_TRIAL_LITERAL)}, a literal with no measurement behind it printed under a heading that said "measured", so every dollar figure below was low by roughly ${(usdPerTrial / RETIRED_USD_PER_TRIAL_LITERAL).toFixed(1)}x.`,
     "",
     "| provider | counted | of those failed | refused | infra | superseded | model-minutes |",
     "|---|---:|---:|---:|---:|---:|---:|",

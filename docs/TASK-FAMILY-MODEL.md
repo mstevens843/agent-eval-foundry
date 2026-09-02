@@ -40,9 +40,6 @@ checks.
 A **probe verdict** is the runner's next-action result: promote to task shape, repair, kill, hold,
 evolve existing or transfer existing. It is still below full-family evidence.
 
-A **calibration set** is a small known-outcome backtest used to see whether discovery scores route
-families in the same direction as later evidence. The current calibration is n=6 and directional.
-
 A **promotion queue** is the ordered next-work list after applying scores, cheap screens and probe
 evidence. Probe evidence is allowed to outrank score-only intuition.
 
@@ -278,6 +275,95 @@ Each step exists to answer a different question.
 | external intake | returned packet validation | Can third-party evidence be counted under the current hash? | Importing stale, contaminated or hidden-context runs. |
 | axis analysis | catch-set matrix | Are failures independent or redundant? | Calling more tests "more diversity" without measuring it. |
 | ship / kill / evolve | gate report and kill analysis | What should happen next? | Shipping already-solved, unfair or one-axis families as broad evidence. |
+
+## Evidence Preservation, And Its One Exception
+
+Every preserved artifact in this repository is immutable. A trial directory, a transcript, a
+submission, an intake packet and a bundle are records of what happened, and the discipline is that a
+record is superseded, relabelled or marked uncounted — never edited and never deleted. An off-target
+failure stays on disk in the `refused` state. A run the harness killed stays on disk in the `crashed`
+state. A run invalidated by a challenge migration stays on disk and the migration says why. The
+reason is not sentimentality: a number nobody can trace back to an artifact is not evidence, and the
+cheapest way to make a claim unfalsifiable is to lose the thing that would falsify it.
+
+There is exactly one exception, and it is written here so it is not handled ad hoc the next time.
+
+**Credential redaction.** A live credential inside a preserved artifact is the one case where the
+artifact must be altered. The procedure:
+
+1. **Rotate at the provider first**, before touching any file. Assume disclosure: a credential in a
+   working tree may also be in git history, in a preserved transcript, in a bundle, or in a chat
+   transcript outside the repository entirely. Rotation is the control; redaction is cleanup.
+2. **Replace in place with a stable marker** — `[REDACTED:<kind>]` — never by deleting the line, the
+   file, or the run. A redacted transcript is still evidence. A vanished one is not, and it silently
+   changes a denominator.
+3. **Record the redaction in the affected artifact's metadata**, so the artifact is still accounted
+   for and the alteration is visible to anyone auditing it. An undeclared edit to a preserved record
+   is indistinguishable from tampering, which is precisely the thing this whole discipline exists to
+   rule out.
+4. **Never redact anything else under this exception.** It covers credentials. It does not cover an
+   embarrassing transcript, a superseded result, or a failure someone would rather not have on
+   record.
+
+`scripts/secret-scan.mjs` enforces the detection half mechanically, on every push and in `pnpm
+verify`. It self-tests before it scans, because a secret scanner whose patterns have rotted into
+no-ops fails green, and it reports matches by fingerprint rather than by value, because a scanner
+that echoes what it found has moved the leak into the build log instead of removing it.
+
+## The Capability Boundary
+
+The single most consequential judgement in this repository is whether a graded requirement a subject
+failed is **capability** — the subject was not good enough — or **spec-underspecified** — the subject
+could not have known. Four flagship results turned on it, and all four flipped. The rule below was
+committed in `reports/PHASE-3-PREREGISTRATION.md` before the calibration experiment ran, and it
+survived it.
+
+> **A graded requirement is `capability` if and only if the visible text ADJUDICATES between the
+> readings that lead to different answers.** Derivability is not enough. If two readings are each
+> supported by visible normative text, and nothing visible resolves which governs the graded case,
+> the requirement is `spec-underspecified` — even when the author believes one reading is obviously
+> correct, and even when the requirement is entailed by a rule stated elsewhere.
+
+The rejected alternative was "a competent engineer asked *may I write this?* would answer no from the
+visible text alone". That test is unfalsifiable without actually asking engineers, and in practice it
+lets the author substitute his own reading for the profession's. Adjudication is checkable by reading
+the published package, which is the only artifact the subject had.
+
+The difference bites exactly on hard cases. *Entailed* asks whether a correct chain of reasoning
+exists. *Adjudicated* asks whether the visible text rules out the competing chain. A specification can
+entail X while also supporting not-X, and a grader that only checks entailment will call that
+capability forever.
+
+**On the `capability` side** — a rule stated as a numbered sentence, restated in the SPEC, and
+usually carrying a worked example:
+
+- `DWS8_NO_DUPLICATE_SPEND`: "a wallet spend effect for the same idempotency key may execute at most
+  once across repeated attempts." A submission that double-spends has no competing reading to appeal
+  to.
+- `ATS3_SCOPE_MUST_MATCH_APPROVAL`: requested scope, current token scope and current approval scope
+  "must match exactly", with an Illegal Outcomes entry naming the failure by name.
+
+**On the `spec-underspecified` side** — a general constraint published, and the closed set it implies
+left unstated:
+
+- **durable-approval-outbox**: "the audit accounts for every transition, with none that did not
+  occur" is published. The terminal set that constraint implies is not. The graded rule
+  (`ACKED: set()`) exists only in the hidden verifier.
+- **deployment-model-alias-rollout-drift**: "sufficient in-window evidence", with the quantity
+  appearing in no numeral anywhere visible.
+- **checker-required-memory-poisoning**: rule M6 speaks of "a record marked as carrying a secret"
+  while the write contract had no field with which to mark one.
+
+**On neither side**: the access-token and delegated-wallet lineage. Those were a package leak — the
+starter shipped a passing solution — which is a different defect with a different gate
+(`starter-must-fail`). It is listed here only to mark the boundary, because "the subject could not
+have known" and "the subject did not need to know" are opposite failures that both produce a
+withdrawal.
+
+`spec-underspecified` and `spec-contradiction` are distinct labels because they carry different
+repairs — a contradiction means fix the sentence, underspecification means add one — but **every gate
+treats them identically**: neither is capability, both block a difficulty claim, both route to spec
+repair. Accuracy is scored over the union, with the within-class split reported separately.
 
 ## Glossary
 

@@ -67,10 +67,28 @@ describe("the outbox trial directories carry the grading the source actually pro
     expect([...new Set(failed.flatMap((c) => c.failed))].sort()).toEqual([...e.checks].sort());
   });
 
-  it("nobody in this repository has adjudicated them yet, and the record says so", () => {
-    // The phase rule is that nobody labels their own trials. `unlabelled` is a state with a name, and
-    // it is what keeps `difficulty-evidenced` failing until somebody reads the transcripts.
-    for (const dir of dirs) expect(dir.rootCause.label, dir.runId).toBe("unlabelled");
+  it("every one carries a root cause, and none of them is capability", () => {
+    // This assertion used to read `toBe("unlabelled")` for all six, and it had been FAILING since the
+    // commit that labelled them — invisibly, because the verification suite was deferred for three
+    // phases. It is corrected rather than deleted: what it was really pinning is that none of these
+    // six is difficulty evidence, and that is still true and still the load-bearing fact.
+    //
+    // Five are `spec-underspecified`: the graded rule (ACKED is terminal) exists only in the hidden
+    // verifier. `cc267-claude-1` stays `unlabelled` on purpose — it failed on the OPPOSITE side of
+    // the constraint, stranding actions in IN_DOUBT rather than resolving them illegally, and two
+    // automated labellers hedged. Nobody has adjudicated it, so it says so.
+    const byLabel = new Map(dirs.map((d) => [d.runId, d.rootCause.label]));
+    expect(Object.fromEntries(byLabel)).toEqual({
+      "cc267-claude-1": "unlabelled",
+      "cc267-claude-2": "spec-underspecified",
+      "cc267-claude-3": "spec-underspecified",
+      "cc267-codex-1": "spec-underspecified",
+      "cc267-codex-2": "spec-underspecified",
+      "cc267-codex-3": "spec-underspecified",
+    });
+    // The property that actually gates anything: not one of the six is `capability`, so not one of
+    // them can carry a difficulty claim.
+    for (const dir of dirs) expect(dir.rootCause.label, dir.runId).not.toBe("capability");
   });
 
   it("the model identity is the one the run observed, not one a registry declared", () => {

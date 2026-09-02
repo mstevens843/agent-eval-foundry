@@ -19,7 +19,7 @@
 // one available from a matrix alone. Where an external ranking exists it should be preferred; the
 // curve accepts an explicit order for exactly that reason.
 
-import { cluster, blindInstances, catchSets, subjectStats } from "./catch-sets.js";
+import { blindInstances, catchSets, checkStats, cluster, subjectStats } from "./catch-sets.js";
 import { nullBaseline } from "./null-model.js";
 import { antichainWidth } from "./similarity.js";
 import type { AxisReport, CurvePoint, Matrix } from "./types.js";
@@ -106,6 +106,9 @@ export function measure(matrix: Matrix, options: MeasureOptions = {}): AxisRepor
         })()
       : undefined;
 
+  const stats = checkStats(matrix);
+  const fired = new Set(stats.map((stat) => stat.check));
+
   return {
     suite: matrix.suite,
     provenance: matrix.provenance,
@@ -119,6 +122,13 @@ export function measure(matrix: Matrix, options: MeasureOptions = {}): AxisRepor
     independentAxes: width,
     chains,
     subjectStats: subjectStats(matrix, sets),
+    checkStats: stats,
+    // Only computable against a declared universe. Without one the honest answer is "unknown", not
+    // "none" — a suite that never says what it checks would otherwise report perfect coverage.
+    checksNeverFired:
+      matrix.provenance.checks_declared === null
+        ? null
+        : matrix.provenance.checks_declared.filter((c) => !fired.has(c)),
     curve: axisCurve(matrix),
     redundancy: distinct.length === 0 ? 0 : discriminatingCount / distinct.length,
     ...(nullSummary === undefined ? {} : { nullBaseline: nullSummary }),

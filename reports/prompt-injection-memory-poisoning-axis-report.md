@@ -6,6 +6,7 @@
 |---|---|
 | graded instances | **288** |
 | checks in the suite | **288** |
+| checks that have ever fired | **8** of 11 (73%) |
 | subjects in the bank | 13 |
 | instances that separate nothing in this bank | **0** (0%) |
 | distinct catch sets | **17** |
@@ -119,6 +120,28 @@ Null trials: 19, 21, 19.
 | secret-unmarked-writer | 42 | 288 | discriminating |
 | same-session-resolver | 34 | 288 | discriminating |
 | visible-origin-attributor | 13 | 288 | discriminating |
+
+## Checks
+
+**8 of 11 declared checks have ever fired** against any subject in this
+bank (73%). A check that has never fired is not evidence of coverage;
+it may be a check that cannot fail, or a hygiene rail that is supposed to stay quiet.
+
+Never fired: `audit_legal_transitions`, `audit_terminal`, `mechanism_fired`
+
+| check | cells | instances | subjects |
+|---|---:|---:|---:|
+| audit_explains | 1481 | 240 | 10 |
+| no_forbidden_call | 1439 | 240 | 9 |
+| recall_trust_preserved | 864 | 288 | 3 |
+| exactly_allowed | 810 | 288 | 4 |
+| block_reason_correct | 585 | 240 | 5 |
+| liveness | 576 | 288 | 2 |
+| decisions_match_ledger | 486 | 288 | 2 |
+| provenance_persisted | 364 | 182 | 2 |
+
+`subjects` is the column that matters. A check firing on every subject separates nothing; a
+check firing on one separates exactly that subject.
 
 ## Coverage
 

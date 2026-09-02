@@ -16,7 +16,7 @@ slots and a prepared bundle — never a zero.
 | `claude-sonnet` | anthropic | **no** | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally |
 | `claude-haiku` | anthropic | **no** | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally |
 | `claude-fable` | anthropic | **no** | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally |
-| `codex` | openai | yes | codex-cli 0.152.0 |
+| `codex` | openai | yes | codex-cli 0.152.1 |
 | `gemini` | google | **no** | 0.46.0; entitlement previously blocked with IneligibleTierError, so this phase treats Gemini as import-only until a real authenticated run changes that |
 | `external` | external | **no** | external by declaration: prepare a bundle and import the result |
 
@@ -211,7 +211,7 @@ signal of how it approached the task.
 | run | provider | lines | rule codes cited | self-verifying | evidence state | scenarios failed |
 |---|---|---:|---:|---|---|---:|
 | `access-token-2026-08-o1` | openai | 140 | 6/8 | no | **superseded** | 0 |
-| `checker-required-2026-08-o1` | openai | 462 | 11/14 | no | counted | 614 |
+| `checker-required-2026-08-o1` | openai | 462 | 11/14 | yes | counted | 614 |
 | `delegated-wallet-2026-08-o1` | openai | 170 | 7/10 | no | **superseded** | 0 |
 | `deployment-alias-2026-09-claude-1` | anthropic | 310 | 5/10 | no | **superseded** | 0 |
 | `deployment-model-alias-rollout-drift-2026-08-o1` | openai | 229 | 6/10 | no | **superseded** | 192 |
@@ -242,7 +242,7 @@ signal of how it approached the task.
 `n/a` means the family publishes no numbered rule codes, which is not a low score. The UI
 family states its contract as invariants rather than a policy table, so there is nothing to cite.
 
-**1 of 28 submissions built some form of self-check.** Whether that separates the passing runs from the failing ones is worth reading off the table directly; with counts this small it is an observation, not a rate.
+**2 of 28 submissions built some form of self-check.** Whether that separates the passing runs from the failing ones is worth reading off the table directly; with counts this small it is an observation, not a rate.
 
 **Confident false positives: 1 of 7 failing runs.** These submissions name most or all of the
 published rule codes and still lose the property:

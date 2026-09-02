@@ -18,11 +18,6 @@ import {
   parseTransferTests,
 } from "./adaptive-funnel.js";
 import {
-  type DiscoveryCalibrationSummary,
-  KNOWN_DISCOVERY_OUTCOMES,
-  runDiscoveryCalibration,
-} from "./discovery-calibration.js";
-import {
   type DiscoveryWorkbench,
   assertDiscoveryWorkbenchValid,
   parseDiscoveryCandidates,
@@ -143,19 +138,6 @@ export function loadProbeRunSummary(
 ): ProbeRunSummary {
   const definitions = loadProbeDefinitions(root, registry, workbench);
   return runMechanismProbes(definitions);
-}
-
-export function loadDiscoveryCalibration(
-  root: string,
-  registry = loadRegistry(root),
-  workbench = loadDiscoveryWorkbench(root, registry),
-): DiscoveryCalibrationSummary {
-  void registry;
-  return runDiscoveryCalibration(
-    workbench,
-    loadProbeRunSummary(root, registry, workbench),
-    KNOWN_DISCOVERY_OUTCOMES,
-  );
 }
 
 export function loadPromotions(

@@ -8,7 +8,7 @@ subjects to appear in both. This report computes whether they do.
 
 | family | counted agent subjects | counted trials | evidence type |
 |---|---|---:|---|
-| `durable-approval-outbox` | `claude-opus-5`, `gpt-5.6-sol` | 15 | imported historical |
+| `durable-approval-outbox` | `claude-opus-5`, `gpt-5.6-sol` | 6 | imported historical |
 | `prompt-injection-containment` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 6 | measured here |
 
 ## Overlap verdict

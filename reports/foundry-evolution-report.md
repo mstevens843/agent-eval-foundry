@@ -54,7 +54,7 @@ and cross-lab claims remain bounded by the shared bank.
 | `ui-action-record-replay` | SHIP | — | — | 6 | 5 | yes |
 | `ui-replay-live-dom` | SHIP | `insufficient_shared_bank` | `schedule` | 19 | 1 | yes |
 
-8 of 18 families execute. 4 have been attempted by a real agent.
+8 of 18 families execute. 5 have been attempted by a real agent.
 
 ## What the kill taxonomy has actually found
 
@@ -75,7 +75,7 @@ every category fires is usually a taxonomy that is not discriminating.
 | `too_synthetic` | weakness | `mutate` | `prompt-injection-containment` |
 | `too_expensive` | cost | `split` | — |
 | `runner_unavailable` | absence | `schedule` | — |
-| `insufficient_shared_bank` | absence | `schedule` | `access-token-scope-expansion`, `checker-required-memory-poisoning`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `prompt-injection-memory-poisoning`, `ui-replay-live-dom` |
+| `insufficient_shared_bank` | absence | `schedule` | `access-token-scope-expansion`, `checker-required-memory-poisoning`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `durable-approval-outbox`, `prompt-injection-memory-poisoning`, `ui-replay-live-dom` |
 | `grader_gameable` | defect | `repair` | — |
 | `ambiguous_truth_source` | defect | `repair` | — |
 

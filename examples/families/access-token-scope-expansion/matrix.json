@@ -7,6 +7,19 @@
     "task_sha256": null,
     "suite_shape": "384 scenarios / 9 subjects / 1152 points in the declared space",
     "checks_total": 384,
+    "checks_declared": [
+      "decision_matches_truth",
+      "no_forbidden_effect",
+      "current_state_observed",
+      "approval_generation_current",
+      "token_status_current",
+      "scope_bound_exactly",
+      "no_duplicate_effect",
+      "report_matches_ledger",
+      "audit_explains",
+      "liveness",
+      "mechanism_fired"
+    ],
     "extracted_from": [
       "src/families/access-token-scope-expansion/runner.ts (in-process sweep)",
       "src/families/access-token-scope-expansion/verify.ts (authority-ledger grading)"

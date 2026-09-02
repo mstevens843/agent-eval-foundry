@@ -6,6 +6,7 @@
 |---|---|
 | graded instances | **384** |
 | checks in the suite | **384** |
+| checks that have ever fired | **10** of 11 (91%) |
 | subjects in the bank | 9 |
 | instances that separate nothing in this bank | **0** (0%) |
 | distinct catch sets | **6** |
@@ -98,6 +99,30 @@ Null trials: 8, 10, 9.
 | grant-widener | 16 | 384 | discriminating |
 | nop-faker | 16 | 384 | discriminating |
 | duplicate-executor | 11 | 384 | discriminating |
+
+## Checks
+
+**10 of 11 declared checks have ever fired** against any subject in this
+bank (91%). A check that has never fired is not evidence of coverage;
+it may be a check that cannot fail, or a hygiene rail that is supposed to stay quiet.
+
+Never fired: `mechanism_fired`
+
+| check | cells | instances | subjects |
+|---|---:|---:|---:|
+| decision_matches_truth | 892 | 384 | 5 |
+| current_state_observed | 768 | 384 | 2 |
+| report_matches_ledger | 620 | 384 | 5 |
+| no_forbidden_effect | 604 | 368 | 4 |
+| audit_explains | 597 | 384 | 3 |
+| approval_generation_current | 335 | 192 | 3 |
+| scope_bound_exactly | 234 | 160 | 5 |
+| token_status_current | 93 | 64 | 2 |
+| liveness | 32 | 16 | 2 |
+| no_duplicate_effect | 11 | 11 | 1 |
+
+`subjects` is the column that matters. A check firing on every subject separates nothing; a
+check firing on one separates exactly that subject.
 
 ## Coverage
 

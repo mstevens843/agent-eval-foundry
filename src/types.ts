@@ -49,6 +49,18 @@ export interface Provenance {
   readonly task_sha256: string | null;
   readonly suite_shape: string | null;
   readonly checks_total: number | null;
+  /**
+   * The names of every check the suite DECLARES, whether or not any of them fired.
+   *
+   * Optional, because every matrix written before this field existed lacks it and a schema change
+   * that invalidates preserved evidence is not a schema change worth making.
+   *
+   * `checks_total` cannot substitute for it. That field is a bare number whose meaning differs by
+   * producer — 267 means check EXECUTIONS for the outbox, 128 means SCENARIOS for another family,
+   * 500 means INSTANCES for the SWE-bench import — so a firing rate computed against it would be
+   * three different statistics wearing one name. Names, or nothing.
+   */
+  readonly checks_declared: readonly string[] | null;
   readonly extracted_from: readonly string[];
   /**
    * Free text stating how subjects and instances were selected relative to each other. Required to
@@ -97,6 +109,34 @@ export interface SubjectStat {
   readonly role: SubjectRole;
 }
 
+/**
+ * How much work one check in the suite is doing.
+ *
+ * This exists because of a number nobody had ever computed about the best suite in this project: of
+ * the eleven checks in the 267-check durable-outbox suite, TWO ever fired against any of the six
+ * frontier agents that failed it. Nine never fired at all. The suite was not measuring eleven things
+ * and finding two problems; it was measuring two things, nine times over, and the check count was
+ * never evidence of breadth.
+ *
+ * "How many of your checks have ever fired" is a one-line diagnostic any suite owner can run, and
+ * almost none have. It is deliberately reported per check rather than as a bare rate, because the
+ * right response depends on WHICH checks are silent.
+ *
+ * A check that never fires is not automatically dead weight. Hygiene checks — determinism, duplicate
+ * effects, mechanism-fired — are SUPPOSED not to fire on a valid scenario, and a suite whose safety
+ * rails all fire is a suite with a broken harness. So this names them and lets the reader judge; it
+ * never condemns them.
+ */
+export interface CheckStat {
+  readonly check: string;
+  /** (instance, subject) pairs where this check appears in `failed`. */
+  readonly firedOnCells: number;
+  /** Distinct instances where it fired. */
+  readonly firedOnInstances: number;
+  /** Distinct subjects it caught. A check firing on one subject only separates that subject. */
+  readonly firedOnSubjects: number;
+}
+
 /** One point on the axis curve: what the suite measures once the k weakest subjects are removed. */
 export interface CurvePoint {
   readonly droppedWeakest: number;
@@ -137,6 +177,16 @@ export interface AxisReport {
    */
   readonly chains: readonly (readonly (readonly string[])[])[];
   readonly subjectStats: readonly SubjectStat[];
+  /** Per-check firing counts, busiest first. Empty when the matrix records no check names. */
+  readonly checkStats: readonly CheckStat[];
+  /**
+   * Checks the suite DECLARES but that never fired against any subject in this bank.
+   *
+   * Null when the matrix does not declare its check universe, because the honest answer is then "we
+   * do not know" rather than zero. A silent check and an undeclared check are different facts, and
+   * collapsing them lets a suite report perfect coverage by simply not saying what it checks.
+   */
+  readonly checksNeverFired: readonly string[] | null;
   readonly curve: readonly CurvePoint[];
   readonly redundancy: number;
   /**

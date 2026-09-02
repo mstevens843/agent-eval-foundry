@@ -7,6 +7,23 @@
     "task_sha256": null,
     "suite_shape": "804 scenarios / 10 subjects / 82944 points in the declared space",
     "checks_total": 804,
+    "checks_declared": [
+      "decision_matches_truth",
+      "no_overgrant",
+      "current_authority_reconciled",
+      "stale_scope_rejected",
+      "valid_scope_executes",
+      "revocation_respected",
+      "downgrade_respected",
+      "remaining_budget_correct",
+      "no_subject_owned_authority",
+      "no_duplicate_effect",
+      "audit_matches_authority_source",
+      "liveness",
+      "deterministic_result",
+      "report_matches_ledger",
+      "mechanism_fired"
+    ],
     "extracted_from": [
       "src/families/delegated-wallet-scope-reconciliation/runner.ts (in-process sweep)",
       "src/families/delegated-wallet-scope-reconciliation/verify.ts (wallet-authority grading)"

@@ -27,7 +27,7 @@ since changed is superseded, preserved, and not in this column.
 | `delegated-wallet-scope-reconciliation` | 804 | 0 | 0 | 0 | 3 | not measurable — fewer than 2 counted failing subjects | human-ready | adversarial-ready | **NOT-READY**: `difficulty-evidenced` |
 | `deployment-model-alias-rollout-drift` | 339 | 0 | 0 | 0 | 20 | not measurable — fewer than 2 counted failing subjects | human-ready | adversarial-ready | **NOT-READY**: `difficulty-evidenced` |
 | `deployment-rollback-partial-effects` | not built | — | — | — | — | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
-| `durable-approval-outbox` | not built | — | — | — | 3 | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
+| `durable-approval-outbox` | not built | 6 | 6 | 0 | 3 | 1 (failures nest — one axis at several sensitivities) | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
 | `model-alias-drift-sentinel` | not built | — | — | — | 2 (est.) | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
 | `permission-boundary-tools` | not built | — | — | — | 1 (est.) | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
 | `prompt-injection-approval-scope-drift` | not built | — | — | — | 3 (est.) | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
@@ -71,9 +71,9 @@ why each excluded run is excluded, is in `reports/historical-durable-outbox-tria
 | | |
 |---|---:|
 | run directories parsed | 33 |
-| counted | **15** |
-| of those, failed >=1 scenario | 13 |
-| uncounted | 18 |
+| counted | **0** |
+| of those, failed >=1 scenario | 0 |
+| uncounted | 33 |
 | excluded for running a different task | 7 |
 
 ## Production routing

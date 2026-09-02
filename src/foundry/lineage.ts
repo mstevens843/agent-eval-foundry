@@ -729,9 +729,9 @@ export function evaluateLineage(
     informedMatrixBlocks,
     deferredMatrixBlocks,
     estimatedMatrixSpendSavedUsd:
-      Math.round(informedMatrixBlocks * MEASURED_DEFAULTS.usdPerMatrix * 100) / 100,
+      Math.round(informedMatrixBlocks * (MEASURED_DEFAULTS.usdPerTrial * MEASURED_DEFAULTS.trialsPerMatrix) * 100) / 100,
     estimatedMatrixSpendDeferredUsd:
-      Math.round(deferredMatrixBlocks * MEASURED_DEFAULTS.usdPerMatrix * 100) / 100,
+      Math.round(deferredMatrixBlocks * (MEASURED_DEFAULTS.usdPerTrial * MEASURED_DEFAULTS.trialsPerMatrix) * 100) / 100,
     nextAction,
   };
 }

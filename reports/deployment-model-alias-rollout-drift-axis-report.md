@@ -6,6 +6,7 @@
 |---|---|
 | graded instances | **339** |
 | checks in the suite | **339** |
+| checks that have ever fired | **14** of 16 (88%) |
 | subjects in the bank | 17 |
 | instances that separate nothing in this bank | **0** (0%) |
 | distinct catch sets | **72** |
@@ -144,6 +145,34 @@ Null trials: 69, 69, 70.
 | reevaluation-blind | 85 | 339 | discriminating |
 | version-attribution-blind | 42 | 339 | discriminating |
 | single-sample-sufficient | 21 | 339 | discriminating |
+
+## Checks
+
+**14 of 16 declared checks have ever fired** against any subject in this
+bank (88%). A check that has never fired is not evidence of coverage;
+it may be a check that cannot fail, or a hygiene rail that is supposed to stay quiet.
+
+Never fired: `deterministic_result`, `mechanism_fired`
+
+| check | cells | instances | subjects |
+|---|---:|---:|---:|
+| decision_matches_truth | 2110 | 339 | 13 |
+| report_matches_ledger | 1822 | 339 | 10 |
+| current_alias_reconciled | 1695 | 339 | 5 |
+| audit_matches_rollout_source | 1399 | 306 | 8 |
+| concrete_version_attributed | 1000 | 192 | 7 |
+| liveness | 894 | 192 | 9 |
+| no_subject_owned_model_truth | 881 | 234 | 10 |
+| no_stale_alias_assumption | 860 | 172 | 5 |
+| quarantine_when_insufficient | 760 | 147 | 9 |
+| rollout_window_respected | 539 | 109 | 7 |
+| rollback_required | 473 | 96 | 8 |
+| continue_required | 421 | 96 | 8 |
+| no_duplicate_effect | 152 | 152 | 1 |
+| correct_baseline_compared | 146 | 73 | 2 |
+
+`subjects` is the column that matters. A check firing on every subject separates nothing; a
+check firing on one separates exactly that subject.
 
 ## Coverage
 

@@ -40,7 +40,6 @@ export type {
 export {
   MEASURED_DEFAULTS,
   HOURS_PER_ENGINEER_YEAR,
-  costOfTarget,
   handAuthoredComparison,
   planBudget,
 } from "./foundry/budget.js";
@@ -56,7 +55,6 @@ export {
   loadCandidates,
   loadAdaptiveFunnel,
   loadDiscoveryWorkbench,
-  loadDiscoveryCalibration,
   loadMechanisms,
   loadMutants,
   loadProbeDefinitions,
@@ -237,18 +235,6 @@ export type {
   SurfaceCoverageSummary,
 } from "./foundry/discovery-workbench.js";
 export {
-  CALIBRATION_MATCHES,
-  KNOWN_DISCOVERY_OUTCOMES,
-  assertDiscoveryCalibrationValid,
-  runDiscoveryCalibration,
-} from "./foundry/discovery-calibration.js";
-export type {
-  CalibrationMatch,
-  DiscoveryCalibrationKnownOutcome,
-  DiscoveryCalibrationRecord,
-  DiscoveryCalibrationSummary,
-} from "./foundry/discovery-calibration.js";
-export {
   EXECUTABLE_PROBES,
   PROBE_STRATEGIES,
   PROBE_SUBJECT_KINDS,
@@ -290,7 +276,7 @@ export { SOURCES, getSource, implementedSources } from "./sources/index.js";
 export type { MatrixSource, SourceLoadOptions } from "./sources/index.js";
 
 // --- reports ---
-export { renderBudgetReport, renderPlanSummary } from "./reports/budget-report.js";
+export { renderBudgetReport } from "./reports/budget-report.js";
 export { renderFamilyDiversityReport, renderLedgerReport } from "./reports/ledger-report.js";
 export { renderMechanismReport, renderMutantReport } from "./reports/registry-report.js";
 export { GATES, assessFamily, familyStatusLabel, renderShipReport } from "./reports/ship-report.js";
@@ -422,7 +408,6 @@ export type {
 
 // --- adversarial verifier-integrity: attempted bypass records vs cheat-resistance design ---
 export {
-  adversarialVerifierOutput,
   importAdversarialBundle,
   prepareAdversarialBundle,
 } from "./adversarial-audit/bundles.js";

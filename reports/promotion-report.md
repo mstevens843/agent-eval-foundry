@@ -110,7 +110,7 @@ No ready, unbuilt promotions are on record.
 
 ## Current Probe Context
 
-Probe queue size: 16. First promoted probe: `access-token-scope-expansion-probe`.
+Probe queue size: 5. First promoted probe: `access-token-scope-expansion-probe`.
 
 ## Evidence Rules
 

@@ -21,7 +21,7 @@ by. Rows are sorted by run id for exactly that reason.
 | `ui-claude-2` | `claude-opus-5` | anthropic | 1 | 698 | n/a | **none** / — | 0 | 33 |
 | `ui-codex-1` | `gpt-5.6-sol` | openai | 1 | 361 | n/a | **none** / example-harness | 1 | 90 |
 | `ui-haiku-1` | `claude-haiku-4-5` | anthropic | 1 | 216 | n/a | **none** / — | 0 | 62 |
-| `ui-sonnet-1` | `claude-sonnet-5` | anthropic | 3 | 191 | n/a | example-harness / — | 0 | 62 |
+| `ui-sonnet-1` | `claude-sonnet-5` | anthropic | 3 | 191 | n/a | **none** / — | 0 | 62 |
 
 `rules cited` is `n/a` where the family publishes no numbered rule codes; zero-of-zero is not a
 low score. `self-check` shows what is in the artifact and what the transcript describes, in that

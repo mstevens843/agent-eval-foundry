@@ -35,6 +35,13 @@ function headline(r: AxisReport): readonly string[] {
   const discriminating = r.instanceCount - r.blindInstances.length;
   const checksRow =
     r.provenance.checks_total === null ? [] : [`| checks in the suite | **${r.provenance.checks_total}** |`];
+  // The denominator that matters, when the suite is willing to name its own checks.
+  const firingRow =
+    r.provenance.checks_declared === null
+      ? []
+      : [
+          `| checks that have ever fired | **${r.provenance.checks_declared.length - (r.checksNeverFired?.length ?? 0)}** of ${r.provenance.checks_declared.length} (${pct(r.provenance.checks_declared.length - (r.checksNeverFired?.length ?? 0), r.provenance.checks_declared.length)}) |`,
+        ];
   return [
     `# Axis report: ${r.suite}`,
     "",
@@ -44,6 +51,7 @@ function headline(r: AxisReport): readonly string[] {
     "|---|---|",
     `| graded instances | **${r.instanceCount}** |`,
     ...checksRow,
+    ...firingRow,
     `| subjects in the bank | ${r.subjectCount} |`,
     `| instances that separate nothing in this bank | **${r.blindInstances.length}** (${pct(r.blindInstances.length, r.instanceCount)}) |`,
     `| distinct catch sets | **${r.distinctMeasurements}** |`,
@@ -172,6 +180,59 @@ function subjects(r: AxisReport): readonly string[] {
   return lines;
 }
 
+/**
+ * How many of your checks have ever fired.
+ *
+ * A one-line diagnostic almost no suite owner has run, and the most legible form of the argument
+ * this whole tool makes. The best suite in this project has eleven checks and 267 check executions;
+ * against the six frontier agents that failed it, TWO checks ever fired. It was not measuring eleven
+ * things and finding two problems. It was measuring two things, nine times over, and the check count
+ * was never evidence of breadth.
+ *
+ * A silent check is not automatically dead weight, and this section does not say it is. Hygiene
+ * checks — determinism, duplicate effects, mechanism-fired — are SUPPOSED to stay silent on a valid
+ * scenario, and a suite whose safety rails all fire has a broken harness, not a good suite. So the
+ * silent ones are named and the reader judges.
+ */
+function checks(r: AxisReport): readonly string[] {
+  if (r.checkStats.length === 0 && r.checksNeverFired === null) return [];
+  const declared = r.provenance.checks_declared;
+  const lines = [
+    "## Checks",
+    "",
+  ];
+  if (declared === null) {
+    lines.push(
+      `${r.checkStats.length} distinct check(s) fired in this bank. The suite does not declare its`,
+      "check universe (`provenance.checks_declared`), so the firing RATE is unknown — not zero, and",
+      "not 100%. Declare the universe and this becomes the cheapest coverage diagnostic you own.",
+    );
+  } else {
+    const fired = declared.length - (r.checksNeverFired?.length ?? 0);
+    lines.push(
+      `**${fired} of ${declared.length} declared checks have ever fired** against any subject in this`,
+      `bank (${pct(fired, declared.length)}). A check that has never fired is not evidence of coverage;`,
+      "it may be a check that cannot fail, or a hygiene rail that is supposed to stay quiet.",
+    );
+    if ((r.checksNeverFired?.length ?? 0) > 0) {
+      lines.push("", `Never fired: ${(r.checksNeverFired ?? []).map((c) => `\`${c}\``).join(", ")}`);
+    }
+  }
+  lines.push("", "| check | cells | instances | subjects |", "|---|---:|---:|---:|");
+  const shown = r.checkStats.slice(0, MAX_ROWS);
+  for (const c of shown) {
+    lines.push(`| ${c.check} | ${c.firedOnCells} | ${c.firedOnInstances} | ${c.firedOnSubjects} |`);
+  }
+  lines.push(...elided(shown.length, r.checkStats.length, "checks (busiest first)"));
+  lines.push(
+    "",
+    "`subjects` is the column that matters. A check firing on every subject separates nothing; a",
+    "check firing on one separates exactly that subject.",
+    "",
+  );
+  return lines;
+}
+
 function calibration(r: AxisReport): readonly string[] {
   const nb = r.nullBaseline;
   if (nb === undefined) return [];
@@ -222,6 +283,7 @@ export function renderReport(r: AxisReport): string {
     ...chains(r),
     ...calibration(r),
     ...subjects(r),
+    ...checks(r),
     ...coverage(r),
     "---",
     "",

@@ -30,7 +30,9 @@ export function assertBudgetInputs(i: BudgetInputs): void {
     ["hoursPerScreenedCandidate", i.hoursPerScreenedCandidate],
     ["cycleHitRate", i.cycleHitRate],
     ["matricesPerFamily", i.matricesPerFamily],
-    ["instancesPerFamily", i.instancesPerFamily],
+    ["trialsPerMatrix", i.trialsPerMatrix],
+    ["deliverableTasksPerFamily", i.deliverableTasksPerFamily],
+    ["hiddenCellsPerTask", i.hiddenCellsPerTask],
     ["axesPerFamily", i.axesPerFamily],
   ];
   for (const [name, value] of positive) {
@@ -38,8 +40,25 @@ export function assertBudgetInputs(i: BudgetInputs): void {
       fail("BUDGET_NEGATIVE_INPUT", `budget.${name}`, `must be a positive finite number, got ${value}`);
     }
   }
-  if (i.usdPerMatrix < 0 || !Number.isFinite(i.usdPerMatrix)) {
-    fail("BUDGET_NEGATIVE_INPUT", "budget.usdPerMatrix", `must be zero or positive, got ${i.usdPerMatrix}`);
+  if (i.usdPerTrial < 0 || !Number.isFinite(i.usdPerTrial)) {
+    fail("BUDGET_NEGATIVE_INPUT", "budget.usdPerTrial", `must be zero or positive, got ${i.usdPerTrial}`);
+  }
+  // Previously unvalidated, alongside two other inputs that could silently produce negative hours or
+  // an infinite family count. A rate of 1 means every built family dies, so nothing ever ships and
+  // the cost per shipped family is infinite; that is a statement about the pipeline, not a plan.
+  if (!Number.isFinite(i.postBuildKillRate) || i.postBuildKillRate < 0 || i.postBuildKillRate >= 1) {
+    fail(
+      "BUDGET_KILL_RATE_OUT_OF_RANGE",
+      "budget.postBuildKillRate",
+      `expected a fraction in [0, 1), got ${i.postBuildKillRate}; at 1 no family ever ships`,
+    );
+  }
+  if (!Number.isFinite(i.descendantReuse) || i.descendantReuse < 0 || i.descendantReuse > 1) {
+    fail(
+      "BUDGET_NEGATIVE_INPUT",
+      "budget.descendantReuse",
+      `expected a fraction in [0, 1], got ${i.descendantReuse}; above 1 makes authoring hours negative`,
+    );
   }
   if (i.cycleHitRate > 1) {
     fail(
@@ -102,7 +121,7 @@ export function assertPlanHonest(plan: BudgetPlan): void {
  * plainly what $100k does and does not buy.
  */
 export function shortfallForTarget(plan: BudgetPlan, targetTasks: number): number {
-  if (plan.shippedTasks >= targetTasks) return 0;
-  const familiesNeeded = Math.ceil(targetTasks / plan.inputs.instancesPerFamily);
+  if (plan.deliverableTasks >= targetTasks) return 0;
+  const familiesNeeded = Math.ceil(targetTasks / plan.inputs.deliverableTasksPerFamily);
   return familiesNeeded * plan.loadedUsdPerFamily - plan.inputs.totalUsd;
 }

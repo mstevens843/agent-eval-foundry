@@ -6,6 +6,7 @@
 |---|---|
 | graded instances | **500** |
 | checks in the suite | **500** |
+| checks that have ever fired | **1** of 1 (100%) |
 | subjects in the bank | 134 |
 | instances that separate nothing in this bank | **0** (0%) |
 | distinct catch sets | **474** |
@@ -271,6 +272,19 @@ Null trials: 500, 500, 500.
 | 20240620_sweagent_claude3.5sonnet | 329 | 497 | discriminating |
 
 *Showing 25 of 134 subjects (most-caught first); 109 not listed.*
+
+## Checks
+
+**1 of 1 declared checks have ever fired** against any subject in this
+bank (100%). A check that has never fired is not evidence of coverage;
+it may be a check that cannot fail, or a hygiene rail that is supposed to stay quiet.
+
+| check | cells | instances | subjects |
+|---|---:|---:|---:|
+| unresolved | 32299 | 500 | 134 |
+
+`subjects` is the column that matters. A check firing on every subject separates nothing; a
+check firing on one separates exactly that subject.
 
 ## Coverage
 

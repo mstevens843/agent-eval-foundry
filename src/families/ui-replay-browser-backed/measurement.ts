@@ -144,6 +144,7 @@ export function browserBackedMeasurementMatrix(measurement: BrowserBackedMeasure
       task_sha256: null,
       suite_shape: `${BROWSER_BACKED_SCENARIOS.length} browser scenarios / ${subjects.length} known-bad browser strategies`,
       checks_total: BROWSER_BACKED_SCENARIOS.length,
+      checks_declared: null,
       extracted_from: [
         "src/families/ui-replay-browser-backed/runner.ts (Playwright browser sweep)",
         "examples/families/ui-replay-browser-backed/browser-measurement.json (preserved browser artifact)",

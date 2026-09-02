@@ -35,8 +35,6 @@ export interface SharedDifficultyInput {
   readonly threshold: number;
 }
 
-const pct = (n: number): string => `${(n * 100).toFixed(0)}%`;
-
 /** The provider whose declared subject id matches, when the registry knows one. */
 function providerFor(subject: string): (typeof PROVIDERS)[number] | null {
   return PROVIDERS.find((p) => p.subjectId === subject) ?? null;
@@ -302,5 +300,3 @@ export function measuredCells(matrix: Matrix): number {
   }
   return n;
 }
-
-export const formatShare = pct;

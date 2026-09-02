@@ -7,6 +7,18 @@
     "task_sha256": null,
     "suite_shape": "324 scenarios / 10 subjects / 648 points in the declared space",
     "checks_total": 324,
+    "checks_declared": [
+      "replay_completes",
+      "selector_resolved_live",
+      "precondition_observed",
+      "confirmation_observed",
+      "replay_idempotent",
+      "replay_order_preserved",
+      "no_model_in_loop",
+      "replay_audit_explains",
+      "unreplayable_reported",
+      "no_forbidden_effect"
+    ],
     "extracted_from": [
       "src/families/ui-action-record-replay/runner.ts (in-process sweep)",
       "src/families/ui-action-record-replay/verify.ts (grading)"

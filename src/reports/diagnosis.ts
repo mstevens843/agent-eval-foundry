@@ -91,6 +91,22 @@ export interface DiagnoseInput {
 }
 
 /** Share of failures above which a single-check wipeout is read as a spec problem. */
+/**
+ * Failure rate inside one knob-value group.
+ *
+ * A group with no scenarios has no rate. Dividing anyway yields NaN, and NaN is the worst possible
+ * value here: `NaN > 0` is false so the row silently vanishes from `implicated`, `NaN - NaN` is NaN
+ * so the sort comparator becomes non-total and the order goes implementation-defined, and the cell
+ * renders as `NaN%` in a report someone is meant to read a root cause out of. Zero is wrong in an
+ * obvious, visible way instead.
+ *
+ * Today `groups` only ever receives entries with `failed > 0`, and `scenarios` is incremented once
+ * per cell, so `scenarios >= failed >= 1` and the guard never fires. It is here because the
+ * invariant lives in a different loop from the division, and nothing enforces that it stays.
+ */
+const failureRate = (g: { readonly failed: number; readonly scenarios: number }): number =>
+  g.scenarios === 0 ? 0 : g.failed / g.scenarios;
+
 const WIPEOUT_SHARE = 0.9;
 
 /**
@@ -189,8 +205,8 @@ export function diagnose(input: DiagnoseInput): TrialDiagnosis {
     }
   }
   const implicated = groups
-    .filter((g) => g.failed / g.scenarios > 0)
-    .sort((a, b) => b.failed / b.scenarios - a.failed / a.scenarios || a.knob.localeCompare(b.knob));
+    .filter((g) => failureRate(g) > 0)
+    .sort((a, b) => failureRate(b) - failureRate(a) || a.knob.localeCompare(b.knob));
 
   // Is the failure confined to some values of some knob, or spread over all of them?
   const concentrated = [...knobs].some((knob) => {
@@ -358,7 +374,7 @@ export function renderDiagnoses(
             "|---|---|---:|---:|---:|",
             ...d.implicated.map(
               (g) =>
-                `| \`${g.knob}\` | \`${g.value}\` | ${g.scenarios} | ${g.failed} | ${((g.failed / g.scenarios) * 100).toFixed(0)}% |`,
+                `| \`${g.knob}\` | \`${g.value}\` | ${g.scenarios} | ${g.failed} | ${(failureRate(g) * 100).toFixed(0)}% |`,
             ),
             "",
             ...d.notes.map((n) => `> ${n}`),
