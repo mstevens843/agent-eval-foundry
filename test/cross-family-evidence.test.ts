@@ -53,7 +53,6 @@ const matrixOf = (familyId: string, subjects: readonly string[], instances: numb
     task_sha256: null,
     suite_shape: "test",
     checks_total: instances,
-    checks_declared: null,
     extracted_from: [],
     caveat: "test fixture",
   },

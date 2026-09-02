@@ -113,9 +113,7 @@ describe("exactly one path counts these runs", () => {
     expect(history.records.flatMap((r) => r.cells)).toEqual([]);
     // The six are not double-counted: the archive knows they bought a verdict and still refuses to
     // treat that verdict as evidence, because its copy of it is one bit.
-    expect(history.gradedRuns.map((r) => r.runName)).toEqual(
-      expect.arrayContaining(Object.keys(EXPECTED)),
-    );
+    expect(history.gradedRuns.map((r) => r.runName)).toEqual(expect.arrayContaining(Object.keys(EXPECTED)));
     for (const runId of Object.keys(EXPECTED)) {
       expect(history.records.find((r) => r.runId === runId)?.counts, runId).toBe(false);
     }
@@ -198,7 +196,10 @@ describe("what the six agents did to verify themselves", () => {
       // Never promoted. The submission is seven engine modules; a grader reading it sees no checker.
       expect(p.strongestObserved, p.runId).toBeNull();
       expect(p.verdict, p.runId).toBe("ephemeral");
-      expect(p.ephemeral.every((s) => s.source === "ephemeral"), p.runId).toBe(true);
+      expect(
+        p.ephemeral.every((s) => s.source === "ephemeral"),
+        p.runId,
+      ).toBe(true);
     }
   });
 

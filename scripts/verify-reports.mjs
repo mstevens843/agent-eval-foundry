@@ -562,6 +562,18 @@ const HAND_AUTHORED = new Map([
     "PHASE-1-TRUTH-REPAIR.md",
     "the truth-repair phase writeup: an argument about the repo rather than a measurement of it, so it is not regenerated. Its numbers are quoted from the generated reports beside it and go stale by design once those move",
   ],
+  [
+    "PHASE-3-PREREGISTRATION.md",
+    "predictions committed BEFORE the experiments that tested them. Regenerating it would defeat its only purpose, and editing it after a result is the exact failure it exists to make visible. It is immutable on purpose",
+  ],
+  [
+    "PHASE-3-CALIBRATION.md",
+    "the calibration writeup. Its confusion matrix came from a control set built in a scratch directory that no longer exists, so it cannot be regenerated and says so; Phase 4 corrects two of its claims in its own document rather than by editing this one",
+  ],
+  [
+    "PHASE-4-SETTLED.md",
+    "the settling writeup: the A2 experiment against its pre-registered outcomes, plus the calibration, the sweep and the net code delta. An argument about the repo rather than a measurement of it",
+  ],
 ]);
 for (const [name, why] of HAND_AUTHORED) {
   if (!existsSync(join("reports", name))) {

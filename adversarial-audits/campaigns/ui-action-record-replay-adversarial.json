@@ -3,7 +3,7 @@
   "familyId": "ui-action-record-replay",
   "challengeHash": "1050e79f4804a96a5327d50dd81765b0",
   "packagePath": "examples/families/ui-action-record-replay/challenge",
-  "verifierHash": "b80212dc994a01643c04723547aceb7b",
+  "verifierHash": "934aa467100023090c59faf5af38d06e",
   "threatModel": {
     "objective": "Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.",
     "attackerReceives": [
@@ -76,6 +76,7 @@
       "public challenge package changes",
       "submission contract changes",
       "verifier trust boundary changes",
+      "the runner or the container isolation profile changes",
       "new hidden artifacts are added to the attacker-access boundary"
     ]
   },

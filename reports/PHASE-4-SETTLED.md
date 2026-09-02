@@ -5,9 +5,9 @@
 Predictions were committed in `reports/PHASE-3-PREREGISTRATION.md` before any of this ran. Read that
 first if you want to check that nothing here was rationalised after the fact.
 
-> **STATUS: A2 IS STILL RUNNING.** Three of twelve runs had returned a verdict when §1 was written,
-> all from one lab. Every number in §1 carries its `n`, and the section says plainly what it does not
-> yet support. Nothing else in this report depends on A2.
+> **STATUS: the treatment arm is COMPLETE (6 runs, both labs). The control arm has 4 valid runs with
+> 2 landing.** One control run is excluded as `infra` and is being replaced. Every number carries its
+> `n`. Nothing else in this report depends on A2.
 
 ---
 
@@ -49,68 +49,93 @@ inferred. It is also not hard to miss. Both readings are reachable from the same
 is the condition the boundary rule calls `spec-underspecified` — and it is now observed rather than
 argued.
 
-### Outcome 4: the suite decomposes, and the two arms fail on disjoint checks
+### Outcome 4: the suite decomposes. Treatment arm complete, both labs.
 
-Four runs in, one lab, and the arms are level on reward — 1 pass and 1 failure each. On reward alone
-that reads as outcome 2, "both fail similarly, the withdrawal reverses". **The reward is the wrong
-thing to look at.**
+The treatment arm is **finished** — six runs, three Anthropic and three OpenAI. The control arm has
+four valid runs with two still landing.
 
-| run | arm | reward | failing cells | the check that fired |
-|---|---|---|---:|---|
-| `a2-control-codex-1` | control | 0.0 | 11 | `audit_explains` |
-| `a2-control-codex-2` | control | 1.0 | 0 | — |
-| `a2-treatment-codex-1` | treatment | 1.0 | 0 | — |
-| `a2-treatment-codex-2` | treatment | 0.0 | 2 | **`executed_iff_called`** |
+**On reward the arms are indistinguishable:**
 
-**The two arms fail on completely disjoint checks.** Not overlapping, not correlated — disjoint. The
-control arm's only failing check is `audit_explains`, on the six `revoke-after-ack` scenarios; every
-one of its eleven failures is `audit records an illegal transition 'ACKED' -> 'REVOKED'`. The
-treatment arm's only failing check is `executed_iff_called`, on `crash-after-tool` and `hostile-mix`:
+| condition | n | passed | pass rate |
+|---|---:|---:|---:|
+| control | 4 | 2 | **0.50** |
+| treatment | 6 | 3 | **0.50** |
+| control / OpenAI | 3 | 2 | 0.67 |
+| treatment / OpenAI | 3 | 2 | 0.67 |
 
-> `Violation: action r0008 is REVOKED with ever_executed=False but the tool recorded 1 side
-> effect(s); an engine may not decide for itself whether the call happened.`
+Identical overall, identical within the lab where both arms are complete. On reward alone this reads
+as pre-registered outcome 2 — "both fail similarly, the withdrawal reverses". **Reward is the wrong
+resolution, and this is the cleanest demonstration of that the project has.**
 
-That is **pre-registered outcome 4**, and it was the one the brief called most interesting:
+**On the check that fires, the arms are disjoint:**
 
-> *treatment removes exactly one axis → the suite decomposes: one axis was spec, one is real.*
-
-Adding one sentence removed the ACKED axis entirely and left a different failure standing — and the
-one left standing is the family's founding mechanism. Not a transition-table bookkeeping rule, but
-the actual dual obligation the task was built to measure: **an engine confronted with an uncertain
-external effect may not decide for itself whether the call happened.** That is a real thing to be
-bad at, and it is what remains when the specification defect is removed.
-
-The prediction was close but not exact. It named `cc267-claude-1`'s mode — stranding actions in
-`IN_DOUBT` rather than resolving them illegally. What survives is the same axis from the opposite
-side: resolving an uncertain action to REVOKED when the tool had in fact executed it. Stranding and
-wrongly-resolving are the two ways to fail one dual obligation, which is exactly why it is one axis
-and not two.
-
-| | control | treatment |
+| | control (4 subjects) | treatment (6 subjects) |
 |---|---|---|
-| instances | 24 | 24 |
-| instances separating nothing in this bank | 13 | 22 |
-| distinct catch sets | 1 | 1 |
-| **independent axes** | **1** | **1** |
-| checks that ever fired | `audit_explains` | `executed_iff_called` |
+| `audit_explains` — the ACKED rule | **17 cells, 2 subjects** | **0 cells, 0 subjects** |
+| `executed_iff_called` | 0 | 4 cells, 2 subjects |
+| `completion` | 0 | 1 cell, 1 subject |
+| total failing cells | 17 | 5 |
+| instances separating nothing | 13 of 24 | 21 of 24 |
+| checks that never fired | 10 of 11 | 9 of 11 |
 
-Both arms measure width 1 at this `n` because only one subject fails in each. The number that
-carries the result is not the width — it is that **the sets are disjoint**.
+**`audit_explains` fires seventeen times in the control arm and zero times across the treatment arm's
+complete six-subject, 144-cell bank.** One sentence, both labs, no residue.
 
-### What this does and does not settle
+What survives appears from **both sides of one dual obligation**, which is why it is one axis:
 
-**It does not settle it.** Four runs, one lab. The Anthropic arms are still in flight, and three
-runs per arm per lab is what the design called for. Specifically:
+- `executed_iff_called` — *"action r0008 is REVOKED with ever_executed=False but the tool recorded 1
+  side effect; an engine may not decide for itself whether the call happened."* It resolved an
+  uncertain action wrongly.
+- `completion` — on `hostile-mix`. It stranded actions rather than resolving them.
 
-- Reward-level: both arms 1-of-2. Fisher's exact p = 1.000, which at this `n` means "no data".
-- Check-level: disjoint, which is a qualitative result and a strong one, but resting on one failing
-  run per arm.
+**The pre-registration named this outcome and named the surviving mode.** It predicted the remaining
+failures would be `cc267-claude-1`'s mode — stranding `IN_DOUBT` rather than resolving it illegally —
+and `a2-treatment-opus-1b` failed exactly there.
 
-**What it does establish** is that reward is the wrong resolution for this question. Two arms with
-identical pass rates are failing at completely different things, and any analysis that stopped at
-`reward` would have concluded "no effect" from data that shows a clean decomposition. That is the
-same error the whole project is about, one level up: a summary statistic that cannot distinguish two
-situations anybody would want distinguished.
+**On the axis counts, stated honestly.** The meter reports width **1** for control and **2** for
+treatment. That is not "the treatment arm gained an axis": the control arm's failures nest (both
+subjects fail the same six scenarios), while the treatment arm's two failures land on different
+subjects and are incomparable. At banks this small the width is a fact about which subject failed,
+not about the suite. The number carrying this result is the 17-versus-0 above.
+
+### One run excluded, and why it matters more than it looks
+
+`a2-control-opus-2` returned reward 0.0 and **244 of 267** — by far the worst score in the
+experiment, and on the control arm, where a bad score is what the hypothesis predicts.
+
+It is excluded. Its `result.json` carries `exception_info.exception_type: NetworkConnectionError`,
+and the agent produced **1,012 output tokens at a cost of $0.41**, against $13–$22 and tens of
+thousands of tokens for every other Opus run here. The harness cut it off and the verifier then
+graded whatever partial engine was on disk.
+
+Counting it would have been quietly disastrous. Its 23 spurious failures fire **four checks the
+control arm otherwise never fires** — `exactly_once`, `expected_executions`, `revocation_ordering`
+and `executed_iff_called`. The clean disjointness in the table above would have become
+`audit_explains` **plus four of the treatment arm's own checks**, and the decomposition result would
+have dissolved into noise, in the direction that flatters the original hypothesis.
+
+It is excluded **mechanically, on `exception_info`, never on cost** — otherwise "this run looks
+wrong" becomes a judgement made case by case in the direction the author prefers. It is preserved
+with an `INFRA.md` beside it, and `a2-control-opus-2b` replaces it.
+
+This is the project's own thesis at one level down: a harness failure that produced a plausible bad
+score on the arm where a bad score was expected. Nothing about the number itself would have given it
+away. The cost line did.
+
+### What this settles and what it does not
+
+**Settled**: the ACKED-terminal axis is a specification defect. One sentence removes it completely,
+in both labs, with no residue. It was counted as difficulty for a month and it was not difficulty.
+
+**Settled**: the family measures something real underneath it. Failures survive the repair, and they
+are the mechanism the task was built around.
+
+**Not settled**: how hard that real thing is. Three runs per arm, and the treatment arm failed 2 of 3
+— but on one cell and two cells respectively, against a suite of 264. Six more runs are in flight.
+
+**Not settled**: whether the surviving failures are themselves `capability`. They have not been
+through the blind protocol. On this project's own rules that makes them `unlabelled`, and
+`unlabelled` blocks.
 
 ### A confound found, and the decision that avoided it
 
@@ -483,9 +508,74 @@ not evidence.
 
 ---
 
-## 7. Net code delta
+## 7. Net code delta — the rule was not met
 
-*Pending — Lane G is in flight. This section will carry the exact delta by directory.*
+**Net lines of code ROSE by 1,419.** The phase rule said they must fall. Stating it first because a
+rule reported at the bottom of a long document is a rule being managed rather than kept.
+
+| area | added | removed | net |
+|---|---:|---:|---:|
+| `src/` | 2,547 | 1,862 | **+685** |
+| `test/` | 875 | 141 | **+734** |
+| **code total** | | | **+1,419** |
+| `reports/` | 1,071 | 604 | +467 |
+| `data/` | 523 | 0 | +523 |
+
+Largest additions and removals in `src/`:
+
+| | lines |
+|---|---:|
+| `src/spec-probe/` (new module, 8 files + README) | **+1,681** |
+| `src/foundry/probe-runner.ts` (pruned) | −844 |
+| `src/adversarial-audit/bundles.ts` (self-graded run path) | −301 |
+| `src/foundry/discovery-calibration.ts` (deleted) | −262 |
+| `src/adversarial-audit/container.ts` | −131 |
+
+### Why, and what is still owed
+
+The deletion that would have made this negative is `src/foundry/probe-runner.ts` in full — 1,838
+lines remaining, plus its 157-line renderer and 328-line test. The brief sanctions it explicitly:
+the mechanism probe is superseded by the spec-only probe. **It was pruned, not retired.**
+
+It was not retired because **the evidence rule forbids it**, and that is a better reason than the
+one I first reached for. `assertPromotionsValid` in `src/foundry/promotion.ts` requires every
+promotion's `sourceProbeId` to resolve to a **live** probe result, and requires the recorded
+`sourceProbeVerdict` to equal the verdict the probe produces when it is actually run. Delete the
+probe and three checked-in promotion records plus a lineage record stop validating — so retiring
+`probe-runner.ts` means editing `data/promotions.json` and `data/lineages.json`, which are preserved
+evidence.
+
+That is a genuine conflict between two of this phase's rules, not an excuse. "Net lines must fall"
+and "preserve, never delete evidence" point in opposite directions here, and the evidence rule wins.
+Retiring the probe properly means first migrating those records to a form that does not require a
+live probe execution to validate — which is real work, and is the debt.
+
+One probe was also kept that four data records do not require. `provider-failover-router-alias-drift`
+(309 lines) supplies the probe-evidence block in
+`reports/deployment-model-alias-rollout-drift-evolution-options.md`. Deleting it does not blank that
+section — it makes the report print *"has not been matched to an executable probe result yet. Status:
+proposal-only"*, which is false: the probe existed and promoted. **A report becoming less true to
+save 309 lines is not a saving.**
+
+One further honest note: an automated pass at deleting the 17 genuinely unreferenced exports was
+attempted and **reverted**. The brace-matching over-consumed and took adjacent code with it, which
+`tsc` caught within seconds. Roughly 150 lines — not worth a hand-audit at this point, and not worth
+an unreliable script at any point.
+
+For the record on who added what: the deletion lane itself removed **2,156 lines** and was net
+negative. The phase is net positive because the same window added `src/spec-probe/` (2,034), its
+tests (898), two data files of preserved evidence (523) and the secret scanner (275).
+
+**What the accounting actually shows**, and it is the part worth keeping: the replacement is smaller
+than the thing it replaces. `src/spec-probe/` is 1,681 lines including its README and does a job the
+2,682-line `probe-runner.ts` was doing badly — the new one is validated against known ground truth
+and can fail; the old one has returned `promote_to_task_shape` on every probe it has ever run. The
+net rose because the old one is still there.
+
+**Owed, and it is a real debt rather than a deferral:** migrate the promotion and lineage records off
+live-probe validation, then retire `probe-runner.ts`, its renderer and its test (≈2,300 lines). That
+alone takes the phase to roughly −900 on code. The migration is the hard half and it is the half
+that keeps the evidence intact.
 
 ---
 

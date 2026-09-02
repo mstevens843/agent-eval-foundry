@@ -353,8 +353,7 @@ export function extractCheckers(
 export function transcriptProse(transcript: string): string {
   const said: string[] = [];
   walkRecords(transcript, (o) => {
-    for (const key of ["text", "description"])
-      if (typeof o[key] === "string") said.push(o[key] as string);
+    for (const key of ["text", "description"]) if (typeof o[key] === "string") said.push(o[key] as string);
   });
   return said.length === 0 ? transcript : said.join("\n");
 }
@@ -488,7 +487,11 @@ export function profileRun(input: ProfileInput): SelfCheckProfile {
   // Same evidence bar, different reach: nobody grading the artifact can see any of it.
   const checkers = input.transcript === null ? [] : extractCheckers(input.transcript, shipped);
   const ephemeral = checkers.flatMap((f) => [
-    ...scanSubmission(f.source).map((sig) => ({ ...sig, source: "ephemeral" as const, locus: `transcript:${f.name}` })),
+    ...scanSubmission(f.source).map((sig) => ({
+      ...sig,
+      source: "ephemeral" as const,
+      locus: `transcript:${f.name}`,
+    })),
     // Same structural argument as for a shipped second file: "this source executes the thing being
     // graded" cannot be said by accident, and it is the only signal that reaches a checker built out
     // of a failure collector rather than out of `assert`.

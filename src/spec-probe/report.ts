@@ -28,7 +28,9 @@ function renderFinding(finding: Finding, index: number): string {
     );
   }
   if (finding.nearest.length > 0) {
-    lines.push("- **closest visible text** (if one of these states the rule, this finding is a false positive):");
+    lines.push(
+      "- **closest visible text** (if one of these states the rule, this finding is a false positive):",
+    );
     for (const ref of finding.nearest) lines.push(`  - \`${ref.path}:${ref.line}\` — ${ref.text}`);
   } else {
     lines.push("- **closest visible text**: none. The package does not mention this at all.");

@@ -6,7 +6,7 @@ tracked as its own evidence stream.
 | item | value |
 |---|---|
 | challenge hash | `805efb58c923f9e081db1b41967392d7` |
-| verifier hash | `a991fc61fe24bcc8a0af67e7d6a2b366` |
+| verifier hash | `da0b305318cac571981be8f6feb6becd` |
 | campaign path | `adversarial-audits/campaigns/deployment-model-alias-rollout-drift-adversarial.json` |
 | bundle path | `bundles/deployment-model-alias-rollout-drift-adversarial` |
 | claim level | `adversarial-ready` |

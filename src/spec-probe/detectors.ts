@@ -19,14 +19,21 @@ import {
   type Corpus,
   groupedWith,
   isStated,
-  nearest,
   mandatedIndirectly,
+  nearest,
   readMandate,
   statesPrecedence,
   statesTerminality,
   strongestPermission,
 } from "./corpus.js";
-import { type HiddenSource, closingBracket, excerpt, inDecisionContext, lineAt, literalsBetween } from "./source.js";
+import {
+  type HiddenSource,
+  closingBracket,
+  excerpt,
+  inDecisionContext,
+  lineAt,
+  literalsBetween,
+} from "./source.js";
 import type { Finding } from "./types.js";
 
 /** Running tally of commitments checked, so silence can be distinguished from blindness. */
@@ -57,8 +64,7 @@ function stringsIn(source: HiddenSource, from: number, to: number): string[] {
 function constantValues(source: HiddenSource): ReadonlyMap<string, string> {
   const out = new Map<string, string>();
   const re = /^\s*([A-Z][A-Z0-9_]*)\s*[:=]/gm;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(source.code)) !== null) {
+  for (const m of source.code.matchAll(re)) {
     const name = m[1];
     if (name === undefined) continue;
     const line = lineAt(source, m.index);
@@ -95,8 +101,7 @@ export function detectThresholds(source: HiddenSource, corpus: Corpus, tally: Ta
   const findings: Finding[] = [];
   const seen = new Set<string>();
   const re = /([A-Za-z_][\w.$[\]()]*)\s*(<=|>=|<|>|===|!==|==|!=)\s*(\d+)\b/g;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(source.code)) !== null) {
+  for (const m of source.code.matchAll(re)) {
     const [, expr, op, digits] = m;
     if (expr === undefined || op === undefined || digits === undefined) continue;
     if (digits === "0" || digits === "1") continue;
@@ -142,8 +147,7 @@ export function detectSetMembership(source: HiddenSource, corpus: Corpus, tally:
   const seen = new Set<string>();
   for (const pattern of MEMBERSHIP) {
     pattern.lastIndex = 0;
-    let m: RegExpExecArray | null;
-    while ((m = pattern.exec(source.code)) !== null) {
+    for (const m of source.code.matchAll(pattern)) {
       const line = lineAt(source, m.index);
       if (!inDecisionContext(source, line)) continue;
       // The members are the literals inside THIS collection's brackets. A line window is not a
@@ -212,8 +216,7 @@ const EMPTY_LITERAL = /^(set\(\)|frozenset\(\)|new Set\(\s*\)|\{\s*\}|\[\s*\]|ne
 function objectLiterals(source: HiddenSource): (readonly [number, number])[] {
   const out: (readonly [number, number])[] = [];
   const opener = /[=:(]\s*\{/g;
-  let m: RegExpExecArray | null;
-  while ((m = opener.exec(source.code)) !== null) {
+  for (const m of source.code.matchAll(opener)) {
     const brace = source.code.indexOf("{", m.index);
     if (brace < 0) continue;
     const end = closingBracket(source, brace);
@@ -226,8 +229,7 @@ function parseEntries(source: HiddenSource, from: number, to: number): Entry[] {
   const entries: Entry[] = [];
   const region = source.code.slice(from, to);
   ENTRY.lastIndex = 0;
-  let m: RegExpExecArray | null;
-  while ((m = ENTRY.exec(region)) !== null) {
+  for (const m of region.matchAll(ENTRY)) {
     const state = m[1] ?? m[2];
     if (state === undefined) continue;
     const literal = (m[3] ?? "").trim();
@@ -315,9 +317,7 @@ export function detectTransitions(source: HiddenSource, corpus: Corpus, tally: T
       findings.push({
         detector: "unstated-transition",
         severity: "high",
-        requirement:
-          `grading treats \`${name}\` as TERMINAL — the hidden table gives it no successor, so any ` +
-          `outgoing transition the subject records is a violation — and no visible file says so`,
+        requirement: `grading treats \`${name}\` as TERMINAL — the hidden table gives it no successor, so any outgoing transition the subject records is a violation — and no visible file says so`,
         hidden: { path: source.path, line: entry.line, text: excerpt(source, entry.line) },
         missing: [`${name} is terminal`],
         nearest: nearest(corpus, [name]),
@@ -380,10 +380,7 @@ export function detectPrecedence(source: HiddenSource, corpus: Corpus, tally: Ta
     {
       detector: "unstated-precedence",
       severity: "low",
-      requirement:
-        `grading applies rules first-match-wins in the order ${hiddenOrder.join(" > ")}, while the ` +
-        `visible package presents them as ${visibleOrder.join(" > ")} and states no precedence. ` +
-        `A case matching two rules is reported under whichever the grader reached first.`,
+      requirement: `grading applies rules first-match-wins in the order ${hiddenOrder.join(" > ")}, while the visible package presents them as ${visibleOrder.join(" > ")} and states no precedence. A case matching two rules is reported under whichever the grader reached first.`,
       hidden: { path: source.path, line, text: excerpt(source, line) },
       missing: [`precedence of ${first} over ${second}`],
       nearest: nearest(corpus, [first, second]),
@@ -397,7 +394,8 @@ const CALL_PREDICATE = /\.\s*(?:method|name|call|fn|op)\s*(?:===|==|!==|!=)\s*["
 const CALL_IN_TUPLE = /\.\s*(?:method|name|call|fn|op)\s+in\s*[([{]/g;
 
 /** Visible language that PROHIBITS rather than obliges. */
-const PROHIBITED = /\b(must not|may not|cannot|never|forbidden|illegal|prohibited|do not|don't|is not permitted|are not permitted)\b/i;
+const PROHIBITED =
+  /\b(must not|may not|cannot|never|forbidden|illegal|prohibited|do not|don't|is not permitted|are not permitted)\b/i;
 
 /**
  * Does the grader punish the ABSENCE of this call, or its PRESENCE?
@@ -443,7 +441,8 @@ function callPolarity(source: HiddenSource, line: number): Polarity | null {
   const statement = (source.lines[line - 1]?.raw ?? "").trim();
 
   // 1. Inline guard: `if (!calls.some(c => c.method === "x"))` versus `if (calls.some(...))`.
-  if (/\bif\s*\(\s*!/.test(statement) || /\bif\s+not\b/.test(statement)) return { polarity: "required", guardLine: line };
+  if (/\bif\s*\(\s*!/.test(statement) || /\bif\s+not\b/.test(statement))
+    return { polarity: "required", guardLine: line };
 
   // 2. The observation is stored, then tested a few lines later.
   const assigned = /(?:const|let|var)\s+([A-Za-z_]\w*)\s*=/.exec(statement)?.[1];
@@ -456,7 +455,11 @@ function callPolarity(source: HiddenSource, line: number): Polarity | null {
 
   if (assigned !== undefined) {
     const v = esc(assigned);
-    if (new RegExp(`(!\\s*${v}\\b)|(\\b${v}(?:\\.length)?\\s*(?:===|==)\\s*0)|(\\b${v}(?:\\.length)?\\s*<\\s*1)|(\\bnot\\s+${v}\\b)`).test(text)) {
+    if (
+      new RegExp(
+        `(!\\s*${v}\\b)|(\\b${v}(?:\\.length)?\\s*(?:===|==)\\s*0)|(\\b${v}(?:\\.length)?\\s*<\\s*1)|(\\bnot\\s+${v}\\b)`,
+      ).test(text)
+    ) {
       return { polarity: "required", guardLine: line };
     }
     if (
@@ -488,7 +491,8 @@ function callPolarity(source: HiddenSource, line: number): Polarity | null {
   }
 
   // 4. Last resort, and only in the unambiguous direction.
-  if (/\bif\s*\(\s*[^)]*\.some\(/.test(text) && !/\bif\s*\(\s*!/.test(text)) return { polarity: "forbidden", guardLine: line };
+  if (/\bif\s*\(\s*[^)]*\.some\(/.test(text) && !/\bif\s*\(\s*!/.test(text))
+    return { polarity: "forbidden", guardLine: line };
 
   // Unclassifiable. Reporting an unknown polarity as "required" is how the inverted findings got
   // written in the first place, so it is dropped instead — a silent miss beats a confident lie in a
@@ -511,8 +515,7 @@ export function detectMandatoryCalls(source: HiddenSource, corpus: Corpus, tally
   const seen = new Set<string>();
   for (const pattern of [CALL_PREDICATE, CALL_IN_TUPLE]) {
     pattern.lastIndex = 0;
-    let m: RegExpExecArray | null;
-    while ((m = pattern.exec(source.code)) !== null) {
+    for (const m of source.code.matchAll(pattern)) {
       const line = lineAt(source, m.index);
       // Decision context is tested at the GUARD, not at the observation. A predicate helper that
       // returns `some(method === "currentApproval") && some(method === "currentToken")` sits a
@@ -528,7 +531,9 @@ export function detectMandatoryCalls(source: HiddenSource, corpus: Corpus, tally
       // both, which is the opposite of what the code requires, and it double-counts the finding.
       const alternatives = stringsIn(source, line, line + 2).filter((m) => /^[a-z][A-Za-z0-9_]{2,}$/.test(m));
       if (alternatives.length === 0) continue;
-      const disjunctive = /\|\||\bor\b/.test((source.lines[line - 1]?.code ?? "") + (source.lines[line]?.code ?? ""));
+      const disjunctive = /\|\||\bor\b/.test(
+        (source.lines[line - 1]?.code ?? "") + (source.lines[line]?.code ?? ""),
+      );
       const groups = disjunctive ? [alternatives] : alternatives.map((m) => [m]);
 
       for (const group of groups) {

@@ -208,10 +208,7 @@ export function parsePromotion(v: unknown, path: string): ProbeToFamilyPromotion
   // are root-caused `spec-underspecified`; under the old check alone they would have carried a
   // `difficulty-evidenced` promotion, which is the exact claim the last two phases spent their time
   // withdrawing.
-  if (
-    evidence.claimedEvidenceLevel === "difficulty-evidenced" &&
-    evidence.capabilityLabelledTrials === 0
-  ) {
+  if (evidence.claimedEvidenceLevel === "difficulty-evidenced" && evidence.capabilityLabelledTrials === 0) {
     fail(
       "PROMOTION_DIFFICULTY_UNATTRIBUTED",
       `${path}.evidence.capabilityLabelledTrials`,

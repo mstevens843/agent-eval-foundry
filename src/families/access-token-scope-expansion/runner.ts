@@ -12,7 +12,7 @@ import {
   withAttempt,
 } from "./truth.js";
 import type { AuthorityFacade, Subject, SubjectReport } from "./types.js";
-import { CHECKS, type Failure, verify } from "./verify.js";
+import { type Failure, verify } from "./verify.js";
 
 export interface CellResult {
   readonly scenarioId: string;
@@ -142,7 +142,6 @@ export function toMatrix(run: RunResult): Matrix {
       task_sha256: null,
       suite_shape: `${run.scenarios.length} scenarios / ${graded.length} subjects / ${run.spaceSize} points in the declared space`,
       checks_total: run.scenarios.length,
-      checks_declared: [...CHECKS],
       extracted_from: [
         "src/families/access-token-scope-expansion/runner.ts (in-process sweep)",
         "src/families/access-token-scope-expansion/verify.ts (authority-ledger grading)",

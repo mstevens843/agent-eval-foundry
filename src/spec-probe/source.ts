@@ -50,7 +50,10 @@ const BLANK = (s: string) => " ".repeat(s.length);
  * inside an error message; the quotes stay so the strings are still findable as literals, and the
  * bodies are recovered separately into `strings`.
  */
-function strip(source: string, language: Language): { code: string; strings: { value: string; line: number }[] } {
+function strip(
+  source: string,
+  language: Language,
+): { code: string; strings: { value: string; line: number }[] } {
   if (language === "text") return { code: source, strings: [] };
   const out: string[] = [];
   const strings: { value: string; line: number }[] = [];
@@ -169,8 +172,7 @@ export function literalsBetween(source: HiddenSource, start: number, end: number
   const text = source.raw.slice(start, Math.min(end, source.raw.length));
   const out: string[] = [];
   const re = /"((?:[^"\\]|\\.)*)"|'((?:[^'\\]|\\.)*)'/g;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(text)) !== null) {
+  for (const m of text.matchAll(re)) {
     const value = m[1] ?? m[2];
     if (value !== undefined && value.length > 0) out.push(value);
   }

@@ -8,7 +8,13 @@
 // See README.md in this directory for the input contract and the measured validation numbers.
 
 export { buildCorpus } from "./corpus.js";
-export { type Adjudication, MIN_REASON_CHARS, loadAdjudications, probeGate, renderProbeGate } from "./gate.js";
+export {
+  type Adjudication,
+  MIN_REASON_CHARS,
+  loadAdjudications,
+  probeGate,
+  renderProbeGate,
+} from "./gate.js";
 export { blocking, probe, summarise } from "./probe.js";
 export { renderProbeReport, renderSweep } from "./report.js";
 export { directoryTarget, familyTarget, probeableFamilies, unprobeableFamilies } from "./targets.js";

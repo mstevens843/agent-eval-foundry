@@ -15,7 +15,7 @@
 // evidence, which is the class this repository exists to catch, so the guards against it are the last
 // ones that should go untested.
 
-import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -24,12 +24,13 @@ import { importOutboxTrialDirectories, readOutboxGrading } from "../src/trials/h
 const scratch = () => mkdtempSync(join(tmpdir(), "outbox-import-"));
 
 /** A CTRF report with `n` parametrized results carrying `tags` tuples, plus an optional summary. */
-function ctrf(dir: string, tests: readonly Record<string, unknown>[], summary?: Record<string, unknown>): string {
+function ctrf(
+  dir: string,
+  tests: readonly Record<string, unknown>[],
+  summary?: Record<string, unknown>,
+): string {
   const path = join(dir, "ctrf.json");
-  writeFileSync(
-    path,
-    JSON.stringify({ results: { tests, ...(summary ? { summary } : {}) } }, null, 1),
-  );
+  writeFileSync(path, JSON.stringify({ results: { tests, ...(summary ? { summary } : {}) } }, null, 1));
   return path;
 }
 
@@ -38,8 +39,7 @@ function ctrf(dir: string, tests: readonly Record<string, unknown>[], summary?: 
  * — and its identity comes from its INDEX in that list, which is exactly why a count mismatch is
  * unrecoverable rather than merely untidy.
  */
-const TAG = (...tuples: readonly string[]) =>
-  `parametrize::name,seed,keys,check::[${tuples.join(", ")}]`;
+const TAG = (...tuples: readonly string[]) => `parametrize::name,seed,keys,check::[${tuples.join(", ")}]`;
 
 const T = (name: string, seed: number, keys: number, check: string) =>
   `('${name}', ${seed}, ${keys}, '${check}')`;

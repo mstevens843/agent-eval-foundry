@@ -92,6 +92,7 @@ import {
   generateScenarios,
   selectMeasuredSet,
 } from "./families/prompt-injection-containment/scenarios.js";
+import { CHECKS as PIC_CHECK_NAMES } from "./families/prompt-injection-containment/verify.js";
 import {
   BUILT_FAMILIES,
   BUILT_FAMILY_IDS,
@@ -621,6 +622,23 @@ function budgetCommand(argv: readonly string[]): string {
 function familyCommand(sub: string, root: string): string {
   void root;
   const run = runFamily(ALL_SUBJECTS);
+  /**
+   * The declared check universe, attached here rather than in the family's runner.
+   *
+   * `family run` with no `--family` takes this legacy path, which builds the matrix directly and
+   * never reaches `sweep()` in the registry — so the check-firing statistic silently read
+   * "universe not declared" for the one family that most needed it: this suite fires 5 of its 9
+   * checks, and without a denominator the report said "5 distinct checks fired", which reads as
+   * complete.
+   *
+   * It goes here and not in `runner.ts` because every `runner.ts` is hashed into the verifier hash
+   * that gates whether a counted adversarial audit still counts. Metadata that cannot affect
+   * grading must not rotate that hash.
+   */
+  const declared = (m: Matrix): Matrix => ({
+    ...m,
+    provenance: { ...m.provenance, checks_declared: [...PIC_CHECK_NAMES] },
+  });
   const failures = referenceFailures(run);
   if (failures.length > 0 && sub !== "scenarios") {
     // A family whose reference fails is measuring its own bugs. Refuse rather than emit a matrix
@@ -645,11 +663,11 @@ function familyCommand(sub: string, root: string): string {
       )}\n`;
     }
     case "run":
-      return `${JSON.stringify(toMatrix(run), null, 2)}\n`;
+      return `${JSON.stringify(declared(toMatrix(run)), null, 2)}\n`;
     case "report":
-      return renderFamilyReport({ run, axis: measure(toMatrix(run), { nullTrials: 3 }) });
+      return renderFamilyReport({ run, axis: measure(declared(toMatrix(run)), { nullTrials: 3 }) });
     case "axis":
-      return renderReport(measure(toMatrix(run), { nullTrials: 3 }));
+      return renderReport(measure(declared(toMatrix(run)), { nullTrials: 3 }));
     case "trials": {
       const { run: r, trials, evidence } = familyEvidenceFor(root);
       return renderTrialReadinessReport(r, trials, evidence);
@@ -3878,10 +3896,7 @@ function allCommand(argv: readonly string[], root: string): string {
     const base = analysisBase(root);
     const allTrials = base.allTrials;
     const selfCheckProfiles = selfCheckProfilesFor(base);
-    write(
-      "self-check-behavior-report.md",
-      renderSelfCheckBehavior({ profiles: selfCheckProfiles }),
-    );
+    write("self-check-behavior-report.md", renderSelfCheckBehavior({ profiles: selfCheckProfiles }));
 
     const qualityRows = qualityRowsFor(base, selfCheckProfiles);
     write("provider-submission-quality-report.md", renderSubmissionQuality(qualityRows));
@@ -4870,10 +4885,7 @@ export function main(argv: readonly string[]): number {
         }
         if (sub === "self-check") {
           const base = analysisBase(root);
-          emit(
-            argv,
-            renderSelfCheckBehavior({ profiles: selfCheckProfilesFor(base) }),
-          );
+          emit(argv, renderSelfCheckBehavior({ profiles: selfCheckProfilesFor(base) }));
           return 0;
         }
         throw new Error(

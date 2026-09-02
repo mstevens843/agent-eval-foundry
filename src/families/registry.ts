@@ -35,6 +35,7 @@ import { INTENDED_CHECK as PIC_CHECKS } from "../reports/trial-report.js";
 import { RULES as PIC_RULES } from "./prompt-injection-containment/policy.js";
 import * as pic from "./prompt-injection-containment/runner.js";
 import * as picScenarios from "./prompt-injection-containment/scenarios.js";
+import { CHECKS as PIC_CHECK_NAMES } from "./prompt-injection-containment/verify.js";
 
 import { BASELINES as MEM_BASELINES, INTENDED_CHECK as MEM_CHECKS } from "./memory-poisoning/mutants.js";
 import { RULES as MEM_RULES } from "./memory-poisoning/policy.js";
@@ -177,6 +178,15 @@ const sweep = <C extends { scenarioId: string; subjectId: string; failures: read
   matrix: Matrix,
   intended: Readonly<Record<string, string>>,
   baselines: readonly string[],
+  /**
+   * The family's declared check universe, injected into the matrix here rather than in its runner.
+   *
+   * Every `runner.ts` is hashed by `VERIFIER_PATHS` into the verifier hash that decides whether a
+   * counted adversarial audit still counts. Adding this two-line metadata field to the runners
+   * rotated eight verifier hashes over a change that cannot affect grading, so it moved here:
+   * `registry.ts` is not hashed, and it already holds every family's check list.
+   */
+  checks?: readonly string[],
 ): FamilySweep => {
   const mutantsCaught = Object.entries(intended).map(([mutantId, check]) => {
     const own = cells.filter((c) => c.subjectId === mutantId);
@@ -186,7 +196,10 @@ const sweep = <C extends { scenarioId: string; subjectId: string; failures: read
   return {
     scenarioCount: scenarios.length,
     spaceSize,
-    matrix,
+    matrix:
+      checks === undefined
+        ? matrix
+        : { ...matrix, provenance: { ...matrix.provenance, checks_declared: [...checks] } },
     referenceFailures: cells
       .filter((c) => c.subjectId === "reference" && c.failures.length > 0)
       .map((c) => ({
@@ -214,7 +227,12 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     name: "Prompt-injection containment",
     domain: "agent tool-use with untrusted retrieved content",
     mechanisms: ["prompt-injection-via-retrieval", "context-contamination", "permission-boundary"],
-    checks: [...new Set(Object.values(PIC_CHECKS))],
+    // Its own `verify.ts` declares nine. This field read the INTENDED_CHECK map instead, whose
+    // distinct values are three, so every consumer under-counted this family by six — including the
+    // check-firing statistic, which would have printed "3 of 3 fired, 100%" for a suite that in fact
+    // fires five of nine. A coverage number that flatters by construction is the defect this phase
+    // is about, one level down.
+    checks: [...PIC_CHECK_NAMES],
     ruleCodes: PIC_RULES.map((r) => r.code),
     space: PIC_SPACE,
     knobPurpose: {
@@ -227,10 +245,15 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     },
     run: () => {
       const run = pic.runFamily();
-      return sweep(run.cells, run.scenarios, run.spaceSize, pic.toMatrix(run), PIC_CHECKS, [
-        "nop-faker",
-        "over-blocker",
-      ]);
+      return sweep(
+        run.cells,
+        run.scenarios,
+        run.spaceSize,
+        pic.toMatrix(run),
+        PIC_CHECKS,
+        ["nop-faker", "over-blocker"],
+        PIC_CHECK_NAMES,
+      );
     },
     challenge: buildChallengePackage,
     leakProfile: PIC_PROFILE,
@@ -259,7 +282,15 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     },
     run: () => {
       const run = mem.runFamily();
-      return sweep(run.cells, run.scenarios, run.spaceSize, mem.toMatrix(run), MEM_CHECKS, MEM_BASELINES);
+      return sweep(
+        run.cells,
+        run.scenarios,
+        run.spaceSize,
+        mem.toMatrix(run),
+        MEM_CHECKS,
+        MEM_BASELINES,
+        MEM_CHECK_NAMES,
+      );
     },
     challenge: buildMemoryChallengePackage,
     leakProfile: MEMORY_PROFILE,
@@ -289,7 +320,15 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     },
     run: () => {
       const run = ui.runFamily();
-      return sweep(run.cells, run.scenarios, run.spaceSize, ui.toMatrix(run), UI_CHECKS, UI_BASELINES);
+      return sweep(
+        run.cells,
+        run.scenarios,
+        run.spaceSize,
+        ui.toMatrix(run),
+        UI_CHECKS,
+        UI_BASELINES,
+        UI_CHECK_NAMES,
+      );
     },
     challenge: buildUiChallengePackage,
     leakProfile: UI_PROFILE,
@@ -329,7 +368,15 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     },
     run: () => {
       const run = live.runFamily();
-      return sweep(run.cells, run.scenarios, run.spaceSize, live.toMatrix(run), LIVE_CHECKS, LIVE_BASELINES);
+      return sweep(
+        run.cells,
+        run.scenarios,
+        run.spaceSize,
+        live.toMatrix(run),
+        LIVE_CHECKS,
+        LIVE_BASELINES,
+        LIVE_CHECK_NAMES,
+      );
     },
     challenge: buildLiveDomChallengePackage,
     leakProfile: LIVE_DOM_PROFILE,
@@ -370,6 +417,7 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
         checker.toMatrix(run),
         CHECKER_INTENDED_CHECK,
         CHECKER_BASELINES,
+        CHECKER_CHECK_NAMES,
       );
     },
     challenge: buildCheckerRequiredChallengePackage,
@@ -407,6 +455,7 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
         access.toMatrix(run),
         ACCESS_CHECKS,
         ACCESS_BASELINES,
+        ACCESS_CHECK_NAMES,
       );
     },
     challenge: buildAccessTokenChallengePackage,
@@ -455,6 +504,7 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
         wallet.toMatrix(run),
         WALLET_CHECKS,
         WALLET_BASELINES,
+        WALLET_CHECK_NAMES,
       );
     },
     challenge: buildDelegatedWalletChallengePackage,
@@ -505,6 +555,7 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
         deployment.toMatrix(run),
         DEPLOYMENT_CHECKS,
         DEPLOYMENT_BASELINES,
+        DEPLOYMENT_CHECK_NAMES,
       );
     },
     challenge: buildDeploymentAliasChallengePackage,

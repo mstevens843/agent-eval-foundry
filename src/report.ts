@@ -36,11 +36,13 @@ function headline(r: AxisReport): readonly string[] {
   const checksRow =
     r.provenance.checks_total === null ? [] : [`| checks in the suite | **${r.provenance.checks_total}** |`];
   // The denominator that matters, when the suite is willing to name its own checks.
+  const declaredChecks = r.provenance.checks_declared ?? null;
+  const firedCount = declaredChecks === null ? 0 : declaredChecks.length - (r.checksNeverFired?.length ?? 0);
   const firingRow =
-    r.provenance.checks_declared === null
+    declaredChecks === null
       ? []
       : [
-          `| checks that have ever fired | **${r.provenance.checks_declared.length - (r.checksNeverFired?.length ?? 0)}** of ${r.provenance.checks_declared.length} (${pct(r.provenance.checks_declared.length - (r.checksNeverFired?.length ?? 0), r.provenance.checks_declared.length)}) |`,
+          `| checks that have ever fired | **${firedCount}** of ${declaredChecks.length} (${pct(firedCount, declaredChecks.length)}) |`,
         ];
   return [
     `# Axis report: ${r.suite}`,
@@ -196,11 +198,8 @@ function subjects(r: AxisReport): readonly string[] {
  */
 function checks(r: AxisReport): readonly string[] {
   if (r.checkStats.length === 0 && r.checksNeverFired === null) return [];
-  const declared = r.provenance.checks_declared;
-  const lines = [
-    "## Checks",
-    "",
-  ];
+  const declared = r.provenance.checks_declared ?? null;
+  const lines = ["## Checks", ""];
   if (declared === null) {
     lines.push(
       `${r.checkStats.length} distinct check(s) fired in this bank. The suite does not declare its`,

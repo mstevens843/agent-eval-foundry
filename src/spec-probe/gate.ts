@@ -33,7 +33,11 @@ export interface Adjudication {
   /** Why. Free text, and it has to be long enough to have said something. */
   readonly reason: string;
   readonly evidence?: readonly string[];
-  readonly adjudicatedBy: { readonly kind: "human" | "automated"; readonly id: string; readonly date: string };
+  readonly adjudicatedBy: {
+    readonly kind: "human" | "automated";
+    readonly id: string;
+    readonly date: string;
+  };
   /**
    * `path:line` of the hidden site this adjudication read.
    *
@@ -138,7 +142,11 @@ const identity = (familyId: string, detector: string, requirement: string): stri
  * hatch, and it is deliberately a different word so it reads as a decision in the file rather than
  * as a conclusion.
  */
-export function probeGate(repoRoot: string, familyId: string, adjudications: readonly Adjudication[]): ProbeGateResult {
+export function probeGate(
+  repoRoot: string,
+  familyId: string,
+  adjudications: readonly Adjudication[],
+): ProbeGateResult {
   const result = probe(familyTarget(repoRoot, familyId));
   const extracted = result.cleared + result.findings.length;
   const high = result.findings.filter((f) => f.severity === "high");
@@ -187,14 +195,18 @@ export function probeGate(repoRoot: string, familyId: string, adjudications: rea
     }));
 
   const blind = extracted === 0;
-  return { familyId, blocking: high, unadjudicated, stale, blind, passes: !blind && unadjudicated.length === 0 };
+  return {
+    familyId,
+    blocking: high,
+    unadjudicated,
+    stale,
+    blind,
+    passes: !blind && unadjudicated.length === 0,
+  };
 }
 
 export function renderProbeGate(results: readonly ProbeGateResult[]): string {
-  const lines: string[] = [
-    "| family | high findings | unadjudicated | verdict |",
-    "|---|---:|---:|---|",
-  ];
+  const lines: string[] = ["| family | high findings | unadjudicated | verdict |", "|---|---:|---:|---|"];
   for (const r of results) {
     const verdict = r.blind ? "**BLIND — probe read nothing, NOT clean**" : r.passes ? "pass" : "**BLOCKED**";
     lines.push(`| \`${r.familyId}\` | ${r.blocking.length} | ${r.unadjudicated.length} | ${verdict} |`);
@@ -211,10 +223,15 @@ export function renderProbeGate(results: readonly ProbeGateResult[]): string {
   }
   const blocked = results.filter((r) => !r.passes);
   if (blocked.length > 0) {
-    lines.push("", "Blocked families carry a high-severity probe finding that nobody has written a reason about:");
+    lines.push(
+      "",
+      "Blocked families carry a high-severity probe finding that nobody has written a reason about:",
+    );
     for (const r of blocked) {
       for (const f of r.unadjudicated) {
-        lines.push(`- \`${r.familyId}\` — ${f.detector}: ${f.missing[0]} (\`${f.hidden.path}:${f.hidden.line}\`)`);
+        lines.push(
+          `- \`${r.familyId}\` — ${f.detector}: ${f.missing[0]} (\`${f.hidden.path}:${f.hidden.line}\`)`,
+        );
       }
     }
     lines.push(

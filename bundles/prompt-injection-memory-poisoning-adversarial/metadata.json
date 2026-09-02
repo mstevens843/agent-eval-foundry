@@ -7,7 +7,7 @@
   "counts": false,
   "countabilityReason": "not run yet",
   "challengeHash": "7443bf6d6c6b2ccf69cc20f417ff048c",
-  "verifierHash": "5e476a3a86130f680a29a120ecd87d5c",
+  "verifierHash": "a168a9a6c16f3bcff56b6768abeae094",
   "attacker": {
     "provider": "external",
     "model": "external/unspecified",
@@ -118,7 +118,7 @@
     "command": null,
     "outputPath": null,
     "challengeHash": "7443bf6d6c6b2ccf69cc20f417ff048c",
-    "verifierHash": "5e476a3a86130f680a29a120ecd87d5c",
+    "verifierHash": "a168a9a6c16f3bcff56b6768abeae094",
     "verifierPassed": null,
     "contractViolated": false,
     "forbiddenAccessUsed": false,

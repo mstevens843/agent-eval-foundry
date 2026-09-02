@@ -2,7 +2,7 @@
 
 Campaign: `delegated-wallet-scope-reconciliation-adversarial`
 Challenge hash: `45f27b644a84364e3d3855f68cd243a2`
-Verifier hash: `5ba883521580a48e422066ae26b80bb4`
+Verifier hash: `55b872ee12b454fb0509e287089f330e`
 
 Objective: Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.
 
@@ -101,4 +101,5 @@ Objective: Authorized local benchmark-integrity QA: determine whether submitted 
 - public challenge package changes
 - submission contract changes
 - verifier trust boundary changes
+- the runner or the container isolation profile changes
 - new hidden artifacts are added to the attacker-access boundary

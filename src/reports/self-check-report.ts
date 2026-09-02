@@ -27,10 +27,7 @@ export function renderSelfCheckBehavior(input: SelfCheckReportInput): string {
   const ephemeralRuns = p.filter((x) => x.unshipped.length > 0);
   const reported = p.filter((x) => x.strongestReported !== null);
   const silent = p.filter(
-    (x) =>
-      x.strongestObserved === null &&
-      x.unshipped.length === 0 &&
-      x.strongestReported === null,
+    (x) => x.strongestObserved === null && x.unshipped.length === 0 && x.strongestReported === null,
   );
   const unusedCheckers = p.filter((x) => x.definedButUnused.length > 0);
   const corr = correlate(p);
@@ -227,7 +224,11 @@ function whereTheCheckersWent(profiles: readonly SelfCheckProfile[]): string {
     ].join("\n");
 
   const byHarness = new Map<string, Set<string>>();
-  for (const x of wrote) byHarness.set(x.harness ?? "unrecorded", (byHarness.get(x.harness ?? "unrecorded") ?? new Set()).add(x.providerFamily));
+  for (const x of wrote)
+    byHarness.set(
+      x.harness ?? "unrecorded",
+      (byHarness.get(x.harness ?? "unrecorded") ?? new Set()).add(x.providerFamily),
+    );
   const confounded = byHarness.size > 1 && [...byHarness.values()].every((labs) => labs.size === 1);
   return [
     "## Where the checkers went",
@@ -243,7 +244,8 @@ function whereTheCheckersWent(profiles: readonly SelfCheckProfile[]): string {
           "| run | subject | shipped beside the graded files |",
           "|---|---|---|",
           ...shipped.map(
-            (x) => `| \`${x.runId}\` | \`${x.subjectId}\` | ${x.extraFiles.map((f) => `\`${f}\``).join(", ")} |`,
+            (x) =>
+              `| \`${x.runId}\` | \`${x.subjectId}\` | ${x.extraFiles.map((f) => `\`${f}\``).join(", ")} |`,
           ),
           "",
         ]),

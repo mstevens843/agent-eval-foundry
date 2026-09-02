@@ -33,7 +33,14 @@ export function buildCorpus(files: readonly ProbeFile[]): Corpus {
       lines.push({ path: file.path, line: i + 1, text: text.trim() });
     }
   }
-  return { files, lines, haystack: files.map((f) => f.source).join("\n").toLowerCase() };
+  return {
+    files,
+    lines,
+    haystack: files
+      .map((f) => f.source)
+      .join("\n")
+      .toLowerCase(),
+  };
 }
 
 const NUMBER_WORDS: Readonly<Record<string, string>> = {
@@ -86,7 +93,8 @@ export function nearest(corpus: Corpus, tokens: readonly string[], limit = 4): S
 }
 
 const MANDATORY = /\b(must|shall|is required|are required|required to|always|never|has to|have to)\b/i;
-const PERMISSIVE = /\b(may|can|optional|optionally|is allowed to|are allowed to|convenience|if it wishes|need not)\b/i;
+const PERMISSIVE =
+  /\b(may|can|optional|optionally|is allowed to|are allowed to|convenience|if it wishes|need not)\b/i;
 
 export interface MandateReading {
   /** A visible sentence imposing the requirement, if one exists. */
@@ -149,7 +157,8 @@ export function mandatedIndirectly(corpus: Corpus, method: string): SourceRef | 
     .split(/\s+/)
     .filter((w) => w.length >= 4);
   if (words.length === 0) return undefined;
-  const observation = /\b(observ\w*|read|reads|query\w*|fetch\w*|from the (current|live) \w+|current authority|live authority|source of truth)\b/i;
+  const observation =
+    /\b(observ\w*|read|reads|query\w*|fetch\w*|from the (current|live) \w+|current authority|live authority|source of truth)\b/i;
   return corpus.lines.find((ref) => {
     if (!MANDATORY.test(ref.text)) return false;
     if (!observation.test(ref.text)) return false;
@@ -231,7 +240,8 @@ export function strongestPermission(corpus: Corpus, words: readonly string[]): S
 
 /** Does the visible text state an order between these two rule codes? */
 export function statesPrecedence(corpus: Corpus, first: string, second: string): SourceRef | undefined {
-  const order = /\b(precedence|priority|takes priority|before|first|in order|earlier|outranks|overrides|wins)\b/i;
+  const order =
+    /\b(precedence|priority|takes priority|before|first|in order|earlier|outranks|overrides|wins)\b/i;
   const a = first.toLowerCase();
   const b = second.toLowerCase();
   return corpus.lines.find((ref) => {

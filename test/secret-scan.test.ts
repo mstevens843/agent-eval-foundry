@@ -67,11 +67,11 @@ describe("the scanner does not become the leak", () => {
       // Run the real CLI against a real file, via git's untracked listing, in a throwaway repo so
       // nothing here depends on the state of the working tree.
       execFileSync("git", ["init", "-q"], { cwd: dir });
-      const out = execFileSync(
-        process.execPath,
-        [join(ROOT, "scripts", "secret-scan.mjs")],
-        { cwd: dir, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
-      );
+      const out = execFileSync(process.execPath, [join(ROOT, "scripts", "secret-scan.mjs")], {
+        cwd: dir,
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "pipe"],
+      });
       // The scanner resolves its own root, not the cwd, so a clean exit here only tells us it ran.
       expect(out).toContain("secret-scan");
     } catch (err) {

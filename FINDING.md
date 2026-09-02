@@ -150,23 +150,28 @@ carrying facts "from the current authority". That claim is withdrawn.
 Both arms were run as a paid controlled experiment. The first matched pair looked decisive: control
 **0.0**, treatment **1.0**, one sentence apart, same model and same lab.
 
-The second control run scored **1.0**. And the second *treatment* run scored **0.0**.
+The second control run scored **1.0**. And a treatment run scored **0.0**.
 
-On reward the two arms are level — one pass, one failure each — which reads as "no effect". **The
-reward is the wrong resolution.** The two arms fail on completely disjoint checks:
+On reward the arms look similar, which reads as "no effect". **Reward is the wrong resolution.** At
+three runs per arm across both labs, the check that fires is *disjoint*:
 
-| arm | failing checks |
-|---|---|
-| control | `audit_explains` only — 11 cells, every one `audit records an illegal transition 'ACKED' -> 'REVOKED'` |
-| treatment | `executed_iff_called` only — 2 cells, `an engine may not decide for itself whether the call happened` |
+| | control (n=3) | treatment (n=3) |
+|---|---|---|
+| `audit_explains` — the ACKED rule | **17 failures, 2 of 3 subjects** | **0** |
+| `executed_iff_called` | 0 | 2 |
+| `completion` | 0 | 1 |
 
-Adding one sentence did not make the task easier. It **removed one axis and left another standing**,
-and the one left standing is the mechanism the task was actually built around: what an agent does
-with an external effect whose outcome it cannot observe. The one removed was the author's
-specification.
+One sentence took the ACKED failures from seventeen to **zero**, in both labs, with no residue. What
+survives is the mechanism the task was actually built around — what an agent does with an external
+effect whose outcome it cannot observe — and it shows up from both sides of that one obligation:
+resolving an uncertain action wrongly (`executed_iff_called`), and refusing to resolve it at all
+(`completion`).
+
+So the task was measuring two things and calling them one. One was real. One was the author's
+specification, and six of the twenty-four scenarios existed only to hit it.
 
 An analysis that stopped at the pass rate would have concluded "no effect" from data showing a clean
-decomposition — which is the same error this whole document is about, one level up.
+decomposition — the same error this whole document is about, one level up.
 
 The control arm also does not fail reliably, and the difference between its two runs is one SQL
 clause:

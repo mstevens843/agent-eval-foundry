@@ -25,6 +25,7 @@ import {
 import { checkChallengePackage } from "../challenge/package-check.js";
 import { ALL_SUBJECTS, runFamily, toMatrix } from "../families/prompt-injection-containment/runner.js";
 import type { RunResult } from "../families/prompt-injection-containment/runner.js";
+import { CHECKS as PIC_CHECK_NAMES } from "../families/prompt-injection-containment/verify.js";
 import { BUILT_FAMILY_IDS, builtFamily } from "../families/registry.js";
 import { readBrowserBackedMeasurement } from "../families/ui-replay-browser-backed/measurement.js";
 import { browserBackedReadiness } from "../families/ui-replay-browser-backed/readiness.js";
@@ -237,7 +238,16 @@ export function familyEvidenceFor(root: string, familyId: string = PIC_FAMILY): 
       ...agentAxisFacts(trials.records, stale),
       ...rootCauseFacts(countedAgentTrials(trials), dirs),
     },
-    matrix: toMatrix(run),
+    // The declared check universe, attached here rather than inside the runner that produces the
+    // matrix. Every `runner.ts` is hashed into the verifier hash that gates whether a counted
+    // adversarial audit still counts, so metadata that cannot affect grading must not live there.
+    //
+    // Without it this family's axis report read "5 distinct checks fired", with no denominator —
+    // which reads as complete. The denominator is 9, and 5 of 9 is the number worth printing.
+    matrix: {
+      ...toMatrix(run),
+      provenance: { ...toMatrix(run).provenance, checks_declared: [...PIC_CHECK_NAMES] },
+    },
     staleTrials: [...stale].sort(),
   };
 }

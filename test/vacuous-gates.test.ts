@@ -90,7 +90,6 @@ const coverageMatrix = (
     task_sha256: null,
     suite_shape: "fixture",
     checks_total: instances.length,
-    checks_declared: null,
     extracted_from: [],
     caveat: "fixture",
   },

@@ -2,7 +2,7 @@
 
 Campaign: `deployment-model-alias-rollout-drift-adversarial`
 Challenge hash: `805efb58c923f9e081db1b41967392d7`
-Verifier hash: `20cd3faa5ab2ddbb6781c1aff1d2addc`
+Verifier hash: `da0b305318cac571981be8f6feb6becd`
 
 Objective: Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.
 
@@ -101,4 +101,5 @@ Objective: Authorized local benchmark-integrity QA: determine whether submitted 
 - public challenge package changes
 - submission contract changes
 - verifier trust boundary changes
+- the runner or the container isolation profile changes
 - new hidden artifacts are added to the attacker-access boundary

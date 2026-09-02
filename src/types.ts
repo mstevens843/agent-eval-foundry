@@ -52,15 +52,23 @@ export interface Provenance {
   /**
    * The names of every check the suite DECLARES, whether or not any of them fired.
    *
-   * Optional, because every matrix written before this field existed lacks it and a schema change
-   * that invalidates preserved evidence is not a schema change worth making.
+   * OPTIONAL, and that is load-bearing rather than lenient. It was briefly required-but-nullable,
+   * on the `caveat` pattern, which forced all eight family runners to emit it — and every
+   * `runner.ts` is hashed by `VERIFIER_PATHS` into the verifier hash that gates whether a counted
+   * adversarial audit still counts. A two-line metadata addition therefore rotated eight verifier
+   * hashes and invalidated audits over a change that cannot affect grading.
+   *
+   * The rule that came out of it: NON-GRADING METADATA DOES NOT GO IN A HASHED FILE. The value is
+   * injected by `sweep()` in `src/families/registry.ts`, which already holds every family's declared
+   * check list and is not hashed, so the runners stay byte-identical to the verifier that graded the
+   * evidence.
    *
    * `checks_total` cannot substitute for it. That field is a bare number whose meaning differs by
    * producer — 267 means check EXECUTIONS for the outbox, 128 means SCENARIOS for another family,
    * 500 means INSTANCES for the SWE-bench import — so a firing rate computed against it would be
    * three different statistics wearing one name. Names, or nothing.
    */
-  readonly checks_declared: readonly string[] | null;
+  readonly checks_declared?: readonly string[] | null;
   readonly extracted_from: readonly string[];
   /**
    * Free text stating how subjects and instances were selected relative to each other. Required to

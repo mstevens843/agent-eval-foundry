@@ -117,7 +117,8 @@ const HIDDEN_DIR_ALIAS: Readonly<Record<string, readonly string[]>> = {
  * Everything else in the same directory is hidden, and is not decision code, and the difference is
  * where most of this probe's false positives came from.
  */
-const NOT_DECISION_CODE = /(^|\/)(types|mutants|spec|reference|scenarios|app|invariants|harness|readiness|measurement)\.ts$/;
+const NOT_DECISION_CODE =
+  /(^|\/)(types|mutants|spec|reference|scenarios|app|invariants|harness|readiness|measurement)\.ts$/;
 
 /**
  * Probe one family of this repository.

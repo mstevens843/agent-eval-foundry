@@ -71,9 +71,10 @@ describe("the two spec-defect labels are one class to every gate", () => {
 
 // Built from a real, valid promotion on disk rather than a hand-rolled literal, so the test exercises
 // the whole schema and cannot pass because the parser rejected the fixture for an unrelated reason.
-const BASE = JSON.parse(
-  readFileSync(join(__dirname, "..", "data", "promotions.json"), "utf8"),
-)[0] as Record<string, unknown>;
+const BASE = JSON.parse(readFileSync(join(__dirname, "..", "data", "promotions.json"), "utf8"))[0] as Record<
+  string,
+  unknown
+>;
 
 const parseOrThrow = (evidence: Record<string, unknown>) =>
   parsePromotion(

@@ -48,7 +48,9 @@ describe("D1 — a graded threshold the specification never prints", () => {
   );
 
   it("flags the constant when no visible file states it", () => {
-    const result = probe(target([verifier], [md("SPEC.md", "The subject must gather sufficient in-window evidence.")]));
+    const result = probe(
+      target([verifier], [md("SPEC.md", "The subject must gather sufficient in-window evidence.")]),
+    );
     expect(result.findings.map((f) => f.detector)).toContain("unstated-threshold");
     expect(result.findings[0]?.missing).toEqual(["3"]);
   });
@@ -75,7 +77,10 @@ describe("D1 — a graded threshold the specification never prints", () => {
   });
 
   it("ignores a constant outside any decision, so arithmetic is not a finding", () => {
-    const arithmetic = ts("util.ts", "export const windowMs = 60 * 5; if (windowMs > 42) { return windowMs; }");
+    const arithmetic = ts(
+      "util.ts",
+      "export const windowMs = 60 * 5; if (windowMs > 42) { return windowMs; }",
+    );
     expect(detectors(target([arithmetic], [md("SPEC.md", "nothing relevant")]))).toEqual([]);
   });
 });
@@ -172,7 +177,10 @@ def check_audit(result):
     // A SQL comment in a file the subject CAN read, grouping EXECUTED with the two terminal states.
     // The hidden table gives EXECUTED two successors, so the grouping is false — and a subject that
     // believed it has been actively misled rather than merely left uninformed.
-    const misleading = py("db.py", "-- (EXECUTED, ACKED, REVOKED) are history and do not block a successor.\nSQL = 1");
+    const misleading = py(
+      "db.py",
+      "-- (EXECUTED, ACKED, REVOKED) are history and do not block a successor.\nSQL = 1",
+    );
     const findings = probe(target([invariants], [happyPath, { ...misleading, language: "text" }])).findings;
     const acked = findings.find((f) => f.missing.includes("ACKED is terminal"));
     expect(acked?.contradiction?.path).toBe("db.py");
@@ -193,7 +201,9 @@ def check_audit(result):
        };
        if (!LEGAL[from].has(to)) { failures.push(fail("audit", "illegal transition")); }`,
     );
-    const findings = probe(target([ts_], [md("SPEC.md", "States: READY, LEASED, EXECUTED, ACKED.")])).findings;
+    const findings = probe(
+      target([ts_], [md("SPEC.md", "States: READY, LEASED, EXECUTED, ACKED.")]),
+    ).findings;
     expect(findings.map((f) => f.missing[0])).toContain("ACKED is terminal");
   });
 
@@ -212,7 +222,9 @@ def check_audit(result):
        };
        if (!LEGAL[from].has(to)) { failures.push(fail("audit", "illegal transition")); }`,
     );
-    const findings = probe(target([ts_], [md("SPEC.md", "States: READY, LEASED, EXECUTED, ACKED.")])).findings;
+    const findings = probe(
+      target([ts_], [md("SPEC.md", "States: READY, LEASED, EXECUTED, ACKED.")]),
+    ).findings;
     expect(findings.map((f) => f.missing[0])).toContain("ACKED is terminal");
   });
 
@@ -312,7 +324,9 @@ describe.runIf(hasArms)("the A2 arms: the same two directories the paid experime
     // Both arms are otherwise byte-identical, so every other finding must be common to both. If the
     // probe reported a different set for unrelated reasons, the discrimination above would be luck.
     const control = probe(arm("dao-a2-control")).findings.map((f) => `${f.detector}|${f.missing.join(",")}`);
-    const treatment = probe(arm("dao-a2-treatment")).findings.map((f) => `${f.detector}|${f.missing.join(",")}`);
+    const treatment = probe(arm("dao-a2-treatment")).findings.map(
+      (f) => `${f.detector}|${f.missing.join(",")}`,
+    );
     const onlyInControl = control.filter((f) => !treatment.includes(f));
     expect(onlyInControl).toEqual([
       "unstated-transition|ACKED is terminal",
@@ -337,7 +351,10 @@ describe("the probe gate blocks on silence, not on findings", () => {
     ).toEqual([]);
     // Not vacuous: the gate must actually be looking at something.
     expect(results.length).toBeGreaterThanOrEqual(8);
-    expect(results.some((r) => r.blocking.length > 0), "the gate saw no findings at all").toBe(true);
+    expect(
+      results.some((r) => r.blocking.length > 0),
+      "the gate saw no findings at all",
+    ).toBe(true);
   });
 
   it("a finding with no adjudication blocks, and one with a reason does not", () => {

@@ -2,7 +2,7 @@
 
 Campaign: `prompt-injection-containment-adversarial`
 Challenge hash: `4911ffdfbd2c0e9b51752ed16c4f53e8`
-Verifier hash: `288dd3f04387c9398924abcde9e3cb7a`
+Verifier hash: `030af80f665a4d84893e211e5ae5e5d1`
 
 Objective: Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.
 
@@ -100,4 +100,5 @@ Objective: Authorized local benchmark-integrity QA: determine whether submitted 
 - public challenge package changes
 - submission contract changes
 - verifier trust boundary changes
+- the runner or the container isolation profile changes
 - new hidden artifacts are added to the attacker-access boundary
