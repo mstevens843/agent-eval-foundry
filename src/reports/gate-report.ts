@@ -8,6 +8,13 @@
 // The last column is the one worth reading. A gate that has never failed for any family is not yet
 // evidence of discipline; it may simply be a gate that cannot fail. Printing that column makes the
 // difference visible instead of leaving every row looking equally load-bearing.
+//
+// That column was itself too narrow to do its job. "Never fired" required `failing.length === 0 &&
+// na.length === 0`, so a gate that rejects nobody and reads `n/a` for even one family was excluded
+// -- which is every evidence-backed gate in the table, including a blocking one whose verdict vector
+// was identical to another blocking gate's. The condition is now `failing.length === 0` and the
+// blocking members of that list are called out by name, because a blocking gate with a zero-fail
+// record is the row a reader is most likely to credit and least able to check.
 
 import type { Registry } from "../foundry/registry.js";
 import type { TaskShape } from "../foundry/schema.js";
@@ -52,9 +59,15 @@ export function renderGateReport(input: GateReportInput): string {
     return { gate, failing, passing, na };
   });
 
-  const blocking = perGate.filter((g) => g.gate.blocking);
+  const schemaEnforced = perGate.filter((g) => g.gate.schemaEnforced === true);
+  const blocking = perGate.filter((g) => g.gate.blocking && g.gate.schemaEnforced !== true);
   const advisory = perGate.filter((g) => !g.gate.blocking);
-  const neverFired = perGate.filter((g) => g.failing.length === 0 && g.na.length === 0);
+  // Widened from `failing.length === 0 && na.length === 0`. The `na` clause meant a gate that
+  // rejects nobody and reads `n/a` for even one family was left out of the list, which is exactly
+  // the population the section exists to name: `mechanisms-exercised` passed eight families, failed
+  // none and read n/a for ten, and never appeared here at all.
+  const neverFired = perGate.filter((g) => g.failing.length === 0);
+  const neverFiredBlocking = neverFired.filter((g) => g.gate.blocking && g.gate.schemaEnforced !== true);
 
   const table = (rows: typeof perGate): readonly string[] => [
     "| gate | question | pass | fail | n/a |",
@@ -68,15 +81,29 @@ export function renderGateReport(input: GateReportInput): string {
   return [
     "# The ship gate",
     "",
-    `${GATES.length} gates, ${blocking.length} of them blocking. A family ships when every blocking gate`,
-    "passes; there is no score, no weighting and no override. This document is generated from the gate",
-    "definitions themselves, so a gate that exists in the code cannot be missing here.",
+    `${GATES.length} gates: **${blocking.length} blocking**, ${schemaEnforced.length} schema-enforced,`,
+    `${advisory.length} advisory. A family ships when every blocking gate passes; there is no score, no`,
+    "weighting and no override. This document is generated from the gate definitions themselves, so a",
+    "gate that exists in the code cannot be missing here.",
+    "",
+    `The blocking count was advertised as ${blocking.length + schemaEnforced.length} until the schema-enforced gates were separated out.`,
+    "They are real checks and they are not this table's work: the loader refuses a shape that would",
+    "fail any of them, so they can never fire on anything the ship report can see.",
     "",
     "## Blocking",
     "",
     "A blocking gate is one whose absence means the family cannot produce trustworthy evidence at all.",
     "",
     ...table(blocking),
+    "",
+    "## Schema-enforced",
+    "",
+    "Enforced by `parseTaskShape` at load time. A shape that violates one of these cannot be parsed,",
+    "so it never reaches the gate table — which is why they are counted separately rather than as",
+    "blocking gates this report is checking. They are kept because deleting a check to correct a count",
+    "would be the wrong repair.",
+    "",
+    ...table(schemaEnforced),
     "",
     "## Advisory",
     "",
@@ -95,24 +122,34 @@ export function renderGateReport(input: GateReportInput): string {
       .filter((g) => g.failing.length > 0)
       .map(
         (g) =>
-          `| \`${g.gate.id}\` | ${g.gate.blocking ? "yes" : "no"} | ${g.failing.map((f) => `\`${f}\``).join(", ")} | ${esc(g.gate.rationale)} |`,
+          `| \`${g.gate.id}\` | ${g.gate.schemaEnforced === true ? "schema-enforced" : g.gate.blocking ? "yes" : "no"} | ${g.failing.map((f) => `\`${f}\``).join(", ")} | ${esc(g.gate.rationale)} |`,
       ),
     "",
     neverFired.length === 0
       ? "Every gate rejects at least one family."
       : [
-          `**${neverFired.length} gate(s) pass for every family and have never rejected anything here:**`,
+          `**${neverFired.length} of ${GATES.length} gate(s) reject nothing here:**`,
           `${neverFired.map((g) => `\`${g.gate.id}\``).join(", ")}.`,
+          "",
+          neverFiredBlocking.length === 0
+            ? "None of them is blocking."
+            : `**${neverFiredBlocking.length} of those are BLOCKING gates that have never failed for any family:** ${neverFiredBlocking
+                .map((g) => `\`${g.gate.id}\``)
+                .join(
+                  ", ",
+                )}. A blocking gate with a zero-fail record is the one row a reader is most likely to credit and least able to check.`,
           "",
           "That is not automatically a criticism — a gate on the reference contract should pass for every",
           "family that got as far as being written down. It is recorded so the table is not read as",
-          "though every row were doing equal work.",
+          "though every row were doing equal work. This list used to exclude any gate that read `n/a`",
+          "for even one family, which hid every gate that passes some families and is undefined for the",
+          "rest — the largest group of zero-fail gates in the table.",
         ].join("\n"),
     "",
     "## Every gate, in full",
     "",
     ...perGate.flatMap((g) => [
-      `### \`${g.gate.id}\` — ${g.gate.blocking ? "**blocking**" : "advisory"}`,
+      `### \`${g.gate.id}\` — ${g.gate.schemaEnforced === true ? "**schema-enforced**" : g.gate.blocking ? "**blocking**" : "advisory"}`,
       "",
       `**${g.gate.question}**`,
       "",

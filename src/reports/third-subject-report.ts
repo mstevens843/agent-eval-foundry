@@ -5,7 +5,7 @@
 
 import type { BankCompletion } from "../trials/bank-completion.js";
 import type { EvidenceLedger } from "../trials/evidence-lifecycle.js";
-import type { ChallengeMigration } from "../trials/migration.js";
+import { type ChallengeMigration, isSupersededRun, renderRunRef, staleRunNote } from "../trials/migration.js";
 import type { ProviderAvailability } from "../trials/provider-registry.js";
 
 /**
@@ -32,6 +32,14 @@ export interface ThirdSubjectInput {
     readonly counted: boolean;
   }[];
   readonly usdPerTrial: number;
+  /**
+   * The evidence ledgers.
+   *
+   * This report's whole subject is a THRESHOLD — three shared subjects — and a threshold reached by
+   * trials that were later invalidated was never reached. The rows below say what was spent; only the
+   * ledger says what is still standing.
+   */
+  readonly ledgers?: readonly EvidenceLedger[];
 }
 
 export function renderThirdSubjectCampaign(input: ThirdSubjectInput): string {
@@ -40,6 +48,15 @@ export function renderThirdSubjectCampaign(input: ThirdSubjectInput): string {
   const counted = input.campaign.filter((r) => r.counted).length;
   const seconds = input.campaign.reduce((n, r) => n + (r.runtimeSeconds ?? 0), 0);
   const unavailable = input.availability.filter((a) => !a.available);
+  const ledgers = input.ledgers ?? [];
+  const campaignNote = staleRunNote(
+    input.campaign.map((r) => r.runId),
+    ledgers,
+  );
+  const withdrawnRuns = input.campaign.filter((r) => isSupersededRun(r.runId, ledgers));
+  // The threshold this campaign was run to cross. If it is not crossed now, the two rows below that
+  // say the campaign bought a cross-family number are claims about a bank that no longer exists.
+  const thresholdHolds = c.sharedSubjects.length >= c.threshold;
 
   return [
     "# Third-subject campaign",
@@ -82,13 +99,15 @@ export function renderThirdSubjectCampaign(input: ThirdSubjectInput): string {
     "|---|---|---|---|---:|---:|---:|",
     ...input.campaign.map(
       (r) =>
-        `| \`${r.runId}\` | ${r.familyId.split("-").pop()} | \`${r.subjectId}\` | ${r.providerFamily} | ${r.scenariosGraded} | ${r.scenariosFailed} | ${r.runtimeSeconds === null ? "—" : `${r.runtimeSeconds}s`} |`,
+        `| ${renderRunRef(r.runId, ledgers)} | ${r.familyId.split("-").pop()} | \`${r.subjectId}\` | ${r.providerFamily} | ${r.scenariosGraded} | ${r.scenariosFailed} | ${r.runtimeSeconds === null ? "—" : `${r.runtimeSeconds}s`} |`,
     ),
     "",
+    ...(campaignNote === null ? [] : [campaignNote, ""]),
     "| | |",
     "|---|---:|",
     `| trials run | ${total} |`,
     `| counted | ${counted} |`,
+    `| withdrawn by a challenge migration | ${withdrawnRuns.length} |`,
     `| model-minutes | ${Math.round(seconds / 60)} |`,
     `| estimated spend at $${input.usdPerTrial.toFixed(2)}/trial | $${(total * input.usdPerTrial).toFixed(2)} |`,
     "",
@@ -107,12 +126,25 @@ export function renderThirdSubjectCampaign(input: ThirdSubjectInput): string {
     "",
     "| | |",
     "|---|---|",
-    "| a combined cross-family axis count | **yes** — computable for the first time |",
-    "| evidence that the families measure different things | **yes** — the axes add over the shared subjects, against a null model twice as large |",
+    thresholdHolds
+      ? "| a combined cross-family axis count | **yes** — computable for the first time |"
+      : `| a combined cross-family axis count | **no longer** — it was computable, and the ${withdrawnRuns.length} withdrawn trial(s) above were part of what made it so. With ${c.sharedSubjects.length} shared subject(s) against a threshold of ${c.threshold}, it is refused again |`,
+    thresholdHolds
+      ? "| evidence that the families measure different things | **yes** — the axes add over the shared subjects, against a null model twice as large |"
+      : "| evidence that the families measure different things | **withdrawn** — that comparison ran over a shared bank the withdrawn trials belonged to. It is not restated more carefully; it is unmade until the bank is rebuilt under the current hashes |",
     "| a third lab | **no** — three of the four subjects are Anthropic models |",
     "| a wider UI family | **no** — the new subjects landed inside the existing chain, which is what a chain does |",
     "| a weaker containment kill | **no** — both new subjects also passed 128 of 128, so `already-solved` got stronger |",
     "",
+    ...(thresholdHolds
+      ? []
+      : [
+          "That is the shape of the cost. The campaign was run correctly, its trials were real, and a",
+          "later repair to one of the families invalidated part of what they bought. The spend stays on",
+          "the books and the conclusion comes off them; there is no version of this where the number",
+          "survives the repair that removed its evidence.",
+          "",
+        ]),
     "The fourth row is the one worth dwelling on. Two of the four trials in this campaign went to a",
     "family whose failure sets were already totally ordered, and both landed on the chain — one of them",
     "failing the *identical* 62 scenarios as another subject. That is the campaign paying to confirm",

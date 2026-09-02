@@ -1,0 +1,137 @@
+{
+  "familyId": "provider-failover-router-alias-drift",
+  "sourceCandidateId": "provider-failover-router-alias-drift",
+  "visibleRulesDraft": [
+    "Alias identity is not routing truth.",
+    "Current provider/model route must be reconciled from router receipts plus rollout/eval ledgers.",
+    "Rollback and failback decisions target concrete provider/model routes, not alias names.",
+    "A missing or delayed router receipt requires bounded quarantine rather than guessed continuation.",
+    "Audit must preserve source disagreement instead of flattening it into a final status."
+  ],
+  "behaviorSpaceDraft": "Agents that handled model-alias rollout drift will still trust cached router state or provider labels when failover receipts and rollout ledgers disagree. Probe verdict: promote_to_task_shape. Full family must expand from these scenarios without adding secret rules.",
+  "knobs": [
+    {
+      "name": "actionRequired",
+      "values": [
+        "continue",
+        "failback",
+        "quarantine",
+        "rollback"
+      ],
+      "purpose": "Inferred from executable mechanism-probe scenarios."
+    },
+    {
+      "name": "cachedRouteStaleness",
+      "values": [
+        "fresh",
+        "stale_provider_a",
+        "stale_unknown"
+      ],
+      "purpose": "Inferred from executable mechanism-probe scenarios."
+    },
+    {
+      "name": "evalProviderMix",
+      "values": [
+        "all_current_b",
+        "current_b_bad",
+        "current_b_bad_a_healthy",
+        "current_b_clean",
+        "insufficient_current",
+        "mixed_provider_stream",
+        "unattributed"
+      ],
+      "purpose": "Inferred from executable mechanism-probe scenarios."
+    },
+    {
+      "name": "evidenceCompleteness",
+      "values": [
+        "complete",
+        "missing_receipt",
+        "partial"
+      ],
+      "purpose": "Inferred from executable mechanism-probe scenarios."
+    },
+    {
+      "name": "failoverTiming",
+      "values": [
+        "after_fallback",
+        "before_eval",
+        "during_canary",
+        "during_eval",
+        "mid_request",
+        "unknown"
+      ],
+      "purpose": "Inferred from executable mechanism-probe scenarios."
+    },
+    {
+      "name": "fallbackProvider",
+      "values": [
+        "provider_b",
+        "unknown"
+      ],
+      "purpose": "Inferred from executable mechanism-probe scenarios."
+    },
+    {
+      "name": "ledgerDisagreement",
+      "values": [
+        "none",
+        "router_after_rollout",
+        "router_vs_rollout",
+        "unknown"
+      ],
+      "purpose": "Inferred from executable mechanism-probe scenarios."
+    },
+    {
+      "name": "rollbackTargetKind",
+      "values": [
+        "none",
+        "provider_failback",
+        "provider_route",
+        "unknown"
+      ],
+      "purpose": "Inferred from executable mechanism-probe scenarios."
+    },
+    {
+      "name": "routerReceiptDelay",
+      "values": [
+        "absent",
+        "landed",
+        "late_landed"
+      ],
+      "purpose": "Inferred from executable mechanism-probe scenarios."
+    }
+  ],
+  "hiddenRegionDraft": "Probe cases vary failover timing, delayed router receipts, ledger disagreement, provider/model eval attribution and concrete rollback/failback targets inside the public router-ledger model.",
+  "authoritativeSource": {
+    "name": "router receipt ledger",
+    "whatItSettles": "Which provider/model route actually served each request and which rollback or failback target is currently authorized.",
+    "whyIndependent": "The probe checker owns this authority and subjects receive only declared observations."
+  },
+  "expectedMutants": [
+    "cached router-map loyalty",
+    "provider-name-only identity",
+    "receipt-blind alias rollback",
+    "unconditional failback",
+    "quarantine/no-op overblocking",
+    "ledger disagreement flattening",
+    "truthless router audit"
+  ],
+  "baselineCheats": [
+    "cached router subjects fail stale/current route checks",
+    "receipt-blind rollback fails concrete route-target checks",
+    "always-failback and always-quarantine fail paired valid continue/failback cases",
+    "ledger flatteners and audit liars fail source-truth checks"
+  ],
+  "humanSolvabilityNotes": [
+    "Failover plus disagreement can become ambiguous without examples.",
+    "Probe success does not prove a human can solve the eventual challenge package."
+  ],
+  "adversarialAuditNotes": [
+    "Subject could forge router receipts or route summaries.",
+    "router receipts, rollout ledgers, eval streams and route effects verifier-owned; subject receives only public facades"
+  ],
+  "transferLinks": [
+    "deployment-alias-to-routing-incident-response",
+    "deployment-alias-to-feature-flag-rollout-drift"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "runId": "live-dom-2026-08-o2",
+  "familyId": "ui-replay-live-dom",
+  "label": "capability",
+  "rationale": "The submission reads the step precondition off the resolved live node (`app.attr(nodeId, step.precondition.attr)`) and records it in the audit, which is `L2_PRECONDITION_OBSERVED` from the visible SPEC implemented on purpose — so the contract was understood. It still failed `precondition_observed` and `replay_completes` on 219 of 864 scenarios, confined to particular knob values and on checks the campaign pre-registered. The graded behaviour is stated verbatim in SPEC.md, so the failure is not a package the subject could not have derived the answer from.",
+  "evidenceRead": [
+    "result.json",
+    "countability.json",
+    "challenge/SPEC.md",
+    "submission/subject.mjs"
+  ],
+  "labelledBy": {
+    "kind": "automated",
+    "id": "lane-4a-root-cause-review",
+    "date": "2026-09-01"
+  },
+  "diagnosisReading": "capability"
+}

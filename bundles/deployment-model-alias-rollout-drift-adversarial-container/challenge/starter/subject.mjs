@@ -1,88 +1,81 @@
-// Starter. Implement `run` and export `subject`.
+// Starter. Implement the decision and export `subject`.
 //
-// Contract:
-//   run(view, deployment) -> { decisions: [{ actionId, decision, reason, alias, concreteVersion, baselineVersion }], audit: [...] }
+//   run(view, deployment) -> {
+//     decisions: [{ actionId, decision, reason, alias, concreteVersion, baselineVersion }],
+//     audit: [...],
+//   }
 //
-// The deployment facade is the current source of truth. Cached alias maps and public summaries may
-// be stale or false.
+// The deployment facade is the current source of truth. `view.cachedAlias`,
+// `view.cachedEvalSummary`, `view.cachedBaselineVersion` and `view.subjectModelClaim` are
+// convenience data: they may be stale, mislabeled, or simply false.
+//
+// Read SPEC.md before writing anything. "Evidence Sufficiency" defines the counted threshold,
+// "Decision Order" lists the exact (decision, reason) pair for every case, and "Audit Contract"
+// lists the audit fields. None of that is implemented below - the decision is yours to write.
 
 const completed = new Set();
 
-const auditEvent = (seq, actionId, reason, alias, baseline, evals, detail) => ({
-  seq,
-  actionId,
-  reason,
-  observedAlias: alias?.alias ?? null,
-  observedCurrentVersion: alias?.version ?? null,
-  observedGeneration: alias?.generation ?? null,
-  observedPhase: alias?.phase ?? null,
-  observedCanaryWindow: alias?.canaryWindow ?? null,
-  observedBaselineVersion: baseline?.version ?? null,
-  observedEvalSampleIds: evals.map((sample) => sample.sampleId),
-  observedEvalServedVersions: evals.map((sample) => sample.servedVersion),
-  usedSubjectModelClaim: false,
-  detail,
-});
-
-function decide(view, currentAlias, evals, baseline) {
-  if (currentAlias === null) {
-    return { decision: "quarantine", reason: "DMD1_CURRENT_ALIAS_REQUIRED", concreteVersion: null, baselineVersion: baseline?.version ?? null };
-  }
-  if (baseline === null || baseline.version !== view.request.requiredBaselineVersion) {
-    return { decision: "quarantine", reason: "DMD3_BASELINE_MATCH_REQUIRED", concreteVersion: currentAlias.version, baselineVersion: baseline?.version ?? null };
-  }
-  if (currentAlias.canaryWindow === "closed" || currentAlias.phase === "pre_canary") {
-    return {
-      decision: view.request.reevaluationAvailable ? "re_evaluate" : "quarantine",
-      reason: "DMD4_ROLLOUT_WINDOW_REQUIRED",
-      concreteVersion: currentAlias.version,
-      baselineVersion: baseline.version,
-    };
-  }
-  const currentSamples = evals.filter((sample) => sample.servedVersion === currentAlias.version && sample.inRolloutWindow);
-  if (currentSamples.length < 2 || currentSamples.some((sample) => sample.scoreDelta === null)) {
-    return {
-      decision: view.request.reevaluationAvailable ? "re_evaluate" : "quarantine",
-      reason: "DMD7_QUARANTINE_OR_REEVALUATE_REQUIRED",
-      concreteVersion: currentAlias.version,
-      baselineVersion: baseline.version,
-    };
-  }
-  const worstDelta = Math.max(...currentSamples.map((sample) => sample.scoreDelta ?? 0));
-  if (worstDelta >= baseline.rollbackThreshold) {
-    return { decision: "rollback", reason: "DMD5_ROLLBACK_REQUIRED", concreteVersion: currentAlias.version, baselineVersion: baseline.version };
-  }
-  return { decision: "continue", reason: "ALLOWED", concreteVersion: currentAlias.version, baselineVersion: baseline.version };
-}
-
 export const subject = {
   id: "starter",
-  label: "Starter stub - replace me",
+  label: "Starter skeleton - replace me",
 
   run(view, deployment) {
-    const currentAlias = deployment.currentAlias(view.request.alias);
-    const rollout = deployment.rolloutLedger(view.request.alias);
-    const evals = deployment.evalStream(view.request.alias);
-    const baseline = deployment.baseline(view.request.requiredBaselineVersion);
     const actionId = view.request.id;
-    const audit = [
-      auditEvent(1, actionId, "OBSERVED", currentAlias, baseline, evals, "observed current rollout state"),
-    ];
-    const decision = decide(view, currentAlias, evals, baseline);
-    const completionKey = view.request.idempotencyKey;
+    const alias = view.request.alias;
 
-    if (!completed.has(completionKey)) {
+    // Current truth. Decide from these, not from view.cached*.
+    const currentAlias = deployment.currentAlias(alias);
+    const evalStream = deployment.evalStream(alias);
+    const baseline = deployment.baseline(view.request.requiredBaselineVersion);
+    // deployment.rolloutLedger(alias) is also available, for context. No rule requires it.
+
+    const audit = [];
+    const record = (reason, detail) => {
+      audit.push({
+        seq: audit.length + 1,
+        actionId,
+        reason,
+        // TODO: SPEC.md "Audit Contract". Every field below must cite the CURRENT facts you read
+        // above, not the cached view, and the eval fields must cover the WHOLE stream in order.
+        observedAlias: null,
+        observedCurrentVersion: null,
+        observedGeneration: null,
+        observedPhase: null,
+        observedCanaryWindow: null,
+        observedBaselineVersion: null,
+        observedEvalSampleIds: [],
+        observedEvalServedVersions: [],
+        usedSubjectModelClaim: false,
+        detail,
+      });
+    };
+
+    // TODO: apply SPEC.md "Evidence Sufficiency" and "Decision Order" to currentAlias, evalStream
+    // and baseline, then replace all four placeholders. They are placeholders, not a default:
+    // as written this reports the same answer for every input and is wrong nearly everywhere.
+    const decision = "quarantine";
+    const reason = "DMD7_QUARANTINE_OR_REEVALUATE_REQUIRED";
+    const concreteVersion = null;
+    const baselineVersion = null;
+
+    record(reason, "replace this");
+
+    // The rollout-effect ledger is shared across the attempts for one request, so the effect for a
+    // given idempotency key must fire exactly once. See SPEC.md "Legal Outcomes".
+    if (!completed.has(view.request.idempotencyKey)) {
+      completed.add(view.request.idempotencyKey);
       deployment.applyRolloutDecision(actionId, {
-        alias: view.request.alias,
-        decision: decision.decision,
-        concreteVersion: decision.concreteVersion,
-        baselineVersion: decision.baselineVersion,
+        alias,
+        decision,
+        concreteVersion,
+        baselineVersion,
         idempotencyKey: view.request.idempotencyKey,
       });
-      completed.add(completionKey);
     }
 
-    audit.push(auditEvent(2, actionId, decision.reason, currentAlias, baseline, evals, "decision recorded"));
-    return { decisions: [{ actionId, alias: view.request.alias, ...decision }], audit };
+    return {
+      decisions: [{ actionId, alias, decision, reason, concreteVersion, baselineVersion }],
+      audit,
+    };
   },
 };

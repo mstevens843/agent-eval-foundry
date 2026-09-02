@@ -2,8 +2,31 @@ import type { PromotionSmokeGateResult, SmokeDiagnosisStatus } from "../foundry/
 import type { CampaignPlan } from "../trials/campaign.js";
 import type { TrialRecord } from "../trials/types.js";
 import type { FamilyTrialAnalysis } from "./agent-results.js";
-import type { TrialDiagnosis } from "./diagnosis.js";
+import { type TrialDiagnosis, needsHumanRead } from "./diagnosis.js";
 
+// WHY THIS LIST IS SHORTER THAN THE FAMILY'S CHECK LIST
+//
+// It used to be byte-identical to `CHECKS` in the family's verifier — all sixteen. A set that
+// contains every check a trial can possibly fail makes `on-target` unconditional and `off-target`
+// unreachable: `classifyDeploymentAliasSmoke` returned "on-target" for any counted failure at all,
+// including a subject that simply crashed. A classifier with one reachable answer measures nothing,
+// and "the smoke failed on target" was being printed on evidence that had never been tested.
+//
+// On-target has to mean what the family claims to measure: did the subject fail to reconcile the
+// alias map, the concrete served versions, the baseline, the rollout window and the eval ledger
+// before choosing continue / rollback / quarantine / re-evaluate. Three of the sixteen checks are
+// not that. They are harness and protocol hygiene, and they are shared, in spirit, with every other
+// family in this repository:
+//
+//   deterministic_result  the subject reported no decision, or two different decisions across
+//                         repeated attempts. A crash or a nondeterministic subject, not alias drift.
+//   no_duplicate_effect   the rollout effect executed twice. Generic idempotence hygiene.
+//   mechanism_fired       the subject sent the wrong number of attempt reports, OR the scenario's
+//                         own expected decision disagrees with the recomputed truth. The second half
+//                         is the HARNESS grading itself; a trial failing it is evidence about this
+//                         package, which is the definition of off-target.
+//
+// A smoke whose only failures are those three must route to repair, not to a difficulty claim.
 export const DEPLOYMENT_ALIAS_ON_TARGET_CHECKS = [
   "decision_matches_truth",
   "current_alias_reconciled",
@@ -17,8 +40,16 @@ export const DEPLOYMENT_ALIAS_ON_TARGET_CHECKS = [
   "no_subject_owned_model_truth",
   "audit_matches_rollout_source",
   "liveness",
-  "deterministic_result",
   "report_matches_ledger",
+] as const;
+
+/**
+ * The remaining checks in the family's verifier. Named rather than implied so that a test can assert
+ * the two lists partition `CHECKS` exactly, and so that adding a seventeenth check to the family
+ * forces a decision about which side it falls on instead of silently defaulting to on-target.
+ */
+export const DEPLOYMENT_ALIAS_OFF_MECHANISM_CHECKS = [
+  "deterministic_result",
   "no_duplicate_effect",
   "mechanism_fired",
 ] as const;
@@ -196,15 +227,21 @@ export function renderDeploymentAliasSmokeDiagnosis(input: DeploymentAliasSmokeD
     diagnoses.length === 0
       ? "No counted failure diagnosis exists yet."
       : [
-          "| run | reading | matches pre-registered hypothesis | repair suspected |",
-          "|---|---|---|---|",
+          "| run | reading | matches pre-registered hypothesis | repair suspected | needs human read |",
+          "|---|---|---|---|---|",
           ...diagnoses.map(
             (diagnosis) =>
               `| \`${diagnosis.runId}\` | ${diagnosis.reading} | ${
                 diagnosis.matchesHypothesis ? "yes" : "no"
-              } | ${diagnosis.repairSuspected ? "yes" : "no"} |`,
+              } | ${diagnosis.repairSuspected ? "yes" : "no"} | ${needsHumanRead(diagnosis) ? "yes" : "no"} |`,
           ),
         ].join("\n"),
+    "",
+    "On-target means the failures land on the thirteen alias-drift mechanism checks. It is not",
+    "automatic: `deterministic_result`, `no_duplicate_effect` and `mechanism_fired` are harness and",
+    "protocol hygiene, and a smoke that fails only those is off-target and routes to repair.",
+    "",
+    fanoutLine(diagnoses),
     "",
     "## Cross-Lab Smoke",
     "",
@@ -366,6 +403,26 @@ function providerFamily(model: string | null): string {
   return model?.split("/")[0] ?? "unknown";
 }
 
+/**
+ * A fanout is not an off-target result — the failures are still on the mechanism — but it is also not
+ * N findings, and the check table above will be read as N findings unless this says otherwise.
+ */
+function fanoutLine(diagnoses: readonly TrialDiagnosis[]): string {
+  const fanouts = diagnoses.filter((diagnosis) => diagnosis.reading === "single-cause-fanout");
+  if (fanouts.length === 0) return "No counted failure diagnosis shows a single-cause fanout.";
+  return [
+    `${fanouts.length} counted failure diagnosis(es) read as \`single-cause-fanout\`: every failing check's`,
+    "failing-scenario set is contained in one dominant check's, so the failure is ONE root decision with",
+    "the rest derivative of it. Read the Failed Checks table as one mechanism failure, not as several,",
+    "and do not treat the number of failing checks as breadth of difficulty.",
+    "",
+    ...fanouts.map(
+      (diagnosis) =>
+        `- \`${diagnosis.runId}\`: dominant \`${diagnosis.checks[0]?.check ?? "unknown check"}\` (${diagnosis.checks[0]?.scenarios ?? 0} scenarios), ${Math.max(diagnosis.checks.length - 1, 0)} derivative check(s)`,
+    ),
+  ].join("\n");
+}
+
 function mechanismRow(
   question: string,
   checks: readonly string[],
@@ -388,22 +445,8 @@ function intendedMechanismReading(analysis: FamilyTrialAnalysis, failedChecks: R
   if (analysis.failures === 0) {
     return "The counted smoke passed cleanly, so the intended mechanism was not a source of difficulty for this subject.";
   }
-  const mechanismChecks = [
-    "decision_matches_truth",
-    "current_alias_reconciled",
-    "no_stale_alias_assumption",
-    "concrete_version_attributed",
-    "correct_baseline_compared",
-    "rollout_window_respected",
-    "rollback_required",
-    "continue_required",
-    "quarantine_when_insufficient",
-    "no_subject_owned_model_truth",
-    "audit_matches_rollout_source",
-    "report_matches_ledger",
-    "liveness",
-  ];
-  const hits = mechanismChecks.filter((check) => failedChecks.has(check));
+  // The same list the classifier uses. It was duplicated here, which is how the two could drift.
+  const hits = DEPLOYMENT_ALIAS_ON_TARGET_CHECKS.filter((check) => failedChecks.has(check));
   if (hits.length === 0) {
     return "The counted smoke failed, but not on a named deployment-alias mechanism check; this should route to repair.";
   }

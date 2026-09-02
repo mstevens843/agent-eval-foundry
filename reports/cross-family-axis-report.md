@@ -7,22 +7,22 @@ What the families measure, together — and the arithmetic this report refuses t
 | family | bank | instances | subjects | blind | distinct catch sets | axes |
 |---|---|---:|---:|---:|---:|---:|
 | `prompt-injection-containment` | `agent` | 128 | 4 | 128 | 0 | **0** |
-| `prompt-injection-memory-poisoning` | `agent` | 288 | 4 | 233 | 3 | **2** |
+| `prompt-injection-memory-poisoning` | `mutant` | 288 | 13 | 0 | 17 | **5** |
 | `ui-action-record-replay` | `agent` | 324 | 4 | 234 | 3 | **1** |
 | `ui-replay-live-dom` | `agent` | 864 | 1 | 645 | 1 | — |
 | `checker-required-memory-poisoning` | `agent` | 792 | 1 | 178 | 1 | — |
-| `access-token-scope-expansion` | `agent` | 384 | 1 | 384 | 0 | — |
-| `delegated-wallet-scope-reconciliation` | `agent` | 804 | 1 | 804 | 0 | — |
-| `deployment-model-alias-rollout-drift` | `agent` | 339 | 2 | 147 | 1 | **1** |
+| `access-token-scope-expansion` | `mutant` | 384 | 9 | 0 | 6 | **3** |
+| `delegated-wallet-scope-reconciliation` | `mutant` | 804 | 10 | 0 | 9 | **3** |
+| `deployment-model-alias-rollout-drift` | `mutant` | 339 | 17 | 0 | 72 | **20** |
 | `durable-approval-outbox` | `imported` | 24 | 2 | 0 | 1 | **1** |
 
 ## The sum that is not available
 
 | naive total | value | why it is not a result |
 |---|---:|---|
-| every family added together | 5 | mixes detection and difficulty; the two answer different questions |
-| detection banks added | 0 | the banks are disjoint by construction — no mutant appears in two families, so the union's width is the sum whatever the families measure |
-| difficulty banks added | 5 | excludes one-subject banks; valid only over subjects that attempted both, and the overlap is below threshold |
+| every family added together | 33 | mixes detection and difficulty; the two answer different questions |
+| detection banks added | 31 | the banks are disjoint by construction — no mutant appears in two families, so the union's width is the sum whatever the families measure |
+| difficulty banks added | 2 | excludes one-subject banks; valid only over subjects that attempted both, and the overlap is below threshold |
 
 A combined axis count requires the same subjects in every bank being combined. Until that holds,
 each family's number stands alone and the portfolio total does not exist.
@@ -38,6 +38,11 @@ each family's number stands alone and the portfolio total does not exist.
 
 - Build or trial a second family whose bank is `imported`.
 - For a mutant bank that means a second family with a written mutant set.
+
+**`mutant`:** nothing: the banks share no subject, so co-failure across families is unobservable and the union's width is the sum by construction.
+
+- Run the same subjects against every `mutant` family until 3 share all of them.
+- Currently shared: none.
 
 ## The cheapest path to a real cross-family number
 

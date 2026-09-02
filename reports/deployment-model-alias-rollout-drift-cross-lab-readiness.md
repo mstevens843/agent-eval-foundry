@@ -6,23 +6,23 @@ import cleanly under the current hash.
 
 | item | value |
 |---|---|
-| expected challenge hash | `0e9b87a5f260544cfbc1cdce8f08938c` |
+| expected challenge hash | `805efb58c923f9e081db1b41967392d7` |
 | expected scenario set | `drift-339-590affe3` |
 | providers prepared | 3/3 |
-| counted smoke trials | 2 |
-| counted non-OpenAI smoke trials | 1 |
-| counted provider families | `anthropic`, `openai` |
-| counted failure provider families | `openai` |
-| cross-lab smoke present | yes |
+| counted smoke trials | 0 |
+| counted non-OpenAI smoke trials | 0 |
+| counted provider families | none |
+| counted failure provider families | none |
+| cross-lab smoke present | no |
 | cross-lab difficulty evidenced | no |
 
 ## Bundle Audit
 
 | provider | state | hash | leak check | metadata template | hidden files | reports |
 |---|---|---|---|---|---|---|
-| `claude` | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally | `0e9b87a5f260544cfbc1cdce8f08938c` | pass | pass | absent | absent |
-| `gemini` | 0.46.0; entitlement previously blocked with IneligibleTierError, so this phase treats Gemini as import-only until a real authenticated run changes that | `0e9b87a5f260544cfbc1cdce8f08938c` | pass | pass | absent | absent |
-| `external` | external by declaration: prepare a bundle and import the result | `0e9b87a5f260544cfbc1cdce8f08938c` | pass | pass | absent | absent |
+| `claude` | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally | `805efb58c923f9e081db1b41967392d7` | pass | pass | absent | absent |
+| `gemini` | 0.46.0; entitlement previously blocked with IneligibleTierError, so this phase treats Gemini as import-only until a real authenticated run changes that | `805efb58c923f9e081db1b41967392d7` | pass | pass | absent | absent |
+| `external` | external by declaration: prepare a bundle and import the result | `805efb58c923f9e081db1b41967392d7` | pass | pass | absent | absent |
 
 ## Commands For Later
 
@@ -52,8 +52,8 @@ Verify: `node dist/cli.js trials verify --family deployment-model-alias-rollout-
 - One Claude/Anthropic smoke may be imported or run only under explicit authorization and the current hash.
 - Gemini remains import-only/infrastructure-error unless entitlement is actually available.
 - Generic external bundles must preserve provider and model identity before any cross-lab claim.
-- A non-OpenAI smoke exists, but cross-lab difficulty is claimed only if the non-OpenAI run also fails on target.
-- Current reading: mixed provider result; full `/6` remains blocked by provider-delta/evolution routing.
+- No cross-lab smoke claim exists yet because only OpenAI/Codex has counted smoke evidence.
+- Current reading: cross-lab smoke remains missing.
 
 ---
 

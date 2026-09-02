@@ -10,8 +10,10 @@
 // throughout, and the difference between "no model failed this" and "no model attempted this" is
 // never left to the reader to infer.
 
-import type { CampaignPlan } from "../trials/campaign.js";
+import type { CampaignPlan, KillSignalEvaluation } from "../trials/campaign.js";
 import { progressOf } from "../trials/campaign.js";
+import type { EvidenceLedger } from "../trials/evidence-lifecycle.js";
+import { isSupersededRun, renderRunRef, staleRunNote } from "../trials/migration.js";
 import type { FamilyTrialAnalysis, KnobSplit, OutcomeKind } from "./agent-results.js";
 
 const esc = (s: string): string => s.replace(/\|/g, "\\|");
@@ -33,12 +35,37 @@ export interface CampaignReportInput {
   readonly disagreements: readonly string[];
   /** Trials preserved from an earlier version of this challenge. */
   readonly superseded?: readonly string[];
+  /**
+   * The evidence ledgers, so a slot row can say that the run filling it has been withdrawn.
+   *
+   * The `## Superseded trials` section below was not enough on its own: a reader meets the slot
+   * table first, sees `RUN` next to a run id, and has already formed the belief the later section
+   * is trying to correct.
+   */
+  readonly ledgers?: readonly EvidenceLedger[];
+  /**
+   * The pre-registered kill signal, evaluated. Required, not optional: an optional verdict is one a
+   * caller can drop, and the whole defect being fixed was a kill condition nothing evaluated.
+   */
+  readonly killSignal: KillSignalEvaluation;
 }
+
+const KILL_VERDICT_LABEL: Readonly<Record<KillSignalEvaluation["verdict"], string>> = {
+  NOT_EVALUABLE: "**not evaluable** — no counted trial belongs to this campaign's slots",
+  FIRED_ALREADY_SOLVED: "**FIRED** — every counted trial passed everything (already-solved clause)",
+  FIRED_NOT_DIFFICULTY:
+    "**FIRED** — counted trials failed and none is root-caused to `capability` (not-difficulty clause)",
+  NOT_FIRED: "did not fire — at least one counted failure is root-caused to `capability`",
+};
 
 export function renderCampaignReport(input: CampaignReportInput): string {
   const { plan } = input;
   const progress = progressOf(plan, input.countedRunIds);
   const matches = plan.challengeHash === input.challengeCurrent;
+  const ledgers = input.ledgers ?? [];
+  const slotRuns = plan.slots.map((s) => s.runId).filter((r): r is string => r !== null);
+  const slotNote = staleRunNote(slotRuns, ledgers);
+  const stale = slotRuns.filter((runId) => isSupersededRun(runId, ledgers));
 
   return [
     `# Trial campaign — ${plan.familyId}`,
@@ -55,6 +82,7 @@ export function renderCampaignReport(input: CampaignReportInput): string {
     "",
     `**Confirm signal.** ${plan.confirmSignal}`,
     "",
+    ...killSignalSection(input.killSignal),
     "## The task that was run",
     "",
     "| | |",
@@ -73,9 +101,19 @@ export function renderCampaignReport(input: CampaignReportInput): string {
     "|---|---|---|---|---|",
     ...plan.slots.map(
       (s) =>
-        `| ${s.slotId} | \`${s.model}\` | ${s.runner} | ${s.state === "NOT_RUN" ? "**NOT_RUN**" : s.state} | ${s.runId === null ? "—" : `\`${s.runId}\``} |`,
+        `| ${s.slotId} | \`${s.model}\` | ${s.runner} | ${s.state === "NOT_RUN" ? "**NOT_RUN**" : stale.includes(s.runId ?? "") ? `${s.state}, **WITHDRAWN**` : s.state} | ${s.runId === null ? "—" : renderRunRef(s.runId, ledgers)} |`,
     ),
     "",
+    ...(slotNote === null
+      ? []
+      : [
+          slotNote,
+          "",
+          "A slot whose recorded run has been withdrawn is an unfilled slot, not a finished one. The",
+          "header line counts it under `run` and not under `counted`, and only the second number says",
+          `anything about the task this campaign now describes${progress.counted === 0 ? ": this campaign has no result yet, and neither its kill signal nor its confirm signal has been tested" : ""}.`,
+          "",
+        ]),
     ...(progress.notRun === 0
       ? []
       : [
@@ -124,6 +162,42 @@ export function renderCampaignReport(input: CampaignReportInput): string {
     "",
   ].join("\n");
 }
+
+/**
+ * What the machine could and could not decide about the pre-registration.
+ *
+ * The prose above is a judgement and is printed verbatim; this section evaluates only the two
+ * clauses every kill signal in this repository states mechanically — everything passed, or nothing
+ * that failed has been attributed to capability. Saying which half was evaluated is the difference
+ * between a check and a claim that a check happened.
+ */
+const killSignalSection = (k: KillSignalEvaluation): readonly string[] => [
+  "### Kill signal, evaluated",
+  "",
+  "| | |",
+  "|---|---|",
+  `| verdict | ${KILL_VERDICT_LABEL[k.verdict]} |`,
+  `| counted trials in this campaign's slots | ${k.countedTrials} |`,
+  `| passed everything | ${k.cleanTrials} |`,
+  `| failed something | ${k.failingTrials} |`,
+  `| root-caused \`capability\` | ${k.capabilityTrials} |`,
+  "",
+  esc(k.detail),
+  "",
+  ...(k.disqualified.length === 0
+    ? []
+    : [
+        "Counted failures that are NOT difficulty evidence, and why:",
+        "",
+        ...k.disqualified.map((d) => `- \`${d.runId}\` — root cause \`${d.rootCause}\``),
+        "",
+      ]),
+  "Only the mechanical clauses are evaluated: whether every counted trial passed, and whether any",
+  "counted failure has been root-caused to `capability`. Whatever else the prose above says — that",
+  "failures concentrated on ambiguous wording, that a knob pattern was or was not present — is a",
+  "judgement no code here makes, and it is printed rather than scored.",
+  "",
+];
 
 const knobTable = (split: KnobSplit): readonly string[] => [
   `### \`${split.knob}\`${split.discriminates ? " — **the failure rate moves with this knob**" : ""}`,

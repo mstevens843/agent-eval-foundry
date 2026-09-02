@@ -2,7 +2,8 @@ import { createHash } from "node:crypto";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { checkChallengePackage } from "../challenge/package-check.js";
-import { builtFamily } from "../families/registry.js";
+import { BUILT_FAMILY_IDS, builtFamily } from "../families/registry.js";
+import { assertFamilyListAccounted } from "../foundry/registry.js";
 import {
   type RuleCode,
   fail,
@@ -23,26 +24,54 @@ import {
   type AdversarialThreatModel,
 } from "./types.js";
 
-export const ADVERSARIAL_AUDITED_FAMILIES = [
-  "checker-required-memory-poisoning",
-  "deployment-model-alias-rollout-drift",
-  "durable-approval-outbox",
-  "prompt-injection-containment",
-  "prompt-injection-memory-poisoning",
-  "ui-action-record-replay",
-  "ui-replay-live-dom",
-  "delegated-wallet-scope-reconciliation",
-] as const;
+/**
+ * Built families with NO package-backed adversarial campaign, and why not.
+ *
+ * This is the fallback for a list that is genuinely narrower than the registry. `foundry check` uses
+ * `ADVERSARIAL_PACKAGE_FAMILIES` to generate attack bundles, run hardening probes and verify
+ * isolation, and a family with no campaign file and no prepared bundle would produce a column of
+ * failures rather than information. Narrower is allowed; SILENTLY narrower is not — every built
+ * family must be present here or in the derived list, and `assertAdversarialFamilyTablesCurrent`
+ * throws if a ninth family is neither.
+ */
+const ADVERSARIAL_PACKAGE_EXCLUSIONS: Readonly<Record<string, string>> = {
+  "access-token-scope-expansion":
+    "No adversarial campaign, threat model or attack bundle has been prepared for this family. It was solved 384/384 by an OpenAI/Codex smoke and routed already_solved_or_needs_evolution, so adversarial spend went to its descendant delegated-wallet-scope-reconciliation instead. Excluded deliberately, not forgotten: to include it, write adversarial-audits/campaigns/access-token-scope-expansion-adversarial.json and prepare bundles/access-token-scope-expansion-adversarial, then delete this entry.",
+};
 
-export const ADVERSARIAL_PACKAGE_FAMILIES = [
-  "checker-required-memory-poisoning",
-  "deployment-model-alias-rollout-drift",
-  "delegated-wallet-scope-reconciliation",
-  "prompt-injection-containment",
-  "prompt-injection-memory-poisoning",
-  "ui-action-record-replay",
-  "ui-replay-live-dom",
-] as const;
+/**
+ * Families whose adversarial campaign is backed by a checked-in, leak-checked challenge package.
+ *
+ * DERIVED from the registry minus the declared exclusions above, so a newly built family joins it
+ * automatically and its missing campaign shows up as an honest `audit-pending` verdict instead of
+ * as a family the report never mentions.
+ */
+export const adversarialPackageFamilies = (
+  builtFamilyIds: readonly string[] = BUILT_FAMILY_IDS,
+): readonly string[] =>
+  builtFamilyIds.filter((id) => ADVERSARIAL_PACKAGE_EXCLUSIONS[id] === undefined).sort();
+
+export const ADVERSARIAL_PACKAGE_FAMILIES: readonly string[] = adversarialPackageFamilies();
+
+/**
+ * Families audited here that are NOT built families, with why they belong anyway.
+ *
+ * `durable-approval-outbox` is the imported historical bank: no executable family exists for it, so
+ * its `audit-pending` verdict is the control proving this audit can fail.
+ */
+export const ADVERSARIAL_NON_BUILT_FAMILIES: readonly string[] = ["durable-approval-outbox"];
+
+/**
+ * Everything the adversarial readiness report covers: the package-backed families plus the imported
+ * banks. DERIVED — the previous hand-written version listed eight ids that happened to be exactly
+ * this set, with nothing checking that they stayed equal.
+ */
+export const adversarialAuditedFamilies = (
+  builtFamilyIds: readonly string[] = BUILT_FAMILY_IDS,
+): readonly string[] =>
+  [...adversarialPackageFamilies(builtFamilyIds), ...ADVERSARIAL_NON_BUILT_FAMILIES].sort();
+
+export const ADVERSARIAL_AUDITED_FAMILIES: readonly string[] = adversarialAuditedFamilies();
 
 const NEVER_COUNTS = [
   "provider-refusal",
@@ -65,7 +94,20 @@ const COMMON_ATTACK_SURFACES = [
   "verifier-output reporting path",
 ] as const;
 
+/**
+ * The attack surfaces a family adds on top of `COMMON_ATTACK_SURFACES`.
+ *
+ * Every built family needs a row: a family with none silently gets the generic threat model and its
+ * own trust boundaries are never named to the attacker, which is the difference between an
+ * adversarial audit and a formality. `assertAdversarialFamilyTablesCurrent` enforces that.
+ */
 const FAMILY_SURFACES: Readonly<Record<string, readonly string[]>> = {
+  "access-token-scope-expansion": [
+    "token issuance and scope-expansion facade",
+    "authority ledger and approval-drift boundary",
+    "cached public snapshot versus current authority",
+    "irreversible grant ledger and repeat-attempt idempotency",
+  ],
   "checker-required-memory-poisoning": [
     "subject.mjs/checker.mjs two-artifact contract",
     "checker-result trust boundary",
@@ -102,36 +144,120 @@ const FAMILY_SURFACES: Readonly<Record<string, readonly string[]>> = {
   ],
 };
 
+/**
+ * What a family's verifier hash covers.
+ *
+ * The subprocess HOST scripts are in here beside `verify.ts` and `runner.ts`, and that is the point
+ * of the list rather than an accident of it. A host builds the facades a submission is measured
+ * through, so changing one changes what was measured exactly as changing the verifier does — the
+ * memory family's host was found handing each session a NEW memory facade while the published
+ * package promised the same one throughout, and two real trials failed every attack scenario for
+ * that reason and no other. Before this, repairing the host left the verifier hash untouched and the
+ * trials it invalidated kept counting.
+ *
+ * A path that does not exist is SKIPPED by `hashFiles` rather than reported, so a typo or a moved
+ * file quietly shrinks what the hash covers and every trial pinned to it keeps counting.
+ * `assertAdversarialFamilyTablesCurrent` therefore checks that every built family has a row here and
+ * that every path in every row exists on disk.
+ */
 const VERIFIER_PATHS: Readonly<Record<string, readonly string[]>> = {
+  "access-token-scope-expansion": [
+    "src/families/access-token-scope-expansion/verify.ts",
+    "src/families/access-token-scope-expansion/runner.ts",
+    "scripts/access-token-host.mjs",
+  ],
   "checker-required-memory-poisoning": [
     "src/families/checker-required-memory-poisoning/verify.ts",
     "src/families/checker-required-memory-poisoning/runner.ts",
+    "scripts/checker-required-host.mjs",
   ],
   "delegated-wallet-scope-reconciliation": [
     "src/families/delegated-wallet-scope-reconciliation/verify.ts",
     "src/families/delegated-wallet-scope-reconciliation/runner.ts",
+    "scripts/delegated-wallet-host.mjs",
   ],
   "deployment-model-alias-rollout-drift": [
     "src/families/deployment-model-alias-rollout-drift/verify.ts",
     "src/families/deployment-model-alias-rollout-drift/runner.ts",
+    "scripts/deployment-alias-host.mjs",
   ],
   "prompt-injection-containment": [
     "src/families/prompt-injection-containment/verify.ts",
     "src/families/prompt-injection-containment/runner.ts",
+    "scripts/subject-host.mjs",
   ],
   "prompt-injection-memory-poisoning": [
     "src/families/memory-poisoning/verify.ts",
     "src/families/memory-poisoning/runner.ts",
+    "scripts/memory-host.mjs",
   ],
   "ui-action-record-replay": [
     "src/families/ui-action-record-replay/verify.ts",
     "src/families/ui-action-record-replay/runner.ts",
+    "scripts/ui-host.mjs",
   ],
   "ui-replay-live-dom": [
     "src/families/ui-replay-live-dom/verify.ts",
     "src/families/ui-replay-live-dom/runner.ts",
+    "scripts/live-dom-host.mjs",
   ],
 };
+
+/**
+ * The gate that makes every list in this file unable to drift from the registry in silence.
+ *
+ * `ADVERSARIAL_PACKAGE_FAMILIES` and `ADVERSARIAL_AUDITED_FAMILIES` are derived, so they cannot
+ * drift at all. `FAMILY_SURFACES` and `VERIFIER_PATHS` cannot be derived — their contents are
+ * per-family prose and per-family file paths that only an author can write — so they get the weaker
+ * guarantee instead: a built family with no row here is a hard error rather than a quiet `?? []`.
+ *
+ * Both halves matter and both can fail. `VERIFIER_PATHS` in particular had no row for
+ * `access-token-scope-expansion`, so `verifierHashFor` returned null for it and any adversarial
+ * record naming that family carried no verifier hash to be invalidated by a verifier repair.
+ *
+ * @param root when given, every listed path is also checked to exist — `hashFiles` skips missing
+ *             files silently, so a stale path is exactly as invisible as a missing row.
+ */
+export function assertAdversarialFamilyTablesCurrent(
+  root?: string,
+  builtFamilyIds: readonly string[] = BUILT_FAMILY_IDS,
+): void {
+  assertFamilyListAccounted({
+    listName: "ADVERSARIAL_PACKAGE_FAMILIES",
+    list: adversarialPackageFamilies(builtFamilyIds),
+    builtFamilyIds,
+    excluded: ADVERSARIAL_PACKAGE_EXCLUSIONS,
+  });
+  assertFamilyListAccounted({
+    listName: "ADVERSARIAL_AUDITED_FAMILIES",
+    list: adversarialAuditedFamilies(builtFamilyIds),
+    builtFamilyIds,
+    allowedNonBuilt: ADVERSARIAL_NON_BUILT_FAMILIES,
+    excluded: ADVERSARIAL_PACKAGE_EXCLUSIONS,
+  });
+  assertFamilyListAccounted({
+    listName: "FAMILY_SURFACES",
+    list: Object.keys(FAMILY_SURFACES),
+    builtFamilyIds,
+  });
+  assertFamilyListAccounted({
+    listName: "VERIFIER_PATHS",
+    list: Object.keys(VERIFIER_PATHS),
+    builtFamilyIds,
+  });
+
+  if (root === undefined) return;
+  const stale = Object.entries(VERIFIER_PATHS)
+    .flatMap(([familyId, paths]) => paths.map((path) => ({ familyId, path })))
+    .filter(({ path }) => !existsSync(join(root, path)));
+  if (stale.length > 0) {
+    throw new Error(
+      `VERIFIER_PATHS names ${stale.length} path(s) that do not exist, so the verifier hash silently omits them: ${stale
+        .map(({ familyId, path }) => `${familyId} -> ${path}`)
+        .join(", ")}`,
+    );
+  }
+}
 
 const nonEmpty = (s: string | null | undefined): boolean => typeof s === "string" && s.trim().length > 0;
 
@@ -227,8 +353,9 @@ export function defaultThreatModel(familyId: string): AdversarialThreatModel {
 }
 
 export function buildAdversarialCampaign(root: string, familyId: string): AdversarialCampaign {
+  assertAdversarialFamilyTablesCurrent(root);
   const hash = currentAdversarialPackageHash(root, familyId);
-  const packageBacked = hash !== null && ADVERSARIAL_PACKAGE_FAMILIES.includes(familyId as never);
+  const packageBacked = hash !== null && ADVERSARIAL_PACKAGE_FAMILIES.includes(familyId);
   return {
     campaignId: `${familyId}-adversarial`,
     familyId,
@@ -338,7 +465,7 @@ export function auditAdversarialReadiness(
       : check("public-package-present", "fail", "no checked-in public challenge package is available here"),
   );
 
-  if (packageAvailable && ADVERSARIAL_PACKAGE_FAMILIES.includes(familyId as never)) {
+  if (packageAvailable && ADVERSARIAL_PACKAGE_FAMILIES.includes(familyId)) {
     try {
       checkChallengePackage(packageFiles(root, familyId), builtFamily(familyId).leakProfile);
       checks.push(check("package-leak-check", "pass", "public challenge package passes leak check"));
@@ -448,6 +575,7 @@ export function auditAdversarialReadiness(
 }
 
 export function auditAdversarialReadinessForFamilies(root: string): readonly AdversarialReadinessAudit[] {
+  assertAdversarialFamilyTablesCurrent(root);
   const campaigns = loadAdversarialCampaigns(root);
   return ADVERSARIAL_AUDITED_FAMILIES.map((familyId) => auditAdversarialReadiness(root, familyId, campaigns));
 }

@@ -24,7 +24,9 @@
 // So this module does three things: detect the chain, prove that subjects cannot fix it, and locate
 // the region of the declared space where an incomparable catch set could exist.
 
+import { measure } from "../axis-meter.js";
 import { fail } from "../foundry/schema.js";
+import { parseMatrix } from "../matrix.js";
 
 export interface SubjectFailures {
   readonly subjectId: string;
@@ -56,7 +58,27 @@ export interface ChainAnalysis {
   readonly order: readonly string[];
   /** Pairs that are incomparable — the only thing that can raise the width above 1. */
   readonly incomparable: readonly SubjectPair[];
-  readonly agentAxes: number;
+  /**
+   * The MEASURED antichain width over the counted failing subjects, or null when it is not
+   * measurable — which is the honest answer for a bank with a single failing subject.
+   *
+   * This was a constant until it was caught: `failing.length === 0 ? 0 : isChain ? 1 : 2`, printed
+   * beside genuine antichain widths as though it had been measured. Its worst reading was the one
+   * that shipped: a family with ONE failing subject is not a chain (a chain needs two), so it fell
+   * through to the literal 2 and three families published "agent axes >= 2" on the strength of a
+   * single failing subject each.
+   */
+  readonly agentAxes: number | null;
+  /**
+   * The ceiling this bank can support, which is how many subjects have failed anything.
+   *
+   * A width is bounded by the bank it was measured over, and a small bank cannot tell a genuinely
+   * two-axis family from a two-subject accident. The bound travels with the number so the reader
+   * never has to reconstruct it.
+   */
+  readonly agentAxesBoundedBy: number;
+  /** The width and its bound, ready to print. Never a bare number, never a `>=` on a constant. */
+  readonly agentAxesReading: string;
   readonly reading: string;
 }
 
@@ -101,9 +123,13 @@ export function analyseChain(familyId: string, subjects: readonly SubjectFailure
     ? [...failing].sort((a, b) => a.failed.size - b.failed.size).map((s) => s.subjectId)
     : [];
 
-  // The width over SUBJECTS as sets of failed scenarios. A chain is width 1 by definition; otherwise
-  // it is bounded below by 2 and computing it exactly is the axis meter's job on the real matrix.
-  const agentAxes = failing.length === 0 ? 0 : isChain ? 1 : 2;
+  const agentAxes = measuredAgentAxes(failing);
+  const agentAxesReading =
+    agentAxes === null
+      ? `not measurable — ${failing.length} counted failing subject`
+      : agentAxes === 0
+        ? "0 — no counted subject has failed anything"
+        : `${agentAxes} (bounded above by the ${failing.length}-subject bank)`;
 
   const reading = isChain
     ? `Every pair of counted failing subjects nests: ${order
@@ -123,8 +149,82 @@ export function analyseChain(familyId: string, subjects: readonly SubjectFailure
     order,
     incomparable,
     agentAxes,
+    agentAxesBoundedBy: failing.length,
+    agentAxesReading,
     reading,
   };
+}
+
+/**
+ * The width, measured, by the same meter every other axis count in this repository goes through.
+ *
+ * `measure` grades a matrix, so the subject-by-scenario failure sets are turned into one: instances
+ * are the scenarios anybody failed, subjects are the failing subjects, and a cell fails when that
+ * subject failed that scenario. `independentAxes` is then the antichain width over the instances'
+ * catch sets, which is the same quantity `shared-difficulty.ts` reports for combined banks and the
+ * same one the mutant-bank axis counts are.
+ *
+ * It agrees with the chain relation at both ends and is strictly more informative in between: if
+ * every subject's failure set nests, every catch set is an up-set of one order and the width is 1;
+ * if any pair is incomparable there are two scenarios separating them in opposite directions and the
+ * width is at least 2. What the old constant could not do is distinguish 2 from 5.
+ *
+ * One failing subject returns null rather than 1. The width over a one-subject bank is 1 whatever
+ * the family does, so the number would be a fact about the bank size wearing a measurement's name —
+ * the exact mistake this module exists to catch.
+ */
+function measuredAgentAxes(failing: readonly SubjectFailures[]): number | null {
+  if (failing.length === 0) return 0;
+  if (failing.length === 1) return null;
+  const scenarioIds = [...new Set(failing.flatMap((s) => [...s.failed]))].sort();
+  if (scenarioIds.length === 0) return 0;
+
+  const results: Record<string, Record<string, { failed: string[] }>> = {};
+  for (const scenarioId of scenarioIds) {
+    const row: Record<string, { failed: string[] }> = {};
+    for (const subject of failing) {
+      row[subject.subjectId] = { failed: subject.failed.has(scenarioId) ? ["failed"] : [] };
+    }
+    results[scenarioId] = row;
+  }
+
+  return measure(
+    parseMatrix({
+      schema: "agent-eval-foundry/matrix@1",
+      suite: "counted-agent-failures",
+      provenance: {
+        repo: "agent-eval-foundry",
+        artifact_commit: null,
+        task_sha256: null,
+        suite_shape: `${scenarioIds.length} failed scenario(s) / ${failing.length} counted failing subject(s)`,
+        checks_total: scenarioIds.length,
+        extracted_from: ["counted agent trial records"],
+        caveat:
+          "Cells are the union of failures across a subject's counted trials, restricted to the " +
+          "scenarios at least one subject failed. Scenarios nobody failed are omitted: their catch " +
+          "set is empty, which is nested inside every other and cannot change the width.",
+      },
+      reference_subject: null,
+      subjects: failing.map((s) => ({
+        id: s.subjectId,
+        label: s.subjectId,
+        family: s.providerFamily,
+        model: s.subjectId,
+        effort: null,
+        note: null,
+      })),
+      instances: scenarioIds.map((id) => ({
+        id,
+        schedule: null,
+        seed: null,
+        keys: null,
+        family: null,
+        source: "counted-agent-trial",
+        note: null,
+      })),
+      results,
+    }),
+  ).independentAxes;
 }
 
 // ---------------------------------------------------------------- where a new axis could live

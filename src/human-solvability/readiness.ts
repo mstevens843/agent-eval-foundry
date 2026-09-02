@@ -6,16 +6,32 @@ import type { ChallengeManifest, ChallengePackage } from "../challenge/package.j
 import { BUILT_FAMILY_IDS, builtFamily } from "../families/registry.js";
 import type { HumanReadinessAudit, HumanReadinessCheck } from "./types.js";
 
-export const HUMAN_AUDITED_FAMILIES = [
-  "durable-approval-outbox",
-  "prompt-injection-memory-poisoning",
-  "ui-action-record-replay",
-  "ui-replay-live-dom",
-  "checker-required-memory-poisoning",
-  "deployment-model-alias-rollout-drift",
-  "delegated-wallet-scope-reconciliation",
-  "prompt-injection-containment",
-] as const;
+/**
+ * Families audited here that are NOT built families, with why they belong anyway.
+ *
+ * `durable-approval-outbox` is the imported historical bank: it has trials and a ledger row in this
+ * repository but no executable family, so the audit is expected to say `not-ready` and that verdict
+ * is the point — it is the control that proves this audit can fail.
+ */
+export const HUMAN_AUDIT_NON_BUILT_FAMILIES: readonly string[] = ["durable-approval-outbox"];
+
+/**
+ * DERIVED from the built-family registry, never typed out.
+ *
+ * The hand-written version of this list carried eight ids and looked complete. It was not: it named
+ * `durable-approval-outbox` and omitted `access-token-scope-expansion`, which has a checked-in
+ * challenge package and had simply never been added here. Nothing compared the list to the registry,
+ * so the family was silently unaudited for human solvability while the report read as full coverage.
+ *
+ * There is no exclusion list on purpose. Auditing a built family costs one package read, so "we did
+ * not get to it" is never a reason to leave one out; if a built family's package is incomplete the
+ * audit is supposed to say so out loud. See `test/family-list-drift.test.ts`.
+ */
+export const humanAuditedFamilies = (
+  builtFamilyIds: readonly string[] = BUILT_FAMILY_IDS,
+): readonly string[] => [...builtFamilyIds, ...HUMAN_AUDIT_NON_BUILT_FAMILIES].sort();
+
+export const HUMAN_AUDITED_FAMILIES: readonly string[] = humanAuditedFamilies();
 
 const pass = (id: string, detail: string): HumanReadinessCheck => ({ id, verdict: "pass", detail });
 const failCheck = (id: string, detail: string): HumanReadinessCheck => ({ id, verdict: "fail", detail });

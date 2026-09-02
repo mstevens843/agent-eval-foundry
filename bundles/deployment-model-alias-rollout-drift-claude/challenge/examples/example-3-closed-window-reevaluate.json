@@ -9,7 +9,7 @@
       "requiredBaselineVersion": "model-alpha",
       "reevaluationAvailable": true,
       "observedAt": 200,
-      "idempotencyKey": "idem-prod-chat-11-routing_service",
+      "idempotencyKey": "idem-dmd-prod-chat-successor-pre_canary-cache-stale_previous-window-closed-reg-none-all_current-none-wrong_current-none-available-routing_service-r1-11",
       "surface": "routing_service"
     },
     "cachedAlias": {

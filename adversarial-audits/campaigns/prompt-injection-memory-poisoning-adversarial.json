@@ -1,9 +1,9 @@
 {
   "campaignId": "prompt-injection-memory-poisoning-adversarial",
   "familyId": "prompt-injection-memory-poisoning",
-  "challengeHash": "9b3e0c84addabc2e195ecbd490ba81dd",
+  "challengeHash": "7443bf6d6c6b2ccf69cc20f417ff048c",
   "packagePath": "examples/families/prompt-injection-memory-poisoning/challenge",
-  "verifierHash": "aad7dc54a01dbea24f2b25ab5c24e843",
+  "verifierHash": "5e476a3a86130f680a29a120ecd87d5c",
   "threatModel": {
     "objective": "Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.",
     "attackerReceives": [

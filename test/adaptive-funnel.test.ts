@@ -142,15 +142,15 @@ describe("adaptive funnel planning", () => {
     expect(action?.stage).not.toBe("full_matrix");
   });
 
-  it("sends stale challenge hashes to repair instead of production", () => {
+  it("sends stale challenge hashes with no counted current-hash trial to repair", () => {
     const { registry, funnel } = input();
     const summary = planAdaptiveFunnel(funnel, registry, [
       {
         familyId: "stale-family",
         trialReady: true,
-        countedAgentTrials: 2,
-        sharedProviderFamilies: ["openai", "anthropic"],
-        agentAxes: 3,
+        countedAgentTrials: 0,
+        sharedProviderFamilies: [],
+        agentAxes: null,
         staleTrials: ["old-run"],
       },
     ]);
@@ -158,6 +158,54 @@ describe("adaptive funnel planning", () => {
     const action = summary.nextActions.find((a) => a.targetId === "stale-family");
     expect(action?.decision).toBe("repair");
     expect(action?.stage).toBe("task_shape");
+    expect(action?.mode).toBe("validation");
+  });
+
+  it("does not route a repaired-and-re-measured family back to repair forever", () => {
+    // Superseded trials stay on disk by design, so a family that has ever been repaired carries
+    // stale run ids permanently. Once it has a counted trial against the CURRENT challenge hash the
+    // repair is done, and the funnel must judge it on that counted evidence instead.
+    const { registry, funnel } = input();
+    const summary = planAdaptiveFunnel(funnel, registry, [
+      {
+        familyId: "repaired-and-remeasured-family",
+        trialReady: true,
+        countedAgentTrials: 2,
+        agentTrialsPassed: 0,
+        sharedProviderFamilies: ["openai", "anthropic"],
+        agentFailuresChain: false,
+        agentAxes: 3,
+        staleTrials: ["superseded-run-a", "superseded-run-b"],
+      },
+    ]);
+
+    const action = summary.nextActions.find((a) => a.targetId === "repaired-and-remeasured-family");
+    expect(action?.decision).not.toBe("repair");
+    expect(action?.decision).toBe("promote");
+    expect(action?.mode).toBe("production");
+    expect(action?.stage).toBe("full_matrix");
+  });
+
+  it("still holds a repaired family at its counted-evidence stage, not at repair", () => {
+    // Same preserved-stale situation, but the counted evidence is a single same-provider trial:
+    // the decision must come from the counted branches (transfer), never from the stale record.
+    const { registry, funnel } = input();
+    const summary = planAdaptiveFunnel(funnel, registry, [
+      {
+        familyId: "repaired-one-provider-family",
+        trialReady: true,
+        countedAgentTrials: 1,
+        agentTrialsPassed: 0,
+        sharedProviderFamilies: ["openai"],
+        agentFailuresChain: false,
+        agentAxes: null,
+        staleTrials: ["superseded-run-a"],
+      },
+    ]);
+
+    const action = summary.nextActions.find((a) => a.targetId === "repaired-one-provider-family");
+    expect(action?.decision).toBe("transfer");
+    expect(action?.stage).toBe("transfer_test");
   });
 
   it("sends collapsed agent failure chains to evolve or hold, not broad ship claims", () => {

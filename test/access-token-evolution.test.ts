@@ -1,3 +1,4 @@
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { assertVariantNovel } from "../src/foundry/evolve.js";
 import {
@@ -17,6 +18,7 @@ import {
   renderAccessTokenEvolutionReport,
 } from "../src/reports/access-token-evolution-report.js";
 import { familyEvidenceFor } from "../src/reports/evidence.js";
+import { readFamilyTrials } from "../src/trials/directory.js";
 import { prepareChallenge } from "../src/trials/run.js";
 
 const ROOT = new URL("..", import.meta.url).pathname;
@@ -34,10 +36,17 @@ function loaded() {
 }
 
 describe("Access-Token Evolution v1", () => {
-  it("routes the clean access-token smoke pass to evolution, not full matrix", () => {
+  // This test used to assert the opposite: one counted trial, one clean pass, `already_solved`.
+  // That reading came from a package whose visible starter was a complete passing solution and whose
+  // `scope_bound_exactly` check never looked at the issued grant, so the pass measured transcription
+  // and grant-blindness rather than the mechanism. Repairing both changed the challenge hash, which
+  // supersedes that trial by design. What has to hold now is that the evidence went to zero and the
+  // preserved trial directory is still on disk.
+  it("supersedes the clean access-token smoke pass once the repaired package changes the hash", () => {
     const { registry } = loaded();
     const state = familyLoop(ROOT, PARENT, registry, (familyId) => familyEvidenceFor(ROOT, familyId));
     const bundle = familyEvidenceFor(ROOT, PARENT);
+    const preserved = readFamilyTrials(join(ROOT, "trials"), PARENT).map((trial) => trial.runId);
     const gate = evaluatePromotionSmokeGate({
       familyId: PARENT,
       localEvidencePass: true,
@@ -51,21 +60,32 @@ describe("Access-Token Evolution v1", () => {
       providerRefusals: 0,
       infraFailures: 0,
       transferDeclared: true,
-      diagnosisStatus: "clean",
+      diagnosisStatus: "none",
     });
 
-    expect(bundle.evidence.countedAgentTrials).toBe(1);
-    expect(bundle.evidence.agentTrialsPassed).toBe(1);
-    expect(state.analysis.primary?.reason).toBe("already_solved");
-    expect(state.analysis.disposition).toBe("harden");
-    expect(gate.state).toBe("smoke-passed-cleanly");
+    expect(preserved).toContain("access-token-2026-08-o1");
+    expect(bundle.evidence.countedAgentTrials).toBe(0);
+    expect(bundle.evidence.agentTrialsPassed).toBe(0);
+    expect(state.analysis.primary?.reason).not.toBe("already_solved");
+    expect(state.analysis.disposition).toBe("trial");
+    expect(gate.state).toBe("smoke-planned");
     expect(gate.fullMatrixReady).toBe(false);
-    expect(gate.nextAction).toContain("already_solved_or_needs_evolution");
+    expect(gate.blockers).toContain("no counted smoke trial");
   });
 
+  // The descendant proposal is driven by a clean-pass reading, and the real evidence no longer
+  // supplies one: the repair superseded the only counted trial. So the evidence is an explicit
+  // fixture here — one counted, fully passing trial — and the test keeps measuring what it was
+  // written to measure, which is the proposal machinery, not the trial ledger.
   it("proposes access-token-specific descendants that are novel versus the parent", () => {
     const { registry } = loaded();
-    const state = familyLoop(ROOT, PARENT, registry, (familyId) => familyEvidenceFor(ROOT, familyId));
+    const state = familyLoop(ROOT, PARENT, registry, (familyId) => {
+      const bundle = familyEvidenceFor(ROOT, familyId);
+      return {
+        ...bundle,
+        evidence: { ...bundle.evidence, countedAgentTrials: 1, agentTrialsPassed: 1 },
+      };
+    });
     const selected = state.variants.find((variant) => variant.id === SELECTED_VARIANT);
 
     expect(state.variants.length).toBeGreaterThanOrEqual(3);

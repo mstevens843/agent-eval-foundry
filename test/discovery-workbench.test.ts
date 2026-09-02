@@ -2,7 +2,9 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
   type DiscoveryCandidate,
+  type DiscoveryCandidateEvidence,
   candidateToTaskShapeDraft,
+  mergeCandidateEvidence,
   parseDiscoveryCandidate,
   scoreDiscoveryCandidate,
   summarizeDiscoveryWorkbench,
@@ -44,10 +46,14 @@ const withRisk = (
 });
 
 describe("Discovery Workbench data", () => {
-  it("loads a validated 51-candidate pool linked to mechanisms and transfer tests", () => {
+  it("loads a validated 52-candidate pool linked to mechanisms and transfer tests", () => {
     const { registry, funnel, workbench } = loaded();
 
-    expect(workbench.candidates).toHaveLength(51);
+    // The literal is a deliberate ledger: growing the pool must be a reviewed edit, not a silent
+    // side effect of in-flight work. The second assertion catches the other failure direction -
+    // the loader dropping or de-duplicating a row that is present on disk.
+    expect(workbench.candidates).toHaveLength(52);
+    expect(workbench.candidates).toHaveLength((read("data/candidate-pool.json") as unknown[]).length);
     expect(workbench.candidates.every((c) => c.expectedKnobs.length >= 2)).toBe(true);
     expect(workbench.candidates.every((c) => c.transferPotential.targetDomains.length > 0)).toBe(true);
     expect(registry.mechanisms.length).toBeGreaterThanOrEqual(15);
@@ -140,6 +146,106 @@ describe("Discovery Workbench scoring", () => {
     expect(summary.warnings).toContain(
       "top-ranked candidates over-concentrate on one mechanism; run a surface-diversity pass",
     );
+  });
+});
+
+describe("candidate evidence merge", () => {
+  const promotion: DiscoveryCandidateEvidence = {
+    candidateId: "merge-target",
+    status: "family-build-ready",
+    sourceId: "merge-target-from-probe",
+    verdict: "family-built",
+    rankBoost: 4,
+    reason: "the probe caught every known-bad subject, so the family was built",
+  };
+  const lineagePenalty: DiscoveryCandidateEvidence = {
+    candidateId: "merge-target",
+    status: "lineage-penalized",
+    sourceId: "lineage:merge-target-lineage",
+    verdict: "lineage_blocked_by_stale_evidence",
+    rankBoost: -3,
+    reason: "penalty from lineage result: this mechanism cluster was solved cleanly",
+  };
+
+  it("keeps both rows for one candidate instead of letting the last one win", () => {
+    const merged = mergeCandidateEvidence([promotion, lineagePenalty]);
+    const entry = merged.get("merge-target");
+
+    // Both rows survive: the promotion decides the status, the lineage row decides the adjustment.
+    expect(entry?.rows).toEqual([promotion, lineagePenalty]);
+    expect(entry?.status).toBe("family-build-ready");
+    expect(entry?.primarySourceId).toBe("merge-target-from-probe");
+    expect(entry?.provenanceBoost).toBe(4);
+    expect(entry?.lineageAdjustment).toBe(-3);
+    expect(entry?.rankBoost).toBe(1);
+  });
+
+  it("merges the same rows the same way in either producer order", () => {
+    const forward = mergeCandidateEvidence([promotion, lineagePenalty]).get("merge-target");
+    const reversed = mergeCandidateEvidence([lineagePenalty, promotion]).get("merge-target");
+
+    expect(reversed?.status).toBe(forward?.status);
+    expect(reversed?.rankBoost).toBe(forward?.rankBoost);
+  });
+
+  it("sums several lineage adjustments on top of one provenance status", () => {
+    const secondPenalty: DiscoveryCandidateEvidence = {
+      ...lineagePenalty,
+      sourceId: "lineage:second-lineage",
+      rankBoost: -2,
+    };
+    const entry = mergeCandidateEvidence([promotion, lineagePenalty, secondPenalty]).get("merge-target");
+
+    expect(entry?.status).toBe("family-build-ready");
+    expect(entry?.lineageAdjustment).toBe(-5);
+    expect(entry?.rankBoost).toBe(-1);
+  });
+
+  it("does not let a lineage boost erase a cheap kill", () => {
+    const killed: DiscoveryCandidateEvidence = {
+      candidateId: "merge-target",
+      status: "probe-killed",
+      sourceId: "merge-target-probe",
+      verdict: "kill",
+      rankBoost: 0,
+      reason: "the probe failed its own reference subject",
+    };
+    const boost: DiscoveryCandidateEvidence = {
+      ...lineagePenalty,
+      status: "lineage-boosted",
+      rankBoost: 6,
+    };
+    const entry = mergeCandidateEvidence([killed, boost]).get("merge-target");
+
+    expect(entry?.status).toBe("probe-killed");
+    expect(entry?.rows).toHaveLength(2);
+  });
+
+  it("ranks a promoted-then-penalized candidate above an equal candidate with no evidence", () => {
+    const base = firstCandidate();
+    const candidates: DiscoveryCandidate[] = [
+      { ...base, id: "merge-target", title: "Merge target" },
+      { ...base, id: "merge-peer", title: "Merge peer" },
+    ];
+    const summary = summarizeDiscoveryWorkbench({ candidates }, [promotion, lineagePenalty]);
+    const queue = summary.topBuildOrProbeCandidates.map((s) => s.candidateId);
+
+    // Last-wins ranking read this candidate as lineage-penalized (rank -2, boost -3) and sank it
+    // below the evidence-free peer; the merge keeps family-build-ready (rank 6, boost +1).
+    expect(queue.indexOf("merge-target")).toBeLessThan(queue.indexOf("merge-peer"));
+    expect(summary.evidenceStatuses).toHaveLength(2);
+  });
+
+  it("shows the surviving provenance status and the lineage adjustment in the report", () => {
+    const { registry } = loaded();
+    const base = firstCandidate();
+    const workbench = { candidates: [{ ...base, id: "merge-target", title: "Merge target" }] };
+    const summary = summarizeDiscoveryWorkbench(workbench, [promotion, lineagePenalty]);
+    const report = renderDiscoveryWorkbenchReport({ registry, workbench, summary });
+
+    expect(report).toContain("family-build-ready (lineage -3.0)");
+    expect(report).toContain("`merge-target-from-probe`");
+    expect(report).toContain("`lineage:merge-target-lineage`");
   });
 });
 

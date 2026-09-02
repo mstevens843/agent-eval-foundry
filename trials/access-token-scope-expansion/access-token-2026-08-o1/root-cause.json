@@ -1,0 +1,20 @@
+{
+  "runId": "access-token-2026-08-o1",
+  "familyId": "access-token-scope-expansion",
+  "label": "clean",
+  "rationale": "0/384 graded scenarios failed, so there is no failure to attribute and `clean` is the only label the outcome permits. Recorded rather than left absent so a reader can tell a trial that was read from one that was not. The pass must not be quoted as evidence that this family is easy or that the subject demonstrated the mechanism: challenge/README.md line 17 describes challenge/starter/subject.mjs as \"a stub with the required export shape\" and the file self-labels \"Starter stub - replace me\" (line 28), but I re-graded the shipped starter against all 384 hidden scenarios and it fails 0. The visible package contained a complete passing solution, so a subject that changed nothing material would also have scored 0/384. `package-leak` is the substantive finding here, but it attributes a failure and this trial failed nothing, so the sidecar format refuses that label (ROOTCAUSE_LABEL_CONTRADICTS_OUTCOME) and the leak is recorded in this rationale instead. The family itself is self-consistent -- its reference subject scores 0/384 -- so this is a packaging defect, not a broken verifier.",
+  "evidenceRead": [
+    "result.json",
+    "countability.json",
+    "metadata.json",
+    "submission/subject.mjs",
+    "challenge/starter/subject.mjs",
+    "challenge/README.md"
+  ],
+  "diagnosisReading": "clean",
+  "labelledBy": {
+    "kind": "automated",
+    "id": "lane-4b-root-cause-adjudication",
+    "date": "2026-09-01"
+  }
+}

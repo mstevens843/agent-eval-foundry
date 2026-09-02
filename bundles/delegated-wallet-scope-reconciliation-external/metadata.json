@@ -7,7 +7,7 @@
   "subjectId": "external",
   "effort": null,
   "scenarioSetId": "reconciliation-804-4b4cc8ff",
-  "challengeHash": "2140032d835a87ff254d01b6b4652f21",
+  "challengeHash": "45f27b644a84364e3d3855f68cd243a2",
   "isolation": "subprocess",
   "status": "completed",
   "notes": "REPLACE: how it was run, and anything unusual about the run.",

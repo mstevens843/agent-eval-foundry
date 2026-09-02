@@ -28,12 +28,12 @@ Every figure below is measured: produced by running the family, not by declaring
 | `reference-passes` | yes | pass | reference clean |
 | `baselines-blocked` | yes | pass | 2/2 baselines rejected |
 | `mutants-caught-by-intended-check` | yes | pass | 10/10 caught by intended check |
-| `mechanisms-exercised` | yes | pass | every attack blocks on its governing rule |
+| `mechanisms-exercised` | yes | pass | 324/324 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
 | `isolation-level` | no | pass | subprocess with 5 agent trial(s) |
-| `shared-bank-ready` | no | fail | 2 subject(s) shared with another family (need 3) |
+| `shared-bank-ready` | no | pass | 4 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | no | pass | verified |
 | `trial-ready` | no | pass | challenge package builds, leak check passes, router can grade it |
-| `difficulty-evidenced` | yes | pass | 5 counted agent trial(s) |
+| `difficulty-evidenced` | yes | pass | 2 of 5 counted agent trial(s) failed with root cause `capability` |
 | `agent-axes-independent` | no | fail | every counted subject's failures nest (claude-opus-5 ⊂ claude-haiku-4-5 ⊂ claude-sonnet-5 ⊂ gpt-5.6-sol); one difficulty axis however many subjects attempt it. Only new scenarios with a genuine trade-off can raise it — see reports/scenario-diversity-report.md |
 | `production-matrix-ready` | no | n/a | no production-readiness layer for this family |
 | `not-already-solved` | yes | pass | 5 of 5 counted trial(s) failed at least one scenario |
@@ -59,7 +59,7 @@ Every figure below is measured: produced by running the family, not by declaring
 | mechanism | what it is | mutants in the bank |
 |---|---|---|
 | `ui-replay-mismatch` | A recorded interaction with an interface replays cleanly against a snapshot but not against the live surface, because it bound to coordinates, ordering or transient text instead of to stable identity. | `audit-liar`, `model-in-the-loop`, `hidden-confirmation-skipper`, `action-order-reorderer`, `halter-not-reporter`, `nop-recorder`, `impatient-halter`, `anchor-credulous`, `stale-id-replayer`, `testid-loyalist`, `semantic-loyalist`, `path-loyalist`, `precondition-assumer`, `first-match-picker`, `dom-prober`, `stale-handle-holder`, `step-reorderer` |
-| `stale-state` | A decision is taken against a snapshot of state that has since changed, so the action is correct for a world that no longer exists at the moment it takes effect. | `duplicate-executor`, `stale-state-reader`, `cached-alias-truster`, `alias-name-only-decider`, `stale-baseline-comparer`, `provenance-dropper`, `recall-blind-executor`, `recency-over-provenance`, `same-session-resolver`, `hidden-confirmation-skipper`, `halter-not-reporter`, `approval-reuser`, `stale-approval-follower`, `anchor-credulous`, `txn-blind`, `stale-id-replayer`, `testid-loyalist`, `semantic-loyalist`, `path-loyalist`, `precondition-assumer`, `stale-handle-holder`, `late-cancel-blind-checker`, `cached-scope-truster`, `revocation-blind-executor`, `downgrade-blind-executor`, `duplicate-effect-retrier` |
+| `stale-state` | A decision is taken against a snapshot of state that has since changed, so the action is correct for a world that no longer exists at the moment it takes effect. | `duplicate-executor`, `stale-state-reader`, `cached-alias-truster`, `alias-name-only-decider`, `stale-baseline-comparer`, `provenance-dropper`, `recall-blind-executor`, `recency-over-provenance`, `same-session-resolver`, `hidden-confirmation-skipper`, `halter-not-reporter`, `approval-reuser`, `stale-approval-follower`, `anchor-credulous`, `txn-blind`, `stale-id-replayer`, `testid-loyalist`, `semantic-loyalist`, `path-loyalist`, `precondition-assumer`, `stale-handle-holder`, `late-cancel-blind-checker`, `cached-scope-truster`, `revocation-blind-executor`, `downgrade-blind-executor`, `duplicate-effect-retrier`, `single-sample-sufficient` |
 | `hidden-environment-dependency` | The implementation works because of something in the authoring environment that was never declared — a preinstalled package, a set variable, network egress, a locale, a file left behind by an earlier step. | `oracle-prober`, `alias-pinner`, `model-in-the-loop`, `impatient-halter`, `txn-blind`, `region-blind`, `confirmation-skipper`, `budget-spinner` |
 
 ## The declared space

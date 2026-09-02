@@ -1,0 +1,18 @@
+{
+  "runId": "ui-claude-1",
+  "familyId": "ui-action-record-replay",
+  "label": "capability",
+  "rationale": "The submission's own header enumerates R4, R5 and R6 from the published SPEC and implements each — a process-level effect ledger keyed by trace id for R5, live confirmation observation for R4 — so the contract was understood rather than missed. It still fired irreversible effects on traces whose correct outcome was not `completed` (`no_forbidden_effect`) and still repeated an already-applied step (`replay_idempotent`). Both behaviours are stated in the visible SPEC (`R5_IDEMPOTENT_REPLAY`: \"Keeping that record is your job; the harness does not keep it for you\"), so `spec-underspecified` is excluded; the failing checks are the ones the campaign's pre-registered hypothesis named, and the failures are confined to particular knob values rather than wiping out a check.",
+  "evidenceRead": [
+    "result.json",
+    "countability.json",
+    "challenge/SPEC.md",
+    "submission/subject.mjs"
+  ],
+  "labelledBy": {
+    "kind": "automated",
+    "id": "lane-4a-root-cause-review",
+    "date": "2026-09-01"
+  },
+  "diagnosisReading": "capability"
+}

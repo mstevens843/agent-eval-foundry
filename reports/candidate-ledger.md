@@ -11,8 +11,8 @@ number you can only get by writing the failures down.
 | candidates | **39** |
 | status `idea` | 6 |
 | status `candidate` | 7 |
-| status `trialed` | 3 |
-| status `shipped` | 7 |
+| status `trialed` | 5 |
+| status `shipped` | 5 |
 | status `killed` | 16 |
 | measured (a real result exists) | 23 |
 | estimated | 16 |
@@ -21,7 +21,7 @@ number you can only get by writing the failures down.
 | kills that cost model spend | 0 |
 | kills with no cost recorded | 8 |
 
-Screened-to-shipped on this record: **16 killed for 7 shipped**. 8 kill(s) demonstrably cost nothing, 0 consumed model spend, and 8 have no cost recorded at all — so the true screening cost is a floor, not a total. The budget planner's hit-rate default is set from the ten design cycles this record reconstructs, and it is an input a reader is entitled to change.
+Screened-to-shipped on this record: **16 killed for 5 shipped**. 8 kill(s) demonstrably cost nothing, 0 consumed model spend, and 8 have no cost recorded at all — so the true screening cost is a floor, not a total. The budget planner's hit-rate default is set from the ten design cycles this record reconstructs, and it is an input a reader is entitled to change.
 
 ## Kill taxonomy
 
@@ -40,7 +40,7 @@ an error, but it is a row whose lesson has not been made transferable yet.
 
 | id | status | decision | mechanisms | cost | quality |
 |---|---|---|---|---:|---|
-| `checker-required-memory-poisoning` | shipped | open | checker-quality-gap, context-contamination, false-audit-history, prompt-injection-via-retrieval | $15.00 | measured |
+| `checker-required-memory-poisoning` | trialed | open | checker-quality-gap, context-contamination, false-audit-history, prompt-injection-via-retrieval | $15.00 | measured |
 | `reorg-safe-settlement-planted-defects` | killed | kill | oracle-probing, stale-state | — | measured |
 | `bounded-work-budget-settlement` | killed | kill | oracle-probing, stale-state | — | measured |
 | `reachable-terminal-observables` | killed | kill | duplicate-side-effects, stale-state | $0.00 | measured |
@@ -48,7 +48,7 @@ an error, but it is a row whose lesson has not been made transferable yet.
 | `cleanroom-pyc-oracle` | killed | kill | oracle-probing | — | measured |
 | `cleanroom-stripped-binary` | killed | kill | oracle-probing | — | measured |
 | `cycle5-fifteen-candidate-sweep` | killed | kill | duplicate-side-effects, hidden-environment-dependency, oracle-probing | $0.00 | measured |
-| `durable-approval-outbox` | shipped | promote | uncertain-external-effects, false-audit-history, liveness-stall, duplicate-side-effects, tool-result-ambiguity | $48.66 | measured |
+| `durable-approval-outbox` | trialed | promote | uncertain-external-effects, false-audit-history, liveness-stall, duplicate-side-effects, tool-result-ambiguity | $48.66 | measured |
 | `outbox-245-check-coverage-family` | trialed | kill | false-audit-history, uncertain-external-effects | $54.48 | measured |
 | `outbox-coverage-correction` | shipped | promote | false-audit-history | $0.00 | measured |
 | `outbox-verifier-cheat-hardening` | shipped | promote | grader-privilege-boundary, permission-boundary | $4.43 | measured |
@@ -82,7 +82,7 @@ an error, but it is a row whose lesson has not been made transferable yet.
 
 ### Memory poisoning with required submitted checker `checker-required-memory-poisoning`
 
-**Status** shipped · **Decision** open · **Domain** agent memory and self-verification · **Data** measured
+**Status** trialed · **Decision** open · **Domain** agent memory and self-verification · **Data** measured
 
 **Hypothesis.** A model may implement the memory-poisoning subject behavior while failing to ship a checker strong enough to reject known-bad subjects. Requiring `checker.mjs` should measure the gap between describing validation and building an executable verifier.
 
@@ -92,7 +92,7 @@ an error, but it is a row whose lesson has not been made transferable yet.
 
 **Results.** 1 passed / 21 failed against reference, vacuous-checker, accept-all-checker, reject-all-checker, own-output-only-checker, status-only-checker, same-bug-coupled-checker, audit-blind-checker, liveness-blind-checker, duplicate-blind-checker, late-cancel-blind-checker, receipt-trusting-checker, visible-only-checker, checker-never-invokes-subject, inexpressive-checker, nondeterministic-checker, stub-checker, no-checker, implementation-correct-checker-useless, checker-correct-implementation-wrong, subject-over-blocker, gpt-5.6-sol. Reference passes 792/792 from a 2,376-point declared space. All 20 known-bad checker/subject submissions are caught by intended checks, including accept-all, reject-all, status-only, checker-never-invokes-subject, no-checker, nondeterministic checker, correct-implementation/useless-checker and correct-checker/wrong-implementation cases. The counted Codex/OpenAI trial checker-required-2026-08-o1 preserved subject.mjs and checker.mjs and failed 614/792 scenarios under challenge hash 448f2f816c51030cc97a374816226168. This is real-agent difficulty evidence for one OpenAI subject only, not cross-lab breadth.
 
-**Decision rationale.** SHIP under the current gates because the family has a leak-checked challenge package, clean reference, intended-check mutant coverage, route grading and one counted Codex/OpenAI failure. The claim is narrow: one OpenAI subject struggled with the required-checker contract; no Anthropic run was executed and no cross-lab generalisation is claimed.
+**Decision rationale.** SHIP under the current gates because the family has a leak-checked challenge package, clean reference, intended-check mutant coverage, route grading and one counted Codex/OpenAI failure. The claim is narrow: one OpenAI subject struggled with the required-checker contract; no Anthropic run was executed and no cross-lab generalisation is claimed. [2026-09, root-cause layer] Status moved from `shipped` to `trialed`. The ship gate's `difficulty-evidenced` check now counts only counted trials carrying a `root-cause.json` that says `capability`, and this family has none, so `shipped` in the ledger and NOT-READY at the gate would be two stories about the same family. Nothing about the trials changed and nothing here is withdrawn — what is missing is the adjudication that says whether each counted failure was a capability finding, an underdetermined package or a harness defect. The route back to `shipped` is to read the transcript of `checker-required-2026-08-o1` and record its root cause. It is currently unlabelled: 614 of 792 scenarios failed across eight checks, six of them on the SUBMITTED CHECKER rather than the subject, and the automatic reading is `mixed`, which `diagnosis.ts` routes to a human read rather than to a difficulty claim.
 
 **Transferability.** The mechanism should transfer across memory, UI replay and workflow families, but the memory-poisoning descendant is the cleanest first version because the underlying policy and known-bad subjects already exist.
 
@@ -240,7 +240,7 @@ an error, but it is a row whose lesson has not been made transferable yet.
 
 ### Durable approval outbox, exactly-once under withdrawal `durable-approval-outbox`
 
-**Status** shipped · **Decision** promote · **Domain** agent tool-call durability, approval workflows, exactly-once external effects · **Data** measured
+**Status** trialed · **Decision** promote · **Domain** agent tool-call durability, approval workflows, exactly-once external effects · **Data** measured
 
 **Hypothesis.** Repair a durable outbox that turns approved agent tool actions into external side effects exactly once, while workers overlap, crash mid-flight, lose leases, and have approvals withdrawn underneath them. The tool sometimes returns without saying whether the call took effect and a later settlement record is authoritative, so no rule computed from local state is correct on every run.
 
@@ -250,7 +250,7 @@ an error, but it is a row whose lesson has not been made transferable yet.
 
 **Results.** 0 passed / 6 failed against cc267-claude-1 (opus-5 max), cc267-claude-2 (opus-5 max), cc267-claude-3 (opus-5 max), cc267-codex-1 (gpt-5.6-sol xhigh), cc267-codex-2 (gpt-5.6-sol xhigh), cc267-codex-3 (gpt-5.6-sol xhigh). Six of six counted frontier failures on the corrected artifact (commit c0e04eb, 24 scenarios / 15 schedules / 267 checks). Verifier scores 265/2, 254/13, 256/11, 256/11, 256/11, 256/11; runtimes 29m to 1h58m; zero timeouts, zero API errors, zero orphans, zero exceptions. Reference and oracle score 267/267 reward 1. Five of six failed by resolving doubt too eagerly and recording the illegal transition ACKED -> REVOKED; one refused to resolve doubt at all — correctly — and stranded an action in IN_DOUBT forever.
 
-**Decision rationale.** It is the only candidate of ten cycles that survived measurement, and the failure signature is the evidence: engines fail from opposite sides of one requirement rather than tripping over one narrow trap, which is what distinguishes a real difficulty. What separated the six was whether they built a checker complete enough to state the rule — every Opus trial wrote its own verifier and two omitted a transition-legality table, so their fuzzers ran clean over buggy engines, while all three Codex trials built no verification tooling at all (84 commands in one trial, zero invoking a self-written checker).
+**Decision rationale.** It is the only candidate of ten cycles that survived measurement, and the failure signature is the evidence: engines fail from opposite sides of one requirement rather than tripping over one narrow trap, which is what distinguishes a real difficulty. What separated the six was whether they built a checker complete enough to state the rule — every Opus trial wrote its own verifier and two omitted a transition-legality table, so their fuzzers ran clean over buggy engines, while all three Codex trials built no verification tooling at all (84 commands in one trial, zero invoking a self-written checker). [2026-09, root-cause layer] Status moved from `shipped` to `trialed`. The ship gate's `difficulty-evidenced` check now counts only counted trials carrying a `root-cause.json` that says `capability`, and this family has none, so `shipped` in the ledger and NOT-READY at the gate would be two stories about the same family. Nothing about the trials changed and nothing here is withdrawn — what is missing is the adjudication that says whether each counted failure was a capability finding, an underdetermined package or a harness defect. The route back to `shipped` is to import the six preserved engine runs as trial directories and record a root cause for each; the results note above already reads like five capability findings and one arguably-correct refusal, which is exactly the distinction a count cannot carry.
 
 **Transferability.** The mechanism is domain-general: uncertain external effects, exactly-once delivery, and audit legality are the same problem in payment capture, message publishing, cloud provisioning and outbound notification. What may not transfer is the shipped instance's margin — the failing and solving engines differ on a single design judgement (must an unknown-outcome action eventually drain to a terminal state), which is a coin-flip-ish call, and Opus's rate on this artifact is roughly one in two.
 

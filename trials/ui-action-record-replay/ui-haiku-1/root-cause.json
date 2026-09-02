@@ -1,0 +1,17 @@
+{
+  "runId": "ui-haiku-1",
+  "familyId": "ui-action-record-replay",
+  "label": "unlabelled",
+  "rationale": "Same shape as ui-codex-1: 62 failures across three checks with no knob confinement, a `mixed` reading, and no human read on record. Recorded as unlabelled. A wide, unconcentrated failure set is as consistent with a subject that never understood the replay contract as with one that did and got it wrong, and only the transcript separates them.",
+  "evidenceRead": [
+    "result.json",
+    "countability.json",
+    "challenge/SPEC.md"
+  ],
+  "labelledBy": {
+    "kind": "automated",
+    "id": "lane-4a-root-cause-review",
+    "date": "2026-09-01"
+  },
+  "diagnosisReading": "mixed"
+}

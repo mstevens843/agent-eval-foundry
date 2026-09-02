@@ -32,7 +32,7 @@ import {
 } from "../src/reports/browser-backed-report.js";
 import { BROWSER_BACKED_NEXT_PLAN } from "../src/reports/browser-backed-scaffold.js";
 import { diagnose } from "../src/reports/diagnosis.js";
-import { computeCurve, wilson } from "../src/reports/difficulty.js";
+import { MIN_TRIALS_FOR_RATE, computeCurve, wilson } from "../src/reports/difficulty.js";
 import { familyEvidenceFor } from "../src/reports/evidence.js";
 import { renderLiveDomCodexDiagnosis } from "../src/reports/live-dom-diagnosis.js";
 import {
@@ -45,6 +45,7 @@ import { CAMPAIGN_SUBCOMMANDS, assertCampaignSubcommand, loadCampaigns } from ".
 import { prepareProviderBundle, readImportedBundle } from "../src/trials/cross-provider.js";
 import { readFamilyTrials } from "../src/trials/directory.js";
 import {
+  EVIDENCE_STATES,
   assertAmbiguityPostmortem,
   assertCampaignReissued,
   assertNoStaleCounted,
@@ -59,6 +60,10 @@ import type { TrialRecord } from "../src/trials/types.js";
 
 const ROOT = new URL("..", import.meta.url).pathname;
 const MEMORY = "prompt-injection-memory-poisoning";
+/** The family that still has counted trials, so the counted-side invariants are exercised somewhere. */
+const CONTAINMENT = "prompt-injection-containment";
+/** The family holding the one real crashed run. */
+const LIVE_DOM = "ui-replay-live-dom";
 
 describe("the provider registry", () => {
   it("declares one spec per model family, each with an invocation note", () => {
@@ -306,14 +311,85 @@ describe("strict import", () => {
 describe("the evidence lifecycle", () => {
   const currentHash = prepareChallenge(ROOT, MEMORY).hash;
   const ledger = evidenceLedger(MEMORY, currentHash, readFamilyTrials(join(ROOT, "trials"), MEMORY));
+  const containmentHash = prepareChallenge(ROOT, CONTAINMENT).hash;
+  const containment = evidenceLedger(
+    CONTAINMENT,
+    containmentHash,
+    readFamilyTrials(join(ROOT, "trials"), CONTAINMENT),
+  );
+  const liveDomHash = prepareChallenge(ROOT, LIVE_DOM).hash;
+  const liveDom = evidenceLedger(LIVE_DOM, liveDomHash, readFamilyTrials(join(ROOT, "trials"), LIVE_DOM));
 
-  it("classifies the real trials into their states", () => {
-    expect(ledger.counted.length).toBeGreaterThan(0);
+  // This assertion used to read `expect(ledger.counted.length).toBeGreaterThan(0)` on the memory
+  // family. That is no longer true and SHOULD no longer be true: the starter-leak repair changed the
+  // memory package, so all eleven graded memory trials were run against a task this family no longer
+  // produces. Zero counted is the correct answer, and a test that demanded a positive count would now
+  // be demanding that supersession be ignored.
+  //
+  // The property the old assertion was really protecting is that the counted arm of the loop below is
+  // not vacuous — an "if (counted)" branch inside a family with no counted trials checks nothing at
+  // all. So the positive count moved to the family that still has one rather than being dropped.
+  it("classifies the real trials into the states they actually have", () => {
+    // Memory: repaired out from under its own evidence. Everything graded is superseded; the one
+    // provider that never authenticated is infra; nothing counts.
+    expect(ledger.entries.length).toBeGreaterThan(0);
+    expect(ledger.counted).toEqual([]);
     expect(ledger.superseded.length).toBeGreaterThan(0);
     for (const entry of ledger.entries) {
-      if (entry.state === "superseded") expect(entry.ranAgainst).not.toBe(currentHash);
-      if (entry.state === "counted") expect(entry.ranAgainst).toBe(currentHash);
+      expect(EVIDENCE_STATES, entry.runId).toContain(entry.state);
+      if (entry.state === "superseded") expect(entry.ranAgainst, entry.runId).not.toBe(currentHash);
+      if (entry.state === "counted") expect(entry.ranAgainst, entry.runId).toBe(currentHash);
     }
+    // Every memory trial is accounted for by one of those two facts, so a trial cannot go missing
+    // from the ledger by falling into no state at all.
+    expect(ledger.superseded.length + ledger.entries.filter((e) => e.state === "infra").length).toBe(
+      ledger.entries.length,
+    );
+
+    // Containment: untouched by the repair, so its trials still measure the task it produces today.
+    // This is what keeps the counted-side invariant above a real check rather than dead code.
+    expect(containment.counted.length).toBeGreaterThan(0);
+    expect(containment.superseded).toEqual([]);
+    for (const entry of containment.entries) {
+      expect(EVIDENCE_STATES, entry.runId).toContain(entry.state);
+      if (entry.state === "counted") expect(entry.ranAgainst, entry.runId).toBe(containmentHash);
+      if (entry.state === "superseded") expect(entry.ranAgainst, entry.runId).not.toBe(containmentHash);
+    }
+  });
+
+  // A crash and a failure to authenticate are different facts about different people, and folding
+  // them into one bucket is how a harness bug hides behind a word that sounds like somebody else's
+  // problem. Both real runs are pinned here so the split cannot quietly be undone.
+  it("a crashed run and an unauthenticated one are different states", () => {
+    const crashed = liveDom.entries.find((e) => e.runId === "live-dom-2026-08-o1");
+    const unauthenticated = ledger.entries.find((e) => e.runId === "mp-gemini-1");
+    expect(crashed?.state).toBe("crashed");
+    expect(unauthenticated?.state).toBe("infra");
+    // Neither counts, so the difficulty numbers do not move either way.
+    expect(liveDom.counted).not.toContain("live-dom-2026-08-o1");
+    expect(ledger.counted).not.toContain("mp-gemini-1");
+    // And the reasons stay distinguishable in prose, not only in the enum.
+    expect(crashed?.reason).toMatch(/crash/i);
+    expect(unauthenticated?.reason).toMatch(/authenticate|entitled/i);
+  });
+
+  // Three containment trials record no challengeHash in their metadata. They count because the
+  // challenge they preserved hashes to the package the family produces today — a sound inference, and
+  // an inference, which is why the ledger names it instead of leaving a reader to assume a hash was
+  // recorded.
+  it("a trial counted on a derived hash says the hash was derived", () => {
+    expect(containment.countedByDerivation).toEqual(["pic-claude-1", "pic-claude-2", "pic-claude-3"]);
+    for (const runId of containment.countedByDerivation ?? []) {
+      const entry = containment.entries.find((e) => e.runId === runId);
+      expect(entry?.hashSource, runId).toBe("derived");
+      expect(entry?.ranAgainst, runId).toBe(containmentHash);
+      expect(entry?.reason, runId).toMatch(/derived/i);
+    }
+    // Not vacuous in the other direction either: the trials that DO record a hash are marked as
+    // recorded, so "derived" means something.
+    const recorded = containment.entries.filter((e) => e.hashSource === "recorded");
+    expect(recorded.length).toBeGreaterThan(0);
+    for (const entry of recorded) expect(entry.reason, entry.runId).not.toMatch(/derived/i);
   });
 
   it("EVIDENCE_STALE_COUNTED — a superseded trial appearing in a counted set", () => {
@@ -493,16 +569,45 @@ describe("difficulty curves", () => {
     expect(many.underpowered).toBe(false);
   });
 
-  // And the live repository is past the threshold on its most-trialed family, which is worth
-  // asserting as a fact rather than leaving implicit.
-  it("the memory family now has enough counted trials to quote a rate", () => {
+  // This used to assert `expect(curve.underpowered).toBe(false)` for the memory family, under the
+  // heading "the memory family now has enough counted trials to quote a rate". It had enough because
+  // eleven trials counted. The starter-leak repair changed the memory package and every one of them
+  // is now superseded, so the family has none — and a family with no counted trials must not be able
+  // to quote a rate. That is the honest behaviour, it is the behaviour most worth locking in, and it
+  // is a stronger thing to assert than the old line was: `underpowered: false` was one arithmetic
+  // fact about a bank that happened to be large enough, while this pins the direction the whole
+  // evidence discipline has to fail in when the evidence goes away.
+  it("a family whose evidence was superseded cannot quote a rate", () => {
     const bundle = familyEvidenceFor(ROOT, MEMORY);
+    expect(bundle.trials.records.filter((r) => r.counts)).toEqual([]);
     const curve = computeCurve({
       familyId: MEMORY,
       records: bundle.trials.records,
       notRunByFamily: {},
       operatorConfirmed: true,
     });
+    expect(curve.underpowered).toBe(true);
+    expect(curve.totalCounted).toBe(0);
+    expect(curve.strength).toBe("no-evidence");
+    // No provider may show a rate computed from nothing.
+    for (const provider of curve.providers) {
+      expect(provider.failRate, provider.providerFamily).toBeNull();
+      expect(provider.interval, provider.providerFamily).toBeNull();
+    }
+  });
+
+  // The other half of the same property, and the half that stops the assertion above from passing for
+  // the boring reason that nothing anywhere is ever powered enough: the containment family kept its
+  // trials through the repair and is over the threshold.
+  it("a family that kept its counted trials can still quote one", () => {
+    const bundle = familyEvidenceFor(ROOT, CONTAINMENT);
+    const curve = computeCurve({
+      familyId: CONTAINMENT,
+      records: bundle.trials.records,
+      notRunByFamily: {},
+      operatorConfirmed: true,
+    });
+    expect(curve.totalCounted).toBeGreaterThanOrEqual(MIN_TRIALS_FOR_RATE);
     expect(curve.underpowered).toBe(false);
   });
 });

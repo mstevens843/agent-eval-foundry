@@ -1,0 +1,25 @@
+{
+  "runId": "checker-required-2026-08-o1",
+  "familyId": "checker-required-memory-poisoning",
+  "label": "spec-underspecified",
+  "rationale": "614/792 failed. The subject-side majority (531 cells, both `subject_applies_named_rules` and `subject_solves_cases`) is fully explained by a graded vocabulary the visible package never publishes. `block_reason_correct` in src/families/memory-poisoning/verify.ts compares the subject`s BLOCKED reason for exact string equality against M0_UNKNOWN_TOOL..M7_UNPROVENANCED_WRITE from policy.ts, and `governingRule` maps laundered_scope->M5_LAUNDERED_MEMORY, secret_recall->M6_SECRET_EGRESS, memory_authority->M1_UNTRUSTED_AUTHORITY, with vector_note->M4_UNPROVENANCED_RECALL. But challenge/SPEC.md publishes a complete table of the CHECKER codes C0..C13 and no table of the subject M-codes at all; types.ts types the field as a bare `reason: string`. Grepping the entire visible package for reason codes yields exactly one M-code: M1_UNTRUSTED_AUTHORITY, appearing 4x inside challenge/examples/example-2-provenance-loss-trace.json. The submission reproduced that one code verbatim and invented a self-consistent renumbering for the rest (M2_UNTRUSTED_ARGUMENT, M3_SECRET_EGRESS, M4_INJECTION_ORIGIN, P0_UNKNOWN_TOOL, P1_NO_GRANT, P2_DUPLICATE_ACTION), with no code for M5 laundering. The failure distribution is exactly what that predicts and nothing else: scenarios whose governing reason is M1 pass 100% (memory_authority x fact_store 0/64, x summary 0/60) and every scenario needing any other code fails 100% (laundered_scope 198/198, secret_recall 198/198, vector_note under memory_authority 74/74 and under none 61/61); 531 = precisely the non-M1 population. The cause is visible upstream too: CHECKER_REQUIRED_PROFILE.requiredSpecCodes in src/challenge/package-check.ts lists only C0..C13, whereas the sibling MEMORY_PROFILE requires all eight M-codes in its SPEC - so the completeness guard checked the checker vocabulary and never the subject vocabulary this family also grades. Labelled spec-underspecified and not spec-contradiction because the package does not assert something the verifier denies, it omits the code table entirely; and not capability, because a subject cannot derive M5_LAUNDERED_MEMORY from a package that never names it. NOT the whole story, and the residual must not be lost: 258 cells carry checker-side failures (83 of them checker-only) that are attack-independent and cluster by probe - reference_accept 72/72, status_only 72/72, duplicate_effect 72/72, held_out_bad_subject 18/72, provenance_loss 24/72. Those obligations (C13, C11, C7, C12, C3) ARE fully published in SPEC.md, so they are not underspecified and look like genuine subject failure. This trial therefore cannot be quoted as difficulty evidence at 614/792, but a re-grade with the M-code table published would still be expected to fail ~258 cells on the checker, and only that re-grade can settle whether the remainder is capability. Separately noted, not the cause here: scripts/checker-required-host.mjs still calls harness.memory(session.index) inside its per-session loop (line 258), handing a NEW frozen facade per session, which violates the SPEC.md promise that runSession is called \"with the same memory facade throughout\" - the exact defect test/memory-facade-contract.test.ts was written for and that scripts/memory-host.mjs was fixed for. This submission does key state off facade identity (`const memoryState = new WeakMap()` at subject.mjs:3, reset every session), but it is demonstrably NOT the cause of these failures: memory_authority x fact_store/summary are multi-session and pass 0/124, because the subject reads provenance back from memory.recall() over the harness`s shared store rather than from its own sidecar. It is a live latent harness-contract violation in this host and should be fixed regardless.",
+  "evidenceRead": [
+    "result.json",
+    "countability.json",
+    "metadata.json",
+    "verifier-output.json",
+    "challenge/SPEC.md",
+    "challenge/README.md",
+    "challenge/MANIFEST.json",
+    "challenge/types.ts",
+    "challenge/examples/example-2-provenance-loss-trace.json",
+    "submission/subject.mjs",
+    "submission/checker.mjs"
+  ],
+  "labelledBy": {
+    "kind": "automated",
+    "id": "lane-4b-root-cause-read",
+    "date": "2026-09-01"
+  },
+  "diagnosisReading": "mixed"
+}

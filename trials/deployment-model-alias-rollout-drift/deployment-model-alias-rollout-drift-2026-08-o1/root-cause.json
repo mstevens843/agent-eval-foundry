@@ -1,0 +1,24 @@
+{
+  "runId": "deployment-model-alias-rollout-drift-2026-08-o1",
+  "familyId": "deployment-model-alias-rollout-drift",
+  "label": "package-leak",
+  "rationale": "All 192 failures are one reading of one undecidable question, and the visible package answered it only in the shipped solution. challenge/SPEC.md says \"sufficient\"/\"insufficient\" evidence eight times (lines 74-76, 87-93, 117) and never quantifies it; challenge/types.ts declares BaselineRecord.sampleCount as a bare `number` with no comment, and no visible example exhibits its value (the `sampleCount: 4` in challenge/examples/* is cachedEvalSummary.sampleCount, a different field on the explicitly untrustworthy cached summary). The one place the threshold appears is challenge/starter/subject.mjs line 43, `currentSamples.length < 2` -- byte-identical to the truth model at src/families/deployment-model-alias-rollout-drift/truth.ts:374. That starter is described in challenge/README.md line 19 as \"a stub with the required export shape\" and self-labels \"Starter stub - replace me\", but I re-graded it against all 339 hidden scenarios and it fails 0. The shipped stub was a complete passing solution. This subject wrote its own decide() and read sufficiency as `Math.max(1, baseline.sampleCount)` (submission/subject.mjs line 111); sampleCount is 80 (truth.ts:258) against an eval stream of at most 4 samples (truth.ts sampleVersions), so every scenario routed to the insufficient branch. I re-ran the preserved artifact through the family runner: 192/339 failing, the same 192 scenario ids as result.json. Replacing that ONE expression with the literal 2 and changing nothing else gives 0/339. The fan-out is arithmetic, not five findings: liveness and report_matches_ledger fail in all 192, and rollback_required (96) plus continue_required (96) partition the 192 exactly -- they are every scenario whose correct answer was not quarantine/re_evaluate. The 143 no_subject_owned_model_truth failures are set-identical to the failing scenarios carrying a subjectModelClaim, and the submission never continues, never rolls back, and hardcodes usedSubjectModelClaim:false, so that check fired on the wrong decision rather than on any use of a subject-owned claim; the current verifier (verify.ts followsSubjectModelClaim, tightened since) reports 0 of them. Not `capability`: the behaviour that separates pass from fail is not derivable from SPEC.md, and the Claude run that passed the same package kept the starter constant (DEFAULT_MIN_SAMPLES = 2, clamped via Math.min(declared, 2)) rather than deriving it. Not `spec-underspecified`: the answer WAS in the visible package -- in the starter -- so the defect is that the package shipped its own solution while calling it a stub, which is what `package-leak` names.",
+  "evidenceRead": [
+    "result.json",
+    "countability.json",
+    "metadata.json",
+    "transcript.txt",
+    "submission/subject.mjs",
+    "challenge/starter/subject.mjs",
+    "challenge/SPEC.md",
+    "challenge/README.md",
+    "challenge/types.ts",
+    "challenge/examples/example-1-valid-continue.json"
+  ],
+  "diagnosisReading": "single-cause-fanout",
+  "labelledBy": {
+    "kind": "automated",
+    "id": "lane-4b-root-cause-adjudication",
+    "date": "2026-09-01"
+  }
+}

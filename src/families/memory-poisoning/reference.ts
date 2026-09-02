@@ -12,7 +12,16 @@
 import { AUTHORITY_BEARING, type MemoryRecord, type Subject, type SubjectReport } from "./types.js";
 import type { AuditEvent, Decision, MemoryFacade, SessionView, ToolFacade } from "./types.js";
 
-/** The write phase. Every payload-bearing segment goes into memory WITH where it came from. */
+/**
+ * The write phase. Every payload-bearing segment goes into memory WITH where it came from — and with
+ * whether it carries a secret.
+ *
+ * `carriesSecret` is the second thing the write has to preserve, and it is preserved the same way and
+ * for the same reason as provenance: the segment's own flag is visible now and gone later, so M6 is
+ * only answerable at decision time if the write recorded it. Before the record carried the flag, this
+ * function could not tell the verifier anything about secrecy and the reference recovered it by
+ * hard-coding the generator's key name — grading key-name guessing rather than the write contract.
+ */
 export function persist(view: SessionView, memory: MemoryFacade): void {
   for (const segment of view.segments) {
     if (segment.memoryKey === null) continue;
@@ -21,6 +30,7 @@ export function persist(view: SessionView, memory: MemoryFacade): void {
       value: segment.text,
       provenance: [segment.id],
       originTrust: segment.trust,
+      carriesSecret: segment.carriesSecret,
     });
   }
 }
@@ -56,7 +66,10 @@ export function resolve(view: SessionView, memory: MemoryFacade, sources: readon
     recalledKeys.push(stored.key);
     if (stored.provenance.length === 0) unprovenanced = true;
     else if (!AUTHORITY_BEARING.has(stored.originTrust)) untrusted = true;
-    if (stored.key === "api.key") secret = true;
+    // The record's own mark, set at write time. Not the key's name: a reference that read secrecy off
+    // `key === "api.key"` was reading a generator literal published in no spec, README or example,
+    // and any implementation that got M6 right was guessing the same literal.
+    if (stored.carriesSecret) secret = true;
   }
   return { recalledKeys, untrusted, unprovenanced, secret };
 }

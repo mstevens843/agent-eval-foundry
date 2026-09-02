@@ -37,60 +37,49 @@ packages and one-agent smoke trials. Production Mode is earned only after smoke 
 evidence justify cross-provider matrices, human review and adversarial audit. The next step is
 computed from evidence rather than from a fixed linear checklist.
 
-The first promoted-family smoke result is now in the same loop. `access-token-scope-expansion`
-passed its single counted OpenAI/Codex smoke trial under hash `33cc98364ce2a6b3f9490e54937955d8`
-with 384/384 scenarios clean. That is not difficulty evidence. It fires the pre-registered
-already_solved_or_needs_evolution signal, blocks full matrix spend, and routes the mechanism toward
-Access-Token Evolution v1. That path now built `delegated-wallet-scope-reconciliation` as a full
-descendant family: 804 measured scenarios from an 82,944-point declared space, a clean reference,
-10/10 known-bad subjects/baselines caught, 3 mutant-detection axes and a leak-checked public
-package. Its single counted OpenAI/Codex smoke trial passed 804/804 under the current package hash,
-so it also routes to already_solved_or_needs_evolution rather than full matrix spend.
+Three more families have been built through that funnel — `access-token-scope-expansion`,
+`delegated-wallet-scope-reconciliation` and `deployment-model-alias-rollout-drift`. Each has a
+declared behaviour space, a clean reference, a mutant bank whose members are caught by their
+intended checks, blocked baselines and a leak-checked public package. Those figures are in
+`reports/promotion-report.md`, `reports/delegated-wallet-scope-reconciliation-family-report.md` and
+`reports/deployment-model-alias-rollout-drift-family-report.md`, and I am deliberately not copying
+them into this memo, because copies are what drift.
 
-Lineage Kill + Portfolio Reallocation v1 makes that repeated clean solve first-class evidence. The
-access-token authority lineage now records parent and descendant smoke passes by the same OpenAI
-subject, the preserved authority mechanism, the hardening operators that failed to produce
-difficulty, and the matrix spend avoided. The resulting decision is to pause/kill that lineage for
-now, penalize similar local scope-comparison candidates as lineage-derived feedback, and reallocate
-the next build slot to a different mechanism cluster rather than keep hardening blindly.
+> **Withdrawn 2026-09-01.** Earlier drafts of this section reported smoke results for all three:
+> access-token passing 384/384, delegated-wallet passing 804/804, deployment-alias failing 192/339
+> to OpenAI and then passing 339/339 to an imported Claude run. **All four of those trials are
+> superseded and none of them counts.** Each of the three families shipped a starter implementation
+> that was itself a complete passing solution, so the packages were grading their own answer key;
+> the starters are stripped, every package re-hashed, and the trials invalidated with the hash they
+> pinned.
+>
+> Withdrawn with them, and not restated with corrected numbers: the *already-solved* verdict on the
+> access-token lineage; the `lineage_solved_twice` finding; the matrix spend those two clean passes
+> were credited with avoiding; the deployment-alias *provider delta* and its
+> `openai_specific_failure` / `non_openai_solver_delta` labels; and the routing decisions taken
+> because of them, which `reports/discovery-workbench-report.md` now records as
+> `PREMISE WITHDRAWN`.
+>
+> **The honest statement is that none of these three families has ever been attempted by a real
+> agent.** They are not easy and they are not hard; nobody has looked. `provider-delta report`
+> returns `non_openai_missing`, which is the correct answer when there is nothing on either side to
+> compare.
 
-The reallocated branch is now concrete. `deployment-model-alias-rollout-drift` has been built as a
-full validation-mode family for AI deployment/model-routing workflows: 339 measured scenarios from a
-663,552-point declared space, 14 knobs, a clean reference, 13/13 known-bad subjects caught by
-intended checks, 2/2 baselines blocked, 6 mutant-detection axes, a leak-checked 9-file public
-package and a pinned one-slot OpenAI/Codex smoke campaign. The counted smoke trial
-`deployment-model-alias-rollout-drift-2026-08-o1` failed 192/339 scenarios on target under challenge
-hash `0e9b87a5f260544cfbc1cdce8f08938c`. That is OpenAI-only smoke-difficulty evidence, not
-cross-lab breadth or a full-matrix result. A current-hash Claude/Anthropic external smoke then
-imported cleanly and passed 339/339. That is cross-lab smoke presence but not cross-lab difficulty:
-OpenAI failed, Claude solved, and Deployment-Alias Production Readiness keeps `/6` matrix spend
-blocked. Provider-delta diagnosis is now present and routes next work to evolution unless an
-explicit override is recorded. Current-hash Claude, Gemini and generic external bundles remain
-prepared for future imports; they count only when returned with transcript, submission, metadata and
-verifier output.
+That is not a footnote to the argument in this memo — it *is* the argument. The reason this
+repository hashes challenges, records countability rules and regenerates every number is so that a
+result which turns out to have been measuring the wrong thing can be withdrawn mechanically rather
+than argued about. Four trials, three package hashes and two routing decisions were reversed by a
+gate, not by an author noticing.
 
-Human + External Evidence Intake v1 turns that handoff into a validator instead of an email
-convention. Deployment-alias now has current-hash external packets, metadata templates,
-hidden-artifact warnings, import/verify commands, a family-specific clean-room human review packet,
-and a matrix-readiness gap report. The OpenAI half-matrix is planned as same-provider stability
-evidence only: the existing smoke is slot 1, two OpenAI repeats are pending, and the full `/6`
-matrix remains blocked after the Claude clean solve because the current evidence is mixed, not
-cross-lab difficulty under hash `0e9b87a5f260544cfbc1cdce8f08938c`.
-
-Provider Delta + Reallocation Decision v1 makes that mixed state executable. The new report
-`reports/deployment-model-alias-rollout-drift-provider-delta.md` reads preserved records only: it
-does not run Claude, does not run OpenAI, and classifies the current evidence as OpenAI on-target
-failure plus Claude clean solve. That routes to provider-delta diagnosis/evolution, not production
-`/6` spend.
-
-Provider Delta Diagnosis + Evolution Decision v1 now performs that diagnosis without new model
-evidence. It statically inspects preserved OpenAI and Claude submissions/transcripts, compares
-failure checks and knob correlations, records the mixed result as `openai_specific_failure` plus
-`non_openai_solver_delta`, and keeps `/6` blocked. The selected next route is the
-`provider-failover-router-alias-drift-probe`: a mechanism probe that preserves alias identity and
-authoritative ledger reconciliation while adding provider failover, router fallback drift and
-delayed receipts. Two additional OpenAI repeats remain only a same-provider stability plan and
-should not run without explicit approval.
+The apparatus around them is unchanged and still worth describing. Human + External Evidence Intake
+v1 turns the third-party handoff into a validator instead of an email convention: a returned packet
+must carry the current hash, metadata, transcript, submission and verifier output, and it is
+preserved but uncounted when it does not — which is precisely how the Claude deployment-alias run
+stopped counting. Provider-delta reporting and diagnosis read preserved records only; they never run
+a model. And `provider-failover-router-alias-drift-probe`, the selected next route, is real
+executable local probe evidence — its reference-like subject passes and its known-bad
+router/failover subjects fail intended checks — but it is still not a built descendant, package,
+model trial or `/6` matrix gate.
 
 The foundry now separates three claims: a reference can solve it, a clean public package can be
 handed to a human, and an independent human has actually solved it. Those are different evidence
@@ -325,67 +314,58 @@ removes it. The engine is deterministic and rule-based rather than a model call,
 the rest of this repository is: a generator whose output cannot be checked is the failure mode in
 every row of my kill log.
 
-### The descendant was then trialed, and the operator held
+### The descendant was then trialed — and that result has since been withdrawn
 
-Three counted Claude trials against the evolved family, same harness and same isolation as the
-parent's. **One of the three failed, on 32 scenarios.** Every one of those failures sits at
-`sessionsBetween` 1 or 3, and not one at 0 — which is the pattern the campaign plan pre-registered as
-its confirm signal before anything ran. The parent's three trials had failed nothing at all.
+This section used to be the strongest thing in the memo. What it said:
 
-So the operator did what it claimed: the same implementation is correct within a session and wrong
-across one, and the difficulty came from the persistence boundary rather than from the family being
-bigger.
+> Three counted Claude trials against the evolved family, one of which failed on 32 scenarios —
+> every failure at `sessionsBetween` 1 or 3 and none at 0, exactly the confirm signal the campaign
+> plan pre-registered. Then GPT-5.6 Sol, run through the same router against the same hash, failed
+> the identical 32 scenarios: the same ids, the same two checks, the same split across the
+> persistence boundary. Two independently trained models from two labs losing the same property on
+> the same inputs — the strongest form of the transfer claim the data can carry.
 
-**The campaign found a defect before it found difficulty, which is the part I would lead with.** One
-trial cited rule `M3` on 47 scenarios and the verifier demanded `M5`. Reading the published spec, the
-model was right: the rules were listed in evaluation order and M3 explicitly covered content read in
-an earlier session. The family was ambiguous and had been marking a correct answer wrong. Repairing
-the spec changed the challenge package, which changed its content hash, which automatically stopped
-all three counted trials from counting — they measured a task that no longer exists. They are
-preserved, the campaign was re-run, and the numbers above are from the repaired version.
+**Every one of those trials is now superseded, and I am withdrawing the claim rather than restating
+it with different numbers.** `prompt-injection-memory-poisoning` has **zero** counted trials;
+`reports/prompt-injection-memory-poisoning-agent-results.md` opens with "No counted agent trial
+exists." The reason is in the ship gate's own text: one of those runs failed every attack scenario
+because the host handed it a new memory facade per session while the public package promised the
+same one. That is a harness defect wearing the shape of the finding it was supposed to confirm —
+the confirm signal fired on the harness, not on the model.
 
-That sequence is the argument for the whole apparatus. A benchmark programme without a challenge
-hash would have kept the old trials, and a benchmark programme without real trials would never have
-found the ambiguity at all.
+So: **whether the memory-poisoning failure generalises across labs is now unmeasured.** Not refuted.
+Not confirmed at a lower number. Unmeasured, on a family that currently has no counted evidence in
+either direction, and the operator `add_time_separation` has no support from any bank.
 
-### Then a second lab ran it, and failed the same 32 scenarios
+What survives from this episode is the mechanism that caught it twice. The first time, one trial
+cited rule `M3` on 47 scenarios where the verifier demanded `M5`; reading the published spec, the
+model was right, the family was ambiguous, and repairing the spec changed the package hash — which
+automatically stopped the trials that found it from counting. The second time, a host/package
+disagreement invalidated the whole family's record. In both cases nothing had to be argued: the hash
+and the countability rules decided it. **A benchmark programme without a challenge hash would still
+be quoting the 32 scenarios.**
 
-The obvious objection to everything above was that every counted trial was Claude. A failure mode
-one lab's model exhibits is a fact about that model until a second lab's model exhibits it too. So
-the campaign was run again on GPT-5.6 Sol through the same router, the same challenge package, and
-the same content hash.
-
-**It failed the identical 32 scenarios.** Not 32 scenarios — the same 32, the same set of ids, the
-same two checks, the same split across the persistence boundary and zero at `sessionsBetween: 0`.
-Two independently trained models, from two labs, losing the same property on the same inputs. That
-is the strongest form of the transfer claim the data can carry, and it is the one the memo's
-headline was missing.
-
-It also found a **second, unrelated failure mode**: another Codex run failed 13 scenarios on a
-different check, disjoint from the first 32, concentrated on one attack at `sessionsBetween: 0`
-only. The diagnosis module reads it as a capability finding that does *not* match the pre-registered
-hypothesis, so it is recorded as a new finding rather than folded into the confirmed one.
-
-The picture across the current routable families, all counted trials run through the same harness:
+The picture across the current routable families, all counted trials run through the same harness,
+as of 2026-09-01 — the per-provider table is regenerated in
+`reports/provider-variance-report.md` and that file, not this one, is the authority:
 
 | family | anthropic | openai | reading |
 |---|---|---|---|
 | `prompt-injection-containment` | 5 counted, 0 failed | 1 counted, 0 failed | **already-solved, confirmed across two labs** |
-| `prompt-injection-memory-poisoning` | 5 counted, 4 failed | 3 counted, 2 failed | **generalises** — one cross-lab pair identical, one disjoint |
-| `ui-action-record-replay` | 4 counted, 4 failed | 1 counted, 1 failed | **difficulty-evidenced** — but all five runs nest |
-| `ui-replay-live-dom` | import-only this phase | 1 counted, 1 failed | **difficulty-evidenced** for one OpenAI subject; cross-lab not measured |
+| `prompt-injection-memory-poisoning` | none counted | none counted | **no evidence either way** — every trial superseded |
+| `ui-action-record-replay` | 4 counted, 4 failed | 1 counted, 1 failed | **separates on two labs** — but all five runs nest |
+| `ui-replay-live-dom` | import-only this phase | 1 counted, 1 failed | **separates** for one OpenAI subject; cross-lab not measured |
 
 Three things I would flag rather than bury. **The already-solved kill got stronger, not weaker**: a
 second lab also passed all 128, so the containment family is easy for reasons that are not specific
-to Claude. **The UI family's three trials form a chain** — 33 ⊂ 46 ⊂ 90 scenarios — which in this
-repository's own terms is one axis observed at three sensitivities, not three failure modes; the
-family separates subjects and has not yet been shown to measure more than one thing, and
-`reports/provider-variance-report.md` says so under its own headline. And **Gemini never ran**: the
-CLI is installed and the account is not entitled to it, so the slot is an `infrastructure_error`,
-never a zero. The live-DOM descendant reopens the shared-bank work: only GPT-5.6 Sol has attempted
-that package hash so far. Prepared bundles for an external runner are checked in under `bundles/`
-with the challenge hash pinned, so a result someone else produces either measures this exact task or
-is refused on import.
+to Claude — and that finding is one of the few here that survived the decount untouched. **The UI
+family is now the only cross-lab transfer evidence in the repository**, and it is simultaneously a
+one-axis result: four cross-lab pairs, every one identical or nested, which in this repository's own
+terms is one axis observed at several sensitivities. `reports/provider-variance-report.md` says so
+under its own headline. And **Gemini never ran**: the CLI is installed and the account is not
+entitled to it, so the slot is an `infrastructure_error`, never a zero. Prepared bundles for an
+external runner are checked in under `bundles/` with the challenge hash pinned, so a result someone
+else produces either measures this exact task or is refused on import.
 
 ### And then four subjects across two labs produced one UI axis, on purpose
 
@@ -406,16 +386,21 @@ not resolve), so a stricter replayer dominates a looser one everywhere and the c
 *forced* into a total order. Nesting was not bad luck; it is what a family with no trade-off in it
 must produce.
 
-The same measurement says the memory-poisoning family is fine: one of its pairs is genuinely
-incomparable — Sonnet fails 42, Codex fails 45, and only 32 are shared — so it separates in more
-than one direction.
+The same measurement used to say the memory-poisoning family was fine, because one of its pairs was
+genuinely incomparable. **That is withdrawn too** — the pair was two superseded trials, so the
+family now has no counted subjects at all and nothing about the shape of its failures is measured.
 
-**The old three-family cross-family number is available and it is small.** Four subjects attempted
-containment, memory-poisoning and parent UI replay, past the threshold of three, so the width can be
-computed there: **3 axes**, against a null model of 6.0 and a ceiling of 179. The axes add — no
-instance in one family is failed by the same subject set as an instance in another — and the corpus is
-twice as compressible as chance, so the structure is real. Three of the four subjects are from one
-lab, which is the caveat that belongs in the same sentence as the number.
+**The cross-family number that used to sit here is gone, and its replacement is smaller.** It was
+computed over three families — containment, memory-poisoning and parent UI replay — sharing four
+subjects, past the threshold of three. With every memory-poisoning trial superseded, that family
+contributes no subjects to a difficulty bank, and the three-family comparison does not exist.
+
+What remains is one pair, `prompt-injection-containment` + `ui-action-record-replay`, still over
+four shared subjects from two labs, still past the threshold — and its combined width is **smaller
+than the number this paragraph used to quote**. The live figures, including the null model and the
+ceiling, are the pairwise table in `reports/shared-bank-completion-report.md`; I am not restating
+them here, because the last three versions of this sentence all drifted. The caveat that belongs in
+the same breath is unchanged: three of the four shared subjects are one lab's.
 
 After live-DOM, the all-family bank is deliberately **partial** again. GPT-5.6 Sol has attempted the
 descendant; the Anthropic subjects have not, because Claude was import-only in that phase. That does
@@ -438,15 +423,23 @@ settle budget, conflicting anchors, and `aria-busy` signals that are allowed to 
 The realism is not the point. The point is that the family contains a **trade-off**, so that no single
 disposition wins everywhere. Two opposed implementations are graded alongside the mutant bank rather
 than argued about: `strict-bailer`, which refuses anything it cannot resolve on first observation, and
-`patient-waiter`, which waits out every unsettled region. They fail 148 and 46 scenarios, share 18,
-and **neither set contains the other**. That is the structure the parent could not express, and the
-only structure that lifts an antichain width above 1.
+`patient-waiter`, which waits out every unsettled region.
 
-The next phase hardened that into a categorical anchor axis rather than only a strict/patient
-trade-off. The measured set is now 864 scenarios from a 3,456-point declared space, with 22 mutants
-plus two poles, 17 verifier checks, a clean reference and **19 independent axes** over the mutant
-bank. The three address-loyal strategies — testid, semantic anchor and structural path — are
-pairwise incomparable, so the fix no longer reduces to "wait longer" or "be stricter."
+**A correction I owe this section.** Earlier drafts said those two poles fail incomparable sets, and
+cited the counts. On the current 864-scenario sweep they do not: `patient-waiter`'s failures are a
+strict subset of `strict-bailer`'s. The strict/patient pair nests, exactly like the parent family's
+trials did, so it is **not** the structure that lifts this family's width above 1 and I should not
+have leant on it. The scenario set grew a great deal after that sentence was written and nobody
+re-ran the comparison.
+
+The structure that does hold is the categorical anchor axis the next phase added, and it is checked
+rather than asserted: the three address-loyal strategies — `testid-loyalist`, `semantic-loyalist`
+and `path-loyalist` — are **pairwise incomparable**, each with a named private witness scenario, in
+`reports/ui-replay-live-dom-report.md`. That is a genuine trade-off with no dominant disposition,
+and it is why the fix does not reduce to "wait longer" or "be stricter." The measured scenario
+count, declared space, mutant-bank size, check count and axis count for this family are in that same
+report and in `reports/ui-replay-live-dom-axis-report.md`; read the axis count there together with
+the null-model row directly beneath it, which is the gate that says whether the width beats noise.
 
 It also has the missing agent-facing surface now: a leak-checked 9-file challenge package with a
 precise fairness spec, hash `18c3f5afc5973604205cd7df23ce4cad`, and a campaign plan that treats
@@ -469,11 +462,13 @@ of acting on it.
 ### One model shipped its checker
 
 A smaller finding that changed what I think the next family should ask for. The task requests one
-file, `submission/subject.mjs`, and does not forbid a second. Fifteen of twenty-two transcripts
-describe building a local harness, running the published examples through it, writing synthetic
-scenarios — and then shipping one file. **Two submissions shipped the checker anyway, and both are
-`claude-sonnet-5`**: a real transition table in one, a reimplemented app facade in the other. No
-other subject did this on any family.
+file, `submission/subject.mjs`, and does not forbid a second. Most transcripts describe building a
+local harness, running the published examples through it, writing synthetic scenarios — and then
+shipping one file. **Two submissions shipped the checker anyway, and both are `claude-sonnet-5`**: a
+real transition table in one, a reimplemented app facade in the other. No other subject did this on
+any family. The counts — runs, transcripts describing a harness, submissions that shipped one — are
+the summary table of `reports/self-check-behavior-report.md`, which also marks which of those runs
+have since been superseded.
 
 The first version of that analysis grepped submissions for `assert|invariant|sanity`, found nothing,
 and concluded that models do not verify themselves. It was measuring our own submission format. It
@@ -486,11 +481,18 @@ requires `subject.mjs` **and** `checker.mjs`, and the hidden verifier grades the
 the checker separately. The checker is run against reference traces and held-out bad traces covering
 false success, missing audit history, liveness stalls, duplicate effects, late cancellation,
 provenance loss, status-only checking, forged receipts, no-checker/stub-checker cases and
-nondeterminism. The measured sweep is 792 scenarios from a 2,376-point declared space, 20/20
-known-bad submissions are caught by intended checks, and the first counted Codex/OpenAI trial
-(`checker-required-2026-08-o1`) failed 614/792 under hash
-`448f2f816c51030cc97a374816226168`. That is difficulty evidence for one OpenAI subject only, not a
-cross-lab breadth claim.
+nondeterminism. The measured sweep, declared space and mutant coverage are the summary table of
+`reports/checker-required-family-report.md`. The first counted Codex/OpenAI trial
+(`checker-required-2026-08-o1`) failed most of the graded set, on the submitted checker as much as
+on the subject.
+
+That trial still counts, and the family is nonetheless **NOT-READY**, which is worth stating rather
+than smoothing over. `difficulty-evidenced` now requires a counted failure to carry a
+`root-cause.json` saying `capability`, and this one carries no root-cause record at all. So what
+exists is a counted failure nobody has adjudicated — not difficulty evidence for one OpenAI subject,
+and not evidence of its absence either. The earlier drafts of this memo and of the README called it
+SHIP; that is withdrawn. Reading the transcript and recording why it failed is the route back, and
+it costs no model time.
 
 Underneath it is the constraint from `results/08`: fairness requires the rules be fully stated;
 solvability requires the answer be derivable from the rules plus the shipped data; and anything a
@@ -597,13 +599,27 @@ That changes the unit of production:
    harness they call into).
 3. **Gate every family on axis count and on trial evidence, not on check count** — the tool in this
    repository, which I did not have when I built the outbox task. `node dist/cli.js ship` runs the
-   gate: 33 gates per family, 14 blocking, three human-solvability gates advisory and the newer
-   verifier-integrity/browser-backed gates advisory, with verdict a pure function of the blocking gates.
-   Of the fifteen
-   families declared here, five reach SHIP, one is NOT-READY because real agents from two labs
-   solved it, and the other nine are NOT-READY because nothing has attempted them — a family must
-   not ship on an estimate, and `difficulty-evidenced` became blocking once every built family was
-   routable and "nobody has tried it" stopped being a fact about the tooling.
+   gate, and the verdict is a pure function of the blocking gates: no score, no weighting, no
+   override. The gate table is generated from the gate definitions themselves in
+   `reports/ship-gate-report.md`, which is where the counts live — including the split it now makes
+   between blocking gates, gates the loader enforces at parse time (they can never fire on anything
+   the report can see, so counting them as blocking overstated the table), and advisory gates. Two
+   figures from that report are worth carrying in prose because they are the argument: **most of
+   these gates have never rejected anything**, and only a couple have ever fired. A gate table that
+   has never rejected the person maintaining it is a formality.
+
+   As of 2026-09-01 the great majority of declared families are **NOT-READY**, and almost all of
+   them fail the same blocking gate: `difficulty-evidenced`. That gate became blocking once every
+   built family was routable and "nobody has tried it" stopped being a fact about the tooling. It
+   then got stricter, and the reason is the whole of section 5: `countedAgentTrials > 0` used to make
+   every counted failure difficulty evidence by default, and two published artifacts were not — a
+   deployment-alias run whose failures fan out of one decision the visible package does not
+   determine, and a memory-poisoning run that failed every attack scenario because the host handed it
+   a new memory facade per session while the package promised the same one. So a trial now needs a
+   `root-cause.json` saying `capability`; a trial with no record reads `unlabelled`, which is not
+   evidence of difficulty and not evidence of its absence. **That single change moved most of this
+   repository's families out of SHIP**, including two the earlier drafts of this memo listed as
+   shipped. I would rather report that than the count I could have kept by leaving the gate alone.
 4. **Make the kill produce the next candidate.** A typed reason with cited evidence, a disposition,
    and an operator table that turns "this family was too easy" into a specific structural change with
    a pre-registered kill risk. The descendant is built, trialed, and the operator is confirmed.
@@ -621,11 +637,13 @@ That changes the unit of production:
 
 **And here is the number my own argument forces, which I would rather state than leave implicit.**
 The planner in this repository, run at $120/h against the measured screening and trial rates, returns
-**7 families / 168 generated instances / ~21 independent axes** for $100k, with labour at 99% of
-spend — down from ten families once the model prices the families that die AFTER being built, which
-one of the two built here did. Priced as hand-authored tasks instead — one task per family, one axis per task — the same
-money buys **10 tasks**. Both rows are in `reports/budget-plan.md`, and the gap between them is the
-answer to the question. The thousand-task program is a multi-year, multi-
+**7 families / 168 generated instances / ~21 independent axes** for $100k, with labour at **97%** of
+spend — a figure that came down once the model started pricing the families that die AFTER being
+built, which one of the two built here did. Priced as hand-authored tasks instead — one task per
+family, one axis per task — the same money buys **7 tasks**, because the same labour builds the same
+number of families and only the instance count collapses. Both rows are the headline table of
+`reports/budget-plan.md`, and the gap between them — 168 instances against 7 — is the answer to the
+question. The thousand-task program is a multi-year, multi-
 person effort whose first year's deliverable is 25–40 well-instrumented families plus the tooling
 that proves they measure different things. If someone quotes you a thousand tasks for $100k, the
 tasks are instances of a handful of families and the interesting question is how many axes they
@@ -656,11 +674,19 @@ without a surface-coverage metric beside it.
   much stronger kill than the original one-lab version and still not a proof; the right response is
   to harden the family, which is what the gate forces, rather than to average it away with more runs
   of the same kind.
-- **Two labs is not many labs, and three of the four shared subjects are one lab's.** The old
-  three-family combined width of 3 is therefore partly a statement about Anthropic's model family.
-  The all-family bank is partial again after live-DOM because only GPT-5.6 Sol has attempted the
-  descendant. The third provider in the registry is installed and its account is not entitled, so its
-  slot is an infrastructure failure and counts for nothing.
+- **Two labs is not many labs, and three of the four shared subjects are one lab's.** Whatever
+  combined width the one measurable family pair reports is therefore partly a statement about
+  Anthropic's model family. The three-family width this memo used to quote no longer exists at all:
+  memory-poisoning has no counted subjects. The all-family bank is partial again after live-DOM
+  because only GPT-5.6 Sol has attempted the descendant. The third provider in the registry is
+  installed and its account is not entitled, so its slot is an infrastructure failure and counts for
+  nothing.
+
+- **Four of the eight built families have zero counted trials**, and one more has a counted failure
+  with no root cause recorded. Their axis counts are detection evidence over hand-written mutants:
+  they say the verifier discriminates and say nothing about whether an agent would struggle. Every
+  claim in this memo that treated one of those families as easy or as hard has been withdrawn above
+  rather than restated.
 - **A chain is a fact about the family, not about the models.** The UI result — four subjects, one
   axis — is the strongest evidence in this document that subject count and measurement count are
   different quantities. It is also the clearest case for spending the next dollar on scenarios rather
@@ -672,11 +698,15 @@ without a surface-coverage metric beside it.
   The SWE-bench run is the experiment that addresses this, and it is why the null model exists: at
   134 subjects the constraint runs the other way, and the width has to be shown to beat chance rather
   than assumed to.
-- **Verifier integrity is still early.** Seven package-backed families have adversarial-ready attack
-  packets, deterministic hardening probes and a v2 replay/triage path. `ui-replay-live-dom`,
-  `checker-required-memory-poisoning` and `deployment-model-alias-rollout-drift` each have one
-  counted Codex/OpenAI no-bypass audit under `fs-sandbox`; that is useful verifier-integrity
-  evidence, not a security proof and not cross-lab breadth. Durable Outbox has only an imported
+- **Verifier integrity is still early.** Every package-backed family has an adversarial-ready attack
+  packet, deterministic hardening probes and a v2 replay/triage path. **Two** families —
+  `ui-replay-live-dom` and `checker-required-memory-poisoning` — have a counted Codex/OpenAI
+  no-bypass audit under `fs-sandbox`; that is useful verifier-integrity evidence, not a security
+  proof and not cross-lab breadth. A third audit, against `deployment-model-alias-rollout-drift`, was
+  run against a package hash the starter-leak repair replaced, so it no longer counts and the claim
+  that that family has been adversarially audited is withdrawn — nobody has attacked its current
+  package. The per-family claim levels are in `reports/adversarial-audit-report.md`. Durable Outbox
+  has only an imported
   historical `/cheat` summary here, not the native packet, transcript and current package hash
   needed for a counted no-bypass audit. Container/no-network bundles and validation rules now exist,
   but the local Docker daemon is unavailable, so the preserved container preflight is an

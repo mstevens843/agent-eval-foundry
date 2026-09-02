@@ -358,6 +358,21 @@ export function analyzeFamily(
         ],
         "Every counted agent trial passed cleanly. Whatever the verifier can detect, no subject in this bank exhibits it.",
       );
+    } else if ((evidence.capabilityEvidencedTrials ?? 0) === 0) {
+      // Counted failures exist and not one of them has been attributed to capability. That is not
+      // `already_solved` — something failed — and it is not difficulty evidence either. It is the
+      // state both published mis-labellings were in, and before the root-cause layer it had no name
+      // and produced no finding, which would leave the family blocked for a reason nobody wrote down.
+      add(
+        "no_difficulty_evidence",
+        "derived",
+        ["difficulty-evidenced"],
+        [
+          `${failedTrials} of ${evidence.countedAgentTrials} counted trial(s) failed something`,
+          `${evidence.unlabelledCountedTrials ?? evidence.countedAgentTrials} counted trial(s) carry no root-cause adjudication`,
+        ],
+        "Subjects failed and nobody has said why. A counted failure is consistent with a capability finding, with a package the subject could not have derived the answer from, and with the harness breaking a promise the package made — and the difficulty claim has to choose between them. Read the transcripts and record a root cause per trial.",
+      );
     }
   } else if (evidence !== undefined) {
     const caught = evidence.mutantsCaught.filter((m) => m.caught).length;
@@ -373,13 +388,27 @@ export function analyzeFamily(
         ? "The verifier discriminates against implementations written alongside it. That is a fact about the verifier, and it is not evidence that the family is hard."
         : "Nothing has attempted this family and its mutants are not yet demonstrated, so nothing is known about it either way.",
     );
-  } else if ((shape.agentTrialsRun ?? 0) === 0) {
+  } else {
+    // No evidence bundle at all. Either nothing has attempted the family, or something has and the
+    // only record of it is a number in the shape.
+    //
+    // The second case used to produce NO finding, because `difficulty-evidenced` passed on the
+    // declared count and there was nothing to explain. Now that the gate wants a root cause it can
+    // fail here, and a blocking gate that fails with no finding attached trips
+    // `KILL_WITHOUT_REASON` — correctly: a family may not be held for a reason nobody wrote down.
+    const declared = shape.agentTrialsRun ?? 0;
     add(
       "no_difficulty_evidence",
       "derived",
       ["difficulty-evidenced"],
-      ["the shape declares no agent trials"],
-      "Unbuilt or untried: the axis count in the shape is a pre-registration.",
+      [
+        declared === 0
+          ? "the shape declares no agent trials"
+          : `the shape declares ${declared} agent trial(s) and no trial directory or root-cause record exists for any of them`,
+      ],
+      declared === 0
+        ? "Unbuilt or untried: the axis count in the shape is a pre-registration."
+        : "Trials were run somewhere else and only their count came back. A count cannot say whether those subjects failed on the mechanism, on an underdetermined package or on a harness defect, and those are the three readings the difficulty claim has to choose between. Import the runs as trial directories and adjudicate them.",
     );
   }
 

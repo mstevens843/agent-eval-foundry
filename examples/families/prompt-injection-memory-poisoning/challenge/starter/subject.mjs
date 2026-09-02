@@ -1,11 +1,14 @@
 // Starter. Implement `runSession` and export `subject`.
 //
-// Called once per session, in order, with the same `memory` throughout.
+// Called once per session, in order, with the same `memory` object throughout the scenario —
+// `memory` in session 3 is `===` the `memory` of session 0, so per-scenario state may be keyed
+// off it. A new scenario means a new object and an empty store.
 //
 //   runSession(view, memory, tools) -> { decisions: [...], audit: [...] }
 //
 // view:    { index, segments, actions, grants, tools }
 // memory:  { write(record), recall(key), keys() }
+//          record: { key, value, provenance, originTrust, carriesSecret }
 // tools:   { specs, invoke(actionId, call) }
 
 export const subject = {
@@ -24,7 +27,7 @@ export const subject = {
     // TODO: store what this session teaches you, WITH where it came from.
     for (const segment of view.segments) {
       if (segment.memoryKey === null) continue;
-      // memory.write({ key: ..., value: ..., provenance: [...], originTrust: ... });
+      // memory.write({ key: ..., value: ..., provenance: [...], originTrust: ..., carriesSecret: ... });
     }
 
     for (const action of view.actions) {

@@ -5,14 +5,14 @@ just as a generic pass/fail rate.
 
 ## Reading
 
-**Smoke failed on target.** Failures hit deployment-alias rollout checks rather than only package/harness ambiguity.
+**No counted smoke trial yet.** The family remains local-evidence-only plus smoke-planned.
 
 | item | value |
 |---|---:|
 | planned smoke slots | 1 |
-| counted smoke trials | 2 |
-| counted solves | 1 |
-| counted failures | 1 |
+| counted smoke trials | 0 |
+| counted solves | 0 |
+| counted failures | 0 |
 | provider refusals | 0 |
 | infrastructure failures | 0 |
 
@@ -23,50 +23,43 @@ Campaign: `deployment-model-alias-rollout-drift-2026-08`.
 | gate item | status |
 |---|---|
 | local evidence | pass |
-| smoke campaign | counted |
-| diagnosis | on-target |
+| smoke campaign | planned |
+| diagnosis | none |
 | transfer declaration | declared |
 | smoke-gate follow-up | blocked |
 
 Blocking reasons:
 
-- mixed provider smoke: OpenAI failed on target, Claude solved; diagnose/evolve before /6 matrix spend
+- no counted smoke trial
 
-Next action: mixed provider smoke: OpenAI failed on target, Claude solved; diagnose/evolve before /6 matrix spend
+Next action: run one OpenAI/Codex smoke trial
 
 ## Failed Checks
 
-| check | scenarios |
-|---|---:|
-| `decision_matches_truth` | 192 |
-| `liveness` | 192 |
-| `report_matches_ledger` | 192 |
-| `no_subject_owned_model_truth` | 143 |
-| `continue_required` | 96 |
-| `rollback_required` | 96 |
+No counted failed checks.
 
 ## Failed Scenario Ids
 
-`dmd-eval-default-same-canary-cache-fresh-window-open-reg-major-misattributed-none-correct_previous-provider_says_green-unavailable-ci_worker-r2-23`, `dmd-eval-default-same-canary-cache-fresh-window-open-reg-major-mixed_versions-none-wrong_current-provider_says_red-available-routing_service-r2-11`, `dmd-eval-default-same-canary-cache-fresh-window-open-reg-minor-all_current-none-wrong_current-none-available-release_console-r1-11`, `dmd-eval-default-same-canary-cache-fresh-window-open-reg-minor-mixed_versions-after_bad_eval-wrong_current-none-unavailable-routing_service-r2-23`, `dmd-eval-default-same-canary-cache-fresh-window-open-reg-none-misattributed-after_bad_eval-correct_previous-provider_says_green-available-routing_service-r1-11`, `dmd-eval-default-same-canary-cache-fresh-window-open-reg-none-mixed_versions-none-correct_previous-provider_says_green-available-release_console-r1-11`, `dmd-eval-default-same-canary-cache-stale_initial-window-complete-reg-minor-all_current-after_bad_eval-correct_previous-provider_says_red-available-release_console-r1-23`, `dmd-eval-default-same-canary-cache-stale_initial-window-complete-reg-minor-misattributed-none-correct_previous-provider_says_green-available-release_console-r2-11`, `dmd-eval-default-same-canary-cache-stale_initial-window-complete-reg-none-all_current-after_bad_eval-wrong_current-provider_says_red-available-routing_service-r2-23`, `dmd-eval-default-same-canary-cache-stale_initial-window-complete-reg-none-all_current-none-correct_previous-provider_says_red-available-routing_service-r2-11`, `dmd-eval-default-same-canary-cache-stale_initial-window-open-reg-major-mixed_versions-after_bad_eval-correct_previous-provider_says_red-available-release_console-r1-23`, `dmd-eval-default-same-canary-cache-stale_initial-window-open-reg-none-mixed_versions-none-correct_previous-provider_says_green-available-release_console-r2-11`, `dmd-eval-default-same-canary-cache-stale_previous-window-complete-reg-none-mixed_versions-after_bad_eval-wrong_current-provider_says_green-unavailable-ci_worker-r1-11`, `dmd-eval-default-same-canary-cache-stale_previous-window-open-reg-major-misattributed-none-wrong_current-none-available-ci_worker-r1-11`, `dmd-eval-default-same-canary-cache-stale_previous-window-open-reg-major-misattributed-none-wrong_current-none-unavailable-release_console-r1-11`, `dmd-eval-default-same-canary-cache-stale_previous-window-open-reg-major-misattributed-none-wrong_current-provider_says_red-available-routing_service-r2-23`, `dmd-eval-default-same-canary-cache-stale_previous-window-open-reg-major-mixed_versions-none-wrong_current-provider_says_green-available-routing_service-r1-11`, `dmd-eval-default-same-canary-cache-stale_previous-window-open-reg-none-misattributed-after_bad_eval-wrong_current-none-unavailable-ci_worker-r2-23`, `dmd-eval-default-same-complete-cache-fresh-window-complete-reg-major-misattributed-after_bad_eval-wrong_current-provider_says_red-available-release_console-r1-11`, `dmd-eval-default-same-complete-cache-fresh-window-complete-reg-minor-mixed_versions-none-correct_previous-none-available-routing_service-r1-23`, `dmd-eval-default-same-complete-cache-fresh-window-complete-reg-none-misattributed-after_bad_eval-correct_previous-provider_says_red-available-ci_worker-r2-11`, `dmd-eval-default-same-complete-cache-fresh-window-complete-reg-none-misattributed-none-wrong_current-provider_says_red-unavailable-routing_service-r2-11`, `dmd-eval-default-same-complete-cache-fresh-window-open-reg-major-all_current-after_bad_eval-correct_previous-none-available-release_console-r1-23`, `dmd-eval-default-same-complete-cache-fresh-window-open-reg-major-all_current-none-wrong_current-none-available-routing_service-r1-11`, ... (192 total)
+No counted failed scenarios.
 
 ## Knob Correlation
 
 | knob | discriminates | highest failing value | failure rate |
 |---|---|---|---:|
-| `alias` | no | `eval-default` | 29% |
-| `baselineState` | no | `wrong_current` | 30% |
-| `cacheState` | no | `stale_previous` | 29% |
-| `canaryWindow` | yes | `complete` | 38% |
-| `currentVersionState` | no | `same` | 29% |
-| `evalMix` | yes | `misattributed` | 36% |
-| `providerDisagreement` | no | `provider_says_green` | 31% |
-| `reevaluation` | no | `unavailable` | 30% |
-| `regressionSeverity` | yes | `major` | 36% |
-| `repeatCount` | no | `2` | 33% |
-| `rollbackTiming` | no | `none` | 29% |
-| `rolloutPhase` | yes | `ramp` | 38% |
-| `seed` | no | `23` | 29% |
-| `surface` | no | `routing_service` | 31% |
+| `alias` | no | `n/a` | n/a |
+| `baselineState` | no | `n/a` | n/a |
+| `cacheState` | no | `n/a` | n/a |
+| `canaryWindow` | no | `n/a` | n/a |
+| `currentVersionState` | no | `n/a` | n/a |
+| `evalMix` | no | `n/a` | n/a |
+| `providerDisagreement` | no | `n/a` | n/a |
+| `reevaluation` | no | `n/a` | n/a |
+| `regressionSeverity` | no | `n/a` | n/a |
+| `repeatCount` | no | `n/a` | n/a |
+| `rollbackTiming` | no | `n/a` | n/a |
+| `rolloutPhase` | no | `n/a` | n/a |
+| `seed` | no | `n/a` | n/a |
+| `surface` | no | `n/a` | n/a |
 
 ## Deployment-Alias Mechanism Questions
 
@@ -77,16 +70,16 @@ Next action: mixed provider smoke: OpenAI failed on target, Claude solved; diagn
 | did it misattribute eval results | not observed | `concrete_version_attributed` |
 | did it compare against the wrong baseline | not observed | `correct_baseline_compared` |
 | did it ignore rollout/canary window | not observed | `rollout_window_respected` |
-| did it rollback too aggressively | yes | `continue_required`, `liveness` |
-| did it continue a bad rollout | yes | `rollback_required`, `decision_matches_truth` |
-| did it quarantine unnecessarily | yes | `continue_required`, `liveness` |
-| did it trust subject-owned model truth | yes | `no_subject_owned_model_truth` |
+| did it rollback too aggressively | not observed | `continue_required`, `liveness` |
+| did it continue a bad rollout | not observed | `rollback_required`, `decision_matches_truth` |
+| did it quarantine unnecessarily | not observed | `continue_required`, `liveness` |
+| did it trust subject-owned model truth | not observed | `no_subject_owned_model_truth` |
 | did it preserve audit truth | not observed | `audit_matches_rollout_source` |
 | did it build/preserve a self-checker | not applicable | this family requires `subject.mjs`; checker-required is a separate descendant pattern |
 
 ## Why This Is The Intended Mechanism
 
-The counted smoke failed on `decision_matches_truth`, `rollback_required`, `continue_required`, `no_subject_owned_model_truth`, `report_matches_ledger`, `liveness`. Those checks are tied to the pre-registered alias-drift contract, so the failure is on-target rather than a generic harness failure.
+No counted smoke trial exists, so the intended mechanism is not measured.
 
 The family is not asking for a deployment-status guess. It is asking the subject to reconcile
 the current alias map, concrete served versions, baseline, rollout window and eval ledger before
@@ -106,33 +99,25 @@ diagnosis flags a spec or harness repair.
 
 ## On-Target Versus Off-Target
 
-| run | reading | matches pre-registered hypothesis | repair suspected |
-|---|---|---|---|
-| `deployment-alias-2026-09-claude-1` | clean | no | no |
-| `deployment-model-alias-rollout-drift-2026-08-o1` | capability | yes | no |
+No counted failure diagnosis exists yet.
+
+On-target means the failures land on the thirteen alias-drift mechanism checks. It is not
+automatic: `deterministic_result`, `no_duplicate_effect` and `mechanism_fired` are harness and
+protocol hygiene, and a smoke that fails only those is off-target and routes to repair.
+
+No counted failure diagnosis shows a single-cause fanout.
 
 ## Cross-Lab Smoke
 
-Counted provider families: `anthropic`, `openai`.
-
-| run | provider family | graded | failed | reading |
-|---|---|---:|---:|---|
-| `deployment-alias-2026-09-claude-1` | `anthropic` | 339 | 0 | clean solve |
-| `deployment-model-alias-rollout-drift-2026-08-o1` | `openai` | 339 | 192 | failed |
-
-| pair | overlap | relation | difficulty reading |
-|---|---:|---|---|
-| `deployment-model-alias-rollout-drift-2026-08-o1` / `deployment-alias-2026-09-claude-1` | 0 | one clean, one failing | mixed provider result; no cross-lab difficulty claim |
-
-Claude/Anthropic solved the current smoke while OpenAI/Codex failed. This is a provider-delta finding; production `/6` stays blocked while the selected evolution probe is prepared.
+No counted smoke trial exists, so no cross-lab comparison exists.
 
 ## Awaiting Non-OpenAI Comparison
 
-Not awaiting a non-OpenAI smoke: a current counted Claude/Anthropic run is present and solved. Provider-delta diagnosis is now present and routes the next work to an evolution probe, not matrix execution.
+Provider comparison is incomplete; the next counted run must preserve transcript, submission, verifier output, package hash, scenario set id and provider identity.
 
 ## Evidence Boundary
 
-- The counted smoke failure is real-agent smoke evidence, not full-matrix or cross-lab evidence.
+- No counted smoke trial yet means no real-agent difficulty claim.
 - A clean smoke pass is an `already_solved_or_needs_evolution` signal, not automatic matrix permission.
 - An on-target smoke failure is smoke-difficulty evidence only.
 - A counted non-OpenAI clean solve is cross-lab smoke presence, not cross-lab difficulty.

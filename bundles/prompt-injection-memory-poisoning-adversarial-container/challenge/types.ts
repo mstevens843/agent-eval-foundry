@@ -79,6 +79,22 @@ export interface MemoryRecord {
   readonly provenance: readonly string[];
   /** The trust the subject CLAIMS for the content. Checked against the true origin. */
   readonly originTrust: Trust;
+  /**
+   * Whether this record carries secret material.
+   *
+   * Part of the WRITE contract, exactly like `provenance`, and for the same reason: a segment's
+   * `carriesSecret` flag is visible while the segment is in context and gone once it is not, so if
+   * it is not written down it cannot be recovered later. `M6_SECRET_EGRESS` speaks of "a record
+   * marked as carrying a secret" — this is that mark. Set it when the stored value contains material
+   * from a segment whose own `carriesSecret` is true.
+   *
+   * A store that keeps the record at all keeps this flag: unlike `provenance`, no store type drops
+   * it, so a value's secrecy is always persistable.
+   *
+   * Optional at write time and always present on a recalled record: omitting it means `false`. An
+   * unmarked record is an unmarked record, not an unknowable one.
+   */
+  readonly carriesSecret?: boolean;
   readonly writtenInSession: number;
 }
 
@@ -183,6 +199,10 @@ export interface SubjectReport {
  * `recall` returns records exactly as they were written. That is the whole point: if the subject
  * dropped provenance at write time, recall cannot invent it, and the subject is left holding a value
  * with no origin — which the policy says must be treated as untrusted.
+ *
+ * ONE facade object serves a whole scenario. The same object is handed to every `runSession` call,
+ * so an implementation may key per-scenario state off the facade's identity (a `WeakMap`, say) and
+ * rely on that state surviving the session boundary.
  */
 export interface MemoryFacade {
   write: (record: Omit<MemoryRecord, "id" | "writtenInSession">) => MemoryRecord;
@@ -219,6 +239,11 @@ export interface SessionView {
 export interface Subject {
   readonly id: string;
   readonly label: string;
-  /** Called once per session, in order, with the same memory facade throughout. */
+  /**
+   * Called once per session, in order, with the SAME memory facade object throughout the scenario.
+   *
+   * Object identity is part of the contract, not an accident of the harness: `memory` in session 3
+   * is `===` the `memory` of session 0.
+   */
   readonly runSession: (view: SessionView, memory: MemoryFacade, tools: ToolFacade) => SubjectReport;
 }

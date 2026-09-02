@@ -33,8 +33,27 @@ export const LINEAGE_SMOKE_STATUSES = [
   "on-target-failure",
   "off-target-failure",
   "uncounted",
+  // A run that happened, was graded, and turned out to measure nothing about the mechanism. It is
+  // NOT "not-run": the money was spent and the transcript exists. It is not "clean-pass" either,
+  // because the pass was against a package that contained its own answer key. Without this value a
+  // lineage record can only say "solved" or "not yet run", and neither is true here.
+  "withdrawn",
 ] as const;
 export type LineageSmokeStatus = (typeof LINEAGE_SMOKE_STATUSES)[number];
+
+/**
+ * Why a recorded smoke result stopped being evidence.
+ *
+ * `package-leak` is the one this vocabulary was added for: the shipped starter was a complete
+ * passing solution, so a clean pass measured transcription, not the mechanism.
+ */
+export const LINEAGE_EVIDENCE_WITHDRAWAL_REASONS = [
+  "package-leak",
+  "harness-contract-violation",
+  "verifier-blind-spot",
+  "spec-ambiguity",
+] as const;
+export type LineageEvidenceWithdrawalReason = (typeof LINEAGE_EVIDENCE_WITHDRAWAL_REASONS)[number];
 
 export const LINEAGE_TRANSFER_EVIDENCE = ["none", "declared", "measured"] as const;
 export type LineageTransferEvidence = (typeof LINEAGE_TRANSFER_EVIDENCE)[number];
@@ -49,6 +68,9 @@ export const LINEAGE_VERDICTS = [
   "lineage_requires_cross_lab_before_more_build",
   "lineage_blocked_by_missing_trials",
   "lineage_blocked_by_stale_evidence",
+  // The runs happened and are withdrawn: the branch's difficulty is UNKNOWN, not solved and not
+  // unmeasured-by-omission.
+  "lineage_evidence_withdrawn",
 ] as const;
 export type LineageVerdict = (typeof LINEAGE_VERDICTS)[number];
 
@@ -61,8 +83,34 @@ export const LINEAGE_DECISIONS = [
   "repair",
   "run-smoke",
   "run-cross-lab",
+  "re-measure",
 ] as const;
 export type LineageDecision = (typeof LINEAGE_DECISIONS)[number];
+
+/**
+ * A written withdrawal of evidence this lineage previously counted.
+ *
+ * The nodes and their run ids stay in the record — deleting them would hide real spend and make the
+ * repo unable to explain why its own verdict moved. What changes is the CLAIM attached to them.
+ */
+export interface LineageEvidenceWithdrawal {
+  readonly reason: LineageEvidenceWithdrawalReason;
+  /** The runs whose numbers may no longer be quoted for this family. */
+  readonly withdrawnRunIds: readonly string[];
+  /** Hash the withdrawn runs were actually graded against. */
+  readonly gradedAgainstHash: string | null;
+  /** Hash the family produces now, after the repair. */
+  readonly currentHash: string | null;
+  /** Matching `ChallengeMigration.date`, so the two records are joinable by a reader. */
+  readonly declaredMigrationDate: string | null;
+  /** Mandatory prose. A withdrawal nobody explained is indistinguishable from a quiet retraction. */
+  readonly explanation: string;
+  /**
+   * True when the matrix this node skipped is still owed. Spend "avoided" on the strength of a
+   * leaked package was never avoided — it was deferred until the family is re-measured.
+   */
+  readonly matrixSpendStillOwed: boolean;
+}
 
 export interface LineageSmokeRecord {
   readonly status: LineageSmokeStatus;
@@ -90,6 +138,8 @@ export interface LineageNode {
   readonly smoke: LineageSmokeRecord;
   readonly fullMatrixBlocked: boolean;
   readonly transferEvidence: LineageTransferEvidence;
+  /** Non-null once this node's recorded evidence has been withdrawn and why. */
+  readonly evidenceWithdrawn: LineageEvidenceWithdrawal | null;
   readonly notes: readonly string[];
 }
 
@@ -112,6 +162,9 @@ export interface LineageScoringFeedbackRule {
   readonly adjustment: number;
   readonly reason: string;
   readonly evidenceLabel: string;
+  /** A withdrawn rule stays in the record for audit and applies no adjustment. */
+  readonly status: "active" | "withdrawn";
+  readonly withdrawnReason: string | null;
 }
 
 export interface LineageReallocationPlan {
@@ -119,6 +172,9 @@ export interface LineageReallocationPlan {
   readonly candidateIds: readonly string[];
   readonly forbiddenClusters: readonly string[];
   readonly exactNextBuildRecommendation: string;
+  /** A withdrawn plan names no penalties, no boosts and no next cluster. */
+  readonly status: "active" | "withdrawn";
+  readonly withdrawnReason: string | null;
 }
 
 export interface LineageLearning {
@@ -179,6 +235,14 @@ export interface LineageNodeEvaluation {
   readonly currentPackageHash: string | null;
   readonly scenarioCount: number | null;
   readonly mutantAxes: number | null;
+  readonly evidenceWithdrawn: LineageEvidenceWithdrawal | null;
+  /**
+   * The only field a verdict is allowed to read as "this node told us something about the
+   * mechanism". A counted trial against a leaked or stale package is not informative.
+   */
+  readonly informativeSmokeEvidence: boolean;
+  /** This node blocked a matrix without informative evidence, so the matrix is still owed. */
+  readonly matrixSpendDeferred: boolean;
 }
 
 export interface LineageEvaluation {
@@ -191,7 +255,13 @@ export interface LineageEvaluation {
   readonly axisDiversityIncreased: boolean;
   readonly crossLabProven: boolean;
   readonly matrixBlocks: number;
+  /** Matrix blocks backed by an informative counted smoke. Only these are a real saving. */
+  readonly informedMatrixBlocks: number;
+  /** Matrix blocks whose justification was withdrawn, stale or never measured. */
+  readonly deferredMatrixBlocks: number;
   readonly estimatedMatrixSpendSavedUsd: number;
+  /** Spend the lineage did not avoid: it postponed it, and owes it on re-measurement. */
+  readonly estimatedMatrixSpendDeferredUsd: number;
   readonly nextAction: string;
 }
 
@@ -211,6 +281,11 @@ export interface PortfolioReallocation {
   readonly lineageId: string;
   readonly verdict: LineageVerdict;
   readonly matrixSpendSavedUsd: number;
+  readonly matrixSpendDeferredUsd: number;
+  /** Rules kept in the record for audit that no longer move any score. */
+  readonly withdrawnFeedback: readonly LineageScoringFeedbackRule[];
+  readonly reallocationStatus: "active" | "withdrawn";
+  readonly reallocationWithdrawnReason: string | null;
   readonly feedback: readonly PortfolioFeedbackApplication[];
   readonly penalized: readonly PortfolioFeedbackApplication[];
   readonly boosted: readonly PortfolioFeedbackApplication[];
@@ -246,10 +321,56 @@ const parseSmoke = (v: unknown, path: string): LineageSmokeRecord => {
   };
 };
 
+const parseWithdrawal = (v: unknown, path: string): LineageEvidenceWithdrawal | null => {
+  if (v === undefined || v === null) return null;
+  const o = obj(v, path);
+  const explanation = str(o.explanation, `${path}.explanation`);
+  if (explanation.trim().length < 80) {
+    fail(
+      "LINEAGE_WITHDRAWAL_UNREASONED",
+      `${path}.explanation`,
+      "a withdrawal has to say what the withdrawn runs actually measured and why that is not the mechanism; a bare status change is indistinguishable from a quiet retraction",
+    );
+  }
+  return {
+    reason: oneOf(o.reason, `${path}.reason`, LINEAGE_EVIDENCE_WITHDRAWAL_REASONS),
+    withdrawnRunIds: requiredList(
+      o.withdrawnRunIds,
+      `${path}.withdrawnRunIds`,
+      "LINEAGE_WITHDRAWAL_UNREASONED",
+      "a withdrawal must name the runs whose numbers may no longer be quoted",
+    ),
+    gradedAgainstHash: strNullable(o.gradedAgainstHash, `${path}.gradedAgainstHash`),
+    currentHash: strNullable(o.currentHash, `${path}.currentHash`),
+    declaredMigrationDate: strNullable(o.declaredMigrationDate, `${path}.declaredMigrationDate`),
+    explanation,
+    matrixSpendStillOwed: bool(o.matrixSpendStillOwed, `${path}.matrixSpendStillOwed`),
+  };
+};
+
 const parseNode = (v: unknown, path: string): LineageNode => {
   const o = obj(v, path);
   const smoke = parseSmoke(o.smoke, `${path}.smoke`);
   const fullMatrixBlocked = bool(o.fullMatrixBlocked, `${path}.fullMatrixBlocked`);
+  const evidenceWithdrawn = parseWithdrawal(o.evidenceWithdrawn, `${path}.evidenceWithdrawn`);
+  // The bug this repo actually shipped: two smoke runs against packages that contained their own
+  // answer key were recorded as counted clean passes and read as "already solved". Once a node
+  // admits its evidence was withdrawn, it may not simultaneously present that evidence as a solve.
+  if (evidenceWithdrawn !== null && (smoke.status !== "withdrawn" || smoke.counted)) {
+    fail(
+      "LINEAGE_WITHDRAWN_EVIDENCE_CLAIMED_INFORMATIVE",
+      `${path}.smoke.status`,
+      `evidence withdrawn for "${evidenceWithdrawn.reason}" cannot also be recorded as a counted ${smoke.status}; a pass against a package that leaked its own solution says nothing about the mechanism`,
+    );
+  }
+  // ...and the converse, so "withdrawn" can never become a silent way to drop a result.
+  if (smoke.status === "withdrawn" && evidenceWithdrawn === null) {
+    fail(
+      "LINEAGE_WITHDRAWAL_UNREASONED",
+      `${path}.evidenceWithdrawn`,
+      "a withdrawn smoke status must carry a written withdrawal record naming the runs and the reason",
+    );
+  }
   if (smoke.status === "clean-pass" && smoke.counted && !fullMatrixBlocked) {
     fail(
       "LINEAGE_MATRIX_AFTER_CLEAN_PASS",
@@ -274,6 +395,7 @@ const parseNode = (v: unknown, path: string): LineageNode => {
     smoke,
     fullMatrixBlocked,
     transferEvidence: oneOf(o.transferEvidence, `${path}.transferEvidence`, LINEAGE_TRANSFER_EVIDENCE),
+    evidenceWithdrawn,
     notes: strArray(o.notes, `${path}.notes`),
   };
 };
@@ -319,6 +441,15 @@ const parseFeedbackRule = (v: unknown, path: string): LineageScoringFeedbackRule
       "portfolio scoring feedback must be explicitly labelled as lineage-derived evidence",
     );
   }
+  const status = oneOf(o.status ?? "active", `${path}.status`, ["active", "withdrawn"] as const);
+  const withdrawnReason = strNullable(o.withdrawnReason ?? null, `${path}.withdrawnReason`);
+  if (status === "withdrawn" && (withdrawnReason === null || withdrawnReason.trim().length < 40)) {
+    fail(
+      "LINEAGE_FEEDBACK_WITHDRAWN_UNREASONED",
+      `${path}.withdrawnReason`,
+      "a withdrawn scoring rule must say what evidence it rested on and why that evidence is gone",
+    );
+  }
   return {
     id: id(o.id, `${path}.id`),
     kind: oneOf(o.kind, `${path}.kind`, ["penalty", "boost"] as const),
@@ -327,6 +458,8 @@ const parseFeedbackRule = (v: unknown, path: string): LineageScoringFeedbackRule
     adjustment: num(o.adjustment, `${path}.adjustment`),
     reason: str(o.reason, `${path}.reason`),
     evidenceLabel,
+    status,
+    withdrawnReason,
   };
 };
 
@@ -338,11 +471,22 @@ const parseReallocation = (v: unknown, path: string): LineageReallocationPlan =>
     "LINEAGE_NO_REALLOCATION",
     "a solved lineage must name a different branch to receive the next build budget",
   );
+  const status = oneOf(o.status ?? "active", `${path}.status`, ["active", "withdrawn"] as const);
+  const withdrawnReason = strNullable(o.withdrawnReason ?? null, `${path}.withdrawnReason`);
+  if (status === "withdrawn" && (withdrawnReason === null || withdrawnReason.trim().length < 40)) {
+    fail(
+      "LINEAGE_FEEDBACK_WITHDRAWN_UNREASONED",
+      `${path}.withdrawnReason`,
+      "a withdrawn reallocation plan must say which verdict it was derived from and why that verdict no longer holds",
+    );
+  }
   return {
     reason: str(o.reason, `${path}.reason`),
     candidateIds,
     forbiddenClusters: strArray(o.forbiddenClusters, `${path}.forbiddenClusters`),
     exactNextBuildRecommendation: str(o.exactNextBuildRecommendation, `${path}.exactNextBuildRecommendation`),
+    status,
+    withdrawnReason,
   };
 };
 
@@ -448,6 +592,23 @@ export function assertLineagesValid(
         );
       }
     }
+    const withdrawnNodes = lineage.nodes.filter((node) => node.evidenceWithdrawn !== null);
+    if (withdrawnNodes.length > 0) {
+      const stillActive = lineage.learning.scoringFeedback.filter((rule) => rule.status === "active");
+      if (stillActive.length > 0 || lineage.learning.reallocation.status === "active") {
+        fail(
+          "LINEAGE_REALLOCATION_ON_WITHDRAWN_EVIDENCE",
+          `${path}.learning`,
+          `every scoring rule here is labelled as lineage-derived, and ${withdrawnNodes
+            .map((node) => node.familyId)
+            .join(
+              ", ",
+            )} withdrew the evidence the lineage verdict was derived from. The penalties and boosts must be withdrawn with it, not left applying silently: ${stillActive
+            .map((rule) => rule.id)
+            .join(", ")}`,
+        );
+      }
+    }
     if (lineage.crossLabClaimed) {
       const providers = new Set(
         lineage.nodes.flatMap((node) =>
@@ -474,15 +635,24 @@ export function evaluateLineage(
   const descendants = nodes.filter((node) => node.familyId !== lineage.rootFamilyId);
   const latest = descendants[descendants.length - 1] ?? null;
   const stale = nodes.some((node) => node.stale);
+  // A clean pass only counts toward a verdict if it was informative. Two passes against packages
+  // that shipped their own answer key are not two solves; they are two measurements of the starter.
   const cleanCount = nodes.filter(
-    (node) => node.smokeStatus === "clean-pass" && node.countedSmokeTrials > 0,
+    (node) => node.smokeStatus === "clean-pass" && node.informativeSmokeEvidence,
   ).length;
+  const withdrawn = nodes.filter((node) => node.evidenceWithdrawn !== null);
   const failedDescendant = latest !== null && latest.countedSmokeFailures > 0;
   const providerFamilies = new Set(nodes.flatMap((node) => node.providerFamilies));
   const subjectIds = new Set(nodes.flatMap((node) => node.subjectIds));
   const sameSubjectAcrossCleanLineage =
-    subjectIds.size === 1 && cleanCount >= 2 && nodes.every((node) => node.countedSmokeTrials > 0);
+    subjectIds.size === 1 && cleanCount >= 2 && nodes.every((node) => node.informativeSmokeEvidence);
   const matrixBlocks = nodes.filter((node) => node.fullMatrixBlocked).length;
+  // The correction that matters for the money: a block only saved a matrix if the smoke that
+  // justified it told us something. Otherwise the matrix was postponed, and is still owed.
+  const informedMatrixBlocks = nodes.filter(
+    (node) => node.fullMatrixBlocked && node.informativeSmokeEvidence,
+  ).length;
+  const deferredMatrixBlocks = nodes.filter((node) => node.matrixSpendDeferred).length;
   const axisDiversityIncreased =
     root?.mutantAxes !== null &&
     latest?.mutantAxes !== null &&
@@ -493,7 +663,17 @@ export function evaluateLineage(
   let decision: LineageDecision;
   let reason: string;
   let nextAction: string;
-  if (stale) {
+  if (withdrawn.length > 0) {
+    verdict = "lineage_evidence_withdrawn";
+    decision = "re-measure";
+    reason = `${withdrawn
+      .map((node) => node.familyId)
+      .join(" and ")} withdrew the smoke evidence this lineage was judged on (${[
+      ...new Set(withdrawn.map((node) => node.evidenceWithdrawn?.reason ?? "unknown")),
+    ].join(", ")}), so the branch's difficulty is unknown - it is neither solved nor unmeasured`;
+    nextAction =
+      "run one counted smoke per node against the repaired current-hash packages before any verdict, portfolio adjustment or matrix decision is derived from this lineage";
+  } else if (stale) {
     verdict = "lineage_blocked_by_stale_evidence";
     decision = "repair";
     reason = "at least one lineage node was recorded against a stale package hash";
@@ -546,7 +726,12 @@ export function evaluateLineage(
     axisDiversityIncreased,
     crossLabProven: providerFamilies.size >= 2,
     matrixBlocks,
-    estimatedMatrixSpendSavedUsd: Math.round(matrixBlocks * MEASURED_DEFAULTS.usdPerMatrix * 100) / 100,
+    informedMatrixBlocks,
+    deferredMatrixBlocks,
+    estimatedMatrixSpendSavedUsd:
+      Math.round(informedMatrixBlocks * MEASURED_DEFAULTS.usdPerMatrix * 100) / 100,
+    estimatedMatrixSpendDeferredUsd:
+      Math.round(deferredMatrixBlocks * MEASURED_DEFAULTS.usdPerMatrix * 100) / 100,
     nextAction,
   };
 }
@@ -572,19 +757,27 @@ function evaluateNode(
     runtime?.countedSmokeSolves ?? (node.smoke.counted && node.smoke.scenariosFailed === 0 ? 1 : 0);
   const countedSmokeFailures =
     runtime?.countedSmokeFailures ?? (node.smoke.counted && node.smoke.scenariosFailed > 0 ? 1 : 0);
-  const smokeStatus =
-    runtime === undefined
-      ? node.smoke.status
-      : countedSmokeTrials === 0
-        ? "not-run"
-        : countedSmokeFailures > 0
-          ? runtime.smokeDiagnosis === "on-target"
-            ? "on-target-failure"
-            : "off-target-failure"
-          : "clean-pass";
+  const smokeStatus: LineageSmokeStatus =
+    node.evidenceWithdrawn !== null && countedSmokeTrials === 0
+      ? "withdrawn"
+      : runtime === undefined
+        ? node.smoke.status
+        : countedSmokeTrials === 0
+          ? "not-run"
+          : countedSmokeFailures > 0
+            ? runtime.smokeDiagnosis === "on-target"
+              ? "on-target-failure"
+              : "off-target-failure"
+            : "clean-pass";
+  const evidenceWithdrawn = node.evidenceWithdrawn;
+  const informativeSmokeEvidence = evidenceWithdrawn === null && !stale && countedSmokeTrials > 0;
+  const fullMatrixBlocked = runtime?.fullMatrixBlocked ?? node.fullMatrixBlocked;
   return {
     familyId: node.familyId,
     stale,
+    evidenceWithdrawn,
+    informativeSmokeEvidence,
+    matrixSpendDeferred: fullMatrixBlocked && !informativeSmokeEvidence,
     localEvidenceStatus:
       runtime === undefined
         ? node.localEvidenceStatus
@@ -598,7 +791,7 @@ function evaluateNode(
     providerFamilies:
       runtime?.providerFamilies ?? (node.smoke.provider === null ? [] : [node.smoke.provider]),
     subjectIds: runtime?.subjectIds ?? (node.smoke.subjectId === null ? [] : [node.smoke.subjectId]),
-    fullMatrixBlocked: runtime?.fullMatrixBlocked ?? node.fullMatrixBlocked,
+    fullMatrixBlocked,
     transferDeclared: runtime?.transferDeclared ?? node.transferEvidence !== "none",
     packageHash,
     currentPackageHash,
@@ -619,6 +812,10 @@ export function planPortfolioReallocation(
       lineageId: "none",
       verdict: "lineage_blocked_by_missing_trials",
       matrixSpendSavedUsd: 0,
+      matrixSpendDeferredUsd: 0,
+      withdrawnFeedback: [],
+      reallocationStatus: "active",
+      reallocationWithdrawnReason: null,
       feedback: [],
       penalized: [],
       boosted: [],
@@ -629,30 +826,42 @@ export function planPortfolioReallocation(
   const scores = new Map(
     scoreDiscoveryCandidates(workbench.candidates).map((score) => [score.candidateId, score]),
   );
+  // Only active rules move a score. Withdrawn rules stay in the record so a reader can see which
+  // adjustments were made, on what evidence, and that they were taken back.
+  const activeRules = lineage.learning.scoringFeedback.filter((rule) => rule.status === "active");
+  const withdrawnFeedback = lineage.learning.scoringFeedback.filter((rule) => rule.status === "withdrawn");
+  const plan = lineage.learning.reallocation;
   const applications = workbench.candidates
-    .map((candidate) =>
-      applyFeedback(candidate, lineage.learning.scoringFeedback, scores.get(candidate.id)?.totalScore ?? 0),
-    )
+    .map((candidate) => applyFeedback(candidate, activeRules, scores.get(candidate.id)?.totalScore ?? 0))
     .sort(
       (a, b) =>
         b.adjustedScore - a.adjustedScore ||
         b.totalAdjustment - a.totalAdjustment ||
         a.candidateId.localeCompare(b.candidateId),
     );
-  const forbidden = new Set(lineage.learning.reallocation.forbiddenClusters);
-  const nextRecommendations = distinctClusterRecommendations(
-    applications.filter((item) => item.totalAdjustment >= 0 && !forbidden.has(item.mechanismCluster)),
-    lineage.learning.reallocation.candidateIds,
-  );
+  const forbidden = new Set(plan.forbiddenClusters);
+  // A withdrawn plan recommends nothing. Ranking a "next cluster" would be re-asserting, in a
+  // different column, the comparison the withdrawn evidence no longer supports.
+  const nextRecommendations =
+    plan.status === "withdrawn"
+      ? []
+      : distinctClusterRecommendations(
+          applications.filter((item) => item.totalAdjustment >= 0 && !forbidden.has(item.mechanismCluster)),
+          plan.candidateIds,
+        );
   return {
     lineageId: lineage.id,
     verdict: evaluation.verdict,
     matrixSpendSavedUsd: evaluation.estimatedMatrixSpendSavedUsd,
+    matrixSpendDeferredUsd: evaluation.estimatedMatrixSpendDeferredUsd,
+    withdrawnFeedback,
+    reallocationStatus: plan.status,
+    reallocationWithdrawnReason: plan.withdrawnReason,
     feedback: applications.filter((item) => item.appliedFeedback.length > 0),
     penalized: applications.filter((item) => item.totalAdjustment < 0),
     boosted: applications.filter((item) => item.totalAdjustment > 0),
     nextRecommendations,
-    exactNextBuildRecommendation: lineage.learning.reallocation.exactNextBuildRecommendation,
+    exactNextBuildRecommendation: plan.exactNextBuildRecommendation,
   };
 }
 

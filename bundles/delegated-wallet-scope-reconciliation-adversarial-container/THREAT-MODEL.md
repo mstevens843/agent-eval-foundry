@@ -1,8 +1,8 @@
 # Threat model: delegated-wallet-scope-reconciliation
 
 Campaign: `delegated-wallet-scope-reconciliation-adversarial`
-Challenge hash: `2140032d835a87ff254d01b6b4652f21`
-Verifier hash: `1823af8a376c33edc069a29773bf8756`
+Challenge hash: `45f27b644a84364e3d3855f68cd243a2`
+Verifier hash: `5ba883521580a48e422066ae26b80bb4`
 
 Objective: Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.
 

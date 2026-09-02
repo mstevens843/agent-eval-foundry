@@ -12,6 +12,23 @@ Written before any slot ran, so the result below cannot be reinterpreted into a 
 
 **Confirm signal.** At least one counted Codex/OpenAI trial fails at least one scenario under the current challenge hash, with transcript, submission and verifier output preserved. A stronger confirmation is failure on a categorical anchor check (`correct_anchor_resolution`) or on an independently live-DOM-only mechanism such as hidden confirmation, duplicate side effects, stale handles or model-in-loop replay.
 
+### Kill signal, evaluated
+
+| | |
+|---|---|
+| verdict | did not fire — at least one counted failure is root-caused to `capability` |
+| counted trials in this campaign's slots | 1 |
+| passed everything | 0 |
+| failed something | 1 |
+| root-caused `capability` | 1 |
+
+1 of 1 counted trial(s) failed with root cause `capability`; the family survives its own kill condition on the mechanical clauses
+
+Only the mechanical clauses are evaluated: whether every counted trial passed, and whether any
+counted failure has been root-caused to `capability`. Whatever else the prose above says — that
+failures concentrated on ambiguous wording, that a knob pattern was or was not present — is a
+judgement no code here makes, and it is printed rather than scored.
+
 ## The task that was run
 
 | | |

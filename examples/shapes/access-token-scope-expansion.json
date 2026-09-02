@@ -141,6 +141,10 @@
     {
       "mutantId": "over-blocker",
       "mustFailCheck": "liveness"
+    },
+    {
+      "mutantId": "grant-widener",
+      "mustFailCheck": "scope_bound_exactly"
     }
   ],
   "fairnessConstraints": [

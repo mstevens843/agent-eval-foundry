@@ -39,40 +39,48 @@ separately.
 
 | run | family | subject | lab | graded | failed | runtime |
 |---|---|---|---|---:|---:|---:|
-| `mp-haiku-1` | poisoning | `claude-haiku-4-5` | anthropic | 288 | 32 | 211s |
-| `mp-sonnet-1` | poisoning | `claude-sonnet-5` | anthropic | 288 | 42 | 345s |
+| `mp-haiku-1` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | poisoning | `claude-haiku-4-5` | anthropic | 288 | 32 | 211s |
+| `mp-sonnet-1` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | poisoning | `claude-sonnet-5` | anthropic | 288 | 42 | 345s |
 | `pic-haiku-1` | containment | `claude-haiku-4-5` | anthropic | 128 | 0 | 54s |
 | `pic-sonnet-1` | containment | `claude-sonnet-5` | anthropic | 128 | 0 | 190s |
 | `ui-haiku-1` | replay | `claude-haiku-4-5` | anthropic | 324 | 62 | 167s |
 | `ui-sonnet-1` | replay | `claude-sonnet-5` | anthropic | 324 | 62 | 320s |
 
+**Withdrawn evidence.** `mp-haiku-1`, `mp-sonnet-1` were invalidated by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration: they were graded against a package this repository no longer produces, so those rows do not count and every number on them is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read these rows as spend that was made, not as a result about the family as it stands.
+
 | | |
 |---|---:|
 | trials run | 6 |
-| counted | 6 |
+| counted | 4 |
+| withdrawn by a challenge migration | 2 |
 | model-minutes | 21 |
 | estimated spend at $3.50/trial | $21.00 |
 
 ## The constraint, after
 
-**PARTIAL.** 1 shared subject(s) against a threshold of 3. The combined width is bounded above by 1, which cannot distinguish complete overlap from independence. 9 more counted trial(s) would reach the threshold.
+**PARTIAL.** 1 shared subject(s) against a threshold of 3. The combined width is bounded above by 1, which cannot distinguish complete overlap from independence. 4 more counted trial(s) would reach the threshold.
 
 | | |
 |---|---:|
 | shared subjects | 1 |
 | threshold | 3 |
 | provider families among them | 1 |
-| counted trials still needed | 9 |
+| counted trials still needed | 4 |
 
 ## What it bought, and what it did not
 
 | | |
 |---|---|
-| a combined cross-family axis count | **yes** — computable for the first time |
-| evidence that the families measure different things | **yes** — the axes add over the shared subjects, against a null model twice as large |
+| a combined cross-family axis count | **no longer** — it was computable, and the 2 withdrawn trial(s) above were part of what made it so. With 1 shared subject(s) against a threshold of 3, it is refused again |
+| evidence that the families measure different things | **withdrawn** — that comparison ran over a shared bank the withdrawn trials belonged to. It is not restated more carefully; it is unmade until the bank is rebuilt under the current hashes |
 | a third lab | **no** — three of the four subjects are Anthropic models |
 | a wider UI family | **no** — the new subjects landed inside the existing chain, which is what a chain does |
 | a weaker containment kill | **no** — both new subjects also passed 128 of 128, so `already-solved` got stronger |
+
+That is the shape of the cost. The campaign was run correctly, its trials were real, and a
+later repair to one of the families invalidated part of what they bought. The spend stays on
+the books and the conclusion comes off them; there is no version of this where the number
+survives the repair that removed its evidence.
 
 The fourth row is the one worth dwelling on. Two of the four trials in this campaign went to a
 family whose failure sets were already totally ordered, and both landed on the chain — one of them

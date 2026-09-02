@@ -4,7 +4,7 @@
   "hypothesis": "The deployment-alias branch was selected after the access-token authority lineage was solved twice. A real agent may trust stale alias maps, alias names, cached eval summaries, stale baselines, provider status strings or subject-owned model truth instead of reconciling the current rollout and eval ledgers. One smoke trial is enough to route the branch, not enough to claim a full matrix or cross-lab breadth.",
   "killSignal": "A counted OpenAI/Codex smoke trial passes every graded deployment-alias scenario cleanly under the current challenge hash, which is an already_solved_or_needs_evolution or reallocation signal rather than a reason to run a full matrix. Alternatively, failures concentrate only on unclear public rollout/eval wording or harness errors, which routes the family to repair/spec work instead of difficulty evidence.",
   "confirmSignal": "At least one counted OpenAI/Codex smoke trial fails on an intended deployment-alias mechanism under the current challenge hash, with transcript, submission, verifier output and scenario-set id preserved. On-target failure produces smoke-difficulty evidence only; one OpenAI run is not cross-lab evidence and does not unlock a full matrix without transfer evidence.",
-  "challengeHash": "0e9b87a5f260544cfbc1cdce8f08938c",
+  "challengeHash": "805efb58c923f9e081db1b41967392d7",
   "scenarioSetId": "drift-339-590affe3",
   "scenariosExpected": 339,
   "timeoutMs": 1800000,

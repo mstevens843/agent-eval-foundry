@@ -6,20 +6,20 @@ from what is only planned or still missing.
 | requirement | state | reading |
 |---|---|---|
 | local reference/verifier/mutant evidence | **pass** | reference clean; intended known-bad bank caught |
-| package hash current | **pass** | current hash `0e9b87a5f260544cfbc1cdce8f08938c` |
+| package hash current | **pass** | current hash `805efb58c923f9e081db1b41967392d7` |
 | scenario set current | **pass** | scenario set `drift-339-590affe3` |
-| OpenAI smoke | **pass** | 1/2 counted smoke run(s) failed on target |
-| cross-lab smoke | **mixed** | non-OpenAI smoke imported cleanly, but it solved the suite rather than failing on target |
+| OpenAI smoke | **pending** | no counted OpenAI on-target failure |
+| cross-lab smoke | **missing** | no non-OpenAI counted smoke under the current hash |
 | provider-delta diagnosis | **present** | mixed provider smoke has a dedicated diagnosis report |
 | evolution options | **ready** | conditional descendants are declared; no descendant family is built yet |
-| external intake | **attempted** | 1 countable / 2 imported packet(s) |
+| external intake | **attempted** | 0 countable / 2 imported packet(s), 1 withdrawn by a challenge migration |
 | human evidence | **pending** | human-ready, but no clean-room solve on record |
-| adversarial OpenAI fs-sandbox | **pass** | 1 counted no-bypass audit(s) |
+| adversarial OpenAI fs-sandbox | **pending** | 0 counted no-bypass audit(s) |
 | container/no-network adversarial audit | **missing** | no counted container/no-network deployment-alias audit yet |
 | transfer | **declared** | feature-flag/model-routing transfer plans exist; not proved |
-| OpenAI half-matrix | **planned** | 3 OpenAI slot(s); 1 already recorded |
+| OpenAI half-matrix | **planned** | 3 OpenAI slot(s); 0 already recorded, and 1 withdrawn by a challenge migration — a withdrawn slot is an empty slot |
 | Anthropic half-matrix | **blocked** | Anthropic quota unavailable; import only until restored |
-| full `/6` matrix | **blocked** | diagnose provider delta or evolve before production /6 matrix spend |
+| full `/6` matrix | **blocked** | run or import one counted smoke trial under the current hash |
 
 ## OpenAI Half-Matrix Plan
 
@@ -27,15 +27,19 @@ Campaign: `deployment-model-alias-rollout-drift-openai-half-matrix-2026-09`.
 
 | slot | model | state | run | note |
 |---|---|---|---|---|
-| `O1` | `openai/gpt-5.6-sol` | `RUN` | `deployment-model-alias-rollout-drift-2026-08-o1` | Existing counted OpenAI/Codex smoke slot. It failed 192/339 scenarios on target and can serve as OpenAI half-matrix slot 1 while the hash remains current. |
+| `O1` | `openai/gpt-5.6-sol` | `RUN`, **WITHDRAWN** | `deployment-model-alias-rollout-drift-2026-08-o1` — **superseded** by the 2026-09-01 `deployment-model-alias-rollout-drift` challenge migration; it does not count and its numbers are withdrawn | Slot is EMPTY. Its pre-registered note said: "Existing counted OpenAI/Codex smoke slot. It failed 192/339 scenarios on target and can serve as OpenAI half-matrix slot 1 while the hash remains current." — the hash did not remain current, so the run cannot serve as a half-matrix slot and its on-target failure count is withdrawn. |
 | `O2` | `openai/gpt-5.6-sol` | `NOT_RUN` | pending | Planned OpenAI/Codex repeat. Same model/provider means same-provider stability only, not a new provider lab. |
 | `O3` | `openai/gpt-5.6-sol` | `NOT_RUN` | pending | Planned OpenAI/Codex repeat. Do not report this as cross-lab evidence even if it is later counted. |
 
+**Withdrawn evidence.** `deployment-model-alias-rollout-drift-2026-08-o1` was invalidated by the 2026-09-01 `deployment-model-alias-rollout-drift` challenge migration: it was graded against a package this repository no longer produces, so that row does not count and every number on it is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read this row as spend that was made, not as a result about the family as it stands.
+
+With 1 of 3 slot(s) withdrawn, the OpenAI half-matrix has 0 slot(s) actually filled. The plan is a plan, not partial evidence.
+
 ## Current Answer
 
-Do not run the full `/6` matrix yet. The non-OpenAI smoke imported cleanly but solved the suite; provider-delta diagnosis is present and routes next work to the selected evolution probe.
+Do not run the full `/6` matrix yet. Import or run one non-OpenAI counted smoke under the same hash first; OpenAI-only 3/6 would strengthen same-provider stability only.
 
-Countable non-OpenAI external packets currently imported: 1.
+Countable non-OpenAI external packets currently imported: 0. (1 further packet(s) imported cleanly and were withdrawn by a challenge migration; a withdrawn packet buys no cross-lab presence.)
 
 ---
 

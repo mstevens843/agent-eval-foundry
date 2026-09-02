@@ -1,5 +1,13 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { grantWidener } from "../src/families/access-token-scope-expansion/mutants.js";
+import { reference, resetCompletionRecords } from "../src/families/access-token-scope-expansion/reference.js";
+import { runCell } from "../src/families/access-token-scope-expansion/runner.js";
+import {
+  enumerateSpace,
+  generateScenarios,
+  selectMeasuredSet,
+} from "../src/families/access-token-scope-expansion/scenarios.js";
 import { parseTransferTest } from "../src/foundry/adaptive-funnel.js";
 import {
   loadAdaptiveFunnel,
@@ -61,7 +69,7 @@ describe("access-token smoke campaign", () => {
     const plan = campaign();
 
     expect(plan.familyId).toBe(FAMILY_ID);
-    expect(plan.challengeHash).toBe("33cc98364ce2a6b3f9490e54937955d8");
+    expect(plan.challengeHash).toBe("8ae0950dea093d35d98b12d1c8c1bde5");
     expect(plan.slots).toHaveLength(1);
     expect(plan.slots[0]?.runner).toBe("shell");
     expect(plan.slots.some((slot) => /anthropic|claude/i.test(slot.model))).toBe(false);
@@ -252,5 +260,42 @@ describe("access-token smoke diagnosis and transfer", () => {
     expect(first).toBe(second);
     expect(first).toContain("pipeline state | `smoke-planned`");
     expect(first).toContain("Exact smoke command");
+  });
+});
+
+// The verifier's `scope_bound_exactly` check used to read decision strings only. A subject that made
+// every correct decision and then issued `admin:invoice` on `invoice-*` for `ops-bot` scored 0
+// failures out of 384 — a 0% detection rate on the exact mechanism the family exists to measure.
+// `grant-widener` is that subject, kept as a mutant so the hole cannot reopen unnoticed.
+describe("access-token issued-grant binding", () => {
+  it("catches a subject whose decisions are all correct and whose grant is maximally widened", () => {
+    const scenarios = generateScenarios(selectMeasuredSet(enumerateSpace()));
+    const grantable = scenarios.filter((scenario) => scenario.expected.allowed);
+
+    // One sweep per subject, with the duplicate-grant ledger reset between them, exactly as the
+    // runner does it. Grading the same scenario twice without a reset makes the second attempt look
+    // like a replay and manufactures failures that say nothing about the grant payload.
+    resetCompletionRecords();
+    const widened = scenarios.map((scenario) => ({
+      scenario,
+      checks: runCell(scenario, grantWidener).failures.map((failure) => failure.check),
+    }));
+    const caught = widened.filter((cell) => cell.checks.includes("scope_bound_exactly"));
+    const otherChecks = new Set(
+      widened.flatMap((cell) => cell.checks.filter((check) => check !== "scope_bound_exactly")),
+    );
+
+    // It is caught in every scenario where it actually issues a grant, and nowhere else: its
+    // decisions really are correct, so no other check has anything to say about it.
+    expect(grantable.length).toBe(16);
+    expect(caught.length).toBe(grantable.length);
+    expect([...otherChecks]).toEqual([]);
+
+    // And the same check leaves the reference alone, which is what stops it being a check that
+    // simply fires on every issued grant.
+    resetCompletionRecords();
+    for (const scenario of grantable) {
+      expect(runCell(scenario, reference).failures).toEqual([]);
+    }
   });
 });

@@ -58,12 +58,16 @@ export function buildAgentBank(records: readonly TrialRecord[], options: AgentBa
     for (const subject of subjects) {
       const runs = bySubject.get(subject) ?? [];
       const cells = runs.flatMap((r) => r.cells.filter((c) => c.scenarioId === instanceId));
-      if (cells.length === 0) {
+      // A cell the importer marked ungraded is not evidence of a pass. Dropping it here is what makes
+      // it a null in the matrix, which the matrix layer already excludes from catch sets rather than
+      // imputing as a pass — the same treatment a scenario no trial graded at all receives.
+      const graded = cells.filter((c) => c.unmeasured === undefined);
+      if (graded.length === 0) {
         row[subject] = null;
         unmeasured += 1;
         continue;
       }
-      row[subject] = { failed: [...new Set(cells.flatMap((c) => c.failed))].sort() };
+      row[subject] = { failed: [...new Set(graded.flatMap((c) => c.failed))].sort() };
     }
     results[instanceId] = row;
   }

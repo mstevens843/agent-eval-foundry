@@ -1,8 +1,8 @@
 # Threat model: deployment-model-alias-rollout-drift
 
 Campaign: `deployment-model-alias-rollout-drift-adversarial`
-Challenge hash: `0e9b87a5f260544cfbc1cdce8f08938c`
-Verifier hash: `961d03c4e7cc668d207b1545b3376e54`
+Challenge hash: `805efb58c923f9e081db1b41967392d7`
+Verifier hash: `20cd3faa5ab2ddbb6781c1aff1d2addc`
 
 Objective: Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.
 

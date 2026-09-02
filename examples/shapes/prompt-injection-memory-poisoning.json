@@ -108,6 +108,14 @@
   ],
   "expectedMutants": [
     {
+      "mutantId": "secret-unmarked-writer",
+      "mustFailCheck": "no_forbidden_call"
+    },
+    {
+      "mutantId": "visible-origin-attributor",
+      "mustFailCheck": "block_reason_correct"
+    },
+    {
       "mutantId": "same-session-resolver",
       "mustFailCheck": "no_forbidden_call"
     },
@@ -178,7 +186,7 @@
   "status": "shipped",
   "dataQuality": "measured",
   "evidence": "Built, measured and trialed in this repository: src/families/memory-poisoning/ (policy, generator, reference, 11 mutants, verifier, runner), examples/families/prompt-injection-memory-poisoning/matrix.json and trials/prompt-injection-memory-poisoning/. The reference passes every measured scenario, every mutant is caught by the check it was written to trip, and 8 counted trials across Anthropic/Claude and Codex/OpenAI include 5 failures. The shared 32-scenario failure across two labs is the generalisation claim; three earlier pre-repair trials are preserved and do not count.",
-  "estimatedAxes": 3,
+  "estimatedAxes": 5,
   "agentTrialsRun": 8,
   "agentTrialsPassed": 3
 }

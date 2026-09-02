@@ -4,7 +4,7 @@
   "hypothesis": "After one counted OpenAI/Codex smoke failed on target and one current-hash Claude/Anthropic smoke solved cleanly, two additional OpenAI/Codex repeats can estimate same-provider stability for deployment-alias. This is not cross-lab breadth and must not unlock a full /6 matrix while the provider-delta result remains mixed.",
   "killSignal": "If the two remaining OpenAI/Codex repeats pass cleanly or fail only off-target while the existing smoke remains the only failure, route the family to repair or evolve before production spend. A provider refusal, infrastructure error, stale hash, missing transcript or missing verifier output counts nothing.",
   "confirmSignal": "If the two remaining OpenAI/Codex repeats also fail on intended deployment-alias checks under the current hash, the family gains same-provider stability evidence. That still is not cross-lab difficulty and still does not satisfy the full /6 matrix gate unless a non-OpenAI counted smoke also fails on target or an explicit override is recorded.",
-  "challengeHash": "0e9b87a5f260544cfbc1cdce8f08938c",
+  "challengeHash": "805efb58c923f9e081db1b41967392d7",
   "scenarioSetId": "drift-339-590affe3",
   "scenariosExpected": 339,
   "timeoutMs": 1800000,

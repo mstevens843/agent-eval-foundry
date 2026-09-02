@@ -72,7 +72,7 @@
     "sourceMechanismIds": ["permission-boundary", "stale-state", "false-audit-history", "duplicate-side-effects", "liveness-stall", "tool-result-ambiguity"],
     "decision": "evolve",
     "status": "family-built",
-    "promotionReason": "The counted access-token smoke trial passed cleanly, so full matrix spend was blocked and the requested-vs-approved-authority mechanism was carried into a full delegated-wallet authority family with time, revocation, downgrade, reconciliation, audit and liveness pressure.",
+    "promotionReason": "PREMISE WITHDRAWN 2026-09-01. The decision was made on this basis: 'The counted access-token smoke trial passed cleanly, so full matrix spend was blocked and the requested-vs-approved-authority mechanism was carried into a full delegated-wallet authority family with time, revocation, downgrade, reconciliation, audit and liveness pressure.' That smoke pass, access-token-2026-08-o1, was graded against a package whose shipped starter failed 0 of 384 scenarios, so it measured the answer key and is superseded: it no longer counts and is not quotable as evidence. The parent was never shown to be solved, and this descendant was therefore built for a reason that did not hold. The family itself is real and locally sound; what is withdrawn is the claim that evolution was the indicated next step.",
     "evidence": {
       "sourceProbeVerdict": "evolve_existing",
       "referencePassed": true,
@@ -165,7 +165,7 @@
     "sourceMechanismIds": ["model-alias-drift", "stale-state", "false-audit-history", "liveness-stall"],
     "decision": "promote",
     "status": "family-built",
-    "promotionReason": "The access-token authority lineage was cleanly solved twice by the same OpenAI subject, so build budget was reallocated to the top non-scope mechanism cluster: deployment model-alias drift.",
+    "promotionReason": "PREMISE WITHDRAWN 2026-09-01. The decision was made on this basis: 'The access-token authority lineage was cleanly solved twice by the same OpenAI subject, so build budget was reallocated to the top non-scope mechanism cluster: deployment model-alias drift.' Both of those solves were graded against packages that shipped their own solution and are superseded and no longer count (access-token-2026-08-o1, delegated-wallet-2026-08-o1), so the lineage was never solved once, let alone twice, and the reallocation that produced this promotion is withdrawn with it. This family was nonetheless built, packaged and trialed, and stands or falls on its own evidence rather than on the lineage verdict that motivated it.",
     "evidence": {
       "sourceProbeVerdict": "promote_to_task_shape",
       "referencePassed": true,

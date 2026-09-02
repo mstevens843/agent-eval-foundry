@@ -15,6 +15,7 @@
 // but me. The run summaries are now vendored under `examples/durable-outbox/runs/`, and that is the
 // default path. A live archive can still be passed explicitly.
 
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
   adversarialGateEvidenceMap,
@@ -36,16 +37,20 @@ import {
   humanGateEvidenceMap,
 } from "../human-solvability/records.js";
 import { parseMatrix } from "../matrix.js";
-import { normalizeSubjectId } from "../trials/bank.js";
+import { buildAgentBank } from "../trials/agent-bank.js";
+import { type KindedBank, computeOverlap, kindedBank, normalizeSubjectId } from "../trials/bank.js";
 import { reconcile } from "../trials/campaign-run.js";
 import { type CampaignPlan, loadCampaigns } from "../trials/campaign.js";
+import type { TrialDirectory } from "../trials/directory.js";
 import { readFamilyTrials } from "../trials/directory.js";
 import { classifyRunKind, importDurableOutboxHistory } from "../trials/history.js";
 import type { ImportedHistory } from "../trials/history.js";
 import { importAgentTrials, runLocalTrials } from "../trials/orchestrate.js";
+import { tallyRootCauses, unlabelledRootCause } from "../trials/root-cause.js";
+import type { RootCauseRecord } from "../trials/root-cause.js";
 import { ROUTABLE_FAMILY_IDS, routeFor } from "../trials/router.js";
-import { gateByChallengeHash, prepareChallenge } from "../trials/run.js";
-import { countedAgentTrials } from "../trials/types.js";
+import { hashChallengeDir, prepareChallenge } from "../trials/run.js";
+import { NEVER_COUNTS, countedAgentTrials } from "../trials/types.js";
 import type { TrialRecord, TrialSet } from "../trials/types.js";
 import type { Matrix } from "../types.js";
 import { analyseFamilyTrials } from "./agent-results.js";
@@ -54,7 +59,7 @@ import { analyseChain } from "./chain-analysis.js";
 import { classifyDeploymentAliasSmoke } from "./deployment-alias-diagnosis.js";
 import { diagnose } from "./diagnosis.js";
 import type { FamilyEvidence } from "./ship-report.js";
-import { computeEvidence } from "./trial-report.js";
+import { computeEvidence, mechanismCoverage, mechanismsExercisedFrom } from "./trial-report.js";
 
 export const PIC_FAMILY = "prompt-injection-containment";
 export const MEMORY_FAMILY = "prompt-injection-memory-poisoning";
@@ -110,6 +115,28 @@ function agentAxisFacts(records: readonly TrialRecord[], stale: ReadonlySet<stri
   };
 }
 
+/**
+ * Root-cause facts over a family's counted agent population.
+ *
+ * Records from the loose inbox have no trial directory and therefore no sidecar, so they resolve to
+ * `unlabelled` here rather than being skipped. Skipping them would shrink the denominator and make a
+ * family look better-adjudicated than it is.
+ */
+function rootCauseFacts(counted: readonly TrialRecord[], dirs: readonly TrialDirectory[]) {
+  const byRunId = new Map(dirs.map((d) => [d.runId, d.rootCause]));
+  const tally = tallyRootCauses(
+    counted.map((record) => ({
+      record,
+      rootCause: byRunId.get(record.runId) ?? unlabelledRootCause(record.runId, record.familyId),
+    })),
+  );
+  return {
+    capabilityEvidencedTrials: tally.capability,
+    unlabelledCountedTrials: tally.unlabelled,
+    rootCauseCounts: tally.byLabel as Readonly<Record<string, number>>,
+  };
+}
+
 export interface FamilyEvidenceBundle {
   readonly run: RunResult;
   readonly trials: TrialSet;
@@ -139,14 +166,7 @@ export function familyEvidenceFor(root: string, familyId: string = PIC_FAMILY): 
   // Trials that measured a DIFFERENT challenge are dropped here rather than counted. The hash is the
   // only thing that ties a preserved result to a task anyone can still read, and a family whose spec
   // was repaired after a trial has evidence for a task that no longer exists.
-  const gated = ROUTABLE.has(familyId)
-    ? gateByChallengeHash(
-        root,
-        familyId,
-        dirs.map((d) => ({ runId: d.runId, metadataPath: join(d.path, "metadata.json"), dir: d.path })),
-      )
-    : null;
-  const stale = new Set(gated?.gates.filter((g) => !g.matches).map((g) => g.runId) ?? []);
+  const stale = staleRunIds(root, familyId, dirs);
   const durable = dirs.filter((d) => !stale.has(d.runId)).map((d) => d.record);
   const loose = importAgentTrials(join(root, `trials-inbox/${familyId}`));
 
@@ -155,15 +175,20 @@ export function familyEvidenceFor(root: string, familyId: string = PIC_FAMILY): 
     // built-family registry and their mutant evidence from that sweep.
     const family = builtFamily(familyId);
     const sweep = family.run();
+    // Per scenario, from the sweep's own matrix. `mutantsCaught` carries which check each mutant was
+    // written to trip, so the intended-check map the coverage needs is already here — this used to
+    // be `sweep.referenceFailures.length === 0`, the same expression as `referencePasses` two lines
+    // above it.
+    const coverage = mechanismCoverage(
+      sweep.matrix,
+      sweep.mutantsCaught.map((m) => ({ mutantId: m.mutantId, check: m.check })),
+    );
     const trials: TrialSet = {
       familyId,
       scenarioSetId: `${familyId}-sweep`,
       records: [...durable, ...loose],
     };
-    const sharedBankSubjects = sharedSubjectCount(
-      root,
-      trials.records.map((r) => r.subjectId),
-    );
+    const sharedBankSubjects = sharedSubjectCount(root, familyId);
     const counted = countedAgentTrials(trials);
     return {
       run: runFamily([]),
@@ -180,7 +205,11 @@ export function familyEvidenceFor(root: string, familyId: string = PIC_FAMILY): 
           check: m.check,
           caught: m.caught,
         })),
-        mechanismsExercised: sweep.referenceFailures.length === 0,
+        mechanismsExercised: mechanismsExercisedFrom(coverage),
+        mechanismScenarios: coverage.scenarios,
+        mechanismScenariosExercised: coverage.exercised,
+        mechanismScenariosBlind: coverage.blind.length,
+        mechanismScenariosMisattributed: coverage.misattributed.length,
         isolation: counted[0]?.isolation ?? "subprocess",
         countedAgentTrials: counted.length,
         agentTrialsPassed: counted.filter((t) => t.cells.every((c) => c.failed.length === 0)).length,
@@ -189,6 +218,7 @@ export function familyEvidenceFor(root: string, familyId: string = PIC_FAMILY): 
         trialReady: ROUTABLE.has(familyId),
         staleTrials: [...stale].sort(),
         ...agentAxisFacts(trials.records, stale),
+        ...rootCauseFacts(counted, dirs),
       },
     };
   }
@@ -196,10 +226,7 @@ export function familyEvidenceFor(root: string, familyId: string = PIC_FAMILY): 
   const run = runFamily(ALL_SUBJECTS);
   const local = runLocalTrials();
   const trials = { ...local, records: [...local.records, ...durable, ...loose] };
-  const sharedBankSubjects = sharedSubjectCount(
-    root,
-    trials.records.map((r) => r.subjectId),
-  );
+  const sharedBankSubjects = sharedSubjectCount(root, familyId);
   return {
     run,
     trials,
@@ -208,6 +235,7 @@ export function familyEvidenceFor(root: string, familyId: string = PIC_FAMILY): 
       trialReady: ROUTABLE.has(familyId),
       staleTrials: [...stale].sort(),
       ...agentAxisFacts(trials.records, stale),
+      ...rootCauseFacts(countedAgentTrials(trials), dirs),
     },
     matrix: toMatrix(run),
     staleTrials: [...stale].sort(),
@@ -352,14 +380,167 @@ export function familyEvidenceMapForShipReport(root: string): Record<string, Fam
   );
 }
 
-/** How many subjects in this family also attempted another measured family. */
-export function sharedSubjectCount(root: string, subjects: readonly string[]): number {
-  const outbox = new Set(
-    outboxHistory(root)
-      .records.filter((r) => r.counts)
-      .map((r) => r.subjectId),
-  );
-  return [...new Set(subjects)].filter((s) => outbox.has(s)).length;
+// ---------------------------------------------------------------- cross-family subject overlap
+
+/**
+ * The current challenge hash for a family, memoized for the life of the process.
+ *
+ * The hash is a pure function of the family's own source, which cannot change while the process is
+ * running, and computing it means generating the family's whole scenario set — 16 s for the live-DOM
+ * family. It used to be computed once per `familyEvidenceFor` call, which was already several times
+ * per report; reading cross-family subject facts multiplies that by the number of measured families.
+ * Memoizing it is the difference between a cheap directory read and a minute of regeneration.
+ */
+const currentChallengeHashes = new Map<string, string>();
+
+function currentChallengeHash(root: string, familyId: string): string {
+  const key = `${root}\u0000${familyId}`;
+  const hit = currentChallengeHashes.get(key);
+  if (hit !== undefined) return hit;
+  const hash = prepareChallenge(root, familyId).hash;
+  currentChallengeHashes.set(key, hash);
+  return hash;
+}
+
+/**
+ * Run ids whose preserved challenge is not the one the family produces today.
+ *
+ * Same rule as `gateByChallengeHash`, and deliberately the same fallback: a directory that predates
+ * the metadata field is hashed from the challenge copy it preserved, because the artifact is better
+ * evidence than a note about the artifact. The only difference is the memoized current hash above.
+ */
+function staleRunIds(root: string, familyId: string, dirs: readonly TrialDirectory[]): ReadonlySet<string> {
+  if (!ROUTABLE.has(familyId)) return new Set<string>();
+  const current = currentChallengeHash(root, familyId);
+  const stale = new Set<string>();
+  for (const dir of dirs) {
+    let recorded: string | null = null;
+    try {
+      const meta = JSON.parse(readFileSync(join(dir.path, "metadata.json"), "utf8")) as Record<
+        string,
+        unknown
+      >;
+      recorded = typeof meta["challengeHash"] === "string" ? meta["challengeHash"] : null;
+    } catch {
+      recorded = null;
+    }
+    const derived = recorded ?? hashChallengeDir(join(dir.path, "challenge"));
+    if (derived !== current) stale.add(dir.runId);
+  }
+  return stale;
+}
+
+/** A counted agent trial: the only population a subject may be read off. */
+const countsAsAgentTrial = (r: TrialRecord): boolean =>
+  r.subjectType === "agent" && r.counts && !NEVER_COUNTS.has(r.status);
+
+/**
+ * Every counted agent trial for a family paired with its root-cause record.
+ *
+ * Directory-backed trials only: a loose-inbox record has nowhere to put a sidecar, so it cannot be
+ * adjudicated and cannot be difficulty evidence. Callers that need the whole counted population
+ * (including the inbox) use `countedAgentRecordsFor` and treat what is missing here as unlabelled.
+ */
+export function countedRootCausesFor(
+  root: string,
+  familyId: string,
+): readonly { readonly record: TrialRecord; readonly rootCause: RootCauseRecord }[] {
+  const dirs = readFamilyTrials(join(root, "trials"), familyId);
+  const stale = staleRunIds(root, familyId, dirs);
+  return dirs
+    .filter((d) => !stale.has(d.runId) && countsAsAgentTrial(d.record))
+    .map((d) => ({ record: d.record, rootCause: d.rootCause }));
+}
+
+/** Every counted agent trial record for a family, stale challenges excluded. */
+export function countedAgentRecordsFor(root: string, familyId: string): readonly TrialRecord[] {
+  const dirs = readFamilyTrials(join(root, "trials"), familyId);
+  const stale = staleRunIds(root, familyId, dirs);
+  const durable = dirs.filter((d) => !stale.has(d.runId)).map((d) => d.record);
+  const loose = importAgentTrials(join(root, `trials-inbox/${familyId}`));
+  return [...durable, ...loose].filter(countsAsAgentTrial);
+}
+
+/**
+ * One bank per MEASURED family, built from trial directories alone.
+ *
+ * "Measured" means a family somebody has actually attempted, so the imported outbox history is one
+ * of them rather than a privileged reference set — which is exactly what the old shared-bank metric
+ * treated it as. No family sweep runs here: a bank's instance ids come from the scenarios the
+ * counted trials were graded on, which the records already carry. Sweeping the other seven families
+ * to answer "who else attempted this" would be 64 sweeps per report.
+ */
+export function measuredAgentBanks(root: string): readonly KindedBank[] {
+  const banks = ROUTABLE_FAMILY_IDS.map((familyId) => {
+    const records = countedAgentRecordsFor(root, familyId);
+    const instanceIds = [...new Set(records.flatMap((r) => r.cells.map((c) => c.scenarioId)))].sort();
+    const bank = buildAgentBank(records, {
+      familyId,
+      instanceIds,
+      caveat:
+        "Counted agent trials only, restricted to the scenarios those trials were graded on. Built " +
+        "for subject overlap; the instance set is the trials' own, not the family's full sweep.",
+    });
+    return kindedBank(
+      { familyId, matrix: bank.matrix, provenance: "counted agent trials", agentDerived: true },
+      "agent",
+    );
+  });
+
+  const outboxRecords = outboxHistory(root).records.filter(countsAsAgentTrial);
+  const outboxBank = buildAgentBank(outboxRecords, {
+    familyId: OUTBOX_FAMILY,
+    instanceIds: outboxMatrix(root).instances.map((i) => i.id),
+    caveat:
+      "Imported from the source project's Harbor runs. Coarse cells; carried here for subject " +
+      "overlap only.",
+  });
+  return [
+    ...banks,
+    kindedBank(
+      {
+        familyId: OUTBOX_FAMILY,
+        matrix: outboxBank.matrix,
+        provenance: "counted frontier trials imported from the source project",
+        agentDerived: true,
+      },
+      "imported",
+    ),
+  ];
+}
+
+/**
+ * How many of a family's counted subjects also appear in the counted trials of ANOTHER measured
+ * family.
+ *
+ * The previous version intersected the family's subject ids with the imported outbox history and
+ * nothing else, so the metric was "how many of `claude-opus-5` and `gpt-5.6-sol` appear in my
+ * records" — capped at 2 by construction, against a gate threshold of 3. A blocking-adjacent gate
+ * that cannot pass is the vacuous-gate failure mode inverted: it says nothing about the family and
+ * everything about the arithmetic.
+ *
+ * The overlap itself is `computeOverlap`, run pairwise: it is the repository's existing convention
+ * for "which subjects attempted both of these banks", and a third convention for the same question
+ * is how the first two stopped agreeing. Pairwise rather than all-at-once because the gate asks
+ * whether cross-family co-failure is observable at all, and one other family is enough for that;
+ * `computeOverlap` over every bank at once answers the stricter question the cross-family axis count
+ * needs, and is still used there.
+ */
+export function sharedSubjectCount(root: string, familyId: string): number {
+  return sharedSubjectsFor(root, familyId).length;
+}
+
+/** The shared subjects themselves, sorted — the same computation the count is taken from. */
+export function sharedSubjectsFor(root: string, familyId: string): readonly string[] {
+  const banks = measuredAgentBanks(root);
+  const self = banks.find((b) => b.familyId === familyId);
+  if (self === undefined) return [];
+  const shared = new Set<string>();
+  for (const other of banks) {
+    if (other.familyId === familyId) continue;
+    for (const subject of computeOverlap([self, other]).sharedSubjects) shared.add(subject);
+  }
+  return [...shared].sort();
 }
 
 /**
@@ -420,12 +601,7 @@ export function providerSpend(root: string): readonly ProviderSpendRow[] {
   >();
   for (const familyId of ROUTABLE_FAMILY_IDS) {
     const dirs = readFamilyTrials(join(root, "trials"), familyId);
-    const gated = gateByChallengeHash(
-      root,
-      familyId,
-      dirs.map((d) => ({ runId: d.runId, metadataPath: join(d.path, "metadata.json"), dir: d.path })),
-    );
-    const stale = new Set(gated.gates.filter((g) => !g.matches).map((g) => g.runId));
+    const stale = staleRunIds(root, familyId, dirs);
     for (const dir of dirs) {
       const record = dir.record;
       if (record.subjectType !== "agent") continue;

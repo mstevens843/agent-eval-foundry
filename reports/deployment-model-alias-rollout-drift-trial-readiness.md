@@ -1,19 +1,21 @@
 # deployment-model-alias-rollout-drift trial readiness
 
-Status: **matrix-ready**.
+Status: **smoke-planned**.
 
 | gate | value |
 |---|---|
-| challenge hash | `0e9b87a5f260544cfbc1cdce8f08938c` |
+| challenge hash | `805efb58c923f9e081db1b41967392d7` |
 | scenario set | `drift-339-590affe3` |
 | visible package files | 9 |
 | route present | yes |
 | scenarios expected | 339 |
-| counted real-agent trials | 2 |
-| diagnosis | on-target |
-| full matrix | ready |
+| counted real-agent trials | 0 |
+| diagnosis | none |
+| full matrix | blocked |
 
-No smoke/matrix blockers remain in this gate calculation.
+Blocking reasons:
+
+- no counted smoke trial
 
 Provider handling: Codex/OpenAI may run one smoke trial when configured. Anthropic/Claude is not run in this phase. Gemini remains import-only unless entitlement is available.
 

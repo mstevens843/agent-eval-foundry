@@ -4,7 +4,7 @@
   "hypothesis": "The access-token promoted family should expose scope authority drift that local mutants already model: a real agent may treat requested scope as approved scope, trust stale token or approval state, confuse user role with token authority, or accept subject-owned receipts. One smoke trial is enough to decide the next routing step, not enough to claim a full matrix or cross-lab breadth.",
   "killSignal": "A counted OpenAI/Codex smoke trial passes every graded access-token scenario cleanly under the current challenge hash, which is an already_solved_or_needs_evolution signal rather than a reason to run a full matrix. Alternatively, failures concentrate only on ambiguous public wording or harness errors, which routes the family to repair/spec work instead of difficulty evidence.",
   "confirmSignal": "At least one counted OpenAI/Codex smoke trial fails on an intended access-token mechanism under the current challenge hash, with transcript, submission, verifier output and scenario-set id preserved. On-target failure produces smoke-difficulty evidence only; one OpenAI run is not cross-lab evidence and does not unlock a full matrix without transfer declaration.",
-  "challengeHash": "33cc98364ce2a6b3f9490e54937955d8",
+  "challengeHash": "8ae0950dea093d35d98b12d1c8c1bde5",
   "scenarioSetId": "expansion-384-138574b0",
   "scenariosExpected": 384,
   "timeoutMs": 1800000,
@@ -49,7 +49,7 @@
       ],
       "state": "RUN",
       "runId": "access-token-2026-08-o1",
-      "note": "Single OpenAI/Codex smoke slot. Counted completed run under the pinned challenge hash: 384 scenarios graded, 0 failed. This is a clean pass and routes to already_solved_or_needs_evolution, not difficulty-smoke evidence, matrix readiness or cross-lab breadth."
+      "note": "Single OpenAI/Codex smoke slot. The preserved run access-token-2026-08-o1 graded 384 scenarios with 0 failures against challenge hash 33cc98364ce2a6b3f9490e54937955d8, whose visible package shipped a starter that was a complete passing solution and whose scope_bound_exactly check never inspected the issued grant. That package is superseded: the starter is now a skeleton and the verifier compares the issued grant against the request and the current approval, so the hash moved to 8ae0950dea093d35d98b12d1c8c1bde5 and the old run no longer counts. The slot needs a fresh run before this family has any smoke evidence at all."
     }
   ]
 }

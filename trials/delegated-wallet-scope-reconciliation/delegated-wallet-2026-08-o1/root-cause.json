@@ -1,0 +1,20 @@
+{
+  "runId": "delegated-wallet-2026-08-o1",
+  "familyId": "delegated-wallet-scope-reconciliation",
+  "label": "clean",
+  "rationale": "0/804 graded scenarios failed, so there is no failure to attribute and `clean` is the only label the outcome permits. Recorded rather than left absent so a reader can tell a trial that was read from one that was not. The pass carries no information about the mechanism: challenge/README.md line 19 describes challenge/starter/subject.mjs as \"a stub with the required export shape\" and the file self-labels \"Starter stub - replace me\" (line 38), but I re-graded the shipped starter against all 804 hidden scenarios and it fails 0. The visible package contained a complete passing solution. `package-leak` is the substantive finding, but it attributes a failure and this trial failed nothing, so the format refuses that label (ROOTCAUSE_LABEL_CONTRADICTS_OUTCOME) and the leak is recorded here instead. The family is self-consistent -- its reference subject scores 0/804 -- so this is a packaging defect rather than a verifier fault. Note for anyone re-measuring this family: its 804 scenarios share only 48 distinct idempotency keys, so a re-grade that reuses one subject module instance across scenarios will produce large spurious duplicate-spend failures; each scenario must get a fresh module, as the recorded subprocess host did.",
+  "evidenceRead": [
+    "result.json",
+    "countability.json",
+    "metadata.json",
+    "submission/subject.mjs",
+    "challenge/starter/subject.mjs",
+    "challenge/README.md"
+  ],
+  "diagnosisReading": "clean",
+  "labelledBy": {
+    "kind": "automated",
+    "id": "lane-4b-root-cause-adjudication",
+    "date": "2026-09-01"
+  }
+}

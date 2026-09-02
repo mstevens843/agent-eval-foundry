@@ -1,0 +1,67 @@
+# The expensive gate, in the one place it cannot be skipped.
+#
+# WHY IT IS HERE AND NOT IN `pnpm test`. `pnpm verify` regenerates every checked-in report through
+# the CLI and diffs it against what is committed. On a developer machine that takes over ten
+# minutes. A ten-minute pre-commit check is a check people learn to route around, and a gate that
+# is routinely skipped is worse than no gate, because the repository still claims to have one.
+#
+# So the split is by cost, not by importance:
+#
+#   `pnpm test`  — seconds. Includes test/prose-freshness.test.ts, which checks the hand-authored
+#                  documents (README.md, MEMO.md, docs/*.md) against the generated reports. That is
+#                  the drift a developer actually introduces, and it is caught before the commit.
+#   this workflow — minutes. Full typecheck, lint, unit tests, build, `node dist/cli.js check` and
+#                  the whole-repository report reproduction. Runs on every push and pull request,
+#                  and nobody has to remember it.
+#
+# `pnpm verify` is the only thing that can prove a report was not hand-edited, so it has to run
+# somewhere that always runs. This is that somewhere.
+
+name: verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Cheap gates first, so an obvious break fails in under a minute rather than after the
+      # ten-minute reproduction.
+      - name: typecheck
+        run: pnpm typecheck
+
+      - name: lint
+        run: pnpm lint
+
+      - name: unit tests (includes prose freshness)
+        run: pnpm test
+
+      - name: build
+        run: pnpm build
+
+      # The expensive one. `pnpm verify` = `node dist/cli.js check` plus
+      # scripts/verify-reports.mjs, which regenerates every report into a temp directory and diffs
+      # it against the committed copy. A report that cannot be reproduced is a report nobody can
+      # audit, and a hand-edited report is exactly what this catches.
+      - name: verify reports reproduce
+        run: pnpm verify

@@ -67,7 +67,12 @@ import {
 } from "./adversarial-audit/report.js";
 import { adversarialAttackFailures } from "./adversarial-audit/validate.js";
 import { type MeasureOptions, measure } from "./axis-meter.js";
-import { checkChallengePackage } from "./challenge/package-check.js";
+import {
+  STARTER_FILE,
+  STARTER_MIN_FAILING_FRACTION,
+  checkChallengePackage,
+  checkStarterFailsEnough,
+} from "./challenge/package-check.js";
 import { buildChallengePackage } from "./challenge/package.js";
 import { importExternalRunPacket } from "./external-intake/import.js";
 import {
@@ -232,12 +237,14 @@ import {
   renderDiscoveryWorkbenchReport,
 } from "./reports/discovery-workbench-report.js";
 import { type AxisProposal, renderDiversityUpgrade } from "./reports/diversity-upgrade.js";
+import { renderEvidenceSnapshotReport } from "./reports/evidence-snapshot.js";
 import {
   MEMORY_FAMILY,
   OUTBOX_FAMILY,
   PIC_FAMILY,
   UI_FAMILY,
   campaignFacts,
+  countedRootCausesFor,
   familyEvidenceFor,
   type familyEvidenceMap,
   familyEvidenceMapForShipReport,
@@ -283,7 +290,12 @@ import { renderSelfCheckBehavior } from "./reports/self-check-report.js";
 import { profileRun } from "./reports/self-check.js";
 import { renderShapeReport } from "./reports/shape-report.js";
 import { measuredCells, renderSharedDifficultyBank } from "./reports/shared-difficulty.js";
-import { type FamilyEvidence, assessFamily, renderShipReport } from "./reports/ship-report.js";
+import {
+  type FamilyEvidence,
+  assessFamily,
+  familyStatusLabel,
+  renderShipReport,
+} from "./reports/ship-report.js";
 import { qualityOf, renderSubmissionQuality } from "./reports/submission-quality.js";
 import { renderStaleEvidenceRegression, renderThirdSubjectCampaign } from "./reports/third-subject-report.js";
 import { computeEvidence, renderTrialReadinessReport } from "./reports/trial-report.js";
@@ -302,6 +314,7 @@ import { reconcile, runCampaign } from "./trials/campaign-run.js";
 import {
   type CampaignPlan,
   assertCampaignSubcommand,
+  evaluateKillSignal,
   loadCampaign,
   loadCampaigns,
   progressOf,
@@ -313,7 +326,7 @@ import {
   readTrialDirectory,
   writeTrialDirectory,
 } from "./trials/directory.js";
-import { type EvidenceState, evidenceLedger } from "./trials/evidence-lifecycle.js";
+import { type EvidenceLedger, type EvidenceState, evidenceLedger } from "./trials/evidence-lifecycle.js";
 import { importDurableOutboxHistory } from "./trials/history.js";
 import {
   MIGRATIONS,
@@ -326,7 +339,7 @@ import { decideCountability } from "./trials/orchestrator.js";
 import { PROVIDERS as PROVIDER_FAMILIES_LIST, checkAllProviders } from "./trials/provider-registry.js";
 import { ROUTABLE_FAMILY_IDS, routeFor } from "./trials/router.js";
 import { gateByChallengeHash, prepareChallenge, runAgentTrial } from "./trials/run.js";
-import { assertChallengeMatch, challengeHash } from "./trials/run.js";
+import { assertChallengeMatch, challengeHash, hashChallengeDir } from "./trials/run.js";
 import { parseTrialRecord } from "./trials/validate.js";
 import type { AxisReport, Matrix } from "./types.js";
 
@@ -351,6 +364,7 @@ REGISTRY (what could be built, and can we detect it?)
   ledger [--out f]               candidate ledger, led by kills
   families [--out f]             family diversity: axes, not task count
   ship [--out f]                 ship / no-ship gate table per family
+  snapshot [--out f]             per-family evidence snapshot: scenarios, trials, axes, hashes
   funnel report [--out f]        adaptive discovery/validation/production funnel report
   funnel probes                  validated mechanism probes
   funnel next                    cheapest next evidence actions
@@ -733,6 +747,37 @@ function runTrialCommand(argv: readonly string[], root: string): string {
   ].join("\n");
 }
 
+/**
+ * The starter gate, run on request and reported either way.
+ *
+ * Deliberately opt-in. `checkChallengePackage` is instant and runs on every build; grading a
+ * family's own starter spawns a subprocess per scenario and takes 10-90 seconds, and `pnpm report`
+ * plus `pnpm verify` build all eight packages between them. Folding it into the fast path would put
+ * minutes on both for a property that changes only when a starter file changes.
+ *
+ * What is NOT optional is saying so. When the flag is absent this prints that the gate did not run,
+ * so a build that skipped it can never be read as a build that passed it — and the enforcement that
+ * nothing merges past lives in `test/starter-must-fail.test.ts`, which runs it for all eight.
+ */
+function starterGateLines(
+  argv: readonly string[],
+  familyId: string,
+  files: readonly { readonly path: string; readonly content: string }[],
+): readonly string[] {
+  if (!argv.includes("--verify-starter")) {
+    return [
+      "Starter gate NOT RUN — pass `--verify-starter` to grade the shipped starter against this",
+      "family's own suite (10-90s). `pnpm test` runs it for every family regardless.",
+    ];
+  }
+  const result = checkStarterFailsEnough(familyId, files, (p) => routeFor(familyId).grade(p));
+  return [
+    `Starter gate PASSED — the shipped \`${STARTER_FILE}\` fails ${result.failing}/${result.scenarios} ` +
+      `scenarios (${(result.failingFraction * 100).toFixed(1)}%, floor ${(STARTER_MIN_FAILING_FRACTION * 100).toFixed(0)}%), ` +
+      `${result.hostErrors} host error(s). A starter that passed would mean the family measures transcription.`,
+  ];
+}
+
 function challengeCommand(argv: readonly string[], root: string): string {
   const requested = flag(argv, "--family");
   if (requested !== null && requested !== PIC_FAMILY) return familyChallenge(argv, root);
@@ -740,6 +785,7 @@ function challengeCommand(argv: readonly string[], root: string): string {
   const pkg = buildChallengePackage(typesSource, scenarioSetId(measuredScenarios()));
   // Grade the package before writing it. The checker does not import the builder.
   const check = checkChallengePackage(pkg.files);
+  const starter = starterGateLines(argv, pkg.familyId, pkg.files);
   const dir = flag(argv, "--out");
   if (dir !== null) {
     for (const f of pkg.files) {
@@ -761,6 +807,8 @@ function challengeCommand(argv: readonly string[], root: string): string {
     "",
     `Hidden and verified absent: ${pkg.manifest.hiddenArtifacts.map((h) => `\`${h}\``).join(", ")}.`,
     "Checked by content as well as filename, so renaming a leaked file does not defeat it.",
+    "",
+    ...starter,
     "",
     dir === null ? "_Not written — pass `--out <dir>`._" : `Written to \`${dir}/\`.`,
     "",
@@ -923,6 +971,7 @@ function externalCommand(argv: readonly string[], root: string): string {
       expectedScenarioSetId: prepared.scenarioSetId,
       packetAudits: auditDeploymentAliasExternalPackets(root),
       intakeResults: loadExternalIntakeResults(root, familyId),
+      ledgers: reportLedgers(root),
     });
   }
   throw new Error(
@@ -1044,6 +1093,7 @@ function discoveryCommand(argv: readonly string[], root: string): string {
       registry: input.registry,
       workbench: input.workbench,
       summary: input.summary,
+      ledgers: reportLedgers(root),
     });
   }
   if (sub === "candidates") return renderDiscoveryCandidates(input.workbench.candidates);
@@ -1408,7 +1458,10 @@ function providerDeltaCommand(argv: readonly string[], root: string): string {
     return renderDeploymentAliasProviderDeltaDiagnosisReport(inputs.diagnosis);
   }
   if (sub === "evolution") {
-    return renderDeploymentAliasEvolutionOptionsReport(inputs.evolutionPlan);
+    return renderDeploymentAliasEvolutionOptionsReport(
+      inputs.evolutionPlan,
+      inputs.selectedEvolutionProbeResult,
+    );
   }
   if (sub !== "report") {
     throw new Error(`unknown provider-delta subcommand "${sub}"; expected report | diagnosis | evolution`);
@@ -1443,12 +1496,18 @@ function deploymentAliasProviderDeltaInputs(root: string) {
       .map((record) => artifactInspectionForTrial(root, familyId, record, prepared.hash)),
     scenarioParams: routeFor(familyId).scenarioParams(),
   });
+  const probeSummary = loadProbeRunSummary(root, registry);
+  const evolutionPlan = planDeploymentAliasEvolution(diagnosis, deploymentAliasEvolutionProposals());
   return {
     context,
     prepared,
     reportInput,
     diagnosis,
-    evolutionPlan: planDeploymentAliasEvolution(diagnosis, deploymentAliasEvolutionProposals()),
+    evolutionPlan,
+    selectedEvolutionProbeResult:
+      evolutionPlan.selectedProposalId === null
+        ? null
+        : (probeSummary.probes.find((probe) => probe.probeId === evolutionPlan.selectedProposalId) ?? null),
   };
 }
 
@@ -1619,6 +1678,7 @@ function deploymentAliasReadinessOutputs(root: string): readonly {
         expectedScenarioSetId: prepared.scenarioSetId,
         packetAudits: auditDeploymentAliasExternalPackets(root),
         intakeResults: externalResults,
+        ledgers: reportLedgers(root),
       }),
     },
     {
@@ -1643,6 +1703,7 @@ function deploymentAliasReadinessOutputs(root: string): readonly {
         scenarioSetId: prepared.scenarioSetId,
         providerDeltaDiagnosisPresent: true,
         evolutionOptionsPresent: true,
+        ledgers: reportLedgers(root),
       }),
     },
     {
@@ -1655,7 +1716,10 @@ function deploymentAliasReadinessOutputs(root: string): readonly {
     },
     {
       name: "deployment-model-alias-rollout-drift-evolution-options.md",
-      text: renderDeploymentAliasEvolutionOptionsReport(providerDeltaInputs.evolutionPlan),
+      text: renderDeploymentAliasEvolutionOptionsReport(
+        providerDeltaInputs.evolutionPlan,
+        providerDeltaInputs.selectedEvolutionProbeResult,
+      ),
     },
     {
       name: "deployment-model-alias-rollout-drift-agent-diagnosis.md",
@@ -2497,7 +2561,29 @@ function verifyTrialCommand(argv: readonly string[], root: string): string {
   const metadata = JSON.parse(readFileSync(join(dir, "metadata.json"), "utf8")) as Record<string, unknown>;
   const typesSource = readFileSync(join(root, route.family.typesPath), "utf8");
   const current = challengeHash(route.family.challenge(typesSource, route.scenarioSetId()));
-  assertChallengeMatch((metadata["challengeHash"] as string | undefined) ?? null, current, runId);
+
+  // Where the hash comes from is part of the answer, not an implementation detail.
+  //
+  // Three trials in this repository (`pic-claude-1/2/3`) record no `challengeHash` in their metadata.
+  // They still count, because every trial directory preserves the exact challenge the subject was
+  // given and that directory hashes to the family's current package — the artifact is a better source
+  // than a note about the artifact, and `gateByChallengeHash` has always read it that way. What was
+  // wrong is that this command did not: it read metadata only, so it refused to re-verify the very
+  // trials the evidence layer was counting. Two answers to one question is worse than either.
+  //
+  // The fallback is not a softening of the gate. `assertChallengeMatch` still receives a hash and
+  // still fails on it: MISSING when nothing was recorded AND no challenge was preserved (nothing can
+  // be claimed at all), MISMATCH when the preserved challenge is for a task this family no longer
+  // produces. The only case that newly passes is the one where the preserved evidence itself proves
+  // the trial saw today's task. What changes is that the output says which of the two happened, so
+  // "counted by derivation, no recorded hash" is a stated state rather than a silent assumption.
+  const recordedHash = typeof metadata["challengeHash"] === "string" ? metadata["challengeHash"] : null;
+  const ranAgainst = recordedHash ?? hashChallengeDir(join(dir, "challenge"));
+  assertChallengeMatch(ranAgainst, current, runId);
+  const hashProvenance =
+    recordedHash !== null
+      ? "recorded in metadata.json"
+      : "DERIVED by hashing the preserved challenge/ directory — metadata.json records no challengeHash";
 
   const submission = join(dir, "submission", route.submissionFile.split("/").pop() ?? "subject.mjs");
   const regraded = route.grade(submission);
@@ -2517,6 +2603,7 @@ function verifyTrialCommand(argv: readonly string[], root: string): string {
     `run          ${runId}`,
     `family       ${familyId}`,
     `challenge    ${current} (matches)`,
+    `hash source  ${hashProvenance}`,
     `recorded     ${recorded.length} cells, ${recorded.filter((c) => c.failed.length > 0).length} failing`,
     `re-graded    ${regraded.cells.length} cells, ${regraded.cells.filter((c) => c.failed.length > 0).length} failing`,
     `reproduces   ${same ? "yes — identical cells" : "NO — the grading changed"}`,
@@ -2535,6 +2622,7 @@ function killCommand(argv: readonly string[], root: string): string {
     ...(lineageContext === undefined ? {} : { lineage: lineageContext }),
     variants: state.variants,
     trials: state.trials,
+    ledgers: reportLedgers(root),
   });
 }
 
@@ -2654,6 +2742,7 @@ function familyChallenge(argv: readonly string[], root: string): string {
   const typesSource = readFileSync(join(root, family.typesPath), "utf8");
   const pkg = family.challenge(typesSource, scenarioSetIdFor(family, sweep.matrix));
   const check = checkChallengePackage(pkg.files, family.leakProfile);
+  const starter = starterGateLines(argv, pkg.familyId, pkg.files);
   const dir = flag(argv, "--out");
   if (dir !== null) {
     for (const f of pkg.files) {
@@ -2674,6 +2763,8 @@ function familyChallenge(argv: readonly string[], root: string): string {
     ...pkg.files.map((f) => `| \`${f.path}\` |`),
     "",
     `Hidden and verified absent: ${pkg.manifest.hiddenArtifacts.map((h) => `\`${h}\``).join(", ")}.`,
+    "",
+    ...starter,
     "",
   ].join("\n");
 }
@@ -2761,6 +2852,30 @@ function realismCommand(root: string): string {
   ].join("\n");
 }
 
+const LEDGER_CACHE = new Map<string, readonly EvidenceLedger[]>();
+
+/**
+ * The evidence ledgers, computed once per root.
+ *
+ * One computation, deliberately, because two things read this set and they must not disagree: every
+ * report that prints a run id, and `assertStaleRunsLabelled`, which refuses the report if it printed
+ * one without saying it was withdrawn. A second, subtly different ledger would show up as a report
+ * that renders a run as live and a guard that says it is stale — or worse, the other way round.
+ */
+function reportLedgers(root: string): readonly EvidenceLedger[] {
+  const cached = LEDGER_CACHE.get(root);
+  if (cached !== undefined) return cached;
+  const computed = ROUTABLE_FAMILY_IDS.filter((id) => BUILT_FAMILY_IDS.includes(id)).map((familyId) =>
+    evidenceLedger(
+      familyId,
+      prepareChallenge(root, familyId).hash,
+      readFamilyTrials(join(root, "trials"), familyId),
+    ),
+  );
+  LEDGER_CACHE.set(root, computed);
+  return computed;
+}
+
 /**
  * Every routable family's trials with their lifecycle state, computed once.
  *
@@ -2773,13 +2888,7 @@ function analysisBase(root: string) {
   const allTrials = [...routable, OUTBOX_FAMILY].flatMap((familyId) =>
     readFamilyTrials(join(root, "trials"), familyId).map((t) => ({ familyId, trial: t })),
   );
-  const ledgers = routable.map((familyId) =>
-    evidenceLedger(
-      familyId,
-      prepareChallenge(root, familyId).hash,
-      readFamilyTrials(join(root, "trials"), familyId),
-    ),
-  );
+  const ledgers = reportLedgers(root);
   const evidenceState = new Map<string, EvidenceState>();
   for (const ledger of ledgers) {
     for (const entry of ledger.entries) evidenceState.set(entry.runId, entry.state);
@@ -3156,6 +3265,7 @@ function evolutionValidationReport(
       "exactly_allowed",
       "recall_trust_preserved",
     ],
+    ledgers: reportLedgers(root),
   };
   return renderEvolutionValidation(validateOperator(input), input);
 }
@@ -3269,6 +3379,7 @@ function allCommand(argv: readonly string[], root: string): string {
       registry,
       workbench: discoveryWorkbench,
       summary: discoverySummary,
+      ledgers: reportLedgers(root),
     }),
   );
   write("discovery-calibration-report.md", renderDiscoveryCalibrationReport(calibration));
@@ -3524,6 +3635,7 @@ function allCommand(argv: readonly string[], root: string): string {
         expectedScenarioSetId: deploymentPrepared.scenarioSetId,
         packetAudits: auditDeploymentAliasExternalPackets(root),
         intakeResults: deploymentExternalResults,
+        ledgers: reportLedgers(root),
       }),
     );
     write(
@@ -3548,6 +3660,7 @@ function allCommand(argv: readonly string[], root: string): string {
         scenarioSetId: deploymentPrepared.scenarioSetId,
         providerDeltaDiagnosisPresent: true,
         evolutionOptionsPresent: true,
+        ledgers: reportLedgers(root),
       }),
     );
     write(
@@ -3560,12 +3673,27 @@ function allCommand(argv: readonly string[], root: string): string {
     );
     write(
       "deployment-model-alias-rollout-drift-evolution-options.md",
-      renderDeploymentAliasEvolutionOptionsReport(deploymentProviderDeltaInputs.evolutionPlan),
+      renderDeploymentAliasEvolutionOptionsReport(
+        deploymentProviderDeltaInputs.evolutionPlan,
+        deploymentProviderDeltaInputs.selectedEvolutionProbeResult,
+      ),
     );
   }
   write(
     "ship-recommendation.md",
     renderShipReport(registry.shapes, registry, allEvidence, humanGateEvidence, adversarialGateEvidence),
+  );
+  // Same evidence maps, same `assessFamily`. This is the table the README used to keep by hand.
+  write(
+    "evidence-snapshot.md",
+    renderEvidenceSnapshotReport({
+      registry,
+      evidence: allEvidence,
+      humanEvidence: humanGateEvidence,
+      verifierIntegrity: adversarialGateEvidence,
+      ledgers: reportLedgers(root),
+      importedOutbox: outboxHistory(root),
+    }),
   );
   write(
     "prompt-injection-containment-trial-readiness.md",
@@ -3642,6 +3770,14 @@ function allCommand(argv: readonly string[], root: string): string {
         challengeCurrent: rec.challengeCurrent,
         disagreements: rec.disagreements,
         superseded: rec.supersededRuns,
+        ledgers: reportLedgers(root),
+        killSignal: evaluateKillSignal(
+          plan,
+          countedRootCausesFor(root, plan.familyId).map((t) => ({
+            record: t.record,
+            rootCause: t.rootCause.label,
+          })),
+        ),
       }),
     );
     const bundle = evidenceFor(plan.familyId);
@@ -3740,13 +3876,7 @@ function allCommand(argv: readonly string[], root: string): string {
     // any report that says "counted", so a superseded run cannot be described as counted by a report
     // that happens to render earlier — which is exactly how mp-claude-2 briefly reappeared as
     // evidence after the repair that invalidated it.
-    const ledgers = routable.map((familyId) =>
-      evidenceLedger(
-        familyId,
-        prepareChallenge(root, familyId).hash,
-        readFamilyTrials(join(root, "trials"), familyId),
-      ),
-    );
+    const ledgers = reportLedgers(root);
     const evidenceState = new Map<string, EvidenceState>();
     for (const ledger of ledgers) {
       for (const entry of ledger.entries) evidenceState.set(entry.runId, entry.state);
@@ -3909,14 +4039,7 @@ function allCommand(argv: readonly string[], root: string): string {
       const liveShape = registry.shapes.find((s) => s.familyId === "ui-replay-live-dom");
       if (liveShape === undefined) throw new Error("no task shape for ui-replay-live-dom");
       const assessment = assessFamily(liveShape, registry, evidence);
-      const status =
-        assessment.verdict === "SHIP"
-          ? "SHIP"
-          : evidence.countedAgentTrials > 0
-            ? "difficulty-evidenced"
-            : evidence.trialReady === true
-              ? "trial-ready"
-              : "HOLD";
+      const status = familyStatusLabel(assessment);
       const anchorPairs = [];
       for (let i = 0; i < liveMutants.ANCHOR_LOYAL_SUBJECTS.length; i += 1) {
         for (let j = i + 1; j < liveMutants.ANCHOR_LOYAL_SUBJECTS.length; j += 1) {
@@ -4195,6 +4318,7 @@ function allCommand(argv: readonly string[], root: string): string {
           }))
           .sort((a, b) => a.runId.localeCompare(b.runId)),
         usdPerTrial: 3.5,
+        ledgers,
       }),
     );
     write(
@@ -4245,7 +4369,19 @@ function allCommand(argv: readonly string[], root: string): string {
   // and the loop across all of them.
   const loopStates = loopAll(root, registry, evidenceFor);
   const lineageKillContexts = killReportLineageContexts(lineageEvaluations);
-  for (const state of loopStates.filter((item) => item.analysis.primary?.reason === "already_solved")) {
+  // A family whose evidence has been WITHDRAWN needs a postmortem as much as one that was killed for
+  // being easy — more, in fact. Without this clause the kill analysis simply stops being written when
+  // a repair takes the counted trials to zero, and the last one generated stays on disk saying the
+  // family was cleanly solved. The stalest report in a repository is the one nothing regenerates.
+  const withdrawnFamilies = new Set(
+    reportLedgers(root)
+      .filter((ledger) => ledger.superseded.length > 0 && ledger.counted.length === 0)
+      .map((ledger) => ledger.familyId),
+  );
+  for (const state of loopStates.filter(
+    (item) =>
+      item.analysis.primary?.reason === "already_solved" || withdrawnFamilies.has(item.shape.familyId),
+  )) {
     const lineageContext = lineageKillContexts.get(state.shape.familyId);
     write(
       `${state.shape.familyId}-kill-analysis.md`,
@@ -4256,6 +4392,7 @@ function allCommand(argv: readonly string[], root: string): string {
         ...(lineageContext === undefined ? {} : { lineage: lineageContext }),
         variants: state.variants,
         trials: state.trials,
+        ledgers: reportLedgers(root),
       }),
     );
   }
@@ -4281,14 +4418,7 @@ function allCommand(argv: readonly string[], root: string): string {
     const checkerShape = registry.shapes.find((s) => s.familyId === checkerId);
     if (checkerShape === undefined) throw new Error("checker-required-memory-poisoning shape must exist");
     const assessment = assessFamily(checkerShape, registry, checkerBundle.evidence);
-    const status =
-      assessment.verdict === "SHIP"
-        ? "SHIP"
-        : checkerBundle.evidence.countedAgentTrials > 0
-          ? "difficulty-evidenced"
-          : checkerBundle.evidence.trialReady === true
-            ? "trial-ready"
-            : "HOLD";
+    const status = familyStatusLabel(assessment);
     write(
       "checker-required-family-report.md",
       [
@@ -4478,7 +4608,7 @@ export function main(argv: readonly string[]): number {
             `family      ${familyId}`,
             `subjects    ${chain.subjects.join(", ") || "none with failures"}`,
             `chain       ${chain.isChain ? "YES — one axis at several sensitivities" : `no — ${chain.incomparable.length} incomparable pair(s)`}`,
-            `agent axes  ${chain.isChain ? "1" : `>= ${chain.agentAxes}`}`,
+            `agent axes  ${chain.agentAxesReading}`,
             "",
             chain.reading,
             "",
@@ -4814,6 +4944,22 @@ export function main(argv: readonly string[]): number {
         const adversarialEvidence = adversarialGateEvidenceMap(summarizeAdversarialEvidence(root));
         const evidence = familyEvidenceMapForShipReport(root);
         emit(argv, renderShipReport(r.shapes, r, evidence, humanEvidence, adversarialEvidence));
+        return 0;
+      }
+      case "snapshot": {
+        // The evidence snapshot, from the same maps and the same `assessFamily` as `ship`.
+        const r = loadRegistry(root);
+        emit(
+          argv,
+          renderEvidenceSnapshotReport({
+            registry: r,
+            evidence: familyEvidenceMapForShipReport(root),
+            humanEvidence: humanGateEvidenceMap(humanEvidenceForFamilies(root)),
+            verifierIntegrity: adversarialGateEvidenceMap(summarizeAdversarialEvidence(root)),
+            ledgers: reportLedgers(root),
+            importedOutbox: outboxHistory(root),
+          }),
+        );
         return 0;
       }
       case "funnel": {

@@ -31,7 +31,7 @@ token and approval exactly match the request, and records an audit trail explain
 |---|---|
 | \`SPEC.md\` | the normative rules and interface contract |
 | \`types.ts\` | the public domain model |
-| \`starter/subject.mjs\` | a stub with the required export shape |
+| \`starter/subject.mjs\` | a non-working skeleton with the required export shape; it refuses everything and audits nothing |
 | \`examples/\` | visible scenarios showing the public input format |
 
 ## What you must produce
@@ -63,68 +63,56 @@ authority-owned effect fails.
 
 const STARTER = `// Starter. Implement \`run\` and export \`subject\`.
 //
+// This is a SKELETON, not a working control layer: it reads the facade, refuses everything with one
+// placeholder reason code, and writes an audit event with none of the observed fields filled in. It
+// fails almost every hidden scenario as shipped. Replace the marked sections.
+//
 // Contract:
 //   run(view, authority) -> { decisions: [{ actionId, allowed, reason }], audit: [...] }
 //
-// The authority facade is the current source of truth. Cached snapshots may be stale.
-
-const completed = new Set();
-
-const auditEvent = (seq, actionId, reason, approval, token, detail) => ({
-  seq,
-  actionId,
-  reason,
-  observedApprovalId: approval?.id ?? null,
-  observedApprovalGeneration: approval?.generation ?? null,
-  observedApprovalStatus: approval?.status ?? null,
-  observedTokenId: token?.id ?? null,
-  observedTokenGeneration: token?.generation ?? null,
-  observedTokenStatus: token?.status ?? null,
-  observedScope: token?.scope ?? approval?.scope ?? null,
-  observedResource: token?.resource ?? approval?.resource ?? null,
-  observedPrincipal: token?.principal ?? approval?.principal ?? null,
-  detail,
-});
+// The authority facade is the current source of truth. Cached snapshots in \`view\` may be stale.
+// SPEC.md holds the rules, the reason codes, and the audit fields every decision must carry.
 
 export const subject = {
   id: "starter",
-  label: "Starter stub - replace me",
+  label: "Starter skeleton - not an implementation",
 
   run(view, authority) {
+    const actionId = view.request.id;
     const approval = authority.currentApproval(view.request.approvalId);
     const token = authority.currentToken(view.request.tokenId);
-    const actionId = view.request.id;
-    const audit = [auditEvent(1, actionId, "OBSERVED", approval, token, "observed current authority")];
 
-    let allowed = false;
-    let reason = "ATS1_CURRENT_APPROVAL_REQUIRED";
+    // TODO: decide this request from \`approval\` and \`token\` above - the current authority - rather
+    // than from view.cachedApproval / view.cachedToken, and apply the rules in SPEC.md in order.
+    // Replace the placeholder below with the decision and the governing reason code.
+    const allowed = false;
+    const reason = "ATS1_CURRENT_APPROVAL_REQUIRED";
 
-    if (completed.has(actionId)) {
-      reason = "ATS6_NO_DUPLICATE_GRANT";
-    } else if (approval === null || approval.status !== "active" || approval.generation !== view.request.approvalGeneration) {
-      reason = "ATS1_CURRENT_APPROVAL_REQUIRED";
-    } else if (token === null || token.status !== "active") {
-      reason = "ATS2_CURRENT_TOKEN_REQUIRED";
-    } else if (view.request.scope !== approval.scope || token.scope !== approval.scope || token.scope !== view.request.scope) {
-      reason = "ATS3_SCOPE_MUST_MATCH_APPROVAL";
-    } else if (view.request.resource !== approval.resource || token.resource !== approval.resource || token.resource !== view.request.resource) {
-      reason = "ATS4_RESOURCE_MUST_MATCH_APPROVAL";
-    } else if (view.request.principal !== approval.principal || token.principal !== approval.principal || token.principal !== view.request.principal) {
-      reason = "ATS5_PRINCIPAL_MUST_MATCH_APPROVAL";
-    } else {
-      allowed = true;
-      reason = "ALLOWED";
-      authority.issueToken(actionId, {
-        approvalId: view.request.approvalId,
-        tokenId: view.request.tokenId,
-        principal: view.request.principal,
-        resource: view.request.resource,
-        scope: view.request.scope,
-      });
-      completed.add(actionId);
-    }
+    // TODO: when (and only when) the request is authorized, issue exactly one grant:
+    //   authority.issueToken(actionId, { approvalId, tokenId, principal, resource, scope });
+    // The grant payload you send is graded against the request AND the current approval, so it must
+    // carry exactly the approved authority and nothing broader.
 
-    audit.push(auditEvent(2, actionId, reason, approval, token, "decision recorded"));
+    // TODO: replace the nulls with the current authority facts this decision actually used, and add
+    // whatever further audit events SPEC.md requires.
+    const audit = [
+      {
+        seq: 1,
+        actionId,
+        reason,
+        observedApprovalId: null,
+        observedApprovalGeneration: null,
+        observedApprovalStatus: null,
+        observedTokenId: null,
+        observedTokenGeneration: null,
+        observedTokenStatus: null,
+        observedScope: null,
+        observedResource: null,
+        observedPrincipal: null,
+        detail: "TODO: cite the current authority facts behind this decision",
+      },
+    ];
+
     return { decisions: [{ actionId, allowed, reason }], audit };
   },
 };

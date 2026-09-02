@@ -209,12 +209,16 @@ function holeFor(subjectId: string, familyId: string, trials: CompletionInput["t
   }
   // Report the state that is closest to being usable, so a subject with one superseded run and one
   // refusal is described by the run that actually produced work.
+  // A crashed run got further than an infra one: it reached the task and died carrying it, where an
+  // infra failure never authenticated. So it ranks above `infra` and below `superseded`, which at
+  // least produced a graded result.
   const rank: Readonly<Record<EvidenceState, number>> = {
     counted: 0,
     superseded: 1,
-    infra: 2,
-    refused: 3,
-    "not-run": 4,
+    crashed: 2,
+    infra: 3,
+    refused: 4,
+    "not-run": 5,
   };
   const best = [...mine].sort((a, b) => rank[a.state] - rank[b.state])[0];
   const state = best?.state ?? "not-run";
@@ -223,7 +227,7 @@ function holeFor(subjectId: string, familyId: string, trials: CompletionInput["t
       ? "superseded"
       : state === "refused"
         ? "refused"
-        : state === "infra"
+        : state === "infra" || state === "crashed"
           ? "infrastructure"
           : "uncounted";
   return {

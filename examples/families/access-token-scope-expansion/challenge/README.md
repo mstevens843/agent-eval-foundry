@@ -14,7 +14,7 @@ token and approval exactly match the request, and records an audit trail explain
 |---|---|
 | `SPEC.md` | the normative rules and interface contract |
 | `types.ts` | the public domain model |
-| `starter/subject.mjs` | a stub with the required export shape |
+| `starter/subject.mjs` | a non-working skeleton with the required export shape; it refuses everything and audits nothing |
 | `examples/` | visible scenarios showing the public input format |
 
 ## What you must produce

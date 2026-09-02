@@ -21,10 +21,15 @@ import {
   buildLiveDomChallengePackage,
 } from "../src/challenge/live-dom-package.js";
 import {
+  ACCESS_TOKEN_PROFILE,
   CHECKER_REQUIRED_PROFILE,
   FORBIDDEN_FILENAMES,
   LIVE_DOM_PROFILE,
+  REQUIRED_FILES,
+  STARTER_FILE,
+  STARTER_MIN_FAILING_FRACTION,
   checkChallengePackage,
+  checkStarterFailsEnough,
 } from "../src/challenge/package-check.js";
 import { buildChallengePackage } from "../src/challenge/package.js";
 import { HIDDEN_ARTIFACTS } from "../src/challenge/package.js";
@@ -369,6 +374,114 @@ describe("challenge package", () => {
 
   it("the builder and the checker agree on the hidden list without importing each other", () => {
     expect([...HIDDEN_ARTIFACTS].sort()).toEqual([...FORBIDDEN_FILENAMES].sort());
+  });
+});
+
+// ---------------------------------------------------------------- the starter rule
+//
+// The leak these fixtures encode is the one every rule above missed. Three of eight families shipped
+// a `starter/subject.mjs` that was a complete working answer — not a copy of a hidden file, a
+// reimplementation — and `checkChallengePackage` passed all three, because an identifier blocklist
+// cannot see behaviour.
+//
+// So these fixtures are built to be structurally PERFECT. Each one passes the fast checker under the
+// real access-token profile, and the assertion below states that first. A fixture the fast checker
+// already rejected would prove nothing about the new rule; the whole point is that the two checkers
+// disagree, and the new one is right.
+//
+// The grader is injected here rather than real. That is deliberate: these cases pin the RULE — the
+// 20% floor, the boundary one scenario under it, and the refusal to certify on zero cells — against
+// numbers that cannot drift, while other agents are actively repairing the live starters. The real
+// grader is wired up in `test/starter-must-fail.test.ts`, which runs all eight families for real.
+describe("starter-passes rule", () => {
+  interface StarterFixture {
+    readonly code: string;
+    readonly note: string;
+    readonly familyId: string;
+    readonly starterGrade: {
+      readonly scenarios: number;
+      readonly failing: number;
+      readonly hostErrors: number;
+    };
+    readonly files: readonly { readonly path: string; readonly content: string }[];
+  }
+
+  const fixture = (name: string): StarterFixture =>
+    JSON.parse(
+      readFileSync(join(ROOT, `fixtures/invalid/challenge-packages/${name}.json`), "utf8"),
+    ) as StarterFixture;
+
+  /** Expand a fixture's declared counts into the cell shape a grader returns. */
+  const grader = (f: StarterFixture) => () => ({
+    cells: Array.from({ length: f.starterGrade.scenarios }, (_, i) => ({
+      failed: i < f.starterGrade.failing ? ["some_check"] : [],
+    })),
+    hostErrors: f.starterGrade.hostErrors,
+  });
+
+  const BAD = ["starter-solves-family", "starter-barely-fails", "starter-graded-nothing"] as const;
+
+  for (const name of BAD) {
+    it(`rejects ${name} with its declared code`, () => {
+      const f = fixture(name);
+      // First: the fast checker sees nothing wrong. This is the assertion that makes the rest matter.
+      expect(() => checkChallengePackage(f.files, ACCESS_TOKEN_PROFILE), f.note).not.toThrow();
+      let thrown: unknown;
+      try {
+        checkStarterFailsEnough(f.familyId, f.files, grader(f));
+      } catch (err) {
+        thrown = err;
+      }
+      expect(thrown, `${name} was accepted; ${f.note}`).toBeDefined();
+      expect((thrown as { code?: string }).code, `${name} was rejected, but by the wrong rule`).toBe(f.code);
+      expect(f.code).toBe("CHALLENGE_STARTER_SOLVES_FAMILY");
+    });
+  }
+
+  it("accepts a starter that fails exactly the floor, so the rule is not simply 'always throws'", () => {
+    const f = fixture("starter-solves-family");
+    const atFloor = { ...f, starterGrade: { scenarios: 100, failing: 20, hostErrors: 0 } };
+    const result = checkStarterFailsEnough(f.familyId, f.files, grader(atFloor));
+    expect(result.failing).toBe(20);
+    expect(result.scenarios).toBe(100);
+    expect(result.failingFraction).toBe(STARTER_MIN_FAILING_FRACTION);
+  });
+
+  it("the floor is well below every healthy family, so it flags answer keys and not hard stubs", () => {
+    // Measured on 2026-09-01, failing/scenarios: containment 108/128, memory 288/288,
+    // ui-record-replay 174/324, live-dom 479/864, checker-required 792/792. The lowest healthy
+    // family is ui-record-replay at 53.7%, so the floor has more than a factor of two of headroom.
+    expect(STARTER_MIN_FAILING_FRACTION).toBeLessThan(174 / 324);
+    expect(STARTER_MIN_FAILING_FRACTION).toBeGreaterThan(0);
+  });
+
+  it("refuses to grade a package with no starter at all rather than skipping it", () => {
+    const f = fixture("starter-solves-family");
+    const stripped = f.files.filter((x) => x.path !== STARTER_FILE);
+    expect(() => checkStarterFailsEnough(f.familyId, stripped, grader(f))).toThrowError(
+      expect.objectContaining({ code: "CHALLENGE_MISSING_SURFACE" }),
+    );
+  });
+
+  it("the fast checker now requires the starter too, so a missing stub is an error not a silent skip", () => {
+    expect(REQUIRED_FILES).toContain(STARTER_FILE);
+    const f = fixture("starter-solves-family");
+    const stripped = f.files
+      .filter((x) => x.path !== STARTER_FILE)
+      .map((x) =>
+        x.path === "MANIFEST.json"
+          ? {
+              path: x.path,
+              content: JSON.stringify({
+                ...(JSON.parse(x.content) as Record<string, unknown>),
+                visibleFiles: ["README.md", "SPEC.md", "types.ts"],
+              }),
+            }
+          : x,
+      );
+    expect(() => checkChallengePackage(stripped, ACCESS_TOKEN_PROFILE)).toThrowError(
+      expect.objectContaining({ code: "CHALLENGE_MISSING_SURFACE" }),
+    );
   });
 });
 

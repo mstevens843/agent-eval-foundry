@@ -17,19 +17,19 @@ Which subjects have attempted which families, and what that permits.
 | family | subjects | counted trials | instances | axes |
 |---|---|---:|---:|---:|
 | `prompt-injection-containment` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 6 | 128 | 0 |
-| `prompt-injection-memory-poisoning` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 8 | 288 | 2 |
 | `ui-action-record-replay` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 5 | 324 | 1 |
 | `ui-replay-live-dom` | `gpt-5.6-sol` | 1 | 864 | — |
 | `checker-required-memory-poisoning` | `gpt-5.6-sol` | 1 | 792 | — |
-| `access-token-scope-expansion` | `gpt-5.6-sol` | 1 | 384 | — |
-| `delegated-wallet-scope-reconciliation` | `gpt-5.6-sol` | 1 | 804 | — |
-| `deployment-model-alias-rollout-drift` | `claude-opus-5`, `gpt-5.6-sol` | 2 | 339 | 1 |
 | `durable-approval-outbox` | `claude-opus-5`, `gpt-5.6-sol` | 0 | 24 | 1 |
 
 ## Detection banks — written mutants
 
 | family | subjects | instances | axes |
 |---|---:|---:|---:|
+| `prompt-injection-memory-poisoning` | 13 | 288 | 5 |
+| `access-token-scope-expansion` | 9 | 384 | 3 |
+| `delegated-wallet-scope-reconciliation` | 10 | 804 | 3 |
+| `deployment-model-alias-rollout-drift` | 17 | 339 | 20 |
 
 **These numbers may not be added to the ones above, or to each other as a portfolio total.** A
 detection axis says the verifier can tell two hand-written defects apart. That is worth knowing
@@ -39,14 +39,14 @@ and it is not a measurement of difficulty.
 
 | subject | families |
 |---|---|
-| `claude-haiku-4-5` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
-| `claude-opus-5` | `deployment-model-alias-rollout-drift`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
-| `claude-sonnet-5` | `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay` |
-| `gpt-5.6-sol` | `access-token-scope-expansion`, `checker-required-memory-poisoning`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom` |
+| `claude-haiku-4-5` | `prompt-injection-containment`, `ui-action-record-replay` |
+| `claude-opus-5` | `durable-approval-outbox`, `prompt-injection-containment`, `ui-action-record-replay` |
+| `claude-sonnet-5` | `prompt-injection-containment`, `ui-action-record-replay` |
+| `gpt-5.6-sol` | `checker-required-memory-poisoning`, `durable-approval-outbox`, `prompt-injection-containment`, `ui-action-record-replay`, `ui-replay-live-dom` |
 
 ## What each kind of bank currently licenses
 
-### `agent` banks — 8 family(ies)
+### `agent` banks — 4 family(ies)
 
 **Verdict:** PARTIAL. a qualitative comparison over 1 shared subject(s); no combined axis count, because the width is bounded by the shared bank size.
 
@@ -67,6 +67,17 @@ Only 2 subject(s) attempted every family, below the threshold of 3. The combined
 
 - Build or trial a second family whose bank is `imported`.
 - For a mutant bank that means a second family with a written mutant set.
+
+### `mutant` banks — 4 family(ies)
+
+**Verdict:** REFUSED. nothing: the banks share no subject, so co-failure across families is unobservable and the union's width is the sum by construction.
+
+No subject attempted more than one family, so co-failure across families is unobservable. The union matrix is null in every cross cell and its antichain width is the sum of the parts by construction — two families testing the identical mechanism would also 'add'. No combined count is available.
+
+**To strengthen this:**
+
+- Run the same subjects against every `mutant` family until 3 share all of them.
+- Currently shared: none.
 
 ---
 

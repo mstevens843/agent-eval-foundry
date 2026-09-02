@@ -10,15 +10,15 @@ were thrown away — so there was nothing to compare a second family against.
 | | |
 |---|---:|
 | run directories parsed | 33 |
-| **counted** (standard attempts, clean) | **20** |
-| uncounted | 13 |
+| **counted** (standard attempts, clean) | **15** |
+| uncounted | 18 |
 | recorded spend across all runs | $252.51 |
 
 | run kind | counted | uncounted | spend |
 |---|---:|---:|---:|
 | `cheat` | 0 | 6 | $8.99 |
 | `gate` | 0 | 3 | $0.00 |
-| `standard` | 20 | 4 | $243.52 |
+| `standard` | 15 | 9 | $243.52 |
 
 ## Why so many runs do not count
 
@@ -35,13 +35,18 @@ and `n_errored_trials` first, and only then looks at reward.
 | `cheat-codex` | refused | cheat run, not an attempt at the task: provider-level refusal (AgentSafetyRefusalError); no attempt was made, so the reward of 0 is not evidence in either direction |
 | `cheat-codex-2` | refused | cheat run, not an attempt at the task: provider-level refusal (AgentSafetyRefusalError); no attempt was made, so the reward of 0 is not evidence in either direction |
 | `cheat-codex-cc267` | refused | cheat run, not an attempt at the task: provider-level refusal (AgentSafetyRefusalError); no attempt was made, so the reward of 0 is not evidence in either direction |
-| `fh-codex-1` | infrastructure_error | run errored (CancelledError); excluded from the counted matrix |
+| `check-v21` | completed | ran task "check-reorg-safe-settlement", not "durable-approval-outbox"; a reward earned on a different task is not evidence about this one however the run directory is named (clean run with reward 1, no exceptions and no errored trials) |
+| `fh-codex-1` | infrastructure_error | the archived result preserves no trial ids naming a single task, so there is no evidence this run attempted "durable-approval-outbox"; the directory name is not evidence (run errored (CancelledError); excluded from the counted matrix) |
 | `gate-v2-cheat-empty-ledger` | completed | gate run, not an attempt at the task: clean run with reward 1, no exceptions and no errored trials |
 | `gate-v2-nop` | completed | gate run, not an attempt at the task: clean run with reward 0, no exceptions and no errored trials |
 | `gate-v2-oracle` | completed | gate run, not an attempt at the task: clean run with reward 1, no exceptions and no errored trials |
-| `run-claude-2` | infrastructure_error | run errored (CancelledError); excluded from the counted matrix |
+| `run-claude-1` | completed | ran task "reorg-safe-settlement", not "durable-approval-outbox"; a reward earned on a different task is not evidence about this one however the run directory is named (clean run with reward 1, no exceptions and no errored trials) |
+| `run-claude-2` | infrastructure_error | the archived result preserves no trial ids naming a single task, so there is no evidence this run attempted "durable-approval-outbox"; the directory name is not evidence (run errored (CancelledError); excluded from the counted matrix) |
+| `v2-claude-1` | completed | ran task "reorg-safe-settlement", not "durable-approval-outbox"; a reward earned on a different task is not evidence about this one however the run directory is named (clean run with reward 1, no exceptions and no errored trials) |
 | `v2-codex-2` | infrastructure_error | run errored (ApiOverloadedError); excluded from the counted matrix |
 | `v2-opus-3` | timeout | hit the agent time limit (AgentTimeoutError); an infrastructure limit is not a capability finding |
+| `v21-claude-1` | completed | ran task "reorg-safe-settlement", not "durable-approval-outbox"; a reward earned on a different task is not evidence about this one however the run directory is named (clean run with reward 1, no exceptions and no errored trials) |
+| `v22-claude-1` | completed | ran task "reorg-safe-settlement", not "durable-approval-outbox"; a reward earned on a different task is not evidence about this one however the run directory is named (clean run with reward 1, no exceptions and no errored trials) |
 
 Three of those are provider-level refusals on `/cheat` trials. The source repository had to state
 in prose that the resulting zero meant *no attack was attempted* rather than *an attack repelled*;
@@ -61,20 +66,15 @@ the harness works. Both produce a reward and neither is an attempt at the task.
 | `cc267-codex-1` | `gpt-5.6-sol` | gpt-5.6-sol | 38m | $3.49 |
 | `cc267-codex-2` | `gpt-5.6-sol` | gpt-5.6-sol | 29m | $2.74 |
 | `cc267-codex-3` | `gpt-5.6-sol` | gpt-5.6-sol | 32m | $3.04 |
-| `check-v21` | `claude-opus-5` | claude-opus-5 | 7m | $2.81 |
 | `fh-claude-1` | `claude-opus-5` | claude-opus-5 | 53m | $15.32 |
 | `fh-claude-2` | `claude-opus-5` | claude-opus-5 | 89m | $15.99 |
 | `fh-claude-3` | `claude-opus-5` | claude-opus-5 | 74m | $23.17 |
-| `run-claude-1` | `claude-opus-5` | claude-opus-5 | 55m | $8.15 |
-| `v2-claude-1` | `claude-opus-5` | claude-opus-5 | 37m | $9.00 |
 | `v2-codex-1` | `gpt-5.6-sol` | gpt-5.6-sol | 23m | $3.38 |
 | `v2-codex-2b` | `gpt-5.6-sol` | gpt-5.6-sol | 25m | $3.49 |
 | `v2-codex-3b` | `gpt-5.6-sol` | gpt-5.6-sol | 27m | $3.25 |
 | `v2-opus-1` | `claude-opus-5` | claude-opus-5 | 78m | $21.71 |
 | `v2-opus-2` | `claude-opus-5` | claude-opus-5 | 91m | $25.04 |
 | `v2-opus-3b` | `claude-opus-5` | claude-opus-5 | 71m | $24.20 |
-| `v21-claude-1` | `claude-opus-5` | claude-opus-5 | 42m | $5.51 |
-| `v22-claude-1` | `claude-opus-5` | claude-opus-5 | 29m | $5.93 |
 
 ## Fidelity limits of this import
 

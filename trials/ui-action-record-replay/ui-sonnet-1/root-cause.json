@@ -1,0 +1,17 @@
+{
+  "runId": "ui-sonnet-1",
+  "familyId": "ui-action-record-replay",
+  "label": "unlabelled",
+  "rationale": "Same shape as ui-codex-1 and ui-haiku-1: 62 failures across three checks, `mixed` reading, no human read on record. Recorded as unlabelled rather than counted as a third capability finding for this family.",
+  "evidenceRead": [
+    "result.json",
+    "countability.json",
+    "challenge/SPEC.md"
+  ],
+  "labelledBy": {
+    "kind": "automated",
+    "id": "lane-4a-root-cause-review",
+    "date": "2026-09-01"
+  },
+  "diagnosisReading": "mixed"
+}

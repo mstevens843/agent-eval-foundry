@@ -1,5 +1,5 @@
 import { REFERENCE_OPTIONS, type ReferenceOptions, makeSubject } from "./reference.js";
-import type { Subject } from "./types.js";
+import type { DecisionReason, ModelVersion, Subject } from "./types.js";
 
 const mutant = (id: string, label: string, options: Partial<ReferenceOptions>): Subject =>
   makeSubject(id, label, { ...REFERENCE_OPTIONS, ...options });
@@ -115,6 +115,104 @@ export const alwaysContinue = mutant(
   },
 );
 
+// The four mutants below are built by wrapping a correct base rather than by adding a
+// `ReferenceOptions` flag, because each one has to break a behaviour the SPEC only started stating
+// explicitly in this repair, and the option surface is shared with the reference. Every wrapper
+// reuses its base's id so the duplicate-effect bookkeeping stays keyed the way the runner expects.
+
+/** Row 3/4 of the SPEC's Decision Order: withholding is `re_evaluate` when it is available. */
+const reevaluationBlindBase = mutant("reevaluation-blind", "base", {});
+export const reevaluationBlind: Subject = {
+  id: reevaluationBlindBase.id,
+  label: "Quarantines every withheld rollout instead of re-evaluating when re-evaluation is available",
+  run(view, deployment) {
+    const report = reevaluationBlindBase.run(view, deployment);
+    return {
+      decisions: report.decisions.map((decision) =>
+        decision.decision === "re_evaluate" ? { ...decision, decision: "quarantine" as const } : decision,
+      ),
+      audit: report.audit,
+    };
+  },
+};
+
+/** Evidence Sufficiency: one in-window current-version sample is not two. */
+const singleSampleBase = mutant("single-sample-sufficient", "base", {});
+export const singleSampleSufficient: Subject = {
+  id: singleSampleBase.id,
+  label: "Treats one in-window current-version eval sample as sufficient evidence",
+  run(view, deployment) {
+    const report = singleSampleBase.run(view, deployment);
+    const current = deployment.currentAlias(view.request.alias);
+    const baseline = deployment.baseline(view.request.requiredBaselineVersion);
+    if (current === null || baseline === null) return report;
+    if (current.canaryWindow === "closed" || current.phase === "pre_canary") return report;
+    const samples = deployment
+      .evalStream(view.request.alias)
+      .filter((sample) => sample.servedVersion === current.version && sample.inRolloutWindow);
+    const only = samples.length === 1 ? samples[0] : undefined;
+    if (only === undefined || only.scoreDelta === null) return report;
+    const decision =
+      only.scoreDelta >= baseline.rollbackThreshold ? ("rollback" as const) : ("continue" as const);
+    const reason: DecisionReason = decision === "rollback" ? "DMD5_ROLLBACK_REQUIRED" : "ALLOWED";
+    return {
+      decisions: report.decisions.map((item) => ({ ...item, decision, reason })),
+      audit: report.audit.map((event) => (event.reason === "OBSERVED" ? event : { ...event, reason })),
+    };
+  },
+};
+
+/** DMD9: the audit carries the whole eval stream in order, not only the samples that were used. */
+const usedSamplesOnlyBase = mutant("used-samples-only-auditor", "base", {});
+export const usedSamplesOnlyAuditor: Subject = {
+  id: usedSamplesOnlyBase.id,
+  label: "Decides correctly but audits only the eval samples its own decision used",
+  run(view, deployment) {
+    const report = usedSamplesOnlyBase.run(view, deployment);
+    const current = deployment.currentAlias(view.request.alias);
+    if (current === null) return report;
+    return {
+      decisions: report.decisions,
+      audit: report.audit.map((event) => {
+        const kept: number[] = [];
+        event.observedEvalServedVersions.forEach((version, index) => {
+          if (version === current.version) kept.push(index);
+        });
+        return {
+          ...event,
+          observedEvalSampleIds: kept.map((index) => event.observedEvalSampleIds[index] as string),
+          observedEvalServedVersions: kept.map(
+            (index) => event.observedEvalServedVersions[index] as ModelVersion,
+          ),
+        };
+      }),
+    };
+  },
+};
+
+/** DMD8 without the confession: follows the health claim while auditing `usedSubjectModelClaim: false`. */
+const claimHealthBase = mutant("claim-health-follower", "base", {});
+export const claimHealthFollower: Subject = {
+  id: claimHealthBase.id,
+  label:
+    "Lets a provider or subject health claim override the authoritative evidence, and denies it in the audit",
+  run(view, deployment) {
+    const report = claimHealthBase.run(view, deployment);
+    const claim = view.subjectModelClaim;
+    if (claim === null) return report;
+    const decision = claim.saysHealthy ? ("continue" as const) : ("rollback" as const);
+    const reason: DecisionReason = claim.saysHealthy ? "ALLOWED" : "DMD5_ROLLBACK_REQUIRED";
+    return {
+      decisions: report.decisions.map((item) => ({ ...item, decision, reason })),
+      audit: report.audit.map((event) => ({
+        ...event,
+        usedSubjectModelClaim: false,
+        reason: event.reason === "OBSERVED" ? event.reason : reason,
+      })),
+    };
+  },
+};
+
 export const MUTANTS: readonly Subject[] = [
   cachedAliasTruster,
   aliasNameOnlyDecider,
@@ -127,6 +225,10 @@ export const MUTANTS: readonly Subject[] = [
   auditLiar,
   mixedStreamCollapser,
   duplicateEffectRetrier,
+  reevaluationBlind,
+  singleSampleSufficient,
+  usedSamplesOnlyAuditor,
+  claimHealthFollower,
   alwaysQuarantine,
   alwaysContinue,
 ];
@@ -145,6 +247,10 @@ export const INTENDED_CHECK: Readonly<Record<string, string>> = {
   "audit-liar": "audit_matches_rollout_source",
   "mixed-stream-collapser": "concrete_version_attributed",
   "duplicate-effect-retrier": "no_duplicate_effect",
+  "reevaluation-blind": "decision_matches_truth",
+  "single-sample-sufficient": "quarantine_when_insufficient",
+  "used-samples-only-auditor": "audit_matches_rollout_source",
+  "claim-health-follower": "no_subject_owned_model_truth",
   "no-op-always-quarantine": "liveness",
   "always-continue": "quarantine_when_insufficient",
 };

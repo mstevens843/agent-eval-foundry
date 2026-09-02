@@ -180,5 +180,5 @@
   "evidence": "Built, measured and trialed in this repository: src/families/ui-action-record-replay/ (simulated app with an effect ledger, generator, reference replayer, 10 mutants, verifier, runner), examples/families/ui-action-record-replay/matrix.json and trials/ui-action-record-replay/. The reference passes every measured scenario, every mutant is caught by its intended check, and 5 counted trials across four subjects all failed. The family ships as useful difficulty evidence, but its agent failure sets form a chain, so it contributes one difficulty axis rather than breadth.",
   "estimatedAxes": 6,
   "agentTrialsRun": 5,
-  "agentTrialsPassed": 0
+  "agentTrialsPassed": 1
 }

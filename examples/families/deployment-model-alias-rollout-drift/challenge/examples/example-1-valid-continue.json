@@ -9,7 +9,7 @@
       "requiredBaselineVersion": "model-alpha",
       "reevaluationAvailable": false,
       "observedAt": 200,
-      "idempotencyKey": "idem-prod-chat-11-release_console",
+      "idempotencyKey": "idem-dmd-prod-chat-successor-ramp-cache-fresh-window-open-reg-none-all_current-none-correct_previous-none-unavailable-release_console-r1-11",
       "surface": "release_console"
     },
     "cachedAlias": {

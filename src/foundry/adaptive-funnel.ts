@@ -500,7 +500,14 @@ function probeNextAction(probe: MechanismProbe): FunnelNextAction {
 }
 
 function familyNextAction(evidence: FamilyFunnelEvidence): FunnelNextAction {
-  if ((evidence.staleTrials?.length ?? 0) > 0) {
+  // Superseded trials are PRESERVED on disk by design, so `staleTrials` is a permanent record of
+  // every repair this family has ever had, not a signal that a repair is still owed. What settles
+  // that is whether a counted trial exists against the CURRENT challenge hash: stale trials with
+  // zero counted trials means the family still has to be re-measured after its repair, while a
+  // counted current-hash trial means it has already been repaired AND re-measured, and the
+  // counted-evidence branches below own the decision from there. Gating on "any stale trial exists"
+  // routed every repaired family to `repair` forever, no matter how much current evidence it had.
+  if ((evidence.staleTrials?.length ?? 0) > 0 && (evidence.countedAgentTrials ?? 0) === 0) {
     return {
       targetId: evidence.familyId,
       targetType: "family",

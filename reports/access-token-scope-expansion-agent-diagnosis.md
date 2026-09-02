@@ -5,13 +5,13 @@ not just as a generic pass/fail rate.
 
 ## Reading
 
-**Smoke passed cleanly.** Route to already_solved_or_needs_evolution unless a matrix reason is pre-registered.
+**No counted smoke trial yet.** The family remains local-evidence-only plus smoke-planned.
 
 | item | value |
 |---|---:|
 | planned smoke slots | 1 |
-| counted smoke trials | 1 |
-| counted solves | 1 |
+| counted smoke trials | 0 |
+| counted solves | 0 |
 | counted failures | 0 |
 | provider refusals | 0 |
 | infrastructure failures | 0 |
@@ -23,16 +23,16 @@ Campaign: `access-token-2026-08`.
 | gate item | status |
 |---|---|
 | local evidence | pass |
-| smoke campaign | counted |
-| diagnosis | clean |
+| smoke campaign | planned |
+| diagnosis | none |
 | transfer declaration | declared |
 | full matrix | blocked |
 
 Blocking reasons:
 
-- clean smoke pass routes to already_solved_or_needs_evolution unless a matrix reason is declared
+- no counted smoke trial
 
-Next action: treat as already_solved_or_needs_evolution unless a matrix reason is declared
+Next action: run one OpenAI/Codex smoke trial
 
 ## Failed Checks
 
@@ -46,12 +46,12 @@ No counted failed scenarios.
 
 | knob | discriminates | highest failing value | failure rate |
 |---|---|---|---:|
-| `approvalDrift` | no | `revoked` | 0% |
-| `cacheFreshness` | no | `fresh` | 0% |
-| `repeatCount` | no | `1` | 0% |
-| `requestSurface` | no | `api` | 0% |
-| `seed` | no | `11` | 0% |
-| `tokenDrift` | no | `exact` | 0% |
+| `approvalDrift` | no | `n/a` | n/a |
+| `cacheFreshness` | no | `n/a` | n/a |
+| `repeatCount` | no | `n/a` | n/a |
+| `requestSurface` | no | `n/a` | n/a |
+| `seed` | no | `n/a` | n/a |
+| `tokenDrift` | no | `n/a` | n/a |
 
 ## Access-Token Mechanism Questions
 
@@ -69,9 +69,7 @@ No counted failed scenarios.
 
 ## On-Target Versus Off-Target
 
-| run | reading | matches pre-registered hypothesis | repair suspected |
-|---|---|---|---|
-| `access-token-2026-08-o1` | clean | no | no |
+No counted failure diagnosis exists yet.
 
 ## Evidence Boundary
 

@@ -11,32 +11,29 @@ Production matrix: **blocked**.
 | item | value |
 |---|---|
 | family | `deployment-model-alias-rollout-drift` |
-| challenge hash | `0e9b87a5f260544cfbc1cdce8f08938c` |
+| challenge hash | `805efb58c923f9e081db1b41967392d7` |
 | scenario set | `drift-339-590affe3` |
 | declared behavior space | 663552 |
 | measured scenarios | 339 |
-| package | 9 files, 24493 bytes |
-| mutant-detection axes | 6 |
-| counted smoke trials | 2 |
-| counted smoke failures | 1 |
-| counted smoke solves | 1 |
-| counted provider families | `anthropic`, `openai` |
-| counted failure provider families | `openai` |
-| smoke difficulty evidenced | yes |
-| cross-lab smoke present | yes |
+| package | 9 files, 28278 bytes |
+| mutant-detection axes | 20 |
+| counted smoke trials | 0 |
+| counted smoke failures | 0 |
+| counted smoke solves | 0 |
+| counted provider families | none |
+| counted failure provider families | none |
+| smoke difficulty evidenced | no |
+| cross-lab smoke present | no |
 | cross-lab difficulty evidenced | no |
-| mixed cross-lab smoke | yes |
+| mixed cross-lab smoke | no |
 
 ## Statuses
 
 - `local-verifier-ready`
 - `package-backed`
 - `smoke-planned`
-- `smoke-attempted`
-- `smoke-failed-on-target`
-- `cross-lab-smoke-present`
-- `cross-lab-smoke-mixed`
-- `cross-lab-difficulty-needed`
+- `cross-lab-smoke-needed`
+- `adversarial-audit-needed`
 - `human-evidence-needed`
 - `matrix-blocked`
 
@@ -44,24 +41,26 @@ Production matrix: **blocked**.
 
 | code | detail |
 |---|---|
-| `PRODUCTION_CROSS_LAB_SMOKE_MIXED` | a non-OpenAI smoke imported cleanly, but counted failures are not shared across provider families; diagnose provider delta or evolve before /6 spend |
+| `PRODUCTION_NO_COUNTED_SMOKE` | campaign exists but no counted smoke trial exists |
 
 ## Advisory Rules
 
 | code | detail |
 |---|---|
+| `PRODUCTION_ADVERSARIAL_READY_NOT_AUDITED` | attack materials are ready, but no counted adversarial audit exists |
 | `PRODUCTION_HUMAN_READY_NOT_EVIDENCED` | public package is human-ready, but no independent clean-room human solve exists |
 | `PRODUCTION_LOCAL_MUTANTS_NOT_DIFFICULTY` | local mutant axes prove verifier discrimination, not real-agent difficulty |
 
 ## Matrix Plan
 
 - Do not run a full `/6` matrix from this state.
-- The non-OpenAI smoke imported cleanly, but it solved the suite rather than failing on target.
-- Diagnose the provider delta before buying more matrix slots.
-- If the mechanism is too provider-specific, evolve or repair the family instead of expanding spend.
-- Preserve transcript, submission, verifier output, package hash, scenario set id and provider identity for any future run.
+- First import or run one non-OpenAI counted smoke under the same challenge hash.
+- Preserve transcript, submission, verifier output, package hash, scenario set id and provider identity.
+- A provider refusal, infrastructure error, stale hash, contaminated run or missing artifact counts nothing.
+- If a non-OpenAI smoke also fails on target, production matrix spend can be considered.
+- If the smoke passes cleanly, route to evolve/repair instead of buying a matrix by default.
 
-Next action: diagnose provider delta or evolve before production /6 matrix spend
+Next action: run or import one counted smoke trial under the current hash
 
 Provider-delta diagnosis is present; the generated diagnosis routes the mixed smoke state to evolution rather than `/6` spend.
 Evolution options are ready; the selected next step is a mechanism probe, not a full descendant build.

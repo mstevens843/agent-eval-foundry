@@ -1,20 +1,34 @@
 import type {
   DiscoveryCandidate,
-  DiscoveryCandidateEvidence,
   DiscoveryCandidateScore,
   DiscoveryNextStep,
   DiscoveryTaskShapeDraft,
   DiscoveryWorkbench,
   DiscoveryWorkbenchSummary,
+  MergedCandidateEvidence,
   SurfaceCoverageGroup,
 } from "../foundry/discovery-workbench.js";
-import { DISCOVERY_NEXT_STEPS, SURFACE_COVERAGE_GROUPS } from "../foundry/discovery-workbench.js";
+import {
+  DISCOVERY_NEXT_STEPS,
+  SURFACE_COVERAGE_GROUPS,
+  isLineageEvidenceStatus,
+  mergeCandidateEvidence,
+} from "../foundry/discovery-workbench.js";
 import type { Registry } from "../foundry/registry.js";
+import type { EvidenceLedger } from "../trials/evidence-lifecycle.js";
+import { labelStaleRunsInProse } from "../trials/migration.js";
 
 export interface DiscoveryWorkbenchReportInput {
   readonly registry: Registry;
   readonly workbench: DiscoveryWorkbench;
   readonly summary: DiscoveryWorkbenchSummary;
+  /**
+   * The evidence ledgers, for the queue reasons that narrate a decision by naming its run.
+   *
+   * Optional so the `discovery report` subcommand can render the workbench without loading every
+   * family's trials; the `all` command, whose output is checked, always supplies them.
+   */
+  readonly ledgers?: readonly EvidenceLedger[];
 }
 
 const esc = (s: string): string => s.replace(/\|/g, "\\|");
@@ -44,10 +58,16 @@ function scoreBrief(score: DiscoveryCandidateScore, candidates: readonly Discove
   return `\`${score.candidateId}\` (${candidate?.domain ?? "unknown"}, score ${score.totalScore.toFixed(1)}, ${score.cheapestNextEvidence})`;
 }
 
-function evidenceByCandidate(
-  evidence: readonly DiscoveryCandidateEvidence[],
-): Map<string, DiscoveryCandidateEvidence> {
-  return new Map(evidence.map((item) => [item.candidateId, item]));
+/**
+ * Renders a merged evidence record as one cell: the strongest provenance status the candidate
+ * earned, plus the lineage adjustment that ranking applied on top of it. Both halves are shown so
+ * the table cannot claim a promoted candidate is merely "lineage-penalized".
+ */
+function evidenceCell(evidence: MergedCandidateEvidence | undefined): string {
+  if (evidence === undefined) return "score-only";
+  if (isLineageEvidenceStatus(evidence.status) || evidence.lineageAdjustment === 0) return evidence.status;
+  const sign = evidence.lineageAdjustment > 0 ? "+" : "";
+  return `${evidence.status} (lineage ${sign}${evidence.lineageAdjustment.toFixed(1)})`;
 }
 
 export function renderDiscoveryCandidates(candidates: readonly DiscoveryCandidate[]): string {
@@ -96,14 +116,14 @@ export function renderDiscoveryNext(
   summary: DiscoveryWorkbenchSummary,
   candidates: readonly DiscoveryCandidate[],
 ): string {
-  const evidence = evidenceByCandidate(summary.evidenceStatuses);
+  const evidence = mergeCandidateEvidence(summary.evidenceStatuses);
   return [
     "discovery workbench next actions",
     "candidate | action | evidence | probe status | score | reason",
     ...summary.topBuildOrProbeCandidates.map((s) => {
       const candidate = candidateById(candidates).get(s.candidateId);
       const status = evidence.get(s.candidateId);
-      return `${s.candidateId} | ${s.recommendedAction} | ${s.cheapestNextEvidence} | ${status?.status ?? "score-only"} | ${s.totalScore.toFixed(1)} | ${status?.reason ?? candidate?.taskFamilyHypothesis ?? "unknown"}`;
+      return `${s.candidateId} | ${s.recommendedAction} | ${s.cheapestNextEvidence} | ${evidenceCell(status)} | ${s.totalScore.toFixed(1)} | ${status?.reason ?? candidate?.taskFamilyHypothesis ?? "unknown"}`;
     }),
     "",
     "Candidate score is not difficulty evidence. Probe-ready is not trialed. Surface coverage is not axis diversity.",
@@ -125,8 +145,13 @@ export function renderDiscoveryScaffoldSummary(draft: DiscoveryTaskShapeDraft): 
 
 export function renderDiscoveryWorkbenchReport(input: DiscoveryWorkbenchReportInput): string {
   const { registry, summary, workbench } = input;
-  const evidence = evidenceByCandidate(summary.evidenceStatuses);
-  const lineageEvidence = summary.evidenceStatuses.filter((item) => item.sourceId.startsWith("lineage:"));
+  // Queue reasons are recorded prose, carried here rather than composed here, and several of them
+  // narrate a decision by naming the run it was made on. The reason text is not rewritten — it is a
+  // record of what was decided and when — but a run id inside it is annotated where the run has since
+  // been withdrawn, so no reader meets it as live evidence.
+  const reason = (text: string): string => labelStaleRunsInProse(esc(text), input.ledgers ?? []);
+  const evidence = mergeCandidateEvidence(summary.evidenceStatuses);
+  const lineageEvidence = summary.evidenceStatuses.filter((item) => isLineageEvidenceStatus(item.status));
   const warnings = summary.warnings.length === 0 ? ["none"] : summary.warnings;
   const killed =
     summary.killedCheaply.length === 0
@@ -189,7 +214,7 @@ export function renderDiscoveryWorkbenchReport(input: DiscoveryWorkbenchReportIn
     ...summary.topBuildOrProbeCandidates.map((s) => {
       const candidate = candidateById(workbench.candidates).get(s.candidateId);
       const status = evidence.get(s.candidateId);
-      return `| \`${s.candidateId}\` | ${esc(candidate?.domain ?? "unknown")} | ${s.totalScore.toFixed(1)} | ${s.confidence.toFixed(2)} | ${s.recommendedAction} | ${s.cheapestNextEvidence} | ${status?.status ?? "score-only"} | ${esc(s.blockingReasons.map((b) => b.code).join(", ") || "none")} |`;
+      return `| \`${s.candidateId}\` | ${esc(candidate?.domain ?? "unknown")} | ${s.totalScore.toFixed(1)} | ${s.confidence.toFixed(2)} | ${s.recommendedAction} | ${s.cheapestNextEvidence} | ${evidenceCell(status)} | ${esc(s.blockingReasons.map((b) => b.code).join(", ") || "none")} |`;
     }),
     "",
     "## Probe Evidence Overlay",
@@ -203,7 +228,7 @@ export function renderDiscoveryWorkbenchReport(input: DiscoveryWorkbenchReportIn
           "|---|---|---|---|---|",
           ...summary.evidenceStatuses.map(
             (item) =>
-              `| \`${item.candidateId}\` | ${item.status} | \`${item.sourceId}\` | ${item.verdict} | ${esc(item.reason)} |`,
+              `| \`${item.candidateId}\` | ${item.status} | \`${item.sourceId}\` | ${item.verdict} | ${reason(item.reason)} |`,
           ),
         ]),
     "",

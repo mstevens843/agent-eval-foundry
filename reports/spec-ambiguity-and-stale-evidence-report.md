@@ -6,21 +6,21 @@ Every trial this repository holds, what state it is in, and what a repair costs.
 
 | state | count | meaning |
 |---|---:|---|
-| `counted` | 25 | graded, and run against the challenge this family produces today |
-| `superseded` | 3 | graded, then invalidated when the family it measured was repaired |
+| `counted` | 13 | graded, and run against the challenge this family produces today |
+| `superseded` | 15 | graded, then invalidated when the family it measured was repaired |
 | `refused` | 0 | the provider declined; never an attempt, never a failure |
-| `infra` | 2 | the provider could not authenticate, or the harness broke |
+| `infra` | 1 | the provider could not authenticate, so the subject never reached the task |
 | `not-run` | 0 | a declared slot nobody has executed |
 
 ## Per family
 
 ### `access-token-scope-expansion`
 
-Current challenge hash: `33cc98364ce2a6b3f9490e54937955d8`.
+Current challenge hash: `8ae0950dea093d35d98b12d1c8c1bde5`.
 
 | run | model | state | ran against |
 |---|---|---|---|
-| `access-token-2026-08-o1` | openai/gpt-5.6-sol | counted | `33cc98364ce2a6b3f9490e54937955d8` |
+| `access-token-2026-08-o1` | openai/gpt-5.6-sol | **superseded** | `33cc98364ce2a6b3f9490e54937955d8` ≠ current |
 
 ### `checker-required-memory-poisoning`
 
@@ -32,20 +32,20 @@ Current challenge hash: `448f2f816c51030cc97a374816226168`.
 
 ### `delegated-wallet-scope-reconciliation`
 
-Current challenge hash: `2140032d835a87ff254d01b6b4652f21`.
+Current challenge hash: `45f27b644a84364e3d3855f68cd243a2`.
 
 | run | model | state | ran against |
 |---|---|---|---|
-| `delegated-wallet-2026-08-o1` | openai/gpt-5.6-sol | counted | `2140032d835a87ff254d01b6b4652f21` |
+| `delegated-wallet-2026-08-o1` | openai/gpt-5.6-sol | **superseded** | `2140032d835a87ff254d01b6b4652f21` ≠ current |
 
 ### `deployment-model-alias-rollout-drift`
 
-Current challenge hash: `0e9b87a5f260544cfbc1cdce8f08938c`.
+Current challenge hash: `805efb58c923f9e081db1b41967392d7`.
 
 | run | model | state | ran against |
 |---|---|---|---|
-| `deployment-alias-2026-09-claude-1` | anthropic/claude-opus-5 | counted | `0e9b87a5f260544cfbc1cdce8f08938c` |
-| `deployment-model-alias-rollout-drift-2026-08-o1` | openai/gpt-5.6-sol | counted | `0e9b87a5f260544cfbc1cdce8f08938c` |
+| `deployment-alias-2026-09-claude-1` | anthropic/claude-opus-5 | **superseded** | `0e9b87a5f260544cfbc1cdce8f08938c` ≠ current |
+| `deployment-model-alias-rollout-drift-2026-08-o1` | openai/gpt-5.6-sol | **superseded** | `0e9b87a5f260544cfbc1cdce8f08938c` ≠ current |
 
 ### `prompt-injection-containment`
 
@@ -62,22 +62,22 @@ Current challenge hash: `4911ffdfbd2c0e9b51752ed16c4f53e8`.
 
 ### `prompt-injection-memory-poisoning`
 
-Current challenge hash: `9b3e0c84addabc2e195ecbd490ba81dd`.
+Current challenge hash: `7443bf6d6c6b2ccf69cc20f417ff048c`.
 
 | run | model | state | ran against |
 |---|---|---|---|
 | `mp-claude-1` | anthropic/claude-opus-5 | **superseded** | `1230948f6c115b674b9308c99dbe77b7` ≠ current |
 | `mp-claude-2` | anthropic/claude-opus-5 | **superseded** | `1230948f6c115b674b9308c99dbe77b7` ≠ current |
 | `mp-claude-3` | anthropic/claude-opus-5 | **superseded** | `1230948f6c115b674b9308c99dbe77b7` ≠ current |
-| `mp-claude-r1` | anthropic/claude-opus-5 | counted | `9b3e0c84addabc2e195ecbd490ba81dd` |
-| `mp-claude-r2` | anthropic/claude-opus-5 | counted | `9b3e0c84addabc2e195ecbd490ba81dd` |
-| `mp-claude-r3` | anthropic/claude-opus-5 | counted | `9b3e0c84addabc2e195ecbd490ba81dd` |
-| `mp-codex-1` | openai/gpt-5.6-sol | counted | `9b3e0c84addabc2e195ecbd490ba81dd` |
-| `mp-codex-2` | openai/gpt-5.6-sol | counted | `9b3e0c84addabc2e195ecbd490ba81dd` |
-| `mp-codex-3` | openai/gpt-5.6-sol | counted | `9b3e0c84addabc2e195ecbd490ba81dd` |
-| `mp-gemini-1` | google/gemini-3-pro | infra | `9b3e0c84addabc2e195ecbd490ba81dd` |
-| `mp-haiku-1` | anthropic/claude-haiku-4-5 | counted | `9b3e0c84addabc2e195ecbd490ba81dd` |
-| `mp-sonnet-1` | anthropic/claude-sonnet-5 | counted | `9b3e0c84addabc2e195ecbd490ba81dd` |
+| `mp-claude-r1` | anthropic/claude-opus-5 | **superseded** | `9b3e0c84addabc2e195ecbd490ba81dd` ≠ current |
+| `mp-claude-r2` | anthropic/claude-opus-5 | **superseded** | `9b3e0c84addabc2e195ecbd490ba81dd` ≠ current |
+| `mp-claude-r3` | anthropic/claude-opus-5 | **superseded** | `9b3e0c84addabc2e195ecbd490ba81dd` ≠ current |
+| `mp-codex-1` | openai/gpt-5.6-sol | **superseded** | `9b3e0c84addabc2e195ecbd490ba81dd` ≠ current |
+| `mp-codex-2` | openai/gpt-5.6-sol | **superseded** | `9b3e0c84addabc2e195ecbd490ba81dd` ≠ current |
+| `mp-codex-3` | openai/gpt-5.6-sol | **superseded** | `9b3e0c84addabc2e195ecbd490ba81dd` ≠ current |
+| `mp-gemini-1` | google/gemini-3-pro | infra | `9b3e0c84addabc2e195ecbd490ba81dd` ≠ current |
+| `mp-haiku-1` | anthropic/claude-haiku-4-5 | **superseded** | `9b3e0c84addabc2e195ecbd490ba81dd` ≠ current |
+| `mp-sonnet-1` | anthropic/claude-sonnet-5 | **superseded** | `9b3e0c84addabc2e195ecbd490ba81dd` ≠ current |
 
 ### `ui-action-record-replay`
 
@@ -97,7 +97,7 @@ Current challenge hash: `18c3f5afc5973604205cd7df23ce4cad`.
 
 | run | model | state | ran against |
 |---|---|---|---|
-| `live-dom-2026-08-o1` | openai/gpt-5.6-sol | infra | `18c3f5afc5973604205cd7df23ce4cad` |
+| `live-dom-2026-08-o1` | openai/gpt-5.6-sol | crashed | `18c3f5afc5973604205cd7df23ce4cad` |
 | `live-dom-2026-08-o2` | openai/gpt-5.6-sol | counted | `18c3f5afc5973604205cd7df23ce4cad` |
 
 ## Ambiguities found by real trials
@@ -130,7 +130,7 @@ Three checks make that hold under pressure:
 
 ## The cost of being right about this
 
-3 counted trials were invalidated, at roughly $10.50
+15 counted trials were invalidated, at roughly $52.50
 of model spend and about an hour of wall clock.
 
 That is the honest price of the discipline, and it is worth naming rather than absorbing: a

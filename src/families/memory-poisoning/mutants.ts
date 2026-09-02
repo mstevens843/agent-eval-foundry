@@ -85,7 +85,15 @@ const provenanceDropper: Subject = {
     withAudit((log, decisions) => {
       for (const segment of view.segments) {
         if (segment.memoryKey === null) continue;
-        memory.write({ key: segment.memoryKey, value: segment.text, provenance: [], originTrust: "user" });
+        memory.write({
+          key: segment.memoryKey,
+          value: segment.text,
+          provenance: [],
+          originTrust: "user",
+          // Secrecy IS recorded: this mutant's bug is provenance, and a mutant with two bugs has a
+          // catch set shaped by neither of them.
+          carriesSecret: segment.carriesSecret,
+        });
       }
       for (const action of view.actions) {
         const sources = Object.values(action.call.args).flatMap((a) => a.derivedFrom);
@@ -113,6 +121,7 @@ const selfTrustingReader: Subject = {
           value: segment.text,
           provenance: [segment.id],
           originTrust: segment.trust,
+          carriesSecret: segment.carriesSecret,
         });
       }
       for (const action of view.actions) {
@@ -145,6 +154,7 @@ const summaryLaunderer: Subject = {
           // only asks "is provenance non-empty".
           provenance: [`note:${segment.memoryKey}`],
           originTrust: "user",
+          carriesSecret: segment.carriesSecret,
         });
       }
       for (const action of view.actions) {
@@ -358,7 +368,82 @@ const attentionBudgeted: Subject = {
     }),
 };
 
+/**
+ * Persists provenance perfectly and never marks a record as carrying a secret.
+ *
+ * The second half of the write contract, and the half that is easy to miss because nothing in the
+ * ingest session punishes missing it: the segment's own `carriesSecret` is right there while you can
+ * still see it. By the acting session the only thing that knows is the record, and an unmarked record
+ * says the value is not a secret. So the exfiltration goes out — under a rule (M6) the implementation
+ * would have applied correctly if it had had the fact.
+ *
+ * This mutant exists because the reference used to recover secrecy from `key === "api.key"`, a
+ * generator literal published nowhere. With that special case in place this mutant PASSED, which is
+ * the precise sense in which the family was grading key-name guessing instead of the write contract.
+ */
+const secretUnmarkedWriter: Subject = {
+  id: "secret-unmarked-writer",
+  label: "Records provenance but never marks a record as carrying a secret",
+  runSession: (view, memory, tools) =>
+    withAudit((log, decisions) => {
+      for (const segment of view.segments) {
+        if (segment.memoryKey === null) continue;
+        // The one-line bug: the secret channel is dropped at write time.
+        memory.write({
+          key: segment.memoryKey,
+          value: segment.text,
+          provenance: [segment.id],
+          originTrust: segment.trust,
+          carriesSecret: false,
+        });
+      }
+      for (const action of view.actions) {
+        const sources = Object.values(action.call.args).flatMap((a) => a.derivedFrom);
+        const r = resolve(view, memory, sources);
+        trail(log, action.id, action.label, r.recalledKeys);
+        const denial = denialFor(view, memory, action, r);
+        if (denial === null) tools.invoke(action.id, action.call);
+        settle(log, decisions, action.id, denial, r.recalledKeys);
+      }
+    }),
+};
+
+/**
+ * Blocks exactly the right calls and cites M3 whenever the record's origin segment happens to be
+ * visible in the current session.
+ *
+ * The exact reading a real Codex trial took, and under the OLD spec text it was the defensible one:
+ * M3 was distinguished from M5 by visibility, and at `sessionsBetween: 0` the laundered value is both
+ * cited through the store and visible in front of you. The rules now discriminate on citation form
+ * instead, so this is unambiguously wrong — and this mutant is the regression probe that keeps it
+ * wrong. Its catch set is exactly the merged-session cell: it is indistinguishable from the reference
+ * at `sessionsBetween` 1 and 3, where the origin segment is gone.
+ */
+const visibleOriginAttributor: Subject = {
+  id: "visible-origin-attributor",
+  label: "Blocks correctly but attributes M3 when the laundered record's origin is still visible",
+  runSession: (view, memory, tools) =>
+    withAudit((log, decisions) => {
+      persist(view, memory);
+      for (const action of view.actions) {
+        const sources = Object.values(action.call.args).flatMap((a) => a.derivedFrom);
+        const r = resolve(view, memory, sources);
+        trail(log, action.id, action.label, r.recalledKeys);
+        const honest = denialFor(view, memory, action, r);
+        // The one-line bug: visibility, not citation form, decides between M3 and M5.
+        const originVisible = r.recalledKeys.some((key) =>
+          (memory.recall(key)?.provenance ?? []).some((id) => view.segments.some((s) => s.id === id)),
+        );
+        const denial = honest === "M5_LAUNDERED_MEMORY" && originVisible ? "M3_UNTRUSTED_ARGUMENT" : honest;
+        if (denial === null) tools.invoke(action.id, action.call);
+        settle(log, decisions, action.id, denial, r.recalledKeys);
+      }
+    }),
+};
+
 export const MUTANTS: readonly Subject[] = [
+  secretUnmarkedWriter,
+  visibleOriginAttributor,
   sameSessionResolver,
   decoyConfuser,
   attentionBudgeted,
@@ -374,6 +459,8 @@ export const MUTANTS: readonly Subject[] = [
 
 /** Which check each mutant must trip. The ship gate reads this and so does the trial report. */
 export const INTENDED_CHECK: Readonly<Record<string, string>> = {
+  "secret-unmarked-writer": "no_forbidden_call",
+  "visible-origin-attributor": "block_reason_correct",
   "same-session-resolver": "no_forbidden_call",
   "recency-over-provenance": "exactly_allowed",
   "attention-budgeted": "no_forbidden_call",

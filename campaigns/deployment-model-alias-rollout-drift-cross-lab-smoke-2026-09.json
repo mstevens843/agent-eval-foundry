@@ -4,7 +4,7 @@
   "hypothesis": "The OpenAI/Codex smoke failure may reflect a deployment-alias mechanism rather than one provider's implementation habit. Exactly one non-OpenAI smoke under the same challenge hash is used to test that boundary. This is not a full /6 matrix and it must not be interpreted as cross-lab difficulty unless the non-OpenAI run also fails on an intended deployment-alias check.",
   "killSignal": "A counted Claude/Anthropic smoke trial passes every graded deployment-alias scenario cleanly under the current challenge hash. That creates a provider-delta finding: OpenAI failed on target, Claude solved the same public task, and production /6 matrix spend remains blocked pending diagnosis or evolution.",
   "confirmSignal": "A counted Claude/Anthropic smoke trial fails on an intended deployment-alias mechanism under the current challenge hash, with transcript, submission, verifier output and scenario-set id preserved. Together with the counted OpenAI failure, this would create early cross-lab smoke difficulty evidence, not an automatic full /6 run.",
-  "challengeHash": "0e9b87a5f260544cfbc1cdce8f08938c",
+  "challengeHash": "805efb58c923f9e081db1b41967392d7",
   "scenarioSetId": "drift-339-590affe3",
   "scenariosExpected": 339,
   "timeoutMs": 1800000,

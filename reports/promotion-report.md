@@ -58,7 +58,7 @@ Human solvability: Public spec must explain exact scope/resource/principal equal
 | measured scenarios | 384 |
 | declared space size | 1152 |
 | reference failures | 0 |
-| intended mutants caught | 8/8 |
+| intended mutants caught | 9/9 |
 | baselines blocked | 2/2 |
 | mutant-detection axes | 3 |
 
@@ -71,19 +71,19 @@ Pre-registered kill signal: A counted smoke trial solves every scenario or failu
 | item | status |
 |---|---|
 | local evidence | pass |
-| smoke campaign | counted |
-| smoke diagnosis | clean |
+| smoke campaign | planned |
+| smoke diagnosis | none |
 | transfer declaration | declared |
 | matrix readiness | blocked |
-| pipeline state | `smoke-passed-cleanly` |
+| pipeline state | `smoke-planned` |
 
 Blockers:
 
-- clean smoke pass routes to already_solved_or_needs_evolution unless a matrix reason is declared
+- no counted smoke trial
 
-Next action: treat as already_solved_or_needs_evolution unless a matrix reason is declared
+Next action: run one OpenAI/Codex smoke trial
 
-No full matrix command is recommended from this gate state.
+Exact smoke command: `node dist/cli.js trials campaign run --family access-token-scope-expansion --only O1`.
 
 ## Built Promotion Smoke States
 
@@ -92,9 +92,9 @@ does not retroactively turn promotion evidence into difficulty evidence.
 
 | promotion | family | scenarios | mutant axes | smoke state | counted smoke | matrix | next action |
 |---|---|---:|---:|---|---|---|---|
-| `access-token-scope-expansion-from-probe` | `access-token-scope-expansion` | 384 | 3 | smoke-passed-cleanly | yes | blocked | treat as already_solved_or_needs_evolution unless a matrix reason is declared |
-| `delegated-wallet-scope-reconciliation-from-access-token-evolution` | `delegated-wallet-scope-reconciliation` | 804 | 3 | smoke-passed-cleanly | yes | blocked | treat as already_solved_or_needs_evolution unless a matrix reason is declared |
-| `deployment-model-alias-rollout-drift-from-lineage-reallocation` | `deployment-model-alias-rollout-drift` | 339 | 6 | transfer-ready | yes | blocked | mixed provider smoke: OpenAI failed on target, Claude solved; diagnose/evolve before /6 matrix spend |
+| `access-token-scope-expansion-from-probe` | `access-token-scope-expansion` | 384 | 3 | smoke-planned | no | blocked | run one OpenAI/Codex smoke trial |
+| `delegated-wallet-scope-reconciliation-from-access-token-evolution` | `delegated-wallet-scope-reconciliation` | 804 | 3 | smoke-planned | no | blocked | run one OpenAI/Codex smoke trial |
+| `deployment-model-alias-rollout-drift-from-lineage-reallocation` | `deployment-model-alias-rollout-drift` | 339 | 20 | smoke-planned | no | blocked | run one OpenAI/Codex smoke trial |
 
 ## Ready Promotions
 
@@ -110,7 +110,7 @@ No ready, unbuilt promotions are on record.
 
 ## Current Probe Context
 
-Probe queue size: 15. First promoted probe: `access-token-scope-expansion-probe`.
+Probe queue size: 16. First promoted probe: `access-token-scope-expansion-probe`.
 
 ## Evidence Rules
 

@@ -293,8 +293,14 @@ export type { MatrixSource, SourceLoadOptions } from "./sources/index.js";
 export { renderBudgetReport, renderPlanSummary } from "./reports/budget-report.js";
 export { renderFamilyDiversityReport, renderLedgerReport } from "./reports/ledger-report.js";
 export { renderMechanismReport, renderMutantReport } from "./reports/registry-report.js";
-export { GATES, assessFamily, renderShipReport } from "./reports/ship-report.js";
-export type { FamilyAssessment, Gate, GateVerdict, ShipVerdict } from "./reports/ship-report.js";
+export { GATES, assessFamily, familyStatusLabel, renderShipReport } from "./reports/ship-report.js";
+export type {
+  FamilyAssessment,
+  FamilyStatusLabel,
+  Gate,
+  GateVerdict,
+  ShipVerdict,
+} from "./reports/ship-report.js";
 
 // --- human solvability: reference-solvable vs human-ready vs human-evidenced ---
 export {
@@ -584,6 +590,7 @@ export type {
   TrialSet,
   TrialStatus,
 } from "./trials/types.js";
+export { cellFailed, cellPassed } from "./trials/types.js";
 export { checkScenarioCoverage, parseTrialRecord, parseTrialSet } from "./trials/validate.js";
 export { inProcessRunner, isolationSummary, subprocessRunner } from "./trials/runners.js";
 export type { RunOutcome, SubjectRunner } from "./trials/runners.js";
@@ -612,6 +619,7 @@ export { INTENDED_CHECK, computeEvidence, renderTrialReadinessReport } from "./r
 export type { FamilyEvidence } from "./reports/ship-report.js";
 export {
   readFamilyTrials,
+  readRootCause,
   readTrialDirectory,
   writeTrialDirectory,
   assertComparable,
@@ -619,6 +627,26 @@ export {
   TRIAL_FILES,
 } from "./trials/directory.js";
 export type { Countability, TrialDirectory } from "./trials/directory.js";
+export {
+  DIFFICULTY_EVIDENCE_CAUSES,
+  FAILURE_ATTRIBUTING,
+  LABELLER_KINDS,
+  ROOT_CAUSES,
+  ROOT_CAUSE_FILE,
+  ROOT_CAUSE_RULE_CODES,
+  assertRootCauseAgainstTrial,
+  isDifficultyEvidence,
+  parseRootCause,
+  tallyRootCauses,
+  unlabelledRootCause,
+} from "./trials/root-cause.js";
+export type {
+  Labeller,
+  LabellerKind,
+  RootCause,
+  RootCauseRecord,
+  RootCauseTally,
+} from "./trials/root-cause.js";
 export {
   PROVIDERS,
   classifyRun,
@@ -635,10 +663,13 @@ export type {
   ProviderRunResult,
 } from "./trials/providers.js";
 export {
+  NO_PER_SCENARIO_DETAIL,
+  SUITE_REWARD_ZERO,
   classifyHistorical,
   importDurableOutboxHistory,
   normalizeModel,
   parseHarborResult,
+  runTaskName,
 } from "./trials/history.js";
 export type { HistoricalRun, ImportedHistory } from "./trials/history.js";
 export { PIC_INSTRUCTION, decideCountability, orchestrateTrial } from "./trials/orchestrator.js";

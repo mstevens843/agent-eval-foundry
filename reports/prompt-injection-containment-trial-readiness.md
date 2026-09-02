@@ -14,7 +14,7 @@ fail it has validated its **verifier**, and has said nothing about its **difficu
 | scenarios exercise their governing rule | yes |
 | isolation | `subprocess` |
 | **counted agent trials** | **6** |
-| shared-bank subjects | 2 |
+| shared-bank subjects | 4 |
 
 ## What is proven
 

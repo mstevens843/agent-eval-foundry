@@ -6,24 +6,40 @@ model difficulty.
 
 | family | human-readiness | package hash | visible files | blockers |
 |---|---|---|---:|---|
+| `access-token-scope-expansion` | **not-ready** | `8ae0950dea093d35d98b12d1c8c1bde5` | 8 | `allowed-assumptions-visible` |
 | `checker-required-memory-poisoning` | **human-ready** | `448f2f816c51030cc97a374816226168` | 8 | none |
-| `delegated-wallet-scope-reconciliation` | **human-ready** | `2140032d835a87ff254d01b6b4652f21` | 9 | none |
-| `deployment-model-alias-rollout-drift` | **human-ready** | `0e9b87a5f260544cfbc1cdce8f08938c` | 9 | none |
+| `delegated-wallet-scope-reconciliation` | **human-ready** | `45f27b644a84364e3d3855f68cd243a2` | 9 | none |
+| `deployment-model-alias-rollout-drift` | **human-ready** | `805efb58c923f9e081db1b41967392d7` | 9 | none |
 | `durable-approval-outbox` | **not-ready** | none | 0 | `public-package-present`, `surface-complete`, `spec-rules-complete`, `hidden-sampling-visible`, `allowed-assumptions-visible`, `forbidden-assumptions-visible`, `examples-present`, `scoring-contract-visible`, `hidden-artifacts-absent`, `solvable-without-source-internals` |
 | `prompt-injection-containment` | **human-ready** | `4911ffdfbd2c0e9b51752ed16c4f53e8` | 8 | none |
-| `prompt-injection-memory-poisoning` | **human-ready** | `9b3e0c84addabc2e195ecbd490ba81dd` | 8 | none |
+| `prompt-injection-memory-poisoning` | **human-ready** | `7443bf6d6c6b2ccf69cc20f417ff048c` | 8 | none |
 | `ui-action-record-replay` | **human-ready** | `1050e79f4804a96a5327d50dd81765b0` | 8 | none |
 | `ui-replay-live-dom` | **human-ready** | `18c3f5afc5973604205cd7df23ce4cad` | 9 | none |
 
 ## Current Reading
 
 Human-ready families: `checker-required-memory-poisoning`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom`.
-Blocked or unavailable packages: `durable-approval-outbox`.
+Blocked or unavailable packages: `access-token-scope-expansion`, `durable-approval-outbox`.
 
 A ready verdict says the public package is complete enough for a clean-room human attempt. It does
 not say that a human has solved it.
 
 ## Audit Checks
+
+### `access-token-scope-expansion`
+
+| check | result | detail |
+|---|---|---|
+| `public-package-present` | pass | checked-in public package hashes to 8ae0950dea093d35d98b12d1c8c1bde5 |
+| `surface-complete` | pass | 8 visible file(s), including README, SPEC, API and starter |
+| `spec-rules-complete` | pass | 8 visible rule code(s) in SPEC.md |
+| `hidden-sampling-visible` | pass | hidden coverage is described as sampling the public declared space |
+| `allowed-assumptions-visible` | **FAIL** | allowed assumptions are not stated explicitly enough |
+| `forbidden-assumptions-visible` | pass | must-not/fails/illegal language is visible |
+| `examples-present` | pass | 3 visible example file(s) |
+| `scoring-contract-visible` | pass | public README/SPEC states how grading works |
+| `hidden-artifacts-absent` | pass | challenge package passed the independent leak checker |
+| `solvable-without-source-internals` | pass | public package contains the contract needed for a clean-room attempt |
 
 ### `checker-required-memory-poisoning`
 
@@ -44,7 +60,7 @@ not say that a human has solved it.
 
 | check | result | detail |
 |---|---|---|
-| `public-package-present` | pass | checked-in public package hashes to 2140032d835a87ff254d01b6b4652f21 |
+| `public-package-present` | pass | checked-in public package hashes to 45f27b644a84364e3d3855f68cd243a2 |
 | `surface-complete` | pass | 9 visible file(s), including README, SPEC, API and starter |
 | `spec-rules-complete` | pass | 10 visible rule code(s) in SPEC.md |
 | `hidden-sampling-visible` | pass | hidden coverage is described as sampling the public declared space |
@@ -59,7 +75,7 @@ not say that a human has solved it.
 
 | check | result | detail |
 |---|---|---|
-| `public-package-present` | pass | checked-in public package hashes to 0e9b87a5f260544cfbc1cdce8f08938c |
+| `public-package-present` | pass | checked-in public package hashes to 805efb58c923f9e081db1b41967392d7 |
 | `surface-complete` | pass | 9 visible file(s), including README, SPEC, API and starter |
 | `spec-rules-complete` | pass | 10 visible rule code(s) in SPEC.md |
 | `hidden-sampling-visible` | pass | hidden coverage is described as sampling the public declared space |
@@ -104,7 +120,7 @@ not say that a human has solved it.
 
 | check | result | detail |
 |---|---|---|
-| `public-package-present` | pass | checked-in public package hashes to 9b3e0c84addabc2e195ecbd490ba81dd |
+| `public-package-present` | pass | checked-in public package hashes to 7443bf6d6c6b2ccf69cc20f417ff048c |
 | `surface-complete` | pass | 8 visible file(s), including README, SPEC, API and starter |
 | `spec-rules-complete` | pass | 8 visible rule code(s) in SPEC.md |
 | `hidden-sampling-visible` | pass | hidden coverage is described as sampling the public declared space |

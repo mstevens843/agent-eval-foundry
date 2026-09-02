@@ -12,6 +12,27 @@ Written before any slot ran, so the result below cannot be reinterpreted into a 
 
 **Confirm signal.** At least one counted Codex/OpenAI trial fails at least one checker-required scenario under the current challenge hash, with transcript, subject.mjs, checker.mjs and verifier output preserved. Repeated OpenAI runs are repeated trials only and do not create cross-lab or agent-axis breadth evidence.
 
+### Kill signal, evaluated
+
+| | |
+|---|---|
+| verdict | **FIRED** — counted trials failed and none is root-caused to `capability` (not-difficulty clause) |
+| counted trials in this campaign's slots | 1 |
+| passed everything | 0 |
+| failed something | 1 |
+| root-caused `capability` | 0 |
+
+1 counted trial(s) failed and none is root-caused to `capability` (checker-required-2026-08-o1: spec-underspecified) — the not-difficulty clause of the kill signal
+
+Counted failures that are NOT difficulty evidence, and why:
+
+- `checker-required-2026-08-o1` — root cause `spec-underspecified`
+
+Only the mechanical clauses are evaluated: whether every counted trial passed, and whether any
+counted failure has been root-caused to `capability`. Whatever else the prose above says — that
+failures concentrated on ambiguous wording, that a knob pattern was or was not present — is a
+judgement no code here makes, and it is printed rather than scored.
+
 ## The task that was run
 
 | | |

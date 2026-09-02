@@ -13,6 +13,8 @@ import type { VariantProposal } from "../foundry/evolve.js";
 import type { KillAnalysis, KillFinding } from "../foundry/kill.js";
 import { KILL_REASON_SPECS, killReasonSpec } from "../foundry/kill.js";
 import type { TaskShape } from "../foundry/schema.js";
+import type { EvidenceLedger } from "../trials/evidence-lifecycle.js";
+import { isSupersededRun, renderRunRef, staleRunNote } from "../trials/migration.js";
 import type { FamilyEvidence } from "./ship-report.js";
 
 const esc = (s: string): string => s.replace(/\|/g, "\\|");
@@ -24,6 +26,13 @@ export interface KillReportInput {
   readonly lineage?: LineageKillContext;
   /** Variants the evolution engine proposed in response. */
   readonly variants: readonly VariantProposal[];
+  /**
+   * The evidence ledgers, so the trial table can say which of its rows have been withdrawn.
+   *
+   * Without them this report reads every row as live: `state.trials` is every preserved directory,
+   * and a trial's own record still says `counts: true` after the repair that invalidated it.
+   */
+  readonly ledgers?: readonly EvidenceLedger[];
   /** Trial rows, for the evidence table. */
   readonly trials: readonly {
     readonly runId: string;
@@ -65,8 +74,19 @@ const finding = (f: KillFinding): readonly string[] => {
 
 export function renderKillReport(input: KillReportInput): string {
   const { shape, analysis, evidence, variants, trials, lineage } = input;
+  const ledgers = input.ledgers ?? [];
   const counted = evidence?.countedAgentTrials ?? 0;
   const passed = evidence?.agentTrialsPassed ?? 0;
+  const trialsNote = staleRunNote(
+    trials.map((t) => t.runId),
+    ledgers,
+  );
+  // A family whose only trials have been withdrawn is not a family nothing has attempted, and the
+  // difference is the whole point of this section. Something DID attempt it — against a package that
+  // no longer exists — so what the run bought is the discovery of the defect, not a difficulty
+  // reading in either direction.
+  const withdrawnOnly =
+    counted === 0 && trials.length > 0 && trials.every((t) => isSupersededRun(t.runId, ledgers));
   const mutantsCaught = (evidence?.mutantsCaught ?? []).filter((m) => m.caught).length;
   const mutantsTotal = evidence?.mutantsCaught.length ?? 0;
   const lineageBlocksBlindHardening =
@@ -127,24 +147,37 @@ export function renderKillReport(input: KillReportInput): string {
     "",
     "## What it did **not** prove",
     "",
-    counted === 0
+    withdrawnOnly
       ? [
-          "**That it is hard.** Nothing that could plausibly fail this family has attempted it. A measured",
-          "axis count against a bank of hand-written mutants is a statement about the verifier, and the two",
-          "get written in the same font unless something forces them apart.",
+          "**That it is anything.** Every trial this family has is WITHDRAWN: each was graded against a",
+          "package this repository no longer produces, so none of them is evidence about the task as it",
+          "stands. That is not the same as never having been attempted — an attempt was made and paid",
+          "for — and it is not a difficulty reading in either direction. A clean pass against a package",
+          "that contained its own answer distinguishes nothing, and a failure against a package with a",
+          "defect in it measures the defect.",
+          "",
+          "What those runs bought is the discovery that invalidated them. The family's status is UNKNOWN",
+          "until one counted trial exists under the current hash, and no routing decision — evolution,",
+          "matrix spend, lineage verdict — may be made on the withdrawn numbers.",
         ].join("\n")
-      : passed === counted
+      : counted === 0
         ? [
-            `**That it is hard.** All ${counted} counted agent trials passed every graded scenario. The`,
-            "submissions were genuine implementations, not refusals or stubs — which makes this a",
-            "measurement rather than a harness failure, and the measurement is that the task is easy for",
-            "the models it was built to separate.",
-            "",
-            "A clean smoke pass is useful evidence. It prevents wasting a `/6` matrix and routes the family into evolution.",
-            "",
-            `It also did not prove the opposite: ${counted} counted clean pass${counted === 1 ? "" : "es"} by the available model family is a signal, not a proof about every provider. What it forecloses is *shipping on the current evidence*.`,
+            "**That it is hard.** Nothing that could plausibly fail this family has attempted it. A measured",
+            "axis count against a bank of hand-written mutants is a statement about the verifier, and the two",
+            "get written in the same font unless something forces them apart.",
           ].join("\n")
-        : `**Nothing outstanding on difficulty**: ${counted - passed} of ${counted} counted trials failed at least one scenario.`,
+        : passed === counted
+          ? [
+              `**That it is hard.** All ${counted} counted agent trials passed every graded scenario. The`,
+              "submissions were genuine implementations, not refusals or stubs — which makes this a",
+              "measurement rather than a harness failure, and the measurement is that the task is easy for",
+              "the models it was built to separate.",
+              "",
+              "A clean smoke pass is useful evidence ONLY when the package withheld the answer. Given that, it prevents wasting a `/6` matrix and routes the family into evolution.",
+              "",
+              `It also did not prove the opposite: ${counted} counted clean pass${counted === 1 ? "" : "es"} by the available model family is a signal, not a proof about every provider. What it forecloses is *shipping on the current evidence*.`,
+            ].join("\n")
+          : `**Nothing outstanding on difficulty**: ${counted - passed} of ${counted} counted trials failed at least one scenario.`,
     "",
     ...(lineage === undefined
       ? []
@@ -173,9 +206,10 @@ export function renderKillReport(input: KillReportInput): string {
           "|---|---|---:|---:|---:|---|",
           ...trials.map(
             (t) =>
-              `| \`${t.runId}\` | ${t.model ?? "—"} | ${t.runtimeSeconds === null ? "—" : `${Math.round(t.runtimeSeconds)}s`} | ${t.scenarios} | ${t.failed} | ${t.isolation} |`,
+              `| ${renderRunRef(t.runId, ledgers)} | ${t.model ?? "—"} | ${t.runtimeSeconds === null ? "—" : `${Math.round(t.runtimeSeconds)}s`} | ${t.scenarios} | ${t.failed} | ${t.isolation} |`,
           ),
           "",
+          ...(trialsNote === null ? [] : [trialsNote, ""]),
         ].join("\n"),
     "## Why it is not ready",
     "",
@@ -201,7 +235,7 @@ export function renderKillReport(input: KillReportInput): string {
     "| **Model strength** — the models are simply good at this | contributory | the submissions were real implementations citing the rules, not lucky guesses. That is a fact about the models AND about the task: the task did not distinguish them. |",
     "| **Policy explicitness** — the spec gave away the answer | likely contributory | the published rule order made attribution a lookup rather than a derivation. `reduce_policy_explicitness` is the operator that tests this directly. |",
     `| **Synthetic data** — the fixtures are too clean to transfer | ${analysis.findings.some((f) => f.reason === "too_synthetic") ? "declared" : "unmeasured"} | scenarios are single-turn and fully observable; nothing has tested whether a pass transfers to a longer, noisier setting |`,
-    `| **Lack of trial evidence** — nothing has attempted it | ${counted === 0 ? "**yes**" : "no — trials exist"} | ${counted} counted trials |`,
+    `| **Lack of trial evidence** — nothing has attempted it | ${withdrawnOnly ? "**yes, by withdrawal**" : counted === 0 ? "**yes**" : "no — trials exist"} | ${counted} counted trials${withdrawnOnly ? `; ${trials.length} preserved and withdrawn, which is spend without evidence rather than an untried family` : ""} |`,
     "",
     "## What would make it stronger",
     "",

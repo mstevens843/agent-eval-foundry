@@ -53,7 +53,7 @@ import type { TrialRecord, TrialSet } from "../src/trials/types.js";
 
 const ROOT = new URL("..", import.meta.url).pathname;
 const FAMILY_ID = "deployment-model-alias-rollout-drift";
-const CHALLENGE_HASH = "0e9b87a5f260544cfbc1cdce8f08938c";
+const CHALLENGE_HASH = "805efb58c923f9e081db1b41967392d7";
 const SCENARIO_SET_ID = "drift-339-590affe3";
 
 let cachedScenarios: readonly Scenario[] | null = null;
@@ -285,7 +285,12 @@ describe("deployment-model-alias-rollout-drift family", () => {
     expect(typeSource).not.toContain("./spec.js");
   });
 
-  it("runs the visible starter through the subprocess host without verifier drift", () => {
+  // This replaces an earlier test that asserted the shipped starter graded CLEAN through the host.
+  // That assertion was the bug: the starter was a near-verbatim port of the hidden decision
+  // procedure, so the family measured whether an agent edited the file it was handed. The starter is
+  // now a skeleton, and the two things worth asserting are that it still RUNS (a starter that
+  // crashes is unfair) and that it does not SOLVE.
+  it("runs the visible starter through the subprocess host without solving the family", () => {
     const pkg = packageForFamily();
     const starter = pkg.files.find((file) => file.path === "starter/subject.mjs");
     if (starter === undefined) throw new Error("starter missing from deployment-alias challenge");
@@ -309,9 +314,43 @@ describe("deployment-model-alias-rollout-drift family", () => {
         reports: (out.reports ?? []) as never,
         effects: (out.effects ?? []) as never,
         calls: (out.calls ?? []) as never,
-      }),
-    ).toEqual([]);
+      }).map((failure) => failure.check),
+    ).toContain("decision_matches_truth");
   });
+
+  it("ships a starter that fails nearly the whole measured set", () => {
+    const pkg = packageForFamily();
+    const starter = pkg.files.find((file) => file.path === "starter/subject.mjs");
+    if (starter === undefined) throw new Error("starter missing from deployment-alias challenge");
+    const dir = mkdtempSync(join(tmpdir(), "deployment-alias-starter-sweep-"));
+    const subjectPath = join(dir, "subject.mjs");
+    writeFileSync(subjectPath, starter.content, "utf8");
+
+    const scenarios = measuredScenarios();
+    const failing = scenarios.filter((scenario) => {
+      const out = JSON.parse(
+        execFileSync("node", ["scripts/deployment-alias-host.mjs", subjectPath], {
+          cwd: ROOT,
+          input: JSON.stringify({ scenario }),
+          encoding: "utf8",
+          timeout: 20_000,
+        }),
+      ) as Record<string, unknown>;
+      if (typeof out.error === "string") return true;
+      return (
+        verify({
+          scenario,
+          reports: (out.reports ?? []) as never,
+          effects: (out.effects ?? []) as never,
+          calls: (out.calls ?? []) as never,
+        }).length > 0
+      );
+    });
+
+    // Measured after the repair: 339/339. Asserted as a floor rather than an equality so a later
+    // scenario-set change cannot silently turn the starter back into a working answer.
+    expect(failing.length / scenarios.length).toBeGreaterThan(0.9);
+  }, 300_000);
 });
 
 describe("deployment-alias smoke campaign, transfer and diagnosis", () => {

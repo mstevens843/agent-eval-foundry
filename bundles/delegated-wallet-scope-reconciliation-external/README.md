@@ -18,7 +18,7 @@ foundry trials campaign import --family delegated-wallet-scope-reconciliation <t
 
 | check | why |
 |---|---|
-| `challengeHash` equals `2140032d835a87ff254d01b6b4652f21` | a trial run against a different version of the task is evidence about that version, not this one |
+| `challengeHash` equals `45f27b644a84364e3d3855f68cd243a2` | a trial run against a different version of the task is evidence about that version, not this one |
 | `transcript.txt` exists and is non-empty | a run with no transcript cannot be audited, so it cannot count |
 | `submission/subject.mjs` exist | a counted trial needs every artifact it was graded on |
 | the submission is not a checked-in baseline | an artifact that does nothing is the absence of an attempt |

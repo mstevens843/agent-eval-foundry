@@ -1057,6 +1057,75 @@
     "evolutionOperator": null
   },
   {
+    "id": "provider-failover-router-alias-drift",
+    "title": "Provider failover router alias drift",
+    "domain": "model-routing incident response",
+    "failureMechanisms": ["model-alias-drift", "stale-state", "tool-result-ambiguity", "false-audit-history"],
+    "taskFamilyHypothesis": "Agents that handled model alias rollout drift may still trust cached router state or provider labels when failover receipts, rollout ledgers and eval streams disagree.",
+    "whyAgentsMightFail": "The alias string stays stable while the live route moves across providers, and the authoritative router receipt can arrive after cached route and rollout-ledger observations.",
+    "authoritativeTruthSource": { "name": "router receipt ledger", "whatItSettles": "The provider/model route that actually served each request and the current authorized rollback or failback target.", "whyIndependent": "The harness owns router receipts, rollout snapshots, eval streams and routing effects; subject-written route summaries are only claims." },
+    "visibleRulesSketch": [
+      "Alias identity is not routing truth.",
+      "Current route truth comes from router receipts reconciled with rollout and eval ledgers.",
+      "Rollback and failback target concrete provider/model routes, not alias strings.",
+      "Missing or delayed router receipts require bounded quarantine, not guessed continuation.",
+      "Audit must preserve source disagreement and concrete provider/model attribution."
+    ],
+    "hiddenRegionSketch": { "samplingStatement": "Hidden cases sample failover timing, router receipt delay, ledger disagreement, mixed provider eval streams, rollback/failback target kind and evidence completeness from the public router-ledger model.", "addsUndeclaredRules": false },
+    "expectedKnobs": [
+      { "name": "failover-timing", "values": ["before-eval", "during-canary", "mid-request", "unknown"], "purpose": "tests whether the subject binds decisions to current route evidence rather than cached aliases" },
+      { "name": "router-receipt-delay", "values": ["landed", "late-landed", "absent"], "purpose": "tests delayed external receipt reconciliation" },
+      { "name": "ledger-disagreement", "values": ["none", "router-vs-rollout", "router-after-rollout", "unknown"], "purpose": "tests source disagreement preservation" },
+      { "name": "eval-provider-mix", "values": ["all-current", "mixed-provider-stream", "current-b-bad", "unattributed"], "purpose": "tests provider/model attribution" },
+      { "name": "action-required", "values": ["continue", "rollback", "failback", "quarantine"], "purpose": "separates liveness from blanket block/failback strategies" }
+    ],
+    "expectedMutants": ["cached-router-truster", "provider-name-only-decider", "receipt-blind-rollbacker", "always-failback", "never-failback", "ledger-disagreement-flattener", "audit-router-liar"],
+    "baselineCheats": ["trust cached provider route", "roll back the alias string", "always fail back to provider A", "quarantine every route", "write a clean route audit without receipts"],
+    "transferPotential": {
+      "targetDomains": ["model-routing incident response", "feature-flag rollout drift", "provider failover"],
+      "linkedTransferTests": ["deployment-alias-to-routing-incident-response", "deployment-alias-to-feature-flag-rollout-drift"],
+      "rationale": "The provider-failover version carries forward alias identity drift but moves the truth boundary from a deployment registry into delayed router receipts and mixed provider eval evidence."
+    },
+    "surfaceCoverageTags": {
+      "domains": ["model-routing", "deployment"],
+      "toolActionTypes": ["route-task", "read-router-receipt", "rollback-route", "failback-provider", "quarantine-route"],
+      "statePatterns": ["alias-drift", "failover", "delayed-receipt", "ledger-disagreement", "mixed-provider-eval"],
+      "authorityModels": ["router-receipt-ledger", "rollout-ledger"],
+      "externalSystems": ["model-router", "provider-gateway", "eval-stream"],
+      "uiApiWorkflowSurfaces": ["api", "workflow"],
+      "riskCategories": ["model-drift", "production-impact", "audit-history"]
+    },
+    "expectedBuildHours": 24,
+    "expectedTrialCostUsd": 40,
+    "riskNotes": {
+      "fairnessRisk": { "level": "medium", "note": "Router receipt precedence must be public and finite.", "mitigation": "Probe uses a synthetic router-ledger contract and declares quarantine when receipts are absent." },
+      "verifierRisk": { "level": "medium", "note": "Final route status misses stale cache and wrong concrete provider attribution.", "mitigation": "Grade harness-owned router receipts, rollout ledgers, eval streams and routing effects." },
+      "cheatRisk": { "level": "high", "note": "Subject could forge router receipts or route summaries.", "mitigation": "Verifier owns receipts and runs outside subject-controlled artifacts before package-ready status." },
+      "alreadySolvedRisk": { "level": "medium", "note": "Claude solved the parent deployment-alias family cleanly.", "mitigation": "Start with an executable probe and promote only if local bad-subject separation survives." },
+      "humanSolvabilityRisk": { "level": "medium", "note": "Failover plus disagreement can become ambiguous without examples.", "mitigation": "Pair valid continue, rollback, failback and quarantine examples in the public task shape." }
+    },
+    "proposedNextStep": "mechanism_probe",
+    "cheapScreens": [
+      { "id": "router-failover-local-probe", "cost": "local", "check": "Run paired continue, rollback, failback and quarantine cases against cached-router, receipt-blind, always-failback, no-failback and audit-liar subjects." }
+    ],
+    "promotionCriteria": [
+      "Reference-like behavior passes continue, rollback, valid failback and bounded quarantine cases.",
+      "Cached-router, provider-name-only, receipt-blind, failback and audit-liar subjects fail intended named checks.",
+      "The probe includes valid and invalid failback cases so blanket failback and blanket quarantine cannot pass."
+    ],
+    "killCriteria": [
+      "Correct behavior collapses to the parent deployment-alias ledger without a router receipt boundary.",
+      "The public contract cannot explain receipt precedence and quarantine without private routing lore.",
+      "Known-bad subjects all fail through one generic check, suggesting no new mechanism separation."
+    ],
+    "referenceSolvability": { "plausible": true, "sketch": "Read router receipts, rollout ledger and eval stream; attribute concrete provider/model route; choose continue, rollback, failback or quarantine; emit source-specific audit." },
+    "expectedAxisPotential": 5,
+    "mechanismOnlyWordingVariation": false,
+    "requiresPrivateContext": false,
+    "isolationPlan": "router receipts, rollout ledgers, eval streams and route effects verifier-owned; subject receives only public facades",
+    "evolutionOperator": "add_provider_failover"
+  },
+  {
     "id": "access-token-scope-expansion",
     "title": "OAuth token scope expands after approval summary",
     "domain": "permissions and access control",

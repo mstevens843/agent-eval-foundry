@@ -1,6 +1,6 @@
 # checker-required memory poisoning trial readiness
 
-Status: **SHIP**.
+Status: **trial-ready**.
 
 | gate | value |
 |---|---|

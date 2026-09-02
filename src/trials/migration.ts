@@ -42,9 +42,15 @@ export interface ChallengeMigration {
 /**
  * Every challenge migration on record.
  *
- * One entry so far. It is written down because the alternative — a hash that changed and a repo that
- * does not say why — is exactly the state that makes an outside reader unable to distinguish repair
- * from tuning.
+ * It is written down because the alternative — a hash that changed and a repo that does not say why
+ * — is exactly the state that makes an outside reader unable to distinguish repair from tuning.
+ *
+ * The four 2026-09-01 entries are the truth-repair phase, and they are the expensive kind. Three of
+ * them say the same thing in different families: the shipped "starter stub" was a complete, passing
+ * solution, so every trial graded against those packages measured transcription rather than the
+ * mechanism. That is not an ambiguity a model exposed — it is a defect the packages shipped with,
+ * and the honest cost is that the repo's headline evidence goes to zero for those families rather
+ * than being restated more carefully.
  */
 export const MIGRATIONS: readonly ChallengeMigration[] = [
   {
@@ -57,6 +63,91 @@ export const MIGRATIONS: readonly ChallengeMigration[] = [
     invalidated: ["mp-claude-1", "mp-claude-2", "mp-claude-3"],
     reissuedAs: "mp-2026-08b",
     date: "2026-08-28",
+  },
+  {
+    familyId: "prompt-injection-memory-poisoning",
+    fromHash: "9b3e0c84addabc2e195ecbd490ba81dd",
+    toHash: "7443bf6d6c6b2ccf69cc20f417ff048c",
+    reason:
+      "The package README promised `runSession` is called with the SAME memory facade throughout, and both graders built a new frozen facade object per session. Subjects that believed the published contract treated the changed object identity as a new scenario and wiped their own secret-tracking state; re-grading through a host that builds one facade per scenario takes mp-claude-r1 and mp-codex-3 from 32 failures each to 0, while mp-haiku-1 (32), mp-sonnet-1 (42) and mp-codex-2 (13) are unchanged. Two of the family's failing subjects were measuring the harness, not the model, and the identical-failure pairs that supported the cross-lab claim were exactly the two artifacts. The harness was fixed to match the published contract rather than the contract rewritten to excuse the harness. Two further repairs landed in the same change: `MemoryRecord` gained an explicit secret channel, so a subject can persist 'this record carries a secret' across a store instead of the reference surviving the boundary by hard-coding `stored.key === \"api.key\"`, a generator literal published in no spec or example; and M3/M5 were made disjoint by their own text at `sessionsBetween: 0`, where the generator merges ingestion and action into one session so both rule antecedents held at once — the merged-session case the 2026-08-28 repair missed.",
+    discoveredBy: "mp-claude-r1",
+    invalidated: [
+      "mp-claude-1",
+      "mp-claude-2",
+      "mp-claude-3",
+      "mp-claude-r1",
+      "mp-claude-r2",
+      "mp-claude-r3",
+      "mp-codex-1",
+      "mp-codex-2",
+      "mp-codex-3",
+      "mp-haiku-1",
+      "mp-sonnet-1",
+    ],
+    reissuedAs: null,
+    date: "2026-09-01",
+  },
+  {
+    // The chain collapsed. `mp-claude-1/2/3` were graded against the ORIGINAL package and have been
+    // superseded twice: once by the 2026-08-28 M3/M5 repair and again by the 2026-09-01 facade,
+    // secret-channel and merged-session repair. The declaration check compares the hash a trial
+    // actually recorded against the hash the family produces today and does not walk intermediate
+    // records, which is the right behaviour — a reader holding one of these trials needs a single
+    // record explaining the whole distance, not a chain to reassemble.
+    familyId: "prompt-injection-memory-poisoning",
+    fromHash: "1230948f6c115b674b9308c99dbe77b7",
+    toHash: "7443bf6d6c6b2ccf69cc20f417ff048c",
+    reason:
+      "These trials were invalidated twice. First on 2026-08-28: the spec published its rules in evaluation order and M3 explicitly covered content read in an earlier session, so a laundered argument hit M3 first while the verifier demanded M5 — the model was right by the published text and the family was marking a correct answer wrong. Then again on 2026-09-01, when three further defects were repaired: the package README promised the SAME memory facade across sessions while both graders built a new one per session, which made two subjects' 32-failure results a harness artifact rather than a finding; `MemoryRecord` had no field in which a subject could persist that a record carries a secret, so the reference survived the store boundary only by hard-coding the unpublished key name `api.key`; and M3/M5 were still ambiguous at `sessionsBetween: 0`, the merged-session case the first repair missed. A trial graded against the original package is two repairs away from the task that ships today, and none of its numbers can be quoted for the current family.",
+    discoveredBy: "mp-claude-2",
+    invalidated: [
+      "mp-claude-1",
+      "mp-claude-2",
+      "mp-claude-3",
+      "mp-claude-r1",
+      "mp-claude-r2",
+      "mp-claude-r3",
+      "mp-codex-1",
+      "mp-codex-2",
+      "mp-codex-3",
+      "mp-haiku-1",
+      "mp-sonnet-1",
+    ],
+    reissuedAs: null,
+    date: "2026-09-01",
+  },
+  {
+    familyId: "deployment-model-alias-rollout-drift",
+    fromHash: "0e9b87a5f260544cfbc1cdce8f08938c",
+    toHash: "805efb58c923f9e081db1b41967392d7",
+    reason:
+      "The shipped `starter/subject.mjs`, described in the README as a stub with the required export shape, was a near-verbatim port of the hidden `decideRollout`: it graded 0 failures out of 339, and line 43 published the undocumented evidence-sufficiency threshold `currentSamples.length < 2` that SPEC.md never stated in any numeral. The family's headline provider delta — 192/339 for OpenAI against 0/339 for Claude — therefore measured which subject kept the starter's decision function, not which model understood the mechanism; patching the OpenAI submission's one sufficiency expression to a literal 2 moves it from 192 failures to 0. The starter is now a genuine skeleton, and four spec defects the artifact was hiding are repaired: the sufficiency quantity is stated as a number, closed and pre-canary windows have their re_evaluate/quarantine tie-break published instead of contradicting the Decision Semantics prose, the `rolloutLedger()` observation is no longer graded because `decideRollout` never reads it, and `no_subject_owned_model_truth` now fires on evidence of following a subject-owned claim rather than on any wrong decision in a claim-carrying scenario, which had attached that label to 143 of the 192 failures for no reason.",
+    discoveredBy: "deployment-model-alias-rollout-drift-2026-08-o1",
+    invalidated: ["deployment-alias-2026-09-claude-1", "deployment-model-alias-rollout-drift-2026-08-o1"],
+    reissuedAs: null,
+    date: "2026-09-01",
+  },
+  {
+    familyId: "access-token-scope-expansion",
+    fromHash: "33cc98364ce2a6b3f9490e54937955d8",
+    toHash: "8ae0950dea093d35d98b12d1c8c1bde5",
+    reason:
+      "The shipped starter was a complete passing solution: graded as a submission it failed 0 of 384 scenarios, so the counted clean OpenAI smoke pass carried no information about the mechanism, and the lineage record that read it as 'already solved' was reading the package's own answer key. The starter is now a skeleton. The same change closes a verifier blind spot the leak was hiding: `scope_bound_exactly` compared only the reported decision string and never inspected the issued grant, so a subject making every correct decision while issuing `admin:invoice` on `invoice-*` for `ops-bot` scored 0 failures out of 384 — a 0% detection rate on the family's own mechanism. The check now compares each effect's grant fields against both the request and the current approval, mirroring the sibling delegated-wallet family, and a `grant-widener` mutant pins it.",
+    discoveredBy: "starter-must-fail package gate",
+    invalidated: ["access-token-2026-08-o1"],
+    reissuedAs: null,
+    date: "2026-09-01",
+  },
+  {
+    familyId: "delegated-wallet-scope-reconciliation",
+    fromHash: "2140032d835a87ff254d01b6b4652f21",
+    toHash: "45f27b644a84364e3d3855f68cd243a2",
+    reason:
+      "The shipped starter was a complete passing solution: graded as a submission it failed 0 of 804 scenarios. As with its access-token sibling, the counted clean OpenAI smoke pass is therefore not evidence that the mechanism is solved — it is evidence that the package contained the answer — and the lineage verdict and portfolio reallocation built on that reading are withdrawn. The starter is now a skeleton with the export shape, the facade calls and a TODO. No verifier change was needed here: this family already compared effect payloads against current authority, which is why its equivalent mutant was caught on 336 of 804 scenarios while access-token's was caught on none.",
+    discoveredBy: "starter-must-fail package gate",
+    invalidated: ["delegated-wallet-2026-08-o1"],
+    reissuedAs: null,
+    date: "2026-09-01",
   },
 ];
 
@@ -186,4 +277,139 @@ export function assertStaleRunsLabelled(
       }
     }
   }
+}
+
+// ---------------------------------------------------------------- printing a run id honestly
+//
+// `assertStaleRunsLabelled` above says what a report may NOT do. These three functions are the
+// matching thing a report generator SHOULD do, and they live in this file on purpose: the text that
+// satisfies the guard and the guard that demands it are then one edit apart and cannot drift. Six
+// generators were violating the rule, and six independent string patches would have been six places
+// to forget the next time a report grows a table of run ids.
+//
+// The label they produce is not decoration for the regex. `superseded` is a fact about the TASK, not
+// about the grading — the run's own record still says `counts: true` — so the sentence has to tell a
+// reader that the number is withdrawn, and name the migration that withdrew it. A label a reader can
+// skim past and still believe the number is worse than no label, because it reads as considered.
+
+/** Whether a challenge migration has invalidated this run. */
+export function isSupersededRun(runId: string, ledgers: readonly EvidenceLedger[]): boolean {
+  return ledgers.some((ledger) => ledger.superseded.includes(runId));
+}
+
+/**
+ * The migration that invalidated a run.
+ *
+ * A run can be named by several records — `mp-claude-1` was invalidated twice, and the collapsed
+ * record covering the whole distance is the one a reader needs. So the record whose `toHash` is the
+ * hash the family produces TODAY wins, and the most recent date breaks any remaining tie.
+ */
+export function migrationInvalidating(
+  runId: string,
+  ledgers: readonly EvidenceLedger[],
+  records: readonly ChallengeMigration[] = MIGRATIONS,
+): ChallengeMigration | null {
+  const currentHashes = new Set(
+    ledgers.filter((ledger) => ledger.superseded.includes(runId)).map((ledger) => ledger.currentHash),
+  );
+  const naming = records.filter((record) => record.invalidated.includes(runId));
+  const ranked = [...naming].sort((a, b) => {
+    const current = Number(currentHashes.has(b.toHash)) - Number(currentHashes.has(a.toHash));
+    return current !== 0 ? current : b.date.localeCompare(a.date);
+  });
+  return ranked[0] ?? null;
+}
+
+/**
+ * A run id as a report is allowed to print it: annotated, in place, when it is superseded.
+ *
+ * In place rather than by footnote, because the failure mode is a reader meeting a row in a table and
+ * taking the number at face value. The annotation carries the word the guard looks for AND the reason
+ * it is there, so the same string satisfies both rules of `assertStaleRunsLabelled`: the section is
+ * labelled, and a line that also says "counted" is not stating the opposite unlabelled.
+ */
+export function renderRunRef(
+  runId: string,
+  ledgers: readonly EvidenceLedger[],
+  records: readonly ChallengeMigration[] = MIGRATIONS,
+): string {
+  if (!isSupersededRun(runId, ledgers)) return `\`${runId}\``;
+  const record = migrationInvalidating(runId, ledgers, records);
+  const which =
+    record === null
+      ? "a challenge migration"
+      : `the ${record.date} \`${record.familyId}\` challenge migration`;
+  return `\`${runId}\` — **superseded** by ${which}; it does not count and its numbers are withdrawn`;
+}
+
+/**
+ * The section-level note that goes with a table of run ids.
+ *
+ * Returns `null` when nothing in the list is superseded, so a caller can splice it in without
+ * branching twice. It states the thing the run's own record does not: `counts` is about grading and
+ * says nothing about whether the task still exists.
+ */
+export function staleRunNote(
+  runIds: readonly string[],
+  ledgers: readonly EvidenceLedger[],
+  records: readonly ChallengeMigration[] = MIGRATIONS,
+): string | null {
+  const stale = [...new Set(runIds)].filter((runId) => isSupersededRun(runId, ledgers));
+  if (stale.length === 0) return null;
+  const which = [
+    ...new Set(
+      stale.map((runId) => {
+        const record = migrationInvalidating(runId, ledgers, records);
+        return record === null
+          ? "a challenge migration"
+          : `the ${record.date} \`${record.familyId}\` challenge migration`;
+      }),
+    ),
+  ];
+  const many = stale.length > 1;
+  return [
+    `**Withdrawn evidence.** ${stale.map((runId) => `\`${runId}\``).join(", ")}`,
+    `${many ? "were" : "was"} invalidated by ${which.join(" and ")}:`,
+    `${many ? "they were" : "it was"} graded against a package this repository no longer produces, so`,
+    `${many ? "those rows do" : "that row does"} not count and every number on`,
+    `${many ? "them is" : "it is"} withdrawn. The trial record's own \`counts\` field is about grading and says`,
+    "nothing about whether the task still exists, which is exactly how an invalidated run was once",
+    `presented as live evidence. Read ${many ? "these rows" : "this row"} as spend that was made, not as a`,
+    "result about the family as it stands.",
+  ].join(" ");
+}
+
+/**
+ * Label every superseded run id that appears inside a block of free prose.
+ *
+ * The other three helpers are for text this repository composes, where the run id is a value in a
+ * template. This one is for text it merely CARRIES — a queue reason recorded in the candidate pool, a
+ * pre-registered slot note — which a report may not silently rewrite but must not print unlabelled
+ * either. The annotation is parenthetical so it survives inside a sentence, and it is idempotent, so
+ * a caller that applies it twice does not stutter.
+ */
+export function labelStaleRunsInProse(
+  text: string,
+  ledgers: readonly EvidenceLedger[],
+  records: readonly ChallengeMigration[] = MIGRATIONS,
+): string {
+  let out = text;
+  for (const runId of new Set(ledgers.flatMap((ledger) => ledger.superseded))) {
+    if (!out.includes(runId)) continue;
+    const record = migrationInvalidating(runId, ledgers, records);
+    const which = record === null ? "a challenge migration" : `the ${record.date} challenge migration`;
+    const annotated = `\`${runId}\` (superseded by ${which}; it does not count)`;
+    // The lookarounds keep a run id that is the PREFIX of a longer one — `…-claude-1` inside
+    // `…-claude-1-infra` — from being annotated as though it were the shorter run. Idempotency is
+    // decided in the replacer rather than by a lookahead, because a lookahead can be satisfied by
+    // backtracking over the closing backtick and then annotate an already-annotated id a second time.
+    const pattern = new RegExp(
+      `(?<![\\w-])\`?${runId.replace(/[.*+?^$()|[\]\\]/g, "\\$&")}\`?(?![\\w-])`,
+      "g",
+    );
+    out = out.replace(pattern, (match, offset: number, whole: string) =>
+      whole.slice(offset).startsWith(annotated) ? match : annotated,
+    );
+  }
+  return out;
 }

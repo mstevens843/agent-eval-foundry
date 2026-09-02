@@ -1,14 +1,14 @@
 # Agent trial results — delegated-wallet-scope-reconciliation
 
-**1 counted agent trial(s): 0 failed at least one scenario, 1 passed everything.**
+**No counted agent trial exists.** Nothing below is difficulty evidence.
 
-The family is **already-solved** on this bank: every counted attempt passed everything.
+**No evidence either way.**
 
 ## Outcomes, kept apart
 
 | kind | count | what it means |
 |---|---:|---|
-| `counted_solve` | 1 | **counted solve** — a real attempt that passed every graded scenario |
+| `counted_solve` | 0 | **counted solve** — a real attempt that passed every graded scenario |
 | `counted_failure` | 0 | **counted failure** — a real attempt that failed at least one scenario |
 | `provider_refusal` | 0 | provider refusal — no attempt was made; never counted |
 | `infra_failure` | 0 | infrastructure failure — the harness, not the subject; never counted |
@@ -22,108 +22,10 @@ it never measured.
 
 | run | model | outcome | graded | failed | runtime |
 |---|---|---|---:|---:|---:|
-| `delegated-wallet-2026-08-o1` | openai/gpt-5.6-sol | counted_solve | 804 | 0 | 230s |
-
-## Which checks failed
-
-Pooled across counted trials. A check that never fires is not evidence it cannot.
-
-| check | scenarios |
-|---|---:|
-
-## Where the failures fall
-
-The analysis that decides whether an evolution operator worked. A knob whose values produce
-different failure rates is a knob that is doing something; a flat split means the difficulty
-came from somewhere else.
-
-### `authorityTransition`
-
-| value | scenarios | failed | rate |
-|---|---:|---:|---:|
-| `downgraded` | 324 | 0 | 0% |
-| `expired` | 96 | 0 | 0% |
-| `revoked` | 96 | 0 | 0% |
-| `stable` | 288 | 0 | 0% |
-
-### `cacheFreshness`
-
-| value | scenarios | failed | rate |
-|---|---:|---:|---:|
-| `fresh` | 275 | 0 | 0% |
-| `stale` | 283 | 0 | 0% |
-| `stale_broader` | 246 | 0 | 0% |
-
-### `initialApprovedLimit`
-
-| value | scenarios | failed | rate |
-|---|---:|---:|---:|
-| `100` | 266 | 0 | 0% |
-| `250` | 312 | 0 | 0% |
-| `50` | 226 | 0 | 0% |
-
-### `policySource`
-
-| value | scenarios | failed | rate |
-|---|---:|---:|---:|
-| `available` | 603 | 0 | 0% |
-| `policy_unavailable` | 201 | 0 | 0% |
-
-### `priorSpend`
-
-| value | scenarios | failed | rate |
-|---|---:|---:|---:|
-| `near_limit` | 249 | 0 | 0% |
-| `none` | 273 | 0 | 0% |
-| `some` | 282 | 0 | 0% |
-
-### `repeatCount`
-
-| value | scenarios | failed | rate |
-|---|---:|---:|---:|
-| `1` | 326 | 0 | 0% |
-| `2` | 478 | 0 | 0% |
-
-### `requestSurface`
-
-| value | scenarios | failed | rate |
-|---|---:|---:|---:|
-| `delegated_tool` | 280 | 0 | 0% |
-| `scheduled_worker` | 261 | 0 | 0% |
-| `wallet_api` | 263 | 0 | 0% |
-
-### `requestedAmount`
-
-| value | scenarios | failed | rate |
-|---|---:|---:|---:|
-| `140` | 158 | 0 | 0% |
-| `25` | 311 | 0 | 0% |
-| `260` | 132 | 0 | 0% |
-| `60` | 203 | 0 | 0% |
-
-### `seed`
-
-| value | scenarios | failed | rate |
-|---|---:|---:|---:|
-| `11` | 212 | 0 | 0% |
-| `23` | 208 | 0 | 0% |
-| `41` | 206 | 0 | 0% |
-| `67` | 178 | 0 | 0% |
-
-### `tokenState`
-
-| value | scenarios | failed | rate |
-|---|---:|---:|---:|
-| `exact` | 516 | 0 | 0% |
-| `revoked` | 96 | 0 | 0% |
-| `scope_broadened` | 96 | 0 | 0% |
-| `wrong_delegate` | 96 | 0 | 0% |
-
-**No knob moves the failure rate.** Whatever the family measures, it is not any single declared parameter.
 
 ## Model coverage
 
-Counted trials come from **one model family** (openai). One family has no measured variance: a result here says what that lab's model does, not what models do. There are no remaining planned slots in this campaign; cross-lab breadth would require a separate imported or future campaign.
+Counted trials come from **one model family** (none). One family has no measured variance: a result here says what that lab's model does, not what models do. There are no remaining planned slots in this campaign; cross-lab breadth would require a separate imported or future campaign.
 
 ## Against the pre-registration
 
@@ -131,7 +33,7 @@ Counted trials come from **one model family** (openai). One family has no measur
 
 **Confirm signal was:** At least one counted OpenAI/Codex smoke trial fails on an intended delegated-wallet authority mechanism under the current challenge hash, with transcript, submission, verifier output and scenario-set id preserved. On-target failure produces smoke-difficulty evidence only; one OpenAI run is not cross-lab evidence and does not unlock a full matrix without transfer evidence.
 
-**The kill signal fired.**
+Neither signal fired: there is no counted evidence.
 
 ---
 

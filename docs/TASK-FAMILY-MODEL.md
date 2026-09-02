@@ -111,16 +111,19 @@ pass is a useful result, but it means already_solved_or_needs_evolution unless a
 matrix the family is pre-registered. Provider refusals, infrastructure errors, stale hashes and
 off-target failures stay preserved and uncounted.
 
-Access-Token Evolution v1 is the first clean-pass recovery example. `access-token-scope-expansion`
-passed its counted OpenAI/Codex smoke trial, so the matrix gate stayed blocked and the mechanism was
-re-probed as `delegated-wallet-scope-reconciliation`: requested authority still is not approved
-authority, but the descendant adds delegation, durable state, revocation/downgrade, authoritative
-reconciliation, audit truth and liveness. That descendant now exists as a full validation-mode
-family with 804 measured scenarios, a clean reference, 10/10 local known-bad subjects/baselines
-caught, a leak-checked challenge package and a one-slot OpenAI/Codex smoke campaign. That counted
-smoke passed cleanly, so it is evidence that the current descendant was also solved by the available
-OpenAI subject. The correct route is lineage kill/pause and portfolio reallocation, not real-agent
-difficulty or full matrix spend.
+Access-Token Evolution v1 was written up here as the first clean-pass recovery example:
+`access-token-scope-expansion` passing its counted smoke trial, the matrix gate staying blocked, and
+the mechanism being re-probed as `delegated-wallet-scope-reconciliation` — requested authority still
+is not approved authority, but the descendant adds delegation, durable state, revocation/downgrade,
+authoritative reconciliation, audit truth and liveness. The descendant does exist as a full
+validation-mode family with a clean reference, every local known-bad subject and baseline caught and
+a leak-checked challenge package; its figures are in
+`reports/delegated-wallet-scope-reconciliation-family-report.md`.
+
+> **Withdrawn 2026-09-01.** Both families shipped a starter implementation that passed their own
+> suites, so both smoke trials were grading the answer key. Both are superseded and neither counts.
+> **Neither family has ever been attempted by a real agent**, so neither was shown to be solved, and
+> the *clean-pass recovery* narrative above describes the machinery rather than a result it produced.
 
 Lineage Kill + Portfolio Reallocation v1 adds the next recovery rule. A **lineage** records a root
 candidate/probe/family, descendant edges, evolution operators, what stayed fixed, what changed,
@@ -131,6 +134,11 @@ preserves the matrix spend avoided, applies labelled portfolio feedback to simil
 recommends the next branch from a different mechanism cluster. This is not a difficulty claim; it is
 negative evidence used to stop waste.
 
+> **Withdrawn 2026-09-01.** The access-token lineage was the worked instance of that rule and its
+> `lineage_solved_twice` verdict is withdrawn along with the two superseded trials that produced it.
+> The rule is stated above as a rule; this repository does not currently contain an example of it
+> firing on evidence that counts.
+
 This layer is intentionally separate from the existing candidate ledger. The ledger records
 historical promote/kill decisions. Discovery Workbench v1 manages the forward-looking pool and
 computes which idea should be built, probed, killed, transferred or repaired next.
@@ -138,26 +146,34 @@ computes which idea should be built, probed, killed, transferred or repaired nex
 Deployment Model-Alias Rollout Drift v1 is the first acted-on reallocation branch after the
 access-token lineage pause. It is not another local scope comparison: the family models model
 aliases, concrete served versions, rollout/eval ledgers, canary windows, stale cached alias maps,
-rollback/continue/quarantine/re-evaluation choices and truthful audit. The built family has 339
-measured scenarios from a 663,552-point declared space, a clean reference, 13/13 known-bad subjects
-caught by intended checks, 2/2 baselines blocked, 6 mutant-detection axes, a leak-checked public
-package and a pinned one-slot OpenAI/Codex smoke campaign. That smoke trial now counted and failed
-192/339 scenarios on target, which is OpenAI-only smoke-difficulty evidence. It is not cross-lab
-evidence and it is not a full-matrix result. Deployment-Alias Production Readiness v1 adds the
-stricter production gate: a current-hash Claude/Anthropic external smoke can count only if the
-packet preserves transcript, submission, metadata and verifier output. That import now exists and
-passed 339/339, so the cross-lab smoke result is mixed rather than a cross-lab difficulty claim.
-The full `/6` matrix stays blocked; provider-delta diagnosis now routes the branch to evolution
-unless an explicit override is recorded. The same phase prepared current-hash external import
-bundles and added one counted Codex/OpenAI no-bypass adversarial audit under `fs-sandbox`; that is
-verifier-integrity evidence for one provider family, not a security proof and not cross-lab
-cheat-resistance evidence.
+rollback/continue/quarantine/re-evaluation choices and truthful audit. The built family has a
+measured scenario set drawn from a large declared space, a clean reference, every known-bad subject
+caught by an intended check, both baselines blocked, mutant-detection axes and a leak-checked public
+package; the figures are the summary table of
+`reports/deployment-model-alias-rollout-drift-family-report.md`. Deployment-Alias Production
+Readiness v1 adds the stricter production gate: a current-hash Claude/Anthropic external smoke can
+count only if the packet preserves transcript, submission, metadata and verifier output.
 
-Provider-delta diagnosis is now present for this mixed state. It compares the counted OpenAI failure
-with the counted Claude solve, identifies rollout phase, canary window, eval mix and regression
-severity as the strongest OpenAI failure correlates, and selects
-`provider-failover-router-alias-drift-probe` as the next evolution probe. That is a routing
-decision, not a built descendant family.
+> **Withdrawn 2026-09-01.** This section reported a counted OpenAI/Codex smoke failing 192/339 on
+> target, a counted Claude import passing 339/339, a resulting **mixed cross-lab smoke** state, a
+> provider-delta diagnosis naming rollout phase, canary window, eval mix and regression severity as
+> the OpenAI failure correlates, and one counted Codex/OpenAI no-bypass adversarial audit under
+> `fs-sandbox`. **All of it is superseded.** This family shipped a starter that passed its own suite;
+> the starter is stripped, the package re-hashed, and both trials and the adversarial audit pinned
+> the replaced hash.
+>
+> **This family has no counted trial, no smoke-difficulty evidence, no cross-lab smoke presence, no
+> provider delta and no counted adversarial audit.** `provider-delta report` returns
+> `non_openai_missing`. The full `/6` matrix stays blocked — that part never changed, and it is now
+> the only thing the record says.
+
+Provider-delta diagnosis is still the layer that would read such a state: it compares counted
+failures against counted solves, correlates knobs, and selects an evolution probe rather than matrix
+spend, all from preserved records without running a model. The route it selected here,
+`provider-failover-router-alias-drift-probe`, has executable local probe evidence of its own and can
+emit a task-shape draft — that evidence is independent of the withdrawn trials. It remains a
+probe-level routing artifact, not a built descendant family, challenge package, model trial or
+production-matrix gate.
 
 Human + External Evidence Intake v1 adds the handoff layer for that production gate. A package-backed
 family can now emit an external packet with the public challenge, pinned challenge hash, pinned
@@ -165,9 +181,11 @@ scenario set, run instructions, metadata template, submission template, verifier
 hidden-artifact warnings. The intake validator preserves returned packets but refuses countability
 for stale hashes, modified public packages, missing transcript/submission/verifier output, provider
 refusal, infrastructure error, author contamination, private hints, provider-family mislabelling or
-hidden artifact leaks. For deployment-alias, the OpenAI half-matrix is now planned as same-provider
-stability evidence; the counted Claude clean solve gives cross-lab smoke presence but not cross-lab
-difficulty, so it still does not satisfy full `/6` matrix gates.
+hidden artifact leaks. It also revokes countability retroactively: a packet that was valid when
+imported stops counting once the hash it pinned stops being current. For deployment-alias, the
+OpenAI half-matrix is a plan with no counted slot 1, and the Claude import that once supplied
+cross-lab smoke presence is superseded — so the family satisfies neither the smoke gate nor the full
+`/6` matrix gates.
 
 For iteration, use the targeted command set in `docs/TARGETED-DEV-GATES.md`. Those commands are
 developer feedback for changed surfaces; they do not replace the full release reproducibility gate.
@@ -402,13 +420,17 @@ Example instances:
 - a vector note carries poisoned instruction into a later session
 - a later tool call uses a value whose origin was laundered through memory
 
-What agents got wrong: the parent containment family was already solved, but the memory-poisoning
-descendant exposed the persistence boundary. Some agents failed the same 32 scenarios across labs,
-which made the transfer claim stronger than a single-provider result.
+What agents got wrong: **not currently known.** This entry used to report that agents failed the
+same 32 scenarios across two labs, which was the strongest transfer claim in the repository. Every
+counted trial on this family is now superseded — one of them because the host handed the subject a
+new memory facade per session while the public package promised the same one, which is a harness
+defect producing exactly the failure signature the campaign had pre-registered as its confirm
+signal. The 32-scenario cross-lab result is **withdrawn, not revised downward**.
 
-Current evidence: package-backed, real-agent difficulty evidenced, and cross-lab failure
-generalises for the measured family. Human evidence and counted adversarial no-bypass evidence are
-separate claims.
+Current evidence: package-backed and mutant-measured. **Zero counted agent trials**, so there is no
+difficulty evidence in either direction and no cross-lab claim; the parent containment family's
+already-solved verdict is unaffected and still holds. Human evidence and counted adversarial
+no-bypass evidence are separate claims and are also absent here.
 
 Relevant reports:
 
@@ -485,8 +507,12 @@ What agents got wrong: the counted Codex/OpenAI trial preserved both `subject.mj
 but still failed most graded scenarios, including implementation behavior and checker-quality
 checks.
 
-Current evidence: package-backed, mutant-measured and difficulty-evidenced by one OpenAI subject. It
-does not yet support cross-lab breadth or human-evidenced claims.
+Current evidence: package-backed, mutant-measured, with one counted failure that **has no root
+cause recorded**. Under the current gate that is `unlabelled`, not difficulty evidence — the family
+was described as difficulty-evidenced and SHIP in earlier drafts and both are withdrawn. Reading
+that transcript and recording whether the failure was capability, an underdetermined package or a
+harness defect is what the claim is waiting on; it does not support cross-lab breadth or
+human-evidenced claims either way.
 
 Relevant reports:
 

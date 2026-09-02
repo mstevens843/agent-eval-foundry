@@ -1,0 +1,33 @@
+{
+  "code": "CHALLENGE_STARTER_SOLVES_FAMILY",
+  "profile": "ACCESS_TOKEN_PROFILE",
+  "familyId": "access-token-scope-expansion",
+  "note": "The vacuity case. A grader that returned no cells has measured nothing, and 0/0 must refuse rather than certify — a gate that passes on no evidence is worse than no gate.",
+  "starterGrade": {
+    "scenarios": 0,
+    "failing": 0,
+    "hostErrors": 0
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "content": "# Fixture challenge package\n\nA structurally perfect package whose starter is the answer.\n"
+    },
+    {
+      "path": "SPEC.md",
+      "content": "# Spec\n\n- `ATS1_CURRENT_APPROVAL_REQUIRED` — stated so the fairness rule is satisfied.\n- `ATS2_CURRENT_TOKEN_REQUIRED` — stated so the fairness rule is satisfied.\n- `ATS3_SCOPE_MUST_MATCH_APPROVAL` — stated so the fairness rule is satisfied.\n- `ATS4_RESOURCE_MUST_MATCH_APPROVAL` — stated so the fairness rule is satisfied.\n- `ATS5_PRINCIPAL_MUST_MATCH_APPROVAL` — stated so the fairness rule is satisfied.\n- `ATS6_NO_DUPLICATE_GRANT` — stated so the fairness rule is satisfied.\n- `ATS7_AUDIT_CURRENT_EVIDENCE` — stated so the fairness rule is satisfied.\n- `ATS8_REPORT_MATCHES_LEDGER` — stated so the fairness rule is satisfied.\n"
+    },
+    {
+      "path": "types.ts",
+      "content": "export interface Request { readonly id: string }\n"
+    },
+    {
+      "path": "starter/subject.mjs",
+      "content": "// Starter. Implement `run` and export `subject`.\n//\n// Contract:\n//   run(view, authority) -> { decisions: [{ actionId, allowed, reason }], audit: [...] }\n//\n// The authority facade is the current source of truth. Cached snapshots may be stale.\n\nconst completed = new Set();\n\nconst auditEvent = (seq, actionId, reason, approval, token, detail) => ({\n  seq,\n  actionId,\n  reason,\n  observedApprovalId: approval?.id ?? null,\n  observedApprovalGeneration: approval?.generation ?? null,\n  observedApprovalStatus: approval?.status ?? null,\n  observedTokenId: token?.id ?? null,\n  observedTokenGeneration: token?.generation ?? null,\n  observedTokenStatus: token?.status ?? null,\n  observedScope: token?.scope ?? approval?.scope ?? null,\n  observedResource: token?.resource ?? approval?.resource ?? null,\n  observedPrincipal: token?.principal ?? approval?.principal ?? null,\n  detail,\n});\n\nexport const subject = {\n  id: \"starter\",\n  label: \"Starter stub - replace me\",\n\n  run(view, authority) {\n    const approval = authority.currentApproval(view.request.approvalId);\n    const token = authority.currentToken(view.request.tokenId);\n    const actionId = view.request.id;\n    const audit = [auditEvent(1, actionId, \"OBSERVED\", approval, token, \"observed current authority\")];\n\n    let allowed = false;\n    let reason = \"ATS1_CURRENT_APPROVAL_REQUIRED\";\n\n    if (completed.has(actionId)) {\n      reason = \"ATS6_NO_DUPLICATE_GRANT\";\n    } else if (approval === null || approval.status !== \"active\" || approval.generation !== view.request.approvalGeneration) {\n      reason = \"ATS1_CURRENT_APPROVAL_REQUIRED\";\n    } else if (token === null || token.status !== \"active\") {\n      reason = \"ATS2_CURRENT_TOKEN_REQUIRED\";\n    } else if (view.request.scope !== approval.scope || token.scope !== approval.scope || token.scope !== view.request.scope) {\n      reason = \"ATS3_SCOPE_MUST_MATCH_APPROVAL\";\n    } else if (view.request.resource !== approval.resource || token.resource !== approval.resource || token.resource !== view.request.resource) {\n      reason = \"ATS4_RESOURCE_MUST_MATCH_APPROVAL\";\n    } else if (view.request.principal !== approval.principal || token.principal !== approval.principal || token.principal !== view.request.principal) {\n      reason = \"ATS5_PRINCIPAL_MUST_MATCH_APPROVAL\";\n    } else {\n      allowed = true;\n      reason = \"ALLOWED\";\n      authority.issueToken(actionId, {\n        approvalId: view.request.approvalId,\n        tokenId: view.request.tokenId,\n        principal: view.request.principal,\n        resource: view.request.resource,\n        scope: view.request.scope,\n      });\n      completed.add(actionId);\n    }\n\n    audit.push(auditEvent(2, actionId, reason, approval, token, \"decision recorded\"));\n    return { decisions: [{ actionId, allowed, reason }], audit };\n  },\n};\n"
+    },
+    {
+      "path": "MANIFEST.json",
+      "content": "{\n  \"familyId\": \"access-token-scope-expansion\",\n  \"visibleFiles\": [\n    \"README.md\",\n    \"SPEC.md\",\n    \"starter/subject.mjs\",\n    \"types.ts\"\n  ],\n  \"hiddenArtifacts\": [\n    \"verify.ts\",\n    \"truth.ts\"\n  ]\n}\n"
+    }
+  ]
+}

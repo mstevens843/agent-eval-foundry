@@ -12,6 +12,27 @@ Written before any slot ran, so the result below cannot be reinterpreted into a 
 
 **Confirm signal.** At least one counted trial fails at least one scenario, with failures spread across more than one check — in particular `replay_idempotent` at replayCount 2, or `no_model_in_loop`, which no amount of care about clicking prevents.
 
+### Kill signal, evaluated
+
+| | |
+|---|---|
+| verdict | did not fire — at least one counted failure is root-caused to `capability` |
+| counted trials in this campaign's slots | 3 |
+| passed everything | 0 |
+| failed something | 3 |
+| root-caused `capability` | 2 |
+
+2 of 3 counted trial(s) failed with root cause `capability`; the family survives its own kill condition on the mechanical clauses
+
+Counted failures that are NOT difficulty evidence, and why:
+
+- `ui-codex-1` — root cause `unlabelled`
+
+Only the mechanical clauses are evaluated: whether every counted trial passed, and whether any
+counted failure has been root-caused to `capability`. Whatever else the prose above says — that
+failures concentrated on ambiguous wording, that a knob pattern was or was not present — is a
+judgement no code here makes, and it is printed rather than scored.
+
 ## The task that was run
 
 | | |

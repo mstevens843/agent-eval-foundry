@@ -52,4 +52,4 @@ CONTRACT_VIOLATION: yes | no
 FORBIDDEN_ACCESS_USED: yes | no
 
 Provider slot: external (external/unspecified).
-Pinned challenge hash: 2140032d835a87ff254d01b6b4652f21.
+Pinned challenge hash: 45f27b644a84364e3d3855f68cd243a2.

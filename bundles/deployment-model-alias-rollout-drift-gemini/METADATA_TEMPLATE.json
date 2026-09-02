@@ -10,7 +10,7 @@
   "runtime": "REPLACE: CLI, web UI, agent harness, or manual external runner",
   "runDate": "YYYY-MM-DD",
   "scenarioSetId": "drift-339-590affe3",
-  "challengeHash": "0e9b87a5f260544cfbc1cdce8f08938c",
+  "challengeHash": "805efb58c923f9e081db1b41967392d7",
   "status": "completed",
   "countsRequested": true,
   "relationToAuthor": "independent",

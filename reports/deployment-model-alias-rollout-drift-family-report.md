@@ -6,26 +6,26 @@ cluster: model alias drift during deployment and eval rollout decisions.
 
 ## Status
 
-**2 counted real-agent trial(s) exist.** Read the agent-results and diagnosis reports before quoting difficulty.
+**Local evidence only.** No counted real-agent trial exists for this family yet.
 
 | item | value |
 |---|---:|
 | declared behavior space | 663552 |
 | measured scenarios | 339 |
-| known-bad subjects and baselines | 13 |
+| known-bad subjects and baselines | 17 |
 | reference failures | 0 |
-| intended mutants caught | 13/13 |
+| intended mutants caught | 17/17 |
 | baselines blocked | 2/2 |
-| distinct catch sets | 18 |
-| mutant-detection axes | 6 |
+| distinct catch sets | 72 |
+| mutant-detection axes | 20 |
 | blind scenarios | 0 |
 | package files | 9 |
-| package bytes | 24493 |
+| package bytes | 28278 |
 | visible rule codes found | 10 |
 | scenario set id | `drift-339-590affe3` |
-| challenge hash | `0e9b87a5f260544cfbc1cdce8f08938c` |
-| counted real-agent trials | 2 |
-| stale/superseded trials | 0 |
+| challenge hash | `805efb58c923f9e081db1b41967392d7` |
+| counted real-agent trials | 0 |
+| stale/superseded trials | 2 |
 
 ## Knobs
 
@@ -64,6 +64,10 @@ asserts that every declared knob value appears at least once.
 | `audit-liar` | `audit_matches_rollout_source` | 267/339 |
 | `mixed-stream-collapser` | `concrete_version_attributed` | 95/339 |
 | `duplicate-effect-retrier` | `no_duplicate_effect` | 152/339 |
+| `reevaluation-blind` | `decision_matches_truth` | 85/339 |
+| `single-sample-sufficient` | `quarantine_when_insufficient` | 21/339 |
+| `used-samples-only-auditor` | `audit_matches_rollout_source` | 95/339 |
+| `claim-health-follower` | `no_subject_owned_model_truth` | 164/339 |
 | `no-op-always-quarantine` | `liveness` | 192/339 |
 | `always-continue` | `quarantine_when_insufficient` | 147/339 |
 

@@ -43,7 +43,7 @@ import type { TrialSet } from "../src/trials/types.js";
 
 const ROOT = new URL("..", import.meta.url).pathname;
 const FAMILY_ID = "delegated-wallet-scope-reconciliation";
-const CHALLENGE_HASH = "2140032d835a87ff254d01b6b4652f21";
+const CHALLENGE_HASH = "45f27b644a84364e3d3855f68cd243a2";
 const SCENARIO_SET_ID = "reconciliation-804-4b4cc8ff";
 const budgetBlindFixture = makeSubject("budget-blind-fixture", "Ignores remaining wallet budget", {
   ...REFERENCE_OPTIONS,
@@ -187,7 +187,10 @@ describe("delegated-wallet-scope-reconciliation family", () => {
     expect(prepared.pkg.files.map((file) => file.path)).not.toContain("truth.ts");
   });
 
-  it("grades the visible starter through the subprocess host without verifier drift", () => {
+  // The previous version of this test asserted the starter failed NOTHING, and it passed: the
+  // shipped starter was a complete solution, so the family measured whether an agent could copy the
+  // file it was handed. The starter is now a skeleton, and what has to hold is the opposite.
+  it("grades the visible starter through the subprocess host and the skeleton fails the suite", () => {
     const prepared = prepareChallenge(ROOT, FAMILY_ID);
     const starter = prepared.pkg.files.find((file) => file.path === "starter/subject.mjs");
     if (starter === undefined) throw new Error("starter missing from delegated-wallet challenge");
@@ -197,10 +200,13 @@ describe("delegated-wallet-scope-reconciliation family", () => {
 
     const route = routeFor(FAMILY_ID);
     const graded = route.grade(subjectPath);
+    const failing = graded.cells.filter((cell) => cell.failed.length > 0).length;
 
+    // hostErrors stays zero: a skeleton must still be a runnable module with the right export
+    // shape, so every failing cell is a graded behaviour and not a module that would not load.
     expect(graded.hostErrors).toBe(0);
     expect(graded.cells.length).toBe(route.scenarioCount());
-    expect(graded.cells.filter((cell) => cell.failed.length > 0)).toEqual([]);
+    expect(failing).toBe(804);
   });
 });
 

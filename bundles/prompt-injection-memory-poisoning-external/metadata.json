@@ -7,7 +7,7 @@
   "subjectId": "external",
   "effort": null,
   "scenarioSetId": "poisoning-288-b8b5b81e",
-  "challengeHash": "9b3e0c84addabc2e195ecbd490ba81dd",
+  "challengeHash": "7443bf6d6c6b2ccf69cc20f417ff048c",
   "isolation": "subprocess",
   "status": "completed",
   "notes": "REPLACE: how it was run, and anything unusual about the run.",

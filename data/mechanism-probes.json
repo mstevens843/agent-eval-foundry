@@ -592,5 +592,101 @@
       "access-token-to-wallet-spending-limit",
       "permission-to-deployment-scope-drift"
     ]
+  },
+  {
+    "id": "provider-failover-router-alias-drift-probe",
+    "mechanismId": "model-alias-drift",
+    "mode": "validation",
+    "currentStage": "mechanism_probe",
+    "decision": "promote",
+    "hypothesis": "Agents that handled model-alias rollout drift can still fail when a stable alias routes through provider failover and the authoritative router receipt arrives after stale cache or rollout-ledger observations.",
+    "domain": "model-routing incident response",
+    "expectedAgentFailure": "The subject trusts a cached provider route, a provider label, or an alias-level rollback target instead of reconciling router receipts, rollout ledgers and concrete provider/model eval evidence.",
+    "authoritativeTruthSource": {
+      "name": "router receipt ledger owned by harness",
+      "whatItSettles": "The concrete provider/model route that served each request and which rollback or failback target is currently authorized.",
+      "hiddenBehaviorDeclared": "Hidden cases vary failover timing, receipt delay, source disagreement, provider/model eval mix and required action; they do not add secret precedence rules.",
+      "whyNoPrivateKnowledge": "The public rules state receipt precedence, quarantine behavior and concrete target requirements; hidden cases sample only the declared route/evidence combinations."
+    },
+    "minimumPublicRules": [
+      "Alias identity is not routing truth.",
+      "Current route truth must be reconciled from router receipts plus rollout and eval ledgers.",
+      "Rollback and failback target concrete provider/model routes, not alias names.",
+      "A missing or delayed router receipt requires bounded quarantine rather than guessed continuation.",
+      "Audit must preserve source disagreement and provider/model attribution."
+    ],
+    "requiresPrivateKnowledge": false,
+    "probeScenarios": [
+      {
+        "id": "failover-provider-b-clean-continue",
+        "publicSetup": "Alias is cached on provider A, but current router receipt says provider B/model b2 served cleanly.",
+        "hiddenBehavior": "Failover timing and cache staleness are sampled from the declared router-ledger model.",
+        "mechanismVariation": "clean-provider-failover"
+      },
+      {
+        "id": "late-receipt-provider-b-rollback",
+        "publicSetup": "A late router receipt proves provider B/model b2 served a bad canary while the cache still says provider A.",
+        "hiddenBehavior": "Receipt delay and rollback target are sampled without changing the public target rule.",
+        "mechanismVariation": "late-receipt-rollback"
+      },
+      {
+        "id": "ledger-disagreement-quarantine",
+        "publicSetup": "Rollout and router ledgers disagree and eval evidence is incomplete.",
+        "hiddenBehavior": "The source disagreement is sampled from public precedence rules.",
+        "mechanismVariation": "source-disagreement"
+      },
+      {
+        "id": "valid-failback-after-b-regression",
+        "publicSetup": "Provider B fallback regressed and current receipts authorize failback to provider A.",
+        "hiddenBehavior": "The healthy failback route is part of the hidden sampled current state.",
+        "mechanismVariation": "authorized-failback"
+      },
+      {
+        "id": "invalid-failback-cache-stale",
+        "publicSetup": "Cache says provider A, but current receipts show provider B is healthy and failback is not authorized.",
+        "hiddenBehavior": "The stale cache trap is sampled from declared current-route rules.",
+        "mechanismVariation": "stale-cache-failback-trap"
+      }
+    ],
+    "expectedMutantsOrBaselines": [
+      "cached-router-truster",
+      "provider-name-only-decider",
+      "receipt-blind-rollbacker",
+      "always-failback",
+      "never-failback",
+      "ledger-disagreement-flattener",
+      "audit-router-liar",
+      "always-quarantine"
+    ],
+    "cheapValidationChecks": [
+      {
+        "id": "router-failover-local-probe",
+        "cost": "local",
+        "description": "Run continue, rollback, failback and quarantine scenarios against stale-router, receipt-blind, failback and audit-liar subjects before any full descendant build."
+      },
+      {
+        "id": "receipt-precedence-static-screen",
+        "cost": "static",
+        "description": "Check that public rules define when router receipts, rollout ledgers and eval streams control the action."
+      }
+    ],
+    "costEstimate": {
+      "firstEvidence": "local",
+      "engineerHours": 6,
+      "frontierUsd": 0
+    },
+    "promotionCriteria": [
+      "Reference-like behavior passes continue, rollback, valid failback and bounded quarantine cases.",
+      "Cached-router, provider-name-only, receipt-blind, failback and audit-liar probe subjects fail intended named checks.",
+      "Valid and invalid failback cases prevent both blanket failback and blanket quarantine from passing."
+    ],
+    "killCriteria": [
+      "The probe collapses to the parent deployment-alias ledger with no router receipt boundary.",
+      "The public contract cannot explain receipt precedence and quarantine without private routing context."
+    ],
+    "transferCandidates": [
+      "deployment-alias-to-routing-incident-response",
+      "deployment-alias-to-feature-flag-rollout-drift"
+    ]
   }
 ]

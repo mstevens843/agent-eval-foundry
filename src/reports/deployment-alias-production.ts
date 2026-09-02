@@ -7,6 +7,8 @@ import type {
   ProductionReadinessStatus,
 } from "../foundry/production-readiness.js";
 import type { CampaignPlan } from "../trials/campaign.js";
+import type { EvidenceLedger } from "../trials/evidence-lifecycle.js";
+import { isSupersededRun, renderRunRef, staleRunNote } from "../trials/migration.js";
 import { hashChallengeDir } from "../trials/run.js";
 import type { FamilyTrialAnalysis } from "./agent-results.js";
 import type { HumanGateEvidence, VerifierIntegrityEvidence } from "./ship-report.js";
@@ -81,6 +83,14 @@ export interface DeploymentAliasMatrixReadinessGapInput {
   readonly scenarioSetId: string;
   readonly providerDeltaDiagnosisPresent?: boolean;
   readonly evolutionOptionsPresent?: boolean;
+  /**
+   * The evidence ledgers, so a half-matrix slot cannot be reported as filled by a withdrawn run.
+   *
+   * The slot's note is pre-registration text: it was written before the run and says what the run
+   * would buy. It is preserved rather than rewritten — a pre-registration edited after the fact is
+   * not a pre-registration — and annotated where the run behind it no longer stands.
+   */
+  readonly ledgers?: readonly EvidenceLedger[];
 }
 
 export function renderDeploymentAliasProductionReadiness(
@@ -357,7 +367,27 @@ export function renderDeploymentAliasMatrixReadinessGap(
   input: DeploymentAliasMatrixReadinessGapInput,
 ): string {
   const { readiness, analysis, adversarial, human, openAiHalfMatrix } = input;
-  const nonOpenAiExternal = input.externalResults.filter(
+  const ledgers = input.ledgers ?? [];
+  const halfMatrixRuns = (openAiHalfMatrix?.slots ?? [])
+    .map((slot) => slot.runId)
+    .filter((runId): runId is string => runId !== null);
+  const halfMatrixNote = staleRunNote(halfMatrixRuns, ledgers);
+  const halfMatrixRecorded = (openAiHalfMatrix?.slots ?? []).filter(
+    (slot) =>
+      (slot.state === "RUN" || slot.state === "IMPORTED") &&
+      !(slot.runId !== null && isSupersededRun(slot.runId, ledgers)),
+  ).length;
+  const halfMatrixWithdrawn = halfMatrixRuns.filter((runId) => isSupersededRun(runId, ledgers)).length;
+  // A packet stays countable in its own frozen intake record after the migration that withdrew it,
+  // so the ledger is the gate here too: a withdrawn packet is not a countable packet.
+  const packetWithdrawn = (result: ExternalIntakeValidationResult): boolean => {
+    const runId = result.packet.metadata?.runId;
+    return runId !== null && runId !== undefined && isSupersededRun(runId, ledgers);
+  };
+  const countableExternal = input.externalResults.filter(
+    (result) => result.countable && !packetWithdrawn(result),
+  );
+  const nonOpenAiExternal = countableExternal.filter(
     (result) =>
       result.countable &&
       result.packet.metadata?.providerFamily !== null &&
@@ -413,7 +443,7 @@ export function renderDeploymentAliasMatrixReadinessGap(
       "external intake",
       input.externalResults.length > 0 ? "attempted" : "ready",
       input.externalResults.length > 0
-        ? `${input.externalResults.filter((result) => result.countable).length} countable / ${input.externalResults.length} imported packet(s)`
+        ? `${countableExternal.length} countable / ${input.externalResults.length} imported packet(s)${input.externalResults.filter(packetWithdrawn).length > 0 ? `, ${input.externalResults.filter(packetWithdrawn).length} withdrawn by a challenge migration` : ""}`
         : "packet/validator ready; no returned packet imported",
     ),
     row(
@@ -439,7 +469,7 @@ export function renderDeploymentAliasMatrixReadinessGap(
       openAiHalfMatrix === undefined ? "missing" : "planned",
       openAiHalfMatrix === undefined
         ? "no OpenAI half-matrix plan file"
-        : `${openAiHalfMatrix.slots.length} OpenAI slot(s); ${openAiHalfMatrix.slots.filter((slot) => slot.state === "RUN" || slot.state === "IMPORTED").length} already recorded`,
+        : `${openAiHalfMatrix.slots.length} OpenAI slot(s); ${halfMatrixRecorded} already recorded${halfMatrixWithdrawn > 0 ? `, and ${halfMatrixWithdrawn} withdrawn by a challenge migration — a withdrawn slot is an empty slot` : ""}`,
     ),
     row("Anthropic half-matrix", "blocked", "Anthropic quota unavailable; import only until restored"),
     row("full `/6` matrix", readiness.fullMatrixReady ? "ready" : "blocked", readiness.nextAction),
@@ -453,12 +483,23 @@ export function renderDeploymentAliasMatrixReadinessGap(
           "",
           "| slot | model | state | run | note |",
           "|---|---|---|---|---|",
-          ...openAiHalfMatrix.slots.map(
-            (slot) =>
-              `| \`${slot.slotId}\` | \`${slot.model}\` | \`${slot.state}\` | ${
-                slot.runId === null ? "pending" : `\`${slot.runId}\``
-              } | ${slot.note} |`,
-          ),
+          ...openAiHalfMatrix.slots.map((slot) => {
+            const withdrawn = slot.runId !== null && isSupersededRun(slot.runId, ledgers);
+            const note = withdrawn
+              ? `Slot is EMPTY. Its pre-registered note said: "${slot.note}" — the hash did not remain current, so the run cannot serve as a half-matrix slot and its on-target failure count is withdrawn.`
+              : slot.note;
+            return `| \`${slot.slotId}\` | \`${slot.model}\` | ${withdrawn ? `\`${slot.state}\`, **WITHDRAWN**` : `\`${slot.state}\``} | ${
+              slot.runId === null ? "pending" : renderRunRef(slot.runId, ledgers)
+            } | ${note} |`;
+          }),
+          "",
+          ...(halfMatrixNote === null
+            ? []
+            : [
+                halfMatrixNote,
+                "",
+                `With ${halfMatrixWithdrawn} of ${openAiHalfMatrix.slots.length} slot(s) withdrawn, the OpenAI half-matrix has ${halfMatrixRecorded} slot(s) actually filled. The plan is a plan, not partial evidence.`,
+              ]),
         ].join("\n"),
     "",
     "## Current Answer",
@@ -471,7 +512,7 @@ export function renderDeploymentAliasMatrixReadinessGap(
           : "Do not run the full `/6` matrix yet. The non-OpenAI smoke imported cleanly but solved the suite, so the next step is provider-delta diagnosis or evolution."
         : "Do not run the full `/6` matrix yet. Import or run one non-OpenAI counted smoke under the same hash first; OpenAI-only 3/6 would strengthen same-provider stability only.",
     "",
-    `Countable non-OpenAI external packets currently imported: ${nonOpenAiExternal.length}.`,
+    `Countable non-OpenAI external packets currently imported: ${nonOpenAiExternal.length}.${input.externalResults.filter(packetWithdrawn).length > 0 ? ` (${input.externalResults.filter(packetWithdrawn).length} further packet(s) imported cleanly and were withdrawn by a challenge migration; a withdrawn packet buys no cross-lab presence.)` : ""}`,
     "",
     "---",
     "",

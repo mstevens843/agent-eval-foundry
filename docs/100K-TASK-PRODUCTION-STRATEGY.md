@@ -198,7 +198,8 @@ The adaptive funnel now has an execution-oriented intake layer: Discovery Workbe
 
 It implements the missing machine before task families exist:
 
-- a 50-candidate pool in `data/candidate-pool.json`
+- a candidate pool in `data/candidate-pool.json` (the size, and every score, is in the generated
+  report rather than in this paper)
 - deterministic cheap screens for truth sources, hidden-rule fairness, reference plausibility,
   mutants, baseline cheats, private-context dependence, verifier feasibility, transfer potential and
   cost/axis tradeoffs
@@ -289,9 +290,9 @@ family "difficult" before a counted agent has attempted the current package hash
 
 The first exercised promotion is `access-token-scope-expansion`. The selected source was the first
 ranked promoted probe in the executable queue. The full family expands three token-scope probe cases
-into a 1,152-point declared state space and a 384-scenario measured set. Its reference passes, eight
-known-bad subjects/baselines fail intended checks, and the challenge package is leak-checked. That is
-validation-mode local evidence.
+into a declared state space and a measured scenario set. Its reference passes, every known-bad
+subject and baseline fails an intended check, and the challenge package is leak-checked. That is
+validation-mode local evidence, and the figures are in `reports/promotion-report.md`.
 
 Access-Token Smoke + Diagnosis + Transfer v1 then exercised the next gate:
 
@@ -304,24 +305,32 @@ probe-promoted family
   -> matrix gate
 ```
 
-The counted OpenAI/Codex smoke trial for `access-token-scope-expansion` passed 384 of 384 scenarios
-under the pinned package hash. That is a useful negative result for the funnel: the pre-registered
-kill signal fired, and the next step is already_solved_or_needs_evolution, not a full `/6` matrix.
+> **Withdrawn 2026-09-01.** Earlier versions of this section reported that the counted OpenAI/Codex
+> smoke trial for `access-token-scope-expansion` passed every graded scenario, fired the
+> pre-registered `already_solved_or_needs_evolution` signal, and blocked matrix spend. **That trial
+> is superseded and does not count.** The family shipped a starter implementation that was itself a
+> complete passing solution, so the trial graded the answer key. The starter is stripped, the package
+> re-hashed, and the *already-solved* verdict is withdrawn rather than restated. This family has
+> never been attempted by a real agent.
+
 The transfer test to wallet spending limits is declared so the mechanism can be re-probed in a
 different domain, but no transfer evidence is claimed until that target-domain probe or family runs.
 
-Access-Token Evolution v1 turns that clean pass into a concrete next artifact. The evolution engine
-now has access-token-specific operators for durable state, delegated authority, authoritative
-reconciliation, scope downgrade/revocation, truthful audit history and liveness pressure. It
-proposes `delegated-wallet-scope-reconciliation`, runs a six-scenario local probe against
-cached-scope, requested-scope, revocation-blind, audit-liar, over-blocker and receipt-trusting
-subjects, and records a ready promotion. The promoted descendant is now a full validation-mode
-family with 804 measured scenarios from an 82,944-point declared space, a clean reference, 10/10
-known-bad subjects and baselines caught, 3 mutant-detection axes, a leak-checked package and a
-one-slot OpenAI/Codex smoke campaign. That smoke trial passed all 804 scenarios cleanly under the
-current package hash, so the descendant also routes to already_solved_or_needs_evolution. This is a
-second example of a clean smoke pass preventing matrix spend rather than becoming a difficulty
-claim.
+Access-Token Evolution v1 is the machinery that turns a clean pass into a concrete next artifact.
+The evolution engine has access-token-specific operators for durable state, delegated authority,
+authoritative reconciliation, scope downgrade/revocation, truthful audit history and liveness
+pressure. It proposes `delegated-wallet-scope-reconciliation`, runs a six-scenario local probe
+against cached-scope, requested-scope, revocation-blind, audit-liar, over-blocker and
+receipt-trusting subjects, and records a ready promotion. The promoted descendant is a full
+validation-mode family with a clean reference, every known-bad subject and baseline caught,
+mutant-detection axes and a leak-checked package; the figures are in
+`reports/delegated-wallet-scope-reconciliation-family-report.md`.
+
+> **Withdrawn 2026-09-01.** Its smoke trial is superseded for the same reason as its parent's — the
+> descendant also shipped a passing starter. So this is *not* a second example of a clean smoke pass
+> preventing matrix spend; there was no clean smoke pass. The evolution decision that built this
+> family stands as a description of the machinery and is recorded as `PREMISE WITHDRAWN` as a
+> decision, in `reports/discovery-workbench-report.md`.
 
 ### Refinement: Lineage Kill And Reallocation
 
@@ -329,18 +338,26 @@ The next refinement is lineage learning. A family is no longer judged only as a 
 foundry records parent/child edges, evolution operators, what stayed fixed, what changed, local
 evidence, smoke outcomes, provider/subject identity and whether full matrix spend was blocked.
 
-The access-token branch is the first concrete example. `access-token-scope-expansion` preserved a
-local requested-vs-approved authority mechanism and passed a counted OpenAI/Codex smoke trial
-cleanly. The descendant, `delegated-wallet-scope-reconciliation`, added time separation, delegated
-authority, durable cache, revocation, downgrade, budget reconciliation, truthful audit and liveness
-pressure. It also passed a counted OpenAI/Codex smoke trial cleanly.
+The access-token branch was the worked example, and it is the one this paper has to retract.
+`access-token-scope-expansion` preserved a local requested-vs-approved authority mechanism; its
+descendant `delegated-wallet-scope-reconciliation` added time separation, delegated authority,
+durable cache, revocation, downgrade, budget reconciliation, truthful audit and liveness pressure.
+Both were reported here as having passed a counted OpenAI/Codex smoke trial cleanly, yielding a
+`lineage_solved_twice` verdict and a portfolio decision to pause the branch.
 
-That sequence is useful negative evidence. It says this branch is too solvable for the current
-OpenAI subject, not that the foundry should buy two full `/6` matrices. The lineage verdict is
-`lineage_solved_twice`; the portfolio action is to pause/kill that lineage for now, label the
-scoring penalty as lineage-derived feedback, and reallocate build effort toward a different
-mechanism cluster such as model-alias rollout drift, delayed external receipts, browser/live-state
-replay, persistent prompt injection or hidden dependency discovery.
+> **Withdrawn 2026-09-01.** Both packages shipped starter implementations that passed their own
+> suites, so both smoke trials graded the answer key. Both are superseded. **The lineage was never
+> solved once, let alone twice**, `lineage_solved_twice` is withdrawn, and so is the matrix spend
+> that pause was credited with avoiding. The reallocation still happened and still produced a
+> family; what is withdrawn is the evidence that justified it.
+
+The rule the example was illustrating is unchanged and is the point worth keeping: if a parent and
+descendant both pass clean counted smoke trials on the same subject, do not keep hardening that
+branch blindly — record it, label the scoring penalty as lineage-derived feedback, and reallocate
+build effort toward a different mechanism cluster such as model-alias rollout drift, delayed
+external receipts, browser/live-state replay, persistent prompt injection or hidden dependency
+discovery. What the current record cannot supply is an instance of that rule firing on real
+evidence.
 
 This keeps the funnel adaptive in both directions. A hard descendant can earn more evidence; a clean
 descendant can stop spend. The goal is not to keep evolving a favorite mechanism. The goal is to
@@ -351,44 +368,50 @@ That reallocation has now been executed once. The next branch selected by the li
 `deployment-model-alias-rollout-drift`, is a full validation-mode family rather than another
 scope-authority hardening attempt. It models model aliases, concrete model versions, rollout/eval
 ledgers, canary windows, stale cached alias maps, rollback/continue/quarantine/re-evaluation
-decisions and truthful audit history. The local evidence is deliberately bounded: 339 measured
-scenarios, a clean reference, 13/13 known-bad subjects caught by intended checks, 2/2 baselines
-blocked, 6 mutant-detection axes and a leak-checked public package. Its counted OpenAI/Codex smoke
-trial failed 192/339 scenarios on target under the pinned package hash, so the branch now has
-OpenAI-only smoke-difficulty evidence. That still is not cross-lab breadth, and a production matrix
-is an earned next decision rather than automatic spend. Deployment-Alias Production Readiness v1
-makes that explicit. A current-hash Claude/Anthropic external smoke imported cleanly and passed
-339/339, creating a provider-delta result rather than cross-lab difficulty: OpenAI failed, Claude
-solved. `/6` remains blocked; provider-delta diagnosis now routes the branch to evolution unless an
-explicit override is recorded.
-The family also has one counted Codex/OpenAI no-bypass adversarial audit under `fs-sandbox`, which
-is verifier-integrity evidence for one provider family, not cross-lab cheat-resistance evidence.
+decisions and truthful audit history. The local evidence is deliberately bounded: a measured
+scenario set, a clean reference, every known-bad subject caught by an intended check, both baselines
+blocked, mutant-detection axes and a leak-checked public package. Those figures are the summary
+table of `reports/deployment-model-alias-rollout-drift-family-report.md`.
 
-Provider Delta + Reallocation Decision v1 makes this mixed state explicit. The provider-delta report
-is a decision table, not a matrix result: OpenAI fail plus no non-OpenAI record means import one;
+> **Withdrawn 2026-09-01.** This section reported a counted OpenAI/Codex smoke trial failing 192 of
+> 339 scenarios on target, then a current-hash Claude/Anthropic import passing 339/339, and read the
+> pair as a **provider delta**: OpenAI failed, Claude solved. **Both trials are superseded** by the
+> starter-leak repair, which replaced the package hash they pinned. With nothing counted on either
+> side, `provider-delta report` now returns `non_openai_missing`.
+>
+> Withdrawn with them: the OpenAI-only smoke-difficulty evidence, the cross-lab smoke presence, the
+> provider delta itself and its `openai_specific_failure` / `non_openai_solver_delta` labels, and the
+> one counted Codex/OpenAI no-bypass adversarial audit — that audit ran against the replaced hash and
+> does not count either. **This family has no counted trial and no counted adversarial audit.** `/6`
+> was blocked throughout and remains blocked, which is now the only conclusion the record supports.
+
+Provider Delta + Reallocation Decision v1 is still the decision layer, and it is worth keeping
+because the decision table is what refused to promote the withdrawn result into matrix spend. It is
+a decision table, not a matrix result: OpenAI fail plus no non-OpenAI record means import one;
 OpenAI fail plus non-OpenAI fail means matrix candidate; OpenAI fail plus non-OpenAI solve means
-diagnose or evolve; both solve means reallocate. Repeated OpenAI runs measure same-provider
-stability only. See `docs/TARGETED-DEV-GATES.md` for the focused commands used while iterating on
-this layer.
+diagnose or evolve; both solve means reallocate; and nothing counted on either side means run one.
+Repeated OpenAI runs measure same-provider stability only. See `docs/TARGETED-DEV-GATES.md` for the
+focused commands used while iterating on this layer.
 
-Provider Delta Diagnosis + Evolution Decision v1 is the next refinement: once the Claude clean solve
-exists, the foundry stops asking whether a second lab was present and asks what the delta means. The
-diagnosis reads preserved submissions and transcripts only, compares failed checks, failed scenario
-sets, knob correlations and implementation strategy signals, and labels the evidence boundary. In
-the current deployment-alias state it routes to evolution rather than `/6`:
-`provider-failover-router-alias-drift-probe` is selected as the cheapest next evidence, while
-OpenAI repeats remain a same-provider stability plan that needs explicit approval.
+Provider Delta Diagnosis + Evolution Decision v1 is the next refinement: once a delta exists, the
+foundry stops asking whether a second lab was present and asks what the delta means. The diagnosis
+reads preserved submissions and transcripts only, compares failed checks, failed scenario sets, knob
+correlations and implementation strategy signals, and labels the evidence boundary. It never runs a
+model. The route it selected for deployment-alias,
+`provider-failover-router-alias-drift-probe`, has executable local probe evidence of its own and can
+emit a task-shape draft — that part is independent of the withdrawn trials — but it is not a built
+descendant, package, model trial or matrix gate, and the diagnosis that selected it rested on a
+delta that no longer exists.
 
-Human + External Evidence Intake v1 makes the next handoff mechanical instead of informal. The
-deployment-alias branch now emits current-hash external packets for Claude, Gemini and generic
-third-party runners, plus a family-specific human clean-room packet. A returned packet must preserve
-metadata, transcript, submission, verifier output, scenario set and the exact public challenge hash;
-it must not include hidden verifier/reference/scenario artifacts or private hints. Invalid packets
-are retained as no-count evidence rather than discarded. The prepared OpenAI 3/6 half-matrix treats
-the existing counted smoke as slot 1 and leaves two OpenAI repeats planned, but that would measure
-same-provider stability only. The imported Claude clean solve satisfies the non-OpenAI smoke
-presence gate but not the cross-lab difficulty gate, so it still does not justify a full `/6` matrix
-by itself.
+Human + External Evidence Intake v1 makes the next handoff mechanical instead of informal, and it is
+the layer that executed the withdrawal above. The deployment-alias branch emits current-hash external
+packets for Claude, Gemini and generic third-party runners, plus a family-specific human clean-room
+packet. A returned packet must preserve metadata, transcript, submission, verifier output, scenario
+set and the exact public challenge hash; it must not include hidden verifier/reference/scenario
+artifacts or private hints. Invalid packets are retained as no-count evidence rather than discarded —
+and a packet that was valid when imported stops counting once the hash it pinned stops being current,
+which is exactly what happened to the Claude run. The prepared OpenAI half-matrix has no counted slot
+1 any more, so it is a plan and not a partial result.
 
 ### Stage 0: Candidate Pool
 

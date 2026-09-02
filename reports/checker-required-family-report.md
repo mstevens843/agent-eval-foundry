@@ -4,8 +4,8 @@ Family: `checker-required-memory-poisoning`.
 
 | item | value |
 |---|---|
-| current status | **SHIP** |
-| ship verdict | **SHIP** |
+| current status | **trial-ready** |
+| ship verdict | **NOT-READY** |
 | declared space | 2376 |
 | measured scenarios | 792 |
 | known-bad submissions | 20 |

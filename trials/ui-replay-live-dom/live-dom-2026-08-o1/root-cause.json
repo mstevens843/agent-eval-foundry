@@ -1,0 +1,17 @@
+{
+  "runId": "live-dom-2026-08-o1",
+  "familyId": "ui-replay-live-dom",
+  "label": "infrastructure",
+  "rationale": "countability.json records `crashed` with no artifact produced: the runner exited non-zero before the subject wrote anything, so zero scenarios were graded. Nothing about the subject was measured, and promoting a crash to a failure is exactly how a harness bug becomes a difficulty finding.",
+  "evidenceRead": [
+    "countability.json",
+    "result.json",
+    "transcript.txt"
+  ],
+  "labelledBy": {
+    "kind": "automated",
+    "id": "lane-4a-root-cause-review",
+    "date": "2026-09-01"
+  },
+  "diagnosisReading": null
+}

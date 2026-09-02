@@ -18,6 +18,15 @@
 
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import {
+  ACCESS_TOKEN_PROFILE,
+  type CheckableChallengeFile,
+  type LeakProfile,
+  STARTER_MIN_FAILING_FRACTION,
+  type StarterCheckResult,
+  checkChallengePackage,
+  checkStarterFailsEnough,
+} from "../src/challenge/package-check.js";
 import { parseMechanismProbe, parseTransferTest } from "../src/foundry/adaptive-funnel.js";
 import { assertBudgetInputs, assertPlanHonest } from "../src/foundry/budget-check.js";
 import { planBudget } from "../src/foundry/budget.js";
@@ -49,12 +58,72 @@ interface FixtureEntry {
     | "registry"
     | "probe"
     | "transfer"
-    | "discovery-candidate";
+    | "discovery-candidate"
+    | "challenge-package";
   readonly code: string;
   readonly note: string;
 }
 
 const MANIFEST = read("manifest.json") as FixtureEntry[];
+
+/**
+ * A whole agent-facing challenge package, checked by the package checker rather than by a row
+ * parser.
+ *
+ * `starterGrade` is the counts a real grader WOULD return, expanded below into the cell shape
+ * `checkStarterFailsEnough` consumes. That indirection is the only way this rule can live in a
+ * fixture corpus at all: grading one family's starter for real means running its suite in
+ * subprocesses and costs 10-90 seconds, which would turn a millisecond corpus into a two-minute one
+ * and put pressure on someone to skip it. The rule does not care where the counts came from, so the
+ * fixture supplies them.
+ *
+ * The division of labour, which is the point rather than a compromise: the fixture pins the RULE
+ * (the 20% floor, the boundary one scenario under it, the refusal to certify 0 of 0), while
+ * `test/starter-must-fail.test.ts` pins the FACT by running this same function over all eight built
+ * families with their real graders and no skip condition. Neither substitutes for the other.
+ */
+interface StarterFixture {
+  readonly profile: string;
+  readonly familyId: string;
+  readonly starterGrade: {
+    readonly scenarios: number;
+    readonly failing: number;
+    readonly hostErrors: number;
+  };
+  readonly files: readonly CheckableChallengeFile[];
+}
+
+/** Leak profiles a fixture may name. Named in the fixture so it cannot silently fall back to another family's profile. */
+const PROFILES: Readonly<Record<string, LeakProfile>> = { ACCESS_TOKEN_PROFILE };
+
+/**
+ * Run the full package check over a fixture: first every fast rule, then the starter rule.
+ *
+ * The fast pass is not ceremony. Each of these fixtures claims to be a structurally PERFECT package
+ * whose only defect is behavioural, and that claim is what makes it a demonstration of the starter
+ * rule rather than of some filename rule that happened to fire first. Asserting it here means a
+ * fixture that drifts into tripping an earlier rule reports as a broken fixture instead of quietly
+ * scoring coverage for a rule it never reached.
+ */
+const runPackageGate = (f: StarterFixture): StarterCheckResult => {
+  const profile = PROFILES[f.profile];
+  if (profile === undefined) {
+    throw new Error(`fixture names an unknown leak profile ${f.profile}`);
+  }
+  try {
+    checkChallengePackage(f.files, profile);
+  } catch (err) {
+    throw new Error(
+      `fixture is not a clean package — the fast checker rejected it (${String(err)}), so this entry would be demonstrating that rule and not the starter rule`,
+    );
+  }
+  return checkStarterFailsEnough(f.familyId, f.files, () => ({
+    cells: Array.from({ length: f.starterGrade.scenarios }, (_, i) => ({
+      failed: i < f.starterGrade.failing ? ["some_check"] : [],
+    })),
+    hostErrors: f.starterGrade.hostErrors,
+  }));
+};
 
 const PARSERS: Record<FixtureEntry["kind"], (v: unknown) => unknown> = {
   mechanism: (v) => parseMechanism(v, "fixture"),
@@ -65,6 +134,7 @@ const PARSERS: Record<FixtureEntry["kind"], (v: unknown) => unknown> = {
   probe: (v) => parseMechanismProbe(v, "fixture"),
   transfer: (v) => parseTransferTest(v, "fixture"),
   "discovery-candidate": (v) => parseDiscoveryCandidate(v, "fixture"),
+  "challenge-package": (v) => runPackageGate(v as StarterFixture),
   // Cross-collection references are checked when the registry is assembled, not when a single row
   // is parsed. Routing this fixture differently is the point: a dangling id is invisible to the row
   // validator by design, and a corpus that hid that would be testing the wrong layer.
@@ -106,6 +176,12 @@ const COVERED_IN_ORCHESTRATION_TEST: readonly RuleCode[] = [
   "BANK_INCOMPARABLE_SCENARIO_SET",
   "TRIAL_BASELINE_IMPOSTER",
 ];
+
+/**
+ * Rules whose known-bad case lives in `history-task-attribution.test.ts`: the cell-level guard that
+ * stops the Harbor importer hedging a fabricated failure by marking a cell both ungraded and failing.
+ */
+const COVERED_IN_HISTORY_TASK_TEST: readonly RuleCode[] = ["TRIAL_CELL_UNMEASURED_WITH_FAILURES"];
 
 /**
  * Rules whose known-bad case lives in `evolution.test.ts`: the kill taxonomy, the evolution engine,
@@ -273,6 +349,10 @@ const COVERED_IN_LINEAGE_TEST: readonly RuleCode[] = [
   "LINEAGE_MATRIX_AFTER_CLEAN_PASS",
   "LINEAGE_FEEDBACK_UNLABELLED",
   "LINEAGE_NO_REALLOCATION",
+  "LINEAGE_WITHDRAWN_EVIDENCE_CLAIMED_INFORMATIVE",
+  "LINEAGE_WITHDRAWAL_UNREASONED",
+  "LINEAGE_FEEDBACK_WITHDRAWN_UNREASONED",
+  "LINEAGE_REALLOCATION_ON_WITHDRAWN_EVIDENCE",
 ];
 
 /** Rules whose known-bad case lives in `provider-delta.test.ts`: cross-provider smoke routing. */
@@ -340,6 +420,17 @@ const COVERED_IN_EXTERNAL_INTAKE_TEST: readonly RuleCode[] = [
   "EXTERNAL_INTAKE_PROVIDER_FAMILY_MISLABELLED",
 ];
 
+/** Per-trial root-cause records; every one has a known-bad case in test/root-cause.test.ts. */
+const COVERED_IN_ROOT_CAUSE_TEST: readonly RuleCode[] = [
+  "ROOTCAUSE_UNKNOWN_LABEL",
+  "ROOTCAUSE_NO_RATIONALE",
+  "ROOTCAUSE_NO_EVIDENCE",
+  "ROOTCAUSE_NO_LABELLER",
+  "ROOTCAUSE_RUN_MISMATCH",
+  "ROOTCAUSE_LABEL_CONTRADICTS_OUTCOME",
+  "ROOTCAUSE_CAPABILITY_OVER_UNREAD_DIAGNOSIS",
+];
+
 /** Rules exercised by code below rather than by a JSON fixture. Keeps assertion 3 honest. */
 const PROGRAMMATIC: readonly RuleCode[] = [
   "E_TYPE",
@@ -380,6 +471,30 @@ describe("known-bad fixtures", () => {
       expect(code, `${entry.file} was rejected, but by the wrong rule`).toBe(entry.code);
     });
   }
+});
+
+describe("the challenge-package harness is not simply 'always throws'", () => {
+  // Assertion 2 above proves each fixture is rejected for the starter rule. It cannot prove the
+  // harness that feeds the rule is honest: a `runPackageGate` that ignored `starterGrade` and always
+  // handed the checker a passing starter would reject all three fixtures for the right code while
+  // demonstrating nothing about the floor. One accepting case fixes that, and pins where the
+  // boundary is at the same time.
+  const solvesFamily = read("challenge-packages/starter-solves-family.json") as StarterFixture;
+
+  it("accepts the same package when its starter fails exactly the floor", () => {
+    const atFloor = { ...solvesFamily, starterGrade: { scenarios: 100, failing: 20, hostErrors: 0 } };
+    const result = runPackageGate(atFloor);
+    expect(result.failing).toBe(20);
+    expect(result.scenarios).toBe(100);
+    expect(result.failingFraction).toBe(STARTER_MIN_FAILING_FRACTION);
+  });
+
+  it("rejects it one scenario below the floor, so the counts are what decide", () => {
+    const under = { ...solvesFamily, starterGrade: { scenarios: 100, failing: 19, hostErrors: 0 } };
+    expect(() => runPackageGate(under)).toThrowError(
+      expect.objectContaining({ code: "CHALLENGE_STARTER_SOLVES_FAMILY" }),
+    );
+  });
 });
 
 describe("structural rules", () => {
@@ -594,6 +709,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ...fromFixtures,
       ...PROGRAMMATIC,
       ...COVERED_IN_TRIALS_TEST,
+      ...COVERED_IN_HISTORY_TASK_TEST,
       ...COVERED_IN_ORCHESTRATION_TEST,
       ...COVERED_IN_EVOLUTION_TEST,
       ...COVERED_IN_ROUTING_TEST,
@@ -608,6 +724,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ...COVERED_IN_DEPLOYMENT_ALIAS_TEST,
       ...COVERED_IN_PROVIDER_DELTA_DIAGNOSIS_TEST,
       ...COVERED_IN_EXTERNAL_INTAKE_TEST,
+      ...COVERED_IN_ROOT_CAUSE_TEST,
     ]);
     const uncovered = RULE_CODES.filter((c) => !covered.has(c));
     expect(
@@ -621,6 +738,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
     // the exemption is a hole rather than a pointer.
     const delegated: readonly (readonly [string, readonly RuleCode[]])[] = [
       ["test/trials.test.ts", COVERED_IN_TRIALS_TEST],
+      ["test/history-task-attribution.test.ts", COVERED_IN_HISTORY_TASK_TEST],
       ["test/orchestration.test.ts", COVERED_IN_ORCHESTRATION_TEST],
       ["test/evolution.test.ts", COVERED_IN_EVOLUTION_TEST],
       ["test/trials-routing.test.ts", COVERED_IN_ROUTING_TEST],
@@ -635,6 +753,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ["test/deployment-alias-family.test.ts", COVERED_IN_DEPLOYMENT_ALIAS_TEST],
       ["test/provider-delta-diagnosis.test.ts", COVERED_IN_PROVIDER_DELTA_DIAGNOSIS_TEST],
       ["test/external-intake.test.ts", COVERED_IN_EXTERNAL_INTAKE_TEST],
+      ["test/root-cause.test.ts", COVERED_IN_ROOT_CAUSE_TEST],
     ];
     for (const [file, codes] of delegated) {
       const source = readFileSync(`${ROOT}${file}`, "utf8");

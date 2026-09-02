@@ -19,6 +19,8 @@
 import type { VariantProposal } from "../foundry/evolve.js";
 import type { KillAnalysis } from "../foundry/kill.js";
 import type { TaskShape } from "../foundry/schema.js";
+import type { EvidenceLedger } from "../trials/evidence-lifecycle.js";
+import { isSupersededRun, renderRunRef, staleRunNote } from "../trials/migration.js";
 import type { FamilyTrialAnalysis } from "./agent-results.js";
 
 export type ValidationVerdict =
@@ -63,6 +65,15 @@ export interface ValidationInput {
   readonly operatorKnob: string | null;
   /** Checks whose failure would be evidence FOR the operator's mechanism. */
   readonly operatorChecks: readonly string[];
+  /**
+   * The evidence ledgers.
+   *
+   * This report is four claims stacked on a set of run ids, and three of the four are claims ABOUT
+   * those runs. When the runs are withdrawn the claims do not become weaker — they become unmade.
+   * `FamilyTrialAnalysis` cannot see that: it classifies a trial by `record.counts`, which is about
+   * grading and says nothing about whether the task the trial was graded against still exists.
+   */
+  readonly ledgers?: readonly EvidenceLedger[];
 }
 
 /**
@@ -142,13 +153,38 @@ const VERDICT_MEANING: Readonly<Record<ValidationVerdict, string>> = {
 export function renderEvolutionValidation(v: OperatorValidation, input: ValidationInput): string {
   const child = input.childAnalysis;
   const knobSplit = child.knobSplits.find((k) => k.knob === v.operatorKnob);
+  const ledgers = input.ledgers ?? [];
+  // The withdrawn runs come from the LEDGER, not from `perTrial`, because by the time the analysis
+  // reaches this renderer they are already gone from it: `analyseFamilyTrials` drops a trial whose
+  // hash no longer matches, which is correct and leaves this report with an empty table and a
+  // mechanical verdict of `no-evidence`. Rendering that as-is is the same bug wearing the opposite
+  // coat — an absence CREATED by a repair, presented as though nothing had ever been attempted.
+  const childLedger = ledgers.find((ledger) => ledger.familyId === v.childId);
+  const withdrawnRuns = childLedger?.superseded ?? [];
+  const noLiveChildEvidence = v.perTrial.length === 0 && withdrawnRuns.length > 0;
+  const perTrialNote = staleRunNote(
+    v.perTrial.length === 0 ? withdrawnRuns : v.perTrial.map((t) => t.runId),
+    ledgers,
+  );
+  const withdrawnMark = noLiveChildEvidence ? "**withdrawn**" : "";
 
   return [
     "# Evolution validation",
     "",
     `\`${v.parentId}\` → \`${v.childId}\` via ${v.operators.map((o) => `\`${o}\``).join(" + ") || "no recorded operator"}`,
     "",
-    `**Verdict: ${v.verdict}.** ${VERDICT_MEANING[v.verdict]}`,
+    noLiveChildEvidence
+      ? [
+          `**Verdict: WITHDRAWN.** The mechanical verdict is \`${v.verdict}\`, and the reason there is no`,
+          `evidence is that ${withdrawnRuns.length} counted descendant trial(s) were INVALIDATED by a challenge`,
+          "migration — not that the descendant was never attempted. Those two look identical in a table of",
+          "zeroes and they are not the same fact: one is a family nobody has run, the other is a family",
+          "whose results were paid for and then withdrawn by the repair those very results prompted.",
+          "",
+          "So the operator is neither confirmed nor falsified. It is **untested against the family as it",
+          "now stands**, and every number this report used to carry is withdrawn rather than restated.",
+        ].join("\n")
+      : `**Verdict: ${v.verdict}.** ${VERDICT_MEANING[v.verdict]}`,
     "",
     "## The chain of claims",
     "",
@@ -159,21 +195,44 @@ export function renderEvolutionValidation(v: OperatorValidation, input: Validati
     "|---|---|---|---|",
     `| 1 | the parent died for the recorded reason | ${input.killAnalysis.primary?.reason === "already_solved" ? "**holds**" : "—"} | ${v.parentCounted} counted trials, ${v.parentFailures} failing |`,
     `| 2 | the descendant is materially different | ${input.childShape.mechanisms.join(",") !== input.parentShape.mechanisms.join(",") ? "**holds**" : "FAILS"} | mechanisms ${input.parentShape.mechanisms.join(", ")} → ${input.childShape.mechanisms.join(", ")} |`,
-    `| 3 | the descendant is harder | ${v.harder ? "**holds**" : "does not hold"} | ${v.childFailures} of ${v.childCounted} counted trials failed something, against ${v.parentFailures} of ${v.parentCounted} for the parent |`,
-    `| 4 | it is harder BECAUSE of the operator | ${v.attributable ? "**supported**" : "unsupported"} | ${v.operatorKnob === null ? "the operator adds no knob to split on" : `failures split on \`${v.operatorKnob}\``} |`,
+    `| 3 | the descendant is harder | ${noLiveChildEvidence ? withdrawnMark : v.harder ? "**holds**" : "does not hold"} | ${noLiveChildEvidence ? `the ${withdrawnRuns.length} descendant trial(s) this rested on are invalidated and do not count; the comparison has no live left-hand side` : `${v.childFailures} of ${v.childCounted} counted trials failed something, against ${v.parentFailures} of ${v.parentCounted} for the parent`} |`,
+    `| 4 | it is harder BECAUSE of the operator | ${noLiveChildEvidence ? withdrawnMark : v.attributable ? "**supported**" : "unsupported"} | ${noLiveChildEvidence ? "the knob split is pooled over the same invalidated trials, so there is nothing to attribute" : v.operatorKnob === null ? "the operator adds no knob to split on" : `failures split on \`${v.operatorKnob}\``} |`,
     "",
-    "## Per counted trial",
+    ...(noLiveChildEvidence
+      ? [
+          "Claim 1 still holds: the parent's trials were not touched by this migration. Claims 3 and 4",
+          "are withdrawn, and claim 2 is a statement about two shapes rather than about any trial, so it",
+          "survives — a materially different descendant that nothing has validly attempted.",
+          "",
+        ]
+      : []),
+    noLiveChildEvidence ? "## Per trial, all withdrawn" : "## Per counted trial",
     "",
-    "| run | scenarios failed | checks | supports the operator? |",
-    "|---|---:|---|---|",
+    ...(noLiveChildEvidence
+      ? [
+          "The descendant's trials are preserved and are listed here rather than dropped: invalidated",
+          "trials are real spend, and a table that silently loses them makes the repair look free. Every",
+          "one of them was graded against a package this repository no longer produces, so none of them",
+          "is a reading about the operator in either direction.",
+          "",
+          ...withdrawnRuns.map((runId) => `- \`${runId}\``),
+        ]
+      : []),
+    ...(noLiveChildEvidence
+      ? []
+      : ["| run | scenarios failed | checks | supports the operator? |", "|---|---:|---|---|"]),
     ...v.perTrial.map(
       (t) =>
-        `| \`${t.runId}\` | ${t.failed} | ${t.checks.map((c) => `\`${c}\``).join(", ") || "—"} | ${t.supportsOperator ? "**yes**" : "no"} |`,
+        `| ${renderRunRef(t.runId, ledgers)} | ${t.failed} | ${t.checks.map((c) => `\`${c}\``).join(", ") || "—"} | ${isSupersededRun(t.runId, ledgers) ? "no longer answerable" : t.supportsOperator ? "**yes**" : "no"} |`,
     ),
     "",
-    ...v.perTrial.map((t) => `- **${t.runId}**: ${t.reading}`),
+    ...v.perTrial.map(
+      (t) =>
+        `- **${t.runId}**: ${isSupersededRun(t.runId, ledgers) ? `withdrawn. It ${t.reading}, and that reading was about a package this repository no longer produces.` : t.reading}`,
+    ),
     "",
-    ...(knobSplit === undefined
+    ...(perTrialNote === null ? [] : [perTrialNote, ""]),
+    ...(knobSplit === undefined || noLiveChildEvidence
       ? []
       : [
           `## The operator's knob: \`${v.operatorKnob}\``,
@@ -187,11 +246,24 @@ export function renderEvolutionValidation(v: OperatorValidation, input: Validati
             (r) => `| \`${r.value}\` | ${r.scenarios} | ${r.failed} | ${(r.rate * 100).toFixed(1)}% |`,
           ),
           "",
-          knobSplit.discriminates
-            ? "**The rate moves with the knob.** That is the operator working: the same implementations are more wrong at the values the operator introduced."
-            : "**The rate does not move with the knob.** Whatever produced the failures, it was not this parameter.",
+          noLiveChildEvidence
+            ? "**This split is WITHDRAWN.** It pools the scenarios of the invalidated trials above, so whichever way it leans it is a statement about a package that no longer exists. Nothing here supports or falsifies the operator."
+            : knobSplit.discriminates
+              ? "**The rate moves with the knob.** That is the operator working: the same implementations are more wrong at the values the operator introduced."
+              : "**The rate does not move with the knob.** Whatever produced the failures, it was not this parameter.",
           "",
         ]),
+    ...(noLiveChildEvidence
+      ? [
+          `## The operator's knob: \`${v.operatorKnob ?? "none"}\``,
+          "",
+          "**No split is printed.** The split that decides claim four pools the scenarios of the",
+          "withdrawn trials above, so there is nothing left to pool. Printing an empty table under the",
+          "sentence 'the rate does not move with the knob' would state a result the data cannot support",
+          "in either direction, which is the failure this whole report exists to avoid.",
+          "",
+        ]
+      : []),
     "## What would falsify this",
     "",
     "Stated so the verdict above can be attacked rather than admired:",
@@ -201,10 +273,18 @@ export function renderEvolutionValidation(v: OperatorValidation, input: Validati
     "2. **The failures are a fairness artifact.** A check that fires because the spec is ambiguous is",
     "   not difficulty. Any check failing on nearly every scenario of one attack shape should be read",
     "   as a design smell first and a capability finding second.",
-    "3. **The parent would fail too, given the same bank.** The parent's three trials and the",
-    "   descendant's three are different runs of the same model; a paired re-run of the parent would",
-    "   make the comparison stronger than it currently is.",
+    "3. **The parent would fail too, given the same bank.** The parent's trials and the descendant's",
+    "   are different runs of the same model; a paired re-run of the parent would make the comparison",
+    "   stronger than it currently is.",
     "",
+    ...(noLiveChildEvidence
+      ? [
+          "None of the three is live right now. With every descendant trial withdrawn there is no verdict",
+          "here to attack, and the only thing that would change that is re-running the descendant against",
+          "the repaired package.",
+          "",
+        ]
+      : []),
     "## Operator kill-risk, revised",
     "",
     input.variant === null
@@ -214,9 +294,11 @@ export function renderEvolutionValidation(v: OperatorValidation, input: Validati
           "",
           `> ${input.variant.killRiskRationale}`,
           "",
-          v.verdict === "operator-falsified"
-            ? "The family died that way. The estimate was too low and the operator should be marked as unproven."
-            : "The family did not die that way. The estimate survives — on one trial of one model family, which is a weak update rather than a confirmation.",
+          noLiveChildEvidence
+            ? "**No update.** The estimate was neither confirmed nor refuted: the trials that would have updated it are withdrawn, so the pre-registered figure stands exactly as it was written, un-tested."
+            : v.verdict === "operator-falsified"
+              ? "The family died that way. The estimate was too low and the operator should be marked as unproven."
+              : "The family did not die that way. The estimate survives — on one trial of one model family, which is a weak update rather than a confirmation.",
         ].join("\n"),
     "",
     "---",

@@ -1,0 +1,22 @@
+{
+  "runId": "deployment-alias-2026-09-claude-1",
+  "familyId": "deployment-model-alias-rollout-drift",
+  "label": "clean",
+  "rationale": "0/339 graded scenarios failed, so there is no failure to attribute and `clean` is the only label the outcome permits. Recording it so a reader can tell a trial that was read from one that was not -- and so the pass is not quoted as difficulty evidence. It should not be: challenge/starter/subject.mjs is a complete passing solution (I re-graded the shipped starter against all 339 hidden scenarios: 0 failures) while challenge/README.md line 19 calls it \"a stub with the required export shape\". The one behaviour the SPEC leaves undetermined -- how many in-window samples count as \"sufficient\" -- is fixed in this submission at DEFAULT_MIN_SAMPLES = 2 (submission/subject.mjs line 18) and applied as Math.min(declared, 2) (line 59), a clamp with no basis in SPEC.md whose only effect is to force the starter constant whenever baseline.sampleCount >= 2; the transcript states the rule as \"fewer than two scored samples ... inconclusive\". This subject wrote its own 309-line implementation rather than copying the starter, so this is not plagiarism, but it retained the leaked constant, and the sibling trial in this family failed 192/339 on exactly that value. A pass against a package that ships its own answer carries no information about the mechanism the family is meant to measure.",
+  "evidenceRead": [
+    "result.json",
+    "countability.json",
+    "metadata.json",
+    "transcript.txt",
+    "submission/subject.mjs",
+    "challenge/starter/subject.mjs",
+    "challenge/README.md",
+    "challenge/SPEC.md"
+  ],
+  "diagnosisReading": "clean",
+  "labelledBy": {
+    "kind": "automated",
+    "id": "lane-4b-root-cause-adjudication",
+    "date": "2026-09-01"
+  }
+}

@@ -5,7 +5,7 @@ countable without importing hidden context into the run.
 
 | item | pinned value |
 |---|---|
-| challenge hash | `0e9b87a5f260544cfbc1cdce8f08938c` |
+| challenge hash | `805efb58c923f9e081db1b41967392d7` |
 | scenario set | `drift-339-590affe3` |
 | provider slot | `external` / `external/unspecified` |
 

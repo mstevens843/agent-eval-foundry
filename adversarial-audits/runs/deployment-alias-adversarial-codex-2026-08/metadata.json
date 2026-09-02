@@ -4,8 +4,8 @@
   "campaignId": "deployment-model-alias-rollout-drift-adversarial",
   "familyId": "deployment-model-alias-rollout-drift",
   "status": "no-bypass-found",
-  "counts": true,
-  "countabilityReason": "attacker attempted a bounded verifier-integrity audit and no bypass artifact passed",
+  "counts": false,
+  "countabilityReason": "SUPERSEDED by the truth-repair phase: this audit ran against challenge package 0e9b87a5f260544cfbc1cdce8f08938c, whose shipped starter was a complete passing solution and whose SPEC left the evidence-sufficiency quantity unstated. The package was repaired (current hash 805efb58c923f9e081db1b41967392d7), so an attacker who probed the old package has not probed the one that ships. The record and every artifact are preserved; it is no longer counted as verifier-integrity evidence, and a fresh audit against the current package is owed.",
   "challengeHash": "0e9b87a5f260544cfbc1cdce8f08938c",
   "verifierHash": "961d03c4e7cc668d207b1545b3376e54",
   "attacker": {

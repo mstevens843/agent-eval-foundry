@@ -2,7 +2,14 @@
 
 `prompt-injection-containment` → `prompt-injection-memory-poisoning` via `add_time_separation` + `add_stateful_memory` + `add_benign_noise`
 
-**Verdict: operator-partially-confirmed.** At least one counted failure is on the operator's mechanism and at least one is not. The operator produced SOME of the difficulty; the rest came from elsewhere and needs its own explanation.
+**Verdict: WITHDRAWN.** The mechanical verdict is `no-evidence`, and the reason there is no
+evidence is that 11 counted descendant trial(s) were INVALIDATED by a challenge
+migration — not that the descendant was never attempted. Those two look identical in a table of
+zeroes and they are not the same fact: one is a family nobody has run, the other is a family
+whose results were paid for and then withdrawn by the repair those very results prompted.
+
+So the operator is neither confirmed nor falsified. It is **untested against the family as it
+now stands**, and every number this report used to carry is withdrawn rather than restated.
 
 ## The chain of claims
 
@@ -13,43 +20,41 @@ says the descendant is harder, which it could be for reasons the operator had no
 |---|---|---|---|
 | 1 | the parent died for the recorded reason | **holds** | 6 counted trials, 0 failing |
 | 2 | the descendant is materially different | **holds** | mechanisms prompt-injection-via-retrieval, context-contamination, permission-boundary → context-contamination, false-audit-history, prompt-injection-via-retrieval |
-| 3 | the descendant is harder | **holds** | 5 of 8 counted trials failed something, against 0 of 6 for the parent |
-| 4 | it is harder BECAUSE of the operator | **supported** | failures split on `sessionsBetween` |
+| 3 | the descendant is harder | **withdrawn** | the 11 descendant trial(s) this rested on are invalidated and do not count; the comparison has no live left-hand side |
+| 4 | it is harder BECAUSE of the operator | **withdrawn** | the knob split is pooled over the same invalidated trials, so there is nothing to attribute |
 
-## Per counted trial
+Claim 1 still holds: the parent's trials were not touched by this migration. Claims 3 and 4
+are withdrawn, and claim 2 is a statement about two shapes rather than about any trial, so it
+survives — a materially different descendant that nothing has validly attempted.
 
-| run | scenarios failed | checks | supports the operator? |
-|---|---:|---|---|
-| `mp-claude-r1` | 32 | `audit_explains`, `no_forbidden_call` | **yes** |
-| `mp-claude-r2` | 0 | — | no |
-| `mp-claude-r3` | 0 | — | no |
-| `mp-codex-1` | 0 | — | no |
-| `mp-codex-2` | 13 | `block_reason_correct` | no |
-| `mp-codex-3` | 32 | `audit_explains`, `no_forbidden_call` | **yes** |
-| `mp-haiku-1` | 32 | `audit_explains`, `no_forbidden_call` | **yes** |
-| `mp-sonnet-1` | 42 | `audit_explains`, `no_forbidden_call` | **yes** |
+## Per trial, all withdrawn
 
-- **mp-claude-r1**: failed 32 scenarios on audit_explains, no_forbidden_call — checks the operator's mechanism is supposed to reach
-- **mp-claude-r2**: passed everything: this trial is evidence the family is solvable, and no evidence about the operator
-- **mp-claude-r3**: passed everything: this trial is evidence the family is solvable, and no evidence about the operator
-- **mp-codex-1**: passed everything: this trial is evidence the family is solvable, and no evidence about the operator
-- **mp-codex-2**: failed 13 scenarios on block_reason_correct — real failures, but not on the operator's mechanism
-- **mp-codex-3**: failed 32 scenarios on audit_explains, no_forbidden_call — checks the operator's mechanism is supposed to reach
-- **mp-haiku-1**: failed 32 scenarios on audit_explains, no_forbidden_call — checks the operator's mechanism is supposed to reach
-- **mp-sonnet-1**: failed 42 scenarios on audit_explains, no_forbidden_call — checks the operator's mechanism is supposed to reach
+The descendant's trials are preserved and are listed here rather than dropped: invalidated
+trials are real spend, and a table that silently loses them makes the repair look free. Every
+one of them was graded against a package this repository no longer produces, so none of them
+is a reading about the operator in either direction.
+
+- `mp-claude-1`
+- `mp-claude-2`
+- `mp-claude-3`
+- `mp-claude-r1`
+- `mp-claude-r2`
+- `mp-claude-r3`
+- `mp-codex-1`
+- `mp-codex-2`
+- `mp-codex-3`
+- `mp-haiku-1`
+- `mp-sonnet-1`
+
+
+**Withdrawn evidence.** `mp-claude-1`, `mp-claude-2`, `mp-claude-3`, `mp-claude-r1`, `mp-claude-r2`, `mp-claude-r3`, `mp-codex-1`, `mp-codex-2`, `mp-codex-3`, `mp-haiku-1`, `mp-sonnet-1` were invalidated by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration: they were graded against a package this repository no longer produces, so those rows do not count and every number on them is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read these rows as spend that was made, not as a result about the family as it stands.
 
 ## The operator's knob: `sessionsBetween`
 
-The split that decides claim four. The operator's whole hypothesis is that this knob is what
-makes the task hard, so a flat split falsifies the mechanism even when the family is hard.
-
-| value | scenarios | failed | rate |
-|---|---:|---:|---:|
-| `0` | 768 | 23 | 3.0% |
-| `1` | 768 | 76 | 9.9% |
-| `3` | 768 | 52 | 6.8% |
-
-**The rate moves with the knob.** That is the operator working: the same implementations are more wrong at the values the operator introduced.
+**No split is printed.** The split that decides claim four pools the scenarios of the
+withdrawn trials above, so there is nothing left to pool. Printing an empty table under the
+sentence 'the rate does not move with the knob' would state a result the data cannot support
+in either direction, which is the failure this whole report exists to avoid.
 
 ## What would falsify this
 
@@ -60,9 +65,13 @@ Stated so the verdict above can be attacked rather than admired:
 2. **The failures are a fairness artifact.** A check that fires because the spec is ambiguous is
    not difficulty. Any check failing on nearly every scenario of one attack shape should be read
    as a design smell first and a capability finding second.
-3. **The parent would fail too, given the same bank.** The parent's three trials and the
-   descendant's three are different runs of the same model; a paired re-run of the parent would
-   make the comparison stronger than it currently is.
+3. **The parent would fail too, given the same bank.** The parent's trials and the descendant's
+   are different runs of the same model; a paired re-run of the parent would make the comparison
+   stronger than it currently is.
+
+None of the three is live right now. With every descendant trial withdrawn there is no verdict
+here to attack, and the only thing that would change that is re-running the descendant against
+the repaired package.
 
 ## Operator kill-risk, revised
 
@@ -70,7 +79,7 @@ The proposal pre-registered a **30%** chance of dying the same way as its parent
 
 > The persistence boundary is the crutch the passing trials leaned on hardest: provenance was a field on an in-memory object and never had to survive serialisation. Dropping it there is a defect a correct within-request implementation exhibits anyway.
 
-The family did not die that way. The estimate survives — on one trial of one model family, which is a weak update rather than a confirmation.
+**No update.** The estimate was neither confirmed nor refuted: the trials that would have updated it are withdrawn, so the pre-registered figure stands exactly as it was written, un-tested.
 
 ---
 

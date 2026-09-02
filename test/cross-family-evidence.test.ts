@@ -34,6 +34,10 @@ import {
   assertMigrationAccountsForLosses,
   assertMigrationDeclared,
   assertStaleRunsLabelled,
+  isSupersededRun,
+  labelStaleRunsInProse,
+  renderRunRef,
+  staleRunNote,
 } from "../src/trials/migration.js";
 import { PROVIDERS, providerFamiliesOf } from "../src/trials/provider-registry.js";
 import type { Matrix } from "../src/types.js";
@@ -307,6 +311,48 @@ describe("nested catch sets", () => {
     expect(c.isChain).toBe(false);
     expect(c.agentAxes).toBeGreaterThan(1);
     expect(c.incomparable.some((p) => p.relation === "overlapping")).toBe(true);
+  });
+
+  // KNOWN-BAD: printing a constant next to measured antichain widths.
+  //
+  // `agentAxes` was `failing.length === 0 ? 0 : isChain ? 1 : 2` — a literal, published in the same
+  // column as genuine widths from the axis meter. Three subjects failing three scenarios pairwise
+  // are three independent directions, and the constant could only ever say 2. It cannot count.
+  it("measures the width instead of asserting 2 whenever the chain breaks", () => {
+    const c = analyseChain("mp", [subj("a", ["s1", "s2"]), subj("b", ["s2", "s3"]), subj("c", ["s1", "s3"])]);
+    expect(c.isChain).toBe(false);
+    // Every pair is incomparable and no scenario's catch set contains another's, so the width is 3.
+    expect(c.agentAxes).toBe(3);
+    expect(c.agentAxesBoundedBy).toBe(3);
+    expect(c.agentAxesReading).toBe("3 (bounded above by the 3-subject bank)");
+  });
+
+  // KNOWN-BAD: one failing subject published as ">= 2 agent axes".
+  //
+  // A single failing subject is not a chain, because a chain needs a pair — so the constant fell
+  // through to its `2` branch and three families published a breadth claim on one trial each. A
+  // one-subject bank cannot separate anything from anything; the honest output is not a number.
+  it("refuses to report a width over a single failing subject", () => {
+    const c = analyseChain("checker", [subj("only", ["s1", "s2", "s3"])]);
+    expect(c.isChain).toBe(false);
+    expect(c.agentAxes).toBeNull();
+    expect(c.agentAxesReading).toBe("not measurable — 1 counted failing subject");
+    expect(c.agentAxesReading).not.toMatch(/≥|>=/);
+  });
+
+  it("reports zero, measurably, when nothing has failed", () => {
+    const c = analyseChain("clean", [subj("a", []), subj("b", [])]);
+    expect(c.agentAxes).toBe(0);
+    expect(c.agentAxesBoundedBy).toBe(0);
+  });
+
+  // The measured width agrees with the chain relation at both ends: nesting forces every catch set
+  // into one order, so it is 1 by measurement rather than by declaration.
+  it("a chain measures 1 rather than being told it is 1", () => {
+    const c = analyseChain("ui", [subj("s1", ["a"]), subj("s2", ["a", "b"]), subj("s3", ["a", "b", "c"])]);
+    expect(c.isChain).toBe(true);
+    expect(c.agentAxes).toBe(1);
+    expect(c.agentAxesReading).toBe("1 (bounded above by the 3-subject bank)");
   });
 
   it("disjoint failure sets are incomparable", () => {
@@ -661,6 +707,57 @@ describe("challenge migration", () => {
 
   it("says nothing when no run is superseded", () => {
     expect(() => assertStaleRunsLabelled("r.md", "`old-run` counted", [ledger("f", [])])).not.toThrow();
+  });
+
+  // The renderer half of the rule. `assertStaleRunsLabelled` says what a report may not print; these
+  // are what the generators print instead, and the pair is only worth anything if the second reliably
+  // satisfies the first — including on the exact line shape that shipped the original bug, a table row
+  // saying `counted` next to an invalidated run id.
+  describe("renderRunRef", () => {
+    const ledgers = [ledger("prompt-injection-memory-poisoning", ["mp-claude-2"])];
+
+    it("annotates a superseded run and leaves a current one alone", () => {
+      const stale = renderRunRef("mp-claude-2", ledgers);
+      expect(stale).toContain("mp-claude-2");
+      expect(stale).toMatch(/superseded/i);
+      expect(stale).toMatch(/does not count/i);
+      // The migration that actually invalidated it, not a generic phrase: a reader who meets the
+      // label needs somewhere to go and read why.
+      expect(stale).toContain("2026-09-01");
+      expect(renderRunRef("mp-claude-r9", ledgers)).toBe("`mp-claude-r9`");
+      expect(isSupersededRun("mp-claude-2", ledgers)).toBe(true);
+      expect(isSupersededRun("mp-claude-r9", ledgers)).toBe(false);
+    });
+
+    it("produces a row the assertion accepts, even next to the word `counted`", () => {
+      const bad = ["# R", "", "## Slots", "", "| `mp-claude-2` | counted |"].join("\n");
+      expect(() => assertStaleRunsLabelled("r.md", bad, ledgers)).toThrow(/REPORT_STALE_UNLABELLED/);
+      const good = ["# R", "", "## Slots", "", `| ${renderRunRef("mp-claude-2", ledgers)} | counted |`].join(
+        "\n",
+      );
+      expect(() => assertStaleRunsLabelled("r.md", good, ledgers)).not.toThrow();
+    });
+
+    it("notes a section's stale runs and stays silent when there are none", () => {
+      const note = staleRunNote(["mp-claude-2", "mp-claude-r9"], ledgers);
+      expect(note).not.toBeNull();
+      expect(note).toContain("`mp-claude-2`");
+      // The run that still counts is not swept into the withdrawal.
+      expect(note).not.toContain("mp-claude-r9");
+      expect(staleRunNote(["mp-claude-r9"], ledgers)).toBeNull();
+      expect(staleRunNote([], ledgers)).toBeNull();
+    });
+
+    it("labels a stale run inside carried prose without touching a longer run id", () => {
+      const withLonger = [ledger("f", ["run-1"])];
+      const out = labelStaleRunsInProse("The smoke pass run-1 and the retry run-1-infra.", withLonger);
+      expect(out).toMatch(/`run-1` \(superseded by .*does not count\)/);
+      expect(out).toContain("run-1-infra");
+      expect(out).not.toMatch(/run-1` \(superseded[^)]*\)-infra/);
+      // Idempotent: a caller that applies it twice does not stutter.
+      expect(labelStaleRunsInProse(out, withLonger)).toBe(out);
+      expect(labelStaleRunsInProse("nothing stale here", withLonger)).toBe("nothing stale here");
+    });
   });
 });
 

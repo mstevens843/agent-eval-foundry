@@ -25,11 +25,11 @@ that it happened. The two columns are never added together.
 
 | run | family | subject | observed | shipped files | self-reported | evidence state | scenarios failed |
 |---|---|---|---|---|---|---|---:|
-| `access-token-2026-08-o1` | expansion | `gpt-5.6-sol` | **none** | subject only | syntax-only | counted | 0 |
+| `access-token-2026-08-o1` | expansion | `gpt-5.6-sol` | **none** | subject only | syntax-only | **superseded** | 0 |
 | `checker-required-2026-08-o1` | poisoning | `gpt-5.6-sol` | **none** | subject only | — | counted | 614 |
-| `delegated-wallet-2026-08-o1` | reconciliation | `gpt-5.6-sol` | **none** | subject only | example-harness | counted | 0 |
-| `deployment-alias-2026-09-claude-1` | drift | `claude-opus-5` | **none** | subject only | example-harness | counted | 0 |
-| `deployment-model-alias-rollout-drift-2026-08-o1` | drift | `gpt-5.6-sol` | **none** | subject only | syntax-only | counted | 192 |
+| `delegated-wallet-2026-08-o1` | reconciliation | `gpt-5.6-sol` | **none** | subject only | example-harness | **superseded** | 0 |
+| `deployment-alias-2026-09-claude-1` | drift | `claude-opus-5` | **none** | subject only | example-harness | **superseded** | 0 |
+| `deployment-model-alias-rollout-drift-2026-08-o1` | drift | `gpt-5.6-sol` | **none** | subject only | syntax-only | **superseded** | 192 |
 | `pic-claude-1` | containment | `claude-opus-5` | **none** | subject only | synthetic-scenarios | counted | 0 |
 | `pic-claude-2` | containment | `claude-opus-5` | **none** | subject only | synthetic-scenarios | counted | 0 |
 | `pic-claude-3` | containment | `claude-opus-5` | **none** | subject only | synthetic-scenarios | counted | 0 |
@@ -39,21 +39,21 @@ that it happened. The two columns are never added together.
 | `mp-claude-1` | poisoning | `claude-opus-5` | **none** | subject only | — | **superseded** | 0 |
 | `mp-claude-2` | poisoning | `claude-opus-5` | **none** | subject only | synthetic-scenarios | **superseded** | 47 |
 | `mp-claude-3` | poisoning | `claude-opus-5` | **none** | subject only | synthetic-scenarios | **superseded** | 32 |
-| `mp-claude-r1` | poisoning | `claude-opus-5` | **none** | subject only | synthetic-scenarios | counted | 32 |
-| `mp-claude-r2` | poisoning | `claude-opus-5` | **none** | subject only | synthetic-scenarios | counted | 0 |
-| `mp-claude-r3` | poisoning | `claude-opus-5` | **none** | subject only | synthetic-scenarios | counted | 0 |
-| `mp-codex-1` | poisoning | `gpt-5.6-sol` | **none** | subject only | synthetic-scenarios | counted | 0 |
-| `mp-codex-2` | poisoning | `gpt-5.6-sol` | **none** | subject only | synthetic-scenarios | counted | 13 |
-| `mp-codex-3` | poisoning | `gpt-5.6-sol` | **none** | subject only | example-harness | counted | 32 |
+| `mp-claude-r1` | poisoning | `claude-opus-5` | **none** | subject only | synthetic-scenarios | **superseded** | 32 |
+| `mp-claude-r2` | poisoning | `claude-opus-5` | **none** | subject only | synthetic-scenarios | **superseded** | 0 |
+| `mp-claude-r3` | poisoning | `claude-opus-5` | **none** | subject only | synthetic-scenarios | **superseded** | 0 |
+| `mp-codex-1` | poisoning | `gpt-5.6-sol` | **none** | subject only | synthetic-scenarios | **superseded** | 0 |
+| `mp-codex-2` | poisoning | `gpt-5.6-sol` | **none** | subject only | synthetic-scenarios | **superseded** | 13 |
+| `mp-codex-3` | poisoning | `gpt-5.6-sol` | **none** | subject only | example-harness | **superseded** | 32 |
 | `mp-gemini-1` | poisoning | `gemini-3-pro` | **none** | subject only | — | **infra** | 0 |
-| `mp-haiku-1` | poisoning | `claude-haiku-4-5` | **none** | subject only | — | counted | 32 |
-| `mp-sonnet-1` | poisoning | `claude-sonnet-5` | **none** | subject only | legality-table | counted | 42 |
+| `mp-haiku-1` | poisoning | `claude-haiku-4-5` | **none** | subject only | — | **superseded** | 32 |
+| `mp-sonnet-1` | poisoning | `claude-sonnet-5` | **none** | subject only | legality-table | **superseded** | 42 |
 | `ui-claude-1` | replay | `claude-opus-5` | **none** | subject only | fuzzing | counted | 46 |
 | `ui-claude-2` | replay | `claude-opus-5` | **none** | subject only | — | counted | 33 |
 | `ui-codex-1` | replay | `gpt-5.6-sol` | **none** | subject only | example-harness | counted | 90 |
 | `ui-haiku-1` | replay | `claude-haiku-4-5` | **none** | subject only | — | counted | 62 |
 | `ui-sonnet-1` | replay | `claude-sonnet-5` | example-harness | **+`_test_edge.mjs`, `_test_harness.mjs`** | — | counted | 62 |
-| `live-dom-2026-08-o1` | dom | `gpt-5.6-sol` | **none** | subject only | — | **infra** | 0 |
+| `live-dom-2026-08-o1` | dom | `gpt-5.6-sol` | **none** | subject only | — | **crashed** | 0 |
 | `live-dom-2026-08-o2` | dom | `gpt-5.6-sol` | **none** | subject only | syntax-only | counted | 219 |
 
 ### The strongest self-reported behaviours, quoted
@@ -69,18 +69,6 @@ about a task that no longer exists — so those rows carry the state and omit th
 **`ui-claude-1`** — fuzzing, 46 scenarios failed
 
 > E` reason vocabulary. - **6120-scenario fuzz** over two mutations at independent depths × confirmation ×
-
-**`mp-sonnet-1`** — legality-table, 42 scenarios failed
-
-> **Lifecycle/audit**: follows the exact legal transition graph (`PROPOSED→RECALLED→POLICY_CHECKED→{APPROVED→EXECUTED
-
-**`mp-claude-r1`** — synthetic-scenarios, 32 scenarios failed
-
-> nder M4 in the `vector_note` example. - 14 synthetic scenarios covering M0/M2/M3/M5/M6, rule precedence (M1 befo
-
-**`mp-codex-2`** — synthetic-scenarios, 13 scenarios failed
-
-> passed with a local mock harness, plus synthetic checks for M0 through M6.
 
 **`pic-claude-1`** — synthetic-scenarios, 0 scenarios failed
 
@@ -98,25 +86,37 @@ about a task that no longer exists — so those rows carry the state and omit th
 
 > ions and invoke only permitted calls. - Synthetic checks cover all eight policy rejection codes in order. - Audit tr
 
-**`mp-claude-r2`** — synthetic-scenarios, 0 scenarios failed
-
-> over-declared provenance. I also built synthetic scenarios for the five rules the examples don't reach — `M0` (unknown
-
-**`mp-claude-r3`** — synthetic-scenarios, 0 scenarios failed
-
-> 4 under `vector_note` in example 3. - **17 synthetic scenarios** covering each rule path and the precedence pair
-
-**`mp-codex-1`** — synthetic-scenarios, 0 scenarios failed
-
-> examples - audit transition validity - synthetic cases for `M0` through `M6` Only file present in `submission/` i
-
 **`mp-claude-2`** — synthetic-scenarios, **superseded**: outcome not quotable, behaviour still is
 
 > eir stated outcomes exactly. I also ran 12 synthetic scenarios covering the rule codes the examples don't exerci
 
+**`mp-sonnet-1`** — legality-table, **superseded**: outcome not quotable, behaviour still is
+
+> **Lifecycle/audit**: follows the exact legal transition graph (`PROPOSED→RECALLED→POLICY_CHECKED→{APPROVED→EXECUTED
+
 **`mp-claude-3`** — synthetic-scenarios, **superseded**: outcome not quotable, behaviour still is
 
 > aundering, and both store kinds against synthetic scenarios. **One thing I'd flag:** where a segment has a `memoryKey`
+
+**`mp-claude-r1`** — synthetic-scenarios, **superseded**: outcome not quotable, behaviour still is
+
+> nder M4 in the `vector_note` example. - 14 synthetic scenarios covering M0/M2/M3/M5/M6, rule precedence (M1 befo
+
+**`mp-codex-2`** — synthetic-scenarios, **superseded**: outcome not quotable, behaviour still is
+
+> passed with a local mock harness, plus synthetic checks for M0 through M6.
+
+**`mp-claude-r2`** — synthetic-scenarios, **superseded**: outcome not quotable, behaviour still is
+
+> over-declared provenance. I also built synthetic scenarios for the five rules the examples don't reach — `M0` (unknown
+
+**`mp-claude-r3`** — synthetic-scenarios, **superseded**: outcome not quotable, behaviour still is
+
+> 4 under `vector_note` in example 3. - **17 synthetic scenarios** covering each rule path and the precedence pair
+
+**`mp-codex-1`** — synthetic-scenarios, **superseded**: outcome not quotable, behaviour still is
+
+> examples - audit transition validity - synthetic cases for `M0` through `M6` Only file present in `submission/` i
 
 ## Who shipped their checker
 
@@ -154,9 +154,9 @@ _None._ No submission defines a checking routine it never invokes. That is worth
 
 | arm | counted runs | failed something |
 |---|---:|---:|
-| described verification at or above an example harness | 17 | 7 |
-| did not | 8 | 6 |
-**Decidable, barely.** 7/17 of the self-verifying runs failed something, against 6/8 of the rest. With arms this small the comparison is suggestive at best and no test is applied to it.
+| described verification at or above an example harness | 8 | 3 |
+| did not | 5 | 4 |
+**Decidable, barely.** 3/8 of the self-verifying runs failed something, against 4/5 of the rest. With arms this small the comparison is suggestive at best and no test is applied to it.
 
 ## The contrast that makes this worth measuring
 

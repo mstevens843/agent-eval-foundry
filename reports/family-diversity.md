@@ -11,7 +11,7 @@ a column mixing the two without labels is how an estimate becomes a fact.
 | `browser-action-replay` | idea | ui-replay-mismatch, stale-state, hidden-environment-dependency | — | 90 | 80 | est. |
 | `checker-required-memory-poisoning` | shipped | checker-quality-gap, context-contamination, false-audit-history, prompt-injection-via-retrieval | 12 | 85 | 35 | measured |
 | `delegated-wallet-scope-reconciliation` | built | permission-boundary, stale-state, false-audit-history, duplicate-side-effects, liveness-stall, tool-result-ambiguity | 3 | 36 | 45 | measured |
-| `deployment-model-alias-rollout-drift` | built | model-alias-drift, stale-state, false-audit-history, liveness-stall, tool-result-ambiguity | 6 | 40 | 45 | measured |
+| `deployment-model-alias-rollout-drift` | built | model-alias-drift, stale-state, false-audit-history, liveness-stall, tool-result-ambiguity | 20 | 40 | 45 | measured |
 | `deployment-rollback-partial-effects` | candidate | uncertain-external-effects, duplicate-side-effects, liveness-stall | — | 60 | 75 | est. |
 | `durable-approval-outbox` | shipped | uncertain-external-effects, duplicate-side-effects, false-audit-history, liveness-stall, tool-result-ambiguity | 3 | 120 | 49 | measured |
 | `model-alias-drift-sentinel` | idea | model-alias-drift, hidden-environment-dependency | 2 | 55 | 50 | est. |
@@ -20,7 +20,7 @@ a column mixing the two without labels is how an estimate becomes a fact.
 | `prompt-injection-capability-routing` | idea | permission-boundary, tool-result-ambiguity, prompt-injection-via-retrieval | 3 | 60 | 55 | est. |
 | `prompt-injection-containment` | trialed | prompt-injection-via-retrieval, context-contamination, permission-boundary | 4 | 70 | 65 | measured |
 | `prompt-injection-cross-tool-escalation` | idea | permission-boundary, tool-result-ambiguity, duplicate-side-effects | 3 | 55 | 50 | est. |
-| `prompt-injection-memory-poisoning` | shipped | context-contamination, false-audit-history, prompt-injection-via-retrieval | 3 | 75 | 70 | measured |
+| `prompt-injection-memory-poisoning` | shipped | context-contamination, false-audit-history, prompt-injection-via-retrieval | 5 | 75 | 70 | measured |
 | `stale-crm-ticket-automation` | candidate | stale-state, tool-result-ambiguity, duplicate-side-effects | 2 | 70 | 55 | est. |
 | `ui-action-record-replay` | shipped | ui-replay-mismatch, stale-state, hidden-environment-dependency | 6 | 55 | 40 | measured |
 | `ui-replay-live-dom` | shipped | ui-replay-mismatch, stale-state, hidden-environment-dependency, duplicate-side-effects | 19 | 95 | 55 | measured |
@@ -30,8 +30,8 @@ a column mixing the two without labels is how an estimate becomes a fact.
 | | |
 |---|---:|
 | families | 18 |
-| expected axes (all) | 73 |
-| of which measured | **59** |
+| expected axes (all) | 89 |
+| of which measured | **75** |
 | of which estimated | 14 |
 | declared build hours | 1124 |
 | declared frontier spend | $958.66 |

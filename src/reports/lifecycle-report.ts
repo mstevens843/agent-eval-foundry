@@ -4,7 +4,7 @@
 // runs looks cleaner than one that names them, and is worth less: the reader cannot tell whether the
 // numbers survived a repair or were never tested by one.
 //
-// Five states, and the interesting one is `superseded`. Those trials cost real money, produced the
+// Six states, and the interesting one is `superseded`. Those trials cost real money, produced the
 // finding that caused the repair, and no longer count for anything. Naming them is the difference
 // between "our family passes" and "our family passes, here is what it used to say, and here is what
 // changed when a model showed us the spec was ambiguous".
@@ -16,7 +16,8 @@ const STATE_MEANING: Readonly<Record<EvidenceState, string>> = {
   counted: "graded, and run against the challenge this family produces today",
   superseded: "graded, then invalidated when the family it measured was repaired",
   refused: "the provider declined; never an attempt, never a failure",
-  infra: "the provider could not authenticate, or the harness broke",
+  infra: "the provider could not authenticate, so the subject never reached the task",
+  crashed: "the subject reached the task and the harness died carrying it",
   "not-run": "a declared slot nobody has executed",
 };
 

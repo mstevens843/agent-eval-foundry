@@ -15,6 +15,14 @@
 //     verifier-output.json the graded cells
 //     result.json          the normalized TrialRecord
 //     countability.json    the counting judgement and its justification
+//     root-cause.json      OPTIONAL. Why the trial came out this way, adjudicated and attributed.
+//
+// `root-cause.json` is deliberately NOT in `TRIAL_FILES`. The five above are what a run PRODUCES and
+// a directory missing any of them was written half-way; a root cause is what somebody CONCLUDES
+// afterwards, and every trial that predates the record legitimately has none. Requiring it would
+// make thirty complete directories read as partial. Its absence is a state with a name —
+// `unlabelled` — rather than an error, and `hashChallengeDir` hashes only `challenge/`, so adding
+// the sidecar to a preserved directory cannot change what the trial is evidence about.
 //
 // `challenge/` is copied in rather than referenced. It costs a few kilobytes and it answers the
 // question that otherwise cannot be answered a month later: was this subject given the same task the
@@ -27,6 +35,8 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fail } from "../foundry/schema.js";
+import { ROOT_CAUSE_FILE, parseRootCause, unlabelledRootCause } from "./root-cause.js";
+import type { RootCauseRecord } from "./root-cause.js";
 import type { TrialRecord } from "./types.js";
 import { parseTrialRecord } from "./validate.js";
 
@@ -66,6 +76,13 @@ export interface TrialDirectory {
   readonly record: TrialRecord;
   readonly countability: Countability;
   readonly submissionFiles: readonly string[];
+  /**
+   * Why this trial came out the way it did. `unlabelled` when there is no sidecar.
+   *
+   * Never optional on the type. An optional field is one every reader may forget, and forgetting it
+   * restores exactly the default this record exists to remove: counted failure means capability.
+   */
+  readonly rootCause: RootCauseRecord;
 }
 
 const listFiles = (dir: string, prefix = ""): readonly string[] =>
@@ -158,6 +175,7 @@ export function readTrialDirectory(dir: string): TrialDirectory {
   }
 
   const submissionFiles = listFiles(join(dir, SUBMISSION_DIR));
+  const rootCause = readRootCause(dir, record);
 
   if (record.counts) {
     const verifierRaw = readFileSync(join(dir, TRIAL_FILES.verifier), "utf8").trim();
@@ -193,7 +211,21 @@ export function readTrialDirectory(dir: string): TrialDirectory {
     record,
     countability,
     submissionFiles,
+    rootCause,
   };
+}
+
+/**
+ * Read the root-cause sidecar beside a trial, or the `unlabelled` default when there is none.
+ *
+ * A malformed sidecar throws. It is not treated as absent: "this file is unreadable" and "nobody has
+ * read this trial" are different facts, and quietly demoting the first to the second would let a
+ * broken record disappear into the same bucket as an honest gap.
+ */
+export function readRootCause(dir: string, record: TrialRecord): RootCauseRecord {
+  const path = join(dir, ROOT_CAUSE_FILE);
+  if (!existsSync(path)) return unlabelledRootCause(record.runId, record.familyId);
+  return parseRootCause(JSON.parse(readFileSync(path, "utf8")), `${dir}/${ROOT_CAUSE_FILE}`, { record });
 }
 
 /** Read every trial directory for a family, sorted by run id for determinism. */

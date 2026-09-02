@@ -16,7 +16,7 @@ Record an audit trail explaining which current facts governed the decision.
 |---|---|
 | `SPEC.md` | the normative rules and interface contract |
 | `types.ts` | the public domain model |
-| `starter/subject.mjs` | a stub with the required export shape |
+| `starter/subject.mjs` | a skeleton: the export shape, the facade reads, and a TODO where the decision goes. It is not a working answer and fails nearly every hidden scenario as shipped. |
 | `examples/` | visible scenarios showing the public input format |
 
 ## What you must produce

@@ -11,11 +11,21 @@ a capability finding, or is the family wrong?
 |---|---|---|
 | `capability` | failures confined to some knob values | a difficulty finding; report it |
 | `likely-spec-defect` | one check, nearly every scenario, evenly spread | read the spec for that check before reading the model |
+| `single-cause-fanout` | several checks, but every failing check's scenarios nest inside one dominant check's | one root cause, not N findings; a human reads the transcript before it is quoted |
 | `mixed` | several checks, no concentration | read the transcript; do not quote either way |
 
 Neither test is conclusive. The point is that a uniform single-check wipeout is never presented as
 difficulty without the alternative reading beside it — which is the mistake the M3/M5 ambiguity
 would have caused had nobody looked.
+
+`single-cause-fanout` is the reading the first version of this file could not produce. Its test
+required exactly one failing check, and no real failure here has that shape: one wrong root
+decision propagates into every check gated on it, and those derivative checks each reach only the
+scenarios their precondition selects, so the failure also looks concentrated. Both halves of the
+test failed and the trial published as `capability`. The structural test — every failing check's
+failing-scenario set contained in one dominant check's — catches it without naming any check, and
+does not fire when a check fails a scenario the dominant check passed, which is what a genuinely
+independent second failure mode looks like.
 
 ## Diagnoses
 
@@ -49,6 +59,8 @@ would have caused had nobody looked.
 
 > Failures are confined to specific knob values and land on checks the pre-registered hypothesis named. This is the pattern that supports a difficulty claim.
 
+
+No trial shows a single-cause fanout.
 
 No trial shows the signature of a spec defect.
 

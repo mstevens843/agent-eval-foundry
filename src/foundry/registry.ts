@@ -134,3 +134,84 @@ export function buildRegistry(
   checkReferentialIntegrity(r);
   return r;
 }
+
+// ---------------------------------------------------------------- family-list drift
+
+/**
+ * A hand-maintained list of family ids, checked against the registry that defines them.
+ *
+ * The repository kept accumulating these: the measured-families set in the loop, the human-audit
+ * list, the adversarial audit/package lists, the per-family surface and verifier-path tables. Each
+ * one was a second copy of "which families exist" written by hand, and nothing compared the copies
+ * to the original. The failure mode is silent by construction — a ninth family is simply absent from
+ * a list, so the code that reads the list does less work and reports no error. That is exactly how
+ * `access-token-scope-expansion` ended up outside the human-readiness audit and outside the
+ * verifier-hash table without a single test noticing.
+ *
+ * The preferred fix is to DERIVE the list, so there is nothing to drift. Where a list genuinely
+ * means something narrower than "all built families", this is the fallback: the narrower list stays,
+ * but every built family must be accounted for — present, or excluded by name with a written reason.
+ * A reason can be wrong; silence cannot even be read.
+ *
+ * @param listName   how the list is referred to in the error, e.g. `VERIFIER_PATHS`.
+ * @param list       the ids the hand-maintained list actually contains.
+ * @param builtFamilyIds  the registry's built families, passed in so this module stays free of the
+ *                   family registry (and so a test can pass a synthetic ninth family).
+ * @param allowedNonBuilt ids that are legitimately in the list without being built families —
+ *                   imported or historical banks such as `durable-approval-outbox`.
+ * @param excluded   built families deliberately left OUT, each mapped to why.
+ */
+export function assertFamilyListAccounted(options: {
+  readonly listName: string;
+  readonly list: readonly string[];
+  readonly builtFamilyIds: readonly string[];
+  readonly allowedNonBuilt?: readonly string[];
+  readonly excluded?: Readonly<Record<string, string>>;
+}): void {
+  const { listName, list, builtFamilyIds } = options;
+  const allowedNonBuilt = options.allowedNonBuilt ?? [];
+  const excluded = options.excluded ?? {};
+  const problems: string[] = [];
+
+  const present = new Set(list);
+  const built = new Set(builtFamilyIds);
+
+  const unaccounted = builtFamilyIds.filter((id) => !present.has(id) && excluded[id] === undefined);
+  if (unaccounted.length > 0) {
+    problems.push(
+      `built famil${unaccounted.length === 1 ? "y is" : "ies are"} neither present nor excluded with a reason: ${unaccounted.join(", ")}`,
+    );
+  }
+
+  const foreign = list.filter((id) => !built.has(id) && !allowedNonBuilt.includes(id));
+  if (foreign.length > 0) {
+    problems.push(
+      `list contains id(s) that are neither a built family nor a declared non-built family: ${foreign.join(", ")}`,
+    );
+  }
+
+  const contradictory = Object.keys(excluded).filter((id) => present.has(id));
+  if (contradictory.length > 0) {
+    problems.push(`id(s) are both excluded and present: ${contradictory.join(", ")}`);
+  }
+
+  const staleExclusions = Object.keys(excluded).filter((id) => !built.has(id));
+  if (staleExclusions.length > 0) {
+    problems.push(
+      `exclusion(s) name a family that is not built, so the reason can no longer be checked: ${staleExclusions.join(", ")}`,
+    );
+  }
+
+  const blankReasons = Object.entries(excluded)
+    .filter(([, reason]) => reason.trim().length === 0)
+    .map(([id]) => id);
+  if (blankReasons.length > 0) {
+    problems.push(`exclusion(s) carry no reason: ${blankReasons.join(", ")}`);
+  }
+
+  if (problems.length > 0) {
+    throw new Error(
+      `${listName} has drifted from the built-family registry — ${problems.join("; ")}. Derive the list from BUILT_FAMILY_IDS, or add the family with a written exclusion reason.`,
+    );
+  }
+}

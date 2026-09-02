@@ -24,17 +24,14 @@ slots and a prepared bundle — never a zero.
 
 ### `access-token-scope-expansion`
 
-**Claim strength: already-solved.** Every one of 1 counted trials passed. The family does not separate the subjects in this bank.
+**Claim strength: no-evidence.** Nothing. No counted agent trial exists for this family.
 
 | provider | counted | failed | refused | infra | not run | fail rate | 95% interval |
 |---|---:|---:|---:|---:|---:|---:|---|
-| `openai` | 1 | 0 | 0 | 0 | 0 | 0% | 0%–79% |
-
-_Every provider here has fewer than 5 counted trials (1 across all of them), which is the threshold this report uses before quoting a per-provider rate without a caveat. The intervals above are the honest width of what these counts support, and they are wide enough that no point estimate should be quoted on its own._
 
 **To strengthen:**
 
-- Harden the family or abandon it. More trials of the same kind will not change an already-solved verdict.
+- Run counted trials on a second model family. Currently failing: none.
 
 ### `checker-required-memory-poisoning`
 
@@ -64,38 +61,25 @@ _Every provider here has fewer than 5 counted trials (1 across all of them), whi
 
 ### `delegated-wallet-scope-reconciliation`
 
-**Claim strength: already-solved.** Every one of 1 counted trials passed. The family does not separate the subjects in this bank.
+**Claim strength: no-evidence.** Nothing. No counted agent trial exists for this family.
 
 | provider | counted | failed | refused | infra | not run | fail rate | 95% interval |
 |---|---:|---:|---:|---:|---:|---:|---|
-| `openai` | 1 | 0 | 0 | 0 | 0 | 0% | 0%–79% |
-
-_Every provider here has fewer than 5 counted trials (1 across all of them), which is the threshold this report uses before quoting a per-provider rate without a caveat. The intervals above are the honest width of what these counts support, and they are wide enough that no point estimate should be quoted on its own._
 
 **To strengthen:**
 
-- Harden the family or abandon it. More trials of the same kind will not change an already-solved verdict.
+- Run counted trials on a second model family. Currently failing: none.
 
 ### `deployment-model-alias-rollout-drift`
 
-**Claim strength: separates.** 1 of 2 counted trials failed at least one scenario, so the family separates something — on 2 model family(ies).
+**Claim strength: no-evidence.** Nothing. No counted agent trial exists for this family.
 
 | provider | counted | failed | refused | infra | not run | fail rate | 95% interval |
 |---|---:|---:|---:|---:|---:|---:|---|
-| `anthropic` | 1 | 0 | 0 | 0 | 0 | 0% | 0%–79% |
-| `openai` | 1 | 1 | 0 | 0 | 0 | 100% | 21%–100% |
-
-_Every provider here has fewer than 5 counted trials (2 across all of them), which is the threshold this report uses before quoting a per-provider rate without a caveat. The intervals above are the honest width of what these counts support, and they are wide enough that no point estimate should be quoted on its own._
-
-**Which checks each provider failed** — the part that says whether they fail the same way:
-
-| provider | checks failed (scenarios) |
-|---|---|
-| `openai` | `decision_matches_truth` (192), `liveness` (192), `report_matches_ledger` (192), `no_subject_owned_model_truth` (143), `continue_required` (96), `rollback_required` (96) |
 
 **To strengthen:**
 
-- Run counted trials on a second model family. Currently failing: openai.
+- Run counted trials on a second model family. Currently failing: none.
 
 ### `prompt-injection-containment`
 
@@ -112,24 +96,20 @@ _Every provider here has fewer than 5 counted trials (2 across all of them), whi
 
 ### `prompt-injection-memory-poisoning`
 
-**Claim strength: generalises.** Counted failures from 2 model families: anthropic, openai. The mechanism is not an artifact of one lab's model.
+**Claim strength: no-evidence.** Nothing. No counted agent trial exists for this family.
 
 | provider | counted | failed | refused | infra | not run | fail rate | 95% interval |
 |---|---:|---:|---:|---:|---:|---:|---|
-| `anthropic` | 5 | 3 | 0 | 0 | 0 | 60% | 23%–88% |
-| `google` | 0 | 0 | 0 | 1 | 0 | — | — |
-| `openai` | 3 | 2 | 0 | 0 | 0 | 67% | 21%–94% |
-
-**Which checks each provider failed** — the part that says whether they fail the same way:
-
-| provider | checks failed (scenarios) |
-|---|---|
-| `anthropic` | `audit_explains` (106), `no_forbidden_call` (106) |
-| `openai` | `audit_explains` (32), `no_forbidden_call` (32), `block_reason_correct` (13) |
+| `anthropic` | 0 | 0 | 0 | 0 | 3 | — | — |
+| `google` | 0 | 0 | 0 | 0 | 1 | — | — |
+| `openai` | 0 | 0 | 0 | 0 | 3 | — | — |
 
 **To strengthen:**
 
-- Widen the bank: 8 counted trials is enough to separate and not enough to rank. 5 per provider family is the threshold this report uses before quoting a rate without a caveat.
+- Run counted trials on a second model family. Currently failing: none.
+- `anthropic` has 3 declared slot(s) and no counted trial.
+- `google` has 1 declared slot(s) and no counted trial.
+- `openai` has 3 declared slot(s) and no counted trial.
 
 ### `ui-action-record-replay`
 
@@ -184,7 +164,6 @@ run here is a fact about this machine; a provider that declines is a fact about 
 
 | family | provider | outcome | what happened |
 |---|---|---|---|
-| `prompt-injection-memory-poisoning` | google/gemini-3-pro | infrastructure_error | infrastructure_error: provider could not authenticate or is not entitled ("ineligibletiererror"); no attempt was made. A refusal, timeout or infrastructure fail |
 | `ui-replay-live-dom` | openai/gpt-5.6-sol | crashed | crashed: runner exited non-zero and produced no artifact. Recorded as not counting by default — promoting a crash to a failure automatically would let a harness |
 
 ## Do the providers fail the same scenarios?
@@ -195,16 +174,6 @@ task. Every pair of counted failing runs, compared as sets of scenario ids:
 
 | family | run A | run B | cross-lab | A | B | shared | relation |
 |---|---|---|---|---:|---:|---:|---|
-| `poisoning` | `mp-claude-r1` | `mp-codex-2` | **yes** (anthropic/openai) | 32 | 13 | 0 | **disjoint** |
-| `poisoning` | `mp-claude-r1` | `mp-codex-3` | **yes** (anthropic/openai) | 32 | 32 | 32 | **identical** |
-| `poisoning` | `mp-claude-r1` | `mp-haiku-1` | no | 32 | 32 | 32 | **identical** |
-| `poisoning` | `mp-claude-r1` | `mp-sonnet-1` | no | 32 | 42 | 32 | **nested** |
-| `poisoning` | `mp-codex-2` | `mp-codex-3` | no | 13 | 32 | 0 | **disjoint** |
-| `poisoning` | `mp-codex-2` | `mp-haiku-1` | **yes** (openai/anthropic) | 13 | 32 | 0 | **disjoint** |
-| `poisoning` | `mp-codex-2` | `mp-sonnet-1` | **yes** (openai/anthropic) | 13 | 42 | 0 | **disjoint** |
-| `poisoning` | `mp-codex-3` | `mp-haiku-1` | **yes** (openai/anthropic) | 32 | 32 | 32 | **identical** |
-| `poisoning` | `mp-codex-3` | `mp-sonnet-1` | **yes** (openai/anthropic) | 32 | 42 | 32 | **nested** |
-| `poisoning` | `mp-haiku-1` | `mp-sonnet-1` | no | 32 | 42 | 32 | **nested** |
 | `replay` | `ui-claude-1` | `ui-claude-2` | no | 46 | 33 | 33 | **nested** |
 | `replay` | `ui-claude-1` | `ui-codex-1` | **yes** (anthropic/openai) | 46 | 90 | 46 | **nested** |
 | `replay` | `ui-claude-1` | `ui-haiku-1` | no | 46 | 62 | 46 | **nested** |
@@ -220,9 +189,8 @@ task. Every pair of counted failing runs, compared as sets of scenario ids:
 |---|---|
 | `identical` | the same scenarios, exactly — the strongest transfer evidence available |
 | `nested` | one run's failures are a strict subset of the other's — one axis at two sensitivities |
-| `disjoint` | no scenario in common — two different failure modes |
 
-**7 of 10 cross-lab pair(s) are identical or nested.** That is the transfer claim
+**4 of 4 cross-lab pair(s) are identical or nested.** That is the transfer claim
 stated in the strongest form the data supports: not 'both labs failed', but 'both labs failed
 the same scenarios'. A defect two independently-trained models share on the same inputs is a
 property of the task.
@@ -242,11 +210,11 @@ signal of how it approached the task.
 
 | run | provider | lines | rule codes cited | self-verifying | evidence state | scenarios failed |
 |---|---|---:|---:|---|---|---:|
-| `access-token-2026-08-o1` | openai | 140 | 6/8 | no | counted | 0 |
+| `access-token-2026-08-o1` | openai | 140 | 6/8 | no | **superseded** | 0 |
 | `checker-required-2026-08-o1` | openai | 462 | 11/14 | no | counted | 614 |
-| `delegated-wallet-2026-08-o1` | openai | 170 | 7/10 | no | counted | 0 |
-| `deployment-alias-2026-09-claude-1` | anthropic | 310 | 5/10 | no | counted | 0 |
-| `deployment-model-alias-rollout-drift-2026-08-o1` | openai | 229 | 6/10 | no | counted | 192 |
+| `delegated-wallet-2026-08-o1` | openai | 170 | 7/10 | no | **superseded** | 0 |
+| `deployment-alias-2026-09-claude-1` | anthropic | 310 | 5/10 | no | **superseded** | 0 |
+| `deployment-model-alias-rollout-drift-2026-08-o1` | openai | 229 | 6/10 | no | **superseded** | 192 |
 | `pic-claude-1` | anthropic | 319 | 8/8 | no | counted | 0 |
 | `pic-claude-2` | anthropic | 232 | 8/8 | no | counted | 0 |
 | `pic-claude-3` | anthropic | 307 | 8/8 | no | counted | 0 |
@@ -256,14 +224,14 @@ signal of how it approached the task.
 | `mp-claude-1` | anthropic | 336 | 7/8 | no | **superseded** | 0 |
 | `mp-claude-2` | anthropic | 324 | 7/8 | no | **superseded** | 47 |
 | `mp-claude-3` | anthropic | 344 | 7/8 | no | **superseded** | 32 |
-| `mp-claude-r1` | anthropic | 384 | 7/8 | no | counted | 32 |
-| `mp-claude-r2` | anthropic | 336 | 7/8 | no | counted | 0 |
-| `mp-claude-r3` | anthropic | 342 | 7/8 | no | counted | 0 |
-| `mp-codex-1` | openai | 254 | 7/8 | no | counted | 0 |
-| `mp-codex-2` | openai | 293 | 7/8 | no | counted | 13 |
-| `mp-codex-3` | openai | 249 | 7/8 | no | counted | 32 |
-| `mp-haiku-1` | anthropic | 250 | 7/8 | no | counted | 32 |
-| `mp-sonnet-1` | anthropic | 123 | 7/8 | no | counted | 42 |
+| `mp-claude-r1` | anthropic | 384 | 7/8 | no | **superseded** | 32 |
+| `mp-claude-r2` | anthropic | 336 | 7/8 | no | **superseded** | 0 |
+| `mp-claude-r3` | anthropic | 342 | 7/8 | no | **superseded** | 0 |
+| `mp-codex-1` | openai | 254 | 7/8 | no | **superseded** | 0 |
+| `mp-codex-2` | openai | 293 | 7/8 | no | **superseded** | 13 |
+| `mp-codex-3` | openai | 249 | 7/8 | no | **superseded** | 32 |
+| `mp-haiku-1` | anthropic | 250 | 7/8 | no | **superseded** | 32 |
+| `mp-sonnet-1` | anthropic | 123 | 7/8 | no | **superseded** | 42 |
 | `ui-claude-1` | anthropic | 523 | n/a | no | counted | 46 |
 | `ui-claude-2` | anthropic | 698 | n/a | no | counted | 33 |
 | `ui-codex-1` | openai | 361 | n/a | no | counted | 90 |
@@ -276,15 +244,10 @@ family states its contract as invariants rather than a policy table, so there is
 
 **1 of 28 submissions built some form of self-check.** Whether that separates the passing runs from the failing ones is worth reading off the table directly; with counts this small it is an observation, not a rate.
 
-**Confident false positives: 6 of 13 failing runs.** These submissions name most or all of the
+**Confident false positives: 1 of 7 failing runs.** These submissions name most or all of the
 published rule codes and still lose the property:
 
 - `checker-required-2026-08-o1` (openai) — cites 11/14 rule codes, 462 lines, fails 614 scenarios
-- `mp-claude-r1` (anthropic) — cites 7/8 rule codes, 384 lines, fails 32 scenarios
-- `mp-codex-2` (openai) — cites 7/8 rule codes, 293 lines, fails 13 scenarios
-- `mp-codex-3` (openai) — cites 7/8 rule codes, 249 lines, fails 32 scenarios
-- `mp-haiku-1` (anthropic) — cites 7/8 rule codes, 250 lines, fails 32 scenarios
-- `mp-sonnet-1` (anthropic) — cites 7/8 rule codes, 123 lines, fails 42 scenarios
 
 That is the pattern worth keeping a family for. The model read the rules well enough to quote
 them and still lost the property under a condition it did not think to test — a capability

@@ -9,7 +9,7 @@
       "requiredBaselineVersion": "model-beta",
       "reevaluationAvailable": true,
       "observedAt": 200,
-      "idempotencyKey": "idem-eval-default-23-ci_worker",
+      "idempotencyKey": "idem-dmd-eval-default-successor-canary-cache-stale_initial-window-open-reg-major-mixed_versions-after_bad_eval-correct_previous-provider_says_green-available-ci_worker-r1-23",
       "surface": "ci_worker"
     },
     "cachedAlias": {

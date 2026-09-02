@@ -6,27 +6,27 @@ provider-specific.
 
 ## Verdict
 
-Verdict: **provider_specific_failure**. Decision: **diagnose**.
+Verdict: **non_openai_missing**. Decision: **run_non_openai_smoke**.
 
 | item | value |
 |---|---|
 | family | `deployment-model-alias-rollout-drift` |
-| challenge hash | `0e9b87a5f260544cfbc1cdce8f08938c` |
+| challenge hash | `805efb58c923f9e081db1b41967392d7` |
 | scenario set | `drift-339-590affe3` |
-| counted OpenAI runs | 1 |
-| counted non-OpenAI runs | 1 |
-| counted provider families | `anthropic`, `openai` |
-| counted failure provider families | `openai` |
-| counted solve provider families | `anthropic` |
-| cross-lab smoke present | yes |
+| counted OpenAI runs | 0 |
+| counted non-OpenAI runs | 0 |
+| counted provider families | none |
+| counted failure provider families | none |
+| counted solve provider families | none |
+| cross-lab smoke present | no |
 | cross-lab difficulty evidenced | no |
 | matrix candidate | no |
 
 ## Current Reading
 
-OpenAI failed on target while the current counted non-OpenAI smoke solved; this is provider-specific evidence, not cross-lab difficulty.
+Provider-delta comparison is pending because non-OpenAI smoke is missing.
 
-Next action: diagnose provider delta, then evolve or repair if the mechanism is too provider-specific
+Next action: run or import one non-OpenAI smoke under the current hash
 
 The follow-on diagnosis report inspects preserved OpenAI and Claude submissions/transcripts
 without running either provider. In the current mixed state it selects an evolution-probe route
@@ -34,33 +34,26 @@ rather than production matrix spend.
 
 ## Run Evidence
 
-| run | provider family | model | status | graded | failed | on target | reason |
-|---|---|---|---|---:|---:|---|---|
-| `deployment-alias-2026-09-claude-1` | `anthropic` | `anthropic/claude-opus-5` | `counted_solve` | 339 | 0 | n/a | completed with 339 graded scenario(s), no refusal, timeout or infrastructure error |
-| `deployment-model-alias-rollout-drift-2026-08-o1` | `openai` | `openai/gpt-5.6-sol` | `counted_failure` | 339 | 192 | yes | completed with 339 graded scenario(s), no refusal, timeout or infrastructure error |
+No run evidence in this bucket.
 
 ## Preserved No-Count Non-OpenAI Attempts
 
-| run | provider family | model | status | graded | failed | on target | reason |
-|---|---|---|---|---:|---:|---|---|
-| `deployment-alias-2026-09-claude-1-infra` | `anthropic` | `anthropic/claude-opus-5` | `infrastructure_error` | 0 | 0 | n/a | infrastructure error preserved as no-count evidence |
+No no-count non-OpenAI attempts are part of this provider-delta comparison.
 
 ## Blocking Rules
 
 | code | detail |
 |---|---|
-| `PROVIDER_DELTA_MIXED_PROVIDER_SIGNAL` | provider families disagree; diagnose or evolve before production matrix spend |
+| `PROVIDER_DELTA_NON_OPENAI_MISSING` | no current counted non-OpenAI smoke exists |
+| `PROVIDER_DELTA_STALE_OR_INVALID_EVIDENCE` | 1 stale or invalid run(s) cannot participate in provider-delta decisions |
 
 ## Advisory Rules
 
-| code | detail |
-|---|---|
-| `PROVIDER_DELTA_INFRA_NO_COUNT` | deployment-alias-2026-09-claude-1-infra is infrastructure_error and contributes no provider-delta evidence |
+No provider-delta advisories.
 
 ## Non-OpenAI Path
 
-Current counted non-OpenAI smoke run(s): `deployment-alias-2026-09-claude-1`.
-No Claude/Anthropic command was run to produce this report; it reads preserved repo artifacts only.
+No current counted non-OpenAI smoke is available in this comparison.
 
 Use these paths when a future non-OpenAI packet needs to be prepared or imported:
 

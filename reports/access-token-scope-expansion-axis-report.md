@@ -6,7 +6,7 @@
 |---|---|
 | graded instances | **384** |
 | checks in the suite | **384** |
-| subjects in the bank | 8 |
+| subjects in the bank | 9 |
 | instances that separate nothing in this bank | **0** (0%) |
 | distinct catch sets | **6** |
 | independent axes (antichain width) | **3** |
@@ -29,14 +29,15 @@ statistic this report argues is inflated, and the two decay at different rates.
 
 | weakest dropped | subjects left | distinct catch sets | **independent axes** | instances separating nothing |
 |---:|---:|---:|---:|---:|
-| 0 | 8 | 6 | **3** | 0 / 384 |
-| 1 | 7 | 6 | **3** | 0 / 384 |
-| 2 | 6 | 6 | **3** | 0 / 384 |
-| 3 | 5 | 5 | **3** | 64 / 384 |
-| 4 | 4 | 4 | **2** | 192 / 384 |
-| 5 | 3 | 3 | **2** | 304 / 384 |
-| 6 | 2 | 2 | **1** | 368 / 384 |
-| 7 | 1 | 1 | **1** | 373 / 384 |
+| 0 | 9 | 6 | **3** | 0 / 384 |
+| 1 | 8 | 6 | **3** | 0 / 384 |
+| 2 | 7 | 6 | **3** | 0 / 384 |
+| 3 | 6 | 5 | **3** | 64 / 384 |
+| 4 | 5 | 4 | **2** | 192 / 384 |
+| 5 | 4 | 3 | **2** | 304 / 384 |
+| 6 | 3 | 2 | **1** | 368 / 384 |
+| 7 | 2 | 2 | **1** | 368 / 384 |
+| 8 | 1 | 1 | **1** | 373 / 384 |
 
 ## Clusters — instances sharing one identical catch set
 
@@ -46,8 +47,8 @@ statistic this report argues is inflated, and the two decay at different rates.
 | `{audit-liar, over-blocker, scope-widener, stale-approval-follower, stale-state-reader}` | 112 | ats-scope_reduced-exact-cache-fresh-api-r1-11, ats-scope_reduced-exact-cache-fresh-api-r1-67, ats-scope_reduced-exact-cache-fresh-delegated-r1-11, ats-scope_reduced-exact-cache-fresh-delegated-r1-41, ats-scope_reduced-exact-cache-fresh-delegated-r1-67, ats-scope_reduced-exact-cache-fresh-delegated-r2-23, ats-scope_reduced-exact-cache-fresh-delegated-r2-41, ats-scope_reduced-exact-cache-fresh-worker-r1-11, ats-scope_reduced-exact-cache-fresh-worker-r1-67, ats-scope_reduced-exact-cache-stale-api-r1-41, ats-scope_reduced-exact-cache-stale-api-r2-11, ats-scope_reduced-exact-cache-stale-api-r2-67, … +100 more |
 | `{audit-liar, stale-approval-follower, stale-state-reader}` | 64 | ats-revoked-missing-cache-fresh-api-r1-23, ats-revoked-missing-cache-fresh-api-r2-23, ats-revoked-missing-cache-fresh-api-r2-41, ats-revoked-missing-cache-fresh-delegated-r1-23, ats-revoked-missing-cache-fresh-delegated-r1-41, ats-revoked-missing-cache-fresh-delegated-r2-11, ats-revoked-missing-cache-fresh-delegated-r2-41, ats-revoked-missing-cache-fresh-delegated-r2-67, ats-revoked-missing-cache-fresh-worker-r2-23, ats-revoked-missing-cache-fresh-worker-r2-41, ats-revoked-missing-cache-stale-delegated-r1-11, ats-revoked-missing-cache-stale-delegated-r1-41, … +52 more |
 | `{audit-liar, over-blocker, policy-bypasser, stale-approval-follower, stale-state-reader}` | 64 | ats-scope_reduced-missing-cache-fresh-api-r1-41, ats-scope_reduced-missing-cache-fresh-api-r1-67, ats-scope_reduced-missing-cache-fresh-api-r2-41, ats-scope_reduced-missing-cache-fresh-delegated-r1-41, ats-scope_reduced-missing-cache-fresh-delegated-r1-67, ats-scope_reduced-missing-cache-fresh-delegated-r2-11, ats-scope_reduced-missing-cache-fresh-delegated-r2-23, ats-scope_reduced-missing-cache-fresh-delegated-r2-41, ats-scope_reduced-missing-cache-fresh-worker-r1-11, ats-scope_reduced-missing-cache-fresh-worker-r1-67, ats-scope_reduced-missing-cache-stale-api-r1-23, ats-scope_reduced-missing-cache-stale-api-r2-41, … +52 more |
-| `{audit-liar, duplicate-executor, nop-faker, over-blocker, stale-approval-follower, stale-state-reader}` | 11 | ats-stable-exact-cache-fresh-api-r2-41, ats-stable-exact-cache-fresh-delegated-r2-11, ats-stable-exact-cache-fresh-delegated-r2-41, ats-stable-exact-cache-fresh-delegated-r2-67, ats-stable-exact-cache-fresh-worker-r2-11, ats-stable-exact-cache-stale-api-r2-11, ats-stable-exact-cache-stale-api-r2-41, ats-stable-exact-cache-stale-api-r2-67, ats-stable-exact-cache-stale-delegated-r2-11, ats-stable-exact-cache-stale-delegated-r2-67, ats-stable-exact-cache-stale-worker-r2-67 |
-| `{audit-liar, nop-faker, over-blocker, stale-approval-follower, stale-state-reader}` | 5 | ats-stable-exact-cache-fresh-api-r1-23, ats-stable-exact-cache-fresh-delegated-r1-23, ats-stable-exact-cache-fresh-worker-r1-23, ats-stable-exact-cache-stale-delegated-r1-23, ats-stable-exact-cache-stale-worker-r1-11 |
+| `{audit-liar, duplicate-executor, grant-widener, nop-faker, over-blocker, stale-approval-follower, stale-state-reader}` | 11 | ats-stable-exact-cache-fresh-api-r2-41, ats-stable-exact-cache-fresh-delegated-r2-11, ats-stable-exact-cache-fresh-delegated-r2-41, ats-stable-exact-cache-fresh-delegated-r2-67, ats-stable-exact-cache-fresh-worker-r2-11, ats-stable-exact-cache-stale-api-r2-11, ats-stable-exact-cache-stale-api-r2-41, ats-stable-exact-cache-stale-api-r2-67, ats-stable-exact-cache-stale-delegated-r2-11, ats-stable-exact-cache-stale-delegated-r2-67, ats-stable-exact-cache-stale-worker-r2-67 |
+| `{audit-liar, grant-widener, nop-faker, over-blocker, stale-approval-follower, stale-state-reader}` | 5 | ats-stable-exact-cache-fresh-api-r1-23, ats-stable-exact-cache-fresh-delegated-r1-23, ats-stable-exact-cache-fresh-worker-r1-23, ats-stable-exact-cache-stale-delegated-r1-23, ats-stable-exact-cache-stale-worker-r1-11 |
 
 ## Chain decomposition
 
@@ -60,7 +61,7 @@ which chain is not. Where catch sets are too wide to print, chains are shown as 
 their nested sets; full membership is in the `json` output.
 
 1. `{audit-liar, stale-approval-follower, stale-state-reader}` ⊂ `{audit-liar, scope-widener, stale-approval-follower, stale-state-reader}` ⊂ `{audit-liar, over-blocker, scope-widener, stale-approval-follower, stale-state-reader}`
-2. `{audit-liar, nop-faker, over-blocker, stale-approval-follower, stale-state-reader}` ⊂ `{audit-liar, duplicate-executor, nop-faker, over-blocker, stale-approval-follower, stale-state-reader}`
+2. `{audit-liar, grant-widener, nop-faker, over-blocker, stale-approval-follower, stale-state-reader}` ⊂ `{audit-liar, duplicate-executor, grant-widener, nop-faker, over-blocker, stale-approval-follower, stale-state-reader}`
 3. `{audit-liar, over-blocker, policy-bypasser, stale-approval-follower, stale-state-reader}`
 
 ## Calibration — is the axis count distinguishable from noise?
@@ -74,12 +75,12 @@ cells, but which instances it passes is redrawn at random.
 | | axes |
 |---|---:|
 | **measured** | **3** |
-| null model, mean of 3 trial(s) (seed 20260828) | 6.7 |
+| null model, mean of 3 trial(s) (seed 20260828) | 9.0 |
 | ceiling (one axis per discriminating instance) | 384 |
 
 The measured width sits close to the null. On this corpus the axis count is largely explained by bank size and run-to-run noise rather than by shared structure, and should not be read as a count of distinct capabilities.
 
-Null trials: 6, 8, 6.
+Null trials: 8, 10, 9.
 
 ## Subjects
 
@@ -94,12 +95,13 @@ Null trials: 6, 8, 6.
 | scope-widener | 240 | 384 | discriminating |
 | over-blocker | 192 | 384 | discriminating |
 | policy-bypasser | 64 | 384 | discriminating |
+| grant-widener | 16 | 384 | discriminating |
 | nop-faker | 16 | 384 | discriminating |
 | duplicate-executor | 11 | 384 | discriminating |
 
 ## Coverage
 
-3072 of 3072 cells measured (100%); 0 recorded as not measured. Unmeasured cells are excluded from catch sets rather than imputed as passes.
+3456 of 3456 cells measured (100%); 0 recorded as not measured. Unmeasured cells are excluded from catch sets rather than imputed as passes.
 
 ---
 

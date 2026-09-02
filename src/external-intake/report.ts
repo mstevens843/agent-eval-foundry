@@ -1,6 +1,8 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { fail } from "../foundry/schema.js";
+import type { EvidenceLedger } from "../trials/evidence-lifecycle.js";
+import { isSupersededRun, renderRunRef, staleRunNote } from "../trials/migration.js";
 import {
   DEPLOYMENT_ALIAS_EXTERNAL_FAMILY_ID,
   auditExternalEvidencePacket,
@@ -66,10 +68,29 @@ export function renderExternalIntakeReport(input: {
   readonly expectedScenarioSetId: string;
   readonly packetAudits: readonly ExternalPacketAudit[];
   readonly intakeResults: readonly ExternalIntakeValidationResult[];
+  /**
+   * The evidence ledgers.
+   *
+   * An intake result is a decision made at import time and frozen in `intake-result.json`. It says
+   * `countable: true` because the packet carried the hash the family produced THAT DAY. A later
+   * challenge migration does not rewrite that file and must not: the import decision was correct
+   * when it was made. What it does do is withdraw the packet, and only the ledger knows that.
+   */
+  readonly ledgers?: readonly EvidenceLedger[];
 }): string {
-  const counted = input.intakeResults.filter((result) => result.countable);
+  const ledgers = input.ledgers ?? [];
+  const withdrawn = (result: ExternalIntakeValidationResult): boolean => {
+    const runId = result.packet.metadata?.runId;
+    return runId !== null && runId !== undefined && isSupersededRun(runId, ledgers);
+  };
+  const counted = input.intakeResults.filter((result) => result.countable && !withdrawn(result));
   const noCount = input.intakeResults.filter((result) => !result.countable);
+  const stillWithdrawn = input.intakeResults.filter(withdrawn);
   const countedFamilies = providerFamilies(counted);
+  const intakeNote = staleRunNote(
+    input.intakeResults.map((result) => result.packet.metadata?.runId ?? "").filter((runId) => runId !== ""),
+    ledgers,
+  );
   const nonOpenAiFamilies = countedFamilies.filter(
     (family) => !["openai", "external", "manual", "unknown"].includes(family),
   );
@@ -88,6 +109,7 @@ export function renderExternalIntakeReport(input: {
     `| imported returned packets | ${input.intakeResults.length} |`,
     `| countable returned packets | ${counted.length} |`,
     `| preserved no-count packets | ${noCount.length} |`,
+    `| withdrawn by a challenge migration | ${stillWithdrawn.length} |`,
     "",
     "## Prepared Packets",
     "",
@@ -113,10 +135,13 @@ export function renderExternalIntakeReport(input: {
           "|---|---|---|---|---|",
           ...input.intakeResults.map((result) => {
             const metadata = result.packet.metadata;
-            return `| \`${metadata?.runId ?? "missing"}\` | \`${metadata?.providerFamily ?? "missing"}\` | \`${result.status}\` | ${
-              result.countable ? "yes" : "no"
-            } | ${result.countabilityReason} |`;
+            const runId = metadata?.runId ?? null;
+            return `| ${runId === null ? "`missing`" : renderRunRef(runId, ledgers)} | \`${metadata?.providerFamily ?? "missing"}\` | \`${result.status}\` | ${
+              withdrawn(result) ? "**no longer**" : result.countable ? "yes" : "no"
+            } | ${withdrawn(result) ? `imported as countable, and withdrawn since: ${result.countabilityReason}. The hash it preserved is not the hash this family produces now` : result.countabilityReason} |`;
           }),
+          "",
+          ...(intakeNote === null ? [] : [intakeNote]),
         ].join("\n"),
     "",
     "## Countability Rules",
@@ -133,7 +158,14 @@ export function renderExternalIntakeReport(input: {
     `Current countable external provider families: ${countedFamilies.join(", ") || "none"}.`,
     nonOpenAiFamilies.length > 0
       ? "A non-OpenAI completed run has imported cleanly under this hash. That is cross-lab smoke presence; the diagnosis report decides whether it is cross-lab difficulty or a provider-delta solve."
-      : "No cross-lab smoke claim exists until a non-OpenAI completed run imports cleanly under this hash.",
+      : stillWithdrawn.length > 0
+        ? [
+            "**The cross-lab smoke claim is WITHDRAWN.** A non-OpenAI packet did import cleanly, and the",
+            "hash it imported against is not the hash this family produces now, so it establishes neither",
+            "cross-lab presence nor a provider-delta solve. There is no cross-lab claim of any kind on this",
+            "family until a non-OpenAI completed run imports cleanly under the current hash.",
+          ].join(" ")
+        : "No cross-lab smoke claim exists until a non-OpenAI completed run imports cleanly under this hash.",
     "",
     "---",
     "",

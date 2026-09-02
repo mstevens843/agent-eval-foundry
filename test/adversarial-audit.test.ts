@@ -728,6 +728,11 @@ describe("adversarial readiness and reports", () => {
         isolation: "subprocess",
         countedAgentTrials: 1,
         agentTrialsPassed: 0,
+        // `difficulty-evidenced` reads root causes now, so a fixture that asserts SHIP has to say
+        // the counted failure was adjudicated. Leaving it out would make this test assert SHIP on
+        // evidence nobody has attributed — the thing that gate exists to refuse.
+        capabilityEvidencedTrials: 1,
+        unlabelledCountedTrials: 0,
         sharedBankSubjects: 1,
         reportsDeterministic: true,
         trialReady: true,

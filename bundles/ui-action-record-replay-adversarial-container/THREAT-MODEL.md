@@ -2,7 +2,7 @@
 
 Campaign: `ui-action-record-replay-adversarial`
 Challenge hash: `1050e79f4804a96a5327d50dd81765b0`
-Verifier hash: `587cf7a875db520362da506c1a62f6fd`
+Verifier hash: `b80212dc994a01643c04723547aceb7b`
 
 Objective: Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.
 

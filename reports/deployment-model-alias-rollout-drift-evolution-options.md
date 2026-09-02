@@ -8,10 +8,14 @@ families and they are not trial evidence.
 | item | value |
 |---|---|
 | parent family | `deployment-model-alias-rollout-drift` |
-| provider-delta route | `evolve_family` |
-| selected proposal | `provider-failover-router-alias-drift-probe` |
+| provider-delta route | `run_non_openai_smoke` |
+| selected proposal | none |
 
-Mixed provider smoke makes the current family a diagnosis/evolution candidate. Start with the selected probe; do not build a full descendant until the probe survives.
+No evolution is selected yet because the current provider-delta diagnosis does not route to family evolution.
+
+## Selected Executable Probe Evidence
+
+No selected evolution proposal is on record.
 
 ## Proposals
 
@@ -188,7 +192,7 @@ No proposal validation findings.
 ## Evidence Boundary
 
 - Evolution proposals are routing artifacts, not measured families.
-- The selected proposal should start as a mechanism probe.
+- The selected proposal starts as a mechanism probe.
 - No full descendant should be built until the probe survives cheap validation.
 - No model trial was run to produce this report.
 

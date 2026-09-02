@@ -18,7 +18,7 @@ foundry trials campaign import --family prompt-injection-memory-poisoning <this-
 
 | check | why |
 |---|---|
-| `challengeHash` equals `9b3e0c84addabc2e195ecbd490ba81dd` | a trial run against a different version of the task is evidence about that version, not this one |
+| `challengeHash` equals `7443bf6d6c6b2ccf69cc20f417ff048c` | a trial run against a different version of the task is evidence about that version, not this one |
 | `transcript.txt` exists and is non-empty | a run with no transcript cannot be audited, so it cannot count |
 | `submission/subject.mjs` exist | a counted trial needs every artifact it was graded on |
 | the submission is not a checked-in baseline | an artifact that does nothing is the absence of an attempt |

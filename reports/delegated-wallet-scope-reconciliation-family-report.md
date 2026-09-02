@@ -8,7 +8,7 @@ pressure.
 
 ## Status
 
-**1 counted real-agent trial(s) exist.** Read the agent-results report before quoting difficulty.
+**Local evidence only.** No counted real-agent trial exists for this descendant yet.
 
 | item | value |
 |---|---:|
@@ -22,12 +22,12 @@ pressure.
 | mutant-detection axes | 3 |
 | blind scenarios | 0 |
 | package files | 9 |
-| package bytes | 25842 |
+| package bytes | 24632 |
 | visible rule codes found | 10 |
 | scenario set id | `reconciliation-804-4b4cc8ff` |
-| challenge hash | `2140032d835a87ff254d01b6b4652f21` |
-| counted real-agent trials | 1 |
-| stale/superseded trials | 0 |
+| challenge hash | `45f27b644a84364e3d3855f68cd243a2` |
+| counted real-agent trials | 0 |
+| stale/superseded trials | 1 |
 
 ## Knobs
 

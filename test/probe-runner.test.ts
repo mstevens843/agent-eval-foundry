@@ -47,6 +47,7 @@ const loaded = () => {
 };
 
 const firstDefinition = (): ProbeDefinition => loaded().definitions[0] as ProbeDefinition;
+const PROVIDER_FAILOVER_PROBE_ID = "provider-failover-router-alias-drift-probe";
 
 function expectSchemaCode(fn: () => unknown, code: string) {
   let thrown: unknown;
@@ -135,6 +136,67 @@ describe("Mechanism Probe Runner v1", () => {
           .every((subject) => subject.caughtByIntendedChecks),
       ),
     ).toBe(true);
+  });
+
+  it("runs the provider-failover router alias probe with deterministic scenario coverage", () => {
+    const { definitions, summary } = loaded();
+    const definition = definitions.find((item) => item.id === PROVIDER_FAILOVER_PROBE_ID);
+    const result = summary.probes.find((item) => item.probeId === PROVIDER_FAILOVER_PROBE_ID);
+
+    expect(definition).toBeDefined();
+    expect(result).toBeDefined();
+    expect(definition?.scenarios.map((scenario) => scenario.id)).toEqual([
+      "failover-provider-b-clean-continue",
+      "late-receipt-provider-b-rollback",
+      "ledger-disagreement-quarantine",
+      "valid-failback-after-b-regression",
+      "invalid-failback-cache-stale",
+      "mixed-provider-eval-attribution",
+      "router-receipt-absent-quarantine",
+      "rollback-provider-route-not-alias",
+    ]);
+    expect(result?.verdict).toBe("promote_to_task_shape");
+    expect(result?.referencePassed).toBe(true);
+    expect(result?.badSubjectsCaught).toBe(result?.badSubjectsTotal);
+    expect(result?.distinctFailedChecks).toEqual(
+      expect.arrayContaining([
+        "current_route_reconciled",
+        "router_receipt_respected",
+        "provider_model_attributed",
+        "ledger_disagreement_preserved",
+        "rollback_target_correct",
+        "failback_target_correct",
+        "continue_when_clean",
+        "audit_matches_router_sources",
+        "liveness",
+      ]),
+    );
+  });
+
+  it("catches provider-failover bad subjects by their intended named checks", () => {
+    const { summary } = loaded();
+    const result = summary.probes.find((item) => item.probeId === PROVIDER_FAILOVER_PROBE_ID);
+    if (result === undefined) throw new Error("expected provider-failover probe result");
+    const bySubject = new Map(result.subjectResults.map((subject) => [subject.subjectId, subject]));
+
+    expect(bySubject.get("cached-router-truster")?.failedChecks).toEqual(
+      expect.arrayContaining(["current_route_reconciled", "no_stale_router_assumption"]),
+    );
+    expect(bySubject.get("receipt-blind-rollbacker")?.failedChecks).toEqual(
+      expect.arrayContaining(["router_receipt_respected", "rollback_target_correct"]),
+    );
+    expect(bySubject.get("always-failback")?.failedChecks).toEqual(
+      expect.arrayContaining(["failback_target_correct", "continue_when_clean"]),
+    );
+    expect(bySubject.get("never-failback")?.failedChecks).toEqual(
+      expect.arrayContaining(["failback_target_correct", "liveness"]),
+    );
+    expect(bySubject.get("audit-router-liar")?.failedChecks).toEqual(
+      expect.arrayContaining(["audit_matches_router_sources", "provider_model_attributed"]),
+    );
+    expect(bySubject.get("always-quarantine")?.failedChecks).toEqual(
+      expect.arrayContaining(["continue_when_clean", "liveness"]),
+    );
   });
 
   it("rejects a failed reference-like probe subject", () => {
@@ -230,6 +292,24 @@ describe("Mechanism Probe Runner v1", () => {
     expect(draft.knobs.length).toBeGreaterThanOrEqual(2);
     expect(draft.expectedMutants.length).toBeGreaterThan(0);
     expect(draft.transferLinks.length).toBeGreaterThan(0);
+  });
+
+  it("generates a task-shape scaffold from the provider-failover probe", () => {
+    const { workbench, definitions, summary } = loaded();
+    const probe = definitions.find((definition) => definition.id === PROVIDER_FAILOVER_PROBE_ID);
+    const candidate = workbench.candidates.find((item) => item.id === "provider-failover-router-alias-drift");
+    const result = summary.probes.find((item) => item.probeId === PROVIDER_FAILOVER_PROBE_ID);
+
+    expect(probe).toBeDefined();
+    expect(candidate).toBeDefined();
+    expect(result?.verdict).toBe("promote_to_task_shape");
+    const draft = probeToTaskShapeDraft(probe as ProbeDefinition, candidate as DiscoveryCandidate, result);
+    expect(draft.familyId).toBe("provider-failover-router-alias-drift");
+    expect(draft.hiddenRegionDraft).toContain("router receipts");
+    expect(draft.knobs.map((knob) => knob.name)).toEqual(
+      expect.arrayContaining(["actionRequired", "routerReceiptDelay", "ledgerDisagreement"]),
+    );
+    expect(draft.adversarialAuditNotes.join("\n")).toContain("router receipts");
   });
 
   it("renders the mechanism probe report deterministically", () => {

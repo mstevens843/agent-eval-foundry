@@ -11,6 +11,7 @@
 // declarations they are labelled as such in every rendering.
 
 import { join } from "node:path";
+import { BUILT_FAMILY_IDS } from "../families/registry.js";
 import { familyEvidenceFor } from "../reports/evidence.js";
 import { type FamilyAssessment, type FamilyEvidence, assessFamily } from "../reports/ship-report.js";
 import { readFamilyTrials } from "../trials/directory.js";
@@ -54,19 +55,19 @@ export interface FamilyLoopState {
 /**
  * Families whose evidence is computed by running them, rather than read off their shape.
  *
- * Every routable family belongs here once it has been built: the gate must read a sweep and the
- * trial directories, not a number somebody typed into a JSON file.
+ * DERIVED, never typed. "A family that can run its own subjects and produce a matrix" is exactly
+ * what `BUILT_FAMILIES` means, so the set of measured families IS the set of built families and the
+ * two cannot be allowed to be separate sentences. This used to be a hand-written list of eight ids
+ * that happened to agree with the registry; nothing enforced the agreement, so the ninth family
+ * would have been read off its shape — a number an author typed into a JSON file — while the gate
+ * reported it as measured evidence and said nothing.
+ *
+ * `test/family-list-drift.test.ts` holds the general form of that rule for every dependent list.
  */
-const MEASURED_FAMILIES = new Set([
-  "prompt-injection-containment",
-  "prompt-injection-memory-poisoning",
-  "ui-action-record-replay",
-  "ui-replay-live-dom",
-  "checker-required-memory-poisoning",
-  "access-token-scope-expansion",
-  "delegated-wallet-scope-reconciliation",
-  "deployment-model-alias-rollout-drift",
-]);
+export const measuredFamilies = (builtFamilyIds: readonly string[] = BUILT_FAMILY_IDS): ReadonlySet<string> =>
+  new Set(builtFamilyIds);
+
+export const MEASURED_FAMILIES: ReadonlySet<string> = measuredFamilies();
 
 type EvidenceLoader = (familyId: string) => ReturnType<typeof familyEvidenceFor>;
 

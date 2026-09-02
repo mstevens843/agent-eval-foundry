@@ -182,6 +182,33 @@ export interface DiscoveryCandidateEvidence {
   readonly reason: string;
 }
 
+/**
+ * One candidate's evidence rows folded into a single ranking input.
+ *
+ * Several independent producers emit evidence for the same candidate (probe runs, promotions,
+ * lineage feedback). Keying them into a plain `Map` keeps only the last producer's row, which
+ * silently erased the strongest provenance a candidate had earned. The merged record keeps the
+ * strongest provenance status and applies lineage adjustments additively on top of it, and it
+ * carries every contributing row so nothing is dropped.
+ */
+export interface MergedCandidateEvidence {
+  readonly candidateId: string;
+  /** Strongest provenance status across the candidate's non-lineage rows (kill dominates). */
+  readonly status: DiscoveryCandidateEvidenceStatus;
+  /** `provenanceBoost + lineageAdjustment`; the value ranking uses. */
+  readonly rankBoost: number;
+  /** Rank boost of the row the status came from; 0 when only lineage rows exist. */
+  readonly provenanceBoost: number;
+  /** Sum of every lineage row's `rankBoost`, positive or negative. */
+  readonly lineageAdjustment: number;
+  /** `sourceId` of the row the status came from. */
+  readonly primarySourceId: string;
+  /** Reason of the row the status came from. */
+  readonly reason: string;
+  /** Every row that contributed, in producer order. Nothing here is discarded. */
+  readonly rows: readonly DiscoveryCandidateEvidence[];
+}
+
 export interface SurfaceCoverageSummary {
   readonly totalCandidates: number;
   readonly defectMechanisms: readonly string[];
@@ -631,7 +658,8 @@ export function summarizeDiscoveryWorkbench(
   evidenceStatuses: readonly DiscoveryCandidateEvidence[] = [],
 ): DiscoveryWorkbenchSummary {
   const scores = scoreDiscoveryCandidates(workbench.candidates);
-  const rankedScores = rankScoresWithEvidence(scores, evidenceStatuses);
+  const mergedEvidence = mergeCandidateEvidence(evidenceStatuses);
+  const rankedScores = rankScoresWithEvidence(scores, mergedEvidence);
   const byDomain = countBy(workbench.candidates.map((c) => c.domain));
   const byMechanism = countBy(workbench.candidates.flatMap((c) => c.failureMechanisms));
   const byRecommendedAction = DISCOVERY_NEXT_STEPS.reduce(
@@ -645,7 +673,7 @@ export function summarizeDiscoveryWorkbench(
     .filter((s) =>
       ["mechanism_probe", "task_shape", "transfer_existing", "evolve_existing"].includes(s.recommendedAction),
     )
-    .filter((s) => evidenceStatuses.find((e) => e.candidateId === s.candidateId)?.status !== "probe-killed")
+    .filter((s) => mergedEvidence.get(s.candidateId)?.status !== "probe-killed")
     .slice(0, 10);
   const surfaceCoverage = summarizeSurfaceCoverage(workbench.candidates);
   const warnings = workbenchWarnings(workbench.candidates, scores, surfaceCoverage);
@@ -949,18 +977,80 @@ function evidenceRank(status: DiscoveryCandidateEvidenceStatus): number {
   )[status];
 }
 
+const LINEAGE_EVIDENCE_STATUSES: ReadonlySet<DiscoveryCandidateEvidenceStatus> = new Set([
+  "lineage-boosted",
+  "lineage-penalized",
+]);
+
+/** Lineage rows are portfolio adjustments, not provenance: they add, they never replace. */
+export function isLineageEvidenceStatus(status: DiscoveryCandidateEvidenceStatus): boolean {
+  return LINEAGE_EVIDENCE_STATUSES.has(status);
+}
+
+const round1 = (n: number): number => Math.round(n * 10) / 10;
+
+function strongerProvenance(
+  a: DiscoveryCandidateEvidence,
+  b: DiscoveryCandidateEvidence,
+): DiscoveryCandidateEvidence {
+  // A cheap kill is terminal: no later row may promote a killed candidate back into the queue.
+  if (a.status === "probe-killed") return a;
+  if (b.status === "probe-killed") return b;
+  const rankDelta = evidenceRank(b.status) - evidenceRank(a.status);
+  if (rankDelta !== 0) return rankDelta > 0 ? b : a;
+  if (a.rankBoost !== b.rankBoost) return a.rankBoost > b.rankBoost ? a : b;
+  return a.sourceId.localeCompare(b.sourceId) <= 0 ? a : b;
+}
+
+/**
+ * The single lookup convention for candidate evidence.
+ *
+ * Merge semantics: strongest provenance status wins (a `probe-killed` row dominates everything),
+ * and every lineage `rankBoost` is summed on top of that row's own boost. A lineage penalty
+ * therefore still lowers a candidate's rank without erasing the fact that it reached, say,
+ * `family-build-ready`.
+ */
+export function mergeCandidateEvidence(
+  evidence: readonly DiscoveryCandidateEvidence[],
+): ReadonlyMap<string, MergedCandidateEvidence> {
+  const rowsById = new Map<string, DiscoveryCandidateEvidence[]>();
+  for (const row of evidence) {
+    const rows = rowsById.get(row.candidateId);
+    if (rows === undefined) rowsById.set(row.candidateId, [row]);
+    else rows.push(row);
+  }
+  const merged = new Map<string, MergedCandidateEvidence>();
+  for (const [candidateId, rows] of rowsById) {
+    const provenanceRows = rows.filter((row) => !isLineageEvidenceStatus(row.status));
+    const lineageRows = rows.filter((row) => isLineageEvidenceStatus(row.status));
+    const pool = provenanceRows.length > 0 ? provenanceRows : lineageRows;
+    const primary = pool.reduce(strongerProvenance);
+    const lineageAdjustment = round1(lineageRows.reduce((sum, row) => sum + row.rankBoost, 0));
+    const provenanceBoost = provenanceRows.length > 0 ? primary.rankBoost : 0;
+    merged.set(candidateId, {
+      candidateId,
+      status: primary.status,
+      rankBoost: round1(provenanceBoost + lineageAdjustment),
+      provenanceBoost,
+      lineageAdjustment,
+      primarySourceId: primary.sourceId,
+      reason: primary.reason,
+      rows,
+    });
+  }
+  return merged;
+}
+
 function rankScoresWithEvidence(
   scores: readonly DiscoveryCandidateScore[],
-  evidence: readonly DiscoveryCandidateEvidence[],
+  merged: ReadonlyMap<string, MergedCandidateEvidence>,
 ): readonly DiscoveryCandidateScore[] {
-  const byCandidate = new Map(evidence.map((e) => [e.candidateId, e]));
+  const weight = (candidateId: string): number => {
+    const evidence = merged.get(candidateId);
+    return evidenceRank(evidence?.status ?? "score-only") + (evidence?.rankBoost ?? 0);
+  };
   return [...scores].sort((a, b) => {
-    const ea = byCandidate.get(a.candidateId);
-    const eb = byCandidate.get(b.candidateId);
-    const evidenceDelta =
-      evidenceRank(eb?.status ?? "score-only") +
-      (eb?.rankBoost ?? 0) -
-      (evidenceRank(ea?.status ?? "score-only") + (ea?.rankBoost ?? 0));
+    const evidenceDelta = weight(b.candidateId) - weight(a.candidateId);
     if (evidenceDelta !== 0) return evidenceDelta;
     return b.totalScore - a.totalScore || a.candidateId.localeCompare(b.candidateId);
   });

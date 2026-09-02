@@ -19,7 +19,7 @@ The verifier output must be tied to the same `runId` as `metadata.json`, for exa
 ```json
 {
   "runId": "deployment-model-alias-rollout-drift-claude-EDITME",
-  "challengeHash": "0e9b87a5f260544cfbc1cdce8f08938c",
+  "challengeHash": "805efb58c923f9e081db1b41967392d7",
   "cells": []
 }
 ```

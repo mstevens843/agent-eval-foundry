@@ -372,23 +372,59 @@ describe("the already-solved gate", () => {
     expect(evidence.agentTrialsPassed).toBe(evidence.countedAgentTrials);
   });
 
-  it("a family every agent solves is NOT-READY, not SHIP", () => {
+  it("a family every agent solves is NOT-READY, and now for two reasons", () => {
+    // WAS: `expect(...difficulty-evidenced...).toBe("pass")`.
+    //
+    // That assertion encoded the OLD evidence picture rather than a bug: under the old gate, six
+    // counted trials WERE the difficulty evidence, because `countedAgentTrials > 0` was the whole
+    // question. Every one of those six passed 128 of 128, and their root-cause records say `clean`.
+    // A clean solve is a fact about the family being easy for this subject; it is not evidence that
+    // the family is hard under any label, so the gate that asks for capability-attributed failure
+    // now fails too. The test's conclusion — NOT-READY — was right then and is right now.
+    //
+    // (`computeEvidence` does not read the sidecars at all, so this also exercises the safe default:
+    // evidence that never computed root causes reads as zero capability trials, not as a pass.)
     const a = assessFamily(shape as NonNullable<typeof shape>, registry, evidence);
-    expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("pass");
+    expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("fail");
     expect(a.results.find((r) => r.gate.id === "not-already-solved")?.verdict).toBe("fail");
     expect(a.blockingFailures).toContain("not-already-solved");
+    expect(a.blockingFailures).toContain("difficulty-evidenced");
     expect(a.verdict).toBe("NOT-READY");
   });
 
-  it("the same family WOULD ship if one agent had failed", () => {
+  it("the same family WOULD ship if one agent had failed AND somebody said why", () => {
     // Guards against the gate being unconditionally red.
+    //
+    // WAS: the same call without `capabilityEvidencedTrials`, asserting `blockingFailures` is empty
+    // on the strength of one failing trial alone. That encoded the bug: "an agent failed" was
+    // treated as "the family is hard", which is exactly how a spec defect and a harness contract
+    // violation were published as difficulty. One failing trial is still necessary and is no longer
+    // sufficient — the failure has to have been attributed.
     const a = assessFamily(shape as NonNullable<typeof shape>, registry, {
       ...evidence,
       agentTrialsPassed: evidence.countedAgentTrials - 1,
+      capabilityEvidencedTrials: 1,
+      unlabelledCountedTrials: 0,
       sharedBankSubjects: 3,
     });
     expect(a.blockingFailures).toEqual([]);
     expect(a.verdict).toBe("SHIP");
+  });
+
+  it("but not if the failure is unattributed: the label is what ships it, not the failure count", () => {
+    // The other half of the anti-vacuity pair. Identical evidence, one field different, and the
+    // family does not ship. Without this the test above would pass on a gate that had simply been
+    // loosened again.
+    const a = assessFamily(shape as NonNullable<typeof shape>, registry, {
+      ...evidence,
+      agentTrialsPassed: evidence.countedAgentTrials - 1,
+      capabilityEvidencedTrials: 0,
+      unlabelledCountedTrials: 1,
+      sharedBankSubjects: 3,
+    });
+    expect(a.blockingFailures).toEqual(["difficulty-evidenced"]);
+    expect(a.results.find((r) => r.gate.id === "not-already-solved")?.verdict).toBe("pass");
+    expect(a.verdict).toBe("NOT-READY");
   });
 
   it("in-process isolation fails once agent artifacts are graded", () => {

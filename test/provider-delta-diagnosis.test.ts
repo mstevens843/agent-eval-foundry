@@ -17,7 +17,7 @@ import {
 import type { TrialRecord } from "../src/trials/types.js";
 
 const FAMILY_ID = "deployment-model-alias-rollout-drift";
-const HASH = "0e9b87a5f260544cfbc1cdce8f08938c";
+const HASH = "805efb58c923f9e081db1b41967392d7";
 const SCENARIO_SET_ID = "drift-339-590affe3";
 
 const scenarioParams = new Map<string, Record<string, unknown>>([
@@ -273,5 +273,21 @@ describe("provider-delta diagnosis", () => {
     expect(firstEvolution).toBe(secondEvolution);
     expect(firstDiagnosis).toContain("Claude solving means this is not cross-lab difficulty evidence");
     expect(firstEvolution).toContain("provider-failover-router-alias-drift-probe");
+  });
+
+  it("renders executable probe evidence without claiming family or model evidence", async () => {
+    const { EXECUTABLE_PROBES, runProbe } = await import("../src/foundry/probe-runner.js");
+    const diagnosis = mixedDiagnosis();
+    const plan = planDeploymentAliasEvolution(diagnosis, deploymentAliasEvolutionProposals());
+    const probe = EXECUTABLE_PROBES.find(
+      (definition) => definition.id === "provider-failover-router-alias-drift-probe",
+    );
+    if (probe === undefined) throw new Error("expected provider-failover probe");
+    const report = renderDeploymentAliasEvolutionOptionsReport(plan, runProbe(probe));
+
+    expect(report).toContain("executable local probe evidence");
+    expect(report).toContain("| probe | `provider-failover-router-alias-drift-probe` |");
+    expect(report).toContain("| verdict | `promote_to_task_shape` |");
+    expect(report).toContain("not a built family, package, model trial, or production-matrix gate");
   });
 });

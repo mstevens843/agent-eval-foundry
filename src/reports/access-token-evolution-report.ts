@@ -27,11 +27,19 @@ export function renderAccessTokenEvolutionReport(input: AccessTokenEvolutionRepo
   const trial = parentState.trials.find((record) => record.runId === "access-token-2026-08-o1");
   const selectedVariantId = selectedVariant?.id ?? "none";
 
+  // The recorded smoke ran against a package whose starter WAS the answer, so it is quoted here only
+  // as withdrawn evidence. `counts` on the record is about grading and says nothing about whether the
+  // task still exists, which is exactly how this run was previously presented as live.
+  const smokeSuperseded = counted === 0 && trial !== undefined;
+
   return [
     "# Access-Token Evolution v1",
     "",
-    "This report tracks the recovery path after `access-token-scope-expansion` was cleanly solved by",
-    "one counted OpenAI/Codex smoke trial. The correct next action is evolution, not a full matrix.",
+    "This report tracked the recovery path after `access-token-scope-expansion` was read as cleanly",
+    "solved by one counted OpenAI/Codex smoke trial. That reading has been WITHDRAWN: the package that",
+    "smoke ran against shipped a `starter/subject.mjs` which was a complete passing solution, graded at",
+    "0 failures out of 384. A clean pass against a package containing its own answer key says nothing",
+    "about the mechanism, so the branch's status is UNKNOWN rather than solved.",
     "",
     "## Parent Signal",
     "",
@@ -41,13 +49,15 @@ export function renderAccessTokenEvolutionReport(input: AccessTokenEvolutionRepo
     `| challenge hash | \`${challengeHash}\` |`,
     `| counted smoke trials | ${counted} |`,
     `| clean passes | ${passed} |`,
-    `| recorded smoke run | \`${trial?.runId ?? "not-found"}\` |`,
-    `| smoke result | ${trial === undefined ? "not-found" : `${trial.scenarios - trial.failed}/${trial.scenarios} pass`} |`,
+    `| recorded smoke run | \`${trial?.runId ?? "not-found"}\`${smokeSuperseded ? " — **superseded**, invalidated by the 2026-09-01 starter-leak repair" : ""} |`,
+    `| smoke result | ${trial === undefined ? "not-found" : `${trial.scenarios - trial.failed}/${trial.scenarios} pass${smokeSuperseded ? " against the superseded package; not current evidence" : ""}`} |`,
     `| primary kill/evolve reason | \`${parentState.analysis.primary?.reason ?? "none"}\` |`,
     `| disposition | \`${parentState.analysis.disposition ?? "none"}\` |`,
     `| matrix gate | ${smokeGate.matrixReadinessStatus} |`,
     "",
-    "A clean smoke pass is useful evidence. It prevents wasting a `/6` matrix and routes the family into evolution.",
+    smokeSuperseded
+      ? "A clean smoke pass is useful evidence ONLY when the package withheld the answer. This one did not, so it neither established that the family is solved nor justified skipping a matrix. What it bought was the discovery of the leak. The family now needs one counted smoke against the repaired package before any evolution or matrix decision can be made on evidence."
+      : "A clean smoke pass is useful evidence. It prevents wasting a `/6` matrix and routes the family into evolution.",
     "",
     "## Descendant Proposals",
     "",
@@ -129,7 +139,9 @@ export function renderAccessTokenEvolutionReport(input: AccessTokenEvolutionRepo
         ]),
     "## Evidence Boundary",
     "",
-    "- Parent clean smoke pass is counted real-agent evidence that the parent is solved by the available OpenAI/Codex subject.",
+    smokeSuperseded
+      ? "- The parent's clean smoke pass is WITHDRAWN, not counted: it ran against a package whose visible starter was a complete passing solution, so it cannot distinguish a subject that solved the mechanism from one that kept the starter. The parent's status is unknown."
+      : "- Parent clean smoke pass is counted real-agent evidence that the parent is solved by the available OpenAI/Codex subject.",
     selectedPromotion?.promotion.status === "family-built"
       ? "- The descendant now has full local verifier/mutant/package evidence, but no counted real-agent trial yet."
       : "- Descendant probe evidence is executable local evidence, not full-family evidence.",

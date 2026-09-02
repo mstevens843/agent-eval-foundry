@@ -410,17 +410,6 @@ export function buildScenarioFromParts(params: ScenarioParams): Scenario {
   const rolloutLedger = rolloutLedgerFor(params);
   const evalStream = evalStreamFor(params);
   const baseline = baselineFor(params);
-  const request: RolloutRequest = {
-    id: `rollout-${params.alias}-${params.seed}`,
-    alias: params.alias,
-    approvedVersion: initialVersionFor(params.seed),
-    approvedGeneration: 10,
-    requiredBaselineVersion: baseline.version,
-    reevaluationAvailable: params.reevaluation === "available",
-    observedAt: BASE_OBSERVED_AT,
-    idempotencyKey: `idem-${params.alias}-${params.seed}-${params.surface}`,
-    surface: params.surface,
-  };
   const idValue = [
     "dmd",
     params.alias,
@@ -438,6 +427,22 @@ export function buildScenarioFromParts(params: ScenarioParams): Scenario {
     `r${params.repeatCount}`,
     params.seed,
   ].join("-");
+
+  // The idempotency key is per-scenario, not per-(alias, seed, surface). Twelve keys shared across
+  // 339 scenarios made the SPEC's dedup rule mean less than it says: a subject that cached one key
+  // per alias/surface would have suppressed a *different* scenario's effect. One key per scenario is
+  // what "the same rollout request may be attempted twice" actually means.
+  const request: RolloutRequest = {
+    id: `rollout-${params.alias}-${params.seed}`,
+    alias: params.alias,
+    approvedVersion: initialVersionFor(params.seed),
+    approvedGeneration: 10,
+    requiredBaselineVersion: baseline.version,
+    reevaluationAvailable: params.reevaluation === "available",
+    observedAt: BASE_OBSERVED_AT,
+    idempotencyKey: `idem-${idValue}`,
+    surface: params.surface,
+  };
 
   return {
     id: idValue,

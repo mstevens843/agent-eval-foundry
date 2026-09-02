@@ -9,7 +9,7 @@
       "requiredBaselineVersion": "model-beta",
       "reevaluationAvailable": false,
       "observedAt": 200,
-      "idempotencyKey": "idem-prod-chat-23-release_console",
+      "idempotencyKey": "idem-dmd-prod-chat-same-complete-cache-fresh-window-complete-reg-minor-all_current-stale_request-correct_previous-provider_says_red-unavailable-release_console-r2-23",
       "surface": "release_console"
     },
     "cachedAlias": {

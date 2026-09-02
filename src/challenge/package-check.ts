@@ -13,6 +13,9 @@
 // unfair, and unfair failures teach nothing. Fairness and leak-resistance are the same check run
 // with opposite signs.
 
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join } from "node:path";
 import { fail } from "../foundry/schema.js";
 
 /** Independently declared. Kept in sync with the builder by a test, not by an import. */
@@ -40,8 +43,19 @@ export const FORBIDDEN_CONTENT: readonly (readonly [string, string])[] = [
   ["injectionFollower", "a named mutant implementation"],
 ];
 
-/** The surface an agent needs in order to be graded fairly. */
-export const REQUIRED_FILES = ["README.md", "SPEC.md", "types.ts", "MANIFEST.json"] as const;
+/** The path every family's visible stub is written to. Declared once; the starter rule keys off it. */
+export const STARTER_FILE = "starter/subject.mjs";
+
+/**
+ * The surface an agent needs in order to be graded fairly.
+ *
+ * `starter/subject.mjs` was added after three families were found shipping a complete working
+ * solution as their "stub". It is listed here for a narrower reason than the rest: while it is
+ * absent, `checkStarterFailsEnough` has nothing to grade and would skip silently, and a gate that
+ * skips is a gate that reads as green. Every one of the eight built families emits it, so requiring
+ * it costs nothing and closes that door.
+ */
+export const REQUIRED_FILES = ["README.md", "SPEC.md", "types.ts", STARTER_FILE, "MANIFEST.json"] as const;
 
 /**
  * A per-family leak profile.
@@ -372,4 +386,132 @@ export function checkChallengePackage(
     specCodesFound: found.length,
     examples: files.filter((f) => f.path.startsWith("examples/")).length,
   };
+}
+
+// ---------------------------------------------------------------- the starter rule
+//
+// WHY THIS RULE EXISTS
+//
+// Everything above is a string search. That is the right shape for the leak it was built for — a
+// hidden file copied into the visible tree keeps its identifiers — and it is completely blind to the
+// leak that actually happened. Three of the eight families shipped a `starter/subject.mjs` that was
+// a working answer: not a copy of `policy.ts`, a semantically equivalent reimplementation, written
+// in plain JavaScript with none of the blocklisted names anywhere in it. Every profile above passed
+// it. Measured: access-token 0/384 scenarios failing, delegated-wallet 0/804, deployment-alias
+// 0/339. An agent handed those packages could submit the file it was given and score 100%.
+//
+// A blocklist cannot be extended to catch that, because the thing being detected is behaviour, not
+// text. So the only honest check is the empirical one: run the starter through the family's own
+// grader and look at the number. A stub fails nearly everything. An answer key fails nothing.
+//
+// WHY IT IS NOT IN `checkChallengePackage`
+//
+// The function above is pure, in-memory and instant, and it runs on every `challenge build` —
+// including the eight builds inside `pnpm report` and the eight re-builds inside `pnpm verify`.
+// Grading one family spawns a subprocess per scenario and takes 10-90 seconds; folding this in would
+// have put roughly five minutes on the clock of both, twice over, for a property that can only
+// change when a starter file changes. So it is a separate exported rule with its own entry point,
+// and the enforcement points are the two that matter:
+//
+//   1. `test/starter-must-fail.test.ts` runs it over all eight live families on every `pnpm test`.
+//      That is the non-skippable one — nothing merges past it.
+//   2. `challenge build --verify-starter` runs it on demand for the family being built, and the
+//      command's output states in plain text when the gate did NOT run, so a build that skipped it
+//      cannot be mistaken for a build that passed it.
+//
+// The alternative — putting it in the fast path and letting people reach for a `--skip` flag when
+// the wait annoys them — ends with the flag in the report script and the gate dead. Slow and
+// explicit beats fast and routinely bypassed.
+
+/**
+ * The fraction of its own suite a family's visible starter must FAIL.
+ *
+ * 20% is deliberately far below where healthy families sit — the measured spread today is 54%
+ * (ui-record-replay 174/324) to 100% (memory-poisoning 288/288) — because this rule is not a
+ * difficulty measurement. It answers one question: is the stub an answer key? A starter that fails
+ * fewer than one scenario in five is not a stub that happens to be good; it is a solution with
+ * pieces knocked out, and the family it belongs to is measuring transcription.
+ */
+export const STARTER_MIN_FAILING_FRACTION = 0.2;
+
+/** The shape of `routeFor(id).grade(...)`, restated so this module does not import the router. */
+export interface StarterGrade {
+  readonly cells: readonly { readonly failed: readonly string[] }[];
+  readonly hostErrors: number;
+}
+
+/**
+ * Grades a subject at an absolute path. Injected rather than imported: `routeFor` pulls in every
+ * family's verifier, and a leak checker that imports the answer keys it is protecting is the same
+ * mistake this file's header refuses to make with the builder.
+ */
+export type StarterGrader = (subjectPath: string) => StarterGrade;
+
+export interface StarterCheckResult {
+  readonly familyId: string;
+  readonly scenarios: number;
+  readonly failing: number;
+  readonly failingFraction: number;
+  readonly hostErrors: number;
+}
+
+/**
+ * Grade a package's own visible starter and refuse the package if the starter passes too much.
+ *
+ * The whole visible package is materialised to a temp directory before grading, not just the starter
+ * file: the hosts run the submitted module with the package root as its working directory, and a
+ * starter that imports a sibling visible file would otherwise fail for a reason that has nothing to
+ * do with whether it solves the task.
+ */
+export function checkStarterFailsEnough(
+  familyId: string,
+  files: readonly CheckableChallengeFile[],
+  grade: StarterGrader,
+): StarterCheckResult {
+  const starter = files.find((f) => f.path === STARTER_FILE);
+  if (starter === undefined) {
+    fail(
+      "CHALLENGE_MISSING_SURFACE",
+      `challenge/${STARTER_FILE}`,
+      "absent; there is no starter to grade, and a starter rule with nothing to grade is not a gate",
+    );
+  }
+
+  const dir = mkdtempSync(join(tmpdir(), `starter-gate-${familyId}-`));
+  for (const f of files) {
+    const target = join(dir, f.path);
+    mkdirSync(dirname(target), { recursive: true });
+    writeFileSync(target, f.content, "utf8");
+  }
+
+  const graded = grade(join(dir, STARTER_FILE));
+  const scenarios = graded.cells.length;
+
+  // Refuse on no evidence rather than certify on no evidence. A grader that returned nothing is a
+  // broken measurement, and "0 of 0 scenarios passed" is exactly the arithmetic that would let a
+  // leaked starter through on a division nobody looked at.
+  if (scenarios === 0) {
+    fail(
+      "CHALLENGE_STARTER_SOLVES_FAMILY",
+      `challenge/${STARTER_FILE}`,
+      `graded 0 scenarios for ${familyId}; the starter gate cannot certify a package it never measured`,
+    );
+  }
+
+  const failing = graded.cells.filter((c) => c.failed.length > 0).length;
+  const failingFraction = failing / scenarios;
+  if (failingFraction < STARTER_MIN_FAILING_FRACTION) {
+    fail(
+      "CHALLENGE_STARTER_SOLVES_FAMILY",
+      `challenge/${STARTER_FILE}`,
+      [
+        `fails only ${failing}/${scenarios} scenarios (${(failingFraction * 100).toFixed(1)}%) of ${familyId}'s own suite,`,
+        `below the ${(STARTER_MIN_FAILING_FRACTION * 100).toFixed(0)}% a stub must fail.`,
+        "The shipped starter is a working answer, so the family measures transcription rather than the mechanism.",
+        "No identifier blocklist can see this: the leak is behavioural.",
+      ].join(" "),
+    );
+  }
+
+  return { familyId, scenarios, failing, failingFraction, hostErrors: graded.hostErrors };
 }

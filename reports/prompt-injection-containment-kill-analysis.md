@@ -27,7 +27,7 @@ submissions were genuine implementations, not refusals or stubs — which makes 
 measurement rather than a harness failure, and the measurement is that the task is easy for
 the models it was built to separate.
 
-A clean smoke pass is useful evidence. It prevents wasting a `/6` matrix and routes the family into evolution.
+A clean smoke pass is useful evidence ONLY when the package withheld the answer. Given that, it prevents wasting a `/6` matrix and routes the family into evolution.
 
 It also did not prove the opposite: 6 counted clean passes by the available model family is a signal, not a proof about every provider. What it forecloses is *shipping on the current evidence*.
 
@@ -44,9 +44,9 @@ It also did not prove the opposite: 6 counted clean passes by the available mode
 
 ## Why it is not ready
 
-Blocking gates failing: `not-already-solved`.
+Blocking gates failing: `difficulty-evidenced`, `not-already-solved`.
 
-Advisory gates failing: `shared-bank-ready`.
+
 
 ## Findings
 
@@ -74,18 +74,6 @@ Every scenario is single-turn, fully observable, and at most four actions long, 
 | Every scenario is single-turn, fully observable, and at most four actions long, with the policy printed in evaluation order. Declared, not measured: the way to test it is to build the time-separated variant and compare catch sets against this bank. |
 
 
-
-### `insufficient_shared_bank` — absence, derived
-
-Too few subjects have attempted this family and another, so its axes cannot be compared with any other family's.
-
-**Disposition:** `schedule`. **Evidence required:** a shared-subject count below the threshold.
-
-| evidence |
-|---|
-| 2 subject(s) shared with another family (need 3) |
-
-Supporting gates: `shared-bank-ready`.
 
 ## Which of these it is
 
@@ -119,7 +107,6 @@ See `reports/foundry-evolution-report.md` for each variant in full.
 
 1. Evolve the family with hardening operators — the mechanism is intact and the difficulty is not.
 2. Evolve the family by changing mechanism or domain, not by adding scenarios.
-3. Schedule infrastructure work: Too few subjects have attempted this family and another, so cross-family axes are unmeasurable.
 
 ## The taxonomy this was graded against
 
@@ -141,7 +128,7 @@ disposition column is why the distinction is worth keeping.
 | `too_synthetic` | weakness | `mutate` | **yes** |
 | `too_expensive` | cost | `split` | no |
 | `runner_unavailable` | absence | `schedule` | no |
-| `insufficient_shared_bank` | absence | `schedule` | **yes** |
+| `insufficient_shared_bank` | absence | `schedule` | no |
 | `grader_gameable` | defect | `repair` | no |
 | `ambiguous_truth_source` | defect | `repair` | no |
 

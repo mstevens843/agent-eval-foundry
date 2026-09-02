@@ -5,13 +5,13 @@ model, define what counts as a bypass, and list records that never count.
 
 | campaign | family | status | challenge hash | verifier hash | providers | surfaces |
 |---|---|---|---|---|---|---:|
-| `checker-required-memory-poisoning-adversarial` | `checker-required-memory-poisoning` | ready | `448f2f816c51030cc97a374816226168` | `6fc285d9426840691745d0237b598ace` | `codex`, `external`, `claude-import-only`, `gemini-import-only` | 11 |
-| `delegated-wallet-scope-reconciliation-adversarial` | `delegated-wallet-scope-reconciliation` | ready | `2140032d835a87ff254d01b6b4652f21` | `1823af8a376c33edc069a29773bf8756` | `codex`, `external`, `claude-import-only`, `gemini-import-only` | 12 |
-| `deployment-model-alias-rollout-drift-adversarial` | `deployment-model-alias-rollout-drift` | ready | `0e9b87a5f260544cfbc1cdce8f08938c` | `961d03c4e7cc668d207b1545b3376e54` | `codex`, `external`, `claude-import-only`, `gemini-import-only` | 12 |
-| `prompt-injection-containment-adversarial` | `prompt-injection-containment` | ready | `4911ffdfbd2c0e9b51752ed16c4f53e8` | `053a34ee607054aca9eadd8e67acf6b9` | `codex`, `external`, `claude-import-only`, `gemini-import-only` | 11 |
-| `prompt-injection-memory-poisoning-adversarial` | `prompt-injection-memory-poisoning` | ready | `9b3e0c84addabc2e195ecbd490ba81dd` | `aad7dc54a01dbea24f2b25ab5c24e843` | `codex`, `external`, `claude-import-only`, `gemini-import-only` | 11 |
-| `ui-action-record-replay-adversarial` | `ui-action-record-replay` | ready | `1050e79f4804a96a5327d50dd81765b0` | `587cf7a875db520362da506c1a62f6fd` | `codex`, `external`, `claude-import-only`, `gemini-import-only` | 11 |
-| `ui-replay-live-dom-adversarial` | `ui-replay-live-dom` | ready | `18c3f5afc5973604205cd7df23ce4cad` | `d74382ec2d5053d555f3575f455de421` | `codex`, `external`, `claude-import-only`, `gemini-import-only` | 12 |
+| `checker-required-memory-poisoning-adversarial` | `checker-required-memory-poisoning` | ready | `448f2f816c51030cc97a374816226168` | `ca78467a4fcd366a0af85f613230af0d` | `codex`, `external`, `claude-import-only`, `gemini-import-only` | 11 |
+| `delegated-wallet-scope-reconciliation-adversarial` | `delegated-wallet-scope-reconciliation` | ready | `45f27b644a84364e3d3855f68cd243a2` | `5ba883521580a48e422066ae26b80bb4` | `codex`, `external`, `claude-import-only`, `gemini-import-only` | 12 |
+| `deployment-model-alias-rollout-drift-adversarial` | `deployment-model-alias-rollout-drift` | ready | `805efb58c923f9e081db1b41967392d7` | `20cd3faa5ab2ddbb6781c1aff1d2addc` | `codex`, `external`, `claude-import-only`, `gemini-import-only` | 12 |
+| `prompt-injection-containment-adversarial` | `prompt-injection-containment` | ready | `4911ffdfbd2c0e9b51752ed16c4f53e8` | `288dd3f04387c9398924abcde9e3cb7a` | `codex`, `external`, `claude-import-only`, `gemini-import-only` | 11 |
+| `prompt-injection-memory-poisoning-adversarial` | `prompt-injection-memory-poisoning` | ready | `7443bf6d6c6b2ccf69cc20f417ff048c` | `5e476a3a86130f680a29a120ecd87d5c` | `codex`, `external`, `claude-import-only`, `gemini-import-only` | 11 |
+| `ui-action-record-replay-adversarial` | `ui-action-record-replay` | ready | `1050e79f4804a96a5327d50dd81765b0` | `b80212dc994a01643c04723547aceb7b` | `codex`, `external`, `claude-import-only`, `gemini-import-only` | 11 |
+| `ui-replay-live-dom-adversarial` | `ui-replay-live-dom` | ready | `18c3f5afc5973604205cd7df23ce4cad` | `7f516e612e077df10558e068515ae23d` | `codex`, `external`, `claude-import-only`, `gemini-import-only` | 12 |
 
 ## Threat Models
 

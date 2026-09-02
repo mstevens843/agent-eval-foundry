@@ -9,20 +9,8 @@ by. Rows are sorted by run id for exactly that reason.
 
 | run | subject | lab | files | lines | rules cited | self-check (shipped / described) | commands quoted | failed |
 |---|---|---|---:|---:|---:|---|---:|---:|
-| `access-token-2026-08-o1` | `gpt-5.6-sol` | openai | 1 | 140 | 6/8 | **none** / syntax-only | 1 | 0 |
 | `checker-required-2026-08-o1` | `gpt-5.6-sol` | openai | 2 | 248 | 0/14 | **none** / — | 0 | 614 |
-| `delegated-wallet-2026-08-o1` | `gpt-5.6-sol` | openai | 1 | 170 | 7/10 | **none** / example-harness | 0 | 0 |
-| `deployment-alias-2026-09-claude-1` | `claude-opus-5` | anthropic | 1 | 310 | 5/10 | **none** / example-harness | 0 | 0 |
-| `deployment-model-alias-rollout-drift-2026-08-o1` | `gpt-5.6-sol` | openai | 1 | 229 | 6/10 | **none** / syntax-only | 1 | 192 |
 | `live-dom-2026-08-o2` | `gpt-5.6-sol` | openai | 1 | 510 | 0/13 | **none** / syntax-only | 1 | 219 |
-| `mp-claude-r1` | `claude-opus-5` | anthropic | 1 | 384 | 7/8 | **none** / synthetic-scenarios | 0 | 32 |
-| `mp-claude-r2` | `claude-opus-5` | anthropic | 1 | 336 | 7/8 | **none** / synthetic-scenarios | 0 | 0 |
-| `mp-claude-r3` | `claude-opus-5` | anthropic | 1 | 342 | 7/8 | **none** / synthetic-scenarios | 0 | 0 |
-| `mp-codex-1` | `gpt-5.6-sol` | openai | 1 | 254 | 7/8 | **none** / synthetic-scenarios | 0 | 0 |
-| `mp-codex-2` | `gpt-5.6-sol` | openai | 1 | 293 | 7/8 | **none** / synthetic-scenarios | 1 | 13 |
-| `mp-codex-3` | `gpt-5.6-sol` | openai | 1 | 249 | 7/8 | **none** / example-harness | 1 | 32 |
-| `mp-haiku-1` | `claude-haiku-4-5` | anthropic | 1 | 250 | 7/8 | **none** / — | 0 | 32 |
-| `mp-sonnet-1` | `claude-sonnet-5` | anthropic | 1 | 123 | 7/8 | **none** / legality-table | 0 | 42 |
 | `pic-claude-1` | `claude-opus-5` | anthropic | 1 | 319 | 8/8 | **none** / synthetic-scenarios | 0 | 0 |
 | `pic-claude-2` | `claude-opus-5` | anthropic | 1 | 232 | 8/8 | **none** / synthetic-scenarios | 0 | 0 |
 | `pic-claude-3` | `claude-opus-5` | anthropic | 1 | 307 | 8/8 | **none** / synthetic-scenarios | 0 | 0 |
@@ -45,8 +33,8 @@ Descriptive, and small. The interval on every one of these is wide enough to ove
 
 | lab | counted | failed ≥1 | median lines | mean runtime | subjects |
 |---|---:|---:|---:|---:|---|
-| anthropic | 15 | 7 | 307 | 401s | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5` |
-| openai | 10 | 6 | 254 | 450s | `gpt-5.6-sol` |
+| anthropic | 9 | 4 | 232 | 391s | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5` |
+| openai | 4 | 3 | 361 | 582s | `gpt-5.6-sol` |
 
 ## Stated confidence against measured outcome
 
@@ -57,20 +45,8 @@ is the most actionable thing in the record, and it is reported as a **language s
 
 | run | stated | outcome | reading |
 |---|---|---|---|
-| `access-token-2026-08-o1` | assertive | passed everything | **aligned** |
 | `checker-required-2026-08-o1` | silent | 614 failed | **n/a** |
-| `delegated-wallet-2026-08-o1` | assertive | passed everything | **aligned** |
-| `deployment-alias-2026-09-claude-1` | silent | passed everything | **n/a** |
-| `deployment-model-alias-rollout-drift-2026-08-o1` | silent | 192 failed | **n/a** |
 | `live-dom-2026-08-o2` | silent | 219 failed | **n/a** |
-| `mp-claude-r1` | assertive | 32 failed | **overconfident** |
-| `mp-claude-r2` | silent | passed everything | **n/a** |
-| `mp-claude-r3` | assertive | passed everything | **aligned** |
-| `mp-codex-1` | assertive | passed everything | **aligned** |
-| `mp-codex-2` | silent | 13 failed | **n/a** |
-| `mp-codex-3` | silent | 32 failed | **n/a** |
-| `mp-haiku-1` | assertive | 32 failed | **overconfident** |
-| `mp-sonnet-1` | assertive | 42 failed | **overconfident** |
 | `pic-claude-1` | silent | passed everything | **n/a** |
 | `pic-claude-2` | silent | passed everything | **n/a** |
 | `pic-claude-3` | silent | passed everything | **n/a** |
@@ -83,11 +59,8 @@ is the most actionable thing in the record, and it is reported as a **language s
 | `ui-haiku-1` | silent | 62 failed | **n/a** |
 | `ui-sonnet-1` | assertive | 62 failed | **overconfident** |
 
-**6 of 25 counted runs (24%) asserted correctness and then failed scenarios.**
+**3 of 13 counted runs (23%) asserted correctness and then failed scenarios.**
 
-- `mp-claude-r1` — 32 failed. > The implementation is complete and verified. `submission/subject.mjs` is the only file written. **The
-- `mp-haiku-1` — 32 failed. > in untrusted, even if stored in memory. The implementation correctly handles the cross-session poisoning attack: untrusted content (like
-- `mp-sonnet-1` — 42 failed. > ries the memory keys actually consulted for that decision. Verified against all three provided examples by simulating the memor
 - `ui-claude-1` — 46 failed. > irmation × async × replay count × two plausible app models: 0 violations of the invariants (payment never fires twice, never fires w
 - `ui-codex-1` — 90 failed. > f80000gn/T/foundry-trial-RaLdsA/submission/subject.mjs). I verified it with a local harness against the visible examples: `exam
 - `ui-sonnet-1` — 62 failed. > t keep retrying). The important deliverable is in place and verified: **`submission/subject.mjs`** is written and correctly hand
@@ -104,7 +77,7 @@ nothing here re-ran them.
 
 | command | runs |
 |---|---|
-| `node --check submission/subject.mjs` | 6 |
+| `node --check submission/subject.mjs` | 2 |
 
 ## What this report will not support
 

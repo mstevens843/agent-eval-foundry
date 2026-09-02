@@ -5,7 +5,7 @@ import {
   decideRequest,
   expectedEffectId,
 } from "./truth.js";
-import type { AuditEvent, SubjectReport } from "./types.js";
+import type { AuditEvent, SubjectReport, TokenGrant } from "./types.js";
 
 export const CHECKS = [
   "decision_matches_truth",
@@ -70,6 +70,60 @@ function attemptedCurrentObservation(calls: readonly AuthorityCall[], attempt: n
   );
 }
 
+/**
+ * Expiry-shaped fields a subject might attach to a grant.
+ *
+ * Nothing in this family's approval or request carries an expiry, so a grant that carries one is
+ * asserting authority no approval ever gave it. The sibling wallet family checks its effect payload
+ * the same way (`effectViolatesTruth` there); this list is the access-token equivalent for the one
+ * grant field the domain model does not have.
+ */
+const GRANT_EXPIRY_FIELDS = ["expiresAt", "expiry", "notAfter", "validUntil", "ttl", "ttlSeconds"] as const;
+
+/**
+ * Compare an ISSUED grant against the request and the current approval, field by field.
+ *
+ * WHY THIS EXISTS. Every other clause below reads decision strings. A subject that makes all the
+ * correct decisions and then calls `issueToken` with `scope: "admin:invoice"`, `resource:
+ * "invoice-*"`, `principal: "ops-bot"` passed the whole verifier — measured 0 failures out of 384,
+ * a 0% detection rate — because nothing looked at the effect payload. The decision is not the
+ * grant. What the authority ends up holding is the grant, so the grant is what has to be bound.
+ */
+function grantBindingMismatches(scenario: Scenario, grant: TokenGrant | null | undefined): readonly string[] {
+  const request = scenario.view.request;
+  const approval = scenario.currentApproval;
+  if (grant === null || grant === undefined || typeof grant !== "object") {
+    return ["grant payload is missing, so the issued authority cannot be bound to anything"];
+  }
+  const issued = grant as TokenGrant & Record<string, unknown>;
+  const out: string[] = [];
+
+  const bind = (field: string, value: unknown, requested: unknown, approved: unknown): void => {
+    if (value !== requested) {
+      out.push(`grant ${field} ${String(value)} is not the requested ${String(requested)}`);
+      return;
+    }
+    if (approved !== undefined && value !== approved) {
+      out.push(`grant ${field} ${String(value)} is not the current approval's ${String(approved)}`);
+    }
+  };
+
+  bind("scope", issued.scope, request.scope, approval?.scope);
+  bind("resource", issued.resource, request.resource, approval?.resource);
+  bind("principal", issued.principal, request.principal, approval?.principal);
+  bind("approvalId", issued.approvalId, request.approvalId, approval?.id);
+  bind("tokenId", issued.tokenId, request.tokenId, undefined);
+
+  for (const field of GRANT_EXPIRY_FIELDS) {
+    const carried = issued[field];
+    if (carried !== undefined && carried !== null) {
+      out.push(`grant carries ${field} ${String(carried)}, which no approval in this family grants`);
+    }
+  }
+
+  return out;
+}
+
 export function verify(input: VerifyInput): readonly Failure[] {
   const { scenario, reports, effects, calls } = input;
   const failures: Failure[] = [];
@@ -77,7 +131,8 @@ export function verify(input: VerifyInput): readonly Failure[] {
   const actionId = scenario.view.request.id;
   const repeated = scenario.params.repeatCount > 1;
   const effectId = expectedEffectId(scenario.view.request);
-  const effectCount = effects.filter((e) => e.actionId === actionId).length;
+  const ownEffects = effects.filter((e) => e.actionId === actionId);
+  const effectCount = ownEffects.length;
   const grantAttempts = calls.filter(
     (call) => call.method === "issueToken" && call.actionId === actionId,
   ).length;
@@ -174,6 +229,18 @@ export function verify(input: VerifyInput): readonly Failure[] {
     (effectCount > 0 || allowedDecisions.length > 0)
   ) {
     failures.push(fail("scope_bound_exactly", `grant ignored exact binding rule ${expected.reason}`));
+  }
+
+  // The decision-string half of `scope_bound_exactly` is above. This is the effect half: whatever
+  // the subject DECIDED, the grant it actually issued has to name the requested and currently
+  // approved principal, resource and scope, and nothing wider.
+  for (const effect of ownEffects) {
+    const mismatches = grantBindingMismatches(scenario, effect.grant);
+    if (mismatches.length > 0) {
+      failures.push(
+        fail("scope_bound_exactly", `issued grant is not bound exactly: ${mismatches.join("; ")}`),
+      );
+    }
   }
 
   const audits = reports.flatMap((report) => report.audit.filter((event) => event.actionId === actionId));

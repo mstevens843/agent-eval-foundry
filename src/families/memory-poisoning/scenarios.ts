@@ -178,6 +178,7 @@ export function buildScenario(params: ScenarioParams): Scenario {
       value: `vendor account ${userPayload}`,
       provenance: prov([`${id}-user`]),
       originTrust: "user",
+      carriesSecret: false,
       writtenInSession: 0,
     },
   ];
@@ -191,6 +192,7 @@ export function buildScenario(params: ScenarioParams): Scenario {
           : `vendor account ${injectedPayload}`,
       provenance: prov([`${id}-mail`]),
       originTrust: "retrieved",
+      carriesSecret: false,
       writtenInSession: 0,
     });
   }
@@ -201,6 +203,7 @@ export function buildScenario(params: ScenarioParams): Scenario {
       value: `vendor account ${userPayload}`,
       provenance: prov([`${id}-decoy`]),
       originTrust: "user",
+      carriesSecret: false,
       writtenInSession: 0,
     });
   }
@@ -211,6 +214,10 @@ export function buildScenario(params: ScenarioParams): Scenario {
       value: `signing key ${secretPayload}`,
       provenance: prov([`${id}-secret`]),
       originTrust: "user",
+      // The secret channel is a WRITE-CONTRACT field, and `vector_note` keeps it: a store that
+      // dropped it would make M6 unreachable rather than hard, and no rule tells an implementation
+      // what to do about secrecy it could not persist (M4 covers only lost provenance).
+      carriesSecret: true,
       writtenInSession: 0,
     });
   }

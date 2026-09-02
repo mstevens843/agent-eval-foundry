@@ -36,10 +36,24 @@ const obj = (v: unknown, path: string): Record<string, unknown> =>
 
 const parseCell = (v: unknown, path: string): TrialCell => {
   const o = obj(v, path);
-  return {
+  const cell: TrialCell = {
     scenarioId: str(o["scenarioId"], `${path}.scenarioId`),
     failed: strArray(o["failed"], `${path}.failed`),
   };
+  const raw = o["unmeasured"];
+  if (raw === undefined || raw === null) return cell;
+  const unmeasured = str(raw, `${path}.unmeasured`);
+  // "Not graded" and "graded, and these checks failed" are different claims about the same cell.
+  // Allowing both would let an importer hedge a fabricated failure, which is the mirror image of the
+  // bug this field exists to fix.
+  if (cell.failed.length > 0) {
+    fail(
+      "TRIAL_CELL_UNMEASURED_WITH_FAILURES",
+      `${path}.unmeasured`,
+      "a cell cannot be both ungraded and carry named failing checks; state one or the other",
+    );
+  }
+  return { ...cell, unmeasured };
 };
 
 export function parseTrialRecord(v: unknown, path = "trial"): TrialRecord {

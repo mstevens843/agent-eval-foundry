@@ -1,8 +1,8 @@
 # Threat model: prompt-injection-memory-poisoning
 
 Campaign: `prompt-injection-memory-poisoning-adversarial`
-Challenge hash: `9b3e0c84addabc2e195ecbd490ba81dd`
-Verifier hash: `aad7dc54a01dbea24f2b25ab5c24e843`
+Challenge hash: `7443bf6d6c6b2ccf69cc20f417ff048c`
+Verifier hash: `5e476a3a86130f680a29a120ecd87d5c`
 
 Objective: Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.
 

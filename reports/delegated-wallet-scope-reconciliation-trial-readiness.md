@@ -1,21 +1,21 @@
 # delegated-wallet-scope-reconciliation trial readiness
 
-Status: **smoke-passed-cleanly**.
+Status: **smoke-planned**.
 
 | gate | value |
 |---|---|
-| challenge hash | `2140032d835a87ff254d01b6b4652f21` |
+| challenge hash | `45f27b644a84364e3d3855f68cd243a2` |
 | scenario set | `reconciliation-804-4b4cc8ff` |
 | visible package files | 9 |
 | route present | yes |
 | scenarios expected | 804 |
-| counted real-agent trials | 1 |
-| diagnosis | clean |
+| counted real-agent trials | 0 |
+| diagnosis | none |
 | full matrix | blocked |
 
 Blocking reasons:
 
-- clean smoke pass routes to already_solved_or_needs_evolution unless a matrix reason is declared
+- no counted smoke trial
 
 Provider handling: Codex/OpenAI may run one smoke trial when configured. Anthropic/Claude is not run in this phase. Gemini remains import-only unless entitlement is available.
 

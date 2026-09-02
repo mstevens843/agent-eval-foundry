@@ -1,0 +1,17 @@
+{
+  "runId": "ui-codex-1",
+  "familyId": "ui-action-record-replay",
+  "label": "unlabelled",
+  "rationale": "Failures span `no_forbidden_effect`, `replay_idempotent` and `unreplayable_reported` and are not confined to particular knob values, which diagnosis.ts reads as `mixed` and lists in NEEDS_HUMAN_READ. Neither reading is clean and no person has read this transcript, so the trial is recorded as unlabelled rather than pooled with the two Claude runs whose failures do concentrate. It is preserved and re-adjudicable; it is not difficulty evidence today.",
+  "evidenceRead": [
+    "result.json",
+    "countability.json",
+    "challenge/SPEC.md"
+  ],
+  "labelledBy": {
+    "kind": "automated",
+    "id": "lane-4a-root-cause-review",
+    "date": "2026-09-01"
+  },
+  "diagnosisReading": "mixed"
+}

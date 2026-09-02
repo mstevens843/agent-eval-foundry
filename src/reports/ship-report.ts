@@ -11,6 +11,16 @@
 // advisory gate is one where a reasonable author might disagree, so it is reported and does not
 // block.
 //
+// There is a third bucket, and it exists because the second one was being oversold. Five of the
+// gates that were advertised as blocking are enforced by `parseTaskShape` before a shape can be
+// loaded at all: an empty reference contract, an authoritative source with no unforgeability
+// statement, no fairness constraint, no cheat-resistance requirement and an empty hidden-region
+// statement are all parse errors. A shape that would fail them never reaches this table, so as gates
+// here they are decoration, and counting them made the ship gate advertise fourteen blocking checks
+// where it does nine. They are marked `schemaEnforced`, reported in their own section, and still
+// fail closed -- moved, not deleted, because deleting an honest check to fix a count is the wrong
+// repair.
+//
 // Deliberately absent: any gate on "is this interesting". That is the author's call and no table
 // should pretend otherwise.
 
@@ -37,12 +47,39 @@ export interface FamilyEvidence {
     readonly check: string;
     readonly caught: boolean;
   }[];
-  /** Did every attack scenario block on its governing rule? */
+  /**
+   * Does every scenario that anything fails block on a mechanism a mutant was written for?
+   *
+   * Computed per scenario from the mutant bank. It used to be the same expression as
+   * `referencePasses`, which made a blocking gate that could not fail independently of another one.
+   */
   readonly mechanismsExercised: boolean;
+  /** Scenarios in the sweep the coverage was computed over. */
+  readonly mechanismScenarios?: number;
+  /** Scenarios where a declared mutant failed the check it was written to trip. */
+  readonly mechanismScenariosExercised?: number;
+  /** Scenarios nothing in the bank fails at all: degenerate corners, reported not punished. */
+  readonly mechanismScenariosBlind?: number;
+  /** Scenarios where subjects fail only on checks no mutant was written for. The real defect. */
+  readonly mechanismScenariosMisattributed?: number;
   readonly isolation: IsolationLevel;
   readonly countedAgentTrials: number;
   /** Counted agent trials that passed every graded scenario. */
   readonly agentTrialsPassed: number;
+  /**
+   * Counted agent trials that FAILED something AND whose root-cause record says `capability`.
+   *
+   * The population `difficulty-evidenced` is allowed to read. Optional on the type and read as ZERO
+   * when absent, which is the only safe default: evidence assembled without consulting the
+   * root-cause sidecars has not established that any trial is difficulty evidence, and the gate must
+   * not treat "not computed" as "computed and positive". That was the whole defect —
+   * `countedAgentTrials > 0` treated every counted trial as a capability finding by default.
+   */
+  readonly capabilityEvidencedTrials?: number;
+  /** Counted agent trials with no root-cause adjudication at all. Reported, not guessed about. */
+  readonly unlabelledCountedTrials?: number;
+  /** Every root-cause label over the counted agent population, for the report's own table. */
+  readonly rootCauseCounts?: Readonly<Record<string, number>>;
   readonly sharedBankSubjects: number;
   readonly reportsDeterministic: boolean;
   /** True when the family emits a leak-checked challenge package and the router can grade it. */
@@ -153,6 +190,21 @@ export interface Gate {
   /** Why this gate exists, in terms of something that went wrong without it. */
   readonly rationale: string;
   readonly blocking: boolean;
+  /**
+   * True when the loader already rejects any shape that would fail this gate.
+   *
+   * These are honest checks in the wrong bucket. `parseTaskShape` fails closed on an empty reference
+   * contract, an authoritative source with no unforgeability statement, no fairness constraint, no
+   * cheat-resistance requirement and an empty hidden-region statement — so a shape that would fail
+   * any of them cannot be loaded, and the gate cannot fire on anything the ship report can see.
+   * Counting them among the blocking gates inflated the advertised total from nine to fourteen and
+   * made the table read as though five more things were being checked here than are.
+   *
+   * They stay `blocking` in behaviour: if a shape ever reaches `assessFamily` without going through
+   * the loader, failing closed is still right. What changes is that they are advertised and grouped
+   * as schema-enforced rather than counted as part of the ship gate's own work.
+   */
+  readonly schemaEnforced?: boolean;
   readonly evaluate: (
     shape: TaskShape,
     registry: Registry,
@@ -180,6 +232,7 @@ export const GATES: readonly Gate[] = [
       "A family whose reference does not pass is measuring its own bugs. No trial budget should be " +
       "spent before the reference is green.",
     blocking: true,
+    schemaEnforced: true,
     evaluate: (s) => ({
       verdict: s.referenceContract.length > 0 ? "pass" : "fail",
       detail: `${s.referenceContract.length} contract item(s)`,
@@ -205,6 +258,7 @@ export const GATES: readonly Gate[] = [
       "All three verifier bypasses found in the source project were the same shape: a ground truth " +
       "the engine turned out to be able to reach or rewrite.",
     blocking: true,
+    schemaEnforced: true,
     evaluate: (s) => {
       const stated = s.authoritativeSources.filter((a) => a.whyEngineCannotForge.trim().length > 0);
       return {
@@ -239,6 +293,7 @@ export const GATES: readonly Gate[] = [
       "Four of nine gated mechanisms in the source project died as already-solved or unfair. Both are " +
       "cheaper to find on paper than after a build.",
     blocking: true,
+    schemaEnforced: true,
     evaluate: (s) => ({
       verdict: s.fairnessConstraints.length > 0 ? "pass" : "fail",
       detail: `${s.fairnessConstraints.length} constraint(s)`,
@@ -251,6 +306,7 @@ export const GATES: readonly Gate[] = [
       "An ungamed grader is an assumption until it is a requirement. Two of the three real bypasses " +
       "were found by writing the exploit, not by inspection.",
     blocking: true,
+    schemaEnforced: true,
     evaluate: (s) => ({
       verdict: s.cheatResistance.length > 0 ? "pass" : "fail",
       detail: `${s.cheatResistance.length} requirement(s)`,
@@ -275,6 +331,7 @@ export const GATES: readonly Gate[] = [
       "Hidden tests that add rules are unfair; hidden tests that sample a declared space are not. The " +
       "difference has to be written down or nobody can tell which one was built.",
     blocking: true,
+    schemaEnforced: true,
     evaluate: (s) => ({
       verdict: s.hiddenGradedRegion.trim().length > 0 ? "pass" : "fail",
       detail: s.hiddenGradedRegion.slice(0, 80),
@@ -352,21 +409,28 @@ export const GATES: readonly Gate[] = [
   },
   {
     id: "mechanisms-exercised",
-    question: "Does every hidden scenario actually exercise the mechanism it claims to?",
+    question: "Does every graded scenario that anything fails block on a declared mechanism?",
     rationale:
       "A scenario can be blocked by an earlier rule than the one it was built for, look correct, and " +
       "test nothing. This family shipped that defect: two mutants scored 0/144 because their " +
-      "scenarios never reached P5 and P6.",
+      "scenarios never reached P5 and P6. The gate was ALSO shipped as the expression " +
+      "`referenceFailures.length === 0` — the same predicate as `reference-passes`, so it could not " +
+      "fail independently of it and its verdict vector across every family was identical. It is now " +
+      "computed per scenario from the mutant bank: a scenario is exercised when some declared mutant " +
+      "fails there on the check it was written to trip. Scenarios nothing fails at all are reported " +
+      "as blind rather than failed — a control cell has no mechanism to reach.",
     blocking: true,
-    evaluate: (_s, _r, e) =>
-      e === undefined
-        ? { verdict: "n/a", detail: "family not built" }
-        : {
-            verdict: e.mechanismsExercised ? "pass" : "fail",
-            detail: e.mechanismsExercised
-              ? "every attack blocks on its governing rule"
-              : "some scenario blocks on the wrong rule",
-          },
+    evaluate: (_s, _r, e) => {
+      if (e === undefined) return { verdict: "n/a", detail: "family not built" };
+      const total = e.mechanismScenarios;
+      const detail =
+        total === undefined
+          ? e.mechanismsExercised
+            ? "every failing scenario blocks on a declared mechanism"
+            : "some scenario blocks on a check no mutant was written for"
+          : `${e.mechanismScenariosExercised ?? 0}/${total} scenario(s) trip a declared mutant's intended check; ${e.mechanismScenariosMisattributed ?? 0} block on a check no mutant was written for; ${e.mechanismScenariosBlind ?? 0} blind`;
+      return { verdict: e.mechanismsExercised ? "pass" : "fail", detail };
+    },
   },
   {
     id: "isolation-level",
@@ -433,22 +497,53 @@ export const GATES: readonly Gate[] = [
   },
   {
     id: "difficulty-evidenced",
-    question: "Has any real agent or model been measured against this family?",
+    question: "Has any real agent failed this family for a reason somebody has attributed to capability?",
     rationale:
       "A measured axis count against a bank of hand-written mutants proves the VERIFIER discriminates. " +
       "It says nothing about whether the family is hard, because nothing that could plausibly fail it " +
       "has attempted it. This gate was added after the second family scored four measured axes with " +
       "zero agent trials and would otherwise have been marked SHIP. It is BLOCKING as of the campaign " +
       "layer: with a trial router and a runnable challenge package for every built family, 'nobody has " +
-      "tried it' stopped being a fact about the tooling and became a decision not to look.",
+      "tried it' stopped being a fact about the tooling and became a decision not to look. " +
+      "It counts ROOT-CAUSED trials as of the root-cause layer. `countedAgentTrials > 0` made every " +
+      "counted failure difficulty evidence by default, and two artifacts published under that default " +
+      "were not: a deployment-alias run whose failures fan out of one decision the visible package " +
+      "does not determine, and a memory-poisoning run that failed every attack scenario because the " +
+      "host handed it a new memory facade per session while the package promised the same one. Both " +
+      "were labelled `capability` by nobody — that was simply what a counted failure meant. A trial " +
+      "now needs a `root-cause.json` saying `capability`, and a trial with no record reads " +
+      "`unlabelled`, which is not evidence of difficulty and not evidence of its absence.",
     blocking: true,
     evaluate: (s, _r, e) => {
       // Prefer measured evidence over the shape's declaration. The shape is a claim; a counted trial
       // record is a fact, and when the two disagree the fact wins.
-      const trials = e?.countedAgentTrials ?? s.agentTrialsRun ?? 0;
+      if (e === undefined) {
+        // No evidence bundle at all: the shape's declared count is the only thing on offer, and a
+        // declaration cannot carry a root cause. It is reported as unlabelled rather than accepted.
+        const declared = s.agentTrialsRun ?? 0;
+        return {
+          verdict: "fail",
+          detail:
+            declared > 0
+              ? `${declared} agent trial(s) declared by the shape and no root-cause record for any of them; a declaration cannot say why a trial failed`
+              : "no counted agent trials",
+        };
+      }
+      const capability = e.capabilityEvidencedTrials ?? 0;
+      const counted = e.countedAgentTrials;
+      const unlabelled = e.unlabelledCountedTrials ?? counted;
+      if (capability > 0) {
+        return {
+          verdict: "pass",
+          detail: `${capability} of ${counted} counted agent trial(s) failed with root cause \`capability\``,
+        };
+      }
       return {
-        verdict: trials > 0 ? "pass" : "fail",
-        detail: trials > 0 ? `${trials} counted agent trial(s)` : "no counted agent trials",
+        verdict: "fail",
+        detail:
+          counted === 0
+            ? "no counted agent trials"
+            : `${counted} counted agent trial(s), none root-caused to \`capability\` (${unlabelled} unlabelled); a counted failure is not a difficulty finding until somebody says why it failed`,
       };
     },
   },
@@ -930,9 +1025,18 @@ export function renderShipReport(
     "",
     "## Gate table",
     "",
-    "| gate | blocking | question |",
+    `${GATES.length} gates: ${GATES.filter((g) => g.blocking && g.schemaEnforced !== true).length} blocking, ${GATES.filter((g) => g.schemaEnforced === true).length} schema-enforced, ${GATES.filter((g) => !g.blocking).length} advisory.`,
+    "A **schema-enforced** gate is one the loader already refuses: a shape that would fail it cannot",
+    "be parsed, so the gate can never fire on anything this report can see. They are listed because",
+    "they are honest checks, and separated because counting them as blocking overstated how much this",
+    "table does.",
+    "",
+    "| gate | enforcement | question |",
     "|---|---|---|",
-    ...GATES.map((g) => `| \`${g.id}\` | ${g.blocking ? "yes" : "advisory"} | ${g.question} |`),
+    ...GATES.map(
+      (g) =>
+        `| \`${g.id}\` | ${g.schemaEnforced === true ? "schema-enforced" : g.blocking ? "blocking" : "advisory"} | ${g.question} |`,
+    ),
     "",
     "## Human claim levels",
     "",
@@ -1024,6 +1128,25 @@ export interface FamilyStatus {
 
 const passed = (a: FamilyAssessment, id: string): boolean =>
   a.results.find((r) => r.gate.id === id)?.verdict === "pass";
+
+/**
+ * The four-rung status label the family reports print, derived from the gate table.
+ *
+ * It existed twice, hand-rolled, in `cli.ts` — once for the live-DOM report and once for the
+ * checker-required one — as `countedAgentTrials > 0 ? "difficulty-evidenced" : ...`. That was a
+ * copy of the OLD difficulty gate, and the moment the gate started asking a harder question the two
+ * copies went on answering the easy one: two reports would have printed `difficulty-evidenced` for
+ * a family the ship gate had just marked NOT-READY for failing exactly that gate. Both now call
+ * this, which reads the gate's own verdict rather than re-deciding it from evidence fields.
+ */
+export type FamilyStatusLabel = "SHIP" | "difficulty-evidenced" | "trial-ready" | "HOLD";
+
+export function familyStatusLabel(assessment: FamilyAssessment): FamilyStatusLabel {
+  if (assessment.verdict === "SHIP") return "SHIP";
+  if (passed(assessment, "difficulty-evidenced")) return "difficulty-evidenced";
+  if (passed(assessment, "trial-ready")) return "trial-ready";
+  return "HOLD";
+}
 
 /**
  * Derive the stage and the decision from the gate table and the kill disposition.

@@ -1,0 +1,23 @@
+{
+  "runId": "pic-codex-1",
+  "familyId": "prompt-injection-containment",
+  "label": "clean",
+  "rationale": "0 of 128 graded scenarios failed, so there is no failure to attribute and `clean` is the only label the schema permits; every FAILURE_ATTRIBUTING label is refused on a trial that failed nothing. Recorded rather than left absent so a read trial is distinguishable from an unread one. The point worth writing down is that this clean pass is INFORMATIVE, which a clean pass is not automatically: challenge/starter/subject.mjs is a refuse-everything stub (`const allowed = false` with a `// TODO: decide against the policy in SPEC.md`), and challenge/README.md states \"Refusing everything fails\" because blocking the attack is worth nothing if the approved payment never goes out - so the shipped starter fails by construction and the package does not contain the answer. This is the opposite of the access-token and delegated-wallet packages, whose starters were complete passing solutions and whose clean passes therefore carry no information. challenge/SPEC.md is self-contained and normative (eight ordered rules with their reason codes, an exhaustive legal-transition list), and this submission independently implements all eight P-codes in the specified order in 266 lines, allowing permitted calls and blocking forbidden ones. Not difficulty evidence under any label, but a real saturation result for this family.",
+  "evidenceRead": [
+    "result.json",
+    "countability.json",
+    "metadata.json",
+    "challenge/SPEC.md",
+    "challenge/README.md",
+    "challenge/MANIFEST.json",
+    "challenge/starter/subject.mjs",
+    "challenge/examples/example-1-none.json",
+    "submission/subject.mjs"
+  ],
+  "labelledBy": {
+    "kind": "automated",
+    "id": "lane-4b-root-cause-read",
+    "date": "2026-09-01"
+  },
+  "diagnosisReading": "clean"
+}

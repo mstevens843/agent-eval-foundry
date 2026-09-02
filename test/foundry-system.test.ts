@@ -227,15 +227,29 @@ describe("the checked-in registry", () => {
     for (const m of measured) expect(m.estimatedAxes, m.familyId).toBeGreaterThan(1);
   });
 
-  it("only a family a real agent has attempted can reach SHIP", () => {
-    // A measured axis count proves the VERIFIER discriminates; it does not prove the family is hard.
-    // That distinction was forced into the gate table when the second family had four measured axes
-    // and zero agent trials. It has trials now, so the no-trials case is constructed rather than
-    // taken from the registry — the invariant outlives the example.
+  it("a DECLARED trial count is not difficulty evidence, however many trials it declares", () => {
+    // WAS: `expect(assessFamily(outbox, registry).verdict).toBe("SHIP")`.
+    //
+    // That assertion is wrong now, and it is wrong in exactly the way this gate exists to prevent.
+    // `durable-approval-outbox` has no trial directory in this repository — its six engine runs live
+    // in the imported Harbor archive — so its whole difficulty claim rests on `agentTrialsRun: 6` in
+    // a JSON file. A number in a shape cannot say WHY a trial failed, and "why" is the difference
+    // between the deployment-alias run (six checks fanning out of one undetermined decision), the
+    // memory-poisoning run (the host broke a promise the package made) and a real capability
+    // finding. All three look identical to a count.
+    //
+    // This is not a claim that the outbox trials are bad. It is a claim that nobody in this
+    // repository has read them, which is true: the route back to SHIP is to import those runs as
+    // trial directories and adjudicate each one, not to trust the count.
     const outbox = registry.shapes.find((s) => s.familyId === "durable-approval-outbox");
     const pic = registry.shapes.find((s) => s.familyId === "prompt-injection-containment");
     expect(outbox?.agentTrialsRun).toBeGreaterThan(0);
-    expect(assessFamily(outbox as NonNullable<typeof outbox>, registry).verdict).toBe("SHIP");
+    const outboxAssessment = assessFamily(outbox as NonNullable<typeof outbox>, registry);
+    expect(outboxAssessment.verdict).toBe("NOT-READY");
+    expect(outboxAssessment.blockingFailures).toEqual(["difficulty-evidenced"]);
+    expect(outboxAssessment.results.find((r) => r.gate.id === "difficulty-evidenced")?.detail).toMatch(
+      /declaration cannot say why a trial failed/,
+    );
 
     // `difficulty-evidenced` became BLOCKING with the campaign layer, so an untried family is
     // NOT-READY rather than HOLD: with a router and a challenge package for every built family,
@@ -296,12 +310,21 @@ describe("scaffold generation on real data", () => {
 });
 
 describe("ship gate on real data", () => {
-  it("the shipped family passes every blocking gate", () => {
+  it("the family with the strongest imported evidence still has no root cause on file", () => {
+    // WAS: "the shipped family passes every blocking gate" — `blockingFailures` empty, verdict SHIP.
+    //
+    // The same reconciliation as above, kept here because this is the ship-gate suite and the fact
+    // this suite most needs to state changed: there is no family in this repository whose blocking
+    // gates all pass on a DECLARED trial count. Every other blocking gate on the outbox still
+    // passes, which is the part worth asserting — the family is not broken, its difficulty evidence
+    // is simply unattributed.
     const shape = registry.shapes.find((s) => s.familyId === "durable-approval-outbox");
     expect(shape).toBeDefined();
     const a = assessFamily(shape as NonNullable<typeof shape>, registry);
-    expect(a.blockingFailures).toEqual([]);
-    expect(a.verdict).toBe("SHIP");
+    expect(a.blockingFailures).toEqual(["difficulty-evidenced"]);
+    expect(a.results.find((r) => r.gate.id === "measured-axes")?.verdict).toBe("pass");
+    expect(a.results.find((r) => r.gate.id === "reference-passes")?.verdict).not.toBe("fail");
+    expect(a.verdict).toBe("NOT-READY");
   });
 
   it("a measured family with no agent trials is held, not shipped", () => {
@@ -313,13 +336,21 @@ describe("ship gate on real data", () => {
     expect(a.verdict).toBe("NOT-READY");
   });
 
-  it("the family that HAS been attempted is blocked for the opposite reason", () => {
-    // Three real trials, every one of them a clean pass. The gate that fails is `not-already-solved`,
-    // and it fails BECAUSE the evidence arrived — which is the whole point of collecting it.
+  it("the family that HAS been attempted is blocked twice over", () => {
+    // WAS: `expect(...difficulty-evidenced...).toBe("pass")`.
+    //
+    // That encoded the old evidence picture, not a bug: six real trials existed, and existing was
+    // the whole of the old question. Every one of them passed 128 of 128 and every one carries a
+    // `clean` root cause. A clean solve is not difficulty evidence, so the family now fails both
+    // blocking gates — `not-already-solved` because nothing failed it, and `difficulty-evidenced`
+    // because nothing that failed it has been attributed to capability. The two gates agree here and
+    // are still independent: `test/root-cause.test.ts` holds the case where one passes and the
+    // other fails.
     const pic = registry.shapes.find((s) => s.familyId === "prompt-injection-containment");
     const a = assessFamily(pic as NonNullable<typeof pic>, registry, picEvidence[PIC_FAMILY]);
-    expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("pass");
+    expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("fail");
     expect(a.blockingFailures).toContain("not-already-solved");
+    expect(a.blockingFailures).toContain("difficulty-evidenced");
     expect(a.verdict).toBe("NOT-READY");
   });
 

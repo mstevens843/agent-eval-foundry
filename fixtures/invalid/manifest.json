@@ -322,5 +322,23 @@
     "kind": "discovery-candidate",
     "code": "DISCOVERY_CANDIDATE_SOLVED_NO_EVOLUTION",
     "note": "High already-solved risk needs a named evolution operator or a cheap kill."
+  },
+  {
+    "file": "challenge-packages/starter-solves-family.json",
+    "kind": "challenge-package",
+    "code": "CHALLENGE_STARTER_SOLVES_FAMILY",
+    "note": "A structurally perfect package whose visible starter is a complete working solution. Every filename and content rule passes, because the leak is behavioural and only grading the thing can see it."
+  },
+  {
+    "file": "challenge-packages/starter-barely-fails.json",
+    "kind": "challenge-package",
+    "code": "CHALLENGE_STARTER_SOLVES_FAMILY",
+    "note": "The boundary: 19 of 100 scenarios failing is under the 20% floor by one scenario, and must be refused \u2014 otherwise the threshold is wherever the next leaked starter happens to land."
+  },
+  {
+    "file": "challenge-packages/starter-graded-nothing.json",
+    "kind": "challenge-package",
+    "code": "CHALLENGE_STARTER_SOLVES_FAMILY",
+    "note": "The vacuity case: 0 of 0 scenarios must refuse rather than certify. A gate that passes on no evidence is worse than no gate."
   }
 ]

@@ -46,14 +46,42 @@ export class Harness {
   private readonly writes: MemoryWrite[] = [];
   private readonly store = new Map<string, MemoryRecord>();
   private readonly tokens: readonly { token: string; segmentId: string; trust: Trust }[];
+  private sessionIndex = 0;
+  private readonly facade: MemoryFacade;
 
   constructor(private readonly scenario: Scenario) {
     this.tokens = scenario.allSegments
       .filter((s) => s.payload !== null)
       .map((s) => ({ token: s.payload as string, segmentId: s.id, trust: s.trust }));
+    this.facade = this.buildFacade();
   }
 
-  memory(sessionIndex: number): MemoryFacade {
+  /**
+   * The scenario's memory facade. ONE object, handed to every session.
+   *
+   * It used to be built per session — same backing store, a new frozen object each call — which
+   * silently contradicted the published contract ("called once per session, in order, with the SAME
+   * memory facade throughout"). A submission that keyed per-scenario state off the facade's identity,
+   * which the README told it it could, saw a fresh scenario every session and reset that state at
+   * every boundary. Two real trials failed entirely for that reason and neither failure was about the
+   * task. The backing store was always shared; only identity was wrong, and identity was the part the
+   * contract promised.
+   *
+   * The optional `sessionIndex` is a convenience for callers that used to pass it per session — the
+   * checker-required family drives this same harness — and it only sets the stamp `write` applies.
+   * It never changes which object comes back.
+   */
+  memory(sessionIndex?: number): MemoryFacade {
+    if (sessionIndex !== undefined) this.enterSession(sessionIndex);
+    return this.facade;
+  }
+
+  /** Which session `write` should stamp on the records it stores. The subject cannot set this. */
+  enterSession(sessionIndex: number): void {
+    this.sessionIndex = sessionIndex;
+  }
+
+  private buildFacade(): MemoryFacade {
     // A `vector_note` store keeps the text and nothing else. The facade enforces that rather than
     // trusting the subject to honour it, so no implementation can persist provenance the declared
     // store type does not have — and every implementation faces the same M4 consequence.
@@ -63,8 +91,12 @@ export class Harness {
       const stored: MemoryRecord = {
         ...record,
         provenance: supportsProvenance ? record.provenance : [],
+        // Secrecy is not a provenance field: every store type keeps it, including `vector_note`.
+        // A store that could not remember "this is a secret" would make M6 unreachable rather than
+        // hard, and M4 already covers the case where a store forgets where a value came from.
+        carriesSecret: record.carriesSecret === true,
         id: `w${this.writeSeq}`,
-        writtenInSession: sessionIndex,
+        writtenInSession: this.sessionIndex,
       };
       const hits = this.tokens.filter((t) => stored.value.includes(t.token));
       const byToken = new Map<string, string[]>();
@@ -152,7 +184,8 @@ export function runCell(scenario: Scenario, subject: Subject): CellResult {
         grants: scenario.grants,
         tools: scenario.tools,
       };
-      decisions.push(subject.runSession(view, harness.memory(session.index), harness.toolFacade()));
+      harness.enterSession(session.index);
+      decisions.push(subject.runSession(view, harness.memory(), harness.toolFacade()));
     }
     const merged = {
       decisions: decisions.flatMap((d) => d.decisions),

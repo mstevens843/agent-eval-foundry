@@ -23,7 +23,7 @@ import type { TrialSet } from "../src/trials/types.js";
 
 const ROOT = new URL("..", import.meta.url).pathname;
 const FAMILY_ID = "deployment-model-alias-rollout-drift";
-const CHALLENGE_HASH = "0e9b87a5f260544cfbc1cdce8f08938c";
+const CHALLENGE_HASH = "805efb58c923f9e081db1b41967392d7";
 const SCENARIO_SET_ID = "drift-339-590affe3";
 
 const writeJson = (path: string, value: unknown) =>

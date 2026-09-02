@@ -58,9 +58,30 @@ export const ISOLATION_GUARANTEES: Readonly<Record<IsolationLevel, string>> = {
 
 export interface TrialCell {
   readonly scenarioId: string;
-  /** Named checks that failed. Empty means the subject passed this scenario. */
+  /** Named checks that failed. Empty means the subject passed this scenario — see `unmeasured`. */
   readonly failed: readonly string[];
+  /**
+   * Set when this scenario was NOT individually graded, carrying the reason why.
+   *
+   * An empty `failed` array is an affirmative claim: this subject was run against this named
+   * scenario and every check on it passed. There is no way to spell "we don't know" in an array of
+   * failing check names — the absence of a name reads as a pass — so a source that only preserves a
+   * suite-level verdict has to say so in a separate field or lie. The importer for the Harbor
+   * archive is exactly that source: a reward of 1 means "the suite that was current at the time
+   * returned 1", which does not name a single scenario.
+   *
+   * An unmeasured cell is never a pass and never a failure. `summarise` will not call a record
+   * passed while one is present, and `buildAgentBank` maps it to a null matrix cell, which the
+   * matrix layer already excludes from catch sets rather than imputing as a pass.
+   */
+  readonly unmeasured?: string;
 }
+
+/** A cell that positively records a pass: graded, and nothing failed. */
+export const cellPassed = (c: TrialCell): boolean => c.unmeasured === undefined && c.failed.length === 0;
+
+/** A cell that positively records a failure. */
+export const cellFailed = (c: TrialCell): boolean => c.unmeasured === undefined && c.failed.length > 0;
 
 export interface TrialRecord {
   readonly runId: string;
@@ -107,11 +128,14 @@ export interface TrialSummary {
   readonly counts: boolean;
   readonly scenariosFailed: number;
   readonly scenariosTotal: number;
+  /** Scenarios present in the record but never individually graded. */
+  readonly scenariosUnmeasured: number;
   readonly passed: boolean;
 }
 
 export const summarise = (r: TrialRecord): TrialSummary => {
-  const failed = r.cells.filter((c) => c.failed.length > 0).length;
+  const failed = r.cells.filter(cellFailed).length;
+  const unmeasured = r.cells.filter((c) => c.unmeasured !== undefined).length;
   return {
     subjectId: r.subjectId,
     subjectType: r.subjectType,
@@ -119,6 +143,9 @@ export const summarise = (r: TrialRecord): TrialSummary => {
     counts: r.counts,
     scenariosFailed: failed,
     scenariosTotal: r.cells.length,
-    passed: r.status === "completed" && failed === 0,
+    scenariosUnmeasured: unmeasured,
+    // A record with an ungraded scenario in it has not been shown to pass. Reporting it as a pass is
+    // the same error as reading an empty `failed` array off a source that never graded per scenario.
+    passed: r.status === "completed" && failed === 0 && unmeasured === 0,
   };
 };

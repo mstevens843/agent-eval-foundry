@@ -55,7 +55,7 @@ export function renderDiversityUpgrade(input: DiversityReportInput): string {
     "|---|---:|---:|---:|---|---:|",
     ...chains.map(
       (c) =>
-        `| \`${c.familyId}\` | ${c.subjects.length} | ${c.pairs.length} | ${c.incomparable.length} | ${c.isChain ? "**YES — one axis**" : "no"} | ${c.isChain ? "1" : `≥${c.agentAxes}`} |`,
+        `| \`${c.familyId}\` | ${c.subjects.length} | ${c.pairs.length} | ${c.incomparable.length} | ${c.isChain ? "**YES — one axis**" : "no"} | ${c.agentAxesReading} |`,
     ),
     "",
     ...chains.flatMap((c) => [
@@ -82,17 +82,26 @@ export function renderDiversityUpgrade(input: DiversityReportInput): string {
             "not bad luck here — it is what a family with no trade-off in it must produce.",
             "",
           ]
-        : [
-            `**${c.incomparable.length} incomparable pair(s)**, so the family separates subjects in more than one`,
-            "direction. That is what a family measuring several things looks like, and it is the state the",
-            "chained families above need to reach.",
-            "",
-            ...c.incomparable.map(
-              (p) =>
-                `- \`${p.a}\` and \`${p.b}\` are **${p.relation}**: ${p.shared} shared out of ${p.sizeA} and ${p.sizeB}. Neither dominates the other, so neither can be explained as a more-sensitive version of the other.`,
-            ),
-            "",
-          ]),
+        : c.subjects.length < 2
+          ? [
+              `**Not measurable — ${c.subjects.length} counted failing subject.** There is no pair to compare, so`,
+              "there is no chain to detect and no width to measure. An earlier version of this report read",
+              "the empty pair list as *zero incomparable pairs* and printed `≥2` here, which turned one",
+              "failing subject into a breadth claim. A second failing subject is what makes the question",
+              "answerable at all.",
+              "",
+            ]
+          : [
+              `**${c.incomparable.length} incomparable pair(s)**, so the family separates subjects in more than one`,
+              "direction. That is what a family measuring several things looks like, and it is the state the",
+              "chained families above need to reach.",
+              "",
+              ...c.incomparable.map(
+                (p) =>
+                  `- \`${p.a}\` and \`${p.b}\` are **${p.relation}**: ${p.shared} shared out of ${p.sizeA} and ${p.sizeB}. Neither dominates the other, so neither can be explained as a more-sensitive version of the other.`,
+              ),
+              "",
+            ]),
     ]),
     "## Where an independent axis could live",
     "",

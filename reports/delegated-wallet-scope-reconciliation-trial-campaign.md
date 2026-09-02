@@ -1,6 +1,6 @@
 # Trial campaign — delegated-wallet-scope-reconciliation
 
-`delegated-wallet-2026-08` · 1 slots · 1 run · 1 counted · 0 not run
+`delegated-wallet-2026-08` · 1 slots · 1 run · 0 counted · 0 not run
 
 ## Pre-registration
 
@@ -12,12 +12,29 @@ Written before any slot ran, so the result below cannot be reinterpreted into a 
 
 **Confirm signal.** At least one counted OpenAI/Codex smoke trial fails on an intended delegated-wallet authority mechanism under the current challenge hash, with transcript, submission, verifier output and scenario-set id preserved. On-target failure produces smoke-difficulty evidence only; one OpenAI run is not cross-lab evidence and does not unlock a full matrix without transfer evidence.
 
+### Kill signal, evaluated
+
+| | |
+|---|---|
+| verdict | **not evaluable** — no counted trial belongs to this campaign's slots |
+| counted trials in this campaign's slots | 0 |
+| passed everything | 0 |
+| failed something | 0 |
+| root-caused `capability` | 0 |
+
+no counted trial belongs to this campaign's slots; the pre-registration stands and neither signal has fired
+
+Only the mechanical clauses are evaluated: whether every counted trial passed, and whether any
+counted failure has been root-caused to `capability`. Whatever else the prose above says — that
+failures concentrated on ambiguous wording, that a knob pattern was or was not present — is a
+judgement no code here makes, and it is printed rather than scored.
+
 ## The task that was run
 
 | | |
 |---|---|
-| challenge hash (plan) | `2140032d835a87ff254d01b6b4652f21` |
-| challenge hash (now) | `2140032d835a87ff254d01b6b4652f21` |
+| challenge hash (plan) | `45f27b644a84364e3d3855f68cd243a2` |
+| challenge hash (now) | `45f27b644a84364e3d3855f68cd243a2` |
 | match | **yes** — every slot measured the task this repository currently holds |
 | scenario set | `reconciliation-804-4b4cc8ff`, 804 scenarios |
 | isolation | `subprocess` |
@@ -28,7 +45,13 @@ Written before any slot ran, so the result below cannot be reinterpreted into a 
 
 | slot | model | runner | state | run |
 |---|---|---|---|---|
-| O1 | `openai/gpt-5.6-sol` | shell | RUN | `delegated-wallet-2026-08-o1` |
+| O1 | `openai/gpt-5.6-sol` | shell | RUN, **WITHDRAWN** | `delegated-wallet-2026-08-o1` — **superseded** by the 2026-09-01 `delegated-wallet-scope-reconciliation` challenge migration; it does not count and its numbers are withdrawn |
+
+**Withdrawn evidence.** `delegated-wallet-2026-08-o1` was invalidated by the 2026-09-01 `delegated-wallet-scope-reconciliation` challenge migration: it was graded against a package this repository no longer produces, so that row does not count and every number on it is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read this row as spend that was made, not as a result about the family as it stands.
+
+A slot whose recorded run has been withdrawn is an unfilled slot, not a finished one. The
+header line counts it under `run` and not under `counted`, and only the second number says
+anything about the task this campaign now describes: this campaign has no result yet, and neither its kill signal nor its confirm signal has been tested.
 
 ## Counting rules
 
@@ -53,6 +76,13 @@ Declared in the plan and cross-checked against the code — a plan may not redef
 - verifier-output.json holds graded cells and named failed checks.
 - countability.json records the countability decision and reason.
 - A stale package hash invalidates the smoke evidence rather than letting old evidence count for a repaired package.
+
+## Superseded trials
+
+These ran against an earlier version of this challenge and are preserved without counting.
+A trial is evidence about the task it was run against, and that task no longer exists.
+
+- `delegated-wallet-2026-08-o1`
 
 The plan and the trial directories on disk agree.
 

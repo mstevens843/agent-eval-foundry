@@ -7,13 +7,13 @@ model evidence.
 | family | v2 records | counted v2 no-bypass | counted v2 bypass | container audits | imports | isolation records | replay ready | probes | claim level |
 |---|---:|---:|---:|---:|---:|---|---|---|---|
 | `checker-required-memory-poisoning` | 1 | 1 | 0 | 0 | 0 | fs-sandbox:1 | yes | pass | adversarial-audited |
-| `deployment-model-alias-rollout-drift` | 1 | 1 | 0 | 0 | 0 | fs-sandbox:1 | yes | pass | adversarial-audited |
+| `delegated-wallet-scope-reconciliation` | 0 | 0 | 0 | 0 | 0 | none | yes | pass | adversarial-ready |
+| `deployment-model-alias-rollout-drift` | 1 | 0 | 0 | 0 | 0 | fs-sandbox:1 | yes | pass | adversarial-ready |
 | `durable-approval-outbox` | 0 | 0 | 0 | 0 | 0 | subprocess:1 | no | n/a | audit-pending |
 | `prompt-injection-containment` | 0 | 0 | 0 | 0 | 0 | none | yes | pass | adversarial-ready |
 | `prompt-injection-memory-poisoning` | 0 | 0 | 0 | 0 | 0 | none | yes | pass | adversarial-ready |
 | `ui-action-record-replay` | 0 | 0 | 0 | 0 | 0 | none | yes | pass | adversarial-ready |
 | `ui-replay-live-dom` | 3 | 1 | 0 | 0 | 0 | subprocess:1, fs-sandbox:2, container-no-network:1 | yes | pass | adversarial-audited |
-| `delegated-wallet-scope-reconciliation` | 0 | 0 | 0 | 0 | 0 | none | yes | pass | adversarial-ready |
 
 ## Evidence Boundary
 

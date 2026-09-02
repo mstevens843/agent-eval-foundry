@@ -61,45 +61,55 @@ const ledger = [];
 let writeSeq = 0;
 let toolSeq = 0;
 
-const memoryFor = (sessionIndex) =>
-  Object.freeze({
-    write(record) {
-      writeSeq += 1;
-      const stored = {
-        key: record.key,
-        value: record.value,
-        provenance: supportsProvenance ? (record.provenance ?? []) : [],
-        originTrust: record.originTrust,
-        id: `w${writeSeq}`,
-        writtenInSession: sessionIndex,
-      };
-      const value = String(stored.value ?? "");
-      const hits = tokens.filter((t) => value.includes(t.token));
-      const byToken = new Map();
-      for (const h of hits) byToken.set(h.token, [...(byToken.get(h.token) ?? []), h.segmentId]);
-      const trueTrust = hits.some((h) => h.trust === "retrieved")
-        ? "retrieved"
-        : hits.some((h) => h.trust === "tool_output")
-          ? "tool_output"
-          : (hits[0]?.trust ?? null);
-      writes.push({
-        seq: writeSeq,
-        record: stored,
-        trueProvenance: hits.map((h) => h.segmentId),
-        tokenSources: [...byToken.values()],
-        trueTrust,
-        provenanceSupported: supportsProvenance,
-      });
-      store.set(stored.key, stored);
-      return stored;
-    },
-    recall(key) {
-      return store.get(key) ?? null;
-    },
-    keys() {
-      return [...store.keys()];
-    },
-  });
+// ONE facade for the whole scenario, handed unchanged to every session — the contract the package
+// README and `types.ts` publish ("called once per session, in order, with the SAME memory facade
+// throughout"). It used to be rebuilt per session over the same backing store, so only object
+// identity differed; identity is exactly what a submission keying per-scenario state off the facade
+// (a WeakMap, an `=== previousMemory` check) relies on, and two real trials failed every attack
+// scenario for that reason alone. `sessionIndex` moved into a variable the host updates between
+// sessions, because the subject must not be able to set `writtenInSession`.
+let sessionIndex = 0;
+
+const memory = Object.freeze({
+  write(record) {
+    writeSeq += 1;
+    const stored = {
+      key: record.key,
+      value: record.value,
+      provenance: supportsProvenance ? (record.provenance ?? []) : [],
+      originTrust: record.originTrust,
+      // Secrecy is not a provenance field: every store type keeps it, `vector_note` included.
+      carriesSecret: record.carriesSecret === true,
+      id: `w${writeSeq}`,
+      writtenInSession: sessionIndex,
+    };
+    const value = String(stored.value ?? "");
+    const hits = tokens.filter((t) => value.includes(t.token));
+    const byToken = new Map();
+    for (const h of hits) byToken.set(h.token, [...(byToken.get(h.token) ?? []), h.segmentId]);
+    const trueTrust = hits.some((h) => h.trust === "retrieved")
+      ? "retrieved"
+      : hits.some((h) => h.trust === "tool_output")
+        ? "tool_output"
+        : (hits[0]?.trust ?? null);
+    writes.push({
+      seq: writeSeq,
+      record: stored,
+      trueProvenance: hits.map((h) => h.segmentId),
+      tokenSources: [...byToken.values()],
+      trueTrust,
+      provenanceSupported: supportsProvenance,
+    });
+    store.set(stored.key, stored);
+    return stored;
+  },
+  recall(key) {
+    return store.get(key) ?? null;
+  },
+  keys() {
+    return [...store.keys()];
+  },
+});
 
 const tools = Object.freeze({
   specs: scenario.tools ?? [],
@@ -131,7 +141,8 @@ try {
       grants: scenario.grants ?? [],
       tools: scenario.tools ?? [],
     };
-    const report = subject.runSession(view, memoryFor(session.index), tools);
+    sessionIndex = session.index;
+    const report = subject.runSession(view, memory, tools);
     for (const d of report?.decisions ?? []) decisions.push(d);
     for (const e of report?.audit ?? []) audit.push(e);
   }

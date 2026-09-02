@@ -118,6 +118,7 @@ export const RULE_CODES = [
   "TRIAL_AGENT_WITHOUT_MODEL",
   "TRIAL_AGENT_WITHOUT_ARTIFACT",
   "TRIAL_EMPTY_CELLS",
+  "TRIAL_CELL_UNMEASURED_WITH_FAILURES",
   "TRIAL_DUPLICATE_RUN_ID",
   "TRIAL_CHALLENGE_HASH_MISSING",
   "TRIAL_CHALLENGE_HASH_MISMATCH",
@@ -142,6 +143,16 @@ export const RULE_CODES = [
   "EVIDENCE_CAMPAIGN_NOT_REISSUED",
   "EVIDENCE_SUPERSEDED_HIDDEN",
   "EVIDENCE_AMBIGUITY_UNDOCUMENTED",
+  // per-trial root cause: WHY a trial came out the way it did, adjudicated and attributed.
+  // Without these, "counted failure" silently meant "capability" and two artifacts published as
+  // difficulty evidence were a spec defect and a harness contract violation.
+  "ROOTCAUSE_UNKNOWN_LABEL",
+  "ROOTCAUSE_NO_RATIONALE",
+  "ROOTCAUSE_NO_EVIDENCE",
+  "ROOTCAUSE_NO_LABELLER",
+  "ROOTCAUSE_RUN_MISMATCH",
+  "ROOTCAUSE_LABEL_CONTRADICTS_OUTCOME",
+  "ROOTCAUSE_CAPABILITY_OVER_UNREAD_DIAGNOSIS",
   // durable trial directories
   "TRIALDIR_MISSING_FILE",
   "TRIALDIR_COUNTED_WITHOUT_VERIFIER",
@@ -173,6 +184,9 @@ export const RULE_CODES = [
   "CHALLENGE_LEAKS_HIDDEN_ARTIFACT",
   "CHALLENGE_MISSING_SURFACE",
   "CHALLENGE_MANIFEST_MISMATCH",
+  // The visible starter is a working answer. Behavioural, so no identifier blocklist can see it;
+  // graded empirically by `checkStarterFailsEnough` rather than by string search.
+  "CHALLENGE_STARTER_SOLVES_FAMILY",
   // human clean-room solvability evidence
   "HUMAN_COUNTED_HASH_MISSING",
   "HUMAN_COUNTED_HASH_STALE",
@@ -280,6 +294,10 @@ export const RULE_CODES = [
   "LINEAGE_MATRIX_AFTER_CLEAN_PASS",
   "LINEAGE_FEEDBACK_UNLABELLED",
   "LINEAGE_NO_REALLOCATION",
+  "LINEAGE_WITHDRAWN_EVIDENCE_CLAIMED_INFORMATIVE",
+  "LINEAGE_WITHDRAWAL_UNREASONED",
+  "LINEAGE_FEEDBACK_WITHDRAWN_UNREASONED",
+  "LINEAGE_REALLOCATION_ON_WITHDRAWN_EVIDENCE",
   // production matrix readiness: one smoke result is routing evidence, not automatic /6 spend
   "PRODUCTION_LOCAL_VERIFIER_NOT_READY",
   "PRODUCTION_PACKAGE_NOT_BACKED",

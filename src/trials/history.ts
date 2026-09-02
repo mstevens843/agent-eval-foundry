@@ -143,6 +143,46 @@ export function classifyRunKind(runName: string): RunKind {
   return "unknown";
 }
 
+/**
+ * Which task this run actually ran, read from the preserved trial ids.
+ *
+ * `classifyRunKind` reads the DIRECTORY NAME, which is a label a human typed and which says nothing
+ * about what was executed. The archive under `examples/durable-outbox/runs/` contains five runs whose
+ * names look exactly like outbox attempts — `run-claude-1`, `v2-claude-1`, `v21-claude-1`,
+ * `v22-claude-1`, `check-v21` — and whose trial ids say `reorg-safe-settlement__…`. All five carry
+ * reward 1. Counting them made a different task's solves look like this task's solves.
+ *
+ * Harbor writes trial ids as `<task-name>__<suffix>`, so the task is recorded and does not have to be
+ * guessed. Returns null when the archive preserves no ids (the run died before any trial started) or
+ * when it preserves ids from more than one task — both are "cannot be verified", not "matches".
+ */
+export function runTaskName(run: HistoricalRun): string | null {
+  const names = new Set(run.trialIds.map((id) => id.split("__")[0] ?? "").filter((name) => name.length > 0));
+  return names.size === 1 ? ([...names][0] ?? null) : null;
+}
+
+/**
+ * The synthetic check a counted reward-0 run fails on every scenario.
+ *
+ * This one is defensible: the name says "the suite returned zero", it is not the name of any real
+ * check, and a suite-level zero does entail that something failed. Its reward-1 counterpart is NOT
+ * defensible and deliberately does not exist — see `NO_PER_SCENARIO_DETAIL`.
+ */
+export const SUITE_REWARD_ZERO = "suite_reward_zero";
+
+/**
+ * Why a counted reward-1 run's cells are marked ungraded rather than passed.
+ *
+ * The archive preserves one binary reward per run and no per-check detail (every run directory
+ * contains exactly one file, `result.json`). Writing `failed: []` for all 24 scenarios turns that
+ * single bit into 24 affirmative claims — "this subject was graded against `serial-clean-1009-12`
+ * and passed it" — which the source cannot support, and which the two reward-1 runs in this archive
+ * actively contradict: `fh-claude-3` and `v2-opus-3b` were both recorded as solves at the time and
+ * both were later found to still carry the `ACKED -> REVOKED` defect.
+ */
+export const NO_PER_SCENARIO_DETAIL =
+  "the archived run preserves a single binary suite reward and no per-check detail, so this scenario was never individually graded; a reward of 1 is not evidence that this named scenario passed";
+
 /** Normalize a model identity so the same model is one subject across families. */
 export function normalizeModel(_agent: string, model: string, effort: string): string {
   const m = model.toLowerCase().replace(/^(anthropic|openai|google)\//, "");
@@ -168,25 +208,61 @@ export interface ImportedHistory {
   readonly counted: number;
   readonly uncounted: number;
   readonly runs: readonly HistoricalRun[];
+  /** The task name every counted run had to have actually run. */
+  readonly taskName: string;
+  /** Run names excluded because their trial ids name a different task, or name none. */
+  readonly excludedForTask: readonly string[];
+  /**
+   * Standard attempts AT THIS TASK. The waste-rate denominator.
+   *
+   * Callers must not recompute this as `records.filter(r => classifyRunKind(r.runId) === "standard")`
+   * — that reads the directory name, so it counts the foreign-task runs and the runs that preserved
+   * no trial ids as outbox attempts that produced nothing, which inflates the waste rate.
+   */
+  readonly standardRuns: number;
+  readonly standardCounted: number;
+  /** Fraction of standard attempts at this task that produced no usable result. */
+  readonly standardWasteRate: number;
 }
 
 /**
  * Import a directory of Harbor runs as normalized trial records.
  *
- * `scenarioIds` supplies the graded instance ids so a counted run produces real cells rather than an
- * opaque pass/fail. The reward is binary in the source, so every scenario in a reward-0 run is
- * recorded as failing the synthetic check `suite_reward_zero` — coarse, and labelled as coarse in the
- * caveat rather than dressed up as per-check detail the source never had.
+ * Two rules govern what a counted run may claim.
+ *
+ * FIRST, a run only counts if its preserved trial ids say it ran `taskName`. The archive is a shared
+ * scratch directory: five of its run directories are named like outbox attempts and ran
+ * `reorg-safe-settlement`. Excluded runs are kept as records with `counts: false` and a reason, the
+ * same way cheat and gate runs are — the evidence is preserved, it just stops being counted.
+ *
+ * SECOND, a counted run's cells never claim more than the source recorded. A reward-0 run fails every
+ * scenario under `SUITE_REWARD_ZERO`; a reward-1 run's scenarios are marked UNGRADED, because a
+ * suite-level reward of 1 is not 24 per-scenario passes and there is nothing on disk that would make
+ * it so.
+ *
+ * `taskName` defaults to `familyId`, which is the right default: a family's imported history should
+ * contain runs of that family's task. Pass it explicitly only where the two genuinely differ.
  */
 export function importDurableOutboxHistory(
   runsRoot: string,
   familyId: string,
   scenarioIds: readonly string[],
   scenarioSetId: string,
+  taskName: string = familyId,
 ): ImportedHistory {
-  if (!existsSync(runsRoot)) {
-    return { familyId, records: [], counted: 0, uncounted: 0, runs: [] };
-  }
+  const empty: ImportedHistory = {
+    familyId,
+    records: [],
+    counted: 0,
+    uncounted: 0,
+    runs: [],
+    taskName,
+    excludedForTask: [],
+    standardRuns: 0,
+    standardCounted: 0,
+    standardWasteRate: 0,
+  };
+  if (!existsSync(runsRoot)) return empty;
 
   const runs: HistoricalRun[] = [];
   // Directory entries only: a real archive contains stray files (.DS_Store, logs) and a reader that
@@ -214,23 +290,54 @@ export function importDurableOutboxHistory(
     }
   }
 
+  const excludedForTask: string[] = [];
   const records = runs.map((run) => {
     const kind = classifyRunKind(run.runName);
     const base = classifyHistorical(run);
+    const ranTask = runTaskName(run);
     // A cheat trial or a gate run is not an attempt at the task, so it can never be difficulty
     // evidence however clean it was. Recorded, kept, and excluded — the same discipline the counting
     // rules apply to refusals.
-    const { status, counts, reason } =
-      kind === "standard"
-        ? base
-        : {
-            status: base.status,
-            counts: false,
-            reason: `${kind} run, not an attempt at the task: ${base.reason}`,
-          };
-    const failedAll = counts && run.reward === 0;
+    //
+    // A run of a DIFFERENT task is excluded the same way and for a stronger reason: a cheat run at
+    // least attacked this grader, whereas `reorg-safe-settlement__…` never touched this task at all.
+    let verdict: { status: TrialStatus; counts: boolean; reason: string };
+    if (kind !== "standard") {
+      verdict = {
+        status: base.status,
+        counts: false,
+        reason: `${kind} run, not an attempt at the task: ${base.reason}`,
+      };
+    } else if (ranTask === null) {
+      excludedForTask.push(run.runName);
+      verdict = {
+        status: base.status,
+        counts: false,
+        reason: `the archived result preserves no trial ids naming a single task, so there is no evidence this run attempted "${taskName}"; the directory name is not evidence (${base.reason})`,
+      };
+    } else if (ranTask !== taskName) {
+      excludedForTask.push(run.runName);
+      verdict = {
+        status: base.status,
+        counts: false,
+        reason: `ran task "${ranTask}", not "${taskName}"; a reward earned on a different task is not evidence about this one however the run directory is named (${base.reason})`,
+      };
+    } else {
+      verdict = base;
+    }
+    const { status, counts, reason } = verdict;
+
+    // What the source actually recorded is one bit for the whole suite. Reward 0 entails a failure
+    // somewhere, so a suite-level failing check on every scenario is coarse but true. Reward 1 does
+    // NOT entail 24 per-scenario passes, and `failed: []` would assert exactly that, so those cells
+    // are marked ungraded instead. The importer would rather record less than record a claim the
+    // archive cannot back.
     const cells: TrialCell[] = counts
-      ? scenarioIds.map((id) => ({ scenarioId: id, failed: failedAll ? ["suite_reward_zero"] : [] }))
+      ? scenarioIds.map((id) =>
+          run.reward === 0
+            ? { scenarioId: id, failed: [SUITE_REWARD_ZERO] }
+            : { scenarioId: id, failed: [], unmeasured: NO_PER_SCENARIO_DETAIL },
+        )
       : [];
     return parseTrialRecord({
       runId: run.runName,
@@ -248,9 +355,17 @@ export function importDurableOutboxHistory(
       costUsd: run.costUsd,
       artifactPath: counts ? `runs/${run.runName}` : null,
       isolation: "container",
-      notes: `kind=${kind} agent=${run.agent} reward=${run.reward ?? "none"} exceptions=[${run.exceptions.join(",")}]`,
+      notes: `kind=${kind} task=${ranTask ?? "unrecorded"} agent=${run.agent} reward=${run.reward ?? "none"} exceptions=[${run.exceptions.join(",")}]`,
     });
   });
+
+  // Standard attempts AT THIS TASK — computed here, from the trial ids, because the run name cannot
+  // tell a caller which of these runs attempted the task.
+  const standard = runs.filter(
+    (run) => classifyRunKind(run.runName) === "standard" && runTaskName(run) === taskName,
+  );
+  const byName = new Map(records.map((r) => [r.runId, r]));
+  const standardCounted = standard.filter((run) => byName.get(run.runName)?.counts === true).length;
 
   return {
     familyId,
@@ -258,5 +373,10 @@ export function importDurableOutboxHistory(
     counted: records.filter((r) => r.counts).length,
     uncounted: records.filter((r) => !r.counts).length,
     runs,
+    taskName,
+    excludedForTask,
+    standardRuns: standard.length,
+    standardCounted,
+    standardWasteRate: standard.length === 0 ? 0 : 1 - standardCounted / standard.length,
   };
 }

@@ -4,7 +4,7 @@
   "hypothesis": "The delegated-wallet descendant should expose authority drift that the cleanly solved access-token family did not: a real agent may trust cached delegation, requested spend authority, subject-owned receipts, stale tokens, revoked or downgraded authority, or fail liveness while avoiding overgrant. One smoke trial is enough to decide the next routing step, not enough to claim a full matrix or cross-lab breadth.",
   "killSignal": "A counted OpenAI/Codex smoke trial passes every graded delegated-wallet scenario cleanly under the current challenge hash, which is an already_solved_or_needs_evolution signal rather than a reason to run a full matrix. Alternatively, failures concentrate only on unclear public delegation/intersection wording or harness errors, which routes the family to repair/spec work instead of difficulty evidence.",
   "confirmSignal": "At least one counted OpenAI/Codex smoke trial fails on an intended delegated-wallet authority mechanism under the current challenge hash, with transcript, submission, verifier output and scenario-set id preserved. On-target failure produces smoke-difficulty evidence only; one OpenAI run is not cross-lab evidence and does not unlock a full matrix without transfer evidence.",
-  "challengeHash": "2140032d835a87ff254d01b6b4652f21",
+  "challengeHash": "45f27b644a84364e3d3855f68cd243a2",
   "scenarioSetId": "reconciliation-804-4b4cc8ff",
   "scenariosExpected": 804,
   "timeoutMs": 1800000,
@@ -49,7 +49,7 @@
       ],
       "state": "RUN",
       "runId": "delegated-wallet-2026-08-o1",
-      "note": "Single OpenAI/Codex smoke slot. Counted completed run under the pinned challenge hash: 804 scenarios graded, 0 failed. This is a clean pass and routes to already_solved_or_needs_evolution, not difficulty-smoke evidence, matrix readiness or cross-lab breadth."
+      "note": "Single OpenAI/Codex smoke slot. The preserved run delegated-wallet-2026-08-o1 graded 804 scenarios with 0 failures against challenge hash 2140032d835a87ff254d01b6b4652f21, whose visible package shipped a starter that was a complete passing solution, so the pass carries no information about the mechanism. That package is superseded: the starter is now a skeleton that fails 804/804, the hash moved to 45f27b644a84364e3d3855f68cd243a2, and the old run no longer counts. The slot needs a fresh run before this family has any smoke evidence at all."
     }
   ]
 }

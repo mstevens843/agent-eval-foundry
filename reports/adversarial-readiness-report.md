@@ -8,17 +8,17 @@ Cheat resistance is not the same claim as no bypass found. Cheat resistance is t
 | family | readiness | package hash | campaign | bundle | blockers |
 |---|---|---|---|---|---|
 | `checker-required-memory-poisoning` | **adversarial-ready** | `448f2f816c51030cc97a374816226168` | `checker-required-memory-poisoning-adversarial` | `bundles/checker-required-memory-poisoning-adversarial` | none |
-| `deployment-model-alias-rollout-drift` | **adversarial-ready** | `0e9b87a5f260544cfbc1cdce8f08938c` | `deployment-model-alias-rollout-drift-adversarial` | `bundles/deployment-model-alias-rollout-drift-adversarial` | none |
+| `delegated-wallet-scope-reconciliation` | **adversarial-ready** | `45f27b644a84364e3d3855f68cd243a2` | `delegated-wallet-scope-reconciliation-adversarial` | `bundles/delegated-wallet-scope-reconciliation-adversarial` | none |
+| `deployment-model-alias-rollout-drift` | **adversarial-ready** | `805efb58c923f9e081db1b41967392d7` | `deployment-model-alias-rollout-drift-adversarial` | `bundles/deployment-model-alias-rollout-drift-adversarial` | none |
 | `durable-approval-outbox` | **audit-pending** | none | none | none | `public-package-present`, `package-leak-check`, `campaign-file-present`, `threat-model-declared`, `access-boundary-declared`, `outcome-contract-declared`, `never-counts-declared` |
 | `prompt-injection-containment` | **adversarial-ready** | `4911ffdfbd2c0e9b51752ed16c4f53e8` | `prompt-injection-containment-adversarial` | `bundles/prompt-injection-containment-adversarial` | none |
-| `prompt-injection-memory-poisoning` | **adversarial-ready** | `9b3e0c84addabc2e195ecbd490ba81dd` | `prompt-injection-memory-poisoning-adversarial` | `bundles/prompt-injection-memory-poisoning-adversarial` | none |
+| `prompt-injection-memory-poisoning` | **adversarial-ready** | `7443bf6d6c6b2ccf69cc20f417ff048c` | `prompt-injection-memory-poisoning-adversarial` | `bundles/prompt-injection-memory-poisoning-adversarial` | none |
 | `ui-action-record-replay` | **adversarial-ready** | `1050e79f4804a96a5327d50dd81765b0` | `ui-action-record-replay-adversarial` | `bundles/ui-action-record-replay-adversarial` | none |
 | `ui-replay-live-dom` | **adversarial-ready** | `18c3f5afc5973604205cd7df23ce4cad` | `ui-replay-live-dom-adversarial` | `bundles/ui-replay-live-dom-adversarial` | none |
-| `delegated-wallet-scope-reconciliation` | **adversarial-ready** | `2140032d835a87ff254d01b6b4652f21` | `delegated-wallet-scope-reconciliation-adversarial` | `bundles/delegated-wallet-scope-reconciliation-adversarial` | none |
 
 ## Current Reading
 
-Adversarial-ready families: `checker-required-memory-poisoning`, `deployment-model-alias-rollout-drift`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom`, `delegated-wallet-scope-reconciliation`.
+Adversarial-ready families: `checker-required-memory-poisoning`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom`.
 Audit-pending families: `durable-approval-outbox`.
 
 A ready verdict means the attack campaign is prepared and hash-pinned. It does not mean anyone
@@ -42,14 +42,30 @@ has tried to exploit the verifier, and it does not mean no bypass exists.
 | `fs-sandbox-isolation-check` | pass | bundle declares fs-sandbox and leaks no hidden files |
 | `exploit-schema-present` | pass | exploit artifact schema is included in the attack packet |
 
+### `delegated-wallet-scope-reconciliation`
+
+| check | result | detail |
+|---|---|---|
+| `public-package-present` | pass | checked-in challenge package hashes to 45f27b644a84364e3d3855f68cd243a2 |
+| `package-leak-check` | pass | public challenge package passes leak check |
+| `campaign-file-present` | pass | campaign delegated-wallet-scope-reconciliation-adversarial |
+| `campaign-hash-current` | pass | campaign pins current hash 45f27b644a84364e3d3855f68cd243a2 |
+| `threat-model-declared` | pass | 12 attack surface(s) |
+| `access-boundary-declared` | pass | allowed and forbidden attacker access are both declared |
+| `outcome-contract-declared` | pass | bypass and no-bypass outcomes are declared separately |
+| `never-counts-declared` | pass | refusal, infrastructure errors and stale hashes never count |
+| `attack-bundle-present` | pass | bundle ./bundles/delegated-wallet-scope-reconciliation-adversarial |
+| `fs-sandbox-isolation-check` | pass | bundle declares fs-sandbox and leaks no hidden files |
+| `exploit-schema-present` | pass | exploit artifact schema is included in the attack packet |
+
 ### `deployment-model-alias-rollout-drift`
 
 | check | result | detail |
 |---|---|---|
-| `public-package-present` | pass | checked-in challenge package hashes to 0e9b87a5f260544cfbc1cdce8f08938c |
+| `public-package-present` | pass | checked-in challenge package hashes to 805efb58c923f9e081db1b41967392d7 |
 | `package-leak-check` | pass | public challenge package passes leak check |
 | `campaign-file-present` | pass | campaign deployment-model-alias-rollout-drift-adversarial |
-| `campaign-hash-current` | pass | campaign pins current hash 0e9b87a5f260544cfbc1cdce8f08938c |
+| `campaign-hash-current` | pass | campaign pins current hash 805efb58c923f9e081db1b41967392d7 |
 | `threat-model-declared` | pass | 12 attack surface(s) |
 | `access-boundary-declared` | pass | allowed and forbidden attacker access are both declared |
 | `outcome-contract-declared` | pass | bypass and no-bypass outcomes are declared separately |
@@ -94,10 +110,10 @@ has tried to exploit the verifier, and it does not mean no bypass exists.
 
 | check | result | detail |
 |---|---|---|
-| `public-package-present` | pass | checked-in challenge package hashes to 9b3e0c84addabc2e195ecbd490ba81dd |
+| `public-package-present` | pass | checked-in challenge package hashes to 7443bf6d6c6b2ccf69cc20f417ff048c |
 | `package-leak-check` | pass | public challenge package passes leak check |
 | `campaign-file-present` | pass | campaign prompt-injection-memory-poisoning-adversarial |
-| `campaign-hash-current` | pass | campaign pins current hash 9b3e0c84addabc2e195ecbd490ba81dd |
+| `campaign-hash-current` | pass | campaign pins current hash 7443bf6d6c6b2ccf69cc20f417ff048c |
 | `threat-model-declared` | pass | 11 attack surface(s) |
 | `access-boundary-declared` | pass | allowed and forbidden attacker access are both declared |
 | `outcome-contract-declared` | pass | bypass and no-bypass outcomes are declared separately |
@@ -135,22 +151,6 @@ has tried to exploit the verifier, and it does not mean no bypass exists.
 | `outcome-contract-declared` | pass | bypass and no-bypass outcomes are declared separately |
 | `never-counts-declared` | pass | refusal, infrastructure errors and stale hashes never count |
 | `attack-bundle-present` | pass | bundle ./bundles/ui-replay-live-dom-adversarial |
-| `fs-sandbox-isolation-check` | pass | bundle declares fs-sandbox and leaks no hidden files |
-| `exploit-schema-present` | pass | exploit artifact schema is included in the attack packet |
-
-### `delegated-wallet-scope-reconciliation`
-
-| check | result | detail |
-|---|---|---|
-| `public-package-present` | pass | checked-in challenge package hashes to 2140032d835a87ff254d01b6b4652f21 |
-| `package-leak-check` | pass | public challenge package passes leak check |
-| `campaign-file-present` | pass | campaign delegated-wallet-scope-reconciliation-adversarial |
-| `campaign-hash-current` | pass | campaign pins current hash 2140032d835a87ff254d01b6b4652f21 |
-| `threat-model-declared` | pass | 12 attack surface(s) |
-| `access-boundary-declared` | pass | allowed and forbidden attacker access are both declared |
-| `outcome-contract-declared` | pass | bypass and no-bypass outcomes are declared separately |
-| `never-counts-declared` | pass | refusal, infrastructure errors and stale hashes never count |
-| `attack-bundle-present` | pass | bundle ./bundles/delegated-wallet-scope-reconciliation-adversarial |
 | `fs-sandbox-isolation-check` | pass | bundle declares fs-sandbox and leaks no hidden files |
 | `exploit-schema-present` | pass | exploit artifact schema is included in the attack packet |
 

@@ -32,7 +32,9 @@ import {
   strArray,
   strNullable,
 } from "../foundry/schema.js";
-import { NEVER_COUNTS, type TrialStatus } from "./types.js";
+import { DIFFICULTY_EVIDENCE_CAUSES, type RootCause } from "./root-cause.js";
+import { NEVER_COUNTS, type TrialStatus, cellFailed } from "./types.js";
+import type { TrialRecord } from "./types.js";
 
 export const SLOT_STATES = ["NOT_RUN", "RUN", "REFUSED", "FAILED_INFRA", "IMPORTED"] as const;
 export type SlotState = (typeof SLOT_STATES)[number];
@@ -232,6 +234,128 @@ export function loadCampaigns(root: string): readonly CampaignPlan[] {
     .filter((f) => f.endsWith(".json"))
     .sort()
     .map((f) => loadCampaign(join(dir, f)));
+}
+
+// ---------------------------------------------------------------- the kill signal, evaluated
+//
+// `killSignal` was a string that nothing read. `assertPlanHonest` checked it was at least twenty
+// characters long and no code anywhere asked whether it had fired — a pre-registered kill condition
+// that only a person re-reading the plan could ever apply, which is decoration on a discipline
+// claim. It is executable now.
+//
+// WHAT IS AND IS NOT EVALUATED
+//
+// The prose is not evaluated and cannot be: "failures concentrate only on unclear public rollout
+// wording" is a judgement. What IS evaluated is the mechanical core that every checked-in kill
+// signal in this repository states, in these words or near them:
+//
+//   1. every counted trial passes cleanly            -> already-solved; kill, harden or reallocate
+//   2. the failures are not difficulty               -> HOLD/REPAIR rather than difficulty-evidenced
+//                                                       ("harness errors", "package defect",
+//                                                       "ambiguous public wording", "spec work")
+//
+// Clause 2 is exactly the root-cause record: a counted failure that nobody has attributed to
+// capability, or that somebody has attributed to the spec, the harness, a leak or infrastructure,
+// is not difficulty evidence and the plan said so before the run. So the verdict is computed from
+// the counted trials of the campaign's OWN slots and their root causes, and the report prints the
+// prose beside it so a reader can see what the machine did not evaluate.
+
+export const KILL_SIGNAL_VERDICTS = [
+  /** No counted trial in this campaign's slots. Neither signal can have fired. */
+  "NOT_EVALUABLE",
+  /** Clause 1: every counted trial passed everything. */
+  "FIRED_ALREADY_SOLVED",
+  /** Clause 2: counted failures exist and none is root-caused to capability. */
+  "FIRED_NOT_DIFFICULTY",
+  /** At least one counted trial failed with root cause `capability`. */
+  "NOT_FIRED",
+] as const;
+export type KillSignalVerdict = (typeof KILL_SIGNAL_VERDICTS)[number];
+
+/** One counted trial as the kill-signal evaluator needs to see it. */
+export interface KillSignalTrial {
+  readonly record: TrialRecord;
+  readonly rootCause: RootCause;
+}
+
+export interface KillSignalEvaluation {
+  readonly campaignId: string;
+  readonly familyId: string;
+  readonly killSignal: string;
+  readonly verdict: KillSignalVerdict;
+  readonly detail: string;
+  readonly countedTrials: number;
+  readonly cleanTrials: number;
+  readonly failingTrials: number;
+  readonly capabilityTrials: number;
+  /** Failing trials whose root cause is not `capability`, with the cause that disqualified them. */
+  readonly disqualified: readonly { readonly runId: string; readonly rootCause: RootCause }[];
+}
+
+/**
+ * Evaluate a plan's pre-registered kill signal against the counted trials its slots produced.
+ *
+ * `trials` is the caller's job to scope: this function does not read the filesystem, so a campaign
+ * is judged on the population the caller says belongs to it rather than on every directory that
+ * happens to share the family.
+ */
+export function evaluateKillSignal(
+  plan: CampaignPlan,
+  trials: readonly KillSignalTrial[],
+): KillSignalEvaluation {
+  const claimed = new Set(plan.slots.map((s) => s.runId).filter((r): r is string => r !== null));
+  const counted = trials.filter(
+    (t) =>
+      claimed.has(t.record.runId) &&
+      t.record.subjectType === "agent" &&
+      t.record.counts &&
+      !NEVER_COUNTS.has(t.record.status),
+  );
+  const failing = counted.filter((t) => t.record.cells.some(cellFailed));
+  const capability = failing.filter((t) => DIFFICULTY_EVIDENCE_CAUSES.has(t.rootCause));
+  const disqualified = failing
+    .filter((t) => !DIFFICULTY_EVIDENCE_CAUSES.has(t.rootCause))
+    .map((t) => ({ runId: t.record.runId, rootCause: t.rootCause }))
+    .sort((a, b) => a.runId.localeCompare(b.runId));
+
+  const base = {
+    campaignId: plan.campaignId,
+    familyId: plan.familyId,
+    killSignal: plan.killSignal,
+    countedTrials: counted.length,
+    cleanTrials: counted.length - failing.length,
+    failingTrials: failing.length,
+    capabilityTrials: capability.length,
+    disqualified,
+  };
+
+  if (counted.length === 0) {
+    return {
+      ...base,
+      verdict: "NOT_EVALUABLE",
+      detail:
+        "no counted trial belongs to this campaign's slots; the pre-registration stands and neither signal has fired",
+    };
+  }
+  if (capability.length > 0) {
+    return {
+      ...base,
+      verdict: "NOT_FIRED",
+      detail: `${capability.length} of ${counted.length} counted trial(s) failed with root cause \`capability\`; the family survives its own kill condition on the mechanical clauses`,
+    };
+  }
+  if (failing.length === 0) {
+    return {
+      ...base,
+      verdict: "FIRED_ALREADY_SOLVED",
+      detail: `all ${counted.length} counted trial(s) passed every graded scenario — the already-solved clause of the kill signal`,
+    };
+  }
+  return {
+    ...base,
+    verdict: "FIRED_NOT_DIFFICULTY",
+    detail: `${failing.length} counted trial(s) failed and none is root-caused to \`capability\` (${disqualified.map((d) => `${d.runId}: ${d.rootCause}`).join(", ")}) — the not-difficulty clause of the kill signal`,
+  };
 }
 
 export interface CampaignProgress {

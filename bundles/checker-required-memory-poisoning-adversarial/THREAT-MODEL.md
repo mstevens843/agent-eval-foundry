@@ -2,7 +2,7 @@
 
 Campaign: `checker-required-memory-poisoning-adversarial`
 Challenge hash: `448f2f816c51030cc97a374816226168`
-Verifier hash: `6fc285d9426840691745d0237b598ace`
+Verifier hash: `ca78467a4fcd366a0af85f613230af0d`
 
 Objective: Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.
 
