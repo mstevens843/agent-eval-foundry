@@ -243,6 +243,54 @@ export function familyEvidenceFor(root: string, familyId: string = PIC_FAMILY): 
 }
 
 /** Family evidence keyed by id, in the shape the ship report expects. */
+/**
+ * Evidence for a family that has TRIALS but no runner in this repository.
+ *
+ * `durable-approval-outbox` is the case and, at present, the only one: it is a shape, it is absent
+ * from `BUILT_FAMILIES`, `routeFor` does not know it, and its six frontier attempts were executed by
+ * the source project. `familyEvidenceFor` cannot serve it — its first act for a non-containment
+ * family is `builtFamily(familyId)`, which throws.
+ *
+ * Until now the consequence was that the ship gate saw NO evidence for it and fell back to
+ * `agentTrialsRun: 6` in a JSON file, which is a number that cannot say why a trial failed. Now that
+ * the six runs are trial directories with per-check cells and root-cause sidecars, the gate can read
+ * the trials.
+ *
+ * `sweepRun: false` is the honest half. There is no reference run, no mutant bank and no baseline
+ * sweep here, and the four blocking gates that read those must go on reporting `n/a` — the same
+ * verdict they gave when there was no evidence at all. Supplying zeros for them would convert
+ * "nobody built this here" into four fresh gate failures, which is a different claim.
+ */
+export function shapeTrialEvidence(root: string, familyId: string): FamilyEvidence {
+  const dirs = readFamilyTrials(join(root, "trials"), familyId);
+  const trials: TrialSet = {
+    familyId,
+    scenarioSetId: dirs[0]?.record.scenarioSetId ?? familyId,
+    records: dirs.map((d) => d.record),
+  };
+  const counted = countedAgentTrials(trials);
+  return {
+    familyId,
+    // Unread: `sweepRun: false` routes every sweep gate to `n/a`. Present because the type requires
+    // them, and set to the value that claims nothing rather than the value that claims a pass.
+    referencePasses: false,
+    baselinesBlocked: [],
+    baselinesTotal: 0,
+    mutantsCaught: [],
+    mechanismsExercised: false,
+    sweepRun: false,
+    isolation: counted[0]?.isolation ?? "container",
+    countedAgentTrials: counted.length,
+    agentTrialsPassed: counted.filter((t) => t.cells.every((c) => c.failed.length === 0)).length,
+    sharedBankSubjects: sharedSubjectCount(root, familyId),
+    reportsDeterministic: true,
+    trialReady: ROUTABLE.has(familyId),
+    staleTrials: [],
+    ...agentAxisFacts(trials.records, new Set<string>()),
+    ...rootCauseFacts(counted, dirs),
+  };
+}
+
 export const familyEvidenceMap = (root: string): Record<string, FamilyEvidence> => {
   const browserReadiness = browserBackedReadiness(
     BROWSER_BACKED_NEXT_PLAN,
@@ -374,7 +422,11 @@ export function familyEvidenceMapForShipReport(root: string): Record<string, Fam
   const funnel = loadAdaptiveFunnel(root, registry);
   return augmentProductionReadinessEvidenceMap(
     root,
-    familyEvidenceMap(root),
+    // The outbox family is keyed in here alongside the built ones. It has no runner, so
+    // `familyEvidenceMap` cannot produce it, and without it the ship report reads this family's
+    // difficulty off `agentTrialsRun` in a JSON file while six adjudicable trial directories sit on
+    // disk. `familyLoop` takes the same route for the same reason.
+    { ...familyEvidenceMap(root), [OUTBOX_FAMILY]: shapeTrialEvidence(root, OUTBOX_FAMILY) },
     loadCampaigns(root),
     funnel.transfers,
   );
@@ -471,7 +523,13 @@ export function countedAgentRecordsFor(root: string, familyId: string): readonly
  * to answer "who else attempted this" would be 64 sweeps per report.
  */
 export function measuredAgentBanks(root: string): readonly KindedBank[] {
-  const banks = ROUTABLE_FAMILY_IDS.map((familyId) => {
+  // The outbox family is in this list on the same terms as the others: one source, its own trial
+  // directories. It used to be appended separately from the imported Harbor archive, whose cells were
+  // the synthetic `suite_reward_zero` — a check no verifier ever ran, reaching the shared bank as
+  // though it had. Its runs now have per-check cells like every other family's, so there is one path
+  // that counts them and the archive is not it.
+  return [...ROUTABLE_FAMILY_IDS, OUTBOX_FAMILY].map((familyId) => {
+    const imported = familyId === OUTBOX_FAMILY;
     const records = countedAgentRecordsFor(root, familyId);
     const instanceIds = [...new Set(records.flatMap((r) => r.cells.map((c) => c.scenarioId)))].sort();
     const bank = buildAgentBank(records, {
@@ -482,31 +540,19 @@ export function measuredAgentBanks(root: string): readonly KindedBank[] {
         "for subject overlap; the instance set is the trials' own, not the family's full sweep.",
     });
     return kindedBank(
-      { familyId, matrix: bank.matrix, provenance: "counted agent trials", agentDerived: true },
-      "agent",
-    );
-  });
-
-  const outboxRecords = outboxHistory(root).records.filter(countsAsAgentTrial);
-  const outboxBank = buildAgentBank(outboxRecords, {
-    familyId: OUTBOX_FAMILY,
-    instanceIds: outboxMatrix(root).instances.map((i) => i.id),
-    caveat:
-      "Imported from the source project's Harbor runs. Coarse cells; carried here for subject " +
-      "overlap only.",
-  });
-  return [
-    ...banks,
-    kindedBank(
       {
-        familyId: OUTBOX_FAMILY,
-        matrix: outboxBank.matrix,
-        provenance: "counted frontier trials imported from the source project",
+        familyId,
+        matrix: bank.matrix,
+        provenance: imported
+          ? "counted frontier trials executed by the source project and imported as trial directories"
+          : "counted agent trials",
         agentDerived: true,
       },
-      "imported",
-    ),
-  ];
+      // `imported` rather than `agent`: these were graded by another harness's verifier, which is
+      // exactly what the kind means. Real per-check cells did not make this repository run them.
+      imported ? "imported" : "agent",
+    );
+  });
 }
 
 /**
@@ -544,20 +590,16 @@ export function sharedSubjectsFor(root: string, familyId: string): readonly stri
 }
 
 /**
- * The imported historical record for the outbox family.
+ * The imported historical record for the outbox family: spend and waste, not evidence.
  *
- * A counted reward-0 run is recorded as failing every instance under the single synthetic check
- * `suite_reward_zero`, because the source rewards are binary. The cells are therefore coarser than
- * the family's own matrix and are never used for the axis count — that reads the matrix.
+ * Every record it returns carries `counts: false` and no cells, because the vendored summaries
+ * preserve one binary reward each. What it is read for is `gradedRuns` — the standard attempts that
+ * bought a verdict — which is the denominator the budget model prices against. The six runs whose
+ * per-check grading survived are counted as trial directories under `trials/durable-approval-outbox/`
+ * and nowhere else.
  */
 export function outboxHistory(root: string, runsPath?: string): ImportedHistory {
-  const matrix = outboxMatrix(root);
-  return importDurableOutboxHistory(
-    runsPath ?? vendoredRunsDir(root),
-    OUTBOX_FAMILY,
-    matrix.instances.map((i) => i.id),
-    "dao-24",
-  );
+  return importDurableOutboxHistory(runsPath ?? vendoredRunsDir(root), OUTBOX_FAMILY, "dao-24");
 }
 
 export const outboxMatrix = (root: string): Matrix =>
@@ -679,9 +721,16 @@ export function campaignFacts(root: string): CampaignFacts {
 
 export interface TrialLayerFacts {
   readonly historicalRuns: number;
+  /**
+   * Standard attempts at this task that bought a graded verdict.
+   *
+   * Not "records the archive counts", which is now zero by construction: a binary suite reward
+   * cannot name what a subject failed, so no archived summary is difficulty evidence. What the
+   * budget model needs is whether the money produced a result, and that question survives.
+   */
   readonly historicalCounted: number;
   readonly historicalSpendUsd: number;
-  /** Spend on runs that produced a counted result. */
+  /** Spend on runs that produced a graded result. */
   readonly countedSpendUsd: number;
   /** Spend on standard attempts that produced nothing usable. */
   readonly wastedSpendUsd: number;
@@ -700,9 +749,14 @@ export function trialLayerFacts(root: string): TrialLayerFacts {
   const history = outboxHistory(root);
   const spend = (rs: readonly { costUsd: number | null }[]): number =>
     rs.reduce((n, r) => n + (r.costUsd ?? 0), 0);
-  const standard = history.records.filter((r) => classifyRunKind(r.runId) === "standard");
-  const standardCounted = standard.filter((r) => r.counts);
-  const counted = history.records.filter((r) => r.counts);
+  // `standardRuns` and `gradedRuns` come from the import rather than from a fresh scan of the run
+  // NAMES, which is what this used to do and what the importer's own docstring warns against: five
+  // archived directories are named like outbox attempts and ran `reorg-safe-settlement`, so reading
+  // the names counted them as attempts at this task that produced nothing.
+  const graded = history.gradedRuns;
+  const wasted = history.runs.filter(
+    (r) => classifyRunKind(r.runName) === "standard" && !graded.some((g) => g.runName === r.runName),
+  );
 
   const pic = readFamilyTrials(join(root, "trials"), PIC_FAMILY)
     .map((t) => t.record)
@@ -712,24 +766,24 @@ export function trialLayerFacts(root: string): TrialLayerFacts {
     .filter((n): n is number => n !== null)
     .sort((a, b) => a - b);
 
+  const byRunName = new Map(history.records.map((r) => [r.runId, r]));
   return {
     historicalRuns: history.records.length,
-    historicalCounted: counted.length,
-    historicalSpendUsd: spend(history.records),
-    countedSpendUsd: spend(counted),
-    wastedSpendUsd: spend(standard.filter((r) => !r.counts)),
-    standardRuns: standard.length,
-    standardCounted: standardCounted.length,
-    standardWasteRate: standard.length === 0 ? 0 : 1 - standardCounted.length / standard.length,
-    usdPerCountedRun: counted.length === 0 ? null : spend(history.records) / counted.length,
+    historicalCounted: graded.length,
+    historicalSpendUsd: spend(history.runs),
+    countedSpendUsd: spend(graded),
+    wastedSpendUsd: spend(wasted),
+    standardRuns: history.standardRuns,
+    standardCounted: history.standardCounted,
+    standardWasteRate: history.standardWasteRate,
+    usdPerCountedRun: graded.length === 0 ? null : spend(history.runs) / graded.length,
     picCountedTrials: pic.length,
     picMedianRuntimeSeconds:
       runtimes.length === 0 ? null : (runtimes[Math.floor(runtimes.length / 2)] ?? null),
-    standardUncountedByStatus: standard
-      .filter((r) => !r.counts)
-      .reduce<Record<string, number>>((acc, r) => {
-        acc[r.status] = (acc[r.status] ?? 0) + 1;
-        return acc;
-      }, {}),
+    standardUncountedByStatus: wasted.reduce<Record<string, number>>((acc, r) => {
+      const status = byRunName.get(r.runName)?.status ?? "infrastructure_error";
+      acc[status] = (acc[status] ?? 0) + 1;
+      return acc;
+    }, {}),
   };
 }

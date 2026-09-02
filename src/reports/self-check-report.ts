@@ -1,10 +1,11 @@
 // The self-check behaviour report.
 //
-// Its whole job is to keep two numbers apart that a careless reader will merge: how many models
-// SHIPPED a checker, and how many models SAY they built one. The first is zero. The second is most
-// of them. Reporting either alone is misleading in a different direction.
+// Its whole job is to keep three numbers apart that a careless reader will merge: how many models
+// SHIPPED a checker, how many WROTE one the submission does not carry, and how many only SAY they
+// built one. Reporting any of them alone is misleading in a different direction.
 
 import {
+  INLINE_SCRIPT,
   KIND_MEANING,
   MIN_RUNS_PER_ARM,
   RIGOUR_ORDER,
@@ -15,16 +16,6 @@ import {
 
 export interface SelfCheckReportInput {
   readonly profiles: readonly SelfCheckProfile[];
-  /**
-   * The source project's strongest engine, for contrast. Not a trial in this repository and
-   * labelled as such everywhere it appears — it is the only data point on record of a model that
-   * DID ship its checker, and it is the reason this analysis exists.
-   */
-  readonly historicalContrast: {
-    readonly label: string;
-    readonly built: readonly string[];
-    readonly outcome: string;
-  };
 }
 
 export function renderSelfCheckBehavior(input: SelfCheckReportInput): string {
@@ -33,8 +24,14 @@ export function renderSelfCheckBehavior(input: SelfCheckReportInput): string {
   );
   const withArtifact = p.filter((x) => x.hasSubmission);
   const observed = p.filter((x) => x.strongestObserved !== null);
+  const ephemeralRuns = p.filter((x) => x.unshipped.length > 0);
   const reported = p.filter((x) => x.strongestReported !== null);
-  const silent = p.filter((x) => x.strongestObserved === null && x.strongestReported === null);
+  const silent = p.filter(
+    (x) =>
+      x.strongestObserved === null &&
+      x.unshipped.length === 0 &&
+      x.strongestReported === null,
+  );
   const unusedCheckers = p.filter((x) => x.definedButUnused.length > 0);
   const corr = correlate(p);
 
@@ -47,12 +44,13 @@ export function renderSelfCheckBehavior(input: SelfCheckReportInput): string {
     "",
     "Did the model verify its own work — and can we actually tell?",
     "",
-    "## The headline, in two numbers that must not be merged",
+    "## The headline, in numbers that must not be merged",
     "",
     "| | |",
     "|---|---:|",
     `| submissions held | ${withArtifact.length} |`,
     `| **submissions containing an executable self-check** | **${observed.length}** |`,
+    `| **runs that wrote checker source and shipped none of it** | **${ephemeralRuns.length}** |`,
     `| **transcripts describing one** | **${reported.length}** |`,
     `| **submissions shipping a checker as a separate file** | **${p.filter((x) => x.extraFiles.length > 0).length}** |`,
     `| runs that neither shipped nor described one | ${silent.length} |`,
@@ -60,33 +58,31 @@ export function renderSelfCheckBehavior(input: SelfCheckReportInput): string {
     "Checker-required trials mandate `checker.mjs`; that file is graded in the checker-required",
     "family reports and is excluded from the voluntary shipped-checker count here.",
     "",
-    observed.length === 0 && reported.length > 0
-      ? [
-          `**Not one of ${withArtifact.length} submissions ships a checker, and ${reported.length} of them describe building one.**`,
-          "",
-          "That gap is the finding, and it is not the one an artifact scan alone produces. An earlier",
-          "version of this analysis grepped the submissions for `assert|invariant|sanity`, found nothing,",
-          "and concluded that models do not verify themselves. Reading the transcripts says something",
-          "different and more specific: they build a harness, run the published examples through it,",
-          "write scenarios of their own — and then ship one file, because one file is what the task",
-          "asked for. **The checker was real and ephemeral.** What we measured the first time was our own",
-          "submission format.",
-        ].join("\n")
-      : observed.length > 0
-        ? `**${observed.length} of ${withArtifact.length} submissions contain an executable self-check.** The rows below name the exact construct and the line it sits on.`
-        : "**No self-verification is visible in either artifacts or transcripts.** With no transcript claims either, that is a statement about the runs on record and not yet about models.",
+    [
+      `**${observed.length} of ${withArtifact.length} submissions ship an executable self-check; ${ephemeralRuns.length} wrote one and did not ship it.**`,
+      "",
+      "An earlier version of this analysis grepped the submissions for `assert|invariant|sanity`, found",
+      "nothing, and concluded that models do not verify themselves. That conclusion was about our own",
+      "submission format. The `unshipped` column is the correction, and it is no longer an inference from",
+      "prose: for a trial that preserves the raw agent transcript, the checker's SOURCE is in it — the",
+      "body of each file the agent wrote, and each script it piped to a shell — and can be scanned by",
+      "exactly the patterns the submission gets. **The checker was real and ephemeral**, and on those",
+      "runs that sentence is now a measurement rather than a reading of the transcripts.",
+    ].join("\n"),
     "",
     "## What each run did",
     "",
-    "`observed` is source we hold and anyone can re-check. `self-reported` is the model's own account",
-    "of what it did during the session, which is evidence about what it attempted and **not** evidence",
-    "that it happened. The two columns are never added together.",
+    "`observed` is source we hold and anyone can re-check. `unshipped` is source the agent wrote or",
+    "piped to a shell during the session and did not submit — also source, also re-checkable, and",
+    "invisible to anyone grading the artifact. `self-reported` is the model's own account of what it",
+    "did, which is evidence about what it attempted and **not** evidence that it happened. The three",
+    "columns are never added together.",
     "",
-    "| run | family | subject | observed | shipped files | self-reported | evidence state | scenarios failed |",
-    "|---|---|---|---|---|---|---|---:|",
+    "| run | family | subject | observed | unshipped | shipped files | self-reported | evidence state | scenarios failed |",
+    "|---|---|---|---|---|---|---|---|---:|",
     ...p.map(
       (x) =>
-        `| \`${x.runId}\` | ${x.familyId.split("-").pop()} | \`${x.subjectId}\` | ${x.strongestObserved ?? "**none**"} | ${x.extraFiles.length === 0 ? "subject only" : `**+${x.extraFiles.map((f) => `\`${f}\``).join(", ")}**`} | ${x.strongestReported ?? "—"} | ${x.state === "counted" ? "counted" : `**${x.state}**`} | ${x.scenariosFailed} |`,
+        `| \`${x.runId}\` | ${x.familyId.split("-").pop()} | \`${x.subjectId}\` | ${x.strongestObserved ?? "**none**"} | ${x.unshipped.length === 0 ? "—" : (x.strongestEphemeral ?? "written, no pattern matched")} | ${x.extraFiles.length === 0 ? "graded files only" : `**+${x.extraFiles.map((f) => `\`${f}\``).join(", ")}**`} | ${x.strongestReported ?? "—"} | ${x.state === "counted" ? "counted" : `**${x.state}**`} | ${x.scenariosFailed} |`,
     ),
     "",
     "### The strongest self-reported behaviours, quoted",
@@ -124,7 +120,7 @@ export function renderSelfCheckBehavior(input: SelfCheckReportInput): string {
         ];
       });
     })(),
-    shippedCheckerSection(p),
+    whereTheCheckersWent(p),
     "",
     "## What kinds of checking were described",
     "",
@@ -156,38 +152,14 @@ export function renderSelfCheckBehavior(input: SelfCheckReportInput): string {
     "",
     correlationBlock(corr),
     "",
-    "## The contrast that makes this worth measuring",
-    "",
-    `**${input.historicalContrast.label}** — not a trial in this repository, and the only run on record`,
-    "that shipped its own checker. It built:",
-    "",
-    ...input.historicalContrast.built.map((b) => `- ${b}`),
-    "",
-    `And the outcome: ${input.historicalContrast.outcome}`,
-    "",
-    "That is the reason this report describes a behaviour rather than scoring a virtue. The most",
-    "thoroughly self-verified implementation on record still failed, and it failed on a state its own",
-    "generator never reached. A checker bounds what you can express; it does not bound what you",
-    "explore. **Difficulty comes from coverage of the space, not from the difficulty of stating the",
-    "rule** — which is the same conclusion the axis meter reaches from the other direction.",
-    "",
-    "The same pattern shows up here without the contrast: the run describing the most rigorous",
-    "self-verification in the table above is not the run that passed.",
-    "",
     "## Why the foundry should keep measuring this",
     "",
     "| reason | what it changes |",
     "|---|---|",
     "| A checker is the clearest signal of how a model APPROACHED the task | it separates 'wrote behaviour' from 'built a theory and tested it', which no pass rate distinguishes |",
-    "| Ephemeral checkers are invisible to artifact grading | every benchmark that grades one file is measuring its own submission format on this axis, and does not know it |",
-    "| It is the cheapest possible harder variant | a family that asks for the checker AND the implementation grades a different capability at no extra authoring cost |",
+    "| Ephemeral checkers are invisible to artifact grading | every benchmark that grades one file is measuring its own submission format on this axis, and does not know it. The `unshipped` column above is that claim measured rather than argued |",
+    "| It is the cheapest possible harder variant | `checker-required-memory-poisoning` is that variant, built: it grades `checker.mjs` against the reference and against held-out mutants, so a checker that passes the reference and catches none of them is a named, gradable failure |",
     "| Coverage, not expressiveness, is where these runs fail | the failures concentrate on states the model never generated, so a family that rewards generation is testing the binding constraint |",
-    "",
-    "**The concrete proposal this report exists to support:** a descendant family whose submission is",
-    "`subject.mjs` **and** `checker.mjs`, where the checker is run against the reference and against a",
-    "held-out set of known-bad implementations. A model whose checker passes the reference and catches",
-    "none of the mutants has written a checker that cannot fail, and that is a measurable, named",
-    "failure mode nothing in this repository currently grades.",
     "",
     "## What this report will not claim",
     "",
@@ -212,44 +184,98 @@ export function renderSelfCheckBehavior(input: SelfCheckReportInput): string {
 }
 
 /**
- * Which models left their checker in the submission directory.
+ * What the agent wrote and did not ship, in one cell.
  *
- * The sharpest observation this analysis produces, and the one it took two attempts to see. The task
- * asks for `submission/subject.mjs`; nothing forbids a second file, and almost every model ships one
- * file anyway. A model that ships its checker has made its verification auditable by someone else,
- * which is a different act from verifying and discarding — and it is the only self-check evidence
- * here that does not rest on the model's own account.
+ * Named files are listed and shell heredocs are counted. A run that piped thirty throwaway scripts
+ * at a shell did thirty separate things, and printing thirty identical placeholders would bury the
+ * one fact the row is for — that none of it is in the artifact.
  */
-function shippedCheckerSection(profiles: readonly SelfCheckProfile[]): string {
-  const shipped = profiles.filter((x) => x.extraFiles.length > 0);
-  if (shipped.length === 0) {
-    return [
-      "## Nobody shipped their checker",
-      "",
-      "Every submission on record is exactly the one file the task asked for. The task does not forbid",
-      "a second file; no model wrote one.",
-    ].join("\n");
-  }
-  const bySubject = new Map<string, string[]>();
-  for (const x of shipped) bySubject.set(x.subjectId, [...(bySubject.get(x.subjectId) ?? []), x.runId]);
-  const solo = bySubject.size === 1;
+const unshippedSummary = (paths: readonly string[]): string => {
+  const named = paths.filter((n) => !n.startsWith(INLINE_SCRIPT));
+  const inline = paths.length - named.length;
   return [
-    "## Who shipped their checker",
+    ...named.map((n) => `\`${n}\``),
+    ...(inline === 0 ? [] : [`${inline} inline shell script(s)`]),
+  ].join(", ");
+};
+
+/**
+ * Where each checker ended up: in the submission, or only in the session.
+ *
+ * One section for both, because they are two answers to one question and the old pair said the same
+ * sentence twice. Shipping a checker makes verification auditable by somebody else — a different act
+ * from verifying and discarding — and both tables below are that distinction, from either side.
+ *
+ * Deliberately flat: what the agent wrote, what the patterns found in it, and what the run then
+ * failed. No row claims the checker was good or that it caused the outcome. The honest statement is
+ * that a checker existed, ran, and did not prevent the failure, with both halves side by side.
+ *
+ * The confound is printed inside the section rather than left to the reader, because the split that
+ * leaps out of the unshipped table is a LAB split and lab and scaffolding are the same variable here.
+ */
+function whereTheCheckersWent(profiles: readonly SelfCheckProfile[]): string {
+  const shipped = profiles.filter((x) => x.extraFiles.length > 0);
+  const wrote = profiles.filter((x) => x.unshipped.length > 0);
+  if (shipped.length === 0 && wrote.length === 0)
+    return [
+      "## Nobody shipped a checker, and no transcript holds one",
+      "",
+      "Every submission on record is exactly the graded file set and nothing else, and no transcript",
+      "carries the body of a file the agent wrote. Read the second half as a fact about the transcripts",
+      "held rather than about the models: a transcript kept as a prose summary cannot carry a file body,",
+      "and only a raw agent log can answer this question.",
+    ].join("\n");
+
+  const byHarness = new Map<string, Set<string>>();
+  for (const x of wrote) byHarness.set(x.harness ?? "unrecorded", (byHarness.get(x.harness ?? "unrecorded") ?? new Set()).add(x.providerFamily));
+  const confounded = byHarness.size > 1 && [...byHarness.values()].every((labs) => labs.size === 1);
+  return [
+    "## Where the checkers went",
     "",
-    `${shipped.length} of ${profiles.length} runs left a file beside \`subject.mjs\`. The task asks for one file and`,
-    "does not forbid a second; almost every model ships one anyway. A model that ships its checker has",
-    "made its verification auditable by somebody else — a different act from verifying and discarding,",
-    "and the only self-check evidence on this page that does not rest on the model's own account.",
+    `${shipped.length} of ${profiles.length} runs left a checker in the submission, where anyone grading the artifact can`,
+    `re-run it. ${wrote.length} wrote verification source during the session and submitted none of it. The second`,
+    "number is the one an artifact scanner cannot produce, and the difference between them is a",
+    "behavioural difference between runs rather than a claim about any model's ability.",
     "",
-    "| run | subject | files shipped beside the artifact |",
-    "|---|---|---|",
-    ...shipped.map(
-      (x) => `| \`${x.runId}\` | \`${x.subjectId}\` | ${x.extraFiles.map((f) => `\`${f}\``).join(", ")} |`,
-    ),
-    "",
-    solo
-      ? `**Every one of them is \`${[...bySubject.keys()][0]}\`.** That is a behavioural difference between models visible in the artifacts rather than in their prose, and it is the kind of thing a pass rate cannot show. With ${shipped.length} run(s) it is an observation and not a rate; what makes it worth recording is that no other subject did it on any family.`
-      : `${bySubject.size} different subjects did this, so it is not a quirk of one model.`,
+    ...(shipped.length === 0
+      ? ["_No run shipped a checker beside the graded files._", ""]
+      : [
+          "| run | subject | shipped beside the graded files |",
+          "|---|---|---|",
+          ...shipped.map(
+            (x) => `| \`${x.runId}\` | \`${x.subjectId}\` | ${x.extraFiles.map((f) => `\`${f}\``).join(", ")} |`,
+          ),
+          "",
+        ]),
+    ...(wrote.length === 0
+      ? []
+      : [
+          "Written, run, and not submitted — paths quoted from the transcript, `found` scanned by exactly",
+          "the patterns the submissions get:",
+          "",
+          "| run | lab | scaffolding | wrote, did not ship | found | failed |",
+          "|---|---|---|---|---|---:|",
+          ...wrote.map(
+            (x) =>
+              `| \`${x.runId}\` | ${x.providerFamily} | ${x.harness ?? "unrecorded"} | ${unshippedSummary(x.unshipped)} | ${x.strongestEphemeral ?? "no pattern matched"} | ${x.scenariosFailed} |`,
+          ),
+          "",
+          "A run in that table built something, ran it, and still failed. That is why this is reported as a",
+          "behaviour and not scored as a virtue: a checker bounds what you can EXPRESS, not what you",
+          "EXPLORE. **Difficulty comes from coverage of the space, not from the difficulty of stating the",
+          "rule** — the conclusion the axis meter reaches from the other direction.",
+          "",
+          confounded
+            ? [
+                "**The lab split there is confounded and must not be read as a model-level finding.** Each lab",
+                `ran under its own scaffolding (${[...byHarness].map(([h, labs]) => `${h} for ${[...labs].join(", ")}`).join("; ")}), so provider and agent harness are the`,
+                "same variable. A harness decides whether writing a file is cheaper than piping a script to a",
+                "shell, how much context a session holds, and what the transcript records at all — any of which",
+                "alone could produce that column. Separating them needs the same model under both scaffoldings,",
+                "which no run on record provides.",
+              ].join("\n")
+            : "Labs there are not aligned one-to-one with scaffolding, so the split is at least not a pure harness artifact. It is still a handful of runs.",
+        ]),
   ].join("\n");
 }
 

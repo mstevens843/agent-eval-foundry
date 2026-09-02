@@ -1,0 +1,5 @@
+{ "name": "crash-after-tool", "n_workers": 3,
+  "crashes": [ {"on": "tool", "nth": 1}, {"on": "tool", "nth": 2},
+               {"on": "tool", "nth": 3}, {"on": "tool", "nth": 5},
+               {"on": "tool", "nth": 7} ],
+  "revokes": [] }

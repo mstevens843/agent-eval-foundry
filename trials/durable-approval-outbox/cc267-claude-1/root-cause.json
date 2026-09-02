@@ -1,0 +1,39 @@
+{
+  "runId": "cc267-claude-1",
+  "familyId": "durable-approval-outbox",
+  "label": "unlabelled",
+  "rationale": "ADJUDICATED, and deliberately WITHHELD. Both independent blind labellers chose `capability` for this run, and both did so at low confidence (0.68 and 0.60) with substantive written dissent. This is the only one of the six that gets the revoke-after-ack question right: engine/outbox.py:44-47 explicitly excludes ACKED from withdrawal, so all its audit_explains cells pass. It fails the opposite way, on `completion`: two actions (r0008, r0011) are left in IN_DOUBT when the feed drains, wedged because withdrawn rows are excluded from re-lease and the only other exit needs a receipt that the schedule never produces.\n\nFailing on the opposite side of the same requirement is the signature that distinguishes a real difficulty from a hidden trap, and that argues for capability. But both labellers independently flagged the same gap: no agent-visible sentence names the terminal state set or says IN_DOUBT is non-terminal. `invariants.check_completion`'s {ACKED, REVOKED} whitelist is verifier-side, and SEMANTICS.md disclaims its own state diagram as non-exhaustive. The requirement is ENTAILED by the visible text (instruction.md:20, SEMANTICS.md:140-141) rather than STATED by it.\n\nThis repository's own rule forbids an automated labeller from writing `capability` over a reading that needs a human, and two hedged automated labels are exactly that case. The label is therefore `unlabelled` pending a human read, not because the evidence is missing but because the format says an automated agent may not make this particular call. A human needs to decide whether 'entailed but not stated' clears the capability bar. Both labellers' full judgements are preserved in the adjudication record.",
+  "evidenceRead": [
+    "submission/",
+    "transcript.txt",
+    "verifier-output.json",
+    "result.json",
+    "challenge/spec/SEMANTICS.md",
+    "(hidden, for adjudication) tests/invariants.py",
+    "(agent-visible) instruction.md"
+  ],
+  "labelledBy": {
+    "kind": "automated",
+    "id": "phase-2-lane-a3-blind-adjudication",
+    "date": "2026-09-01"
+  },
+  "diagnosisReading": null,
+  "adjudication": {
+    "protocol": "two independent blind labellers, neither reading the source project's existing diagnosis, approaching from opposite directions (engine-first and failed-check-first)",
+    "rawAgreement": "6/6 = 1.000",
+    "labellers": [
+      {
+        "id": "blind-1",
+        "label": "capability",
+        "confidence": 0.68,
+        "dissent": "Two honest caveats. (1) My mechanism is a static reconstruction; I was forbidden to re-run the suite, and the verifier stdout prints only the action id and state, not the audit trail, so I could not confirm by execution which withdrawal wedged r0008/r0011. The label does not depend on the reconstruction being exactly right, but the confidence does. (2) There is a real counter-argument for spec-underspecified that I considered and rejected: SEMANTICS.md:130 says \"The absence of a receipt means it has not arrived yet\", which invites exactly the wait claude-1 performs, and SEMANTICS.md:136-139 forbids the engine to guess or to let a withdrawn-but-uncrossed action cross. Read together those three sentences describe a bind with no exit for a withdrawn, dispatched, receipt-less action. I rejected it because the receipt guarantee at SEMANTICS.md:128-129 is explicitly scoped to \"every call whose outcome was `UNKNOWN`\", which a crash-after-tool call never was, and because five other engines resolved it. A human should sanity-check that reading. AUTOMATED-LABELLER RULE: I computed the diagnosisReading for this trial as `capability` (checks.length===1 but `concentrated` is true, because the failures sit on 2 of the ~18 distinct `name` knob values, which defeats singleCheckWipeout and leaves the `concentrated` branch), so ROOTCAUSE_CAPABILITY_OVER_UNREAD_DIAGNOSIS does not bite and I am permitted to write this label. BUT that computation depends entirely on the importer recording per-scenario knob params. This shape is not a BUILT family and has no scenarioSetId, so if the trial is imported with an empty params map, `concentrated` is false, the reading becomes `likely-spec-defect`, that IS in NEEDS_HUMAN_READ, and root-cause.ts will and should REFUSE this automated `capability`. I am not routing around that. If the reading comes out `likely-spec-defect`, treat this entry as a recommendation held pending a human read; what the human needs to confirm is (a) that r0008/r0011 were withdrawn-or-superseded while dispatched rather than wedged some other way, and (b) that the SEMANTICS.md:130 \"absence of a receipt\" sentence does not excuse the wait."
+      },
+      {
+        "id": "blind-2",
+        "label": "capability",
+        "confidence": 0.6,
+        "dissent": "This is my least confident label and I would not defend it past 0.6. Two things cut against `capability`. (1) No agent-visible sentence says IN_DOUBT is non-terminal or names the terminal set; invariants.check_completion's whitelist {ACKED, REVOKED} is verifier-side only, and SEMANTICS 50-58 explicitly disclaims its own state diagram as non-exhaustive. The requirement is entailed by the visible text, not stated by it. (2) There is a real corner the visible package does not resolve: a commit crash on the pre-call intent commit (faults.CrashPlan.note_commit, and hostile-mix.json declares commit crashes at nth 9 and 30) leaves `dispatched` true for a call that never crossed; if such an action is then withdrawn and the schedule declares no `unknowns`, no receipt will ever exist, a repeat would land the very side effect the withdrawal forbids (SEMANTICS:137), and SEMANTICS:138-139 forbids guessing -- so no honest terminal state is reachable. I label `capability` because crash-after-tool.json declares ONLY `on: tool` crash points, so that corner cannot be what wedged r0008 there and the repeat was provably safe. A human should confirm, from a re-run that dumps the per-scenario result, whether r0011 in hostile-mix-1009-12 was wedged by that unresolvable corner rather than by the same avoidable one; if it was, the honest label for this run moves to spec-underspecified. I am an AUTOMATED labeller writing `capability`: root-cause.ts:303-314 blocks that only over a diagnosisReading in NEEDS_HUMAN_READ, and this trial's computed reading is `capability` (one check, failures on 2 of 15 scenario names, so `concentrated` is true and singleCheckWipeout is false), so the guard does not fire. It should have; see the shared dissent on the other five."
+      }
+    ]
+  }
+}

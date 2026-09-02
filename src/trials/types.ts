@@ -146,6 +146,11 @@ export const summarise = (r: TrialRecord): TrialSummary => {
     scenariosUnmeasured: unmeasured,
     // A record with an ungraded scenario in it has not been shown to pass. Reporting it as a pass is
     // the same error as reading an empty `failed` array off a source that never graded per scenario.
-    passed: r.status === "completed" && failed === 0 && unmeasured === 0,
+    //
+    // NO cells is the degenerate case of the same rule, and it used to read as a pass: zero failures,
+    // zero ungraded, therefore clean. `parseTrialRecord` keeps that out of the counted population,
+    // but the archive importer now emits uncounted records with no cells at all, and "nothing was
+    // graded" must never render as "everything passed" whoever asks.
+    passed: r.status === "completed" && r.cells.length > 0 && failed === 0 && unmeasured === 0,
   };
 };

@@ -1,0 +1,24 @@
+{
+ "name": "stale-lease",
+ "n_workers": 4,
+ "crashes": [
+  {
+   "on": "commit",
+   "nth": 6
+  },
+  {
+   "on": "commit",
+   "nth": 14
+  },
+  {
+   "on": "tool",
+   "nth": 4
+  }
+ ],
+ "revokes": [
+  {
+   "after_invoke": 2,
+   "key_index": 4
+  }
+ ]
+}

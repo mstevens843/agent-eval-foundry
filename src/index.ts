@@ -663,15 +663,26 @@ export type {
   ProviderRunResult,
 } from "./trials/providers.js";
 export {
-  NO_PER_SCENARIO_DETAIL,
-  SUITE_REWARD_ZERO,
+  ARCHIVE_IS_NOT_EVIDENCE,
+  OUTBOX_AGENT_VISIBLE_SUBTREE_SHA256,
+  OUTBOX_SCENARIO_SET_ID,
+  OUTBOX_TRIAL_RUN_IDS,
   classifyHistorical,
   importDurableOutboxHistory,
+  importOutboxTrialDirectories,
+  modelFamily,
   normalizeModel,
   parseHarborResult,
+  readOutboxGrading,
   runTaskName,
 } from "./trials/history.js";
-export type { HistoricalRun, ImportedHistory } from "./trials/history.js";
+export type {
+  HistoricalRun,
+  ImportedHistory,
+  OutboxGrading,
+  OutboxTrialImport,
+  OutboxTrialImportInput,
+} from "./trials/history.js";
 export { PIC_INSTRUCTION, decideCountability, orchestrateTrial } from "./trials/orchestrator.js";
 export type {
   FamilyGrader,

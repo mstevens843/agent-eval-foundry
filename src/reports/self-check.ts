@@ -13,6 +13,9 @@
 // about MODELS and a claim about the FILE FORMAT WE ASKED FOR:
 //
 //   observed        the behaviour is in source we hold. Strongest, and checkable by anyone.
+//   ephemeral       the checker's SOURCE is in the transcript — a file body the agent wrote, or a
+//                   script it piped to a shell — and the submission does not carry it. Source, so
+//                   re-checkable by anyone; unshipped, so invisible to anyone grading the artifact.
 //   self-reported   the model says it did this in its transcript. Real evidence about what it
 //                   attempted, and NOT evidence that it happened. Never merged with observed.
 //   absent          the artifact is present, we looked, and there is nothing.
@@ -73,7 +76,7 @@ export const RIGOUR_ORDER: readonly SelfCheckKind[] = [
 
 import type { EvidenceState } from "../trials/evidence-lifecycle.js";
 
-export type EvidenceSource = "observed" | "self-reported" | "absent" | "unobservable";
+export type EvidenceSource = "observed" | "ephemeral" | "self-reported" | "absent" | "unobservable";
 
 export interface SelfCheckSignal {
   readonly kind: SelfCheckKind;
@@ -101,8 +104,14 @@ export interface SelfCheckProfile {
   readonly scenariosFailed: number;
   /** Behaviour visible in source we hold. */
   readonly observed: readonly SelfCheckSignal[];
+  /** Behaviour in source the agent wrote into the transcript and did not ship. */
+  readonly ephemeral: readonly SelfCheckSignal[];
   /** Behaviour the model says it performed. Evidence of intent, not of occurrence. */
   readonly selfReported: readonly SelfCheckSignal[];
+  /** Paths the agent wrote or piped to a shell and did not ship. Named, in transcript order. */
+  readonly unshipped: readonly string[];
+  /** The agent scaffolding, from the run's own metadata. Observed, and never inferred from the model. */
+  readonly harness: string | null;
   /** Defined and never called — a checker that exists and does nothing. */
   readonly definedButUnused: readonly string[];
   /**
@@ -118,6 +127,7 @@ export interface SelfCheckProfile {
   readonly hasTranscript: boolean;
   /** The strongest OBSERVED kind, or null. The headline number is built from this and nothing else. */
   readonly strongestObserved: SelfCheckKind | null;
+  readonly strongestEphemeral: SelfCheckKind | null;
   readonly strongestReported: SelfCheckKind | null;
   readonly verdict: EvidenceSource;
 }
@@ -179,12 +189,17 @@ interface SourcePattern {
 const SOURCE_PATTERNS: readonly SourcePattern[] = [
   {
     kind: "assertions",
-    re: /\b(?:assert|invariant|mustBe|require)\s*\(|\bthrow new (?:Error|TypeError)\s*\(\s*[^)]*(?:invariant|assertion|impossible|unreachable)/i,
+    // The bare `assert x, msg` alternative is Python's spelling. It is not valid JavaScript, so
+    // widening for one language cannot start crediting the other's ordinary code.
+    re: /\b(?:assert|invariant|mustBe|require)\s*\(|\bassert\s+[A-Za-z_(]|\bthrow new (?:Error|TypeError)\s*\(\s*[^)]*(?:invariant|assertion|impossible|unreachable)/i,
     why: "an executable assertion",
   },
   {
     kind: "legality-table",
-    re: /\b(?:LEGAL|ALLOWED|PERMITTED|VALID_TRANSITIONS|TRANSITIONS|LEGAL_TRANSITIONS)\s*(?:=|:)\s*(?:new (?:Map|Set)|\{|\[)/,
+    // The second alternative is deliberately a table of PAIRS — `allowed = {('READY', 'LEASED'),`.
+    // A lowercase `transitions = {` would match an implementation's own state machine, which is the
+    // false positive that got `separate-checker` deleted; a set of state pairs cannot be that.
+    re: /\b(?:LEGAL|ALLOWED|PERMITTED|VALID_TRANSITIONS|TRANSITIONS|LEGAL_TRANSITIONS)\s*(?:=|:)\s*(?:new (?:Map|Set)|\{|\[)|\b(?:allowed|legal|permitted)\w*\s*=\s*[{[]\s*\n?\s*[([]/i,
     why: "a declared table of permitted states or transitions",
   },
   {
@@ -253,9 +268,95 @@ function lineOf(source: string, index: number): number {
  * those patterns to catch it would have re-introduced the false positives they were narrowed to
  * exclude. "This file executes the thing being graded" cannot be said by accident.
  */
-export function importsGradedArtifact(name: string, source: string): boolean {
-  if (name === "subject.mjs") return false;
-  return /\bfrom\s+["'`]\.\/subject\.mjs["'`]|\bimport\s*\(\s*["'`]\.\/subject\.mjs["'`]/.test(source);
+export function importsGradedArtifact(
+  name: string,
+  source: string,
+  shipped: readonly string[] = ["subject.mjs"],
+): boolean {
+  if (shipped.some((s) => name.endsWith(s))) return false;
+  // The module roots of the graded submission: `subject.mjs` -> `subject`, `engine/db.py` ->
+  // `engine`. Short roots are dropped because a two-letter word matches everything.
+  const roots = [...new Set(shipped.map((s) => (s.split("/")[0] ?? s).replace(/\.\w+$/, "")))].filter(
+    (r) => r.length > 2,
+  );
+  if (roots.length === 0) return false;
+  return new RegExp(`\\b(?:import|from|require)\\b[^\\n]{0,80}\\b(?:${roots.join("|")})\\b`).test(source);
+}
+
+/** The placeholder name for a script the agent piped to a shell rather than saving. */
+export const INLINE_SCRIPT = "<inline script>";
+
+function walkRecords(transcript: string, visit: (node: Record<string, unknown>) => void): void {
+  const walk = (node: unknown): void => {
+    if (Array.isArray(node)) {
+      for (const item of node) walk(item);
+      return;
+    }
+    if (node === null || typeof node !== "object") return;
+    visit(node as Record<string, unknown>);
+    for (const value of Object.values(node)) walk(value);
+  };
+  for (const line of transcript.split("\n")) {
+    if (!line.startsWith("{")) continue;
+    try {
+      walk(JSON.parse(line));
+    } catch {
+      // Not a record line. Silence is correct: an unparsed line is not evidence of anything.
+    }
+  }
+}
+
+/**
+ * Source the agent wrote, ran, and did not ship.
+ *
+ * This module's founding claim — "the checker was real and ephemeral" — was read off prose and never
+ * measured, because a family whose submission is one file preserves only that file. A trial holding
+ * the RAW agent transcript holds the missing source: each written file's body is the payload of a
+ * write tool call, and each throwaway script's body is inside the shell command that ran it. Both
+ * are source and re-checkable by anyone with the transcript, and neither is `observed`, because
+ * nobody grading the submission can see them.
+ *
+ * A written path ending in one of `shipped` is the artifact, not a checker. Structural, so it needs
+ * no list of blessed checker names and cannot be defeated by a model that picks a different one. A
+ * transcript line that does not parse as JSON is skipped, so prose is never credited as source.
+ */
+export function extractCheckers(
+  transcript: string,
+  shipped: readonly string[],
+): readonly { readonly name: string; readonly source: string }[] {
+  const written = new Map<string, string>();
+  const inline: { name: string; source: string }[] = [];
+  walkRecords(transcript, (o) => {
+    const path = typeof o.file_path === "string" ? o.file_path : null;
+    // Last write wins: a file rewritten eight times is one checker, and the last body is the one
+    // that ran. Counting the rewrites would report iteration as if it were eight checkers.
+    if (path !== null && typeof o.content === "string" && !shipped.some((s) => path.endsWith(s)))
+      written.set(path, o.content);
+    if (typeof o.command === "string")
+      for (const m of o.command.matchAll(/<<\s*'?(\w+)'?\r?\n([\s\S]*?)\r?\n\1\b/g)) {
+        const body = m[2] ?? "";
+        // Short heredocs are configuration and log filters, not checkers.
+        if (body.length >= 200) inline.push({ name: `${INLINE_SCRIPT} ${inline.length + 1}`, source: body });
+      }
+  });
+  return [...[...written].map(([name, source]) => ({ name, source })), ...inline];
+}
+
+/**
+ * The model's own words, out of a machine transcript.
+ *
+ * `scanTranscript` quotes what it matched, and a match found inside a serialized tool call quotes
+ * JSON punctuation instead of a sentence — the transcript equivalent of crediting a comment. A raw
+ * agent log carries the prose in `text` and `description` fields; a transcript that is already prose
+ * has no record lines and comes back unchanged, so no existing family's classification moves.
+ */
+export function transcriptProse(transcript: string): string {
+  const said: string[] = [];
+  walkRecords(transcript, (o) => {
+    for (const key of ["text", "description"])
+      if (typeof o[key] === "string") said.push(o[key] as string);
+  });
+  return said.length === 0 ? transcript : said.join("\n");
 }
 
 /** Scan submission source for behaviour that actually executes. */
@@ -351,9 +452,20 @@ export interface ProfileInput {
   /** Every file in the submission directory, name and source. Scanned in full. */
   readonly submissionFiles: readonly { readonly name: string; readonly source: string }[];
   readonly transcript: string | null;
+  /**
+   * The graded artifact, or null when the whole submission is graded.
+   *
+   * Was the literal string `subject.mjs` in two places, which is a claim about one family's
+   * submission format written into a module that reads every family's. A trial whose submission is a
+   * seven-file Python package reported all seven as checkers shipped beside the artifact.
+   */
+  readonly gradedArtifact?: string | null;
+  readonly harness?: string | null;
 }
 
 export function profileRun(input: ProfileInput): SelfCheckProfile {
+  const graded = input.gradedArtifact === undefined ? "subject.mjs" : input.gradedArtifact;
+  const shipped = [...input.submissionFiles.map((f) => f.name), ...(graded === null ? [] : [graded])];
   // Every file, not just the graded artifact. A model that ships `subject.mjs` and `_test.mjs` has
   // done the thing this module measures, and reading one file per submission misses it entirely.
   const observed = input.submissionFiles.flatMap((f) => [
@@ -361,29 +473,51 @@ export function profileRun(input: ProfileInput): SelfCheckProfile {
       ...sig,
       locus: `${f.name}:${sig.locus.split(":")[1] ?? "?"}`,
     })),
-    ...(importsGradedArtifact(f.name, f.source)
+    ...(importsGradedArtifact(f.name, f.source, shipped)
       ? [
           {
             kind: "example-harness" as const,
             source: "observed" as const,
-            citation: `\`${f.name}\` imports \`./subject.mjs\` and runs it`,
+            citation: `\`${f.name}\` imports the graded submission and runs it`,
             locus: `${f.name}:1`,
           },
         ]
       : []),
   ]);
-  const reported = input.transcript === null ? [] : scanTranscript(input.transcript);
+  // Source the agent wrote and did not ship, scanned by exactly the patterns the submission gets.
+  // Same evidence bar, different reach: nobody grading the artifact can see any of it.
+  const checkers = input.transcript === null ? [] : extractCheckers(input.transcript, shipped);
+  const ephemeral = checkers.flatMap((f) => [
+    ...scanSubmission(f.source).map((sig) => ({ ...sig, source: "ephemeral" as const, locus: `transcript:${f.name}` })),
+    // Same structural argument as for a shipped second file: "this source executes the thing being
+    // graded" cannot be said by accident, and it is the only signal that reaches a checker built out
+    // of a failure collector rather than out of `assert`.
+    ...(importsGradedArtifact(f.name, f.source, shipped)
+      ? [
+          {
+            kind: "example-harness" as const,
+            source: "ephemeral" as const,
+            citation: `\`${f.name}\` imports the graded submission and runs it`,
+            locus: `transcript:${f.name}`,
+          },
+        ]
+      : []),
+  ]);
+  const reported = input.transcript === null ? [] : scanTranscript(transcriptProse(input.transcript));
   const unused = input.submissionFiles.flatMap((f) => definedButUnused(stripNonCode(f.source)));
-  const extraFiles = input.submissionFiles
-    .map((f) => f.name)
-    .filter((n) => n !== "subject.mjs")
-    .sort();
+  const extraFiles =
+    graded === null
+      ? []
+      : input.submissionFiles
+          .map((f) => f.name)
+          .filter((n) => n !== graded)
+          .sort();
 
   // A model whose transcript describes verification and whose submission contains none of it is not
   // lying and is not verified either. It built something and did not ship it, and `narrative-only`
   // is the honest name for what is left in the artifact.
   const narrative: SelfCheckSignal[] =
-    observed.length === 0 && reported.length > 0
+    observed.length === 0 && ephemeral.length === 0 && reported.length > 0
       ? [
           {
             kind: "narrative-only",
@@ -400,9 +534,11 @@ export function profileRun(input: ProfileInput): SelfCheckProfile {
       ? "unobservable"
       : observed.length > 0
         ? "observed"
-        : reported.length > 0
-          ? "self-reported"
-          : "absent";
+        : ephemeral.length > 0
+          ? "ephemeral"
+          : reported.length > 0
+            ? "self-reported"
+            : "absent";
 
   return {
     runId: input.runId,
@@ -413,12 +549,16 @@ export function profileRun(input: ProfileInput): SelfCheckProfile {
     counted: input.state === "counted",
     scenariosFailed: input.scenariosFailed,
     observed: [...observed, ...narrative],
+    ephemeral,
     selfReported: reported,
+    unshipped: checkers.map((f) => f.name),
+    harness: input.harness ?? null,
     definedButUnused: [...new Set(unused)].sort(),
     extraFiles,
     hasSubmission: input.submissionFiles.length > 0,
     hasTranscript: input.transcript !== null,
     strongestObserved: strongest(observed),
+    strongestEphemeral: strongest(ephemeral),
     strongestReported: strongest(reported),
     verdict,
   };
@@ -447,7 +587,7 @@ export const MIN_RUNS_PER_ARM = 3;
 export function correlate(profiles: readonly SelfCheckProfile[]): SelfCheckCorrelation {
   const counted = profiles.filter((p) => p.counted);
   const rigorous = (p: SelfCheckProfile): boolean => {
-    const kind = p.strongestObserved ?? p.strongestReported;
+    const kind = p.strongestObserved ?? p.strongestEphemeral ?? p.strongestReported;
     return kind !== null && RIGOUR_ORDER.indexOf(kind) >= RIGOUR_ORDER.indexOf("example-harness");
   };
   const withCheck = counted.filter(rigorous);

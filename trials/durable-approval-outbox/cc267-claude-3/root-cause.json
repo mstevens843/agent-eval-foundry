@@ -1,0 +1,39 @@
+{
+  "runId": "cc267-claude-3",
+  "familyId": "durable-approval-outbox",
+  "label": "spec-underspecified",
+  "rationale": "ADJUDICATED from two independent blind labellings that agreed. Both labellers worked from the preserved artifacts only; neither was permitted to read the source project's existing diagnosis, so the agreement measures the evidence rather than a shared document. Both reached `spec-underspecified` and both named `spec-contradiction` as their runner-up.\n\nAll failures are `audit_explains`, and every one is the same violation: the audit records the transition ACKED -> REVOKED. The graded rule lives in the HIDDEN verifier at tests/invariants.py:161, `ACKED: set()`, which makes ACKED absorbing, so a revocation arriving after acknowledgement must be a silent no-op. That requirement is not derivable from the agent-visible package, and the nearest visible statements point the other way: instruction.md:17 says an action that already reached the tool and is revoked afterwards is 'recorded as having done both'; SEMANTICS.md:135-136 says an action that has crossed 'has crossed... and the audit trail must carry both facts'; and SEMANTICS.md:87-89, the only place the post-execution case is instantiated, names EXECUTED specifically and never ACKED. An exhaustive grep of the agent-visible tree finds ACKED in exactly five places: a happy-path arrow diagram (SEMANTICS.md:51), the exactly-once definition (:143), code identifiers, a db.py comment calling ACKED 'history', and instruction.md:20. Nothing states ACKED is terminal.\n\nThis is the same defect class the truth-repair phase withdrew elsewhere: a behaviour graded by the hidden verifier that the visible package does not determine. It is NOT capability evidence, and the engine's reading was a reasoned one rather than an oversight.",
+  "evidenceRead": [
+    "submission/",
+    "transcript.txt",
+    "verifier-output.json",
+    "result.json",
+    "challenge/spec/SEMANTICS.md",
+    "(hidden, for adjudication) tests/invariants.py",
+    "(agent-visible) instruction.md"
+  ],
+  "labelledBy": {
+    "kind": "automated",
+    "id": "phase-2-lane-a3-blind-adjudication",
+    "date": "2026-09-01"
+  },
+  "diagnosisReading": null,
+  "adjudication": {
+    "protocol": "two independent blind labellers, neither reading the source project's existing diagnosis, approaching from opposite directions (engine-first and failed-check-first)",
+    "rawAgreement": "6/6 = 1.000",
+    "labellers": [
+      {
+        "id": "blind-1",
+        "label": "spec-underspecified",
+        "confidence": 0.78,
+        "dissent": "Worth recording that the agent-visible STARTING engine already scoped revoke to READY/LEASED only (environment/app/engine/runtime.py:49-52, \"WHERE key = %s AND state IN (%s, %s)\" with READY, LEASED) — so the baseline handed the agent behaviour that is correct on ACKED. That cuts against my label and I want it visible to the second labeller. It does not change my judgement, because SEMANTICS.md:85-88 REQUIRES widening that set to include EXECUTED (the baseline omits EXECUTED->REVOKED, which the verifier permits and §6 demands), so every competent agent had to edit exactly this SELECT. The package tells the agent to widen and never says where to stop, which is the underspecification. Same runner-up as claude-2: spec-contradiction, ~0.3."
+      },
+      {
+        "id": "blind-2",
+        "label": "spec-underspecified",
+        "confidence": 0.72,
+        "dissent": "Same as cc267-claude-2: spec-contradiction is defensible. Additionally worth recording that this run and cc267-codex-1/2 produced byte-for-byte identical failing-cell sets (11 cells, same scenarios), which is a strong convergence signal across two different model families and vendors on a boundary the visible text does not draw."
+      }
+    ]
+  }
+}

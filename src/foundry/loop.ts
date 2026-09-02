@@ -12,7 +12,7 @@
 
 import { join } from "node:path";
 import { BUILT_FAMILY_IDS } from "../families/registry.js";
-import { familyEvidenceFor } from "../reports/evidence.js";
+import { familyEvidenceFor, shapeTrialEvidence } from "../reports/evidence.js";
 import { type FamilyAssessment, type FamilyEvidence, assessFamily } from "../reports/ship-report.js";
 import { readFamilyTrials } from "../trials/directory.js";
 import { type VariantProposal, assertVariantNovel, evolve } from "./evolve.js";
@@ -82,7 +82,12 @@ export function familyLoop(
   if (shape === undefined) throw new Error(`no task shape for family "${familyId}"`);
 
   const bundle = MEASURED_FAMILIES.has(familyId) ? evidenceFor(familyId) : null;
-  const evidence = bundle?.evidence;
+  // A family with no runner here can still have been ATTEMPTED — `durable-approval-outbox` has six
+  // frontier trial directories and no built family — and when it has, the gate reads those trials
+  // rather than the `agentTrialsRun` integer in its shape. `shapeTrialEvidence` returns a bundle with
+  // `sweepRun: false`, so the verifier-grading gates go on reading `n/a` for it.
+  const trialOnly = readFamilyTrials(join(root, "trials"), familyId).length > 0;
+  const evidence = bundle?.evidence ?? (trialOnly ? shapeTrialEvidence(root, familyId) : undefined);
   const assessment = assessFamily(shape, reg, evidence);
   const analysis = analyzeFamily(shape, assessment, evidence, DECLARED_CONCERNS[familyId] ?? {});
 

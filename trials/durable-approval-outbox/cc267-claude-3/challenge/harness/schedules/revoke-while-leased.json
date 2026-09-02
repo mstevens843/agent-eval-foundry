@@ -1,0 +1,19 @@
+{
+ "name": "revoke-while-leased",
+ "n_workers": 2,
+ "crashes": [],
+ "revokes": [
+  {
+   "after_invoke": 1,
+   "key_index": 2
+  },
+  {
+   "after_invoke": 3,
+   "key_index": 5
+  },
+  {
+   "after_invoke": 5,
+   "key_index": 8
+  }
+ ]
+}

@@ -1,0 +1,4 @@
+{ "name": "crash-after-lease", "n_workers": 3,
+  "crashes": [ {"on": "commit", "nth": 4}, {"on": "commit", "nth": 12},
+               {"on": "commit", "nth": 25} ],
+  "revokes": [] }

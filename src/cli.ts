@@ -244,6 +244,7 @@ import {
   PIC_FAMILY,
   UI_FAMILY,
   campaignFacts,
+  countedAgentRecordsFor,
   countedRootCausesFor,
   familyEvidenceFor,
   type familyEvidenceMap,
@@ -327,7 +328,7 @@ import {
   writeTrialDirectory,
 } from "./trials/directory.js";
 import { type EvidenceLedger, type EvidenceState, evidenceLedger } from "./trials/evidence-lifecycle.js";
-import { importDurableOutboxHistory } from "./trials/history.js";
+import { importOutboxTrialDirectories } from "./trials/history.js";
 import {
   MIGRATIONS,
   assertMigrationAccountsForLosses,
@@ -425,7 +426,8 @@ FAMILIES (run a measured mini-benchmark)
   trials import <dir> [--out f]  ingest agent attempts from <dir>/<run>/metadata.json
   trials bank [--out f]          every trial on record, counted and uncounted
   shared-bank [--out f]          cross-family subject overlap and what it permits
-  history import [path] [--out f]  normalize Harbor runs from the Durable Outbox repo
+  history import [path] [--out f]  normalize Harbor run summaries: spend and waste, never evidence
+  history import-trials <repo>   write the preserved cc267 runs as trial directories with per-check cells
   external packet --family <id> --provider <p> --out <dir>
                                  build third-party evidence packet with hash-pinned templates
   external validate <packet-dir> validate a returned external/human packet without importing it
@@ -815,13 +817,48 @@ function challengeCommand(argv: readonly string[], root: string): string {
   ].join("\n");
 }
 
+/**
+ * `history import-trials <source-repo>` — the six preserved cc267 runs, as trial directories.
+ *
+ * A one-shot generator, not a read path. It needs the source Terminal-Bench checkout, which is a
+ * machine-local absolute path and cannot be a default; what it produces is committed and every
+ * report reads THAT. Re-running it against the same runs rewrites the same directories.
+ */
+function importOutboxTrialsCommand(root: string, sourceRepo: string | undefined): string {
+  if (sourceRepo === undefined) {
+    throw new Error("usage: foundry history import-trials <path-to-terminal-bench-checkout>");
+  }
+  const imported = importOutboxTrialDirectories({
+    harborRunsRoot: join(sourceRepo, "runs"),
+    taskDir: join(sourceRepo, "tasks", OUTBOX_FAMILY),
+    trialsRoot: join(root, "trials"),
+    familyId: OUTBOX_FAMILY,
+  });
+  return [
+    `imported ${imported.length} trial director${imported.length === 1 ? "y" : "ies"} into trials/${OUTBOX_FAMILY}/`,
+    "",
+    "run             subject        counts  scenarios  failed  suite  failing checks",
+    ...imported.map((i) =>
+      [
+        i.runId.padEnd(15),
+        i.subjectId.padEnd(14),
+        (i.counts ? "yes" : "NO").padEnd(6),
+        String(i.scenarios).padStart(9),
+        String(i.scenariosFailed).padStart(7),
+        `${i.suitePassed}/${i.suiteTotal}`.padStart(6),
+        `  ${i.failedChecks.join(", ") || "none"}`,
+      ].join(" "),
+    ),
+    "",
+  ].join("\n");
+}
+
 function sharedBankCommand(root: string): string {
   const matrix = outboxMatrix(root);
-  const history = outboxHistory(root);
   const { trials, run } = familyEvidenceFor(root);
   const picMatrix = toMatrix(run);
   return renderSharedBankReport({
-    history,
+    outboxTrials: countedAgentRecordsFor(root, OUTBOX_FAMILY),
     outboxMatrix: matrix,
     picMatrix,
     picTrials: trials,
@@ -2802,26 +2839,6 @@ function completionsFor(
 }
 
 /**
- * The one run on record that shipped its own checker, for contrast in the self-check report.
- *
- * From the source project rather than from this repository, and labelled that way everywhere it
- * appears. It is the reason the self-check analysis exists: the most thoroughly self-verified
- * implementation anyone has measured still failed, and it failed on a state its own generator never
- * produced.
- */
-const HISTORICAL_SELF_CHECK = {
-  label: "`cc267-claude-1` (Klavis durable-outbox, Claude Opus)",
-  built: [
-    "a `LEGAL` transition table encoding which audit edges are permitted, independently derived",
-    "a fuzzer generating schedules and seeds beyond the ones the task shipped",
-    "mutation tests against its own checker — deliberately breaking its implementation to confirm the checker noticed",
-    "900/900 clean on its own suite before submitting",
-  ],
-  outcome:
-    "reward 0. It avoided the `ACKED -> REVOKED` bug that caught five of six frontier trials — its legality table excluded that edge — and failed liveness instead, stranding an action in `IN_DOUBT` forever. Its checker could express the rule; its generator never reached the state where the rule bit.",
-} as const;
-
-/**
  * Where each built family's harness sits on the realism ladder, and what the next rung would buy.
  *
  * A single command, because "how real is this?" is the question a reviewer asks first and the one a
@@ -2898,6 +2915,19 @@ function analysisBase(root: string) {
 
 const readIfPresent = (file: string): string | null => (existsSync(file) ? readFileSync(file, "utf8") : null);
 
+/**
+ * The run's own metadata, for fields the trial record does not carry.
+ *
+ * `metadata.json` is not part of `TrialRecord`, and the agent scaffolding only lives there. Reading
+ * it here rather than widening the trial reader keeps `src/trials/` unchanged.
+ */
+function metadataOf(path: string): { readonly agent: string | null } {
+  const raw = readIfPresent(join(path, "metadata.json"));
+  if (raw === null) return { agent: null };
+  const parsed = JSON.parse(raw) as { agent?: unknown };
+  return { agent: typeof parsed.agent === "string" ? parsed.agent : null };
+}
+
 /** Self-check profiles for every agent trial on disk. */
 function selfCheckProfilesFor(base: ReturnType<typeof analysisBase>) {
   return base.allTrials
@@ -2920,6 +2950,13 @@ function selfCheckProfilesFor(base: ReturnType<typeof analysisBase>) {
         scenariosFailed: trial.record.cells.filter((c) => c.failed.length > 0).length,
         submissionFiles: selfCheckFiles,
         transcript: readIfPresent(join(trial.path, "transcript.txt")),
+        // The outbox submission is a Python package and every file in it is graded, so nothing in it
+        // is a checker shipped beside the artifact. Passing null says that instead of reporting all
+        // seven engine modules as voluntary self-checks.
+        gradedArtifact: familyId === OUTBOX_FAMILY ? null : "subject.mjs",
+        // Observed in the run's own metadata, not inferred from the model id: which lab's scaffolding
+        // produced the transcript is the confound the report has to name.
+        harness: metadataOf(trial.path).agent,
       });
     });
 }
@@ -3160,14 +3197,17 @@ function bankInput(
   // matrix's subjects are named `fhc1`, `opus3b` and so on — artifacts, not models — so using it made
   // cross-family overlap structurally impossible: no model could ever appear in it, and the shared
   // bank reported REFUSED while also reporting that one model had attempted three families.
-  const outboxRecords = outboxHistory(root).records;
+  //
+  // The records are the family's TRIAL DIRECTORIES, not the imported run summaries. The summaries
+  // preserve a binary reward each and now carry no cells at all, so a bank built from them was a bank
+  // built from a synthetic check.
+  const outboxRecords = countedAgentRecordsFor(root, OUTBOX_FAMILY);
   const outboxAgent = buildAgentBank(outboxRecords, {
     familyId: OUTBOX_FAMILY,
     instanceIds: outboxMatrix(root).instances.map((i) => i.id),
     caveat:
-      "Imported from the source project's Harbor runs. Cells are coarse — the archive preserved a " +
-      "binary reward per run rather than per-check detail — so this bank supports subject overlap and " +
-      "not a fine-grained axis count.",
+      "Executed by the source project's Harbor harness and imported as trial directories: real " +
+      "per-check cells, graded by that project's verifier rather than by this one.",
   });
   const outbox = kindedBank(
     {
@@ -3189,9 +3229,10 @@ function bankInput(
 
   const rows = all.map((bank) => {
     const shape = registry.shapes.find((sh) => sh.familyId === bank.familyId);
+    // The outbox has counted trials and no runner, so its count comes from the directories directly.
     const counted = ROUTABLE_FAMILY_IDS.includes(bank.familyId)
       ? evidenceFor(bank.familyId).evidence.countedAgentTrials
-      : 0;
+      : countedAgentRecordsFor(root, bank.familyId).length;
     return {
       familyId: bank.familyId,
       kind: bank.kind,
@@ -3917,10 +3958,7 @@ function allCommand(argv: readonly string[], root: string): string {
     const selfCheckProfiles = selfCheckProfilesFor(base);
     write(
       "self-check-behavior-report.md",
-      renderSelfCheckBehavior({
-        profiles: selfCheckProfiles,
-        historicalContrast: HISTORICAL_SELF_CHECK,
-      }),
+      renderSelfCheckBehavior({ profiles: selfCheckProfiles }),
     );
 
     const qualityRows = qualityRowsFor(base, selfCheckProfiles);
@@ -4722,6 +4760,10 @@ export function main(argv: readonly string[]): number {
         emit(argv, sharedBankCommand(root));
         return 0;
       case "history": {
+        if (positional(argv, 1) === "import-trials") {
+          process.stdout.write(importOutboxTrialsCommand(root, positional(argv, 2)));
+          return 0;
+        }
         const path = positional(argv, 2);
         emit(argv, renderHistoricalReport(outboxHistory(root, path)));
         return 0;
@@ -4908,10 +4950,7 @@ export function main(argv: readonly string[]): number {
           const base = analysisBase(root);
           emit(
             argv,
-            renderSelfCheckBehavior({
-              profiles: selfCheckProfilesFor(base),
-              historicalContrast: HISTORICAL_SELF_CHECK,
-            }),
+            renderSelfCheckBehavior({ profiles: selfCheckProfilesFor(base) }),
           );
           return 0;
         }

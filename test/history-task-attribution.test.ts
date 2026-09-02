@@ -7,26 +7,26 @@
 // counted as outbox solves.
 //
 // SECOND, it expanded one binary reward into 24 per-scenario cells. A reward-0 run became "failed all
-// 24 scenarios", which is coarse but not false; a reward-1 run became 24 cells of `failed: []`, which
-// is the affirmative claim "this subject was graded against `serial-clean-1009-12` and passed it".
-// The archive cannot support that claim — every run directory holds exactly one file, `result.json`,
-// with one reward in it — and in this archive the claim is also wrong: `fh-claude-3` and
-// `v2-opus-3b` were both recorded as solves at the time and both were later found still carrying the
-// `ACKED -> REVOKED` defect.
+// 24 scenarios" under a synthetic check named `suite_reward_zero`; a reward-1 run became 24 cells of
+// `failed: []`, which is the affirmative claim "this subject was graded against `serial-clean-1009-12`
+// and passed it". The archive cannot support either claim — every run directory holds exactly one
+// file, `result.json`, with one reward in it — and in this archive the second is also wrong:
+// `fh-claude-3` and `v2-opus-3b` were both recorded as solves at the time and both were later found
+// still carrying the `ACKED -> REVOKED` defect.
 //
-// Both groups fail against the pre-fix importer.
+// The reward-1 half was fixed first, by marking those cells ungraded. The reward-0 half survived a
+// round longer, because "the suite returned zero" is at least true — but it named a check no verifier
+// ever ran and it reached the shared bank as though one had. Both are now gone: the archive emits no
+// cells at all, and the six runs whose per-check grading survived are trial directories instead.
+//
+// Every group below fails against the importer that preceded it.
 
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { parseMatrix } from "../src/matrix.js";
 import { buildAgentBank } from "../src/trials/agent-bank.js";
-import {
-  NO_PER_SCENARIO_DETAIL,
-  SUITE_REWARD_ZERO,
-  importDurableOutboxHistory,
-  runTaskName,
-} from "../src/trials/history.js";
+import { importDurableOutboxHistory, runTaskName } from "../src/trials/history.js";
 import { cellPassed, summarise } from "../src/trials/types.js";
 import { parseTrialRecord } from "../src/trials/validate.js";
 
@@ -38,7 +38,7 @@ const matrix = parseMatrix(
   JSON.parse(readFileSync(join(ROOT, "examples/durable-outbox/matrix.json"), "utf8")),
 );
 const scenarioIds = matrix.instances.map((i) => i.id);
-const history = importDurableOutboxHistory(RUNS, OUTBOX, scenarioIds, "dao-24");
+const history = importDurableOutboxHistory(RUNS, OUTBOX, "dao-24");
 const recordFor = (runId: string) => history.records.find((r) => r.runId === runId);
 
 describe("imported runs are attributed to the task they actually ran", () => {
@@ -76,12 +76,16 @@ describe("imported runs are attributed to the task they actually ran", () => {
 
   // The core regression. Pre-fix these five were counted, at reward 1.0, as outbox solves.
   it.each(["run-claude-1", "v2-claude-1", "v21-claude-1", "v22-claude-1", "check-v21"])(
-    "%s ran a different task, so it does not count",
+    "%s ran a different task, so it is excluded by task and not merely uncounted",
     (runId) => {
       const record = recordFor(runId);
       expect(record).toBeDefined();
       expect(record?.counts).toBe(false);
       expect(record?.cells).toEqual([]);
+      expect(history.excludedForTask).toContain(runId);
+      // `gradedRuns` is the budget denominator, and a foreign task must never enter it however
+      // cleanly it ran: four of these carry reward 1.0.
+      expect(history.gradedRuns.some((r) => r.runName === runId)).toBe(false);
     },
   );
 
@@ -99,64 +103,58 @@ describe("imported runs are attributed to the task they actually ran", () => {
     expect(history.excludedForTask).toContain("run-claude-2");
   });
 
-  it("still counts the real outbox attempts and reports the waste rate over those alone", () => {
+  it("reports the waste rate over the real outbox attempts alone", () => {
     expect(history.records.length).toBe(33);
-    expect(history.counted).toBe(15);
-    expect(recordFor("cc267-claude-1")?.counts).toBe(true);
-    expect(recordFor("v2-opus-1")?.counts).toBe(true);
     // 17 standard attempts at THIS task; 2 (v2-codex-2 ApiOverloadedError, v2-opus-3 AgentTimeoutError)
     // produced nothing usable. Computed from trial ids, so the foreign runs are not in the denominator.
     expect(history.standardRuns).toBe(17);
     expect(history.standardCounted).toBe(15);
+    expect(history.gradedRuns.length).toBe(15);
     expect(history.standardWasteRate).toBeCloseTo(2 / 17, 6);
+    // Graded is not counted. The money bought a verdict; the verdict is one bit.
+    expect(history.gradedRuns.map((r) => r.runName)).toContain("cc267-claude-1");
+    expect(recordFor("cc267-claude-1")?.counts).toBe(false);
   });
 });
 
-describe("the importer refuses to fabricate per-scenario detail it does not have", () => {
-  it("a counted reward-1 run produces no clean per-scenario pass", () => {
-    // Pre-fix: 24 cells of `failed: []` each, i.e. 24 assertions that a named scenario was passed.
-    for (const runId of ["fh-claude-3", "v2-opus-3b"]) {
+describe("the archive import produces no cells and counts nothing", () => {
+  it("not one record counts, whatever its reward", () => {
+    expect(history.counted).toBe(0);
+    expect(history.uncounted).toBe(history.records.length);
+    for (const record of history.records) expect(record.cells).toEqual([]);
+  });
+
+  it("a clean run at this task says why a binary reward is not evidence", () => {
+    for (const runId of ["cc267-claude-1", "fh-claude-3", "v2-opus-1", "v2-opus-3b"]) {
       const record = recordFor(runId);
-      expect(record?.counts).toBe(true);
-      expect(record?.cells.length).toBe(24);
-      expect(record?.cells.some(cellPassed)).toBe(false);
-      for (const cell of record?.cells ?? []) {
-        expect(cell.failed).toEqual([]);
-        expect(cell.unmeasured).toBe(NO_PER_SCENARIO_DETAIL);
-      }
-      // ...and the record is not reported as a pass on the strength of cells nobody graded.
-      if (record === undefined) throw new Error("expected a record for the reward-1 outbox run");
-      const s = summarise(record);
-      expect(s.scenariosUnmeasured).toBe(24);
-      expect(s.passed).toBe(false);
+      expect(record?.counts).toBe(false);
+      // The reason names both halves: what the source recorded, and where the real cells live.
+      expect(record?.countsReason).toMatch(/one binary suite reward and no per-check detail/);
+      expect(record?.countsReason).toMatch(/trials\/durable-approval-outbox\//);
     }
   });
 
-  it("across the whole import, not one cell claims a scenario was graded and passed", () => {
-    const counted = history.records.filter((r) => r.counts);
-    const cells = counted.flatMap((r) => r.cells);
-    expect(cells.length).toBe(360);
-    expect(cells.filter(cellPassed).length).toBe(0); // was 168
-    expect(cells.filter((c) => c.unmeasured !== undefined).length).toBe(48);
-    // A suite-level zero does entail a failure somewhere, so that coarse cell is kept as-is.
-    expect(cells.filter((c) => c.failed.length > 0).length).toBe(312);
-    expect(new Set(cells.flatMap((c) => c.failed))).toEqual(new Set([SUITE_REWARD_ZERO]));
-    expect(counted.filter((r) => r.cells.some((c) => c.failed.length > 0)).length).toBe(13);
+  it("neither reward-1 run is reported as a pass", () => {
+    // Pre-fix: 24 cells of `failed: []` each, i.e. 24 assertions that a named scenario was passed.
+    for (const runId of ["fh-claude-3", "v2-opus-3b"]) {
+      const record = recordFor(runId);
+      if (record === undefined) throw new Error(`expected a record for ${runId}`);
+      expect(record.cells.some(cellPassed)).toBe(false);
+      expect(summarise(record).passed).toBe(false);
+    }
   });
 
-  it("an ungraded cell reaches the agent bank as a null, never as a pass", () => {
-    // Only the two reward-1 runs, so their cells are the sole evidence for the subject. Pre-fix this
-    // bank showed `claude-opus-5` passing all 24 instances, which is a catch set of nothing derived
-    // from a suite-level bit; a null is excluded from catch sets instead of imputed as a pass.
-    const rewardOne = history.records.filter((r) => r.counts && /fh-claude-3|v2-opus-3b/.test(r.runId));
-    expect(rewardOne.length).toBe(2);
-    const bank = buildAgentBank(rewardOne, { familyId: OUTBOX, instanceIds: scenarioIds, caveat: "test" });
-    const opus = "claude-opus-5";
-    expect(bank.matrix.subjects.map((s) => s.id)).toContain(opus);
-    const nulls = scenarioIds.filter((id) => bank.matrix.results[id]?.[opus] === null);
-    const passes = scenarioIds.filter((id) => bank.matrix.results[id]?.[opus]?.failed.length === 0);
-    expect(passes.length).toBe(0); // was 24
-    expect(nulls.length).toBe(24);
+  it("the synthetic `suite_reward_zero` check reaches no bank, because no bank can be built", () => {
+    // Pre-fix: 312 cells across 13 counted runs, every one of them failing a check no verifier ran.
+    const cells = history.records.flatMap((r) => r.cells);
+    expect(cells.length).toBe(0);
+    const bank = buildAgentBank(history.records, {
+      familyId: OUTBOX,
+      instanceIds: scenarioIds,
+      caveat: "test",
+    });
+    expect(bank.subjects).toEqual([]);
+    expect(bank.matrix.subjects).toEqual([]);
   });
 
   it("a cell may not be both ungraded and carry named failing checks", () => {

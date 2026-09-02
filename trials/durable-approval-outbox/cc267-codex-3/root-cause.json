@@ -1,0 +1,39 @@
+{
+  "runId": "cc267-codex-3",
+  "familyId": "durable-approval-outbox",
+  "label": "spec-underspecified",
+  "rationale": "ADJUDICATED from two independent blind labellings that agreed. Both labellers worked from the preserved artifacts only; neither was permitted to read the source project's existing diagnosis, so the agreement measures the evidence rather than a shared document. Both reached `spec-underspecified` and both named `spec-contradiction` as their runner-up.\n\nAll failures are `audit_explains`, and every one is the same violation: the audit records the transition ACKED -> REVOKED. The graded rule lives in the HIDDEN verifier at tests/invariants.py:161, `ACKED: set()`, which makes ACKED absorbing, so a revocation arriving after acknowledgement must be a silent no-op. That requirement is not derivable from the agent-visible package, and the nearest visible statements point the other way: instruction.md:17 says an action that already reached the tool and is revoked afterwards is 'recorded as having done both'; SEMANTICS.md:135-136 says an action that has crossed 'has crossed... and the audit trail must carry both facts'; and SEMANTICS.md:87-89, the only place the post-execution case is instantiated, names EXECUTED specifically and never ACKED. An exhaustive grep of the agent-visible tree finds ACKED in exactly five places: a happy-path arrow diagram (SEMANTICS.md:51), the exactly-once definition (:143), code identifiers, a db.py comment calling ACKED 'history', and instruction.md:20. Nothing states ACKED is terminal.\n\nThis is the same defect class the truth-repair phase withdrew elsewhere: a behaviour graded by the hidden verifier that the visible package does not determine. It is NOT capability evidence, and the engine's reading was a reasoned one rather than an oversight.",
+  "evidenceRead": [
+    "submission/",
+    "transcript.txt",
+    "verifier-output.json",
+    "result.json",
+    "challenge/spec/SEMANTICS.md",
+    "(hidden, for adjudication) tests/invariants.py",
+    "(agent-visible) instruction.md"
+  ],
+  "labelledBy": {
+    "kind": "automated",
+    "id": "phase-2-lane-a3-blind-adjudication",
+    "date": "2026-09-01"
+  },
+  "diagnosisReading": null,
+  "adjudication": {
+    "protocol": "two independent blind labellers, neither reading the source project's existing diagnosis, approaching from opposite directions (engine-first and failed-check-first)",
+    "rawAgreement": "6/6 = 1.000",
+    "labellers": [
+      {
+        "id": "blind-1",
+        "label": "spec-underspecified",
+        "confidence": 0.8,
+        "dissent": "This is the run where I would most seriously entertain spec-contradiction over spec-underspecified, because the engine's written reasoning tracks the agent-visible task prompt bullet almost word for word and the verifier grades that reading as illegal. I still say underspecified for the reason given on claude-2: §6 is written around an action whose prior state is EXECUTED, so it is silent rather than opposed on what happens once the action has since been ACKED. If the second labeller wrote spec-contradiction for these five, I would not call that wrong, and I would rather the gate treat 'spec-underspecified vs spec-contradiction' as agreement on the finding than as a disagreement — both say the same operational thing, which is that this family is not difficulty evidence until SEMANTICS.md states the rule."
+      },
+      {
+        "id": "blind-2",
+        "label": "spec-underspecified",
+        "confidence": 0.75,
+        "dissent": "Same spec-contradiction alternative. On this run specifically, the self-test evidence pushes me closest to spec-contradiction of the six."
+      }
+    ]
+  }
+}

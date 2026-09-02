@@ -1,0 +1,51 @@
+{
+  "runId": "cc267-codex-2",
+  "familyId": "durable-approval-outbox",
+  "provenance": "externally executed",
+  "provenanceDetail": "run by the source Terminal-Bench project (klavis-terminal-bench-task) under Harbor, not by this repository's trial router; this family has no foundry challenge package and no route",
+  "sourceTrial": "runs/cc267-codex-2/cc267-codex-2/durable-approval-outbox__nPCx8Rz",
+  "sourceTaskChecksum": "7ef7e2b979b93e2ae456cea01bfd41bb2136db6caa50fc717c011548b68543ae",
+  "agent": "codex",
+  "agentVersion": "0.149.1",
+  "model": "openai/gpt-5.6-sol",
+  "modelSource": "config.json agent.model_name (observed in the run)",
+  "effort": "xhigh",
+  "effortSource": "config.json agent.kwargs.reasoning_effort (observed in the run)",
+  "subjectId": "gpt-5.6-sol",
+  "scenarioSetId": "dao-24-267",
+  "runtimeSeconds": 1764,
+  "costUsd": 2.7433655999999993,
+  "startedAt": "2026-08-26T00:54:29.446457Z",
+  "finishedAt": "2026-08-26T01:23:53.526423Z",
+  "isolation": "container",
+  "isolationDetail": "the source project's Harbor Docker environment, one container per trial, with the verifier run in a separate environment from the agent; NOT this repository's container runner, which is declared and unimplemented",
+  "challengeHash": null,
+  "challengeHashReason": "this family is a shape, not a built family: it is absent from BUILT_FAMILIES, has no routeFor entry and emits no foundry challenge package, so there is no hash of the kind every other trial records and none was invented",
+  "agentVisibleSubtreeSha256": "4d54bb5d24cb0ff3693fb24d2bb1a36f22c980fb30d26bec3d2cffd5be400121",
+  "agentVisibleSubtreeSource": "pinned by the source project's results/34-cc267-standard-matrix.md for exactly this round",
+  "challengeSubtree": "tasks/durable-approval-outbox/environment/app",
+  "challengeFiles": 21,
+  "submissionFiles": 6,
+  "transcriptSource": "codex.txt",
+  "classification": "completed",
+  "classificationDetail": "graded by the source project's 267-result suite: 24 scenario(s) x 11 check(s) plus 3 suite-level test(s), 11 scenario(s) failing on audit_explains; no exception and the submitted engine is preserved beside it",
+  "scenariosGraded": 24,
+  "scenariosFailed": 11,
+  "failedChecks": [
+    "audit_explains"
+  ],
+  "suiteLevelTests": [
+    {
+      "name": "test_invariants.py::test_tool_saw_no_duplicate_keys",
+      "status": "passed"
+    },
+    {
+      "name": "test_invariants.py::test_every_scenario_ran",
+      "status": "passed"
+    },
+    {
+      "name": "test_invariants.py::test_types_match_baseline",
+      "status": "passed"
+    }
+  ]
+}

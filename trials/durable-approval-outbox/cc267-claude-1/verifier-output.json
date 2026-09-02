@@ -1,0 +1,135 @@
+{
+  "source": "cc267-claude-1/durable-approval-outbox__YyRS6ZG/verifier/ctrf.json",
+  "suite": "24 scenarios x 11 checks + 3 suite-level tests = 267 results",
+  "reward": 0,
+  "resultsFailed": 2,
+  "checks": [
+    "audit_append_only",
+    "audit_explains",
+    "completion",
+    "exactly_once",
+    "executed_iff_called",
+    "expected_executions",
+    "gate",
+    "mechanism_fired",
+    "progress",
+    "revocation_ordering",
+    "tool_plan"
+  ],
+  "suiteTests": [
+    {
+      "name": "test_invariants.py::test_tool_saw_no_duplicate_keys",
+      "status": "passed"
+    },
+    {
+      "name": "test_invariants.py::test_every_scenario_ran",
+      "status": "passed"
+    },
+    {
+      "name": "test_invariants.py::test_types_match_baseline",
+      "status": "passed"
+    }
+  ],
+  "cells": [
+    {
+      "scenarioId": "serial-clean-1009-12",
+      "failed": []
+    },
+    {
+      "scenarioId": "serial-clean-1013-16",
+      "failed": []
+    },
+    {
+      "scenarioId": "two-workers-1009-12",
+      "failed": []
+    },
+    {
+      "scenarioId": "two-workers-1021-16",
+      "failed": []
+    },
+    {
+      "scenarioId": "revoke-while-leased-1009-12",
+      "failed": []
+    },
+    {
+      "scenarioId": "revoke-while-leased-1031-16",
+      "failed": []
+    },
+    {
+      "scenarioId": "crash-after-tool-1009-12",
+      "failed": []
+    },
+    {
+      "scenarioId": "crash-after-tool-1013-16",
+      "failed": [
+        "completion"
+      ]
+    },
+    {
+      "scenarioId": "crash-after-tool-1031-20",
+      "failed": []
+    },
+    {
+      "scenarioId": "crash-after-lease-1009-12",
+      "failed": []
+    },
+    {
+      "scenarioId": "crash-after-lease-1021-16",
+      "failed": []
+    },
+    {
+      "scenarioId": "stale-lease-1009-12",
+      "failed": []
+    },
+    {
+      "scenarioId": "stale-lease-1013-16",
+      "failed": []
+    },
+    {
+      "scenarioId": "hostile-mix-1009-12",
+      "failed": [
+        "completion"
+      ]
+    },
+    {
+      "scenarioId": "hostile-mix-1021-16",
+      "failed": []
+    },
+    {
+      "scenarioId": "hostile-mix-1031-20",
+      "failed": []
+    },
+    {
+      "scenarioId": "unknown-then-revoke-1009-12",
+      "failed": []
+    },
+    {
+      "scenarioId": "unknown-then-revoke-noop-1009-12",
+      "failed": []
+    },
+    {
+      "scenarioId": "revoke-after-ack-a-1009-12",
+      "failed": []
+    },
+    {
+      "scenarioId": "revoke-after-ack-b-1009-12",
+      "failed": []
+    },
+    {
+      "scenarioId": "revoke-after-ack-c-1009-12",
+      "failed": []
+    },
+    {
+      "scenarioId": "revoke-after-ack-d-1021-12",
+      "failed": []
+    },
+    {
+      "scenarioId": "revoke-after-ack-e-1049-12",
+      "failed": []
+    },
+    {
+      "scenarioId": "revoke-after-ack-f-1049-12",
+      "failed": []
+    }
+  ]
+}

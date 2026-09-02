@@ -17,59 +17,62 @@ import type { BankOverlap } from "../trials/bank.js";
 import { assertBankCoherent, combinedMatrixFor } from "../trials/bank.js";
 import type { ImportedHistory } from "../trials/history.js";
 import { classifyRunKind } from "../trials/history.js";
-import type { TrialSet } from "../trials/types.js";
+import type { TrialRecord, TrialSet } from "../trials/types.js";
 import { countedAgentTrials } from "../trials/types.js";
 import type { Matrix } from "../types.js";
 
 const usd = (n: number | null): string => (n === null ? "—" : `$${n.toFixed(2)}`);
 
 export function renderHistoricalReport(history: ImportedHistory): string {
-  const byKind = new Map<string, { counted: number; uncounted: number; cost: number }>();
+  const graded = new Set(history.gradedRuns.map((r) => r.runName));
+  const byKind = new Map<string, { graded: number; barren: number; cost: number }>();
   for (const r of history.records) {
     const kind = classifyRunKind(r.runId);
-    const e = byKind.get(kind) ?? { counted: 0, uncounted: 0, cost: 0 };
-    if (r.counts) e.counted += 1;
-    else e.uncounted += 1;
+    const e = byKind.get(kind) ?? { graded: 0, barren: 0, cost: 0 };
+    if (graded.has(r.runId)) e.graded += 1;
+    else e.barren += 1;
     e.cost += r.costUsd ?? 0;
     byKind.set(kind, e);
   }
-  const counted = history.records.filter((r) => r.counts);
-  const uncounted = history.records.filter((r) => !r.counts);
+  const productive = history.records.filter((r) => graded.has(r.runId));
+  const barren = history.records.filter((r) => !graded.has(r.runId));
   const totalCost = history.records.reduce((n, r) => n + (r.costUsd ?? 0), 0);
 
   return [
     "# Historical trials — durable approval outbox",
     "",
-    "The outbox family's real trial record, imported from the Harbor run directories that produced it",
-    "and normalized into the same `TrialRecord` shape the containment family uses. Until this import",
-    "existed the outbox side was a static matrix with no notion of who ran, what it cost, or which runs",
-    "were thrown away — so there was nothing to compare a second family against.",
+    "What the outbox family's trial layer COST, imported from the Harbor run summaries that recorded",
+    "it. Not what it measured: every record here carries `counts: false`, because a run summary",
+    "preserves one binary suite reward and a binary reward cannot name a scenario. The six runs whose",
+    "full per-check grading survived are trial directories under `trials/durable-approval-outbox/`,",
+    "and those are the only outbox trials any difficulty claim reads.",
     "",
     "## What the import found",
     "",
     "| | |",
     "|---|---:|",
     `| run directories parsed | ${history.runs.length} |`,
-    `| **counted** (standard attempts, clean) | **${counted.length}** |`,
-    `| uncounted | ${uncounted.length} |`,
+    `| **standard attempts that bought a verdict** | **${productive.length}** |`,
+    `| runs that produced nothing usable, or were never attempts at this task | ${barren.length} |`,
     `| recorded spend across all runs | ${usd(totalCost)} |`,
     "",
-    "| run kind | counted | uncounted | spend |",
+    "| run kind | graded | no usable result | spend |",
     "|---|---:|---:|---:|",
     ...[...byKind.entries()]
       .sort()
-      .map(([k, e]) => `| \`${k}\` | ${e.counted} | ${e.uncounted} | ${usd(e.cost)} |`),
+      .map(([k, e]) => `| \`${k}\` | ${e.graded} | ${e.barren} | ${usd(e.cost)} |`),
     "",
-    "## Why so many runs do not count",
+    "## Why so many runs bought nothing",
     "",
-    "This is the part worth reading. Every uncounted run below carries **reward 0.0** in the source",
-    "data, sitting in the same field as the genuine failures. Reading the reward column naively turns",
-    "each of them into a data point about difficulty. The importer classifies from `exception_stats`",
-    "and `n_errored_trials` first, and only then looks at reward.",
+    "This is the part worth reading. Most of the runs below carry **reward 0.0** in the source data,",
+    "sitting in the same field as the genuine failures. Reading the reward column naively turns each of",
+    "them into a data point about difficulty. The importer classifies from `exception_stats` and",
+    "`n_errored_trials` first, then from the task the preserved trial ids name, and only then looks at",
+    "reward.",
     "",
-    "| run | status | why it does not count |",
+    "| run | status | why it bought nothing |",
     "|---|---|---|",
-    ...uncounted.map((r) => `| \`${r.runId}\` | ${r.status} | ${r.countsReason} |`),
+    ...barren.map((r) => `| \`${r.runId}\` | ${r.status} | ${r.countsReason} |`),
     "",
     "Three of those are provider-level refusals on `/cheat` trials. The source repository had to state",
     "in prose that the resulting zero meant *no attack was attempted* rather than *an attack repelled*;",
@@ -79,21 +82,23 @@ export function renderHistoricalReport(history: ImportedHistory): string {
     "trial measures whether the grader can be broken, and a gate run is the oracle or the nop proving",
     "the harness works. Both produce a reward and neither is an attempt at the task.",
     "",
-    "## Counted trials",
+    "## Standard attempts that produced a verdict",
     "",
     "| run | subject | model | runtime | cost |",
     "|---|---|---|---:|---:|",
-    ...counted.map(
+    ...productive.map(
       (r) =>
         `| \`${r.runId}\` | \`${r.subjectId}\` | ${r.model ?? "—"} | ${r.runtimeSeconds === null ? "—" : `${Math.round(r.runtimeSeconds / 60)}m`} | ${usd(r.costUsd)} |`,
     ),
     "",
     "## Fidelity limits of this import",
     "",
-    "- **Rewards are binary in the source.** A counted reward-0 run is recorded as failing every",
-    "  scenario under the synthetic check `suite_reward_zero`. The per-check detail the outbox verifier",
-    "  produced was not preserved in the run summaries, so the imported cells are coarser than the",
-    "  family's own matrix. The axis analysis uses the family matrix, not these cells.",
+    "- **Rewards are binary in the source, so this import produces no cells at all.** It used to",
+    "  record a counted reward-0 run as failing every scenario under a synthetic check named",
+    "  `suite_reward_zero` — a check no verifier ever ran, which then reached the shared bank as though",
+    "  one had. A reward of 1 was worse: the two reward-1 runs here, `fh-claude-3` and `v2-opus-3b`,",
+    "  were recorded as solves at the time and both were later found to still carry the",
+    "  `ACKED -> REVOKED` defect the suite was built to catch.",
     "- **Effort is not recorded.** Harbor writes `adhoc` into the effort slot of its eval key, so the",
     "  subject identity is the model alone.",
     "- **Some archived trial-level files were redacted** before commit and do not parse; the run-level",
@@ -107,7 +112,15 @@ export function renderHistoricalReport(history: ImportedHistory): string {
 }
 
 export interface SharedBankInput {
-  readonly history: ImportedHistory;
+  /**
+   * The outbox family's counted agent trials — its trial directories, not the imported archive.
+   *
+   * This used to be the `ImportedHistory`, whose records now count nothing on purpose: a binary suite
+   * reward cannot name a scenario. The six cc267 runs are trial directories with per-check cells, and
+   * a shared-bank table has to be built from the same kind of record on both sides or the "counted
+   * trials" column means two different things across one row.
+   */
+  readonly outboxTrials: readonly TrialRecord[];
   readonly outboxMatrix: Matrix;
   readonly picMatrix: Matrix;
   readonly picTrials: TrialSet;
@@ -117,12 +130,11 @@ export interface SharedBankInput {
 export function renderSharedBankReport(input: SharedBankInput): string {
   // Before anything is printed: each family's counted trials must have been graded against one
   // scenario set. Pooling two suites into one bank would make the table below quietly wrong.
-  assertBankCoherent("durable-approval-outbox", input.history.records);
+  assertBankCoherent("durable-approval-outbox", input.outboxTrials);
   assertBankCoherent("prompt-injection-containment", input.picTrials.records);
 
-  const outboxSubjects = [
-    ...new Set(input.history.records.filter((r) => r.counts).map((r) => r.subjectId)),
-  ].sort();
+  const outboxCounted = input.outboxTrials.filter((r) => r.counts);
+  const outboxSubjects = [...new Set(outboxCounted.map((r) => r.subjectId))].sort();
   const picAgents = countedAgentTrials(input.picTrials);
   const picSubjects = [...new Set(picAgents.map((r) => r.subjectId))].sort();
   const shared = outboxSubjects.filter((s) => picSubjects.includes(s));
@@ -140,7 +152,7 @@ export function renderSharedBankReport(input: SharedBankInput): string {
     "",
     "| family | counted agent subjects | counted trials | evidence type |",
     "|---|---|---:|---|",
-    `| \`durable-approval-outbox\` | ${outboxSubjects.map((s) => `\`${s}\``).join(", ") || "none"} | ${input.history.records.filter((r) => r.counts).length} | imported historical |`,
+    `| \`durable-approval-outbox\` | ${outboxSubjects.map((s) => `\`${s}\``).join(", ") || "none"} | ${outboxCounted.length} | imported historical |`,
     `| \`prompt-injection-containment\` | ${picSubjects.map((s) => `\`${s}\``).join(", ") || "none"} | ${picAgents.length} | measured here |`,
     "",
     "## Overlap verdict",

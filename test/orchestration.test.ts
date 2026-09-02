@@ -310,7 +310,7 @@ describe("historical import", () => {
   });
 
   it("returns an empty import for a missing directory rather than throwing", () => {
-    const h = importDurableOutboxHistory("/does/not/exist", "f", ["a"], "s");
+    const h = importDurableOutboxHistory("/does/not/exist", "f", "s");
     expect(h.records).toEqual([]);
   });
 });

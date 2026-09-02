@@ -23,6 +23,7 @@ import type { ProviderAvailability } from "../trials/provider-registry.js";
 import type { TrialRecord } from "../trials/types.js";
 import type { DifficultyCurve, ProviderCurve } from "./difficulty.js";
 import { MIN_TRIALS_FOR_RATE, underpoweredCaveat } from "./difficulty.js";
+import { scanSubmission } from "./self-check.js";
 
 const pct = (n: number | null): string => (n === null ? "—" : `${(n * 100).toFixed(0)}%`);
 const esc = (s: string): string => s.replace(/\|/g, "\\|");
@@ -110,12 +111,9 @@ function selfVerifyingLine(artifacts: readonly ArtifactQuality[]): string {
   }
   return [
     `**Not one of the ${artifacts.length} submissions built a self-check.** No assertion, no invariant`,
-    "function, no local sanity pass — every model wrote behaviour and stopped. That is a sharper",
-    "finding than any per-provider rate on this page, because the source project's strongest engine",
-    "did the opposite (a legality table, a fuzzer, and mutation tests against its own checker) and",
-    "still failed, on a state its own generator never reached. Self-verification did not save that",
-    "engine and its absence here has not yet been shown to cost anything, so the column is evidence",
-    "about how models approach the task rather than about whether they succeed at it.",
+    "function, no local sanity pass in the artifact. Read it as a fact about the SUBMISSION and not",
+    "about the session: the self-check report measures runs whose transcripts carry a checker's source",
+    "that never reached the artifact, and this column cannot see those.",
   ].join("\n");
 }
 
@@ -398,9 +396,11 @@ export function describeArtifact(
   failedScenarios: number,
 ): ArtifactQuality {
   const cites = ruleCodes.length === 0 ? null : ruleCodes.filter((code) => source.includes(code)).length;
-  // A submission that defines its own assertions or invariant checks was verifying itself rather
-  // than only producing behaviour. The source project's one non-defective engine did exactly this.
-  const selfVerifying = /\b(assert|invariant|selfCheck|validate[A-Z]|sanity)\b/.test(source);
+  // One scanner, shared with the self-check report. The regex that used to live here matched inside
+  // comments and strings and credited any `validate[A-Z]` name — the exact false positive that got
+  // `separate-checker` deleted from the pattern list — so the two pages could disagree about the
+  // same submission.
+  const selfVerifying = scanSubmission(source).length > 0;
   return {
     runId,
     providerFamily,

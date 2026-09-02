@@ -1,0 +1,5 @@
+{
+  "counts": true,
+  "classification": "completed",
+  "reason": "graded by the source project's 267-result suite: 24 scenario(s) x 11 check(s) plus 3 suite-level test(s), 13 scenario(s) failing on audit_explains; no exception and the submitted engine is preserved beside it. Countable because the grading is per check rather than a suite-level bit, the submitted engine is preserved so the result can be re-graded when the suite changes, and the agent-visible subtree it was given is copied beside it"
+}
