@@ -30,7 +30,7 @@
 //
 // SLOW, ON PURPOSE, AND NOT SKIPPABLE
 //
-// This grades eight families in subprocesses and takes roughly 90 seconds. That is why the rule is
+// This grades nine families in subprocesses and takes roughly 90 seconds. That is why the rule is
 // not in `checkChallengePackage`, which runs on every build — but it is also why the rule cannot
 // live only behind a CLI flag. This file is the enforcement point: it runs on every `pnpm test`, it
 // has no skip condition, and a family that starts shipping its answer key fails here by name.
@@ -48,7 +48,7 @@ import { routeFor } from "../src/trials/router.js";
 const ROOT = new URL("..", import.meta.url).pathname;
 
 /**
- * The eight built, routable families. Written out rather than derived from a registry constant on
+ * The nine built, routable families. Written out rather than derived from a registry constant on
  * purpose: this is the list a reader can check against the repository by eye, and a family quietly
  * dropping out of a derived list would silently shrink the gate to whatever remained.
  */
@@ -60,6 +60,7 @@ const FAMILIES = [
   "checker-required-memory-poisoning",
   "access-token-scope-expansion",
   "delegated-wallet-scope-reconciliation",
+  "dao-descendant",
   "deployment-model-alias-rollout-drift",
 ] as const;
 

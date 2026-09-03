@@ -84,8 +84,8 @@ The one input that is purely an assumption, so here is the whole column instead 
 ## Sensitivity to authoring hours per family
 
 **This is the dominant term.** `hoursPerFamily` is an estimate, not a measurement, and it is the
-only input that moves the family count on its own. The 18 declared shapes in
-`examples/shapes/*.json` estimate their own build at 18 to 120 hours — mean 62.4, median 57.5 —
+only input that moves the family count on its own. The 19 declared shapes in
+`examples/shapes/*.json` estimate their own build at 18 to 120 hours — mean 65.5, median 60 —
 so **45 is 28% below the mean of the author's own estimates**. It is not below their low end;
 three shapes declare less. But the flagship family `durable-approval-outbox` declares 120, which
 is 2.7x what this plan charges for it.
@@ -93,8 +93,8 @@ is 2.7x what this plan charges for it.
 | hours/family | why this row | loaded $ / family | families | deliverable tasks | axes | $ / axis |
 |---|---|---:|---:|---:|---:|---:|
 | 45 h | current input | $12,937 | 7 | 7 | 14 | $6,468 |
-| 62 h | mean of the 18 declared shape estimates (62.4, rounded) | $16,303 | 6 | 6 | 12 | $8,151 |
-| 90 h | above 15 of the 18 declared estimates | $21,847 | 4 | 4 | 8 | $10,923 |
+| 66 h | mean of the 19 declared shape estimates (65.5, rounded) | $17,095 | 5 | 5 | 10 | $8,547 |
+| 90 h | above 15 of the 19 declared estimates | $21,847 | 4 | 4 | 8 | $10,923 |
 | 120 h | the flagship family's own estimate | $27,787 | 3 | 3 | 6 | $13,893 |
 
 45 stays the default because moving a headline without new evidence is worse than reporting the
@@ -102,9 +102,10 @@ discrepancy — but read the table before quoting the headline. Charging the fla
 declared 120 hours costs more than half the yield.
 
 One further caveat on this input: the repository declares build hours in TWO places, and neither
-is a measurement. `examples/shapes/*.json` carries an estimate for all 18 declared shapes, and
-`src/families/registry.ts` carries a second `estimatedBuildHours` on each of the 8 BUILT families
-(18, 36, 40, 55, 70, 75, 85, 95 — mean 59.3). Two independent guesses at the same quantity is one
+is a measurement. `examples/shapes/*.json` carries an estimate for all 19 declared shapes, and
+`src/families/registry.ts` carries a second `estimatedBuildHours` on each of the 9 BUILT families
+(18, 36, 40, 55, 70, 75, 85, 95, 120 — mean 66.0). The descendant's 120 is its parent's
+from-scratch estimate; measured 0.18 h marginal work remains separate. Two independent guesses at the same quantity is one
 more guess than evidence.
 
 ## Sensitivity to deliverable tasks per family
@@ -133,7 +134,7 @@ The last row is what the previous version of this report printed as its headline
 
 | input | value | source |
 |---|---:|---|
-| `hoursPerFamily` | 45 | ESTIMATED — no timesheet was ever kept. It is **28% below the mean of the author's own 18 declared estimates** in `examples/shapes/*.json` (mean 62.4 h, median 57.5, range 18–120), and the flagship family `durable-approval-outbox` declares 120 — 2.7x the value this plan uses |
+| `hoursPerFamily` | 45 | ESTIMATED — no from-scratch timesheet was ever kept. It is **31% below the mean of the author's own 19 declared estimates** in `examples/shapes/*.json` (mean 65.5 h, median 60, range 18–120), and the flagship family `durable-approval-outbox` declares 120 — 2.7x the value this plan uses. The dao descendant's measured 0.18 h is excluded because it inherited the mechanism and infrastructure |
 | `hoursPerScreenedCandidate` | 3 | measured — cycle 5 killed 15 candidates in ~90 min |
 | `cycleHitRate` | 0.1 | measured — 1 family shipped from 10 design cycles |
 | `matricesPerFamily` | 3 | measured — the shipped family consumed 3 matrix rounds |

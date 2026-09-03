@@ -225,6 +225,7 @@
     "Blocking every spend to avoid over-granting.",
     "Writing an audit that cites cached or subject-owned facts rather than current facade observations."
   ],
+  "hardnessRecipe": null,
   "estimatedBuildHours": 36,
   "estimatedFrontierUsd": 45,
   "status": "built",

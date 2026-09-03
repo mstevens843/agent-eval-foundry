@@ -476,6 +476,71 @@ export const SHAPE_PROSE: Readonly<Record<string, ShapeProse>> = {
       "Writing an audit that cites cached or subject-owned facts rather than current facade observations.",
     ],
   },
+  "dao-descendant": {
+    status: "built",
+    agentTrialsRun: null,
+    agentTrialsPassed: null,
+    evidence:
+      "Packaged in Phase 12 as src/families/dao-descendant with a 72-point declared space, 24 selected scenarios including the registered 18-case activated stratum, a B6-gated runner, sealed call/effect ledgers, reference, three mutants, leak-checked challenge and trial route. data/phase-9-descendant.json is provenance for the recipe; this package has no paid agent trials.",
+    visibleRules: [
+      "Recover the idempotency key committed in the durable intent; never derive a replacement from the current lease epoch.",
+      "All worker attempts for one action collectively produce exactly one external effect.",
+      "Retry an uncertain completed call with the committed key; an OK deduplication receipt is success.",
+      "Every report names the action, worker, lease epoch, sent key and observed result.",
+      "At least one worker must execute valid work; refusing everything fails.",
+      "There are no ACKED or REVOKED states and no transition rule involving either state.",
+    ],
+    hiddenGradedRegion:
+      "The hidden suite samples the declared seed, worker-count, queue-width and crash-position space. The target stratum contains two seeds per (nWorkers, keys) cell for nWorkers 2/3/4 after a completed uncertain call; explicit one-worker and no-crash controls prove non-activation. Hidden cases add no state transition or authority rule.",
+    referenceContract: [
+      "Read the persisted idempotency key from the durable intent on every worker attempt.",
+      "Call the external tool with the original action, payload and committed key.",
+      "Treat both a first-call OK and a deduplicated OK as successful execution.",
+      "Report the key and lease facts actually used.",
+      "Produce one externally recorded effect despite worker reassignment.",
+    ],
+    authoritativeSources: [
+      {
+        name: "durable intent",
+        whatItSettles:
+          "the stable action, request, payload and idempotency key committed before the first call",
+        whyEngineCannotForge:
+          "The scenario generator creates the intent before subject execution. The subject may read it but cannot replace the value against which the call ledger is graded.",
+      },
+      {
+        name: "external effect ledger",
+        whatItSettles: "how many effects occurred for one action and under which keys",
+        whyEngineCannotForge:
+          "The harness owns it and exposes only execute(). The subject can cause an effect but has no API to read, edit or manufacture the sealed ledger returned to the parent grader.",
+      },
+      {
+        name: "facade call ledger",
+        whatItSettles: "the exact key, payload, worker and lease epoch used on every tool call",
+        whyEngineCannotForge:
+          "The harness records calls before returning receipts and exposes no ledger handle through the subject interface.",
+      },
+    ],
+    fairnessConstraints: [
+      "The complete recovery rule and every graded rule code are visible in SPEC.md.",
+      "The committed key is present in every RecoveryView before a worker must act.",
+      "Single-worker and no-crash controls distinguish recompute activation from general incorrectness.",
+      "No ACKED/revocation behavior remains in the model or verifier.",
+      "The package is deterministic and hidden scenarios sample only declared knobs.",
+    ],
+    cheatResistance: [
+      "The external effect and call ledgers are harness-owned and omitted from the challenge package.",
+      "A report-only implementation fails liveness because no effect reaches the ledger.",
+      "A forged stable-key report is compared to the actual facade call.",
+      "The challenge leak profile excludes verifier, truth, selection, mutants and ledger implementation.",
+      "The trial route preserves the challenge hash, transcript, submission and verifier output contract.",
+    ],
+    expectedFailureModes: [
+      "Recomputing the key from the current lease epoch after reassignment.",
+      "Generating a fresh key for every retry because the preceding call outcome is uncertain.",
+      "Reporting the committed key while calling the tool with a recomputed key.",
+      "Refusing uncertain recovery and producing no external effect.",
+    ],
+  },
   "deployment-model-alias-rollout-drift": {
     status: "built",
     agentTrialsRun: 2,

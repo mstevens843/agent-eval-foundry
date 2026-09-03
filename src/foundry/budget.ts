@@ -42,15 +42,16 @@ export interface BudgetInputs {
    * ESTIMATED, not measured, and the report says so. No timesheet was ever kept; the shipped family
    * took weeks.
    *
-   * The value is 45. The eighteen task shapes this repository declares estimate their own builds at
-   * 18 to 120 hours, mean 62.4 — so 45 is NOT below the low end, it is 28% below the MEAN of the
+   * The value is 45. The nineteen task shapes this repository declares estimate their own builds at
+   * 18 to 120 hours, mean 65.5 — so 45 is NOT below the low end, it is 31% below the MEAN of the
    * author's own estimates, and the flagship `durable-approval-outbox` declares 120, which is 2.7x
    * it. (An earlier revision of this comment said "between 55 and 120 … below the low end". That was
    * wrong in both halves; three shapes declare 18, 36 and 40.)
    *
-   * Build hours are declared in two places and neither is measured: `examples/shapes/*.json` (18
-   * shapes, mean 62.4) and `BuiltFamily.estimatedBuildHours` in `src/families/registry.ts` (8 built
-   * families, mean 59.3).
+   * Build hours are declared in two places and neither is measured: `examples/shapes/*.json` (19
+   * shapes, mean 65.5) and `BuiltFamily.estimatedBuildHours` in `src/families/registry.ts` (9 built
+   * families, mean 66.0). The dao descendant carries 120 here as the parent's from-scratch estimate;
+   * its measured 0.18 h marginal build remains quarantined in `descendantBuildHours`.
    *
    * 45 is retained rather than raised because raising it silently would change the headline without
    * new evidence. The sensitivity table spans the declared range, and that is where a reader should

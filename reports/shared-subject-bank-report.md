@@ -29,6 +29,7 @@ Which subjects have attempted which families, and what that permits.
 | `prompt-injection-memory-poisoning` | 13 | 288 | 5 |
 | `access-token-scope-expansion` | 9 | 384 | 3 |
 | `delegated-wallet-scope-reconciliation` | 10 | 804 | 3 |
+| `dao-descendant` | 3 | 24 | 1 |
 | `deployment-model-alias-rollout-drift` | 17 | 339 | 20 |
 
 **These numbers may not be added to the ones above, or to each other as a portfolio total.** A
@@ -68,7 +69,7 @@ Only 2 subject(s) attempted every family, below the threshold of 3. The combined
 - Build or trial a second family whose bank is `imported`.
 - For a mutant bank that means a second family with a written mutant set.
 
-### `mutant` banks — 4 family(ies)
+### `mutant` banks — 5 family(ies)
 
 **Verdict:** REFUSED. nothing: the banks share no subject, so co-failure across families is unobservable and the union's width is the sum by construction.
 

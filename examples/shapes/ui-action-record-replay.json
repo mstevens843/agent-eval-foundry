@@ -173,6 +173,7 @@
     "Improvising past a mutation by asking a model, which completes the flow and destroys the capability.",
     "Producing an audit that says a step ran without saying what was observed."
   ],
+  "hardnessRecipe": null,
   "estimatedBuildHours": 55,
   "estimatedFrontierUsd": 40,
   "status": "shipped",

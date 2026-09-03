@@ -247,6 +247,7 @@
     "Asking a model to choose when deterministic recorded addresses diverge.",
     "Returning an audit that reports observations or effects the call ledger does not support."
   ],
+  "hardnessRecipe": null,
   "estimatedBuildHours": 95,
   "estimatedFrontierUsd": 55,
   "status": "shipped",

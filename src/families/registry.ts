@@ -11,6 +11,7 @@
 
 import { buildAccessTokenChallengePackage } from "../challenge/access-token-package.js";
 import { buildCheckerRequiredChallengePackage } from "../challenge/checker-required-package.js";
+import { buildDaoDescendantChallengePackage } from "../challenge/dao-descendant-package.js";
 import { buildDelegatedWalletChallengePackage } from "../challenge/delegated-wallet-package.js";
 import { buildDeploymentAliasChallengePackage } from "../challenge/deployment-alias-package.js";
 import { buildLiveDomChallengePackage } from "../challenge/live-dom-package.js";
@@ -18,6 +19,7 @@ import { buildMemoryChallengePackage } from "../challenge/memory-package.js";
 import {
   ACCESS_TOKEN_PROFILE,
   CHECKER_REQUIRED_PROFILE,
+  DAO_DESCENDANT_PROFILE,
   DELEGATED_WALLET_PROFILE,
   DEPLOYMENT_ALIAS_PROFILE,
   LIVE_DOM_PROFILE,
@@ -29,6 +31,7 @@ import {
 import { buildChallengePackage } from "../challenge/package.js";
 import type { ChallengePackage } from "../challenge/package.js";
 import { buildUiChallengePackage } from "../challenge/ui-package.js";
+import type { HardnessRecipe } from "../foundry/schema.js";
 import type { Matrix } from "../types.js";
 
 import { INTENDED_CHECK as PIC_CHECKS } from "../reports/trial-report.js";
@@ -89,6 +92,12 @@ import * as deployment from "./deployment-model-alias-rollout-drift/runner.js";
 import * as deploymentScenarios from "./deployment-model-alias-rollout-drift/scenarios.js";
 import { RULES as DEPLOYMENT_RULES } from "./deployment-model-alias-rollout-drift/spec.js";
 import { CHECKS as DEPLOYMENT_CHECK_NAMES } from "./deployment-model-alias-rollout-drift/verify.js";
+
+import { BASELINES as DAO_BASELINES, INTENDED_CHECK as DAO_CHECKS } from "./dao-descendant/mutants.js";
+import * as dao from "./dao-descendant/runner.js";
+import * as daoScenarios from "./dao-descendant/scenarios.js";
+import { RULES as DAO_RULES } from "./dao-descendant/spec.js";
+import { CHECKS as DAO_CHECK_NAMES } from "./dao-descendant/verify.js";
 
 export interface FamilySweep {
   readonly scenarioCount: number;
@@ -169,6 +178,8 @@ export interface BuiltFamily {
   readonly realism: RealismLevel;
   /** What would have to be built to reach the next level, and what it would newly measure. */
   readonly realismGap: string;
+  /** Explicit only where construction history has been reconstructed; legacy families remain null. */
+  readonly hardnessRecipe?: HardnessRecipe;
 }
 
 const sweep = <C extends { scenarioId: string; subjectId: string; failures: readonly { check: string }[] }>(
@@ -515,6 +526,60 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     realism: "simulated-tree",
     realismGap:
       "The wallet policy, delegation, token, budget and effect ledgers are deterministic in-process facades. A service-backed descendant would add real wallet RPC confirmation, chain reorg or settlement latency and process isolation around signing.",
+  },
+  {
+    id: "dao-descendant",
+    name: "Durable outbox recompute recovery",
+    domain: "durable job recovery across uncertain external effects",
+    mechanisms: ["uncertain-external-effects", "duplicate-side-effects"],
+    checks: [...DAO_CHECK_NAMES],
+    ruleCodes: DAO_RULES.map((rule) => rule.code),
+    space: daoScenarios.SPACE,
+    knobPurpose: {
+      seed: "selects deterministic action and request identities",
+      nWorkers: "the controlling parameter: one worker cannot cross a lease epoch; two or more can",
+      keys: "queue width, retained as the concentration axis measured in Phase 9",
+      crashPosition: "whether a completed call is followed by uncertain recovery or a clean completion",
+    },
+    run: () => {
+      const run = dao.runFamily();
+      return sweep(
+        run.cells,
+        run.scenarios,
+        run.spaceSize,
+        dao.toMatrix(run),
+        DAO_CHECKS,
+        DAO_BASELINES,
+        DAO_CHECK_NAMES,
+      );
+    },
+    challenge: buildDaoDescendantChallengePackage,
+    leakProfile: DAO_DESCENDANT_PROFILE,
+    typesPath: "src/families/dao-descendant/types.ts",
+    // The schema field prices a from-scratch family. The measured 0.18 h Phase 9 descendant build
+    // stays in hardnessRecipe evidence and the budget's descendantBuildHours; putting it here would
+    // silently substitute inherited marginal work for hoursPerFamily.
+    estimatedBuildHours: 120,
+    estimatedFrontierUsd: 145,
+    realism: "simulated-tree",
+    realismGap:
+      "The effect ledger is harness-owned and absent from the subject API, but the tool is simulated. The source task's service-backed version adds a PostgreSQL outbox, independent tool process, socket boundary, lease expiry and crash orchestration.",
+    hardnessRecipe: {
+      operatorBundle: [
+        "repair_specification",
+        "recover_committed_authority",
+        "external_authoritative_ledger",
+        "concentrate_activated_scenarios",
+        "harden_verifier_with_cheat_oracles",
+      ],
+      verifierProfile: "sealed-call-and-effect-ledger+b6",
+      specificationProfile: "a2-repaired-no-acked-axis",
+      starterProfile: "narrow-recompute-mutant",
+      scenarioSelectionStrategy: "18-activated-plus-6-nonactivation-controls",
+      evidenceStatus: "measured",
+      evidence:
+        "data/a2-spec-repair-differential.json; data/phase-9-descendant.json; src/families/dao-descendant/runner.ts",
+    },
   },
   {
     id: "deployment-model-alias-rollout-drift",

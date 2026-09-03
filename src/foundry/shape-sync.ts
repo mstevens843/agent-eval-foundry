@@ -65,6 +65,7 @@ export function shapeFromFamily(family: BuiltFamily, prose: ShapeProse): unknown
     fairnessConstraints: [...prose.fairnessConstraints],
     cheatResistance: [...prose.cheatResistance],
     expectedFailureModes: [...prose.expectedFailureModes],
+    hardnessRecipe: family.hardnessRecipe ?? null,
     estimatedBuildHours: family.estimatedBuildHours,
     estimatedFrontierUsd: family.estimatedFrontierUsd,
     status: prose.status,

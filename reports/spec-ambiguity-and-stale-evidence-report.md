@@ -30,6 +30,13 @@ Current challenge hash: `448f2f816c51030cc97a374816226168`.
 |---|---|---|---|
 | `checker-required-2026-08-o1` | openai/gpt-5.6-sol | counted | `448f2f816c51030cc97a374816226168` |
 
+### `dao-descendant`
+
+Current challenge hash: `9d89b49307a960f65f2e6e8f204fd15e`.
+
+| run | model | state | ran against |
+|---|---|---|---|
+
 ### `delegated-wallet-scope-reconciliation`
 
 Current challenge hash: `45f27b644a84364e3d3855f68cd243a2`.

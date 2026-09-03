@@ -230,6 +230,7 @@
     "Implementing the subject correctly but shipping a checker too weak to catch neighbors.",
     "Implementing the checker correctly while the subject itself fails the memory policy."
   ],
+  "hardnessRecipe": null,
   "estimatedBuildHours": 85,
   "estimatedFrontierUsd": 35,
   "status": "shipped",

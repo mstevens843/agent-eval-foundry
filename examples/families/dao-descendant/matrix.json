@@ -1,0 +1,756 @@
+{
+  "schema": "agent-eval-foundry/matrix@1",
+  "suite": "dao-descendant",
+  "provenance": {
+    "repo": "agent-eval-foundry",
+    "artifact_commit": null,
+    "task_sha256": null,
+    "suite_shape": "24 scenarios / 3 subjects / 72 points in the declared space",
+    "checks_total": 24,
+    "checks_declared": [
+      "exactly_once",
+      "stable_key_recovered",
+      "liveness",
+      "report_matches_call_ledger",
+      "local_confirmation_green"
+    ],
+    "extracted_from": [
+      "src/families/dao-descendant/runner.ts (B6-gated sweep)",
+      "src/families/dao-descendant/verify.ts (sealed external-ledger grading)"
+    ],
+    "caveat": "This is a packaged calibration descendant with measured local mutant discrimination and no paid agent trials. Phase 9 measurements motivated its selected set but do not become evidence produced by this TypeScript package."
+  },
+  "reference_subject": "reference",
+  "subjects": [
+    {
+      "id": "recompute-current-epoch",
+      "label": "Recompute the idempotency key from the current lease epoch",
+      "family": "mutant",
+      "model": null,
+      "effort": null,
+      "note": "exactly_once"
+    },
+    {
+      "id": "no-op",
+      "label": "Report success without calling the external tool",
+      "family": "baseline",
+      "model": null,
+      "effort": null,
+      "note": "liveness"
+    },
+    {
+      "id": "forged-stable-report",
+      "label": "Use an epoch key while claiming the committed key",
+      "family": "mutant",
+      "model": null,
+      "effort": null,
+      "note": "stable_key_recovered"
+    }
+  ],
+  "instances": [
+    {
+      "id": "recovery-11-w2-k4-after_tool",
+      "schedule": "after_tool/workers-2",
+      "seed": 11,
+      "keys": 4,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 2 worker attempts"
+    },
+    {
+      "id": "recovery-11-w2-k6-after_tool",
+      "schedule": "after_tool/workers-2",
+      "seed": 11,
+      "keys": 6,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 2 worker attempts"
+    },
+    {
+      "id": "recovery-11-w2-k12-after_tool",
+      "schedule": "after_tool/workers-2",
+      "seed": 11,
+      "keys": 12,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 2 worker attempts"
+    },
+    {
+      "id": "recovery-11-w3-k4-after_tool",
+      "schedule": "after_tool/workers-3",
+      "seed": 11,
+      "keys": 4,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 3 worker attempts"
+    },
+    {
+      "id": "recovery-11-w3-k6-after_tool",
+      "schedule": "after_tool/workers-3",
+      "seed": 11,
+      "keys": 6,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 3 worker attempts"
+    },
+    {
+      "id": "recovery-11-w3-k12-after_tool",
+      "schedule": "after_tool/workers-3",
+      "seed": 11,
+      "keys": 12,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 3 worker attempts"
+    },
+    {
+      "id": "recovery-11-w4-k4-after_tool",
+      "schedule": "after_tool/workers-4",
+      "seed": 11,
+      "keys": 4,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 4 worker attempts"
+    },
+    {
+      "id": "recovery-11-w4-k6-after_tool",
+      "schedule": "after_tool/workers-4",
+      "seed": 11,
+      "keys": 6,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 4 worker attempts"
+    },
+    {
+      "id": "recovery-11-w4-k12-after_tool",
+      "schedule": "after_tool/workers-4",
+      "seed": 11,
+      "keys": 12,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 4 worker attempts"
+    },
+    {
+      "id": "recovery-23-w2-k4-after_tool",
+      "schedule": "after_tool/workers-2",
+      "seed": 23,
+      "keys": 4,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 2 worker attempts"
+    },
+    {
+      "id": "recovery-23-w2-k6-after_tool",
+      "schedule": "after_tool/workers-2",
+      "seed": 23,
+      "keys": 6,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 2 worker attempts"
+    },
+    {
+      "id": "recovery-23-w2-k12-after_tool",
+      "schedule": "after_tool/workers-2",
+      "seed": 23,
+      "keys": 12,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 2 worker attempts"
+    },
+    {
+      "id": "recovery-23-w3-k4-after_tool",
+      "schedule": "after_tool/workers-3",
+      "seed": 23,
+      "keys": 4,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 3 worker attempts"
+    },
+    {
+      "id": "recovery-23-w3-k6-after_tool",
+      "schedule": "after_tool/workers-3",
+      "seed": 23,
+      "keys": 6,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 3 worker attempts"
+    },
+    {
+      "id": "recovery-23-w3-k12-after_tool",
+      "schedule": "after_tool/workers-3",
+      "seed": 23,
+      "keys": 12,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 3 worker attempts"
+    },
+    {
+      "id": "recovery-23-w4-k4-after_tool",
+      "schedule": "after_tool/workers-4",
+      "seed": 23,
+      "keys": 4,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 4 worker attempts"
+    },
+    {
+      "id": "recovery-23-w4-k6-after_tool",
+      "schedule": "after_tool/workers-4",
+      "seed": 23,
+      "keys": 6,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 4 worker attempts"
+    },
+    {
+      "id": "recovery-23-w4-k12-after_tool",
+      "schedule": "after_tool/workers-4",
+      "seed": 23,
+      "keys": 12,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 4 worker attempts"
+    },
+    {
+      "id": "recovery-41-w1-k4-after_tool",
+      "schedule": "after_tool/workers-1",
+      "seed": 41,
+      "keys": 4,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 1 worker attempts"
+    },
+    {
+      "id": "recovery-41-w1-k6-after_tool",
+      "schedule": "after_tool/workers-1",
+      "seed": 41,
+      "keys": 6,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 1 worker attempts"
+    },
+    {
+      "id": "recovery-41-w1-k12-after_tool",
+      "schedule": "after_tool/workers-1",
+      "seed": 41,
+      "keys": 12,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 1 worker attempts"
+    },
+    {
+      "id": "recovery-41-w2-k4-none",
+      "schedule": "none/workers-2",
+      "seed": 41,
+      "keys": 4,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 1 worker attempts"
+    },
+    {
+      "id": "recovery-41-w3-k6-none",
+      "schedule": "none/workers-3",
+      "seed": 41,
+      "keys": 6,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 1 worker attempts"
+    },
+    {
+      "id": "recovery-41-w4-k12-none",
+      "schedule": "none/workers-4",
+      "seed": 41,
+      "keys": 12,
+      "family": "recompute-recovery",
+      "source": "generated",
+      "note": "committed-key recovery across 1 worker attempts"
+    }
+  ],
+  "results": {
+    "recovery-11-w2-k4-after_tool": {
+      "recompute-current-epoch": {
+        "failed": [
+          "exactly_once",
+          "stable_key_recovered"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "exactly_once",
+          "report_matches_call_ledger",
+          "stable_key_recovered"
+        ]
+      }
+    },
+    "recovery-11-w2-k6-after_tool": {
+      "recompute-current-epoch": {
+        "failed": [
+          "exactly_once",
+          "stable_key_recovered"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "exactly_once",
+          "report_matches_call_ledger",
+          "stable_key_recovered"
+        ]
+      }
+    },
+    "recovery-11-w2-k12-after_tool": {
+      "recompute-current-epoch": {
+        "failed": [
+          "exactly_once",
+          "stable_key_recovered"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "exactly_once",
+          "report_matches_call_ledger",
+          "stable_key_recovered"
+        ]
+      }
+    },
+    "recovery-11-w3-k4-after_tool": {
+      "recompute-current-epoch": {
+        "failed": [
+          "exactly_once",
+          "stable_key_recovered"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "exactly_once",
+          "report_matches_call_ledger",
+          "stable_key_recovered"
+        ]
+      }
+    },
+    "recovery-11-w3-k6-after_tool": {
+      "recompute-current-epoch": {
+        "failed": [
+          "exactly_once",
+          "stable_key_recovered"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "exactly_once",
+          "report_matches_call_ledger",
+          "stable_key_recovered"
+        ]
+      }
+    },
+    "recovery-11-w3-k12-after_tool": {
+      "recompute-current-epoch": {
+        "failed": [
+          "exactly_once",
+          "stable_key_recovered"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "exactly_once",
+          "report_matches_call_ledger",
+          "stable_key_recovered"
+        ]
+      }
+    },
+    "recovery-11-w4-k4-after_tool": {
+      "recompute-current-epoch": {
+        "failed": [
+          "exactly_once",
+          "stable_key_recovered"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "exactly_once",
+          "report_matches_call_ledger",
+          "stable_key_recovered"
+        ]
+      }
+    },
+    "recovery-11-w4-k6-after_tool": {
+      "recompute-current-epoch": {
+        "failed": [
+          "exactly_once",
+          "stable_key_recovered"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "exactly_once",
+          "report_matches_call_ledger",
+          "stable_key_recovered"
+        ]
+      }
+    },
+    "recovery-11-w4-k12-after_tool": {
+      "recompute-current-epoch": {
+        "failed": [
+          "exactly_once",
+          "stable_key_recovered"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "exactly_once",
+          "report_matches_call_ledger",
+          "stable_key_recovered"
+        ]
+      }
+    },
+    "recovery-23-w2-k4-after_tool": {
+      "recompute-current-epoch": {
+        "failed": [
+          "exactly_once",
+          "stable_key_recovered"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "exactly_once",
+          "report_matches_call_ledger",
+          "stable_key_recovered"
+        ]
+      }
+    },
+    "recovery-23-w2-k6-after_tool": {
+      "recompute-current-epoch": {
+        "failed": [
+          "exactly_once",
+          "stable_key_recovered"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "exactly_once",
+          "report_matches_call_ledger",
+          "stable_key_recovered"
+        ]
+      }
+    },
+    "recovery-23-w2-k12-after_tool": {
+      "recompute-current-epoch": {
+        "failed": [
+          "exactly_once",
+          "stable_key_recovered"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "exactly_once",
+          "report_matches_call_ledger",
+          "stable_key_recovered"
+        ]
+      }
+    },
+    "recovery-23-w3-k4-after_tool": {
+      "recompute-current-epoch": {
+        "failed": [
+          "exactly_once",
+          "stable_key_recovered"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "exactly_once",
+          "report_matches_call_ledger",
+          "stable_key_recovered"
+        ]
+      }
+    },
+    "recovery-23-w3-k6-after_tool": {
+      "recompute-current-epoch": {
+        "failed": [
+          "exactly_once",
+          "stable_key_recovered"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "exactly_once",
+          "report_matches_call_ledger",
+          "stable_key_recovered"
+        ]
+      }
+    },
+    "recovery-23-w3-k12-after_tool": {
+      "recompute-current-epoch": {
+        "failed": [
+          "exactly_once",
+          "stable_key_recovered"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "exactly_once",
+          "report_matches_call_ledger",
+          "stable_key_recovered"
+        ]
+      }
+    },
+    "recovery-23-w4-k4-after_tool": {
+      "recompute-current-epoch": {
+        "failed": [
+          "exactly_once",
+          "stable_key_recovered"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "exactly_once",
+          "report_matches_call_ledger",
+          "stable_key_recovered"
+        ]
+      }
+    },
+    "recovery-23-w4-k6-after_tool": {
+      "recompute-current-epoch": {
+        "failed": [
+          "exactly_once",
+          "stable_key_recovered"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "exactly_once",
+          "report_matches_call_ledger",
+          "stable_key_recovered"
+        ]
+      }
+    },
+    "recovery-23-w4-k12-after_tool": {
+      "recompute-current-epoch": {
+        "failed": [
+          "exactly_once",
+          "stable_key_recovered"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "exactly_once",
+          "report_matches_call_ledger",
+          "stable_key_recovered"
+        ]
+      }
+    },
+    "recovery-41-w1-k4-after_tool": {
+      "recompute-current-epoch": {
+        "failed": []
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": []
+      }
+    },
+    "recovery-41-w1-k6-after_tool": {
+      "recompute-current-epoch": {
+        "failed": []
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": []
+      }
+    },
+    "recovery-41-w1-k12-after_tool": {
+      "recompute-current-epoch": {
+        "failed": []
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": []
+      }
+    },
+    "recovery-41-w2-k4-none": {
+      "recompute-current-epoch": {
+        "failed": []
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": []
+      }
+    },
+    "recovery-41-w3-k6-none": {
+      "recompute-current-epoch": {
+        "failed": []
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": []
+      }
+    },
+    "recovery-41-w4-k12-none": {
+      "recompute-current-epoch": {
+        "failed": []
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_call_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": []
+      }
+    }
+  }
+}

@@ -24,7 +24,7 @@
 
 import type { KillAnalysis, KillReason } from "./kill.js";
 import type { Registry } from "./registry.js";
-import { type Knob, type TaskShape, fail } from "./schema.js";
+import { type HardnessRecipe, type Knob, type MaterialDelta, type TaskShape, fail } from "./schema.js";
 
 export const OPERATOR_IDS = [
   "reduce_policy_explicitness",
@@ -68,9 +68,16 @@ export interface EvolutionOperator {
   readonly addsMechanisms: readonly string[];
   /** True when the operator changes the family's structure rather than its infrastructure. */
   readonly structural: boolean;
+  /** Measured means demonstrated in the named scope, never that transfer is established. */
+  readonly evidenceStatus: "measured" | "estimated";
+  readonly evidence: string | null;
+  readonly evidenceScope: string;
 }
 
-export const OPERATORS: readonly EvolutionOperator[] = [
+const OPERATOR_DEFINITIONS: readonly Omit<
+  EvolutionOperator,
+  "evidenceStatus" | "evidence" | "evidenceScope"
+>[] = [
   {
     id: "reduce_policy_explicitness",
     name: "Stop publishing the evaluation order",
@@ -509,6 +516,47 @@ export const OPERATORS: readonly EvolutionOperator[] = [
   },
 ];
 
+const MEASURED_OPERATOR_EVIDENCE: Partial<
+  Readonly<Record<OperatorId, { readonly evidence: string; readonly scope: string }>>
+> = {
+  add_durable_state: {
+    evidence: "data/hardness-operators.json#committed-idempotency-authority",
+    scope: "durable outbox only; cross-domain transfer is unmeasured",
+  },
+  add_authoritative_reconciliation: {
+    evidence: "data/hardness-operators.json#committed-idempotency-authority",
+    scope: "durable outbox only; cross-domain transfer is unmeasured",
+  },
+  add_audit_truth_requirement: {
+    evidence: "data/a2-spec-repair-differential.json",
+    scope: "outbox audit-transition failures only",
+  },
+  add_liveness_pressure: {
+    evidence:
+      "/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task/results/34-cc267-standard-matrix.md",
+    scope: "one outbox engine stranded IN_DOUBT; cross-domain transfer is unmeasured",
+  },
+  force_mechanism_reach: {
+    evidence: "data/hardness-operators.json#fuzz-controlling-parameter",
+    scope: "outbox ACKED and recompute activation grids",
+  },
+  upgrade_isolation: {
+    evidence: "data/hardness-operators.json#verifier-process-and-ledger-isolation",
+    scope: "verifier validity in durable outbox; not difficulty evidence",
+  },
+};
+
+/** Existing operators migrate as estimated unless the ledger names a measured precedent and scope. */
+export const OPERATORS: readonly EvolutionOperator[] = OPERATOR_DEFINITIONS.map((definition) => {
+  const measured = MEASURED_OPERATOR_EVIDENCE[definition.id];
+  return {
+    ...definition,
+    evidenceStatus: measured === undefined ? "estimated" : "measured",
+    evidence: measured?.evidence ?? null,
+    evidenceScope: measured?.scope ?? "no measured precedent in this repository",
+  };
+});
+
 const OPERATOR_BY_ID: ReadonlyMap<OperatorId, EvolutionOperator> = new Map(OPERATORS.map((o) => [o.id, o]));
 
 export const operator = (id: OperatorId): EvolutionOperator => {
@@ -524,8 +572,10 @@ export interface VariantProposal {
   readonly parentId: string;
   readonly name: string;
   readonly operators: readonly OperatorId[];
-  /** Mechanisms the variant targets. Must differ from the parent's set. */
+  /** Mechanisms may stay fixed when another construction profile changes materially. */
   readonly mechanisms: readonly string[];
+  readonly hardnessRecipe: HardnessRecipe;
+  readonly materialDeltas: readonly MaterialDelta[];
   readonly whatChanges: readonly string[];
   readonly whatStaysFixed: readonly string[];
   readonly whyHarder: readonly string[];
@@ -552,6 +602,79 @@ export interface VariantProposal {
   readonly killRiskRationale: string;
   readonly estimatedBuildHours: number;
 }
+
+const LEGACY_RECIPE: HardnessRecipe = {
+  operatorBundle: [],
+  verifierProfile: "legacy-unspecified",
+  specificationProfile: "legacy-unspecified",
+  starterProfile: "legacy-unspecified",
+  scenarioSelectionStrategy: "legacy-unspecified",
+  evidenceStatus: "estimated",
+  evidence: null,
+};
+
+const materialOperator = (id: OperatorId): boolean =>
+  id !== "require_agent_trial" && id !== "schedule_shared_bank";
+
+const variantRecipe = (parent: TaskShape, ids: readonly OperatorId[]): HardnessRecipe => {
+  const before = parent.hardnessRecipe ?? LEGACY_RECIPE;
+  const material = ids.filter(materialOperator);
+  return {
+    operatorBundle: [...new Set([...before.operatorBundle, ...material])].sort(),
+    verifierProfile: ids.includes("upgrade_isolation")
+      ? `${before.verifierProfile}+upgraded-isolation`
+      : before.verifierProfile,
+    specificationProfile: ids.includes("reduce_policy_explicitness")
+      ? `${before.specificationProfile}+derived-precedence`
+      : before.specificationProfile,
+    starterProfile: before.starterProfile,
+    scenarioSelectionStrategy: ids.includes("force_mechanism_reach")
+      ? `${before.scenarioSelectionStrategy}+forced-activation`
+      : before.scenarioSelectionStrategy,
+    evidenceStatus: "estimated",
+    evidence: null,
+  };
+};
+
+const recipeSnapshot = (recipe: HardnessRecipe, kind: MaterialDelta["kind"]): string => {
+  if (kind === "operator-bundle") return JSON.stringify([...recipe.operatorBundle].sort());
+  if (kind === "verifier-profile") return recipe.verifierProfile;
+  if (kind === "specification-profile") return recipe.specificationProfile;
+  if (kind === "starter-profile") return recipe.starterProfile;
+  if (kind === "scenario-selection-strategy") return recipe.scenarioSelectionStrategy;
+  return "";
+};
+
+const materialDeltasBetween = (
+  parent: TaskShape,
+  mechanisms: readonly string[],
+  recipe: HardnessRecipe,
+): readonly MaterialDelta[] => {
+  const deltas: MaterialDelta[] = [];
+  const beforeMechanisms = [...parent.mechanisms].sort();
+  const afterMechanisms = [...mechanisms].sort();
+  if (JSON.stringify(beforeMechanisms) !== JSON.stringify(afterMechanisms)) {
+    deltas.push({
+      kind: "mechanism-set",
+      before: JSON.stringify(beforeMechanisms),
+      after: JSON.stringify(afterMechanisms),
+      rationale: "the targeted mechanism set changed",
+    });
+  }
+  const beforeRecipe = parent.hardnessRecipe ?? LEGACY_RECIPE;
+  for (const kind of [
+    "operator-bundle",
+    "verifier-profile",
+    "specification-profile",
+    "starter-profile",
+    "scenario-selection-strategy",
+  ] as const) {
+    const before = recipeSnapshot(beforeRecipe, kind);
+    const after = recipeSnapshot(recipe, kind);
+    if (before !== after) deltas.push({ kind, before, after, rationale: `${kind} changed` });
+  }
+  return deltas;
+};
 
 /** A named composition of operators. The engine's output is one proposal per recipe that applies. */
 interface Recipe {
@@ -1120,12 +1243,15 @@ export function evolve(
   return selected.map((recipe) => {
     const ops = recipe.operators.map(operator);
     const knobs = ops.flatMap((o) => o.knobs);
+    const hardnessRecipe = variantRecipe(parent, recipe.operators);
     return {
       id: `${parent.familyId.split("-").slice(0, 2).join("-")}-${recipe.id}`,
       parentId: parent.familyId,
       name: recipe.name,
       operators: recipe.operators,
       mechanisms: recipe.mechanisms,
+      hardnessRecipe,
+      materialDeltas: materialDeltasBetween(parent, recipe.mechanisms, hardnessRecipe),
       whatChanges: [recipe.summary, ...ops.map((o) => `${o.name}: ${o.whatChanges}`)],
       whatStaysFixed: [
         `The parent's fairness contract: ${parent.fairnessConstraints[0] ?? "declared space, sampled not extended"}`,
@@ -1238,6 +1364,10 @@ export function variantToShape(variant: VariantProposal): unknown {
       ...variant.cheatRisks.map((r) => `Risk carried from evolution — ${r}`),
     ],
     expectedFailureModes: [...variant.expectedFailureModes],
+    hardnessRecipe: {
+      ...variant.hardnessRecipe,
+      operatorBundle: [...variant.hardnessRecipe.operatorBundle],
+    },
     estimatedBuildHours: variant.estimatedBuildHours,
     estimatedFrontierUsd: variant.estimatedFrontierUsd,
     status: "idea",
@@ -1255,9 +1385,9 @@ export function variantToShape(variant: VariantProposal): unknown {
  * A variant must actually be a variant.
  *
  * The failure this prevents is the one that makes evolution engines worthless: a proposal that
- * renames the parent, claims novelty, and gets promoted. Three properties are checked, and the third
- * is the one with teeth — the mechanism set must DIFFER, because a variant targeting exactly the
- * parent's mechanisms is the parent with new prose.
+ * renames the parent, claims novelty, and gets promoted. A mechanism change is one valid delta, but
+ * so are independently auditable changes to the recipe, verifier, specification, starter or
+ * scenario-selection profile. Trial scheduling alone is not a variant.
  */
 export function assertVariantNovel(variant: VariantProposal, parent: TaskShape, registry: Registry): void {
   const path = `variant.${variant.id}`;
@@ -1274,28 +1404,25 @@ export function assertVariantNovel(variant: VariantProposal, parent: TaskShape, 
     }
   }
 
-  const parentSet = new Set(parent.mechanisms);
-  const added = variant.mechanisms.filter((m) => !parentSet.has(m));
-  const dropped = parent.mechanisms.filter((m) => !variant.mechanisms.includes(m));
-  if (added.length === 0 && dropped.length === 0) {
+  const actualDeltas = materialDeltasBetween(parent, variant.mechanisms, variant.hardnessRecipe);
+  const declared = variant.materialDeltas.map(({ kind, before, after }) => ({ kind, before, after }));
+  const actual = actualDeltas.map(({ kind, before, after }) => ({ kind, before, after }));
+  const mechanismChanged = actualDeltas.some((delta) => delta.kind === "mechanism-set");
+  const hasMaterialOperator = variant.operators.some(materialOperator);
+  if (
+    actualDeltas.length === 0 ||
+    JSON.stringify(declared) !== JSON.stringify(actual) ||
+    (!mechanismChanged && !hasMaterialOperator)
+  ) {
     fail(
-      "VARIANT_NO_MECHANISM_DELTA",
-      `${path}.mechanisms`,
-      `targets exactly the parent's mechanisms (${parent.mechanisms.join(", ")}); a variant that changes no mechanism is the parent under a new name`,
+      "VARIANT_NO_MATERIAL_DELTA",
+      `${path}.materialDeltas`,
+      "no auditable mechanism, recipe, verifier, specification, starter or scenario-selection delta separates this proposal from its parent",
     );
   }
 
   if (variant.id === parent.familyId) {
     fail("VARIANT_IDENTICAL_TO_PARENT", path, "shares the parent's family id");
-  }
-
-  const structural = variant.operators.map(operator).filter((o) => o.structural);
-  if (structural.length === 0) {
-    fail(
-      "VARIANT_IDENTICAL_TO_PARENT",
-      path,
-      "every applied operator is infrastructural; nothing about the family itself changed",
-    );
   }
 }
 

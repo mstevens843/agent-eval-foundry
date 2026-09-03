@@ -44,7 +44,7 @@ const RETIRED_USD_PER_TRIAL_LITERAL = 3.5;
 /** Which inputs come from the source project rather than from an assumption. */
 const PROVENANCE: Readonly<Record<string, string>> = {
   hoursPerFamily:
-    "ESTIMATED — no timesheet was ever kept. It is **28% below the mean of the author's own 18 declared estimates** in `examples/shapes/*.json` (mean 62.4 h, median 57.5, range 18–120), and the flagship family `durable-approval-outbox` declares 120 — 2.7x the value this plan uses",
+    "ESTIMATED — no from-scratch timesheet was ever kept. It is **31% below the mean of the author's own 19 declared estimates** in `examples/shapes/*.json` (mean 65.5 h, median 60, range 18–120), and the flagship family `durable-approval-outbox` declares 120 — 2.7x the value this plan uses. The dao descendant's measured 0.18 h is excluded because it inherited the mechanism and infrastructure",
   hoursPerScreenedCandidate: "measured — cycle 5 killed 15 candidates in ~90 min",
   cycleHitRate: "measured — 1 family shipped from 10 design cycles",
   matricesPerFamily: "measured — the shipped family consumed 3 matrix rounds",
@@ -91,11 +91,11 @@ export function renderBudgetReport(
 
   // The declared estimates in `examples/shapes/*.json`, which are the only evidence this repository
   // has about how long a family takes to build. 45 is NOT below the low end of them — three shapes
-  // declare less — but it is 28% below their mean of 62.4, and the flagship family declares 120.
+  // declare less — but it is 31% below their mean of 65.5, and the flagship family declares 120.
   const hoursSensitivity: readonly (readonly [number, string])[] = [
     [45, "current input"],
-    [62, "mean of the 18 declared shape estimates (62.4, rounded)"],
-    [90, "above 15 of the 18 declared estimates"],
+    [66, "mean of the 19 declared shape estimates (65.5, rounded)"],
+    [90, "above 15 of the 19 declared estimates"],
     [120, "the flagship family's own estimate"],
   ];
   const hoursRows = hoursSensitivity.map(([h, note]) => {
@@ -194,8 +194,8 @@ export function renderBudgetReport(
     "## Sensitivity to authoring hours per family",
     "",
     "**This is the dominant term.** `hoursPerFamily` is an estimate, not a measurement, and it is the",
-    "only input that moves the family count on its own. The 18 declared shapes in",
-    "`examples/shapes/*.json` estimate their own build at 18 to 120 hours — mean 62.4, median 57.5 —",
+    "only input that moves the family count on its own. The 19 declared shapes in",
+    "`examples/shapes/*.json` estimate their own build at 18 to 120 hours — mean 65.5, median 60 —",
     "so **45 is 28% below the mean of the author's own estimates**. It is not below their low end;",
     "three shapes declare less. But the flagship family `durable-approval-outbox` declares 120, which",
     "is 2.7x what this plan charges for it.",
@@ -209,9 +209,10 @@ export function renderBudgetReport(
     "declared 120 hours costs more than half the yield.",
     "",
     "One further caveat on this input: the repository declares build hours in TWO places, and neither",
-    "is a measurement. `examples/shapes/*.json` carries an estimate for all 18 declared shapes, and",
-    "`src/families/registry.ts` carries a second `estimatedBuildHours` on each of the 8 BUILT families",
-    "(18, 36, 40, 55, 70, 75, 85, 95 — mean 59.3). Two independent guesses at the same quantity is one",
+    "is a measurement. `examples/shapes/*.json` carries an estimate for all 19 declared shapes, and",
+    "`src/families/registry.ts` carries a second `estimatedBuildHours` on each of the 9 BUILT families",
+    "(18, 36, 40, 55, 70, 75, 85, 95, 120 — mean 66.0). The descendant's 120 is its parent's",
+    "from-scratch estimate; measured 0.18 h marginal work remains separate. Two independent guesses at the same quantity is one",
     "more guess than evidence.",
     "",
     "## Sensitivity to deliverable tasks per family",

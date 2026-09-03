@@ -76,6 +76,7 @@ export type { CheckableFile, ScaffoldCheckResult } from "./foundry/scaffold-chec
 export {
   DATA_QUALITY,
   DECISIONS,
+  MATERIAL_DELTA_KINDS,
   MECHANISM_MATURITY,
   RULE_CODES,
   SchemaError,
@@ -88,14 +89,28 @@ export type {
   DataQuality,
   Decision,
   ExpectedMutant,
+  HardnessRecipe,
   Knob,
   Mechanism,
   MechanismMaturity,
+  MaterialDelta,
+  MaterialDeltaKind,
   Mutant,
   RuleCode,
   TaskShape,
   TaskStatus,
 } from "./foundry/schema.js";
+export {
+  HARDNESS_OPERATOR_CATEGORIES,
+  parseHardnessOperatorLedger,
+} from "./foundry/hardness-ledger.js";
+export type {
+  HardnessOperatorCategory,
+  HardnessOperatorEvidence,
+  HardnessOperatorLedger,
+  OperatorConfidence,
+  SolveRateEffect,
+} from "./foundry/hardness-ledger.js";
 export {
   EVIDENCE_COSTS,
   FUNNEL_DECISIONS,
@@ -712,7 +727,13 @@ export { renderKillReport } from "./reports/kill-report.js";
 export { renderEvolutionReport } from "./reports/evolution-report.js";
 export { buildMemoryChallengePackage } from "./challenge/memory-package.js";
 export { buildUiChallengePackage } from "./challenge/ui-package.js";
-export { MEMORY_PROFILE, PIC_PROFILE, UI_PROFILE } from "./challenge/package-check.js";
+export { buildDaoDescendantChallengePackage } from "./challenge/dao-descendant-package.js";
+export {
+  DAO_DESCENDANT_PROFILE,
+  MEMORY_PROFILE,
+  PIC_PROFILE,
+  UI_PROFILE,
+} from "./challenge/package-check.js";
 export type { LeakProfile } from "./challenge/package-check.js";
 export {
   activationAudit,

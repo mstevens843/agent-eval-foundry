@@ -1,0 +1,202 @@
+{
+  "schema": "agent-eval-foundry/hardness-operator-ledger@1",
+  "extractedOn": "2026-09-03",
+  "scope": "durable-approval-outbox history and its recompute-isolated descendant",
+  "operators": [
+    {
+      "id": "verifier-process-and-ledger-isolation",
+      "category": "validity-control",
+      "name": "Move external truth outside the subject's authority",
+      "changed": "The tool ledger moved to a root-owned service; scenario execution moved to an unprivileged process; collection no longer imports the engine; positive execution checks and cheat oracles were added.",
+      "stayedFixed": "The durable-outbox behavior being requested and the exactly-once mechanism.",
+      "beforeEvidence": "A no-tool engine and a buggy engine that rebound tool.calls each passed 113/113.",
+      "afterEvidence": "The corrected oracle/reference passed 267/267; no-op, empty-ledger and ledger-rebind oracles all received reward 0.",
+      "measurementStatus": "measured",
+      "fairnessOutcome": "improved: a reward now requires the external work the task asks for, without adding a hidden behavior rule",
+      "verifierIntegrityEffect": "closed three demonstrated bypasses: vacuous success, same-process ground-truth rewrite, and decorative database-role isolation",
+      "solveRateEffect": {
+        "countable": false,
+        "before": null,
+        "after": null,
+        "note": "The old perfect scores were verifier bypasses, not comparable agent solves. This operator repairs validity and must not be credited as hardness."
+      },
+      "capabilityAttribution": "not-applicable: this repairs what reward means",
+      "provenance": [
+        "/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task/results/15-outbox-verifier-audit.md",
+        "/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task/FINDINGS.md#7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "a2-explicit-terminal-state-repair",
+      "category": "validity-control",
+      "name": "State the terminal ACKED rule explicitly",
+      "changed": "One visible sentence: ACKED and REVOKED are terminal and have no outgoing transition.",
+      "stayedFixed": "Task implementation, harness, verifier, scenarios, starter, agent instruction and all other visible text; task name differed for arm identity.",
+      "beforeEvidence": "Control: 2/6 clean solves; 33 failing cells were ACKED->REVOKED illegal transitions.",
+      "afterEvidence": "Treatment: 3/6 clean solves; 0 ACKED->REVOKED illegal-transition failures.",
+      "measurementStatus": "measured",
+      "fairnessOutcome": "improved: moved the derivation from demanding A2 to explicit A3 and removed that wording axis from the descendant",
+      "verifierIntegrityEffect": "none: grading was unchanged",
+      "solveRateEffect": {
+        "countable": true,
+        "before": "2/6",
+        "after": "3/6",
+        "note": "The measured causal effect is the disappearance of 33 target failures, not a claim that every reward difference came from the sentence."
+      },
+      "capabilityAttribution": "negative for the repaired axis: wording carried the target failures",
+      "provenance": [
+        "data/a2-spec-repair-differential.json",
+        "docs/DEFECT-TAXONOMY.md#part-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "committed-idempotency-authority",
+      "category": "difficulty",
+      "name": "Recover a committed idempotency key across lease epochs",
+      "changed": "The correct implementation persists one action-stable key before calling the tool and recovers that value after uncertain completion instead of deriving from current lease state.",
+      "stayedFixed": "The external operation, action identity, payload, tool idempotency behavior and retry requirement.",
+      "beforeEvidence": "A recomputed epoch key creates two ledger effects for one action while each invocation returns OK.",
+      "afterEvidence": "A recovered committed key creates one ledger effect and later calls receive an OK deduplication receipt.",
+      "measurementStatus": "measured",
+      "fairnessOutcome": "passes: the committed value exists before the crash and is available to a correct implementation",
+      "verifierIntegrityEffect": "requires grading on an external per-action ledger rather than on subject status",
+      "solveRateEffect": {
+        "countable": false,
+        "before": null,
+        "after": null,
+        "note": "The mechanism is demonstrated locally, but no controlled paid trial changes only this operator."
+      },
+      "capabilityAttribution": "not-established: local fatality is not agent difficulty",
+      "provenance": [
+        "data/phase-9-descendant.json#a3_narrowAdversary",
+        "src/screens/row-five.ts",
+        "/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task/FINDINGS.md#3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "fuzz-controlling-parameter",
+      "category": "scenario-selection",
+      "name": "Fuzz for the controlling activation parameter",
+      "changed": "Selection moved from broad schedules chosen against one buggy engine to a parameter grid followed by selection in the region that reliably activates the target mechanism.",
+      "stayedFixed": "Agent-visible package, mechanism, reference, verifier rules and subject bank used for anti-overfitting checks.",
+      "beforeEvidence": "The 245-check suite produced 5/6 failures and missed a solved engine carrying the target ACKED bug; the old four points caught 4-5 measured engines each.",
+      "afterEvidence": "Six replacement key_index=0 points caught 6-7 engines each, including 5-6 not used for selection; the unchanged visible task then produced 6/6 failures.",
+      "measurementStatus": "measured",
+      "fairnessOutcome": "unchanged: only hidden coverage of an existing declared rule changed",
+      "verifierIntegrityEffect": "improved activation validity; a candidate whose reference event did not fire was rejected",
+      "solveRateEffect": {
+        "countable": true,
+        "before": "5/6",
+        "after": "6/6",
+        "note": "The two matrices used different fresh subjects, so this is an artifact-level outcome change, not an individual treatment effect."
+      },
+      "capabilityAttribution": "not-established under the foundry's blind-labelling rule",
+      "provenance": [
+        "/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task/results/33-coverage-correction.md",
+        "/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task/results/34-cc267-standard-matrix.md"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "recompute-activation-concentration",
+      "category": "scenario-selection",
+      "name": "Concentrate recompute recovery on multi-worker schedules",
+      "changed": "The descendant selects two seeds per (n_workers, keys) cell after a completed uncertain call, with explicit one-worker and no-crash controls.",
+      "stayedFixed": "Repaired specification, reference, verifier and narrow recompute defect.",
+      "beforeEvidence": "n_workers=1 activated 0/24 runs; the repaired parent separated the narrow defect on 3/24 instances.",
+      "afterEvidence": "n_workers=2 and 3 activated 45.8% and 58.3% in the grid; the selected descendant region separated 105/108 points and its selected 18 schedules caught the narrow mutant 18/18.",
+      "measurementStatus": "measured",
+      "fairnessOutcome": "passes: selection changes probability of reaching a published recovery case, not the rule",
+      "verifierIntegrityEffect": "adds explicit non-activation controls so parameter effect cannot be inferred from an all-fail rig",
+      "solveRateEffect": {
+        "countable": false,
+        "before": null,
+        "after": null,
+        "note": "These are deterministic mechanism-activation and mutant-separation rates, not frontier solve rates."
+      },
+      "capabilityAttribution": "not-established until descendant agent trials are independently labelled",
+      "provenance": [
+        "data/phase-9-descendant.json#a2_controllingParameter",
+        "data/phase-9-descendant.json#a4_amplification",
+        "src/families/dao-descendant/scenarios.ts"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "narrow-mutant-isolation",
+      "category": "validity-control",
+      "name": "Measure one defect against an otherwise identical reference",
+      "changed": "One policy switch changes committed-key recovery to current-epoch recomputation.",
+      "stayedFixed": "All other reference behavior, calls, reports, payloads and harness behavior.",
+      "beforeEvidence": "Broadly buggy engines made it impossible to tell which defect caused separation.",
+      "afterEvidence": "Corrected Phase 9 rig: reference failed 0/18 and the narrow recompute mutant failed 18/18.",
+      "measurementStatus": "measured",
+      "fairnessOutcome": "improved diagnosis: the result is attributed only to the intended defect",
+      "verifierIntegrityEffect": "positive, subject to the B6 correction recorded separately",
+      "solveRateEffect": {
+        "countable": false,
+        "before": null,
+        "after": null,
+        "note": "Mutant fatality is verifier evidence, not solve-rate evidence."
+      },
+      "capabilityAttribution": "not-applicable to local mutants",
+      "provenance": [
+        "data/phase-9-descendant.json#a3_narrowAdversary",
+        "data/phase-9-descendant.json#a5_screens"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "b6-rig-integrity-controls",
+      "category": "validity-control",
+      "name": "Run known-good, known-bad and malformed-input controls with every rig",
+      "changed": "Every new pass/fail rig must prove the reference passes, a targeted bad subject fails, and absent or wrong-shaped evidence is refused in the same invocation.",
+      "stayedFixed": "The measured subject behavior and verifier rules.",
+      "beforeEvidence": "A Phase 9 rig attached result.tool while checks read result._tool, making the correct reference appear to fail 18/18.",
+      "afterEvidence": "The corrected rig passed reference 18/18 and failed the narrow mutant 18/18; Phase 10 added B6/screen 9 and this package runs it internally.",
+      "measurementStatus": "measured",
+      "fairnessOutcome": "improved: broken apparatus produces a void run instead of a false subject failure",
+      "verifierIntegrityEffect": "directly detects inverted controls, degenerate uncalibrated results and missing input shape",
+      "solveRateEffect": {
+        "countable": false,
+        "before": null,
+        "after": null,
+        "note": "This prevents fabricated measurement; it does not make a task harder."
+      },
+      "capabilityAttribution": "not-applicable: instrumentation validity",
+      "provenance": [
+        "src/screens/rig-integrity.ts",
+        "data/phase-9-descendant.json#a5_screens",
+        "data/phase-10-status.json"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "narrow-recompute-starter",
+      "category": "difficulty",
+      "name": "Seed the public starter with the natural recomputation error",
+      "changed": "The starter implements the tempting current-epoch derivation but leaves the repair to the agent.",
+      "stayedFixed": "The complete repaired specification, committed key in the public view and submission interface.",
+      "beforeEvidence": "Legacy starter profiles were not represented as a construction variable.",
+      "afterEvidence": "The packaged starter fails all 18 activated schedules and passes non-activation controls through the real trial route.",
+      "measurementStatus": "measured",
+      "fairnessOutcome": "passes locally: the starter is explicitly labelled wrong and the correct value is visible in every input",
+      "verifierIntegrityEffect": "none; the starter is graded by the same sealed ledgers as every submission",
+      "solveRateEffect": {
+        "countable": false,
+        "before": null,
+        "after": null,
+        "note": "No paid trial has isolated starter-profile effects."
+      },
+      "capabilityAttribution": "not-established",
+      "provenance": [
+        "src/challenge/dao-descendant-package.ts",
+        "src/families/dao-descendant/runner.ts"
+      ],
+      "confidence": "medium"
+    }
+  ]
+}

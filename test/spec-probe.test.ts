@@ -346,7 +346,15 @@ describe("the probe gate blocks on silence, not on findings", () => {
     const results = probeableFamilies(ROOT).map((id) => probeGate(ROOT, id, adjudications));
     const blocked = results.filter((r) => !r.passes);
     expect(
-      blocked.map((r) => `${r.familyId}: ${r.unadjudicated.map((f) => f.missing[0]).join(", ")}`),
+      blocked.map(
+        (r) =>
+          `${r.familyId}: ${r.unadjudicated
+            .map(
+              (finding) =>
+                `${finding.detector}[${finding.missing.join(", ")}]@${finding.hidden.path}:${finding.hidden.line}`,
+            )
+            .join("; ")}`,
+      ),
       "a family carries a high-severity probe finding nobody has adjudicated",
     ).toEqual([]);
     // Not vacuous: the gate must actually be looking at something.

@@ -59,6 +59,17 @@ _Every provider here has fewer than 5 counted trials (1 across all of them), whi
 - `external` has 1 declared slot(s) and no counted trial.
 - `google` has 1 declared slot(s) and no counted trial.
 
+### `dao-descendant`
+
+**Claim strength: no-evidence.** Nothing. No counted agent trial exists for this family.
+
+| provider | counted | failed | refused | infra | not run | fail rate | 95% interval |
+|---|---:|---:|---:|---:|---:|---:|---|
+
+**To strengthen:**
+
+- Run counted trials on a second model family. Currently failing: none.
+
 ### `delegated-wallet-scope-reconciliation`
 
 **Claim strength: no-evidence.** Nothing. No counted agent trial exists for this family.

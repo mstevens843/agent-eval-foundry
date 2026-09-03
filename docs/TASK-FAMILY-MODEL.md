@@ -15,6 +15,15 @@ A **task shape** is the declared specification for one family. It names the rule
 knobs, hidden graded region, fairness constraints, trust boundaries, expected mutants, cost and
 evidence status.
 
+A **hardness recipe** is the construction profile applied to a family: an operator bundle plus the
+verifier, specification, starter and scenario-selection profiles. It is separate from the family
+because the outbox moved from a bypassable reward to 5/6 and then 6/6 without changing mechanism at
+each step. A recipe can improve validity, difficulty or activation; those effects are never merged.
+
+A **family variant** is a family plus a materially different recipe profile. It need not invent a
+new mechanism. It must declare the before/after profile and the operator that caused the change;
+renames, prose-only claims and requests to run more trials are not variants.
+
 A **scenario** or **instance** is one concrete sampled point inside a family. It has specific knob
 values and a specific expected outcome.
 
@@ -82,7 +91,7 @@ candidate pool
   -> mechanism probe
   -> promotion record
   -> transfer test
-  -> task shape
+  -> task shape + hardness recipe
   -> family build
 ```
 
@@ -226,6 +235,7 @@ Each family should have:
 - kill/evolve evidence
 - human-solvability evidence
 - adversarial verifier-integrity evidence
+- a versioned hardness recipe that separates validity, difficulty and scenario-selection operators
 
 Then the program samples concrete tasks from the families that survive.
 
@@ -245,6 +255,7 @@ The foundry lifecycle is:
 idea
   -> candidate
   -> task shape
+  -> hardness recipe
   -> scaffold
   -> reference
   -> verifier
@@ -264,6 +275,7 @@ Each step exists to answer a different question.
 | idea | short mechanism sketch | What failure might be worth measuring? | Starting with a task that has no theory of failure. |
 | candidate | ledger row | Why should this candidate advance or die? | Forgetting why a decision was made. |
 | task shape | `examples/shapes/*.json` | What rules, knobs and hidden region define the family? | Hidden tests becoming secret rules. |
+| hardness recipe | `data/hardness-operators.json` plus the shape profile | Which construction choices changed, what stayed fixed, and what evidence supports their effect? | Treating every reward-0 increase as task-family difficulty. |
 | scaffold | family docs and package outline | What must be built before trials? | Treating an idea as executable evidence. |
 | reference | known-good implementation | Can the task be solved at all? | Measuring bugs in the benchmark instead of bugs in subjects. |
 | verifier | hidden grader | Can the suite judge outputs independently? | Trusting subject-written status or audit claims. |

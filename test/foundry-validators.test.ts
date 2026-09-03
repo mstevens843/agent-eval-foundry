@@ -79,7 +79,7 @@ const MANIFEST = read("manifest.json") as FixtureEntry[];
  *
  * The division of labour, which is the point rather than a compromise: the fixture pins the RULE
  * (the 20% floor, the boundary one scenario under it, the refusal to certify 0 of 0), while
- * `test/starter-must-fail.test.ts` pins the FACT by running this same function over all eight built
+ * `test/starter-must-fail.test.ts` pins the FACT by running this same function over all nine built
  * families with their real graders and no skip condition. Neither substitutes for the other.
  */
 interface StarterFixture {
@@ -198,11 +198,12 @@ const COVERED_IN_EVOLUTION_TEST: readonly RuleCode[] = [
   "KILL_UNKNOWN_REASON",
   "VARIANT_IDENTICAL_TO_PARENT",
   "VARIANT_WITHOUT_OPERATOR",
-  "VARIANT_NO_MECHANISM_DELTA",
+  "VARIANT_NO_MATERIAL_DELTA",
   "VARIANT_UNKNOWN_MECHANISM",
   "VARIANT_PROMOTED_WITHOUT_BUILD",
   "LEDGER_STATUS_CONTRADICTS_GATE",
   "LEDGER_KILL_WITHOUT_ANALYSIS",
+  "SHAPE_RECIPE_MEASURED_WITHOUT_EVIDENCE",
 ];
 
 /**

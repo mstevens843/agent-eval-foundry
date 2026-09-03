@@ -16,6 +16,7 @@ artifact directories.
 | bundle | verdict | network | runtime | hidden mounted | repo mounted | verifier inside | writable dirs | failures |
 |---|---|---|---|---:|---:|---:|---|---|
 | `bundles/checker-required-memory-poisoning-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
+| `bundles/dao-descendant-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
 | `bundles/delegated-wallet-scope-reconciliation-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
 | `bundles/deployment-model-alias-rollout-drift-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
 | `bundles/prompt-injection-containment-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
@@ -28,6 +29,7 @@ artifact directories.
 | family | container records | counted no-bypass | counted bypass | readiness failures |
 |---|---:|---:|---:|---|
 | `checker-required-memory-poisoning` | 0 | 0 | 0 | none |
+| `dao-descendant` | 0 | 0 | 0 | none |
 | `delegated-wallet-scope-reconciliation` | 0 | 0 | 0 | none |
 | `deployment-model-alias-rollout-drift` | 0 | 0 | 0 | none |
 | `durable-approval-outbox` | 0 | 0 | 0 | none |

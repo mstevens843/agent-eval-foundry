@@ -52,7 +52,7 @@ export const STARTER_FILE = "starter/subject.mjs";
  * `starter/subject.mjs` was added after three families were found shipping a complete working
  * solution as their "stub". It is listed here for a narrower reason than the rest: while it is
  * absent, `checkStarterFailsEnough` has nothing to grade and would skip silently, and a gate that
- * skips is a gate that reads as green. Every one of the eight built families emits it, so requiring
+ * skips is a gate that reads as green. Every one of the nine built families emits it, so requiring
  * it costs nothing and closes that door.
  */
 export const REQUIRED_FILES = ["README.md", "SPEC.md", "types.ts", STARTER_FILE, "MANIFEST.json"] as const;
@@ -208,6 +208,27 @@ export const CHECKER_REQUIRED_PROFILE: LeakProfile = {
     "C11_STATUS_ONLY",
     "C12_HELD_OUT_MUTANT",
     "C13_REFERENCE_ACCEPTED",
+  ],
+};
+
+export const DAO_DESCENDANT_PROFILE: LeakProfile = {
+  familyId: "dao-descendant",
+  forbiddenFilenames: [...FORBIDDEN_FILENAMES, "truth.ts", "answer-matrix.json"],
+  forbiddenContent: [
+    ["export function verify", "the hidden grading function"],
+    ["recomputeCurrentEpoch", "the named narrow adversary"],
+    ["MUTANTS", "the hidden mutant bank"],
+    ["selectMeasuredSet", "the hidden scenario selection"],
+    ["ExternalLedgerHarness", "the harness-owned ledger implementation"],
+    ["sealedEffects", "the private external effect ledger"],
+    ["INTENDED_CHECK", "the mutant-to-check answer map"],
+  ],
+  requiredSpecCodes: [
+    "DOR1_RECOVER_COMMITTED_KEY",
+    "DOR2_EXACTLY_ONCE",
+    "DOR3_RETRY_AFTER_UNKNOWN",
+    "DOR4_TRUTHFUL_REPORT",
+    "DOR5_LIVENESS",
   ],
 };
 
@@ -413,7 +434,7 @@ export function checkChallengePackage(
 // change when a starter file changes. So it is a separate exported rule with its own entry point,
 // and the enforcement points are the two that matter:
 //
-//   1. `test/starter-must-fail.test.ts` runs it over all eight live families on every `pnpm test`.
+//   1. `test/starter-must-fail.test.ts` runs it over all nine live families on every `pnpm test`.
 //      That is the non-skippable one — nothing merges past it.
 //   2. `challenge build --verify-starter` runs it on demand for the family being built, and the
 //      command's output states in plain text when the gate did NOT run, so a build that skipped it

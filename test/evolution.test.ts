@@ -186,11 +186,43 @@ describe("the evolution engine", () => {
 describe("known-bad variants", () => {
   const parent = picState.shape;
   const good = picState.variants[0] as NonNullable<(typeof picState.variants)[0]>;
+  const parentRecipe = parent.hardnessRecipe ?? {
+    operatorBundle: [],
+    verifierProfile: "legacy-unspecified",
+    specificationProfile: "legacy-unspecified",
+    starterProfile: "legacy-unspecified",
+    scenarioSelectionStrategy: "legacy-unspecified",
+    evidenceStatus: "estimated" as const,
+    evidence: null,
+  };
 
-  it("VARIANT_NO_MECHANISM_DELTA — a rename of the parent", () => {
+  it("VARIANT_NO_MATERIAL_DELTA — a rename of the parent", () => {
     expect(() =>
-      assertVariantNovel({ ...good, mechanisms: [...parent.mechanisms] }, parent, registry),
-    ).toThrowError(expect.objectContaining({ code: "VARIANT_NO_MECHANISM_DELTA" }));
+      assertVariantNovel(
+        {
+          ...good,
+          mechanisms: [...parent.mechanisms],
+          hardnessRecipe: parentRecipe,
+          materialDeltas: [],
+        },
+        parent,
+        registry,
+      ),
+    ).toThrowError(expect.objectContaining({ code: "VARIANT_NO_MATERIAL_DELTA" }));
+  });
+
+  it("accepts an auditable recipe delta with the parent's mechanism set", () => {
+    expect(() =>
+      assertVariantNovel(
+        {
+          ...good,
+          mechanisms: [...parent.mechanisms],
+          materialDeltas: good.materialDeltas.filter((delta) => delta.kind !== "mechanism-set"),
+        },
+        parent,
+        registry,
+      ),
+    ).not.toThrow();
   });
 
   it("VARIANT_WITHOUT_OPERATOR — a proposal with no operator applied", () => {
@@ -210,8 +242,27 @@ describe("known-bad variants", () => {
       expect.objectContaining({ code: "VARIANT_IDENTICAL_TO_PARENT" }),
     );
     expect(() =>
-      assertVariantNovel({ ...good, operators: ["require_agent_trial"] }, parent, registry),
-    ).toThrowError(expect.objectContaining({ code: "VARIANT_IDENTICAL_TO_PARENT" }));
+      assertVariantNovel(
+        {
+          ...good,
+          operators: ["require_agent_trial"],
+          mechanisms: [...parent.mechanisms],
+          hardnessRecipe: parentRecipe,
+          materialDeltas: [],
+        },
+        parent,
+        registry,
+      ),
+    ).toThrowError(expect.objectContaining({ code: "VARIANT_NO_MATERIAL_DELTA" }));
+  });
+
+  it("SHAPE_RECIPE_MEASURED_WITHOUT_EVIDENCE — measured recipes must cite evidence", async () => {
+    const { parseTaskShape } = await import("../src/foundry/validate.js");
+    const raw = variantToShape(good) as Record<string, unknown>;
+    raw["hardnessRecipe"] = { ...good.hardnessRecipe, evidenceStatus: "measured", evidence: null };
+    expect(() => parseTaskShape(raw, "recipe-without-evidence")).toThrowError(
+      expect.objectContaining({ code: "SHAPE_RECIPE_MEASURED_WITHOUT_EVIDENCE" }),
+    );
   });
 
   it("VARIANT_PROMOTED_WITHOUT_BUILD — promoted with nothing that executes", () => {
@@ -300,8 +351,15 @@ describe("the built families", () => {
         expect(sweep.scenarioCount).toBeLessThan(sweep.spaceSize);
       });
 
-      it("measures at least two independent axes", () => {
-        expect(measure(sweep.matrix, { nullTrials: 3 }).independentAxes).toBeGreaterThanOrEqual(2);
+      it("measures its intended axis breadth", () => {
+        const axes = measure(sweep.matrix, { nullTrials: 3 }).independentAxes;
+        if (family.id === "dao-descendant") {
+          // This is deliberately a one-axis calibration task. Adding an unrelated mutant pattern
+          // to satisfy a generic breadth floor would destroy the isolation Phase 9 established.
+          expect(axes).toBe(1);
+        } else {
+          expect(axes).toBeGreaterThanOrEqual(2);
+        }
       });
 
       it("its challenge package ships no hidden artifact", () => {

@@ -211,11 +211,12 @@ describe("the checked-in registry", () => {
     for (const m of measured) expect(m.results, `${m.id} claims measured`).not.toBeNull();
   });
 
-  it("nine families now have measured axis counts", () => {
+  it("ten families now have measured axis counts", () => {
     const measured = registry.shapes.filter((s) => s.dataQuality === "measured");
     expect(measured.map((s) => s.familyId).sort()).toEqual([
       "access-token-scope-expansion",
       "checker-required-memory-poisoning",
+      "dao-descendant",
       "delegated-wallet-scope-reconciliation",
       "deployment-model-alias-rollout-drift",
       "durable-approval-outbox",
@@ -224,7 +225,13 @@ describe("the checked-in registry", () => {
       "ui-action-record-replay",
       "ui-replay-live-dom",
     ]);
-    for (const m of measured) expect(m.estimatedAxes, m.familyId).toBeGreaterThan(1);
+    for (const m of measured) {
+      if (m.familyId === "dao-descendant") {
+        expect(m.estimatedAxes, m.familyId).toBe(1);
+      } else {
+        expect(m.estimatedAxes, m.familyId).toBeGreaterThan(1);
+      }
+    }
   });
 
   it("a DECLARED trial count is not difficulty evidence, however many trials it declares", () => {

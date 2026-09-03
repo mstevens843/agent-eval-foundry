@@ -378,7 +378,7 @@ export function renderPhase11DiscoveryReport(input: {
     "",
     `The ${audit.repoCountableZeroSolveTrials} preserved failures contain **${audit.difficultyEvidencedFailures} capability-labelled failures**. Phase 10's Codex label and split Claude label also lack the evidence packets they describe. Difficulty evidence remains zero.`,
     "",
-    `The claimed descendant is registered as a built family: **${audit.descendantRegistered ? "yes" : "no"}**. An executable in-repo package exists: **${audit.descendantPackagePresent ? "yes" : "no"}**. The Phase 9 scenario-selection and screen JSON are evidence about a proposed package, not a challenge package an agent can run.`,
+    `Current repository state: the descendant is registered as a built family: **${audit.descendantRegistered ? "yes" : "no"}**. An executable in-repo package exists: **${audit.descendantPackagePresent ? "yes" : "no"}**. At the Phase 11 decision point neither existed; the Phase 9 scenario-selection and screen JSON alone were evidence about a proposed package, not a challenge package an agent could run.`,
     "",
     "The brief's dead `reports/PHASE-10-MEASURED.md` reference was repaired to point at the Phase 10 data files. Creating another hand-authored measurement report would have enlarged the prose-drift problem it was meant to document.",
     "",
@@ -429,6 +429,10 @@ export function renderPhase11DiscoveryReport(input: {
     "",
     `Decision: **${results.measurement.decision}**. Descendant and additional parent trials were not run.`,
     "",
+    audit.descendantPackagePresent
+      ? "The blockers below are the historical Phase 11 blockers. Phase 12 has since resolved the package and durable-capture blocker; it has not created agent-trial evidence."
+      : "The blockers below remain current.",
+    "",
     ...blockerRows,
     "",
     `B6 remains present at \`${results.measurement.b6.implementation}\` with ${results.measurement.b6.status}. This phase introduced no new pass/fail rig, so it created no invocation that could legitimately claim matrix evidence without controls.`,
@@ -438,7 +442,7 @@ export function renderPhase11DiscoveryReport(input: {
     `| parent, repo-countable | ${parentN} | 0 | 0.000 | ${fmt(zeroSolveUpper95(parentN))} | measured and re-gradeable |`,
     `| parent, Phase 10 summary claim | ${reportedN} | 0 | 0.000 | ${fmt(zeroSolveUpper95(reportedN))} | **not countable; artifacts absent** |`,
     `| parent target | ${targetN} | 0 | 0.000 | ${fmt(zeroSolveUpper95(targetN))} | not reached |`,
-    "| descendant | 0 | - | - | - | no executable package, no trials |",
+    `| descendant | 0 | - | - | - | ${audit.descendantPackagePresent ? "package absent at the Phase 11 decision; packaged in Phase 12, still no trials" : "no executable package, no trials"} |`,
     "",
     `At the benchmark bar of solve rate <= 0.30, zero solves need at least ${benchmarkMinimum} clean trials (n=${benchmarkMinimum} gives ${fmt(zeroSolveUpper95(benchmarkMinimum))}); the repo-countable parent evidence does not clear it. At the take-home bar, the parent has an observed ${parentN}/${parentN} failure artifact but zero capability-attributed failures, while the descendant has no trial evidence. Self-check coverage and failure concentration are **not measured**; kill signals 2-4 are not evaluable.`,
     "",

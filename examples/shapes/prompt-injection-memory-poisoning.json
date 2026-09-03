@@ -181,6 +181,7 @@
     "Trusting the most recent record on a topic instead of the best-provenanced one.",
     "Deciding correctly and reporting a decision that does not match what ran."
   ],
+  "hardnessRecipe": null,
   "estimatedBuildHours": 75,
   "estimatedFrontierUsd": 70,
   "status": "shipped",

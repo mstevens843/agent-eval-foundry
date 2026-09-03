@@ -91,6 +91,7 @@ export const RULE_CODES = [
   "SHAPE_NO_KNOBS",
   "SHAPE_NO_EXPECTED_MUTANTS",
   "SHAPE_BUILT_WITHOUT_COST",
+  "SHAPE_RECIPE_MEASURED_WITHOUT_EVIDENCE",
   // candidate ledger
   "LEDGER_NO_DECISION_RATIONALE",
   "LEDGER_TRIALED_WITHOUT_COST",
@@ -181,7 +182,7 @@ export const RULE_CODES = [
   // family evolution — a variant must differ from its parent
   "VARIANT_IDENTICAL_TO_PARENT",
   "VARIANT_WITHOUT_OPERATOR",
-  "VARIANT_NO_MECHANISM_DELTA",
+  "VARIANT_NO_MATERIAL_DELTA",
   "VARIANT_UNKNOWN_MECHANISM",
   "VARIANT_PROMOTED_WITHOUT_BUILD",
   // ledger consistency against the ship gate
@@ -506,6 +507,34 @@ export interface ExpectedMutant {
   readonly mustFailCheck: string;
 }
 
+export const MATERIAL_DELTA_KINDS = [
+  "mechanism-set",
+  "operator-bundle",
+  "verifier-profile",
+  "specification-profile",
+  "starter-profile",
+  "scenario-selection-strategy",
+] as const;
+export type MaterialDeltaKind = (typeof MATERIAL_DELTA_KINDS)[number];
+
+/** Construction choices that may change difficulty without changing the underlying mechanism. */
+export interface HardnessRecipe {
+  readonly operatorBundle: readonly string[];
+  readonly verifierProfile: string;
+  readonly specificationProfile: string;
+  readonly starterProfile: string;
+  readonly scenarioSelectionStrategy: string;
+  readonly evidenceStatus: DataQuality;
+  readonly evidence: string | null;
+}
+
+export interface MaterialDelta {
+  readonly kind: MaterialDeltaKind;
+  readonly before: string;
+  readonly after: string;
+  readonly rationale: string;
+}
+
 /** A parameterized task family: the expensive artifact, from which instances are cheap. */
 export interface TaskShape {
   readonly familyId: string;
@@ -521,6 +550,8 @@ export interface TaskShape {
   readonly fairnessConstraints: readonly string[];
   readonly cheatResistance: readonly string[];
   readonly expectedFailureModes: readonly string[];
+  /** Null only for legacy shapes whose construction history has not been reconstructed. */
+  readonly hardnessRecipe: HardnessRecipe | null;
   readonly estimatedBuildHours: number;
   readonly estimatedFrontierUsd: number;
   readonly status: TaskStatus;

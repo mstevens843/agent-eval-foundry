@@ -1,0 +1,16 @@
+{
+  "views": [
+    {
+      "intent": {
+        "actionId": "action-23-11",
+        "requestId": "request-23-12",
+        "payload": "payload-23-11",
+        "idempotencyKey": "idem::action-23-11::request-23-12::epoch-0"
+      },
+      "workerId": "worker-1",
+      "leaseEpoch": 0,
+      "attempt": 0
+    }
+  ],
+  "note": "Without an uncertain post-call crash, only the first delivery is made."
+}

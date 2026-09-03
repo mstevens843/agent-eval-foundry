@@ -67,6 +67,7 @@ for (const [path, args] of [
     "examples/families/deployment-model-alias-rollout-drift/matrix.json",
     ["family", "run", "--family", "deployment-model-alias-rollout-drift"],
   ],
+  ["examples/families/dao-descendant/matrix.json", ["family", "run", "--family", "dao-descendant"]],
   [
     "examples/shapes/prompt-injection-memory-poisoning.json",
     ["family", "shape", "--family", "prompt-injection-memory-poisoning"],
@@ -92,6 +93,7 @@ for (const [path, args] of [
     "examples/shapes/deployment-model-alias-rollout-drift.json",
     ["family", "shape", "--family", "deployment-model-alias-rollout-drift"],
   ],
+  ["examples/shapes/dao-descendant.json", ["family", "shape", "--family", "dao-descendant"]],
 ]) {
   if (run(args) !== readFileSync(path, "utf8")) {
     console.error(`STALE  ${path}`);
@@ -115,6 +117,7 @@ for (const [familyId, committedDir] of [
     "deployment-model-alias-rollout-drift",
     "examples/families/deployment-model-alias-rollout-drift/challenge",
   ],
+  ["dao-descendant", "examples/families/dao-descendant/challenge"],
 ]) {
   const tmpDir = mkdtempSync(join(tmpdir(), "foundry-fam-"));
   run(["challenge", "build", "--family", familyId, "--out", tmpDir]);
@@ -400,6 +403,7 @@ if (!externalVerifierOutput.includes('"runId": "verify-smoke-external"')) {
 // verifier-integrity claim.
 const ADVERSARIAL_FAMILIES = [
   "checker-required-memory-poisoning",
+  "dao-descendant",
   "delegated-wallet-scope-reconciliation",
   "deployment-model-alias-rollout-drift",
   "prompt-injection-containment",

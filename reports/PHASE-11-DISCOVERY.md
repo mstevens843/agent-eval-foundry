@@ -21,7 +21,7 @@ The repository therefore supports **6 clean zero-solve parent trials**, not 8. T
 
 The 6 preserved failures contain **0 capability-labelled failures**. Phase 10's Codex label and split Claude label also lack the evidence packets they describe. Difficulty evidence remains zero.
 
-The claimed descendant is registered as a built family: **no**. An executable in-repo package exists: **no**. The Phase 9 scenario-selection and screen JSON are evidence about a proposed package, not a challenge package an agent can run.
+Current repository state: the descendant is registered as a built family: **yes**. An executable in-repo package exists: **yes**. At the Phase 11 decision point neither existed; the Phase 9 scenario-selection and screen JSON alone were evidence about a proposed package, not a challenge package an agent could run.
 
 The brief's dead `reports/PHASE-10-MEASURED.md` reference was repaired to point at the Phase 10 data files. Creating another hand-authored measurement report would have enlarged the prose-drift problem it was meant to document.
 
@@ -81,6 +81,8 @@ Observed discovery cost: **3 systems, 8 authoritative documents, 18 cited sectio
 
 Decision: **do-not-run**. Descendant and additional parent trials were not run.
 
+The blockers below are the historical Phase 11 blockers. Phase 12 has since resolved the package and durable-capture blocker; it has not created agent-trial evidence.
+
 - Neither Phase 10 run ID has a trial directory, challenge copy, submission, transcript, metadata, verifier output, normalized result, countability judgement, or root-cause sidecar in the repository.
 - The claimed dao-descendant package is not a built family or task package in either checked repository. Only scenario-selection and local screen data exist, so there is no challenge hash to preregister or artifact to send to agents.
 - The registered descendant matrix requires two provider families and blind cross-provider labels; the second provider was unavailable during this phase.
@@ -93,7 +95,7 @@ B6 remains present at `src/screens/rig-integrity.ts` with passed in the Phase 11
 | parent, repo-countable | 6 | 0 | 0.000 | 0.393 | measured and re-gradeable |
 | parent, Phase 10 summary claim | 8 | 0 | 0.000 | 0.312 | **not countable; artifacts absent** |
 | parent target | 12 | 0 | 0.000 | 0.221 | not reached |
-| descendant | 0 | - | - | - | no executable package, no trials |
+| descendant | 0 | - | - | - | package absent at the Phase 11 decision; packaged in Phase 12, still no trials |
 
 At the benchmark bar of solve rate <= 0.30, zero solves need at least 9 clean trials (n=9 gives 0.283); the repo-countable parent evidence does not clear it. At the take-home bar, the parent has an observed 6/6 failure artifact but zero capability-attributed failures, while the descendant has no trial evidence. Self-check coverage and failure concentration are **not measured**; kill signals 2-4 are not evaluable.
 

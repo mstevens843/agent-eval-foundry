@@ -8,6 +8,7 @@ Cheat resistance is not the same claim as no bypass found. Cheat resistance is t
 | family | readiness | package hash | campaign | bundle | blockers |
 |---|---|---|---|---|---|
 | `checker-required-memory-poisoning` | **adversarial-ready** | `448f2f816c51030cc97a374816226168` | `checker-required-memory-poisoning-adversarial` | `bundles/checker-required-memory-poisoning-adversarial` | none |
+| `dao-descendant` | **adversarial-ready** | `9d89b49307a960f65f2e6e8f204fd15e` | `dao-descendant-adversarial` | `bundles/dao-descendant-adversarial` | none |
 | `delegated-wallet-scope-reconciliation` | **adversarial-ready** | `45f27b644a84364e3d3855f68cd243a2` | `delegated-wallet-scope-reconciliation-adversarial` | `bundles/delegated-wallet-scope-reconciliation-adversarial` | none |
 | `deployment-model-alias-rollout-drift` | **adversarial-ready** | `805efb58c923f9e081db1b41967392d7` | `deployment-model-alias-rollout-drift-adversarial` | `bundles/deployment-model-alias-rollout-drift-adversarial` | none |
 | `durable-approval-outbox` | **audit-pending** | none | none | none | `public-package-present`, `package-leak-check`, `campaign-file-present`, `threat-model-declared`, `access-boundary-declared`, `outcome-contract-declared`, `never-counts-declared` |
@@ -18,7 +19,7 @@ Cheat resistance is not the same claim as no bypass found. Cheat resistance is t
 
 ## Current Reading
 
-Adversarial-ready families: `checker-required-memory-poisoning`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom`.
+Adversarial-ready families: `checker-required-memory-poisoning`, `dao-descendant`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom`.
 Audit-pending families: `durable-approval-outbox`.
 
 A ready verdict means the attack campaign is prepared and hash-pinned. It does not mean anyone
@@ -39,6 +40,22 @@ has tried to exploit the verifier, and it does not mean no bypass exists.
 | `outcome-contract-declared` | pass | bypass and no-bypass outcomes are declared separately |
 | `never-counts-declared` | pass | refusal, infrastructure errors and stale hashes never count |
 | `attack-bundle-present` | pass | bundle ./bundles/checker-required-memory-poisoning-adversarial |
+| `fs-sandbox-isolation-check` | pass | bundle declares fs-sandbox and leaks no hidden files |
+| `exploit-schema-present` | pass | exploit artifact schema is included in the attack packet |
+
+### `dao-descendant`
+
+| check | result | detail |
+|---|---|---|
+| `public-package-present` | pass | checked-in challenge package hashes to 9d89b49307a960f65f2e6e8f204fd15e |
+| `package-leak-check` | pass | public challenge package passes leak check |
+| `campaign-file-present` | pass | campaign dao-descendant-adversarial |
+| `campaign-hash-current` | pass | campaign pins current hash 9d89b49307a960f65f2e6e8f204fd15e |
+| `threat-model-declared` | pass | 12 attack surface(s) |
+| `access-boundary-declared` | pass | allowed and forbidden attacker access are both declared |
+| `outcome-contract-declared` | pass | bypass and no-bypass outcomes are declared separately |
+| `never-counts-declared` | pass | refusal, infrastructure errors and stale hashes never count |
+| `attack-bundle-present` | pass | bundle ./bundles/dao-descendant-adversarial |
 | `fs-sandbox-isolation-check` | pass | bundle declares fs-sandbox and leaks no hidden files |
 | `exploit-schema-present` | pass | exploit artifact schema is included in the attack packet |
 

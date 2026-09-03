@@ -81,6 +81,7 @@ import {
   renderExternalIntakeReport,
 } from "./external-intake/report.js";
 import { validateExternalRunPacket } from "./external-intake/validate.js";
+import * as daoDescendant from "./families/dao-descendant/runner.js";
 import {
   ALL_SUBJECTS,
   referenceFailures,
@@ -130,7 +131,8 @@ import {
   scoreDiscoveryCandidates,
   summarizeDiscoveryWorkbench,
 } from "./foundry/discovery-workbench.js";
-import { assertPromotionEvidence, variantToShape } from "./foundry/evolve.js";
+import { OPERATORS, assertPromotionEvidence, variantToShape } from "./foundry/evolve.js";
+import { parseHardnessOperatorLedger } from "./foundry/hardness-ledger.js";
 import {
   type FamilyLineage,
   type LineageEvaluation,
@@ -265,6 +267,12 @@ import {
   parsePhase11Results,
   renderPhase11DiscoveryReport,
 } from "./reports/phase-11-discovery.js";
+import {
+  renderDaoDescendantFoundation,
+  renderHardnessOperatorLedger,
+  renderPhase12FoundationSummary,
+  renderVariantSchemaMigration,
+} from "./reports/phase-12-foundation.js";
 import {
   renderMechanismProbeReport,
   renderProbeNext,
@@ -765,12 +773,12 @@ function runTrialCommand(argv: readonly string[], root: string): string {
  *
  * Deliberately opt-in. `checkChallengePackage` is instant and runs on every build; grading a
  * family's own starter spawns a subprocess per scenario and takes 10-90 seconds, and `pnpm report`
- * plus `pnpm verify` build all eight packages between them. Folding it into the fast path would put
+ * plus `pnpm verify` build all nine packages between them. Folding it into the fast path would put
  * minutes on both for a property that changes only when a starter file changes.
  *
  * What is NOT optional is saying so. When the flag is absent this prints that the gate did not run,
  * so a build that skipped it can never be read as a build that passed it — and the enforcement that
- * nothing merges past lives in `test/starter-must-fail.test.ts`, which runs it for all eight.
+ * nothing merges past lives in `test/starter-must-fail.test.ts`, which runs it for all nine.
  */
 function starterGateLines(
   argv: readonly string[],
@@ -4506,6 +4514,56 @@ function allCommand(argv: readonly string[], root: string): string {
   write(
     "PHASE-11-DISCOVERY.md",
     renderPhase11DiscoveryReport({ root, results: phase11Results, phase10: phase10Summary }),
+  );
+  const hardnessLedger = parseHardnessOperatorLedger(
+    JSON.parse(readFileSync(join(root, "data", "hardness-operators.json"), "utf8")),
+  );
+  const daoFamily = builtFamily("dao-descendant");
+  const daoRun = daoDescendant.runFamily();
+  const daoSweep = daoFamily.run();
+  const preparedDao = prepareChallenge(root, "dao-descendant");
+  const daoPackageCheck = checkChallengePackage(preparedDao.pkg.files, daoFamily.leakProfile);
+  const target = daoRun.scenarios.filter(
+    (scenario) => scenario.params.crashPosition === "after_tool" && scenario.params.nWorkers > 1,
+  );
+  const targetIds = new Set(target.map((scenario) => scenario.id));
+  const narrow = daoRun.cells.filter((cell) => cell.subjectId === "recompute-current-epoch");
+  const targetNarrow = narrow.filter((cell) => targetIds.has(cell.scenarioId));
+  const controlNarrow = narrow.filter((cell) => !targetIds.has(cell.scenarioId));
+  const daoFacts = {
+    challengeHash: preparedDao.hash,
+    challengeFiles: daoPackageCheck.files,
+    declaredSpace: daoRun.spaceSize,
+    selectedScenarios: daoRun.scenarios.length,
+    activatedScenarios: target.length,
+    referenceFailures: daoRun.cells.filter(
+      (cell) => cell.subjectId === "reference" && cell.failures.length > 0,
+    ).length,
+    narrowMutantFailures: targetNarrow.filter((cell) => cell.failures.length > 0).length,
+    narrowMutantLocalGreen: targetNarrow.filter((cell) => cell.localConfirmationsGreen).length,
+    nonActivationControls: controlNarrow.length,
+    nonActivationMutantFailures: controlNarrow.filter((cell) => cell.failures.length > 0).length,
+    mutantsCaught: daoSweep.mutantsCaught.filter((mutant) => mutant.caught).length,
+    mutantsTotal: daoSweep.mutantsCaught.length,
+    rigUsable: daoRun.rigUsable,
+    malformedInputRefused: daoRun.malformedInputRefused,
+    packageGatePassed: true,
+  };
+  const daoProse = SHAPE_PROSE["dao-descendant"];
+  if (daoProse === undefined) throw new Error("dao-descendant has no shape prose");
+  const daoShape = parseTaskShape(shapeFromFamily(daoFamily, daoProse), "generated.dao-descendant");
+  const exampleDeltas =
+    loopStates.flatMap((state) => state.variants).find((variant) => variant.materialDeltas.length > 0)
+      ?.materialDeltas ?? [];
+  write("hardness-operator-ledger.md", renderHardnessOperatorLedger(hardnessLedger));
+  write("dao-descendant-foundation.md", renderDaoDescendantFoundation(daoFacts));
+  write(
+    "variant-schema-migration.md",
+    renderVariantSchemaMigration({ descendant: daoShape, exampleDeltas, operators: OPERATORS }),
+  );
+  write(
+    "PHASE-12-HARDNESS-FOUNDATION.md",
+    renderPhase12FoundationSummary({ ledger: hardnessLedger, facts: daoFacts }),
   );
   const inputs = { ...MEASURED_DEFAULTS, totalUsd: 100_000, labourRateUsdPerHour: 120 };
   assertBudgetInputs(inputs);

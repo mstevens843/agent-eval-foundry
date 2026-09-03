@@ -108,6 +108,9 @@ checkers too weak to express the rule, so their own fuzzers ran clean over the b
 | `claim-health-follower` | model-alias-drift, false-audit-history, tool-result-ambiguity | 2 | yes |
 | `secret-unmarked-writer` | context-contamination, false-audit-history, permission-boundary | 2 | yes |
 | `visible-origin-attributor` | context-contamination, prompt-injection-via-retrieval, false-audit-history | 3 | yes |
+| `recompute-current-epoch` | uncertain-external-effects, duplicate-side-effects | 3 | yes |
+| `no-op` | uncertain-external-effects, liveness-stall | 2 | yes |
+| `forged-stable-report` | false-audit-history, duplicate-side-effects | 2 | yes |
 
 ### No-op faker (empty external ledger) `nop-faker`
 
@@ -1661,6 +1664,51 @@ const originVisible = r.recalledKeys.some((key) =>
 );
 const denial =
   honest === "M5_LAUNDERED_MEMORY" && originVisible ? "M3_UNTRUSTED_ARGUMENT" : honest;
+```
+
+### Current-epoch idempotency-key recomputation `recompute-current-epoch`
+
+**Bug.** A recovery worker ignores the key committed before the uncertain call and derives a new key from the current lease epoch. The idempotent tool accepts it as new work, so one action produces multiple external effects while every call returns OK.
+
+**False confidence.** The replacement call returns OK and the worker records executed, so every subject-visible confirmation is green. The duplicate exists only in the harness-owned external ledger.
+
+**Must be caught by**
+- count sealed external effects by stable action id and require exactly one
+- compare every actual tool-call key with the key committed in the durable intent
+- run a post-call reassignment scenario where the current lease epoch changes
+
+```
+const key = derive(view.intent.actionId, view.intent.requestId, view.leaseEpoch);
+tool.execute(view.intent.actionId, { idempotencyKey: key, payload: view.intent.payload });
+```
+
+### Durable-recovery no-op `no-op`
+
+**Bug.** The subject reports a successful recovery without invoking the external tool, producing no external effect.
+
+**False confidence.** A report-only verifier sees a clean executed outcome and no duplicates; only a positive-work check against external truth exposes the absence.
+
+**Must be caught by**
+- require at least one harness-owned effect for every valid action
+- compare reports against the sealed tool-call ledger
+
+```
+return { actionId, outcome: "executed", toolOk: true }; // tool.execute is never called
+```
+
+### Forged stable-key report `forged-stable-report`
+
+**Bug.** The subject sends an epoch-derived key to the tool but reports the committed key, trying to satisfy audit checks while duplicating the external effect.
+
+**False confidence.** Its report is byte-for-byte what a correct recovery report should say. A verifier that does not reconcile it to actual calls accepts the lie.
+
+**Must be caught by**
+- compare the reported key with the harness-owned call ledger
+- count external effects by stable action id rather than trusting the report
+
+```
+tool.execute(actionId, { idempotencyKey: epochKey, payload });
+return { actionId, idempotencyKey: intent.idempotencyKey, outcome: "executed" };
 ```
 
 ---

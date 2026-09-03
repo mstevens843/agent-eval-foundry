@@ -32,6 +32,7 @@ import {
   DATA_QUALITY,
   DECISIONS,
   type ExpectedMutant,
+  type HardnessRecipe,
   type Knob,
   MECHANISM_MATURITY,
   type Mechanism,
@@ -191,6 +192,29 @@ const parseExpectedMutant = (v: unknown, path: string): ExpectedMutant => {
   };
 };
 
+const parseHardnessRecipe = (v: unknown, path: string): HardnessRecipe | null => {
+  if (v === null || v === undefined) return null;
+  const o = obj(v, path);
+  const evidenceStatus = oneOf(o["evidenceStatus"], `${path}.evidenceStatus`, DATA_QUALITY);
+  const evidence = strNullable(o["evidence"], `${path}.evidence`);
+  if (evidenceStatus === "measured" && evidence === null) {
+    fail(
+      "SHAPE_RECIPE_MEASURED_WITHOUT_EVIDENCE",
+      `${path}.evidence`,
+      "a measured hardness recipe must cite the artifact that measured it",
+    );
+  }
+  return {
+    operatorBundle: strArray(o["operatorBundle"], `${path}.operatorBundle`),
+    verifierProfile: str(o["verifierProfile"], `${path}.verifierProfile`),
+    specificationProfile: str(o["specificationProfile"], `${path}.specificationProfile`),
+    starterProfile: str(o["starterProfile"], `${path}.starterProfile`),
+    scenarioSelectionStrategy: str(o["scenarioSelectionStrategy"], `${path}.scenarioSelectionStrategy`),
+    evidenceStatus,
+    evidence,
+  };
+};
+
 const nonEmpty = <T>(items: readonly T[], path: string, code: Parameters<typeof fail>[0], why: string) => {
   if (items.length === 0) fail(code, path, why);
   return items;
@@ -279,6 +303,7 @@ export function parseTaskShape(v: unknown, path = "shape"): TaskShape {
       "an ungamed grader is an assumption until it is a requirement",
     ),
     expectedFailureModes: strArray(o["expectedFailureModes"], `${path}.expectedFailureModes`),
+    hardnessRecipe: parseHardnessRecipe(o["hardnessRecipe"], `${path}.hardnessRecipe`),
     estimatedBuildHours: buildHours,
     estimatedFrontierUsd: frontierUsd,
     status,

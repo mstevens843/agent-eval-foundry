@@ -10,6 +10,7 @@ a column mixing the two without labels is how an estimate becomes a fact.
 | `audit-truth-financial-workflow` | candidate | false-audit-history, oracle-probing, permission-boundary | — | 45 | 60 | est. |
 | `browser-action-replay` | idea | ui-replay-mismatch, stale-state, hidden-environment-dependency | — | 90 | 80 | est. |
 | `checker-required-memory-poisoning` | shipped | checker-quality-gap, context-contamination, false-audit-history, prompt-injection-via-retrieval | 12 | 85 | 35 | measured |
+| `dao-descendant` | built | uncertain-external-effects, duplicate-side-effects | 1 | 120 | 145 | measured |
 | `delegated-wallet-scope-reconciliation` | built | permission-boundary, stale-state, false-audit-history, duplicate-side-effects, liveness-stall, tool-result-ambiguity | 3 | 36 | 45 | measured |
 | `deployment-model-alias-rollout-drift` | built | model-alias-drift, stale-state, false-audit-history, liveness-stall, tool-result-ambiguity | 20 | 40 | 45 | measured |
 | `deployment-rollback-partial-effects` | candidate | uncertain-external-effects, duplicate-side-effects, liveness-stall | — | 60 | 75 | est. |
@@ -29,12 +30,12 @@ a column mixing the two without labels is how an estimate becomes a fact.
 
 | | |
 |---|---:|
-| families | 18 |
-| expected axes (all) | 89 |
-| of which measured | **75** |
+| families | 19 |
+| expected axes (all) | 90 |
+| of which measured | **76** |
 | of which estimated | 14 |
-| declared build hours | 1124 |
-| declared frontier spend | $958.66 |
+| declared build hours | 1244 |
+| declared frontier spend | $1103.66 |
 
 Mechanism coverage across families: 15 distinct mechanisms.
 

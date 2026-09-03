@@ -119,6 +119,12 @@ const FAMILY_SURFACES: Readonly<Record<string, readonly string[]>> = {
     "cached authority and subject-owned receipt boundary",
     "idempotency and duplicate irreversible spend boundary",
   ],
+  "dao-descendant": [
+    "durable intent versus current lease epoch",
+    "idempotent external tool facade",
+    "sealed per-action call and effect ledgers",
+    "multi-worker uncertain-completion recovery boundary",
+  ],
   "deployment-model-alias-rollout-drift": [
     "model alias rollout facade",
     "authoritative rollout and eval ledger",
@@ -175,6 +181,11 @@ const VERIFIER_PATHS: Readonly<Record<string, readonly string[]>> = {
     "src/families/delegated-wallet-scope-reconciliation/verify.ts",
     "src/families/delegated-wallet-scope-reconciliation/runner.ts",
     "scripts/delegated-wallet-host.mjs",
+  ],
+  "dao-descendant": [
+    "src/families/dao-descendant/verify.ts",
+    "src/families/dao-descendant/runner.ts",
+    "scripts/dao-descendant-host.mjs",
   ],
   "deployment-model-alias-rollout-drift": [
     "src/families/deployment-model-alias-rollout-drift/verify.ts",

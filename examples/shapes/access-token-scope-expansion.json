@@ -171,6 +171,7 @@
     "Blocking every request to avoid over-granting.",
     "Writing an audit that cites cached or subject-written facts rather than current authority observations."
   ],
+  "hardnessRecipe": null,
   "estimatedBuildHours": 18,
   "estimatedFrontierUsd": 35,
   "status": "built",

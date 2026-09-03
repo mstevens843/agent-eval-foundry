@@ -7,6 +7,7 @@ model evidence.
 | family | v2 records | counted v2 no-bypass | counted v2 bypass | container audits | imports | isolation records | replay ready | probes | claim level |
 |---|---:|---:|---:|---:|---:|---|---|---|---|
 | `checker-required-memory-poisoning` | 1 | 1 | 0 | 0 | 0 | fs-sandbox:1 | yes | pass | adversarial-audited |
+| `dao-descendant` | 0 | 0 | 0 | 0 | 0 | none | yes | pass | adversarial-ready |
 | `delegated-wallet-scope-reconciliation` | 0 | 0 | 0 | 0 | 0 | none | yes | pass | adversarial-ready |
 | `deployment-model-alias-rollout-drift` | 1 | 0 | 0 | 0 | 0 | fs-sandbox:1 | yes | pass | adversarial-ready |
 | `durable-approval-outbox` | 0 | 0 | 0 | 0 | 0 | subprocess:1 | no | n/a | audit-pending |
