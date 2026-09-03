@@ -61,3 +61,12 @@ export {
   type RowFiveResult,
   type RowFiveVerdict,
 } from "./row-five.js";
+export {
+  RigInputError,
+  controlsHold,
+  isDegenerate,
+  requireShape,
+  rigIntegrity,
+  type RigControl,
+  type RigVerdict,
+} from "./rig-integrity.js";

@@ -51,12 +51,42 @@ The answer is stated outright in one sentence.
 
 A list that reads as exhaustive, which the surrounding prose proves is not.
 
-*Instance:* a state-transition block that omits an outgoing edge, where the paragraph immediately
-following introduces a state absent from the block. Once a reader notices the omission, "this state
-has no outgoing arrow" can no longer be read as "this state is terminal."
+*Shape:* a state-transition block that omits an outgoing edge, where the paragraph immediately
+following introduces a state absent from the block. Read alone, "this state has no outgoing arrow"
+can no longer be relied on to mean "this state is terminal."
 
-*Verdict:* usually A1, but check for an independent derivation route that does not depend on the
-enumeration being complete. In the instance above there was one, through two other sections.
+*Verdict:* **the shape alone does not settle the class.** Check for an independent derivation route
+that does not depend on the enumeration being complete. If one exists, the rule is A2 and the
+enumeration weakness is cosmetic; only if none exists is it A1.
+
+*The worked instance, and a correction this document previously got wrong.* The source project's
+terminal-`ACKED` rule has this shape, and an earlier version of this file filed it as tending toward
+A1. **That was wrong on the record and it is corrected here**, because getting the classification
+backwards on the one task that cleared the bar would invert the lesson:
+
+- The rule **is** derivable without touching the diagram. §6 gives the single post-execution
+  withdrawal path as `EXECUTED -> REVOKED`; §9 forbids recording a transition that did not occur; an
+  already-`ACKED` action cannot satisfy §6 without violating §9. Two citations, two sections, depth 1,
+  **no negative inference** — squarely inside the Part 3 pass band.
+- The source project raised this concern during development, audited it, and concluded before
+  shipping that the rule was already stated and no spec change was needed. That conclusion was
+  restated at completion and **never retracted in the submitted artifact.** The shipped specification
+  carries no literal "terminal" sentence and does not need one.
+- The explicit sentence exists only in a later experimental copy built *by this repository* a week
+  after the submission was complete, as one arm of a spec-repair differential. It is a measurement
+  instrument, not a correction to the task.
+
+*Why the differential result does not contradict this.* Adding the explicit sentence removed the bulk
+of failures on that axis. That is true of **any** derivable rule made explicit — moving a rule from A2
+to A3 always reduces failures, which is why A3 grades reading comprehension. A single-sentence
+differential measures how much work the derivation was doing. **It cannot distinguish "I supplied
+missing information" from "I made derivable information obvious,"** and reading it as the former is
+the specific error corrected here.
+
+*Detection:* for every list that carries a rule, ask whether anything else in the document adds a
+member — then look for a route that does not depend on the list at all. A load-bearing **negative
+inference** is fragile; an independent positive derivation makes the enumeration's completeness
+irrelevant.
 
 *Detection:* for every list that carries a rule, ask whether anything else in the document adds a
 member. A load-bearing **negative inference** — depending on something *not* being present — is
@@ -87,6 +117,39 @@ about *how* you got somewhere is invisible to a check on *where you ended up*.
 
 *Detection:* for every stated rule, write a subject that violates it and confirm some check fails. If
 none does, the rule is decoration. This is cheap and mechanical and nothing here does it.
+
+#### B6. The rig returns a verdict it has no basis for — **found inside our own instrument**
+
+The measuring apparatus reads the wrong key, or an absent one, and evaluates the resulting empty
+structure as a *result* rather than as a *failure to measure*. The output is confident, correctly
+formatted, and unrelated to the subject.
+
+The instance, and it is ours:
+
+| instance | what happened |
+|---|---|
+| Phase 9's independent-fatality rig | ground truth was attached as `result["tool"]`; the checks read `result["_tool"]`, whose accessor returns `result.get("_tool") or {}`. Every tool-dependent check ran against `{}` and scored it as a failing subject. **A known-correct reference engine appeared to fail all 18 instances**, and that number reached a report draft. |
+
+**Nothing flagged it.** It was caught because a correct engine failing everywhere is not a believable
+result — by disbelief, not by any gate. Disbelief does not scale and does not survive a tired author.
+
+This is the same family as B1 and B5: machinery that returns a verdict without the evidence to
+support one. It is the most dangerous member of the family because it sits *upstream* of every other
+screen — a broken rig invalidates whatever it was used to measure, including the screens themselves.
+
+*Detection, in three parts and all of them cheap:*
+
+1. **Controls in the same invocation.** A known-good must pass and a known-bad must fail before any
+   output counts. If either comes back inverted the run is VOID — not "the subject is bad". This
+   alone would have caught the instance above in seconds.
+2. **Degeneracy is suspicious by construction.** All-pass and all-fail are the shape a broken rig
+   produces. They are permitted only when the controls ran in the same invocation and held. Note that
+   Phase 9's *real* result was also all-fail-against-the-mutant; the controls are the only thing that
+   distinguishes it from the fiction.
+3. **An empty input is not a failing input.** A check handed a structure that is absent, empty, or the
+   wrong shape must raise, never return a verdict.
+
+Implemented in `src/screens/rig-integrity.ts`, with the near-miss replayed as a test.
 
 *Repair pattern:* deliver the input in phases with a barrier, snapshot the graded structure between
 phases, and require earlier entries to survive unchanged. Or add a structural check on the discipline
@@ -203,6 +266,7 @@ were spent on a family that a 45-minute paper screen would have killed.
 | **6** | **Enforcement screen** — for every stated rule, a subject that violates it must fail some check | mechanical, cheap | **B1** |
 | **7** | **Starter screen** — grade the shipped starter through its own verifier; it must fail widely | mechanical, minutes | **B2** |
 | **8** | **Independent-fatality screen** — each planted defect alone must be fatal | mechanical | **B4** |
+| **9** | **Rig-integrity gate** — a known-good must pass and a known-bad must fail *in the same invocation* before any rig output counts | mechanical, seconds | **B6** |
 
 Screens 6–8 are additions. Screen 6 is the most valuable of the three because B1 has now appeared
 three times independently and nothing looks for it.

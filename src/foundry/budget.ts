@@ -57,6 +57,23 @@ export interface BudgetInputs {
    * look.
    */
   readonly hoursPerFamily: number;
+  /**
+   * Hours to derive a DESCENDANT from an existing proven mechanism. **Measured, once.**
+   *
+   * 0.18 hours, wall clock, Phase 9: the controlling-parameter fuzz (72 runs), the amplification
+   * sweep (108), a narrow adversary, the independent-fatality screen (216 runs across two engines)
+   * and the activation audit (36). First and only build figure either repository has MEASURED rather
+   * than estimated.
+   *
+   * THE CAVEAT IS PART OF THE NUMBER AND MUST TRAVEL WITH IT. A descendant inherits a working spec,
+   * harness, verifier, reference engine and cheat oracles. **It is not `hoursPerFamily` and must
+   * never be substituted for it.** `hoursPerFamily` stays a labelled ESTIMATE across the declared
+   * 55-120 until a family is built from nothing and timed.
+   *
+   * What it does establish is the marginal cost of a second task once a mechanism is proven, which is
+   * the only regime where this repository has evidence.
+   */
+  readonly descendantBuildHours: number;
   /** Hours spent screening ONE candidate before it is killed or promoted. */
   readonly hoursPerScreenedCandidate: number;
   /** Families shipped per candidate screened. 1-in-10 measured across ten design cycles. */
@@ -259,6 +276,7 @@ export function handAuthoredComparison(inputs: BudgetInputs): BudgetPlan {
  */
 export const MEASURED_DEFAULTS: Omit<BudgetInputs, "totalUsd" | "labourRateUsdPerHour"> = {
   hoursPerFamily: 45,
+  descendantBuildHours: 0.18,
   hoursPerScreenedCandidate: 3,
   cycleHitRate: 0.1,
   matricesPerFamily: 3,

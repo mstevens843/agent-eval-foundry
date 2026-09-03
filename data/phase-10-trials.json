@@ -1,0 +1,153 @@
+{
+  "phase": 10,
+  "lane": "A",
+  "note": "The first native paid trials this repository has launched. Harbor, container-isolated, one per lab, run in parallel.",
+  "trials": [
+    {
+      "runId": "p10-outbox-codex-1",
+      "family": "durable-approval-outbox",
+      "model": "openai/gpt-5.6-sol",
+      "effort": "xhigh",
+      "reward": 0.0,
+      "runtimeSeconds": 1676,
+      "costUsd": 3.3263568,
+      "inputTokens": 4565584,
+      "outputTokens": 54970,
+      "errors": 0,
+      "retries": 0,
+      "exceptions": {},
+      "verifier": "10 failed, 257 passed",
+      "counts": true,
+      "countsReason": "clean verifier failure: reward 0 with 257 checks passing, no exception, no retry, no timeout. This is a genuine graded failure rather than a crash.",
+      "failedChecks": "all ten failures are audit_explains",
+      "failingSchedules": [
+        "serial-clean",
+        "two-workers",
+        "revoke-while-leased",
+        "crash-after-lease",
+        "revoke-after-ack-a",
+        "revoke-after-ack-b",
+        "revoke-after-ack-c",
+        "revoke-after-ack-d",
+        "revoke-after-ack-e",
+        "revoke-after-ack-f"
+      ],
+      "rootCauseObservation": "SIX of the ten failing schedules are revoke-after-ack-a..f - the ACKED axis. Phase 6 established that axis is category 1, UNDERSPECIFIED: three independent readers gave three different answers to the same question from the same package, and A2 showed one sentence takes audit_explains from 33 cells to zero. Under this repository's own labelling rule that is spec-underspecified, NOT capability, and it does not count as difficulty-evidenced.",
+      "whyThisMattersForTheDescendant": "This is the mixed-axis problem measured on a fresh trial rather than argued from old evidence. The parent's failures remain dominated by the axis known to be a specification artifact, which is precisely what the descendant removes. It is the strongest independent support the descendant build has received, and it arrived from a trial run to measure something else.",
+      "labellingCaveat": "This is the AUTHOR's observation from the verifier output, not a blind root-cause label. Under the standing rule - nobody labels their own trials - it needs two labellers from different provider families before it counts as a root cause.",
+      "blindRootCause": {
+        "protocol": "Two independent labellers, different provider families, given ONLY the spec, the submitted engine and the verifier output. The author's own reading was deliberately withheld.",
+        "labellerA": {
+          "rootCause": "spec-underspecified",
+          "determinate": false,
+          "confidence": "high"
+        },
+        "labellerB": {
+          "rootCause": "spec-underspecified",
+          "determinate": false,
+          "confidence": "medium"
+        },
+        "agreement": "2 of 2",
+        "convergentCitations": [
+          "Section 4's diagram declares itself non-exhaustive one paragraph later ('engine/types.py also defines IN_DOUBT ... whichever states it passes through'), so its arrow list cannot be read as a closed enumeration of REVOKED's predecessors.",
+          "Section 6 scopes its post-crossing carve-out to EXECUTED by name ('recorded as EXECUTED then REVOKED') and never mentions ACKED.",
+          "Section 7 Obligations pulls the OTHER way and is unqualified by state: 'An action that has crossed into the outside world has crossed. Withdrawing it afterwards does not un-happen it, and the audit trail must carry both facts.' An ACKED action has crossed."
+        ],
+        "labellerAObservation": "The harness ships six scenarios named revoke-after-ack-a..f, so the distinction was deliberately probed - while the specification that calls itself 'normative and complete for behaviour' never states it.",
+        "authorReadingConfirmed": "The author read the same conclusion off the verifier log before the labellers ran, and withheld it from them. They reached it independently."
+      },
+      "countsAsDifficultyEvidence": false,
+      "whyNot": "Counted as a clean zero-solve trial - reward 0, 257 checks passing, no exception. But the root cause is spec-underspecified, and difficulty-evidenced counts only `capability`. This trial tightens the p-bound and contributes NOTHING to difficulty evidence."
+    },
+    {
+      "runId": "p10-outbox-claude-1",
+      "family": "durable-approval-outbox",
+      "model": "anthropic/claude-opus-5",
+      "effort": "max",
+      "reward": 0.0,
+      "runtimeSeconds": 4243,
+      "costUsd": 20.815085500000006,
+      "inputTokens": 25485231,
+      "outputTokens": 207651,
+      "errors": 0,
+      "retries": 0,
+      "exceptions": {},
+      "verifier": "15 failed, 252 passed",
+      "counts": true,
+      "countsReason": "clean verifier failure: reward 0 with 252 checks passing, no exception, no retry, no timeout.",
+      "failedChecks": "all fifteen failures are audit_explains",
+      "failingSchedules": [
+        "crash-after-tool",
+        "stale-lease x2",
+        "hostile-mix x3",
+        "revoke-after-ack-a",
+        "revoke-after-ack-b",
+        "revoke-after-ack-c",
+        "revoke-after-ack-d",
+        "revoke-after-ack-e",
+        "revoke-after-ack-f",
+        "+3 more"
+      ],
+      "blindRootCause": {
+        "protocol": "Its own blind pass. Labellers told nothing about the codex trial or its verdict.",
+        "labellerA": {
+          "rootCause": "spec-underspecified",
+          "determinate": false,
+          "confidence": "medium"
+        },
+        "labellerB": {
+          "rootCause": "capability",
+          "determinate": true,
+          "confidence": "high"
+        },
+        "agreement": "1 of 2 - THEY DISAGREE",
+        "whyTheyDisagree": "The engine failed on TWO distinct rules and the labellers weighted them differently. (1) ACKED -> REVOKED, the axis already established as underspecified. (2) IN_DOUBT -> LEASED, which labeller B argues IS determinate: section 5 unit 1 says 'lease one READY action, or one whose lease has expired', and section 7 says repeating an unknown call 'returns UNKNOWN again rather than resolving it'. On B's reading the document settles that an IN_DOUBT action may not be directly re-leased, so failing it is capability.",
+        "verdict": "UNLABELLED under the repository's own rule. A disagreed label is not a label. This trial counts as a clean zero-solve and contributes NOTHING to difficulty evidence, but neither is it recorded as a specification defect.",
+        "whatWouldSettleIt": "A third labeller, or an adjudication of whether IN_DOUBT -> LEASED is determinate. That second rule was not part of the ACKED analysis and has never been examined."
+      },
+      "countsAsDifficultyEvidence": false,
+      "whyNot": "Root cause is UNLABELLED - two labellers, two different causes. difficulty-evidenced counts only an agreed `capability`."
+    }
+  ],
+  "parentTally": {
+    "before": {
+      "cleanZeroSolve": 6,
+      "upperBound95": 0.393
+    },
+    "after": {
+      "cleanZeroSolve": 8,
+      "upperBound95": 0.3123
+    },
+    "target": {
+      "cleanZeroSolve": 12,
+      "upperBound95": 0.221
+    }
+  },
+  "costSoFarUsd": 24.14,
+  "theDistinctionThisTrialForces": {
+    "claim": "A p-bound and difficulty evidence are different quantities and this repository has been at risk of letting one stand for the other.",
+    "detail": "Seven clean zero-solve trials bound the parent at p <= 0.348. Zero of them are attributable to capability on the axis this trial failed. Tightening the bound to 0.221 with five more trials would make the failure rate more CERTAIN without making it more ATTRIBUTABLE.",
+    "consequence": "The next trials should go to the DESCENDANT, which removes this axis, rather than to the parent."
+  },
+  "crossFamilyAgreement": {
+    "codexTrial": "2 of 2 (spec-underspecified)",
+    "claudeTrial": "1 of 2 (spec-underspecified vs capability)",
+    "overall": "3 of 4 across two cases",
+    "correctionToEarlierClaim": "I earlier called the codex 2/2 a payoff for Phase 6's operationalised boundary, against Phase 6's 0.000 cross-family agreement on real cases. That still holds for that case, but on the second case the labellers split. The honest summary is 3 of 4 across two cases, not a restored agreement rate. The boundary helps and does not eliminate disagreement - and the disagreement here is INFORMATIVE rather than noise, because it located a second rule nobody had examined."
+  },
+  "replication": {
+    "finding": "Two independent labs, two independent trials, both failing EXCLUSIVELY on audit_explains, both with all six revoke-after-ack schedules among the failures.",
+    "codex": "10 failed / 257 passed, all audit_explains, 6 of 10 on the ACKED axis",
+    "claude": "15 failed / 252 passed, all audit_explains, 6 of 15 on the ACKED axis",
+    "whyItMatters": "The mixed-axis problem is now replicated across provider families rather than observed once. The codex trial's root cause was blind-labelled spec-underspecified 2/2; if the claude trial labels the same way, the parent's failures are dominated by a specification defect in BOTH labs, which is the strongest case yet for the descendant that removes that axis.",
+    "discipline": "The claude trial is NOT labelled by resemblance to the codex one. Same-shaped failures can have different causes and the whole point of blind labelling is that the author does not get to decide by eye.",
+    "correction": "EARLIER FRAMING WAS TOO STRONG AND IS CORRECTED HERE. I wrote that the mixed-axis finding was 'replicated across provider families'. What replicated is the failure SHAPE - both trials failed exclusively on audit_explains with all six revoke-after-ack schedules among them. The CAUSE did not replicate: the codex trial labelled spec-underspecified 2/2, the claude trial split 1/2 because its engine also produced IN_DOUBT -> LEASED, a second and possibly determinate rule the codex engine did not violate. Same-shaped failures, different causes - which is precisely the thing the blind protocol exists to catch, and precisely what inheriting the label would have hidden."
+  },
+  "costAsymmetry": "Opus cost 6.3x Codex for the same task - $20.82 against $3.33 - on 25.5M input tokens against 4.6M. A 12-trial two-lab matrix is therefore roughly $145, not the flat-rate estimate.",
+  "newFindingSurfaced": {
+    "rule": "IN_DOUBT -> LEASED",
+    "status": "never examined by this project",
+    "why": "Every prior analysis of this task - Phase 6's derivation test, the A2 differential, the descendant build - concerned the ACKED axis and the recompute trap. A labeller looking at a fresh trial found a THIRD rule in dispute, and argues it is determinate. If it is, it is a capability axis the descendant does not isolate and the parent does grade.",
+    "action": "Worth a derivation test of its own before the descendant is trialled, because it may be a second real axis hiding in the parent."
+  }
+}

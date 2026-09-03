@@ -32,6 +32,7 @@ const base: RowFiveCandidate = {
   whyUnreadable: "another process",
   divergenceIsLocallyObservable: false,
   signalsEmitted: [],
+  unreachableBoundary: { what: "another process", enforcedBy: "a socket the subject cannot open" },
 };
 
 describe("the row-5 shape", () => {
@@ -104,6 +105,10 @@ describe("the row-5 shape", () => {
     // assertion is now a record of the collapse, not a floor the pool is expected to clear.
     expect(survivors.length).toBe(1);
     expect(survivors[0]?.id).toBe("idem-key-epoch");
+    // C2: the survivor is validated by the SIXTH element, not grandfathered past it. Its boundary is
+    // a privilege boundary the OS enforces - the tool's ledger lives in another process behind a
+    // socket the unprivileged engine cannot open - and SEMANTICS section 7 states it outright.
+    expect(survivors[0]?.unreachableBoundary?.enforcedBy).toContain("socket");
   });
 });
 
@@ -160,5 +165,40 @@ describe("self-check coverage: the three corrections the data forced", () => {
       true,
     );
     expect(detectsRecomputedKeyDoubleExecution(["assert state in LEGAL"])).toBe(false);
+  });
+});
+
+describe("the sixth element: a boundary, not an assertion about attention", () => {
+  const withBoundary = (enforcedBy: string): RowFiveCandidate => ({
+    ...base,
+    unreachableBoundary: { what: "the external ledger", enforcedBy },
+  });
+
+  it("rejects a candidate that names no boundary at all", () => {
+    const { unreachableBoundary, ...noBoundary } = base;
+    expect(screenRowFive(noBoundary as RowFiveCandidate).verdict).toBe("no-boundary");
+  });
+
+  it("rejects inattention dressed up as a boundary", () => {
+    // This is the defect that killed five of five generated candidates, stated in the form the
+    // author kept writing it in.
+    for (const excuse of [
+      "the subject does not look there",
+      "an engineer would not think to check it",
+      "it is hard to notice",
+      "the divergence is easy to miss",
+    ]) {
+      expect(screenRowFive(withBoundary(excuse)).verdict, excuse).toBe("no-boundary");
+    }
+  });
+
+  it("accepts a mechanism that actually enforces separation", () => {
+    for (const real of [
+      "a unix socket in another process the engine cannot open",
+      "a privilege boundary: the ledger role is not grantable to the subject",
+      "a separate host reachable only from the grader's network",
+    ]) {
+      expect(screenRowFive(withBoundary(real)).verdict, real).toBe("row-five");
+    }
   });
 });

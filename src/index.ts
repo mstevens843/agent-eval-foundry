@@ -763,3 +763,11 @@ export {
 export { screenRowFive, simulateRecoverVsRecompute } from "./screens/row-five.js";
 export type { CoverageResult, GradedRule } from "./screens/self-check-coverage.js";
 export type { RowFiveCandidate, RowFiveResult } from "./screens/row-five.js";
+export {
+  RigInputError,
+  controlsHold,
+  isDegenerate,
+  requireShape,
+  rigIntegrity,
+} from "./screens/rig-integrity.js";
+export type { RigControl, RigVerdict } from "./screens/rig-integrity.js";

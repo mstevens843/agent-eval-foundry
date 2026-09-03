@@ -12,7 +12,11 @@
     "whyUnreadable": "it lives in another process behind a socket the engine cannot open",
     "divergenceIsLocallyObservable": false,
     "signalsEmitted": [],
-    "provenance": "PHASE 6, found in the shipped durable-approval-outbox task"
+    "provenance": "PHASE 6, found in the shipped durable-approval-outbox task",
+    "unreachableBoundary": {
+      "what": "the tool's own call ledger, which lives in a separate OS process",
+      "enforcedBy": "a unix socket the engine's process cannot open. SEMANTICS section 7 states it outright - 'That record is not readable from the engine. It lives in another process, behind a socket the engine cannot open, and nothing in the engine's database mirrors it.' The control socket is owned by root and the engine runs unprivileged, so this is a privilege boundary enforced by the OS, not a convention."
+    }
   },
   {
     "id": "session-scoped-cursor",
@@ -27,7 +31,8 @@
     "whyUnreadable": "the broker exposes only its own position, never the true delivery history",
     "divergenceIsLocallyObservable": true,
     "signalsEmitted": [],
-    "correctedInPhase9": "Phase 9 Lane 0: an independent reader established the divergence IS locally observable. All FIVE author-generated candidates have now been overturned - 5 of 5. The readers converge on the reason: in every generated candidate the divergent effect lands in the SUBJECT'S OWN STATE, so the subject's natural tests witness it. Only in idem-key-epoch does the effect land somewhere the subject structurally cannot observe - a second call at a remote tool behind a socket the engine cannot open."
+    "correctedInPhase9": "Phase 9 Lane 0: an independent reader established the divergence IS locally observable. All FIVE author-generated candidates have now been overturned - 5 of 5. The readers converge on the reason: in every generated candidate the divergent effect lands in the SUBJECT'S OWN STATE, so the subject's natural tests witness it. Only in idem-key-epoch does the effect land somewhere the subject structurally cannot observe - a second call at a remote tool behind a socket the engine cannot open.",
+    "whyNoBoundary": "The gaps and redeliveries are in the CONSUMER'S OWN SINK. There is no boundary at all - the author pointed at the broker's delivery log while the same events sat in the subject's own table."
   },
   {
     "id": "canonical-digest-normalisation",
@@ -42,7 +47,8 @@
     "whyUnreadable": "the index is internal to the store and exposes no enumeration API",
     "divergenceIsLocallyObservable": true,
     "signalsEmitted": [],
-    "correctedInPhase9": "Phase 9 Lane 0: an independent reader established the divergence IS locally observable. All FIVE author-generated candidates have now been overturned - 5 of 5. The readers converge on the reason: in every generated candidate the divergent effect lands in the SUBJECT'S OWN STATE, so the subject's natural tests witness it. Only in idem-key-epoch does the effect land somewhere the subject structurally cannot observe - a second call at a remote tool behind a socket the engine cannot open."
+    "correctedInPhase9": "Phase 9 Lane 0: an independent reader established the divergence IS locally observable. All FIVE author-generated candidates have now been overturned - 5 of 5. The readers converge on the reason: in every generated candidate the divergent effect lands in the SUBJECT'S OWN STATE, so the subject's natural tests witness it. Only in idem-key-epoch does the effect land somewhere the subject structurally cannot observe - a second call at a remote tool behind a socket the engine cannot open.",
+    "whyNoBoundary": "The digest is recomputed in-process and compared against a manifest the subject reads. Nothing separates them."
   },
   {
     "id": "retry-budget-carryover",
@@ -57,7 +63,8 @@
     "whyUnreadable": "the upstream reports only 429, never its own count",
     "divergenceIsLocallyObservable": true,
     "signalsEmitted": [],
-    "correctedInPhase9": "Phase 9 Lane 0: an independent reader established the divergence IS locally observable. All FIVE author-generated candidates have now been overturned - 5 of 5. The readers converge on the reason: in every generated candidate the divergent effect lands in the SUBJECT'S OWN STATE, so the subject's natural tests witness it. Only in idem-key-epoch does the effect land somewhere the subject structurally cannot observe - a second call at a remote tool behind a socket the engine cannot open."
+    "correctedInPhase9": "Phase 9 Lane 0: an independent reader established the divergence IS locally observable. All FIVE author-generated candidates have now been overturned - 5 of 5. The readers converge on the reason: in every generated candidate the divergent effect lands in the SUBJECT'S OWN STATE, so the subject's natural tests witness it. Only in idem-key-epoch does the effect land somewhere the subject structurally cannot observe - a second call at a remote tool behind a socket the engine cannot open.",
+    "whyNoBoundary": "The budget is the subject's own journalled state. The upstream counter is a second witness, not a barrier."
   },
   {
     "id": "lossy-order-reconstruction",
@@ -72,7 +79,8 @@
     "whyUnreadable": "the projection is the grader's, not the subject's",
     "divergenceIsLocallyObservable": true,
     "signalsEmitted": [],
-    "correctedInPhase9": "Phase 9 Lane 0: an independent reader established the divergence IS locally observable. All FIVE author-generated candidates have now been overturned - 5 of 5. The readers converge on the reason: in every generated candidate the divergent effect lands in the SUBJECT'S OWN STATE, so the subject's natural tests witness it. Only in idem-key-epoch does the effect land somewhere the subject structurally cannot observe - a second call at a remote tool behind a socket the engine cannot open."
+    "correctedInPhase9": "Phase 9 Lane 0: an independent reader established the divergence IS locally observable. All FIVE author-generated candidates have now been overturned - 5 of 5. The readers converge on the reason: in every generated candidate the divergent effect lands in the SUBJECT'S OWN STATE, so the subject's natural tests witness it. Only in idem-key-epoch does the effect land somewhere the subject structurally cannot observe - a second call at a remote tool behind a socket the engine cannot open.",
+    "whyNoBoundary": "The order is reconstructed from a log the subject reads. Sequence numbers are right there."
   },
   {
     "id": "stale-cache-recompute",
@@ -87,7 +95,8 @@
     "whyUnreadable": "the audit's clock is the grader's",
     "divergenceIsLocallyObservable": true,
     "signalsEmitted": [],
-    "correctedInPhase8": "Asserted false by the author in Phase 7; established TRUE in Phase 8 by an independent reader who, unprompted, designed the discriminating narrowing test and confirmed it forces the disagreement. The row-5 screen's inputs are AUTHOR ASSERTIONS until a reader tests them, and this is the first one tested."
+    "correctedInPhase8": "Asserted false by the author in Phase 7; established TRUE in Phase 8 by an independent reader who, unprompted, designed the discriminating narrowing test and confirmed it forces the disagreement. The row-5 screen's inputs are AUTHOR ASSERTIONS until a reader tests them, and this is the first one tested.",
+    "whyNoBoundary": "Both the grant snapshot and the current policy are reachable through the same store the subject is handed."
   },
   {
     "id": "float-accumulation",

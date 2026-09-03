@@ -1,0 +1,39 @@
+{
+  "phase": 10,
+  "title": "Measure it, and fix what nearly fooled you",
+  "lane0_token": {
+    "rotation": "NOT DONE - the operator declined after being told the risk twice. Their call, recorded.",
+    "scan": "The repo tree carries no live token. The only oat01 strings on disk are the secret scanner's own positive controls in scripts/secret-scan.mjs and test/secret-scan.test.ts. secret-scan clean at 2179 files.",
+    "whereItLives": "Two session transcripts outside the repository. Not redacted, per the operator's decision."
+  },
+  "laneB_rigIntegrity": {
+    "status": "COMPLETE",
+    "built": "src/screens/rig-integrity.ts + test/rig-integrity.test.ts (8 tests)",
+    "b1_controls": "A known-good must pass and a known-bad must fail IN THE SAME INVOCATION or the run is void.",
+    "b2_degeneracy": "All-pass and all-fail are flagged as the shape a broken rig produces, and permitted only when controls ran and held. This is what separates Phase 9's real all-fail-against-the-mutant from its fictional all-fail-against-the-reference - the shapes are identical and only the controls tell them apart.",
+    "b3_shapeAssertion": "requireShape() raises on absent, empty or wrong-shaped input. An empty input is not a failing input.",
+    "b4_taxonomy": "Recorded as class B6 in DEFECT-TAXONOMY.md with the instance, plus screen 9 in the cost-ordered list.",
+    "theTestThatMatters": "The first test replays the actual near-miss - 18 instances, reference reported failing every one - and asserts the gate voids the run."
+  },
+  "laneC_sixthElement": {
+    "status": "C1 and C2 COMPLETE, C3 WRITTEN BUT NOT RUN",
+    "c1": "unreachableBoundary added to the template: name the boundary AND the mechanism enforcing it. Inattention - 'does not look', 'unlikely to check', 'hard to notice' - is rejected by regex, because that is the exact form the author kept writing.",
+    "c2": "All ten candidates re-screened. idem-key-epoch PASSES on a declared OS-enforced privilege boundary (the tool's ledger in another process behind a socket the unprivileged engine cannot open, stated in SEMANTICS section 7). The other five now fail at `no-boundary` rather than `locally-observable` - earlier and more informatively, because it names what is missing rather than what went wrong.",
+    "c3": "The search procedure is written in data/phase-10-lane-c.json. It has NOT been run. That is Phase 11's Lane A and it is the open question."
+  },
+  "laneA_trials": {
+    "status": "IN FLIGHT",
+    "started": "one parent (durable-approval-outbox) trial, claude-opus-5 at max effort, container-isolated via Harbor",
+    "runnable": "Harbor is installed and the pipeline works end to end - image built, agent installed, instruction piped with --output-format=stream-json --effort max. This is the first native paid trial this repository has launched.",
+    "remaining": "11 more parent trials and 12 descendant trials. Each runs 29 minutes to 1 hour 58, so the full matrix is 9-36 hours of wall clock.",
+    "registeredPredictions": "Already on disk from Phase 9: >= 4 of 6 self-check-green, and failures CONCENTRATED on the recompute checks rather than spread."
+  },
+  "openQuestion": "Can this foundry DISCOVER, or only SCREEN? Generation is 0-for-5, finding is 1-for-1, and the search procedure has not been run. Until it is, the defensible claim is that the repository screens reliably and has not shown it can discover.",
+  "killSignal4_retroactive": {
+    "question": "Does the rig-integrity gate, built in Phase 10, retroactively invalidate any Phase 9 measurement?",
+    "answer": "NO. Both Phase 9 rigs pass.",
+    "activationAudit": "usable=true, degenerate=TRUE. All 18 cells agree, and it passes ONLY because the reference (known-good) and the narrow adversary (known-bad) both ran in the same invocation and came back the right way round. This is exactly the distinction the gate was built to draw, validated on the case that motivated it.",
+    "fatalityScreen": "usable=true, degenerate=false - 105 of 108 separate, so the result discriminates on its own.",
+    "whyThisMatters": "The gate was written against a fabricated result. Running it against the REAL results afterwards is the test of whether it distinguishes them or just rejects everything that looks alike. It distinguishes them."
+  }
+}

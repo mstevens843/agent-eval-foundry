@@ -76,6 +76,32 @@ export interface RowFiveCandidate {
 
   /** Anything that would signal the divergence: an exception, an error code, a type error. */
   readonly signalsEmitted: readonly string[];
+
+  /**
+   * THE SIXTH ELEMENT, added in Phase 10, and it is the one that separates 1 from 5.
+   *
+   * All five candidates GENERATED from this template were overturned by the first independent
+   * readers to see them, and every one died the same way: the divergent effect was placed in the
+   * subject's own state -- its sink, its digest, its balance, its projection -- and then ASSERTED to
+   * be invisible. The subject's natural tests witnessed it directly.
+   *
+   * The one survivor was not generated. `idem-key-epoch` was found by reading an existing task, and
+   * its second side effect lands at a tool in another process behind a socket the engine cannot
+   * open. SEMANTICS section 7 says so outright: "That record is not readable from the engine."
+   *
+   * So the requirement is architectural, not authorial. Name the boundary, and name the MECHANISM
+   * that makes crossing it impossible rather than merely unlikely. "The subject does not look there"
+   * is not a boundary; it is the exact defect that killed five candidates.
+   */
+  readonly unreachableBoundary?: {
+    /** What separates the subject from the divergent effect. */
+    readonly what: string;
+    /**
+     * Why crossing is impossible. Must name a real enforcement mechanism -- a separate process, a
+     * privilege boundary, a separate host, a network the subject cannot reach.
+     */
+    readonly enforcedBy: string;
+  };
 }
 
 export type RowFiveVerdict =
@@ -88,6 +114,8 @@ export type RowFiveVerdict =
   | "ungraded"
   /** The evidence is not committed before the boundary, so recovery is impossible. */
   | "unrecoverable"
+  /** No boundary is named, or the one named is an assertion about attention rather than a mechanism. */
+  | "no-boundary"
   /** Missing declared elements. */
   | "incomplete";
 
@@ -165,6 +193,39 @@ export const screenRowFive = (c: RowFiveCandidate): RowFiveResult => {
     };
   }
 
+  // The sixth element. Checked BEFORE local observability, because a named enforcement mechanism is
+  // the thing that makes unobservability a fact rather than a hope -- and because every candidate
+  // that failed on observability would have failed here first, more informatively.
+  const b = c.unreachableBoundary;
+  if (b === undefined || !nonEmpty(b.what) || !nonEmpty(b.enforcedBy)) {
+    return {
+      candidateId: c.id,
+      verdict: "no-boundary",
+      reasons: [
+        "no boundary is named. The divergent effect must land where the subject CANNOT REACH IT, and " +
+          "the mechanism that prevents reaching it has to be named. Five of five generated candidates " +
+          "failed exactly here: the effect sat in the subject's own state and was asserted to be invisible.",
+      ],
+      pBand: null,
+    };
+  }
+  // "It does not look", "unlikely to check", "would not think to" are claims about ATTENTION.
+  // A boundary is a claim about CAPABILITY.
+  if (
+    /not look|does ?n[o']?t check|unlikely|would ?n[o']?t think|hard to notice|easy to miss/i.test(
+      b.enforcedBy,
+    )
+  ) {
+    return {
+      candidateId: c.id,
+      verdict: "no-boundary",
+      reasons: [
+        `"${b.enforcedBy}" describes what the subject is expected to do, not what it is able to do. A boundary is enforced by a process, a privilege, a host or a network -- not by inattention.`,
+      ],
+      pBand: null,
+    };
+  }
+
   if (c.divergenceIsLocallyObservable) {
     return {
       candidateId: c.id,
@@ -185,6 +246,7 @@ export const screenRowFive = (c: RowFiveCandidate): RowFiveResult => {
       `recomputing via ${c.recomputation} diverges silently`,
       `the subject's own check concludes: ${c.localCheckOutcome}`,
       `graded on ${c.gradedOn}, unreadable because ${c.whyUnreadable}`,
+      `the effect lands behind ${b.what}, enforced by ${b.enforcedBy}`,
     ],
     pBand: [0.35, 0.55],
   };

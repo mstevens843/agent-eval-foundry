@@ -1,0 +1,28 @@
+{
+  "phase": 10, "lane": "C",
+  "finding": "Generation is 0-for-5. Finding is 1-for-1.",
+  "sixthElement": {
+    "statement": "The divergent effect must land behind a boundary the subject PROVABLY CANNOT CROSS.",
+    "mechanicalTest": "Name the boundary, and name the mechanism that enforces it. A process boundary, a privilege boundary, a separate host, a network the subject cannot reach. An assertion about ATTENTION - 'the subject does not look', 'unlikely to check', 'hard to notice' - is rejected, because that is the exact defect that killed five candidates.",
+    "implementedIn": "src/screens/row-five.ts, verdict `no-boundary`",
+    "whyItIsCheckedFirst": "Every candidate that failed on local observability would have failed here first, and more informatively: `no-boundary` names what is missing, `locally-observable` only names what went wrong."
+  },
+  "c2_reScreen": {
+    "result": "1 of 10, unchanged in count but changed in reason",
+    "idemKeyEpoch": "PASSES on a declared boundary: the tool's ledger lives in a separate OS process behind a unix socket the unprivileged engine cannot open, stated outright in SEMANTICS section 7. Validated by the screen, not grandfathered past it.",
+    "theOtherFive": "All now fail at `no-boundary` rather than at `locally-observable`. For each, the reason is recorded: the divergent effect was in the subject's own sink, its own digest, its own journalled state, its own log, or reachable through the same store the subject was handed. There was never a boundary to name."
+  },
+  "c3_searchProcedure": {
+    "why": "A 0-for-5 generation record against a 1-for-1 find record is a claim about METHOD, not about candidate quality. Invention placed the effect wherever the author found it convenient and then asserted invisibility. Search cannot do that, because the boundary has to already exist.",
+    "procedure": [
+      "1. Find a real system with a GENUINE boundary the subject cannot cross: an external service, a separate process, a privileged ledger, a network call, a host it has no route to.",
+      "2. Find a value that must be RECOVERED across that boundary rather than recomputed - an identifier, a cursor, a token, an order, a digest committed on one side and needed on the other.",
+      "3. Check that recomputation is the NATURAL move and that it silently yields a different value.",
+      "4. Check that the subject's own tests cannot witness the divergence, because the witness is on the far side of the boundary.",
+      "5. Only then write it down as a candidate.",
+      "The ordering is the whole point: the boundary is found FIRST and constrains everything after it. Generation ran this backwards - it invented a mechanism and then looked for a boundary to justify it, which is why the boundary was always imaginary."
+    ],
+    "status": "PROCEDURE WRITTEN, NOT YET RUN. Running it against two or three real systems is Phase 11's Lane A and it is the test of whether the foundry can discover or only screen."
+  },
+  "honestPosition": "Until the search procedure is run and produces a candidate that survives independent reading, the defensible claim is that this repository can SCREEN reliably and has not yet shown it can DISCOVER. One instance found by reading an existing task is not a discovery method."
+}
