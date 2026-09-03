@@ -1,0 +1,120 @@
+{
+  "phase": 6,
+  "lane": "B4",
+  "protocol": "Independent readers given ONLY the subject-visible package (instruction.md, spec/SEMANTICS.md, engine/*.py, harness/*.py minus tool_server.py). No reader saw the phase brief, the candidate derivations, or each other. Each was required to quote verbatim, list assumptions not in the cited text, and flag negative inference.",
+  "question": "May an action that has reached ACKED subsequently be recorded as REVOKED?",
+  "arm": "dao-a2-control (the arm WITHOUT the terminal-states sentence)",
+  "readers": [
+    {
+      "id": "reader-2",
+      "answer": "cannot be determined from the package",
+      "negativeInference": true,
+      "confidence": "medium",
+      "assumptionsNotInText": 5,
+      "keyFinding": "Section 6's antecedent ('after the tool call has already happened') IS satisfied by an ACKED action, but its consequent names the recorded pair 'EXECUTED then REVOKED'. Two readings are each consistent with every sentence in the package and nothing selects between them."
+    },
+    {
+      "id": "reader-3",
+      "answer": "not determined by the package",
+      "negativeInference": true,
+      "confidence": "high",
+      "assumptionsNotInText": 3,
+      "keyFinding": "Section 4's diagram omits at least TWO things the same document requires: passage through IN_DOUBT, and the EXECUTED -> REVOKED edge that section 6 mandates. A diagram that already fails to list a mandatory edge cannot be read as forbidding an unlisted one."
+    },
+    {
+      "id": "reader-1",
+      "answer": "yes (an ACKED action MAY be recorded as REVOKED)",
+      "negativeInference": true,
+      "confidence": "medium",
+      "assumptionsNotInText": 6,
+      "keyFinding": "Section 6's antecedent is satisfied by an ACKED action and its consequent prescribes a record ending in REVOKED; section 7's 'the audit trail must carry both facts' reinforces it. Reached the OPPOSITE answer from readers 2 and 3 from the same package."
+    }
+  ],
+  "convergentFindings": [
+    "Section 4's transition diagram is not a closed enumeration, and the document says so itself one paragraph later.",
+    "Section 7's 'the audit trail must carry both facts' pulls TOWARD recording the revocation, i.e. against the rule under test.",
+    "instruction.md's 'An action that already reached the tool and is revoked afterwards is recorded as having done both' also pulls against the rule; an ACKED action reached the tool.",
+    "engine/db.py's comment calling (EXECUTED, ACKED, REVOKED) terminal is self-defeating: section 6 requires EXECUTED -> REVOKED, so 'terminal' there cannot mean 'no outgoing transition'."
+  ],
+  "verdictOnDerivationB": "FAILS. The brief predicted 2 citations / 2 sections / depth 1 / no negative inference, which is the pass band. Both readers reached depth >= 2 WITH a load-bearing negative inference, and neither concluded the rule holds at all. Section 9 governs audit fidelity, not edge legality, so it cannot carry the step the derivation needs.",
+  "consequenceForPrediction": "The author's registered prediction P2 holds and the brief's prediction does not.",
+  "ackedVerdict": {
+    "answersGiven": [
+      "yes",
+      "cannot be determined",
+      "not determined"
+    ],
+    "agreement": "0/3 - the three readers do not agree on the answer",
+    "category": 1,
+    "categoryRule": "Pre-registered scoring rule: 'readers disagree on the answer itself -> 1, underspecified'. This fires on the answers alone and does not depend on the negative-inference argument.",
+    "consequence": "The ACKED axis of the durable outbox stays WITHDRAWN. Derivation B does not rescue it. Phase 5's conclusion stands on this axis.",
+    "corroboration": "Independent of the readers, the A2 differential already showed this mechanically: one sentence closing the enumeration took audit_explains from 33 cells to 0."
+  },
+  "idemKeyCorrection": {
+    "whatIGotWrong": "An earlier statement in this phase said idem_key is reconstructible 'twice over' - by recomputation from durable columns AND from the committed intent record. The recomputation half is FALSE.",
+    "why": "idem_key(action_id, req_id, epoch) mixes in epoch. SEMANTICS section 4: 'epoch increases by one every time the action is leased, ever.' A crash forces the lease to expire (harness/limits.py: the driver advances the clock by RESTART_STEPS) and the action to be re-leased, so epoch after restart differs from epoch at the time of the call. Recomputing therefore yields a key the tool has never seen, the idempotency dedupe does not fire, and the re-invocation causes a SECOND side effect.",
+    "correctPosition": "idem_key is recoverable after an after_tool crash, but ONLY from the write-ahead intent audit row committed before the call (engine/worker.py:58-60). Recomputation is not a second route; it is the trap.",
+    "foundBy": "an independent reader, not by the author",
+    "effectOnTheVerdict": "It strengthens the case that the RESIDUE is category 2 rather than category 1: the derivation exists and is fully cited, and it contains a trap that a careless engine falls into. That is difficulty, not underspecification."
+  },
+  "residue": {
+    "questionAsPosed": "After an after_tool crash, how does the engine determine whether the side effect occurred?",
+    "readerAgreement": "3 of 3 agree on the substance, all with high confidence, and all three independently found the epoch trap that neither the author nor the phase brief had noticed.",
+    "readers": [
+      {
+        "id": "residue-1",
+        "verdict": "determination impossible; correct behaviour achievable by making the question unnecessary",
+        "confidence": "high",
+        "foundEpochTrap": true
+      },
+      {
+        "id": "residue-2",
+        "verdict": "yes - a guess-free procedure exists",
+        "confidence": "high",
+        "foundEpochTrap": true
+      },
+      {
+        "id": "residue-3",
+        "verdict": "the claim 'can always DETERMINE ... without guessing' is FALSE, but reconstruction is available",
+        "confidence": "high",
+        "negativeInferenceOnMainAnswer": false,
+        "foundEpochTrap": true,
+        "counterexample": "World A: crash on the intent COMMIT, so tool.invoke is never reached - no side effect, no receipt. World B: crash on the TOOL with outcome OK - the side effect happened, and no receipt is guaranteed because section 7 promises receipts only for calls whose outcome was UNKNOWN. After rebuild the engine-visible rows are identical in both worlds (action LEASED, executed=FALSE, same epoch, same intent: audit row) and poll_receipts() is empty in both. No function of observable state separates them."
+      }
+    ],
+    "theDecompositionThatSettlesIt": {
+      "determination": "IMPOSSIBLE. 'Did my earlier call land?' is not answerable from any engine channel, and reader 3's two-world construction proves it rather than asserting it.",
+      "reconstruction": "POSSIBLE and derivable. Commit a durable intent carrying the exact key before the call; after restart recover THAT key and re-invoke under it; idempotency collapses both worlds to one outcome. The engine never needs to know which world it was in.",
+      "theSpecSaysThisItself": "SEMANTICS section 7: 'A service that calls an external system cannot look up whether its own call landed, which is why exactly-once has to be reconstructed rather than checked.'",
+      "category": 2,
+      "profile": {
+        "citations": 4,
+        "sections": 3,
+        "depth": 2,
+        "negativeInference": false
+      },
+      "band": "demanding-fragile",
+      "honestNote": "At 4 citations across 3 sections this lands in the FRAGILE band, not the ship band. It is category 2 - genuine difficulty, not underspecification - but at the tortuous end, and the honest reading is 'repair before shipping' rather than 'ship this'. Rounding it into the pass band would be exactly the thing this phase exists to stop."
+    },
+    "theTrap": {
+      "what": "idem_key folds in epoch; epoch increments on every lease; a crash forces the lease to expire and the action to be re-leased. Recomputing the key after restart therefore produces a key the tool has never seen, the dedupe does not fire, and the re-invocation causes a SECOND side effect - the exact failure the task exists to catch.",
+      "citations": [
+        "SEMANTICS section 4: 'epoch increases by one every time the action is leased, ever.'",
+        "harness/limits.py: RESTART_STEPS = LEASE_STEPS + 1",
+        "harness/driver.py: 'Advancing the clock is what lets the lease it was holding expire, so a peer reclaims the action at a higher epoch'",
+        "engine/worker.py:14-16"
+      ],
+      "foundBy": "all three independent readers; not by the author, not by the phase brief",
+      "significance": "This is calibration-table row 5 exactly: an engine that recomputes the key has a self-check that runs GREEN - it re-invoked, it got OK, it recorded EXECUTED - over a double side effect it cannot see."
+    }
+  },
+  "outboxVerdict": {
+    "headline": "WITHDRAWN IN PART, RESTORED IN PART",
+    "ackedAxis": "WITHDRAWN - category 1. Three readers gave three different answers to the same question from the same package.",
+    "residueAxis": "RESTORED - category 2, derivable-but-demanding, at the fragile end of the band.",
+    "note": "This is the decomposition registered as outcome 4 in Phase 4, which the axis-width test was too coarse to detect. It took a derivation test to see it.",
+    "cc267claude1": "Stranding an action in IN_DOUBT forever is a genuine CAPABILITY failure on the residue axis: the reconstruction route was derivable from cited text and that engine did not take it.",
+    "whatWouldOverturnThis": "If the hidden verifier grades 'determine what happened' rather than 'achieve exactly-once', the residue is category 1 after all and the restoration is wrong. That is checkable against the verifier and was NOT checked in this phase.",
+    "killSignal3": "Does not fire. Derivation B failed, but the residue survived on a separate axis, so the outbox is not dead."
+  }
+}

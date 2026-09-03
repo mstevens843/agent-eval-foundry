@@ -1,0 +1,74 @@
+{
+  "phase": 6,
+  "title": "Port the discipline that already works",
+  "registeredOn": "2026-09-03",
+  "registeredBefore": "any screen was implemented, any reader was run, any retrospective was scored",
+  "note": "Predictions are recorded so the phase can be scored against them rather than narrated after the fact. Phases 4 and 5 each disclosed that their own registered test failed; that is the point of writing them down.",
+
+  "loadBearingChecksSettledFirst": [
+    {
+      "id": "idem-key-durability",
+      "question": "Is idem_key persisted or reconstructible before the tool call, so it survives an after_tool crash?",
+      "answer": "YES, twice over",
+      "evidence": [
+        "engine/worker.py:14 defines idem_key(action_id, req_id, epoch) as a pure function f\"idem::{action_id}::{req_id}::{epoch}\" - no clock, no randomness, no in-memory state",
+        "all three inputs are durable columns on `actions` (action_id PRIMARY KEY, req_id NOT NULL, epoch NOT NULL DEFAULT 0) per engine/db.py",
+        "engine/worker.py:58-60 commits a write-ahead intent audit row `intent:{k}` BEFORE tool.invoke(k, ...) is called"
+      ],
+      "consequence": "Kill signal 3 does not fire on the idem_key ground. Phase 5's residue withdrawal cannot rest on non-reconstructibility.",
+      "correctionToTheBrief": "The brief's candidate chain says a re-invoke 'resolves the ambiguity'. SEMANTICS.md 7 says the opposite in general: an unknown call 'stays unknown for a while: repeating it during that window returns UNKNOWN again rather than resolving it.' The chain only closes because NO crash schedule arms an unknown window - crash-after-tool, hostile-mix, crash-after-lease and stale-lease all omit `unknowns`, and the only two schedules that arm it (unknown-then-revoke, unknown-then-revoke-noop, window 8) have crashes: []. So _WINDOWS stays empty and the recovery re-invoke hits `if idem_key in _BY_KEY` -> returns OK with no new side effect."
+    },
+    {
+      "id": "a2-treatment-diff",
+      "question": "Is the A2 treatment diff exactly the one sentence the brief quotes?",
+      "answer": "YES",
+      "evidence": "diff -r tasks/dao-a2-control tasks/dao-a2-treatment yields 55a56,57 adding '`ACKED` and `REVOKED` are terminal: neither has an outgoing transition.' plus a blank line, and the task.toml name line. Nothing else."
+    }
+  ],
+
+  "predictions": [
+    {
+      "id": "P1",
+      "lane": "A5",
+      "claim": "The four ported screens will kill the withdrawn families earlier and more cheaply than the foundry did, at a rate comparable to the source repo's 4-of-5-at-steps-1-to-3.",
+      "falsifiedIf": "fewer than half the known-withdrawn cases are caught by screens 1-4 without running a model",
+      "killSignal": 1
+    },
+    {
+      "id": "P2",
+      "lane": "B4",
+      "claim": "Derivation B (the obligation route, 6 + 9) will NOT come back at depth 1 with no negative inference as the brief predicts. It lands at depth 2 with a load-bearing negative inference, or needs a third citation.",
+      "reasoning": "6 states a positive rule for revocation landing after the tool call and never mentions ACKED. Getting from there to 'an ACKED action must not be revoked' needs either 6's recorded sequence read as exhaustive - the same negative inference that sinks Derivation A - or an extra step showing ACKED cannot produce that sequence. 9 governs audit fidelity, not edge legality: an engine that really moves ACKED->REVOKED has made that transition occur, so 9 alone does not forbid it.",
+      "falsifiedIf": "a majority of independent readers produce citation-only derivations at depth <= 2 with no negative-inference flag that survive adversarial checking",
+      "note": "This is the author's own prediction against the brief's. Either way it is reported."
+    },
+    {
+      "id": "P3",
+      "lane": "B1",
+      "claim": "Most of the 52-candidate pool lands in calibration rows 1-4 (p >= 0.80), which would explain the funnel's yield better than any scoring model in the repository.",
+      "falsifiedIf": "fewer than half the pool lands in rows 1-4",
+      "killSignal": 5
+    },
+    {
+      "id": "P4",
+      "lane": "B2",
+      "claim": "Self-check coverage reproduces the results/34 split: the one trial with a transition-legality table separates from the five without.",
+      "falsifiedIf": "the metric does not separate cc267-claude-1 from the other five",
+      "killSignal": 4
+    },
+    {
+      "id": "P5",
+      "lane": "C",
+      "claim": "Calibration row 5 (choosing against a confirmed green measurement) passes the screen, giving it a demonstrated pass band for the first time.",
+      "falsifiedIf": "row 5 is rejected",
+      "killSignal": 2,
+      "commitment": "If row 5 fails, that is the headline and the threshold is NOT adjusted to manufacture a pass."
+    },
+    {
+      "id": "P6",
+      "lane": "F",
+      "claim": "Net lines fall this phase. Phase 5 was +272.",
+      "falsifiedIf": "net delta is positive"
+    }
+  ]
+}

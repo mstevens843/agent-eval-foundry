@@ -714,3 +714,41 @@ export { buildMemoryChallengePackage } from "./challenge/memory-package.js";
 export { buildUiChallengePackage } from "./challenge/ui-package.js";
 export { MEMORY_PROFILE, PIC_PROFILE, UI_PROFILE } from "./challenge/package-check.js";
 export type { LeakProfile } from "./challenge/package-check.js";
+export {
+  activationAudit,
+  band,
+  CALIBRATION_TABLE,
+  checkActivation,
+  cheapClassifierAccuracy,
+  classify,
+  clearsVise,
+  corpusFromMatrix,
+  entropy,
+  identifiabilityCheck,
+  knobActivation,
+  leakAudit,
+  mutualInformation,
+  passRateBand,
+  profile,
+  runScreens,
+  SCREEN_COST,
+  SCREEN_ORDER,
+  summarisePool,
+  verifyCitations,
+  vise,
+} from "./screens/index.js";
+export type {
+  ActivationVerdict,
+  Band,
+  ChainProfile,
+  Citation,
+  Classification,
+  CorpusRow,
+  DiscoveryShape,
+  EvidenceChain,
+  IdentifiabilityVerdict,
+  LeakVerdict,
+  ScreenId,
+  ScreenRun,
+  ViseVerdict,
+} from "./screens/index.js";
