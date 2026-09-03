@@ -5,9 +5,9 @@
 Predictions were committed in `reports/PHASE-3-PREREGISTRATION.md` before any of this ran. Read that
 first if you want to check that nothing here was rationalised after the fact.
 
-> **STATUS: the treatment arm is COMPLETE (6 runs, both labs). The control arm has 4 valid runs with
-> 2 landing.** One control run is excluded as `infra` and is being replaced. Every number carries its
-> `n`. Nothing else in this report depends on A2.
+> **A2 IS COMPLETE.** Twelve valid runs, six per arm, three per lab per arm. Two further runs were
+> killed by a machine shutdown and one by a network failure; all three are preserved, annotated, and
+> excluded from every denominator.
 
 ---
 
@@ -49,54 +49,98 @@ inferred. It is also not hard to miss. Both readings are reachable from the same
 is the condition the boundary rule calls `spec-underspecified` — and it is now observed rather than
 argued.
 
-### Outcome 4: the suite decomposes. Treatment arm complete, both labs.
+### The result, at full n
 
-The treatment arm is **finished** — six runs, three Anthropic and three OpenAI. The control arm has
-four valid runs with two still landing.
+**A2 is complete: 6 valid runs per arm, 3 per lab per arm, as designed.**
 
-**On reward the arms are indistinguishable:**
+| run | arm | lab | reward | cells failed | check(s) that fired |
+|---|---|---|---|---:|---|
+| `a2-control-opus-1b` | control | Anthropic | 0.0 | 6 | `audit_explains` |
+| `a2-control-opus-2b` | control | Anthropic | 0.0 | 11 | `audit_explains` |
+| `a2-control-opus-3` | control | Anthropic | 0.0 | 9 | `audit_explains`, `executed_iff_called` |
+| `a2-control-codex-1` | control | OpenAI | 0.0 | 11 | `audit_explains` |
+| `a2-control-codex-2` | control | OpenAI | 1.0 | 0 | — |
+| `a2-control-codex-3` | control | OpenAI | 1.0 | 0 | — |
+| `a2-treatment-opus-1b` | treatment | Anthropic | 0.0 | 1 | `completion` |
+| `a2-treatment-opus-2` | treatment | Anthropic | 0.0 | 2 | `executed_iff_called` |
+| `a2-treatment-opus-3` | treatment | Anthropic | 1.0 | 0 | — |
+| `a2-treatment-codex-1` | treatment | OpenAI | 1.0 | 0 | — |
+| `a2-treatment-codex-2` | treatment | OpenAI | 0.0 | 2 | `executed_iff_called` |
+| `a2-treatment-codex-3` | treatment | OpenAI | 1.0 | 0 | — |
 
-| condition | n | passed | pass rate |
+#### Reward barely moves
+
+| condition | n | passed | rate |
 |---|---:|---:|---:|
-| control | 4 | 2 | **0.50** |
+| control | 6 | 2 | **0.33** |
 | treatment | 6 | 3 | **0.50** |
 | control / OpenAI | 3 | 2 | 0.67 |
-| treatment / OpenAI | 3 | 2 | 0.67 |
+| treatment / OpenAI | 3 | 2 | **0.67 — identical** |
 
-Identical overall, identical within the lab where both arms are complete. On reward alone this reads
-as pre-registered outcome 2 — "both fail similarly, the withdrawal reverses". **Reward is the wrong
-resolution, and this is the cleanest demonstration of that the project has.**
+Fisher's exact, two-tailed: **p = 1.000**. At n=6 per arm this test has almost no power, so that is
+"not enough data", not "no effect". **On reward, this experiment is inconclusive and would have been
+inconclusive at any n this budget could buy.**
 
-**On the check that fires, the arms are disjoint:**
+#### The check level is not inconclusive at all
 
-| | control (4 subjects) | treatment (6 subjects) |
+| | control (6 subjects) | treatment (6 subjects) |
 |---|---|---|
-| `audit_explains` — the ACKED rule | **17 cells, 2 subjects** | **0 cells, 0 subjects** |
-| `executed_iff_called` | 0 | 4 cells, 2 subjects |
+| `audit_explains` — the ACKED rule | **33 cells, 4 of 6 subjects** | **0 cells, 0 subjects** |
+| `executed_iff_called` | 4 cells, 1 subject | 4 cells, 2 subjects |
 | `completion` | 0 | 1 cell, 1 subject |
-| total failing cells | 17 | 5 |
-| instances separating nothing | 13 of 24 | 21 of 24 |
-| checks that never fired | 10 of 11 | 9 of 11 |
+| **total failing cells** | **37** | **5** |
+| instances that separate nothing | 9 of 24 | **21 of 24** |
+| distinct catch sets | 6 | 2 |
+| independent axes | 2 | 2 |
+| axis width vs null-model mean | 2 vs 4.7 | 2 vs 2.8 |
+| checks that never fired | 9 of 11 | 9 of 11 |
 
-**`audit_explains` fires seventeen times in the control arm and zero times across the treatment arm's
-complete six-subject, 144-cell bank.** One sentence, both labs, no residue.
+**33 of the control arm's 37 failing cells — 89% — are the specification defect.** One sentence takes
+that to zero across a complete six-subject, 144-cell bank spanning both labs. The suite goes from 15
+discriminating instances to 3.
 
-What survives appears from **both sides of one dual obligation**, which is why it is one axis:
+What survives is one mechanism seen from both sides, which is why it is one axis and not two:
 
-- `executed_iff_called` — *"action r0008 is REVOKED with ever_executed=False but the tool recorded 1
-  side effect; an engine may not decide for itself whether the call happened."* It resolved an
-  uncertain action wrongly.
-- `completion` — on `hostile-mix`. It stranded actions rather than resolving them.
+- `executed_iff_called` — *"an engine may not decide for itself whether the call happened"* — resolving
+  an uncertain action wrongly.
+- `completion` — stranding actions rather than resolving them.
 
-**The pre-registration named this outcome and named the surviving mode.** It predicted the remaining
-failures would be `cc267-claude-1`'s mode — stranding `IN_DOUBT` rather than resolving it illegally —
-and `a2-treatment-opus-1b` failed exactly there.
+The pre-registration predicted the surviving mode would be `cc267-claude-1`'s — stranding `IN_DOUBT`
+rather than resolving it illegally — and `a2-treatment-opus-1b` failed exactly there.
 
-**On the axis counts, stated honestly.** The meter reports width **1** for control and **2** for
-treatment. That is not "the treatment arm gained an axis": the control arm's failures nest (both
-subjects fail the same six scenarios), while the treatment arm's two failures land on different
-subjects and are incomparable. At banks this small the width is a fact about which subject failed,
-not about the suite. The number carrying this result is the 17-versus-0 above.
+#### Where the pre-registered statistic did NOT do what I predicted
+
+Outcome 4 was worded as *"treatment removes exactly one axis"*, to be tested by comparing axis width
+between arms. **The width is 2 in both arms. On its own stated test, outcome 4 did not fire.**
+
+That is a miss in the instrument, not in the effect, and the distinction is checkable rather than
+convenient:
+
+- The control arm's two axes are the ACKED defect and the uncertainty mechanism.
+- The treatment arm's two axes are the *two sides of the uncertainty mechanism*, which land on
+  different subjects and are therefore incomparable catch sets, so the meter counts them separately.
+
+Antichain width counts incomparable catch sets. It cannot know that "stranded it" and "resolved it
+wrongly" are one obligation, and at six subjects one failure per subject is enough to split them. The
+width is measuring which subject failed as much as what the suite measures.
+
+Everything that *did* move moved hard: failing cells 37 → 5, distinct catch sets 6 → 2, discriminating
+instances 15 → 3, and the defect check 33 → 0. **I should have pre-registered the check-firing
+comparison rather than the width**, and I am recording that I did not rather than quietly reporting
+the statistic that worked.
+
+Both widths sit below their null-model means (2 against 4.7, and 2 against 2.8), so neither arm's
+compression is an artifact of bank size.
+
+#### Two version confounds, recorded
+
+- The 2026-08 runs behind the original `6/6` used **codex 0.149.1**; A2 used **0.152.1**. Nothing here
+  is comparable to that result. The pre-registration's insistence on re-running the control arm rather
+  than reusing the 2026-08 controls is what saved the experiment.
+- Within A2, one run drifted: `a2-control-opus-2b` ran **claude-code 2.1.259** where the other five
+  Anthropic runs ran **2.1.258**. It is a patch release and it is on the control arm, which had the
+  lower pass rate — so it cannot manufacture the effect reported here. Recorded because a confound
+  found later reads as a confound concealed.
 
 ### One run excluded, and why it matters more than it looks
 
@@ -130,23 +174,13 @@ in both labs, with no residue. It was counted as difficulty for a month and it w
 **Settled**: the family measures something real underneath it. Failures survive the repair, and they
 are the mechanism the task was built around.
 
-**Not settled**: how hard that real thing is. Three runs per arm, and the treatment arm failed 2 of 3
-— but on one cell and two cells respectively, against a suite of 264. Six more runs are in flight.
+**Not settled**: how hard that real thing is. Three of six treatment subjects failed it, but on 5
+cells out of 288 graded. A signal that thin is a signal; it is not a difficulty measurement, and no
+`n` this budget could buy would have made it one.
 
 **Not settled**: whether the surviving failures are themselves `capability`. They have not been
 through the blind protocol. On this project's own rules that makes them `unlabelled`, and
 `unlabelled` blocks.
-
-### A confound found, and the decision that avoided it
-
-The 2026-08 runs that produced the original `6/6 reward 0` used **codex 0.149.1**. The A2 runs use
-**codex 0.152.1**. Same model name, different agent harness.
-
-So any comparison between A2 and the original 6/6 crosses a version boundary and cannot be trusted.
-The within-A2 comparison does not, because both arms run 0.152.1.
-
-The pre-registration insisted that the control arm be re-run rather than reused from 2026-08. That
-decision was made for a different reason — symmetry — and it is what saved the experiment.
 
 ### What the original 6/6 could always have been
 
@@ -155,14 +189,24 @@ with no successes is consistent with a true per-run pass probability as high as 
 level, since `(1 − 0.39)^6 ≈ 0.05`. The `6/6 reward 0` headline was always compatible with a task
 that frontier models pass roughly a third of the time. It was reported as a property of the task.
 
-### Cost so far
+### Cost, complete
 
-Two runs were killed mid-flight when the machine was shut down: `$17.13` and `$15.07` of real spend,
-no verdict, preserved under `runs/a2-*-opus-1/` with a `CRASHED.md` recording the state. They
-contribute to no denominator, and they are counted in the cost record, because a plan that prices
-only the runs that finished is the same optimistic error as one that prices only the families that
-shipped.
+| | runs | spend |
+|---|---:|---:|
+| counted, control | 6 | $64.12 |
+| counted, treatment | 6 | $56.08 |
+| **counted total** | **12** | **$120.20** |
+| crashed — machine shut down mid-flight | 2 | $32.20 |
+| infra — `NetworkConnectionError` | 1 | $0.41 |
+| **total spent** | **15** | **$152.81** |
 
+The three excluded runs cost **$32.61 and produced nothing**, which is 21% of the spend. They are in
+the cost record and in no denominator, because a plan that prices only the runs that finished is the
+same optimistic error as one that prices only the families that shipped. The free oracle and nop
+validations that gated all of this cost $0.
+
+Against the pre-registered estimate of roughly $110 for twelve runs, the actual counted spend was
+$120.20 — within 10%. Including the losses it was $152.81, which is the number a plan should carry.
 ---
 
 ## 2. The outbox verdict: decomposed, not withdrawn and not restored
@@ -180,9 +224,14 @@ project has made about the outbox that an experiment produced rather than an arg
   the family was built around, and failing it requires deciding for yourself whether an uncertain
   external call happened, which is a genuine thing to be bad at.
 
-The original headline counted both as difficulty. Six of the twenty-four scenarios —
-`revoke-after-ack-{a..f}` — exist solely to hit the first, and they carry one catch set between them:
-one measurement wearing six names, and the measurement was of the author's specification.
+The original headline counted both as difficulty. **89% of the control arm's failing cells are the
+specification defect** — 33 of 37, across four of six subjects and both labs — and one sentence takes
+that to zero. Six of the twenty-four scenarios, `revoke-after-ack-{a..f}`, exist solely to hit it, and
+they carry one catch set between them: one measurement wearing six names, and the measurement was of
+the author's specification.
+
+The residue is small and it is real. Five failing cells survive the repair, on three of six subjects,
+in both labs.
 
 On the ACKED axis specifically, the original argument was that the rule was unstated and therefore
 unknowable. The observation is sharper and less flattering: the rule is *knowable* — one control run
@@ -438,7 +487,24 @@ further work by this author closes it.
 
 ## 5. What is demonstrated
 
-**Families with surviving cross-lab `capability` evidence: still zero.**
+**Families with surviving cross-lab `capability` evidence: still zero — but the outbox is now the
+closest thing to it this project has.**
+
+After the repair, five failing cells survive across three of six subjects in both labs, on one
+mechanism: what an engine does with an external effect whose outcome it cannot observe. That is a
+real thing to be bad at, it is the thing the family was built to measure, and it is the first
+difficulty signal here that survived a controlled single-sentence spec repair.
+
+It is **not** `capability` evidence yet, and calling it that would be the same move this project
+spent three phases undoing. Nobody has adjudicated those five cells under the blind protocol. On this
+repository's own rules they are `unlabelled`, and `unlabelled` blocks. The honest sentence is:
+
+> One family has a surviving failure mode that a controlled spec repair did not remove, at one
+> measured axis, across two labs, on 5 of 288 graded cells. It has not been root-caused, so it is not
+> yet difficulty evidence.
+
+That is much smaller than `6/6 reward 0`. It is also the first version of the claim that an
+experiment produced rather than an argument.
 
 The check-firing statistic, added to the axis meter this phase, sharpens the coverage argument more
 than expected:
@@ -579,13 +645,23 @@ that keeps the evidence intact.
 
 ---
 
-## 8. Still open at the time of writing
+## 8. Still open
 
-- **A2**: six of twelve runs complete; the Anthropic arms and the second and third Codex replicates
-  are still in flight. Outcome 4 — the axis comparison — is not measurable until the treatment bank
-  is complete.
-- **Lane B**: the calibration set is being rebuilt at n≥24 positives with *matched* negatives (the
-  same mutant failure with and without the SPEC sentence that states its rule), which is a stronger
-  design than Phase 3's. Cross-family labelling uses a genuinely different provider.
-- **A human labeller**: not available. There is no human in this loop, and the agreement figure this
-  phase reports will be model-to-model only. That limitation is not fixable by working harder at it.
+- **The five surviving failures need blind adjudication.** They are the whole remaining question
+  about this family, and this phase did not answer it. `cc267-claude-1` — the trial that failed on
+  the *opposite* side of the constraint — should be read alongside them.
+- **The three `capability` trials have still never been re-labelled blind.** Unchanged since Phase 3.
+  They carry that label because somebody wrote it, not because two independent readers agreed.
+- **The calibration's perfect score is a ceiling effect** (§4b). The controls are easier than the
+  defect they stand in for; only 2 of 22 negatives were one-sentence deletions. A harder control set
+  is the next real measurement.
+- **There is no human labeller.** Not in any phase. Every agreement figure here is model-to-model.
+  The cross-family result narrows the gap and does not close it.
+- **Net lines rose by 1,419** (§7). Retiring `probe-runner.ts` requires first migrating promotion and
+  lineage records off live-probe validation, because two phase rules conflict and the evidence rule
+  wins.
+- **The deliverable exporter was not built.** Kill signal 5 was answered by measurement instead
+  (§5) — every family yields more than two genuinely distinct instances — but no exporter emits them.
+- **A3 — human ground truth on the ACKED question — was never run**, by the operator's instruction,
+  pending two engineers. It is the one experiment that would settle whether the terminal set is
+  derivable by a competent reader who is not a language model.

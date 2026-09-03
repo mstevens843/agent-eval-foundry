@@ -59,6 +59,19 @@ jobs:
       - name: lint
         run: pnpm lint
 
+      # Whether the container isolation tests actually RAN is a fact the log should state.
+      #
+      # They guard on being able to start a container, not on a daemon answering — GitHub's runners
+      # answer and then failed the real `docker run`, so the tests went red while their assertions
+      # were never checked. Now they skip instead, which is right, and this step makes the skip
+      # visible rather than silent. Non-fatal: a pull failure is an infrastructure fact, not a defect
+      # in this repository.
+      - name: container runtime probe (informational)
+        continue-on-error: true
+        run: |
+          docker pull node:22-alpine
+          docker run --rm node:22-alpine true && echo "CONTAINER RUNTIME OK — isolation tests will run"
+
       - name: unit tests (includes prose freshness)
         run: pnpm test
 

@@ -1,0 +1,1300 @@
+{
+ "_comment": [
+  "A2 \u2014 the spec-repair differential, complete. Two arms of `durable-approval-outbox` differing by",
+  "ONE SENTENCE of agent-visible specification:",
+  "",
+  "    `ACKED` and `REVOKED` are terminal: neither has an outgoing transition.",
+  "",
+  "The control arm is byte-identical to the original task apart from its name (verified by diff -r).",
+  "Both arms were built as fresh copies so neither is privileged as 'the original'. Free validation",
+  "before any spend: oracle 1.0 on both arms, nop 0.0 on treatment.",
+  "",
+  "WHY THIS FILE EXISTS IN THE REPOSITORY. Phase 3's control set and probe lived in a scratch",
+  "directory and did not survive a machine restart; only the numbers in its report survived, and one",
+  "of them turned out to be wrong. Evidence that lives only in a report is a claim, not evidence.",
+  "",
+  "EXCLUSIONS are mechanical and are recorded below with the marker file that carries the reason.",
+  "A run whose harness raised is not evidence about a subject \u2014 with one exception that is part of",
+  "the task's own contract: `task.toml` declares `timeout_sec = 7200.0` for the agent, so exhausting",
+  "that budget is failing the task, not the harness failing the subject. `AgentTimeoutError` counts;",
+  "`NetworkConnectionError` does not. The rule is the exception TYPE, never the cost, because",
+  "excluding on cost is a judgement made case by case in whichever direction the author prefers.",
+  "",
+  "VERSION CONFOUNDS. The 2026-08 runs behind the original 6/6 used codex 0.149.1; A2 used 0.152.1,",
+  "so nothing here is comparable to that result. Within A2, `a2-control-opus-2b` ran claude-code",
+  "2.1.259 where the other five Anthropic runs ran 2.1.258 \u2014 a patch release, on the control arm,",
+  "which had the LOWER pass rate, so it cannot manufacture the reported effect."
+ ],
+ "capturedOn": "2026-09-02",
+ "source": "/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task/runs/a2-*",
+ "sentenceUnderTest": "`ACKED` and `REVOKED` are terminal: neither has an outgoing transition.",
+ "runs": [
+  {
+   "run": "a2-control-codex-1",
+   "arm": "control",
+   "lab": "openai",
+   "version": "0.152.1",
+   "model": "gpt-5.6-sol",
+   "reward": 0.0,
+   "cost": 7.741098400000003,
+   "tests_total": 267,
+   "tests_failed": 11,
+   "illegal_transitions": {
+    "ACKED->REVOKED": 11
+   }
+  },
+  {
+   "run": "a2-control-codex-2",
+   "arm": "control",
+   "lab": "openai",
+   "version": "0.152.1",
+   "model": "gpt-5.6-sol",
+   "reward": 1.0,
+   "cost": 2.486164,
+   "tests_total": 267,
+   "tests_failed": 0,
+   "illegal_transitions": {}
+  },
+  {
+   "run": "a2-control-codex-3",
+   "arm": "control",
+   "lab": "openai",
+   "version": "0.152.1",
+   "model": "gpt-5.6-sol",
+   "reward": 1.0,
+   "cost": 4.121571999999999,
+   "tests_total": 267,
+   "tests_failed": 0,
+   "illegal_transitions": {}
+  },
+  {
+   "run": "a2-control-opus-1b",
+   "arm": "control",
+   "lab": "anthropic",
+   "version": "2.1.258",
+   "model": "claude-opus-5",
+   "reward": 0.0,
+   "cost": 13.034203999999999,
+   "tests_total": 267,
+   "tests_failed": 6,
+   "illegal_transitions": {
+    "ACKED->REVOKED": 6
+   }
+  },
+  {
+   "run": "a2-control-opus-2b",
+   "arm": "control",
+   "lab": "anthropic",
+   "version": "2.1.259",
+   "model": "claude-opus-5",
+   "reward": 0.0,
+   "cost": 23.61397900000002,
+   "tests_total": 267,
+   "tests_failed": 11,
+   "illegal_transitions": {
+    "ACKED->REVOKED": 11
+   }
+  },
+  {
+   "run": "a2-control-opus-3",
+   "arm": "control",
+   "lab": "anthropic",
+   "version": "2.1.258",
+   "model": "claude-opus-5",
+   "reward": 0.0,
+   "cost": 13.123899749999996,
+   "tests_total": 267,
+   "tests_failed": 9,
+   "illegal_transitions": {
+    "ACKED->REVOKED": 5
+   }
+  },
+  {
+   "run": "a2-treatment-codex-1",
+   "arm": "treatment",
+   "lab": "openai",
+   "version": "0.152.1",
+   "model": "gpt-5.6-sol",
+   "reward": 1.0,
+   "cost": 3.6825624000000006,
+   "tests_total": 267,
+   "tests_failed": 0,
+   "illegal_transitions": {}
+  },
+  {
+   "run": "a2-treatment-codex-2",
+   "arm": "treatment",
+   "lab": "openai",
+   "version": "0.152.1",
+   "model": "gpt-5.6-sol",
+   "reward": 0.0,
+   "cost": 3.3677696,
+   "tests_total": 267,
+   "tests_failed": 2,
+   "illegal_transitions": {}
+  },
+  {
+   "run": "a2-treatment-codex-3",
+   "arm": "treatment",
+   "lab": "openai",
+   "version": "0.152.1",
+   "model": "gpt-5.6-sol",
+   "reward": 1.0,
+   "cost": 3.2206767999999997,
+   "tests_total": 267,
+   "tests_failed": 0,
+   "illegal_transitions": {}
+  },
+  {
+   "run": "a2-treatment-opus-1b",
+   "arm": "treatment",
+   "lab": "anthropic",
+   "version": "2.1.258",
+   "model": "claude-opus-5",
+   "reward": 0.0,
+   "cost": 21.568919499999996,
+   "tests_total": 267,
+   "tests_failed": 1,
+   "illegal_transitions": {}
+  },
+  {
+   "run": "a2-treatment-opus-2",
+   "arm": "treatment",
+   "lab": "anthropic",
+   "version": "2.1.258",
+   "model": "claude-opus-5",
+   "reward": 0.0,
+   "cost": 12.662047999999995,
+   "tests_total": 267,
+   "tests_failed": 2,
+   "illegal_transitions": {}
+  },
+  {
+   "run": "a2-treatment-opus-3",
+   "arm": "treatment",
+   "lab": "anthropic",
+   "version": "2.1.258",
+   "model": "claude-opus-5",
+   "reward": 1.0,
+   "cost": 11.575854499999998,
+   "tests_total": 267,
+   "tests_failed": 0,
+   "illegal_transitions": {}
+  }
+ ],
+ "excluded": [
+  {
+   "run": "a2-control-opus-1",
+   "state": "crashed",
+   "marker": "runs/a2-control-opus-1/CRASHED.md"
+  },
+  {
+   "run": "a2-control-opus-2",
+   "state": "infra",
+   "marker": "runs/a2-control-opus-2/INFRA.md"
+  },
+  {
+   "run": "a2-treatment-opus-1",
+   "state": "crashed",
+   "marker": "runs/a2-treatment-opus-1/CRASHED.md"
+  }
+ ],
+ "perArmMatrix": {
+  "control": {
+   "subjects": [
+    "a2-control-codex-1",
+    "a2-control-codex-2",
+    "a2-control-codex-3",
+    "a2-control-opus-1b",
+    "a2-control-opus-2b",
+    "a2-control-opus-3"
+   ],
+   "instances": 24,
+   "checksDeclared": [
+    "exactly_once",
+    "executed_iff_called",
+    "gate",
+    "completion",
+    "audit_append_only",
+    "audit_explains",
+    "revocation_ordering",
+    "tool_plan",
+    "expected_executions",
+    "progress",
+    "mechanism_fired"
+   ],
+   "results": {
+    "crash-after-lease-1009-12": {
+     "a2-control-codex-1": {
+      "failed": []
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": []
+     },
+     "a2-control-opus-2b": {
+      "failed": []
+     },
+     "a2-control-opus-3": {
+      "failed": []
+     }
+    },
+    "crash-after-lease-1021-16": {
+     "a2-control-codex-1": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": []
+     },
+     "a2-control-opus-2b": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-opus-3": {
+      "failed": []
+     }
+    },
+    "crash-after-tool-1009-12": {
+     "a2-control-codex-1": {
+      "failed": []
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": []
+     },
+     "a2-control-opus-2b": {
+      "failed": []
+     },
+     "a2-control-opus-3": {
+      "failed": []
+     }
+    },
+    "crash-after-tool-1013-16": {
+     "a2-control-codex-1": {
+      "failed": []
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": []
+     },
+     "a2-control-opus-2b": {
+      "failed": []
+     },
+     "a2-control-opus-3": {
+      "failed": [
+       "executed_iff_called"
+      ]
+     }
+    },
+    "crash-after-tool-1031-20": {
+     "a2-control-codex-1": {
+      "failed": []
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": []
+     },
+     "a2-control-opus-2b": {
+      "failed": []
+     },
+     "a2-control-opus-3": {
+      "failed": [
+       "executed_iff_called"
+      ]
+     }
+    },
+    "hostile-mix-1009-12": {
+     "a2-control-codex-1": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": []
+     },
+     "a2-control-opus-2b": {
+      "failed": []
+     },
+     "a2-control-opus-3": {
+      "failed": []
+     }
+    },
+    "hostile-mix-1021-16": {
+     "a2-control-codex-1": {
+      "failed": []
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": []
+     },
+     "a2-control-opus-2b": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-opus-3": {
+      "failed": [
+       "executed_iff_called"
+      ]
+     }
+    },
+    "hostile-mix-1031-20": {
+     "a2-control-codex-1": {
+      "failed": []
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": []
+     },
+     "a2-control-opus-2b": {
+      "failed": []
+     },
+     "a2-control-opus-3": {
+      "failed": [
+       "executed_iff_called"
+      ]
+     }
+    },
+    "revoke-after-ack-a-1009-12": {
+     "a2-control-codex-1": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-opus-2b": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-opus-3": {
+      "failed": [
+       "audit_explains"
+      ]
+     }
+    },
+    "revoke-after-ack-b-1009-12": {
+     "a2-control-codex-1": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-opus-2b": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-opus-3": {
+      "failed": []
+     }
+    },
+    "revoke-after-ack-c-1009-12": {
+     "a2-control-codex-1": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-opus-2b": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-opus-3": {
+      "failed": [
+       "audit_explains"
+      ]
+     }
+    },
+    "revoke-after-ack-d-1021-12": {
+     "a2-control-codex-1": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-opus-2b": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-opus-3": {
+      "failed": [
+       "audit_explains"
+      ]
+     }
+    },
+    "revoke-after-ack-e-1049-12": {
+     "a2-control-codex-1": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-opus-2b": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-opus-3": {
+      "failed": [
+       "audit_explains"
+      ]
+     }
+    },
+    "revoke-after-ack-f-1049-12": {
+     "a2-control-codex-1": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-opus-2b": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-opus-3": {
+      "failed": [
+       "audit_explains"
+      ]
+     }
+    },
+    "revoke-while-leased-1009-12": {
+     "a2-control-codex-1": {
+      "failed": []
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": []
+     },
+     "a2-control-opus-2b": {
+      "failed": []
+     },
+     "a2-control-opus-3": {
+      "failed": []
+     }
+    },
+    "revoke-while-leased-1031-16": {
+     "a2-control-codex-1": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": []
+     },
+     "a2-control-opus-2b": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-opus-3": {
+      "failed": []
+     }
+    },
+    "serial-clean-1009-12": {
+     "a2-control-codex-1": {
+      "failed": []
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": []
+     },
+     "a2-control-opus-2b": {
+      "failed": []
+     },
+     "a2-control-opus-3": {
+      "failed": []
+     }
+    },
+    "serial-clean-1013-16": {
+     "a2-control-codex-1": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": []
+     },
+     "a2-control-opus-2b": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-opus-3": {
+      "failed": []
+     }
+    },
+    "stale-lease-1009-12": {
+     "a2-control-codex-1": {
+      "failed": []
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": []
+     },
+     "a2-control-opus-2b": {
+      "failed": []
+     },
+     "a2-control-opus-3": {
+      "failed": []
+     }
+    },
+    "stale-lease-1013-16": {
+     "a2-control-codex-1": {
+      "failed": []
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": []
+     },
+     "a2-control-opus-2b": {
+      "failed": []
+     },
+     "a2-control-opus-3": {
+      "failed": []
+     }
+    },
+    "two-workers-1009-12": {
+     "a2-control-codex-1": {
+      "failed": []
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": []
+     },
+     "a2-control-opus-2b": {
+      "failed": []
+     },
+     "a2-control-opus-3": {
+      "failed": []
+     }
+    },
+    "two-workers-1021-16": {
+     "a2-control-codex-1": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": []
+     },
+     "a2-control-opus-2b": {
+      "failed": [
+       "audit_explains"
+      ]
+     },
+     "a2-control-opus-3": {
+      "failed": []
+     }
+    },
+    "unknown-then-revoke-1009-12": {
+     "a2-control-codex-1": {
+      "failed": []
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": []
+     },
+     "a2-control-opus-2b": {
+      "failed": []
+     },
+     "a2-control-opus-3": {
+      "failed": []
+     }
+    },
+    "unknown-then-revoke-noop-1009-12": {
+     "a2-control-codex-1": {
+      "failed": []
+     },
+     "a2-control-codex-2": {
+      "failed": []
+     },
+     "a2-control-codex-3": {
+      "failed": []
+     },
+     "a2-control-opus-1b": {
+      "failed": []
+     },
+     "a2-control-opus-2b": {
+      "failed": []
+     },
+     "a2-control-opus-3": {
+      "failed": []
+     }
+    }
+   }
+  },
+  "treatment": {
+   "subjects": [
+    "a2-treatment-codex-1",
+    "a2-treatment-codex-2",
+    "a2-treatment-codex-3",
+    "a2-treatment-opus-1b",
+    "a2-treatment-opus-2",
+    "a2-treatment-opus-3"
+   ],
+   "instances": 24,
+   "checksDeclared": [
+    "exactly_once",
+    "executed_iff_called",
+    "gate",
+    "completion",
+    "audit_append_only",
+    "audit_explains",
+    "revocation_ordering",
+    "tool_plan",
+    "expected_executions",
+    "progress",
+    "mechanism_fired"
+   ],
+   "results": {
+    "crash-after-lease-1009-12": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "crash-after-lease-1021-16": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "crash-after-tool-1009-12": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "crash-after-tool-1013-16": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": [
+       "executed_iff_called"
+      ]
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": [
+       "executed_iff_called"
+      ]
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "crash-after-tool-1031-20": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "hostile-mix-1009-12": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": [
+       "executed_iff_called"
+      ]
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": [
+       "executed_iff_called"
+      ]
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "hostile-mix-1021-16": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": [
+       "completion"
+      ]
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "hostile-mix-1031-20": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "revoke-after-ack-a-1009-12": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "revoke-after-ack-b-1009-12": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "revoke-after-ack-c-1009-12": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "revoke-after-ack-d-1021-12": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "revoke-after-ack-e-1049-12": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "revoke-after-ack-f-1049-12": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "revoke-while-leased-1009-12": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "revoke-while-leased-1031-16": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "serial-clean-1009-12": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "serial-clean-1013-16": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "stale-lease-1009-12": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "stale-lease-1013-16": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "two-workers-1009-12": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "two-workers-1021-16": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "unknown-then-revoke-1009-12": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    },
+    "unknown-then-revoke-noop-1009-12": {
+     "a2-treatment-codex-1": {
+      "failed": []
+     },
+     "a2-treatment-codex-2": {
+      "failed": []
+     },
+     "a2-treatment-codex-3": {
+      "failed": []
+     },
+     "a2-treatment-opus-1b": {
+      "failed": []
+     },
+     "a2-treatment-opus-2": {
+      "failed": []
+     },
+     "a2-treatment-opus-3": {
+      "failed": []
+     }
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,7 @@
+# Git cannot store an empty directory, and this directory being EMPTY is the point.
+#
+# The attacker is handed an empty exploit/ and submitted-bypass/ to write into, and the
+# fs-sandbox isolation check verifies both are present and writable. Without this file a
+# fresh clone has no such directories, the check fails, and every package-backed family
+# drops from adversarial-ready to audit-pending -- on CI only, on a machine that had never
+# run .

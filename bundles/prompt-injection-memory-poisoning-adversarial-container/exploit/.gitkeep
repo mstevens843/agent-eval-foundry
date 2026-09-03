@@ -1,0 +1,8 @@
+# Git cannot store an empty directory, and this directory being EMPTY is the point.
+#
+# The attacker is handed an empty exploit/ and submitted-bypass/ to write into, and the
+# isolation checks verify both are present and writable. Without this file a fresh clone has
+# no such directories, those checks fail, and every package-backed family drops from
+# adversarial-ready to audit-pending -- on CI only, on a machine that had never run
+# `adversarial prepare`. That is a green local build and a red remote one, for a reason no
+# diff would show.

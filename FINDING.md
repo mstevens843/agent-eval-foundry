@@ -152,20 +152,27 @@ Both arms were run as a paid controlled experiment. The first matched pair looke
 
 The second control run scored **1.0**. And a treatment run scored **0.0**.
 
-On reward the arms look similar, which reads as "no effect". **Reward is the wrong resolution.** At
-three runs per arm across both labs, the check that fires is *disjoint*:
+The experiment ran to completion: **six runs per arm, three per lab per arm.**
 
-| | control (n=3) | treatment (n=3) |
+On reward it is inconclusive, and would have been at any n this budget could buy — control 2 of 6,
+treatment 3 of 6, Fisher's exact p = 1.000, and within the lab where both arms finished the pass rate
+is *identical* at 0.67. **Reward is the wrong resolution.**
+
+At the check level it is not close:
+
+| | control (6 subjects) | treatment (6 subjects) |
 |---|---|---|
-| `audit_explains` — the ACKED rule | **17 failures, 2 of 3 subjects** | **0** |
-| `executed_iff_called` | 0 | 2 |
+| `audit_explains` — the ACKED rule | **33 cells, 4 of 6 subjects** | **0** |
+| `executed_iff_called` | 4 | 4 |
 | `completion` | 0 | 1 |
+| total failing cells | **37** | **5** |
+| instances that separate nothing | 9 of 24 | **21 of 24** |
 
-One sentence took the ACKED failures from seventeen to **zero**, in both labs, with no residue. What
-survives is the mechanism the task was actually built around — what an agent does with an external
-effect whose outcome it cannot observe — and it shows up from both sides of that one obligation:
-resolving an uncertain action wrongly (`executed_iff_called`), and refusing to resolve it at all
-(`completion`).
+**89% of the control arm's failures are the specification defect**, and one sentence takes them to
+zero across a complete 144-cell bank in both labs. What survives is the mechanism the task was
+actually built around — what an agent does with an external effect whose outcome it cannot observe —
+seen from both sides of that one obligation: resolving an uncertain action wrongly, and refusing to
+resolve it at all.
 
 So the task was measuring two things and calling them one. One was real. One was the author's
 specification, and six of the twenty-four scenarios existed only to hit it.
@@ -237,6 +244,16 @@ Stated small, because that is the point.
 
 Not "few". None. Every family that produced a headline result either had its result withdrawn, or has
 never had a counted trial adjudicated under the blind protocol.
+
+The closest thing to an exception is the task above, and the precise version of it is:
+
+> One family has a failure mode that a controlled single-sentence specification repair did **not**
+> remove — at one measured axis, across two labs, on 5 of 288 graded cells.
+
+That is not capability evidence yet. Nobody has adjudicated those five cells, and on this project's
+own rules an unadjudicated failure is not difficulty. It is, however, the first difficulty signal
+here that an experiment produced rather than an argument, and it is roughly two orders of magnitude
+smaller than the headline it replaces.
 
 What the project has instead is the instrument, and the fact that the instrument was pointed at its
 author's own best work first.
