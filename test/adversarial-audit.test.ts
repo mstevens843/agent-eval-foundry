@@ -655,6 +655,13 @@ describe("adversarial readiness and reports", () => {
         summaries,
       }),
     );
+    expect(
+      renderAdversarialContainerIsolationReport({
+        runtime: null,
+        verifications: containerIsolation,
+        summaries,
+      }),
+    ).toContain("available locally | not probed");
     expect(renderAdversarialImportReport(records)).toBe(renderAdversarialImportReport(records));
     expect(renderAdversarialHardeningProbesReport(probes)).toBe(
       renderAdversarialHardeningProbesReport(probes),

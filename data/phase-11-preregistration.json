@@ -1,0 +1,48 @@
+{
+  "phase": 11,
+  "registeredOn": "2026-09-03",
+  "registrationBoundary": "Written before opening any of the three target systems' source or specification material.",
+  "question": "Can the boundary-first procedure discover a new hard benchmark candidate, or can the foundry currently only screen candidates supplied by another source?",
+  "procedureSource": "data/phase-10-lane-c.json#c3_searchProcedure",
+  "targets": [
+    {
+      "order": 1,
+      "system": "Git object database and reference transactions",
+      "plausibleBoundary": "A sandboxed subject can manipulate a supplied worktree and local repository while a remote or verifier-owned ref/object store remains outside its route and credentials.",
+      "valueToLookFor": "An object identity or expected reference value committed on one side and required for recovery or compare-and-swap on the other.",
+      "priorPrediction": "Likely to die at step 3: object IDs are deterministic, and safe ref updates already require an explicit expected old value rather than inviting silent recomputation. Any mutable-ref variant may duplicate an existing alias-drift family."
+    },
+    {
+      "order": 2,
+      "system": "npm package-lock and registry resolution",
+      "plausibleBoundary": "A network-disabled subject can read the project and lockfile but cannot inspect the verifier-owned registry history or tarball store.",
+      "valueToLookFor": "The exact resolved package identity and integrity committed in a lockfile but needed after registry metadata changes.",
+      "priorPrediction": "Most likely survivor: recomputing from a semver range is natural, can silently select a different artifact, and an offline local test cannot observe the remote historical resolution."
+    },
+    {
+      "order": 3,
+      "system": "SQLite WAL and checkpoint recovery",
+      "plausibleBoundary": "A subject can operate through a supplied database connection while a verifier-owned concurrent reader or crash/checkpoint timeline remains in another process.",
+      "valueToLookFor": "A snapshot, frame, salt, checksum, or commit position recorded across the WAL/main-database boundary and needed during recovery.",
+      "priorPrediction": "Likely to die at step 4: SQLite's supported APIs can probably witness the state needed for correctness, making hidden divergence an invented harness restriction rather than a property of the real boundary."
+    }
+  ],
+  "prediction": {
+    "survivorsAfterAuthorScreen": 1,
+    "survivorsAfterIndependentReading": 1,
+    "specificPrediction": "Exactly one of three systems will yield a candidate that survives independent reading, most likely npm lockfile versus registry resolution.",
+    "falsification": "Zero independent survivors means the foundry is a screening instrument today. More than one survivor falsifies the estimated discovery yield but strengthens the qualitative discovery claim."
+  },
+  "measurement": {
+    "deathStep": "Record the first failed step from the five-step procedure for every target.",
+    "readCost": "Count authoritative documents and separately count cited sections opened for the decision; do not convert reads into dollars without a measured provider charge.",
+    "survivor": "A candidate passes the author's nine screens and then survives independent adversarial reading. Author approval alone never counts.",
+    "duplicateRule": "A mechanism already represented by a registered family is not a new discovery even if the surface system differs."
+  },
+  "measurementOrder": [
+    "Settle IN_DOUBT -> LEASED from agent-visible text.",
+    "Search the three targets in the registered order.",
+    "Obtain independent review for every author-screen survivor.",
+    "Only then decide whether paid descendant trials remain valid."
+  ]
+}

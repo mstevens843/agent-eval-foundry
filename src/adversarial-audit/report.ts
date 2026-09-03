@@ -181,7 +181,8 @@ export function renderAdversarialV2Report(summaries: readonly AdversarialEvidenc
 }
 
 export function renderAdversarialContainerIsolationReport(input: {
-  readonly runtime: ContainerRuntimeReadiness;
+  /** Null when called by deterministic report generation; the live CLI command supplies a probe. */
+  readonly runtime: ContainerRuntimeReadiness | null;
   readonly verifications: readonly ContainerIsolationVerification[];
   readonly summaries: readonly AdversarialEvidenceSummary[];
 }): string {
@@ -195,9 +196,9 @@ export function renderAdversarialContainerIsolationReport(input: {
     "",
     "| item | value |",
     "|---|---|",
-    `| runtime | ${input.runtime.runtime} |`,
-    `| available locally | ${yesNo(input.runtime.available)} |`,
-    `| detail | ${input.runtime.detail.replace(/\|/g, "\\|")} |`,
+    `| runtime | ${input.runtime?.runtime ?? "docker"} |`,
+    `| available locally | ${input.runtime === null ? "not probed" : yesNo(input.runtime.available)} |`,
+    `| detail | ${input.runtime === null ? "run `foundry adversarial container report` for live host readiness; deterministic generation does not snapshot machine-local daemon state" : input.runtime.detail.replace(/\|/g, "\\|")} |`,
     "",
     "## Prepared Bundles",
     "",

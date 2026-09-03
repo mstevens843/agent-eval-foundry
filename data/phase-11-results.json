@@ -1,0 +1,236 @@
+{
+  "phase": 11,
+  "title": "Settle the axis, test discovery, then decide whether to measure",
+  "axisDerivation": {
+    "rule": "IN_DOUBT -> LEASED is illegal",
+    "agentVisibleEvidence": [
+      {
+        "source": "tasks/durable-approval-outbox/environment/app/spec/SEMANTICS.md",
+        "location": "section 4, lines 48-58",
+        "finding": "The state diagram omits IN_DOUBT, then the next paragraph says IN_DOUBT exists and the audit must account for whichever states an action actually passes through. The diagram is not an exhaustive transition table."
+      },
+      {
+        "source": "tasks/durable-approval-outbox/environment/app/spec/SEMANTICS.md",
+        "location": "section 4, lines 60-67",
+        "finding": "An expired lease may be taken by any worker and increments epoch. The sentence does not restrict this permission to a listed action state."
+      },
+      {
+        "source": "tasks/durable-approval-outbox/environment/app/spec/SEMANTICS.md",
+        "location": "section 5, lines 71-76",
+        "finding": "A worker may lease one READY action, or one whose lease has expired. This is positive text permitting the expired-lease branch without saying IN_DOUBT is excluded."
+      },
+      {
+        "source": "tasks/durable-approval-outbox/environment/app/spec/SEMANTICS.md",
+        "location": "section 7, lines 113-130",
+        "finding": "Repeating an UNKNOWN call during its window returns UNKNOWN again; later authoritative receipts settle it. This constrains tool outcomes, not the action-state transition used before a retry."
+      },
+      {
+        "source": "tasks/durable-approval-outbox/environment/app/engine/types.py",
+        "location": "lines 15-23",
+        "finding": "IN_DOUBT means a call went out and nothing local can settle it. The type definition states no outgoing-transition restriction."
+      }
+    ],
+    "hiddenVerifierEvidence": {
+      "source": "tasks/durable-approval-outbox/tests/invariants.py",
+      "location": "LEGAL table, lines 155-163",
+      "finding": "The verifier rejects direct IN_DOUBT -> LEASED, so the rule is graded even though the agent-visible package does not determine it."
+    },
+    "attemptedDerivation": {
+      "citationCount": 5,
+      "sectionCount": 4,
+      "inferenceDepth": 2,
+      "negativeInference": true,
+      "chainWritable": false,
+      "loadBearingInference": "The only route to the verifier's rule treats a diagram that immediately declares an omitted state as exhaustive and turns text about repeated tool outcomes into an unstated action-state prohibition."
+    },
+    "classification": "A1",
+    "verdict": "The package does not determine that IN_DOUBT -> LEASED is illegal. This is a second specification defect in the parent, not a demonstrated capability axis.",
+    "trialLabelEffect": "This derivation does not relabel the disputed Phase 10 Claude trial. Its two blind labels disagreed, so it remains unlabelled and contributes no difficulty evidence."
+  },
+  "discovery": {
+    "procedureSource": "data/phase-10-lane-c.json",
+    "preregistrationSource": "data/phase-11-preregistration.json",
+    "prediction": {
+      "survivors": 1,
+      "outOfSystems": 3,
+      "result": "falsified"
+    },
+    "systems": [
+      {
+        "order": 1,
+        "system": "Git object database and ref transactions",
+        "authoritativeSources": [
+          "https://git-scm.com/docs/gitdatamodel.html",
+          "https://git-scm.com/docs/git-update-ref.html"
+        ],
+        "documentsRead": 2,
+        "sectionsRead": 6,
+        "boundary": "A restricted remote owns its ref transaction history and reflog.",
+        "committedValue": "The durable publish intent carries the expected old and intended new object IDs.",
+        "draftedCandidate": true,
+        "survivedIndependentReading": false,
+        "authorAdvancedToStep": 5,
+        "finalDeathStep": 3,
+        "deathReason": "Recomputing a commit is not the natural recovery move when the exact intended object ID was durably committed. Both independent readers also showed that comparing the readable remote tip with that intended ID exposes the divergence locally.",
+        "independentReaders": [
+          {
+            "reader": "reader-a",
+            "providerFamily": "OpenAI",
+            "verdict": "kill",
+            "earliestScreen": "screen 1: vise/local observability",
+            "classification": "locally-observable",
+            "confidence": 0.99,
+            "additionalFinding": "A disposable Git fixture reproduced that remote tip equals the intended ID before flawed recovery and differs afterward. The server reflog boundary is real but not load-bearing."
+          },
+          {
+            "reader": "reader-b",
+            "providerFamily": "OpenAI",
+            "verdict": "kill",
+            "earliestScreen": "screen 1: vise/local observability",
+            "classification": "signalled and locally-observable",
+            "confidence": 0.97,
+            "additionalFinding": "The strongest recovery algorithm compares current remote tip to the persisted old and new IDs; no reflog access is needed."
+          }
+        ],
+        "novelty": "Duplicate mechanism on a new surface: stable identity across retry, overlapping durable-outbox replay and mutable-alias binding."
+      },
+      {
+        "order": 2,
+        "system": "npm package lock versus registry resolution",
+        "authoritativeSources": [
+          "https://docs.npmjs.com/cli/v11/configuring-npm/package-lock-json/",
+          "https://docs.npmjs.com/cli/v11/commands/npm-install/",
+          "https://docs.npmjs.com/cli/v11/commands/npm-ci/"
+        ],
+        "documentsRead": 3,
+        "sectionsRead": 4,
+        "boundary": "The registry and cache can be external, while the lockfile is committed locally.",
+        "committedValue": "package-lock.json records the exact resolved location and integrity needed to reproduce the tree.",
+        "draftedCandidate": false,
+        "survivedIndependentReading": false,
+        "authorAdvancedToStep": 3,
+        "finalDeathStep": 3,
+        "deathReason": "Registry re-resolution from a semver range is not the natural lock-aware recovery path. npm install uses a compatible lock and npm ci refuses to rewrite it; exact identity and integrity are already local and testable."
+      },
+      {
+        "order": 3,
+        "system": "SQLite WAL and checkpoint recovery",
+        "authoritativeSources": [
+          "https://www.sqlite.org/wal.html",
+          "https://www.sqlite.org/fileformat.html",
+          "https://www.sqlite.org/c3ref/snapshot.html"
+        ],
+        "documentsRead": 3,
+        "sectionsRead": 8,
+        "boundary": "The proposed witness is the local WAL, shared-memory index, or an SQLite snapshot handle.",
+        "committedValue": null,
+        "draftedCandidate": false,
+        "survivedIndependentReading": false,
+        "authorAdvancedToStep": 1,
+        "finalDeathStep": 1,
+        "deathReason": "No genuine inaccessible observer boundary was found. The WAL is subject-readable local state, and snapshot/checkpoint APIs expose success or invalidation. Moving the witness to a verifier-only copy would invent the boundary rather than discover one in SQLite."
+      }
+    ],
+    "systemsSearched": 3,
+    "draftedCandidates": 1,
+    "independentReaderPasses": 2,
+    "survivors": 0,
+    "documentsRead": 8,
+    "sectionsRead": 18,
+    "costPerSurvivor": null,
+    "conclusion": "The registered search produced no independently surviving candidate. The foundry is a screening instrument today; it has not demonstrated discovery."
+  },
+  "measurement": {
+    "decision": "do-not-run",
+    "parent": {
+      "previousRepoCountableZeroSolveTrials": 6,
+      "phase10ReportedTrials": 2,
+      "phase10RepoCountableTrials": 0,
+      "currentRepoCountableZeroSolveTrials": 6,
+      "targetZeroSolveTrials": 12,
+      "difficultyEvidencedTrials": 0,
+      "reportedSpendUsd": 24.14,
+      "spendProvenance": "Reported in data/phase-10-trials.json, but not reproducible from preserved run artifacts."
+    },
+    "descendant": {
+      "registeredTrials": 12,
+      "completedTrials": 0,
+      "selfCheckGreen": null,
+      "failureDistribution": null,
+      "agentSolveRate": null
+    },
+    "blockers": [
+      "Neither Phase 10 run ID has a trial directory, challenge copy, submission, transcript, metadata, verifier output, normalized result, countability judgement, or root-cause sidecar in the repository.",
+      "The claimed dao-descendant package is not a built family or task package in either checked repository. Only scenario-selection and local screen data exist, so there is no challenge hash to preregister or artifact to send to agents.",
+      "The registered descendant matrix requires two provider families and blind cross-provider labels; the second provider was unavailable during this phase.",
+      "Buying more runs before repairing package materialization and durable capture would produce more summaries that the repository cannot re-grade."
+    ],
+    "b6": {
+      "implementation": "src/screens/rig-integrity.ts",
+      "test": "test/rig-integrity.test.ts",
+      "status": "passed in the Phase 11 baseline suite",
+      "newPassFailRigIntroduced": false
+    }
+  },
+  "economics": {
+    "descendantBuildHours": {
+      "value": 0.18,
+      "provenance": "measured descendant-only marginal work recorded in data/phase-9-descendant.json",
+      "caveat": "The spec, harness, verifier, reference engine, and cheat oracles already existed; the deliverable package is absent. Never substitute this for hoursPerFamily."
+    },
+    "hoursPerFamily": {
+      "currentModelValue": 45,
+      "provenance": "estimated",
+      "declaredShapeRange": [18, 120],
+      "declaredShapeMean": 62.4,
+      "declaredShapeMedian": 57.5
+    },
+    "phase10NativeTrials": {
+      "codexReportedUsd": 3.3263568,
+      "opusReportedUsd": 20.8150855,
+      "opusToCodexRatio": 6.3,
+      "provenance": "reported, not repo-reproducible because the run artifacts are absent"
+    },
+    "a2Differential": {
+      "countedUsd": 120.2,
+      "includingLossesUsd": 152.81,
+      "provenance": "measured in Phase 4"
+    },
+    "screens": {
+      "forwardGateOne": "3 model reads, measured in Phase 8",
+      "fullSpecProbe": "about 8 model reads, measured in Phase 5",
+      "mechanical": "seconds to minutes",
+      "discovery": "3 systems, 8 authoritative documents, 18 cited sections, 2 independent reader passes, 0 survivors"
+    },
+    "modelledBuildsPerShip": {
+      "benchmarkBar": {
+        "bar": "solve rate <= 0.30",
+        "expectedBuilds": 2,
+        "basis": "1 of 2 locally built families died after trials; measured but too small a sample for a stable rate"
+      },
+      "takeHomeBar": {
+        "solveRateBand": [0.35, 0.55],
+        "sixOfSixFailures": {
+          "expectedBuildsRange": [13.2592775061, 120.4272910822]
+        },
+        "atLeastFiveOfSixFailures": {
+          "expectedBuildsRange": [3.1340110469, 14.4512749299]
+        },
+        "provenance": "modelled from the inherited row-five solve-rate band, not measured production yield"
+      }
+    }
+  },
+  "corrections": [
+    "Phase 10 reported an eight-trial parent tally, but its two new run artifacts are absent. Phase 11 withdrew both counts; under the repository's own countability rule the supported tally remains six.",
+    "Before correction, data/phase-10-trials.json contradicted itself by describing both an eight-trial tally and a seven-trial tally. The corrected ledger preserves the original eight-trial claim separately and derives neither as evidence.",
+    "data/phase-10-status.json is stale: it says one parent trial is in flight and eleven remain.",
+    "PHASE-11-BRIEF.md referenced a PHASE-10-MEASURED.md file that does not exist.",
+    "Phase 9 says dao-descendant was built and packaged, but no executable package or built-family registration exists in either repository.",
+    "The Phase 9 rig first fabricated an all-failing reference result because it attached result.tool while checks read result._tool; B6 now protects future pass/fail rigs.",
+    "Five of five generated row-five candidates died on first independent reading; this phase's search draft also died under independent reading.",
+    "Ten hand-authored reports are allowlisted against a stated ceiling of two, so prose remains a drift surface. This Phase 11 report is generated instead.",
+    "The deterministic all-report command embedded live Docker daemon readiness. Phase 11 changed generated output to say not probed while preserving live readiness in the explicit container report command.",
+    "PHASE-11-BRIEF.md describes hoursPerFamily as 55-120 hours, while the executable budget uses an estimated 45 hours and the 18 declared shapes span 18-120. The generated economics retain the executable 45-hour input and expose the full range rather than selecting a new estimate."
+  ],
+  "recommendation": "This is a screening instrument today; spend the $100k on screening and selective builds, not bulk production. Repair deterministic descendant packaging and durable trial capture before buying another matrix."
+}

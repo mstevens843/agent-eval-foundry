@@ -2,6 +2,12 @@
   "phase": 10,
   "lane": "A",
   "note": "The first native paid trials this repository has launched. Harbor, container-isolated, one per lab, run in parallel.",
+  "phase11Correction": {
+    "status": "WITHDRAWN_FROM_REPO_COUNTS",
+    "reason": "Neither run has a preserved trial directory. The repository therefore has no challenge copy, submission, transcript, metadata, verifier output, normalized result, countability judgement, or root-cause sidecar to re-grade.",
+    "preserved": "Rewards, costs, verifier summaries, and labels remain below as Phase 10's reported observations. They are not repo-countable measurements.",
+    "supportedParentTally": "6 clean zero-solve trials, one-sided 95% upper bound 0.3930"
+  },
   "trials": [
     {
       "runId": "p10-outbox-codex-1",
@@ -17,8 +23,9 @@
       "retries": 0,
       "exceptions": {},
       "verifier": "10 failed, 257 passed",
-      "counts": true,
-      "countsReason": "clean verifier failure: reward 0 with 257 checks passing, no exception, no retry, no timeout. This is a genuine graded failure rather than a crash.",
+      "counts": false,
+      "originallyReportedCounts": true,
+      "countsReason": "withdrawn by the Phase 11 repo audit: the summary reports a clean verifier failure, but no trial directory or re-gradeable artifacts were preserved in the repository",
       "failedChecks": "all ten failures are audit_explains",
       "failingSchedules": [
         "serial-clean",
@@ -73,8 +80,9 @@
       "retries": 0,
       "exceptions": {},
       "verifier": "15 failed, 252 passed",
-      "counts": true,
-      "countsReason": "clean verifier failure: reward 0 with 252 checks passing, no exception, no retry, no timeout.",
+      "counts": false,
+      "originallyReportedCounts": true,
+      "countsReason": "withdrawn by the Phase 11 repo audit: the summary reports a clean verifier failure, but no trial directory or re-gradeable artifacts were preserved in the repository",
       "failedChecks": "all fifteen failures are audit_explains",
       "failingSchedules": [
         "crash-after-tool",
@@ -115,6 +123,10 @@
       "upperBound95": 0.393
     },
     "after": {
+      "cleanZeroSolve": 6,
+      "upperBound95": 0.393
+    },
+    "originallyReportedAfter": {
       "cleanZeroSolve": 8,
       "upperBound95": 0.3123
     },
@@ -126,7 +138,7 @@
   "costSoFarUsd": 24.14,
   "theDistinctionThisTrialForces": {
     "claim": "A p-bound and difficulty evidence are different quantities and this repository has been at risk of letting one stand for the other.",
-    "detail": "Seven clean zero-solve trials bound the parent at p <= 0.348. Zero of them are attributable to capability on the axis this trial failed. Tightening the bound to 0.221 with five more trials would make the failure rate more CERTAIN without making it more ATTRIBUTABLE.",
+    "detail": "The Phase 10 narrative first said seven trials and later said eight. The Phase 11 artifact audit supersedes both: six preserved clean zero-solve trials bound the parent at p <= 0.393. Zero are attributable to capability. Reaching twelve preserved trials would tighten the bound to 0.221 without making the failures more attributable unless blind labels agree on capability.",
     "consequence": "The next trials should go to the DESCENDANT, which removes this axis, rather than to the parent."
   },
   "crossFamilyAgreement": {

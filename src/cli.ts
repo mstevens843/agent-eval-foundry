@@ -261,6 +261,11 @@ import { renderLiveDomCodexDiagnosis } from "./reports/live-dom-diagnosis.js";
 import { renderLiveDom } from "./reports/live-dom-report.js";
 import { renderOrchestrationReport } from "./reports/orchestration-report.js";
 import {
+  parsePhase10Summary,
+  parsePhase11Results,
+  renderPhase11DiscoveryReport,
+} from "./reports/phase-11-discovery.js";
+import {
   renderMechanismProbeReport,
   renderProbeNext,
   renderProbeRun,
@@ -3719,7 +3724,7 @@ function allCommand(argv: readonly string[], root: string): string {
   write(
     "adversarial-container-isolation-report.md",
     renderAdversarialContainerIsolationReport({
-      runtime: containerRuntimeReadiness(),
+      runtime: null,
       verifications: adversarialContainerVerifications,
       summaries: adversarialSummaries,
     }),
@@ -4490,6 +4495,18 @@ function allCommand(argv: readonly string[], root: string): string {
     write(`${UI_FAMILY}-family-report.md`, renderShapeReport(uiShape, registry, allEvidence[UI_FAMILY]));
   }
   write("historical-durable-outbox-trials.md", renderHistoricalReport(outboxHistory(root)));
+  const phase11Results = parsePhase11Results(
+    JSON.parse(readFileSync(join(root, "data", "phase-11-results.json"), "utf8")),
+    "data/phase-11-results.json",
+  );
+  const phase10Summary = parsePhase10Summary(
+    JSON.parse(readFileSync(join(root, "data", "phase-10-trials.json"), "utf8")),
+    "data/phase-10-trials.json",
+  );
+  write(
+    "PHASE-11-DISCOVERY.md",
+    renderPhase11DiscoveryReport({ root, results: phase11Results, phase10: phase10Summary }),
+  );
   const inputs = { ...MEASURED_DEFAULTS, totalUsd: 100_000, labourRateUsdPerHour: 120 };
   assertBudgetInputs(inputs);
   assertPlanHonest(planBudget(inputs));

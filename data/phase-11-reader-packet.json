@@ -1,0 +1,49 @@
+{
+  "phase": 11,
+  "purpose": "Blind adversarial reading packet. It contains the candidate and primary-source chain, but not the author's verdict or the registered prediction.",
+  "candidate": {
+    "id": "git-remote-ref-replay",
+    "domain": "Git remote reference transactions",
+    "taskSketch": "Repair a crash-safe publisher that creates a commit from staged content and advances a verifier-owned remote ref. A crash may occur after the remote accepted the update but before the publisher recorded completion. The publisher's protocol can read the current remote ref and submit a compare-and-swap update, but Git does not expose the remote repository's reflog to clients.",
+    "value": "the exact new commit object ID and expected old remote object ID used by the first reference update",
+    "committedEvidence": "a durable local publish-intent record written before the remote update, containing both object IDs",
+    "boundary": "publisher crash after the remote reference transaction commits but before its acknowledgement is recorded locally",
+    "recomputation": "rebuild the commit from the same tree and message using the new committer time, then read the now-current remote ref and use both recomputed values for another compare-and-swap update",
+    "movedInput": "the commit's committer timestamp and the remote branch tip",
+    "localCheckOutcome": "the second update succeeds and the checked-out tree matches the intended content",
+    "gradedOn": "the verifier-owned remote reflog and object graph, which reveal two successful updates and two commit object IDs for one publish action",
+    "whyUnreadable": "Git's documented remote-tracking refs expose only the last-known remote tip, and its documented reflogs are local and not shared with remotes; the subject has the Git transport, not filesystem access to the verifier-owned bare repository",
+    "divergenceIsLocallyObservable": false,
+    "signalsEmitted": [],
+    "unreachableBoundary": {
+      "what": "the remote repository's reflog and server-side object history",
+      "enforcedBy": "a separate verifier-owned Git server/process whose transport exposes ref tips and update results but not its local reflog"
+    }
+  },
+  "primarySources": [
+    {
+      "url": "https://git-scm.com/docs/git-update-ref.html",
+      "relevantSections": [
+        "DESCRIPTION: an update can verify an expected old object ID before storing a new object ID",
+        "TRANSACTIONS: refs are locked against matching old IDs and modifications commit together",
+        "LOGGING UPDATES: each reflog entry records old and new object IDs"
+      ]
+    },
+    {
+      "url": "https://git-scm.com/docs/gitdatamodel.html",
+      "relevantSections": [
+        "OBJECTS: an object ID hashes its type and contents; commit contents include committer time",
+        "REFERENCES: branches are mutable names for commit IDs; remote-tracking refs are last-known remote state",
+        "REFLOGS: reflogs record local ref changes and are not shared with remotes"
+      ]
+    }
+  ],
+  "readerQuestions": [
+    "Does a real boundary prevent the subject from reading the grading witness, or is the claimed boundary only an assumption about what it will inspect?",
+    "Is the original value recoverable from evidence committed before the boundary?",
+    "Is recomputation a natural implementation move, and can it silently yield a different value?",
+    "Can ordinary subject-authored tests using the shipped interface witness the divergence?",
+    "Does the candidate reduce to an existing registered family or mechanism closely enough that it is not a new discovery under data/phase-11-preregistration.json?",
+    "Which of the nine screens should reject it first, if any?"
+  ]
+}

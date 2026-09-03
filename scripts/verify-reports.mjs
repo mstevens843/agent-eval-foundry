@@ -542,7 +542,7 @@ for (const variant of [
 // Lowering this floor is therefore a real decision with a real diff, not a number that drifts down one
 // at a time behind a passing build. Raise it whenever the suite grows.
 run(["all", "--out", tmp]);
-const REPORT_FLOOR = 110;
+const REPORT_FLOOR = 111;
 const generated = readdirSync(tmp);
 if (generated.length < REPORT_FLOOR) {
   console.error(

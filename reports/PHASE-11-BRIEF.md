@@ -4,7 +4,9 @@ Repo: `/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-fou
 Source repo: `/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task`
 
 Read `docs/INHERITED-EVIDENCE.md`, `docs/DEFECT-TAXONOMY.md` (note the new **B6** and **screen 9**),
-`reports/PHASE-9-DESCENDANT.md`, `reports/PHASE-10-MEASURED.md`, and `data/phase-10-lane-c.json`.
+`reports/PHASE-9-DESCENDANT.md`, `data/phase-10-status.json`, `data/phase-10-trials.json`, and
+`data/phase-10-lane-c.json`. Phase 10 did not produce a `reports/PHASE-10-MEASURED.md`; Phase 11 must
+audit the structured data and preserved trial artifacts instead of assuming that missing report exists.
 
 ---
 

@@ -8,8 +8,8 @@ artifact directories.
 | item | value |
 |---|---|
 | runtime | docker |
-| available locally | yes |
-| detail | Docker version 29.3.1, build c2be9cc |
+| available locally | not probed |
+| detail | run `foundry adversarial container report` for live host readiness; deterministic generation does not snapshot machine-local daemon state |
 
 ## Prepared Bundles
 
