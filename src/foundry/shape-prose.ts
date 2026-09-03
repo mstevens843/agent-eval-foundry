@@ -541,6 +541,136 @@ export const SHAPE_PROSE: Readonly<Record<string, ShapeProse>> = {
       "Refusing uncertain recovery and producing no external effect.",
     ],
   },
+  "trading-reconciliation-recompute": {
+    status: "built",
+    agentTrialsRun: null,
+    agentTrialsPassed: null,
+    evidence:
+      "Built in Phase 13 from the pre-registered committed-authority recipe. The 72-point local grid and four-cell U x C probe show the recompute mutant fails only when venue acceptance is uncertain and reconciliation authority changes. The selected 24-scenario package retains 18 activated cases and 6 controls. This is local synthetic-venue transfer evidence, not frontier-agent or production-exchange evidence.",
+    visibleRules: [
+      "Recover the client order key committed in the durable order intent; never derive it from the current reconciler, authority epoch or retry attempt.",
+      "All submissions for one order intent collectively create exactly one venue execution.",
+      "Retry a lost accepted-order response with the committed key and treat a deduplicated acceptance as completion.",
+      "Report the order intent, reconciler, authority epoch, sent key and observed venue result truthfully.",
+      "Every valid order intent must reach the venue at least once.",
+      "No market-price, fill-priority, partial-fill or venue-specific policy is part of this family.",
+    ],
+    hiddenGradedRegion:
+      "The hidden suite samples only declared seed, reconciler-count, order-set-width and crash-position dimensions. The target stratum contains two seeds per (nReconcilers, orders) cell for two, three and four reconcilers after venue acceptance; one-reconciler and clean-submission controls prove non-activation.",
+    referenceContract: [
+      "Read the committed client order key from the durable intent on every reconciliation attempt.",
+      "Submit the unchanged account, symbol, side, quantity and logical order identity.",
+      "Treat first acceptance and deduplicated acceptance as successful completion.",
+      "Report the actual key and authority epoch used.",
+      "Produce one venue execution despite reconciliation authority transfer.",
+    ],
+    authoritativeSources: [
+      {
+        name: "durable order intent",
+        whatItSettles:
+          "the stable order intent, client request, account, order payload and key committed before submission",
+        whyEngineCannotForge:
+          "The scenario generator creates the intent before subject execution. The subject may read it but cannot replace the value against which the call ledger is graded.",
+      },
+      {
+        name: "synthetic venue execution ledger",
+        whatItSettles: "how many accepted executions occurred for one order intent and under which keys",
+        whyEngineCannotForge:
+          "The trial host owns the ledger and exposes only placeOrder(). The parent verifier receives a sealed copy after subject execution.",
+      },
+      {
+        name: "venue call ledger",
+        whatItSettles: "the exact order payload, key, reconciler and authority epoch on every call",
+        whyEngineCannotForge:
+          "The facade records each call before returning acceptance and exposes no call-ledger handle through the subject interface.",
+      },
+    ],
+    fairnessConstraints: [
+      "Every graded rule code appears in SPEC.md.",
+      "The committed order key and complete synthetic order payload are visible in every recovery view.",
+      "No hidden market, price, exchange-priority or partial-fill convention is graded.",
+      "The four-cell probe distinguishes uncertainty, authority change and their interaction.",
+      "Hidden cases sample only declared dimensions.",
+    ],
+    cheatResistance: [
+      "The venue call and execution ledgers are harness-owned and absent from the challenge package.",
+      "A no-op report fails the positive execution floor.",
+      "A forged committed-key report is compared with the actual venue call.",
+      "The challenge leak profile excludes truth, verifier, selection and mutant artifacts.",
+      "The trial route preserves challenge, submission, transcript, verifier output and countability artifacts.",
+    ],
+    expectedFailureModes: [
+      "Recomputing a client order key from the current reconciliation authority epoch.",
+      "Generating a fresh key from the retry counter after a lost response.",
+      "Reporting the committed key while sending a different key to the venue.",
+      "Refusing uncertain reconciliation and never submitting the valid order.",
+    ],
+  },
+  "deployment-rollback-recompute": {
+    status: "built",
+    agentTrialsRun: null,
+    agentTrialsPassed: null,
+    evidence:
+      "Built in Phase 13 from the pre-registered committed-authority recipe. The 72-point local grid and four-cell U x C probe show the recompute mutant fails only when compensation completion is uncertain and controller authority changes. The selected 24-scenario package retains 18 activated cases and 6 controls. This is local synthetic-controller transfer evidence, not frontier-agent or production-cloud evidence.",
+    visibleRules: [
+      "Recover the key committed in the already-authorized rollback intent; never derive it from the current controller, authority epoch or retry attempt.",
+      "All attempts for one rollback intent collectively create exactly one compensation effect.",
+      "Retry a lost completed-compensation response with the committed key and treat a deduplicated result as completion.",
+      "Report the rollback intent, controller, authority epoch, sent key and observed result truthfully.",
+      "Every supplied rollback intent is authorized and must reach the controller at least once.",
+      "No rollback-decision, cloud-provider, release-DAG or irreversible-effect policy is part of this family.",
+    ],
+    hiddenGradedRegion:
+      "The hidden suite samples only declared seed, controller-count, release-effect-width and crash-position dimensions. The target stratum contains two seeds per (nControllers, effects) cell for two, three and four controllers after compensation; one-controller and clean-compensation controls prove non-activation.",
+    referenceContract: [
+      "Read the committed rollback key from the durable intent on every controller attempt.",
+      "Submit the unchanged release, region, compensation and logical rollback identity.",
+      "Treat first completion and deduplicated completion as successful recovery.",
+      "Report the actual key and authority epoch used.",
+      "Produce one compensation effect despite controller authority transfer.",
+    ],
+    authoritativeSources: [
+      {
+        name: "authorized durable rollback intent",
+        whatItSettles:
+          "the stable rollback identity, release, region, compensation and key committed before invocation",
+        whyEngineCannotForge:
+          "The scenario generator creates the intent before subject execution. The subject may read it but cannot replace the value against which calls are graded.",
+      },
+      {
+        name: "deployment controller effect ledger",
+        whatItSettles: "how many compensation effects occurred for one rollback intent and under which keys",
+        whyEngineCannotForge:
+          "The trial host owns the ledger and exposes only compensate(). The parent verifier receives a sealed copy after subject execution.",
+      },
+      {
+        name: "controller call ledger",
+        whatItSettles: "the exact compensation, key, controller and authority epoch on every call",
+        whyEngineCannotForge:
+          "The facade records calls before returning completion and exposes no call-ledger handle through the subject interface.",
+      },
+    ],
+    fairnessConstraints: [
+      "Every graded rule code appears in SPEC.md.",
+      "The committed rollback key and complete authorized compensation are visible in every recovery view.",
+      "No hidden cloud-provider, rollback-decision or reversibility convention is graded.",
+      "The four-cell probe distinguishes uncertainty, authority change and their interaction.",
+      "Hidden cases sample only declared dimensions.",
+    ],
+    cheatResistance: [
+      "The controller call and effect ledgers are harness-owned and absent from the challenge package.",
+      "A no-op report fails the positive compensation floor.",
+      "A forged committed-key report is compared with the actual controller call.",
+      "The challenge leak profile excludes truth, verifier, selection and mutant artifacts.",
+      "The trial route preserves challenge, submission, transcript, verifier output and countability artifacts.",
+    ],
+    expectedFailureModes: [
+      "Recomputing a rollback key from the current controller authority epoch.",
+      "Generating a fresh key from the recovery attempt after a lost result.",
+      "Reporting the committed key while sending a different key to the controller.",
+      "Refusing uncertain recovery and never applying the authorized compensation.",
+    ],
+  },
   "deployment-model-alias-rollout-drift": {
     status: "built",
     agentTrialsRun: 2,

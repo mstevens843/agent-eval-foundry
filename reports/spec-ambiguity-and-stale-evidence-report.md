@@ -54,6 +54,13 @@ Current challenge hash: `805efb58c923f9e081db1b41967392d7`.
 | `deployment-alias-2026-09-claude-1` | anthropic/claude-opus-5 | **superseded** | `0e9b87a5f260544cfbc1cdce8f08938c` ≠ current |
 | `deployment-model-alias-rollout-drift-2026-08-o1` | openai/gpt-5.6-sol | **superseded** | `0e9b87a5f260544cfbc1cdce8f08938c` ≠ current |
 
+### `deployment-rollback-recompute`
+
+Current challenge hash: `2ddfad2fd3287f752c41a408184b48ce`.
+
+| run | model | state | ran against |
+|---|---|---|---|
+
 ### `prompt-injection-containment`
 
 Current challenge hash: `4911ffdfbd2c0e9b51752ed16c4f53e8`.
@@ -85,6 +92,13 @@ Current challenge hash: `7443bf6d6c6b2ccf69cc20f417ff048c`.
 | `mp-gemini-1` | google/gemini-3-pro | infra | `9b3e0c84addabc2e195ecbd490ba81dd` ≠ current |
 | `mp-haiku-1` | anthropic/claude-haiku-4-5 | **superseded** | `9b3e0c84addabc2e195ecbd490ba81dd` ≠ current |
 | `mp-sonnet-1` | anthropic/claude-sonnet-5 | **superseded** | `9b3e0c84addabc2e195ecbd490ba81dd` ≠ current |
+
+### `trading-reconciliation-recompute`
+
+Current challenge hash: `94bfc2c401ad2cc19f7e84e8a1270a08`.
+
+| run | model | state | ran against |
+|---|---|---|---|
 
 ### `ui-action-record-replay`
 

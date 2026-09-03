@@ -14,6 +14,7 @@ import { buildCheckerRequiredChallengePackage } from "../challenge/checker-requi
 import { buildDaoDescendantChallengePackage } from "../challenge/dao-descendant-package.js";
 import { buildDelegatedWalletChallengePackage } from "../challenge/delegated-wallet-package.js";
 import { buildDeploymentAliasChallengePackage } from "../challenge/deployment-alias-package.js";
+import { buildDeploymentRollbackChallengePackage } from "../challenge/deployment-rollback-package.js";
 import { buildLiveDomChallengePackage } from "../challenge/live-dom-package.js";
 import { buildMemoryChallengePackage } from "../challenge/memory-package.js";
 import {
@@ -22,14 +23,17 @@ import {
   DAO_DESCENDANT_PROFILE,
   DELEGATED_WALLET_PROFILE,
   DEPLOYMENT_ALIAS_PROFILE,
+  DEPLOYMENT_ROLLBACK_PROFILE,
   LIVE_DOM_PROFILE,
   type LeakProfile,
   MEMORY_PROFILE,
   PIC_PROFILE,
+  TRADING_RECONCILIATION_PROFILE,
   UI_PROFILE,
 } from "../challenge/package-check.js";
 import { buildChallengePackage } from "../challenge/package.js";
 import type { ChallengePackage } from "../challenge/package.js";
+import { buildTradingReconciliationChallengePackage } from "../challenge/trading-reconciliation-package.js";
 import { buildUiChallengePackage } from "../challenge/ui-package.js";
 import type { HardnessRecipe } from "../foundry/schema.js";
 import type { Matrix } from "../types.js";
@@ -98,6 +102,24 @@ import * as dao from "./dao-descendant/runner.js";
 import * as daoScenarios from "./dao-descendant/scenarios.js";
 import { RULES as DAO_RULES } from "./dao-descendant/spec.js";
 import { CHECKS as DAO_CHECK_NAMES } from "./dao-descendant/verify.js";
+
+import {
+  BASELINES as TRADING_BASELINES,
+  INTENDED_CHECK as TRADING_CHECKS,
+} from "./trading-reconciliation-recompute/mutants.js";
+import * as trading from "./trading-reconciliation-recompute/runner.js";
+import * as tradingScenarios from "./trading-reconciliation-recompute/scenarios.js";
+import { RULES as TRADING_RULES } from "./trading-reconciliation-recompute/spec.js";
+import { CHECKS as TRADING_CHECK_NAMES } from "./trading-reconciliation-recompute/verify.js";
+
+import {
+  BASELINES as ROLLBACK_BASELINES,
+  INTENDED_CHECK as ROLLBACK_CHECKS,
+} from "./deployment-rollback-recompute/mutants.js";
+import * as rollback from "./deployment-rollback-recompute/runner.js";
+import * as rollbackScenarios from "./deployment-rollback-recompute/scenarios.js";
+import { RULES as ROLLBACK_RULES } from "./deployment-rollback-recompute/spec.js";
+import { CHECKS as ROLLBACK_CHECK_NAMES } from "./deployment-rollback-recompute/verify.js";
 
 export interface FamilySweep {
   readonly scenarioCount: number;
@@ -579,6 +601,109 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
       evidenceStatus: "measured",
       evidence:
         "data/a2-spec-repair-differential.json; data/phase-9-descendant.json; src/families/dao-descendant/runner.ts",
+    },
+  },
+  {
+    id: "trading-reconciliation-recompute",
+    name: "Trading reconciliation recompute recovery",
+    domain: "trading order submission and reconciliation",
+    mechanisms: ["uncertain-external-effects", "duplicate-side-effects"],
+    checks: [...TRADING_CHECK_NAMES],
+    ruleCodes: TRADING_RULES.map((rule) => rule.code),
+    space: tradingScenarios.SPACE,
+    knobPurpose: {
+      seed: "selects deterministic account, symbol, side and order identity",
+      nReconcilers:
+        "one reconciler cannot cross authority; two or more expose recovery under changed authority",
+      orders: "order-set width, retained as a concentration and collision-control dimension",
+      crashPosition: "whether venue acceptance is followed by uncertain reconciliation or clean completion",
+    },
+    run: () => {
+      const run = trading.runFamily();
+      return sweep(
+        run.cells,
+        run.scenarios,
+        run.spaceSize,
+        trading.toMatrix(run),
+        TRADING_CHECKS,
+        TRADING_BASELINES,
+        TRADING_CHECK_NAMES,
+      );
+    },
+    challenge: buildTradingReconciliationChallengePackage,
+    leakProfile: TRADING_RECONCILIATION_PROFILE,
+    typesPath: "src/families/trading-reconciliation-recompute/types.ts",
+    estimatedBuildHours: 24,
+    estimatedFrontierUsd: 145,
+    realism: "simulated-tree",
+    realismGap:
+      "The venue protocol and ledger boundary execute deterministically in the trial host; no production exchange, partial fills, price movement or venue-specific order policy is represented.",
+    hardnessRecipe: {
+      operatorBundle: [
+        "recover_committed_authority",
+        "external_authoritative_ledger",
+        "concentrate_activated_scenarios",
+        "harden_verifier_with_cheat_oracles",
+      ],
+      verifierProfile: "sealed-venue-call-and-execution-ledger+b6",
+      specificationProfile: "explicit-synthetic-venue-recovery-only",
+      starterProfile: "narrow-current-authority-recompute",
+      scenarioSelectionStrategy: "18-activated-plus-6-nonactivation-controls",
+      evidenceStatus: "measured",
+      evidence:
+        "data/phase-13-preregistration.json; data/phase-13-activation-results.json; src/families/trading-reconciliation-recompute/runner.ts",
+    },
+  },
+  {
+    id: "deployment-rollback-recompute",
+    name: "Deployment rollback recompute recovery",
+    domain: "deployment compensation recovery",
+    mechanisms: ["uncertain-external-effects", "duplicate-side-effects"],
+    checks: [...ROLLBACK_CHECK_NAMES],
+    ruleCodes: ROLLBACK_RULES.map((rule) => rule.code),
+    space: rollbackScenarios.SPACE,
+    knobPurpose: {
+      seed: "selects deterministic release, region, compensation and rollback identity",
+      nControllers:
+        "one controller cannot cross authority; two or more expose recovery under changed authority",
+      effects: "release-effect width, retained as a concentration and collision-control dimension",
+      crashPosition:
+        "whether compensation is followed by uncertain recovery or a clean controller completion",
+    },
+    run: () => {
+      const run = rollback.runFamily();
+      return sweep(
+        run.cells,
+        run.scenarios,
+        run.spaceSize,
+        rollback.toMatrix(run),
+        ROLLBACK_CHECKS,
+        ROLLBACK_BASELINES,
+        ROLLBACK_CHECK_NAMES,
+      );
+    },
+    challenge: buildDeploymentRollbackChallengePackage,
+    leakProfile: DEPLOYMENT_ROLLBACK_PROFILE,
+    typesPath: "src/families/deployment-rollback-recompute/types.ts",
+    estimatedBuildHours: 24,
+    estimatedFrontierUsd: 145,
+    realism: "simulated-tree",
+    realismGap:
+      "The controller and rollback-effect ledger execute deterministically in the trial host; no production cloud, release DAG, irreversible effect or provider-specific rollback policy is represented.",
+    hardnessRecipe: {
+      operatorBundle: [
+        "recover_committed_authority",
+        "external_authoritative_ledger",
+        "concentrate_activated_scenarios",
+        "harden_verifier_with_cheat_oracles",
+      ],
+      verifierProfile: "sealed-controller-call-and-effect-ledger+b6",
+      specificationProfile: "explicit-authorized-compensation-recovery-only",
+      starterProfile: "narrow-current-authority-recompute",
+      scenarioSelectionStrategy: "18-activated-plus-6-nonactivation-controls",
+      evidenceStatus: "measured",
+      evidence:
+        "data/phase-13-preregistration.json; data/phase-13-activation-results.json; src/families/deployment-rollback-recompute/runner.ts",
     },
   },
   {

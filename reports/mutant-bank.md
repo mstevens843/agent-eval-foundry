@@ -111,6 +111,8 @@ checkers too weak to express the rule, so their own fuzzers ran clean over the b
 | `recompute-current-epoch` | uncertain-external-effects, duplicate-side-effects | 3 | yes |
 | `no-op` | uncertain-external-effects, liveness-stall | 2 | yes |
 | `forged-stable-report` | false-audit-history, duplicate-side-effects | 2 | yes |
+| `recompute-current-authority` | uncertain-external-effects, duplicate-side-effects | 3 | yes |
+| `recompute-from-attempt-counter` | uncertain-external-effects, duplicate-side-effects | 3 | yes |
 
 ### No-op faker (empty external ledger) `nop-faker`
 
@@ -1709,6 +1711,38 @@ return { actionId, outcome: "executed", toolOk: true }; // tool.execute is never
 ```
 tool.execute(actionId, { idempotencyKey: epochKey, payload });
 return { actionId, idempotencyKey: intent.idempotencyKey, outcome: "executed" };
+```
+
+### Current-authority idempotency-key recomputation `recompute-current-authority`
+
+**Bug.** A recovery subject ignores the key committed with a logical external operation and derives a replacement from the current reconciliation or controller authority epoch. Once authority changes after an uncertain completed call, the external service accepts the replacement key as new work and performs the logical operation again.
+
+**False confidence.** Every retry receives a successful response and the subject's own report says the operation completed. Only the external ledger reveals that the new authority-scoped key caused another effect.
+
+**Must be caught by**
+- cross uncertain post-effect recovery with a changed authority epoch
+- count harness-owned effects by logical operation rather than by submitted idempotency key
+- compare actual call keys with the key committed before the first external call
+
+```
+const key = derive(intent.logicalId, intent.requestId, view.authorityEpoch);
+external.execute(intent.logicalId, { idempotencyKey: key, payload: intent.payload });
+```
+
+### Attempt-counter idempotency-key recomputation `recompute-from-attempt-counter`
+
+**Bug.** A recovery subject treats each retry attempt as a fresh idempotency namespace. A lost successful response followed by retry therefore creates one external effect per attempt instead of recovering the committed logical-operation identity.
+
+**False confidence.** Attempt numbers are unique and every individual request succeeds, so request-local assertions are green. The defect appears only when effects are grouped under durable logical identity.
+
+**Must be caught by**
+- hold the logical operation fixed while recovery attempts increase
+- count sealed external effects per logical operation
+- retain this subject outside scenario selection and require it to fail the frozen activated set
+
+```
+const key = derive(intent.logicalId, intent.requestId, view.attempt);
+external.execute(intent.logicalId, { idempotencyKey: key, payload: intent.payload });
 ```
 
 ---

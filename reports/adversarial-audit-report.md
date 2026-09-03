@@ -10,9 +10,11 @@ infrastructure error, timeout, stale hash or contaminated attack.
 | `dao-descendant` | **adversarial-ready** | `9d89b49307a960f65f2e6e8f204fd15e` | yes | 0 | 0 | 0 | 0 | none |
 | `delegated-wallet-scope-reconciliation` | **adversarial-ready** | `45f27b644a84364e3d3855f68cd243a2` | yes | 0 | 0 | 0 | 0 | none |
 | `deployment-model-alias-rollout-drift` | **adversarial-ready** | `805efb58c923f9e081db1b41967392d7` | yes | 0 | 0 | 0 | 1 | none |
+| `deployment-rollback-recompute` | **adversarial-ready** | `2ddfad2fd3287f752c41a408184b48ce` | yes | 0 | 0 | 0 | 0 | none |
 | `durable-approval-outbox` | **audit-pending** | none | no | 0 | 0 | 0 | 1 | none |
 | `prompt-injection-containment` | **adversarial-ready** | `4911ffdfbd2c0e9b51752ed16c4f53e8` | yes | 0 | 0 | 0 | 0 | none |
 | `prompt-injection-memory-poisoning` | **adversarial-ready** | `7443bf6d6c6b2ccf69cc20f417ff048c` | yes | 0 | 0 | 0 | 0 | none |
+| `trading-reconciliation-recompute` | **adversarial-ready** | `94bfc2c401ad2cc19f7e84e8a1270a08` | yes | 0 | 0 | 0 | 0 | none |
 | `ui-action-record-replay` | **adversarial-ready** | `1050e79f4804a96a5327d50dd81765b0` | yes | 0 | 0 | 0 | 0 | none |
 | `ui-replay-live-dom` | **adversarial-audited** | `18c3f5afc5973604205cd7df23ce4cad` | yes | 1 | 0 | 0 | 4 | none |
 
@@ -33,9 +35,11 @@ audit says one attacker under one declared threat model did not find a bypass.
 | `dao-descendant` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `delegated-wallet-scope-reconciliation` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `deployment-model-alias-rollout-drift` | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| `deployment-rollback-recompute` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `durable-approval-outbox` | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `prompt-injection-containment` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `prompt-injection-memory-poisoning` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| `trading-reconciliation-recompute` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `ui-action-record-replay` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `ui-replay-live-dom` | 0 | 1 | 0 | 0 | 1 | 2 | 0 | 0 | 0 | 0 | 0 |
 
@@ -47,9 +51,11 @@ audit says one attacker under one declared threat model did not find a bypass.
 | `dao-descendant` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `delegated-wallet-scope-reconciliation` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `deployment-model-alias-rollout-drift` | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| `deployment-rollback-recompute` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `durable-approval-outbox` | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `prompt-injection-containment` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `prompt-injection-memory-poisoning` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| `trading-reconciliation-recompute` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `ui-action-record-replay` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `ui-replay-live-dom` | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 

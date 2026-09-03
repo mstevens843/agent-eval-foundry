@@ -222,16 +222,16 @@ trial directories rather than assumed.
 
 | | |
 |---|---:|
-| campaigns declared | 9 |
-| slots planned | 29 |
+| campaigns declared | 12 |
+| slots planned | 35 |
 | slots run | 11 |
-| slots **not run** | 18 |
+| slots **not run** | 24 |
 | counted trials | 7 |
 | of those, failing something | 7 |
 | superseded by a challenge repair | 16 |
 | median counted-trial runtime | 12.5 min |
-| budget declared across campaigns | $100.00 |
-| **budget per counted failure** | $14.29 |
+| budget declared across campaigns | $190.00 |
+| **budget per counted failure** | $27.14 |
 
 ### The line item nobody budgets for
 
@@ -245,7 +245,7 @@ once**, because the first campaign is often what tells you the family is not yet
 
 ### Unrun slots are a budget line, not an absence
 
-18 of 29 declared slots have not run, almost all of them because no runner
+24 of 35 declared slots have not run, almost all of them because no runner
 for that model family is configured here. They are costed in the plans and visible in every
 report. A campaign that quietly dropped them would show a complete-looking result over one lab's
 model — which is the single most common way a benchmark overstates what it measured.
@@ -307,7 +307,7 @@ is pinned and the router can grade an artifact. Difficulty-evidenced means at le
 real agent trial exists under that hash. SHIP still requires the family not to be already solved
 and all blocking gates to pass.
 
-Provider unavailability is visible as 18 not-run slot(s) out of 29; those slots do not become failures or passes.
+Provider unavailability is visible as 24 not-run slot(s) out of 35; those slots do not become failures or passes.
 The current observed pipeline also carries a 12% standard-attempt waste rate from historical trials.
 
 Under the current observed pipeline, $100,000 buys 7 shipped family line(s), 7 independently gradeable package(s), about 168 graded cells and 14 independent axes. It does not buy 168 independent tasks — those cells sit inside 7 package(s) — and the axis meter is the guard against that phrasing.

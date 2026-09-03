@@ -65,10 +65,14 @@ _Every provider here has fewer than 5 counted trials (1 across all of them), whi
 
 | provider | counted | failed | refused | infra | not run | fail rate | 95% interval |
 |---|---:|---:|---:|---:|---:|---:|---|
+| `anthropic` | 0 | 0 | 0 | 0 | 1 | — | — |
+| `openai` | 0 | 0 | 0 | 0 | 1 | — | — |
 
 **To strengthen:**
 
 - Run counted trials on a second model family. Currently failing: none.
+- `anthropic` has 1 declared slot(s) and no counted trial.
+- `openai` has 1 declared slot(s) and no counted trial.
 
 ### `delegated-wallet-scope-reconciliation`
 
@@ -91,6 +95,21 @@ _Every provider here has fewer than 5 counted trials (1 across all of them), whi
 **To strengthen:**
 
 - Run counted trials on a second model family. Currently failing: none.
+
+### `deployment-rollback-recompute`
+
+**Claim strength: no-evidence.** Nothing. No counted agent trial exists for this family.
+
+| provider | counted | failed | refused | infra | not run | fail rate | 95% interval |
+|---|---:|---:|---:|---:|---:|---:|---|
+| `anthropic` | 0 | 0 | 0 | 0 | 1 | — | — |
+| `openai` | 0 | 0 | 0 | 0 | 1 | — | — |
+
+**To strengthen:**
+
+- Run counted trials on a second model family. Currently failing: none.
+- `anthropic` has 1 declared slot(s) and no counted trial.
+- `openai` has 1 declared slot(s) and no counted trial.
 
 ### `prompt-injection-containment`
 
@@ -121,6 +140,21 @@ _Every provider here has fewer than 5 counted trials (1 across all of them), whi
 - `anthropic` has 3 declared slot(s) and no counted trial.
 - `google` has 1 declared slot(s) and no counted trial.
 - `openai` has 3 declared slot(s) and no counted trial.
+
+### `trading-reconciliation-recompute`
+
+**Claim strength: no-evidence.** Nothing. No counted agent trial exists for this family.
+
+| provider | counted | failed | refused | infra | not run | fail rate | 95% interval |
+|---|---:|---:|---:|---:|---:|---:|---|
+| `anthropic` | 0 | 0 | 0 | 0 | 1 | — | — |
+| `openai` | 0 | 0 | 0 | 0 | 1 | — | — |
+
+**To strengthen:**
+
+- Run counted trials on a second model family. Currently failing: none.
+- `anthropic` has 1 declared slot(s) and no counted trial.
+- `openai` has 1 declared slot(s) and no counted trial.
 
 ### `ui-action-record-replay`
 

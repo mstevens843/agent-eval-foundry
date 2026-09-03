@@ -93,6 +93,7 @@ export interface CampaignPlan {
 const CAMPAIGN_CODES: readonly RuleCode[] = [
   "CAMPAIGN_NO_KILL_SIGNAL",
   "CAMPAIGN_COUNTING_CONTRADICTS_CODE",
+  "CAMPAIGN_ISOLATION_CONTRADICTS_RUNNER",
   "CAMPAIGN_SLOT_WITHOUT_RUN",
   "CAMPAIGN_CHALLENGE_HASH_MISMATCH",
   "CAMPAIGN_RETRY_ON_REFUSAL",
@@ -193,6 +194,15 @@ export function assertPlanHonest(plan: CampaignPlan): void {
   }
 
   for (const slot of plan.slots) {
+    const runnerIsolation =
+      slot.runner === "external" ? null : slot.runner === "docker" ? "container" : "subprocess";
+    if (runnerIsolation !== null && runnerIsolation !== plan.isolation) {
+      fail(
+        "CAMPAIGN_ISOLATION_CONTRADICTS_RUNNER",
+        `${path}.slots.${slot.slotId}.runner`,
+        `runner ${slot.runner} records ${runnerIsolation} isolation but the campaign requires ${plan.isolation}; the declared isolation may not be stronger or different than the executable runner`,
+      );
+    }
     if ((slot.state === "RUN" || slot.state === "IMPORTED") && slot.runId === null) {
       fail(
         "CAMPAIGN_SLOT_WITHOUT_RUN",

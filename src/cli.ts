@@ -274,6 +274,12 @@ import {
   renderVariantSchemaMigration,
 } from "./reports/phase-12-foundation.js";
 import {
+  measurePhase13,
+  renderPhase13DesignMatrix,
+  renderPhase13Results,
+  renderPhase13TransferLab,
+} from "./reports/phase-13-transfer.js";
+import {
   renderMechanismProbeReport,
   renderProbeNext,
   renderProbeRun,
@@ -401,6 +407,9 @@ REGISTRY (what could be built, and can we detect it?)
                                   deployment-alias conditional evolution options
   deployment-alias readiness [--out dir]
                                   targeted deployment-alias readiness reports
+  phase13 report [--out f]       controlled family x recipe transfer report
+  phase13 results [--out f]      structured transfer activation measurements
+  phase13 design [--out f]       preregistered minimal design matrix
   sources                        list every matrix source, implemented and planned
 
 FAMILIES (run a measured mini-benchmark)
@@ -4565,6 +4574,8 @@ function allCommand(argv: readonly string[], root: string): string {
     "PHASE-12-HARDNESS-FOUNDATION.md",
     renderPhase12FoundationSummary({ ledger: hardnessLedger, facts: daoFacts }),
   );
+  const phase13Results = measurePhase13(root);
+  write("PHASE-13-TRANSFER-LAB.md", renderPhase13TransferLab(phase13Results));
   const inputs = { ...MEASURED_DEFAULTS, totalUsd: 100_000, labourRateUsdPerHour: 120 };
   assertBudgetInputs(inputs);
   assertPlanHonest(planBudget(inputs));
@@ -5085,6 +5096,15 @@ export function main(argv: readonly string[]): number {
       case "budget":
         emit(argv, budgetCommand(argv));
         return 0;
+      case "phase13": {
+        const sub = positional(argv, 1) ?? "report";
+        const results = measurePhase13(root);
+        if (sub === "report") emit(argv, renderPhase13TransferLab(results));
+        else if (sub === "results") emit(argv, renderPhase13Results(results));
+        else if (sub === "design") emit(argv, renderPhase13DesignMatrix(results));
+        else throw new Error(`unknown phase13 subcommand "${sub}"; expected report, results or design`);
+        return 0;
+      }
       case "reports": {
         // `reports all` is an alias for `all`: the report layer got large enough that people look for
         // it under a noun rather than under a bare verb.

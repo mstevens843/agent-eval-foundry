@@ -1,0 +1,62 @@
+{
+  "campaignId": "trading-reconciliation-recompute-transfer-smoke-2026-09",
+  "familyId": "trading-reconciliation-recompute",
+  "hypothesis": "The committed-authority recipe may transfer from outbox recovery to synthetic trading reconciliation: a capable subject may still recompute client order identity after a lost venue acceptance and changed reconciliation authority. A matched Codex/Claude smoke is the minimum agent evidence.",
+  "killSignal": "Both countable provider-family attempts solve every scenario, or every failure is independently attributed to trading wording, hidden market assumptions, harness, or verifier defects. Either result blocks matrix spend and withdraws any claim that the recipe produced agent difficulty in trading.",
+  "confirmSignal": "At least one countable attempt fails an activated reconciliation scenario on client-order-key recomputation or duplicate venue execution, with no market-policy failure and two blind labellers agreeing capability. This is smoke evidence only.",
+  "challengeHash": "94bfc2c401ad2cc19f7e84e8a1270a08",
+  "scenarioSetId": "recompute-24-1063a653",
+  "scenariosExpected": 24,
+  "timeoutMs": 1800000,
+  "artifactPath": "submission/subject.mjs",
+  "isolation": "subprocess",
+  "counting": {
+    "neverCounts": [
+      "refused",
+      "timeout",
+      "infrastructure_error"
+    ],
+    "onRefusal": "Preserve the transcript and record REFUSED; never count it as a task failure and do not retry the slot.",
+    "onInfraFailure": "Preserve the failed packet and record FAILED_INFRA; allow one infrastructure repair retry without selecting on model behavior.",
+    "onCrash": "Record crashed and leave it uncounted unless artifact review proves the submitted subject, rather than the rig, caused the crash.",
+    "retriesOnInfra": 1,
+    "retryOnRefusal": false
+  },
+  "preservation": [
+    "Every attempt preserves challenge, submission, transcript, verifier output, metadata, normalized result and countability decision.",
+    "The challenge hash and scenario-set id must match this manifest before any result counts.",
+    "B6 controls run in the same grading invocation and a failed control voids the run.",
+    "Root-cause labels are separate sidecars produced by two blind provider-family-independent readers; only agreed capability counts as difficulty evidence."
+  ],
+  "budgetUsd": 30,
+  "slots": [
+    {
+      "slotId": "O1",
+      "model": "openai/gpt-5.6-sol",
+      "subjectId": "gpt-5.6-sol-phase13",
+      "effort": "xhigh",
+      "runner": "shell",
+      "command": [
+        "codex",
+        "exec",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "--skip-git-repo-check",
+        "{instruction}"
+      ],
+      "state": "NOT_RUN",
+      "runId": null,
+      "note": "Matched Codex slot. Not executed or authorized by Phase 13."
+    },
+    {
+      "slotId": "A1",
+      "model": "anthropic/claude-opus-5",
+      "subjectId": "claude-opus-5-phase13",
+      "effort": "max",
+      "runner": "external",
+      "command": null,
+      "state": "NOT_RUN",
+      "runId": null,
+      "note": "Matched Claude slot, import-only while the native provider is unavailable. Not executed in Phase 13."
+    }
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "familyId": "trading-reconciliation-recompute",
+  "name": "Trading reconciliation recompute recovery",
+  "domain": "trading order submission and reconciliation",
+  "mechanisms": [
+    "uncertain-external-effects",
+    "duplicate-side-effects"
+  ],
+  "visibleRules": [
+    "Recover the client order key committed in the durable order intent; never derive it from the current reconciler, authority epoch or retry attempt.",
+    "All submissions for one order intent collectively create exactly one venue execution.",
+    "Retry a lost accepted-order response with the committed key and treat a deduplicated acceptance as completion.",
+    "Report the order intent, reconciler, authority epoch, sent key and observed venue result truthfully.",
+    "Every valid order intent must reach the venue at least once.",
+    "No market-price, fill-priority, partial-fill or venue-specific policy is part of this family."
+  ],
+  "hiddenGradedRegion": "The hidden suite samples only declared seed, reconciler-count, order-set-width and crash-position dimensions. The target stratum contains two seeds per (nReconcilers, orders) cell for two, three and four reconcilers after venue acceptance; one-reconciler and clean-submission controls prove non-activation.",
+  "knobs": [
+    {
+      "name": "seed",
+      "type": "seed",
+      "values": [
+        11,
+        23,
+        41
+      ],
+      "purpose": "selects deterministic account, symbol, side and order identity"
+    },
+    {
+      "name": "nReconcilers",
+      "type": "int",
+      "values": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "purpose": "one reconciler cannot cross authority; two or more expose recovery under changed authority"
+    },
+    {
+      "name": "orders",
+      "type": "int",
+      "values": [
+        4,
+        6,
+        12
+      ],
+      "purpose": "order-set width, retained as a concentration and collision-control dimension"
+    },
+    {
+      "name": "crashPosition",
+      "type": "enum",
+      "values": [
+        "none",
+        "after_venue_accept"
+      ],
+      "purpose": "whether venue acceptance is followed by uncertain reconciliation or clean completion"
+    }
+  ],
+  "authoritativeSources": [
+    {
+      "name": "durable order intent",
+      "whatItSettles": "the stable order intent, client request, account, order payload and key committed before submission",
+      "whyEngineCannotForge": "The scenario generator creates the intent before subject execution. The subject may read it but cannot replace the value against which the call ledger is graded."
+    },
+    {
+      "name": "synthetic venue execution ledger",
+      "whatItSettles": "how many accepted executions occurred for one order intent and under which keys",
+      "whyEngineCannotForge": "The trial host owns the ledger and exposes only placeOrder(). The parent verifier receives a sealed copy after subject execution."
+    },
+    {
+      "name": "venue call ledger",
+      "whatItSettles": "the exact order payload, key, reconciler and authority epoch on every call",
+      "whyEngineCannotForge": "The facade records each call before returning acceptance and exposes no call-ledger handle through the subject interface."
+    }
+  ],
+  "referenceContract": [
+    "Read the committed client order key from the durable intent on every reconciliation attempt.",
+    "Submit the unchanged account, symbol, side, quantity and logical order identity.",
+    "Treat first acceptance and deduplicated acceptance as successful completion.",
+    "Report the actual key and authority epoch used.",
+    "Produce one venue execution despite reconciliation authority transfer."
+  ],
+  "expectedMutants": [
+    {
+      "mutantId": "recompute-current-authority",
+      "mustFailCheck": "exactly_once"
+    },
+    {
+      "mutantId": "recompute-from-attempt-counter",
+      "mustFailCheck": "exactly_once"
+    },
+    {
+      "mutantId": "no-op",
+      "mustFailCheck": "liveness"
+    },
+    {
+      "mutantId": "forged-stable-report",
+      "mustFailCheck": "report_matches_venue_ledger"
+    }
+  ],
+  "fairnessConstraints": [
+    "Every graded rule code appears in SPEC.md.",
+    "The committed order key and complete synthetic order payload are visible in every recovery view.",
+    "No hidden market, price, exchange-priority or partial-fill convention is graded.",
+    "The four-cell probe distinguishes uncertainty, authority change and their interaction.",
+    "Hidden cases sample only declared dimensions."
+  ],
+  "cheatResistance": [
+    "The venue call and execution ledgers are harness-owned and absent from the challenge package.",
+    "A no-op report fails the positive execution floor.",
+    "A forged committed-key report is compared with the actual venue call.",
+    "The challenge leak profile excludes truth, verifier, selection and mutant artifacts.",
+    "The trial route preserves challenge, submission, transcript, verifier output and countability artifacts."
+  ],
+  "expectedFailureModes": [
+    "Recomputing a client order key from the current reconciliation authority epoch.",
+    "Generating a fresh key from the retry counter after a lost response.",
+    "Reporting the committed key while sending a different key to the venue.",
+    "Refusing uncertain reconciliation and never submitting the valid order."
+  ],
+  "hardnessRecipe": {
+    "operatorBundle": [
+      "recover_committed_authority",
+      "external_authoritative_ledger",
+      "concentrate_activated_scenarios",
+      "harden_verifier_with_cheat_oracles"
+    ],
+    "verifierProfile": "sealed-venue-call-and-execution-ledger+b6",
+    "specificationProfile": "explicit-synthetic-venue-recovery-only",
+    "starterProfile": "narrow-current-authority-recompute",
+    "scenarioSelectionStrategy": "18-activated-plus-6-nonactivation-controls",
+    "evidenceStatus": "measured",
+    "evidence": "data/phase-13-preregistration.json; data/phase-13-activation-results.json; src/families/trading-reconciliation-recompute/runner.ts"
+  },
+  "estimatedBuildHours": 24,
+  "estimatedFrontierUsd": 145,
+  "status": "built",
+  "dataQuality": "measured",
+  "evidence": "Built in Phase 13 from the pre-registered committed-authority recipe. The 72-point local grid and four-cell U x C probe show the recompute mutant fails only when venue acceptance is uncertain and reconciliation authority changes. The selected 24-scenario package retains 18 activated cases and 6 controls. This is local synthetic-venue transfer evidence, not frontier-agent or production-exchange evidence.",
+  "estimatedAxes": 1,
+  "agentTrialsRun": null,
+  "agentTrialsPassed": null
+}

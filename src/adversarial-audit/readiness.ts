@@ -125,6 +125,18 @@ const FAMILY_SURFACES: Readonly<Record<string, readonly string[]>> = {
     "sealed per-action call and effect ledgers",
     "multi-worker uncertain-completion recovery boundary",
   ],
+  "trading-reconciliation-recompute": [
+    "durable client-order intent versus current reconciliation authority",
+    "synthetic venue submission facade",
+    "sealed venue call and execution ledgers",
+    "multi-reconciler lost-acceptance recovery boundary",
+  ],
+  "deployment-rollback-recompute": [
+    "authorized rollback intent versus current controller authority",
+    "deployment compensation facade",
+    "sealed controller call and rollback-effect ledgers",
+    "multi-controller lost-compensation recovery boundary",
+  ],
   "deployment-model-alias-rollout-drift": [
     "model alias rollout facade",
     "authoritative rollout and eval ledger",
@@ -186,6 +198,16 @@ const VERIFIER_PATHS: Readonly<Record<string, readonly string[]>> = {
     "src/families/dao-descendant/verify.ts",
     "src/families/dao-descendant/runner.ts",
     "scripts/dao-descendant-host.mjs",
+  ],
+  "trading-reconciliation-recompute": [
+    "src/families/trading-reconciliation-recompute/verify.ts",
+    "src/families/trading-reconciliation-recompute/runner.ts",
+    "scripts/trading-reconciliation-host.mjs",
+  ],
+  "deployment-rollback-recompute": [
+    "src/families/deployment-rollback-recompute/verify.ts",
+    "src/families/deployment-rollback-recompute/runner.ts",
+    "scripts/deployment-rollback-host.mjs",
   ],
   "deployment-model-alias-rollout-drift": [
     "src/families/deployment-model-alias-rollout-drift/verify.ts",

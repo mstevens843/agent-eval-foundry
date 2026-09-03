@@ -36,6 +36,18 @@ for (const [path, args] of axis) {
   } else console.log(`ok     ${path}`);
 }
 
+// Phase 13's structured measurements are inputs to the generated prose report. Keep the JSON and
+// the preregistered design on the same CLI-level freshness path as the report they support.
+for (const [path, args] of [
+  ["data/phase-13-activation-results.json", ["phase13", "results"]],
+  ["data/phase-13-design-matrix.json", ["phase13", "design"]],
+]) {
+  if (run(args) !== readFileSync(path, "utf8")) {
+    console.error(`STALE  ${path}`);
+    failures += 1;
+  } else console.log(`ok     ${path}`);
+}
+
 // The family artifacts are generated too, so they get the same treatment: regenerate and diff.
 // Every built family's matrix and shape are here: a family whose axis count moves and whose shape
 // does not is a build failure rather than a discrepancy someone notices in six months.
@@ -69,6 +81,14 @@ for (const [path, args] of [
   ],
   ["examples/families/dao-descendant/matrix.json", ["family", "run", "--family", "dao-descendant"]],
   [
+    "examples/families/trading-reconciliation-recompute/matrix.json",
+    ["family", "run", "--family", "trading-reconciliation-recompute"],
+  ],
+  [
+    "examples/families/deployment-rollback-recompute/matrix.json",
+    ["family", "run", "--family", "deployment-rollback-recompute"],
+  ],
+  [
     "examples/shapes/prompt-injection-memory-poisoning.json",
     ["family", "shape", "--family", "prompt-injection-memory-poisoning"],
   ],
@@ -94,6 +114,14 @@ for (const [path, args] of [
     ["family", "shape", "--family", "deployment-model-alias-rollout-drift"],
   ],
   ["examples/shapes/dao-descendant.json", ["family", "shape", "--family", "dao-descendant"]],
+  [
+    "examples/shapes/trading-reconciliation-recompute.json",
+    ["family", "shape", "--family", "trading-reconciliation-recompute"],
+  ],
+  [
+    "examples/shapes/deployment-rollback-recompute.json",
+    ["family", "shape", "--family", "deployment-rollback-recompute"],
+  ],
 ]) {
   if (run(args) !== readFileSync(path, "utf8")) {
     console.error(`STALE  ${path}`);
@@ -118,6 +146,8 @@ for (const [familyId, committedDir] of [
     "examples/families/deployment-model-alias-rollout-drift/challenge",
   ],
   ["dao-descendant", "examples/families/dao-descendant/challenge"],
+  ["trading-reconciliation-recompute", "examples/families/trading-reconciliation-recompute/challenge"],
+  ["deployment-rollback-recompute", "examples/families/deployment-rollback-recompute/challenge"],
 ]) {
   const tmpDir = mkdtempSync(join(tmpdir(), "foundry-fam-"));
   run(["challenge", "build", "--family", familyId, "--out", tmpDir]);
@@ -187,6 +217,7 @@ const SMOKE = [
   [["provider-delta", "diagnosis"], /provider-delta diagnosis/],
   [["provider-delta", "evolution"], /evolution options/],
   [["deployment-alias", "readiness"], /deployment-alias readiness report/],
+  [["phase13", "report"], /Controlled Family x Recipe Transfer Laboratory/],
   [["adversarial", "readiness"], /Adversarial verifier-integrity readiness/],
   [["adversarial", "report"], /Adversarial verifier-integrity audit/],
   [["adversarial", "v2", "report"], /Adversarial Audit v2/],
@@ -348,7 +379,9 @@ if (!/deployment-model-alias-rollout-drift/.test(externalPacketOut)) {
     `SMOKE  could not read ${EXTERNAL_PACKET_FAMILY}'s current hash out of reports/evidence-snapshot.md`,
   );
   failures += 1;
-} else if (readFileSync(join(externalPacketTmp, "challenge_hash.txt"), "utf8").trim() !== expectedPacketHash) {
+} else if (
+  readFileSync(join(externalPacketTmp, "challenge_hash.txt"), "utf8").trim() !== expectedPacketHash
+) {
   console.error("SMOKE  `external packet` did not preserve the current challenge hash");
   failures += 1;
 } else if (!readFileSync(join(externalPacketTmp, "DO_NOT_INCLUDE.md"), "utf8").includes("hidden verifier")) {
@@ -405,9 +438,11 @@ const ADVERSARIAL_FAMILIES = [
   "checker-required-memory-poisoning",
   "dao-descendant",
   "delegated-wallet-scope-reconciliation",
+  "deployment-rollback-recompute",
   "deployment-model-alias-rollout-drift",
   "prompt-injection-containment",
   "prompt-injection-memory-poisoning",
+  "trading-reconciliation-recompute",
   "ui-action-record-replay",
   "ui-replay-live-dom",
 ];
@@ -546,7 +581,7 @@ for (const variant of [
 // Lowering this floor is therefore a real decision with a real diff, not a number that drifts down one
 // at a time behind a passing build. Raise it whenever the suite grows.
 run(["all", "--out", tmp]);
-const REPORT_FLOOR = 111;
+const REPORT_FLOOR = 112;
 const generated = readdirSync(tmp);
 if (generated.length < REPORT_FLOOR) {
   console.error(
@@ -642,7 +677,7 @@ for (const name of readdirSync(tmp).sort()) {
 
 if (failures > 0) {
   console.error(
-    `\n${failures} generated artifact(s) differ from a fresh render. Run \`pnpm report && pnpm bundles\`.`,
+    `\n${failures} generated artifact(s) differ from a fresh render. Run \`pnpm report && pnpm phase13:artifacts && pnpm bundles\`.`,
   );
   process.exit(1);
 }

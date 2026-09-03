@@ -762,3 +762,25 @@ measures independent axes, and then ships, kills or evolves the family based on 
 That is the answer to the 1000-task question: build families first, then generate instances from the
 families that survive. Raw task count is not the goal. Fair, solvable, cheat-resistant tasks that add
 independent signal are the goal.
+
+## Phase 13 Transfer Boundary
+
+Phase 13 instantiated one measured construction recipe in three substrates: durable outbox,
+trading reconciliation, and deployment rollback. The recipe keeps a stable logical identity and a
+committed operation key across uncertain external completion and changed recovery authority, while
+the authoritative effect ledger remains outside the subject process.
+
+A preregistered four-cell `uncertainty x authority-change` probe isolated the same interaction in all
+three substrates. Each reference passed all 72 sweep points; each current-authority recompute mutant
+failed exactly-once in 27/72 broad points and 18/18 selected target scenarios, while passing all six
+non-activation controls. These are deterministic local verifier and mechanism-activation results.
+
+This establishes **recipe portability**, not **hardness portability**. The two new domain protocols
+are synthetic, no agent attempted them, and three isomorphic packages do not create three independent
+difficulty axes. Agent trials and capability-attributed failures are still required before the
+foundry may claim that the transferred recipe makes multiple task families hard.
+
+The real-system documentation audit was performed after the local outcomes. It establishes precedent
+for the modeled boundaries, not prospective source-first discovery or fidelity to a production
+exchange or deployment controller. The campaign packages are subprocess-ready; that separates the
+submitted subject from host-owned evidence but is not a completed container or adversarial audit.

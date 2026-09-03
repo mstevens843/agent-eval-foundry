@@ -11,16 +11,18 @@ model difficulty.
 | `dao-descendant` | **not-ready** | `9d89b49307a960f65f2e6e8f204fd15e` | 8 | `hidden-sampling-visible`, `allowed-assumptions-visible`, `forbidden-assumptions-visible`, `solvable-without-source-internals` |
 | `delegated-wallet-scope-reconciliation` | **human-ready** | `45f27b644a84364e3d3855f68cd243a2` | 9 | none |
 | `deployment-model-alias-rollout-drift` | **human-ready** | `805efb58c923f9e081db1b41967392d7` | 9 | none |
+| `deployment-rollback-recompute` | **not-ready** | `2ddfad2fd3287f752c41a408184b48ce` | 8 | `hidden-sampling-visible`, `allowed-assumptions-visible`, `forbidden-assumptions-visible`, `solvable-without-source-internals` |
 | `durable-approval-outbox` | **not-ready** | none | 0 | `public-package-present`, `surface-complete`, `spec-rules-complete`, `hidden-sampling-visible`, `allowed-assumptions-visible`, `forbidden-assumptions-visible`, `examples-present`, `scoring-contract-visible`, `hidden-artifacts-absent`, `solvable-without-source-internals` |
 | `prompt-injection-containment` | **human-ready** | `4911ffdfbd2c0e9b51752ed16c4f53e8` | 8 | none |
 | `prompt-injection-memory-poisoning` | **human-ready** | `7443bf6d6c6b2ccf69cc20f417ff048c` | 8 | none |
+| `trading-reconciliation-recompute` | **not-ready** | `94bfc2c401ad2cc19f7e84e8a1270a08` | 8 | `hidden-sampling-visible`, `allowed-assumptions-visible`, `forbidden-assumptions-visible`, `solvable-without-source-internals` |
 | `ui-action-record-replay` | **human-ready** | `1050e79f4804a96a5327d50dd81765b0` | 8 | none |
 | `ui-replay-live-dom` | **human-ready** | `18c3f5afc5973604205cd7df23ce4cad` | 9 | none |
 
 ## Current Reading
 
 Human-ready families: `checker-required-memory-poisoning`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom`.
-Blocked or unavailable packages: `access-token-scope-expansion`, `dao-descendant`, `durable-approval-outbox`.
+Blocked or unavailable packages: `access-token-scope-expansion`, `dao-descendant`, `deployment-rollback-recompute`, `durable-approval-outbox`, `trading-reconciliation-recompute`.
 
 A ready verdict says the public package is complete enough for a clean-room human attempt. It does
 not say that a human has solved it.
@@ -102,6 +104,21 @@ not say that a human has solved it.
 | `hidden-artifacts-absent` | pass | challenge package passed the independent leak checker |
 | `solvable-without-source-internals` | pass | public package contains the contract needed for a clean-room attempt |
 
+### `deployment-rollback-recompute`
+
+| check | result | detail |
+|---|---|---|
+| `public-package-present` | pass | checked-in public package hashes to 2ddfad2fd3287f752c41a408184b48ce |
+| `surface-complete` | pass | 8 visible file(s), including README, SPEC, API and starter |
+| `spec-rules-complete` | pass | 5 visible rule code(s) in SPEC.md |
+| `hidden-sampling-visible` | **FAIL** | public package does not clearly say hidden cases add no rules |
+| `allowed-assumptions-visible` | **FAIL** | allowed assumptions are not stated explicitly enough |
+| `forbidden-assumptions-visible` | **FAIL** | forbidden assumptions are not stated explicitly enough |
+| `examples-present` | pass | 3 visible example file(s) |
+| `scoring-contract-visible` | pass | public README/SPEC states how grading works |
+| `hidden-artifacts-absent` | pass | challenge package passed the independent leak checker |
+| `solvable-without-source-internals` | **FAIL** | a solver would need hidden source or author context |
+
 ### `durable-approval-outbox`
 
 | check | result | detail |
@@ -146,6 +163,21 @@ not say that a human has solved it.
 | `scoring-contract-visible` | pass | public README/SPEC states how grading works |
 | `hidden-artifacts-absent` | pass | challenge package passed the independent leak checker |
 | `solvable-without-source-internals` | pass | public package contains the contract needed for a clean-room attempt |
+
+### `trading-reconciliation-recompute`
+
+| check | result | detail |
+|---|---|---|
+| `public-package-present` | pass | checked-in public package hashes to 94bfc2c401ad2cc19f7e84e8a1270a08 |
+| `surface-complete` | pass | 8 visible file(s), including README, SPEC, API and starter |
+| `spec-rules-complete` | pass | 5 visible rule code(s) in SPEC.md |
+| `hidden-sampling-visible` | **FAIL** | public package does not clearly say hidden cases add no rules |
+| `allowed-assumptions-visible` | **FAIL** | allowed assumptions are not stated explicitly enough |
+| `forbidden-assumptions-visible` | **FAIL** | forbidden assumptions are not stated explicitly enough |
+| `examples-present` | pass | 3 visible example file(s) |
+| `scoring-contract-visible` | pass | public README/SPEC states how grading works |
+| `hidden-artifacts-absent` | pass | challenge package passed the independent leak checker |
+| `solvable-without-source-internals` | **FAIL** | a solver would need hidden source or author context |
 
 ### `ui-action-record-replay`
 

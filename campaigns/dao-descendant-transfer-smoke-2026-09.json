@@ -1,0 +1,62 @@
+{
+  "campaignId": "dao-descendant-transfer-smoke-2026-09",
+  "familyId": "dao-descendant",
+  "hypothesis": "The A2-repaired outbox calibration package may turn the locally invisible recompute defect into agent difficulty. A matched Codex/Claude smoke is the minimum next evidence; local mutant fatality alone is not difficulty evidence.",
+  "killSignal": "Both countable provider-family attempts solve every scenario, or every failure is independently attributed to specification, harness, or verifier defects rather than the committed-authority mechanism. Either result blocks matrix spend and the local transfer result remains verifier-only.",
+  "confirmSignal": "At least one countable attempt fails an activated recovery scenario on recomputation or duplicate effects while its own checks remain green, and two independent blind labellers agree the failure is capability-attributed. This is smoke evidence only, not a full matrix claim.",
+  "challengeHash": "9d89b49307a960f65f2e6e8f204fd15e",
+  "scenarioSetId": "descendant-24-21639a0f",
+  "scenariosExpected": 24,
+  "timeoutMs": 1800000,
+  "artifactPath": "submission/subject.mjs",
+  "isolation": "subprocess",
+  "counting": {
+    "neverCounts": [
+      "refused",
+      "timeout",
+      "infrastructure_error"
+    ],
+    "onRefusal": "Preserve the transcript and record REFUSED; never count it as a task failure and do not retry the slot.",
+    "onInfraFailure": "Preserve the failed packet and record FAILED_INFRA; allow one infrastructure repair retry without selecting on model behavior.",
+    "onCrash": "Record crashed and leave it uncounted unless artifact review proves the submitted subject, rather than the rig, caused the crash.",
+    "retriesOnInfra": 1,
+    "retryOnRefusal": false
+  },
+  "preservation": [
+    "Every attempt preserves challenge, submission, transcript, verifier output, metadata, normalized result and countability decision.",
+    "The challenge hash and scenario-set id must match this manifest before any result counts.",
+    "B6 controls run in the same grading invocation and a failed control voids the run.",
+    "Root-cause labels are separate sidecars produced by two blind provider-family-independent readers; only agreed capability counts as difficulty evidence."
+  ],
+  "budgetUsd": 30,
+  "slots": [
+    {
+      "slotId": "O1",
+      "model": "openai/gpt-5.6-sol",
+      "subjectId": "gpt-5.6-sol-phase13",
+      "effort": "xhigh",
+      "runner": "shell",
+      "command": [
+        "codex",
+        "exec",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "--skip-git-repo-check",
+        "{instruction}"
+      ],
+      "state": "NOT_RUN",
+      "runId": null,
+      "note": "Matched Codex slot. Not executed or authorized by Phase 13."
+    },
+    {
+      "slotId": "A1",
+      "model": "anthropic/claude-opus-5",
+      "subjectId": "claude-opus-5-phase13",
+      "effort": "max",
+      "runner": "external",
+      "command": null,
+      "state": "NOT_RUN",
+      "runId": null,
+      "note": "Matched Claude slot, import-only while the native provider is unavailable. Not executed in Phase 13."
+    }
+  ]
+}

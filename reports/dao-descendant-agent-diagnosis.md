@@ -3,7 +3,7 @@
 One diagnosis per counted trial that failed something, and the question each asks first: is this
 a capability finding, or is the family wrong?
 
-**Pre-registered hypothesis.** No campaign plan on record.
+**Pre-registered hypothesis.** The A2-repaired outbox calibration package may turn the locally invisible recompute defect into agent difficulty. A matched Codex/Claude smoke is the minimum next evidence; local mutant fatality alone is not difficulty evidence.
 
 ## How the two readings are told apart
 

@@ -1,0 +1,133 @@
+{
+  "schema": "agent-eval-foundry/phase-13-design-matrix@1",
+  "preregistrationSha256": "745d61bdd5b45a13bb6b699a46768691fd7bf939b217bc888185ad36fccb8db2",
+  "factors": [
+    {
+      "id": "U",
+      "name": "uncertain-after-effect recovery",
+      "levels": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "C",
+      "name": "changed recovery authority",
+      "levels": [
+        0,
+        1
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "substrateId": "dao-descendant",
+      "cell": "U0C0",
+      "uncertainAfterEffect": false,
+      "changedAuthority": false,
+      "referenceFailed": false,
+      "narrowExactlyOnceFailed": false,
+      "narrowLocalConfirmationGreen": true
+    },
+    {
+      "substrateId": "dao-descendant",
+      "cell": "U1C0",
+      "uncertainAfterEffect": true,
+      "changedAuthority": false,
+      "referenceFailed": false,
+      "narrowExactlyOnceFailed": false,
+      "narrowLocalConfirmationGreen": true
+    },
+    {
+      "substrateId": "dao-descendant",
+      "cell": "U0C1",
+      "uncertainAfterEffect": false,
+      "changedAuthority": true,
+      "referenceFailed": false,
+      "narrowExactlyOnceFailed": false,
+      "narrowLocalConfirmationGreen": true
+    },
+    {
+      "substrateId": "dao-descendant",
+      "cell": "U1C1",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "referenceFailed": false,
+      "narrowExactlyOnceFailed": true,
+      "narrowLocalConfirmationGreen": true
+    },
+    {
+      "substrateId": "trading-reconciliation-recompute",
+      "cell": "U0C0",
+      "uncertainAfterEffect": false,
+      "changedAuthority": false,
+      "referenceFailed": false,
+      "narrowExactlyOnceFailed": false,
+      "narrowLocalConfirmationGreen": true
+    },
+    {
+      "substrateId": "trading-reconciliation-recompute",
+      "cell": "U1C0",
+      "uncertainAfterEffect": true,
+      "changedAuthority": false,
+      "referenceFailed": false,
+      "narrowExactlyOnceFailed": false,
+      "narrowLocalConfirmationGreen": true
+    },
+    {
+      "substrateId": "trading-reconciliation-recompute",
+      "cell": "U0C1",
+      "uncertainAfterEffect": false,
+      "changedAuthority": true,
+      "referenceFailed": false,
+      "narrowExactlyOnceFailed": false,
+      "narrowLocalConfirmationGreen": true
+    },
+    {
+      "substrateId": "trading-reconciliation-recompute",
+      "cell": "U1C1",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "referenceFailed": false,
+      "narrowExactlyOnceFailed": true,
+      "narrowLocalConfirmationGreen": true
+    },
+    {
+      "substrateId": "deployment-rollback-recompute",
+      "cell": "U0C0",
+      "uncertainAfterEffect": false,
+      "changedAuthority": false,
+      "referenceFailed": false,
+      "narrowExactlyOnceFailed": false,
+      "narrowLocalConfirmationGreen": true
+    },
+    {
+      "substrateId": "deployment-rollback-recompute",
+      "cell": "U1C0",
+      "uncertainAfterEffect": true,
+      "changedAuthority": false,
+      "referenceFailed": false,
+      "narrowExactlyOnceFailed": false,
+      "narrowLocalConfirmationGreen": true
+    },
+    {
+      "substrateId": "deployment-rollback-recompute",
+      "cell": "U0C1",
+      "uncertainAfterEffect": false,
+      "changedAuthority": true,
+      "referenceFailed": false,
+      "narrowExactlyOnceFailed": false,
+      "narrowLocalConfirmationGreen": true
+    },
+    {
+      "substrateId": "deployment-rollback-recompute",
+      "cell": "U1C1",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "referenceFailed": false,
+      "narrowExactlyOnceFailed": true,
+      "narrowLocalConfirmationGreen": true
+    }
+  ],
+  "estimand": "Within each substrate, Y11 - Y10 - Y01 + Y00 for the narrow subject's exactly-once failure; family differences are differences between those interaction contrasts."
+}

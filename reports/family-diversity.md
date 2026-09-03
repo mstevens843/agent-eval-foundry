@@ -14,6 +14,7 @@ a column mixing the two without labels is how an estimate becomes a fact.
 | `delegated-wallet-scope-reconciliation` | built | permission-boundary, stale-state, false-audit-history, duplicate-side-effects, liveness-stall, tool-result-ambiguity | 3 | 36 | 45 | measured |
 | `deployment-model-alias-rollout-drift` | built | model-alias-drift, stale-state, false-audit-history, liveness-stall, tool-result-ambiguity | 20 | 40 | 45 | measured |
 | `deployment-rollback-partial-effects` | candidate | uncertain-external-effects, duplicate-side-effects, liveness-stall | — | 60 | 75 | est. |
+| `deployment-rollback-recompute` | built | uncertain-external-effects, duplicate-side-effects | 1 | 24 | 145 | measured |
 | `durable-approval-outbox` | shipped | uncertain-external-effects, duplicate-side-effects, false-audit-history, liveness-stall, tool-result-ambiguity | 3 | 120 | 49 | measured |
 | `model-alias-drift-sentinel` | idea | model-alias-drift, hidden-environment-dependency | 2 | 55 | 50 | est. |
 | `permission-boundary-tools` | idea | permission-boundary, grader-privilege-boundary | 1 | 45 | 50 | est. |
@@ -23,6 +24,7 @@ a column mixing the two without labels is how an estimate becomes a fact.
 | `prompt-injection-cross-tool-escalation` | idea | permission-boundary, tool-result-ambiguity, duplicate-side-effects | 3 | 55 | 50 | est. |
 | `prompt-injection-memory-poisoning` | shipped | context-contamination, false-audit-history, prompt-injection-via-retrieval | 5 | 75 | 70 | measured |
 | `stale-crm-ticket-automation` | candidate | stale-state, tool-result-ambiguity, duplicate-side-effects | 2 | 70 | 55 | est. |
+| `trading-reconciliation-recompute` | built | uncertain-external-effects, duplicate-side-effects | 1 | 24 | 145 | measured |
 | `ui-action-record-replay` | shipped | ui-replay-mismatch, stale-state, hidden-environment-dependency | 6 | 55 | 40 | measured |
 | `ui-replay-live-dom` | shipped | ui-replay-mismatch, stale-state, hidden-environment-dependency, duplicate-side-effects | 19 | 95 | 55 | measured |
 
@@ -30,12 +32,12 @@ a column mixing the two without labels is how an estimate becomes a fact.
 
 | | |
 |---|---:|
-| families | 19 |
-| expected axes (all) | 90 |
-| of which measured | **76** |
+| families | 21 |
+| expected axes (all) | 92 |
+| of which measured | **78** |
 | of which estimated | 14 |
-| declared build hours | 1244 |
-| declared frontier spend | $1103.66 |
+| declared build hours | 1292 |
+| declared frontier spend | $1393.66 |
 
 Mechanism coverage across families: 15 distinct mechanisms.
 

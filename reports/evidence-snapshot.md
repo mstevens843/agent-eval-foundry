@@ -28,6 +28,7 @@ since changed is superseded, preserved, and not in this column.
 | `delegated-wallet-scope-reconciliation` | 804 | 0 | 0 | 0 | 3 | not measurable — fewer than 2 counted failing subjects | human-ready | adversarial-ready | **NOT-READY**: `difficulty-evidenced` |
 | `deployment-model-alias-rollout-drift` | 339 | 0 | 0 | 0 | 20 | not measurable — fewer than 2 counted failing subjects | human-ready | adversarial-ready | **NOT-READY**: `difficulty-evidenced` |
 | `deployment-rollback-partial-effects` | not built | — | — | — | — | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
+| `deployment-rollback-recompute` | 24 | 0 | 0 | 0 | 1 | not measurable — fewer than 2 counted failing subjects | reference-solvable | adversarial-ready | **NOT-READY**: `difficulty-evidenced` |
 | `durable-approval-outbox` | not built | 6 | 6 | 0 | 3 | 1 (failures nest — one axis at several sensitivities) | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
 | `model-alias-drift-sentinel` | not built | — | — | — | 2 (est.) | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
 | `permission-boundary-tools` | not built | — | — | — | 1 (est.) | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
@@ -37,6 +38,7 @@ since changed is superseded, preserved, and not in this column.
 | `prompt-injection-cross-tool-escalation` | not built | — | — | — | 3 (est.) | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
 | `prompt-injection-memory-poisoning` | 288 | 0 | 0 | 0 | 5 | not measurable — fewer than 2 counted failing subjects | human-ready | adversarial-ready | **NOT-READY**: `difficulty-evidenced` |
 | `stale-crm-ticket-automation` | not built | — | — | — | 2 (est.) | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
+| `trading-reconciliation-recompute` | 24 | 0 | 0 | 0 | 1 | not measurable — fewer than 2 counted failing subjects | reference-solvable | adversarial-ready | **NOT-READY**: `difficulty-evidenced` |
 | `ui-action-record-replay` | 324 | 5 | 5 | 2 | 6 | 1 (failures nest — one axis at several sensitivities) | human-ready | adversarial-ready | **SHIP** |
 | `ui-replay-live-dom` | 864 | 1 | 1 | 1 | 19 | not measurable — fewer than 2 counted failing subjects | human-ready | adversarial-audited | **SHIP** |
 
@@ -57,8 +59,10 @@ anywhere by hand.
 | `dao-descendant` | `9d89b49307a960f65f2e6e8f204fd15e` | 0 | 0 |
 | `delegated-wallet-scope-reconciliation` | `45f27b644a84364e3d3855f68cd243a2` | 0 | 1 |
 | `deployment-model-alias-rollout-drift` | `805efb58c923f9e081db1b41967392d7` | 0 | 2 |
+| `deployment-rollback-recompute` | `2ddfad2fd3287f752c41a408184b48ce` | 0 | 0 |
 | `prompt-injection-containment` | `4911ffdfbd2c0e9b51752ed16c4f53e8` | 6 | 0 |
 | `prompt-injection-memory-poisoning` | `7443bf6d6c6b2ccf69cc20f417ff048c` | 0 | 11 |
+| `trading-reconciliation-recompute` | `94bfc2c401ad2cc19f7e84e8a1270a08` | 0 | 0 |
 | `ui-action-record-replay` | `1050e79f4804a96a5327d50dd81765b0` | 5 | 0 |
 | `ui-replay-live-dom` | `18c3f5afc5973604205cd7df23ce4cad` | 1 | 0 |
 

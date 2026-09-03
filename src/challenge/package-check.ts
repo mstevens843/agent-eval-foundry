@@ -232,6 +232,50 @@ export const DAO_DESCENDANT_PROFILE: LeakProfile = {
   ],
 };
 
+export const TRADING_RECONCILIATION_PROFILE: LeakProfile = {
+  familyId: "trading-reconciliation-recompute",
+  forbiddenFilenames: [...FORBIDDEN_FILENAMES, "truth.ts", "answer-matrix.json"],
+  forbiddenContent: [
+    ["export function verify", "the hidden grading function"],
+    ["recomputeCurrentAuthority", "the named narrow adversary"],
+    ["recomputeAttemptCounter", "the held-out narrow adversary"],
+    ["MUTANTS", "the hidden mutant bank"],
+    ["selectMeasuredSet", "the hidden scenario selection"],
+    ["VenueLedgerHarness", "the harness-owned venue ledger implementation"],
+    ["sealedEffects", "the private execution ledger"],
+    ["INTENDED_CHECK", "the mutant-to-check answer map"],
+  ],
+  requiredSpecCodes: [
+    "TRR1_RECOVER_COMMITTED_ORDER_KEY",
+    "TRR2_EXACTLY_ONE_VENUE_EXECUTION",
+    "TRR3_RETRY_AFTER_UNKNOWN_ACCEPTANCE",
+    "TRR4_TRUTHFUL_RECONCILIATION_REPORT",
+    "TRR5_ORDER_LIVENESS",
+  ],
+};
+
+export const DEPLOYMENT_ROLLBACK_PROFILE: LeakProfile = {
+  familyId: "deployment-rollback-recompute",
+  forbiddenFilenames: [...FORBIDDEN_FILENAMES, "truth.ts", "answer-matrix.json"],
+  forbiddenContent: [
+    ["export function verify", "the hidden grading function"],
+    ["recomputeCurrentAuthority", "the named narrow adversary"],
+    ["recomputeAttemptCounter", "the held-out narrow adversary"],
+    ["MUTANTS", "the hidden mutant bank"],
+    ["selectMeasuredSet", "the hidden scenario selection"],
+    ["ControllerLedgerHarness", "the harness-owned controller ledger implementation"],
+    ["sealedEffects", "the private rollback-effect ledger"],
+    ["INTENDED_CHECK", "the mutant-to-check answer map"],
+  ],
+  requiredSpecCodes: [
+    "DRR1_RECOVER_COMMITTED_ROLLBACK_KEY",
+    "DRR2_EXACTLY_ONE_COMPENSATION",
+    "DRR3_RETRY_AFTER_UNKNOWN_COMPENSATION",
+    "DRR4_TRUTHFUL_ROLLBACK_REPORT",
+    "DRR5_ROLLBACK_LIVENESS",
+  ],
+};
+
 export const ACCESS_TOKEN_PROFILE: LeakProfile = {
   familyId: "access-token-scope-expansion",
   forbiddenFilenames: [...FORBIDDEN_FILENAMES, "truth.ts", "answer-matrix.json"],

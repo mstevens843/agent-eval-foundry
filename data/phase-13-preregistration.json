@@ -1,0 +1,135 @@
+{
+  "schema": "agent-eval-foundry/phase-13-transfer-preregistration@1",
+  "registeredAt": "2026-09-03",
+  "registeredBeforeTargetImplementationAudit": true,
+  "baselineCommit": "7abb410",
+  "question": "Does the committed durable-authority recipe produce the same narrow, locally unobservable recomputation failure in durable outbox, trading reconciliation, and deployment rollback substrates?",
+  "evidenceBoundary": "This phase may establish local transfer, activation, verifier integrity, package readiness, and held-out-mutant discrimination. It may not establish frontier-agent difficulty or capability attribution because the model-read budget is zero.",
+  "recipe": {
+    "id": "committed-authority-after-uncertain-effect-v1",
+    "fixedValidityControls": [
+      "explicit-adjudicating-specification",
+      "harness-owned-ground-truth",
+      "positive-work-and-liveness-checks",
+      "subject-process-isolation",
+      "reference-correctness",
+      "b6-same-invocation-controls",
+      "challenge-leak-check",
+      "durable-trial-capture-contract"
+    ],
+    "difficultyOperator": "commit one logical-operation idempotency key before the external call and recover it byte-identically after an uncertain result instead of recomputing it from mutable recovery authority",
+    "selectionOperator": "select scenarios from the registered uncertain-effect x changed-authority interaction while retaining non-activation controls",
+    "narrowAdversary": "derive the external idempotency key from the current recovery epoch or attempt while otherwise following the reference",
+    "fixedAcrossSubstrates": [
+      "one durable logical operation",
+      "an external effect whose reply can be lost after commitment",
+      "a harness-owned append-only effect ledger",
+      "at-least-one successful effect required",
+      "at-most-one effect per logical operation required",
+      "the committed key present in the public recovery view",
+      "the same narrow reference-versus-recompute policy switch"
+    ]
+  },
+  "substrates": [
+    {
+      "id": "dao-descendant",
+      "domain": "durable approval outbox",
+      "expectedBoundary": "subject process versus harness-owned outbox tool and per-action effect ledger",
+      "expectedLogicalIdentity": "actionId plus requestId",
+      "expectedExternalAuthority": "committed outbox idempotency key and harness-owned delivery ledger",
+      "prediction": "survives",
+      "reason": "Phase 12 already packaged the isolated mechanism; Phase 13 must independently remeasure it under the common design."
+    },
+    {
+      "id": "trading-reconciliation-recompute",
+      "domain": "trading order reconciliation",
+      "expectedBoundary": "subject process versus harness-owned synthetic venue and execution ledger",
+      "expectedLogicalIdentity": "orderIntentId plus clientRequestId",
+      "expectedExternalAuthority": "client order key committed before venue submission and venue-owned execution ledger",
+      "prediction": "survives",
+      "reason": "a reply-lost accepted order naturally requires reconciliation or retry under the original logical identity; an attempt-scoped key permits a duplicate venue acceptance."
+    },
+    {
+      "id": "deployment-rollback-recompute",
+      "domain": "deployment rollback",
+      "expectedBoundary": "subject process versus harness-owned deployment controller and rollback-effect ledger",
+      "expectedLogicalIdentity": "rollbackIntentId plus releaseId",
+      "expectedExternalAuthority": "rollback key committed before controller invocation and controller-owned effect ledger",
+      "prediction": "survives",
+      "reason": "a lost controller reply during rollback naturally requires recovery under the original rollback identity; an attempt-scoped key can duplicate the compensation."
+    }
+  ],
+  "prediction": {
+    "cheapProbeSurvivors": 3,
+    "trialReadyPackages": 3,
+    "qualification": "The outbox result is prior local evidence, not a fresh prediction. Trading and deployment remain predictions until their probes and packages pass."
+  },
+  "experimentalDesign": {
+    "kind": "minimal 2x2 factorial plus registered selection contrast",
+    "factors": [
+      {
+        "id": "U",
+        "name": "uncertain-after-effect recovery",
+        "levels": [false, true]
+      },
+      {
+        "id": "C",
+        "name": "changed recovery authority",
+        "levels": [false, true]
+      }
+    ],
+    "cells": [
+      {
+        "id": "base-U0-C0",
+        "purpose": "clean one-authority baseline"
+      },
+      {
+        "id": "uncertainty-only-U1-C0",
+        "purpose": "uncertain effect without changed recovery authority"
+      },
+      {
+        "id": "authority-only-U0-C1",
+        "purpose": "changed authority without a prior uncertain effect"
+      },
+      {
+        "id": "full-U1-C1",
+        "purpose": "registered interaction in which recomputation can create duplicate effects"
+      }
+    ],
+    "identification": "The two main effects and UxC interaction are identified by the four cells. A larger factorial is unnecessary. The selection contrast compares the balanced four-cell probe with a target-concentrated suite while preserving controls.",
+    "expectedPattern": "reference passes every cell; narrow recompute passes U0C0, U1C0, and U0C1 on exactly-once behavior and fails U1C1; no-op fails positive-work cases; forged reports cannot alter the external ledger"
+  },
+  "heldOutPlan": {
+    "selectionSubjects": [
+      "reference",
+      "recompute-current-authority"
+    ],
+    "heldOutSubjects": [
+      "no-op",
+      "forged-stable-report",
+      "recompute-from-attempt-counter"
+    ],
+    "rule": "Scenario selection may inspect only the reference and recompute-current-authority behavior. The remaining subjects are evaluated after the selected set is frozen."
+  },
+  "killSignals": [
+    "the external authority boundary is only asserted, not enforced by a process or harness boundary",
+    "the correct reference requires information absent from the public recovery view",
+    "attempt- or epoch-scoped recomputation is not a natural implementation choice in the substrate",
+    "the subject can read or rewrite the authoritative effect witness",
+    "the narrow recompute adversary does not activate in U1C1",
+    "the narrow recompute adversary fails non-interaction cells on the claimed exactly-once axis",
+    "the reference fails any registered cell",
+    "a no-op or forged-report oracle passes",
+    "B6 or malformed-input refusal fails",
+    "the package leaks verifier, truth, mutant, matrix, or answer artifacts"
+  ],
+  "budgets": {
+    "paidUsd": 0,
+    "modelReads": 0,
+    "cheapProbes": 3,
+    "maxEnumeratedParameterPointsPerNewSubstrate": 300,
+    "maxSelectedScenariosPerSubstrate": 30,
+    "maxNewFullPackages": 2,
+    "stopRule": "Kill at the first registered signal; do not spend the remaining local build budget on a dead substrate."
+  }
+}

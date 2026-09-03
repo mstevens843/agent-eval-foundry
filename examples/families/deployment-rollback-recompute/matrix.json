@@ -1,0 +1,890 @@
+{
+  "schema": "agent-eval-foundry/matrix@1",
+  "suite": "deployment-rollback-recompute",
+  "provenance": {
+    "repo": "agent-eval-foundry",
+    "artifact_commit": null,
+    "task_sha256": null,
+    "suite_shape": "24 scenarios / 4 subjects / 72 points in the declared space",
+    "checks_total": 24,
+    "checks_declared": [
+      "exactly_once",
+      "committed_rollback_key_recovered",
+      "liveness",
+      "report_matches_controller_ledger",
+      "local_confirmation_green"
+    ],
+    "extracted_from": [
+      "src/families/deployment-rollback-recompute/runner.ts (B6-gated sweep)",
+      "src/families/deployment-rollback-recompute/verify.ts (sealed controller-ledger grading)"
+    ],
+    "caveat": "This is local transfer and mutant-discrimination evidence over a synthetic deployment controller. No paid agent trial or production controller is represented."
+  },
+  "reference_subject": "reference",
+  "subjects": [
+    {
+      "id": "recompute-current-authority",
+      "label": "Recompute the rollback key from current controller authority",
+      "family": "mutant",
+      "model": null,
+      "effort": null,
+      "note": "exactly_once"
+    },
+    {
+      "id": "no-op",
+      "label": "Claim compensation without calling the controller",
+      "family": "baseline",
+      "model": null,
+      "effort": null,
+      "note": "liveness"
+    },
+    {
+      "id": "forged-stable-report",
+      "label": "Send an authority-scoped key while reporting the committed key",
+      "family": "mutant",
+      "model": null,
+      "effort": null,
+      "note": "report_matches_controller_ledger"
+    },
+    {
+      "id": "recompute-from-attempt-counter",
+      "label": "Recompute the rollback key from the recovery attempt",
+      "family": "mutant",
+      "model": null,
+      "effort": null,
+      "note": "exactly_once"
+    }
+  ],
+  "instances": [
+    {
+      "id": "rollback-recovery-11-c2-e4-after_compensation",
+      "schedule": "after_compensation/controllers-2",
+      "seed": 11,
+      "keys": 4,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 2 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-11-c2-e6-after_compensation",
+      "schedule": "after_compensation/controllers-2",
+      "seed": 11,
+      "keys": 6,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 2 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-11-c2-e12-after_compensation",
+      "schedule": "after_compensation/controllers-2",
+      "seed": 11,
+      "keys": 12,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 2 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-11-c3-e4-after_compensation",
+      "schedule": "after_compensation/controllers-3",
+      "seed": 11,
+      "keys": 4,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 3 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-11-c3-e6-after_compensation",
+      "schedule": "after_compensation/controllers-3",
+      "seed": 11,
+      "keys": 6,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 3 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-11-c3-e12-after_compensation",
+      "schedule": "after_compensation/controllers-3",
+      "seed": 11,
+      "keys": 12,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 3 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-11-c4-e4-after_compensation",
+      "schedule": "after_compensation/controllers-4",
+      "seed": 11,
+      "keys": 4,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 4 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-11-c4-e6-after_compensation",
+      "schedule": "after_compensation/controllers-4",
+      "seed": 11,
+      "keys": 6,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 4 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-11-c4-e12-after_compensation",
+      "schedule": "after_compensation/controllers-4",
+      "seed": 11,
+      "keys": 12,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 4 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-23-c2-e4-after_compensation",
+      "schedule": "after_compensation/controllers-2",
+      "seed": 23,
+      "keys": 4,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 2 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-23-c2-e6-after_compensation",
+      "schedule": "after_compensation/controllers-2",
+      "seed": 23,
+      "keys": 6,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 2 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-23-c2-e12-after_compensation",
+      "schedule": "after_compensation/controllers-2",
+      "seed": 23,
+      "keys": 12,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 2 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-23-c3-e4-after_compensation",
+      "schedule": "after_compensation/controllers-3",
+      "seed": 23,
+      "keys": 4,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 3 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-23-c3-e6-after_compensation",
+      "schedule": "after_compensation/controllers-3",
+      "seed": 23,
+      "keys": 6,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 3 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-23-c3-e12-after_compensation",
+      "schedule": "after_compensation/controllers-3",
+      "seed": 23,
+      "keys": 12,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 3 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-23-c4-e4-after_compensation",
+      "schedule": "after_compensation/controllers-4",
+      "seed": 23,
+      "keys": 4,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 4 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-23-c4-e6-after_compensation",
+      "schedule": "after_compensation/controllers-4",
+      "seed": 23,
+      "keys": 6,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 4 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-23-c4-e12-after_compensation",
+      "schedule": "after_compensation/controllers-4",
+      "seed": 23,
+      "keys": 12,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 4 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-41-c1-e4-after_compensation",
+      "schedule": "after_compensation/controllers-1",
+      "seed": 41,
+      "keys": 4,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 1 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-41-c1-e6-after_compensation",
+      "schedule": "after_compensation/controllers-1",
+      "seed": 41,
+      "keys": 6,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 1 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-41-c1-e12-after_compensation",
+      "schedule": "after_compensation/controllers-1",
+      "seed": 41,
+      "keys": 12,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 1 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-41-c2-e4-none",
+      "schedule": "none/controllers-2",
+      "seed": 41,
+      "keys": 4,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 1 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-41-c3-e6-none",
+      "schedule": "none/controllers-3",
+      "seed": 41,
+      "keys": 6,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 1 controller attempt(s)"
+    },
+    {
+      "id": "rollback-recovery-41-c4-e12-none",
+      "schedule": "none/controllers-4",
+      "seed": 41,
+      "keys": 12,
+      "family": "rollback-recompute-recovery",
+      "source": "generated",
+      "note": "committed rollback identity across 1 controller attempt(s)"
+    }
+  ],
+  "results": {
+    "rollback-recovery-11-c2-e4-after_compensation": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "rollback-recovery-11-c2-e6-after_compensation": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "rollback-recovery-11-c2-e12-after_compensation": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "rollback-recovery-11-c3-e4-after_compensation": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "rollback-recovery-11-c3-e6-after_compensation": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "rollback-recovery-11-c3-e12-after_compensation": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "rollback-recovery-11-c4-e4-after_compensation": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "rollback-recovery-11-c4-e6-after_compensation": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "rollback-recovery-11-c4-e12-after_compensation": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "rollback-recovery-23-c2-e4-after_compensation": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "rollback-recovery-23-c2-e6-after_compensation": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "rollback-recovery-23-c2-e12-after_compensation": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "rollback-recovery-23-c3-e4-after_compensation": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "rollback-recovery-23-c3-e6-after_compensation": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "rollback-recovery-23-c3-e12-after_compensation": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "rollback-recovery-23-c4-e4-after_compensation": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "rollback-recovery-23-c4-e6-after_compensation": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "rollback-recovery-23-c4-e12-after_compensation": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_rollback_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "rollback-recovery-41-c1-e4-after_compensation": {
+      "recompute-current-authority": {
+        "failed": []
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": []
+      },
+      "recompute-from-attempt-counter": {
+        "failed": []
+      }
+    },
+    "rollback-recovery-41-c1-e6-after_compensation": {
+      "recompute-current-authority": {
+        "failed": []
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": []
+      },
+      "recompute-from-attempt-counter": {
+        "failed": []
+      }
+    },
+    "rollback-recovery-41-c1-e12-after_compensation": {
+      "recompute-current-authority": {
+        "failed": []
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": []
+      },
+      "recompute-from-attempt-counter": {
+        "failed": []
+      }
+    },
+    "rollback-recovery-41-c2-e4-none": {
+      "recompute-current-authority": {
+        "failed": []
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": []
+      },
+      "recompute-from-attempt-counter": {
+        "failed": []
+      }
+    },
+    "rollback-recovery-41-c3-e6-none": {
+      "recompute-current-authority": {
+        "failed": []
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": []
+      },
+      "recompute-from-attempt-counter": {
+        "failed": []
+      }
+    },
+    "rollback-recovery-41-c4-e12-none": {
+      "recompute-current-authority": {
+        "failed": []
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_controller_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": []
+      },
+      "recompute-from-attempt-counter": {
+        "failed": []
+      }
+    }
+  }
+}

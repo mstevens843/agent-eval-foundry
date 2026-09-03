@@ -162,9 +162,15 @@ export function reconcile(root: string, plan: CampaignPlan): Reconciliation {
 
   const disagreements: string[] = [];
   for (const slot of plan.slots) {
-    if (slot.runId !== null && !byRunId.has(slot.runId)) {
+    const trial = slot.runId === null ? undefined : byRunId.get(slot.runId);
+    if (slot.runId !== null && trial === undefined) {
       disagreements.push(
         `slot ${slot.slotId} claims run \`${slot.runId}\`, which has no trial directory — the evidence for this slot is gone`,
+      );
+    }
+    if (trial !== undefined && trial.record.isolation !== plan.isolation) {
+      disagreements.push(
+        `slot ${slot.slotId} requires ${plan.isolation} isolation but run \`${trial.runId}\` records ${trial.record.isolation}`,
       );
     }
     if (slot.state === "NOT_RUN" && slot.runId === null) {

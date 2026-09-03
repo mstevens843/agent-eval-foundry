@@ -54,7 +54,7 @@ repair look cheaper than it was.
 
 ## The guard that runs on output, not on inputs
 
-`assertStaleRunsLabelled` runs over the rendered text of **all 85 reports** that
+`assertStaleRunsLabelled` runs over the rendered text of **all 93 reports** that
 `foundry all` produces, and it enforces two rules per superseded run:
 
 1. the markdown SECTION naming the run must say somewhere that it is superseded, invalidated or

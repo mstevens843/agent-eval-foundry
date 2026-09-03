@@ -22,6 +22,21 @@ export const enumerateSpace = (): readonly ScenarioParams[] => {
   return out;
 };
 
+export const designCell = (params: ScenarioParams): "U0C0" | "U1C0" | "U0C1" | "U1C1" => {
+  const uncertain = params.crashPosition === "after_tool";
+  const changed = params.nWorkers > 1;
+  return `${uncertain ? "U1" : "U0"}${changed ? "C1" : "C0"}`;
+};
+
+export const selectProbeSet = (space: readonly ScenarioParams[]): readonly ScenarioParams[] =>
+  (["U0C0", "U1C0", "U0C1", "U1C1"] as const).map((cell) => {
+    const found = space.find(
+      (params) => params.seed === 11 && params.keys === 4 && designCell(params) === cell,
+    );
+    if (found === undefined) throw new Error(`dao descendant probe has no ${cell} cell`);
+    return found;
+  });
+
 /**
  * The registered 18 activated schedules plus six explicit non-activation controls. The controls
  * keep every declared value represented without diluting the fatality claim, which is always

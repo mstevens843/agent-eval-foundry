@@ -14,6 +14,8 @@ What the families measure, together — and the arithmetic this report refuses t
 | `access-token-scope-expansion` | `mutant` | 384 | 9 | 0 | 6 | **3** |
 | `delegated-wallet-scope-reconciliation` | `mutant` | 804 | 10 | 0 | 9 | **3** |
 | `dao-descendant` | `mutant` | 24 | 3 | 0 | 2 | **1** |
+| `trading-reconciliation-recompute` | `mutant` | 24 | 4 | 0 | 2 | **1** |
+| `deployment-rollback-recompute` | `mutant` | 24 | 4 | 0 | 2 | **1** |
 | `deployment-model-alias-rollout-drift` | `mutant` | 339 | 17 | 0 | 72 | **20** |
 | `durable-approval-outbox` | `imported` | 24 | 2 | 10 | 2 | **1** |
 
@@ -21,8 +23,8 @@ What the families measure, together — and the arithmetic this report refuses t
 
 | naive total | value | why it is not a result |
 |---|---:|---|
-| every family added together | 34 | mixes detection and difficulty; the two answer different questions |
-| detection banks added | 32 | the banks are disjoint by construction — no mutant appears in two families, so the union's width is the sum whatever the families measure |
+| every family added together | 36 | mixes detection and difficulty; the two answer different questions |
+| detection banks added | 34 | the banks are disjoint by construction — no mutant appears in two families, so the union's width is the sum whatever the families measure |
 | difficulty banks added | 2 | excludes one-subject banks; valid only over subjects that attempted both, and the overlap is below threshold |
 
 A combined axis count requires the same subjects in every bank being combined. Until that holds,

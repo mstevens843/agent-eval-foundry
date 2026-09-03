@@ -353,9 +353,13 @@ describe("the built families", () => {
 
       it("measures its intended axis breadth", () => {
         const axes = measure(sweep.matrix, { nullTrials: 3 }).independentAxes;
-        if (family.id === "dao-descendant") {
-          // This is deliberately a one-axis calibration task. Adding an unrelated mutant pattern
-          // to satisfy a generic breadth floor would destroy the isolation Phase 9 established.
+        if (
+          ["dao-descendant", "deployment-rollback-recompute", "trading-reconciliation-recompute"].includes(
+            family.id,
+          )
+        ) {
+          // These are deliberately comparable one-axis calibration tasks. Adding an unrelated
+          // mutant pattern to satisfy a generic breadth floor would confound the transfer design.
           expect(axes).toBe(1);
         } else {
           expect(axes).toBeGreaterThanOrEqual(2);

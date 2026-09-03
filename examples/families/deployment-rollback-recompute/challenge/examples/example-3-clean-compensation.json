@@ -1,0 +1,17 @@
+{
+  "views": [
+    {
+      "intent": {
+        "rollbackIntentId": "rollback-intent-23-11",
+        "releaseId": "release-23-12",
+        "regionId": "ap-south",
+        "compensation": "restore-config-11",
+        "idempotencyKey": "rollback::rollback-intent-23-11::release-23-12::authority-0"
+      },
+      "controllerId": "controller-1",
+      "authorityEpoch": 0,
+      "attempt": 0
+    }
+  ],
+  "note": "Without an uncertain completed compensation, only the first invocation is made."
+}

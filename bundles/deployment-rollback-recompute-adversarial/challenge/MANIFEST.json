@@ -1,0 +1,24 @@
+{
+  "familyId": "deployment-rollback-recompute",
+  "scenarioSetId": "recompute-24-80da6d41",
+  "visibleFiles": [
+    "README.md",
+    "SPEC.md",
+    "examples/example-1-single-controller.json",
+    "examples/example-2-authority-transfer.json",
+    "examples/example-3-clean-compensation.json",
+    "starter/subject.mjs",
+    "types.ts"
+  ],
+  "hiddenArtifacts": [
+    "verify.ts",
+    "reference.ts",
+    "mutants.ts",
+    "runner.ts",
+    "truth.ts",
+    "matrix.json",
+    "answer-matrix.json",
+    "reports/"
+  ],
+  "submissionFormat": "an ES module exporting `subject` with run(view, controller)"
+}

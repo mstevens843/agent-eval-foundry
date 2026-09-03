@@ -25,16 +25,16 @@ candidate mechanisms
 | probes ready for validation | 4 |
 | probes needing repair/hold | 4 |
 | transfer tests | 11 |
-| transfer tests ready | 6 |
+| transfer tests ready | 5 |
 | production-mode families | 0 |
 
 ## Cheapest Next Evidence
 
 | cost tier | queued actions |
 |---|---:|
-| static | 16 |
+| static | 15 |
 | local | 7 |
-| one-agent | 1 |
+| one-agent | 3 |
 | cross-provider | 2 |
 
 | target | type | mode | stage | decision | evidence cost | next action |
@@ -48,11 +48,11 @@ candidate mechanisms
 | `durable-memory-injection-probe` | probe | validation | task_shape | promote | static | promote probe into a full task shape |
 | `hidden-dependency-discovery-probe` | probe | discovery | mechanism_probe | repair | static | run or repair the cheapest declared mechanism screen |
 | `memory-to-cross-tool-authority-laundering` | transfer | validation | transfer_test | transfer | static | execute the transfer test and require preserved evidence before claiming transfer |
-| `outbox-to-trading-reconciliation` | transfer | validation | transfer_test | transfer | static | execute the transfer test and require preserved evidence before claiming transfer |
 | `permission-scope-drift-probe` | probe | discovery | mechanism_probe | hold | static | run or repair the cheapest declared mechanism screen |
 | `prompt-injection-containment` | family | validation | task_shape | evolve | static | treat the clean smoke pass as already_solved_or_needs_evolution before matrix spend |
 | `prompt-injection-memory-poisoning` | family | validation | task_shape | repair | static | repair/reissue the package and invalidate stale evidence before further trials |
 | `provider-failover-router-alias-drift-probe` | probe | validation | task_shape | promote | static | promote probe into a full task shape |
+| `ui-action-record-replay` | family | validation | transfer_test | evolve | static | evolve or transfer before broad ship claims |
 
 ## Rules The Planner Enforces
 
@@ -87,9 +87,9 @@ candidate mechanisms
 
 | transfer | source | mechanism | target domain | status | next evidence |
 |---|---|---|---|---|---|
-| `outbox-to-trading-reconciliation` | family:`durable-approval-outbox` | `uncertain-external-effects` | trading order reconciliation | ready | static |
+| `outbox-to-trading-reconciliation` | family:`dao-descendant` | `uncertain-external-effects` | trading order reconciliation | measured | one-agent |
 | `outbox-to-crm-permission-update` | family:`durable-approval-outbox` | `stale-state` | CRM permission update | ready | local |
-| `outbox-to-deployment-rollback` | family:`durable-approval-outbox` | `duplicate-side-effects` | deployment rollback | proposed | paper |
+| `outbox-to-deployment-rollback` | family:`dao-descendant` | `duplicate-side-effects` | deployment rollback | measured | one-agent |
 | `live-dom-to-browser-confirmation` | family:`ui-replay-live-dom` | `ui-replay-mismatch` | browser replay confirmation | ready | local |
 | `memory-to-cross-tool-authority-laundering` | family:`prompt-injection-memory-poisoning` | `prompt-injection-via-retrieval` | cross-tool authority laundering | ready | static |
 | `checker-required-to-hidden-dependency` | family:`checker-required-memory-poisoning` | `checker-quality-gap` | package dependency discovery | proposed | static |
@@ -111,6 +111,8 @@ candidate mechanisms
 | `prompt-injection-memory-poisoning` | task_shape | repair | stale challenge hashes cannot feed production-mode claims |
 | `ui-action-record-replay` | transfer_test | evolve | nested failure sets are one axis at multiple sensitivities, not breadth |
 | `dao-descendant` | smoke_trial | promote | mutant-detection evidence does not prove real-agent difficulty |
+| `deployment-rollback-recompute` | smoke_trial | promote | mutant-detection evidence does not prove real-agent difficulty |
+| `trading-reconciliation-recompute` | smoke_trial | promote | mutant-detection evidence does not prove real-agent difficulty |
 | `checker-required-memory-poisoning` | transfer_test | transfer | repeated same-provider trials estimate stability, not cross-lab transfer |
 | `ui-replay-live-dom` | transfer_test | transfer | repeated same-provider trials estimate stability, not cross-lab transfer |
 
@@ -130,12 +132,14 @@ No family is automatically recommended for a fresh full matrix by this planner p
 | `prompt-injection-memory-poisoning` | static at `task_shape` | stale challenge hashes cannot feed production-mode claims |
 | `ui-action-record-replay` | static at `transfer_test` | nested failure sets are one axis at multiple sensitivities, not breadth |
 | `dao-descendant` | one-agent at `smoke_trial` | mutant-detection evidence does not prove real-agent difficulty |
+| `deployment-rollback-recompute` | one-agent at `smoke_trial` | mutant-detection evidence does not prove real-agent difficulty |
+| `trading-reconciliation-recompute` | one-agent at `smoke_trial` | mutant-detection evidence does not prove real-agent difficulty |
 | `checker-required-memory-poisoning` | cross-provider at `transfer_test` | repeated same-provider trials estimate stability, not cross-lab transfer |
 | `ui-replay-live-dom` | cross-provider at `transfer_test` | repeated same-provider trials estimate stability, not cross-lab transfer |
 
 ## Registry Link
 
-This report was generated against 15 mechanisms and 19 family shapes. Probe and transfer references are checked against that registry, so a stale mechanism id or family id fails `node dist/cli.js check`.
+This report was generated against 15 mechanisms and 21 family shapes. Probe and transfer references are checked against that registry, so a stale mechanism id or family id fails `node dist/cli.js check`.
 
 ---
 

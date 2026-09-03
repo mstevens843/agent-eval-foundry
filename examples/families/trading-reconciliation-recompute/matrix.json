@@ -1,0 +1,890 @@
+{
+  "schema": "agent-eval-foundry/matrix@1",
+  "suite": "trading-reconciliation-recompute",
+  "provenance": {
+    "repo": "agent-eval-foundry",
+    "artifact_commit": null,
+    "task_sha256": null,
+    "suite_shape": "24 scenarios / 4 subjects / 72 points in the declared space",
+    "checks_total": 24,
+    "checks_declared": [
+      "exactly_once",
+      "committed_order_key_recovered",
+      "liveness",
+      "report_matches_venue_ledger",
+      "local_confirmation_green"
+    ],
+    "extracted_from": [
+      "src/families/trading-reconciliation-recompute/runner.ts (B6-gated sweep)",
+      "src/families/trading-reconciliation-recompute/verify.ts (sealed venue-ledger grading)"
+    ],
+    "caveat": "This is local transfer and mutant-discrimination evidence over a synthetic venue. No paid agent trial or production exchange is represented."
+  },
+  "reference_subject": "reference",
+  "subjects": [
+    {
+      "id": "recompute-current-authority",
+      "label": "Recompute the order key from current reconciliation authority",
+      "family": "mutant",
+      "model": null,
+      "effort": null,
+      "note": "exactly_once"
+    },
+    {
+      "id": "no-op",
+      "label": "Claim acceptance without contacting the venue",
+      "family": "baseline",
+      "model": null,
+      "effort": null,
+      "note": "liveness"
+    },
+    {
+      "id": "forged-stable-report",
+      "label": "Send an authority-scoped key while reporting the committed key",
+      "family": "mutant",
+      "model": null,
+      "effort": null,
+      "note": "report_matches_venue_ledger"
+    },
+    {
+      "id": "recompute-from-attempt-counter",
+      "label": "Recompute the order key from the retry counter",
+      "family": "mutant",
+      "model": null,
+      "effort": null,
+      "note": "exactly_once"
+    }
+  ],
+  "instances": [
+    {
+      "id": "order-recovery-11-r2-o4-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-2",
+      "seed": 11,
+      "keys": 4,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 2 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-11-r2-o6-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-2",
+      "seed": 11,
+      "keys": 6,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 2 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-11-r2-o12-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-2",
+      "seed": 11,
+      "keys": 12,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 2 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-11-r3-o4-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-3",
+      "seed": 11,
+      "keys": 4,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 3 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-11-r3-o6-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-3",
+      "seed": 11,
+      "keys": 6,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 3 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-11-r3-o12-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-3",
+      "seed": 11,
+      "keys": 12,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 3 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-11-r4-o4-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-4",
+      "seed": 11,
+      "keys": 4,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 4 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-11-r4-o6-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-4",
+      "seed": 11,
+      "keys": 6,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 4 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-11-r4-o12-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-4",
+      "seed": 11,
+      "keys": 12,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 4 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-23-r2-o4-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-2",
+      "seed": 23,
+      "keys": 4,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 2 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-23-r2-o6-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-2",
+      "seed": 23,
+      "keys": 6,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 2 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-23-r2-o12-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-2",
+      "seed": 23,
+      "keys": 12,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 2 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-23-r3-o4-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-3",
+      "seed": 23,
+      "keys": 4,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 3 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-23-r3-o6-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-3",
+      "seed": 23,
+      "keys": 6,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 3 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-23-r3-o12-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-3",
+      "seed": 23,
+      "keys": 12,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 3 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-23-r4-o4-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-4",
+      "seed": 23,
+      "keys": 4,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 4 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-23-r4-o6-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-4",
+      "seed": 23,
+      "keys": 6,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 4 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-23-r4-o12-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-4",
+      "seed": 23,
+      "keys": 12,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 4 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-41-r1-o4-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-1",
+      "seed": 41,
+      "keys": 4,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 1 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-41-r1-o6-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-1",
+      "seed": 41,
+      "keys": 6,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 1 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-41-r1-o12-after_venue_accept",
+      "schedule": "after_venue_accept/reconcilers-1",
+      "seed": 41,
+      "keys": 12,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 1 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-41-r2-o4-none",
+      "schedule": "none/reconcilers-2",
+      "seed": 41,
+      "keys": 4,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 1 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-41-r3-o6-none",
+      "schedule": "none/reconcilers-3",
+      "seed": 41,
+      "keys": 6,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 1 reconciliation attempt(s)"
+    },
+    {
+      "id": "order-recovery-41-r4-o12-none",
+      "schedule": "none/reconcilers-4",
+      "seed": 41,
+      "keys": 12,
+      "family": "trading-recompute-recovery",
+      "source": "generated",
+      "note": "committed client-order identity across 1 reconciliation attempt(s)"
+    }
+  ],
+  "results": {
+    "order-recovery-11-r2-o4-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "order-recovery-11-r2-o6-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "order-recovery-11-r2-o12-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "order-recovery-11-r3-o4-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "order-recovery-11-r3-o6-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "order-recovery-11-r3-o12-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "order-recovery-11-r4-o4-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "order-recovery-11-r4-o6-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "order-recovery-11-r4-o12-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "order-recovery-23-r2-o4-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "order-recovery-23-r2-o6-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "order-recovery-23-r2-o12-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "order-recovery-23-r3-o4-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "order-recovery-23-r3-o6-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "order-recovery-23-r3-o12-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "order-recovery-23-r4-o4-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "order-recovery-23-r4-o6-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "order-recovery-23-r4-o12-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "recompute-from-attempt-counter": {
+        "failed": [
+          "committed_order_key_recovered",
+          "exactly_once"
+        ]
+      }
+    },
+    "order-recovery-41-r1-o4-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": []
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": []
+      },
+      "recompute-from-attempt-counter": {
+        "failed": []
+      }
+    },
+    "order-recovery-41-r1-o6-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": []
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": []
+      },
+      "recompute-from-attempt-counter": {
+        "failed": []
+      }
+    },
+    "order-recovery-41-r1-o12-after_venue_accept": {
+      "recompute-current-authority": {
+        "failed": []
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": []
+      },
+      "recompute-from-attempt-counter": {
+        "failed": []
+      }
+    },
+    "order-recovery-41-r2-o4-none": {
+      "recompute-current-authority": {
+        "failed": []
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": []
+      },
+      "recompute-from-attempt-counter": {
+        "failed": []
+      }
+    },
+    "order-recovery-41-r3-o6-none": {
+      "recompute-current-authority": {
+        "failed": []
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": []
+      },
+      "recompute-from-attempt-counter": {
+        "failed": []
+      }
+    },
+    "order-recovery-41-r4-o12-none": {
+      "recompute-current-authority": {
+        "failed": []
+      },
+      "no-op": {
+        "failed": [
+          "exactly_once",
+          "liveness",
+          "report_matches_venue_ledger"
+        ]
+      },
+      "forged-stable-report": {
+        "failed": []
+      },
+      "recompute-from-attempt-counter": {
+        "failed": []
+      }
+    }
+  }
+}

@@ -728,13 +728,36 @@ export { renderEvolutionReport } from "./reports/evolution-report.js";
 export { buildMemoryChallengePackage } from "./challenge/memory-package.js";
 export { buildUiChallengePackage } from "./challenge/ui-package.js";
 export { buildDaoDescendantChallengePackage } from "./challenge/dao-descendant-package.js";
+export { buildTradingReconciliationChallengePackage } from "./challenge/trading-reconciliation-package.js";
+export { buildDeploymentRollbackChallengePackage } from "./challenge/deployment-rollback-package.js";
 export {
   DAO_DESCENDANT_PROFILE,
+  DEPLOYMENT_ROLLBACK_PROFILE,
   MEMORY_PROFILE,
   PIC_PROFILE,
+  TRADING_RECONCILIATION_PROFILE,
   UI_PROFILE,
 } from "./challenge/package-check.js";
 export type { LeakProfile } from "./challenge/package-check.js";
+export {
+  PHASE_13_SUBSTRATES,
+  measurePhase13,
+  parsePhase13BoundaryEvidence,
+  parsePhase13Preregistration,
+  renderPhase13DesignMatrix,
+  renderPhase13Results,
+  renderPhase13TransferLab,
+} from "./reports/phase-13-transfer.js";
+export type {
+  DesignCellId,
+  Phase13BoundaryEvidence,
+  Phase13BoundaryMapping,
+  Phase13BoundarySource,
+  Phase13Preregistration,
+  Phase13Results,
+  Phase13SubstrateId,
+  Phase13SubstrateResult,
+} from "./reports/phase-13-transfer.js";
 export {
   activationAudit,
   band,

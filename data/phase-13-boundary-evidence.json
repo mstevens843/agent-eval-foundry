@@ -1,0 +1,123 @@
+{
+  "schema": "agent-eval-foundry/phase-13-boundary-evidence@1",
+  "auditedAt": "2026-09-03",
+  "timing": "post-outcome",
+  "evidenceUse": "These sources establish real-system precedent for the modeled boundaries. Because they were audited after the local probes ran, they do not convert Phase 13 into a prospective source-first discovery result and do not validate the exact synthetic protocols.",
+  "sources": [
+    {
+      "id": "source-task-outbox-semantics",
+      "kind": "local-primary-source",
+      "title": "Durable approval outbox public semantics",
+      "url": "../klavis-terminal-bench-task/tasks/durable-approval-outbox/environment/app/spec/SEMANTICS.md",
+      "supports": [
+        "an external call can complete while its local outcome remains unknown",
+        "later authoritative receipts settle external effects",
+        "retry identity must survive worker recovery"
+      ],
+      "doesNotSupport": [
+        "frontier difficulty of the repaired descendant",
+        "trading or deployment domain fidelity"
+      ]
+    },
+    {
+      "id": "alpaca-idempotent-orders",
+      "kind": "authoritative-product-documentation",
+      "title": "Alpaca Trading CLI - Idempotent Orders",
+      "url": "https://docs.alpaca.markets/us/docs/alpacas-cli",
+      "supports": [
+        "a client-assigned order id can be persisted across submissions",
+        "duplicate submissions with the same client order id are rejected",
+        "the order can later be retrieved by that client order id"
+      ],
+      "doesNotSupport": [
+        "the benchmark venue receipt shape",
+        "all exchanges sharing Alpaca semantics",
+        "a guaranteed lost-response schedule"
+      ]
+    },
+    {
+      "id": "alpaca-order-reconciliation",
+      "kind": "authoritative-product-documentation",
+      "title": "Alpaca - Placing Orders",
+      "url": "https://docs.alpaca.markets/us/docs/orders-at-alpaca",
+      "supports": [
+        "orders have a client-provided unique identifier",
+        "orders can be queried by client or system identifier",
+        "order-state updates are delivered by a separate streaming interface"
+      ],
+      "doesNotSupport": [
+        "exactly-once execution under every broker failure mode",
+        "the benchmark's synthetic execution ledger"
+      ]
+    },
+    {
+      "id": "kubernetes-external-controller-boundary",
+      "kind": "authoritative-project-documentation",
+      "title": "Kubernetes - Controllers",
+      "url": "https://kubernetes.io/docs/concepts/architecture/controller/",
+      "supports": [
+        "controllers read desired state from the API server",
+        "controllers can act on systems outside the cluster",
+        "controllers report observed state back through a separate authority"
+      ],
+      "doesNotSupport": ["the benchmark rollback-key schema", "exactly-once external compensation by itself"]
+    },
+    {
+      "id": "aws-ecs-client-token-retry",
+      "kind": "authoritative-product-documentation",
+      "title": "Amazon ECS - Ensuring idempotency",
+      "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_Idempotency.html",
+      "supports": [
+        "deployment operations accept client idempotency tokens",
+        "retrying a completed request with the same token and parameters performs no further action",
+        "changing parameters under the same token is rejected"
+      ],
+      "doesNotSupport": [
+        "the benchmark compensation API",
+        "a universal rollback protocol",
+        "an unbounded token lifetime"
+      ]
+    },
+    {
+      "id": "argo-rollout-rollback",
+      "kind": "authoritative-project-documentation",
+      "title": "Argo Rollouts - Rollback Window",
+      "url": "https://argo-rollouts.readthedocs.io/en/stable/features/rollback/",
+      "supports": [
+        "a deployment controller treats an older manifest as a rollback",
+        "rollback behavior is controller-owned and depends on recorded rollout revision state"
+      ],
+      "doesNotSupport": [
+        "a client idempotency token for rollback",
+        "the benchmark's compensation-effect ledger"
+      ]
+    }
+  ],
+  "substrates": [
+    {
+      "id": "dao-descendant",
+      "classification": "source-task-derived",
+      "sourceIds": ["source-task-outbox-semantics"],
+      "conclusion": "The executable boundary and recovery contract descend from the source benchmark and were already measured before Phase 13.",
+      "limitation": "The repaired descendant still has no counted agent trial."
+    },
+    {
+      "id": "trading-reconciliation-recompute",
+      "classification": "synthetic-protocol-with-real-precedent-post-outcome",
+      "sourceIds": ["alpaca-idempotent-orders", "alpaca-order-reconciliation"],
+      "conclusion": "Stable client order identity and broker-owned later order state are documented real boundaries; the benchmark instantiates the same shape in a deterministic synthetic venue.",
+      "limitation": "The exact venue API and lost-response schedule are synthetic, and the source audit was post-outcome."
+    },
+    {
+      "id": "deployment-rollback-recompute",
+      "classification": "synthetic-composite-with-real-precedent-post-outcome",
+      "sourceIds": [
+        "kubernetes-external-controller-boundary",
+        "aws-ecs-client-token-retry",
+        "argo-rollout-rollback"
+      ],
+      "conclusion": "External deployment control, rollback state, and stable token retry are documented real patterns; the benchmark composes them into one deterministic recovery contract.",
+      "limitation": "No cited system exposes the exact benchmark rollback protocol, and the source audit was post-outcome."
+    }
+  ]
+}

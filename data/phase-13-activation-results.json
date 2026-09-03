@@ -1,0 +1,574 @@
+{
+  "schema": "agent-eval-foundry/phase-13-transfer-results@1",
+  "preregistration": {
+    "path": "data/phase-13-preregistration.json",
+    "sha256": "745d61bdd5b45a13bb6b699a46768691fd7bf939b217bc888185ad36fccb8db2",
+    "baselineCommit": "7abb410",
+    "expectedSurvivors": 3
+  },
+  "substrates": [
+    {
+      "id": "dao-descendant",
+      "domain": "durable approval outbox",
+      "status": "survived",
+      "boundary": {
+        "stableLogicalIdentity": "actionId + requestId",
+        "committedValue": "idempotencyKey stored in the durable outbox intent before the first call",
+        "recoveryContract": "replacement workers retry the same logical action with the committed key",
+        "safetyObligation": "at most one external effect per action",
+        "livenessObligation": "at least one external effect for every valid action",
+        "inaccessibleWitness": "host-owned per-action call and effect ledgers",
+        "naturalRecomputationFailure": "lease ownership changes while action identity does not",
+        "realism": "simulated calibration package with service-backed source-task precedent",
+        "structurallyEnforced": true,
+        "referenceNeedsPrivateKnowledge": false,
+        "witnessExposedInSubjectApi": false,
+        "provenance": {
+          "id": "dao-descendant",
+          "classification": "source-task-derived",
+          "sourceIds": [
+            "source-task-outbox-semantics"
+          ],
+          "conclusion": "The executable boundary and recovery contract descend from the source benchmark and were already measured before Phase 13.",
+          "limitation": "The repaired descendant still has no counted agent trial."
+        }
+      },
+      "probe": {
+        "cells": [
+          {
+            "cell": "U0C0",
+            "referenceFailures": 0,
+            "narrowFailures": [],
+            "narrowExactlyOnceFailed": false,
+            "narrowLocalConfirmationGreen": true,
+            "effects": 1
+          },
+          {
+            "cell": "U1C0",
+            "referenceFailures": 0,
+            "narrowFailures": [],
+            "narrowExactlyOnceFailed": false,
+            "narrowLocalConfirmationGreen": true,
+            "effects": 1
+          },
+          {
+            "cell": "U0C1",
+            "referenceFailures": 0,
+            "narrowFailures": [],
+            "narrowExactlyOnceFailed": false,
+            "narrowLocalConfirmationGreen": true,
+            "effects": 1
+          },
+          {
+            "cell": "U1C1",
+            "referenceFailures": 0,
+            "narrowFailures": [
+              "exactly_once",
+              "stable_key_recovered"
+            ],
+            "narrowExactlyOnceFailed": true,
+            "narrowLocalConfirmationGreen": true,
+            "effects": 2
+          }
+        ],
+        "interactionContrast": 1,
+        "matchesPreregistration": true
+      },
+      "grid": {
+        "parameterPoints": 72,
+        "referenceFailures": 0,
+        "narrowFailures": 27,
+        "byRecoveryActors": [
+          {
+            "recoveryActors": 1,
+            "points": 18,
+            "failures": 0
+          },
+          {
+            "recoveryActors": 2,
+            "points": 18,
+            "failures": 9
+          },
+          {
+            "recoveryActors": 3,
+            "points": 18,
+            "failures": 9
+          },
+          {
+            "recoveryActors": 4,
+            "points": 18,
+            "failures": 9
+          }
+        ]
+      },
+      "selected": {
+        "scenarios": 24,
+        "targetScenarios": 18,
+        "controls": 6,
+        "referenceFailures": 0,
+        "narrowFailures": 18,
+        "narrowTargetFailures": 18,
+        "narrowControlFailures": 0,
+        "narrowTargetLocalGreen": 18,
+        "heldOut": [
+          {
+            "subjectId": "no-op",
+            "intendedCheck": "liveness",
+            "caughtInSelected": 24,
+            "caughtInTarget": 18,
+            "selectedScenarios": 24,
+            "targetScenarios": 18
+          },
+          {
+            "subjectId": "forged-stable-report",
+            "intendedCheck": "report_matches_call_ledger",
+            "caughtInSelected": 18,
+            "caughtInTarget": 18,
+            "selectedScenarios": 24,
+            "targetScenarios": 18
+          },
+          {
+            "subjectId": "recompute-from-attempt-counter",
+            "intendedCheck": "exactly_once",
+            "caughtInSelected": 18,
+            "caughtInTarget": 18,
+            "selectedScenarios": 24,
+            "targetScenarios": 18
+          }
+        ],
+        "intendedMutantsCaught": 3,
+        "intendedMutantsTotal": 3
+      },
+      "package": {
+        "challengeHash": "9d89b49307a960f65f2e6e8f204fd15e",
+        "scenarioSetId": "descendant-24-21639a0f",
+        "files": 8,
+        "examples": 3,
+        "deterministic": true,
+        "routeHostErrors": 0,
+        "starterFailures": 18,
+        "campaignFile": "campaigns/dao-descendant-transfer-smoke-2026-09.json",
+        "campaignPresent": true,
+        "campaignHashCurrent": true,
+        "campaignSlotsNotRun": 2,
+        "trialReady": true
+      },
+      "killSignalsTriggered": []
+    },
+    {
+      "id": "trading-reconciliation-recompute",
+      "domain": "trading order reconciliation",
+      "status": "survived",
+      "boundary": {
+        "stableLogicalIdentity": "orderIntentId + clientRequestId",
+        "committedValue": "client order key stored in the durable order intent before venue submission",
+        "recoveryContract": "a replacement reconciler retries a lost accepted order with the committed key",
+        "safetyObligation": "at most one venue execution per order intent",
+        "livenessObligation": "at least one venue execution for every valid order intent",
+        "inaccessibleWitness": "host-owned venue call and execution ledgers",
+        "naturalRecomputationFailure": "reconciliation ownership changes while client order identity does not",
+        "realism": "synthetic venue protocol; no production exchange or market mechanics",
+        "structurallyEnforced": true,
+        "referenceNeedsPrivateKnowledge": false,
+        "witnessExposedInSubjectApi": false,
+        "provenance": {
+          "id": "trading-reconciliation-recompute",
+          "classification": "synthetic-protocol-with-real-precedent-post-outcome",
+          "sourceIds": [
+            "alpaca-idempotent-orders",
+            "alpaca-order-reconciliation"
+          ],
+          "conclusion": "Stable client order identity and broker-owned later order state are documented real boundaries; the benchmark instantiates the same shape in a deterministic synthetic venue.",
+          "limitation": "The exact venue API and lost-response schedule are synthetic, and the source audit was post-outcome."
+        }
+      },
+      "probe": {
+        "cells": [
+          {
+            "cell": "U0C0",
+            "referenceFailures": 0,
+            "narrowFailures": [],
+            "narrowExactlyOnceFailed": false,
+            "narrowLocalConfirmationGreen": true,
+            "effects": 1
+          },
+          {
+            "cell": "U1C0",
+            "referenceFailures": 0,
+            "narrowFailures": [],
+            "narrowExactlyOnceFailed": false,
+            "narrowLocalConfirmationGreen": true,
+            "effects": 1
+          },
+          {
+            "cell": "U0C1",
+            "referenceFailures": 0,
+            "narrowFailures": [],
+            "narrowExactlyOnceFailed": false,
+            "narrowLocalConfirmationGreen": true,
+            "effects": 1
+          },
+          {
+            "cell": "U1C1",
+            "referenceFailures": 0,
+            "narrowFailures": [
+              "exactly_once",
+              "committed_order_key_recovered"
+            ],
+            "narrowExactlyOnceFailed": true,
+            "narrowLocalConfirmationGreen": true,
+            "effects": 2
+          }
+        ],
+        "interactionContrast": 1,
+        "matchesPreregistration": true
+      },
+      "grid": {
+        "parameterPoints": 72,
+        "referenceFailures": 0,
+        "narrowFailures": 27,
+        "byRecoveryActors": [
+          {
+            "recoveryActors": 1,
+            "points": 18,
+            "failures": 0
+          },
+          {
+            "recoveryActors": 2,
+            "points": 18,
+            "failures": 9
+          },
+          {
+            "recoveryActors": 3,
+            "points": 18,
+            "failures": 9
+          },
+          {
+            "recoveryActors": 4,
+            "points": 18,
+            "failures": 9
+          }
+        ]
+      },
+      "selected": {
+        "scenarios": 24,
+        "targetScenarios": 18,
+        "controls": 6,
+        "referenceFailures": 0,
+        "narrowFailures": 18,
+        "narrowTargetFailures": 18,
+        "narrowControlFailures": 0,
+        "narrowTargetLocalGreen": 18,
+        "heldOut": [
+          {
+            "subjectId": "no-op",
+            "intendedCheck": "liveness",
+            "caughtInSelected": 24,
+            "caughtInTarget": 18,
+            "selectedScenarios": 24,
+            "targetScenarios": 18
+          },
+          {
+            "subjectId": "forged-stable-report",
+            "intendedCheck": "report_matches_venue_ledger",
+            "caughtInSelected": 18,
+            "caughtInTarget": 18,
+            "selectedScenarios": 24,
+            "targetScenarios": 18
+          },
+          {
+            "subjectId": "recompute-from-attempt-counter",
+            "intendedCheck": "exactly_once",
+            "caughtInSelected": 18,
+            "caughtInTarget": 18,
+            "selectedScenarios": 24,
+            "targetScenarios": 18
+          }
+        ],
+        "intendedMutantsCaught": 4,
+        "intendedMutantsTotal": 4
+      },
+      "package": {
+        "challengeHash": "94bfc2c401ad2cc19f7e84e8a1270a08",
+        "scenarioSetId": "recompute-24-1063a653",
+        "files": 8,
+        "examples": 3,
+        "deterministic": true,
+        "routeHostErrors": 0,
+        "starterFailures": 18,
+        "campaignFile": "campaigns/trading-reconciliation-recompute-transfer-smoke-2026-09.json",
+        "campaignPresent": true,
+        "campaignHashCurrent": true,
+        "campaignSlotsNotRun": 2,
+        "trialReady": true
+      },
+      "killSignalsTriggered": []
+    },
+    {
+      "id": "deployment-rollback-recompute",
+      "domain": "deployment rollback",
+      "status": "survived",
+      "boundary": {
+        "stableLogicalIdentity": "rollbackIntentId + releaseId",
+        "committedValue": "rollback key stored after authorization and before controller invocation",
+        "recoveryContract": "a replacement controller retries completed-but-unconfirmed compensation with the committed key",
+        "safetyObligation": "at most one compensation effect per rollback intent",
+        "livenessObligation": "at least one compensation effect for every supplied authorized rollback intent",
+        "inaccessibleWitness": "host-owned controller call and rollback-effect ledgers",
+        "naturalRecomputationFailure": "controller authority changes while authorized rollback identity does not",
+        "realism": "synthetic controller protocol; no production cloud or rollback-decision policy",
+        "structurallyEnforced": true,
+        "referenceNeedsPrivateKnowledge": false,
+        "witnessExposedInSubjectApi": false,
+        "provenance": {
+          "id": "deployment-rollback-recompute",
+          "classification": "synthetic-composite-with-real-precedent-post-outcome",
+          "sourceIds": [
+            "kubernetes-external-controller-boundary",
+            "aws-ecs-client-token-retry",
+            "argo-rollout-rollback"
+          ],
+          "conclusion": "External deployment control, rollback state, and stable token retry are documented real patterns; the benchmark composes them into one deterministic recovery contract.",
+          "limitation": "No cited system exposes the exact benchmark rollback protocol, and the source audit was post-outcome."
+        }
+      },
+      "probe": {
+        "cells": [
+          {
+            "cell": "U0C0",
+            "referenceFailures": 0,
+            "narrowFailures": [],
+            "narrowExactlyOnceFailed": false,
+            "narrowLocalConfirmationGreen": true,
+            "effects": 1
+          },
+          {
+            "cell": "U1C0",
+            "referenceFailures": 0,
+            "narrowFailures": [],
+            "narrowExactlyOnceFailed": false,
+            "narrowLocalConfirmationGreen": true,
+            "effects": 1
+          },
+          {
+            "cell": "U0C1",
+            "referenceFailures": 0,
+            "narrowFailures": [],
+            "narrowExactlyOnceFailed": false,
+            "narrowLocalConfirmationGreen": true,
+            "effects": 1
+          },
+          {
+            "cell": "U1C1",
+            "referenceFailures": 0,
+            "narrowFailures": [
+              "exactly_once",
+              "committed_rollback_key_recovered"
+            ],
+            "narrowExactlyOnceFailed": true,
+            "narrowLocalConfirmationGreen": true,
+            "effects": 2
+          }
+        ],
+        "interactionContrast": 1,
+        "matchesPreregistration": true
+      },
+      "grid": {
+        "parameterPoints": 72,
+        "referenceFailures": 0,
+        "narrowFailures": 27,
+        "byRecoveryActors": [
+          {
+            "recoveryActors": 1,
+            "points": 18,
+            "failures": 0
+          },
+          {
+            "recoveryActors": 2,
+            "points": 18,
+            "failures": 9
+          },
+          {
+            "recoveryActors": 3,
+            "points": 18,
+            "failures": 9
+          },
+          {
+            "recoveryActors": 4,
+            "points": 18,
+            "failures": 9
+          }
+        ]
+      },
+      "selected": {
+        "scenarios": 24,
+        "targetScenarios": 18,
+        "controls": 6,
+        "referenceFailures": 0,
+        "narrowFailures": 18,
+        "narrowTargetFailures": 18,
+        "narrowControlFailures": 0,
+        "narrowTargetLocalGreen": 18,
+        "heldOut": [
+          {
+            "subjectId": "no-op",
+            "intendedCheck": "liveness",
+            "caughtInSelected": 24,
+            "caughtInTarget": 18,
+            "selectedScenarios": 24,
+            "targetScenarios": 18
+          },
+          {
+            "subjectId": "forged-stable-report",
+            "intendedCheck": "report_matches_controller_ledger",
+            "caughtInSelected": 18,
+            "caughtInTarget": 18,
+            "selectedScenarios": 24,
+            "targetScenarios": 18
+          },
+          {
+            "subjectId": "recompute-from-attempt-counter",
+            "intendedCheck": "exactly_once",
+            "caughtInSelected": 18,
+            "caughtInTarget": 18,
+            "selectedScenarios": 24,
+            "targetScenarios": 18
+          }
+        ],
+        "intendedMutantsCaught": 4,
+        "intendedMutantsTotal": 4
+      },
+      "package": {
+        "challengeHash": "2ddfad2fd3287f752c41a408184b48ce",
+        "scenarioSetId": "recompute-24-80da6d41",
+        "files": 8,
+        "examples": 3,
+        "deterministic": true,
+        "routeHostErrors": 0,
+        "starterFailures": 18,
+        "campaignFile": "campaigns/deployment-rollback-recompute-transfer-smoke-2026-09.json",
+        "campaignPresent": true,
+        "campaignHashCurrent": true,
+        "campaignSlotsNotRun": 2,
+        "trialReady": true
+      },
+      "killSignalsTriggered": []
+    }
+  ],
+  "summary": {
+    "probesRun": 3,
+    "probeSurvivors": 3,
+    "packagesTrialReady": 3,
+    "paidUsd": 0,
+    "modelReads": 0,
+    "localTransferEstablished": true,
+    "agentDifficultyEstablished": false,
+    "prospectiveRealSystemTransferEstablished": false
+  },
+  "boundaryEvidence": {
+    "path": "data/phase-13-boundary-evidence.json",
+    "sha256": "9f861d6ff47d2edcb5d2772c3070a8f18a4e8c42e2e064e623a7637fdf63e171",
+    "timing": "post-outcome",
+    "evidenceUse": "These sources establish real-system precedent for the modeled boundaries. Because they were audited after the local probes ran, they do not convert Phase 13 into a prospective source-first discovery result and do not validate the exact synthetic protocols.",
+    "sources": [
+      {
+        "id": "source-task-outbox-semantics",
+        "kind": "local-primary-source",
+        "title": "Durable approval outbox public semantics",
+        "url": "../klavis-terminal-bench-task/tasks/durable-approval-outbox/environment/app/spec/SEMANTICS.md",
+        "supports": [
+          "an external call can complete while its local outcome remains unknown",
+          "later authoritative receipts settle external effects",
+          "retry identity must survive worker recovery"
+        ],
+        "doesNotSupport": [
+          "frontier difficulty of the repaired descendant",
+          "trading or deployment domain fidelity"
+        ]
+      },
+      {
+        "id": "alpaca-idempotent-orders",
+        "kind": "authoritative-product-documentation",
+        "title": "Alpaca Trading CLI - Idempotent Orders",
+        "url": "https://docs.alpaca.markets/us/docs/alpacas-cli",
+        "supports": [
+          "a client-assigned order id can be persisted across submissions",
+          "duplicate submissions with the same client order id are rejected",
+          "the order can later be retrieved by that client order id"
+        ],
+        "doesNotSupport": [
+          "the benchmark venue receipt shape",
+          "all exchanges sharing Alpaca semantics",
+          "a guaranteed lost-response schedule"
+        ]
+      },
+      {
+        "id": "alpaca-order-reconciliation",
+        "kind": "authoritative-product-documentation",
+        "title": "Alpaca - Placing Orders",
+        "url": "https://docs.alpaca.markets/us/docs/orders-at-alpaca",
+        "supports": [
+          "orders have a client-provided unique identifier",
+          "orders can be queried by client or system identifier",
+          "order-state updates are delivered by a separate streaming interface"
+        ],
+        "doesNotSupport": [
+          "exactly-once execution under every broker failure mode",
+          "the benchmark's synthetic execution ledger"
+        ]
+      },
+      {
+        "id": "kubernetes-external-controller-boundary",
+        "kind": "authoritative-project-documentation",
+        "title": "Kubernetes - Controllers",
+        "url": "https://kubernetes.io/docs/concepts/architecture/controller/",
+        "supports": [
+          "controllers read desired state from the API server",
+          "controllers can act on systems outside the cluster",
+          "controllers report observed state back through a separate authority"
+        ],
+        "doesNotSupport": [
+          "the benchmark rollback-key schema",
+          "exactly-once external compensation by itself"
+        ]
+      },
+      {
+        "id": "aws-ecs-client-token-retry",
+        "kind": "authoritative-product-documentation",
+        "title": "Amazon ECS - Ensuring idempotency",
+        "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_Idempotency.html",
+        "supports": [
+          "deployment operations accept client idempotency tokens",
+          "retrying a completed request with the same token and parameters performs no further action",
+          "changing parameters under the same token is rejected"
+        ],
+        "doesNotSupport": [
+          "the benchmark compensation API",
+          "a universal rollback protocol",
+          "an unbounded token lifetime"
+        ]
+      },
+      {
+        "id": "argo-rollout-rollback",
+        "kind": "authoritative-project-documentation",
+        "title": "Argo Rollouts - Rollback Window",
+        "url": "https://argo-rollouts.readthedocs.io/en/stable/features/rollback/",
+        "supports": [
+          "a deployment controller treats an older manifest as a rollback",
+          "rollback behavior is controller-owned and depends on recorded rollout revision state"
+        ],
+        "doesNotSupport": [
+          "a client idempotency token for rollback",
+          "the benchmark's compensation-effect ledger"
+        ]
+      }
+    ]
+  },
+  "phase12Correction": "Four empty dao-descendant adversarial exploit/submitted-bypass directories lacked tracked .gitkeep files. Phase 13 added them after clone-fidelity failed; this repairs fresh-clone reproducibility without changing the challenge hash.",
+  "phase13Corrections": [
+    "The first implementation shortened the preregistered held-out id recompute-from-attempt-counter to recompute-attempt-counter. The implementation was renamed to the registered id; the preregistration was not edited.",
+    "The two new verifiers initially left the static specification probe blind because their recognizable outcome set sat outside a scoring-decision window. The same rule was moved into scoring scope without changing behavior; the probe now reads and clears it from visible text.",
+    "Authoritative real-system source review for trading and deployment happened after local outcomes. It is retained as post-outcome provenance and cannot support a prospective source-first transfer claim.",
+    "Campaign isolation was declared but not cross-checked against slot runners or preserved trial records. Plans now reject incompatible executable runners, and reconciliation reports any recorded-isolation mismatch."
+  ]
+}

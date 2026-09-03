@@ -1,0 +1,19 @@
+{
+  "views": [
+    {
+      "intent": {
+        "orderIntentId": "order-intent-41-1",
+        "clientRequestId": "client-request-41-4",
+        "accountId": "account-3",
+        "symbol": "GAMMA",
+        "side": "sell",
+        "quantity": 20,
+        "idempotencyKey": "order::order-intent-41-1::client-request-41-4::authority-0"
+      },
+      "reconcilerId": "reconciler-1",
+      "authorityEpoch": 0,
+      "attempt": 0
+    }
+  ],
+  "note": "No replacement reconciler arrives, so the committed authority-0 key is used once."
+}

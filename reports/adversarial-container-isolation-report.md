@@ -19,8 +19,10 @@ artifact directories.
 | `bundles/dao-descendant-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
 | `bundles/delegated-wallet-scope-reconciliation-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
 | `bundles/deployment-model-alias-rollout-drift-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
+| `bundles/deployment-rollback-recompute-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
 | `bundles/prompt-injection-containment-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
 | `bundles/prompt-injection-memory-poisoning-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
+| `bundles/trading-reconciliation-recompute-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
 | `bundles/ui-action-record-replay-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
 | `bundles/ui-replay-live-dom-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
 
@@ -32,9 +34,11 @@ artifact directories.
 | `dao-descendant` | 0 | 0 | 0 | none |
 | `delegated-wallet-scope-reconciliation` | 0 | 0 | 0 | none |
 | `deployment-model-alias-rollout-drift` | 0 | 0 | 0 | none |
+| `deployment-rollback-recompute` | 0 | 0 | 0 | none |
 | `durable-approval-outbox` | 0 | 0 | 0 | none |
 | `prompt-injection-containment` | 0 | 0 | 0 | none |
 | `prompt-injection-memory-poisoning` | 0 | 0 | 0 | none |
+| `trading-reconciliation-recompute` | 0 | 0 | 0 | none |
 | `ui-action-record-replay` | 0 | 0 | 0 | none |
 | `ui-replay-live-dom` | 1 | 0 | 0 | docker daemon unavailable: failed to connect to the docker API at unix:///Users/devlegacy/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/devlegacy/.docker/run/docker.sock: connect: no such file or directory |
 

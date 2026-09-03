@@ -238,6 +238,14 @@ describe("campaign plans", () => {
     ).toThrowError(expect.objectContaining({ code: "CAMPAIGN_RETRY_ON_REFUSAL" }));
   });
 
+  it("CAMPAIGN_ISOLATION_CONTRADICTS_RUNNER — isolation is executable, not decorative", () => {
+    const plan = plans.find((candidate) => candidate.slots.some((slot) => slot.runner === "shell"));
+    expect(plan).toBeDefined();
+    expect(() =>
+      assertPlanHonest({ ...(plan as NonNullable<typeof plan>), isolation: "container" }),
+    ).toThrowError(expect.objectContaining({ code: "CAMPAIGN_ISOLATION_CONTRADICTS_RUNNER" }));
+  });
+
   it("CAMPAIGN_SLOT_WITHOUT_RUN — a slot claiming a result it cannot point at", () => {
     const plan = plans[0] as NonNullable<(typeof plans)[0]>;
     const slot = plan.slots[0] as NonNullable<(typeof plan.slots)[0]>;
