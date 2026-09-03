@@ -462,6 +462,7 @@ const PROGRAMMATIC: readonly RuleCode[] = [
   "BUDGET_NEGATIVE_INPUT",
   "BUDGET_RETRY_RATE_OUT_OF_RANGE",
   "BUDGET_KILL_RATE_OUT_OF_RANGE",
+  "BUDGET_LOST_RUN_RATE_OUT_OF_RANGE",
 ];
 
 describe("known-bad fixtures", () => {
@@ -677,6 +678,15 @@ describe("budget rules", () => {
   it("BUDGET_NEGATIVE_INPUT — a non-positive input", () => {
     expect(() => assertBudgetInputs({ ...sane, hoursPerFamily: 0 })).toThrowError(
       expect.objectContaining({ code: "BUDGET_NEGATIVE_INPUT" }),
+    );
+  });
+
+  it("BUDGET_LOST_RUN_RATE_OUT_OF_RANGE — a loss rate of 1, at which no run ever returns", () => {
+    // Buying N verdicts costs N/(1-lostRunRate) runs, so at 1 the cost of any evidence is infinite.
+    // Measured at 0.0667 across 30 recorded runs; the guard exists because nothing validated it and
+    // nothing priced it for four phases.
+    expect(() => assertBudgetInputs({ ...sane, lostRunRate: 1 })).toThrowError(
+      expect.objectContaining({ code: "BUDGET_LOST_RUN_RATE_OUT_OF_RANGE" }),
     );
   });
 

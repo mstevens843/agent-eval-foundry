@@ -4,7 +4,6 @@ import type { ProbeResult } from "../foundry/probe-runner.js";
 import type { PromotedFamilyRecord } from "../foundry/promotion.js";
 import type { PromotionSmokeGateResult } from "../foundry/smoke-gates.js";
 
-export const ACCESS_TOKEN_EVOLUTION_PARENT = "access-token-scope-expansion";
 export const ACCESS_TOKEN_EVOLUTION_PROBE = "delegated-wallet-scope-reconciliation-probe";
 export const ACCESS_TOKEN_EVOLUTION_FAMILY = "delegated-wallet-scope-reconciliation";
 

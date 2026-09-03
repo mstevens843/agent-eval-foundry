@@ -571,6 +571,10 @@ const HAND_AUTHORED = new Map([
     "the calibration writeup. Its confusion matrix came from a control set built in a scratch directory that no longer exists, so it cannot be regenerated and says so; Phase 4 corrects two of its claims in its own document rather than by editing this one",
   ],
   [
+    "PHASE-5-FORWARD.md",
+    "the forward-build writeup: the residue verdict, a family killed at the spec probe before any implementation existed, and the repriced plan. An argument about the repo rather than a measurement of it",
+  ],
+  [
     "PHASE-4-SETTLED.md",
     "the settling writeup: the A2 experiment against its pre-registered outcomes, plus the calibration, the sweep and the net code delta. An argument about the repo rather than a measurement of it",
   ],

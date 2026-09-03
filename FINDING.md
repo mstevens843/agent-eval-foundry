@@ -22,7 +22,7 @@ fails on it confirms what they already believe.
 
 ---
 
-## The evidence: four flagship results, all withdrawn, all mine
+## The evidence: five flagship results, all withdrawn, all mine
 
 This project built a portfolio of agentic task families and ran frontier models against them. Its
 best results were:
@@ -34,8 +34,9 @@ best results were:
 | `checker-required-memory-poisoning` | rule M6 violated by every subject | M6 named "a record marked as carrying a secret"; the write contract had **no field to mark one** |
 | `access-token` / `delegated-wallet` lineage | a family and its descendant | both starters were **complete passing solutions** |
 
-Four for four. Not one was detected by failure rate; each was found by reading the grader against the
-prose. One was found **against the author's own written brief**, which asserted that the rule was
+Five for five — the fifth is the same task as the first, withdrawn a second time on a different axis
+after a controlled repair removed the first one. Not one was detected by failure rate; each was found
+by reading the grader against the prose. One was found **against the author's own written brief**, which asserted that the rule was
 stated three times in visible text. It was not, and two blind labellers found that independently
 before the author re-checked.
 
@@ -245,26 +246,80 @@ Stated small, because that is the point.
 Not "few". None. Every family that produced a headline result either had its result withdrawn, or has
 never had a counted trial adjudicated under the blind protocol.
 
-The closest thing to an exception is the task above, and the precise version of it is:
+There was, briefly, an exception. Five cells survived the controlled repair — the failure mode the
+task was actually built around — and that looked like the first difficulty signal an experiment had
+produced rather than an argument.
 
-> One family has a failure mode that a controlled single-sentence specification repair did **not**
-> remove — at one measured axis, across two labs, on 5 of 288 graded cells.
+**It did not survive being labelled.** Two blind labellers from different model families split
+**0 for 5**, both at high confidence, both quoting the same sentence. And the underlying fact settles
+it independently: the specification tells the engine it *"is not permitted to guess"* and names a
+settlement receipt as the way to find out — and on the only two schedules where any of these failures
+occur, the harness declares no unknowns and **never mints a receipt.** The strategy that passes is a
+presumption, and the word `presumed` appears exactly once in the whole task: in the reference
+solution, which the subject cannot read.
 
-That is not capability evidence yet. Nobody has adjudicated those five cells, and on this project's
-own rules an unadjudicated failure is not difficulty. It is, however, the first difficulty signal
-here that an experiment produced rather than an argument, and it is roughly two orders of magnitude
-smaller than the headline it replaces.
+So the task is withdrawn in full. Both of its axes are the author's own specification, and the second
+was only visible *after* a controlled experiment removed the first.
 
 What the project has instead is the instrument, and the fact that the instrument was pointed at its
 author's own best work first.
 
 ---
 
+## The part that finally paid for itself
+
+Auditing found five defects. The question the whole apparatus exists to answer is whether it can stop
+the sixth **before** the money, and that had never been tested — every family here was audited after
+it was built.
+
+So one was built forward. A different domain, the same mechanism, and a specification written by
+someone who by then knew all five defect classes in detail and wrote explicitly against each.
+It named its terminal states. It enumerated the complete transition set and said *"exactly these and
+no others."*
+
+Four independent readers — one from a different model family — were handed **the specification
+alone.** No implementation, no reference, no tests; none existed. Each was asked what decision
+function the document implies.
+
+They found **94 ambiguities, clustering to 11 defects all four readers hit independently.** Including:
+
+- a state reachable through an edge the "exactly these and no others" table did not contain — the
+  same defect that withdrew the flagship, reproduced in a document written to avoid it
+- two rules that send the same case to different states, with a stated precedence order that makes it
+  worse rather than better
+- a requirement the audit format cannot express
+
+One full repair pass took 11 to 10, **and introduced two new defects in the process.** One survivor
+was fatal: nothing in the document required the agent to advance the clock, so an agent that did
+nothing at all satisfied every rule by the letter and passed.
+
+The pre-registered threshold was two. **The family was retired at the specification stage.** No
+implementation, no verifier, no mutants, no starter, no trials, no paid model runs.
+
+| | cost |
+|---|---|
+| the screen that killed it | 8 model reads — **minutes, and dollars** |
+| the build it prevented | **18 to 120 hours**, mean 62.4 |
+| the trials it prevented | ~$370 at measured rates |
+
+That is the economic argument, demonstrated instead of asserted.
+
+And the finding underneath it is worth more than the family: **this mechanism has now failed
+specification three times** — twice inside the flagship, once in a fresh document by an author who
+knew every prior failure. That is not three unlucky drafts. The grader must know the truth, the
+subject must not, and every sentence that gives the subject a way to find out either leaks the answer
+or names a channel that does not fire.
+
 ## Limits, stated because they are the reason to believe the rest
 
 - **Small n, everywhere.** The control-set calibration was 7 positives and 4 negatives; a 0% false
   positive rate on 7 cases has a 95% upper bound near 35%. The honest claim is "no evidence of
   over-calling", not "over-calling is rare". A larger, better-matched control set is in progress.
+- **The calibration overstated the instrument, and the real cases proved it.** Cross-family labeller
+  agreement was **0.967 across 61 constructed controls** and **0.000 across the five real ones.** The
+  constructed set was flagged at the time as a probable ceiling effect — only 2 of 22 negatives were
+  one-sentence deletions — and that is exactly what it was hiding. Quote the 0.967 only with this
+  beside it.
 - **Both labellers share a model family.** That measures whether the *standard* is applied
   consistently, not whether a different intelligence would agree. A cross-family labeller is in
   progress. **There is no human labeller.** Not one. Every agreement figure this project reports is

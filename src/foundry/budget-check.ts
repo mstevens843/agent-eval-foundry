@@ -46,6 +46,13 @@ export function assertBudgetInputs(i: BudgetInputs): void {
   // Previously unvalidated, alongside two other inputs that could silently produce negative hours or
   // an infinite family count. A rate of 1 means every built family dies, so nothing ever ships and
   // the cost per shipped family is infinite; that is a statement about the pipeline, not a plan.
+  if (!Number.isFinite(i.lostRunRate) || i.lostRunRate < 0 || i.lostRunRate >= 1) {
+    fail(
+      "BUDGET_LOST_RUN_RATE_OUT_OF_RANGE",
+      "budget.lostRunRate",
+      `expected a fraction in [0, 1), got ${i.lostRunRate}; at 1 no run ever returns a verdict`,
+    );
+  }
   if (!Number.isFinite(i.postBuildKillRate) || i.postBuildKillRate < 0 || i.postBuildKillRate >= 1) {
     fail(
       "BUDGET_KILL_RATE_OUT_OF_RANGE",

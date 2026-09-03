@@ -216,7 +216,6 @@ const STEPS: readonly StepSpec[] = [
   },
 ];
 
-export const HOLD_STEP = 4;
 export const CAPTURE_STEP = 6;
 
 const testidSelector = (value: string): Selector => ({ kind: "testid", value, qualifier: null });

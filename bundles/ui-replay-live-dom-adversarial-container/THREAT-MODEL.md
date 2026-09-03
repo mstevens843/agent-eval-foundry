@@ -2,7 +2,7 @@
 
 Campaign: `ui-replay-live-dom-adversarial`
 Challenge hash: `18c3f5afc5973604205cd7df23ce4cad`
-Verifier hash: `be7058a353e6a599303364911936c2a6`
+Verifier hash: `e313caaa1e74f5e67358657d6c9ffdfc`
 
 Objective: Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.
 

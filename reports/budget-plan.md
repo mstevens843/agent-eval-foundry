@@ -9,30 +9,34 @@ printed the largest of them under the smallest one's name.
 
 | | families | deliverable tasks | graded cells | independent axes | $ / deliverable task | $ / axis |
 |---|---:|---:|---:|---:|---:|---:|
-| **parameterized families** | **7** | **7** | 168 | **14** | $12,922 | **$6,461** |
-| hand-authored tasks | 7 | 7 | 7 | 7 | $12,922 | $12,922 |
+| **parameterized families** | **7** | **7** | 168 | **14** | $12,937 | **$6,468** |
+| hand-authored tasks | 7 | 7 | 7 | 7 | $12,937 | $12,937 |
 
 **A FAMILY is what the money builds. A DELIVERABLE TASK is an independently gradeable package a
 recipient can be handed, and this repository emits one per family. A GRADED CELL is one
 scenario-check pair inside that package, and there are 24 per package.** Those are the three columns, and
 conflating the third with the second is the defect this revision fixes.
 
-Read the two rows against each other and the honest gap is narrower than it used to look: per DELIVERABLE the two cost the same $12,922, because one family yields one deliverable either way. What the family buys for that money is **24x the graded cells and 2x the independent axes** — $6,461 per axis against $12,922. That is a real advantage and it is not two orders of magnitude.
+Read the two rows against each other and the honest gap is narrower than it used to look: per DELIVERABLE the two cost the same $12,937, because one family yields one deliverable either way. What the family buys for that money is **24x the graded cells and 2x the independent axes** — $6,468 per axis against $12,937. That is a real advantage and it is not two orders of magnitude.
 
-**$100,000 does not buy 1,000 deliverable tasks.** At one deliverable per family, 1,000 deliverables means 1,000 families, so reaching that count needs a further $12,821,930. What it does buy is **7 families yielding about 168 graded instances and 14 independent axes** — and the axes are the number worth quoting, because a thousand tasks measuring two things is two measurements.
+**$100,000 does not buy 1,000 deliverable tasks.** At one deliverable per family, 1,000 deliverables means 1,000 families, so reaching that count needs a further $12,836,731. What it does buy is **7 families yielding about 168 graded instances and 14 independent axes** — and the axes are the number worth quoting, because a thousand tasks measuring two things is two measurements.
 
-Read as graded CELLS instead, the same target is far cheaper and still not covered: 1,000 cells at 24 per family is 42 families and $442,721 more. The two shortfalls differ by 24x, and the previous version of this report printed the second one beside a headline labelled in the first one's unit.
+Read as graded CELLS instead, the same target is far cheaper and still not covered: 1,000 cells at 24 per family is 42 families and $443,343 more. The two shortfalls differ by 24x, and the previous version of this report printed the second one beside a headline labelled in the first one's unit.
 
 ## What this revision corrects
 
 | | was | is | effect |
 |---|---|---|---|
-| cost of one frontier trial | $3.50, a literal under a heading that said "measured" | $9.95, the mean of 19 real Harbor trials over $0.50 in `data/measured-trial-costs.json` | the plan was low by roughly 2.8x on model spend |
+| cost of one frontier trial | $3.50, a literal under a heading that said "measured" | $9.62, the mean of the 28 recorded runs that PRODUCED a verdict, in `data/measured-trial-costs.json` | the plan was low by roughly 2.7x on model spend |
 | the headline unit | families x 24 cells, called "shipped tasks" | families x 1 deliverable package | the deliverable count was overstated 24x |
 | axes per family | 3, the antichain width pooled ACROSS both labs | 2, the width inside a single lab | the axis yield was overstated by half |
 | builds per shipped family | a second input sitting beside `postBuildKillRate` and agreeing with it by luck | `buildsPerShippedFamily(0.5)` = 2 | the two can no longer disagree |
 
-The trial correction is the one with money attached. $3.50 per run was never measured — it was a literal, and three phases of this report printed it inside a section headed "measured". The measurement, once taken, is $9.95: **the plan was low by roughly 2.8x on model spend.** It does not move the family count, because model spend is 3% of this plan — but a plan whose labour was cheap would have been wrong by that factor on the only line it priced.
+| runs bought and lost | not priced at all | 6.7% of started runs return no verdict, measured over 30 recorded runs | every trial line was low by that factor again |
+
+**The loss rate had never appeared in any plan.** Two of the thirty recorded runs over $0.50 spent money and returned nothing — one killed by a machine shutdown, one by a harness `NetworkConnectionError` — and because runs that die tend to die late, that is 6.7% of runs but 10.7% of spend. Buying 6 verdicts costs 6.4 runs, so a matrix is $61.85 rather than $57.72. Pricing only the runs that finish is the same optimistic error as pricing only the families that ship, and this plan made both for four phases.
+
+The trial correction is the one with money attached. $3.50 per run was never measured — it was a literal, and three phases of this report printed it inside a section headed "measured". The measurement, once taken, is $9.62: **the plan was low by roughly 2.7x on model spend.** It does not move the family count, because model spend is 3% of this plan — but a plan whose labour was cheap would have been wrong by that factor on the only line it priced.
 
 ## Where the money goes
 
@@ -40,10 +44,10 @@ The trial correction is the one with money attached. $3.50 per run was never mea
 |---|---:|---:|---:|
 | screening (candidates killed to find one) | $3,600 | $25,200 | 28% |
 | authoring the family | $8,910 | $62,370 | 69% |
-| frontier trials | $411.93 | $2,884 | 3% |
+| frontier trials | $426.73 | $2,987 | 3% |
 | generating graded cells (168 of them) | $0.00 | $0.00 | 0% |
 
-**Labour is 97% of spend.** Model spend is $2,884 of $90,454, at the corrected $9.95 per trial. This is the finding: the budget is an engineering budget with a rounding error of GPU time attached, and any plan that prices only the trials is wrong by the size of the rest of the table.
+**Labour is 97% of spend.** Model spend is $2,987 of $90,557, at the corrected $9.62 per trial. This is the finding: the budget is an engineering budget with a rounding error of GPU time attached, and any plan that prices only the trials is wrong by the size of the rest of the table.
 
 The plan implies **0.41 engineer-years** and **70 candidates screened** to yield 7 families.
 
@@ -71,11 +75,11 @@ The one input that is purely an assumption, so here is the whole column instead 
 
 | rate | families | deliverable tasks | graded cells | axes | $ / axis |
 |---|---:|---:|---:|---:|---:|
-| $60.00/h | 14 | 14 | 336 | 28 | $3,333 |
-| $90.00/h | 10 | 10 | 240 | 20 | $4,897 |
-| $120.00/h | 7 | 7 | 168 | 14 | $6,461 |
-| $180.00/h | 5 | 5 | 120 | 10 | $9,588 |
-| $240.00/h | 3 | 3 | 72 | 6 | $12,716 |
+| $60.00/h | 14 | 14 | 336 | 28 | $3,341 |
+| $90.00/h | 10 | 10 | 240 | 20 | $4,905 |
+| $120.00/h | 7 | 7 | 168 | 14 | $6,468 |
+| $180.00/h | 5 | 5 | 120 | 10 | $9,596 |
+| $240.00/h | 3 | 3 | 72 | 6 | $12,723 |
 
 ## Sensitivity to authoring hours per family
 
@@ -88,10 +92,10 @@ is 2.7x what this plan charges for it.
 
 | hours/family | why this row | loaded $ / family | families | deliverable tasks | axes | $ / axis |
 |---|---|---:|---:|---:|---:|---:|
-| 45 h | current input | $12,922 | 7 | 7 | 14 | $6,461 |
-| 62 h | mean of the 18 declared shape estimates (62.4, rounded) | $16,288 | 6 | 6 | 12 | $8,144 |
-| 90 h | above 15 of the 18 declared estimates | $21,832 | 4 | 4 | 8 | $10,916 |
-| 120 h | the flagship family's own estimate | $27,772 | 3 | 3 | 6 | $13,886 |
+| 45 h | current input | $12,937 | 7 | 7 | 14 | $6,468 |
+| 62 h | mean of the 18 declared shape estimates (62.4, rounded) | $16,303 | 6 | 6 | 12 | $8,151 |
+| 90 h | above 15 of the 18 declared estimates | $21,847 | 4 | 4 | 8 | $10,923 |
+| 120 h | the flagship family's own estimate | $27,787 | 3 | 3 | 6 | $13,893 |
 
 45 stays the default because moving a headline without new evidence is worse than reporting the
 discrepancy — but read the table before quoting the headline. Charging the flagship family its own
@@ -117,11 +121,11 @@ knobs are not nine deliverables.
 
 | deliverables/family | families | deliverable tasks | $ / deliverable task | $ / axis |
 |---|---:|---:|---:|---:|
-| 1 (current — no deliverable exporter exists) | 7 | 7 | $12,922 | $6,461 |
-| 2 | 7 | 14 | $6,461 | $6,461 |
-| 4 | 7 | 28 | $3,230 | $6,461 |
-| 8 | 7 | 56 | $1,615 | $6,461 |
-| 24 | 7 | 168 | $538.41 | $6,461 |
+| 1 (current — no deliverable exporter exists) | 7 | 7 | $12,937 | $6,468 |
+| 2 | 7 | 14 | $6,468 | $6,468 |
+| 4 | 7 | 28 | $3,234 | $6,468 |
+| 8 | 7 | 56 | $1,617 | $6,468 |
+| 24 | 7 | 168 | $539.03 | $6,468 |
 
 The last row is what the previous version of this report printed as its headline: it treated all 24 graded cells as 24 deliverables. Nothing in the repository emits them that way.
 
@@ -133,7 +137,7 @@ The last row is what the previous version of this report printed as its headline
 | `hoursPerScreenedCandidate` | 3 | measured — cycle 5 killed 15 candidates in ~90 min |
 | `cycleHitRate` | 0.1 | measured — 1 family shipped from 10 design cycles |
 | `matricesPerFamily` | 3 | measured — the shipped family consumed 3 matrix rounds |
-| `usdPerTrial` | 9.95 | measured — mean of the 19 real Harbor trials over $0.50 in `data/measured-trial-costs.json` (median $7.74; Anthropic median $15.20, OpenAI $3.28). A mean, not a median, because a cross-lab plan buys both halves of a bimodal distribution |
+| `usdPerTrial` | 9.62 | measured — mean of the 19 real Harbor trials over $0.50 in `data/measured-trial-costs.json` (median $7.74; Anthropic median $15.20, OpenAI $3.28). A mean, not a median, because a cross-lab plan buys both halves of a bimodal distribution |
 | `trialsPerMatrix` | 6 | measured — 3 subjects x 2 labs is what one cross-lab claim costs |
 | `retryRate` | 0.15 | measured — 3 of 20 matrix runs discarded for infrastructure reasons |
 | `deliverableTasksPerFamily` | 1 | measured — this repository emits ONE independently gradeable package per family. Not 24: the 24 are graded cells inside that one package |
@@ -188,7 +192,7 @@ records this repository holds rather than from an estimate.
 | counted agent trials on the second family | 6 |
 | median runtime of those trials | 326s |
 
-The plan prices one trial at $9.95 and this table's effective cost per COUNTED run is $16.83. They differ because the second amortizes the runs that produced nothing over the runs that did, and both are several times the $3.50 the plan assumed for three phases. The refutation of that literal was being printed two sections below it the whole time.
+The plan prices one trial at $9.62 and this table's effective cost per COUNTED run is $16.83. They differ because the second amortizes the runs that produced nothing over the runs that did, and both are several times the $3.50 the plan assumed for three phases. The refutation of that literal was being printed two sections below it the whole time.
 
 ### The waste rate
 
@@ -250,7 +254,7 @@ model — which is the single most common way a benchmark overstates what it mea
 Every row read from the trial directories on disk. `superseded` runs were counted once and are
 not counted now: the family they measured was repaired.
 
-Runs are priced at the measured $9.95 — the mean of the 19 real Harbor trials over $0.50 in `data/measured-trial-costs.json`. This section used to price them at $3.50, a literal with no measurement behind it printed under a heading that said "measured", so every dollar figure below was low by roughly 2.8x.
+Runs are priced at the measured $9.62 — the mean of the 19 real Harbor trials over $0.50 in `data/measured-trial-costs.json`. This section used to price them at $3.50, a literal with no measurement behind it printed under a heading that said "measured", so every dollar figure below was low by roughly 2.7x.
 
 | provider | counted | of those failed | refused | infra | superseded | model-minutes |
 |---|---:|---:|---:|---:|---:|---:|
@@ -263,8 +267,8 @@ Runs are priced at the measured $9.95 — the mean of the 19 real Harbor trials 
 | runs attempted | 30 |
 | counted | 13 |
 | **produced no usable evidence** | **17** (57%) |
-| at $9.95 per run, spend on runs that produced nothing | $169.15 |
-| **cost per counted FAILURE** | $42.64 |
+| at $9.62 per run, spend on runs that produced nothing | $163.54 |
+| **cost per counted FAILURE** | $41.23 |
 
 **Cost per counted failure is the number to plan against.** A counted solve tells you the family
 is solvable, which the reference already told you. A counted failure is the only kind of trial
@@ -293,8 +297,8 @@ directories.
 | question | cost at current inputs | label | what is included |
 |---|---:|---|---|
 | mutant-measured -> trial-ready | $2,790 (23.3 h) | estimated | fairness SPEC, challenge package, leak tests, route, campaign plan |
-| trial-ready -> difficulty-evidenced | $251.44 + provider availability | estimated | one counted provider run, grading, reconcile, report update |
-| spec ambiguity waste already observed | $903.08 | measured trials + estimated repair | stale/superseded trials plus repair time |
+| trial-ready -> difficulty-evidenced | $251.06 + provider availability | estimated | one counted provider run, grading, reconcile, report update |
+| spec ambiguity waste already observed | $897.01 | measured trials + estimated repair | stale/superseded trials plus repair time |
 | checker-required package-ready -> difficulty-evidenced | $15 campaign budget; provider cost not recorded | measured campaign | package, route, two submitted artifacts, 792 graded scenarios and one counted Codex/OpenAI failure; no cross-lab breadth |
 
 Trial-ready is not SHIP. Trial-ready means the package builds, the leak checker passes, the hash

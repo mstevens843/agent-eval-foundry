@@ -1,4 +1,4 @@
-import { MEASURED_DEFAULTS } from "./budget.js";
+import { MEASURED_DEFAULTS, usdPerMatrix } from "./budget.js";
 import type {
   DiscoveryCandidate,
   DiscoveryCandidateEvidence,
@@ -729,13 +729,9 @@ export function evaluateLineage(
     informedMatrixBlocks,
     deferredMatrixBlocks,
     estimatedMatrixSpendSavedUsd:
-      Math.round(
-        informedMatrixBlocks * (MEASURED_DEFAULTS.usdPerTrial * MEASURED_DEFAULTS.trialsPerMatrix) * 100,
-      ) / 100,
+      Math.round(informedMatrixBlocks * usdPerMatrix(MEASURED_DEFAULTS) * 100) / 100,
     estimatedMatrixSpendDeferredUsd:
-      Math.round(
-        deferredMatrixBlocks * (MEASURED_DEFAULTS.usdPerTrial * MEASURED_DEFAULTS.trialsPerMatrix) * 100,
-      ) / 100,
+      Math.round(deferredMatrixBlocks * usdPerMatrix(MEASURED_DEFAULTS) * 100) / 100,
     nextAction,
   };
 }

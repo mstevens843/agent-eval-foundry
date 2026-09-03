@@ -37,6 +37,7 @@
     "verify": "node scripts/secret-scan.mjs && node dist/cli.js check && node scripts/verify-reports.mjs",
     "check": "node dist/cli.js check",
     "secret-scan": "node scripts/secret-scan.mjs",
+    "clean-checkout": "node scripts/clean-checkout-check.mjs",
     "freshness": "vitest run test/prose-freshness.test.ts"
   },
   "devDependencies": {

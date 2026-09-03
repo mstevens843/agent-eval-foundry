@@ -338,20 +338,5 @@ export function runBuildGates(run: RunResult = runFamily()): readonly GateResult
   return gates;
 }
 
-/** Throws with every failing gate named. Wire this into the family's test file. */
-export function assertBuildGates(run?: RunResult): void {
-  const gates = runBuildGates(run);
-  const failed = gates.filter((g) => !g.passed);
-  if (failed.length > 0) {
-    throw new Error(
-      `ui-replay-live-dom build gates failed:\n${failed.map((g) => `  ${g.gate}: ${g.detail}`).join("\n")}`,
-    );
-  }
-}
-
-/** Scenario-count-free summary. Any report quoting a width must print this beside it. */
-export const gateSummary = (gates: readonly GateResult[]): string =>
-  gates.map((g) => `${g.passed ? "PASS" : "FAIL"} ${g.gate} — ${g.detail}`).join("\n");
-
 /** Re-exported so `generateScenarios` is reachable from a gate runner without a second import. */
 export { generateScenarios };

@@ -67,15 +67,28 @@ export interface BudgetInputs {
    * Cost of ONE frontier trial, measured.
    *
    * Replaces a per-matrix figure that hid how many runs a matrix is and what each one cost. The
-   * value is the mean of the 19 real Harbor trials over $0.50 recorded in
-   * `data/measured-trial-costs.json` (21 rows, two of them sub-$0.50 no-op probes that are preserved
-   * and excluded from the statistic). It is deliberately a MEAN and not a median: the
+   * value is the mean of the 28 recorded Harbor trials over $0.50 that PRODUCED A VERDICT, in
+   * `data/measured-trial-costs.json`. Runs that spent money and returned nothing are excluded here
+   * and priced separately by `lostRunRate`, so the two numbers do not double-count. It is deliberately a MEAN and not a median: the
    * distribution is bimodal by lab (Anthropic median $15.20, OpenAI $3.28) and a plan that buys
    * cross-lab evidence buys both.
    */
   readonly usdPerTrial: number;
   /** Runs in one matrix. 6 = 3 subjects x 2 labs, which is what a cross-lab claim costs. */
   readonly trialsPerMatrix: number;
+  /**
+   * Fraction of STARTED trials that spend money and return no verdict.
+   *
+   * Measured, and never priced before this. Across the 30 recorded runs over $0.50 in
+   * `data/measured-trial-costs.json`, 2 were lost — a machine shut down mid-flight, and a harness
+   * that raised `NetworkConnectionError` after 1,012 output tokens. That is 6.7% of runs and 10.7%
+   * of spend, because the runs that die tend to die late.
+   *
+   * A plan that prices only the runs that finished is making the same optimistic error as one that
+   * prices only the families that shipped, and this project made both for four phases. Buying N
+   * verdicts costs `N / (1 - lostRunRate)` runs.
+   */
+  readonly lostRunRate: number;
   /** Infrastructure re-run tax: runs discarded for API/Docker/timeout reasons. 0.15 measured. */
   readonly retryRate: number;
   /**
@@ -157,6 +170,20 @@ export const HOURS_PER_ENGINEER_YEAR = 1800;
  * of coincidence that keeps a defect invisible for three phases. They are one quantity: if half of
  * built families die, shipping one costs two builds. Deriving it means they cannot disagree.
  */
+/**
+ * What one matrix actually costs, including the runs that will be bought and lost.
+ *
+ * Exported because `lineage.ts` was computing this independently to price avoided and deferred
+ * matrices, so the two could — and did — drift the moment the measured per-trial cost moved. One
+ * definition, one place.
+ */
+export function usdPerMatrix(
+  inputs: Pick<BudgetInputs, "usdPerTrial" | "trialsPerMatrix" | "lostRunRate">,
+): number {
+  const runs = inputs.trialsPerMatrix / Math.max(1e-9, 1 - inputs.lostRunRate);
+  return inputs.usdPerTrial * runs;
+}
+
 export function buildsPerShippedFamily(postBuildKillRate: number): number {
   const survival = 1 - postBuildKillRate;
   return survival > 0 ? 1 / survival : Number.POSITIVE_INFINITY;
@@ -177,9 +204,8 @@ export function planBudget(inputs: BudgetInputs): BudgetPlan {
   const authoringUsdPerFamily = lineageHours * inputs.labourRateUsdPerHour;
 
   // Every family in the lineage is trialed, including the ones that die — that is HOW they die.
-  const usdPerMatrix = inputs.usdPerTrial * inputs.trialsPerMatrix;
   const trialUsdPerFamily =
-    buildsPerSurvivor * inputs.matricesPerFamily * usdPerMatrix * (1 + inputs.retryRate);
+    buildsPerSurvivor * inputs.matricesPerFamily * usdPerMatrix(inputs) * (1 + inputs.retryRate);
   const loadedUsdPerFamily = screeningUsdPerFamily + authoringUsdPerFamily + trialUsdPerFamily;
 
   const families = loadedUsdPerFamily > 0 ? Math.floor(inputs.totalUsd / loadedUsdPerFamily) : 0;
@@ -239,8 +265,11 @@ export const MEASURED_DEFAULTS: Omit<BudgetInputs, "totalUsd" | "labourRateUsdPe
   // Mean of 19 real trials over $0.50 in `data/measured-trial-costs.json`. The model previously
   // carried a $3.50 literal under a heading that said "measured"; the measurement, when finally
   // taken, was 2.8x that.
-  usdPerTrial: 9.95,
+  // Mean of the 28 recorded runs over $0.50 that actually produced a verdict.
+  usdPerTrial: 9.62,
   trialsPerMatrix: 6,
+  // 2 of 30 recorded runs spent money and returned nothing. See the field docstring.
+  lostRunRate: 0.0667,
   retryRate: 0.15,
   // ONE package per family. This is what the repository actually emits, and it is the number the
   // headline was inflated 24-fold by not using.

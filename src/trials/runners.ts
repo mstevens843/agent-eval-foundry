@@ -26,7 +26,7 @@
 // family-specific is the host script, which knows how to build a harness and call a subject.
 
 import { execFileSync } from "node:child_process";
-import { copyFileSync, existsSync, mkdtempSync, writeFileSync } from "node:fs";
+import { chmodSync, copyFileSync, existsSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { CONTAINER_IMAGE, containerRuntimeReadiness } from "../adversarial-audit/isolation.js";
@@ -216,6 +216,35 @@ export function containerFlags(
   ];
 }
 
+/**
+ * A staging directory the container can actually read.
+ *
+ * `mkdtempSync` creates 0700, owned by whoever ran the process. The container is deliberately forced
+ * to `--user=1000:1000` so nothing runs as root, and on a Linux host that uid is almost never the
+ * one that staged the files: GitHub's ubuntu runners are uid 1001, so the container cannot traverse
+ * into its own bind mount and node reports the mounted script as MODULE_NOT_FOUND — a permission
+ * error wearing a missing-file error's clothes.
+ *
+ * It does not reproduce on macOS. Docker Desktop shares the host filesystem through a VM layer that
+ * remaps ownership, so every uid inside the container can read the mount whatever its mode. This is
+ * the class of defect that only exists on someone else's machine, which is why it is fixed here and
+ * not worked around in the test.
+ *
+ * 0755 on a directory holding a host script and a subject module, under a read-only mount, in a
+ * per-run temp directory. Nothing secret is staged and nothing may be written back.
+ */
+const stagingDir = (prefix: string): string => {
+  const dir = mkdtempSync(join(tmpdir(), prefix));
+  chmodSync(dir, 0o755);
+  return dir;
+};
+
+/** Stage one file where a non-root container uid can read it. `copyFileSync` preserves the source mode. */
+const stageFile = (from: string, to: string): void => {
+  copyFileSync(from, to);
+  chmodSync(to, 0o644);
+};
+
 const containerName = (prefix: string): string =>
   `foundry-${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 
@@ -262,9 +291,9 @@ export function containerRunner(options: ContainerOptions): SubjectRunner {
       try {
         // A fresh staging directory per run IS the disjointness guarantee: it is the only host path
         // the container can reach, and no two runs are ever handed the same one.
-        const stage = mkdtempSync(join(tmpdir(), "foundry-container-"));
-        copyFileSync(host, join(stage, "subject-host.mjs"));
-        copyFileSync(options.modulePath, join(stage, "subject.mjs"));
+        const stage = stagingDir("foundry-container-");
+        stageFile(host, join(stage, "subject-host.mjs"));
+        stageFile(options.modulePath, join(stage, "subject.mjs"));
         const stdout = execFileSync(
           "docker",
           [
@@ -389,9 +418,9 @@ export function containerDryRun(
 ): ContainerDryRun {
   const readiness = containerRuntimeReadiness();
   const name = containerName("dryrun");
-  const stage = mkdtempSync(join(tmpdir(), "foundry-dryrun-"));
-  writeFileSync(join(stage, "probe.mjs"), PROBE_SOURCE, "utf8");
-  writeFileSync(join(stage, "bundle-marker.txt"), "mounted bundle\n", "utf8");
+  const stage = stagingDir("foundry-dryrun-");
+  writeFileSync(join(stage, "probe.mjs"), PROBE_SOURCE, { encoding: "utf8", mode: 0o644 });
+  writeFileSync(join(stage, "bundle-marker.txt"), "mounted bundle\n", { encoding: "utf8", mode: 0o644 });
   const argv = [...containerFlags(name, stage, "none", limits), image, "node", "/work/probe.mjs"];
   if (!readiness.available) {
     return { ran: false, image, limits, argv, facts: null, violations: [], detail: readiness.detail };

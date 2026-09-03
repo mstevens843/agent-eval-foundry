@@ -3,7 +3,7 @@
   "familyId": "ui-action-record-replay",
   "challengeHash": "1050e79f4804a96a5327d50dd81765b0",
   "packagePath": "examples/families/ui-action-record-replay/challenge",
-  "verifierHash": "934aa467100023090c59faf5af38d06e",
+  "verifierHash": "fdb7e460ada105fa346cdd58565f2a5d",
   "threatModel": {
     "objective": "Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.",
     "attackerReceives": [

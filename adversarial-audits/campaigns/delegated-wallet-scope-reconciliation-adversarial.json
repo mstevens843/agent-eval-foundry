@@ -3,7 +3,7 @@
   "familyId": "delegated-wallet-scope-reconciliation",
   "challengeHash": "45f27b644a84364e3d3855f68cd243a2",
   "packagePath": "examples/families/delegated-wallet-scope-reconciliation/challenge",
-  "verifierHash": "55b872ee12b454fb0509e287089f330e",
+  "verifierHash": "86714a6c3770d43a70e55afdcd21799c",
   "threatModel": {
     "objective": "Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.",
     "attackerReceives": [

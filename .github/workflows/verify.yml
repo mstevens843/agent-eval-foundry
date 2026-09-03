@@ -84,3 +84,10 @@ jobs:
       # audit, and a hand-edited report is exactly what this catches.
       - name: verify reports reproduce
         run: pnpm verify
+
+      # The last gate, and the one that catches what the others structurally cannot: every check
+      # above runs against the working tree, so a claim resting on a file only this machine holds
+      # passes all of them. This renders every gate report from a tracked-files-only checkout and
+      # diffs. Zero divergence means no gate verdict depends on anybody's disk.
+      - name: gates reproduce from a clean checkout
+        run: pnpm clean-checkout

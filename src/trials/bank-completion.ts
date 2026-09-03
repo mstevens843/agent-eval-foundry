@@ -383,9 +383,3 @@ export function assertCombinedWidthAllowed(completion: BankCompletion): void {
     );
   }
 }
-
-/** Re-exported so a report can print what an axis count over this bank is a statement about. */
-export const axisKindMeaning = (kind: BankKind): string => BANK_KIND_MEANING[kind];
-
-/** The overlap verdict from the underlying bank module, for callers that want both views. */
-export const overlapOf = computeOverlap;

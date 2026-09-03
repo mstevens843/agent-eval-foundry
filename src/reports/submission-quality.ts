@@ -23,14 +23,6 @@ import type { SelfCheckProfile } from "./self-check.js";
 
 export type StatedConfidence = "assertive" | "hedged" | "mixed" | "silent";
 
-export const CONFIDENCE_MEANING: Readonly<Record<StatedConfidence, string>> = {
-  assertive: "the transcript states the work is complete, correct or verified, without qualification",
-  hedged:
-    "the transcript qualifies the claim — should, believe, likely, may — or names what it did not check",
-  mixed: "both an unqualified claim and a stated limitation",
-  silent: "the transcript makes no claim about correctness either way",
-};
-
 /** Calibration is only interesting where confidence and outcome disagree. */
 export type Calibration = "overconfident" | "appropriately-hedged" | "understated" | "aligned" | "n/a";
 

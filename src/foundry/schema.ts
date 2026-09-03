@@ -111,6 +111,7 @@ export const RULE_CODES = [
   "BUDGET_NEGATIVE_INPUT",
   "BUDGET_RETRY_RATE_OUT_OF_RANGE",
   "BUDGET_KILL_RATE_OUT_OF_RANGE",
+  "BUDGET_LOST_RUN_RATE_OUT_OF_RANGE",
   // trial records — the layer that separates "the verifier works" from "the family is hard"
   "TRIAL_COUNTS_WITHOUT_REASON",
   "TRIAL_REFUSAL_COUNTED",

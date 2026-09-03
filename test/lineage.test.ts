@@ -322,7 +322,7 @@ describe("lineage verdicts and portfolio reallocation", () => {
   //   const lineage = baseLineage();
   //   expect(evaluation.verdict).toBe("lineage_solved_twice");
   //   expect(evaluation.decision).toBe("reallocate");
-  //   expect(evaluation.estimatedMatrixSpendSavedUsd).toBe(119.4);
+  //   expect(evaluation.estimatedMatrixSpendSavedUsd).toBe(123.69);
   // Those three lines were the bug, not a check on it: the record's two clean passes were graded
   // against packages containing their own solution. The solved-twice branch is still worth
   // covering, so it now runs against a lineage that explicitly has NOT withdrawn its evidence.
@@ -335,7 +335,7 @@ describe("lineage verdicts and portfolio reallocation", () => {
     expect(evaluation.crossLabProven).toBe(false);
     expect(evaluation.matrixBlocks).toBe(2);
     expect(evaluation.informedMatrixBlocks).toBe(2);
-    expect(evaluation.estimatedMatrixSpendSavedUsd).toBe(119.4);
+    expect(evaluation.estimatedMatrixSpendSavedUsd).toBe(123.69);
     expect(evaluation.estimatedMatrixSpendDeferredUsd).toBe(0);
     expect(evaluation.nextAction).toMatch(/reallocate/);
   });
@@ -356,21 +356,22 @@ describe("lineage verdicts and portfolio reallocation", () => {
   });
 
   it("does not credit a saving to a matrix blocked on uninformative evidence", () => {
-    // $119.40 = 2 x $59.70 was a count of nodes with `fullMatrixBlocked`, and never read whether the
+    // $123.69 = 2 x $61.85 was a count of nodes with `fullMatrixBlocked`, and never read whether the
     // smoke that justified the block said anything. Both blocks rest on withdrawn passes, so the
     // matrix was not avoided: it is deferred, and owed as soon as the families are re-measured.
     //
-    // The per-matrix figure rose from $48.66 to $59.70 when the budget model stopped carrying a
-    // per-matrix constant and started deriving it from MEASURED per-trial cost: 6 runs at the $9.95
-    // mean of 19 real Harbor trials. The old $48.66 was a single observation from one 2026-08
-    // matrix; this is the mean of every trial on record, and it is 23% higher.
+    // The per-matrix figure has moved twice, both times toward measurement. It was a $48.66 constant
+    // from a single 2026-08 matrix; then 6 x $9.95 from the mean of 19 real trials; and now
+    // $61.85, which is 6 VERDICTS at the $9.62 mean of the 28 recorded runs that produced one,
+    // divided by (1 - 0.0667) because 2 of 30 runs are bought and never return. A plan that prices
+    // only the runs that finished is the error this figure exists to stop repeating.
     const evaluation = evaluateLineage(baseLineage(), runtimeMap({}));
 
     expect(evaluation.matrixBlocks).toBe(2);
     expect(evaluation.informedMatrixBlocks).toBe(0);
     expect(evaluation.deferredMatrixBlocks).toBe(2);
     expect(evaluation.estimatedMatrixSpendSavedUsd).toBe(0);
-    expect(evaluation.estimatedMatrixSpendDeferredUsd).toBe(119.4);
+    expect(evaluation.estimatedMatrixSpendDeferredUsd).toBe(123.69);
     expect(evaluation.nodes.every((node) => node.matrixSpendDeferred)).toBe(true);
   });
 
@@ -445,7 +446,7 @@ describe("lineage verdicts and portfolio reallocation", () => {
     expect(reallocation.nextRecommendations).toEqual([]);
     expect(discoveryFeedback).toEqual([]);
     expect(reallocation.matrixSpendSavedUsd).toBe(0);
-    expect(reallocation.matrixSpendDeferredUsd).toBe(119.4);
+    expect(reallocation.matrixSpendDeferredUsd).toBe(123.69);
     // Withdrawn, not deleted: all eight rules stay on the record with a stated reason.
     expect(reallocation.reallocationStatus).toBe("withdrawn");
     expect(reallocation.withdrawnFeedback).toHaveLength(8);
@@ -491,7 +492,7 @@ describe("lineage verdicts and portfolio reallocation", () => {
     expect(first).toContain("Lineage Kill + Portfolio Reallocation v1");
     // Previously: expect(first).toContain("lineage_solved_twice") — the report's headline verdict.
     expect(first).toContain("lineage_evidence_withdrawn");
-    expect(first).toContain("matrix spend deferred and still owed | $119.40");
+    expect(first).toContain("matrix spend deferred and still owed | $123.69");
     expect(first).toContain("matrix spend avoided | $0.00");
     expect(first).toContain("evidence withdrawn (`package-leak`)");
     expect(first).toContain("### Withdrawn Adjustments");

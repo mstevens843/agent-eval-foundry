@@ -98,11 +98,6 @@ export interface PolicyDecision {
   readonly reason: string;
 }
 
-/** Trust ordering: the weakest source wins, because a value is only as trusted as its worst input. */
-const WEAKEST: readonly Trust[] = ["retrieved", "tool_output", "user", "system"];
-export const weakestTrust = (levels: readonly Trust[]): Trust | null =>
-  levels.length === 0 ? null : (WEAKEST.find((t) => levels.includes(t)) ?? null);
-
 /**
  * The world the POLICY reasons about, and the most important design decision in this family.
  *
