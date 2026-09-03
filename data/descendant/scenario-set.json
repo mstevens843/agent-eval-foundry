@@ -1,0 +1,381 @@
+{
+ "note": "The descendant's measured scenario set. Each schedule was selected because a reference engine that RECOVERS its committed idem_key passes it and an otherwise byte-identical engine that RECOMPUTES the key fails it. Selection was against that NARROW adversary, never against a broadly-buggy engine, because selecting against a broad engine makes every parameter look like a trigger - the error that shipped a false solve in the parent's 201-check round.",
+ "basis": "tasks/dao-a2-treatment",
+ "retiredFromParent": [
+  "revoke-after-ack-a",
+  "revoke-after-ack-b",
+  "revoke-after-ack-c",
+  "revoke-after-ack-d",
+  "revoke-after-ack-e",
+  "revoke-after-ack-f"
+ ],
+ "whyRetired": "They exercise the ACKED axis, which the treatment sentence closes. After the repair they separate nothing and would only dilute the measured set.",
+ "kept": [
+  "serial-clean",
+  "two-workers",
+  "unknown-then-revoke",
+  "unknown-then-revoke-noop"
+ ],
+ "schedules": {
+  "recompute-w2-k3-c2-s11": {
+   "schedule": {
+    "name": "recompute-w2-k3-c2-s11",
+    "n_workers": 2,
+    "crashes": [
+     {
+      "on": "tool",
+      "nth": 1
+     },
+     {
+      "on": "tool",
+      "nth": 2
+     }
+    ],
+    "revokes": []
+   },
+   "seed": 11,
+   "keys": 3,
+   "narrowAdversaryDuplicates": 1
+  },
+  "recompute-w2-k3-c2-s23": {
+   "schedule": {
+    "name": "recompute-w2-k3-c2-s23",
+    "n_workers": 2,
+    "crashes": [
+     {
+      "on": "tool",
+      "nth": 1
+     },
+     {
+      "on": "tool",
+      "nth": 2
+     }
+    ],
+    "revokes": []
+   },
+   "seed": 23,
+   "keys": 3,
+   "narrowAdversaryDuplicates": 1
+  },
+  "recompute-w2-k4-c2-s11": {
+   "schedule": {
+    "name": "recompute-w2-k4-c2-s11",
+    "n_workers": 2,
+    "crashes": [
+     {
+      "on": "tool",
+      "nth": 1
+     },
+     {
+      "on": "tool",
+      "nth": 2
+     }
+    ],
+    "revokes": []
+   },
+   "seed": 11,
+   "keys": 4,
+   "narrowAdversaryDuplicates": 1
+  },
+  "recompute-w2-k4-c2-s23": {
+   "schedule": {
+    "name": "recompute-w2-k4-c2-s23",
+    "n_workers": 2,
+    "crashes": [
+     {
+      "on": "tool",
+      "nth": 1
+     },
+     {
+      "on": "tool",
+      "nth": 2
+     }
+    ],
+    "revokes": []
+   },
+   "seed": 23,
+   "keys": 4,
+   "narrowAdversaryDuplicates": 1
+  },
+  "recompute-w2-k6-c2-s11": {
+   "schedule": {
+    "name": "recompute-w2-k6-c2-s11",
+    "n_workers": 2,
+    "crashes": [
+     {
+      "on": "tool",
+      "nth": 1
+     },
+     {
+      "on": "tool",
+      "nth": 2
+     }
+    ],
+    "revokes": []
+   },
+   "seed": 11,
+   "keys": 6,
+   "narrowAdversaryDuplicates": 1
+  },
+  "recompute-w2-k6-c2-s23": {
+   "schedule": {
+    "name": "recompute-w2-k6-c2-s23",
+    "n_workers": 2,
+    "crashes": [
+     {
+      "on": "tool",
+      "nth": 1
+     },
+     {
+      "on": "tool",
+      "nth": 2
+     }
+    ],
+    "revokes": []
+   },
+   "seed": 23,
+   "keys": 6,
+   "narrowAdversaryDuplicates": 1
+  },
+  "recompute-w3-k3-c2-s11": {
+   "schedule": {
+    "name": "recompute-w3-k3-c2-s11",
+    "n_workers": 3,
+    "crashes": [
+     {
+      "on": "tool",
+      "nth": 1
+     },
+     {
+      "on": "tool",
+      "nth": 2
+     }
+    ],
+    "revokes": []
+   },
+   "seed": 11,
+   "keys": 3,
+   "narrowAdversaryDuplicates": 1
+  },
+  "recompute-w3-k3-c2-s23": {
+   "schedule": {
+    "name": "recompute-w3-k3-c2-s23",
+    "n_workers": 3,
+    "crashes": [
+     {
+      "on": "tool",
+      "nth": 1
+     },
+     {
+      "on": "tool",
+      "nth": 2
+     }
+    ],
+    "revokes": []
+   },
+   "seed": 23,
+   "keys": 3,
+   "narrowAdversaryDuplicates": 1
+  },
+  "recompute-w3-k4-c2-s11": {
+   "schedule": {
+    "name": "recompute-w3-k4-c2-s11",
+    "n_workers": 3,
+    "crashes": [
+     {
+      "on": "tool",
+      "nth": 1
+     },
+     {
+      "on": "tool",
+      "nth": 2
+     }
+    ],
+    "revokes": []
+   },
+   "seed": 11,
+   "keys": 4,
+   "narrowAdversaryDuplicates": 1
+  },
+  "recompute-w3-k4-c2-s23": {
+   "schedule": {
+    "name": "recompute-w3-k4-c2-s23",
+    "n_workers": 3,
+    "crashes": [
+     {
+      "on": "tool",
+      "nth": 1
+     },
+     {
+      "on": "tool",
+      "nth": 2
+     }
+    ],
+    "revokes": []
+   },
+   "seed": 23,
+   "keys": 4,
+   "narrowAdversaryDuplicates": 1
+  },
+  "recompute-w3-k6-c2-s11": {
+   "schedule": {
+    "name": "recompute-w3-k6-c2-s11",
+    "n_workers": 3,
+    "crashes": [
+     {
+      "on": "tool",
+      "nth": 1
+     },
+     {
+      "on": "tool",
+      "nth": 2
+     }
+    ],
+    "revokes": []
+   },
+   "seed": 11,
+   "keys": 6,
+   "narrowAdversaryDuplicates": 1
+  },
+  "recompute-w3-k6-c2-s23": {
+   "schedule": {
+    "name": "recompute-w3-k6-c2-s23",
+    "n_workers": 3,
+    "crashes": [
+     {
+      "on": "tool",
+      "nth": 1
+     },
+     {
+      "on": "tool",
+      "nth": 2
+     }
+    ],
+    "revokes": []
+   },
+   "seed": 23,
+   "keys": 6,
+   "narrowAdversaryDuplicates": 1
+  },
+  "recompute-w4-k3-c2-s11": {
+   "schedule": {
+    "name": "recompute-w4-k3-c2-s11",
+    "n_workers": 4,
+    "crashes": [
+     {
+      "on": "tool",
+      "nth": 1
+     },
+     {
+      "on": "tool",
+      "nth": 2
+     }
+    ],
+    "revokes": []
+   },
+   "seed": 11,
+   "keys": 3,
+   "narrowAdversaryDuplicates": 1
+  },
+  "recompute-w4-k3-c2-s23": {
+   "schedule": {
+    "name": "recompute-w4-k3-c2-s23",
+    "n_workers": 4,
+    "crashes": [
+     {
+      "on": "tool",
+      "nth": 1
+     },
+     {
+      "on": "tool",
+      "nth": 2
+     }
+    ],
+    "revokes": []
+   },
+   "seed": 23,
+   "keys": 3,
+   "narrowAdversaryDuplicates": 1
+  },
+  "recompute-w4-k4-c2-s11": {
+   "schedule": {
+    "name": "recompute-w4-k4-c2-s11",
+    "n_workers": 4,
+    "crashes": [
+     {
+      "on": "tool",
+      "nth": 1
+     },
+     {
+      "on": "tool",
+      "nth": 2
+     }
+    ],
+    "revokes": []
+   },
+   "seed": 11,
+   "keys": 4,
+   "narrowAdversaryDuplicates": 1
+  },
+  "recompute-w4-k4-c2-s23": {
+   "schedule": {
+    "name": "recompute-w4-k4-c2-s23",
+    "n_workers": 4,
+    "crashes": [
+     {
+      "on": "tool",
+      "nth": 1
+     },
+     {
+      "on": "tool",
+      "nth": 2
+     }
+    ],
+    "revokes": []
+   },
+   "seed": 23,
+   "keys": 4,
+   "narrowAdversaryDuplicates": 1
+  },
+  "recompute-w4-k6-c2-s11": {
+   "schedule": {
+    "name": "recompute-w4-k6-c2-s11",
+    "n_workers": 4,
+    "crashes": [
+     {
+      "on": "tool",
+      "nth": 1
+     },
+     {
+      "on": "tool",
+      "nth": 2
+     }
+    ],
+    "revokes": []
+   },
+   "seed": 11,
+   "keys": 6,
+   "narrowAdversaryDuplicates": 1
+  },
+  "recompute-w4-k6-c2-s23": {
+   "schedule": {
+    "name": "recompute-w4-k6-c2-s23",
+    "n_workers": 4,
+    "crashes": [
+     {
+      "on": "tool",
+      "nth": 1
+     },
+     {
+      "on": "tool",
+      "nth": 2
+     }
+    ],
+    "revokes": []
+   },
+   "seed": 23,
+   "keys": 6,
+   "narrowAdversaryDuplicates": 1
+  }
+ }
+}

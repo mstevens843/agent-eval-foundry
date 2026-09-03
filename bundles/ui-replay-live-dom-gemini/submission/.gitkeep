@@ -1,0 +1,8 @@
+A trial bundle's submission directory, kept deliberately empty.
+
+`pnpm bundles` creates this so a provider run has somewhere to write its artifact. Git cannot store
+an empty directory, so without this file a fresh clone lacks it and the bundle is not runnable -
+the same failure class that broke every package-backed family in Phase 5, found again here by
+`test/clone-fidelity.test.ts` rather than by somebody's clone.
+
+Do not delete. Do not weaken the check that reads it.

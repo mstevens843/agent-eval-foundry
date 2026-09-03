@@ -1,0 +1,54 @@
+{
+  "phase": 9, "artifact": "dao-descendant (recompute-isolated)",
+  "basis": "tasks/dao-a2-treatment - the arm carrying the one-sentence repair that closes the ACKED axis",
+
+  "a1_diffVerified": "diff -r control treatment = 55a56,57 (one sentence + blank) plus the task.toml name line. Nothing else.",
+
+  "a2_controllingParameter": {
+    "method": "72-schedule grid over the existing schedule grammar, run against the real harness on a local Postgres. Response variable: duplicate external side effects per action, which is exactly what check_exactly_once grades. No reasoning about which knob matters - the grid decided.",
+    "answer": "n_workers, and it is a HARD THRESHOLD",
+    "measured": {"n_workers=1": "0.0% of runs fire (n=24) - the trap structurally cannot fire",
+                 "n_workers=2": "45.8%", "n_workers=3": "58.3%"},
+    "secondary": {"n_crashes": "1 crash 19.4%, then plateaus at 50% for 2, 3 and 5 - more than two buys nothing",
+                  "keys": "6 keys 44.4% vs 12 keys 25.0% - FEWER keys concentrates it",
+                  "seed": "seed 11 47.2% vs seed 23 22.2% - which action gets hit"},
+    "whyThisMatters": "A single-worker schedule is a 0.0000%-activation structure, the same shape that killed two designs in the source project. The parent's own 5/6-to-6/6 correction was the same kind of finding reached the same way: concentrate coverage where the trap actually fires."
+  },
+
+  "a3_narrowAdversary": {
+    "reference": "evidence/durable-outbox/solved-engine - stores idem_key as a durable COLUMN and reuses it across epochs, so recovery is by construction",
+    "narrow": "the reference with ONE call site changed: the stored key is ignored and one derived from the CURRENT epoch is used instead. Everything else is byte-identical.",
+    "why": "Selecting against a broadly-buggy engine makes every parameter look like a trigger. That error shipped a false solve in the parent's 201-check round."
+  },
+
+  "a4_amplification": {
+    "parent": "5 armed crashes doubled exactly ONE action in ten; 21 of 24 instances separated nothing after the A2 repair",
+    "descendant": "105 of 108 grid points separate (reference passes, narrow adversary fails) = 97.2%",
+    "bestCell": "n_workers=4, keys=4 -> fires on 100% of runs",
+    "selected": "18 schedules, diversified two per (n_workers, keys) cell rather than taking the first N"
+  },
+
+  "a5_screens": {
+    "activationAudit": "PASS. Narrow adversary caught on 18/18. Kill signal 1 does not fire - the trap fires on 100% of the measured set, far above the one-third threshold.",
+    "independentFatality": "PASS. Reference fails 0/18; the recompute defect ALONE, with everything else correct, fails all 18. Kill signal 2 does not fire - the axis is isolated.",
+    "checksFiring": {"exactly_once": "18/18", "expected_executions": "18/18", "revocation_ordering": "18/18", "executed_iff_called": "18/18"},
+    "honestNote": "All four checks fire on all 18 instances because they are detecting the SAME defect. That is isolation achieved, and it means the descendant is deliberately NARROWER than the parent: one real axis where the parent had one real plus one specification artifact. An axis meter would report width 1.",
+    "rigCorrection": "The first version of this measurement set result['tool']; the checks read result['_tool'], so every check needing the tool's record ran against {} and the reference appeared to fail all 18. Caught because a reference engine failing everywhere is not a believable result. The rig now attaches ground truth exactly as tests/collect.py does."
+  },
+
+  "a6_selfCheckPrediction": {
+    "registeredBefore": "any trial is run",
+    "parentBaseline": "3 of 6 outbox trials ran green self-checks over failing submissions",
+    "prediction": "HIGHER than 3 of 6 - at least 4 of 6.",
+    "why": "The parent mixed two axes. Agents failing on the ACKED axis were failing a rule the document did not determine, and several of those failures were loud - a checker that could not express the rule still ran and reported. The descendant removes that axis entirely and leaves only the recompute trap, whose defining property is that the engine's own verification is GREEN: it re-invoked, received OK, recorded EXECUTED. Concentrating on that axis should raise the rate at which agents confirm their own wrong answer.",
+    "falsifiedIf": "the rate falls below 3 of 6, which would mean isolation diluted the mechanism rather than concentrating it",
+    "killSignal4": "fires if the rate falls below the parent's 3 of 6"
+  },
+
+  "laneC_buildHours": {
+    "measured": 0.18,
+    "unit": "hours, wall clock, from first command to a screened artifact",
+    "scope": "Controlling-parameter fuzz (72 runs), amplification sweep (108 runs), narrow adversary, independent-fatality screen (216 runs), activation audit (36 runs). Excludes writing the report.",
+    "caveat": "This is a DESCENDANT of an existing task: the spec, harness, verifier and reference engine already existed. It is NOT hoursPerFamily for a family built from nothing, and must not be substituted for it. It is the first time any build hour figure has been measured rather than estimated in either repository."
+  }
+}

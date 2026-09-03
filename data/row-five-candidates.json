@@ -25,8 +25,9 @@
     "localCheckOutcome": "cursor is monotonic and parses - green",
     "gradedOn": "the broker's delivery log, checked for gaps and redeliveries",
     "whyUnreadable": "the broker exposes only its own position, never the true delivery history",
-    "divergenceIsLocallyObservable": false,
-    "signalsEmitted": []
+    "divergenceIsLocallyObservable": true,
+    "signalsEmitted": [],
+    "correctedInPhase9": "Phase 9 Lane 0: an independent reader established the divergence IS locally observable. All FIVE author-generated candidates have now been overturned - 5 of 5. The readers converge on the reason: in every generated candidate the divergent effect lands in the SUBJECT'S OWN STATE, so the subject's natural tests witness it. Only in idem-key-epoch does the effect land somewhere the subject structurally cannot observe - a second call at a remote tool behind a socket the engine cannot open."
   },
   {
     "id": "canonical-digest-normalisation",
@@ -39,8 +40,9 @@
     "localCheckOutcome": "digest is well-formed and the object round-trips - green",
     "gradedOn": "the store's deduplication index",
     "whyUnreadable": "the index is internal to the store and exposes no enumeration API",
-    "divergenceIsLocallyObservable": false,
-    "signalsEmitted": []
+    "divergenceIsLocallyObservable": true,
+    "signalsEmitted": [],
+    "correctedInPhase9": "Phase 9 Lane 0: an independent reader established the divergence IS locally observable. All FIVE author-generated candidates have now been overturned - 5 of 5. The readers converge on the reason: in every generated candidate the divergent effect lands in the SUBJECT'S OWN STATE, so the subject's natural tests witness it. Only in idem-key-epoch does the effect land somewhere the subject structurally cannot observe - a second call at a remote tool behind a socket the engine cannot open."
   },
   {
     "id": "retry-budget-carryover",
@@ -53,8 +55,9 @@
     "localCheckOutcome": "budget is within bounds and decreasing - green",
     "gradedOn": "the upstream's per-request attempt counter",
     "whyUnreadable": "the upstream reports only 429, never its own count",
-    "divergenceIsLocallyObservable": false,
-    "signalsEmitted": []
+    "divergenceIsLocallyObservable": true,
+    "signalsEmitted": [],
+    "correctedInPhase9": "Phase 9 Lane 0: an independent reader established the divergence IS locally observable. All FIVE author-generated candidates have now been overturned - 5 of 5. The readers converge on the reason: in every generated candidate the divergent effect lands in the SUBJECT'S OWN STATE, so the subject's natural tests witness it. Only in idem-key-epoch does the effect land somewhere the subject structurally cannot observe - a second call at a remote tool behind a socket the engine cannot open."
   },
   {
     "id": "lossy-order-reconstruction",
@@ -67,8 +70,9 @@
     "localCheckOutcome": "state converges and is internally consistent - green",
     "gradedOn": "a reference projection built from sequence order",
     "whyUnreadable": "the projection is the grader's, not the subject's",
-    "divergenceIsLocallyObservable": false,
-    "signalsEmitted": []
+    "divergenceIsLocallyObservable": true,
+    "signalsEmitted": [],
+    "correctedInPhase9": "Phase 9 Lane 0: an independent reader established the divergence IS locally observable. All FIVE author-generated candidates have now been overturned - 5 of 5. The readers converge on the reason: in every generated candidate the divergent effect lands in the SUBJECT'S OWN STATE, so the subject's natural tests witness it. Only in idem-key-epoch does the effect land somewhere the subject structurally cannot observe - a second call at a remote tool behind a socket the engine cannot open."
   },
   {
     "id": "stale-cache-recompute",

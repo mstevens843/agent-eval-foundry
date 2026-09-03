@@ -1,0 +1,19 @@
+{
+  "phase": 9,
+  "lane": 0,
+  "result": "THE POOL COLLAPSES TO ONE.",
+  "tested": 5,
+  "overturned": 5,
+  "detail": "stale-cache-recompute was overturned in Phase 8. The remaining four were read independently in Phase 9 and all four were overturned. Every reader marked wouldNaturalTestsCatchIt=true.",
+  "whatSurvives": [
+    "idem-key-epoch - and it was FOUND by reading an existing task, not generated from the shape"
+  ],
+  "theRefinementThisForces": {
+    "missingElement": "The divergent effect must land where the subject STRUCTURALLY CANNOT OBSERVE IT. Not merely 'hard to notice' - unobservable in principle.",
+    "whyTheGeneratedOnesFailed": "In all five the effect landed in the subject's own state - its sink, its digest, its balance, its projection - so the subject's natural tests witness it directly. The author repeatedly mis-located the witness, treating 'the grader checks X' as though it meant 'the subject cannot check X'.",
+    "whyIdemKeyEpochSurvives": "The second side effect lands at a tool in another process behind a socket the engine cannot open, and SEMANTICS section 7 says so explicitly: 'That record is not readable from the engine.' The unobservability is a stated property of the architecture, not an author's hope.",
+    "revisedScreenRule": "screenRowFive should require the grading record to be UNREACHABLE BY CONSTRUCTION - a separate process, a remote authority, a privilege boundary - rather than accepting an author's assertion that a divergence is hard to notice."
+  },
+  "honestReading": "The row-5 template describes the one real instance accurately and does NOT generate new ones - at least not in this author's hands. Phase 7's '6 of 10 survive' and Phase 8's '5 of 10' were both measuring my own assertions. The measured generativity, after reader contact, is ZERO new instances from five attempts.",
+  "consequenceForPhase9": "This is exactly why building the DESCENDANT rather than a fresh candidate was the right call: it rests on the one instance that is demonstrated rather than asserted."
+}

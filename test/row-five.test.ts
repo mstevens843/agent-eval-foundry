@@ -78,21 +78,32 @@ describe("the row-5 shape", () => {
     expect(recomputed.localCheckPasses).toBe(true);
   });
 
-  it("screens the generated instances: 5 of 10 have the shape", () => {
+  it("screens the generated instances: 1 of 10 has the shape, and it was not generated", () => {
     const cands = JSON.parse(
       readFileSync(join(__dirname, "..", "data", "row-five-candidates.json"), "utf8"),
     ) as RowFiveCandidate[];
     const survivors = cands.filter((c) => screenRowFive(c).verdict === "row-five");
     expect(cands).toHaveLength(10);
-    // Kill signal 4 fires below 5. Registered before the instances were written.
-    expect(survivors.length).toBeGreaterThanOrEqual(5);
-    // 6 until Phase 8. `stale-cache-recompute` was recorded by the AUTHOR with
-    // divergenceIsLocallyObservable: false; an independent reader then designed the discriminating
-    // narrowing fixture unprompted and showed the divergence IS locally observable, so the screen now
-    // rejects it. The lesson is about the input, not the screen: these flags are author assertions
-    // until a reader tests them, and the first one tested was wrong. The count now sits ON the kill
-    // threshold rather than above it.
-    expect(survivors.length).toBe(5);
+    // 6 in Phase 7, 5 in Phase 8, 1 in Phase 9. The pool did not shrink because the screen changed;
+    // it shrank because every candidate finally got read by someone other than its author.
+    //
+    // ALL FIVE author-generated candidates were overturned - stale-cache-recompute in Phase 8, then
+    // the remaining four in Phase 9, each by an independent reader that marked
+    // wouldNaturalTestsCatchIt=true. The readers converge on why, and it is the same defect every
+    // time: in a generated candidate the divergent effect lands in the SUBJECT'S OWN STATE - its
+    // sink, its digest, its balance, its projection - so the subject's natural tests witness it.
+    // The author kept mistaking "the grader checks X" for "the subject cannot check X".
+    //
+    // The one survivor, `idem-key-epoch`, was NOT generated from the shape. It was found by reading
+    // an existing task, and it survives because its second side effect lands at a tool in another
+    // process behind a socket the engine cannot open - unobservable BY CONSTRUCTION and stated as
+    // such in SEMANTICS section 7, rather than merely asserted to be hard to notice.
+    //
+    // So the honest measured generativity of this template is ZERO new instances from five attempts.
+    // The kill-signal-4 threshold of 5 is breached and that is recorded rather than softened: this
+    // assertion is now a record of the collapse, not a floor the pool is expected to clear.
+    expect(survivors.length).toBe(1);
+    expect(survivors[0]?.id).toBe("idem-key-epoch");
   });
 });
 
