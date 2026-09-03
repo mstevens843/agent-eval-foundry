@@ -46,13 +46,23 @@ const withRisk = (
 });
 
 describe("Discovery Workbench data", () => {
-  it("loads a validated 52-candidate pool linked to mechanisms and transfer tests", () => {
+  it("loads a validated 9-candidate pool linked to mechanisms and transfer tests", () => {
     const { registry, funnel, workbench } = loaded();
 
     // The literal is a deliberate ledger: growing the pool must be a reviewed edit, not a silent
     // side effect of in-flight work. The second assertion catches the other failure direction -
     // the loader dropping or de-duplicating a row that is present on disk.
-    expect(workbench.candidates).toHaveLength(52);
+    //
+    // 52 until Phase 8, when 43 candidates were retired against the calibration table: rows 1-4 are
+    // p >= 0.80 and are not worth building, and a candidate is a proposal rather than a measurement,
+    // so retiring one loses no evidence. Each retirement is recorded with its row and reason in
+    // `data/retired-candidates.json` and is reversible by rewriting the candidate's declaration.
+    //
+    // Nine survive: the two on rows 5-6, plus SEVEN kept only because a probe, promotion or lineage
+    // record still references them by id. The first attempt retired those too and `cli check`
+    // rejected it with E_DANGLING_REF - "dangling references make coverage reports lie" - which is
+    // why the retention rule is referential and not editorial.
+    expect(workbench.candidates).toHaveLength(9);
     expect(workbench.candidates).toHaveLength((read("data/candidate-pool.json") as unknown[]).length);
     expect(workbench.candidates.every((c) => c.expectedKnobs.length >= 2)).toBe(true);
     expect(workbench.candidates.every((c) => c.transferPotential.targetDomains.length > 0)).toBe(true);

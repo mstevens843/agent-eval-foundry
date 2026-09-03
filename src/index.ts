@@ -752,3 +752,14 @@ export type {
   ScreenRun,
   ViseVerdict,
 } from "./screens/index.js";
+export {
+  ACKED_TERMINAL,
+  coversGradedCase,
+  detectsRecomputedKeyDoubleExecution,
+  expressesStructure,
+  invokesOwnTooling,
+  selfCheckCoverage,
+} from "./screens/self-check-coverage.js";
+export { screenRowFive, simulateRecoverVsRecompute } from "./screens/row-five.js";
+export type { CoverageResult, GradedRule } from "./screens/self-check-coverage.js";
+export type { RowFiveCandidate, RowFiveResult } from "./screens/row-five.js";

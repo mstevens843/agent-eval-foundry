@@ -2,7 +2,7 @@ import type {
   DeploymentAliasEvolutionPlan,
   DeploymentAliasEvolutionProposal,
 } from "../foundry/deployment-alias-evolution.js";
-import type { ProbeResult } from "../foundry/probe-runner.js";
+import type { ProbeResult } from "../foundry/probe-types.js";
 import type {
   ProviderDeltaArtifactInspection,
   ProviderDeltaDiagnosis,

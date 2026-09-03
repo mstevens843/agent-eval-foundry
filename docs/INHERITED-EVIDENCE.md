@@ -103,6 +103,12 @@ Using the source project's own measured p, and its measured build cost:
 "$100k buys 1000 tasks at 6/6" is off by two to three orders of magnitude, and this is the derivation
 that shows it rather than asserting it.
 
+**Read this table as pricing an *unscreened* programme**, where the mechanism of each new candidate is
+unknown and §2's prior is the best available estimate. It is not a prediction about any specific
+screened task: a mechanism measured below row 5, as in §1.1, is priced from its own measurement, not
+from the prior. The gap between the two is the entire value of screening, and it is why the screens in
+`DEFECT-TAXONOMY.md` Part 2 are worth more than any single family.
+
 ---
 
 ## 2. The calibration table

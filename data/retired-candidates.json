@@ -1,0 +1,438 @@
+{
+  "note": "Candidates retired against the calibration table (INHERITED-EVIDENCE section 2). Rows 1-4 are p >= 0.80 and are not worth building; only rows 5-6 are. A candidate is a proposal, not a measurement, so retiring one loses no evidence - but the row and the reason are recorded per id so the decision is auditable and reversible.",
+  "retiredOn": "2026-09-03 (phase 8)",
+  "retainedDespiteRow1to4": "A candidate still referenced by a probe, promotion or lineage record is KEPT whatever its row. A dangling reference makes coverage reports lie, which is exactly what the check gate exists to catch, and the first attempt at this retirement broke it.",
+  "caveat": "The classifier reads only what a candidate declared about itself and DEFAULTS to the easiest row when no marker for a harder row is present. The defensible claim is 'these candidates' own declared text contains no marker of rows 5-6', not 'these are provably easy'. Any of them can be reinstated by rewriting its declaration to name a row-5 or row-6 mechanism.",
+  "retired": [
+    {
+      "id": "payment-refund-idempotency-replay",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Refund retry after worker restart",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "payment-webhook-outbox-reconcile",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Webhook delivery with ambiguous downstream receipt",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "wallet-signing-scope-drift",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Wallet signing request widens after approval",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "wallet-nonce-stale-rebroadcast",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Stale wallet nonce rebroadcast after cancellation",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "trading-order-replace-stale-risk",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Order replace based on stale risk limits",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "trading-settlement-receipt-ambiguity",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Settlement receipt disagrees with broker status",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "crm-permission-cancel-race",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "CRM account update after permission cancellation",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "crm-merge-audit-legality",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "CRM merge without illegal audit transitions",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "crm-assignment-pagination-drop",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "CRM owner assignment across paginated account lists",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "email-calendar-invite-authority",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Calendar invite authority from forwarded email",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "email-thread-injection-memory",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Email thread summary poisons later memory",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "calendar-cancel-stale-room-booking",
+      "row": "standard-tool-residual",
+      "p": [
+        0.8,
+        1
+      ],
+      "title": "Room booking remains after meeting cancellation",
+      "why": "declared text contains \"diff\""
+    },
+    {
+      "id": "browser-admin-hidden-confirmation",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Admin action replay skips hidden confirmation state",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "browser-aria-busy-false-ready",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Browser aria-busy lies about replay readiness",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "deployment-rollback-unknown-apply",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Deployment rollback while apply outcome is unknown",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "deployment-bluegreen-stale-health",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Blue-green promotion from stale health check",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "access-revocation-eventual-lag",
+      "row": "standard-tool-residual",
+      "p": [
+        0.8,
+        1
+      ],
+      "title": "Access revocation under eventually consistent directory state",
+      "why": "declared text contains \"diff\""
+    },
+    {
+      "id": "memory-poisoned-cross-session-approval",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Poisoned memory authorizes later approval",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "memory-summarizer-provenance-loss",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Summarizer drops provenance while compressing long memory",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "long-horizon-recurring-task-cancel",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Recurring task executes after late cancellation",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "prompt-injection-doc-retrieval-policy",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Retrieved policy document tries to override system policy",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "prompt-injection-tool-output-cross-scope",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Tool output launders authority into another tool",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "tool-result-null-vs-empty",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Tool returns null where empty list means something different",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "tool-result-partial-error",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Partial API success hidden behind error status",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "tool-result-pagination-race",
+      "row": "standard-tool-residual",
+      "p": [
+        0.8,
+        1
+      ],
+      "title": "Paginated tool results mutate during scan",
+      "why": "declared text contains \"diff\""
+    },
+    {
+      "id": "audit-history-rewrite-approval",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Approval workflow rewrites terminal audit history",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "audit-redaction-provenance-loss",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Redacted audit hides authority source",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "duplicate-side-effect-webhook-retry",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Webhook retry duplicates downstream charge",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "duplicate-ticket-merge-notification",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Ticket merge sends duplicate customer notifications",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "hidden-dependency-private-helper",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Task secretly requires a private helper library",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "hidden-dependency-env-feature-flag",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Feature flag dependency changes task semantics",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "multi-worker-lease-expiry",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Two workers act after lease expiry",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "multi-worker-idempotency-key-collision",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Concurrent workers reuse idempotency key for different actions",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "api-pagination-rate-limit-window",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Paginated API scan stops at rate-limit reset",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "api-rate-limit-backoff-liveness",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Backoff policy preserves progress under repeated 429s",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "schema-drift-status-field-rename",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Status field rename makes success look absent",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "schema-drift-enum-default-danger",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "New enum value defaults to allow",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "model-alias-capability-regression",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Capability regression hidden behind stable model alias",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "model-alias-cost-aware-routing",
+      "row": "standard-tool-residual",
+      "p": [
+        0.8,
+        1
+      ],
+      "title": "Cost-aware routing silently changes safety class",
+      "why": "declared text contains \"diff\""
+    },
+    {
+      "id": "production-approval-late-cancel",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Production approval cancelled after queueing",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "production-approval-audit-chain",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Production approval audit chain omits failed precondition",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "checker-required-ui-replay",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "UI replay submission must ship its own independent checker",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    },
+    {
+      "id": "verifier-integrity-import-hijack-probe",
+      "row": "evidence-channel-present",
+      "p": [
+        0.85,
+        1
+      ],
+      "title": "Verifier import hijack against package-backed family",
+      "why": "no marker for a harder row: defaulted to the easiest row, which is the safe default"
+    }
+  ]
+}

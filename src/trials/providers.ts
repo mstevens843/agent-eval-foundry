@@ -53,9 +53,32 @@ export interface ProviderRunRequest {
   readonly command?: readonly string[];
 }
 
+/**
+ * How much of the run was preserved.
+ *
+ * `thin` — the agent's final message only. Every trial captured before Phase 7 is thin, because the
+ * provider commands requested `--output-format json` (one closing object) and only the graded
+ * `submission/` directory was collected. Self-check coverage is NOT computable on a thin trial: the
+ * transcript records the agent asserting it verified its work, and contains no evidence either way.
+ *
+ * `full` — streamed per-event trajectory plus every file the agent wrote outside the graded
+ * directory.
+ *
+ * This is recorded rather than inferred, and it is deliberately NOT part of the verifier hash.
+ * `HARNESS_PATHS` excludes `providers.ts` on the stated grounds that how the agent is invoked
+ * "changes neither what the model saw nor how its artifact was graded", and that holds here: grading
+ * still reads `submission/` and the model still sees the same instruction. Rotating the hash would
+ * invalidate the grading of thirty counted trials over a change that touches no grading, which is
+ * the exact failure mode that comment warns produces a hash people learn to ignore.
+ */
+export type CaptureLevel = "thin" | "full";
+
 export interface ProviderRunResult {
   readonly transcript: string;
   readonly submission: readonly { readonly path: string; readonly content: string }[];
+  /** Everything the agent wrote outside `challenge/` and `submission/`: its scratch and its tests. */
+  readonly workspace: readonly { readonly path: string; readonly content: string }[];
+  readonly captureLevel: CaptureLevel;
   /** Classified before any judgement about whether the run counts. */
   readonly classification: "completed" | "refused" | "timeout" | "infrastructure_error" | "crashed";
   readonly detail: string;
@@ -224,7 +247,21 @@ export function withUsageReporting(argv: readonly string[]): readonly string[] {
   }
   const printing = argv.includes("-p") || argv.includes("--print");
   if (bin === "claude" && printing && !argv.includes("--output-format")) {
-    return [argv[0] as string, "--output-format", "json", ...argv.slice(1)];
+    // `stream-json`, not `json`, and the difference is the whole of Phase 7's Lane B.
+    //
+    // `--output-format json` emits ONE object: the final result. That is enough to parse usage and
+    // nothing else. Measured across this repository's own trials, it produced transcripts of 248
+    // BYTES to 3.8KB -- the agent's closing message and no more -- while the six imported outbox
+    // trials, captured elsewhere with a streaming format, are 180KB to 1.7MB of per-event JSONL.
+    //
+    // That gap is why "did the agent write a checker, and did its checker run green over a failing
+    // submission?" has never been computable on a foundry-native trial. You cannot see whether an
+    // agent verified its work from a transcript that contains only its claim that it did.
+    //
+    // `--verbose` is required: the CLI refuses `stream-json` with `-p` without it. `parseProviderUsage`
+    // already reads both shapes -- it scans every line and keeps the last match -- so this is
+    // backward compatible with every transcript already on disk.
+    return [argv[0] as string, "--output-format", "stream-json", "--verbose", ...argv.slice(1)];
   }
   return argv;
 }
@@ -311,10 +348,29 @@ export const shellAdapter: ProviderAdapter = {
     }
 
     const submission = readFileTree(join(sandbox, "submission"));
+    // Everything the agent wrote OUTSIDE the graded directory: scratch files, its own tests, the
+    // fuzzers and checkers that decide whether it caught its own mistake.
+    //
+    // Until Phase 7 only `submission/` was collected, so an agent's verification work survived only
+    // if it happened to write it inside the graded directory. Across 30 trials exactly four files
+    // did -- `ui-sonnet-1/_test_harness.mjs`, `_test_edge.mjs`, `pic-sonnet-1/_test.mjs` -- and they
+    // survived by accident of where the agent chose to put them, not by design.
+    //
+    // `challenge/` is excluded because it is already preserved and content-hashed; re-collecting it
+    // would double every trial record with bytes that are known not to have changed.
+    const workspace = readFileTree(sandbox).filter(
+      (f) => !f.path.startsWith("challenge/") && !f.path.startsWith("submission/"),
+    );
     const { classification, detail } = classifyRun(transcript, submission.length > 0, timedOut, crashed);
     return {
       transcript,
       submission,
+      workspace,
+      // Thin trials stay thin. A trial captured before Phase 7 has the agent's closing message and
+      // nothing else, and no amount of later processing can recover a trajectory that was never
+      // written down. Consumers of the self-check metric must be able to tell the two apart, so this
+      // is recorded per run rather than inferred from a transcript's size.
+      captureLevel: "full",
       classification,
       detail,
       runtimeSeconds: Math.round((Date.now() - started) / 1000),

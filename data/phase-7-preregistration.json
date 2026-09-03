@@ -1,0 +1,27 @@
+{
+  "phase": 7,
+  "title": "Exploit row 5",
+  "registeredOn": "2026-09-03",
+  "laneA": {
+    "question": "Does the hidden verifier grade 'achieve exactly-once' or 'determine what happened'?",
+    "verdict": "ACHIEVE EXACTLY-ONCE",
+    "killSignal1": "does NOT fire",
+    "evidence": [
+      "calls_by_action() (invariants.py:53-57) counts the tool's ledger BY action_id and ignores idem_key entirely. It grades the world, not the engine's belief.",
+      "check_exactly_once (69-77) raises when any action_id has n > 1 calls in the TOOL's ledger - a record the engine provably cannot read (SEMANTICS section 7: 'That record is not readable from the engine.').",
+      "check_executed_iff_called (79-100) compares the action's recorded state against the tool's call count. Its REVOKED clause raises with the words 'an engine may not decide for itself whether the call landed' - i.e. it grades CONSISTENCY WITH THE WORLD, not whether the engine knew.",
+      "check_completion (141-150) raises for any action not in (ACKED, REVOKED). Stranding in IN_DOUBT fails LIVENESS - 'the feed drained without finishing them' - which is a finish-the-work requirement, not a determine-what-happened one.",
+      "check_expected_executions (341-403) requires that every un-revoked winning request 'must have run, exactly once, and been acknowledged', and that 'One idem_key never spans two actions'.",
+      "A grep for determin|know|believ|guess|infer across the whole verifier returns no check that grades the engine's epistemic state. Every hit is prose about scheduled unknowns."
+    ],
+    "consequence": "The residue axis is category 2. The durable outbox is restored in part. Lane C has a live worked example rather than only an abstract shape.",
+    "theTrapIsProvablyGraded": "A recomputed idem_key after a crash produces TWO tool-ledger entries under ONE action_id, because calls_by_action keys on action_id. check_exactly_once therefore fires. Meanwhile every check the engine can run locally passes: it re-invoked, received OK, and recorded EXECUTED. The failure is graded on a ledger the engine cannot read. That is calibration row 5 with a mechanical proof rather than an argument."
+  },
+  "predictions": [
+    {"id":"P1","lane":"B2","claim":"The self-check coverage metric reproduces the results/34 split: the one trial with a transition-legality table separates from the five without, and the three trials that built no verification tooling separate from the three that did.","falsifiedIf":"the metric does not recover the documented split","killSignal":2},
+    {"id":"P2","lane":"D1","claim":"The enforcement screen finds at least one more instance of a stated rule that no check enforces.","falsifiedIf":"zero instances across all built families","killSignal":3},
+    {"id":"P3","lane":"C","claim":"The row-5 shape is generative: at least 5 repopulated candidates survive to screen 5.","falsifiedIf":"fewer than 5 survive","killSignal":4,"commitment":"If fewer than 5 survive, the central hypothesis is refuted and the screens are NOT lowered."},
+    {"id":"P4","lane":"F","claim":"A coupling map exists under which at least one deletion target can be freed without a rewrite.","falsifiedIf":"no deletion is possible without a rewrite","killSignal":5},
+    {"id":"P5","lane":"E","claim":"No built family in this repository has enough clean trials to bound p below 0.39.","falsifiedIf":"any family has 6+ clean zero-solve counted trials"}
+  ]
+}

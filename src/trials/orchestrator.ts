@@ -184,6 +184,9 @@ export function orchestrateTrial(options: OrchestrateOptions): OrchestrateResult
     transcript: providerResult.transcript,
     challengeFiles: readFileTree(options.challengeDir),
     submissionFiles: providerResult.submission,
+    // The agent's own scratch and test files, preserved under `workspace/` in the trial directory.
+    // Without these, "run the agent's own checks against its own submission" has no input.
+    workspaceFiles: providerResult.workspace,
     verifierOutput: { cells: graded.cells, detail: graded.detail },
     metadata: {
       runId: options.runId,
@@ -201,6 +204,8 @@ export function orchestrateTrial(options: OrchestrateOptions): OrchestrateResult
       isolation: adapter.isolation,
       classification: providerResult.classification,
       classificationDetail: providerResult.detail,
+      // Thin trials stay thin and are never backfilled. See `CaptureLevel`.
+      captureLevel: providerResult.captureLevel,
       command: providerResult.command.length > 0 ? providerResult.command : null,
       ...(options.extraMetadata ?? {}),
     },

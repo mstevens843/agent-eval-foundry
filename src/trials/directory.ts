@@ -50,6 +50,14 @@ export const TRIAL_FILES = {
 
 export const CHALLENGE_DIR = "challenge";
 export const SUBMISSION_DIR = "submission";
+/**
+ * Where the agent's own work is preserved, as distinct from the artifact it submitted for grading.
+ *
+ * Kept separate from `submission/` deliberately. A grader reads `submission/`; a self-check metric
+ * reads this. Merging them would put the agent's fuzzer in front of the verifier, which is both
+ * wrong and the sort of thing that quietly changes what a score means.
+ */
+export const WORKSPACE_DIR = "workspace";
 
 /** Files that must never appear inside a trial's `challenge/` copy. */
 export const HIDDEN_IN_CHALLENGE = [
@@ -101,6 +109,14 @@ export interface WriteTrialInput {
   readonly transcript: string;
   readonly challengeFiles: readonly { readonly path: string; readonly content: string }[];
   readonly submissionFiles: readonly { readonly path: string; readonly content: string }[];
+  /**
+   * Everything the agent wrote outside the graded directory: scratch, notes, and above all its own
+   * tests and fuzzers.
+   *
+   * Optional because every trial written before Phase 7 has none, and a required-but-empty field
+   * would make a thin trial indistinguishable from a full one that happened to write nothing.
+   */
+  readonly workspaceFiles?: readonly { readonly path: string; readonly content: string }[];
   readonly verifierOutput: unknown;
   readonly metadata: Record<string, unknown>;
 }
@@ -118,6 +134,11 @@ export function writeTrialDirectory(input: WriteTrialInput): string {
   }
   for (const f of input.submissionFiles) {
     const target = join(dir, SUBMISSION_DIR, f.path);
+    mkdirSync(join(target, ".."), { recursive: true });
+    writeFileSync(target, f.content, "utf8");
+  }
+  for (const f of input.workspaceFiles ?? []) {
+    const target = join(dir, WORKSPACE_DIR, f.path);
     mkdirSync(join(target, ".."), { recursive: true });
     writeFileSync(target, f.content, "utf8");
   }

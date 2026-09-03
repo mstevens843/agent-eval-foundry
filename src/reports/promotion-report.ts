@@ -1,6 +1,6 @@
 import { measure } from "../axis-meter.js";
 import type { BuiltFamily } from "../families/registry.js";
-import type { ProbeRunSummary } from "../foundry/probe-runner.js";
+import type { ProbeRunSummary } from "../foundry/probe-types.js";
 import type {
   ProbeToFamilyPromotion,
   PromotedFamilyRecord,

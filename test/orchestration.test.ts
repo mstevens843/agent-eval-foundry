@@ -295,12 +295,18 @@ describe("what a trial cost", () => {
     expect(
       withUsageReporting(["codex", "exec", "--dangerously-bypass-approvals-and-sandbox", "{instruction}"]),
     ).toEqual(["codex", "exec", "--json", "--dangerously-bypass-approvals-and-sandbox", "{instruction}"]);
+    // `stream-json --verbose`, not `json`, since Phase 7. `json` returns ONE closing object, which is
+    // enough to parse usage and nothing else: it is why every native transcript on disk is 248 bytes
+    // to 3.8KB while the six imported outbox trials are 180KB-1.7MB of per-event JSONL, and why
+    // self-check coverage was not computable on a foundry-native trial. `--verbose` is required
+    // because the CLI refuses `stream-json` with `-p` without it.
     expect(
       withUsageReporting(["claude", "-p", "{instruction}", "--permission-mode", "bypassPermissions"]),
     ).toEqual([
       "claude",
       "--output-format",
-      "json",
+      "stream-json",
+      "--verbose",
       "-p",
       "{instruction}",
       "--permission-mode",

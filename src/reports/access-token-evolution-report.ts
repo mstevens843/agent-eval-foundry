@@ -1,6 +1,6 @@
 import type { VariantProposal } from "../foundry/evolve.js";
 import type { FamilyLoopState } from "../foundry/loop.js";
-import type { ProbeResult } from "../foundry/probe-runner.js";
+import type { ProbeResult } from "../foundry/probe-types.js";
 import type { PromotedFamilyRecord } from "../foundry/promotion.js";
 import type { PromotionSmokeGateResult } from "../foundry/smoke-gates.js";
 

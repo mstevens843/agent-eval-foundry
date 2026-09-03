@@ -1,0 +1,60 @@
+{
+  "phase": 8,
+  "lane": "A",
+  "candidate": "stale-cache-recompute",
+  "builtAs": "delegated-grant-replay",
+  "a1_whyChosen": {
+    "chosen": "stale-cache-recompute",
+    "reason": "Of the six row-5 survivors it sits on the AUTHORISATION/ECONOMIC channel, which FINDINGS.md section 8 names as the one unexplored direction where the confirmed-green escape might still be real.",
+    "rejected": {
+      "lossy-order-reconstruction": "The tempting pick - no local signal at all - but FINDINGS.md section 4 measured that direction SHUT: any arrival-order label lives in row order, and (df.ts.diff() < 0).sum() is line one of any agent's exploration. Choosing it would have repeated a known dead end.",
+      "idem-key-epoch": "Already exists in a shipped task; building it would not be a forward pass."
+    },
+    "predictedCalibrationRow": 5,
+    "predictedSelfCheckFailure": "The subject consults store.currentPolicy() instead of store.policyAt(grant.issuedAtVersion); its own tests pass because the fixtures do not force the two policies apart."
+  },
+  "a2_screen1_vise": {
+    "protocol": "Three independent readers given ONLY the SPEC. None saw the phase brief, the candidate record, or each other. Reader 2 was asked to IMPLEMENT and then to describe how it would check its own work - the question that decides row 5.",
+    "readers": [
+      {
+        "id": "reader-1",
+        "answer": "allowed",
+        "confidence": "high",
+        "negativeInference": true,
+        "note": "Independently identified the trap: 'view.currentPolicyVersion is handed to run() at top level and store.currentPolicy() is the most convenient method on the table, so a programmer skimming the interface before reaching G3 would plausibly write store.currentPolicy() and wrongly deny this use.'"
+      },
+      {
+        "id": "reader-2",
+        "answer": "consults policyAt(grant.issuedAtVersion) - CORRECT",
+        "confidence": "high",
+        "note": "Called store.currentPolicy() and view.currentPolicyVersion 'bait'. Said a different choice would NOT seem reasonable, because G3 forecloses the alternative by name."
+      },
+      {
+        "id": "reader-3-adversarial",
+        "verdict": "UNDERSPECIFIED",
+        "decisiveFinding": "The graded mechanism and the determined cases do not overlap. The trivial rule `allow = grantExists(grantId) && within(requestedScope, grant.scope)` - which never reads the policy, ignores issuedAtVersion, principal, resource and currentPolicyVersion - scores 3/3 on the ENTIRE Legal-outcomes table. G3's widening clause is inert because G1 already caps every decision at grant.scope, so only narrowing could bite, and narrowing is exactly the direction with no outcome row.",
+        "theFork": "If the trial set contains no invalidly-issued grant the task is trivially solvable and the mechanism is decorative. If it does contain one, the task grades a case the spec does not decide. Both horns of the identifiability vise, simultaneously.",
+        "underspecifications": 14,
+        "sharpest": "'validly issued' is load-bearing twice and never defined. G5 argues BOTH ways on it with equal force: allowing a grant the at-issue policy never permitted substitutes judgement for the policy; overriding the durable log substitutes judgement for the log."
+      }
+    ],
+    "verdict": "KILLED AT SCREEN 1 - underspecified AND trivially solvable",
+    "why": [
+      "THE DECISIVE FINDING, from reader 2 unprompted: it designed the discriminating test itself - a NARROWING replay where policy v1 grants {read,write}, v2 revokes write, and the use requests write - and answered the question directly: 'Would that test detect it if I had consulted the wrong policy version? YES. The disagreement is forced.'",
+      "A natural self-check therefore CATCHES the wrong implementation. That fails the defining property of calibration row 5, which requires the local check to run green over the failure.",
+      "My candidate record asserted divergenceIsLocallyObservable: false. An independent reader established that it is TRUE. The screen fired on a reader's finding, not on my assertion.",
+      "Reader 3, independently and decisively: the mechanism is decorative. A policy-blind two-line rule reproduces every outcome the spec enumerates, so the spec cannot separate a solver that understands versioned authority from one that transcribed two table rows."
+    ],
+    "secondaryFinding": "Reader 2 also found four genuine underspecifications the author did not intend: a grant recorded but not validly issued at its version (no row in Legal outcomes), policyAt returning nothing, a duplicate grantId in an append-only log, and - sharpest - whether the policy is consulted AT ALL, since G1/G2 alone are decidable from the grant log. A subject that never calls policyAt would pass every case in the Legal-outcomes table. That is a category-1 defect on top of the row-5 failure.",
+    "subtletyWorthKeeping": "Reader 2's most useful observation: a WIDENING test does not discriminate, because G1 bounds by grant.scope and the grant never claimed the widened permission. A suite built only from the Legal-outcomes table produces exactly the widening case and passes under both implementations. The discrimination requires a narrowing fixture. So the mechanism is not entirely absent - it is just not reliable enough to build on.",
+    "costToKill": "3 model reads, no code written, no trial paid for.",
+    "costAvoided": "18-120 hours of build, plus a 12-trial matrix at roughly $150-400.",
+    "readerDisagreement": {
+      "question": "Would a natural self-check catch an implementation that consults the current policy?",
+      "reader2": "YES - it designed a narrowing fixture unprompted and confirmed the disagreement is forced.",
+      "reader3": "NO - the Legal-outcomes table has three rows, none mentioning policy content, so all three derived tests pass under the wrong implementation. 'To catch the substitution the author would have to invent, unprompted, a case the spec never enumerates, and invent its expected answer too. Inventing an oracle the spec does not state is not a self-check; it is authoring a different spec.'",
+      "howIAmReportingIt": "Unresolved, and reported as unresolved. Reader 2 demonstrates the test is INVENTABLE; reader 3 argues that inventing it is not self-checking. Both are right about different things, and the disagreement does not change the verdict, because reader 3's independent finding - that a policy-blind rule scores 3/3 on the whole outcomes table - kills the candidate on its own."
+    }
+  },
+  "killSignal1": "Applies. A death at a screen is a success, and this one was found by the screen doing exactly what it exists to do - at three reads against an 18-120 hour build."
+}

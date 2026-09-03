@@ -4,7 +4,7 @@ import type {
   DiscoveryTaskShapeDraft,
   DiscoveryWorkbench,
 } from "./discovery-workbench.js";
-import type { ProbeDefinition, ProbeResult, ProbeRunSummary } from "./probe-runner.js";
+import type { ProbeDefinition, ProbeResult, ProbeRunSummary } from "./probe-types.js";
 import {
   fail,
   id,

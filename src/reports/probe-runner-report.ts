@@ -1,5 +1,5 @@
 import type { DiscoveryCandidate, DiscoveryTaskShapeDraft } from "../foundry/discovery-workbench.js";
-import type { ProbeDefinition, ProbeResult, ProbeRunSummary } from "../foundry/probe-runner.js";
+import type { ProbeDefinition, ProbeResult, ProbeRunSummary } from "../foundry/probe-types.js";
 
 const esc = (s: string): string => s.replace(/\|/g, "\\|");
 const money = (n: number): string => `$${n.toFixed(0)}`;

@@ -41,3 +41,23 @@ export {
   type ScreenRun,
 } from "./run.js";
 export { band, clearsVise, normalise, PASSES_VISE, profile, verifyCitations, vise } from "./vise.js";
+export {
+  ACKED_TERMINAL,
+  coversGradedCase,
+  detectsRecomputedKeyDoubleExecution,
+  expressesStructure,
+  invokesOwnTooling,
+  isCheckerPath,
+  selfCheckCoverage,
+  type CoverageInput,
+  type CoverageResult,
+  type GradedRule,
+} from "./self-check-coverage.js";
+export {
+  screenRowFive,
+  simulateRecoverVsRecompute,
+  type DivergenceTrace,
+  type RowFiveCandidate,
+  type RowFiveResult,
+  type RowFiveVerdict,
+} from "./row-five.js";
