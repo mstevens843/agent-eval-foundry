@@ -1,0 +1,75 @@
+{
+  "schema": "agent-eval-foundry/phase-16-review-continuation-preregistration@1",
+  "continuationId": "phase16-frozen-packet-review-continuation-v1",
+  "registeredAt": "2026-09-04T15:19:11Z",
+  "chronologyEvidence": "This real UTC clock value and the execution transcript establish local ordering only; neither is independent third-party timestamp proof.",
+  "reason": "The initial run correctly stopped when Anthropic authentication was unavailable. The operator subsequently supplied authentication, so this continuation may review only the already frozen packets without reopening discovery.",
+  "parent": {
+    "runId": "phase16-contract-complete-discovery-v3",
+    "preregistrationSha256": "189018ba2072c6de2b2a841b919a5f78834b8585d15e7756ad11d1eb5f6ef302",
+    "blockedPreflightSha256": "b4768def2a6c6f6f554576bc759b69db5114b22389d689d9253c6944e1953a9c",
+    "packetArtifactSha256": "fa136c14d176df7cbde39bf220a3ad4a9a7ccad27d91b851187e553f17f95672",
+    "packetSetSha256": "3fa172dc319ade976bbcec651ac6b2a3a5e85cc6a18be91dfcb630829958ace3"
+  },
+  "frozenReviewContract": {
+    "readerOutputSchemaSha256": "e6f076483364ecb51ab3e23e71cef264bc64667845af988346e2716c296aa293",
+    "readerInstructionsSha256": "1b7759b910d7f19d02c82bbda786eb347201fadbcec3dbd21931b747db2bb2ce",
+    "probeImplementationSha256": "bf98d8164c5fa2bdcbc07d122d4fee9b2fa758186d27505f6ccfb33f417f0023",
+    "providerImage": "agent-eval-foundry/provider-agent:claude-2.1.260-codex-0.152.1",
+    "providerImageDigest": "sha256:1dfbe421ae3c90efd543c8e2403bf7fc2f3cbe081fff217076eb650cae161cc4"
+  },
+  "packets": [
+    {
+      "candidateId": "restore-proven-backup-orchestrator",
+      "packetSha256": "65c8e2815c22e6fe9f80c260dd94ec033c5fda5a0ddf838fe8d06a029de6bc79"
+    },
+    {
+      "candidateId": "cell-capacity-removal-planner",
+      "packetSha256": "284b0266d6eef2e8ee7600606d1f8c86209eb7f77c71c378a3e5f8bbbab1cdfa"
+    },
+    {
+      "candidateId": "bgp-route-scope-patch-validator",
+      "packetSha256": "eb49d3c5a7658cdfa04af05f0d95f6cc7c8d43e59c3f7e803931d2d7642c900d"
+    },
+    {
+      "candidateId": "multi-name-caa-revalidation-reconciler",
+      "packetSha256": "45475d79cb39fc0eb9a9e4e992512ec3a1d75974a6e3be8b8ae815178f7d2c13"
+    }
+  ],
+  "reviewPlan": {
+    "order": [
+      "restore-proven-backup-orchestrator/openai",
+      "restore-proven-backup-orchestrator/anthropic",
+      "cell-capacity-removal-planner/openai",
+      "cell-capacity-removal-planner/anthropic",
+      "bgp-route-scope-patch-validator/openai",
+      "bgp-route-scope-patch-validator/anthropic",
+      "multi-name-caa-revalidation-reconciler/openai",
+      "multi-name-caa-revalidation-reconciler/anthropic"
+    ],
+    "providerFamilies": ["openai", "anthropic"],
+    "openaiModel": "openai/gpt-5.6-sol, xhigh",
+    "anthropicModel": "claude-opus, max",
+    "reviewsPerCandidate": 2,
+    "requiredPromotion": "2-of-2 promote from different provider families",
+    "maximumSemanticReviews": 8,
+    "maximumReaderSpendUsd": 100,
+    "paidSubjectTrials": 0,
+    "infrastructureRetryRule": "At most one retry is allowed only when no parseable semantic review was produced; every attempt and any cost remain recorded."
+  },
+  "blinding": {
+    "withheld": ["engine score", "author rationale", "prediction", "candidate rank", "other reader verdict", "campaign decision"],
+    "rule": "Each container receives one immutable packet and the frozen reader instructions. It receives no repository mount and no other review output."
+  },
+  "probePlan": {
+    "eligibility": "Run only after both provider reviews promote the exact packet hash.",
+    "controls": ["reference pass", "narrow-mutant failure", "malformed-input refusal", "mechanism activation", "witness isolation", "deterministic replay", "challenge nonleakage"],
+    "noRepair": "Do not repair or replace a reader-killed or probe-killed candidate inside this continuation."
+  },
+  "decisions": {
+    "BUILD": "At least two probe survivors from independent incidents and at least two causal axes.",
+    "REPEAT-DISCOVERY": "Exactly one probe survivor after all valid reviews.",
+    "REPAIR-ENGINE": "Zero probe survivors after all valid reviews.",
+    "BLOCKED": "A required provider or valid review remains unavailable; missing evidence is not zero yield."
+  }
+}

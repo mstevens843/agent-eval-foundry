@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agent-eval-foundry/phase-16-reader-output@1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["candidateId", "packetSha256", "providerFamily", "dimensions", "verdict", "earliestFailedDimension", "rationale"],
+  "properties": {
+    "candidateId": { "type": "string", "minLength": 8 },
+    "packetSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "providerFamily": { "enum": ["openai", "anthropic"] },
+    "dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source support", "contract fairness", "natural task contract", "structural witness isolation", "semantic novelty", "cheap-probe falsifiability"],
+      "properties": {
+        "source support": { "enum": ["pass", "fail", "uncertain"] },
+        "contract fairness": { "enum": ["pass", "fail", "uncertain"] },
+        "natural task contract": { "enum": ["pass", "fail", "uncertain"] },
+        "structural witness isolation": { "enum": ["pass", "fail", "uncertain"] },
+        "semantic novelty": { "enum": ["pass", "fail", "uncertain"] },
+        "cheap-probe falsifiability": { "enum": ["pass", "fail", "uncertain"] }
+      }
+    },
+    "verdict": { "enum": ["promote", "kill"] },
+    "earliestFailedDimension": { "type": ["string", "null"] },
+    "rationale": { "type": "string", "minLength": 80 }
+  }
+}

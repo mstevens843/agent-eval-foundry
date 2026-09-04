@@ -1,0 +1,79 @@
+{
+  "schema": "agent-eval-foundry/phase-16-contract-gate-results@1",
+  "runId": "phase16-contract-complete-discovery-v3",
+  "calibrationSha256": "dc85b9a1b79407ee3f0336bc821828ec739add7034af343c513a553413c2087a",
+  "results": [
+    {
+      "candidateId": "restore-proven-backup-orchestrator",
+      "contractSha256": "1ab363692daa1fd11bee3402dfbc97b278015ae468b8bf9fc97050bd71e6851e",
+      "gate": {
+        "candidateId": "restore-proven-backup-orchestrator",
+        "status": "accepted",
+        "deficiencies": [],
+        "checkedRuleCount": 3,
+        "checkedMetricCount": 3,
+        "checkedEnvelopeDimensionCount": 4
+      }
+    },
+    {
+      "candidateId": "cell-capacity-removal-planner",
+      "contractSha256": "0eaee9864689ac86399ee004f9276d5494a7b38ae80d31c5a5ed1f59a59b375c",
+      "gate": {
+        "candidateId": "cell-capacity-removal-planner",
+        "status": "accepted",
+        "deficiencies": [],
+        "checkedRuleCount": 3,
+        "checkedMetricCount": 3,
+        "checkedEnvelopeDimensionCount": 5
+      }
+    },
+    {
+      "candidateId": "bgp-route-scope-patch-validator",
+      "contractSha256": "226673488614074b6ea3f3a8f088be3514493ee75ecaccf14079effa3af44e0d",
+      "gate": {
+        "candidateId": "bgp-route-scope-patch-validator",
+        "status": "accepted",
+        "deficiencies": [],
+        "checkedRuleCount": 3,
+        "checkedMetricCount": 3,
+        "checkedEnvelopeDimensionCount": 4
+      }
+    },
+    {
+      "candidateId": "multi-name-caa-revalidation-reconciler",
+      "contractSha256": "16dbbda7ecaee2529b5cb87c7db4b9c742e2b8ad0bfa917614b36886fcfe20b9",
+      "gate": {
+        "candidateId": "multi-name-caa-revalidation-reconciler",
+        "status": "accepted",
+        "deficiencies": [],
+        "checkedRuleCount": 3,
+        "checkedMetricCount": 3,
+        "checkedEnvelopeDimensionCount": 3
+      }
+    },
+    {
+      "candidateId": "remote-state-lock-recovery",
+      "contractSha256": "e8b3622c08bc66a6925f79b77485b7a345c7946e29c20cc3f5f8fb8f8fd72fc4",
+      "gate": {
+        "candidateId": "remote-state-lock-recovery",
+        "status": "accepted",
+        "deficiencies": [],
+        "checkedRuleCount": 3,
+        "checkedMetricCount": 3,
+        "checkedEnvelopeDimensionCount": 3
+      }
+    },
+    {
+      "candidateId": "oci-descriptor-verified-fetcher",
+      "contractSha256": "1f701c052514b4fd217d90caebfeb45233e3df9a4b8a31e43311cd68f351edc3",
+      "gate": {
+        "candidateId": "oci-descriptor-verified-fetcher",
+        "status": "accepted",
+        "deficiencies": [],
+        "checkedRuleCount": 3,
+        "checkedMetricCount": 3,
+        "checkedEnvelopeDimensionCount": 4
+      }
+    }
+  ]
+}

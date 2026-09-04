@@ -1,0 +1,1870 @@
+{
+  "schema": "agent-eval-foundry/phase-16-candidate-contracts@1",
+  "runId": "phase16-contract-complete-discovery-v3",
+  "preregistrationSha256": "189018ba2072c6de2b2a841b919a5f78834b8585d15e7756ad11d1eb5f6ef302",
+  "contracts": [
+    {
+      "schema": "agent-eval-foundry/candidate-contract@1",
+      "candidateId": "restore-proven-backup-orchestrator",
+      "sourceIncidentId": "gitlab-2017-database-incident",
+      "role": "prospective",
+      "source": {
+        "locator": "https://about.gitlab.com/blog/postmortem-of-database-outage-of-january-31/",
+        "revision": "published-2017-02-10-snapshot-2026-09-04",
+        "digest": "03af5cf69422d2c2828a70bd8a62470a1f52e7415ae7d28547b365fc10b911a1",
+        "evidenceLocations": [
+          "Timeline and WAL loss",
+          "Root cause analysis",
+          "Recovery improvements"
+        ],
+        "observedFailure": "A scheduled backup was absent because of a client/server version mismatch, its alert was lost, and no restore test exposed the failure before both database copies were unavailable."
+      },
+      "publicContract": {
+        "goal": "Create a database backup with a compatible client, restore it into a fresh target, and report success only after exact state verification.",
+        "inputGrammar": {
+          "notation": "TypeScript",
+          "definition": "type BackupView = { sourceSnapshotId:string, sourceEngineMajor:92|96, availableClientMajors:(92|96)[], restoreTargetId:string, expectedObjectCount:number }",
+          "validExamples": [
+            "{\"sourceSnapshotId\":\"snap-7\",\"sourceEngineMajor\":96,\"availableClientMajors\":[92,96],\"restoreTargetId\":\"restore-4\",\"expectedObjectCount\":12}"
+          ],
+          "invalidExamples": [
+            "{\"sourceSnapshotId\":\"snap-7\",\"sourceEngineMajor\":\"latest\",\"availableClientMajors\":[]}"
+          ]
+        },
+        "outputGrammar": {
+          "notation": "TypeScript",
+          "definition": "type BackupReport = { status:'VERIFIED'|'FAILED', artifactId:string|null, restoreId:string|null, clientMajor:92|96|null }",
+          "validExamples": [
+            "{\"status\":\"VERIFIED\",\"artifactId\":\"artifact-8\",\"restoreId\":\"restore-4\",\"clientMajor\":96}",
+            "{\"status\":\"FAILED\",\"artifactId\":null,\"restoreId\":null,\"clientMajor\":null}"
+          ],
+          "invalidExamples": [
+            "{\"status\":\"SUCCESS\",\"artifactId\":\"artifact-8\"}"
+          ]
+        },
+        "stateSemantics": {
+          "initialState": "SOURCE_READY",
+          "states": [
+            "SOURCE_READY",
+            "ARTIFACT_CREATED",
+            "RESTORE_VERIFIED",
+            "BACKUP_FAILED"
+          ],
+          "transitions": [
+            {
+              "id": "create-compatible-backup",
+              "from": "SOURCE_READY",
+              "input": "Call backup.create with a listed client whose major equals sourceEngineMajor.",
+              "to": "ARTIFACT_CREATED",
+              "effect": "The facade records an artifact only when the compatible dump completes successfully."
+            },
+            {
+              "id": "restore-and-compare-state",
+              "from": "ARTIFACT_CREATED",
+              "input": "Call backup.restore and then backup.compareState on the fresh restore target.",
+              "to": "RESTORE_VERIFIED",
+              "effect": "VERIFIED is permitted only when source and restored object digests match exactly."
+            }
+          ]
+        },
+        "acceptedOutcomes": [
+          "A compatible backup is created, restored into the declared fresh target, and its state digest matches the source before VERIFIED is returned."
+        ],
+        "forbiddenOutcomes": [
+          "Declaring success from a scheduled job, process exit, artifact name, object count, or alert alone without a matching restored-state digest."
+        ],
+        "safetyObligations": [
+          "Never overwrite the source and never return VERIFIED for a missing, incompatible, corrupt, unrestored, or state-divergent artifact."
+        ],
+        "livenessObligations": [
+          "When a compatible client is available, attempt backup creation and one fresh-target restoration before reporting the final status."
+        ],
+        "implementationFreedom": [
+          "Client selection, retry structure, local function layout, and diagnostic text may vary without changing the public report fields."
+        ],
+        "nonrequirements": [
+          "WAL replay, point-in-time recovery, production failover, email delivery, and storage throughput optimization are outside this isolated task."
+        ]
+      },
+      "grading": {
+        "rules": [
+          {
+            "id": "backup-compatible-client-required",
+            "agentVisibleText": "backup.create must use an available client whose major version exactly equals sourceEngineMajor.",
+            "publicSection": "Compatible backup creation"
+          },
+          {
+            "id": "backup-restore-proof-required",
+            "agentVisibleText": "VERIFIED is correct only after backup.restore succeeds in restoreTargetId and backup.compareState reports an exact digest match.",
+            "publicSection": "Restoration proof"
+          },
+          {
+            "id": "backup-positive-work-required",
+            "agentVisibleText": "A valid case with a compatible client must call both create and restore at least once.",
+            "publicSection": "Liveness and positive work"
+          }
+        ],
+        "metrics": [
+          {
+            "id": "backup-client-version-mismatches",
+            "unit": "backup calls using an incompatible client",
+            "deterministicProcedure": "Compare each host-recorded create call's clientMajor to the source engine major.",
+            "comparator": "=",
+            "threshold": 0,
+            "derivation": {
+              "formula": "permitted_violation_count",
+              "inputs": {
+                "permitted_violations": 0
+              },
+              "explanation": "The compatibility rule allows no wrong-major create call."
+            }
+          },
+          {
+            "id": "backup-false-verification-count",
+            "unit": "VERIFIED reports without exact restoration proof",
+            "deterministicProcedure": "Count VERIFIED reports lacking a successful restore and equal source/restored state digest in the host ledger.",
+            "comparator": "=",
+            "threshold": 0,
+            "derivation": {
+              "formula": "permitted_violation_count",
+              "inputs": {
+                "permitted_violations": 0
+              },
+              "explanation": "The success contract permits no false verification."
+            }
+          },
+          {
+            "id": "backup-restoration-attempt-count",
+            "unit": "host-recorded restore operations",
+            "deterministicProcedure": "Count restore calls for valid cases that expose a compatible client and artifact.",
+            "comparator": ">=",
+            "threshold": 1,
+            "derivation": {
+              "formula": "minimum_positive_work_count",
+              "inputs": {
+                "minimum_positive_work": 1
+              },
+              "explanation": "One restore is the minimum operation that can prove an artifact is restorable."
+            }
+          }
+        ],
+        "checks": [
+          {
+            "id": "check-backup-compatible-client",
+            "ruleIds": [
+              "backup-compatible-client-required"
+            ],
+            "metricIds": [
+              "backup-client-version-mismatches"
+            ],
+            "envelopeDimensionIds": [
+              "source-engine-major",
+              "client-set"
+            ]
+          },
+          {
+            "id": "check-backup-restoration-proof",
+            "ruleIds": [
+              "backup-restore-proof-required"
+            ],
+            "metricIds": [
+              "backup-false-verification-count"
+            ],
+            "envelopeDimensionIds": [
+              "artifact-condition",
+              "source-object-count"
+            ]
+          },
+          {
+            "id": "check-backup-positive-work",
+            "ruleIds": [
+              "backup-positive-work-required"
+            ],
+            "metricIds": [
+              "backup-restoration-attempt-count"
+            ],
+            "envelopeDimensionIds": [
+              "client-set"
+            ]
+          }
+        ]
+      },
+      "hiddenInstanceEnvelope": {
+        "publicDescription": "Held-out cases vary only source-engine-major, client-set, artifact-condition, source-object-count, all defined below.",
+        "dimensions": [
+          {
+            "id": "source-engine-major",
+            "type": "enum",
+            "values": [
+              92,
+              96
+            ],
+            "derivation": "The incident's incompatible PostgreSQL 9.2 and 9.6 paths become two explicit integer codes."
+          },
+          {
+            "id": "client-set",
+            "type": "enum",
+            "values": [
+              "matching-only",
+              "mismatch-then-match",
+              "no-match"
+            ],
+            "derivation": "These cases distinguish selection, fallback, and honest failure without adding behavior."
+          },
+          {
+            "id": "artifact-condition",
+            "type": "enum",
+            "values": [
+              "valid",
+              "truncated",
+              "wrong-snapshot"
+            ],
+            "derivation": "A restore test must distinguish usable bytes from existence and process success."
+          },
+          {
+            "id": "source-object-count",
+            "type": "integer",
+            "values": [
+              1,
+              4,
+              12
+            ],
+            "derivation": "Small public counts expose empty and partial restoration without relying on production scale."
+          }
+        ],
+        "samplingProcedure": "Hash-sort the registered Cartesian cases and retain equal valid, corrupt, and incompatible strata with every engine major represented.",
+        "constraints": [
+          "The matching client always succeeds on a valid artifact and the mismatching client always returns a typed VERSION_MISMATCH error.",
+          "compareState is read-only and returns only equal or unequal; it does not reveal either digest to the subject."
+        ],
+        "noNewRulesEvidence": "Every failure mode is one combination of the four published dimensions and all checks map to the three rules above."
+      },
+      "subjectInterface": {
+        "entrypoint": "submission/backup.mjs exports run(view, backup) returning one BackupReport.",
+        "readableInputs": [
+          "BackupView plus create(clientMajor, snapshotId), restore(artifactId, targetId), and compareState(snapshotId, targetId) facade methods."
+        ],
+        "writableOutputs": [
+          "Calls through the backup facade and exactly one BackupReport object."
+        ],
+        "unavailableAuthority": [
+          "Source rows, artifact bytes, restored rows, source digest, restored digest, and host operation ledger."
+        ]
+      },
+      "authorityBoundary": {
+        "kind": "host-owned source and restored database state",
+        "enforcement": "The subject can request operations but receives only typed status values; source and restore bytes and their digest comparison live in the parent harness.",
+        "subjectCanCross": false
+      },
+      "witnessInaccessibility": {
+        "witness": "Equality of the source and independently restored database-state digests.",
+        "proof": "Neither digest nor database rows are exposed by the facade; the subject receives only compareState's boolean after performing the restore.",
+        "locallyObservable": false
+      },
+      "validation": {
+        "referenceStrategy": "Select the matching client, create one artifact, restore it to the declared target, call compareState, and map that boolean to VERIFIED or FAILED.",
+        "narrowMutants": [
+          {
+            "id": "artifact-existence-only-mutant",
+            "singleDefect": "Returns VERIFIED after create produces an artifact id and never restores or compares state.",
+            "expectedFailedChecks": [
+              "check-backup-restoration-proof",
+              "check-backup-positive-work"
+            ]
+          }
+        ],
+        "cheatModels": [
+          {
+            "id": "fabricated-backup-success-report",
+            "attempt": "Return a plausible artifact and restore identifier without invoking the backup facade.",
+            "blockedBy": "The verifier grades host-owned create, restore, and digest-comparison records plus positive work."
+          }
+        ],
+        "positiveWorkRequirement": "Every valid case with a matching client must create an artifact and attempt a fresh-target restore.",
+        "cheapProbe": {
+          "id": "restore-proof-fatality-probe",
+          "procedure": "In one invocation, run the reference, existence-only mutant, and malformed report on valid, truncated, and mismatched-client fixtures twice.",
+          "falsifier": "Kill if the reference fails, the mutant does not fail only restoration-proof or positive-work checks, malformed output is graded, replay differs, or state bytes leak.",
+          "activationSignal": "The existence-only mutant reports VERIFIED for a truncated artifact while the host restore ledger proves no matching restored state."
+        }
+      },
+      "derivation": {
+        "classification": "A2",
+        "citationCount": 3,
+        "sectionSpan": 3,
+        "inferenceDepth": 1,
+        "negativeInference": false,
+        "citations": [
+          "GitLab postmortem timeline: WAL loss forced resynchronization.",
+          "GitLab root-cause analysis: pg_dump 9.2 silently failed against PostgreSQL 9.6.",
+          "GitLab remediation: automated recovery testing and durability ownership."
+        ],
+        "evidenceChain": [
+          "A scheduled backup and alert path did not establish that a usable artifact existed.",
+          "Automated restore plus exact state comparison is the positive proof that the documented process lacked."
+        ],
+        "unresolvedValidityRisks": [
+          "A reader must decide whether this isolates one natural engineering task rather than a synthetic combination of backup operations."
+        ]
+      },
+      "novelty": {
+        "causalAxis": "artifact existence versus independently restored state equivalence",
+        "subjectActionContract": "produce and independently restore-verify one database backup artifact",
+        "nearestBaseline": "rs-archive-clone layered recovery precedent",
+        "materialDifference": "This task verifies an artifact by executing a cross-version backup and fresh restore; it does not infer a hidden binary format through oracle queries."
+      }
+    },
+    {
+      "schema": "agent-eval-foundry/candidate-contract@1",
+      "candidateId": "cell-capacity-removal-planner",
+      "sourceIncidentId": "aws-s3-2017-service-disruption",
+      "role": "prospective",
+      "source": {
+        "locator": "https://aws.amazon.com/message/41926/",
+        "revision": "published-2017-snapshot-2026-09-04",
+        "digest": "66b4006fc2c6208bee61cd13bfef39cea7370521b594a28514998f3f367b6b73",
+        "evidenceLocations": [
+          "Incident command input",
+          "Subsystem recovery",
+          "Bounded-removal remediation"
+        ],
+        "observedFailure": "A valid maintenance command accepted an erroneous removal scope and took multiple subsystems below safe capacity."
+      },
+      "publicContract": {
+        "goal": "Remove the requested maintenance capacity in accepted batches while keeping every dependent subsystem at or above its declared minimum.",
+        "inputGrammar": {
+          "notation": "TypeScript",
+          "definition": "type RemovalView = { requestId:string, targetCell:string, removeCount:number, maxBatch:number, subsystems:{id:string,current:number,minimum:number,cells:string[]}[] }",
+          "validExamples": [
+            "{\"requestId\":\"r1\",\"targetCell\":\"c1\",\"removeCount\":2,\"maxBatch\":1,\"subsystems\":[{\"id\":\"index\",\"current\":5,\"minimum\":3,\"cells\":[\"c1\"]}]}"
+          ],
+          "invalidExamples": [
+            "{\"requestId\":\"r1\",\"targetCell\":\"c1\",\"removeCount\":-2,\"subsystems\":[]}"
+          ]
+        },
+        "outputGrammar": {
+          "notation": "TypeScript",
+          "definition": "type RemovalReport = { status:'COMPLETED'|'REFUSED'|'PARTIAL', acceptedBatches:number[][], removed:number }",
+          "validExamples": [
+            "{\"status\":\"COMPLETED\",\"acceptedBatches\":[[0],[1]],\"removed\":2}",
+            "{\"status\":\"REFUSED\",\"acceptedBatches\":[],\"removed\":0}"
+          ],
+          "invalidExamples": [
+            "{\"status\":\"DONE\",\"removed\":\"all\"}"
+          ]
+        },
+        "stateSemantics": {
+          "initialState": "REMOVAL_PLANNED",
+          "states": [
+            "REMOVAL_PLANNED",
+            "BATCH_APPLIED",
+            "REMOVAL_COMPLETE",
+            "REMOVAL_REFUSED"
+          ],
+          "transitions": [
+            {
+              "id": "apply-safe-removal-batch",
+              "from": "REMOVAL_PLANNED",
+              "input": "Call capacity.remove with at most maxBatch target-cell server indexes.",
+              "to": "BATCH_APPLIED",
+              "effect": "The harness applies the batch only when every affected subsystem remains at or above minimum."
+            },
+            {
+              "id": "finish-or-refuse-removal",
+              "from": "BATCH_APPLIED",
+              "input": "Continue with accepted current capacity or stop when the next requested removal would cross a floor.",
+              "to": "REMOVAL_COMPLETE",
+              "effect": "Report exactly the host-accepted batches and total removals; use PARTIAL when only a prefix is safe."
+            }
+          ]
+        },
+        "acceptedOutcomes": [
+          "Every batch is no larger than maxBatch, no subsystem falls below minimum, and the report exactly matches accepted host removals."
+        ],
+        "forbiddenOutcomes": [
+          "Crossing any minimum, removing outside targetCell, claiming rejected work, or refusing a wholly safe positive request."
+        ],
+        "safetyObligations": [
+          "Never issue a removal batch that would leave an affected subsystem below its public minimum capacity."
+        ],
+        "livenessObligations": [
+          "Apply at least one batch when the first requested unit is safe and stop only at completion or the first unsafe unit."
+        ],
+        "implementationFreedom": [
+          "The planner may choose any server order and internal data structure when each accepted batch and report obeys the contract."
+        ],
+        "nonrequirements": [
+          "Restart timing, customer traffic, placement algorithms, billing logic, and cross-region recovery are outside this task."
+        ]
+      },
+      "grading": {
+        "rules": [
+          {
+            "id": "capacity-floor-never-crossed",
+            "agentVisibleText": "Every accepted batch must leave each affected subsystem current capacity at or above minimum.",
+            "publicSection": "Safety floor"
+          },
+          {
+            "id": "capacity-public-batch-limit",
+            "agentVisibleText": "No capacity.remove call may contain more than maxBatch server indexes.",
+            "publicSection": "Bounded removal"
+          },
+          {
+            "id": "capacity-positive-safe-progress",
+            "agentVisibleText": "When one requested removal is safe, at least one accepted removal must occur.",
+            "publicSection": "Liveness"
+          }
+        ],
+        "metrics": [
+          {
+            "id": "capacity-floor-violation-count",
+            "unit": "accepted batches crossing a subsystem floor",
+            "deterministicProcedure": "Replay host ledger capacities after each accepted batch and count any subsystem with current below minimum.",
+            "comparator": "=",
+            "threshold": 0,
+            "derivation": {
+              "formula": "permitted_violation_count",
+              "inputs": {
+                "permitted_violations": 0
+              },
+              "explanation": "A hard safety floor permits zero crossings."
+            }
+          },
+          {
+            "id": "capacity-oversize-batch-count",
+            "unit": "removal calls larger than maxBatch",
+            "deterministicProcedure": "Count host-recorded removal calls whose server-index list length exceeds maxBatch.",
+            "comparator": "=",
+            "threshold": 0,
+            "derivation": {
+              "formula": "permitted_violation_count",
+              "inputs": {
+                "permitted_violations": 0
+              },
+              "explanation": "Every batch is explicitly bounded, so no oversized call is permitted."
+            }
+          },
+          {
+            "id": "capacity-safe-removal-count",
+            "unit": "host-accepted server removals",
+            "deterministicProcedure": "Count accepted removals when the initial fixture proves at least one target server is safe to remove.",
+            "comparator": ">=",
+            "threshold": 1,
+            "derivation": {
+              "formula": "minimum_positive_work_count",
+              "inputs": {
+                "minimum_positive_work": 1
+              },
+              "explanation": "One accepted unit is the minimum positive progress on a safe request."
+            }
+          }
+        ],
+        "checks": [
+          {
+            "id": "check-capacity-safety-floor",
+            "ruleIds": [
+              "capacity-floor-never-crossed"
+            ],
+            "metricIds": [
+              "capacity-floor-violation-count"
+            ],
+            "envelopeDimensionIds": [
+              "subsystem-count",
+              "headroom-units",
+              "dependency-overlap"
+            ]
+          },
+          {
+            "id": "check-capacity-batch-bound",
+            "ruleIds": [
+              "capacity-public-batch-limit"
+            ],
+            "metricIds": [
+              "capacity-oversize-batch-count"
+            ],
+            "envelopeDimensionIds": [
+              "requested-removals",
+              "maximum-batch-size"
+            ]
+          },
+          {
+            "id": "check-capacity-positive-progress",
+            "ruleIds": [
+              "capacity-positive-safe-progress"
+            ],
+            "metricIds": [
+              "capacity-safe-removal-count"
+            ],
+            "envelopeDimensionIds": [
+              "headroom-units"
+            ]
+          }
+        ]
+      },
+      "hiddenInstanceEnvelope": {
+        "publicDescription": "Held-out cases vary only subsystem-count, headroom-units, dependency-overlap, requested-removals, maximum-batch-size, all defined below.",
+        "dimensions": [
+          {
+            "id": "subsystem-count",
+            "type": "integer",
+            "values": [
+              1,
+              2,
+              3
+            ],
+            "derivation": "The incident crossed multiple dependent subsystems; one is the noninteraction control."
+          },
+          {
+            "id": "headroom-units",
+            "type": "integer",
+            "values": [
+              0,
+              1,
+              2,
+              4
+            ],
+            "derivation": "Current minus minimum directly determines the safe removal prefix."
+          },
+          {
+            "id": "dependency-overlap",
+            "type": "enum",
+            "values": [
+              "disjoint",
+              "partial",
+              "shared-target-cell"
+            ],
+            "derivation": "The source reports one command affecting multiple subsystems through shared servers."
+          },
+          {
+            "id": "requested-removals",
+            "type": "integer",
+            "values": [
+              1,
+              2,
+              4,
+              8
+            ],
+            "derivation": "Requests straddle the public headroom values to create safe, partial, and refused outcomes."
+          },
+          {
+            "id": "maximum-batch-size",
+            "type": "integer",
+            "values": [
+              1,
+              2
+            ],
+            "derivation": "The remediation requires slower removal; one and two expose one-shot mutants."
+          }
+        ],
+        "samplingProcedure": "Enumerate all floor-boundary cases, then hash-select equal safe, partial, and refused outcomes across overlap classes.",
+        "constraints": [
+          "Every subsystem minimum is nonnegative and no greater than its initial current capacity.",
+          "Server indexes are stable within a case and the facade returns accepted current capacities after every call."
+        ],
+        "noNewRulesEvidence": "All hidden cases are numeric combinations of the five published dimensions; checks enforce only floor, batch, and progress rules."
+      },
+      "subjectInterface": {
+        "entrypoint": "submission/planner.mjs exports run(view, capacity) returning one RemovalReport.",
+        "readableInputs": [
+          "RemovalView and capacity.remove(requestId, targetCell, serverIndexes)."
+        ],
+        "writableOutputs": [
+          "Removal calls and one report listing exactly the accepted batch indexes."
+        ],
+        "unavailableAuthority": [
+          "Host capacity ledger, rejected-call ledger, and final subsystem state used by the verifier."
+        ]
+      },
+      "authorityBoundary": {
+        "kind": "host-owned live subsystem-capacity ledger",
+        "enforcement": "The subject can request removals but cannot edit accepted/rejected records or final capacities outside the capacity facade.",
+        "subjectCanCross": false
+      },
+      "witnessInaccessibility": {
+        "witness": "The applied removal sequence and each dependent subsystem's post-batch capacity.",
+        "proof": "The facade returns only each call's accepted status and current public counts; the immutable aggregate ledger remains in the parent harness.",
+        "locallyObservable": false
+      },
+      "validation": {
+        "referenceStrategy": "Remove target servers in batches no larger than maxBatch, recompute public headroom after accepted calls, and stop before the first floor crossing.",
+        "narrowMutants": [
+          {
+            "id": "one-shot-requested-removal-mutant",
+            "singleDefect": "Sends every requested server index in one call without checking batch size or shared subsystem floors.",
+            "expectedFailedChecks": [
+              "check-capacity-safety-floor",
+              "check-capacity-batch-bound"
+            ]
+          }
+        ],
+        "cheatModels": [
+          {
+            "id": "report-removal-without-operation",
+            "attempt": "Claim the requested capacity was removed without calling the host facade.",
+            "blockedBy": "The positive-work metric and host ledger grade accepted operations instead of the report alone."
+          }
+        ],
+        "positiveWorkRequirement": "At least one host-accepted removal must occur whenever the fixture's initial headroom makes one unit safe.",
+        "cheapProbe": {
+          "id": "capacity-blast-radius-probe",
+          "procedure": "In one invocation, run reference, one-shot mutant, and malformed plan twice across safe, shared-floor, and oversized requests.",
+          "falsifier": "Kill if reference fails, mutant avoids the intended floor or batch checks, malformed output is graded, replay changes, or the ledger leaks.",
+          "activationSignal": "The one-shot mutant submits a syntactically valid call that is oversized or would cross a shared subsystem floor."
+        }
+      },
+      "derivation": {
+        "classification": "A2",
+        "citationCount": 3,
+        "sectionSpan": 3,
+        "inferenceDepth": 1,
+        "negativeInference": false,
+        "citations": [
+          "AWS summary: one erroneous input removed more servers than intended.",
+          "AWS summary: affected index and placement subsystems required full restart.",
+          "AWS remediation: slower removal and refusal below minimum required capacity."
+        ],
+        "evidenceChain": [
+          "A valid maintenance interface allowed one input to exceed safe shared capacity.",
+          "The documented remediation directly yields the batch-bound and minimum-floor obligations."
+        ],
+        "unresolvedValidityRisks": [
+          "The public arithmetic may be straightforward enough that the candidate is fair but not difficult."
+        ]
+      },
+      "novelty": {
+        "causalAxis": "blast-radius bounds across overlapping subsystem capacity floors",
+        "subjectActionContract": "plan and execute capacity removal without crossing any subsystem floor",
+        "nearestBaseline": "deployment rollback partial-effects family",
+        "materialDifference": "This task computes safe destructive batches across shared capacity dependencies rather than compensating uncertain completed effects."
+      }
+    },
+    {
+      "schema": "agent-eval-foundry/candidate-contract@1",
+      "candidateId": "bgp-route-scope-patch-validator",
+      "sourceIncidentId": "cloudflare-2020-backbone-outage",
+      "role": "prospective",
+      "source": {
+        "locator": "https://blog.cloudflare.com/cloudflare-outage-on-july-17-2020/",
+        "revision": "published-2020-07-18-snapshot-2026-09-04",
+        "digest": "31f9c9e9b97867d7b671ed9dd3e4f7b7c7c6f2d3cb84fe16e178b69ef49e21cf",
+        "evidenceLocations": [
+          "Configuration analysis",
+          "Traffic impact",
+          "Maximum-prefix remediation"
+        ],
+        "observedFailure": "Deactivating a prefix-list condition broadened a valid BGP policy to every route and redirected roughly half of traffic."
+      },
+      "publicContract": {
+        "goal": "Apply a requested BGP policy edit while preserving its prefix-set scope, maximum-prefix bound, and local-route preference invariant.",
+        "inputGrammar": {
+          "notation": "TypeScript",
+          "definition": "type RouteView = { requestId:string, intent:'remove-target-from-backbone', targetSite:string, policy:{termActive:boolean,prefixListActive:boolean,prefixes:string[],localPreference:number}, localPreference:number, maximumPrefixes:number }",
+          "validExamples": [
+            "{\"requestId\":\"r1\",\"intent\":\"remove-target-from-backbone\",\"targetSite\":\"ATL\",\"policy\":{\"termActive\":true,\"prefixListActive\":true,\"prefixes\":[\"10.1.0.0/16\"],\"localPreference\":200},\"localPreference\":100,\"maximumPrefixes\":2}"
+          ],
+          "invalidExamples": [
+            "{\"intent\":\"reroute-everything\",\"policy\":{\"prefixes\":\"all\"}}"
+          ]
+        },
+        "outputGrammar": {
+          "notation": "TypeScript",
+          "definition": "type RoutePatch = { termActive:boolean, prefixListActive:boolean, prefixes:string[], policyLocalPreference:number, decision:'APPLY'|'REFUSE' }",
+          "validExamples": [
+            "{\"termActive\":false,\"prefixListActive\":true,\"prefixes\":[\"10.1.0.0/16\"],\"policyLocalPreference\":200,\"decision\":\"APPLY\"}"
+          ],
+          "invalidExamples": [
+            "{\"prefixListActive\":false,\"decision\":\"APPLY\"}"
+          ]
+        },
+        "stateSemantics": {
+          "initialState": "POLICY_LOADED",
+          "states": [
+            "POLICY_LOADED",
+            "PATCH_SIMULATED",
+            "PATCH_APPLIED",
+            "PATCH_REFUSED"
+          ],
+          "transitions": [
+            {
+              "id": "simulate-route-policy-patch",
+              "from": "POLICY_LOADED",
+              "input": "Submit one RoutePatch to routing.simulate before any apply call.",
+              "to": "PATCH_SIMULATED",
+              "effect": "The facade returns counts only for advertised prefixes and locality violations under the patch."
+            },
+            {
+              "id": "apply-only-safe-route-patch",
+              "from": "PATCH_SIMULATED",
+              "input": "Call routing.apply only when advertisedPrefixes is at most maximumPrefixes and localityViolations is zero.",
+              "to": "PATCH_APPLIED",
+              "effect": "The host records the propagated routes and resulting traffic destinations."
+            }
+          ]
+        },
+        "acceptedOutcomes": [
+          "The target policy term is disabled, its prefix condition remains intact, simulation is safe, and exactly that patch is applied."
+        ],
+        "forbiddenOutcomes": [
+          "Disabling or deleting the prefix condition while leaving the accepting term active, exceeding maximumPrefixes, or outranking local server routes."
+        ],
+        "safetyObligations": [
+          "Never apply a patch whose simulated advertisements exceed maximumPrefixes or whose policy preference attracts another site's local routes."
+        ],
+        "livenessObligations": [
+          "Simulate every valid requested patch and apply it when both public safety tests pass."
+        ],
+        "implementationFreedom": [
+          "Patch construction and internal policy representation may vary while the emitted RoutePatch uses the exact public fields."
+        ],
+        "nonrequirements": [
+          "Real BGP sockets, vendor configuration syntax, convergence timing, packet forwarding, and traffic optimization are outside this task."
+        ]
+      },
+      "grading": {
+        "rules": [
+          {
+            "id": "route-prefix-condition-preserved",
+            "agentVisibleText": "For remove-target-from-backbone, disable the policy term and preserve the active prefix list and exact prefix values.",
+            "publicSection": "Patch semantics"
+          },
+          {
+            "id": "route-simulation-safety-required",
+            "agentVisibleText": "Apply only when simulation advertises at most maximumPrefixes and reports zero locality violations.",
+            "publicSection": "Route safety"
+          },
+          {
+            "id": "route-positive-simulation-required",
+            "agentVisibleText": "Every valid request must invoke routing.simulate before APPLY or REFUSE.",
+            "publicSection": "Positive work"
+          }
+        ],
+        "metrics": [
+          {
+            "id": "route-scope-violation-count",
+            "unit": "applied routes outside the original prefix list",
+            "deterministicProcedure": "Compare host-propagated routes after apply to the original exact prefix array and count additions.",
+            "comparator": "=",
+            "threshold": 0,
+            "derivation": {
+              "formula": "permitted_violation_count",
+              "inputs": {
+                "permitted_violations": 0
+              },
+              "explanation": "The requested edit changes participation, not authorized route scope, so no added prefix is permitted."
+            }
+          },
+          {
+            "id": "route-unsafe-apply-count",
+            "unit": "applies exceeding prefix or locality limits",
+            "deterministicProcedure": "Count apply calls whose preceding simulation exceeded maximumPrefixes or reported a locality violation.",
+            "comparator": "=",
+            "threshold": 0,
+            "derivation": {
+              "formula": "permitted_violation_count",
+              "inputs": {
+                "permitted_violations": 0
+              },
+              "explanation": "The safety contract forbids every unsafe apply."
+            }
+          },
+          {
+            "id": "route-simulation-call-count",
+            "unit": "host-recorded policy simulations",
+            "deterministicProcedure": "Count routing.simulate calls for the request before the final decision.",
+            "comparator": ">=",
+            "threshold": 1,
+            "derivation": {
+              "formula": "minimum_positive_work_count",
+              "inputs": {
+                "minimum_positive_work": 1
+              },
+              "explanation": "One simulation is the minimum evidence the required pre-apply safety check ran."
+            }
+          }
+        ],
+        "checks": [
+          {
+            "id": "check-route-prefix-scope",
+            "ruleIds": [
+              "route-prefix-condition-preserved"
+            ],
+            "metricIds": [
+              "route-scope-violation-count"
+            ],
+            "envelopeDimensionIds": [
+              "prefix-count",
+              "edit-target"
+            ]
+          },
+          {
+            "id": "check-route-safe-application",
+            "ruleIds": [
+              "route-simulation-safety-required"
+            ],
+            "metricIds": [
+              "route-unsafe-apply-count"
+            ],
+            "envelopeDimensionIds": [
+              "maximum-prefixes",
+              "preference-relation"
+            ]
+          },
+          {
+            "id": "check-route-positive-simulation",
+            "ruleIds": [
+              "route-positive-simulation-required"
+            ],
+            "metricIds": [
+              "route-simulation-call-count"
+            ],
+            "envelopeDimensionIds": [
+              "edit-target"
+            ]
+          }
+        ]
+      },
+      "hiddenInstanceEnvelope": {
+        "publicDescription": "Held-out cases vary only prefix-count, edit-target, maximum-prefixes, preference-relation, all defined below.",
+        "dimensions": [
+          {
+            "id": "prefix-count",
+            "type": "integer",
+            "values": [
+              1,
+              2,
+              4
+            ],
+            "derivation": "The maximum-prefix control requires cases below, at, and above a public bound."
+          },
+          {
+            "id": "edit-target",
+            "type": "enum",
+            "values": [
+              "policy-term",
+              "prefix-list-condition"
+            ],
+            "derivation": "The incident distinguishes the intended term deactivation from the dangerous condition deactivation."
+          },
+          {
+            "id": "maximum-prefixes",
+            "type": "integer",
+            "values": [
+              1,
+              2,
+              4
+            ],
+            "derivation": "Public limits align with generated prefix counts to create safe and unsafe simulations."
+          },
+          {
+            "id": "preference-relation",
+            "type": "enum",
+            "values": [
+              "policy-below-local",
+              "policy-equals-local",
+              "policy-above-local"
+            ],
+            "derivation": "The source says policy preference 200 outranked local preference 100."
+          }
+        ],
+        "samplingProcedure": "Enumerate both edit targets and every preference relation, then hash-select equal within-limit and over-limit cases.",
+        "constraints": [
+          "Prefixes are canonical IPv4 CIDR strings supplied in the input; no hidden parser behavior is graded.",
+          "Simulation is deterministic and apply uses the exact previously simulated patch bytes."
+        ],
+        "noNewRulesEvidence": "Hidden cases combine only the four public dimensions and grade exact prefix preservation, simulation safety, and positive work."
+      },
+      "subjectInterface": {
+        "entrypoint": "submission/routes.mjs exports run(view, routing) returning one RoutePatch.",
+        "readableInputs": [
+          "RouteView plus routing.simulate(patch) and routing.apply(requestId, patch) status methods."
+        ],
+        "writableOutputs": [
+          "One simulation, at most one apply, and one exact RoutePatch report."
+        ],
+        "unavailableAuthority": [
+          "Host route-propagation graph, apply ledger, and final traffic-destination map."
+        ]
+      },
+      "authorityBoundary": {
+        "kind": "host-owned route propagation simulator and apply ledger",
+        "enforcement": "The subject submits patch values through a facade and cannot edit simulated or applied propagation state directly.",
+        "subjectCanCross": false
+      },
+      "witnessInaccessibility": {
+        "witness": "The complete propagated prefix set and resulting route winner at every simulated site.",
+        "proof": "The facade reveals only aggregate prefix and locality-violation counts; route graph and site winners remain in the harness.",
+        "locallyObservable": false
+      },
+      "validation": {
+        "referenceStrategy": "Disable the policy term, retain the prefix condition and list exactly, simulate, and apply only when both public aggregate safety conditions hold.",
+        "narrowMutants": [
+          {
+            "id": "deactivate-prefix-condition-mutant",
+            "singleDefect": "Disables the prefix-list condition while leaving the accepting high-preference term active.",
+            "expectedFailedChecks": [
+              "check-route-prefix-scope",
+              "check-route-safe-application"
+            ]
+          }
+        ],
+        "cheatModels": [
+          {
+            "id": "fabricated-safe-simulation-report",
+            "attempt": "Return APPLY without invoking routing.simulate or apply a different patch from the simulated bytes.",
+            "blockedBy": "Host records simulation and apply order and hashes both patch payloads for equality."
+          }
+        ],
+        "positiveWorkRequirement": "Every valid request must produce one host-recorded simulation before its final decision.",
+        "cheapProbe": {
+          "id": "route-scope-expansion-probe",
+          "procedure": "In one invocation, run reference, condition-deactivation mutant, and malformed patch twice against bounded and broadening topologies.",
+          "falsifier": "Kill if reference fails, mutant does not activate only scope or safety checks, malformed output is graded, replay changes, or propagation state leaks.",
+          "activationSignal": "The mutant remains syntactically valid but simulation expands advertisements beyond the original prefix list or changes a remote route winner."
+        }
+      },
+      "derivation": {
+        "classification": "A2",
+        "citationCount": 3,
+        "sectionSpan": 3,
+        "inferenceDepth": 1,
+        "negativeInference": false,
+        "citations": [
+          "Cloudflare postmortem: the prefix-list condition rather than the term was deactivated.",
+          "Cloudflare postmortem: local preference 200 attracted routes that previously preferred 100 locally.",
+          "Cloudflare remediation: maximum-prefix and local-preference safeguards."
+        ],
+        "evidenceChain": [
+          "Removing the condition broadened an accepting term from a named set to all routes.",
+          "Exact scope preservation plus simulation limits directly encode the documented correction."
+        ],
+        "unresolvedValidityRisks": [
+          "A reader must distinguish this route-policy contract from the AWS candidate's broader blast-radius safety axis."
+        ]
+      },
+      "novelty": {
+        "causalAxis": "policy-condition deletion silently broadens a transitive route match",
+        "subjectActionContract": "repair and apply one route policy without broadening its authorized route scope",
+        "nearestBaseline": "cell-capacity-removal-planner in this run",
+        "materialDifference": "This candidate preserves semantic match scope under policy-AST editing; the capacity planner batches numeric resource removals across dependency floors."
+      }
+    },
+    {
+      "schema": "agent-eval-foundry/candidate-contract@1",
+      "candidateId": "multi-name-caa-revalidation-reconciler",
+      "sourceIncidentId": "letsencrypt-2020-caa-recheck-bug",
+      "role": "prospective",
+      "source": {
+        "locator": "https://bugzilla.mozilla.org/show_bug.cgi?id=1619047",
+        "revision": "incident-filed-2020-02-29-snapshot-2026-09-04",
+        "digest": "c351ddf9dda3e800754508ce324a57fc9c3200ee00549942e7994bc665a47701",
+        "evidenceLocations": [
+          "Incident description",
+          "Testing gap",
+          "Remediation plan"
+        ],
+        "observedFailure": "A multi-domain path checked one FQDN N times; tests asserted N results and used one-domain integration coverage rather than identity binding."
+      },
+      "publicContract": {
+        "goal": "Recheck current CAA authorization for every certificate name whose cached validation is older than eight hours and issue only when every name permits issuance.",
+        "inputGrammar": {
+          "notation": "TypeScript",
+          "definition": "type OrderView = { orderId:string, nowHour:number, names:{fqdn:string,validatedAtHour:number,cachedCaa:'ALLOW'|'DENY'}[] } with unique lowercase FQDNs and 1..5 names",
+          "validExamples": [
+            "{\"orderId\":\"o1\",\"nowHour\":20,\"names\":[{\"fqdn\":\"a.example\",\"validatedAtHour\":10,\"cachedCaa\":\"ALLOW\"},{\"fqdn\":\"b.example\",\"validatedAtHour\":19,\"cachedCaa\":\"ALLOW\"}]}"
+          ],
+          "invalidExamples": [
+            "{\"orderId\":\"o1\",\"names\":[{\"fqdn\":\"A EXAMPLE\",\"validatedAtHour\":\"old\"}]}"
+          ]
+        },
+        "outputGrammar": {
+          "notation": "TypeScript",
+          "definition": "type OrderReport = { decision:'ISSUE'|'REFUSE', results:{fqdn:string,caa:'ALLOW'|'DENY',source:'CACHE'|'CURRENT'}[] }",
+          "validExamples": [
+            "{\"decision\":\"ISSUE\",\"results\":[{\"fqdn\":\"a.example\",\"caa\":\"ALLOW\",\"source\":\"CURRENT\"}]}",
+            "{\"decision\":\"REFUSE\",\"results\":[{\"fqdn\":\"a.example\",\"caa\":\"DENY\",\"source\":\"CURRENT\"}]}"
+          ],
+          "invalidExamples": [
+            "{\"decision\":\"ISSUE\",\"results\":[{\"caa\":\"ALLOW\"}]}"
+          ]
+        },
+        "stateSemantics": {
+          "initialState": "ORDER_PENDING",
+          "states": [
+            "ORDER_PENDING",
+            "NAMES_RECONCILED",
+            "ORDER_ISSUED",
+            "ORDER_REFUSED"
+          ],
+          "transitions": [
+            {
+              "id": "reconcile-each-domain-name",
+              "from": "ORDER_PENDING",
+              "input": "For each name with nowHour - validatedAtHour greater than 8, call caa.current with that exact fqdn once; otherwise use its own cachedCaa.",
+              "to": "NAMES_RECONCILED",
+              "effect": "Produce one result bound to each input name in the original order."
+            },
+            {
+              "id": "decide-whole-certificate-order",
+              "from": "NAMES_RECONCILED",
+              "input": "Inspect all bound results after reconciliation.",
+              "to": "ORDER_ISSUED",
+              "effect": "ISSUE only when every result is ALLOW; any DENY produces REFUSE."
+            }
+          ]
+        },
+        "acceptedOutcomes": [
+          "Every input FQDN has one same-name result, every age greater than eight hours uses its current CAA answer, and ISSUE occurs only when all results allow."
+        ],
+        "forbiddenOutcomes": [
+          "Using one domain's current result for another, checking one FQDN repeatedly to satisfy list length, omitting a name, or issuing with any DENY."
+        ],
+        "safetyObligations": [
+          "Never issue unless every requested name is individually bound to an applicable ALLOW result under the public eight-hour rule."
+        ],
+        "livenessObligations": [
+          "Query every stale name exactly once, retain fresh cached results, and return one decision for every well-formed order."
+        ],
+        "implementationFreedom": [
+          "Iteration style, maps, arrays, helper functions, and query order may vary while output order matches input order."
+        ],
+        "nonrequirements": [
+          "DNS transport, CAA record parsing, ACME protocol messages, certificate signing, revocation, and thirty-day domain-control validity are outside this task."
+        ]
+      },
+      "grading": {
+        "rules": [
+          {
+            "id": "caa-current-result-bound-per-name",
+            "agentVisibleText": "For every name older than eight hours, call caa.current on that exact fqdn and bind the returned value only to that fqdn.",
+            "publicSection": "Per-name rechecking"
+          },
+          {
+            "id": "caa-all-names-must-authorize",
+            "agentVisibleText": "Return ISSUE if and only if every per-name result is ALLOW; otherwise return REFUSE.",
+            "publicSection": "Issuance decision"
+          },
+          {
+            "id": "caa-positive-query-work-required",
+            "agentVisibleText": "Each stale name must produce one host-recorded current CAA query.",
+            "publicSection": "Positive work"
+          }
+        ],
+        "metrics": [
+          {
+            "id": "caa-name-binding-mismatch-count",
+            "unit": "stale names without a same-name current query and result",
+            "deterministicProcedure": "Compare each stale input fqdn to host query records and its output result; count missing, repeated-other-name, or mismatched bindings.",
+            "comparator": "=",
+            "threshold": 0,
+            "derivation": {
+              "formula": "permitted_violation_count",
+              "inputs": {
+                "permitted_violations": 0
+              },
+              "explanation": "Every stale name requires its own exact current result, so no binding mismatch is permitted."
+            }
+          },
+          {
+            "id": "caa-unsafe-issuance-count",
+            "unit": "ISSUE decisions containing a denied name",
+            "deterministicProcedure": "Join output names to host-owned applicable CAA answers and count ISSUE reports with any DENY.",
+            "comparator": "=",
+            "threshold": 0,
+            "derivation": {
+              "formula": "permitted_violation_count",
+              "inputs": {
+                "permitted_violations": 0
+              },
+              "explanation": "Certificate issuance is conjunctive across all names, permitting no denied member."
+            }
+          },
+          {
+            "id": "caa-stale-name-query-count",
+            "unit": "host-recorded CAA queries for stale names",
+            "deterministicProcedure": "Count exact-fqdn current calls when the fixture contains at least one name older than eight hours.",
+            "comparator": ">=",
+            "threshold": 1,
+            "derivation": {
+              "formula": "minimum_positive_work_count",
+              "inputs": {
+                "minimum_positive_work": 1
+              },
+              "explanation": "One query is the minimum positive work for a fixture selected to contain a stale name."
+            }
+          }
+        ],
+        "checks": [
+          {
+            "id": "check-caa-per-name-binding",
+            "ruleIds": [
+              "caa-current-result-bound-per-name"
+            ],
+            "metricIds": [
+              "caa-name-binding-mismatch-count"
+            ],
+            "envelopeDimensionIds": [
+              "domain-count",
+              "validation-age-hours",
+              "deny-position"
+            ]
+          },
+          {
+            "id": "check-caa-safe-issuance",
+            "ruleIds": [
+              "caa-all-names-must-authorize"
+            ],
+            "metricIds": [
+              "caa-unsafe-issuance-count"
+            ],
+            "envelopeDimensionIds": [
+              "domain-count",
+              "deny-position"
+            ]
+          },
+          {
+            "id": "check-caa-positive-query-work",
+            "ruleIds": [
+              "caa-positive-query-work-required"
+            ],
+            "metricIds": [
+              "caa-stale-name-query-count"
+            ],
+            "envelopeDimensionIds": [
+              "validation-age-hours"
+            ]
+          }
+        ]
+      },
+      "hiddenInstanceEnvelope": {
+        "publicDescription": "Held-out cases vary only domain-count, validation-age-hours, deny-position, all defined below.",
+        "dimensions": [
+          {
+            "id": "domain-count",
+            "type": "integer",
+            "values": [
+              1,
+              2,
+              3,
+              5
+            ],
+            "derivation": "One is the published integration-test control; larger orders activate the incident's N-name path."
+          },
+          {
+            "id": "validation-age-hours",
+            "type": "integer",
+            "values": [
+              0,
+              8,
+              9,
+              24,
+              719
+            ],
+            "derivation": "The public boundary is greater than eight hours; 719 remains within the documented thirty-day cache period."
+          },
+          {
+            "id": "deny-position",
+            "type": "enum",
+            "values": [
+              "none",
+              "first",
+              "middle",
+              "last"
+            ],
+            "derivation": "Position changes expose implementations that repeat one iterator value while preserving result count."
+          }
+        ],
+        "samplingProcedure": "Include every age boundary and domain-count control, then hash-balance deny position so the denied name is not predictably first.",
+        "constraints": [
+          "Input FQDNs are unique lowercase ASCII labels and every caa.current call deterministically returns ALLOW or DENY.",
+          "Ages equal to eight use CACHE; only ages strictly greater than eight require CURRENT."
+        ],
+        "noNewRulesEvidence": "All cases vary only public domain count, age, and deny position; no DNS errors or undocumented record semantics are introduced."
+      },
+      "subjectInterface": {
+        "entrypoint": "submission/reconcile.mjs exports run(view, caa) returning one OrderReport.",
+        "readableInputs": [
+          "OrderView and caa.current(fqdn), which returns ALLOW or DENY for that exact name."
+        ],
+        "writableOutputs": [
+          "CAA query calls and one ordered per-name result list plus issuance decision."
+        ],
+        "unavailableAuthority": [
+          "Host query ledger, held-out current CAA map, and authoritative decision recomputation."
+        ]
+      },
+      "authorityBoundary": {
+        "kind": "host-owned per-domain authorization service and query ledger",
+        "enforcement": "The subject can query one name at a time but cannot enumerate the held-out map or rewrite which fqdn each call recorded.",
+        "subjectCanCross": false
+      },
+      "witnessInaccessibility": {
+        "witness": "The mapping from every requested stale FQDN to the exact host query and current authorization result.",
+        "proof": "The facade returns only the queried name's value; the immutable query-to-name ledger and complete hidden map remain in the harness.",
+        "locallyObservable": false
+      },
+      "validation": {
+        "referenceStrategy": "Map input names in order, query each age greater than eight by its own fqdn, reuse only that name's fresh cache, and require every result to allow.",
+        "narrowMutants": [
+          {
+            "id": "first-stale-name-reused-mutant",
+            "singleDefect": "Finds the first stale name and queries that same fqdn once for every stale list position.",
+            "expectedFailedChecks": [
+              "check-caa-per-name-binding",
+              "check-caa-safe-issuance"
+            ]
+          }
+        ],
+        "cheatModels": [
+          {
+            "id": "cardinality-only-query-cheat",
+            "attempt": "Issue after making the correct number of calls without binding call identities to requested names.",
+            "blockedBy": "The host query ledger is joined by exact fqdn and the verifier grades identity correspondence rather than count."
+          }
+        ],
+        "positiveWorkRequirement": "Every held-out fixture contains at least one stale name, and each stale name requires one same-name current query.",
+        "cheapProbe": {
+          "id": "caa-identity-binding-probe",
+          "procedure": "In one invocation, run reference, first-name-reuse mutant, and malformed output twice over one-name controls and multi-name denied-tail cases.",
+          "falsifier": "Kill if reference fails, mutant does not fail binding or safe-issuance checks, malformed output is graded, replay changes, or query ledger leaks.",
+          "activationSignal": "The mutant performs N queries and emits N results but the host ledger records one fqdn N times while another stale denied name is never queried."
+        }
+      },
+      "derivation": {
+        "classification": "A2",
+        "citationCount": 4,
+        "sectionSpan": 3,
+        "inferenceDepth": 1,
+        "negativeInference": false,
+        "citations": [
+          "Incident report: names validated more than eight hours earlier require CAA rechecking.",
+          "Incident report: N required names caused one selected domain to be checked N times.",
+          "Incident report: the unit test asserted only the number of returned authorizations.",
+          "Incident report: the integration test contained only one FQDN."
+        ],
+        "evidenceChain": [
+          "The authorization obligation belongs to each domain identity, not to list cardinality.",
+          "A value-to-identity checker and multi-name envelope directly expose the documented loop-binding defect."
+        ],
+        "unresolvedValidityRisks": [
+          "The eight-hour boundary is incident-specific and must stay explicit rather than becoming hidden certificate-policy knowledge."
+        ]
+      },
+      "novelty": {
+        "causalAxis": "cardinality preserved while external authorization values bind to the wrong principal identities",
+        "subjectActionContract": "revalidate every stale domain identity before one certificate issuance decision",
+        "nearestBaseline": "access-token-scope-expansion authority family",
+        "materialDifference": "This task preserves list length while corrupting per-principal correspondence; it does not choose between stale and current scope for one principal."
+      }
+    },
+    {
+      "schema": "agent-eval-foundry/candidate-contract@1",
+      "candidateId": "remote-state-lock-recovery",
+      "sourceIncidentId": "terraform-state-lock-boundary",
+      "role": "prospective",
+      "source": {
+        "locator": "https://developer.hashicorp.com/terraform/language/state/locking",
+        "revision": "terraform-v1.16-documentation-snapshot-2026-09-04",
+        "digest": "44f424417acaec2c4d155b56e1ae261cb2ad3ef7ae2668ae884bfd49aa6886b3",
+        "evidenceLocations": [
+          "State locking",
+          "Force unlock nonce",
+          "Backend state serial"
+        ],
+        "observedFailure": "No observed incident is claimed; force-unlock requires the unique lock id so one caller cannot release another writer's lock."
+      },
+      "publicContract": {
+        "goal": "Recover a failed remote-state lock only when the operator-provided lock id still names the same backend lock and state serial.",
+        "inputGrammar": {
+          "notation": "TypeScript",
+          "definition": "type LockView = { workspace:string, failedLockId:string, observedStateSerial:number, operation:'FORCE_UNLOCK' }",
+          "validExamples": [
+            "{\"workspace\":\"prod\",\"failedLockId\":\"lock-17\",\"observedStateSerial\":42,\"operation\":\"FORCE_UNLOCK\"}"
+          ],
+          "invalidExamples": [
+            "{\"workspace\":\"prod\",\"failedLockId\":\"\",\"operation\":\"UNLOCK_ANY\"}"
+          ]
+        },
+        "outputGrammar": {
+          "notation": "TypeScript",
+          "definition": "type LockReport = { decision:'UNLOCKED'|'REFUSED', lockId:string, observedOwner:string|null, observedStateSerial:number }",
+          "validExamples": [
+            "{\"decision\":\"UNLOCKED\",\"lockId\":\"lock-17\",\"observedOwner\":\"run-8\",\"observedStateSerial\":42}"
+          ],
+          "invalidExamples": [
+            "{\"decision\":\"UNLOCKED\",\"lockId\":\"prod-latest\"}"
+          ]
+        },
+        "stateSemantics": {
+          "initialState": "LOCK_FAILURE_REPORTED",
+          "states": [
+            "LOCK_FAILURE_REPORTED",
+            "CURRENT_LOCK_OBSERVED",
+            "LOCK_RELEASED",
+            "UNLOCK_REFUSED"
+          ],
+          "transitions": [
+            {
+              "id": "observe-current-backend-lock",
+              "from": "LOCK_FAILURE_REPORTED",
+              "input": "Call backend.inspect(workspace) and retain its exact id, owner, and stateSerial response.",
+              "to": "CURRENT_LOCK_OBSERVED",
+              "effect": "No state changes; the host records which lock version was observed."
+            },
+            {
+              "id": "conditional-force-unlock",
+              "from": "CURRENT_LOCK_OBSERVED",
+              "input": "Call backend.forceUnlock only when id equals failedLockId and stateSerial equals observedStateSerial.",
+              "to": "LOCK_RELEASED",
+              "effect": "The backend releases exactly the matching current lock or atomically rejects a stale compare value."
+            }
+          ]
+        },
+        "acceptedOutcomes": [
+          "Inspect current backend state and unlock only the exact failed lock id at the exact observed state serial; otherwise refuse without mutation."
+        ],
+        "forbiddenOutcomes": [
+          "Unlocking by workspace name, local process id, owner text, timestamp, reconstructed nonce, or stale state serial."
+        ],
+        "safetyObligations": [
+          "Never release a concurrent writer's lock or overwrite a newer backend state serial."
+        ],
+        "livenessObligations": [
+          "Release the exact unchanged failed lock after one successful inspection and compare."
+        ],
+        "implementationFreedom": [
+          "The implementation may structure comparisons and diagnostics freely while it uses the exact supplied lock id and serial."
+        ],
+        "nonrequirements": [
+          "Creating locks, running Terraform plans, modifying infrastructure, backend authentication, and interactive confirmation are outside this task."
+        ]
+      },
+      "grading": {
+        "rules": [
+          {
+            "id": "lock-exact-nonce-and-serial-required",
+            "agentVisibleText": "forceUnlock is permitted only when the inspected current id equals failedLockId and current stateSerial equals observedStateSerial.",
+            "publicSection": "Force-unlock identity"
+          },
+          {
+            "id": "lock-stale-observation-must-refuse",
+            "agentVisibleText": "Any id or serial mismatch must return REFUSED without a forceUnlock call.",
+            "publicSection": "Concurrent writer safety"
+          },
+          {
+            "id": "lock-positive-inspection-required",
+            "agentVisibleText": "Every valid request must inspect current backend lock state before deciding.",
+            "publicSection": "Positive work"
+          }
+        ],
+        "metrics": [
+          {
+            "id": "lock-wrong-release-count",
+            "unit": "released locks not matching id and state serial",
+            "deterministicProcedure": "Join each host unlock record to the immediately preceding inspect record and count any id or serial mismatch.",
+            "comparator": "=",
+            "threshold": 0,
+            "derivation": {
+              "formula": "permitted_violation_count",
+              "inputs": {
+                "permitted_violations": 0
+              },
+              "explanation": "The nonce and serial contract permits no cross-version release."
+            }
+          },
+          {
+            "id": "lock-stale-mutation-count",
+            "unit": "backend mutations after a stale observation",
+            "deterministicProcedure": "Count forceUnlock calls after inspect returns an id or state serial unequal to the request.",
+            "comparator": "=",
+            "threshold": 0,
+            "derivation": {
+              "formula": "permitted_violation_count",
+              "inputs": {
+                "permitted_violations": 0
+              },
+              "explanation": "Every stale observation requires refusal without mutation."
+            }
+          },
+          {
+            "id": "lock-inspection-call-count",
+            "unit": "host-recorded current-lock inspections",
+            "deterministicProcedure": "Count backend.inspect calls before the final report for every valid request.",
+            "comparator": ">=",
+            "threshold": 1,
+            "derivation": {
+              "formula": "minimum_positive_work_count",
+              "inputs": {
+                "minimum_positive_work": 1
+              },
+              "explanation": "One current-state inspection is the minimum positive work needed to adjudicate ownership."
+            }
+          }
+        ],
+        "checks": [
+          {
+            "id": "check-lock-exact-release",
+            "ruleIds": [
+              "lock-exact-nonce-and-serial-required"
+            ],
+            "metricIds": [
+              "lock-wrong-release-count"
+            ],
+            "envelopeDimensionIds": [
+              "lock-relation",
+              "serial-relation"
+            ]
+          },
+          {
+            "id": "check-lock-stale-refusal",
+            "ruleIds": [
+              "lock-stale-observation-must-refuse"
+            ],
+            "metricIds": [
+              "lock-stale-mutation-count"
+            ],
+            "envelopeDimensionIds": [
+              "lock-relation",
+              "serial-relation"
+            ]
+          },
+          {
+            "id": "check-lock-positive-inspection",
+            "ruleIds": [
+              "lock-positive-inspection-required"
+            ],
+            "metricIds": [
+              "lock-inspection-call-count"
+            ],
+            "envelopeDimensionIds": [
+              "backend-outcome"
+            ]
+          }
+        ]
+      },
+      "hiddenInstanceEnvelope": {
+        "publicDescription": "Held-out cases vary only lock-relation, serial-relation, backend-outcome, all defined below.",
+        "dimensions": [
+          {
+            "id": "lock-relation",
+            "type": "enum",
+            "values": [
+              "same-lock",
+              "replacement-lock",
+              "no-current-lock"
+            ],
+            "derivation": "The unique lock id distinguishes the caller's failed lock from a later writer or no lock."
+          },
+          {
+            "id": "serial-relation",
+            "type": "enum",
+            "values": [
+              "same-serial",
+              "newer-serial"
+            ],
+            "derivation": "Remote state can advance after a local observation and newer state must not be overwritten."
+          },
+          {
+            "id": "backend-outcome",
+            "type": "enum",
+            "values": [
+              "accepted",
+              "compare-rejected",
+              "unavailable"
+            ],
+            "derivation": "Atomic acceptance, race rejection, and typed unavailability cover the public facade contract."
+          }
+        ],
+        "samplingProcedure": "Enumerate every lock and serial relation, then hash-balance backend outcomes with same-lock acceptance and replacement-lock refusal controls.",
+        "constraints": [
+          "Lock ids are opaque nonempty strings and cannot be derived from workspace, owner, time, or state serial.",
+          "forceUnlock atomically compares both id and serial to the state returned by the most recent inspect for that request."
+        ],
+        "noNewRulesEvidence": "The three public dimensions completely determine same-lock release, stale refusal, and typed backend failure outcomes."
+      },
+      "subjectInterface": {
+        "entrypoint": "submission/unlock.mjs exports run(view, backend) returning one LockReport.",
+        "readableInputs": [
+          "LockView plus backend.inspect(workspace) and backend.forceUnlock(workspace, lockId, stateSerial)."
+        ],
+        "writableOutputs": [
+          "One optional forceUnlock call and one exact LockReport."
+        ],
+        "unavailableAuthority": [
+          "Backend current-lock record, atomic compare result, state bytes, and mutation ledger."
+        ]
+      },
+      "authorityBoundary": {
+        "kind": "remote backend-owned lock and state-serial authority",
+        "enforcement": "The subject receives facade snapshots and compare results but cannot mutate current lock identity or state serial except through atomic forceUnlock.",
+        "subjectCanCross": false
+      },
+      "witnessInaccessibility": {
+        "witness": "Which opaque lock id and state serial the backend atomically released, if any.",
+        "proof": "The immutable mutation ledger stays in the parent harness; report fields and local reconstruction cannot alter it.",
+        "locallyObservable": false
+      },
+      "validation": {
+        "referenceStrategy": "Inspect the backend, compare exact id and serial to the request, refuse any mismatch, and submit those exact observed values to atomic forceUnlock.",
+        "narrowMutants": [
+          {
+            "id": "workspace-derived-lock-id-mutant",
+            "singleDefect": "Reconstructs a lock id from workspace and state serial instead of carrying the opaque failedLockId.",
+            "expectedFailedChecks": [
+              "check-lock-exact-release",
+              "check-lock-stale-refusal"
+            ]
+          }
+        ],
+        "cheatModels": [
+          {
+            "id": "reported-unlock-without-backend-call",
+            "attempt": "Return UNLOCKED after matching local strings without calling the backend.",
+            "blockedBy": "The host mutation ledger and exact-release check require one accepted atomic unlock record."
+          }
+        ],
+        "positiveWorkRequirement": "Every valid request must inspect the current lock; same-lock unchanged cases must attempt one unlock.",
+        "cheapProbe": {
+          "id": "lock-nonce-fencing-probe",
+          "procedure": "In one invocation, run reference, derived-id mutant, and malformed report twice over same, replacement, newer-serial, and race fixtures.",
+          "falsifier": "Kill if reference fails, mutant does not fail the exact-release axis, malformed output is graded, replay differs, or the backend ledger leaks.",
+          "activationSignal": "A replacement writer retains the same workspace and related serial while its opaque lock id differs from the failed caller's id."
+        }
+      },
+      "derivation": {
+        "classification": "A2",
+        "citationCount": 3,
+        "sectionSpan": 2,
+        "inferenceDepth": 1,
+        "negativeInference": false,
+        "citations": [
+          "Terraform state locking documentation: failed acquisition stops write operations.",
+          "Terraform force-unlock documentation: the unique lock id acts as a nonce and should target only one's own failed lock.",
+          "Terraform backend documentation: newer state serial prevents stale overwrite."
+        ],
+        "evidenceChain": [
+          "The backend-issued lock id identifies the exact lock rather than a workspace or owner description.",
+          "Combining exact nonce and state serial prevents a delayed recovery from releasing a replacement writer."
+        ],
+        "unresolvedValidityRisks": [
+          "The state-serial conjunction extends the lock-id page with backend documentation and may be too shallow to become a hard task."
+        ]
+      },
+      "novelty": {
+        "causalAxis": "opaque lock ownership fencing across a newer remote-state version",
+        "subjectActionContract": "recover one failed state lock without unlocking a concurrent writer",
+        "nearestBaseline": "access-token-scope-expansion and durable idempotency authority",
+        "materialDifference": "This recovery authorizes destructive lock release through an opaque nonce plus state serial, rather than tool-effect deduplication or permission-scope lookup."
+      }
+    },
+    {
+      "schema": "agent-eval-foundry/candidate-contract@1",
+      "candidateId": "oci-descriptor-verified-fetcher",
+      "sourceIncidentId": "oci-image-descriptor-digest-boundary",
+      "role": "prospective",
+      "source": {
+        "locator": "https://github.com/opencontainers/image-spec/blob/main/descriptor.md?plain=1",
+        "revision": "main-snapshot-2026-09-04",
+        "digest": "f4ece6cbd6fe23bcad76463df69349d05c8957bad4f2931419d4e4f340d65606",
+        "evidenceLocations": [
+          "Descriptor properties",
+          "Digest verification",
+          "SHA-256 requirements"
+        ],
+        "observedFailure": "No observed incident is claimed; the specification defines digest and size verification before consuming untrusted bytes."
+      },
+      "publicContract": {
+        "goal": "Fetch OCI content from a descriptor URL, reject size or SHA-256 mismatch, and consume only the exact descriptor-committed bytes.",
+        "inputGrammar": {
+          "notation": "TypeScript",
+          "definition": "type FetchView = { requestId:string, descriptor:{mediaType:string,size:number,digest:`sha256:${string}`,urls:string[]} } with one or two HTTPS URLs and a 64-lowercase-hex digest",
+          "validExamples": [
+            "{\"requestId\":\"r1\",\"descriptor\":{\"mediaType\":\"application/vnd.oci.image.manifest.v1+json\",\"size\":3,\"digest\":\"sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"urls\":[\"https://registry.example/blob\"]}}"
+          ],
+          "invalidExamples": [
+            "{\"descriptor\":{\"size\":-1,\"digest\":\"sha256:XYZ\",\"urls\":[]}}"
+          ]
+        },
+        "outputGrammar": {
+          "notation": "TypeScript",
+          "definition": "type FetchReport = { decision:'CONSUMED'|'REJECTED', url:string|null, observedSize:number|null, observedDigest:string|null }",
+          "validExamples": [
+            "{\"decision\":\"CONSUMED\",\"url\":\"https://registry.example/blob\",\"observedSize\":3,\"observedDigest\":\"sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}"
+          ],
+          "invalidExamples": [
+            "{\"decision\":\"TRUSTED\",\"url\":\"latest\"}"
+          ]
+        },
+        "stateSemantics": {
+          "initialState": "DESCRIPTOR_RECEIVED",
+          "states": [
+            "DESCRIPTOR_RECEIVED",
+            "BYTES_FETCHED",
+            "CONTENT_VERIFIED",
+            "CONTENT_REJECTED"
+          ],
+          "transitions": [
+            {
+              "id": "fetch-descriptor-url-bytes",
+              "from": "DESCRIPTOR_RECEIVED",
+              "input": "Call registry.fetch on one declared URL and retain the exact returned byte handle.",
+              "to": "BYTES_FETCHED",
+              "effect": "The host records immutable bytes for that fetch while a mutable URL may return different bytes on another call."
+            },
+            {
+              "id": "verify-before-content-consumption",
+              "from": "BYTES_FETCHED",
+              "input": "Compare raw byte length and lowercase SHA-256 to descriptor.size and descriptor.digest before registry.consume.",
+              "to": "CONTENT_VERIFIED",
+              "effect": "Consume the same byte handle only after both comparisons match; otherwise reject without consumption."
+            }
+          ]
+        },
+        "acceptedOutcomes": [
+          "CONSUMED follows one fetch whose exact bytes match both descriptor size and SHA-256 and those same bytes reach consume."
+        ],
+        "forbiddenOutcomes": [
+          "Trusting URL name, media type, registry metadata, separately refetched bytes, uppercase or malformed digest, size mismatch, or digest mismatch."
+        ],
+        "safetyObligations": [
+          "Never consume bytes that differ in length or digest from the committed descriptor."
+        ],
+        "livenessObligations": [
+          "Try declared URLs in order until matching bytes are found or every declared URL is rejected."
+        ],
+        "implementationFreedom": [
+          "The implementation may use Node's SHA-256 API or an equivalent exact implementation and may stream or buffer bytes."
+        ],
+        "nonrequirements": [
+          "Signature verification, layer unpacking, tag resolution, authentication, media-type interpretation, and non-SHA-256 algorithms are outside this task."
+        ]
+      },
+      "grading": {
+        "rules": [
+          {
+            "id": "oci-descriptor-size-and-digest-match",
+            "agentVisibleText": "Before consume, raw bytes must equal descriptor.size and lowercase sha256(bytes) must equal descriptor.digest.",
+            "publicSection": "Descriptor verification"
+          },
+          {
+            "id": "oci-same-fetched-bytes-consumed",
+            "agentVisibleText": "registry.consume must receive the exact verified byte handle, not a second fetch from the URL.",
+            "publicSection": "Stable content identity"
+          },
+          {
+            "id": "oci-positive-fetch-required",
+            "agentVisibleText": "Every valid descriptor with at least one URL must attempt at least one registry.fetch call.",
+            "publicSection": "Positive work"
+          }
+        ],
+        "metrics": [
+          {
+            "id": "oci-unverified-consumption-count",
+            "unit": "consumed byte handles without size and digest proof",
+            "deterministicProcedure": "For each consume record, compare that byte handle's host-recorded size and SHA-256 to the input descriptor.",
+            "comparator": "=",
+            "threshold": 0,
+            "derivation": {
+              "formula": "permitted_violation_count",
+              "inputs": {
+                "permitted_violations": 0
+              },
+              "explanation": "The descriptor permits no unverified consumption."
+            }
+          },
+          {
+            "id": "oci-verified-consumed-handle-mismatch",
+            "unit": "consume records using a different fetch handle",
+            "deterministicProcedure": "Compare the host identifier of the verified fetched bytes to the identifier passed to consume.",
+            "comparator": "=",
+            "threshold": 0,
+            "derivation": {
+              "formula": "permitted_violation_count",
+              "inputs": {
+                "permitted_violations": 0
+              },
+              "explanation": "Content identity covers the exact bytes, so no time-of-check/time-of-use substitution is permitted."
+            }
+          },
+          {
+            "id": "oci-registry-fetch-call-count",
+            "unit": "host-recorded content fetch operations",
+            "deterministicProcedure": "Count registry.fetch calls for each valid descriptor containing a declared URL.",
+            "comparator": ">=",
+            "threshold": 1,
+            "derivation": {
+              "formula": "minimum_positive_work_count",
+              "inputs": {
+                "minimum_positive_work": 1
+              },
+              "explanation": "One fetch is the minimum positive work required to evaluate remote content."
+            }
+          }
+        ],
+        "checks": [
+          {
+            "id": "check-oci-content-verification",
+            "ruleIds": [
+              "oci-descriptor-size-and-digest-match"
+            ],
+            "metricIds": [
+              "oci-unverified-consumption-count"
+            ],
+            "envelopeDimensionIds": [
+              "content-condition",
+              "content-size"
+            ]
+          },
+          {
+            "id": "check-oci-stable-consumption",
+            "ruleIds": [
+              "oci-same-fetched-bytes-consumed"
+            ],
+            "metricIds": [
+              "oci-verified-consumed-handle-mismatch"
+            ],
+            "envelopeDimensionIds": [
+              "url-mutation-mode",
+              "url-count"
+            ]
+          },
+          {
+            "id": "check-oci-positive-fetch",
+            "ruleIds": [
+              "oci-positive-fetch-required"
+            ],
+            "metricIds": [
+              "oci-registry-fetch-call-count"
+            ],
+            "envelopeDimensionIds": [
+              "url-count"
+            ]
+          }
+        ]
+      },
+      "hiddenInstanceEnvelope": {
+        "publicDescription": "Held-out cases vary only content-condition, content-size, url-count, url-mutation-mode, all defined below.",
+        "dimensions": [
+          {
+            "id": "content-condition",
+            "type": "enum",
+            "values": [
+              "exact",
+              "wrong-size",
+              "wrong-digest",
+              "both-wrong"
+            ],
+            "derivation": "The OCI descriptor independently requires raw size and digest checks."
+          },
+          {
+            "id": "content-size",
+            "type": "integer",
+            "values": [
+              0,
+              1,
+              64,
+              1024
+            ],
+            "derivation": "Boundary sizes include empty, single-byte, block-sized, and multi-block hash inputs."
+          },
+          {
+            "id": "url-count",
+            "type": "integer",
+            "values": [
+              1,
+              2
+            ],
+            "derivation": "The descriptor allows a URL list; two URLs exercise ordered fallback without changing identity rules."
+          },
+          {
+            "id": "url-mutation-mode",
+            "type": "enum",
+            "values": [
+              "stable",
+              "changes-after-first-fetch"
+            ],
+            "derivation": "Mutable retrieval location must not replace descriptor-committed byte identity after verification."
+          }
+        ],
+        "samplingProcedure": "Enumerate every content condition at boundary sizes and hash-balance stable and changing URL behavior across one- and two-URL cases.",
+        "constraints": [
+          "Digest strings use exactly the published sha256 prefix and 64 lowercase hexadecimal characters.",
+          "A fetch handle refers to immutable bytes even when a later call to the same URL returns different bytes."
+        ],
+        "noNewRulesEvidence": "All hidden cases vary only the published content, size, URL count, and mutation dimensions and grade the three explicit rules."
+      },
+      "subjectInterface": {
+        "entrypoint": "submission/fetch.mjs exports run(view, registry) returning one FetchReport.",
+        "readableInputs": [
+          "FetchView and registry.fetch(url), registry.bytes(handle), and registry.consume(requestId, handle)."
+        ],
+        "writableOutputs": [
+          "Fetch and consume calls plus one FetchReport with observed size and digest."
+        ],
+        "unavailableAuthority": [
+          "Future URL contents, host fetch-handle ledger, consume ledger, and verifier digest recomputation."
+        ]
+      },
+      "authorityBoundary": {
+        "kind": "host-owned mutable registry and immutable fetched-byte handles",
+        "enforcement": "The subject accesses remote content only through handles; it cannot rewrite bytes recorded for a handle or the consume ledger.",
+        "subjectCanCross": false
+      },
+      "witnessInaccessibility": {
+        "witness": "The exact immutable byte handle consumed and its host-recomputed size and SHA-256.",
+        "proof": "The subject can read bytes to verify them but cannot alter the host's handle identity, historical fetched bytes, or consume record.",
+        "locallyObservable": false
+      },
+      "validation": {
+        "referenceStrategy": "Fetch each URL in order, read one immutable handle, compute raw size and SHA-256, and consume that same handle only on both exact matches.",
+        "narrowMutants": [
+          {
+            "id": "verify-then-refetch-mutant",
+            "singleDefect": "Verifies the first fetch but calls fetch again and consumes the second handle from the mutable URL.",
+            "expectedFailedChecks": [
+              "check-oci-stable-consumption"
+            ]
+          }
+        ],
+        "cheatModels": [
+          {
+            "id": "reported-digest-without-consume-proof",
+            "attempt": "Echo the descriptor digest and claim CONSUMED without passing a verified byte handle to the host.",
+            "blockedBy": "The verifier recomputes the digest over the host's consumed handle and requires a positive consume record."
+          }
+        ],
+        "positiveWorkRequirement": "Every valid descriptor must produce at least one host-recorded fetch operation.",
+        "cheapProbe": {
+          "id": "oci-fetch-handle-toctou-probe",
+          "procedure": "In one invocation, run reference, verify-then-refetch mutant, and malformed report twice over stable and changing URL fixtures.",
+          "falsifier": "Kill if reference fails, mutant does not fail only stable-consumption checks, malformed output is graded, replay differs, or future bytes leak.",
+          "activationSignal": "The first fetched handle matches the descriptor while the same URL returns different bytes on the mutant's second fetch."
+        }
+      },
+      "derivation": {
+        "classification": "A3",
+        "citationCount": 3,
+        "sectionSpan": 2,
+        "inferenceDepth": 0,
+        "negativeInference": false,
+        "citations": [
+          "OCI descriptor specification: media type, digest, and raw size are required properties.",
+          "OCI descriptor verification: verify size and digest before consuming untrusted content.",
+          "OCI SHA-256 rule: encoded digest is exactly 64 lowercase hexadecimal characters."
+        ],
+        "evidenceChain": [
+          "A descriptor commits exact raw bytes independently of the URL used to fetch them.",
+          "Consuming a later refetch violates that identity even if an earlier fetch was verified."
+        ],
+        "unresolvedValidityRisks": [
+          "This source supplies protocol precedent but no observed agent or production failure, so source support is weaker than the incident-derived candidates."
+        ]
+      },
+      "novelty": {
+        "causalAxis": "time-of-check/time-of-use substitution across immutable content handles and mutable retrieval locations",
+        "subjectActionContract": "fetch and consume the exact bytes committed by one OCI descriptor",
+        "nearestBaseline": "durable approval outbox committed-authority recipe",
+        "materialDifference": "The verifier binds content bytes across verification and consumption rather than deduplicating an uncertain external action across retries."
+      }
+    }
+  ]
+}

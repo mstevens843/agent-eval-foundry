@@ -1,0 +1,23 @@
+{
+  "schema": "agent-eval-foundry/phase-16-source-snapshot@1",
+  "sourceUnitId": "cloudflare-2020-backbone-outage",
+  "retrievedAt": "2026-09-04T14:35:00Z",
+  "locator": "https://blog.cloudflare.com/cloudflare-outage-on-july-17-2020/",
+  "sourceKind": "first-party outage postmortem",
+  "published": "2020-07-18",
+  "evidence": [
+    {
+      "location": "Summary, lines 840-846",
+      "fact": "A router configuration error attracted backbone traffic to Atlanta, caused a 27-minute outage, and reduced observed traffic by about 50 percent."
+    },
+    {
+      "location": "Configuration analysis, lines 871-893",
+      "fact": "Deactivating a prefix-list condition instead of the policy term made the policy match every route and assign local preference 200, overriding local routes at preference 100."
+    },
+    {
+      "location": "Remediation, lines 897-898",
+      "fact": "Cloudflare added a maximum-prefix limit and changed local-route preference so one location could not attract every location's traffic."
+    }
+  ],
+  "observedFailure": "A one-line policy edit broadened a route match from a named prefix set to all routes; syntactically valid configuration then redirected half of network traffic."
+}

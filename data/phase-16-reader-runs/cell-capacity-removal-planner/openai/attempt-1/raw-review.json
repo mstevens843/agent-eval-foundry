@@ -1,0 +1,16 @@
+{
+  "candidateId": "cell-capacity-removal-planner",
+  "packetSha256": "284b0266d6eef2e8ee7600606d1f8c86209eb7f77c71c378a3e5f8bbbab1cdfa",
+  "providerFamily": "openai",
+  "dimensions": {
+    "source support": "pass",
+    "contract fairness": "fail",
+    "natural task contract": "pass",
+    "structural witness isolation": "pass",
+    "semantic novelty": "pass",
+    "cheap-probe falsifiability": "pass"
+  },
+  "verdict": "kill",
+  "earliestFailedDimension": "contract fairness",
+  "rationale": "The packet ties the proposal to the authoritative incident's excessive capacity removal, multi-subsystem blast radius, slower-removal remediation, and minimum-capacity safeguard, so source support passes. Contract fairness fails because the public input gives a removal count but defines neither the valid server-index set nor how an indexed server affects subsystem counts; it also does not specify the capacity.remove return schema or duplicate/rejected-index behavior. Those missing terms are necessary to choose legal batches, predict whether issuing a call itself violates the safety obligation, and report exactly the host-accepted indexes. The task remains natural, the host-owned immutable ledger isolates the structural witness, the capacity-floor mechanism is distinct from the listed novelty families, and the proposed reference/mutant/malformed/replay probe has explicit falsifiers. The closest competing verdict is promote if one assumes indexes are 0 through removeCount-1, each target-cell removal decrements every subsystem listing that cell, and a precise facade response; those assumptions are not stated, so contract terms cannot be filled in by the reader."
+}

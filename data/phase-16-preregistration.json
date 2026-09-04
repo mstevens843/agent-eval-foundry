@@ -1,0 +1,174 @@
+{
+  "schema": "agent-eval-foundry/phase-16-discovery-v3-preregistration@1",
+  "runId": "phase16-contract-complete-discovery-v3",
+  "registeredAt": "2026-09-04T14:32:36Z",
+  "baselineCommit": "6e65d2bb32666c6ddec9e54adee116beaf3770ea",
+  "chronologyEvidence": "The real UTC clock value above and this execution transcript establish local ordering only; neither is independent third-party timestamp proof.",
+  "immutability": {
+    "completedPhase15Run": "Phase 15 remains unchanged at zero reader survivors.",
+    "noReplacement": "No source or candidate may be replaced, repaired, or added after this registration is opened.",
+    "candidateContractGateSha256": "d005856c34c9d04378aea0e107220b13d3e3cd2549c65afe9203f8b0e64f9fc4",
+    "candidateContractSchemaSha256": "ae9d02567fdab71ca3495ceb5b1e70071d9e706ae6a4f920c83ca360edaa86f1",
+    "calibrationSha256": "dc85b9a1b79407ee3f0336bc821828ec739add7034af343c513a553413c2087a"
+  },
+  "sourceCorpus": [
+    {
+      "sourceUnitId": "access-token-2026-08-o1",
+      "channel": "benchmark-trajectory-solve-patch",
+      "locator": "trials/access-token-scope-expansion/access-token-2026-08-o1",
+      "reason": "A fresh-to-Phase-15 counted local trial may expose a transferable authorization-state failure.",
+      "extractionLimit": 1
+    },
+    {
+      "sourceUnitId": "delegated-wallet-2026-08-o1",
+      "channel": "benchmark-trajectory-solve-patch",
+      "locator": "trials/delegated-wallet-scope-reconciliation/delegated-wallet-2026-08-o1",
+      "reason": "A fresh-to-Phase-15 counted local trial may expose a transferable delegated-authority reconciliation failure.",
+      "extractionLimit": 1
+    },
+    {
+      "sourceUnitId": "deployment-alias-2026-08-o1",
+      "channel": "agent-self-check-failure",
+      "locator": "trials/deployment-model-alias-rollout-drift/deployment-model-alias-rollout-drift-2026-08-o1",
+      "reason": "The preserved subject and checks can show whether local validation confirmed the wrong model-alias abstraction.",
+      "extractionLimit": 1
+    },
+    {
+      "sourceUnitId": "memory-poisoning-codex-3",
+      "channel": "agent-self-check-failure",
+      "locator": "trials/prompt-injection-memory-poisoning/mp-codex-3",
+      "reason": "The preserved trajectory may expose a self-check blind spot outside the recompute family.",
+      "extractionLimit": 1
+    },
+    {
+      "sourceUnitId": "gitlab-2017-database-incident",
+      "channel": "authoritative-incident-upstream-fix",
+      "locator": "GitLab.com database incident, 2017-01-31, first-party GitLab postmortem",
+      "reason": "Backup, replication, and recovery authority may separate a natural repair contract from local observability.",
+      "extractionLimit": 1
+    },
+    {
+      "sourceUnitId": "aws-s3-2017-service-disruption",
+      "channel": "authoritative-incident-upstream-fix",
+      "locator": "Amazon S3 service disruption, 2017-02-28, first-party AWS summary at aws.amazon.com/message/41926",
+      "reason": "A control-plane command exceeded intended scope and may support a bounded safety-invariant repair task.",
+      "extractionLimit": 1
+    },
+    {
+      "sourceUnitId": "cloudflare-2020-backbone-outage",
+      "channel": "authoritative-incident-upstream-fix",
+      "locator": "Cloudflare backbone outage, 2020-07-17, first-party Cloudflare postmortem",
+      "reason": "Route rollout and staged validation may expose a distinct topology-safety failure axis.",
+      "extractionLimit": 1
+    },
+    {
+      "sourceUnitId": "letsencrypt-2020-caa-recheck-bug",
+      "channel": "authoritative-incident-upstream-fix",
+      "locator": "Let's Encrypt CAA rechecking bug and 2020 revocation event, first-party incident notice",
+      "reason": "Reusing one validation result across names may support a provenance-scoped authorization task.",
+      "extractionLimit": 1
+    },
+    {
+      "sourceUnitId": "oci-image-descriptor-digest-boundary",
+      "channel": "boundary-first-system-inspection",
+      "locator": "Open Container Initiative image-spec descriptor and manifest documents on github.com/opencontainers/image-spec",
+      "reason": "Registry tags are mutable while descriptor digests commit immutable content across the pull boundary.",
+      "extractionLimit": 1
+    },
+    {
+      "sourceUnitId": "kafka-transactional-producer-boundary",
+      "channel": "boundary-first-system-inspection",
+      "locator": "Apache Kafka KIP-98 exactly-once and transactional messaging specification",
+      "reason": "Broker-owned producer epochs and sequence numbers form an authority boundary unavailable to a producer-local checker.",
+      "extractionLimit": 1
+    },
+    {
+      "sourceUnitId": "kubernetes-finalizer-boundary",
+      "channel": "boundary-first-system-inspection",
+      "locator": "Kubernetes finalizers concept documentation at kubernetes.io/docs/concepts/overview/working-with-objects/finalizers",
+      "reason": "Deletion timestamps, finalizers, and external cleanup may support a safety-and-liveness reconciliation task.",
+      "extractionLimit": 1
+    },
+    {
+      "sourceUnitId": "terraform-state-lock-boundary",
+      "channel": "boundary-first-system-inspection",
+      "locator": "HashiCorp Terraform state-locking documentation at developer.hashicorp.com/terraform/language/state/locking",
+      "reason": "Backend-owned lock identity may separate legitimate recovery from unsafe force-unlock behavior.",
+      "extractionLimit": 1
+    }
+  ],
+  "caps": {
+    "sourceUnits": 12,
+    "canonicalExtractions": 12,
+    "contractCompletionAttempts": 6,
+    "semanticUniqueCandidates": 4,
+    "readerPackets": 4,
+    "independentReaderReviews": 8,
+    "reviewsPerCandidate": 2,
+    "cheapProbes": 4,
+    "modelReads": 8,
+    "modelReadSpendUsd": 100,
+    "paidSubjectTrials": 0
+  },
+  "predictions": {
+    "extractedPatterns": 8,
+    "contractCompleteCandidates": 4,
+    "semanticUniques": 3,
+    "readerSurvivors": 2,
+    "probeSurvivors": 2,
+    "uncertainty": "The 80% interval is deliberately qualitative and wide: zero to three probe survivors is plausible because no prospective contract-complete run exists. The point prediction is frozen at two."
+  },
+  "deduplication": {
+    "fingerprint": "normalized causal axis plus normalized subject action contract",
+    "domainBreadth": "A different domain noun does not create novelty.",
+    "incidentMultiplicity": "Exactly one canonical extraction is allowed per source incident.",
+    "outboxExclusion": "Outbox and the repaired WAF are calibration fixtures only and never enter the prospective numerator."
+  },
+  "contractCompletion": {
+    "order": "source support, canonical extraction, complete contract, contract gate, semantic deduplication, packet creation",
+    "rule": "The engine may draft only from source-supported facts and public domain specifications; a missing obligation is a deficiency, not an invitation to invent behavior.",
+    "stopping": "Stop contract drafting after six attempts, even when more source patterns are eligible. Rank source support and structural witness availability before drafting."
+  },
+  "readerProtocol": {
+    "threshold": "2-of-2 promote, with one independent reader from OpenAI and one from Anthropic",
+    "blindedTo": [
+      "engine score",
+      "author rationale",
+      "predicted yield",
+      "other reader verdict",
+      "candidate rank"
+    ],
+    "packetMustContain": [
+      "source locator and immutable revision or snapshot digest",
+      "complete public task contract",
+      "novelty baseline",
+      "falsifiable cheap probe"
+    ],
+    "providerFailureRule": "If either provider family is unavailable, preserve packets and mark promotion blocked; do not substitute same-provider or self-review."
+  },
+  "probeProtocol": {
+    "eligibility": "Only a 2-of-2 cross-provider reader survivor may run.",
+    "sameInvocationControls": [
+      "reference pass",
+      "narrow-mutant failure",
+      "malformed-input refusal",
+      "mechanism activation",
+      "witness isolation",
+      "deterministic replay",
+      "challenge nonleakage"
+    ]
+  },
+  "promotionThresholds": {
+    "BUILD": "At least two B6 probe survivors from independent incidents and at least two causal axes.",
+    "REPEAT-DISCOVERY": "Exactly one B6 probe survivor.",
+    "REPAIR-ENGINE": "Zero B6 probe survivors after all eligible cross-provider reviews complete.",
+    "BLOCKED": "Required cross-provider reviews cannot run; this is not equivalent to zero survivors."
+  },
+  "stoppingRules": [
+    "Do not replace an unavailable, unsupported, duplicate, reader-killed, or probe-killed source.",
+    "Do not revise a candidate inside this run after its gate, reader, or probe outcome is known.",
+    "Do not execute a cheap probe without the registered cross-provider 2-of-2 reader result.",
+    "Do not buy subject trials in Phase 16.",
+    "Do not count calibration fixtures or retrospective repairs in prospective yield."
+  ]
+}

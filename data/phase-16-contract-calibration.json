@@ -1,0 +1,282 @@
+{
+  "schema": "agent-eval-foundry/phase-16-contract-calibration@1",
+  "runId": "phase16-contract-gate-calibration-v1",
+  "gateFrozenAt": "2026-09-04T14:27:25Z",
+  "gateHashes": {
+    "schema": "ae9d02567fdab71ca3495ceb5b1e70071d9e706ae6a4f920c83ca360edaa86f1",
+    "types": "e737b57021044f565430079bb9a83320021d235e019892ba3b16b7e137a59e9f",
+    "gate": "d005856c34c9d04378aea0e107220b13d3e3cd2549c65afe9203f8b0e64f9fc4",
+    "fixtures": "b5dfede8e8a784a0019864fd819c53c2ee83c36a9559b42328fe7b0a63c31bf3"
+  },
+  "controls": [
+    {
+      "id": "phase15-waf-original-negative",
+      "role": "retrospective negative: the exact drafting omissions both readers found",
+      "expectedStatus": "rejected",
+      "expectedDeficiencyCodes": [
+        "missing-grammar",
+        "missing-transition-semantics",
+        "missing-deterministic-meter",
+        "missing-numeric-threshold",
+        "missing-threshold-derivation",
+        "missing-hidden-envelope"
+      ],
+      "result": {
+        "candidateId": "phase15-original-waf-packet-calibration",
+        "status": "rejected",
+        "deficiencies": [
+          {
+            "code": "missing-grammar",
+            "path": "publicContract.inputGrammar.notation",
+            "message": "grammar notation must be explicit"
+          },
+          {
+            "code": "missing-specific-text",
+            "path": "publicContract.inputGrammar.definition",
+            "message": "publicContract.inputGrammar.definition must contain specific public text"
+          },
+          {
+            "code": "missing-nonempty-list",
+            "path": "publicContract.inputGrammar.validExamples",
+            "message": "publicContract.inputGrammar.validExamples must be a non-empty array"
+          },
+          {
+            "code": "missing-nonempty-list",
+            "path": "publicContract.inputGrammar.invalidExamples",
+            "message": "publicContract.inputGrammar.invalidExamples must be a non-empty array"
+          },
+          {
+            "code": "missing-grammar",
+            "path": "publicContract.outputGrammar.notation",
+            "message": "grammar notation must be explicit"
+          },
+          {
+            "code": "missing-specific-text",
+            "path": "publicContract.outputGrammar.definition",
+            "message": "publicContract.outputGrammar.definition must contain specific public text"
+          },
+          {
+            "code": "missing-nonempty-list",
+            "path": "publicContract.outputGrammar.validExamples",
+            "message": "publicContract.outputGrammar.validExamples must be a non-empty array"
+          },
+          {
+            "code": "missing-nonempty-list",
+            "path": "publicContract.outputGrammar.invalidExamples",
+            "message": "publicContract.outputGrammar.invalidExamples must be a non-empty array"
+          },
+          {
+            "code": "missing-specific-text",
+            "path": "publicContract.stateSemantics.initialState",
+            "message": "publicContract.stateSemantics.initialState must contain specific public text"
+          },
+          {
+            "code": "missing-nonempty-list",
+            "path": "publicContract.stateSemantics.states",
+            "message": "publicContract.stateSemantics.states must be a non-empty array"
+          },
+          {
+            "code": "missing-transition-semantics",
+            "path": "publicContract.stateSemantics.transitions",
+            "message": "at least one exact transition is required"
+          },
+          {
+            "code": "missing-specific-text",
+            "path": "grading.metrics[0].deterministicProcedure",
+            "message": "grading.metrics[0].deterministicProcedure must contain specific public text"
+          },
+          {
+            "code": "missing-deterministic-meter",
+            "path": "grading.metrics[0].deterministicProcedure",
+            "message": "the metric must define a deterministic measurement procedure"
+          },
+          {
+            "code": "missing-numeric-threshold",
+            "path": "grading.metrics[0].threshold",
+            "message": "threshold must be finite and numeric"
+          },
+          {
+            "code": "missing-specific-text",
+            "path": "grading.metrics[0].derivation.formula",
+            "message": "grading.metrics[0].derivation.formula must contain specific public text"
+          },
+          {
+            "code": "missing-specific-text",
+            "path": "grading.metrics[0].derivation.explanation",
+            "message": "grading.metrics[0].derivation.explanation must contain specific public text"
+          },
+          {
+            "code": "missing-threshold-derivation",
+            "path": "grading.metrics[0].derivation.inputs",
+            "message": "threshold derivation must expose numeric inputs"
+          },
+          {
+            "code": "missing-traceability",
+            "path": "grading.checks",
+            "message": "every checker must map to public rules"
+          },
+          {
+            "code": "ungraded-public-rule",
+            "path": "grading.checks",
+            "message": "public rule waf-public-semantic-equivalence has no check"
+          },
+          {
+            "code": "ungraded-public-rule",
+            "path": "grading.checks",
+            "message": "public rule waf-public-work-budget has no check"
+          },
+          {
+            "code": "ungraded-public-rule",
+            "path": "grading.checks",
+            "message": "public rule waf-public-positive-work has no check"
+          },
+          {
+            "code": "missing-specific-text",
+            "path": "hiddenInstanceEnvelope.publicDescription",
+            "message": "hiddenInstanceEnvelope.publicDescription must contain specific public text"
+          },
+          {
+            "code": "missing-hidden-envelope",
+            "path": "hiddenInstanceEnvelope.dimensions",
+            "message": "hidden dimensions must be public"
+          },
+          {
+            "code": "missing-specific-text",
+            "path": "hiddenInstanceEnvelope.samplingProcedure",
+            "message": "hiddenInstanceEnvelope.samplingProcedure must contain specific public text"
+          },
+          {
+            "code": "missing-nonempty-list",
+            "path": "hiddenInstanceEnvelope.constraints",
+            "message": "hiddenInstanceEnvelope.constraints must be a non-empty array"
+          },
+          {
+            "code": "missing-specific-text",
+            "path": "hiddenInstanceEnvelope.noNewRulesEvidence",
+            "message": "hiddenInstanceEnvelope.noNewRulesEvidence must contain specific public text"
+          }
+        ],
+        "checkedRuleCount": 3,
+        "checkedMetricCount": 1,
+        "checkedEnvelopeDimensionCount": 0
+      },
+      "held": true
+    },
+    {
+      "id": "repaired-waf-positive",
+      "role": "retrospective positive only; excluded from prospective yield",
+      "expectedStatus": "accepted",
+      "expectedDeficiencyCodes": [],
+      "result": {
+        "candidateId": "waf-semantic-complexity-repair-calibration",
+        "status": "accepted",
+        "deficiencies": [],
+        "checkedRuleCount": 3,
+        "checkedMetricCount": 3,
+        "checkedEnvelopeDimensionCount": 3
+      },
+      "held": true
+    },
+    {
+      "id": "a2-repaired-dao-positive",
+      "role": "retrospective fairness and traceability positive",
+      "expectedStatus": "accepted",
+      "expectedDeficiencyCodes": [],
+      "result": {
+        "candidateId": "dao-descendant-contract-calibration",
+        "status": "accepted",
+        "deficiencies": [],
+        "checkedRuleCount": 4,
+        "checkedMetricCount": 4,
+        "checkedEnvelopeDimensionCount": 4
+      },
+      "held": true
+    },
+    {
+      "id": "checker-hidden-vocabulary-negative",
+      "role": "retrospective negative: checker references an unpublished reason code",
+      "expectedStatus": "rejected",
+      "expectedDeficiencyCodes": [
+        "unknown-rule-reference"
+      ],
+      "result": {
+        "candidateId": "checker-hidden-reason-vocabulary-calibration",
+        "status": "rejected",
+        "deficiencies": [
+          {
+            "code": "unknown-rule-reference",
+            "path": "grading.checks[4].ruleIds",
+            "message": "unknown rule checker-reason-code-revoked"
+          }
+        ],
+        "checkedRuleCount": 4,
+        "checkedMetricCount": 4,
+        "checkedEnvelopeDimensionCount": 4
+      },
+      "held": true
+    },
+    {
+      "id": "locally-observable-negative",
+      "role": "retrospective negative: divergence lives in subject-readable state",
+      "expectedStatus": "rejected",
+      "expectedDeficiencyCodes": [
+        "crossable-authority-boundary",
+        "locally-observable-witness"
+      ],
+      "result": {
+        "candidateId": "locally-observable-subject-state-calibration",
+        "status": "rejected",
+        "deficiencies": [
+          {
+            "code": "crossable-authority-boundary",
+            "path": "authorityBoundary.subjectCanCross",
+            "message": "subject boundary must be structurally uncrossable"
+          },
+          {
+            "code": "locally-observable-witness",
+            "path": "witnessInaccessibility.locallyObservable",
+            "message": "the subject's own environment can observe the graded divergence"
+          }
+        ],
+        "checkedRuleCount": 3,
+        "checkedMetricCount": 3,
+        "checkedEnvelopeDimensionCount": 3
+      },
+      "held": true
+    },
+    {
+      "id": "wrong-shaped-input-negative",
+      "role": "B6 malformed-input control",
+      "expectedStatus": "refused",
+      "expectedDeficiencyCodes": [
+        "malformed-input-refused"
+      ],
+      "result": {
+        "candidateId": null,
+        "status": "refused",
+        "deficiencies": [
+          {
+            "code": "malformed-input-refused",
+            "path": "$",
+            "message": "candidate-contract is an array, expected an object"
+          }
+        ],
+        "checkedRuleCount": 0,
+        "checkedMetricCount": 0,
+        "checkedEnvelopeDimensionCount": 0
+      },
+      "held": true
+    }
+  ],
+  "b6": {
+    "usable": true,
+    "sameInvocation": true,
+    "knownGoodPassed": true,
+    "knownBadFailed": true,
+    "malformedInputRefused": true,
+    "nondegenerate": true,
+    "reasons": [
+      "controls held and the result discriminates"
+    ]
+  }
+}

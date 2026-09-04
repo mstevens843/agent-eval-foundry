@@ -1,0 +1,23 @@
+{
+  "schema": "agent-eval-foundry/phase-16-source-snapshot@1",
+  "sourceUnitId": "oci-image-descriptor-digest-boundary",
+  "retrievedAt": "2026-09-04T14:35:00Z",
+  "locator": "https://github.com/opencontainers/image-spec/blob/main/descriptor.md?plain=1",
+  "sourceKind": "authoritative protocol specification",
+  "revision": "main as retrieved; snapshot digest is the immutable evidence reference",
+  "evidence": [
+    {
+      "location": "Descriptor properties, lines 663-706",
+      "fact": "A descriptor carries required media type, digest, and raw-byte size; content with the wrong length should not be trusted."
+    },
+    {
+      "location": "Digest grammar and verification, lines 741-831",
+      "fact": "The digest is the content identifier; consumers independently hash retrieved bytes and compare the result to the descriptor before consumption."
+    },
+    {
+      "location": "SHA-256 requirements, lines 832-846",
+      "fact": "Implementations must support SHA-256 verification and its encoded portion is exactly 64 lowercase hexadecimal characters."
+    }
+  ],
+  "observedFailure": "No incident is asserted: the source defines a real trust boundary between mutable retrieval locations and descriptor-committed content identity."
+}

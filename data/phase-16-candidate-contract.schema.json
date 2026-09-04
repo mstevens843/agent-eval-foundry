@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agent-eval-foundry/candidate-contract@1",
+  "title": "Phase 16 candidate contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidateId",
+    "sourceIncidentId",
+    "role",
+    "source",
+    "publicContract",
+    "grading",
+    "hiddenInstanceEnvelope",
+    "subjectInterface",
+    "authorityBoundary",
+    "witnessInaccessibility",
+    "validation",
+    "derivation",
+    "novelty"
+  ],
+  "properties": {
+    "schema": { "const": "agent-eval-foundry/candidate-contract@1" },
+    "candidateId": { "type": "string", "minLength": 8 },
+    "sourceIncidentId": { "type": "string", "minLength": 8 },
+    "role": { "enum": ["prospective", "retrospective-calibration"] },
+    "source": { "$ref": "#/$defs/source" },
+    "publicContract": { "$ref": "#/$defs/publicContract" },
+    "grading": { "$ref": "#/$defs/grading" },
+    "hiddenInstanceEnvelope": { "$ref": "#/$defs/envelope" },
+    "subjectInterface": { "$ref": "#/$defs/subjectInterface" },
+    "authorityBoundary": { "$ref": "#/$defs/boundary" },
+    "witnessInaccessibility": { "$ref": "#/$defs/witness" },
+    "validation": { "$ref": "#/$defs/validation" },
+    "derivation": { "$ref": "#/$defs/derivation" },
+    "novelty": { "$ref": "#/$defs/novelty" }
+  },
+  "$defs": {
+    "text": { "type": "string", "minLength": 8 },
+    "texts": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/text" } },
+    "source": {
+      "type": "object",
+      "required": ["locator", "revision", "digest", "evidenceLocations", "observedFailure"],
+      "properties": {
+        "locator": { "$ref": "#/$defs/text" },
+        "revision": { "$ref": "#/$defs/text" },
+        "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "evidenceLocations": { "$ref": "#/$defs/texts" },
+        "observedFailure": { "$ref": "#/$defs/text" }
+      }
+    },
+    "grammar": {
+      "type": "object",
+      "required": ["notation", "definition", "validExamples", "invalidExamples"],
+      "properties": {
+        "notation": { "enum": ["ABNF", "EBNF", "JSON-Schema", "TypeScript"] },
+        "definition": { "$ref": "#/$defs/text" },
+        "validExamples": { "$ref": "#/$defs/texts" },
+        "invalidExamples": { "$ref": "#/$defs/texts" }
+      }
+    },
+    "publicContract": {
+      "type": "object",
+      "required": ["goal", "inputGrammar", "outputGrammar", "stateSemantics", "acceptedOutcomes", "forbiddenOutcomes", "safetyObligations", "livenessObligations", "implementationFreedom", "nonrequirements"],
+      "properties": {
+        "goal": { "$ref": "#/$defs/text" },
+        "inputGrammar": { "$ref": "#/$defs/grammar" },
+        "outputGrammar": { "$ref": "#/$defs/grammar" },
+        "stateSemantics": { "type": "object" },
+        "acceptedOutcomes": { "$ref": "#/$defs/texts" },
+        "forbiddenOutcomes": { "$ref": "#/$defs/texts" },
+        "safetyObligations": { "$ref": "#/$defs/texts" },
+        "livenessObligations": { "$ref": "#/$defs/texts" },
+        "implementationFreedom": { "$ref": "#/$defs/texts" },
+        "nonrequirements": { "$ref": "#/$defs/texts" }
+      }
+    },
+    "grading": { "type": "object", "required": ["rules", "metrics", "checks"] },
+    "envelope": { "type": "object", "required": ["publicDescription", "dimensions", "samplingProcedure", "constraints", "noNewRulesEvidence"] },
+    "subjectInterface": { "type": "object", "required": ["entrypoint", "readableInputs", "writableOutputs", "unavailableAuthority"] },
+    "boundary": { "type": "object", "required": ["kind", "enforcement", "subjectCanCross"], "properties": { "subjectCanCross": { "const": false } } },
+    "witness": { "type": "object", "required": ["witness", "proof", "locallyObservable"], "properties": { "locallyObservable": { "const": false } } },
+    "validation": { "type": "object", "required": ["referenceStrategy", "narrowMutants", "cheatModels", "positiveWorkRequirement", "cheapProbe"] },
+    "derivation": { "type": "object", "required": ["classification", "citationCount", "sectionSpan", "inferenceDepth", "negativeInference", "citations", "evidenceChain", "unresolvedValidityRisks"] },
+    "novelty": { "type": "object", "required": ["causalAxis", "subjectActionContract", "nearestBaseline", "materialDifference"] }
+  }
+}

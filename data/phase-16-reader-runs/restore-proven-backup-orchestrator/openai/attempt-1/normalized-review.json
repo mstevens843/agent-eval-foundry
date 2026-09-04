@@ -1,0 +1,44 @@
+{
+  "candidateId": "restore-proven-backup-orchestrator",
+  "packetSha256": "65c8e2815c22e6fe9f80c260dd94ec033c5fda5a0ddf838fe8d06a029de6bc79",
+  "providerFamily": "openai",
+  "dimensions": {
+    "source support": "pass",
+    "contract fairness": "fail",
+    "natural task contract": "pass",
+    "structural witness isolation": "pass",
+    "semantic novelty": "pass",
+    "cheap-probe falsifiability": "pass"
+  },
+  "verdict": "kill",
+  "earliestFailedDimension": "contract fairness",
+  "rationale": "The authoritative incident summary directly supports the compatible-client, restore-before-success task, and the grading rules, hidden-envelope axes, host-owned witness, novel backup-integrity mechanism, and proposed reference/mutant/malformed/replay probe are otherwise coherent and falsifiable. Contract fairness fails because the packet names backup.create, backup.restore, and backup.compareState but never defines their callable return schemas, typed failure values, exception behavior, or whether they are synchronous or asynchronous; in particular, a subject cannot know how create yields the artifactId required by later calls and the public report. The closest competing verdict is promote, which would be reasonable only by assuming conventional facade signatures or an external starter interface, but those terms are absent from the packet and cannot be filled in by the reader.",
+  "reviewId": "phase16-restore-proven-backup-orchestrator-openai",
+  "readerId": "phase16-reader-openai",
+  "model": "openai/gpt-5.6-sol",
+  "independentlyProduced": true,
+  "blindedTo": [
+    "engine score",
+    "author rationale",
+    "prediction",
+    "candidate rank",
+    "other reader verdict",
+    "campaign decision"
+  ],
+  "startedAt": "2026-09-04T15:40:13.130Z",
+  "finishedAt": "2026-09-04T15:41:30.644Z",
+  "runtimeSeconds": 78,
+  "classification": "completed",
+  "usage": {
+    "inputTokens": 93126,
+    "cachedInputTokens": 81792,
+    "outputTokens": 3305,
+    "costUsd": null,
+    "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+  },
+  "costUsd": null,
+  "rawOutputPath": "data/phase-16-reader-runs/restore-proven-backup-orchestrator/openai/attempt-1/raw-review.json",
+  "rawOutputSha256": "bfc8d5c22cea141bedfe476c211da2abed4a24d0270e9a67e7ac49889f4f498d",
+  "transcriptPath": "data/phase-16-reader-runs/restore-proven-backup-orchestrator/openai/attempt-1/transcript.jsonl",
+  "metadataPath": "data/phase-16-reader-runs/restore-proven-backup-orchestrator/openai/attempt-1/metadata.json"
+}

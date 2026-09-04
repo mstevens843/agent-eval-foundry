@@ -1,0 +1,40 @@
+{
+  "schema": "agent-eval-foundry/phase-16-reader-reviews@1",
+  "runId": "phase16-contract-complete-discovery-v3",
+  "packetSetSha256": "3fa172dc319ade976bbcec651ac6b2a3a5e85cc6a18be91dfcb630829958ace3",
+  "rawReviewSetSha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+  "normalizedReviewSetSha256": "2515cebbc76d77cf928960a4a6626dd52340cbf477c6872e4a26064fad482386",
+  "reviews": [],
+  "decisions": [
+    {
+      "candidateId": "restore-proven-backup-orchestrator",
+      "status": "blocked",
+      "reason": "Anthropic authentication was unavailable at preflight; the registered 2-of-2 different-provider threshold cannot be evaluated.",
+      "reviewsPresent": 0,
+      "reviewsRequired": 2
+    },
+    {
+      "candidateId": "cell-capacity-removal-planner",
+      "status": "blocked",
+      "reason": "Anthropic authentication was unavailable at preflight; the registered 2-of-2 different-provider threshold cannot be evaluated.",
+      "reviewsPresent": 0,
+      "reviewsRequired": 2
+    },
+    {
+      "candidateId": "bgp-route-scope-patch-validator",
+      "status": "blocked",
+      "reason": "Anthropic authentication was unavailable at preflight; the registered 2-of-2 different-provider threshold cannot be evaluated.",
+      "reviewsPresent": 0,
+      "reviewsRequired": 2
+    },
+    {
+      "candidateId": "multi-name-caa-revalidation-reconciler",
+      "status": "blocked",
+      "reason": "Anthropic authentication was unavailable at preflight; the registered 2-of-2 different-provider threshold cannot be evaluated.",
+      "reviewsPresent": 0,
+      "reviewsRequired": 2
+    }
+  ],
+  "promotionBlocked": true,
+  "blocker": "Required Anthropic reader authentication was unavailable; same-provider substitution is forbidden."
+}

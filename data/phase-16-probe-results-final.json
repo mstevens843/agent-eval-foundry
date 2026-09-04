@@ -1,0 +1,76 @@
+{
+  "schema": "agent-eval-foundry/phase-16-probe-results-final@1",
+  "continuationId": "phase16-frozen-packet-review-continuation-v1",
+  "normalizedReviewSetSha256": "959b6cb43a256527b1e3bd41501be24f8223318e110f190ca38d68c36d1db6d9",
+  "probes": [
+    {
+      "candidateId": "restore-proven-backup-orchestrator",
+      "status": "not-run-reader-killed",
+      "reason": "At least one independent reader killed the candidate.",
+      "result": null
+    },
+    {
+      "candidateId": "cell-capacity-removal-planner",
+      "status": "not-run-reader-killed",
+      "reason": "At least one independent reader killed the candidate.",
+      "result": null
+    },
+    {
+      "candidateId": "bgp-route-scope-patch-validator",
+      "status": "not-run-reader-killed",
+      "reason": "At least one independent reader killed the candidate.",
+      "result": null
+    },
+    {
+      "candidateId": "multi-name-caa-revalidation-reconciler",
+      "status": "survived",
+      "reason": "All registered probe controls and the exact narrow-mutant profile held.",
+      "result": {
+        "candidateId": "multi-name-caa-revalidation-reconciler",
+        "probeId": "caa-identity-binding-probe",
+        "status": "survived",
+        "reason": "All registered probe controls and the exact narrow-mutant profile held.",
+        "expectedMutantFailures": [
+          "check-caa-per-name-binding",
+          "check-caa-safe-issuance"
+        ],
+        "observedMutantFailures": [
+          "check-caa-per-name-binding",
+          "check-caa-safe-issuance"
+        ],
+        "b6": {
+          "sameInvocation": true,
+          "usable": true,
+          "knownGoodPassed": true,
+          "knownBadFailed": true,
+          "malformedInputRefused": true,
+          "nondegenerate": true
+        },
+        "mechanismActivated": true,
+        "witnessIsolated": true,
+        "deterministicReplay": true,
+        "challengeNonleakage": true,
+        "observations": {
+          "queryCount": 2,
+          "uniqueQueryCount": 1,
+          "staleNames": 2,
+          "unsafeIssue": true,
+          "authorityMarkerRetained": true
+        }
+      }
+    }
+  ],
+  "summary": {
+    "packets": 4,
+    "reviewsRequired": 8,
+    "reviewsCompleted": 8,
+    "readerSurvivors": 1,
+    "probesRun": 1,
+    "probeSurvivors": 1,
+    "independentIncidentSurvivors": 1,
+    "causalAxisSurvivors": 1,
+    "pricedReaderSpendUsd": 2.9877925,
+    "unpricedReads": 4,
+    "decision": "REPEAT-DISCOVERY"
+  }
+}

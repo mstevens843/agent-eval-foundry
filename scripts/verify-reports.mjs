@@ -65,6 +65,34 @@ for (const [path, args] of [
   } else console.log(`ok     ${path}`);
 }
 
+// Phase 16 freezes its registration, calibration inputs, source bytes and provider preflight, then
+// regenerates every downstream view. The dedicated Phase 16 verifier runs this smaller set during
+// development; keeping it here also makes the operator's periodic repository-wide pass complete.
+for (const [path, args] of [
+  ["data/phase-16-contract-calibration.json", ["phase16", "calibration"]],
+  ["data/phase-16-source-results.json", ["phase16", "sources"]],
+  ["data/phase-16-candidate-contracts.json", ["phase16", "contracts"]],
+  ["data/phase-16-contract-gate-results.json", ["phase16", "gate"]],
+  ["data/phase-16-traceability.json", ["phase16", "traceability"]],
+  ["data/phase-16-candidate-queue.json", ["phase16", "queue"]],
+  ["data/phase-16-reader-packets.json", ["phase16", "packets"]],
+  ["data/phase-16-reader-reviews.json", ["phase16", "reviews"]],
+  ["data/phase-16-probe-results.json", ["phase16", "probes"]],
+  ["data/phase-16-method-comparison.json", ["phase16", "comparison"]],
+  ["data/phase-16-input-hashes.json", ["phase16", "hashes"]],
+  ["data/phase-16-corrections.json", ["phase16", "corrections"]],
+  ["data/phase-16-reader-preflight.json", ["phase16", "preflight"]],
+  ["data/phase-16-reader-reviews-final.json", ["phase16", "final-reviews"]],
+  ["data/phase-16-probe-results-final.json", ["phase16", "final-probes"]],
+  ["data/phase-16-method-comparison-final.json", ["phase16", "final-comparison"]],
+  ["data/phase-16-continuation-status.json", ["phase16", "continuation"]],
+]) {
+  if (run(args) !== readFileSync(path, "utf8")) {
+    console.error(`STALE  ${path}`);
+    failures += 1;
+  } else console.log(`ok     ${path}`);
+}
+
 // Phase 14 regenerates from preserved attempt and blind-label artifacts at every campaign state.
 // Diff the structured artifacts themselves so an observed cell cannot later be replaced by an
 // inferred outcome or an unstated package hash.

@@ -1,0 +1,16 @@
+{
+  "candidateId": "bgp-route-scope-patch-validator",
+  "packetSha256": "eb49d3c5a7658cdfa04af05f0d95f6cc7c8d43e59c3f7e803931d2d7642c900d",
+  "providerFamily": "openai",
+  "dimensions": {
+    "source support": "pass",
+    "contract fairness": "fail",
+    "natural task contract": "pass",
+    "structural witness isolation": "pass",
+    "semantic novelty": "pass",
+    "cheap-probe falsifiability": "pass"
+  },
+  "verdict": "kill",
+  "earliestFailedDimension": "contract fairness",
+  "rationale": "The incident metadata directly supports the route-scope failure, preference inversion, and maximum-prefix safety basis. However, the hidden envelope says held-out cases vary and enumerate edit-target between policy-term and prefix-list-condition, while RouteView exposes no edit-target field and fixes the only intent to remove-target-from-backbone; the public grading rule itself selects policy-term. A subject therefore cannot observe or respond to that claimed hidden dimension, so the grading envelope adds an unrepresented contract term. The operational task remains natural, the propagated-route witness is host-isolated, the BGP condition-versus-term mechanism is distinct from the listed novelty families, and the deterministic reference/mutant/malformed replay probe is falsifiable. The closest competing verdict is promote because those other five dimensions pass, but promote is unavailable once contract fairness fails."
+}

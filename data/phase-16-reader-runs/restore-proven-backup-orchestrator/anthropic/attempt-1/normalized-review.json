@@ -1,0 +1,44 @@
+{
+  "candidateId": "restore-proven-backup-orchestrator",
+  "packetSha256": "65c8e2815c22e6fe9f80c260dd94ec033c5fda5a0ddf838fe8d06a029de6bc79",
+  "providerFamily": "anthropic",
+  "dimensions": {
+    "source support": "pass",
+    "contract fairness": "pass",
+    "natural task contract": "pass",
+    "structural witness isolation": "pass",
+    "semantic novelty": "pass",
+    "cheap-probe falsifiability": "pass"
+  },
+  "verdict": "promote",
+  "earliestFailedDimension": null,
+  "rationale": "SOURCE SUPPORT (pass): The observed failure is a faithful, unembellished statement of the GitLab 2017-01-31 postmortem: pg_dump run by a 9.2 client against a 9.6 server produced no dump, the failure notification did not reach anyone, and no restore test had ever exercised the artifact before the database copies were gone. The three cited evidence locations (timeline/WAL loss, root cause, recovery improvements) correspond to real sections of that document, and the enum codes 92/96 are a direct encoding of the incident's two PostgreSQL majors. The nonrequirements list honestly excludes the parts of the incident the task does not measure (WAL replay, PITR, failover, email delivery) rather than claiming source support for them. CONTRACT FAIRNESS (pass): The contract is closed. Every fact the subject needs to obey the three published rules is in BackupView (sourceEngineMajor, availableClientMajors, restoreTargetId) or reachable through the facade, and each metric is a host-ledger count with an explicit comparator, threshold, and derivation. I checked each envelope cell for a forced violation and found none: no-match implies no create is permitted and the liveness obligation is explicitly conditioned on a compatible client being available, so FAILED-without-create is consistent; truncated and wrong-snapshot both resolve to create, restore, unequal compareState, FAILED; the positive-work metric is scoped to valid cases exposing a compatible client and artifact, so it never demands a restore the rules forbid. The output grammar admits string-or-null in every field, and no rule or metric constrains the field contents of a FAILED report, so the all-null valid example is not a hidden requirement. STRUCTURAL WITNESS ISOLATION (pass): The witness is equality of source and restored state digests, and it is neither locally computable nor forgeable. unavailableAuthority enumerates the complete leak surface (source rows, artifact bytes, restored rows, both digests, the host ledger), compareState is read-only and returns only equal/unequal, and a fresh target compared without a restore yields unequal, so the boolean cannot be obtained without actually performing the operation. Grading reads host-recorded create/restore calls and host-side digest equality, never the subject's own claims, so nothing the subject writes can move a metric. NATURAL TASK CONTRACT (pass): 'back up with a compatible client, restore into a fresh target, verify before claiming success' is ordinary SRE/DBA practice with an ordinary create/restore/compareState surface; nothing is bent to force the failure. expectedObjectCount is a decoy rather than an artificial requirement, and it is a decoy that real backup tooling actually reports, which is why forbiddenOutcomes names it alongside exit status and artifact name. CHEAP-PROBE FALSIFIABILITY (pass): Three subjects on three fixtures replayed twice is one cheap deterministic invocation, and the falsifier can kill on five independent grounds (unsatisfiable reference, entangled checks, ungated malformed output, nondeterminism, digest leak). The mutant's predicted signature is coherent and discriminating: an existence-only mutant using the matching client trips false-verification on truncated and positive-work on valid while leaving the compatible-client check green, which is exactly the 'fails only those two checks' condition. Limitation noted but not disqualifying: no mutant drives a wrong-major create, so the compatible-client check's positive-firing side is pinned only indirectly, by the requirement that it stay green for the mutant. CLOSEST COMPETING VERDICT: kill at semantic novelty. The uncertain-external-effects cluster (dao-descendant, durable-approval-outbox, deployment-rollback-recompute, trading-reconciliation-recompute) shares the theme of confirming that an operation really landed against host-owned state, and the version-mismatch mechanic is thematically adjacent to model-alias-drift. I resolved this to pass because the resemblance is thematic rather than structural: those families turn on duplicate side effects, compensation, and retry ambiguity under an uncertain outcome, whereas here every operation returns a typed deterministic result and the gap is the subject's willingness to spend an additional consuming operation (restore) to establish that an artifact it already 'successfully' created is usable at all. Proof-by-reconstruction of a non-locally-observable state equality appears in no baseline mechanism list, and no baseline family occupies the backup/restore-integrity domain. The second-closest kill was contract fairness, on the tension between the client-set value 'mismatch-then-match' (whose derivation mentions 'fallback') and a zero-tolerance mismatch metric; I resolved it because the agent-visible rule text mandates an exactly-equal major on every create call, the metric measures precisely that rule, and the reading in which 'mismatch-then-match' denotes list ordering that tests selection over head-taking is both the natural one and harmless under either interpretation.",
+  "reviewId": "phase16-restore-proven-backup-orchestrator-anthropic",
+  "readerId": "phase16-reader-anthropic",
+  "model": "anthropic/claude-opus",
+  "independentlyProduced": true,
+  "blindedTo": [
+    "engine score",
+    "author rationale",
+    "prediction",
+    "candidate rank",
+    "other reader verdict",
+    "campaign decision"
+  ],
+  "startedAt": "2026-09-04T15:42:17.390Z",
+  "finishedAt": "2026-09-04T15:44:57.673Z",
+  "runtimeSeconds": 160,
+  "classification": "completed",
+  "usage": {
+    "inputTokens": 90650,
+    "cachedInputTokens": 66563,
+    "outputTokens": 11671,
+    "costUsd": 0.5671154999999999,
+    "source": "claude `result` event `usage` and `total_cost_usd`"
+  },
+  "costUsd": 0.5671154999999999,
+  "rawOutputPath": "data/phase-16-reader-runs/restore-proven-backup-orchestrator/anthropic/attempt-1/raw-review.json",
+  "rawOutputSha256": "088379914ab61afc30652e37187c0737bb54b2a1f67ef0895d44ad6d5fc330a5",
+  "transcriptPath": "data/phase-16-reader-runs/restore-proven-backup-orchestrator/anthropic/attempt-1/transcript.jsonl",
+  "metadataPath": "data/phase-16-reader-runs/restore-proven-backup-orchestrator/anthropic/attempt-1/metadata.json"
+}

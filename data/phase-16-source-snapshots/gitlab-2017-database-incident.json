@@ -1,0 +1,27 @@
+{
+  "schema": "agent-eval-foundry/phase-16-source-snapshot@1",
+  "sourceUnitId": "gitlab-2017-database-incident",
+  "retrievedAt": "2026-09-04T14:35:00Z",
+  "locator": "https://about.gitlab.com/blog/postmortem-of-database-outage-of-january-31/",
+  "sourceKind": "first-party postmortem",
+  "published": "2017-02-10",
+  "evidence": [
+    {
+      "location": "Database setup and timeline, lines 31-45",
+      "fact": "Replication lagged until required WAL segments had already been removed, and WAL archiving was not enabled, forcing manual re-synchronization."
+    },
+    {
+      "location": "Recovery timeline, lines 102-105",
+      "fact": "The surviving staging snapshot took about 18 hours to copy and restored the database only to an earlier point in time."
+    },
+    {
+      "location": "Root cause analysis, lines 127-135",
+      "fact": "The normal pg_dump path had silently failed because a PostgreSQL 9.2 client targeted PostgreSQL 9.6, alert email was rejected, and nobody regularly tested restoration."
+    },
+    {
+      "location": "Recovery improvements, lines 138-153",
+      "fact": "Registered remediations included backup monitoring, point-in-time recovery, continuous archiving, automated restore testing, and explicit durability ownership."
+    }
+  ],
+  "observedFailure": "A nominal backup process existed but produced no usable artifact, its failure alert was lost, replication recovery destroyed the remaining copy, and no routine restore test exposed the gap."
+}

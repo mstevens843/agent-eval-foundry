@@ -1,0 +1,31 @@
+{
+  "schema": "agent-eval-foundry/phase-16-source-snapshot@1",
+  "sourceUnitId": "letsencrypt-2020-caa-recheck-bug",
+  "retrievedAt": "2026-09-04T14:35:00Z",
+  "locator": "https://bugzilla.mozilla.org/show_bug.cgi?id=1619047",
+  "sourceKind": "public CA incident report filed by the affected operator",
+  "published": "2020-02-29",
+  "evidence": [
+    {
+      "location": "Description and incident report item 1",
+      "fact": "When N domain names required CAA rechecking, Boulder selected one domain and checked it N times instead of checking every domain identity."
+    },
+    {
+      "location": "Description",
+      "fact": "CAA had to be checked within eight hours before issuance when a cached domain validation was older than eight hours."
+    },
+    {
+      "location": "Incident report item 4",
+      "fact": "The operator identified 3,048,289 affected currently valid certificates out of approximately 116 million active certificates."
+    },
+    {
+      "location": "Incident report item 6",
+      "fact": "A Go loop-iterator reference error caused the identity collapse; the unit test checked only authorization count, and the integration test used one FQDN, so both missed value-to-domain binding."
+    },
+    {
+      "location": "Incident report item 7",
+      "fact": "Remediation added content checks, a lower-level conversion test, multi-domain integration coverage, log verification, and stronger static analysis."
+    }
+  ],
+  "observedFailure": "A multi-identity authorization path preserved cardinality but rebound every check to one identity, while tests asserted count and a one-identity example rather than identity-to-result correspondence."
+}

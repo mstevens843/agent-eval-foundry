@@ -1,0 +1,13 @@
+{
+  "schema": "agent-eval-foundry/phase-16-corrections@1",
+  "runId": "phase16-contract-complete-discovery-v3",
+  "corrections": [
+    "Two preregistered local benchmark solves were complete-solution starter leaks, so they contribute validity-control patterns rather than evidence that either mechanism was easy.",
+    "The deployment-alias failure was caused by an unpublished numeric threshold present only in a passing starter; it is not a capability failure and now calibrates the threshold-derivation gate.",
+    "The memory-poisoning failure was caused by the host violating its published same-facade lifetime contract; it is not a candidate source for difficulty.",
+    "The initial run could not score reader or probe predictions because Anthropic authentication was unavailable. Its base artifacts preserve null rather than zero; the separately preregistered continuation owns the later measured outcomes.",
+    "All six attempted contracts passed the machine completeness gate. This validates drafting structure only; it does not establish fairness, naturalness, novelty, probe survival, or agent difficulty without independent review.",
+    "Six unique drafts were found, but only the top four were admitted under the preregistered semantic-unique and reader-packet caps; the other two remain measured below-cap outcomes.",
+    "Boundary-first protocol sources without observed incidents receive no incident-support credit and no measured operator uplift. Phase 14 measured no positive agent effect."
+  ]
+}

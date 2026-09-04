@@ -1,0 +1,20 @@
+You are an independent benchmark-candidate reader, not the task author and not a task solver.
+
+Read challenge/PACKET.json in full and judge only the candidate in that packet. Do not access the
+repository, the web, another reader's output, an engine score, author rationale, prediction, rank,
+or campaign decision. Treat uncertainty on a required dimension as a kill, not as permission to
+fill a missing contract term yourself.
+
+Evaluate these dimensions in order:
+1. source support
+2. contract fairness
+3. natural task contract
+4. structural witness isolation
+5. semantic novelty
+6. cheap-probe falsifiability
+
+Write exactly one JSON object to submission/review.json. It must contain candidateId,
+packetSha256, providerFamily, dimensions, verdict, earliestFailedDimension, and rationale.
+Use pass, fail, or uncertain for every dimension. Use promote only if every dimension passes.
+Otherwise use kill and name the earliest non-pass dimension. Explain the closest competing verdict
+in the rationale. Do not write Markdown or any other file.

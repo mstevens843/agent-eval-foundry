@@ -1,0 +1,23 @@
+{
+  "schema": "agent-eval-foundry/phase-16-source-snapshot@1",
+  "sourceUnitId": "kubernetes-finalizer-boundary",
+  "retrievedAt": "2026-09-04T14:35:00Z",
+  "locator": "https://kubernetes.io/docs/concepts/overview/working-with-objects/finalizers/",
+  "sourceKind": "authoritative product documentation",
+  "revision": "documentation page as retrieved; snapshot digest is the immutable evidence reference",
+  "evidence": [
+    {
+      "location": "How finalizers work, lines 915-918",
+      "fact": "A controller observes deletionTimestamp, performs finalizer work, and removes its key only after the condition is satisfied; deletion occurs when no finalizers remain."
+    },
+    {
+      "location": "Deletion constraints, lines 919-925",
+      "fact": "After deletion begins, finalizers may be removed but not added, deletionTimestamp is immutable, and the object cannot be resurrected."
+    },
+    {
+      "location": "Persistent-volume example, lines 917-918",
+      "fact": "The pv-protection finalizer keeps an in-use volume terminating until the consuming Pod no longer uses it."
+    }
+  ],
+  "observedFailure": "No incident is asserted: the source defines a real coordination boundary between API-object deletion state and controller-owned external cleanup."
+}

@@ -1,0 +1,44 @@
+{
+  "candidateId": "multi-name-caa-revalidation-reconciler",
+  "packetSha256": "45475d79cb39fc0eb9a9e4e992512ec3a1d75974a6e3be8b8ae815178f7d2c13",
+  "providerFamily": "anthropic",
+  "dimensions": {
+    "source support": "pass",
+    "contract fairness": "pass",
+    "natural task contract": "pass",
+    "structural witness isolation": "pass",
+    "semantic novelty": "pass",
+    "cheap-probe falsifiability": "pass"
+  },
+  "verdict": "promote",
+  "earliestFailedDimension": null,
+  "rationale": "SOURCE SUPPORT (pass): The locator is an authoritative CA-incident record filed 2020-02-29, and the observedFailure states the distinctive shape of that incident precisely -- a multi-name issuance path that checked one FQDN N times while emitting N results, with a testing gap in which unit tests asserted result COUNT and integration coverage used single-domain orders. That count-not-identity testing gap is a specific, non-generic detail, and the contract's derived constants are faithful to the domain: the eight-hour CAA recheck window and the thirty-day validation-reuse period from which the 719-hour envelope value is derived. The evidenceLocations (Incident description, Testing gap, Remediation plan) match the sections such an incident report carries. Nothing in the packet is embellished beyond what the cited failure supports.\n\nCONTRACT FAIRNESS (pass): Every graded rule traces to public text. caa-current-result-bound-per-name restates the reconcile-each-domain-name transition; caa-all-names-must-authorize restates decide-whole-certificate-order; caa-positive-query-work-required restates the liveness obligation to query every stale name. The decisive boundary is stated twice and consistently (input text 'greater than 8', envelope constraint 'ages equal to eight use CACHE'), so the age-8 and age-9 envelope values cannot ambush a subject that read the contract. The metrics grade only publicly stated behavior: identity binding, conjunctive issuance, and a minimum-one-query work floor whose procedure is explicitly conditioned on the fixture containing a stale name, so it cannot fire vacuously. Two loose ends were checked and neither can fail a compliant subject: the output 'source' field's CACHE/CURRENT mapping is inferable from the transition text and is not graded by any metric, and extra or duplicate queries are unpenalized (lenient, not unfair).\n\nNATURAL TASK CONTRACT (pass): The goal -- recheck stale per-name authorization and issue only when every name permits -- is the actual production job in this domain, not a puzzle built to induce a trap. Grammars, state semantics, obligations, non-requirements (DNS transport, record parsing, ACME, signing, revocation) and implementation freedom (iteration style, maps or arrays, query order) form a coherent whole with real latitude. Minor formalism nit, not disqualifying: ORDER_REFUSED is declared as a state with no inbound transition edge, its semantics carried in the decide-whole-certificate-order effect text and the output grammar; the required behavior remains unambiguous.\n\nSTRUCTURAL WITNESS ISOLATION (pass): The witness -- which exact FQDN each host query recorded, and that name's current answer -- is held harness-side. The facade returns only the queried name's value, the query-to-name ledger is immutable from the subject side, and unavailableAuthority withholds the ledger, the held-out map, and authoritative decision recomputation. A subject cannot manufacture a call it did not make, so a shortcut that emits N results without N same-name queries is detected by caa-name-binding-mismatch-count, and guessing ALLOW is caught by caa-unsafe-issuance-count on deny-position cases. Isolation is asserted AND tested: the probe's falsifier includes 'query ledger leaks', which is the right check on the one residual concern (ambient reachability of harness state from a subject module in the same process).\n\nSEMANTIC NOVELTY (pass): No baseline family occupies the certificate-issuance domain, and none lists a mechanism resembling per-member identity binding across an N-element set where cardinality is preserved but identity is not. Closest neighbor is access-token-scope-expansion (and secondarily delegated-wallet-scope-reconciliation), which shares stale-state and a revalidate-before-acting shape; those families turn on scope expansion and fabricated audit history over a single subject, whereas this candidate's discriminator is conjunctive multi-member binding, which is absent from all 21 families. Overlap is on a shared component, not on the discriminator.\n\nCHEAP-PROBE FALSIFIABILITY (pass): The probe is one invocation over tiny fixtures and names five concrete conditions that could actually be observed and would each kill: reference fails, mutant escapes, malformed output graded, replay drift, ledger leak. The mutant design is sound and the activation signal is mechanically checkable -- on a multi-name denied-tail case, first-name reuse yields N queries and N results with the tail's DENY never observed, which must trip BOTH caa-name-binding-mismatch-count and caa-unsafe-issuance-count, while the one-name control confirms the grader does not false-positive where mutant and reference are behaviorally identical. Running malformed output twice tests rejection and determinism together.\n\nCLOSEST COMPETING VERDICT: kill at 'natural task contract'. The argument is that the contract is written backwards from the postmortem -- forbiddenOutcomes enumerates the historical bug verbatim ('using one domain's current result for another', 'checking one FQDN repeatedly to satisfy list length'), the agent-visible grading text says 'bind the returned value only to that fqdn', and the deny-position derivation names the mutant strategy being hunted -- leaving a roughly six-line pure function whose target failure a competent subject is unlikely to reach. I rejected that verdict for two reasons: contract fairness REQUIRES graded behavior to be stated publicly, so the explicitness is compelled rather than contrived; and per-name authorization checking is a genuine requirement in this domain, not an artificial anti-bug clause. Expected difficulty and yield are not among the six required dimensions and I declined to smuggle them in as a seventh. That said, the risk is material and belongs to the downstream stage: this candidate is valid but may prove low-yield, since the source failure arose from a refactor inside a large existing codebase with count-asserting tests, whereas the derived task is greenfield with the anti-pattern named in the spec.\n\nTWO FLAGS FOR THE PROBE RUN, neither a kill: (1) the age-8 boundary may be non-discriminating unless the fixture makes cached and current answers disagree for that name -- no metric grades the CACHE/CURRENT decision directly, so an off-by-one at the boundary is caught only indirectly through the applicable-answer join; (2) domain-count=1 combined with deny-position 'middle' or 'last' is degenerate, and the samplingProcedure does not say how those combinations collapse.",
+  "reviewId": "phase16-multi-name-caa-revalidation-reconciler-anthropic",
+  "readerId": "phase16-reader-anthropic",
+  "model": "anthropic/claude-opus",
+  "independentlyProduced": true,
+  "blindedTo": [
+    "engine score",
+    "author rationale",
+    "prediction",
+    "candidate rank",
+    "other reader verdict",
+    "campaign decision"
+  ],
+  "startedAt": "2026-09-04T15:58:05.489Z",
+  "finishedAt": "2026-09-04T16:02:45.361Z",
+  "runtimeSeconds": 280,
+  "classification": "completed",
+  "usage": {
+    "inputTokens": 141351,
+    "cachedInputTokens": 115016,
+    "outputTokens": 20245,
+    "costUsd": 0.8281620000000001,
+    "source": "claude `result` event `usage` and `total_cost_usd`"
+  },
+  "costUsd": 0.8281620000000001,
+  "rawOutputPath": "data/phase-16-reader-runs/multi-name-caa-revalidation-reconciler/anthropic/attempt-1/raw-review.json",
+  "rawOutputSha256": "db52a6d34f6fd55407ec21f45ed57c39cf09d257ca8226080cd9915bac10ed86",
+  "transcriptPath": "data/phase-16-reader-runs/multi-name-caa-revalidation-reconciler/anthropic/attempt-1/transcript.jsonl",
+  "metadataPath": "data/phase-16-reader-runs/multi-name-caa-revalidation-reconciler/anthropic/attempt-1/metadata.json"
+}

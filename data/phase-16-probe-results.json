@@ -1,0 +1,32 @@
+{
+  "schema": "agent-eval-foundry/phase-16-probe-results@1",
+  "runId": "phase16-contract-complete-discovery-v3",
+  "results": [
+    {
+      "candidateId": "restore-proven-backup-orchestrator",
+      "status": "not-run-reader-blocked",
+      "reason": "The candidate has no cross-provider 2-of-2 reader survival, so the preregistered probe gate is closed.",
+      "b6Invocation": null
+    },
+    {
+      "candidateId": "cell-capacity-removal-planner",
+      "status": "not-run-reader-blocked",
+      "reason": "The candidate has no cross-provider 2-of-2 reader survival, so the preregistered probe gate is closed.",
+      "b6Invocation": null
+    },
+    {
+      "candidateId": "bgp-route-scope-patch-validator",
+      "status": "not-run-reader-blocked",
+      "reason": "The candidate has no cross-provider 2-of-2 reader survival, so the preregistered probe gate is closed.",
+      "b6Invocation": null
+    },
+    {
+      "candidateId": "multi-name-caa-revalidation-reconciler",
+      "status": "not-run-reader-blocked",
+      "reason": "The candidate has no cross-provider 2-of-2 reader survival, so the preregistered probe gate is closed.",
+      "b6Invocation": null
+    }
+  ],
+  "executed": 0,
+  "reason": "No packet had a completed 2-of-2 cross-provider reader decision."
+}

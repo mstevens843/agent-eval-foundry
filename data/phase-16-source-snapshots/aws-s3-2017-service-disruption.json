@@ -1,0 +1,27 @@
+{
+  "schema": "agent-eval-foundry/phase-16-source-snapshot@1",
+  "sourceUnitId": "aws-s3-2017-service-disruption",
+  "retrievedAt": "2026-09-04T14:35:00Z",
+  "locator": "https://aws.amazon.com/message/41926/",
+  "sourceKind": "first-party service disruption summary",
+  "published": "2017",
+  "evidence": [
+    {
+      "location": "Incident summary, lines 225-228",
+      "fact": "An authorized operator entered one command input incorrectly, removing substantially more servers than intended and taking index and placement subsystems offline."
+    },
+    {
+      "location": "Recovery, lines 229-232",
+      "fact": "Large subsystems required full restart and integrity validation; dependent services accumulated additional recovery work."
+    },
+    {
+      "location": "Remediation, lines 233-235",
+      "fact": "AWS changed the tool to remove capacity more slowly and to refuse removal below each subsystem's minimum required capacity, and prioritized smaller failure cells."
+    },
+    {
+      "location": "Monitoring dependency, lines 236-237",
+      "fact": "The health-dashboard administration console depended on S3 and could not update during the outage; it was moved across multiple regions."
+    }
+  ],
+  "observedFailure": "A legitimate maintenance command accepted a scope error that crossed subsystem minimum-capacity boundaries before the system could recover."
+}

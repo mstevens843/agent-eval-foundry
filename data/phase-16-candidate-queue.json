@@ -1,0 +1,245 @@
+{
+  "schema": "agent-eval-foundry/phase-16-candidate-queue@1",
+  "runId": "phase16-contract-complete-discovery-v3",
+  "candidates": [
+    {
+      "candidateId": "restore-proven-backup-orchestrator",
+      "sourceIncidentId": "gitlab-2017-database-incident",
+      "channel": "authoritative-incident-upstream-fix",
+      "contractSha256": "1ab363692daa1fd11bee3402dfbc97b278015ae468b8bf9fc97050bd71e6851e",
+      "gate": {
+        "candidateId": "restore-proven-backup-orchestrator",
+        "status": "accepted",
+        "deficiencies": [],
+        "checkedRuleCount": 3,
+        "checkedMetricCount": 3,
+        "checkedEnvelopeDimensionCount": 4
+      },
+      "semanticFingerprint": "9aebe454464a2c3544184f9682cad419753a23486f46da0902a0c341b4fc562e",
+      "semanticDuplicateOf": null,
+      "semanticNovelty": true,
+      "domainBreadthUnit": "database backup and restore orchestrator",
+      "causalAxis": "artifact existence versus independently restored state equivalence",
+      "subjectActionContract": "produce and independently restore-verify one database backup artifact",
+      "score": 85,
+      "scoreBreakdown": {
+        "observedIncidentSupport": 40,
+        "contractGate": 20,
+        "structuralBoundary": 20,
+        "derivationStrength": 10,
+        "unresolvedRiskPenalty": -5,
+        "measuredOperatorUplift": 0
+      },
+      "operatorEvidence": "no-measured-positive-agent-effect",
+      "queueStatus": "reader-packet",
+      "queueReason": "Contract complete and within the frozen packet cap after source-support ranking; independent cross-provider review required."
+    },
+    {
+      "candidateId": "cell-capacity-removal-planner",
+      "sourceIncidentId": "aws-s3-2017-service-disruption",
+      "channel": "authoritative-incident-upstream-fix",
+      "contractSha256": "0eaee9864689ac86399ee004f9276d5494a7b38ae80d31c5a5ed1f59a59b375c",
+      "gate": {
+        "candidateId": "cell-capacity-removal-planner",
+        "status": "accepted",
+        "deficiencies": [],
+        "checkedRuleCount": 3,
+        "checkedMetricCount": 3,
+        "checkedEnvelopeDimensionCount": 5
+      },
+      "semanticFingerprint": "14650a37fcef4b6e02792895e59b1197bd03e3d2d5526183d3a8e455fce1a733",
+      "semanticDuplicateOf": null,
+      "semanticNovelty": true,
+      "domainBreadthUnit": "cell-capacity maintenance planner",
+      "causalAxis": "blast-radius bounds across overlapping subsystem capacity floors",
+      "subjectActionContract": "plan and execute capacity removal without crossing any subsystem floor",
+      "score": 85,
+      "scoreBreakdown": {
+        "observedIncidentSupport": 40,
+        "contractGate": 20,
+        "structuralBoundary": 20,
+        "derivationStrength": 10,
+        "unresolvedRiskPenalty": -5,
+        "measuredOperatorUplift": 0
+      },
+      "operatorEvidence": "no-measured-positive-agent-effect",
+      "queueStatus": "reader-packet",
+      "queueReason": "Contract complete and within the frozen packet cap after source-support ranking; independent cross-provider review required."
+    },
+    {
+      "candidateId": "bgp-route-scope-patch-validator",
+      "sourceIncidentId": "cloudflare-2020-backbone-outage",
+      "channel": "authoritative-incident-upstream-fix",
+      "contractSha256": "226673488614074b6ea3f3a8f088be3514493ee75ecaccf14079effa3af44e0d",
+      "gate": {
+        "candidateId": "bgp-route-scope-patch-validator",
+        "status": "accepted",
+        "deficiencies": [],
+        "checkedRuleCount": 3,
+        "checkedMetricCount": 3,
+        "checkedEnvelopeDimensionCount": 4
+      },
+      "semanticFingerprint": "51370f93319a8b776566c0504b897d647d454343264c69711d00b7ffb0e5cf82",
+      "semanticDuplicateOf": null,
+      "semanticNovelty": true,
+      "domainBreadthUnit": "BGP policy patch validator",
+      "causalAxis": "policy-condition deletion silently broadens a transitive route match",
+      "subjectActionContract": "repair and apply one route policy without broadening its authorized route scope",
+      "score": 85,
+      "scoreBreakdown": {
+        "observedIncidentSupport": 40,
+        "contractGate": 20,
+        "structuralBoundary": 20,
+        "derivationStrength": 10,
+        "unresolvedRiskPenalty": -5,
+        "measuredOperatorUplift": 0
+      },
+      "operatorEvidence": "no-measured-positive-agent-effect",
+      "queueStatus": "reader-packet",
+      "queueReason": "Contract complete and within the frozen packet cap after source-support ranking; independent cross-provider review required."
+    },
+    {
+      "candidateId": "multi-name-caa-revalidation-reconciler",
+      "sourceIncidentId": "letsencrypt-2020-caa-recheck-bug",
+      "channel": "authoritative-incident-upstream-fix",
+      "contractSha256": "16dbbda7ecaee2529b5cb87c7db4b9c742e2b8ad0bfa917614b36886fcfe20b9",
+      "gate": {
+        "candidateId": "multi-name-caa-revalidation-reconciler",
+        "status": "accepted",
+        "deficiencies": [],
+        "checkedRuleCount": 3,
+        "checkedMetricCount": 3,
+        "checkedEnvelopeDimensionCount": 3
+      },
+      "semanticFingerprint": "4f858815c180f92513853f26bbc4a4d8ad57b3c8f4921c53ad6c10683756d42f",
+      "semanticDuplicateOf": null,
+      "semanticNovelty": true,
+      "domainBreadthUnit": "multi-name certificate authorization reconciler",
+      "causalAxis": "cardinality preserved while external authorization values bind to the wrong principal identities",
+      "subjectActionContract": "revalidate every stale domain identity before one certificate issuance decision",
+      "score": 85,
+      "scoreBreakdown": {
+        "observedIncidentSupport": 40,
+        "contractGate": 20,
+        "structuralBoundary": 20,
+        "derivationStrength": 10,
+        "unresolvedRiskPenalty": -5,
+        "measuredOperatorUplift": 0
+      },
+      "operatorEvidence": "no-measured-positive-agent-effect",
+      "queueStatus": "reader-packet",
+      "queueReason": "Contract complete and within the frozen packet cap after source-support ranking; independent cross-provider review required."
+    },
+    {
+      "candidateId": "remote-state-lock-recovery",
+      "sourceIncidentId": "terraform-state-lock-boundary",
+      "channel": "boundary-first-system-inspection",
+      "contractSha256": "e8b3622c08bc66a6925f79b77485b7a345c7946e29c20cc3f5f8fb8f8fd72fc4",
+      "gate": {
+        "candidateId": "remote-state-lock-recovery",
+        "status": "accepted",
+        "deficiencies": [],
+        "checkedRuleCount": 3,
+        "checkedMetricCount": 3,
+        "checkedEnvelopeDimensionCount": 3
+      },
+      "semanticFingerprint": "8649e887ccc9ef3669c24d4929e00d337b7da76ac7a1e218a806d8e074ed3462",
+      "semanticDuplicateOf": null,
+      "semanticNovelty": true,
+      "domainBreadthUnit": "remote-state lock recovery",
+      "causalAxis": "opaque lock ownership fencing across a newer remote-state version",
+      "subjectActionContract": "recover one failed state lock without unlocking a concurrent writer",
+      "score": 60,
+      "scoreBreakdown": {
+        "observedIncidentSupport": 15,
+        "contractGate": 20,
+        "structuralBoundary": 20,
+        "derivationStrength": 10,
+        "unresolvedRiskPenalty": -5,
+        "measuredOperatorUplift": 0
+      },
+      "operatorEvidence": "no-measured-positive-agent-effect",
+      "queueStatus": "below-semantic-unique-cap",
+      "queueReason": "Contract complete and semantically unique, but ranked below the frozen four-unique admission cap; no replacement or review is permitted in this run."
+    },
+    {
+      "candidateId": "oci-descriptor-verified-fetcher",
+      "sourceIncidentId": "oci-image-descriptor-digest-boundary",
+      "channel": "boundary-first-system-inspection",
+      "contractSha256": "1f701c052514b4fd217d90caebfeb45233e3df9a4b8a31e43311cd68f351edc3",
+      "gate": {
+        "candidateId": "oci-descriptor-verified-fetcher",
+        "status": "accepted",
+        "deficiencies": [],
+        "checkedRuleCount": 3,
+        "checkedMetricCount": 3,
+        "checkedEnvelopeDimensionCount": 4
+      },
+      "semanticFingerprint": "b55647831ad2f4efe55aecb2b03e1cd657c138e49676daa2f2353776290afa48",
+      "semanticDuplicateOf": null,
+      "semanticNovelty": true,
+      "domainBreadthUnit": "OCI descriptor-verified artifact fetcher",
+      "causalAxis": "time-of-check/time-of-use substitution across immutable content handles and mutable retrieval locations",
+      "subjectActionContract": "fetch and consume the exact bytes committed by one OCI descriptor",
+      "score": 55,
+      "scoreBreakdown": {
+        "observedIncidentSupport": 15,
+        "contractGate": 20,
+        "structuralBoundary": 20,
+        "derivationStrength": 5,
+        "unresolvedRiskPenalty": -5,
+        "measuredOperatorUplift": 0
+      },
+      "operatorEvidence": "no-measured-positive-agent-effect",
+      "queueStatus": "below-semantic-unique-cap",
+      "queueReason": "Contract complete and semantically unique, but ranked below the frozen four-unique admission cap; no replacement or review is permitted in this run."
+    }
+  ],
+  "readerDecisions": [
+    {
+      "candidateId": "restore-proven-backup-orchestrator",
+      "status": "blocked",
+      "reason": "Anthropic authentication was unavailable at preflight; the registered 2-of-2 different-provider threshold cannot be evaluated.",
+      "reviewsPresent": 0,
+      "reviewsRequired": 2
+    },
+    {
+      "candidateId": "cell-capacity-removal-planner",
+      "status": "blocked",
+      "reason": "Anthropic authentication was unavailable at preflight; the registered 2-of-2 different-provider threshold cannot be evaluated.",
+      "reviewsPresent": 0,
+      "reviewsRequired": 2
+    },
+    {
+      "candidateId": "bgp-route-scope-patch-validator",
+      "status": "blocked",
+      "reason": "Anthropic authentication was unavailable at preflight; the registered 2-of-2 different-provider threshold cannot be evaluated.",
+      "reviewsPresent": 0,
+      "reviewsRequired": 2
+    },
+    {
+      "candidateId": "multi-name-caa-revalidation-reconciler",
+      "status": "blocked",
+      "reason": "Anthropic authentication was unavailable at preflight; the registered 2-of-2 different-provider threshold cannot be evaluated.",
+      "reviewsPresent": 0,
+      "reviewsRequired": 2
+    }
+  ],
+  "summary": {
+    "sourceUnits": 12,
+    "canonicalExtractions": 12,
+    "validityOnlyDeaths": 4,
+    "belowContractCap": 2,
+    "contractAttempts": 6,
+    "contractComplete": 6,
+    "semanticUniquesFound": 6,
+    "semanticUniquesAdmitted": 4,
+    "readerPackets": 4,
+    "readerReviews": 0,
+    "readerSurvivors": null,
+    "probeSurvivors": null,
+    "prospectiveYield": null,
+    "promotionBlocked": true,
+    "decision": "BLOCKED"
+  }
+}

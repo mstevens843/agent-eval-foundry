@@ -1,0 +1,28 @@
+{
+  "schema": "agent-eval-foundry/phase-16-reader-preflight-observations@1",
+  "runId": "phase16-contract-complete-discovery-v3",
+  "capturedAt": "2026-09-04T14:46:22Z",
+  "providers": [
+    {
+      "providerFamily": "openai",
+      "command": "codex login status",
+      "cliVersion": "codex-cli 0.153.2",
+      "authenticated": true,
+      "observation": "Logged in using ChatGPT"
+    },
+    {
+      "providerFamily": "anthropic",
+      "command": "claude auth status",
+      "cliVersion": "installed; version not needed for the failed auth gate",
+      "authenticated": false,
+      "observation": "loggedIn false; authMethod none"
+    }
+  ],
+  "containerRuntime": {
+    "available": false,
+    "observation": "Docker API socket denied in this environment; no reader or probe was started."
+  },
+  "decision": "Cross-provider 2-of-2 review is unavailable. Prepare immutable reader packets, run no review, promote nothing, and run no probe.",
+  "preflightSha256": "b4768def2a6c6f6f554576bc759b69db5114b22389d689d9253c6944e1953a9c",
+  "crossProviderReady": false
+}

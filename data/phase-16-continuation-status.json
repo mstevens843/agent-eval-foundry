@@ -1,0 +1,148 @@
+{
+  "schema": "agent-eval-foundry/phase-16-continuation-status@1",
+  "continuationId": "phase16-frozen-packet-review-continuation-v1",
+  "capturedReviewArtifacts": [
+    {
+      "path": "data/phase-16-reader-runs/bgp-route-scope-patch-validator/anthropic/attempt-1/metadata.json",
+      "sha256": "e8f81aa1b2a059bad65cd6393db11267045b227e8b9ab36eff4f5eb061f4b396"
+    },
+    {
+      "path": "data/phase-16-reader-runs/bgp-route-scope-patch-validator/anthropic/attempt-1/normalized-review.json",
+      "sha256": "34c44878d6c8b5de17e3a973b8256e92c81d0b04fd16d69dcd6d46d45cc6db97"
+    },
+    {
+      "path": "data/phase-16-reader-runs/bgp-route-scope-patch-validator/anthropic/attempt-1/raw-review.json",
+      "sha256": "4d293469ea196ed116ee54b3dc2aed861dd2d7010271d45fde45bd63771e966e"
+    },
+    {
+      "path": "data/phase-16-reader-runs/bgp-route-scope-patch-validator/anthropic/attempt-1/transcript.jsonl",
+      "sha256": "97562fc4184612c1225c28b9b926f1165941ff2c854860c8d5e062451938dac8"
+    },
+    {
+      "path": "data/phase-16-reader-runs/bgp-route-scope-patch-validator/openai/attempt-1/metadata.json",
+      "sha256": "24d70ae903f11c981d37120292a102687fbf5d1eddc8dbe549be4066a2f1c296"
+    },
+    {
+      "path": "data/phase-16-reader-runs/bgp-route-scope-patch-validator/openai/attempt-1/normalized-review.json",
+      "sha256": "65870e86edd04e6db316a28b5ecd172251ecf8b28890ff1f5d70523e4330adec"
+    },
+    {
+      "path": "data/phase-16-reader-runs/bgp-route-scope-patch-validator/openai/attempt-1/raw-review.json",
+      "sha256": "329c90dcce088de99bdad9063d9f2869431d8bd462804f83673cb31e1129085b"
+    },
+    {
+      "path": "data/phase-16-reader-runs/bgp-route-scope-patch-validator/openai/attempt-1/transcript.jsonl",
+      "sha256": "a3ebdcc2bae474affefae3a68d626f54ad180d79c12db3d274d4a98fc472fc94"
+    },
+    {
+      "path": "data/phase-16-reader-runs/cell-capacity-removal-planner/anthropic/attempt-1/metadata.json",
+      "sha256": "e9f20f69c839dcc37aa12af912c9e3b2e84450125ec297eaeeb7ad6257939b3b"
+    },
+    {
+      "path": "data/phase-16-reader-runs/cell-capacity-removal-planner/anthropic/attempt-1/normalized-review.json",
+      "sha256": "4e5c8ed53542f3d358eab5ea72f6562cbfaa1019ded22e7a64980788583d2f1f"
+    },
+    {
+      "path": "data/phase-16-reader-runs/cell-capacity-removal-planner/anthropic/attempt-1/raw-review.json",
+      "sha256": "165a45494ae961c529fb027432ad5fc05cb1e562d6a60b3122707a21d1503210"
+    },
+    {
+      "path": "data/phase-16-reader-runs/cell-capacity-removal-planner/anthropic/attempt-1/transcript.jsonl",
+      "sha256": "11c48d94253282257b51754641f73de44595e298ed268680f7c1d2af679965e0"
+    },
+    {
+      "path": "data/phase-16-reader-runs/cell-capacity-removal-planner/openai/attempt-1/metadata.json",
+      "sha256": "730a9537804d0667520c89e5301a27456f548668244dbf5e865bfea91da45e4b"
+    },
+    {
+      "path": "data/phase-16-reader-runs/cell-capacity-removal-planner/openai/attempt-1/normalized-review.json",
+      "sha256": "85d82d6f33dabc4c462a91c107aa1c7c762e5c80e70c8c0e2e8db2790492ee32"
+    },
+    {
+      "path": "data/phase-16-reader-runs/cell-capacity-removal-planner/openai/attempt-1/raw-review.json",
+      "sha256": "baf8ca270a0d6b08cf84dbb948c6a6a535bca0a951617dc6e11b818396f864b7"
+    },
+    {
+      "path": "data/phase-16-reader-runs/cell-capacity-removal-planner/openai/attempt-1/transcript.jsonl",
+      "sha256": "e6c587bd039f50467c61cdedf5774fa2420bf64974e083bffa53ff7d487c5f4c"
+    },
+    {
+      "path": "data/phase-16-reader-runs/multi-name-caa-revalidation-reconciler/anthropic/attempt-1/metadata.json",
+      "sha256": "6d0f7dfbeb3a8f24f8b4db26c42ab75daeb43bbf7a5b64d22bcb6c244dcac633"
+    },
+    {
+      "path": "data/phase-16-reader-runs/multi-name-caa-revalidation-reconciler/anthropic/attempt-1/normalized-review.json",
+      "sha256": "fc2c169bccf83051098d325e85efe407fb312a66946f89336e0fe62b103476ab"
+    },
+    {
+      "path": "data/phase-16-reader-runs/multi-name-caa-revalidation-reconciler/anthropic/attempt-1/raw-review.json",
+      "sha256": "db52a6d34f6fd55407ec21f45ed57c39cf09d257ca8226080cd9915bac10ed86"
+    },
+    {
+      "path": "data/phase-16-reader-runs/multi-name-caa-revalidation-reconciler/anthropic/attempt-1/transcript.jsonl",
+      "sha256": "56c16f293c24c45b948de9f36a38fc8a52874559b741c121a1a0c6f492da83d9"
+    },
+    {
+      "path": "data/phase-16-reader-runs/multi-name-caa-revalidation-reconciler/openai/attempt-1/metadata.json",
+      "sha256": "d261ef77085b2bdf384c6426671e6426bfd4aea93f0d606d041721d298452f40"
+    },
+    {
+      "path": "data/phase-16-reader-runs/multi-name-caa-revalidation-reconciler/openai/attempt-1/normalized-review.json",
+      "sha256": "c294277ac0378439755581a48a8ae1a8eabfefe9cda5b7633db52b2cd88370d2"
+    },
+    {
+      "path": "data/phase-16-reader-runs/multi-name-caa-revalidation-reconciler/openai/attempt-1/raw-review.json",
+      "sha256": "a9603ba031e4bdd3f3f760581a7d97b161658ddce3f26861f4af138f7a60b5ab"
+    },
+    {
+      "path": "data/phase-16-reader-runs/multi-name-caa-revalidation-reconciler/openai/attempt-1/transcript.jsonl",
+      "sha256": "b438559a4702d0e240da43bb76bd42edb51bc6cce2ae5d8a2f3184ac6eb6c3ca"
+    },
+    {
+      "path": "data/phase-16-reader-runs/restore-proven-backup-orchestrator/anthropic/attempt-1/metadata.json",
+      "sha256": "af42567cf070bc7b9f64739d27c3ba48700dc8b1658929a3156837918601ddbe"
+    },
+    {
+      "path": "data/phase-16-reader-runs/restore-proven-backup-orchestrator/anthropic/attempt-1/normalized-review.json",
+      "sha256": "fccb00a65ba2a8b63a1843605254077df3b294b5fb54ccbc7769714f557ded65"
+    },
+    {
+      "path": "data/phase-16-reader-runs/restore-proven-backup-orchestrator/anthropic/attempt-1/raw-review.json",
+      "sha256": "088379914ab61afc30652e37187c0737bb54b2a1f67ef0895d44ad6d5fc330a5"
+    },
+    {
+      "path": "data/phase-16-reader-runs/restore-proven-backup-orchestrator/anthropic/attempt-1/transcript.jsonl",
+      "sha256": "6e297969eadbe444b7755971a0fbdea6c0736f862ed60f391b49fe25e6c650c3"
+    },
+    {
+      "path": "data/phase-16-reader-runs/restore-proven-backup-orchestrator/openai/attempt-1/metadata.json",
+      "sha256": "be2c782bacc4894f70e2ed882c44394a6dd6e424efc0451070afd1dafd95f521"
+    },
+    {
+      "path": "data/phase-16-reader-runs/restore-proven-backup-orchestrator/openai/attempt-1/normalized-review.json",
+      "sha256": "351ff433af2a1b3810a51795e5ca0cc16beb342f1479f8118b4187a3d95d2024"
+    },
+    {
+      "path": "data/phase-16-reader-runs/restore-proven-backup-orchestrator/openai/attempt-1/raw-review.json",
+      "sha256": "bfc8d5c22cea141bedfe476c211da2abed4a24d0270e9a67e7ac49889f4f498d"
+    },
+    {
+      "path": "data/phase-16-reader-runs/restore-proven-backup-orchestrator/openai/attempt-1/transcript.jsonl",
+      "sha256": "a7532d470e0aa9b834da3c696841256025f325bfc68ca326f20e61556b98c9be"
+    }
+  ],
+  "summary": {
+    "packets": 4,
+    "reviewsRequired": 8,
+    "reviewsCompleted": 8,
+    "readerSurvivors": 1,
+    "probesRun": 1,
+    "probeSurvivors": 1,
+    "independentIncidentSurvivors": 1,
+    "causalAxisSurvivors": 1,
+    "pricedReaderSpendUsd": 2.9877925,
+    "unpricedReads": 4,
+    "decision": "REPEAT-DISCOVERY"
+  },
+  "conclusion": "Exactly one candidate survived independent reading and its B6 probe. Repeat prospective discovery before building a multi-family phase."
+}

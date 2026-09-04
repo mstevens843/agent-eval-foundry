@@ -212,6 +212,34 @@ import {
   phase15ReaderPacketsArtifact,
   runPhase15Discovery,
 } from "./phase-15/discovery.js";
+import { phase16Json, runPhase16Calibration } from "./phase-16/calibration.js";
+import {
+  phase16ContinuationComparisonArtifact,
+  phase16ContinuationProbesArtifact,
+  phase16ContinuationReviewsArtifact,
+  phase16ContinuationStatusArtifact,
+  runPhase16Continuation,
+} from "./phase-16/continuation.js";
+import {
+  phase16ComparisonArtifact,
+  phase16ContractsArtifact,
+  phase16CorrectionsArtifact,
+  phase16GateArtifact,
+  phase16InputHashesArtifact,
+  phase16PacketsArtifact,
+  phase16PreflightArtifact,
+  phase16ProbesArtifact,
+  phase16QueueArtifact,
+  phase16ReviewsArtifact,
+  phase16SourceArtifact,
+  phase16TraceabilityArtifact,
+  runPhase16Discovery,
+} from "./phase-16/discovery.js";
+import {
+  executePhase16ReaderReview,
+  nextPhase16Review,
+  phase16ReviewExecutionJson,
+} from "./phase-16/review-execution.js";
 import { renderReport } from "./report.js";
 import {
   classifyAccessTokenSmoke,
@@ -316,6 +344,7 @@ import {
 } from "./reports/phase-13-transfer.js";
 import { renderPhase14OperatorEffects } from "./reports/phase-14-operator-effects.js";
 import { renderPhase15DiscoveryEngine } from "./reports/phase-15-discovery-engine.js";
+import { renderPhase16DiscoveryV3 } from "./reports/phase-16-discovery-v3.js";
 import {
   renderMechanismProbeReport,
   renderProbeNext,
@@ -466,6 +495,27 @@ REGISTRY (what could be built, and can we detect it?)
   phase15 probes [--out f]       reader-gated B6 cheap-probe results
   phase15 comparison [--out f]   discovery-method yield and cost comparison
   phase15 corrections [--out f]  audit corrections discovered during the run
+  phase16 calibration [--out f]  frozen candidate-contract gate calibration
+  phase16 report [--out f]       contract-complete prospective discovery result
+  phase16 sources [--out f]      frozen source evidence and extraction outcomes
+  phase16 contracts [--out f]    complete prospective candidate contracts
+  phase16 gate [--out f]         contract-gate results for every drafted candidate
+  phase16 traceability [--out f] public-rule, metric and envelope traceability
+  phase16 queue [--out f]        capped semantic-unique candidate queue
+  phase16 packets [--out f]      blinded immutable reader packets
+  phase16 reviews [--out f]      raw review decisions or explicit provider block
+  phase16 probes [--out f]       reader-gated B6 probe outcomes
+  phase16 comparison [--out f]   discovery-method comparison with null blocked yield
+  phase16 hashes [--out f]       frozen and generated input hashes
+  phase16 corrections [--out f] audit corrections discovered during the run
+  phase16 preflight [--out f]    frozen cross-provider readiness observation
+  phase16 review --candidate <id> --reader <openai|anthropic>
+                                  execute exactly the next frozen blind read
+  phase16 next                    show the next registered reader assignment
+  phase16 final-reviews [--out f] normalized continuation reviews and decisions
+  phase16 final-probes [--out f] reader-gated continuation probe results
+  phase16 final-comparison [--out f] completed prospective method comparison
+  phase16 continuation [--out f] final continuation status and decision
   sources                        list every matrix source, implemented and planned
 
 FAMILIES (run a measured mini-benchmark)
@@ -4636,6 +4686,7 @@ function allCommand(argv: readonly string[], root: string): string {
   write("PHASE-13-TRANSFER-LAB.md", renderPhase13TransferLab(phase13Results));
   write("PHASE-14-OPERATOR-EFFECTS.md", renderPhase14OperatorEffects(root));
   write("PHASE-15-DISCOVERY-ENGINE.md", renderPhase15DiscoveryEngine(root));
+  write("PHASE-16-DISCOVERY-V3.md", renderPhase16DiscoveryV3(root));
   const inputs = { ...MEASURED_DEFAULTS, totalUsd: 100_000, labourRateUsdPerHour: 120 };
   assertBudgetInputs(inputs);
   assertPlanHonest(planBudget(inputs));
@@ -5222,6 +5273,56 @@ export function main(argv: readonly string[]): number {
         else {
           throw new Error(
             `unknown phase15 subcommand "${sub}"; expected report, provenance, queue, packets, probes, comparison or corrections`,
+          );
+        }
+        return 0;
+      }
+      case "phase16": {
+        const sub = positional(argv, 1) ?? "report";
+        const run =
+          sub === "calibration" || sub === "preflight" || sub === "review" || sub === "next"
+            ? null
+            : runPhase16Discovery(root);
+        if (sub === "report") emit(argv, renderPhase16DiscoveryV3(root));
+        else if (sub === "calibration") emit(argv, phase16Json(runPhase16Calibration(root)));
+        else if (sub === "sources" && run !== null) emit(argv, phase16Json(phase16SourceArtifact(run)));
+        else if (sub === "contracts" && run !== null) emit(argv, phase16Json(phase16ContractsArtifact(run)));
+        else if (sub === "gate" && run !== null) emit(argv, phase16Json(phase16GateArtifact(run)));
+        else if (sub === "traceability" && run !== null)
+          emit(argv, phase16Json(phase16TraceabilityArtifact(run)));
+        else if (sub === "queue" && run !== null) emit(argv, phase16Json(phase16QueueArtifact(run)));
+        else if (sub === "packets" && run !== null) emit(argv, phase16Json(phase16PacketsArtifact(run)));
+        else if (sub === "reviews" && run !== null) emit(argv, phase16Json(phase16ReviewsArtifact(run)));
+        else if (sub === "probes" && run !== null) emit(argv, phase16Json(phase16ProbesArtifact(run)));
+        else if (sub === "comparison" && run !== null)
+          emit(argv, phase16Json(phase16ComparisonArtifact(root, run)));
+        else if (sub === "hashes" && run !== null)
+          emit(argv, phase16Json(phase16InputHashesArtifact(root, run)));
+        else if (sub === "corrections" && run !== null)
+          emit(argv, phase16Json(phase16CorrectionsArtifact(run)));
+        else if (sub === "preflight") emit(argv, phase16Json(phase16PreflightArtifact(root)));
+        else if (sub === "next") {
+          process.stdout.write(`${nextPhase16Review(root) ?? "complete"}\n`);
+        } else if (sub === "review") {
+          const candidateId = flag(argv, "--candidate");
+          const reader = flag(argv, "--reader");
+          if (candidateId === null || (reader !== "openai" && reader !== "anthropic")) {
+            throw new Error("phase16 review needs --candidate and --reader openai|anthropic");
+          }
+          emit(argv, phase16ReviewExecutionJson(executePhase16ReaderReview(root, candidateId, reader)));
+        } else if (sub === "final-reviews") {
+          emit(argv, phase16Json(phase16ContinuationReviewsArtifact(runPhase16Continuation(root))));
+        } else if (sub === "final-probes") {
+          emit(argv, phase16Json(phase16ContinuationProbesArtifact(runPhase16Continuation(root))));
+        } else if (sub === "final-comparison") {
+          const continuation = runPhase16Continuation(root);
+          emit(argv, phase16Json(phase16ContinuationComparisonArtifact(root, continuation)));
+        } else if (sub === "continuation") {
+          const continuation = runPhase16Continuation(root);
+          emit(argv, phase16Json(phase16ContinuationStatusArtifact(root, continuation)));
+        } else {
+          throw new Error(
+            `unknown phase16 subcommand "${sub}"; expected report, calibration, sources, contracts, gate, traceability, queue, packets, reviews, probes, comparison, hashes, corrections, preflight, review, next, final-reviews, final-probes, final-comparison or continuation`,
           );
         }
         return 0;

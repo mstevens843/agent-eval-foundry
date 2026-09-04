@@ -1,0 +1,23 @@
+{
+  "schema": "agent-eval-foundry/phase-16-source-snapshot@1",
+  "sourceUnitId": "terraform-state-lock-boundary",
+  "retrievedAt": "2026-09-04T14:35:00Z",
+  "locator": "https://developer.hashicorp.com/terraform/language/state/locking",
+  "sourceKind": "authoritative product documentation",
+  "revision": "Terraform v1.16 documentation as retrieved; snapshot digest is the immutable evidence reference",
+  "evidence": [
+    {
+      "location": "State locking, lines 158-165",
+      "fact": "Backends lock state for write-capable operations; when lock acquisition fails Terraform does not continue, and disabling locking is discouraged."
+    },
+    {
+      "location": "Force unlock, lines 166-171",
+      "fact": "Force unlock should target only the caller's own failed lock and requires the unique lock ID, which acts as a nonce for the exact lock."
+    },
+    {
+      "location": "Backend state documentation",
+      "fact": "Backends own state storage and locking behavior; remote-state serials prevent overwriting state when newer changes already exist."
+    }
+  ],
+  "observedFailure": "No incident is asserted: the source defines backend-owned lock identity and state serial as authority that a recovery command must not reconstruct from local timing or workspace name."
+}

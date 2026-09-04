@@ -1,0 +1,27 @@
+{
+  "schema": "agent-eval-foundry/phase-16-source-snapshot@1",
+  "sourceUnitId": "kafka-transactional-producer-boundary",
+  "retrievedAt": "2026-09-04T14:35:00Z",
+  "locator": "https://cwiki.apache.org/confluence/spaces/KAFKA/pages/66854913/KIP-98%2B-%2BExactly%2BOnce%2BDelivery%2Band%2BTransactional%2BMessaging",
+  "sourceKind": "authoritative protocol design",
+  "revision": "Confluence page 66854913 as retrieved; snapshot digest is the immutable evidence reference",
+  "evidence": [
+    {
+      "location": "Idempotent producer guarantees, lines 206-218",
+      "fact": "The broker associates a producer id with monotonic per-partition sequence numbers, treats lower numbers as duplicates, and treats gaps as fatal loss."
+    },
+    {
+      "location": "Transactional guarantees, lines 219-245",
+      "fact": "A user-supplied stable transactional id enables recovery or abort across producer sessions and atomic consume-transform-produce behavior."
+    },
+    {
+      "location": "Message format, lines 629-640",
+      "fact": "Producer id, producer epoch, and first sequence are persisted in message batches and allocated or validated at a single point."
+    },
+    {
+      "location": "Test plan, lines 759-767",
+      "fact": "The design calls for system tests that kill producers, consumers, and brokers in varied states while checking the guarantees."
+    }
+  ],
+  "observedFailure": "No incident is asserted: the source defines broker-owned sequence and epoch authority needed to distinguish retries, duplicates, gaps, and stale producers."
+}

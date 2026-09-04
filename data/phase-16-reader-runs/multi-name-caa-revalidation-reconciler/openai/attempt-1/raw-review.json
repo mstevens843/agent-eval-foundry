@@ -1,0 +1,16 @@
+{
+  "candidateId": "multi-name-caa-revalidation-reconciler",
+  "packetSha256": "45475d79cb39fc0eb9a9e4e992512ec3a1d75974a6e3be8b8ae815178f7d2c13",
+  "providerFamily": "openai",
+  "dimensions": {
+    "source support": "pass",
+    "contract fairness": "pass",
+    "natural task contract": "pass",
+    "structural witness isolation": "pass",
+    "semantic novelty": "pass",
+    "cheap-probe falsifiability": "pass"
+  },
+  "verdict": "promote",
+  "earliestFailedDimension": null,
+  "rationale": "The authoritative incident snapshot directly supports the multi-name identity-binding failure, the one-domain testing gap, and the per-name revalidation remediation embodied by the proposal. The public contract specifies the input and output shapes, the strict greater-than-eight-hour boundary, per-name query and binding behavior, conjunctive issuance decision, prohibited shortcuts, grading rules, and held-out variation without introducing hidden rules. The task is a natural executable reduction of the incident rather than an artificial checker puzzle. The decisive witness is isolated in the host-owned exact-FQDN query ledger and hidden current-CAA map, so a subject cannot establish compliance merely by emitting the right number of results. Its PKI multi-identity authorization and exact-name reconciliation semantics are distinct from the listed novelty families even though stale state appears in some baselines. The cheap probe is falsifiable: a first-name-reuse mutant can preserve query and result counts yet must fail exact binding and, on a denied tail, safe issuance; malformed output, nondeterministic replay, reference failure, and ledger leakage are explicit kill conditions. The closest competing verdict is kill at contract fairness because the state-transition list names ORDER_ISSUED as the sole destination of the decision transition and omits a separate ORDER_REFUSED transition. That wording defect does not make the subject-facing obligation or grader ambiguous: the same transition effect, accepted outcomes, forbidden outcomes, grading rule, and output grammar all independently and consistently require REFUSE for any DENY, while internal state is neither an input nor a required output. Therefore it is not a required-term uncertainty."
+}
