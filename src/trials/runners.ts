@@ -26,7 +26,7 @@
 // family-specific is the host script, which knows how to build a harness and call a subject.
 
 import { execFileSync } from "node:child_process";
-import { chmodSync, copyFileSync, existsSync, mkdtempSync, writeFileSync } from "node:fs";
+import { chmodSync, copyFileSync, existsSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { CONTAINER_IMAGE, containerRuntimeReadiness } from "../adversarial-audit/isolation.js";
@@ -337,6 +337,63 @@ export function containerRunner(options: ContainerOptions): SubjectRunner {
   };
 }
 
+export interface JsonContainerHostOptions {
+  /** Absolute path to the family host script. */
+  readonly hostScript: string;
+  /** Absolute path to the untrusted submitted ES module. */
+  readonly modulePath: string;
+  readonly image?: string;
+  readonly limits?: ContainerLimits;
+  readonly timeoutMs?: number;
+}
+
+/**
+ * Run a family host and submitted module in a no-network container, returning only JSON to the
+ * verifier process. Unlike `containerRunner`, this keeps the host payload generic so every routed
+ * family can reuse the same boundary without pretending its ledger has the containment shape.
+ */
+export function runJsonContainerHost(
+  options: JsonContainerHostOptions,
+  payload: unknown,
+): Record<string, unknown> {
+  const image = options.image ?? CONTAINER_IMAGE;
+  const limits = options.limits ?? CONTAINER_LIMITS;
+  const timeout = options.timeoutMs ?? limits.wallClockMs;
+  const name = containerName("json-host");
+  const stage = stagingDir("foundry-json-host-");
+  try {
+    stageFile(options.hostScript, join(stage, "family-host.mjs"));
+    stageFile(options.modulePath, join(stage, "subject.mjs"));
+    const stdout = execFileSync(
+      "docker",
+      [
+        ...containerFlags(name, stage, "none", limits),
+        "--interactive",
+        image,
+        "node",
+        "/work/family-host.mjs",
+        "/work/subject.mjs",
+      ],
+      {
+        input: JSON.stringify(payload),
+        encoding: "utf8",
+        timeout,
+        maxBuffer: 64 * 1024 * 1024,
+        env: { PATH: process.env["PATH"] ?? "", HOME: process.env["HOME"] ?? "" },
+      },
+    );
+    const parsed: unknown = JSON.parse(stdout);
+    return parsed !== null && typeof parsed === "object" && !Array.isArray(parsed)
+      ? (parsed as Record<string, unknown>)
+      : { error: "container host returned non-object JSON" };
+  } catch (err) {
+    forceRemove(name);
+    return { error: `container host failed: ${(err as Error).message.slice(0, 300)}` };
+  } finally {
+    rmSync(stage, { recursive: true, force: true });
+  }
+}
+
 /** Names that would carry a credential. Matched against KEYS only — a value is never read. */
 export const SECRET_ENV_PATTERN = /TOKEN|SECRET|API_?KEY|PASSWORD|CREDENTIAL|AUTH|SESSION/i;
 
@@ -480,10 +537,10 @@ export function containerDryRun(
 }
 
 export interface ContainerTrialCommandOptions {
-  /** Directory holding the credential the provider CLI needs. Mounted read-only; never read here. */
-  readonly credentialDir: string;
-  /** Where that directory appears inside the container. */
-  readonly credentialTarget: string;
+  /** Directory holding a file-backed credential, when required. Mounted read-only; never read here. */
+  readonly credentialDir?: string;
+  /** Where that directory appears inside the container. Required with `credentialDir`. */
+  readonly credentialTarget?: string;
   /** Environment variable NAMES the CLI needs. Values are passed by docker, never by this process. */
   readonly envPassthrough?: readonly string[];
   /** The provider CLI invocation, run inside the container. */
@@ -509,6 +566,9 @@ export interface ContainerTrialCommandOptions {
 export function containerTrialCommand(options: ContainerTrialCommandOptions): readonly string[] {
   const image = options.image ?? CONTAINER_IMAGE;
   const limits = options.limits ?? CONTAINER_LIMITS;
+  if ((options.credentialDir === undefined) !== (options.credentialTarget === undefined)) {
+    throw new Error("credentialDir and credentialTarget must be supplied together");
+  }
   return [
     "docker",
     // `{dir}` is the per-trial sandbox the shell adapter creates, so this reaches the orchestrator
@@ -516,7 +576,12 @@ export function containerTrialCommand(options: ContainerTrialCommandOptions): re
     // The bundle is writable here and read-only above, because the agent must write its submission
     // into it and a subject artifact must not write anywhere but its own tmpfs.
     ...containerFlags(containerName("trial"), "{dir}", "bridge", limits, "rw"),
-    `--mount=type=bind,source=${options.credentialDir},target=${options.credentialTarget},readonly`,
+    // Overlay the challenge path read-only on the writable workspace mount. The model can create
+    // tests and its submission, but cannot rewrite the bytes whose hash makes the run countable.
+    "--mount=type=bind,source={dir}/challenge,target=/work/challenge,readonly",
+    ...(options.credentialDir === undefined
+      ? []
+      : [`--mount=type=bind,source=${options.credentialDir},target=${options.credentialTarget},readonly`]),
     ...(options.envPassthrough ?? []).map((key) => `--env=${key}`),
     image,
     ...options.agentCommand,
@@ -571,11 +636,24 @@ export function containerIsolationDetail(command: readonly string[] | null): str
     return "NOT containerized: the provider ran as a host subprocess sharing this machine's filesystem, network and environment.";
   }
   const networked = command.includes("--network=bridge");
+  const imageIndex = command.findIndex((arg, index) => {
+    if (index < 2 || arg.startsWith("-")) return false;
+    return command[index - 1] !== "--name";
+  });
+  const image = imageIndex < 0 ? "unknown image" : command[imageIndex];
+  const value = (prefix: string, fallback: string): string =>
+    command.find((arg) => arg.startsWith(prefix))?.slice(prefix.length) ?? fallback;
+  const credentialMounts = command.filter(
+    (arg) => arg.startsWith("--mount=") && !arg.includes("target=/work"),
+  ).length;
+  const credentialEnvNames = command
+    .filter((arg) => arg.startsWith("--env=") && !arg.slice("--env=".length).includes("="))
+    .map((arg) => arg.slice("--env=".length));
   return [
-    `containerized (${CONTAINER_IMAGE}), one container per trial, per-trial bind mount, private tmpfs, read-only rootfs, cap-drop=ALL, no-new-privileges, uid 1000,`,
-    `limits memory=${CONTAINER_LIMITS.memory} cpus=${CONTAINER_LIMITS.cpus} pids=${CONTAINER_LIMITS.pids} nofile=${CONTAINER_LIMITS.nofile} wall-clock=${CONTAINER_LIMITS.wallClockMs}ms.`,
+    `containerized (${image}), one container per trial, writable per-trial workspace with a nested read-only challenge mount, private tmpfs, read-only rootfs, cap-drop=ALL, no-new-privileges, uid 1000,`,
+    `limits memory=${value("--memory=", "unknown")} cpus=${value("--cpus=", "unknown")} pids=${value("--pids-limit=", "unknown")} nofile=${value("--ulimit=nofile=", "unknown")} host timeout is recorded separately.`,
     networked
-      ? "NETWORK IS ON, and the reason is specific: the provider CLI is the agent and must reach its vendor API, so a no-network container would record an infrastructure error rather than a capability result. Exactly one credential directory is mounted read-only; no other host environment crosses."
+      ? `NETWORK IS ON, and the reason is specific: the provider CLI is the agent and must reach its vendor API, so a no-network container would record an infrastructure error rather than a capability result. Credential channels: ${credentialMounts} read-only mount(s), declared environment key(s) [${credentialEnvNames.join(", ")}]; no other host environment crosses.`
       : "Network is off (--network=none): no interface but loopback, and no credential is mounted.",
     "WEAKER THAN HARBOR in three ways this runner does not claim to close: (1) Harbor built a separate verifier IMAGE and ran it in its own container after the agent container was torn down, with only the declared artifact crossing; here the verifier runs on the HOST, so it is outside the attacker's container but inside its blast radius if the container is escaped. (2) Harbor separated privilege three ways inside the verifier — a root tool_server owning the ledger behind a 0700 control socket, an unprivileged per-scenario child that was the only process to import agent code and was killed by process group, and a root collector that never imported it — so the agent's account of itself and the ground truth came from different processes at different privilege levels; this runner has one unprivileged process and one account. (3) Harbor baked all verifier tooling into the image and forbade network fetches at verify time; here the grader uses the host's installed toolchain.",
   ].join(" ");

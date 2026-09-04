@@ -86,6 +86,7 @@ import {
   scenarioSetId as picScenarioSetId,
   measuredScenarios as picScenarios,
 } from "./orchestrate.js";
+import { runJsonContainerHost } from "./runners.js";
 import type { TrialCell } from "./types.js";
 
 export interface GradeResult {
@@ -140,6 +141,18 @@ function runHost(hostScript: string, modulePath: string, payload: unknown): Reco
   }
 }
 
+type HostExecution = (payload: unknown) => Record<string, unknown>;
+
+const subprocessHost =
+  (hostScript: string, modulePath: string): HostExecution =>
+  (payload) =>
+    runHost(hostScript, modulePath, payload);
+
+const containerHost =
+  (hostScript: string, modulePath: string): HostExecution =>
+  (payload) =>
+    runJsonContainerHost({ hostScript, modulePath }, payload);
+
 const memoryScenarios = (): ReturnType<typeof memGenerate> => memGenerate(memSelect(memEnumerate()));
 const uiScenarios = (): ReturnType<typeof uiGenerate> => uiGenerate(uiSelect(uiEnumerate()));
 const liveScenarios = (): ReturnType<typeof liveGenerate> => liveGenerate(liveSelect(liveEnumerate()));
@@ -158,12 +171,11 @@ const rollbackScenarios = (): ReturnType<typeof rollbackGenerate> =>
   rollbackGenerate(rollbackSelect(rollbackEnumerate()));
 
 const daoHostFailures = (
-  host: string,
-  modulePath: string,
+  execute: HostExecution,
   scenario: ReturnType<typeof daoScenarios>[number],
   control: "reference" | "recompute-current-epoch",
 ): readonly string[] => {
-  const out = runHost(host, modulePath, { scenario, control });
+  const out = execute({ scenario, control });
   if (typeof out["error"] === "string") return ["host_error"];
   return daoVerify({
     scenario,
@@ -173,13 +185,13 @@ const daoHostFailures = (
   }).map((failure) => failure.check);
 };
 
-const assertDaoHostIntegrity = (host: string, modulePath: string): void => {
+const assertDaoHostIntegrity = (execute: HostExecution): void => {
   const activated = daoScenarios().find(
     (scenario) => scenario.params.nWorkers > 1 && scenario.params.crashPosition === "after_tool",
   );
   if (activated === undefined) throw new Error("dao-descendant has no activated B6 control scenario");
-  const reference = daoHostFailures(host, modulePath, activated, "reference");
-  const narrowBad = daoHostFailures(host, modulePath, activated, "recompute-current-epoch");
+  const reference = daoHostFailures(execute, activated, "reference");
+  const narrowBad = daoHostFailures(execute, activated, "recompute-current-epoch");
   const integrity = rigIntegrity(
     "dao-descendant-subprocess-grader",
     [
@@ -188,7 +200,7 @@ const assertDaoHostIntegrity = (host: string, modulePath: string): void => {
     ],
     [narrowBad],
   );
-  const malformed = runHost(host, modulePath, {});
+  const malformed = execute({});
   const malformedRefused = typeof malformed["error"] === "string";
   if (!integrity.usable || !malformedRefused) {
     throw new RigInputError(
@@ -205,13 +217,12 @@ const assertDaoHostIntegrity = (host: string, modulePath: string): void => {
 type TransferControl = "reference" | "recompute-current-authority";
 
 const transferHostFailures = (
-  host: string,
-  modulePath: string,
+  execute: HostExecution,
   scenario: unknown,
   control: TransferControl,
   verifier: (value: unknown) => readonly { readonly check: string }[],
 ): readonly string[] => {
-  const out = runHost(host, modulePath, { scenario, control });
+  const out = execute({ scenario, control });
   if (typeof out["error"] === "string") return ["host_error"];
   return verifier({
     scenario,
@@ -223,13 +234,12 @@ const transferHostFailures = (
 
 const assertTransferHostIntegrity = (
   familyId: string,
-  host: string,
-  modulePath: string,
+  execute: HostExecution,
   scenario: unknown,
   verifier: (value: unknown) => readonly { readonly check: string }[],
 ): void => {
-  const reference = transferHostFailures(host, modulePath, scenario, "reference", verifier);
-  const narrowBad = transferHostFailures(host, modulePath, scenario, "recompute-current-authority", verifier);
+  const reference = transferHostFailures(execute, scenario, "reference", verifier);
+  const narrowBad = transferHostFailures(execute, scenario, "recompute-current-authority", verifier);
   const integrity = rigIntegrity(
     `${familyId}-subprocess-grader`,
     [
@@ -238,7 +248,7 @@ const assertTransferHostIntegrity = (
     ],
     [narrowBad],
   );
-  const malformedRefused = typeof runHost(host, modulePath, {})["error"] === "string";
+  const malformedRefused = typeof execute({})["error"] === "string";
   if (!integrity.usable || !malformedRefused) {
     throw new RigInputError(
       `${familyId} subprocess grader is void: ${[
@@ -430,13 +440,12 @@ export function gradeDeploymentAlias(modulePath: string): GradeResult {
 }
 
 /** Grade durable recovery against the host-owned external call and effect ledgers. */
-export function gradeDaoDescendant(modulePath: string): GradeResult {
-  const host = hostPath("dao-descendant-host.mjs");
-  assertDaoHostIntegrity(host, modulePath);
+function gradeDaoWithHost(modulePath: string, execute: HostExecution, isolation: string): GradeResult {
+  assertDaoHostIntegrity(execute);
   const cells: TrialCell[] = [];
   let hostErrors = 0;
   for (const scenario of daoScenarios()) {
-    const out = runHost(host, modulePath, { scenario });
+    const out = execute({ scenario });
     if (typeof out["error"] === "string" && (out["error"] as string).length > 0) {
       hostErrors += 1;
       cells.push({ scenarioId: scenario.id, failed: ["local_confirmation_green"] });
@@ -450,22 +459,26 @@ export function gradeDaoDescendant(modulePath: string): GradeResult {
     });
     cells.push({ scenarioId: scenario.id, failed: [...new Set(failures.map((f) => f.check))].sort() });
   }
-  return summarise(cells, hostErrors);
+  return summarise(cells, hostErrors, isolation);
+}
+
+export function gradeDaoDescendant(modulePath: string): GradeResult {
+  const host = hostPath("dao-descendant-host.mjs");
+  return gradeDaoWithHost(modulePath, subprocessHost(host, modulePath), "subprocess");
 }
 
 /** Grade order reconciliation against host-owned venue calls and executions. */
-export function gradeTradingReconciliation(modulePath: string): GradeResult {
-  const host = hostPath("trading-reconciliation-host.mjs");
+function gradeTradingWithHost(modulePath: string, execute: HostExecution, isolation: string): GradeResult {
   const scenarios = tradingScenarios();
   const activated = scenarios.find(
     (scenario) => scenario.params.nReconcilers > 1 && scenario.params.crashPosition === "after_venue_accept",
   );
   if (activated === undefined) throw new Error("trading transfer has no activated B6 control scenario");
-  assertTransferHostIntegrity("trading-reconciliation-recompute", host, modulePath, activated, tradingVerify);
+  assertTransferHostIntegrity("trading-reconciliation-recompute", execute, activated, tradingVerify);
   const cells: TrialCell[] = [];
   let hostErrors = 0;
   for (const scenario of scenarios) {
-    const out = runHost(host, modulePath, { scenario });
+    const out = execute({ scenario });
     if (typeof out["error"] === "string" && (out["error"] as string).length > 0) {
       hostErrors += 1;
       cells.push({ scenarioId: scenario.id, failed: ["local_confirmation_green"] });
@@ -479,22 +492,26 @@ export function gradeTradingReconciliation(modulePath: string): GradeResult {
     });
     cells.push({ scenarioId: scenario.id, failed: [...new Set(failures.map((f) => f.check))].sort() });
   }
-  return summarise(cells, hostErrors);
+  return summarise(cells, hostErrors, isolation);
+}
+
+export function gradeTradingReconciliation(modulePath: string): GradeResult {
+  const host = hostPath("trading-reconciliation-host.mjs");
+  return gradeTradingWithHost(modulePath, subprocessHost(host, modulePath), "subprocess");
 }
 
 /** Grade rollback recovery against host-owned controller calls and compensation effects. */
-export function gradeDeploymentRollback(modulePath: string): GradeResult {
-  const host = hostPath("deployment-rollback-host.mjs");
+function gradeRollbackWithHost(modulePath: string, execute: HostExecution, isolation: string): GradeResult {
   const scenarios = rollbackScenarios();
   const activated = scenarios.find(
     (scenario) => scenario.params.nControllers > 1 && scenario.params.crashPosition === "after_compensation",
   );
   if (activated === undefined) throw new Error("deployment transfer has no activated B6 control scenario");
-  assertTransferHostIntegrity("deployment-rollback-recompute", host, modulePath, activated, rollbackVerify);
+  assertTransferHostIntegrity("deployment-rollback-recompute", execute, activated, rollbackVerify);
   const cells: TrialCell[] = [];
   let hostErrors = 0;
   for (const scenario of scenarios) {
-    const out = runHost(host, modulePath, { scenario });
+    const out = execute({ scenario });
     if (typeof out["error"] === "string" && (out["error"] as string).length > 0) {
       hostErrors += 1;
       cells.push({ scenarioId: scenario.id, failed: ["local_confirmation_green"] });
@@ -508,14 +525,40 @@ export function gradeDeploymentRollback(modulePath: string): GradeResult {
     });
     cells.push({ scenarioId: scenario.id, failed: [...new Set(failures.map((f) => f.check))].sort() });
   }
-  return summarise(cells, hostErrors);
+  return summarise(cells, hostErrors, isolation);
 }
 
-const summarise = (cells: readonly TrialCell[], hostErrors: number): GradeResult => ({
+export function gradeDeploymentRollback(modulePath: string): GradeResult {
+  const host = hostPath("deployment-rollback-host.mjs");
+  return gradeRollbackWithHost(modulePath, subprocessHost(host, modulePath), "subprocess");
+}
+
+const summarise = (
+  cells: readonly TrialCell[],
+  hostErrors: number,
+  isolation = "subprocess",
+): GradeResult => ({
   cells,
-  detail: `${cells.filter((c) => c.failed.length > 0).length}/${cells.length} scenarios failed (${hostErrors} host error${hostErrors === 1 ? "" : "s"}) under subprocess isolation`,
+  detail: `${cells.filter((c) => c.failed.length > 0).length}/${cells.length} scenarios failed (${hostErrors} host error${hostErrors === 1 ? "" : "s"}) under ${isolation} isolation`,
   hostErrors,
 });
+
+/** Phase 14's stronger grading path: the verifier stays here; host plus submission get no network. */
+export function gradePhase14ContainerSubmission(familyId: string, modulePath: string): GradeResult {
+  if (familyId === "dao-descendant") {
+    const host = hostPath("dao-descendant-host.mjs");
+    return gradeDaoWithHost(modulePath, containerHost(host, modulePath), "no-network container");
+  }
+  if (familyId === "trading-reconciliation-recompute") {
+    const host = hostPath("trading-reconciliation-host.mjs");
+    return gradeTradingWithHost(modulePath, containerHost(host, modulePath), "no-network container");
+  }
+  if (familyId === "deployment-rollback-recompute") {
+    const host = hostPath("deployment-rollback-host.mjs");
+    return gradeRollbackWithHost(modulePath, containerHost(host, modulePath), "no-network container");
+  }
+  throw new Error(`${familyId}: no Phase 14 container grader is registered`);
+}
 
 const INSTRUCTIONS: Readonly<Record<string, string>> = {
   "prompt-injection-containment": [

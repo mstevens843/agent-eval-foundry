@@ -1,0 +1,19 @@
+{
+  "views": [
+    {
+      "intent": {
+        "orderIntentId": "order-intent-23-11",
+        "clientRequestId": "client-request-23-12",
+        "accountId": "account-3",
+        "symbol": "GAMMA",
+        "side": "sell",
+        "quantity": 120,
+        "idempotencyKey": "order::order-intent-23-11::client-request-23-12::authority-0"
+      },
+      "reconcilerId": "reconciler-1",
+      "authorityEpoch": 0,
+      "attempt": 0
+    }
+  ],
+  "note": "Without an uncertain accepted order, only the first submission is made."
+}

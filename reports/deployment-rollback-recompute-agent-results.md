@@ -1,14 +1,14 @@
 # Agent trial results — deployment-rollback-recompute
 
-**No counted agent trial exists.** Nothing below is difficulty evidence.
+**2 counted agent trial(s): 0 failed at least one scenario, 2 passed everything.**
 
-**No evidence either way.**
+The family is **already-solved** on this bank: every counted attempt passed everything.
 
 ## Outcomes, kept apart
 
 | kind | count | what it means |
 |---|---:|---|
-| `counted_solve` | 0 | **counted solve** — a real attempt that passed every graded scenario |
+| `counted_solve` | 2 | **counted solve** — a real attempt that passed every graded scenario |
 | `counted_failure` | 0 | **counted failure** — a real attempt that failed at least one scenario |
 | `provider_refusal` | 0 | provider refusal — no attempt was made; never counted |
 | `infra_failure` | 0 | infrastructure failure — the harness, not the subject; never counted |
@@ -24,10 +24,59 @@ it never measured.
 |---|---|---|---:|---:|---:|
 | `deployment-rollback-recompute-transfer-smoke-2026-09:o1:not_run` | openai/gpt-5.6-sol | not_run | 0 | 0 | — |
 | `deployment-rollback-recompute-transfer-smoke-2026-09:a1:not_run` | anthropic/claude-opus-5 | not_run | 0 | 0 | — |
+| `phase14-deployment-rollback-recompute-seeded-recompute-anthropic` | anthropic/claude-opus-5 | counted_solve | 24 | 0 | 114s |
+| `phase14-deployment-rollback-recompute-seeded-recompute-openai` | openai/gpt-5.6-sol | counted_solve | 24 | 0 | 39s |
+
+## Which checks failed
+
+Pooled across counted trials. A check that never fires is not evidence it cannot.
+
+| check | scenarios |
+|---|---:|
+
+## Where the failures fall
+
+The analysis that decides whether an evolution operator worked. A knob whose values produce
+different failure rates is a knob that is doing something; a flat split means the difficulty
+came from somewhere else.
+
+### `crashPosition`
+
+| value | scenarios | failed | rate |
+|---|---:|---:|---:|
+| `after_compensation` | 42 | 0 | 0% |
+| `none` | 6 | 0 | 0% |
+
+### `effects`
+
+| value | scenarios | failed | rate |
+|---|---:|---:|---:|
+| `12` | 16 | 0 | 0% |
+| `4` | 16 | 0 | 0% |
+| `6` | 16 | 0 | 0% |
+
+### `nControllers`
+
+| value | scenarios | failed | rate |
+|---|---:|---:|---:|
+| `1` | 6 | 0 | 0% |
+| `2` | 14 | 0 | 0% |
+| `3` | 14 | 0 | 0% |
+| `4` | 14 | 0 | 0% |
+
+### `seed`
+
+| value | scenarios | failed | rate |
+|---|---:|---:|---:|
+| `11` | 18 | 0 | 0% |
+| `23` | 18 | 0 | 0% |
+| `41` | 12 | 0 | 0% |
+
+**No knob moves the failure rate.** Whatever the family measures, it is not any single declared parameter.
 
 ## Model coverage
 
-Counted trials come from **one model family** (none). One family has no measured variance: a result here says what that lab's model does, not what models do. The unrun slots in the campaign are the planned fix, and they are still unrun.
+Counted trials span 2 model families: anthropic, openai.
 
 ## Against the pre-registration
 
@@ -35,7 +84,7 @@ Counted trials come from **one model family** (none). One family has no measured
 
 **Confirm signal was:** At least one countable attempt fails an activated recovery scenario on rollback-key recomputation or duplicate compensation, with no rollback-policy failure and two blind labellers agreeing capability. This is smoke evidence only.
 
-Neither signal fired: there is no counted evidence.
+**The kill signal fired.**
 
 ---
 

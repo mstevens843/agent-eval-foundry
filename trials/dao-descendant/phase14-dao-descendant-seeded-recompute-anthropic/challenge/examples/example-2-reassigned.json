@@ -1,0 +1,27 @@
+{
+  "views": [
+    {
+      "intent": {
+        "actionId": "action-11-3",
+        "requestId": "request-11-4",
+        "payload": "payload-11-3",
+        "idempotencyKey": "idem::action-11-3::request-11-4::epoch-0"
+      },
+      "workerId": "worker-1",
+      "leaseEpoch": 0,
+      "attempt": 0
+    },
+    {
+      "intent": {
+        "actionId": "action-11-3",
+        "requestId": "request-11-4",
+        "payload": "payload-11-3",
+        "idempotencyKey": "idem::action-11-3::request-11-4::epoch-0"
+      },
+      "workerId": "worker-2",
+      "leaseEpoch": 1,
+      "attempt": 1
+    }
+  ],
+  "note": "The second worker sees epoch 1 and must still recover the committed epoch-0 key."
+}

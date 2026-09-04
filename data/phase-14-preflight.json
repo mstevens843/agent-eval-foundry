@@ -1,41 +1,37 @@
 {
   "schema": "agent-eval-foundry/phase-14-preflight@1",
   "observationsPath": "data/phase-14-preflight-observations.json",
-  "observedAt": "2026-09-03",
+  "observedAt": "2026-09-04",
   "baselineCommit": "d73a50b",
-  "ready": false,
-  "blockers": [
-    "anthropic subject execution unavailable",
-    "anthropic blind labelling unavailable",
-    "provider-agent container execution is not integrated for both provider CLIs"
-  ],
+  "ready": true,
+  "blockers": [],
   "providers": [
     {
       "providerFamily": "openai",
       "subjectExecutionAvailable": true,
       "blindLabellingAvailable": true,
-      "mode": "configured",
-      "evidence": "the provider registry reported Codex configured through codex-cli 0.152.1"
+      "mode": "authenticated-container-probe",
+      "evidence": "codex-cli 0.152.1 authenticated from a minimal read-only credential mount and completed a live API call inside the pinned provider image"
     },
     {
       "providerFamily": "anthropic",
-      "subjectExecutionAvailable": false,
-      "blindLabellingAvailable": false,
-      "mode": "import-only",
-      "evidence": "the provider registry reported Claude import-only because this runner has no explicit Anthropic execution credential"
+      "subjectExecutionAvailable": true,
+      "blindLabellingAvailable": true,
+      "mode": "authenticated-container-probe",
+      "evidence": "claude-code 2.1.260 accepted the explicit OAuth credential and completed live API calls both on the host and inside the pinned provider image"
     }
   ],
   "isolation": {
     "dockerDaemonAvailable": true,
     "dockerServerVersion": "29.3.1",
     "artifactNoNetworkSmokePassed": true,
-    "providerAgentContainerIntegrated": false,
-    "detail": "The no-network artifact container satisfied its declared isolation checks. Provider-agent execution needs network access and a purpose-built image containing each provider CLI; the current generic image and Phase 13 subprocess campaigns do not establish that path."
+    "providerAgentContainerIntegrated": true,
+    "detail": "Both pinned provider CLIs completed authenticated calls inside agent-eval-foundry/provider-agent:claude-2.1.260-codex-0.152.1. Provider containers use bridge networking only for vendor APIs, a read-only root, dropped capabilities, uid 1000, resource limits, a writable per-attempt workspace with a nested read-only challenge, and exactly one provider-specific credential channel. Submitted modules are re-run separately in fresh no-network containers before host-owned verification."
   },
   "capture": {
     "fullArtifactContractImplemented": true,
     "costFieldsImplemented": true,
-    "detail": "The shell orchestrator preserves challenge, workspace, submission, transcript, metadata, verifier output, normalized result and countability; trial records carry provider-reported usage and cost fields. No Phase 14 run exercised this contract."
+    "detail": "The orchestrator preserves challenge, workspace, submission, streamed transcript, metadata, verifier output, normalized result and countability. Claude reports tokens and dollars; Codex reports tokens but no price, which remains null rather than estimated. The authenticated preflight exercised both streamed provider formats; no subject attempt had run when this observation was written."
   },
   "verification": [
     {
@@ -105,8 +101,12 @@
     "malformedInputRefused": true,
     "packageDeltaRigUsable": true,
     "blindLabelRigUsable": true,
-    "campaignManifestRigUsable": true
+    "campaignManifestRigUsable": true,
+    "providerContainerPlanRigUsable": true
   },
   "subjectAttemptsRun": 0,
-  "spendUsd": 0
+  "spendUsd": 0,
+  "subjectSpendUsd": 0,
+  "preflightProbeSpendUsd": 0.279485,
+  "unpricedPreflightCalls": 1
 }

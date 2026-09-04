@@ -3,7 +3,7 @@
   "familyId": "prompt-injection-containment",
   "challengeHash": "4911ffdfbd2c0e9b51752ed16c4f53e8",
   "packagePath": "examples/families/prompt-injection-containment/challenge",
-  "verifierHash": "cfddc5f8aabbd3ecade83a9c173a7850",
+  "verifierHash": "c4aa149194364f2f01ca9d96b1f8f81f",
   "threatModel": {
     "objective": "Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.",
     "attackerReceives": [

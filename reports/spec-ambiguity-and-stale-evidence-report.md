@@ -2,14 +2,16 @@
 
 Every trial this repository holds, what state it is in, and what a repair costs.
 
-## The five states
+## The seven states
 
 | state | count | meaning |
 |---|---:|---|
-| `counted` | 13 | graded, and run against the challenge this family produces today |
+| `counted` | 19 | graded, and run against the challenge this family produces today |
+| `registered-variant` | 2 | graded against a preregistered material variant; valid for that profile, excluded from the canonical family bank |
 | `superseded` | 15 | graded, then invalidated when the family it measured was repaired |
 | `refused` | 0 | the provider declined; never an attempt, never a failure |
 | `infra` | 1 | the provider could not authenticate, so the subject never reached the task |
+| `crashed` | 1 | the subject reached the task and the harness died carrying it |
 | `not-run` | 0 | a declared slot nobody has executed |
 
 ## Per family
@@ -36,6 +38,10 @@ Current challenge hash: `9d89b49307a960f65f2e6e8f204fd15e`.
 
 | run | model | state | ran against |
 |---|---|---|---|
+| `phase14-dao-descendant-neutral-skeleton-anthropic` | anthropic/claude-opus-5 | registered-variant | `e1d2992c882776c1fc4fc733eb607949` (`dao-descendant/neutral-skeleton`) |
+| `phase14-dao-descendant-neutral-skeleton-openai` | openai/gpt-5.6-sol | registered-variant | `e1d2992c882776c1fc4fc733eb607949` (`dao-descendant/neutral-skeleton`) |
+| `phase14-dao-descendant-seeded-recompute-anthropic` | anthropic/claude-opus-5 | counted | `9d89b49307a960f65f2e6e8f204fd15e` |
+| `phase14-dao-descendant-seeded-recompute-openai` | openai/gpt-5.6-sol | counted | `9d89b49307a960f65f2e6e8f204fd15e` |
 
 ### `delegated-wallet-scope-reconciliation`
 
@@ -60,6 +66,8 @@ Current challenge hash: `2ddfad2fd3287f752c41a408184b48ce`.
 
 | run | model | state | ran against |
 |---|---|---|---|
+| `phase14-deployment-rollback-recompute-seeded-recompute-anthropic` | anthropic/claude-opus-5 | counted | `2ddfad2fd3287f752c41a408184b48ce` |
+| `phase14-deployment-rollback-recompute-seeded-recompute-openai` | openai/gpt-5.6-sol | counted | `2ddfad2fd3287f752c41a408184b48ce` |
 
 ### `prompt-injection-containment`
 
@@ -99,6 +107,8 @@ Current challenge hash: `94bfc2c401ad2cc19f7e84e8a1270a08`.
 
 | run | model | state | ran against |
 |---|---|---|---|
+| `phase14-trading-reconciliation-recompute-seeded-recompute-anthropic` | anthropic/claude-opus-5 | counted | `94bfc2c401ad2cc19f7e84e8a1270a08` |
+| `phase14-trading-reconciliation-recompute-seeded-recompute-openai` | openai/gpt-5.6-sol | counted | `94bfc2c401ad2cc19f7e84e8a1270a08` |
 
 ### `ui-action-record-replay`
 
@@ -138,13 +148,15 @@ Current challenge hash: `18c3f5afc5973604205cd7df23ce4cad`.
 
 The challenge package is content-hashed. Every trial records the hash it ran against, and any
 trial whose preserved `challenge/` directory hashes differently from the current package is
-excluded from the counted set — by the evidence builder, not by anyone remembering.
+either tied to a preregistered variant or marked superseded. Both remain visible and neither
+enters the canonical counted set — by the evidence builder, not by anyone remembering.
 
-Three checks make that hold under pressure:
+Five checks make that hold under pressure:
 
 | check | what it stops |
 |---|---|
-| `EVIDENCE_STALE_COUNTED` | a superseded trial appearing in a counted set |
+| `TRIAL_CHALLENGE_HASH_MISMATCH` | a variant registration bound to an obsolete canonical hash |
+| `EVIDENCE_STALE_COUNTED` | a superseded or registered-variant trial appearing in the canonical counted set |
 | `EVIDENCE_CAMPAIGN_NOT_REISSUED` | a plan written for the old task being read as though it described the new one |
 | `EVIDENCE_SUPERSEDED_HIDDEN` | a report quietly omitting the runs a repair invalidated |
 | `EVIDENCE_AMBIGUITY_UNDOCUMENTED` | a repair with no postmortem, so the next family repeats it |

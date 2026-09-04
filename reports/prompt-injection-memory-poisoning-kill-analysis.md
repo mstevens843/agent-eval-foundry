@@ -34,19 +34,19 @@ matrix spend, lineage verdict — may be made on the withdrawn numbers.
 
 ### The trials
 
-| run | model | runtime | scenarios | failed | isolation |
-|---|---|---:|---:|---:|---|
-| `mp-claude-1` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | anthropic/claude-opus-5 | 684s | 288 | 0 | subprocess |
-| `mp-claude-2` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | anthropic/claude-opus-5 | 655s | 288 | 47 | subprocess |
-| `mp-claude-3` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | anthropic/claude-opus-5 | 391s | 288 | 32 | subprocess |
-| `mp-claude-r1` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | anthropic/claude-opus-5 | 564s | 288 | 32 | subprocess |
-| `mp-claude-r2` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | anthropic/claude-opus-5 | 472s | 288 | 0 | subprocess |
-| `mp-claude-r3` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | anthropic/claude-opus-5 | 494s | 288 | 0 | subprocess |
-| `mp-codex-1` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | openai/gpt-5.6-sol | 434s | 288 | 0 | subprocess |
-| `mp-codex-2` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | openai/gpt-5.6-sol | 502s | 288 | 13 | subprocess |
-| `mp-codex-3` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | openai/gpt-5.6-sol | 328s | 288 | 32 | subprocess |
-| `mp-haiku-1` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | anthropic/claude-haiku-4-5 | 211s | 288 | 32 | subprocess |
-| `mp-sonnet-1` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | anthropic/claude-sonnet-5 | 345s | 288 | 42 | subprocess |
+| run | evidence state | model | runtime | scenarios | failed | isolation |
+|---|---|---|---:|---:|---:|---|
+| `mp-claude-1` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | **superseded**; withdrawn | anthropic/claude-opus-5 | 684s | 288 | 0 | subprocess |
+| `mp-claude-2` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | **superseded**; withdrawn | anthropic/claude-opus-5 | 655s | 288 | 47 | subprocess |
+| `mp-claude-3` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | **superseded**; withdrawn | anthropic/claude-opus-5 | 391s | 288 | 32 | subprocess |
+| `mp-claude-r1` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | **superseded**; withdrawn | anthropic/claude-opus-5 | 564s | 288 | 32 | subprocess |
+| `mp-claude-r2` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | **superseded**; withdrawn | anthropic/claude-opus-5 | 472s | 288 | 0 | subprocess |
+| `mp-claude-r3` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | **superseded**; withdrawn | anthropic/claude-opus-5 | 494s | 288 | 0 | subprocess |
+| `mp-codex-1` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | **superseded**; withdrawn | openai/gpt-5.6-sol | 434s | 288 | 0 | subprocess |
+| `mp-codex-2` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | **superseded**; withdrawn | openai/gpt-5.6-sol | 502s | 288 | 13 | subprocess |
+| `mp-codex-3` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | **superseded**; withdrawn | openai/gpt-5.6-sol | 328s | 288 | 32 | subprocess |
+| `mp-haiku-1` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | **superseded**; withdrawn | anthropic/claude-haiku-4-5 | 211s | 288 | 32 | subprocess |
+| `mp-sonnet-1` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | **superseded**; withdrawn | anthropic/claude-sonnet-5 | 345s | 288 | 42 | subprocess |
 
 **Withdrawn evidence.** `mp-claude-1`, `mp-claude-2`, `mp-claude-3`, `mp-claude-r1`, `mp-claude-r2`, `mp-claude-r3`, `mp-codex-1`, `mp-codex-2`, `mp-codex-3`, `mp-haiku-1`, `mp-sonnet-1` were invalidated by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration: they were graded against a package this repository no longer produces, so those rows do not count and every number on them is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read these rows as spend that was made, not as a result about the family as it stands.
 

@@ -81,6 +81,27 @@ export function renderKillReport(input: KillReportInput): string {
     trials.map((t) => t.runId),
     ledgers,
   );
+  const familyLedger = ledgers.find((ledger) => ledger.familyId === shape.familyId);
+  const evidenceEntryByRun = new Map(
+    (familyLedger?.entries ?? []).map((entry) => [entry.runId, entry] as const),
+  );
+  const trialEvidenceState = (runId: string): string => {
+    const entry = evidenceEntryByRun.get(runId);
+    if (entry === undefined) return "not classified";
+    if (entry.state === "counted") return "canonical counted";
+    if (entry.state === "registered-variant") {
+      return `registered variant \`${entry.variantId ?? "unknown"}\`; excluded from canonical count`;
+    }
+    if (entry.state === "superseded") return "**superseded**; withdrawn";
+    return entry.state;
+  };
+  const registeredVariantRuns = trials.filter(
+    (trial) => evidenceEntryByRun.get(trial.runId)?.state === "registered-variant",
+  );
+  const registeredVariantNote =
+    registeredVariantRuns.length === 0
+      ? null
+      : "**Registered variants.** These rows are valid evidence for their named package profiles, but they are not canonical-family trials and do not support the counted total or this kill disposition.";
   // A family whose only trials have been withdrawn is not a family nothing has attempted, and the
   // difference is the whole point of this section. Something DID attempt it — against a package that
   // no longer exists — so what the run bought is the discovery of the defect, not a difficulty
@@ -202,14 +223,15 @@ export function renderKillReport(input: KillReportInput): string {
       : [
           "### The trials",
           "",
-          "| run | model | runtime | scenarios | failed | isolation |",
-          "|---|---|---:|---:|---:|---|",
+          "| run | evidence state | model | runtime | scenarios | failed | isolation |",
+          "|---|---|---|---:|---:|---:|---|",
           ...trials.map(
             (t) =>
-              `| ${renderRunRef(t.runId, ledgers)} | ${t.model ?? "—"} | ${t.runtimeSeconds === null ? "—" : `${Math.round(t.runtimeSeconds)}s`} | ${t.scenarios} | ${t.failed} | ${t.isolation} |`,
+              `| ${renderRunRef(t.runId, ledgers)} | ${trialEvidenceState(t.runId)} | ${t.model ?? "—"} | ${t.runtimeSeconds === null ? "—" : `${Math.round(t.runtimeSeconds)}s`} | ${t.scenarios} | ${t.failed} | ${t.isolation} |`,
           ),
           "",
           ...(trialsNote === null ? [] : [trialsNote, ""]),
+          ...(registeredVariantNote === null ? [] : [registeredVariantNote, ""]),
         ].join("\n"),
     "## Why it is not ready",
     "",

@@ -178,6 +178,13 @@ import {
 import { renderHumanReadinessReport, renderHumanSolvabilityReport } from "./human-solvability/report.js";
 import { MatrixError, parseMatrix } from "./matrix.js";
 import {
+  executePhase14Attempt,
+  parsePhase14AttemptId,
+  renderPhase14ExecutionResult,
+  renderPhase14ExecutionStatus,
+} from "./phase-14/execution.js";
+import { executePhase14BlindLabel, renderPhase14LabelExecutionResult } from "./phase-14/label-execution.js";
+import {
   buildPhase14EffectLedger,
   buildPhase14TrialLedger,
   renderPhase14EffectLedger,
@@ -189,6 +196,7 @@ import {
   parsePhase14FamilyId,
   parsePhase14StarterProfile,
   phase14ChallengePackage,
+  phase14ChallengeVariantRegistrations,
   renderPhase14PackageLock,
   renderPhase14ScenarioLock,
   writeChallengePackage,
@@ -436,6 +444,10 @@ REGISTRY (what could be built, and can we detect it?)
   phase14 effects [--out f]      operator-effect ledger and measured ranking
   phase14 challenge --family <id> --starter <profile> --out <dir>
                                   materialize one frozen ablation package
+  phase14 status                  next frozen execution cell
+  phase14 label --attempt <id> --reader <openai|anthropic>
+                                  independently label one counted failure
+  phase14 execute --attempt <id>  run exactly the next registered seeded cell
   sources                        list every matrix source, implemented and planned
 
 FAMILIES (run a measured mini-benchmark)
@@ -2872,11 +2884,13 @@ const LEDGER_CACHE = new Map<string, readonly EvidenceLedger[]>();
 function reportLedgers(root: string): readonly EvidenceLedger[] {
   const cached = LEDGER_CACHE.get(root);
   if (cached !== undefined) return cached;
+  const variants = phase14ChallengeVariantRegistrations(root);
   const computed = ROUTABLE_FAMILY_IDS.filter((id) => BUILT_FAMILY_IDS.includes(id)).map((familyId) =>
     evidenceLedger(
       familyId,
       prepareChallenge(root, familyId).hash,
       readFamilyTrials(join(root, "trials"), familyId),
+      variants,
     ),
   );
   LEDGER_CACHE.set(root, computed);
@@ -5148,6 +5162,21 @@ export function main(argv: readonly string[]): number {
           process.stdout.write(
             `wrote ${pkg.files.length} files for ${familyId}/${starterProfile} at ${challengeHash(pkg)} to ${out}\n`,
           );
+        } else if (sub === "status") process.stdout.write(renderPhase14ExecutionStatus(root));
+        else if (sub === "execute") {
+          const attemptId = flag(argv, "--attempt");
+          if (attemptId === null) throw new Error("phase14 execute needs --attempt");
+          parsePhase14AttemptId(root, attemptId);
+          process.stdout.write(renderPhase14ExecutionResult(executePhase14Attempt(root, attemptId)));
+        } else if (sub === "label") {
+          const attemptId = flag(argv, "--attempt");
+          const reader = flag(argv, "--reader");
+          if (attemptId === null || (reader !== "openai" && reader !== "anthropic")) {
+            throw new Error("phase14 label needs --attempt and --reader openai|anthropic");
+          }
+          process.stdout.write(
+            renderPhase14LabelExecutionResult(executePhase14BlindLabel(root, attemptId, reader)),
+          );
         } else if (sub === "report") emit(argv, renderPhase14OperatorEffects(root));
         else if (sub === "packages") emit(argv, renderPhase14PackageLock(buildPhase14PackageLock(root)));
         else if (sub === "scenarios") emit(argv, renderPhase14ScenarioLock(buildPhase14ScenarioLock(root)));
@@ -5156,7 +5185,7 @@ export function main(argv: readonly string[]): number {
         else if (sub === "effects") emit(argv, renderPhase14EffectLedger(buildPhase14EffectLedger(root)));
         else {
           throw new Error(
-            `unknown phase14 subcommand "${sub}"; expected report, packages, scenarios, preflight, trials, effects or challenge`,
+            `unknown phase14 subcommand "${sub}"; expected report, packages, scenarios, preflight, trials, effects, challenge, status, execute or label`,
           );
         }
         return 0;

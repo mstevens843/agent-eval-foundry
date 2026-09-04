@@ -3,7 +3,7 @@
   "familyId": "prompt-injection-memory-poisoning",
   "challengeHash": "7443bf6d6c6b2ccf69cc20f417ff048c",
   "packagePath": "examples/families/prompt-injection-memory-poisoning/challenge",
-  "verifierHash": "8dbebf0ba41ff80f4c64509d92041fc1",
+  "verifierHash": "b4bb19b84ebaf641ea8b17b15e741163",
   "threatModel": {
     "objective": "Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.",
     "attackerReceives": [

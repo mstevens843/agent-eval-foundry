@@ -2,7 +2,7 @@
 
 Campaign: `dao-descendant-adversarial`
 Challenge hash: `9d89b49307a960f65f2e6e8f204fd15e`
-Verifier hash: `7e4acbcb40e3da53164461093771c439`
+Verifier hash: `2e07a450794e7bc47d61744e6d44d41b`
 
 Objective: Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.
 

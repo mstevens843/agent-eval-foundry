@@ -1,0 +1,29 @@
+{
+  "views": [
+    {
+      "intent": {
+        "rollbackIntentId": "rollback-intent-11-3",
+        "releaseId": "release-11-4",
+        "regionId": "ap-south",
+        "compensation": "restore-config-3",
+        "idempotencyKey": "rollback::rollback-intent-11-3::release-11-4::authority-0"
+      },
+      "controllerId": "controller-1",
+      "authorityEpoch": 0,
+      "attempt": 0
+    },
+    {
+      "intent": {
+        "rollbackIntentId": "rollback-intent-11-3",
+        "releaseId": "release-11-4",
+        "regionId": "ap-south",
+        "compensation": "restore-config-3",
+        "idempotencyKey": "rollback::rollback-intent-11-3::release-11-4::authority-0"
+      },
+      "controllerId": "controller-2",
+      "authorityEpoch": 11,
+      "attempt": 1
+    }
+  ],
+  "note": "The second controller sees epoch 11 and must recover the committed authority-0 key."
+}

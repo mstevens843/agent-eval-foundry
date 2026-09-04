@@ -1,0 +1,122 @@
+{
+  "runId": "phase14-dao-descendant-seeded-recompute-anthropic",
+  "familyId": "dao-descendant",
+  "subjectId": "claude-claude-opus-5",
+  "subjectType": "agent",
+  "model": "anthropic/claude-opus-5",
+  "effort": "max",
+  "status": "completed",
+  "counts": true,
+  "countsReason": "completed with 24 graded scenario(s), no refusal, timeout or infrastructure error",
+  "scenarioSetId": "descendant-24-21639a0f",
+  "cells": [
+    {
+      "scenarioId": "recovery-11-w2-k4-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-11-w2-k6-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-11-w2-k12-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-11-w3-k4-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-11-w3-k6-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-11-w3-k12-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-11-w4-k4-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-11-w4-k6-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-11-w4-k12-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-23-w2-k4-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-23-w2-k6-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-23-w2-k12-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-23-w3-k4-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-23-w3-k6-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-23-w3-k12-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-23-w4-k4-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-23-w4-k6-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-23-w4-k12-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-41-w1-k4-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-41-w1-k6-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-41-w1-k12-after_tool",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-41-w2-k4-none",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-41-w3-k6-none",
+      "failed": []
+    },
+    {
+      "scenarioId": "recovery-41-w4-k12-none",
+      "failed": []
+    }
+  ],
+  "runtimeSeconds": 104,
+  "costUsd": 0.48225149999999994,
+  "usage": {
+    "inputTokens": 187715,
+    "cachedInputTokens": 168491,
+    "outputTokens": 8192,
+    "costUsd": 0.48225149999999994,
+    "source": "claude `result` event `usage` and `total_cost_usd`"
+  },
+  "artifactPath": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry/trials/dao-descendant/phase14-dao-descendant-seeded-recompute-anthropic/submission",
+  "isolation": "container",
+  "notes": "provider=docker 0/24 scenarios failed (0 host errors) under no-network container isolation"
+}

@@ -39,11 +39,11 @@ and cross-lab claims remain bounded by the shared bank.
 | `audit-truth-financial-workflow` | NOT-READY | `no_difficulty_evidence` | `trial` | — _(est.)_ | 0 | no |
 | `browser-action-replay` | NOT-READY | `no_difficulty_evidence` | `trial` | — _(est.)_ | 0 | no |
 | `checker-required-memory-poisoning` | NOT-READY | `no_difficulty_evidence` | `trial` | 12 | 1 | yes |
-| `dao-descendant` | NOT-READY | `redundant_axis` | `mutate` | 1 | 0 | yes |
+| `dao-descendant` | NOT-READY | `already_solved` | `harden` | 1 | 2 | yes |
 | `delegated-wallet-scope-reconciliation` | NOT-READY | `verifier_only` | `trial` | 3 | 0 | yes |
 | `deployment-model-alias-rollout-drift` | NOT-READY | `verifier_only` | `trial` | 20 | 0 | yes |
 | `deployment-rollback-partial-effects` | NOT-READY | `no_difficulty_evidence` | `trial` | — _(est.)_ | 0 | no |
-| `deployment-rollback-recompute` | NOT-READY | `redundant_axis` | `mutate` | 1 | 0 | yes |
+| `deployment-rollback-recompute` | NOT-READY | `already_solved` | `harden` | 1 | 2 | yes |
 | `durable-approval-outbox` | NOT-READY | `no_difficulty_evidence` | `trial` | 3 | 6 | no |
 | `model-alias-drift-sentinel` | NOT-READY | `no_difficulty_evidence` | `trial` | 2 _(est.)_ | 0 | no |
 | `permission-boundary-tools` | NOT-READY | `no_difficulty_evidence` | `trial` | 1 _(est.)_ | 0 | no |
@@ -53,11 +53,11 @@ and cross-lab claims remain bounded by the shared bank.
 | `prompt-injection-cross-tool-escalation` | NOT-READY | `no_difficulty_evidence` | `trial` | 3 _(est.)_ | 0 | no |
 | `prompt-injection-memory-poisoning` | NOT-READY | `verifier_only` | `trial` | 5 | 0 | yes |
 | `stale-crm-ticket-automation` | NOT-READY | `no_difficulty_evidence` | `trial` | 2 _(est.)_ | 0 | no |
-| `trading-reconciliation-recompute` | NOT-READY | `redundant_axis` | `mutate` | 1 | 0 | yes |
+| `trading-reconciliation-recompute` | NOT-READY | `already_solved` | `harden` | 1 | 2 | yes |
 | `ui-action-record-replay` | SHIP | — | — | 6 | 5 | yes |
 | `ui-replay-live-dom` | SHIP | `insufficient_shared_bank` | `schedule` | 19 | 1 | yes |
 
-11 of 21 families execute. 5 have been attempted by a real agent.
+11 of 21 families execute. 8 have been attempted by a real agent.
 
 ## What the kill taxonomy has actually found
 
@@ -66,8 +66,8 @@ every category fires is usually a taxonomy that is not discriminating.
 
 | reason | kind | disposition | families |
 |---|---|---|---|
-| `already_solved` | weakness | `harden` | `prompt-injection-containment` |
-| `verifier_only` | absence | `trial` | `access-token-scope-expansion`, `dao-descendant`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `deployment-rollback-recompute`, `prompt-injection-memory-poisoning`, `trading-reconciliation-recompute` |
+| `already_solved` | weakness | `harden` | `dao-descendant`, `deployment-rollback-recompute`, `prompt-injection-containment`, `trading-reconciliation-recompute` |
+| `verifier_only` | absence | `trial` | `access-token-scope-expansion`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `prompt-injection-memory-poisoning` |
 | `redundant_axis` | weakness | `mutate` | `dao-descendant`, `deployment-rollback-recompute`, `trading-reconciliation-recompute` |
 | `unfair_hidden_rule` | defect | `repair` | — |
 | `hidden_artifact_leak` | defect | `repair` | — |

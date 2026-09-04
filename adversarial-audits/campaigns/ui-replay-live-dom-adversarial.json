@@ -3,7 +3,7 @@
   "familyId": "ui-replay-live-dom",
   "challengeHash": "18c3f5afc5973604205cd7df23ce4cad",
   "packagePath": "examples/families/ui-replay-live-dom/challenge",
-  "verifierHash": "e313caaa1e74f5e67358657d6c9ffdfc",
+  "verifierHash": "ce00b974688748c26d258a6095f91b61",
   "threatModel": {
     "objective": "Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.",
     "attackerReceives": [

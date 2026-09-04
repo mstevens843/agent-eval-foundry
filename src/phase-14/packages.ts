@@ -7,6 +7,7 @@ import type { ChallengeFile, ChallengePackage } from "../challenge/package.js";
 import { builtFamily } from "../families/registry.js";
 import { fail, str } from "../foundry/schema.js";
 import { RigInputError, requireShape, rigIntegrity } from "../screens/rig-integrity.js";
+import type { ChallengeVariantRegistration } from "../trials/evidence-lifecycle.js";
 import { routeFor } from "../trials/router.js";
 import { challengeHash, prepareChallenge } from "../trials/run.js";
 
@@ -371,6 +372,29 @@ export function buildPhase14PackageLock(root: string): Phase14PackageLock {
       knownBadFailed: knownBadFailures.length > 0,
     },
   };
+}
+
+/** Registered Phase 14 profiles that are live variants, not migrations of the canonical family. */
+export function phase14ChallengeVariantRegistrations(root: string): readonly ChallengeVariantRegistration[] {
+  const lock = buildPhase14PackageLock(root);
+  if (!lock.phase13PreregistrationPreserved || !lock.phase13SeededHashesPreserved || !lock.b6.usable) {
+    throw new RigInputError("Phase 14 variant registrations cannot be trusted because their lock is invalid");
+  }
+  return lock.rows
+    .filter((row) => row.starterProfile === "neutral-skeleton")
+    .map((row) => {
+      if (!row.onlyRegisteredDelta || !row.packageGatePassed) {
+        throw new RigInputError(`${row.familyId}/neutral-skeleton is not a valid registered variant`);
+      }
+      return {
+        variantId: `${row.familyId}/neutral-skeleton`,
+        familyId: row.familyId,
+        challengeHash: row.challengeHash,
+        canonicalHash: row.phase13ChallengeHash,
+        registrationPath: lock.preregistrationPath,
+        registrationSha256: lock.preregistrationSha256,
+      };
+    });
 }
 
 export function parsePhase14PackageLock(value: unknown): Phase14PackageLock {

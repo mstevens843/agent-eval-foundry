@@ -78,7 +78,7 @@ The plan is in `plans/prompt-injection-agent-trials.md`, and the import path
 
 - **`in-process`** — The subject receives a frozen facade and never sees the ledger array. It cannot swap the recorder by accident. It CAN reach past its arguments — module globals, prototype patching, the filesystem — so this level is sufficient for code you wrote and insufficient for code an agent wrote.
 - **`subprocess`** — The subject runs in a separate node process and communicates over stdout. It cannot touch the parent's memory, so the ledger and the grading are genuinely out of reach. It still shares the filesystem and network with the parent.
-- **`container`** — The subject runs in a container with its own filesystem and no network. Not implemented here; declared so the gate can distinguish it rather than treating subprocess as the ceiling.
+- **`container`** — The provider agent runs in a per-attempt networked container with a read-only public challenge, writable trial workspace, read-only root, dropped capabilities and resource limits. The submitted module is then graded separately with its family host in fresh no-network containers while the verifier and authoritative result stay outside.
 
 This family currently grades local subjects at `subprocess`. Imported agent artifacts
 are always run at `subprocess`, which is not configurable.

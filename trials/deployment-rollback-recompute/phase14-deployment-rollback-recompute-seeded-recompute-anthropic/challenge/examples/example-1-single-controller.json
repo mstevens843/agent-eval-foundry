@@ -1,0 +1,17 @@
+{
+  "views": [
+    {
+      "intent": {
+        "rollbackIntentId": "rollback-intent-41-1",
+        "releaseId": "release-41-4",
+        "regionId": "ap-south",
+        "compensation": "restore-config-1",
+        "idempotencyKey": "rollback::rollback-intent-41-1::release-41-4::authority-0"
+      },
+      "controllerId": "controller-1",
+      "authorityEpoch": 0,
+      "attempt": 0
+    }
+  ],
+  "note": "No replacement controller arrives, so the committed authority-0 key is used once."
+}

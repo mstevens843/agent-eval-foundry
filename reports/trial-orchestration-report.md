@@ -71,9 +71,9 @@ through either.
 | `claude-cli` | **implemented** | process | — |
 | `codex-cli` | declared | process | It needs the Codex CLI's non-interactive invocation and auth verified, plus a decision about how its sandbox interacts with ours. Until then use `--provider shell --cmd` with the codex command directly, which is the same thing without a convenience wrapper. |
 | `gemini-cli` | declared | process | It needs the Gemini CLI's non-interactive invocation and auth verified. Reachable today via `--provider shell --cmd`. |
-| `docker` | declared | container | It needs a running Docker daemon. The design is fixed and validated by `dockerPlan()`: the challenge mounts read-only, the submission directory is the only writable mount, no verifier or matrix path is mounted at all, the network is off unless explicitly enabled, and only declared environment variables cross the boundary. The daemon is not running in this environment, so the adapter refuses rather than silently degrading to a subprocess. |
+| `docker` | **implemented** | container | — |
 
-2 adapters are implemented and 3 are declared. A declared adapter throws
+3 adapters are implemented and 2 are declared. A declared adapter throws
 `provider not configured` when invoked. It does not return an empty submission, and it does not
 return a fabricated result — an unconfigured provider must be indistinguishable from a missing
 one, never from a failing model.
@@ -84,7 +84,7 @@ one, never from a failing model.
 |---|---|
 | `in-process` | The subject receives a frozen facade and never sees the ledger array. It cannot swap the recorder by accident. It CAN reach past its arguments — module globals, prototype patching, the filesystem — so this level is sufficient for code you wrote and insufficient for code an agent wrote. |
 | `subprocess` | The subject runs in a separate node process and communicates over stdout. It cannot touch the parent's memory, so the ledger and the grading are genuinely out of reach. It still shares the filesystem and network with the parent. |
-| `container` | The subject runs in a container with its own filesystem and no network. Not implemented here; declared so the gate can distinguish it rather than treating subprocess as the ceiling. |
+| `container` | The provider agent runs in a per-attempt networked container with a read-only public challenge, writable trial workspace, read-only root, dropped capabilities and resource limits. The submitted module is then graded separately with its family host in fresh no-network containers while the verifier and authoritative result stay outside. |
 
 The counted trials above ran at `subprocess`. That is the level at which a hostile submission
 cannot reach the verifier's memory: the artifact is imported in a child process, and the test

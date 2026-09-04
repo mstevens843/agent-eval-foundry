@@ -13,9 +13,9 @@ What the families measure, together — and the arithmetic this report refuses t
 | `checker-required-memory-poisoning` | `agent` | 792 | 1 | 178 | 1 | — |
 | `access-token-scope-expansion` | `mutant` | 384 | 9 | 0 | 6 | **3** |
 | `delegated-wallet-scope-reconciliation` | `mutant` | 804 | 10 | 0 | 9 | **3** |
-| `dao-descendant` | `mutant` | 24 | 3 | 0 | 2 | **1** |
-| `trading-reconciliation-recompute` | `mutant` | 24 | 4 | 0 | 2 | **1** |
-| `deployment-rollback-recompute` | `mutant` | 24 | 4 | 0 | 2 | **1** |
+| `dao-descendant` | `agent` | 24 | 2 | 24 | 0 | **0** |
+| `trading-reconciliation-recompute` | `agent` | 24 | 2 | 24 | 0 | **0** |
+| `deployment-rollback-recompute` | `agent` | 24 | 2 | 24 | 0 | **0** |
 | `deployment-model-alias-rollout-drift` | `mutant` | 339 | 17 | 0 | 72 | **20** |
 | `durable-approval-outbox` | `imported` | 24 | 2 | 10 | 2 | **1** |
 
@@ -23,8 +23,8 @@ What the families measure, together — and the arithmetic this report refuses t
 
 | naive total | value | why it is not a result |
 |---|---:|---|
-| every family added together | 36 | mixes detection and difficulty; the two answer different questions |
-| detection banks added | 34 | the banks are disjoint by construction — no mutant appears in two families, so the union's width is the sum whatever the families measure |
+| every family added together | 33 | mixes detection and difficulty; the two answer different questions |
+| detection banks added | 31 | the banks are disjoint by construction — no mutant appears in two families, so the union's width is the sum whatever the families measure |
 | difficulty banks added | 2 | excludes one-subject banks; valid only over subjects that attempted both, and the overlap is below threshold |
 
 A combined axis count requires the same subjects in every bank being combined. Until that holds,
@@ -32,10 +32,10 @@ each family's number stands alone and the portfolio total does not exist.
 
 ## What each claim needs
 
-**`agent`:** a qualitative comparison over 1 shared subject(s); no combined axis count, because the width is bounded by the shared bank size.
+**`agent`:** nothing: the banks share no subject, so co-failure across families is unobservable and the union's width is the sum by construction.
 
 - Run the same subjects against every `agent` family until 3 share all of them.
-- Currently shared: gpt-5.6-sol.
+- Currently shared: none.
 
 **`imported`:** nothing cross-family: only one `imported` bank exists, so there is nothing to compare it with.
 

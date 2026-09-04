@@ -194,8 +194,10 @@ describe("the recorded isolation detail claims no parity it does not have", () =
     });
     expect(cmd[0]).toBe("docker");
     expect(cmd).toContain("--network=bridge");
-    // Exactly one credential crosses, read-only, and nothing else from the host environment.
-    expect(cmd.filter((a) => a.startsWith("--mount=")).length).toBe(2);
+    // The workspace is writable, the nested challenge and credential mounts are read-only, and
+    // nothing else from the host filesystem crosses.
+    expect(cmd.filter((a) => a.startsWith("--mount=")).length).toBe(3);
+    expect(cmd).toContain("--mount=type=bind,source={dir}/challenge,target=/work/challenge,readonly");
     expect(cmd).toContain("--mount=type=bind,source=/some/provider/home,target=/cred,readonly");
     expect(cmd).toContain("--env-file=/dev/null");
 
@@ -205,6 +207,21 @@ describe("the recorded isolation detail claims no parity it does not have", () =
     expect(detail).toMatch(/separate verifier IMAGE/);
     expect(detail).toMatch(/privilege three ways/);
     expect(detail).toMatch(new RegExp(CONTAINER_LIMITS.memory));
+  });
+
+  it("supports an environment-only provider credential and refuses half-specified mounts", () => {
+    const cmd = containerTrialCommand({
+      envPassthrough: ["CLAUDE_CODE_OAUTH_TOKEN"],
+      agentCommand: ["claude", "-p", "{instruction}"],
+    });
+    expect(cmd.filter((a) => a.startsWith("--mount=")).length).toBe(2);
+    expect(cmd).toContain("--env=CLAUDE_CODE_OAUTH_TOKEN");
+    expect(() =>
+      containerTrialCommand({
+        credentialDir: "/credential",
+        agentCommand: ["claude", "-p", "{instruction}"],
+      }),
+    ).toThrow(/supplied together/);
   });
 
   it("no longer describes the container level as unimplemented", () => {

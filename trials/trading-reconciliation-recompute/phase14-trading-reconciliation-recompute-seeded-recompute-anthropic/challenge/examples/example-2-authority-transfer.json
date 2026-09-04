@@ -1,0 +1,33 @@
+{
+  "views": [
+    {
+      "intent": {
+        "orderIntentId": "order-intent-11-3",
+        "clientRequestId": "client-request-11-4",
+        "accountId": "account-3",
+        "symbol": "GAMMA",
+        "side": "sell",
+        "quantity": 40,
+        "idempotencyKey": "order::order-intent-11-3::client-request-11-4::authority-0"
+      },
+      "reconcilerId": "reconciler-1",
+      "authorityEpoch": 0,
+      "attempt": 0
+    },
+    {
+      "intent": {
+        "orderIntentId": "order-intent-11-3",
+        "clientRequestId": "client-request-11-4",
+        "accountId": "account-3",
+        "symbol": "GAMMA",
+        "side": "sell",
+        "quantity": 40,
+        "idempotencyKey": "order::order-intent-11-3::client-request-11-4::authority-0"
+      },
+      "reconcilerId": "reconciler-2",
+      "authorityEpoch": 7,
+      "attempt": 1
+    }
+  ],
+  "note": "The second reconciler sees epoch 7 and must recover the committed authority-0 key."
+}

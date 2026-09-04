@@ -166,8 +166,13 @@ describe("countability is never inferred", () => {
 
 describe("providers", () => {
   it("declares both implemented and unconfigured adapters", () => {
-    expect(PROVIDERS.filter((p) => p.status === "implemented").length).toBeGreaterThanOrEqual(2);
-    expect(PROVIDERS.filter((p) => p.status === "declared").length).toBeGreaterThanOrEqual(3);
+    expect(PROVIDERS.filter((p) => p.status === "implemented").length).toBeGreaterThanOrEqual(3);
+    expect(PROVIDERS.filter((p) => p.status === "declared").length).toBeGreaterThanOrEqual(2);
+    expect(PROVIDERS.find((p) => p.id === "docker")).toMatchObject({
+      status: "implemented",
+      isolation: "container",
+      requires: null,
+    });
   });
 
   it("an unconfigured provider refuses rather than returning an empty submission", () => {

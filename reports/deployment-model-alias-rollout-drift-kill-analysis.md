@@ -34,10 +34,10 @@ matrix spend, lineage verdict — may be made on the withdrawn numbers.
 
 ### The trials
 
-| run | model | runtime | scenarios | failed | isolation |
-|---|---|---:|---:|---:|---|
-| `deployment-alias-2026-09-claude-1` — **superseded** by the 2026-09-01 `deployment-model-alias-rollout-drift` challenge migration; it does not count and its numbers are withdrawn | anthropic/claude-opus-5 | — | 339 | 0 | subprocess |
-| `deployment-model-alias-rollout-drift-2026-08-o1` — **superseded** by the 2026-09-01 `deployment-model-alias-rollout-drift` challenge migration; it does not count and its numbers are withdrawn | openai/gpt-5.6-sol | 422s | 339 | 192 | subprocess |
+| run | evidence state | model | runtime | scenarios | failed | isolation |
+|---|---|---|---:|---:|---:|---|
+| `deployment-alias-2026-09-claude-1` — **superseded** by the 2026-09-01 `deployment-model-alias-rollout-drift` challenge migration; it does not count and its numbers are withdrawn | **superseded**; withdrawn | anthropic/claude-opus-5 | — | 339 | 0 | subprocess |
+| `deployment-model-alias-rollout-drift-2026-08-o1` — **superseded** by the 2026-09-01 `deployment-model-alias-rollout-drift` challenge migration; it does not count and its numbers are withdrawn | **superseded**; withdrawn | openai/gpt-5.6-sol | 422s | 339 | 192 | subprocess |
 
 **Withdrawn evidence.** `deployment-alias-2026-09-claude-1`, `deployment-model-alias-rollout-drift-2026-08-o1` were invalidated by the 2026-09-01 `deployment-model-alias-rollout-drift` challenge migration: they were graded against a package this repository no longer produces, so those rows do not count and every number on them is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read these rows as spend that was made, not as a result about the family as it stands.
 

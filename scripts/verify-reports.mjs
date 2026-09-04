@@ -48,8 +48,8 @@ for (const [path, args] of [
   } else console.log(`ok     ${path}`);
 }
 
-// Phase 14 is intentionally allowed to generate an empty measured-effect ledger when preflight is
-// blocked. Diff the structured artifacts themselves so NOT_RUN cannot later be replaced by an
+// Phase 14 regenerates from preserved attempt and blind-label artifacts at every campaign state.
+// Diff the structured artifacts themselves so an observed cell cannot later be replaced by an
 // inferred outcome or an unstated package hash.
 for (const [path, args] of [
   ["data/phase-14-package-lock.json", ["phase14", "packages"]],

@@ -19,7 +19,7 @@ Three CLIs are installed here and exactly one of them was a new LAB:
 | `claude-sonnet` | anthropic | **no** | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally |
 | `claude-haiku` | anthropic | **no** | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally |
 | `claude-fable` | anthropic | **no** | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally |
-| `codex` | openai | yes | codex-cli 0.152.1 |
+| `codex` | openai | yes | codex-cli 0.153.2 |
 | `gemini` | google | **no** | 0.46.0; entitlement previously blocked with IneligibleTierError, so this phase treats Gemini as import-only until a real authenticated run changes that |
 | `external` | external | **no** | external by declaration: prepare a bundle and import the result |
 
@@ -58,20 +58,20 @@ separately.
 
 ## The constraint, after
 
-**PARTIAL.** 1 shared subject(s) against a threshold of 3. The combined width is bounded above by 1, which cannot distinguish complete overlap from independence. 4 more counted trial(s) would reach the threshold.
+**REFUSED.** No subject has a counted, hash-current trial in every family. Co-failure across families is unobservable and the union's width is the sum of the parts by construction.
 
 | | |
 |---|---:|
-| shared subjects | 1 |
+| shared subjects | 0 |
 | threshold | 3 |
-| provider families among them | 1 |
-| counted trials still needed | 4 |
+| provider families among them | 0 |
+| counted trials still needed | 11 |
 
 ## What it bought, and what it did not
 
 | | |
 |---|---|
-| a combined cross-family axis count | **no longer** — it was computable, and the 2 withdrawn trial(s) above were part of what made it so. With 1 shared subject(s) against a threshold of 3, it is refused again |
+| a combined cross-family axis count | **no longer** — it was computable, and the 2 withdrawn trial(s) above were part of what made it so. With 0 shared subject(s) against a threshold of 3, it is refused again |
 | evidence that the families measure different things | **withdrawn** — that comparison ran over a shared bank the withdrawn trials belonged to. It is not restated more carefully; it is unmade until the bank is rebuilt under the current hashes |
 | a third lab | **no** — three of the four subjects are Anthropic models |
 | a wider UI family | **no** — the new subjects landed inside the existing chain, which is what a chain does |

@@ -4,6 +4,9 @@
 // A trial is not simply counted or uncounted. It has a history:
 //
 //   counted      graded, hash matches the family as it stands today
+//   registered-variant
+//                graded against a preregistered material variant that remains reproducible, but is
+//                not evidence about the family's canonical package
 //   superseded   graded, but the family was repaired afterwards — evidence about a task that is gone
 //   refused      the provider declined; never an attempt, never a failure
 //   infra        the provider could not authenticate, or the run hit a limit; no attempt reached the task
@@ -36,8 +39,26 @@ import type { TrialDirectory } from "./directory.js";
 import { hashChallengeDir } from "./run.js";
 import type { TrialRecord } from "./types.js";
 
-export const EVIDENCE_STATES = ["counted", "superseded", "refused", "infra", "crashed", "not-run"] as const;
+export const EVIDENCE_STATES = [
+  "counted",
+  "registered-variant",
+  "superseded",
+  "refused",
+  "infra",
+  "crashed",
+  "not-run",
+] as const;
 export type EvidenceState = (typeof EVIDENCE_STATES)[number];
+
+/** A noncanonical challenge hash whose material delta was registered before its trial output. */
+export interface ChallengeVariantRegistration {
+  readonly variantId: string;
+  readonly familyId: string;
+  readonly challengeHash: string;
+  readonly canonicalHash: string;
+  readonly registrationPath: string;
+  readonly registrationSha256: string;
+}
 
 /**
  * Where `ranAgainst` came from.
@@ -66,6 +87,8 @@ export interface EvidenceEntry {
    */
   readonly hashSource?: HashSource;
   readonly currentHash: string;
+  readonly variantId?: string;
+  readonly variantRegistration?: string;
   readonly reason: string;
 }
 
@@ -75,6 +98,8 @@ export interface EvidenceLedger {
   readonly entries: readonly EvidenceEntry[];
   readonly counted: readonly string[];
   readonly superseded: readonly string[];
+  /** Reproducible evidence for registered profiles that must not enter the canonical family bank. */
+  readonly registeredVariants?: readonly string[];
   /**
    * Counted trials whose hash was recomputed from the preserved challenge rather than read from
    * metadata. They count, and the fact that they count is an inference — so it is listed rather than
@@ -90,7 +115,18 @@ export function evidenceLedger(
   familyId: string,
   currentHash: string,
   trials: readonly TrialDirectory[],
+  registeredVariants: readonly ChallengeVariantRegistration[] = [],
 ): EvidenceLedger {
+  const variants = registeredVariants.filter((variant) => variant.familyId === familyId);
+  for (const variant of variants) {
+    if (variant.canonicalHash !== currentHash) {
+      fail(
+        "TRIAL_CHALLENGE_HASH_MISMATCH",
+        `variant.${variant.variantId}`,
+        `registration names canonical hash ${variant.canonicalHash}, but ${familyId} now produces ${currentHash}`,
+      );
+    }
+  }
   const entries = trials.map((trial): EvidenceEntry => {
     const metaPath = join(trial.path, "metadata.json");
     let recorded: string | null = null;
@@ -131,6 +167,16 @@ export function evidenceLedger(
       return { ...base, state: "crashed", reason: record.countsReason };
     }
     if (ranAgainst !== currentHash) {
+      const variant = variants.find((candidate) => candidate.challengeHash === ranAgainst);
+      if (variant !== undefined) {
+        return {
+          ...base,
+          state: "registered-variant",
+          variantId: variant.variantId,
+          variantRegistration: `${variant.registrationPath}@${variant.registrationSha256}`,
+          reason: `run against registered variant ${variant.variantId}; valid in that profile and excluded from canonical-family evidence.${derivationNote}`,
+        };
+      }
       return {
         ...base,
         state: "superseded",
@@ -151,6 +197,7 @@ export function evidenceLedger(
     entries,
     counted: counted.map((e) => e.runId),
     superseded: entries.filter((e) => e.state === "superseded").map((e) => e.runId),
+    registeredVariants: entries.filter((e) => e.state === "registered-variant").map((e) => e.runId),
     countedByDerivation: counted.filter((e) => e.hashSource === "derived").map((e) => e.runId),
   };
 }
@@ -163,13 +210,13 @@ export function evidenceLedger(
  * than trusted.
  */
 export function assertNoStaleCounted(ledger: EvidenceLedger, counted: readonly TrialRecord[]): void {
-  const superseded = new Set(ledger.superseded);
+  const noncanonical = new Set([...ledger.superseded, ...(ledger.registeredVariants ?? [])]);
   for (const record of counted) {
-    if (superseded.has(record.runId)) {
+    if (noncanonical.has(record.runId)) {
       fail(
         "EVIDENCE_STALE_COUNTED",
         `evidence.${ledger.familyId}.${record.runId}`,
-        "counted, and it was run against a challenge this family no longer produces. It is evidence about a task that no longer exists.",
+        "counted in the canonical family bank, but it was run against a different challenge hash. Registered variants remain evidence for their own profile; superseded tasks remain historical evidence. Neither is evidence about the canonical package.",
       );
     }
   }

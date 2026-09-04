@@ -21,7 +21,7 @@
 // sandbox.
 
 import { execFileSync } from "node:child_process";
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync } from "node:fs";
+import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type { TrialUsage } from "./types.js";
@@ -279,6 +279,10 @@ export function makeSandbox(challengeDir: string): string {
   const dir = mkdtempSync(join(tmpdir(), "foundry-trial-"));
   cpSync(challengeDir, join(dir, "challenge"), { recursive: true });
   mkdirSync(join(dir, "submission"), { recursive: true });
+  // The provider container runs as uid 1000, which need not match the host uid. This directory
+  // contains only the public challenge and trial output; the challenge is over-mounted read-only.
+  chmodSync(dir, 0o777);
+  chmodSync(join(dir, "submission"), 0o777);
   return dir;
 }
 
@@ -426,16 +430,16 @@ export const PROVIDERS: readonly ProviderAdapter[] = [
   },
   {
     id: "docker",
-    label: "Container-isolated runner",
-    status: "declared",
-    requires:
-      "It needs a running Docker daemon. The design is fixed and validated by `dockerPlan()`: the " +
-      "challenge mounts read-only, the submission directory is the only writable mount, no verifier " +
-      "or matrix path is mounted at all, the network is off unless explicitly enabled, and only " +
-      "declared environment variables cross the boundary. The daemon is not running in this " +
-      "environment, so the adapter refuses rather than silently degrading to a subprocess.",
+    label: "Container-isolated provider CLI",
+    status: "implemented",
+    requires: null,
     isolation: "container",
-    run: notConfigured("docker", "It needs a running Docker daemon."),
+    run(req) {
+      if (req.command?.[0] !== "docker") {
+        throw new Error('provider "docker" requires a docker command produced by containerTrialCommand');
+      }
+      return shellAdapter.run({ ...req, inheritEnv: true });
+    },
   },
 ];
 

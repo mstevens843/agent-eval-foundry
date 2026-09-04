@@ -760,6 +760,27 @@ export type {
 } from "./reports/phase-13-transfer.js";
 export { renderPhase14OperatorEffects } from "./reports/phase-14-operator-effects.js";
 export {
+  assertPhase14AttemptHash,
+  executePhase14Attempt,
+  executePhase14SeededAttempt,
+  nextPhase14SeededAttempt,
+  parsePhase14AttemptId,
+  phase14AttemptId,
+  phase14AttemptSpecs,
+  phase14ExecutionStatus,
+  renderPhase14ExecutionResult,
+  renderPhase14ExecutionStatus,
+} from "./phase-14/execution.js";
+export type {
+  Phase14AttemptSpec,
+  Phase14ExecutionResult,
+} from "./phase-14/execution.js";
+export {
+  executePhase14BlindLabel,
+  renderPhase14LabelExecutionResult,
+} from "./phase-14/label-execution.js";
+export type { Phase14LabelExecutionResult } from "./phase-14/label-execution.js";
+export {
   PHASE14_READER_FAMILIES,
   REQUIRED_BLINDING,
   adjudicatePhase14Labels,
@@ -794,6 +815,7 @@ export {
   parsePhase14FamilyId,
   parsePhase14PackageLock,
   parsePhase14StarterProfile,
+  phase14ChallengeVariantRegistrations,
   phase14ChallengePackage,
   renderPhase14PackageLock,
   renderPhase14ScenarioLock,
@@ -820,6 +842,8 @@ export type {
 } from "./phase-14/preflight.js";
 export { exactBinomialInterval } from "./phase-14/statistics.js";
 export type { ExactBinomialInterval } from "./phase-14/statistics.js";
+export { gradePhase14ContainerSubmission } from "./trials/router.js";
+export { runJsonContainerHost } from "./trials/runners.js";
 export {
   activationAudit,
   band,

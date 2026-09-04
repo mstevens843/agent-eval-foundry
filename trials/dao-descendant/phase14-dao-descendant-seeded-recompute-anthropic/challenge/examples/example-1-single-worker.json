@@ -1,0 +1,16 @@
+{
+  "views": [
+    {
+      "intent": {
+        "actionId": "action-41-1",
+        "requestId": "request-41-4",
+        "payload": "payload-41-1",
+        "idempotencyKey": "idem::action-41-1::request-41-4::epoch-0"
+      },
+      "workerId": "worker-1",
+      "leaseEpoch": 0,
+      "attempt": 0
+    }
+  ],
+  "note": "No replacement worker arrives, so the committed epoch-0 key is used once."
+}

@@ -6,17 +6,17 @@ Did the model verify its own work — and can we actually tell?
 
 | | |
 |---|---:|
-| submissions held | 34 |
+| submissions held | 42 |
 | **submissions containing an executable self-check** | **1** |
-| **runs that wrote checker source and shipped none of it** | **6** |
-| **transcripts describing one** | **21** |
+| **runs that wrote checker source and shipped none of it** | **14** |
+| **transcripts describing one** | **25** |
 | **submissions shipping a checker as a separate file** | **2** |
 | runs that neither shipped nor described one | 9 |
 
 Checker-required trials mandate `checker.mjs`; that file is graded in the checker-required
 family reports and is excluded from the voluntary shipped-checker count here.
 
-**1 of 34 submissions ship an executable self-check; 6 wrote one and did not ship it.**
+**1 of 42 submissions ship an executable self-check; 14 wrote one and did not ship it.**
 
 An earlier version of this analysis grepped the submissions for `assert|invariant|sanity`, found
 nothing, and concluded that models do not verify themselves. That conclusion was about our own
@@ -38,9 +38,15 @@ columns are never added together.
 |---|---|---|---|---|---|---|---|---:|
 | `access-token-2026-08-o1` | expansion | `gpt-5.6-sol` | **none** | — | graded files only | syntax-only | **superseded** | 0 |
 | `checker-required-2026-08-o1` | poisoning | `gpt-5.6-sol` | **none** | — | graded files only | — | counted | 614 |
+| `phase14-dao-descendant-neutral-skeleton-anthropic` | descendant | `claude-claude-opus-5` | **none** | example-harness | graded files only | synthetic-scenarios | **registered-variant** | 0 |
+| `phase14-dao-descendant-neutral-skeleton-openai` | descendant | `codex-gpt-5.6-sol` | **none** | example-harness | graded files only | — | **registered-variant** | 0 |
+| `phase14-dao-descendant-seeded-recompute-anthropic` | descendant | `claude-claude-opus-5` | **none** | example-harness | graded files only | synthetic-scenarios | counted | 0 |
+| `phase14-dao-descendant-seeded-recompute-openai` | descendant | `codex-gpt-5.6-sol` | **none** | example-harness | graded files only | — | counted | 0 |
 | `delegated-wallet-2026-08-o1` | reconciliation | `gpt-5.6-sol` | **none** | — | graded files only | example-harness | **superseded** | 0 |
 | `deployment-alias-2026-09-claude-1` | drift | `claude-opus-5` | **none** | — | graded files only | example-harness | **superseded** | 0 |
 | `deployment-model-alias-rollout-drift-2026-08-o1` | drift | `gpt-5.6-sol` | **none** | — | graded files only | syntax-only | **superseded** | 192 |
+| `phase14-deployment-rollback-recompute-seeded-recompute-anthropic` | recompute | `claude-claude-opus-5` | **none** | example-harness | graded files only | example-harness | counted | 0 |
+| `phase14-deployment-rollback-recompute-seeded-recompute-openai` | recompute | `codex-gpt-5.6-sol` | **none** | example-harness | graded files only | — | counted | 0 |
 | `cc267-claude-1` | outbox | `claude-opus-5` | **none** | mutation-testing | graded files only | mutation-testing | **not-run** | 2 |
 | `cc267-claude-2` | outbox | `claude-opus-5` | **none** | example-harness | graded files only | — | **not-run** | 13 |
 | `cc267-claude-3` | outbox | `claude-opus-5` | **none** | example-harness | graded files only | — | **not-run** | 11 |
@@ -65,6 +71,8 @@ columns are never added together.
 | `mp-gemini-1` | poisoning | `gemini-3-pro` | **none** | — | graded files only | — | **infra** | 0 |
 | `mp-haiku-1` | poisoning | `claude-haiku-4-5` | **none** | — | graded files only | — | **superseded** | 32 |
 | `mp-sonnet-1` | poisoning | `claude-sonnet-5` | **none** | — | graded files only | legality-table | **superseded** | 42 |
+| `phase14-trading-reconciliation-recompute-seeded-recompute-anthropic` | recompute | `claude-claude-opus-5` | **none** | example-harness | graded files only | example-harness | counted | 0 |
+| `phase14-trading-reconciliation-recompute-seeded-recompute-openai` | recompute | `codex-gpt-5.6-sol` | **none** | example-harness | graded files only | — | counted | 0 |
 | `ui-claude-1` | replay | `claude-opus-5` | **none** | — | graded files only | fuzzing | counted | 46 |
 | `ui-claude-2` | replay | `claude-opus-5` | **none** | — | graded files only | — | counted | 33 |
 | `ui-codex-1` | replay | `gpt-5.6-sol` | **none** | — | graded files only | example-harness | counted | 90 |
@@ -86,6 +94,10 @@ about a task that no longer exists — so those rows carry the state and omit th
 **`ui-claude-1`** — fuzzing, 46 scenarios failed
 
 > E` reason vocabulary. - **6120-scenario fuzz** over two mutations at independent depths × confirmation ×
+
+**`phase14-dao-descendant-seeded-recompute-anthropic`** — synthetic-scenarios, 0 scenarios failed
+
+> cs, and ran the 3 visible examples plus 41 synthetic scenarios sweeping the declared dimensions (1/2/3/5 workers
 
 **`pic-claude-1`** — synthetic-scenarios, 0 scenarios failed
 
@@ -127,6 +139,10 @@ about a task that no longer exists — so those rows carry the state and omit th
 
 > and confirming it catches each bug. Run mutation tests against the checker Run mutation tests against the checker
 
+**`phase14-dao-descendant-neutral-skeleton-anthropic`** — synthetic-scenarios, **registered-variant**: outcome not quotable, behaviour still is
+
+> five rules over the three examples plus 54 synthetic scenarios across the declared dimensions (seed × 1/2/4 work
+
 **`mp-claude-r2`** — synthetic-scenarios, **superseded**: outcome not quotable, behaviour still is
 
 > over-declared provenance. I also built synthetic scenarios for the five rules the examples don't reach — `M0` (unknown
@@ -141,8 +157,8 @@ about a task that no longer exists — so those rows carry the state and omit th
 
 ## Where the checkers went
 
-2 of 36 runs left a checker in the submission, where anyone grading the artifact can
-re-run it. 6 wrote verification source during the session and submitted none of it. The second
+2 of 44 runs left a checker in the submission, where anyone grading the artifact can
+re-run it. 14 wrote verification source during the session and submitted none of it. The second
 number is the one an artifact scanner cannot produce, and the difference between them is a
 behavioural difference between runs rather than a claim about any model's ability.
 
@@ -156,34 +172,37 @@ the patterns the submissions get:
 
 | run | lab | scaffolding | wrote, did not ship | found | failed |
 |---|---|---|---|---|---:|
+| `phase14-dao-descendant-neutral-skeleton-anthropic` | anthropic | unrecorded | 2 inline shell script(s) | example-harness | 0 |
+| `phase14-dao-descendant-neutral-skeleton-openai` | openai | unrecorded | 2 inline shell script(s) | example-harness | 0 |
+| `phase14-dao-descendant-seeded-recompute-anthropic` | anthropic | unrecorded | 2 inline shell script(s) | example-harness | 0 |
+| `phase14-dao-descendant-seeded-recompute-openai` | openai | unrecorded | 2 inline shell script(s) | example-harness | 0 |
+| `phase14-deployment-rollback-recompute-seeded-recompute-anthropic` | anthropic | unrecorded | 2 inline shell script(s) | example-harness | 0 |
+| `phase14-deployment-rollback-recompute-seeded-recompute-openai` | openai | unrecorded | 2 inline shell script(s) | example-harness | 0 |
 | `cc267-claude-1` | anthropic | claude-code | `/app/check.py`, `/app/fuzz.py`, `/app/scenarios.py`, `/app/mutations.py`, 1 inline shell script(s) | mutation-testing | 2 |
 | `cc267-claude-2` | anthropic | claude-code | `/app/check_invariants.py`, `/app/check_appendonly.py`, `/app/hunt.py`, 1 inline shell script(s) | example-harness | 13 |
 | `cc267-claude-3` | anthropic | claude-code | `/tmp/check/verify.py`, 10 inline shell script(s) | example-harness | 11 |
 | `cc267-codex-1` | openai | codex | 32 inline shell script(s) | assertions | 11 |
 | `cc267-codex-2` | openai | codex | 20 inline shell script(s) | assertions | 11 |
 | `cc267-codex-3` | openai | codex | 30 inline shell script(s) | legality-table | 11 |
+| `phase14-trading-reconciliation-recompute-seeded-recompute-anthropic` | anthropic | unrecorded | 2 inline shell script(s) | example-harness | 0 |
+| `phase14-trading-reconciliation-recompute-seeded-recompute-openai` | openai | unrecorded | 2 inline shell script(s) | example-harness | 0 |
 
 A run in that table built something, ran it, and still failed. That is why this is reported as a
 behaviour and not scored as a virtue: a checker bounds what you can EXPRESS, not what you
 EXPLORE. **Difficulty comes from coverage of the space, not from the difficulty of stating the
 rule** — the conclusion the axis meter reaches from the other direction.
 
-**The lab split there is confounded and must not be read as a model-level finding.** Each lab
-ran under its own scaffolding (claude-code for anthropic; codex for openai), so provider and agent harness are the
-same variable. A harness decides whether writing a file is cheaper than piping a script to a
-shell, how much context a session holds, and what the transcript records at all — any of which
-alone could produce that column. Separating them needs the same model under both scaffoldings,
-which no run on record provides.
+Labs there are not aligned one-to-one with scaffolding, so the split is at least not a pure harness artifact. It is still a handful of runs.
 
 ## What kinds of checking were described
 
 | kind | runs | what it means |
 |---|---:|---|
 | `syntax-only` | 6 | `node --check` or equivalent: the file parses, and nothing else was established |
-| `example-harness` | 5 | the published examples, run through a driver the model wrote |
+| `example-harness` | 9 | the published examples, run through a driver the model wrote |
 | `assertions` | 1 | executable assertions or invariant checks that fail loudly |
 | `legality-table` | 5 | an explicit table of permitted states or transitions, consulted rather than reasoned about each time |
-| `synthetic-scenarios` | 11 | inputs the model invented beyond the ones it was given |
+| `synthetic-scenarios` | 13 | inputs the model invented beyond the ones it was given |
 | `fuzzing` | 2 | randomized or exhaustive generation over an input space |
 | `mutation-testing` | 1 | deliberately breaking its own code to confirm its checker notices |
 
@@ -198,9 +217,9 @@ _None._ No submission defines a checking routine it never invokes. That is worth
 
 | arm | counted runs | failed something |
 |---|---:|---:|
-| described verification at or above an example harness | 7 | 2 |
+| described verification at or above an example harness | 13 | 2 |
 | did not | 6 | 5 |
-**Decidable, barely.** 2/7 of the self-verifying runs failed something, against 5/6 of the rest. With arms this small the comparison is suggestive at best and no test is applied to it.
+**Decidable, barely.** 2/13 of the self-verifying runs failed something, against 5/6 of the rest. With arms this small the comparison is suggestive at best and no test is applied to it.
 
 ## Why the foundry should keep measuring this
 

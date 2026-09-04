@@ -1,0 +1,122 @@
+{
+  "runId": "phase14-trading-reconciliation-recompute-seeded-recompute-anthropic",
+  "familyId": "trading-reconciliation-recompute",
+  "subjectId": "claude-claude-opus-5",
+  "subjectType": "agent",
+  "model": "anthropic/claude-opus-5",
+  "effort": "max",
+  "status": "completed",
+  "counts": true,
+  "countsReason": "completed with 24 graded scenario(s), no refusal, timeout or infrastructure error",
+  "scenarioSetId": "recompute-24-1063a653",
+  "cells": [
+    {
+      "scenarioId": "order-recovery-11-r2-o4-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-11-r2-o6-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-11-r2-o12-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-11-r3-o4-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-11-r3-o6-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-11-r3-o12-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-11-r4-o4-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-11-r4-o6-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-11-r4-o12-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-23-r2-o4-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-23-r2-o6-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-23-r2-o12-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-23-r3-o4-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-23-r3-o6-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-23-r3-o12-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-23-r4-o4-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-23-r4-o6-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-23-r4-o12-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-41-r1-o4-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-41-r1-o6-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-41-r1-o12-after_venue_accept",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-41-r2-o4-none",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-41-r3-o6-none",
+      "failed": []
+    },
+    {
+      "scenarioId": "order-recovery-41-r4-o12-none",
+      "failed": []
+    }
+  ],
+  "runtimeSeconds": 136,
+  "costUsd": 0.549681,
+  "usage": {
+    "inputTokens": 246880,
+    "cachedInputTokens": 228802,
+    "outputTokens": 10141,
+    "costUsd": 0.549681,
+    "source": "claude `result` event `usage` and `total_cost_usd`"
+  },
+  "artifactPath": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry/trials/trading-reconciliation-recompute/phase14-trading-reconciliation-recompute-seeded-recompute-anthropic/submission",
+  "isolation": "container",
+  "notes": "provider=docker 0/24 scenarios failed (0 host errors) under no-network container isolation"
+}

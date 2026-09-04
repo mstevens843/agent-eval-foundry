@@ -1,0 +1,101 @@
+{
+  "cells": [
+    {
+      "scenarioId": "rollback-recovery-11-c2-e4-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-11-c2-e6-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-11-c2-e12-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-11-c3-e4-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-11-c3-e6-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-11-c3-e12-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-11-c4-e4-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-11-c4-e6-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-11-c4-e12-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-23-c2-e4-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-23-c2-e6-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-23-c2-e12-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-23-c3-e4-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-23-c3-e6-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-23-c3-e12-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-23-c4-e4-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-23-c4-e6-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-23-c4-e12-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-41-c1-e4-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-41-c1-e6-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-41-c1-e12-after_compensation",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-41-c2-e4-none",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-41-c3-e6-none",
+      "failed": []
+    },
+    {
+      "scenarioId": "rollback-recovery-41-c4-e12-none",
+      "failed": []
+    }
+  ],
+  "detail": "0/24 scenarios failed (0 host errors) under no-network container isolation"
+}

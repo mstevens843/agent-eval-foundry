@@ -16,11 +16,11 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `audit-truth-financial-workflow` | **NOT-READY** | difficulty-evidenced |
 | `browser-action-replay` | **NOT-READY** | difficulty-evidenced |
 | `checker-required-memory-poisoning` | **NOT-READY** | difficulty-evidenced |
-| `dao-descendant` | **NOT-READY** | difficulty-evidenced |
+| `dao-descendant` | **NOT-READY** | difficulty-evidenced, not-already-solved |
 | `delegated-wallet-scope-reconciliation` | **NOT-READY** | difficulty-evidenced |
 | `deployment-model-alias-rollout-drift` | **NOT-READY** | difficulty-evidenced |
 | `deployment-rollback-partial-effects` | **NOT-READY** | difficulty-evidenced |
-| `deployment-rollback-recompute` | **NOT-READY** | difficulty-evidenced |
+| `deployment-rollback-recompute` | **NOT-READY** | difficulty-evidenced, not-already-solved |
 | `durable-approval-outbox` | **NOT-READY** | difficulty-evidenced |
 | `model-alias-drift-sentinel` | **NOT-READY** | difficulty-evidenced |
 | `permission-boundary-tools` | **NOT-READY** | difficulty-evidenced |
@@ -30,7 +30,7 @@ The verifier-integrity layer is also advisory here: `audit-pending`, `adversaria
 | `prompt-injection-cross-tool-escalation` | **NOT-READY** | difficulty-evidenced |
 | `prompt-injection-memory-poisoning` | **NOT-READY** | difficulty-evidenced |
 | `stale-crm-ticket-automation` | **NOT-READY** | difficulty-evidenced |
-| `trading-reconciliation-recompute` | **NOT-READY** | difficulty-evidenced |
+| `trading-reconciliation-recompute` | **NOT-READY** | difficulty-evidenced, not-already-solved |
 | `ui-action-record-replay` | **SHIP** | none |
 | `ui-replay-live-dom` | **SHIP** | none |
 
@@ -321,14 +321,14 @@ table does.
 | `baselines-blocked` | pass | 1/1 baselines rejected |
 | `mutants-caught-by-intended-check` | pass | 3/3 caught by intended check |
 | `mechanisms-exercised` | pass | 24/24 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
-| `isolation-level` | pass | subprocess; adequate while no agent artifact is graded |
-| `shared-bank-ready` | **FAIL** | 0 subject(s) shared with another family (need 3) |
+| `isolation-level` | pass | container with 2 agent trial(s) |
+| `shared-bank-ready` | **FAIL** | 2 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
-| `difficulty-evidenced` | **FAIL** | no counted agent trials |
+| `difficulty-evidenced` | **FAIL** | 2 counted agent trial(s), none root-caused to `capability` (2 unlabelled); a counted failure is not a difficulty finding until somebody says why it failed |
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
 | `production-matrix-ready` | n/a | no production-readiness layer for this family |
-| `not-already-solved` | n/a | no counted agent trials yet |
+| `not-already-solved` | **FAIL** | all 2 counted trial(s) passed every scenario — the family is already-solved |
 | `priced` | pass | 120h build, $145 frontier |
 | `human-package-ready` | **FAIL** | public package is incomplete or not generated here |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
@@ -489,14 +489,14 @@ table does.
 | `baselines-blocked` | pass | 1/1 baselines rejected |
 | `mutants-caught-by-intended-check` | pass | 4/4 caught by intended check |
 | `mechanisms-exercised` | pass | 24/24 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
-| `isolation-level` | pass | subprocess; adequate while no agent artifact is graded |
-| `shared-bank-ready` | **FAIL** | 0 subject(s) shared with another family (need 3) |
+| `isolation-level` | pass | container with 2 agent trial(s) |
+| `shared-bank-ready` | **FAIL** | 2 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
-| `difficulty-evidenced` | **FAIL** | no counted agent trials |
+| `difficulty-evidenced` | **FAIL** | 2 counted agent trial(s), none root-caused to `capability` (2 unlabelled); a counted failure is not a difficulty finding until somebody says why it failed |
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
 | `production-matrix-ready` | n/a | no production-readiness layer for this family |
-| `not-already-solved` | n/a | no counted agent trials yet |
+| `not-already-solved` | **FAIL** | all 2 counted trial(s) passed every scenario — the family is already-solved |
 | `priced` | pass | 24h build, $145 frontier |
 | `human-package-ready` | **FAIL** | public package is incomplete or not generated here |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
@@ -909,14 +909,14 @@ table does.
 | `baselines-blocked` | pass | 1/1 baselines rejected |
 | `mutants-caught-by-intended-check` | pass | 4/4 caught by intended check |
 | `mechanisms-exercised` | pass | 24/24 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
-| `isolation-level` | pass | subprocess; adequate while no agent artifact is graded |
-| `shared-bank-ready` | **FAIL** | 0 subject(s) shared with another family (need 3) |
+| `isolation-level` | pass | container with 2 agent trial(s) |
+| `shared-bank-ready` | **FAIL** | 2 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
-| `difficulty-evidenced` | **FAIL** | no counted agent trials |
+| `difficulty-evidenced` | **FAIL** | 2 counted agent trial(s), none root-caused to `capability` (2 unlabelled); a counted failure is not a difficulty finding until somebody says why it failed |
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
 | `production-matrix-ready` | n/a | no production-readiness layer for this family |
-| `not-already-solved` | n/a | no counted agent trials yet |
+| `not-already-solved` | **FAIL** | all 2 counted trial(s) passed every scenario — the family is already-solved |
 | `priced` | pass | 24h build, $145 frontier |
 | `human-package-ready` | **FAIL** | public package is incomplete or not generated here |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |

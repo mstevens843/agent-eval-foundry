@@ -18,11 +18,12 @@
 //   is it comparable     whether the families' cells can be put in one matrix at all
 //   what kind of axis    difficulty (real models) or detection (authored mutants) — never merged
 //
-// THE FOUR WAYS A SUBJECT CAN FAIL TO COUNT, which the missing-rows deliberately keep apart:
+// THE FIVE WAYS A SUBJECT CAN FAIL TO COUNT, which the missing-rows deliberately keep apart:
 //
 //   never-attempted      nobody ran it. The cheapest hole to fill and the only one that is just money.
 //   refused              the provider declined. Re-running until it complies would fabricate a sample.
 //   infrastructure       an auth or harness failure. Fixable, but not by the model.
+//   registered-variant   it validly measured another preregistered profile, not this canonical package.
 //   superseded           it ran, it was graded, and then the family was repaired underneath it. The
 //                        evidence is about a task that no longer exists.
 //
@@ -135,8 +136,8 @@ export interface BankCompletion {
 export interface CompletionInput {
   readonly banks: readonly KindedBank[];
   /**
-   * Every trial on disk, per family, with its lifecycle state. Superseded and refused runs are
-   * present here and absent from the banks, which is exactly what lets a hole say WHY.
+   * Every trial on disk, per family, with its lifecycle state. Registered-variant, superseded and
+   * refused runs are present here and absent from canonical banks, which lets a hole say WHY.
    */
   readonly trials: readonly {
     readonly familyId: string;
@@ -214,11 +215,12 @@ function holeFor(subjectId: string, familyId: string, trials: CompletionInput["t
   // least produced a graded result.
   const rank: Readonly<Record<EvidenceState, number>> = {
     counted: 0,
-    superseded: 1,
-    crashed: 2,
-    infra: 3,
-    refused: 4,
-    "not-run": 5,
+    "registered-variant": 1,
+    superseded: 2,
+    crashed: 3,
+    infra: 4,
+    refused: 5,
+    "not-run": 6,
   };
   const best = [...mine].sort((a, b) => rank[a.state] - rank[b.state])[0];
   const state = best?.state ?? "not-run";

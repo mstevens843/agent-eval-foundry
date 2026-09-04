@@ -3,7 +3,7 @@
   "familyId": "trading-reconciliation-recompute",
   "challengeHash": "94bfc2c401ad2cc19f7e84e8a1270a08",
   "packagePath": "examples/families/trading-reconciliation-recompute/challenge",
-  "verifierHash": "6dc8155e320ba62d1f530c9ce7a13758",
+  "verifierHash": "2b0ef2194b0466c51c7196df425cca39",
   "threatModel": {
     "objective": "Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.",
     "attackerReceives": [

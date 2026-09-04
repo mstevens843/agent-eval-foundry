@@ -3,7 +3,7 @@
   "familyId": "deployment-rollback-recompute",
   "challengeHash": "2ddfad2fd3287f752c41a408184b48ce",
   "packagePath": "examples/families/deployment-rollback-recompute/challenge",
-  "verifierHash": "2f7ccbc94c86a2ff7e5d175ab885fcc4",
+  "verifierHash": "ea438359dde128a31c9f72de24da831a",
   "threatModel": {
     "objective": "Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.",
     "attackerReceives": [

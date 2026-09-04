@@ -32,9 +32,8 @@ candidate mechanisms
 
 | cost tier | queued actions |
 |---|---:|
-| static | 15 |
+| static | 18 |
 | local | 7 |
-| one-agent | 3 |
 | cross-provider | 2 |
 
 | target | type | mode | stage | decision | evidence cost | next action |
@@ -42,8 +41,10 @@ candidate mechanisms
 | `access-token-scope-expansion` | family | validation | task_shape | repair | static | repair/reissue the package and invalidate stale evidence before further trials |
 | `audit-history-rewrite-probe` | probe | validation | transfer_test | transfer | static | run the declared transfer test before expanding scenarios |
 | `cross-tool-authority-laundering-probe` | probe | discovery | mechanism_probe | hold | static | run or repair the cheapest declared mechanism screen |
+| `dao-descendant` | family | validation | task_shape | evolve | static | treat the clean smoke pass as already_solved_or_needs_evolution before matrix spend |
 | `delegated-wallet-scope-reconciliation` | family | validation | task_shape | repair | static | repair/reissue the package and invalidate stale evidence before further trials |
 | `deployment-model-alias-rollout-drift` | family | validation | task_shape | repair | static | repair/reissue the package and invalidate stale evidence before further trials |
+| `deployment-rollback-recompute` | family | validation | task_shape | evolve | static | treat the clean smoke pass as already_solved_or_needs_evolution before matrix spend |
 | `durable-approval-outbox` | family | validation | transfer_test | evolve | static | evolve or transfer before broad ship claims |
 | `durable-memory-injection-probe` | probe | validation | task_shape | promote | static | promote probe into a full task shape |
 | `hidden-dependency-discovery-probe` | probe | discovery | mechanism_probe | repair | static | run or repair the cheapest declared mechanism screen |
@@ -51,8 +52,6 @@ candidate mechanisms
 | `permission-scope-drift-probe` | probe | discovery | mechanism_probe | hold | static | run or repair the cheapest declared mechanism screen |
 | `prompt-injection-containment` | family | validation | task_shape | evolve | static | treat the clean smoke pass as already_solved_or_needs_evolution before matrix spend |
 | `prompt-injection-memory-poisoning` | family | validation | task_shape | repair | static | repair/reissue the package and invalidate stale evidence before further trials |
-| `provider-failover-router-alias-drift-probe` | probe | validation | task_shape | promote | static | promote probe into a full task shape |
-| `ui-action-record-replay` | family | validation | transfer_test | evolve | static | evolve or transfer before broad ship claims |
 
 ## Rules The Planner Enforces
 
@@ -104,15 +103,15 @@ candidate mechanisms
 | family | stage | decision | reason |
 |---|---|---|---|
 | `access-token-scope-expansion` | task_shape | repair | stale challenge hashes cannot feed production-mode claims |
+| `dao-descendant` | task_shape | evolve | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
 | `delegated-wallet-scope-reconciliation` | task_shape | repair | stale challenge hashes cannot feed production-mode claims |
 | `deployment-model-alias-rollout-drift` | task_shape | repair | stale challenge hashes cannot feed production-mode claims |
+| `deployment-rollback-recompute` | task_shape | evolve | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
 | `durable-approval-outbox` | transfer_test | evolve | nested failure sets are one axis at multiple sensitivities, not breadth |
 | `prompt-injection-containment` | task_shape | evolve | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
 | `prompt-injection-memory-poisoning` | task_shape | repair | stale challenge hashes cannot feed production-mode claims |
+| `trading-reconciliation-recompute` | task_shape | evolve | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
 | `ui-action-record-replay` | transfer_test | evolve | nested failure sets are one axis at multiple sensitivities, not breadth |
-| `dao-descendant` | smoke_trial | promote | mutant-detection evidence does not prove real-agent difficulty |
-| `deployment-rollback-recompute` | smoke_trial | promote | mutant-detection evidence does not prove real-agent difficulty |
-| `trading-reconciliation-recompute` | smoke_trial | promote | mutant-detection evidence does not prove real-agent difficulty |
 | `checker-required-memory-poisoning` | transfer_test | transfer | repeated same-provider trials estimate stability, not cross-lab transfer |
 | `ui-replay-live-dom` | transfer_test | transfer | repeated same-provider trials estimate stability, not cross-lab transfer |
 
@@ -125,15 +124,15 @@ No family is automatically recommended for a fresh full matrix by this planner p
 | family | next required evidence | reason |
 |---|---|---|
 | `access-token-scope-expansion` | static at `task_shape` | stale challenge hashes cannot feed production-mode claims |
+| `dao-descendant` | static at `task_shape` | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
 | `delegated-wallet-scope-reconciliation` | static at `task_shape` | stale challenge hashes cannot feed production-mode claims |
 | `deployment-model-alias-rollout-drift` | static at `task_shape` | stale challenge hashes cannot feed production-mode claims |
+| `deployment-rollback-recompute` | static at `task_shape` | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
 | `durable-approval-outbox` | static at `transfer_test` | nested failure sets are one axis at multiple sensitivities, not breadth |
 | `prompt-injection-containment` | static at `task_shape` | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
 | `prompt-injection-memory-poisoning` | static at `task_shape` | stale challenge hashes cannot feed production-mode claims |
+| `trading-reconciliation-recompute` | static at `task_shape` | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
 | `ui-action-record-replay` | static at `transfer_test` | nested failure sets are one axis at multiple sensitivities, not breadth |
-| `dao-descendant` | one-agent at `smoke_trial` | mutant-detection evidence does not prove real-agent difficulty |
-| `deployment-rollback-recompute` | one-agent at `smoke_trial` | mutant-detection evidence does not prove real-agent difficulty |
-| `trading-reconciliation-recompute` | one-agent at `smoke_trial` | mutant-detection evidence does not prove real-agent difficulty |
 | `checker-required-memory-poisoning` | cross-provider at `transfer_test` | repeated same-provider trials estimate stability, not cross-lab transfer |
 | `ui-replay-live-dom` | cross-provider at `transfer_test` | repeated same-provider trials estimate stability, not cross-lab transfer |
 

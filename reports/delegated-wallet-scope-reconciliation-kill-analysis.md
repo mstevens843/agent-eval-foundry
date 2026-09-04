@@ -46,9 +46,9 @@ The lineage does not currently override the single-family disposition.
 
 ### The trials
 
-| run | model | runtime | scenarios | failed | isolation |
-|---|---|---:|---:|---:|---|
-| `delegated-wallet-2026-08-o1` — **superseded** by the 2026-09-01 `delegated-wallet-scope-reconciliation` challenge migration; it does not count and its numbers are withdrawn | openai/gpt-5.6-sol | 230s | 804 | 0 | subprocess |
+| run | evidence state | model | runtime | scenarios | failed | isolation |
+|---|---|---|---:|---:|---:|---|
+| `delegated-wallet-2026-08-o1` — **superseded** by the 2026-09-01 `delegated-wallet-scope-reconciliation` challenge migration; it does not count and its numbers are withdrawn | **superseded**; withdrawn | openai/gpt-5.6-sol | 230s | 804 | 0 | subprocess |
 
 **Withdrawn evidence.** `delegated-wallet-2026-08-o1` was invalidated by the 2026-09-01 `delegated-wallet-scope-reconciliation` challenge migration: it was graded against a package this repository no longer produces, so that row does not count and every number on it is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read this row as spend that was made, not as a result about the family as it stands.
 

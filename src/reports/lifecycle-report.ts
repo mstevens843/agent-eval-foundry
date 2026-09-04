@@ -4,16 +4,18 @@
 // runs looks cleaner than one that names them, and is worth less: the reader cannot tell whether the
 // numbers survived a repair or were never tested by one.
 //
-// Six states, and the interesting one is `superseded`. Those trials cost real money, produced the
+// Seven states, and the expensive historical one is `superseded`. Those trials cost real money, produced the
 // finding that caused the repair, and no longer count for anything. Naming them is the difference
 // between "our family passes" and "our family passes, here is what it used to say, and here is what
 // changed when a model showed us the spec was ambiguous".
 
 import type { CampaignPlan } from "../trials/campaign.js";
-import type { EvidenceLedger, EvidenceState } from "../trials/evidence-lifecycle.js";
+import { EVIDENCE_STATES, type EvidenceLedger, type EvidenceState } from "../trials/evidence-lifecycle.js";
 
 const STATE_MEANING: Readonly<Record<EvidenceState, string>> = {
   counted: "graded, and run against the challenge this family produces today",
+  "registered-variant":
+    "graded against a preregistered material variant; valid for that profile, excluded from the canonical family bank",
   superseded: "graded, then invalidated when the family it measured was repaired",
   refused: "the provider declined; never an attempt, never a failure",
   infra: "the provider could not authenticate, so the subject never reached the task",
@@ -70,13 +72,11 @@ export function renderLifecycleReport(input: LifecycleReportInput): string {
     "",
     "Every trial this repository holds, what state it is in, and what a repair costs.",
     "",
-    "## The five states",
+    "## The seven states",
     "",
     "| state | count | meaning |",
     "|---|---:|---|",
-    ...(["counted", "superseded", "refused", "infra", "not-run"] as const).map(
-      (s) => `| \`${s}\` | ${byState(s)} | ${STATE_MEANING[s]} |`,
-    ),
+    ...EVIDENCE_STATES.map((s) => `| \`${s}\` | ${byState(s)} | ${STATE_MEANING[s]} |`),
     "",
     "## Per family",
     "",
@@ -89,7 +89,7 @@ export function renderLifecycleReport(input: LifecycleReportInput): string {
       "|---|---|---|---|",
       ...ledger.entries.map(
         (e) =>
-          `| \`${e.runId}\` | ${e.model ?? "—"} | ${e.state === "superseded" ? "**superseded**" : e.state} | \`${e.ranAgainst ?? "unknown"}\`${e.ranAgainst === e.currentHash ? "" : " ≠ current"} |`,
+          `| \`${e.runId}\` | ${e.model ?? "—"} | ${e.state === "superseded" ? "**superseded**" : e.state} | \`${e.ranAgainst ?? "unknown"}\`${e.ranAgainst === e.currentHash ? "" : e.state === "registered-variant" ? ` (\`${e.variantId ?? "registered variant"}\`)` : " ≠ current"} |`,
       ),
       "",
     ]),
@@ -114,13 +114,15 @@ export function renderLifecycleReport(input: LifecycleReportInput): string {
     "",
     "The challenge package is content-hashed. Every trial records the hash it ran against, and any",
     "trial whose preserved `challenge/` directory hashes differently from the current package is",
-    "excluded from the counted set — by the evidence builder, not by anyone remembering.",
+    "either tied to a preregistered variant or marked superseded. Both remain visible and neither",
+    "enters the canonical counted set — by the evidence builder, not by anyone remembering.",
     "",
-    "Three checks make that hold under pressure:",
+    "Five checks make that hold under pressure:",
     "",
     "| check | what it stops |",
     "|---|---|",
-    "| `EVIDENCE_STALE_COUNTED` | a superseded trial appearing in a counted set |",
+    "| `TRIAL_CHALLENGE_HASH_MISMATCH` | a variant registration bound to an obsolete canonical hash |",
+    "| `EVIDENCE_STALE_COUNTED` | a superseded or registered-variant trial appearing in the canonical counted set |",
     "| `EVIDENCE_CAMPAIGN_NOT_REISSUED` | a plan written for the old task being read as though it described the new one |",
     "| `EVIDENCE_SUPERSEDED_HIDDEN` | a report quietly omitting the runs a repair invalidated |",
     "| `EVIDENCE_AMBIGUITY_UNDOCUMENTED` | a repair with no postmortem, so the next family repeats it |",

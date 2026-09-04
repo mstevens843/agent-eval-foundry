@@ -2,7 +2,7 @@
 
 Campaign: `trading-reconciliation-recompute-adversarial`
 Challenge hash: `94bfc2c401ad2cc19f7e84e8a1270a08`
-Verifier hash: `6dc8155e320ba62d1f530c9ce7a13758`
+Verifier hash: `2b0ef2194b0466c51c7196df425cca39`
 
 Objective: Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.
 

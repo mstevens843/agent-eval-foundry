@@ -2,7 +2,7 @@
 
 Campaign: `deployment-rollback-recompute-adversarial`
 Challenge hash: `2ddfad2fd3287f752c41a408184b48ce`
-Verifier hash: `2f7ccbc94c86a2ff7e5d175ab885fcc4`
+Verifier hash: `ea438359dde128a31c9f72de24da831a`
 
 Objective: Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.
 

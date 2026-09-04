@@ -13,10 +13,14 @@ import {
   PHASE14_FAMILIES,
   buildPhase14PackageLock,
   buildPhase14ScenarioLock,
+  phase14ChallengeVariantRegistrations,
 } from "../src/phase-14/packages.js";
 import { buildPhase14Preflight, parsePhase14PreflightObservations } from "../src/phase-14/preflight.js";
 import { exactBinomialInterval } from "../src/phase-14/statistics.js";
 import { renderPhase14OperatorEffects } from "../src/reports/phase-14-operator-effects.js";
+import { readFamilyTrials } from "../src/trials/directory.js";
+import { evidenceLedger } from "../src/trials/evidence-lifecycle.js";
+import { prepareChallenge } from "../src/trials/run.js";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const PREREGISTRATION_SHA256 = "bbc31777883629466cf70eca0a9ce9597f1b78a15d4d65242c24d416c0ee1a56";
@@ -87,19 +91,40 @@ describe("Phase 14 frozen packages and scenarios", () => {
       expect(rows.filter((row) => row.inBalanced12 && row.activation === "target")).toHaveLength(6);
     }
   });
+
+  it("keeps registered starter variants visible without calling them package migrations", () => {
+    const variants = phase14ChallengeVariantRegistrations(ROOT);
+    expect(variants).toHaveLength(3);
+    const familyId = "dao-descendant";
+    const ledger = evidenceLedger(
+      familyId,
+      prepareChallenge(ROOT, familyId).hash,
+      readFamilyTrials(`${ROOT}/trials`, familyId),
+      variants,
+    );
+    const variantRuns = ledger.registeredVariants ?? [];
+    expect([...variantRuns].sort()).toEqual([
+      "phase14-dao-descendant-neutral-skeleton-anthropic",
+      "phase14-dao-descendant-neutral-skeleton-openai",
+    ]);
+    expect(ledger.superseded).not.toEqual(expect.arrayContaining([...variantRuns]));
+    expect(
+      ledger.entries
+        .filter((entry) => variantRuns.includes(entry.runId))
+        .every((entry) => entry.variantId === "dao-descendant/neutral-skeleton"),
+    ).toBe(true);
+  });
 });
 
 describe("Phase 14 preflight and blind labels", () => {
-  it("blocks measurement instead of substituting the available provider", () => {
+  it("unlocks measurement only after both provider families and the container rig pass", () => {
     const preflight = buildPhase14Preflight(ROOT);
-    expect(preflight.ready).toBe(false);
+    expect(preflight.ready).toBe(true);
     expect(preflight.subjectAttemptsRun).toBe(0);
     expect(preflight.spendUsd).toBe(0);
-    expect(preflight.blockers).toEqual([
-      "anthropic subject execution unavailable",
-      "anthropic blind labelling unavailable",
-      "provider-agent container execution is not integrated for both provider CLIs",
-    ]);
+    expect(preflight.preflightProbeSpendUsd).toBeCloseTo(0.279485, 6);
+    expect(preflight.unpricedPreflightCalls).toBe(1);
+    expect(preflight.blockers).toEqual([]);
     expect(preflight.b6).toMatchObject({
       usable: true,
       knownGoodPassed: true,
@@ -108,6 +133,7 @@ describe("Phase 14 preflight and blind labels", () => {
       packageDeltaRigUsable: true,
       blindLabelRigUsable: true,
       campaignManifestRigUsable: true,
+      providerContainerPlanRigUsable: true,
     });
     expect(preflight.phase13Campaigns).toHaveLength(3);
     expect(
@@ -174,21 +200,49 @@ describe("Phase 14 effect analysis", () => {
     expect(() => exactBinomialInterval(7, 6)).toThrow(/must not exceed/);
   });
 
-  it("writes all frozen cells as NOT_RUN and leaves the ranking empty", () => {
+  it("preserves the registered stop after eight clean counted attempts", () => {
     const trials = buildPhase14TrialLedger(ROOT);
-    expect(trials.status).toBe("BLOCKED_PREFLIGHT");
+    expect(trials.status).toBe("STOPPED_BY_RULE");
     expect(trials.attempts).toHaveLength(12);
     expect(new Set(trials.attempts.map((attempt) => attempt.attemptId))).toHaveLength(12);
-    expect(trials.attempts.every((attempt) => attempt.state === "NOT_RUN")).toBe(true);
-    expect(trials.attempts.every((attempt) => attempt.countability.counts === false)).toBe(true);
-    expect(trials.summary).toMatchObject({ attempted: 0, countable: 0, spentUsd: 0 });
+    expect(trials.attempts.filter((attempt) => attempt.state === "COUNTED_SOLVE")).toHaveLength(8);
+    expect(trials.attempts.filter((attempt) => attempt.state === "COUNTED_FAILURE")).toHaveLength(0);
+    expect(trials.attempts.filter((attempt) => attempt.state === "NOT_RUN")).toHaveLength(4);
+    expect(
+      trials.attempts
+        .filter((attempt) => attempt.state === "NOT_RUN")
+        .every((attempt) => attempt.executionEligibility === "stopped-by-rule"),
+    ).toBe(true);
+    expect(trials.summary).toMatchObject({
+      attempted: 8,
+      countable: 8,
+      cleanSolves: 8,
+      rewardZero: 0,
+      agreedCapabilityFailures: 0,
+      blindLabelsRun: 0,
+    });
+    expect(trials.summary.spentUsd).toBeCloseTo(1.9917585, 7);
+    expect(trials.nextAttemptId).toBeNull();
 
     const effects = buildPhase14EffectLedger(ROOT);
-    expect(effects.status).toBe("NO_AGENT_EFFECTS_MEASURED");
+    expect(effects.status).toBe("REGISTERED_MATRIX_COMPLETE");
     expect(effects.measuredOperatorRanking).toEqual([]);
     expect(effects.estimates).toHaveLength(6);
-    expect(effects.estimates.every((effect) => effect.status === "not-estimable")).toBe(true);
-    expect(effects.estimates.every((effect) => effect.exactInterval === null)).toBe(true);
+    expect(effects.estimates.find((effect) => effect.estimandId === "E1-family")).toMatchObject({
+      status: "measured-descriptive",
+      independentAttempts: 8,
+      estimate: 0,
+      exactInterval: { successes: 0, trials: 8 },
+    });
+    expect(effects.estimates.find((effect) => effect.estimandId === "E2-starter")).toMatchObject({
+      status: "measured-descriptive",
+      independentAttempts: 4,
+      estimate: 0,
+    });
+    expect(effects.estimates.find((effect) => effect.estimandId === "E5-family-by-starter")).toMatchObject({
+      status: "not-estimable",
+      independentAttempts: 0,
+    });
     expect(effects.localCalibration).toHaveLength(3);
     expect(
       effects.localCalibration.every(
@@ -201,11 +255,16 @@ describe("Phase 14 effect analysis", () => {
     ).toBe(true);
   });
 
-  it("renders the blocked result without a difficulty claim", () => {
+  it("renders the preregistered stop without manufacturing a difficulty claim", () => {
     const report = renderPhase14OperatorEffects(ROOT);
-    expect(report).toContain("**BLOCKED BEFORE MEASUREMENT.**");
-    expect(report).toContain("Observed agent attempts: **0**");
-    expect(report).toContain("measured operator ranking is therefore **empty**");
-    expect(report).toContain("not a measured operator ranking");
+    expect(report).toContain("**MEASUREMENT STOPPED BY THE PREREGISTERED RULE.**");
+    expect(report).toContain("Observed agent attempts: **8**");
+    expect(report).toContain("Clean solves: **8**");
+    expect(report).toContain("No blind labels ran because no counted subject artifact failed");
+    expect(report).toContain(
+      "Measured operator ranking: empty; the DAO starter contrast was measured at 0.000",
+    );
+    expect(report).toContain("registered variants now remain visible");
+    expect(report).toContain("Reward zero and capability difficulty remain separate quantities");
   });
 });

@@ -5,6 +5,7 @@ import { type CampaignPlan, parseCampaignPlan } from "../trials/campaign.js";
 import { phase14LabelRigIntegrity } from "./blind-labels.js";
 import { PHASE14_FAMILIES, buildPhase14PackageLock } from "./packages.js";
 import type { Phase14FamilyId, Phase14PackageRow } from "./packages.js";
+import { phase14ProviderContainerB6 } from "./provider-runtime.js";
 
 const PHASE13_CAMPAIGNS: Readonly<Record<Phase14FamilyId, string>> = {
   "dao-descendant": "campaigns/dao-descendant-transfer-smoke-2026-09.json",
@@ -50,6 +51,11 @@ export interface Phase14PreflightObservations {
     readonly campaignIsolation: string;
     readonly agentOutputObservedBeforeRegistration: boolean;
   };
+  readonly providerProbeSpend: {
+    readonly providerReportedUsd: number;
+    readonly unpricedCalls: number;
+    readonly detail: string;
+  };
 }
 
 export interface Phase14PreflightResult {
@@ -82,9 +88,14 @@ export interface Phase14PreflightResult {
     readonly packageDeltaRigUsable: boolean;
     readonly blindLabelRigUsable: boolean;
     readonly campaignManifestRigUsable: boolean;
+    readonly providerContainerPlanRigUsable: boolean;
   };
   readonly subjectAttemptsRun: 0;
+  /** Backward-compatible alias: subject campaign spend, excluding authentication probes. */
   readonly spendUsd: 0;
+  readonly subjectSpendUsd: 0;
+  readonly preflightProbeSpendUsd: number;
+  readonly unpricedPreflightCalls: number;
 }
 
 const nonEmpty = (value: unknown, path: string): string => {
@@ -94,6 +105,13 @@ const nonEmpty = (value: unknown, path: string): string => {
 
 const bool = (value: unknown, path: string): boolean => {
   if (typeof value !== "boolean") throw new RigInputError(`${path} must be boolean`);
+  return value;
+};
+
+const nonNegativeNumber = (value: unknown, path: string): number => {
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0) {
+    throw new RigInputError(`${path} must be a non-negative number`);
+  }
   return value;
 };
 
@@ -110,6 +128,7 @@ export function parsePhase14PreflightObservations(
     "isolation",
     "capture",
     "phase13Audit",
+    "providerProbeSpend",
   ]);
   if (top.schema !== "agent-eval-foundry/phase-14-preflight-observations@1") {
     throw new RigInputError(`${path}.schema is unsupported`);
@@ -176,6 +195,11 @@ export function parsePhase14PreflightObservations(
     "campaignIsolation",
     "agentOutputObservedBeforeRegistration",
   ]);
+  const providerProbeSpend = requireShape(top.providerProbeSpend, `${path}.providerProbeSpend`, [
+    "providerReportedUsd",
+    "unpricedCalls",
+    "detail",
+  ]);
   return {
     schema: "agent-eval-foundry/phase-14-preflight-observations@1",
     observedAt: nonEmpty(top.observedAt, `${path}.observedAt`),
@@ -217,6 +241,17 @@ export function parsePhase14PreflightObservations(
         phase13Audit.agentOutputObservedBeforeRegistration,
         `${path}.phase13Audit.agentOutputObservedBeforeRegistration`,
       ),
+    },
+    providerProbeSpend: {
+      providerReportedUsd: nonNegativeNumber(
+        providerProbeSpend.providerReportedUsd,
+        `${path}.providerProbeSpend.providerReportedUsd`,
+      ),
+      unpricedCalls: nonNegativeNumber(
+        providerProbeSpend.unpricedCalls,
+        `${path}.providerProbeSpend.unpricedCalls`,
+      ),
+      detail: nonEmpty(providerProbeSpend.detail, `${path}.providerProbeSpend.detail`),
     },
   };
 }
@@ -361,6 +396,7 @@ export function buildPhase14Preflight(root: string): Phase14PreflightResult {
     [campaignGoodFailures, campaignBadFailures],
   );
   const labelRig = phase14LabelRigIntegrity();
+  const providerContainerRig = phase14ProviderContainerB6();
   const b6Usable =
     integrity.usable &&
     malformedInputRefused &&
@@ -369,7 +405,8 @@ export function buildPhase14Preflight(root: string): Phase14PreflightResult {
     campaignIntegrity.usable &&
     malformedCampaignRefused &&
     labelRig.usable &&
-    labelRig.malformedInputRefused;
+    labelRig.malformedInputRefused &&
+    providerContainerRig.usable;
   const blockers = [
     ...actualFailures,
     ...(packageLock.phase13PreregistrationPreserved
@@ -410,9 +447,13 @@ export function buildPhase14Preflight(root: string): Phase14PreflightResult {
       packageDeltaRigUsable: packageRig.usable && packageRig.malformedInputRefused,
       blindLabelRigUsable: labelRig.usable && labelRig.malformedInputRefused,
       campaignManifestRigUsable: campaignIntegrity.usable && malformedCampaignRefused,
+      providerContainerPlanRigUsable: providerContainerRig.usable,
     },
     subjectAttemptsRun: 0,
     spendUsd: 0,
+    subjectSpendUsd: 0,
+    preflightProbeSpendUsd: observations.providerProbeSpend.providerReportedUsd,
+    unpricedPreflightCalls: observations.providerProbeSpend.unpricedCalls,
   };
 }
 

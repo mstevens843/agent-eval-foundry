@@ -11,6 +11,12 @@ by. Rows are sorted by run id for exactly that reason.
 |---|---|---|---:|---:|---:|---|---:|---:|
 | `checker-required-2026-08-o1` | `gpt-5.6-sol` | openai | 2 | 248 | 0/14 | **none** / — | 0 | 614 |
 | `live-dom-2026-08-o2` | `gpt-5.6-sol` | openai | 1 | 510 | 0/13 | **none** / syntax-only | 1 | 219 |
+| `phase14-dao-descendant-seeded-recompute-anthropic` | `claude-claude-opus-5` | anthropic | 1 | 55 | 0/5 | **none** / synthetic-scenarios | 0 | 0 |
+| `phase14-dao-descendant-seeded-recompute-openai` | `codex-gpt-5.6-sol` | openai | 1 | 24 | 0/5 | **none** / — | 0 | 0 |
+| `phase14-deployment-rollback-recompute-seeded-recompute-anthropic` | `claude-claude-opus-5` | anthropic | 1 | 44 | 0/5 | **none** / example-harness | 0 | 0 |
+| `phase14-deployment-rollback-recompute-seeded-recompute-openai` | `codex-gpt-5.6-sol` | openai | 1 | 26 | 0/5 | **none** / — | 0 | 0 |
+| `phase14-trading-reconciliation-recompute-seeded-recompute-anthropic` | `claude-claude-opus-5` | anthropic | 1 | 60 | 0/5 | **none** / example-harness | 0 | 0 |
+| `phase14-trading-reconciliation-recompute-seeded-recompute-openai` | `codex-gpt-5.6-sol` | openai | 1 | 27 | 0/5 | **none** / — | 0 | 0 |
 | `pic-claude-1` | `claude-opus-5` | anthropic | 1 | 319 | 8/8 | **none** / synthetic-scenarios | 0 | 0 |
 | `pic-claude-2` | `claude-opus-5` | anthropic | 1 | 232 | 8/8 | **none** / synthetic-scenarios | 0 | 0 |
 | `pic-claude-3` | `claude-opus-5` | anthropic | 1 | 307 | 8/8 | **none** / synthetic-scenarios | 0 | 0 |
@@ -33,8 +39,8 @@ Descriptive, and small. The interval on every one of these is wide enough to ove
 
 | lab | counted | failed ≥1 | median lines | mean runtime | subjects |
 |---|---:|---:|---:|---:|---|
-| anthropic | 9 | 4 | 232 | 391s | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5` |
-| openai | 4 | 3 | 361 | 582s | `gpt-5.6-sol` |
+| anthropic | 12 | 4 | 216 | 323s | `claude-claude-opus-5`, `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5` |
+| openai | 7 | 3 | 248 | 349s | `codex-gpt-5.6-sol`, `gpt-5.6-sol` |
 
 ## Stated confidence against measured outcome
 
@@ -47,6 +53,12 @@ is the most actionable thing in the record, and it is reported as a **language s
 |---|---|---|---|
 | `checker-required-2026-08-o1` | silent | 614 failed | **n/a** |
 | `live-dom-2026-08-o2` | silent | 219 failed | **n/a** |
+| `phase14-dao-descendant-seeded-recompute-anthropic` | hedged | passed everything | **understated** |
+| `phase14-dao-descendant-seeded-recompute-openai` | hedged | passed everything | **understated** |
+| `phase14-deployment-rollback-recompute-seeded-recompute-anthropic` | assertive | passed everything | **aligned** |
+| `phase14-deployment-rollback-recompute-seeded-recompute-openai` | silent | passed everything | **n/a** |
+| `phase14-trading-reconciliation-recompute-seeded-recompute-anthropic` | silent | passed everything | **n/a** |
+| `phase14-trading-reconciliation-recompute-seeded-recompute-openai` | assertive | passed everything | **aligned** |
 | `pic-claude-1` | silent | passed everything | **n/a** |
 | `pic-claude-2` | silent | passed everything | **n/a** |
 | `pic-claude-3` | silent | passed everything | **n/a** |
@@ -59,7 +71,7 @@ is the most actionable thing in the record, and it is reported as a **language s
 | `ui-haiku-1` | silent | 62 failed | **n/a** |
 | `ui-sonnet-1` | assertive | 62 failed | **overconfident** |
 
-**3 of 13 counted runs (23%) asserted correctness and then failed scenarios.**
+**3 of 19 counted runs (16%) asserted correctness and then failed scenarios.**
 
 - `ui-claude-1` — 46 failed. > irmation × async × replay count × two plausible app models: 0 violations of the invariants (payment never fires twice, never fires w
 - `ui-codex-1` — 90 failed. > f80000gn/T/foundry-trial-RaLdsA/submission/subject.mjs). I verified it with a local harness against the visible examples: `exam

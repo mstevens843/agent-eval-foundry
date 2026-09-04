@@ -73,6 +73,14 @@ Declared in the plan and cross-checked against the code — a plan may not redef
 - B6 controls run in the same grading invocation and a failed control voids the run.
 - Root-cause labels are separate sidecars produced by two blind provider-family-independent readers; only agreed capability counts as difficulty evidence.
 
+## Superseded trials
+
+These ran against an earlier version of this challenge and are preserved without counting.
+A trial is evidence about the task it was run against, and that task no longer exists.
+
+- `phase14-dao-descendant-neutral-skeleton-anthropic`
+- `phase14-dao-descendant-neutral-skeleton-openai`
+
 The plan and the trial directories on disk agree.
 
 ---

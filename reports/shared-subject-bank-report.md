@@ -20,6 +20,9 @@ Which subjects have attempted which families, and what that permits.
 | `ui-action-record-replay` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 5 | 324 | 1 |
 | `ui-replay-live-dom` | `gpt-5.6-sol` | 1 | 864 | — |
 | `checker-required-memory-poisoning` | `gpt-5.6-sol` | 1 | 792 | — |
+| `dao-descendant` | `claude-claude-opus-5`, `codex-gpt-5.6-sol` | 2 | 24 | 0 |
+| `trading-reconciliation-recompute` | `claude-claude-opus-5`, `codex-gpt-5.6-sol` | 2 | 24 | 0 |
+| `deployment-rollback-recompute` | `claude-claude-opus-5`, `codex-gpt-5.6-sol` | 2 | 24 | 0 |
 | `durable-approval-outbox` | `claude-opus-5`, `gpt-5.6-sol` | 6 | 24 | 1 |
 
 ## Detection banks — written mutants
@@ -29,9 +32,6 @@ Which subjects have attempted which families, and what that permits.
 | `prompt-injection-memory-poisoning` | 13 | 288 | 5 |
 | `access-token-scope-expansion` | 9 | 384 | 3 |
 | `delegated-wallet-scope-reconciliation` | 10 | 804 | 3 |
-| `dao-descendant` | 3 | 24 | 1 |
-| `trading-reconciliation-recompute` | 4 | 24 | 1 |
-| `deployment-rollback-recompute` | 4 | 24 | 1 |
 | `deployment-model-alias-rollout-drift` | 17 | 339 | 20 |
 
 **These numbers may not be added to the ones above, or to each other as a portfolio total.** A
@@ -42,23 +42,25 @@ and it is not a measurement of difficulty.
 
 | subject | families |
 |---|---|
+| `claude-claude-opus-5` | `dao-descendant`, `deployment-rollback-recompute`, `trading-reconciliation-recompute` |
 | `claude-haiku-4-5` | `prompt-injection-containment`, `ui-action-record-replay` |
 | `claude-opus-5` | `durable-approval-outbox`, `prompt-injection-containment`, `ui-action-record-replay` |
 | `claude-sonnet-5` | `prompt-injection-containment`, `ui-action-record-replay` |
+| `codex-gpt-5.6-sol` | `dao-descendant`, `deployment-rollback-recompute`, `trading-reconciliation-recompute` |
 | `gpt-5.6-sol` | `checker-required-memory-poisoning`, `durable-approval-outbox`, `prompt-injection-containment`, `ui-action-record-replay`, `ui-replay-live-dom` |
 
 ## What each kind of bank currently licenses
 
-### `agent` banks — 4 family(ies)
+### `agent` banks — 7 family(ies)
 
-**Verdict:** PARTIAL. a qualitative comparison over 1 shared subject(s); no combined axis count, because the width is bounded by the shared bank size.
+**Verdict:** REFUSED. nothing: the banks share no subject, so co-failure across families is unobservable and the union's width is the sum by construction.
 
-Only 1 subject(s) attempted every family, below the threshold of 3. The combined width is bounded above by the shared bank size, so it cannot distinguish complete overlap from independence. Overlap is reported; no combined axis count is quoted as a headline.
+No subject attempted more than one family, so co-failure across families is unobservable. The union matrix is null in every cross cell and its antichain width is the sum of the parts by construction — two families testing the identical mechanism would also 'add'. No combined count is available.
 
 **To strengthen this:**
 
 - Run the same subjects against every `agent` family until 3 share all of them.
-- Currently shared: gpt-5.6-sol.
+- Currently shared: none.
 
 ### `imported` banks — 1 family(ies)
 
@@ -71,7 +73,7 @@ Only 2 subject(s) attempted every family, below the threshold of 3. The combined
 - Build or trial a second family whose bank is `imported`.
 - For a mutant bank that means a second family with a written mutant set.
 
-### `mutant` banks — 7 family(ies)
+### `mutant` banks — 4 family(ies)
 
 **Verdict:** REFUSED. nothing: the banks share no subject, so co-failure across families is unobservable and the union's width is the sum by construction.
 

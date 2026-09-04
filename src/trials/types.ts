@@ -53,7 +53,7 @@ export const ISOLATION_GUARANTEES: Readonly<Record<IsolationLevel, string>> = {
   subprocess:
     "The subject runs in a separate node process and communicates over stdout. It cannot touch the parent's memory, so the ledger and the grading are genuinely out of reach. It still shares the filesystem and network with the parent.",
   container:
-    "The subject runs in a container with its own filesystem and no network. Not implemented here; declared so the gate can distinguish it rather than treating subprocess as the ceiling.",
+    "The provider agent runs in a per-attempt networked container with a read-only public challenge, writable trial workspace, read-only root, dropped capabilities and resource limits. The submitted module is then graded separately with its family host in fresh no-network containers while the verifier and authoritative result stay outside.",
 };
 
 export interface TrialCell {

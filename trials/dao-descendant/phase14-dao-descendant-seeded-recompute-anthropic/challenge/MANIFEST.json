@@ -1,0 +1,24 @@
+{
+  "familyId": "dao-descendant",
+  "scenarioSetId": "descendant-24-21639a0f",
+  "visibleFiles": [
+    "README.md",
+    "SPEC.md",
+    "examples/example-1-single-worker.json",
+    "examples/example-2-reassigned.json",
+    "examples/example-3-clean-call.json",
+    "starter/subject.mjs",
+    "types.ts"
+  ],
+  "hiddenArtifacts": [
+    "verify.ts",
+    "reference.ts",
+    "mutants.ts",
+    "runner.ts",
+    "truth.ts",
+    "matrix.json",
+    "answer-matrix.json",
+    "reports/"
+  ],
+  "submissionFormat": "an ES module exporting `subject` with run(view, tool)"
+}

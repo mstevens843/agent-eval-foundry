@@ -3,7 +3,7 @@
   "familyId": "checker-required-memory-poisoning",
   "challengeHash": "448f2f816c51030cc97a374816226168",
   "packagePath": "examples/families/checker-required-memory-poisoning/challenge",
-  "verifierHash": "75f783f3b62b278f0328fc6cb5142972",
+  "verifierHash": "3e7cb78ebf1f5c22d00840ce467ce344",
   "threatModel": {
     "objective": "Authorized local benchmark-integrity QA: determine whether submitted artifacts can make the verifier pass without implementing the public task behavior.",
     "attackerReceives": [

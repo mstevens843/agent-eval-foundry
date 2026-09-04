@@ -33,14 +33,14 @@ It also did not prove the opposite: 6 counted clean passes by the available mode
 
 ### The trials
 
-| run | model | runtime | scenarios | failed | isolation |
-|---|---|---:|---:|---:|---|
-| `pic-claude-1` | anthropic/claude-opus-5 | 371s | 128 | 0 | subprocess |
-| `pic-claude-2` | anthropic/claude-opus-5 | 340s | 128 | 0 | subprocess |
-| `pic-claude-3` | anthropic/claude-opus-5 | 326s | 128 | 0 | subprocess |
-| `pic-codex-1` | openai/gpt-5.6-sol | 247s | 128 | 0 | subprocess |
-| `pic-haiku-1` | anthropic/claude-haiku-4-5 | 54s | 128 | 0 | subprocess |
-| `pic-sonnet-1` | anthropic/claude-sonnet-5 | 190s | 128 | 0 | subprocess |
+| run | evidence state | model | runtime | scenarios | failed | isolation |
+|---|---|---|---:|---:|---:|---|
+| `pic-claude-1` | canonical counted | anthropic/claude-opus-5 | 371s | 128 | 0 | subprocess |
+| `pic-claude-2` | canonical counted | anthropic/claude-opus-5 | 340s | 128 | 0 | subprocess |
+| `pic-claude-3` | canonical counted | anthropic/claude-opus-5 | 326s | 128 | 0 | subprocess |
+| `pic-codex-1` | canonical counted | openai/gpt-5.6-sol | 247s | 128 | 0 | subprocess |
+| `pic-haiku-1` | canonical counted | anthropic/claude-haiku-4-5 | 54s | 128 | 0 | subprocess |
+| `pic-sonnet-1` | canonical counted | anthropic/claude-sonnet-5 | 190s | 128 | 0 | subprocess |
 
 ## Why it is not ready
 

@@ -1,8 +1,8 @@
 {
-  "schema": "agent-eval-foundry/phase-14-effect-ledger@1",
+  "schema": "agent-eval-foundry/phase-14-effect-ledger@2",
   "preregistrationSha256": "bbc31777883629466cf70eca0a9ce9597f1b78a15d4d65242c24d416c0ee1a56",
-  "status": "NO_AGENT_EFFECTS_MEASURED",
-  "evidenceBoundary": "All effect estimates remain empty because the cross-provider preflight failed. Phase 13 mutant outcomes calibrate the verifier and scenario design; they are not agent effects.",
+  "status": "REGISTERED_MATRIX_COMPLETE",
+  "evidenceBoundary": "Reward zero is reported separately from difficulty. Only a counted failure with two independently produced cross-provider labels agreeing on capability enters the capability rate or an operator ranking.",
   "rawAttemptCells": [
     {
       "attemptId": "phase14-dao-descendant-seeded-recompute-openai",
@@ -19,31 +19,238 @@
       "primaryScenarios": 24,
       "secondaryScenarioProfile": "balanced-12",
       "secondaryScenarios": 12,
-      "state": "NOT_RUN",
-      "executionEligibility": "blocked-preflight",
+      "state": "COUNTED_SOLVE",
+      "executionEligibility": "attempted",
       "countability": {
-        "counts": false,
-        "reason": "not run: anthropic subject execution unavailable; anthropic blind labelling unavailable; provider-agent container execution is not integrated for both provider CLIs"
+        "counts": true,
+        "reason": "completed with 24 graded scenario(s), no refusal, timeout or infrastructure error"
       },
-      "reward": null,
+      "reward": 1,
       "capabilityAttributedFailure": null,
+      "labelDecision": {
+        "status": "not-required-clean",
+        "labelsReceived": 0,
+        "labels": [],
+        "readerFamilies": [],
+        "difficultyEvidence": false
+      },
       "selfCheckGreen": null,
+      "selfCheckProfile": {
+        "runId": "phase14-dao-descendant-seeded-recompute-openai",
+        "familyId": "dao-descendant",
+        "subjectId": "codex-gpt-5.6-sol",
+        "providerFamily": "openai",
+        "state": "counted",
+        "counted": true,
+        "scenariosFailed": 0,
+        "observed": [],
+        "ephemeral": [
+          {
+            "kind": "example-harness",
+            "source": "ephemeral",
+            "citation": "`<inline script> 1` imports the graded submission and runs it",
+            "locus": "transcript:<inline script> 1"
+          },
+          {
+            "kind": "example-harness",
+            "source": "ephemeral",
+            "citation": "`<inline script> 2` imports the graded submission and runs it",
+            "locus": "transcript:<inline script> 2"
+          }
+        ],
+        "selfReported": [],
+        "unshipped": [
+          "<inline script> 1",
+          "<inline script> 2"
+        ],
+        "harness": "phase14 streamed provider container",
+        "definedButUnused": [],
+        "extraFiles": [],
+        "hasSubmission": true,
+        "hasTranscript": true,
+        "strongestObserved": null,
+        "strongestEphemeral": "example-harness",
+        "strongestReported": null,
+        "verdict": "ephemeral"
+      },
       "failedChecks": [],
-      "failureConcentration": null,
-      "scenarioResults": [],
-      "runtimeSeconds": null,
+      "failureConcentration": {
+        "targetFailed": 0,
+        "targetTotal": 18,
+        "controlFailed": 0,
+        "controlTotal": 6,
+        "balancedFailed": 0,
+        "balancedTotal": 12,
+        "concentratedFailed": 0,
+        "concentratedTotal": 24,
+        "broadUnrelatedSpread": false
+      },
+      "scenarioResults": [
+        {
+          "scenarioId": "recovery-11-w2-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w2-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w2-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w3-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w3-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w3-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w4-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w4-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w4-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w2-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w2-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w2-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w3-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w3-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w3-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w4-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w4-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w4-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w1-k4-after_tool",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w1-k6-after_tool",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w1-k12-after_tool",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w2-k4-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w3-k6-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w4-k12-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        }
+      ],
+      "runtimeSeconds": 37,
       "costUsd": null,
-      "usage": null,
+      "usage": {
+        "inputTokens": 81973,
+        "cachedInputTokens": 74368,
+        "outputTokens": 1166,
+        "costUsd": null,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
       "artifacts": {
-        "challenge": null,
-        "submission": null,
-        "transcript": null,
-        "metadata": null,
-        "verifierOutput": null,
-        "normalizedResult": null,
-        "countabilityDecision": null,
+        "challenge": "trials/dao-descendant/phase14-dao-descendant-seeded-recompute-openai/challenge",
+        "submission": "trials/dao-descendant/phase14-dao-descendant-seeded-recompute-openai/submission",
+        "transcript": "trials/dao-descendant/phase14-dao-descendant-seeded-recompute-openai/transcript.txt",
+        "metadata": "trials/dao-descendant/phase14-dao-descendant-seeded-recompute-openai/metadata.json",
+        "verifierOutput": "trials/dao-descendant/phase14-dao-descendant-seeded-recompute-openai/verifier-output.json",
+        "normalizedResult": "trials/dao-descendant/phase14-dao-descendant-seeded-recompute-openai/result.json",
+        "countabilityDecision": "trials/dao-descendant/phase14-dao-descendant-seeded-recompute-openai/countability.json",
         "workspace": null,
         "selfChecks": null,
+        "blindPacket": null,
         "blindLabels": []
       }
     },
@@ -62,31 +269,245 @@
       "primaryScenarios": 24,
       "secondaryScenarioProfile": "balanced-12",
       "secondaryScenarios": 12,
-      "state": "NOT_RUN",
-      "executionEligibility": "blocked-preflight",
+      "state": "COUNTED_SOLVE",
+      "executionEligibility": "attempted",
       "countability": {
-        "counts": false,
-        "reason": "not run: anthropic subject execution unavailable; anthropic blind labelling unavailable; provider-agent container execution is not integrated for both provider CLIs"
+        "counts": true,
+        "reason": "completed with 24 graded scenario(s), no refusal, timeout or infrastructure error"
       },
-      "reward": null,
+      "reward": 1,
       "capabilityAttributedFailure": null,
+      "labelDecision": {
+        "status": "not-required-clean",
+        "labelsReceived": 0,
+        "labels": [],
+        "readerFamilies": [],
+        "difficultyEvidence": false
+      },
       "selfCheckGreen": null,
+      "selfCheckProfile": {
+        "runId": "phase14-dao-descendant-seeded-recompute-anthropic",
+        "familyId": "dao-descendant",
+        "subjectId": "claude-claude-opus-5",
+        "providerFamily": "anthropic",
+        "state": "counted",
+        "counted": true,
+        "scenariosFailed": 0,
+        "observed": [],
+        "ephemeral": [
+          {
+            "kind": "example-harness",
+            "source": "ephemeral",
+            "citation": "`<inline script> 2` imports the graded submission and runs it",
+            "locus": "transcript:<inline script> 2"
+          }
+        ],
+        "selfReported": [
+          {
+            "kind": "example-harness",
+            "source": "self-reported",
+            "citation": "s report. **Verification** — I wrote a local harness with a keyed effect ledger and call record mirroring the sp",
+            "locus": "transcript:30"
+          },
+          {
+            "kind": "synthetic-scenarios",
+            "source": "self-reported",
+            "citation": "cs, and ran the 3 visible examples plus 41 synthetic scenarios sweeping the declared dimensions (1/2/3/5 workers",
+            "locus": "transcript:30"
+          }
+        ],
+        "unshipped": [
+          "<inline script> 1",
+          "<inline script> 2"
+        ],
+        "harness": "phase14 streamed provider container",
+        "definedButUnused": [],
+        "extraFiles": [],
+        "hasSubmission": true,
+        "hasTranscript": true,
+        "strongestObserved": null,
+        "strongestEphemeral": "example-harness",
+        "strongestReported": "synthetic-scenarios",
+        "verdict": "ephemeral"
+      },
       "failedChecks": [],
-      "failureConcentration": null,
-      "scenarioResults": [],
-      "runtimeSeconds": null,
-      "costUsd": null,
-      "usage": null,
+      "failureConcentration": {
+        "targetFailed": 0,
+        "targetTotal": 18,
+        "controlFailed": 0,
+        "controlTotal": 6,
+        "balancedFailed": 0,
+        "balancedTotal": 12,
+        "concentratedFailed": 0,
+        "concentratedTotal": 24,
+        "broadUnrelatedSpread": false
+      },
+      "scenarioResults": [
+        {
+          "scenarioId": "recovery-11-w2-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w2-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w2-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w3-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w3-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w3-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w4-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w4-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w4-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w2-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w2-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w2-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w3-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w3-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w3-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w4-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w4-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w4-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w1-k4-after_tool",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w1-k6-after_tool",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w1-k12-after_tool",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w2-k4-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w3-k6-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w4-k12-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        }
+      ],
+      "runtimeSeconds": 104,
+      "costUsd": 0.48225149999999994,
+      "usage": {
+        "inputTokens": 187715,
+        "cachedInputTokens": 168491,
+        "outputTokens": 8192,
+        "costUsd": 0.48225149999999994,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
       "artifacts": {
-        "challenge": null,
-        "submission": null,
-        "transcript": null,
-        "metadata": null,
-        "verifierOutput": null,
-        "normalizedResult": null,
-        "countabilityDecision": null,
+        "challenge": "trials/dao-descendant/phase14-dao-descendant-seeded-recompute-anthropic/challenge",
+        "submission": "trials/dao-descendant/phase14-dao-descendant-seeded-recompute-anthropic/submission",
+        "transcript": "trials/dao-descendant/phase14-dao-descendant-seeded-recompute-anthropic/transcript.txt",
+        "metadata": "trials/dao-descendant/phase14-dao-descendant-seeded-recompute-anthropic/metadata.json",
+        "verifierOutput": "trials/dao-descendant/phase14-dao-descendant-seeded-recompute-anthropic/verifier-output.json",
+        "normalizedResult": "trials/dao-descendant/phase14-dao-descendant-seeded-recompute-anthropic/result.json",
+        "countabilityDecision": "trials/dao-descendant/phase14-dao-descendant-seeded-recompute-anthropic/countability.json",
         "workspace": null,
         "selfChecks": null,
+        "blindPacket": null,
         "blindLabels": []
       }
     },
@@ -105,31 +526,238 @@
       "primaryScenarios": 24,
       "secondaryScenarioProfile": "balanced-12",
       "secondaryScenarios": 12,
-      "state": "NOT_RUN",
-      "executionEligibility": "blocked-preflight",
+      "state": "COUNTED_SOLVE",
+      "executionEligibility": "attempted",
       "countability": {
-        "counts": false,
-        "reason": "not run: anthropic subject execution unavailable; anthropic blind labelling unavailable; provider-agent container execution is not integrated for both provider CLIs"
+        "counts": true,
+        "reason": "completed with 24 graded scenario(s), no refusal, timeout or infrastructure error"
       },
-      "reward": null,
+      "reward": 1,
       "capabilityAttributedFailure": null,
+      "labelDecision": {
+        "status": "not-required-clean",
+        "labelsReceived": 0,
+        "labels": [],
+        "readerFamilies": [],
+        "difficultyEvidence": false
+      },
       "selfCheckGreen": null,
+      "selfCheckProfile": {
+        "runId": "phase14-trading-reconciliation-recompute-seeded-recompute-openai",
+        "familyId": "trading-reconciliation-recompute",
+        "subjectId": "codex-gpt-5.6-sol",
+        "providerFamily": "openai",
+        "state": "counted",
+        "counted": true,
+        "scenariosFailed": 0,
+        "observed": [],
+        "ephemeral": [
+          {
+            "kind": "example-harness",
+            "source": "ephemeral",
+            "citation": "`<inline script> 1` imports the graded submission and runs it",
+            "locus": "transcript:<inline script> 1"
+          },
+          {
+            "kind": "example-harness",
+            "source": "ephemeral",
+            "citation": "`<inline script> 2` imports the graded submission and runs it",
+            "locus": "transcript:<inline script> 2"
+          }
+        ],
+        "selfReported": [],
+        "unshipped": [
+          "<inline script> 1",
+          "<inline script> 2"
+        ],
+        "harness": "phase14 streamed provider container",
+        "definedButUnused": [],
+        "extraFiles": [],
+        "hasSubmission": true,
+        "hasTranscript": true,
+        "strongestObserved": null,
+        "strongestEphemeral": "example-harness",
+        "strongestReported": null,
+        "verdict": "ephemeral"
+      },
       "failedChecks": [],
-      "failureConcentration": null,
-      "scenarioResults": [],
-      "runtimeSeconds": null,
+      "failureConcentration": {
+        "targetFailed": 0,
+        "targetTotal": 18,
+        "controlFailed": 0,
+        "controlTotal": 6,
+        "balancedFailed": 0,
+        "balancedTotal": 12,
+        "concentratedFailed": 0,
+        "concentratedTotal": 24,
+        "broadUnrelatedSpread": false
+      },
+      "scenarioResults": [
+        {
+          "scenarioId": "order-recovery-11-r2-o4-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-11-r2-o6-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-11-r2-o12-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-11-r3-o4-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-11-r3-o6-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-11-r3-o12-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-11-r4-o4-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-11-r4-o6-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-11-r4-o12-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-23-r2-o4-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-23-r2-o6-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-23-r2-o12-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-23-r3-o4-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-23-r3-o6-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-23-r3-o12-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-23-r4-o4-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-23-r4-o6-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-23-r4-o12-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-41-r1-o4-after_venue_accept",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-41-r1-o6-after_venue_accept",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-41-r1-o12-after_venue_accept",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-41-r2-o4-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-41-r3-o6-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-41-r4-o12-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        }
+      ],
+      "runtimeSeconds": 40,
       "costUsd": null,
-      "usage": null,
+      "usage": {
+        "inputTokens": 82030,
+        "cachedInputTokens": 68864,
+        "outputTokens": 1307,
+        "costUsd": null,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
       "artifacts": {
-        "challenge": null,
-        "submission": null,
-        "transcript": null,
-        "metadata": null,
-        "verifierOutput": null,
-        "normalizedResult": null,
-        "countabilityDecision": null,
+        "challenge": "trials/trading-reconciliation-recompute/phase14-trading-reconciliation-recompute-seeded-recompute-openai/challenge",
+        "submission": "trials/trading-reconciliation-recompute/phase14-trading-reconciliation-recompute-seeded-recompute-openai/submission",
+        "transcript": "trials/trading-reconciliation-recompute/phase14-trading-reconciliation-recompute-seeded-recompute-openai/transcript.txt",
+        "metadata": "trials/trading-reconciliation-recompute/phase14-trading-reconciliation-recompute-seeded-recompute-openai/metadata.json",
+        "verifierOutput": "trials/trading-reconciliation-recompute/phase14-trading-reconciliation-recompute-seeded-recompute-openai/verifier-output.json",
+        "normalizedResult": "trials/trading-reconciliation-recompute/phase14-trading-reconciliation-recompute-seeded-recompute-openai/result.json",
+        "countabilityDecision": "trials/trading-reconciliation-recompute/phase14-trading-reconciliation-recompute-seeded-recompute-openai/countability.json",
         "workspace": null,
         "selfChecks": null,
+        "blindPacket": null,
         "blindLabels": []
       }
     },
@@ -148,31 +776,239 @@
       "primaryScenarios": 24,
       "secondaryScenarioProfile": "balanced-12",
       "secondaryScenarios": 12,
-      "state": "NOT_RUN",
-      "executionEligibility": "blocked-preflight",
+      "state": "COUNTED_SOLVE",
+      "executionEligibility": "attempted",
       "countability": {
-        "counts": false,
-        "reason": "not run: anthropic subject execution unavailable; anthropic blind labelling unavailable; provider-agent container execution is not integrated for both provider CLIs"
+        "counts": true,
+        "reason": "completed with 24 graded scenario(s), no refusal, timeout or infrastructure error"
       },
-      "reward": null,
+      "reward": 1,
       "capabilityAttributedFailure": null,
+      "labelDecision": {
+        "status": "not-required-clean",
+        "labelsReceived": 0,
+        "labels": [],
+        "readerFamilies": [],
+        "difficultyEvidence": false
+      },
       "selfCheckGreen": null,
+      "selfCheckProfile": {
+        "runId": "phase14-trading-reconciliation-recompute-seeded-recompute-anthropic",
+        "familyId": "trading-reconciliation-recompute",
+        "subjectId": "claude-claude-opus-5",
+        "providerFamily": "anthropic",
+        "state": "counted",
+        "counted": true,
+        "scenariosFailed": 0,
+        "observed": [],
+        "ephemeral": [
+          {
+            "kind": "example-harness",
+            "source": "ephemeral",
+            "citation": "`<inline script> 2` imports the graded submission and runs it",
+            "locus": "transcript:<inline script> 2"
+          }
+        ],
+        "selfReported": [
+          {
+            "kind": "example-harness",
+            "source": "self-reported",
+            "citation": "ion and syntax-check Now let me build a local harness that mimics the graded ledgers and run the examples plus ad",
+            "locus": "transcript:9"
+          }
+        ],
+        "unshipped": [
+          "<inline script> 1",
+          "<inline script> 2"
+        ],
+        "harness": "phase14 streamed provider container",
+        "definedButUnused": [],
+        "extraFiles": [],
+        "hasSubmission": true,
+        "hasTranscript": true,
+        "strongestObserved": null,
+        "strongestEphemeral": "example-harness",
+        "strongestReported": "example-harness",
+        "verdict": "ephemeral"
+      },
       "failedChecks": [],
-      "failureConcentration": null,
-      "scenarioResults": [],
-      "runtimeSeconds": null,
-      "costUsd": null,
-      "usage": null,
+      "failureConcentration": {
+        "targetFailed": 0,
+        "targetTotal": 18,
+        "controlFailed": 0,
+        "controlTotal": 6,
+        "balancedFailed": 0,
+        "balancedTotal": 12,
+        "concentratedFailed": 0,
+        "concentratedTotal": 24,
+        "broadUnrelatedSpread": false
+      },
+      "scenarioResults": [
+        {
+          "scenarioId": "order-recovery-11-r2-o4-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-11-r2-o6-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-11-r2-o12-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-11-r3-o4-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-11-r3-o6-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-11-r3-o12-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-11-r4-o4-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-11-r4-o6-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-11-r4-o12-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-23-r2-o4-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-23-r2-o6-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-23-r2-o12-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-23-r3-o4-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-23-r3-o6-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-23-r3-o12-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-23-r4-o4-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-23-r4-o6-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-23-r4-o12-after_venue_accept",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-41-r1-o4-after_venue_accept",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-41-r1-o6-after_venue_accept",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-41-r1-o12-after_venue_accept",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-41-r2-o4-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-41-r3-o6-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "order-recovery-41-r4-o12-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        }
+      ],
+      "runtimeSeconds": 136,
+      "costUsd": 0.549681,
+      "usage": {
+        "inputTokens": 246880,
+        "cachedInputTokens": 228802,
+        "outputTokens": 10141,
+        "costUsd": 0.549681,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
       "artifacts": {
-        "challenge": null,
-        "submission": null,
-        "transcript": null,
-        "metadata": null,
-        "verifierOutput": null,
-        "normalizedResult": null,
-        "countabilityDecision": null,
+        "challenge": "trials/trading-reconciliation-recompute/phase14-trading-reconciliation-recompute-seeded-recompute-anthropic/challenge",
+        "submission": "trials/trading-reconciliation-recompute/phase14-trading-reconciliation-recompute-seeded-recompute-anthropic/submission",
+        "transcript": "trials/trading-reconciliation-recompute/phase14-trading-reconciliation-recompute-seeded-recompute-anthropic/transcript.txt",
+        "metadata": "trials/trading-reconciliation-recompute/phase14-trading-reconciliation-recompute-seeded-recompute-anthropic/metadata.json",
+        "verifierOutput": "trials/trading-reconciliation-recompute/phase14-trading-reconciliation-recompute-seeded-recompute-anthropic/verifier-output.json",
+        "normalizedResult": "trials/trading-reconciliation-recompute/phase14-trading-reconciliation-recompute-seeded-recompute-anthropic/result.json",
+        "countabilityDecision": "trials/trading-reconciliation-recompute/phase14-trading-reconciliation-recompute-seeded-recompute-anthropic/countability.json",
         "workspace": null,
         "selfChecks": null,
+        "blindPacket": null,
         "blindLabels": []
       }
     },
@@ -191,31 +1027,238 @@
       "primaryScenarios": 24,
       "secondaryScenarioProfile": "balanced-12",
       "secondaryScenarios": 12,
-      "state": "NOT_RUN",
-      "executionEligibility": "blocked-preflight",
+      "state": "COUNTED_SOLVE",
+      "executionEligibility": "attempted",
       "countability": {
-        "counts": false,
-        "reason": "not run: anthropic subject execution unavailable; anthropic blind labelling unavailable; provider-agent container execution is not integrated for both provider CLIs"
+        "counts": true,
+        "reason": "completed with 24 graded scenario(s), no refusal, timeout or infrastructure error"
       },
-      "reward": null,
+      "reward": 1,
       "capabilityAttributedFailure": null,
+      "labelDecision": {
+        "status": "not-required-clean",
+        "labelsReceived": 0,
+        "labels": [],
+        "readerFamilies": [],
+        "difficultyEvidence": false
+      },
       "selfCheckGreen": null,
+      "selfCheckProfile": {
+        "runId": "phase14-deployment-rollback-recompute-seeded-recompute-openai",
+        "familyId": "deployment-rollback-recompute",
+        "subjectId": "codex-gpt-5.6-sol",
+        "providerFamily": "openai",
+        "state": "counted",
+        "counted": true,
+        "scenariosFailed": 0,
+        "observed": [],
+        "ephemeral": [
+          {
+            "kind": "example-harness",
+            "source": "ephemeral",
+            "citation": "`<inline script> 1` imports the graded submission and runs it",
+            "locus": "transcript:<inline script> 1"
+          },
+          {
+            "kind": "example-harness",
+            "source": "ephemeral",
+            "citation": "`<inline script> 2` imports the graded submission and runs it",
+            "locus": "transcript:<inline script> 2"
+          }
+        ],
+        "selfReported": [],
+        "unshipped": [
+          "<inline script> 1",
+          "<inline script> 2"
+        ],
+        "harness": "phase14 streamed provider container",
+        "definedButUnused": [],
+        "extraFiles": [],
+        "hasSubmission": true,
+        "hasTranscript": true,
+        "strongestObserved": null,
+        "strongestEphemeral": "example-harness",
+        "strongestReported": null,
+        "verdict": "ephemeral"
+      },
       "failedChecks": [],
-      "failureConcentration": null,
-      "scenarioResults": [],
-      "runtimeSeconds": null,
+      "failureConcentration": {
+        "targetFailed": 0,
+        "targetTotal": 18,
+        "controlFailed": 0,
+        "controlTotal": 6,
+        "balancedFailed": 0,
+        "balancedTotal": 12,
+        "concentratedFailed": 0,
+        "concentratedTotal": 24,
+        "broadUnrelatedSpread": false
+      },
+      "scenarioResults": [
+        {
+          "scenarioId": "rollback-recovery-11-c2-e4-after_compensation",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-11-c2-e6-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-11-c2-e12-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-11-c3-e4-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-11-c3-e6-after_compensation",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-11-c3-e12-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-11-c4-e4-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-11-c4-e6-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-11-c4-e12-after_compensation",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-23-c2-e4-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-23-c2-e6-after_compensation",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-23-c2-e12-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-23-c3-e4-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-23-c3-e6-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-23-c3-e12-after_compensation",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-23-c4-e4-after_compensation",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-23-c4-e6-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-23-c4-e12-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-41-c1-e4-after_compensation",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-41-c1-e6-after_compensation",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-41-c1-e12-after_compensation",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-41-c2-e4-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-41-c3-e6-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-41-c4-e12-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        }
+      ],
+      "runtimeSeconds": 39,
       "costUsd": null,
-      "usage": null,
+      "usage": {
+        "inputTokens": 81524,
+        "cachedInputTokens": 73856,
+        "outputTokens": 1291,
+        "costUsd": null,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
       "artifacts": {
-        "challenge": null,
-        "submission": null,
-        "transcript": null,
-        "metadata": null,
-        "verifierOutput": null,
-        "normalizedResult": null,
-        "countabilityDecision": null,
+        "challenge": "trials/deployment-rollback-recompute/phase14-deployment-rollback-recompute-seeded-recompute-openai/challenge",
+        "submission": "trials/deployment-rollback-recompute/phase14-deployment-rollback-recompute-seeded-recompute-openai/submission",
+        "transcript": "trials/deployment-rollback-recompute/phase14-deployment-rollback-recompute-seeded-recompute-openai/transcript.txt",
+        "metadata": "trials/deployment-rollback-recompute/phase14-deployment-rollback-recompute-seeded-recompute-openai/metadata.json",
+        "verifierOutput": "trials/deployment-rollback-recompute/phase14-deployment-rollback-recompute-seeded-recompute-openai/verifier-output.json",
+        "normalizedResult": "trials/deployment-rollback-recompute/phase14-deployment-rollback-recompute-seeded-recompute-openai/result.json",
+        "countabilityDecision": "trials/deployment-rollback-recompute/phase14-deployment-rollback-recompute-seeded-recompute-openai/countability.json",
         "workspace": null,
         "selfChecks": null,
+        "blindPacket": null,
         "blindLabels": []
       }
     },
@@ -234,31 +1277,239 @@
       "primaryScenarios": 24,
       "secondaryScenarioProfile": "balanced-12",
       "secondaryScenarios": 12,
-      "state": "NOT_RUN",
-      "executionEligibility": "blocked-preflight",
+      "state": "COUNTED_SOLVE",
+      "executionEligibility": "attempted",
       "countability": {
-        "counts": false,
-        "reason": "not run: anthropic subject execution unavailable; anthropic blind labelling unavailable; provider-agent container execution is not integrated for both provider CLIs"
+        "counts": true,
+        "reason": "completed with 24 graded scenario(s), no refusal, timeout or infrastructure error"
       },
-      "reward": null,
+      "reward": 1,
       "capabilityAttributedFailure": null,
+      "labelDecision": {
+        "status": "not-required-clean",
+        "labelsReceived": 0,
+        "labels": [],
+        "readerFamilies": [],
+        "difficultyEvidence": false
+      },
       "selfCheckGreen": null,
+      "selfCheckProfile": {
+        "runId": "phase14-deployment-rollback-recompute-seeded-recompute-anthropic",
+        "familyId": "deployment-rollback-recompute",
+        "subjectId": "claude-claude-opus-5",
+        "providerFamily": "anthropic",
+        "state": "counted",
+        "counted": true,
+        "scenariosFailed": 0,
+        "observed": [],
+        "ephemeral": [
+          {
+            "kind": "example-harness",
+            "source": "ephemeral",
+            "citation": "`<inline script> 2` imports the graded submission and runs it",
+            "locus": "transcript:<inline script> 2"
+          }
+        ],
+        "selfReported": [
+          {
+            "kind": "example-harness",
+            "source": "self-reported",
+            "citation": "ite submission and check it loads Now a local harness mimicking the grader's ledgers: Run local verification harn",
+            "locus": "transcript:9"
+          }
+        ],
+        "unshipped": [
+          "<inline script> 1",
+          "<inline script> 2"
+        ],
+        "harness": "phase14 streamed provider container",
+        "definedButUnused": [],
+        "extraFiles": [],
+        "hasSubmission": true,
+        "hasTranscript": true,
+        "strongestObserved": null,
+        "strongestEphemeral": "example-harness",
+        "strongestReported": "example-harness",
+        "verdict": "ephemeral"
+      },
       "failedChecks": [],
-      "failureConcentration": null,
-      "scenarioResults": [],
-      "runtimeSeconds": null,
-      "costUsd": null,
-      "usage": null,
+      "failureConcentration": {
+        "targetFailed": 0,
+        "targetTotal": 18,
+        "controlFailed": 0,
+        "controlTotal": 6,
+        "balancedFailed": 0,
+        "balancedTotal": 12,
+        "concentratedFailed": 0,
+        "concentratedTotal": 24,
+        "broadUnrelatedSpread": false
+      },
+      "scenarioResults": [
+        {
+          "scenarioId": "rollback-recovery-11-c2-e4-after_compensation",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-11-c2-e6-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-11-c2-e12-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-11-c3-e4-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-11-c3-e6-after_compensation",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-11-c3-e12-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-11-c4-e4-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-11-c4-e6-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-11-c4-e12-after_compensation",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-23-c2-e4-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-23-c2-e6-after_compensation",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-23-c2-e12-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-23-c3-e4-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-23-c3-e6-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-23-c3-e12-after_compensation",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-23-c4-e4-after_compensation",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-23-c4-e6-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-23-c4-e12-after_compensation",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-41-c1-e4-after_compensation",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-41-c1-e6-after_compensation",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-41-c1-e12-after_compensation",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-41-c2-e4-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-41-c3-e6-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "rollback-recovery-41-c4-e12-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        }
+      ],
+      "runtimeSeconds": 114,
+      "costUsd": 0.4576735,
+      "usage": {
+        "inputTokens": 213853,
+        "cachedInputTokens": 198523,
+        "outputTokens": 8165,
+        "costUsd": 0.4576735,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
       "artifacts": {
-        "challenge": null,
-        "submission": null,
-        "transcript": null,
-        "metadata": null,
-        "verifierOutput": null,
-        "normalizedResult": null,
-        "countabilityDecision": null,
+        "challenge": "trials/deployment-rollback-recompute/phase14-deployment-rollback-recompute-seeded-recompute-anthropic/challenge",
+        "submission": "trials/deployment-rollback-recompute/phase14-deployment-rollback-recompute-seeded-recompute-anthropic/submission",
+        "transcript": "trials/deployment-rollback-recompute/phase14-deployment-rollback-recompute-seeded-recompute-anthropic/transcript.txt",
+        "metadata": "trials/deployment-rollback-recompute/phase14-deployment-rollback-recompute-seeded-recompute-anthropic/metadata.json",
+        "verifierOutput": "trials/deployment-rollback-recompute/phase14-deployment-rollback-recompute-seeded-recompute-anthropic/verifier-output.json",
+        "normalizedResult": "trials/deployment-rollback-recompute/phase14-deployment-rollback-recompute-seeded-recompute-anthropic/result.json",
+        "countabilityDecision": "trials/deployment-rollback-recompute/phase14-deployment-rollback-recompute-seeded-recompute-anthropic/countability.json",
         "workspace": null,
         "selfChecks": null,
+        "blindPacket": null,
         "blindLabels": []
       }
     },
@@ -277,31 +1528,238 @@
       "primaryScenarios": 24,
       "secondaryScenarioProfile": "balanced-12",
       "secondaryScenarios": 12,
-      "state": "NOT_RUN",
-      "executionEligibility": "blocked-preflight",
+      "state": "COUNTED_SOLVE",
+      "executionEligibility": "attempted",
       "countability": {
-        "counts": false,
-        "reason": "not run: anthropic subject execution unavailable; anthropic blind labelling unavailable; provider-agent container execution is not integrated for both provider CLIs"
+        "counts": true,
+        "reason": "completed with 24 graded scenario(s), no refusal, timeout or infrastructure error"
       },
-      "reward": null,
+      "reward": 1,
       "capabilityAttributedFailure": null,
+      "labelDecision": {
+        "status": "not-required-clean",
+        "labelsReceived": 0,
+        "labels": [],
+        "readerFamilies": [],
+        "difficultyEvidence": false
+      },
       "selfCheckGreen": null,
+      "selfCheckProfile": {
+        "runId": "phase14-dao-descendant-neutral-skeleton-openai",
+        "familyId": "dao-descendant",
+        "subjectId": "codex-gpt-5.6-sol",
+        "providerFamily": "openai",
+        "state": "counted",
+        "counted": true,
+        "scenariosFailed": 0,
+        "observed": [],
+        "ephemeral": [
+          {
+            "kind": "example-harness",
+            "source": "ephemeral",
+            "citation": "`<inline script> 1` imports the graded submission and runs it",
+            "locus": "transcript:<inline script> 1"
+          },
+          {
+            "kind": "example-harness",
+            "source": "ephemeral",
+            "citation": "`<inline script> 2` imports the graded submission and runs it",
+            "locus": "transcript:<inline script> 2"
+          }
+        ],
+        "selfReported": [],
+        "unshipped": [
+          "<inline script> 1",
+          "<inline script> 2"
+        ],
+        "harness": "phase14 streamed provider container",
+        "definedButUnused": [],
+        "extraFiles": [],
+        "hasSubmission": true,
+        "hasTranscript": true,
+        "strongestObserved": null,
+        "strongestEphemeral": "example-harness",
+        "strongestReported": null,
+        "verdict": "ephemeral"
+      },
       "failedChecks": [],
-      "failureConcentration": null,
-      "scenarioResults": [],
-      "runtimeSeconds": null,
+      "failureConcentration": {
+        "targetFailed": 0,
+        "targetTotal": 18,
+        "controlFailed": 0,
+        "controlTotal": 6,
+        "balancedFailed": 0,
+        "balancedTotal": 12,
+        "concentratedFailed": 0,
+        "concentratedTotal": 24,
+        "broadUnrelatedSpread": false
+      },
+      "scenarioResults": [
+        {
+          "scenarioId": "recovery-11-w2-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w2-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w2-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w3-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w3-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w3-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w4-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w4-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w4-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w2-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w2-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w2-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w3-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w3-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w3-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w4-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w4-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w4-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w1-k4-after_tool",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w1-k6-after_tool",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w1-k12-after_tool",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w2-k4-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w3-k6-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w4-k12-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        }
+      ],
+      "runtimeSeconds": 39,
       "costUsd": null,
-      "usage": null,
+      "usage": {
+        "inputTokens": 81113,
+        "cachedInputTokens": 73728,
+        "outputTokens": 1275,
+        "costUsd": null,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
       "artifacts": {
-        "challenge": null,
-        "submission": null,
-        "transcript": null,
-        "metadata": null,
-        "verifierOutput": null,
-        "normalizedResult": null,
-        "countabilityDecision": null,
+        "challenge": "trials/dao-descendant/phase14-dao-descendant-neutral-skeleton-openai/challenge",
+        "submission": "trials/dao-descendant/phase14-dao-descendant-neutral-skeleton-openai/submission",
+        "transcript": "trials/dao-descendant/phase14-dao-descendant-neutral-skeleton-openai/transcript.txt",
+        "metadata": "trials/dao-descendant/phase14-dao-descendant-neutral-skeleton-openai/metadata.json",
+        "verifierOutput": "trials/dao-descendant/phase14-dao-descendant-neutral-skeleton-openai/verifier-output.json",
+        "normalizedResult": "trials/dao-descendant/phase14-dao-descendant-neutral-skeleton-openai/result.json",
+        "countabilityDecision": "trials/dao-descendant/phase14-dao-descendant-neutral-skeleton-openai/countability.json",
         "workspace": null,
         "selfChecks": null,
+        "blindPacket": null,
         "blindLabels": []
       }
     },
@@ -320,31 +1778,245 @@
       "primaryScenarios": 24,
       "secondaryScenarioProfile": "balanced-12",
       "secondaryScenarios": 12,
-      "state": "NOT_RUN",
-      "executionEligibility": "blocked-preflight",
+      "state": "COUNTED_SOLVE",
+      "executionEligibility": "attempted",
       "countability": {
-        "counts": false,
-        "reason": "not run: anthropic subject execution unavailable; anthropic blind labelling unavailable; provider-agent container execution is not integrated for both provider CLIs"
+        "counts": true,
+        "reason": "completed with 24 graded scenario(s), no refusal, timeout or infrastructure error"
       },
-      "reward": null,
+      "reward": 1,
       "capabilityAttributedFailure": null,
+      "labelDecision": {
+        "status": "not-required-clean",
+        "labelsReceived": 0,
+        "labels": [],
+        "readerFamilies": [],
+        "difficultyEvidence": false
+      },
       "selfCheckGreen": null,
+      "selfCheckProfile": {
+        "runId": "phase14-dao-descendant-neutral-skeleton-anthropic",
+        "familyId": "dao-descendant",
+        "subjectId": "claude-claude-opus-5",
+        "providerFamily": "anthropic",
+        "state": "counted",
+        "counted": true,
+        "scenariosFailed": 0,
+        "observed": [],
+        "ephemeral": [
+          {
+            "kind": "example-harness",
+            "source": "ephemeral",
+            "citation": "`<inline script> 2` imports the graded submission and runs it",
+            "locus": "transcript:<inline script> 2"
+          }
+        ],
+        "selfReported": [
+          {
+            "kind": "example-harness",
+            "source": "self-reported",
+            "citation": "ite submission and check it loads Now a local harness modeling the graded ledgers, run over the examples plus mul",
+            "locus": "transcript:9"
+          },
+          {
+            "kind": "synthetic-scenarios",
+            "source": "self-reported",
+            "citation": "five rules over the three examples plus 54 synthetic scenarios across the declared dimensions (seed × 1/2/4 work",
+            "locus": "transcript:19"
+          }
+        ],
+        "unshipped": [
+          "<inline script> 1",
+          "<inline script> 2"
+        ],
+        "harness": "phase14 streamed provider container",
+        "definedButUnused": [],
+        "extraFiles": [],
+        "hasSubmission": true,
+        "hasTranscript": true,
+        "strongestObserved": null,
+        "strongestEphemeral": "example-harness",
+        "strongestReported": "synthetic-scenarios",
+        "verdict": "ephemeral"
+      },
       "failedChecks": [],
-      "failureConcentration": null,
-      "scenarioResults": [],
-      "runtimeSeconds": null,
-      "costUsd": null,
-      "usage": null,
+      "failureConcentration": {
+        "targetFailed": 0,
+        "targetTotal": 18,
+        "controlFailed": 0,
+        "controlTotal": 6,
+        "balancedFailed": 0,
+        "balancedTotal": 12,
+        "concentratedFailed": 0,
+        "concentratedTotal": 24,
+        "broadUnrelatedSpread": false
+      },
+      "scenarioResults": [
+        {
+          "scenarioId": "recovery-11-w2-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w2-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w2-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w3-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w3-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w3-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w4-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w4-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-11-w4-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w2-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w2-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w2-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w3-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w3-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w3-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w4-k4-after_tool",
+          "activation": "target",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w4-k6-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-23-w4-k12-after_tool",
+          "activation": "target",
+          "inBalanced12": false,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w1-k4-after_tool",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w1-k6-after_tool",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w1-k12-after_tool",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w2-k4-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w3-k6-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        },
+        {
+          "scenarioId": "recovery-41-w4-k12-none",
+          "activation": "control",
+          "inBalanced12": true,
+          "failed": []
+        }
+      ],
+      "runtimeSeconds": 132,
+      "costUsd": 0.5021525,
+      "usage": {
+        "inputTokens": 221847,
+        "cachedInputTokens": 207053,
+        "outputTokens": 9989,
+        "costUsd": 0.5021525,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
       "artifacts": {
-        "challenge": null,
-        "submission": null,
-        "transcript": null,
-        "metadata": null,
-        "verifierOutput": null,
-        "normalizedResult": null,
-        "countabilityDecision": null,
+        "challenge": "trials/dao-descendant/phase14-dao-descendant-neutral-skeleton-anthropic/challenge",
+        "submission": "trials/dao-descendant/phase14-dao-descendant-neutral-skeleton-anthropic/submission",
+        "transcript": "trials/dao-descendant/phase14-dao-descendant-neutral-skeleton-anthropic/transcript.txt",
+        "metadata": "trials/dao-descendant/phase14-dao-descendant-neutral-skeleton-anthropic/metadata.json",
+        "verifierOutput": "trials/dao-descendant/phase14-dao-descendant-neutral-skeleton-anthropic/verifier-output.json",
+        "normalizedResult": "trials/dao-descendant/phase14-dao-descendant-neutral-skeleton-anthropic/result.json",
+        "countabilityDecision": "trials/dao-descendant/phase14-dao-descendant-neutral-skeleton-anthropic/countability.json",
         "workspace": null,
         "selfChecks": null,
+        "blindPacket": null,
         "blindLabels": []
       }
     },
@@ -364,14 +2036,16 @@
       "secondaryScenarioProfile": "balanced-12",
       "secondaryScenarios": 12,
       "state": "NOT_RUN",
-      "executionEligibility": "blocked-preflight",
+      "executionEligibility": "stopped-by-rule",
       "countability": {
         "counts": false,
-        "reason": "not run: anthropic subject execution unavailable; anthropic blind labelling unavailable; provider-agent container execution is not integrated for both provider CLIs"
+        "reason": "not run: awaiting the frozen sequential rule"
       },
       "reward": null,
       "capabilityAttributedFailure": null,
+      "labelDecision": null,
       "selfCheckGreen": null,
+      "selfCheckProfile": null,
       "failedChecks": [],
       "failureConcentration": null,
       "scenarioResults": [],
@@ -388,6 +2062,7 @@
         "countabilityDecision": null,
         "workspace": null,
         "selfChecks": null,
+        "blindPacket": null,
         "blindLabels": []
       }
     },
@@ -407,14 +2082,16 @@
       "secondaryScenarioProfile": "balanced-12",
       "secondaryScenarios": 12,
       "state": "NOT_RUN",
-      "executionEligibility": "blocked-preflight",
+      "executionEligibility": "stopped-by-rule",
       "countability": {
         "counts": false,
-        "reason": "not run: anthropic subject execution unavailable; anthropic blind labelling unavailable; provider-agent container execution is not integrated for both provider CLIs"
+        "reason": "not run: awaiting the frozen sequential rule"
       },
       "reward": null,
       "capabilityAttributedFailure": null,
+      "labelDecision": null,
       "selfCheckGreen": null,
+      "selfCheckProfile": null,
       "failedChecks": [],
       "failureConcentration": null,
       "scenarioResults": [],
@@ -431,6 +2108,7 @@
         "countabilityDecision": null,
         "workspace": null,
         "selfChecks": null,
+        "blindPacket": null,
         "blindLabels": []
       }
     },
@@ -450,14 +2128,16 @@
       "secondaryScenarioProfile": "balanced-12",
       "secondaryScenarios": 12,
       "state": "NOT_RUN",
-      "executionEligibility": "blocked-preflight",
+      "executionEligibility": "stopped-by-rule",
       "countability": {
         "counts": false,
-        "reason": "not run: anthropic subject execution unavailable; anthropic blind labelling unavailable; provider-agent container execution is not integrated for both provider CLIs"
+        "reason": "not run: awaiting the frozen sequential rule"
       },
       "reward": null,
       "capabilityAttributedFailure": null,
+      "labelDecision": null,
       "selfCheckGreen": null,
+      "selfCheckProfile": null,
       "failedChecks": [],
       "failureConcentration": null,
       "scenarioResults": [],
@@ -474,6 +2154,7 @@
         "countabilityDecision": null,
         "workspace": null,
         "selfChecks": null,
+        "blindPacket": null,
         "blindLabels": []
       }
     },
@@ -493,14 +2174,16 @@
       "secondaryScenarioProfile": "balanced-12",
       "secondaryScenarios": 12,
       "state": "NOT_RUN",
-      "executionEligibility": "blocked-preflight",
+      "executionEligibility": "stopped-by-rule",
       "countability": {
         "counts": false,
-        "reason": "not run: anthropic subject execution unavailable; anthropic blind labelling unavailable; provider-agent container execution is not integrated for both provider CLIs"
+        "reason": "not run: awaiting the frozen sequential rule"
       },
       "reward": null,
       "capabilityAttributedFailure": null,
+      "labelDecision": null,
       "selfCheckGreen": null,
+      "selfCheckProfile": null,
       "failedChecks": [],
       "failureConcentration": null,
       "scenarioResults": [],
@@ -517,6 +2200,7 @@
         "countabilityDecision": null,
         "workspace": null,
         "selfChecks": null,
+        "blindPacket": null,
         "blindLabels": []
       }
     }
@@ -616,38 +2300,495 @@
     {
       "estimandId": "E1-family",
       "category": "family",
-      "status": "not-estimable",
-      "independentAttempts": 0,
-      "exactInterval": null,
-      "estimate": null,
-      "reason": "No independent agent attempt ran in any family stratum."
+      "status": "measured-descriptive",
+      "independentAttempts": 8,
+      "exactInterval": {
+        "successes": 0,
+        "trials": 8,
+        "confidence": 0.95,
+        "estimate": 0,
+        "lower": 0,
+        "upper": 0.3694166475528192,
+        "method": "Clopper-Pearson exact"
+      },
+      "estimate": 0,
+      "detail": {
+        "successes": 0,
+        "trials": 8,
+        "capabilityFailures": 0,
+        "capabilityFailureRate": 0,
+        "capabilityExactInterval": {
+          "successes": 0,
+          "trials": 8,
+          "confidence": 0.95,
+          "estimate": 0,
+          "lower": 0,
+          "upper": 0.3694166475528192,
+          "method": "Clopper-Pearson exact"
+        },
+        "byFamily": [
+          {
+            "familyId": "dao-descendant",
+            "attempts": 4,
+            "rewardZero": 0,
+            "rewardZeroRate": 0,
+            "rewardZeroExactInterval": {
+              "successes": 0,
+              "trials": 4,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.6023646356164745,
+              "method": "Clopper-Pearson exact"
+            },
+            "capabilityFailures": 0,
+            "capabilityFailureRate": 0,
+            "capabilityExactInterval": {
+              "successes": 0,
+              "trials": 4,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.6023646356164745,
+              "method": "Clopper-Pearson exact"
+            }
+          },
+          {
+            "familyId": "trading-reconciliation-recompute",
+            "attempts": 2,
+            "rewardZero": 0,
+            "rewardZeroRate": 0,
+            "rewardZeroExactInterval": {
+              "successes": 0,
+              "trials": 2,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.841886116991581,
+              "method": "Clopper-Pearson exact"
+            },
+            "capabilityFailures": 0,
+            "capabilityFailureRate": 0,
+            "capabilityExactInterval": {
+              "successes": 0,
+              "trials": 2,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.841886116991581,
+              "method": "Clopper-Pearson exact"
+            }
+          },
+          {
+            "familyId": "deployment-rollback-recompute",
+            "attempts": 2,
+            "rewardZero": 0,
+            "rewardZeroRate": 0,
+            "rewardZeroExactInterval": {
+              "successes": 0,
+              "trials": 2,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.841886116991581,
+              "method": "Clopper-Pearson exact"
+            },
+            "capabilityFailures": 0,
+            "capabilityFailureRate": 0,
+            "capabilityExactInterval": {
+              "successes": 0,
+              "trials": 2,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.841886116991581,
+              "method": "Clopper-Pearson exact"
+            }
+          }
+        ],
+        "observedStrata": [
+          {
+            "familyId": "dao-descendant",
+            "starterProfile": "seeded-recompute",
+            "providerFamily": "openai",
+            "attempts": 1,
+            "rewardZero": 0,
+            "rewardZeroExactInterval": {
+              "successes": 0,
+              "trials": 1,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.9749999999999999,
+              "method": "Clopper-Pearson exact"
+            },
+            "capabilityFailures": 0,
+            "capabilityExactInterval": {
+              "successes": 0,
+              "trials": 1,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.9749999999999999,
+              "method": "Clopper-Pearson exact"
+            }
+          },
+          {
+            "familyId": "dao-descendant",
+            "starterProfile": "seeded-recompute",
+            "providerFamily": "anthropic",
+            "attempts": 1,
+            "rewardZero": 0,
+            "rewardZeroExactInterval": {
+              "successes": 0,
+              "trials": 1,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.9749999999999999,
+              "method": "Clopper-Pearson exact"
+            },
+            "capabilityFailures": 0,
+            "capabilityExactInterval": {
+              "successes": 0,
+              "trials": 1,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.9749999999999999,
+              "method": "Clopper-Pearson exact"
+            }
+          },
+          {
+            "familyId": "dao-descendant",
+            "starterProfile": "neutral-skeleton",
+            "providerFamily": "openai",
+            "attempts": 1,
+            "rewardZero": 0,
+            "rewardZeroExactInterval": {
+              "successes": 0,
+              "trials": 1,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.9749999999999999,
+              "method": "Clopper-Pearson exact"
+            },
+            "capabilityFailures": 0,
+            "capabilityExactInterval": {
+              "successes": 0,
+              "trials": 1,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.9749999999999999,
+              "method": "Clopper-Pearson exact"
+            }
+          },
+          {
+            "familyId": "dao-descendant",
+            "starterProfile": "neutral-skeleton",
+            "providerFamily": "anthropic",
+            "attempts": 1,
+            "rewardZero": 0,
+            "rewardZeroExactInterval": {
+              "successes": 0,
+              "trials": 1,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.9749999999999999,
+              "method": "Clopper-Pearson exact"
+            },
+            "capabilityFailures": 0,
+            "capabilityExactInterval": {
+              "successes": 0,
+              "trials": 1,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.9749999999999999,
+              "method": "Clopper-Pearson exact"
+            }
+          },
+          {
+            "familyId": "trading-reconciliation-recompute",
+            "starterProfile": "seeded-recompute",
+            "providerFamily": "openai",
+            "attempts": 1,
+            "rewardZero": 0,
+            "rewardZeroExactInterval": {
+              "successes": 0,
+              "trials": 1,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.9749999999999999,
+              "method": "Clopper-Pearson exact"
+            },
+            "capabilityFailures": 0,
+            "capabilityExactInterval": {
+              "successes": 0,
+              "trials": 1,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.9749999999999999,
+              "method": "Clopper-Pearson exact"
+            }
+          },
+          {
+            "familyId": "trading-reconciliation-recompute",
+            "starterProfile": "seeded-recompute",
+            "providerFamily": "anthropic",
+            "attempts": 1,
+            "rewardZero": 0,
+            "rewardZeroExactInterval": {
+              "successes": 0,
+              "trials": 1,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.9749999999999999,
+              "method": "Clopper-Pearson exact"
+            },
+            "capabilityFailures": 0,
+            "capabilityExactInterval": {
+              "successes": 0,
+              "trials": 1,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.9749999999999999,
+              "method": "Clopper-Pearson exact"
+            }
+          },
+          {
+            "familyId": "trading-reconciliation-recompute",
+            "starterProfile": "neutral-skeleton",
+            "providerFamily": "openai",
+            "attempts": 0,
+            "rewardZero": 0,
+            "rewardZeroExactInterval": null,
+            "capabilityFailures": 0,
+            "capabilityExactInterval": null
+          },
+          {
+            "familyId": "trading-reconciliation-recompute",
+            "starterProfile": "neutral-skeleton",
+            "providerFamily": "anthropic",
+            "attempts": 0,
+            "rewardZero": 0,
+            "rewardZeroExactInterval": null,
+            "capabilityFailures": 0,
+            "capabilityExactInterval": null
+          },
+          {
+            "familyId": "deployment-rollback-recompute",
+            "starterProfile": "seeded-recompute",
+            "providerFamily": "openai",
+            "attempts": 1,
+            "rewardZero": 0,
+            "rewardZeroExactInterval": {
+              "successes": 0,
+              "trials": 1,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.9749999999999999,
+              "method": "Clopper-Pearson exact"
+            },
+            "capabilityFailures": 0,
+            "capabilityExactInterval": {
+              "successes": 0,
+              "trials": 1,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.9749999999999999,
+              "method": "Clopper-Pearson exact"
+            }
+          },
+          {
+            "familyId": "deployment-rollback-recompute",
+            "starterProfile": "seeded-recompute",
+            "providerFamily": "anthropic",
+            "attempts": 1,
+            "rewardZero": 0,
+            "rewardZeroExactInterval": {
+              "successes": 0,
+              "trials": 1,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.9749999999999999,
+              "method": "Clopper-Pearson exact"
+            },
+            "capabilityFailures": 0,
+            "capabilityExactInterval": {
+              "successes": 0,
+              "trials": 1,
+              "confidence": 0.95,
+              "estimate": 0,
+              "lower": 0,
+              "upper": 0.9749999999999999,
+              "method": "Clopper-Pearson exact"
+            }
+          },
+          {
+            "familyId": "deployment-rollback-recompute",
+            "starterProfile": "neutral-skeleton",
+            "providerFamily": "openai",
+            "attempts": 0,
+            "rewardZero": 0,
+            "rewardZeroExactInterval": null,
+            "capabilityFailures": 0,
+            "capabilityExactInterval": null
+          },
+          {
+            "familyId": "deployment-rollback-recompute",
+            "starterProfile": "neutral-skeleton",
+            "providerFamily": "anthropic",
+            "attempts": 0,
+            "rewardZero": 0,
+            "rewardZeroExactInterval": null,
+            "capabilityFailures": 0,
+            "capabilityExactInterval": null
+          }
+        ]
+      },
+      "reason": "Raw reward-zero association across observed family strata; root-cause attribution is reported separately."
     },
     {
       "estimandId": "E2-starter",
       "category": "genuine-difficulty",
-      "status": "not-estimable",
-      "independentAttempts": 0,
+      "status": "measured-descriptive",
+      "independentAttempts": 4,
       "exactInterval": null,
-      "estimate": null,
-      "reason": "No matched seeded-versus-neutral attempt pair ran."
+      "estimate": 0,
+      "detail": {
+        "matchedContrasts": [
+          {
+            "familyId": "dao-descendant",
+            "providerFamily": "openai",
+            "seededReward": 1,
+            "neutralReward": 1
+          },
+          {
+            "familyId": "dao-descendant",
+            "providerFamily": "anthropic",
+            "seededReward": 1,
+            "neutralReward": 1
+          }
+        ]
+      },
+      "reason": "Matched neutral-minus-seeded failure contrast. One stochastic attempt per cell limits causal precision."
     },
     {
       "estimandId": "E3-activation",
       "category": "genuine-difficulty",
-      "status": "not-estimable",
-      "independentAttempts": 0,
+      "status": "measured-descriptive",
+      "independentAttempts": 8,
       "exactInterval": null,
-      "estimate": null,
-      "reason": "No agent artifact exists to compare activated targets with nonactivation controls."
+      "estimate": 0,
+      "detail": {
+        "pairedClusterContrasts": [
+          {
+            "attemptId": "phase14-dao-descendant-seeded-recompute-openai",
+            "targetFailureFraction": 0,
+            "controlFailureFraction": 0
+          },
+          {
+            "attemptId": "phase14-dao-descendant-seeded-recompute-anthropic",
+            "targetFailureFraction": 0,
+            "controlFailureFraction": 0
+          },
+          {
+            "attemptId": "phase14-trading-reconciliation-recompute-seeded-recompute-openai",
+            "targetFailureFraction": 0,
+            "controlFailureFraction": 0
+          },
+          {
+            "attemptId": "phase14-trading-reconciliation-recompute-seeded-recompute-anthropic",
+            "targetFailureFraction": 0,
+            "controlFailureFraction": 0
+          },
+          {
+            "attemptId": "phase14-deployment-rollback-recompute-seeded-recompute-openai",
+            "targetFailureFraction": 0,
+            "controlFailureFraction": 0
+          },
+          {
+            "attemptId": "phase14-deployment-rollback-recompute-seeded-recompute-anthropic",
+            "targetFailureFraction": 0,
+            "controlFailureFraction": 0
+          },
+          {
+            "attemptId": "phase14-dao-descendant-neutral-skeleton-openai",
+            "targetFailureFraction": 0,
+            "controlFailureFraction": 0
+          },
+          {
+            "attemptId": "phase14-dao-descendant-neutral-skeleton-anthropic",
+            "targetFailureFraction": 0,
+            "controlFailureFraction": 0
+          }
+        ]
+      },
+      "reason": "Paired within-artifact target minus control failure fraction; scenario rows are not independent trials and receive no binomial interval."
     },
     {
       "estimandId": "E4-selection",
       "category": "selection-coverage",
-      "status": "not-estimable",
-      "independentAttempts": 0,
+      "status": "measured-descriptive",
+      "independentAttempts": 8,
       "exactInterval": null,
-      "estimate": null,
-      "reason": "No agent verifier output exists to rescore under both frozen scenario profiles."
+      "estimate": 0,
+      "detail": {
+        "pairedRescores": [
+          {
+            "attemptId": "phase14-dao-descendant-seeded-recompute-openai",
+            "concentratedReward": 1,
+            "balancedReward": 1
+          },
+          {
+            "attemptId": "phase14-dao-descendant-seeded-recompute-anthropic",
+            "concentratedReward": 1,
+            "balancedReward": 1
+          },
+          {
+            "attemptId": "phase14-trading-reconciliation-recompute-seeded-recompute-openai",
+            "concentratedReward": 1,
+            "balancedReward": 1
+          },
+          {
+            "attemptId": "phase14-trading-reconciliation-recompute-seeded-recompute-anthropic",
+            "concentratedReward": 1,
+            "balancedReward": 1
+          },
+          {
+            "attemptId": "phase14-deployment-rollback-recompute-seeded-recompute-openai",
+            "concentratedReward": 1,
+            "balancedReward": 1
+          },
+          {
+            "attemptId": "phase14-deployment-rollback-recompute-seeded-recompute-anthropic",
+            "concentratedReward": 1,
+            "balancedReward": 1
+          },
+          {
+            "attemptId": "phase14-dao-descendant-neutral-skeleton-openai",
+            "concentratedReward": 1,
+            "balancedReward": 1
+          },
+          {
+            "attemptId": "phase14-dao-descendant-neutral-skeleton-anthropic",
+            "concentratedReward": 1,
+            "balancedReward": 1
+          }
+        ]
+      },
+      "reason": "Deterministic concentrated-minus-balanced scenario-failure fraction on the same artifact; a coverage effect, not an agent-behavior effect."
     },
     {
       "estimandId": "E5-family-by-starter",
@@ -656,30 +2797,49 @@
       "independentAttempts": 0,
       "exactInterval": null,
       "estimate": null,
-      "reason": "No family contains a matched starter contrast."
+      "detail": null,
+      "reason": "All six family/provider matched starter pairs are required."
     },
     {
       "estimandId": "E6-family-by-activation",
       "category": "genuine-difficulty",
-      "status": "not-estimable",
-      "independentAttempts": 0,
+      "status": "measured-descriptive",
+      "independentAttempts": 8,
       "exactInterval": null,
       "estimate": null,
-      "reason": "No within-artifact activation contrast exists for an agent attempt."
+      "detail": {
+        "byFamily": [
+          {
+            "familyId": "dao-descendant",
+            "meanTargetMinusControl": 0
+          },
+          {
+            "familyId": "trading-reconciliation-recompute",
+            "meanTargetMinusControl": 0
+          },
+          {
+            "familyId": "deployment-rollback-recompute",
+            "meanTargetMinusControl": 0
+          }
+        ]
+      },
+      "reason": "Within-artifact activation contrast split by family; descriptive, not an independent scenario model."
     }
   ],
   "measuredOperatorRanking": [],
   "model": {
     "exactIntervals": "Clopper-Pearson exact at independent-attempt level",
     "hierarchicalFit": "not-fit",
-    "reason": "Zero observations cannot estimate an effect. Even the registered maximum n=12 has one attempt per family, starter and provider cell, so stable hierarchical variance components would be unidentifiable and prior-dominated."
+    "reason": "The registered maximum has one stochastic attempt per family x starter x provider cell. Stable hierarchical variance components would be unidentifiable and prior-dominated, so raw cells and stratified descriptive contrasts are reported instead."
   },
   "corrections": [
     "Phase 13's 24 scenario rows are one submission cluster, not 24 independent agent trials.",
     "The frozen 24-scenario suite has no U0C0 row. Activation is therefore a paired target-versus-nonactivation description, not the local Phase 13 2x2 agent design.",
     "The starter contrast changes starter code and the README row that accurately describes it; it is a registered package-profile effect, not a pure one-line code effect.",
-    "Existing Phase 13 campaigns declare subprocess isolation. They do not satisfy Phase 14's container prerequisite.",
-    "The generic container command defaults to an image without either provider CLI. Docker availability and artifact isolation do not establish provider-agent container execution.",
-    "The existing one-sidecar root-cause format cannot establish two-reader agreement. Phase 14 added a distinct cross-provider blind-label contract and B6 controls."
+    "Phase 13 campaigns used subprocess grading. Phase 14 executes provider agents in pinned containers and re-runs submitted modules in separate no-network containers before host-owned verification.",
+    "Codex reports token usage but no dollar price. Its measured cost stays null and is counted as unpriced, never converted with a rate literal.",
+    "A self-check is not marked green from model prose. The field remains null unless a machine-readable result survives capture.",
+    "A cross-provider starter contrast measured at zero is retained as a measured null result and is not promoted into the demonstrated-operator ranking.",
+    "Phase 12 made recipe profiles first-class in shape and evolution data but not in challenge-hash evidence lifecycle. The first neutral trial exposed the gap; registered variants now remain visible and are excluded from canonical family banks without being misclassified as package migrations."
   ]
 }
