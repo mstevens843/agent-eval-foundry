@@ -111,6 +111,7 @@ export type {
   OperatorConfidence,
   SolveRateEffect,
 } from "./foundry/hardness-ledger.js";
+export { renderHardnessOperatorLedger } from "./reports/phase-12-foundation.js";
 export {
   EVIDENCE_COSTS,
   FUNNEL_DECISIONS,
@@ -842,6 +843,55 @@ export type {
 } from "./phase-14/preflight.js";
 export { exactBinomialInterval } from "./phase-14/statistics.js";
 export type { ExactBinomialInterval } from "./phase-14/statistics.js";
+export {
+  PHASE15_PREREGISTRATION_SHA256,
+  PHASE15_READER_REVIEWS_SHA256,
+  PHASE15_SOURCE_ADAPTERS,
+  PHASE15_SOURCE_CORPUS_SHA256,
+  auditPhase15Source,
+  loadPhase15Preregistration,
+  loadPhase15ReaderReviews,
+  loadPhase15SourceCorpus,
+  phase15Json,
+  phase15Sha256,
+} from "./phase-15/corpus.js";
+export type { EvidenceSourceAdapter } from "./phase-15/corpus.js";
+export {
+  phase15CandidateQueueArtifact,
+  phase15ComparisonArtifact,
+  phase15CorrectionsArtifact,
+  phase15ProbeResultsArtifact,
+  phase15ProvenanceArtifact,
+  phase15ReaderPacketsArtifact,
+  runPhase15Discovery,
+} from "./phase-15/discovery.js";
+export {
+  runLayeredContractProbe,
+  runPhase15Probe,
+  runRegexComplexityProbe,
+} from "./phase-15/probes.js";
+export type {
+  AdapterAudit,
+  CandidateReaderDecision,
+  DiscoveryChannel,
+  DiscoveryMethodComparison,
+  OperatorAssessment,
+  OperatorEffectStatus,
+  Phase15Candidate,
+  Phase15DiscoveryRun,
+  Phase15Preregistration,
+  Phase15ProbeResult,
+  Phase15ProvenanceRecord,
+  Phase15ReaderPacket,
+  Phase15ReaderReview,
+  Phase15ReaderReviewLedger,
+  Phase15SourceCorpus,
+  ReaderDimensionVerdict,
+  SourceAdapterId,
+  SourceCorpusRow,
+  SourceRole,
+} from "./phase-15/types.js";
+export { renderPhase15DiscoveryEngine } from "./reports/phase-15-discovery-engine.js";
 export { gradePhase14ContainerSubmission } from "./trials/router.js";
 export { runJsonContainerHost } from "./trials/runners.js";
 export {

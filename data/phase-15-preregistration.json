@@ -1,0 +1,153 @@
+{
+  "schema": "agent-eval-foundry/phase-15-discovery-preregistration@1",
+  "phase": 15,
+  "registeredAt": "2026-09-04T00:00:00-07:00",
+  "baselineCommit": "523ba07",
+  "purpose": "Prospectively measure whether provenance-first evidence mining can produce novel benchmark candidates that survive independent reading and a falsifiable local probe.",
+  "immutability": {
+    "rule": "This file is an input, never generated from Phase 15 outcomes. Any content change voids the prospective run and requires a new registration and run id.",
+    "runId": "phase15-bounded-corpus-v1"
+  },
+  "channelsImplemented": [
+    "benchmark-trajectory-solve-patch",
+    "verifier-repair-bypass",
+    "agent-self-check-failure",
+    "known-hard-benchmark",
+    "authoritative-incident-upstream-fix",
+    "boundary-first-system-inspection"
+  ],
+  "sourceCorpus": [
+    {
+      "sourceUnitId": "outbox-verifier-repairs",
+      "role": "retrospective-calibration-excluded-from-yield",
+      "channel": "verifier-repair-bypass",
+      "locator": "/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task/FINDINGS.md#6",
+      "extractionLimit": 1
+    },
+    {
+      "sourceUnitId": "outbox-self-check-trajectories",
+      "role": "retrospective-calibration-excluded-from-yield",
+      "channel": "agent-self-check-failure",
+      "locator": "/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task/results/34",
+      "extractionLimit": 1
+    },
+    {
+      "sourceUnitId": "live-dom-counted-failure",
+      "role": "prospective",
+      "channel": "benchmark-trajectory-solve-patch",
+      "locator": "trials/ui-replay-live-dom/live-dom-2026-08-o2",
+      "extractionLimit": 1
+    },
+    {
+      "sourceUnitId": "checker-required-counted-failure",
+      "role": "prospective",
+      "channel": "agent-self-check-failure",
+      "locator": "trials/checker-required-memory-poisoning/checker-required-2026-08-o1",
+      "extractionLimit": 1
+    },
+    {
+      "sourceUnitId": "terminal-bench-rs-archive-clone",
+      "role": "prospective",
+      "channel": "known-hard-benchmark",
+      "locator": "official Terminal-Bench repository task rs-archive-clone; resolve and preserve an immutable upstream revision after registration",
+      "extractionLimit": 1
+    },
+    {
+      "sourceUnitId": "cloudflare-2019-regex-outage",
+      "role": "prospective",
+      "channel": "authoritative-incident-upstream-fix",
+      "locator": "Cloudflare's official postmortem Details of the Cloudflare outage on July 2, 2019",
+      "extractionLimit": 1
+    }
+  ],
+  "comparators": [
+    {
+      "method": "transfer-based-discovery",
+      "evidence": [
+        "data/phase-13-activation-results.json",
+        "data/phase-14-effect-ledger.json"
+      ],
+      "rule": "Count Phase 13/14 systems and candidates, but do not convert local mutant transfer into prospective discovery or agent difficulty."
+    },
+    {
+      "method": "boundary-first-search",
+      "evidence": [
+        "data/phase-11-preregistration.json",
+        "data/phase-11-results.json"
+      ],
+      "rule": "Reuse the one completed registered search; do not rerun it until this comparison is scored."
+    },
+    {
+      "method": "author-generation",
+      "evidence": [
+        "data/phase-10-lane-c.json",
+        "data/row-five-candidates.json"
+      ],
+      "rule": "Count the five independently read candidates once; aliases and revisions do not create new candidates."
+    }
+  ],
+  "limits": {
+    "sourceUnits": 6,
+    "prospectiveSourceUnits": 4,
+    "patternsPerSourceUnit": 1,
+    "prospectiveCandidateDrafts": 4,
+    "readerReviews": 8,
+    "readerReviewsPerCandidate": 2,
+    "cheapProbes": 2,
+    "modelReadBudgetUsd": 25,
+    "paidSubjectTrials": 0,
+    "engineerHours": 5
+  },
+  "predictions": {
+    "patternsExtractedFromProspectiveSources": 4,
+    "candidateDrafts": 3,
+    "unanimousReaderSurvivors": 1,
+    "probeSurvivors": 1,
+    "note": "The checker-required failure is predicted to yield a validity lesson rather than an eligible difficulty candidate."
+  },
+  "readerProtocol": {
+    "threshold": "2-of-2 independent readers",
+    "blindedTo": [
+      "author rationale",
+      "engine score",
+      "other reader verdict",
+      "predicted survivor count"
+    ],
+    "requiredPassDimensions": [
+      "source support",
+      "fairness",
+      "natural task contract",
+      "structural witness isolation",
+      "semantic novelty",
+      "cheap-probe falsifiability"
+    ],
+    "use": "Screening only. Same-provider agreement, if necessary, is not cross-provider root-cause attribution or capability evidence."
+  },
+  "noveltyStandard": {
+    "required": "A candidate must differ from existing foundry families in causal failure axis and subject action contract; a new domain noun, renamed state, or copied recompute mechanism is not novel.",
+    "breadth": "Report domain breadth and failure-axis breadth separately.",
+    "deduplication": "Canonicalize by source incident, affected layer, authority boundary, causal mechanism and subject action contract. One source incident can promote at most one canonical candidate."
+  },
+  "promotionCriteria": [
+    "source provenance is immutable or content-addressed",
+    "the observed failure is countable benchmark evidence or an authoritative primary-source failure",
+    "the candidate has no known A1, A3, A4 or fragile-A2 specification defect",
+    "two independent blinded readers pass every required dimension",
+    "the same-invocation B6 probe passes a known-good control, rejects a known-bad control and refuses malformed input",
+    "the probe demonstrates mechanism activation and the proposed witness is not available through the subject interface",
+    "the candidate is semantically novel under the registered standard"
+  ],
+  "rankingPolicy": {
+    "phase14Evidence": "Only measured Phase 14 effects may change ranking. Phase 14 measured no positive operator effect; therefore no operator receives a positive difficulty prior.",
+    "nullEffect": "The recompute starter, activation and selection contrasts receive zero measured uplift, not a positive transfer score.",
+    "hypotheses": "All operators without agent-effect evidence remain explicitly labelled hypotheses.",
+    "retrospectiveOutbox": "Outbox evidence may calibrate extraction and operators but cannot count toward prospective candidate or discovery yield."
+  },
+  "stoppingRules": [
+    "Do not review a pattern that is ineligible or semantically deduplicated before candidate drafting.",
+    "Do not probe a candidate without unanimous reader survival.",
+    "Stop after two probes even if more candidates survive reading.",
+    "A failed known-good, known-bad or malformed-input B6 control voids the entire probe invocation.",
+    "Zero survivors is a valid measured result and must be reported without replacement sources."
+  ]
+}

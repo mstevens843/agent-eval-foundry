@@ -1,0 +1,30 @@
+{
+  "schema": "agent-eval-foundry/source-evidence-snapshot@1",
+  "sourceUnitId": "cloudflare-2019-regex-outage",
+  "capturedAt": "2026-09-04",
+  "source": {
+    "publisher": "Cloudflare",
+    "title": "Details of the Cloudflare outage on July 2, 2019",
+    "url": "https://blog.cloudflare.com/details-of-the-cloudflare-outage-on-july-2-2019/",
+    "published": "2019-07-12"
+  },
+  "auditedFacts": [
+    {
+      "fact": "A WAF rule containing a catastrophic-backtracking regular expression exhausted CPUs serving HTTP and HTTPS traffic globally.",
+      "location": "postmortem sections describing the cause and CPU saturation"
+    },
+    {
+      "fact": "The emergency rollback restored service after a 27-minute global outage.",
+      "location": "postmortem summary and timeline"
+    },
+    {
+      "fact": "Functional WAF tests covered blocking behavior but did not measure the rule's CPU cost under adversarial input.",
+      "location": "postmortem discussion of testing gaps"
+    },
+    {
+      "fact": "Rapid global rule deployment amplified a locally introduced defect, and the postmortem enumerates eleven contributing conditions.",
+      "location": "postmortem deployment-process and contributing-factors sections"
+    }
+  ],
+  "claimBoundary": "This snapshot establishes a real semantic-correctness-versus-resource-complexity failure and its testing blind spot. It does not establish benchmark difficulty, candidate fairness, or agent failure."
+}

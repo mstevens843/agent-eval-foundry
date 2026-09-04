@@ -1,0 +1,19 @@
+{
+  "schema": "agent-eval-foundry/phase-15-corrections@1",
+  "runId": "phase15-bounded-corpus-v1",
+  "sourceCorpusSha256": "c69a96d399e5e1dc0852168039e2225b034975b08e6368e65f7eded65b32f1eb",
+  "readerReviewsSha256": "79365fdde531602a5a148884ee77c407a220bde4443cbbfd0fb73bf40e948c19",
+  "corrections": [
+    "The Phase 15 preregistration used the source-repo shorthand results/34; the audited artifact is results/34-cc267-standard-matrix.md, pinned in the source corpus without changing the registration.",
+    "TASK-FAMILY-MODEL.md simultaneously called the outbox ACKED rule hidden-only and already visible. The corrected classification is fragile A2: positively derivable across two sections, then made explicit by the measured one-sentence repair.",
+    "The Phase 12 operator ledger said starter and activation effects had no agent measurement. Phase 14 has now measured descriptive nulls; local mutant activation remains real, but positive agent effect is not established.",
+    "The official rs-archive-clone artifact has a 16-hour expert estimate and detailed verifier, but no countable agent matrix in either audited repository. It is retained as precedent and rejected from promotion in this run.",
+    "Phase 14's 8/8 clean solves make the measured operator ranking empty. Discovery V2 gives the recompute recipe zero uplift rather than inheriting its local mutant effect as frontier difficulty.",
+    "Both Phase 15 readers killed the only queued candidate at fairness because its packet named the need for public semantics and a deterministic budget without instantiating either one. This is a drafting-layer gate defect, not a failure of the incident evidence and not agent-difficulty evidence.",
+    "The first method-comparison draft equated five author-generated candidates with five model reads. The audited evidence is three Phase 8 reads plus four Phase 9 reads, so the generated comparison now records seven.",
+    "The first comparison counted all four extracted V2 patterns as failure-axis breadth while other methods counted drafted candidates. The table now uses draft-level breadth for every method and reports domain breadth separately.",
+    "The first local-source adapter validated digest shape but not source bytes. It now byte-verifies both local documents and the checked-in first-party incident snapshot; the reader packet content and hash did not change.",
+    "The first semantic-dedup implementation treated any candidate mined from an existing-family trial as a duplicate. It now requires an explicit same-axis and same-action-contract equivalence record, preventing a family id from hiding a new failure mode.",
+    "The preregistration's declared midnight timestamp predates its own baseline commit, and the source corpus initially carried a future 13:00 placeholder. Neither is valid chronology evidence. The corpus timestamp is now null; the sealed preregistration remains unchanged, and prospective ordering is claimed only from this execution transcript, not as independently timestamp-proven by the repo."
+  ]
+}

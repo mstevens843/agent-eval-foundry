@@ -1,0 +1,397 @@
+{
+  "schema": "agent-eval-foundry/phase-15-source-corpus@1",
+  "runId": "phase15-bounded-corpus-v1",
+  "preregistrationSha256": "dd2a3f95c9933ab32aafc35aa10700e834d956d64f57f6c35f565488f226de18",
+  "acquiredAt": null,
+  "sources": [
+    {
+      "sourceUnitId": "outbox-verifier-repairs",
+      "role": "retrospective-calibration-excluded-from-yield",
+      "channel": "verifier-repair-bypass",
+      "adapter": "local-document-snapshot",
+      "provenance": {
+        "locator": "/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task/FINDINGS.md#6",
+        "revision": "22f3cb9694ced2595af38a9a9b64edb28337e6b3",
+        "contentDigest": "d66dcdf9067808d74bb5ec763325a37dc16ffe7855d021cf57bc1639f626f6d7",
+        "digestAlgorithm": "sha256",
+        "primary": true
+      },
+      "evidence": {
+        "class": "repo-audit",
+        "countable": true,
+        "countabilityReason": "The source repository preserves executable no-op, same-process rebinding and decorative-isolation bypass probes plus the repaired verifier path.",
+        "observedFailure": "A no-op passed 113 of 113 checks, same-process oracle rebinding could replace trusted outputs, and the nominal database-role boundary did not prevent direct writes.",
+        "measurements": [
+          {
+            "name": "no_op_checks_passed",
+            "value": 113,
+            "denominator": 113
+          }
+        ],
+        "locations": [
+          "FINDINGS.md section 6",
+          "results/15"
+        ]
+      },
+      "extraction": {
+        "affectedLayer": "verifier architecture",
+        "failureAxis": "verifier-trust-boundary-collapse",
+        "transferableMechanism": "Move authority and collection outside the subject process, require positive work, and grade exact authoritative effects rather than subject claims.",
+        "candidateSubstrate": null,
+        "subjectActionContract": "produce a graded artifact without access to grader-owned authority",
+        "authorityBoundary": {
+          "kind": "process-and-privilege",
+          "enforcement": "root-owned tool server and collector with an unprivileged subject child",
+          "subjectCanCross": false
+        },
+        "applicableOperators": [
+          "verifier-process-and-ledger-isolation",
+          "narrow-mutant-isolation",
+          "b6-rig-integrity-controls"
+        ],
+        "validityRisks": [
+          "Treating bypass closure as task difficulty would launder a validity repair into a hardness claim."
+        ],
+        "cheapProbe": null,
+        "eligibility": {
+          "eligible": false,
+          "reason": "Retrospective outbox calibration and a validity-control pattern, not a prospective family candidate."
+        }
+      }
+    },
+    {
+      "sourceUnitId": "outbox-self-check-trajectories",
+      "role": "retrospective-calibration-excluded-from-yield",
+      "channel": "agent-self-check-failure",
+      "adapter": "local-document-snapshot",
+      "provenance": {
+        "locator": "/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task/results/34-cc267-standard-matrix.md",
+        "revision": "22f3cb9694ced2595af38a9a9b64edb28337e6b3",
+        "contentDigest": "c2030f0d135bf9ae57ac14f259dd1d9b72e47e4daaaa06b6f44a1dc1d2a77f37",
+        "digestAlgorithm": "sha256",
+        "primary": true
+      },
+      "evidence": {
+        "class": "countable-agent-trials",
+        "countable": true,
+        "countabilityReason": "Six clean source-task trials preserve transcript, submission, verifier and per-check evidence.",
+        "observedFailure": "Three agents ran their own checks green over submissions the verifier rejected; the other three wrote no executable assertion capable of contradicting them.",
+        "measurements": [
+          {
+            "name": "self_check_green_verifier_failures",
+            "value": 3,
+            "denominator": 6
+          },
+          {
+            "name": "trials_without_executable_assertion",
+            "value": 3,
+            "denominator": 6
+          }
+        ],
+        "locations": [
+          "results/34-cc267-standard-matrix.md",
+          "FINDINGS.md section 8"
+        ]
+      },
+      "extraction": {
+        "affectedLayer": "agent self-validation",
+        "failureAxis": "confirmed-green-self-check-blind-spot",
+        "transferableMechanism": "Select scenarios where a plausible local checker confirms the wrong abstraction while an isolated authority records the divergent effect.",
+        "candidateSubstrate": "durable approval outbox descendant",
+        "subjectActionContract": "recover and execute one durable action exactly once",
+        "authorityBoundary": {
+          "kind": "service-ledger",
+          "enforcement": "host-owned call and effect ledgers behind an inaccessible socket",
+          "subjectCanCross": false
+        },
+        "applicableOperators": [
+          "committed-idempotency-authority",
+          "recompute-activation-concentration",
+          "narrow-recompute-starter"
+        ],
+        "validityRisks": [
+          "The original ACKED rule required the later A2 specification repair.",
+          "Phase 14 measured no positive agent effect for the repaired recompute recipe."
+        ],
+        "cheapProbe": null,
+        "eligibility": {
+          "eligible": false,
+          "reason": "Retrospective recovery of the outbox is explicitly excluded from prospective discovery yield."
+        }
+      }
+    },
+    {
+      "sourceUnitId": "live-dom-counted-failure",
+      "role": "prospective",
+      "channel": "benchmark-trajectory-solve-patch",
+      "adapter": "trial-directory-snapshot",
+      "provenance": {
+        "locator": "trials/ui-replay-live-dom/live-dom-2026-08-o2",
+        "revision": "523ba07",
+        "contentDigest": "e0a96517796bed10337fa147716f9cf8cf43d97092823e0100610a496bbef00d",
+        "digestAlgorithm": "sha256",
+        "primary": true
+      },
+      "evidence": {
+        "class": "countable-agent-trial",
+        "countable": true,
+        "countabilityReason": "The preserved trial completed all 864 scenarios with no refusal, timeout or infrastructure error.",
+        "observedFailure": "The subject failed 219 of 864 live replay scenarios: 139 replay completion checks and 80 precondition-observation checks.",
+        "measurements": [
+          {
+            "name": "failing_scenarios",
+            "value": 219,
+            "denominator": 864
+          },
+          {
+            "name": "replay_completes_failures",
+            "value": 139,
+            "denominator": 864
+          },
+          {
+            "name": "precondition_observed_failures",
+            "value": 80,
+            "denominator": 864
+          }
+        ],
+        "locations": [
+          "result.json",
+          "countability.json",
+          "root-cause.json",
+          "submission/subject.mjs"
+        ]
+      },
+      "extraction": {
+        "affectedLayer": "temporal object resolution",
+        "failureAxis": "logical-target-rebinding-under-object-churn",
+        "transferableMechanism": "Resolve a durable semantic target against a changing object graph and observe the precondition on the resolved live object, not the stale recorded node.",
+        "candidateSubstrate": "declarative controller replay across resource replacement",
+        "subjectActionContract": "rebind and replay a recorded action against a replacement object",
+        "existingFamilyEquivalence": {
+          "familyId": "ui-replay-live-dom",
+          "sameFailureAxis": true,
+          "sameSubjectActionContract": true,
+          "reason": "The target changes domain nouns but retains logical-target rebinding under object churn and the same rebind-and-replay action contract."
+        },
+        "authorityBoundary": {
+          "kind": "host-owned-live-world",
+          "enforcement": "the harness owns object replacement, competing matches and the final effect trace",
+          "subjectCanCross": false
+        },
+        "applicableOperators": [
+          "fuzz-controlling-parameter",
+          "recompute-activation-concentration"
+        ],
+        "validityRisks": [
+          "Only one automated root-cause reader labelled this trial; it is not two-provider capability evidence.",
+          "The proposed substrate retains the source failure axis and therefore risks being a domain rename."
+        ],
+        "cheapProbe": {
+          "probeType": "temporal-rebinding",
+          "falsifier": "If the candidate differs from ui-replay-live-dom only in domain nouns, semantic novelty is false before execution.",
+          "witnessIsolation": "host-owned object and effect trace"
+        },
+        "eligibility": {
+          "eligible": true,
+          "reason": "Countable observed failure, subject-inaccessible witness and a natural transfer substrate; semantic deduplication still applies."
+        }
+      }
+    },
+    {
+      "sourceUnitId": "checker-required-counted-failure",
+      "role": "prospective",
+      "channel": "agent-self-check-failure",
+      "adapter": "trial-directory-snapshot",
+      "provenance": {
+        "locator": "trials/checker-required-memory-poisoning/checker-required-2026-08-o1",
+        "revision": "523ba07",
+        "contentDigest": "167a5ed198ed5ba3cd197927af1a415614bdcc7ad734de17a210c2b7b82fad5b",
+        "digestAlgorithm": "sha256",
+        "primary": true
+      },
+      "evidence": {
+        "class": "countable-agent-trial-mixed-cause",
+        "countable": true,
+        "countabilityReason": "The preserved trial completed all 792 scenarios, but the root-cause record classifies the aggregate as specification-underspecified and leaves checker-side residuals unsettled.",
+        "observedFailure": "The subject failed 614 of 792 scenarios; 531 subject-rule failures are exactly explained by an unpublished graded reason-code vocabulary, while checker-side residuals have not been independently attributed.",
+        "measurements": [
+          {
+            "name": "failing_scenarios",
+            "value": 614,
+            "denominator": 792
+          },
+          {
+            "name": "spec_explained_subject_failures",
+            "value": 531,
+            "denominator": 792
+          }
+        ],
+        "locations": [
+          "result.json",
+          "countability.json",
+          "root-cause.json",
+          "challenge/SPEC.md",
+          "submission/checker.mjs"
+        ]
+      },
+      "extraction": {
+        "affectedLayer": "specification and agent-authored checker",
+        "failureAxis": "checker-obligation-confounded-by-hidden-vocabulary",
+        "transferableMechanism": "Require an independent executable checker only after every graded vocabulary and adjudicating rule is published and mechanically completeness-checked.",
+        "candidateSubstrate": "dual-implementation protocol repair",
+        "subjectActionContract": "implement a protocol and an independent checker for the same public rules",
+        "authorityBoundary": {
+          "kind": "separate-verifier",
+          "enforcement": "the host evaluates subject and checker against held-out traces",
+          "subjectCanCross": false
+        },
+        "applicableOperators": [
+          "a2-explicit-terminal-state-repair",
+          "narrow-mutant-isolation",
+          "b6-rig-integrity-controls"
+        ],
+        "validityRisks": [
+          "The dominant observed failure is a specification omission.",
+          "The checker-side residual is not isolated or agreed capability evidence."
+        ],
+        "cheapProbe": null,
+        "eligibility": {
+          "eligible": false,
+          "reason": "The only isolated cause is a validity defect; promoting the unresolved residual would launder mixed evidence into difficulty."
+        }
+      }
+    },
+    {
+      "sourceUnitId": "terminal-bench-rs-archive-clone",
+      "role": "prospective",
+      "channel": "known-hard-benchmark",
+      "adapter": "pinned-upstream-task-snapshot",
+      "provenance": {
+        "locator": "https://github.com/harbor-framework/terminal-bench/tree/83c7a6172d629c6575b785ab12c8db787bb2e323/tasks/rs-archive-clone",
+        "revision": "83c7a6172d629c6575b785ab12c8db787bb2e323",
+        "contentDigest": "e6fc10fa851281f792de3aaddfaea5b378157801",
+        "digestAlgorithm": "git-blob-sha1",
+        "primary": true
+      },
+      "evidence": {
+        "class": "authoritative-benchmark-task-artifact",
+        "countable": false,
+        "countabilityReason": "The official task, verifier and 16-hour expert estimate are pinned, but no auditable per-agent trial artifacts or solve-rate matrix are present in either local repository.",
+        "observedFailure": "The task's own explanation identifies tiny mismatches across interacting archive, package, transform, recovery and malformed-input layers as verifier failures; no countable agent failure is preserved here.",
+        "measurements": [
+          {
+            "name": "expert_time_estimate_hours",
+            "value": 16,
+            "denominator": null
+          }
+        ],
+        "locations": [
+          "instruction.md blob e6fc10fa851281f792de3aaddfaea5b378157801",
+          "README.md blob 934954b8def4f0055901cfd14c918c2e12288778",
+          "tests/test_outputs.py blob bddfb47223695aea337747b1dab5b9e7c48d715e"
+        ]
+      },
+      "extraction": {
+        "affectedLayer": "layered binary contract inference",
+        "failureAxis": "interacting-black-box-contract-recovery",
+        "transferableMechanism": "Expose a lawful black-box oracle and require a cleanroom implementation of interacting format, recovery and error contracts, graded byte-exactly on held-out compositions.",
+        "candidateSubstrate": "database page-and-WAL recovery tool cleanroom clone",
+        "subjectActionContract": "infer and reproduce a layered storage-recovery CLI from black-box probes",
+        "authorityBoundary": {
+          "kind": "sealed-reference-binary",
+          "enforcement": "the subject may execute but not inspect the reference; the verifier owns held-out vectors and exact effects",
+          "subjectCanCross": false
+        },
+        "applicableOperators": [
+          "verifier-process-and-ledger-isolation",
+          "narrow-mutant-isolation",
+          "fuzz-controlling-parameter"
+        ],
+        "validityRisks": [
+          "The known-hard label and expert-hours estimate are not countable difficulty evidence in this repo.",
+          "A synthetic reference could become arbitrary trivia rather than a realistic storage contract.",
+          "Oracle access must permit derivation within the time budget without exposing held-out fixtures."
+        ],
+        "cheapProbe": {
+          "probeType": "layered-contract-interaction",
+          "falsifier": "If single-layer probes uniquely determine all held-out compositions, the proposed interaction adds breadth but no inference burden.",
+          "witnessIsolation": "verifier-owned byte-exact composed fixtures"
+        },
+        "eligibility": {
+          "eligible": false,
+          "reason": "The source is authoritative precedent but has no countable observed agent failure in the available evidence, so it cannot clear this run's promotion rule."
+        }
+      }
+    },
+    {
+      "sourceUnitId": "cloudflare-2019-regex-outage",
+      "role": "prospective",
+      "channel": "authoritative-incident-upstream-fix",
+      "adapter": "authoritative-incident-snapshot",
+      "provenance": {
+        "locator": "https://blog.cloudflare.com/details-of-the-cloudflare-outage-on-july-2-2019/",
+        "revision": "published-2019-07-12-retrieved-2026-09-04",
+        "contentDigest": "191cb2699b53f0fa09157484571f8a7816d99c72f8df404bff8e904f28ffd6c4",
+        "digestAlgorithm": "snapshot-evidence-sha256",
+        "snapshotPath": "data/phase-15-source-snapshots/cloudflare-2019-regex-outage.json",
+        "primary": true
+      },
+      "evidence": {
+        "class": "authoritative-primary-source-incident",
+        "countable": true,
+        "countabilityReason": "Cloudflare's first-party postmortem names the deployed rule, the 27-minute global outage, the missed CPU dimension, the direct repairs and the deployment process that amplified it.",
+        "observedFailure": "Functional CI passed a WAF rule whose catastrophic backtracking exhausted HTTP/HTTPS CPUs globally; the suite checked blocking behavior but not runaway resource use.",
+        "measurements": [
+          {
+            "name": "outage_minutes",
+            "value": 27,
+            "denominator": null
+          },
+          {
+            "name": "documented_contributing_conditions",
+            "value": 11,
+            "denominator": null
+          }
+        ],
+        "locations": [
+          "What happened",
+          "How Cloudflare operates",
+          "What went wrong",
+          "Appendix: About Regular Expression Backtracking"
+        ]
+      },
+      "extraction": {
+        "affectedLayer": "resource complexity and rollout validation",
+        "failureAxis": "semantic-correctness-with-adversarial-complexity",
+        "transferableMechanism": "Require semantic equivalence on benign and attack corpora while an isolated evaluator enforces a deterministic operation budget on adversarial non-matches.",
+        "candidateSubstrate": "WAF rule repair under semantic and complexity constraints",
+        "subjectActionContract": "repair a ruleset while preserving blocking semantics and a worst-case evaluation budget",
+        "authorityBoundary": {
+          "kind": "isolated-resource-meter",
+          "enforcement": "the verifier runs candidate and reference matchers in constrained workers against held-out adversarial requests",
+          "subjectCanCross": false
+        },
+        "applicableOperators": [
+          "verifier-process-and-ledger-isolation",
+          "fuzz-controlling-parameter",
+          "narrow-mutant-isolation",
+          "b6-rig-integrity-controls"
+        ],
+        "validityRisks": [
+          "Wall-clock-only thresholds would be flaky; the cheap probe must use a deterministic work counter.",
+          "A rewrite task is unfair unless accepted semantics and the resource budget are explicit.",
+          "Hidden requests must sample the declared grammar rather than undocumented WAF behavior."
+        ],
+        "cheapProbe": {
+          "probeType": "deterministic-regex-complexity",
+          "falsifier": "If a known-bad nested-wildcard matcher does not pass the visible semantic corpus while exceeding the hidden work budget, the proposed blind spot is not activated.",
+          "witnessIsolation": "verifier-owned adversarial corpus and deterministic work counter"
+        },
+        "eligibility": {
+          "eligible": true,
+          "reason": "The primary-source failure, explicit repair direction, natural coding contract and non-recompute axis satisfy source eligibility subject to readers and B6."
+        }
+      }
+    }
+  ]
+}

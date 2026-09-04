@@ -1,0 +1,27 @@
+{
+  "schema": "agent-eval-foundry/phase-15-probe-results@1",
+  "runId": "phase15-bounded-corpus-v1",
+  "sourceCorpusSha256": "c69a96d399e5e1dc0852168039e2225b034975b08e6368e65f7eded65b32f1eb",
+  "readerReviewsSha256": "79365fdde531602a5a148884ee77c407a220bde4443cbbfd0fb73bf40e948c19",
+  "results": [
+    {
+      "candidateId": "waf-semantic-complexity-repair",
+      "probeType": "deterministic-regex-complexity",
+      "status": "not-run",
+      "reason": "Stopped after reader rejection.",
+      "b6": {
+        "usable": false,
+        "knownGoodPassed": false,
+        "knownBadFailed": false,
+        "malformedInputRefused": false,
+        "sameInvocation": false,
+        "reasons": [
+          "Stopped after reader rejection."
+        ]
+      },
+      "mechanismActivated": false,
+      "witnessIsolated": false,
+      "observations": {}
+    }
+  ]
+}

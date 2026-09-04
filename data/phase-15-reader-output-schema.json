@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "dimensions",
+    "verdict",
+    "rationale",
+    "earliestFailedDimension"
+  ],
+  "properties": {
+    "dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source support",
+        "fairness",
+        "natural task contract",
+        "structural witness isolation",
+        "semantic novelty",
+        "cheap-probe falsifiability"
+      ],
+      "properties": {
+        "source support": {
+          "type": "string",
+          "enum": ["pass", "fail", "uncertain"]
+        },
+        "fairness": {
+          "type": "string",
+          "enum": ["pass", "fail", "uncertain"]
+        },
+        "natural task contract": {
+          "type": "string",
+          "enum": ["pass", "fail", "uncertain"]
+        },
+        "structural witness isolation": {
+          "type": "string",
+          "enum": ["pass", "fail", "uncertain"]
+        },
+        "semantic novelty": {
+          "type": "string",
+          "enum": ["pass", "fail", "uncertain"]
+        },
+        "cheap-probe falsifiability": {
+          "type": "string",
+          "enum": ["pass", "fail", "uncertain"]
+        }
+      }
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["promote", "kill"]
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 1
+    },
+    "earliestFailedDimension": {
+      "type": ["string", "null"]
+    }
+  }
+}

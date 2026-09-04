@@ -355,12 +355,17 @@ usually carrying a worked example:
 - `ATS3_SCOPE_MUST_MATCH_APPROVAL`: requested scope, current token scope and current approval scope
   "must match exactly", with an Illegal Outcomes entry naming the failure by name.
 
-**On the `spec-underspecified` side** — a general constraint published, and the closed set it implies
-left unstated:
+**On the fragile-A2 side** — a positive derivation exists, but a compact explicit statement still
+changes agent behavior:
 
-- **durable-approval-outbox**: "the audit accounts for every transition, with none that did not
-  occur" is published. The terminal set that constraint implies is not. The graded rule
-  (`ACKED: set()`) exists only in the hidden verifier.
+- **durable-approval-outbox**: `ACKED` terminality is derivable by combining the published
+  acknowledgement transition with the audit legality rule. The chain spans two sections at inference
+  depth one, so it is A2 rather than a hidden-only rule. The measured treatment made that conclusion
+  explicit; it did not disclose verifier-only behavior.
+
+**On the `spec-underspecified` side** — a general constraint published, and the closed set or value
+it implies left unstated:
+
 - **deployment-model-alias-rollout-drift**: "sufficient in-window evidence", with the quantity
   appearing in no numeral anywhere visible.
 - **checker-required-memory-poisoning**: rule M6 speaks of "a record marked as carrying a secret"
@@ -626,10 +631,11 @@ The distinction matters because hidden coverage is necessary for benchmarks. If 
 visible, a subject can overfit the examples. But the subject still deserves to know the rules of the
 world it is implementing.
 
-Durable Approval Outbox is the working example. The rule "`ACKED` is terminal" was already visible.
-The correction that moved the task from a false positive to a clean failure did not add that rule.
-It changed which valid schedules the hidden suite sampled, so the already-visible rule was actually
-tested.
+Durable Approval Outbox illustrates two changes that must not be conflated. The A2 differential made
+an already derivable `ACKED` rule explicit and measured the effect of that specification repair. The
+later change from five failures in six trials to six in six changed no agent-visible rule; it selected
+valid schedules that activated the same behavior more reliably. Only the latter is scenario
+selection.
 
 That is the line the foundry tries to preserve:
 

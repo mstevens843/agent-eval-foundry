@@ -202,6 +202,16 @@ import {
   writeChallengePackage,
 } from "./phase-14/packages.js";
 import { buildPhase14Preflight, renderPhase14Preflight } from "./phase-14/preflight.js";
+import { phase15Json } from "./phase-15/corpus.js";
+import {
+  phase15CandidateQueueArtifact,
+  phase15ComparisonArtifact,
+  phase15CorrectionsArtifact,
+  phase15ProbeResultsArtifact,
+  phase15ProvenanceArtifact,
+  phase15ReaderPacketsArtifact,
+  runPhase15Discovery,
+} from "./phase-15/discovery.js";
 import { renderReport } from "./report.js";
 import {
   classifyAccessTokenSmoke,
@@ -305,6 +315,7 @@ import {
   renderPhase13TransferLab,
 } from "./reports/phase-13-transfer.js";
 import { renderPhase14OperatorEffects } from "./reports/phase-14-operator-effects.js";
+import { renderPhase15DiscoveryEngine } from "./reports/phase-15-discovery-engine.js";
 import {
   renderMechanismProbeReport,
   renderProbeNext,
@@ -448,6 +459,13 @@ REGISTRY (what could be built, and can we detect it?)
   phase14 label --attempt <id> --reader <openai|anthropic>
                                   independently label one counted failure
   phase14 execute --attempt <id>  run exactly the next registered seeded cell
+  phase15 report [--out f]       provenance-first discovery engine result
+  phase15 provenance [--out f]   normalized source evidence and extraction decisions
+  phase15 queue [--out f]        semantic-deduplicated candidate and reader queue
+  phase15 packets [--out f]      blinded reader packets without scores or rationale
+  phase15 probes [--out f]       reader-gated B6 cheap-probe results
+  phase15 comparison [--out f]   discovery-method yield and cost comparison
+  phase15 corrections [--out f]  audit corrections discovered during the run
   sources                        list every matrix source, implemented and planned
 
 FAMILIES (run a measured mini-benchmark)
@@ -4617,6 +4635,7 @@ function allCommand(argv: readonly string[], root: string): string {
   const phase13Results = measurePhase13(root);
   write("PHASE-13-TRANSFER-LAB.md", renderPhase13TransferLab(phase13Results));
   write("PHASE-14-OPERATOR-EFFECTS.md", renderPhase14OperatorEffects(root));
+  write("PHASE-15-DISCOVERY-ENGINE.md", renderPhase15DiscoveryEngine(root));
   const inputs = { ...MEASURED_DEFAULTS, totalUsd: 100_000, labourRateUsdPerHour: 120 };
   assertBudgetInputs(inputs);
   assertPlanHonest(planBudget(inputs));
@@ -5186,6 +5205,23 @@ export function main(argv: readonly string[]): number {
         else {
           throw new Error(
             `unknown phase14 subcommand "${sub}"; expected report, packages, scenarios, preflight, trials, effects, challenge, status, execute or label`,
+          );
+        }
+        return 0;
+      }
+      case "phase15": {
+        const sub = positional(argv, 1) ?? "report";
+        const run = runPhase15Discovery(root);
+        if (sub === "report") emit(argv, renderPhase15DiscoveryEngine(root));
+        else if (sub === "provenance") emit(argv, phase15Json(phase15ProvenanceArtifact(run)));
+        else if (sub === "queue") emit(argv, phase15Json(phase15CandidateQueueArtifact(run)));
+        else if (sub === "packets") emit(argv, phase15Json(phase15ReaderPacketsArtifact(run)));
+        else if (sub === "probes") emit(argv, phase15Json(phase15ProbeResultsArtifact(run)));
+        else if (sub === "comparison") emit(argv, phase15Json(phase15ComparisonArtifact(run)));
+        else if (sub === "corrections") emit(argv, phase15Json(phase15CorrectionsArtifact(run)));
+        else {
+          throw new Error(
+            `unknown phase15 subcommand "${sub}"; expected report, provenance, queue, packets, probes, comparison or corrections`,
           );
         }
         return 0;

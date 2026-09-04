@@ -48,6 +48,23 @@ for (const [path, args] of [
   } else console.log(`ok     ${path}`);
 }
 
+// Phase 15 keeps its prospective registration as immutable input, then regenerates every result
+// view from the source corpus and blind-reader ledger. Checking the structured artifacts prevents a
+// prose-only correction from silently changing candidate yield, deduplication, or probe status.
+for (const [path, args] of [
+  ["data/phase-15-provenance-records.json", ["phase15", "provenance"]],
+  ["data/phase-15-candidate-queue.json", ["phase15", "queue"]],
+  ["data/phase-15-reader-packets.json", ["phase15", "packets"]],
+  ["data/phase-15-probe-results.json", ["phase15", "probes"]],
+  ["data/phase-15-method-comparison.json", ["phase15", "comparison"]],
+  ["data/phase-15-corrections.json", ["phase15", "corrections"]],
+]) {
+  if (run(args) !== readFileSync(path, "utf8")) {
+    console.error(`STALE  ${path}`);
+    failures += 1;
+  } else console.log(`ok     ${path}`);
+}
+
 // Phase 14 regenerates from preserved attempt and blind-label artifacts at every campaign state.
 // Diff the structured artifacts themselves so an observed cell cannot later be replaced by an
 // inferred outcome or an unstated package hash.

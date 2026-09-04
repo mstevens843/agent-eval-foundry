@@ -1,0 +1,179 @@
+{
+  "schema": "agent-eval-foundry/phase-15-candidate-queue@1",
+  "runId": "phase15-bounded-corpus-v1",
+  "sourceCorpusSha256": "c69a96d399e5e1dc0852168039e2225b034975b08e6368e65f7eded65b32f1eb",
+  "readerReviewsSha256": "79365fdde531602a5a148884ee77c407a220bde4443cbbfd0fb73bf40e948c19",
+  "candidates": [
+    {
+      "candidateId": "controller-rebinding-replay",
+      "sourceUnitId": "live-dom-counted-failure",
+      "channel": "benchmark-trajectory-solve-patch",
+      "title": "Controller replay across resource replacement",
+      "domain": "declarative controller replay across resource replacement",
+      "affectedLayer": "temporal object resolution",
+      "failureAxis": "logical-target-rebinding-under-object-churn",
+      "observedFailure": "The subject failed 219 of 864 live replay scenarios: 139 replay completion checks and 80 precondition-observation checks.",
+      "transferableMechanism": "Resolve a durable semantic target against a changing object graph and observe the precondition on the resolved live object, not the stale recorded node.",
+      "subjectActionContract": "rebind and replay a recorded action against a replacement object",
+      "authorityBoundary": {
+        "kind": "host-owned-live-world",
+        "enforcement": "the harness owns object replacement, competing matches and the final effect trace",
+        "subjectCanCross": false
+      },
+      "applicableOperators": [
+        {
+          "operatorId": "fuzz-controlling-parameter",
+          "status": "phase14-measured-null",
+          "phase14Estimand": "E4-selection",
+          "estimate": 0,
+          "rankingDelta": 0,
+          "reason": "Phase 14 E4-selection measured a descriptive 0.000 effect; no difficulty credit is awarded."
+        },
+        {
+          "operatorId": "recompute-activation-concentration",
+          "status": "phase14-measured-null",
+          "phase14Estimand": "E4-selection",
+          "estimate": 0,
+          "rankingDelta": 0,
+          "reason": "Phase 14 E4-selection measured a descriptive 0.000 effect; no difficulty credit is awarded."
+        }
+      ],
+      "validityRisks": [
+        "Only one automated root-cause reader labelled this trial; it is not two-provider capability evidence.",
+        "The proposed substrate retains the source failure axis and therefore risks being a domain rename."
+      ],
+      "cheapProbe": {
+        "probeType": "temporal-rebinding",
+        "falsifier": "If the candidate differs from ui-replay-live-dom only in domain nouns, semantic novelty is false before execution.",
+        "witnessIsolation": "host-owned object and effect trace"
+      },
+      "semanticFingerprint": "8c4a510dde5e83f099e11b1dcbf001bcb6069d4b24c4beeb57755224d58377ba",
+      "semanticNovelty": false,
+      "duplicateOf": "ui-replay-live-dom",
+      "engineScore": 80,
+      "scoreBreakdown": {
+        "sourceEvidence": 25,
+        "causalSpecificity": 20,
+        "structuralBoundary": 15,
+        "naturalContract": 10,
+        "cheapProbe": 10,
+        "novelty": 0,
+        "measuredOperatorUplift": 0
+      },
+      "queueStatus": "deduplicated",
+      "queueReason": "The proposal carries the same causal axis and action contract as ui-replay-live-dom; a new domain is not novelty."
+    },
+    {
+      "candidateId": "waf-semantic-complexity-repair",
+      "sourceUnitId": "cloudflare-2019-regex-outage",
+      "channel": "authoritative-incident-upstream-fix",
+      "title": "WAF semantic and complexity repair",
+      "domain": "WAF rule repair under semantic and complexity constraints",
+      "affectedLayer": "resource complexity and rollout validation",
+      "failureAxis": "semantic-correctness-with-adversarial-complexity",
+      "observedFailure": "Functional CI passed a WAF rule whose catastrophic backtracking exhausted HTTP/HTTPS CPUs globally; the suite checked blocking behavior but not runaway resource use.",
+      "transferableMechanism": "Require semantic equivalence on benign and attack corpora while an isolated evaluator enforces a deterministic operation budget on adversarial non-matches.",
+      "subjectActionContract": "repair a ruleset while preserving blocking semantics and a worst-case evaluation budget",
+      "authorityBoundary": {
+        "kind": "isolated-resource-meter",
+        "enforcement": "the verifier runs candidate and reference matchers in constrained workers against held-out adversarial requests",
+        "subjectCanCross": false
+      },
+      "applicableOperators": [
+        {
+          "operatorId": "verifier-process-and-ledger-isolation",
+          "status": "validity-control-only",
+          "phase14Estimand": null,
+          "estimate": null,
+          "rankingDelta": 0,
+          "reason": "Validity controls determine whether reward means anything; they never receive difficulty uplift."
+        },
+        {
+          "operatorId": "fuzz-controlling-parameter",
+          "status": "phase14-measured-null",
+          "phase14Estimand": "E4-selection",
+          "estimate": 0,
+          "rankingDelta": 0,
+          "reason": "Phase 14 E4-selection measured a descriptive 0.000 effect; no difficulty credit is awarded."
+        },
+        {
+          "operatorId": "narrow-mutant-isolation",
+          "status": "validity-control-only",
+          "phase14Estimand": null,
+          "estimate": null,
+          "rankingDelta": 0,
+          "reason": "Validity controls determine whether reward means anything; they never receive difficulty uplift."
+        },
+        {
+          "operatorId": "b6-rig-integrity-controls",
+          "status": "validity-control-only",
+          "phase14Estimand": null,
+          "estimate": null,
+          "rankingDelta": 0,
+          "reason": "Validity controls determine whether reward means anything; they never receive difficulty uplift."
+        }
+      ],
+      "validityRisks": [
+        "Wall-clock-only thresholds would be flaky; the cheap probe must use a deterministic work counter.",
+        "A rewrite task is unfair unless accepted semantics and the resource budget are explicit.",
+        "Hidden requests must sample the declared grammar rather than undocumented WAF behavior."
+      ],
+      "cheapProbe": {
+        "probeType": "deterministic-regex-complexity",
+        "falsifier": "If a known-bad nested-wildcard matcher does not pass the visible semantic corpus while exceeding the hidden work budget, the proposed blind spot is not activated.",
+        "witnessIsolation": "verifier-owned adversarial corpus and deterministic work counter"
+      },
+      "semanticFingerprint": "32126d7ce00352610ac249ba2d158739b338a5d4d62ece32de514366ab9fda9c",
+      "semanticNovelty": true,
+      "duplicateOf": null,
+      "engineScore": 90,
+      "scoreBreakdown": {
+        "sourceEvidence": 25,
+        "causalSpecificity": 20,
+        "structuralBoundary": 15,
+        "naturalContract": 10,
+        "cheapProbe": 10,
+        "novelty": 10,
+        "measuredOperatorUplift": 0
+      },
+      "queueStatus": "reader-review",
+      "queueReason": "Eligible source evidence, structural boundary and a new causal axis; independent reading required."
+    }
+  ],
+  "readerDecisions": [
+    {
+      "candidateId": "waf-semantic-complexity-repair",
+      "required": 2,
+      "reviewsReceived": 2,
+      "providerFamilies": [
+        "openai"
+      ],
+      "unanimous": false,
+      "verdict": "killed",
+      "reasons": [
+        "reader-a: kill - The primary-source incident directly supports the claimed semantic-only CI blind spot and catastrophic regex complexity failure. However, the packet itself recognizes that fairness requires explicit accepted semantics and a resource budget, yet supplies neither a defined grammar/corpus contract nor a numeric deterministic work limit. Thus candidate acceptance would depend on verifier-hidden requirements. The task is otherwise natural, the verifier-owned corpus and work counter provide structural isolation, and adversarial resource-complexity enforcement is novel against the supplied baseline. Cheap-probe falsifiability is also uncertain because its stated falsifier is logically incomplete and no concrete budget is registered.",
+        "reader-b: kill - The primary-source incident supports the claimed resource-complexity blind spot. Fairness fails because the packet says semantics, request grammar, resource budget, and deterministic work counter must be public, but it supplies none of their concrete definitions or thresholds. Therefore hidden cases could depend on an undocumented semantic or measurement contract."
+      ]
+    }
+  ],
+  "summary": {
+    "sourceUnits": 6,
+    "prospectiveSourceUnits": 4,
+    "prospectivePatterns": 4,
+    "candidateDrafts": 2,
+    "semanticDuplicates": 1,
+    "readerCandidates": 1,
+    "readerSurvivors": 0,
+    "probeSurvivors": 0,
+    "domainBreadth": 4,
+    "failureAxisBreadth": 4,
+    "prospectiveYieldPerSource": 0,
+    "discoveryCostPerSurvivor": "not finite: no probe survivor",
+    "predictionOutcomes": {
+      "patternsExtracted": "met",
+      "candidateDrafts": "falsified",
+      "unanimousReaderSurvivors": "falsified",
+      "probeSurvivors": "falsified"
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # Measured hardness-operator ledger
 
-Extracted 2026-09-03. Scope: durable-approval-outbox history and its recompute-isolated descendant.
+Extracted 2026-09-04. Scope: durable-approval-outbox history, its recompute-isolated descendant, and Phase 14 controlled agent ablations.
 
 An operator is not called hardening merely because reward-0 outcomes increased. Validity
 controls repair what reward means; difficulty operators change the reasoning burden; scenario
@@ -10,12 +10,12 @@ selection operators change how reliably an existing mechanism activates.
 |---|---|---:|---|---|---:|
 | `verifier-process-and-ledger-isolation` | validity-control | measured | not countable | not-applicable: this repairs what reward means | high |
 | `a2-explicit-terminal-state-repair` | validity-control | measured | 2/6 -> 3/6 | negative for the repaired axis: wording carried the target failures | high |
-| `committed-idempotency-authority` | difficulty | measured | not countable | not-established: local fatality is not agent difficulty | high |
+| `committed-idempotency-authority` | difficulty | measured | 8/8 clean passes on paired non-activation/control views -> 8/8 clean passes on paired recompute-target views | no positive effect established: all eight countable Phase 14 submissions passed both paired views, so no root-cause labels ran | high |
 | `fuzz-controlling-parameter` | scenario-selection | measured | 5/6 -> 6/6 | not-established under the foundry's blind-labelling rule | high |
-| `recompute-activation-concentration` | scenario-selection | measured | not countable | not-established until descendant agent trials are independently labelled | high |
+| `recompute-activation-concentration` | scenario-selection | measured | 8/8 clean solves under the balanced rescore -> 8/8 clean solves under concentrated selection | no positive effect established: all eight countable Phase 14 submissions passed both target and control views, so no root-cause labels ran | high |
 | `narrow-mutant-isolation` | validity-control | measured | not countable | not-applicable to local mutants | high |
 | `b6-rig-integrity-controls` | validity-control | measured | not countable | not-applicable: instrumentation validity | high |
-| `narrow-recompute-starter` | difficulty | measured | not countable | not-established | medium |
+| `narrow-recompute-starter` | difficulty | measured | 2/2 clean solves with the neutral DAO starter -> 2/2 clean solves with the seeded recompute DAO starter | no positive effect established: all four DAO attempts solved, so no failure required root-cause labelling | medium |
 
 ## Move external truth outside the subject's authority
 
@@ -47,8 +47,8 @@ selection operators change how reliably an existing mechanism activates.
 - **After:** A recovered committed key creates one ledger effect and later calls receive an OK deduplication receipt.
 - **Fairness:** passes: the committed value exists before the crash and is available to a correct implementation
 - **Verifier integrity:** requires grading on an external per-action ledger rather than on subject status
-- **Solve-rate interpretation:** The mechanism is demonstrated locally, but no controlled paid trial changes only this operator.
-- **Provenance:** `data/phase-9-descendant.json#a3_narrowAdversary`; `src/screens/row-five.ts`; `/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task/FINDINGS.md#3`
+- **Solve-rate interpretation:** Phase 14 E3 measured a paired descriptive target-minus-control failure effect of 0.000; scenario rows are not independent trials.
+- **Provenance:** `data/phase-9-descendant.json#a3_narrowAdversary`; `src/screens/row-five.ts`; `/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task/FINDINGS.md#3`; `data/phase-14-effect-ledger.json#E3-activation`
 
 ## Fuzz for the controlling activation parameter
 
@@ -69,8 +69,8 @@ selection operators change how reliably an existing mechanism activates.
 - **After:** n_workers=2 and 3 activated 45.8% and 58.3% in the grid; the selected descendant region separated 105/108 points and its selected 18 schedules caught the narrow mutant 18/18.
 - **Fairness:** passes: selection changes probability of reaching a published recovery case, not the rule
 - **Verifier integrity:** adds explicit non-activation controls so parameter effect cannot be inferred from an all-fail rig
-- **Solve-rate interpretation:** These are deterministic mechanism-activation and mutant-separation rates, not frontier solve rates.
-- **Provenance:** `data/phase-9-descendant.json#a2_controllingParameter`; `data/phase-9-descendant.json#a4_amplification`; `src/families/dao-descendant/scenarios.ts`
+- **Solve-rate interpretation:** Phase 14 E4 is a paired descriptive rescore of the same eight agent artifacts, not eight new independent contrasts; measured effect 0.000.
+- **Provenance:** `data/phase-9-descendant.json#a2_controllingParameter`; `data/phase-9-descendant.json#a4_amplification`; `src/families/dao-descendant/scenarios.ts`; `data/phase-14-effect-ledger.json#E3-activation`; `data/phase-14-effect-ledger.json#E4-selection`
 
 ## Measure one defect against an otherwise identical reference
 
@@ -102,6 +102,6 @@ selection operators change how reliably an existing mechanism activates.
 - **After:** The packaged starter fails all 18 activated schedules and passes non-activation controls through the real trial route.
 - **Fairness:** passes locally: the starter is explicitly labelled wrong and the correct value is visible in every input
 - **Verifier integrity:** none; the starter is graded by the same sealed ledgers as every submission
-- **Solve-rate interpretation:** No paid trial has isolated starter-profile effects.
-- **Provenance:** `src/challenge/dao-descendant-package.ts`; `src/families/dao-descendant/runner.ts`
+- **Solve-rate interpretation:** Phase 14 E2 measured a 0.000 matched reward-zero contrast across OpenAI and Anthropic; one attempt per cell limits causal precision.
+- **Provenance:** `src/challenge/dao-descendant-package.ts`; `src/families/dao-descendant/runner.ts`; `data/phase-14-effect-ledger.json#E2-starter`
 

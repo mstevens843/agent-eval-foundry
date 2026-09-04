@@ -1,0 +1,68 @@
+{
+  "schema": "agent-eval-foundry/phase-15-reader-reviews@1",
+  "runId": "phase15-bounded-corpus-v1",
+  "reviews": [
+    {
+      "reviewId": "waf-complexity-reader-a",
+      "candidateId": "waf-semantic-complexity-repair",
+      "readerId": "reader-a",
+      "sessionId": "01a06c90-6fae-7ba3-8980-ae0d18a077cb",
+      "providerFamily": "openai",
+      "model": "gpt-5.6-sol",
+      "packetSha256": "da42ce85b2f4159a1fc3505134d0a66ccf5475f86086b99af131244305f1e296",
+      "independentlyProduced": true,
+      "blindedTo": [
+        "author rationale",
+        "engine score",
+        "other reader verdict",
+        "predicted survivor count"
+      ],
+      "dimensions": {
+        "source support": "pass",
+        "fairness": "fail",
+        "natural task contract": "pass",
+        "structural witness isolation": "pass",
+        "semantic novelty": "pass",
+        "cheap-probe falsifiability": "uncertain"
+      },
+      "verdict": "kill",
+      "rationale": "The primary-source incident directly supports the claimed semantic-only CI blind spot and catastrophic regex complexity failure. However, the packet itself recognizes that fairness requires explicit accepted semantics and a resource budget, yet supplies neither a defined grammar/corpus contract nor a numeric deterministic work limit. Thus candidate acceptance would depend on verifier-hidden requirements. The task is otherwise natural, the verifier-owned corpus and work counter provide structural isolation, and adversarial resource-complexity enforcement is novel against the supplied baseline. Cheap-probe falsifiability is also uncertain because its stated falsifier is logically incomplete and no concrete budget is registered.",
+      "earliestFailedDimension": "fairness",
+      "costUsd": null,
+      "tokensUsed": 16364,
+      "rawOutputPath": "data/phase-15-reader-raw/waf-complexity-reader-a.json",
+      "rawOutputSha256": "a7b418d55a9d4b895dc4bf178e048d80fecad3caba22523d11970ce0cc95573a"
+    },
+    {
+      "reviewId": "waf-complexity-reader-b",
+      "candidateId": "waf-semantic-complexity-repair",
+      "readerId": "reader-b",
+      "sessionId": "01a06c90-6a44-7dc0-bd7a-9e3a772b95af",
+      "providerFamily": "openai",
+      "model": "gpt-5.6-sol",
+      "packetSha256": "da42ce85b2f4159a1fc3505134d0a66ccf5475f86086b99af131244305f1e296",
+      "independentlyProduced": true,
+      "blindedTo": [
+        "author rationale",
+        "engine score",
+        "other reader verdict",
+        "predicted survivor count"
+      ],
+      "dimensions": {
+        "source support": "pass",
+        "fairness": "fail",
+        "natural task contract": "uncertain",
+        "structural witness isolation": "uncertain",
+        "semantic novelty": "uncertain",
+        "cheap-probe falsifiability": "uncertain"
+      },
+      "verdict": "kill",
+      "rationale": "The primary-source incident supports the claimed resource-complexity blind spot. Fairness fails because the packet says semantics, request grammar, resource budget, and deterministic work counter must be public, but it supplies none of their concrete definitions or thresholds. Therefore hidden cases could depend on an undocumented semantic or measurement contract.",
+      "earliestFailedDimension": "fairness",
+      "costUsd": null,
+      "tokensUsed": 16253,
+      "rawOutputPath": "data/phase-15-reader-raw/waf-complexity-reader-b.json",
+      "rawOutputSha256": "8c952fe9b3e37175c2b395c4e607a78a60820a2e08415302ccecbbcc3b866886"
+    }
+  ]
+}
