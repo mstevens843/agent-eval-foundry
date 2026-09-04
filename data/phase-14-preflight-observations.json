@@ -1,0 +1,65 @@
+{
+  "schema": "agent-eval-foundry/phase-14-preflight-observations@1",
+  "observedAt": "2026-09-03",
+  "baselineCommit": "d73a50b",
+  "verification": [
+    {
+      "id": "tests",
+      "command": "pnpm test",
+      "passed": true,
+      "detail": "53 files and 1089 tests passed before Phase 14 changes"
+    },
+    {
+      "id": "typecheck",
+      "command": "pnpm typecheck",
+      "passed": true,
+      "detail": "baseline TypeScript check exited 0"
+    },
+    {
+      "id": "lint",
+      "command": "pnpm lint",
+      "passed": true,
+      "detail": "baseline Biome check exited 0"
+    },
+    {
+      "id": "build",
+      "command": "pnpm build",
+      "passed": true,
+      "detail": "baseline package build exited 0"
+    }
+  ],
+  "providers": [
+    {
+      "providerFamily": "openai",
+      "subjectExecutionAvailable": true,
+      "blindLabellingAvailable": true,
+      "mode": "configured",
+      "evidence": "the provider registry reported Codex configured through codex-cli 0.152.1"
+    },
+    {
+      "providerFamily": "anthropic",
+      "subjectExecutionAvailable": false,
+      "blindLabellingAvailable": false,
+      "mode": "import-only",
+      "evidence": "the provider registry reported Claude import-only because this runner has no explicit Anthropic execution credential"
+    }
+  ],
+  "isolation": {
+    "dockerDaemonAvailable": true,
+    "dockerServerVersion": "29.3.1",
+    "artifactNoNetworkSmokePassed": true,
+    "providerAgentContainerIntegrated": false,
+    "detail": "The no-network artifact container satisfied its declared isolation checks. Provider-agent execution needs network access and a purpose-built image containing each provider CLI; the current generic image and Phase 13 subprocess campaigns do not establish that path."
+  },
+  "capture": {
+    "fullArtifactContractImplemented": true,
+    "costFieldsImplemented": true,
+    "detail": "The shell orchestrator preserves challenge, workspace, submission, transcript, metadata, verifier output, normalized result and countability; trial records carry provider-reported usage and cost fields. No Phase 14 run exercised this contract."
+  },
+  "phase13Audit": {
+    "campaignHashesCurrent": true,
+    "localB6PassedForAllFamilies": true,
+    "campaignIsolation": "subprocess",
+    "agentOutputObservedBeforeRegistration": false
+  }
+}

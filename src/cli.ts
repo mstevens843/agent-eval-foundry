@@ -177,6 +177,23 @@ import {
 } from "./human-solvability/records.js";
 import { renderHumanReadinessReport, renderHumanSolvabilityReport } from "./human-solvability/report.js";
 import { MatrixError, parseMatrix } from "./matrix.js";
+import {
+  buildPhase14EffectLedger,
+  buildPhase14TrialLedger,
+  renderPhase14EffectLedger,
+  renderPhase14TrialLedger,
+} from "./phase-14/measurement.js";
+import {
+  buildPhase14PackageLock,
+  buildPhase14ScenarioLock,
+  parsePhase14FamilyId,
+  parsePhase14StarterProfile,
+  phase14ChallengePackage,
+  renderPhase14PackageLock,
+  renderPhase14ScenarioLock,
+  writeChallengePackage,
+} from "./phase-14/packages.js";
+import { buildPhase14Preflight, renderPhase14Preflight } from "./phase-14/preflight.js";
 import { renderReport } from "./report.js";
 import {
   classifyAccessTokenSmoke,
@@ -279,6 +296,7 @@ import {
   renderPhase13Results,
   renderPhase13TransferLab,
 } from "./reports/phase-13-transfer.js";
+import { renderPhase14OperatorEffects } from "./reports/phase-14-operator-effects.js";
 import {
   renderMechanismProbeReport,
   renderProbeNext,
@@ -410,6 +428,14 @@ REGISTRY (what could be built, and can we detect it?)
   phase13 report [--out f]       controlled family x recipe transfer report
   phase13 results [--out f]      structured transfer activation measurements
   phase13 design [--out f]       preregistered minimal design matrix
+  phase14 report [--out f]       controlled agent-ablation status and effects report
+  phase14 packages [--out f]     frozen seeded/neutral package hashes and B6 evidence
+  phase14 scenarios [--out f]    frozen concentrated and balanced scenario views
+  phase14 preflight [--out f]    cross-provider execution-readiness gate
+  phase14 trials [--out f]       planned and observed attempt ledger
+  phase14 effects [--out f]      operator-effect ledger and measured ranking
+  phase14 challenge --family <id> --starter <profile> --out <dir>
+                                  materialize one frozen ablation package
   sources                        list every matrix source, implemented and planned
 
 FAMILIES (run a measured mini-benchmark)
@@ -4576,6 +4602,7 @@ function allCommand(argv: readonly string[], root: string): string {
   );
   const phase13Results = measurePhase13(root);
   write("PHASE-13-TRANSFER-LAB.md", renderPhase13TransferLab(phase13Results));
+  write("PHASE-14-OPERATOR-EFFECTS.md", renderPhase14OperatorEffects(root));
   const inputs = { ...MEASURED_DEFAULTS, totalUsd: 100_000, labourRateUsdPerHour: 120 };
   assertBudgetInputs(inputs);
   assertPlanHonest(planBudget(inputs));
@@ -5103,6 +5130,35 @@ export function main(argv: readonly string[]): number {
         else if (sub === "results") emit(argv, renderPhase13Results(results));
         else if (sub === "design") emit(argv, renderPhase13DesignMatrix(results));
         else throw new Error(`unknown phase13 subcommand "${sub}"; expected report, results or design`);
+        return 0;
+      }
+      case "phase14": {
+        const sub = positional(argv, 1) ?? "report";
+        if (sub === "challenge") {
+          const family = flag(argv, "--family");
+          const starter = flag(argv, "--starter");
+          const out = flag(argv, "--out");
+          if (family === null || starter === null || out === null) {
+            throw new Error("phase14 challenge needs --family, --starter and --out");
+          }
+          const familyId = parsePhase14FamilyId(family);
+          const starterProfile = parsePhase14StarterProfile(starter);
+          const pkg = phase14ChallengePackage(root, familyId, starterProfile);
+          writeChallengePackage(pkg, out);
+          process.stdout.write(
+            `wrote ${pkg.files.length} files for ${familyId}/${starterProfile} at ${challengeHash(pkg)} to ${out}\n`,
+          );
+        } else if (sub === "report") emit(argv, renderPhase14OperatorEffects(root));
+        else if (sub === "packages") emit(argv, renderPhase14PackageLock(buildPhase14PackageLock(root)));
+        else if (sub === "scenarios") emit(argv, renderPhase14ScenarioLock(buildPhase14ScenarioLock(root)));
+        else if (sub === "preflight") emit(argv, renderPhase14Preflight(buildPhase14Preflight(root)));
+        else if (sub === "trials") emit(argv, renderPhase14TrialLedger(buildPhase14TrialLedger(root)));
+        else if (sub === "effects") emit(argv, renderPhase14EffectLedger(buildPhase14EffectLedger(root)));
+        else {
+          throw new Error(
+            `unknown phase14 subcommand "${sub}"; expected report, packages, scenarios, preflight, trials, effects or challenge`,
+          );
+        }
         return 0;
       }
       case "reports": {

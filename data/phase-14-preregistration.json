@@ -1,0 +1,242 @@
+{
+  "schema": "agent-eval-foundry/phase-14-operator-effects-preregistration@1",
+  "registeredAt": "2026-09-03",
+  "registeredBeforeAgentOutput": true,
+  "baselineCommit": "d73a50b",
+  "question": "Which parts of the committed-authority recipe change agent outcomes, which only change measurement validity or scenario coverage, and which effects depend on family?",
+  "frozenPhase13Inputs": {
+    "preregistration": "data/phase-13-preregistration.json",
+    "preregistrationSha256": "745d61bdd5b45a13bb6b699a46768691fd7bf939b217bc888185ad36fccb8db2",
+    "families": [
+      {
+        "familyId": "dao-descendant",
+        "challengeHash": "9d89b49307a960f65f2e6e8f204fd15e",
+        "scenarioSetId": "descendant-24-21639a0f"
+      },
+      {
+        "familyId": "trading-reconciliation-recompute",
+        "challengeHash": "94bfc2c401ad2cc19f7e84e8a1270a08",
+        "scenarioSetId": "recompute-24-1063a653"
+      },
+      {
+        "familyId": "deployment-rollback-recompute",
+        "challengeHash": "2ddfad2fd3287f752c41a408184b48ce",
+        "scenarioSetId": "recompute-24-80da6d41"
+      }
+    ]
+  },
+  "evidenceBoundary": [
+    "A reward-0 run is an outcome, not capability evidence.",
+    "Only a counted failure with two independent blind labels from different provider families agreeing on capability contributes to a difficulty claim.",
+    "Scenario rows within one submission are repeated measurements of one artifact, not independent model trials.",
+    "The balanced-versus-concentrated contrast estimates the effect of suite selection on scoring the same artifact; it is not an effect on agent behavior.",
+    "The Phase 13 families are deliberately isomorphic synthetic transfers, so a family coefficient does not establish independent difficulty axes or production-domain fidelity."
+  ],
+  "fixedValidityControls": [
+    "explicit-adjudicating-specification",
+    "harness-owned-ground-truth",
+    "positive-work-and-liveness-checks",
+    "anti-cheat-package-boundary",
+    "reference-correctness",
+    "b6-same-invocation-controls",
+    "challenge-leak-check",
+    "durable-full-capture"
+  ],
+  "experimentalFactors": [
+    {
+      "id": "F",
+      "name": "family substrate",
+      "unit": "attempt",
+      "levels": [
+        "dao-descendant",
+        "trading-reconciliation-recompute",
+        "deployment-rollback-recompute"
+      ],
+      "category": "family"
+    },
+    {
+      "id": "T",
+      "name": "starter profile",
+      "unit": "attempt",
+      "levels": [
+        "seeded-recompute",
+        "neutral-skeleton"
+      ],
+      "category": "genuine-difficulty",
+      "contrast": "The seeded profile contains the natural current-authority recomputation error and names it as wrong. The neutral profile preserves the interface and task text but provides no key-selection implementation. README text describing the starter changes with the profile; normative rules, types, examples, verifier, scenario set, and instruction stay fixed."
+    },
+    {
+      "id": "A",
+      "name": "committed-authority activation",
+      "unit": "scenario-within-attempt",
+      "levels": [
+        "nonactivation-control",
+        "uncertain-effect-and-changed-authority"
+      ],
+      "category": "genuine-difficulty",
+      "contrast": "A is descriptive within a submitted artifact. It measures whether failures concentrate where uncertainty and changed authority jointly make recomputation wrong; it does not randomize the operator across independent agents."
+    },
+    {
+      "id": "Q",
+      "name": "scenario-selection profile",
+      "unit": "deterministic-rescore-of-one-attempt",
+      "levels": [
+        "balanced-12",
+        "concentrated-24"
+      ],
+      "category": "selection-coverage",
+      "contrast": "Both scores are derived from the same frozen primary verifier output. The 12-scenario view contains all six nonactivation controls and six target scenarios frozen before agent output; the 24-scenario view contains 18 targets and six controls."
+    }
+  ],
+  "providerStrata": [
+    {
+      "providerFamily": "openai",
+      "providerId": "codex",
+      "model": "openai/gpt-5.6-sol",
+      "effort": "xhigh"
+    },
+    {
+      "providerFamily": "anthropic",
+      "providerId": "claude",
+      "model": "anthropic/claude-opus-5",
+      "effort": "max"
+    }
+  ],
+  "design": {
+    "kind": "3 family x 2 starter x 2 provider matched design with within-artifact activation and selection contrasts",
+    "maximumSubjectAttempts": 12,
+    "attemptRows": [
+      "dao-descendant/seeded-recompute/openai",
+      "dao-descendant/seeded-recompute/anthropic",
+      "trading-reconciliation-recompute/seeded-recompute/openai",
+      "trading-reconciliation-recompute/seeded-recompute/anthropic",
+      "deployment-rollback-recompute/seeded-recompute/openai",
+      "deployment-rollback-recompute/seeded-recompute/anthropic",
+      "dao-descendant/neutral-skeleton/openai",
+      "dao-descendant/neutral-skeleton/anthropic",
+      "trading-reconciliation-recompute/neutral-skeleton/openai",
+      "trading-reconciliation-recompute/neutral-skeleton/anthropic",
+      "deployment-rollback-recompute/neutral-skeleton/openai",
+      "deployment-rollback-recompute/neutral-skeleton/anthropic"
+    ],
+    "primaryScenarioProfile": "concentrated-24",
+    "secondaryScenarioProfile": "balanced-12",
+    "executionOrder": [
+      "Preflight both subject provider families, both blind-labeller provider families, durable full capture, B6, current hashes, and the required isolation boundary. Run nothing if any prerequisite is unavailable.",
+      "Stage 1: run the six seeded-recompute attempts as matched provider pairs in family order: durable outbox, trading reconciliation, deployment rollback. Within each pair run the cheaper Codex slot first only after both providers have passed preflight.",
+      "Blind-label every counted failure before applying an expansion rule. Readers receive separate packets and never receive the other reader's label, author interpretation, family outcome summary, or stopping decision.",
+      "If any seeded failure is agreed capability, run all six neutral-skeleton attempts to identify T and F x T.",
+      "If all six seeded attempts solve cleanly, run only the two dao-descendant neutral-skeleton sentinel attempts. If both sentinels also solve cleanly, stop; the transferred recipe and starter contrast are already solved at smoke resolution. If either sentinel has an agreed capability failure, run the remaining four neutral attempts.",
+      "If seeded failures exist but none has agreed capability because labels disagree or remain missing, pause. Do not use disagreement as an expansion signal and do not substitute an author label.",
+      "Any agreed specification, harness, verifier, package-leak, hash, or B6 defect pauses the affected package. A correction produces a new hash and a new preregistration; its earlier attempts remain preserved but are void for the corrected package."
+    ]
+  },
+  "estimands": [
+    {
+      "id": "E1-family",
+      "outcome": "attempt-level clean solve and agreed-capability failure",
+      "contrast": "raw and exact-binomial rates by family, stratified by provider and starter profile",
+      "claimClass": "association under a small matched smoke; not a causal family effect"
+    },
+    {
+      "id": "E2-starter",
+      "outcome": "attempt-level agreed-capability failure plus target-scenario failure fraction",
+      "contrast": "neutral-skeleton minus seeded-recompute within family and provider strata",
+      "claimClass": "controlled package-profile effect; causal language remains qualified because each cell has at most one stochastic model attempt"
+    },
+    {
+      "id": "E3-activation",
+      "outcome": "target-check scenario failure",
+      "contrast": "activated target minus nonactivation control within the same submission, then summarized across attempt clusters",
+      "claimClass": "mechanism concentration in agent artifacts; scenario rows are not independent trials"
+    },
+    {
+      "id": "E4-selection",
+      "outcome": "virtual suite failure and scenario failure fraction",
+      "contrast": "concentrated-24 minus balanced-12 on the same verifier output",
+      "claimClass": "causal scoring/coverage effect for the frozen artifact; no claim about changing agent behavior"
+    },
+    {
+      "id": "E5-family-by-starter",
+      "outcome": "attempt-level and cluster-level contrasts",
+      "contrast": "difference in E2 across the three families, with provider as a reporting stratum",
+      "claimClass": "family x operator interaction at smoke resolution"
+    },
+    {
+      "id": "E6-family-by-activation",
+      "outcome": "within-attempt target-check failure fraction",
+      "contrast": "difference in E3 across the three families",
+      "claimClass": "family x mechanism-activation interaction; descriptive unless replicated attempts exist"
+    }
+  ],
+  "analysisPlan": {
+    "rawCellsFirst": true,
+    "exactIntervals": "Use two-sided 95% Clopper-Pearson intervals for raw attempt-level binomial rates. Do not compute binomial intervals over scenarios as if 24 rows were 24 independent agents.",
+    "stratifiedModel": "Report family and starter contrasts within provider strata. Pool only with a Mantel-Haenszel style equal-stratum summary when both providers have countable matched cells; otherwise report strata separately.",
+    "hierarchicalModel": "Do not fit a hierarchical model at the maximum n=12. Three families, two providers, and one attempt per package profile cannot identify stable variance components. The report must say insufficient sample size rather than emit a precise prior-driven coefficient.",
+    "clusterRule": "One agent attempt is one independent cluster. Scenario-level summaries are paired descriptive outcomes inside that cluster.",
+    "missingness": "Refusal, timeout, infrastructure failure, stale hash, missing artifact, incomplete capture, B6 failure, and unlabelled or disagreed root cause are never imputed.",
+    "operatorRanking": "Rank an operator only when at least two provider-family strata contain the required countable contrast and all contributing failures have agreed root-cause labels. Otherwise record not-demonstrated or not-estimable."
+  },
+  "captureContract": [
+    "exact challenge directory and challenge hash",
+    "submission artifact",
+    "full provider transcript and event capture",
+    "provider metadata, invocation identity, runtime, token usage, and provider-reported cost",
+    "primary verifier output and normalized result",
+    "countability decision",
+    "agent workspace files and self-check artifacts",
+    "scenario parameters and target/control stratum",
+    "two separately produced blind root-cause packets and agreement decision"
+  ],
+  "rootCauseProtocol": {
+    "readerFamilies": [
+      "openai",
+      "anthropic"
+    ],
+    "blindPacketIncludes": [
+      "agent-visible challenge",
+      "submitted artifact",
+      "full transcript",
+      "verifier output",
+      "normalized result",
+      "scenario parameters for failing cells"
+    ],
+    "blindPacketExcludes": [
+      "the other reader's output",
+      "the author's diagnosis",
+      "cross-family outcome summaries",
+      "the expansion decision",
+      "language asserting that the descendant or recipe worked"
+    ],
+    "agreementRule": "Both readers must independently select capability from the closed root-cause vocabulary. Any other pair is unlabelled for difficulty purposes, including capability plus capability-adjacent prose under a different label.",
+    "selfLabellingForbidden": true
+  },
+  "stopRules": [
+    "No subject trial starts unless both provider families and both blind-labeller families pass preflight in the same session.",
+    "No package correction is made after agent output and retained under the old hash.",
+    "Any B6 failure voids that grading invocation and pauses the package.",
+    "Any broad failure spread outside committed-key, exactly-once, report-ledger consistency, and liveness checks pauses causal interpretation for that attempt.",
+    "All six seeded attempts clean plus both DAO neutral sentinels clean stops the remaining neutral cells as uninformative at smoke resolution.",
+    "No expansion is triggered by reward-0 alone, by a mutant result, or by an unlabelled failure."
+  ],
+  "budgets": {
+    "maximumSubjectAttempts": 12,
+    "maximumBlindLabels": 24,
+    "maximumSubjectTrialUsd": 180,
+    "maximumBlindLabellingUsd": 60,
+    "maximumTotalUsd": 240,
+    "maximumWallClockHours": 18,
+    "retryOnInfrastructureFailure": 1,
+    "retryOnRefusal": 0
+  },
+  "packagePolicy": {
+    "phase13SeededPackagesRemainByteIdentical": true,
+    "neutralVariantMayDifferOnlyIn": [
+      "starter/subject.mjs",
+      "README.md lines that accurately describe the starter profile"
+    ],
+    "packageLockRequiredBeforeTrials": true,
+    "correctionRule": "Any other byte change is a package correction, voids affected evidence, requires a new challenge hash, and requires an explicit replacement preregistration before another attempt."
+  }
+}

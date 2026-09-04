@@ -758,6 +758,68 @@ export type {
   Phase13SubstrateId,
   Phase13SubstrateResult,
 } from "./reports/phase-13-transfer.js";
+export { renderPhase14OperatorEffects } from "./reports/phase-14-operator-effects.js";
+export {
+  PHASE14_READER_FAMILIES,
+  REQUIRED_BLINDING,
+  adjudicatePhase14Labels,
+  parsePhase14BlindLabel,
+  phase14LabelRigIntegrity,
+} from "./phase-14/blind-labels.js";
+export type {
+  Phase14BlindLabel,
+  Phase14LabelDecision,
+  Phase14ReaderFamily,
+} from "./phase-14/blind-labels.js";
+export {
+  buildPhase14EffectLedger,
+  buildPhase14TrialLedger,
+  loadPhase14Preregistration,
+  renderPhase14EffectLedger,
+  renderPhase14TrialLedger,
+} from "./phase-14/measurement.js";
+export type {
+  Phase14EffectEstimate,
+  Phase14EffectLedger,
+  Phase14PreregistrationSummary,
+  Phase14RegisteredProvider,
+  Phase14TrialLedger,
+  Phase14TrialRow,
+} from "./phase-14/measurement.js";
+export {
+  PHASE14_FAMILIES,
+  STARTER_PROFILES,
+  buildPhase14PackageLock,
+  buildPhase14ScenarioLock,
+  parsePhase14FamilyId,
+  parsePhase14PackageLock,
+  parsePhase14StarterProfile,
+  phase14ChallengePackage,
+  renderPhase14PackageLock,
+  renderPhase14ScenarioLock,
+  writeChallengePackage,
+} from "./phase-14/packages.js";
+export type {
+  Phase14FamilyId,
+  Phase14PackageLock,
+  Phase14PackageRow,
+  Phase14ScenarioLock,
+  Phase14ScenarioRow,
+  StarterProfile,
+} from "./phase-14/packages.js";
+export {
+  buildPhase14Preflight,
+  parsePhase14PreflightObservations,
+  phase14PreflightFailures,
+  renderPhase14Preflight,
+} from "./phase-14/preflight.js";
+export type {
+  Phase14PreflightObservations,
+  Phase14PreflightResult,
+  Phase14ProviderPreflight,
+} from "./phase-14/preflight.js";
+export { exactBinomialInterval } from "./phase-14/statistics.js";
+export type { ExactBinomialInterval } from "./phase-14/statistics.js";
 export {
   activationAudit,
   band,

@@ -1,0 +1,112 @@
+{
+  "schema": "agent-eval-foundry/phase-14-preflight@1",
+  "observationsPath": "data/phase-14-preflight-observations.json",
+  "observedAt": "2026-09-03",
+  "baselineCommit": "d73a50b",
+  "ready": false,
+  "blockers": [
+    "anthropic subject execution unavailable",
+    "anthropic blind labelling unavailable",
+    "provider-agent container execution is not integrated for both provider CLIs"
+  ],
+  "providers": [
+    {
+      "providerFamily": "openai",
+      "subjectExecutionAvailable": true,
+      "blindLabellingAvailable": true,
+      "mode": "configured",
+      "evidence": "the provider registry reported Codex configured through codex-cli 0.152.1"
+    },
+    {
+      "providerFamily": "anthropic",
+      "subjectExecutionAvailable": false,
+      "blindLabellingAvailable": false,
+      "mode": "import-only",
+      "evidence": "the provider registry reported Claude import-only because this runner has no explicit Anthropic execution credential"
+    }
+  ],
+  "isolation": {
+    "dockerDaemonAvailable": true,
+    "dockerServerVersion": "29.3.1",
+    "artifactNoNetworkSmokePassed": true,
+    "providerAgentContainerIntegrated": false,
+    "detail": "The no-network artifact container satisfied its declared isolation checks. Provider-agent execution needs network access and a purpose-built image containing each provider CLI; the current generic image and Phase 13 subprocess campaigns do not establish that path."
+  },
+  "capture": {
+    "fullArtifactContractImplemented": true,
+    "costFieldsImplemented": true,
+    "detail": "The shell orchestrator preserves challenge, workspace, submission, transcript, metadata, verifier output, normalized result and countability; trial records carry provider-reported usage and cost fields. No Phase 14 run exercised this contract."
+  },
+  "verification": [
+    {
+      "id": "tests",
+      "command": "pnpm test",
+      "passed": true,
+      "detail": "53 files and 1089 tests passed before Phase 14 changes"
+    },
+    {
+      "id": "typecheck",
+      "command": "pnpm typecheck",
+      "passed": true,
+      "detail": "baseline TypeScript check exited 0"
+    },
+    {
+      "id": "lint",
+      "command": "pnpm lint",
+      "passed": true,
+      "detail": "baseline Biome check exited 0"
+    },
+    {
+      "id": "build",
+      "command": "pnpm build",
+      "passed": true,
+      "detail": "baseline package build exited 0"
+    }
+  ],
+  "phase13Campaigns": [
+    {
+      "familyId": "dao-descendant",
+      "path": "campaigns/dao-descendant-transfer-smoke-2026-09.json",
+      "challengeHash": "9d89b49307a960f65f2e6e8f204fd15e",
+      "hashCurrent": true,
+      "scenarioSetCurrent": true,
+      "slotsNotRun": 2,
+      "slots": 2,
+      "isolation": "subprocess",
+      "auditFailures": []
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "path": "campaigns/trading-reconciliation-recompute-transfer-smoke-2026-09.json",
+      "challengeHash": "94bfc2c401ad2cc19f7e84e8a1270a08",
+      "hashCurrent": true,
+      "scenarioSetCurrent": true,
+      "slotsNotRun": 2,
+      "slots": 2,
+      "isolation": "subprocess",
+      "auditFailures": []
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "path": "campaigns/deployment-rollback-recompute-transfer-smoke-2026-09.json",
+      "challengeHash": "2ddfad2fd3287f752c41a408184b48ce",
+      "hashCurrent": true,
+      "scenarioSetCurrent": true,
+      "slotsNotRun": 2,
+      "slots": 2,
+      "isolation": "subprocess",
+      "auditFailures": []
+    }
+  ],
+  "b6": {
+    "usable": true,
+    "knownGoodPassed": true,
+    "knownBadFailed": true,
+    "malformedInputRefused": true,
+    "packageDeltaRigUsable": true,
+    "blindLabelRigUsable": true,
+    "campaignManifestRigUsable": true
+  },
+  "subjectAttemptsRun": 0,
+  "spendUsd": 0
+}

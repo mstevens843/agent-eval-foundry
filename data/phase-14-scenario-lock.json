@@ -1,0 +1,1088 @@
+{
+  "schema": "agent-eval-foundry/phase-14-scenario-lock@1",
+  "preregistrationPath": "data/phase-14-preregistration.json",
+  "preregistrationSha256": "bbc31777883629466cf70eca0a9ce9597f1b78a15d4d65242c24d416c0ee1a56",
+  "selectionRule": "Keep all six nonactivation controls. Select six targets before agent output: seed 11 uses actor/width pairs 2/4, 3/6, 4/12; seed 23 uses 2/6, 3/12, 4/4.",
+  "rows": [
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-11-w2-k4-after_tool",
+      "params": {
+        "seed": 11,
+        "nWorkers": 2,
+        "keys": 4,
+        "crashPosition": "after_tool"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-11-w2-k6-after_tool",
+      "params": {
+        "seed": 11,
+        "nWorkers": 2,
+        "keys": 6,
+        "crashPosition": "after_tool"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-11-w2-k12-after_tool",
+      "params": {
+        "seed": 11,
+        "nWorkers": 2,
+        "keys": 12,
+        "crashPosition": "after_tool"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-11-w3-k4-after_tool",
+      "params": {
+        "seed": 11,
+        "nWorkers": 3,
+        "keys": 4,
+        "crashPosition": "after_tool"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-11-w3-k6-after_tool",
+      "params": {
+        "seed": 11,
+        "nWorkers": 3,
+        "keys": 6,
+        "crashPosition": "after_tool"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-11-w3-k12-after_tool",
+      "params": {
+        "seed": 11,
+        "nWorkers": 3,
+        "keys": 12,
+        "crashPosition": "after_tool"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-11-w4-k4-after_tool",
+      "params": {
+        "seed": 11,
+        "nWorkers": 4,
+        "keys": 4,
+        "crashPosition": "after_tool"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-11-w4-k6-after_tool",
+      "params": {
+        "seed": 11,
+        "nWorkers": 4,
+        "keys": 6,
+        "crashPosition": "after_tool"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-11-w4-k12-after_tool",
+      "params": {
+        "seed": 11,
+        "nWorkers": 4,
+        "keys": 12,
+        "crashPosition": "after_tool"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-23-w2-k4-after_tool",
+      "params": {
+        "seed": 23,
+        "nWorkers": 2,
+        "keys": 4,
+        "crashPosition": "after_tool"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-23-w2-k6-after_tool",
+      "params": {
+        "seed": 23,
+        "nWorkers": 2,
+        "keys": 6,
+        "crashPosition": "after_tool"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-23-w2-k12-after_tool",
+      "params": {
+        "seed": 23,
+        "nWorkers": 2,
+        "keys": 12,
+        "crashPosition": "after_tool"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-23-w3-k4-after_tool",
+      "params": {
+        "seed": 23,
+        "nWorkers": 3,
+        "keys": 4,
+        "crashPosition": "after_tool"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-23-w3-k6-after_tool",
+      "params": {
+        "seed": 23,
+        "nWorkers": 3,
+        "keys": 6,
+        "crashPosition": "after_tool"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-23-w3-k12-after_tool",
+      "params": {
+        "seed": 23,
+        "nWorkers": 3,
+        "keys": 12,
+        "crashPosition": "after_tool"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-23-w4-k4-after_tool",
+      "params": {
+        "seed": 23,
+        "nWorkers": 4,
+        "keys": 4,
+        "crashPosition": "after_tool"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-23-w4-k6-after_tool",
+      "params": {
+        "seed": 23,
+        "nWorkers": 4,
+        "keys": 6,
+        "crashPosition": "after_tool"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-23-w4-k12-after_tool",
+      "params": {
+        "seed": 23,
+        "nWorkers": 4,
+        "keys": 12,
+        "crashPosition": "after_tool"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-41-w1-k4-after_tool",
+      "params": {
+        "seed": 41,
+        "nWorkers": 1,
+        "keys": 4,
+        "crashPosition": "after_tool"
+      },
+      "activation": "control",
+      "uncertainAfterEffect": true,
+      "changedAuthority": false,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-41-w1-k6-after_tool",
+      "params": {
+        "seed": 41,
+        "nWorkers": 1,
+        "keys": 6,
+        "crashPosition": "after_tool"
+      },
+      "activation": "control",
+      "uncertainAfterEffect": true,
+      "changedAuthority": false,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-41-w1-k12-after_tool",
+      "params": {
+        "seed": 41,
+        "nWorkers": 1,
+        "keys": 12,
+        "crashPosition": "after_tool"
+      },
+      "activation": "control",
+      "uncertainAfterEffect": true,
+      "changedAuthority": false,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-41-w2-k4-none",
+      "params": {
+        "seed": 41,
+        "nWorkers": 2,
+        "keys": 4,
+        "crashPosition": "none"
+      },
+      "activation": "control",
+      "uncertainAfterEffect": false,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-41-w3-k6-none",
+      "params": {
+        "seed": 41,
+        "nWorkers": 3,
+        "keys": 6,
+        "crashPosition": "none"
+      },
+      "activation": "control",
+      "uncertainAfterEffect": false,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "dao-descendant",
+      "scenarioId": "recovery-41-w4-k12-none",
+      "params": {
+        "seed": 41,
+        "nWorkers": 4,
+        "keys": 12,
+        "crashPosition": "none"
+      },
+      "activation": "control",
+      "uncertainAfterEffect": false,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-11-r2-o4-after_venue_accept",
+      "params": {
+        "seed": 11,
+        "nReconcilers": 2,
+        "orders": 4,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-11-r2-o6-after_venue_accept",
+      "params": {
+        "seed": 11,
+        "nReconcilers": 2,
+        "orders": 6,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-11-r2-o12-after_venue_accept",
+      "params": {
+        "seed": 11,
+        "nReconcilers": 2,
+        "orders": 12,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-11-r3-o4-after_venue_accept",
+      "params": {
+        "seed": 11,
+        "nReconcilers": 3,
+        "orders": 4,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-11-r3-o6-after_venue_accept",
+      "params": {
+        "seed": 11,
+        "nReconcilers": 3,
+        "orders": 6,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-11-r3-o12-after_venue_accept",
+      "params": {
+        "seed": 11,
+        "nReconcilers": 3,
+        "orders": 12,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-11-r4-o4-after_venue_accept",
+      "params": {
+        "seed": 11,
+        "nReconcilers": 4,
+        "orders": 4,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-11-r4-o6-after_venue_accept",
+      "params": {
+        "seed": 11,
+        "nReconcilers": 4,
+        "orders": 6,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-11-r4-o12-after_venue_accept",
+      "params": {
+        "seed": 11,
+        "nReconcilers": 4,
+        "orders": 12,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-23-r2-o4-after_venue_accept",
+      "params": {
+        "seed": 23,
+        "nReconcilers": 2,
+        "orders": 4,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-23-r2-o6-after_venue_accept",
+      "params": {
+        "seed": 23,
+        "nReconcilers": 2,
+        "orders": 6,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-23-r2-o12-after_venue_accept",
+      "params": {
+        "seed": 23,
+        "nReconcilers": 2,
+        "orders": 12,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-23-r3-o4-after_venue_accept",
+      "params": {
+        "seed": 23,
+        "nReconcilers": 3,
+        "orders": 4,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-23-r3-o6-after_venue_accept",
+      "params": {
+        "seed": 23,
+        "nReconcilers": 3,
+        "orders": 6,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-23-r3-o12-after_venue_accept",
+      "params": {
+        "seed": 23,
+        "nReconcilers": 3,
+        "orders": 12,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-23-r4-o4-after_venue_accept",
+      "params": {
+        "seed": 23,
+        "nReconcilers": 4,
+        "orders": 4,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-23-r4-o6-after_venue_accept",
+      "params": {
+        "seed": 23,
+        "nReconcilers": 4,
+        "orders": 6,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-23-r4-o12-after_venue_accept",
+      "params": {
+        "seed": 23,
+        "nReconcilers": 4,
+        "orders": 12,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-41-r1-o4-after_venue_accept",
+      "params": {
+        "seed": 41,
+        "nReconcilers": 1,
+        "orders": 4,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "control",
+      "uncertainAfterEffect": true,
+      "changedAuthority": false,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-41-r1-o6-after_venue_accept",
+      "params": {
+        "seed": 41,
+        "nReconcilers": 1,
+        "orders": 6,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "control",
+      "uncertainAfterEffect": true,
+      "changedAuthority": false,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-41-r1-o12-after_venue_accept",
+      "params": {
+        "seed": 41,
+        "nReconcilers": 1,
+        "orders": 12,
+        "crashPosition": "after_venue_accept"
+      },
+      "activation": "control",
+      "uncertainAfterEffect": true,
+      "changedAuthority": false,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-41-r2-o4-none",
+      "params": {
+        "seed": 41,
+        "nReconcilers": 2,
+        "orders": 4,
+        "crashPosition": "none"
+      },
+      "activation": "control",
+      "uncertainAfterEffect": false,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-41-r3-o6-none",
+      "params": {
+        "seed": 41,
+        "nReconcilers": 3,
+        "orders": 6,
+        "crashPosition": "none"
+      },
+      "activation": "control",
+      "uncertainAfterEffect": false,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "scenarioId": "order-recovery-41-r4-o12-none",
+      "params": {
+        "seed": 41,
+        "nReconcilers": 4,
+        "orders": 12,
+        "crashPosition": "none"
+      },
+      "activation": "control",
+      "uncertainAfterEffect": false,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-11-c2-e4-after_compensation",
+      "params": {
+        "seed": 11,
+        "nControllers": 2,
+        "effects": 4,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-11-c2-e6-after_compensation",
+      "params": {
+        "seed": 11,
+        "nControllers": 2,
+        "effects": 6,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-11-c2-e12-after_compensation",
+      "params": {
+        "seed": 11,
+        "nControllers": 2,
+        "effects": 12,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-11-c3-e4-after_compensation",
+      "params": {
+        "seed": 11,
+        "nControllers": 3,
+        "effects": 4,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-11-c3-e6-after_compensation",
+      "params": {
+        "seed": 11,
+        "nControllers": 3,
+        "effects": 6,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-11-c3-e12-after_compensation",
+      "params": {
+        "seed": 11,
+        "nControllers": 3,
+        "effects": 12,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-11-c4-e4-after_compensation",
+      "params": {
+        "seed": 11,
+        "nControllers": 4,
+        "effects": 4,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-11-c4-e6-after_compensation",
+      "params": {
+        "seed": 11,
+        "nControllers": 4,
+        "effects": 6,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-11-c4-e12-after_compensation",
+      "params": {
+        "seed": 11,
+        "nControllers": 4,
+        "effects": 12,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-23-c2-e4-after_compensation",
+      "params": {
+        "seed": 23,
+        "nControllers": 2,
+        "effects": 4,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-23-c2-e6-after_compensation",
+      "params": {
+        "seed": 23,
+        "nControllers": 2,
+        "effects": 6,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-23-c2-e12-after_compensation",
+      "params": {
+        "seed": 23,
+        "nControllers": 2,
+        "effects": 12,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-23-c3-e4-after_compensation",
+      "params": {
+        "seed": 23,
+        "nControllers": 3,
+        "effects": 4,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-23-c3-e6-after_compensation",
+      "params": {
+        "seed": 23,
+        "nControllers": 3,
+        "effects": 6,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-23-c3-e12-after_compensation",
+      "params": {
+        "seed": 23,
+        "nControllers": 3,
+        "effects": 12,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-23-c4-e4-after_compensation",
+      "params": {
+        "seed": 23,
+        "nControllers": 4,
+        "effects": 4,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-23-c4-e6-after_compensation",
+      "params": {
+        "seed": 23,
+        "nControllers": 4,
+        "effects": 6,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-23-c4-e12-after_compensation",
+      "params": {
+        "seed": 23,
+        "nControllers": 4,
+        "effects": 12,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "target",
+      "uncertainAfterEffect": true,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": false
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-41-c1-e4-after_compensation",
+      "params": {
+        "seed": 41,
+        "nControllers": 1,
+        "effects": 4,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "control",
+      "uncertainAfterEffect": true,
+      "changedAuthority": false,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-41-c1-e6-after_compensation",
+      "params": {
+        "seed": 41,
+        "nControllers": 1,
+        "effects": 6,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "control",
+      "uncertainAfterEffect": true,
+      "changedAuthority": false,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-41-c1-e12-after_compensation",
+      "params": {
+        "seed": 41,
+        "nControllers": 1,
+        "effects": 12,
+        "crashPosition": "after_compensation"
+      },
+      "activation": "control",
+      "uncertainAfterEffect": true,
+      "changedAuthority": false,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-41-c2-e4-none",
+      "params": {
+        "seed": 41,
+        "nControllers": 2,
+        "effects": 4,
+        "crashPosition": "none"
+      },
+      "activation": "control",
+      "uncertainAfterEffect": false,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-41-c3-e6-none",
+      "params": {
+        "seed": 41,
+        "nControllers": 3,
+        "effects": 6,
+        "crashPosition": "none"
+      },
+      "activation": "control",
+      "uncertainAfterEffect": false,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "scenarioId": "rollback-recovery-41-c4-e12-none",
+      "params": {
+        "seed": 41,
+        "nControllers": 4,
+        "effects": 12,
+        "crashPosition": "none"
+      },
+      "activation": "control",
+      "uncertainAfterEffect": false,
+      "changedAuthority": true,
+      "inConcentrated24": true,
+      "inBalanced12": true
+    }
+  ]
+}

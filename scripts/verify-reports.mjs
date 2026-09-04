@@ -48,6 +48,22 @@ for (const [path, args] of [
   } else console.log(`ok     ${path}`);
 }
 
+// Phase 14 is intentionally allowed to generate an empty measured-effect ledger when preflight is
+// blocked. Diff the structured artifacts themselves so NOT_RUN cannot later be replaced by an
+// inferred outcome or an unstated package hash.
+for (const [path, args] of [
+  ["data/phase-14-package-lock.json", ["phase14", "packages"]],
+  ["data/phase-14-scenario-lock.json", ["phase14", "scenarios"]],
+  ["data/phase-14-preflight.json", ["phase14", "preflight"]],
+  ["data/phase-14-trial-ledger.json", ["phase14", "trials"]],
+  ["data/phase-14-effect-ledger.json", ["phase14", "effects"]],
+]) {
+  if (run(args) !== readFileSync(path, "utf8")) {
+    console.error(`STALE  ${path}`);
+    failures += 1;
+  } else console.log(`ok     ${path}`);
+}
+
 // The family artifacts are generated too, so they get the same treatment: regenerate and diff.
 // Every built family's matrix and shape are here: a family whose axis count moves and whose shape
 // does not is a build failure rather than a discrepancy someone notices in six months.
@@ -218,6 +234,7 @@ const SMOKE = [
   [["provider-delta", "evolution"], /evolution options/],
   [["deployment-alias", "readiness"], /deployment-alias readiness report/],
   [["phase13", "report"], /Controlled Family x Recipe Transfer Laboratory/],
+  [["phase14", "report"], /Controlled Agent Operator Ablations/],
   [["adversarial", "readiness"], /Adversarial verifier-integrity readiness/],
   [["adversarial", "report"], /Adversarial verifier-integrity audit/],
   [["adversarial", "v2", "report"], /Adversarial Audit v2/],
@@ -581,7 +598,7 @@ for (const variant of [
 // Lowering this floor is therefore a real decision with a real diff, not a number that drifts down one
 // at a time behind a passing build. Raise it whenever the suite grows.
 run(["all", "--out", tmp]);
-const REPORT_FLOOR = 112;
+const REPORT_FLOOR = 113;
 const generated = readdirSync(tmp);
 if (generated.length < REPORT_FLOOR) {
   console.error(
@@ -677,7 +694,7 @@ for (const name of readdirSync(tmp).sort()) {
 
 if (failures > 0) {
   console.error(
-    `\n${failures} generated artifact(s) differ from a fresh render. Run \`pnpm report && pnpm phase13:artifacts && pnpm bundles\`.`,
+    `\n${failures} generated artifact(s) differ from a fresh render. Run \`pnpm report && pnpm phase13:artifacts && pnpm phase14:artifacts && pnpm bundles\`.`,
   );
   process.exit(1);
 }
