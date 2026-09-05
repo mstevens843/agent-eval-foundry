@@ -951,3 +951,30 @@ export {
   rigIntegrity,
 } from "./screens/rig-integrity.js";
 export type { RigControl, RigVerdict } from "./screens/rig-integrity.js";
+
+// Phase 21 — construction operator causal laboratory
+export { parseOperatorTreatmentSchema, operatorTreatment } from "./phase-21/operator-schema.js";
+export type {
+  OperatorTreatment,
+  OperatorTreatmentSchema,
+  OperatorPrecondition,
+  PreconditionKind,
+  OperatorEvidenceStatus,
+} from "./phase-21/operator-schema.js";
+export { assertMatchedPairDiffable, requireMatchedPair } from "./phase-21/matched-pair.js";
+export type { MatchedPairComponents, MatchedPairDiffResult } from "./phase-21/matched-pair.js";
+export { mcNemarExact, evaluateStoppingRule } from "./phase-21/stopping-rule.js";
+export type {
+  BinaryOutcome,
+  MatchedObservation,
+  StoppingRulePreregistration,
+  StoppingDecision,
+  McNemarResult,
+} from "./phase-21/stopping-rule.js";
+export {
+  runPilot,
+  selectNaiveBaseline,
+  selectSmallTargeted,
+} from "./phase-21/pilot-caa-scenario-selection.js";
+export type { PilotResult, SizedPilotResult } from "./phase-21/pilot-caa-scenario-selection.js";
+export { toHardnessOperatorEvidence } from "./phase-21/operator-ledger-bridge.js";

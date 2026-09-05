@@ -16,6 +16,7 @@ selection operators change how reliably an existing mechanism activates.
 | `narrow-mutant-isolation` | validity-control | measured | not countable | not-applicable to local mutants | high |
 | `b6-rig-integrity-controls` | validity-control | measured | not countable | not-applicable: instrumentation validity | high |
 | `narrow-recompute-starter` | difficulty | measured | 2/2 clean solves with the neutral DAO starter -> 2/2 clean solves with the seeded recompute DAO starter | no positive effect established: all four DAO attempts solved, so no failure required root-cause labelling | medium |
+| `grade-the-obligation-from-the-external-party-log` | validity-control | measured | not countable | not-applicable: this constrains what a passing repair must actually do, it does not attribute difficulty to a capability | high |
 
 ## Move external truth outside the subject's authority
 
@@ -104,4 +105,15 @@ selection operators change how reliably an existing mechanism activates.
 - **Verifier integrity:** none; the starter is graded by the same sealed ledgers as every submission
 - **Solve-rate interpretation:** Phase 14 E2 measured a 0.000 matched reward-zero contrast across OpenAI and Anthropic; one attempt per cell limits causal precision.
 - **Provenance:** `src/challenge/dao-descendant-package.ts`; `src/families/dao-descendant/runner.ts`; `data/phase-14-effect-ledger.json#E2-starter`
+
+## Grade a behavioural obligation from the counterparty's record, not from the submitted source
+
+- **Changed:** The requirement that several rechecks be in flight together is checked against the authority's own root-owned append-only tick-stamped log of when each query started and finished, rather than against anything visible in the submission.
+- **Stayed fixed:** The published contract (SEMANTICS.md section 3) and the defect the task asks the agent to repair.
+- **Before:** The claim that a repair which fixes identifier pairing by deleting the goroutines would still be rejected was asserted during construction and never tested.
+- **After:** Two pairing-correct variants were built and graded. `serial-repair` (fan-out deleted, queries issued sequentially) scored 24/24 scenarios failed on both frozen suites, reward 0. `mutex-serialized` (goroutines retained, a mutex held across the query so the fan-out is cosmetic) failed identically, 24/24 on both suites, reward 0. Both fail only `rechecks_issued_together`, and only on the scenarios carrying two or more pending identifiers. The reference passes 0/24 failed on both suites.
+- **Fairness:** fair: the obligation is published verbatim in SEMANTICS.md section 3 ('An order carrying several identifiers to recheck costs one authority round trip, not one per identifier: their rechecks are in flight together') and restated in instruction.md, and checks.py maps the check to that section. This is stated-and-enforced, not a grader scoring unpublished behaviour.
+- **Verifier integrity:** closed the degenerate repair route. Because the check reads observed overlap at the counterparty rather than the shape of the submitted code, a submission cannot satisfy it by merely looking concurrent - the mutex variant keeps every goroutine and still fails.
+- **Solve-rate interpretation:** This operator was part of the Phase 18 bundle, which was applied all at once and produced 3 of 3 clean solves at time of writing. It closed a shortcut; it did not measurably make the task hard. It must not be credited with hardness.
+- **Provenance:** `data/phase-18-lazy-repair-probe.json`; `tasks/caa-revalidation-repair/tests/checks.py (rechecks_issued_together, CHECK_SECTIONS)`; `tasks/caa-revalidation-repair/tests/authority.py (_TICK/_EVENTS append-only log)`; `tasks/caa-revalidation-repair/environment/app/spec/SEMANTICS.md section 3`
 

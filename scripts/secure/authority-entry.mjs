@@ -57,15 +57,11 @@ writeFileSync(payloadPath, JSON.stringify(payload), { encoding: "utf8", mode: 0o
 const secret = randomBytes(32).toString("hex");
 const verifier = makeVerifier(secret);
 
-const child = spawn(
-  process.execPath,
-  [cellScriptPath, modulePath, adapterPath, payloadPath],
-  {
-    stdio: ["ignore", "pipe", "pipe", "pipe"],
-    env: { RPC_SECRET: secret },
-    detached: true,
-  },
-);
+const child = spawn(process.execPath, [cellScriptPath, modulePath, adapterPath, payloadPath], {
+  stdio: ["ignore", "pipe", "pipe", "pipe"],
+  env: { RPC_SECRET: secret },
+  detached: true,
+});
 
 const channels = new Map();
 let report = null;
@@ -79,8 +75,7 @@ let fd3Buffer = "";
 let stdoutTail = "";
 let stderrTail = "";
 
-const recordDiagnostic = (buf, current) =>
-  (current + buf.toString("utf8")).slice(-DIAGNOSTIC_CAP_BYTES);
+const recordDiagnostic = (buf, current) => (current + buf.toString("utf8")).slice(-DIAGNOSTIC_CAP_BYTES);
 
 const killChild = () => {
   try {
@@ -145,7 +140,8 @@ child.stdio[3].on("data", (buf) => {
     } else if (kind === FRAME_KINDS.DONE) {
       doneSeen = true;
     } else if (kind === FRAME_KINDS.CRASH) {
-      crash = framePayload && typeof framePayload.message === "string" ? framePayload.message : "cell crashed";
+      crash =
+        framePayload && typeof framePayload.message === "string" ? framePayload.message : "cell crashed";
     } else {
       noteViolation(`unknown frame kind: ${kind}`);
       return;
@@ -153,9 +149,12 @@ child.stdio[3].on("data", (buf) => {
   }
 });
 
-const timer = setTimeout(() => {
-  noteViolation(`cell exceeded wall-clock timeout of ${DEFAULT_TIMEOUT_MS}ms`);
-}, Number(process.env.CELL_TIMEOUT_MS ?? DEFAULT_TIMEOUT_MS));
+const timer = setTimeout(
+  () => {
+    noteViolation(`cell exceeded wall-clock timeout of ${DEFAULT_TIMEOUT_MS}ms`);
+  },
+  Number(process.env.CELL_TIMEOUT_MS ?? DEFAULT_TIMEOUT_MS),
+);
 
 child.on("error", (err) => {
   noteViolation(`cell process failed to start: ${String(err?.message ?? err)}`);
@@ -169,7 +168,12 @@ child.on("exit", (code, signal) => {
     finish({ channels: channelsOut, report, diagnostics: { stdoutTail, stderrTail }, error: violation });
   }
   if (crash !== null) {
-    finish({ channels: channelsOut, report, diagnostics: { stdoutTail, stderrTail }, error: `subject threw: ${crash}` });
+    finish({
+      channels: channelsOut,
+      report,
+      diagnostics: { stdoutTail, stderrTail },
+      error: `subject threw: ${crash}`,
+    });
   }
   if (!doneSeen) {
     finish({

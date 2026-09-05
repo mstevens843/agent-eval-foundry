@@ -225,7 +225,8 @@
         "tasks/caa-revalidation-repair/tests/checks.py (rechecks_issued_together, CHECK_SECTIONS)",
         "tasks/caa-revalidation-repair/tests/authority.py (_TICK/_EVENTS append-only log)",
         "tasks/caa-revalidation-repair/environment/app/spec/SEMANTICS.md section 3"
-      ]
+      ],
+      "confidence": "high"
     }
   ]
 }

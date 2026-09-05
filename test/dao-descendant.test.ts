@@ -109,7 +109,10 @@ describe("dao recompute descendant", () => {
   it("validates the measured operator ledger and refuses a row with no provenance", () => {
     const raw = JSON.parse(readFileSync(join(ROOT, "data", "hardness-operators.json"), "utf8"));
     const ledger = parseHardnessOperatorLedger(raw);
-    expect(ledger.operators).toHaveLength(8);
+    // Was 8 before Phase 21 fixed operators[8]'s missing `confidence` field (a pre-existing defect
+    // that made this file fail to parse at all, so this assertion was never actually reached before —
+    // the file has always had 9 operators; the count was stale, not the fix).
+    expect(ledger.operators).toHaveLength(9);
     expect(new Set(ledger.operators.map((row) => row.category))).toEqual(
       new Set(["validity-control", "difficulty", "scenario-selection"]),
     );

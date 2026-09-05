@@ -91,7 +91,9 @@ export function makeVerifier(secret) {
       if (typeof sig !== "string" || sig.length !== 64) {
         return { ok: false, reason: "sig is not a 64-char hex digest" };
       }
-      const expectedSig = createHmac("sha256", secret).update(canonical(seq, kind, payload)).digest("hex");
+      const expectedSig = createHmac("sha256", secret)
+        .update(canonical(seq, kind, payload))
+        .digest("hex");
       if (sig !== expectedSig) return { ok: false, reason: "signature mismatch" };
       if (seq !== expectedSeq) {
         return { ok: false, reason: `out-of-order seq: expected ${expectedSeq}, got ${seq}` };

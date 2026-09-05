@@ -1,0 +1,106 @@
+{
+  "schema": "agent-eval-foundry/phase-21-preregistration@1",
+  "phase": 21,
+  "title": "Construction Operator Causal Laboratory",
+  "recordedAtUtc": "2026-09-05T22:01:54Z",
+  "snapshot": {
+    "headCommit": "b3fdc5a594029749270014b6e6b92cddbbbb5d2b",
+    "headSubject": "Add a secure execution boundary for the trial router (Phase 20, squash-committed)",
+    "branch": "main",
+    "worktreeAtStart": "clean; no uncommitted changes",
+    "runtimeVersions": { "node": "v22.22.1", "pnpm": "10.33.0", "docker": "29.3.1" },
+    "evidenceCutoff": "All facts below reflect repository state as of recordedAtUtc, before any Phase 21 code was written."
+  },
+  "lane0ReVerificationOfPhase20": {
+    "method": "Re-ran node dist/cli.js check and node scripts/verify-phase-20.mjs fresh, from a rebuilt dist/, rather than trusting Phase 20's final summary.",
+    "result": "Both pass cleanly. SECURELY_MIGRATED_FAMILIES (src/trials/secure-runner.ts) still contains exactly [\"prompt-injection-memory-poisoning\", \"caa-revalidation\"]. reports/PHASE-20-VERIFIER-TRUST-BOUNDARY.md's claims hold as stated.",
+    "criticalAdditionalFindingNotInPhase20Report": "Migrating a family's GRADING ROUTE does not retroactively relabel its PAST trial records. Querying every routable family's counted-trial isolation directly (readFamilyTrials + countedAgentTrials) shows ALL 12 routed families have real historical counted trials, every one of them under pre-Phase-20 isolation (subprocess or container, never cell-container) — INCLUDING the two migrated families. However, reports/ship-recommendation.md's real evidence computation (familyEvidenceFor in src/reports/evidence.ts) additionally drops any trial whose recorded challenge hash no longer matches the family's CURRENT package (staleRunIds) before it ever reaches the isolation-level gate. Combining both facts: access-token-scope-expansion, delegated-wallet-scope-reconciliation, deployment-model-alias-rollout-drift, and prompt-injection-memory-poisoning currently have ZERO non-stale counted trials, so their isolation-level gate reads a vacuous 'pass, no agent artifact graded' rather than a real pass. The other 8 routable families (plus durable-approval-outbox) have real, non-stale counted trials, all under isolation the ship gate now correctly fails. NET CONCLUSION, stated precisely because it changes what Lane 6 would actually buy: there is currently ZERO family in this repository with a non-stale, counted, real-agent trial run under cell-container isolation. 'caa-revalidation is migrated' and 'memory-poisoning is migrated' both mean 'a NEW trial run today would be trustworthy', not 'an existing trial is trustworthy'. Any production-level (Lane 6-tier) evidence Phase 21 might want to cite has to be generated fresh."
+  },
+  "lane0ReuseVsRebuildDecisions": [
+    {
+      "system": "src/foundry/hardness-ledger.ts + data/hardness-operators.json",
+      "decision": "EXTEND, positioned as a downstream retrospective summary layer, not the live experiment schema",
+      "reasoning": "Its HardnessOperatorEvidence schema (id, category, changed, stayedFixed, beforeEvidence, afterEvidence, measurementStatus, fairnessOutcome, solveRateEffect{countable,before,after,note}, capabilityAttribution, provenance, confidence) is free-text narrative with light structure — good for human-readable post-hoc documentation of what was learned, but it has no preconditions field, no structured/diffable delta, no matched-pair (baseline vs treated) identifiers, and solveRateEffect.before/after are STRINGS not numbers. It cannot serve as Phase 21's live, machine-checkable operator-treatment schema (Lane 1) without losing exactly the structure Lane 1 needs. Decision: build a new, structured, prospective schema for Lane 1 (data/phase-21-operator-schema.json), and write a converter that emits a HardnessOperatorEvidence-shaped record into data/hardness-operators.json once a Phase 21 experiment concludes, so the two systems stay linked rather than forking into disconnected operator-tracking. The pre-existing operators[8] missing-confidence defect (blocks node dist/cli.js all) is fixed as part of this work, in src/foundry/hardness-ledger.ts's data file, not as an unrelated drive-by.",
+      "fixedDefect": "data/hardness-operators.json operators[8] (id: grade-the-obligation-from-the-external-party-log) was missing its confidence field entirely. Added confidence: \"high\", justified by its own beforeEvidence/afterEvidence fields already describing two independently-built pairing-correct variants both scoring reward 0 on both frozen suites."
+    },
+    {
+      "system": "src/phase-14/measurement.ts (preregistered-stop, blind-label, exact-interval machinery)",
+      "decision": "EXTEND",
+      "reasoning": "A dedicated audit (fork) confirmed: (1) most of Phase 14's six estimands are single-arm rates or within-artifact contrasts, but E2 (\"starter-profile-seeding\") IS a genuine matched baseline-vs-treatment pair (seeded-recompute vs neutral-skeleton), real precedent for exactly what Phase 21 wants, done once, n=6. (2) Its stopping rule is a deterministic two-stage adaptive-enrollment design (6 seeded attempts first, then either a 2-attempt sentinel subsample or full expansion, hardcoded to Phase 14's specific 3-family/2-provider/named-sentinel design) — not a formal SPRT, but a real, working, fail-closed sequential mechanism. (3) Blinding is outcome-assessor blinding on failure-cause adjudication (two independent cross-provider readers), not treatment-arm blinding — directly reusable for Phase 21's own failure-cause adjudication with no changes. (4) Its uplift computation for E2 is a bare mean of paired 0/1 differences with an explicit disclaimer that it lacks causal precision; exactBinomialInterval (Clopper-Pearson) only covers single-arm rates. What Phase 21 reuses near-verbatim: Clopper-Pearson exact intervals, the blind cross-provider adjudication pattern, and especially observedRow's trial-integrity verification block (mechanically checks a preserved trial's model/effort/scenario-set/isolation/challenge-hash/preregistration-hash all match before trusting it, fail-closed via RigInputError). Three concrete extensions Phase 21 needs and Phase 14 lacks: (a) genericize the two-stage expansion rule to take an arbitrary (baseline-arm, treatment-arm, sentinel-selection-strategy) tuple instead of hardcoded family/provider lists; (b) add a real validity-regression early-stop trigger — none exists; Phase 14's fixedValidityControls are static preconditions asserted once before the run, never monitored during it; (c) add a paired-binary significance test (McNemar's exact) to replace the bare-mean-difference placeholder."
+    },
+    {
+      "system": "src/reports/phase-13-transfer.ts (cross-family transfer-probe layer)",
+      "decision": "EXTEND",
+      "reasoning": "A dedicated audit (fork) confirmed this already implements a real 2x2 factorial cross-family design (U = uncertain-after-effect recovery, C = changed recovery authority) with an explicit interaction-contrast estimand (Y11-Y10-Y01+Y00), hand-implemented identically across three families (dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute). It is genuinely zero-cost (parsePhase13Preregistration throws unless paidUsd===0 && modelReads===0), and it enforces exactly the honesty discipline Phase 21 needs: it already splits localTransferEstablished (true) from agentDifficultyEstablished (hardcoded false, never set true anywhere) from prospectiveRealSystemTransferEstablished (hardcoded false/absent) — i.e., it already refuses to let mechanism-transfer evidence pass as difficulty-transfer evidence. What Phase 21 reuses: the interaction-contrast estimand pattern, the held-out-subject validity check, the kill-signal list, the hash-stability package/campaign gating, and — as a HARD RULE carried forward unmodified — the three-way honesty split. What's missing and must be added: (a) the per-family comparison is currently three hand-written TypeScript Adapter objects merged into the file; a fourth family means hand-writing new source, not declaring applicability against a schema — Phase 21's operator schema should drive this generically; (b) there is no WITHIN-FAMILY replication level at all (only one variant exists per family today) — Phase 21 must introduce it, since the mission's four evidence levels require it as a distinct tier between within-package and cross-family.",
+      "importantConstraint": "The three families this mechanism already uses (dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute) are EXACTLY the three ANSWER_KEY_GRANDFATHERED families from Phase 20 — their starters carry a known, deliberately un-fixed leak. This is fine for Phase 13's OWN purpose (measuring whether a deterministically-narrow MUTANT activates the mechanism identically; mutants do not read starter comments), but it means these three families remain unusable for any Phase 21 operator whose causal claim depends on legibility (causal depth, diagnosis radius, defect non-legibility at the edit site) until re-baselined, exactly as Phase 20 flagged."
+    },
+    {
+      "system": "src/foundry/evolve.ts (operator/variant proposal machinery)",
+      "decision": "BUILD A SEPARATE, SMALLER MODULE (src/phase-21/operator-apply.ts); reuse OperatorId, EvolutionOperator, OPERATORS/operator() lookup, and MaterialDelta as shared vocabulary only",
+      "reasoning": "A dedicated audit (fork) confirmed evolve()'s zero-proposals-for-repair-disposition behavior is a deliberate, documented design choice (\"repair: no variants. Fix the defect; a broken family's descendants inherit the break.\") — correct for evolve.ts's actual job (propose a whole NEW descendant family to replace a killed one) and not a bug to patch. Separately, recipesForParent() only special-cases access-token-scope-expansion; every other family (containment included) gets one of 4 hardcoded CONTAINMENT_RECIPES bundles, none of which use the two operators tagged appliesTo:[\"grader_gameable\"] (upgrade_isolation, add_audit_truth_requirement) — so even ignoring the disposition gate, no recipe would compose them. VariantProposal/variantToShape build an entirely fresh task shape (new domain, visibleRules, hiddenGradedRegion, referenceContract, authoritativeSources, requiredMutants) — there is no notion in this file of \"family F, unchanged, except operator X's own delta\", which is precisely Phase 21's matched-pair requirement. materialDeltasBetween() diffs coarse recipe-label strings, not itemized declared shape fields — useful as a sanity check, not sufficient alone. Decision: a new function, applyOperatorToShape(parent, operatorId, registry) -> {baseline, treated, materialDeltas}, independent of KillAnalysis/disposition entirely, cloning parent and applying only the one operator's own declared knobs/addsMechanisms, reusing OperatorId/EvolutionOperator/OPERATOR_BY_ID/MaterialDelta verbatim from evolve.ts.",
+      "operatorNoteUpgradeIsolation": "upgrade_isolation (whatChanges: \"The harness, not the family.\"; structural:false; knobs:[]; addsMechanisms:[]) is not a constructible, measurable treatment at all — it is a prerequisite migration checklist item (\"move this family to the secure executor\"), not something Phase 21 applies-and-measures. Excluded from Lane 1's operator taxonomy as a measurable operator; recorded as a prerequisite gate instead.",
+      "operatorNoteAuditTruth": "add_audit_truth_requirement IS a real content operator (adds an audit_evidence_state knob, targets false-audit-history) with prior measured evidence (data/a2-spec-repair-differential.json, scope: outbox audit-transition failures only). Retained as a genuine Lane 1 candidate operator, cross-domain transfer explicitly unmeasured."
+    },
+    {
+      "system": "src/trials/root-cause.ts (failure-cause taxonomy)",
+      "decision": "REUSE AS-IS, no extension needed",
+      "reasoning": "Read directly (not delegated). ROOT_CAUSES is exactly the closed, non-vacuous enum Phase 21 needs for its failure-cause outcome metric (capability / spec-underspecified / spec-contradiction / harness-contract-violation / package-leak / infrastructure / clean / unlabelled), with isDifficultyEvidence() and tallyRootCauses() as ready-made, already-tested utility functions. No documented reason found that it cannot serve Phase 21's purpose; using a second taxonomy beside it would be the exact mistake this module exists to prevent."
+    }
+  ],
+  "lane0SubstrateEnumeration": {
+    "note": "Path correction: root-cause.ts actually lives at src/trials/root-cause.ts, not src/foundry/root-cause.ts as the mission prompt assumed.",
+    "migratedCellContainerFamilies": ["prompt-injection-memory-poisoning", "caa-revalidation"],
+    "grandfatheredLeakyFamilies_excludedFromLegibilitySensitiveOperators": [
+      "dao-descendant", "trading-reconciliation-recompute", "deployment-rollback-recompute"
+    ],
+    "familiesWithNonStaleCountedTrials_underWeakIsolation_notValidProductionEvidenceYet": [
+      "caa-revalidation", "checker-required-memory-poisoning", "dao-descendant",
+      "deployment-rollback-recompute", "durable-approval-outbox", "prompt-injection-containment",
+      "trading-reconciliation-recompute", "ui-action-record-replay", "ui-replay-live-dom"
+    ],
+    "familiesWithZeroNonStaleCountedTrials_localOnlySubstrates": [
+      "access-token-scope-expansion", "delegated-wallet-scope-reconciliation",
+      "deployment-model-alias-rollout-drift", "prompt-injection-memory-poisoning"
+    ],
+    "allTwelveRoutableFamilies_validForLocalReferenceMutantOperatorMeasurement_regardlessOfMigration": [
+      "prompt-injection-containment", "prompt-injection-memory-poisoning", "ui-action-record-replay",
+      "ui-replay-live-dom", "checker-required-memory-poisoning", "access-token-scope-expansion",
+      "delegated-wallet-scope-reconciliation", "deployment-model-alias-rollout-drift",
+      "caa-revalidation", "dao-descendant", "trading-reconciliation-recompute",
+      "deployment-rollback-recompute"
+    ],
+    "validForProductionLevelEvidenceToday": [],
+    "validForProductionLevelEvidenceAfterOneNewCellContainerTrial": ["prompt-injection-memory-poisoning", "caa-revalidation"]
+  },
+  "lane0NewVsRepairSplit": {
+    "genuinelyNewWork": [
+      "The prospective, machine-checkable operator-treatment schema (Lane 1) with preconditions/deltas/substrate links.",
+      "applyOperatorToShape and the matched-pair diffability check (a new, small module; evolve.ts's machinery does not fit this shape).",
+      "The generic two-arm sequential stopping-rule engine (arbitrary baseline/treatment/sentinel-strategy, plus a real validity-regression trigger).",
+      "McNemar's exact test for paired-binary uplift.",
+      "The within-family replication evidence level (does not exist anywhere in this repo today)."
+    ],
+    "repairOrExtensionOfExistingInfrastructure": [
+      "Trial-integrity verification for any preserved matched-pair trial (reuse observedRow's pattern from src/phase-14/measurement.ts nearly verbatim).",
+      "Blind cross-provider failure-cause adjudication (reuse Phase 14's pattern with no changes beyond naming).",
+      "Cross-family transfer evidence level (extend Phase 13's interaction-contrast/held-out-subject/hash-stability machinery; generalize its hardcoded per-family Adapters to be schema-driven).",
+      "Failure-cause classification (reuse src/trials/root-cause.ts verbatim, zero changes).",
+      "The hardness-ledger as the retrospective summary sink (extend with a converter, fix its one defect)."
+    ]
+  },
+  "threatModel": {
+    "whatCouldMakeAResultFalselyPositive": [
+      "Constructing the treated arm in a way that changes more than the declared operator (confounding) — mitigated by the mechanical matched-pair diff check.",
+      "Measuring on a grandfathered-leaky family for a legibility-sensitive operator — mitigated by the substrate table above; enforced as a precondition check in applyOperatorToShape.",
+      "Treating a single stochastic attempt's outcome as a rate — mitigated by requiring the preregistered minimum matched-pair count before any uplift claim, per Lane 4.",
+      "Promoting a within-package result to a cross-family or production claim — mitigated by keeping Phase 13's three-way honesty split as a hard, carried-forward rule."
+    ],
+    "stoppingRules": [
+      "Never run a real paid provider trial without explicit operator authorization to spend (Lane 6).",
+      "Never invent a dollar cost, labor estimate, or scaling projection.",
+      "Do not conduct further candidate discovery in this phase.",
+      "Do not promote any construction hypothesis to a rule without measured uplift, no validity regression, and replication.",
+      "Do not alter Phase 17-20 registrations, trial results, hashes, or historical conclusions; corrections are additive and dated."
+    ]
+  }
+}

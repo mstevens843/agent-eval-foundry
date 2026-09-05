@@ -359,6 +359,9 @@ export const RULE_CODES = [
   "EXTERNAL_INTAKE_VERIFIER_RUN_MISMATCH",
   "EXTERNAL_INTAKE_DUPLICATE_RUN_ID",
   "EXTERNAL_INTAKE_PROVIDER_FAMILY_MISLABELLED",
+  // Phase 21 — construction operator causal laboratory
+  "PHASE21_OPERATOR_SCHEMA_INVALID",
+  "PHASE21_MATCHED_PAIR_NOT_DIFFABLE",
 ] as const;
 export type RuleCode = (typeof RULE_CODES)[number];
 

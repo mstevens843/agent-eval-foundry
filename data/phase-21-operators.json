@@ -1,0 +1,227 @@
+{
+  "schema": "agent-eval-foundry/phase-21-operator-schema@1",
+  "extractedOn": "2026-09-05",
+  "operators": [
+    {
+      "id": "realistic-multi-file-repair-context",
+      "causalClaim": "Requiring a submission to span more than one coupled file, rather than one self-contained module, causes solve rate to drop because the subject must maintain cross-file consistency instead of reasoning about one artifact in isolation.",
+      "targetsMechanisms": [],
+      "preconditions": [
+        { "kind": "custom", "detail": "family's submission contract must already require, or be extendable to require, more than one file with a declared coupling between them" }
+      ],
+      "constructionDelta": "Split the single submission/subject.mjs contract into two or more files with an explicit cross-file invariant the verifier checks (not just that both files exist, that their combined behavior satisfies one obligation neither file alone can).",
+      "staysFixed": "The scenario space, mutant bank, verifier logic, and every rule code in SPEC.md.",
+      "shapeFieldsEdited": ["submissionFile", "instruction", "referenceContract"],
+      "legibilitySensitive": false,
+      "measurable": true,
+      "evidenceStatus": "untested",
+      "priorEvidence": [],
+      "candidateSubstrates": ["checker-required-memory-poisoning"],
+      "excludedSubstrates": [
+        { "familyId": "*", "reason": "every other routable family's contract is a single submission/subject.mjs file today; checker-required-memory-poisoning is the only one already requiring two coupled files (subject.mjs + checker.mjs), so it is the only substrate with a natural baseline (a hypothetical single-file variant) close at hand." }
+      ]
+    },
+    {
+      "id": "outcome-specified-solution-undirected-contracts",
+      "causalClaim": "A SPEC that states the required outcome (what must hold) without directing the solution's shape (how to achieve it) causes solve rate to drop relative to a SPEC that hints at or names the expected fix pattern.",
+      "targetsMechanisms": [],
+      "preconditions": [
+        { "kind": "custom", "detail": "requires a per-family audit of SPEC.md/README.md for solution-directing language before any matched pair can be built; not completed this phase" }
+      ],
+      "constructionDelta": "Rewrite the visible SPEC/README so the same rule codes are stated as outcomes only, removing any implementation-shaped hint (e.g. naming a data structure, a control-flow pattern, or a specific field to recompute).",
+      "staysFixed": "The rule codes themselves, the scenario space, the mutant bank, the verifier.",
+      "shapeFieldsEdited": ["visibleRules", "README", "SPEC"],
+      "legibilitySensitive": true,
+      "measurable": true,
+      "evidenceStatus": "untested",
+      "priorEvidence": [],
+      "candidateSubstrates": [],
+      "excludedSubstrates": [
+        { "familyId": "*", "reason": "no family's visible SPEC has been individually audited for solution-directing language yet — Lane 0 confirmed this operator needs its own pre-pilot audit pass before a matched pair is meaningful, and that audit was not performed this phase." }
+      ]
+    },
+    {
+      "id": "causal-depth",
+      "causalClaim": "Increasing the number of inferential steps between the visible symptom and the root cause (the defect's damage surfaces one or more decisions removed from its trigger) causes solve rate to drop.",
+      "targetsMechanisms": [],
+      "preconditions": [
+        { "kind": "family-not-grandfathered", "detail": "the operator's claim depends on the causal chain's length being genuinely non-obvious, so a family whose starter already announces the mechanism cannot carry it" },
+        { "kind": "family-migrated", "detail": "a real solve-rate measurement needs counted agent trials through a trustworthy grading path" }
+      ],
+      "constructionDelta": "Add one more indirection step between the point a wrong decision is made and the point its consequence becomes observable (e.g. the mispaired value is written back and only surfaces on the NEXT unrelated request, as CAA's existing planted defect already does one step of).",
+      "staysFixed": "The rule codes, the mutant bank's caught-check mapping, the scenario generation's knob space.",
+      "shapeFieldsEdited": ["scenarios", "truth"],
+      "legibilitySensitive": true,
+      "measurable": true,
+      "evidenceStatus": "untested",
+      "priorEvidence": ["tasks/caa-revalidation-repair/task.toml (difficulty_explanation already documents one step of exactly this property)"],
+      "candidateSubstrates": ["caa-revalidation"],
+      "excludedSubstrates": [
+        { "familyId": "dao-descendant", "reason": "grandfathered leaky starter (Phase 20) confounds any causal-depth measurement" },
+        { "familyId": "trading-reconciliation-recompute", "reason": "grandfathered leaky starter (Phase 20) confounds any causal-depth measurement" },
+        { "familyId": "deployment-rollback-recompute", "reason": "grandfathered leaky starter (Phase 20) confounds any causal-depth measurement" }
+      ]
+    },
+    {
+      "id": "diagnosis-radius",
+      "causalClaim": "Spreading the evidence a solver needs across more sessions/scenarios/artifacts (widening how much surrounding context must be read to localize the defect) causes solve rate to drop.",
+      "targetsMechanisms": [],
+      "preconditions": [
+        { "kind": "custom", "detail": "family must already have a knob controlling how spread-out relevant history is (e.g. a sessions-between or similar breadth knob)" }
+      ],
+      "constructionDelta": "Increase the family's existing breadth knob (e.g. prompt-injection-memory-poisoning's sessionsBetween) so the evidence needed to detect the defect is spread across more sessions, holding the mechanism and every rule code fixed.",
+      "staysFixed": "The rule codes, the mutant bank, the memory/session contract's shape.",
+      "shapeFieldsEdited": ["scenarios.params.sessionsBetween"],
+      "legibilitySensitive": false,
+      "measurable": true,
+      "evidenceStatus": "untested",
+      "priorEvidence": [],
+      "candidateSubstrates": ["prompt-injection-memory-poisoning"],
+      "excludedSubstrates": []
+    },
+    {
+      "id": "defect-non-legibility-at-edit-site",
+      "causalClaim": "Removing prose or comments that name a defect's location or mechanism, so the fix is not legible from the diff site alone, causes solve rate to drop relative to an otherwise-identical package that names the defect inline.",
+      "targetsMechanisms": [],
+      "preconditions": [
+        { "kind": "custom", "detail": "requires an EXISTING legible-defect baseline to compare against, without editing the shipped, hash-pinned original — a new sibling variant (different id, never overwriting the original files) satisfies this without touching Phase 14's preserved trial" }
+      ],
+      "constructionDelta": "Construct a new, separately-hashed sibling variant of a grandfathered family with the answer-key comment (`// Deliberately wrong after X changes.` / `// WRONG: <mechanism>`) removed, everything else byte-identical; grade both the original (legible) and the sibling (non-legible) against the same mutant bank and scenario set.",
+      "staysFixed": "Every declared rule code, the scenario space, the mutant bank, the verifier logic.",
+      "shapeFieldsEdited": ["starter"],
+      "legibilitySensitive": true,
+      "measurable": true,
+      "evidenceStatus": "untested",
+      "priorEvidence": ["reports/PHASE-20-VERIFIER-TRUST-BOUNDARY.md (found the leak this operator would remove)"],
+      "candidateSubstrates": ["dao-descendant", "trading-reconciliation-recompute", "deployment-rollback-recompute"],
+      "excludedSubstrates": [
+        { "familyId": "*", "reason": "the ORIGINAL shipped package must never be edited (Phase 14 evidence); this operator is only pilotable via a new sibling variant that does not touch it, which is why the same three families are both the source of the finding and the candidate substrates." }
+      ]
+    },
+    {
+      "id": "cross-process-cross-time-external-authority-evidence",
+      "causalClaim": "Making ground truth depend on an external authority's answer, which can change between the time it was cached and the time it is used, causes solve rate to drop relative to ground truth the subject can compute locally and immediately.",
+      "targetsMechanisms": [],
+      "preconditions": [
+        { "kind": "custom", "detail": "family must already expose an authority-style facade whose answers are looked up rather than computed" }
+      ],
+      "constructionDelta": "Widen the staleness window knob (e.g. CAA's nowHour vs validatedAtHour gap, or an analogous cache-freshness knob) so more scenarios require a live re-check rather than a cached read, holding the authority facade's own contract fixed.",
+      "staysFixed": "The authority facade's method signatures, the rule codes, the mutant bank.",
+      "shapeFieldsEdited": ["scenarios.params (staleness/freshness knobs)"],
+      "legibilitySensitive": false,
+      "measurable": true,
+      "evidenceStatus": "untested",
+      "priorEvidence": [],
+      "candidateSubstrates": ["caa-revalidation", "access-token-scope-expansion", "delegated-wallet-scope-reconciliation", "deployment-model-alias-rollout-drift"],
+      "excludedSubstrates": []
+    },
+    {
+      "id": "naturally-incomplete-visible-tests",
+      "causalClaim": "Shipping a visible example/test surface that covers fewer edge cases than the hidden graded set, without appearing artificially truncated, causes solve rate to drop relative to a visible surface that (unrealistically) already demonstrates every graded edge case.",
+      "targetsMechanisms": [],
+      "preconditions": [
+        { "kind": "custom", "detail": "requires a per-family audit of how many of the hidden graded dimensions the visible examples/ directory already demonstrates; not completed this phase" }
+      ],
+      "constructionDelta": "Remove one or more visible worked examples that currently demonstrate a graded edge case, without changing SPEC.md's stated rules (the rule stays visible; only the worked demonstration of it is removed).",
+      "staysFixed": "SPEC.md's rule codes, the hidden scenario space, the mutant bank.",
+      "shapeFieldsEdited": ["examples"],
+      "legibilitySensitive": false,
+      "measurable": true,
+      "evidenceStatus": "untested",
+      "priorEvidence": [],
+      "candidateSubstrates": [],
+      "excludedSubstrates": [
+        { "familyId": "*", "reason": "no family's examples/ coverage against the hidden scenario space has been individually audited yet." }
+      ]
+    },
+    {
+      "id": "interacting-safety-and-liveness-obligations",
+      "causalClaim": "Requiring a submission to satisfy a safety obligation (never duplicate an effect) and a liveness obligation (eventually complete despite a crash) TOGETHER, where satisfying one naively violates the other, causes solve rate to drop relative to either obligation alone.",
+      "targetsMechanisms": [],
+      "preconditions": [
+        { "kind": "custom", "detail": "family must already have both a duplicate-effect safety check and a crash-recovery liveness check in its verifier" }
+      ],
+      "constructionDelta": "Compare the family's existing full scenario set (safety+liveness both graded, both required to hold together) against a constructed variant that grades only the safety check with crash-recovery scenarios excluded (liveness pressure removed), everything else identical.",
+      "staysFixed": "The idempotency-key contract, the effect ledger shape, the mutant bank.",
+      "shapeFieldsEdited": ["scenarios (crash-position knob restricted to none)"],
+      "legibilitySensitive": false,
+      "measurable": true,
+      "evidenceStatus": "untested",
+      "priorEvidence": ["data/hardness-operators.json#grade-the-obligation-from-the-external-party-log (measured precedent for the pairing half of this interaction on dao-descendant)"],
+      "candidateSubstrates": ["dao-descendant", "trading-reconciliation-recompute", "deployment-rollback-recompute"],
+      "excludedSubstrates": []
+    },
+    {
+      "id": "hidden-scenario-selection-targets-narrow-mutants",
+      "causalClaim": "Selecting the hidden graded scenario set to deliberately activate a narrow, hard-to-trigger mutant (rather than sampling uniformly across the declared parameter space) causes mutant-detection rate to rise without changing the reference's pass rate or the declared space itself.",
+      "targetsMechanisms": [],
+      "preconditions": [
+        { "kind": "custom", "detail": "family must already separate scenario ENUMERATION (the full declared space) from scenario SELECTION (the graded subset), so a baseline (uniform) selector can be constructed alongside the shipped (targeted) one without touching either" }
+      ],
+      "constructionDelta": "Hold enumerateSpace(), generateScenarios(), the mutant bank, and verify() fixed; replace only the selection function that turns the full space into a 24-scenario graded subset — shipped selectMeasuredSet() deliberately splits into an 18-scenario activated quota plus a 6-scenario non-activation control quota; the constructed baseline instead takes the first 24 scenarios in the same deterministic tie-break order with no activation split at all.",
+      "staysFixed": "enumerateSpace(), generateScenarios(), the mutant bank (mutants.ts), verify(), the reference implementation.",
+      "shapeFieldsEdited": ["scenario selection function only"],
+      "legibilitySensitive": false,
+      "measurable": true,
+      "evidenceStatus": "piloted",
+      "priorEvidence": ["src/families/caa-revalidation/scenarios.ts (selectMeasuredSet, ACTIVATED_QUOTA=18, CONTROL_QUOTA=6)"],
+      "candidateSubstrates": ["caa-revalidation"],
+      "excludedSubstrates": []
+    },
+    {
+      "id": "self-check-coverage",
+      "causalClaim": "Requiring the subject to author its own checker artifact that independently validates observed traces, in addition to the primary submission, causes solve rate to drop relative to grading the primary submission alone.",
+      "targetsMechanisms": [],
+      "preconditions": [
+        { "kind": "custom", "detail": "requires two families that are otherwise the same mechanism, one requiring a checker artifact and one not" }
+      ],
+      "constructionDelta": "checker-required-memory-poisoning already IS the operator-applied arm of this comparison: it requires submission/checker.mjs in addition to submission/subject.mjs, invoking runCase and validating traces independently, over what is otherwise the same memory-poisoning mechanism prompt-injection-memory-poisoning grades without a checker.",
+      "staysFixed": "This claim is NOT YET CONFIRMED as a true matched pair — the two families' scenario sets, knob spaces and rule codes have not been diffed against each other this phase. They are recorded as a promising, already-built candidate pair, not as a validated one.",
+      "shapeFieldsEdited": ["submissionFile", "instruction"],
+      "legibilitySensitive": false,
+      "measurable": true,
+      "evidenceStatus": "untested",
+      "priorEvidence": [],
+      "candidateSubstrates": ["prompt-injection-memory-poisoning", "checker-required-memory-poisoning"],
+      "excludedSubstrates": [
+        { "familyId": "*", "reason": "before this pair can be cited as evidence, their scenario/knob/rule-code sets must be diffed to confirm they differ ONLY by the checker requirement — not performed this phase; recorded as the concrete next step, not as a result." }
+      ]
+    },
+    {
+      "id": "collateral-damage-verification",
+      "causalClaim": "Grading whether a fix avoids an UNINTENDED side effect, in addition to whether it satisfies the primary obligation, causes solve rate to drop relative to grading the primary obligation alone.",
+      "targetsMechanisms": [],
+      "preconditions": [
+        { "kind": "custom", "detail": "family must already have a verifier check for an effect distinct from the primary correctness check (e.g. a duplicate-effect or collateral-write check)" }
+      ],
+      "constructionDelta": "Compare grading against the full check set (primary correctness check plus the collateral/duplicate-effect check) versus a constructed variant that drops the collateral check from scoring, everything else (scenarios, mutants, reference) identical.",
+      "staysFixed": "The scenario space, the mutant bank, the primary correctness check.",
+      "shapeFieldsEdited": ["verify (which checks are scored)"],
+      "legibilitySensitive": false,
+      "measurable": true,
+      "evidenceStatus": "untested",
+      "priorEvidence": [],
+      "candidateSubstrates": ["dao-descendant", "trading-reconciliation-recompute", "deployment-rollback-recompute", "ui-replay-live-dom"],
+      "excludedSubstrates": []
+    },
+    {
+      "id": "authoritative-state-inaccessible-to-subject",
+      "causalClaim": "Making the ledger/authority state that decides the grade physically unreachable from the subject's own process (Phase 20's cell-container boundary), rather than merely conventionally off-limits within a shared process, changes what a submission can get away with, though it is a grading-infrastructure property rather than a task-content property.",
+      "targetsMechanisms": [],
+      "preconditions": [
+        { "kind": "family-migrated", "detail": "only prompt-injection-memory-poisoning and caa-revalidation currently have a cell-container grading path to compare against their own historical subprocess/container path" }
+      ],
+      "constructionDelta": "This operator's delta is at the GRADING ROUTE level, not the TaskShape level: grade the identical submission through the pre-Phase-20 subprocessHost/containerHost path and through the post-Phase-20 cell-container path, holding the submission, scenario set, and verifier byte-identical, and compare only whether the ledger/report differ.",
+      "staysFixed": "The submission itself, the scenario set, the mutant bank, the verifier logic — literally everything except which process the ledger is constructed in.",
+      "shapeFieldsEdited": [],
+      "legibilitySensitive": false,
+      "measurable": true,
+      "evidenceStatus": "measured",
+      "priorEvidence": ["test/phase-20-lane1-exploits/exploits.test.ts", "test/phase-20-secure-executor.test.ts", "reports/PHASE-20-VERIFIER-TRUST-BOUNDARY.md"],
+      "candidateSubstrates": ["prompt-injection-memory-poisoning", "caa-revalidation"],
+      "excludedSubstrates": [
+        { "familyId": "*", "reason": "already measured for a malicious/adversarial submission by Phase 20 (the exploit does/does not forge a pass); what remains untested is whether this operator changes a HONEST subject's ordinary solve rate at all — expected to be null, since a compliant submission behaves identically under both paths, but this null has not been explicitly measured." }
+      ]
+    }
+  ]
+}

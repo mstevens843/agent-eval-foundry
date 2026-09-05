@@ -78,7 +78,10 @@ export async function runCell({ subject, payload, emit }) {
     specs: scenario.tools ?? [],
     invoke(actionId, call) {
       toolSeq += 1;
-      emit("call", { channel: "ledger", entry: { seq: toolSeq, tool: call.tool, actionId, args: call.args } });
+      emit("call", {
+        channel: "ledger",
+        entry: { seq: toolSeq, tool: call.tool, actionId, args: call.args },
+      });
       return {
         ok: true,
         output: {

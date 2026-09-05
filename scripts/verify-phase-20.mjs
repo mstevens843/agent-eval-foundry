@@ -56,7 +56,12 @@ const sortedManifestSha256 = (dir) => {
   walk(dir, "");
   files.sort();
   const manifest = files
-    .map((rel) => `${rel}  ${createHash("sha256").update(readFileSync(join(dir, rel))).digest("hex")}`)
+    .map(
+      (rel) =>
+        `${rel}  ${createHash("sha256")
+          .update(readFileSync(join(dir, rel)))
+          .digest("hex")}`,
+    )
     .join("\n");
   return createHash("sha256").update(manifest).digest("hex");
 };
@@ -69,14 +74,25 @@ const sortedManifestSha256 = (dir) => {
 // the historical mutants/reference/baseline/scenarios trees are untouched (via git, not hashing).
 const caaTestsDir = "tasks/caa-revalidation-repair/tests";
 if (existsSync(caaTestsDir)) {
-  console.log(`info   CAA tests/ tree sha256 (this script's own manifest method): ${sortedManifestSha256(caaTestsDir)}`);
+  console.log(
+    `info   CAA tests/ tree sha256 (this script's own manifest method): ${sortedManifestSha256(caaTestsDir)}`,
+  );
 } else {
   fail("CAA tests/ tree", "directory not found");
 }
 try {
   const touched = execFileSync(
     "git",
-    ["diff", "--name-only", "HEAD", "--", "tasks/caa-revalidation-repair/tests/mutants", "tasks/caa-revalidation-repair/tests/reference", "tasks/caa-revalidation-repair/tests/baseline", "tasks/caa-revalidation-repair/tests/scenarios"],
+    [
+      "diff",
+      "--name-only",
+      "HEAD",
+      "--",
+      "tasks/caa-revalidation-repair/tests/mutants",
+      "tasks/caa-revalidation-repair/tests/reference",
+      "tasks/caa-revalidation-repair/tests/baseline",
+      "tasks/caa-revalidation-repair/tests/scenarios",
+    ],
     { encoding: "utf8" },
   ).trim();
   if (touched === "") ok("CAA mutants/reference/baseline/scenarios untouched since HEAD");
@@ -112,10 +128,7 @@ if (!dockerAvailable) {
     for (const f of ["authority-entry.mjs", "cell-entry.mjs", "protocol.mjs"]) {
       writeFileSync(join(stage, f), readFileSync(join("scripts/secure", f)));
     }
-    writeFileSync(
-      join(stage, "adapter.mjs"),
-      readFileSync("scripts/secure/adapters/memory-poisoning.mjs"),
-    );
+    writeFileSync(join(stage, "adapter.mjs"), readFileSync("scripts/secure/adapters/memory-poisoning.mjs"));
     writeFileSync(
       join(stage, "subject-good.mjs"),
       "export const subject = { async runSession(view, memory, tools) {" +

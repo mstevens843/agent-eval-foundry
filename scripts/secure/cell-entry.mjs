@@ -22,7 +22,7 @@ import { makeSigner } from "./protocol.mjs";
 const rawWriteSync = writeSync;
 
 const secret = process.env.RPC_SECRET;
-delete process.env.RPC_SECRET; // gone from process.env before any untrusted code can run
+process.env.RPC_SECRET = undefined; // gone from process.env before any untrusted code can run
 if (typeof secret !== "string" || secret.length < 32) {
   rawWriteSync(2, "cell: no signing secret supplied, refusing to start\n");
   process.exit(1);
