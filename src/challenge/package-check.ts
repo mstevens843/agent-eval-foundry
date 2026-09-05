@@ -43,6 +43,63 @@ export const FORBIDDEN_CONTENT: readonly (readonly [string, string])[] = [
   ["injectionFollower", "a named mutant implementation"],
 ];
 
+/**
+ * Phase 20 Lane 5: prose in a visible file that names its own answer, regardless of family.
+ *
+ * Unlike `FORBIDDEN_CONTENT`, these patterns are not specific to one family's internals — they are
+ * the generic vocabulary of a challenge author leaving a debugging trail in what an agent reads.
+ * "deliberately wrong after line 40" tells the agent exactly where to look and what to expect there;
+ * a mutant bank finding the same defect independently is beside the point once a comment names it.
+ * Matched case-insensitively, on word boundaries where that matters, over every visible file's raw
+ * content — including README/SPEC/instruction prose, not only code.
+ */
+export const ANSWER_KEY_PATTERNS: readonly (readonly [RegExp, string])[] = [
+  [/deliberately\s+(wrong|incorrect)/i, "names the defect as deliberate"],
+  [/intentionally\s+(broken|wrong|incorrect|buggy)/i, "names the defect as intentional"],
+  [/\bis\s+(the\s+|an?\s+)?answer[\s-]?key\b/i, "names itself as an answer key"],
+  [/\bthe\s+bug\s+is\s+(here|on\s+line|in\s+this)/i, "points at the bug's location"],
+  [/\bthis\s+is\s+(the\s+)?(planted\s+)?defect\b/i, "names itself as the planted defect"],
+  [/\bfix(ed)?\s+on\s+line\s+\d+/i, "cites a line number for the fix"],
+  [/\bdo\s+not\s+fix\s+this\b/i, "instructs against fixing the named defect"],
+  [/\bmutant\s+(id|name)\s*[:=]/i, "names a mutant identifier inline"],
+] as const;
+
+/**
+ * Three families this gate found real leaks in on the day it was written — and whose starter's
+ * exact bytes are also the challenge hash a REAL, preserved Phase 14 agent trial (an OpenAI
+ * transcript under `trials/`) was actually run against. Editing the leak out changes that hash,
+ * which makes `buildPhase14TrialLedger` refuse to build the Phase 14 operator-effects report from
+ * evidence that genuinely happened. That is a real historical-evidence cost, not a formality, so the
+ * leak stays in place here rather than being silently fixed as a side effect of Phase 20.
+ *
+ * This is a known, dated, narrowly-scoped exemption — not a general escape hatch. Remediating it for
+ * real means re-baselining the Phase 14 trial evidence against the fixed package (out of Phase 20's
+ * scope) and is recorded as follow-up work in reports/PHASE-20-VERIFIER-TRUST-BOUNDARY.md. Every
+ * OTHER family, and any of these three going forward, is fully gated.
+ */
+const ANSWER_KEY_GRANDFATHERED: ReadonlySet<string> = new Set([
+  "dao-descendant",
+  "trading-reconciliation-recompute",
+  "deployment-rollback-recompute",
+]);
+
+/** Scan every visible file for prose that gives away its own answer. First hit wins; scan is total. */
+export function checkAnswerKeyLegibility(files: readonly CheckableChallengeFile[], familyId?: string): void {
+  if (familyId !== undefined && ANSWER_KEY_GRANDFATHERED.has(familyId)) return;
+  for (const f of files) {
+    for (const [pattern, why] of ANSWER_KEY_PATTERNS) {
+      const match = f.content.match(pattern);
+      if (match !== null) {
+        fail(
+          "CHALLENGE_LEAKS_ANSWER_KEY_COMMENT",
+          `challenge/${f.path}`,
+          `contains "${match[0]}" — ${why}. A starter-legibility gate rejects prose that gives away the answer, independent of whether the identifier blocklist or the empirical starter check would also have caught it.`,
+        );
+      }
+    }
+  }
+}
+
 /** The path every family's visible stub is written to. Declared once; the starter rule keys off it. */
 export const STARTER_FILE = "starter/subject.mjs";
 
@@ -414,6 +471,8 @@ export function checkChallengePackage(
       );
     }
   }
+
+  checkAnswerKeyLegibility(files, profile.familyId);
 
   const base = (p: string): string => p.split("/").pop() ?? p;
   for (const f of files) {

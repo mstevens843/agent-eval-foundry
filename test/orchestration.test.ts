@@ -551,8 +551,13 @@ describe("the already-solved gate", () => {
       unlabelledCountedTrials: 0,
       sharedBankSubjects: 3,
     });
-    expect(a.blockingFailures).toEqual([]);
-    expect(a.verdict).toBe("SHIP");
+    // Phase 20: `evidence.isolation` here is real — prompt-injection-containment's actual counted
+    // trials are genuinely graded under `subprocess` isolation (see "three counted Claude trials
+    // exist" above), which Phase 20 proved forgeable (test/phase-20-lane1-exploits/). The isolation-
+    // level gate is now blocking, so this family cannot SHIP on that evidence alone even once
+    // difficulty is properly attributed — it needs migrating to the secure executor first.
+    expect(a.blockingFailures).toEqual(["isolation-level"]);
+    expect(a.verdict).toBe("NOT-READY");
   });
 
   it("but not if the failure is unattributed: the label is what ships it, not the failure count", () => {
@@ -566,7 +571,9 @@ describe("the already-solved gate", () => {
       unlabelledCountedTrials: 1,
       sharedBankSubjects: 3,
     });
-    expect(a.blockingFailures).toEqual(["difficulty-evidenced"]);
+    // Phase 20: same real `subprocess` isolation as the sibling test above, so isolation-level joins
+    // difficulty-evidenced rather than replacing it.
+    expect(a.blockingFailures).toEqual(["isolation-level", "difficulty-evidenced"]);
     expect(a.results.find((r) => r.gate.id === "not-already-solved")?.verdict).toBe("pass");
     expect(a.verdict).toBe("NOT-READY");
   });
@@ -639,13 +646,18 @@ describe("UI action record/replay family", () => {
     expect(shape?.expectedMutants.length).toBeGreaterThanOrEqual(4);
   });
 
-  it("ships with counted trials while preserving the advisory chain limitation", () => {
+  it("would ship on difficulty evidence alone, but Phase 20 blocks it on isolation", () => {
     const evidence = familyEvidenceFor(ROOT, "ui-action-record-replay").evidence;
     const a = assessFamily(shape as NonNullable<typeof shape>, registry, evidence);
-    expect(a.blockingFailures).toEqual([]);
+    // Phase 20: this family's counted trials are real and were genuinely graded under `subprocess`
+    // isolation, which Phase 20 proved forgeable. Every OTHER gate below still reads exactly as it
+    // did — difficulty-evidenced still passes, agent-axes-independent is still advisory-fail — the
+    // only change is that isolation-level now also blocks SHIP until this family is migrated to the
+    // secure executor. See reports/PHASE-20-VERIFIER-TRUST-BOUNDARY.md.
+    expect(a.blockingFailures).toEqual(["isolation-level"]);
     expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("pass");
     expect(a.results.find((r) => r.gate.id === "agent-axes-independent")?.verdict).toBe("fail");
-    expect(a.verdict).toBe("SHIP");
+    expect(a.verdict).toBe("NOT-READY");
   });
 
   it("declares both halves so refusing to replay cannot pass", () => {

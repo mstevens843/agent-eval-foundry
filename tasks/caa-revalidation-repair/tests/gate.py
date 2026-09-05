@@ -81,12 +81,16 @@ def witness_isolation():
         "    s.connect(%r); s.sendall(json.dumps({'op':'dump'}).encode()); print(s.recv(65536).decode()[:80])\n"
         "except Exception as e: print('DENIED', type(e).__name__)\n" % authority.CONTROL_SOCK
     )
+    # Phase 20 hardening: -I (isolated mode) on both invocations, matching
+    # test.sh -- neither probe imports anything beyond the standard library, so
+    # this costs nothing and closes the same cwd/site-packages class of import
+    # hijack that test.sh's own invocations were hardened against.
     as_nobody = subprocess.run(
         ["setpriv", "--reuid", "nobody", "--regid", "nogroup", "--clear-groups", "--no-new-privs",
-         "python3", "-c", probe],
+         "python3", "-I", "-c", probe],
         capture_output=True, text=True, timeout=60,
     ).stdout.strip()
-    as_root = subprocess.run(["python3", "-c", probe], capture_output=True, text=True, timeout=60).stdout.strip()
+    as_root = subprocess.run(["python3", "-I", "-c", probe], capture_output=True, text=True, timeout=60).stdout.strip()
     # The public socket must answer a query and refuse everything else.
     public = authority.call_control({"op": "dump"}, path=authority.PUBLIC_SOCK)
     return {

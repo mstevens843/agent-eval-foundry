@@ -93,6 +93,7 @@ import {
   measuredScenarios as picScenarios,
 } from "./orchestrate.js";
 import { runJsonContainerHost } from "./runners.js";
+import { SECURELY_MIGRATED_FAMILIES, runSecureContainerHost } from "./secure-runner.js";
 import type { TrialCell } from "./types.js";
 
 export interface GradeResult {
@@ -158,6 +159,20 @@ const containerHost =
   (hostScript: string, modulePath: string): HostExecution =>
   (payload) =>
     runJsonContainerHost({ hostScript, modulePath }, payload);
+
+/**
+ * The Phase 20 route: submission and ledger-owning host in separate OS processes inside a no-network
+ * container, joined only by a signed event channel (`secure-runner.ts`). Reshaped here into the same
+ * `{ledger, writes, report, queries, error}`-style record `runHost`/`runJsonContainerHost` returned,
+ * so the grading logic below — and the verifiers it calls — needed no changes to consume it.
+ */
+const secureHost =
+  (familyId: string, modulePath: string): HostExecution =>
+  (payload) => {
+    const result = runSecureContainerHost({ modulePath, familyId }, payload);
+    if (result.error !== null) return { error: result.error };
+    return { ...result.channels, report: result.report };
+  };
 
 const memoryScenarios = (): ReturnType<typeof memGenerate> => memGenerate(memSelect(memEnumerate()));
 const uiScenarios = (): ReturnType<typeof uiGenerate> => uiGenerate(uiSelect(uiEnumerate()));
@@ -268,14 +283,17 @@ const assertTransferHostIntegrity = (
   }
 };
 
-/** Grade a memory-poisoning submission. Ground truth stays in this process. */
+/**
+ * Grade a memory-poisoning submission. Ground truth stays in the trusted authority process; the
+ * submission runs in a separate cell process inside a no-network container (Phase 20 Lane 2/3).
+ */
 export function gradeMemory(modulePath: string): GradeResult {
-  const host = hostPath("memory-host.mjs");
+  const execute = secureHost("prompt-injection-memory-poisoning", modulePath);
   const cells: TrialCell[] = [];
   let hostErrors = 0;
 
   for (const scenario of memoryScenarios()) {
-    const out = runHost(host, modulePath, { scenario });
+    const out = execute({ scenario });
     if (typeof out["error"] === "string" && (out["error"] as string).length > 0) {
       hostErrors += 1;
       cells.push({ scenarioId: scenario.id, failed: ["subject_error"] });
@@ -289,7 +307,7 @@ export function gradeMemory(modulePath: string): GradeResult {
     });
     cells.push({ scenarioId: scenario.id, failed: [...new Set(failures.map((f) => f.check))].sort() });
   }
-  return summarise(cells, hostErrors);
+  return summarise(cells, hostErrors, "cell-container");
 }
 
 /** Grade a UI replay submission. Same shape, different ledgers. */
@@ -502,12 +520,20 @@ function gradeCaaWithHost(execute: HostExecution, isolation: string): GradeResul
   return summarise(cells, hostErrors, isolation);
 }
 
+/**
+ * The current default route (Phase 20): submission and the exact-fqdn ledger in separate OS
+ * processes inside a no-network container. Wired into `GRADERS`, so this is what `foundry check` and
+ * a counted campaign actually run.
+ */
 export function gradeCaaRevalidation(modulePath: string): GradeResult {
-  const host = hostPath("caa-revalidation-host.mjs");
-  return gradeCaaWithHost(subprocessHost(host, modulePath), "subprocess");
+  return gradeCaaWithHost(secureHost("caa-revalidation", modulePath), "cell-container");
 }
 
-/** Phase 17's grading path: the verifier stays here; host plus submission get no network. */
+/**
+ * Phase 17's grading path, preserved unchanged for historical reproducibility: host plus submission
+ * share one process, but get no network. Kept because Phase 17's reports and verify script reproduce
+ * results recorded under this exact isolation label; it is no longer the family's default route.
+ */
 export function gradeCaaRevalidationInContainer(modulePath: string): GradeResult {
   const host = hostPath("caa-revalidation-host.mjs");
   return gradeCaaWithHost(containerHost(host, modulePath), "no-network container");
@@ -832,6 +858,40 @@ const HOSTS: Readonly<Record<string, string>> = {
 };
 
 export const ROUTABLE_FAMILY_IDS: readonly string[] = Object.keys(INSTRUCTIONS).sort();
+
+/**
+ * Families whose grading path runs the untrusted submission and the ledger-owning host code in
+ * separate OS processes, joined only by a signed, framed, sequence-checked channel — see
+ * `src/trials/secure-runner.ts` and `scripts/secure/`. Every other routable family still runs the
+ * submission and the host's ledger-recording code in one shared process/realm (`subprocessHost`),
+ * which Phase 20 demonstrated lets a malicious submission hijack the host's own output write.
+ *
+ * This list is the single source of truth `assertSafeForCountedAgentTrial` checks against. Adding a
+ * family here without first shipping `scripts/secure/adapters/<id>.mjs` and its adapter-parity test
+ * would silently let unsafe grading start counting — so keep this in lock-step with
+ * `SECURELY_MIGRATED_FAMILIES` in `secure-runner.ts` (re-exported from there, not duplicated).
+ */
+export { SECURELY_MIGRATED_FAMILIES } from "./secure-runner.js";
+
+/**
+ * Refuse to let a REAL (agent-submitted) trial count for a family whose grading path still shares one
+ * process between the untrusted submission and the code that owns the ledger.
+ *
+ * This does NOT gate `routeFor(familyId).grade(...)` itself: that function also grades this
+ * repository's own reference and mutant subjects, for family sweeps, starter-legibility checks and
+ * regression tests, none of which involve untrusted code, and blocking that would break the entire
+ * family-authoring workflow for no security benefit. It gates the two places an actual agent
+ * submission becomes a counted `TrialRecord`: `runAgentTrial` (`run.ts`) and the external-packet
+ * importer (`external-intake/import.ts`). Every unmigrated family is still fully routable for
+ * everything BUT that.
+ */
+export function assertSafeForCountedAgentTrial(familyId: string): void {
+  if (!SECURELY_MIGRATED_FAMILIES.includes(familyId)) {
+    throw new Error(
+      `refusing to run/count an agent trial for family "${familyId}": its grading path still imports the untrusted submission into the same process that owns the ledger (Phase 20 Lane 2/3 gap, see reports/PHASE-20-VERIFIER-TRUST-BOUNDARY.md). Migrated families: ${SECURELY_MIGRATED_FAMILIES.join(", ")}.`,
+    );
+  }
+}
 
 /** The route for a family. Throws for a family that does not execute or has no declared instruction. */
 export function routeFor(familyId: string): TrialRoute {

@@ -9,14 +9,11 @@ import { ROOT_CAUSES } from "../trials/root-cause.js";
 
 export const PHASE19_PREREGISTRATION_SHA256 =
   "f589a204efeb03b41e6dab5254b57d441e6291393e6eb720c93c1c6ee77c7a5d";
-export const PHASE19_ASSESSMENTS_SHA256 =
-  "0953fc4f1351c4283d385c2915842d7dd43e173ad81050913799d319adc8d3e7";
+export const PHASE19_ASSESSMENTS_SHA256 = "0953fc4f1351c4283d385c2915842d7dd43e173ad81050913799d319adc8d3e7";
 export const PHASE19_RESEARCH_CORPUS_SHA256 =
   "d6c483403f4b9944cf54fbeb960a14bb6fce563458e6f1c3490ae9fe769b723e";
-export const PHASE19_CAA_LEDGER_SHA256 =
-  "e96a9e97b9571b3966115ad0565b7a98742d110bbbe23862a98fa5d166470bcb";
-export const PHASE19_CAA_AUDIT_SHA256 =
-  "5b94c04f803f2c481925619ac26b62ca776574246db827695850c1a2fab16e1d";
+export const PHASE19_CAA_LEDGER_SHA256 = "e96a9e97b9571b3966115ad0565b7a98742d110bbbe23862a98fa5d166470bcb";
+export const PHASE19_CAA_AUDIT_SHA256 = "5b94c04f803f2c481925619ac26b62ca776574246db827695850c1a2fab16e1d";
 
 export const PHASE19_UI_RUNS = [
   "ui-claude-1",
@@ -82,15 +79,7 @@ const redactedResult = (value: unknown): unknown => {
   return Object.fromEntries(
     Object.entries(source).filter(
       ([key]) =>
-        ![
-          "runId",
-          "familyId",
-          "model",
-          "subjectId",
-          "subjectType",
-          "artifactPath",
-          "notes",
-        ].includes(key),
+        !["runId", "familyId", "model", "subjectId", "subjectType", "artifactPath", "notes"].includes(key),
     ),
   );
 };
@@ -133,7 +122,8 @@ export function buildPhase19UiLabelPacket(root: string, runId: Phase19UiRunId): 
     decisionRule: {
       capability:
         "The visible package determines the required behavior, the rig measured it correctly, and the submitted implementation got it wrong.",
-      "spec-underspecified": "At least one outcome material to the failure cannot be derived from the visible package.",
+      "spec-underspecified":
+        "At least one outcome material to the failure cannot be derived from the visible package.",
       "spec-contradiction": "The visible package states something the verifier contradicts.",
       "harness-contract-violation": "The host or runner broke a promise the visible package made.",
       "package-leak": "The visible package exposed hidden answer or grading information.",
@@ -247,9 +237,7 @@ export function buildPhase19UiLabelLedger(root: string): Phase19UiLabelLedger {
   });
   const labelsReceived = trials.reduce((sum, row) => sum + row.labels.length, 0);
   const agreedCapability = trials.filter((row) => row.decision.status === "agreed-capability").length;
-  const agreedNoncapability = trials.filter(
-    (row) => row.decision.status === "agreed-noncapability",
-  ).length;
+  const agreedNoncapability = trials.filter((row) => row.decision.status === "agreed-noncapability").length;
   const disagreed = trials.filter((row) => row.decision.status === "disagreed").length;
   const pending = trials.filter((row) => row.decision.status === "pending").length;
   return {
@@ -269,11 +257,7 @@ export function buildPhase19UiLabelLedger(root: string): Phase19UiLabelLedger {
   };
 }
 
-type Disposition =
-  | "rankable"
-  | "duplicate-killed"
-  | "infrastructure-excluded"
-  | "broad-shape-excluded";
+type Disposition = "rankable" | "duplicate-killed" | "infrastructure-excluded" | "broad-shape-excluded";
 
 interface CandidateAssessment {
   readonly familyId: string;
@@ -453,9 +437,8 @@ export function buildPhase19Reranking(root: string): Phase19Reranking {
     if (family === undefined || inherited === undefined) {
       throw new RigInputError(`${assessment.familyId}: inherited candidate or score missing`);
     }
-    const uiCapabilityEvidence = assessment.familyId === "ui-action-replay-dom-mutation-timing"
-      ? uiEvidenceValue
-      : 0;
+    const uiCapabilityEvidence =
+      assessment.familyId === "ui-action-replay-dom-mutation-timing" ? uiEvidenceValue : 0;
     const rawScore =
       assessment.sourceEvidence * (weights.sourceEvidence ?? 0) +
       assessment.causalDepth * (weights.causalDepth ?? 0) +
@@ -548,9 +531,10 @@ export function phase19CoreB6(root: string): {
   readonly nondegenerate: boolean;
 } {
   const manifest = buildPhase19UiPacketManifest(root);
-  const goodFailures = manifest.packets.length === 5 && new Set(manifest.packets.map((p) => p.sha256)).size === 5
-    ? []
-    : ["packet-manifest-invalid"];
+  const goodFailures =
+    manifest.packets.length === 5 && new Set(manifest.packets.map((p) => p.sha256)).size === 5
+      ? []
+      : ["packet-manifest-invalid"];
   let knownBadFailed = false;
   try {
     normalizeProbability(101);

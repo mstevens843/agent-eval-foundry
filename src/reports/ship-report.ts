@@ -462,16 +462,23 @@ export const GATES: readonly Gate[] = [
     rationale:
       "In-process isolation is sufficient for code this repository wrote and insufficient for code an " +
       "agent wrote. Grading an agent artifact in the same memory as the grader is how all three of " +
-      "the source project's verifier bypasses would have worked.",
-    blocking: false,
+      "the source project's verifier bypasses would have worked. Phase 20 found that 'subprocess' and " +
+      "'container' are not sufficient either: the untrusted submission and the host code that owns the " +
+      "ledger still share one process/realm at those levels, and a submission that hijacks the host's " +
+      "own stdout write or a builtin the ledger recording depends on can forge a clean grade — proven " +
+      "reproducible in test/phase-20-lane1-exploits/. Only 'cell-container' (submission and the " +
+      "ledger-owning authority in separate OS processes, joined by a signed and verified channel) " +
+      "closes that. This gate is now BLOCKING: an agent trial graded through a weaker isolation level " +
+      "is not evidence a family may ship on.",
+    blocking: true,
     evaluate: (_s, _r, e) => {
       if (e === undefined) return { verdict: "n/a", detail: "family not built" };
       if (e.countedAgentTrials === 0) {
         return { verdict: "pass", detail: `${e.isolation}; adequate while no agent artifact is graded` };
       }
       return {
-        verdict: e.isolation === "in-process" ? "fail" : "pass",
-        detail: `${e.isolation} with ${e.countedAgentTrials} agent trial(s)`,
+        verdict: e.isolation === "cell-container" ? "pass" : "fail",
+        detail: `${e.isolation} with ${e.countedAgentTrials} agent trial(s); Phase 20 requires cell-container`,
       };
     },
   },

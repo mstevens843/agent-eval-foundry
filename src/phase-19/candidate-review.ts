@@ -126,7 +126,8 @@ export function buildPhase19CandidatePacket(root: string, candidateId: string): 
           }
         : {
             status: "no local capability-attributed subject trial for this candidate",
-            limit: "Source incidents and related benchmark results are provenance, not this package's solve rate.",
+            limit:
+              "Source incidents and related benchmark results are provenance, not this package's solve rate.",
           },
     cheapProbe: phase19ProbeDefinition(candidateId),
     withheld: [
@@ -387,18 +388,10 @@ export function buildPhase19ReviewLedger(root: string): Phase19ReviewLedger {
     ? decisions.filter((decision) => decision.verdict === "survived").length
     : null;
   const executed = probes.filter((probe) => probe.result !== null);
-  const probeSurvivors = complete
-    ? executed.filter((probe) => probe.status === "survived").length
-    : null;
+  const probeSurvivors = complete ? executed.filter((probe) => probe.status === "survived").length : null;
   const fullBuildsAuthorized =
-    complete &&
-    reranking.uiEvidence.difficultyEvidenceSurvives &&
-    (probeSurvivors ?? 0) > 0;
-  const decision = !complete
-    ? "PENDING"
-    : fullBuildsAuthorized
-      ? "BUILD-SELECTIVELY"
-      : "REPAIR-CANDIDATES";
+    complete && reranking.uiEvidence.difficultyEvidenceSurvives && (probeSurvivors ?? 0) > 0;
+  const decision = !complete ? "PENDING" : fullBuildsAuthorized ? "BUILD-SELECTIVELY" : "REPAIR-CANDIDATES";
   const capturedArtifacts = [
     ...phase19CapturedFiles(root, "data/phase-19-ui-label-runs"),
     ...phase19CapturedFiles(root, "data/phase-19-candidate-review-runs"),

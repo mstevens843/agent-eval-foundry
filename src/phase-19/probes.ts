@@ -64,7 +64,8 @@ const DEFINITIONS: Readonly<Record<Phase19ProbeFamily, Phase19ProbeDefinition>> 
     activationCase: "inventory lookup produces the identifier required by fulfillment",
     nonActivationCase: "the downstream action has no upstream dependency",
     narrowMutant: "invoke tools in request-text order rather than dependency order",
-    limit: "This proves a dependency oracle is possible; it does not prove fuzzy tool discovery is difficult.",
+    limit:
+      "This proves a dependency oracle is possible; it does not prove fuzzy tool discovery is difficult.",
   },
 };
 
@@ -111,7 +112,8 @@ const rebalanceProbe = (mutant: boolean, activation: boolean): ProbeObservation 
   const emitted = attempts.filter((attempt) => mutant || attempt.generation === currentGeneration);
   const logicalEffects = emitted.map(() => "event-7");
   return {
-    failures: new Set(logicalEffects).size === 1 && logicalEffects.length === 1 ? [] : ["callback_not_exactly_once"],
+    failures:
+      new Set(logicalEffects).size === 1 && logicalEffects.length === 1 ? [] : ["callback_not_exactly_once"],
     mechanismActivated: activation,
     witness: { currentGeneration, emitted },
   };
@@ -127,7 +129,8 @@ const stateDiffProbe = (mutant: boolean, activation: boolean): ProbeObservation 
     if (id === "acct-1" || (mutant && id.startsWith("acct-1"))) row.enabled = true;
   }
   const changed = Object.keys(after).filter(
-    (id) => JSON.stringify(after[id as keyof typeof after]) !== JSON.stringify(before[id as keyof typeof before]),
+    (id) =>
+      JSON.stringify(after[id as keyof typeof after]) !== JSON.stringify(before[id as keyof typeof before]),
   );
   return {
     failures: changed.some((id) => id !== "acct-1") ? ["unauthorized_collateral_change"] : [],

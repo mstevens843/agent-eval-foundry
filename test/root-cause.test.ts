@@ -293,7 +293,10 @@ const gateEvidence = (over: Partial<FamilyEvidence> = {}): FamilyEvidence => ({
   baselinesTotal: 2,
   mutantsCaught: [{ mutantId: "m", check: "c", caught: true }],
   mechanismsExercised: true,
-  isolation: "subprocess",
+  // Phase 20 requires `cell-container` isolation once `countedAgentTrials > 0`, or the isolation-level
+  // gate joins `blockingFailures` too — an unrelated confound for a file whose whole point is testing
+  // the difficulty-evidenced/root-cause gate in isolation.
+  isolation: "cell-container",
   countedAgentTrials: 5,
   agentTrialsPassed: 0,
   capabilityEvidencedTrials: 2,

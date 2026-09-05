@@ -39,7 +39,7 @@ export const NEVER_COUNTS: ReadonlySet<TrialStatus> = new Set<TrialStatus>([
   "infrastructure_error",
 ]);
 
-export const ISOLATION_LEVELS = ["in-process", "subprocess", "container"] as const;
+export const ISOLATION_LEVELS = ["in-process", "subprocess", "container", "cell-container"] as const;
 export type IsolationLevel = (typeof ISOLATION_LEVELS)[number];
 
 /**
@@ -51,9 +51,11 @@ export const ISOLATION_GUARANTEES: Readonly<Record<IsolationLevel, string>> = {
   "in-process":
     "The subject receives a frozen facade and never sees the ledger array. It cannot swap the recorder by accident. It CAN reach past its arguments — module globals, prototype patching, the filesystem — so this level is sufficient for code you wrote and insufficient for code an agent wrote.",
   subprocess:
-    "The subject runs in a separate node process and communicates over stdout. It cannot touch the parent's memory, so the ledger and the grading are genuinely out of reach. It still shares the filesystem and network with the parent.",
+    "The subject runs in a separate node process and communicates over stdout. It cannot touch the parent's memory, so the ledger and the grading are genuinely out of reach. It still shares the filesystem and network with the parent. Phase 20 demonstrated this level does NOT stop the submission from hijacking the host's own stdout write, since host and submission share one process/realm — see reports/PHASE-20-VERIFIER-TRUST-BOUNDARY.md.",
   container:
-    "The provider agent runs in a per-attempt networked container with a read-only public challenge, writable trial workspace, read-only root, dropped capabilities and resource limits. The submitted module is then graded separately with its family host in fresh no-network containers while the verifier and authoritative result stay outside.",
+    "The provider agent runs in a per-attempt networked container with a read-only public challenge, writable trial workspace, read-only root, dropped capabilities and resource limits. The submitted module is then graded separately with its family host in fresh no-network containers while the verifier and authoritative result stay outside. The host and submission still share one process inside that container — see the `subprocess` caveat above; a container wrapped around a shared process is not a boundary between what is inside it.",
+  "cell-container":
+    "Phase 20's route. Inside a no-network container, the submission runs in its own OS process (the 'cell'), never sharing a realm with the trusted 'authority' process that owns the ledger. Every fact the cell reports crosses a one-way channel signed with a per-run secret the cell never has after import, verified frame-by-frame (schema, size, count, strict sequence) by the authority; a forged or malformed frame fails the run closed rather than being graded. The cell's own stdout/stderr are captured only as diagnostics and can never become the graded result. Known residual gap: cell and authority run under the same container user, so a native-code or V8 escape in the cell could in principle ptrace the authority process; closing that needs a distinct low-privilege identity for the cell (the CAA task's root/nobody split shows the pattern) and is flagged as follow-up work, not claimed here.",
 };
 
 export interface TrialCell {

@@ -1,5 +1,10 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "files": {
+    "ignore": [
+      "test/phase-20-lane1-exploits/fixtures/**"
+    ]
+  },
   "organizeImports": {
     "enabled": true
   },

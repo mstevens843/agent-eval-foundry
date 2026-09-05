@@ -8,8 +8,8 @@ Every figure below is measured: produced by running the family, not by declaring
 
 | | |
 |---|---|
-| ship gate | **SHIP** |
-| blocking failures | none |
+| ship gate | **NOT-READY** |
+| blocking failures | `isolation-level` |
 | data quality | `measured` |
 | status | `shipped` |
 | agent trials run | 5 |
@@ -29,7 +29,7 @@ Every figure below is measured: produced by running the family, not by declaring
 | `baselines-blocked` | yes | pass | 2/2 baselines rejected |
 | `mutants-caught-by-intended-check` | yes | pass | 10/10 caught by intended check |
 | `mechanisms-exercised` | yes | pass | 324/324 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
-| `isolation-level` | no | pass | subprocess with 5 agent trial(s) |
+| `isolation-level` | yes | fail | subprocess with 5 agent trial(s); Phase 20 requires cell-container |
 | `shared-bank-ready` | no | pass | 4 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | no | pass | verified |
 | `trial-ready` | no | pass | challenge package builds, leak check passes, router can grade it |

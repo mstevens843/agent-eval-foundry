@@ -1,6 +1,6 @@
 # ui-replay-live-dom trial readiness
 
-Status: **SHIP**.
+Status: **difficulty-evidenced**.
 
 | gate | value |
 |---|---|

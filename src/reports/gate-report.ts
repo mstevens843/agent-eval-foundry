@@ -86,7 +86,9 @@ export function renderGateReport(input: GateReportInput): string {
     "weighting and no override. This document is generated from the gate definitions themselves, so a",
     "gate that exists in the code cannot be missing here.",
     "",
-    `The blocking count was advertised as ${blocking.length + schemaEnforced.length} until the schema-enforced gates were separated out.`,
+    // A fact about the past, not a live computation: it must not silently reinflate every time a new
+    // gate turns blocking (Phase 20 added one), or a historical claim quietly starts describing today.
+    "The blocking count was advertised as 14 until the schema-enforced gates were separated out.",
     "They are real checks and they are not this table's work: the loader refuses a shape that would",
     "fail any of them, so they can never fire on anything the ship report can see.",
     "",

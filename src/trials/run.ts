@@ -19,7 +19,7 @@ import type { ChallengePackage } from "../challenge/package.js";
 import { fail } from "../foundry/schema.js";
 import { baselineDisqualifier } from "./orchestrate.js";
 import { type OrchestrateResult, orchestrateTrial } from "./orchestrator.js";
-import { type TrialRoute, routeFor } from "./router.js";
+import { type TrialRoute, assertSafeForCountedAgentTrial, routeFor } from "./router.js";
 import { containerIsolationDetail } from "./runners.js";
 
 /** Content hash of a challenge package: every visible file, path and bytes, in sorted order. */
@@ -166,6 +166,7 @@ export interface AgentTrialOptions {
  * Family-agnostic: everything family-specific comes from the route.
  */
 export function runAgentTrial(options: AgentTrialOptions): OrchestrateResult {
+  assertSafeForCountedAgentTrial(options.familyId);
   const prepared = prepareChallenge(options.root, options.familyId);
   const route = prepared.route;
 

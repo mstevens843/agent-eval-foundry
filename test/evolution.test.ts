@@ -60,13 +60,24 @@ describe("the kill taxonomy", () => {
     }
   });
 
-  it("the containment family is already-solved, derived from trial records", () => {
-    expect(picState.analysis.primary?.reason).toBe("already_solved");
-    expect(picState.analysis.disposition).toBe("harden");
-    const finding = picState.analysis.findings.find((f) => f.reason === "already_solved");
-    expect(finding?.source).toBe("derived");
-    expect(finding?.gates).toContain("not-already-solved");
-    expect(finding?.evidence.join(" ")).toMatch(/counted agent trial/);
+  it("the containment family is grader-gameable before it is already-solved", () => {
+    // Phase 20 activated a kill-reason branch that was already written and waiting: this family's
+    // three counted trials were genuinely graded under `subprocess` isolation, which Phase 20
+    // demonstrated lets a subject reach the grader (test/phase-20-lane1-exploits/). `grader_gameable`
+    // outranks `already_solved` in the priority order (src/foundry/kill.ts) for exactly this reason —
+    // a pass under a gameable grader is not trustworthy evidence that everyone solved it. Both
+    // findings are still present; only which one is PRIMARY changed.
+    expect(picState.analysis.primary?.reason).toBe("grader_gameable");
+    // `grader_gameable` dispositions to `repair` (fix the grading path), not `harden` (make the
+    // family itself harder) — a deeper, more precise diagnosis than `already_solved` gave.
+    expect(picState.analysis.disposition).toBe("repair");
+    const gameable = picState.analysis.findings.find((f) => f.reason === "grader_gameable");
+    expect(gameable?.source).toBe("derived");
+    expect(gameable?.gates).toContain("isolation-level");
+    const alreadySolved = picState.analysis.findings.find((f) => f.reason === "already_solved");
+    expect(alreadySolved?.source).toBe("derived");
+    expect(alreadySolved?.gates).toContain("not-already-solved");
+    expect(alreadySolved?.evidence.join(" ")).toMatch(/counted agent trial/);
   });
 
   it("declared judgements are labelled as declared and never as derived", () => {

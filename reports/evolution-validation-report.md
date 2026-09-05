@@ -1,6 +1,6 @@
 # Evolution validation
 
-`prompt-injection-containment` → `prompt-injection-memory-poisoning` via `add_time_separation` + `add_stateful_memory` + `add_benign_noise`
+`prompt-injection-containment` → `prompt-injection-memory-poisoning` via no recorded operator
 
 **Verdict: WITHDRAWN.** The mechanical verdict is `no-evidence`, and the reason there is no
 evidence is that 11 counted descendant trial(s) were INVALIDATED by a challenge
@@ -18,7 +18,7 @@ says the descendant is harder, which it could be for reasons the operator had no
 
 | # | claim | status | evidence |
 |---|---|---|---|
-| 1 | the parent died for the recorded reason | **holds** | 6 counted trials, 0 failing |
+| 1 | the parent died for the recorded reason | — | 6 counted trials, 0 failing |
 | 2 | the descendant is materially different | **holds** | mechanisms prompt-injection-via-retrieval, context-contamination, permission-boundary → context-contamination, false-audit-history, prompt-injection-via-retrieval |
 | 3 | the descendant is harder | **withdrawn** | the 11 descendant trial(s) this rested on are invalidated and do not count; the comparison has no live left-hand side |
 | 4 | it is harder BECAUSE of the operator | **withdrawn** | the knob split is pooled over the same invalidated trials, so there is nothing to attribute |
@@ -75,11 +75,7 @@ the repaired package.
 
 ## Operator kill-risk, revised
 
-The proposal pre-registered a **30%** chance of dying the same way as its parent, on this reasoning:
-
-> The persistence boundary is the crutch the passing trials leaned on hardest: provenance was a field on an in-memory object and never had to survive serialisation. Dropping it there is a defect a correct within-request implementation exhibits anyway.
-
-**No update.** The estimate was neither confirmed nor refuted: the trials that would have updated it are withdrawn, so the pre-registered figure stands exactly as it was written, un-tested.
+_No variant proposal is on record for this pair._
 
 ---
 

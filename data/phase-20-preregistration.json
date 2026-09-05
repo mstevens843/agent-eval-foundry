@@ -1,0 +1,137 @@
+{
+  "schema": "agent-eval-foundry/phase-20-preregistration@1",
+  "phase": 20,
+  "title": "Trusted Execution Repair, Evidence Reconciliation, And Candidate Continuation",
+  "recordedAtUtc": "2026-09-05T20:08:34Z",
+  "snapshot": {
+    "headCommit": "d6f329ed4b0f104d3c82d66768dff83bb5358c61",
+    "headSubject": "feat(phase17): validate the prospective CAA candidate",
+    "branch": "main",
+    "expectedHeadFromMissionPrompt": "d6f329e",
+    "headMatchesExpectation": true,
+    "worktreeAtStart": {
+      "modified": [
+        ".playwright-mcp/console-2026-09-05T04-06-24-238Z.log",
+        ".playwright-mcp/console-2026-09-05T06-17-39-957Z.log",
+        "reports/budget-plan.md"
+      ],
+      "untracked": [".playwright-mcp/console-2026-09-05T08-47-44-626Z.log"],
+      "preservationPolicy": "left exactly as found; not staged, cleaned, reverted, or committed by this phase",
+      "verifiedPreservedAtWriteTime": true
+    },
+    "runtimeVersions": {
+      "node": "v22.22.1",
+      "pnpm": "10.33.0",
+      "docker": "29.3.1 (build c2be9cc)",
+      "dockerDaemonAvailableAtStart": false,
+      "dockerDaemonAvailableAfterManualStart": true,
+      "note": "Docker Desktop was not running at session start; `open -a Docker` was used to start it (a local dev-environment action, not a repo change), after which `docker info` succeeded and all container work in this phase used the real daemon."
+    },
+    "knownBlockersAtStart": [
+      "Docker daemon down until manually started — would have blocked all container-based Lane 1/2 verification if left unresolved.",
+      "Historical reference path given in the mission prompt (/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/klavis-terminal-bench-task) does not exist; the actual path is /Users/devlegacy/Desktop/projects/klavis-terminal-bench-task (one directory level up, outside ai-gap-coverage-projects/). Corrected in this document; not deeply explored beyond confirming it exists, since the in-repo `tests/*` CAA harness (with its own 'harbor-canary' architecture comments) already supplied the needed reference pattern.",
+      "data/research-task-family-candidates.json's current sha256 (aa7e3088cd81f6f59cb24c5f50f44d6fa8cb4f108abcf96e2f9cbc51c631fa6c) does not match the researchCorpus hash Phase 19 recorded as its input (data/phase-19-reranking.json inputHashes.researchCorpus = d6c483403f4b9944cf54fbeb960a14bb6fce563458e6f1c3490ae9fe769b723e) — confirms the mission's claim that the frozen corpus changed after Phase 19 froze it. No git commit touches this file other than d6f329e, so the change predates or is concurrent with that commit; the exact prior state was not independently reconstructed (git history for this path shows only one commit)."
+    ],
+    "evidenceCutoff": "All file reads, hashes, and test runs in this document reflect repository state as of this preregistration's recordedAtUtc, immediately before Lane 1/2 implementation began. Later corrections in this phase are recorded additively in reports/PHASE-20-VERIFIER-TRUST-BOUNDARY.md and in dated failureNotes fields, never by editing this snapshot."
+  },
+  "auditOfEstablishedContext": {
+    "claim_hostSharesRealmWithSubmission": {
+      "prompt claim": "Every current family host appears to import the untrusted submission and later emit authoritative results through process.stdout in that same process.",
+      "verdict": "CONFIRMED, with a correction",
+      "correction": "The router (src/trials/router.ts) already runs the host+submission pair in a SEPARATE OS process from the grading parent, via execFileSync — the grading parent's memory is not reachable by the child. The real defect is narrower and more precise than the prompt states: the per-family HOST SCRIPT (e.g. scripts/memory-host.mjs) and the UNTRUSTED SUBMISSION share that one child process/JS realm. Because the host writes `process.stdout.write(JSON.stringify({ledger, report}))` AFTER calling `subject.run()`, in the SAME process, a malicious submission can hijack `process.stdout.write`, poison builtins the host's own ledger-recording code depends on, or call `process.exit()` before the host's own write ever runs — forging exactly what the parent reads back. This is proven live in test/phase-20-lane1-exploits/ against prompt-injection-containment (subprocessHost path)."
+    },
+    "claim_containerizingDoesNotFixIt": {
+      "prompt claim": "Containerizing that combined host/submission process does not create a trust boundary between them.",
+      "verdict": "CONFIRMED",
+      "evidence": "src/trials/runners.ts's containerRunner/runJsonContainerHost already puts the combined host+submission process in a no-network container (used for some Phase 14/17 grading paths), but host and submission still share one process/realm inside it. The repo's own comment in containerIsolationDetail() already says this in different words: '...here the verifier runs on the HOST...Harbor separated privilege three ways inside the verifier...this runner has one unprivileged process and one account.'"
+    },
+    "claim_caaV2Confounded": {
+      "prompt claim": "Phase 18 CAA V2 recorded 4/4 genuine clean solves, but its difficulty inference is CONFOUNDED... a usercustomize.py injection could forge reward 1.",
+      "verdict": "PARTIALLY CONFIRMED / PARTIALLY NOT REPRODUCED",
+      "evidence": "A dedicated agent built the real tests/Dockerfile verifier image and tried two concrete usercustomize/sitecustomize injection paths (shadow checks.py via cwd-first sys.path; sitecustomize.py poisoning sys.modules) against the AS-SHIPPED Phase 18 package, under both the default cwd and a deliberately adversarial cwd override. Neither forged reward=1. Root causes verified empirically: environment_mode=\"separate\" means no agent environment variable crosses into the verifier process at all; HOME=/tmp/pytest-work is freshly created after the build; pytest's own import-mode re-inserts /tests at sys.path[0] ahead of any cwd-based entry. High confidence no live exploit exists against the as-shipped package, though the true harbor launch cwd could not be independently confirmed from this repo alone. Hardening was still applied (Python -I isolated mode) to close the CLASS of attack by design rather than by incidental Debian/pytest behavior — see CAA disposition below. The other listed confounds (shallow localization, readable hidden tests, agent-visible scenarios reproducing both defects) were not independently re-audited in this phase; treat as unverified-but-not-contradicted."
+    },
+    "claim_phase19Relabeling": {
+      "prompt claim": "Phase 19 independently relabelled five UI failures: 1 agreed capability, 1 agreed non-capability, 3 reader disagreements.",
+      "verdict": "CONSISTENT WITH data/phase-19-ui-label-ledger.json and reports/PHASE-19-EVIDENCE-RERANK.md (not independently re-tallied in this phase; trusted as Phase 19's own recorded output, which this phase must not alter)."
+    },
+    "claim_twoCandidatesReviewed": {
+      "prompt claim": "rollback-reactivates-dormant-defect killed by disagreement; worker-rebalance-partition-callback-dedup killed 2-of-2; three remain unreviewed.",
+      "verdict": "CONFIRMED",
+      "evidence": "data/phase-19-reranking.json topFive = [rollback-reactivates-dormant-defect, worker-rebalance-partition-callback-dedup, ui-action-replay-dom-mutation-timing, state-diff-collateral-damage-verification, fuzzy-instruction-cross-server-tool-discovery]; data/phase-19-candidate-review-ledger.json / reports/PHASE-19-EVIDENCE-RERANK.md record the first two as reviewed and killed, matching the stated dispositions."
+    },
+    "claim_researchCorpusChanged": {
+      "prompt claim": "Three candidates remain unreviewed because the frozen research corpus changed.",
+      "verdict": "CONFIRMED BY HASH MISMATCH",
+      "evidence": "sha256(data/research-task-family-candidates.json) = aa7e3088cd81f6f59cb24c5f50f44d6fa8cb4f108abcf96e2f9cbc51c631fa6c today; data/phase-19-reranking.json recorded inputHashes.researchCorpus = d6c483403f4b9944cf54fbeb960a14bb6fce563458e6f1c3490ae9fe769b723e when it ran. These differ, so Phase 19's ranking was computed against a corpus that is no longer the one on disk."
+    },
+    "claim_reportsStillSayShip": {
+      "prompt claim": "Generated reports still call UI families SHIP and therefore do not yet reflect the strongest current evidence.",
+      "verdict": "CONFIRMED AT SNAPSHOT TIME, CORRECTED DURING THIS PHASE",
+      "evidence": "reports/evidence-snapshot.md:43-44 and reports/ship-recommendation.md:35-36,982,1024 marked ui-action-record-replay and ui-replay-live-dom SHIP at snapshot time. data/candidates-klavis.json recorded both candidate ledger rows as status=shipped. This phase's Lane 5 gate hardening (isolation-level gate made blocking, requiring cell-container isolation for any family with counted agent trials) causes `foundry check` to correctly fail with LEDGER_STATUS_CONTRADICTS_GATE for both once the gate change lands; the ledger rows were corrected to status=trialed with a dated Phase 20 correction note, and reports were regenerated. See reports/PHASE-20-VERIFIER-TRUST-BOUNDARY.md for the full before/after."
+    }
+  },
+  "threatModel": {
+    "trustedParties": [
+      "The grading (router) process, running outside any container, on the host.",
+      "The new authority process (scripts/secure/authority-entry.mjs), which never imports submission code.",
+      "Family adapter modules (scripts/secure/adapters/*.mjs), authored by the repository, staged read-only alongside the submission."
+    ],
+    "untrustedParties": [
+      "The agent-submitted artifact (submission/subject.mjs), which may contain arbitrary JavaScript including attempts to poison builtins, hijack stdout, exit early, spawn background children, or exfiltrate/forge state."
+    ],
+    "assumedAttackerCapabilities": [
+      "Full control over the content of submission/subject.mjs.",
+      "Ability to import Node built-in modules (node:fs, node:child_process, node:crypto, etc.) from within the cell process.",
+      "Ability to monkeypatch any mutable global/prototype reachable in its own process (process.stdout.write, JSON.stringify, Array.prototype.push, Object.prototype.toJSON, etc.).",
+      "Ability to call process.exit() at any point, including before returning from its declared entry point.",
+      "Ability to write directly to any file descriptor it can discover, including guessing that fd 3 carries the trusted event channel."
+    ],
+    "explicitlyOutOfScope": [
+      "A kernel-level or container-escape exploit (e.g. a Node/V8 native-code vulnerability letting the cell process ptrace or otherwise read the authority process's memory). The cell and authority currently run under the same container UID; this is a documented residual gap (see ISOLATION_GUARANTEES['cell-container'] in src/trials/types.ts), not something this phase claims to close.",
+      "Attacks requiring network access (both processes run inside a --network=none container)."
+    ],
+    "expectedExploitOutcomes": {
+      "beforeLane2": "stdout hijack after early exit forges a fully clean grade; builtin poisoning suppresses ledger evidence; both reproduced live against prompt-injection-containment's subprocessHost path.",
+      "afterLane2ForMigratedFamilies": "The same exploit classes fail closed: the forged bytes land only in a diagnostics field never parsed as data, and the authority's signed/framed/sequenced verification rejects any frame it did not itself validate — reproduced live, in real Docker containers, for both migrated families (prompt-injection-memory-poisoning, caa-revalidation)."
+    },
+    "migrationRequirements": [
+      "Trusted host code must never import submission code into its own process.",
+      "Untrusted code (the 'cell') runs in a separate OS process, inside a no-network container with dropped capabilities, a read-only root filesystem, a private tmpfs, and no credentials.",
+      "All communication from cell to authority crosses a one-way, newline-framed, HMAC-signed, strictly-sequenced channel with a per-frame size cap, a total-size cap, a total-frame-count cap, and a wall-clock timeout; any violation fails the run closed.",
+      "The cell's real stdout/stderr are captured only as truncated diagnostics and never parsed as grading data.",
+      "The authority constructs the final result; it never trusts anything the cell did not report through the signed channel."
+    ],
+    "stoppingRules": [
+      "Never run a real paid provider trial in this phase.",
+      "Never invent a dollar cost, labor estimate, or scaling projection.",
+      "Never print, persist, or inspect a credential value; record only boolean availability.",
+      "Never edit Phase 17-19 trial results, transcripts, hashes, or historical conclusions; corrections are additive and dated.",
+      "Do not retune CAA difficulty or claim new difficulty evidence while hardening its verifier.",
+      "If six hours of effective work is insufficient to migrate all 12 families, ship the reusable boundary plus representative adapters and mechanically block the rest from counted trials rather than leaving them silently ungated."
+    ],
+    "acceptanceCriteria": [
+      "At least one exploit class is proven to work against the pre-Phase-20 architecture, with exact commands and results.",
+      "The same exploit class is proven to fail closed against the new architecture, in a real Docker container, for at least one migrated family.",
+      "Every routed family is either migrated or mechanically blocked from producing a counted agent TrialRecord.",
+      "`foundry check` fails on a ledger/gate contradiction rather than silently passing, and passes cleanly once the ledger is corrected.",
+      "The CAA verifier's actual execution boundary is empirically tested (not merely inspected), and its disposition (harden vs. withdraw) is decided on that evidence.",
+      "All corrections to Phase 17-19-derived artifacts are additive, dated, and clearly scoped to what changed and why."
+    ]
+  },
+  "inputHashesAtSnapshot": {
+    "researchTaskFamilyCandidatesJson_sha256": "aa7e3088cd81f6f59cb24c5f50f44d6fa8cb4f108abcf96e2f9cbc51c631fa6c",
+    "phase19RerankingRecordedResearchCorpusHash_sha256": "d6c483403f4b9944cf54fbeb960a14bb6fce563458e6f1c3490ae9fe769b723e",
+    "caaVerifierTestsDir_sha256OfSortedManifest_before": "2b5673906a9d2f8c2048a449628f42e107be55f608969ceecee8dd24dc8cbb80",
+    "caaVerifierTestsDir_sha256OfSortedManifest_after": "40299d78c667835f8c0a5f9e2b4f0167f1d7d136000881e46a84e951925b0461",
+    "note": "The CAA before/after hashes were computed by a dedicated Lane 4 agent as sha256(sorted per-file sha256 manifest of tasks/caa-revalidation-repair/tests/); exactly 3 files changed (test.sh, gate.py, test_certd.py), none under mutants/, reference/, baseline/, or scenarios/."
+  },
+  "correctionsLog": [
+    {
+      "date": "2026-09-05",
+      "target": "data/candidates-klavis.json: ui-action-record-replay-built, ui-replay-live-dom-built",
+      "change": "status: shipped -> trialed; failureNotes populated with a dated Phase 20 rationale",
+      "reason": "Phase 20 made the isolation-level ship gate blocking; both families' counted agent trials were graded under subprocess/container isolation, which Phase 20 demonstrated is forgeable. Historical trial results, subject counts, and pass/fail figures inside `results` were NOT modified.",
+      "additive": true
+    }
+  ]
+}

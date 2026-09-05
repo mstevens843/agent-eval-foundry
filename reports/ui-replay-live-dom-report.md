@@ -48,7 +48,7 @@ scenario set.
 | instances separating nothing | 0 |
 | challenge package | 9 files, hash `18c3f5afc5973604205cd7df23ce4cad` |
 | counted real-agent trials | 1 |
-| live-DOM status | **SHIP** |
+| live-DOM status | **difficulty-evidenced** |
 
 The axis count is over a MUTANT bank: it says the verifier can distinguish 19 kinds of
 wrong, and it is bounded by how many kinds were written.
@@ -81,7 +81,7 @@ correction can never change a hash and invalidate the evidence that motivated it
 | browser-backed | **no.** No renderer, no layout, no compositing, no real CSS matching |
 | challenge package | **yes.** 9 leak-checked visible files, hash `18c3f5afc5973604205cd7df23ce4cad` |
 | trialed | **yes.** 1 counted real-agent trial(s) |
-| shippable | **yes**. SHIP requires counted agent evidence, not only mutant-detection evidence |
+| shippable | **no**. SHIP requires counted agent evidence, not only mutant-detection evidence |
 
 The package exists now, and its hash is the stale-evidence guard. Any spec or visible-example
 edit changes that hash and invalidates trials run against the older package.

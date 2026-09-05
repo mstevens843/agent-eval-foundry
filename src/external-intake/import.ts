@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSy
 import { dirname, join } from "node:path";
 import { readFamilyTrials, writeTrialDirectory } from "../trials/directory.js";
 import { decideCountability } from "../trials/orchestrator.js";
-import { routeFor } from "../trials/router.js";
+import { assertSafeForCountedAgentTrial, routeFor } from "../trials/router.js";
 import { prepareChallenge } from "../trials/run.js";
 import { parseTrialRecord } from "../trials/validate.js";
 import type { ExternalIntakeImportResult, ExternalIntakeValidationResult } from "./types.js";
@@ -85,6 +85,11 @@ export function importExternalRunPacket(
   if (!validation.importedTrialEligible || validation.packet.metadata === null) {
     return { validation, preservedDir, trialDir: null };
   }
+
+  // The packet is preserved above regardless — evidence that a submission arrived is never destroyed.
+  // What is refused here is COUNTING it: grading an untrusted external submission through a route that
+  // still shares one process between the submission and the code that owns the ledger.
+  assertSafeForCountedAgentTrial(familyId);
 
   const metadata = validation.packet.metadata;
   const runId = metadata.runId as string;

@@ -3,8 +3,15 @@
 
 import json
 import os
+import sys
 
 import pytest
+
+# Phase 20 hardening: test.sh now runs pytest with -I (isolated mode), which
+# ignores PYTHONPATH -- so this can no longer rely on the env var test.sh sets
+# for readability. Every other /tests module already does this same insert at
+# its own top; this file just did it implicitly via the env instead.
+sys.path.insert(0, "/tests")
 
 import checks
 

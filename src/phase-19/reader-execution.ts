@@ -1,22 +1,15 @@
 import { createHash } from "node:crypto";
-import {
-  existsSync,
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, relative } from "node:path";
+import { REQUIRED_BLINDING, parsePhase14BlindLabel } from "../phase-14/blind-labels.js";
+import type { Phase14BlindLabel } from "../phase-14/blind-labels.js";
 import {
   PHASE14_PROVIDER_IMAGE,
   phase14ProviderCommand,
   phase14ProviderContainerB6,
   stageCodexCredential,
 } from "../phase-14/provider-runtime.js";
-import { REQUIRED_BLINDING, parsePhase14BlindLabel } from "../phase-14/blind-labels.js";
-import type { Phase14BlindLabel } from "../phase-14/blind-labels.js";
 import { RigInputError } from "../screens/rig-integrity.js";
 import { getProvider } from "../trials/providers.js";
 import { ROOT_CAUSES } from "../trials/root-cause.js";
@@ -50,7 +43,9 @@ const exactKeys = (value: Record<string, unknown>, expected: readonly string[], 
   }
 };
 
-const semanticUiLabel = (value: unknown): {
+const semanticUiLabel = (
+  value: unknown,
+): {
   readonly label: Phase14BlindLabel["label"];
   readonly rationale: string;
   readonly evidenceRead: readonly string[];
@@ -448,14 +443,7 @@ export function nextPhase19UiLabel(root: string): { packetId: string; provider: 
   for (const runId of PHASE19_UI_RUNS_ORDERED) {
     const packetId = phase19UiPacketId(runId);
     for (const provider of ["openai", "anthropic"] as const) {
-      const path = join(
-        root,
-        "data",
-        "phase-19-ui-label-runs",
-        packetId,
-        provider,
-        "normalized-label.json",
-      );
+      const path = join(root, "data", "phase-19-ui-label-runs", packetId, provider, "normalized-label.json");
       if (!existsSync(path)) return { packetId, provider };
     }
   }

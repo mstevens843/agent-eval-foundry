@@ -11,8 +11,8 @@ number you can only get by writing the failures down.
 | candidates | **39** |
 | status `idea` | 6 |
 | status `candidate` | 7 |
-| status `trialed` | 5 |
-| status `shipped` | 5 |
+| status `trialed` | 7 |
+| status `shipped` | 3 |
 | status `killed` | 16 |
 | measured (a real result exists) | 23 |
 | estimated | 16 |
@@ -21,7 +21,7 @@ number you can only get by writing the failures down.
 | kills that cost model spend | 0 |
 | kills with no cost recorded | 8 |
 
-Screened-to-shipped on this record: **16 killed for 5 shipped**. 8 kill(s) demonstrably cost nothing, 0 consumed model spend, and 8 have no cost recorded at all — so the true screening cost is a floor, not a total. The budget planner's hit-rate default is set from the ten design cycles this record reconstructs, and it is an input a reader is entitled to change.
+Screened-to-shipped on this record: **16 killed for 3 shipped**. 8 kill(s) demonstrably cost nothing, 0 consumed model spend, and 8 have no cost recorded at all — so the true screening cost is a floor, not a total. The budget planner's hit-rate default is set from the ten design cycles this record reconstructs, and it is an input a reader is entitled to change.
 
 ## Kill taxonomy
 
@@ -61,8 +61,8 @@ an error, but it is a row whose lesson has not been made transferable yet.
 | `prompt-injection-containment-built` | trialed | kill | prompt-injection-via-retrieval, context-contamination, permission-boundary | $0.00 | measured |
 | `durable-outbox-historical-import` | shipped | promote | uncertain-external-effects, duplicate-side-effects, false-audit-history, liveness-stall | $0.00 | measured |
 | `prompt-injection-memory-poisoning` | trialed | promote | context-contamination, false-audit-history, prompt-injection-via-retrieval | $40.00 | measured |
-| `ui-action-record-replay-built` | shipped | promote | ui-replay-mismatch, stale-state, hidden-environment-dependency | $10.00 | measured |
-| `ui-replay-live-dom-built` | shipped | promote | ui-replay-mismatch, stale-state, hidden-environment-dependency, duplicate-side-effects | $15.00 | measured |
+| `ui-action-record-replay-built` | trialed | promote | ui-replay-mismatch, stale-state, hidden-environment-dependency | $10.00 | measured |
+| `ui-replay-live-dom-built` | trialed | promote | ui-replay-mismatch, stale-state, hidden-environment-dependency, duplicate-side-effects | $15.00 | measured |
 | `prompt-injection-capability-routing` | idea | open | permission-boundary, tool-result-ambiguity, prompt-injection-via-retrieval | $0.00 | est. |
 | `prompt-injection-cross-tool-escalation` | idea | open | permission-boundary, tool-result-ambiguity, duplicate-side-effects | $0.00 | est. |
 | `prompt-injection-approval-scope-drift` | idea | open | permission-boundary, stale-state, context-contamination | $0.00 | est. |
@@ -490,7 +490,7 @@ an error, but it is a row whose lesson has not been made transferable yet.
 
 ### UI action record and replay, built `ui-action-record-replay-built`
 
-**Status** shipped · **Decision** promote · **Domain** browser and desktop UI automation without an API · **Data** measured
+**Status** trialed · **Decision** promote · **Domain** browser and desktop UI automation without an API · **Data** measured
 
 **Hypothesis.** A model can discover a UI workflow; the capability worth shipping is a recording that replays deterministically without the model in the loop. Grading the recording rather than the discovery should separate implementations that carry state properly from ones that improvise.
 
@@ -500,6 +500,8 @@ an error, but it is a row whose lesson has not been made transferable yet.
 
 **Results.** 1 passed / 14 failed against reference, claude-opus-5, claude-haiku-4-5, claude-sonnet-5, gpt-5.6-sol, stale-state-reader, eager-resolver, hidden-confirmation-skipper, duplicate-executor, model-in-the-loop, action-order-reorderer, audit-forger, halter-not-reporter, over-blocker, nop-recorder. Reference passes 324/324. All 10 mutants caught by their intended check. 6 measured detection axes. Five counted trials across four subjects and two labs all failed: 33, 46, 62, 62 and 90 scenarios. Every counted agent failure set nests, so the family ships as a useful one-axis difficulty benchmark rather than as breadth. Harness realism is `simulated-tree`, relabelled down when the live-DOM descendant supplied the mutable tree mechanics.
 
+**Why it died.** PHASE 20 CORRECTION (2026-09-05, additive, does not alter the trial results above): downgraded shipped -> trialed. The isolation-level ship gate is now blocking and requires `cell-container` isolation for any family with counted agent trials; this family's counted trials were graded under `subprocess`/`container` isolation, where Phase 20 demonstrated the untrusted submission and the host code owning the ledger share one process and a submission can hijack the host's own output write (test/phase-20-lane1-exploits/). Not migrated to the secure executor yet. Re-promote once migrated and re-verified; see reports/PHASE-20-VERIFIER-TRUST-BOUNDARY.md.
+
 **Decision rationale.** SHIP, with the one-axis limitation explicit. Five counted trials all fail under the current challenge hash, so the family has real-agent difficulty evidence. The nested failure sets mean it contributes one difficulty axis however many similar subjects are added; the live-DOM descendant is therefore a separate evolution line, not a rewrite of the parent evidence.
 
 **Transferability.** Directly relevant to agent 'hands' work: any product that records a workflow once and replays it many times faces exactly these three outcomes and exactly this idempotency requirement.
@@ -508,7 +510,7 @@ an error, but it is a row whose lesson has not been made transferable yet.
 
 ### Live-DOM action replay descendant, packaged and trialed `ui-replay-live-dom-built`
 
-**Status** shipped · **Decision** promote · **Domain** UI replay against a mutable DOM-like tree · **Data** measured
+**Status** trialed · **Decision** promote · **Domain** UI replay against a mutable DOM-like tree · **Data** measured
 
 **Hypothesis.** The parent UI replay family measured one difficulty axis because every counted failure set nested. A live, mutable DOM-like descendant with categorical address conflicts should create incomparable strategies: data-testid loyalty, semantic-anchor loyalty and structural-path loyalty are each correct on some scenarios and wrong on others.
 
@@ -517,6 +519,8 @@ an error, but it is a row whose lesson has not been made transferable yet.
 **Why it might be unfair.** The task would be unfair if anchor conflict resolution were hidden, if `aria-busy` carried a browser-only convention, or if a live-DOM label implied renderer semantics. The package SPEC names the state model, conflict rule, settle budget, observed semantics and dom-like-not-browser-backed realism level.
 
 **Results.** 1 passed / 25 failed against reference, gpt-5.6-sol, impatient-halter, anchor-credulous, txn-blind, stale-id-replayer, testid-loyalist, semantic-loyalist, path-loyalist, region-blind, precondition-assumer, confirmation-skipper, first-match-picker, budget-spinner, dom-prober, silent-abandoner, halter-not-reporter, stale-handle-holder, model-in-the-loop, duplicate-executor, step-reorderer, audit-forger, over-blocker, nop-recorder, strict-bailer, patient-waiter. Reference passes 864/864 from a 3,456-point declared space. All 22 mutants are caught by the intended check, with 19 mutant-detection axes across 17 verifier checks. The categorical anchor fix is measured: testid-loyalist, semantic-loyalist and path-loyalist are pairwise incomparable. The challenge package has 9 visible leak-checked files and hash 18c3f5afc5973604205cd7df23ce4cad. One counted Codex/OpenAI trial, live-dom-2026-08-o2, failed 219/864 scenarios on replay_completes and precondition_observed; the first local slot failed before artifact creation and remains uncounted infrastructure evidence.
+
+**Why it died.** PHASE 20 CORRECTION (2026-09-05, additive, does not alter the trial results above): downgraded shipped -> trialed. The isolation-level ship gate is now blocking and requires `cell-container` isolation for any family with counted agent trials; this family's counted OpenAI trial was graded under `container` isolation, where Phase 20 demonstrated the untrusted submission and the host code owning the ledger share one process and a submission can hijack the host's own output write (test/phase-20-lane1-exploits/). Not migrated to the secure executor yet. Re-promote once migrated and re-verified; see reports/PHASE-20-VERIFIER-TRUST-BOUNDARY.md.
 
 **Decision rationale.** SHIP under the current gates because challenge packaging, leak checks, route grading, reference, mutants, scenario coverage and one counted real-agent failure all pass. The claim is deliberately narrow: difficulty-evidenced for one OpenAI subject, not cross-lab generalisation and not browser-backed realism. Anthropic/Claude slots are import-only for this phase and Gemini remains entitlement-blocked.
 

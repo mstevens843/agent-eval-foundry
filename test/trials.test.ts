@@ -352,6 +352,19 @@ describe("challenge package", () => {
     );
   });
 
+  it("catches prose that names its own answer, independent of the identifier blocklist", () => {
+    // Phase 20: a starter-legibility gate over generic vocabulary ("deliberately wrong", "answer
+    // key", ...) rather than family-specific identifiers, so renaming a leaked function does not
+    // help and a comment can leak without any code at all.
+    const leaked = [
+      ...pkg.files,
+      { path: "README.md", content: "The starter is deliberately wrong after line 40." },
+    ];
+    expect(() => checkChallengePackage(leaked)).toThrowError(
+      expect.objectContaining({ code: "CHALLENGE_LEAKS_ANSWER_KEY_COMMENT" }),
+    );
+  });
+
   it("refuses a package that hides a rule the agent is graded on", () => {
     const gutted = pkg.files.map((f) =>
       f.path === "SPEC.md" ? { path: f.path, content: "# Spec\nP1_UNTRUSTED_AUTHORITY only." } : f,

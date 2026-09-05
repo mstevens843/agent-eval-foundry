@@ -1,10 +1,10 @@
 import { buildPhase19ReviewLedger } from "../phase-19/candidate-review.js";
+import { phase19CandidateReviewB6 } from "../phase-19/candidate-review.js";
 import {
   buildPhase19Reranking,
   buildPhase19UiLabelLedger,
   phase19CoreB6,
 } from "../phase-19/evidence-rerank.js";
-import { phase19CandidateReviewB6 } from "../phase-19/candidate-review.js";
 
 const pct = (value: number): string => `${(value * 100).toFixed(0)}%`;
 const dash = (value: string | number | null): string => (value === null ? "-" : String(value));
@@ -117,13 +117,11 @@ export function renderPhase19EvidenceRerank(root: string): string {
       "that the mechanism is cheap to falsify locally; it does not establish frontier-agent difficulty.",
     );
   }
-  lines.push(
-    "",
-    "## 6. Recommendation",
-    "",
-  );
+  lines.push("", "## 6. Recommendation", "");
   if (reviews === null || reviews.summary.decision === "PENDING") {
-    lines.push("Do not authorize a full build while the registered evidence and review sequence is incomplete.");
+    lines.push(
+      "Do not authorize a full build while the registered evidence and review sequence is incomplete.",
+    );
   } else if (!ui.summary.difficultyEvidenceSurvives) {
     lines.push(
       "**REPAIR-CANDIDATES.** The UI evidence did not survive independent attribution. The project has a",

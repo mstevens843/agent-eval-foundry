@@ -23,25 +23,25 @@ since changed is superseded, preserved, and not in this column.
 | `access-token-scope-expansion` | 384 | 0 | 0 | 0 | 3 | not measurable — fewer than 2 counted failing subjects | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced`, `not-already-solved` |
 | `audit-truth-financial-workflow` | not built | — | — | — | — | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
 | `browser-action-replay` | not built | — | — | — | — | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
-| `caa-revalidation` | 24 | 4 | 0 | 0 | 3 | not measurable — fewer than 2 counted failing subjects | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced`, `not-already-solved` |
-| `checker-required-memory-poisoning` | 792 | 1 | 1 | 0 | 12 | not measurable — fewer than 2 counted failing subjects | human-ready | adversarial-audited | **NOT-READY**: `difficulty-evidenced` |
-| `dao-descendant` | 24 | 2 | 0 | 0 | 1 | not measurable — fewer than 2 counted failing subjects | reference-solvable | adversarial-ready | **NOT-READY**: `difficulty-evidenced`, `not-already-solved` |
+| `caa-revalidation` | 24 | 4 | 0 | 0 | 3 | not measurable — fewer than 2 counted failing subjects | reference-solvable | audit-pending | **NOT-READY**: `isolation-level`, `difficulty-evidenced`, `not-already-solved` |
+| `checker-required-memory-poisoning` | 792 | 1 | 1 | 0 | 12 | not measurable — fewer than 2 counted failing subjects | human-ready | adversarial-audited | **NOT-READY**: `isolation-level`, `difficulty-evidenced` |
+| `dao-descendant` | 24 | 2 | 0 | 0 | 1 | not measurable — fewer than 2 counted failing subjects | reference-solvable | adversarial-ready | **NOT-READY**: `isolation-level`, `difficulty-evidenced`, `not-already-solved` |
 | `delegated-wallet-scope-reconciliation` | 804 | 0 | 0 | 0 | 3 | not measurable — fewer than 2 counted failing subjects | human-ready | adversarial-ready | **NOT-READY**: `difficulty-evidenced` |
 | `deployment-model-alias-rollout-drift` | 339 | 0 | 0 | 0 | 20 | not measurable — fewer than 2 counted failing subjects | human-ready | adversarial-ready | **NOT-READY**: `difficulty-evidenced` |
 | `deployment-rollback-partial-effects` | not built | — | — | — | — | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
-| `deployment-rollback-recompute` | 24 | 2 | 0 | 0 | 1 | not measurable — fewer than 2 counted failing subjects | reference-solvable | adversarial-ready | **NOT-READY**: `difficulty-evidenced`, `not-already-solved` |
-| `durable-approval-outbox` | not built | 6 | 6 | 0 | 3 | 1 (failures nest — one axis at several sensitivities) | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
+| `deployment-rollback-recompute` | 24 | 2 | 0 | 0 | 1 | not measurable — fewer than 2 counted failing subjects | reference-solvable | adversarial-ready | **NOT-READY**: `isolation-level`, `difficulty-evidenced`, `not-already-solved` |
+| `durable-approval-outbox` | not built | 6 | 6 | 0 | 3 | 1 (failures nest — one axis at several sensitivities) | reference-solvable | audit-pending | **NOT-READY**: `isolation-level`, `difficulty-evidenced` |
 | `model-alias-drift-sentinel` | not built | — | — | — | 2 (est.) | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
 | `permission-boundary-tools` | not built | — | — | — | 1 (est.) | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
 | `prompt-injection-approval-scope-drift` | not built | — | — | — | 3 (est.) | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
 | `prompt-injection-capability-routing` | not built | — | — | — | 3 (est.) | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
-| `prompt-injection-containment` | 128 | 6 | 0 | 0 | 4 | not measurable — fewer than 2 counted failing subjects | human-ready | adversarial-ready | **NOT-READY**: `difficulty-evidenced`, `not-already-solved` |
+| `prompt-injection-containment` | 128 | 6 | 0 | 0 | 4 | not measurable — fewer than 2 counted failing subjects | human-ready | adversarial-ready | **NOT-READY**: `isolation-level`, `difficulty-evidenced`, `not-already-solved` |
 | `prompt-injection-cross-tool-escalation` | not built | — | — | — | 3 (est.) | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
 | `prompt-injection-memory-poisoning` | 288 | 0 | 0 | 0 | 5 | not measurable — fewer than 2 counted failing subjects | human-ready | adversarial-ready | **NOT-READY**: `difficulty-evidenced` |
 | `stale-crm-ticket-automation` | not built | — | — | — | 2 (est.) | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
-| `trading-reconciliation-recompute` | 24 | 2 | 0 | 0 | 1 | not measurable — fewer than 2 counted failing subjects | reference-solvable | adversarial-ready | **NOT-READY**: `difficulty-evidenced`, `not-already-solved` |
-| `ui-action-record-replay` | 324 | 5 | 5 | 2 | 6 | 1 (failures nest — one axis at several sensitivities) | human-ready | adversarial-ready | **SHIP** |
-| `ui-replay-live-dom` | 864 | 1 | 1 | 1 | 19 | not measurable — fewer than 2 counted failing subjects | human-ready | adversarial-audited | **SHIP** |
+| `trading-reconciliation-recompute` | 24 | 2 | 0 | 0 | 1 | not measurable — fewer than 2 counted failing subjects | reference-solvable | adversarial-ready | **NOT-READY**: `isolation-level`, `difficulty-evidenced`, `not-already-solved` |
+| `ui-action-record-replay` | 324 | 5 | 5 | 2 | 6 | 1 (failures nest — one axis at several sensitivities) | human-ready | adversarial-ready | **NOT-READY**: `isolation-level` |
+| `ui-replay-live-dom` | 864 | 1 | 1 | 1 | 19 | not measurable — fewer than 2 counted failing subjects | human-ready | adversarial-audited | **NOT-READY**: `isolation-level` |
 
 `not built` means the family is declared as a task shape and has no executable sweep, so it has
 no measured scenario count, no mutant run and no evidence of any kind beyond what it claims.

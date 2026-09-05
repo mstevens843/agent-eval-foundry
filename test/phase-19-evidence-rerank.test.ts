@@ -86,12 +86,8 @@ describe("Phase 19 corrected ranking", () => {
   it("removes infrastructure, broad shapes and confirmed duplicates before top-five review", () => {
     const ranking = buildPhase19Reranking(ROOT);
     const byId = new Map(ranking.rows.map((row) => [row.familyId, row]));
-    expect(byId.get("verifier-container-isolation-boundary")?.disposition).toBe(
-      "infrastructure-excluded",
-    );
-    expect(byId.get("long-horizon-multi-app-coordination")?.disposition).toBe(
-      "broad-shape-excluded",
-    );
+    expect(byId.get("verifier-container-isolation-boundary")?.disposition).toBe("infrastructure-excluded");
+    expect(byId.get("long-horizon-multi-app-coordination")?.disposition).toBe("broad-shape-excluded");
     expect(byId.get("payment-idempotency-ambiguous-retry")?.disposition).toBe("duplicate-killed");
     expect(ranking.topFive).toHaveLength(5);
     expect(ranking.topFive).toEqual(

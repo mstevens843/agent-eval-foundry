@@ -233,22 +233,23 @@ export function containerFlags(
  * 0755 on a directory holding a host script and a subject module, under a read-only mount, in a
  * per-run temp directory. Nothing secret is staged and nothing may be written back.
  */
-const stagingDir = (prefix: string): string => {
+/** Exported so `secure-runner.ts` reuses one staging implementation rather than a second that can drift. */
+export const stagingDir = (prefix: string): string => {
   const dir = mkdtempSync(join(tmpdir(), prefix));
   chmodSync(dir, 0o755);
   return dir;
 };
 
 /** Stage one file where a non-root container uid can read it. `copyFileSync` preserves the source mode. */
-const stageFile = (from: string, to: string): void => {
+export const stageFile = (from: string, to: string): void => {
   copyFileSync(from, to);
   chmodSync(to, 0o644);
 };
 
-const containerName = (prefix: string): string =>
+export const containerName = (prefix: string): string =>
   `foundry-${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 
-const forceRemove = (name: string): void => {
+export const forceRemove = (name: string): void => {
   try {
     execFileSync("docker", ["rm", "-f", name], { stdio: "ignore", timeout: 15_000 });
   } catch {
@@ -665,5 +666,7 @@ export const isolationSummary = (level: IsolationLevel): string =>
     "in-process": "sufficient for subjects this repository wrote; not for agent-submitted code",
     subprocess: "child cannot reach the grading process's memory; shares filesystem and network",
     container:
-      "own container per run: no network, empty env, private tmpfs, read-only rootfs, all capabilities dropped, recorded cpu/memory/pid/wall-clock limits; the grader still runs on the host, not in a second image",
+      "own container per run: no network, empty env, private tmpfs, read-only rootfs, all capabilities dropped, recorded cpu/memory/pid/wall-clock limits; the grader still runs on the host, not in a second image; host and submission still share one process inside the container",
+    "cell-container":
+      "own container per run, all `container` properties, PLUS the submission and the ledger-owning host run in separate OS processes joined only by a signed, framed, sequence-checked channel; the submission's own stdout/stderr can never become the graded result",
   })[level];

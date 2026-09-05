@@ -280,7 +280,13 @@ describe("the checked-in registry", () => {
     expect(state.evidence?.countedAgentTrials).toBe(1);
     expect(state.evidence?.agentAxes).toBeNull();
     const assessment = assessFamily(shape as NonNullable<typeof shape>, registry, state.evidence);
-    expect(assessment.verdict).toBe("SHIP");
+    // Phase 20: the one counted agent trial was graded under `container` isolation, where the
+    // submission and the host code owning the ledger still share one process — the isolation-level
+    // gate is now blocking and this family has not been migrated to the secure executor, so it reads
+    // NOT-READY rather than SHIP. Everything below about agent-axes independence is unaffected: that
+    // gate still correctly reads n/a for the same reason it always did.
+    expect(assessment.verdict).toBe("NOT-READY");
+    expect(assessment.blockingFailures).toEqual(["isolation-level"]);
     const agentAxes = assessment.results.find((r) => r.gate.id === "agent-axes-independent");
     expect(agentAxes?.verdict).toBe("n/a");
     expect(agentAxes?.detail).toMatch(/fewer than two counted failing subjects/);
@@ -376,8 +382,11 @@ describe("ship gate on real data", () => {
   it("parent UI replay and live-DOM descendant keep separate ledger evidence", () => {
     const parent = registry.candidates.find((c) => c.id === "ui-action-record-replay-built");
     const child = registry.candidates.find((c) => c.id === "ui-replay-live-dom-built");
-    expect(parent?.status).toBe("shipped");
-    expect(child?.status).toBe("shipped");
+    // Phase 20 downgraded both from `shipped` to `trialed`: their counted agent trials were graded
+    // under subprocess/container isolation, which the isolation-level ship gate (now blocking) no
+    // longer accepts. See failureNotes on each candidate and reports/PHASE-20-VERIFIER-TRUST-BOUNDARY.md.
+    expect(parent?.status).toBe("trialed");
+    expect(child?.status).toBe("trialed");
     expect(parent?.results?.note).toMatch(/failure set nests/);
     expect(child?.results?.note).toMatch(/categorical anchor fix is measured/);
     expect(parent?.links).toContain("src/families/ui-action-record-replay/");

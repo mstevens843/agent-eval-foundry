@@ -1,0 +1,126 @@
+{
+  "schema": "agent-eval-foundry/phase-20-route-migration-matrix@1",
+  "generatedAtUtc": "2026-09-05T20:08:34Z",
+  "legend": {
+    "isolationBefore": "The isolation level GRADERS[familyId] used at Phase 20 start (before any change in this phase).",
+    "isolationAfter": "The isolation level GRADERS[familyId] uses now.",
+    "countedAgentTrialGate": "Whether run.ts's runAgentTrial and external-intake/import.ts's importExternalRunPacket will now throw (refuse) for this family rather than silently grading and counting.",
+    "shipGate": "Whether the hardened isolation-level ship gate (blocking, requires cell-container when countedAgentTrials>0) can pass for this family."
+  },
+  "routes": [
+    {
+      "familyId": "prompt-injection-containment",
+      "isolationBefore": "subprocess (dedicated orchestrate.ts/gradeContainment path, not the generic subprocessHost helper)",
+      "isolationAfter": "unchanged — NOT migrated",
+      "migrated": false,
+      "countedAgentTrialGate": "BLOCKED — assertSafeForCountedAgentTrial throws (family not in SECURELY_MIGRATED_FAMILIES)",
+      "shipGate": "n/a at snapshot time (no counted agent trial existed for this family to contradict the gate)",
+      "exploitEvidence": "test/phase-20-lane1-exploits/exploits.test.ts: 4 of 7 live exploits succeed against this family's real, unmodified grading path (stdout hijack after exit; stdout.write monkeypatch replace; scoped Array.prototype.push poisoning; orphaned detached grandchild). 40/40 tests in that file pass (i.e. every assertion about current behavior, exploitable or not, is verified).",
+      "note": "Highest-value next migration target given it is the family with the most mature agent-trial history and demonstrated live exploits."
+    },
+    {
+      "familyId": "prompt-injection-memory-poisoning",
+      "isolationBefore": "subprocess (scripts/memory-host.mjs via subprocessHost)",
+      "isolationAfter": "cell-container",
+      "migrated": true,
+      "adapterPath": "scripts/secure/adapters/memory-poisoning.mjs",
+      "countedAgentTrialGate": "ALLOWED",
+      "shipGate": "would pass if a counted agent trial existed; none currently on record",
+      "verification": "test/phase-20-secure-executor.test.ts (5 tests, real Docker): compliant subject grades clean with ledger/writes intact; stdout-hijack+exit forgery fails closed; Array.prototype.push/JSON.stringify poisoning cannot touch the write channel; direct forged fd3 frame rejected; malformed/absent runSession fails closed. test/trials-routing.test.ts host-equivalence tests for this family re-verified passing against the new route."
+    },
+    {
+      "familyId": "ui-action-record-replay",
+      "isolationBefore": "subprocess (scripts/ui-host.mjs)",
+      "isolationAfter": "unchanged — NOT migrated",
+      "migrated": false,
+      "countedAgentTrialGate": "BLOCKED for any NEW agent trial",
+      "shipGate": "FAILS — 5 pre-existing counted agent trials on record, graded under subprocess isolation; ship gate now blocking",
+      "correctionApplied": "data/candidates-klavis.json ui-action-record-replay-built: status shipped -> trialed, dated Phase 20 correction note added; historical trial results (5 counted failures, reference/mutant figures) left unchanged."
+    },
+    {
+      "familyId": "ui-replay-live-dom",
+      "isolationBefore": "subprocess (scripts/live-dom-host.mjs)",
+      "isolationAfter": "unchanged — NOT migrated",
+      "migrated": false,
+      "countedAgentTrialGate": "BLOCKED for any NEW agent trial",
+      "shipGate": "FAILS — 1 pre-existing counted OpenAI trial on record, graded under container isolation (still one shared process); ship gate now blocking",
+      "correctionApplied": "data/candidates-klavis.json ui-replay-live-dom-built: status shipped -> trialed, dated Phase 20 correction note added; historical trial results left unchanged."
+    },
+    {
+      "familyId": "checker-required-memory-poisoning",
+      "isolationBefore": "subprocess (scripts/checker-required-host.mjs)",
+      "isolationAfter": "unchanged — NOT migrated",
+      "migrated": false,
+      "countedAgentTrialGate": "BLOCKED",
+      "shipGate": "n/a — no counted agent trial on record at snapshot time",
+      "note": "Two-artifact contract (subject.mjs + checker.mjs) makes this the most structurally different family to migrate; deferred."
+    },
+    {
+      "familyId": "access-token-scope-expansion",
+      "isolationBefore": "subprocess (scripts/access-token-host.mjs)",
+      "isolationAfter": "unchanged — NOT migrated",
+      "migrated": false,
+      "countedAgentTrialGate": "BLOCKED",
+      "shipGate": "n/a — no counted agent trial on record at snapshot time"
+    },
+    {
+      "familyId": "delegated-wallet-scope-reconciliation",
+      "isolationBefore": "subprocess (scripts/delegated-wallet-host.mjs)",
+      "isolationAfter": "unchanged — NOT migrated",
+      "migrated": false,
+      "countedAgentTrialGate": "BLOCKED",
+      "shipGate": "n/a — no counted agent trial on record at snapshot time"
+    },
+    {
+      "familyId": "deployment-model-alias-rollout-drift",
+      "isolationBefore": "subprocess (scripts/deployment-alias-host.mjs)",
+      "isolationAfter": "unchanged — NOT migrated",
+      "migrated": false,
+      "countedAgentTrialGate": "BLOCKED",
+      "shipGate": "n/a — no counted agent trial on record at snapshot time"
+    },
+    {
+      "familyId": "caa-revalidation",
+      "isolationBefore": "subprocess (default GRADERS route, scripts/caa-revalidation-host.mjs); a separate no-network-container variant (gradeCaaRevalidationInContainer) existed for Phase 17 reproduction only, never the default.",
+      "isolationAfter": "cell-container (default GRADERS route). gradeCaaRevalidationInContainer preserved byte-for-byte for Phase 17 historical reproduction — not deleted, not changed, no longer the default.",
+      "migrated": true,
+      "adapterPath": "scripts/secure/adapters/caa-revalidation.mjs",
+      "countedAgentTrialGate": "ALLOWED",
+      "shipGate": "n/a for the counted-trial dimension at snapshot time; the pre-existing Phase 17 trial ledger (data/phase-17-trial-ledger.json) is untouched and is NOT re-labelled by this migration",
+      "verification": "test/phase-20-secure-executor.test.ts: compliant subject correctly grades REFUSE when one queried name is DENY, with both queries recorded; forged ISSUE via stdout+exit (skipping the DENY query) fails closed.",
+      "caaHardening": "Separately, tasks/caa-revalidation-repair/tests/{test.sh,gate.py,test_certd.py} were hardened with Python -I isolated mode to close the usercustomize/sitecustomize/PYTHONPATH-injection class by design; see reports/PHASE-20-VERIFIER-TRUST-BOUNDARY.md CAA section. This is a SEPARATE verifier (Go/Python, task-level) from the caa-revalidation FAMILY's own Node grading route above; both were hardened in this phase, independently."
+    },
+    {
+      "familyId": "dao-descendant",
+      "isolationBefore": "subprocess (default GRADERS route, scripts/dao-descendant-host.mjs); a no-network-container variant existed for Phase 14 reproduction (gradePhase14ContainerSubmission), never the default.",
+      "isolationAfter": "unchanged — NOT migrated",
+      "migrated": false,
+      "countedAgentTrialGate": "BLOCKED",
+      "shipGate": "n/a — no counted agent trial on record at snapshot time"
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "isolationBefore": "subprocess (default GRADERS route); Phase 14 no-network-container variant exists, not the default.",
+      "isolationAfter": "unchanged — NOT migrated",
+      "migrated": false,
+      "countedAgentTrialGate": "BLOCKED",
+      "shipGate": "n/a — no counted agent trial on record at snapshot time"
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "isolationBefore": "subprocess (default GRADERS route); Phase 14 no-network-container variant exists, not the default.",
+      "isolationAfter": "unchanged — NOT migrated",
+      "migrated": false,
+      "countedAgentTrialGate": "BLOCKED",
+      "shipGate": "n/a — no counted agent trial on record at snapshot time"
+    }
+  ],
+  "summary": {
+    "totalFamilies": 12,
+    "migratedToSecureExecutor": 2,
+    "mechanicallyBlockedFromNewCountedAgentTrials": 10,
+    "shipStatusCorrectedThisPhase": 2,
+    "familiesWithLiveProvenExploit": ["prompt-injection-containment"],
+    "familiesWithLiveProvenFix": ["prompt-injection-memory-poisoning", "caa-revalidation"]
+  }
+}

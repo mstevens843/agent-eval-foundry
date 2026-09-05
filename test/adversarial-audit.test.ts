@@ -732,7 +732,10 @@ describe("adversarial readiness and reports", () => {
         baselinesTotal: 2,
         mutantsCaught: [{ mutantId: "testid-loyal", check: "correct_anchor_resolution", caught: true }],
         mechanismsExercised: true,
-        isolation: "subprocess",
+        // Synthetic fixture testing that adversarial gates are advisory — not the real isolation-
+        // level gate, which Phase 20 made blocking, so this stays "cell-container" to keep that gate
+        // out of this test's way.
+        isolation: "cell-container",
         countedAgentTrials: 1,
         agentTrialsPassed: 0,
         // `difficulty-evidenced` reads root causes now, so a fixture that asserts SHIP has to say

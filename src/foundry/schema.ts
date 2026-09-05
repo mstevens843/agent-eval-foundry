@@ -196,6 +196,8 @@ export const RULE_CODES = [
   // The visible starter is a working answer. Behavioural, so no identifier blocklist can see it;
   // graded empirically by `checkStarterFailsEnough` rather than by string search.
   "CHALLENGE_STARTER_SOLVES_FAMILY",
+  // Phase 20 Lane 5: a visible file's own prose gives away where or why the planted defect is wrong.
+  "CHALLENGE_LEAKS_ANSWER_KEY_COMMENT",
   // human clean-room solvability evidence
   "HUMAN_COUNTED_HASH_MISSING",
   "HUMAN_COUNTED_HASH_STALE",
