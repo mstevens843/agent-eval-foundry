@@ -1,0 +1,25 @@
+{
+  "schema": "agent-eval-foundry/phase-19-execution-corrections@1",
+  "recordedAt": "2026-09-05T00:15:45-07:00",
+  "corrections": [
+    {
+      "stage": "ui-blind-label",
+      "packetId": "ui-blind-01",
+      "providerFamily": "openai",
+      "counts": false,
+      "providerReached": false,
+      "reason": "The first invocation ran under the managed filesystem sandbox and could not connect to the Docker socket. No provider container started, no model read occurred, and no label was produced.",
+      "capture": "Only the normalized runner error survived; this exposed no evidence defect. The retry used the same packet after explicit Docker approval."
+    },
+    {
+      "stage": "ui-blind-label",
+      "packetId": "ui-blind-01",
+      "providerFamily": "anthropic",
+      "counts": false,
+      "providerReached": true,
+      "reason": "The reader completed but returned evidenceRead in a shape rejected by the frozen label parser. A malformed output is not a label and contributes no vote.",
+      "capture": "The wrapper persisted provider output only after successful normalization, so this malformed raw output was lost. That capture ordering was repaired before retry. Runtime and price are unknown rather than inferred.",
+      "protocolEffect": "The evidence packet and classification definitions remain unchanged. The retry instruction adds only that evidenceRead must be a JSON array of strings."
+    }
+  ]
+}

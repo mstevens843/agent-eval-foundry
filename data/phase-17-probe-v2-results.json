@@ -1,0 +1,1147 @@
+{
+  "schema": "agent-eval-foundry/phase-17-probe-v2-results@1",
+  "registrationId": "phase17-caa-exact-probe-v2",
+  "registrationSha256": "3293dad7230c255f14d54a33440652eae5befb4c1ee6c6c791e858dbefcfdf6c",
+  "implementationSha256": "4aa18095e7a8596cf5e2b750f13a887f2a06b6919f6ef018612a916f7b2a4228",
+  "verdict": {
+    "status": "PROBE-V2-PASSED",
+    "matrixMismatches": [],
+    "killReasons": [],
+    "implementationHashMatches": true
+  },
+  "run": {
+    "checks": [
+      "check-caa-result-shape",
+      "check-caa-per-name-binding",
+      "check-caa-applicable-answer",
+      "check-caa-safe-issuance",
+      "check-caa-decision-faithful",
+      "check-caa-positive-query-work"
+    ],
+    "fixtures": [
+      {
+        "id": "one-name-stale-allow",
+        "domainCount": 1,
+        "denyPosition": "none",
+        "nameCount": 1,
+        "staleCount": 1,
+        "freshCount": 0,
+        "ages": [
+          9
+        ],
+        "allApplicableAllow": true,
+        "note": "Declared one-name control. Reference and the first-name-reuse mutant are behaviorally identical and must both pass."
+      },
+      {
+        "id": "one-name-stale-deny",
+        "domainCount": 1,
+        "denyPosition": "first",
+        "nameCount": 1,
+        "staleCount": 1,
+        "freshCount": 0,
+        "ages": [
+          9
+        ],
+        "allApplicableAllow": false,
+        "note": "Declared one-name control on the refusing side. Both must correctly refuse."
+      },
+      {
+        "id": "multi-name-denied-tail",
+        "domainCount": 3,
+        "denyPosition": "last",
+        "nameCount": 3,
+        "staleCount": 3,
+        "freshCount": 0,
+        "ages": [
+          24,
+          24,
+          24
+        ],
+        "allApplicableAllow": false,
+        "note": "The incident shape: three stale names, the denied one last, cardinality preserved by the mutant."
+      },
+      {
+        "id": "mixed-fresh-stale-identity",
+        "domainCount": 3,
+        "denyPosition": "none",
+        "nameCount": 3,
+        "staleCount": 2,
+        "freshCount": 1,
+        "ages": [
+          0,
+          24,
+          9
+        ],
+        "allApplicableAllow": true,
+        "note": "Mixed fresh and stale. The fresh name's current answer disagrees with its cache, so querying it is wrong. Every value the mutant reports is coincidentally correct, isolating identity binding alone."
+      },
+      {
+        "id": "age-boundary-eight",
+        "domainCount": 2,
+        "denyPosition": "none",
+        "nameCount": 2,
+        "staleCount": 1,
+        "freshCount": 1,
+        "ages": [
+          8,
+          9
+        ],
+        "allApplicableAllow": true,
+        "note": "Age exactly eight uses CACHE. Cached and current disagree there, so a >= 8 off-by-one becomes observable."
+      },
+      {
+        "id": "age-boundary-nine",
+        "domainCount": 2,
+        "denyPosition": "first",
+        "nameCount": 2,
+        "staleCount": 1,
+        "freshCount": 1,
+        "ages": [
+          9,
+          0
+        ],
+        "allApplicableAllow": false,
+        "note": "Age exactly nine requires CURRENT. Cached and current disagree there, so a > 9 off-by-one becomes observable."
+      },
+      {
+        "id": "all-fresh-no-query-required",
+        "domainCount": 2,
+        "denyPosition": "none",
+        "nameCount": 2,
+        "staleCount": 0,
+        "freshCount": 2,
+        "ages": [
+          0,
+          8
+        ],
+        "allApplicableAllow": true,
+        "note": "No stale name. The positive-work floor is conditioned on staleness, so doing no query here is correct. This proves the work check cannot fire vacuously."
+      },
+      {
+        "id": "five-name-denied-middle",
+        "domainCount": 5,
+        "denyPosition": "middle",
+        "nameCount": 5,
+        "staleCount": 3,
+        "freshCount": 2,
+        "ages": [
+          719,
+          0,
+          9,
+          8,
+          24
+        ],
+        "allApplicableAllow": false,
+        "note": "Widest declared order, denial away from the first position, both boundary ages present, and two fresh names whose current answers would mislead anyone who queries them."
+      }
+    ],
+    "cells": [
+      {
+        "fixtureId": "one-name-stale-allow",
+        "subjectId": "reference",
+        "failures": [],
+        "queries": [
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "one-name-stale-allow",
+        "subjectId": "first-name-reuse-mutant",
+        "failures": [],
+        "queries": [
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "one-name-stale-allow",
+        "subjectId": "boundary-inclusive-mutant",
+        "failures": [],
+        "queries": [
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "one-name-stale-allow",
+        "subjectId": "boundary-lenient-mutant",
+        "failures": [
+          "check-caa-per-name-binding",
+          "check-caa-positive-query-work"
+        ],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "one-name-stale-allow",
+        "subjectId": "duplicate-query-cheat",
+        "failures": [],
+        "queries": [
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "one-name-stale-allow",
+        "subjectId": "no-query-cheat",
+        "failures": [
+          "check-caa-per-name-binding",
+          "check-caa-positive-query-work"
+        ],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "one-name-stale-allow",
+        "subjectId": "always-refuse",
+        "failures": [
+          "check-caa-decision-faithful"
+        ],
+        "queries": [
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "one-name-stale-allow",
+        "subjectId": "fabricated-result",
+        "failures": [
+          "check-caa-per-name-binding",
+          "check-caa-positive-query-work"
+        ],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "one-name-stale-allow",
+        "subjectId": "reversed-order-mutant",
+        "failures": [],
+        "queries": [
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "one-name-stale-deny",
+        "subjectId": "reference",
+        "failures": [],
+        "queries": [
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "one-name-stale-deny",
+        "subjectId": "first-name-reuse-mutant",
+        "failures": [],
+        "queries": [
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "one-name-stale-deny",
+        "subjectId": "boundary-inclusive-mutant",
+        "failures": [],
+        "queries": [
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "one-name-stale-deny",
+        "subjectId": "boundary-lenient-mutant",
+        "failures": [
+          "check-caa-applicable-answer",
+          "check-caa-per-name-binding",
+          "check-caa-positive-query-work",
+          "check-caa-safe-issuance"
+        ],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "one-name-stale-deny",
+        "subjectId": "duplicate-query-cheat",
+        "failures": [
+          "check-caa-applicable-answer",
+          "check-caa-safe-issuance"
+        ],
+        "queries": [
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "one-name-stale-deny",
+        "subjectId": "no-query-cheat",
+        "failures": [
+          "check-caa-applicable-answer",
+          "check-caa-per-name-binding",
+          "check-caa-positive-query-work",
+          "check-caa-safe-issuance"
+        ],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "one-name-stale-deny",
+        "subjectId": "always-refuse",
+        "failures": [],
+        "queries": [
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "one-name-stale-deny",
+        "subjectId": "fabricated-result",
+        "failures": [
+          "check-caa-applicable-answer",
+          "check-caa-per-name-binding",
+          "check-caa-positive-query-work",
+          "check-caa-safe-issuance"
+        ],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "one-name-stale-deny",
+        "subjectId": "reversed-order-mutant",
+        "failures": [],
+        "queries": [
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "multi-name-denied-tail",
+        "subjectId": "reference",
+        "failures": [],
+        "queries": [
+          "a.example",
+          "b.example",
+          "c.example"
+        ],
+        "uniqueQueries": 3,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "multi-name-denied-tail",
+        "subjectId": "first-name-reuse-mutant",
+        "failures": [
+          "check-caa-applicable-answer",
+          "check-caa-per-name-binding",
+          "check-caa-safe-issuance"
+        ],
+        "queries": [
+          "a.example",
+          "a.example",
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "multi-name-denied-tail",
+        "subjectId": "boundary-inclusive-mutant",
+        "failures": [],
+        "queries": [
+          "a.example",
+          "b.example",
+          "c.example"
+        ],
+        "uniqueQueries": 3,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "multi-name-denied-tail",
+        "subjectId": "boundary-lenient-mutant",
+        "failures": [],
+        "queries": [
+          "a.example",
+          "b.example",
+          "c.example"
+        ],
+        "uniqueQueries": 3,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "multi-name-denied-tail",
+        "subjectId": "duplicate-query-cheat",
+        "failures": [
+          "check-caa-applicable-answer",
+          "check-caa-per-name-binding",
+          "check-caa-safe-issuance"
+        ],
+        "queries": [
+          "a.example",
+          "a.example",
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "multi-name-denied-tail",
+        "subjectId": "no-query-cheat",
+        "failures": [
+          "check-caa-applicable-answer",
+          "check-caa-per-name-binding",
+          "check-caa-positive-query-work",
+          "check-caa-safe-issuance"
+        ],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "multi-name-denied-tail",
+        "subjectId": "always-refuse",
+        "failures": [],
+        "queries": [
+          "a.example",
+          "b.example",
+          "c.example"
+        ],
+        "uniqueQueries": 3,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "multi-name-denied-tail",
+        "subjectId": "fabricated-result",
+        "failures": [
+          "check-caa-applicable-answer",
+          "check-caa-per-name-binding",
+          "check-caa-positive-query-work",
+          "check-caa-safe-issuance"
+        ],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "multi-name-denied-tail",
+        "subjectId": "reversed-order-mutant",
+        "failures": [
+          "check-caa-result-shape"
+        ],
+        "queries": [
+          "a.example",
+          "b.example",
+          "c.example"
+        ],
+        "uniqueQueries": 3,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "mixed-fresh-stale-identity",
+        "subjectId": "reference",
+        "failures": [],
+        "queries": [
+          "b.example",
+          "c.example"
+        ],
+        "uniqueQueries": 2,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "mixed-fresh-stale-identity",
+        "subjectId": "first-name-reuse-mutant",
+        "failures": [
+          "check-caa-per-name-binding"
+        ],
+        "queries": [
+          "b.example",
+          "b.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "mixed-fresh-stale-identity",
+        "subjectId": "boundary-inclusive-mutant",
+        "failures": [],
+        "queries": [
+          "b.example",
+          "c.example"
+        ],
+        "uniqueQueries": 2,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "mixed-fresh-stale-identity",
+        "subjectId": "boundary-lenient-mutant",
+        "failures": [
+          "check-caa-per-name-binding"
+        ],
+        "queries": [
+          "b.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "mixed-fresh-stale-identity",
+        "subjectId": "duplicate-query-cheat",
+        "failures": [
+          "check-caa-per-name-binding"
+        ],
+        "queries": [
+          "b.example",
+          "b.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "mixed-fresh-stale-identity",
+        "subjectId": "no-query-cheat",
+        "failures": [
+          "check-caa-per-name-binding",
+          "check-caa-positive-query-work"
+        ],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "mixed-fresh-stale-identity",
+        "subjectId": "always-refuse",
+        "failures": [
+          "check-caa-decision-faithful"
+        ],
+        "queries": [
+          "b.example",
+          "c.example"
+        ],
+        "uniqueQueries": 2,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "mixed-fresh-stale-identity",
+        "subjectId": "fabricated-result",
+        "failures": [
+          "check-caa-per-name-binding",
+          "check-caa-positive-query-work"
+        ],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "mixed-fresh-stale-identity",
+        "subjectId": "reversed-order-mutant",
+        "failures": [
+          "check-caa-result-shape"
+        ],
+        "queries": [
+          "b.example",
+          "c.example"
+        ],
+        "uniqueQueries": 2,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "age-boundary-eight",
+        "subjectId": "reference",
+        "failures": [],
+        "queries": [
+          "b.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "age-boundary-eight",
+        "subjectId": "first-name-reuse-mutant",
+        "failures": [],
+        "queries": [
+          "b.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "age-boundary-eight",
+        "subjectId": "boundary-inclusive-mutant",
+        "failures": [
+          "check-caa-applicable-answer",
+          "check-caa-decision-faithful"
+        ],
+        "queries": [
+          "a.example",
+          "b.example"
+        ],
+        "uniqueQueries": 2,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "age-boundary-eight",
+        "subjectId": "boundary-lenient-mutant",
+        "failures": [
+          "check-caa-per-name-binding",
+          "check-caa-positive-query-work"
+        ],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "age-boundary-eight",
+        "subjectId": "duplicate-query-cheat",
+        "failures": [],
+        "queries": [
+          "b.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "age-boundary-eight",
+        "subjectId": "no-query-cheat",
+        "failures": [
+          "check-caa-per-name-binding",
+          "check-caa-positive-query-work"
+        ],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "age-boundary-eight",
+        "subjectId": "always-refuse",
+        "failures": [
+          "check-caa-decision-faithful"
+        ],
+        "queries": [
+          "b.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "age-boundary-eight",
+        "subjectId": "fabricated-result",
+        "failures": [
+          "check-caa-per-name-binding",
+          "check-caa-positive-query-work"
+        ],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "age-boundary-eight",
+        "subjectId": "reversed-order-mutant",
+        "failures": [
+          "check-caa-result-shape"
+        ],
+        "queries": [
+          "b.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "age-boundary-nine",
+        "subjectId": "reference",
+        "failures": [],
+        "queries": [
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "age-boundary-nine",
+        "subjectId": "first-name-reuse-mutant",
+        "failures": [],
+        "queries": [
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "age-boundary-nine",
+        "subjectId": "boundary-inclusive-mutant",
+        "failures": [],
+        "queries": [
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "age-boundary-nine",
+        "subjectId": "boundary-lenient-mutant",
+        "failures": [
+          "check-caa-applicable-answer",
+          "check-caa-per-name-binding",
+          "check-caa-positive-query-work",
+          "check-caa-safe-issuance"
+        ],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "age-boundary-nine",
+        "subjectId": "duplicate-query-cheat",
+        "failures": [
+          "check-caa-applicable-answer",
+          "check-caa-safe-issuance"
+        ],
+        "queries": [
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "age-boundary-nine",
+        "subjectId": "no-query-cheat",
+        "failures": [
+          "check-caa-applicable-answer",
+          "check-caa-per-name-binding",
+          "check-caa-positive-query-work",
+          "check-caa-safe-issuance"
+        ],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "age-boundary-nine",
+        "subjectId": "always-refuse",
+        "failures": [],
+        "queries": [
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "age-boundary-nine",
+        "subjectId": "fabricated-result",
+        "failures": [
+          "check-caa-applicable-answer",
+          "check-caa-per-name-binding",
+          "check-caa-positive-query-work",
+          "check-caa-safe-issuance"
+        ],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "age-boundary-nine",
+        "subjectId": "reversed-order-mutant",
+        "failures": [
+          "check-caa-result-shape"
+        ],
+        "queries": [
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "all-fresh-no-query-required",
+        "subjectId": "reference",
+        "failures": [],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "all-fresh-no-query-required",
+        "subjectId": "first-name-reuse-mutant",
+        "failures": [],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "all-fresh-no-query-required",
+        "subjectId": "boundary-inclusive-mutant",
+        "failures": [
+          "check-caa-applicable-answer",
+          "check-caa-decision-faithful"
+        ],
+        "queries": [
+          "b.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "all-fresh-no-query-required",
+        "subjectId": "boundary-lenient-mutant",
+        "failures": [],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "all-fresh-no-query-required",
+        "subjectId": "duplicate-query-cheat",
+        "failures": [],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "all-fresh-no-query-required",
+        "subjectId": "no-query-cheat",
+        "failures": [],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "all-fresh-no-query-required",
+        "subjectId": "always-refuse",
+        "failures": [
+          "check-caa-decision-faithful"
+        ],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "all-fresh-no-query-required",
+        "subjectId": "fabricated-result",
+        "failures": [],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "all-fresh-no-query-required",
+        "subjectId": "reversed-order-mutant",
+        "failures": [
+          "check-caa-result-shape"
+        ],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "five-name-denied-middle",
+        "subjectId": "reference",
+        "failures": [],
+        "queries": [
+          "a.example",
+          "c.example",
+          "e.example"
+        ],
+        "uniqueQueries": 3,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "five-name-denied-middle",
+        "subjectId": "first-name-reuse-mutant",
+        "failures": [
+          "check-caa-applicable-answer",
+          "check-caa-per-name-binding",
+          "check-caa-safe-issuance"
+        ],
+        "queries": [
+          "a.example",
+          "a.example",
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "five-name-denied-middle",
+        "subjectId": "boundary-inclusive-mutant",
+        "failures": [
+          "check-caa-applicable-answer"
+        ],
+        "queries": [
+          "a.example",
+          "c.example",
+          "d.example",
+          "e.example"
+        ],
+        "uniqueQueries": 4,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "five-name-denied-middle",
+        "subjectId": "boundary-lenient-mutant",
+        "failures": [
+          "check-caa-applicable-answer",
+          "check-caa-per-name-binding",
+          "check-caa-safe-issuance"
+        ],
+        "queries": [
+          "a.example",
+          "e.example"
+        ],
+        "uniqueQueries": 2,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "five-name-denied-middle",
+        "subjectId": "duplicate-query-cheat",
+        "failures": [
+          "check-caa-applicable-answer",
+          "check-caa-per-name-binding",
+          "check-caa-safe-issuance"
+        ],
+        "queries": [
+          "a.example",
+          "a.example",
+          "a.example"
+        ],
+        "uniqueQueries": 1,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "five-name-denied-middle",
+        "subjectId": "no-query-cheat",
+        "failures": [
+          "check-caa-applicable-answer",
+          "check-caa-per-name-binding",
+          "check-caa-positive-query-work",
+          "check-caa-safe-issuance"
+        ],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "five-name-denied-middle",
+        "subjectId": "always-refuse",
+        "failures": [],
+        "queries": [
+          "a.example",
+          "c.example",
+          "e.example"
+        ],
+        "uniqueQueries": 3,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "five-name-denied-middle",
+        "subjectId": "fabricated-result",
+        "failures": [
+          "check-caa-applicable-answer",
+          "check-caa-per-name-binding",
+          "check-caa-positive-query-work",
+          "check-caa-safe-issuance"
+        ],
+        "queries": [],
+        "uniqueQueries": 0,
+        "refused": null,
+        "replayIdentical": true
+      },
+      {
+        "fixtureId": "five-name-denied-middle",
+        "subjectId": "reversed-order-mutant",
+        "failures": [
+          "check-caa-result-shape"
+        ],
+        "queries": [
+          "a.example",
+          "c.example",
+          "e.example"
+        ],
+        "uniqueQueries": 3,
+        "refused": null,
+        "replayIdentical": true
+      }
+    ],
+    "repetitions": 2,
+    "deterministicReplay": true,
+    "malformed": [
+      {
+        "id": "null-report",
+        "refusedFirstPass": true,
+        "refusedSecondPass": true,
+        "identicalMessage": true
+      },
+      {
+        "id": "array-report",
+        "refusedFirstPass": true,
+        "refusedSecondPass": true,
+        "identicalMessage": true
+      },
+      {
+        "id": "empty-object",
+        "refusedFirstPass": true,
+        "refusedSecondPass": true,
+        "identicalMessage": true
+      },
+      {
+        "id": "missing-results",
+        "refusedFirstPass": true,
+        "refusedSecondPass": true,
+        "identicalMessage": true
+      },
+      {
+        "id": "unknown-decision",
+        "refusedFirstPass": true,
+        "refusedSecondPass": true,
+        "identicalMessage": true
+      },
+      {
+        "id": "results-not-array",
+        "refusedFirstPass": true,
+        "refusedSecondPass": true,
+        "identicalMessage": true
+      },
+      {
+        "id": "result-not-object",
+        "refusedFirstPass": true,
+        "refusedSecondPass": true,
+        "identicalMessage": true
+      },
+      {
+        "id": "result-missing-fqdn",
+        "refusedFirstPass": true,
+        "refusedSecondPass": true,
+        "identicalMessage": true
+      },
+      {
+        "id": "result-unknown-caa",
+        "refusedFirstPass": true,
+        "refusedSecondPass": true,
+        "identicalMessage": true
+      },
+      {
+        "id": "result-unknown-source",
+        "refusedFirstPass": true,
+        "refusedSecondPass": true,
+        "identicalMessage": true
+      }
+    ],
+    "malformedAllRefusedTwice": true,
+    "isolation": {
+      "witnessAbsentFromEverySurface": true,
+      "facadeOwnPropertyNames": [
+        "current"
+      ],
+      "leakCanaryDetected": true,
+      "challengeCarriesNoWitness": true,
+      "challengeLeakCanaryDetected": true,
+      "staleNamesWhereCacheDisagreesWithCurrent": 4,
+      "ledgerReachableFromSubject": false,
+      "usable": true
+    },
+    "checkActivation": {
+      "check-caa-result-shape": 6,
+      "check-caa-per-name-binding": 26,
+      "check-caa-applicable-answer": 20,
+      "check-caa-safe-issuance": 17,
+      "check-caa-decision-faithful": 6,
+      "check-caa-positive-query-work": 18
+    },
+    "neverFiringChecks": [],
+    "b6": {
+      "sameInvocation": true,
+      "usable": true,
+      "knownGoodPassed": true,
+      "knownBadFailed": true,
+      "malformedInputRefused": true,
+      "nondegenerate": true,
+      "reasons": [
+        "controls held and the result discriminates"
+      ]
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "answers": {
+    "shop.example.test": "PERMIT"
+  },
+  "fail_with": {
+    "down.example.test": "upstream timeout"
+  }
+}

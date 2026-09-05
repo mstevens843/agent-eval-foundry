@@ -1,0 +1,21 @@
+{
+  "label": "spec-underspecified",
+  "rationale": "The only failures are no_forbidden_effect in settled, suppressed-confirmation scenarios, but the visible contract merely names suppressed as a varying state. It does not define its facade-level semantics, when confirmationPresent becomes true relative to the action that data-opens-confirmation says opens the dialog, or how replay can trigger that dialog without first invoking the recorded irreversible action. Therefore the verifier's required no-effect behavior for suppression cannot be derived from the package. This is not capability: although the verifier measured the submitted code and its act-then-observe choice, the public rules do not determine the alternative ordering or suppressed-state handling that would make those cells pass.",
+  "evidenceRead": [
+    "challenge/MANIFEST.json",
+    "challenge/README.md",
+    "challenge/SPEC.md",
+    "challenge/examples/example-1-none.json",
+    "challenge/examples/example-2-node_wrapped.json",
+    "challenge/examples/example-3-node_removed.json",
+    "challenge/starter/subject.mjs",
+    "challenge/types.ts",
+    "submission/subject.mjs",
+    "evidence.transcript",
+    "evidence.countability",
+    "evidence.verifierOutput",
+    "evidence.normalizedResult",
+    "excluded",
+    "requiredOutput"
+  ]
+}

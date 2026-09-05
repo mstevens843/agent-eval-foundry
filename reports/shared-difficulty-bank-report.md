@@ -14,6 +14,7 @@ what a verifier detects and are a different question; they are in
 | `ui-action-record-replay` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 5 | 324 | 1296 | 1 | simulated-tree |
 | `ui-replay-live-dom` | `gpt-5.6-sol` | 1 | 864 | 864 | — | dom-like |
 | `checker-required-memory-poisoning` | `gpt-5.6-sol` | 1 | 792 | 792 | — | simulated-tree |
+| `caa-revalidation` | `anthropic-claude-opus`, `openai-gpt-5.6-sol` | 4 | 24 | 48 | 0 | simulated-tree |
 | `dao-descendant` | `claude-claude-opus-5`, `codex-gpt-5.6-sol` | 2 | 24 | 48 | 0 | simulated-tree |
 | `trading-reconciliation-recompute` | `claude-claude-opus-5`, `codex-gpt-5.6-sol` | 2 | 24 | 48 | 0 | simulated-tree |
 | `deployment-rollback-recompute` | `claude-claude-opus-5`, `codex-gpt-5.6-sol` | 2 | 24 | 48 | 0 | simulated-tree |
@@ -40,7 +41,7 @@ axis column empty rather than reporting a degenerate 1.
 
 | | |
 |---|---:|
-| difficulty banks | 8 |
+| difficulty banks | 9 |
 | subjects attempting every family | 0 |
 | threshold for a quoted combined count | 3 |
 | combined axes | not computable |
@@ -72,6 +73,32 @@ foundry trials campaign import --family ui-replay-live-dom bundles/ui-replay-liv
 foundry trials campaign prepare --family checker-required-memory-poisoning --provider external --out bundles/checker-required-memory-poisoning-external
 foundry trials campaign import --family checker-required-memory-poisoning bundles/checker-required-memory-poisoning-external
 
+foundry trials campaign prepare --family dao-descendant --provider external --out bundles/dao-descendant-external
+foundry trials campaign import --family dao-descendant bundles/dao-descendant-external
+
+foundry trials campaign prepare --family trading-reconciliation-recompute --provider external --out bundles/trading-reconciliation-recompute-external
+foundry trials campaign import --family trading-reconciliation-recompute bundles/trading-reconciliation-recompute-external
+
+foundry trials campaign prepare --family deployment-rollback-recompute --provider external --out bundles/deployment-rollback-recompute-external
+foundry trials campaign import --family deployment-rollback-recompute bundles/deployment-rollback-recompute-external
+
+# anthropic-claude-opus on durable-approval-outbox: imported/non-routable bank; run in its source harness and import the result.
+
+foundry trials campaign prepare --family prompt-injection-containment --provider external --out bundles/prompt-injection-containment-external
+foundry trials campaign import --family prompt-injection-containment bundles/prompt-injection-containment-external
+
+foundry trials campaign prepare --family ui-action-record-replay --provider external --out bundles/ui-action-record-replay-external
+foundry trials campaign import --family ui-action-record-replay bundles/ui-action-record-replay-external
+
+foundry trials campaign prepare --family ui-replay-live-dom --provider external --out bundles/ui-replay-live-dom-external
+foundry trials campaign import --family ui-replay-live-dom bundles/ui-replay-live-dom-external
+
+foundry trials campaign prepare --family checker-required-memory-poisoning --provider external --out bundles/checker-required-memory-poisoning-external
+foundry trials campaign import --family checker-required-memory-poisoning bundles/checker-required-memory-poisoning-external
+
+foundry trials campaign prepare --family caa-revalidation --provider external --out bundles/caa-revalidation-external
+foundry trials campaign import --family caa-revalidation bundles/caa-revalidation-external
+
 # claude-claude-opus-5 on durable-approval-outbox: imported/non-routable bank; run in its source harness and import the result.
 
 foundry trials campaign prepare --family ui-replay-live-dom --provider claude-haiku --out bundles/ui-replay-live-dom-claude-haiku
@@ -79,6 +106,9 @@ foundry trials campaign import --family ui-replay-live-dom bundles/ui-replay-liv
 
 foundry trials campaign prepare --family checker-required-memory-poisoning --provider claude-haiku --out bundles/checker-required-memory-poisoning-claude-haiku
 foundry trials campaign import --family checker-required-memory-poisoning bundles/checker-required-memory-poisoning-claude-haiku
+
+foundry trials campaign prepare --family caa-revalidation --provider claude-haiku --out bundles/caa-revalidation-claude-haiku
+foundry trials campaign import --family caa-revalidation bundles/caa-revalidation-claude-haiku
 
 foundry trials campaign prepare --family dao-descendant --provider claude-haiku --out bundles/dao-descendant-claude-haiku
 foundry trials campaign import --family dao-descendant bundles/dao-descendant-claude-haiku
@@ -97,6 +127,9 @@ foundry trials campaign import --family ui-replay-live-dom bundles/ui-replay-liv
 foundry trials campaign prepare --family checker-required-memory-poisoning --provider claude --out bundles/checker-required-memory-poisoning-claude
 foundry trials campaign import --family checker-required-memory-poisoning bundles/checker-required-memory-poisoning-claude
 
+foundry trials campaign prepare --family caa-revalidation --provider claude --out bundles/caa-revalidation-claude
+foundry trials campaign import --family caa-revalidation bundles/caa-revalidation-claude
+
 foundry trials campaign prepare --family dao-descendant --provider claude --out bundles/dao-descendant-claude
 foundry trials campaign import --family dao-descendant bundles/dao-descendant-claude
 
@@ -111,6 +144,9 @@ foundry trials campaign import --family ui-replay-live-dom bundles/ui-replay-liv
 
 foundry trials campaign prepare --family checker-required-memory-poisoning --provider claude-sonnet --out bundles/checker-required-memory-poisoning-claude-sonnet
 foundry trials campaign import --family checker-required-memory-poisoning bundles/checker-required-memory-poisoning-claude-sonnet
+
+foundry trials campaign prepare --family caa-revalidation --provider claude-sonnet --out bundles/caa-revalidation-claude-sonnet
+foundry trials campaign import --family caa-revalidation bundles/caa-revalidation-claude-sonnet
 
 foundry trials campaign prepare --family dao-descendant --provider claude-sonnet --out bundles/dao-descendant-claude-sonnet
 foundry trials campaign import --family dao-descendant bundles/dao-descendant-claude-sonnet
@@ -135,7 +171,14 @@ foundry trials campaign import --family ui-replay-live-dom bundles/ui-replay-liv
 foundry trials campaign prepare --family checker-required-memory-poisoning --provider external --out bundles/checker-required-memory-poisoning-external
 foundry trials campaign import --family checker-required-memory-poisoning bundles/checker-required-memory-poisoning-external
 
+foundry trials campaign prepare --family caa-revalidation --provider external --out bundles/caa-revalidation-external
+foundry trials campaign import --family caa-revalidation bundles/caa-revalidation-external
+
 # codex-gpt-5.6-sol on durable-approval-outbox: imported/non-routable bank; run in its source harness and import the result.
+
+foundry trials run --family caa-revalidation --run-id revalidation-codex-1 \
+  --model openai/gpt-5.6-sol --provider shell --inherit-env \
+  --command codex exec --dangerously-bypass-approvals-and-sandbox --skip-git-repo-check '{instruction}'
 
 foundry trials run --family dao-descendant --run-id descendant-codex-1 \
   --model openai/gpt-5.6-sol --provider shell --inherit-env \
@@ -148,6 +191,29 @@ foundry trials run --family trading-reconciliation-recompute --run-id recompute-
 foundry trials run --family deployment-rollback-recompute --run-id recompute-codex-1 \
   --model openai/gpt-5.6-sol --provider shell --inherit-env \
   --command codex exec --dangerously-bypass-approvals-and-sandbox --skip-git-repo-check '{instruction}'
+
+foundry trials campaign prepare --family prompt-injection-containment --provider external --out bundles/prompt-injection-containment-external
+foundry trials campaign import --family prompt-injection-containment bundles/prompt-injection-containment-external
+
+foundry trials campaign prepare --family ui-action-record-replay --provider external --out bundles/ui-action-record-replay-external
+foundry trials campaign import --family ui-action-record-replay bundles/ui-action-record-replay-external
+
+foundry trials campaign prepare --family ui-replay-live-dom --provider external --out bundles/ui-replay-live-dom-external
+foundry trials campaign import --family ui-replay-live-dom bundles/ui-replay-live-dom-external
+
+foundry trials campaign prepare --family checker-required-memory-poisoning --provider external --out bundles/checker-required-memory-poisoning-external
+foundry trials campaign import --family checker-required-memory-poisoning bundles/checker-required-memory-poisoning-external
+
+foundry trials campaign prepare --family dao-descendant --provider external --out bundles/dao-descendant-external
+foundry trials campaign import --family dao-descendant bundles/dao-descendant-external
+
+foundry trials campaign prepare --family trading-reconciliation-recompute --provider external --out bundles/trading-reconciliation-recompute-external
+foundry trials campaign import --family trading-reconciliation-recompute bundles/trading-reconciliation-recompute-external
+
+foundry trials campaign prepare --family deployment-rollback-recompute --provider external --out bundles/deployment-rollback-recompute-external
+foundry trials campaign import --family deployment-rollback-recompute bundles/deployment-rollback-recompute-external
+
+# openai-gpt-5.6-sol on durable-approval-outbox: imported/non-routable bank; run in its source harness and import the result.
 ```
 
 ---

@@ -113,6 +113,15 @@ checkers too weak to express the rule, so their own fuzzers ran clean over the b
 | `forged-stable-report` | false-audit-history, duplicate-side-effects | 2 | yes |
 | `recompute-current-authority` | uncertain-external-effects, duplicate-side-effects | 3 | yes |
 | `recompute-from-attempt-counter` | uncertain-external-effects, duplicate-side-effects | 3 | yes |
+| `first-name-reuse` | cardinality-preserved-identity-collapse, stale-state | 3 | yes |
+| `cardinality-only-queries` | cardinality-preserved-identity-collapse, stale-state | 2 | yes |
+| `boundary-inclusive` | stale-state | 2 | yes |
+| `boundary-lenient` | stale-state, cardinality-preserved-identity-collapse | 2 | yes |
+| `reversed-order` | cardinality-preserved-identity-collapse | 1 | yes |
+| `no-query` | stale-state, liveness-stall | 2 | yes |
+| `always-refuse` | liveness-stall | 1 | yes |
+| `always-issue` | cardinality-preserved-identity-collapse | 1 | yes |
+| `fabricated-result` | cardinality-preserved-identity-collapse, false-audit-history | 2 | yes |
 
 ### No-op faker (empty external ledger) `nop-faker`
 
@@ -1743,6 +1752,134 @@ external.execute(intent.logicalId, { idempotencyKey: key, payload: intent.payloa
 ```
 const key = derive(intent.logicalId, intent.requestId, view.attempt);
 external.execute(intent.logicalId, { idempotencyKey: key, payload: intent.payload });
+```
+
+### First-stale-name reuse across every rechecked position `first-name-reuse`
+
+**Bug.** The revalidation loop resolves the first name needing a recheck once, then queries that same fqdn for every subsequent position. It emits one result per input name and makes one call per stale name, so both counts are correct, while every answer after the first belongs to the wrong domain.
+
+**False confidence.** N calls produce N real answers and N results in the right order, so a self-check that counts authorizations, or that runs a single-domain order, is green over the bug.
+
+**Must be caught by**
+- require a host-recorded call under each stale name's own exact fqdn
+- join every emitted result to the answer the authority holds for that name
+- place the denied name away from the first position in a multi-name order
+
+```
+const first = names.find(isStale);
+for (const name of names) if (isStale(name)) results.push({ fqdn: name.fqdn, caa: caa.current(first.fqdn) });
+```
+
+### Correct call count against one identity, answers taken from the cache `cardinality-only-queries`
+
+**Bug.** The subject issues exactly as many authority calls as there are stale names, all against one identity, and then reports every name's recorded value rather than any queried answer. It satisfies a call-count floor while performing no per-name revalidation at all.
+
+**False confidence.** The work floor is met and the output is well-formed, so a grader metering the number of calls sees a diligent subject.
+
+**Must be caught by**
+- grade identity correspondence in the host ledger rather than call count
+- join every emitted result to the applicable answer for that name
+
+```
+for (let i = 0; i < stale.length; i += 1) caa.current(stale[0].fqdn);
+return names.map((n) => ({ fqdn: n.fqdn, caa: n.cachedCaa }));
+```
+
+### Recheck window applied inclusively `boundary-inclusive`
+
+**Bug.** The staleness test is age >= window instead of age > window, so a name exactly at the boundary is rechecked and its current answer overrides the recorded value the specification makes applicable to it.
+
+**False confidence.** Rechecking more often looks strictly safer, and the defect is invisible on every instance where the recorded and current answers agree.
+
+**Must be caught by**
+- an instance with a name at exactly the boundary age whose recorded and current answers disagree
+- join every name - not only the stale ones - to its applicable answer
+
+```
+const stale = (n) => view.nowHour - n.validatedAtHour >= 8;
+```
+
+### Recheck window applied one hour too generously `boundary-lenient`
+
+**Bug.** The staleness test is age > window + 1, so a name exactly one hour past the boundary is treated as fresh and its stale recorded value is used without any authority call.
+
+**False confidence.** Fewer calls look like a correct cache optimisation, and the omission is silent on any instance where the stale value happens to still be right.
+
+**Must be caught by**
+- an instance with a name exactly one hour past the boundary whose recorded and current answers disagree
+- require a host-recorded call under each stale name's own exact fqdn
+
+```
+const stale = (n) => view.nowHour - n.validatedAtHour > 9;
+```
+
+### Correct per-identity answers emitted out of order `reversed-order`
+
+**Bug.** Every identity is authorized correctly and every answer is right, but the result list is emitted in an order that does not match the input order, so a positional consumer attributes each answer to the wrong member.
+
+**False confidence.** The multiset of answers is exactly correct, so any check that compares sets, counts or sorted output is green.
+
+**Must be caught by**
+- require one result per input name at the input index carrying that name's identity
+
+```
+return { decision, results: results.reverse() };
+```
+
+### No authority call at all `no-query`
+
+**Bug.** The subject never contacts the external authority and answers every identity from its recorded value regardless of age.
+
+**False confidence.** The output is well-formed and, on any request whose recorded values are still current, entirely correct.
+
+**Must be caught by**
+- require at least one host-recorded call when the request contains a stale identity
+- join every emitted result to its applicable answer
+
+```
+return names.map((n) => ({ fqdn: n.fqdn, caa: n.cachedCaa, source: 'CACHE' }));
+```
+
+### Honest work, unconditional refusal `always-refuse`
+
+**Bug.** The subject performs every required per-identity revalidation correctly and then refuses every request regardless of the answers it received.
+
+**False confidence.** Refusal is the safe direction, so every safety metric is satisfied and the ledger shows a subject that did all the work.
+
+**Must be caught by**
+- meter the approval half of a conjunctive decision: refusing while every applicable answer allows is a failure
+
+```
+const results = reconcile(view, caa);
+return { decision: 'REFUSE', results };
+```
+
+### Honest work, unconditional approval `always-issue`
+
+**Bug.** The subject performs every required per-identity revalidation and then approves every request without consulting the answers it received.
+
+**False confidence.** The call ledger shows complete, correctly bound work, so any check reading the ledger alone sees a diligent subject.
+
+**Must be caught by**
+- meter approvals issued while some identity's applicable answer denies
+
+```
+const results = reconcile(view, caa);
+return { decision: 'ISSUE', results };
+```
+
+### Plausible authorization results with no matching call `fabricated-result`
+
+**Bug.** The subject emits a well-formed result per identity, each labelled as freshly retrieved, without contacting the authority at all.
+
+**False confidence.** Every field, including the provenance label, is exactly the shape a correct implementation produces.
+
+**Must be caught by**
+- grade the host call ledger rather than the subject's account of what it queried
+- join every emitted result to its applicable answer
+
+```
+return { decision: 'ISSUE', results: names.map((n) => ({ fqdn: n.fqdn, caa: 'ALLOW', source: 'CURRENT' })) };
 ```
 
 ---

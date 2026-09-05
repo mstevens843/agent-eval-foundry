@@ -1,0 +1,5 @@
+# Compiled output never belongs in the task image: it is architecture-specific and
+# the agent builds its own.
+app/harness/devauthority
+app/certd/certd
+**/*.test

@@ -476,6 +476,75 @@ export const SHAPE_PROSE: Readonly<Record<string, ShapeProse>> = {
       "Writing an audit that cites cached or subject-owned facts rather than current facade observations.",
     ],
   },
+  "caa-revalidation": {
+    status: "built",
+    agentTrialsRun: null,
+    agentTrialsPassed: null,
+    evidence:
+      "Prospectively discovered in Phase 16 from the 2020 Let's Encrypt CAA rechecking incident and promoted by two independent cross-provider readers against packet 45475d79. Packaged in Phase 17 as src/families/caa-revalidation with a 192-point declared space, 24 selected scenarios including an 18-case activated stratum, a B6-gated runner carrying a leak canary, a host-owned exact-fqdn query ledger, a reference, nine mutants and four cheat oracles, a leak-checked challenge and a trial route. Local evidence is in data/phase-17-probe-v2-results.json and data/phase-17-package-controls.json; the agent-trial result is in reports/PHASE-17-CAA-VALIDATION.md. agentTrialsRun stays null here and is owned by the measured trial ledger.",
+    visibleRules: [
+      "A name older than the eight-hour recheck window is rechecked by calling the authority with that exact fqdn, and the value returned binds to that name and no other.",
+      "A name whose age is eight hours or less uses its own recorded value. Age exactly eight is inside the window.",
+      "Issue if and only if every name's bound answer allows; any denial refuses, and refusing when every name allows is wrong.",
+      "Emit exactly one result per input name, in the input order, carrying that name's fqdn.",
+      "When the order contains a name older than the window, at least one query must reach the host. Extra or repeated queries are permitted.",
+      "The result `source` field is required by the output grammar and is not graded.",
+    ],
+    hiddenGradedRegion:
+      "The hidden suite samples the declared seed, domain-count, age-pattern and denied-position space. The activated stratum contains the orders with two or more rechecked names, where identity collapse can fire at all; explicit one-name and single-recheck controls prove non-activation. Ages are drawn from the declared set 0, 8, 9, 24 and 719 hours, and a denied position always names a name that is actually rechecked. Hidden cases add no rule beyond the five visible ones.",
+    referenceContract: [
+      "Compute each name's age from the view's own nowHour and validatedAtHour.",
+      "For each name past the window, call the authority with that name's own fqdn and bind the returned value to that name.",
+      "For each name inside the window, use that name's own recorded value.",
+      "Emit one result per input name in the input order.",
+      "Issue when and only when every bound answer allows.",
+    ],
+    authoritativeSources: [
+      {
+        name: "current authorization map",
+        whatItSettles:
+          "what each domain's authorization answer is right now, as opposed to when it was recorded",
+        whyEngineCannotForge:
+          "The harness builds the map before subject execution and exposes only current(fqdn), which answers for one name at a time. The subject cannot enumerate the map, and the value it reports is compared against the harness copy rather than accepted.",
+      },
+      {
+        name: "exact-fqdn query ledger",
+        whatItSettles: "which domain name each authority call actually named, and in what order",
+        whyEngineCannotForge:
+          "The harness appends to the ledger before returning an answer and hands the subject a frozen facade whose only own property is current. There is no handle through which the ledger can be read, edited or manufactured.",
+      },
+      {
+        name: "applicable-answer rule",
+        whatItSettles:
+          "which of a name's two candidate answers - recorded or current - the specification makes binding",
+        whyEngineCannotForge:
+          "It is computed host-side from the view's declared ages and the harness map. A subject can choose which value to report but cannot change which one it is graded against.",
+      },
+    ],
+    fairnessConstraints: [
+      "All five graded rule codes and the eight-hour window are visible in SPEC.md, and every check enforces one of them.",
+      "Each name's age and recorded value are present in the view before the subject must act.",
+      "One-name and single-recheck controls distinguish identity collapse from general incorrectness.",
+      "The positive-work floor is conditioned on the order containing a rechecked name, so it cannot fire vacuously.",
+      "The denied-position collapse rule for short orders is stated rather than left as an undefined dimension combination.",
+      "The package is deterministic and hidden scenarios sample only declared knobs.",
+    ],
+    cheatResistance: [
+      "The authorization map and the query ledger are harness-owned and absent from the challenge package.",
+      "A subject that reports plausible current answers without calling the authority fails identity binding, because the ledger rather than the report is graded.",
+      "A subject that meets a call-count floor by repeating one name fails identity binding for the names it never queried.",
+      "A subject that refuses every order fails the approval half of the conjunctive decision.",
+      "A wrong-shaped report is refused rather than graded, so an unparseable submission cannot be scored as a passing subject.",
+      "The runner's witness-isolation control carries a deliberately leaky facade as a negative control and voids the sweep if that canary does not trip.",
+    ],
+    expectedFailureModes: [
+      "Resolving the name to recheck once outside the loop and reusing it for every rechecked position.",
+      "Applying the recheck window inclusively, so a name at exactly eight hours is rechecked and its recorded value is discarded.",
+      "Applying the window one hour too generously, so a name at exactly nine hours is never rechecked.",
+      "Satisfying a call-count expectation by repeating one name rather than binding calls to identities.",
+      "Refusing the whole order rather than deciding it, or issuing without consulting the answers received.",
+    ],
+  },
   "dao-descendant": {
     status: "built",
     agentTrialsRun: null,

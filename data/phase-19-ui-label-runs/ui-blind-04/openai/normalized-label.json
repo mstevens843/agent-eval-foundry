@@ -1,0 +1,38 @@
+{
+  "runId": "ui-haiku-1",
+  "familyId": "ui-action-record-replay",
+  "readerId": "phase19-ui-blind-04-openai",
+  "providerFamily": "openai",
+  "label": "capability",
+  "rationale": "The visible package determines the failed obligations: R4 forbids completing a confirmation-opening step before confirmation is observed and accepted, R5 forbids repeating irreversible work, and the outcome definitions plus the node-removed example require a permanently impossible trace to be reported unreplayable. The submission invokes submit before checking confirmation, does not record the irreversible step when the later confirmation branch halts, and processes sequentially so an earlier pending step can hide a permanently unresolved later target. The verifier measured those submitted behaviors across 324 scenarios with zero host errors. This is not spec-underspecified: the public rules, facade signals, and worked node-removed example determine the required safety, retry, and unreplayable outcomes.",
+  "evidenceRead": [
+    "MANIFEST.json",
+    "README.md",
+    "SPEC.md",
+    "examples/example-1-none.json",
+    "examples/example-2-node_wrapped.json",
+    "examples/example-3-node_removed.json",
+    "starter/subject.mjs",
+    "types.ts",
+    "submission/subject.mjs",
+    "evidence.transcript",
+    "evidence.countability",
+    "evidence.verifierOutput",
+    "evidence.normalizedResult",
+    "excluded",
+    "requiredOutput"
+  ],
+  "packetPath": "data/phase-19-ui-label-packets/ui-blind-04.json",
+  "packetSha256": "1cb3b57f4191c71545b1822daaae3ae255632ef38c11a4ca70c823e63e2bfe3d",
+  "independentlyProduced": true,
+  "blindedTo": [
+    "other-reader-label",
+    "author-diagnosis",
+    "cross-cell-outcomes",
+    "stopping-decision",
+    "existing root-cause sidecar",
+    "other UI trial outcomes",
+    "family promotion status",
+    "research ranking"
+  ]
+}

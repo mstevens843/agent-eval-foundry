@@ -1,0 +1,40 @@
+{
+  "delay_ms": {
+    "a.example.test": 10,
+    "b.example.test": 140
+  },
+  "fail_with": {},
+  "id": "ctl-answered-in-order",
+  "orders": [
+    {
+      "at": "2031-03-04T12:00:00Z",
+      "id": "o1",
+      "identifiers": [
+        "a.example.test",
+        "b.example.test"
+      ]
+    },
+    {
+      "at": "2031-03-04T13:00:00Z",
+      "id": "o2",
+      "identifiers": [
+        "b.example.test"
+      ]
+    }
+  ],
+  "policy": {
+    "a.example.test": "PERMIT",
+    "b.example.test": "FORBID"
+  },
+  "store": {
+    "a.example.test": {
+      "checked_at": "2031-03-03T06:00:00Z",
+      "decision": "PERMIT"
+    },
+    "b.example.test": {
+      "checked_at": "2031-03-03T06:00:00Z",
+      "decision": "PERMIT"
+    }
+  },
+  "why": "two identifiers are rechecked and the authority answers them in the order the document names, so no permutation occurs"
+}

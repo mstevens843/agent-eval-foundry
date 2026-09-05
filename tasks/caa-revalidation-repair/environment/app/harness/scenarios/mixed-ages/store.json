@@ -1,0 +1,16 @@
+{
+  "authorizations": {
+    "shop.example.test": {
+      "decision": "PERMIT",
+      "checked_at": "2031-03-04T09:00:00Z"
+    },
+    "api.example.test": {
+      "decision": "PERMIT",
+      "checked_at": "2031-03-03T04:00:00Z"
+    },
+    "cdn.example.test": {
+      "decision": "PERMIT",
+      "checked_at": "2031-03-03T18:00:00Z"
+    }
+  }
+}

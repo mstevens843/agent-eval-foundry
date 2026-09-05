@@ -6,17 +6,17 @@ Did the model verify its own work — and can we actually tell?
 
 | | |
 |---|---:|
-| submissions held | 42 |
+| submissions held | 46 |
 | **submissions containing an executable self-check** | **1** |
-| **runs that wrote checker source and shipped none of it** | **14** |
-| **transcripts describing one** | **25** |
+| **runs that wrote checker source and shipped none of it** | **18** |
+| **transcripts describing one** | **28** |
 | **submissions shipping a checker as a separate file** | **2** |
 | runs that neither shipped nor described one | 9 |
 
 Checker-required trials mandate `checker.mjs`; that file is graded in the checker-required
 family reports and is excluded from the voluntary shipped-checker count here.
 
-**1 of 42 submissions ship an executable self-check; 14 wrote one and did not ship it.**
+**1 of 46 submissions ship an executable self-check; 18 wrote one and did not ship it.**
 
 An earlier version of this analysis grepped the submissions for `assert|invariant|sanity`, found
 nothing, and concluded that models do not verify themselves. That conclusion was about our own
@@ -37,6 +37,10 @@ columns are never added together.
 | run | family | subject | observed | unshipped | shipped files | self-reported | evidence state | scenarios failed |
 |---|---|---|---|---|---|---|---|---:|
 | `access-token-2026-08-o1` | expansion | `gpt-5.6-sol` | **none** | — | graded files only | syntax-only | **superseded** | 0 |
+| `phase17-caa-slot-1-openai-attempt-1` | revalidation | `openai-gpt-5.6-sol` | **none** | example-harness | graded files only | — | counted | 0 |
+| `phase17-caa-slot-2-anthropic-attempt-1` | revalidation | `anthropic-claude-opus` | **none** | example-harness | graded files only | example-harness | counted | 0 |
+| `phase17-caa-slot-3-openai-attempt-1` | revalidation | `openai-gpt-5.6-sol` | **none** | assertions | graded files only | assertions | counted | 0 |
+| `phase17-caa-slot-4-anthropic-attempt-1` | revalidation | `anthropic-claude-opus` | **none** | example-harness | graded files only | example-harness | counted | 0 |
 | `checker-required-2026-08-o1` | poisoning | `gpt-5.6-sol` | **none** | — | graded files only | — | counted | 614 |
 | `phase14-dao-descendant-neutral-skeleton-anthropic` | descendant | `claude-claude-opus-5` | **none** | example-harness | graded files only | synthetic-scenarios | **registered-variant** | 0 |
 | `phase14-dao-descendant-neutral-skeleton-openai` | descendant | `codex-gpt-5.6-sol` | **none** | example-harness | graded files only | — | **registered-variant** | 0 |
@@ -157,8 +161,8 @@ about a task that no longer exists — so those rows carry the state and omit th
 
 ## Where the checkers went
 
-2 of 44 runs left a checker in the submission, where anyone grading the artifact can
-re-run it. 14 wrote verification source during the session and submitted none of it. The second
+2 of 48 runs left a checker in the submission, where anyone grading the artifact can
+re-run it. 18 wrote verification source during the session and submitted none of it. The second
 number is the one an artifact scanner cannot produce, and the difference between them is a
 behavioural difference between runs rather than a claim about any model's ability.
 
@@ -172,6 +176,10 @@ the patterns the submissions get:
 
 | run | lab | scaffolding | wrote, did not ship | found | failed |
 |---|---|---|---|---|---:|
+| `phase17-caa-slot-1-openai-attempt-1` | openai | unrecorded | 2 inline shell script(s) | example-harness | 0 |
+| `phase17-caa-slot-2-anthropic-attempt-1` | claude opus | unrecorded | 3 inline shell script(s) | example-harness | 0 |
+| `phase17-caa-slot-3-openai-attempt-1` | openai | unrecorded | 2 inline shell script(s) | assertions | 0 |
+| `phase17-caa-slot-4-anthropic-attempt-1` | claude opus | unrecorded | 3 inline shell script(s) | example-harness | 0 |
 | `phase14-dao-descendant-neutral-skeleton-anthropic` | anthropic | unrecorded | 2 inline shell script(s) | example-harness | 0 |
 | `phase14-dao-descendant-neutral-skeleton-openai` | openai | unrecorded | 2 inline shell script(s) | example-harness | 0 |
 | `phase14-dao-descendant-seeded-recompute-anthropic` | anthropic | unrecorded | 2 inline shell script(s) | example-harness | 0 |
@@ -199,8 +207,8 @@ Labs there are not aligned one-to-one with scaffolding, so the split is at least
 | kind | runs | what it means |
 |---|---:|---|
 | `syntax-only` | 6 | `node --check` or equivalent: the file parses, and nothing else was established |
-| `example-harness` | 9 | the published examples, run through a driver the model wrote |
-| `assertions` | 1 | executable assertions or invariant checks that fail loudly |
+| `example-harness` | 11 | the published examples, run through a driver the model wrote |
+| `assertions` | 2 | executable assertions or invariant checks that fail loudly |
 | `legality-table` | 5 | an explicit table of permitted states or transitions, consulted rather than reasoned about each time |
 | `synthetic-scenarios` | 13 | inputs the model invented beyond the ones it was given |
 | `fuzzing` | 2 | randomized or exhaustive generation over an input space |
@@ -217,9 +225,9 @@ _None._ No submission defines a checking routine it never invokes. That is worth
 
 | arm | counted runs | failed something |
 |---|---:|---:|
-| described verification at or above an example harness | 13 | 2 |
+| described verification at or above an example harness | 17 | 2 |
 | did not | 6 | 5 |
-**Decidable, barely.** 2/13 of the self-verifying runs failed something, against 5/6 of the rest. With arms this small the comparison is suggestive at best and no test is applied to it.
+**Decidable, barely.** 2/17 of the self-verifying runs failed something, against 5/6 of the rest. With arms this small the comparison is suggestive at best and no test is applied to it.
 
 ## Why the foundry should keep measuring this
 

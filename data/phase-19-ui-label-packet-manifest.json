@@ -1,0 +1,37 @@
+{
+  "schema": "agent-eval-foundry/phase-19-ui-label-packet-manifest@1",
+  "preregistrationSha256": "f589a204efeb03b41e6dab5254b57d441e6291393e6eb720c93c1c6ee77c7a5d",
+  "commonChallengeSha256": "ee79d3b799f88467de0f94fcef444955ddf7cb022527536b77ab48db2803429c",
+  "packets": [
+    {
+      "runId": "ui-claude-1",
+      "packetId": "ui-blind-01",
+      "path": "data/phase-19-ui-label-packets/ui-blind-01.json",
+      "sha256": "9b083fa265cebf4ade631ab5890edfcde7e12aebc6a9ba513f7d1a3dcab347cd"
+    },
+    {
+      "runId": "ui-claude-2",
+      "packetId": "ui-blind-02",
+      "path": "data/phase-19-ui-label-packets/ui-blind-02.json",
+      "sha256": "90d33f258ada313889f2b1c02a0c51d0dc0f559381a3c916f15d4e8137fc34e1"
+    },
+    {
+      "runId": "ui-codex-1",
+      "packetId": "ui-blind-03",
+      "path": "data/phase-19-ui-label-packets/ui-blind-03.json",
+      "sha256": "7551febfca1b9400b6312f164537d8b6c184eee3b8c1c723543dab0224d7d0c7"
+    },
+    {
+      "runId": "ui-haiku-1",
+      "packetId": "ui-blind-04",
+      "path": "data/phase-19-ui-label-packets/ui-blind-04.json",
+      "sha256": "1cb3b57f4191c71545b1822daaae3ae255632ef38c11a4ca70c823e63e2bfe3d"
+    },
+    {
+      "runId": "ui-sonnet-1",
+      "packetId": "ui-blind-05",
+      "path": "data/phase-19-ui-label-packets/ui-blind-05.json",
+      "sha256": "90ca06f823b0f158bb4e380a3ba2e1adc81dca143fdffb176f62db158631c5b8"
+    }
+  ]
+}

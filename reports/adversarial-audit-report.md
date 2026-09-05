@@ -6,6 +6,7 @@ infrastructure error, timeout, stale hash or contaminated attack.
 
 | family | claim level | package hash | ready | counted no-bypass | counted bypass | unrepaired bypass | records | validation failures |
 |---|---|---|---|---:|---:|---:|---:|---|
+| `caa-revalidation` | **audit-pending** | none | no | 0 | 0 | 0 | 0 | none |
 | `checker-required-memory-poisoning` | **adversarial-audited** | `448f2f816c51030cc97a374816226168` | yes | 1 | 0 | 0 | 1 | none |
 | `dao-descendant` | **adversarial-ready** | `9d89b49307a960f65f2e6e8f204fd15e` | yes | 0 | 0 | 0 | 0 | none |
 | `delegated-wallet-scope-reconciliation` | **adversarial-ready** | `45f27b644a84364e3d3855f68cd243a2` | yes | 0 | 0 | 0 | 0 | none |
@@ -31,6 +32,7 @@ audit says one attacker under one declared threat model did not find a bypass.
 
 | family | not-run | no-bypass-found | bypass-found | exploit-attempt-blocked | provider-refusal | infrastructure-error | timeout | invalid-attack | stale-hash | contaminated | superseded |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| `caa-revalidation` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `checker-required-memory-poisoning` | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `dao-descendant` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `delegated-wallet-scope-reconciliation` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -47,6 +49,7 @@ audit says one attacker under one declared threat model did not find a bypass.
 
 | family | no-bypass | hidden-artifact-leak | ground-truth-rebinding | ledger-forgery | verifier-import-hijack | process-boundary-escape | challenge-hash-confusion | baseline-imposter | status-only-fake | artifact-substitution | environment-assumption | scorer-output-forgery |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| `caa-revalidation` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `checker-required-memory-poisoning` | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `dao-descendant` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `delegated-wallet-scope-reconciliation` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |

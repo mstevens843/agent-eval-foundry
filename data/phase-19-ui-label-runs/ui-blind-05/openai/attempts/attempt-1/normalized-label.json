@@ -1,0 +1,29 @@
+{
+  "runId": "ui-sonnet-1",
+  "familyId": "ui-action-record-replay",
+  "readerId": "phase19-ui-blind-05-openai",
+  "providerFamily": "openai",
+  "label": "spec-underspecified",
+  "rationale": "This is spec-underspecified, not capability: R4 says a data-opens-confirmation step must not complete until confirmation is observed and accepted, but the visible facade and rules never determine whether the action must first be invoked to open that dialog or whether confirmation must already exist before an irreversible action. The submission invokes submit, then observes suppression and halts, while the verifier charges no_forbidden_effect in 33 suppressed/settled cells. Whether that already-fired effect was forbidden therefore depends on an unstated ordering protocol. The separate ran:true audit on skipped second-replay steps is a determinate submission defect, but it does not turn the package-undetermined confirmation failures into capability failures.",
+  "evidenceRead": [
+    "challenge/PACKET.json: instructions, closedVocabulary, decisionRule, excluded, and requiredOutput",
+    "challenge/PACKET.json: evidence.challenge README.md, SPEC.md, all three examples, starter/subject.mjs, and types.ts",
+    "challenge/PACKET.json: evidence.submission _test_edge.mjs, _test_harness.mjs, and subject.mjs",
+    "challenge/PACKET.json: evidence.transcript and evidence.countability",
+    "challenge/PACKET.json: all 324 evidence.verifierOutput.cells plus detail",
+    "challenge/PACKET.json: evidence.normalizedResult metadata and all 324 cells"
+  ],
+  "packetPath": "data/phase-19-ui-label-packets/ui-blind-05.json",
+  "packetSha256": "90ca06f823b0f158bb4e380a3ba2e1adc81dca143fdffb176f62db158631c5b8",
+  "independentlyProduced": true,
+  "blindedTo": [
+    "other-reader-label",
+    "author-diagnosis",
+    "cross-cell-outcomes",
+    "stopping-decision",
+    "existing root-cause sidecar",
+    "other UI trial outcomes",
+    "family promotion status",
+    "research ranking"
+  ]
+}

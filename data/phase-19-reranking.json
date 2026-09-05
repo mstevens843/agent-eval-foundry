@@ -1,0 +1,757 @@
+{
+  "schema": "agent-eval-foundry/phase-19-reranking@1",
+  "inputHashes": {
+    "preregistration": "f589a204efeb03b41e6dab5254b57d441e6291393e6eb720c93c1c6ee77c7a5d",
+    "assessments": "0953fc4f1351c4283d385c2915842d7dd43e173ad81050913799d319adc8d3e7",
+    "researchCorpus": "d6c483403f4b9944cf54fbeb960a14bb6fce563458e6f1c3490ae9fe769b723e",
+    "caaTrialLedger": "e96a9e97b9571b3966115ad0565b7a98742d110bbbe23862a98fa5d166470bcb",
+    "caaVerifierAudit": "5b94c04f803f2c481925619ac26b62ca776574246db827695850c1a2fab16e1d"
+  },
+  "probabilitySemantic": "P(agent cleanly solves the package)",
+  "caaV2Correction": {
+    "countableTrials": 4,
+    "cleanSolves": 4,
+    "rewardZero": 0,
+    "difficultyEstimateValid": false,
+    "reason": "The four solves are genuine and general, but a fatal verifier bypass plus public activation leaks invalidate CAA V2 as a task-difficulty estimate. They still falsify the claim that realistic packaging alone hid its locally legible defect."
+  },
+  "uiEvidence": {
+    "trials": 5,
+    "labelsRequired": 10,
+    "labelsReceived": 10,
+    "agreedCapability": 1,
+    "agreedNoncapability": 1,
+    "disagreed": 3,
+    "pending": 0,
+    "difficultyEvidenceSurvives": true
+  },
+  "rows": [
+    {
+      "rank": 1,
+      "familyId": "rollback-reactivates-dormant-defect",
+      "name": "Rollback That Reactivates a Dormant Defect",
+      "causalAxis": "partial-effect-reconciliation-rollback",
+      "professionalDomain": "fintech trading systems deployment operations",
+      "disposition": "rankable",
+      "duplicateOf": null,
+      "dimensions": {
+        "sourceEvidence": 5,
+        "causalDepth": 5,
+        "diagnosisRadius": 5,
+        "authorityBoundary": 4,
+        "scenarioSpace": 5,
+        "fairContractFeasibility": 4,
+        "novelty": 5,
+        "buildTractability": 3,
+        "uiCapabilityEvidence": 0
+      },
+      "caaAnalogyPenalty": 0,
+      "decisionScore": 84,
+      "inheritedCleanSolveProbability": {
+        "ordinary": {
+          "value": 0.42,
+          "low": 0.3,
+          "high": 0.58
+        },
+        "fullRecipe": {
+          "value": 0.45,
+          "low": 0.25,
+          "high": 0.65
+        },
+        "status": "estimated-unvalidated"
+      },
+      "rationale": "A locally reasonable rollback is wrong only after connecting heterogeneous node history, dormant code, reused flags and fleet-wide actuation. The public SEC incident supports the mechanism and the diagnosis cannot be completed from one decision site."
+    },
+    {
+      "rank": 2,
+      "familyId": "worker-rebalance-partition-callback-dedup",
+      "name": "Worker Rebalance Callback Deduplication",
+      "causalAxis": "retries-duplicate-side-effects",
+      "professionalDomain": "distributed streaming / consumer-group infrastructure engineering",
+      "disposition": "rankable",
+      "duplicateOf": null,
+      "dimensions": {
+        "sourceEvidence": 4,
+        "causalDepth": 5,
+        "diagnosisRadius": 5,
+        "authorityBoundary": 5,
+        "scenarioSpace": 5,
+        "fairContractFeasibility": 4,
+        "novelty": 4,
+        "buildTractability": 3,
+        "uiCapabilityEvidence": 0
+      },
+      "caaAnalogyPenalty": 0,
+      "decisionScore": 81,
+      "inheritedCleanSolveProbability": {
+        "ordinary": {
+          "value": 0.32,
+          "low": 0.2,
+          "high": 0.45
+        },
+        "fullRecipe": {
+          "value": 0.62,
+          "low": 0.45,
+          "high": 0.78
+        },
+        "status": "estimated-unvalidated"
+      },
+      "rationale": "Generation fencing, transient dual ownership, offset state and external callback effects create a cross-process/time causal chain. It shares duplicate-effect ancestry with outbox but changes the controlling authority and failure geometry enough to remain a distinct family hypothesis."
+    },
+    {
+      "rank": 3,
+      "familyId": "ui-action-replay-dom-mutation-timing",
+      "name": "Async DOM Mutation Timing in UI Action Replay",
+      "causalAxis": "async-out-of-order-completion",
+      "professionalDomain": "browser/UI automation and frontend testing infrastructure",
+      "disposition": "rankable",
+      "duplicateOf": "ui-action-record-replay lineage (intentional descendant)",
+      "dimensions": {
+        "sourceEvidence": 4,
+        "causalDepth": 4,
+        "diagnosisRadius": 4,
+        "authorityBoundary": 4,
+        "scenarioSpace": 5,
+        "fairContractFeasibility": 4,
+        "novelty": 3,
+        "buildTractability": 4,
+        "uiCapabilityEvidence": 1
+      },
+      "caaAnalogyPenalty": 0,
+      "decisionScore": 74,
+      "inheritedCleanSolveProbability": {
+        "ordinary": {
+          "value": 0.15,
+          "low": 0.08,
+          "high": 0.28
+        },
+        "fullRecipe": {
+          "value": 0.82,
+          "low": 0.68,
+          "high": 0.95
+        },
+        "status": "estimated-unvalidated"
+      },
+      "rationale": "This is an intentional descendant of the only locally measured reward-zero UI lineage. Its evidence bonus is zero until Phase 19 blind labels agree capability, preventing inherited author labels from deciding the rank."
+    },
+    {
+      "rank": 4,
+      "familyId": "state-diff-collateral-damage-verification",
+      "name": "State-Diff Collateral Damage Verification",
+      "causalAxis": "scope-expansion-collateral-damage",
+      "professionalDomain": "personal / enterprise app automation (multi-app simulated ecosystem)",
+      "disposition": "rankable",
+      "duplicateOf": "access-token scope cluster, with distinct full-world-diff witness",
+      "dimensions": {
+        "sourceEvidence": 4,
+        "causalDepth": 3,
+        "diagnosisRadius": 4,
+        "authorityBoundary": 5,
+        "scenarioSpace": 4,
+        "fairContractFeasibility": 5,
+        "novelty": 4,
+        "buildTractability": 4,
+        "uiCapabilityEvidence": 0
+      },
+      "caaAnalogyPenalty": 0,
+      "decisionScore": 73,
+      "inheritedCleanSolveProbability": {
+        "ordinary": {
+          "value": 0.53,
+          "low": 0.35,
+          "high": 0.65
+        },
+        "fullRecipe": {
+          "value": 0.28,
+          "low": 0.1,
+          "high": 0.4
+        },
+        "status": "estimated-unvalidated"
+      },
+      "rationale": "The full-world-state diff is a distinct verifier and witness strategy for collateral effects invisible in successful tool results. It is not yet proven difficult, but it is a clean new measurement axis with good local probe economics."
+    },
+    {
+      "rank": 5,
+      "familyId": "fuzzy-instruction-cross-server-tool-discovery",
+      "name": "Fuzzy-Instruction Tool Discovery and Dependency Threading",
+      "causalAxis": "tool-selection-failure",
+      "professionalDomain": "cross-domain knowledge work mediated by many specialized tool APIs",
+      "disposition": "rankable",
+      "duplicateOf": null,
+      "dimensions": {
+        "sourceEvidence": 4,
+        "causalDepth": 4,
+        "diagnosisRadius": 4,
+        "authorityBoundary": 4,
+        "scenarioSpace": 5,
+        "fairContractFeasibility": 3,
+        "novelty": 4,
+        "buildTractability": 2,
+        "uiCapabilityEvidence": 0
+      },
+      "caaAnalogyPenalty": 0,
+      "decisionScore": 70,
+      "inheritedCleanSolveProbability": {
+        "ordinary": {
+          "value": 0.3,
+          "low": 0.15,
+          "high": 0.45
+        },
+        "fullRecipe": {
+          "value": 0.2,
+          "low": 0.08,
+          "high": 0.35
+        },
+        "status": "estimated-unvalidated"
+      },
+      "rationale": "Cross-server dependency threading is more than tool count: no single server exposes completion, and errors propagate across authority domains. Deterministic grading and instance independence remain material risks."
+    },
+    {
+      "rank": 6,
+      "familyId": "crm-pagination-locator-resilience",
+      "name": "CRM Bulk Pagination Under Live Concurrent Writes",
+      "causalAxis": "pagination-partial-observation",
+      "professionalDomain": "CRM / sales-ops bulk data engineering",
+      "disposition": "rankable",
+      "duplicateOf": null,
+      "dimensions": {
+        "sourceEvidence": 3,
+        "causalDepth": 4,
+        "diagnosisRadius": 4,
+        "authorityBoundary": 4,
+        "scenarioSpace": 5,
+        "fairContractFeasibility": 3,
+        "novelty": 4,
+        "buildTractability": 3,
+        "uiCapabilityEvidence": 0
+      },
+      "caaAnalogyPenalty": 0,
+      "decisionScore": 68,
+      "inheritedCleanSolveProbability": {
+        "ordinary": {
+          "value": 0.72,
+          "low": 0.55,
+          "high": 0.85
+        },
+        "fullRecipe": {
+          "value": 0.5,
+          "low": 0.35,
+          "high": 0.68
+        },
+        "status": "estimated-unvalidated"
+      },
+      "rationale": "Concurrent writes, cursor expiry, durable progress and duplicate side effects create a real cross-time problem. Source support and a complete fair recovery contract are weaker than the leading incident-backed candidates."
+    },
+    {
+      "rank": 7,
+      "familyId": "clinical-bundle-partial-success-masking",
+      "name": "Nominally-Successful Batch Hides Partial Failure",
+      "causalAxis": "partial-effect-reconciliation-rollback",
+      "professionalDomain": "healthcare interoperability / clinical data exchange engineering",
+      "disposition": "rankable",
+      "duplicateOf": null,
+      "dimensions": {
+        "sourceEvidence": 4,
+        "causalDepth": 2,
+        "diagnosisRadius": 2,
+        "authorityBoundary": 3,
+        "scenarioSpace": 3,
+        "fairContractFeasibility": 5,
+        "novelty": 3,
+        "buildTractability": 4,
+        "uiCapabilityEvidence": 0
+      },
+      "caaAnalogyPenalty": 8,
+      "decisionScore": 48,
+      "inheritedCleanSolveProbability": {
+        "ordinary": {
+          "value": 0.62,
+          "low": 0.45,
+          "high": 0.78
+        },
+        "fullRecipe": {
+          "value": 0.5,
+          "low": 0.35,
+          "high": 0.68
+        },
+        "status": "estimated-unvalidated"
+      },
+      "rationale": "FHIR batch semantics are authoritative and fair, but the failure is usually exposed by reading one nested response structure. That is a low-radius documented carve-out, not yet a deep diagnosis family."
+    },
+    {
+      "rank": 8,
+      "familyId": "sql-identifier-injection-scope-expansion",
+      "name": "SQL/Query Identifier Injection Scope Expansion",
+      "causalAxis": "authority-boundary-scope-violation",
+      "professionalDomain": "data warehousing / spreadsheet API integration security engineering",
+      "disposition": "rankable",
+      "duplicateOf": "access-token-scope-expansion causal cluster",
+      "dimensions": {
+        "sourceEvidence": 4,
+        "causalDepth": 2,
+        "diagnosisRadius": 2,
+        "authorityBoundary": 4,
+        "scenarioSpace": 4,
+        "fairContractFeasibility": 4,
+        "novelty": 2,
+        "buildTractability": 4,
+        "uiCapabilityEvidence": 0
+      },
+      "caaAnalogyPenalty": 8,
+      "decisionScore": 48,
+      "inheritedCleanSolveProbability": {
+        "ordinary": {
+          "value": 0.55,
+          "low": 0.3,
+          "high": 0.75
+        },
+        "fullRecipe": {
+          "value": 0.28,
+          "low": 0.15,
+          "high": 0.5
+        },
+        "status": "estimated-unvalidated"
+      },
+      "rationale": "Independent queried-object evidence could make a sound verifier, but unsanitized identifier interpolation is a recognizable one-site security defect. The substrate is new while the authority-expansion axis is not."
+    },
+    {
+      "rank": 9,
+      "familyId": "cdn-cache-staleness-verification-gap",
+      "name": "CDN and DNS Cache Staleness Verification",
+      "causalAxis": "stale-authority-replay-against-changed-state",
+      "professionalDomain": "network / CDN infrastructure operations",
+      "disposition": "rankable",
+      "duplicateOf": "deployment-model-alias-rollout-drift / caa-revalidation stale-authority cluster",
+      "dimensions": {
+        "sourceEvidence": 4,
+        "causalDepth": 2,
+        "diagnosisRadius": 2,
+        "authorityBoundary": 4,
+        "scenarioSpace": 4,
+        "fairContractFeasibility": 4,
+        "novelty": 1,
+        "buildTractability": 3,
+        "uiCapabilityEvidence": 0
+      },
+      "caaAnalogyPenalty": 10,
+      "decisionScore": 43,
+      "inheritedCleanSolveProbability": {
+        "ordinary": {
+          "value": 0.45,
+          "low": 0.32,
+          "high": 0.58
+        },
+        "fullRecipe": {
+          "value": 0.3,
+          "low": 0.15,
+          "high": 0.45
+        },
+        "status": "estimated-unvalidated"
+      },
+      "rationale": "Public TTL and purge semantics are fair but textbook. The central error can collapse to one documented decision and closely resembles the CAA/deployment-alias stale-authority line. Keep as a hypothesis but substantially demote after four genuine CAA V2 solves."
+    },
+    {
+      "rank": null,
+      "familyId": "large-tool-catalog-selection-collapse",
+      "name": "Tool Selection Collapse Under a Large Simultaneous Catalog",
+      "causalAxis": "tool-selection-failure",
+      "professionalDomain": "multi-application agent-tooling platform design (MCP aggregation)",
+      "disposition": "broad-shape-excluded",
+      "duplicateOf": "fuzzy-instruction-cross-server-tool-discovery",
+      "dimensions": {
+        "sourceEvidence": 4,
+        "causalDepth": 2,
+        "diagnosisRadius": 2,
+        "authorityBoundary": 3,
+        "scenarioSpace": 3,
+        "fairContractFeasibility": 2,
+        "novelty": 2,
+        "buildTractability": 2,
+        "uiCapabilityEvidence": 0
+      },
+      "caaAnalogyPenalty": 0,
+      "decisionScore": null,
+      "inheritedCleanSolveProbability": {
+        "ordinary": {
+          "value": 0.45,
+          "low": 0.3,
+          "high": 0.6
+        },
+        "fullRecipe": {
+          "value": 0.2,
+          "low": 0.1,
+          "high": 0.35
+        },
+        "status": "estimated-unvalidated"
+      },
+      "rationale": "Catalog size is a benchmark condition, not a causal failure mechanism. The dependency-threading candidate is the more specific version of this idea."
+    },
+    {
+      "rank": null,
+      "familyId": "long-horizon-multi-app-coordination",
+      "name": "Long-Horizon Coordination Across Many Real Applications",
+      "causalAxis": "long-horizon-planning-execution-monitoring",
+      "professionalDomain": "cross-application business/IT operations (SaaS workflow automation)",
+      "disposition": "broad-shape-excluded",
+      "duplicateOf": "multi-day-state-carryforward-drift",
+      "dimensions": {
+        "sourceEvidence": 5,
+        "causalDepth": 5,
+        "diagnosisRadius": 5,
+        "authorityBoundary": 4,
+        "scenarioSpace": 5,
+        "fairContractFeasibility": 2,
+        "novelty": 3,
+        "buildTractability": 1,
+        "uiCapabilityEvidence": 0
+      },
+      "caaAnalogyPenalty": 0,
+      "decisionScore": null,
+      "inheritedCleanSolveProbability": {
+        "ordinary": {
+          "value": 0.18,
+          "low": 0.05,
+          "high": 0.35
+        },
+        "fullRecipe": {
+          "value": 0.07,
+          "low": 0.02,
+          "high": 0.2
+        },
+        "status": "estimated-unvalidated"
+      },
+      "rationale": "Long horizon is a difficulty dimension and benchmark format, not one falsifiable causal mechanism. It can later wrap validated families but should not occupy a family slot by itself."
+    },
+    {
+      "rank": null,
+      "familyId": "multi-day-state-carryforward-drift",
+      "name": "Multi-Day State Carryforward Drift",
+      "causalAxis": "long-horizon-planning-execution-monitoring",
+      "professionalDomain": "cross-domain terminal professional work (office/scientific/engineering/sysadmin)",
+      "disposition": "broad-shape-excluded",
+      "duplicateOf": "long-horizon-multi-app-coordination",
+      "dimensions": {
+        "sourceEvidence": 4,
+        "causalDepth": 5,
+        "diagnosisRadius": 5,
+        "authorityBoundary": 3,
+        "scenarioSpace": 5,
+        "fairContractFeasibility": 2,
+        "novelty": 2,
+        "buildTractability": 1,
+        "uiCapabilityEvidence": 0
+      },
+      "caaAnalogyPenalty": 0,
+      "decisionScore": null,
+      "inheritedCleanSolveProbability": {
+        "ordinary": {
+          "value": 0.33,
+          "low": 0.2,
+          "high": 0.45
+        },
+        "fullRecipe": {
+          "value": 0.15,
+          "low": 0.05,
+          "high": 0.25
+        },
+        "status": "estimated-unvalidated"
+      },
+      "rationale": "Multi-day carryforward describes duration and memory pressure, not a concrete mechanism-workflow-authority-verifier family. Treat it as an operator on future tasks."
+    },
+    {
+      "rank": null,
+      "familyId": "narrow-assertion-reward-hacking",
+      "name": "Narrow-Assertion Verifier Satisfied Without Real Work",
+      "causalAxis": "verification-strategy-failure",
+      "professionalDomain": "software engineering / benchmark and QA test authoring",
+      "disposition": "infrastructure-excluded",
+      "duplicateOf": null,
+      "dimensions": {
+        "sourceEvidence": 5,
+        "causalDepth": 2,
+        "diagnosisRadius": 2,
+        "authorityBoundary": 2,
+        "scenarioSpace": 2,
+        "fairContractFeasibility": 2,
+        "novelty": 2,
+        "buildTractability": 4,
+        "uiCapabilityEvidence": 0
+      },
+      "caaAnalogyPenalty": 0,
+      "decisionScore": null,
+      "inheritedCleanSolveProbability": {
+        "ordinary": {
+          "value": 0.48,
+          "low": 0.3,
+          "high": 0.65
+        },
+        "fullRecipe": {
+          "value": 0.28,
+          "low": 0.12,
+          "high": 0.45
+        },
+        "status": "estimated-unvalidated"
+      },
+      "rationale": "A narrow assertion is a defect in benchmark verification. It should generate cheat oracles and enforcement screens, not a benchmark task whose subject is asked to exploit or repair the benchmark."
+    },
+    {
+      "rank": null,
+      "familyId": "oauth-refresh-scope-narrowing",
+      "name": "Silent Scope Narrowing on Token Refresh",
+      "causalAxis": "authority-boundary-scope-violation",
+      "professionalDomain": "identity and access management / OAuth2 client integration engineering",
+      "disposition": "duplicate-killed",
+      "duplicateOf": "access-token-scope-expansion / delegated-wallet-scope-reconciliation",
+      "dimensions": {
+        "sourceEvidence": 4,
+        "causalDepth": 2,
+        "diagnosisRadius": 2,
+        "authorityBoundary": 4,
+        "scenarioSpace": 3,
+        "fairContractFeasibility": 5,
+        "novelty": 1,
+        "buildTractability": 4,
+        "uiCapabilityEvidence": 0
+      },
+      "caaAnalogyPenalty": 8,
+      "decisionScore": null,
+      "inheritedCleanSolveProbability": {
+        "ordinary": {
+          "value": 0.4,
+          "low": 0.22,
+          "high": 0.58
+        },
+        "fullRecipe": {
+          "value": 0.17,
+          "low": 0.08,
+          "high": 0.28
+        },
+        "status": "estimated-unvalidated"
+      },
+      "rationale": "The research artifact identifies near-total mechanism overlap with two built authority-scope families. Reading the optional scope field is also a locally legible RFC rule."
+    },
+    {
+      "rank": null,
+      "familyId": "payment-idempotency-ambiguous-retry",
+      "name": "Ambiguous-Failure Payment Retry Discipline",
+      "causalAxis": "retries-duplicate-side-effects",
+      "professionalDomain": "payments/fintech backend infrastructure",
+      "disposition": "duplicate-killed",
+      "duplicateOf": "durable-approval-outbox / payment-unknown-capture-receipt",
+      "dimensions": {
+        "sourceEvidence": 5,
+        "causalDepth": 4,
+        "diagnosisRadius": 4,
+        "authorityBoundary": 5,
+        "scenarioSpace": 4,
+        "fairContractFeasibility": 4,
+        "novelty": 0,
+        "buildTractability": 4,
+        "uiCapabilityEvidence": 0
+      },
+      "caaAnalogyPenalty": 0,
+      "decisionScore": null,
+      "inheritedCleanSolveProbability": {
+        "ordinary": {
+          "value": 0.34,
+          "low": 0.22,
+          "high": 0.48
+        },
+        "fullRecipe": {
+          "value": 0.17,
+          "low": 0.08,
+          "high": 0.28
+        },
+        "status": "estimated-unvalidated"
+      },
+      "rationale": "The inherited artifact itself calls this a verified near-duplicate with the same domain, failure mechanism and authority-ledger resolution as the outbox lineage. Domain restatement is not a new family."
+    },
+    {
+      "rank": null,
+      "familyId": "replica-lag-stale-read-reconciliation",
+      "name": "Read-Replica Lag Reconciliation",
+      "causalAxis": "stale-authority-replay-against-changed-state",
+      "professionalDomain": "database administration / replicated-datastore infrastructure",
+      "disposition": "duplicate-killed",
+      "duplicateOf": "deployment-model-alias-rollout-drift stale-authority reconciliation",
+      "dimensions": {
+        "sourceEvidence": 4,
+        "causalDepth": 3,
+        "diagnosisRadius": 3,
+        "authorityBoundary": 4,
+        "scenarioSpace": 4,
+        "fairContractFeasibility": 4,
+        "novelty": 1,
+        "buildTractability": 3,
+        "uiCapabilityEvidence": 0
+      },
+      "caaAnalogyPenalty": 5,
+      "decisionScore": null,
+      "inheritedCleanSolveProbability": {
+        "ordinary": {
+          "value": 0.45,
+          "low": 0.3,
+          "high": 0.6
+        },
+        "fullRecipe": {
+          "value": 0.17,
+          "low": 0.08,
+          "high": 0.28
+        },
+        "status": "estimated-unvalidated"
+      },
+      "rationale": "The Postgres substrate is real, but the proposed failure remains trusting a lagged non-authoritative view, already represented in the portfolio. The source artifact identifies surface novelty rather than a new causal family."
+    },
+    {
+      "rank": null,
+      "familyId": "self-authored-verification-integrity",
+      "name": "Self-Authored Verification Script Falsely Reports Success",
+      "causalAxis": "verification-strategy-failure",
+      "professionalDomain": "CLI/terminal software engineering (agent self-verification practices)",
+      "disposition": "infrastructure-excluded",
+      "duplicateOf": "checker-quality-gap control bank",
+      "dimensions": {
+        "sourceEvidence": 5,
+        "causalDepth": 2,
+        "diagnosisRadius": 2,
+        "authorityBoundary": 2,
+        "scenarioSpace": 3,
+        "fairContractFeasibility": 2,
+        "novelty": 1,
+        "buildTractability": 4,
+        "uiCapabilityEvidence": 0
+      },
+      "caaAnalogyPenalty": 0,
+      "decisionScore": null,
+      "inheritedCleanSolveProbability": {
+        "ordinary": {
+          "value": 0.55,
+          "low": 0.4,
+          "high": 0.7
+        },
+        "fullRecipe": {
+          "value": 0.27,
+          "low": 0.15,
+          "high": 0.45
+        },
+        "status": "estimated-unvalidated"
+      },
+      "rationale": "Self-check adequacy is a measured agent-behavior feature and construction operator. Turning it into a task would confuse measurement instrumentation with a family substrate."
+    },
+    {
+      "rank": null,
+      "familyId": "trial-time-tool-shim-poisoning",
+      "name": "Trial-Time Tool Shim Poisoning",
+      "causalAxis": "verifier-trust-boundary-integrity",
+      "professionalDomain": "security-adjacent CI / eval-harness engineering",
+      "disposition": "infrastructure-excluded",
+      "duplicateOf": null,
+      "dimensions": {
+        "sourceEvidence": 5,
+        "causalDepth": 4,
+        "diagnosisRadius": 4,
+        "authorityBoundary": 5,
+        "scenarioSpace": 3,
+        "fairContractFeasibility": 2,
+        "novelty": 2,
+        "buildTractability": 3,
+        "uiCapabilityEvidence": 0
+      },
+      "caaAnalogyPenalty": 0,
+      "decisionScore": null,
+      "inheritedCleanSolveProbability": {
+        "ordinary": {
+          "value": 0.42,
+          "low": 0.28,
+          "high": 0.58
+        },
+        "fullRecipe": {
+          "value": 0.63,
+          "low": 0.48,
+          "high": 0.78
+        },
+        "status": "estimated-unvalidated"
+      },
+      "rationale": "Tool-shim poisoning is a verifier hardening fixture and overlaps checker-memory poisoning. It belongs in the adversarial control bank, not the task-family portfolio."
+    },
+    {
+      "rank": null,
+      "familyId": "verifier-container-isolation-boundary",
+      "name": "Verifier Container Isolation Boundary",
+      "causalAxis": "verifier-trust-boundary-integrity",
+      "professionalDomain": "CI/CD and benchmark grading infrastructure engineering",
+      "disposition": "infrastructure-excluded",
+      "duplicateOf": null,
+      "dimensions": {
+        "sourceEvidence": 5,
+        "causalDepth": 4,
+        "diagnosisRadius": 4,
+        "authorityBoundary": 5,
+        "scenarioSpace": 3,
+        "fairContractFeasibility": 2,
+        "novelty": 3,
+        "buildTractability": 2,
+        "uiCapabilityEvidence": 0
+      },
+      "caaAnalogyPenalty": 0,
+      "decisionScore": null,
+      "inheritedCleanSolveProbability": {
+        "ordinary": {
+          "value": 0.42,
+          "low": 0.28,
+          "high": 0.58
+        },
+        "fullRecipe": {
+          "value": 0.32,
+          "low": 0.15,
+          "high": 0.5
+        },
+        "status": "estimated-unvalidated"
+      },
+      "rationale": "This is foundry/verifier infrastructure and a validity requirement, not a professional subject task family. Phase 18 proves it is important, but importance does not make it one of the 1,000 tasks."
+    },
+    {
+      "rank": null,
+      "familyId": "webhook-out-of-order-state-overwrite",
+      "name": "Out-of-Order and Split-Event Webhook Reconciliation",
+      "causalAxis": "async-out-of-order-completion",
+      "professionalDomain": "payments/subscription lifecycle webhook operations",
+      "disposition": "duplicate-killed",
+      "duplicateOf": "payment webhook/idempotency candidates and async identity-collapse lineage",
+      "dimensions": {
+        "sourceEvidence": 4,
+        "causalDepth": 3,
+        "diagnosisRadius": 3,
+        "authorityBoundary": 4,
+        "scenarioSpace": 5,
+        "fairContractFeasibility": 3,
+        "novelty": 1,
+        "buildTractability": 4,
+        "uiCapabilityEvidence": 0
+      },
+      "caaAnalogyPenalty": 4,
+      "decisionScore": null,
+      "inheritedCleanSolveProbability": {
+        "ordinary": {
+          "value": 0.55,
+          "low": 0.4,
+          "high": 0.7
+        },
+        "fullRecipe": {
+          "value": 0.38,
+          "low": 0.22,
+          "high": 0.52
+        },
+        "status": "estimated-unvalidated"
+      },
+      "rationale": "The source artifact names three retired near-duplicates, and all three adversarial readers found its public contract named the tested anti-patterns. A repaired contract could be useful, but it is not a distinct current candidate."
+    }
+  ],
+  "topFive": [
+    "rollback-reactivates-dormant-defect",
+    "worker-rebalance-partition-callback-dedup",
+    "ui-action-replay-dom-mutation-timing",
+    "state-diff-collateral-damage-verification",
+    "fuzzy-instruction-cross-server-tool-discovery"
+  ]
+}

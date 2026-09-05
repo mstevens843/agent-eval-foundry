@@ -1,0 +1,23 @@
+{
+  "schema": "agent-eval-foundry/phase-19-ui-reader-run@1",
+  "packetId": "ui-blind-01",
+  "runId": "ui-claude-1",
+  "familyId": "ui-action-record-replay",
+  "providerFamily": "anthropic",
+  "packetPath": "data/phase-19-ui-label-packets/ui-blind-01.json",
+  "packetSha256": "9b083fa265cebf4ade631ab5890edfcde7e12aebc6a9ba513f7d1a3dcab347cd",
+  "independentlyProduced": true,
+  "providerImage": "agent-eval-foundry/provider-agent:claude-2.1.260-codex-0.152.1",
+  "classification": "completed",
+  "classificationDetail": "artifact produced",
+  "captureLevel": "full",
+  "runtimeSeconds": 580,
+  "usage": {
+    "inputTokens": 1058358,
+    "cachedInputTokens": 967967,
+    "outputTokens": 45519,
+    "costUsd": 2.5267844999999998,
+    "source": "claude `result` event `usage` and `total_cost_usd`"
+  },
+  "costUsd": 2.5267844999999998
+}

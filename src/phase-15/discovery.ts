@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parseHardnessOperatorLedger } from "../foundry/hardness-ledger.js";
 import { loadRegistry } from "../foundry/load.js";
+import { frozenNoveltyBaseline } from "../phase-17/frozen-novelty-baseline.js";
 import {
   PHASE15_PREREGISTRATION_SHA256,
   PHASE15_READER_REVIEWS_SHA256,
@@ -625,11 +626,7 @@ export function runPhase15Discovery(root: string): Phase15DiscoveryRun {
       source,
       preregistration.readerProtocol.blindedTo,
       preregistration.readerProtocol.requiredPassDimensions,
-      loadRegistry(root).shapes.map((shape) => ({
-        familyId: shape.familyId,
-        domain: shape.domain,
-        mechanisms: shape.mechanisms,
-      })),
+      frozenNoveltyBaseline(root),
     );
   });
   const reviewLedger = loadPhase15ReaderReviews(root);

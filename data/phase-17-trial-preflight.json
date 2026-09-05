@@ -1,0 +1,72 @@
+{
+  "schema": "agent-eval-foundry/phase-17-trial-preflight@1",
+  "observedAt": "2026-09-04T18:07:08Z",
+  "baselineCommit": "c3005fe704afd13a8081efe8851a87f0e5b9a14a",
+  "chronologyEvidence": "This real UTC clock value and the execution transcript establish local ordering only; neither is independent third-party timestamp proof.",
+  "isolation": {
+    "dockerDaemonAvailable": true,
+    "dockerServerVersion": "29.3.1",
+    "providerImage": "agent-eval-foundry/provider-agent:claude-2.1.260-codex-0.152.1",
+    "providerImagePresent": true,
+    "providerImageDigest": "sha256:1dfbe421ae3c90efd543c8e2403bf7fc2f3cbe081fff217076eb650cae161cc4",
+    "containerPlanB6Usable": true
+  },
+  "providers": [
+    {
+      "providerFamily": "openai",
+      "credentialChannel": "read-only bind mount of the Codex CLI auth file into /run/foundry-credential",
+      "credentialPresent": true,
+      "subjectExecutionAvailable": true,
+      "blindLabellingAvailable": true,
+      "evidence": "a Codex credential file exists at ~/.codex/auth.json; its contents were not read"
+    },
+    {
+      "providerFamily": "anthropic",
+      "credentialChannel": "CLAUDE_CODE_OAUTH_TOKEN passed through to the container environment",
+      "credentialPresent": false,
+      "subjectExecutionAvailable": false,
+      "blindLabellingAvailable": false,
+      "evidence": "CLAUDE_CODE_OAUTH_TOKEN is absent from this process environment"
+    }
+  ],
+  "packageReady": {
+    "challengeSha256": "c2948f2c26f2231ceaa47d0ec2d3f04a",
+    "scenarioSetId": "revalidation-24-bd3bcd60",
+    "allControlsHeld": true,
+    "probeV2Status": "PROBE-V2-PASSED"
+  },
+  "capture": {
+    "perAttemptArtifacts": [
+      "challenge and scenario-set hashes",
+      "submission bytes",
+      "provider transcript",
+      "attempt metadata",
+      "verifier output",
+      "normalized result",
+      "self-written tests and their outcome",
+      "failed checks",
+      "scenario knobs",
+      "runtime seconds",
+      "token usage and provider-reported cost",
+      "countability decision"
+    ],
+    "costFieldsImplemented": true,
+    "unpricedProviderDeclared": "The Codex CLI reports token counts and no dollar price. Its cost stays null and is counted as unpriced, never converted with a rate literal."
+  },
+  "spend": {
+    "measuredAnthropicSubjectUsdPerAttempt": 0.4975,
+    "measuredAnthropicLabelUsdPerCall": 0.7469,
+    "maximumCleanTrials": 8,
+    "maximumAttemptsWithRetries": 16,
+    "maximumLabelCalls": 16,
+    "estimatedMaximumPricedUsd": 9.96,
+    "registeredSubjectCapUsd": 60,
+    "registeredLabelCapUsd": 40,
+    "registeredTotalCapUsd": 100,
+    "estimateBasis": "ESTIMATED, not measured. Anthropic per-call figures are this repository's own Phase 14 subject telemetry ($1.99 over 4 attempts) and Phase 16 reader telemetry ($2.9878 over 4 reads). OpenAI attempts are unpriced and contribute nothing to this figure, so the true total will exceed it by an unknown OpenAI amount."
+  },
+  "blockingConditions": [
+    "the anthropic credential is absent, so its subject trials and blind labels cannot run; a cross-provider requirement is never weakened to route around one unavailable provider"
+  ],
+  "readyForPaidTrials": false
+}

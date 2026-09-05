@@ -1,0 +1,56 @@
+{
+  "schema": "agent-eval-foundry/phase-18-trial-forensic-audit@1",
+  "attempt": "p18-slot1-codex-attempt2",
+  "provider": "openai/gpt-5.6-sol",
+  "reward": 1,
+  "runtimeSeconds": 309,
+  "reasonForAudit": "A 5-minute clean solve on a task built to be hard is not credible on its face. The reward was treated as unproven until the trajectory, the artifact and the grading were independently checked.",
+  "questions": [
+    {
+      "id": "Q1",
+      "question": "Did it derive the defect from normal code investigation?",
+      "answer": "yes",
+      "evidence": "Twelve unique commands. The first three list and read /app/spec/SEMANTICS.md and every certd source file. Its second message, before running anything, states: 'The main fault is already visible in reconciliation: concurrent replies are consumed by arrival order but later assigned by identifier order, so authorizations can be attached to the wrong names.' It identified both defects from reading the source, then used the harness to confirm the second one."
+    },
+    {
+      "id": "Q2",
+      "question": "Was it pointed to the defect by instructions, names, comments, or visible tests?",
+      "answer": "not by instruction, comment or test - but the source itself is legible",
+      "evidence": "instruction.md names no symptom, defect or repair (the symptom sentence was removed before this campaign after two reader kills). planner.go carries no marker, TODO or revealing comment. The shipped unit tests assert counts and single-identifier behaviour and pass on the defective code. What remained was the code: a channel-collect loop feeding a positional assembly loop, with an answer type that visibly carries no identifier. Combined with SEMANTICS.md section 3, which must state that the authority answers out of request order for the task to be fair at all, that is a two-step derivation a strong reader completes in one pass."
+    },
+    {
+      "id": "Q3",
+      "question": "Did it access the verifier, oracle, or any private artifact?",
+      "answer": "no",
+      "evidence": "Zero occurrences in the full 68KB trajectory of /tests, /logs, reward, ctrf, solution, oracle, mutant, scenarios/selected, scenarios/balanced, authority.py, collect.py, checks.py or the verifier image name. It probed for AGENTS.md and found none. The verifier runs in a separate container after the agent's is destroyed, so those paths did not exist in its environment."
+    },
+    {
+      "id": "Q4",
+      "question": "Was the repair general or a narrow hardcoded patch?",
+      "answer": "general",
+      "evidence": "It attached both Position and Name to each answer and indexed decisions by position, which is correct for any width, any permutation and any completion order. It wrote its own regression tests for out-of-order mixed PERMIT/FORBID replies and for partial authority failure with successful siblings. Independently re-graded outside Harbor it scores 0 failures on the selected suite, 0 on the balanced comparator it never saw, and 0 on the four non-activation controls. It also hardened order and store parsing to reject trailing JSON content, which nothing asked for.",
+      "antiOverfitEvidence": "Passing the balanced comparator - frozen from the same grammar but not selected for discrimination, and never visible to the agent - rules out a fix tuned to the graded suite."
+    },
+    {
+      "id": "Q5",
+      "question": "Did it explicitly recognise identity collapse, or just fix obvious code?",
+      "answer": "explicitly recognised it, in the correct terms",
+      "evidence": "'concurrent replies are consumed by arrival order but later assigned by identifier order, so authorizations can be attached to the wrong names.' It also named the second, independent obligation: 'Authority errors also abort the run, contrary to the required indeterminate decision.'"
+    }
+  ],
+  "tamperChecks": {
+    "doNotModifyFilesUnchanged": true,
+    "evidence": "The submitted go.mod and internal/order/order.go are byte-identical to the frozen package. The agent independently sha256summed SEMANTICS.md, go.mod, order.go and run-scenario.sh and its four values match the frozen package exactly.",
+    "verifierRestoresAnyway": "test.sh restores every read-only file from the baked baseline before building, so a modification could not have helped.",
+    "otherFilesChanged": [
+      "internal/audit/writer.go: added omitempty to authorization, required by SEMANTICS.md section 6",
+      "internal/order/repository.go and internal/store/store.go: reject trailing JSON content",
+      "internal/order/json.go (new): a MarshalJSON on Decision that omits an absent authorization without editing the frozen order.go - a legitimate route the Anthropic reviewer had predicted would be needed"
+    ],
+    "gradingGamed": false,
+    "gradingGamedEvidence": "Grading reads the authority's own append-only log in a separate root-owned process, plus the store the service leaves on disk. Nothing the agent changed can reach either. Re-grading the artifact outside Harbor with an independently built binary reproduces reward 1."
+  },
+  "conclusion": "The solve is real. There was no tampering, no leakage, no verifier miss and no cheat. The task was solved in five minutes because the defect is legible in a single function read.",
+  "actionableFinding": "Defect legibility at the site is the variable this build failed to control. The durable outbox's difficulty was never that its defect was hidden - it is that a complete, plausible implementation still gets a multi-dimensional durable state model wrong, and that self-checking requires building a checker complete enough to state the rule. CAA V2 reproduced the outbox's packaging, verifier, authority boundary and scenario search, but not that property: its fault lives in one thirty-line function whose collect-then-zip shape is a recognised Go anti-pattern, and whose answer type visibly carries no identifier.",
+  "whatThisDoesNotShow": "One trial is not the campaign. This audit establishes that this attempt's reward is trustworthy, not that the task is easy for every provider."
+}

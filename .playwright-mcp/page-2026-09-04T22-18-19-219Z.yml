@@ -1,0 +1,64 @@
+- generic [active] [ref=f4e1]:
+  - generic [ref=f4e2]:
+    - navigation [ref=f4e3]:
+      - generic [ref=f4e4]:
+        - link [ref=f4e5] [cursor=pointer]:
+          - /url: /
+        - list [ref=f4e7]:
+          - listitem [ref=f4e8]:
+            - link "Database" [ref=f4e9] [cursor=pointer]:
+              - /url: /database
+          - listitem [ref=f4e10]:
+            - link "Podcast" [ref=f4e11] [cursor=pointer]:
+              - /url: https://podcast.thevoid.community/
+          - listitem [ref=f4e12]:
+            - link "Blog" [ref=f4e13] [cursor=pointer]:
+              - /url: /blog-index
+          - listitem [ref=f4e14]:
+            - link "Newsletter" [ref=f4e15] [cursor=pointer]:
+              - /url: /newsletter
+          - listitem [ref=f4e16]:
+            - link "2024 Report" [ref=f4e17] [cursor=pointer]:
+              - /url: /report-2024
+          - listitem [ref=f4e18]:
+            - link "Take the VOID Incident Management Survey" [ref=f4e19] [cursor=pointer]:
+              - /url: /survey
+        - text: 
+    - generic [ref=f4e28]:
+      - generic [ref=f4e29]:
+        - heading "Includes:" [level=6] [ref=f4e30]
+        - button "Expert commentary" [ref=f4e32] [cursor=pointer]
+      - heading "Filter by impact category:" [level=6] [ref=f4e35]
+    - generic [ref=f4e701]:
+      - generic [ref=f4e703]:
+        - heading "Partners" [level=2] [ref=f4e704]
+        - paragraph [ref=f4e705]: These folks help keep the VOID running.
+      - generic [ref=f4e706]:
+        - link [ref=f4e708] [cursor=pointer]:
+          - /url: https://www.incident.io
+        - link [ref=f4e711] [cursor=pointer]:
+          - /url: https://www.adaptivecapacitylabs.com/
+        - link [ref=f4e714] [cursor=pointer]:
+          - /url: https://uptimelabs.io/
+    - contentinfo [ref=f4e716]:
+      - generic [ref=f4e717]:
+        - generic [ref=f4e718]:
+          - link [ref=f4e720] [cursor=pointer]:
+            - /url: /
+            - img "Publish your designed things." [ref=f4e721]
+          - generic [ref=f4e723]:
+            - link "ABOUT" [ref=f4e724] [cursor=pointer]:
+              - /url: /about
+            - link "STATUS" [ref=f4e725] [cursor=pointer]:
+              - /url: /status
+            - link "TERMS" [ref=f4e726] [cursor=pointer]:
+              - /url: /terms
+            - link "CONTACT" [ref=f4e727] [cursor=pointer]:
+              - /url: /contact
+        - separator [ref=f4e730]
+        - generic [ref=f4e731]: © 2024 The VOID. All rights reserved.
+    - complementary [ref=f4e735]:
+      - link [ref=f4e736] [cursor=pointer]:
+        - /url: https://www.softr.io/?via=madewithbadge
+        - img "Free AI No Code App Builder | Portals | Internal Tools" [ref=f4e737]
+  - text: ✕

@@ -1,0 +1,18 @@
+{
+  "candidateId": "rollback-reactivates-dormant-defect",
+  "packetSha256": "646a057704f9cc236041fa4c6b9cc0e9ea3e000c54f68e5ae8e5bb60cd10a32b",
+  "providerFamily": "openai",
+  "dimensions": {
+    "source support": "pass",
+    "specific causal mechanism": "pass",
+    "causal depth": "uncertain",
+    "diagnosis radius": "pass",
+    "fair solution-undirected contract": "pass",
+    "structural witness isolation": "pass",
+    "semantic novelty": "pass",
+    "cheap-probe falsifiability": "pass"
+  },
+  "verdict": "kill",
+  "earliestFailedDimension": "causal depth",
+  "rationale": "The SEC incident evidence directly supports flag reuse, dormant-code reachability, partial deployment, and rollback amplification, and the proposed artifact/witness geometry is otherwise concrete. Causal depth is not established, however: the claimed four independently necessary changes are only a future construction gate, while the outcome contract appears to permit a generic safe fleet-wide patch, redeploy, restart, and accurate all-replica report without identifying the deviant replica or its root cause. The packet provides no built reference or ablation showing that this shortcut fails. That missing independence evidence is uncertain and therefore kills the bounded run at causal depth."
+}

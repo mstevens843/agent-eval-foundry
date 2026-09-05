@@ -1,0 +1,223 @@
+- generic [active] [ref=f2e1]:
+  - generic [ref=f2e2]:
+    - navigation [ref=f2e3]:
+      - generic [ref=f2e4]:
+        - link [ref=f2e5] [cursor=pointer]:
+          - /url: /
+        - list [ref=f2e7]:
+          - listitem [ref=f2e8]:
+            - link "Database" [ref=f2e9] [cursor=pointer]:
+              - /url: /database
+          - listitem [ref=f2e10]:
+            - link "Podcast" [ref=f2e11] [cursor=pointer]:
+              - /url: https://podcast.thevoid.community/
+          - listitem [ref=f2e12]:
+            - link "Blog" [ref=f2e13] [cursor=pointer]:
+              - /url: /blog-index
+          - listitem [ref=f2e14]:
+            - link "Newsletter" [ref=f2e15] [cursor=pointer]:
+              - /url: /newsletter
+          - listitem [ref=f2e16]:
+            - link "2024 Report" [ref=f2e17] [cursor=pointer]:
+              - /url: /report-2024
+          - listitem [ref=f2e18]:
+            - link "Take the VOID Incident Management Survey" [ref=f2e19] [cursor=pointer]:
+              - /url: /survey
+        - text: 
+    - generic [ref=f2e24]:
+      - heading "2024 VOID Report" [level=1] [ref=f2e25]
+      - paragraph [ref=f2e26]: Our understanding and beliefs about automation have rapidly evolved towards an AI-dominated industry. These beliefs are partly driven by the notion that AI can address the limitations of traditional automation. The VOID has proven to be a valuable data source on how automation impacts software incidents, challenging prevailing myths about duration, severity, and MTTR. We aim to illuminate the discrepancies between our expectations of automation and its reality, offering insights on narrowing this gap.
+      - link "Download" [ref=f2e28] [cursor=pointer]:
+        - /url: "#custom-code1"
+    - generic [ref=f2e33]:
+      - heading "Key Results" [level=2] [ref=f2e35]
+      - generic [ref=f2e36]:
+        - generic [ref=f2e38]:
+          - img "Automation Plays Multiple Roles in Incidents" [ref=f2e39]
+          - heading "Automation Plays Multiple Roles in Incidents" [level=6] [ref=f2e40]
+          - paragraph [ref=f2e41]: Although automation is primarily developed to remove tasks from human oversight and alert us only when issues arise, it frequently becomes a contributing factor in incidents without the capability to resolve these incidents independently. In many cases, automation assumes various roles within a single incident.
+        - generic [ref=f2e43]:
+          - img "Automation Can Unexpectedly Make Things Worse" [ref=f2e44]
+          - heading "Automation Can Unexpectedly Make Things Worse" [level=6] [ref=f2e45]
+          - paragraph [ref=f2e46]: Not only does automation contribute to an incident, but occasionally it “behaves” in ways that make incidents worse. This can take the form of retry storms, interference with access to automated logs/data, unexpected interactions with other components that expand the surface area of the incident, misconfigurations, etc.
+        - generic [ref=f2e48]:
+          - img "Human Intervention Remains Essential" [ref=f2e49]
+          - heading "Human Intervention Remains Essential" [level=6] [ref=f2e50]
+          - paragraph [ref=f2e51]: Our findings illustrate how automation, while designed to minimize human involvement, often necessitates human intervention when it fails to function as expected. These situations are usually more complex and challenging to resolve than those the automation was designed to handle.
+    - paragraph [ref=f2e58]:
+      - generic [ref=f2e61]:
+        - heading "Download the Report" [level=2] [ref=f2e63]
+        - paragraph [ref=f2e65]: You'll also be subscribed to the VOID Newsletter.
+        - generic [ref=f2e66]:
+          - textbox "Email Address" [ref=f2e68]
+          - textbox "First Name" [ref=f2e70]
+          - textbox "Last Name" [ref=f2e72]
+          - textbox "Company" [ref=f2e74]
+          - textbox "Title" [ref=f2e76]
+          - button "Subscribe" [ref=f2e77] [cursor=pointer]
+        - generic [ref=f2e79]: We won't send you spam. Unsubscribe at any time.
+        - link "Built with Kit" [ref=f2e81] [cursor=pointer]:
+          - /url: https://kit.com/features/forms?utm_campaign=poweredby&utm_content=form&utm_medium=referral&utm_source=dynamic
+    - generic [ref=f2e83]:
+      - heading "What People Are Saying About the VOID" [level=2] [ref=f2e85]
+      - generic [ref=f2e87]:
+        - generic [ref=f2e89]:
+          - generic [ref=f2e91]:
+            - paragraph [ref=f2e93]: Reading that companies are ditching Root Cause Analysis in the same report as we get a fantastic analysis of MTTR fallacies really gave me, a professional pessimist, optimism for the future.
+            - generic [ref=f2e94]:
+              - heading "Clint Byrum" [level=5] [ref=f2e95]
+              - generic [ref=f2e96]: Staff Engineer, Spotify
+          - generic [ref=f2e98]:
+            - paragraph [ref=f2e100]: "If you loved Accelerate and the DORA Report, this will be right up your alley: a long-overdue, open-sourced data dump of real outages. Yours. Ours. Companies big and small have contributed their outage reports to seed this repo of what really happens when things goes sideways."
+            - heading "Honeycomb" [level=5] [ref=f2e102]
+          - generic [ref=f2e104]:
+            - paragraph [ref=f2e106]: The VOID report is the first industry-wide analysis of the state of software reliability today—in fact, it is the closest thing we have to a 'State of the Union' address. Everyone who designs and operates software systems should read it.
+            - generic [ref=f2e107]:
+              - heading "Laura Nolan" [level=5] [ref=f2e108]
+              - generic [ref=f2e109]: Engineer, Stanza Systems
+          - generic [ref=f2e111]:
+            - paragraph [ref=f2e113]: The VOID project is one of the most significant steps we can take as an industry to improve our operations and safety. This report sets up solid bases for many organizations and practitioners to turn their outage review practices towards more impactful and learning-centric views.
+            - generic [ref=f2e114]:
+              - heading "Fred Hebert" [level=5] [ref=f2e115]
+              - generic [ref=f2e116]: Staff SRE, Honeycomb
+          - generic [ref=f2e118]:
+            - paragraph [ref=f2e120]: The VOID report is an outstanding broad view of patterns in incidents across many organizations. I'm looking forward to the database growing and lending itself to even more research and insights.
+            - generic [ref=f2e121]:
+              - heading "Štěpán Davidovič" [level=5] [ref=f2e122]
+              - generic [ref=f2e123]: Senior Staff SRE, Google
+          - generic [ref=f2e125]:
+            - paragraph [ref=f2e127]: "The VOID report challenges the “Old View” in what many technology organizations deem as the gold standard for incidents, such as: duration of incidents, MTTR, and Root Cause Analysis. Instead, we can embrace a “New View” that includes learning from incidents beyond just fixing them, deeper and broader incident analysis, humans as the superpower of systems, and an increased focus on successes versus failures when analyzing incidents."
+            - generic [ref=f2e128]:
+              - heading "Chad Todd" [level=5] [ref=f2e129]
+              - generic [ref=f2e130]: SRE Manager, Crowdstrike
+          - generic [ref=f2e132]:
+            - paragraph [ref=f2e134]: If you aren't recording and publishing incidents because you want to look good, then you are more likely to have a much bigger failure. This report raises some interesting questions, how can we measure near-misses, and can we find a better metric than Mean Time To Repair (MTTR) given the complex partial failure modes we see? I encourage everyone to publish more, include near misses in your incident reports, and to help everyone else build a safer world as a result.
+            - generic [ref=f2e135]:
+              - heading "Adrian Cockcroft" [level=5] [ref=f2e136]
+              - generic [ref=f2e137]: Partner, OrionX & Tech Advisor
+          - generic [ref=f2e139]:
+            - paragraph [ref=f2e141]: The VOID report marks a remarkable advancement in how our community will look at and fix incidents moving forward. Upon seeing the emerging key findings of the report, Jeli was excited to support this research across these large datasets. Through extrapolating the key findings of the report, we are all able to build more resilient systems with greater collaboration.
+            - generic [ref=f2e142]:
+              - heading "Nora Jones" [level=5] [ref=f2e143]
+              - generic [ref=f2e144]: CEO, Jeli
+          - generic [ref=f2e146]:
+            - paragraph [ref=f2e148]: The VOID Report is one of those rare and delightful moments of active thought. It takes a given subject matter, in this case claims about incidents in software, as serious and worthy of in-depth consideration. And through a close examination it finds that something doesn't quite make sense. That critique provides an opening for thought, and the sloughing off of received dogma. It's a wonderful example of critical thinking.
+            - generic [ref=f2e149]:
+              - heading "Nick Travaglini" [level=5] [ref=f2e150]
+              - generic [ref=f2e151]: Technical CSM, Honeycomb
+          - generic [ref=f2e153]:
+            - paragraph [ref=f2e155]: As SREs we spend a lot of time thinking about incidents, trying to learn from them and understand our world better. The VOID report gives us well-researched data so we can see clearer, and help our organizations learn from our peers across the industry.
+            - generic [ref=f2e156]:
+              - heading "Amy Tobey" [level=5] [ref=f2e157]
+              - generic [ref=f2e158]: Senior Principal Engineer, Equinix
+          - generic [ref=f2e160]:
+            - paragraph [ref=f2e162]: The VOID report represents a great step forward for the IT industry. It is both a demonstration that numerous organizations are transforming their approach to post-incident learning, and an inspiring call for others to recognize the importance of this New Way of looking at incidents. I love the rigorous critique of MTTR, as well as the practical alternatives suggested by the report.
+            - generic [ref=f2e163]:
+              - heading "David Leigh" [level=5] [ref=f2e164]
+              - generic [ref=f2e165]: Distinguished Engineer, IBM
+          - generic [ref=f2e167]:
+            - paragraph [ref=f2e169]: Reading that companies are ditching Root Cause Analysis in the same report as we get a fantastic analysis of MTTR fallacies really gave me, a professional pessimist, optimism for the future.
+            - generic [ref=f2e170]:
+              - heading "Clint Byrum" [level=5] [ref=f2e171]
+              - generic [ref=f2e172]: Staff Engineer, Spotify
+          - generic [ref=f2e174]:
+            - paragraph [ref=f2e176]: "If you loved Accelerate and the DORA Report, this will be right up your alley: a long-overdue, open-sourced data dump of real outages. Yours. Ours. Companies big and small have contributed their outage reports to seed this repo of what really happens when things goes sideways."
+            - heading "Honeycomb" [level=5] [ref=f2e178]
+          - generic [ref=f2e180]:
+            - paragraph [ref=f2e182]: The VOID report is the first industry-wide analysis of the state of software reliability today—in fact, it is the closest thing we have to a 'State of the Union' address. Everyone who designs and operates software systems should read it.
+            - generic [ref=f2e183]:
+              - heading "Laura Nolan" [level=5] [ref=f2e184]
+              - generic [ref=f2e185]: Engineer, Stanza Systems
+          - generic [ref=f2e187]:
+            - paragraph [ref=f2e189]: The VOID project is one of the most significant steps we can take as an industry to improve our operations and safety. This report sets up solid bases for many organizations and practitioners to turn their outage review practices towards more impactful and learning-centric views.
+            - generic [ref=f2e190]:
+              - heading "Fred Hebert" [level=5] [ref=f2e191]
+              - generic [ref=f2e192]: Staff SRE, Honeycomb
+          - generic [ref=f2e194]:
+            - paragraph [ref=f2e196]: The VOID report is an outstanding broad view of patterns in incidents across many organizations. I'm looking forward to the database growing and lending itself to even more research and insights.
+            - generic [ref=f2e197]:
+              - heading "Štěpán Davidovič" [level=5] [ref=f2e198]
+              - generic [ref=f2e199]: Senior Staff SRE, Google
+          - generic [ref=f2e201]:
+            - paragraph [ref=f2e203]: "The VOID report challenges the “Old View” in what many technology organizations deem as the gold standard for incidents, such as: duration of incidents, MTTR, and Root Cause Analysis. Instead, we can embrace a “New View” that includes learning from incidents beyond just fixing them, deeper and broader incident analysis, humans as the superpower of systems, and an increased focus on successes versus failures when analyzing incidents."
+            - generic [ref=f2e204]:
+              - heading "Chad Todd" [level=5] [ref=f2e205]
+              - generic [ref=f2e206]: SRE Manager, Crowdstrike
+          - generic [ref=f2e208]:
+            - paragraph [ref=f2e210]: If you aren't recording and publishing incidents because you want to look good, then you are more likely to have a much bigger failure. This report raises some interesting questions, how can we measure near-misses, and can we find a better metric than Mean Time To Repair (MTTR) given the complex partial failure modes we see? I encourage everyone to publish more, include near misses in your incident reports, and to help everyone else build a safer world as a result.
+            - generic [ref=f2e211]:
+              - heading "Adrian Cockcroft" [level=5] [ref=f2e212]
+              - generic [ref=f2e213]: Partner, OrionX & Tech Advisor
+          - generic [ref=f2e215]:
+            - paragraph [ref=f2e217]: The VOID report marks a remarkable advancement in how our community will look at and fix incidents moving forward. Upon seeing the emerging key findings of the report, Jeli was excited to support this research across these large datasets. Through extrapolating the key findings of the report, we are all able to build more resilient systems with greater collaboration.
+            - generic [ref=f2e218]:
+              - heading "Nora Jones" [level=5] [ref=f2e219]
+              - generic [ref=f2e220]: CEO, Jeli
+          - generic [ref=f2e222]:
+            - paragraph [ref=f2e224]: The VOID Report is one of those rare and delightful moments of active thought. It takes a given subject matter, in this case claims about incidents in software, as serious and worthy of in-depth consideration. And through a close examination it finds that something doesn't quite make sense. That critique provides an opening for thought, and the sloughing off of received dogma. It's a wonderful example of critical thinking.
+            - generic [ref=f2e225]:
+              - heading "Nick Travaglini" [level=5] [ref=f2e226]
+              - generic [ref=f2e227]: Technical CSM, Honeycomb
+          - generic [ref=f2e229]:
+            - paragraph [ref=f2e231]: As SREs we spend a lot of time thinking about incidents, trying to learn from them and understand our world better. The VOID report gives us well-researched data so we can see clearer, and help our organizations learn from our peers across the industry.
+            - generic [ref=f2e232]:
+              - heading "Amy Tobey" [level=5] [ref=f2e233]
+              - generic [ref=f2e234]: Senior Principal Engineer, Equinix
+          - generic [ref=f2e236]:
+            - paragraph [ref=f2e238]: The VOID report represents a great step forward for the IT industry. It is both a demonstration that numerous organizations are transforming their approach to post-incident learning, and an inspiring call for others to recognize the importance of this New Way of looking at incidents. I love the rigorous critique of MTTR, as well as the practical alternatives suggested by the report.
+            - generic [ref=f2e239]:
+              - heading "David Leigh" [level=5] [ref=f2e240]
+              - generic [ref=f2e241]: Distinguished Engineer, IBM
+          - generic [ref=f2e243]:
+            - paragraph [ref=f2e245]: Reading that companies are ditching Root Cause Analysis in the same report as we get a fantastic analysis of MTTR fallacies really gave me, a professional pessimist, optimism for the future.
+            - generic [ref=f2e246]:
+              - heading "Clint Byrum" [level=5] [ref=f2e247]
+              - generic [ref=f2e248]: Staff Engineer, Spotify
+        - generic [ref=f2e249]:
+          - button [ref=f2e250] [cursor=pointer]
+          - button [ref=f2e251] [cursor=pointer]
+          - button [ref=f2e252] [cursor=pointer]
+          - button [ref=f2e253] [cursor=pointer]
+          - button [ref=f2e254] [cursor=pointer]
+          - button [ref=f2e255] [cursor=pointer]
+          - button [ref=f2e256] [cursor=pointer]
+          - button [ref=f2e257] [cursor=pointer]
+          - button [ref=f2e258] [cursor=pointer]
+          - button [ref=f2e259] [cursor=pointer]
+          - button [ref=f2e260] [cursor=pointer]
+    - generic [ref=f2e263]:
+      - generic [ref=f2e264]:
+        - heading "Partners" [level=2] [ref=f2e265]
+        - paragraph [ref=f2e266]: These folks help keep the VOID running.
+      - generic [ref=f2e267]:
+        - link [ref=f2e269] [cursor=pointer]:
+          - /url: https://www.rootly.com/
+          - img "https://assets.softr-files.com/applications/80b4ceb8-e1ce-4c9f-9712-500c2a2bb4c7/assets/39628ac2-8f0b-4e9c-8fb8-f218217c0f00.png" [ref=f2e270]
+        - link [ref=f2e272] [cursor=pointer]:
+          - /url: https://incident.io/
+          - img "https://assets.softr-files.com/applications/80b4ceb8-e1ce-4c9f-9712-500c2a2bb4c7/assets/f6f949a8-5b2b-43ab-8811-9dbc04e6e744.png" [ref=f2e273]
+        - link [ref=f2e275] [cursor=pointer]:
+          - /url: https://www.indeed.com
+          - img "https://assets.softr-files.com/applications/80b4ceb8-e1ce-4c9f-9712-500c2a2bb4c7/assets/889fb45d-44a3-4485-a322-2da5fc655b6d.png" [ref=f2e276]
+    - contentinfo [ref=f2e277]:
+      - generic [ref=f2e278]:
+        - generic [ref=f2e279]:
+          - link [ref=f2e281] [cursor=pointer]:
+            - /url: /
+            - img "Publish your designed things." [ref=f2e282]
+          - generic [ref=f2e284]:
+            - link "ABOUT" [ref=f2e285] [cursor=pointer]:
+              - /url: /about
+            - link "STATUS" [ref=f2e286] [cursor=pointer]:
+              - /url: /status
+            - link "TERMS" [ref=f2e287] [cursor=pointer]:
+              - /url: /terms
+            - link "CONTACT" [ref=f2e288] [cursor=pointer]:
+              - /url: /contact
+        - separator [ref=f2e291]
+        - generic [ref=f2e292]: © 2024 The VOID. All rights reserved.
+    - complementary [ref=f2e296]:
+      - link [ref=f2e297] [cursor=pointer]:
+        - /url: https://www.softr.io/?via=madewithbadge
+        - img "Free AI No Code App Builder | Portals | Internal Tools" [ref=f2e298]
+  - text: ✕

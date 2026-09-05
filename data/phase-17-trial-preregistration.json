@@ -1,0 +1,158 @@
+{
+  "schema": "agent-eval-foundry/phase-17-trial-preregistration@1",
+  "registrationId": "phase17-caa-sequential-agent-smoke",
+  "registeredAt": "2026-09-04T17:22:40Z",
+  "baselineCommit": "c3005fe704afd13a8081efe8851a87f0e5b9a14a",
+  "chronologyEvidence": "This real UTC clock value and the execution transcript establish local ordering only; neither is independent third-party timestamp proof. This file was written before any paid Phase 17 subject attempt.",
+  "candidate": {
+    "familyId": "caa-revalidation",
+    "candidateId": "multi-name-caa-revalidation-reconciler",
+    "sourceIncidentId": "letsencrypt-2020-caa-recheck-bug",
+    "status": "candidate package, not a proven task family"
+  },
+  "registrationCorrections": [
+    "The first draft of this registration carried challengeSha256 c32b73e8d6f8b06e98a02ca48525514bbcebaea6a8496a063c51477635c5b21d, computed by a hashing scheme local to Phase 17. The repository already has one canonical definition in hashChallengeDir, which is what a trial recomputes from the preserved challenge directory, and two definitions of the challenge hash is how a package correction silently stops invalidating the trials it should. Phase 17 now uses the canonical scheme and the registered value is c2948f2c26f2231ceaa47d0ec2d3f04a. The package bytes did not change; only the function that names them did, and this correction was made before any paid attempt."
+  ],
+  "frozenInputs": {
+    "challengeSha256": "c2948f2c26f2231ceaa47d0ec2d3f04a",
+    "scenarioSetId": "revalidation-24-bd3bcd60",
+    "scenarioCount": 24,
+    "declaredSpaceSize": 192,
+    "probeV2RegistrationSha256": "3293dad7230c255f14d54a33440652eae5befb4c1ee6c6c791e858dbefcfdf6c",
+    "probeV2ImplementationSha256": "4aa18095e7a8596cf5e2b750f13a887f2a06b6919f6ef018612a916f7b2a4228",
+    "lane0AuditSha256": "704aaddd1b92fd6b77a3bed872defd5104b07346722ff16cf4ec7454fb1b666e",
+    "phase16PacketSha256": "45475d79cb39fc0eb9a9e4e992512ec3a1d75974a6e3be8b8ae815178f7d2c13"
+  },
+  "providerRuntime": {
+    "image": "agent-eval-foundry/provider-agent:claude-2.1.260-codex-0.152.1",
+    "imageDigest": "sha256:1dfbe421ae3c90efd543c8e2403bf7fc2f3cbe081fff217076eb650cae161cc4",
+    "isolation": "docker run, read-only root, cap-drop ALL, no-new-privileges, uid 1000, cleared host environment, bridge network for the vendor API only, writable per-attempt workspace with a read-only nested challenge mount",
+    "submissionReRun": "The submitted module is re-executed by scripts/caa-revalidation-host.mjs in a separate process that cannot import the family. The verifier stays outside and consumes only the emitted report and the host-owned exact-fqdn ledger.",
+    "configurations": [
+      {
+        "providerFamily": "openai",
+        "model": "openai/gpt-5.6-sol",
+        "effort": "xhigh",
+        "command": "codex exec --json --dangerously-bypass-approvals-and-sandbox --skip-git-repo-check",
+        "costTelemetry": "tokens only; the Codex CLI reports no dollar price and its cost stays null and unpriced"
+      },
+      {
+        "providerFamily": "anthropic",
+        "model": "claude opus",
+        "effort": "max",
+        "command": "claude --model opus --effort max --output-format stream-json --verbose -p --permission-mode bypassPermissions",
+        "costTelemetry": "provider-reported total_cost_usd"
+      }
+    ]
+  },
+  "firstStageCampaign": {
+    "cleanTrialSlots": 4,
+    "trialOrder": [
+      "slot-1/openai",
+      "slot-2/anthropic",
+      "slot-3/openai",
+      "slot-4/anthropic"
+    ],
+    "pairedScenarioCoverage": "Every slot is graded against the identical frozen 24-scenario set at scenarioSetId revalidation-24-bd3bcd60, so provider coverage is paired by construction and no provider sees a scenario the other did not.",
+    "b6Rule": "Every grading invocation runs the family's reference, the first-name-reuse known-bad and a malformed-input control in the same invocation. A grading run whose controls do not hold is VOID rather than a failing subject."
+  },
+  "retryPolicy": {
+    "maximumRetriesPerSlot": 1,
+    "permittedOnly": [
+      "container failed to start",
+      "provider API error or provider-level refusal with no submission produced",
+      "no submission file written",
+      "capture incomplete: a required artifact is absent",
+      "stale challenge or scenario hash at grading time"
+    ],
+    "neverRetriedFor": "a completed attempt that produced a submission, whatever its reward",
+    "preservation": "Every failed attempt, its transcript and its cost are preserved and reported. A retried slot reports both attempts."
+  },
+  "capturePerAttempt": [
+    "challengeSha256 and scenarioSetId",
+    "submission bytes and their sha256",
+    "provider transcript",
+    "attempt metadata",
+    "verifier output",
+    "normalized result and reward",
+    "self-written tests present, and their outcome where a machine-readable result survives capture",
+    "failed checks",
+    "scenario knobs for every failed scenario",
+    "runtime seconds",
+    "token usage and provider-reported cost, or an explicit unpriced marker",
+    "countability decision and its reason"
+  ],
+  "countability": {
+    "counts": "an attempt that ran to completion in a clean container against the registered hashes, produced a submission, and was graded by a B6-usable invocation",
+    "neverCounts": [
+      "infrastructure error",
+      "provider refusal",
+      "stale challenge or scenario hash",
+      "incomplete capture",
+      "malformed or absent artifact",
+      "a grading invocation whose B6 controls did not hold"
+    ]
+  },
+  "predictions": {
+    "registeredBefore": "any paid attempt",
+    "firstStageCleanSolves": 4,
+    "firstStageRewardZero": 0,
+    "predictedDecision": "VALID-BUT-EASY",
+    "predictedPerTrialFailureProbability": 0.15,
+    "reasoning": "docs/INHERITED-EVIDENCE.md places a discovery that is a direct consequence of a rule stated in the instruction at p >= 0.85, and this candidate sits on that row: CAA1 states the identity binding outright and the specification's forbidden outcomes name the historical anti-pattern in words. The Phase 16 Anthropic reader independently registered the same concern before any of this was built, calling the candidate valid but likely low-yield because the source failure arose inside a large existing codebase with count-asserting tests while the derived task is greenfield with the anti-pattern named. Section 8 of the same document says the axis that works is whether the agent's natural self-check covers the rule; a fifteen-line pure function is small enough that most self-checks will.",
+    "falsifier": "Two or more countable reward-0 trials, at least one from each provider family, whose blind labels agree on capability."
+  },
+  "stoppingRules": [
+    { "id": "S1", "rule": "If all four first-stage trials are clean solves, stop and report VALID-BUT-EASY. Do not buy more slots." },
+    { "id": "S2", "rule": "If at least two countable reward-0 trials occur including one from each provider family, stop buying slots and proceed directly to blind labelling." },
+    { "id": "S3", "rule": "If exactly one reward-0 occurs, or reward-0 occurs in only one provider family, preregister and run at most four additional slots, two per provider." },
+    { "id": "S4", "rule": "Maximum campaign size is 8 clean trials. No ninth clean trial is bought under any outcome." },
+    { "id": "S5", "rule": "No benchmark solve-rate bound is claimed from this campaign. Clopper-Pearson intervals over the observed attempts are reported instead, and they are wide at this size." }
+  ],
+  "spendCaps": {
+    "subjectUsd": 60,
+    "labellingUsd": 40,
+    "totalUsd": 100,
+    "estimatedMaximumPricedUsd": 9.96,
+    "estimateBasis": "ESTIMATED, not measured. Derived from this repository's Phase 14 subject telemetry ($1.99 over 4 Anthropic attempts) and Phase 16 reader telemetry ($2.9878 over 4 Anthropic reads). OpenAI attempts are unpriced and add an unknown amount on top."
+  },
+  "labellingPlan": {
+    "trigger": "every countable reward-0 trial",
+    "labellersPerTrial": 2,
+    "providerFamilies": ["openai", "anthropic"],
+    "freshness": "Each labeller is a fresh container with no repository mount and no other label output.",
+    "packet": "evidence only: the visible challenge package, the submission, the verifier output and the transcript",
+    "withheld": [
+      "the expected mechanism",
+      "the desired verdict",
+      "the candidate score",
+      "the discovery prediction",
+      "the other labeller's result",
+      "the campaign decision"
+    ],
+    "allowedLabels": [
+      "capability",
+      "spec-underspecified",
+      "verifier defect",
+      "infrastructure",
+      "contamination",
+      "indeterminate"
+    ],
+    "agreementRule": "Difficulty evidence counts only when both labellers independently choose `capability`. Disagreement means unlabelled: not capability, and not specification failure.",
+    "secondaryDistinction": [
+      "identity-binding failure",
+      "age-boundary failure",
+      "unsafe issuance",
+      "no-work or liveness failure",
+      "broad implementation failure unrelated to the intended mechanism"
+    ],
+    "noInheritance": "A trial's label is never inherited from another trial merely because the two share a failed-check shape.",
+    "writeOrder": "Labels are written to disk before the campaign verdict is computed."
+  },
+  "decisionRules": {
+    "TRANSFER-READY": "Probe V2 passed, package and reader gates passed, at least two agreed capability failures, at least one capability failure from each subject-provider family, failures concentrated on the intended identity-binding or associated selection checks, and no repeated specification, verifier, capture or infrastructure defect.",
+    "VALID-BUT-EASY": "The package is valid and the maximum campaign produced no agreed capability failure.",
+    "INCONCLUSIVE": "Evidence appears in only one provider family, labels disagree, or valid slots cannot be completed within the cap.",
+    "CANDIDATE-INVALID": "The exact probe, contract, verifier, witness boundary or package controls failed."
+  }
+}

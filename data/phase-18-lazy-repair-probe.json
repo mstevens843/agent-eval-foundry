@@ -1,0 +1,150 @@
+{
+  "schema": "agent-eval-foundry/phase-18-lazy-repair-probe@1",
+  "question": "Phase 18 asserted that a repair which fixes identifier pairing by removing the concurrency would be blocked by rechecks_issued_together. That assertion was never tested. This probe tests it.",
+  "why_it_matters": "If serialisation passes, the intended repair collapses from 'preserve the fan-out and bind each answer to its identifier' to 'delete the goroutines', the task is materially easier than claimed, and the Phase 18 report must say so.",
+  "variants": [
+    {
+      "id": "serial-repair",
+      "construction": "reference planner with the goroutine fan-out deleted; p.Client.Query called sequentially in the assembly loop",
+      "pairing_correct": true,
+      "concurrency_preserved": false,
+      "rationale": "the repair an agent reaches for on seeing 'answers arrive out of order' and concluding 'then do not ask them at the same time'"
+    },
+    {
+      "id": "mutex-serialized",
+      "construction": "reference planner with the goroutines retained but a sync.Mutex held across p.Client.Query",
+      "pairing_correct": true,
+      "concurrency_preserved": false,
+      "rationale": "cosmetic fan-out; the authority still observes one query at a time. Tests whether the check measures observed overlap at the authority rather than the presence of goroutines in the source."
+    }
+  ],
+  "results": {
+    "reference": {
+      "selected": {
+        "failed": 0,
+        "total": 24,
+        "reward": 1
+      },
+      "balanced": {
+        "failed": 0,
+        "total": 24,
+        "reward": 1
+      },
+      "controls": {
+        "failed": 0,
+        "total": 4,
+        "reward": 1
+      },
+      "checks": {}
+    },
+    "serial-repair": {
+      "selected": {
+        "failed": 24,
+        "total": 24,
+        "reward": 0
+      },
+      "balanced": {
+        "failed": 24,
+        "total": 24,
+        "reward": 0
+      },
+      "controls": {
+        "failed": 2,
+        "total": 4,
+        "reward": 0
+      },
+      "checks": {
+        "rechecks_issued_together": 24
+      }
+    },
+    "mutex-serialized": {
+      "selected": {
+        "failed": 24,
+        "total": 24,
+        "reward": 0
+      },
+      "balanced": {
+        "failed": 24,
+        "total": 24,
+        "reward": 0
+      },
+      "controls": {
+        "failed": 2,
+        "total": 4,
+        "reward": 0
+      },
+      "checks": {
+        "rechecks_issued_together": 24
+      }
+    },
+    "shipped": {
+      "selected": {
+        "failed": 22,
+        "total": 24,
+        "reward": 0
+      },
+      "balanced": {
+        "failed": 23,
+        "total": 24,
+        "reward": 0
+      },
+      "controls": {
+        "failed": 0,
+        "total": 4,
+        "reward": 1
+      },
+      "checks": {
+        "authorization_applied": 21,
+        "store_recorded": 21,
+        "outcome": 9,
+        "report_present": 1
+      }
+    }
+  },
+  "verdict": "ASSERTION-HELD",
+  "findings": [
+    "Both lazy repairs score reward 0 on both frozen suites, failing rechecks_issued_together on every scenario that carries two or more pending identifiers.",
+    "The mutex variant fails identically to the serial one, which shows the check measures overlap observed at the authority's own append-only log, not the syntactic presence of goroutines in the submitted source. A submission cannot satisfy it by looking concurrent.",
+    "The two lazy repairs also fail 2 of 4 controls; those are the two control scenarios carrying two or more pending identifiers. The other two controls carry fewer, so the check correctly does not fire and correctly does not penalise them.",
+    "The obligation is published, not hidden: SEMANTICS.md section 3 states 'An order carrying several identifiers to recheck costs one authority round trip, not one per identifier: their rechecks are in flight together', and instruction.md restates that the authority serves queries concurrently. checks.py maps rechecks_issued_together to section 3. This is a stated-and-enforced requirement, not a B1 (stated but unenforced) nor a grader scoring unpublished behaviour."
+  ],
+  "consequence_for_the_phase_18_finding": "The task's repair is genuinely two-part: bind each answer to its own identifier AND keep the rechecks in flight together. Removing the concurrency is not an escape hatch. This makes the BUNDLE-DID-NOT-TRANSFER finding stronger, not weaker: agents solved a task whose correct repair had two published obligations, so the clean solves cannot be explained by the verifier accepting a degenerate repair.",
+  "does_not_show": "This probe says nothing about how hard the task is. It only closes one specific way the task could have been easier than claimed.",
+  "ran_after_the_campaign": {
+    "note": "This probe was built after the trials, so it could not have influenced them. The two variants live under tests/mutants/, which is verifier-side and never reaches the agent container.",
+    "surface_drift_check": "data/phase-18-package-lock.json was regenerated after adding the two variants and every surface except mutants hashed identically.",
+    "surfaces": {
+      "challenge": {
+        "moved": false,
+        "sha256": "e144ea966d5a723d3e0a81254e457c61efc236fb8a76b4c50306c2b12e7017d7"
+      },
+      "selected": {
+        "moved": false,
+        "sha256": "9532d8fef966ec6ee1b88631bd99c91dc05ba231b166f523c08f29631a53308e"
+      },
+      "balanced": {
+        "moved": false,
+        "sha256": "a1f42f9bf9a1bc26139e5fb71366e623a0e417e7ffc6453a4b9a3ec5c91438d6"
+      },
+      "controls": {
+        "moved": false,
+        "sha256": "3f5386193e99f0fe2f515dcc98cf50af7171ddbe3f4a4c0fb2bc5a395bcf1ede"
+      },
+      "verifier": {
+        "moved": false,
+        "sha256": "b32d0fa18744660ad399dbfe383ab650406ca12b3b6e502de779f9712f8beefe"
+      },
+      "solution": {
+        "moved": false,
+        "sha256": "7c3efb09f2746ac1f4c963d79d7fb73a821e8b969aaacfd276826111ec4ddf80"
+      },
+      "mutants": {
+        "moved": true,
+        "from": "7f252fa67ed8cc1752cf992f2ae1545757bc240d6ee57b49d1cec9ddc6119b24",
+        "to": "50f4687290b7307b529772547dfd328ca59cefa2f8dc83728203168b0e666099",
+        "files": "26 -> 28",
+        "reason": "the two probe variants were added; the frozen lock is left at its campaign-time value on purpose"
+      }
+    }
+  }
+}

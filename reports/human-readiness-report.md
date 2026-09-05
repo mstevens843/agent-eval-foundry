@@ -7,6 +7,7 @@ model difficulty.
 | family | human-readiness | package hash | visible files | blockers |
 |---|---|---|---:|---|
 | `access-token-scope-expansion` | **not-ready** | `8ae0950dea093d35d98b12d1c8c1bde5` | 8 | `allowed-assumptions-visible` |
+| `caa-revalidation` | **not-ready** | none | 0 | `public-package-present`, `surface-complete`, `spec-rules-complete`, `hidden-sampling-visible`, `allowed-assumptions-visible`, `forbidden-assumptions-visible`, `examples-present`, `scoring-contract-visible`, `hidden-artifacts-absent`, `solvable-without-source-internals` |
 | `checker-required-memory-poisoning` | **human-ready** | `448f2f816c51030cc97a374816226168` | 8 | none |
 | `dao-descendant` | **not-ready** | `9d89b49307a960f65f2e6e8f204fd15e` | 8 | `hidden-sampling-visible`, `allowed-assumptions-visible`, `forbidden-assumptions-visible`, `solvable-without-source-internals` |
 | `delegated-wallet-scope-reconciliation` | **human-ready** | `45f27b644a84364e3d3855f68cd243a2` | 9 | none |
@@ -22,7 +23,7 @@ model difficulty.
 ## Current Reading
 
 Human-ready families: `checker-required-memory-poisoning`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom`.
-Blocked or unavailable packages: `access-token-scope-expansion`, `dao-descendant`, `deployment-rollback-recompute`, `durable-approval-outbox`, `trading-reconciliation-recompute`.
+Blocked or unavailable packages: `access-token-scope-expansion`, `caa-revalidation`, `dao-descendant`, `deployment-rollback-recompute`, `durable-approval-outbox`, `trading-reconciliation-recompute`.
 
 A ready verdict says the public package is complete enough for a clean-room human attempt. It does
 not say that a human has solved it.
@@ -43,6 +44,21 @@ not say that a human has solved it.
 | `scoring-contract-visible` | pass | public README/SPEC states how grading works |
 | `hidden-artifacts-absent` | pass | challenge package passed the independent leak checker |
 | `solvable-without-source-internals` | pass | public package contains the contract needed for a clean-room attempt |
+
+### `caa-revalidation`
+
+| check | result | detail |
+|---|---|---|
+| `public-package-present` | **FAIL** | no generated challenge package is checked by this repository for this imported or unbuilt family |
+| `surface-complete` | **FAIL** | README.md, SPEC.md, types/API and manifest are not available here |
+| `spec-rules-complete` | **FAIL** | no visible SPEC.md was audited in this repository |
+| `hidden-sampling-visible` | **FAIL** | hidden coverage cannot be audited without a public package |
+| `allowed-assumptions-visible` | **FAIL** | allowed assumptions cannot be audited without a public package |
+| `forbidden-assumptions-visible` | **FAIL** | forbidden assumptions cannot be audited without a public package |
+| `examples-present` | **FAIL** | no visible examples are available here |
+| `scoring-contract-visible` | **FAIL** | no public scoring contract is available here |
+| `hidden-artifacts-absent` | **FAIL** | no generated package split was checked here |
+| `solvable-without-source-internals` | **FAIL** | a human would need source or external context |
 
 ### `checker-required-memory-poisoning`
 

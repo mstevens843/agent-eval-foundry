@@ -1,0 +1,37 @@
+{
+  "delay_ms": {},
+  "fail_with": {},
+  "id": "ctl-all-current",
+  "orders": [
+    {
+      "at": "2031-03-04T12:00:00Z",
+      "id": "o1",
+      "identifiers": [
+        "a.example.test",
+        "b.example.test"
+      ]
+    },
+    {
+      "at": "2031-03-04T14:00:00Z",
+      "id": "o2",
+      "identifiers": [
+        "a.example.test"
+      ]
+    }
+  ],
+  "policy": {
+    "a.example.test": "FORBID",
+    "b.example.test": "FORBID"
+  },
+  "store": {
+    "a.example.test": {
+      "checked_at": "2031-03-04T11:00:00Z",
+      "decision": "PERMIT"
+    },
+    "b.example.test": {
+      "checked_at": "2031-03-04T08:00:00Z",
+      "decision": "PERMIT"
+    }
+  },
+  "why": "nothing is rechecked at all, so the authority is never asked"
+}

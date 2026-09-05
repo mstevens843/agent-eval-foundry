@@ -1,0 +1,100 @@
+{
+  "schema": "agent-eval-foundry/phase-19-evidence-rerank-preregistration@1",
+  "phaseId": "phase-19-ui-relabel-and-evidence-rerank",
+  "registeredAt": "2026-09-04T21:27:13-07:00",
+  "chronologyNote": "This file was written before any Phase 19 reader was invoked. The local timestamp records chronology but is not independent third-party proof.",
+  "inputs": {
+    "candidateCorpus": "data/research-task-family-candidates.json",
+    "uiFamily": "ui-action-record-replay",
+    "uiRuns": [
+      "ui-claude-1",
+      "ui-claude-2",
+      "ui-codex-1",
+      "ui-haiku-1",
+      "ui-sonnet-1"
+    ],
+    "caaV2TrialLedger": "data/phase-18-trial-ledger.json",
+    "caaV2VerifierAudit": "data/phase-18-verifier-audit.json"
+  },
+  "uiRelabelling": {
+    "prediction": "Two to four of the five trials will receive 2-of-2 capability agreement; at least one will either split or agree on a non-capability cause because three current labels are unlabelled and the two capability labels were author-side automated reads.",
+    "readersPerTrial": 2,
+    "requiredProviderFamilies": [
+      "openai",
+      "anthropic"
+    ],
+    "blindTo": [
+      "existing root-cause sidecar",
+      "other reader verdict",
+      "other UI trial outcomes",
+      "family promotion status",
+      "research ranking",
+      "author diagnosis",
+      "campaign stopping decision"
+    ],
+    "countingRule": "A trial contributes difficulty evidence only when both provider families independently return the exact label capability. Agreement on any other exact label is non-capability evidence. A split remains unlabelled.",
+    "maximumReaderCalls": 10,
+    "maximumPricedReaderSpendUsd": 75
+  },
+  "reranking": {
+    "probabilitySemantic": "Every probability is P(agent cleanly solves the package), represented on [0,1]. Lower means harder. Values above 1 in the inherited artifact are percentages and are divided by 100; no other semantic repair is inferred.",
+    "mandatoryDimensions": [
+      "causalDepth",
+      "diagnosisRadius"
+    ],
+    "causalDepthDefinition": "Minimum number of causally distinct state transitions or authority handoffs needed to explain why a locally plausible implementation is wrong.",
+    "diagnosisRadiusDefinition": "Minimum number of distinct code/state/process/time surfaces a solver must connect to locate and refute the defect; raw line count and irrelevant files do not count.",
+    "hardExclusions": [
+      "benchmark or verifier infrastructure presented as a subject task family",
+      "a broad benchmark format without a falsifiable causal failure mechanism",
+      "a confirmed semantic duplicate with no new workflow-authority-verifier combination",
+      "missing evidence needed to assess either mandatory dimension"
+    ],
+    "caaUpdateRule": "Record all four countable CAA V2 clean solves, not the earlier 2-of-2 interim state. Because the verifier audit found a fatal bypass and public activation leaks, CAA V2 is invalid as a difficulty estimate. The genuine general solves still falsify the prediction that realistic packaging alone made the locally legible CAA defect hard and therefore penalize analogous low-depth, low-radius candidates.",
+    "topNForReview": 5,
+    "tieBreakOrder": [
+      "higher causalDepth",
+      "higher diagnosisRadius",
+      "stronger directly measured evidence",
+      "lower first-package build cost",
+      "familyId lexical order"
+    ]
+  },
+  "candidateReview": {
+    "prediction": "Two or three of the corrected top five will survive 2-of-2 independent reading. Missing contract detail is expected to kill at least one evidence-rich but underdrafted idea.",
+    "readersPerCandidate": 2,
+    "requiredProviderFamilies": [
+      "openai",
+      "anthropic"
+    ],
+    "promotionRule": "Both readers must pass every dimension. Uncertain is a kill for this bounded run.",
+    "blindTo": [
+      "rank",
+      "numeric score",
+      "clean-solve probability",
+      "other reader verdict",
+      "author recommendation",
+      "predicted survivor count"
+    ],
+    "maximumReaderCalls": 10,
+    "maximumPricedReaderSpendUsd": 75
+  },
+  "cheapProbes": {
+    "runOnlyAfterReaderSurvival": true,
+    "controlsRequiredInOneInvocation": [
+      "known-good reference passes",
+      "narrow known-bad implementation fails",
+      "non-activating control does not falsely fail",
+      "malformed input is refused",
+      "mechanism activates on at least one registered case",
+      "deterministic replay is byte-stable"
+    ],
+    "interpretation": "A passing mechanism probe establishes local falsifiability and activation only. It does not establish agent difficulty and does not authorize a full build by itself.",
+    "buildAuthorization": "At least one UI trial must have 2-of-2 capability agreement, and a candidate must survive 2-of-2 candidate review plus its B6 cheap probe. Otherwise complete builds remain unauthorized."
+  },
+  "spend": {
+    "paidSubjectTrials": 0,
+    "maximumSemanticReaderCalls": 20,
+    "maximumPricedReaderSpendUsd": 150
+  }
+}

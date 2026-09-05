@@ -33,6 +33,21 @@ slots and a prepared bundle — never a zero.
 
 - Run counted trials on a second model family. Currently failing: none.
 
+### `caa-revalidation`
+
+**Claim strength: already-solved.** Every one of 4 counted trials passed. The family does not separate the subjects in this bank.
+
+| provider | counted | failed | refused | infra | not run | fail rate | 95% interval |
+|---|---:|---:|---:|---:|---:|---:|---|
+| `claude opus` | 2 | 0 | 0 | 0 | 0 | 0% | 0%–66% |
+| `openai` | 2 | 0 | 0 | 0 | 0 | 0% | 0%–66% |
+
+_Every provider here has fewer than 5 counted trials (4 across all of them), which is the threshold this report uses before quoting a per-provider rate without a caveat. The intervals above are the honest width of what these counts support, and they are wide enough that no point estimate should be quoted on its own._
+
+**To strengthen:**
+
+- Harden the family or abandon it. More trials of the same kind will not change an already-solved verdict.
+
 ### `checker-required-memory-poisoning`
 
 **Claim strength: separates.** 1 of 1 counted trials failed at least one scenario, so the family separates something — on 1 model family(ies).
@@ -256,6 +271,10 @@ signal of how it approached the task.
 | run | provider | lines | rule codes cited | self-verifying | evidence state | scenarios failed |
 |---|---|---:|---:|---|---|---:|
 | `access-token-2026-08-o1` | openai | 140 | 6/8 | no | **superseded** | 0 |
+| `phase17-caa-slot-1-openai-attempt-1` | openai | 24 | 0/5 | no | counted | 0 |
+| `phase17-caa-slot-2-anthropic-attempt-1` | claude opus | 47 | 0/5 | no | counted | 0 |
+| `phase17-caa-slot-3-openai-attempt-1` | openai | 23 | 0/5 | no | counted | 0 |
+| `phase17-caa-slot-4-anthropic-attempt-1` | claude opus | 45 | 0/5 | no | counted | 0 |
 | `checker-required-2026-08-o1` | openai | 462 | 11/14 | yes | counted | 614 |
 | `phase14-dao-descendant-neutral-skeleton-anthropic` | anthropic | 69 | 0/5 | no | **registered-variant** | 0 |
 | `phase14-dao-descendant-neutral-skeleton-openai` | openai | 22 | 0/5 | no | **registered-variant** | 0 |
@@ -295,7 +314,7 @@ signal of how it approached the task.
 `n/a` means the family publishes no numbered rule codes, which is not a low score. The UI
 family states its contract as invariants rather than a policy table, so there is nothing to cite.
 
-**2 of 36 submissions built some form of self-check.** Whether that separates the passing runs from the failing ones is worth reading off the table directly; with counts this small it is an observation, not a rate.
+**2 of 40 submissions built some form of self-check.** Whether that separates the passing runs from the failing ones is worth reading off the table directly; with counts this small it is an observation, not a rate.
 
 **Confident false positives: 1 of 7 failing runs.** These submissions name most or all of the
 published rule codes and still lose the property:

@@ -1,0 +1,256 @@
+{
+  "candidates": 105,
+  "controllingParameters": {
+    "boundary_ages=()": {
+      "candidates": 25,
+      "points": 229,
+      "rate": 0.109
+    },
+    "boundary_ages=(8, 9)": {
+      "candidates": 18,
+      "points": 199,
+      "rate": 0.09
+    },
+    "boundary_ages=(8,)": {
+      "candidates": 33,
+      "points": 238,
+      "rate": 0.139
+    },
+    "boundary_ages=(9,)": {
+      "candidates": 29,
+      "points": 234,
+      "rate": 0.124
+    },
+    "distinct_delays=1": {
+      "candidates": 0,
+      "points": 106,
+      "rate": 0.0
+    },
+    "distinct_delays=2": {
+      "candidates": 39,
+      "points": 513,
+      "rate": 0.076
+    },
+    "distinct_delays=3": {
+      "candidates": 66,
+      "points": 281,
+      "rate": 0.235
+    },
+    "gap_hours=1": {
+      "candidates": 18,
+      "points": 221,
+      "rate": 0.081
+    },
+    "gap_hours=4": {
+      "candidates": 16,
+      "points": 232,
+      "rate": 0.069
+    },
+    "gap_hours=7": {
+      "candidates": 23,
+      "points": 227,
+      "rate": 0.101
+    },
+    "gap_hours=9": {
+      "candidates": 48,
+      "points": 220,
+      "rate": 0.218
+    },
+    "has_failure=False": {
+      "candidates": 96,
+      "points": 806,
+      "rate": 0.119
+    },
+    "has_failure=True": {
+      "candidates": 9,
+      "points": 94,
+      "rate": 0.096
+    },
+    "stale_count=0": {
+      "candidates": 10,
+      "points": 99,
+      "rate": 0.101
+    },
+    "stale_count=1": {
+      "candidates": 11,
+      "points": 288,
+      "rate": 0.038
+    },
+    "stale_count=2": {
+      "candidates": 50,
+      "points": 308,
+      "rate": 0.162
+    },
+    "stale_count=3": {
+      "candidates": 34,
+      "points": 157,
+      "rate": 0.217
+    },
+    "stale_count=4": {
+      "candidates": 0,
+      "points": 40,
+      "rate": 0.0
+    },
+    "stale_count=5": {
+      "candidates": 0,
+      "points": 8,
+      "rate": 0.0
+    },
+    "width=2": {
+      "candidates": 14,
+      "points": 231,
+      "rate": 0.061
+    },
+    "width=3": {
+      "candidates": 17,
+      "points": 196,
+      "rate": 0.087
+    },
+    "width=4": {
+      "candidates": 34,
+      "points": 248,
+      "rate": 0.137
+    },
+    "width=5": {
+      "candidates": 40,
+      "points": 225,
+      "rate": 0.178
+    }
+  },
+  "correctImplementations": [
+    "reference",
+    "alt-reference"
+  ],
+  "fuzz": {
+    "points": 900,
+    "seed": 1009,
+    "tally": {
+      "both-fail": 0,
+      "candidate": 105,
+      "generator-artifact": 795,
+      "reference-failure": 0
+    }
+  },
+  "heldOutMutants": [
+    "any-authorizes",
+    "always-issue",
+    "always-refuse",
+    "no-work",
+    "fabricated-audit",
+    "visible-example-hardcoding"
+  ],
+  "schema": "agent-eval-foundry/phase-18-scenario-selection@1",
+  "selectionMutants": [
+    "identity-collapse",
+    "completion-order-association",
+    "stale-boundary",
+    "cached-stale"
+  ],
+  "suiteSize": 24,
+  "validationMatrix": {
+    "alt-reference": {
+      "checks": {},
+      "scenarios_failed": 0,
+      "scenarios_total": 24
+    },
+    "always-issue": {
+      "checks": {
+        "outcome": 24
+      },
+      "scenarios_failed": 24,
+      "scenarios_total": 24
+    },
+    "always-refuse": {
+      "checks": {
+        "outcome": 8
+      },
+      "scenarios_failed": 8,
+      "scenarios_total": 24
+    },
+    "any-authorizes": {
+      "checks": {
+        "outcome": 23
+      },
+      "scenarios_failed": 23,
+      "scenarios_total": 24
+    },
+    "cached-stale": {
+      "checks": {
+        "authorization_applied": 17,
+        "authorization_source": 24,
+        "no_unnamed_or_late_query": 11,
+        "outcome": 11,
+        "store_recorded": 24
+      },
+      "scenarios_failed": 24,
+      "scenarios_total": 24
+    },
+    "completion-order-association": {
+      "checks": {
+        "authorization_applied": 12,
+        "outcome": 6,
+        "store_recorded": 12
+      },
+      "scenarios_failed": 12,
+      "scenarios_total": 24
+    },
+    "fabricated-audit": {
+      "checks": {
+        "audit_matches_report": 24
+      },
+      "scenarios_failed": 24,
+      "scenarios_total": 24
+    },
+    "identity-collapse": {
+      "checks": {
+        "authorization_applied": 21,
+        "outcome": 9,
+        "report_present": 1,
+        "store_recorded": 21
+      },
+      "scenarios_failed": 22,
+      "scenarios_total": 24
+    },
+    "no-work": {
+      "checks": {
+        "authorization_applied": 17,
+        "authorization_source": 24,
+        "outcome": 11,
+        "rechecked_exactly_the_stale": 24,
+        "rechecks_issued_together": 24,
+        "store_recorded": 24
+      },
+      "scenarios_failed": 24,
+      "scenarios_total": 24
+    },
+    "reference": {
+      "checks": {},
+      "scenarios_failed": 0,
+      "scenarios_total": 24
+    },
+    "stale-boundary": {
+      "checks": {
+        "authorization_applied": 1,
+        "authorization_source": 6,
+        "no_unnamed_or_late_query": 4,
+        "rechecked_exactly_the_stale": 3,
+        "rechecks_issued_together": 3,
+        "store_recorded": 5
+      },
+      "scenarios_failed": 6,
+      "scenarios_total": 24
+    },
+    "visible-example-hardcoding": {
+      "checks": {
+        "authorization_applied": 24,
+        "authorization_source": 1,
+        "outcome": 23,
+        "rechecked_exactly_the_stale": 24,
+        "rechecks_issued_together": 24,
+        "store_recorded": 24
+      },
+      "scenarios_failed": 24,
+      "scenarios_total": 24
+    }
+  }
+}

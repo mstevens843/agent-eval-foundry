@@ -1,0 +1,198 @@
+{
+  "schema": "agent-eval-foundry/phase-17-probe-v2-preregistration@1",
+  "registrationId": "phase17-caa-exact-probe-v2",
+  "registeredAt": "2026-09-04T16:47:23Z",
+  "baselineCommit": "c3005fe704afd13a8081efe8851a87f0e5b9a14a",
+  "chronologyEvidence": "This real UTC clock value and the execution transcript establish local ordering only; neither is independent third-party timestamp proof. The implementation hash below was computed and written here before the probe was executed or unit-tested for the first time.",
+  "provenance": {
+    "candidateId": "multi-name-caa-revalidation-reconciler",
+    "sourceIncidentId": "letsencrypt-2020-caa-recheck-bug",
+    "phase16PacketSha256": "45475d79cb39fc0eb9a9e4e992512ec3a1d75974a6e3be8b8ae815178f7d2c13",
+    "phase16ContractSha256": "26fa2151f24a260c003ef4bc9ac0b25fdddae7c7f39cdb9d6c6400180c254c11",
+    "phase16ProbeImplementationSha256": "bf98d8164c5fa2bdcbc07d122d4fee9b2fa758186d27505f6ccfb33f417f0023",
+    "lane0AuditSha256": "704aaddd1b92fd6b77a3bed872defd5104b07346722ff16cf4ec7454fb1b666e",
+    "readerVerdicts": "2-of-2 promote, openai/gpt-5.6-sol and anthropic/claude-opus, both bound to the packet hash above"
+  },
+  "implementationSha256": "4aa18095e7a8596cf5e2b750f13a887f2a06b6919f6ef018612a916f7b2a4228",
+  "implementationPath": "src/phase-17/probe-v2.ts",
+  "frozenPhase16Inputs": "src/phase-16/probes.ts is frozen by the continuation registration and is not edited by this phase. Probe V2 lives in new code and reads Phase 16 artifacts read-only.",
+  "correctedContract": {
+    "supersedes": "The Phase 16 cheapProbe declaration and its two-check narrow-mutant profile.",
+    "changesAffectingTheValidSolutionSet": "none",
+    "verifierCompletions": [
+      "check-caa-applicable-answer enforces reconcile-each-domain-name for EVERY name, including the `otherwise use its own cachedCaa` clause that no Phase 16 metric covered.",
+      "check-caa-decision-faithful enforces the ISSUE half of caa-all-names-must-authorize, which is published as an if-and-only-if and metered only on the unsafe-ISSUE side.",
+      "check-caa-result-shape enforces `one result bound to each input name in the original order`, which had no metric at all."
+    ],
+    "proseOnlyClarifications": [
+      "caa.current is synchronous, total over any string, and returns ALLOW or DENY; run may return an OrderReport or a promise of one.",
+      "Extra or duplicate queries are permitted; each stale name requires at least one same-name query. This states the graded semantics that both readers reviewed.",
+      "The result `source` field is syntactically required and semantically ungraded.",
+      "deny-position `middle` requires domain-count >= 3 and `last` requires domain-count >= 2; a one-name order admits only `none` and `first`."
+    ],
+    "freshReaderReviewRequired": false,
+    "freshReaderReviewReasoning": "A metric that enforces an already-public clause cannot exclude a subject that satisfies the published specification, so the valid-solution set is unchanged and the blind reviews remain bound to the semantics they reviewed. The four prose items resolve omissions without narrowing obligations. If any item had narrowed the valid-solution set, a new packet and fresh 2-of-2 blind review would be required before trials."
+  },
+  "repetitions": 2,
+  "checks": [
+    "check-caa-result-shape",
+    "check-caa-per-name-binding",
+    "check-caa-applicable-answer",
+    "check-caa-safe-issuance",
+    "check-caa-decision-faithful",
+    "check-caa-positive-query-work"
+  ],
+  "fixtures": [
+    { "id": "one-name-stale-allow", "domainCount": 1, "denyPosition": "none", "ages": [9], "purpose": "declared one-name control; reference and first-name-reuse mutant behaviorally identical, both must pass" },
+    { "id": "one-name-stale-deny", "domainCount": 1, "denyPosition": "first", "ages": [9], "purpose": "declared one-name control on the refusing side; both must correctly refuse" },
+    { "id": "multi-name-denied-tail", "domainCount": 3, "denyPosition": "last", "ages": [24, 24, 24], "purpose": "the incident shape; mutant activation with the denied member last" },
+    { "id": "mixed-fresh-stale-identity", "domainCount": 3, "denyPosition": "none", "ages": [0, 24, 9], "purpose": "mixed fresh and stale; every mutant value is coincidentally correct so identity binding is isolated" },
+    { "id": "age-boundary-eight", "domainCount": 2, "denyPosition": "none", "ages": [8, 9], "purpose": "age exactly eight with cached/current disagreement" },
+    { "id": "age-boundary-nine", "domainCount": 2, "denyPosition": "first", "ages": [9, 0], "purpose": "age exactly nine with cached/current disagreement" },
+    { "id": "all-fresh-no-query-required", "domainCount": 2, "denyPosition": "none", "ages": [0, 8], "purpose": "no stale name; proves the positive-work floor cannot fire vacuously" },
+    { "id": "five-name-denied-middle", "domainCount": 5, "denyPosition": "middle", "ages": [719, 0, 9, 8, 24], "purpose": "widest declared order, denial away from first position, both boundary ages present" }
+  ],
+  "activatingFixtures": ["multi-name-denied-tail", "mixed-fresh-stale-identity", "five-name-denied-middle"],
+  "subjects": [
+    { "id": "reference", "intendedCheck": null },
+    { "id": "first-name-reuse-mutant", "intendedCheck": "check-caa-per-name-binding" },
+    { "id": "boundary-inclusive-mutant", "intendedCheck": "check-caa-applicable-answer" },
+    { "id": "boundary-lenient-mutant", "intendedCheck": "check-caa-per-name-binding" },
+    { "id": "duplicate-query-cheat", "intendedCheck": "check-caa-per-name-binding" },
+    { "id": "no-query-cheat", "intendedCheck": "check-caa-positive-query-work" },
+    { "id": "always-refuse", "intendedCheck": "check-caa-decision-faithful" },
+    { "id": "fabricated-result", "intendedCheck": "check-caa-per-name-binding" },
+    { "id": "reversed-order-mutant", "intendedCheck": "check-caa-result-shape" }
+  ],
+  "b6Controls": [
+    "reference must pass every fixture in this invocation",
+    "first-name-reuse-mutant must fail on the activating fixtures in this invocation",
+    "every malformed report must be refused on both passes with an identical message",
+    "the cell matrix must be nondegenerate",
+    "no registered check may finish with zero activations"
+  ],
+  "challengeNonleakageRules": [
+    "No subject-visible surface - the view handed in, the facade's own property names, the facade function source, or the subject's own report - may contain the private authority witness.",
+    "A deliberately leaky facade must trip the same detector, or the detector carries no evidence.",
+    "The serialized fixture views must not contain the witness, and a witness-carrying view must trip the challenge detector.",
+    "At least one stale name must have a cached answer that disagrees with its current answer, or the challenge would determine the answer without any query.",
+    "The facade's own property names must be exactly [\"current\"]; the query ledger is never reachable from the subject."
+  ],
+  "killRules": [
+    { "id": "K1", "rule": "The executed implementation hash must equal implementationSha256." },
+    { "id": "K2", "rule": "Every one of the 72 registered cells must match observation exactly. Any mismatch is a kill." },
+    { "id": "K3", "rule": "Reference must pass all eight fixtures. A reference failure returns CANDIDATE-INVALID." },
+    { "id": "K4", "rule": "B6 must be usable, nondegenerate, and run in the same invocation." },
+    { "id": "K5", "rule": "Replay over two repetitions must be byte-identical for every cell." },
+    { "id": "K6", "rule": "Every malformed report must be refused twice with an identical message." },
+    { "id": "K7", "rule": "Witness isolation and challenge nonleakage must hold AND both negative controls must fire." },
+    { "id": "K8", "rule": "No registered check may never fire, and every defect subject's intended check must fire at least once." },
+    { "id": "K9", "rule": "No valid subject's report may be refused as malformed." }
+  ],
+  "predictions": {
+    "referenceCleanCells": 8,
+    "mutantPassesOneNameControls": true,
+    "mutantActivatesOnMultiNameCases": true,
+    "totalCells": 72,
+    "expectedFailingCells": 41,
+    "supersededPhase16MutantProfile": ["check-caa-per-name-binding", "check-caa-safe-issuance"],
+    "correctedDeniedTailMutantProfile": ["check-caa-applicable-answer", "check-caa-per-name-binding", "check-caa-safe-issuance"],
+    "correctedProfileReasoning": "The completed verifier additionally grades the answer bound to each name. On a denied tail the first-name-reuse mutant reports ALLOW for a name whose applicable answer is DENY, which violates a clause that was public in Phase 16 and metered by nothing."
+  },
+  "registrationCorrections": [
+    "The implementation was reformatted to satisfy the repository lint gate after its first execution, moving implementationSha256 from 9f8c238c1ec602b510bb7d40a01d8d02061421a6f8dadc6d85d147324bf23e2a to 4aa18095e7a8596cf5e2b750f13a887f2a06b6919f6ef018612a916f7b2a4228. The change is whitespace, trailing commas and bracket-to-dot property access only: the two files are identical once whitespace is stripped apart from two trailing commas, and re-running under the new hash reproduced all 72 registered cells unchanged. NOT ONE CELL OF expectedMatrix WAS EDITED - it was written before any execution and is byte-identical across this correction. The pre-format hash is recorded here so the earlier run remains checkable.",
+    "The first draft of this registration stated expectedFailingCells 39 while its own expectedMatrix contained 41 failing cells. The matrix is the authoritative registration; the summary was an arithmetic slip in a derived field. It was corrected to 41 before the probe was executed, and no cell expectation changed."
+  ],
+  "expectedMatrix": {
+    "reference": {
+      "one-name-stale-allow": [],
+      "one-name-stale-deny": [],
+      "multi-name-denied-tail": [],
+      "mixed-fresh-stale-identity": [],
+      "age-boundary-eight": [],
+      "age-boundary-nine": [],
+      "all-fresh-no-query-required": [],
+      "five-name-denied-middle": []
+    },
+    "first-name-reuse-mutant": {
+      "one-name-stale-allow": [],
+      "one-name-stale-deny": [],
+      "multi-name-denied-tail": ["check-caa-applicable-answer", "check-caa-per-name-binding", "check-caa-safe-issuance"],
+      "mixed-fresh-stale-identity": ["check-caa-per-name-binding"],
+      "age-boundary-eight": [],
+      "age-boundary-nine": [],
+      "all-fresh-no-query-required": [],
+      "five-name-denied-middle": ["check-caa-applicable-answer", "check-caa-per-name-binding", "check-caa-safe-issuance"]
+    },
+    "boundary-inclusive-mutant": {
+      "one-name-stale-allow": [],
+      "one-name-stale-deny": [],
+      "multi-name-denied-tail": [],
+      "mixed-fresh-stale-identity": [],
+      "age-boundary-eight": ["check-caa-applicable-answer", "check-caa-decision-faithful"],
+      "age-boundary-nine": [],
+      "all-fresh-no-query-required": ["check-caa-applicable-answer", "check-caa-decision-faithful"],
+      "five-name-denied-middle": ["check-caa-applicable-answer"]
+    },
+    "boundary-lenient-mutant": {
+      "one-name-stale-allow": ["check-caa-per-name-binding", "check-caa-positive-query-work"],
+      "one-name-stale-deny": ["check-caa-applicable-answer", "check-caa-per-name-binding", "check-caa-positive-query-work", "check-caa-safe-issuance"],
+      "multi-name-denied-tail": [],
+      "mixed-fresh-stale-identity": ["check-caa-per-name-binding"],
+      "age-boundary-eight": ["check-caa-per-name-binding", "check-caa-positive-query-work"],
+      "age-boundary-nine": ["check-caa-applicable-answer", "check-caa-per-name-binding", "check-caa-positive-query-work", "check-caa-safe-issuance"],
+      "all-fresh-no-query-required": [],
+      "five-name-denied-middle": ["check-caa-applicable-answer", "check-caa-per-name-binding", "check-caa-safe-issuance"]
+    },
+    "duplicate-query-cheat": {
+      "one-name-stale-allow": [],
+      "one-name-stale-deny": ["check-caa-applicable-answer", "check-caa-safe-issuance"],
+      "multi-name-denied-tail": ["check-caa-applicable-answer", "check-caa-per-name-binding", "check-caa-safe-issuance"],
+      "mixed-fresh-stale-identity": ["check-caa-per-name-binding"],
+      "age-boundary-eight": [],
+      "age-boundary-nine": ["check-caa-applicable-answer", "check-caa-safe-issuance"],
+      "all-fresh-no-query-required": [],
+      "five-name-denied-middle": ["check-caa-applicable-answer", "check-caa-per-name-binding", "check-caa-safe-issuance"]
+    },
+    "no-query-cheat": {
+      "one-name-stale-allow": ["check-caa-per-name-binding", "check-caa-positive-query-work"],
+      "one-name-stale-deny": ["check-caa-applicable-answer", "check-caa-per-name-binding", "check-caa-positive-query-work", "check-caa-safe-issuance"],
+      "multi-name-denied-tail": ["check-caa-applicable-answer", "check-caa-per-name-binding", "check-caa-positive-query-work", "check-caa-safe-issuance"],
+      "mixed-fresh-stale-identity": ["check-caa-per-name-binding", "check-caa-positive-query-work"],
+      "age-boundary-eight": ["check-caa-per-name-binding", "check-caa-positive-query-work"],
+      "age-boundary-nine": ["check-caa-applicable-answer", "check-caa-per-name-binding", "check-caa-positive-query-work", "check-caa-safe-issuance"],
+      "all-fresh-no-query-required": [],
+      "five-name-denied-middle": ["check-caa-applicable-answer", "check-caa-per-name-binding", "check-caa-positive-query-work", "check-caa-safe-issuance"]
+    },
+    "always-refuse": {
+      "one-name-stale-allow": ["check-caa-decision-faithful"],
+      "one-name-stale-deny": [],
+      "multi-name-denied-tail": [],
+      "mixed-fresh-stale-identity": ["check-caa-decision-faithful"],
+      "age-boundary-eight": ["check-caa-decision-faithful"],
+      "age-boundary-nine": [],
+      "all-fresh-no-query-required": ["check-caa-decision-faithful"],
+      "five-name-denied-middle": []
+    },
+    "fabricated-result": {
+      "one-name-stale-allow": ["check-caa-per-name-binding", "check-caa-positive-query-work"],
+      "one-name-stale-deny": ["check-caa-applicable-answer", "check-caa-per-name-binding", "check-caa-positive-query-work", "check-caa-safe-issuance"],
+      "multi-name-denied-tail": ["check-caa-applicable-answer", "check-caa-per-name-binding", "check-caa-positive-query-work", "check-caa-safe-issuance"],
+      "mixed-fresh-stale-identity": ["check-caa-per-name-binding", "check-caa-positive-query-work"],
+      "age-boundary-eight": ["check-caa-per-name-binding", "check-caa-positive-query-work"],
+      "age-boundary-nine": ["check-caa-applicable-answer", "check-caa-per-name-binding", "check-caa-positive-query-work", "check-caa-safe-issuance"],
+      "all-fresh-no-query-required": [],
+      "five-name-denied-middle": ["check-caa-applicable-answer", "check-caa-per-name-binding", "check-caa-positive-query-work", "check-caa-safe-issuance"]
+    },
+    "reversed-order-mutant": {
+      "one-name-stale-allow": [],
+      "one-name-stale-deny": [],
+      "multi-name-denied-tail": ["check-caa-result-shape"],
+      "mixed-fresh-stale-identity": ["check-caa-result-shape"],
+      "age-boundary-eight": ["check-caa-result-shape"],
+      "age-boundary-nine": ["check-caa-result-shape"],
+      "all-fresh-no-query-required": ["check-caa-result-shape"],
+      "five-name-denied-middle": ["check-caa-result-shape"]
+    }
+  }
+}

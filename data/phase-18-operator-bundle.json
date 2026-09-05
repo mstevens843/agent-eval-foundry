@@ -1,0 +1,73 @@
+{
+  "schema": "agent-eval-foundry/phase-18-operator-bundle@1",
+  "purpose": "What Phase 18 changed, and what each change is entitled to claim. The bundle was applied all at once, so no element below may be credited with an individual effect on agent difficulty. Every element is a HYPOTHESIS unless this phase measured it separately, and the one element that was measured was measured as coverage, not as difficulty.",
+  "measurementVocabulary": {
+    "hypothesis": "Applied as part of the bundle and not separately measured. Its contribution to any observed outcome is unidentified.",
+    "measured-coverage": "Measured, but what was measured is which scenarios discriminate, not whether an agent fails. A coverage operator changes what the suite can see, not what an agent can do.",
+    "measured-difficulty": "Measured against real agent attempts with a control. Nothing in Phase 18 earns this label from Phase 18 alone."
+  },
+  "elements": [
+    {
+      "id": "realistic-existing-system-repair",
+      "status": "hypothesis",
+      "what": "A working multi-package Go service under /app/certd with a CLI, an order contract, a persistent authorization store, a freshness window, a revalidation planner, a concurrent authority client, an issuance decider and an audit writer, rather than one exported function.",
+      "whyItMightMatter": "The durable outbox, the only construction that has ever measured frontier failures in this project, had this shape. CAA V1 did not.",
+      "whatWouldMeasureIt": "The same mechanism and verifier packaged once as a microtask and once as a service repair, trialled separately."
+    },
+    {
+      "id": "solution-undirected-specification",
+      "status": "hypothesis",
+      "what": "Public text states obligations as end states and names neither the defect nor the repair. The final instruction removed even the symptom-condition sentence after an independent reader killed the package on it twice.",
+      "whyItMightMatter": "CAA V1 stated the graded mechanism verbatim and named the historical anti-pattern in its forbidden outcomes; all four agents avoided it and all four cited the rule codes back.",
+      "whatWouldMeasureIt": "One arm with the symptom sentence and one without, same package otherwise."
+    },
+    {
+      "id": "naturally-embedded-defect",
+      "status": "hypothesis",
+      "what": "The shipped planner collects answers from a channel and reassembles them positionally. It carries no marker, no TODO, no revealing comment, and the count of queries it makes is always correct.",
+      "whyItMightMatter": "A defect an agent must find is different from a defect a specification points at.",
+      "whatWouldMeasureIt": "The same defect with and without a comment marking it."
+    },
+    {
+      "id": "source-supported-visible-test-blind-spot",
+      "status": "hypothesis",
+      "what": "Six shipped unit tests assert recheck COUNT and single-identifier behaviour, and the development authority answers with no delay so a local reproduction cannot express the failing condition.",
+      "whyItMightMatter": "This is the coverage gap the incident record documents: unit tests asserting the number of returned authorizations, integration coverage using one identifier.",
+      "whatWouldMeasureIt": "An arm whose shipped tests do cover multi-identifier disagreement under reordering."
+    },
+    {
+      "id": "family-native-asynchrony",
+      "status": "hypothesis",
+      "what": "The authority answers concurrently and returns answers in an order fixed by a per-identifier latency schedule the harness owns, so completion order differs from document order by construction.",
+      "whyItMightMatter": "It is the condition under which the mechanism fires at all, and it is native to the domain rather than injected. Crash scheduling was deliberately NOT transferred: certd has no public recovery obligation, so crashes would have been an invented mechanism.",
+      "whatWouldMeasureIt": "An arm with in-order answers only, which would make the defect unreachable and is therefore a control rather than a comparison."
+    },
+    {
+      "id": "inaccessible-external-authority",
+      "status": "hypothesis",
+      "what": "The authority runs in its own process as root, owns the policy and an append-only tick-stamped log, exposes exactly one public verb, and keeps arm/seal/dump behind a 0700 directory the unprivileged service cannot traverse.",
+      "whyItMightMatter": "It makes the service's own report a claim rather than evidence, which is what defeats fabrication and no-work strategies.",
+      "whatWouldMeasureIt": "Nothing in this phase. It is a validity control and is not expected to change agent difficulty; it is listed here so it is not silently credited with one."
+    },
+    {
+      "id": "deterministic-adversarial-scenario-selection",
+      "status": "measured-coverage",
+      "what": "900 points fuzzed over the declared grammar; 795 rejected as generator artifacts; 105 candidates minimised while preserving a latency schedule that inverts document order by construction; 24 selected across the parameters that do not control activation; a 24-scenario balanced comparator frozen at the same moment.",
+      "measured": {
+        "referenceFailuresAcrossTheGrid": 0,
+        "candidates": 105,
+        "narrowMutantOnSelected": "22 of 24 scenarios",
+        "narrowMutantOnNonActivationControls": "0 of 4",
+        "heldOutMutantsCaught": "6 of 6, none of which took part in selection",
+        "secondCorrectImplementation": "0 of 24 on selected, 0 of 4 on controls"
+      },
+      "claimBoundary": "This measures that the suite discriminates correct from incorrect implementations and does so on the stratum where the mechanism can fire. It is a coverage result. It says nothing about whether an agent fails, and it must not be reported as an agent-difficulty effect.",
+      "whatWouldMeasureDifficulty": "The same submission graded against the selected and the balanced suites, which this phase records as paired rescoring of one trial rather than as two trials."
+    }
+  ],
+  "priorMeasurements": {
+    "durableOutboxA2Repaired": "3 of 6 reward-zero over six clean runs, with no illegal transitions in the three failures. This is the only fair measurement of the bundle and it is the basis for Phase 18's registered prediction.",
+    "caaV1": "4 of 4 clean solves. This measures the overexplained microtask packaging, not the mechanism."
+  },
+  "phase14Standing": "Phase 14 measured null agent effects for every operator it tested. Phase 17 measured null again for seven candidate CAA operators. Nothing in this repository has yet earned measured-difficulty status."
+}

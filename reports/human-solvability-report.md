@@ -7,6 +7,7 @@ contaminated walkthroughs are retained but do not count.
 | family | claim level | package hash | human-ready | clean solves | records | open ambiguity | validation failures |
 |---|---|---|---|---:|---:|---:|---|
 | `access-token-scope-expansion` | **reference-solvable** | `8ae0950dea093d35d98b12d1c8c1bde5` | no | 0 | 0 | 0 | none |
+| `caa-revalidation` | **reference-solvable** | none | no | 0 | 0 | 0 | none |
 | `checker-required-memory-poisoning` | **human-ready** | `448f2f816c51030cc97a374816226168` | yes | 0 | 0 | 0 | none |
 | `dao-descendant` | **reference-solvable** | `9d89b49307a960f65f2e6e8f204fd15e` | no | 0 | 0 | 0 | none |
 | `delegated-wallet-scope-reconciliation` | **human-ready** | `45f27b644a84364e3d3855f68cd243a2` | yes | 0 | 0 | 0 | none |
@@ -23,7 +24,7 @@ contaminated walkthroughs are retained but do not count.
 
 Human-evidenced families: none.
 Ready for clean-room review, pending an independent solve: `checker-required-memory-poisoning`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `ui-action-record-replay`, `ui-replay-live-dom`.
-Not human-ready in this repo: `access-token-scope-expansion`, `dao-descendant`, `deployment-rollback-recompute`, `durable-approval-outbox`, `trading-reconciliation-recompute`.
+Not human-ready in this repo: `access-token-scope-expansion`, `caa-revalidation`, `dao-descendant`, `deployment-rollback-recompute`, `durable-approval-outbox`, `trading-reconciliation-recompute`.
 1 assisted or contaminated review record(s) are preserved and do not count. 0 counted record(s) are invalid.
 
 The clean claim levels are: `reference-solvable`, `human-ready`, `human-evidenced`. A family can
@@ -34,6 +35,7 @@ ship on model/verifier gates while still being `human-ready` rather than `human-
 | family | not-run | clean-pass | clean-fail | ambiguous-spec | needed-private-context | timeout | assisted | contaminated | invalid-hash |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | `access-token-scope-expansion` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| `caa-revalidation` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `checker-required-memory-poisoning` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `dao-descendant` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `delegated-wallet-scope-reconciliation` | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |

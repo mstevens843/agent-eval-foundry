@@ -1,0 +1,21 @@
+{
+  "schema": "agent-eval-foundry/phase-19-candidate-reader-run@1",
+  "candidateId": "rollback-reactivates-dormant-defect",
+  "providerFamily": "openai",
+  "packetPath": "data/phase-19-candidate-review-packets/rollback-reactivates-dormant-defect.json",
+  "packetSha256": "646a057704f9cc236041fa4c6b9cc0e9ea3e000c54f68e5ae8e5bb60cd10a32b",
+  "independentlyProduced": true,
+  "providerImage": "agent-eval-foundry/provider-agent:claude-2.1.260-codex-0.152.1",
+  "classification": "completed",
+  "classificationDetail": "artifact produced",
+  "captureLevel": "full",
+  "runtimeSeconds": 145,
+  "usage": {
+    "inputTokens": 279981,
+    "cachedInputTokens": 253824,
+    "outputTokens": 5974,
+    "costUsd": null,
+    "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+  },
+  "costUsd": null
+}

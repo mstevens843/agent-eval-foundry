@@ -15,15 +15,15 @@ A blocking gate is one whose absence means the family cannot produce trustworthy
 
 | gate | question | pass | fail | n/a |
 |---|---|---:|---:|---:|
-| `verifier-graded` | Does it name at least 2 known-bad implementations its verifier must catch? | 21 | 0 | 0 |
-| `detectable` | Does every mechanism it targets have a mutant in the bank? | 21 | 0 | 0 |
-| `is-a-family` | Does it have at least 3 knobs, so instances are cheaper than authoring? | 21 | 0 | 0 |
-| `reference-passes` | Does the reference pass every graded scenario, when actually run? | 11 | 0 | 10 |
-| `baselines-blocked` | Do the trivial baselines — do nothing, refuse everything — fail? | 11 | 0 | 10 |
-| `mutants-caught-by-intended-check` | Is every declared mutant caught by the check it was written to trip? | 11 | 0 | 10 |
-| `mechanisms-exercised` | Does every graded scenario that anything fails block on a declared mechanism? | 11 | 0 | 10 |
-| `difficulty-evidenced` | Has any real agent failed this family for a reason somebody has attributed to capability? | 2 | 19 | 0 |
-| `not-already-solved` | Is there at least one counted agent trial that did NOT pass cleanly? | 6 | 5 | 10 |
+| `verifier-graded` | Does it name at least 2 known-bad implementations its verifier must catch? | 22 | 0 | 0 |
+| `detectable` | Does every mechanism it targets have a mutant in the bank? | 22 | 0 | 0 |
+| `is-a-family` | Does it have at least 3 knobs, so instances are cheaper than authoring? | 22 | 0 | 0 |
+| `reference-passes` | Does the reference pass every graded scenario, when actually run? | 12 | 0 | 10 |
+| `baselines-blocked` | Do the trivial baselines — do nothing, refuse everything — fail? | 12 | 0 | 10 |
+| `mutants-caught-by-intended-check` | Is every declared mutant caught by the check it was written to trip? | 12 | 0 | 10 |
+| `mechanisms-exercised` | Does every graded scenario that anything fails block on a declared mechanism? | 12 | 0 | 10 |
+| `difficulty-evidenced` | Has any real agent failed this family for a reason somebody has attributed to capability? | 2 | 20 | 0 |
+| `not-already-solved` | Is there at least one counted agent trial that did NOT pass cleanly? | 6 | 6 | 10 |
 
 ## Schema-enforced
 
@@ -34,11 +34,11 @@ would be the wrong repair.
 
 | gate | question | pass | fail | n/a |
 |---|---|---:|---:|---:|
-| `solvable` | Is there a reference contract proving the family is solvable? | 21 | 0 | 0 |
-| `trust-boundary` | Does every authoritative source state why the implementation cannot forge it? | 21 | 0 | 0 |
-| `fairness` | Are fairness constraints stated? | 21 | 0 | 0 |
-| `cheat-resistance` | Are cheat-resistance requirements stated? | 21 | 0 | 0 |
-| `hidden-region-declared` | Is the hidden graded region stated as a sampling of the declared space? | 21 | 0 | 0 |
+| `solvable` | Is there a reference contract proving the family is solvable? | 22 | 0 | 0 |
+| `trust-boundary` | Does every authoritative source state why the implementation cannot forge it? | 22 | 0 | 0 |
+| `fairness` | Are fairness constraints stated? | 22 | 0 | 0 |
+| `cheat-resistance` | Are cheat-resistance requirements stated? | 22 | 0 | 0 |
+| `hidden-region-declared` | Is the hidden graded region stated as a sampling of the declared space? | 22 | 0 | 0 |
 
 ## Advisory
 
@@ -46,29 +46,29 @@ An advisory gate is one where a reasonable author might disagree. Reported, neve
 
 | gate | question | pass | fail | n/a |
 |---|---|---:|---:|---:|
-| `measured-axes` | Has it measured at least 2 independent axes? | 9 | 3 | 9 |
-| `isolation-level` | Is the isolation strong enough for the subjects being graded? | 12 | 0 | 9 |
-| `shared-bank-ready` | Have enough subjects attempted this family AND another, so cross-family axes are measurable? | 2 | 10 | 9 |
-| `deterministic-reports` | Do this family's reports regenerate byte-identically? | 12 | 0 | 9 |
-| `trial-ready` | Can a real agent actually be run against this family today? | 11 | 1 | 9 |
-| `agent-axes-independent` | Do the counted agents fail in more than one direction, or do their failure sets nest? | 0 | 2 | 19 |
-| `production-matrix-ready` | Has this family earned production-mode /6 matrix spend? | 0 | 1 | 20 |
-| `priced` | Is the build cost recorded? | 21 | 0 | 0 |
-| `human-package-ready` | Can the public package be handed to an independent human without hidden context? | 7 | 5 | 9 |
-| `human-solvability-evidenced` | Has an independent human solved the current public package clean-room? | 0 | 12 | 9 |
-| `human-ambiguity-reviewed` | Are human ambiguity findings resolved or explicitly absent? | 12 | 0 | 9 |
-| `adversarial-threat-model-declared` | Is there a declared verifier-bypass threat model for this family? | 10 | 1 | 10 |
-| `adversarial-package-ready` | Is a hash-pinned attack packet ready for this family? | 10 | 1 | 10 |
-| `adversarial-audit-evidenced` | Has a counted attacker failed to find a verifier bypass against the current package? | 2 | 9 | 10 |
-| `no-known-unrepaired-bypass` | Are there zero counted, known, unrepaired verifier bypasses? | 11 | 0 | 10 |
-| `adversarial-isolation-adequate` | Is adversarial execution isolated beyond the legacy subprocess profile? | 10 | 1 | 10 |
-| `adversarial-exploit-replay-ready` | Can a claimed bypass artifact be replayed mechanically? | 10 | 1 | 10 |
-| `adversarial-hardening-probes-pass` | Do deterministic verifier-integrity probes pass? | 10 | 1 | 10 |
-| `adversarial-container-isolation-ready` | Is a real container/no-network adversarial isolation profile ready? | 0 | 11 | 10 |
-| `adversarial-container-no-network` | Is there counted adversarial evidence collected under container/no-network isolation? | 0 | 11 | 10 |
-| `adversarial-import-replay-valid` | Have imported non-local adversarial audits been replay-validated? | 0 | 0 | 21 |
-| `browser-backed-ready` | Is the browser-backed UI descendant ready for real browser trials? | 1 | 0 | 20 |
-| `browser-backed-measured` | Has a real browser-backed UI run been measured? | 1 | 0 | 20 |
+| `measured-axes` | Has it measured at least 2 independent axes? | 10 | 3 | 9 |
+| `isolation-level` | Is the isolation strong enough for the subjects being graded? | 13 | 0 | 9 |
+| `shared-bank-ready` | Have enough subjects attempted this family AND another, so cross-family axes are measurable? | 2 | 11 | 9 |
+| `deterministic-reports` | Do this family's reports regenerate byte-identically? | 13 | 0 | 9 |
+| `trial-ready` | Can a real agent actually be run against this family today? | 12 | 1 | 9 |
+| `agent-axes-independent` | Do the counted agents fail in more than one direction, or do their failure sets nest? | 0 | 2 | 20 |
+| `production-matrix-ready` | Has this family earned production-mode /6 matrix spend? | 0 | 1 | 21 |
+| `priced` | Is the build cost recorded? | 22 | 0 | 0 |
+| `human-package-ready` | Can the public package be handed to an independent human without hidden context? | 7 | 6 | 9 |
+| `human-solvability-evidenced` | Has an independent human solved the current public package clean-room? | 0 | 13 | 9 |
+| `human-ambiguity-reviewed` | Are human ambiguity findings resolved or explicitly absent? | 13 | 0 | 9 |
+| `adversarial-threat-model-declared` | Is there a declared verifier-bypass threat model for this family? | 10 | 2 | 10 |
+| `adversarial-package-ready` | Is a hash-pinned attack packet ready for this family? | 10 | 2 | 10 |
+| `adversarial-audit-evidenced` | Has a counted attacker failed to find a verifier bypass against the current package? | 2 | 10 | 10 |
+| `no-known-unrepaired-bypass` | Are there zero counted, known, unrepaired verifier bypasses? | 12 | 0 | 10 |
+| `adversarial-isolation-adequate` | Is adversarial execution isolated beyond the legacy subprocess profile? | 10 | 2 | 10 |
+| `adversarial-exploit-replay-ready` | Can a claimed bypass artifact be replayed mechanically? | 10 | 2 | 10 |
+| `adversarial-hardening-probes-pass` | Do deterministic verifier-integrity probes pass? | 10 | 2 | 10 |
+| `adversarial-container-isolation-ready` | Is a real container/no-network adversarial isolation profile ready? | 0 | 12 | 10 |
+| `adversarial-container-no-network` | Is there counted adversarial evidence collected under container/no-network isolation? | 0 | 12 | 10 |
+| `adversarial-import-replay-valid` | Have imported non-local adversarial audits been replay-validated? | 0 | 0 | 22 |
+| `browser-backed-ready` | Is the browser-backed UI descendant ready for real browser trials? | 1 | 0 | 21 |
+| `browser-backed-measured` | Has a real browser-backed UI run been measured? | 1 | 0 | 21 |
 
 ## Which gates have actually stopped something
 
@@ -78,22 +78,22 @@ fail. These are the ones that currently reject at least one family:
 | gate | blocking | families it rejects | why the gate exists |
 |---|---|---|---|
 | `measured-axes` | no | `dao-descendant`, `deployment-rollback-recompute`, `trading-reconciliation-recompute` | The point of the whole exercise. A family yielding one axis is one measurement however many instances it generates. Advisory rather than blocking, because an unbuilt family cannot have measured anything yet — but it must not ship on an estimate. |
-| `shared-bank-ready` | no | `access-token-scope-expansion`, `checker-required-memory-poisoning`, `dao-descendant`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `deployment-rollback-recompute`, `durable-approval-outbox`, `prompt-injection-memory-poisoning`, `trading-reconciliation-recompute`, `ui-replay-live-dom` | Axis counts across disjoint banks add by construction and mean nothing. Only shared subjects make 'did the same implementation fail both?' a question with an answer. |
+| `shared-bank-ready` | no | `access-token-scope-expansion`, `caa-revalidation`, `checker-required-memory-poisoning`, `dao-descendant`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `deployment-rollback-recompute`, `durable-approval-outbox`, `prompt-injection-memory-poisoning`, `trading-reconciliation-recompute`, `ui-replay-live-dom` | Axis counts across disjoint banks add by construction and mean nothing. Only shared subjects make 'did the same implementation fail both?' a question with an answer. |
 | `trial-ready` | no | `durable-approval-outbox` | The gap between 'measured' and 'trialable' is where families sit for months. A family is trial-ready when it emits a challenge package that passes its own leak check and the router knows how to grade a submission for it — at which point the only thing between it and difficulty evidence is model time. |
-| `difficulty-evidenced` | yes | `access-token-scope-expansion`, `audit-truth-financial-workflow`, `browser-action-replay`, `checker-required-memory-poisoning`, `dao-descendant`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `deployment-rollback-partial-effects`, `deployment-rollback-recompute`, `durable-approval-outbox`, `model-alias-drift-sentinel`, `permission-boundary-tools`, `prompt-injection-approval-scope-drift`, `prompt-injection-capability-routing`, `prompt-injection-containment`, `prompt-injection-cross-tool-escalation`, `prompt-injection-memory-poisoning`, `stale-crm-ticket-automation`, `trading-reconciliation-recompute` | A measured axis count against a bank of hand-written mutants proves the VERIFIER discriminates. It says nothing about whether the family is hard, because nothing that could plausibly fail it has attempted it. This gate was added after the second family scored four measured axes with zero agent trials and would otherwise have been marked SHIP. It is BLOCKING as of the campaign layer: with a trial router and a runnable challenge package for every built family, 'nobody has tried it' stopped being a fact about the tooling and became a decision not to look. It counts ROOT-CAUSED trials as of the root-cause layer. `countedAgentTrials > 0` made every counted failure difficulty evidence by default, and two artifacts published under that default were not: a deployment-alias run whose failures fan out of one decision the visible package does not determine, and a memory-poisoning run that failed every attack scenario because the host handed it a new memory facade per session while the package promised the same one. Both were labelled `capability` by nobody — that was simply what a counted failure meant. A trial now needs a `root-cause.json` saying `capability`, and a trial with no record reads `unlabelled`, which is not evidence of difficulty and not evidence of its absence. |
+| `difficulty-evidenced` | yes | `access-token-scope-expansion`, `audit-truth-financial-workflow`, `browser-action-replay`, `caa-revalidation`, `checker-required-memory-poisoning`, `dao-descendant`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `deployment-rollback-partial-effects`, `deployment-rollback-recompute`, `durable-approval-outbox`, `model-alias-drift-sentinel`, `permission-boundary-tools`, `prompt-injection-approval-scope-drift`, `prompt-injection-capability-routing`, `prompt-injection-containment`, `prompt-injection-cross-tool-escalation`, `prompt-injection-memory-poisoning`, `stale-crm-ticket-automation`, `trading-reconciliation-recompute` | A measured axis count against a bank of hand-written mutants proves the VERIFIER discriminates. It says nothing about whether the family is hard, because nothing that could plausibly fail it has attempted it. This gate was added after the second family scored four measured axes with zero agent trials and would otherwise have been marked SHIP. It is BLOCKING as of the campaign layer: with a trial router and a runnable challenge package for every built family, 'nobody has tried it' stopped being a fact about the tooling and became a decision not to look. It counts ROOT-CAUSED trials as of the root-cause layer. `countedAgentTrials > 0` made every counted failure difficulty evidence by default, and two artifacts published under that default were not: a deployment-alias run whose failures fan out of one decision the visible package does not determine, and a memory-poisoning run that failed every attack scenario because the host handed it a new memory facade per session while the package promised the same one. Both were labelled `capability` by nobody — that was simply what a counted failure meant. A trial now needs a `root-cause.json` saying `capability`, and a trial with no record reads `unlabelled`, which is not evidence of difficulty and not evidence of its absence. |
 | `agent-axes-independent` | no | `durable-approval-outbox`, `ui-action-record-replay` | The measured-axes gate counts axes over the MUTANT bank: a statement about what the verifier detects, bounded by how many known-bad implementations the author wrote. This one counts axes over real agents, and the two can disagree sharply. If every subject's failure set nests inside the next, the family separates subjects perfectly and measures ONE thing at several sensitivities — and no additional subject can change that, because a chain stays a chain. Advisory rather than blocking: a one-axis family is a legitimate benchmark component, and the cost of pretending otherwise would be killing useful families. What it must not do is read as breadth. The UI family scores six mutant axes, one agent axis, and five counted trials across four subjects and two labs whose failure counts are 33, 46, 62, 62 and 90 — five different numbers that are one measurement. |
 | `production-matrix-ready` | no | `deployment-model-alias-rollout-drift` | A one-agent smoke trial is routing evidence. It can prove a family is worth follow-up, but it must not silently unlock a full matrix before cross-lab smoke, current hashes and integrity gates are satisfied. |
-| `not-already-solved` | yes | `access-token-scope-expansion`, `dao-descendant`, `deployment-rollback-recompute`, `prompt-injection-containment`, `trading-reconciliation-recompute` | A family every model solves measures nothing, and `already-solved` was the single most common cause of death in the source project's kill log — four of nine gated mechanisms. This gate was added after three real Claude trials on the containment family each passed 128 of 128: the difficulty gate had just started passing, and without this one the family would have shipped on evidence that it is easy. |
-| `human-package-ready` | no | `access-token-scope-expansion`, `dao-descendant`, `deployment-rollback-recompute`, `durable-approval-outbox`, `trading-reconciliation-recompute` | Reference solvability only proves the author can solve the internal task. The public package must also state the rules, examples, scoring contract and hidden sampling boundary clearly enough for a clean-room engineer. |
-| `human-solvability-evidenced` | no | `access-token-scope-expansion`, `checker-required-memory-poisoning`, `dao-descendant`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `deployment-rollback-recompute`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `trading-reconciliation-recompute`, `ui-action-record-replay`, `ui-replay-live-dom` | A task can be mechanically solvable and still be ambiguous to anyone who did not write it. This gate counts only independent, current-hash, unassisted solves with notes and verifier output. |
-| `adversarial-threat-model-declared` | no | `durable-approval-outbox` | Cheat resistance is a design requirement, not evidence that anyone tried to break the grader. The adversarial layer starts by declaring the attacker objective, surface and access boundary. |
-| `adversarial-package-ready` | no | `durable-approval-outbox` | An adversarial audit without a preserved package is just a story about a task. The attacker packet must pin the public challenge hash and state which artifacts are forbidden. |
-| `adversarial-audit-evidenced` | no | `dao-descendant`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `deployment-rollback-recompute`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `trading-reconciliation-recompute`, `ui-action-record-replay` | No adversarial run yet is not the same as no bypass. This gate counts only current-hash, non-refusal, non-infrastructure, transcript-preserved no-bypass audits. |
-| `adversarial-isolation-adequate` | no | `durable-approval-outbox` | A no-bypass audit only means something if the attacker did not receive the repository, hidden verifier, generated reports or mutable grader state. Subprocess preservation is not the same as an attacker context boundary. |
-| `adversarial-exploit-replay-ready` | no | `durable-approval-outbox` | A bypass report without replay is a claim about an exploit. Replay turns it into evidence by rerunning the submitted artifact against the current verifier and package hash. |
-| `adversarial-hardening-probes-pass` | no | `durable-approval-outbox` | Model adversarial audits are scarce and can refuse. Local probes keep known bypass classes from regressing, but passing them is hardening evidence rather than no-bypass audit evidence. |
-| `adversarial-container-isolation-ready` | no | `checker-required-memory-poisoning`, `dao-descendant`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `deployment-rollback-recompute`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `trading-reconciliation-recompute`, `ui-action-record-replay`, `ui-replay-live-dom` | The fs-sandbox boundary removes hidden files from the working directory, but it does not disable networking or enforce process isolation. Container/no-network evidence is a stronger claim and needs its own smoke record. |
-| `adversarial-container-no-network` | no | `checker-required-memory-poisoning`, `dao-descendant`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `deployment-rollback-recompute`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `trading-reconciliation-recompute`, `ui-action-record-replay`, `ui-replay-live-dom` | A no-network container audit is stronger than an fs-sandbox audit. Passing this gate requires the counted audit itself to carry the container profile, not merely a prepared bundle. |
+| `not-already-solved` | yes | `access-token-scope-expansion`, `caa-revalidation`, `dao-descendant`, `deployment-rollback-recompute`, `prompt-injection-containment`, `trading-reconciliation-recompute` | A family every model solves measures nothing, and `already-solved` was the single most common cause of death in the source project's kill log — four of nine gated mechanisms. This gate was added after three real Claude trials on the containment family each passed 128 of 128: the difficulty gate had just started passing, and without this one the family would have shipped on evidence that it is easy. |
+| `human-package-ready` | no | `access-token-scope-expansion`, `caa-revalidation`, `dao-descendant`, `deployment-rollback-recompute`, `durable-approval-outbox`, `trading-reconciliation-recompute` | Reference solvability only proves the author can solve the internal task. The public package must also state the rules, examples, scoring contract and hidden sampling boundary clearly enough for a clean-room engineer. |
+| `human-solvability-evidenced` | no | `access-token-scope-expansion`, `caa-revalidation`, `checker-required-memory-poisoning`, `dao-descendant`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `deployment-rollback-recompute`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `trading-reconciliation-recompute`, `ui-action-record-replay`, `ui-replay-live-dom` | A task can be mechanically solvable and still be ambiguous to anyone who did not write it. This gate counts only independent, current-hash, unassisted solves with notes and verifier output. |
+| `adversarial-threat-model-declared` | no | `caa-revalidation`, `durable-approval-outbox` | Cheat resistance is a design requirement, not evidence that anyone tried to break the grader. The adversarial layer starts by declaring the attacker objective, surface and access boundary. |
+| `adversarial-package-ready` | no | `caa-revalidation`, `durable-approval-outbox` | An adversarial audit without a preserved package is just a story about a task. The attacker packet must pin the public challenge hash and state which artifacts are forbidden. |
+| `adversarial-audit-evidenced` | no | `caa-revalidation`, `dao-descendant`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `deployment-rollback-recompute`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `trading-reconciliation-recompute`, `ui-action-record-replay` | No adversarial run yet is not the same as no bypass. This gate counts only current-hash, non-refusal, non-infrastructure, transcript-preserved no-bypass audits. |
+| `adversarial-isolation-adequate` | no | `caa-revalidation`, `durable-approval-outbox` | A no-bypass audit only means something if the attacker did not receive the repository, hidden verifier, generated reports or mutable grader state. Subprocess preservation is not the same as an attacker context boundary. |
+| `adversarial-exploit-replay-ready` | no | `caa-revalidation`, `durable-approval-outbox` | A bypass report without replay is a claim about an exploit. Replay turns it into evidence by rerunning the submitted artifact against the current verifier and package hash. |
+| `adversarial-hardening-probes-pass` | no | `caa-revalidation`, `durable-approval-outbox` | Model adversarial audits are scarce and can refuse. Local probes keep known bypass classes from regressing, but passing them is hardening evidence rather than no-bypass audit evidence. |
+| `adversarial-container-isolation-ready` | no | `caa-revalidation`, `checker-required-memory-poisoning`, `dao-descendant`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `deployment-rollback-recompute`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `trading-reconciliation-recompute`, `ui-action-record-replay`, `ui-replay-live-dom` | The fs-sandbox boundary removes hidden files from the working directory, but it does not disable networking or enforce process isolation. Container/no-network evidence is a stronger claim and needs its own smoke record. |
+| `adversarial-container-no-network` | no | `caa-revalidation`, `checker-required-memory-poisoning`, `dao-descendant`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `deployment-rollback-recompute`, `durable-approval-outbox`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `trading-reconciliation-recompute`, `ui-action-record-replay`, `ui-replay-live-dom` | A no-network container audit is stronger than an fs-sandbox audit. Passing this gate requires the counted audit itself to carry the container profile, not merely a prepared bundle. |
 
 **20 of 37 gate(s) reject nothing here:**
 `solvable`, `verifier-graded`, `trust-boundary`, `detectable`, `fairness`, `cheat-resistance`, `is-a-family`, `hidden-region-declared`, `reference-passes`, `baselines-blocked`, `mutants-caught-by-intended-check`, `mechanisms-exercised`, `isolation-level`, `deterministic-reports`, `priced`, `human-ambiguity-reviewed`, `no-known-unrepaired-bypass`, `adversarial-import-replay-valid`, `browser-backed-ready`, `browser-backed-measured`.
@@ -119,6 +119,7 @@ A family whose reference does not pass is measuring its own bugs. No trial budge
 | `access-token-scope-expansion` | pass | 7 contract item(s) |
 | `audit-truth-financial-workflow` | pass | 7 contract item(s) |
 | `browser-action-replay` | pass | 7 contract item(s) |
+| `caa-revalidation` | pass | 5 contract item(s) |
 | `checker-required-memory-poisoning` | pass | 7 contract item(s) |
 | `dao-descendant` | pass | 5 contract item(s) |
 | `delegated-wallet-scope-reconciliation` | pass | 8 contract item(s) |
@@ -149,6 +150,7 @@ Two of three Opus engines in the source trials wrote checkers that could not exp
 | `access-token-scope-expansion` | pass | 9 expected mutant(s) |
 | `audit-truth-financial-workflow` | pass | 4 expected mutant(s) |
 | `browser-action-replay` | pass | 5 expected mutant(s) |
+| `caa-revalidation` | pass | 9 expected mutant(s) |
 | `checker-required-memory-poisoning` | pass | 20 expected mutant(s) |
 | `dao-descendant` | pass | 3 expected mutant(s) |
 | `delegated-wallet-scope-reconciliation` | pass | 10 expected mutant(s) |
@@ -179,6 +181,7 @@ All three verifier bypasses found in the source project were the same shape: a g
 | `access-token-scope-expansion` | pass | 3/3 source(s) state unforgeability |
 | `audit-truth-financial-workflow` | pass | 3/3 source(s) state unforgeability |
 | `browser-action-replay` | pass | 3/3 source(s) state unforgeability |
+| `caa-revalidation` | pass | 3/3 source(s) state unforgeability |
 | `checker-required-memory-poisoning` | pass | 4/4 source(s) state unforgeability |
 | `dao-descendant` | pass | 3/3 source(s) state unforgeability |
 | `delegated-wallet-scope-reconciliation` | pass | 4/4 source(s) state unforgeability |
@@ -209,6 +212,7 @@ A mechanism with no known-bad implementation is a difficulty the foundry can des
 | `access-token-scope-expansion` | pass | all mechanisms detectable |
 | `audit-truth-financial-workflow` | pass | all mechanisms detectable |
 | `browser-action-replay` | pass | all mechanisms detectable |
+| `caa-revalidation` | pass | all mechanisms detectable |
 | `checker-required-memory-poisoning` | pass | all mechanisms detectable |
 | `dao-descendant` | pass | all mechanisms detectable |
 | `delegated-wallet-scope-reconciliation` | pass | all mechanisms detectable |
@@ -239,6 +243,7 @@ Four of nine gated mechanisms in the source project died as already-solved or un
 | `access-token-scope-expansion` | pass | 5 constraint(s) |
 | `audit-truth-financial-workflow` | pass | 5 constraint(s) |
 | `browser-action-replay` | pass | 5 constraint(s) |
+| `caa-revalidation` | pass | 6 constraint(s) |
 | `checker-required-memory-poisoning` | pass | 6 constraint(s) |
 | `dao-descendant` | pass | 5 constraint(s) |
 | `delegated-wallet-scope-reconciliation` | pass | 5 constraint(s) |
@@ -269,6 +274,7 @@ An ungamed grader is an assumption until it is a requirement. Two of the three r
 | `access-token-scope-expansion` | pass | 5 requirement(s) |
 | `audit-truth-financial-workflow` | pass | 5 requirement(s) |
 | `browser-action-replay` | pass | 5 requirement(s) |
+| `caa-revalidation` | pass | 6 requirement(s) |
 | `checker-required-memory-poisoning` | pass | 6 requirement(s) |
 | `dao-descendant` | pass | 5 requirement(s) |
 | `delegated-wallet-scope-reconciliation` | pass | 5 requirement(s) |
@@ -299,6 +305,7 @@ A family with no parameter space is a single task wearing a family's name, and t
 | `access-token-scope-expansion` | pass | 6 knob(s): seed, approvalDrift, tokenDrift, cacheFreshness, requestSurface, repeatCount |
 | `audit-truth-financial-workflow` | pass | 6 knob(s): correctionLag, retroAuthorityTiming, delegationDepth, reversalChainLength, asOfQueryDensity, seed |
 | `browser-action-replay` | pass | 7 knob(s): seed, mutation_class, mutation_depth, viewport, locale, feature_flags, state_delta |
+| `caa-revalidation` | pass | 4 knob(s): seed, domainCount, agePattern, denyPosition |
 | `checker-required-memory-poisoning` | pass | 6 knob(s): seed, attack, sessionsBetween, memoryKind, checkerProbe, visibleCoverage |
 | `dao-descendant` | pass | 4 knob(s): seed, nWorkers, keys, crashPosition |
 | `delegated-wallet-scope-reconciliation` | pass | 10 knob(s): seed, initialApprovedLimit, requestedAmount, authorityTransition, tokenState, cacheFreshness, priorSpend, policySource, requestSurface, repeatCount |
@@ -329,6 +336,7 @@ Hidden tests that add rules are unfair; hidden tests that sample a declared spac
 | `access-token-scope-expansion` | pass | The hidden suite samples the declared access-token state space: approval drift,  |
 | `audit-truth-financial-workflow` | pass | Hidden instances are sampled from the same declared grammar as the shipped fixtu |
 | `browser-action-replay` | pass | The hidden suite samples the declared mutation grammar rather than extending it: |
+| `caa-revalidation` | pass | The hidden suite samples the declared seed, domain-count, age-pattern and denied |
 | `checker-required-memory-poisoning` | pass | The hidden suite samples the declared memory and checker space: seed, attack, se |
 | `dao-descendant` | pass | The hidden suite samples the declared seed, worker-count, queue-width and crash- |
 | `delegated-wallet-scope-reconciliation` | pass | The hidden suite samples the declared delegated-wallet state space: initial appr |
@@ -359,6 +367,7 @@ The point of the whole exercise. A family yielding one axis is one measurement h
 | `access-token-scope-expansion` | pass | 3 measured axes |
 | `audit-truth-financial-workflow` | n/a | estimated — axes; not measured |
 | `browser-action-replay` | n/a | estimated — axes; not measured |
+| `caa-revalidation` | pass | 3 measured axes |
 | `checker-required-memory-poisoning` | pass | 12 measured axes |
 | `dao-descendant` | fail | 1 measured axes |
 | `delegated-wallet-scope-reconciliation` | pass | 3 measured axes |
@@ -389,6 +398,7 @@ Declared solvability is not solvability. A family whose reference fails is measu
 | `access-token-scope-expansion` | pass | reference clean |
 | `audit-truth-financial-workflow` | n/a | family not built; nothing to run |
 | `browser-action-replay` | n/a | family not built; nothing to run |
+| `caa-revalidation` | pass | reference clean |
 | `checker-required-memory-poisoning` | pass | reference clean |
 | `dao-descendant` | pass | reference clean |
 | `delegated-wallet-scope-reconciliation` | pass | reference clean |
@@ -419,6 +429,7 @@ The classic way a safety suite measures nothing: the implementation that refuses
 | `access-token-scope-expansion` | pass | 2/2 baselines rejected |
 | `audit-truth-financial-workflow` | n/a | family not built |
 | `browser-action-replay` | n/a | family not built |
+| `caa-revalidation` | pass | 1/1 baselines rejected |
 | `checker-required-memory-poisoning` | pass | 5/5 baselines rejected |
 | `dao-descendant` | pass | 1/1 baselines rejected |
 | `delegated-wallet-scope-reconciliation` | pass | 2/2 baselines rejected |
@@ -449,6 +460,7 @@ Catching a mutant by accident, via some unrelated assertion, is luck rather than
 | `access-token-scope-expansion` | pass | 9/9 caught by intended check |
 | `audit-truth-financial-workflow` | n/a | family not built |
 | `browser-action-replay` | n/a | family not built |
+| `caa-revalidation` | pass | 9/9 caught by intended check |
 | `checker-required-memory-poisoning` | pass | 20/20 caught by intended check |
 | `dao-descendant` | pass | 3/3 caught by intended check |
 | `delegated-wallet-scope-reconciliation` | pass | 10/10 caught by intended check |
@@ -479,6 +491,7 @@ A scenario can be blocked by an earlier rule than the one it was built for, look
 | `access-token-scope-expansion` | pass | 384/384 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
 | `audit-truth-financial-workflow` | n/a | family not built |
 | `browser-action-replay` | n/a | family not built |
+| `caa-revalidation` | pass | 24/24 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
 | `checker-required-memory-poisoning` | pass | 792/792 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
 | `dao-descendant` | pass | 24/24 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
 | `delegated-wallet-scope-reconciliation` | pass | 804/804 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
@@ -509,6 +522,7 @@ In-process isolation is sufficient for code this repository wrote and insufficie
 | `access-token-scope-expansion` | pass | subprocess; adequate while no agent artifact is graded |
 | `audit-truth-financial-workflow` | n/a | family not built |
 | `browser-action-replay` | n/a | family not built |
+| `caa-revalidation` | pass | container with 4 agent trial(s) |
 | `checker-required-memory-poisoning` | pass | subprocess with 1 agent trial(s) |
 | `dao-descendant` | pass | container with 2 agent trial(s) |
 | `delegated-wallet-scope-reconciliation` | pass | subprocess; adequate while no agent artifact is graded |
@@ -539,6 +553,7 @@ Axis counts across disjoint banks add by construction and mean nothing. Only sha
 | `access-token-scope-expansion` | fail | 0 subject(s) shared with another family (need 3) |
 | `audit-truth-financial-workflow` | n/a | family not built |
 | `browser-action-replay` | n/a | family not built |
+| `caa-revalidation` | fail | 0 subject(s) shared with another family (need 3) |
 | `checker-required-memory-poisoning` | fail | 1 subject(s) shared with another family (need 3) |
 | `dao-descendant` | fail | 2 subject(s) shared with another family (need 3) |
 | `delegated-wallet-scope-reconciliation` | fail | 0 subject(s) shared with another family (need 3) |
@@ -569,6 +584,7 @@ A report nobody can reproduce is a report nobody can audit.
 | `access-token-scope-expansion` | pass | verified |
 | `audit-truth-financial-workflow` | n/a | family not built |
 | `browser-action-replay` | n/a | family not built |
+| `caa-revalidation` | pass | verified |
 | `checker-required-memory-poisoning` | pass | verified |
 | `dao-descendant` | pass | verified |
 | `delegated-wallet-scope-reconciliation` | pass | verified |
@@ -599,6 +615,7 @@ The gap between 'measured' and 'trialable' is where families sit for months. A f
 | `access-token-scope-expansion` | pass | challenge package builds, leak check passes, router can grade it |
 | `audit-truth-financial-workflow` | n/a | family not built |
 | `browser-action-replay` | n/a | family not built |
+| `caa-revalidation` | pass | challenge package builds, leak check passes, router can grade it |
 | `checker-required-memory-poisoning` | pass | challenge package builds, leak check passes, router can grade it |
 | `dao-descendant` | pass | challenge package builds, leak check passes, router can grade it |
 | `delegated-wallet-scope-reconciliation` | pass | challenge package builds, leak check passes, router can grade it |
@@ -629,6 +646,7 @@ A measured axis count against a bank of hand-written mutants proves the VERIFIER
 | `access-token-scope-expansion` | fail | no counted agent trials |
 | `audit-truth-financial-workflow` | fail | no counted agent trials |
 | `browser-action-replay` | fail | no counted agent trials |
+| `caa-revalidation` | fail | 4 counted agent trial(s), none root-caused to `capability` (4 unlabelled); a counted failure is not a difficulty finding until somebody says why it failed |
 | `checker-required-memory-poisoning` | fail | 1 counted agent trial(s), none root-caused to `capability` (0 unlabelled); a counted failure is not a difficulty finding until somebody says why it failed |
 | `dao-descendant` | fail | 2 counted agent trial(s), none root-caused to `capability` (2 unlabelled); a counted failure is not a difficulty finding until somebody says why it failed |
 | `delegated-wallet-scope-reconciliation` | fail | no counted agent trials |
@@ -659,6 +677,7 @@ The measured-axes gate counts axes over the MUTANT bank: a statement about what 
 | `access-token-scope-expansion` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
 | `audit-truth-financial-workflow` | n/a | family not built |
 | `browser-action-replay` | n/a | family not built |
+| `caa-revalidation` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
 | `checker-required-memory-poisoning` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
 | `dao-descendant` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
 | `delegated-wallet-scope-reconciliation` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
@@ -689,6 +708,7 @@ A one-agent smoke trial is routing evidence. It can prove a family is worth foll
 | `access-token-scope-expansion` | n/a | no production-readiness layer for this family |
 | `audit-truth-financial-workflow` | n/a | no production-readiness layer for this family |
 | `browser-action-replay` | n/a | no production-readiness layer for this family |
+| `caa-revalidation` | n/a | no production-readiness layer for this family |
 | `checker-required-memory-poisoning` | n/a | no production-readiness layer for this family |
 | `dao-descendant` | n/a | no production-readiness layer for this family |
 | `delegated-wallet-scope-reconciliation` | n/a | no production-readiness layer for this family |
@@ -719,6 +739,7 @@ A family every model solves measures nothing, and `already-solved` was the singl
 | `access-token-scope-expansion` | fail | 0 of 1 declared trial(s) failed — declared by the shape, not measured here |
 | `audit-truth-financial-workflow` | n/a | no counted agent trials yet |
 | `browser-action-replay` | n/a | no counted agent trials yet |
+| `caa-revalidation` | fail | all 4 counted trial(s) passed every scenario — the family is already-solved |
 | `checker-required-memory-poisoning` | pass | 1 of 1 counted trial(s) failed at least one scenario |
 | `dao-descendant` | fail | all 2 counted trial(s) passed every scenario — the family is already-solved |
 | `delegated-wallet-scope-reconciliation` | n/a | no counted agent trials yet |
@@ -749,6 +770,7 @@ An unpriced family cannot enter the budget model, so the plan built on it is fic
 | `access-token-scope-expansion` | pass | 18h build, $35 frontier |
 | `audit-truth-financial-workflow` | pass | 45h build, $60 frontier |
 | `browser-action-replay` | pass | 90h build, $80 frontier |
+| `caa-revalidation` | pass | 24h build, $40 frontier |
 | `checker-required-memory-poisoning` | pass | 85h build, $35 frontier |
 | `dao-descendant` | pass | 120h build, $145 frontier |
 | `delegated-wallet-scope-reconciliation` | pass | 36h build, $45 frontier |
@@ -779,6 +801,7 @@ Reference solvability only proves the author can solve the internal task. The pu
 | `access-token-scope-expansion` | fail | public package is incomplete or not generated here |
 | `audit-truth-financial-workflow` | n/a | no human-readiness audit |
 | `browser-action-replay` | n/a | no human-readiness audit |
+| `caa-revalidation` | fail | public package is incomplete or not generated here |
 | `checker-required-memory-poisoning` | pass | public package passed human-readiness audit |
 | `dao-descendant` | fail | public package is incomplete or not generated here |
 | `delegated-wallet-scope-reconciliation` | pass | public package passed human-readiness audit |
@@ -809,6 +832,7 @@ A task can be mechanically solvable and still be ambiguous to anyone who did not
 | `access-token-scope-expansion` | fail | no clean independent human solve on record |
 | `audit-truth-financial-workflow` | n/a | no human evidence layer |
 | `browser-action-replay` | n/a | no human evidence layer |
+| `caa-revalidation` | fail | no clean independent human solve on record |
 | `checker-required-memory-poisoning` | fail | no clean independent human solve on record |
 | `dao-descendant` | fail | no clean independent human solve on record |
 | `delegated-wallet-scope-reconciliation` | fail | no clean independent human solve on record |
@@ -839,6 +863,7 @@ The fastest way to make a fair-looking benchmark unfair is to leave a human's cl
 | `access-token-scope-expansion` | pass | 0 human review record(s), no open ambiguity |
 | `audit-truth-financial-workflow` | n/a | no human review records |
 | `browser-action-replay` | n/a | no human review records |
+| `caa-revalidation` | pass | 0 human review record(s), no open ambiguity |
 | `checker-required-memory-poisoning` | pass | 0 human review record(s), no open ambiguity |
 | `dao-descendant` | pass | 0 human review record(s), no open ambiguity |
 | `delegated-wallet-scope-reconciliation` | pass | 0 human review record(s), no open ambiguity |
@@ -869,6 +894,7 @@ Cheat resistance is a design requirement, not evidence that anyone tried to brea
 | `access-token-scope-expansion` | n/a | no adversarial audit layer |
 | `audit-truth-financial-workflow` | n/a | no adversarial audit layer |
 | `browser-action-replay` | n/a | no adversarial audit layer |
+| `caa-revalidation` | fail | no threat model declared |
 | `checker-required-memory-poisoning` | pass | threat model declared |
 | `dao-descendant` | pass | threat model declared |
 | `delegated-wallet-scope-reconciliation` | pass | threat model declared |
@@ -899,6 +925,7 @@ An adversarial audit without a preserved package is just a story about a task. T
 | `access-token-scope-expansion` | n/a | no adversarial package audit |
 | `audit-truth-financial-workflow` | n/a | no adversarial package audit |
 | `browser-action-replay` | n/a | no adversarial package audit |
+| `caa-revalidation` | fail | adversarial campaign or attack bundle is incomplete |
 | `checker-required-memory-poisoning` | pass | adversarial campaign, package hash and attack bundle are ready |
 | `dao-descendant` | pass | adversarial campaign, package hash and attack bundle are ready |
 | `delegated-wallet-scope-reconciliation` | pass | adversarial campaign, package hash and attack bundle are ready |
@@ -929,6 +956,7 @@ No adversarial run yet is not the same as no bypass. This gate counts only curre
 | `access-token-scope-expansion` | n/a | no adversarial audit evidence |
 | `audit-truth-financial-workflow` | n/a | no adversarial audit evidence |
 | `browser-action-replay` | n/a | no adversarial audit evidence |
+| `caa-revalidation` | fail | no counted no-bypass audit on record |
 | `checker-required-memory-poisoning` | pass | 1 counted no-bypass audit(s) |
 | `dao-descendant` | fail | no counted no-bypass audit on record |
 | `delegated-wallet-scope-reconciliation` | fail | no counted no-bypass audit on record |
@@ -959,6 +987,7 @@ A counted bypass does not necessarily kill the benchmark family, but it blocks a
 | `access-token-scope-expansion` | n/a | no adversarial audit evidence |
 | `audit-truth-financial-workflow` | n/a | no adversarial audit evidence |
 | `browser-action-replay` | n/a | no adversarial audit evidence |
+| `caa-revalidation` | pass | 0 counted bypass(es), none unrepaired |
 | `checker-required-memory-poisoning` | pass | 0 counted bypass(es), none unrepaired |
 | `dao-descendant` | pass | 0 counted bypass(es), none unrepaired |
 | `delegated-wallet-scope-reconciliation` | pass | 0 counted bypass(es), none unrepaired |
@@ -989,6 +1018,7 @@ A no-bypass audit only means something if the attacker did not receive the repos
 | `access-token-scope-expansion` | n/a | no adversarial isolation profile |
 | `audit-truth-financial-workflow` | n/a | no adversarial isolation profile |
 | `browser-action-replay` | n/a | no adversarial isolation profile |
+| `caa-revalidation` | fail | legacy subprocess profile only |
 | `checker-required-memory-poisoning` | pass | fs-sandbox/container isolation profile available |
 | `dao-descendant` | pass | fs-sandbox/container isolation profile available |
 | `delegated-wallet-scope-reconciliation` | pass | fs-sandbox/container isolation profile available |
@@ -1019,6 +1049,7 @@ A bypass report without replay is a claim about an exploit. Replay turns it into
 | `access-token-scope-expansion` | n/a | no exploit replay path |
 | `audit-truth-financial-workflow` | n/a | no exploit replay path |
 | `browser-action-replay` | n/a | no exploit replay path |
+| `caa-revalidation` | fail | claimed bypasses cannot be replayed mechanically |
 | `checker-required-memory-poisoning` | pass | exploit replay command and schema are available |
 | `dao-descendant` | pass | exploit replay command and schema are available |
 | `delegated-wallet-scope-reconciliation` | pass | exploit replay command and schema are available |
@@ -1049,6 +1080,7 @@ Model adversarial audits are scarce and can refuse. Local probes keep known bypa
 | `access-token-scope-expansion` | n/a | no deterministic hardening probes |
 | `audit-truth-financial-workflow` | n/a | no deterministic hardening probes |
 | `browser-action-replay` | n/a | no deterministic hardening probes |
+| `caa-revalidation` | fail | 0 hardening probe failure(s) |
 | `checker-required-memory-poisoning` | pass | deterministic hardening probes pass |
 | `dao-descendant` | pass | deterministic hardening probes pass |
 | `delegated-wallet-scope-reconciliation` | pass | deterministic hardening probes pass |
@@ -1079,6 +1111,7 @@ The fs-sandbox boundary removes hidden files from the working directory, but it 
 | `access-token-scope-expansion` | n/a | no container isolation layer |
 | `audit-truth-financial-workflow` | n/a | no container isolation layer |
 | `browser-action-replay` | n/a | no container isolation layer |
+| `caa-revalidation` | fail | container/no-network isolation not ready |
 | `checker-required-memory-poisoning` | fail | container/no-network isolation not ready |
 | `dao-descendant` | fail | container/no-network isolation not ready |
 | `delegated-wallet-scope-reconciliation` | fail | container/no-network isolation not ready |
@@ -1109,6 +1142,7 @@ A no-network container audit is stronger than an fs-sandbox audit. Passing this 
 | `access-token-scope-expansion` | n/a | no container/no-network audit field |
 | `audit-truth-financial-workflow` | n/a | no container/no-network audit field |
 | `browser-action-replay` | n/a | no container/no-network audit field |
+| `caa-revalidation` | fail | no counted container/no-network audit on record |
 | `checker-required-memory-poisoning` | fail | no counted container/no-network audit on record |
 | `dao-descendant` | fail | no counted container/no-network audit on record |
 | `delegated-wallet-scope-reconciliation` | fail | no counted container/no-network audit on record |
@@ -1139,6 +1173,7 @@ External adversarial evidence is useful only when the transcript, provider ident
 | `access-token-scope-expansion` | n/a | no counted imported adversarial audit |
 | `audit-truth-financial-workflow` | n/a | no counted imported adversarial audit |
 | `browser-action-replay` | n/a | no counted imported adversarial audit |
+| `caa-revalidation` | n/a | no counted imported adversarial audit |
 | `checker-required-memory-poisoning` | n/a | no counted imported adversarial audit |
 | `dao-descendant` | n/a | no counted imported adversarial audit |
 | `delegated-wallet-scope-reconciliation` | n/a | no counted imported adversarial audit |
@@ -1169,6 +1204,7 @@ Live-DOM is dom-like. A browser-backed claim requires a real browser harness con
 | `access-token-scope-expansion` | n/a | no browser-backed layer |
 | `audit-truth-financial-workflow` | n/a | no browser-backed layer |
 | `browser-action-replay` | n/a | no browser-backed layer |
+| `caa-revalidation` | n/a | no browser-backed layer |
 | `checker-required-memory-poisoning` | n/a | no browser-backed layer |
 | `dao-descendant` | n/a | no browser-backed layer |
 | `delegated-wallet-scope-reconciliation` | n/a | no browser-backed layer |
@@ -1199,6 +1235,7 @@ A scaffold is not a browser result. This gate only passes after a real browser d
 | `access-token-scope-expansion` | n/a | no browser-backed layer |
 | `audit-truth-financial-workflow` | n/a | no browser-backed layer |
 | `browser-action-replay` | n/a | no browser-backed layer |
+| `caa-revalidation` | n/a | no browser-backed layer |
 | `checker-required-memory-poisoning` | n/a | no browser-backed layer |
 | `dao-descendant` | n/a | no browser-backed layer |
 | `delegated-wallet-scope-reconciliation` | n/a | no browser-backed layer |
@@ -1225,6 +1262,7 @@ A scaffold is not a browser result. This gate only passes after a real browser d
 | `access-token-scope-expansion` | **NOT-READY** | `difficulty-evidenced`, `not-already-solved` |
 | `audit-truth-financial-workflow` | **NOT-READY** | `difficulty-evidenced` |
 | `browser-action-replay` | **NOT-READY** | `difficulty-evidenced` |
+| `caa-revalidation` | **NOT-READY** | `difficulty-evidenced`, `not-already-solved` |
 | `checker-required-memory-poisoning` | **NOT-READY** | `difficulty-evidenced` |
 | `dao-descendant` | **NOT-READY** | `difficulty-evidenced`, `not-already-solved` |
 | `delegated-wallet-scope-reconciliation` | **NOT-READY** | `difficulty-evidenced` |

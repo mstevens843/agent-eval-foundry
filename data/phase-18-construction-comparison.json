@@ -1,0 +1,68 @@
+{
+  "schema": "agent-eval-foundry/phase-18-construction-comparison@1",
+  "purpose": "Structured comparison of the three packages whose construction is at issue. CAA V1 and durable-outbox are measured; CAA V2 is what Phase 18 builds and is unmeasured until its campaign runs.",
+  "dimensions": [
+    {
+      "dimension": "public instruction style",
+      "durableOutbox": "One page. Names the symptom conditions (workers overlap, a worker dies partway, an approval is withdrawn while held) and lists nine outcome invariants. Never names the defect or the repair. Says explicitly that the invariants hold for every seed and schedule the harness can generate, not only the shipped ones.",
+      "caaV1": "SPEC.md states the graded mechanism verbatim as rule CAA1 including the word 'exact' and an exclusivity clause, and forbiddenOutcomes names the historical anti-pattern in words ('checking one fqdn repeatedly instead of querying another').",
+      "caaV2": "Eighty-seven-line SEMANTICS.md stating obligations as outcomes. Names the environmental property (the authority serves queries concurrently and answers out of request order) and the correspondence obligation ('the authorization applied to an identifier is the one the authority gave for that identifier'), and never names positional reconciliation, completion-order association, or any code change."
+    },
+    {
+      "dimension": "codebase shape",
+      "durableOutbox": "Multi-file Python service: engine (worker, runtime, db, gate, types) plus a read-only harness driving interleavings against Postgres and a separate tool process.",
+      "caaV1": "One exported function, subject.run(view, caa), reachable in about twenty lines.",
+      "caaV2": "Multi-package Go service under /app/certd: cmd entrypoint, order contract, persistent authorization store, freshness window, revalidation planner, concurrent authority client, issuance decider, audit writer, plus a read-only harness with a development authority and five runnable scenarios."
+    },
+    {
+      "dimension": "starter quality",
+      "durableOutbox": "A complete, working engine that passes a clean serial queue and an ordinary two-worker run, carrying a family of the same mistake.",
+      "caaV1": "A neutral skeleton that never contacts the authority; fails 23/24 scenarios immediately.",
+      "caaV2": "A complete, working service. Builds, vets clean, and its five shipped unit tests pass. It is correct for single-identifier orders, for all-current stores, and whenever a multi-identifier order's rechecks happen to agree."
+    },
+    {
+      "dimension": "visible-test coverage",
+      "durableOutbox": "Seven visible schedules under /app/harness/schedules/; the graded set is fifteen schedules the agent never sees.",
+      "caaV1": "Three visible example orders showing the view shape; the grading checks map one-to-one onto the five published rules.",
+      "caaV2": "Six shipped Go unit tests that assert recheck COUNT and single-identifier behaviour, plus five runnable dev scenarios whose development authority answers with no delay. This mirrors the historical coverage gap the incident record documents: unit tests asserting the number of returned authorizations, integration coverage using one identifier."
+    },
+    {
+      "dimension": "authority boundary",
+      "durableOutbox": "External tool in its own process with an append-only tick-stamped ledger; public invoke socket, root-only control socket in a 0700 directory.",
+      "caaV1": "In-process facade object; the query ledger lived in the same address space as the grader and was never reachable from the subject only because the subject was handed a closure.",
+      "caaV2": "Authority in its own process owning the current policy and an append-only tick-stamped log; public socket answers exactly one verb, arm/seal/dump on a second socket in a 0700 directory the unprivileged service cannot traverse."
+    },
+    {
+      "dimension": "verifier",
+      "durableOutbox": "Separate container, three privilege roles, 267 checks over 24 scenarios, CTRF-confirmed count and name whitelist, reward written by root before any agent code runs.",
+      "caaV1": "In-process TypeScript verifier plus a subprocess host; six checks over 24 scenarios.",
+      "caaV2": "Separate container. The submitted Go tree is restored to its read-only baseline, built offline to a standalone binary, and executed as nobody once per order in its own process group. The grading process never links agent code. Ten obligation checks per scenario plus three suite-level checks, CTRF-confirmed against a count derived from the check registry."
+    },
+    {
+      "dimension": "cheat controls",
+      "durableOutbox": "no-op, empty-ledger and ledger-rebind oracles, each measured at reward 0 on the shipped suite.",
+      "caaV1": "no-query, always-refuse, always-issue and fabricated-result oracles, measured locally.",
+      "caaV2": "Cheat oracles are Lane 3 work. The structural controls are: the store and report are claims, the authority log is evidence; positive work is enforced because an order that should issue must issue; and an unnamed or post-seal query is recorded and fails."
+    },
+    {
+      "dimension": "scenario selection",
+      "durableOutbox": "Deterministic fuzzer over the declared schedule grammar, classified into candidate/reference-bug/both-fail/generator-artifact, minimised, controlling parameter measured (key_index=0), six points spread across seeds/timings/worker counts, validated against ten engines of which nine had no part in selection.",
+      "caaV1": "Coverage-first hash-balanced selection over a 192-point declared space; no adversary-driven search.",
+      "caaV2": "The same method, transferred: fuzz the declared CAA grammar, reject generator artifacts and non-activating points, measure the controlling parameter rather than assume it, minimise, select spread, validate against held-out mutants and a second correct implementation."
+    },
+    {
+      "dimension": "agent self-check behaviour",
+      "durableOutbox": "Every Opus trial wrote its own verifier; two built one that could not express the rule, so their fuzzers ran green over buggy engines. All three Codex trials built no verification tooling at all.",
+      "caaV1": "All four agents wrote and ran a self-check, all four tracked per-name query identity, all four transcripts named the identity-collapse failure mode explicitly, because the specification named it first.",
+      "caaV2": "Unmeasured. The registered prediction is that a natural self-check reproduces the shipped dev harness's behaviour - a development authority that answers immediately and therefore in request order - and so runs green over the defect."
+    },
+    {
+      "dimension": "measured trial evidence",
+      "durableOutbox": "Original artifact 6/6 frontier failures, later found to carry an ACKED-state specification ambiguity. The fair A2-repaired treatment measured 3/6 reward-zero over six clean runs, and none of those three carried an illegal transition, so they are a different failure mode rather than the artifact.",
+      "caaV1": "4/4 clean solves, 4/4 countable, zero reward-zero, 48-100 seconds each.",
+      "caaV2": "None. Four trials are registered and unrun."
+    }
+  ],
+  "correction": "Phase 17 established that CAA V1's overexplained microtask packaging was easy. It did not establish that the CAA mechanism, or a CAA task family, is easy. Phase 17's artifacts and its 4/4 result stand unmodified; only the interpretation is corrected here.",
+  "comparabilityLimit": "CAA V1 and CAA V2 differ in instruction style, codebase shape, starter, visible coverage, authority boundary, verifier, and scenario selection at the same time. Any difference in measured outcome is a package-bundle comparison and must never be reported as a causal ablation of any single operator."
+}

@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import { loadRegistry } from "../foundry/load.js";
+import { frozenNoveltyBaseline } from "../phase-17/frozen-novelty-baseline.js";
 import { phase16Sha256, runPhase16Calibration } from "./calibration.js";
 import { auditCandidateContract } from "./contract-gate.js";
 import { phase16CandidateContracts } from "./contracts.js";
@@ -528,11 +529,7 @@ export function runPhase16Discovery(root: string): Phase16DiscoveryRun {
   const contracts = phase16CandidateContracts(root);
   const candidates = buildCandidates(root, sources, registration);
   const contractById = new Map(contracts.map((contract) => [contract.candidateId, contract]));
-  const noveltyBaseline = loadRegistry(root).shapes.map((shape) => ({
-    familyId: shape.familyId,
-    domain: shape.domain,
-    mechanisms: shape.mechanisms,
-  }));
+  const noveltyBaseline = frozenNoveltyBaseline(root);
   const packets = candidates
     .filter((candidate) => candidate.queueStatus === "reader-packet")
     .map((candidate) => {

@@ -149,145 +149,6 @@ The last row is what the previous version of this report printed as its headline
 | `labourRateUsdPerHour` | 120 | ASSUMPTION — caller-supplied, and the dominant term |
 | `totalUsd` | 100000 | the question |
 
-## Families die after they are built, and that is priced
-
-The earlier version of this model priced one build per shipped family. That is the same mistake as
-pricing only the trial runs that produced a result: it charges for the work that survived and
-omits the work that produced it.
-
-| | |
-|---|---:|
-| families actually built | 14 |
-| of those, killed after being built | 7 |
-| families that survive to ship | 7 |
-| builds per survivor | 2 = 1 / (1 - 0.5), derived from `postBuildKillRate` |
-| a descendant's reuse of its parent | 35% |
-
-**Why killing prompt-injection early was the good outcome.** The family cost roughly 70 hours to
-build and three counted trials — about seventeen minutes of model time — to kill. Had it shipped,
-the cost would have been every downstream hour spent maintaining a benchmark that separates
-nothing, plus the credibility of every number quoted beside it. The gate that killed it cost
-nothing to run.
-
-That asymmetry is the argument for the whole screening layer: **a kill is cheap and a build is
-not**, so the discipline that pays is moving evidence earlier, not building faster.
-
-What the numbers above do NOT say is that the kill rate is 50%. One of two families built here
-died after being built. That is a sample of two, it is the only post-build kill rate this
-repository has measured, and a plan resting on it is resting on very little — but a plan assuming
-100% survival is resting on less, and `budget-check.ts` rejects that one.
-
-## Trial-layer assumptions, measured
-
-Everything above prices *building* families. This section prices *running* them, from the trial
-records this repository holds rather than from an estimate.
-
-| | |
-|---|---:|
-| historical runs imported | 33 |
-| of those, counted | 15 |
-| total recorded spend | $252.51 |
-| spend on runs that produced a counted result | $184.20 |
-| spend on standard attempts that produced nothing | $59.32 |
-| **effective $ per counted run** | **$16.83** |
-| counted agent trials on the second family | 6 |
-| median runtime of those trials | 326s |
-
-The plan prices one trial at $9.62 and this table's effective cost per COUNTED run is $16.83. They differ because the second amortizes the runs that produced nothing over the runs that did, and both are several times the $3.50 the plan assumed for three phases. The refutation of that literal was being printed two sections below it the whole time.
-
-### The waste rate
-
-Of 17 genuine attempts at the task — cheat and gate runs excluded, because those are
-deliberate and not waste — 15 produced a usable result. That is a waste rate of
-**12%**, against the `retryRate` input of 15%.
-
-The measured rate is at or below the input, so the plan above is not optimistic on this axis.
-
-### What a second family costs to run
-
-The containment family's trials cost minutes and cents rather than hours and tens of dollars: the
-subject is a single module graded against 128 in-memory scenarios, not a service under a workload.
-Two consequences for the budget:
-
-- **Cheap families are how you fill a shared bank.** Cross-family axis measurement needs the same
-  models to attempt both families, and the binding cost is the expensive family, not the cheap one.
-- **Cheap to run is not cheap to build.** The containment family took roughly the same authoring
-  effort as the expensive one and then failed the ship gate for being too easy. Run cost is the
-  smaller half of the bill, and the model above is right to be dominated by labour.
-
-## Campaigns, measured
-
-The trial layer running for real, on this machine. Every figure is read from campaign plans and
-trial directories rather than assumed.
-
-| | |
-|---|---:|
-| campaigns declared | 12 |
-| slots planned | 35 |
-| slots run | 11 |
-| slots **not run** | 24 |
-| counted trials | 13 |
-| of those, failing something | 7 |
-| superseded by a challenge repair | 18 |
-| median counted-trial runtime | 2.8 min |
-| budget declared across campaigns | $190.00 |
-| **budget per counted failure** | $27.14 |
-
-### The line item nobody budgets for
-
-18 counted trials were invalidated by a repair to the family they measured. They
-are preserved and they do not count, because the task they were run against no longer exists.
-
-That is not waste in the ordinary sense — the repair came FROM those trials, which found a rule
-attribution the spec had left ambiguous — but it is real spend that a plan pricing only successful
-runs would omit. **A benchmark programme should expect to pay for each family's trials more than
-once**, because the first campaign is often what tells you the family is not yet fair.
-
-### Unrun slots are a budget line, not an absence
-
-24 of 35 declared slots have not run, almost all of them because no runner
-for that model family is configured here. They are costed in the plans and visible in every
-report. A campaign that quietly dropped them would show a complete-looking result over one lab's
-model — which is the single most common way a benchmark overstates what it measured.
-
-## Spend by provider, measured
-
-Every row read from the trial directories on disk. `superseded` runs were counted once and are
-not counted now: the family they measured was repaired.
-
-Runs are priced at the measured $9.62 — the mean of the 19 real Harbor trials over $0.50 in `data/measured-trial-costs.json`. This section used to price them at $3.50, a literal with no measurement behind it printed under a heading that said "measured", so every dollar figure below was low by roughly 2.7x.
-
-| provider | counted | of those failed | refused | infra | superseded | model-minutes |
-|---|---:|---:|---:|---:|---:|---:|
-| `anthropic` | 12 | 4 | 0 | 0 | 10 | 130 |
-| `google` | 0 | 0 | 0 | 0 | 1 | 0 |
-| `openai` | 7 | 3 | 0 | 1 | 7 | 78 |
-
-| | |
-|---|---:|
-| runs attempted | 38 |
-| counted | 19 |
-| **produced no usable evidence** | **19** (50%) |
-| at $9.62 per run, spend on runs that produced nothing | $182.78 |
-| **cost per counted FAILURE** | $52.22 |
-
-**Cost per counted failure is the number to plan against.** A counted solve tells you the family
-is solvable, which the reference already told you. A counted failure is the only kind of trial
-that moves a family toward shipping, and at the observed rates it costs several times what a
-single run does.
-
-### The three kinds of waste, which are not the same
-
-| kind | count | can it be engineered away? |
-|---|---:|---|
-| provider refusal | 0 | no — it is a property of the provider, and re-running until it complies would fabricate a sample |
-| infrastructure / auth | 1 | partly — an account-tier error is fixable by paying; a harness bug is fixable by fixing it |
-| superseded by repair | 18 | no, and it should not be. These runs found the defect that invalidated them |
-
-Priced into the plan, 19 wasted runs against 3 matrices per family is
-a real multiplier on trial cost — and still a rounding error beside labour, which is the finding
-the whole budget model exists to make.
-
 ## Pipeline conversion costs
 
 This is the cost model for the exact live-DOM and checker-required phases: turning a
@@ -299,7 +160,7 @@ directories.
 |---|---:|---|---|
 | mutant-measured -> trial-ready | $2,790 (23.3 h) | estimated | fairness SPEC, challenge package, leak tests, route, campaign plan |
 | trial-ready -> difficulty-evidenced | $251.06 + provider availability | estimated | one counted provider run, grading, reconcile, report update |
-| spec ambiguity waste already observed | $919.13 | measured trials + estimated repair | stale/superseded trials plus repair time |
+| spec ambiguity waste already observed | not observed in supplied campaign facts | not-run | stale/superseded trials plus repair time |
 | checker-required package-ready -> difficulty-evidenced | $15 campaign budget; provider cost not recorded | measured campaign | package, route, two submitted artifacts, 792 graded scenarios and one counted Codex/OpenAI failure; no cross-lab breadth |
 
 Trial-ready is not SHIP. Trial-ready means the package builds, the leak checker passes, the hash
@@ -307,8 +168,7 @@ is pinned and the router can grade an artifact. Difficulty-evidenced means at le
 real agent trial exists under that hash. SHIP still requires the family not to be already solved
 and all blocking gates to pass.
 
-Provider unavailability is visible as 24 not-run slot(s) out of 35; those slots do not become failures or passes.
-The current observed pipeline also carries a 12% standard-attempt waste rate from historical trials.
+Provider unavailability is represented when campaign facts are supplied.
 
 Under the current observed pipeline, $100,000 buys 7 shipped family line(s), 7 independently gradeable package(s), about 168 graded cells and 14 independent axes. It does not buy 168 independent tasks — those cells sit inside 7 package(s) — and the axis meter is the guard against that phrasing.
 

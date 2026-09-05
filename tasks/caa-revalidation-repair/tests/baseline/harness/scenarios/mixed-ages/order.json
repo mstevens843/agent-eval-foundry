@@ -1,0 +1,8 @@
+{
+  "id": "dev-mixed-ages-1",
+  "identifiers": [
+    "shop.example.test",
+    "api.example.test",
+    "cdn.example.test"
+  ]
+}

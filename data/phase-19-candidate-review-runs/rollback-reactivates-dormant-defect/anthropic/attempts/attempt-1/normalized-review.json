@@ -1,0 +1,43 @@
+{
+  "candidateId": "rollback-reactivates-dormant-defect",
+  "packetSha256": "646a057704f9cc236041fa4c6b9cc0e9ea3e000c54f68e5ae8e5bb60cd10a32b",
+  "providerFamily": "anthropic",
+  "dimensions": {
+    "source support": "pass",
+    "specific causal mechanism": "pass",
+    "causal depth": "pass",
+    "diagnosis radius": "pass",
+    "fair solution-undirected contract": "pass",
+    "structural witness isolation": "pass",
+    "semantic novelty": "pass",
+    "cheap-probe falsifiability": "pass"
+  },
+  "verdict": "promote",
+  "earliestFailedDimension": null,
+  "rationale": "Source support: one authoritative primary unit (SEC 34-70694, sec.gov/files/litigation/admin/2013/34-70694.pdf), depthAchieved full-source, fetchFailed false, with three mechanisms carrying verbatim quotes that check out against the order text ('repurposed a flag that was formerly used to activate the Power Peg code'; 'did not copy the new code to one of the eight SMARS computer servers'; 'uninstalled the new RLP code from the seven servers... This action worsened the problem'). The third quote is the family's causal spine verbatim, so the family is source-derived rather than source-inspired; calling a regulator order a 'first-party postmortem' is a loose label, not a provenance defect. Specific causal mechanism: a named collision (repurposed routing attribute reaching src/engine/legacy/accumulation.ts, present/complete/unmarked) with a stated activation region (>=1 genuinely stale replica AND nonzero colliding traffic) and two explicit non-activation controls that must never trip. Causal depth: credited on the four independently-revertible decisions (locate deviant replica via independent attestation; structurally guard the dormant path; redeploy AND restart confirmed by reachable-code fingerprint not the manifest version field; coverage claim matching the query log), each isolated by its own mutant (redeploy-without-restart, coverage-overclaim, partial-rollback-inverted, stale-attestation-race) and gated by a reference-thickness floor that voids the probe if the reference collapses below four hunks across three files -- not credited on the ~1,300-1,600 line file count, per the CAA V2 warning. Diagnosis radius: the discriminating fact lives outside the editable tree entirely (manifest status 'Complete' can be true while reachability differs), forcing a join across router, engine, legacy module, CHANGELOG's true-but-unflagged 'removed from routing logic in v2.3', and per-replica attestation; mainFairnessRisks and killConditions bound it so it stays diagnosable within granted authority rather than a guessing game. Fair solution-undirected contract: the CAA V1-style leak was removed outright, not reworded, and its stated redundancy verifies independently -- a fleet rollback trips outcome (1) behaviorally via the canary and (3) via the subject-unwritable release-pipeline deploy-target record; the five surviving clauses state terminal-state outcomes only, and infoIntentionallyAbsent withholds the module, the repurposing fact, the stale replica, the existence of a catastrophic fast action, and every name for incident and anti-pattern. The auditReachableCode affordance is one of seven verbs and is required for fairness, not a strategy hint, since scope and ordering remain ungiven. Structural witness isolation: three subject-unwritable records plus an out-of-process verifier that never reads subject logs or markResolved; 'intended version' is defined by the release pipeline rather than the writable manifest, closing self-certification, and the audited-vs-changed gap is closed by a real append-only inbound-query log. Decisively, the controls are demonstrated with fail-stops rather than asserted: the coverage-overclaim canary must trip every rig cycle or that cycle voids, and a missing ledger/attestation/query-log feed voids rather than silently passes -- the direct answer to CAA V2's verifier bypass. Semantic novelty: the graded failure is that the remediation amplifies the incident, an axis distinct from CAA V2's defect-in-one-function-across-one-fan-in; the codebase is originally authored, and recognizing the famous incident buys only one of four decisions since restart-vs-redeploy-record and coverage honesty appear nowhere in the source. Cheap-probe falsifiability: four numbered conditions over a fully specified rig, falsifiable in several directions (rollback mutant failing to reactivate; non-activation case tripping the signature; reference failing to clear; reference collapsing below the thickness floor, which voids), at an honestly revised 6-9 hours, with the limit correctly scoped to activation geometry rather than agent choice. Residual uncertainties -- no pilot batch, unrun thickness gate, unvalidated LOW-coverage predictor -- are each disclosed in-packet, scoped as post-probe work consistent with difficultyRule and measuredLineageEvidence, and covered by pre-registered kill conditions; disclosed and bounded absence of a post-probe measurement is not a missing construction fact, and none of them is load-bearing for probe readiness. All eight dimensions pass, so the candidate is ready for the cheap probe.",
+  "reviewId": "phase19-rollback-reactivates-dormant-defect-anthropic",
+  "independentlyProduced": true,
+  "blindedTo": [
+    "corrected rank",
+    "numeric decision score",
+    "estimated clean-solve probabilities",
+    "Phase 19 assessment rationale",
+    "prior skeptic verdicts and repairs",
+    "other reader verdict",
+    "author recommendation",
+    "predicted survivor count"
+  ],
+  "transcriptPath": "data/phase-19-candidate-review-runs/rollback-reactivates-dormant-defect/anthropic/transcript.txt",
+  "rawOutputPath": "data/phase-19-candidate-review-runs/rollback-reactivates-dormant-defect/anthropic/raw-review.json",
+  "rawOutputSha256": "5eab5347933b2285eeabb5500ceee092c4fd59730e5c73dd56505631cd4058b8",
+  "metadataPath": "data/phase-19-candidate-review-runs/rollback-reactivates-dormant-defect/anthropic/metadata.json",
+  "runtimeSeconds": 191,
+  "usage": {
+    "inputTokens": 354405,
+    "cachedInputTokens": 320589,
+    "outputTokens": 14062,
+    "costUsd": 0.8510425000000001,
+    "source": "claude `result` event `usage` and `total_cost_usd`"
+  },
+  "costUsd": 0.8510425000000001
+}

@@ -1,0 +1,42 @@
+{
+  "runId": "ui-haiku-1",
+  "familyId": "ui-action-record-replay",
+  "readerId": "phase19-ui-blind-04-anthropic",
+  "providerFamily": "anthropic",
+  "label": "capability",
+  "rationale": "Every one of the 62 failing cells maps onto an obligation the visible package states outright, and the rig measured the submitted code. (1) All 33 no_forbidden_effect failures are 'suppressed' cells: subject.mjs calls app.submit/app.click first and only afterwards reads app.confirmationPresent(), so the irreversible effect fires although no confirmation was ever observed — precisely what SPEC.md R4 forbids ('must not complete until a confirmation has been observed and accepted. An absent dialog is not a confirmation') and what README grades as 'no irreversible effect fires when it should not'. They occur only for none/node_reordered/node_wrapped/text_changed, i.e. exactly the traces that reach the irreversible step. (2) All 28 replay_idempotent failures are settled r2 cells with a confirmation-bearing target, and they follow from the same inversion: the effect fires, then the confirmation branch breaks out before thisReplayCompleted.add(step.index), so the record R5 says is 'your job' never captures the fired step and the second replay repeats it. (3) All 16 unreplayable_reported failures are exactly d4 attribute_renamed/node_removed with a pending region: the subject halts at the earlier pending step and never resolves the permanently gone step-4 target, so it reports 'halted' where SPEC.md's outcome semantics and README require the trace to be 'reported as such rather than half-run' — SPEC.md names this very error ('Reporting halted for a trace whose target is gone tells an operator to wait for something that will never happen'), and examples/example-3-node_removed.json repeats it ('halting part-way through is a different and wrong answer'). The nearest alternative, spec-underspecified, would have to rest on family (3), arguing the package never fixes precedence between a pending region and a later vanished target; it is rejected because the package does fix it twice over — the outcome table defines 'unreplayable' as a property of the trace ('can never replay as recorded'), README's grading list names half-running such a trace as the failure, and example-3 demonstrates the required outcome — while families (1) and (2), 49 of the 62 cells, rest on R4 and R5 verbatim and no reading of the package permits them. harness-contract-violation is rejected because the host kept its promises: replay was called twice with the same trace and the subject's in-memory Map survived between calls, proven by 21/21 absent+settled+r2 replayable traces passing replay_idempotent; only confirmation-bearing cells fail. infrastructure is rejected because status=completed, counts=true, 324/324 scenarios graded with 0 host errors in 167s, scenarioSetId replay-324-2255de40 matches MANIFEST.json, and the failure signature is reproducible from the submitted source's own act-then-observe ordering. package-leak is rejected because no hidden artifact (verify.ts, reference.ts, mutants.ts, runner.ts, app.ts, matrix.json, scenarios.json) appears among the visible files; the disclosed mutation space is deliberate per README and revealed no expected outcome. spec-contradiction is rejected because the three failed check names enforce R4, R5 and the outcome table as written, and the pending/gone cells involve a pending region distinct from the removed target, so nothing the verifier demands conflicts with a stated rule.",
+  "evidenceRead": [
+    "challenge/PACKET.json:instructions",
+    "challenge/PACKET.json:closedVocabulary",
+    "challenge/PACKET.json:decisionRule",
+    "challenge/PACKET.json:excluded",
+    "challenge/PACKET.json:requiredOutput",
+    "evidence.challenge MANIFEST.json (visibleFiles, hiddenArtifacts, scenarioSetId replay-324-2255de40)",
+    "evidence.challenge README.md (grading list; replay may be called twice; refusing everything fails)",
+    "evidence.challenge SPEC.md (R1-R7, outcome semantics for completed/halted/unreplayable, mutation space, facade, action kinds)",
+    "evidence.challenge types.ts (QueryResult.pending/matches, StepAudit, ReplayReport, AppFacade.confirmationPresent/acceptConfirmation)",
+    "evidence.challenge starter/subject.mjs",
+    "evidence.challenge examples/example-1-none.json",
+    "evidence.challenge examples/example-2-node_wrapped.json",
+    "evidence.challenge examples/example-3-node_removed.json (note: unreplayable required, halting part-way is wrong)",
+    "evidence.submission subject.mjs (full source: act-then-observe confirmation ordering, thisReplayCompleted bookkeeping, matches===0 pending branch)",
+    "evidence.transcript",
+    "evidence.countability (counts=true, classification=completed)",
+    "evidence.verifierOutput.detail (62/324 scenarios failed, 0 host errors, subprocess isolation)",
+    "evidence.verifierOutput.cells (all 324; tallied 33 no_forbidden_effect, 28 replay_idempotent, 16 unreplayable_reported and cross-tabulated by mutation/depth/confirmation/async/replay-count)",
+    "evidence.normalizedResult (status, scenarioSetId, runtimeSeconds=167, isolation)"
+  ],
+  "packetPath": "data/phase-19-ui-label-packets/ui-blind-04.json",
+  "packetSha256": "1cb3b57f4191c71545b1822daaae3ae255632ef38c11a4ca70c823e63e2bfe3d",
+  "independentlyProduced": true,
+  "blindedTo": [
+    "other-reader-label",
+    "author-diagnosis",
+    "cross-cell-outcomes",
+    "stopping-decision",
+    "existing root-cause sidecar",
+    "other UI trial outcomes",
+    "family promotion status",
+    "research ranking"
+  ]
+}

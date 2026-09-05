@@ -1,0 +1,34 @@
+{
+  "view": {
+    "orderId": "order-31-5",
+    "nowHour": 1031,
+    "names": [
+      {
+        "fqdn": "n1-s31.example",
+        "validatedAtHour": 1031,
+        "cachedCaa": "ALLOW"
+      },
+      {
+        "fqdn": "n2-s31.example",
+        "validatedAtHour": 1007,
+        "cachedCaa": "ALLOW"
+      },
+      {
+        "fqdn": "n3-s31.example",
+        "validatedAtHour": 1023,
+        "cachedCaa": "ALLOW"
+      },
+      {
+        "fqdn": "n4-s31.example",
+        "validatedAtHour": 312,
+        "cachedCaa": "ALLOW"
+      },
+      {
+        "fqdn": "n5-s31.example",
+        "validatedAtHour": 1022,
+        "cachedCaa": "ALLOW"
+      }
+    ]
+  },
+  "note": "Five names of mixed age. Some are inside the recheck window and some are not; the report must carry one result per name in this order."
+}

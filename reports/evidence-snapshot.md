@@ -23,6 +23,7 @@ since changed is superseded, preserved, and not in this column.
 | `access-token-scope-expansion` | 384 | 0 | 0 | 0 | 3 | not measurable — fewer than 2 counted failing subjects | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced`, `not-already-solved` |
 | `audit-truth-financial-workflow` | not built | — | — | — | — | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
 | `browser-action-replay` | not built | — | — | — | — | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
+| `caa-revalidation` | 24 | 4 | 0 | 0 | 3 | not measurable — fewer than 2 counted failing subjects | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced`, `not-already-solved` |
 | `checker-required-memory-poisoning` | 792 | 1 | 1 | 0 | 12 | not measurable — fewer than 2 counted failing subjects | human-ready | adversarial-audited | **NOT-READY**: `difficulty-evidenced` |
 | `dao-descendant` | 24 | 2 | 0 | 0 | 1 | not measurable — fewer than 2 counted failing subjects | reference-solvable | adversarial-ready | **NOT-READY**: `difficulty-evidenced`, `not-already-solved` |
 | `delegated-wallet-scope-reconciliation` | 804 | 0 | 0 | 0 | 3 | not measurable — fewer than 2 counted failing subjects | human-ready | adversarial-ready | **NOT-READY**: `difficulty-evidenced` |
@@ -55,6 +56,7 @@ anywhere by hand.
 | family | current package hash | counted | superseded |
 |---|---|---:|---:|
 | `access-token-scope-expansion` | `8ae0950dea093d35d98b12d1c8c1bde5` | 0 | 1 |
+| `caa-revalidation` | `c2948f2c26f2231ceaa47d0ec2d3f04a` | 4 | 0 |
 | `checker-required-memory-poisoning` | `448f2f816c51030cc97a374816226168` | 1 | 0 |
 | `dao-descendant` | `9d89b49307a960f65f2e6e8f204fd15e` | 2 | 0 |
 | `delegated-wallet-scope-reconciliation` | `45f27b644a84364e3d3855f68cd243a2` | 0 | 1 |
@@ -66,7 +68,7 @@ anywhere by hand.
 | `ui-action-record-replay` | `1050e79f4804a96a5327d50dd81765b0` | 5 | 0 |
 | `ui-replay-live-dom` | `18c3f5afc5973604205cd7df23ce4cad` | 1 | 0 |
 
-Repo-wide across package-backed families: **19 counted**, 15 superseded.
+Repo-wide across package-backed families: **23 counted**, 15 superseded.
 
 ## Imported historical evidence
 

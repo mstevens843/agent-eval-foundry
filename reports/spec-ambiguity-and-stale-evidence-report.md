@@ -6,7 +6,7 @@ Every trial this repository holds, what state it is in, and what a repair costs.
 
 | state | count | meaning |
 |---|---:|---|
-| `counted` | 19 | graded, and run against the challenge this family produces today |
+| `counted` | 23 | graded, and run against the challenge this family produces today |
 | `registered-variant` | 2 | graded against a preregistered material variant; valid for that profile, excluded from the canonical family bank |
 | `superseded` | 15 | graded, then invalidated when the family it measured was repaired |
 | `refused` | 0 | the provider declined; never an attempt, never a failure |
@@ -23,6 +23,17 @@ Current challenge hash: `8ae0950dea093d35d98b12d1c8c1bde5`.
 | run | model | state | ran against |
 |---|---|---|---|
 | `access-token-2026-08-o1` | openai/gpt-5.6-sol | **superseded** | `33cc98364ce2a6b3f9490e54937955d8` ≠ current |
+
+### `caa-revalidation`
+
+Current challenge hash: `c2948f2c26f2231ceaa47d0ec2d3f04a`.
+
+| run | model | state | ran against |
+|---|---|---|---|
+| `phase17-caa-slot-1-openai-attempt-1` | openai/gpt-5.6-sol | counted | `c2948f2c26f2231ceaa47d0ec2d3f04a` |
+| `phase17-caa-slot-2-anthropic-attempt-1` | claude opus | counted | `c2948f2c26f2231ceaa47d0ec2d3f04a` |
+| `phase17-caa-slot-3-openai-attempt-1` | openai/gpt-5.6-sol | counted | `c2948f2c26f2231ceaa47d0ec2d3f04a` |
+| `phase17-caa-slot-4-anthropic-attempt-1` | claude opus | counted | `c2948f2c26f2231ceaa47d0ec2d3f04a` |
 
 ### `checker-required-memory-poisoning`
 

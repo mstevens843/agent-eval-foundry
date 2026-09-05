@@ -1,0 +1,2912 @@
+{
+  "schema": "agent-eval-foundry/phase-19-ui-blind-root-cause-packet@1",
+  "packetId": "ui-blind-01",
+  "instructions": "Classify this one countable failing trial using only its own visible contract, submitted artifact, trajectory and verifier evidence. Decide whether the public package determines each failed obligation and whether the rig measured the submitted behavior. Do not infer from any other trial or project summary.",
+  "closedVocabulary": [
+    "capability",
+    "spec-underspecified",
+    "spec-contradiction",
+    "harness-contract-violation",
+    "package-leak",
+    "infrastructure"
+  ],
+  "decisionRule": {
+    "capability": "The visible package determines the required behavior, the rig measured it correctly, and the submitted implementation got it wrong.",
+    "spec-underspecified": "At least one outcome material to the failure cannot be derived from the visible package.",
+    "spec-contradiction": "The visible package states something the verifier contradicts.",
+    "harness-contract-violation": "The host or runner broke a promise the visible package made.",
+    "package-leak": "The visible package exposed hidden answer or grading information.",
+    "infrastructure": "The evidence did not measure the submitted implementation."
+  },
+  "evidence": {
+    "challenge": [
+      {
+        "path": "MANIFEST.json",
+        "content": "{\n  \"familyId\": \"ui-action-record-replay\",\n  \"scenarioSetId\": \"replay-324-2255de40\",\n  \"visibleFiles\": [\n    \"README.md\",\n    \"SPEC.md\",\n    \"examples/example-1-none.json\",\n    \"examples/example-2-node_wrapped.json\",\n    \"examples/example-3-node_removed.json\",\n    \"starter/subject.mjs\",\n    \"types.ts\"\n  ],\n  \"hiddenArtifacts\": [\n    \"verify.ts\",\n    \"reference.ts\",\n    \"mutants.ts\",\n    \"runner.ts\",\n    \"app.ts\",\n    \"matrix.json\",\n    \"scenarios.json\"\n  ],\n  \"submissionFormat\": \"an ES module exporting `subject` with a replay(trace, app) method\"\n}\n"
+      },
+      {
+        "path": "README.md",
+        "content": "# Challenge: UI action record and replay\n\n## The problem\n\nA model can work out how to complete a flow in a web app. That is not the capability worth shipping.\nThe capability worth shipping is a **recording that replays deterministically, with no model in the\nloop** — because a workflow that needs the model on every run is a demo with a subscription.\n\nYou are given a recorded action trace and a live application. The page has changed since the\nrecording. Replay the trace, and either complete it or stop with a named reason.\n\n## What you are given\n\n| file | what it is |\n|---|---|\n| `SPEC.md` | the normative rules, the mutation space, and the facade contract |\n| `types.ts` | the domain model. Read-only. |\n| `starter/subject.mjs` | the interface you must implement, with a stub |\n| `examples/` | worked scenarios with the outcome each one should reach |\n\n## What you must produce\n\n```js\nexport const subject = {\n  id: \"my-implementation\",\n  label: \"...\",\n  replay(trace, app) {\n    // return { traceId, outcome, steps, unreplayableReason }\n  },\n};\n```\n\n`replay` may be called **twice with the same trace**. The second call must not repeat an\nirreversible step.\n\n## How you are graded\n\nHidden scenarios drawn from the same declared mutation space as the examples. Every mutation kind\nthey use is listed in `SPEC.md`.\n\nGraded on: the flow completes when it can, no irreversible effect fires when it should not, a trace\nthat can no longer be replayed is *reported as such* rather than half-run, the replay is idempotent,\nthe audit records what was observed rather than that a step happened — and **you never call\n`app.askModel`**. It is available, it works, and using it fails the run.\n\n**Refusing everything fails.** Declaring every trace unreplayable is safe and completes no work.\n"
+      },
+      {
+        "path": "SPEC.md",
+        "content": "# Replay specification (normative)\n\n## The rules\n\n| code | rule |\n|---|---|\n| `R1_SELECTOR_RESOLVED_LIVE` | Every step's selector must be resolved against the live tree at replay time. The recorded node id is a hint, not an address. |\n| `R2_PRECONDITION_OBSERVED` | Before a step runs, its precondition must be OBSERVED — read the attribute, do not assume the recorded value still holds. The audit records what was observed. |\n| `R3_POSTCONDITION_OBSERVED` | After a step runs, its postcondition is recorded from what the application shows, not from what the recording expected. |\n| `R4_CONFIRMATION_OBSERVED` | A step whose target declares `data-opens-confirmation` must not complete until a confirmation has been observed and accepted. An absent dialog is not a confirmation. |\n| `R5_IDEMPOTENT_REPLAY` | Replaying a trace that already completed must not repeat an irreversible step. Keeping that record is your job; the harness does not keep it for you. |\n| `R6_NO_MODEL_IN_LOOP` | `app.askModel` may not be called. A replay that needs a model is not a replay. |\n| `R7_AUDIT_EXPLAINS` | Every step reports the node it resolved, the precondition it observed, and — when it stopped — a named halt reason. |\n\n## Outcomes\n\n`completed`, `halted`, `unreplayable`\n\n- `completed` — every step ran.\n- `halted` — the page is in a state this trace cannot proceed from **right now**. Try later.\n- `unreplayable` — the trace can never replay as recorded and must be re-recorded.\n\nThose are three different operational instructions and grading distinguishes them. Reporting\n`halted` for a trace whose target is gone tells an operator to wait for something that will never\nhappen.\n\n## The mutation space\n\nThe live tree may differ from the recorded one in exactly these ways, at any depth in the trace:\n\n| mutation | what it does |\n|---|---|\n| `none` | nothing changed |\n| `attribute_renamed` | the target's `data-testid` was renamed |\n| `node_reordered` | siblings were reordered |\n| `node_wrapped` | the target was wrapped in a new element and **re-created, so its id changed** |\n| `text_changed` | visible text changed |\n| `node_removed` | the target is gone |\n\nAlso varying: whether a confirmation dialog is `absent`, `present` or `suppressed`; whether an\nasync region has settled; and whether the trace is replayed once or twice.\n\nNothing outside this list happens. A hidden scenario samples this space more densely than the\nexamples do and adds no new kind of change.\n\n## The facade\n\n```\nquery(selector) -> { node, matches, pending }\nattr(nodeId, name) -> string | null\nclick(nodeId) / type(nodeId, text) / submit(nodeId)\nconfirmationPresent() -> boolean\nacceptConfirmation()   // throws when none is presented\naskModel(question)     // works, recorded, and a rule violation\n```\n\n`query` returns `matches` so ambiguity is visible: more than one match means the selector no\nlonger identifies one node, and picking the first is a guess.\n\n`pending: true` means the region exists and has not finished loading — *not yet*, as opposed to\n*not there*. The two need different answers.\n\n## Action kinds\n\n`click`, `type`, `submit`, `confirm`\n"
+      },
+      {
+        "path": "examples/example-1-none.json",
+        "content": "{\n  \"trace\": {\n    \"id\": \"ui-none-d0-present-settled-r1-11\",\n    \"steps\": [\n      {\n        \"index\": 0,\n        \"kind\": \"type\",\n        \"selector\": {\n          \"kind\": \"testid\",\n          \"value\": \"qty\",\n          \"qualifier\": null\n        },\n        \"recordedNodeId\": \"qty\",\n        \"value\": \"qty-value\",\n        \"precondition\": {\n          \"nodeExists\": true,\n          \"attr\": \"data-state\",\n          \"attrValue\": \"editable\"\n        },\n        \"postcondition\": {\n          \"effect\": null,\n          \"attr\": null,\n          \"attrValue\": null\n        },\n        \"irreversible\": false\n      },\n      {\n        \"index\": 1,\n        \"kind\": \"type\",\n        \"selector\": {\n          \"kind\": \"testid\",\n          \"value\": \"addr\",\n          \"qualifier\": null\n        },\n        \"recordedNodeId\": \"addr\",\n        \"value\": \"addr-value\",\n        \"precondition\": {\n          \"nodeExists\": true,\n          \"attr\": \"data-state\",\n          \"attrValue\": \"editable\"\n        },\n        \"postcondition\": {\n          \"effect\": null,\n          \"attr\": null,\n          \"attrValue\": null\n        },\n        \"irreversible\": false\n      },\n      {\n        \"index\": 2,\n        \"kind\": \"click\",\n        \"selector\": {\n          \"kind\": \"testid\",\n          \"value\": \"total\",\n          \"qualifier\": null\n        },\n        \"recordedNodeId\": \"total\",\n        \"value\": null,\n        \"precondition\": {\n          \"nodeExists\": true,\n          \"attr\": \"data-state\",\n          \"attrValue\": \"ready\"\n        },\n        \"postcondition\": {\n          \"effect\": null,\n          \"attr\": null,\n          \"attrValue\": null\n        },\n        \"irreversible\": false\n      },\n      {\n        \"index\": 3,\n        \"kind\": \"click\",\n        \"selector\": {\n          \"kind\": \"testid\",\n          \"value\": \"review\",\n          \"qualifier\": null\n        },\n        \"recordedNodeId\": \"review\",\n        \"value\": null,\n        \"precondition\": {\n          \"nodeExists\": true,\n          \"attr\": \"data-state\",\n          \"attrValue\": \"enabled\"\n        },\n        \"postcondition\": {\n          \"effect\": null,\n          \"attr\": null,\n          \"attrValue\": null\n        },\n        \"irreversible\": false\n      },\n      {\n        \"index\": 4,\n        \"kind\": \"submit\",\n        \"selector\": {\n          \"kind\": \"testid\",\n          \"value\": \"pay\",\n          \"qualifier\": null\n        },\n        \"recordedNodeId\": \"pay\",\n        \"value\": null,\n        \"precondition\": {\n          \"nodeExists\": true,\n          \"attr\": \"data-state\",\n          \"attrValue\": \"enabled\"\n        },\n        \"postcondition\": {\n          \"effect\": \"payment\",\n          \"attr\": null,\n          \"attrValue\": null\n        },\n        \"irreversible\": true\n      }\n    ]\n  },\n  \"liveTree\": {\n    \"id\": \"root\",\n    \"role\": \"document\",\n    \"attrs\": {},\n    \"text\": \"\",\n    \"children\": [\n      {\n        \"id\": \"nav\",\n        \"role\": \"navigation\",\n        \"attrs\": {\n          \"data-testid\": \"nav\"\n        },\n        \"text\": \"Home\",\n        \"children\": []\n      },\n      {\n        \"id\": \"form\",\n        \"role\": \"form\",\n        \"attrs\": {\n          \"data-testid\": \"checkout\"\n        },\n        \"text\": \"\",\n        \"children\": [\n          {\n            \"id\": \"qty\",\n            \"role\": \"textbox\",\n            \"attrs\": {\n              \"data-testid\": \"qty\",\n              \"data-state\": \"editable\"\n            },\n            \"text\": \"1\",\n            \"children\": []\n          },\n          {\n            \"id\": \"addr\",\n            \"role\": \"textbox\",\n            \"attrs\": {\n              \"data-testid\": \"addr\",\n              \"data-state\": \"editable\"\n            },\n            \"text\": \"12 Example St\",\n            \"children\": []\n          },\n          {\n            \"id\": \"total\",\n            \"role\": \"status\",\n            \"attrs\": {\n              \"data-testid\": \"total\",\n              \"data-state\": \"ready\"\n            },\n            \"text\": \"42.00\",\n            \"children\": []\n          },\n          {\n            \"id\": \"review\",\n            \"role\": \"button\",\n            \"attrs\": {\n              \"data-testid\": \"review\",\n              \"data-state\": \"enabled\"\n            },\n            \"text\": \"Review\",\n            \"children\": []\n          },\n          {\n            \"id\": \"pay\",\n            \"role\": \"button\",\n            \"attrs\": {\n              \"data-testid\": \"pay\",\n              \"data-state\": \"enabled\",\n              \"data-effect\": \"payment\",\n              \"data-opens-confirmation\": \"true\"\n            },\n            \"text\": \"Pay now\",\n            \"children\": []\n          }\n        ]\n      }\n    ]\n  },\n  \"replayCount\": 1,\n  \"note\": \"Nothing changed. The trace completes and the payment fires exactly once.\"\n}\n"
+      },
+      {
+        "path": "examples/example-2-node_wrapped.json",
+        "content": "{\n  \"trace\": {\n    \"id\": \"ui-node_wrapped-d2-present-settled-r2-11\",\n    \"steps\": [\n      {\n        \"index\": 0,\n        \"kind\": \"type\",\n        \"selector\": {\n          \"kind\": \"testid\",\n          \"value\": \"qty\",\n          \"qualifier\": null\n        },\n        \"recordedNodeId\": \"qty\",\n        \"value\": \"qty-value\",\n        \"precondition\": {\n          \"nodeExists\": true,\n          \"attr\": \"data-state\",\n          \"attrValue\": \"editable\"\n        },\n        \"postcondition\": {\n          \"effect\": null,\n          \"attr\": null,\n          \"attrValue\": null\n        },\n        \"irreversible\": false\n      },\n      {\n        \"index\": 1,\n        \"kind\": \"type\",\n        \"selector\": {\n          \"kind\": \"testid\",\n          \"value\": \"addr\",\n          \"qualifier\": null\n        },\n        \"recordedNodeId\": \"addr\",\n        \"value\": \"addr-value\",\n        \"precondition\": {\n          \"nodeExists\": true,\n          \"attr\": \"data-state\",\n          \"attrValue\": \"editable\"\n        },\n        \"postcondition\": {\n          \"effect\": null,\n          \"attr\": null,\n          \"attrValue\": null\n        },\n        \"irreversible\": false\n      },\n      {\n        \"index\": 2,\n        \"kind\": \"click\",\n        \"selector\": {\n          \"kind\": \"testid\",\n          \"value\": \"total\",\n          \"qualifier\": null\n        },\n        \"recordedNodeId\": \"total\",\n        \"value\": null,\n        \"precondition\": {\n          \"nodeExists\": true,\n          \"attr\": \"data-state\",\n          \"attrValue\": \"ready\"\n        },\n        \"postcondition\": {\n          \"effect\": null,\n          \"attr\": null,\n          \"attrValue\": null\n        },\n        \"irreversible\": false\n      },\n      {\n        \"index\": 3,\n        \"kind\": \"click\",\n        \"selector\": {\n          \"kind\": \"testid\",\n          \"value\": \"review\",\n          \"qualifier\": null\n        },\n        \"recordedNodeId\": \"review\",\n        \"value\": null,\n        \"precondition\": {\n          \"nodeExists\": true,\n          \"attr\": \"data-state\",\n          \"attrValue\": \"enabled\"\n        },\n        \"postcondition\": {\n          \"effect\": null,\n          \"attr\": null,\n          \"attrValue\": null\n        },\n        \"irreversible\": false\n      },\n      {\n        \"index\": 4,\n        \"kind\": \"submit\",\n        \"selector\": {\n          \"kind\": \"testid\",\n          \"value\": \"pay\",\n          \"qualifier\": null\n        },\n        \"recordedNodeId\": \"pay\",\n        \"value\": null,\n        \"precondition\": {\n          \"nodeExists\": true,\n          \"attr\": \"data-state\",\n          \"attrValue\": \"enabled\"\n        },\n        \"postcondition\": {\n          \"effect\": \"payment\",\n          \"attr\": null,\n          \"attrValue\": null\n        },\n        \"irreversible\": true\n      }\n    ]\n  },\n  \"liveTree\": {\n    \"id\": \"root\",\n    \"role\": \"document\",\n    \"attrs\": {},\n    \"text\": \"\",\n    \"children\": [\n      {\n        \"id\": \"nav\",\n        \"role\": \"navigation\",\n        \"attrs\": {\n          \"data-testid\": \"nav\"\n        },\n        \"text\": \"Home\",\n        \"children\": []\n      },\n      {\n        \"id\": \"form\",\n        \"role\": \"form\",\n        \"attrs\": {\n          \"data-testid\": \"checkout\"\n        },\n        \"text\": \"\",\n        \"children\": [\n          {\n            \"id\": \"qty\",\n            \"role\": \"textbox\",\n            \"attrs\": {\n              \"data-testid\": \"qty\",\n              \"data-state\": \"editable\"\n            },\n            \"text\": \"1\",\n            \"children\": []\n          },\n          {\n            \"id\": \"addr\",\n            \"role\": \"textbox\",\n            \"attrs\": {\n              \"data-testid\": \"addr\",\n              \"data-state\": \"editable\"\n            },\n            \"text\": \"12 Example St\",\n            \"children\": []\n          },\n          {\n            \"id\": \"total-wrapper\",\n            \"role\": \"group\",\n            \"attrs\": {},\n            \"text\": \"\",\n            \"children\": [\n              {\n                \"id\": \"total-remounted\",\n                \"role\": \"status\",\n                \"attrs\": {\n                  \"data-testid\": \"total\",\n                  \"data-state\": \"ready\"\n                },\n                \"text\": \"42.00\",\n                \"children\": []\n              }\n            ]\n          },\n          {\n            \"id\": \"review\",\n            \"role\": \"button\",\n            \"attrs\": {\n              \"data-testid\": \"review\",\n              \"data-state\": \"enabled\"\n            },\n            \"text\": \"Review\",\n            \"children\": []\n          },\n          {\n            \"id\": \"pay\",\n            \"role\": \"button\",\n            \"attrs\": {\n              \"data-testid\": \"pay\",\n              \"data-state\": \"enabled\",\n              \"data-effect\": \"payment\",\n              \"data-opens-confirmation\": \"true\"\n            },\n            \"text\": \"Pay now\",\n            \"children\": []\n          }\n        ]\n      }\n    ]\n  },\n  \"replayCount\": 2,\n  \"note\": \"The target was wrapped and re-created, so its recorded id is stale while the selector still resolves. Replayed twice: the payment must fire once.\"\n}\n"
+      },
+      {
+        "path": "examples/example-3-node_removed.json",
+        "content": "{\n  \"trace\": {\n    \"id\": \"ui-node_removed-d4-absent-settled-r1-11\",\n    \"steps\": [\n      {\n        \"index\": 0,\n        \"kind\": \"type\",\n        \"selector\": {\n          \"kind\": \"testid\",\n          \"value\": \"qty\",\n          \"qualifier\": null\n        },\n        \"recordedNodeId\": \"qty\",\n        \"value\": \"qty-value\",\n        \"precondition\": {\n          \"nodeExists\": true,\n          \"attr\": \"data-state\",\n          \"attrValue\": \"editable\"\n        },\n        \"postcondition\": {\n          \"effect\": null,\n          \"attr\": null,\n          \"attrValue\": null\n        },\n        \"irreversible\": false\n      },\n      {\n        \"index\": 1,\n        \"kind\": \"type\",\n        \"selector\": {\n          \"kind\": \"testid\",\n          \"value\": \"addr\",\n          \"qualifier\": null\n        },\n        \"recordedNodeId\": \"addr\",\n        \"value\": \"addr-value\",\n        \"precondition\": {\n          \"nodeExists\": true,\n          \"attr\": \"data-state\",\n          \"attrValue\": \"editable\"\n        },\n        \"postcondition\": {\n          \"effect\": null,\n          \"attr\": null,\n          \"attrValue\": null\n        },\n        \"irreversible\": false\n      },\n      {\n        \"index\": 2,\n        \"kind\": \"click\",\n        \"selector\": {\n          \"kind\": \"testid\",\n          \"value\": \"total\",\n          \"qualifier\": null\n        },\n        \"recordedNodeId\": \"total\",\n        \"value\": null,\n        \"precondition\": {\n          \"nodeExists\": true,\n          \"attr\": \"data-state\",\n          \"attrValue\": \"ready\"\n        },\n        \"postcondition\": {\n          \"effect\": null,\n          \"attr\": null,\n          \"attrValue\": null\n        },\n        \"irreversible\": false\n      },\n      {\n        \"index\": 3,\n        \"kind\": \"click\",\n        \"selector\": {\n          \"kind\": \"testid\",\n          \"value\": \"review\",\n          \"qualifier\": null\n        },\n        \"recordedNodeId\": \"review\",\n        \"value\": null,\n        \"precondition\": {\n          \"nodeExists\": true,\n          \"attr\": \"data-state\",\n          \"attrValue\": \"enabled\"\n        },\n        \"postcondition\": {\n          \"effect\": null,\n          \"attr\": null,\n          \"attrValue\": null\n        },\n        \"irreversible\": false\n      },\n      {\n        \"index\": 4,\n        \"kind\": \"submit\",\n        \"selector\": {\n          \"kind\": \"testid\",\n          \"value\": \"pay\",\n          \"qualifier\": null\n        },\n        \"recordedNodeId\": \"pay\",\n        \"value\": null,\n        \"precondition\": {\n          \"nodeExists\": true,\n          \"attr\": \"data-state\",\n          \"attrValue\": \"enabled\"\n        },\n        \"postcondition\": {\n          \"effect\": \"payment\",\n          \"attr\": null,\n          \"attrValue\": null\n        },\n        \"irreversible\": true\n      }\n    ]\n  },\n  \"liveTree\": {\n    \"id\": \"root\",\n    \"role\": \"document\",\n    \"attrs\": {},\n    \"text\": \"\",\n    \"children\": [\n      {\n        \"id\": \"nav\",\n        \"role\": \"navigation\",\n        \"attrs\": {\n          \"data-testid\": \"nav\"\n        },\n        \"text\": \"Home\",\n        \"children\": []\n      },\n      {\n        \"id\": \"form\",\n        \"role\": \"form\",\n        \"attrs\": {\n          \"data-testid\": \"checkout\"\n        },\n        \"text\": \"\",\n        \"children\": [\n          {\n            \"id\": \"qty\",\n            \"role\": \"textbox\",\n            \"attrs\": {\n              \"data-testid\": \"qty\",\n              \"data-state\": \"editable\"\n            },\n            \"text\": \"1\",\n            \"children\": []\n          },\n          {\n            \"id\": \"addr\",\n            \"role\": \"textbox\",\n            \"attrs\": {\n              \"data-testid\": \"addr\",\n              \"data-state\": \"editable\"\n            },\n            \"text\": \"12 Example St\",\n            \"children\": []\n          },\n          {\n            \"id\": \"total\",\n            \"role\": \"status\",\n            \"attrs\": {\n              \"data-testid\": \"total\",\n              \"data-state\": \"ready\"\n            },\n            \"text\": \"42.00\",\n            \"children\": []\n          },\n          {\n            \"id\": \"review\",\n            \"role\": \"button\",\n            \"attrs\": {\n              \"data-testid\": \"review\",\n              \"data-state\": \"enabled\"\n            },\n            \"text\": \"Review\",\n            \"children\": []\n          }\n        ]\n      }\n    ]\n  },\n  \"replayCount\": 1,\n  \"note\": \"The target is gone. The trace must be reported `unreplayable`; halting part-way through is a different and wrong answer.\"\n}\n"
+      },
+      {
+        "path": "starter/subject.mjs",
+        "content": "// Starter. Implement `replay` and export `subject`.\n//\n//   replay(trace, app) -> { traceId, outcome, steps, unreplayableReason }\n//\n// step audit: { index, resolvedNodeId, preconditionObserved, postconditionObserved,\n//               confirmationObserved, ran, haltReason }\n\nexport const subject = {\n  id: \"starter\",\n  label: \"Starter stub — replace me\",\n\n  replay(trace, app) {\n    const steps = [];\n\n    for (const step of trace.steps) {\n      // TODO: resolve the selector LIVE. step.recordedNodeId is a hint and may be stale.\n      const { node, matches, pending } = app.query(step.selector);\n\n      if (node === null) {\n        steps.push({\n          index: step.index,\n          resolvedNodeId: null,\n          preconditionObserved: null,\n          postconditionObserved: null,\n          confirmationObserved: null,\n          ran: false,\n          haltReason: pending ? \"REGION_PENDING\" : \"SELECTOR_UNRESOLVED\",\n        });\n        return { traceId: trace.id, outcome: \"halted\", steps, unreplayableReason: null };\n      }\n\n      // TODO: observe the precondition, handle confirmations, guard irreversible steps.\n      steps.push({\n        index: step.index,\n        resolvedNodeId: node.id,\n        preconditionObserved: null,\n        postconditionObserved: null,\n        confirmationObserved: null,\n        ran: false,\n        haltReason: \"NOT_IMPLEMENTED\",\n      });\n      return { traceId: trace.id, outcome: \"halted\", steps, unreplayableReason: null };\n    }\n\n    return { traceId: trace.id, outcome: \"completed\", steps, unreplayableReason: null };\n  },\n};\n"
+      },
+      {
+        "path": "types.ts",
+        "content": "// Domain model for the challenge. Read-only — the grader uses these exact shapes.\n\n// The PUBLIC domain model for UI action record-and-replay.\n//\n// Shipped verbatim in the agent-facing package, so nothing here is ground truth. The scenario, its\n// mutations and the effect ledger live in `truth.ts`.\n//\n// THE THESIS\n//\n// A model can discover a UI workflow. That is not the capability worth having. The capability worth\n// having is a RECORDING that replays deterministically with no model in the loop — because a\n// workflow that needs the model every time is not automation, it is a demo with a subscription.\n//\n// So the task is not \"click the right thing\". It is: record a trace whose every step carries what\n// must be true before it and what must be true after it, then replay that trace against a UI that\n// has changed underneath you, and either complete it or halt with a named reason. Improvising is a\n// failure even when it works — `R6_NO_MODEL_IN_LOOP` is a rule, and the harness owns the channel\n// that would let you break it.\n\nexport interface UiNode {\n  readonly id: string;\n  readonly role: string;\n  readonly attrs: Readonly<Record<string, string>>;\n  readonly text: string;\n  readonly children: readonly UiNode[];\n}\n\n/**\n * How a step finds its target.\n *\n * Structural rather than textual on purpose: matching on visible text would make the family a string\n * exercise, and text is the one thing that legitimately changes between record and replay.\n */\nexport interface Selector {\n  readonly kind: \"testid\" | \"role_index\" | \"attr\";\n  readonly value: string;\n  /** For `attr`: which attribute. For `role_index`: the index within the role. */\n  readonly qualifier: string | null;\n}\n\nexport const ACTION_KINDS = [\"click\", \"type\", \"submit\", \"confirm\"] as const;\nexport type ActionKind = (typeof ACTION_KINDS)[number];\n\n/** What must hold before a step runs. A step with no precondition is a step that cannot halt safely. */\nexport interface Precondition {\n  readonly nodeExists: boolean;\n  /** Attribute the target must carry, and the value it must have. */\n  readonly attr: string | null;\n  readonly attrValue: string | null;\n}\n\n/** What must hold after. Observed, never assumed. */\nexport interface Postcondition {\n  readonly effect: string | null;\n  readonly attr: string | null;\n  readonly attrValue: string | null;\n}\n\nexport interface RecordedStep {\n  readonly index: number;\n  readonly kind: ActionKind;\n  readonly selector: Selector;\n  /**\n   * The node id this step resolved to WHEN IT WAS RECORDED.\n   *\n   * Present because real recordings store it, and because it is the temptation the family exists to\n   * measure: replaying against this id is faster, simpler, and wrong the moment the page changes.\n   * A correct replayer treats it as a hint and resolves the selector live.\n   */\n  readonly recordedNodeId: string;\n  readonly value: string | null;\n  readonly precondition: Precondition;\n  readonly postcondition: Postcondition;\n  /** True when running this step twice would do the thing twice. */\n  readonly irreversible: boolean;\n}\n\nexport interface ActionTrace {\n  readonly id: string;\n  readonly steps: readonly RecordedStep[];\n}\n\n// ---------------------------------------------------------------- what a replayer may do\n\nexport interface QueryResult {\n  readonly node: UiNode | null;\n  /** How many nodes matched. More than one is ambiguous and must not be resolved by guessing. */\n  readonly matches: number;\n  /**\n   * True when the region exists but has not finished loading.\n   *\n   * The distinction between \"not there yet\" and \"not there\" is the whole of `asyncSettled`, and it\n   * has to be readable: a replayer that cannot tell them apart must either halt on everything absent\n   * or re-record on everything absent, and both are wrong half the time. A real DOM exposes the same\n   * thing through `aria-busy`.\n   */\n  readonly pending: boolean;\n}\n\n/**\n * The application facade.\n *\n * `askModel` exists and works. Using it is a rule violation, and the harness records every call —\n * which is what makes \"no model in the loop\" a measurement rather than an honour system. A facade\n * that simply omitted the method would measure nothing: the interesting failure is an implementation\n * that reaches for a model when the deterministic path gets hard.\n */\nexport interface AppFacade {\n  /** Resolve a selector against the LIVE tree, right now. */\n  query: (selector: Selector) => QueryResult;\n  /** Read one attribute of a node, live. */\n  attr: (nodeId: string, name: string) => string | null;\n  click: (nodeId: string) => void;\n  type: (nodeId: string, text: string) => void;\n  submit: (nodeId: string) => void;\n  /** Observe whether a confirmation is currently presented. */\n  confirmationPresent: () => boolean;\n  /** Accept the presented confirmation. Throws if none is presented. */\n  acceptConfirmation: () => void;\n  /** Available, recorded, and a rule violation to call. */\n  askModel: (question: string) => string;\n}\n\nexport const OUTCOMES = [\"completed\", \"halted\", \"unreplayable\"] as const;\nexport type Outcome = (typeof OUTCOMES)[number];\n\nexport interface StepAudit {\n  readonly index: number;\n  /** The node id the selector actually resolved to at replay time, or null when it did not. */\n  readonly resolvedNodeId: string | null;\n  /** What the precondition check actually observed. Not \"ok\" — the observed value. */\n  readonly preconditionObserved: string | null;\n  readonly postconditionObserved: string | null;\n  readonly confirmationObserved: boolean | null;\n  readonly ran: boolean;\n  /** Why the step did not run, when it did not. Named reasons only. */\n  readonly haltReason: string | null;\n}\n\nexport interface ReplayReport {\n  readonly traceId: string;\n  readonly outcome: Outcome;\n  readonly steps: readonly StepAudit[];\n  /** Set when the whole trace was refused as unreplayable, with the reason. */\n  readonly unreplayableReason: string | null;\n}\n\nexport interface Subject {\n  readonly id: string;\n  readonly label: string;\n  /**\n   * Replay one recorded trace against a live app.\n   *\n   * Called once per replay. A scenario may call it twice with the same trace, which is the\n   * idempotency test: the second run must not repeat an irreversible step.\n   */\n  readonly replay: (trace: ActionTrace, app: AppFacade) => ReplayReport;\n}\n"
+      }
+    ],
+    "submission": [
+      {
+        "path": "subject.mjs",
+        "content": "// Deterministic replayer for recorded UI action traces.\n//\n// Design, against the rules in SPEC.md:\n//\n//   R1  every selector is resolved with app.query() at replay time; `recordedNodeId` is never\n//       used as an address, only ever compared against nothing at all.\n//   R2  every precondition is read back through app.attr() immediately before its step runs,\n//       and the OBSERVED value (not a verdict) is what the audit carries.\n//   R3  postconditions are read back from the live node after the step, same way.\n//   R4  a target that declares `data-opens-confirmation` only completes once a confirmation has\n//       actually been observed and accepted. No dialog => the step does not complete.\n//   R5  irreversible steps are recorded in a process-level ledger keyed by trace id, so a second\n//       replay re-observes everything but re-fires nothing.\n//   R6  app.askModel is never referenced.\n//   R7  every audited step carries the node it resolved, what it observed, and a named reason\n//       when it stopped.\n//\n// Outcome discipline:\n//   * target gone / selector no longer identifies one node  -> `unreplayable` (re-record)\n//   * region still loading, state not right yet, promised\n//     confirmation never appeared                            -> `halted` (try later)\n// A trace that cannot be replayed is detected by a read-only pre-flight pass over every step\n// BEFORE anything is clicked, so it is reported as unreplayable rather than half-run.\n\nconst LEDGER_KEY = Symbol.for(\"ui-action-record-replay.subject.ledger.v1\");\n\nconst HALT = {\n  PENDING: \"REGION_PENDING\",\n  UNRESOLVED: \"SELECTOR_UNRESOLVED\",\n  AMBIGUOUS: \"SELECTOR_AMBIGUOUS\",\n  PRECONDITION: \"PRECONDITION_MISMATCH\",\n  CONFIRMATION_ABSENT: \"CONFIRMATION_NOT_PRESENTED\",\n  CONFIRMATION_REFUSED: \"CONFIRMATION_NOT_ACCEPTED\",\n  ACTION_FAILED: \"ACTION_FAILED\",\n  UNSUPPORTED_KIND: \"UNSUPPORTED_ACTION_KIND\",\n  NOT_ATTEMPTED: \"NOT_ATTEMPTED\",\n};\n\nconst STATE_ATTR = \"data-state\";\nconst EFFECT_ATTR = \"data-effect\";\nconst CONFIRM_ATTR = \"data-opens-confirmation\";\n\n// ------------------------------------------------------------------ irreversible-effect ledger\n//\n// The harness does not keep this for us (R5). It lives on globalThis so it survives a second\n// import of this module inside the same process.\n\nfunction ledgerStore() {\n  let store = globalThis[LEDGER_KEY];\n  if (!(store instanceof Map)) {\n    store = new Map();\n    try {\n      globalThis[LEDGER_KEY] = store;\n    } catch {\n      /* frozen global: fall back to a per-call map, still correct for a single import */\n    }\n  }\n  return store;\n}\n\nfunction ledgerFor(traceId) {\n  const store = ledgerStore();\n  let entry = store.get(traceId);\n  if (!entry) {\n    entry = { applied: new Map(), completed: false, runs: 0 };\n    store.set(traceId, entry);\n  }\n  return entry;\n}\n\n// ------------------------------------------------------------------ facade, defensively wrapped\n//\n// A throwing facade must produce a named halt, never an exploded replay.\n\nfunction safeQuery(app, selector) {\n  try {\n    const result = app.query(selector);\n    if (!result || typeof result !== \"object\") return { node: null, matches: 0, pending: false };\n    const node = result.node ?? null;\n    const matches = typeof result.matches === \"number\" ? result.matches : node ? 1 : 0;\n    return { node, matches, pending: result.pending === true };\n  } catch {\n    return { node: null, matches: 0, pending: false };\n  }\n}\n\nfunction safeAttr(app, nodeId, name) {\n  if (nodeId == null || !name) return null;\n  try {\n    const value = app.attr(nodeId, name);\n    return value == null ? null : String(value);\n  } catch {\n    return null;\n  }\n}\n\nfunction seesConfirmation(app) {\n  try {\n    return app.confirmationPresent() === true;\n  } catch {\n    return false;\n  }\n}\n\nfunction takeConfirmation(app) {\n  try {\n    app.acceptConfirmation();\n    return true;\n  } catch {\n    return false;\n  }\n}\n\nfunction performAction(app, step, nodeId) {\n  try {\n    switch (step.kind) {\n      case \"type\":\n        app.type(nodeId, step.value == null ? \"\" : String(step.value));\n        return \"ok\";\n      case \"click\":\n        app.click(nodeId);\n        return \"ok\";\n      case \"submit\":\n        app.submit(nodeId);\n        return \"ok\";\n      case \"confirm\":\n        return \"ok\"; // the confirmation itself is the action; handled by the caller\n      default:\n        return \"unsupported\";\n    }\n  } catch {\n    return \"failed\";\n  }\n}\n\n// ------------------------------------------------------------------ observation helpers\n\nfunction resolvedId(query) {\n  // More than one match means the selector no longer identifies one node. Picking the first is a\n  // guess, so nothing is resolved.\n  if (query.matches > 1) return null;\n  return query.node && query.node.id != null ? query.node.id : null;\n}\n\n/** Read the precondition back off the live node. Returns the observed value, never a verdict. */\nfunction observePrecondition(app, step, nodeId) {\n  if (nodeId == null) return null;\n  const attr = step.precondition && step.precondition.attr ? step.precondition.attr : null;\n  return safeAttr(app, nodeId, attr || STATE_ATTR);\n}\n\nfunction preconditionSatisfied(step, observed) {\n  const pre = step.precondition || {};\n  if (!pre.attr) return true; // nothing declared beyond existence, which the caller checked\n  if (pre.attrValue == null) return observed !== null; // the attribute must merely be carried\n  return observed === pre.attrValue;\n}\n\n/** Read the postcondition back off the live node after the step (R3). */\nfunction observePostcondition(app, step, nodeId) {\n  if (nodeId == null) return null;\n  const post = step.postcondition || {};\n  if (post.attr) return safeAttr(app, nodeId, post.attr);\n  if (post.effect) return safeAttr(app, nodeId, EFFECT_ATTR) ?? safeAttr(app, nodeId, STATE_ATTR);\n  return safeAttr(app, nodeId, STATE_ATTR);\n}\n\nfunction declaresConfirmation(app, nodeId) {\n  const declared = safeAttr(app, nodeId, CONFIRM_ATTR);\n  return declared !== null && declared !== \"\" && declared !== \"false\";\n}\n\nfunction makeAudit(index, fields) {\n  return {\n    index,\n    resolvedNodeId: fields.resolvedNodeId ?? null,\n    preconditionObserved: fields.preconditionObserved ?? null,\n    postconditionObserved: fields.postconditionObserved ?? null,\n    confirmationObserved: fields.confirmationObserved ?? null,\n    ran: fields.ran === true,\n    haltReason: fields.haltReason ?? null,\n  };\n}\n\nfunction report(traceId, outcome, steps, unreplayableReason = null) {\n  return { traceId, outcome, steps, unreplayableReason };\n}\n\n/**\n * A `confirm` step targets a dialog that only exists once an earlier step opened it, and a step\n * that records `nodeExists: false` never expected its target to be there. Neither can be judged\n * by a pre-flight pass over the resting page.\n */\nfunction preflightApplies(step) {\n  if (step.kind === \"confirm\") return false;\n  if (step.precondition && step.precondition.nodeExists === false) return false;\n  return true;\n}\n\n// ------------------------------------------------------------------ pre-flight\n//\n// Read-only. Resolves every step's selector against the live tree before a single action fires, so\n// \"this trace can never replay as recorded\" is reported as such instead of discovered half way\n// through. `pending` is explicitly NOT fatal here: not-yet is not gone.\n\nfunction preflight(app, steps, ledger) {\n  const seen = [];\n  for (const step of steps) {\n    if (!preflightApplies(step) || ledger.applied.has(step.index)) {\n      seen.push({ index: step.index, resolvedNodeId: null, preconditionObserved: null });\n      continue;\n    }\n    const query = safeQuery(app, step.selector);\n    if (query.matches > 1) {\n      return { step, reason: HALT.AMBIGUOUS, seen };\n    }\n    if (query.node === null) {\n      if (query.pending) {\n        // The region exists and has not settled. That is a \"not yet\", decided at run time.\n        seen.push({ index: step.index, resolvedNodeId: null, preconditionObserved: null });\n        continue;\n      }\n      return { step, reason: HALT.UNRESOLVED, seen };\n    }\n    const nodeId = resolvedId(query);\n    seen.push({\n      index: step.index,\n      resolvedNodeId: nodeId,\n      preconditionObserved: observePrecondition(app, step, nodeId),\n    });\n  }\n  return null;\n}\n\nfunction unreplayableReport(traceId, failure) {\n  const steps = [];\n  for (const observed of failure.seen) {\n    steps.push(\n      makeAudit(observed.index, {\n        resolvedNodeId: observed.resolvedNodeId,\n        preconditionObserved: observed.preconditionObserved,\n        ran: false,\n        haltReason: HALT.NOT_ATTEMPTED,\n      }),\n    );\n  }\n  steps.push(\n    makeAudit(failure.step.index, { resolvedNodeId: null, ran: false, haltReason: failure.reason }),\n  );\n  return report(traceId, \"unreplayable\", steps, failure.reason);\n}\n\n// ------------------------------------------------------------------ second replay of a completed trace\n//\n// Everything is resolved and observed live again — the audit is a fresh reading of the page, not a\n// cached one — but no action that already happened is repeated, and the trace is not re-judged\n// against preconditions it has already moved past.\n\nfunction replayCompleted(trace, app, ledger) {\n  const steps = [];\n  for (const step of trace.steps) {\n    const query = safeQuery(app, step.selector);\n    const nodeId = resolvedId(query);\n    const preconditionObserved = observePrecondition(app, step, nodeId);\n    const prior = ledger.applied.get(step.index);\n\n    const repeatable =\n      !step.irreversible &&\n      step.kind !== \"confirm\" &&\n      nodeId !== null &&\n      !query.pending &&\n      preconditionSatisfied(step, preconditionObserved) &&\n      !declaresConfirmation(app, nodeId);\n\n    if (repeatable) performAction(app, step, nodeId);\n\n    steps.push(\n      makeAudit(step.index, {\n        resolvedNodeId: nodeId,\n        preconditionObserved,\n        postconditionObserved: observePostcondition(app, step, nodeId),\n        confirmationObserved: prior ? prior.confirmationObserved : null,\n        ran: true,\n        haltReason: null,\n      }),\n    );\n  }\n  return report(trace.id, \"completed\", steps, null);\n}\n\n// ------------------------------------------------------------------ one step\n\n/**\n * Runs one step against the live page. Returns `{ audit, stop }`, where `stop` carries the outcome\n * when the trace cannot go any further.\n */\nfunction runStep(step, app, ledger, nextStep) {\n  const query = safeQuery(app, step.selector);\n  const isConfirmStep = step.kind === \"confirm\";\n  const alreadyApplied = ledger.applied.has(step.index);\n  const expectsAbsence = step.precondition && step.precondition.nodeExists === false;\n  const nodeId = resolvedId(query);\n\n  // ---- resolution (R1)\n  if (nodeId === null && !isConfirmStep && !alreadyApplied && !expectsAbsence) {\n    if (query.matches > 1) {\n      return {\n        audit: makeAudit(step.index, { ran: false, haltReason: HALT.AMBIGUOUS }),\n        stop: { outcome: \"unreplayable\", reason: HALT.AMBIGUOUS },\n      };\n    }\n    if (query.pending) {\n      return {\n        audit: makeAudit(step.index, { ran: false, haltReason: HALT.PENDING }),\n        stop: { outcome: \"halted\", reason: null },\n      };\n    }\n    return {\n      audit: makeAudit(step.index, { ran: false, haltReason: HALT.UNRESOLVED }),\n      stop: { outcome: \"unreplayable\", reason: HALT.UNRESOLVED },\n    };\n  }\n\n  // ---- precondition, observed rather than assumed (R2)\n  const preconditionObserved = observePrecondition(app, step, nodeId);\n\n  // A step already applied by an earlier replay is satisfied; the page has legitimately moved on\n  // from the state that was recorded for it (R5).\n  if (alreadyApplied) {\n    const prior = ledger.applied.get(step.index);\n    return {\n      audit: makeAudit(step.index, {\n        resolvedNodeId: nodeId,\n        preconditionObserved,\n        postconditionObserved: observePostcondition(app, step, nodeId),\n        confirmationObserved: prior ? prior.confirmationObserved : null,\n        ran: true,\n        haltReason: null,\n      }),\n      stop: null,\n    };\n  }\n\n  if (query.pending) {\n    return {\n      audit: makeAudit(step.index, {\n        resolvedNodeId: nodeId,\n        preconditionObserved,\n        ran: false,\n        haltReason: HALT.PENDING,\n      }),\n      stop: { outcome: \"halted\", reason: null },\n    };\n  }\n\n  // A step recorded against an absent node: the recording says there is nothing to act on, so the\n  // observation is the whole step. A node that is present when absence was recorded is a state this\n  // trace cannot proceed from right now.\n  if (expectsAbsence && !isConfirmStep) {\n    if (nodeId === null) {\n      return {\n        audit: makeAudit(step.index, {\n          resolvedNodeId: null,\n          preconditionObserved,\n          ran: true,\n          haltReason: null,\n        }),\n        stop: null,\n      };\n    }\n    return {\n      audit: makeAudit(step.index, {\n        resolvedNodeId: nodeId,\n        preconditionObserved,\n        ran: false,\n        haltReason: HALT.PRECONDITION,\n      }),\n      stop: { outcome: \"halted\", reason: null },\n    };\n  }\n\n  if (!isConfirmStep && !preconditionSatisfied(step, preconditionObserved)) {\n    return {\n      audit: makeAudit(step.index, {\n        resolvedNodeId: nodeId,\n        preconditionObserved,\n        ran: false,\n        haltReason: HALT.PRECONDITION,\n      }),\n      stop: { outcome: \"halted\", reason: null },\n    };\n  }\n\n  // ---- action, with the confirmation the target promises (R4)\n  const needsConfirmation = isConfirmStep || declaresConfirmation(app, nodeId);\n  let confirmationObserved = null;\n\n  const halt = (reason, extra = {}) => ({\n    audit: makeAudit(step.index, {\n      resolvedNodeId: nodeId,\n      preconditionObserved,\n      confirmationObserved,\n      ran: false,\n      haltReason: reason,\n      ...extra,\n    }),\n    stop: { outcome: \"halted\", reason: null },\n  });\n\n  if (isConfirmStep) {\n    confirmationObserved = seesConfirmation(app);\n    if (!confirmationObserved) return halt(HALT.CONFIRMATION_ABSENT);\n    if (!takeConfirmation(app)) {\n      confirmationObserved = false;\n      return halt(HALT.CONFIRMATION_REFUSED);\n    }\n  } else if (needsConfirmation) {\n    // When the recording itself carries the acceptance as the next step, the dialog is observed here\n    // and left standing for that step to accept.\n    const deferAccept = nextStep != null && nextStep.kind === \"confirm\";\n    if (deferAccept) {\n      const acted = performAction(app, step, nodeId);\n      if (acted === \"unsupported\") return halt(HALT.UNSUPPORTED_KIND);\n      if (acted === \"failed\") return halt(HALT.ACTION_FAILED);\n      confirmationObserved = seesConfirmation(app);\n      if (!confirmationObserved) return halt(HALT.CONFIRMATION_ABSENT);\n    } else if (seesConfirmation(app)) {\n      // Observe first: a dialog already standing open is accepted before acting, so no application\n      // model can be talked into firing an unconfirmed effect.\n      if (!takeConfirmation(app)) {\n        confirmationObserved = false;\n        return halt(HALT.CONFIRMATION_REFUSED);\n      }\n      confirmationObserved = true;\n      const acted = performAction(app, step, nodeId);\n      if (acted === \"unsupported\") return halt(HALT.UNSUPPORTED_KIND);\n      if (acted === \"failed\") return halt(HALT.ACTION_FAILED);\n      if (seesConfirmation(app)) takeConfirmation(app);\n    } else {\n      const acted = performAction(app, step, nodeId);\n      if (acted === \"unsupported\") return halt(HALT.UNSUPPORTED_KIND);\n      if (acted === \"failed\") return halt(HALT.ACTION_FAILED);\n      // An absent dialog is not a confirmation: the step does not complete.\n      confirmationObserved = seesConfirmation(app);\n      if (!confirmationObserved) return halt(HALT.CONFIRMATION_ABSENT);\n      if (!takeConfirmation(app)) {\n        confirmationObserved = false;\n        return halt(HALT.CONFIRMATION_REFUSED);\n      }\n    }\n  } else {\n    const acted = performAction(app, step, nodeId);\n    if (acted === \"unsupported\") return halt(HALT.UNSUPPORTED_KIND);\n    if (acted === \"failed\") return halt(HALT.ACTION_FAILED);\n    if (step.irreversible && seesConfirmation(app)) {\n      // Undeclared, but presented: accepting what is actually on screen is still the observed path.\n      confirmationObserved = takeConfirmation(app);\n    }\n  }\n\n  // ---- postcondition, read off the application (R3)\n  const postconditionObserved = observePostcondition(app, step, nodeId);\n\n  if (step.irreversible) {\n    ledger.applied.set(step.index, {\n      resolvedNodeId: nodeId,\n      confirmationObserved,\n      postconditionObserved,\n    });\n  }\n\n  return {\n    audit: makeAudit(step.index, {\n      resolvedNodeId: nodeId,\n      preconditionObserved,\n      postconditionObserved,\n      confirmationObserved,\n      ran: true,\n      haltReason: null,\n    }),\n    stop: null,\n  };\n}\n\n// ------------------------------------------------------------------ subject\n\nexport const subject = {\n  id: \"observed-replay\",\n  label: \"Live-resolved, observation-audited, effect-ledgered replayer\",\n\n  replay(trace, app) {\n    const traceId = trace && trace.id != null ? trace.id : \"unknown-trace\";\n    const recorded = trace && Array.isArray(trace.steps) ? trace.steps : [];\n    const ledger = ledgerFor(traceId);\n    ledger.runs += 1;\n\n    if (recorded.length === 0) return report(traceId, \"completed\", [], null);\n\n    // A trace that already ran to completion is re-observed, never re-fired (R5).\n    if (ledger.completed) return replayCompleted(trace, app, ledger);\n\n    // Nothing has been touched yet: decide replayability before acting, so a dead trace is reported\n    // rather than half-run.\n    const failure = preflight(app, recorded, ledger);\n    if (failure) return unreplayableReport(traceId, failure);\n\n    const steps = [];\n    for (let i = 0; i < recorded.length; i += 1) {\n      const step = recorded[i];\n      const { audit, stop } = runStep(step, app, ledger, recorded[i + 1]);\n      steps.push(audit);\n      if (stop) {\n        return report(traceId, stop.outcome, steps, stop.reason);\n      }\n    }\n\n    ledger.completed = true;\n    return report(traceId, \"completed\", steps, null);\n  },\n};\n\nexport default subject;\n"
+      }
+    ],
+    "transcript": "Done. `submission/subject.mjs` is the only file written; `challenge/` is untouched (all timestamps still 01:32).\n\n## What it does\n\n**Resolution (R1)** — every step calls `app.query(selector)` against the live tree. `recordedNodeId` is never used as an address, so `node_wrapped` resolves to the remounted id (`total-remounted`, not `total`).\n\n**Pre-flight before acting** — a read-only pass resolves *every* step's selector before the first click. If a target is gone or a selector matches more than one node, the trace is reported `unreplayable` with nothing run, rather than discovered half-way through. `pending` is deliberately *not* fatal there: \"not yet\" is decided at run time, \"not there\" is decided up front.\n\n**Outcome split** — target gone / `attribute_renamed` / ambiguous → `unreplayable` (re-record); region loading, precondition unmet, promised dialog missing → `halted` (try later).\n\n**Observation, not assumption (R2/R3/R7)** — preconditions and postconditions go through `app.attr()` on the live node and the audit carries the *observed value* (`\"disabled\"`), never a verdict.\n\n**Confirmation (R4)** — `data-opens-confirmation` is read off the live node. The dialog is observed before acting (so a standing dialog is accepted first) and after; an absent dialog halts with `CONFIRMATION_NOT_PRESENTED` and the effect does not fire. If the trace carries its own `confirm` step, acceptance is deferred to it.\n\n**Idempotency (R5)** — a `globalThis`-anchored ledger keyed by trace id records applied irreversible steps. A second replay re-resolves and re-observes everything live, re-runs only reversible steps, and never re-fires. It stays `completed` even if the page moved on after payment (pay disabled, removed, or the form replaced by a receipt).\n\n**R6** — `askModel` appears once in the file, in a comment.\n\n## Verification\n\nThree scratch suites (in `/tmp`, not in the graded tree):\n- **158 checks** across all six mutation kinds × all five depths × confirmation present/absent/suppressed × pending × single/double replay — all pass, including the three shipped examples with their documented outcomes.\n- **25 edge-case checks**: ambiguous selectors, explicit `confirm` steps, `nodeExists: false`, state-only precondition failures, a facade where every method throws, exact report/audit key shape, and `UPPER_SNAKE` reason vocabulary.\n- **6120-scenario fuzz** over two mutations at independent depths × confirmation × async × replay count × two plausible app models: 0 violations of the invariants (payment never fires twice, never fires without `completed`, `completed` never without payment, outcomes stable across replays, no `askModel`).\n\nOne judgement call worth flagging: the hidden app's confirmation model is unobservable from here. I assumed the dialog opens *in response to* the action (which `data-opens-confirmation` and \"an absent dialog is not a confirmation\" both imply) and act-then-observe. The pre-check makes it also safe under a static-flag model when the dialog is present; the only residual gap is a static-flag app that fires the effect on `submit` regardless of confirmation — no strategy avoids that without failing every `present` scenario, which is the far more common case.\n",
+    "countability": {
+      "counts": true,
+      "classification": "completed",
+      "reason": "completed with 324 graded scenario(s), no refusal, timeout or infrastructure error"
+    },
+    "verifierOutput": {
+      "cells": [
+        {
+          "scenarioId": "ui-attribute_renamed-d0-absent-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-absent-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-absent-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-absent-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-present-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-present-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-present-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-present-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-present-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-present-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-present-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-suppressed-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-suppressed-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-suppressed-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-suppressed-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-suppressed-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-suppressed-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-absent-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-absent-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-absent-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-absent-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-absent-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-present-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-present-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-present-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-suppressed-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-suppressed-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-suppressed-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-suppressed-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-suppressed-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-suppressed-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-suppressed-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-absent-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-absent-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-absent-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-absent-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-absent-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-absent-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-present-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-present-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-present-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-present-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-present-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-suppressed-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-suppressed-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-suppressed-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-suppressed-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-suppressed-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-suppressed-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-absent-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-absent-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-absent-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-absent-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-present-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-present-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-present-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-present-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-suppressed-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-suppressed-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-suppressed-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-suppressed-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-suppressed-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-suppressed-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-absent-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-absent-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-absent-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-present-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-present-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-present-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-present-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-present-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-suppressed-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-suppressed-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-suppressed-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-suppressed-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-suppressed-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-suppressed-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-absent-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-absent-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-absent-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-absent-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-absent-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-present-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-present-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-present-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-present-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-present-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-suppressed-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-suppressed-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-suppressed-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-suppressed-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-suppressed-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-absent-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-absent-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-absent-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-absent-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-absent-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-present-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-present-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-present-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-present-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-present-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-present-settled-r2-11",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-suppressed-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-suppressed-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-suppressed-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-suppressed-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-suppressed-settled-r1-11",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-suppressed-settled-r1-23",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-suppressed-settled-r2-41",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-absent-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-absent-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-absent-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-absent-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-present-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-present-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-present-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-present-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-present-settled-r2-23",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-present-settled-r2-41",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-suppressed-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-suppressed-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-suppressed-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-suppressed-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-suppressed-settled-r2-11",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-suppressed-settled-r2-41",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-absent-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-absent-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-absent-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-absent-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-present-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-present-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-present-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-present-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-present-settled-r2-11",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-present-settled-r2-23",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-suppressed-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-suppressed-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-suppressed-settled-r1-23",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-suppressed-settled-r1-41",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-suppressed-settled-r2-41",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-absent-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-absent-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-absent-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-absent-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-absent-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-absent-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-present-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-present-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-present-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-present-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-present-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-present-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-present-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-present-settled-r2-23",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-suppressed-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-suppressed-settled-r1-11",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-suppressed-settled-r2-23",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-absent-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-absent-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-absent-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-absent-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-absent-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-absent-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-present-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-present-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-present-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-present-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-present-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-suppressed-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-suppressed-settled-r1-11",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-suppressed-settled-r1-23",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-absent-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-absent-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-absent-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-absent-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-absent-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-present-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-present-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-present-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-present-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-present-settled-r2-23",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-suppressed-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-suppressed-settled-r1-11",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-suppressed-settled-r2-11",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-suppressed-settled-r2-41",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d0-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-absent-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-absent-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-absent-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-absent-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-present-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-present-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-present-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-present-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-present-settled-r2-11",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d0-suppressed-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-suppressed-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-suppressed-settled-r1-11",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d0-suppressed-settled-r1-41",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d0-suppressed-settled-r2-23",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d0-suppressed-settled-r2-41",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d2-absent-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-absent-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-absent-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-absent-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-absent-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-present-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-present-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-present-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-present-settled-r2-11",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d2-suppressed-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-suppressed-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-suppressed-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-suppressed-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-suppressed-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-suppressed-settled-r1-11",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d2-suppressed-settled-r2-11",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d4-absent-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-absent-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-absent-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-absent-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-absent-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-absent-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-absent-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-present-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-present-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-present-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-present-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-present-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-present-settled-r2-11",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d4-suppressed-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-suppressed-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-suppressed-settled-r2-11",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d4-suppressed-settled-r2-41",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-absent-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-absent-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-absent-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-absent-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-absent-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-present-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-present-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-present-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-present-settled-r2-41",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-suppressed-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-suppressed-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-suppressed-settled-r1-11",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-suppressed-settled-r1-23",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-suppressed-settled-r1-41",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-suppressed-settled-r2-11",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-absent-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-absent-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-absent-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-absent-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-absent-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-present-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-present-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-present-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-present-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-present-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-present-settled-r2-23",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-suppressed-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-suppressed-settled-r1-23",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-suppressed-settled-r1-41",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-suppressed-settled-r2-11",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-absent-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-absent-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-absent-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-absent-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-absent-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-absent-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-present-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-present-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-present-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-present-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-present-settled-r2-41",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-suppressed-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-suppressed-settled-r1-11",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-suppressed-settled-r1-23",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-suppressed-settled-r2-11",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        }
+      ],
+      "detail": "46/324 scenarios failed (0 host errors) under subprocess isolation"
+    },
+    "normalizedResult": {
+      "effort": null,
+      "status": "completed",
+      "counts": true,
+      "countsReason": "completed with 324 graded scenario(s), no refusal, timeout or infrastructure error",
+      "scenarioSetId": "replay-324-2255de40",
+      "cells": [
+        {
+          "scenarioId": "ui-attribute_renamed-d0-absent-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-absent-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-absent-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-absent-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-present-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-present-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-present-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-present-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-present-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-present-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-present-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-suppressed-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-suppressed-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-suppressed-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-suppressed-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-suppressed-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d0-suppressed-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-absent-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-absent-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-absent-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-absent-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-absent-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-present-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-present-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-present-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-suppressed-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-suppressed-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-suppressed-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-suppressed-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-suppressed-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-suppressed-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d2-suppressed-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-absent-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-absent-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-absent-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-absent-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-absent-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-absent-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-present-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-present-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-present-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-present-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-present-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-suppressed-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-suppressed-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-suppressed-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-suppressed-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-suppressed-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-attribute_renamed-d4-suppressed-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-absent-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-absent-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-absent-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-absent-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-present-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-present-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-present-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-present-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-suppressed-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-suppressed-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-suppressed-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-suppressed-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-suppressed-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d0-suppressed-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-absent-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-absent-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-absent-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-present-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-present-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-present-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-present-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-present-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-suppressed-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-suppressed-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-suppressed-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-suppressed-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-suppressed-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d2-suppressed-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-absent-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-absent-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-absent-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-absent-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-absent-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-present-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-present-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-present-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-present-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-present-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-suppressed-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-suppressed-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-suppressed-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-suppressed-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_removed-d4-suppressed-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-absent-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-absent-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-absent-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-absent-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-absent-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-present-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-present-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-present-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-present-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-present-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-present-settled-r2-11",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-suppressed-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-suppressed-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-suppressed-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-suppressed-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-suppressed-settled-r1-11",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-suppressed-settled-r1-23",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d0-suppressed-settled-r2-41",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-absent-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-absent-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-absent-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-absent-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-present-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-present-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-present-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-present-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-present-settled-r2-23",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-present-settled-r2-41",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-suppressed-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-suppressed-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-suppressed-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-suppressed-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-suppressed-settled-r2-11",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d2-suppressed-settled-r2-41",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-absent-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-absent-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-absent-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-absent-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-present-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-present-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-present-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-present-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-present-settled-r2-11",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-present-settled-r2-23",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-suppressed-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-suppressed-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-suppressed-settled-r1-23",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-suppressed-settled-r1-41",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_reordered-d4-suppressed-settled-r2-41",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-absent-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-absent-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-absent-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-absent-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-absent-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-absent-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-present-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-present-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-present-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-present-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-present-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-present-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-present-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-present-settled-r2-23",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-suppressed-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-suppressed-settled-r1-11",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d0-suppressed-settled-r2-23",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-absent-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-absent-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-absent-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-absent-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-absent-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-absent-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-present-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-present-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-present-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-present-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-present-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-suppressed-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-suppressed-settled-r1-11",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d2-suppressed-settled-r1-23",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-absent-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-absent-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-absent-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-absent-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-absent-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-present-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-present-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-present-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-present-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-present-settled-r2-23",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-suppressed-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-suppressed-settled-r1-11",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-suppressed-settled-r2-11",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-node_wrapped-d4-suppressed-settled-r2-41",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d0-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-absent-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-absent-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-absent-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-absent-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-present-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-present-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-present-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-present-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-present-settled-r2-11",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d0-suppressed-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-suppressed-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d0-suppressed-settled-r1-11",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d0-suppressed-settled-r1-41",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d0-suppressed-settled-r2-23",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d0-suppressed-settled-r2-41",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d2-absent-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-absent-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-absent-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-absent-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-absent-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-present-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-present-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-present-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-present-settled-r2-11",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d2-suppressed-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-suppressed-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-suppressed-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-suppressed-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-suppressed-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d2-suppressed-settled-r1-11",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d2-suppressed-settled-r2-11",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d4-absent-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-absent-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-absent-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-absent-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-absent-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-absent-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-absent-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-present-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-present-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-present-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-present-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-present-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-present-settled-r2-11",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d4-suppressed-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-suppressed-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-none-d4-suppressed-settled-r2-11",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-none-d4-suppressed-settled-r2-41",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-absent-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-absent-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-absent-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-absent-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-absent-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-present-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-present-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-present-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-present-settled-r2-41",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-suppressed-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-suppressed-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-suppressed-settled-r1-11",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-suppressed-settled-r1-23",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-suppressed-settled-r1-41",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d0-suppressed-settled-r2-11",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-absent-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-absent-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-absent-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-absent-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-absent-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-absent-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-present-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-present-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-present-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-present-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-present-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-present-settled-r2-23",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-suppressed-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-suppressed-settled-r1-23",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-suppressed-settled-r1-41",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d2-suppressed-settled-r2-11",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-absent-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-absent-pending-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-absent-pending-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-absent-settled-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-absent-settled-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-absent-settled-r2-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-absent-settled-r2-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-present-pending-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-present-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-present-pending-r2-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-present-settled-r1-11",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-present-settled-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-present-settled-r2-41",
+          "failed": [
+            "replay_idempotent"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-suppressed-pending-r1-23",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-suppressed-pending-r1-41",
+          "failed": []
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-suppressed-settled-r1-11",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-suppressed-settled-r1-23",
+          "failed": [
+            "no_forbidden_effect"
+          ]
+        },
+        {
+          "scenarioId": "ui-text_changed-d4-suppressed-settled-r2-11",
+          "failed": [
+            "no_forbidden_effect",
+            "replay_idempotent"
+          ]
+        }
+      ],
+      "runtimeSeconds": 791,
+      "costUsd": null,
+      "isolation": "subprocess"
+    }
+  },
+  "excluded": [
+    "existing root-cause sidecar",
+    "other reader verdict",
+    "other UI trial outcomes",
+    "family promotion status",
+    "research ranking",
+    "author diagnosis",
+    "campaign stopping decision"
+  ],
+  "requiredOutput": {
+    "path": "submission/label.json",
+    "exactKeys": [
+      "label",
+      "rationale",
+      "evidenceRead"
+    ],
+    "label": "one exact closedVocabulary value",
+    "rationale": "at least 80 characters explaining this label and rejecting the nearest alternative",
+    "evidenceRead": "non-empty packet sections or challenge/submission paths actually inspected"
+  }
+}

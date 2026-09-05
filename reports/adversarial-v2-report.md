@@ -6,6 +6,7 @@ model evidence.
 
 | family | v2 records | counted v2 no-bypass | counted v2 bypass | container audits | imports | isolation records | replay ready | probes | claim level |
 |---|---:|---:|---:|---:|---:|---|---|---|---|
+| `caa-revalidation` | 0 | 0 | 0 | 0 | 0 | none | no | n/a | audit-pending |
 | `checker-required-memory-poisoning` | 1 | 1 | 0 | 0 | 0 | fs-sandbox:1 | yes | pass | adversarial-audited |
 | `dao-descendant` | 0 | 0 | 0 | 0 | 0 | none | yes | pass | adversarial-ready |
 | `delegated-wallet-scope-reconciliation` | 0 | 0 | 0 | 0 | 0 | none | yes | pass | adversarial-ready |

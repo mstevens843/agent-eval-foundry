@@ -1,0 +1,245 @@
+{
+  "schema": "agent-eval-foundry/phase-17-package-controls@1",
+  "familyId": "caa-revalidation",
+  "challengeSha256": "c2948f2c26f2231ceaa47d0ec2d3f04a",
+  "scenarioSetId": "revalidation-24-bd3bcd60",
+  "scenarioCount": 24,
+  "spaceSize": 192,
+  "visibleFiles": [
+    "MANIFEST.json",
+    "README.md",
+    "SPEC.md",
+    "examples/example-1-boundary-ages.json",
+    "examples/example-2-single-name.json",
+    "examples/example-3-five-names-mixed.json",
+    "starter/subject.mjs",
+    "types.ts"
+  ],
+  "hiddenArtifacts": [
+    "verify.ts",
+    "reference.ts",
+    "mutants.ts",
+    "runner.ts",
+    "truth.ts",
+    "scenarios.ts",
+    "matrix.json",
+    "answer-matrix.json",
+    "current-authority.json",
+    "query-ledger.json",
+    "reports/"
+  ],
+  "ruleToCheck": [
+    {
+      "ruleCode": "CAA1_RECHECK_EACH_STALE_NAME",
+      "checks": [
+        "caa_per_name_binding"
+      ]
+    },
+    {
+      "ruleCode": "CAA2_FRESH_NAMES_USE_THEIR_OWN_CACHE",
+      "checks": [
+        "caa_applicable_answer"
+      ]
+    },
+    {
+      "ruleCode": "CAA3_CONJUNCTIVE_ISSUANCE",
+      "checks": [
+        "caa_safe_issuance",
+        "caa_decision_faithful"
+      ]
+    },
+    {
+      "ruleCode": "CAA4_ONE_RESULT_PER_NAME_IN_ORDER",
+      "checks": [
+        "caa_result_shape"
+      ]
+    },
+    {
+      "ruleCode": "CAA5_POSITIVE_QUERY_WORK",
+      "checks": [
+        "caa_positive_query_work"
+      ]
+    }
+  ],
+  "activationMap": [
+    {
+      "subjectId": "reference",
+      "intendedCheck": null,
+      "activatedFailing": 0,
+      "activatedTotal": 18,
+      "controlFailing": 0,
+      "controlTotal": 6,
+      "intendedCheckFatalIn": 0
+    },
+    {
+      "subjectId": "first-name-reuse",
+      "intendedCheck": "caa_per_name_binding",
+      "activatedFailing": 18,
+      "activatedTotal": 18,
+      "controlFailing": 0,
+      "controlTotal": 6,
+      "intendedCheckFatalIn": 18
+    },
+    {
+      "subjectId": "boundary-inclusive",
+      "intendedCheck": "caa_applicable_answer",
+      "activatedFailing": 11,
+      "activatedTotal": 18,
+      "controlFailing": 2,
+      "controlTotal": 6,
+      "intendedCheckFatalIn": 13
+    },
+    {
+      "subjectId": "boundary-lenient",
+      "intendedCheck": "caa_per_name_binding",
+      "activatedFailing": 17,
+      "activatedTotal": 18,
+      "controlFailing": 3,
+      "controlTotal": 6,
+      "intendedCheckFatalIn": 20
+    },
+    {
+      "subjectId": "cardinality-only-queries",
+      "intendedCheck": "caa_per_name_binding",
+      "activatedFailing": 18,
+      "activatedTotal": 18,
+      "controlFailing": 2,
+      "controlTotal": 6,
+      "intendedCheckFatalIn": 18
+    },
+    {
+      "subjectId": "reversed-order",
+      "intendedCheck": "caa_result_shape",
+      "activatedFailing": 18,
+      "activatedTotal": 18,
+      "controlFailing": 4,
+      "controlTotal": 6,
+      "intendedCheckFatalIn": 22
+    },
+    {
+      "subjectId": "no-query",
+      "intendedCheck": "caa_positive_query_work",
+      "activatedFailing": 18,
+      "activatedTotal": 18,
+      "controlFailing": 5,
+      "controlTotal": 6,
+      "intendedCheckFatalIn": 23
+    },
+    {
+      "subjectId": "always-refuse",
+      "intendedCheck": "caa_decision_faithful",
+      "activatedFailing": 7,
+      "activatedTotal": 18,
+      "controlFailing": 4,
+      "controlTotal": 6,
+      "intendedCheckFatalIn": 11
+    },
+    {
+      "subjectId": "always-issue",
+      "intendedCheck": "caa_safe_issuance",
+      "activatedFailing": 11,
+      "activatedTotal": 18,
+      "controlFailing": 2,
+      "controlTotal": 6,
+      "intendedCheckFatalIn": 13
+    },
+    {
+      "subjectId": "fabricated-result",
+      "intendedCheck": "caa_per_name_binding",
+      "activatedFailing": 18,
+      "activatedTotal": 18,
+      "controlFailing": 5,
+      "controlTotal": 6,
+      "intendedCheckFatalIn": 23
+    }
+  ],
+  "checkActivation": {
+    "caa_per_name_binding": 102,
+    "caa_applicable_answer": 70,
+    "caa_safe_issuance": 65,
+    "caa_decision_faithful": 17,
+    "caa_positive_query_work": 49,
+    "caa_result_shape": 22
+  },
+  "neverFiringChecks": [],
+  "starter": {
+    "scenarios": 24,
+    "failing": 23,
+    "fraction": 0.9583
+  },
+  "controls": [
+    {
+      "id": "C1-reference-passes",
+      "screen": "rig integrity, known-good",
+      "held": true,
+      "detail": "the reference failed 0 of 24 graded scenarios"
+    },
+    {
+      "id": "C2-every-mutant-independently-fatal",
+      "screen": "screen 8, independent fatality",
+      "held": true,
+      "detail": "first-name-reuse:caa_per_name_binding=18 boundary-inclusive:caa_applicable_answer=13 boundary-lenient:caa_per_name_binding=20 cardinality-only-queries:caa_per_name_binding=18 reversed-order:caa_result_shape=22 no-query:caa_positive_query_work=23 always-refuse:caa_decision_faithful=11 always-issue:caa_safe_issuance=13 fabricated-result:caa_per_name_binding=23"
+    },
+    {
+      "id": "C3-no-unrelated-mutant-failure",
+      "screen": "screen 8, narrowness",
+      "held": true,
+      "detail": "every graded subject other than the reference fails somewhere in the measured set"
+    },
+    {
+      "id": "C4-starter-fails-widely-without-leaking",
+      "screen": "screen 7, starter",
+      "held": true,
+      "detail": "starter fails 23/24; package leak check: no leak or missing-surface finding"
+    },
+    {
+      "id": "C5-no-op-and-always-refuse-fail",
+      "screen": "screen 6, enforcement of the liveness and approval halves",
+      "held": true,
+      "detail": "no-query=23 always-refuse=11 always-issue=13"
+    },
+    {
+      "id": "C6-malformed-refused",
+      "screen": "B6, an empty input is not a failing input",
+      "held": true,
+      "detail": "a wrong-shaped verification input raises rather than returning a verdict"
+    },
+    {
+      "id": "C7-mechanism-activation",
+      "screen": "screen 2, activation audit",
+      "held": true,
+      "detail": "first-name-reuse fails 18/18 activated and 0/6 control scenarios"
+    },
+    {
+      "id": "C8-witness-isolation-with-canary",
+      "screen": "B5 applied to the isolation control itself",
+      "held": true,
+      "detail": "isolated=true; the deliberately leaky facade tripped the detector=true"
+    },
+    {
+      "id": "C9-deterministic-replay",
+      "screen": "reproducibility",
+      "held": true,
+      "detail": "two independent sweeps produced byte-identical cells"
+    },
+    {
+      "id": "C10-challenge-nonleakage",
+      "screen": "screen 3, content-based leak audit",
+      "held": true,
+      "detail": "no visible file carries the authority witness, the denied-position resolver, or a mutant identifier"
+    },
+    {
+      "id": "C11-registry-and-router-consistent",
+      "screen": "family-list drift",
+      "held": true,
+      "detail": "route, 6 checks and 5 rule codes agree with the family modules"
+    },
+    {
+      "id": "C12-every-public-rule-enforced-and-every-check-fires",
+      "screen": "screen 6 and screen 5, in both directions",
+      "held": true,
+      "detail": "never-firing checks: none; public rules with no check: none"
+    }
+  ],
+  "allControlsHeld": true
+}

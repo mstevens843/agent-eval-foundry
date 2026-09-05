@@ -1,0 +1,72 @@
+[     103ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ https://claude.ai/api/account:0
+[     107ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[    2595ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[    6347ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[   13450ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[   31181ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[   65318ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[  137429ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[  245112ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[  535344ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[  630033ms] [WARNING] Error with Permissions-Policy header: Unrecognized feature: 'attribution-reporting'. @ :0
+[  630147ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[  630150ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ https://claude.ai/api/account:0
+[  631977ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[  635409ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[  644292ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[  661545ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[  692258ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[  749827ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[  888530ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 1177207ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 1482191ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 1799408ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 2135023ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 2409471ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 2764691ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 3026493ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 3305291ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 3576522ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 3846754ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 4142656ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 4492506ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 4792768ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 5065021ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 5312395ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 5602857ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 5905760ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 6146771ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 6493277ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 6777088ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 7019938ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 7331652ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 7667124ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 7915381ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 8266233ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 8579189ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 8921991ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 9167030ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 9455268ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[ 9807498ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[10156196ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[10502539ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[10770846ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[11106368ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[11403457ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[11761231ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[12014551ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[12293818ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[12625494ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[12980094ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[13230014ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[13565845ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[13890885ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[14146697ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[14418522ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[14667407ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[14949575ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[15243049ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[15536397ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[15787164ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[16084530ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0
+[16438615ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://claude.ai/api/frame/76856376-6849-4965-b247-77f5aef8edb5?via=auto_preview&bk=initial:0

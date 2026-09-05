@@ -1,0 +1,23 @@
+{
+  "schema": "agent-eval-foundry/phase-19-ui-reader-run@1",
+  "packetId": "ui-blind-04",
+  "runId": "ui-haiku-1",
+  "familyId": "ui-action-record-replay",
+  "providerFamily": "openai",
+  "packetPath": "data/phase-19-ui-label-packets/ui-blind-04.json",
+  "packetSha256": "1cb3b57f4191c71545b1822daaae3ae255632ef38c11a4ca70c823e63e2bfe3d",
+  "independentlyProduced": true,
+  "providerImage": "agent-eval-foundry/provider-agent:claude-2.1.260-codex-0.152.1",
+  "classification": "completed",
+  "classificationDetail": "artifact produced",
+  "captureLevel": "full",
+  "runtimeSeconds": 166,
+  "usage": {
+    "inputTokens": 565479,
+    "cachedInputTokens": 519040,
+    "outputTokens": 6678,
+    "costUsd": null,
+    "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+  },
+  "costUsd": null
+}

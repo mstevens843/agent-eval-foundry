@@ -119,6 +119,12 @@ const FAMILY_SURFACES: Readonly<Record<string, readonly string[]>> = {
     "cached authority and subject-owned receipt boundary",
     "idempotency and duplicate irreversible spend boundary",
   ],
+  "caa-revalidation": [
+    "host-owned current authorization map versus each name's recorded value",
+    "exact-fqdn query ledger and per-name identity binding",
+    "eight-hour recheck-window boundary",
+    "conjunctive multi-name issuance decision",
+  ],
   "dao-descendant": [
     "durable intent versus current lease epoch",
     "idempotent external tool facade",
@@ -193,6 +199,11 @@ const VERIFIER_PATHS: Readonly<Record<string, readonly string[]>> = {
     "src/families/delegated-wallet-scope-reconciliation/verify.ts",
     "src/families/delegated-wallet-scope-reconciliation/runner.ts",
     "scripts/delegated-wallet-host.mjs",
+  ],
+  "caa-revalidation": [
+    "src/families/caa-revalidation/verify.ts",
+    "src/families/caa-revalidation/runner.ts",
+    "scripts/caa-revalidation-host.mjs",
   ],
   "dao-descendant": [
     "src/families/dao-descendant/verify.ts",

@@ -65,7 +65,7 @@ separately.
 | shared subjects | 0 |
 | threshold | 3 |
 | provider families among them | 0 |
-| counted trials still needed | 11 |
+| counted trials still needed | 14 |
 
 ## What it bought, and what it did not
 

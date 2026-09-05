@@ -86,6 +86,10 @@ for (const [path, args] of [
   ["data/phase-16-probe-results-final.json", ["phase16", "final-probes"]],
   ["data/phase-16-method-comparison-final.json", ["phase16", "final-comparison"]],
   ["data/phase-16-continuation-status.json", ["phase16", "continuation"]],
+  ["data/phase-17-phase16-probe-audit.json", ["phase17", "audit"]],
+  ["data/phase-17-probe-v2-results.json", ["phase17", "probe"]],
+  ["data/phase-17-package-controls.json", ["phase17", "controls"]],
+  ["data/phase-17-trial-ledger.json", ["phase17", "ledger"]],
 ]) {
   if (run(args) !== readFileSync(path, "utf8")) {
     console.error(`STALE  ${path}`);

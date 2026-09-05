@@ -10,6 +10,7 @@
 // shapes, three of which appear here. The other six are pre-registrations.
 
 import { buildAccessTokenChallengePackage } from "../challenge/access-token-package.js";
+import { buildCaaRevalidationChallengePackage } from "../challenge/caa-revalidation-package.js";
 import { buildCheckerRequiredChallengePackage } from "../challenge/checker-required-package.js";
 import { buildDaoDescendantChallengePackage } from "../challenge/dao-descendant-package.js";
 import { buildDelegatedWalletChallengePackage } from "../challenge/delegated-wallet-package.js";
@@ -19,6 +20,7 @@ import { buildLiveDomChallengePackage } from "../challenge/live-dom-package.js";
 import { buildMemoryChallengePackage } from "../challenge/memory-package.js";
 import {
   ACCESS_TOKEN_PROFILE,
+  CAA_REVALIDATION_PROFILE,
   CHECKER_REQUIRED_PROFILE,
   DAO_DESCENDANT_PROFILE,
   DELEGATED_WALLET_PROFILE,
@@ -96,6 +98,12 @@ import * as deployment from "./deployment-model-alias-rollout-drift/runner.js";
 import * as deploymentScenarios from "./deployment-model-alias-rollout-drift/scenarios.js";
 import { RULES as DEPLOYMENT_RULES } from "./deployment-model-alias-rollout-drift/spec.js";
 import { CHECKS as DEPLOYMENT_CHECK_NAMES } from "./deployment-model-alias-rollout-drift/verify.js";
+
+import { BASELINES as CAA_BASELINES, INTENDED_CHECK as CAA_CHECKS } from "./caa-revalidation/mutants.js";
+import * as caa from "./caa-revalidation/runner.js";
+import * as caaScenarios from "./caa-revalidation/scenarios.js";
+import { RULES as CAA_RULES } from "./caa-revalidation/spec.js";
+import { CHECKS as CAA_CHECK_NAMES } from "./caa-revalidation/verify.js";
 
 import { BASELINES as DAO_BASELINES, INTENDED_CHECK as DAO_CHECKS } from "./dao-descendant/mutants.js";
 import * as dao from "./dao-descendant/runner.js";
@@ -550,6 +558,61 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
       "The wallet policy, delegation, token, budget and effect ledgers are deterministic in-process facades. A service-backed descendant would add real wallet RPC confirmation, chain reorg or settlement latency and process isolation around signing.",
   },
   {
+    id: "caa-revalidation",
+    name: "Multi-name certificate authorization revalidation",
+    domain: "certificate issuance authorization across multiple domain identities",
+    mechanisms: ["stale-state", "cardinality-preserved-identity-collapse"],
+    checks: [...CAA_CHECK_NAMES],
+    ruleCodes: CAA_RULES.map((rule) => rule.code),
+    space: caaScenarios.SPACE,
+    knobPurpose: {
+      seed: "selects deterministic order and domain identities and shifts the current hour",
+      domainCount:
+        "the controlling parameter: one rechecked name cannot expose identity collapse, two or more can",
+      agePattern:
+        "places names on both sides of the eight-hour recheck window, including exactly eight and exactly nine",
+      denyPosition:
+        "which rechecked name the authority now denies, resolved against the names actually rechecked so the denied member is not predictably first",
+    },
+    run: () => {
+      const run = caa.runFamily();
+      return sweep(
+        run.cells,
+        run.scenarios,
+        run.spaceSize,
+        caa.toMatrix(run),
+        CAA_CHECKS,
+        CAA_BASELINES,
+        CAA_CHECK_NAMES,
+      );
+    },
+    challenge: buildCaaRevalidationChallengePackage,
+    leakProfile: CAA_REVALIDATION_PROFILE,
+    typesPath: "src/families/caa-revalidation/types.ts",
+    estimatedBuildHours: 24,
+    estimatedFrontierUsd: 40,
+    realism: "simulated-tree",
+    realismGap:
+      "The authorization map and the exact-fqdn ledger are harness-owned and absent from the subject API, but the authority is an in-process facade. A service-backed descendant would add real DNS CAA lookups, resolver latency and failure, record-set parsing, and an ACME order lifecycle around the issuance decision.",
+    hardnessRecipe: {
+      operatorBundle: [
+        "multiple_identities_rather_than_one",
+        "cardinality_preserving_wrong_identity_binding",
+        "mixed_fresh_and_stale_state",
+        "denied_member_away_from_first_position",
+        "cache_current_disagreement_at_the_age_boundary",
+        "concentrate_activated_scenarios",
+      ],
+      verifierProfile: "host-owned-exact-fqdn-ledger+applicable-answer+b6-with-leak-canary",
+      specificationProfile: "phase-16-reviewed-contract-rendered-faithfully",
+      starterProfile: "neutral-recorded-value-skeleton",
+      scenarioSelectionStrategy: "18-activated-plus-6-nonactivation-controls",
+      evidenceStatus: "measured",
+      evidence:
+        "data/phase-17-probe-v2-results.json; data/phase-17-package-controls.json; data/phase-17-trial-ledger.json; reports/PHASE-17-CAA-VALIDATION.md",
+    },
+  },
+  {
     id: "dao-descendant",
     name: "Durable outbox recompute recovery",
     domain: "durable job recovery across uncertain external effects",
@@ -578,11 +641,11 @@ export const BUILT_FAMILIES: readonly BuiltFamily[] = [
     challenge: buildDaoDescendantChallengePackage,
     leakProfile: DAO_DESCENDANT_PROFILE,
     typesPath: "src/families/dao-descendant/types.ts",
+    estimatedBuildHours: 120,
+    estimatedFrontierUsd: 145,
     // The schema field prices a from-scratch family. The measured 0.18 h Phase 9 descendant build
     // stays in hardnessRecipe evidence and the budget's descendantBuildHours; putting it here would
     // silently substitute inherited marginal work for hoursPerFamily.
-    estimatedBuildHours: 120,
-    estimatedFrontierUsd: 145,
     realism: "simulated-tree",
     realismGap:
       "The effect ledger is harness-owned and absent from the subject API, but the tool is simulated. The source task's service-backed version adds a PostgreSQL outbox, independent tool process, socket boundary, lease expiry and crash orchestration.",

@@ -232,6 +232,30 @@ export const DAO_DESCENDANT_PROFILE: LeakProfile = {
   ],
 };
 
+export const CAA_REVALIDATION_PROFILE: LeakProfile = {
+  familyId: "caa-revalidation",
+  forbiddenFilenames: [...FORBIDDEN_FILENAMES, "truth.ts", "scenarios.ts", "answer-matrix.json"],
+  forbiddenContent: [
+    ["export function verify", "the hidden grading function"],
+    ["applicableAnswer", "the host-side applicable-answer computation"],
+    ["firstNameReuse", "the named narrow adversary"],
+    ["MUTANTS", "the hidden mutant bank"],
+    ["selectMeasuredSet", "the hidden scenario selection"],
+    ["CaaAuthorityHarness", "the harness-owned authority and ledger implementation"],
+    ["sealedQueries", "the private exact-fqdn query ledger"],
+    ["CAA_WITNESS", "the private authority witness"],
+    ["deniedIndexFor", "the hidden denied-position resolver"],
+    ["INTENDED_CHECK", "the mutant-to-check answer map"],
+  ],
+  requiredSpecCodes: [
+    "CAA1_RECHECK_EACH_STALE_NAME",
+    "CAA2_FRESH_NAMES_USE_THEIR_OWN_CACHE",
+    "CAA3_CONJUNCTIVE_ISSUANCE",
+    "CAA4_ONE_RESULT_PER_NAME_IN_ORDER",
+    "CAA5_POSITIVE_QUERY_WORK",
+  ],
+};
+
 export const TRADING_RECONCILIATION_PROFILE: LeakProfile = {
   familyId: "trading-reconciliation-recompute",
   forbiddenFilenames: [...FORBIDDEN_FILENAMES, "truth.ts", "answer-matrix.json"],

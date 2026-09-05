@@ -13,6 +13,7 @@ What the families measure, together — and the arithmetic this report refuses t
 | `checker-required-memory-poisoning` | `agent` | 792 | 1 | 178 | 1 | — |
 | `access-token-scope-expansion` | `mutant` | 384 | 9 | 0 | 6 | **3** |
 | `delegated-wallet-scope-reconciliation` | `mutant` | 804 | 10 | 0 | 9 | **3** |
+| `caa-revalidation` | `agent` | 24 | 2 | 24 | 0 | **0** |
 | `dao-descendant` | `agent` | 24 | 2 | 24 | 0 | **0** |
 | `trading-reconciliation-recompute` | `agent` | 24 | 2 | 24 | 0 | **0** |
 | `deployment-rollback-recompute` | `agent` | 24 | 2 | 24 | 0 | **0** |

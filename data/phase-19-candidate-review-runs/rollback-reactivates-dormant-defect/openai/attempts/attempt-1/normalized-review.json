@@ -1,0 +1,43 @@
+{
+  "candidateId": "rollback-reactivates-dormant-defect",
+  "packetSha256": "646a057704f9cc236041fa4c6b9cc0e9ea3e000c54f68e5ae8e5bb60cd10a32b",
+  "providerFamily": "openai",
+  "dimensions": {
+    "source support": "pass",
+    "specific causal mechanism": "pass",
+    "causal depth": "uncertain",
+    "diagnosis radius": "pass",
+    "fair solution-undirected contract": "pass",
+    "structural witness isolation": "pass",
+    "semantic novelty": "pass",
+    "cheap-probe falsifiability": "pass"
+  },
+  "verdict": "kill",
+  "earliestFailedDimension": "causal depth",
+  "rationale": "The SEC incident evidence directly supports flag reuse, dormant-code reachability, partial deployment, and rollback amplification, and the proposed artifact/witness geometry is otherwise concrete. Causal depth is not established, however: the claimed four independently necessary changes are only a future construction gate, while the outcome contract appears to permit a generic safe fleet-wide patch, redeploy, restart, and accurate all-replica report without identifying the deviant replica or its root cause. The packet provides no built reference or ablation showing that this shortcut fails. That missing independence evidence is uncertain and therefore kills the bounded run at causal depth.",
+  "reviewId": "phase19-rollback-reactivates-dormant-defect-openai",
+  "independentlyProduced": true,
+  "blindedTo": [
+    "corrected rank",
+    "numeric decision score",
+    "estimated clean-solve probabilities",
+    "Phase 19 assessment rationale",
+    "prior skeptic verdicts and repairs",
+    "other reader verdict",
+    "author recommendation",
+    "predicted survivor count"
+  ],
+  "transcriptPath": "data/phase-19-candidate-review-runs/rollback-reactivates-dormant-defect/openai/transcript.txt",
+  "rawOutputPath": "data/phase-19-candidate-review-runs/rollback-reactivates-dormant-defect/openai/raw-review.json",
+  "rawOutputSha256": "bd1c60a97624212ba047bfedcfc9ae7b02ca4015032a71fd97b9b7fce552aac8",
+  "metadataPath": "data/phase-19-candidate-review-runs/rollback-reactivates-dormant-defect/openai/metadata.json",
+  "runtimeSeconds": 145,
+  "usage": {
+    "inputTokens": 279981,
+    "cachedInputTokens": 253824,
+    "outputTokens": 5974,
+    "costUsd": null,
+    "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+  },
+  "costUsd": null
+}

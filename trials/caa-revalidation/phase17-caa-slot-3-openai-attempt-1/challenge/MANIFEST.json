@@ -1,0 +1,27 @@
+{
+  "familyId": "caa-revalidation",
+  "scenarioSetId": "revalidation-24-bd3bcd60",
+  "visibleFiles": [
+    "README.md",
+    "SPEC.md",
+    "examples/example-1-boundary-ages.json",
+    "examples/example-2-single-name.json",
+    "examples/example-3-five-names-mixed.json",
+    "starter/subject.mjs",
+    "types.ts"
+  ],
+  "hiddenArtifacts": [
+    "verify.ts",
+    "reference.ts",
+    "mutants.ts",
+    "runner.ts",
+    "truth.ts",
+    "scenarios.ts",
+    "matrix.json",
+    "answer-matrix.json",
+    "current-authority.json",
+    "query-ledger.json",
+    "reports/"
+  ],
+  "submissionFormat": "an ES module exporting `subject` with run(view, caa)"
+}

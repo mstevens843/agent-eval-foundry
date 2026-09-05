@@ -201,6 +201,31 @@
         "data/phase-14-effect-ledger.json#E2-starter"
       ],
       "confidence": "medium"
+    },
+    {
+      "id": "grade-the-obligation-from-the-external-party-log",
+      "category": "validity-control",
+      "name": "Grade a behavioural obligation from the counterparty's record, not from the submitted source",
+      "changed": "The requirement that several rechecks be in flight together is checked against the authority's own root-owned append-only tick-stamped log of when each query started and finished, rather than against anything visible in the submission.",
+      "stayedFixed": "The published contract (SEMANTICS.md section 3) and the defect the task asks the agent to repair.",
+      "beforeEvidence": "The claim that a repair which fixes identifier pairing by deleting the goroutines would still be rejected was asserted during construction and never tested.",
+      "afterEvidence": "Two pairing-correct variants were built and graded. `serial-repair` (fan-out deleted, queries issued sequentially) scored 24/24 scenarios failed on both frozen suites, reward 0. `mutex-serialized` (goroutines retained, a mutex held across the query so the fan-out is cosmetic) failed identically, 24/24 on both suites, reward 0. Both fail only `rechecks_issued_together`, and only on the scenarios carrying two or more pending identifiers. The reference passes 0/24 failed on both suites.",
+      "measurementStatus": "measured",
+      "fairnessOutcome": "fair: the obligation is published verbatim in SEMANTICS.md section 3 ('An order carrying several identifiers to recheck costs one authority round trip, not one per identifier: their rechecks are in flight together') and restated in instruction.md, and checks.py maps the check to that section. This is stated-and-enforced, not a grader scoring unpublished behaviour.",
+      "verifierIntegrityEffect": "closed the degenerate repair route. Because the check reads observed overlap at the counterparty rather than the shape of the submitted code, a submission cannot satisfy it by merely looking concurrent - the mutex variant keeps every goroutine and still fails.",
+      "solveRateEffect": {
+        "countable": false,
+        "before": null,
+        "after": null,
+        "note": "This operator was part of the Phase 18 bundle, which was applied all at once and produced 3 of 3 clean solves at time of writing. It closed a shortcut; it did not measurably make the task hard. It must not be credited with hardness."
+      },
+      "capabilityAttribution": "not-applicable: this constrains what a passing repair must actually do, it does not attribute difficulty to a capability",
+      "provenance": [
+        "data/phase-18-lazy-repair-probe.json",
+        "tasks/caa-revalidation-repair/tests/checks.py (rechecks_issued_together, CHECK_SECTIONS)",
+        "tasks/caa-revalidation-repair/tests/authority.py (_TICK/_EVENTS append-only log)",
+        "tasks/caa-revalidation-repair/environment/app/spec/SEMANTICS.md section 3"
+      ]
     }
   ]
 }

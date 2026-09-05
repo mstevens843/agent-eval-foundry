@@ -1,0 +1,6 @@
+{
+  "answers": {
+    "shop.example.test": "PERMIT",
+    "old.example.test": "FORBID"
+  }
+}

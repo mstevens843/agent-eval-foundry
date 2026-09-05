@@ -1,0 +1,47 @@
+{
+  "delay_ms": {
+    "a.example.test": 140,
+    "b.example.test": 20,
+    "c.example.test": 60
+  },
+  "fail_with": {},
+  "id": "ctl-answers-agree",
+  "orders": [
+    {
+      "at": "2031-03-04T12:00:00Z",
+      "id": "o1",
+      "identifiers": [
+        "a.example.test",
+        "b.example.test",
+        "c.example.test"
+      ]
+    },
+    {
+      "at": "2031-03-04T15:00:00Z",
+      "id": "o2",
+      "identifiers": [
+        "c.example.test"
+      ]
+    }
+  ],
+  "policy": {
+    "a.example.test": "PERMIT",
+    "b.example.test": "PERMIT",
+    "c.example.test": "PERMIT"
+  },
+  "store": {
+    "a.example.test": {
+      "checked_at": "2031-03-03T06:00:00Z",
+      "decision": "FORBID"
+    },
+    "b.example.test": {
+      "checked_at": "2031-03-03T06:00:00Z",
+      "decision": "FORBID"
+    },
+    "c.example.test": {
+      "checked_at": "2031-03-03T06:00:00Z",
+      "decision": "FORBID"
+    }
+  },
+  "why": "three identifiers are rechecked and the authority answers them all alike, so any permutation is invisible"
+}

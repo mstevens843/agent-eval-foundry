@@ -25,6 +25,12 @@ import {
 } from "../families/access-token-scope-expansion/scenarios.js";
 import { verify as accessVerify } from "../families/access-token-scope-expansion/verify.js";
 import {
+  enumerateSpace as caaEnumerate,
+  generateScenarios as caaGenerate,
+  selectMeasuredSet as caaSelect,
+} from "../families/caa-revalidation/scenarios.js";
+import { verify as caaVerify } from "../families/caa-revalidation/verify.js";
+import {
   enumerateSpace as checkerEnumerate,
   generateScenarios as checkerGenerate,
   selectMeasuredSet as checkerSelect,
@@ -164,6 +170,7 @@ const walletScenarios = (): ReturnType<typeof walletGenerate> =>
   walletGenerate(walletSelect(walletEnumerate()));
 const deploymentScenarios = (): ReturnType<typeof deploymentGenerate> =>
   deploymentGenerate(deploymentSelect(deploymentEnumerate()));
+const caaScenarios = (): ReturnType<typeof caaGenerate> => caaGenerate(caaSelect(caaEnumerate()));
 const daoScenarios = (): ReturnType<typeof daoGenerate> => daoGenerate(daoSelect(daoEnumerate()));
 const tradingScenarios = (): ReturnType<typeof tradingGenerate> =>
   tradingGenerate(tradingSelect(tradingEnumerate()));
@@ -462,6 +469,50 @@ function gradeDaoWithHost(modulePath: string, execute: HostExecution, isolation:
   return summarise(cells, hostErrors, isolation);
 }
 
+/** Grade one certificate order against the host-owned exact-fqdn ledger and authorization map. */
+function gradeCaaWithHost(execute: HostExecution, isolation: string): GradeResult {
+  const cells: TrialCell[] = [];
+  let hostErrors = 0;
+
+  for (const scenario of caaScenarios()) {
+    const out = execute({ scenario });
+    if (typeof out["error"] === "string" && (out["error"] as string).length > 0) {
+      hostErrors += 1;
+      cells.push({ scenarioId: scenario.id, failed: ["caa_result_shape"] });
+      continue;
+    }
+    let failed: string[];
+    try {
+      failed = [
+        ...new Set(
+          caaVerify({
+            scenario,
+            report: out["report"] as never,
+            queries: (out["queries"] ?? []) as never,
+          }).map((f) => f.check),
+        ),
+      ].sort();
+    } catch {
+      // A report outside the published grammar is refused, not graded. The refusal is recorded as a
+      // shape failure for this scenario rather than silently scored as a passing subject.
+      failed = ["caa_result_shape"];
+    }
+    cells.push({ scenarioId: scenario.id, failed });
+  }
+  return summarise(cells, hostErrors, isolation);
+}
+
+export function gradeCaaRevalidation(modulePath: string): GradeResult {
+  const host = hostPath("caa-revalidation-host.mjs");
+  return gradeCaaWithHost(subprocessHost(host, modulePath), "subprocess");
+}
+
+/** Phase 17's grading path: the verifier stays here; host plus submission get no network. */
+export function gradeCaaRevalidationInContainer(modulePath: string): GradeResult {
+  const host = hostPath("caa-revalidation-host.mjs");
+  return gradeCaaWithHost(containerHost(host, modulePath), "no-network container");
+}
+
 export function gradeDaoDescendant(modulePath: string): GradeResult {
   const host = hostPath("dao-descendant-host.mjs");
   return gradeDaoWithHost(modulePath, subprocessHost(host, modulePath), "subprocess");
@@ -545,6 +596,7 @@ const summarise = (
 
 /** Phase 14's stronger grading path: the verifier stays here; host plus submission get no network. */
 export function gradePhase14ContainerSubmission(familyId: string, modulePath: string): GradeResult {
+  if (familyId === "caa-revalidation") return gradeCaaRevalidationInContainer(modulePath);
   if (familyId === "dao-descendant") {
     const host = hostPath("dao-descendant-host.mjs");
     return gradeDaoWithHost(modulePath, containerHost(host, modulePath), "no-network container");
@@ -655,6 +707,21 @@ const INSTRUCTIONS: Readonly<Record<string, string>> = {
     "",
     "Do not modify anything in challenge/. Write exactly one file: submission/subject.mjs.",
   ].join("\n"),
+  "caa-revalidation": [
+    "You are attempting a benchmark task. Your working directory contains:",
+    "  challenge/   — read this. README.md explains the task, SPEC.md is the normative contract.",
+    "  submission/  — write your answer here.",
+    "",
+    "Read challenge/README.md and challenge/SPEC.md in full, then implement the subject they",
+    "describe:",
+    "  submission/subject.mjs exporting `subject` with run(view, caa)",
+    "",
+    "The authorization facade answers for exactly the name it is given and is the current source of",
+    "truth. The value recorded at a name's last validation may since have changed. One order decides",
+    "every one of its names together.",
+    "",
+    "Do not modify anything in challenge/. Write exactly one file: submission/subject.mjs.",
+  ].join("\n"),
   "dao-descendant": [
     "You are attempting a benchmark task. Your working directory contains:",
     "  challenge/   — read this. README.md explains the task, SPEC.md is normative.",
@@ -716,6 +783,7 @@ const GRADERS: Readonly<Record<string, (p: string) => GradeResult>> = {
   "access-token-scope-expansion": gradeAccessToken,
   "delegated-wallet-scope-reconciliation": gradeDelegatedWallet,
   "deployment-model-alias-rollout-drift": gradeDeploymentAlias,
+  "caa-revalidation": gradeCaaRevalidation,
   "dao-descendant": gradeDaoDescendant,
   "trading-reconciliation-recompute": gradeTradingReconciliation,
   "deployment-rollback-recompute": gradeDeploymentRollback,
@@ -739,6 +807,7 @@ const PARAMS: Readonly<Record<string, () => ReadonlyMap<string, Readonly<Record<
     paramMap(walletScenarios().map((s) => ({ id: s.id, params: { ...s.params } }))),
   "deployment-model-alias-rollout-drift": () =>
     paramMap(deploymentScenarios().map((s) => ({ id: s.id, params: { ...s.params } }))),
+  "caa-revalidation": () => paramMap(caaScenarios().map((s) => ({ id: s.id, params: { ...s.params } }))),
   "dao-descendant": () => paramMap(daoScenarios().map((s) => ({ id: s.id, params: { ...s.params } }))),
   "trading-reconciliation-recompute": () =>
     paramMap(tradingScenarios().map((s) => ({ id: s.id, params: { ...s.params } }))),
@@ -756,6 +825,7 @@ const HOSTS: Readonly<Record<string, string>> = {
   "access-token-scope-expansion": "access-token-host.mjs",
   "delegated-wallet-scope-reconciliation": "delegated-wallet-host.mjs",
   "deployment-model-alias-rollout-drift": "deployment-alias-host.mjs",
+  "caa-revalidation": "caa-revalidation-host.mjs",
   "dao-descendant": "dao-descendant-host.mjs",
   "trading-reconciliation-recompute": "trading-reconciliation-host.mjs",
   "deployment-rollback-recompute": "deployment-rollback-host.mjs",

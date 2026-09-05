@@ -1,0 +1,16 @@
+{
+  "label": "spec-contradiction",
+  "rationale": "The visible contract explicitly says pending:true means the target is not there yet and distinguishes that temporary state as halted, but the verifier marks node_removed d4 pending scenarios as failures of unreplayable_reported when the submission returns halted. This is not merely spec-underspecified: the package supplies a determinate pending rule and the verifier contradicts it. Nor can the overall trial be labelled capability merely because other cells may expose implementation mistakes, since these material failures enforce the opposite of the public rule.",
+  "evidenceRead": [
+    "decisionRule and closedVocabulary",
+    "evidence.challenge/SPEC.md",
+    "evidence.challenge/README.md",
+    "evidence.challenge/types.ts",
+    "evidence.challenge/examples/example-3-node_removed.json",
+    "evidence.submission/subject.mjs",
+    "evidence.countability",
+    "evidence.verifierOutput.cells and detail",
+    "evidence.normalizedResult",
+    "excluded and requiredOutput"
+  ]
+}

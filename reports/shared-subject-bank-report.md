@@ -20,6 +20,7 @@ Which subjects have attempted which families, and what that permits.
 | `ui-action-record-replay` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 5 | 324 | 1 |
 | `ui-replay-live-dom` | `gpt-5.6-sol` | 1 | 864 | — |
 | `checker-required-memory-poisoning` | `gpt-5.6-sol` | 1 | 792 | — |
+| `caa-revalidation` | `anthropic-claude-opus`, `openai-gpt-5.6-sol` | 4 | 24 | 0 |
 | `dao-descendant` | `claude-claude-opus-5`, `codex-gpt-5.6-sol` | 2 | 24 | 0 |
 | `trading-reconciliation-recompute` | `claude-claude-opus-5`, `codex-gpt-5.6-sol` | 2 | 24 | 0 |
 | `deployment-rollback-recompute` | `claude-claude-opus-5`, `codex-gpt-5.6-sol` | 2 | 24 | 0 |
@@ -51,7 +52,7 @@ and it is not a measurement of difficulty.
 
 ## What each kind of bank currently licenses
 
-### `agent` banks — 7 family(ies)
+### `agent` banks — 8 family(ies)
 
 **Verdict:** REFUSED. nothing: the banks share no subject, so co-failure across families is unobservable and the union's width is the sum by construction.
 

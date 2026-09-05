@@ -240,6 +240,31 @@ import {
   nextPhase16Review,
   phase16ReviewExecutionJson,
 } from "./phase-16/review-execution.js";
+import {
+  executePhase17Attempt,
+  nextPhase17Attempt,
+  renderPhase17ExecutionResult,
+} from "./phase-17/execution.js";
+import { buildPhase17TrialLedger, phase17TrialLedgerJson } from "./phase-17/measurement.js";
+import { phase17PackageControlsJson, runPhase17PackageControls } from "./phase-17/package-controls.js";
+import { phase17PreflightJson, runPhase17Preflight } from "./phase-17/preflight.js";
+import { phase17ProbeAuditJson, runPhase17ProbeAudit } from "./phase-17/probe-audit.js";
+import { phase17ProbeV2Json, runPhase17ProbeV2 } from "./phase-17/probe-v2-run.js";
+import { buildPhase19ReviewLedger } from "./phase-19/candidate-review.js";
+import {
+  buildPhase19Reranking,
+  buildPhase19UiLabelLedger,
+  buildPhase19UiPacketManifest,
+  phase19Json,
+} from "./phase-19/evidence-rerank.js";
+import {
+  executePhase19CandidateReview,
+  executePhase19UiLabel,
+  nextPhase19CandidateReview,
+  nextPhase19UiLabel,
+  phase19ExecutionJson,
+  phase19ReaderPreflight,
+} from "./phase-19/reader-execution.js";
 import { renderReport } from "./report.js";
 import {
   classifyAccessTokenSmoke,
@@ -345,6 +370,8 @@ import {
 import { renderPhase14OperatorEffects } from "./reports/phase-14-operator-effects.js";
 import { renderPhase15DiscoveryEngine } from "./reports/phase-15-discovery-engine.js";
 import { renderPhase16DiscoveryV3 } from "./reports/phase-16-discovery-v3.js";
+import { renderPhase17CaaValidation } from "./reports/phase-17-caa-validation.js";
+import { renderPhase19EvidenceRerank } from "./reports/phase-19-evidence-rerank.js";
 import {
   renderMechanismProbeReport,
   renderProbeNext,
@@ -516,6 +543,27 @@ REGISTRY (what could be built, and can we detect it?)
   phase16 final-probes [--out f] reader-gated continuation probe results
   phase16 final-comparison [--out f] completed prospective method comparison
   phase16 continuation [--out f] final continuation status and decision
+
+  phase17 report [--out f]       the Phase 17 CAA validation result
+  phase17 audit [--out f]        Phase 16 probe-contract audit and truth repair
+  phase17 probe [--out f]        the exact CAA Probe V2 against its frozen registration
+  phase17 controls [--out f]     runnable-package controls and the scenario activation map
+  phase17 preflight [--out f]    trial preflight, provider readiness and estimated maximum spend
+  phase17 ledger [--out f]       measured trial ledger, countability and the campaign decision
+  phase17 next                   the next registered trial slot
+  phase17 trial --attempt <id> [--retry n]  execute exactly that registered slot
+  phase19 report [--out f]       UI relabelling, corrected reranking, reviews and probes
+  phase19 preflight [--out f]    provider readiness and B6 status without credential values
+  phase19 packets [--out f]      immutable five-trial UI label-packet manifest
+  phase19 labels [--out f]       cross-provider UI root-cause decisions
+  phase19 rerank [--out f]       corrected 20-family disposition and top-five queue
+  phase19 reviews [--out f]      top-five cross-provider decisions and gated probes
+  phase19 next-label             next UI packet/provider assignment
+  phase19 label --packet <id> --reader <openai|anthropic>
+                                  independently label one historical UI failure
+  phase19 next-review            next top-five candidate/provider assignment
+  phase19 review --candidate <id> --reader <openai|anthropic>
+                                  independently review one corrected candidate
   sources                        list every matrix source, implemented and planned
 
 FAMILIES (run a measured mini-benchmark)
@@ -2762,7 +2810,7 @@ function evolveCommand(argv: readonly string[], root: string): string {
         ]
       : state.variants.map(
           (v) =>
-            `${v.id.padEnd(42)} risk ${(v.killRisk * 100).toFixed(0).padStart(3)}%  ${v.estimatedBuildHours}h  ops: ${v.operators.join(", ")}`,
+            `${v.id.padEnd(42)} risk ${(v.killRisk * 100).toFixed(0).padStart(3)}%  ops: ${v.operators.join(", ")}`,
         )),
     "",
   ].join("\n");
@@ -5323,6 +5371,63 @@ export function main(argv: readonly string[]): number {
         } else {
           throw new Error(
             `unknown phase16 subcommand "${sub}"; expected report, calibration, sources, contracts, gate, traceability, queue, packets, reviews, probes, comparison, hashes, corrections, preflight, review, next, final-reviews, final-probes, final-comparison or continuation`,
+          );
+        }
+        return 0;
+      }
+      case "phase17": {
+        const sub = positional(argv, 1) ?? "report";
+        if (sub === "report") emit(argv, renderPhase17CaaValidation(root));
+        else if (sub === "audit") emit(argv, phase17ProbeAuditJson(runPhase17ProbeAudit(root)));
+        else if (sub === "probe") emit(argv, phase17ProbeV2Json(runPhase17ProbeV2(root)));
+        else if (sub === "controls") emit(argv, phase17PackageControlsJson(runPhase17PackageControls(root)));
+        else if (sub === "preflight") emit(argv, phase17PreflightJson(runPhase17Preflight(root)));
+        else if (sub === "ledger") emit(argv, phase17TrialLedgerJson(buildPhase17TrialLedger(root)));
+        else if (sub === "next") {
+          process.stdout.write(`${nextPhase17Attempt(root)?.attemptId ?? "complete"}\n`);
+        } else if (sub === "trial") {
+          const attemptId = flag(argv, "--attempt");
+          if (attemptId === null) throw new Error("phase17 trial needs --attempt <id>");
+          const retry = Number(flag(argv, "--retry") ?? "1");
+          process.stdout.write(renderPhase17ExecutionResult(executePhase17Attempt(root, attemptId, retry)));
+        } else {
+          throw new Error(
+            `unknown phase17 subcommand "${sub}"; expected report, audit, probe, controls, preflight, ledger, next or trial`,
+          );
+        }
+        return 0;
+      }
+      case "phase19": {
+        const sub = positional(argv, 1) ?? "report";
+        if (sub === "report") emit(argv, renderPhase19EvidenceRerank(root));
+        else if (sub === "preflight") emit(argv, phase19Json(phase19ReaderPreflight(root)));
+        else if (sub === "packets") emit(argv, phase19Json(buildPhase19UiPacketManifest(root)));
+        else if (sub === "labels") emit(argv, phase19Json(buildPhase19UiLabelLedger(root)));
+        else if (sub === "rerank") emit(argv, phase19Json(buildPhase19Reranking(root)));
+        else if (sub === "reviews") emit(argv, phase19Json(buildPhase19ReviewLedger(root)));
+        else if (sub === "next-label") {
+          process.stdout.write(`${JSON.stringify(nextPhase19UiLabel(root))}\n`);
+        } else if (sub === "label") {
+          const packetId = flag(argv, "--packet");
+          const reader = flag(argv, "--reader");
+          if (packetId === null || (reader !== "openai" && reader !== "anthropic")) {
+            throw new Error("phase19 label needs --packet and --reader openai|anthropic");
+          }
+          process.stdout.write(phase19ExecutionJson(executePhase19UiLabel(root, packetId, reader)));
+        } else if (sub === "next-review") {
+          process.stdout.write(`${JSON.stringify(nextPhase19CandidateReview(root))}\n`);
+        } else if (sub === "review") {
+          const candidateId = flag(argv, "--candidate");
+          const reader = flag(argv, "--reader");
+          if (candidateId === null || (reader !== "openai" && reader !== "anthropic")) {
+            throw new Error("phase19 review needs --candidate and --reader openai|anthropic");
+          }
+          process.stdout.write(
+            phase19ExecutionJson(executePhase19CandidateReview(root, candidateId, reader)),
+          );
+        } else {
+          throw new Error(
+            `unknown phase19 subcommand "${sub}"; expected report, preflight, packets, labels, rerank, reviews, next-label, label, next-review or review`,
           );
         }
         return 0;

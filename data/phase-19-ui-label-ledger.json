@@ -1,0 +1,487 @@
+{
+  "schema": "agent-eval-foundry/phase-19-ui-label-ledger@1",
+  "packetManifestSha256": "942fa9689c842864de7ed53d2f713108ee6119934df44ae03cf887501d1198ef",
+  "trials": [
+    {
+      "runId": "ui-claude-1",
+      "packetId": "ui-blind-01",
+      "packetSha256": "9b083fa265cebf4ade631ab5890edfcde7e12aebc6a9ba513f7d1a3dcab347cd",
+      "labels": [
+        {
+          "runId": "ui-claude-1",
+          "familyId": "ui-action-record-replay",
+          "readerId": "phase19-ui-blind-01-openai",
+          "providerFamily": "openai",
+          "label": "spec-underspecified",
+          "rationale": "The visible package does not determine the call ordering required by these failures. R4 says a data-opens-confirmation step may not complete before confirmation is observed and accepted, but the facade never says whether the action opens the dialog or whether the irreversible effect occurs on submit or on acceptance; therefore the suppressed-dialog no_forbidden_effect expectation is not derivable. R5 only forbids repeating an irreversible step, and the submission skips such actions after completion, while the verifier's replay_idempotent flag does not reveal whether it instead rejects repeated reversible actions, the second-run audit, or some lifecycle assumption. This rejects capability, the nearest alternative, because the material expected behavior is not a determinate public rule rather than a clearly specified rule implemented incorrectly.",
+          "evidenceRead": [
+            "packet instructions, closedVocabulary, and decisionRule",
+            "challenge/MANIFEST.json",
+            "challenge/README.md",
+            "challenge/SPEC.md",
+            "challenge/examples/example-1-none.json",
+            "challenge/examples/example-2-node_wrapped.json",
+            "challenge/examples/example-3-node_removed.json",
+            "challenge/starter/subject.mjs",
+            "challenge/types.ts",
+            "submission/subject.mjs",
+            "evidence.transcript",
+            "evidence.countability",
+            "evidence.verifierOutput.cells and detail",
+            "evidence.normalizedResult",
+            "excluded and requiredOutput"
+          ],
+          "packetPath": "data/phase-19-ui-label-packets/ui-blind-01.json",
+          "packetSha256": "9b083fa265cebf4ade631ab5890edfcde7e12aebc6a9ba513f7d1a3dcab347cd",
+          "independentlyProduced": true,
+          "blindedTo": [
+            "other-reader-label",
+            "author-diagnosis",
+            "cross-cell-outcomes",
+            "stopping-decision",
+            "existing root-cause sidecar",
+            "other UI trial outcomes",
+            "family promotion status",
+            "research ranking"
+          ]
+        },
+        {
+          "runId": "ui-claude-1",
+          "familyId": "ui-action-record-replay",
+          "readerId": "phase19-ui-blind-01-anthropic",
+          "providerFamily": "anthropic",
+          "label": "capability",
+          "rationale": "SPEC.md R4 is determinate and the submission itself restates it in its header comment: a target declaring data-opens-confirmation \"must not complete until a confirmation has been observed and accepted\", and \"An absent dialog is not a confirmation\". README.md lists \"no irreversible effect fires when it should not\" among the graded properties, `halted` is a first-class outcome for a page that cannot proceed right now, and the facade (SPEC.md + types.ts) exposes confirmationPresent() as a side-effect-free observation available before acting. The submitted subject.mjs breaks that ordering: in runStep()'s needsConfirmation fall-through branch it calls performAction() first and only then reads seesConfirmation(), so the irreversible submit is issued before any confirmation exists; it then returns halted with CONFIRMATION_NOT_PRESENTED and, because that halt returns before ledger.applied.set(), records nothing of the effect R5 makes the subject's job to remember. The 46 failing cells track that code branch for branch: no_forbidden_effect fails in 33 of 33 suppressed-settled scenarios whose mutation still leaves the trace replayable (none/node_reordered/node_wrapped/text_changed) and nowhere else; every attribute_renamed and node_removed cell passes because pre-flight reports unreplayable before acting; every pending cohort passes because it halts at the unsettled region; and 15 of the 28 replay_idempotent failures are those same suppressed cells re-firing on the second call after run one wrote no ledger entry, the other 13 being present-settled-r2, where replayCompleted() re-issues the recorded steps and reports ran:true for the irreversible step it did not run. Nearest alternative rejected - spec-underspecified: the trajectory argues \"the hidden app's confirmation model is unobservable from here\" and that no strategy avoids the suppressed case \"without failing every present scenario\". What the package leaves open is the hidden app's internal mechanics, not the outcome material to this failure. R4, plus \"an absent dialog is not a confirmation\", plus the graded no-forbidden-effect property, determine that an irreversible action must not be issued on a confirmation-declaring target until a confirmation has been observed, and the subject's own preceding branch (seesConfirmation() then acceptConfirmation() then act) shows the observe-then-act path was implementable and is what the passing present cohorts exercise. Choosing act-then-observe was a bet against a stated rule, not a gap the package failed to close. spec-contradiction does not fit: no verifier cell contradicts anything the visible files state, and the failures land exactly where R4 and R5 predict. harness-contract-violation and infrastructure are excluded by verifierOutput.detail (\"46/324 scenarios failed (0 host errors) under subprocess isolation\") and countability (completed with 324 graded scenarios): every cell was graded and the pass/fail split maps one-to-one onto this file's branches, so the rig measured the submitted implementation. package-leak does not apply - MANIFEST.json only names verify.ts/reference.ts/mutants.ts as hidden and no grading key appears in the visible package.",
+          "evidenceRead": [
+            "challenge/PACKET.json - instructions, closedVocabulary, decisionRule, excluded, requiredOutput",
+            "evidence.challenge[MANIFEST.json] - visibleFiles vs hiddenArtifacts, submissionFormat",
+            "evidence.challenge[README.md] - graded properties list, replay may be called twice, refusing everything fails",
+            "evidence.challenge[SPEC.md] - R1-R7 (esp. R4_CONFIRMATION_OBSERVED and R5_IDEMPOTENT_REPLAY), outcomes, mutation space, absent/present/suppressed dial, facade",
+            "evidence.challenge[types.ts] - AppFacade.confirmationPresent/acceptConfirmation docs, QueryResult.pending, StepAudit.ran/haltReason, Subject.replay idempotency note",
+            "evidence.challenge[starter/subject.mjs] - required report and step-audit shape",
+            "evidence.challenge[examples/example-1-none.json] - present+settled completes, payment fires exactly once, pay declares data-opens-confirmation",
+            "evidence.challenge[examples/example-2-node_wrapped.json] - stale recorded id, replayCount 2, payment must fire once",
+            "evidence.challenge[examples/example-3-node_removed.json] - target gone must be unreplayable, not halted",
+            "evidence.submission[subject.mjs] - runStep() confirmation branches and act-then-observe fall-through, halt() returning before ledger.applied.set(), replayCompleted(), globalThis Symbol.for ledger, preflight()",
+            "evidence.transcript - author's own flagged judgement call about the unobservable confirmation model and the act-then-observe assumption",
+            "evidence.verifierOutput.detail and .cells - 46/324 failed, 0 host errors, subprocess isolation",
+            "evidence.normalizedResult.cells - 324 cells; 33 no_forbidden_effect failures all in suppressed-settled replayable mutations; 28 replay_idempotent failures all in r2 (13 present-settled, 15 suppressed-settled); 0 failures on attribute_renamed/node_removed or in any pending cohort",
+            "evidence.countability - counts true, classification completed, 324 graded scenarios"
+          ],
+          "packetPath": "data/phase-19-ui-label-packets/ui-blind-01.json",
+          "packetSha256": "9b083fa265cebf4ade631ab5890edfcde7e12aebc6a9ba513f7d1a3dcab347cd",
+          "independentlyProduced": true,
+          "blindedTo": [
+            "other-reader-label",
+            "author-diagnosis",
+            "cross-cell-outcomes",
+            "stopping-decision",
+            "existing root-cause sidecar",
+            "other UI trial outcomes",
+            "family promotion status",
+            "research ranking"
+          ]
+        }
+      ],
+      "decision": {
+        "status": "disagreed",
+        "labelsReceived": 2,
+        "labels": [
+          "spec-underspecified",
+          "capability"
+        ],
+        "readerFamilies": [
+          "openai",
+          "anthropic"
+        ],
+        "difficultyEvidence": false
+      }
+    },
+    {
+      "runId": "ui-claude-2",
+      "packetId": "ui-blind-02",
+      "packetSha256": "90d33f258ada313889f2b1c02a0c51d0dc0f559381a3c916f15d4e8137fc34e1",
+      "labels": [
+        {
+          "runId": "ui-claude-2",
+          "familyId": "ui-action-record-replay",
+          "readerId": "phase19-ui-blind-02-openai",
+          "providerFamily": "openai",
+          "label": "spec-underspecified",
+          "rationale": "The only failures are no_forbidden_effect in settled, suppressed-confirmation scenarios, but the visible contract merely names suppressed as a varying state. It does not define its facade-level semantics, when confirmationPresent becomes true relative to the action that data-opens-confirmation says opens the dialog, or how replay can trigger that dialog without first invoking the recorded irreversible action. Therefore the verifier's required no-effect behavior for suppression cannot be derived from the package. This is not capability: although the verifier measured the submitted code and its act-then-observe choice, the public rules do not determine the alternative ordering or suppressed-state handling that would make those cells pass.",
+          "evidenceRead": [
+            "challenge/MANIFEST.json",
+            "challenge/README.md",
+            "challenge/SPEC.md",
+            "challenge/examples/example-1-none.json",
+            "challenge/examples/example-2-node_wrapped.json",
+            "challenge/examples/example-3-node_removed.json",
+            "challenge/starter/subject.mjs",
+            "challenge/types.ts",
+            "submission/subject.mjs",
+            "evidence.transcript",
+            "evidence.countability",
+            "evidence.verifierOutput",
+            "evidence.normalizedResult",
+            "excluded",
+            "requiredOutput"
+          ],
+          "packetPath": "data/phase-19-ui-label-packets/ui-blind-02.json",
+          "packetSha256": "90d33f258ada313889f2b1c02a0c51d0dc0f559381a3c916f15d4e8137fc34e1",
+          "independentlyProduced": true,
+          "blindedTo": [
+            "other-reader-label",
+            "author-diagnosis",
+            "cross-cell-outcomes",
+            "stopping-decision",
+            "existing root-cause sidecar",
+            "other UI trial outcomes",
+            "family promotion status",
+            "research ranking"
+          ]
+        },
+        {
+          "runId": "ui-claude-2",
+          "familyId": "ui-action-record-replay",
+          "readerId": "phase19-ui-blind-02-anthropic",
+          "providerFamily": "anthropic",
+          "label": "spec-underspecified",
+          "rationale": "All 33 failing cells report the single check no_forbidden_effect, and they are exactly the suppressed+settled cells whose mutation still lets the trace reach the irreversible pay step (node_reordered 8, node_wrapped 7, none 8, text_changed 10 = 33/33); every absent and present cell passes, and the only suppressed+settled passes are attribute_renamed/node_removed, where the trace can never reach that step. So the whole failure turns on one undefined term: SPEC.md mentions `suppressed` exactly once (\"whether a confirmation dialog is `absent`, `present` or `suppressed`\") and never says what it does, never distinguishes it from `absent`, and no example exercises it. R4, the only confirmation rule, is conditioned on the live target declaring `data-opens-confirmation`, and R1-R3 plus types.ts insist on reading the live tree rather than the recording; a replayer that reads that attribute live and finds it gone has no visible rule left to obey. Nor can the requirement be recovered from the recording: types.ts RecordedStep has no confirmation field, and the seed-11 trace shared by all three examples contains no `confirm` step, yet seed-11 suppressed cells fail. The nearest neighbour to the failing cell ui-none-d0-suppressed-settled-r1-11 is example-1 (ui-none-d0-present-settled-r1-11), which differs only in that undefined token and whose note says the payment SHOULD fire. I reject capability, the nearest alternative: capability requires the visible package to determine the required behaviour, and here the material outcome (must the irreversible payment fire when the live page no longer declares or presents a confirmation?) is not derivable from any visible file. I also reject spec-contradiction: the package never positively asserts that firing under `suppressed` is correct, and the dialog mode is declared as its own varying axis, so the tree-mutation closure claim is not broken - the defect is silence, not conflict. harness-contract-violation, package-leak and infrastructure are out: verifierOutput.detail reports 0 host errors with all 324 scenarios graded under subprocess isolation, no hidden artifact appears in the visible files, and 291 cells pass including the node_wrapped live-resolution and r2 idempotency cases, so the rig plainly measured this implementation.",
+          "evidenceRead": [
+            "challenge/PACKET.json (whole packet: instructions, closedVocabulary, decisionRule, excluded, requiredOutput)",
+            "evidence.challenge MANIFEST.json",
+            "evidence.challenge README.md",
+            "evidence.challenge SPEC.md (R1-R7, Outcomes, mutation space, facade)",
+            "evidence.challenge types.ts (RecordedStep, Precondition, QueryResult, AppFacade, StepAudit)",
+            "evidence.challenge starter/subject.mjs",
+            "evidence.challenge examples/example-1-none.json",
+            "evidence.challenge examples/example-2-node_wrapped.json",
+            "evidence.challenge examples/example-3-node_removed.json",
+            "evidence.submission subject.mjs (confirmation path lines ~215-240 and ~565-670: declaresConfirmation reads data-opens-confirmation live; performAction runs before confirmationPresent is observed)",
+            "evidence.transcript (submission states suppressed = attribute gone, so the step proceeds; flags act-then-observe as a judgment call)",
+            "evidence.countability (counts: true, completed, 324 graded scenarios)",
+            "evidence.verifierOutput.cells (all 324; cross-tabulated by mutation x dialog x settled)",
+            "evidence.verifierOutput.detail (\"33/324 scenarios failed (0 host errors) under subprocess isolation\")",
+            "evidence.normalizedResult (status completed, scenarioSetId replay-324-2255de40)"
+          ],
+          "packetPath": "data/phase-19-ui-label-packets/ui-blind-02.json",
+          "packetSha256": "90d33f258ada313889f2b1c02a0c51d0dc0f559381a3c916f15d4e8137fc34e1",
+          "independentlyProduced": true,
+          "blindedTo": [
+            "other-reader-label",
+            "author-diagnosis",
+            "cross-cell-outcomes",
+            "stopping-decision",
+            "existing root-cause sidecar",
+            "other UI trial outcomes",
+            "family promotion status",
+            "research ranking"
+          ]
+        }
+      ],
+      "decision": {
+        "status": "agreed-noncapability",
+        "labelsReceived": 2,
+        "labels": [
+          "spec-underspecified",
+          "spec-underspecified"
+        ],
+        "readerFamilies": [
+          "openai",
+          "anthropic"
+        ],
+        "difficultyEvidence": false
+      }
+    },
+    {
+      "runId": "ui-codex-1",
+      "packetId": "ui-blind-03",
+      "packetSha256": "7551febfca1b9400b6312f164537d8b6c184eee3b8c1c723543dab0224d7d0c7",
+      "labels": [
+        {
+          "runId": "ui-codex-1",
+          "familyId": "ui-action-record-replay",
+          "readerId": "phase19-ui-blind-03-openai",
+          "providerFamily": "openai",
+          "label": "spec-contradiction",
+          "rationale": "The visible contract explicitly says pending:true means the target is not there yet and distinguishes that temporary state as halted, but the verifier marks node_removed d4 pending scenarios as failures of unreplayable_reported when the submission returns halted. This is not merely spec-underspecified: the package supplies a determinate pending rule and the verifier contradicts it. Nor can the overall trial be labelled capability merely because other cells may expose implementation mistakes, since these material failures enforce the opposite of the public rule.",
+          "evidenceRead": [
+            "decisionRule and closedVocabulary",
+            "evidence.challenge/SPEC.md",
+            "evidence.challenge/README.md",
+            "evidence.challenge/types.ts",
+            "evidence.challenge/examples/example-3-node_removed.json",
+            "evidence.submission/subject.mjs",
+            "evidence.countability",
+            "evidence.verifierOutput.cells and detail",
+            "evidence.normalizedResult",
+            "excluded and requiredOutput"
+          ],
+          "packetPath": "data/phase-19-ui-label-packets/ui-blind-03.json",
+          "packetSha256": "7551febfca1b9400b6312f164537d8b6c184eee3b8c1c723543dab0224d7d0c7",
+          "independentlyProduced": true,
+          "blindedTo": [
+            "other-reader-label",
+            "author-diagnosis",
+            "cross-cell-outcomes",
+            "stopping-decision",
+            "existing root-cause sidecar",
+            "other UI trial outcomes",
+            "family promotion status",
+            "research ranking"
+          ]
+        },
+        {
+          "runId": "ui-codex-1",
+          "familyId": "ui-action-record-replay",
+          "readerId": "phase19-ui-blind-03-anthropic",
+          "providerFamily": "anthropic",
+          "label": "capability",
+          "rationale": "Every failed check is determined by the visible package and the rig measured this file. (1) unreplayable_reported: 36 of 44 failures are attribute_renamed, where SPEC.md's mutation table kills the target's data-testid and SPEC.md defines unreplayable as a trace that 'can never replay as recorded'; example-3 sets the precedent (recorded selector no longer resolves -> unreplayable) and example-2 the contrast (id stale but selector still resolves -> completed). The submission instead synthesizes substitute selectors from precondition.attr and postcondition.effect (repairSelectors/repairTarget) and blesses the guess by matching step.recordedNodeId, which R1 and types.ts call a hint, not an address, and name as the temptation the family measures. The branch explains the exact split: d2/d4 fail 18/18 while d0 passes 18/18 only because its fallback selector is ambiguous. (2) no_forbidden_effect: 33/33 suppressed+settled cells fail because replay() calls runAction() before observing confirmationPresent(), so the irreversible submit fires with no dialog ever presented, violating R4 ('must not complete until a confirmation has been observed and accepted. An absent dialog is not a confirmation') and README's 'no irreversible effect fires when it should not'. (3) replay_idempotent: 35 failures, all r=2 and never conf=absent, because completedIrreversibleSteps.add() sits after the confirmation gate, so a halt at that gate discards the record after the payment already fired and the second replay pays again, against R5's 'Keeping that record is your job'. Nearest alternative, spec-underspecified, is rejected: the only slice whose required outcome is arguably not derivable is node_removed at d4 with a pending region (8 of 90 failing cells, all and only those cells), where query reports pending for a removed target and SPEC.md's 'not yet vs not there' gloss does not settle precedence. Scoring all 8 as passes still leaves 82 failing cells and all three checks failing on obligations stated verbatim in SPEC.md R1/R4/R5 and the outcome definitions, so no underdetermined outcome is material to this failure. spec-contradiction fails for the same reason: the verifier's expectations match R4, R5 and the unreplayable definition rather than contradicting them. harness-contract-violation and infrastructure are excluded by the evidence: status completed, 324/324 graded, '0 host errors' under subprocess isolation, and each cell's pass/fail pattern maps onto a specific branch of the submitted subject.mjs. package-leak does not apply: MANIFEST.json names hidden artifacts without exposing their content, and the examples' outcome notes are declared teaching material.",
+          "evidenceRead": [
+            "challenge/PACKET.json -> instructions, closedVocabulary, decisionRule, excluded, requiredOutput",
+            "challenge/MANIFEST.json",
+            "challenge/README.md",
+            "challenge/SPEC.md (R1-R7, outcome definitions, mutation space, facade contract)",
+            "challenge/types.ts (Selector, RecordedStep.recordedNodeId note, QueryResult.pending note, AppFacade)",
+            "challenge/starter/subject.mjs",
+            "challenge/examples/example-1-none.json",
+            "challenge/examples/example-2-node_wrapped.json",
+            "challenge/examples/example-3-node_removed.json",
+            "submission/subject.mjs (rawResolve, repairSelectors, repairTarget, identityMatches, replay loop ordering, completedIrreversibleSteps placement, auditAlreadyCompleted)",
+            "evidence.verifierOutput.cells (324 cells; 90 failing: no_forbidden_effect 61, unreplayable_reported 44, replay_idempotent 35)",
+            "evidence.verifierOutput.detail ('90/324 scenarios failed (0 host errors) under subprocess isolation')",
+            "evidence.transcript",
+            "evidence.countability",
+            "evidence.normalizedResult (status, counts, scenarioSetId, runtimeSeconds, isolation)"
+          ],
+          "packetPath": "data/phase-19-ui-label-packets/ui-blind-03.json",
+          "packetSha256": "7551febfca1b9400b6312f164537d8b6c184eee3b8c1c723543dab0224d7d0c7",
+          "independentlyProduced": true,
+          "blindedTo": [
+            "other-reader-label",
+            "author-diagnosis",
+            "cross-cell-outcomes",
+            "stopping-decision",
+            "existing root-cause sidecar",
+            "other UI trial outcomes",
+            "family promotion status",
+            "research ranking"
+          ]
+        }
+      ],
+      "decision": {
+        "status": "disagreed",
+        "labelsReceived": 2,
+        "labels": [
+          "spec-contradiction",
+          "capability"
+        ],
+        "readerFamilies": [
+          "openai",
+          "anthropic"
+        ],
+        "difficultyEvidence": false
+      }
+    },
+    {
+      "runId": "ui-haiku-1",
+      "packetId": "ui-blind-04",
+      "packetSha256": "1cb3b57f4191c71545b1822daaae3ae255632ef38c11a4ca70c823e63e2bfe3d",
+      "labels": [
+        {
+          "runId": "ui-haiku-1",
+          "familyId": "ui-action-record-replay",
+          "readerId": "phase19-ui-blind-04-openai",
+          "providerFamily": "openai",
+          "label": "capability",
+          "rationale": "The visible package determines the failed obligations: R4 forbids completing a confirmation-opening step before confirmation is observed and accepted, R5 forbids repeating irreversible work, and the outcome definitions plus the node-removed example require a permanently impossible trace to be reported unreplayable. The submission invokes submit before checking confirmation, does not record the irreversible step when the later confirmation branch halts, and processes sequentially so an earlier pending step can hide a permanently unresolved later target. The verifier measured those submitted behaviors across 324 scenarios with zero host errors. This is not spec-underspecified: the public rules, facade signals, and worked node-removed example determine the required safety, retry, and unreplayable outcomes.",
+          "evidenceRead": [
+            "MANIFEST.json",
+            "README.md",
+            "SPEC.md",
+            "examples/example-1-none.json",
+            "examples/example-2-node_wrapped.json",
+            "examples/example-3-node_removed.json",
+            "starter/subject.mjs",
+            "types.ts",
+            "submission/subject.mjs",
+            "evidence.transcript",
+            "evidence.countability",
+            "evidence.verifierOutput",
+            "evidence.normalizedResult",
+            "excluded",
+            "requiredOutput"
+          ],
+          "packetPath": "data/phase-19-ui-label-packets/ui-blind-04.json",
+          "packetSha256": "1cb3b57f4191c71545b1822daaae3ae255632ef38c11a4ca70c823e63e2bfe3d",
+          "independentlyProduced": true,
+          "blindedTo": [
+            "other-reader-label",
+            "author-diagnosis",
+            "cross-cell-outcomes",
+            "stopping-decision",
+            "existing root-cause sidecar",
+            "other UI trial outcomes",
+            "family promotion status",
+            "research ranking"
+          ]
+        },
+        {
+          "runId": "ui-haiku-1",
+          "familyId": "ui-action-record-replay",
+          "readerId": "phase19-ui-blind-04-anthropic",
+          "providerFamily": "anthropic",
+          "label": "capability",
+          "rationale": "Every one of the 62 failing cells maps onto an obligation the visible package states outright, and the rig measured the submitted code. (1) All 33 no_forbidden_effect failures are 'suppressed' cells: subject.mjs calls app.submit/app.click first and only afterwards reads app.confirmationPresent(), so the irreversible effect fires although no confirmation was ever observed — precisely what SPEC.md R4 forbids ('must not complete until a confirmation has been observed and accepted. An absent dialog is not a confirmation') and what README grades as 'no irreversible effect fires when it should not'. They occur only for none/node_reordered/node_wrapped/text_changed, i.e. exactly the traces that reach the irreversible step. (2) All 28 replay_idempotent failures are settled r2 cells with a confirmation-bearing target, and they follow from the same inversion: the effect fires, then the confirmation branch breaks out before thisReplayCompleted.add(step.index), so the record R5 says is 'your job' never captures the fired step and the second replay repeats it. (3) All 16 unreplayable_reported failures are exactly d4 attribute_renamed/node_removed with a pending region: the subject halts at the earlier pending step and never resolves the permanently gone step-4 target, so it reports 'halted' where SPEC.md's outcome semantics and README require the trace to be 'reported as such rather than half-run' — SPEC.md names this very error ('Reporting halted for a trace whose target is gone tells an operator to wait for something that will never happen'), and examples/example-3-node_removed.json repeats it ('halting part-way through is a different and wrong answer'). The nearest alternative, spec-underspecified, would have to rest on family (3), arguing the package never fixes precedence between a pending region and a later vanished target; it is rejected because the package does fix it twice over — the outcome table defines 'unreplayable' as a property of the trace ('can never replay as recorded'), README's grading list names half-running such a trace as the failure, and example-3 demonstrates the required outcome — while families (1) and (2), 49 of the 62 cells, rest on R4 and R5 verbatim and no reading of the package permits them. harness-contract-violation is rejected because the host kept its promises: replay was called twice with the same trace and the subject's in-memory Map survived between calls, proven by 21/21 absent+settled+r2 replayable traces passing replay_idempotent; only confirmation-bearing cells fail. infrastructure is rejected because status=completed, counts=true, 324/324 scenarios graded with 0 host errors in 167s, scenarioSetId replay-324-2255de40 matches MANIFEST.json, and the failure signature is reproducible from the submitted source's own act-then-observe ordering. package-leak is rejected because no hidden artifact (verify.ts, reference.ts, mutants.ts, runner.ts, app.ts, matrix.json, scenarios.json) appears among the visible files; the disclosed mutation space is deliberate per README and revealed no expected outcome. spec-contradiction is rejected because the three failed check names enforce R4, R5 and the outcome table as written, and the pending/gone cells involve a pending region distinct from the removed target, so nothing the verifier demands conflicts with a stated rule.",
+          "evidenceRead": [
+            "challenge/PACKET.json:instructions",
+            "challenge/PACKET.json:closedVocabulary",
+            "challenge/PACKET.json:decisionRule",
+            "challenge/PACKET.json:excluded",
+            "challenge/PACKET.json:requiredOutput",
+            "evidence.challenge MANIFEST.json (visibleFiles, hiddenArtifacts, scenarioSetId replay-324-2255de40)",
+            "evidence.challenge README.md (grading list; replay may be called twice; refusing everything fails)",
+            "evidence.challenge SPEC.md (R1-R7, outcome semantics for completed/halted/unreplayable, mutation space, facade, action kinds)",
+            "evidence.challenge types.ts (QueryResult.pending/matches, StepAudit, ReplayReport, AppFacade.confirmationPresent/acceptConfirmation)",
+            "evidence.challenge starter/subject.mjs",
+            "evidence.challenge examples/example-1-none.json",
+            "evidence.challenge examples/example-2-node_wrapped.json",
+            "evidence.challenge examples/example-3-node_removed.json (note: unreplayable required, halting part-way is wrong)",
+            "evidence.submission subject.mjs (full source: act-then-observe confirmation ordering, thisReplayCompleted bookkeeping, matches===0 pending branch)",
+            "evidence.transcript",
+            "evidence.countability (counts=true, classification=completed)",
+            "evidence.verifierOutput.detail (62/324 scenarios failed, 0 host errors, subprocess isolation)",
+            "evidence.verifierOutput.cells (all 324; tallied 33 no_forbidden_effect, 28 replay_idempotent, 16 unreplayable_reported and cross-tabulated by mutation/depth/confirmation/async/replay-count)",
+            "evidence.normalizedResult (status, scenarioSetId, runtimeSeconds=167, isolation)"
+          ],
+          "packetPath": "data/phase-19-ui-label-packets/ui-blind-04.json",
+          "packetSha256": "1cb3b57f4191c71545b1822daaae3ae255632ef38c11a4ca70c823e63e2bfe3d",
+          "independentlyProduced": true,
+          "blindedTo": [
+            "other-reader-label",
+            "author-diagnosis",
+            "cross-cell-outcomes",
+            "stopping-decision",
+            "existing root-cause sidecar",
+            "other UI trial outcomes",
+            "family promotion status",
+            "research ranking"
+          ]
+        }
+      ],
+      "decision": {
+        "status": "agreed-capability",
+        "labelsReceived": 2,
+        "labels": [
+          "capability",
+          "capability"
+        ],
+        "readerFamilies": [
+          "openai",
+          "anthropic"
+        ],
+        "difficultyEvidence": true
+      }
+    },
+    {
+      "runId": "ui-sonnet-1",
+      "packetId": "ui-blind-05",
+      "packetSha256": "90ca06f823b0f158bb4e380a3ba2e1adc81dca143fdffb176f62db158631c5b8",
+      "labels": [
+        {
+          "runId": "ui-sonnet-1",
+          "familyId": "ui-action-record-replay",
+          "readerId": "phase19-ui-blind-05-openai",
+          "providerFamily": "openai",
+          "label": "spec-underspecified",
+          "rationale": "This is spec-underspecified, not capability: R4 says a data-opens-confirmation step must not complete until confirmation is observed and accepted, but the visible facade and rules never determine whether the action must first be invoked to open that dialog or whether confirmation must already exist before an irreversible action. The submission invokes submit, then observes suppression and halts, while the verifier charges no_forbidden_effect in 33 suppressed/settled cells. Whether that already-fired effect was forbidden therefore depends on an unstated ordering protocol. The separate ran:true audit on skipped second-replay steps is a determinate submission defect, but it does not turn the package-undetermined confirmation failures into capability failures.",
+          "evidenceRead": [
+            "challenge/PACKET.json: instructions, closedVocabulary, decisionRule, excluded, and requiredOutput",
+            "challenge/PACKET.json: evidence.challenge README.md, SPEC.md, all three examples, starter/subject.mjs, and types.ts",
+            "challenge/PACKET.json: evidence.submission _test_edge.mjs, _test_harness.mjs, and subject.mjs",
+            "challenge/PACKET.json: evidence.transcript and evidence.countability",
+            "challenge/PACKET.json: all 324 evidence.verifierOutput.cells plus detail",
+            "challenge/PACKET.json: evidence.normalizedResult metadata and all 324 cells"
+          ],
+          "packetPath": "data/phase-19-ui-label-packets/ui-blind-05.json",
+          "packetSha256": "90ca06f823b0f158bb4e380a3ba2e1adc81dca143fdffb176f62db158631c5b8",
+          "independentlyProduced": true,
+          "blindedTo": [
+            "other-reader-label",
+            "author-diagnosis",
+            "cross-cell-outcomes",
+            "stopping-decision",
+            "existing root-cause sidecar",
+            "other UI trial outcomes",
+            "family promotion status",
+            "research ranking"
+          ]
+        },
+        {
+          "runId": "ui-sonnet-1",
+          "familyId": "ui-action-record-replay",
+          "readerId": "phase19-ui-blind-05-anthropic",
+          "providerFamily": "anthropic",
+          "label": "capability",
+          "rationale": "All 77 obligation failures across the 62 failing cells trace to defects in submission/subject.mjs against rules the visible package states normatively, and the rig measured that code. (1) no_forbidden_effect (33 cells = every suppressed+settled cell whose flow reaches the irreversible step): replay() calls runAction() -> app.submit()/app.click() BEFORE it reads app.confirmationPresent(), so the payment fires and only then does the code return halted with CONFIRMATION_NOT_OBSERVED. SPEC R4 (\"must not complete until a confirmation has been observed and accepted. An absent dialog is not a confirmation\") plus README grading (\"no irreversible effect fires when it should not\") determine that outcome. (2) replay_idempotent (28 cells, all r2): firedIrreversibleSteps.add(key) runs only after the confirmation branch, so a step whose facade action already fired but whose gate failed is never recorded and fires again on the second call, violating R5. The 53 absent+settled cells pass 53/53, which proves the module-level Set did survive both replay calls under subprocess isolation, so the runner kept R5’s promise that keeping the record is the subject’s job. (3) unreplayable_reported (16 cells, all d4 x pending x node_removed/attribute_renamed): the code returns halted at the first pending region and never asks whether a later step’s target is gone; the same 20 d4 removed/renamed traces in settled scenarios are reported unreplayable correctly, so the miss is the early return, not the concept. SPEC (\"Reporting halted for a trace whose target is gone tells an operator to wait for something that will never happen\"), README (\"reported as such rather than half-run\") and example-3’s note (\"halting part-way through is a different and wrong answer\") determine that outcome. Nearest alternative is spec-underspecified, on the ground that the package never states when the app commits the effect or that confirmationPresent() is readable before the action fires. Rejected: the package fixes the OUTCOMES the verifier scored (no irreversible effect without an observed-and-accepted confirmation; one effect across two replays; unreplayable rather than half-run), and the safe ordering follows from the obligation itself since firing first makes R4 unenforceable; the submission instead validated an assumption it invented, its own _test_harness.mjs makes click()/submit() create the confirmation, and no visible example is suppressed or pending, so nothing licensed that model. spec-contradiction also fails: nothing visible is contradicted, pending still means \"not yet\" for the pending step, while the graded property is the replayability of the whole trace. harness-contract-violation and infrastructure fail because verifierOutput.detail reports 0 host errors over 324 scenarios, countability is \"completed\", and the pass/fail pattern maps exactly onto the submitted code’s branches (absent-dialog cells pass, suppressed cells fail, only pending d4 target-destroying cells miss unreplayable). package-leak fails: MANIFEST lists hidden artifacts by name only, with no answer or grading content.",
+          "evidenceRead": [
+            "challenge/PACKET.json (read in full: instructions, closedVocabulary, decisionRule, excluded, requiredOutput)",
+            "evidence.challenge MANIFEST.json (visibleFiles, hiddenArtifacts, submissionFormat)",
+            "evidence.challenge README.md (grading bullets: completes when it can, no irreversible effect when it should not, reported as such rather than half-run, idempotent, never call askModel)",
+            "evidence.challenge SPEC.md (R1-R7, the three outcomes, mutation space, facade including confirmationPresent/acceptConfirmation and pending semantics)",
+            "evidence.challenge types.ts (QueryResult.pending, RecordedStep.irreversible, StepAudit, ReplayReport, Subject.replay called twice)",
+            "evidence.challenge starter/subject.mjs",
+            "evidence.challenge examples/example-1-none.json (pay carries data-opens-confirmation)",
+            "evidence.challenge examples/example-2-node_wrapped.json (replayCount 2, payment must fire once)",
+            "evidence.challenge examples/example-3-node_removed.json (note: target gone must be unreplayable; halting part-way through is a different and wrong answer)",
+            "evidence.submission subject.mjs (runAction before confirmationPresent; firedIrreversibleSteps.add after the confirmation branch; early return halted on pending)",
+            "evidence.submission _test_harness.mjs (self-written mock where click/submit set confirmationPresented = true)",
+            "evidence.submission _test_edge.mjs (case 3 suppressed confirmation, with no-op submit that cannot observe a fired effect)",
+            "evidence.transcript (final message claiming R4/R5 handled and examples plus edge cases verified)",
+            "evidence.countability (counts true, completed, 324 graded scenarios, no refusal/timeout/infrastructure error)",
+            "evidence.verifierOutput.detail (62/324 scenarios failed, 0 host errors, subprocess isolation)",
+            "evidence.verifierOutput.cells (all 324 cross-tabulated by dialog x async x replayCount x mutation x depth: 33 no_forbidden_effect all suppressed+settled, 28 replay_idempotent all r2, 16 unreplayable_reported all d4+pending+node_removed/attribute_renamed, 53/53 absent+settled pass, 20/20 d4 removed/renamed settled pass)",
+            "evidence.normalizedResult (status completed, counts true, scenarioSetId replay-324-2255de40)"
+          ],
+          "packetPath": "data/phase-19-ui-label-packets/ui-blind-05.json",
+          "packetSha256": "90ca06f823b0f158bb4e380a3ba2e1adc81dca143fdffb176f62db158631c5b8",
+          "independentlyProduced": true,
+          "blindedTo": [
+            "other-reader-label",
+            "author-diagnosis",
+            "cross-cell-outcomes",
+            "stopping-decision",
+            "existing root-cause sidecar",
+            "other UI trial outcomes",
+            "family promotion status",
+            "research ranking"
+          ]
+        }
+      ],
+      "decision": {
+        "status": "disagreed",
+        "labelsReceived": 2,
+        "labels": [
+          "spec-underspecified",
+          "capability"
+        ],
+        "readerFamilies": [
+          "openai",
+          "anthropic"
+        ],
+        "difficultyEvidence": false
+      }
+    }
+  ],
+  "summary": {
+    "trials": 5,
+    "labelsRequired": 10,
+    "labelsReceived": 10,
+    "agreedCapability": 1,
+    "agreedNoncapability": 1,
+    "disagreed": 3,
+    "pending": 0,
+    "difficultyEvidenceSurvives": true
+  }
+}

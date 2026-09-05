@@ -1,0 +1,19 @@
+{
+  "view": {
+    "orderId": "order-7-2",
+    "nowHour": 1007,
+    "names": [
+      {
+        "fqdn": "n1-s7.example",
+        "validatedAtHour": 999,
+        "cachedCaa": "ALLOW"
+      },
+      {
+        "fqdn": "n2-s7.example",
+        "validatedAtHour": 998,
+        "cachedCaa": "ALLOW"
+      }
+    ]
+  },
+  "note": "Ages 8 and 9. Age 8 is inside the recheck window and age 9 is outside it."
+}

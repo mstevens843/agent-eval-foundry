@@ -1,0 +1,101 @@
+{
+  "cells": [
+    {
+      "scenarioId": "caa-s31-d5-mixed-none",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s7-d5-mixed-middle",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s7-d3-all-stale-first",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s7-d5-mixed-last",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s19-d3-all-stale-middle",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s31-d5-boundary-eight-last",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s31-d5-boundary-nine-none",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s7-d2-all-stale-first",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s7-d5-all-stale-none",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s31-d5-boundary-eight-none",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s7-d5-boundary-nine-none",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s19-d5-boundary-eight-last",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s7-d5-boundary-nine-first",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s31-d3-all-stale-last",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s19-d5-all-stale-none",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s19-d3-all-stale-none",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s7-d5-boundary-eight-first",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s31-d5-boundary-eight-first",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s7-d1-boundary-eight-none",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s19-d2-mixed-middle",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s31-d1-boundary-nine-none",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s31-d2-mixed-middle",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s31-d2-boundary-nine-none",
+      "failed": []
+    },
+    {
+      "scenarioId": "caa-s7-d3-boundary-eight-none",
+      "failed": []
+    }
+  ],
+  "detail": "0/24 scenarios failed (0 host errors) under no-network container isolation"
+}

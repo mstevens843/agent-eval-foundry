@@ -1,0 +1,38 @@
+{
+  "runId": "ui-claude-2",
+  "familyId": "ui-action-record-replay",
+  "readerId": "phase19-ui-blind-02-anthropic",
+  "providerFamily": "anthropic",
+  "label": "spec-underspecified",
+  "rationale": "All 33 failing cells report the single check no_forbidden_effect, and they are exactly the suppressed+settled cells whose mutation still lets the trace reach the irreversible pay step (node_reordered 8, node_wrapped 7, none 8, text_changed 10 = 33/33); every absent and present cell passes, and the only suppressed+settled passes are attribute_renamed/node_removed, where the trace can never reach that step. So the whole failure turns on one undefined term: SPEC.md mentions `suppressed` exactly once (\"whether a confirmation dialog is `absent`, `present` or `suppressed`\") and never says what it does, never distinguishes it from `absent`, and no example exercises it. R4, the only confirmation rule, is conditioned on the live target declaring `data-opens-confirmation`, and R1-R3 plus types.ts insist on reading the live tree rather than the recording; a replayer that reads that attribute live and finds it gone has no visible rule left to obey. Nor can the requirement be recovered from the recording: types.ts RecordedStep has no confirmation field, and the seed-11 trace shared by all three examples contains no `confirm` step, yet seed-11 suppressed cells fail. The nearest neighbour to the failing cell ui-none-d0-suppressed-settled-r1-11 is example-1 (ui-none-d0-present-settled-r1-11), which differs only in that undefined token and whose note says the payment SHOULD fire. I reject capability, the nearest alternative: capability requires the visible package to determine the required behaviour, and here the material outcome (must the irreversible payment fire when the live page no longer declares or presents a confirmation?) is not derivable from any visible file. I also reject spec-contradiction: the package never positively asserts that firing under `suppressed` is correct, and the dialog mode is declared as its own varying axis, so the tree-mutation closure claim is not broken - the defect is silence, not conflict. harness-contract-violation, package-leak and infrastructure are out: verifierOutput.detail reports 0 host errors with all 324 scenarios graded under subprocess isolation, no hidden artifact appears in the visible files, and 291 cells pass including the node_wrapped live-resolution and r2 idempotency cases, so the rig plainly measured this implementation.",
+  "evidenceRead": [
+    "challenge/PACKET.json (whole packet: instructions, closedVocabulary, decisionRule, excluded, requiredOutput)",
+    "evidence.challenge MANIFEST.json",
+    "evidence.challenge README.md",
+    "evidence.challenge SPEC.md (R1-R7, Outcomes, mutation space, facade)",
+    "evidence.challenge types.ts (RecordedStep, Precondition, QueryResult, AppFacade, StepAudit)",
+    "evidence.challenge starter/subject.mjs",
+    "evidence.challenge examples/example-1-none.json",
+    "evidence.challenge examples/example-2-node_wrapped.json",
+    "evidence.challenge examples/example-3-node_removed.json",
+    "evidence.submission subject.mjs (confirmation path lines ~215-240 and ~565-670: declaresConfirmation reads data-opens-confirmation live; performAction runs before confirmationPresent is observed)",
+    "evidence.transcript (submission states suppressed = attribute gone, so the step proceeds; flags act-then-observe as a judgment call)",
+    "evidence.countability (counts: true, completed, 324 graded scenarios)",
+    "evidence.verifierOutput.cells (all 324; cross-tabulated by mutation x dialog x settled)",
+    "evidence.verifierOutput.detail (\"33/324 scenarios failed (0 host errors) under subprocess isolation\")",
+    "evidence.normalizedResult (status completed, scenarioSetId replay-324-2255de40)"
+  ],
+  "packetPath": "data/phase-19-ui-label-packets/ui-blind-02.json",
+  "packetSha256": "90d33f258ada313889f2b1c02a0c51d0dc0f559381a3c916f15d4e8137fc34e1",
+  "independentlyProduced": true,
+  "blindedTo": [
+    "other-reader-label",
+    "author-diagnosis",
+    "cross-cell-outcomes",
+    "stopping-decision",
+    "existing root-cause sidecar",
+    "other UI trial outcomes",
+    "family promotion status",
+    "research ranking"
+  ]
+}

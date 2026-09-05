@@ -1,0 +1,12 @@
+{
+  "authorizations": {
+    "shop.example.test": {
+      "decision": "PERMIT",
+      "checked_at": "2031-03-03T20:00:00Z"
+    },
+    "old.example.test": {
+      "decision": "PERMIT",
+      "checked_at": "2031-03-03T04:00:00Z"
+    }
+  }
+}

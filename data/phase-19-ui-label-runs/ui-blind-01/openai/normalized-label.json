@@ -1,0 +1,38 @@
+{
+  "runId": "ui-claude-1",
+  "familyId": "ui-action-record-replay",
+  "readerId": "phase19-ui-blind-01-openai",
+  "providerFamily": "openai",
+  "label": "spec-underspecified",
+  "rationale": "The visible package does not determine the call ordering required by these failures. R4 says a data-opens-confirmation step may not complete before confirmation is observed and accepted, but the facade never says whether the action opens the dialog or whether the irreversible effect occurs on submit or on acceptance; therefore the suppressed-dialog no_forbidden_effect expectation is not derivable. R5 only forbids repeating an irreversible step, and the submission skips such actions after completion, while the verifier's replay_idempotent flag does not reveal whether it instead rejects repeated reversible actions, the second-run audit, or some lifecycle assumption. This rejects capability, the nearest alternative, because the material expected behavior is not a determinate public rule rather than a clearly specified rule implemented incorrectly.",
+  "evidenceRead": [
+    "packet instructions, closedVocabulary, and decisionRule",
+    "challenge/MANIFEST.json",
+    "challenge/README.md",
+    "challenge/SPEC.md",
+    "challenge/examples/example-1-none.json",
+    "challenge/examples/example-2-node_wrapped.json",
+    "challenge/examples/example-3-node_removed.json",
+    "challenge/starter/subject.mjs",
+    "challenge/types.ts",
+    "submission/subject.mjs",
+    "evidence.transcript",
+    "evidence.countability",
+    "evidence.verifierOutput.cells and detail",
+    "evidence.normalizedResult",
+    "excluded and requiredOutput"
+  ],
+  "packetPath": "data/phase-19-ui-label-packets/ui-blind-01.json",
+  "packetSha256": "9b083fa265cebf4ade631ab5890edfcde7e12aebc6a9ba513f7d1a3dcab347cd",
+  "independentlyProduced": true,
+  "blindedTo": [
+    "other-reader-label",
+    "author-diagnosis",
+    "cross-cell-outcomes",
+    "stopping-decision",
+    "existing root-cause sidecar",
+    "other UI trial outcomes",
+    "family promotion status",
+    "research ranking"
+  ]
+}

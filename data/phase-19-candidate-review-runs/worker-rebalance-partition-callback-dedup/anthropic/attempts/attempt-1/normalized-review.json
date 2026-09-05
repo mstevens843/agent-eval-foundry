@@ -1,0 +1,43 @@
+{
+  "candidateId": "worker-rebalance-partition-callback-dedup",
+  "packetSha256": "707e302edd0507e52865620dbf81b1524708f7090a03a51a975c280f0b75f9ba",
+  "providerFamily": "anthropic",
+  "dimensions": {
+    "source support": "pass",
+    "specific causal mechanism": "pass",
+    "causal depth": "uncertain",
+    "diagnosis radius": "uncertain",
+    "fair solution-undirected contract": "uncertain",
+    "structural witness isolation": "uncertain",
+    "semantic novelty": "fail",
+    "cheap-probe falsifiability": "pass"
+  },
+  "verdict": "kill",
+  "earliestFailedDimension": "causal depth",
+  "rationale": "Source support passes: two sourceRecords (tb-repo-root, tb-merged-tasks-sample) are depthAchieved=full-source with fetchFailed=false, dated 2026-09-04, with itemized gh CLI access methods and six quoted sourceMechanisms attributed to those unit ids. The specific causal mechanism also passes: the probe names a concrete defect site rather than generic concurrency, namely an emit at the effect boundary that checks neither current generation ownership nor logical event identity. The run dies at causal depth because constructionCard is null. With no proposed code or state geometry, the number of causal hops between the planted defect and the customer-visible duplicate callback cannot be determined, and the packet instruction to treat missing construction detail as uncertain applies directly; the calibration note is pointed here, since CAA V2 went 4/4 precisely when the defect was visible in one short function across one obvious fan-in pattern, and nothing in this packet rules that geometry out. The same null card leaves diagnosis radius undeterminable and the packet argues against itself, because whyAgentMayFail localizes the entire fix to one well-known ordering decision between offset-commit and the external call, which is a single-site radius rather than a wide search. Structural witness isolation is likewise undeterminable: the inherited tolerance of up to 5 percent duplicated callbacks could absorb a mutant duplicate and blur the mutant/control separation, and no trial counts or tolerance for this candidate are stated. The fair solution-undirected contract has no artifact to audit at all, and the cheapProbe limit concedes that the simulation does not establish a fair public recovery contract or agent difficulty, while whyFair points at the answer by naming commit-then-emit-then-ack. Independent of the missing card, semantic novelty fails outright: family.taskShape restates the tb-repo-root payments-pipeline-fix taskShapeSketch nearly verbatim, down to sequencing state-commit versus offset-commit versus external-callback so kill/restart/scale sequences never silently drop or double-fire a customer-visible effect, and it reuses that task 5 percent duplicate tolerance and its retries-duplicate-side-effects axis, with isCalibrationAnchor=false so the replication is not licensed as an anchor. Cheap-probe falsifiability passes on its own terms, since the narrow mutant of emitting without current-generation fencing is paired with a one-generation one-owner non-activation control and a two-conjunct claim that a sink-side identity dedup could negate, though the result would only test the simulation, not a fair package. Two non-passes are structural rather than repairable by rewording: ship a construction card with real code and state geometry, and differentiate the family from the already-merged source task, before re-review.",
+  "reviewId": "phase19-worker-rebalance-partition-callback-dedup-anthropic",
+  "independentlyProduced": true,
+  "blindedTo": [
+    "corrected rank",
+    "numeric decision score",
+    "estimated clean-solve probabilities",
+    "Phase 19 assessment rationale",
+    "prior skeptic verdicts and repairs",
+    "other reader verdict",
+    "author recommendation",
+    "predicted survivor count"
+  ],
+  "transcriptPath": "data/phase-19-candidate-review-runs/worker-rebalance-partition-callback-dedup/anthropic/transcript.txt",
+  "rawOutputPath": "data/phase-19-candidate-review-runs/worker-rebalance-partition-callback-dedup/anthropic/raw-review.json",
+  "rawOutputSha256": "b8ba55f14ad6bebc756a7cadf0fd1c50712ecd902862b972747c9196d1dea540",
+  "metadataPath": "data/phase-19-candidate-review-runs/worker-rebalance-partition-callback-dedup/anthropic/metadata.json",
+  "runtimeSeconds": 134,
+  "usage": {
+    "inputTokens": 208383,
+    "cachedInputTokens": 188332,
+    "outputTokens": 10128,
+    "costUsd": 0.5489649999999999,
+    "source": "claude `result` event `usage` and `total_cost_usd`"
+  },
+  "costUsd": 0.5489649999999999
+}

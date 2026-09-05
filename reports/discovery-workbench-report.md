@@ -20,7 +20,7 @@ axis diversity. The workbench routes evidence; it does not prove a benchmark is 
 | expected next-batch build hours | 184 |
 | expected next-batch trial cost | $324 |
 | expected next-batch axes | 34 |
-| registry mechanisms available | 15 |
+| registry mechanisms available | 16 |
 
 ## Recommended Actions
 

@@ -1,0 +1,459 @@
+{
+  "allControlsHeld": true,
+  "controlSummary": {
+    "challenge_nonleakage": true,
+    "cheats_all_fail": true,
+    "determinism": true,
+    "every_mutant_independently_fatal": true,
+    "malformed_refused": true,
+    "narrow_mutant_activates_and_respects_controls": true,
+    "reference_and_alternative_pass": true,
+    "witness_isolation": true
+  },
+  "controls": {
+    "challenge_nonleakage": {
+      "agent_visible_files_scanned": 40,
+      "canary_detector_fires": true,
+      "canary_detector_rejects_substring": true,
+      "clean": true,
+      "leaks": [],
+      "secrets_scanned": 40
+    },
+    "cheats_all_fail": true,
+    "determinism": {
+      "correct_implementations_byte_stable": true,
+      "every_mutant_earns_reward_zero_every_round": true,
+      "rounds": 3,
+      "variants": {
+        "alt-reference/controls": {
+          "distinct_results": 1,
+          "failed_per_round": [
+            0,
+            0,
+            0
+          ],
+          "stable": true
+        },
+        "alt-reference/selected": {
+          "distinct_results": 1,
+          "failed_per_round": [
+            0,
+            0,
+            0
+          ],
+          "stable": true
+        },
+        "always-issue/selected": {
+          "earns_reward_zero_every_round": true,
+          "failed_per_round": [
+            24,
+            24,
+            24
+          ]
+        },
+        "always-refuse/selected": {
+          "earns_reward_zero_every_round": true,
+          "failed_per_round": [
+            8,
+            8,
+            8
+          ]
+        },
+        "any-authorizes/selected": {
+          "earns_reward_zero_every_round": true,
+          "failed_per_round": [
+            23,
+            23,
+            23
+          ]
+        },
+        "cached-stale/selected": {
+          "earns_reward_zero_every_round": true,
+          "failed_per_round": [
+            24,
+            24,
+            24
+          ]
+        },
+        "completion-order-association/selected": {
+          "earns_reward_zero_every_round": true,
+          "failed_per_round": [
+            12,
+            12,
+            12
+          ]
+        },
+        "fabricated-audit/selected": {
+          "earns_reward_zero_every_round": true,
+          "failed_per_round": [
+            24,
+            24,
+            24
+          ]
+        },
+        "identity-collapse/selected": {
+          "earns_reward_zero_every_round": true,
+          "failed_per_round": [
+            22,
+            22,
+            22
+          ]
+        },
+        "no-work/selected": {
+          "earns_reward_zero_every_round": true,
+          "failed_per_round": [
+            24,
+            24,
+            24
+          ]
+        },
+        "reference/controls": {
+          "distinct_results": 1,
+          "failed_per_round": [
+            0,
+            0,
+            0
+          ],
+          "stable": true
+        },
+        "reference/selected": {
+          "distinct_results": 1,
+          "failed_per_round": [
+            0,
+            0,
+            0
+          ],
+          "stable": true
+        },
+        "stale-boundary/selected": {
+          "earns_reward_zero_every_round": true,
+          "failed_per_round": [
+            6,
+            6,
+            6
+          ]
+        },
+        "visible-example-hardcoding/selected": {
+          "earns_reward_zero_every_round": true,
+          "failed_per_round": [
+            24,
+            24,
+            24
+          ]
+        }
+      }
+    },
+    "every_mutant_independently_fatal": true,
+    "malformed_refused": {
+      "all_refused": true,
+      "outcomes": {
+        "empty": "KeyError",
+        "no_scenario": "KeyError",
+        "orders_not_a_list": "AttributeError"
+      }
+    },
+    "narrow_mutant_activates_and_respects_controls": true,
+    "reference_and_alternative_pass": true,
+    "witness_isolation": {
+      "canary_evidence": "{\"events\": [{\"tick\": 2738, \"kind\": \"armed\", \"scenario\": \"ctl-single-stale\"}, {\"t",
+      "control_socket_canary_reaches_it_as_root": true,
+      "control_socket_denied_to_service": true,
+      "public_socket_refuses_control_verbs": true,
+      "service_evidence": "DENIED PermissionError"
+    }
+  },
+  "independentlyFatal": {
+    "always-issue": {
+      "fatal": true,
+      "intended_check": "outcome",
+      "intended_check_fired": 24,
+      "scenarios_failed": 24
+    },
+    "always-refuse": {
+      "fatal": true,
+      "intended_check": "outcome",
+      "intended_check_fired": 8,
+      "scenarios_failed": 8
+    },
+    "any-authorizes": {
+      "fatal": true,
+      "intended_check": "outcome",
+      "intended_check_fired": 23,
+      "scenarios_failed": 23
+    },
+    "cached-stale": {
+      "fatal": true,
+      "intended_check": "authorization_source",
+      "intended_check_fired": 24,
+      "scenarios_failed": 24
+    },
+    "completion-order-association": {
+      "fatal": true,
+      "intended_check": "authorization_applied",
+      "intended_check_fired": 12,
+      "scenarios_failed": 12
+    },
+    "fabricated-audit": {
+      "fatal": true,
+      "intended_check": "audit_matches_report",
+      "intended_check_fired": 24,
+      "scenarios_failed": 24
+    },
+    "identity-collapse": {
+      "fatal": true,
+      "intended_check": "authorization_applied",
+      "intended_check_fired": 21,
+      "scenarios_failed": 22
+    },
+    "no-work": {
+      "fatal": true,
+      "intended_check": "rechecked_exactly_the_stale",
+      "intended_check_fired": 24,
+      "scenarios_failed": 24
+    },
+    "stale-boundary": {
+      "fatal": true,
+      "intended_check": "authorization_source",
+      "intended_check_fired": 6,
+      "scenarios_failed": 6
+    },
+    "visible-example-hardcoding": {
+      "fatal": true,
+      "intended_check": "authorization_applied",
+      "intended_check_fired": 24,
+      "scenarios_failed": 24
+    }
+  },
+  "matrix": {
+    "alt-reference": {
+      "controls": {
+        "checks": {},
+        "failed": 0,
+        "total": 4
+      },
+      "selected": {
+        "checks": {},
+        "failed": 0,
+        "total": 24
+      }
+    },
+    "always-issue": {
+      "controls": {
+        "checks": {
+          "outcome": 2
+        },
+        "failed": 2,
+        "total": 4
+      },
+      "selected": {
+        "checks": {
+          "outcome": 24
+        },
+        "failed": 24,
+        "total": 24
+      }
+    },
+    "always-refuse": {
+      "controls": {
+        "checks": {
+          "outcome": 3
+        },
+        "failed": 3,
+        "total": 4
+      },
+      "selected": {
+        "checks": {
+          "outcome": 8
+        },
+        "failed": 8,
+        "total": 24
+      }
+    },
+    "any-authorizes": {
+      "controls": {
+        "checks": {
+          "outcome": 2
+        },
+        "failed": 2,
+        "total": 4
+      },
+      "selected": {
+        "checks": {
+          "outcome": 23
+        },
+        "failed": 23,
+        "total": 24
+      }
+    },
+    "cached-stale": {
+      "controls": {
+        "checks": {
+          "authorization_applied": 3,
+          "authorization_source": 3,
+          "no_unnamed_or_late_query": 2,
+          "outcome": 3,
+          "store_recorded": 3
+        },
+        "failed": 3,
+        "total": 4
+      },
+      "selected": {
+        "checks": {
+          "authorization_applied": 17,
+          "authorization_source": 24,
+          "no_unnamed_or_late_query": 11,
+          "outcome": 11,
+          "store_recorded": 24
+        },
+        "failed": 24,
+        "total": 24
+      }
+    },
+    "completion-order-association": {
+      "controls": {
+        "checks": {},
+        "failed": 0,
+        "total": 4
+      },
+      "selected": {
+        "checks": {
+          "authorization_applied": 12,
+          "outcome": 6,
+          "store_recorded": 12
+        },
+        "failed": 12,
+        "total": 24
+      }
+    },
+    "fabricated-audit": {
+      "controls": {
+        "checks": {
+          "audit_matches_report": 2
+        },
+        "failed": 2,
+        "total": 4
+      },
+      "selected": {
+        "checks": {
+          "audit_matches_report": 24
+        },
+        "failed": 24,
+        "total": 24
+      }
+    },
+    "identity-collapse": {
+      "controls": {
+        "checks": {},
+        "failed": 0,
+        "total": 4
+      },
+      "selected": {
+        "checks": {
+          "authorization_applied": 21,
+          "outcome": 9,
+          "report_present": 1,
+          "store_recorded": 21
+        },
+        "failed": 22,
+        "total": 24
+      }
+    },
+    "no-work": {
+      "controls": {
+        "checks": {
+          "authorization_applied": 3,
+          "authorization_source": 3,
+          "outcome": 3,
+          "rechecked_exactly_the_stale": 3,
+          "rechecks_issued_together": 2,
+          "store_recorded": 3
+        },
+        "failed": 3,
+        "total": 4
+      },
+      "selected": {
+        "checks": {
+          "authorization_applied": 17,
+          "authorization_source": 24,
+          "outcome": 11,
+          "rechecked_exactly_the_stale": 24,
+          "rechecks_issued_together": 24,
+          "store_recorded": 24
+        },
+        "failed": 24,
+        "total": 24
+      }
+    },
+    "reference": {
+      "controls": {
+        "checks": {},
+        "failed": 0,
+        "total": 4
+      },
+      "selected": {
+        "checks": {},
+        "failed": 0,
+        "total": 24
+      }
+    },
+    "stale-boundary": {
+      "controls": {
+        "checks": {},
+        "failed": 0,
+        "total": 4
+      },
+      "selected": {
+        "checks": {
+          "authorization_applied": 1,
+          "authorization_source": 6,
+          "no_unnamed_or_late_query": 4,
+          "rechecked_exactly_the_stale": 3,
+          "rechecks_issued_together": 3,
+          "store_recorded": 5
+        },
+        "failed": 6,
+        "total": 24
+      }
+    },
+    "visible-example-hardcoding": {
+      "controls": {
+        "checks": {
+          "authorization_applied": 2,
+          "outcome": 2,
+          "rechecked_exactly_the_stale": 3,
+          "rechecks_issued_together": 2,
+          "store_recorded": 2
+        },
+        "failed": 3,
+        "total": 4
+      },
+      "selected": {
+        "checks": {
+          "authorization_applied": 24,
+          "authorization_source": 1,
+          "outcome": 23,
+          "rechecked_exactly_the_stale": 24,
+          "rechecks_issued_together": 24,
+          "store_recorded": 24
+        },
+        "failed": 24,
+        "total": 24
+      }
+    }
+  },
+  "schema": "agent-eval-foundry/phase-18-package-controls@1",
+  "variants": [
+    "reference",
+    "alt-reference",
+    "always-issue",
+    "always-refuse",
+    "any-authorizes",
+    "cached-stale",
+    "completion-order-association",
+    "fabricated-audit",
+    "identity-collapse",
+    "no-work",
+    "stale-boundary",
+    "visible-example-hardcoding"
+  ]
+}

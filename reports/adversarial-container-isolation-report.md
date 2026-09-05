@@ -15,6 +15,7 @@ artifact directories.
 
 | bundle | verdict | network | runtime | hidden mounted | repo mounted | verifier inside | writable dirs | failures |
 |---|---|---|---|---:|---:|---:|---|---|
+| `bundles/caa-revalidation-adversarial-container` | **fail** | none | yes | 0 | 0 | 0 | exploit:no, submitted-bypass:no | writable exploit/submitted-bypass directories are not preserved |
 | `bundles/checker-required-memory-poisoning-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
 | `bundles/dao-descendant-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
 | `bundles/delegated-wallet-scope-reconciliation-adversarial-container` | **fail** | none | no | 0 | 0 | 0 | exploit:yes, submitted-bypass:yes | container smoke not run during deterministic bundle preparation |
@@ -30,6 +31,7 @@ artifact directories.
 
 | family | container records | counted no-bypass | counted bypass | readiness failures |
 |---|---:|---:|---:|---|
+| `caa-revalidation` | 0 | 0 | 0 | none |
 | `checker-required-memory-poisoning` | 0 | 0 | 0 | none |
 | `dao-descendant` | 0 | 0 | 0 | none |
 | `delegated-wallet-scope-reconciliation` | 0 | 0 | 0 | none |

@@ -1,0 +1,18 @@
+{
+  "candidateId": "worker-rebalance-partition-callback-dedup",
+  "packetSha256": "707e302edd0507e52865620dbf81b1524708f7090a03a51a975c280f0b75f9ba",
+  "providerFamily": "openai",
+  "dimensions": {
+    "source support": "pass",
+    "specific causal mechanism": "pass",
+    "causal depth": "uncertain",
+    "diagnosis radius": "uncertain",
+    "fair solution-undirected contract": "uncertain",
+    "structural witness isolation": "uncertain",
+    "semantic novelty": "uncertain",
+    "cheap-probe falsifiability": "uncertain"
+  },
+  "verdict": "kill",
+  "earliestFailedDimension": "causal depth",
+  "rationale": "The cited Terminal-Bench records support the worker-rebalance failure family, and the packet states a specific generation-fencing and logical-event-identity mechanism with activation and non-activation cases. However, constructionCard is null and no candidate code, state topology, commit/effect boundary layout, or multi-step dependency geometry is supplied. The depth of the source tasks and their verifier file sizes cannot be inherited as causal depth for this candidate. Under the rule that missing construction detail is uncertain and uncertainty kills the bounded run, causal depth is the earliest non-pass; later dimensions cannot be established from the packet after that gate fails."
+}

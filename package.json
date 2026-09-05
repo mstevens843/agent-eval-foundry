@@ -22,7 +22,9 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsup",
@@ -41,7 +43,12 @@
     "check": "node dist/cli.js check",
     "secret-scan": "node scripts/secret-scan.mjs",
     "clean-checkout": "node scripts/clean-checkout-check.mjs",
-    "freshness": "vitest run test/prose-freshness.test.ts"
+    "freshness": "vitest run test/prose-freshness.test.ts",
+    "phase17:artifacts": "node dist/cli.js phase17 audit --out data/phase-17-phase16-probe-audit.json && node dist/cli.js phase17 probe --out data/phase-17-probe-v2-results.json && node dist/cli.js phase17 controls --out data/phase-17-package-controls.json && node dist/cli.js phase17 ledger --out data/phase-17-trial-ledger.json && node dist/cli.js phase17 report --out reports/PHASE-17-CAA-VALIDATION.md",
+    "phase17:verify": "node scripts/verify-phase-17.mjs",
+    "phase18:verify": "node scripts/verify-phase-18.mjs",
+    "phase19:artifacts": "node dist/cli.js phase19 packets --out data/phase-19-ui-label-packet-manifest.json && node dist/cli.js phase19 labels --out data/phase-19-ui-label-ledger.json && node dist/cli.js phase19 rerank --out data/phase-19-reranking.json && node dist/cli.js phase19 reviews --out data/phase-19-candidate-review-ledger.json && node dist/cli.js phase19 report --out reports/PHASE-19-EVIDENCE-RERANK.md",
+    "phase19:verify": "node scripts/verify-phase-19.mjs"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",

@@ -1,0 +1,21 @@
+{
+  "label": "capability",
+  "rationale": "Every failed check is determined by the visible package and the rig measured this file. (1) unreplayable_reported: 36 of 44 failures are attribute_renamed, where SPEC.md's mutation table kills the target's data-testid and SPEC.md defines unreplayable as a trace that 'can never replay as recorded'; example-3 sets the precedent (recorded selector no longer resolves -> unreplayable) and example-2 the contrast (id stale but selector still resolves -> completed). The submission instead synthesizes substitute selectors from precondition.attr and postcondition.effect (repairSelectors/repairTarget) and blesses the guess by matching step.recordedNodeId, which R1 and types.ts call a hint, not an address, and name as the temptation the family measures. The branch explains the exact split: d2/d4 fail 18/18 while d0 passes 18/18 only because its fallback selector is ambiguous. (2) no_forbidden_effect: 33/33 suppressed+settled cells fail because replay() calls runAction() before observing confirmationPresent(), so the irreversible submit fires with no dialog ever presented, violating R4 ('must not complete until a confirmation has been observed and accepted. An absent dialog is not a confirmation') and README's 'no irreversible effect fires when it should not'. (3) replay_idempotent: 35 failures, all r=2 and never conf=absent, because completedIrreversibleSteps.add() sits after the confirmation gate, so a halt at that gate discards the record after the payment already fired and the second replay pays again, against R5's 'Keeping that record is your job'. Nearest alternative, spec-underspecified, is rejected: the only slice whose required outcome is arguably not derivable is node_removed at d4 with a pending region (8 of 90 failing cells, all and only those cells), where query reports pending for a removed target and SPEC.md's 'not yet vs not there' gloss does not settle precedence. Scoring all 8 as passes still leaves 82 failing cells and all three checks failing on obligations stated verbatim in SPEC.md R1/R4/R5 and the outcome definitions, so no underdetermined outcome is material to this failure. spec-contradiction fails for the same reason: the verifier's expectations match R4, R5 and the unreplayable definition rather than contradicting them. harness-contract-violation and infrastructure are excluded by the evidence: status completed, 324/324 graded, '0 host errors' under subprocess isolation, and each cell's pass/fail pattern maps onto a specific branch of the submitted subject.mjs. package-leak does not apply: MANIFEST.json names hidden artifacts without exposing their content, and the examples' outcome notes are declared teaching material.",
+  "evidenceRead": [
+    "challenge/PACKET.json -> instructions, closedVocabulary, decisionRule, excluded, requiredOutput",
+    "challenge/MANIFEST.json",
+    "challenge/README.md",
+    "challenge/SPEC.md (R1-R7, outcome definitions, mutation space, facade contract)",
+    "challenge/types.ts (Selector, RecordedStep.recordedNodeId note, QueryResult.pending note, AppFacade)",
+    "challenge/starter/subject.mjs",
+    "challenge/examples/example-1-none.json",
+    "challenge/examples/example-2-node_wrapped.json",
+    "challenge/examples/example-3-node_removed.json",
+    "submission/subject.mjs (rawResolve, repairSelectors, repairTarget, identityMatches, replay loop ordering, completedIrreversibleSteps placement, auditAlreadyCompleted)",
+    "evidence.verifierOutput.cells (324 cells; 90 failing: no_forbidden_effect 61, unreplayable_reported 44, replay_idempotent 35)",
+    "evidence.verifierOutput.detail ('90/324 scenarios failed (0 host errors) under subprocess isolation')",
+    "evidence.transcript",
+    "evidence.countability",
+    "evidence.normalizedResult (status, counts, scenarioSetId, runtimeSeconds, isolation)"
+  ]
+}

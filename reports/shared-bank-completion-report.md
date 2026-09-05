@@ -7,7 +7,7 @@ would produce them. Every number here is computed from the trial directories; no
 
 | kind | what an axis count over it means | families | shared subjects | labs | verdict | trials still needed |
 |---|---|---:|---:|---:|---|---:|
-| `agent` | difficulty | 7 | 0 | 0 | **REFUSED** | 11 |
+| `agent` | difficulty | 8 | 0 | 0 | **REFUSED** | 14 |
 | `imported` | difficulty | 1 | 2 | 2 | **REFUSED** | 1 |
 | `mutant` | mutant-detection | 4 | 0 | 0 | **REFUSED** | 9 |
 
@@ -22,12 +22,14 @@ No subject has a counted, hash-current trial in every family. Co-failure across 
 
 | subject | lab | present in | missing from |
 |---|---|---|---|
-| `claude-claude-opus-5` | unknown | `descendant`, `recompute`, `recompute` | `containment` (never-attempted), `replay` (never-attempted), `dom` (never-attempted), `poisoning` (never-attempted) |
-| `claude-haiku-4-5` | anthropic | `containment`, `replay` | `dom` (never-attempted), `poisoning` (never-attempted), `descendant` (never-attempted), `recompute` (never-attempted), `recompute` (never-attempted) |
-| `claude-opus-5` | anthropic | `containment`, `replay` | `dom` (never-attempted), `poisoning` (never-attempted), `descendant` (never-attempted), `recompute` (never-attempted), `recompute` (never-attempted) |
-| `claude-sonnet-5` | anthropic | `containment`, `replay` | `dom` (never-attempted), `poisoning` (never-attempted), `descendant` (never-attempted), `recompute` (never-attempted), `recompute` (never-attempted) |
-| `codex-gpt-5.6-sol` | unknown | `descendant`, `recompute`, `recompute` | `containment` (never-attempted), `replay` (never-attempted), `dom` (never-attempted), `poisoning` (never-attempted) |
-| `gpt-5.6-sol` | openai | `containment`, `replay`, `dom`, `poisoning` | `descendant` (never-attempted), `recompute` (never-attempted), `recompute` (never-attempted) |
+| `anthropic-claude-opus` | unknown | `revalidation` | `containment` (never-attempted), `replay` (never-attempted), `dom` (never-attempted), `poisoning` (never-attempted), `descendant` (never-attempted), `recompute` (never-attempted), `recompute` (never-attempted) |
+| `claude-claude-opus-5` | unknown | `descendant`, `recompute`, `recompute` | `containment` (never-attempted), `replay` (never-attempted), `dom` (never-attempted), `poisoning` (never-attempted), `revalidation` (never-attempted) |
+| `claude-haiku-4-5` | anthropic | `containment`, `replay` | `dom` (never-attempted), `poisoning` (never-attempted), `revalidation` (never-attempted), `descendant` (never-attempted), `recompute` (never-attempted), `recompute` (never-attempted) |
+| `claude-opus-5` | anthropic | `containment`, `replay` | `dom` (never-attempted), `poisoning` (never-attempted), `revalidation` (never-attempted), `descendant` (never-attempted), `recompute` (never-attempted), `recompute` (never-attempted) |
+| `claude-sonnet-5` | anthropic | `containment`, `replay` | `dom` (never-attempted), `poisoning` (never-attempted), `revalidation` (never-attempted), `descendant` (never-attempted), `recompute` (never-attempted), `recompute` (never-attempted) |
+| `codex-gpt-5.6-sol` | unknown | `descendant`, `recompute`, `recompute` | `containment` (never-attempted), `replay` (never-attempted), `dom` (never-attempted), `poisoning` (never-attempted), `revalidation` (never-attempted) |
+| `gpt-5.6-sol` | openai | `containment`, `replay`, `dom`, `poisoning` | `revalidation` (never-attempted), `descendant` (never-attempted), `recompute` (never-attempted), `recompute` (never-attempted) |
+| `openai-gpt-5.6-sol` | unknown | `revalidation` | `containment` (never-attempted), `replay` (never-attempted), `dom` (never-attempted), `poisoning` (never-attempted), `descendant` (never-attempted), `recompute` (never-attempted), `recompute` (never-attempted) |
 
 ## `imported` — difficulty
 
@@ -105,21 +107,28 @@ number exists, so it is computed and quoted here rather than suppressed by a thi
 | `containment` + `replay` | 4 | 2 | **MEASURED** | **1** | 1 | 6.0 |
 | `containment` + `dom` | 1 | 1 | **PARTIAL** | refused | — | — |
 | `containment` + `poisoning` | 1 | 1 | **PARTIAL** | refused | — | — |
+| `containment` + `revalidation` | 0 | 0 | **REFUSED** | refused | — | — |
 | `containment` + `descendant` | 0 | 0 | **REFUSED** | refused | — | — |
 | `containment` + `recompute` | 0 | 0 | **REFUSED** | refused | — | — |
 | `containment` + `recompute` | 0 | 0 | **REFUSED** | refused | — | — |
 | `replay` + `dom` | 1 | 1 | **PARTIAL** | refused | — | — |
 | `replay` + `poisoning` | 1 | 1 | **PARTIAL** | refused | — | — |
+| `replay` + `revalidation` | 0 | 0 | **REFUSED** | refused | — | — |
 | `replay` + `descendant` | 0 | 0 | **REFUSED** | refused | — | — |
 | `replay` + `recompute` | 0 | 0 | **REFUSED** | refused | — | — |
 | `replay` + `recompute` | 0 | 0 | **REFUSED** | refused | — | — |
 | `dom` + `poisoning` | 1 | 1 | **PARTIAL** | refused | — | — |
+| `dom` + `revalidation` | 0 | 0 | **REFUSED** | refused | — | — |
 | `dom` + `descendant` | 0 | 0 | **REFUSED** | refused | — | — |
 | `dom` + `recompute` | 0 | 0 | **REFUSED** | refused | — | — |
 | `dom` + `recompute` | 0 | 0 | **REFUSED** | refused | — | — |
+| `poisoning` + `revalidation` | 0 | 0 | **REFUSED** | refused | — | — |
 | `poisoning` + `descendant` | 0 | 0 | **REFUSED** | refused | — | — |
 | `poisoning` + `recompute` | 0 | 0 | **REFUSED** | refused | — | — |
 | `poisoning` + `recompute` | 0 | 0 | **REFUSED** | refused | — | — |
+| `revalidation` + `descendant` | 0 | 0 | **REFUSED** | refused | — | — |
+| `revalidation` + `recompute` | 0 | 0 | **REFUSED** | refused | — | — |
+| `revalidation` + `recompute` | 0 | 0 | **REFUSED** | refused | — | — |
 | `descendant` + `recompute` | 2 | 0 | **PARTIAL** | refused | — | — |
 | `descendant` + `recompute` | 2 | 0 | **PARTIAL** | refused | — | — |
 | `recompute` + `recompute` | 2 | 0 | **PARTIAL** | refused | — | — |
@@ -158,25 +167,32 @@ The shared subjects span 2 labs (anthropic, openai), so the width is not an arti
 
 ## The exact work remaining
 
-11 counted trial(s), listed exactly. Each line is a trial that does not exist yet:
+14 counted trial(s), listed exactly. Each line is a trial that does not exist yet:
 
 | subject | family | provider | runnable here | what it unlocks |
 |---|---|---|---|---|
-| `gpt-5.6-sol` | `dao-descendant` | `codex` | **yes** | `gpt-5.6-sol` is already counted in prompt-injection-containment, ui-action-record-replay, ui-replay-live-dom, checker-required-memory-poisoning; this is the last 3 trials it needs |
-| `gpt-5.6-sol` | `trading-reconciliation-recompute` | `codex` | **yes** | `gpt-5.6-sol` is already counted in prompt-injection-containment, ui-action-record-replay, ui-replay-live-dom, checker-required-memory-poisoning; this is the last 3 trials it needs |
-| `gpt-5.6-sol` | `deployment-rollback-recompute` | `codex` | **yes** | `gpt-5.6-sol` is already counted in prompt-injection-containment, ui-action-record-replay, ui-replay-live-dom, checker-required-memory-poisoning; this is the last 3 trials it needs |
-| `claude-claude-opus-5` | `prompt-injection-containment` | `external` | no — no provider in the registry hosts this subject | `claude-claude-opus-5` is already counted in dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute; this is the last 4 trials it needs |
-| `claude-claude-opus-5` | `ui-action-record-replay` | `external` | no — no provider in the registry hosts this subject | `claude-claude-opus-5` is already counted in dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute; this is the last 4 trials it needs |
-| `claude-claude-opus-5` | `ui-replay-live-dom` | `external` | no — no provider in the registry hosts this subject | `claude-claude-opus-5` is already counted in dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute; this is the last 4 trials it needs |
-| `claude-claude-opus-5` | `checker-required-memory-poisoning` | `external` | no — no provider in the registry hosts this subject | `claude-claude-opus-5` is already counted in dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute; this is the last 4 trials it needs |
-| `codex-gpt-5.6-sol` | `prompt-injection-containment` | `external` | no — no provider in the registry hosts this subject | `codex-gpt-5.6-sol` is already counted in dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute; this is the last 4 trials it needs |
-| `codex-gpt-5.6-sol` | `ui-action-record-replay` | `external` | no — no provider in the registry hosts this subject | `codex-gpt-5.6-sol` is already counted in dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute; this is the last 4 trials it needs |
-| `codex-gpt-5.6-sol` | `ui-replay-live-dom` | `external` | no — no provider in the registry hosts this subject | `codex-gpt-5.6-sol` is already counted in dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute; this is the last 4 trials it needs |
-| `codex-gpt-5.6-sol` | `checker-required-memory-poisoning` | `external` | no — no provider in the registry hosts this subject | `codex-gpt-5.6-sol` is already counted in dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute; this is the last 4 trials it needs |
+| `gpt-5.6-sol` | `caa-revalidation` | `codex` | **yes** | `gpt-5.6-sol` is already counted in prompt-injection-containment, ui-action-record-replay, ui-replay-live-dom, checker-required-memory-poisoning; this is the last 4 trials it needs |
+| `gpt-5.6-sol` | `dao-descendant` | `codex` | **yes** | `gpt-5.6-sol` is already counted in prompt-injection-containment, ui-action-record-replay, ui-replay-live-dom, checker-required-memory-poisoning; this is the last 4 trials it needs |
+| `gpt-5.6-sol` | `trading-reconciliation-recompute` | `codex` | **yes** | `gpt-5.6-sol` is already counted in prompt-injection-containment, ui-action-record-replay, ui-replay-live-dom, checker-required-memory-poisoning; this is the last 4 trials it needs |
+| `gpt-5.6-sol` | `deployment-rollback-recompute` | `codex` | **yes** | `gpt-5.6-sol` is already counted in prompt-injection-containment, ui-action-record-replay, ui-replay-live-dom, checker-required-memory-poisoning; this is the last 4 trials it needs |
+| `claude-claude-opus-5` | `prompt-injection-containment` | `external` | no — no provider in the registry hosts this subject | `claude-claude-opus-5` is already counted in dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute; this is the last 5 trials it needs |
+| `claude-claude-opus-5` | `ui-action-record-replay` | `external` | no — no provider in the registry hosts this subject | `claude-claude-opus-5` is already counted in dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute; this is the last 5 trials it needs |
+| `claude-claude-opus-5` | `ui-replay-live-dom` | `external` | no — no provider in the registry hosts this subject | `claude-claude-opus-5` is already counted in dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute; this is the last 5 trials it needs |
+| `claude-claude-opus-5` | `checker-required-memory-poisoning` | `external` | no — no provider in the registry hosts this subject | `claude-claude-opus-5` is already counted in dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute; this is the last 5 trials it needs |
+| `claude-claude-opus-5` | `caa-revalidation` | `external` | no — no provider in the registry hosts this subject | `claude-claude-opus-5` is already counted in dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute; this is the last 5 trials it needs |
+| `codex-gpt-5.6-sol` | `prompt-injection-containment` | `external` | no — no provider in the registry hosts this subject | `codex-gpt-5.6-sol` is already counted in dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute; this is the last 5 trials it needs |
+| `codex-gpt-5.6-sol` | `ui-action-record-replay` | `external` | no — no provider in the registry hosts this subject | `codex-gpt-5.6-sol` is already counted in dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute; this is the last 5 trials it needs |
+| `codex-gpt-5.6-sol` | `ui-replay-live-dom` | `external` | no — no provider in the registry hosts this subject | `codex-gpt-5.6-sol` is already counted in dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute; this is the last 5 trials it needs |
+| `codex-gpt-5.6-sol` | `checker-required-memory-poisoning` | `external` | no — no provider in the registry hosts this subject | `codex-gpt-5.6-sol` is already counted in dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute; this is the last 5 trials it needs |
+| `codex-gpt-5.6-sol` | `caa-revalidation` | `external` | no — no provider in the registry hosts this subject | `codex-gpt-5.6-sol` is already counted in dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute; this is the last 5 trials it needs |
 
 Runnable here, as written:
 
 ```bash
+foundry trials run --family caa-revalidation --run-id revalidation-codex-1 \
+  --model openai/gpt-5.6-sol --provider shell --inherit-env \
+  --command codex exec --dangerously-bypass-approvals-and-sandbox --skip-git-repo-check '{instruction}'
+
 foundry trials run --family dao-descendant --run-id descendant-codex-1 \
   --model openai/gpt-5.6-sol --provider shell --inherit-env \
   --command codex exec --dangerously-bypass-approvals-and-sandbox --skip-git-repo-check '{instruction}'
@@ -199,6 +215,7 @@ foundry trials campaign prepare --family prompt-injection-containment --provider
 foundry trials campaign prepare --family ui-action-record-replay --provider external --out bundles/ui-action-record-replay-external
 foundry trials campaign prepare --family ui-replay-live-dom --provider external --out bundles/ui-replay-live-dom-external
 foundry trials campaign prepare --family checker-required-memory-poisoning --provider external --out bundles/checker-required-memory-poisoning-external
+foundry trials campaign prepare --family caa-revalidation --provider external --out bundles/caa-revalidation-external
 ```
 
 
@@ -246,25 +263,37 @@ money. Collapsing them into 'missing' is how a work list becomes a wish.
 | `access-token-scope-expansion::stale-state-reader` | `delegated-wallet-scope-reconciliation` | `never-attempted` | no trial record exists |
 | `access-token-scope-expansion::stale-state-reader` | `deployment-model-alias-rollout-drift` | `never-attempted` | no trial record exists |
 | `access-token-scope-expansion::stale-state-reader` | `prompt-injection-memory-poisoning` | `never-attempted` | no trial record exists |
+| `anthropic-claude-opus` | `checker-required-memory-poisoning` | `never-attempted` | no trial record exists |
+| `anthropic-claude-opus` | `dao-descendant` | `never-attempted` | no trial record exists |
+| `anthropic-claude-opus` | `deployment-rollback-recompute` | `never-attempted` | no trial record exists |
+| `anthropic-claude-opus` | `prompt-injection-containment` | `never-attempted` | no trial record exists |
+| `anthropic-claude-opus` | `trading-reconciliation-recompute` | `never-attempted` | no trial record exists |
+| `anthropic-claude-opus` | `ui-action-record-replay` | `never-attempted` | no trial record exists |
+| `anthropic-claude-opus` | `ui-replay-live-dom` | `never-attempted` | no trial record exists |
+| `claude-claude-opus-5` | `caa-revalidation` | `never-attempted` | no trial record exists |
 | `claude-claude-opus-5` | `checker-required-memory-poisoning` | `never-attempted` | no trial record exists |
 | `claude-claude-opus-5` | `prompt-injection-containment` | `never-attempted` | no trial record exists |
 | `claude-claude-opus-5` | `ui-action-record-replay` | `never-attempted` | no trial record exists |
 | `claude-claude-opus-5` | `ui-replay-live-dom` | `never-attempted` | no trial record exists |
+| `claude-haiku-4-5` | `caa-revalidation` | `never-attempted` | no trial record exists |
 | `claude-haiku-4-5` | `checker-required-memory-poisoning` | `never-attempted` | no trial record exists |
 | `claude-haiku-4-5` | `dao-descendant` | `never-attempted` | no trial record exists |
 | `claude-haiku-4-5` | `deployment-rollback-recompute` | `never-attempted` | no trial record exists |
 | `claude-haiku-4-5` | `trading-reconciliation-recompute` | `never-attempted` | no trial record exists |
 | `claude-haiku-4-5` | `ui-replay-live-dom` | `never-attempted` | no trial record exists |
+| `claude-opus-5` | `caa-revalidation` | `never-attempted` | no trial record exists |
 | `claude-opus-5` | `checker-required-memory-poisoning` | `never-attempted` | no trial record exists |
 | `claude-opus-5` | `dao-descendant` | `never-attempted` | no trial record exists |
 | `claude-opus-5` | `deployment-rollback-recompute` | `never-attempted` | no trial record exists |
 | `claude-opus-5` | `trading-reconciliation-recompute` | `never-attempted` | no trial record exists |
 | `claude-opus-5` | `ui-replay-live-dom` | `never-attempted` | no trial record exists |
+| `claude-sonnet-5` | `caa-revalidation` | `never-attempted` | no trial record exists |
 | `claude-sonnet-5` | `checker-required-memory-poisoning` | `never-attempted` | no trial record exists |
 | `claude-sonnet-5` | `dao-descendant` | `never-attempted` | no trial record exists |
 | `claude-sonnet-5` | `deployment-rollback-recompute` | `never-attempted` | no trial record exists |
 | `claude-sonnet-5` | `trading-reconciliation-recompute` | `never-attempted` | no trial record exists |
 | `claude-sonnet-5` | `ui-replay-live-dom` | `never-attempted` | no trial record exists |
+| `codex-gpt-5.6-sol` | `caa-revalidation` | `never-attempted` | no trial record exists |
 | `codex-gpt-5.6-sol` | `checker-required-memory-poisoning` | `never-attempted` | no trial record exists |
 | `codex-gpt-5.6-sol` | `prompt-injection-containment` | `never-attempted` | no trial record exists |
 | `codex-gpt-5.6-sol` | `ui-action-record-replay` | `never-attempted` | no trial record exists |
@@ -350,9 +379,17 @@ money. Collapsing them into 'missing' is how a work list becomes a wish.
 | `deployment-model-alias-rollout-drift::version-attribution-blind` | `access-token-scope-expansion` | `never-attempted` | no trial record exists |
 | `deployment-model-alias-rollout-drift::version-attribution-blind` | `delegated-wallet-scope-reconciliation` | `never-attempted` | no trial record exists |
 | `deployment-model-alias-rollout-drift::version-attribution-blind` | `prompt-injection-memory-poisoning` | `never-attempted` | no trial record exists |
+| `gpt-5.6-sol` | `caa-revalidation` | `never-attempted` | no trial record exists |
 | `gpt-5.6-sol` | `dao-descendant` | `never-attempted` | no trial record exists |
 | `gpt-5.6-sol` | `deployment-rollback-recompute` | `never-attempted` | no trial record exists |
 | `gpt-5.6-sol` | `trading-reconciliation-recompute` | `never-attempted` | no trial record exists |
+| `openai-gpt-5.6-sol` | `checker-required-memory-poisoning` | `never-attempted` | no trial record exists |
+| `openai-gpt-5.6-sol` | `dao-descendant` | `never-attempted` | no trial record exists |
+| `openai-gpt-5.6-sol` | `deployment-rollback-recompute` | `never-attempted` | no trial record exists |
+| `openai-gpt-5.6-sol` | `prompt-injection-containment` | `never-attempted` | no trial record exists |
+| `openai-gpt-5.6-sol` | `trading-reconciliation-recompute` | `never-attempted` | no trial record exists |
+| `openai-gpt-5.6-sol` | `ui-action-record-replay` | `never-attempted` | no trial record exists |
+| `openai-gpt-5.6-sol` | `ui-replay-live-dom` | `never-attempted` | no trial record exists |
 | `prompt-injection-memory-poisoning::attention-budgeted` | `access-token-scope-expansion` | `never-attempted` | no trial record exists |
 | `prompt-injection-memory-poisoning::attention-budgeted` | `delegated-wallet-scope-reconciliation` | `never-attempted` | no trial record exists |
 | `prompt-injection-memory-poisoning::attention-budgeted` | `deployment-model-alias-rollout-drift` | `never-attempted` | no trial record exists |

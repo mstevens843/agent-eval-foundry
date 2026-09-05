@@ -7,6 +7,7 @@ Cheat resistance is not the same claim as no bypass found. Cheat resistance is t
 
 | family | readiness | package hash | campaign | bundle | blockers |
 |---|---|---|---|---|---|
+| `caa-revalidation` | **audit-pending** | none | none | none | `public-package-present`, `package-leak-check`, `campaign-file-present`, `threat-model-declared`, `access-boundary-declared`, `outcome-contract-declared`, `never-counts-declared` |
 | `checker-required-memory-poisoning` | **adversarial-ready** | `448f2f816c51030cc97a374816226168` | `checker-required-memory-poisoning-adversarial` | `bundles/checker-required-memory-poisoning-adversarial` | none |
 | `dao-descendant` | **adversarial-ready** | `9d89b49307a960f65f2e6e8f204fd15e` | `dao-descendant-adversarial` | `bundles/dao-descendant-adversarial` | none |
 | `delegated-wallet-scope-reconciliation` | **adversarial-ready** | `45f27b644a84364e3d3855f68cd243a2` | `delegated-wallet-scope-reconciliation-adversarial` | `bundles/delegated-wallet-scope-reconciliation-adversarial` | none |
@@ -22,12 +23,28 @@ Cheat resistance is not the same claim as no bypass found. Cheat resistance is t
 ## Current Reading
 
 Adversarial-ready families: `checker-required-memory-poisoning`, `dao-descendant`, `delegated-wallet-scope-reconciliation`, `deployment-model-alias-rollout-drift`, `deployment-rollback-recompute`, `prompt-injection-containment`, `prompt-injection-memory-poisoning`, `trading-reconciliation-recompute`, `ui-action-record-replay`, `ui-replay-live-dom`.
-Audit-pending families: `durable-approval-outbox`.
+Audit-pending families: `caa-revalidation`, `durable-approval-outbox`.
 
 A ready verdict means the attack campaign is prepared and hash-pinned. It does not mean anyone
 has tried to exploit the verifier, and it does not mean no bypass exists.
 
 ## Audit Checks
+
+### `caa-revalidation`
+
+| check | result | detail |
+|---|---|---|
+| `public-package-present` | **FAIL** | no checked-in public challenge package is available here |
+| `package-leak-check` | **FAIL** | no generated package split can be audited |
+| `campaign-file-present` | **FAIL** | no adversarial campaign file is checked in |
+| `campaign-hash-current` | n/a | campaign hash none / current none |
+| `threat-model-declared` | **FAIL** | campaign must declare the attack surface |
+| `access-boundary-declared` | **FAIL** | allowed/forbidden attacker access boundary is incomplete |
+| `outcome-contract-declared` | **FAIL** | campaign must define what counts as bypass and no-bypass |
+| `never-counts-declared` | **FAIL** | campaign never-counts list is incomplete |
+| `attack-bundle-present` | n/a | prepared adversarial bundle missing |
+| `fs-sandbox-isolation-check` | n/a | no attack bundle to inspect |
+| `exploit-schema-present` | n/a | no attack bundle to inspect |
 
 ### `checker-required-memory-poisoning`
 

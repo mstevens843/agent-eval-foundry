@@ -1,0 +1,67 @@
+{
+  "delay_ms": {
+    "d.example.test": 50,
+    "e.example.test": 10
+  },
+  "fail_with": {},
+  "id": "sel-07",
+  "knobs": {
+    "ages": {
+      "a.example.test": 0,
+      "b.example.test": 8,
+      "c.example.test": 8,
+      "d.example.test": 200,
+      "e.example.test": 24
+    },
+    "delays": {
+      "a.example.test": 50,
+      "b.example.test": 50,
+      "c.example.test": 50,
+      "d.example.test": 50,
+      "e.example.test": 10
+    },
+    "document": [
+      "d.example.test",
+      "a.example.test",
+      "c.example.test",
+      "b.example.test",
+      "e.example.test"
+    ],
+    "gap_hours": 9,
+    "has_failure": false,
+    "width": 5
+  },
+  "orders": [
+    {
+      "at": "2031-03-04T12:00:00Z",
+      "id": "o1",
+      "identifiers": [
+        "d.example.test",
+        "e.example.test"
+      ]
+    },
+    {
+      "at": "2031-03-04T21:00:00Z",
+      "id": "o2",
+      "identifiers": [
+        "d.example.test",
+        "e.example.test"
+      ]
+    }
+  ],
+  "policy": {
+    "d.example.test": "FORBID",
+    "e.example.test": "PERMIT"
+  },
+  "seed": 6932,
+  "store": {
+    "d.example.test": {
+      "checked_at": "2031-02-24T04:00:00Z",
+      "decision": "FORBID"
+    },
+    "e.example.test": {
+      "checked_at": "2031-03-03T12:00:00Z",
+      "decision": "FORBID"
+    }
+  }
+}

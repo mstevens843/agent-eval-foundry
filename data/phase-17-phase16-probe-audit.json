@@ -1,0 +1,309 @@
+{
+  "schema": "agent-eval-foundry/phase-17-phase16-probe-audit@1",
+  "auditId": "phase17-lane0-phase16-probe-audit",
+  "supersedes": [
+    "reports/PHASE-16-DISCOVERY-V3.md, Probe Gate: the clauses `the authority witness remained inaccessible, and the challenge did not leak it`",
+    "data/phase-16-probe-results-final.json: the fields `witnessIsolated: true` and `challengeNonleakage: true` for the CAA candidate",
+    "The description of the CAA candidate as an exact full-procedure probe survivor"
+  ],
+  "frozenInputs": [
+    {
+      "name": "probeImplementation",
+      "path": "src/phase-16/probes.ts",
+      "registeredSha256": "bf98d8164c5fa2bdcbc07d122d4fee9b2fa758186d27505f6ccfb33f417f0023",
+      "observedSha256": "bf98d8164c5fa2bdcbc07d122d4fee9b2fa758186d27505f6ccfb33f417f0023",
+      "matches": true
+    },
+    {
+      "name": "readerOutputSchema",
+      "path": "data/phase-16-reader-output.schema.json",
+      "registeredSha256": "e6f076483364ecb51ab3e23e71cef264bc64667845af988346e2716c296aa293",
+      "observedSha256": "e6f076483364ecb51ab3e23e71cef264bc64667845af988346e2716c296aa293",
+      "matches": true
+    },
+    {
+      "name": "readerInstructions",
+      "path": "data/phase-16-reader-instructions.txt",
+      "registeredSha256": "1b7759b910d7f19d02c82bbda786eb347201fadbcec3dbd21931b747db2bb2ce",
+      "observedSha256": "1b7759b910d7f19d02c82bbda786eb347201fadbcec3dbd21931b747db2bb2ce",
+      "matches": true
+    },
+    {
+      "name": "parentPreregistration",
+      "path": "data/phase-16-preregistration.json",
+      "registeredSha256": "189018ba2072c6de2b2a841b919a5f78834b8585d15e7756ad11d1eb5f6ef302",
+      "observedSha256": "189018ba2072c6de2b2a841b919a5f78834b8585d15e7756ad11d1eb5f6ef302",
+      "matches": true
+    }
+  ],
+  "allFrozenInputsIntact": true,
+  "funnel": {
+    "packetsRegistered": 4,
+    "reviewsRegistered": 8,
+    "reviewsCompleted": 8,
+    "promoteVerdicts": 3,
+    "candidatesWithTwoOfTwoPromote": 1,
+    "probesRun": 1,
+    "probeSurvivors": 1,
+    "caaProbeFixtures": 1,
+    "caaProbeDeclaredFixtureClasses": 2,
+    "enforcementStrategiesRun": 8,
+    "publicRuleViolationsCaughtNowhere": 5
+  },
+  "caaReaderVerdicts": [
+    {
+      "providerFamily": "openai",
+      "model": "openai/gpt-5.6-sol",
+      "verdict": "promote",
+      "packetSha256": "45475d79cb39fc0eb9a9e4e992512ec3a1d75974a6e3be8b8ae815178f7d2c13",
+      "independentlyProduced": true,
+      "allDimensionsPass": true
+    },
+    {
+      "providerFamily": "anthropic",
+      "model": "anthropic/claude-opus",
+      "verdict": "promote",
+      "packetSha256": "45475d79cb39fc0eb9a9e4e992512ec3a1d75974a6e3be8b8ae815178f7d2c13",
+      "independentlyProduced": true,
+      "allDimensionsPass": true
+    }
+  ],
+  "caaPromotedByTwoIndependentFamilies": true,
+  "declaredProcedure": "In one invocation, run reference, first-name-reuse mutant, and malformed output twice over one-name controls and multi-name denied-tail cases.",
+  "declaredFalsifier": "Kill if reference fails, mutant does not fail binding or safe-issuance checks, malformed output is graded, replay changes, or query ledger leaks.",
+  "implemented": {
+    "sourceSha256": "bf98d8164c5fa2bdcbc07d122d4fee9b2fa758186d27505f6ccfb33f417f0023",
+    "runnerAcceptsFixtureParameter": false,
+    "distinctFixtures": 1,
+    "fixtureNameCount": 2,
+    "fixtureNowHour": 20,
+    "fixtureValidatedAtHours": [
+      10,
+      9
+    ],
+    "fixtureAges": [
+      10,
+      11
+    ],
+    "fixtureStaleCount": 2,
+    "fixtureFreshCount": 0,
+    "envelopeAgeValues": [
+      0,
+      8,
+      9,
+      24,
+      719
+    ],
+    "fixtureAgesInsideDeclaredEnvelope": false,
+    "referenceRuns": 2,
+    "mutantRuns": 1,
+    "malformedChecks": 1,
+    "oneNameControlsRun": 0,
+    "sentinelInCaaAuthorityMap": false,
+    "sentinelOccurrencesInContractArtifact": 0,
+    "sentinelOccurrencesInPacketArtifact": 0
+  },
+  "replayedProbeResult": {
+    "candidateId": "multi-name-caa-revalidation-reconciler",
+    "probeId": "caa-identity-binding-probe",
+    "status": "survived",
+    "reason": "All registered probe controls and the exact narrow-mutant profile held.",
+    "expectedMutantFailures": [
+      "check-caa-per-name-binding",
+      "check-caa-safe-issuance"
+    ],
+    "observedMutantFailures": [
+      "check-caa-per-name-binding",
+      "check-caa-safe-issuance"
+    ],
+    "b6": {
+      "sameInvocation": true,
+      "usable": true,
+      "knownGoodPassed": true,
+      "knownBadFailed": true,
+      "malformedInputRefused": true,
+      "nondegenerate": true
+    },
+    "mechanismActivated": true,
+    "witnessIsolated": true,
+    "deterministicReplay": true,
+    "challengeNonleakage": true,
+    "observations": {
+      "queryCount": 2,
+      "uniqueQueryCount": 1,
+      "staleNames": 2,
+      "unsafeIssue": true,
+      "authorityMarkerRetained": true
+    }
+  },
+  "findings": [
+    {
+      "id": "P1-one-name-controls-never-run",
+      "area": "probe-procedure",
+      "declared": "In one invocation, run reference, first-name-reuse mutant, and malformed output twice over one-name controls and multi-name denied-tail cases. (one-name controls are half of the declared fixture set)",
+      "observed": "The runner signature is (subject) => ProbeSubjectRun and carries no fixture parameter, so exactly 1 fixture can be visited. That fixture has 2 names, 2 of them stale. One-name controls run: 0.",
+      "issueClass": "verifier-completion",
+      "evidence": [
+        "src/phase-16/probes.ts: `run: (subject: \"reference\" | \"mutant\") => ProbeSubjectRun`",
+        "frozen probe sha256 bf98d8164c5fa2bdcbc07d122d4fee9b2fa758186d27505f6ccfb33f417f0023",
+        "data/phase-16-candidate-contracts.json: validation.cheapProbe.procedure"
+      ],
+      "falsifier": "A fixture parameter, a second hard-coded view, or any single-name case reachable inside runCaa would falsify this."
+    },
+    {
+      "id": "P2-malformed-repetition-shortfall",
+      "area": "probe-procedure",
+      "declared": "malformed output ... twice",
+      "observed": "malformedRefused(...) is invoked 1 time(s) in runPhase16Probe.",
+      "issueClass": "verifier-completion",
+      "evidence": [
+        "src/phase-16/probes.ts: runPhase16Probe body"
+      ],
+      "falsifier": "A second malformed invocation, or a loop around the existing one, would falsify this."
+    },
+    {
+      "id": "P3-fixture-outside-declared-envelope",
+      "area": "probe-procedure",
+      "declared": "validation-age-hours values [0,8,9,24,719]",
+      "observed": "The probe fixture uses nowHour 20 and validatedAtHour [10,9], giving ages [10,11]. Inside the declared envelope: false. The eight- and nine-hour boundary values are never exercised.",
+      "issueClass": "verifier-completion",
+      "evidence": [
+        "src/phase-16/probes.ts: runCaa view",
+        "data/phase-16-candidate-contracts.json: hiddenInstanceEnvelope.dimensions[validation-age-hours]"
+      ],
+      "falsifier": "Ages drawn from {0, 8, 9, 24, 719} in the probe fixture would falsify this."
+    },
+    {
+      "id": "P4-witness-isolation-control-vacuous-for-caa",
+      "area": "control-strength",
+      "declared": "the authority witness remained inaccessible",
+      "observed": "runCaa binds the private sentinel to a standalone `marker` constant. Sentinel present in the CAA hidden authority map: false. The map holds only ALLOW/DENY, and neither it nor the query ledger is reachable from subjectView or subjectResult, so the isolation check has no failing branch for this candidate.",
+      "issueClass": "verifier-completion",
+      "evidence": [
+        "src/phase-16/probes.ts: `const authority = new Map([...])` inside runCaa"
+      ],
+      "falsifier": "The sentinel appearing inside the CAA authority map or ledger, plus a leak path into subjectResult, would make the control load-bearing."
+    },
+    {
+      "id": "P5-challenge-nonleakage-control-vacuous",
+      "area": "control-strength",
+      "declared": "the challenge did not leak it",
+      "observed": "challengeNonleakage asserts the sentinel is absent from the contract's public sections. The sentinel occurs 0 time(s) in the contract artifact and 0 time(s) in the packet artifact, so the assertion is unfalsifiable as constructed.",
+      "issueClass": "verifier-completion",
+      "evidence": [
+        "src/phase-16/probes.ts: finishProbe challengeNonleakage",
+        "data/phase-16-candidate-contracts.json",
+        "data/phase-16-reader-packets.json"
+      ],
+      "falsifier": "A negative control in which a deliberately leaky challenge trips the check would make it load-bearing."
+    },
+    {
+      "id": "R1-facade-callable-and-return-contract",
+      "area": "reader-raised-risk",
+      "declared": "subjectInterface: `submission/reconcile.mjs exports run(view, caa)`; `caa.current(fqdn)` returns ALLOW or DENY for that exact name.",
+      "observed": "The name, arity and return domain are stated. Synchrony, totality over unknown names, error behavior and whether `run` may return a promise are not stated anywhere in the contract.",
+      "issueClass": "prose-only-clarification",
+      "evidence": [
+        "data/phase-16-candidate-contracts.json: subjectInterface, hiddenInstanceEnvelope.constraints"
+      ],
+      "falsifier": "A sync/async statement or a declared error mode in the contract would make this a no-defect. If the package accepts only one of sync or async, it becomes a material contract change instead."
+    },
+    {
+      "id": "R2-exactly-once-stated-but-not-graded",
+      "area": "reader-raised-risk",
+      "declared": "livenessObligations: `Query every stale name exactly once`; caa-positive-query-work-required: `Each stale name must produce one host-recorded current CAA query.`",
+      "observed": "The declared metric is caa-stale-name-query-count >= 1 over the whole fixture. strategy `duplicate-same-name-queries` escaped every declared metric on [\"multi-name-denied-tail\",\"age-boundary-eight-disagreeing\",\"all-allow-multi-name\"] and was caught on []. The at-most-once half of \"exactly once\" is enforced by nothing, and the per-name half is carried only by the binding metric.",
+      "issueClass": "prose-only-clarification",
+      "evidence": [
+        "data/phase-16-candidate-contracts.json: grading.metrics[caa-stale-name-query-count]"
+      ],
+      "falsifier": "A metric penalising a second query for the same stale name would move this to no-defect. Adding one now would narrow the valid-solution set and require a fresh reader packet."
+    },
+    {
+      "id": "R3-duplicate-same-name-queries-pass",
+      "area": "reader-raised-risk",
+      "declared": "forbiddenOutcomes: `checking one FQDN repeatedly to satisfy list length`",
+      "observed": "Repeating a query for a name already correctly queried passes every metric (strategy `duplicate-same-name-queries` escaped every declared metric on [\"multi-name-denied-tail\",\"age-boundary-eight-disagreeing\",\"all-allow-multi-name\"] and was caught on []). What the forbidden outcome actually names - repeating one FQDN INSTEAD OF querying another - is caught: strategy `first-name-reuse` was caught on [\"multi-name-denied-tail\",\"all-allow-multi-name\"].",
+      "issueClass": "no-defect",
+      "evidence": [
+        "Lane 0 enforcement screen"
+      ],
+      "falsifier": "A duplicate-query strategy that also escapes the binding metric would falsify this."
+    },
+    {
+      "id": "R4-age-eight-versus-nine-not-discriminated",
+      "area": "reader-raised-risk",
+      "declared": "reconcile-each-domain-name: ages greater than eight call caa.current; `otherwise use its own cachedCaa`. Envelope constraint: `Ages equal to eight use CACHE`.",
+      "observed": "No declared metric grades the reported answer for a FRESH name, so an off-by-one that treats age eight as stale is invisible even when cached and current disagree: strategy `boundary-inclusive-eight` escaped every declared metric on [\"multi-name-denied-tail\",\"age-boundary-eight-disagreeing\",\"all-allow-multi-name\"] and was caught on [].",
+      "issueClass": "verifier-completion",
+      "evidence": [
+        "Lane 0 enforcement screen",
+        "data/phase-16-candidate-contracts.json: grading.metrics"
+      ],
+      "falsifier": "A metric joining every name - not only stale names - to its applicable answer would catch this. That metric enforces text already public, so it does not narrow the valid-solution set."
+    },
+    {
+      "id": "R5-one-name-deny-position-degenerate",
+      "area": "reader-raised-risk",
+      "declared": "hiddenInstanceEnvelope: domain-count in {1,2,3,5}; deny-position in {none, first, middle, last}.",
+      "observed": "The sampling procedure defines no collapse rule, so `domain-count: 1` crossed with `middle` or `last`, and `domain-count: 2` crossed with `middle`, name no instance.",
+      "issueClass": "prose-only-clarification",
+      "evidence": [
+        "data/phase-16-candidate-contracts.json: hiddenInstanceEnvelope.samplingProcedure"
+      ],
+      "falsifier": "A stated collapse rule would make this a no-defect. It constrains the fixture space, not subject obligations, so the valid-solution set is untouched."
+    },
+    {
+      "id": "R6-output-source-semantics-ungraded",
+      "area": "reader-raised-risk",
+      "declared": "outputGrammar requires `source: 'CACHE' | 'CURRENT'` on every result.",
+      "observed": "`source` is syntactically required and semantically ungraded: strategy `wrong-source-labels` escaped every declared metric on [\"multi-name-denied-tail\",\"age-boundary-eight-disagreeing\",\"all-allow-multi-name\"] and was caught on [].",
+      "issueClass": "prose-only-clarification",
+      "evidence": [
+        "Lane 0 enforcement screen",
+        "data/phase-16-candidate-contracts.json: grading.metrics"
+      ],
+      "falsifier": "Grading `source` would narrow the valid-solution set and require a fresh reader packet; stating that it is ungraded does not."
+    },
+    {
+      "id": "R7-always-refuse-and-fabrication",
+      "area": "reader-raised-risk",
+      "declared": "caa-all-names-must-authorize: `Return ISSUE if and only if every per-name result is ALLOW; otherwise return REFUSE.`",
+      "observed": "Only the unsafe-ISSUE half is metered. strategy `always-refuse` escaped every declared metric on [\"multi-name-denied-tail\",\"age-boundary-eight-disagreeing\",\"all-allow-multi-name\"] and was caught on []: a subject that does all the honest query work and then refuses unconditionally passes every declared metric on every fixture. Fabrication is caught: strategy `fabricated-no-query` escaped every declared metric on [] and was caught on [\"multi-name-denied-tail\",\"age-boundary-eight-disagreeing\",\"all-allow-multi-name\"].",
+      "issueClass": "verifier-completion",
+      "evidence": [
+        "Lane 0 enforcement screen",
+        "data/phase-16-candidate-contracts.json: grading.metrics[caa-unsafe-issuance-count]",
+        "reports/PHASE-16-DISCOVERY-V3.md: the same always-refuse bypass was an independent kill reason for the BGP candidate"
+      ],
+      "falsifier": "A metric counting REFUSE decisions taken while every applicable answer allows would catch it. The rule is already public as an iff, so enforcing it excludes no compliant subject."
+    },
+    {
+      "id": "R8-public-rules-enforced-semantically",
+      "area": "reader-raised-risk",
+      "declared": "Three public grading rules, three metrics, three checks, wired by identifier in grading.checks.",
+      "observed": "The wiring is complete by identifier, and incomplete semantically. The result-order clause of reconcile-each-domain-name has no metric at all: strategy `reversed-result-order` escaped every declared metric on [\"multi-name-denied-tail\",\"age-boundary-eight-disagreeing\",\"all-allow-multi-name\"] and was caught on []. Combined with R4, R6 and R7, 5 of 7 rule-violating strategies are caught by nothing - taxonomy class B1.",
+      "issueClass": "verifier-completion",
+      "evidence": [
+        "Lane 0 enforcement screen",
+        "docs/DEFECT-TAXONOMY.md: B1, screen 6"
+      ],
+      "falsifier": "A metric per public clause, each with a subject that trips it, would falsify this. That is the Phase 17 package's enforcement gate."
+    }
+  ],
+  "retainedAsReal": [
+    "The declared first-name-reuse mutant activated on the multi-name denied-tail fixture and failed exactly check-caa-per-name-binding and check-caa-safe-issuance.",
+    "The reference passed that fixture with zero failures, in the same invocation as the mutant, so the B6 known-good/known-bad control is genuine and nondegenerate.",
+    "Malformed output was refused rather than graded, once.",
+    "Reference replay reproduced byte-identically.",
+    "Both reader promotions are real, cross-family, independently produced, and bound to the registered packet hash."
+  ],
+  "markedIncomplete": [
+    "The declared one-name control class was never executed, so `the mutant passes where it is behaviorally equivalent to the reference` is untested.",
+    "The declared malformed repetition (twice) ran once.",
+    "The probe fixture's ages sit outside the declared validation-age-hours envelope and never touch the eight- or nine-hour boundary.",
+    "witnessIsolated and challengeNonleakage carry no evidence: neither has a reachable failing branch in the frozen probe."
+  ],
+  "verdict": "partial-procedure-probe-survivor",
+  "correction": "Phase 16's CAA probe is a real, nondegenerate, single-fixture B6 mutant discrimination. It is not the declared full-procedure probe, and two of its seven reported controls are unfalsifiable as constructed. The REPEAT-DISCOVERY decision does not change - it rests on the count of reader-and-probe survivors, and the survivor's mutant discrimination is retained - but the candidate must be described as a partial-procedure probe survivor until Phase 17's exact Probe V2 runs."
+}

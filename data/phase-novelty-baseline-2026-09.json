@@ -1,0 +1,204 @@
+{
+  "schema": "agent-eval-foundry/frozen-novelty-baseline@1",
+  "recordedFor": [
+    "phase15-bounded-corpus-v1",
+    "phase16-contract-complete-discovery-v3"
+  ],
+  "reason": "The reader packets of Phase 15 and Phase 16 embed the built-family list as their novelty baseline, and their sha256 is the hash two independent blind readers reviewed. Reading that list live meant every later family silently changed a frozen packet. This file records the exact list those runs used so their packets reproduce byte-for-byte forever.",
+  "capturedFromCommit": "c3005fe704afd13a8081efe8851a87f0e5b9a14a",
+  "families": [
+    {
+      "familyId": "access-token-scope-expansion",
+      "domain": "permissions and access control",
+      "mechanisms": [
+        "permission-boundary",
+        "stale-state",
+        "false-audit-history"
+      ]
+    },
+    {
+      "familyId": "audit-truth-financial-workflow",
+      "domain": "regulated financial approval workflow",
+      "mechanisms": [
+        "false-audit-history",
+        "oracle-probing",
+        "permission-boundary"
+      ]
+    },
+    {
+      "familyId": "browser-action-replay",
+      "domain": "browser and UI automation",
+      "mechanisms": [
+        "ui-replay-mismatch",
+        "stale-state",
+        "hidden-environment-dependency"
+      ]
+    },
+    {
+      "familyId": "checker-required-memory-poisoning",
+      "domain": "agent memory control with a submitted verifier artifact",
+      "mechanisms": [
+        "checker-quality-gap",
+        "context-contamination",
+        "false-audit-history",
+        "prompt-injection-via-retrieval"
+      ]
+    },
+    {
+      "familyId": "dao-descendant",
+      "domain": "durable job recovery across uncertain external effects",
+      "mechanisms": [
+        "uncertain-external-effects",
+        "duplicate-side-effects"
+      ]
+    },
+    {
+      "familyId": "delegated-wallet-scope-reconciliation",
+      "domain": "wallet spending limits and delegated authority",
+      "mechanisms": [
+        "permission-boundary",
+        "stale-state",
+        "false-audit-history",
+        "duplicate-side-effects",
+        "liveness-stall",
+        "tool-result-ambiguity"
+      ]
+    },
+    {
+      "familyId": "deployment-model-alias-rollout-drift",
+      "domain": "AI infrastructure deployment and model routing",
+      "mechanisms": [
+        "model-alias-drift",
+        "stale-state",
+        "false-audit-history",
+        "liveness-stall",
+        "tool-result-ambiguity"
+      ]
+    },
+    {
+      "familyId": "deployment-rollback-partial-effects",
+      "domain": "multi-region release orchestration",
+      "mechanisms": [
+        "uncertain-external-effects",
+        "duplicate-side-effects",
+        "liveness-stall"
+      ]
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "domain": "deployment compensation recovery",
+      "mechanisms": [
+        "uncertain-external-effects",
+        "duplicate-side-effects"
+      ]
+    },
+    {
+      "familyId": "durable-approval-outbox",
+      "domain": "distributed systems and agent tool execution",
+      "mechanisms": [
+        "uncertain-external-effects",
+        "duplicate-side-effects",
+        "false-audit-history",
+        "liveness-stall",
+        "tool-result-ambiguity"
+      ]
+    },
+    {
+      "familyId": "model-alias-drift-sentinel",
+      "domain": "LLM evaluation harnesses and release engineering",
+      "mechanisms": [
+        "model-alias-drift",
+        "hidden-environment-dependency"
+      ]
+    },
+    {
+      "familyId": "permission-boundary-tools",
+      "domain": "agent tool surfaces and authorization",
+      "mechanisms": [
+        "permission-boundary",
+        "grader-privilege-boundary"
+      ]
+    },
+    {
+      "familyId": "prompt-injection-approval-scope-drift",
+      "domain": "human-in-the-loop approval for agent actions",
+      "mechanisms": [
+        "permission-boundary",
+        "stale-state",
+        "context-contamination"
+      ]
+    },
+    {
+      "familyId": "prompt-injection-capability-routing",
+      "domain": "agent tool routing over mixed-trust document sets",
+      "mechanisms": [
+        "permission-boundary",
+        "tool-result-ambiguity",
+        "prompt-injection-via-retrieval"
+      ]
+    },
+    {
+      "familyId": "prompt-injection-containment",
+      "domain": "agent tooling and untrusted retrieval",
+      "mechanisms": [
+        "prompt-injection-via-retrieval",
+        "context-contamination",
+        "permission-boundary"
+      ]
+    },
+    {
+      "familyId": "prompt-injection-cross-tool-escalation",
+      "domain": "multi-step agent tool chains with mixed privilege",
+      "mechanisms": [
+        "permission-boundary",
+        "tool-result-ambiguity",
+        "duplicate-side-effects"
+      ]
+    },
+    {
+      "familyId": "prompt-injection-memory-poisoning",
+      "domain": "agent memory and retrieval across sessions",
+      "mechanisms": [
+        "context-contamination",
+        "false-audit-history",
+        "prompt-injection-via-retrieval"
+      ]
+    },
+    {
+      "familyId": "stale-crm-ticket-automation",
+      "domain": "CRM and support automation",
+      "mechanisms": [
+        "stale-state",
+        "tool-result-ambiguity",
+        "duplicate-side-effects"
+      ]
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "domain": "trading order submission and reconciliation",
+      "mechanisms": [
+        "uncertain-external-effects",
+        "duplicate-side-effects"
+      ]
+    },
+    {
+      "familyId": "ui-action-record-replay",
+      "domain": "browser and desktop UI automation without an API",
+      "mechanisms": [
+        "ui-replay-mismatch",
+        "stale-state",
+        "hidden-environment-dependency"
+      ]
+    },
+    {
+      "familyId": "ui-replay-live-dom",
+      "domain": "UI replay against a mutable DOM-like tree",
+      "mechanisms": [
+        "ui-replay-mismatch",
+        "stale-state",
+        "hidden-environment-dependency",
+        "duplicate-side-effects"
+      ]
+    }
+  ]
+}

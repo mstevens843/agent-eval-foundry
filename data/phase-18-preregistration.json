@@ -1,0 +1,109 @@
+{
+  "schema": "agent-eval-foundry/phase-18-preregistration@1",
+  "registrationId": "phase18-caa-v2-bundle-transfer",
+  "registeredAt": "2026-09-04T20:20:02Z",
+  "baselineCommit": "c3005fe704afd13a8081efe8851a87f0e5b9a14a",
+  "chronologyEvidence": "This real UTC clock value and the execution transcript establish local ordering only; neither is independent third-party timestamp proof.",
+  "processDeviation": "This file was written after the CAA V2 package was constructed and after its reference and shipped variants were graded end to end, not before. The deviation is recorded rather than hidden. What it does and does not threaten: the scenario grammar has not been fuzzed, no controlling parameter has been measured, no scenario has been selected, no mutant bank exists, no reader review has run, and no subject trial has run. Everything below that could be tuned to a result is therefore still unobserved at the moment of writing. The hypothesis and the 3-4 of 4 prediction were fixed by the operator's Phase 18 brief before construction began.",
+  "candidateMechanism": "Stale multi-identifier certificate authorization revalidation with identity-to-result correspondence. An order carrying several identifiers whose stored authorizations have aged out preserves the number of rechecks it performs while losing which answer belongs to which identifier, and records the mispaired answers back into the authorization store.",
+  "bundleUnderTest": [
+    "realistic existing-system repair rather than a from-scratch function",
+    "concise outcome specification that states obligations and never the defect or the repair",
+    "naturally embedded defect carrying no marker, hint, or revealing comment",
+    "source-supported visible-test blind spot: count-oriented unit tests and single-identifier coverage, matching the incident's documented testing gap",
+    "inaccessible external authority owning the policy and an append-only query log",
+    "family-native asynchronous behaviour: authority answers complete in an order the caller did not choose",
+    "strong verification in a separate container that never links the submitted code",
+    "deterministic adversarial scenario selection over a declared grammar"
+  ],
+  "notInTheBundle": "Crash injection. Crash scheduling transfers only to a system with a genuine public recovery obligation; certd has none. The fuzzing METHOD transfers; the outbox's crash grammar does not.",
+  "predictions": {
+    "registeredBefore": "any scenario selection, any reader review, and any paid trial",
+    "rewardZeroOfFour": "3 or 4",
+    "eligibilityMeaning": "3/4 or 4/4 reward-zero with 2-of-2 capability agreement keeps CAA V2 eligible for the CEO's 5/6 target and earns two further trials later, one at a time.",
+    "perTrialFailureProbability": 0.75,
+    "reasoning": "The A2-repaired outbox - the only fair measurement of this construction bundle - produced 3/6 reward-zero, so the bundle's measured per-trial failure rate is 0.5 with a wide interval. CAA V2 is predicted slightly above that because its defect requires the agent to discover that its own natural reproduction harness cannot express the failing condition, and because the harm surfaces one order after the mispairing rather than in the order that caused it. It is predicted below certainty because the mechanism is a known Go idiom and the internet is open.",
+    "falsifier": "0/4, 1/4 or 2/4 reward-zero. At 2/4 or below, 5 of 6 is already mathematically out of reach from this start and the bundle did not transfer."
+  },
+  "noCausalClaim": "V1 versus V2 changes instruction style, codebase shape, starter, visible coverage, authority boundary, verifier and scenario selection simultaneously. No individual operator effect may be claimed from this phase. Every bundle element is recorded as a HYPOTHESIS unless this phase measures it separately.",
+  "scenarioSelection": {
+    "method": "The durable-outbox search method, transferred: fuzz the declared grammar; classify each point as candidate, reference-failure, both-fail or generator artifact; reject every point where the reference fails or the mechanism does not activate; measure controlling parameters rather than assume them; minimise discriminating cases; select a spread across seeds and non-controlling dimensions.",
+    "declaredDimensions": [
+      "order width (number of identifiers on an order)",
+      "stale/current composition of the store",
+      "age relative to the eight-hour boundary, including exactly eight and exactly nine",
+      "stored-versus-current disagreement",
+      "authorization vector across the order's identifiers",
+      "position of the forbidding identifier",
+      "identifier permutation on the order document",
+      "authority response completion order",
+      "authority failure for an identifier",
+      "number of orders in the sequence and the interval between them"
+    ],
+    "fuzzCap": 2000,
+    "seeds": [1009, 1013, 1021, 1031, 1049, 1063],
+    "selectedSuiteSize": 24,
+    "balancedSuiteSize": 24,
+    "balancedPurpose": "A comparator frozen before trials and graded separately. It is paired coverage analysis of one submission, never an additional trial.",
+    "selectionMutants": ["identity-collapse", "completion-order-association", "stale-boundary", "cached-stale"],
+    "heldOutMutants": ["any-authorizes", "always-issue", "always-refuse", "no-work", "fabricated-audit", "visible-example-hardcoding"],
+    "validationRequirement": "Selected points are scored against the held-out mutants and against at least two independently structured correct implementations. Selection never sees a Phase 18 paid submission.",
+    "rejectionRules": [
+      "the reference fails the point",
+      "fewer than two identifiers need rechecking on any order of the point",
+      "the authority's answers agree across the point's rechecked identifiers, so no permutation is observable",
+      "the point's completion order equals its order-document order, so the mechanism cannot fire"
+    ]
+  },
+  "campaign": {
+    "trials": 4,
+    "order": [
+      "codex/openai/gpt-5.6-sol/xhigh",
+      "claude/anthropic/opus/max",
+      "codex/openai/gpt-5.6-sol/xhigh",
+      "claude/anthropic/opus/max"
+    ],
+    "agentTimeoutSec": 7200,
+    "internet": "enabled",
+    "containers": "fresh per trial",
+    "retryPolicy": "At most one retry per slot, and only for a registered infrastructure or provider failure. Every attempt and its cost are preserved.",
+    "noExpansion": "This phase does not expand to six trials whatever the outcome.",
+    "capturePerAttempt": [
+      "challenge hash and both scenario-set hashes",
+      "the full patched artifact",
+      "transcript",
+      "verifier output and CTRF",
+      "failed checks and failed scenarios",
+      "self-written tests and their machine-readable outcome where one survives capture",
+      "runtime",
+      "tokens",
+      "provider cost or an explicit unpriced marker",
+      "countability decision and its reason"
+    ],
+    "pairedRescoring": "Every submission is graded independently against the selected and the balanced suites. This is coverage analysis of one trial, never two trials.",
+    "spendCaps": { "subjectUsd": 120, "labellingUsd": 60, "totalUsd": 180 }
+  },
+  "labelling": {
+    "trigger": "every countable reward-zero attempt",
+    "labellers": 2,
+    "providerFamilies": ["openai", "anthropic"],
+    "given": ["the public challenge", "the submission", "the transcript", "the verifier evidence"],
+    "withheld": ["the incident", "the expected defect", "the reference solution", "the mutant bank", "fuzzer scores", "the predicted yield", "the other labeller's result", "the campaign decision"],
+    "allowedLabels": ["capability", "spec-underspecified", "verifier defect", "infrastructure", "contamination", "indeterminate"],
+    "agreementRule": "Difficulty counts only on 2-of-2 independent agreement on capability. Disagreement means unlabelled: not capability and not specification failure."
+  },
+  "decisionRules": {
+    "ELIGIBLE-FOR-5-OF-6": "3/4 or 4/4 countable reward-zero, every relevant failure capability-agreed 2-of-2, failures concentrated on public CAA obligations, and no validity defect.",
+    "BUNDLE-DID-NOT-TRANSFER": "0/4, 1/4 or 2/4 countable reward-zero. Five of six is then mathematically unreachable from this four-run start.",
+    "INCONCLUSIVE": "Cross-provider execution incomplete, or labels do not support a difficulty claim.",
+    "INVALID": "Specification, verifier, isolation, capture or package integrity failed."
+  },
+  "fairnessBoundaries": [
+    "Every graded behaviour traces to a section of the public SEMANTICS.md, asserted mechanically by test_every_obligation_is_checked.",
+    "Public text describes outcomes, never the implementation, the historical defect, or the repair.",
+    "Difficulty comes from professional investigation and system interaction, not obscurity, volume, timeouts, hidden rules, or model-specific tricks.",
+    "Scenario search improves coverage inside one declared behaviour space. It does not generate many candidate tasks and filter for model-specific failure.",
+    "The internet stays enabled. No incident URL and no copied historical code appears in the agent-facing package.",
+    "The residual contamination risk is recorded rather than denied: the underlying incident class is publicly documented, so an agent may reach the mechanism by search. The package is original Go with original identifiers and no locator, but this cannot be reduced to zero."
+  ]
+}
