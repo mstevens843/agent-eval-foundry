@@ -2,6 +2,7 @@ import { SPEC_MD } from "../families/trading-reconciliation-recompute/spec.js";
 import { buildScenario } from "../families/trading-reconciliation-recompute/truth.js";
 import type { ScenarioParams } from "../families/trading-reconciliation-recompute/truth.js";
 import type { ChallengeFile, ChallengeManifest, ChallengePackage } from "./package.js";
+import { publicFiles, publicManifest } from "./public-surface.js";
 
 export const TRADING_RECONCILIATION_HIDDEN_ARTIFACTS = [
   "verify.ts",
@@ -28,7 +29,7 @@ idempotent synthetic venue facade.
 |---|---|
 | \`SPEC.md\` | the complete normative rules and hidden-scenario dimensions |
 | \`types.ts\` | the public subject and venue interfaces |
-| \`starter/subject.mjs\` | a deliberately incorrect authority-epoch implementation |
+| \`starter/subject.mjs\` | the existing reconciliation implementation |
 | \`examples/\` | visible examples of the public recovery view |
 
 ## What you must produce
@@ -42,14 +43,12 @@ is recovered, retries collectively create one execution, valid work completes, a
 calls. No price, fill, exchange-priority, or private trading rule is graded.
 `;
 
-const STARTER = `// Deliberately wrong after reconciliation authority changes.
-// Read SPEC.md, then recover the committed key from the durable order intent.
+const STARTER = `// Order reconciliation entrypoint.
 
 export const subject = {
   id: "starter",
-  label: "Current-authority order-key recomputation starter",
+  label: "Order reconciler",
   run(view, venue) {
-    // WRONG: authorityEpoch changes when a new reconciler takes ownership.
     const idempotencyKey =
       \`order::\${view.intent.orderIntentId}::\${view.intent.clientRequestId}::authority-\${view.authorityEpoch}\`;
     const receipt = venue.placeOrder(view.intent.orderIntentId, {
@@ -132,7 +131,7 @@ export function buildTradingReconciliationChallengePackage(
   };
   return {
     familyId: manifest.familyId,
-    files: [...files, { path: "MANIFEST.json", content: `${JSON.stringify(manifest, null, 2)}\n` }],
+    files: [...publicFiles(files), { path: "MANIFEST.json", content: publicManifest(manifest) }],
     manifest,
   };
 }

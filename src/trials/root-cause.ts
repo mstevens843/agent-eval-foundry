@@ -318,6 +318,7 @@ export function assertRootCauseAgainstTrial(
 export function isDifficultyEvidence(record: TrialRecord, cause: RootCauseRecord): boolean {
   return (
     record.subjectType === "agent" &&
+    record.status === "completed" &&
     record.counts &&
     record.cells.some(cellFailed) &&
     DIFFICULTY_EVIDENCE_CAUSES.has(cause.label)

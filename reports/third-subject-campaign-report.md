@@ -39,14 +39,14 @@ separately.
 
 | run | family | subject | lab | graded | failed | runtime |
 |---|---|---|---|---:|---:|---:|
-| `mp-haiku-1` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | poisoning | `claude-haiku-4-5` | anthropic | 288 | 32 | 211s |
-| `mp-sonnet-1` — **superseded** by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | poisoning | `claude-sonnet-5` | anthropic | 288 | 42 | 345s |
+| `mp-haiku-1` — **superseded** by the 2026-09-05 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | poisoning | `claude-haiku-4-5` | anthropic | 288 | 32 | 211s |
+| `mp-sonnet-1` — **superseded** by the 2026-09-05 `prompt-injection-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn | poisoning | `claude-sonnet-5` | anthropic | 288 | 42 | 345s |
 | `pic-haiku-1` | containment | `claude-haiku-4-5` | anthropic | 128 | 0 | 54s |
 | `pic-sonnet-1` | containment | `claude-sonnet-5` | anthropic | 128 | 0 | 190s |
 | `ui-haiku-1` | replay | `claude-haiku-4-5` | anthropic | 324 | 62 | 167s |
 | `ui-sonnet-1` | replay | `claude-sonnet-5` | anthropic | 324 | 62 | 320s |
 
-**Withdrawn evidence.** `mp-haiku-1`, `mp-sonnet-1` were invalidated by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration: they were graded against a package this repository no longer produces, so those rows do not count and every number on them is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read these rows as spend that was made, not as a result about the family as it stands.
+**Withdrawn evidence.** `mp-haiku-1`, `mp-sonnet-1` were invalidated by the 2026-09-05 `prompt-injection-memory-poisoning` challenge migration: they were graded against a package this repository no longer produces, so those rows do not count and every number on them is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read these rows as spend that was made, not as a result about the family as it stands.
 
 | | |
 |---|---:|

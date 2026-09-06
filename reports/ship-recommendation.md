@@ -868,8 +868,8 @@ table does.
 | `measured-axes` | pass | 5 measured axes |
 | `reference-passes` | pass | reference clean |
 | `baselines-blocked` | pass | 2/2 baselines rejected |
-| `mutants-caught-by-intended-check` | pass | 13/13 caught by intended check |
-| `mechanisms-exercised` | pass | 288/288 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
+| `mutants-caught-by-intended-check` | pass | 14/14 caught by intended check |
+| `mechanisms-exercised` | pass | 864/864 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
 | `isolation-level` | pass | subprocess; adequate while no agent artifact is graded |
 | `shared-bank-ready` | **FAIL** | 0 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |

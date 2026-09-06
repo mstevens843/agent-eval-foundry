@@ -50,7 +50,7 @@ import { importAgentTrials, runLocalTrials } from "../trials/orchestrate.js";
 import { tallyRootCauses, unlabelledRootCause } from "../trials/root-cause.js";
 import type { RootCauseRecord } from "../trials/root-cause.js";
 import { ROUTABLE_FAMILY_IDS, routeFor } from "../trials/router.js";
-import { hashChallengeDir, prepareChallenge } from "../trials/run.js";
+import { currentChallenge, hashChallengeDir } from "../trials/run.js";
 import { NEVER_COUNTS, countedAgentTrials } from "../trials/types.js";
 import type { TrialRecord, TrialSet } from "../trials/types.js";
 import type { Matrix } from "../types.js";
@@ -343,7 +343,7 @@ export function augmentProductionReadinessEvidenceMap(
   const adversarialEvidence = adversarialGateEvidenceMap(summarizeAdversarialEvidence(root));
   const deploymentFamily = builtFamily(DEPLOYMENT_ALIAS_FAMILY_ID);
   const deploymentSweep = deploymentFamily.run();
-  const deploymentPrepared = prepareChallenge(root, DEPLOYMENT_ALIAS_FAMILY_ID);
+  const deploymentPrepared = currentChallenge(root, DEPLOYMENT_ALIAS_FAMILY_ID);
   const deploymentPackageCheck = checkChallengePackage(
     deploymentPrepared.pkg.files,
     deploymentFamily.leakProfile,
@@ -459,7 +459,7 @@ function currentChallengeHash(root: string, familyId: string): string {
   const key = `${root}\u0000${familyId}`;
   const hit = currentChallengeHashes.get(key);
   if (hit !== undefined) return hit;
-  const hash = prepareChallenge(root, familyId).hash;
+  const hash = currentChallenge(root, familyId).hash;
   currentChallengeHashes.set(key, hash);
   return hash;
 }
@@ -588,7 +588,11 @@ export function sharedSubjectCount(root: string, familyId: string): number {
 
 /** The shared subjects themselves, sorted — the same computation the count is taken from. */
 export function sharedSubjectsFor(root: string, familyId: string): readonly string[] {
-  const banks = measuredAgentBanks(root);
+  return sharedSubjectsFromBanks(measuredAgentBanks(root), familyId);
+}
+
+/** Pure overlap calculation; test its threshold without treating stale trial fixtures as current. */
+export function sharedSubjectsFromBanks(banks: readonly KindedBank[], familyId: string): readonly string[] {
   const self = banks.find((b) => b.familyId === familyId);
   if (self === undefined) return [];
   const shared = new Set<string>();

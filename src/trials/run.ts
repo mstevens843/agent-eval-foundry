@@ -12,7 +12,15 @@
 // grading a submission against a scenario set it never saw.
 
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  lstatSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import type { ChallengePackage } from "../challenge/package.js";
@@ -43,19 +51,25 @@ export interface PreparedChallenge {
   readonly dir: string;
 }
 
-/** Build the family's challenge into a fresh directory and hash it. */
-export function prepareChallenge(root: string, familyId: string, outDir?: string): PreparedChallenge {
+/** Current visible bytes without publishing or making a temporary directory. Legacy digest scope. */
+export function currentChallenge(root: string, familyId: string): Omit<PreparedChallenge, "dir"> {
   const route = routeFor(familyId);
   const typesSource = readFileSync(join(root, route.family.typesPath), "utf8");
   const scenarioSetId = route.scenarioSetId();
   const pkg = route.family.challenge(typesSource, scenarioSetId);
+  return { route, pkg, hash: challengeHash(pkg), scenarioSetId };
+}
+
+/** Build the family's challenge into a fresh directory and hash it. */
+export function prepareChallenge(root: string, familyId: string, outDir?: string): PreparedChallenge {
+  const { route, pkg, hash, scenarioSetId } = currentChallenge(root, familyId);
   const dir = outDir ?? mkdtempSync(join(tmpdir(), `foundry-${familyId}-`));
   for (const file of pkg.files) {
     const dest = join(dir, file.path);
     mkdirSync(dirname(dest), { recursive: true });
     writeFileSync(dest, file.content, "utf8");
   }
-  return { route, pkg, hash: challengeHash(pkg), scenarioSetId, dir };
+  return { route, pkg, hash, scenarioSetId, dir };
 }
 
 /**
@@ -87,6 +101,7 @@ export interface HashGate {
   readonly recorded: string | null;
   readonly current: string;
   readonly matches: boolean;
+  readonly integrity: "verified" | "derived-legacy" | "mismatch" | "unavailable";
 }
 
 /**
@@ -104,7 +119,7 @@ export function gateByChallengeHash(
   familyId: string,
   trials: readonly { readonly runId: string; readonly metadataPath: string; readonly dir: string }[],
 ): { readonly current: string; readonly gates: readonly HashGate[] } {
-  const prepared = prepareChallenge(root, familyId);
+  const prepared = currentChallenge(root, familyId);
   const gates = trials.map((t) => {
     let recorded: string | null = null;
     try {
@@ -116,8 +131,22 @@ export function gateByChallengeHash(
     // Trials that predate the hash field are not lost. Every trial directory preserves the exact
     // challenge the model saw, so the hash can be recomputed from the evidence itself — which is a
     // better source than the metadata anyway, because it is the artifact rather than a note about it.
-    const derived = recorded ?? hashChallengeDir(join(t.dir, "challenge"));
-    return { runId: t.runId, recorded: derived, current: prepared.hash, matches: derived === prepared.hash };
+    const derived = hashChallengeDir(join(t.dir, "challenge"));
+    const integrity =
+      derived === null
+        ? "unavailable"
+        : recorded === null
+          ? "derived-legacy"
+          : recorded === derived
+            ? "verified"
+            : "mismatch";
+    return {
+      runId: t.runId,
+      recorded: derived,
+      current: prepared.hash,
+      integrity,
+      matches: derived === prepared.hash && integrity !== "mismatch" && integrity !== "unavailable",
+    } as HashGate;
   });
   return { current: prepared.hash, gates };
 }
@@ -125,15 +154,23 @@ export function gateByChallengeHash(
 /** Hash a preserved challenge directory the same way `challengeHash` hashes a package. */
 export function hashChallengeDir(dir: string): string | null {
   if (!existsSync(dir)) return null;
+  if (!lstatSync(dir).isDirectory()) return null;
   const files: { path: string; content: string }[] = [];
   const walk = (current: string, prefix: string): void => {
     for (const entry of readdirSync(current, { withFileTypes: true })) {
       const next = join(current, entry.name);
+      if (entry.isSymbolicLink() || (!entry.isDirectory() && !entry.isFile()))
+        throw new Error("invalid retained challenge file kind");
       if (entry.isDirectory()) walk(next, `${prefix}${entry.name}/`);
       else files.push({ path: `${prefix}${entry.name}`, content: readFileSync(next, "utf8") });
     }
   };
-  walk(dir, "");
+  try {
+    walk(dir, "");
+  } catch {
+    return null;
+  }
+  if (!files.length) return null;
   const hash = createHash("sha256");
   for (const file of files.sort((a, b) => a.path.localeCompare(b.path))) {
     hash.update(file.path);
@@ -145,6 +182,7 @@ export function hashChallengeDir(dir: string): string | null {
 }
 
 export interface AgentTrialOptions {
+  readonly execution?: import("./orchestrator.js").OrchestrateOptions["execution"];
   readonly root: string;
   readonly familyId: string;
   readonly runId: string;
@@ -166,11 +204,14 @@ export interface AgentTrialOptions {
  * Family-agnostic: everything family-specific comes from the route.
  */
 export function runAgentTrial(options: AgentTrialOptions): OrchestrateResult {
+  if (!options.execution) throw new Error("PACKAGE_AUTHORIZATION_DENIED: no package-bound execution context");
   assertSafeForCountedAgentTrial(options.familyId);
   const prepared = prepareChallenge(options.root, options.familyId);
   const route = prepared.route;
 
   return orchestrateTrial({
+    execution: options.execution,
+    expectedScenarioIds: [...route.scenarioParams().keys()],
     familyId: options.familyId,
     runId: options.runId,
     challengeDir: prepared.dir,
@@ -187,7 +228,12 @@ export function runAgentTrial(options: AgentTrialOptions): OrchestrateResult {
     costUsd: options.costUsd ?? null,
     grade: (modulePath: string) => {
       const out = route.grade(modulePath);
-      return { cells: out.cells, detail: out.detail };
+      return {
+        cells: out.cells,
+        detail: out.detail,
+        hostErrors: out.hostErrors,
+        ...(out.isolation === undefined ? {} : { isolation: out.isolation }),
+      };
     },
     disqualify: baselineDisqualifier(options.familyId),
     extraMetadata: {

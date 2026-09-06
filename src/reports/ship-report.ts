@@ -26,6 +26,7 @@
 
 import type { Registry } from "../foundry/registry.js";
 import { type TaskShape, fail } from "../foundry/schema.js";
+import { type PackageDecision, type PackagePolicyInput, decidePackage } from "../packages/policy.js";
 import type { IsolationLevel } from "../trials/types.js";
 
 /**
@@ -36,6 +37,7 @@ import type { IsolationLevel } from "../trials/types.js";
  * is produced by execution — so the gates that matter most read from here.
  */
 export interface FamilyEvidence {
+  readonly packagePolicy?: PackagePolicyInput;
   readonly familyId: string;
   readonly referencePasses: boolean;
   /** Baselines (nop, over-blocker) that the suite successfully rejects. */
@@ -985,6 +987,8 @@ export const GATES: readonly Gate[] = [
 export type ShipVerdict = "SHIP" | "HOLD" | "NOT-READY";
 
 export interface FamilyAssessment {
+  readonly diagnosticFailures?: readonly string[];
+  readonly packageDecision?: PackageDecision;
   readonly familyId: string;
   readonly verdict: ShipVerdict;
   readonly results: readonly { gate: Gate; verdict: GateVerdict; detail: string }[];
@@ -998,28 +1002,63 @@ export function assessFamily(
   humanEvidence?: HumanGateEvidence,
   verifierIntegrity?: VerifierIntegrityEvidence,
 ): FamilyAssessment {
+  const provided = evidence?.packagePolicy;
+  const maxKnownCount = (...values: (number | undefined)[]): number => {
+    const known = values.filter((value): value is number => value !== undefined);
+    return known.length ? Math.max(...known) : Number.NaN;
+  };
+  const packageDecision = decidePackage({
+    ...provided,
+    expectedFamilyId: shape.familyId,
+    checks: {
+      ...provided?.checks,
+      reference: provided?.checks.reference === true && evidence?.referencePasses !== false,
+      positiveWork:
+        provided?.checks.positiveWork === true &&
+        (!evidence ||
+          (evidence.baselinesTotal > 0 && evidence.baselinesBlocked.length === evidence.baselinesTotal)),
+      nearMissControls:
+        provided?.checks.nearMissControls === true &&
+        (!evidence || (evidence.mutantsCaught.length > 0 && evidence.mutantsCaught.every((m) => m.caught))),
+      ...(humanEvidence?.humanPackageReady === false ||
+      evidence?.humanPackageReady === false ||
+      evidence?.trialReady === false
+        ? { publicPackageComplete: false }
+        : {}),
+      ...(evidence?.isolation === "in-process" || evidence?.isolation === "subprocess"
+        ? { protectedGrading: false }
+        : {}),
+      unresolvedAmbiguities: maxKnownCount(
+        provided?.checks.unresolvedAmbiguities,
+        humanEvidence?.unresolvedHumanAmbiguities,
+        evidence?.unresolvedHumanAmbiguities,
+      ),
+      unrepairedBypasses: maxKnownCount(
+        provided?.checks.unrepairedBypasses,
+        verifierIntegrity?.unrepairedBypasses,
+        evidence?.unrepairedBypasses,
+      ),
+    },
+  });
   const results = GATES.map((gate) => {
     const { verdict, detail } = gate.evaluate(shape, registry, evidence, humanEvidence, verifierIntegrity);
     return { gate, verdict, detail };
   });
-  const blockingFailures = results
-    .filter((r) => r.gate.blocking && r.verdict === "fail")
-    .map((r) => r.gate.id);
-  const measured = results.find((r) => r.gate.id === "measured-axes");
-  const evidenced = results.find((r) => r.gate.id === "difficulty-evidenced");
-  const providerDeltaHold =
-    evidence?.productionMixedCrossLabSmoke === true && evidence?.providerDeltaDiagnosisPresent === true;
-  // SHIP needs both: the verifier discriminates (measured axes) AND something that could fail the
-  // family has tried. Either alone is a different, weaker claim.
-  const verdict: ShipVerdict =
-    blockingFailures.length > 0
-      ? "NOT-READY"
-      : providerDeltaHold
-        ? "HOLD"
-        : measured?.verdict === "pass" && evidenced?.verdict === "pass"
-          ? "SHIP"
-          : "HOLD";
-  return { familyId: shape.familyId, verdict, results, blockingFailures };
+  // Taxonomy/axis gates remain diagnostics, not a second source of release authority.
+  const blockingFailures = [...packageDecision.stages["release-eligible"].blockers];
+  const verdict: ShipVerdict = packageDecision.stages["release-eligible"].allowed
+    ? "SHIP"
+    : packageDecision.stages["local-valid"].allowed
+      ? "HOLD"
+      : "NOT-READY";
+  return {
+    familyId: shape.familyId,
+    verdict,
+    results,
+    blockingFailures,
+    packageDecision,
+    diagnosticFailures: results.filter((r) => r.gate.blocking && r.verdict === "fail").map((r) => r.gate.id),
+  };
 }
 
 const ICON: Readonly<Record<GateVerdict, string>> = { pass: "pass", fail: "**FAIL**", "n/a": "n/a" };
@@ -1037,15 +1076,13 @@ export function renderShipReport(
   const lines: string[] = [
     "# Ship / no-ship",
     "",
-    "Each family against a fixed gate table. The verdict is a pure function of the gates — no",
-    "weighting, no score, no override. **SHIP** means every blocking gate passes and the family has a",
-    `measured axis count of at least ${String(MIN_MEASURED_AXES)}; **HOLD** means it is structurally sound but its diversity is still an`,
-    "estimate or current provider-delta routing blocks production claims; **NOT-READY** means at least one blocking gate fails.",
+    "SHIP is the package-stages-v1 release decision: verified professional package identity, valid local",
+    "assurance, resolved contract/integrity issues and qualified exact-profile standard/adversarial evidence.",
+    "HOLD means locally valid but not release-qualified; NOT-READY means local validity is incomplete.",
+    "The historical gate table remains diagnostic. Axis breadth and prior smoke failures do not authorize release or spend.",
     "",
-    "The human layer is reported as advisory claim levels. `reference-solvable`, `human-ready` and",
-    "`human-evidenced` are separate claims and do not silently rewrite the model/verifier verdict.",
-    "The verifier-integrity layer is also advisory here: `audit-pending`, `adversarial-ready`,",
-    "`adversarial-audited`, `bypass-found` and `bypass-repaired` are separate claims from difficulty.",
+    "Reference solvability, human readiness and measured expert solvability remain distinct. Missing required",
+    "package evidence, unresolved material ambiguity and known unrepaired bypasses block the relevant package stages.",
     "",
     "| family | verdict | blocking failures |",
     "|---|---|---|",
@@ -1173,9 +1210,9 @@ const passed = (a: FamilyAssessment, id: string): boolean =>
 export type FamilyStatusLabel = "SHIP" | "difficulty-evidenced" | "trial-ready" | "HOLD";
 
 export function familyStatusLabel(assessment: FamilyAssessment): FamilyStatusLabel {
-  if (assessment.verdict === "SHIP") return "SHIP";
-  if (passed(assessment, "difficulty-evidenced")) return "difficulty-evidenced";
-  if (passed(assessment, "trial-ready")) return "trial-ready";
+  if (assessment.packageDecision?.stages["release-eligible"].allowed) return "SHIP";
+  if (assessment.packageDecision?.stages["hardness-observed"].allowed) return "difficulty-evidenced";
+  if (assessment.packageDecision?.stages["trial-eligible"].allowed) return "trial-ready";
   return "HOLD";
 }
 
@@ -1191,28 +1228,25 @@ export function familyStatus(
   assessment: FamilyAssessment,
   disposition: string | null,
 ): FamilyStatus {
-  const stage: ReadinessStage = passed(assessment, "shared-bank-ready")
-    ? "shared-bank-measured"
-    : passed(assessment, "difficulty-evidenced")
-      ? "difficulty-evidenced"
-      : passed(assessment, "trial-ready")
-        ? "trial-ready"
-        : passed(assessment, "mutants-caught-by-intended-check")
-          ? "mutant-discriminating"
-          : passed(assessment, "reference-passes")
-            ? "verifier-valid"
-            : "declared";
+  const stage: ReadinessStage = assessment.packageDecision?.stages["hardness-observed"].allowed
+    ? "difficulty-evidenced"
+    : assessment.packageDecision?.stages["trial-eligible"].allowed
+      ? "trial-ready"
+      : passed(assessment, "mutants-caught-by-intended-check")
+        ? "mutant-discriminating"
+        : passed(assessment, "reference-passes")
+          ? "verifier-valid"
+          : "declared";
 
-  const decision: FamilyDecision =
-    assessment.verdict === "SHIP"
-      ? "SHIP"
-      : disposition === "harden" || disposition === "mutate"
-        ? "EVOLVE"
-        : disposition === "repair"
-          ? "REPAIR"
-          : disposition === "abandon"
-            ? "KILL"
-            : "HOLD";
+  const decision: FamilyDecision = assessment.packageDecision?.stages["release-eligible"].allowed
+    ? "SHIP"
+    : disposition === "harden" || disposition === "mutate"
+      ? "EVOLVE"
+      : disposition === "repair"
+        ? "REPAIR"
+        : disposition === "abandon"
+          ? "KILL"
+          : "HOLD";
 
   return {
     familyId,
@@ -1221,7 +1255,7 @@ export function familyStatus(
     blockingFailures: assessment.blockingFailures,
     reason:
       decision === "SHIP"
-        ? "every blocking gate passes and a counted agent trial failed something"
+        ? "the authoritative package release policy passes with version-bound qualification evidence"
         : decision === "EVOLVE"
           ? "the family works and does not measure enough; the kill analysis says harden or mutate"
           : decision === "REPAIR"

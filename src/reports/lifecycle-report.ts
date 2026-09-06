@@ -13,6 +13,8 @@ import type { CampaignPlan } from "../trials/campaign.js";
 import { EVIDENCE_STATES, type EvidenceLedger, type EvidenceState } from "../trials/evidence-lifecycle.js";
 
 const STATE_MEANING: Readonly<Record<EvidenceState, string>> = {
+  "invalid-evidence":
+    "retained bytes are missing/invalid or disagree with the declared identity; no current claim",
   counted: "graded, and run against the challenge this family produces today",
   "registered-variant":
     "graded against a preregistered material variant; valid for that profile, excluded from the canonical family bank",

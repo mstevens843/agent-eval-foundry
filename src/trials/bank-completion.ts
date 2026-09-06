@@ -214,6 +214,7 @@ function holeFor(subjectId: string, familyId: string, trials: CompletionInput["t
   // infra failure never authenticated. So it ranks above `infra` and below `superseded`, which at
   // least produced a graded result.
   const rank: Readonly<Record<EvidenceState, number>> = {
+    "invalid-evidence": 7,
     counted: 0,
     "registered-variant": 1,
     superseded: 2,

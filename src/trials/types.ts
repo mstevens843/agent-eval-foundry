@@ -146,7 +146,7 @@ export interface TrialSet {
 
 /** Counted agent trials only. The population any difficulty claim must be built from. */
 export const countedAgentTrials = (set: TrialSet): readonly TrialRecord[] =>
-  set.records.filter((r) => r.subjectType === "agent" && r.counts && !NEVER_COUNTS.has(r.status));
+  set.records.filter((r) => r.subjectType === "agent" && r.counts && r.status === "completed");
 
 export const uncountedTrials = (set: TrialSet): readonly TrialRecord[] =>
   set.records.filter((r) => !r.counts);

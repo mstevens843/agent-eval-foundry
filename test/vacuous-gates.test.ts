@@ -9,7 +9,7 @@
 import { describe, expect, it } from "vitest";
 import { runFamily } from "../src/families/prompt-injection-containment/runner.js";
 import { loadRegistry } from "../src/foundry/load.js";
-import { PIC_FAMILY, sharedSubjectCount, sharedSubjectsFor } from "../src/reports/evidence.js";
+import { PIC_FAMILY, sharedSubjectCount, sharedSubjectsFromBanks } from "../src/reports/evidence.js";
 import { renderGateReport } from "../src/reports/gate-report.js";
 import { type FamilyEvidence, GATES, assessFamily } from "../src/reports/ship-report.js";
 import {
@@ -18,7 +18,7 @@ import {
   mechanismCoverageDetail,
   mechanismsExercisedFrom,
 } from "../src/reports/trial-report.js";
-import { MIN_SHARED_SUBJECTS } from "../src/trials/bank.js";
+import { MIN_SHARED_SUBJECTS, kindedBank } from "../src/trials/bank.js";
 import { runLocalTrials } from "../src/trials/orchestrate.js";
 import type { Matrix } from "../src/types.js";
 
@@ -28,6 +28,21 @@ const UI_FAMILY = "ui-action-record-replay";
 // ---------------------------------------------------------------- R5: shared subjects
 
 describe("the shared-subject metric measures cross-family overlap", () => {
+  const fixtureOverlap = () => {
+    const subjects = ["claude-opus-5", "gpt-5.6-sol", "third-model", "fourth-model"];
+    const banks = [UI_FAMILY, "another-measured-family"].map((familyId) =>
+      kindedBank(
+        {
+          familyId,
+          matrix: coverageMatrix(["case"], subjects, {}),
+          provenance: "controlled complete measurement fixture",
+          agentDerived: true,
+        },
+        "agent",
+      ),
+    );
+    return sharedSubjectsFromBanks(banks, UI_FAMILY);
+  };
   // KNOWN-BAD: a gate that could not pass.
   //
   // `sharedSubjectCount` intersected a family's subject ids with the imported outbox history and
@@ -35,7 +50,7 @@ describe("the shared-subject metric measures cross-family overlap", () => {
   // construction — against a threshold of 3. `shared-bank-ready` could not pass for any family, ever,
   // whatever anybody ran. A gate that cannot pass says nothing about the family it is judging.
   it("counts subjects shared with ANY measured family, not just the outbox", () => {
-    const shared = sharedSubjectsFor(ROOT, UI_FAMILY);
+    const shared = fixtureOverlap();
     // The old metric could only ever see these two, because they are the outbox's whole bank.
     const outboxBank = ["claude-opus-5", "gpt-5.6-sol"];
     const beyondTheOutbox = shared.filter((s) => !outboxBank.includes(s));
@@ -44,7 +59,7 @@ describe("the shared-subject metric measures cross-family overlap", () => {
   });
 
   it("the threshold is now reachable, so the gate is a question rather than a wall", () => {
-    const count = sharedSubjectCount(ROOT, UI_FAMILY);
+    const count = fixtureOverlap().length;
     expect(count).toBeGreaterThanOrEqual(MIN_SHARED_SUBJECTS);
 
     const registry = loadRegistry(ROOT);
@@ -224,6 +239,6 @@ describe("the gate report tells the truth about which gates fire", () => {
     expect(shape).toBeDefined();
     const forged = { ...(shape as NonNullable<typeof shape>), fairnessConstraints: [] };
     const a = assessFamily(forged, registry);
-    expect(a.blockingFailures).toContain("fairness");
+    expect(a.diagnosticFailures).toContain("fairness");
   });
 });

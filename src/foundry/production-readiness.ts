@@ -1,3 +1,4 @@
+import { type PackageDecision, type PackagePolicyInput, decidePackage } from "../packages/policy.js";
 import type { RuleCode } from "./schema.js";
 import type { SmokeDiagnosisStatus } from "./smoke-gates.js";
 
@@ -38,6 +39,7 @@ export const PRODUCTION_READINESS_RULE_CODES = [
   "PRODUCTION_ADVERSARIAL_READY_NOT_AUDITED",
   "PRODUCTION_HUMAN_READY_NOT_EVIDENCED",
   "PRODUCTION_UNREPAIRED_BYPASS",
+  "PRODUCTION_PACKAGE_POLICY_DENIED",
 ] as const satisfies readonly RuleCode[];
 export type ProductionReadinessRuleCode = (typeof PRODUCTION_READINESS_RULE_CODES)[number];
 
@@ -48,6 +50,7 @@ export interface ProductionReadinessFinding {
 }
 
 export interface ProductionReadinessInput {
+  readonly packagePolicy?: PackagePolicyInput;
   readonly familyId: string;
   readonly challengeHash: string;
   readonly currentChallengeHash: string;
@@ -75,6 +78,14 @@ export interface ProductionReadinessInput {
 }
 
 export interface ProductionReadinessResult {
+  /** Legacy aggregate smoke arithmetic, retained for diagnosis but never a current evidence claim. */
+  readonly legacySmokeDiagnostics?: {
+    readonly smokeDifficultyEvidenced: boolean;
+    readonly crossLabSmokeEvidenced: boolean;
+    readonly crossLabDifficultyEvidenced: boolean;
+    readonly mixedCrossLabSmoke: boolean;
+  };
+  readonly packageDecision?: PackageDecision;
   readonly familyId: string;
   readonly challengeHash: string;
   readonly statuses: readonly ProductionReadinessStatus[];
@@ -95,6 +106,20 @@ export interface ProductionReadinessResult {
 const NO_CROSS_LAB_PROVIDER_FAMILIES = new Set(["external", "openai", "unknown"]);
 
 export function evaluateProductionReadiness(input: ProductionReadinessInput): ProductionReadinessResult {
+  const packageDecision = decidePackage({
+    ...input.packagePolicy,
+    expectedFamilyId: input.familyId,
+    checks: {
+      ...input.packagePolicy?.checks,
+      ...(input.localVerifierReady ? {} : { reference: false }),
+      ...(input.packageBacked && input.humanReady ? {} : { publicPackageComplete: false }),
+      ...(input.adversarialReady ? {} : { localIntegrityControls: false }),
+      unrepairedBypasses: Math.max(
+        input.unrepairedBypasses,
+        input.packagePolicy?.checks.unrepairedBypasses ?? 0,
+      ),
+    },
+  });
   const providerFamilies = [...new Set(input.modelFamilies.map((family) => family.toLowerCase()))].sort();
   const failureProviderFamilies = [
     ...new Set(input.countedFailureModelFamilies.map((family) => family.toLowerCase())),
@@ -221,23 +246,34 @@ export function evaluateProductionReadiness(input: ProductionReadinessInput): Pr
     );
   }
 
-  const blockerCodes = new Set(
-    findings.filter((finding) => finding.severity === "blocker").map((f) => f.code),
-  );
+  // Smoke strategy is historical advice, not a prerequisite for the first valid package trial.
+  const oldFindings = findings.splice(0);
+  findings.push(...oldFindings.map((f) => ({ ...f, severity: "advisory" as const })));
   const fullMatrixReady =
-    blockerCodes.size === 0 &&
-    input.localVerifierReady &&
-    input.packageBacked &&
-    smokeDifficultyEvidenced &&
-    input.transferDeclared &&
-    input.adversarialReady &&
-    (crossLabDifficultyEvidenced || override.length > 0);
+    packageDecision.stages["trial-eligible"].allowed &&
+    input.challengeHash === input.currentChallengeHash &&
+    input.packageHashCurrent;
+  if (!fullMatrixReady)
+    add(
+      "PRODUCTION_PACKAGE_POLICY_DENIED",
+      "blocker",
+      [
+        ...packageDecision.stages["trial-eligible"].blockers,
+        ...(input.challengeHash !== input.currentChallengeHash || !input.packageHashCurrent
+          ? ["current-public-hash-mismatch"]
+          : []),
+      ].join(", "),
+    );
+  const verifiedSmokeDifficulty = packageDecision.stages["hardness-observed"].allowed;
+  const verifiedCrossLabSmoke = packageDecision.observedProviderFamilies.length >= 2;
+  const verifiedCrossLabDifficulty = packageDecision.failureProviderFamilies.length >= 2;
+  const verifiedMixedSmoke = verifiedCrossLabSmoke && !verifiedCrossLabDifficulty;
   const statuses = statusesFor(
     input,
     fullMatrixReady,
-    smokeDifficultyEvidenced,
-    crossLabSmokeEvidenced,
-    mixedCrossLabSmoke,
+    verifiedSmokeDifficulty,
+    verifiedCrossLabSmoke,
+    verifiedMixedSmoke,
   );
   const sortedFindings = findings
     .filter(
@@ -247,20 +283,29 @@ export function evaluateProductionReadiness(input: ProductionReadinessInput): Pr
 
   return {
     familyId: input.familyId,
+    packageDecision,
     challengeHash: input.challengeHash,
     statuses,
     fullMatrixReady,
     productionMatrixStatus: fullMatrixReady ? "ready" : "blocked",
-    smokeDifficultyEvidenced,
-    crossLabSmokeEvidenced,
-    crossLabDifficultyEvidenced,
-    mixedCrossLabSmoke,
-    hasNonOpenAiCountedSmoke,
-    countedProviderFamilies: providerFamilies,
-    countedFailureProviderFamilies: failureProviderFamilies,
+    legacySmokeDiagnostics: {
+      smokeDifficultyEvidenced,
+      crossLabSmokeEvidenced,
+      crossLabDifficultyEvidenced,
+      mixedCrossLabSmoke,
+    },
+    smokeDifficultyEvidenced: verifiedSmokeDifficulty,
+    crossLabSmokeEvidenced: verifiedCrossLabSmoke,
+    crossLabDifficultyEvidenced: verifiedCrossLabDifficulty,
+    mixedCrossLabSmoke: verifiedMixedSmoke,
+    hasNonOpenAiCountedSmoke: packageDecision.observedProviderFamilies.some((family) => family !== "openai"),
+    countedProviderFamilies: packageDecision.observedProviderFamilies,
+    countedFailureProviderFamilies: packageDecision.failureProviderFamilies,
     blockers: sortedFindings.filter((finding) => finding.severity === "blocker"),
     advisories: sortedFindings.filter((finding) => finding.severity === "advisory"),
-    nextAction: nextProductionAction(input, fullMatrixReady, crossLabSmokeEvidenced, mixedCrossLabSmoke),
+    nextAction: !packageDecision.stages["trial-eligible"].allowed
+      ? `Resolve package blockers: ${packageDecision.stages["trial-eligible"].blockers.join(", ")}`
+      : nextProductionAction(input, fullMatrixReady, verifiedCrossLabSmoke, verifiedMixedSmoke),
   };
 }
 

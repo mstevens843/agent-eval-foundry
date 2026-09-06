@@ -116,8 +116,8 @@ describe("Phase 13 measurement contract", () => {
     expect(evidence.substrates.filter((row) => row.classification.includes("post-outcome"))).toHaveLength(2);
   });
 
-  it("recomputes three trial-ready local transfers without claiming agent difficulty", () => {
-    const result = measurePhase13(ROOT);
+  it("reads the frozen three local transfers without treating them as current qualification", () => {
+    const result = measurePhase13(ROOT, "historical");
     expect(result.summary).toMatchObject({
       probesRun: 3,
       probeSurvivors: 3,

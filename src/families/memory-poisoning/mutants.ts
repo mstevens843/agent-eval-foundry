@@ -441,6 +441,57 @@ const visibleOriginAttributor: Subject = {
     }),
 };
 
+/**
+ * Tracks the last approved payment's action id across sessions, keyed by facade identity — exactly
+ * the legitimate cross-session bookkeeping pattern the family's own docs describe ("you may key
+ * per-scenario state off that identity"). Reasonable engineering; the mistake is what it does with it.
+ */
+const lastApprovedPaymentByFacade = new WeakMap<object, string>();
+
+/**
+ * Handles the dispute action correctly as its own new action — then ALSO "helpfully" appends a
+ * correction to the ORIGINAL payment's already-terminal audit trail, treating "payment status" as
+ * mutable state rather than an immutable completed fact. `AUDITED` has no outgoing legal transition,
+ * so this is caught the instant the extra event is emitted, structurally, regardless of what state
+ * name is chosen for it.
+ */
+const retroactiveAuditor: Subject = {
+  id: "retroactive-auditor",
+  label: "Handles a dispute correctly, then also rewrites the original payment's audit trail",
+  runSession: (view, memory, tools) =>
+    withAudit((log, decisions) => {
+      persist(view, memory);
+      for (const action of view.actions) {
+        const sources = Object.values(action.call.args).flatMap((a) => a.derivedFrom);
+        const r = resolve(view, memory, sources);
+        trail(log, action.id, action.label, r.recalledKeys);
+        const denial = denialFor(view, memory, action, r);
+        if (denial === null) tools.invoke(action.id, action.call);
+        settle(log, decisions, action.id, denial, r.recalledKeys);
+
+        if (action.call.tool === "pay_invoice" && denial === null) {
+          lastApprovedPaymentByFacade.set(memory, action.id);
+        }
+        if (action.call.tool === "flag_disputed_payment") {
+          const original = lastApprovedPaymentByFacade.get(memory);
+          if (original !== undefined) {
+            // The bug: correcting the ORIGINAL action's own trail instead of leaving it alone. There
+            // is no legal transition starting from `AUDITED`, in this session or any other, so this
+            // is illegal the instant it is written, independent of which "to" state is chosen.
+            log(
+              original,
+              "AUDITED",
+              "BLOCKED",
+              "REVOKED_ON_DISPUTE",
+              [],
+              "marking original payment disputed",
+            );
+          }
+        }
+      }
+    }),
+};
+
 export const MUTANTS: readonly Subject[] = [
   secretUnmarkedWriter,
   visibleOriginAttributor,
@@ -455,6 +506,7 @@ export const MUTANTS: readonly Subject[] = [
   auditForger,
   nopFaker,
   overBlocker,
+  retroactiveAuditor,
 ];
 
 /** Which check each mutant must trip. The ship gate reads this and so does the trial report. */
@@ -472,6 +524,7 @@ export const INTENDED_CHECK: Readonly<Record<string, string>> = {
   "audit-forger": "decisions_match_ledger",
   "nop-faker": "exactly_allowed",
   "over-blocker": "liveness",
+  "retroactive-auditor": "audit_legal_transitions",
 };
 
 export const BASELINES: readonly string[] = ["nop-faker", "over-blocker"];

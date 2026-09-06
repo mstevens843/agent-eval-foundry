@@ -1,0 +1,734 @@
+{
+  "schemaVersion": 1,
+  "promptId": "01",
+  "verifiedAt": "2026-09-06",
+  "status": "prompt-1-scope-implemented; broader-integration-incomplete",
+  "providerCallsMade": 0,
+  "sourceSnapshot": {
+    "head": "6d71a25d233c054f67e50c7d48005893a609e09d",
+    "digest": "79c90726cdf7eebefd3a8630161ad13b89a1ace04725b2a90c67b95ddc5c529d",
+    "files": 3205,
+    "bytes": 57511612,
+    "inventoryPath": ".local/prompt-01/tested-source-before.json",
+    "afterInventoryPath": ".local/prompt-01/tested-source-after.json",
+    "algorithm": "SHA-256 of JSON.stringify(path-sorted file descriptors: path, bytes, executable, sha256). Paths are unique git ls-files --cached --others --exclude-standard; two Prompt 1 report outputs are excluded.",
+    "exclusions": "Git-ignored private/local/generated files and the two non-runtime Prompt 1 report outputs; dependencies node_modules are represented by the lockfile, not runtime attestation.",
+    "changedSourceFiles": [
+      {
+        "path": "data/implementation-gap-ledger.json",
+        "bytes": 21928,
+        "executable": false,
+        "sha256": "29683d5718b2065d659ec40fbc0f6a1493dd22651b4a0a33bc64c7165567f301"
+      },
+      {
+        "path": "data/package-history-lock.json",
+        "bytes": 483,
+        "executable": false,
+        "sha256": "0bd837571189e999f574010017591936a7f2b0cad178ddf7b8f578aff9908e89"
+      },
+      {
+        "path": "src/cli.ts",
+        "bytes": 245274,
+        "executable": false,
+        "sha256": "de40d719db8457ee2380a1f8d5d845e91fa1e8bcbeb9bb03375c1c11b9f441e0"
+      },
+      {
+        "path": "src/external-intake/import.ts",
+        "bytes": 7335,
+        "executable": false,
+        "sha256": "5b16abe7913a63f36c1d305f2b52430f9cd7e97fd2dc35b982c38145d72051f9"
+      },
+      {
+        "path": "src/external-intake/report.ts",
+        "bytes": 8300,
+        "executable": false,
+        "sha256": "d4f13d491430786d38ba84605c1e212d35442806673512c621b1291fac7320e8"
+      },
+      {
+        "path": "src/external-intake/types.ts",
+        "bytes": 5095,
+        "executable": false,
+        "sha256": "991e06bda89773993bea539051ed41ebf8111caabc9b1749841657b01dc02646"
+      },
+      {
+        "path": "src/external-intake/validate.ts",
+        "bytes": 15502,
+        "executable": false,
+        "sha256": "95beeaa1b68b576697eebf9c1af07791ba715fba529408243f25eaa1325eb66e"
+      },
+      {
+        "path": "src/foundry/production-readiness.ts",
+        "bytes": 15736,
+        "executable": false,
+        "sha256": "95bc273139f602f44df6a5cd596d98a32cf780aededec3f8a250150e3f871831"
+      },
+      {
+        "path": "src/foundry/schema.ts",
+        "bytes": 24812,
+        "executable": false,
+        "sha256": "bcb43908a47d58fcabbc56a65d4d29099bc64202ff348dd8af6f460a5d20308f"
+      },
+      {
+        "path": "src/index.ts",
+        "bytes": 31002,
+        "executable": false,
+        "sha256": "8c8cbe5248682ba00aca541f5a2c96f22712c85147395fbc81d2d194c738942e"
+      },
+      {
+        "path": "src/packages/command.ts",
+        "bytes": 1683,
+        "executable": false,
+        "sha256": "7dd4203f976ff5c78922d7bcb497f6455d673487571020c15060584e172f7ba2"
+      },
+      {
+        "path": "src/packages/evidence.ts",
+        "bytes": 7317,
+        "executable": false,
+        "sha256": "0c76bcae8ad44b95fd84b588168e4ca93f5f6c93e9641c7a511297c4017e8336"
+      },
+      {
+        "path": "src/packages/gaps.ts",
+        "bytes": 2669,
+        "executable": false,
+        "sha256": "b23222398fe40970533ef362303a70e9f96758a7c53c94b45985940ca219112d"
+      },
+      {
+        "path": "src/packages/history.ts",
+        "bytes": 2418,
+        "executable": false,
+        "sha256": "81093ce69704294fa0b246a9a192a3c7a9a07b5e8610ef9786e4c07ec72ac205"
+      },
+      {
+        "path": "src/packages/policy.ts",
+        "bytes": 9071,
+        "executable": false,
+        "sha256": "89a74378620e72e0500ea24cf169d089a49937bd04ac79195dd07d1ad722e5fc"
+      },
+      {
+        "path": "src/packages/record.ts",
+        "bytes": 11868,
+        "executable": false,
+        "sha256": "78716f33f0a621ebbb9097281c70dbd234da33163aac509cf6671301666d47f5"
+      },
+      {
+        "path": "src/packages/source.ts",
+        "bytes": 7177,
+        "executable": false,
+        "sha256": "f7fb71eb35ae3d91354b94f4f5db9901d157f91170f8db3b983c7a83128a8e53"
+      },
+      {
+        "path": "src/phase-14/execution.ts",
+        "bytes": 12840,
+        "executable": false,
+        "sha256": "d7610a5ae3f750a93fecf440124499b988dc9f39e937fee830912ba0cd15ec4c"
+      },
+      {
+        "path": "src/phase-14/label-execution.ts",
+        "bytes": 11267,
+        "executable": false,
+        "sha256": "b7e80c56027d7b1b497a86d74365d5e108cb7cbf63955f98afb298e3296553a6"
+      },
+      {
+        "path": "src/phase-14/measurement.ts",
+        "bytes": 45951,
+        "executable": false,
+        "sha256": "c123f4e17ba2c04f0a12d9e1a133585eed8b247f3ba149e0b506f808250e98be"
+      },
+      {
+        "path": "src/phase-14/packages.ts",
+        "bytes": 22880,
+        "executable": false,
+        "sha256": "fdf6abbb77fc99415122c3a8aad07987a5cb82d30bf55ec8be860f336e03c6e4"
+      },
+      {
+        "path": "src/phase-16/review-execution.ts",
+        "bytes": 22269,
+        "executable": false,
+        "sha256": "85f528160f94af65e3950bba8fc22eb901d2174f8a8651150e6a446fe42de916"
+      },
+      {
+        "path": "src/phase-17/execution.ts",
+        "bytes": 10475,
+        "executable": false,
+        "sha256": "9f4ef9410edc8afb858cef18fc11f6a2f740324576e62908c56a8a2b9190f270"
+      },
+      {
+        "path": "src/phase-19/reader-execution.ts",
+        "bytes": 18717,
+        "executable": false,
+        "sha256": "40b046dc20e28282ff6af3fbb026f2438aec6056eee06ed1457f3a6f5afb74a1"
+      },
+      {
+        "path": "src/reports/evidence.ts",
+        "bytes": 37046,
+        "executable": false,
+        "sha256": "9a6a77cfd22414c8f869faee03ddfff0a71d2f8c71cd0c1f48fb2470319bc21d"
+      },
+      {
+        "path": "src/reports/lifecycle-report.ts",
+        "bytes": 7456,
+        "executable": false,
+        "sha256": "5e6445b213165883edd00534e3a07f2089805f9f62b69b8a15664412d5c5b365"
+      },
+      {
+        "path": "src/reports/phase-13-transfer.ts",
+        "bytes": 45271,
+        "executable": false,
+        "sha256": "19b95d1bcaaf25569960a679484be84818c3a47a55a897b3ce44642910e58cbc"
+      },
+      {
+        "path": "src/reports/ship-report.ts",
+        "bytes": 60766,
+        "executable": false,
+        "sha256": "d5c5dd3b5cf639cc0da424b5f242b927698666346dc7fc361e3824a874be2c7c"
+      },
+      {
+        "path": "src/trials/bank-completion.ts",
+        "bytes": 16699,
+        "executable": false,
+        "sha256": "97d42c4b570bf7ef71eff841c396c0781c9420f078b8da6cfd85eca8e2d6e960"
+      },
+      {
+        "path": "src/trials/campaign-run.ts",
+        "bytes": 9385,
+        "executable": false,
+        "sha256": "69db8c2287a5a81580ee5611683132002d2071317842c9845486a8b6955df610"
+      },
+      {
+        "path": "src/trials/campaign.ts",
+        "bytes": 17539,
+        "executable": false,
+        "sha256": "dd6d17c876613a44f616845f3b4e9add68b97a20bca4958fd31b1baa11ed479e"
+      },
+      {
+        "path": "src/trials/cross-provider.ts",
+        "bytes": 13734,
+        "executable": false,
+        "sha256": "3464af3b71492d9df25acf6a2dd68049c6880de107b9561ffb64369e7131f1a1"
+      },
+      {
+        "path": "src/trials/directory.ts",
+        "bytes": 12549,
+        "executable": false,
+        "sha256": "2c30b15de6d53f3fc9b7609afccd4bad5bfc0d530986f277cfcfdd203e41e8d4"
+      },
+      {
+        "path": "src/trials/evidence-lifecycle.ts",
+        "bytes": 13051,
+        "executable": false,
+        "sha256": "7297570989c3b70791859d7e606b95820530b3c4fe001b27d4b59bc0ef3210e0"
+      },
+      {
+        "path": "src/trials/inert-provider.ts",
+        "bytes": 919,
+        "executable": false,
+        "sha256": "11dbaf83f548942e7b39ca395014db6c245df9eb0b36adf76be0beeb148ed011"
+      },
+      {
+        "path": "src/trials/orchestrator.ts",
+        "bytes": 13745,
+        "executable": false,
+        "sha256": "f71036d174bd5fea28634eab3d705a18c76e093e5bc774aa4eef4360a64bd2de"
+      },
+      {
+        "path": "src/trials/outcome.ts",
+        "bytes": 4592,
+        "executable": false,
+        "sha256": "7ba0db581781d932bb5063a2048a858fe915791ff535b84fd71c9330c864d069"
+      },
+      {
+        "path": "src/trials/providers.ts",
+        "bytes": 22668,
+        "executable": false,
+        "sha256": "a8dd9856af8fc42237c5a7a4e4a4f6bfddbc40c6cde71d31e729cb8cedf74077"
+      },
+      {
+        "path": "src/trials/root-cause.ts",
+        "bytes": 14957,
+        "executable": false,
+        "sha256": "2da067b78d953b64e62a4076fb8d8eb779699cf16681493b805a99e9497280e2"
+      },
+      {
+        "path": "src/trials/run.ts",
+        "bytes": 10452,
+        "executable": false,
+        "sha256": "7c5755da0302344cf9ad5eab9481dec1afc1aa3d71eb2a9485c68d7c54c0f54a"
+      },
+      {
+        "path": "src/trials/types.ts",
+        "bytes": 11113,
+        "executable": false,
+        "sha256": "36b33ecab792d0d6f539b68d564372fbb083569c9c93dbc07be9b17363910cf1"
+      },
+      {
+        "path": "test/cross-provider.test.ts",
+        "bytes": 45881,
+        "executable": false,
+        "sha256": "8e541b0a8f2e79ceab37e928f17e9877badde25ce8c095791c9f4f1af17e292b"
+      },
+      {
+        "path": "test/external-intake.test.ts",
+        "bytes": 14909,
+        "executable": false,
+        "sha256": "36055205a8cb63ba3f3eabeab36eafd1bc28be89fcda3533f79a701c989481e1"
+      },
+      {
+        "path": "test/orchestration.test.ts",
+        "bytes": 35130,
+        "executable": false,
+        "sha256": "826c5612c0528ffff58df6a6bf8ef4781363afd15ece50d7b3f4ced14cfccec5"
+      },
+      {
+        "path": "test/package-evidence-decisions.test.ts",
+        "bytes": 27002,
+        "executable": false,
+        "sha256": "93cedf3f95ec52886ca97a4d91d020c7cb21e3741b5dd89fb3abbc18fa9cde7e"
+      },
+      {
+        "path": "test/package-public-surface.test.ts",
+        "bytes": 2680,
+        "executable": false,
+        "sha256": "1742459555cbe489335ec3abf282e33631d15058833c1af464f772433eb8e8c2"
+      },
+      {
+        "path": "test/phase-13-transfer.test.ts",
+        "bytes": 6929,
+        "executable": false,
+        "sha256": "8701492cf6759c64a6c27f406366e8224b5b5dacad006bd6d95d667aa7a1ccd0"
+      },
+      {
+        "path": "test/root-cause.test.ts",
+        "bytes": 24412,
+        "executable": false,
+        "sha256": "aa69eb7beb40c64ae5c1f163f0233256729e5a390603906cbcc882190c5954cf"
+      },
+      {
+        "path": "test/trials-routing.test.ts",
+        "bytes": 25577,
+        "executable": false,
+        "sha256": "7e8f0ed7fb9f7a8a12434633874b6348f95c4f8d93b4b0e62c0007450704476c"
+      },
+      {
+        "path": "test/vacuous-gates.test.ts",
+        "bytes": 10732,
+        "executable": false,
+        "sha256": "3be85a4468a07466b0fc7e3653eca994c19660bc5d7c18e4a3d32aacb71d1e9a"
+      }
+    ],
+    "unchangedDuringFinalVerification": true
+  },
+  "baseline": {
+    "head": "6d71a25d233c054f67e50c7d48005893a609e09d",
+    "preservedDirtyEntries": 141,
+    "inventoryFiles": 3208,
+    "commands": [
+      "pnpm exec tsc --noEmit",
+      "pnpm lint",
+      "pnpm exec tsup --out-dir .local/prompt-01/baseline-build"
+    ],
+    "checksPassed": true,
+    "selectedTests": {
+      "passed": 84,
+      "failed": 7,
+      "unexecuted": 0
+    },
+    "failureCauses": [
+      "Environment-dependent Anthropic import-only fixture (1).",
+      "Old UI readiness assertion (1).",
+      "Historical/current Phase 14 identity/calibration assumptions (3).",
+      "Current shared-subject tests relying on stale retained banks (2)."
+    ],
+    "artifacts": [
+      ".local/prompt-01/baseline-inventory.json",
+      ".local/prompt-01/baseline-verification.json",
+      ".local/prompt-01/baseline-tests.json"
+    ]
+  },
+  "verification": {
+    "typecheck": {
+      "command": "pnpm exec tsc --noEmit",
+      "exitCode": 0
+    },
+    "lint": {
+      "command": "pnpm lint",
+      "exitCode": 0,
+      "checkedFiles": 408
+    },
+    "build": {
+      "command": "pnpm build",
+      "exitCode": 0,
+      "outputs": "Normal dist/ ESM/CJS/declarations; also .local/prompt-01/acceptance-build/"
+    },
+    "whitespace": {
+      "command": "git diff --check",
+      "exitCode": 0
+    },
+    "requiredCore": {
+      "passed": 126,
+      "failed": 0,
+      "unexecuted": 0,
+      "files": [
+        "test/external-intake.test.ts",
+        "test/package-evidence-decisions.test.ts",
+        "test/phase-13-transfer.test.ts",
+        "test/phase-14-operator-effects.test.ts",
+        "test/phase-14-provider-runtime.test.ts",
+        "test/root-cause.test.ts",
+        "test/vacuous-gates.test.ts",
+        "test/zz-outbox-probe.test.ts"
+      ],
+      "note": "Subset of the bounded final run; not an additional 126 independent tests."
+    },
+    "boundedIntegration": {
+      "command": "pnpm exec vitest run test/cross-provider.test.ts test/external-intake.test.ts test/orchestration.test.ts test/package-authority-boundary.test.ts test/package-checker-integrity.test.ts test/package-evidence-decisions.test.ts test/package-population-integrity.test.ts test/package-public-surface.test.ts test/package-semantic-integrity.test.ts test/phase-13-transfer.test.ts test/phase-14-operator-effects.test.ts test/phase-14-provider-runtime.test.ts test/root-cause.test.ts test/trials-routing.test.ts test/vacuous-gates.test.ts test/zz-outbox-probe.test.ts -t '^(?!.*host equivalence.*prompt-injection-memory-poisoning)' --reporter=json --outputFile=.local/prompt-01/bounded-acceptance-tests.json",
+      "exitCode": 1,
+      "passed": 329,
+      "failed": 3,
+      "unexecutedCount": 2,
+      "unexecuted": [
+        {
+          "title": "host equivalence — the subprocess host grades like the family does prompt-injection-memory-poisoning: a do-nothing artifact fails every scenario through the host",
+          "owner": 7,
+          "gap": "G14/E4",
+          "classification": "explicitly filtered from bounded tier; full sweep incomplete, not a pass"
+        },
+        {
+          "title": "host equivalence — the subprocess host grades like the family does prompt-injection-memory-poisoning: the host produces one cell per measured scenario, in the family's ids",
+          "owner": 7,
+          "gap": "G14/E4",
+          "classification": "explicitly filtered from bounded tier; full sweep incomplete, not a pass"
+        }
+      ],
+      "durationMs": 136828.41357421875,
+      "files": [
+        {
+          "file": "test/cross-provider.test.ts",
+          "status": "passed",
+          "passed": 62,
+          "failed": 0,
+          "unexecuted": 0
+        },
+        {
+          "file": "test/external-intake.test.ts",
+          "status": "passed",
+          "passed": 9,
+          "failed": 0,
+          "unexecuted": 0
+        },
+        {
+          "file": "test/orchestration.test.ts",
+          "status": "failed",
+          "passed": 51,
+          "failed": 3,
+          "unexecuted": 0
+        },
+        {
+          "file": "test/package-authority-boundary.test.ts",
+          "status": "passed",
+          "passed": 9,
+          "failed": 0,
+          "unexecuted": 0
+        },
+        {
+          "file": "test/package-checker-integrity.test.ts",
+          "status": "passed",
+          "passed": 6,
+          "failed": 0,
+          "unexecuted": 0
+        },
+        {
+          "file": "test/package-evidence-decisions.test.ts",
+          "status": "passed",
+          "passed": 45,
+          "failed": 0,
+          "unexecuted": 0
+        },
+        {
+          "file": "test/package-population-integrity.test.ts",
+          "status": "passed",
+          "passed": 7,
+          "failed": 0,
+          "unexecuted": 0
+        },
+        {
+          "file": "test/package-public-surface.test.ts",
+          "status": "passed",
+          "passed": 14,
+          "failed": 0,
+          "unexecuted": 0
+        },
+        {
+          "file": "test/package-semantic-integrity.test.ts",
+          "status": "passed",
+          "passed": 13,
+          "failed": 0,
+          "unexecuted": 0
+        },
+        {
+          "file": "test/phase-13-transfer.test.ts",
+          "status": "passed",
+          "passed": 6,
+          "failed": 0,
+          "unexecuted": 0
+        },
+        {
+          "file": "test/phase-14-operator-effects.test.ts",
+          "status": "passed",
+          "passed": 8,
+          "failed": 0,
+          "unexecuted": 0
+        },
+        {
+          "file": "test/phase-14-provider-runtime.test.ts",
+          "status": "passed",
+          "passed": 4,
+          "failed": 0,
+          "unexecuted": 0
+        },
+        {
+          "file": "test/root-cause.test.ts",
+          "status": "passed",
+          "passed": 29,
+          "failed": 0,
+          "unexecuted": 0
+        },
+        {
+          "file": "test/trials-routing.test.ts",
+          "status": "passed",
+          "passed": 41,
+          "failed": 0,
+          "unexecuted": 2
+        },
+        {
+          "file": "test/vacuous-gates.test.ts",
+          "status": "passed",
+          "passed": 10,
+          "failed": 0,
+          "unexecuted": 0
+        },
+        {
+          "file": "test/zz-outbox-probe.test.ts",
+          "status": "passed",
+          "passed": 15,
+          "failed": 0,
+          "unexecuted": 0
+        }
+      ],
+      "failures": [
+        {
+          "file": "test/orchestration.test.ts",
+          "title": "providers the shell runner enforces its timeout",
+          "error": "Error: PACKAGE_AUTHORIZATION_DENIED: real provider execution requires Prompt 5 durable reservations; inert test adapter only",
+          "owner": 5,
+          "gap": "EXECUTION-TESTS-1",
+          "classification": "intentional denial of unreserved shell execution; test remains failing"
+        },
+        {
+          "file": "test/orchestration.test.ts",
+          "title": "providers a run that produces no artifact is never `completed`",
+          "error": "Error: PACKAGE_AUTHORIZATION_DENIED: real provider execution requires Prompt 5 durable reservations; inert test adapter only",
+          "owner": 5,
+          "gap": "EXECUTION-TESTS-1",
+          "classification": "intentional denial of unreserved shell execution; test remains failing"
+        },
+        {
+          "file": "test/orchestration.test.ts",
+          "title": "what a trial cost carries usage onto the run result without calling any provider",
+          "error": "Error: PACKAGE_AUTHORIZATION_DENIED: real provider execution requires Prompt 5 durable reservations; inert test adapter only",
+          "owner": 5,
+          "gap": "EXECUTION-TESTS-1",
+          "classification": "intentional denial of unreserved shell execution; test remains failing"
+        }
+      ],
+      "artifact": ".local/prompt-01/bounded-acceptance-tests.json"
+    },
+    "exhaustiveAttempt": {
+      "exitCode": 130,
+      "status": "interrupted by agent to bound per-scenario container fan-out",
+      "scope": "Same 16 files without the test-name filter; two memory sweeps expand to 1728 container launches.",
+      "qualification": "No complete test result claimed. Finish/profile under owner 7."
+    },
+    "infrastructureRerun": {
+      "initial": "Sandboxed Docker host checks failed runtime access.",
+      "diagnostic": "Elevated single CAA reference passed (1 selected case; other 8 filtered in that diagnostic).",
+      "final": "All 9 protected-authority regressions pass in final bounded Docker-enabled run."
+    },
+    "historicalIntegrity": {
+      "filesComparedToBaseline": 873,
+      "changed": [],
+      "scope": "trials, imported outbox examples and selected historical campaign/Phase 13–14 artifacts"
+    }
+  },
+  "nativeSeed": {
+    "store": ".local/prompt-01/package-store",
+    "digest": "2320c5e4b20ca33e6c4bd5b30be44056f4c4420bc0e59c6e278ed64deca40fa0",
+    "id": "caa-revalidation-repair",
+    "version": "prompt-01-source-seed-v1",
+    "components": {
+      "adapters": {
+        "files": 2,
+        "digest": "04dc785760757c4afd5a792824617c471bc404448a5e14ab32899cbc4a64413a"
+      },
+      "collector": {
+        "files": 2,
+        "digest": "872160f9fae9ce3d34356e590dcc2e9c1525bad48070941b2e2421b782348b5b"
+      },
+      "contract": {
+        "files": 2,
+        "digest": "b98100469a778b2704c1fba6373a0082b547b2a58e0c2ee19d9ef85f22901928"
+      },
+      "controls": {
+        "files": 19,
+        "digest": "6fc64b87f114c252200b6f58d64a723452c064591afd02187e09da9893118227"
+      },
+      "dependencies": {
+        "files": 853,
+        "digest": "fec08e47f495a803195609ccb074b2ab0e5705af6d9b2e80f4ab15bedad6a486"
+      },
+      "policy": {
+        "files": 1,
+        "digest": "33e9971b5ddb2c40cfd8d214982b710d4ff3ca53f384b8cb2684a130e2b77e8d"
+      },
+      "reference": {
+        "files": 17,
+        "digest": "ced0e912f18e21f010e5f08860ff3c0b4060c94d01692d2420ac5147fc397a63"
+      },
+      "scenarios": {
+        "files": 54,
+        "digest": "ba0eec1999f3ddc4e0472cef311236e267893f50056155ed9652a2b168dc89fe"
+      },
+      "verifier": {
+        "files": 124,
+        "digest": "a01b7e505e0871f122ccc8ed8b791497fbfdeb6372257bf62e97bc052765840e"
+      },
+      "workspace": {
+        "files": 41,
+        "digest": "6f8cf8bc66fdb303eab26df93697de5d379825285aa79ca59ad13c75f80f6d20"
+      }
+    },
+    "uniqueBlobs": 776,
+    "blobBytes": 18188313,
+    "recordBytes": 189108,
+    "inspectionMilliseconds": 155.800375,
+    "inspectionDidNotChangeRecords": true,
+    "stages": {
+      "local-valid": {
+        "allowed": false,
+        "blockers": [
+          "ambiguity-status-unknown",
+          "bypass-status-unknown",
+          "required-reference",
+          "required-positiveWork",
+          "required-nearMissControls",
+          "required-contractReviewed"
+        ],
+        "notApplicable": [
+          "model-evidence",
+          "spend-approval",
+          "axis-breadth"
+        ]
+      },
+      "trial-eligible": {
+        "allowed": false,
+        "blockers": [
+          "ambiguity-status-unknown",
+          "bypass-status-unknown",
+          "required-reference",
+          "required-positiveWork",
+          "required-nearMissControls",
+          "required-contractReviewed",
+          "required-publicPackageComplete",
+          "required-protectedGrading",
+          "required-localIntegrityControls",
+          "required-boundedSolveEvidence",
+          "runtime-dependencies-unresolved"
+        ],
+        "notApplicable": [
+          "prior-model-failure",
+          "spend-approval",
+          "axis-breadth"
+        ]
+      },
+      "trial-authorized": {
+        "allowed": false,
+        "blockers": [
+          "ambiguity-status-unknown",
+          "bypass-status-unknown",
+          "required-reference",
+          "required-positiveWork",
+          "required-nearMissControls",
+          "required-contractReviewed",
+          "required-publicPackageComplete",
+          "required-protectedGrading",
+          "required-localIntegrityControls",
+          "required-boundedSolveEvidence",
+          "runtime-dependencies-unresolved",
+          "explicit-approval-missing"
+        ],
+        "notApplicable": []
+      },
+      "hardness-observed": {
+        "allowed": false,
+        "blockers": [
+          "ambiguity-status-unknown",
+          "bypass-status-unknown",
+          "required-reference",
+          "required-positiveWork",
+          "required-nearMissControls",
+          "required-contractReviewed",
+          "required-publicPackageComplete",
+          "required-protectedGrading",
+          "required-localIntegrityControls",
+          "required-boundedSolveEvidence",
+          "runtime-dependencies-unresolved",
+          "no-qualified-capability-failure"
+        ],
+        "notApplicable": [
+          "full-six-trial-qualification"
+        ]
+      },
+      "release-eligible": {
+        "allowed": false,
+        "blockers": [
+          "ambiguity-status-unknown",
+          "bypass-status-unknown",
+          "required-reference",
+          "required-positiveWork",
+          "required-nearMissControls",
+          "required-contractReviewed",
+          "required-publicPackageComplete",
+          "required-protectedGrading",
+          "required-localIntegrityControls",
+          "required-boundedSolveEvidence",
+          "runtime-dependencies-unresolved",
+          "no-qualified-capability-failure",
+          "required-destinationChecks",
+          "exact-two-target-profiles-missing"
+        ],
+        "notApplicable": []
+      }
+    },
+    "note": "Source seed only. Missing runtime pinning/assurance and normalized native scenario/check IDs remain owner 2; record is not trial-ready."
+  },
+  "gapDispositions": {
+    "verified": [
+      "G2",
+      "G3",
+      "G5",
+      "HISTORY-1",
+      "STATUS-1"
+    ],
+    "ledger": "data/implementation-gap-ledger.json",
+    "ledgerRows": 37,
+    "packageRows": 14
+  },
+  "remainingOwners": {
+    "2": "Native production/export and executed assurance; runtime pinning; sampler/Jaccard/native capture.",
+    "3": "Ten protected routes and incomplete family APIs.",
+    "4": "Substantive coherent/diverse package portfolio.",
+    "5": "Durable reserved execution, exact effective profiles, atomic persistence, bounded capture; 3 blocked legacy tests.",
+    "6": "Integrated evidence viewer/findings/withdrawal/transfer and package-first selection.",
+    "7": "Whole-repository green integration, affordable exhaustive test tier, measured performance/public docs."
+  },
+  "qualification": "No real-model hardness, expert solve time, adversarial-model qualification, or destination acceptance established."
+}

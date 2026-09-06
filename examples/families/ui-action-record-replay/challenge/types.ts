@@ -1,21 +1,3 @@
-// Domain model for the challenge. Read-only — the grader uses these exact shapes.
-
-// The PUBLIC domain model for UI action record-and-replay.
-//
-// Shipped verbatim in the agent-facing package, so nothing here is ground truth. The scenario, its
-// mutations and the effect ledger live in `truth.ts`.
-//
-// THE THESIS
-//
-// A model can discover a UI workflow. That is not the capability worth having. The capability worth
-// having is a RECORDING that replays deterministically with no model in the loop — because a
-// workflow that needs the model every time is not automation, it is a demo with a subscription.
-//
-// So the task is not "click the right thing". It is: record a trace whose every step carries what
-// must be true before it and what must be true after it, then replay that trace against a UI that
-// has changed underneath you, and either complete it or halt with a named reason. Improvising is a
-// failure even when it works — `R6_NO_MODEL_IN_LOOP` is a rule, and the harness owns the channel
-// that would let you break it.
 
 export interface UiNode {
   readonly id: string;

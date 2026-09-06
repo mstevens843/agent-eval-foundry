@@ -114,8 +114,11 @@ describe("dao recompute descendant", () => {
     // the file has always had 9 operators; the count was stale, not the fix). Phase 22 appended a
     // tenth: the real, replicated NULL-ON-FAIR-ENVELOPE result for
     // hidden-scenario-selection-targets-narrow-mutants on caa-revalidation (see
-    // scripts/verify-phase-22.mjs and reports/PHASE-22-TRANSFER-AND-CONSTRUCTION.md).
-    expect(ledger.operators).toHaveLength(10);
+    // scripts/verify-phase-22.mjs and reports/PHASE-22-TRANSFER-AND-CONSTRUCTION.md). Phase 23 appended
+    // two more: authoritative-state-inaccessible-to-subject's honest-subject case (route parity, a real
+    // null) and diagnosis-radius's construction-only record (see scripts/verify-phase-23.mjs and
+    // reports/PHASE-23-OPERATOR-CLASSIFICATION-AND-TRUSTED-TRIAL.md).
+    expect(ledger.operators).toHaveLength(12);
     expect(new Set(ledger.operators.map((row) => row.category))).toEqual(
       new Set(["validity-control", "difficulty", "scenario-selection"]),
     );

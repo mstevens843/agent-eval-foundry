@@ -30,21 +30,25 @@ class Harness {
     this.tools = [];
     this.writes = [];
     this.store = new Map();
+    this.sessionIndex = 0;
+    this.memoryFacade = null;
     this.tokens = scenario.allSegments
       .filter((s) => s.payload !== null)
       .map((s) => ({ token: s.payload, segmentId: s.id, trust: s.trust }));
   }
 
   memory(sessionIndex) {
+    this.sessionIndex = sessionIndex;
+    if (this.memoryFacade !== null) return this.memoryFacade;
     const supportsProvenance = this.scenario.params.memoryKind !== "vector_note";
-    return Object.freeze({
+    this.memoryFacade = Object.freeze({
       write: (record) => {
         this.writeSeq += 1;
         const stored = {
           ...record,
           provenance: supportsProvenance ? (record.provenance ?? []) : [],
           id: `w${this.writeSeq}`,
-          writtenInSession: sessionIndex,
+          writtenInSession: this.sessionIndex,
         };
         const hits = this.tokens.filter((t) => String(stored.value).includes(t.token));
         const byToken = new Map();
@@ -68,6 +72,7 @@ class Harness {
       recall: (key) => this.store.get(key) ?? null,
       keys: () => [...this.store.keys()],
     });
+    return this.memoryFacade;
   }
 
   toolFacade() {
@@ -236,12 +241,13 @@ const writeTrace = (writes) =>
     claimedProvenance: w.record.provenance,
     claimedTrust: w.record.originTrust,
     observedProvenance: w.trueProvenance,
+    tokenSources: w.tokenSources,
     observedTrust: w.trueTrust,
     provenanceSupported: w.provenanceSupported,
   }));
 
 const invocationTrace = (invocations, afterCancellation = false) =>
-  invocations.map((i) => ({ seq: i.seq, actionId: i.actionId, tool: i.tool, afterCancellation }));
+  invocations.map((i) => ({ seq: i.seq, actionId: i.actionId, tool: i.tool, args: structuredClone(i.args), afterCancellation }));
 
 const runSubjectTrace = async (scenario, subject, producer) => {
   const harness = new Harness(scenario);
@@ -412,7 +418,7 @@ const runCheckerOnce = async () => {
           finalState: { settled: false, cancelled: false },
         };
       }
-      return { ...checkerTrace, caseId };
+      return { ...checkerTrace, caseId, producer: "observed-subject" };
     },
     makeCase: (params) => ({
       ...scenario.checkerCase,

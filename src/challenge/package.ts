@@ -1,3 +1,4 @@
+import { publicFiles, publicManifest } from "./public-surface.js";
 // The agent-facing challenge package.
 //
 // Splitting a family into what the agent sees and what grades it is the step that turns an internal
@@ -85,7 +86,7 @@ export const subject = {
 \`\`\`
 
 It will be executed in a separate process. It receives \`tools.invoke(actionId, call)\`; whatever it
-invokes actually happens and is recorded outside your process.
+invokes actually happens and is recorded by the grading harness.
 
 ## How you are graded
 
@@ -260,7 +261,7 @@ export function buildChallengePackage(typesSource: string, scenarioSetId: string
 
   return {
     familyId: manifest.familyId,
-    files: [...files, { path: "MANIFEST.json", content: `${JSON.stringify(manifest, null, 2)}\n` }],
+    files: [...publicFiles(files), { path: "MANIFEST.json", content: publicManifest(manifest) }],
     manifest,
   };
 }

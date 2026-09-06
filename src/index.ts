@@ -892,7 +892,11 @@ export type {
   SourceRole,
 } from "./phase-15/types.js";
 export { renderPhase15DiscoveryEngine } from "./reports/phase-15-discovery-engine.js";
-export { gradePhase14ContainerSubmission } from "./trials/router.js";
+export {
+  gradePhase14ContainerSubmission,
+  gradeCaaRevalidation,
+  gradeCaaRevalidationInContainer,
+} from "./trials/router.js";
 export { runJsonContainerHost } from "./trials/runners.js";
 export {
   activationAudit,
@@ -1007,3 +1011,24 @@ export { regradeSubmissionAgainstSuite } from "./phase-22/regrade.js";
 export type { RegradeCellResult, RegradeSubmissionResult } from "./phase-22/regrade.js";
 export { assessWithinFamilyReplication } from "./phase-22/within-family-replication.js";
 export type { ReplicationVerdict, ReplicationResult } from "./phase-22/within-family-replication.js";
+
+// Phase 23 — operator classification and the first trusted agent-facing causal experiment
+export { checkRouteParity } from "./phase-23/route-parity.js";
+export type { RouteParityResult, RouteParityDiscrepancy } from "./phase-23/route-parity.js";
+export {
+  BASELINE_SESSIONS_BETWEEN,
+  TREATED_SESSIONS_BETWEEN,
+  BASELINE_ARM,
+  TREATED_ARM,
+  selectFixedSessionsBetween,
+  runValidityGates,
+  freezeArmPackage,
+} from "./phase-23/diagnosis-radius.js";
+export type { ArmScenarioSet, ValidityGateResult, FrozenArmPackage } from "./phase-23/diagnosis-radius.js";
+export * from "./packages/record.js";
+export * from "./packages/policy.js";
+export * from "./packages/source.js";
+export * from "./packages/history.js";
+export * from "./packages/evidence.js";
+export * from "./packages/gaps.js";
+export * from "./trials/outcome.js";

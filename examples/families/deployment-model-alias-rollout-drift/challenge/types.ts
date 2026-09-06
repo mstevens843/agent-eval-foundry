@@ -1,5 +1,3 @@
-// Public domain model for the challenge.
-// Hidden truth, scenarios, verifier and mutants are deliberately absent.
 
 export const MODEL_ALIASES = ["prod-chat", "eval-default"] as const;
 export type ModelAlias = (typeof MODEL_ALIASES)[number];

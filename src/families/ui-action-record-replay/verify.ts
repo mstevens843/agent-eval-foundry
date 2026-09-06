@@ -39,6 +39,26 @@ export function verify({ scenario, reports, effects, calls }: VerifyInput): read
   const failures: Failure[] = [];
   const last = reports[reports.length - 1];
   const expected = scenario.expectedOutcome;
+  if (reports.length !== scenario.params.replayCount) {
+    failures.push({ check: "replay_completes", detail: "missing or extra replay report" });
+  }
+  for (const report of reports) {
+    if (
+      new Set(report.steps.map((step) => step.index)).size !== report.steps.length ||
+      report.steps.some((step) => !scenario.trace.steps.some((recorded) => recorded.index === step.index))
+    ) {
+      failures.push({
+        check: "replay_audit_explains",
+        detail: "replay report contains duplicate or unknown steps",
+      });
+    }
+  }
+  if (effects.map((effect) => effect.effect).join("|") !== scenario.expectedEffects.join("|")) {
+    failures.push({
+      check: "no_forbidden_effect",
+      detail: "actual effect sequence does not match the trace's required effects",
+    });
+  }
 
   // --- did the right thing happen at all? --------------------------------------------------------
   if (last === undefined) {
@@ -67,6 +87,9 @@ export function verify({ scenario, reports, effects, calls }: VerifyInput): read
       check: "replay_completes",
       detail: `a correct replayer halts on this trace; the subject reported \`${last.outcome}\``,
     });
+  }
+  if (expected === "completed" && last.outcome !== "completed") {
+    failures.push({ check: "replay_completes", detail: "a completed trace was not reported completed" });
   }
 
   // --- unreplayable is its own outcome, not a flavour of halted -----------------------------------
@@ -134,6 +157,18 @@ export function verify({ scenario, reports, effects, calls }: VerifyInput): read
       failures.push({
         check: "precondition_observed",
         detail: `step ${audit.index} ran and reports no observed value for its \`${recorded.precondition.attr}\` precondition; it was assumed, not observed`,
+      });
+    }
+    const observed = calls.some(
+      (call) =>
+        call.replayIndex === reports.length - 1 &&
+        call.method === "attr" &&
+        call.detail === `${audit.resolvedNodeId}.${recorded.precondition.attr}`,
+    );
+    if (!observed) {
+      failures.push({
+        check: "precondition_observed",
+        detail: `step ${audit.index} claims an observation with no matching live attribute read in this replay`,
       });
     }
   }

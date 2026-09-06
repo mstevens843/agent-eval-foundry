@@ -163,8 +163,8 @@
       "shapeFieldsEdited": ["scenario selection function only"],
       "legibilitySensitive": false,
       "measurable": true,
-      "evidenceStatus": "piloted",
-      "priorEvidence": ["src/families/caa-revalidation/scenarios.ts (selectMeasuredSet, ACTIVATED_QUOTA=18, CONTROL_QUOTA=6)"],
+      "evidenceStatus": "measured",
+      "priorEvidence": ["src/families/caa-revalidation/scenarios.ts (selectMeasuredSet, ACTIVATED_QUOTA=18, CONTROL_QUOTA=6)", "reports/PHASE-22-TRANSFER-AND-CONSTRUCTION.md (replicated NULL-ON-FAIR-ENVELOPE on a frozen, disjoint held-out mutant bank plus regraded real submissions)"],
       "candidateSubstrates": ["caa-revalidation"],
       "excludedSubstrates": []
     },

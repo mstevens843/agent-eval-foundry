@@ -531,7 +531,7 @@ var App = class {
     }
   }
   // ---------------------------------------------------------------- ledgers
-  record(method, detail, permitted = null) {
+  record(method, detail, permitted = null, observedValue) {
     this.callSeq += 1;
     this.calls.push({
       seq: this.callSeq,
@@ -540,6 +540,7 @@ var App = class {
       replayIndex: this.replayIndex,
       tick: this.tick,
       permitted,
+      ...(observedValue === undefined ? {} : { observedValue }),
     });
   }
   /**
@@ -624,8 +625,9 @@ var App = class {
         };
       },
       attr: (nodeId, name) => {
-        this.record("attr", `${nodeId}.${name}`);
-        return this.find(nodeId)?.attrs[name] ?? null;
+        const value = this.find(nodeId)?.attrs[name] ?? null;
+        this.record("attr", `${nodeId}.${name}`, null, value);
+        return value;
       },
       regionState: (region) => {
         const node = walk(this.root).find(

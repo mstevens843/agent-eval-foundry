@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { DEPLOYMENT_ALIAS_PROFILE } from "../challenge/package-check.js";
+import { type PackagePolicyInput, decidePackage } from "../packages/policy.js";
 import { hashChallengeDir } from "../trials/run.js";
 import { hiddenPath, readAllPaths } from "./packet.js";
 import {
@@ -18,6 +19,7 @@ import {
 } from "./types.js";
 
 export interface ExternalIntakeContext {
+  readonly packagePolicy?: PackagePolicyInput;
   readonly familyId: string;
   readonly currentChallengeHash: string;
   readonly expectedScenarioSetId: string;
@@ -379,14 +381,20 @@ export function validateExternalRunPacket(
         index,
     )
     .sort((a, b) => a.code.localeCompare(b.code) || a.path.localeCompare(b.path));
-  const countable = status === "completed" && sorted.length === 0;
+  const packetValid = status === "completed" && sorted.length === 0;
+  const packageDecision = decidePackage({
+    ...(context.packagePolicy ?? { checks: {} }),
+    expectedFamilyId: context.familyId,
+  });
 
   return {
     packet,
     findings: sorted,
-    countable,
-    countabilityReason: countabilityReason(status, sorted),
+    packetValid,
+    packageDecision,
+    countable: false,
+    countabilityReason: `${countabilityReason(status, sorted)}; packet validation alone is not a complete semantic evaluation`,
     status,
-    importedTrialEligible: countable,
+    importedTrialEligible: packetValid && packageDecision.stages["trial-eligible"].allowed,
   };
 }

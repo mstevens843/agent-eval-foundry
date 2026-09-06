@@ -32,7 +32,7 @@ export const subject = {
 ```
 
 It will be executed in a separate process. It receives `tools.invoke(actionId, call)`; whatever it
-invokes actually happens and is recorded outside your process.
+invokes actually happens and is recorded by the grading harness.
 
 ## How you are graded
 

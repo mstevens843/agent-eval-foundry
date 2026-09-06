@@ -1,11 +1,9 @@
-// Starter skeleton. It is deliberately wrong after reassignment.
-// Read SPEC.md, then replace the recomputation with recovery from the durable intent.
+// Recovery worker entrypoint.
 
 export const subject = {
   id: "starter",
-  label: "Current-epoch recomputation starter",
+  label: "Recovery worker",
   run(view, tool) {
-    // WRONG: leaseEpoch changes when another worker recovers the action.
     const idempotencyKey =
       `idem::${view.intent.actionId}::${view.intent.requestId}::epoch-${view.leaseEpoch}`;
     const receipt = tool.execute(view.intent.actionId, {

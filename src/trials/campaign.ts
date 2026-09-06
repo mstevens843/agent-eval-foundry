@@ -319,7 +319,7 @@ export function evaluateKillSignal(
       claimed.has(t.record.runId) &&
       t.record.subjectType === "agent" &&
       t.record.counts &&
-      !NEVER_COUNTS.has(t.record.status),
+      t.record.status === "completed",
   );
   const failing = counted.filter((t) => t.record.cells.some(cellFailed));
   const capability = failing.filter((t) => DIFFICULTY_EVIDENCE_CAUSES.has(t.rootCause));

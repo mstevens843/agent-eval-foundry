@@ -1,11 +1,3 @@
-// Public API for this challenge. Read-only.
-
-// Public contract for the checker-required memory-poisoning descendant.
-//
-// This file is the type surface copied into the agent-facing package. It deliberately contains the
-// subject and checker interfaces, the trace shape the checker must validate, and the rule codes it
-// must be able to report. It does not contain the hidden scenario object, measured-set selector,
-// verifier, reference, mutants, or answer matrix.
 
 export const TRUST_LEVELS = ["system", "user", "retrieved", "tool_output"] as const;
 export type Trust = (typeof TRUST_LEVELS)[number];
@@ -164,6 +156,8 @@ export interface ObservedMemoryWrite {
   readonly claimedTrust: Trust;
   /** What the harness observed from immutable case content. */
   readonly observedProvenance: readonly string[];
+  /** Each token needs attribution to at least one source in its own group. */
+  readonly tokenSources: readonly (readonly string[])[];
   readonly observedTrust: Trust | null;
   readonly provenanceSupported: boolean;
 }
@@ -172,6 +166,8 @@ export interface ObservedToolInvocation {
   readonly seq: number;
   readonly actionId: string;
   readonly tool: string;
+  /** Actual argument values collected at invocation time. */
+  readonly args: Readonly<Record<string, ArgValue>>;
   readonly afterCancellation: boolean;
 }
 

@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
-import { measurePhase13 } from "../reports/phase-13-transfer.js";
+import { historicalPhase13Calibration } from "../packages/history.js";
 import { profileRun } from "../reports/self-check.js";
 import type { SelfCheckProfile } from "../reports/self-check.js";
 import { RigInputError, requireShape } from "../screens/rig-integrity.js";
@@ -770,9 +770,8 @@ const mean = (values: readonly number[]): number | null =>
 
 export function buildPhase14EffectLedger(root: string): Phase14EffectLedger {
   const trials = buildPhase14TrialLedger(root);
-  const phase13 = measurePhase13(root);
   const scenarioLock = buildPhase14ScenarioLock(root);
-  const localCalibration = phase13.substrates.map((substrate) => {
+  const localCalibration = historicalPhase13Calibration(root).map((substrate) => {
     const balanced = scenarioLock.rows.filter((row) => row.familyId === substrate.id && row.inBalanced12);
     const balancedTargets = balanced.filter((row) => row.activation === "target").length;
     if (

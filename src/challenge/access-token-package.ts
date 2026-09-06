@@ -2,6 +2,7 @@ import { buildScenario } from "../families/access-token-scope-expansion/scenario
 import { SPEC_MD } from "../families/access-token-scope-expansion/spec.js";
 import type { ScenarioParams } from "../families/access-token-scope-expansion/truth.js";
 import type { ChallengeFile, ChallengeManifest, ChallengePackage } from "./package.js";
+import { publicFiles, publicManifest } from "./public-surface.js";
 
 export const ACCESS_TOKEN_HIDDEN_ARTIFACTS = [
   "verify.ts",
@@ -210,7 +211,7 @@ export function buildAccessTokenChallengePackage(
 
   return {
     familyId: manifest.familyId,
-    files: [...files, { path: "MANIFEST.json", content: `${JSON.stringify(manifest, null, 2)}\n` }],
+    files: [...publicFiles(files), { path: "MANIFEST.json", content: publicManifest(manifest) }],
     manifest,
   };
 }

@@ -3,13 +3,14 @@ import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { checkChallengePackage } from "../challenge/package-check.js";
-import type { ChallengeFile, ChallengePackage } from "../challenge/package.js";
+import type { ChallengeFile, ChallengeManifest, ChallengePackage } from "../challenge/package.js";
 import { builtFamily } from "../families/registry.js";
 import { fail, str } from "../foundry/schema.js";
+import { readLockedHistory } from "../packages/history.js";
 import { RigInputError, requireShape, rigIntegrity } from "../screens/rig-integrity.js";
 import type { ChallengeVariantRegistration } from "../trials/evidence-lifecycle.js";
 import { routeFor } from "../trials/router.js";
-import { challengeHash, prepareChallenge } from "../trials/run.js";
+import { challengeHash } from "../trials/run.js";
 
 export const PHASE14_FAMILIES = [
   "dao-descendant",
@@ -146,13 +147,50 @@ const replaceOnce = (source: string, before: string, after: string, path: string
   return `${source.slice(0, first)}${after}${source.slice(first + before.length)}`;
 };
 
-/** Build a Phase 14 package without changing the registered Phase 13 default builder. */
+/** Read frozen historical bytes; changes to today's package must not rewrite Phase 14. */
+function frozenSeededPackage(root: string, familyId: Phase14FamilyId): ChallengePackage {
+  const directory = join(
+    root,
+    "trials",
+    familyId,
+    `phase14-${familyId}-seeded-recompute-openai`,
+    "challenge",
+  );
+  const manifestSource = readFileSync(join(directory, "MANIFEST.json"), "utf8");
+  const manifest = JSON.parse(manifestSource) as ChallengeManifest;
+  if (manifest.familyId !== familyId || !Array.isArray(manifest.visibleFiles)) {
+    throw new Error("invalid frozen Phase 14 manifest");
+  }
+  const files = manifest.visibleFiles.map((path): ChallengeFile => {
+    if (
+      typeof path !== "string" ||
+      !/^[a-zA-Z0-9_./-]+$/.test(path) ||
+      path.startsWith("/") ||
+      path.split("/").includes("..")
+    ) {
+      throw new Error("invalid frozen Phase 14 file path");
+    }
+    return { path, content: readFileSync(join(directory, path), "utf8") };
+  });
+  files.push({ path: "MANIFEST.json", content: manifestSource });
+  const pkg = { familyId, manifest, files };
+  const registration = JSON.parse(readFileSync(join(root, PREREGISTRATION_PATH), "utf8"));
+  const expected = registration.frozenPhase13Inputs.families.find(
+    (row: { familyId: string }) => row.familyId === familyId,
+  )?.challengeHash;
+  if (typeof expected !== "string" || challengeHash(pkg) !== expected) {
+    throw new Error(`frozen Phase 14 package hash mismatch: ${familyId}`);
+  }
+  return pkg;
+}
+
+/** Construct only the registered historical delta, never from the current package builder. */
 export function phase14ChallengePackage(
   root: string,
   familyId: Phase14FamilyId,
   starterProfile: StarterProfile,
 ): ChallengePackage {
-  const base = prepareChallenge(root, familyId).pkg;
+  const base = frozenSeededPackage(root, familyId);
   if (starterProfile === "seeded-recompute") return base;
 
   const profile = FAMILY_PROFILES[familyId];
@@ -376,13 +414,19 @@ export function buildPhase14PackageLock(root: string): Phase14PackageLock {
 
 /** Registered Phase 14 profiles that are live variants, not migrations of the canonical family. */
 export function phase14ChallengeVariantRegistrations(root: string): readonly ChallengeVariantRegistration[] {
-  const lock = buildPhase14PackageLock(root);
+  const lock = parsePhase14PackageLock(readLockedHistory(root, "data/phase-14-package-lock.json"));
+  readLockedHistory(root, PREREGISTRATION_PATH);
   if (!lock.phase13PreregistrationPreserved || !lock.phase13SeededHashesPreserved || !lock.b6.usable) {
     throw new RigInputError("Phase 14 variant registrations cannot be trusted because their lock is invalid");
   }
   return lock.rows
     .filter((row) => row.starterProfile === "neutral-skeleton")
     .map((row) => {
+      if (
+        challengeHash(phase14ChallengePackage(root, row.familyId, "neutral-skeleton")) !== row.challengeHash
+      ) {
+        throw new RigInputError(`${row.familyId}: retained variant bytes changed`);
+      }
       if (!row.onlyRegisteredDelta || !row.packageGatePassed) {
         throw new RigInputError(`${row.familyId}/neutral-skeleton is not a valid registered variant`);
       }

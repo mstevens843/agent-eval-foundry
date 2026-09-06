@@ -57,7 +57,8 @@ import {
 import type { Scenario as TradingScenario } from "../families/trading-reconciliation-recompute/truth.js";
 import type { Subject as TradingSubject } from "../families/trading-reconciliation-recompute/types.js";
 import { fail, isRecord, num, str, strArray } from "../foundry/schema.js";
-import { assertCampaignChallenge, parseCampaignPlan } from "../trials/campaign.js";
+import { historicalPhase13Calibration, readLockedHistory } from "../packages/history.js";
+import { parseCampaignPlan } from "../trials/campaign.js";
 import { prepareChallenge } from "../trials/run.js";
 
 export const PHASE_13_SUBSTRATES = [
@@ -619,8 +620,8 @@ function measureSubstrate(
   let campaignSlotsNotRun = 0;
   if (campaignPresent) {
     const plan = parseCampaignPlan(JSON.parse(readFileSync(campaignPath, "utf8")), adapter.campaignFile);
-    assertCampaignChallenge(plan, prepared.hash);
     campaignHashCurrent =
+      plan.challengeHash === prepared.hash &&
       plan.familyId === adapter.id &&
       plan.scenarioSetId === prepared.scenarioSetId &&
       plan.scenariosExpected === run.scenarios.length;
@@ -702,7 +703,11 @@ function measureSubstrate(
   };
 }
 
-export function measurePhase13(root: string): Phase13Results {
+export function measurePhase13(root: string, view: "current" | "historical" = "current"): Phase13Results {
+  if (view === "historical") {
+    historicalPhase13Calibration(root);
+    return readLockedHistory(root, "data/phase-13-activation-results.json") as Phase13Results;
+  }
   const preregPath = join(root, "data", "phase-13-preregistration.json");
   const preregBytes = readFileSync(preregPath, "utf8");
   const preregistration = parsePhase13Preregistration(JSON.parse(preregBytes));

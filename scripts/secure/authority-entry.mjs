@@ -1,187 +1,93 @@
 #!/usr/bin/env node
-// The authority: trusted, family-agnostic, and NEVER imports submission code.
-//
-// This process is the container's entrypoint. It reads the scenario payload from its own stdin
-// (exactly the contract `runJsonContainerHost` already used), stages that payload where the cell can
-// read it, then spawns the cell as a separate child process holding a fresh per-run signing secret
-// that is handed to the cell only through an environment variable and is never written anywhere else.
-//
-// Every event the cell reports arrives as a signed frame on fd 3, which this process verifies before
-// trusting anything in it — an unsigned, malformed, replayed, oversized or excess frame is a protocol
-// violation, and a protocol violation fails the whole run closed rather than grading a partial result.
-// The cell's real stdout/stderr are captured only as truncated diagnostics; they are never parsed.
-//
-// This file has no per-family knowledge. It groups "call" frames by the `channel` name the family
-// adapter chose (e.g. "ledger", "writes", "queries") and hands back `{channels, report, diagnostics,
-// error}`. The TypeScript caller maps `channels` onto the exact shape each family's verifier expects.
-
+// Authority-owned state and operations. The child submits requests and answers, never ledger facts.
+// No secret or hidden scenario crosses this OS identity boundary.
 import { spawn } from "node:child_process";
-import { randomBytes } from "node:crypto";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
-import { FRAME_KINDS, MAX_FRAMES, MAX_TOTAL_BYTES, makeVerifier } from "./protocol.mjs";
+import { readFileSync } from "node:fs";
+import { pathToFileURL } from "node:url";
+import { MAX_FRAME_BYTES, MAX_FRAMES, MAX_TOTAL_BYTES } from "./protocol.mjs";
 
-const DEFAULT_TIMEOUT_MS = 45_000;
-const DIAGNOSTIC_CAP_BYTES = 8192;
-
-const [cellScriptPath, modulePath, adapterPath] = process.argv.slice(2);
-
-const finish = (result) => {
-  process.stdout.write(JSON.stringify(result));
-  process.exit(0);
-};
-
-if (!cellScriptPath || !modulePath || !adapterPath) {
-  finish({ error: "authority invoked without cellScriptPath, modulePath and adapterPath" });
-}
-
-let stdinRaw;
+const [cellPath, modulePath, adapterPath] = process.argv.slice(2);
+const diagnostics = { stdoutTail: "", stderrTail: "" };
+const finish = (result) => { process.stdout.write(JSON.stringify({ diagnostics, ...result })); process.exit(0); };
+if (process.getuid?.() !== 0) finish({ error: "authority requires a separate privileged identity", channels: {}, report: null });
+let adapter;
 try {
-  stdinRaw = readFileSync(0, "utf8");
-} catch (err) {
-  finish({ error: `authority could not read stdin: ${String(err?.message ?? err)}` });
+  const payload = JSON.parse(readFileSync(0, "utf8"));
+  const module = await import(pathToFileURL(adapterPath).href);
+  adapter = module.createAuthority(payload);
+} catch (error) {
+  finish({ error: `authority setup failed: ${String(error?.message ?? error)}`, channels: {}, report: null });
 }
-
-let payload;
-try {
-  payload = JSON.parse(stdinRaw);
-} catch (err) {
-  finish({ error: `authority stdin was not valid JSON: ${String(err?.message ?? err)}` });
-}
-
-const workDir = mkdtempSync(join(tmpdir(), "foundry-cell-"));
-const payloadPath = join(workDir, "payload.json");
-writeFileSync(payloadPath, JSON.stringify(payload), { encoding: "utf8", mode: 0o600 });
-
-const secret = randomBytes(32).toString("hex");
-const verifier = makeVerifier(secret);
-
-const child = spawn(process.execPath, [cellScriptPath, modulePath, adapterPath, payloadPath], {
+const child = spawn(process.execPath, [cellPath, modulePath], {
+  uid: 1000, gid: 1000, detached: true,
   stdio: ["ignore", "pipe", "pipe", "pipe"],
-  env: { RPC_SECRET: secret },
-  detached: true,
+  env: { PATH: "/usr/local/bin:/usr/bin:/bin", HOME: "/tmp" },
 });
-
-const channels = new Map();
-let report = null;
-let reportSeen = false;
-let doneSeen = false;
-let crash = null;
-let violation = null;
+let error = null;
+let buffer = Buffer.alloc(0);
 let totalBytes = 0;
-let frameCount = 0;
-let fd3Buffer = "";
-let stdoutTail = "";
-let stderrTail = "";
-
-const recordDiagnostic = (buf, current) => (current + buf.toString("utf8")).slice(-DIAGNOSTIC_CAP_BYTES);
-
-const killChild = () => {
-  try {
-    process.kill(-child.pid, "SIGKILL");
-  } catch {
-    /* already gone */
-  }
-};
-
-const noteViolation = (reason) => {
-  if (violation === null) violation = reason;
-  killChild();
-};
-
-child.stdout.on("data", (buf) => {
-  stdoutTail = recordDiagnostic(buf, stdoutTail);
-});
-child.stderr.on("data", (buf) => {
-  stderrTail = recordDiagnostic(buf, stderrTail);
-});
-
-child.stdio[3].on("data", (buf) => {
-  if (violation !== null) return; // already failing closed; ignore further bytes
-  totalBytes += buf.length;
-  if (totalBytes > MAX_TOTAL_BYTES) {
-    noteViolation(`cell event channel exceeded ${MAX_TOTAL_BYTES} total bytes`);
-    return;
-  }
-  fd3Buffer += buf.toString("utf8");
-  let idx;
-  // eslint-disable-next-line no-cond-assign
-  while ((idx = fd3Buffer.indexOf("\n")) >= 0) {
-    const line = fd3Buffer.slice(0, idx);
-    fd3Buffer = fd3Buffer.slice(idx + 1);
-    if (line.length === 0) continue;
-    frameCount += 1;
-    if (frameCount > MAX_FRAMES) {
-      noteViolation(`cell emitted more than ${MAX_FRAMES} frames`);
-      return;
-    }
-    const verdict = verifier.verifyLine(line);
-    if (!verdict.ok) {
-      noteViolation(`unverifiable frame: ${verdict.reason}`);
-      return;
-    }
-    const { kind, payload: framePayload } = verdict.frame;
-    if (kind === FRAME_KINDS.CALL) {
-      const channel = framePayload && typeof framePayload.channel === "string" ? framePayload.channel : null;
-      if (channel === null || !("entry" in (framePayload ?? {}))) {
-        noteViolation("call frame missing channel/entry");
-        return;
+let seq = 0;
+let active = false;
+let index = 0;
+let completed = false;
+const kill = () => { try { process.kill(-child.pid, "SIGKILL"); } catch { /* already exited */ } };
+const refuse = (reason) => { error ??= reason; kill(); };
+const timer = setTimeout(() => refuse("cell exceeded wall-clock timeout"), 45_000);
+for (const [stream, key] of [[child.stdout, "stdoutTail"], [child.stderr, "stderrTail"]]) {
+  stream.on("data", (chunk) => { diagnostics[key] = (diagnostics[key] + chunk.toString("utf8")).slice(-8192); });
+}
+child.stdio[3].on("error", (err) => refuse(`request channel failed: ${err.message}`));
+child.stdio[3].on("data", (chunk) => {
+  if (error !== null) return;
+  totalBytes += chunk.length;
+  if (totalBytes > MAX_TOTAL_BYTES) return refuse("request channel byte limit exceeded");
+  buffer = Buffer.concat([buffer, chunk]);
+  while (buffer.includes(10)) {
+    const end = buffer.indexOf(10);
+    if (end > MAX_FRAME_BYTES) return refuse("request frame too large");
+    const line = buffer.subarray(0, end);
+    buffer = buffer.subarray(end + 1);
+    try {
+      const request = JSON.parse(line.toString("utf8"));
+      if (completed || ++seq > MAX_FRAMES || request.seq !== seq ||
+        Object.keys(request).sort().join(",") !== "args,kind,seq" || !Array.isArray(request.args)) {
+        throw new Error("invalid request sequence, envelope or terminal ordering");
       }
-      if (!channels.has(channel)) channels.set(channel, []);
-      channels.get(channel).push(framePayload.entry);
-    } else if (kind === FRAME_KINDS.REPORT) {
-      if (reportSeen) {
-        noteViolation("more than one report frame");
-        return;
+      let result;
+      if (request.kind === "begin" && !active && index < adapter.count && request.args.length === 0) {
+        active = true;
+        result = adapter.begin(index);
+      } else if (request.kind === "call" && active && request.args.length === 2) {
+        result = adapter.invoke(request.args[0], request.args[1]);
+      } else if (request.kind === "report" && active && request.args.length === 1) {
+        adapter.report(request.args[0]);
+        active = false;
+        index += 1;
+        result = { remaining: adapter.count - index };
+      } else if (request.kind === "finish" && !active && index === adapter.count && request.args.length === 0) {
+        completed = true;
+        result = null;
+      } else {
+        throw new Error("request not allowed in current execution state");
       }
-      reportSeen = true;
-      report = framePayload;
-    } else if (kind === FRAME_KINDS.DONE) {
-      doneSeen = true;
-    } else if (kind === FRAME_KINDS.CRASH) {
-      crash =
-        framePayload && typeof framePayload.message === "string" ? framePayload.message : "cell crashed";
-    } else {
-      noteViolation(`unknown frame kind: ${kind}`);
-      return;
+      const response = `${JSON.stringify({ seq, result })}\n`;
+      if (Buffer.byteLength(response) > MAX_FRAME_BYTES) throw new Error("facade response too large");
+      child.stdio[3].write(response);
+    } catch (err) {
+      return refuse(`request refused: ${String(err?.message ?? err)}`);
     }
   }
+  if (buffer.length > MAX_FRAME_BYTES) refuse("unterminated request frame too large");
 });
-
-const timer = setTimeout(
-  () => {
-    noteViolation(`cell exceeded wall-clock timeout of ${DEFAULT_TIMEOUT_MS}ms`);
-  },
-  Number(process.env.CELL_TIMEOUT_MS ?? DEFAULT_TIMEOUT_MS),
-);
-
-child.on("error", (err) => {
-  noteViolation(`cell process failed to start: ${String(err?.message ?? err)}`);
-});
-
-child.on("exit", (code, signal) => {
+child.on("error", (err) => refuse(`cell spawn failed: ${err.message}`));
+// exit can precede pipe drainage. Kill descendants, then wait for close before grading.
+child.on("exit", () => kill());
+child.on("close", (code, signal) => {
   clearTimeout(timer);
-  rmSync(workDir, { recursive: true, force: true });
-  const channelsOut = Object.fromEntries(channels);
-  if (violation !== null) {
-    finish({ channels: channelsOut, report, diagnostics: { stdoutTail, stderrTail }, error: violation });
+  if (buffer.length !== 0) error ??= "incomplete request frame";
+  if (!completed || active || index !== adapter.count || code !== 0 || signal !== null) {
+    error ??= `incomplete cell execution (code=${code}, signal=${signal})`;
   }
-  if (crash !== null) {
-    finish({
-      channels: channelsOut,
-      report,
-      diagnostics: { stdoutTail, stderrTail },
-      error: `subject threw: ${crash}`,
-    });
-  }
-  if (!doneSeen) {
-    finish({
-      channels: channelsOut,
-      report,
-      diagnostics: { stdoutTail, stderrTail },
-      error: `cell exited (code=${code}, signal=${signal}) without signalling completion`,
-    });
-  }
-  finish({ channels: channelsOut, report, diagnostics: { stdoutTail, stderrTail }, error: null });
+  const result = adapter.result();
+  finish({ ...result, report: error === null ? result.report : null, error });
 });

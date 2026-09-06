@@ -18,6 +18,8 @@ selection operators change how reliably an existing mechanism activates.
 | `narrow-recompute-starter` | difficulty | measured | 2/2 clean solves with the neutral DAO starter -> 2/2 clean solves with the seeded recompute DAO starter | no positive effect established: all four DAO attempts solved, so no failure required root-cause labelling | medium |
 | `grade-the-obligation-from-the-external-party-log` | validity-control | measured | not countable | not-applicable: this constrains what a passing repair must actually do, it does not attribute difficulty to a capability | high |
 | `phase22-hidden-scenario-selection-targets-narrow-mutants-caa-revalidation` | difficulty | measured | 24 -> 24 | measures mutant/mechanism detection under matched selection, not agent capability directly — see reports/PHASE-21-OPERATOR-CAUSAL-LAB.md for the honesty split; also see reports/PHASE-22-TRANSFER-AND-CONSTRUCTION.md for the held-out-bank and regraded-submission evidence this specific record is drawn from. | medium |
+| `phase23-authoritative-state-inaccessible-to-subject-honest-subject-caa-revalidation` | validity-control | measured | 4/4 clean (pre-route) -> 4/4 clean (post-route) | not-applicable: measures grading-infrastructure equivalence, not agent capability | high |
+| `phase23-diagnosis-radius-prompt-injection-memory-poisoning-construction` | difficulty | estimated | not countable | not yet resolved: awaiting Lane 6 trial authorization | low |
 
 ## Move external truth outside the subject's authority
 
@@ -128,4 +130,26 @@ selection operators change how reliably an existing mechanism activates.
 - **Verifier integrity:** n/a — this operator changes scenario selection or a shape field, not verifier logic itself.
 - **Solve-rate interpretation:** maximum 8 matched pairs reached with zero discordant pairs — no detectable effect either way
 - **Provenance:** `src/phase-22/mutant-envelope.ts (held-out bank, never seen during selector construction)`; `src/phase-22/orchestrator.ts (runCoverageExperiment, bank=heldOut, quota=24)`; `scripts/verify-phase-22.mjs`
+
+## Authoritative state inaccessible to the subject — honest-subject case (Phase 20 already measured the adversarial/exploit case; this closes the remaining half)
+
+- **Changed:** Which grading route the submission runs through: pre-Phase-20 (subprocessHost/containerHost, shared process) vs post-Phase-20 (signed cell-container split).
+- **Stayed fixed:** The submission itself, the scenario set, the mutant bank, the verifier logic — literally everything except which process the ledger is constructed in.
+- **Before:** Phase 20 measured the adversarial case only (test/phase-20-secure-executor.test.ts, reports/PHASE-20-VERIFIER-TRUST-BOUNDARY.md): a malicious submission cannot forge a pass under the post-Phase-20 route. The honest-subject case was never checked.
+- **After:** All 4 preserved, hash-verified-compatible real Phase 17 caa-revalidation submissions (2 OpenAI, 2 Anthropic) graded through both routes for real: 4/4 identical cell-by-cell, zero discrepancies, zero host errors either route.
+- **Fairness:** n/a — this operator concerns grading-route equivalence for an honest submission, not what is fair to grade.
+- **Verifier integrity:** Confirms the Phase 20 migration did not silently change what a compliant submission is graded as, for every preserved real submission available for this check.
+- **Solve-rate interpretation:** Identical outcome both routes for every submission — the operator's own predicted null for the honest-subject case, now actually checked rather than assumed.
+- **Provenance:** `src/phase-23/route-parity.ts`; `scripts/verify-phase-23.mjs`; `trials/caa-revalidation/phase17-caa-slot-{1,2,3,4}-*/submission/subject.mjs`
+
+## Spreading the evidence a solver needs across more sessions/scenarios/artifacts (widening how much surrounding context must be read to localize the defect) causes solve rate to drop.
+
+- **Changed:** Increase the family's existing breadth knob (e.g. prompt-injection-memory-poisoning's sessionsBetween) so the evidence needed to detect the defect is spread across more sessions, holding the mechanism and every rule code fixed.
+- **Stayed fixed:** The rule codes, the mutant bank, the memory/session contract's shape.
+- **Before:** Untested prior to this phase (evidenceStatus:"untested" in data/phase-21-operators.json). causal-depth on caa-revalidation was attempted first and found not constructible without editing verify.ts (see data/phase-23-preregistration.json); this operator was the disciplined pivot.
+- **After:** Two matched packages constructed and frozen (baseline sessionsBetween=0 hash 20d789b9fc1a2e874196020058b09314, treated sessionsBetween=3 hash d17fc8a6616bf77dde4910143ac6982d), mechanically confirmed as a real matched pair (requireMatchedPair), reference clean on both, every one of the 13 mutants caught by at least one arm. A real agent trial (data/phase-23-trial-preregistration.json) is fully designed and frozen but NOT executed — no real-time spend authorization was available this phase.
+- **Fairness:** Matched pair mechanically confirmed diffable (requireMatchedPair); every declared field outside the operator's own shapeFieldsEdited held identical between arms.
+- **Verifier integrity:** n/a — this operator changes the hidden graded scenario set's session-spacing parameter, not verifier logic itself.
+- **Solve-rate interpretation:** Construction and validity-gating complete; real solve-rate evidence requires the Lane 6 trial in data/phase-23-trial-preregistration.json, which was designed but not authorized/executed this phase.
+- **Provenance:** `src/phase-23/diagnosis-radius.ts`; `data/phase-23-trial-preregistration.json`; `scripts/verify-phase-23.mjs`
 

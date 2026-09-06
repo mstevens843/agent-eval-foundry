@@ -2,6 +2,7 @@ import { SPEC_MD } from "../families/caa-revalidation/spec.js";
 import { buildScenario } from "../families/caa-revalidation/truth.js";
 import type { ScenarioParams } from "../families/caa-revalidation/truth.js";
 import type { ChallengeFile, ChallengeManifest, ChallengePackage } from "./package.js";
+import { publicFiles, publicManifest } from "./public-surface.js";
 
 export const CAA_REVALIDATION_HIDDEN_ARTIFACTS = [
   "verify.ts",
@@ -134,7 +135,7 @@ export function buildCaaRevalidationChallengePackage(
   };
   return {
     familyId: manifest.familyId,
-    files: [...files, { path: "MANIFEST.json", content: `${JSON.stringify(manifest, null, 2)}\n` }],
+    files: [...publicFiles(files), { path: "MANIFEST.json", content: publicManifest(manifest) }],
     manifest,
   };
 }

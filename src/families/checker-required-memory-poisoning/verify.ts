@@ -90,13 +90,13 @@ const asMemoryWrites = (trace: CaseTrace): readonly MemoryWrite[] =>
       writtenInSession: 0,
     },
     trueProvenance: w.observedProvenance,
-    tokenSources: w.observedProvenance.length === 0 ? [] : [w.observedProvenance],
+    tokenSources: w.tokenSources,
     trueTrust: w.observedTrust,
     provenanceSupported: w.provenanceSupported,
   }));
 
 const asToolInvocations = (trace: CaseTrace): readonly ToolInvocation[] =>
-  trace.toolInvocations.map((i) => ({ seq: i.seq, tool: i.tool, actionId: i.actionId, args: {} }));
+  trace.toolInvocations.map((i) => ({ seq: i.seq, tool: i.tool, actionId: i.actionId, args: i.args }));
 
 function subjectFailures(scenario: MemoryScenario, trace: CaseTrace): readonly Failure[] {
   const memory = verifyMemory({
@@ -139,7 +139,8 @@ const ruleForSpecific: Readonly<Record<CheckName, CheckerRuleCode | null>> = {
   checker_returns_well_formed_report: "C1_CHECKER_RETURNS_REPORT",
   checker_accepts_reference_trace: "C13_REFERENCE_ACCEPTED",
   checker_rejects_bad_trace: null,
-  checker_rejects_held_out_mutant: "C12_HELD_OUT_MUTANT",
+  // Held-out is a sampling category, not an observable violation. Name the actual failed rule.
+  checker_rejects_held_out_mutant: null,
   checker_rejects_provenance_loss: "C3_PROVENANCE_LOSS",
   checker_rejects_bad_transition: "C2_BAD_TRANSITION",
   checker_rejects_false_success: "C4_FALSE_SUCCESS",
@@ -200,6 +201,18 @@ function checkerFailures(scenario: Scenario, run: CheckerRunResult): readonly Fa
     failures.push({
       check: "checker_deterministic",
       detail: "same trace produced different checker reports",
+    });
+  }
+  if (
+    run.report.ok !== (run.report.failures.length === 0) ||
+    !run.report.casesRun.includes(scenario.checkerCase.id) ||
+    !Number.isInteger(run.report.subjectInvocations) ||
+    run.report.subjectInvocations + run.repeat.subjectInvocations !== run.invocations ||
+    run.report.failures.some((entry) => !run.report?.casesRun.includes(entry.caseId))
+  ) {
+    failures.push({
+      check: "checker_returns_well_formed_report",
+      detail: "checker report contradicts its case population, observed invocation count or own failure list",
     });
   }
 

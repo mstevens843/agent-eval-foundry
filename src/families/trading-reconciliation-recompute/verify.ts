@@ -1,8 +1,10 @@
 import { requireShape } from "../../screens/rig-integrity.js";
+import { fieldsMatch } from "../verification-contract.js";
 import type { VerificationInput } from "./truth.js";
 
 export const CHECKS = [
   "exactly_once",
+  "effect_matches_intent",
   "committed_order_key_recovered",
   "liveness",
   "report_matches_venue_ledger",
@@ -36,6 +38,22 @@ export function verify(value: unknown): readonly Failure[] {
   const ownCalls = input.calls.filter((call) => call.orderIntentId === orderIntentId);
   const ownEffects = input.effects.filter((effect) => effect.orderIntentId === orderIntentId);
   const failures: Failure[] = [];
+  const semanticFields = ["accountId", "symbol", "side", "quantity"];
+  if (
+    ownCalls.length !== input.calls.length ||
+    ownEffects.length !== input.effects.length ||
+    input.calls.some((call) => !fieldsMatch(call.request, input.scenario.intent, semanticFields)) ||
+    input.effects.some(
+      (effect) => !fieldsMatch(effect, input.scenario.intent, [...semanticFields, "idempotencyKey"]),
+    )
+  ) {
+    failures.push(
+      failure(
+        "effect_matches_intent",
+        "venue work differs from the committed trade or includes unrequested work",
+      ),
+    );
+  }
   const validOutcomes = new Set(["accepted"]);
 
   if (ownEffects.length !== 1) {

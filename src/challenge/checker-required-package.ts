@@ -1,3 +1,4 @@
+import { publicFiles, publicManifest } from "./public-surface.js";
 // Agent-facing package for checker-required memory poisoning.
 
 import { probeTrace } from "../families/checker-required-memory-poisoning/reference.js";
@@ -199,7 +200,7 @@ export function buildCheckerRequiredChallengePackage(
 
   return {
     familyId: manifest.familyId,
-    files: [...files, { path: "MANIFEST.json", content: `${JSON.stringify(manifest, null, 2)}\n` }],
+    files: [...publicFiles(files), { path: "MANIFEST.json", content: publicManifest(manifest) }],
     manifest,
   };
 }

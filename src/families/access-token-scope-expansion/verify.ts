@@ -140,6 +140,18 @@ export function verify(input: VerifyInput): readonly Failure[] {
     report.decisions.filter((decision) => decision.actionId === actionId),
   );
   const allowedDecisions = decisions.filter((decision) => decision.allowed);
+  if (
+    effects.some((effect) => effect.actionId !== actionId) ||
+    calls.some((call) => call.method === "issueToken" && call.actionId !== actionId)
+  ) {
+    failures.push(fail("no_forbidden_effect", "authority received unrequested token work"));
+  }
+  if (reports.some((report) => report.decisions.length !== 1 || report.decisions[0]?.actionId !== actionId)) {
+    failures.push(fail("report_matches_ledger", "each attempt must report exactly its requested action"));
+  }
+  if (reports.some((report) => report.audit.some((event) => event.actionId !== actionId))) {
+    failures.push(fail("audit_explains", "audit includes an unrequested action"));
+  }
 
   if (reports.length !== scenario.params.repeatCount) {
     failures.push(

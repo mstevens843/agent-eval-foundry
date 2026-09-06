@@ -1,3 +1,4 @@
+import { publicFiles, publicManifest } from "./public-surface.js";
 // The agent-facing package for the live-DOM replay descendant.
 //
 // The package split is stricter than the parent UI family. The visible surface publishes the full
@@ -251,7 +252,7 @@ export function buildLiveDomChallengePackage(typesSource: string, scenarioSetId:
 
   return {
     familyId: manifest.familyId,
-    files: [...files, { path: "MANIFEST.json", content: `${JSON.stringify(manifest, null, 2)}\n` }],
+    files: [...publicFiles(files), { path: "MANIFEST.json", content: publicManifest(manifest) }],
     manifest,
   };
 }

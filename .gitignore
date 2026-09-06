@@ -13,3 +13,22 @@ secrets.json
 
 # Local scratch files.
 .local/
+
+# Local model-capability research requested by the project owner.
+/MODEL-CAPABILITY-RESEARCH.md
+
+# Local foundry systems audit requested by the project owner.
+/FOUNDRY-GAP-ANALYSIS.md
+
+# Local task-package audit requested by the project owner.
+/TASK-PACKAGE-GAP-ANALYSIS.md
+
+# Local engineering-quality and production-learning analyses requested by the project owner.
+/ENGINEERING-QUALITY-AND-PERFORMANCE-GAP-ANALYSIS.md
+/TASK-PRODUCTION-AND-LEARNING-PROCESS.md
+
+# First private evidence-backed finding; other findings are not automatically ignored.
+/findings/durableoutbox/README.md
+
+# Private implementation briefs derived from the local analyses.
+/IMPLEMENTATION-PROMPTS/

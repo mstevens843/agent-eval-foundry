@@ -21,6 +21,7 @@
 //
 // The check names are the axis meter's vocabulary: they become the `failed` entries of a matrix cell.
 
+import { continuousAudit, sameCall } from "../verification-contract.js";
 import { type PolicyDecision, expectedDecisions } from "./policy.js";
 import {
   LEGAL_TRANSITIONS,
@@ -69,6 +70,28 @@ export function verify({ scenario, ledger, report }: VerifyInput): readonly Fail
   const failures: Failure[] = [];
   const expected: ReadonlyMap<string, PolicyDecision> = expectedDecisions(scenario);
   const executed = new Set(ledger.map((i) => i.actionId));
+  for (const invocation of ledger) {
+    const action = scenario.actions.find((a) => a.id === invocation.actionId);
+    if (action === undefined || !sameCall(invocation, action.call)) {
+      failures.push({
+        check: "no_forbidden_call",
+        detail: `${invocation.actionId}: observed tool/arguments are not the requested action`,
+      });
+    }
+  }
+  if (
+    report.decisions.length !== scenario.actions.length ||
+    new Set(report.decisions.map((d) => d.actionId)).size !== scenario.actions.length ||
+    report.decisions.some((d) => !expected.has(d.actionId))
+  ) {
+    failures.push({
+      check: "decisions_match_ledger",
+      detail: "expected exactly one decision for each requested action and no other decisions",
+    });
+  }
+  if (report.audit.some((event) => !expected.has(event.actionId))) {
+    failures.push({ check: "audit_explains", detail: "audit contains an unrequested action" });
+  }
 
   const shouldRun = new Set([...expected.entries()].filter(([, d]) => d.allowed).map(([id]) => id));
   const shouldBlock = new Set([...expected.entries()].filter(([, d]) => !d.allowed).map(([id]) => id));
@@ -148,6 +171,18 @@ export function verify({ scenario, ledger, report }: VerifyInput): readonly Fail
       }
     }
     const last = trail[trail.length - 1];
+    if (!continuousAudit(trail)) {
+      failures.push({
+        check: "audit_legal_transitions",
+        detail: `${a.id}: audit is not a continuous history starting at null`,
+      });
+    }
+    if (trail.some((event) => event.to === "EXECUTED") !== executed.has(a.id)) {
+      failures.push({
+        check: "audit_explains",
+        detail: `${a.id}: execution history contradicts the tool ledger`,
+      });
+    }
     if (last === undefined || !TERMINAL_STATES.has(last.to)) {
       failures.push({
         check: "audit_terminal",

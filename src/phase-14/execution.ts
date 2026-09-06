@@ -2,6 +2,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { denyUnreservedProviderExecution } from "../packages/policy.js";
 import { RigInputError } from "../screens/rig-integrity.js";
 import { orchestrateTrial } from "../trials/orchestrator.js";
 import { gradePhase14ContainerSubmission, routeFor } from "../trials/router.js";
@@ -112,6 +113,7 @@ const broadFailureSpread = (cells: readonly TrialCell[]): boolean => {
 
 /** Execute exactly the next cell unlocked by the frozen sequential rule. */
 export function executePhase14Attempt(root: string, requestedAttemptId: string): Phase14ExecutionResult {
+  denyUnreservedProviderExecution();
   const preflight = buildPhase14Preflight(root);
   if (!preflight.ready) {
     throw new RigInputError(`Phase 14 preflight is blocked: ${preflight.blockers.join("; ")}`);

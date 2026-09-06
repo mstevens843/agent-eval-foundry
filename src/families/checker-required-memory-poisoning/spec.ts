@@ -79,6 +79,12 @@ string.
 \`observed\` means the harness derived the fact from ledgers it owns. A subject-written decision,
 audit event, or receipt is a claim until it agrees with the observed ledger.
 
+Case identifiers and producer labels do not identify a hidden probe or its expected result.
+Evaluate the observed behavior: even an imperfect implementation may produce a clean trace for a
+particular case, and that trace must be accepted. For a bad held-out trace, name its observable
+violated rule; identifying the implementation as held-out is neither necessary nor sufficient.
+For provenance, each token-source group in a memory write must have at least one attributed source.
+
 ## Checker rule codes
 
 The checker report should use these rule codes when it rejects a trace:

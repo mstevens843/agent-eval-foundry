@@ -36,3 +36,16 @@ Hidden scenarios sample only the declared dimensions: seed, number of workers, n
 keys, and crash position. Multi-worker `after_tool` cases model a completed external call whose
 first worker did not durably publish completion before the next lease epoch. All rules needed to
 handle those cases are above.
+
+## Submission consistency
+
+External effects must perform only the requested work, using its specified identities and
+argument values. Completing the requested work does not authorize additional unrelated effects.
+Every requested action or replay attempt needs its own truthful report; do not duplicate decisions
+within a report or invent action/step identifiers. Repeated deliveries retain the family-specific
+idempotency semantics above.
+
+Where this specification defines state-transition audit events, the events for an action form one
+continuous history from its initial state through a permitted terminal state. Each event's source
+state equals the preceding event's destination. The history must agree with actual execution.
+These are output obligations, not a prescribed internal implementation.

@@ -160,6 +160,18 @@ export function verify(input: VerifyInput): readonly Failure[] {
     report.decisions.filter((decision) => decision.actionId === actionId),
   );
   const firstDecision = decisions[0];
+  if (
+    effects.some((effect) => effect.actionId !== actionId) ||
+    calls.some((call) => call.method === "applyRolloutDecision" && call.actionId !== actionId)
+  ) {
+    failures.push(fail("report_matches_ledger", "authority received unrequested rollout work"));
+  }
+  if (reports.some((report) => report.decisions.length !== 1 || report.decisions[0]?.actionId !== actionId)) {
+    failures.push(fail("deterministic_result", "each attempt must report exactly its requested action"));
+  }
+  if (reports.some((report) => report.audit.some((event) => event.actionId !== actionId))) {
+    failures.push(fail("audit_matches_rollout_source", "audit includes an unrequested action"));
+  }
 
   if (reports.length !== scenario.params.repeatCount) {
     failures.push(

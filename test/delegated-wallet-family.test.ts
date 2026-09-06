@@ -44,6 +44,7 @@ import type { TrialSet } from "../src/trials/types.js";
 const ROOT = new URL("..", import.meta.url).pathname;
 const FAMILY_ID = "delegated-wallet-scope-reconciliation";
 const CHALLENGE_HASH = "45f27b644a84364e3d3855f68cd243a2";
+const CURRENT_CHALLENGE_HASH = "b3eb59318b3a120a3c6316755402b584";
 const SCENARIO_SET_ID = "reconciliation-804-4b4cc8ff";
 const budgetBlindFixture = makeSubject("budget-blind-fixture", "Ignores remaining wallet budget", {
   ...REFERENCE_OPTIONS,
@@ -179,7 +180,7 @@ describe("delegated-wallet-scope-reconciliation family", () => {
     const family = builtFamily(FAMILY_ID);
     const check = checkChallengePackage(prepared.pkg.files, family.leakProfile);
 
-    expect(prepared.hash).toBe(CHALLENGE_HASH);
+    expect(prepared.hash).toBe(CURRENT_CHALLENGE_HASH);
     expect(prepared.scenarioSetId).toBe(SCENARIO_SET_ID);
     expect(check.files).toBe(9);
     expect(check.specCodesFound).toBe(10);
@@ -217,12 +218,15 @@ describe("delegated-wallet smoke campaign and diagnosis", () => {
     const route = routeFor(FAMILY_ID);
 
     expect(plan).toBeDefined();
-    expect(plan?.challengeHash).toBe(currentHash);
+    // The preserved campaign belongs to its old artifact, not the revised contract.
+    expect(plan?.challengeHash).toBe(CHALLENGE_HASH);
+    expect(plan?.challengeHash).not.toBe(currentHash);
     expect(plan?.scenarioSetId).toBe(SCENARIO_SET_ID);
     expect(plan?.scenariosExpected).toBe(route.scenarioCount());
     expect(plan?.slots).toHaveLength(1);
     expect(plan?.slots.some((slot) => /anthropic|claude|gemini/i.test(slot.model))).toBe(false);
-    expect(() => assertCampaignChallenge(plan as NonNullable<typeof plan>, currentHash)).not.toThrow();
+    expect(() => assertCampaignChallenge(plan as NonNullable<typeof plan>, CHALLENGE_HASH)).not.toThrow();
+    expect(() => assertCampaignChallenge(plan as NonNullable<typeof plan>, currentHash)).toThrow();
 
     const gate = evaluatePromotionSmokeGate({
       familyId: FAMILY_ID,

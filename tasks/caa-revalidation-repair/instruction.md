@@ -30,4 +30,8 @@ Run one locally with:
 
 DO NOT MODIFY `/app/harness/`, `/app/spec/SEMANTICS.md`, `/app/certd/go.mod`, or `/app/certd/internal/order/order.go`.
 
+The submitted `/app/certd/` tree must contain only directories and ordinary files, with no symbolic
+links, hard links or special files. Report, audit and store outputs must be ordinary JSON files,
+each no larger than 8 MiB. These are artifact/collection bounds, not additional authorization rules.
+
 You have 7200 seconds to complete this task. Do not cheat by using online solutions or hints specific to this task.

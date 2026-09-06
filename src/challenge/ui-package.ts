@@ -1,3 +1,4 @@
+import { publicFiles, publicManifest } from "./public-surface.js";
 // The agent-facing package for the UI record-and-replay family.
 //
 // The split here is unusual and worth stating: the RULES are visible, the decision procedure is not,
@@ -246,7 +247,7 @@ export function buildUiChallengePackage(typesSource: string, scenarioSetId: stri
 
   return {
     familyId: manifest.familyId,
-    files: [...files, { path: "MANIFEST.json", content: `${JSON.stringify(manifest, null, 2)}\n` }],
+    files: [...publicFiles(files), { path: "MANIFEST.json", content: publicManifest(manifest) }],
     manifest,
   };
 }

@@ -28,6 +28,7 @@ const SCENARIO = buildScenario({
   memoryKind: "fact_store",
   benignActions: 1,
   decoySimilarity: "none",
+  lateDispute: "none",
 });
 
 describe("the memory facade is one object per scenario", () => {

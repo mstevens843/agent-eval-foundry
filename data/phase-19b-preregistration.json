@@ -1,0 +1,21 @@
+{
+  "schema": "agent-eval-foundry/phase-19b-preregistration@1",
+  "phase": "23-lane-7",
+  "title": "Phase 19B scoping — bounded, deliberately not completed this phase",
+  "status": "SCOPED-NOT-EXECUTED",
+  "whyNotARefreeze": "scripts/verify-phase-19.mjs already states explicitly: it does not revert the corpus, and it does not retroactively edit the Phase 19 preregistration to accept the new hash. This file honors that: it does not touch data/phase-19-preregistration.json, src/phase-19/evidence-rerank.ts's PHASE19_RESEARCH_CORPUS_SHA256 constant, or any other Phase 19-owned artifact. Phase 19's own tests keep correctly refusing, which is the system working as designed.",
+  "factsEstablishedThisPhase": {
+    "gitHistory": "git log --oneline -- data/research-task-family-candidates.json shows exactly ONE commit ever touching this file (d6f329e, the repository's earliest visible commit). The current on-disk content matches that commit exactly (git status shows no local modification). The hash mismatch Phase 19's own tests report is therefore not something any of Phases 20-23 introduced — it has been present, known, and documented (scripts/verify-phase-19.mjs's own comment) since Phase 19 itself concluded.",
+    "currentCorpusHash": "aa7e3088cd81f6f59cb24c5f50f44d6fa8cb4f108abcf96e2f9cbc51c631fa6c",
+    "phase19FrozenHash": "d6c483403f4b9944cf54fbeb960a14bb6fce563458e6f1c3490ae9fe769b723e (src/phase-19/evidence-rerank.ts#PHASE19_RESEARCH_CORPUS_SHA256, unchanged)",
+    "familySetUnchanged": "The current corpus's families20 array still lists exactly the same 20 familyIds, in the same order, that data/phase-19-candidate-assessments.json's 20 rows score (verified by direct comparison this phase). Whatever changed in the corpus since Phase 19's freeze, it did NOT add or remove a family from the top-20 set.",
+    "noReconstructableDiff": "Because only one committed version of this file has ever existed in git history, there is no way to mechanically diff 'what Phase 19's readers actually saw' against the current content — the pre-drift version was never itself committed separately. This is an honest limitation, not something this phase can work around."
+  },
+  "whatARealPhase19BRequires": [
+    "Read every one of the 20 families' full entries in the CURRENT data/research-task-family-candidates.json (each carries dense, real per-family research: sourceEvidence citations, rationale, existingEvidence, mustRebuild, recipeOverlay, predictedProbability, whatWouldBeLearnedIfEasy — this is substantial, serious research content, not boilerplate).",
+    "For each family, determine whether data/phase-19-candidate-assessments.json's existing score row (sourceEvidence, causalDepth, diagnosisRadius, authorityBoundary, scenarioSpace, fairContractFeasibility, novelty, buildTractability, caaAnalogyPenalty, disposition, duplicateOf, rationale) still accurately describes the family as it currently reads, or needs updating.",
+    "Freeze a new corpus hash and a new phase-19b-preregistration entry (this file, extended) once that validation pass is real and complete.",
+    "Re-run the reranking/review/probe pipeline (buildPhase19Reranking-equivalent logic) against the validated assessments and the current corpus, producing a genuinely new top-five and a new report."
+  ],
+  "boundingDecision": "This is a substantial, dedicated research task — comparable in scope to a meaningful fraction of what Phase 19 itself originally did — not a quick hash-bump. Per this phase's own Lane 7 instruction ('if Phase 19B surfaces its own complications deep enough to threaten this phase's primary goal, bound the time spent and document precisely what's left, rather than letting it consume Lanes 2-6'), it is deliberately NOT executed this phase. Lanes 0-6 (the phase's actual primary goal — one real, trusted, agent-facing matched experiment) were completed first and are not compromised by this deferral."
+}

@@ -727,7 +727,12 @@ export class App {
 
   // ---------------------------------------------------------------- ledgers
 
-  private record(method: string, detail: string, permitted: boolean | null = null): void {
+  private record(
+    method: string,
+    detail: string,
+    permitted: boolean | null = null,
+    observedValue?: string | null,
+  ): void {
     this.callSeq += 1;
     this.calls.push({
       seq: this.callSeq,
@@ -736,6 +741,7 @@ export class App {
       replayIndex: this.replayIndex,
       tick: this.tick,
       permitted,
+      ...(observedValue === undefined ? {} : { observedValue }),
     });
   }
 
@@ -834,8 +840,9 @@ export class App {
       },
 
       attr: (nodeId: string, name: string): string | null => {
-        this.record("attr", `${nodeId}.${name}`);
-        return this.find(nodeId)?.attrs[name] ?? null;
+        const value = this.find(nodeId)?.attrs[name] ?? null;
+        this.record("attr", `${nodeId}.${name}`, null, value);
+        return value;
       },
 
       regionState: (region: string): RegionState => {

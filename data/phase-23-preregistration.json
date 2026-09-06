@@ -1,0 +1,135 @@
+{
+  "schema": "agent-eval-foundry/phase-23-preregistration@1",
+  "phase": 23,
+  "title": "Operator Classification And The First Trusted Agent-Facing Causal Experiment",
+  "recordedAtUtc": "2026-09-06T00:00:00Z",
+  "snapshot": {
+    "headCommit": "6d71a25d233c054f67e50c7d48005893a609e09d",
+    "headSubject": "Add transfer infrastructure and a generic operator experiment orchestrator for phase twenty-two (Phase 22, squash-committed)",
+    "worktreeAtStart": "clean; no uncommitted changes",
+    "phase22ReVerification": "node scripts/verify-phase-22.mjs re-run fresh: envelope bankHash 0140428542f44980121ecf94ff4ef47d reproduces, ledger entry present and idempotent, all four coverage experiments and the Docker-gated regrade smoke check pass."
+  },
+  "lane0Classification": {
+    "method": "Read data/phase-21-operators.json fresh in full (all 12 operators' causalClaim/constructionDelta/staysFixed/preconditions/priorEvidence/candidateSubstrates/excludedSubstrates), rather than carrying forward any list from memory or from this phase's own mission prompt.",
+    "correctionToThisPhaseOwnDraft": "This phase's own mission prompt named authoritative-state-inaccessible-to-subject as the example for bucket 3 ('predictors or measurement controls... not directly measurable as a causal treatment at all'), based on imprecise recollection of its Phase 21 characterization. Reading the real file shows measurable:true and evidenceStatus:\"measured\" for this operator — it is a bucket-1 (verifier/infrastructure) operator, already half-measured (Phase 20 measured the adversarial/exploit case), not a bucket-3 exclusion. This correction is exactly what Lane 0's 'read fresh, do not presume' rule exists to catch, and is recorded here rather than silently followed anyway.",
+    "bucket3Empty": "No operator in the current 12-operator taxonomy has measurable:false. Bucket 3 (predictors/measurement controls, not measurable as a causal treatment at all) is empty as of this audit.",
+    "buckets": {
+      "verifierOrInfrastructureInterventions": [
+        {
+          "id": "hidden-scenario-selection-targets-narrow-mutants",
+          "evidenceStatus": "measured (Phase 21 pilot + Phase 22 replication on a frozen held-out bank; NULL-ON-FAIR-ENVELOPE)",
+          "note": "The reference example; the only operator whose shape (pick a scenario selection, grade a mutant bank, count discordant pairs) the existing src/phase-22 orchestrator is a valid instrument for, unmodified."
+        },
+        {
+          "id": "authoritative-state-inaccessible-to-subject",
+          "evidenceStatus": "measured for the adversarial/exploit case (Phase 20); UNMEASURED for the honest-subject case",
+          "note": "Its own constructionDelta is explicit: this operator's delta is at the GRADING ROUTE level (pre-Phase-20 subprocessHost/containerHost vs post-Phase-20 cell-container), not the TaskShape level, and does not fit src/phase-22's scenario-selection orchestrator shape at all. The remaining honest-subject measurement is cheap and real: grade the SAME preserved honest submission through both routes and diff the report. Measured this phase via a small, purpose-built script (src/phase-23/route-parity.ts), not by forcing it through an ill-fitting orchestrator — this is a deliberate, disclosed departure from Lane 1's literal 'valid for the existing orchestrator without modification' framing, justified because the evidence is real, free (reuses the same four preserved, hash-compatible Phase 17 submissions Phase 22 already validated), and closes an operator that was otherwise left half-measured with no plan to finish it."
+        }
+      ],
+      "agentFacingConstructionInterventions": [
+        {
+          "id": "causal-depth",
+          "candidateSubstrates": ["caa-revalidation"],
+          "migrated": true,
+          "legibilitySensitive": true,
+          "feasibleThisPhase": true,
+          "note": "SELECTED for Lane 2 — see lane2Selection below."
+        },
+        {
+          "id": "diagnosis-radius",
+          "candidateSubstrates": ["prompt-injection-memory-poisoning"],
+          "migrated": true,
+          "legibilitySensitive": false,
+          "feasibleThisPhase": true,
+          "note": "Strong alternative candidate, not selected this phase — see lane2Selection. Recorded as the natural next agent-facing operator for a future phase; its construction (widen the existing sessionsBetween knob) is simpler than causal-depth's and does not require adding any new mechanism to the family."
+        },
+        {
+          "id": "realistic-multi-file-repair-context",
+          "candidateSubstrates": ["checker-required-memory-poisoning"],
+          "migrated": false,
+          "feasibleThisPhase": false,
+          "note": "Feasible in principle but the only candidate substrate is unmigrated — would require Lane 4 migration work on top of construction. Deferred."
+        },
+        {
+          "id": "defect-non-legibility-at-edit-site",
+          "candidateSubstrates": ["dao-descendant", "trading-reconciliation-recompute", "deployment-rollback-recompute"],
+          "migrated": false,
+          "legibilitySensitive": true,
+          "feasibleThisPhase": false,
+          "note": "Scientifically important (would finally settle whether the Phase 20 grandfathered leak actually confounds anything, by building a clean sibling variant), but requires BOTH a new sibling-package construction AND migrating one of three currently-unmigrated families. More total prerequisite work than causal-depth or diagnosis-radius. Recommended as a strong candidate for the phase after this one, once one of these three families has a migration reason of its own."
+        },
+        {
+          "id": "cross-process-cross-time-external-authority-evidence",
+          "candidateSubstrates": ["caa-revalidation", "access-token-scope-expansion", "delegated-wallet-scope-reconciliation", "deployment-model-alias-rollout-drift"],
+          "migrated": "caa-revalidation only",
+          "feasibleThisPhase": true,
+          "note": "Also feasible without new migration (caa-revalidation already has a staleness/freshness knob — staleAboveHours/AGE_PATTERNS). A real second candidate; not selected because causal-depth has a more direct, already-documented real-world anchor (the family's own planted defect already exhibits one step of the exact mechanism this operator adds a second step of) and because measuring two agent-facing operators in one phase would repeat the breadth-over-depth mistake this phase exists to correct."
+        },
+        {
+          "id": "interacting-safety-and-liveness-obligations",
+          "candidateSubstrates": ["dao-descendant", "trading-reconciliation-recompute", "deployment-rollback-recompute"],
+          "migrated": false,
+          "feasibleThisPhase": false,
+          "note": "Not legibility-sensitive itself, but every candidate substrate is both grandfathered and unmigrated. Its priorEvidence pointer (data/hardness-operators.json#grade-the-obligation-from-the-external-party-log) is conceptual precedent from a DIFFERENT substrate (tasks/caa-revalidation-repair/, the Phase 17/18 Python task), not a reusable result on any of its own candidate families — read in full this phase to confirm, not assumed."
+        },
+        {
+          "id": "self-check-coverage",
+          "candidateSubstrates": ["prompt-injection-memory-poisoning", "checker-required-memory-poisoning"],
+          "migrated": "prompt-injection-memory-poisoning only",
+          "feasibleThisPhase": false,
+          "note": "Blocked on its own stated precondition: the two families' scenario/knob/rule-code sets have never been diffed to confirm they are actually a matched pair, not performed this or any prior phase. Not attempted here — doing that diff properly is its own real audit task, not a quick check to fold into Lane 2's already-large scope."
+        },
+        {
+          "id": "collateral-damage-verification",
+          "candidateSubstrates": ["dao-descendant", "trading-reconciliation-recompute", "deployment-rollback-recompute", "ui-replay-live-dom"],
+          "migrated": false,
+          "feasibleThisPhase": false,
+          "note": "Borderline classification: its claim is about real submissions' solve rate under a wider vs narrower scored check set, which is closer to a verifier-configuration question than most other agent-facing operators, but it is fundamentally about SOLVE RATE (real submissions), not about a fixed mutant's detectability, so it is bucketed as agent-facing. No candidate substrate is migrated. Deferred."
+        },
+        {
+          "id": "outcome-specified-solution-undirected-contracts",
+          "candidateSubstrates": [],
+          "feasibleThisPhase": false,
+          "note": "Explicitly blocked by its own stated precondition: no family's SPEC/README has been audited for solution-directing language. Not performed this phase — a real audit task in its own right."
+        },
+        {
+          "id": "naturally-incomplete-visible-tests",
+          "candidateSubstrates": [],
+          "feasibleThisPhase": false,
+          "note": "Explicitly blocked by its own stated precondition: no family's examples/ coverage against the hidden scenario space has been audited. Not performed this phase."
+        }
+      ]
+    }
+  },
+  "lane2Selection": {
+    "chosen": "causal-depth",
+    "family": "caa-revalidation",
+    "migrationStatus": "already migrated (SECURELY_MIGRATED_FAMILIES) — Lane 4 is skipped",
+    "reasoning": [
+      "Already migrated: no Lane 4 prerequisite work needed, so this phase's full effort goes into construction, validity gating, and trial design rather than also standing up a new secure-executor adapter.",
+      "legibilitySensitive:true is honestly satisfiable here: caa-revalidation is not one of the three grandfathered families, so its excluded-substrates list (dao-descendant, trading-reconciliation-recompute, deployment-rollback-recompute — all excluded for exactly this operator, per data/phase-21-operators.json) does not apply.",
+      "The operator's own priorEvidence names a direct, concrete anchor: 'tasks/caa-revalidation-repair/task.toml (difficulty_explanation already documents one step of exactly this property)' — the mispaired-identity defect this whole family models already carries one step of causal indirection (a wrong query at one point, a wrong bound answer used in the issuance decision at another). This operator's constructionDelta asks for exactly one MORE step: a decision made in one scenario whose consequence surfaces in a later, otherwise-unrelated scenario, rather than within the same evaluation.",
+      "This directly and honestly resolves a gap Phase 22 itself flagged and explicitly declined to fabricate a mutant for: 'This family has no cache-mutation or write-back path at all... Inventing a mutant for a mechanism the substrate does not have would be exactly the fabrication this phase exists to avoid.' Phase 23's causal-depth operator is the deliberate, motivated vehicle for actually adding that mechanism as a genuine one-step deepening — not a throwaway mutant, a real construction change with its own frozen baseline/treated pair.",
+      "Deep familiarity with this family from Phase 22 (reference.ts was extended there; truth.ts/scenarios.ts/verify.ts/mutants.ts were all read and reasoned about in full) reduces the risk of a subtle construction error relative to building on a less-familiar family in the same phase."
+    ],
+    "notSelectedThisPhase": ["diagnosis-radius", "cross-process-cross-time-external-authority-evidence"],
+    "notSelectedReasoning": "Both are also feasible without new migration. Measuring more than one agent-facing operator in the phase that exists specifically to correct 'more operators, shallower measurement' would repeat the mistake. Recorded as the two strongest candidates for the next agent-facing phase."
+  },
+  "lane2CausalDepthInfeasibilityFinding": {
+    "status": "BLOCKED-BEFORE-MEASUREMENT — causal-depth is NOT constructible on caa-revalidation without editing verify.ts, which staysFixed forbids. Recorded as a real finding, not silently abandoned.",
+    "attemptedConstruction": "The operator's own priorEvidence points to tasks/caa-revalidation-repair/task.toml's difficulty_explanation, read in full this phase: the real (Go-based, terminal-bench) task's actual mechanism is a mispaired revalidation answer WRITTEN BACK into a persistent store, whose damage 'is one order removed from its cause' because 'an order arriving inside the freshness window is then decided from an authorization belonging to a different domain.' Attempting the direct analogue on src/families/caa-revalidation/ (linked order pairs sharing one fqdn, the first order's reported answer written back as the second order's cachedCaa) requires the SECOND order to present the carried name as fresh — a stale-presented name is rechecked against independent truth regardless of what the first order did, so no propagation is even possible through a stale name.",
+    "proof": "src/families/caa-revalidation/truth.ts#applicableAnswer defines, verbatim: isStale(view, name) ? scenario.current[name.fqdn] : name.cachedCaa. For any FRESH name, the applicable answer IS the cache by definition. verify.ts#L115 (caa_applicable_answer) checks resultFor(name.fqdn)?.caa !== applicable[index] — for a fresh name this reduces to checking the report's value against the cache itself, so a subject that reports the cache verbatim (right or wrong) always passes, no matter what value a scenario constructor puts in that cache. This is not a limitation of construction cleverness; it is a structural consequence of the spec's own definition (fresh cache is trusted, full stop — the entire point of a recheck window). No scenarios/truth-only construction (verify.ts and types.ts held fixed, per shapeFieldsEdited) can make a poisoned-but-fresh cache detectable.",
+    "consequence": "Pivoting Lane 2's selection to the pre-identified, pre-registered alternative: diagnosis-radius on prompt-injection-memory-poisoning. This is a disciplined pivot to an alternative already named and reasoned about BEFORE any construction began (see agentFacingConstructionInterventions above), not an undisciplined search for whichever operator happens to work — causal-depth's infeasibility is recorded as a genuine result, not erased."
+  },
+  "lane2SelectionRevised": {
+    "chosen": "diagnosis-radius",
+    "family": "prompt-injection-memory-poisoning",
+    "migrationStatus": "already migrated (SECURELY_MIGRATED_FAMILIES) — Lane 4 is skipped",
+    "reasoning": [
+      "Already migrated, same as causal-depth's original choice — no new Lane 4 work.",
+      "Not legibility-sensitive — no grandfathering concern at all.",
+      "constructionDelta is a single existing scenario PARAMETER value change (sessionsBetween), not a new mechanism, new field, or cross-scenario dependency — the exact kind of construction the family's real code already supports without any structural tension with verify() staying fixed. Phase 21's own matched-pair smoke test (test/phase-21-operator-lab.test.ts) already demonstrates the field name and a baseline/treated value pair (2 vs 5) as a placeholder illustration, confirming the knob's shape was already anticipated.",
+      "This is the more tractable of the two remaining feasible agent-facing candidates named in Lane 0's audit; cross-process-cross-time-external-authority-evidence remains available for a future phase."
+    ]
+  }
+}

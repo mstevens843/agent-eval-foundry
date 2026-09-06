@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "scope": "Retained legacy bytes adopted during Prompt 1; not a retroactive runtime/provenance attestation.",
+  "files": {
+    "data/phase-13-activation-results.json": "678d7d366e6ba9a6f36036da8678cc4bdbc5566c94886e7822b1c5e7e3498729",
+    "data/phase-14-preregistration.json": "bbc31777883629466cf70eca0a9ce9597f1b78a15d4d65242c24d416c0ee1a56",
+    "data/phase-14-package-lock.json": "bfd3cfc79b7a8dba78d91cb354c8202f2d2c13b5d04f2bbe4adcf0e60522932b"
+  }
+}

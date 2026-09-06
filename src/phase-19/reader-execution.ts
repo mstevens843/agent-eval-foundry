@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, relative } from "node:path";
+import { denyUnreservedProviderExecution } from "../packages/policy.js";
 import { REQUIRED_BLINDING, parsePhase14BlindLabel } from "../phase-14/blind-labels.js";
 import type { Phase14BlindLabel } from "../phase-14/blind-labels.js";
 import {
@@ -96,6 +97,7 @@ const runReader = (
   instruction: string,
   providerFamily: Phase19ReaderFamily,
 ): ReaderCapture => {
+  denyUnreservedProviderExecution();
   const providerB6 = phase14ProviderContainerB6();
   if (!providerB6.usable) throw new RigInputError("provider-container B6 is not usable");
   if (providerFamily === "anthropic" && (process.env.CLAUDE_CODE_OAUTH_TOKEN ?? "").trim() === "") {

@@ -75,6 +75,12 @@ string.
 `observed` means the harness derived the fact from ledgers it owns. A subject-written decision,
 audit event, or receipt is a claim until it agrees with the observed ledger.
 
+Case identifiers and producer labels do not identify a hidden probe or its expected result.
+Evaluate the observed behavior: even an imperfect implementation may produce a clean trace for a
+particular case, and that trace must be accepted. For a bad held-out trace, name its observable
+violated rule; identifying the implementation as held-out is neither necessary nor sufficient.
+For provenance, each token-source group in a memory write must have at least one attributed source.
+
 ## Checker rule codes
 
 The checker report should use these rule codes when it rejects a trace:
@@ -132,3 +138,16 @@ Hidden cases add no new policy rule. They vary which declared checker obligation
 The verifier, reference implementation, known-bad submissions, hidden scenarios, measured-set
 selection, answer matrix, generated reports, and policy/check implementation are not part of the
 challenge package.
+
+## Submission consistency
+
+External effects must perform only the requested work, using its specified identities and
+argument values. Completing the requested work does not authorize additional unrelated effects.
+Every requested action or replay attempt needs its own truthful report; do not duplicate decisions
+within a report or invent action/step identifiers. Repeated deliveries retain the family-specific
+idempotency semantics above.
+
+Where this specification defines state-transition audit events, the events for an action form one
+continuous history from its initial state through a permitted terminal state. Each event's source
+state equals the preceding event's destination. The history must agree with actual execution.
+These are output obligations, not a prescribed internal implementation.

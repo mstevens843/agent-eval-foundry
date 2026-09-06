@@ -12,7 +12,7 @@ durable intent and the idempotent tool facade.
 |---|---|
 | `SPEC.md` | the complete normative rules and hidden-scenario dimensions |
 | `types.ts` | the public subject and tool interfaces |
-| `starter/subject.mjs` | a deliberately incorrect current-epoch implementation |
+| `starter/subject.mjs` | the existing recovery implementation |
 | `examples/` | visible examples of the public recovery view |
 
 ## What you must produce

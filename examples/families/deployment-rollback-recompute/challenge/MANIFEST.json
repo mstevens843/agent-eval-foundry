@@ -1,6 +1,6 @@
 {
   "familyId": "deployment-rollback-recompute",
-  "scenarioSetId": "recompute-24-80da6d41",
+  "scenarioSetId": "private",
   "visibleFiles": [
     "README.md",
     "SPEC.md",

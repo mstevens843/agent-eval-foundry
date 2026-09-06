@@ -1,6 +1,6 @@
 {
   "familyId": "checker-required-memory-poisoning",
-  "scenarioSetId": "poisoning-792-67126f04",
+  "scenarioSetId": "private",
   "visibleFiles": [
     "README.md",
     "SPEC.md",

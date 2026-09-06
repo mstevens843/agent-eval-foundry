@@ -1,5 +1,3 @@
-// Domain model for the challenge. Read-only — the grader uses these shapes.
-// Implementation-side filenames, scenario parameters and answer keys are deliberately absent.
 
 export interface UiNode {
   readonly id: string;

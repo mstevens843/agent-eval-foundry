@@ -7,7 +7,7 @@ What the families measure, together — and the arithmetic this report refuses t
 | family | bank | instances | subjects | blind | distinct catch sets | axes |
 |---|---|---:|---:|---:|---:|---:|
 | `prompt-injection-containment` | `agent` | 128 | 4 | 128 | 0 | **0** |
-| `prompt-injection-memory-poisoning` | `mutant` | 288 | 13 | 0 | 17 | **5** |
+| `prompt-injection-memory-poisoning` | `mutant` | 864 | 14 | 0 | 30 | **8** |
 | `ui-action-record-replay` | `agent` | 324 | 4 | 234 | 3 | **1** |
 | `ui-replay-live-dom` | `agent` | 864 | 1 | 645 | 1 | — |
 | `checker-required-memory-poisoning` | `agent` | 792 | 1 | 178 | 1 | — |
@@ -24,8 +24,8 @@ What the families measure, together — and the arithmetic this report refuses t
 
 | naive total | value | why it is not a result |
 |---|---:|---|
-| every family added together | 33 | mixes detection and difficulty; the two answer different questions |
-| detection banks added | 31 | the banks are disjoint by construction — no mutant appears in two families, so the union's width is the sum whatever the families measure |
+| every family added together | 36 | mixes detection and difficulty; the two answer different questions |
+| detection banks added | 34 | the banks are disjoint by construction — no mutant appears in two families, so the union's width is the sum whatever the families measure |
 | difficulty banks added | 2 | excludes one-subject banks; valid only over subjects that attempted both, and the overlap is below threshold |
 
 A combined axis count requires the same subjects in every bank being combined. Until that holds,

@@ -22,7 +22,7 @@ import { writeExternalPacketSupplementalFiles } from "../external-intake/packet.
 import { fail } from "../foundry/schema.js";
 import { type ProviderSpec, buildCommand, checkProvider, providerById } from "./provider-registry.js";
 import { routeFor } from "./router.js";
-import { type PreparedChallenge, prepareChallenge } from "./run.js";
+import { type PreparedChallenge, hashChallengeDir, prepareChallenge } from "./run.js";
 
 export interface PreparedProviderBundle {
   readonly familyId: string;
@@ -53,6 +53,8 @@ const RUN_SCRIPT = (familyId: string, spec: ProviderSpec, command: readonly stri
       .join(" and ")}.`,
     "# Then hand the whole directory back to `foundry trials campaign import`.",
     "set -euo pipefail",
+    'echo "Execution blocked: package-bound durable authorization is not implemented until Prompt 5." >&2',
+    "exit 78",
     'cd "$(dirname "$0")"',
     "mkdir -p submission",
     "",
@@ -202,6 +204,7 @@ export function prepareProviderBundle(
 // ---------------------------------------------------------------- strict import
 
 export interface ImportedBundle {
+  readonly contentIntegrity: "verified-legacy-visible" | "unavailable";
   readonly runId: string;
   readonly familyId: string;
   readonly provider: string;
@@ -301,9 +304,18 @@ export function readImportedBundle(
     path: name,
     content: readFileSync(join(submissionDir, name), "utf8"),
   }));
+  const actualHash = hashChallengeDir(join(dir, "challenge"));
+  if (actualHash !== null && actualHash !== meta["challengeHash"]) {
+    fail(
+      "IMPORT_CHALLENGE_MISMATCH",
+      `${path}.challengeHash`,
+      "retained challenge bytes contradict the declared metadata hash",
+    );
+  }
 
   return {
     runId: String(meta["runId"]),
+    contentIntegrity: actualHash === null ? "unavailable" : "verified-legacy-visible",
     familyId: expectedFamilyId,
     provider: String(meta["provider"]),
     model: String(meta["model"]),

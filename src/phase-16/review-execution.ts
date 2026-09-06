@@ -11,6 +11,7 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
+import { denyUnreservedProviderExecution } from "../packages/policy.js";
 import {
   PHASE14_PROVIDER_IMAGE,
   phase14ProviderCommand,
@@ -390,6 +391,7 @@ export function executePhase16ReaderReview(
   candidateId: string,
   providerFamily: Phase16ReaderFamily,
 ): Phase16ReviewExecutionResult {
+  denyUnreservedProviderExecution();
   const registration = loadPhase16ContinuationPreregistration(root);
   const expected = nextPhase16Review(root);
   const requested = `${candidateId}/${providerFamily}`;

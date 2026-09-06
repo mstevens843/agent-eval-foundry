@@ -2,6 +2,7 @@ import { SPEC_MD } from "../families/dao-descendant/spec.js";
 import { buildScenario } from "../families/dao-descendant/truth.js";
 import type { ScenarioParams } from "../families/dao-descendant/truth.js";
 import type { ChallengeFile, ChallengeManifest, ChallengePackage } from "./package.js";
+import { publicFiles, publicManifest } from "./public-surface.js";
 
 export const DAO_DESCENDANT_HIDDEN_ARTIFACTS = [
   "verify.ts",
@@ -28,7 +29,7 @@ durable intent and the idempotent tool facade.
 |---|---|
 | \`SPEC.md\` | the complete normative rules and hidden-scenario dimensions |
 | \`types.ts\` | the public subject and tool interfaces |
-| \`starter/subject.mjs\` | a deliberately incorrect current-epoch implementation |
+| \`starter/subject.mjs\` | the existing recovery implementation |
 | \`examples/\` | visible examples of the public recovery view |
 
 ## What you must produce
@@ -42,14 +43,12 @@ that retries collectively produce exactly one effect, that valid work completes,
 match calls. Hidden cases sample only the dimensions declared in \`SPEC.md\`.
 `;
 
-const STARTER = `// Starter skeleton. It is deliberately wrong after reassignment.
-// Read SPEC.md, then replace the recomputation with recovery from the durable intent.
+const STARTER = `// Recovery worker entrypoint.
 
 export const subject = {
   id: "starter",
-  label: "Current-epoch recomputation starter",
+  label: "Recovery worker",
   run(view, tool) {
-    // WRONG: leaseEpoch changes when another worker recovers the action.
     const idempotencyKey =
       \`idem::\${view.intent.actionId}::\${view.intent.requestId}::epoch-\${view.leaseEpoch}\`;
     const receipt = tool.execute(view.intent.actionId, {
@@ -126,7 +125,7 @@ export function buildDaoDescendantChallengePackage(
   };
   return {
     familyId: manifest.familyId,
-    files: [...files, { path: "MANIFEST.json", content: `${JSON.stringify(manifest, null, 2)}\n` }],
+    files: [...publicFiles(files), { path: "MANIFEST.json", content: publicManifest(manifest) }],
     manifest,
   };
 }

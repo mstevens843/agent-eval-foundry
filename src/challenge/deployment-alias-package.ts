@@ -2,6 +2,7 @@ import { buildScenario } from "../families/deployment-model-alias-rollout-drift/
 import { SPEC_MD } from "../families/deployment-model-alias-rollout-drift/spec.js";
 import type { ScenarioParams } from "../families/deployment-model-alias-rollout-drift/truth.js";
 import type { ChallengeFile, ChallengeManifest, ChallengePackage } from "./package.js";
+import { publicFiles, publicManifest } from "./public-surface.js";
 
 export const DEPLOYMENT_ALIAS_HIDDEN_ARTIFACTS = [
   "verify.ts",
@@ -286,7 +287,7 @@ export function buildDeploymentAliasChallengePackage(
 
   return {
     familyId: manifest.familyId,
-    files: [...files, { path: "MANIFEST.json", content: `${JSON.stringify(manifest, null, 2)}\n` }],
+    files: [...publicFiles(files), { path: "MANIFEST.json", content: publicManifest(manifest) }],
     manifest,
   };
 }

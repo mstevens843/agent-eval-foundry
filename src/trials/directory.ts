@@ -35,6 +35,8 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fail } from "../foundry/schema.js";
+import { canonicalJson } from "../packages/record.js";
+import { evaluateOutcome } from "./outcome.js";
 import { ROOT_CAUSE_FILE, parseRootCause, unlabelledRootCause } from "./root-cause.js";
 import type { RootCauseRecord } from "./root-cause.js";
 import type { TrialRecord } from "./types.js";
@@ -182,6 +184,30 @@ export function readTrialDirectory(dir: string): TrialDirectory {
     `${dir}/${TRIAL_FILES.result}`,
   );
   const countability = JSON.parse(readFileSync(join(dir, TRIAL_FILES.countability), "utf8")) as Countability;
+  const metadata = JSON.parse(readFileSync(join(dir, TRIAL_FILES.metadata), "utf8"));
+  if (metadata.evaluation?.schemaVersion === 1) {
+    const verifier = JSON.parse(readFileSync(join(dir, TRIAL_FILES.verifier), "utf8"));
+    const evaluation = evaluateOutcome({
+      providerStatus: metadata.classification,
+      expectedIds: Array.isArray(metadata.evaluation.expectedIds) ? metadata.evaluation.expectedIds : [],
+      ...(Array.isArray(metadata.evaluation.expectedCheckIds)
+        ? { expectedCheckIds: metadata.evaluation.expectedCheckIds }
+        : {}),
+      ...(verifier.errorStage ? { errorStage: verifier.errorStage } : {}),
+      cells: verifier.cells,
+      hostErrors: verifier.hostErrors,
+      artifactPresent:
+        existsSync(join(dir, SUBMISSION_DIR)) && listFiles(join(dir, SUBMISSION_DIR)).length > 0,
+    });
+    if (
+      canonicalJson(evaluation) !== canonicalJson(metadata.evaluation) ||
+      (verifier.evaluation && canonicalJson(verifier.evaluation) !== canonicalJson(evaluation)) ||
+      (record.counts &&
+        (!evaluation.complete || canonicalJson(record.cells) !== canonicalJson(verifier.cells))) ||
+      countability.counts !== record.counts
+    )
+      throw new Error(`TRIAL_EVALUATION_INCONSISTENT: ${dir}`);
+  }
 
   const challengeFiles = listFiles(join(dir, CHALLENGE_DIR));
   for (const f of challengeFiles) {

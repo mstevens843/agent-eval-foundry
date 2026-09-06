@@ -30,7 +30,7 @@ Which subjects have attempted which families, and what that permits.
 
 | family | subjects | instances | axes |
 |---|---:|---:|---:|
-| `prompt-injection-memory-poisoning` | 13 | 288 | 5 |
+| `prompt-injection-memory-poisoning` | 14 | 864 | 8 |
 | `access-token-scope-expansion` | 9 | 384 | 3 |
 | `delegated-wallet-scope-reconciliation` | 10 | 804 | 3 |
 | `deployment-model-alias-rollout-drift` | 17 | 339 | 20 |

@@ -34,8 +34,8 @@ judgement no code here makes, and it is printed rather than scored.
 | | |
 |---|---|
 | challenge hash (plan) | `7443bf6d6c6b2ccf69cc20f417ff048c` |
-| challenge hash (now) | `7443bf6d6c6b2ccf69cc20f417ff048c` |
-| match | **yes** — every slot measured the task this repository currently holds |
+| challenge hash (now) | `6966852cf74afd8e336918f527217c47` |
+| match | **NO** — the family changed after the plan was written; these slots measured a different task |
 | scenario set | `poisoning-288-b8b5b81e`, 288 scenarios |
 | isolation | `subprocess` |
 | timeout | 25 minutes per slot |

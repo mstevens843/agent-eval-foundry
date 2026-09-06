@@ -54,6 +54,7 @@ import type { TrialRecord, TrialSet } from "../src/trials/types.js";
 const ROOT = new URL("..", import.meta.url).pathname;
 const FAMILY_ID = "deployment-model-alias-rollout-drift";
 const CHALLENGE_HASH = "805efb58c923f9e081db1b41967392d7";
+const CURRENT_CHALLENGE_HASH = "3fcb6594208934c438b964219f3af4dd";
 const SCENARIO_SET_ID = "drift-339-590affe3";
 
 let cachedScenarios: readonly Scenario[] | null = null;
@@ -276,7 +277,7 @@ describe("deployment-model-alias-rollout-drift family", () => {
     const check = checkChallengePackage(pkg.files, family.leakProfile);
     const typeSource = pkg.files.find((file) => file.path === "types.ts")?.content ?? "";
 
-    expect(challengeHash(pkg)).toBe(CHALLENGE_HASH);
+    expect(challengeHash(pkg)).toBe(CURRENT_CHALLENGE_HASH);
     expect(pkg.manifest.scenarioSetId).toBe(SCENARIO_SET_ID);
     expect(check.files).toBe(9);
     expect(check.specCodesFound).toBe(10);

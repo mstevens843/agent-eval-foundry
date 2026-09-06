@@ -177,6 +177,8 @@ import {
 } from "./human-solvability/records.js";
 import { renderHumanReadinessReport, renderHumanSolvabilityReport } from "./human-solvability/report.js";
 import { MatrixError, parseMatrix } from "./matrix.js";
+import { packageCommand } from "./packages/command.js";
+import { assertPackageStage } from "./packages/policy.js";
 import {
   executePhase14Attempt,
   parsePhase14AttemptId,
@@ -445,7 +447,7 @@ import { importAgentTrials, measuredScenarios, runLocalTrials, scenarioSetId } f
 import { decideCountability } from "./trials/orchestrator.js";
 import { PROVIDERS as PROVIDER_FAMILIES_LIST, checkAllProviders } from "./trials/provider-registry.js";
 import { ROUTABLE_FAMILY_IDS, routeFor } from "./trials/router.js";
-import { gateByChallengeHash, prepareChallenge, runAgentTrial } from "./trials/run.js";
+import { currentChallenge, gateByChallengeHash, prepareChallenge, runAgentTrial } from "./trials/run.js";
 import { assertChallengeMatch, challengeHash, hashChallengeDir } from "./trials/run.js";
 import { parseTrialRecord } from "./trials/validate.js";
 import type { AxisReport, Matrix } from "./types.js";
@@ -1095,7 +1097,7 @@ function externalVerifierOutputCommand(packetDir: string, root: string, familyId
     ? (JSON.parse(readFileSync(metaPath, "utf8")) as Record<string, unknown>)
     : {};
   const runId = typeof metadata["runId"] === "string" ? metadata["runId"] : "missing-run-id";
-  const prepared = prepareChallenge(root, familyId);
+  const prepared = currentChallenge(root, familyId);
   const route = routeFor(familyId);
   const graded = route.grade(join(packetDir, "submission", "subject.mjs"));
   const verifierOutput = {
@@ -1155,7 +1157,7 @@ function externalCommand(argv: readonly string[], root: string): string {
   if (sub === "validate") {
     const dir = positional(argv, 2);
     if (dir === undefined) throw new Error("external validate needs a packet directory");
-    const prepared = prepareChallenge(root, familyId);
+    const prepared = currentChallenge(root, familyId);
     const existingRunIds = readFamilyTrials(join(root, "trials"), familyId).map((trial) => trial.runId);
     return externalValidationSummary(
       validateExternalRunPacket(root, dir, {
@@ -1183,7 +1185,7 @@ function externalCommand(argv: readonly string[], root: string): string {
     ].join("\n");
   }
   if (sub === "report") {
-    const prepared = prepareChallenge(root, familyId);
+    const prepared = currentChallenge(root, familyId);
     return renderExternalIntakeReport({
       familyId,
       expectedHash: prepared.hash,
@@ -1492,7 +1494,7 @@ function smokeContext(
         hypothesisKnob: null,
       }),
     );
-  const currentHash = prepareChallenge(root, familyId).hash;
+  const currentHash = currentChallenge(root, familyId).hash;
   const sweep = builtFamily(familyId).run();
   const localEvidencePass =
     sweep.referenceFailures.length === 0 &&
@@ -1577,7 +1579,7 @@ function lineageRuntimeEvidence(
     out.set(familyId, {
       familyId,
       currentPackageHash: ROUTABLE_FAMILY_IDS.includes(familyId)
-        ? prepareChallenge(root, familyId).hash
+        ? currentChallenge(root, familyId).hash
         : null,
       localEvidencePass:
         sweep.referenceFailures.length === 0 &&
@@ -1691,7 +1693,7 @@ function deploymentAliasProviderDeltaInputs(root: string) {
   const funnel = loadAdaptiveFunnel(root, registry);
   const campaigns = loadCampaigns(root);
   const context = deploymentAliasSmokeContext(root, campaigns, funnel.transfers);
-  const prepared = prepareChallenge(root, familyId);
+  const prepared = currentChallenge(root, familyId);
   const reportInput = {
     challengeHash: prepared.hash,
     scenarioSetId: prepared.scenarioSetId,
@@ -1808,7 +1810,7 @@ function deploymentAliasReadinessOutputs(root: string): readonly {
   const context = deploymentAliasSmokeContext(root, campaignPlans, adaptiveFunnel.transfers);
   const family = builtFamily(DEPLOYMENT_ALIAS_FAMILY_ID);
   const sweep = family.run();
-  const prepared = prepareChallenge(root, DEPLOYMENT_ALIAS_FAMILY_ID);
+  const prepared = currentChallenge(root, DEPLOYMENT_ALIAS_FAMILY_ID);
   const pkgCheck = checkChallengePackage(prepared.pkg.files, family.leakProfile);
   const localEvidencePass =
     sweep.referenceFailures.length === 0 &&
@@ -2448,13 +2450,14 @@ function campaignPrepare(argv: readonly string[], root: string): string {
 
 /** `trials campaign import --family <id> <dir>` — strict, and it grades what it accepts. */
 function campaignImport(argv: readonly string[], root: string): string {
+  assertPackageStage({ checks: {} }, "trial-eligible");
   const familyId = flag(argv, "--family");
   const dir = positional(argv, 3);
   if (familyId === null) throw new Error("trials campaign import needs --family");
   if (dir === undefined) throw new Error("trials campaign import needs a bundle directory");
 
   const route = routeFor(familyId);
-  const prepared = prepareChallenge(root, familyId);
+  const prepared = currentChallenge(root, familyId);
   const bundle = readImportedBundle(dir, familyId, prepared.hash);
 
   const graded =
@@ -2604,7 +2607,7 @@ function campaignCommand(argv: readonly string[], root: string): string {
 }
 
 function campaignReconcileForFamily(root: string, familyId: string, plans: readonly CampaignPlan[]): string {
-  const prepared = prepareChallenge(root, familyId);
+  const prepared = currentChallenge(root, familyId);
   const dirs = readFamilyTrials(join(root, "trials"), familyId);
   const claimed = new Set(
     plans.flatMap((plan) =>
@@ -3004,7 +3007,7 @@ function reportLedgers(root: string): readonly EvidenceLedger[] {
   const computed = ROUTABLE_FAMILY_IDS.filter((id) => BUILT_FAMILY_IDS.includes(id)).map((familyId) =>
     evidenceLedger(
       familyId,
-      prepareChallenge(root, familyId).hash,
+      currentChallenge(root, familyId).hash,
       readFamilyTrials(join(root, "trials"), familyId),
       variants,
     ),
@@ -3577,13 +3580,13 @@ function allCommand(argv: readonly string[], root: string): string {
       selectedVariant: accessTokenEvolutionVariant,
       selectedProbeResult: accessTokenEvolutionProbe,
       selectedPromotion: accessTokenEvolutionPromotion,
-      challengeHash: prepareChallenge(root, ACCESS_TOKEN_FAMILY_ID).hash,
+      challengeHash: currentChallenge(root, ACCESS_TOKEN_FAMILY_ID).hash,
     }),
   );
   {
     const delegatedFamily = builtFamily(DELEGATED_WALLET_FAMILY_ID);
     const delegatedSweep = delegatedFamily.run();
-    const delegatedPrepared = prepareChallenge(root, DELEGATED_WALLET_FAMILY_ID);
+    const delegatedPrepared = currentChallenge(root, DELEGATED_WALLET_FAMILY_ID);
     const delegatedPkgCheck = checkChallengePackage(delegatedPrepared.pkg.files, delegatedFamily.leakProfile);
     const delegatedBundle = evidenceFor(DELEGATED_WALLET_FAMILY_ID);
     write(
@@ -3645,7 +3648,7 @@ function allCommand(argv: readonly string[], root: string): string {
   {
     const deploymentFamily = builtFamily(DEPLOYMENT_ALIAS_FAMILY_ID);
     const deploymentSweep = deploymentFamily.run();
-    const deploymentPrepared = prepareChallenge(root, DEPLOYMENT_ALIAS_FAMILY_ID);
+    const deploymentPrepared = currentChallenge(root, DEPLOYMENT_ALIAS_FAMILY_ID);
     const deploymentPkgCheck = checkChallengePackage(
       deploymentPrepared.pkg.files,
       deploymentFamily.leakProfile,
@@ -4183,7 +4186,7 @@ function allCommand(argv: readonly string[], root: string): string {
       const liveBundle = evidenceFor("ui-replay-live-dom");
       const liveMatrix = liveBundle.matrix;
       const liveReport = measureFor(liveMatrix, { nullTrials: 3 });
-      const prepared = prepareChallenge(root, "ui-replay-live-dom");
+      const prepared = currentChallenge(root, "ui-replay-live-dom");
       const pkgCheck = checkChallengePackage(
         prepared.pkg.files,
         builtFamily("ui-replay-live-dom").leakProfile,
@@ -4496,7 +4499,7 @@ function allCommand(argv: readonly string[], root: string): string {
   {
     const uiFamily = builtFamily(UI_FAMILY);
     const sweep = uiFamily.run();
-    const prepared = prepareChallenge(root, UI_FAMILY);
+    const prepared = currentChallenge(root, UI_FAMILY);
     write(
       "ui-action-record-replay-upgrade-report.md",
       renderUiUpgradeReport({
@@ -4566,7 +4569,7 @@ function allCommand(argv: readonly string[], root: string): string {
     const checkerSweep = checkerFamily.run();
     const checkerBundle = evidenceFor(checkerId);
     const checkerAxis = measureFor(checkerSweep.matrix, { nullTrials: 3 });
-    const prepared = prepareChallenge(root, checkerId);
+    const prepared = currentChallenge(root, checkerId);
     const pkgCheck = checkChallengePackage(prepared.pkg.files, checkerFamily.leakProfile);
     const checkerShape = registry.shapes.find((s) => s.familyId === checkerId);
     if (checkerShape === undefined) throw new Error("checker-required-memory-poisoning shape must exist");
@@ -4686,7 +4689,7 @@ function allCommand(argv: readonly string[], root: string): string {
   const daoFamily = builtFamily("dao-descendant");
   const daoRun = daoDescendant.runFamily();
   const daoSweep = daoFamily.run();
-  const preparedDao = prepareChallenge(root, "dao-descendant");
+  const preparedDao = currentChallenge(root, "dao-descendant");
   const daoPackageCheck = checkChallengePackage(preparedDao.pkg.files, daoFamily.leakProfile);
   const target = daoRun.scenarios.filter(
     (scenario) => scenario.params.crashPosition === "after_tool" && scenario.params.nWorkers > 1,
@@ -4775,6 +4778,9 @@ export function main(argv: readonly string[]): number {
         emit(argv, axisCommand(argv, command, path));
         return 0;
       }
+      case "package":
+        process.stdout.write(packageCommand(root, argv.slice(1)));
+        return 0;
       case "check":
         process.stdout.write(checkCommand(root));
         return 0;

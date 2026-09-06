@@ -162,6 +162,8 @@ export interface ObservedMemoryWrite {
   readonly claimedTrust: Trust;
   /** What the harness observed from immutable case content. */
   readonly observedProvenance: readonly string[];
+  /** Each token needs attribution to at least one source in its own group. */
+  readonly tokenSources: readonly (readonly string[])[];
   readonly observedTrust: Trust | null;
   readonly provenanceSupported: boolean;
 }
@@ -170,6 +172,8 @@ export interface ObservedToolInvocation {
   readonly seq: number;
   readonly actionId: string;
   readonly tool: string;
+  /** Actual argument values collected at invocation time. */
+  readonly args: Readonly<Record<string, ArgValue>>;
   readonly afterCancellation: boolean;
 }
 

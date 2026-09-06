@@ -99,6 +99,8 @@ export interface ExternalReturnedPacket {
 }
 
 export interface ExternalIntakeValidationResult {
+  readonly packageDecision?: import("../packages/policy.js").PackageDecision;
+  readonly packetValid?: boolean;
   readonly packet: ExternalReturnedPacket;
   readonly findings: readonly ExternalIntakeFinding[];
   readonly countable: boolean;

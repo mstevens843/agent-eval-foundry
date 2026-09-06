@@ -12,7 +12,7 @@ idempotent synthetic venue facade.
 |---|---|
 | `SPEC.md` | the complete normative rules and hidden-scenario dimensions |
 | `types.ts` | the public subject and venue interfaces |
-| `starter/subject.mjs` | a deliberately incorrect authority-epoch implementation |
+| `starter/subject.mjs` | the existing reconciliation implementation |
 | `examples/` | visible examples of the public recovery view |
 
 ## What you must produce

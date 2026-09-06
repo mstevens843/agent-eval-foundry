@@ -1,8 +1,10 @@
 import { requireShape } from "../../screens/rig-integrity.js";
+import { fieldsMatch } from "../verification-contract.js";
 import type { VerificationInput } from "./truth.js";
 
 export const CHECKS = [
   "exactly_once",
+  "effect_matches_intent",
   "stable_key_recovered",
   "liveness",
   "report_matches_call_ledger",
@@ -34,6 +36,20 @@ export function verify(value: unknown): readonly Failure[] {
   const ownCalls = input.calls.filter((call) => call.actionId === actionId);
   const ownEffects = input.effects.filter((effect) => effect.actionId === actionId);
   const failures: Failure[] = [];
+
+  if (
+    ownCalls.length !== input.calls.length ||
+    ownEffects.length !== input.effects.length ||
+    input.calls.some((call) => !fieldsMatch(call.request, input.scenario.intent, ["payload"])) ||
+    input.effects.some((effect) => !fieldsMatch(effect, input.scenario.intent, ["payload", "idempotencyKey"]))
+  ) {
+    failures.push(
+      failure(
+        "effect_matches_intent",
+        "external work differs from the committed action or includes unrequested work",
+      ),
+    );
+  }
 
   if (ownEffects.length !== 1) {
     failures.push(

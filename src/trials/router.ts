@@ -94,13 +94,14 @@ import {
 } from "./orchestrate.js";
 import { runJsonContainerHost } from "./runners.js";
 import { SECURELY_MIGRATED_FAMILIES, runSecureContainerHost } from "./secure-runner.js";
-import type { TrialCell } from "./types.js";
+import type { IsolationLevel, TrialCell } from "./types.js";
 
 export interface GradeResult {
   readonly cells: readonly TrialCell[];
   readonly detail: string;
   /** Scenarios where the host could not run the artifact at all. Never behaviour, always a defect. */
   readonly hostErrors: number;
+  readonly isolation?: IsolationLevel;
 }
 
 export interface TrialRoute {
@@ -162,7 +163,7 @@ const containerHost =
 
 /**
  * The Phase 20 route: submission and ledger-owning host in separate OS processes inside a no-network
- * container, joined only by a signed event channel (`secure-runner.ts`). Reshaped here into the same
+ * container, joined by an operation-request channel (`secure-runner.ts`). Reshaped here into the same
  * `{ledger, writes, report, queries, error}`-style record `runHost`/`runJsonContainerHost` returned,
  * so the grading logic below — and the verifiers it calls — needed no changes to consume it.
  */
@@ -465,7 +466,11 @@ export function gradeDeploymentAlias(modulePath: string): GradeResult {
 }
 
 /** Grade durable recovery against the host-owned external call and effect ledgers. */
-function gradeDaoWithHost(modulePath: string, execute: HostExecution, isolation: string): GradeResult {
+function gradeDaoWithHost(
+  modulePath: string,
+  execute: HostExecution,
+  isolation: IsolationLevel,
+): GradeResult {
   assertDaoHostIntegrity(execute);
   const cells: TrialCell[] = [];
   let hostErrors = 0;
@@ -488,7 +493,7 @@ function gradeDaoWithHost(modulePath: string, execute: HostExecution, isolation:
 }
 
 /** Grade one certificate order against the host-owned exact-fqdn ledger and authorization map. */
-function gradeCaaWithHost(execute: HostExecution, isolation: string): GradeResult {
+function gradeCaaWithHost(execute: HostExecution, isolation: IsolationLevel): GradeResult {
   const cells: TrialCell[] = [];
   let hostErrors = 0;
 
@@ -536,7 +541,7 @@ export function gradeCaaRevalidation(modulePath: string): GradeResult {
  */
 export function gradeCaaRevalidationInContainer(modulePath: string): GradeResult {
   const host = hostPath("caa-revalidation-host.mjs");
-  return gradeCaaWithHost(containerHost(host, modulePath), "no-network container");
+  return gradeCaaWithHost(containerHost(host, modulePath), "container");
 }
 
 export function gradeDaoDescendant(modulePath: string): GradeResult {
@@ -545,7 +550,11 @@ export function gradeDaoDescendant(modulePath: string): GradeResult {
 }
 
 /** Grade order reconciliation against host-owned venue calls and executions. */
-function gradeTradingWithHost(modulePath: string, execute: HostExecution, isolation: string): GradeResult {
+function gradeTradingWithHost(
+  modulePath: string,
+  execute: HostExecution,
+  isolation: IsolationLevel,
+): GradeResult {
   const scenarios = tradingScenarios();
   const activated = scenarios.find(
     (scenario) => scenario.params.nReconcilers > 1 && scenario.params.crashPosition === "after_venue_accept",
@@ -578,7 +587,11 @@ export function gradeTradingReconciliation(modulePath: string): GradeResult {
 }
 
 /** Grade rollback recovery against host-owned controller calls and compensation effects. */
-function gradeRollbackWithHost(modulePath: string, execute: HostExecution, isolation: string): GradeResult {
+function gradeRollbackWithHost(
+  modulePath: string,
+  execute: HostExecution,
+  isolation: IsolationLevel,
+): GradeResult {
   const scenarios = rollbackScenarios();
   const activated = scenarios.find(
     (scenario) => scenario.params.nControllers > 1 && scenario.params.crashPosition === "after_compensation",
@@ -613,11 +626,12 @@ export function gradeDeploymentRollback(modulePath: string): GradeResult {
 const summarise = (
   cells: readonly TrialCell[],
   hostErrors: number,
-  isolation = "subprocess",
+  isolation: IsolationLevel = "subprocess",
 ): GradeResult => ({
   cells,
   detail: `${cells.filter((c) => c.failed.length > 0).length}/${cells.length} scenarios failed (${hostErrors} host error${hostErrors === 1 ? "" : "s"}) under ${isolation} isolation`,
   hostErrors,
+  isolation,
 });
 
 /** Phase 14's stronger grading path: the verifier stays here; host plus submission get no network. */
@@ -625,15 +639,15 @@ export function gradePhase14ContainerSubmission(familyId: string, modulePath: st
   if (familyId === "caa-revalidation") return gradeCaaRevalidationInContainer(modulePath);
   if (familyId === "dao-descendant") {
     const host = hostPath("dao-descendant-host.mjs");
-    return gradeDaoWithHost(modulePath, containerHost(host, modulePath), "no-network container");
+    return gradeDaoWithHost(modulePath, containerHost(host, modulePath), "container");
   }
   if (familyId === "trading-reconciliation-recompute") {
     const host = hostPath("trading-reconciliation-host.mjs");
-    return gradeTradingWithHost(modulePath, containerHost(host, modulePath), "no-network container");
+    return gradeTradingWithHost(modulePath, containerHost(host, modulePath), "container");
   }
   if (familyId === "deployment-rollback-recompute") {
     const host = hostPath("deployment-rollback-host.mjs");
-    return gradeRollbackWithHost(modulePath, containerHost(host, modulePath), "no-network container");
+    return gradeRollbackWithHost(modulePath, containerHost(host, modulePath), "container");
   }
   throw new Error(`${familyId}: no Phase 14 container grader is registered`);
 }
@@ -800,7 +814,7 @@ const INSTRUCTIONS: Readonly<Record<string, string>> = {
 const GRADERS: Readonly<Record<string, (p: string) => GradeResult>> = {
   "prompt-injection-containment": (p) => {
     const out = gradeContainment(p);
-    return { cells: out.cells, detail: out.detail, hostErrors: 0 };
+    return { cells: out.cells, detail: out.detail, hostErrors: 0, isolation: "subprocess" };
   },
   "prompt-injection-memory-poisoning": gradeMemory,
   "ui-action-record-replay": gradeUi,

@@ -24,6 +24,7 @@ import { execFileSync } from "node:child_process";
 import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { denyUnreservedProviderExecution } from "../packages/policy.js";
 import type { TrialUsage } from "./types.js";
 
 export type ProviderStatus = "implemented" | "declared";
@@ -309,6 +310,7 @@ export const shellAdapter: ProviderAdapter = {
   requires: null,
   isolation: "process",
   run(req) {
+    denyUnreservedProviderExecution();
     if (req.command === undefined || req.command.length === 0) {
       throw new Error('the "shell" provider needs a command; pass --cmd');
     }

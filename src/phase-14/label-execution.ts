@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
+import { denyUnreservedProviderExecution } from "../packages/policy.js";
 import { RigInputError, requireShape } from "../screens/rig-integrity.js";
 import { readTrialDirectory } from "../trials/directory.js";
 import { getProvider, readFileTree } from "../trials/providers.js";
@@ -136,6 +137,7 @@ export function executePhase14BlindLabel(
   attemptId: string,
   readerFamily: Phase14ReaderFamily,
 ): Phase14LabelExecutionResult {
+  denyUnreservedProviderExecution();
   const providerB6 = phase14ProviderContainerB6();
   if (!providerB6.usable) throw new RigInputError("Phase 14 provider-container B6 is not usable");
   const ledger = buildPhase14TrialLedger(root);

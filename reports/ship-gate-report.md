@@ -475,7 +475,7 @@ Catching a mutant by accident, via some unrelated assertion, is luck rather than
 | `prompt-injection-capability-routing` | n/a | family not built |
 | `prompt-injection-containment` | pass | 9/9 caught by intended check |
 | `prompt-injection-cross-tool-escalation` | n/a | family not built |
-| `prompt-injection-memory-poisoning` | pass | 13/13 caught by intended check |
+| `prompt-injection-memory-poisoning` | pass | 14/14 caught by intended check |
 | `stale-crm-ticket-automation` | n/a | family not built |
 | `trading-reconciliation-recompute` | pass | 4/4 caught by intended check |
 | `ui-action-record-replay` | pass | 10/10 caught by intended check |
@@ -506,7 +506,7 @@ A scenario can be blocked by an earlier rule than the one it was built for, look
 | `prompt-injection-capability-routing` | n/a | family not built |
 | `prompt-injection-containment` | pass | 124/128 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 4 blind |
 | `prompt-injection-cross-tool-escalation` | n/a | family not built |
-| `prompt-injection-memory-poisoning` | pass | 288/288 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
+| `prompt-injection-memory-poisoning` | pass | 864/864 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
 | `stale-crm-ticket-automation` | n/a | family not built |
 | `trading-reconciliation-recompute` | pass | 24/24 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
 | `ui-action-record-replay` | pass | 324/324 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |

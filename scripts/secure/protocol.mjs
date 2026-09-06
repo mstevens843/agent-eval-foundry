@@ -1,32 +1,6 @@
-// Phase 20 secure-execution protocol: a signed, framed, one-way event channel from an untrusted
-// "cell" process to the trusted "authority" process that spawned it.
-//
-// WHY SIGNED, GIVEN THE PROCESSES ARE ALREADY SEPARATE
-//
-// Process separation alone stops the untrusted module from touching the authority's memory. It does
-// NOT stop the untrusted module from writing directly to the pipe file descriptor the cell's own
-// trusted wrapper code uses to report events (fd numbers are not secret), so a submission that
-// discovers "fd 3 carries the ledger" could try to inject forged frames onto it directly. The HMAC
-// closes that: the signing key is generated fresh by the authority for this one run, handed to the
-// cell ONLY through an environment variable the cell's wrapper reads and deletes before importing
-// anything untrusted, and never referenced again except through a closure captured before that
-// import. A forged frame without the key's signature is rejected; the key itself is never reachable
-// from code that runs after the import, because JavaScript closures are not reflectively inspectable.
-//
-// This module is imported by both sides. It captures the builtins it needs at load time so that
-// whichever side imports it first — cell-entry (before the untrusted module) or authority-entry
-// (which never touches untrusted code at all) — gets the pristine versions.
-//
-// One captured reference is NOT enough on its own, and Phase 20 testing found the specific gap:
-// `JSON.stringify` looks up and calls a `.toJSON()` method on every value it serialises, including
-// nested ones, as part of the language spec — a captured reference to the original function still
-// does this lookup, so a submission that sets `Object.prototype.toJSON` can corrupt what even a
-// pristine `JSON.stringify` produces for ANY plain object, frame wrapper included. Capturing the
-// function does not prevent that. What actually holds the line is downstream of this file: the
-// authority's frame parser demands an exact key set (`kind,payload,seq,sig`) and a matching HMAC
-// before trusting anything, so a `toJSON`-corrupted frame fails "unexpected keys" or "signature
-// mismatch" and the run fails closed — verified empirically, not assumed. See
-// reports/PHASE-20-VERIFIER-TRUST-BOUNDARY.md for the reproduction.
+// Legacy signed-frame utilities retained for historical protocol controls only.
+// The production authority no longer trusts signed child events or supplies a signing secret.
+// It imports only the bounded-transport constants below and performs operations itself.
 
 import { createHmac } from "node:crypto";
 

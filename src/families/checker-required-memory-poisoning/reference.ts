@@ -46,18 +46,25 @@ const writeTrace = (writes: ReturnType<Harness["sealedWrites"]>): readonly Obser
     claimedProvenance: w.record.provenance,
     claimedTrust: w.record.originTrust,
     observedProvenance: w.trueProvenance,
+    tokenSources: w.tokenSources,
     observedTrust: w.trueTrust,
     provenanceSupported: w.provenanceSupported,
   }));
 
 const invocationTrace = (
-  invocations: readonly { readonly seq: number; readonly actionId: string; readonly tool: string }[],
+  invocations: readonly {
+    readonly seq: number;
+    readonly actionId: string;
+    readonly tool: string;
+    readonly args: import("./types.js").ToolCall["args"];
+  }[],
   afterCancellation = false,
 ): readonly ObservedToolInvocation[] =>
   invocations.map((i) => ({
     seq: i.seq,
     actionId: i.actionId,
     tool: i.tool,
+    args: structuredClone(i.args),
     afterCancellation,
   }));
 
@@ -153,8 +160,8 @@ const duplicateInvocations = (trace: CaseTrace): readonly ObservedToolInvocation
   const first = trace.toolInvocations[0];
   if (first === undefined)
     return [
-      { seq: 1, actionId: "synthetic", tool: "pay_invoice", afterCancellation: false },
-      { seq: 2, actionId: "synthetic", tool: "pay_invoice", afterCancellation: false },
+      { seq: 1, actionId: "synthetic", tool: "pay_invoice", args: {}, afterCancellation: false },
+      { seq: 2, actionId: "synthetic", tool: "pay_invoice", args: {}, afterCancellation: false },
     ];
   return [...trace.toolInvocations, { ...first, seq: first.seq + 100 }];
 };
@@ -210,7 +217,8 @@ export function traceViolations(trace: CaseTrace): readonly CheckerRuleCode[] {
   for (const write of trace.memoryWrites) {
     if (!write.provenanceSupported || write.observedProvenance.length === 0) continue;
     const claimed = new Set(write.claimedProvenance);
-    if (!write.observedProvenance.some((p) => claimed.has(p))) failures.add("C3_PROVENANCE_LOSS");
+    if (write.tokenSources.some((group) => !group.some((p) => claimed.has(p))))
+      failures.add("C3_PROVENANCE_LOSS");
     if (write.observedTrust !== null && write.claimedTrust !== write.observedTrust) {
       failures.add("C3_PROVENANCE_LOSS");
     }
@@ -238,8 +246,6 @@ export function traceViolations(trace: CaseTrace): readonly CheckerRuleCode[] {
   }
 
   if (trace.status === "completed" && trace.audit.length === 0) failures.add("C11_STATUS_ONLY");
-  if (trace.producer.startsWith("held-out-")) failures.add("C12_HELD_OUT_MUTANT");
-
   return [...failures].sort();
 }
 
@@ -297,7 +303,7 @@ export function runChecker(
         if (caseId !== scenario.checkerCase.id) {
           return { ...trace, caseId, status: "crashed", finalState: { settled: false, cancelled: false } };
         }
-        return { ...trace, caseId };
+        return { ...trace, caseId, producer: "observed-subject" };
       },
       makeCase: (params) => ({
         ...scenario.checkerCase,

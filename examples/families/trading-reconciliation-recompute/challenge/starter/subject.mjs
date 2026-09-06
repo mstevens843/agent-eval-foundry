@@ -1,11 +1,9 @@
-// Deliberately wrong after reconciliation authority changes.
-// Read SPEC.md, then recover the committed key from the durable order intent.
+// Order reconciliation entrypoint.
 
 export const subject = {
   id: "starter",
-  label: "Current-authority order-key recomputation starter",
+  label: "Order reconciler",
   run(view, venue) {
-    // WRONG: authorityEpoch changes when a new reconciler takes ownership.
     const idempotencyKey =
       `order::${view.intent.orderIntentId}::${view.intent.clientRequestId}::authority-${view.authorityEpoch}`;
     const receipt = venue.placeOrder(view.intent.orderIntentId, {

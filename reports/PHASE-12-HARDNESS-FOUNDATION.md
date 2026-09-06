@@ -6,7 +6,7 @@ The recompute descendant is now a built, routable, leak-checked calibration fami
 identity and construction recipe are separate schema dimensions, so a controlled verifier,
 specification, starter or selection change no longer has to pretend it introduced a mechanism.
 
-The ledger contains 10 operators: 5 validity controls, 3 difficulty operators, and 2 scenario-selection operators.
+The ledger contains 12 operators: 6 validity controls, 4 difficulty operators, and 2 scenario-selection operators.
 The local target stratum catches the narrow recompute mutant 18/18 while its own confirmations remain green 18/18.
 
 ## Corrections preserved

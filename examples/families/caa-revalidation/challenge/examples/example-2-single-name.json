@@ -1,0 +1,14 @@
+{
+  "view": {
+    "orderId": "order-19-1",
+    "nowHour": 1019,
+    "names": [
+      {
+        "fqdn": "n1-s19.example",
+        "validatedAtHour": 995,
+        "cachedCaa": "ALLOW"
+      }
+    ]
+  },
+  "note": "One name, older than the window. It must be rechecked under its own fqdn before the order is decided."
+}

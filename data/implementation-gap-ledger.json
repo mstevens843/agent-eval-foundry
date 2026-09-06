@@ -1,0 +1,588 @@
+{
+  "schemaVersion": 1,
+  "scope": "Package-first implementation program. Proof links are tracked sources/tests, not green claims based on private handoffs. Owners are prompts 1 through 7; pending external qualification is not engineering completion.",
+  "gaps": [
+    {
+      "id": "G1",
+      "source": "System G1; package S1/S2",
+      "packageId": null,
+      "owner": 3,
+      "status": "blocked",
+      "summary": "Two protected routes repaired; ten legacy routes still need independent collection and execution controls.",
+      "dependencies": [],
+      "proof": [
+        "test/package-authority-boundary.test.ts",
+        "src/trials/migration.ts"
+      ],
+      "nextAction": "Preserve existing memory/CAA authority repairs and implement/test all remaining protected routes."
+    },
+    {
+      "id": "G2",
+      "source": "System G2",
+      "packageId": null,
+      "owner": 1,
+      "status": "verified",
+      "summary": "Package stages are authoritative across ship, production, execution and intake; legacy readiness fields cannot authorize execution or release.",
+      "dependencies": [],
+      "proof": [
+        "src/packages/policy.ts",
+        "test/package-evidence-decisions.test.ts"
+      ],
+      "nextAction": "Retain the Prompt 1 regressions. Later implementation owners must supply actual package/runtime assurance and must not reinterpret this closure as qualification."
+    },
+    {
+      "id": "G3",
+      "source": "System G3; package S3",
+      "packageId": null,
+      "owner": 1,
+      "status": "verified",
+      "summary": "Exact scenario sets and typed semantic/provider/artifact/collector/verifier outcomes supplement host errors; modern directory ingestion rechecks envelopes.",
+      "dependencies": [],
+      "proof": [
+        "src/trials/outcome.ts",
+        "src/trials/orchestrator.ts",
+        "test/package-evidence-decisions.test.ts"
+      ],
+      "nextAction": "Retain the Prompt 1 regressions. Later implementation owners must supply actual package/runtime assurance and must not reinterpret this closure as qualification."
+    },
+    {
+      "id": "G4",
+      "source": "System G4",
+      "packageId": null,
+      "owner": 2,
+      "status": "blocked",
+      "summary": "Identity and stage checks cannot turn a metadata probe into executed route assurance.",
+      "dependencies": [
+        "G2",
+        "G5"
+      ],
+      "proof": [
+        "src/adversarial-audit/probes.ts"
+      ],
+      "nextAction": "Emit and consume real same-route reference/alternative/negative/control receipts; retain unknown status for unexecuted checks."
+    },
+    {
+      "id": "G5",
+      "source": "System G5; package S3",
+      "packageId": null,
+      "owner": 1,
+      "status": "verified",
+      "summary": "Complete component identities, immutable CAS and byte-verified current/historical/regrade views replace metadata precedence for new package evidence.",
+      "dependencies": [],
+      "proof": [
+        "src/packages/record.ts",
+        "src/packages/evidence.ts",
+        "test/package-evidence-decisions.test.ts"
+      ],
+      "nextAction": "Retain the Prompt 1 regressions. Later implementation owners must supply actual package/runtime assurance and must not reinterpret this closure as qualification."
+    },
+    {
+      "id": "G6",
+      "source": "System G6",
+      "packageId": null,
+      "owner": 2,
+      "status": "blocked",
+      "summary": "Native CAA exists but shared assembly/export is incomplete; drafts and placeholder code are not finished packages.",
+      "dependencies": [
+        "G2",
+        "G5"
+      ],
+      "proof": [
+        "tasks/caa-revalidation-repair/task.toml",
+        "src/packages/source.ts"
+      ],
+      "nextAction": "Complete one reproducible native CAA production/export path using the package-record seed."
+    },
+    {
+      "id": "G7",
+      "source": "System G7",
+      "packageId": null,
+      "owner": 6,
+      "status": "blocked",
+      "summary": "Funnel ranking still rewards intermediate measurement more than valid distinct hard packages.",
+      "dependencies": [
+        "G6",
+        "G11"
+      ],
+      "proof": [
+        "src/foundry/adaptive-funnel.ts"
+      ],
+      "nextAction": "Select by complete package yield, explicit costs and evidence-backed promise; keep cheap validity checks separate from expensive decomposition."
+    },
+    {
+      "id": "G8",
+      "source": "System G8",
+      "packageId": null,
+      "owner": 2,
+      "status": "blocked",
+      "summary": "Reusable standards need executable implementations and per-domain adapters, not universal difficulty recipes.",
+      "dependencies": [
+        "G2",
+        "G5"
+      ],
+      "proof": [
+        "src/packages/policy.ts"
+      ],
+      "nextAction": "Implement reusable authority/positive-work/alternative-solution components through the native package path."
+    },
+    {
+      "id": "G9",
+      "source": "System G9",
+      "packageId": null,
+      "owner": 5,
+      "status": "blocked",
+      "summary": "Declared model settings are not effective runtime attestation; authoring and grading isolation must stay distinct.",
+      "dependencies": [
+        "G2",
+        "G5"
+      ],
+      "proof": [
+        "src/trials/providers.ts",
+        "src/trials/orchestrator.ts"
+      ],
+      "nextAction": "Bind exact model/effort/scaffold/image/argv/profile identity to authorized reservations and captures."
+    },
+    {
+      "id": "G10",
+      "source": "System G10",
+      "packageId": null,
+      "owner": 5,
+      "status": "blocked",
+      "summary": "Real provider adapters are now deliberately disabled; durable reservations, spend caps, cancellation and atomic run publication remain to implement.",
+      "dependencies": [
+        "G2",
+        "G5"
+      ],
+      "proof": [
+        "src/packages/policy.ts",
+        "src/trials/providers.ts",
+        "src/trials/directory.ts"
+      ],
+      "nextAction": "Implement budgeted durable execution with inert fault-injection tests before accepting real authorization."
+    },
+    {
+      "id": "G11",
+      "source": "System G11; corrected outbox evidence",
+      "packageId": null,
+      "owner": 6,
+      "status": "blocked",
+      "summary": "Findings/withdrawal workflow is not fully integrated; six preserved outbox zeroes do not establish six fair capability failures.",
+      "dependencies": [
+        "G3",
+        "G5"
+      ],
+      "proof": [
+        "test/zz-outbox-probe.test.ts",
+        "src/trials/root-cause.ts"
+      ],
+      "nextAction": "Build evidence-linked findings, correction/withdrawal propagation and specific-versus-conceptual transfer records."
+    },
+    {
+      "id": "G12",
+      "source": "System G12",
+      "packageId": null,
+      "owner": 4,
+      "status": "blocked",
+      "summary": "Isomorphic recovery-key kernels do not prove a diverse professional portfolio.",
+      "dependencies": [
+        "G6"
+      ],
+      "proof": [
+        "src/families/dao-descendant/runner.ts",
+        "src/families/trading-reconciliation-recompute/runner.ts"
+      ],
+      "nextAction": "Build distinct professional workloads and record essential-solution diversity; retain calibration roles honestly."
+    },
+    {
+      "id": "G13",
+      "source": "System G13",
+      "packageId": null,
+      "owner": 6,
+      "status": "blocked",
+      "summary": "Total-cycle cost/yield and prospective 1000-task production are uncalibrated.",
+      "dependencies": [
+        "G9",
+        "G10",
+        "G11"
+      ],
+      "proof": [
+        "src/trials/types.ts"
+      ],
+      "nextAction": "Measure construction, validation, invalid execution and qualified distinct-package yield; never turn null costs into zero."
+    },
+    {
+      "id": "G14",
+      "source": "System G14",
+      "packageId": null,
+      "owner": 7,
+      "status": "blocked",
+      "summary": "Prompt 1 captures baseline and repairs scoped history; full clean-checkout integration and cheap mandatory test tiers remain.",
+      "dependencies": [
+        "HISTORY-1",
+        "G2",
+        "G3",
+        "G5"
+      ],
+      "proof": [
+        "reports/PROMPT-01-PACKAGE-EVIDENCE.md"
+      ],
+      "nextAction": "Close owned baseline failures, run all tiers, publish pass/fail/skip counts and remove misleading public/generated claims."
+    },
+    {
+      "id": "HISTORY-1",
+      "source": "Phase 14 compatibility failures",
+      "packageId": null,
+      "owner": 1,
+      "status": "verified",
+      "summary": "Read registered historical variants against their frozen parent, not current source; Phase 14 uses locked retained Phase 13 calibration instead of reissuing old campaigns.",
+      "dependencies": [
+        "G5"
+      ],
+      "proof": [
+        "src/packages/history.ts",
+        "data/package-history-lock.json",
+        "test/phase-14-operator-effects.test.ts"
+      ],
+      "nextAction": "Retain the Prompt 1 regressions. Later implementation owners must supply actual package/runtime assurance and must not reinterpret this closure as qualification."
+    },
+    {
+      "id": "STATUS-1",
+      "source": "Read-only status audit",
+      "packageId": null,
+      "owner": 1,
+      "status": "verified",
+      "summary": "Package inspection and current challenge hashing are read-only; campaign counts exclude unrelated runs and expose historical observations separately.",
+      "dependencies": [
+        "G5"
+      ],
+      "proof": [
+        "src/packages/command.ts",
+        "src/trials/run.ts",
+        "src/trials/campaign-run.ts"
+      ],
+      "nextAction": "Retain the Prompt 1 regressions. Later implementation owners must supply actual package/runtime assurance and must not reinterpret this closure as qualification."
+    },
+    {
+      "id": "E1",
+      "source": "Engineering sampler copying",
+      "packageId": null,
+      "owner": 2,
+      "status": "blocked",
+      "summary": "Avoidable quadratic sampler copying remains.",
+      "dependencies": [],
+      "proof": [
+        "src/foundry/sample.ts"
+      ],
+      "nextAction": "Preserve deterministic behavior with an efficient sampling implementation and scale checks."
+    },
+    {
+      "id": "E2",
+      "source": "Engineering eager scenarios",
+      "packageId": null,
+      "owner": 2,
+      "status": "blocked",
+      "summary": "Scenario generation/repeated construction needs profiling and selected-only generation where semantics permit.",
+      "dependencies": [],
+      "proof": [
+        "src/trials/router.ts"
+      ],
+      "nextAction": "Avoid repeated full construction without changing frozen scenario identities."
+    },
+    {
+      "id": "E3",
+      "source": "Engineering Jaccard contract",
+      "packageId": null,
+      "owner": 2,
+      "status": "blocked",
+      "summary": "Clustering implementation and documented pairwise guarantee disagree.",
+      "dependencies": [],
+      "proof": [
+        "src/similarity.ts"
+      ],
+      "nextAction": "Resolve the intended contract, implement it and test a non-transitive similarity counterexample."
+    },
+    {
+      "id": "E4",
+      "source": "Engineering matrix/report performance",
+      "packageId": null,
+      "owner": 7,
+      "status": "blocked",
+      "summary": "Command-level evidence contexts, memory/storage budgets and repeated matrix analysis need measured optimization.",
+      "dependencies": [
+        "STATUS-1"
+      ],
+      "proof": [
+        "src/reports/evidence.ts"
+      ],
+      "nextAction": "Profile representative small/large workloads before selecting bounded caches or algorithmic changes."
+    },
+    {
+      "id": "PKG-CONTAINMENT",
+      "source": "Package audit 1",
+      "packageId": "prompt-injection-containment",
+      "owner": 3,
+      "status": "blocked",
+      "summary": "Payload/population/history repairs exist; protected execution and independent correct alternatives remain. Tiny policy kernel is calibration.",
+      "dependencies": [
+        "G1"
+      ],
+      "proof": [
+        "test/package-semantic-integrity.test.ts"
+      ],
+      "nextAction": "Implement protected parity and valid-alternative controls; Prompt 4 must explicitly retain calibration or build meaningful new substance."
+    },
+    {
+      "id": "PKG-MEMORY",
+      "source": "Package audit 2",
+      "packageId": "prompt-injection-memory-poisoning",
+      "owner": 4,
+      "status": "blocked",
+      "summary": "Authority/stable-facade/late-history controls repaired; still synthetic explicit policy, not an UNKNOWN reconciliation task.",
+      "dependencies": [
+        "G6"
+      ],
+      "proof": [
+        "test/package-authority-boundary.test.ts",
+        "test/memory-facade-contract.test.ts"
+      ],
+      "nextAction": "Build coherent multi-file persistence/provenance/authority changes with real alternatives; do not reuse invalid host-failure signatures."
+    },
+    {
+      "id": "PKG-UI",
+      "source": "Package audit 3",
+      "packageId": "ui-action-record-replay",
+      "owner": 3,
+      "status": "blocked",
+      "summary": "Legacy route and complete replay attempt/value/order checking remain; old capability labels were disputed.",
+      "dependencies": [
+        "G1"
+      ],
+      "proof": [
+        "src/families/ui-action-record-replay/verify.ts"
+      ],
+      "nextAction": "Finish protected all-attempt validation and controls; Prompt 4 builds genuine browser interaction, not selector puzzle volume."
+    },
+    {
+      "id": "PKG-LIVE-DOM",
+      "source": "Package audit 4",
+      "packageId": "ui-replay-live-dom",
+      "owner": 3,
+      "status": "blocked",
+      "summary": "Settling/precondition signal is narrow with unpinned effort; protected route, attempted-effect checks and expert evidence remain.",
+      "dependencies": [
+        "G1"
+      ],
+      "proof": [
+        "src/families/ui-replay-live-dom/verify.ts"
+      ],
+      "nextAction": "Check actual action-time freshness and legitimate delayed alternatives through protected execution."
+    },
+    {
+      "id": "PKG-CHECKER",
+      "source": "Package audit 5",
+      "packageId": "checker-required-memory-poisoning",
+      "owner": 3,
+      "status": "blocked",
+      "summary": "makeCase API remains incomplete; label-proxy/provenance/facade fixes do not complete checker construction or protected grading.",
+      "dependencies": [
+        "G1"
+      ],
+      "proof": [
+        "test/package-checker-integrity.test.ts"
+      ],
+      "nextAction": "Implement real case construction/registry and protected checker execution; preserve intentional old scenario pin."
+    },
+    {
+      "id": "PKG-ACCESS",
+      "source": "Package audit 6",
+      "packageId": "access-token-scope-expansion",
+      "owner": 3,
+      "status": "blocked",
+      "summary": "Scope/token/payload/population controls improved; small policy geometry and unprotected route remain.",
+      "dependencies": [
+        "G1"
+      ],
+      "proof": [
+        "src/families/access-token-scope-expansion/verify.ts"
+      ],
+      "nextAction": "Protected route, independently correct strategies and non-strawman near misses; keep calibration unless professional expansion is justified."
+    },
+    {
+      "id": "PKG-WALLET",
+      "source": "Package audit 7",
+      "packageId": "delegated-wallet-scope-reconciliation",
+      "owner": 4,
+      "status": "blocked",
+      "summary": "Owner/delegate/payload/population controls improved; actual changing authority and collateral obligations need coherent substrate.",
+      "dependencies": [
+        "G1",
+        "G6"
+      ],
+      "proof": [
+        "src/families/delegated-wallet-scope-reconciliation/verify.ts"
+      ],
+      "nextAction": "Construct a distinct multi-file wallet reconciliation task with protected effects, attainable resolution and alternative strategies."
+    },
+    {
+      "id": "PKG-CAA-KERNEL",
+      "source": "Package audit 8",
+      "packageId": "caa-revalidation",
+      "owner": 2,
+      "status": "blocked",
+      "summary": "Protected authority and actual query semantics repaired; small function remains calibration, distinct from native CAA.",
+      "dependencies": [
+        "G5"
+      ],
+      "proof": [
+        "test/package-authority-boundary.test.ts"
+      ],
+      "nextAction": "Retain kernel controls as reusable calibration; prioritize native service assembly and verify no source/identity conflation."
+    },
+    {
+      "id": "PKG-DAO",
+      "source": "Package audit 9",
+      "packageId": "dao-descendant",
+      "owner": 3,
+      "status": "blocked",
+      "summary": "Wrong-payload/foreign-effect omissions fixed; tiny stable-key kernel and legacy route remain.",
+      "dependencies": [
+        "G1",
+        "HISTORY-1"
+      ],
+      "proof": [
+        "test/package-semantic-integrity.test.ts"
+      ],
+      "nextAction": "Protected execution and explicit calibration disposition; do not call this the successful native outbox service."
+    },
+    {
+      "id": "PKG-TRADING",
+      "source": "Package audit 10",
+      "packageId": "trading-reconciliation-recompute",
+      "owner": 3,
+      "status": "blocked",
+      "summary": "Descriptor/effect repairs exist; isomorphic key recovery is not a real reconciliation service or diverse task.",
+      "dependencies": [
+        "G1",
+        "HISTORY-1"
+      ],
+      "proof": [
+        "test/package-semantic-integrity.test.ts"
+      ],
+      "nextAction": "Protected controls and calibration disposition; any expansion must add task-native venue receipts/collateral correctness."
+    },
+    {
+      "id": "PKG-ROLLBACK",
+      "source": "Package audit 11",
+      "packageId": "deployment-rollback-recompute",
+      "owner": 3,
+      "status": "blocked",
+      "summary": "Committed rollback payload/foreign effects repaired; small isomorphic key kernel still lacks real deployment substrate.",
+      "dependencies": [
+        "G1",
+        "HISTORY-1"
+      ],
+      "proof": [
+        "test/package-semantic-integrity.test.ts"
+      ],
+      "nextAction": "Protected parity and calibration disposition; require materially different restoration/collateral work before professional promotion."
+    },
+    {
+      "id": "PKG-ALIAS",
+      "source": "Package audit 12",
+      "packageId": "deployment-model-alias-rollout-drift",
+      "owner": 4,
+      "status": "blocked",
+      "summary": "Population/duplicate repairs exist; protected rollout/telemetry/cache interactions and actual cleanup correctness remain.",
+      "dependencies": [
+        "G1",
+        "G6"
+      ],
+      "proof": [
+        "src/families/deployment-model-alias-rollout-drift/verify.ts"
+      ],
+      "nextAction": "Build coherent multi-surface rollout task, alternatives and independent collector; preserve old external campaign evidence as historical."
+    },
+    {
+      "id": "PKG-NATIVE-CAA",
+      "source": "Package audit 13",
+      "packageId": "caa-revalidation-repair",
+      "owner": 2,
+      "status": "blocked",
+      "summary": "Real service, independent alternatives and local Docker controls exist; bounded stream collection, source-ban alternatives, runtime pinning and destination checks remain.",
+      "dependencies": [
+        "G2",
+        "G5"
+      ],
+      "proof": [
+        "tasks/caa-revalidation-repair/tests/collect.py",
+        "src/packages/source.ts"
+      ],
+      "nextAction": "Use native seed to finish reproducible assembly/export, bounded stdout/stderr, valid alternatives and required static/native tests."
+    },
+    {
+      "id": "PKG-BROWSER",
+      "source": "Adjacent browser prototype",
+      "packageId": "ui-replay-browser-backed",
+      "owner": 4,
+      "status": "blocked",
+      "summary": "A built-in browser demonstration is not protected grading of arbitrary submitted implementations.",
+      "dependencies": [
+        "G6",
+        "PKG-UI",
+        "PKG-LIVE-DOM"
+      ],
+      "proof": [
+        "src/families/ui-replay-browser-backed/runner.ts"
+      ],
+      "nextAction": "Complete a real browser professional package, isolated submission route and independent observed actions."
+    },
+    {
+      "id": "PUBLIC-CONTRACTS",
+      "source": "Package S4; remaining public cues",
+      "packageId": null,
+      "owner": 4,
+      "status": "blocked",
+      "summary": "Common opaque manifest and misleading prose repaired; each substantive package still needs contract/selection-cue/alternative-solution review.",
+      "dependencies": [
+        "G6"
+      ],
+      "proof": [
+        "test/package-public-surface.test.ts"
+      ],
+      "nextAction": "Review all visible artifacts without deleting necessary domain information or hiding rules."
+    },
+    {
+      "id": "QUALIFICATION",
+      "source": "User destination acceptance requirements",
+      "packageId": null,
+      "owner": 7,
+      "status": "pending-external",
+      "summary": "Independent expert-time/fairness review, exact-target standard/adversarial runs and destination acceptance remain unmeasured on revised packages.",
+      "dependencies": [
+        "G4",
+        "G9",
+        "G10"
+      ],
+      "proof": [
+        "src/packages/policy.ts"
+      ],
+      "nextAction": "Obtain separate explicit authority only after required local package gates; never label local controls or ambiguous historical zeroes as qualification."
+    },
+    {
+      "id": "EXECUTION-TESTS-1",
+      "source": "Prompt 1 integration verification",
+      "packageId": null,
+      "owner": 5,
+      "status": "blocked",
+      "summary": "Three legacy shell-adapter tests require unreserved subprocess execution; the new deny-by-default boundary intentionally prevents that route. No test is skipped or weakened.",
+      "dependencies": [
+        "G10"
+      ],
+      "proof": [
+        "test/orchestration.test.ts",
+        "src/packages/policy.ts"
+      ],
+      "nextAction": "Implement reserved process execution with inert fault fixtures and restore timeout, artifact classification and usage capture tests. Reproduce: pnpm exec vitest run test/orchestration.test.ts."
+    }
+  ]
+}

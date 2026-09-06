@@ -12,7 +12,7 @@ the durable rollback intent and the idempotent deployment-controller facade.
 |---|---|
 | `SPEC.md` | the complete normative rules and hidden-scenario dimensions |
 | `types.ts` | the public subject and controller interfaces |
-| `starter/subject.mjs` | a deliberately incorrect authority-epoch implementation |
+| `starter/subject.mjs` | the existing rollback implementation |
 | `examples/` | visible examples of the public recovery view |
 
 ## What you must produce

@@ -47,7 +47,7 @@ is a reading about the operator in either direction.
 - `mp-sonnet-1`
 
 
-**Withdrawn evidence.** `mp-claude-1`, `mp-claude-2`, `mp-claude-3`, `mp-claude-r1`, `mp-claude-r2`, `mp-claude-r3`, `mp-codex-1`, `mp-codex-2`, `mp-codex-3`, `mp-haiku-1`, `mp-sonnet-1` were invalidated by the 2026-09-01 `prompt-injection-memory-poisoning` challenge migration: they were graded against a package this repository no longer produces, so those rows do not count and every number on them is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read these rows as spend that was made, not as a result about the family as it stands.
+**Withdrawn evidence.** `mp-claude-1`, `mp-claude-2`, `mp-claude-3`, `mp-claude-r1`, `mp-claude-r2`, `mp-claude-r3`, `mp-codex-1`, `mp-codex-2`, `mp-codex-3`, `mp-haiku-1`, `mp-sonnet-1` were invalidated by the 2026-09-05 `prompt-injection-memory-poisoning` challenge migration: they were graded against a package this repository no longer produces, so those rows do not count and every number on them is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read these rows as spend that was made, not as a result about the family as it stands.
 
 ## The operator's knob: `sessionsBetween`
 

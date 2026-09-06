@@ -18,12 +18,12 @@ import {
 import { loadCampaigns } from "../src/trials/campaign.js";
 import { prepareProviderBundle } from "../src/trials/cross-provider.js";
 import { readFamilyTrials } from "../src/trials/directory.js";
-import { prepareChallenge } from "../src/trials/run.js";
+import { currentChallenge, prepareChallenge } from "../src/trials/run.js";
 import type { TrialSet } from "../src/trials/types.js";
 
 const ROOT = new URL("..", import.meta.url).pathname;
 const FAMILY_ID = "deployment-model-alias-rollout-drift";
-const CHALLENGE_HASH = "805efb58c923f9e081db1b41967392d7";
+const CHALLENGE_HASH = currentChallenge(ROOT, FAMILY_ID).hash;
 const SCENARIO_SET_ID = "drift-339-590affe3";
 
 const writeJson = (path: string, value: unknown) =>
@@ -123,8 +123,12 @@ describe("external deployment-alias evidence intake", () => {
     const { dir } = returnedPacket();
     const result = validate(dir);
 
-    expect(result.countable).toBe(true);
-    expect(result.importedTrialEligible).toBe(true);
+    expect(result.packetValid).toBe(true);
+    expect(result.countable).toBe(false);
+    expect(result.importedTrialEligible).toBe(false);
+    expect(result.packageDecision?.stages["trial-eligible"].blockers).toContain(
+      "content-verified-package-missing",
+    );
     expect(result.findings).toEqual([]);
     expect(result.packet.actualChallengeHash).toBe(CHALLENGE_HASH);
     expect(result.packet.verifierRunId).toBe("deployment-alias-external-valid");
@@ -260,7 +264,7 @@ describe("external deployment-alias evidence intake", () => {
     expect(human).toContain("Human-ready is not human-evidenced");
   });
 
-  it("labels a countable non-OpenAI packet as smoke presence, not difficulty by itself", () => {
+  it("does not turn a structurally valid packet into smoke or difficulty evidence", () => {
     const prepared = prepareChallenge(ROOT, FAMILY_ID);
     const anthropic = validate(
       returnedPacket({
@@ -278,9 +282,9 @@ describe("external deployment-alias evidence intake", () => {
       intakeResults: [anthropic],
     });
 
-    expect(anthropic.countable).toBe(true);
-    expect(external).toContain("cross-lab smoke presence");
-    expect(external).toContain("diagnosis report decides whether it is cross-lab difficulty");
+    expect(anthropic.packetValid).toBe(true);
+    expect(anthropic.countable).toBe(false);
+    expect(external).toContain("No cross-lab smoke claim exists");
   });
 
   it("plans the OpenAI half-matrix without satisfying cross-lab or /6 readiness", () => {

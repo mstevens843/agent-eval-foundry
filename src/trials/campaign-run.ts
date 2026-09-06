@@ -11,9 +11,15 @@
 // tool that quietly rewrites its own pre-registration to match the outcome is not a pre-registration.
 
 import { join } from "node:path";
+import {
+  type PackageDecision,
+  type PackagePolicyInput,
+  assertPackageStage,
+  decidePackage,
+} from "../packages/policy.js";
 import { type CampaignPlan, type CampaignSlot, assertCampaignChallenge } from "./campaign.js";
 import { readFamilyTrials } from "./directory.js";
-import { gateByChallengeHash, prepareChallenge, runAgentTrial } from "./run.js";
+import { currentChallenge, gateByChallengeHash, hashChallengeDir, runAgentTrial } from "./run.js";
 import type { TrialRecord } from "./types.js";
 
 export interface SlotOutcome {
@@ -41,6 +47,7 @@ export interface CampaignRunResult {
 }
 
 export interface CampaignRunOptions {
+  readonly packagePolicy?: PackagePolicyInput;
   readonly root: string;
   readonly plan: CampaignPlan;
   /** Only run these slot ids. Empty means every runnable slot. */
@@ -59,11 +66,15 @@ export interface CampaignRunOptions {
  */
 export function runCampaign(options: CampaignRunOptions): CampaignRunResult {
   const { root, plan } = options;
+  assertPackageStage(
+    { ...(options.packagePolicy ?? { checks: {} }), expectedFamilyId: options.plan.familyId },
+    "trial-authorized",
+  );
 
   // Before anything runs: the plan's challenge hash must still describe the family. A campaign
   // executed against a drifted challenge produces trials that cannot count, and finding that out
   // after spending the budget is the expensive way to learn it.
-  const prepared = prepareChallenge(root, plan.familyId);
+  const prepared = currentChallenge(root, plan.familyId);
   assertCampaignChallenge(plan, prepared.hash);
 
   const outcomes: SlotOutcome[] = [];
@@ -140,6 +151,8 @@ export function runCampaign(options: CampaignRunOptions): CampaignRunResult {
 }
 
 export interface Reconciliation {
+  readonly packageDecision: PackageDecision;
+  readonly historicalRecords: readonly TrialRecord[];
   readonly plan: CampaignPlan;
   readonly challengeCurrent: string;
   readonly challengeMatches: boolean;
@@ -154,8 +167,12 @@ export interface Reconciliation {
 }
 
 /** Compare a plan against the trial directories, without changing either. */
-export function reconcile(root: string, plan: CampaignPlan): Reconciliation {
-  const prepared = prepareChallenge(root, plan.familyId);
+export function reconcile(
+  root: string,
+  plan: CampaignPlan,
+  packagePolicy?: PackagePolicyInput,
+): Reconciliation {
+  const prepared = currentChallenge(root, plan.familyId);
   const dirs = readFamilyTrials(join(root, "trials"), plan.familyId);
   const byRunId = new Map(dirs.map((d) => [d.runId, d]));
   const claimed = new Set(plan.slots.map((s) => s.runId).filter((r): r is string => r !== null));
@@ -195,12 +212,30 @@ export function reconcile(root: string, plan: CampaignPlan): Reconciliation {
   const stale = new Set(gated.gates.filter((g) => !g.matches).map((g) => g.runId));
 
   return {
+    packageDecision: decidePackage({ ...(packagePolicy ?? { checks: {} }), expectedFamilyId: plan.familyId }),
+    historicalRecords: dirs
+      .filter(
+        (d) =>
+          claimed.has(d.runId) &&
+          d.record.counts &&
+          d.record.status === "completed" &&
+          gated.gates.some(
+            (g) => g.runId === d.runId && g.integrity !== "mismatch" && g.integrity !== "unavailable",
+          ) &&
+          hashChallengeDir(join(d.path, "challenge")) === plan.challengeHash,
+      )
+      .map((d) => d.record),
     plan,
     challengeCurrent: prepared.hash,
     challengeMatches: prepared.hash === plan.challengeHash,
     disagreements,
     orphanRuns: dirs.map((d) => d.runId).filter((id) => !claimed.has(id) && !stale.has(id)),
-    countedRecords: dirs.filter((d) => d.record.counts && !stale.has(d.runId)).map((d) => d.record),
+    countedRecords: dirs
+      .filter(
+        (d) =>
+          claimed.has(d.runId) && d.record.counts && d.record.status === "completed" && !stale.has(d.runId),
+      )
+      .map((d) => d.record),
     supersededRuns: [...stale].sort(),
   };
 }

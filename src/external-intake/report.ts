@@ -8,7 +8,7 @@ import {
   auditExternalEvidencePacket,
   externalPacketAuditFindings,
 } from "./packet.js";
-import type { ExternalIntakeValidationResult, ExternalPacketAudit, ExternalProviderFamily } from "./types.js";
+import type { ExternalIntakeValidationResult, ExternalPacketAudit } from "./types.js";
 
 const PROVIDERS = ["claude", "gemini", "external"] as const;
 
@@ -83,16 +83,13 @@ export function renderExternalIntakeReport(input: {
     const runId = result.packet.metadata?.runId;
     return runId !== null && runId !== undefined && isSupersededRun(runId, ledgers);
   };
-  const counted = input.intakeResults.filter((result) => result.countable && !withdrawn(result));
-  const noCount = input.intakeResults.filter((result) => !result.countable);
+  // These are packet-validation receipts, not host-graded trial observations. Preserve legacy
+  // assertions without promoting an imported `countable` flag into a current semantic claim.
+  const historicallyClaimed = input.intakeResults.filter((result) => result.countable);
   const stillWithdrawn = input.intakeResults.filter(withdrawn);
-  const countedFamilies = providerFamilies(counted);
   const intakeNote = staleRunNote(
     input.intakeResults.map((result) => result.packet.metadata?.runId ?? "").filter((runId) => runId !== ""),
     ledgers,
-  );
-  const nonOpenAiFamilies = countedFamilies.filter(
-    (family) => !["openai", "external", "manual", "unknown"].includes(family),
   );
   return [
     `# ${input.familyId} external evidence intake`,
@@ -107,8 +104,9 @@ export function renderExternalIntakeReport(input: {
     `| expected scenario set | \`${input.expectedScenarioSetId}\` |`,
     `| prepared packets | ${input.packetAudits.filter((audit) => audit.present).length}/${input.packetAudits.length} |`,
     `| imported returned packets | ${input.intakeResults.length} |`,
-    `| countable returned packets | ${counted.length} |`,
-    `| preserved no-count packets | ${noCount.length} |`,
+    "| current semantic evaluations established by packet validation alone | 0 |",
+    `| legacy packet countability assertions preserved | ${historicallyClaimed.length} |`,
+    `| preserved packets requiring separate graded evidence | ${input.intakeResults.length} |`,
     `| withdrawn by a challenge migration | ${stillWithdrawn.length} |`,
     "",
     "## Prepared Packets",
@@ -131,7 +129,7 @@ export function renderExternalIntakeReport(input: {
     input.intakeResults.length === 0
       ? "No returned external packets have been imported yet."
       : [
-          "| run | provider family | status | countable | reason |",
+          "| run | provider family | status | original packet countability (not current grading) | reason |",
           "|---|---|---|---|---|",
           ...input.intakeResults.map((result) => {
             const metadata = result.packet.metadata;
@@ -152,34 +150,23 @@ export function renderExternalIntakeReport(input: {
     "- Hidden verifier, reference, scenario, mutant or answer-matrix artifacts contaminate the packet.",
     "- Provider and model identity must be explicit; external/manual is not a provider-lab claim.",
     "- A verifier output file must name the same `runId` as the metadata.",
+    "- Packet validation never establishes a complete semantic evaluation. Inspect the separately preserved, package-bound host grading to determine that.",
     "",
     "## Cross-Lab Boundary",
     "",
-    `Current countable external provider families: ${countedFamilies.join(", ") || "none"}.`,
-    nonOpenAiFamilies.length > 0
-      ? "A non-OpenAI completed run has imported cleanly under this hash. That is cross-lab smoke presence; the diagnosis report decides whether it is cross-lab difficulty or a provider-delta solve."
-      : stillWithdrawn.length > 0
-        ? [
-            "**The cross-lab smoke claim is WITHDRAWN.** A non-OpenAI packet did import cleanly, and the",
-            "hash it imported against is not the hash this family produces now, so it establishes neither",
-            "cross-lab presence nor a provider-delta solve. There is no cross-lab claim of any kind on this",
-            "family until a non-OpenAI completed run imports cleanly under the current hash.",
-          ].join(" ")
-        : "No cross-lab smoke claim exists until a non-OpenAI completed run imports cleanly under this hash.",
+    "Current countable external provider families established by packet validation alone: none.",
+    stillWithdrawn.length > 0
+      ? [
+          "**The cross-lab smoke claim is WITHDRAWN.** A non-OpenAI packet did import cleanly, and the",
+          "hash it imported against is not the hash this family produces now, so it establishes neither",
+          "cross-lab presence nor a provider-delta solve. There is no cross-lab claim of any kind on this",
+          "family until a non-OpenAI completed run imports cleanly under the current hash.",
+        ].join(" ")
+      : "No cross-lab smoke claim exists from packet validation alone; content-verified complete host grading is required.",
     "",
     "---",
     "",
     "Generated by `agent-eval-foundry`. Deterministic - no timestamp, diffable.",
     "",
   ].join("\n");
-}
-
-function providerFamilies(results: readonly ExternalIntakeValidationResult[]): readonly string[] {
-  return [
-    ...new Set(
-      results
-        .map((result) => result.packet.metadata?.providerFamily)
-        .filter((family): family is ExternalProviderFamily => family !== null && family !== undefined),
-    ),
-  ].sort();
 }

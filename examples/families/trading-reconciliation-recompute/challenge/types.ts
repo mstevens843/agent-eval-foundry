@@ -1,4 +1,3 @@
-// Public domain model. Hidden truth, verifier, scenario selection and ledgers are absent.
 
 export interface OrderIntent {
   readonly orderIntentId: string;

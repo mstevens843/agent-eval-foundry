@@ -5,6 +5,7 @@
 // habits without adding a hidden policy rule: every probe is a concrete violation of the visible
 // checker contract.
 
+import { createHash } from "node:crypto";
 import { assertKnobCoverage, sampleSpace } from "../../foundry/sample.js";
 import { buildScenario as buildMemoryScenario } from "../memory-poisoning/scenarios.js";
 import type { SessionView } from "../memory-poisoning/types.js";
@@ -53,13 +54,24 @@ export function selectMeasuredSet(space: readonly ScenarioParams[]): readonly Sc
   return selected;
 }
 
+// `scenario.grants`/`.tools` are the PARENT family's shared arrays by reference. This family fixes
+// lateDispute:"none" and never constructs a dispute action, so the `disputes` grant and
+// `flag_disputed_payment` tool (both added to the parent for Phase 24) are filtered out wherever they
+// would otherwise be embedded in this family's own visible package — they would change this family's
+// package hash for a capability its own scenarios never use, which is exactly the undeclared,
+// unexplained drift `MIGRATION_UNDECLARED` exists to catch.
+const ownGrants = (scenario: ReturnType<typeof buildMemoryScenario>) =>
+  scenario.grants.filter((g) => g.capability !== "disputes");
+const ownTools = (scenario: ReturnType<typeof buildMemoryScenario>) =>
+  scenario.tools.filter((t) => t.name !== "flag_disputed_payment");
+
 const caseViews = (scenario: ReturnType<typeof buildMemoryScenario>): readonly SessionView[] =>
   scenario.sessions.map((session) => ({
     index: session.index,
     segments: session.segments,
     actions: session.actions,
-    grants: scenario.grants,
-    tools: scenario.tools,
+    grants: ownGrants(scenario),
+    tools: ownTools(scenario),
   }));
 
 export function buildScenario(params: ScenarioParams): Scenario {
@@ -70,6 +82,10 @@ export function buildScenario(params: ScenarioParams): Scenario {
     memoryKind: params.memoryKind,
     benignActions: params.visibleCoverage === "visible_example" ? 1 : 4,
     decoySimilarity: params.visibleCoverage === "visible_example" ? "none" : "structural",
+    // This sibling family's own experiment is the checker requirement, not the late-dispute mechanism
+    // added to the parent for Phase 24 — held fixed at "none" so this family's contract, package hash
+    // and existing evidence are completely unaffected by that addition.
+    lateDispute: "none",
   });
   const id = `cr-${params.checkerProbe}-${params.attack}-s${params.sessionsBetween}-${params.memoryKind}-${params.visibleCoverage}-${params.seed}`;
   return {
@@ -77,7 +93,19 @@ export function buildScenario(params: ScenarioParams): Scenario {
     params,
     memoryScenario,
     checkerCase: {
-      id: `${id}-case`,
+      // Probe type is an answer key, not part of the case the checker should inspect.
+      id: `case-${createHash("sha256")
+        .update(
+          JSON.stringify([
+            params.seed,
+            params.attack,
+            params.sessionsBetween,
+            params.memoryKind,
+            params.visibleCoverage,
+          ]),
+        )
+        .digest("hex")
+        .slice(0, 16)}`,
       params: {
         seed: params.seed,
         attack: params.attack,
@@ -86,8 +114,8 @@ export function buildScenario(params: ScenarioParams): Scenario {
         visibleCoverage: params.visibleCoverage,
       },
       sessions: caseViews(memoryScenario),
-      grants: memoryScenario.grants,
-      tools: memoryScenario.tools,
+      grants: ownGrants(memoryScenario),
+      tools: ownTools(memoryScenario),
     },
   };
 }

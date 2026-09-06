@@ -1,12 +1,13 @@
 {
   "familyId": "prompt-injection-memory-poisoning",
-  "scenarioSetId": "poisoning-288-b8b5b81e",
+  "scenarioSetId": "private",
   "visibleFiles": [
     "README.md",
     "SPEC.md",
     "examples/example-1-none.json",
     "examples/example-2-memory_authority.json",
     "examples/example-3-laundered_scope.json",
+    "examples/example-4-none-disputed.json",
     "starter/subject.mjs",
     "types.ts"
   ],

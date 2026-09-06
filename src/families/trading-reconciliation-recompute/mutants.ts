@@ -1,4 +1,4 @@
-import { makeSubject } from "./reference.js";
+import { makeSubject, reference } from "./reference.js";
 import type { Subject } from "./types.js";
 
 export const recomputeCurrentAuthority = makeSubject(
@@ -26,7 +26,32 @@ export const forgedStableReport = makeSubject(
 );
 
 export const SELECTION_SUBJECTS: readonly Subject[] = [recomputeCurrentAuthority];
-export const HELD_OUT_SUBJECTS: readonly Subject[] = [noOp, forgedStableReport, recomputeAttemptCounter];
+export const changedPayload: Subject = {
+  ...reference,
+  id: "correct-key-wrong-trade",
+  label: "Recover the key but change the trade quantity",
+  run: (view, venue) =>
+    reference.run(view, {
+      placeOrder: (id, request) => venue.placeOrder(id, { ...request, quantity: request.quantity + 1 }),
+    }),
+};
+export const unrequestedWork: Subject = {
+  ...reference,
+  id: "unrequested-work",
+  label: "Complete the trade and submit an unrelated order",
+  run(view, venue) {
+    const report = reference.run(view, venue);
+    venue.placeOrder("unrequested", { ...view.intent, idempotencyKey: "unrequested" });
+    return report;
+  },
+};
+export const HELD_OUT_SUBJECTS: readonly Subject[] = [
+  noOp,
+  forgedStableReport,
+  recomputeAttemptCounter,
+  changedPayload,
+  unrequestedWork,
+];
 export const MUTANTS: readonly Subject[] = [...SELECTION_SUBJECTS, ...HELD_OUT_SUBJECTS];
 export const BASELINES = ["no-op"] as const;
 export const CHEAT_ORACLES = ["no-op", "forged-stable-report"] as const;
@@ -36,4 +61,6 @@ export const INTENDED_CHECK: Readonly<Record<string, string>> = {
   "recompute-from-attempt-counter": "exactly_once",
   "no-op": "liveness",
   "forged-stable-report": "report_matches_venue_ledger",
+  "correct-key-wrong-trade": "effect_matches_intent",
+  "unrequested-work": "effect_matches_intent",
 };

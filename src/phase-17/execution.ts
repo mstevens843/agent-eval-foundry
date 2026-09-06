@@ -8,6 +8,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
+import { denyUnreservedProviderExecution } from "../packages/policy.js";
 import {
   PHASE14_PROVIDER_IMAGE,
   phase14ProviderCommand,
@@ -110,6 +111,7 @@ export function executePhase17Attempt(
   requestedAttemptId: string,
   attemptIndex = 1,
 ): Phase17ExecutionResult {
+  denyUnreservedProviderExecution();
   const preflight = runPhase17Preflight(root);
   if (!preflight.readyForPaidTrials) {
     throw new RigInputError(`Phase 17 preflight is blocked: ${preflight.blockingConditions.join("; ")}`);

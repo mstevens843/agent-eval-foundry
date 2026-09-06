@@ -1,8 +1,10 @@
 import { requireShape } from "../../screens/rig-integrity.js";
+import { fieldsMatch } from "../verification-contract.js";
 import type { VerificationInput } from "./truth.js";
 
 export const CHECKS = [
   "exactly_once",
+  "effect_matches_intent",
   "committed_rollback_key_recovered",
   "liveness",
   "report_matches_controller_ledger",
@@ -35,6 +37,22 @@ export function verify(value: unknown): readonly Failure[] {
   const ownCalls = input.calls.filter((call) => call.rollbackIntentId === rollbackIntentId);
   const ownEffects = input.effects.filter((effect) => effect.rollbackIntentId === rollbackIntentId);
   const failures: Failure[] = [];
+  const semanticFields = ["releaseId", "regionId", "compensation"];
+  if (
+    ownCalls.length !== input.calls.length ||
+    ownEffects.length !== input.effects.length ||
+    input.calls.some((call) => !fieldsMatch(call.request, input.scenario.intent, semanticFields)) ||
+    input.effects.some(
+      (effect) => !fieldsMatch(effect, input.scenario.intent, [...semanticFields, "idempotencyKey"]),
+    )
+  ) {
+    failures.push(
+      failure(
+        "effect_matches_intent",
+        "controller work differs from the committed rollback or includes unrequested work",
+      ),
+    );
+  }
   const validOutcomes = new Set(["compensated"]);
 
   if (ownEffects.length !== 1) {

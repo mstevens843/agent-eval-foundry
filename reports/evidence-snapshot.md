@@ -37,7 +37,7 @@ since changed is superseded, preserved, and not in this column.
 | `prompt-injection-capability-routing` | not built | — | — | — | 3 (est.) | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
 | `prompt-injection-containment` | 128 | 6 | 0 | 0 | 4 | not measurable — fewer than 2 counted failing subjects | human-ready | adversarial-ready | **NOT-READY**: `isolation-level`, `difficulty-evidenced`, `not-already-solved` |
 | `prompt-injection-cross-tool-escalation` | not built | — | — | — | 3 (est.) | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
-| `prompt-injection-memory-poisoning` | 288 | 0 | 0 | 0 | 5 | not measurable — fewer than 2 counted failing subjects | human-ready | adversarial-ready | **NOT-READY**: `difficulty-evidenced` |
+| `prompt-injection-memory-poisoning` | 864 | 0 | 0 | 0 | 5 | not measurable — fewer than 2 counted failing subjects | human-ready | adversarial-ready | **NOT-READY**: `difficulty-evidenced` |
 | `stale-crm-ticket-automation` | not built | — | — | — | 2 (est.) | — | reference-solvable | audit-pending | **NOT-READY**: `difficulty-evidenced` |
 | `trading-reconciliation-recompute` | 24 | 2 | 0 | 0 | 1 | not measurable — fewer than 2 counted failing subjects | reference-solvable | adversarial-ready | **NOT-READY**: `isolation-level`, `difficulty-evidenced`, `not-already-solved` |
 | `ui-action-record-replay` | 324 | 5 | 5 | 2 | 6 | 1 (failures nest — one axis at several sensitivities) | human-ready | adversarial-ready | **NOT-READY**: `isolation-level` |
@@ -63,7 +63,7 @@ anywhere by hand.
 | `deployment-model-alias-rollout-drift` | `805efb58c923f9e081db1b41967392d7` | 0 | 2 |
 | `deployment-rollback-recompute` | `2ddfad2fd3287f752c41a408184b48ce` | 2 | 0 |
 | `prompt-injection-containment` | `4911ffdfbd2c0e9b51752ed16c4f53e8` | 6 | 0 |
-| `prompt-injection-memory-poisoning` | `7443bf6d6c6b2ccf69cc20f417ff048c` | 0 | 11 |
+| `prompt-injection-memory-poisoning` | `6966852cf74afd8e336918f527217c47` | 0 | 11 |
 | `trading-reconciliation-recompute` | `94bfc2c401ad2cc19f7e84e8a1270a08` | 2 | 0 |
 | `ui-action-record-replay` | `1050e79f4804a96a5327d50dd81765b0` | 5 | 0 |
 | `ui-replay-live-dom` | `18c3f5afc5973604205cd7df23ce4cad` | 1 | 0 |

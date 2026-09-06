@@ -41,6 +41,9 @@ fail() { echo "VERIFIER: $1"; echo 0 > /logs/verifier/reward.txt; exit 0; }
 
 [ -d /app/certd ] || fail "the declared artifact /app/certd/ did not arrive"
 
+# Validate BEFORE privileged cp/chmod/build touches any submitted path.
+python3 -I /tests/artifact_guard.py /app/certd || fail "artifact contains links or special files"
+
 # --- restore everything the spec declared read-only ---------------------------
 # The agent's copies never reach the build, so editing them cannot help it pass.
 mkdir -p /app/spec /app/harness /app/certd/internal/order

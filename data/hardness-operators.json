@@ -252,6 +252,56 @@
         "scripts/verify-phase-22.mjs"
       ],
       "confidence": "medium"
+    },
+    {
+      "id": "phase23-authoritative-state-inaccessible-to-subject-honest-subject-caa-revalidation",
+      "category": "validity-control",
+      "name": "Authoritative state inaccessible to the subject — honest-subject case (Phase 20 already measured the adversarial/exploit case; this closes the remaining half)",
+      "changed": "Which grading route the submission runs through: pre-Phase-20 (subprocessHost/containerHost, shared process) vs post-Phase-20 (signed cell-container split).",
+      "stayedFixed": "The submission itself, the scenario set, the mutant bank, the verifier logic — literally everything except which process the ledger is constructed in.",
+      "beforeEvidence": "Phase 20 measured the adversarial case only (test/phase-20-secure-executor.test.ts, reports/PHASE-20-VERIFIER-TRUST-BOUNDARY.md): a malicious submission cannot forge a pass under the post-Phase-20 route. The honest-subject case was never checked.",
+      "afterEvidence": "All 4 preserved, hash-verified-compatible real Phase 17 caa-revalidation submissions (2 OpenAI, 2 Anthropic) graded through both routes for real: 4/4 identical cell-by-cell, zero discrepancies, zero host errors either route.",
+      "measurementStatus": "measured",
+      "fairnessOutcome": "n/a — this operator concerns grading-route equivalence for an honest submission, not what is fair to grade.",
+      "verifierIntegrityEffect": "Confirms the Phase 20 migration did not silently change what a compliant submission is graded as, for every preserved real submission available for this check.",
+      "solveRateEffect": {
+        "countable": true,
+        "before": "4/4 clean (pre-route)",
+        "after": "4/4 clean (post-route)",
+        "note": "Identical outcome both routes for every submission — the operator's own predicted null for the honest-subject case, now actually checked rather than assumed."
+      },
+      "capabilityAttribution": "not-applicable: measures grading-infrastructure equivalence, not agent capability",
+      "provenance": [
+        "src/phase-23/route-parity.ts",
+        "scripts/verify-phase-23.mjs",
+        "trials/caa-revalidation/phase17-caa-slot-{1,2,3,4}-*/submission/subject.mjs"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "phase23-diagnosis-radius-prompt-injection-memory-poisoning-construction",
+      "category": "difficulty",
+      "name": "Spreading the evidence a solver needs across more sessions/scenarios/artifacts (widening how much surrounding context must be read to localize the defect) causes solve rate to drop.",
+      "changed": "Increase the family's existing breadth knob (e.g. prompt-injection-memory-poisoning's sessionsBetween) so the evidence needed to detect the defect is spread across more sessions, holding the mechanism and every rule code fixed.",
+      "stayedFixed": "The rule codes, the mutant bank, the memory/session contract's shape.",
+      "beforeEvidence": "Untested prior to this phase (evidenceStatus:\"untested\" in data/phase-21-operators.json). causal-depth on caa-revalidation was attempted first and found not constructible without editing verify.ts (see data/phase-23-preregistration.json); this operator was the disciplined pivot.",
+      "afterEvidence": "Two matched packages constructed and frozen (baseline sessionsBetween=0 hash 20d789b9fc1a2e874196020058b09314, treated sessionsBetween=3 hash d17fc8a6616bf77dde4910143ac6982d), mechanically confirmed as a real matched pair (requireMatchedPair), reference clean on both, every one of the 13 mutants caught by at least one arm. A real agent trial (data/phase-23-trial-preregistration.json) is fully designed and frozen but NOT executed — no real-time spend authorization was available this phase.",
+      "measurementStatus": "estimated",
+      "fairnessOutcome": "Matched pair mechanically confirmed diffable (requireMatchedPair); every declared field outside the operator's own shapeFieldsEdited held identical between arms.",
+      "verifierIntegrityEffect": "n/a — this operator changes the hidden graded scenario set's session-spacing parameter, not verifier logic itself.",
+      "solveRateEffect": {
+        "countable": false,
+        "before": null,
+        "after": null,
+        "note": "Construction and validity-gating complete; real solve-rate evidence requires the Lane 6 trial in data/phase-23-trial-preregistration.json, which was designed but not authorized/executed this phase."
+      },
+      "capabilityAttribution": "not yet resolved: awaiting Lane 6 trial authorization",
+      "provenance": [
+        "src/phase-23/diagnosis-radius.ts",
+        "data/phase-23-trial-preregistration.json",
+        "scripts/verify-phase-23.mjs"
+      ],
+      "confidence": "low"
     }
   ]
 }

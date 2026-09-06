@@ -1,11 +1,9 @@
-// Deliberately wrong after controller authority changes.
-// Read SPEC.md, then recover the committed key from the durable rollback intent.
+// Rollback controller entrypoint.
 
 export const subject = {
   id: "starter",
-  label: "Current-authority rollback-key recomputation starter",
+  label: "Rollback controller",
   run(view, controller) {
-    // WRONG: authorityEpoch changes when another controller recovers the rollback.
     const idempotencyKey =
       `rollback::${view.intent.rollbackIntentId}::${view.intent.releaseId}::authority-${view.authorityEpoch}`;
     const receipt = controller.compensate(view.intent.rollbackIntentId, {

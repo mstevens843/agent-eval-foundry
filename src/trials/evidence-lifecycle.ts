@@ -47,6 +47,7 @@ export const EVIDENCE_STATES = [
   "infra",
   "crashed",
   "not-run",
+  "invalid-evidence",
 ] as const;
 export type EvidenceState = (typeof EVIDENCE_STATES)[number];
 
@@ -118,15 +119,8 @@ export function evidenceLedger(
   registeredVariants: readonly ChallengeVariantRegistration[] = [],
 ): EvidenceLedger {
   const variants = registeredVariants.filter((variant) => variant.familyId === familyId);
-  for (const variant of variants) {
-    if (variant.canonicalHash !== currentHash) {
-      fail(
-        "TRIAL_CHALLENGE_HASH_MISMATCH",
-        `variant.${variant.variantId}`,
-        `registration names canonical hash ${variant.canonicalHash}, but ${familyId} now produces ${currentHash}`,
-      );
-    }
-  }
+  // A registration is anchored to its historical canonical parent, not today's edited source.
+  // The registration loader verifies the frozen parent/delta; both remain excluded from current evidence.
   const entries = trials.map((trial): EvidenceEntry => {
     const metaPath = join(trial.path, "metadata.json");
     let recorded: string | null = null;
@@ -138,9 +132,9 @@ export function evidenceLedger(
         recorded = null;
       }
     }
-    const derived = recorded ?? hashChallengeDir(join(trial.path, "challenge"));
+    const derived = hashChallengeDir(join(trial.path, "challenge"));
     const hashSource: HashSource =
-      recorded !== null ? "recorded" : derived !== null ? "derived" : "unavailable";
+      derived === null ? "unavailable" : recorded !== null ? "recorded" : "derived";
     const ranAgainst = derived;
     const record = trial.record;
     const base = { runId: trial.runId, familyId, model: record.model, ranAgainst, hashSource, currentHash };
@@ -163,8 +157,18 @@ export function evidenceLedger(
     // a crash to a failure is a hand judgement — and a crash an importer HAS judged to be the
     // subject's own code (`counts: true`) falls through to the hash gate below, because at that point
     // it is a graded failure like any other and must not dodge supersession.
-    if (record.status === "crashed" && !record.counts) {
+    if (record.status === "crashed") {
       return { ...base, state: "crashed", reason: record.countsReason };
+    }
+    if (derived === null || (recorded !== null && recorded !== derived)) {
+      return {
+        ...base,
+        state: "invalid-evidence",
+        reason:
+          derived === null
+            ? "retained public bytes unavailable or invalid; legacy metadata alone cannot establish identity"
+            : `retained bytes hash ${derived} disagrees with declared ${recorded}; metadata cannot outrank contents`,
+      };
     }
     if (ranAgainst !== currentHash) {
       const variant = variants.find((candidate) => candidate.challengeHash === ranAgainst);
@@ -210,7 +214,9 @@ export function evidenceLedger(
  * than trusted.
  */
 export function assertNoStaleCounted(ledger: EvidenceLedger, counted: readonly TrialRecord[]): void {
-  const noncanonical = new Set([...ledger.superseded, ...(ledger.registeredVariants ?? [])]);
+  const noncanonical = new Set(
+    ledger.entries.filter((entry) => entry.state !== "counted").map((entry) => entry.runId),
+  );
   for (const record of counted) {
     if (noncanonical.has(record.runId)) {
       fail(

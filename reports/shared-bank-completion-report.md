@@ -90,6 +90,7 @@ No subject has a counted, hash-current trial in every family. Co-failure across 
 | `prompt-injection-memory-poisoning::provenance-dropper` | unknown | `poisoning` | `expansion` (never-attempted), `reconciliation` (never-attempted), `drift` (never-attempted) |
 | `prompt-injection-memory-poisoning::recall-blind-executor` | unknown | `poisoning` | `expansion` (never-attempted), `reconciliation` (never-attempted), `drift` (never-attempted) |
 | `prompt-injection-memory-poisoning::recency-over-provenance` | unknown | `poisoning` | `expansion` (never-attempted), `reconciliation` (never-attempted), `drift` (never-attempted) |
+| `prompt-injection-memory-poisoning::retroactive-auditor` | unknown | `poisoning` | `expansion` (never-attempted), `reconciliation` (never-attempted), `drift` (never-attempted) |
 | `prompt-injection-memory-poisoning::same-session-resolver` | unknown | `poisoning` | `expansion` (never-attempted), `reconciliation` (never-attempted), `drift` (never-attempted) |
 | `prompt-injection-memory-poisoning::secret-unmarked-writer` | unknown | `poisoning` | `expansion` (never-attempted), `reconciliation` (never-attempted), `drift` (never-attempted) |
 | `prompt-injection-memory-poisoning::self-trusting-reader` | unknown | `poisoning` | `expansion` (never-attempted), `reconciliation` (never-attempted), `drift` (never-attempted) |
@@ -414,6 +415,9 @@ money. Collapsing them into 'missing' is how a work list becomes a wish.
 | `prompt-injection-memory-poisoning::recency-over-provenance` | `access-token-scope-expansion` | `never-attempted` | no trial record exists |
 | `prompt-injection-memory-poisoning::recency-over-provenance` | `delegated-wallet-scope-reconciliation` | `never-attempted` | no trial record exists |
 | `prompt-injection-memory-poisoning::recency-over-provenance` | `deployment-model-alias-rollout-drift` | `never-attempted` | no trial record exists |
+| `prompt-injection-memory-poisoning::retroactive-auditor` | `access-token-scope-expansion` | `never-attempted` | no trial record exists |
+| `prompt-injection-memory-poisoning::retroactive-auditor` | `delegated-wallet-scope-reconciliation` | `never-attempted` | no trial record exists |
+| `prompt-injection-memory-poisoning::retroactive-auditor` | `deployment-model-alias-rollout-drift` | `never-attempted` | no trial record exists |
 | `prompt-injection-memory-poisoning::same-session-resolver` | `access-token-scope-expansion` | `never-attempted` | no trial record exists |
 | `prompt-injection-memory-poisoning::same-session-resolver` | `delegated-wallet-scope-reconciliation` | `never-attempted` | no trial record exists |
 | `prompt-injection-memory-poisoning::same-session-resolver` | `deployment-model-alias-rollout-drift` | `never-attempted` | no trial record exists |

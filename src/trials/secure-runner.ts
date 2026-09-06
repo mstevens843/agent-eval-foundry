@@ -1,19 +1,7 @@
-// Phase 20's trusted execution boundary, driven from the grading process.
-//
-// This replaces `subprocessHost`/`containerHost` for a migrated family. The difference is not "runs
-// in a container" — `containerHost` already did that — it is that the untrusted submission and the
-// code that owns the ledger no longer share a process. `scripts/secure/authority-entry.mjs` runs as
-// the container's entrypoint and never imports the submission; it spawns
-// `scripts/secure/cell-entry.mjs` as a separate child that does, and trusts nothing that crosses back
-// except signed, framed, sequence-checked events (see `scripts/secure/protocol.mjs`). This process
-// (the grading parent, outside the container entirely) trusts nothing the container printed beyond
-// "it is JSON, and if `error` is set the run did not produce gradable evidence."
-//
-// A family adapter lives in `scripts/secure/adapters/<family>.mjs`. It is trusted, staged into the
-// container read-only alongside the submission, and tags every fact it reports with a `channel` name
-// ("ledger", "writes", "queries", ...). This file's only family-specific knowledge is which channel
-// names a given family's verifier expects — the wire protocol and the container itself know nothing
-// about any of that.
+// Container grading with an authority-owned operation ledger. The authority imports the family
+// adapter; a uid-1000 child imports the submitted code. Only public views and facade responses cross
+// into that child. No hidden scenario or signing key does. Subject messages are operation requests
+// or untrusted reports, never evidence entries. Grader errors are not model-capability results.
 
 import { execFileSync } from "node:child_process";
 import { existsSync, rmSync } from "node:fs";
@@ -54,7 +42,7 @@ export interface SecureHostResult {
   readonly error: string | null;
 }
 
-/** Families with a shipped cell-side adapter. Anything else has no secure route yet — see router.ts. */
+/** Families with a shipped authority-side adapter. Anything else has no secure route yet. */
 export const SECURELY_MIGRATED_FAMILIES: readonly string[] = [
   "prompt-injection-memory-poisoning",
   "caa-revalidation",
@@ -115,7 +103,13 @@ export function runSecureContainerHost(options: SecureHostOptions, payload: unkn
     const stdout = execFileSync(
       "docker",
       [
-        ...containerFlags(name, stage, "none", limits),
+        // Only the authority runs as root. SETUID/SETGID launch an unprivileged child and KILL
+        // permits cleanup across that UID boundary. No writable root filesystem or network is added.
+        ...containerFlags(name, stage, "none", limits).filter((flag) => flag !== "--user=1000:1000"),
+        "--user=0:0",
+        "--cap-add=SETUID",
+        "--cap-add=SETGID",
+        "--cap-add=KILL",
         "--interactive",
         image,
         "node",
@@ -142,6 +136,21 @@ export function runSecureContainerHost(options: SecureHostOptions, payload: unkn
       };
     }
     const rec = parsed as Record<string, unknown>;
+    if (
+      !(rec["error"] === null || typeof rec["error"] === "string") ||
+      rec["channels"] === null ||
+      typeof rec["channels"] !== "object" ||
+      Array.isArray(rec["channels"]) ||
+      !Object.values(rec["channels"] as object).every(Array.isArray) ||
+      !("report" in rec)
+    ) {
+      return {
+        channels: {},
+        report: null,
+        diagnostics: empty,
+        error: "secure host returned incomplete result envelope",
+      };
+    }
     return {
       channels: (rec["channels"] as Record<string, readonly unknown[]>) ?? {},
       report: rec["report"] ?? null,

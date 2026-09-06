@@ -1,7 +1,8 @@
 import { buildScenario } from "../families/delegated-wallet-scope-reconciliation/scenarios.js";
-import { SPEC_MD } from "../families/delegated-wallet-scope-reconciliation/spec.js";
+import { RULES, SPEC_MD } from "../families/delegated-wallet-scope-reconciliation/spec.js";
 import type { ScenarioParams } from "../families/delegated-wallet-scope-reconciliation/truth.js";
 import type { ChallengeFile, ChallengeManifest, ChallengePackage } from "./package.js";
+import { publicFiles, publicManifest } from "./public-surface.js";
 
 export const DELEGATED_WALLET_HIDDEN_ARTIFACTS = [
   "verify.ts",
@@ -215,7 +216,10 @@ function typesFor(typesSource: string): string {
     "// Public domain model for the challenge.",
     "// Hidden truth, scenarios, verifier and mutants are deliberately absent.",
     "",
-    typesSource,
+    typesSource.replace(
+      'import type { DecisionReason } from "./spec.js";',
+      `export type DecisionReason = ${[...RULES.map((rule) => JSON.stringify(rule.code)), '"ALLOWED"'].join(" | ")};`,
+    ),
   ].join("\n");
 }
 
@@ -259,7 +263,7 @@ export function buildDelegatedWalletChallengePackage(
 
   return {
     familyId: manifest.familyId,
-    files: [...files, { path: "MANIFEST.json", content: `${JSON.stringify(manifest, null, 2)}\n` }],
+    files: [...publicFiles(files), { path: "MANIFEST.json", content: publicManifest(manifest) }],
     manifest,
   };
 }

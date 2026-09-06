@@ -21,21 +21,36 @@
 
 import { existsSync } from "node:fs";
 import { join } from "node:path";
+import { type PackagePolicyInput, assertPackageStage } from "../packages/policy.js";
+import { canonicalJson, refreshSnapshot, sha256 } from "../packages/record.js";
+import {
+  expectedPackageCheckIds,
+  expectedPackageScenarioIds,
+  retainedTreeDigest,
+  verifyPublicPackage,
+} from "../packages/source.js";
 import { type Countability, writeTrialDirectory } from "./directory.js";
-import { type ProviderAdapter, type ProviderRunResult, getProvider, readFileTree } from "./providers.js";
+import { isInertProvider } from "./inert-provider.js";
+import { evaluateOutcome } from "./outcome.js";
+import { type ProviderAdapter, type ProviderRunResult, readFileTree } from "./providers.js";
 import type { TrialCell, TrialRecord } from "./types.js";
 import { NEVER_COUNTS } from "./types.js";
 import { parseTrialRecord } from "./validate.js";
 
 export interface GradeResult {
+  readonly errorStage?: "artifact" | "collector" | "verifier";
   readonly cells: readonly TrialCell[];
   readonly detail: string;
+  readonly hostErrors?: number;
+  readonly isolation?: import("./types.js").IsolationLevel;
 }
 
 /** A family supplies this. It receives the submitted artifact's path and returns graded cells. */
 export type FamilyGrader = (submissionModulePath: string) => GradeResult;
 
 export interface OrchestrateOptions {
+  readonly execution?: { readonly policy: PackagePolicyInput; readonly adapter: ProviderAdapter };
+  readonly expectedScenarioIds?: readonly string[];
   readonly familyId: string;
   readonly runId: string;
   readonly challengeDir: string;
@@ -78,16 +93,23 @@ export interface OrchestrateResult {
 /**
  * Decide countability from the provider's classification.
  *
- * Deliberately mechanical, and deliberately not overridable from a flag. The one judgement left to a
- * human is `crashed`, which is recorded as not counting by default with the reasoning stated — a
- * crash inside the subject's own code is arguably a failure, but calling it one automatically would
- * let a harness bug become a capability finding.
+ * Deliberately mechanical and not overridable from an import or adjudication flag. Crashes retain
+ * their diagnostic cause but never qualify. Full scenario/check accounting is performed by
+ * evaluateOutcome before this compatibility helper receives its graded-cell count.
  */
 export function decideCountability(
   classification: ProviderRunResult["classification"],
   detail: string,
   gradedCells: number,
+  hostErrors = 0,
 ): Countability {
+  if (!Number.isInteger(hostErrors) || hostErrors < 0 || hostErrors > 0) {
+    return {
+      counts: false,
+      classification: "infrastructure_error",
+      reason: `grading did not produce valid evidence (${hostErrors} host/protocol error(s))`,
+    };
+  }
   if (NEVER_COUNTS.has(classification as never)) {
     return {
       counts: false,
@@ -99,10 +121,10 @@ export function decideCountability(
     return {
       counts: false,
       classification,
-      reason: `crashed: ${detail}. Recorded as not counting by default — promoting a crash to a failure automatically would let a harness bug read as a capability finding. Re-classify by hand if the crash is genuinely in the subject's code.`,
+      reason: `crashed: ${detail}. Crashes, including subject-code crashes, cannot qualify as genuine semantic failures under the package policy.`,
     };
   }
-  if (gradedCells === 0) {
+  if (!Number.isSafeInteger(gradedCells) || gradedCells <= 0) {
     return {
       counts: false,
       classification,
@@ -117,7 +139,30 @@ export function decideCountability(
 }
 
 export function orchestrateTrial(options: OrchestrateOptions): OrchestrateResult {
-  const adapter: ProviderAdapter = getProvider(options.provider);
+  const context = options.execution;
+  if (!context) throw new Error("PACKAGE_AUTHORIZATION_DENIED: no package-bound execution context");
+  const decision = assertPackageStage(
+    { ...context.policy, expectedFamilyId: options.familyId },
+    "trial-authorized",
+  );
+  const request = context.policy.authorization;
+  if (!request || request.operation !== "standard" || request.profile !== trialProfileIdentity(options)) {
+    throw new Error("PACKAGE_AUTHORIZATION_DENIED: invocation differs from approved profile");
+  }
+  const adapter = context.adapter;
+  if (!isInertProvider(adapter) || options.provider !== adapter.id)
+    throw new Error(
+      "PACKAGE_AUTHORIZATION_DENIED: only identified inert adapters can execute before Prompt 5",
+    );
+  if (!context.policy.snapshot) throw new Error("PACKAGE_UNVERIFIED");
+  const snapshot = refreshSnapshot(context.policy.snapshot);
+  verifyPublicPackage(snapshot, options.challengeDir);
+  if (!options.expectedScenarioIds?.length) throw new Error("PACKAGE_EXPECTED_SCENARIOS_MISSING");
+  if (
+    canonicalJson([...options.expectedScenarioIds].sort()) !==
+    canonicalJson([...expectedPackageScenarioIds(snapshot)].sort())
+  )
+    throw new Error("PACKAGE_EXPECTED_SCENARIOS_MISMATCH");
   const submissionFile = options.submissionFile ?? "submission/subject.mjs";
 
   const providerResult = adapter.run({
@@ -137,15 +182,40 @@ export function orchestrateTrial(options: OrchestrateOptions): OrchestrateResult
     try {
       graded = options.grade(artifact);
     } catch (err) {
-      graded = { cells: [], detail: `grading failed: ${(err as Error).message}` };
+      graded = {
+        cells: [],
+        detail: `grading failed: ${(err as Error).message}`,
+        hostErrors: 1,
+        errorStage: "verifier",
+      };
     }
   }
 
-  const decided = decideCountability(
+  const evaluation = evaluateOutcome({
+    providerStatus: providerResult.classification,
+    expectedIds: options.expectedScenarioIds,
+    expectedCheckIds: expectedPackageCheckIds(snapshot),
+    cells: graded.cells,
+    hostErrors: graded.hostErrors ?? 0,
+    artifactPresent: existsSync(artifact),
+    ...(graded.errorStage ? { errorStage: graded.errorStage } : {}),
+  });
+  const rawDecision = decideCountability(
     providerResult.classification,
     providerResult.detail,
     graded.cells.length,
+    graded.hostErrors ?? 0,
   );
+  const decided = evaluation.complete
+    ? rawDecision
+    : {
+        counts: false,
+        classification:
+          providerResult.classification === "completed"
+            ? "infrastructure_error"
+            : providerResult.classification,
+        reason: `${evaluation.status}: ${evaluation.problems.join(", ") || graded.detail}`,
+      };
   const vetoed = decided.counts ? (options.disqualify?.(graded.cells) ?? null) : null;
   const countability: Countability =
     vetoed === null ? decided : { counts: false, classification: decided.classification, reason: vetoed };
@@ -157,7 +227,7 @@ export function orchestrateTrial(options: OrchestrateOptions): OrchestrateResult
     subjectType: "agent",
     model: options.model,
     effort: options.effort,
-    status: providerResult.classification,
+    status: countability.classification,
     counts: countability.counts,
     countsReason: countability.reason,
     scenarioSetId: options.scenarioSetId,
@@ -171,7 +241,7 @@ export function orchestrateTrial(options: OrchestrateOptions): OrchestrateResult
     artifactPath: countability.counts
       ? join(options.trialsRoot, options.familyId, options.runId, "submission")
       : null,
-    isolation: adapter.isolation === "container" ? "container" : "subprocess",
+    isolation: graded.isolation ?? (adapter.isolation === "container" ? "container" : "subprocess"),
     notes: `provider=${adapter.id} ${graded.detail}`,
   });
 
@@ -187,7 +257,13 @@ export function orchestrateTrial(options: OrchestrateOptions): OrchestrateResult
     // The agent's own scratch and test files, preserved under `workspace/` in the trial directory.
     // Without these, "run the agent's own checks against its own submission" has no input.
     workspaceFiles: providerResult.workspace,
-    verifierOutput: { cells: graded.cells, detail: graded.detail },
+    verifierOutput: {
+      cells: graded.cells,
+      detail: graded.detail,
+      hostErrors: graded.hostErrors ?? 0,
+      errorStage: graded.errorStage ?? null,
+      evaluation,
+    },
     metadata: {
       runId: options.runId,
       familyId: options.familyId,
@@ -201,17 +277,45 @@ export function orchestrateTrial(options: OrchestrateOptions): OrchestrateResult
       runtimeSeconds: providerResult.runtimeSeconds,
       costUsd: record.costUsd,
       usage: providerResult.usage,
-      isolation: adapter.isolation,
+      isolation: record.isolation,
+      providerIsolation: adapter.isolation,
+      gradingHostErrors: graded.hostErrors ?? 0,
       classification: providerResult.classification,
       classificationDetail: providerResult.detail,
       // Thin trials stay thin and are never backfilled. See `CaptureLevel`.
       captureLevel: providerResult.captureLevel,
       command: providerResult.command.length > 0 ? providerResult.command : null,
       ...(options.extraMetadata ?? {}),
+      packageDigest: decision.packageDigest,
+      submissionDigest: existsSync(join(providerResult.sandbox, "submission"))
+        ? retainedTreeDigest(join(providerResult.sandbox, "submission"))
+        : null,
+      evaluation,
+      authoringIsolation: adapter.isolation,
+      gradingIsolation: graded.isolation ?? "unknown",
+      executionMode: "inert-test",
     },
   });
 
   return { record, countability, directory, providerResult };
+}
+
+export function trialProfileIdentity(
+  options: Pick<
+    OrchestrateOptions,
+    "provider" | "model" | "effort" | "command" | "timeoutMs" | "instruction"
+  >,
+): string {
+  return sha256(
+    canonicalJson({
+      provider: options.provider,
+      model: options.model,
+      effort: options.effort,
+      command: options.command ?? null,
+      timeoutMs: options.timeoutMs,
+      instruction: options.instruction,
+    }),
+  );
 }
 
 /** The instruction handed to an agent for the containment family. Kept here so trials are identical. */

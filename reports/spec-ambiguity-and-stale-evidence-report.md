@@ -95,7 +95,7 @@ Current challenge hash: `4911ffdfbd2c0e9b51752ed16c4f53e8`.
 
 ### `prompt-injection-memory-poisoning`
 
-Current challenge hash: `7443bf6d6c6b2ccf69cc20f417ff048c`.
+Current challenge hash: `6966852cf74afd8e336918f527217c47`.
 
 | run | model | state | ran against |
 |---|---|---|---|

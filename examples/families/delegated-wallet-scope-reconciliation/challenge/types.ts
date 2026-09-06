@@ -1,7 +1,5 @@
-// Public domain model for the challenge.
-// Hidden truth, scenarios, verifier and mutants are deliberately absent.
 
-import type { DecisionReason } from "./spec.js";
+export type DecisionReason = "DWS1_CURRENT_POLICY_REQUIRED" | "DWS2_CURRENT_DELEGATION_REQUIRED" | "DWS3_CURRENT_TOKEN_REQUIRED" | "DWS4_DELEGATION_SCOPE_REQUIRED" | "DWS5_REQUEST_WITHIN_CURRENT_LIMIT" | "DWS6_REMAINING_BUDGET_REQUIRED" | "DWS7_NO_SUBJECT_OWNED_AUTHORITY" | "DWS8_NO_DUPLICATE_SPEND" | "DWS9_AUDIT_CURRENT_EVIDENCE" | "DWS10_REPORT_MATCHES_LEDGER" | "ALLOWED";
 
 export const WALLET_OWNERS = ["owner-alice", "owner-ravi"] as const;
 export type WalletOwner = (typeof WALLET_OWNERS)[number];

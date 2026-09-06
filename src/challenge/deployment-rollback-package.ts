@@ -2,6 +2,7 @@ import { SPEC_MD } from "../families/deployment-rollback-recompute/spec.js";
 import { buildScenario } from "../families/deployment-rollback-recompute/truth.js";
 import type { ScenarioParams } from "../families/deployment-rollback-recompute/truth.js";
 import type { ChallengeFile, ChallengeManifest, ChallengePackage } from "./package.js";
+import { publicFiles, publicManifest } from "./public-surface.js";
 
 export const DEPLOYMENT_ROLLBACK_HIDDEN_ARTIFACTS = [
   "verify.ts",
@@ -28,7 +29,7 @@ the durable rollback intent and the idempotent deployment-controller facade.
 |---|---|
 | \`SPEC.md\` | the complete normative rules and hidden-scenario dimensions |
 | \`types.ts\` | the public subject and controller interfaces |
-| \`starter/subject.mjs\` | a deliberately incorrect authority-epoch implementation |
+| \`starter/subject.mjs\` | the existing rollback implementation |
 | \`examples/\` | visible examples of the public recovery view |
 
 ## What you must produce
@@ -43,14 +44,12 @@ recovered, retries collectively create one compensation, valid work completes, a
 calls. Every intent is already authorized; no private cloud or rollback-decision policy is graded.
 `;
 
-const STARTER = `// Deliberately wrong after controller authority changes.
-// Read SPEC.md, then recover the committed key from the durable rollback intent.
+const STARTER = `// Rollback controller entrypoint.
 
 export const subject = {
   id: "starter",
-  label: "Current-authority rollback-key recomputation starter",
+  label: "Rollback controller",
   run(view, controller) {
-    // WRONG: authorityEpoch changes when another controller recovers the rollback.
     const idempotencyKey =
       \`rollback::\${view.intent.rollbackIntentId}::\${view.intent.releaseId}::authority-\${view.authorityEpoch}\`;
     const receipt = controller.compensate(view.intent.rollbackIntentId, {
@@ -129,7 +128,7 @@ export function buildDeploymentRollbackChallengePackage(
   };
   return {
     familyId: manifest.familyId,
-    files: [...files, { path: "MANIFEST.json", content: `${JSON.stringify(manifest, null, 2)}\n` }],
+    files: [...publicFiles(files), { path: "MANIFEST.json", content: publicManifest(manifest) }],
     manifest,
   };
 }

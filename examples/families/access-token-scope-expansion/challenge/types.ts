@@ -1,5 +1,3 @@
-// Public domain model for the challenge.
-// Hidden truth, scenarios, verifier and mutants are deliberately absent.
 
 export const TOKEN_SCOPES = ["read:invoice", "write:invoice", "admin:invoice"] as const;
 export type TokenScope = (typeof TOKEN_SCOPES)[number];

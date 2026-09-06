@@ -324,7 +324,7 @@ describe("the difficulty-evidenced gate reads root causes", () => {
     const g = gateOf(gateEvidence());
     expect(g.verdict).toBe("pass");
     expect(g.detail).toMatch(/2 of 5 counted agent trial\(s\) failed with root cause/);
-    expect(g.assessment.blockingFailures).not.toContain("difficulty-evidenced");
+    expect(g.assessment.diagnosticFailures).not.toContain("difficulty-evidenced");
   });
 
   it("(a)(b)(d) FAILS when five counted trials exist and none is root-caused to `capability`", () => {
@@ -333,7 +333,7 @@ describe("the difficulty-evidenced gate reads root causes", () => {
     const g = gateOf(gateEvidence({ capabilityEvidencedTrials: 0, unlabelledCountedTrials: 5 }));
     expect(g.verdict).toBe("fail");
     expect(g.detail).toMatch(/5 counted agent trial\(s\), none root-caused/);
-    expect(g.assessment.blockingFailures).toContain("difficulty-evidenced");
+    expect(g.assessment.diagnosticFailures).toContain("difficulty-evidenced");
     expect(g.assessment.verdict).toBe("NOT-READY");
   });
 
@@ -354,7 +354,7 @@ describe("the difficulty-evidenced gate reads root causes", () => {
     // establish difficulty. This is the hole the imported-history families used to walk through.
     const g = gateOf(undefined);
     expect(g.verdict).toBe("fail");
-    expect(g.assessment.blockingFailures).toContain("difficulty-evidenced");
+    expect(g.assessment.diagnosticFailures).toContain("difficulty-evidenced");
   });
 
   it("stays independently failable: it is not a duplicate of `not-already-solved`", () => {
@@ -368,18 +368,18 @@ describe("the difficulty-evidenced gate reads root causes", () => {
       g.assessment.results.find((r) => r.gate.id === "not-already-solved")?.verdict,
       "not-already-solved must still pass: something failed",
     ).toBe("pass");
-    expect(g.assessment.blockingFailures).toEqual(["difficulty-evidenced"]);
+    expect(g.assessment.diagnosticFailures).toEqual(["difficulty-evidenced"]);
   });
 
-  it("the family status label is derived from the gate, not re-decided beside it", () => {
+  it("legacy positive gates do not manufacture package-stage readiness", () => {
     // Two hand-rolled copies of this ladder lived in cli.ts and read `countedAgentTrials > 0`. They
     // would now print `difficulty-evidenced` for a family the gate marks NOT-READY for failing
     // exactly that gate.
-    expect(familyStatusLabel(gateOf(gateEvidence()).assessment)).toBe("SHIP");
+    expect(familyStatusLabel(gateOf(gateEvidence()).assessment)).toBe("HOLD");
     expect(
       familyStatusLabel(gateOf(gateEvidence({ capabilityEvidencedTrials: 0 })).assessment),
       "five counted trials, none adjudicated: not difficulty-evidenced",
-    ).toBe("trial-ready");
+    ).toBe("HOLD");
   });
 });
 

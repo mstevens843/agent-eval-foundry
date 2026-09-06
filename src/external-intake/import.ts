@@ -1,9 +1,12 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
+import type { PackagePolicyInput } from "../packages/policy.js";
+import { packageSourceSeed, retainedTreeDigest } from "../packages/source.js";
 import { readFamilyTrials, writeTrialDirectory } from "../trials/directory.js";
 import { decideCountability } from "../trials/orchestrator.js";
+import { evaluateOutcome } from "../trials/outcome.js";
 import { assertSafeForCountedAgentTrial, routeFor } from "../trials/router.js";
-import { prepareChallenge } from "../trials/run.js";
+import { currentChallenge } from "../trials/run.js";
 import { parseTrialRecord } from "../trials/validate.js";
 import type { ExternalIntakeImportResult, ExternalIntakeValidationResult } from "./types.js";
 import { validateExternalRunPacket } from "./validate.js";
@@ -72,14 +75,16 @@ export function importExternalRunPacket(
   root: string,
   familyId: string,
   packetDir: string,
+  packagePolicy?: PackagePolicyInput,
 ): ExternalIntakeImportResult {
-  const prepared = prepareChallenge(root, familyId);
+  const prepared = currentChallenge(root, familyId);
   const existingRunIds = readFamilyTrials(join(root, "trials"), familyId).map((trial) => trial.runId);
   const validation = validateExternalRunPacket(root, packetDir, {
     familyId,
     currentChallengeHash: prepared.hash,
     expectedScenarioSetId: prepared.scenarioSetId,
     existingRunIds,
+    ...(packagePolicy ? { packagePolicy } : {}),
   });
   const preservedDir = preservePacket(root, packetDir, validation);
   if (!validation.importedTrialEligible || validation.packet.metadata === null) {
@@ -90,16 +95,36 @@ export function importExternalRunPacket(
   // What is refused here is COUNTING it: grading an untrusted external submission through a route that
   // still shares one process between the submission and the code that owns the ledger.
   assertSafeForCountedAgentTrial(familyId);
+  const snapshot = packagePolicy?.snapshot;
+  if (
+    !snapshot ||
+    packageSourceSeed(root, familyId, snapshot.record.version).record.digest !== snapshot.record.digest
+  )
+    throw new Error("PACKAGE_IMPORT_GRADER_IDENTITY_MISMATCH");
 
   const metadata = validation.packet.metadata;
   const runId = metadata.runId as string;
   const route = routeFor(familyId);
   const submissionPath = join(packetDir, "submission", "subject.mjs");
-  const graded = route.grade(submissionPath);
+  let graded: ReturnType<typeof route.grade>;
+  try {
+    graded = route.grade(submissionPath);
+  } catch (error) {
+    graded = { cells: [], hostErrors: 1, detail: `grader failed: ${(error as Error).message}` };
+  }
+  const evaluation = evaluateOutcome({
+    providerStatus: "completed",
+    expectedIds: [...route.scenarioParams().keys()],
+    expectedCheckIds: route.family.checks,
+    cells: graded.cells,
+    hostErrors: graded.hostErrors,
+    artifactPresent: true,
+  });
   const countability = decideCountability(
     "completed",
     metadata.notes || "validated external packet",
-    graded.cells.length,
+    evaluation.complete ? graded.cells.length : 0,
+    graded.hostErrors,
   );
   const record = parseTrialRecord({
     runId,
@@ -108,7 +133,7 @@ export function importExternalRunPacket(
     subjectType: "agent",
     model: metadata.model,
     effort: null,
-    status: "completed",
+    status: countability.classification,
     counts: countability.counts,
     countsReason: countability.reason,
     scenarioSetId: prepared.scenarioSetId,
@@ -116,7 +141,7 @@ export function importExternalRunPacket(
     runtimeSeconds: null,
     costUsd: null,
     artifactPath: countability.counts ? join("trials", familyId, runId, "submission") : null,
-    isolation: "subprocess",
+    isolation: graded.isolation ?? "subprocess",
     notes: `external intake import from ${packetDir}; provider=${metadata.provider ?? "unknown"}`,
   });
   const trialDir = writeTrialDirectory({
@@ -128,9 +153,21 @@ export function importExternalRunPacket(
     transcript: readTranscript(packetDir),
     challengeFiles: prepared.pkg.files.map((file) => ({ path: file.path, content: file.content })),
     submissionFiles: readSubmissionFiles(packetDir),
-    verifierOutput: { runId, challengeHash: prepared.hash, cells: graded.cells, detail: graded.detail },
+    verifierOutput: {
+      runId,
+      challengeHash: prepared.hash,
+      cells: graded.cells,
+      detail: graded.detail,
+      hostErrors: graded.hostErrors,
+      evaluation,
+    },
     metadata: {
       runId,
+      packageDigest: snapshot.record.digest,
+      submissionDigest: retainedTreeDigest(join(packetDir, "submission")),
+      evaluation,
+      authoringIsolation: "external-unknown",
+      gradingIsolation: graded.isolation ?? "unknown",
       familyId,
       providerFamily: metadata.providerFamily,
       provider: metadata.provider,

@@ -13,7 +13,7 @@
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { BUILT_FAMILIES, REALISM_LEVELS, builtFamily } from "../src/families/registry.js";
 import {
   BROWSER_HARNESS_REQUIREMENTS,
@@ -95,12 +95,17 @@ describe("the provider registry", () => {
     expect(check.detail).toMatch(/not runnable here/);
   });
 
-  it("declares Anthropic providers import-only in this phase", () => {
-    for (const id of ["claude", "claude-sonnet", "claude-haiku", "claude-fable"]) {
-      const status = checkProvider(providerById(id));
-      expect(status.available, id).toBe(false);
-      expect(status.state, id).toBe("import-only");
-      expect(status.detail, id).toMatch(/out of tokens|import-only/);
+  it("declares Anthropic providers import-only without explicit runner credentials", () => {
+    vi.stubEnv("CLAUDE_CODE_OAUTH_TOKEN", "");
+    try {
+      for (const id of ["claude", "claude-sonnet", "claude-haiku", "claude-fable"]) {
+        const status = checkProvider(providerById(id));
+        expect(status.available, id).toBe(false);
+        expect(status.state, id).toBe("import-only");
+        expect(status.detail, id).toMatch(/out of tokens|import-only/);
+      }
+    } finally {
+      vi.unstubAllEnvs();
     }
   });
 });
@@ -311,7 +316,8 @@ describe("strict import", () => {
 describe("the evidence lifecycle", () => {
   const currentHash = prepareChallenge(ROOT, MEMORY).hash;
   const ledger = evidenceLedger(MEMORY, currentHash, readFamilyTrials(join(ROOT, "trials"), MEMORY));
-  const containmentHash = prepareChallenge(ROOT, CONTAINMENT).hash;
+  // Positive historical fixture; deliberately not today's package identity.
+  const containmentHash = "4911ffdfbd2c0e9b51752ed16c4f53e8";
   const containment = evidenceLedger(
     CONTAINMENT,
     containmentHash,
@@ -411,8 +417,16 @@ describe("the evidence lifecycle", () => {
     expect(() => assertCampaignReissued(plan as NonNullable<typeof plan>, "0000")).toThrowError(
       expect.objectContaining({ code: "EVIDENCE_CAMPAIGN_NOT_REISSUED" }),
     );
-    // The checked-in plan WAS reissued after the repair, so it passes.
-    expect(() => assertCampaignReissued(plan as NonNullable<typeof plan>, currentHash)).not.toThrow();
+    // Reissued for an earlier repair, not today's task. Its historical identity remains intact.
+    expect(() => assertCampaignReissued(plan as NonNullable<typeof plan>, currentHash)).toThrow(
+      /EVIDENCE_CAMPAIGN_NOT_REISSUED/,
+    );
+    expect(() =>
+      assertCampaignReissued(
+        plan as NonNullable<typeof plan>,
+        (plan as NonNullable<typeof plan>).challengeHash,
+      ),
+    ).not.toThrow();
   });
 
   it("EVIDENCE_SUPERSEDED_HIDDEN — a report that omits the invalidated runs", () => {
@@ -599,11 +613,11 @@ describe("difficulty curves", () => {
   // The other half of the same property, and the half that stops the assertion above from passing for
   // the boring reason that nothing anywhere is ever powered enough: the containment family kept its
   // trials through the repair and is over the threshold.
-  it("a family that kept its counted trials can still quote one", () => {
+  it("a frozen historical cohort retains its descriptive rate without current promotion", () => {
     const bundle = familyEvidenceFor(ROOT, CONTAINMENT);
     const curve = computeCurve({
       familyId: CONTAINMENT,
-      records: bundle.trials.records,
+      records: readFamilyTrials(join(ROOT, "trials"), CONTAINMENT).map((t) => t.record),
       notRunByFamily: {},
       operatorConfirmed: true,
     });

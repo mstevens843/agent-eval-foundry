@@ -11,7 +11,7 @@
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { buildChallengePackage } from "../src/challenge/package.js";
 import { runFamily } from "../src/families/prompt-injection-containment/runner.js";
 import { loadRegistry } from "../src/foundry/load.js";
@@ -152,7 +152,7 @@ describe("countability is never inferred", () => {
   it("a crash does not count by default, and says why", () => {
     const d = decideCountability("crashed", "exited non-zero", 0);
     expect(d.counts).toBe(false);
-    expect(d.reason).toMatch(/harness bug/);
+    expect(d.reason).toMatch(/including subject-code crashes.*cannot qualify/);
   });
 
   it("a completed run that graded nothing does not count", () => {
@@ -242,15 +242,20 @@ describe("providers", () => {
     expect(() => getProvider("nope")).toThrow(/unknown provider/);
   });
 
-  it("provider registry keeps Anthropic import-only and external import-only for this phase", () => {
-    const claude = checkProvider(providerById("claude"));
-    expect(claude.available).toBe(false);
-    expect(claude.state).toBe("import-only");
-    expect(claude.detail).toMatch(/out of tokens|import-only/i);
+  it("provider registry requires explicit Anthropic runner credentials; external remains import-only", () => {
+    vi.stubEnv("CLAUDE_CODE_OAUTH_TOKEN", "");
+    try {
+      const claude = checkProvider(providerById("claude"));
+      expect(claude.available).toBe(false);
+      expect(claude.state).toBe("import-only");
+      expect(claude.detail).toMatch(/out of tokens|import-only/i);
 
-    const external = checkProvider(providerById("external"));
-    expect(external.available).toBe(false);
-    expect(external.state).toBe("import-only");
+      const external = checkProvider(providerById("external"));
+      expect(external.available).toBe(false);
+      expect(external.state).toBe("import-only");
+    } finally {
+      vi.unstubAllEnvs();
+    }
   });
 });
 
@@ -531,8 +536,8 @@ describe("the already-solved gate", () => {
     const a = assessFamily(shape as NonNullable<typeof shape>, registry, evidence);
     expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("fail");
     expect(a.results.find((r) => r.gate.id === "not-already-solved")?.verdict).toBe("fail");
-    expect(a.blockingFailures).toContain("not-already-solved");
-    expect(a.blockingFailures).toContain("difficulty-evidenced");
+    expect(a.diagnosticFailures).toContain("not-already-solved");
+    expect(a.diagnosticFailures).toContain("difficulty-evidenced");
     expect(a.verdict).toBe("NOT-READY");
   });
 
@@ -556,7 +561,7 @@ describe("the already-solved gate", () => {
     // exist" above), which Phase 20 proved forgeable (test/phase-20-lane1-exploits/). The isolation-
     // level gate is now blocking, so this family cannot SHIP on that evidence alone even once
     // difficulty is properly attributed — it needs migrating to the secure executor first.
-    expect(a.blockingFailures).toEqual(["isolation-level"]);
+    expect(a.diagnosticFailures).toEqual(["isolation-level"]);
     expect(a.verdict).toBe("NOT-READY");
   });
 
@@ -573,7 +578,7 @@ describe("the already-solved gate", () => {
     });
     // Phase 20: same real `subprocess` isolation as the sibling test above, so isolation-level joins
     // difficulty-evidenced rather than replacing it.
-    expect(a.blockingFailures).toEqual(["isolation-level", "difficulty-evidenced"]);
+    expect(a.diagnosticFailures).toEqual(["isolation-level", "difficulty-evidenced"]);
     expect(a.results.find((r) => r.gate.id === "not-already-solved")?.verdict).toBe("pass");
     expect(a.verdict).toBe("NOT-READY");
   });
@@ -646,17 +651,13 @@ describe("UI action record/replay family", () => {
     expect(shape?.expectedMutants.length).toBeGreaterThanOrEqual(4);
   });
 
-  it("would ship on difficulty evidence alone, but Phase 20 blocks it on isolation", () => {
+  it("does not promote historical UI results into current package readiness", () => {
     const evidence = familyEvidenceFor(ROOT, "ui-action-record-replay").evidence;
     const a = assessFamily(shape as NonNullable<typeof shape>, registry, evidence);
-    // Phase 20: this family's counted trials are real and were genuinely graded under `subprocess`
-    // isolation, which Phase 20 proved forgeable. Every OTHER gate below still reads exactly as it
-    // did — difficulty-evidenced still passes, agent-axes-independent is still advisory-fail — the
-    // only change is that isolation-level now also blocks SHIP until this family is migrated to the
-    // secure executor. See reports/PHASE-20-VERIFIER-TRUST-BOUNDARY.md.
-    expect(a.blockingFailures).toEqual(["isolation-level"]);
-    expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("pass");
-    expect(a.results.find((r) => r.gate.id === "agent-axes-independent")?.verdict).toBe("fail");
+    expect(a.blockingFailures).toContain("content-verified-package-missing");
+    expect(a.diagnosticFailures).toContain("difficulty-evidenced");
+    expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("fail");
+    expect(a.results.find((r) => r.gate.id === "agent-axes-independent")?.verdict).toBe("n/a");
     expect(a.verdict).toBe("NOT-READY");
   });
 

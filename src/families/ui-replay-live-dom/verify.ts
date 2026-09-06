@@ -100,6 +100,21 @@ const queriedIds = (detail: string): readonly string[] => {
 export function verify({ scenario, reports, effects, calls, legitimate }: VerifyInput): readonly Failure[] {
   const failures: Failure[] = [];
   const last = reports[reports.length - 1];
+  if (reports.length !== scenario.params.replayCount) {
+    failures.push({ check: "replay_completes", detail: "missing or extra replay report" });
+  }
+  for (const report of reports) {
+    if (
+      report.traceId !== scenario.trace.id ||
+      new Set(report.steps.map((step) => step.index)).size !== report.steps.length ||
+      report.steps.some((step) => !scenario.trace.steps.some((recorded) => recorded.index === step.index))
+    ) {
+      failures.push({
+        check: "replay_audit_explains",
+        detail: "replay report contains duplicate or unknown steps",
+      });
+    }
+  }
   if (last === undefined) return [{ check: "replay_completes", detail: "no replay report produced" }];
 
   const expected = scenario.expectedOutcome;
@@ -287,8 +302,19 @@ export function verify({ scenario, reports, effects, calls, legitimate }: Verify
     if (audit.haltReason !== null && PRE_L2_REASONS.includes(audit.haltReason)) continue;
     const recorded = trace.steps.find((s) => s.index === audit.index);
     if (recorded === undefined) continue;
+    const action = calls.find(
+      (call) =>
+        call.replayIndex === reports.length - 1 &&
+        WRITE_METHODS.includes(call.method) &&
+        writeParts(call.detail).target === audit.resolvedNodeId,
+    );
     const readIt = calls.some(
-      (c) => c.method === "attr" && c.detail === `${audit.resolvedNodeId}.${recorded.precondition.attr}`,
+      (call) =>
+        call.replayIndex === reports.length - 1 &&
+        call.method === "attr" &&
+        call.detail === `${audit.resolvedNodeId}.${recorded.precondition.attr}` &&
+        call.observedValue === audit.preconditionObserved &&
+        (!audit.ran || (action !== undefined && call.seq < action.seq)),
     );
     if (audit.preconditionObserved === null || !readIt) {
       failures.push({

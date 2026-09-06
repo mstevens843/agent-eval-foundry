@@ -162,7 +162,9 @@ describe("challenge hashing", () => {
     expect(trials.length).toBeGreaterThan(0);
     const current = prepareChallenge(ROOT, "prompt-injection-containment").hash;
     for (const trial of trials) {
-      expect(hashChallengeDir(join(trial.path, "challenge")), trial.runId).toBe(current);
+      const retained = hashChallengeDir(join(trial.path, "challenge"));
+      expect(retained, trial.runId).toBe("4911ffdfbd2c0e9b51752ed16c4f53e8");
+      expect(retained, trial.runId).not.toBe(current);
     }
   });
 
@@ -264,12 +266,14 @@ describe("campaign plans", () => {
     );
   });
 
-  it("the live-DOM campaign is pinned to the current package hash and import-only external slots", () => {
+  it("the live-DOM campaign retains its historical hash and cannot authorize today's package", () => {
     const plan = plans.find((p) => p.familyId === "ui-replay-live-dom");
     expect(plan).toBeDefined();
     const current = prepareChallenge(ROOT, "ui-replay-live-dom").hash;
-    expect((plan as NonNullable<typeof plan>).challengeHash).toBe(current);
-    expect(() => assertCampaignChallenge(plan as NonNullable<typeof plan>, current)).not.toThrow();
+    expect((plan as NonNullable<typeof plan>).challengeHash).toBe("18c3f5afc5973604205cd7df23ce4cad");
+    expect(() => assertCampaignChallenge(plan as NonNullable<typeof plan>, current)).toThrow(
+      /CAMPAIGN_CHALLENGE_HASH_MISMATCH/,
+    );
 
     const slots = (plan as NonNullable<typeof plan>).slots;
     expect(slots.find((s) => s.slotId === "O1")?.runner).toBe("shell");
@@ -449,7 +453,7 @@ describe("status coherence", () => {
       const state = familyLoop(ROOT, family.id, registry);
       if ((state.evidence?.countedAgentTrials ?? 0) > 0) continue;
       expect(state.assessment.verdict, family.id).not.toBe("SHIP");
-      expect(state.assessment.blockingFailures, family.id).toContain("difficulty-evidenced");
+      expect(state.assessment.blockingFailures, family.id).toContain("no-qualified-capability-failure");
     }
   });
 });
@@ -459,7 +463,10 @@ describe("trial analysis", () => {
     const bundle = familyEvidenceFor(ROOT, "prompt-injection-containment");
     const analysis = analyseFamilyTrials(
       "prompt-injection-containment",
-      bundle.trials,
+      {
+        ...bundle.trials,
+        records: readFamilyTrials(join(ROOT, "trials"), "prompt-injection-containment").map((t) => t.record),
+      },
       routeFor("prompt-injection-containment").scenarioParams(),
     );
     expect(analysis.counted).toBeGreaterThan(0);
@@ -616,7 +623,7 @@ describe("the gate table itself", () => {
       reportsDeterministic: true,
       trialReady: true,
     });
-    expect(a.blockingFailures).toContain("difficulty-evidenced");
+    expect(a.blockingFailures).toContain("no-qualified-capability-failure");
     expect(a.verdict).not.toBe("SHIP");
   });
 

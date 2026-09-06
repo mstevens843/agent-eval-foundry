@@ -22,6 +22,7 @@ import time
 sys.path.insert(0, "/tests")
 
 import authority  # noqa: E402
+from artifact_guard import read_json_artifact  # noqa: E402
 
 CERTD = os.environ.get("CERTD_BINARY", "/tmp/certd-build/certd")
 SCENARIO_DIRS = {
@@ -48,8 +49,7 @@ def _load_scenarios():
 
 def _read_json(path):
     try:
-        with open(path, "r", encoding="utf-8") as fh:
-            return json.load(fh)
+        return read_json_artifact(path)
     except Exception as exc:  # malformed or absent is a fact, not a crash
         return {"__unreadable__": str(exc)}
 
@@ -59,7 +59,10 @@ def _run_order(workdir, scenario, entry, binary=None):
     order_path = os.path.join(workdir, "order-%s.json" % entry["id"])
     report_path = os.path.join(workdir, "report-%s.json" % entry["id"])
     audit_path = os.path.join(workdir, "audit-%s.json" % entry["id"])
-    with open(order_path, "w", encoding="utf-8") as fh:
+    # A previous submitted process may have left a path with this name. Never overwrite/follow it
+    # as root, even if that merely attempts to corrupt a later order's input.
+    order_fd = os.open(order_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o644)
+    with os.fdopen(order_fd, "w", encoding="utf-8") as fh:
         json.dump(
             {"id": entry["id"], "identifiers": entry["identifiers"]},
             fh,

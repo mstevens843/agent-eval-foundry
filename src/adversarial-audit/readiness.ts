@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { checkChallengePackage } from "../challenge/package-check.js";
 import { BUILT_FAMILY_IDS, builtFamily } from "../families/registry.js";
 import { assertFamilyListAccounted } from "../foundry/registry.js";
@@ -321,8 +321,8 @@ export const adversarialBundlePath = (root: string, familyId: string): string =>
   join(root, "bundles", `${familyId}-adversarial`);
 
 function hashFiles(root: string, paths: readonly string[]): string | null {
-  const present = paths.map((p) => join(root, p)).filter((p) => existsSync(p));
-  if (present.length === 0) return null;
+  const present = [...new Set(paths)].map((p) => join(root, p));
+  if (present.length === 0 || present.some((path) => !existsSync(path))) return null;
   const hash = createHash("sha256");
   for (const file of present.sort()) {
     hash.update(file.replace(root, ""));
@@ -356,6 +356,14 @@ function hashFiles(root: string, paths: readonly string[]): string | null {
 export const HARNESS_PATHS: readonly string[] = [
   "src/trials/runners.ts",
   "src/adversarial-audit/isolation.ts",
+  "src/trials/secure-runner.ts",
+  "src/trials/router.ts",
+  "src/families/verification-contract.ts",
+  "scripts/secure/authority-entry.mjs",
+  "scripts/secure/cell-entry.mjs",
+  "scripts/secure/protocol.mjs",
+  "scripts/secure/adapters/caa-revalidation.mjs",
+  "scripts/secure/adapters/memory-poisoning.mjs",
 ];
 
 /**
@@ -367,7 +375,21 @@ export const HARNESS_PATHS: readonly string[] = [
  */
 export function verifierHashFor(root: string, familyId: string): string | null {
   const verifier = VERIFIER_PATHS[familyId];
-  return verifier === undefined ? null : hashFiles(root, [...verifier, ...HARNESS_PATHS]);
+  if (verifier === undefined || verifier[0] === undefined) return null;
+  const familyDirectory = dirname(verifier[0]);
+  if (!existsSync(join(root, familyDirectory))) return null;
+  // Scenario, policy and facade changes alter grading even when verify.ts itself is unchanged.
+  // Checker-required also executes and grades the shared memory substrate.
+  const directories = [
+    familyDirectory,
+    ...(familyId === "checker-required-memory-poisoning" ? ["src/families/memory-poisoning"] : []),
+  ];
+  const sources = directories.flatMap((directory) =>
+    readdirSync(join(root, directory))
+      .filter((file) => file.endsWith(".ts"))
+      .map((file) => join(directory, file)),
+  );
+  return hashFiles(root, [...verifier, ...sources, ...HARNESS_PATHS]);
 }
 
 export function currentAdversarialPackageHash(root: string, familyId: string): string | null {

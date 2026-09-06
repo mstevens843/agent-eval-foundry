@@ -26,7 +26,7 @@ COPY . /tests/
 
 # Warm the module/build cache with the pristine service so the verify-time build
 # of the agent's tree compiles the standard library from cache.
-RUN cd /tests/baseline/certd && go build ./... && go vet ./... || true
+RUN cd /tests/baseline/certd && go build ./... && go vet ./...
 
 # Artifact landing directory. /app/certd/ is the only declared artifact, so its
 # parent must exist or harbor's upload fails.

@@ -104,4 +104,6 @@ export interface FacadeCall {
    * dialog the step itself mounted.
    */
   readonly permitted: boolean | null;
+  /** Authority-observed value for attr reads, absent for other methods. */
+  readonly observedValue?: string | null;
 }

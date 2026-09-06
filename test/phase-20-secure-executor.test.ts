@@ -120,7 +120,7 @@ describe("Phase 20 secure executor — prompt-injection-memory-poisoning", () =>
       { modulePath: subject, familyId: "prompt-injection-memory-poisoning" },
       { scenario: MEMORY_SCENARIO },
     );
-    expect(result.error).toContain("unverifiable frame");
+    expect(result.error).toContain("request refused");
   });
 
   it.runIf(() => dockerAvailable)("a malformed/absent report fails closed, not silently", () => {
@@ -129,7 +129,8 @@ describe("Phase 20 secure executor — prompt-injection-memory-poisoning", () =>
       { modulePath: subject, familyId: "prompt-injection-memory-poisoning" },
       { scenario: MEMORY_SCENARIO },
     );
-    expect(result.error).toContain("no subject with a runSession");
+    expect(result.error).toContain("incomplete cell execution");
+    expect(result.diagnostics.stderrTail).toContain("not a function");
   });
 });
 
