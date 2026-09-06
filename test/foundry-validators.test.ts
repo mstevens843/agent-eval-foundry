@@ -350,6 +350,12 @@ const COVERED_IN_PHASE21_OPERATOR_LAB_TEST: readonly RuleCode[] = [
   "PHASE21_MATCHED_PAIR_NOT_DIFFABLE",
 ];
 
+/** Rules whose known-bad case lives in `phase-22-transfer.test.ts`: envelope + adapter registry. */
+const COVERED_IN_PHASE22_TRANSFER_TEST: readonly RuleCode[] = [
+  "PHASE22_ENVELOPE_INVALID",
+  "PHASE22_ADAPTER_NOT_FOUND",
+];
+
 /** Rules whose known-bad case lives in `promotion.test.ts`: probe-to-family promotion validation. */
 const COVERED_IN_PROMOTION_TEST: readonly RuleCode[] = [
   "PROMOTION_NO_SOURCE_PROBE",
@@ -762,6 +768,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ...COVERED_IN_OUTBOX_IMPORT_TEST,
       ...COVERED_IN_LABEL_PARITY_TEST,
       ...COVERED_IN_PHASE21_OPERATOR_LAB_TEST,
+      ...COVERED_IN_PHASE22_TRANSFER_TEST,
     ]);
     const uncovered = RULE_CODES.filter((c) => !covered.has(c));
     expect(
@@ -792,6 +799,7 @@ describe("rule coverage — the mutation test on the checkers themselves", () =>
       ["test/external-intake.test.ts", COVERED_IN_EXTERNAL_INTAKE_TEST],
       ["test/root-cause.test.ts", COVERED_IN_ROOT_CAUSE_TEST],
       ["test/phase-21-operator-lab.test.ts", COVERED_IN_PHASE21_OPERATOR_LAB_TEST],
+      ["test/phase-22-transfer.test.ts", COVERED_IN_PHASE22_TRANSFER_TEST],
     ];
     for (const [file, codes] of delegated) {
       const source = readFileSync(`${ROOT}${file}`, "utf8");

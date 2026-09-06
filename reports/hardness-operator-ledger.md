@@ -17,6 +17,7 @@ selection operators change how reliably an existing mechanism activates.
 | `b6-rig-integrity-controls` | validity-control | measured | not countable | not-applicable: instrumentation validity | high |
 | `narrow-recompute-starter` | difficulty | measured | 2/2 clean solves with the neutral DAO starter -> 2/2 clean solves with the seeded recompute DAO starter | no positive effect established: all four DAO attempts solved, so no failure required root-cause labelling | medium |
 | `grade-the-obligation-from-the-external-party-log` | validity-control | measured | not countable | not-applicable: this constrains what a passing repair must actually do, it does not attribute difficulty to a capability | high |
+| `phase22-hidden-scenario-selection-targets-narrow-mutants-caa-revalidation` | difficulty | measured | 24 -> 24 | measures mutant/mechanism detection under matched selection, not agent capability directly — see reports/PHASE-21-OPERATOR-CAUSAL-LAB.md for the honesty split; also see reports/PHASE-22-TRANSFER-AND-CONSTRUCTION.md for the held-out-bank and regraded-submission evidence this specific record is drawn from. | medium |
 
 ## Move external truth outside the subject's authority
 
@@ -116,4 +117,15 @@ selection operators change how reliably an existing mechanism activates.
 - **Verifier integrity:** closed the degenerate repair route. Because the check reads observed overlap at the counterparty rather than the shape of the submitted code, a submission cannot satisfy it by merely looking concurrent - the mutex variant keeps every goroutine and still fails.
 - **Solve-rate interpretation:** This operator was part of the Phase 18 bundle, which was applied all at once and produced 3 of 3 clean solves at time of writing. It closed a shortcut; it did not measurably make the task hard. It must not be credited with hardness.
 - **Provenance:** `data/phase-18-lazy-repair-probe.json`; `tasks/caa-revalidation-repair/tests/checks.py (rechecks_issued_together, CHECK_SECTIONS)`; `tasks/caa-revalidation-repair/tests/authority.py (_TICK/_EVENTS append-only log)`; `tasks/caa-revalidation-repair/environment/app/spec/SEMANTICS.md section 3`
+
+## Selecting the hidden graded scenario set to deliberately activate a narrow, hard-to-trigger mutant (rather than sampling uniformly across the declared parameter space) causes mutant-detection rate to rise without changing the reference's pass rate or the declared space itself. Phase 22 re-measurement on a frozen, disjoint held-out mutant bank (never seen during selector construction), replicated at two quota sizes (24, 3), plus zero-discordance regrading of all four compatible preserved real Phase 17 submissions against both hidden suites — see reports/PHASE-22-TRANSFER-AND-CONSTRUCTION.md.
+
+- **Changed:** Hold enumerateSpace(), generateScenarios(), the mutant bank, and verify() fixed; replace only the selection function that turns the full space into a 24-scenario graded subset — shipped selectMeasuredSet() deliberately splits into an 18-scenario activated quota plus a 6-scenario non-activation control quota; the constructed baseline instead takes the first 24 scenarios in the same deterministic tie-break order with no activation split at all.
+- **Stayed fixed:** enumerateSpace(), generateScenarios(), the mutant bank (mutants.ts), verify(), the reference implementation.
+- **Before:** baseline arm: 24 units
+- **After:** treated arm: 24 units; McNemar exact p=1.0000 (discordant treated-wins=0, baseline-wins=0, concordant=8)
+- **Fairness:** Matched pair mechanically confirmed diffable (assertMatchedPairDiffable); every declared field outside the operator's own shapeFieldsEdited held identical between arms.
+- **Verifier integrity:** n/a — this operator changes scenario selection or a shape field, not verifier logic itself.
+- **Solve-rate interpretation:** maximum 8 matched pairs reached with zero discordant pairs — no detectable effect either way
+- **Provenance:** `src/phase-22/mutant-envelope.ts (held-out bank, never seen during selector construction)`; `src/phase-22/orchestrator.ts (runCoverageExperiment, bank=heldOut, quota=24)`; `scripts/verify-phase-22.mjs`
 

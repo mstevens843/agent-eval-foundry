@@ -111,8 +111,11 @@ describe("dao recompute descendant", () => {
     const ledger = parseHardnessOperatorLedger(raw);
     // Was 8 before Phase 21 fixed operators[8]'s missing `confidence` field (a pre-existing defect
     // that made this file fail to parse at all, so this assertion was never actually reached before —
-    // the file has always had 9 operators; the count was stale, not the fix).
-    expect(ledger.operators).toHaveLength(9);
+    // the file has always had 9 operators; the count was stale, not the fix). Phase 22 appended a
+    // tenth: the real, replicated NULL-ON-FAIR-ENVELOPE result for
+    // hidden-scenario-selection-targets-narrow-mutants on caa-revalidation (see
+    // scripts/verify-phase-22.mjs and reports/PHASE-22-TRANSFER-AND-CONSTRUCTION.md).
+    expect(ledger.operators).toHaveLength(10);
     expect(new Set(ledger.operators.map((row) => row.category))).toEqual(
       new Set(["validity-control", "difficulty", "scenario-selection"]),
     );

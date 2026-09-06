@@ -227,6 +227,31 @@
         "tasks/caa-revalidation-repair/environment/app/spec/SEMANTICS.md section 3"
       ],
       "confidence": "high"
+    },
+    {
+      "id": "phase22-hidden-scenario-selection-targets-narrow-mutants-caa-revalidation",
+      "category": "difficulty",
+      "name": "Selecting the hidden graded scenario set to deliberately activate a narrow, hard-to-trigger mutant (rather than sampling uniformly across the declared parameter space) causes mutant-detection rate to rise without changing the reference's pass rate or the declared space itself. Phase 22 re-measurement on a frozen, disjoint held-out mutant bank (never seen during selector construction), replicated at two quota sizes (24, 3), plus zero-discordance regrading of all four compatible preserved real Phase 17 submissions against both hidden suites — see reports/PHASE-22-TRANSFER-AND-CONSTRUCTION.md.",
+      "changed": "Hold enumerateSpace(), generateScenarios(), the mutant bank, and verify() fixed; replace only the selection function that turns the full space into a 24-scenario graded subset — shipped selectMeasuredSet() deliberately splits into an 18-scenario activated quota plus a 6-scenario non-activation control quota; the constructed baseline instead takes the first 24 scenarios in the same deterministic tie-break order with no activation split at all.",
+      "stayedFixed": "enumerateSpace(), generateScenarios(), the mutant bank (mutants.ts), verify(), the reference implementation.",
+      "beforeEvidence": "baseline arm: 24 units",
+      "afterEvidence": "treated arm: 24 units; McNemar exact p=1.0000 (discordant treated-wins=0, baseline-wins=0, concordant=8)",
+      "measurementStatus": "measured",
+      "fairnessOutcome": "Matched pair mechanically confirmed diffable (assertMatchedPairDiffable); every declared field outside the operator's own shapeFieldsEdited held identical between arms.",
+      "verifierIntegrityEffect": "n/a — this operator changes scenario selection or a shape field, not verifier logic itself.",
+      "solveRateEffect": {
+        "countable": true,
+        "before": "24",
+        "after": "24",
+        "note": "maximum 8 matched pairs reached with zero discordant pairs — no detectable effect either way"
+      },
+      "capabilityAttribution": "measures mutant/mechanism detection under matched selection, not agent capability directly — see reports/PHASE-21-OPERATOR-CAUSAL-LAB.md for the honesty split; also see reports/PHASE-22-TRANSFER-AND-CONSTRUCTION.md for the held-out-bank and regraded-submission evidence this specific record is drawn from.",
+      "provenance": [
+        "src/phase-22/mutant-envelope.ts (held-out bank, never seen during selector construction)",
+        "src/phase-22/orchestrator.ts (runCoverageExperiment, bank=heldOut, quota=24)",
+        "scripts/verify-phase-22.mjs"
+      ],
+      "confidence": "medium"
     }
   ]
 }

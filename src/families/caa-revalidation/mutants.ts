@@ -29,7 +29,7 @@ export const cardinalityOnlyQueries = makeSubject(
 
 /** Correct answers, wrong order. */
 export const reversedOrder = makeSubject("reversed-order", "Correct answers emitted in reverse order", {
-  preserveOrder: false,
+  resultOrder: "reverse",
 });
 
 /** Baseline: touches nothing external. */

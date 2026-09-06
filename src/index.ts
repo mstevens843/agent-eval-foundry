@@ -978,3 +978,32 @@ export {
 } from "./phase-21/pilot-caa-scenario-selection.js";
 export type { PilotResult, SizedPilotResult } from "./phase-21/pilot-caa-scenario-selection.js";
 export { toHardnessOperatorEvidence } from "./phase-21/operator-ledger-bridge.js";
+
+// Phase 22 — transfer infrastructure and the first real signal
+export {
+  DEV_MUTANTS,
+  DEV_INTENDED_CHECK,
+  HELD_OUT_MUTANTS,
+  HELD_OUT_INTENDED_CHECK,
+  ALL_SCENARIOS,
+  mutantBehaviorHash,
+  assertEnvelopeSound,
+  buildMutantEnvelope,
+  envelopeSubjectById,
+} from "./phase-22/mutant-envelope.js";
+export type { EnvelopeManifestEntry, MutantEnvelope } from "./phase-22/mutant-envelope.js";
+export { registerAdapter, getAdapter, registeredAdapterFamilyIds } from "./phase-22/operator-adapter.js";
+export type { OperatorAdapter, EnvelopeMutantRef, CellGrade } from "./phase-22/operator-adapter.js";
+export { caaRevalidationAdapter, registerAllAdapters } from "./phase-22/adapters/index.js";
+export { runCoverageExperiment } from "./phase-22/orchestrator.js";
+export type {
+  EnvelopeBank,
+  MutantCoverageRow,
+  CoveragePrimaryResult,
+  CoverageSecondaryCaveated,
+  CoverageRunResult,
+} from "./phase-22/orchestrator.js";
+export { regradeSubmissionAgainstSuite } from "./phase-22/regrade.js";
+export type { RegradeCellResult, RegradeSubmissionResult } from "./phase-22/regrade.js";
+export { assessWithinFamilyReplication } from "./phase-22/within-family-replication.js";
+export type { ReplicationVerdict, ReplicationResult } from "./phase-22/within-family-replication.js";

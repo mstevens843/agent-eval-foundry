@@ -15,6 +15,13 @@ export interface ExperimentSummaryForLedger {
   readonly stoppingRule: StoppingDecision;
   readonly provenance: readonly string[];
   readonly extractedOn: string;
+  /**
+   * Distinguishes which phase's methodology produced this record, so a later phase re-measuring the
+   * SAME operator/family pair under a different (e.g. held-out-envelope) protocol adds a new ledger
+   * entry instead of silently overwriting an earlier one under an identical id. Defaults to "phase21"
+   * so every pre-existing call site (and its exact-id test assertion) is unaffected.
+   */
+  readonly phaseLabel?: string;
 }
 
 const confidenceFor = (stoppingRule: StoppingDecision, mcNemar: McNemarResult): OperatorConfidence => {
@@ -27,7 +34,7 @@ export function toHardnessOperatorEvidence(summary: ExperimentSummaryForLedger):
   const { operator, mcNemar, stoppingRule } = summary;
   const countable = stoppingRule.kind === "stop-uplift" || stoppingRule.kind === "stop-null";
   return {
-    id: `phase21-${operator.id}-${summary.familyId}`,
+    id: `${summary.phaseLabel ?? "phase21"}-${operator.id}-${summary.familyId}`,
     category: "difficulty",
     name: operator.causalClaim,
     changed: operator.constructionDelta,

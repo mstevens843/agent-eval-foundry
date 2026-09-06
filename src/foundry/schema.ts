@@ -362,6 +362,9 @@ export const RULE_CODES = [
   // Phase 21 — construction operator causal laboratory
   "PHASE21_OPERATOR_SCHEMA_INVALID",
   "PHASE21_MATCHED_PAIR_NOT_DIFFABLE",
+  // Phase 22 — transfer infrastructure and the first real signal
+  "PHASE22_ENVELOPE_INVALID",
+  "PHASE22_ADAPTER_NOT_FOUND",
 ] as const;
 export type RuleCode = (typeof RULE_CODES)[number];
 

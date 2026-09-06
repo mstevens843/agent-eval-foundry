@@ -1,0 +1,66 @@
+{
+  "schema": "agent-eval-foundry/phase-22-preregistration@1",
+  "phase": 22,
+  "title": "Transfer Infrastructure And The First Real Signal (mandatory-corrections revision)",
+  "recordedAtUtc": "2026-09-05T23:30:02Z",
+  "snapshot": {
+    "headCommit": "d006ee4d312ba943f89684911a450f4cc6bb80c1",
+    "headSubject": "Add the construction operator causal laboratory for phase twenty-one (Phase 21, squash-committed)",
+    "branch": "main",
+    "worktreeAtStart": "clean; no uncommitted changes",
+    "runtimeVersions": { "node": "v22.22.1", "docker": "29.3.1" },
+    "operatorAvailability": "Executed unattended per explicit operator instruction: complete Phase 22 fully and autonomously, do not ask questions, decide next phase afterward. Lane 6 (real-agent pilot) is fully specified but NOT executed, because running it would spend real provider money and requires separate, explicit, in-the-moment authorization the operator is not present to give — absence of authorization is treated as the default, not as permission."
+  },
+  "priorCritiqueAcceptedIntoThisPhase": [
+    "Fixed operator choice, no post-hoc discretion: hidden-scenario-selection-targets-narrow-mutants only.",
+    "A real train/test split for mutants: a frozen development bank (already used to build/pilot the selectors) strictly disjoint from a frozen held-out bank (never seen during selector construction).",
+    "Statistical discipline: exact paired coverage counts are the primary, descriptive result; McNemar's p-value is secondary and explicitly caveated under a stated, admittedly-false independence assumption; forbidden language ('statistically established', 'general effect', 'transferable rule') is not used anywhere in this phase's code or reports.",
+    "A generic orchestrator plus a versioned OperatorAdapter interface, family-specific adapters underneath it, fail-closed refusal when no adapter exists for a family, instead of one 'universal' editor function.",
+    "Regrading preserved real agent submissions against both frozen suites through the Phase 20 trusted executor, as a THIRD, structurally distinct evidence category, never merged with mutant-coverage counts, and explicitly not a new counted trial.",
+    "Cross-family transfer strictly conditional on a real, non-null, replicated primary-family signal; otherwise stop and record the null.",
+    "Lane 6 (real-agent pilot) fully specified but requiring separate, explicit, in-the-moment operator authorization — never pre-authorized inside this document or adopted from another agent's suggested override language."
+  ],
+  "lane0Audit": {
+    "phase21ReVerification": {
+      "method": "Rebuilt dist/ and re-ran node dist/cli.js check plus a fresh evaluation of node scripts/verify-phase-21.mjs (19/19 phase-21-operator-lab tests, schema/matched-pair/stopping-rule/pilot suites) rather than trusting Phase 21's own final summary.",
+      "result": "Passes cleanly, unchanged from Phase 21's own reported state."
+    },
+    "submissionCompatibilityAudit": {
+      "method": "Computed the CURRENT live caa-revalidation challenge package hash via prepareChallenge(root, 'caa-revalidation') (src/trials/run.ts#challengeHash) and independently recomputed each preserved trial's own challenge/ directory hash via hashChallengeDir, comparing both against metadata.json's registeredChallengeSha256 for all four preserved Phase 17 trial directories under trials/caa-revalidation/.",
+      "currentLiveChallengeHash": "c2948f2c26f2231ceaa47d0ec2d3f04a",
+      "currentLiveScenarioSetId": "revalidation-24-bd3bcd60",
+      "result": "All four preserved submissions (phase17-caa-slot-1-openai-attempt-1, phase17-caa-slot-2-anthropic-attempt-1, phase17-caa-slot-3-openai-attempt-1, phase17-caa-slot-4-anthropic-attempt-1) are byte-for-byte compatible with the CURRENT live package: registeredChallengeSha256, the independently recomputed preserved-directory hash, and the live current hash all agree (c2948f2c26f2231ceaa47d0ec2d3f04a) for every trial. None are stale. Regrading these four against a new scenario suite through the Phase 20 trusted executor is therefore valid, real evidence, not a comparison against a task the model never actually saw.",
+      "consequence": "Lane 3's third evidence source (regraded-submission evidence) is executed for real, against all four preserved submissions, rather than honestly skipped for lack of compatible material."
+    },
+    "secondFamilyAudit": {
+      "candidatesConsidered": "Only prompt-injection-memory-poisoning and caa-revalidation are cell-container migrated (SECURELY_MIGRATED_FAMILIES, src/trials/secure-runner.ts); a transfer target that cannot be regraded through the same trusted executor as the primary family would make Lane 3's regrading step asymmetric between families, so the second family for Lane 5 is drawn from this set only.",
+      "auditedFamily": "prompt-injection-memory-poisoning (source directory: src/families/memory-poisoning/ — deliberately shorter than the routed family id, per ADAPTER_FILENAMES's own documented precedent)",
+      "structuralFindings": "Confirmed the same enumerateSpace()/selectMeasuredSet()/buildScenario()/generateScenarios() separation the operator's own precondition requires, plus its own mutants.ts (13 mutant subjects) and a distinct verify({scenario, ledger, writes, report}) signature — structurally compatible with the operator's precondition, but NOT signature-compatible with caa-revalidation's verify({scenario, report, queries}). This is exactly why Lane 2 builds a versioned OperatorAdapter per family rather than one shared verifier-calling function.",
+      "decision": "Preregistered as the Lane 5 transfer target IF AND ONLY IF Lane 3/4 on caa-revalidation produce a real, non-null, replicated, correctly-directed signal with no validity regression. No memory-poisoning adapter or mutant envelope is built in this phase unless that condition is met (see lane5Outcome below) — building one speculatively, before knowing whether there is a primary-family effect worth transferring, would be exactly the unearned scope Phase 22's corrections exist to prevent."
+    },
+    "mutantEnvelopeDesign": {
+      "developmentBank": "The nine pre-existing, shipped mutants (src/families/caa-revalidation/mutants.ts), unchanged. These are the ones src/phase-21/pilot-caa-scenario-selection.ts's selectNaiveBaseline/selectSmallTargeted were built and piloted against; reused here for sanity checks only, never reported as new (held-out) evidence.",
+      "heldOutBank": "Eight new mutants (src/phase-22/mutant-envelope.ts), an 8-cell grid of donor-position (first/last/middle stale name) crossed with collapse-width (1, 2, or all other stale names folded onto the donor) minus the one cell (first-donor/all-width) already occupied by the development bank's first-name-reuse. Every one of the eight was empirically verified (mutantBehaviorHash over the full 192-scenario space) to be behaviorally distinct from every development-bank mutant AND from every other held-out mutant — not merely differently-labelled, but observably different on at least one scenario.",
+      "excludedAxesWithEvidence": [
+        {
+          "axis": "result-order permutation (rotate-by-one, swap-adjacent-pairs)",
+          "reason": "Both produced a mutantBehaviorHash IDENTICAL to the development bank's reversed-order, over all 192 scenarios. caa_result_shape only checks whether the result order exactly matches input order; every non-identity permutation of a domain-count>=2 list fails it the same way, so no non-redundant new order-defect exists without altering generateScenarios/verify, which are held fixed."
+        },
+        {
+          "axis": "wider boundary-age offsets (staleAboveHours=6, staleAboveHours=10)",
+          "reason": "Both produced a mutantBehaviorHash IDENTICAL to boundary-inclusive/boundary-lenient respectively. AGE_PATTERNS (src/families/caa-revalidation/truth.ts) realizes only five discrete ages (0, 8, 9, 24, 719); any staleAboveHours in (0,8) or (8,9) reclassifies the exact same names the two existing boundary mutants already do, so no non-redundant new boundary-defect magnitude exists on the frozen age set."
+        },
+        {
+          "axis": "persistence / write-back contamination",
+          "reason": "This family has no cache-mutation or write-back path at all: OrderName.cachedCaa is immutable for the life of a scenario, and verify() grades purely from the host's own query ledger, never from state a subject could have written. There is no mechanism to construct a mutant for; inventing one would be fabrication, not measurement."
+        }
+      ],
+      "soundnessBar": "assertEnvelopeSound (src/phase-22/mutant-envelope.ts) mechanically enforces, for every mutant in both banks: failure rate over the full 192-scenario space strictly between 0% and 100% (not vacuous, not universal), plus, for the held-out bank specifically: no shared behavioral fingerprint with any development-bank mutant or with any other held-out mutant. One pre-existing redundancy was found and deliberately tolerated rather than silently fixed: the shipped development-bank mutants no-query and fabricated-result share a fingerprint (this family hardcodes every cached answer to ALLOW, making 'report the cache' and 'fabricate ALLOW' observably identical) — real, pre-existing, out of this phase's scope (mutants.ts backs the shipped family sweep other gates depend on), recorded here rather than hidden."
+    }
+  },
+  "lane2ArchitectureDecision": {
+    "rejectedApproach": "A single 'universal' function editing shared JSON-shaped fields across arbitrary families — rejected because families do not share a verifier shape (caa-revalidation's verify({scenario,report,queries}) versus memory-poisoning's verify({scenario,ledger,writes,report})), so a shared editor either half-works or silently assumes structure a family does not have.",
+    "adoptedApproach": "src/phase-22/operator-adapter.ts declares a family-agnostic OperatorAdapter interface (enumerateScenarioSpace, buildScenarios, selectNaive, selectTargeted, gradeCell, referenceSubject, mutantEnvelope, sharedComponentDescriptions) treating every scenario/subject value as opaque. src/phase-22/orchestrator.ts owns only family-agnostic bookkeeping: building the matched pair, mechanically confirming it via requireMatchedPair (src/phase-21/matched-pair.ts, reused unchanged) that only the operator's declared shapeFieldsEdited differ, grading the mutant bank under both selectors, and evaluating the stopping rule (src/phase-21/stopping-rule.ts, reused unchanged). A family with no registered adapter is refused (PHASE22_ADAPTER_NOT_FOUND) rather than silently run through a generic path never proven to fit it. Registration is an explicit function call (registerAllAdapters(), src/phase-22/adapters/index.ts) rather than an import-time side effect, because this package declares \"sideEffects\": false and an import kept only for its registration side effect is a real risk of being tree-shaken by any bundler (including this repo's own tsup build) that takes that declaration at its word.",
+    "realAdapterBuilt": "src/phase-22/adapters/caa-revalidation-adapter.ts — reuses selectNaiveBaseline/selectSmallTargeted (src/phase-21/pilot-caa-scenario-selection.ts, unchanged: the operator under test IS those two functions, and Phase 22 does not get to change them just because it now grades them against a fairer envelope) and wraps runCell (src/families/caa-revalidation/runner.ts, unchanged) as gradeCell."
+  }
+}
