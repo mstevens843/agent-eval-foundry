@@ -34,8 +34,10 @@
 
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { publishEvidence, reserveDirectory, verifyEvidence } from "../execution/artifacts.js";
+import { safeId } from "../execution/store.js";
 import { fail } from "../foundry/schema.js";
-import { canonicalJson } from "../packages/record.js";
+import { canonicalJson, safePackagePath } from "../packages/record.js";
 import { evaluateOutcome } from "./outcome.js";
 import { ROOT_CAUSE_FILE, parseRootCause, unlabelledRootCause } from "./root-cause.js";
 import type { RootCauseRecord } from "./root-cause.js";
@@ -125,7 +127,18 @@ export interface WriteTrialInput {
 
 /** Write a complete trial directory. Everything the run produced, nothing inferred. */
 export function writeTrialDirectory(input: WriteTrialInput): string {
-  const dir = join(input.root, input.familyId, input.runId);
+  safeId(input.familyId);
+  safeId(input.runId);
+  for (const files of [input.challengeFiles, input.submissionFiles, input.workspaceFiles ?? []]) {
+    const seen = new Set<string>();
+    for (const f of files) {
+      safePackagePath(f.path);
+      if (seen.has(f.path.toLowerCase())) throw Error("TRIAL_ARTIFACT_DUPLICATE_PATH");
+      seen.add(f.path.toLowerCase());
+    }
+  }
+  const reservation = reserveDirectory(join(input.root, input.familyId), input.runId);
+  const dir = reservation.stage;
   mkdirSync(join(dir, CHALLENGE_DIR), { recursive: true });
   mkdirSync(join(dir, SUBMISSION_DIR), { recursive: true });
 
@@ -157,7 +170,11 @@ export function writeTrialDirectory(input: WriteTrialInput): string {
   write(TRIAL_FILES.verifier, input.verifierOutput);
   write(TRIAL_FILES.result, input.record);
   write(TRIAL_FILES.countability, input.countability);
-  return dir;
+  return publishEvidence(dir, reservation.destination, {
+    runId: input.runId,
+    familyId: input.familyId,
+    format: "legacy-trial-directory-with-manifest@1",
+  });
 }
 
 /**
@@ -178,6 +195,7 @@ export function readTrialDirectory(dir: string): TrialDirectory {
       fail("TRIALDIR_MISSING_FILE", `${dir}/${name}`, "absent; a partial directory is not a trial");
     }
   }
+  if (existsSync(join(dir, "completion.json"))) verifyEvidence(dir);
 
   const record = parseTrialRecord(
     JSON.parse(readFileSync(join(dir, TRIAL_FILES.result), "utf8")),
@@ -185,6 +203,13 @@ export function readTrialDirectory(dir: string): TrialDirectory {
   );
   const countability = JSON.parse(readFileSync(join(dir, TRIAL_FILES.countability), "utf8")) as Countability;
   const metadata = JSON.parse(readFileSync(join(dir, TRIAL_FILES.metadata), "utf8"));
+  if (
+    [metadata.executionMode, metadata.evidenceClass, metadata.profileObservation?.evidenceClass].some(
+      (value) => ["simulation", "inert-test"].includes(value),
+    ) &&
+    record.counts
+  )
+    throw Error("SIMULATION_CANNOT_COUNT_AS_MODEL_EVIDENCE");
   if (metadata.evaluation?.schemaVersion === 1) {
     const verifier = JSON.parse(readFileSync(join(dir, TRIAL_FILES.verifier), "utf8"));
     const evaluation = evaluateOutcome({
@@ -280,7 +305,7 @@ export function readFamilyTrials(root: string, familyId: string): readonly Trial
   const base = join(root, familyId);
   if (!existsSync(base)) return [];
   return readdirSync(base, { withFileTypes: true })
-    .filter((e) => e.isDirectory())
+    .filter((e) => e.isDirectory() && !e.name.startsWith("."))
     .map((e) => e.name)
     .sort()
     .map((name) => readTrialDirectory(join(base, name)));

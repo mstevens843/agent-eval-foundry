@@ -1,3 +1,12 @@
+import {
+  type ExecutionProfile,
+  type ProfileObservation,
+  type QualificationEvidence,
+  type Target,
+  profileDigest,
+  qualify,
+} from "../execution/profiles.js";
+import { type ReservedAuthority, isActiveReservedAuthority } from "../execution/store.js";
 import { type PackageSnapshot, isVerifiedSnapshot, refreshSnapshot } from "./record.js";
 
 export const PACKAGE_STAGES = [
@@ -41,6 +50,15 @@ export interface PackagePolicyInput {
     readonly contentVerified: boolean;
     /** Host-attested profile lab, not a name inferred from imported model text. */
     readonly providerFamily?: "openai" | "anthropic" | "google" | "other" | "unknown";
+    readonly evidenceClass?: "real-provider" | "simulation" | "historical-import";
+    readonly profileSpecification?: ExecutionProfile;
+    readonly profileObservation?: ProfileObservation;
+    readonly substantive?: boolean;
+    readonly slot?: string;
+    readonly attempt?: number;
+    readonly retryOf?: string | null;
+    readonly retryReason?: string;
+    readonly retryAuthorized?: boolean;
   }[];
   /** Exact, frozen configuration identities; general provider names are insufficient. */
   readonly qualificationProfiles?: readonly string[];
@@ -57,6 +75,7 @@ export interface AuthorizationRequest {
     readonly approved: boolean;
   } | null;
   readonly execution: "inert-test" | "real-provider";
+  readonly reservation?: ReservedAuthority;
 }
 export interface PackageDecision {
   readonly policyVersion: "package-stages-v1";
@@ -116,18 +135,19 @@ export function decidePackage(input: PackagePolicyInput): PackageDecision {
   if (record?.dependencies.unresolved.length) eligible.push("runtime-dependencies-unresolved");
   const authorized = [...eligible];
   const request = input.authorization;
-  if (!request?.approval?.approved) authorized.push("explicit-approval-missing");
+  const reserved = isActiveReservedAuthority(request?.reservation) ? request.reservation : null;
+  if (!request?.approval?.approved && !reserved) authorized.push("explicit-approval-missing");
   if (request) {
     if (
       !request.profile ||
       request.packageDigest !== record?.digest ||
-      request.approval?.packageDigest !== request.packageDigest ||
-      request.approval?.profile !== request.profile ||
-      request.approval?.operation !== request.operation
+      (reserved?.packageDigest ?? request.approval?.packageDigest) !== request.packageDigest ||
+      (reserved?.profile ?? request.approval?.profile) !== request.profile ||
+      (reserved?.operation ?? request.approval?.operation) !== request.operation
     )
       authorized.push("approval-binding-mismatch");
-    if (request.execution !== "inert-test")
-      authorized.push("durable-spend-authority-not-implemented-prompt-5");
+    if (request.execution !== "inert-test" && (!reserved || reserved.realm !== "real-provider"))
+      authorized.push("durable-signed-reservation-missing");
   }
   const observations = input.observations ?? [];
   const unique = new Set<string>();
@@ -140,6 +160,7 @@ export function decidePackage(input: PackagePolicyInput): PackageDecision {
   const valid = observations.filter(
     (o) =>
       o.contentVerified &&
+      o.evidenceClass !== "simulation" &&
       o.packageDigest === record?.digest &&
       o.outcome !== "invalid" &&
       /^[a-f0-9]{64}$/.test(o.profile) &&
@@ -160,16 +181,42 @@ export function decidePackage(input: PackagePolicyInput): PackageDecision {
     profiles.some((p) => !/^[a-f0-9]{64}$/.test(p))
   )
     release.push("exact-two-target-profiles-missing");
-  for (const profile of profiles) {
-    const standard = valid.filter((o) => o.operation === "standard" && o.profile === profile);
-    if (
-      standard.length !== 3 ||
-      standard.some((o) => o.outcome !== "semantic-fail" || o.adjudication !== "capability")
-    )
-      release.push(`requires-three-genuine-failures:${profile}`);
-    const audit = valid.filter((o) => o.operation === "adversarial" && o.profile === profile);
-    if (audit.length < 1 || audit.some((o) => o.outcome !== "semantic-fail"))
-      release.push(`requires-zero-reward-adversarial-evidence:${profile}`);
+  // The same qualification policy is used by standalone inspection and release. Do not
+  // discard invalid attempts before checking retry lineage, or retries become cherry-picks.
+  const specifications: Partial<Record<Target, ExecutionProfile>> = {};
+  const evidence: QualificationEvidence[] = [];
+  for (const o of observations.filter((o) => profiles.includes(o.profile))) {
+    try {
+      const p = o.profileSpecification;
+      if (!o.contentVerified || !p || !o.profileObservation || profileDigest(p) !== o.profile)
+        throw Error("profile or content missing");
+      const previous = specifications[p.target];
+      if (previous && profileDigest(previous) !== o.profile) throw Error("conflicting target profiles");
+      specifications[p.target] = p;
+      evidence.push({
+        ...o,
+        target: p.target,
+        profileDigest: o.profile,
+        slot: o.slot ?? "",
+        attempt: o.attempt ?? 0,
+        observation: o.profileObservation,
+        substantive: o.substantive === true,
+        evidenceClass: o.evidenceClass ?? "historical-import",
+        outcome: o.outcome === "invalid" ? "invalid-execution" : o.outcome,
+      });
+    } catch {
+      release.push(`unattested-exact-profile:${o.profile}`);
+    }
+  }
+  if (!specifications.codex || !specifications.claude) release.push("exact-two-target-profiles-missing");
+  else {
+    const qualification = qualify(
+      record?.digest ?? "",
+      specifications as Record<Target, ExecutionProfile>,
+      evidence,
+    );
+    release.push(...qualification.problems.map((problem) => `qualification:${problem}`));
+    if (!qualification.complete) release.push("full-standard-and-adversarial-qualification-missing");
   }
   const stage = (blockers: string[], notApplicable: string[] = []): StageDecision => ({
     allowed: blockers.length === 0,
@@ -224,6 +271,6 @@ export function assertPackageStage(input: PackagePolicyInput, stage: PackageStag
 /** Actual subprocess adapters cannot be unlocked by a test-mode flag or a plain approval object. */
 export function denyUnreservedProviderExecution(): void {
   throw new Error(
-    "PACKAGE_AUTHORIZATION_DENIED: real provider execution requires Prompt 5 durable reservations; inert test adapter only",
+    "PACKAGE_AUTHORIZATION_DENIED: legacy direct provider dispatch is disabled; use the signed, reserved execution lifecycle with a controlled adapter",
   );
 }

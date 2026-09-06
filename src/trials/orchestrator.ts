@@ -217,8 +217,15 @@ export function orchestrateTrial(options: OrchestrateOptions): OrchestrateResult
         reason: `${evaluation.status}: ${evaluation.problems.join(", ") || graded.detail}`,
       };
   const vetoed = decided.counts ? (options.disqualify?.(graded.cells) ?? null) : null;
-  const countability: Countability =
-    vetoed === null ? decided : { counts: false, classification: decided.classification, reason: vetoed };
+  const countability: Countability = {
+    counts: false,
+    classification: decided.classification,
+    reason:
+      vetoed ??
+      (decided.counts
+        ? "Inert local simulation: semantic results are preserved but cannot count as model evidence"
+        : decided.reason),
+  };
 
   const record = parseTrialRecord({
     runId: options.runId,

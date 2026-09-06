@@ -24,6 +24,7 @@
 // was never asked" is the distinction the whole counting layer exists to protect.
 
 import { execFileSync } from "node:child_process";
+import { TARGETS } from "../execution/profiles.js";
 
 export const PROVIDER_FAMILIES = ["anthropic", "openai", "google", "external"] as const;
 export type ProviderFamily = (typeof PROVIDER_FAMILIES)[number];
@@ -64,12 +65,12 @@ export const PROVIDERS: readonly ProviderSpec[] = [
     family: "anthropic",
     label: "Claude Opus 5 via the Claude CLI",
     binary: "claude",
-    model: "anthropic/claude-opus-5",
+    model: TARGETS.claude.model,
     subjectId: "claude-opus-5",
-    effort: null,
-    command: ["claude", "-p", "{instruction}", "--permission-mode", "bypassPermissions"],
+    effort: TARGETS.claude.effort,
+    command: ["claude", "--model", "claude-opus-5", "--effort", TARGETS.claude.effort, "-p", "{instruction}"],
     invocationNote:
-      "`-p` is non-interactive. `bypassPermissions` is required because the sandbox is a fresh temp directory with nothing in it but the challenge; the model must be able to write its submission without a prompt nobody is there to answer.",
+      "Requested target only, not observed backend identity. Legacy direct dispatch is disabled; actual execution requires a signed reservation and controlled authoring boundary.",
     siblingModel: false,
   },
   {
@@ -116,18 +117,23 @@ export const PROVIDERS: readonly ProviderSpec[] = [
     family: "openai",
     label: "GPT-5.6 Sol via the Codex CLI",
     binary: "codex",
-    model: "openai/gpt-5.6-sol",
+    model: TARGETS.codex.model,
     subjectId: "gpt-5.6-sol",
-    effort: null,
+    effort: TARGETS.codex.effort,
     command: [
       "codex",
       "exec",
-      "--dangerously-bypass-approvals-and-sandbox",
+      "--model",
+      "gpt-5.6-sol",
+      "-c",
+      `model_reasoning_effort=\"${TARGETS.codex.effort}\"`,
+      "--sandbox",
+      "workspace-write",
       "--skip-git-repo-check",
       "{instruction}",
     ],
     invocationNote:
-      "`exec` is non-interactive. The approval bypass is the same requirement as Claude's; `--skip-git-repo-check` is needed because the sandbox is a bare temp directory rather than a repository. `-m` was probed against five other model ids and every one returned `not supported when using Codex with a ChatGPT account`, so this provider contributes exactly one subject.",
+      "Explicit requested model and effort from the pinned profile. CLI output may leave resolved backend identity unknown. A cwd is not isolation; legacy direct dispatch remains disabled.",
     siblingModel: false,
   },
   {

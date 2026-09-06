@@ -646,7 +646,7 @@ export async function validatePortfolioPackage(directory: string, output: string
   return { results, decision };
 }
 
-export async function exportPortfolioPackage(directory: string, output: string, receiptPath: string) {
+export async function verifyPortfolioReceipt(directory: string, receiptPath: string) {
   const snapshot = snapshotAt(directory);
   const receipt = json<{
     packageDigest: string;
@@ -733,6 +733,11 @@ export async function exportPortfolioPackage(directory: string, output: string, 
   const runtime = get<Runtime>(snapshot, "dependencies", "runtime.json");
   if ((await hashFile(join(directory, "runtime.tar"))) !== runtime.archive.sha256)
     throw Error("PORTFOLIO_RUNTIME_BYTES");
+  return { snapshot, receipt, evidence };
+}
+
+export async function exportPortfolioPackage(directory: string, output: string, receiptPath: string) {
+  const { snapshot, receipt, evidence } = await verifyPortfolioReceipt(directory, receiptPath);
   fresh(output);
   copySnapshot(snapshot, join(output, "store"));
   materializeAssembly(snapshot, join(output, "package"));

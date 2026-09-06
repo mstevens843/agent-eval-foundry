@@ -1037,3 +1037,24 @@ export * from "./packages/assurance.js";
 export * from "./trials/outcome.js";
 export * from "./packages/portfolio.js";
 export { browserProduction } from "./families/ui-replay-browser-backed/production.js";
+export { JobStore } from "./execution/store.js";
+export type {
+  Authorization as ExecutionAuthorization,
+  SignedAuthorization,
+  Job,
+  JobRequest,
+  JobState,
+} from "./execution/store.js";
+export {
+  TARGETS,
+  QUALIFICATION_POLICY,
+  profileFor,
+  profileDigest,
+  exactProfileProblems,
+  qualify,
+} from "./execution/profiles.js";
+export type { ExecutionProfile, ProfileObservation, QualificationEvidence } from "./execution/profiles.js";
+export { executeSimulation, driveReservedJob } from "./execution/execute.js";
+export { executionPackage } from "./execution/package-route.js";
+export { regradeExecution } from "./execution/regrade.js";
+export { executionCommand } from "./execution/command.js";

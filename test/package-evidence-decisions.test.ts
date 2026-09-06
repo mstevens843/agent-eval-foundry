@@ -11,6 +11,7 @@ import {
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { afterAll, describe, expect, it } from "vitest";
+import { profileDigest, profileFor } from "../src/execution/profiles.js";
 import { BUILT_FAMILY_IDS } from "../src/families/registry.js";
 import { loadRegistry } from "../src/foundry/load.js";
 import { evaluateProductionReadiness } from "../src/foundry/production-readiness.js";
@@ -292,7 +293,42 @@ describe("one stage-aware policy", () => {
       observations: [...qualified, ...audits],
       qualificationProfiles: [PROFILE_A, PROFILE_B],
     };
-    expect(decidePackage(input).stages["release-eligible"].allowed).toBe(true);
+    expect(decidePackage(input).stages["release-eligible"].allowed).toBe(false);
+    const specs = [
+      profileFor("codex", `sha256:${"a".repeat(64)}`, "fixture"),
+      profileFor("claude", `sha256:${"a".repeat(64)}`, "fixture"),
+    ];
+    for (const p of specs) p.adapter.scaffoldVersion = "observed-fixture-version";
+    const observed = (value: string) => ({
+      value,
+      source: "host-verified fixture receipt",
+      status: "observed" as const,
+    });
+    const exact = {
+      ...input,
+      qualificationProfiles: specs.map(profileDigest),
+      observations: input.observations.map((o) => {
+        const p = specs[o.profile === PROFILE_A ? 0 : 1];
+        if (!p) throw Error("missing fixture profile");
+        return {
+          ...o,
+          slot: o.runId,
+          attempt: 1,
+          profile: profileDigest(p),
+          evidenceClass: "real-provider" as const,
+          substantive: true,
+          profileSpecification: p,
+          profileObservation: {
+            model: observed(p.requested.model),
+            effort: observed(p.requested.effort),
+            scaffoldVersion: observed("observed-fixture-version"),
+            fallback: false,
+            evidenceClass: "real-provider" as const,
+          },
+        };
+      }),
+    };
+    expect(decidePackage(exact).stages["release-eligible"].allowed).toBe(true);
     expect(
       decidePackage({ ...input, observations: [...input.observations, first] }).stages["release-eligible"]
         .allowed,
@@ -483,11 +519,11 @@ describe("execution authorization and semantic completeness", () => {
       expect(inertInvocationCount(f.adapter)).toBe(0);
     },
   );
-  it("counts a completed valid near miss and preserves separate authoring/grading isolation", () => {
+  it("preserves a completed simulated near miss without counting it as model evidence", () => {
     const f = runFixture();
     const result = orchestrateTrial(f.options);
     expect(inertInvocationCount(f.adapter)).toBe(1);
-    expect(result.countability.counts).toBe(true);
+    expect(result.countability.counts).toBe(false);
     const metadata = JSON.parse(readFileSync(join(result.directory, "metadata.json"), "utf8"));
     expect(metadata.evaluation.status).toBe("semantic-fail");
     expect(metadata.authoringIsolation).toBe("process");
@@ -610,7 +646,7 @@ describe("retained history is not current source", () => {
     const output = JSON.parse(readFileSync(path, "utf8"));
     output.cells.push(output.cells[0]);
     writeFileSync(path, JSON.stringify(output));
-    expect(() => readTrialDirectory(result.directory)).toThrow(/EVALUATION_INCONSISTENT/);
+    expect(() => readTrialDirectory(result.directory)).toThrow(/EVIDENCE_CONTENT_MISMATCH/);
   });
   it("derives retained bytes instead of trusting a forged current hash", () => {
     const dir = temporary();

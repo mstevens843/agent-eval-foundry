@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
+import { verifyEvidence } from "../execution/artifacts.js";
 import { fail } from "../foundry/schema.js";
 import type { EvidenceLedger } from "../trials/evidence-lifecycle.js";
 import { isSupersededRun, renderRunRef, staleRunNote } from "../trials/migration.js";
@@ -30,12 +31,13 @@ export function loadExternalIntakeResults(
   const base = join(root, "external-intake", "received");
   if (!existsSync(base)) return [];
   return readdirSync(base, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
+    .filter((entry) => entry.isDirectory() && !entry.name.startsWith("."))
     .map((entry) => entry.name)
     .sort()
     .flatMap((name) => {
       const path = join(base, name, "intake-result.json");
       if (!existsSync(path)) return [];
+      if (existsSync(join(base, name, "completion.json"))) verifyEvidence(join(base, name));
       const parsed = JSON.parse(readFileSync(path, "utf8")) as ExternalIntakeValidationResult;
       return parsed.packet.familyId === familyId ? [parsed] : [];
     });

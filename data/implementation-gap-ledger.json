@@ -140,35 +140,41 @@
       "source": "System G9",
       "packageId": null,
       "owner": 5,
-      "status": "blocked",
-      "summary": "Declared model settings are not effective runtime attestation; authoring and grading isolation must stay distinct.",
+      "status": "verified",
+      "summary": "Pinned requested profiles, explicit unobservable runtime identity, isolated multi-file authoring and separate grading are implemented and exercised using inert containers. Simulations and unknown or fallback identities cannot satisfy exact-target release qualification.",
       "dependencies": [
         "G2",
         "G5"
       ],
       "proof": [
-        "src/trials/providers.ts",
-        "src/trials/orchestrator.ts"
+        "src/execution/profiles.ts",
+        "src/execution/authoring.ts",
+        "test/execution-lifecycle.test.ts",
+        "scripts/verify-authorized-execution.mjs",
+        "reports/verification/prompt-05.json"
       ],
-      "nextAction": "Bind exact model/effort/scaffold/image/argv/profile identity to authorized reservations and captures."
+      "nextAction": "Real provider enrollment, reviewed credential mediation and effective identity receipts require separate authorization; local Docker simulations do not attest Modal or provider behavior."
     },
     {
       "id": "G10",
       "source": "System G10",
       "packageId": null,
       "owner": 5,
-      "status": "blocked",
-      "summary": "Real provider adapters are now deliberately disabled; durable reservations, spend caps, cancellation and atomic run publication remain to implement.",
+      "status": "verified",
+      "summary": "Signed version-bound authorization, transactional reservations, fenced leases, conservative unknown-cost accounting, bounded capture, explicit uncertain-dispatch reconciliation, reasoned infrastructure retries and exclusive atomic publication implement the durable local lifecycle. Real provider entry points remain disabled unless enrolled through the reserved host-service interface.",
       "dependencies": [
         "G2",
         "G5"
       ],
       "proof": [
-        "src/packages/policy.ts",
-        "src/trials/providers.ts",
-        "src/trials/directory.ts"
+        "src/execution/store.ts",
+        "src/execution/execute.ts",
+        "src/execution/capture.ts",
+        "src/execution/artifacts.ts",
+        "test/execution-lifecycle.test.ts",
+        "reports/verification/prompt-05.json"
       ],
-      "nextAction": "Implement budgeted durable execution with inert fault-injection tests before accepting real authorization."
+      "nextAction": "Prompt 6 consumes immutable records and events. Provider billing caps, credentials and lost-request semantics need reviewed provider adapters; no live transport or real campaign is enabled by the local demo."
     },
     {
       "id": "G11",
@@ -633,16 +639,18 @@
       "source": "Prompt 1 integration verification",
       "packageId": null,
       "owner": 5,
-      "status": "blocked",
-      "summary": "Three legacy shell-adapter tests require unreserved subprocess execution; the new deny-by-default boundary intentionally prevents that route. No test is skipped or weakened.",
+      "status": "verified",
+      "summary": "Timeout, missing-artifact and usage fixtures now use bounded inert process capture; direct unreserved provider dispatch stays denied. Dedicated lifecycle tests exercise signed authority, independent worker races, drift, interruption, retries and immutable evidence.",
       "dependencies": [
         "G10"
       ],
       "proof": [
         "test/orchestration.test.ts",
-        "src/packages/policy.ts"
+        "src/packages/policy.ts",
+        "test/execution-lifecycle.test.ts",
+        "reports/verification/prompt-05.json"
       ],
-      "nextAction": "Implement reserved process execution with inert fault fixtures and restore timeout, artifact classification and usage capture tests. Reproduce: pnpm exec vitest run test/orchestration.test.ts."
+      "nextAction": "Retain no-provider routine CI and container integration tiers. Never restore legacy unrestricted shell dispatch just to satisfy an old test."
     },
     {
       "id": "PKG-NATIVE-QUALIFICATION",
@@ -684,8 +692,14 @@
       "owner": 4,
       "status": "verified",
       "summary": "Docker emitted the same image set in varying top-level manifest order. Bounded canonicalization now stabilizes those unordered indexes without changing image blobs or layer order; old archives remain intact.",
-      "dependencies": ["G6"],
-      "proof": ["src/packages/runtime-archive.ts", "test/runtime-archive.test.ts", "reports/verification/prompt-04.json"],
+      "dependencies": [
+        "G6"
+      ],
+      "proof": [
+        "src/packages/runtime-archive.ts",
+        "test/runtime-archive.test.ts",
+        "reports/verification/prompt-04.json"
+      ],
       "nextAction": "Retain repeated native build/archive parity checks; changed image contents still require a new package identity."
     },
     {
@@ -704,6 +718,23 @@
         "docs/protected-family-routes.md"
       ],
       "nextAction": "Prompt 6 historical/current evidence views, then Prompt 7 full integration. Never alter a historical audit hash to make it current."
+    },
+    {
+      "id": "P5-BROWSER-VISIBLE-MOCK",
+      "source": "Prompt 5 actual reference authoring self-check",
+      "packageId": "browser-replay-repair",
+      "owner": 7,
+      "status": "blocked",
+      "summary": "The frozen browser reference passes the protected suite but one visible unit-test mock omits api.settle, so the reference fails that mock test. Starter tests pass. Preserve the artifact and repair parity in a new package version before real qualification.",
+      "dependencies": [
+        "PKG-BROWSER"
+      ],
+      "proof": [
+        "tasks/browser-replay-repair/public/test/replay.test.mjs",
+        "scripts/verify-authorized-execution.mjs",
+        "reports/verification/prompt-05.json"
+      ],
+      "nextAction": "Prompt 7: run every legitimate reference against visible tests as well as protected suites, correct the browser mock and issue a new validated package. Do not rewrite the Prompt 4 package or assurance."
     }
   ]
 }

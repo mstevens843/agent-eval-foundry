@@ -1,6 +1,16 @@
-import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { randomUUID } from "node:crypto";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { join } from "node:path";
+import {
+  copyArtifactTree,
+  publishEvidence,
+  regularTree,
+  reserveDirectory,
+  writeEvidence,
+} from "../execution/artifacts.js";
+import { unobservedProfile } from "../execution/profiles.js";
 import type { PackagePolicyInput } from "../packages/policy.js";
+import { canonicalJson } from "../packages/record.js";
 import { packageSourceSeed, retainedTreeDigest } from "../packages/source.js";
 import { readFamilyTrials, writeTrialDirectory } from "../trials/directory.js";
 import { decideCountability } from "../trials/orchestrator.js";
@@ -11,29 +21,15 @@ import { parseTrialRecord } from "../trials/validate.js";
 import type { ExternalIntakeImportResult, ExternalIntakeValidationResult } from "./types.js";
 import { validateExternalRunPacket } from "./validate.js";
 
-const json = (value: unknown): string => `${JSON.stringify(value, null, 2)}\n`;
-
 export function externalIntakeReceivedRoot(root: string): string {
   return join(root, "external-intake", "received");
 }
 
-function copyTree(source: string, target: string): void {
-  mkdirSync(target, { recursive: true });
-  for (const entry of readdirSync(source, { withFileTypes: true })) {
-    const src = join(source, entry.name);
-    const dest = join(target, entry.name);
-    if (entry.isDirectory()) copyTree(src, dest);
-    else {
-      mkdirSync(dirname(dest), { recursive: true });
-      writeFileSync(dest, readFileSync(src));
-    }
-  }
-}
-
-function packetRunId(validation: ExternalIntakeValidationResult, packetDir: string): string {
+function packetRunId(validation: ExternalIntakeValidationResult): string {
   const runId = validation.packet.metadata?.runId;
-  if (runId !== null && runId !== undefined && runId.trim().length > 0) return runId;
-  return `invalid-${packetDir.split("/").filter(Boolean).pop() ?? "packet"}`;
+  if (runId && /^[a-zA-Z0-9][a-zA-Z0-9_-]{0,95}$/.test(runId)) return runId;
+  // Malformed IDs are retained as data, never interpreted as destination paths.
+  return `invalid-${randomUUID()}`;
 }
 
 function readSubmissionFiles(dir: string): readonly { readonly path: string; readonly content: string }[] {
@@ -63,12 +59,21 @@ function readTranscript(dir: string): string {
   return "";
 }
 
-function preservePacket(root: string, packetDir: string, validation: ExternalIntakeValidationResult): string {
-  const runId = packetRunId(validation, packetDir);
-  const dest = join(externalIntakeReceivedRoot(root), runId);
-  copyTree(packetDir, dest);
-  writeFileSync(join(dest, "intake-result.json"), json(validation), "utf8");
-  return dest;
+export function preserveExternalPacket(
+  root: string,
+  packetDir: string,
+  validation: ExternalIntakeValidationResult,
+): string {
+  const runId = packetRunId(validation);
+  const reserved = reserveDirectory(externalIntakeReceivedRoot(root), runId);
+  // Keep untrusted packet filenames separate from host-owned receipts/manifests.
+  copyArtifactTree(packetDir, join(reserved.stage, "packet"), 64 * 1024 * 1024);
+  writeEvidence(join(reserved.stage, "intake-result.json"), validation);
+  return publishEvidence(reserved.stage, reserved.destination, {
+    runId,
+    operation: "external-intake",
+    evidenceClass: "historical-import",
+  });
 }
 
 export function importExternalRunPacket(
@@ -78,6 +83,7 @@ export function importExternalRunPacket(
   packagePolicy?: PackagePolicyInput,
 ): ExternalIntakeImportResult {
   const prepared = currentChallenge(root, familyId);
+  const packetBefore = regularTree(packetDir, 64 * 1024 * 1024);
   const existingRunIds = readFamilyTrials(join(root, "trials"), familyId).map((trial) => trial.runId);
   const validation = validateExternalRunPacket(root, packetDir, {
     familyId,
@@ -86,7 +92,10 @@ export function importExternalRunPacket(
     existingRunIds,
     ...(packagePolicy ? { packagePolicy } : {}),
   });
-  const preservedDir = preservePacket(root, packetDir, validation);
+  const preservedDir = preserveExternalPacket(root, packetDir, validation);
+  const retainedPacket = join(preservedDir, "packet");
+  if (canonicalJson(packetBefore) !== canonicalJson(regularTree(retainedPacket, 64 * 1024 * 1024)))
+    throw Error("EXTERNAL_PACKET_CHANGED_DURING_VALIDATION");
   if (!validation.importedTrialEligible || validation.packet.metadata === null) {
     return { validation, preservedDir, trialDir: null };
   }
@@ -105,7 +114,7 @@ export function importExternalRunPacket(
   const metadata = validation.packet.metadata;
   const runId = metadata.runId as string;
   const route = routeFor(familyId);
-  const submissionPath = join(packetDir, "submission", "subject.mjs");
+  const submissionPath = join(retainedPacket, "submission", "subject.mjs");
   let graded: ReturnType<typeof route.grade>;
   try {
     graded = route.grade(submissionPath);
@@ -150,9 +159,9 @@ export function importExternalRunPacket(
     runId,
     record,
     countability,
-    transcript: readTranscript(packetDir),
+    transcript: readTranscript(retainedPacket),
     challengeFiles: prepared.pkg.files.map((file) => ({ path: file.path, content: file.content })),
-    submissionFiles: readSubmissionFiles(packetDir),
+    submissionFiles: readSubmissionFiles(retainedPacket),
     verifierOutput: {
       runId,
       challengeHash: prepared.hash,
@@ -164,7 +173,7 @@ export function importExternalRunPacket(
     metadata: {
       runId,
       packageDigest: snapshot.record.digest,
-      submissionDigest: retainedTreeDigest(join(packetDir, "submission")),
+      submissionDigest: retainedTreeDigest(join(retainedPacket, "submission")),
       evaluation,
       authoringIsolation: "external-unknown",
       gradingIsolation: graded.isolation ?? "unknown",
@@ -178,6 +187,8 @@ export function importExternalRunPacket(
       scenarioSetId: prepared.scenarioSetId,
       challengeHash: prepared.hash,
       importedFrom: packetDir,
+      profileObservation: unobservedProfile("historical-import"),
+      requestedProfileProvenance: "imported metadata; not a runtime attestation",
       preservedExternalPacket: preservedDir.replace(`${root}/`, ""),
       classification: "completed",
       notes: metadata.notes,

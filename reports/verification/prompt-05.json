@@ -1,0 +1,616 @@
+{
+  "schemaVersion": 1,
+  "promptId": 5,
+  "status": "complete-local-engineering",
+  "date": "2026-09-06",
+  "providerCallsMade": 0,
+  "realTrialsRun": 0,
+  "realSpendAuthorityMinted": false,
+  "sourceSnapshot": {
+    "baseCommit": "fdbb262812cdba62c849f803637d4d8b4dad5104",
+    "digest": "8350f71e9f15ccd939a8a69f3284ff34d9d98c2fad626f68a518e8f69a0d6fac",
+    "files": 2074,
+    "inventoryBefore": ".local/prompt-05/source-final-before-05.json",
+    "inventoryAfter": ".local/prompt-05/source-final-after.json",
+    "inventoryCommand": "node scripts/execution/source-inventory.mjs",
+    "unchangedAcrossFinalVerification": true,
+    "excluded": "Generated reports, examples and external-intake envelopes; trial/campaign/audit history inventoried separately. See the tracked inventory script.",
+    "historicalFiles": 904,
+    "historicalDigest": "0f8c7429e52bf3a340f8dde804e84e60a33adcfa235981f089960f972ce61c95",
+    "historicalAndTaskDiffEmpty": true,
+    "changedSource": [
+      {
+        "path": "data/implementation-gap-ledger.json",
+        "sha256": "b68c20858d09ebfc85780a36fb58fa9592b160a91857aa2bd42fe000d78a44a0"
+      },
+      {
+        "path": "docs/authorized-execution.md",
+        "sha256": "8e922093e4c13c3b83fd4d28dfaee09691fd63efc07d5905785869c97e366d21"
+      },
+      {
+        "path": "scripts/execution/inert-author.go",
+        "sha256": "2092cf2919f4b157eef71a60f2e2cac77966736c522d0013e997b69a8a68681c"
+      },
+      {
+        "path": "scripts/execution/source-inventory.mjs",
+        "sha256": "fcfeee81d2c490d59d904e6ed6167fa9eecf09f0e6bd5bb47c3591705c880799"
+      },
+      {
+        "path": "scripts/verify-authorized-execution.mjs",
+        "sha256": "7535864fc575b13ce86cf15931e588bc9f205c2c20d04a9cff57ecb28abce481"
+      },
+      {
+        "path": "src/execution/artifacts.ts",
+        "sha256": "6fda691006f69f3465df495ff4c70247d23f1a83729c3c6779a5af6ef729c3da"
+      },
+      {
+        "path": "src/execution/authoring.ts",
+        "sha256": "8b7c39e2da2dbb5c4353abf1d50df1494f7a3a0f4c10d68011b2bee73b4269c7"
+      },
+      {
+        "path": "src/execution/capture.ts",
+        "sha256": "d19c9da200f83098ce6556b2d9f71a861dd23b56d7aed3469abf41f7603c5adc"
+      },
+      {
+        "path": "src/execution/command.ts",
+        "sha256": "0d45c72ad1c2e9f62e432be77566d13649df1578e8d41045c3a75e795023c966"
+      },
+      {
+        "path": "src/execution/execute.ts",
+        "sha256": "731cf9f92a128f1207930a496f741d86fee19a1f4f184e6ed284652b010e3b28"
+      },
+      {
+        "path": "src/execution/package-route.ts",
+        "sha256": "97d1432fdcbd1d437cf7d8db24103ffd02cad5abe0fbaf1f96089087c3648da9"
+      },
+      {
+        "path": "src/execution/profiles.ts",
+        "sha256": "6405448c5da4634a100b8f2584c84993d566d8c37a53a19ce5c0a9447bfc8fc4"
+      },
+      {
+        "path": "src/execution/regrade.ts",
+        "sha256": "5e887514fd5c7f2bd07ba334252d3f32170328e99dd44196f89b41f1ea4b4e48"
+      },
+      {
+        "path": "src/execution/store.ts",
+        "sha256": "2a2e48afa98b2160cb0c21830b2162335afe066b0812550b7e08864b0d649d8e"
+      },
+      {
+        "path": "src/external-intake/import.ts",
+        "sha256": "01277e98827d5fdf25679ac4227978c1d52a3c6c9f4ea9720d0c2ff71e2caf26"
+      },
+      {
+        "path": "src/external-intake/report.ts",
+        "sha256": "12db44c8b1158870106f169ab4b8aac73d486ad6aa756124d3da018d456fabbe"
+      },
+      {
+        "path": "src/external-intake/validate.ts",
+        "sha256": "7debc8c8b312ae07eb4fd0562fa4ccc20b9a3883550408530b337b0a012cc303"
+      },
+      {
+        "path": "src/index.ts",
+        "sha256": "779b6d2a69c28209a8f098908decdc19471d7374839b04bec2397cf2a7c47787"
+      },
+      {
+        "path": "src/packages/local-cli.ts",
+        "sha256": "7d921ed401cda428be59fbb08c29e8f977edccc36d3ce06c765d1edadfaf0a12"
+      },
+      {
+        "path": "src/packages/native-caa.ts",
+        "sha256": "8674d30a870235f302b5832ecfe68bb89749f1435e11fcbd8c6cc8e2a01fc6f8"
+      },
+      {
+        "path": "src/packages/policy.ts",
+        "sha256": "a08d788d27fe0cc621566fa79fc002d4c2e69b652f926a285a266c7c86a9ab36"
+      },
+      {
+        "path": "src/packages/portfolio.ts",
+        "sha256": "7a42b284772880100161483cf7edb5c0fd950607ff7b11ef89e82d43093cb807"
+      },
+      {
+        "path": "src/trials/directory.ts",
+        "sha256": "21369f14fd5f359fa60954c6dce3c416840919e2089fe44154bd8ff1fbc069fd"
+      },
+      {
+        "path": "src/trials/orchestrator.ts",
+        "sha256": "c9b397a0d3f0adc34bd8b35010b0db33b22c646930b5e8503d497c9385a56d61"
+      },
+      {
+        "path": "src/trials/provider-registry.ts",
+        "sha256": "b602fed6e9d32b6644861f6a0843c857ea45fbdf3b00accd65702d6172caf663"
+      },
+      {
+        "path": "test/execution-lifecycle.test.ts",
+        "sha256": "27f84d751aa06b5bde84cbfe285503273f3c25f382c4d5ce736f3624790d5b76"
+      },
+      {
+        "path": "test/orchestration.test.ts",
+        "sha256": "db1a8ab94ce9c0c3e396c1f5679883a6356315799c5fc126d949f9cb07b30487"
+      },
+      {
+        "path": "test/package-evidence-decisions.test.ts",
+        "sha256": "a63a9ede6a57e0a8356d9134b9d4da0c7d107e1b2bf7147053ad3e56a9596e85"
+      }
+    ],
+    "compiled": [
+      {
+        "path": "dist/index.js",
+        "sha256": "5127948cbd221109ad17629b0fce1b5a0b192052fd0cc75f079e142ff5fc15d6"
+      },
+      {
+        "path": "dist/index.cjs",
+        "sha256": "0bf5e522b3225009e1b2733238c1086fe5b4b79dae59f15f1c59ef87241ed641"
+      },
+      {
+        "path": "dist/packages/local-cli.js",
+        "sha256": "41c17f39151c91fe006a2e0b9f79d8dc77ce4e7661c922fe5b3cbfc8dbab6bb9"
+      },
+      {
+        "path": "dist/trials/operation-authority.js",
+        "sha256": "e00566a13878ec240034f32cbd06619163c2be0a3bd9b521365ff843c1cd279b"
+      }
+    ],
+    "executionSourceDigest": "5fecfc42da0a7222a13189f876c98d3a8d02b0d36e34eede532778af6fc70b8e"
+  },
+  "prerequisitesVerified": [
+    {
+      "prompt": 1,
+      "proof": "test/package-evidence-decisions.test.ts",
+      "detail": "Existing content-verified snapshots and package-stage policy reused."
+    },
+    {
+      "prompt": 2,
+      "proof": "test/package-production.test.ts",
+      "packageDigest": "b75735fc458b016a10d482dab328fc91a7cd9ba96acd80bdba6c363e9c30a244",
+      "detail": "Retained native CAA assembly/receipt/images reused for actual multi-file grading."
+    },
+    {
+      "prompt": 3,
+      "proof": "test/protected-family-routes.test.ts",
+      "detail": "All twelve protected routes rechecked with references, alternatives and scoped negative/boundary controls; not a complete protected Cartesian sweep."
+    },
+    {
+      "prompt": 4,
+      "proof": "test/portfolio-production.test.ts",
+      "packageDigest": "43b7ae61f5dda199139796e765e81f31ad7f9da133ca6ac16e770c9664680941",
+      "detail": "Retained browser export/receipt and real Chromium grading route used; no frozen task package rewritten."
+    }
+  ],
+  "implementedInterfaces": [
+    "profileFor/profileDigest/exactProfileProblems/qualify",
+    "JobStore.install/reserve/reservation/claim/bindPlan/transition/account/reconcile",
+    "captureProcess/runInertAuthor",
+    "executeSimulation/driveReservedJob",
+    "reserveDirectory/copyArtifactTree/publishEvidence/verifyEvidence",
+    "regradeExecution",
+    "pnpm package:local execution demo/resume/inspect/verify/reconcile/regrade",
+    "immutable compatibility trial writer and external packet intake"
+  ],
+  "gapDispositions": [
+    {
+      "id": "G9",
+      "status": "verified-local",
+      "detail": "Requested identities and effective observations are separate; isolated public workspaces exercised, real identities unobserved."
+    },
+    {
+      "id": "G10",
+      "status": "verified-local",
+      "detail": "Transactional signed reservations, fenced recovery, bounded capture and immutable publication exercised without provider calls."
+    },
+    {
+      "id": "EXECUTION-TESTS-1",
+      "status": "verified",
+      "detail": "Legacy timeout/artifact/usage fixtures restored on bounded inert process capture; direct providers remain denied."
+    }
+  ],
+  "verification": [
+    {
+      "path": ".local/prompt-05/final-regressions-04.json",
+      "sha256": "b02a1f34bb8e4f6c18d030a59b0d2b3115f9cd19f39b776a2503e913753cd13b",
+      "passed": 292,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 55.8752119140625,
+      "files": [
+        {
+          "path": "test/cross-provider.test.ts",
+          "passed": 62,
+          "failed": 0
+        },
+        {
+          "path": "test/execution-lifecycle.test.ts",
+          "passed": 29,
+          "failed": 0
+        },
+        {
+          "path": "test/external-intake.test.ts",
+          "passed": 9,
+          "failed": 0
+        },
+        {
+          "path": "test/history-task-attribution.test.ts",
+          "passed": 13,
+          "failed": 0
+        },
+        {
+          "path": "test/orchestration.test.ts",
+          "passed": 54,
+          "failed": 0
+        },
+        {
+          "path": "test/package-checker-integrity.test.ts",
+          "passed": 6,
+          "failed": 0
+        },
+        {
+          "path": "test/package-evidence-decisions.test.ts",
+          "passed": 45,
+          "failed": 0
+        },
+        {
+          "path": "test/package-population-integrity.test.ts",
+          "passed": 7,
+          "failed": 0
+        },
+        {
+          "path": "test/package-production.test.ts",
+          "passed": 10,
+          "failed": 0
+        },
+        {
+          "path": "test/package-public-surface.test.ts",
+          "passed": 14,
+          "failed": 0
+        },
+        {
+          "path": "test/package-semantic-integrity.test.ts",
+          "passed": 13,
+          "failed": 0
+        },
+        {
+          "path": "test/portfolio-production.test.ts",
+          "passed": 10,
+          "failed": 0
+        },
+        {
+          "path": "test/protected-contracts.test.ts",
+          "passed": 5,
+          "failed": 0
+        },
+        {
+          "path": "test/protected-family-semantics.test.ts",
+          "passed": 13,
+          "failed": 0
+        },
+        {
+          "path": "test/runtime-archive.test.ts",
+          "passed": 2,
+          "failed": 0
+        }
+      ],
+      "failures": [],
+      "command": "pnpm exec vitest run test/execution-lifecycle.test.ts test/package-evidence-decisions.test.ts test/orchestration.test.ts test/external-intake.test.ts test/cross-provider.test.ts test/portfolio-production.test.ts test/package-production.test.ts test/runtime-archive.test.ts test/protected-contracts.test.ts test/protected-family-semantics.test.ts test/package-semantic-integrity.test.ts test/package-population-integrity.test.ts test/package-public-surface.test.ts test/package-checker-integrity.test.ts test/history-task-attribution.test.ts --reporter=json --outputFile=.local/prompt-05/final-regressions-04.json",
+      "status": "pass"
+    },
+    {
+      "path": ".local/prompt-05/final-protected-routes-03.json",
+      "sha256": "dc703bf78744842ec8c6e31f989f95088965afaa603ae42b0ca3e0989a6368bf",
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 259.36233935546875,
+      "files": [
+        {
+          "path": "test/protected-family-routes.test.ts",
+          "passed": 15,
+          "failed": 0
+        }
+      ],
+      "failures": [],
+      "command": "pnpm exec vitest run test/protected-family-routes.test.ts --reporter=json --outputFile=.local/prompt-05/final-protected-routes-03.json",
+      "status": "pass"
+    },
+    {
+      "command": "pnpm exec tsc --noEmit",
+      "status": "pass"
+    },
+    {
+      "command": "pnpm lint",
+      "status": "pass",
+      "files": 449
+    },
+    {
+      "command": "pnpm build",
+      "status": "pass",
+      "formats": [
+        "ESM",
+        "CJS",
+        "declarations"
+      ]
+    },
+    {
+      "command": "git diff --check",
+      "status": "pass"
+    },
+    {
+      "command": "ESM/CJS public export loading",
+      "status": "pass"
+    },
+    {
+      "command": "Cached Go image gofmt -l scripts/execution/inert-author.go",
+      "status": "pass"
+    },
+    {
+      "command": "pnpm exec biome check scripts/execution/source-inventory.mjs scripts/verify-authorized-execution.mjs",
+      "status": "pass"
+    }
+  ],
+  "localEndToEnd": {
+    "schemaVersion": 1,
+    "cases": [
+      {
+        "id": "native-correct",
+        "mode": "correct",
+        "expected": "semantic-pass",
+        "observed": "semantic-pass",
+        "captureStatus": "completed",
+        "bytesRetained": 72948,
+        "milliseconds": 4502,
+        "directory": ".local/prompt-05/final-route-04/jobs/simulation/records/native-correct",
+        "files": 307,
+        "packageDigest": "b75735fc458b016a10d482dab328fc91a7cd9ba96acd80bdba6c363e9c30a244",
+        "profileDigest": "4dd9e09700c30435da798b3a636b8fa49dc6988fe210db9b74c062f27e38448e",
+        "completionSha256": "84378e4e7fcc93e4e4d8ced1741f91b042bfa58ee24f5b096b39833a3f2b0270"
+      },
+      {
+        "id": "native-missing-file",
+        "mode": "missing-file",
+        "expected": "invalid-execution",
+        "observed": "invalid-execution",
+        "captureStatus": "completed",
+        "bytesRetained": 67326,
+        "milliseconds": 4410,
+        "directory": ".local/prompt-05/final-route-04/jobs/simulation/records/native-missing-file",
+        "files": 303,
+        "packageDigest": "b75735fc458b016a10d482dab328fc91a7cd9ba96acd80bdba6c363e9c30a244",
+        "profileDigest": "4dd9e09700c30435da798b3a636b8fa49dc6988fe210db9b74c062f27e38448e",
+        "completionSha256": "a0afed4e43401645475e28f98cf88fc5ca11502135c0687348f6fd90490bb308"
+      },
+      {
+        "id": "native-incorrect",
+        "mode": "incorrect",
+        "expected": "semantic-fail",
+        "observed": "semantic-fail",
+        "captureStatus": "completed",
+        "bytesRetained": 73388,
+        "milliseconds": 4417,
+        "directory": ".local/prompt-05/final-route-04/jobs/simulation/records/native-incorrect",
+        "files": 307,
+        "packageDigest": "b75735fc458b016a10d482dab328fc91a7cd9ba96acd80bdba6c363e9c30a244",
+        "profileDigest": "0402fa93afa9c00e979cd3b9774abb11b3e900a1dd87607eae8625ada1908e10",
+        "completionSha256": "e9cc9426af52d77c20540d6cb48cf4b1e76c3fa1d15574fcaae839c951deffcf"
+      },
+      {
+        "id": "browser-correct",
+        "mode": "correct",
+        "expected": "semantic-pass",
+        "observed": "semantic-pass",
+        "captureStatus": "completed",
+        "bytesRetained": 32556,
+        "milliseconds": 267,
+        "directory": ".local/prompt-05/final-route-04/jobs/simulation/records/browser-correct",
+        "files": 110,
+        "packageDigest": "43b7ae61f5dda199139796e765e81f31ad7f9da133ca6ac16e770c9664680941",
+        "profileDigest": "171b11a38f25e1fa6f98a00cd11e1d32738909f9e85e999a67448dd9d8217ca4",
+        "completionSha256": "ea62ff4a0d2302b708348e2495482e3206591b14358033b92871ef790a1eb064"
+      },
+      {
+        "id": "browser-incorrect",
+        "mode": "incorrect",
+        "expected": "semantic-fail",
+        "observed": "semantic-fail",
+        "captureStatus": "completed",
+        "bytesRetained": 26906,
+        "milliseconds": 306,
+        "directory": ".local/prompt-05/final-route-04/jobs/simulation/records/browser-incorrect",
+        "files": 110,
+        "packageDigest": "43b7ae61f5dda199139796e765e81f31ad7f9da133ca6ac16e770c9664680941",
+        "profileDigest": "0c55d963fe87ef629fc50eb132208bd511696dfc3f32fc3c5241489462abeeef",
+        "completionSha256": "8a764b6fd268be7e8dac06116792df0cb5d2a235aa3c90c36b03ef4e7ca5aa6e"
+      },
+      {
+        "id": "resource-timeout",
+        "mode": "timeout",
+        "expected": "invalid-execution",
+        "observed": "invalid-execution",
+        "captureStatus": "timeout",
+        "bytesRetained": 376,
+        "milliseconds": 4113,
+        "directory": ".local/prompt-05/final-route-04/jobs/simulation/records/resource-timeout",
+        "files": 68,
+        "packageDigest": "43b7ae61f5dda199139796e765e81f31ad7f9da133ca6ac16e770c9664680941",
+        "profileDigest": "19fbfcba93f941d9bc3b4a1d022657e20790b384d2e8889ef7e353dbd30eb0d9",
+        "completionSha256": "7dc7c46fdc8ca94741d5a2b4a82c1792065a96817407a893bc2a7511511af04a"
+      },
+      {
+        "id": "resource-malformed",
+        "mode": "malformed",
+        "expected": "invalid-execution",
+        "observed": "invalid-execution",
+        "captureStatus": "malformed-events",
+        "bytesRetained": 397,
+        "milliseconds": 170,
+        "directory": ".local/prompt-05/final-route-04/jobs/simulation/records/resource-malformed",
+        "files": 68,
+        "packageDigest": "43b7ae61f5dda199139796e765e81f31ad7f9da133ca6ac16e770c9664680941",
+        "profileDigest": "2e78d5d8a8895faba3a72ac669574ed38a87a5df4afaea85bd2afc114bb8509d",
+        "completionSha256": "3f1f08a40b6815aa3fa93692b2b0b81856e7693d6c3351be7ca0372beb452288"
+      },
+      {
+        "id": "resource-large-output",
+        "mode": "large-output",
+        "expected": "invalid-execution",
+        "observed": "invalid-execution",
+        "captureStatus": "output-limit",
+        "bytesRetained": 33554432,
+        "milliseconds": 305,
+        "directory": ".local/prompt-05/final-route-04/jobs/simulation/records/resource-large-output",
+        "files": 68,
+        "packageDigest": "43b7ae61f5dda199139796e765e81f31ad7f9da133ca6ac16e770c9664680941",
+        "profileDigest": "2e78d5d8a8895faba3a72ac669574ed38a87a5df4afaea85bd2afc114bb8509d",
+        "completionSha256": "81104a65e20672d5a2b5e19f38cb3f9760f653ed96a6b3105aabf07dca08fd3d"
+      },
+      {
+        "id": "resource-interrupted",
+        "mode": "interrupted",
+        "expected": "invalid-execution",
+        "observed": "invalid-execution",
+        "captureStatus": "process-error",
+        "bytesRetained": 376,
+        "milliseconds": 177,
+        "directory": ".local/prompt-05/final-route-04/jobs/simulation/records/resource-interrupted",
+        "files": 68,
+        "packageDigest": "43b7ae61f5dda199139796e765e81f31ad7f9da133ca6ac16e770c9664680941",
+        "profileDigest": "2e78d5d8a8895faba3a72ac669574ed38a87a5df4afaea85bd2afc114bb8509d",
+        "completionSha256": "6c937e699ecc0d9d80691f07310e3a1106a5a6c553bb61c7ced7fef05eb65139"
+      },
+      {
+        "id": "resource-child-process",
+        "mode": "child-process",
+        "expected": "invalid-execution",
+        "observed": "invalid-execution",
+        "captureStatus": "timeout",
+        "bytesRetained": 376,
+        "milliseconds": 4112,
+        "directory": ".local/prompt-05/final-route-04/jobs/simulation/records/resource-child-process",
+        "files": 68,
+        "packageDigest": "43b7ae61f5dda199139796e765e81f31ad7f9da133ca6ac16e770c9664680941",
+        "profileDigest": "19fbfcba93f941d9bc3b4a1d022657e20790b384d2e8889ef7e353dbd30eb0d9",
+        "completionSha256": "4f379b772c12c2c0f6ceeefaf442c187c6fe3bb31a2640280b6e12680801a618"
+      }
+    ],
+    "regrade": ".local/prompt-05/final-route-04/regrades/browser-regrade",
+    "readOnlyInspection": true,
+    "repeatedResumeNoDispatch": true,
+    "providerCallsMade": 0,
+    "realTrialEvidence": false,
+    "path": ".local/prompt-05/final-route-04/result.json",
+    "sha256": "8544a1b3f0ca0e832195e6605fa646158521aca7f716f4e076e95a86d05251b1",
+    "command": "node scripts/verify-authorized-execution.mjs .local/prompt-04/canonical-native-export .local/prompt-04/release-browser-export sha256:948613e43689f45087dc21a2dfd91a0419e473850042862e795838e2d6013159 .local/prompt-05/final-route-04",
+    "passed": 10,
+    "failed": 0,
+    "simulationCannotQualify": true,
+    "recordFootprintKiB": 83220
+  },
+  "runtime": {
+    "node": "v22.22.1",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "executionDigest": "5fecfc42da0a7222a13189f876c98d3a8d02b0d36e34eede532778af6fc70b8e",
+    "nativeEnvironmentImage": "sha256:948613e43689f45087dc21a2dfd91a0419e473850042862e795838e2d6013159",
+    "nativeVerifierImage": "sha256:7a4c731ecbc30ab06b823071e80c2bc9a0df82fcf3aa52441b5c8f974fbff703",
+    "browserEnvironmentImage": "sha256:9462df8de5e2ea66b6fa2f2e20d59e3955760f420f8dc386d9aa85212348cc40",
+    "sqlite": "built-in, experimental warning on Node 22",
+    "limits": {
+      "captureBytes": 33554432,
+      "eventLineBytes": 65536,
+      "diagnosticTailCharacters": 4096,
+      "artifactBytes": 8388608,
+      "artifactFiles": 128,
+      "completeEvidenceBytes": 134217728,
+      "completeEvidenceEntries": 4096
+    }
+  },
+  "legacyCompatibility": {
+    "path": ".local/prompt-05/legacy-compatibility.json",
+    "sha256": "f17b158614ffcb0d25b0c45f65454e0cfb3d359d1a2461ab1e0769e9d85acc18",
+    "passed": 50,
+    "failed": 6,
+    "skipped": 0,
+    "seconds": 50.163841552734375,
+    "files": [
+      {
+        "path": "test/trials.test.ts",
+        "passed": 50,
+        "failed": 6
+      }
+    ],
+    "failures": [
+      "manual agent import grades an imported artifact under subprocess isolation",
+      "checker-required measured family is measured in the ledger but not shipped without real-agent difficulty",
+      "ship gate with computed evidence a verifier-only family cannot be SHIP however good its mutant evidence is",
+      "ship gate with computed evidence a shape declaring trials that all passed is blocked even with no live evidence attached",
+      "ship gate with computed evidence a family whose reference fails is NOT-READY whatever else passes",
+      "ship gate with computed evidence a family whose baselines pass is NOT-READY — refusing everything must not win"
+    ],
+    "command": "pnpm exec vitest run test/trials.test.ts --reporter=json --outputFile=.local/prompt-05/legacy-compatibility.json",
+    "status": "known-failures-retained",
+    "owner": 7,
+    "interpretation": "One assertion expects the old subprocess label instead of cell-container; five expect superseded ship-blocker labels. No test or historical evidence was changed to conceal them."
+  },
+  "intermediateEvidence": "Prior failed/preliminary runs remain under .local/prompt-05. They exposed a tiny test lease, absent report receipt, source/build drift during an early route sweep, one transient concurrent protected-control failure, and native workspace/fixture assumptions. Only the final unchanged-source runs listed above are final verification. Frozen native grading intentionally restores read-only go.mod/order definitions; the missing-file fixture removes mutable planner code instead.",
+  "remainingBlockers": [
+    {
+      "owner": "external",
+      "id": "QUALIFICATION",
+      "detail": "No live provider adapter, real account credentials, owner spend authority, effective provider identity, human solve, official model rubric or real standard/adversarial qualification was executed or enrolled. Provider-specific credential mediation, enforceable billing/request limits and identity observations are required before real execution."
+    },
+    {
+      "owner": 7,
+      "id": "P5-BROWSER-VISIBLE-MOCK",
+      "detail": "Frozen browser reference passes protected grading, but one visible mock lacks api.settle. Correct mock/contract parity in a new package version before real qualification; old package and evidence retained."
+    },
+    {
+      "owner": 7,
+      "id": "G14",
+      "detail": "Separate legacy compatibility tier has 50 passing and six failing assertions, listed below. Full repository suite is not claimed green."
+    },
+    {
+      "owner": 6,
+      "id": "P3-HISTORICAL-AUDIT-VIEW",
+      "detail": "Preserved checker adversarial evidence still needs a historical/current view; prior ADV_COUNTED_HASH_STALE registry diagnostic remains assigned to Prompt 6. No historical hash rewritten."
+    }
+  ],
+  "nextOwner": 6,
+  "changedFiles": [
+    "data/implementation-gap-ledger.json",
+    "docs/authorized-execution.md",
+    "reports/PROMPT-05-AUTHORIZED-EXECUTION.md",
+    "reports/verification/prompt-05.json",
+    "scripts/execution/inert-author.go",
+    "scripts/execution/source-inventory.mjs",
+    "scripts/verify-authorized-execution.mjs",
+    "src/execution/artifacts.ts",
+    "src/execution/authoring.ts",
+    "src/execution/capture.ts",
+    "src/execution/command.ts",
+    "src/execution/execute.ts",
+    "src/execution/package-route.ts",
+    "src/execution/profiles.ts",
+    "src/execution/regrade.ts",
+    "src/execution/store.ts",
+    "src/external-intake/import.ts",
+    "src/external-intake/report.ts",
+    "src/external-intake/validate.ts",
+    "src/index.ts",
+    "src/packages/local-cli.ts",
+    "src/packages/native-caa.ts",
+    "src/packages/policy.ts",
+    "src/packages/portfolio.ts",
+    "src/trials/directory.ts",
+    "src/trials/orchestrator.ts",
+    "src/trials/provider-registry.ts",
+    "test/execution-lifecycle.test.ts",
+    "test/orchestration.test.ts",
+    "test/package-evidence-decisions.test.ts"
+  ],
+  "compatibilityNotes": [
+    "Existing source/report APIs remain Node 20 compatible; job storage requires Node 22.13 or newer.",
+    "New trials are sealed by completion manifests; historical unsealed trials remain readable.",
+    "New external envelopes keep returned files under packet/; duplicate IDs fail rather than overwrite.",
+    "Modern simulated evidence is explicitly uncounted; imported runtime uncertainty is preserved.",
+    "Regrades have separate identities and zero new authoring attempts.",
+    "Local reservations do not claim provider-enforced billing limits or exactly-once external spend.",
+    "Prompt documents and private handoffs remain Git-ignored. Public runtime documentation and verification are tracked."
+  ]
+}

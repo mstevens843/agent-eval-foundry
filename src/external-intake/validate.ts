@@ -205,6 +205,19 @@ export function validateExternalRunPacket(
   const add = (code: ExternalIntakeRuleCode, path: string, detail: string) =>
     findings.push(finding(code, path, detail));
 
+  const rawMetadata = readJson(join(packetDir, "metadata.json"));
+  const rawResult = readJson(join(packetDir, "result.json"));
+  if (
+    [rawMetadata?.evidenceClass, rawMetadata?.executionMode, rawResult?.evidenceClass].some(
+      (v) => v === "simulation" || v === "inert-test",
+    )
+  )
+    add(
+      "EXTERNAL_INTAKE_METADATA_MISSING",
+      packetDir,
+      "Simulation provenance is ineligible for external model evidence; retain it only as local validation.",
+    );
+
   if (metadata === null) {
     add(
       "EXTERNAL_INTAKE_METADATA_MISSING",

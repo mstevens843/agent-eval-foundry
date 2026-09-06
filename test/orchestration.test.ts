@@ -13,6 +13,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import { buildChallengePackage } from "../src/challenge/package.js";
+import { captureProcess } from "../src/execution/capture.js";
 import { runFamily } from "../src/families/prompt-injection-containment/runner.js";
 import { loadRegistry } from "../src/foundry/load.js";
 import { familyEvidenceFor } from "../src/reports/evidence.js";
@@ -185,34 +186,30 @@ describe("providers", () => {
     }
   });
 
-  it("the shell runner enforces its timeout", () => {
+  it("the bounded inert process runner enforces its timeout without unlocking provider dispatch", async () => {
     const chal = mkdtempSync(join(tmpdir(), "foundry-chal-"));
     writeFileSync(join(chal, "README.md"), "task", "utf8");
-    const out = shellAdapter.run({
-      challengeDir: chal,
-      submissionPath: "submission/subject.mjs",
-      instruction: "",
+    const out = await captureProcess(process.execPath, ["-e", "setTimeout(()=>{},60000)"], {
+      directory: join(chal, "capture"),
       timeoutMs: 500,
+      maxBytes: 16384,
       env: {},
-      command: ["node", "-e", "setTimeout(()=>{},60000)"],
     });
-    expect(out.classification).toBe("timeout");
-    expect(out.runtimeSeconds).toBeLessThan(30);
+    expect(out.status).toBe("timeout");
+    expect(out.milliseconds).toBeLessThan(30000);
   });
 
-  it("a run that produces no artifact is never `completed`", () => {
+  it("a successful inert process with no artifact is not a completed solver attempt", async () => {
     const chal = mkdtempSync(join(tmpdir(), "foundry-chal2-"));
     writeFileSync(join(chal, "README.md"), "task", "utf8");
-    const out = shellAdapter.run({
-      challengeDir: chal,
-      submissionPath: "submission/subject.mjs",
-      instruction: "",
-      timeoutMs: 10_000,
+    const out = await captureProcess(process.execPath, ["-e", "console.log('did nothing')"], {
+      directory: join(chal, "capture"),
+      timeoutMs: 10000,
+      maxBytes: 16384,
       env: {},
-      command: ["node", "-e", "console.log('did nothing')"],
     });
-    expect(out.submission).toEqual([]);
-    expect(out.classification).not.toBe("completed");
+    expect(out.status).toBe("completed");
+    expect(classifyRun(out.stdoutTail, false, false, false).classification).not.toBe("completed");
   });
 
   it("classifyRun prefers the artifact over the prose", () => {
@@ -334,7 +331,7 @@ describe("what a trial cost", () => {
     ]);
   });
 
-  it("carries usage onto the run result without calling any provider", () => {
+  it("carries streamed usage onto the capture result without calling any provider", async () => {
     // A local node process impersonating the claude output shape. No provider is contacted, so this
     // is runnable without spending: what is under test is the harness, not the model.
     const chal = mkdtempSync(join(tmpdir(), "foundry-usage-"));
@@ -344,18 +341,15 @@ describe("what a trial cost", () => {
       total_cost_usd: 0.25,
       usage: { input_tokens: 10, cache_read_input_tokens: 5, output_tokens: 7 },
     });
-    const out = shellAdapter.run({
-      challengeDir: chal,
-      submissionPath: "submission/subject.mjs",
-      instruction: "",
-      timeoutMs: 10_000,
+    const out = await captureProcess(process.execPath, ["-e", `console.log(${JSON.stringify(line)})`], {
+      directory: join(chal, "capture"),
+      timeoutMs: 10000,
+      maxBytes: 16384,
       env: {},
-      command: ["node", "-e", `console.log(${JSON.stringify(line)})`],
+      jsonEvents: true,
     });
-    expect(out.usage?.costUsd).toBe(0.25);
-    expect(out.usage?.inputTokens).toBe(15);
-    // The effective argv is returned so the trial metadata records what ran, not what was planned.
-    expect(out.command).toEqual(["node", "-e", `console.log(${JSON.stringify(line)})`]);
+    expect(out.lastUsage).toMatchObject({ costUsd: 0.25, inputTokens: 15 });
+    expect(readFileSync(join(chal, "capture/events.jsonl"), "utf8").trim()).toBe(line);
   });
 
   it("a cost the provider never reported cannot be recorded beside its tokens", () => {
