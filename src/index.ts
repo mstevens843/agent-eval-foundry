@@ -18,6 +18,7 @@ export {
   isProperSubset,
   jaccard,
   jaccardGroups,
+  representativeJaccardGroups,
   maxBipartiteMatching,
   subsetAdjacency,
 } from "./similarity.js";
@@ -1031,4 +1032,6 @@ export * from "./packages/source.js";
 export * from "./packages/history.js";
 export * from "./packages/evidence.js";
 export * from "./packages/gaps.js";
+export * from "./packages/assembly.js";
+export * from "./packages/assurance.js";
 export * from "./trials/outcome.js";

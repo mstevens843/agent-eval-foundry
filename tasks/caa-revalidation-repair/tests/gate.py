@@ -45,6 +45,11 @@ INTENDED = {
     "no-work": "rechecked_exactly_the_stale",
     "fabricated-audit": "audit_matches_report",
     "visible-example-hardcoding": "authorization_applied",
+    "serial-repair": "rechecks_issued_together",
+    "mutex-serialized": "rechecks_issued_together",
+    "two-query-batches": "rechecks_issued_together",
+    "wrong-order-id": "report_present",
+    "unrelated-cache-loss": "store_recorded",
 }
 AGENT_VISIBLE = os.environ.get("AGENT_VISIBLE", "/tests/baseline")
 

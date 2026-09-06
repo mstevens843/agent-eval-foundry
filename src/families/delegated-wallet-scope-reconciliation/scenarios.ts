@@ -8,6 +8,7 @@ import {
   type ScenarioParams,
   TOKEN_STATES,
   buildScenarioFromParts,
+  expectedForParams,
 } from "./truth.js";
 import { REQUEST_SURFACES } from "./types.js";
 
@@ -80,7 +81,7 @@ export function selectMeasuredSet(space: readonly ScenarioParams[]): readonly Sc
   const add = (params: readonly ScenarioParams[]): void => {
     for (const p of params) byKey.set(keyOf(p), p);
   };
-  const scenarioRows = space.map((params) => ({ params, scenario: buildScenarioFromParts(params) }));
+  const scenarioRows = space.map((params) => ({ params, expected: expectedForParams(params) }));
 
   add(
     sampleSpace(space, {
@@ -94,7 +95,7 @@ export function selectMeasuredSet(space: readonly ScenarioParams[]): readonly Sc
   // so "refuse everything" and duplicate-retry bugs are measured on more than a token handful.
   add(
     sampleSpace(
-      scenarioRows.filter((row) => row.scenario.expected.allowed).map((row) => row.params),
+      scenarioRows.filter((row) => row.expected.allowed).map((row) => row.params),
       {
         keyOf,
         groupOf: (p) => `${p.requestSurface}/${p.repeatCount}/${p.priorSpend}`,
@@ -105,7 +106,7 @@ export function selectMeasuredSet(space: readonly ScenarioParams[]): readonly Sc
   add(
     sampleSpace(
       scenarioRows
-        .filter((row) => row.scenario.expected.allowed && row.params.repeatCount === 2)
+        .filter((row) => row.expected.allowed && row.params.repeatCount === 2)
         .map((row) => row.params),
       {
         keyOf,
@@ -120,7 +121,7 @@ export function selectMeasuredSet(space: readonly ScenarioParams[]): readonly Sc
         .filter(
           (row) =>
             row.params.authorityTransition === "downgraded" &&
-            row.scenario.expected.reason === "DWS5_REQUEST_WITHIN_CURRENT_LIMIT",
+            row.expected.reason === "DWS5_REQUEST_WITHIN_CURRENT_LIMIT",
         )
         .map((row) => row.params),
       {

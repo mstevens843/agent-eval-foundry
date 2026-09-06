@@ -21,7 +21,7 @@ SOCK="$OUT/authority.sock"
 ( cd "$HARNESS" && go build -o "$OUT/devauthority" ./cmd/devauthority )
 
 cp "$SCENARIO/store.json" "$OUT/store.json"
-NOW="$(head -n1 "$SCENARIO/now.txt" 2>/dev/null || true)"
+NOW="$(sed '/^#/d' "$SCENARIO/now.txt" | head -n1)"
 
 "$OUT/devauthority" --socket "$SOCK" --policy "$SCENARIO/policy.json" &
 AUTHORITY_PID=$!

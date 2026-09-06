@@ -34,9 +34,9 @@ export function hash32(input: string): number {
 }
 
 export interface SampleOptions<T> {
-  /** Stable identity for a point. Must include every knob. */
+  /** Unique, nonempty stable identity for a point. Must include every knob. */
   readonly keyOf: (item: T) => string;
-  /** Keep roughly this fraction. */
+  /** Keep roughly this fraction, in (0, 1]. Every nonempty stratum retains at least one item. */
   readonly fraction: number;
   /** Points are grouped by this and sampled within each group, so no group is emptied. */
   readonly groupOf?: (item: T) => string;
@@ -50,25 +50,35 @@ export interface SampleOptions<T> {
  * with any single knob.
  */
 export function sampleSpace<T>(items: readonly T[], options: SampleOptions<T>): readonly T[] {
+  if (!Number.isFinite(options.fraction) || options.fraction <= 0 || options.fraction > 1)
+    throw new RangeError("sampleSpace fraction must be finite and in (0, 1]");
   const groupOf = options.groupOf ?? ((): string => "all");
-  const groups = new Map<string, T[]>();
+  type Ranked = { item: T; identity: string; hash: number };
+  const groups = new Map<string, Ranked[]>();
+  const identities = new Set<string>();
   for (const item of items) {
+    const identity = options.keyOf(item);
+    if (typeof identity !== "string" || !identity || identities.has(identity))
+      throw new Error("sampleSpace requires unique nonempty identities");
+    identities.add(identity);
     const key = groupOf(item);
-    groups.set(key, [...(groups.get(key) ?? []), item]);
-  }
-  const out: T[] = [];
-  for (const key of [...groups.keys()].sort()) {
     const group = groups.get(key) ?? [];
-    const ranked = [...group].sort((a, b) => {
-      const ha = hash32(options.keyOf(a));
-      const hb = hash32(options.keyOf(b));
-      return ha === hb ? options.keyOf(a).localeCompare(options.keyOf(b)) : ha - hb;
-    });
+    if (!groups.has(key)) groups.set(key, group);
+    group.push({ item, identity, hash: hash32(identity) });
+  }
+  const out: Ranked[] = [];
+  for (const key of [...groups.keys()].sort()) {
+    const ranked = (groups.get(key) ?? []).sort((a, b) =>
+      a.hash === b.hash ? a.identity.localeCompare(b.identity) : a.hash - b.hash,
+    );
     const keep = Math.max(1, Math.round(ranked.length * options.fraction));
-    out.push(...ranked.slice(0, keep));
+    for (let i = 0; i < keep; i += 1) {
+      const entry = ranked[i];
+      if (entry) out.push(entry);
+    }
   }
   // Sorted by identity so the measured set is stable and diffable.
-  return out.sort((a, b) => options.keyOf(a).localeCompare(options.keyOf(b)));
+  return out.sort((a, b) => a.identity.localeCompare(b.identity)).map((row) => row.item);
 }
 
 /**

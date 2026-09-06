@@ -371,7 +371,8 @@ export function decideSpend(
   };
 }
 
-export function buildScenarioFromParts(params: ScenarioParams): Scenario {
+/** Shared decision inputs; selection does not allocate cached views or full scenario worlds. */
+function decisionInputs(params: ScenarioParams) {
   const base = basePolicy(params);
   const currentPolicy = currentPolicyFor(params);
   const currentDelegation = currentDelegationFor(params);
@@ -394,6 +395,17 @@ export function buildScenarioFromParts(params: ScenarioParams): Scenario {
     idempotencyKey: `idem-${params.seed}-${params.requestedAmount}-${params.requestSurface}`,
     surface: params.requestSurface,
   };
+  return { base, currentPolicy, currentDelegation, currentToken, priorSpend, remainingBudget, request };
+}
+
+export function expectedForParams(params: ScenarioParams): ExpectedDecision {
+  const { request, currentPolicy, currentDelegation, currentToken, remainingBudget } = decisionInputs(params);
+  return decideSpend(request, currentPolicy, currentDelegation, currentToken, remainingBudget);
+}
+
+export function buildScenarioFromParts(params: ScenarioParams): Scenario {
+  const { base, currentPolicy, currentDelegation, currentToken, priorSpend, remainingBudget, request } =
+    decisionInputs(params);
   const id = [
     "dws",
     `limit-${params.initialApprovedLimit}`,

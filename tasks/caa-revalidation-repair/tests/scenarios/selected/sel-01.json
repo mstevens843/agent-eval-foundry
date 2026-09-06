@@ -56,6 +56,10 @@
     "c.example.test": {
       "checked_at": "2031-02-24T04:00:00Z",
       "decision": "PERMIT"
+    },
+    "archive.example.test": {
+      "checked_at": "2028-01-01T00:00:00Z",
+      "decision": "FORBID"
     }
   }
 }

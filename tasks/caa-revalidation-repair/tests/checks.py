@@ -96,6 +96,8 @@ def _store_matches(actual, expected):
         return False, "store holds %s, expected %s" % (sorted(entries), sorted(expected))
     for name, want in expected.items():
         got = entries.get(name) or {}
+        if not isinstance(got, dict):
+            return False, "%s store record is not an object" % name
         if got.get("decision") != want["decision"]:
             return False, "%s stored as %s, expected %s" % (name, got.get("decision"), want["decision"])
         if not _same_instant(str(got.get("checked_at", "")), want["checked_at"]):
@@ -146,8 +148,14 @@ def completion_inverted(row):
 
 def evaluate_scenario(row):
     """Return {check_id: (ok, detail)} for one scenario."""
+    if not isinstance(row, dict) or not isinstance(row.get("scenario"), dict):
+        raise ValueError("missing scenario")
+    if not isinstance(row.get("orders"), list) or not isinstance(row.get("events"), list):
+        raise ValueError("incomplete collection")
     scenario = row["scenario"]
     expected = expected_orders(scenario)
+    if len(row["orders"]) != len(expected) or any(not isinstance(o, dict) for o in row["orders"]):
+        raise ValueError("order population mismatch")
     events = sorted(row["events"], key=lambda e: e["tick"])
     results = {cid: (True, "") for cid in CHECK_IDS}
 
@@ -161,7 +169,7 @@ def evaluate_scenario(row):
         oid = want["order_id"]
         report = actual.get("report")
 
-        if actual.get("timed_out"):
+        if actual.get("timed_out") or actual.get("output_overflow") or actual.get("status", "completed") != "completed":
             fail("report_present", "%s: certd did not finish" % oid)
             continue
         if actual.get("exit_code") != 0 or not isinstance(report, dict) or "__unreadable__" in report:
@@ -175,8 +183,11 @@ def evaluate_scenario(row):
         if report.get("outcome") != want["outcome"]:
             fail("outcome", "%s: outcome %s, expected %s" % (oid, report.get("outcome"), want["outcome"]))
 
+        if report.get("order_id") != oid:
+            fail("report_present", "%s: report names the wrong order" % oid)
+
         decisions = report.get("decisions")
-        if not isinstance(decisions, list) or [d.get("name") for d in decisions] != [
+        if not isinstance(decisions, list) or any(not isinstance(d, dict) for d in decisions) or [d.get("name") for d in decisions] != [
             d["name"] for d in want["decisions"]
         ]:
             fail(
@@ -184,14 +195,14 @@ def evaluate_scenario(row):
                 "%s: decisions name %s, expected %s"
                 % (
                     oid,
-                    [d.get("name") for d in decisions] if isinstance(decisions, list) else decisions,
+                    decisions,
                     [d["name"] for d in want["decisions"]],
                 ),
             )
         else:
             for got, wanted in zip(decisions, want["decisions"]):
                 if wanted["authorization"] is None:
-                    if got.get("authorization") in (PERMIT, FORBID):
+                    if got.get("authorization") not in (None, ""):
                         fail(
                             "authorization_applied",
                             "%s: %s carries %s, but no authorization was established for it"
@@ -223,10 +234,14 @@ def evaluate_scenario(row):
                 audit.get("order_id") == report.get("order_id")
                 and audit.get("outcome") == report.get("outcome")
                 and isinstance(entries, list)
+                and all(isinstance(e, dict) for e in entries)
+                and isinstance(decisions, list)
+                and all(isinstance(d, dict) for d in decisions)
                 and len(entries) == len(decisions or [])
                 and all(
                     e.get("name") == d.get("name")
-                    and e.get("authorization") == d.get("authorization")
+                    and (e.get("authorization") == d.get("authorization")
+                         or (e.get("authorization") in (None, "") and d.get("authorization") in (None, "")))
                     and e.get("source") == d.get("source")
                     for e, d in zip(entries, decisions or [])
                 )
@@ -243,15 +258,15 @@ def evaluate_scenario(row):
             )
 
         if len(want["pending"]) >= 2:
-            overlapped = any(
-                a["started"] < b["finished"] and b["started"] < a["finished"]
-                for i, a in enumerate(asked)
-                for b in asked[i + 1 :]
+            # All required rechecks share a flight interval. One overlapping pair
+            # alone would accept a multi-round sequence of two-query batches.
+            overlapped = len(asked) == len(want["pending"]) and bool(asked) and (
+                max(e["started"] for e in asked) < min(e["finished"] for e in asked)
             )
             if not overlapped:
                 fail(
                     "rechecks_issued_together",
-                    "%s: %d rechecks, none of them overlapping" % (oid, len(asked)),
+                    "%s: %d rechecks do not share one in-flight interval" % (oid, len(asked)),
                 )
 
     stray = [e for e in events if e["kind"] in ("unnamed_query", "late_query")] + [

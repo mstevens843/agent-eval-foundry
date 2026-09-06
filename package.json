@@ -27,6 +27,7 @@
   ],
   "sideEffects": false,
   "scripts": {
+    "package:local": "node dist/packages/local-cli.js",
     "build": "tsup",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

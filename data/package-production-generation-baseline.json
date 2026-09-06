@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "a228c37",
+  "note": "Pre-Prompt 2 ordered route scenario parameter membership; containment exposes no parameter map and does not use sampleSpace.",
+  "families": {
+    "prompt-injection-containment": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "prompt-injection-memory-poisoning": {
+      "count": 864,
+      "sha256": "035a8ebb51494fbd49504ece478858c06f939c3565356a696a377df40cdba4b0"
+    },
+    "ui-action-record-replay": {
+      "count": 324,
+      "sha256": "3e258b22a9928561d1f8ae2dc420b3250f531c9cb4e20979db535e8969ce13e2"
+    },
+    "ui-replay-live-dom": {
+      "count": 864,
+      "sha256": "461febe98a377b1cf6b5b4402c5afd6b64d7d1850a625ae726c336ff580091b3"
+    },
+    "checker-required-memory-poisoning": {
+      "count": 792,
+      "sha256": "0567b03f84079baac5d194dc3559300d4e36bda6221d269538ceef0687eed9f1"
+    },
+    "access-token-scope-expansion": {
+      "count": 384,
+      "sha256": "0c060cbe53040ebf038e09e8d10a2f44ccbe56675a30e5f964bb6a1b29a75d4a"
+    },
+    "delegated-wallet-scope-reconciliation": {
+      "count": 804,
+      "sha256": "f79cb36f2f2179d2edaf8f641bcee3fc933ab664080caec8459a6bd28b0af79a"
+    },
+    "caa-revalidation": {
+      "count": 24,
+      "sha256": "cedebc69ea202ddaad66051ed801dee59241a7f683fb6dbbc4cc04a7ee56dad7"
+    },
+    "dao-descendant": {
+      "count": 24,
+      "sha256": "642af888f08aa274378138fa0db9b7c17d901eecf72526be205f70960a834251"
+    },
+    "trading-reconciliation-recompute": {
+      "count": 24,
+      "sha256": "88e59d031b0f84a725126b11d5b09bd06534ac6dbdd4b508f1e24bb55e465a28"
+    },
+    "deployment-rollback-recompute": {
+      "count": 24,
+      "sha256": "ad4279aa0528f2da57a5b241a2e8a358caabc9b667e02568e8bda25b9cc34485"
+    },
+    "deployment-model-alias-rollout-drift": {
+      "count": 339,
+      "sha256": "44cb09b4f1b06299e4f51b2bb99fdf60b4f6b66d14ccbc676c935e7748a07366"
+    }
+  }
+}

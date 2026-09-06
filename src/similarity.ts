@@ -155,11 +155,17 @@ export const maxBipartiteMatching = maxMatching;
 export const subsetAdjacency = (sets: readonly (readonly string[])[]): readonly (readonly number[])[] =>
   sets.map((a, i) => sets.flatMap((b, j) => (i !== j && isProperSubset(a, b) ? [j] : [])));
 
-/** Group catch sets whose pairwise Jaccard meets `threshold`, greedily by descending set size. */
-export function jaccardGroups(
+/**
+ * Greedy representative groups, descending by set size (input order breaks size ties).
+ * Every member meets the threshold against the FIRST member, not every other member.
+ * This preserves historical clustering; it neither changes the antichain nor proves common cause.
+ */
+export function representativeJaccardGroups(
   sets: readonly (readonly string[])[],
   threshold: number,
 ): readonly (readonly number[])[] {
+  if (!Number.isFinite(threshold) || threshold < 0 || threshold > 1)
+    throw new RangeError("Jaccard threshold must be in [0, 1]");
   const order = sets.map((_, i) => i).sort((a, b) => (sets[b]?.length ?? 0) - (sets[a]?.length ?? 0));
   const assigned = new Set<number>();
   const groups: number[][] = [];
@@ -178,3 +184,6 @@ export function jaccardGroups(
   }
   return groups;
 }
+
+/** Compatibility name: representative-based, NOT an all-pairs guarantee. */
+export const jaccardGroups = representativeJaccardGroups;

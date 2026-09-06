@@ -1,0 +1,2180 @@
+{
+  "schemaVersion": 1,
+  "promptId": "02",
+  "status": "complete-local-engineering",
+  "providerCallsMade": 0,
+  "sourceSnapshot": {
+    "head": "a228c3766ca36cf253ab3c8897735a2d769061eb",
+    "digest": "251950ea32e1cb33b50ece0279af1c8534cd6a573f918ddf17945b56776c8d97",
+    "files": 3229,
+    "beforeInventory": ".local/prompt-02/tested-source-before.json",
+    "afterInventory": ".local/prompt-02/tested-source-after.json",
+    "unchangedDuringFinalVerification": true,
+    "exclusions": "Ignored/private/generated files and two non-runtime Prompt 2 report outputs. Dependency lockfile retained; no claim this attests the local Node installation.",
+    "changedFiles": [
+      {
+        "path": "data/implementation-gap-ledger.json",
+        "size": 23980,
+        "executable": false,
+        "sha256": "286c1f37829825b92dd1806c2c5ba2e0a9703ed084ea981f8813672dbe0dfdc8"
+      },
+      {
+        "path": "data/package-production-generation-baseline.json",
+        "size": 1973,
+        "executable": false,
+        "sha256": "373bc6cdca93d2a508ca0431a0f47dd1f59581a1981c4a464f01f5cd7c70498e"
+      },
+      {
+        "path": "docs/package-production.md",
+        "size": 11635,
+        "executable": false,
+        "sha256": "3a3d27a117d89e84232227893a52c7d6c172a0e2cf90b33066f9e94fbf420679"
+      },
+      {
+        "path": "package.json",
+        "size": 9832,
+        "executable": false,
+        "sha256": "c908241b73776506880b439e47970d133a62fe16fa23af73fd63704658730e43"
+      },
+      {
+        "path": "reports/verification/prompt-02-generation-performance.json",
+        "size": 17463,
+        "executable": false,
+        "sha256": "aa27e5f8cb725634a117be24a1798fcbe04c8ae67a81af8ca6a24c5bbe72a9f2"
+      },
+      {
+        "path": "scripts/benchmark-package-generation.ts",
+        "size": 5685,
+        "executable": false,
+        "sha256": "d529e02efd1fcf2a8e7681ce181b1c94ed7f8653a87823558464ddc293c4bb49"
+      },
+      {
+        "path": "scripts/verify-native-package-reproduction.mjs",
+        "size": 3484,
+        "executable": false,
+        "sha256": "a6cccf6285e6bbe2e88e85acb3a369fdd8213d62742db31d27929b234b15304f"
+      },
+      {
+        "path": "src/families/delegated-wallet-scope-reconciliation/scenarios.ts",
+        "size": 4517,
+        "executable": false,
+        "sha256": "26b2ac3c182f1cd08c0021697197ed65a5de83157f1885683d37d1496bf46a37"
+      },
+      {
+        "path": "src/families/delegated-wallet-scope-reconciliation/truth.ts",
+        "size": 14316,
+        "executable": false,
+        "sha256": "6b8c667f9b23afd63e836ecd56319670a7eb4a2d205bed11139f06afbd15a7e4"
+      },
+      {
+        "path": "src/foundry/sample.ts",
+        "size": 5066,
+        "executable": false,
+        "sha256": "6f1322866121ea2b637c9ad08d8603c2ef7c7407ffbf753ea82d741ec0387c18"
+      },
+      {
+        "path": "src/index.ts",
+        "size": 31114,
+        "executable": false,
+        "sha256": "840a57c77f02f54885fe898a6c14e724fbddb60838b7594b310d868c47efd7a6"
+      },
+      {
+        "path": "src/packages/assembly.ts",
+        "size": 5515,
+        "executable": false,
+        "sha256": "68c392d23fabe94657f88fffcce3ec0fdfc243a46cec1d003d680b8deb74e6dc"
+      },
+      {
+        "path": "src/packages/assurance.ts",
+        "size": 3552,
+        "executable": false,
+        "sha256": "cdcdadb22323c6a6c18bd58f28dae4cf45a433ac52600fbfd43ac022761db2b7"
+      },
+      {
+        "path": "src/packages/local-cli.ts",
+        "size": 353,
+        "executable": false,
+        "sha256": "60cb7a2f21ac1f2d46df26c6a9caaa6a867c0a6c12260128c73f689c99e35282"
+      },
+      {
+        "path": "src/packages/local-process.ts",
+        "size": 3249,
+        "executable": false,
+        "sha256": "d75c613097a40d5b2d78cf1026086209e939249aec39a3f8a558db821e8d9af7"
+      },
+      {
+        "path": "src/packages/native-caa.ts",
+        "size": 29416,
+        "executable": false,
+        "sha256": "b0e183c8c012e4c13c6b5be37ee2e40380dd6f6637af10d23b43efc3f0947481"
+      },
+      {
+        "path": "src/similarity.ts",
+        "size": 8156,
+        "executable": false,
+        "sha256": "ab5ebfc36eb6560d9f9659af6e8c601cf200703590d4dba55f4fa831de54c50c"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/environment/Dockerfile",
+        "size": 1154,
+        "executable": false,
+        "sha256": "1bb04d91dd768f5f3a532473dfefcbe74f5763d998c2e2a612ef824c49c01496"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/environment/app/harness/run-scenario.sh",
+        "size": 1599,
+        "executable": true,
+        "sha256": "ff5cd00a8a3d5570ff92d15207d59d59686e43ae0ec2f1345c8b00fa5c6b5886"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/environment/app/spec/SEMANTICS.md",
+        "size": 5047,
+        "executable": false,
+        "sha256": "8ec7f3e14c01a9128ba0ebf73319bae47fbf69300a9187a22dfb6f1152f0b345"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/instruction.md",
+        "size": 3420,
+        "executable": false,
+        "sha256": "ef86b979106d4731c81ffcad617f6d0b9b7ab724ea06d7f8dac9d93aa32ca65b"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/tests/Dockerfile",
+        "size": 2060,
+        "executable": false,
+        "sha256": "9ae255a5a9f5fa0d0a7c8e4725d9154ef333f85cafc9aaede0c8fb8958d2351e"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/tests/artifact_guard.py",
+        "size": 1681,
+        "executable": false,
+        "sha256": "0027cc9bb42594c0f3a891942bf0f4b6ab4b8a748057f68642c42163394e0d00"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/tests/bounded_process.py",
+        "size": 4867,
+        "executable": false,
+        "sha256": "49490da55f4fae6bf8509a8107e00ec626b053ef87bf402ae7641a0b7ceb1863"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/tests/build_submission.py",
+        "size": 1240,
+        "executable": false,
+        "sha256": "10e2ae2d5eb9d978c5a6502ae5ecce887cea9994dc4db65c88aeb924a2f7c761"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/tests/checks.py",
+        "size": 11447,
+        "executable": false,
+        "sha256": "eb950f2204f484fbd8bfdffe43f828f41245a0673ee681a73c52472aecef4355"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/tests/collect.py",
+        "size": 5742,
+        "executable": false,
+        "sha256": "50f6b508993fde266df3fa6c5376f534bcc654e5ee74e561f26546dccfb8481e"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/tests/format_check.py",
+        "size": 758,
+        "executable": false,
+        "sha256": "285ad61d2c7473bf7303e009d6817a1c150389accf2974477e1451b8ef48540b"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/tests/gate.py",
+        "size": 11548,
+        "executable": false,
+        "sha256": "3a68cbe4b3c0d757f42fe122d58146306c25766c1043195e71c213d223abec9a"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/tests/local_validate.py",
+        "size": 2476,
+        "executable": false,
+        "sha256": "e7f6f3c084b87758709f36febddcb3f006dfca073209bc770f3085f42b9b1965"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/tests/manifest.py",
+        "size": 1244,
+        "executable": false,
+        "sha256": "0c7a038eb747c542588a3459373203c45d57081524f758a23d8d032b0a886371"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/tests/mutants/two-query-batches/internal/authz/planner.go",
+        "size": 2923,
+        "executable": false,
+        "sha256": "e12f166390c7e160293afc3e6e351190e51c0f93067fb0df4e4614b1b3642aab"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/tests/mutants/unrelated-cache-loss/internal/authz/planner.go",
+        "size": 2927,
+        "executable": false,
+        "sha256": "4cb4ab175cf7784c515ba02fa55972b2ef5fbaee299d00b14e2066818597b201"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/tests/mutants/unrelated-cache-loss/internal/store/prune.go",
+        "size": 306,
+        "executable": false,
+        "sha256": "1a18764923abdd69faea6333f169cda87c36f4e6694941523ca74a3972fe94db"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/tests/mutants/wrong-order-id/cmd/certd/main.go",
+        "size": 2157,
+        "executable": false,
+        "sha256": "3de57300f1fe7055e1609faf8d9e65c5c8942c3989fdbfc19c52ece1626f6603"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/tests/native_evaluation.py",
+        "size": 2184,
+        "executable": false,
+        "sha256": "64c089664faeb444e3146152004fcd66893d26eefc0b9ab69affd6c7480b2027"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/tests/scenarios/selected/sel-01.json",
+        "size": 1240,
+        "executable": false,
+        "sha256": "88dbb7f643ee7588e7d2ab45d12c0a005a9a6360bf7d36976a924fdcbb6b900d"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/tests/test.sh",
+        "size": 7594,
+        "executable": true,
+        "sha256": "f291d9b41b6fbcf92fdbe9826ae4397ece070d70f8d6a6196ae7fbbebe4b261f"
+      },
+      {
+        "path": "tasks/caa-revalidation-repair/tests/test_process_local.py",
+        "size": 4450,
+        "executable": false,
+        "sha256": "c663d23361e9529ebd1a406b5a994141208ab216d8c1d0a136ebfbad86f71a95"
+      },
+      {
+        "path": "test/package-production.test.ts",
+        "size": 11650,
+        "executable": false,
+        "sha256": "7f4722fc4e3211f9adecfbfcd6c15fbac9457eadce2d5978d3024b3f428fef97"
+      },
+      {
+        "path": "tsup.config.ts",
+        "size": 331,
+        "executable": false,
+        "sha256": "afef56c84d0a385fde1e47f71afef93b3889b2e6d7ac1c18c6585db0c52f88de"
+      }
+    ]
+  },
+  "prerequisitesVerified": [
+    "Prompt 1 identity/policy implementation inspected and regression tested",
+    "Native source, audits, production process, sampler and actual Jaccard callers inspected",
+    "No subagent/provider execution authorized or performed"
+  ],
+  "implementedInterfaces": {
+    "assembly": [
+      "AssemblyPlan",
+      "assemblePackage",
+      "inspectAssembly",
+      "materializeAssembly",
+      "verifyAssembly",
+      "copySnapshot"
+    ],
+    "assurance": [
+      "AssuranceOperation",
+      "AssuranceResult",
+      "runAssurance",
+      "assertAssuranceCoverage",
+      "assuranceVerdictDigest"
+    ],
+    "native": [
+      "buildNativeCaa",
+      "inspectNativeCaa",
+      "validateNativeCaa",
+      "exportNativeCaa",
+      "nativePackageCommand"
+    ],
+    "resources": [
+      "localProcess",
+      "hashFile",
+      "run_bounded"
+    ]
+  },
+  "changedFiles": [
+    "data/implementation-gap-ledger.json",
+    "data/package-production-generation-baseline.json",
+    "docs/package-production.md",
+    "package.json",
+    "reports/PROMPT-02-PACKAGE-PRODUCTION.md",
+    "reports/verification/prompt-02-generation-performance.json",
+    "reports/verification/prompt-02.json",
+    "scripts/benchmark-package-generation.ts",
+    "scripts/verify-native-package-reproduction.mjs",
+    "src/families/delegated-wallet-scope-reconciliation/scenarios.ts",
+    "src/families/delegated-wallet-scope-reconciliation/truth.ts",
+    "src/foundry/sample.ts",
+    "src/index.ts",
+    "src/packages/assembly.ts",
+    "src/packages/assurance.ts",
+    "src/packages/local-cli.ts",
+    "src/packages/local-process.ts",
+    "src/packages/native-caa.ts",
+    "src/similarity.ts",
+    "tasks/caa-revalidation-repair/environment/Dockerfile",
+    "tasks/caa-revalidation-repair/environment/app/harness/run-scenario.sh",
+    "tasks/caa-revalidation-repair/environment/app/spec/SEMANTICS.md",
+    "tasks/caa-revalidation-repair/instruction.md",
+    "tasks/caa-revalidation-repair/tests/Dockerfile",
+    "tasks/caa-revalidation-repair/tests/artifact_guard.py",
+    "tasks/caa-revalidation-repair/tests/bounded_process.py",
+    "tasks/caa-revalidation-repair/tests/build_submission.py",
+    "tasks/caa-revalidation-repair/tests/checks.py",
+    "tasks/caa-revalidation-repair/tests/collect.py",
+    "tasks/caa-revalidation-repair/tests/format_check.py",
+    "tasks/caa-revalidation-repair/tests/gate.py",
+    "tasks/caa-revalidation-repair/tests/local_validate.py",
+    "tasks/caa-revalidation-repair/tests/manifest.py",
+    "tasks/caa-revalidation-repair/tests/mutants/two-query-batches/internal/authz/planner.go",
+    "tasks/caa-revalidation-repair/tests/mutants/unrelated-cache-loss/internal/authz/planner.go",
+    "tasks/caa-revalidation-repair/tests/mutants/unrelated-cache-loss/internal/store/prune.go",
+    "tasks/caa-revalidation-repair/tests/mutants/wrong-order-id/cmd/certd/main.go",
+    "tasks/caa-revalidation-repair/tests/native_evaluation.py",
+    "tasks/caa-revalidation-repair/tests/scenarios/selected/sel-01.json",
+    "tasks/caa-revalidation-repair/tests/test.sh",
+    "tasks/caa-revalidation-repair/tests/test_process_local.py",
+    "test/package-production.test.ts",
+    "tsup.config.ts"
+  ],
+  "gapDispositions": {
+    "verified": [
+      "G4",
+      "G6",
+      "G8",
+      "E1",
+      "E2",
+      "E3",
+      "PKG-NATIVE-CAA"
+    ],
+    "scope": "Shared interfaces and native path only. Remaining family adapters G1 stay open; native official qualification is separately pending.",
+    "pendingExternal": [
+      "PKG-NATIVE-QUALIFICATION"
+    ]
+  },
+  "verification": {
+    "typecheck": {
+      "command": "pnpm exec tsc --noEmit",
+      "exitCode": 0
+    },
+    "lint": {
+      "command": "pnpm lint",
+      "exitCode": 0,
+      "checkedFiles": 414
+    },
+    "build": {
+      "command": "pnpm build",
+      "exitCode": 0,
+      "outputs": "ESM/CJS/declarations"
+    },
+    "scripts": {
+      "command": "pnpm exec biome check scripts/benchmark-package-generation.ts scripts/verify-native-package-reproduction.mjs",
+      "exitCode": 0
+    },
+    "tests": {
+      "command": "pnpm exec vitest run test/package-production.test.ts test/package-evidence-decisions.test.ts test/delegated-wallet-family.test.ts test/axis-meter.test.ts test/package-population-integrity.test.ts test/package-public-surface.test.ts --reporter=json --outputFile=.local/prompt-02/tested-source-tests.json",
+      "passed": 105,
+      "failed": 0,
+      "skipped": 0,
+      "resultSha256": "18aebe3bd95b55e3c5d2d08f8e88876a615fda13e0328fff93f2698648574e09"
+    },
+    "fullRepositoryGreen": false,
+    "historicalEvidence": {
+      "filesChecked": 838,
+      "changed": 0,
+      "scope": "Tracked trials/campaigns/evidence and package-history-lock from initial snapshot"
+    },
+    "developmentFailures": [
+      {
+        "source": ".local/prompt-02/build-01",
+        "cause": "Standalone gate missing /logs; export denied, fixed and rerun"
+      },
+      {
+        "source": ".local/prompt-02/build-02",
+        "cause": "Format canaries/path and empty authorization contract mismatch; repaired, not model evidence"
+      },
+      {
+        "source": ".local/prompt-02/acceptance-tests.json",
+        "passed": 104,
+        "failed": 1,
+        "cause": "Referenced report JSON not yet created; final source test run passed105"
+      }
+    ]
+  },
+  "native": {
+    "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+    "componentDigests": {
+      "adapters": "64ce2d199b92483f5c43bb36cdb59be4cd8f019939f95f7bc508aa12c74640e1",
+      "collector": "88867301be3f0da229401e6796c478e35513f97fa6405ef2229f48543a6cea9b",
+      "contract": "3f6695d9fe7fbff29a8a5cd72d67f70f6ddd76d678633e3e1199839289923c58",
+      "controls": "dbcd41a82fecef375c1a227e94d2d5a6aa3182fd5b778a482e7e283b50613cd2",
+      "dependencies": "5ece389adb64c0ef5976ad37ea8e7f6177966a30ea145da4c210a40bc8621db0",
+      "policy": "e62ce5d01498f1059601f099630f36f870a9398744a99744a27e7287c677b9e4",
+      "reference": "ced0e912f18e21f010e5f08860ff3c0b4060c94d01692d2420ac5147fc397a63",
+      "scenarios": "57edae19306af914fb4550a24cfaa23c97345df13b7f763711c27aa445b0bf3a",
+      "verifier": "d4756a4498a0d8621a639a81efc4eb7ec7ab2b84e906fde32cf0ddf0db3f3c0b",
+      "workspace": "0c9ac54fd343f0cb6fc6dbbabcaa49b9f67c3291797a90f32f0e1429ea868d6d"
+    },
+    "runtime": {
+      "archive": {
+        "path": "runtime.tar",
+        "sha256": "7b19772d81ef5a275f555b99c36344dfe8fa103628306cb01d5db7cef3248631",
+        "size": 317566464
+      },
+      "boundary": "Exact built image IDs and streamed archive digest are included in package identity. Source recipes pin Go and Debian snapshot; a changed runtime creates a new identity. Logs/timestamps are observations, not task semantics. Recipient can load these exact images offline; no authoring-network restriction is set.",
+      "images": {
+        "environment": "sha256:948613e43689f45087dc21a2dfd91a0419e473850042862e795838e2d6013159",
+        "verifier": "sha256:7a4c731ecbc30ab06b823071e80c2bc9a0df82fcf3aa52441b5c8f974fbff703"
+      },
+      "platform": "linux/arm64",
+      "schemaVersion": 1,
+      "toolchain": "go version go1.25.14 linux/arm64"
+    },
+    "buildReceipt": {
+      "path": ".local/prompt-02/build-09/validations/946febdf-393c-4533-b2ae-4512f3e2f769/assurance.json",
+      "sha256": "fa0aa48ce8227daeb5555742ef86985d2735a6836de055a18815dd69b94dda51",
+      "semanticVerdictDigest": "c7678213150f0a75ead7b845ae93ec9892353d13f4d03605db9b5ae0ac2403e4",
+      "operations": [
+        {
+          "id": "visible-workspace-smoke",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "0c9ac54fd343f0cb6fc6dbbabcaa49b9f67c3291797a90f32f0e1429ea868d6d",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 1828.5290000000005
+        },
+        {
+          "id": "contract-manifest",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "3f6695d9fe7fbff29a8a5cd72d67f70f6ddd76d678633e3e1199839289923c58",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "record-check",
+          "status": "pass",
+          "milliseconds": 195.3804999999993
+        },
+        {
+          "id": "static-format",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "e62ce5d01498f1059601f099630f36f870a9398744a99744a27e7287c677b9e4",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 801.6869580000002
+        },
+        {
+          "id": "public-interface/oracle",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "8afaa1db2317005f7686c85e5f741c90fcefb1515a57d428660cce7cf1772b9c",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 12041.620334000001,
+          "reward": 1,
+          "kind": "semantic-pass",
+          "intended": null,
+          "activationScenarios": [],
+          "evaluationDigest": "9802751ca8b089e1b0917c2585685ba23bc3ae5a3c37d192e455348fc223393a"
+        },
+        {
+          "id": "public-interface/alternative",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "eedcb9c55e5977c8e2904244ee2f37c31f76af834dd34471cdbb4205c72fb826",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 9500.272957999998,
+          "reward": 1,
+          "kind": "semantic-pass",
+          "intended": null,
+          "activationScenarios": [],
+          "evaluationDigest": "9802751ca8b089e1b0917c2585685ba23bc3ae5a3c37d192e455348fc223393a"
+        },
+        {
+          "id": "public-interface/feature-alternative",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "1c564f4433dd94c5fadf8b5ae6a56d77d697dacaac7f4d2de4b06e2eca531ea9",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 9565.167915999999,
+          "reward": 1,
+          "kind": "semantic-pass",
+          "intended": null,
+          "activationScenarios": [],
+          "evaluationDigest": "9802751ca8b089e1b0917c2585685ba23bc3ae5a3c37d192e455348fc223393a"
+        },
+        {
+          "id": "public-interface/nop",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "99fa15217ab694677c4a50bc1553215dc40967ebff839a1daac2e898788d3566",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 9819.560542,
+          "reward": 0,
+          "kind": "artifact-failure",
+          "intended": null,
+          "activationScenarios": [],
+          "evaluationDigest": "6f6198e6f612ded6b786dcd00fe01d7bf83edea0508e5eae7ba36552cdfc241d"
+        },
+        {
+          "id": "public-interface/identity-collapse",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "988a537587ddf04b4f11278506facc779e26369e779823e7f9e16e60205f6a88",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 9681.268916,
+          "reward": 0,
+          "kind": "artifact-failure",
+          "intended": "authorization_applied",
+          "activationScenarios": [
+            "sel-01",
+            "sel-03",
+            "sel-04",
+            "sel-05",
+            "sel-06",
+            "sel-07",
+            "sel-08",
+            "sel-09",
+            "sel-10",
+            "sel-11",
+            "sel-12",
+            "sel-14",
+            "sel-15",
+            "sel-16",
+            "sel-17",
+            "sel-19",
+            "sel-20",
+            "sel-21",
+            "sel-22",
+            "sel-23",
+            "sel-24"
+          ],
+          "evaluationDigest": "6f6198e6f612ded6b786dcd00fe01d7bf83edea0508e5eae7ba36552cdfc241d"
+        },
+        {
+          "id": "public-interface/completion-order-association",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "ab874485125044e2a75f854f4325df689801b8497665b78e1f477d1024b969a7",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 9644.566375000002,
+          "reward": 0,
+          "kind": "semantic-fail",
+          "intended": "authorization_applied",
+          "activationScenarios": [
+            "sel-01",
+            "sel-04",
+            "sel-06",
+            "sel-09",
+            "sel-10",
+            "sel-11",
+            "sel-14",
+            "sel-18",
+            "sel-19",
+            "sel-20",
+            "sel-21",
+            "sel-22"
+          ],
+          "evaluationDigest": "a30f1f87e7eb946162456426e70c868746ed696d10f5af72c7d9061dba89af28"
+        },
+        {
+          "id": "public-interface/stale-boundary",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "425c7c2ece598f1b676afe925d9071be46a83b8834e8e165284d0dac24ab289b",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 9803.195250000004,
+          "reward": 0,
+          "kind": "semantic-fail",
+          "intended": "authorization_source",
+          "activationScenarios": [
+            "sel-02",
+            "sel-10",
+            "sel-12",
+            "sel-13",
+            "sel-14",
+            "sel-19"
+          ],
+          "evaluationDigest": "06ed253f002cadf17c5ff70bf885be827a676bfb89e263ea3e7d94a41708b35d"
+        },
+        {
+          "id": "public-interface/cached-stale",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "de8b271c808a6c6e0829db6b3fd02aa18c72216a4fa574b81b4df32c68352f41",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 10749.818791999991,
+          "reward": 0,
+          "kind": "semantic-fail",
+          "intended": "authorization_source",
+          "activationScenarios": [
+            "sel-01",
+            "sel-02",
+            "sel-03",
+            "sel-04",
+            "sel-05",
+            "sel-06",
+            "sel-07",
+            "sel-08",
+            "sel-09",
+            "sel-10",
+            "sel-11",
+            "sel-12",
+            "sel-13",
+            "sel-14",
+            "sel-15",
+            "sel-16",
+            "sel-17",
+            "sel-18",
+            "sel-19",
+            "sel-20",
+            "sel-21",
+            "sel-22",
+            "sel-23",
+            "sel-24"
+          ],
+          "evaluationDigest": "9d0dabeb13d8a0b3513f58765a91adaff6567661ac9fa92fc2d17c1889ad43d5"
+        },
+        {
+          "id": "public-interface/any-authorizes",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "bc628bd5660e46e5543f44ae89f004993357c8c0d509cb50d29e3787bc9c8ec9",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 9656.77133399999,
+          "reward": 0,
+          "kind": "semantic-fail",
+          "intended": "outcome",
+          "activationScenarios": [
+            "sel-01",
+            "sel-02",
+            "sel-03",
+            "sel-04",
+            "sel-05",
+            "sel-06",
+            "sel-07",
+            "sel-08",
+            "sel-09",
+            "sel-10",
+            "sel-11",
+            "sel-12",
+            "sel-14",
+            "sel-15",
+            "sel-16",
+            "sel-17",
+            "sel-18",
+            "sel-19",
+            "sel-20",
+            "sel-21",
+            "sel-22",
+            "sel-23",
+            "sel-24"
+          ],
+          "evaluationDigest": "de29b5c493ded20f8e17951ac707de114a5a2de2df47d1f10789b429d3505ca8"
+        },
+        {
+          "id": "public-interface/always-issue",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "a4e61e48226f25534f8cf3a709e82d927c55eef3e1daf9a72de29609f7ae8dda",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 9838.233625000008,
+          "reward": 0,
+          "kind": "semantic-fail",
+          "intended": "outcome",
+          "activationScenarios": [
+            "sel-01",
+            "sel-02",
+            "sel-03",
+            "sel-04",
+            "sel-05",
+            "sel-06",
+            "sel-07",
+            "sel-08",
+            "sel-09",
+            "sel-10",
+            "sel-11",
+            "sel-12",
+            "sel-13",
+            "sel-14",
+            "sel-15",
+            "sel-16",
+            "sel-17",
+            "sel-18",
+            "sel-19",
+            "sel-20",
+            "sel-21",
+            "sel-22",
+            "sel-23",
+            "sel-24"
+          ],
+          "evaluationDigest": "6032bc630898fb7af5ccd3ec92d0c87e41b784383cdaac6254f4b6861c48e13a"
+        },
+        {
+          "id": "public-interface/always-refuse",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "35ad29d985f6c618d18ee6c839cd9aa7ac768aeb4fcfeef73136ad88fd34373d",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 9854.263416000002,
+          "reward": 0,
+          "kind": "semantic-fail",
+          "intended": "outcome",
+          "activationScenarios": [
+            "sel-02",
+            "sel-04",
+            "sel-09",
+            "sel-10",
+            "sel-11",
+            "sel-17",
+            "sel-22",
+            "sel-24"
+          ],
+          "evaluationDigest": "dda151823348865c1d06ef66cbc2f36ebf38f02efdf8e36a12c25c3bcf5c51ea"
+        },
+        {
+          "id": "public-interface/no-work",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "102a5dc731ea24e8a172803824a2739177c65ea14b092de62990b4e5cb2929c1",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 3832.717625000005,
+          "reward": 0,
+          "kind": "semantic-fail",
+          "intended": "rechecked_exactly_the_stale",
+          "activationScenarios": [
+            "sel-01",
+            "sel-02",
+            "sel-03",
+            "sel-04",
+            "sel-05",
+            "sel-06",
+            "sel-07",
+            "sel-08",
+            "sel-09",
+            "sel-10",
+            "sel-11",
+            "sel-12",
+            "sel-13",
+            "sel-14",
+            "sel-15",
+            "sel-16",
+            "sel-17",
+            "sel-18",
+            "sel-19",
+            "sel-20",
+            "sel-21",
+            "sel-22",
+            "sel-23",
+            "sel-24"
+          ],
+          "evaluationDigest": "b1cdca6bf4f4e9b66fecf67ef102e4fc1d6c04dbbf1f799c05e9f1ec2edf0fba"
+        },
+        {
+          "id": "public-interface/fabricated-audit",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "a2bf80135d50e7fafb67ad5f6a0b6b24cb6c9a89320cf8848b37833116b10112",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 9776.327959000002,
+          "reward": 0,
+          "kind": "semantic-fail",
+          "intended": "audit_matches_report",
+          "activationScenarios": [
+            "sel-01",
+            "sel-02",
+            "sel-03",
+            "sel-04",
+            "sel-05",
+            "sel-06",
+            "sel-07",
+            "sel-08",
+            "sel-09",
+            "sel-10",
+            "sel-11",
+            "sel-12",
+            "sel-13",
+            "sel-14",
+            "sel-15",
+            "sel-16",
+            "sel-17",
+            "sel-18",
+            "sel-19",
+            "sel-20",
+            "sel-21",
+            "sel-22",
+            "sel-23",
+            "sel-24"
+          ],
+          "evaluationDigest": "616e16163ed552947adcef9d9cf7ac1b79ed5c6d71e9f00500cba4cdec7c736f"
+        },
+        {
+          "id": "public-interface/visible-example-hardcoding",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "4306960d84fce0d749f831e01fe5cf455f61573506ea3b32e1e9fd3225a20ef6",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 3800.9139999999898,
+          "reward": 0,
+          "kind": "semantic-fail",
+          "intended": "authorization_applied",
+          "activationScenarios": [
+            "sel-01",
+            "sel-02",
+            "sel-03",
+            "sel-04",
+            "sel-05",
+            "sel-06",
+            "sel-07",
+            "sel-08",
+            "sel-09",
+            "sel-10",
+            "sel-11",
+            "sel-12",
+            "sel-13",
+            "sel-14",
+            "sel-15",
+            "sel-16",
+            "sel-17",
+            "sel-18",
+            "sel-19",
+            "sel-20",
+            "sel-21",
+            "sel-22",
+            "sel-23",
+            "sel-24"
+          ],
+          "evaluationDigest": "21aa4959469f1aa4b697ec46dc29194951ccd5591ab34c96096cea71e6129d5e"
+        },
+        {
+          "id": "public-interface/serial-repair",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "f13b66e7337aad6b27f823af7722e8f4703dafe47f7ef4666a55a86136e42998",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 11972.10616699999,
+          "reward": 0,
+          "kind": "semantic-fail",
+          "intended": "rechecks_issued_together",
+          "activationScenarios": [
+            "sel-01",
+            "sel-02",
+            "sel-03",
+            "sel-04",
+            "sel-05",
+            "sel-06",
+            "sel-07",
+            "sel-08",
+            "sel-09",
+            "sel-10",
+            "sel-11",
+            "sel-12",
+            "sel-13",
+            "sel-14",
+            "sel-15",
+            "sel-16",
+            "sel-17",
+            "sel-18",
+            "sel-19",
+            "sel-20",
+            "sel-21",
+            "sel-22",
+            "sel-23",
+            "sel-24"
+          ],
+          "evaluationDigest": "6dbaeba58759f4b49a9b7505517b6fe23936aa09ae581cee8a9b49a07d028517"
+        },
+        {
+          "id": "public-interface/mutex-serialized",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "ad888745d842de4f5f58d4ecafb43215060d728fd79c47c4084aa7549c91944e",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 12006.73895900001,
+          "reward": 0,
+          "kind": "semantic-fail",
+          "intended": "rechecks_issued_together",
+          "activationScenarios": [
+            "sel-01",
+            "sel-02",
+            "sel-03",
+            "sel-04",
+            "sel-05",
+            "sel-06",
+            "sel-07",
+            "sel-08",
+            "sel-09",
+            "sel-10",
+            "sel-11",
+            "sel-12",
+            "sel-13",
+            "sel-14",
+            "sel-15",
+            "sel-16",
+            "sel-17",
+            "sel-18",
+            "sel-19",
+            "sel-20",
+            "sel-21",
+            "sel-22",
+            "sel-23",
+            "sel-24"
+          ],
+          "evaluationDigest": "c067fb0add8539a356a7e13f037b14713c2997bf35855d0c812281aebffd4a35"
+        },
+        {
+          "id": "public-interface/two-query-batches",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "3ebf18f5ed002447ecd1ca11145dd2de33125ccc0f64038eca6e47bb1434ab96",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 10052.964042000007,
+          "reward": 0,
+          "kind": "semantic-fail",
+          "intended": "rechecks_issued_together",
+          "activationScenarios": [
+            "sel-18"
+          ],
+          "evaluationDigest": "2000cc507d19957be16b0280e9d2ce6089b42a58094ffcbdfbb42b0eb36c4303"
+        },
+        {
+          "id": "public-interface/wrong-order-id",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "564baa13ed59e5c6f85314793e91a5c22e8af6e503bacc872bb6826aec0e6c05",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 10052.588667000004,
+          "reward": 0,
+          "kind": "semantic-fail",
+          "intended": "report_present",
+          "activationScenarios": [
+            "sel-01",
+            "sel-02",
+            "sel-03",
+            "sel-04",
+            "sel-05",
+            "sel-06",
+            "sel-07",
+            "sel-08",
+            "sel-09",
+            "sel-10",
+            "sel-11",
+            "sel-12",
+            "sel-13",
+            "sel-14",
+            "sel-15",
+            "sel-16",
+            "sel-17",
+            "sel-18",
+            "sel-19",
+            "sel-20",
+            "sel-21",
+            "sel-22",
+            "sel-23",
+            "sel-24"
+          ],
+          "evaluationDigest": "ceac05df9c6e3ff5d7a9f5a4130895f678b471a2b5b09bcc502635c8cf96ff5b"
+        },
+        {
+          "id": "public-interface/unrelated-cache-loss",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "beac7a6a4dd834433b43b90bd2ca6bb50f43a467001c0e447381b01fd956e104",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 9843.245792000002,
+          "reward": 0,
+          "kind": "semantic-fail",
+          "intended": "store_recorded",
+          "activationScenarios": [
+            "sel-01",
+            "sel-02",
+            "sel-03",
+            "sel-04",
+            "sel-05",
+            "sel-06",
+            "sel-11",
+            "sel-15",
+            "sel-17",
+            "sel-18",
+            "sel-20",
+            "sel-21",
+            "sel-22",
+            "sel-23",
+            "sel-24"
+          ],
+          "evaluationDigest": "7ed0366880179debefc4db5d770324bf34e8448541c5b4a99b4a83b21223da2a"
+        },
+        {
+          "id": "public-interface/artifact-symlink",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "0434cf55eb352b455a3ee2e3c3a3e616257737ee78e2738f993cc5112356ad52",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 241.69029200001387,
+          "reward": 0,
+          "kind": "artifact-failure",
+          "intended": null,
+          "activationScenarios": [],
+          "evaluationDigest": "cd0ace3149c48b58c296bc8359fd4f2298e59aeebb1a9ac983bd2a7c1e680028"
+        },
+        {
+          "id": "public-interface/artifact-hardlink",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "cf341d044069799374b8d016c9c0a97c33f5d75f850c3e2f6112b6b8c592d0dc",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 217.9344160000037,
+          "reward": 0,
+          "kind": "artifact-failure",
+          "intended": null,
+          "activationScenarios": [],
+          "evaluationDigest": "cd0ace3149c48b58c296bc8359fd4f2298e59aeebb1a9ac983bd2a7c1e680028"
+        },
+        {
+          "id": "public-interface/artifact-fifo",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "3e3d7201f9d93079c6987beaaed0efae75150fb0025c597dd9f6a130309338b3",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 227.23791699999128,
+          "reward": 0,
+          "kind": "artifact-failure",
+          "intended": null,
+          "activationScenarios": [],
+          "evaluationDigest": "cd0ace3149c48b58c296bc8359fd4f2298e59aeebb1a9ac983bd2a7c1e680028"
+        },
+        {
+          "id": "artifact-and-process-integrity",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "88867301be3f0da229401e6796c478e35513f97fa6405ef2229f48543a6cea9b",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 1762.8027090000105
+        },
+        {
+          "id": "activation-nonactivation-and-repeatability",
+          "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+          "artifactDigest": "dbcd41a82fecef375c1a227e94d2d5a6aa3182fd5b778a482e7e283b50613cd2",
+          "route": "native-caa/separate-container/test.sh@2",
+          "evidenceClass": "local-execution",
+          "status": "pass",
+          "milliseconds": 179931.42820799997
+        }
+      ],
+      "totalMilliseconds": 366699.032669
+    },
+    "recipientReceipt": {
+      "path": ".local/prompt-02/export-09/validations/6a214bf9-03ec-4c57-9e37-9cb7b8dca65c/assurance.json",
+      "sha256": "45f3383287640f92a9be8ce8de5a2d886b027c326f721d05c98b2ef375472c76",
+      "semanticVerdictDigest": "c7678213150f0a75ead7b845ae93ec9892353d13f4d03605db9b5ae0ac2403e4",
+      "matchingVerdicts": true,
+      "operations": [
+        {
+          "id": "visible-workspace-smoke",
+          "status": "pass",
+          "milliseconds": 1749.172791
+        },
+        {
+          "id": "contract-manifest",
+          "status": "pass",
+          "milliseconds": 148.58358299999963
+        },
+        {
+          "id": "static-format",
+          "status": "pass",
+          "milliseconds": 732.2805420000004
+        },
+        {
+          "id": "public-interface/oracle",
+          "status": "pass",
+          "milliseconds": 12589.721458999999
+        },
+        {
+          "id": "public-interface/alternative",
+          "status": "pass",
+          "milliseconds": 9976.598541
+        },
+        {
+          "id": "public-interface/feature-alternative",
+          "status": "pass",
+          "milliseconds": 9990.786415999999
+        },
+        {
+          "id": "public-interface/nop",
+          "status": "pass",
+          "milliseconds": 10002.359125000003
+        },
+        {
+          "id": "public-interface/identity-collapse",
+          "status": "pass",
+          "milliseconds": 10018.886791999998
+        },
+        {
+          "id": "public-interface/completion-order-association",
+          "status": "pass",
+          "milliseconds": 10020.070749999999
+        },
+        {
+          "id": "public-interface/stale-boundary",
+          "status": "pass",
+          "milliseconds": 10160.753625000012
+        },
+        {
+          "id": "public-interface/cached-stale",
+          "status": "pass",
+          "milliseconds": 11166.955583999996
+        },
+        {
+          "id": "public-interface/any-authorizes",
+          "status": "pass",
+          "milliseconds": 10008.47600000001
+        },
+        {
+          "id": "public-interface/always-issue",
+          "status": "pass",
+          "milliseconds": 10063.327916999988
+        },
+        {
+          "id": "public-interface/always-refuse",
+          "status": "pass",
+          "milliseconds": 10028.644625
+        },
+        {
+          "id": "public-interface/no-work",
+          "status": "pass",
+          "milliseconds": 3838.581416999994
+        },
+        {
+          "id": "public-interface/fabricated-audit",
+          "status": "pass",
+          "milliseconds": 10025.726167000015
+        },
+        {
+          "id": "public-interface/visible-example-hardcoding",
+          "status": "pass",
+          "milliseconds": 3779.2227080000157
+        },
+        {
+          "id": "public-interface/serial-repair",
+          "status": "pass",
+          "milliseconds": 12336.935457999993
+        },
+        {
+          "id": "public-interface/mutex-serialized",
+          "status": "pass",
+          "milliseconds": 12359.568415999995
+        },
+        {
+          "id": "public-interface/two-query-batches",
+          "status": "pass",
+          "milliseconds": 10503.507083000004
+        },
+        {
+          "id": "public-interface/wrong-order-id",
+          "status": "pass",
+          "milliseconds": 10018.83587499999
+        },
+        {
+          "id": "public-interface/unrelated-cache-loss",
+          "status": "pass",
+          "milliseconds": 9988.261582999985
+        },
+        {
+          "id": "public-interface/artifact-symlink",
+          "status": "pass",
+          "milliseconds": 226.57666600000812
+        },
+        {
+          "id": "public-interface/artifact-hardlink",
+          "status": "pass",
+          "milliseconds": 220.94583299997612
+        },
+        {
+          "id": "public-interface/artifact-fifo",
+          "status": "pass",
+          "milliseconds": 217.60120799997821
+        },
+        {
+          "id": "artifact-and-process-integrity",
+          "status": "pass",
+          "milliseconds": 1268.2257080000127
+        },
+        {
+          "id": "activation-nonactivation-and-repeatability",
+          "status": "pass",
+          "milliseconds": 179892.658167
+        }
+      ],
+      "totalMilliseconds": 371333.2640389999
+    },
+    "staticFormat": {
+      "passed": 22,
+      "failed": 0,
+      "checks": [
+        "check-allow-internet.sh",
+        "check-canary.sh",
+        "check-compose-host-binds.sh",
+        "check-dockerfile-platform.sh",
+        "check-dockerfile-references.sh",
+        "check-dockerfile-sanity.sh",
+        "check-gpu-types.sh",
+        "check-instruction-suffix.sh",
+        "check-no-allow-internet-true.sh",
+        "check-nproc.sh",
+        "check-pip-pinning.sh",
+        "check-pytest-version.sh",
+        "check-separate-verifier.sh",
+        "check-task-absolute-path.sh",
+        "check-task-fields.sh",
+        "check-task-package-name.sh",
+        "check-task-slug.sh",
+        "check-task-timeout.sh",
+        "check-test-file-references.sh",
+        "check-test-sh-sanity.sh",
+        "check-trial-network-fetch.sh",
+        "check-verifier-tooling-baked.sh"
+      ],
+      "retainedPath": "scripts/tb-upstream-checks",
+      "boundary": "Retained content-pinned local scripts, not a live official rubric run"
+    },
+    "artifactAndProcessTests": {
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0,
+      "rawSummary": "............\n----------------------------------------------------------------------\nRan 12 tests in 1.573s\n\nOK\n"
+    },
+    "correctImplementations": [
+      {
+        "name": "oracle",
+        "reward": 1,
+        "ctfr": {
+          "tests": 243,
+          "passed": 243,
+          "failed": 0,
+          "skipped": 0,
+          "pending": 0,
+          "other": 0,
+          "start": 1788697061341,
+          "stop": 1788697061423
+        }
+      },
+      {
+        "name": "alternative",
+        "reward": 1,
+        "ctfr": {
+          "tests": 243,
+          "passed": 243,
+          "failed": 0,
+          "skipped": 0,
+          "pending": 0,
+          "other": 0,
+          "start": 1788697070860,
+          "stop": 1788697070942
+        }
+      },
+      {
+        "name": "feature-alternative",
+        "reward": 1,
+        "ctfr": {
+          "tests": 243,
+          "passed": 243,
+          "failed": 0,
+          "skipped": 0,
+          "pending": 0,
+          "other": 0,
+          "start": 1788697080405,
+          "stop": 1788697080492
+        }
+      }
+    ],
+    "finalGate": {
+      "allControlsHeld": true,
+      "controlSummary": {
+        "challenge_nonleakage": true,
+        "cheats_all_fail": true,
+        "determinism": true,
+        "every_mutant_independently_fatal": true,
+        "malformed_refused": true,
+        "narrow_mutant_activates_and_respects_controls": true,
+        "reference_and_alternative_pass": true,
+        "witness_isolation": true
+      },
+      "controls": {
+        "challenge_nonleakage": {
+          "agent_visible_files_scanned": 43,
+          "canary_detector_fires": true,
+          "canary_detector_rejects_substring": true,
+          "clean": true,
+          "leaks": [],
+          "secrets_scanned": 45
+        },
+        "cheats_all_fail": true,
+        "determinism": {
+          "correct_implementations_byte_stable": true,
+          "every_mutant_earns_reward_zero_every_round": true,
+          "rounds": 3,
+          "variants": {
+            "alt-reference/controls": {
+              "distinct_results": 1,
+              "failed_per_round": [
+                0,
+                0,
+                0
+              ],
+              "stable": true
+            },
+            "alt-reference/selected": {
+              "distinct_results": 1,
+              "failed_per_round": [
+                0,
+                0,
+                0
+              ],
+              "stable": true
+            },
+            "always-issue/selected": {
+              "earns_reward_zero_every_round": true,
+              "failed_per_round": [
+                24,
+                24,
+                24
+              ]
+            },
+            "always-refuse/selected": {
+              "earns_reward_zero_every_round": true,
+              "failed_per_round": [
+                8,
+                8,
+                8
+              ]
+            },
+            "any-authorizes/selected": {
+              "earns_reward_zero_every_round": true,
+              "failed_per_round": [
+                23,
+                23,
+                23
+              ]
+            },
+            "cached-stale/selected": {
+              "earns_reward_zero_every_round": true,
+              "failed_per_round": [
+                24,
+                24,
+                24
+              ]
+            },
+            "completion-order-association/selected": {
+              "earns_reward_zero_every_round": true,
+              "failed_per_round": [
+                12,
+                12,
+                12
+              ]
+            },
+            "fabricated-audit/selected": {
+              "earns_reward_zero_every_round": true,
+              "failed_per_round": [
+                24,
+                24,
+                24
+              ]
+            },
+            "identity-collapse/selected": {
+              "earns_reward_zero_every_round": true,
+              "failed_per_round": [
+                22,
+                22,
+                22
+              ]
+            },
+            "mutex-serialized/selected": {
+              "earns_reward_zero_every_round": true,
+              "failed_per_round": [
+                24,
+                24,
+                24
+              ]
+            },
+            "no-work/selected": {
+              "earns_reward_zero_every_round": true,
+              "failed_per_round": [
+                24,
+                24,
+                24
+              ]
+            },
+            "reference/controls": {
+              "distinct_results": 1,
+              "failed_per_round": [
+                0,
+                0,
+                0
+              ],
+              "stable": true
+            },
+            "reference/selected": {
+              "distinct_results": 1,
+              "failed_per_round": [
+                0,
+                0,
+                0
+              ],
+              "stable": true
+            },
+            "serial-repair/selected": {
+              "earns_reward_zero_every_round": true,
+              "failed_per_round": [
+                24,
+                24,
+                24
+              ]
+            },
+            "stale-boundary/selected": {
+              "earns_reward_zero_every_round": true,
+              "failed_per_round": [
+                6,
+                6,
+                6
+              ]
+            },
+            "two-query-batches/selected": {
+              "earns_reward_zero_every_round": true,
+              "failed_per_round": [
+                1,
+                1,
+                1
+              ]
+            },
+            "unrelated-cache-loss/selected": {
+              "earns_reward_zero_every_round": true,
+              "failed_per_round": [
+                15,
+                15,
+                15
+              ]
+            },
+            "visible-example-hardcoding/selected": {
+              "earns_reward_zero_every_round": true,
+              "failed_per_round": [
+                24,
+                24,
+                24
+              ]
+            },
+            "wrong-order-id/selected": {
+              "earns_reward_zero_every_round": true,
+              "failed_per_round": [
+                24,
+                24,
+                24
+              ]
+            }
+          }
+        },
+        "every_mutant_independently_fatal": true,
+        "malformed_refused": {
+          "all_refused": true,
+          "outcomes": {
+            "empty": "ValueError",
+            "no_scenario": "ValueError",
+            "orders_not_a_list": "ValueError"
+          }
+        },
+        "narrow_mutant_activates_and_respects_controls": true,
+        "reference_and_alternative_pass": true,
+        "witness_isolation": {
+          "canary_evidence": "{\"events\": [{\"tick\": 4020, \"kind\": \"armed\", \"scenario\": \"ctl-single-stale\"}, {\"t",
+          "control_socket_canary_reaches_it_as_root": true,
+          "control_socket_denied_to_service": true,
+          "public_socket_refuses_control_verbs": true,
+          "service_evidence": "DENIED PermissionError"
+        }
+      },
+      "independentlyFatal": {
+        "always-issue": {
+          "fatal": true,
+          "intended_check": "outcome",
+          "intended_check_fired": 24,
+          "scenarios_failed": 24
+        },
+        "always-refuse": {
+          "fatal": true,
+          "intended_check": "outcome",
+          "intended_check_fired": 8,
+          "scenarios_failed": 8
+        },
+        "any-authorizes": {
+          "fatal": true,
+          "intended_check": "outcome",
+          "intended_check_fired": 23,
+          "scenarios_failed": 23
+        },
+        "cached-stale": {
+          "fatal": true,
+          "intended_check": "authorization_source",
+          "intended_check_fired": 24,
+          "scenarios_failed": 24
+        },
+        "completion-order-association": {
+          "fatal": true,
+          "intended_check": "authorization_applied",
+          "intended_check_fired": 12,
+          "scenarios_failed": 12
+        },
+        "fabricated-audit": {
+          "fatal": true,
+          "intended_check": "audit_matches_report",
+          "intended_check_fired": 24,
+          "scenarios_failed": 24
+        },
+        "identity-collapse": {
+          "fatal": true,
+          "intended_check": "authorization_applied",
+          "intended_check_fired": 21,
+          "scenarios_failed": 22
+        },
+        "mutex-serialized": {
+          "fatal": true,
+          "intended_check": "rechecks_issued_together",
+          "intended_check_fired": 24,
+          "scenarios_failed": 24
+        },
+        "no-work": {
+          "fatal": true,
+          "intended_check": "rechecked_exactly_the_stale",
+          "intended_check_fired": 24,
+          "scenarios_failed": 24
+        },
+        "serial-repair": {
+          "fatal": true,
+          "intended_check": "rechecks_issued_together",
+          "intended_check_fired": 24,
+          "scenarios_failed": 24
+        },
+        "stale-boundary": {
+          "fatal": true,
+          "intended_check": "authorization_source",
+          "intended_check_fired": 6,
+          "scenarios_failed": 6
+        },
+        "two-query-batches": {
+          "fatal": true,
+          "intended_check": "rechecks_issued_together",
+          "intended_check_fired": 1,
+          "scenarios_failed": 1
+        },
+        "unrelated-cache-loss": {
+          "fatal": true,
+          "intended_check": "store_recorded",
+          "intended_check_fired": 15,
+          "scenarios_failed": 15
+        },
+        "visible-example-hardcoding": {
+          "fatal": true,
+          "intended_check": "authorization_applied",
+          "intended_check_fired": 24,
+          "scenarios_failed": 24
+        },
+        "wrong-order-id": {
+          "fatal": true,
+          "intended_check": "report_present",
+          "intended_check_fired": 24,
+          "scenarios_failed": 24
+        }
+      },
+      "matrix": {
+        "alt-reference": {
+          "controls": {
+            "checks": {},
+            "failed": 0,
+            "total": 4
+          },
+          "selected": {
+            "checks": {},
+            "failed": 0,
+            "total": 24
+          }
+        },
+        "always-issue": {
+          "controls": {
+            "checks": {
+              "outcome": 2
+            },
+            "failed": 2,
+            "total": 4
+          },
+          "selected": {
+            "checks": {
+              "outcome": 24
+            },
+            "failed": 24,
+            "total": 24
+          }
+        },
+        "always-refuse": {
+          "controls": {
+            "checks": {
+              "outcome": 3
+            },
+            "failed": 3,
+            "total": 4
+          },
+          "selected": {
+            "checks": {
+              "outcome": 8
+            },
+            "failed": 8,
+            "total": 24
+          }
+        },
+        "any-authorizes": {
+          "controls": {
+            "checks": {
+              "outcome": 2
+            },
+            "failed": 2,
+            "total": 4
+          },
+          "selected": {
+            "checks": {
+              "outcome": 23
+            },
+            "failed": 23,
+            "total": 24
+          }
+        },
+        "cached-stale": {
+          "controls": {
+            "checks": {
+              "authorization_applied": 3,
+              "authorization_source": 3,
+              "no_unnamed_or_late_query": 2,
+              "outcome": 3,
+              "store_recorded": 3
+            },
+            "failed": 3,
+            "total": 4
+          },
+          "selected": {
+            "checks": {
+              "authorization_applied": 17,
+              "authorization_source": 24,
+              "no_unnamed_or_late_query": 11,
+              "outcome": 11,
+              "store_recorded": 24
+            },
+            "failed": 24,
+            "total": 24
+          }
+        },
+        "completion-order-association": {
+          "controls": {
+            "checks": {},
+            "failed": 0,
+            "total": 4
+          },
+          "selected": {
+            "checks": {
+              "authorization_applied": 12,
+              "outcome": 6,
+              "store_recorded": 12
+            },
+            "failed": 12,
+            "total": 24
+          }
+        },
+        "fabricated-audit": {
+          "controls": {
+            "checks": {
+              "audit_matches_report": 2
+            },
+            "failed": 2,
+            "total": 4
+          },
+          "selected": {
+            "checks": {
+              "audit_matches_report": 24
+            },
+            "failed": 24,
+            "total": 24
+          }
+        },
+        "identity-collapse": {
+          "controls": {
+            "checks": {},
+            "failed": 0,
+            "total": 4
+          },
+          "selected": {
+            "checks": {
+              "authorization_applied": 21,
+              "outcome": 9,
+              "report_present": 1,
+              "store_recorded": 21
+            },
+            "failed": 22,
+            "total": 24
+          }
+        },
+        "mutex-serialized": {
+          "controls": {
+            "checks": {
+              "rechecks_issued_together": 2
+            },
+            "failed": 2,
+            "total": 4
+          },
+          "selected": {
+            "checks": {
+              "rechecks_issued_together": 24
+            },
+            "failed": 24,
+            "total": 24
+          }
+        },
+        "no-work": {
+          "controls": {
+            "checks": {
+              "authorization_applied": 3,
+              "authorization_source": 3,
+              "outcome": 3,
+              "rechecked_exactly_the_stale": 3,
+              "rechecks_issued_together": 2,
+              "store_recorded": 3
+            },
+            "failed": 3,
+            "total": 4
+          },
+          "selected": {
+            "checks": {
+              "authorization_applied": 17,
+              "authorization_source": 24,
+              "outcome": 11,
+              "rechecked_exactly_the_stale": 24,
+              "rechecks_issued_together": 24,
+              "store_recorded": 24
+            },
+            "failed": 24,
+            "total": 24
+          }
+        },
+        "reference": {
+          "controls": {
+            "checks": {},
+            "failed": 0,
+            "total": 4
+          },
+          "selected": {
+            "checks": {},
+            "failed": 0,
+            "total": 24
+          }
+        },
+        "serial-repair": {
+          "controls": {
+            "checks": {
+              "rechecks_issued_together": 2
+            },
+            "failed": 2,
+            "total": 4
+          },
+          "selected": {
+            "checks": {
+              "rechecks_issued_together": 24
+            },
+            "failed": 24,
+            "total": 24
+          }
+        },
+        "stale-boundary": {
+          "controls": {
+            "checks": {},
+            "failed": 0,
+            "total": 4
+          },
+          "selected": {
+            "checks": {
+              "authorization_applied": 1,
+              "authorization_source": 6,
+              "no_unnamed_or_late_query": 4,
+              "rechecked_exactly_the_stale": 3,
+              "rechecks_issued_together": 3,
+              "store_recorded": 5
+            },
+            "failed": 6,
+            "total": 24
+          }
+        },
+        "two-query-batches": {
+          "controls": {
+            "checks": {
+              "rechecks_issued_together": 1
+            },
+            "failed": 1,
+            "total": 4
+          },
+          "selected": {
+            "checks": {
+              "rechecks_issued_together": 1
+            },
+            "failed": 1,
+            "total": 24
+          }
+        },
+        "unrelated-cache-loss": {
+          "controls": {
+            "checks": {
+              "store_recorded": 4
+            },
+            "failed": 4,
+            "total": 4
+          },
+          "selected": {
+            "checks": {
+              "store_recorded": 15
+            },
+            "failed": 15,
+            "total": 24
+          }
+        },
+        "visible-example-hardcoding": {
+          "controls": {
+            "checks": {
+              "authorization_applied": 2,
+              "outcome": 2,
+              "rechecked_exactly_the_stale": 3,
+              "rechecks_issued_together": 2,
+              "store_recorded": 2
+            },
+            "failed": 3,
+            "total": 4
+          },
+          "selected": {
+            "checks": {
+              "authorization_applied": 24,
+              "authorization_source": 1,
+              "outcome": 23,
+              "rechecked_exactly_the_stale": 24,
+              "rechecks_issued_together": 24,
+              "store_recorded": 24
+            },
+            "failed": 24,
+            "total": 24
+          }
+        },
+        "wrong-order-id": {
+          "controls": {
+            "checks": {
+              "report_present": 4
+            },
+            "failed": 4,
+            "total": 4
+          },
+          "selected": {
+            "checks": {
+              "report_present": 24
+            },
+            "failed": 24,
+            "total": 24
+          }
+        }
+      },
+      "schema": "agent-eval-foundry/phase-18-package-controls@1",
+      "variants": [
+        "reference",
+        "alt-reference",
+        "always-issue",
+        "always-refuse",
+        "any-authorizes",
+        "cached-stale",
+        "completion-order-association",
+        "fabricated-audit",
+        "identity-collapse",
+        "mutex-serialized",
+        "no-work",
+        "serial-repair",
+        "stale-boundary",
+        "two-query-batches",
+        "unrelated-cache-loss",
+        "visible-example-hardcoding",
+        "wrong-order-id"
+      ]
+    },
+    "recipientGateSummary": {
+      "challenge_nonleakage": true,
+      "cheats_all_fail": true,
+      "determinism": true,
+      "every_mutant_independently_fatal": true,
+      "malformed_refused": true,
+      "narrow_mutant_activates_and_respects_controls": true,
+      "reference_and_alternative_pass": true,
+      "witness_isolation": true
+    },
+    "reproduction": {
+      "schemaVersion": 1,
+      "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+      "builds": [
+        ".local/prompt-02/build-09",
+        ".local/prompt-02/build-10"
+      ],
+      "exported": ".local/prompt-02/export-09",
+      "repeatBuildIdentity": true,
+      "taskGraphDigests": [
+        "c4e527d0b260cfba45ef77b20c592c01b3698a877555cb2a4610e9e822a19a25",
+        "c4e527d0b260cfba45ef77b20c592c01b3698a877555cb2a4610e9e822a19a25",
+        "c4e527d0b260cfba45ef77b20c592c01b3698a877555cb2a4610e9e822a19a25"
+      ],
+      "runtimeArchiveHashes": [
+        "7b19772d81ef5a275f555b99c36344dfe8fa103628306cb01d5db7cef3248631",
+        "7b19772d81ef5a275f555b99c36344dfe8fa103628306cb01d5db7cef3248631",
+        "7b19772d81ef5a275f555b99c36344dfe8fa103628306cb01d5db7cef3248631"
+      ],
+      "readOnlyInspection": true,
+      "recipientFiles": 610,
+      "recipientBytes": 413163340,
+      "publicFiles": 43,
+      "recipientTreeDigest": "7e4f364ef1d46bf4953c4c03d00f6ef559dd63a3b6e72203ecc0879c67dd8235",
+      "decision": {
+        "policyVersion": "package-stages-v1",
+        "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+        "observedProviderFamilies": [],
+        "failureProviderFamilies": [],
+        "stages": {
+          "local-valid": {
+            "allowed": true,
+            "blockers": [],
+            "notApplicable": [
+              "model-evidence",
+              "spend-approval",
+              "axis-breadth"
+            ]
+          },
+          "trial-eligible": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence"
+            ],
+            "notApplicable": [
+              "prior-model-failure",
+              "spend-approval",
+              "axis-breadth"
+            ]
+          },
+          "trial-authorized": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence",
+              "explicit-approval-missing"
+            ],
+            "notApplicable": []
+          },
+          "hardness-observed": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence",
+              "no-qualified-capability-failure"
+            ],
+            "notApplicable": [
+              "full-six-trial-qualification"
+            ]
+          },
+          "release-eligible": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence",
+              "no-qualified-capability-failure",
+              "required-destinationChecks",
+              "exact-two-target-profiles-missing"
+            ],
+            "notApplicable": []
+          }
+        }
+      },
+      "providerCallsMade": 0
+    },
+    "decision": {
+      "failureProviderFamilies": [],
+      "observedProviderFamilies": [],
+      "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+      "policyVersion": "package-stages-v1",
+      "stages": {
+        "hardness-observed": {
+          "allowed": false,
+          "blockers": [
+            "required-boundedSolveEvidence",
+            "no-qualified-capability-failure"
+          ],
+          "notApplicable": [
+            "full-six-trial-qualification"
+          ]
+        },
+        "local-valid": {
+          "allowed": true,
+          "blockers": [],
+          "notApplicable": [
+            "model-evidence",
+            "spend-approval",
+            "axis-breadth"
+          ]
+        },
+        "release-eligible": {
+          "allowed": false,
+          "blockers": [
+            "required-boundedSolveEvidence",
+            "no-qualified-capability-failure",
+            "required-destinationChecks",
+            "exact-two-target-profiles-missing"
+          ],
+          "notApplicable": []
+        },
+        "trial-authorized": {
+          "allowed": false,
+          "blockers": [
+            "required-boundedSolveEvidence",
+            "explicit-approval-missing"
+          ],
+          "notApplicable": []
+        },
+        "trial-eligible": {
+          "allowed": false,
+          "blockers": [
+            "required-boundedSolveEvidence"
+          ],
+          "notApplicable": [
+            "prior-model-failure",
+            "spend-approval",
+            "axis-breadth"
+          ]
+        }
+      }
+    },
+    "pending": [
+      {
+        "artifactDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+        "detail": "Not authorized or independently evidenced by local construction.",
+        "evidenceClass": "human-review",
+        "id": "independent-human-time-and-fairness",
+        "milliseconds": 0,
+        "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+        "route": "external-qualification",
+        "status": "pending"
+      },
+      {
+        "artifactDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+        "detail": "Not authorized or independently evidenced by local construction.",
+        "evidenceClass": "human-review",
+        "id": "human-authored-reviewer-material",
+        "milliseconds": 0,
+        "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+        "route": "external-qualification",
+        "status": "pending"
+      },
+      {
+        "artifactDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+        "detail": "Not authorized or independently evidenced by local construction.",
+        "evidenceClass": "human-review",
+        "id": "official-implementation-rubric",
+        "milliseconds": 0,
+        "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+        "route": "external-qualification",
+        "status": "pending"
+      },
+      {
+        "artifactDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+        "detail": "Not authorized or independently evidenced by local construction.",
+        "evidenceClass": "model-standard",
+        "id": "standard-model-trials",
+        "milliseconds": 0,
+        "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+        "route": "external-qualification",
+        "status": "pending"
+      },
+      {
+        "artifactDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+        "detail": "Not authorized or independently evidenced by local construction.",
+        "evidenceClass": "model-adversarial",
+        "id": "official-adversarial-trials",
+        "milliseconds": 0,
+        "packageDigest": "faa1c47953000946432d76bd2ebf0ce061867de73fdd645de440bcba14bfd60f",
+        "route": "external-qualification",
+        "status": "pending"
+      }
+    ],
+    "caveats": [
+      "No completed model attempt exists in these local control results",
+      "Starter and identity-collapse have process-error sel-13/o2 as well as semantic defects elsewhere",
+      "Concurrency uses delayed real responses, not a fully virtualized scheduler",
+      "Receipts are trusted local-author byte-consistency records, not independent signatures"
+    ]
+  },
+  "performance": {
+    "raw": "reports/verification/prompt-02-generation-performance.json",
+    "sha256": "aa27e5f8cb725634a117be24a1798fcbe04c8ae67a81af8ca6a24c5bbe72a9f2",
+    "membershipBaseline": "data/package-production-generation-baseline.json",
+    "allExistingSelectionsUnchanged": true,
+    "walletPointsCompared": 82944,
+    "walletSelected": 804,
+    "scope": "Isolated generator measurements, not total foundry speedup"
+  },
+  "artifactLocations": {
+    "build": ".local/prompt-02/build-09",
+    "repeatBuild": ".local/prompt-02/build-10",
+    "recipient": ".local/prompt-02/export-09",
+    "guide": "docs/package-production.md",
+    "report": "reports/PROMPT-02-PACKAGE-PRODUCTION.md"
+  },
+  "compatibilityNotes": [
+    "Native semantics/runtime changes create new package identities; historical evidence is untouched",
+    "Sampler fraction now finite (0,1], identities unique/nonempty; valid old selections unchanged",
+    "Jaccard alias preserves representative clustering and antichain behavior",
+    "Prompt 1 policy remains authoritative; local-valid does not mean trial-authorized or release-eligible"
+  ],
+  "remainingBlockers": [
+    {
+      "owner": 3,
+      "gap": "G1",
+      "detail": "Ten protected family adapters and checker/replay contract completion"
+    },
+    {
+      "owner": 4,
+      "gap": "PKG-NATIVE-QUALIFICATION",
+      "detail": "Independent human-time/fairness, human reviewer material and official qualification; no human solve or model trials claimed"
+    },
+    {
+      "owner": 5,
+      "gap": "EXECUTION-TESTS-1",
+      "detail": "Three old shell-runner tests remain intentionally denied pending reservations; not rerun or weakened here"
+    },
+    {
+      "owner": 7,
+      "gap": "G14",
+      "detail": "Broader integration and two exhaustive memory-host sweeps remain outside this selected run"
+    }
+  ],
+  "nextOwner": 3,
+  "continuation": "Prompt 2 engineering complete; start Prompt 3 with the common artifact/assurance APIs, without real-provider authority."
+}

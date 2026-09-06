@@ -13,8 +13,6 @@ authority's event log is collected separately, and it is the only evidence.
 import json
 import os
 import shutil
-import signal
-import subprocess
 import sys
 import tempfile
 import time
@@ -23,6 +21,7 @@ sys.path.insert(0, "/tests")
 
 import authority  # noqa: E402
 from artifact_guard import read_json_artifact  # noqa: E402
+from bounded_process import run_bounded  # noqa: E402
 
 CERTD = os.environ.get("CERTD_BINARY", "/tmp/certd-build/certd")
 SCENARIO_DIRS = {
@@ -92,37 +91,18 @@ def _run_order(workdir, scenario, entry, binary=None):
         entry["at"],
     ]
 
-    started = time.monotonic()
-    proc = subprocess.Popen(
+    capture = run_bounded(
         argv,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        start_new_session=True,
+        timeout_sec=ORDER_TIMEOUT_SEC,
+        exclusive_uid=65534,
         env={"PATH": "/usr/bin:/bin", "HOME": workdir, "TMPDIR": workdir},
         cwd=workdir,
     )
-    try:
-        stdout, stderr = proc.communicate(timeout=ORDER_TIMEOUT_SEC)
-        timed_out = False
-    except subprocess.TimeoutExpired:
-        timed_out = True
-        stdout, stderr = b"", b"timeout"
-    finally:
-        try:
-            os.killpg(proc.pid, signal.SIGKILL)
-        except ProcessLookupError:
-            pass
-    elapsed = time.monotonic() - started
-
     return {
         "order_id": entry["id"],
         "at": entry["at"],
         "identifiers": list(entry["identifiers"]),
-        "exit_code": proc.returncode,
-        "timed_out": timed_out,
-        "stdout": stdout.decode("utf-8", "replace")[:2000],
-        "stderr": stderr.decode("utf-8", "replace")[:2000],
-        "elapsed_sec": round(elapsed, 3),
+        **capture,
         "report": _read_json(report_path) if os.path.exists(report_path) else None,
         "audit": _read_json(audit_path) if os.path.exists(audit_path) else None,
         "store_after": _read_json(os.path.join(workdir, "store.json")),

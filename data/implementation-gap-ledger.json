@@ -50,16 +50,19 @@
       "source": "System G4",
       "packageId": null,
       "owner": 2,
-      "status": "blocked",
-      "summary": "Identity and stage checks cannot turn a metadata probe into executed route assurance.",
+      "status": "verified",
+      "summary": "Native same-route local assurance records bind exact controls, artifacts, route and evidence bytes; model/human evidence remains separate.",
       "dependencies": [
         "G2",
         "G5"
       ],
       "proof": [
-        "src/adversarial-audit/probes.ts"
+        "src/packages/assurance.ts",
+        "test/package-production.test.ts",
+        "reports/PROMPT-02-PACKAGE-PRODUCTION.md",
+        "reports/verification/prompt-02.json"
       ],
-      "nextAction": "Emit and consume real same-route reference/alternative/negative/control receipts; retain unknown status for unexecuted checks."
+      "nextAction": "Use these receipts for remaining adapters in Prompt 3; metadata-only legacy probes do not inherit native assurance."
     },
     {
       "id": "G5",
@@ -81,17 +84,19 @@
       "source": "System G6",
       "packageId": null,
       "owner": 2,
-      "status": "blocked",
-      "summary": "Native CAA exists but shared assembly/export is incomplete; drafts and placeholder code are not finished packages.",
+      "status": "verified",
+      "summary": "One-command native CAA assembly, actual local validation and parity-checked recipient export now use the immutable package graph.",
       "dependencies": [
         "G2",
         "G5"
       ],
       "proof": [
-        "tasks/caa-revalidation-repair/task.toml",
-        "src/packages/source.ts"
+        "src/packages/native-caa.ts",
+        "test/package-production.test.ts",
+        "reports/PROMPT-02-PACKAGE-PRODUCTION.md",
+        "reports/verification/prompt-02.json"
       ],
-      "nextAction": "Complete one reproducible native CAA production/export path using the package-record seed."
+      "nextAction": "Use this production path for new packages; Prompt 4 must demonstrate a genuinely different serious package."
     },
     {
       "id": "G7",
@@ -114,16 +119,19 @@
       "source": "System G8",
       "packageId": null,
       "owner": 2,
-      "status": "blocked",
-      "summary": "Reusable standards need executable implementations and per-domain adapters, not universal difficulty recipes.",
+      "status": "verified",
+      "summary": "Reusable assembly and executable assurance interfaces are exercised by native CAA and a numeric fixture without domain fields.",
       "dependencies": [
         "G2",
         "G5"
       ],
       "proof": [
-        "src/packages/policy.ts"
+        "src/packages/assembly.ts",
+        "test/package-production.test.ts",
+        "reports/PROMPT-02-PACKAGE-PRODUCTION.md",
+        "reports/verification/prompt-02.json"
       ],
-      "nextAction": "Implement reusable authority/positive-work/alternative-solution components through the native package path."
+      "nextAction": "Reuse generic artifact/evidence interfaces while implementing domain-specific collectors and controls in Prompts 3 and 4."
     },
     {
       "id": "G9",
@@ -267,39 +275,48 @@
       "source": "Engineering sampler copying",
       "packageId": null,
       "owner": 2,
-      "status": "blocked",
-      "summary": "Avoidable quadratic sampler copying remains.",
+      "status": "verified",
+      "summary": "Sampler grouping uses owned append-only arrays and cached identity/hash values, preserving selected membership and order.",
       "dependencies": [],
       "proof": [
-        "src/foundry/sample.ts"
+        "src/foundry/sample.ts",
+        "test/package-production.test.ts",
+        "reports/PROMPT-02-PACKAGE-PRODUCTION.md",
+        "reports/verification/prompt-02.json"
       ],
-      "nextAction": "Preserve deterministic behavior with an efficient sampling implementation and scale checks."
+      "nextAction": "Retain compatibility regressions; do not interpret the isolated sampler speedup as end-to-end production throughput."
     },
     {
       "id": "E2",
       "source": "Engineering eager scenarios",
       "packageId": null,
       "owner": 2,
-      "status": "blocked",
-      "summary": "Scenario generation/repeated construction needs profiling and selected-only generation where semantics permit.",
+      "status": "verified",
+      "summary": "Wallet selection classifies 82944 parameter points without allocating rejected full worlds; all 804 selected parameters and decision semantics are unchanged.",
       "dependencies": [],
       "proof": [
-        "src/trials/router.ts"
+        "src/families/delegated-wallet-scope-reconciliation/scenarios.ts",
+        "test/package-production.test.ts",
+        "reports/PROMPT-02-PACKAGE-PRODUCTION.md",
+        "reports/verification/prompt-02.json"
       ],
-      "nextAction": "Avoid repeated full construction without changing frozen scenario identities."
+      "nextAction": "Prompt 7 retains ownership of wider repeated construction and command-scoped caching; no global cache was added."
     },
     {
       "id": "E3",
       "source": "Engineering Jaccard contract",
       "packageId": null,
       "owner": 2,
-      "status": "blocked",
-      "summary": "Clustering implementation and documented pairwise guarantee disagree.",
+      "status": "verified",
+      "summary": "Representative-based Jaccard grouping is explicitly named/documented, with the old API preserved and the nontransitive counterexample tested.",
       "dependencies": [],
       "proof": [
-        "src/similarity.ts"
+        "src/similarity.ts",
+        "test/package-production.test.ts",
+        "reports/PROMPT-02-PACKAGE-PRODUCTION.md",
+        "reports/verification/prompt-02.json"
       ],
-      "nextAction": "Resolve the intended contract, implement it and test a non-transitive similarity counterexample."
+      "nextAction": "Retain historical representative grouping; antichain semantics remain unchanged."
     },
     {
       "id": "E4",
@@ -427,7 +444,7 @@
       "id": "PKG-CAA-KERNEL",
       "source": "Package audit 8",
       "packageId": "caa-revalidation",
-      "owner": 2,
+      "owner": 4,
       "status": "blocked",
       "summary": "Protected authority and actual query semantics repaired; small function remains calibration, distinct from native CAA.",
       "dependencies": [
@@ -436,7 +453,7 @@
       "proof": [
         "test/package-authority-boundary.test.ts"
       ],
-      "nextAction": "Retain kernel controls as reusable calibration; prioritize native service assembly and verify no source/identity conflation."
+      "nextAction": "Native production is implemented separately. Keep this generic route as calibration; Prompt 4 owns disposition and any substantive construction, not an automatic hardness claim."
     },
     {
       "id": "PKG-DAO",
@@ -507,17 +524,19 @@
       "source": "Package audit 13",
       "packageId": "caa-revalidation-repair",
       "owner": 2,
-      "status": "blocked",
-      "summary": "Real service, independent alternatives and local Docker controls exist; bounded stream collection, source-ban alternatives, runtime pinning and destination checks remain.",
+      "status": "verified",
+      "summary": "Native local production now covers pinned/runtime-archived assembly, bounded unprivileged compilation/collection, legitimate alternatives, fifteen wrong controls and exact export parity.",
       "dependencies": [
         "G2",
         "G5"
       ],
       "proof": [
-        "tasks/caa-revalidation-repair/tests/collect.py",
-        "src/packages/source.ts"
+        "src/packages/native-caa.ts",
+        "test/package-production.test.ts",
+        "reports/PROMPT-02-PACKAGE-PRODUCTION.md",
+        "reports/verification/prompt-02.json"
       ],
-      "nextAction": "Use native seed to finish reproducible assembly/export, bounded stdout/stderr, valid alternatives and required static/native tests."
+      "nextAction": "Retain native engineering evidence; independent human-time and official qualification remain PKG-NATIVE-QUALIFICATION."
     },
     {
       "id": "PKG-BROWSER",
@@ -583,6 +602,22 @@
         "src/packages/policy.ts"
       ],
       "nextAction": "Implement reserved process execution with inert fault fixtures and restore timeout, artifact classification and usage capture tests. Reproduce: pnpm exec vitest run test/orchestration.test.ts."
+    },
+    {
+      "id": "PKG-NATIVE-QUALIFICATION",
+      "source": "Prompt 2 external qualification boundary",
+      "packageId": "caa-revalidation-repair",
+      "owner": 4,
+      "status": "pending-external",
+      "summary": "Local validity is distinct from independent expert-time/fairness, human-authored reviewer material, official rubric and real standard/adversarial trial qualification.",
+      "dependencies": [
+        "PKG-NATIVE-CAA"
+      ],
+      "proof": [
+        "docs/package-production.md",
+        "src/packages/native-caa.ts"
+      ],
+      "nextAction": "Obtain independent reviews and separate explicit model-trial authority; do not use local controls to claim 6 of 6 genuine model failures."
     }
   ]
 }
