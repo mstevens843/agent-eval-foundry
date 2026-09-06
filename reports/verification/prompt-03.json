@@ -1,0 +1,1098 @@
+{
+  "promptId": "03",
+  "status": "complete-local-engineering",
+  "date": "2026-09-06",
+  "sourceSnapshot": {
+    "head": "3d4f3d0f152201291819c6e79940328a908e83bd",
+    "digest": "83a88fc376f190e8a5e3dcad0c3754efb0606989fee8c149c569b90b886af908",
+    "files": 3254,
+    "unchangedDuringVerification": true,
+    "excludedReportPaths": [
+      "reports/PROMPT-03-PROTECTED-FAMILY-ROUTES.md",
+      "reports/verification/prompt-03.json"
+    ],
+    "beforeInventory": ".local/prompt-03/source-before.json",
+    "afterInventory": ".local/prompt-03/source-after.json",
+    "historicalFilesUnchanged": 1019
+  },
+  "route": "cell-container / scripts/secure/authority-entry.mjs",
+  "imageIdentity": "sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32",
+  "controlSourceDigest": "0c292ec716d8e38ad8e9f7b7c0d5afa0838f9485092ac62089dcd3737e9f8dcd",
+  "summary": {
+    "protectedFamilies": 12,
+    "newProtectedFamilies": 10,
+    "localReferenceScenarios": 4595,
+    "localAlternativeScenarios": 4595,
+    "registeredMutantsCaught": 137,
+    "protectedSampledScenarios": 156,
+    "localAssuranceOperations": 96,
+    "topLevelFamilyControlInvocations": 467,
+    "additionalUiAndGeneratorInvocations": 9,
+    "exhaustiveProtectedCartesian": false,
+    "providerCallsMade": 0,
+    "subjectModelTrials": 0
+  },
+  "verification": [
+    {
+      "path": ".local/prompt-03/semantic-tests.json",
+      "sha256": "06fedc2a599d48fd1b89a126cf4de802e0fa852d7175b2cc29959f9bda112ddb",
+      "tests": 126,
+      "passed": 126,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 28.64597802734375
+    },
+    {
+      "path": ".local/prompt-03/route-tests.json",
+      "sha256": "ce1cb103e09832d485c989d6e0afc225e834e4d828f067cbba7c9b1c2606717e",
+      "tests": 15,
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 255.09436083984374
+    },
+    {
+      "command": "pnpm exec tsc --noEmit",
+      "status": "pass"
+    },
+    {
+      "command": "pnpm lint",
+      "status": "pass",
+      "files": 434
+    },
+    {
+      "command": "pnpm build",
+      "status": "pass",
+      "formats": [
+        "esm",
+        "cjs",
+        "declarations"
+      ]
+    },
+    {
+      "command": "import dist/index.js and require dist/index.cjs",
+      "status": "pass"
+    },
+    {
+      "command": "git diff --check",
+      "status": "pass"
+    }
+  ],
+  "knownNonPassingChecks": [
+    {
+      "command": "node dist/cli.js check",
+      "code": "ADV_COUNTED_HASH_STALE",
+      "meaning": "Legacy validator refuses preserved checker audit as current after public-contract migration; historical bytes unchanged.",
+      "nextOwner": 6
+    }
+  ],
+  "families": [
+    {
+      "familyId": "access-token-scope-expansion",
+      "packageDigest": "fe16e520a997f9877986816a30dddee03ad2666f6f20a7147646aacdc42ac568",
+      "componentDigests": {
+        "adapters": "c164e1be0d8d77128d39a8433b8c215a42d5d51ce8a3220c1edfaa4c8dd06c7b",
+        "collector": "4943f17e771b36d0eead31745844c6aac7deefd524b79bb158df97e3170ea44a",
+        "contract": "51cddf1c9bd9ebc92fe310442ebec06691db42a0c720ea8b96f9cf4daa51e816",
+        "controls": "5413a8ddca6eb95e532372b2ae145b46e8b8e188a0f40991f362db6ce7452754",
+        "dependencies": "2467470d08abb2f9c618fc75cb9d6ca6967ef5043cab69b2d738e834273db01c",
+        "policy": "33e9971b5ddb2c40cfd8d214982b710d4ff3ca53f384b8cb2684a130e2b77e8d",
+        "reference": "48ba9774adfcd85f5f9185b542aca46843c72689d918bd218b3d3a412c425d7d",
+        "scenarios": "429aea59dccb9eaafd6ddb45e931a0173cf91a55858d23279063891815075f39",
+        "verifier": "fa14607061f71947859d7ffe9c09bc409a51c0c5d26db7c99394f822baec1d92",
+        "workspace": "08243d670f1879e80c94d6faa252d298f36a965b0767537317f227c83f51e0fb"
+      },
+      "totalLocalScenarios": 384,
+      "referenceLocalFailures": 0,
+      "alternativeLocalFailures": 0,
+      "registeredMutantsCaught": 9,
+      "protectedSampledScenarios": 15,
+      "protectedScenarioIds": [
+        "ats-revoked-exact-cache-fresh-api-r2-11",
+        "ats-revoked-exact-cache-fresh-api-r2-23",
+        "ats-revoked-exact-cache-fresh-api-r2-41",
+        "ats-revoked-exact-cache-fresh-delegated-r1-41",
+        "ats-revoked-exact-cache-fresh-delegated-r1-67",
+        "ats-revoked-exact-cache-stale-api-r1-41",
+        "ats-revoked-exact-cache-stale-worker-r1-41",
+        "ats-revoked-missing-cache-fresh-api-r1-23",
+        "ats-revoked-principal_changed-cache-fresh-api-r1-41",
+        "ats-revoked-resource_expanded-cache-fresh-api-r1-23",
+        "ats-revoked-revoked-cache-fresh-api-r1-11",
+        "ats-revoked-scope_expanded-cache-fresh-api-r1-41",
+        "ats-scope_reduced-exact-cache-fresh-api-r1-11",
+        "ats-stable-exact-cache-fresh-api-r1-23",
+        "ats-superseded-exact-cache-fresh-api-r1-11"
+      ],
+      "protectedReferenceAttempts": 18,
+      "topLevelControlInvocations": 42,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 4346.903541000007
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 4750.442917000008
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 1043.410542000027
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 631.721332999994
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 678.2906250000233
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 1657.3897920000018
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1172.9409159999923
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 52.386333000002196
+        }
+      ],
+      "localValid": true,
+      "trialEligible": false,
+      "rawReceiptSha256": "9443620ba8fa0da5fe99ef8b865490aa5f39cc75eaaedccb59975eb7f16c0c5d"
+    },
+    {
+      "familyId": "caa-revalidation",
+      "packageDigest": "5039cc8e22015ff703e571a98d116cc253eec46f4e14a599d6796601ccfb7f9a",
+      "componentDigests": {
+        "adapters": "c164e1be0d8d77128d39a8433b8c215a42d5d51ce8a3220c1edfaa4c8dd06c7b",
+        "collector": "4943f17e771b36d0eead31745844c6aac7deefd524b79bb158df97e3170ea44a",
+        "contract": "31477bf44a0176ad8f1f36eba0dd33c78a29ef697c5ffca132e16fef8e222b1a",
+        "controls": "ebe70c1d3752f256f9bff79df7cbd6fe2f08d8bb022295645428fb12f684daaa",
+        "dependencies": "2467470d08abb2f9c618fc75cb9d6ca6967ef5043cab69b2d738e834273db01c",
+        "policy": "33e9971b5ddb2c40cfd8d214982b710d4ff3ca53f384b8cb2684a130e2b77e8d",
+        "reference": "8b8cbf4bf559da32a2a08f38fb1ea9f0fe18a11e7c857d8323ef1da1907e0b6c",
+        "scenarios": "72453af427afbfd74713c9c8b7d07150d5dfce55e7f8facd5a646c21476bdd38",
+        "verifier": "3a37f6313159a218e017f68ec160fe9b0135ff343c6b09e19b8800b502822661",
+        "workspace": "06ca42e45ac8720198230d61be3ea54a49beda8f95d2d858228868f29c6e36df"
+      },
+      "totalLocalScenarios": 24,
+      "referenceLocalFailures": 0,
+      "alternativeLocalFailures": 0,
+      "registeredMutantsCaught": 9,
+      "protectedSampledScenarios": 9,
+      "protectedScenarioIds": [
+        "caa-s31-d5-mixed-none",
+        "caa-s7-d5-mixed-middle",
+        "caa-s7-d3-all-stale-first",
+        "caa-s7-d5-mixed-last",
+        "caa-s19-d3-all-stale-middle",
+        "caa-s31-d5-boundary-eight-last",
+        "caa-s31-d5-boundary-nine-none",
+        "caa-s7-d2-all-stale-first",
+        "caa-s7-d1-boundary-eight-none"
+      ],
+      "protectedReferenceAttempts": 9,
+      "topLevelControlInvocations": 31,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 2634.251958000008
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 3002.62612500001
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 1001.8203329999815
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 638.2975830000069
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 707.81700000001
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 2332.735083000007
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1198.494000000006
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 52.54579099998227
+        }
+      ],
+      "localValid": true,
+      "trialEligible": false,
+      "rawReceiptSha256": "4b5650ebf490f4279e55caecbaaffabd586d9b831c93c26b90ed4ec069a38007"
+    },
+    {
+      "familyId": "checker-required-memory-poisoning",
+      "packageDigest": "9870cf734465d03b616e362a3875cf14100d35c512636aa43dbe703111bbdfdd",
+      "componentDigests": {
+        "adapters": "c164e1be0d8d77128d39a8433b8c215a42d5d51ce8a3220c1edfaa4c8dd06c7b",
+        "collector": "4943f17e771b36d0eead31745844c6aac7deefd524b79bb158df97e3170ea44a",
+        "contract": "907412ad658d88aa5a386912c325d0fbb1ce37e122c8a3cbdb24540c21519761",
+        "controls": "7c6db4c7233925e419e4643bdfdeeaccb100f066293825f4bd7ef7bc332d495f",
+        "dependencies": "2467470d08abb2f9c618fc75cb9d6ca6967ef5043cab69b2d738e834273db01c",
+        "policy": "33e9971b5ddb2c40cfd8d214982b710d4ff3ca53f384b8cb2684a130e2b77e8d",
+        "reference": "49bffc3960ecd8f9115a91093189d86d50da3f450deda079ac726c247324c00e",
+        "scenarios": "05a50e1f6c90d7f2b46f056b3f1f4977b329ecf41c9ff415e778d8ea871b3ba1",
+        "verifier": "49dfbbb47f714d1f44cc408b166ed68bd921d8205b866f2bbb6156590109448c",
+        "workspace": "8cadf0429486f815d7d3592b4f36ffb8267a0f0d5e671f4e27ec6ba664d190cf"
+      },
+      "totalLocalScenarios": 792,
+      "referenceLocalFailures": 0,
+      "alternativeLocalFailures": 0,
+      "registeredMutantsCaught": 20,
+      "protectedSampledScenarios": 21,
+      "protectedScenarioIds": [
+        "cr-bad_transition-laundered_scope-s0-fact_store-held_out-11",
+        "cr-duplicate_effect-laundered_scope-s0-fact_store-held_out-11",
+        "cr-false_success-laundered_scope-s0-fact_store-held_out-11",
+        "cr-late_cancel-laundered_scope-s0-fact_store-held_out-11",
+        "cr-liveness_stall-laundered_scope-s0-fact_store-held_out-11",
+        "cr-liveness_stall-laundered_scope-s0-fact_store-visible_example-11",
+        "cr-provenance_loss-laundered_scope-s0-fact_store-visible_example-11",
+        "cr-reference_accept-laundered_scope-s0-fact_store-visible_example-11",
+        "cr-false_success-laundered_scope-s0-summary-held_out-11",
+        "cr-held_out_bad_subject-laundered_scope-s0-summary-held_out-11",
+        "cr-receipt_forgery-laundered_scope-s0-summary-visible_example-11",
+        "cr-held_out_bad_subject-laundered_scope-s0-vector_note-visible_example-11",
+        "cr-status_only-laundered_scope-s0-vector_note-held_out-11",
+        "cr-duplicate_effect-laundered_scope-s1-fact_store-held_out-11",
+        "cr-audit_gap-laundered_scope-s1-summary-held_out-11",
+        "cr-bad_transition-laundered_scope-s3-fact_store-held_out-11",
+        "cr-bad_transition-memory_authority-s0-fact_store-visible_example-11",
+        "cr-bad_transition-none-s0-fact_store-visible_example-11",
+        "cr-bad_transition-secret_recall-s0-fact_store-visible_example-11",
+        "cr-audit_gap-laundered_scope-s0-fact_store-held_out-23",
+        "cr-held_out_bad_subject-laundered_scope-s0-fact_store-visible_example-41"
+      ],
+      "protectedReferenceAttempts": 71,
+      "topLevelControlInvocations": 61,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 6203.494666999992
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 7433.832792000001
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 3655.6577499999985
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 652.1304170000076
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 704.8672920000099
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 11885.499416999985
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1291.208083000005
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 54.53283300000476
+        }
+      ],
+      "localValid": true,
+      "trialEligible": false,
+      "rawReceiptSha256": "78b56c3d9d84b5b1acf9547eb5983715720261b6d989b027721842b7ffda6752"
+    },
+    {
+      "familyId": "dao-descendant",
+      "packageDigest": "b1c72d98cc9ba7cdbee306948c24c31a79490a790322407999c2b23ce8232753",
+      "componentDigests": {
+        "adapters": "c164e1be0d8d77128d39a8433b8c215a42d5d51ce8a3220c1edfaa4c8dd06c7b",
+        "collector": "4943f17e771b36d0eead31745844c6aac7deefd524b79bb158df97e3170ea44a",
+        "contract": "5f0dd73f107e068ac83bdfb378ed08138bc40e0959fd40a6df9a60dfd4a58024",
+        "controls": "aa37142fe5d118f0d1cae4bfaefcd4e21c683b6b617be3bc3eedad0eca2ca529",
+        "dependencies": "2467470d08abb2f9c618fc75cb9d6ca6967ef5043cab69b2d738e834273db01c",
+        "policy": "33e9971b5ddb2c40cfd8d214982b710d4ff3ca53f384b8cb2684a130e2b77e8d",
+        "reference": "b817f2bb6646e6266ce2c93404f797ef9d9be73196001261ce20d12450cc04af",
+        "scenarios": "ab4415fbeba7ec361aad58743f850985d6b813ef804a24f41dab42df4d489db4",
+        "verifier": "403bbeccea2944c267fb07cd84aaccdb219611419071ea39490867d73b919f0a",
+        "workspace": "a1685423f92c9d763aa8b00572389635ad0daea9b19b1c8ac7f2ff72822a1120"
+      },
+      "totalLocalScenarios": 24,
+      "referenceLocalFailures": 0,
+      "alternativeLocalFailures": 0,
+      "registeredMutantsCaught": 5,
+      "protectedSampledScenarios": 8,
+      "protectedScenarioIds": [
+        "recovery-11-w2-k4-after_tool",
+        "recovery-11-w2-k6-after_tool",
+        "recovery-11-w2-k12-after_tool",
+        "recovery-11-w3-k4-after_tool",
+        "recovery-11-w4-k4-after_tool",
+        "recovery-23-w2-k4-after_tool",
+        "recovery-41-w1-k4-after_tool",
+        "recovery-41-w2-k4-none"
+      ],
+      "protectedReferenceAttempts": 17,
+      "topLevelControlInvocations": 29,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 2375.2147920000134
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 2723.244834000012
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 988.4298749999725
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 620.3074589999742
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 706.2132079999719
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 2271.698250000016
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1227.1425419999869
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 52.33733400001074
+        }
+      ],
+      "localValid": true,
+      "trialEligible": false,
+      "rawReceiptSha256": "1cb07ccd6bd797d84f25a7ccb0a907d5af4e6c6d55a7b665880709581b4b9e7f"
+    },
+    {
+      "familyId": "delegated-wallet-scope-reconciliation",
+      "packageDigest": "195643b42341b8dbc4cb39c717202ed531f24897c4cde59a9f3e16f135035179",
+      "componentDigests": {
+        "adapters": "c164e1be0d8d77128d39a8433b8c215a42d5d51ce8a3220c1edfaa4c8dd06c7b",
+        "collector": "4943f17e771b36d0eead31745844c6aac7deefd524b79bb158df97e3170ea44a",
+        "contract": "8cf5fc9473cb4891ca023b6d8895448890f4c502ebb2e1aa899c750be2ce0df2",
+        "controls": "ba5a1df96274cf205a45c7c6b25db2c4342a763a9f1e333c9400775e34957472",
+        "dependencies": "2467470d08abb2f9c618fc75cb9d6ca6967ef5043cab69b2d738e834273db01c",
+        "policy": "33e9971b5ddb2c40cfd8d214982b710d4ff3ca53f384b8cb2684a130e2b77e8d",
+        "reference": "cb00e4662bf6b8f806690138231c576323159e97ab7c255269983d6b26e2f20f",
+        "scenarios": "2a0b639052652588cd7e9f5f65021bb628ab4aaff058890588d1d4e20c404338",
+        "verifier": "062e7770ac83115a3165f657f0f87ad743a3682dd16fdbc56f9f43fc2b17a6a8",
+        "workspace": "39faf8e75addd95c4eadec747aed76450be2d5187ae4981fab680f486fc2ea2d"
+      },
+      "totalLocalScenarios": 804,
+      "referenceLocalFailures": 0,
+      "alternativeLocalFailures": 0,
+      "registeredMutantsCaught": 10,
+      "protectedSampledScenarios": 18,
+      "protectedScenarioIds": [
+        "dws-limit-100-amount-140-downgraded-exact-cache-fresh-prior-none-available-delegated_tool-r1-11",
+        "dws-limit-100-amount-140-downgraded-exact-cache-fresh-prior-none-available-delegated_tool-r2-11",
+        "dws-limit-100-amount-140-downgraded-exact-cache-stale-prior-some-available-delegated_tool-r2-11",
+        "dws-limit-100-amount-140-downgraded-wrong_delegate-cache-fresh-prior-none-policy_unavailable-scheduled_worker-r1-11",
+        "dws-limit-100-amount-140-downgraded-wrong_delegate-cache-stale_broader-prior-near_limit-available-delegated_tool-r1-11",
+        "dws-limit-100-amount-140-expired-revoked-cache-stale_broader-prior-some-available-delegated_tool-r1-11",
+        "dws-limit-100-amount-140-revoked-revoked-cache-fresh-prior-some-available-delegated_tool-r1-11",
+        "dws-limit-100-amount-140-stable-revoked-cache-fresh-prior-near_limit-available-delegated_tool-r2-11",
+        "dws-limit-100-amount-25-downgraded-exact-cache-fresh-prior-near_limit-available-scheduled_worker-r1-11",
+        "dws-limit-100-amount-25-downgraded-exact-cache-fresh-prior-some-available-wallet_api-r2-11",
+        "dws-limit-100-amount-25-downgraded-scope_broadened-cache-fresh-prior-near_limit-available-scheduled_worker-r1-11",
+        "dws-limit-100-amount-260-downgraded-exact-cache-fresh-prior-near_limit-available-delegated_tool-r2-11",
+        "dws-limit-100-amount-60-downgraded-exact-cache-stale-prior-none-available-wallet_api-r1-11",
+        "dws-limit-250-amount-140-downgraded-exact-cache-fresh-prior-near_limit-available-scheduled_worker-r1-11",
+        "dws-limit-50-amount-140-downgraded-exact-cache-fresh-prior-some-available-wallet_api-r1-11",
+        "dws-limit-100-amount-140-downgraded-exact-cache-fresh-prior-near_limit-available-delegated_tool-r1-23",
+        "dws-limit-100-amount-140-downgraded-exact-cache-stale_broader-prior-some-available-scheduled_worker-r1-41",
+        "dws-limit-100-amount-140-downgraded-exact-cache-stale_broader-prior-none-available-delegated_tool-r1-67"
+      ],
+      "protectedReferenceAttempts": 23,
+      "topLevelControlInvocations": 48,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 5236.391665999981
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 5599.6299589999835
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 1275.3359999999811
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 611.3875830000034
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 693.4730829999899
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 1899.3562090000196
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1202.4224169999943
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 53.4666670000006
+        }
+      ],
+      "localValid": true,
+      "trialEligible": false,
+      "rawReceiptSha256": "5cd215190ccc793d593dc8c0700fbbb9394a492c3aa540ef071a03a6e0c5def9"
+    },
+    {
+      "familyId": "deployment-model-alias-rollout-drift",
+      "packageDigest": "b89b5ea296b56542d4702568815229895adbf5a65eb43a910dbbc39d5b935600",
+      "componentDigests": {
+        "adapters": "c164e1be0d8d77128d39a8433b8c215a42d5d51ce8a3220c1edfaa4c8dd06c7b",
+        "collector": "4943f17e771b36d0eead31745844c6aac7deefd524b79bb158df97e3170ea44a",
+        "contract": "b746c0a880e42026b461847ed4350301b5c9ab2996bfdae702cc000271b44602",
+        "controls": "0d7841301a2e4a34248d94770e9db8af6f2754eb71c24e1b4c0b831e320962ef",
+        "dependencies": "2467470d08abb2f9c618fc75cb9d6ca6967ef5043cab69b2d738e834273db01c",
+        "policy": "33e9971b5ddb2c40cfd8d214982b710d4ff3ca53f384b8cb2684a130e2b77e8d",
+        "reference": "e8064e0b12f3989936f7517da4ac94d490fca9797af9720ce2ea9f252f9eb738",
+        "scenarios": "e4ff7c8937116c4e16d53fae41eff25127bcd58063f9d48e4fd0bd8325b86289",
+        "verifier": "3814b919ec4ac64c5e3c972c993c100a8c52ac9a129027a1984e090cc2330294",
+        "workspace": "90379596204c1977df38f9169c4a57208a61ec8af241a918c480fe25716fc9ee"
+      },
+      "totalLocalScenarios": 339,
+      "referenceLocalFailures": 0,
+      "alternativeLocalFailures": 0,
+      "registeredMutantsCaught": 17,
+      "protectedSampledScenarios": 13,
+      "protectedScenarioIds": [
+        "dmd-eval-default-same-canary-cache-fresh-window-open-reg-major-mixed_versions-none-wrong_current-provider_says_red-available-routing_service-r2-11",
+        "dmd-eval-default-same-canary-cache-fresh-window-open-reg-minor-all_current-none-wrong_current-none-available-release_console-r1-11",
+        "dmd-eval-default-same-canary-cache-fresh-window-open-reg-none-misattributed-after_bad_eval-correct_previous-provider_says_green-available-routing_service-r1-11",
+        "dmd-eval-default-same-canary-cache-stale_initial-window-complete-reg-minor-misattributed-none-correct_previous-provider_says_green-available-release_console-r2-11",
+        "dmd-eval-default-same-canary-cache-stale_previous-window-complete-reg-none-mixed_versions-after_bad_eval-wrong_current-provider_says_green-unavailable-ci_worker-r1-11",
+        "dmd-eval-default-same-complete-cache-fresh-window-closed-reg-none-all_current-none-correct_previous-provider_says_red-unavailable-routing_service-r1-11",
+        "dmd-eval-default-same-complete-cache-fresh-window-closed-reg-unknown-misattributed-none-wrong_current-provider_says_red-available-release_console-r2-11",
+        "dmd-eval-default-same-pre_canary-cache-fresh-window-closed-reg-none-all_current-none-correct_previous-none-available-release_console-r1-11",
+        "dmd-eval-default-same-ramp-cache-fresh-window-complete-reg-none-misattributed-none-wrong_current-provider_says_red-available-release_console-r1-11",
+        "dmd-eval-default-same-ramp-cache-stale_previous-window-closed-reg-major-insufficient-after_bad_eval-correct_previous-none-unavailable-ci_worker-r2-11",
+        "dmd-eval-default-successor-canary-cache-fresh-window-open-reg-major-all_current-none-wrong_current-provider_says_red-available-routing_service-r1-11",
+        "dmd-prod-chat-same-canary-cache-fresh-window-closed-reg-none-all_current-none-correct_previous-none-available-release_console-r1-11",
+        "dmd-eval-default-same-canary-cache-fresh-window-closed-reg-major-mixed_versions-none-correct_previous-provider_says_green-available-release_console-r1-23"
+      ],
+      "protectedReferenceAttempts": 17,
+      "topLevelControlInvocations": 38,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 3856.5424999999814
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 4202.126625000004
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 3171.3382920000004
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 627.8674579999933
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 706.403083000012
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 3746.5760420000006
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1199.6961669999873
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 53.72683400000096
+        }
+      ],
+      "localValid": true,
+      "trialEligible": false,
+      "rawReceiptSha256": "85906f7ef044f16aec9ce417ef574bac62a344dc67471d500f177b4dd20779db"
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "packageDigest": "adf0928c26130bcd3cac6d0f6721cd20da6e8d9cfdbf1aee04438a18b90c4de9",
+      "componentDigests": {
+        "adapters": "c164e1be0d8d77128d39a8433b8c215a42d5d51ce8a3220c1edfaa4c8dd06c7b",
+        "collector": "4943f17e771b36d0eead31745844c6aac7deefd524b79bb158df97e3170ea44a",
+        "contract": "2a39c77394322af98e32aa61e4f2172c2117cc79624af61849214fb920066985",
+        "controls": "18c748036be194e1881a9864cf33801885fd41e5f3588fe732ae4d3eb64606ee",
+        "dependencies": "2467470d08abb2f9c618fc75cb9d6ca6967ef5043cab69b2d738e834273db01c",
+        "policy": "33e9971b5ddb2c40cfd8d214982b710d4ff3ca53f384b8cb2684a130e2b77e8d",
+        "reference": "3569bfc33d6a7c867829a2840dbb3d16cb0db4283e97253051ebb194c11e23ab",
+        "scenarios": "5bf58c2e21648d1453c7bdcee6d6cfc9002ffe4cccba565122bd76975b539207",
+        "verifier": "0159f515efa1b01f526deffcbc59ef8749102501cd83a922cfea3f0850e1c0f4",
+        "workspace": "82599d2a9c232732b85afe5d0f1ab5df90c6c81578c2967b3acbacd60a87b92f"
+      },
+      "totalLocalScenarios": 24,
+      "referenceLocalFailures": 0,
+      "alternativeLocalFailures": 0,
+      "registeredMutantsCaught": 6,
+      "protectedSampledScenarios": 8,
+      "protectedScenarioIds": [
+        "rollback-recovery-11-c2-e4-after_compensation",
+        "rollback-recovery-11-c2-e6-after_compensation",
+        "rollback-recovery-11-c2-e12-after_compensation",
+        "rollback-recovery-11-c3-e4-after_compensation",
+        "rollback-recovery-11-c4-e4-after_compensation",
+        "rollback-recovery-23-c2-e4-after_compensation",
+        "rollback-recovery-41-c1-e4-after_compensation",
+        "rollback-recovery-41-c2-e4-none"
+      ],
+      "protectedReferenceAttempts": 17,
+      "topLevelControlInvocations": 29,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 2367.522499999992
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 2706.9491250000137
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 998.4769170000218
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 635.6047089999774
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 699.7439580000064
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 2258.400250000006
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1212.4355830000131
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 52.311083000007784
+        }
+      ],
+      "localValid": true,
+      "trialEligible": false,
+      "rawReceiptSha256": "c75325582d0028b080e7523d0d8b73d8746b1343ec8edca9450120258f37d85c"
+    },
+    {
+      "familyId": "prompt-injection-containment",
+      "packageDigest": "134d4906ae522637ce82ce60de452b10ca467a91d18a66d4870299e24f9ce4bb",
+      "componentDigests": {
+        "adapters": "c164e1be0d8d77128d39a8433b8c215a42d5d51ce8a3220c1edfaa4c8dd06c7b",
+        "collector": "4943f17e771b36d0eead31745844c6aac7deefd524b79bb158df97e3170ea44a",
+        "contract": "c1aefdb705966a4e98f86ca93996590c311cf82a42ec60f6b300ff260f2e3564",
+        "controls": "d5daa3f2e6f70069486e15b0105f9eaf3ba80d57e6b47c223c51d4c7776fd121",
+        "dependencies": "2467470d08abb2f9c618fc75cb9d6ca6967ef5043cab69b2d738e834273db01c",
+        "policy": "33e9971b5ddb2c40cfd8d214982b710d4ff3ca53f384b8cb2684a130e2b77e8d",
+        "reference": "f284bebe5b7c491f762e14f4f4a45b96ed9da24aeb84dc9bd23e7de73241a1e4",
+        "scenarios": "d7727c4427a01c159da3772554f37b07c6c8b2d6be83ee33264e259a6a9a47c1",
+        "verifier": "53e220963011de6db21347fa673f36659e35e3759d9fe0ec0980fa783c06f2c5",
+        "workspace": "e7984f62581138a65464ab2aee1d15e73f600953a1d30d1abc87e1cf74ec21ce"
+      },
+      "totalLocalScenarios": 128,
+      "referenceLocalFailures": 0,
+      "alternativeLocalFailures": 0,
+      "registeredMutantsCaught": 9,
+      "protectedSampledScenarios": 12,
+      "protectedScenarioIds": [
+        "pic-none-none-nosec-safe-h0-s11",
+        "pic-none-none-nosec-safe-h2-s11",
+        "pic-none-none-nosec-nosafe-h0-s11",
+        "pic-none-none-sec-safe-h0-s11",
+        "pic-email-authority_grab-nosec-safe-h0-s11",
+        "pic-email-scope_expansion-nosec-safe-h0-s11",
+        "pic-email-secret_exfil-sec-safe-h0-s11",
+        "pic-email-approval_confusion-nosec-safe-h0-s11",
+        "pic-document-authority_grab-nosec-safe-h0-s11",
+        "pic-webpage-authority_grab-nosec-safe-h0-s11",
+        "pic-crm_note-authority_grab-nosec-safe-h0-s11",
+        "pic-tool_output-tool_chain-nosec-safe-h0-s11"
+      ],
+      "protectedReferenceAttempts": 12,
+      "topLevelControlInvocations": 36,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 4780.922166
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 4077.599333
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 1062.4817500000008
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 660.8562500000007
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 723.1696670000001
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 1684.0617920000004
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1229.1744170000002
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 52.65949999999975
+        }
+      ],
+      "localValid": true,
+      "trialEligible": false,
+      "rawReceiptSha256": "6cf753faf3b71ab1b5718776c45a9a1b5723b2627d869c7d1e4cf539b0fc57f5"
+    },
+    {
+      "familyId": "prompt-injection-memory-poisoning",
+      "packageDigest": "f7245af73a9ace6c7b7b861b01d543730d4f1f5dceaec5640148a386c9917b94",
+      "componentDigests": {
+        "adapters": "c164e1be0d8d77128d39a8433b8c215a42d5d51ce8a3220c1edfaa4c8dd06c7b",
+        "collector": "4943f17e771b36d0eead31745844c6aac7deefd524b79bb158df97e3170ea44a",
+        "contract": "e3e77d6d31b3869631bb0f11f5ee17f4ff28d95c9af867bb6dd7869e350f90c7",
+        "controls": "43b4e8d821ca7e988d58846ce3761d50dcbcce8c8931914df80bf4db847ab471",
+        "dependencies": "2467470d08abb2f9c618fc75cb9d6ca6967ef5043cab69b2d738e834273db01c",
+        "policy": "33e9971b5ddb2c40cfd8d214982b710d4ff3ca53f384b8cb2684a130e2b77e8d",
+        "reference": "fa8fbfd10eb5164f8fef0a8d2b77af79e5d831059741f230a3daf9c104582877",
+        "scenarios": "fcbfa09ea5929d3d047fe42c35ac2cc664e5bd501d025a8e90a7531c408fcfeb",
+        "verifier": "d82f8a351e60783dec0fe7ca7bb83a2330f760317e4d37b95020b1d7eafb2871",
+        "workspace": "9b48223d38d41f34d92bb37828ff44e2caef3ee714d01a6345bfbe85c7a038c1"
+      },
+      "totalLocalScenarios": 864,
+      "referenceLocalFailures": 0,
+      "alternativeLocalFailures": 0,
+      "registeredMutantsCaught": 14,
+      "protectedSampledScenarios": 14,
+      "protectedScenarioIds": [
+        "mp-laundered_scope-s0-fact_store-b1-dlexical-rlegit-11",
+        "mp-laundered_scope-s0-fact_store-b1-dlexical-rlegit-23",
+        "mp-laundered_scope-s0-fact_store-b1-dlexical-67",
+        "mp-laundered_scope-s0-fact_store-b1-dnone-rlegit-11",
+        "mp-laundered_scope-s0-fact_store-b1-dnone-rlegit-41",
+        "mp-laundered_scope-s0-fact_store-b1-dstructural-rillegit-41",
+        "mp-laundered_scope-s0-fact_store-b4-dlexical-rillegit-11",
+        "mp-laundered_scope-s0-summary-b1-dlexical-rillegit-23",
+        "mp-laundered_scope-s0-vector_note-b1-dlexical-rillegit-23",
+        "mp-laundered_scope-s1-fact_store-b1-dlexical-rlegit-67",
+        "mp-laundered_scope-s3-fact_store-b1-dlexical-rillegit-11",
+        "mp-memory_authority-s0-fact_store-b1-dlexical-rillegit-67",
+        "mp-none-s0-fact_store-b1-dlexical-rillegit-11",
+        "mp-secret_recall-s0-fact_store-b1-dlexical-rillegit-11"
+      ],
+      "protectedReferenceAttempts": 33,
+      "topLevelControlInvocations": 40,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 4249.301749999999
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 4691.275708000001
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 1437.6497920000002
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 669.1295419999988
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 711.5605000000032
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 2085.209334000003
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1229.8211250000022
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 52.71049999999741
+        }
+      ],
+      "localValid": true,
+      "trialEligible": false,
+      "rawReceiptSha256": "4801291b6e17d75c63d405d6b8026cae71e218d83799975059050bdc1486fb45"
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "packageDigest": "c4d165de694e2c49452f8500544ef2b5116bb3b9314028ab7c0769910d7d28ab",
+      "componentDigests": {
+        "adapters": "c164e1be0d8d77128d39a8433b8c215a42d5d51ce8a3220c1edfaa4c8dd06c7b",
+        "collector": "4943f17e771b36d0eead31745844c6aac7deefd524b79bb158df97e3170ea44a",
+        "contract": "60339ef830ba2734c5960dd51c9484f58e30c7e633108295562c1466a9b183d9",
+        "controls": "0632a0a8315f6dab9058d7a8bffd1a3403387e5dcad2f9511b1db9767a9cae58",
+        "dependencies": "2467470d08abb2f9c618fc75cb9d6ca6967ef5043cab69b2d738e834273db01c",
+        "policy": "33e9971b5ddb2c40cfd8d214982b710d4ff3ca53f384b8cb2684a130e2b77e8d",
+        "reference": "93eda41bdf10beb7648b43a3686247989898f83a2e200ba14f413183297abac5",
+        "scenarios": "7cb2939920f50de2ba401d840b36091f71fb50ed75c6156835793a4dffc3223a",
+        "verifier": "29aa67aa57cf28467c8054bd440d33c98ed93449d08255c1dd901dd57bd48438",
+        "workspace": "ba23294592350b15a1f3aefc04a771a56294cba15979d2b55411ad67758a814e"
+      },
+      "totalLocalScenarios": 24,
+      "referenceLocalFailures": 0,
+      "alternativeLocalFailures": 0,
+      "registeredMutantsCaught": 6,
+      "protectedSampledScenarios": 8,
+      "protectedScenarioIds": [
+        "order-recovery-11-r2-o4-after_venue_accept",
+        "order-recovery-11-r2-o6-after_venue_accept",
+        "order-recovery-11-r2-o12-after_venue_accept",
+        "order-recovery-11-r3-o4-after_venue_accept",
+        "order-recovery-11-r4-o4-after_venue_accept",
+        "order-recovery-23-r2-o4-after_venue_accept",
+        "order-recovery-41-r1-o4-after_venue_accept",
+        "order-recovery-41-r2-o4-none"
+      ],
+      "protectedReferenceAttempts": 17,
+      "topLevelControlInvocations": 29,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 2340.8275419999845
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 2727.992041999998
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 972.084458999976
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 634.4147500000254
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 708.6072500000009
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 2271.380541999999
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1265.7577499999898
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 52.80775000000722
+        }
+      ],
+      "localValid": true,
+      "trialEligible": false,
+      "rawReceiptSha256": "568c87ef48573a217b5ddc5dc74c38a2cb4388c2995c5dda2bddeebedd072bb5"
+    },
+    {
+      "familyId": "ui-action-record-replay",
+      "packageDigest": "5dc1a340127adabafc12e4471c85bc774dcc8090603b5fd659c3c5ab2da67d8f",
+      "componentDigests": {
+        "adapters": "c164e1be0d8d77128d39a8433b8c215a42d5d51ce8a3220c1edfaa4c8dd06c7b",
+        "collector": "4943f17e771b36d0eead31745844c6aac7deefd524b79bb158df97e3170ea44a",
+        "contract": "da28f5e2a84d8081105f9808b6842c2c8686ef908d8428f900d5b2b9b03c8b23",
+        "controls": "2e7f0dc077ad946492810f0045d0b901f0d8d24941a075aa5b6e6144bd18a79c",
+        "dependencies": "2467470d08abb2f9c618fc75cb9d6ca6967ef5043cab69b2d738e834273db01c",
+        "policy": "33e9971b5ddb2c40cfd8d214982b710d4ff3ca53f384b8cb2684a130e2b77e8d",
+        "reference": "e6da7fb90ddb1f923133fee866d6ae671fb2f2e640f46ed95a4a2941040e1855",
+        "scenarios": "2c547bd2e138a4a18f622b75b76d0753de71266f3c11884c78f8dc370592293a",
+        "verifier": "74fef7db3dc338a039061cf335fc70792e6fa182dd11b7c486a641163906f947",
+        "workspace": "df871973b1eae8f7f9c7dd5b215bf8fb0a4a859ed4aca5d9cb29f67d9fffa9ea"
+      },
+      "totalLocalScenarios": 324,
+      "referenceLocalFailures": 0,
+      "alternativeLocalFailures": 0,
+      "registeredMutantsCaught": 10,
+      "protectedSampledScenarios": 15,
+      "protectedScenarioIds": [
+        "ui-attribute_renamed-d0-absent-pending-r1-11",
+        "ui-attribute_renamed-d0-absent-pending-r2-11",
+        "ui-attribute_renamed-d0-absent-pending-r2-41",
+        "ui-attribute_renamed-d0-absent-settled-r1-11",
+        "ui-attribute_renamed-d0-present-pending-r2-11",
+        "ui-attribute_renamed-d0-present-pending-r2-23",
+        "ui-attribute_renamed-d0-suppressed-pending-r2-11",
+        "ui-attribute_renamed-d2-absent-pending-r1-11",
+        "ui-attribute_renamed-d4-absent-pending-r1-11",
+        "ui-node_removed-d0-absent-pending-r1-11",
+        "ui-node_reordered-d0-absent-pending-r2-11",
+        "ui-node_wrapped-d0-absent-pending-r1-11",
+        "ui-none-d0-absent-pending-r1-41",
+        "ui-text_changed-d0-absent-pending-r2-11",
+        "ui-node_reordered-d0-absent-settled-r2-23"
+      ],
+      "protectedReferenceAttempts": 23,
+      "topLevelControlInvocations": 42,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 4312.599125000001
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 5221.5870829999985
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 1171.0113330000022
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 697.4329170000055
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 717.5028749999983
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 1749.3980420000007
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1224.2352090000059
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 53.86158299999806
+        }
+      ],
+      "localValid": true,
+      "trialEligible": false,
+      "rawReceiptSha256": "7d2ca841941fa3f902c4174786fa8c08c16945f68b7b95381d5fa3d7c73a3350"
+    },
+    {
+      "familyId": "ui-replay-live-dom",
+      "packageDigest": "0a0cd789d9698aab24ff6fbfb3db4c811d5b8cda14c6058242b36e0248fd4574",
+      "componentDigests": {
+        "adapters": "c164e1be0d8d77128d39a8433b8c215a42d5d51ce8a3220c1edfaa4c8dd06c7b",
+        "collector": "4943f17e771b36d0eead31745844c6aac7deefd524b79bb158df97e3170ea44a",
+        "contract": "d39170c1ab9776861ff3fdd30173f9bc40f2ba8e269d00a549dcd3aea367dcba",
+        "controls": "8505b74512c7b561b5622495b5d52ec7c9a265bff571e1d39f419296109c75db",
+        "dependencies": "2467470d08abb2f9c618fc75cb9d6ca6967ef5043cab69b2d738e834273db01c",
+        "policy": "33e9971b5ddb2c40cfd8d214982b710d4ff3ca53f384b8cb2684a130e2b77e8d",
+        "reference": "0525729ac36f6adcfe1d76c465e916b61b4fdf5dacae8eb2d1c4da1d7d9ea29c",
+        "scenarios": "948399b386064c59b76523360aebf2d8b68ef872c103fe4d1883228887e4737d",
+        "verifier": "26307612c52ad1054c335cdb797bd04092d7a8e2029e4b26b00c371292971e1d",
+        "workspace": "68a0760db277801dbfb79f5138ca701c2c6ffbc21dd777201c014fd7d93a56c7"
+      },
+      "totalLocalScenarios": 864,
+      "referenceLocalFailures": 0,
+      "alternativeLocalFailures": 0,
+      "registeredMutantsCaught": 22,
+      "protectedSampledScenarios": 15,
+      "protectedScenarioIds": [
+        "live-disabled_then_enabled-arming-b0-duplicated-path_wins-honest-r1-s11",
+        "live-disabled_then_enabled-arming-b0-duplicated-path_wins-misleading-r2-s41",
+        "live-disabled_then_enabled-arming-b0-duplicated-semantic_wins-honest-r2-s11",
+        "live-disabled_then_enabled-arming-b0-duplicated-testid_wins-honest-r1-s41",
+        "live-disabled_then_enabled-arming-b0-exact-none-honest-r1-s41",
+        "live-disabled_then_enabled-arming-b2-duplicated-none-honest-r1-s11",
+        "live-disabled_then_enabled-arming-b6-duplicated-none-honest-r1-s11",
+        "live-disabled_then_enabled-clean-b0-duplicated-none-honest-r1-s11",
+        "live-disabled_then_enabled-foreign_hold-b0-duplicated-none-honest-r1-s11",
+        "live-late_mount-arming-b0-duplicated-none-honest-r1-s11",
+        "live-remount_rekeyed-arming-b0-duplicated-none-honest-r2-s11",
+        "live-removed-arming-b0-duplicated-path_wins-misleading-r2-s11",
+        "live-stable-arming-b0-duplicated-none-honest-r1-s11",
+        "live-superseded-arming-b0-duplicated-none-honest-r1-s41",
+        "live-disabled_then_enabled-arming-b2-duplicated-path_wins-misleading-r2-s11"
+      ],
+      "protectedReferenceAttempts": 20,
+      "topLevelControlInvocations": 42,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 4553.9106669999965
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 4932.470165999999
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 16297.265041999999
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 661.7802919999958
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 716.0000839999993
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 16888.71983300001
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1219.965875000009
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 53.256915999998455
+        }
+      ],
+      "localValid": true,
+      "trialEligible": false,
+      "rawReceiptSha256": "651abf7b4038a096412d90aeb876e6b988e0121a592565ae357ecbe7ea628d8e"
+    }
+  ],
+  "limitations": [
+    "No human solve, standard-model, adversarial-model or destination acceptance evidence.",
+    "Finite local controls and representative protected coverage do not prove exhaustive completeness or hardness.",
+    "Native CAA preserved, not rebuilt/requalified by this prompt.",
+    "Full repository tests not claimed green; legacy integration remains with later owners.",
+    "Policy-family alternatives share some normative predicates/serializers, not reference orchestration."
+  ],
+  "nextOwner": {
+    "promptId": "04",
+    "prerequisitesHold": true
+  }
+}

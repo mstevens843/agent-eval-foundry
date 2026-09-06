@@ -17,7 +17,15 @@
 // say why is `auditLiar`, and it fails.
 
 import { decide } from "./policy.js";
-import type { AuditEvent, Decision, Scenario, State, Subject, SubjectReport, ToolFacade } from "./types.js";
+import type {
+  AuditEvent,
+  Decision,
+  ScenarioView as Scenario,
+  State,
+  Subject,
+  SubjectReport,
+  ToolFacade,
+} from "./types.js";
 
 export class AuditLog {
   private seq = 0;

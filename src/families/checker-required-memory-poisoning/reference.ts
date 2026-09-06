@@ -9,6 +9,7 @@ import { reference as memoryReference } from "../memory-poisoning/reference.js";
 import { Harness } from "../memory-poisoning/runner.js";
 import type { Scenario as MemoryScenario } from "../memory-poisoning/truth.js";
 import type { AuditEvent as MemoryAuditEvent, Subject as MemorySubject } from "../memory-poisoning/types.js";
+import { CaseRegistry } from "./cases.js";
 import type { Scenario } from "./truth.js";
 import type {
   CaseTrace,
@@ -38,7 +39,7 @@ const LEGAL_TRANSITIONS = new Set([
 const asCheckerSubject = (subject: MemorySubject): Subject => subject as unknown as Subject;
 export const referenceSubject: Subject = asCheckerSubject(memoryReference);
 
-const writeTrace = (writes: ReturnType<Harness["sealedWrites"]>): readonly ObservedMemoryWrite[] =>
+export const writeTrace = (writes: ReturnType<Harness["sealedWrites"]>): readonly ObservedMemoryWrite[] =>
   writes.map((w) => ({
     seq: w.seq,
     key: w.record.key,
@@ -51,7 +52,7 @@ const writeTrace = (writes: ReturnType<Harness["sealedWrites"]>): readonly Obser
     provenanceSupported: w.provenanceSupported,
   }));
 
-const invocationTrace = (
+export const invocationTrace = (
   invocations: readonly {
     readonly seq: number;
     readonly actionId: string;
@@ -284,32 +285,35 @@ export const referenceSubmission: Submission = {
 export function runChecker(
   scenario: Scenario,
   checker: Checker | null,
+  subject: Subject = referenceSubject,
 ): {
   readonly report: CheckerReport | null;
   readonly repeat: CheckerReport | null;
   readonly invocations: number;
   readonly trace: CaseTrace;
   readonly error: string | null;
+  readonly observations?: readonly (readonly CaseTrace[])[];
 } {
   const trace = probeTrace(scenario);
   if (checker === null) return { report: null, repeat: null, invocations: 0, trace, error: null };
 
   const makeInput = (): CheckerInput => {
     let invocations = 0;
+    const registry = new CaseRegistry(scenario);
+    const observed: CaseTrace[] = [];
     return {
       cases: [scenario.checkerCase],
       runCase: (caseId: string): CaseTrace => {
+        const selected = registry.run(caseId);
         invocations += 1;
-        if (caseId !== scenario.checkerCase.id) {
-          return { ...trace, caseId, status: "crashed", finalState: { settled: false, cancelled: false } };
-        }
-        return { ...trace, caseId, producer: "observed-subject" };
+        const actual =
+          caseId === scenario.checkerCase.id ? trace : runSubjectTrace(selected.memoryScenario, subject);
+        const result = { ...actual, caseId, producer: "observed-subject" };
+        observed.push(structuredClone(result));
+        return structuredClone(result);
       },
-      makeCase: (params) => ({
-        ...scenario.checkerCase,
-        id: `${scenario.checkerCase.id}-made`,
-        params: { ...scenario.checkerCase.params, ...params },
-      }),
+      makeCase: (params) => registry.make(params),
+      observed,
       get invocationCount() {
         return invocations;
       },
@@ -329,6 +333,9 @@ export function runChecker(
         (secondInput as CheckerInput & { readonly invocationCount: number }).invocationCount,
       trace,
       error: null,
+      observations: [firstInput, secondInput].map(
+        (input) => (input as CheckerInput & { observed: CaseTrace[] }).observed,
+      ),
     };
   } catch (err) {
     return {

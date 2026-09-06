@@ -72,7 +72,10 @@ export function verify(value: unknown): readonly Failure[] {
   if (
     input.reports.length !== input.scenario.views.length ||
     input.reports.some((report, index) => {
-      const call = ownCalls[index];
+      const view = input.scenario.views[index];
+      const call = ownCalls.find(
+        (c) => c.reconcilerId === view?.reconcilerId && c.authorityEpoch === view?.authorityEpoch,
+      );
       return (
         call === undefined ||
         report.orderIntentId !== call.orderIntentId ||

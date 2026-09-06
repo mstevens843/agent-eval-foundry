@@ -7,14 +7,16 @@
       "source": "System G1; package S1/S2",
       "packageId": null,
       "owner": 3,
-      "status": "blocked",
-      "summary": "Two protected routes repaired; ten legacy routes still need independent collection and execution controls.",
+      "status": "verified",
+      "summary": "All twelve generic routes now use independent authority-owned operations, protected child execution and current-package local controls; executed reference, alternative, negative and boundary controls provide local verification.",
       "dependencies": [],
       "proof": [
-        "test/package-authority-boundary.test.ts",
-        "src/trials/migration.ts"
+        "src/trials/operation-authority.ts",
+        "src/trials/secure-runner.ts",
+        "test/protected-family-routes.test.ts",
+        "docs/protected-family-routes.md"
       ],
-      "nextAction": "Preserve existing memory/CAA authority repairs and implement/test all remaining protected routes."
+      "nextAction": "Retain boundary regressions; do not infer task hardness or destination readiness from migration."
     },
     {
       "id": "G2",
@@ -338,15 +340,18 @@
       "source": "Package audit 1",
       "packageId": "prompt-injection-containment",
       "owner": 3,
-      "status": "blocked",
-      "summary": "Payload/population/history repairs exist; protected execution and independent correct alternatives remain. Tiny policy kernel is calibration.",
+      "status": "verified",
+      "summary": "Prompt 3 implemented protected execution, full local semantic and independent alternative controls, and package-bound assurance. Substantial professional construction and external qualification remain separate.",
       "dependencies": [
         "G1"
       ],
       "proof": [
-        "test/package-semantic-integrity.test.ts"
+        "test/package-semantic-integrity.test.ts",
+        "test/protected-family-semantics.test.ts",
+        "test/protected-family-routes.test.ts",
+        "docs/protected-family-routes.md"
       ],
-      "nextAction": "Implement protected parity and valid-alternative controls; Prompt 4 must explicitly retain calibration or build meaningful new substance."
+      "nextAction": "Prompt 4: explicitly retain as calibration or build a substantial professional package; preserve Prompt 3 contract and route regressions."
     },
     {
       "id": "PKG-MEMORY",
@@ -369,60 +374,72 @@
       "source": "Package audit 3",
       "packageId": "ui-action-record-replay",
       "owner": 3,
-      "status": "blocked",
-      "summary": "Legacy route and complete replay attempt/value/order checking remain; old capability labels were disputed.",
+      "status": "verified",
+      "summary": "Prompt 3 implemented protected execution, full local semantic and independent alternative controls, and package-bound assurance. Every replay is checked for ordered value-bearing observations and truthful work. Substantial professional construction and external qualification remain separate.",
       "dependencies": [
         "G1"
       ],
       "proof": [
-        "src/families/ui-action-record-replay/verify.ts"
+        "src/families/ui-action-record-replay/verify.ts",
+        "test/protected-family-semantics.test.ts",
+        "test/protected-family-routes.test.ts",
+        "docs/protected-family-routes.md"
       ],
-      "nextAction": "Finish protected all-attempt validation and controls; Prompt 4 builds genuine browser interaction, not selector puzzle volume."
+      "nextAction": "Prompt 4: explicitly retain as calibration or build a substantial professional package; preserve Prompt 3 contract and route regressions."
     },
     {
       "id": "PKG-LIVE-DOM",
       "source": "Package audit 4",
       "packageId": "ui-replay-live-dom",
       "owner": 3,
-      "status": "blocked",
-      "summary": "Settling/precondition signal is narrow with unpinned effort; protected route, attempted-effect checks and expert evidence remain.",
+      "status": "verified",
+      "summary": "Prompt 3 implemented protected execution, full local semantic and independent alternative controls, and package-bound assurance. Every replay is checked for ordered value-bearing observations and truthful work. Substantial professional construction and external qualification remain separate.",
       "dependencies": [
         "G1"
       ],
       "proof": [
-        "src/families/ui-replay-live-dom/verify.ts"
+        "src/families/ui-replay-live-dom/verify.ts",
+        "test/protected-family-semantics.test.ts",
+        "test/protected-family-routes.test.ts",
+        "docs/protected-family-routes.md"
       ],
-      "nextAction": "Check actual action-time freshness and legitimate delayed alternatives through protected execution."
+      "nextAction": "Prompt 4: explicitly retain as calibration or build a substantial professional package; preserve Prompt 3 contract and route regressions."
     },
     {
       "id": "PKG-CHECKER",
       "source": "Package audit 5",
       "packageId": "checker-required-memory-poisoning",
       "owner": 3,
-      "status": "blocked",
-      "summary": "makeCase API remains incomplete; label-proxy/provenance/facade fixes do not complete checker construction or protected grading.",
+      "status": "verified",
+      "summary": "Prompt 3 implemented protected execution, full local semantic and independent alternative controls, and package-bound assurance. Generated case registry executes actual submitted code; checker evidence is behavior-based. Substantial professional construction and external qualification remain separate.",
       "dependencies": [
         "G1"
       ],
       "proof": [
-        "test/package-checker-integrity.test.ts"
+        "test/package-checker-integrity.test.ts",
+        "test/protected-family-semantics.test.ts",
+        "test/protected-family-routes.test.ts",
+        "docs/protected-family-routes.md"
       ],
-      "nextAction": "Implement real case construction/registry and protected checker execution; preserve intentional old scenario pin."
+      "nextAction": "Prompt 4: explicitly retain as calibration or build a substantial professional package; preserve Prompt 3 contract and route regressions."
     },
     {
       "id": "PKG-ACCESS",
       "source": "Package audit 6",
       "packageId": "access-token-scope-expansion",
       "owner": 3,
-      "status": "blocked",
-      "summary": "Scope/token/payload/population controls improved; small policy geometry and unprotected route remain.",
+      "status": "verified",
+      "summary": "Prompt 3 implemented protected execution, full local semantic and independent alternative controls, and package-bound assurance. Substantial professional construction and external qualification remain separate.",
       "dependencies": [
         "G1"
       ],
       "proof": [
-        "src/families/access-token-scope-expansion/verify.ts"
+        "src/families/access-token-scope-expansion/verify.ts",
+        "test/protected-family-semantics.test.ts",
+        "test/protected-family-routes.test.ts",
+        "docs/protected-family-routes.md"
       ],
-      "nextAction": "Protected route, independently correct strategies and non-strawman near misses; keep calibration unless professional expansion is justified."
+      "nextAction": "Prompt 4: explicitly retain as calibration or build a substantial professional package; preserve Prompt 3 contract and route regressions."
     },
     {
       "id": "PKG-WALLET",
@@ -460,48 +477,57 @@
       "source": "Package audit 9",
       "packageId": "dao-descendant",
       "owner": 3,
-      "status": "blocked",
-      "summary": "Wrong-payload/foreign-effect omissions fixed; tiny stable-key kernel and legacy route remain.",
+      "status": "verified",
+      "summary": "Prompt 3 implemented protected execution, full local semantic and independent alternative controls, and package-bound assurance. Substantial professional construction and external qualification remain separate.",
       "dependencies": [
         "G1",
         "HISTORY-1"
       ],
       "proof": [
-        "test/package-semantic-integrity.test.ts"
+        "test/package-semantic-integrity.test.ts",
+        "test/protected-family-semantics.test.ts",
+        "test/protected-family-routes.test.ts",
+        "docs/protected-family-routes.md"
       ],
-      "nextAction": "Protected execution and explicit calibration disposition; do not call this the successful native outbox service."
+      "nextAction": "Prompt 4: explicitly retain as calibration or build a substantial professional package; preserve Prompt 3 contract and route regressions."
     },
     {
       "id": "PKG-TRADING",
       "source": "Package audit 10",
       "packageId": "trading-reconciliation-recompute",
       "owner": 3,
-      "status": "blocked",
-      "summary": "Descriptor/effect repairs exist; isomorphic key recovery is not a real reconciliation service or diverse task.",
+      "status": "verified",
+      "summary": "Prompt 3 implemented protected execution, full local semantic and independent alternative controls, and package-bound assurance. Substantial professional construction and external qualification remain separate.",
       "dependencies": [
         "G1",
         "HISTORY-1"
       ],
       "proof": [
-        "test/package-semantic-integrity.test.ts"
+        "test/package-semantic-integrity.test.ts",
+        "test/protected-family-semantics.test.ts",
+        "test/protected-family-routes.test.ts",
+        "docs/protected-family-routes.md"
       ],
-      "nextAction": "Protected controls and calibration disposition; any expansion must add task-native venue receipts/collateral correctness."
+      "nextAction": "Prompt 4: explicitly retain as calibration or build a substantial professional package; preserve Prompt 3 contract and route regressions."
     },
     {
       "id": "PKG-ROLLBACK",
       "source": "Package audit 11",
       "packageId": "deployment-rollback-recompute",
       "owner": 3,
-      "status": "blocked",
-      "summary": "Committed rollback payload/foreign effects repaired; small isomorphic key kernel still lacks real deployment substrate.",
+      "status": "verified",
+      "summary": "Prompt 3 implemented protected execution, full local semantic and independent alternative controls, and package-bound assurance. Substantial professional construction and external qualification remain separate.",
       "dependencies": [
         "G1",
         "HISTORY-1"
       ],
       "proof": [
-        "test/package-semantic-integrity.test.ts"
+        "test/package-semantic-integrity.test.ts",
+        "test/protected-family-semantics.test.ts",
+        "test/protected-family-routes.test.ts",
+        "docs/protected-family-routes.md"
       ],
-      "nextAction": "Protected parity and calibration disposition; require materially different restoration/collateral work before professional promotion."
+      "nextAction": "Prompt 4: explicitly retain as calibration or build a substantial professional package; preserve Prompt 3 contract and route regressions."
     },
     {
       "id": "PKG-ALIAS",
@@ -618,6 +644,40 @@
         "src/packages/native-caa.ts"
       ],
       "nextAction": "Obtain independent reviews and separate explicit model-trial authority; do not use local controls to claim 6 of 6 genuine model failures."
+    },
+    {
+      "id": "P3-BUILD-COHERENCE",
+      "source": "Prompt 3 integration audit",
+      "packageId": null,
+      "owner": 3,
+      "status": "verified",
+      "summary": "Current collectors bind an embedded source digest and exact bundle bytes; stale bundles refuse. Historical Phase 23 selector explicitly pins lateDispute none instead of duplicate sampling identities at library import.",
+      "dependencies": [
+        "G1"
+      ],
+      "proof": [
+        "src/trials/authority-build.ts",
+        "src/phase-23/diagnosis-radius.ts",
+        "test/protected-contracts.test.ts"
+      ],
+      "nextAction": "Keep fresh build and source snapshot checks in final integration."
+    },
+    {
+      "id": "P3-HISTORICAL-AUDIT-VIEW",
+      "source": "Prompt 3 final CLI diagnostic",
+      "packageId": null,
+      "owner": 6,
+      "status": "blocked",
+      "summary": "Legacy registry check fails closed on ADV_COUNTED_HASH_STALE for preserved checker adversarial evidence after the public contract migration. Keep original audit bytes; distinguish historical audit validity from current assurance in reporting.",
+      "dependencies": [
+        "G5"
+      ],
+      "proof": [
+        "src/adversarial-audit/records.ts",
+        "src/adversarial-audit/validate.ts",
+        "docs/protected-family-routes.md"
+      ],
+      "nextAction": "Prompt 6 historical/current evidence views, then Prompt 7 full integration. Never alter a historical audit hash to make it current."
     }
   ]
 }

@@ -58,9 +58,15 @@ export class App {
     this.confirmationOpen = false;
   }
 
-  private record(method: string, detail: string): void {
+  private record(method: string, detail: string, observedValue?: string | null): void {
     this.callSeq += 1;
-    this.calls.push({ seq: this.callSeq, method, detail, replayIndex: this.replayIndex });
+    this.calls.push({
+      seq: this.callSeq,
+      method,
+      detail,
+      replayIndex: this.replayIndex,
+      ...(observedValue === undefined ? {} : { observedValue }),
+    });
   }
 
   facade(): AppFacade {
@@ -80,8 +86,9 @@ export class App {
         return resolved;
       },
       attr: (nodeId: string, name: string): string | null => {
-        this.record("attr", `${nodeId}.${name}`);
-        return walk(this.tree).find((n) => n.id === nodeId)?.attrs[name] ?? null;
+        const value = walk(this.tree).find((n) => n.id === nodeId)?.attrs[name] ?? null;
+        this.record("attr", `${nodeId}.${name}`, value);
+        return value;
       },
       click: (nodeId: string): void => {
         this.record("click", nodeId);
@@ -108,10 +115,11 @@ export class App {
         });
       },
       confirmationPresent: (): boolean => {
-        this.record("confirmationPresent", "");
+        const present = this.confirmation === "present" ? this.confirmationOpen : false;
+        this.record("confirmationPresent", "", String(present));
         // `suppressed` is the interesting value: the dialog exists in the flow and is not shown, so
         // an implementation that treats "no dialog" as "confirmed" fires the irreversible step.
-        return this.confirmation === "present" ? this.confirmationOpen : false;
+        return present;
       },
       acceptConfirmation: (): void => {
         this.record("acceptConfirmation", "");

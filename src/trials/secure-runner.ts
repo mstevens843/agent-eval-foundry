@@ -4,9 +4,20 @@
 // or untrusted reports, never evidence entries. Grader errors are not model-capability results.
 
 import { execFileSync } from "node:child_process";
-import { existsSync, rmSync } from "node:fs";
-import { join } from "node:path";
+import {
+  constants,
+  closeSync,
+  existsSync,
+  fstatSync,
+  openSync,
+  readFileSync,
+  readSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import { dirname, join } from "node:path";
 import { CONTAINER_IMAGE, containerRuntimeReadiness } from "../adversarial-audit/isolation.js";
+import { assertCurrentAuthorityBundle } from "./authority-build.js";
 import {
   CONTAINER_LIMITS,
   type ContainerLimits,
@@ -28,7 +39,7 @@ const secureScriptDir = (): string => {
 export interface SecureHostOptions {
   /** Absolute path to the untrusted submitted ES module. */
   readonly modulePath: string;
-  /** Family id; resolves to `scripts/secure/adapters/<familyId>.mjs`. */
+  /** Family id; dispatches inside the private compiled operation-authority bundle. */
   readonly familyId: string;
   readonly image?: string;
   readonly limits?: ContainerLimits;
@@ -36,31 +47,64 @@ export interface SecureHostOptions {
 }
 
 export interface SecureHostResult {
+  readonly execution?: {
+    readonly expectedAttempts: number;
+    readonly reportedAttempts: number;
+    readonly completed: boolean;
+    readonly requests: number;
+    readonly requestBytes: number;
+    readonly responseBytes: number;
+    readonly diagnosticBytes: number;
+  };
   readonly channels: Readonly<Record<string, readonly unknown[]>>;
   readonly report: unknown;
   readonly diagnostics: { readonly stdoutTail: string; readonly stderrTail: string };
   readonly error: string | null;
+  readonly errorKind?: "setup" | "protocol" | "resource" | "artifact" | null;
 }
 
 /** Families with a shipped authority-side adapter. Anything else has no secure route yet. */
 export const SECURELY_MIGRATED_FAMILIES: readonly string[] = [
   "prompt-injection-memory-poisoning",
   "caa-revalidation",
+  "prompt-injection-containment",
+  "ui-action-record-replay",
+  "ui-replay-live-dom",
+  "access-token-scope-expansion",
+  "delegated-wallet-scope-reconciliation",
+  "deployment-model-alias-rollout-drift",
+  "dao-descendant",
+  "trading-reconciliation-recompute",
+  "deployment-rollback-recompute",
+  "checker-required-memory-poisoning",
 ];
 
-/**
- * Family id -> adapter filename. Kept explicit rather than assumed equal to the family id, because
- * this family's source directory (`src/families/memory-poisoning/`) already uses a shorter name than
- * its routed family id (`prompt-injection-memory-poisoning`) and silently assuming they match is
- * exactly the kind of drift `hostPath()` in `router.ts` was written to avoid for host scripts.
- */
-const ADAPTER_FILENAMES: Readonly<Record<string, string>> = {
-  "prompt-injection-memory-poisoning": "memory-poisoning.mjs",
-  "caa-revalidation": "caa-revalidation.mjs",
-};
+/** One private, self-contained adapter bundle; no family-specific script fallback. */
+const adapterScriptFor = (): string =>
+  join(secureScriptDir(), "..", "..", "dist", "trials", "operation-authority.js");
 
-const adapterScriptFor = (familyId: string): string =>
-  join(secureScriptDir(), "adapters", ADAPTER_FILENAMES[familyId] ?? `${familyId}.mjs`);
+/** Capture a bounded regular artifact once, without following its final symlink or blocking on a
+ * FIFO. The child sees only these captured bytes, not a mutable source path. */
+export function stageSubmissionArtifact(source: string, target: string): void {
+  const fd = openSync(source, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
+  try {
+    const stat = fstatSync(fd);
+    if (!stat.isFile() || stat.size > 8 * 1024 * 1024)
+      throw Error("submission must be a regular module at most 8 MiB");
+    const bytes = Buffer.alloc(Math.min(stat.size + 1, 8 * 1024 * 1024 + 1));
+    let offset = 0;
+    while (offset < bytes.length) {
+      const count = readSync(fd, bytes, offset, bytes.length - offset, null);
+      if (!count) break;
+      offset += count;
+    }
+    if (offset !== stat.size || fstatSync(fd).size !== stat.size)
+      throw Error("submission changed during capture");
+    writeFileSync(target, bytes.subarray(0, offset), { mode: 0o644, flag: "wx" });
+  } finally {
+    closeSync(fd);
+  }
+}
 
 /**
  * Run a family's secure adapter in a no-network container, with the submission and the ledger-owning
@@ -72,14 +116,15 @@ export function runSecureContainerHost(options: SecureHostOptions, payload: unkn
   const image = options.image ?? CONTAINER_IMAGE;
   const limits = options.limits ?? CONTAINER_LIMITS;
   const timeout = options.timeoutMs ?? limits.wallClockMs;
-  const adapterScript = adapterScriptFor(options.familyId);
+  const adapterScript = adapterScriptFor();
   const empty = { stdoutTail: "", stderrTail: "" };
-  if (!existsSync(adapterScript)) {
+  if (!SECURELY_MIGRATED_FAMILIES.includes(options.familyId) || !existsSync(adapterScript)) {
     return {
       channels: {},
       report: null,
       diagnostics: empty,
-      error: `no secure adapter shipped for family "${options.familyId}"`,
+      error: `no built secure adapter for family "${options.familyId}"; run pnpm build`,
+      errorKind: "setup",
     };
   }
   const readiness = containerRuntimeReadiness();
@@ -89,17 +134,23 @@ export function runSecureContainerHost(options: SecureHostOptions, payload: unkn
       report: null,
       diagnostics: empty,
       error: `container runtime unavailable: ${readiness.detail}`,
+      errorKind: "setup",
     };
   }
   const name = containerName("secure-host");
   const stage = stagingDir("foundry-secure-host-");
   const scriptDir = secureScriptDir();
   try {
+    const adapterSource = readFileSync(adapterScript, "utf8");
+    assertCurrentAuthorityBundle(join(scriptDir, "..", ".."), adapterSource);
     stageFile(join(scriptDir, "authority-entry.mjs"), join(stage, "authority-entry.mjs"));
+    stageFile(join(scriptDir, "authority-engine.mjs"), join(stage, "authority-engine.mjs"));
     stageFile(join(scriptDir, "cell-entry.mjs"), join(stage, "cell-entry.mjs"));
     stageFile(join(scriptDir, "protocol.mjs"), join(stage, "protocol.mjs"));
-    stageFile(adapterScript, join(stage, "adapter.mjs"));
-    stageFile(options.modulePath, join(stage, "subject.mjs"));
+    stageSubmissionArtifact(options.modulePath, join(stage, "subject.mjs"));
+    if (options.familyId === "checker-required-memory-poisoning") {
+      stageSubmissionArtifact(join(dirname(options.modulePath), "checker.mjs"), join(stage, "checker.mjs"));
+    }
     const stdout = execFileSync(
       "docker",
       [
@@ -116,10 +167,12 @@ export function runSecureContainerHost(options: SecureHostOptions, payload: unkn
         "/work/authority-entry.mjs",
         "/work/cell-entry.mjs",
         "/work/subject.mjs",
-        "/work/adapter.mjs",
       ],
       {
-        input: JSON.stringify(payload),
+        input: JSON.stringify({
+          adapterSource,
+          input: { ...(payload as object), familyId: options.familyId },
+        }),
         encoding: "utf8",
         timeout,
         maxBuffer: 64 * 1024 * 1024,
@@ -133,26 +186,48 @@ export function runSecureContainerHost(options: SecureHostOptions, payload: unkn
         report: null,
         diagnostics: empty,
         error: "secure host returned non-object JSON",
+        errorKind: "protocol",
       };
     }
     const rec = parsed as Record<string, unknown>;
+    const execution = rec["execution"] as Record<string, unknown> | undefined;
     if (
       !(rec["error"] === null || typeof rec["error"] === "string") ||
       rec["channels"] === null ||
       typeof rec["channels"] !== "object" ||
       Array.isArray(rec["channels"]) ||
       !Object.values(rec["channels"] as object).every(Array.isArray) ||
-      !("report" in rec)
+      !("report" in rec) ||
+      (rec["error"] === null &&
+        (!execution ||
+          execution["completed"] !== true ||
+          execution["reportedAttempts"] !== execution["expectedAttempts"] ||
+          ![
+            "expectedAttempts",
+            "reportedAttempts",
+            "requests",
+            "requestBytes",
+            "responseBytes",
+            "diagnosticBytes",
+          ].every((k) => Number.isSafeInteger(execution[k]) && (execution[k] as number) >= 0)))
     ) {
       return {
         channels: {},
         report: null,
         diagnostics: empty,
         error: "secure host returned incomplete result envelope",
+        errorKind: "protocol",
       };
     }
     return {
       channels: (rec["channels"] as Record<string, readonly unknown[]>) ?? {},
+      ...(execution ? { execution: execution as unknown as NonNullable<SecureHostResult["execution"]> } : {}),
+      errorKind:
+        rec["error"] === null
+          ? null
+          : ["protocol", "resource", "artifact"].includes(String(rec["errorKind"]))
+            ? (rec["errorKind"] as "protocol" | "resource" | "artifact")
+            : "setup",
       report: rec["report"] ?? null,
       diagnostics: (rec["diagnostics"] as { stdoutTail: string; stderrTail: string }) ?? empty,
       error: typeof rec["error"] === "string" ? rec["error"] : null,
@@ -164,6 +239,7 @@ export function runSecureContainerHost(options: SecureHostOptions, payload: unkn
       report: null,
       diagnostics: empty,
       error: `secure container host failed: ${(err as Error).message.slice(0, 300)}`,
+      errorKind: (err as NodeJS.ErrnoException).code === "ETIMEDOUT" ? "resource" : "artifact",
     };
   } finally {
     rmSync(stage, { recursive: true, force: true });

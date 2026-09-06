@@ -118,7 +118,7 @@ function collapsedStream(view: ScenarioView, alias: AliasState | null): readonly
   }));
 }
 
-function auditEvent(
+export function auditEvent(
   seq: number,
   actionId: string,
   reason: DecisionReason | "OBSERVED",

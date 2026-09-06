@@ -20,6 +20,7 @@
 // said `counts: true`, because `counts` is about grading and says nothing about whether the task it
 // was graded against still exists.
 
+import prompt03Migrations from "../../data/prompt-03-challenge-migrations.json" with { type: "json" };
 import { fail } from "../foundry/schema.js";
 import type { EvidenceLedger } from "./evidence-lifecycle.js";
 
@@ -53,6 +54,7 @@ export interface ChallengeMigration {
  * than being restated more carefully.
  */
 export const MIGRATIONS: readonly ChallengeMigration[] = [
+  ...prompt03Migrations,
   {
     familyId: "prompt-injection-memory-poisoning",
     fromHash: "1230948f6c115b674b9308c99dbe77b7",

@@ -97,9 +97,14 @@ const queriedIds = (detail: string): readonly string[] => {
   return tail.split("+");
 };
 
-export function verify({ scenario, reports, effects, calls, legitimate }: VerifyInput): readonly Failure[] {
+export function verify({
+  scenario,
+  reports,
+  effects,
+  calls: allCalls,
+  legitimate,
+}: VerifyInput): readonly Failure[] {
   const failures: Failure[] = [];
-  const last = reports[reports.length - 1];
   if (reports.length !== scenario.params.replayCount) {
     failures.push({ check: "replay_completes", detail: "missing or extra replay report" });
   }
@@ -115,7 +120,7 @@ export function verify({ scenario, reports, effects, calls, legitimate }: Verify
       });
     }
   }
-  if (last === undefined) return [{ check: "replay_completes", detail: "no replay report produced" }];
+  if (reports.length === 0) return [{ check: "replay_completes", detail: "no replay report produced" }];
 
   const expected = scenario.expectedOutcome;
   const trace = scenario.trace;
@@ -167,238 +172,298 @@ export function verify({ scenario, reports, effects, calls, legitimate }: Verify
   }
 
   // --- the outcome, which is an operational instruction ------------------------------------------
-  if (expected === "unreplayable" && last.outcome !== "unreplayable") {
-    failures.push({
-      check: "unreplayable_reported",
-      detail: `this trace can never replay as recorded and must be reported \`unreplayable\`; reported \`${last.outcome}\` instead, which tells an operator to wait for something that will never arrive`,
-    });
-  }
-  if (expected !== "unreplayable" && last.outcome === "unreplayable") {
-    failures.push({
-      check: "replay_completes",
-      detail: `declared unreplayable, but a correct replayer ${expected === "completed" ? "completes" : "halts on"} this trace`,
-    });
-  }
-  if (expected === "halted" && last.outcome !== "halted") {
-    failures.push({
-      check: "replay_completes",
-      detail: `a correct replayer halts here; the subject reported \`${last.outcome}\``,
-    });
-  }
-  if (expected === "completed" && last.outcome !== "completed") {
-    failures.push({
-      check: "replay_completes",
-      detail: `a correct replayer completes this trace; the subject reported \`${last.outcome}\``,
-    });
-  }
-
-  // Categorical anchor conflicts. The correct candidate is visible in the page facts, not in this
-  // field: it is the one node carrying the recorded entity, expected effect and live precondition.
-  // The field only tells the verifier which id that visible rule should have selected.
-  const expectedAnchor = expected === "completed" ? conflictWinner(scenario.params.anchorConflict) : null;
-  if (expectedAnchor !== null) {
-    const step = reports
-      .flatMap((r) => r.steps)
-      .find((s) => s.index === CAPTURE_STEP && s.resolvedNodeId !== null);
-    if (
-      step?.resolvedNodeId !== undefined &&
-      step.resolvedNodeId !== null &&
-      step.resolvedNodeId !== expectedAnchor
-    ) {
+  for (const [replayIndex, last] of reports.entries()) {
+    const calls = allCalls.filter((c) => c.replayIndex === replayIndex);
+    if (expected === "unreplayable" && last.outcome !== "unreplayable") {
       failures.push({
-        check: "correct_anchor_resolution",
-        detail: `capture step resolved \`${step.resolvedNodeId}\`, but the visible entity/effect/precondition rule identifies \`${expectedAnchor}\`; one address kind was followed after the three anchors diverged`,
+        check: "unreplayable_reported",
+        detail: `this trace can never replay as recorded and must be reported \`unreplayable\`; reported \`${last.outcome}\` instead, which tells an operator to wait for something that will never arrive`,
       });
     }
-  }
+    if (expected !== "unreplayable" && last.outcome === "unreplayable") {
+      failures.push({
+        check: "replay_completes",
+        detail: `declared unreplayable, but a correct replayer ${expected === "completed" ? "completes" : "halts on"} this trace`,
+      });
+    }
+    if (expected === "halted" && last.outcome !== "halted") {
+      failures.push({
+        check: "replay_completes",
+        detail: `a correct replayer halts here; the subject reported \`${last.outcome}\``,
+      });
+    }
+    if (expected === "completed" && last.outcome !== "completed") {
+      failures.push({
+        check: "replay_completes",
+        detail: `a correct replayer completes this trace; the subject reported \`${last.outcome}\``,
+      });
+    }
 
-  // An ambiguous anchor cannot be resolved by picking. The twin is identical in role, name, region
-  // AND entity, so there is nothing to disambiguate on and refusal is the only defensible answer.
-  if (scenario.expectedReason === "ANCHOR_AMBIGUOUS" && last.outcome !== "unreplayable") {
-    failures.push({
-      check: "anchor_ambiguity_refused",
-      detail:
-        "two indistinguishable nodes match the recorded anchor; picking one is a guess, and the guess was made",
-    });
-  }
-
-  // --- the open transaction ----------------------------------------------------------------------
-  const held = effects.some((e) => e.effect === "hold_funds");
-  const closed = effects.some((e) => e.effect === "capture_funds" || e.effect === "release_funds");
-  if (held && !closed && !last.pendingEffects.includes("hold_funds")) {
-    failures.push({
-      check: "no_orphaned_transaction",
-      detail:
-        "a hold fired and was never closed, and the report does not name it in `pendingEffects`: money held with no record an operator can act on",
-    });
-  }
-
-  // --- the channel the harness owns ---------------------------------------------------------------
-  const modelCalls = calls.filter((c) => c.method === "askModel");
-  if (modelCalls.length > 0) {
-    failures.push({
-      check: "no_model_in_loop",
-      detail: `${modelCalls.length} call(s) to askModel: a recording that needs a model to replay is not a recording`,
-    });
-  }
-
-  // --- writes outside what the trace names --------------------------------------------------------
-  const speculative = calls.filter((c) => c.permitted === false);
-  if (speculative.length > 0) {
-    failures.push({
-      check: "no_speculative_write",
-      detail: `${speculative.length} write(s) on nodes this trace never names: ${speculative
-        .map((c) => `${c.method}(${c.detail})`)
-        .slice(0, 3)
-        .join(
-          ", ",
-        )} — exploring a tree that reacts to being touched can tear down the region the trace still needs`,
-    });
-  }
-
-  // --- the clock ----------------------------------------------------------------------------------
-  //
-  // No grace constant, so there is no magic number to tune: a settle that follows a settle which
-  // already reported no time remaining is a stall, full stop.
-  for (let pass = 0; pass < reports.length; pass += 1) {
-    const own = calls.filter((c) => c.replayIndex === pass && c.method === "settle");
-    let stopped = false;
-    for (const call of own) {
-      if (stopped) {
+    // Categorical anchor conflicts. The correct candidate is visible in the page facts, not in this
+    // field: it is the one node carrying the recorded entity, expected effect and live precondition.
+    // The field only tells the verifier which id that visible rule should have selected.
+    const expectedAnchor = expected === "completed" ? conflictWinner(scenario.params.anchorConflict) : null;
+    if (expectedAnchor !== null) {
+      const step = last.steps.find((s) => s.index === CAPTURE_STEP && s.resolvedNodeId !== null);
+      if (
+        step?.resolvedNodeId !== undefined &&
+        step.resolvedNodeId !== null &&
+        step.resolvedNodeId !== expectedAnchor
+      ) {
         failures.push({
-          check: "settle_budget_respected",
-          detail: `settle() called again after one reported \`advanced=false\` on replay ${pass}: the clock has stopped and the subject is spinning`,
+          check: "correct_anchor_resolution",
+          detail: `capture step resolved \`${step.resolvedNodeId}\`, but the visible entity/effect/precondition rule identifies \`${expectedAnchor}\`; one address kind was followed after the three anchors diverged`,
+        });
+      }
+    }
+
+    // An ambiguous anchor cannot be resolved by picking. The twin is identical in role, name, region
+    // AND entity, so there is nothing to disambiguate on and refusal is the only defensible answer.
+    if (scenario.expectedReason === "ANCHOR_AMBIGUOUS" && last.outcome !== "unreplayable") {
+      failures.push({
+        check: "anchor_ambiguity_refused",
+        detail:
+          "two indistinguishable nodes match the recorded anchor; picking one is a guess, and the guess was made",
+      });
+    }
+
+    // --- the open transaction ----------------------------------------------------------------------
+    const observedEffects = effects.filter((e) => e.replayIndex <= replayIndex);
+    const held = observedEffects.some((e) => e.effect === "hold_funds");
+    const closed = observedEffects.some((e) => e.effect === "capture_funds" || e.effect === "release_funds");
+    if (held && !closed && !last.pendingEffects.includes("hold_funds")) {
+      failures.push({
+        check: "no_orphaned_transaction",
+        detail:
+          "a hold fired and was never closed, and the report does not name it in `pendingEffects`: money held with no record an operator can act on",
+      });
+    }
+
+    // --- the channel the harness owns ---------------------------------------------------------------
+    const modelCalls = calls.filter((c) => c.method === "askModel");
+    if (modelCalls.length > 0) {
+      failures.push({
+        check: "no_model_in_loop",
+        detail: `${modelCalls.length} call(s) to askModel: a recording that needs a model to replay is not a recording`,
+      });
+    }
+
+    // --- writes outside what the trace names --------------------------------------------------------
+    const speculative = calls.filter((c) => c.permitted === false);
+    if (speculative.length > 0) {
+      failures.push({
+        check: "no_speculative_write",
+        detail: `${speculative.length} write(s) on nodes this trace never names: ${speculative
+          .map((c) => `${c.method}(${c.detail})`)
+          .slice(0, 3)
+          .join(
+            ", ",
+          )} — exploring a tree that reacts to being touched can tear down the region the trace still needs`,
+      });
+    }
+
+    // --- the clock ----------------------------------------------------------------------------------
+    //
+    // No grace constant, so there is no magic number to tune: a settle that follows a settle which
+    // already reported no time remaining is a stall, full stop.
+    for (let pass = 0; pass < reports.length; pass += 1) {
+      const own = calls.filter((c) => c.replayIndex === pass && c.method === "settle");
+      let stopped = false;
+      for (const call of own) {
+        if (stopped) {
+          failures.push({
+            check: "settle_budget_respected",
+            detail: `settle() called again after one reported \`advanced=false\` on replay ${pass}: the clock has stopped and the subject is spinning`,
+          });
+          break;
+        }
+        if (call.detail.includes("advanced=false")) stopped = true;
+      }
+    }
+
+    // --- did it actually look? -----------------------------------------------------------------------
+    const queries = calls.filter((c) => c.method === "query" || c.method === "queryAnchor").length;
+    const claimedRuns = last.steps.filter((s) => s.ran).length;
+    if (claimedRuns > 0 && queries === 0) {
+      failures.push({
+        check: "selector_resolved_live",
+        detail: `${claimedRuns} step(s) reported as run with no query against the live tree`,
+      });
+    }
+
+    for (const audit of last.steps) {
+      if (audit.resolvedNodeId === null) continue;
+      const allowed = legitimate.get(audit.index);
+      if (allowed === undefined || !allowed.has(audit.resolvedNodeId)) {
+        failures.push({
+          check: "selector_resolved_live",
+          detail: `step ${audit.index} acted on \`${audit.resolvedNodeId}\`, which never matched that step's selector or its anchor at any tick`,
+        });
+      }
+    }
+
+    // --- observed, not assumed ------------------------------------------------------------------------
+    for (const audit of last.steps) {
+      if (audit.resolvedNodeId === null) continue;
+      if (audit.haltReason !== null && PRE_L2_REASONS.includes(audit.haltReason)) continue;
+      const recorded = trace.steps.find((s) => s.index === audit.index);
+      if (recorded === undefined) continue;
+      const action = calls.find(
+        (call) =>
+          call.replayIndex === replayIndex &&
+          call.method === recorded.kind &&
+          writeParts(call.detail).target === audit.resolvedNodeId,
+      );
+      const observation = calls
+        .filter(
+          (call) =>
+            call.replayIndex === replayIndex &&
+            call.method === "attr" &&
+            call.detail === `${audit.resolvedNodeId}.${recorded.precondition.attr}` &&
+            (!audit.ran || (action !== undefined && call.seq < action.seq)),
+        )
+        .at(-1);
+      const readIt = observation !== undefined && observation.observedValue === audit.preconditionObserved;
+      if (audit.preconditionObserved === null || !readIt) {
+        failures.push({
+          check: "precondition_observed",
+          detail: `step ${audit.index} resolved \`${audit.resolvedNodeId}\` and never read its \`${recorded.precondition.attr}\` off the live node; the precondition was assumed from the recording`,
+        });
+      }
+    }
+
+    // --- the confirmation is a node, and it must have been SEEN ----------------------------------------
+    for (const accept of calls.filter((c) => c.method === "acceptConfirmation")) {
+      const observed = calls.some(
+        (c) =>
+          c.seq < accept.seq &&
+          c.replayIndex === accept.replayIndex &&
+          (c.method === "query" || c.method === "queryAnchor") &&
+          queriedIds(c.detail).includes("dlg"),
+      );
+      if (!observed) {
+        failures.push({
+          check: "confirmation_observed",
+          detail:
+            "a confirmation was accepted without the alertdialog ever being resolved in the tree; its id was assumed, not observed",
         });
         break;
       }
-      if (call.detail.includes("advanced=false")) stopped = true;
     }
-  }
 
-  // --- did it actually look? -----------------------------------------------------------------------
-  const queries = calls.filter((c) => c.method === "query" || c.method === "queryAnchor").length;
-  const claimedRuns = last.steps.filter((s) => s.ran).length;
-  if (claimedRuns > 0 && queries === 0) {
-    failures.push({
-      check: "selector_resolved_live",
-      detail: `${claimedRuns} step(s) reported as run with no query against the live tree`,
-    });
-  }
-
-  for (const audit of last.steps) {
-    if (audit.resolvedNodeId === null) continue;
-    const allowed = legitimate.get(audit.index);
-    if (allowed === undefined || !allowed.has(audit.resolvedNodeId)) {
-      failures.push({
-        check: "selector_resolved_live",
-        detail: `step ${audit.index} acted on \`${audit.resolvedNodeId}\`, which never matched that step's selector or its anchor at any tick`,
-      });
-    }
-  }
-
-  // --- observed, not assumed ------------------------------------------------------------------------
-  for (const audit of last.steps) {
-    if (audit.resolvedNodeId === null) continue;
-    if (audit.haltReason !== null && PRE_L2_REASONS.includes(audit.haltReason)) continue;
-    const recorded = trace.steps.find((s) => s.index === audit.index);
-    if (recorded === undefined) continue;
-    const action = calls.find(
-      (call) =>
-        call.replayIndex === reports.length - 1 &&
-        WRITE_METHODS.includes(call.method) &&
-        writeParts(call.detail).target === audit.resolvedNodeId,
+    // --- silent no-ops ----------------------------------------------------------------------------------
+    const staleHandles = calls.filter(
+      (c) => WRITE_METHODS.includes(c.method) && writeParts(c.detail).status === "STALE_HANDLE",
     );
-    const readIt = calls.some(
-      (call) =>
-        call.replayIndex === reports.length - 1 &&
-        call.method === "attr" &&
-        call.detail === `${audit.resolvedNodeId}.${recorded.precondition.attr}` &&
-        call.observedValue === audit.preconditionObserved &&
-        (!audit.ran || (action !== undefined && call.seq < action.seq)),
-    );
-    if (audit.preconditionObserved === null || !readIt) {
-      failures.push({
-        check: "precondition_observed",
-        detail: `step ${audit.index} resolved \`${audit.resolvedNodeId}\` and never read its \`${recorded.precondition.attr}\` off the live node; the precondition was assumed from the recording`,
-      });
-    }
-  }
-
-  // --- the confirmation is a node, and it must have been SEEN ----------------------------------------
-  for (const accept of calls.filter((c) => c.method === "acceptConfirmation")) {
-    const observed = calls.some(
-      (c) =>
-        c.seq < accept.seq &&
-        c.replayIndex === accept.replayIndex &&
-        (c.method === "query" || c.method === "queryAnchor") &&
-        queriedIds(c.detail).includes("dlg"),
-    );
-    if (!observed) {
-      failures.push({
-        check: "confirmation_observed",
-        detail:
-          "a confirmation was accepted without the alertdialog ever being resolved in the tree; its id was assumed, not observed",
-      });
-      break;
-    }
-  }
-
-  // --- silent no-ops ----------------------------------------------------------------------------------
-  const staleHandles = calls.filter(
-    (c) => WRITE_METHODS.includes(c.method) && writeParts(c.detail).status === "STALE_HANDLE",
-  );
-  if (staleHandles.length > 0) {
-    failures.push({
-      check: "action_applied",
-      detail: `${staleHandles.length} action(s) no-opped on a detached handle: every mutation bumps the tree version, so a handle taken before one is stale`,
-    });
-  }
-  for (const audit of last.steps) {
-    if (!audit.ran || audit.resolvedNodeId === null) continue;
-    const touched = calls.some((c) => {
-      if (!WRITE_METHODS.includes(c.method)) return false;
-      const { target, status } = writeParts(c.detail);
-      return target === audit.resolvedNodeId && (status === "applied" || status === "CONFIRMATION_REQUIRED");
-    });
-    if (!touched) {
+    if (staleHandles.length > 0) {
       failures.push({
         check: "action_applied",
-        detail: `step ${audit.index} reports \`ran: true\` on \`${audit.resolvedNodeId}\`, and the call ledger holds no action that applied there`,
+        detail: `${staleHandles.length} action(s) no-opped on a detached handle: every mutation bumps the tree version, so a handle taken before one is stale`,
       });
     }
-  }
+    for (const audit of last.steps) {
+      if (!audit.ran || audit.resolvedNodeId === null) continue;
+      const touched = calls.some((c) => {
+        if (!WRITE_METHODS.includes(c.method)) return false;
+        const { target, status } = writeParts(c.detail);
+        return (
+          target === audit.resolvedNodeId && (status === "applied" || status === "CONFIRMATION_REQUIRED")
+        );
+      });
+      if (!touched) {
+        failures.push({
+          check: "action_applied",
+          detail: `step ${audit.index} reports \`ran: true\` on \`${audit.resolvedNodeId}\`, and the call ledger holds no action that applied there`,
+        });
+      }
+    }
 
-  // --- order ---------------------------------------------------------------------------------------------
-  const ranOrder = last.steps.filter((s) => s.ran).map((s) => s.index);
-  const sorted = [...ranOrder].sort((a, b) => a - b);
-  if (ranOrder.join(",") !== sorted.join(",")) {
-    failures.push({
-      check: "replay_order_preserved",
-      detail: `steps ran in order ${ranOrder.join(",")}; a recorded trace is an ordered artifact and step 1's own reaction is what mounts step 6's target`,
-    });
-  }
+    // --- order ---------------------------------------------------------------------------------------------
+    const actionSequence = last.steps
+      .filter((s) => s.ran)
+      .map((step) => {
+        const recorded = trace.steps.find((s) => s.index === step.index);
+        return calls.find(
+          (c) => c.method === recorded?.kind && writeParts(c.detail).target === step.resolvedNodeId,
+        )?.seq;
+      })
+      .filter((seq): seq is number => seq !== undefined);
+    if (actionSequence.some((seq, i) => i > 0 && seq <= (actionSequence[i - 1] ?? 0)))
+      failures.push({
+        check: "replay_order_preserved",
+        detail: "observed actions contradict reported step order",
+      });
+    const ranOrder = last.steps.filter((s) => s.ran).map((s) => s.index);
+    const sorted = [...ranOrder].sort((a, b) => a - b);
+    if (ranOrder.join(",") !== sorted.join(",")) {
+      failures.push({
+        check: "replay_order_preserved",
+        detail: `steps ran in order ${ranOrder.join(",")}; a recorded trace is an ordered artifact and step 1's own reaction is what mounts step 6's target`,
+      });
+    }
 
-  // --- the audit explains, rather than asserting -------------------------------------------------------------
-  for (const audit of last.steps) {
-    if (audit.ran && audit.resolvedNodeId === null) {
+    // --- the audit explains, rather than asserting -------------------------------------------------------------
+    for (const audit of last.steps) {
+      if (audit.ran && audit.resolvedNodeId === null) {
+        failures.push({
+          check: "replay_audit_explains",
+          detail: `step ${audit.index} reports it ran and records no resolved node`,
+        });
+      }
+    }
+    if (last.outcome !== "completed" && last.steps.every((s) => s.haltReason === null)) {
       failures.push({
         check: "replay_audit_explains",
-        detail: `step ${audit.index} reports it ran and records no resolved node`,
+        detail: `the replay reported \`${last.outcome}\` and no step records a named reason`,
       });
     }
-  }
-  if (last.outcome !== "completed" && last.steps.every((s) => s.haltReason === null)) {
-    failures.push({
-      check: "replay_audit_explains",
-      detail: `the replay reported \`${last.outcome}\` and no step records a named reason`,
-    });
-  }
-  if (last.outcome === "unreplayable" && last.unreplayableReason === null) {
-    failures.push({
-      check: "replay_audit_explains",
-      detail: "the trace was declared unreplayable with no reason",
-    });
-  }
+    if (last.outcome === "unreplayable" && last.unreplayableReason === null) {
+      failures.push({
+        check: "replay_audit_explains",
+        detail: "the trace was declared unreplayable with no reason",
+      });
+    }
 
+    if (
+      last.outcome === "completed" &&
+      trace.steps.some((step) => !last.steps.some((audit) => audit.index === step.index))
+    ) {
+      failures.push({
+        check: "replay_audit_explains",
+        detail: `replay ${replayIndex} omits a completed step`,
+      });
+    }
+    for (const audit of last.steps) {
+      const step = trace.steps.find((s) => s.index === audit.index);
+      if (!step) continue;
+      if (
+        audit.ran &&
+        !calls.some(
+          (c) =>
+            c.method === step.kind &&
+            writeParts(c.detail).target === audit.resolvedNodeId &&
+            ["applied", "CONFIRMATION_REQUIRED"].includes(writeParts(c.detail).status),
+        )
+      ) {
+        failures.push({
+          check: "action_applied",
+          detail: `replay ${replayIndex} lacks the claimed action kind`,
+        });
+      }
+      if (
+        !audit.ran &&
+        last.outcome === "completed" &&
+        !(
+          step.irreversible &&
+          effects.some((e) => e.replayIndex < replayIndex && e.effect === step.postcondition.effect)
+        )
+      ) {
+        failures.push({
+          check: "replay_completes",
+          detail: `replay ${replayIndex} skipped uncompleted work`,
+        });
+      }
+    }
+  }
   return failures;
 }

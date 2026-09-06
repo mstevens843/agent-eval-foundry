@@ -1,0 +1,248 @@
+[
+  {
+    "familyId": "prompt-injection-containment",
+    "fromHash": "4911ffdfbd2c0e9b51752ed16c4f53e8",
+    "toHash": "bbc682395fdc508b829d19e908def046",
+    "reason": "Prompt 3 publishes the protected lifecycle and execution bounds, captures every replay attempt and its ordered value-bearing observations, and completes the public checker generation contract where applicable. Prior scenario observations remain historical and are not evidence for this changed contract or collector. This declaration links retained bytes without rewriting or rerunning any historical trial. Local controls establish validity only, not task hardness.",
+    "discoveredBy": "Prompt 3 deterministic contract and route audit",
+    "invalidated": [
+      "pic-claude-1",
+      "pic-claude-2",
+      "pic-claude-3",
+      "pic-codex-1",
+      "pic-haiku-1",
+      "pic-sonnet-1"
+    ],
+    "reissuedAs": null,
+    "date": "2026-09-06"
+  },
+  {
+    "familyId": "prompt-injection-memory-poisoning",
+    "fromHash": "1230948f6c115b674b9308c99dbe77b7",
+    "toHash": "14870e7a6999848e888db374fede18b3",
+    "reason": "Prompt 3 publishes the protected lifecycle and execution bounds, captures every replay attempt and its ordered value-bearing observations, and completes the public checker generation contract where applicable. Prior scenario observations remain historical and are not evidence for this changed contract or collector. This declaration links retained bytes without rewriting or rerunning any historical trial. Local controls establish validity only, not task hardness.",
+    "discoveredBy": "Prompt 3 deterministic contract and route audit",
+    "invalidated": [
+      "mp-claude-1",
+      "mp-claude-2",
+      "mp-claude-3"
+    ],
+    "reissuedAs": null,
+    "date": "2026-09-06"
+  },
+  {
+    "familyId": "prompt-injection-memory-poisoning",
+    "fromHash": "6966852cf74afd8e336918f527217c47",
+    "toHash": "14870e7a6999848e888db374fede18b3",
+    "reason": "Prompt 3 publishes the protected lifecycle and execution bounds, captures every replay attempt and its ordered value-bearing observations, and completes the public checker generation contract where applicable. Prior scenario observations remain historical and are not evidence for this changed contract or collector. This declaration links retained bytes without rewriting or rerunning any historical trial. Local controls establish validity only, not task hardness.",
+    "discoveredBy": "Prompt 3 deterministic contract and route audit",
+    "invalidated": [],
+    "reissuedAs": null,
+    "date": "2026-09-06"
+  },
+  {
+    "familyId": "prompt-injection-memory-poisoning",
+    "fromHash": "7443bf6d6c6b2ccf69cc20f417ff048c",
+    "toHash": "14870e7a6999848e888db374fede18b3",
+    "reason": "Prompt 3 publishes the protected lifecycle and execution bounds, captures every replay attempt and its ordered value-bearing observations, and completes the public checker generation contract where applicable. Prior scenario observations remain historical and are not evidence for this changed contract or collector. This declaration links retained bytes without rewriting or rerunning any historical trial. Local controls establish validity only, not task hardness.",
+    "discoveredBy": "Prompt 3 deterministic contract and route audit",
+    "invalidated": [],
+    "reissuedAs": null,
+    "date": "2026-09-06"
+  },
+  {
+    "familyId": "prompt-injection-memory-poisoning",
+    "fromHash": "9b3e0c84addabc2e195ecbd490ba81dd",
+    "toHash": "14870e7a6999848e888db374fede18b3",
+    "reason": "Prompt 3 publishes the protected lifecycle and execution bounds, captures every replay attempt and its ordered value-bearing observations, and completes the public checker generation contract where applicable. Prior scenario observations remain historical and are not evidence for this changed contract or collector. This declaration links retained bytes without rewriting or rerunning any historical trial. Local controls establish validity only, not task hardness.",
+    "discoveredBy": "Prompt 3 deterministic contract and route audit",
+    "invalidated": [
+      "mp-claude-r1",
+      "mp-claude-r2",
+      "mp-claude-r3",
+      "mp-codex-1",
+      "mp-codex-2",
+      "mp-codex-3",
+      "mp-gemini-1",
+      "mp-haiku-1",
+      "mp-sonnet-1"
+    ],
+    "reissuedAs": null,
+    "date": "2026-09-06"
+  },
+  {
+    "familyId": "ui-action-record-replay",
+    "fromHash": "1050e79f4804a96a5327d50dd81765b0",
+    "toHash": "9b00f533f3fd08718ddb96394f92fa48",
+    "reason": "Prompt 3 publishes the protected lifecycle and execution bounds, captures every replay attempt and its ordered value-bearing observations, and completes the public checker generation contract where applicable. Prior scenario observations remain historical and are not evidence for this changed contract or collector. This declaration links retained bytes without rewriting or rerunning any historical trial. Local controls establish validity only, not task hardness.",
+    "discoveredBy": "Prompt 3 deterministic contract and route audit",
+    "invalidated": [
+      "ui-claude-1",
+      "ui-claude-2",
+      "ui-codex-1",
+      "ui-haiku-1",
+      "ui-sonnet-1"
+    ],
+    "reissuedAs": null,
+    "date": "2026-09-06"
+  },
+  {
+    "familyId": "ui-replay-live-dom",
+    "fromHash": "18c3f5afc5973604205cd7df23ce4cad",
+    "toHash": "b79ba7c2d564aa9b83775bfe064c2f78",
+    "reason": "Prompt 3 publishes the protected lifecycle and execution bounds, captures every replay attempt and its ordered value-bearing observations, and completes the public checker generation contract where applicable. Prior scenario observations remain historical and are not evidence for this changed contract or collector. This declaration links retained bytes without rewriting or rerunning any historical trial. Local controls establish validity only, not task hardness.",
+    "discoveredBy": "Prompt 3 deterministic contract and route audit",
+    "invalidated": [
+      "live-dom-2026-08-o1",
+      "live-dom-2026-08-o2"
+    ],
+    "reissuedAs": null,
+    "date": "2026-09-06"
+  },
+  {
+    "familyId": "checker-required-memory-poisoning",
+    "fromHash": "448f2f816c51030cc97a374816226168",
+    "toHash": "0530fe3b520faaddd9ad7ed8742825cc",
+    "reason": "Prompt 3 publishes the protected lifecycle and execution bounds, captures every replay attempt and its ordered value-bearing observations, and completes the public checker generation contract where applicable. Prior scenario observations remain historical and are not evidence for this changed contract or collector. This declaration links retained bytes without rewriting or rerunning any historical trial. Local controls establish validity only, not task hardness.",
+    "discoveredBy": "Prompt 3 deterministic contract and route audit",
+    "invalidated": [
+      "checker-required-2026-08-o1"
+    ],
+    "reissuedAs": null,
+    "date": "2026-09-06"
+  },
+  {
+    "familyId": "access-token-scope-expansion",
+    "fromHash": "33cc98364ce2a6b3f9490e54937955d8",
+    "toHash": "449d7f9a570517fe168dc12a24da0d6d",
+    "reason": "Prompt 3 publishes the protected lifecycle and execution bounds, captures every replay attempt and its ordered value-bearing observations, and completes the public checker generation contract where applicable. Prior scenario observations remain historical and are not evidence for this changed contract or collector. This declaration links retained bytes without rewriting or rerunning any historical trial. Local controls establish validity only, not task hardness.",
+    "discoveredBy": "Prompt 3 deterministic contract and route audit",
+    "invalidated": [
+      "access-token-2026-08-o1"
+    ],
+    "reissuedAs": null,
+    "date": "2026-09-06"
+  },
+  {
+    "familyId": "access-token-scope-expansion",
+    "fromHash": "8ae0950dea093d35d98b12d1c8c1bde5",
+    "toHash": "449d7f9a570517fe168dc12a24da0d6d",
+    "reason": "Prompt 3 publishes the protected lifecycle and execution bounds, captures every replay attempt and its ordered value-bearing observations, and completes the public checker generation contract where applicable. Prior scenario observations remain historical and are not evidence for this changed contract or collector. This declaration links retained bytes without rewriting or rerunning any historical trial. Local controls establish validity only, not task hardness.",
+    "discoveredBy": "Prompt 3 deterministic contract and route audit",
+    "invalidated": [],
+    "reissuedAs": null,
+    "date": "2026-09-06"
+  },
+  {
+    "familyId": "delegated-wallet-scope-reconciliation",
+    "fromHash": "2140032d835a87ff254d01b6b4652f21",
+    "toHash": "0a9b26f37d40e87f67a5f755d79a0a85",
+    "reason": "Prompt 3 publishes the protected lifecycle and execution bounds, captures every replay attempt and its ordered value-bearing observations, and completes the public checker generation contract where applicable. Prior scenario observations remain historical and are not evidence for this changed contract or collector. This declaration links retained bytes without rewriting or rerunning any historical trial. Local controls establish validity only, not task hardness.",
+    "discoveredBy": "Prompt 3 deterministic contract and route audit",
+    "invalidated": [
+      "delegated-wallet-2026-08-o1"
+    ],
+    "reissuedAs": null,
+    "date": "2026-09-06"
+  },
+  {
+    "familyId": "delegated-wallet-scope-reconciliation",
+    "fromHash": "45f27b644a84364e3d3855f68cd243a2",
+    "toHash": "0a9b26f37d40e87f67a5f755d79a0a85",
+    "reason": "Prompt 3 publishes the protected lifecycle and execution bounds, captures every replay attempt and its ordered value-bearing observations, and completes the public checker generation contract where applicable. Prior scenario observations remain historical and are not evidence for this changed contract or collector. This declaration links retained bytes without rewriting or rerunning any historical trial. Local controls establish validity only, not task hardness.",
+    "discoveredBy": "Prompt 3 deterministic contract and route audit",
+    "invalidated": [],
+    "reissuedAs": null,
+    "date": "2026-09-06"
+  },
+  {
+    "familyId": "caa-revalidation",
+    "fromHash": "c2948f2c26f2231ceaa47d0ec2d3f04a",
+    "toHash": "cbb41af034435cec75810117377febcb",
+    "reason": "Prompt 3 publishes the protected lifecycle and execution bounds, captures every replay attempt and its ordered value-bearing observations, and completes the public checker generation contract where applicable. Prior scenario observations remain historical and are not evidence for this changed contract or collector. This declaration links retained bytes without rewriting or rerunning any historical trial. Local controls establish validity only, not task hardness.",
+    "discoveredBy": "Prompt 3 deterministic contract and route audit",
+    "invalidated": [
+      "phase17-caa-slot-1-openai-attempt-1",
+      "phase17-caa-slot-2-anthropic-attempt-1",
+      "phase17-caa-slot-3-openai-attempt-1",
+      "phase17-caa-slot-4-anthropic-attempt-1"
+    ],
+    "reissuedAs": null,
+    "date": "2026-09-06"
+  },
+  {
+    "familyId": "dao-descendant",
+    "fromHash": "9d89b49307a960f65f2e6e8f204fd15e",
+    "toHash": "bbb02380b6f8633fec7bc0e9d2956ec1",
+    "reason": "Prompt 3 publishes the protected lifecycle and execution bounds, captures every replay attempt and its ordered value-bearing observations, and completes the public checker generation contract where applicable. Prior scenario observations remain historical and are not evidence for this changed contract or collector. This declaration links retained bytes without rewriting or rerunning any historical trial. Local controls establish validity only, not task hardness.",
+    "discoveredBy": "Prompt 3 deterministic contract and route audit",
+    "invalidated": [
+      "phase14-dao-descendant-seeded-recompute-anthropic",
+      "phase14-dao-descendant-seeded-recompute-openai"
+    ],
+    "reissuedAs": null,
+    "date": "2026-09-06"
+  },
+  {
+    "familyId": "dao-descendant",
+    "fromHash": "e1d2992c882776c1fc4fc733eb607949",
+    "toHash": "bbb02380b6f8633fec7bc0e9d2956ec1",
+    "reason": "Prompt 3 publishes the protected lifecycle and execution bounds, captures every replay attempt and its ordered value-bearing observations, and completes the public checker generation contract where applicable. Prior scenario observations remain historical and are not evidence for this changed contract or collector. This declaration links retained bytes without rewriting or rerunning any historical trial. Local controls establish validity only, not task hardness.",
+    "discoveredBy": "Prompt 3 deterministic contract and route audit",
+    "invalidated": [
+      "phase14-dao-descendant-neutral-skeleton-anthropic",
+      "phase14-dao-descendant-neutral-skeleton-openai"
+    ],
+    "reissuedAs": null,
+    "date": "2026-09-06"
+  },
+  {
+    "familyId": "trading-reconciliation-recompute",
+    "fromHash": "94bfc2c401ad2cc19f7e84e8a1270a08",
+    "toHash": "61183c46b73606ef156ea9121d3b0308",
+    "reason": "Prompt 3 publishes the protected lifecycle and execution bounds, captures every replay attempt and its ordered value-bearing observations, and completes the public checker generation contract where applicable. Prior scenario observations remain historical and are not evidence for this changed contract or collector. This declaration links retained bytes without rewriting or rerunning any historical trial. Local controls establish validity only, not task hardness.",
+    "discoveredBy": "Prompt 3 deterministic contract and route audit",
+    "invalidated": [
+      "phase14-trading-reconciliation-recompute-seeded-recompute-anthropic",
+      "phase14-trading-reconciliation-recompute-seeded-recompute-openai"
+    ],
+    "reissuedAs": null,
+    "date": "2026-09-06"
+  },
+  {
+    "familyId": "deployment-rollback-recompute",
+    "fromHash": "2ddfad2fd3287f752c41a408184b48ce",
+    "toHash": "46ed5ea45b412e242ef362fde040051a",
+    "reason": "Prompt 3 publishes the protected lifecycle and execution bounds, captures every replay attempt and its ordered value-bearing observations, and completes the public checker generation contract where applicable. Prior scenario observations remain historical and are not evidence for this changed contract or collector. This declaration links retained bytes without rewriting or rerunning any historical trial. Local controls establish validity only, not task hardness.",
+    "discoveredBy": "Prompt 3 deterministic contract and route audit",
+    "invalidated": [
+      "phase14-deployment-rollback-recompute-seeded-recompute-anthropic",
+      "phase14-deployment-rollback-recompute-seeded-recompute-openai"
+    ],
+    "reissuedAs": null,
+    "date": "2026-09-06"
+  },
+  {
+    "familyId": "deployment-model-alias-rollout-drift",
+    "fromHash": "0e9b87a5f260544cfbc1cdce8f08938c",
+    "toHash": "5b3171584b8a190743067d745b22e586",
+    "reason": "Prompt 3 publishes the protected lifecycle and execution bounds, captures every replay attempt and its ordered value-bearing observations, and completes the public checker generation contract where applicable. Prior scenario observations remain historical and are not evidence for this changed contract or collector. This declaration links retained bytes without rewriting or rerunning any historical trial. Local controls establish validity only, not task hardness.",
+    "discoveredBy": "Prompt 3 deterministic contract and route audit",
+    "invalidated": [
+      "deployment-alias-2026-09-claude-1",
+      "deployment-model-alias-rollout-drift-2026-08-o1"
+    ],
+    "reissuedAs": null,
+    "date": "2026-09-06"
+  },
+  {
+    "familyId": "deployment-model-alias-rollout-drift",
+    "fromHash": "805efb58c923f9e081db1b41967392d7",
+    "toHash": "5b3171584b8a190743067d745b22e586",
+    "reason": "Prompt 3 publishes the protected lifecycle and execution bounds, captures every replay attempt and its ordered value-bearing observations, and completes the public checker generation contract where applicable. Prior scenario observations remain historical and are not evidence for this changed contract or collector. This declaration links retained bytes without rewriting or rerunning any historical trial. Local controls establish validity only, not task hardness.",
+    "discoveredBy": "Prompt 3 deterministic contract and route audit",
+    "invalidated": [],
+    "reissuedAs": null,
+    "date": "2026-09-06"
+  }
+]

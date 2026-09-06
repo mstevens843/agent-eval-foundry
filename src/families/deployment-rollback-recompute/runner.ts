@@ -28,7 +28,7 @@ export interface RunResult {
 
 export const ALL_SUBJECTS: readonly Subject[] = [reference, ...MUTANTS];
 
-class ControllerLedgerHarness {
+export class ControllerLedgerHarness {
   private seq = 0;
   private attempt = 0;
   private controllerId = "";

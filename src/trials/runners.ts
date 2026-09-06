@@ -9,10 +9,9 @@
 //                arguments — module globals, prototype patching, the filesystem — so this is
 //                sufficient for code you wrote and INSUFFICIENT for code an agent wrote.
 //
-//   SUBPROCESS   The subject runs in a separate node process and answers over stdout. The ledger and
-//                the grading live in the parent's memory, which the child cannot reach at all. This
-//                is the level an agent-submitted artifact must be run at, and it is implemented here
-//                rather than described.
+//   SUBPROCESS   Historical transport: submitted code shares the collector process and can forge
+//                its evidence. Retained only for trusted fixtures and explicit historical replay.
+//                Current arbitrary submissions MUST use secure-runner's independent authority.
 //
 //   CONTAINER    The subject runs in its own container: no network at all, an empty environment, a
 //                private tmpfs, a read-only rootfs, dropped capabilities and recorded CPU/memory/pid
@@ -97,16 +96,15 @@ export function defaultHostScript(): string {
 }
 
 /**
- * For artifacts this repository did not write.
+ * Historical compatibility only, not a current arbitrary-submission assurance route.
  *
  * The child receives the scenario on stdin and returns `{ledger, report}` on stdout. The ledger it
  * returns is the one the HOST built inside the child — the parent still owns the grading, and the
  * child cannot reach the parent's memory to alter what it is graded against. That is the real
  * guarantee here, and it is the one the in-process runner cannot make.
  *
- * What this does NOT stop: a child that writes to the filesystem, opens a socket, or simply lies
- * about its own ledger. The first two need a container; the third is caught by the verifier, which
- * compares the subject's reported decisions against the ledger rather than trusting either alone.
+ * This does NOT stop filesystem/network access or forged ledgers. A semantic comparison cannot
+ * repair a compromised collector. Use runSecureContainerHost for arbitrary submissions.
  */
 export function subprocessRunner(options: SubprocessOptions): SubjectRunner {
   const host = options.hostScript ?? defaultHostScript();

@@ -56,6 +56,8 @@ export interface CheckerRunResult {
   readonly invocations: number;
   readonly trace: CaseTrace;
   readonly error: string | null;
+  /** Authority-observed executions for each checker run, including generated cases. */
+  readonly observations?: readonly (readonly CaseTrace[])[];
 }
 
 export interface VerifyInput {
@@ -203,6 +205,42 @@ function checkerFailures(scenario: Scenario, run: CheckerRunResult): readonly Fa
       detail: "same trace produced different checker reports",
     });
   }
+  if (run.observations) {
+    for (const [index, report] of [run.report, run.repeat].entries()) {
+      const observed = run.observations[index] ?? [];
+      const ids = observed.map((trace) => trace.caseId).sort();
+      if (
+        JSON.stringify([...report.casesRun].sort()) !== JSON.stringify(ids) ||
+        report.subjectInvocations !== ids.length ||
+        report.ok !== (report.failures.length === 0)
+      ) {
+        failures.push({
+          check: "checker_invokes_subject",
+          detail: "reported cases/invocations differ from actual case executions",
+        });
+      }
+      for (const trace of observed) {
+        const rules = traceViolations(trace);
+        const named = report.failures.filter((f) => f.caseId === trace.caseId);
+        if (rules.length === 0 && named.length)
+          failures.push({
+            check: "checker_accepts_reference_trace",
+            detail: `rejected clean case ${trace.caseId}`,
+          });
+        if (rules.length && !named.some((f) => rules.includes(f.rule as CheckerRuleCode))) {
+          failures.push({
+            check: "checker_rejects_bad_trace",
+            detail: `missed actual violation in case ${trace.caseId}`,
+          });
+        }
+        if (named.some((f) => !rules.includes(f.rule as CheckerRuleCode)))
+          failures.push({
+            check: "checker_names_failed_rule",
+            detail: `named an unobserved violation in ${trace.caseId}`,
+          });
+      }
+    }
+  }
   if (
     run.report.ok !== (run.report.failures.length === 0) ||
     !run.report.casesRun.includes(scenario.checkerCase.id) ||
@@ -234,8 +272,9 @@ function checkerFailures(scenario: Scenario, run: CheckerRunResult): readonly Fa
   }
 
   const expectedRules = traceViolations(run.trace);
+  const requiredFailures = run.report.failures.filter((f) => f.caseId === scenario.checkerCase.id);
   if (expectedRules.length === 0) {
-    if (!run.report.ok) {
+    if (run.observations ? requiredFailures.length > 0 : !run.report.ok) {
       failures.push({
         check: "checker_accepts_reference_trace",
         detail: "checker rejected a clean reference trace",
@@ -248,7 +287,7 @@ function checkerFailures(scenario: Scenario, run: CheckerRunResult): readonly Fa
     return dedupe(failures);
   }
 
-  if (run.report.ok) {
+  if (run.observations ? requiredFailures.length === 0 : run.report.ok) {
     failures.push({
       check: "checker_rejects_bad_trace",
       detail: `bad trace accepted; expected rejection for ${expectedRules.join(", ")}`,
@@ -258,7 +297,7 @@ function checkerFailures(scenario: Scenario, run: CheckerRunResult): readonly Fa
       failures.push({ check: specific, detail: `bad ${scenario.params.checkerProbe} trace accepted` });
   }
 
-  const named = new Set(run.report.failures.map((f) => String(f.rule)));
+  const named = new Set(requiredFailures.map((f) => String(f.rule)));
   const specific = probeSpecific[scenario.params.checkerProbe];
   if (specific !== null) {
     const requiredRule = ruleForSpecific[specific];

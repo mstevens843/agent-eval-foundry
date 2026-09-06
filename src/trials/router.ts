@@ -66,6 +66,7 @@ import {
   selectMeasuredSet as memSelect,
 } from "../families/memory-poisoning/scenarios.js";
 import { verify as memVerify } from "../families/memory-poisoning/verify.js";
+import { verify as containmentVerify } from "../families/prompt-injection-containment/verify.js";
 import { type BuiltFamily, builtFamily, scenarioSetIdFor } from "../families/registry.js";
 import {
   enumerateSpace as tradingEnumerate,
@@ -92,6 +93,7 @@ import {
   scenarioSetId as picScenarioSetId,
   measuredScenarios as picScenarios,
 } from "./orchestrate.js";
+import { type EvaluationOutcome, evaluateOutcome } from "./outcome.js";
 import { runJsonContainerHost } from "./runners.js";
 import { SECURELY_MIGRATED_FAMILIES, runSecureContainerHost } from "./secure-runner.js";
 import type { IsolationLevel, TrialCell } from "./types.js";
@@ -102,6 +104,8 @@ export interface GradeResult {
   /** Scenarios where the host could not run the artifact at all. Never behaviour, always a defect. */
   readonly hostErrors: number;
   readonly isolation?: IsolationLevel;
+  readonly outcome?: EvaluationOutcome;
+  readonly errors?: readonly { scenarioId: string; kind: string; message: string }[];
 }
 
 export interface TrialRoute {
@@ -192,6 +196,112 @@ const tradingScenarios = (): ReturnType<typeof tradingGenerate> =>
   tradingGenerate(tradingSelect(tradingEnumerate()));
 const rollbackScenarios = (): ReturnType<typeof rollbackGenerate> =>
   rollbackGenerate(rollbackSelect(rollbackEnumerate()));
+
+const PROTECTED_SCENARIOS: Readonly<Record<string, () => readonly { id: string }[]>> = {
+  "prompt-injection-containment": () => picScenarios(),
+  "prompt-injection-memory-poisoning": memoryScenarios,
+  "caa-revalidation": caaScenarios,
+  "ui-action-record-replay": uiScenarios,
+  "ui-replay-live-dom": liveScenarios,
+  "checker-required-memory-poisoning": checkerScenarios,
+  "access-token-scope-expansion": accessScenarios,
+  "delegated-wallet-scope-reconciliation": walletScenarios,
+  "deployment-model-alias-rollout-drift": deploymentScenarios,
+  "dao-descendant": daoScenarios,
+  "trading-reconciliation-recompute": tradingScenarios,
+  "deployment-rollback-recompute": rollbackScenarios,
+};
+export function protectedScenariosFor(familyId: string): readonly { id: string }[] {
+  const generate = PROTECTED_SCENARIOS[familyId];
+  if (!generate) throw Error(`no protected scenario generator: ${familyId}`);
+  return generate();
+}
+
+/** Same semantic consumer for submissions and deterministic route conformance controls. */
+export function verifyProtectedEvidence(
+  familyId: string,
+  scenario: unknown,
+  result: Pick<import("./secure-runner.js").SecureHostResult, "channels" | "report">,
+): readonly { check: string; detail: string }[] {
+  const { channels, report } = result;
+  const input = { scenario, ...channels, report, reports: report };
+  switch (familyId) {
+    case "prompt-injection-containment":
+      return containmentVerify(input as never);
+    case "prompt-injection-memory-poisoning":
+      return memVerify(input as never);
+    case "caa-revalidation":
+      return caaVerify(input as never);
+    case "ui-action-record-replay":
+      return uiVerify(input as never);
+    case "ui-replay-live-dom":
+      return liveVerify({
+        ...input,
+        legitimate: new Map(
+          (channels.legitimate as [number, string[]][]).map(([i, ids]) => [i, new Set(ids)]),
+        ),
+      } as never);
+    case "checker-required-memory-poisoning":
+      return checkerVerify({ scenario, ...(report as object) } as never);
+    case "access-token-scope-expansion":
+      return accessVerify(input as never);
+    case "delegated-wallet-scope-reconciliation":
+      return walletVerify(input as never);
+    case "deployment-model-alias-rollout-drift":
+      return deploymentVerify(input as never);
+    case "dao-descendant":
+      return daoVerify(input as never);
+    case "trading-reconciliation-recompute":
+      return tradingVerify(input as never);
+    case "deployment-rollback-recompute":
+      return rollbackVerify(input as never);
+    default:
+      throw Error(`no protected verifier: ${familyId}`);
+  }
+}
+
+export function gradeProtectedScenarios(
+  familyId: string,
+  modulePath: string,
+  scenarios: readonly { id: string }[],
+): GradeResult {
+  assertSafeForCountedAgentTrial(familyId);
+  const cells: TrialCell[] = [];
+  let hostErrors = 0;
+  const errors: { scenarioId: string; kind: string; message: string }[] = [];
+  for (const scenario of scenarios) {
+    const out = runSecureContainerHost({ familyId, modulePath }, { scenario });
+    if (out.error !== null) {
+      hostErrors++;
+      errors.push({ scenarioId: scenario.id, kind: out.errorKind ?? "setup", message: out.error });
+      cells.push({ scenarioId: scenario.id, failed: [] });
+      continue;
+    }
+    try {
+      const failures = verifyProtectedEvidence(familyId, scenario, out);
+      cells.push({ scenarioId: scenario.id, failed: [...new Set(failures.map((f) => f.check))].sort() });
+    } catch (error) {
+      hostErrors++;
+      errors.push({ scenarioId: scenario.id, kind: "invalid-evidence", message: String(error) });
+      cells.push({ scenarioId: scenario.id, failed: [] });
+    }
+  }
+  return {
+    ...summarise(cells, hostErrors, "cell-container"),
+    errors,
+    outcome: evaluateOutcome({
+      providerStatus: "completed",
+      artifactPresent: existsSync(modulePath),
+      expectedIds: scenarios.map((s) => s.id),
+      expectedCheckIds: builtFamily(familyId).checks,
+      cells,
+      hostErrors,
+    }),
+  };
+}
+export function gradeProtectedFamily(familyId: string, modulePath: string): GradeResult {
+  return gradeProtectedScenarios(familyId, modulePath, protectedScenariosFor(familyId));
+}
 
 const daoHostFailures = (
   execute: HostExecution,
@@ -288,7 +398,7 @@ const assertTransferHostIntegrity = (
  * Grade a memory-poisoning submission. Ground truth stays in the trusted authority process; the
  * submission runs in a separate cell process inside a no-network container (Phase 20 Lane 2/3).
  */
-export function gradeMemory(modulePath: string): GradeResult {
+export function gradeMemoryHistorical(modulePath: string): GradeResult {
   const execute = secureHost("prompt-injection-memory-poisoning", modulePath);
   const cells: TrialCell[] = [];
   let hostErrors = 0;
@@ -312,7 +422,7 @@ export function gradeMemory(modulePath: string): GradeResult {
 }
 
 /** Grade a UI replay submission. Same shape, different ledgers. */
-export function gradeUi(modulePath: string): GradeResult {
+export function gradeUiHistorical(modulePath: string): GradeResult {
   const host = hostPath("ui-host.mjs");
   const cells: TrialCell[] = [];
   let hostErrors = 0;
@@ -336,7 +446,7 @@ export function gradeUi(modulePath: string): GradeResult {
 }
 
 /** Grade a live-DOM replay submission. Same replay interface, richer sealed ledgers. */
-export function gradeLiveDom(modulePath: string): GradeResult {
+export function gradeLiveDomHistorical(modulePath: string): GradeResult {
   const host = hostPath("live-dom-host.mjs");
   const cells: TrialCell[] = [];
   let hostErrors = 0;
@@ -365,7 +475,7 @@ export function gradeLiveDom(modulePath: string): GradeResult {
 }
 
 /** Grade a checker-required submission. `modulePath` is subject.mjs; checker.mjs must be its sibling. */
-export function gradeCheckerRequired(modulePath: string): GradeResult {
+export function gradeCheckerRequiredHistorical(modulePath: string): GradeResult {
   const host = hostPath("checker-required-host.mjs");
   const cells: TrialCell[] = [];
   let hostErrors = 0;
@@ -394,7 +504,7 @@ export function gradeCheckerRequired(modulePath: string): GradeResult {
 }
 
 /** Grade an access-token scope-expansion submission against verifier-owned authority ledgers. */
-export function gradeAccessToken(modulePath: string): GradeResult {
+export function gradeAccessTokenHistorical(modulePath: string): GradeResult {
   const host = hostPath("access-token-host.mjs");
   const cells: TrialCell[] = [];
   let hostErrors = 0;
@@ -418,7 +528,7 @@ export function gradeAccessToken(modulePath: string): GradeResult {
 }
 
 /** Grade a delegated-wallet submission against verifier-owned policy, delegation and effect ledgers. */
-export function gradeDelegatedWallet(modulePath: string): GradeResult {
+export function gradeDelegatedWalletHistorical(modulePath: string): GradeResult {
   const host = hostPath("delegated-wallet-host.mjs");
   const cells: TrialCell[] = [];
   let hostErrors = 0;
@@ -442,7 +552,7 @@ export function gradeDelegatedWallet(modulePath: string): GradeResult {
 }
 
 /** Grade a deployment-alias submission against verifier-owned rollout and eval ledgers. */
-export function gradeDeploymentAlias(modulePath: string): GradeResult {
+export function gradeDeploymentAliasHistorical(modulePath: string): GradeResult {
   const host = hostPath("deployment-alias-host.mjs");
   const cells: TrialCell[] = [];
   let hostErrors = 0;
@@ -530,7 +640,7 @@ function gradeCaaWithHost(execute: HostExecution, isolation: IsolationLevel): Gr
  * processes inside a no-network container. Wired into `GRADERS`, so this is what `foundry check` and
  * a counted campaign actually run.
  */
-export function gradeCaaRevalidation(modulePath: string): GradeResult {
+export function gradeCaaRevalidationHistorical(modulePath: string): GradeResult {
   return gradeCaaWithHost(secureHost("caa-revalidation", modulePath), "cell-container");
 }
 
@@ -544,7 +654,7 @@ export function gradeCaaRevalidationInContainer(modulePath: string): GradeResult
   return gradeCaaWithHost(containerHost(host, modulePath), "container");
 }
 
-export function gradeDaoDescendant(modulePath: string): GradeResult {
+export function gradeDaoDescendantHistorical(modulePath: string): GradeResult {
   const host = hostPath("dao-descendant-host.mjs");
   return gradeDaoWithHost(modulePath, subprocessHost(host, modulePath), "subprocess");
 }
@@ -581,7 +691,7 @@ function gradeTradingWithHost(
   return summarise(cells, hostErrors, isolation);
 }
 
-export function gradeTradingReconciliation(modulePath: string): GradeResult {
+export function gradeTradingReconciliationHistorical(modulePath: string): GradeResult {
   const host = hostPath("trading-reconciliation-host.mjs");
   return gradeTradingWithHost(modulePath, subprocessHost(host, modulePath), "subprocess");
 }
@@ -618,7 +728,7 @@ function gradeRollbackWithHost(
   return summarise(cells, hostErrors, isolation);
 }
 
-export function gradeDeploymentRollback(modulePath: string): GradeResult {
+export function gradeDeploymentRollbackHistorical(modulePath: string): GradeResult {
   const host = hostPath("deployment-rollback-host.mjs");
   return gradeRollbackWithHost(modulePath, subprocessHost(host, modulePath), "subprocess");
 }
@@ -651,6 +761,29 @@ export function gradePhase14ContainerSubmission(familyId: string, modulePath: st
   }
   throw new Error(`${familyId}: no Phase 14 container grader is registered`);
 }
+
+export const gradeMemory = (modulePath: string): GradeResult =>
+  gradeProtectedFamily("prompt-injection-memory-poisoning", modulePath);
+export const gradeUi = (modulePath: string): GradeResult =>
+  gradeProtectedFamily("ui-action-record-replay", modulePath);
+export const gradeLiveDom = (modulePath: string): GradeResult =>
+  gradeProtectedFamily("ui-replay-live-dom", modulePath);
+export const gradeCheckerRequired = (modulePath: string): GradeResult =>
+  gradeProtectedFamily("checker-required-memory-poisoning", modulePath);
+export const gradeAccessToken = (modulePath: string): GradeResult =>
+  gradeProtectedFamily("access-token-scope-expansion", modulePath);
+export const gradeDelegatedWallet = (modulePath: string): GradeResult =>
+  gradeProtectedFamily("delegated-wallet-scope-reconciliation", modulePath);
+export const gradeDeploymentAlias = (modulePath: string): GradeResult =>
+  gradeProtectedFamily("deployment-model-alias-rollout-drift", modulePath);
+export const gradeCaaRevalidation = (modulePath: string): GradeResult =>
+  gradeProtectedFamily("caa-revalidation", modulePath);
+export const gradeDaoDescendant = (modulePath: string): GradeResult =>
+  gradeProtectedFamily("dao-descendant", modulePath);
+export const gradeTradingReconciliation = (modulePath: string): GradeResult =>
+  gradeProtectedFamily("trading-reconciliation-recompute", modulePath);
+export const gradeDeploymentRollback = (modulePath: string): GradeResult =>
+  gradeProtectedFamily("deployment-rollback-recompute", modulePath);
 
 const INSTRUCTIONS: Readonly<Record<string, string>> = {
   "prompt-injection-containment": [
@@ -932,8 +1065,8 @@ export function routeFor(familyId: string): TrialRoute {
     family,
     submissionFile: "submission/subject.mjs",
     instruction,
-    hostScript: hostPath(host),
-    grade,
+    hostScript: join(hostPath("secure"), "authority-entry.mjs"),
+    grade: (path) => gradeProtectedFamily(familyId, path),
     matrix,
     // The containment family had a scenario-set id before the router existed, and the challenge
     // package embeds it. Computing a second one here changed the MANIFEST by one string and made

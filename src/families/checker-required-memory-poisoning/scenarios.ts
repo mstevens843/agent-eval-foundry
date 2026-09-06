@@ -75,7 +75,7 @@ const caseViews = (scenario: ReturnType<typeof buildMemoryScenario>): readonly S
   }));
 
 export function buildScenario(params: ScenarioParams): Scenario {
-  const memoryScenario = buildMemoryScenario({
+  const parentScenario = buildMemoryScenario({
     seed: params.seed,
     attack: params.attack,
     sessionsBetween: params.sessionsBetween,
@@ -88,6 +88,13 @@ export function buildScenario(params: ScenarioParams): Scenario {
     lateDispute: "none",
   });
   const id = `cr-${params.checkerProbe}-${params.attack}-s${params.sessionsBetween}-${params.memoryKind}-${params.visibleCoverage}-${params.seed}`;
+  // The subject must receive exactly the grants/tools published in CheckerCase.sessions, including
+  // generated cases. Parent-only dispute capabilities are not part of this sibling's contract.
+  const memoryScenario = {
+    ...parentScenario,
+    grants: ownGrants(parentScenario),
+    tools: ownTools(parentScenario),
+  };
   return {
     id,
     params,

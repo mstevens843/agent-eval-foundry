@@ -146,14 +146,21 @@ export function packageSourceSeed(
       { path: "check-ids.json", bytes: Buffer.from(canonicalJson(route.family.checks)) },
     ];
     files.verifier = tree.filter((f) => /verify|harness|policy|spec/.test(f.path));
-    files.collector = closure.filter(
-      (f) => f.path.startsWith("scripts/") || f.path.startsWith("src/trials/"),
-    );
+    files.collector = [
+      ...closure.filter((f) => f.path.startsWith("scripts/") || f.path.startsWith("src/trials/")),
+      ...readPackageTree(root, "dist/trials/operation-authority.js"),
+    ];
     files.adapters = closure.filter(
-      (f) => f.path.startsWith("scripts/secure/adapters/") || f.path === "src/trials/router.ts",
+      (f) =>
+        f.path.startsWith("scripts/secure/adapters/") ||
+        [
+          "src/trials/router.ts",
+          "src/trials/operation-authority.ts",
+          "src/trials/checker-authority.ts",
+        ].includes(f.path),
     );
-    files.reference = tree.filter((f) => /reference/.test(f.path));
-    files.controls = tree.filter((f) => /mutants|runner/.test(f.path));
+    files.reference = tree.filter((f) => /reference|alternative/.test(f.path));
+    files.controls = tree.filter((f) => /mutants|runner|alternative/.test(f.path));
   }
   return buildPackageRecord({
     id: familyId,

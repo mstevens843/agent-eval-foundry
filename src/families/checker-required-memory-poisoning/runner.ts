@@ -28,7 +28,7 @@ export const ALL_SUBJECTS: readonly Submission[] = [referenceSubmission, ...MUTA
 export function runCell(scenario: Scenario, submission: Submission): CellResult {
   try {
     const subjectTrace = runSubjectTrace(scenario.memoryScenario, submission.subject, "candidate");
-    const checkerRun = runChecker(scenario, submission.checker);
+    const checkerRun = runChecker(scenario, submission.checker, submission.subject);
     return {
       scenarioId: scenario.id,
       subjectId: submission.id,

@@ -29,7 +29,7 @@ export interface RunResult {
 
 export const ALL_SUBJECTS: readonly Subject[] = [reference, ...MUTANTS];
 
-class DeploymentHarness {
+export class DeploymentHarness {
   private seq = 0;
   private attempt = 0;
   private readonly calls: DeploymentCall[] = [];

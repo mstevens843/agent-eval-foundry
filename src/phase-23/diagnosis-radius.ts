@@ -46,7 +46,9 @@ export function selectFixedSessionsBetween(
   sessionsBetween: number,
   fraction: number,
 ): readonly ScenarioParams[] {
-  const filtered = space.filter((p) => p.sessionsBetween === sessionsBetween);
+  // Historical five-knob experiment predates lateDispute. Preserve its original slice rather than
+  // alias three new points to one sampler identity (which also broke the public library import).
+  const filtered = space.filter((p) => p.sessionsBetween === sessionsBetween && p.lateDispute === "none");
   const selected = sampleSpace(filtered, {
     keyOf: (p) => `${p.attack}|${p.memoryKind}|${p.benignActions}|${p.decoySimilarity}|${p.seed}`,
     groupOf: (p) => p.attack,
@@ -54,7 +56,7 @@ export function selectFixedSessionsBetween(
   });
   assertKnobCoverage(
     selected,
-    { ...SPACE, sessionsBetween: [sessionsBetween] },
+    { ...SPACE, sessionsBetween: [sessionsBetween], lateDispute: ["none"] },
     (p, knob) => (p as unknown as Record<string, unknown>)[knob],
     `phase23.diagnosis-radius.sessionsBetween=${sessionsBetween}`,
   );

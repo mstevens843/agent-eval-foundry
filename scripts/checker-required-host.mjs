@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+// HISTORICAL REPLAY ONLY. This host preserves the pre-Prompt-3 generator semantics and does not
+// establish current validity. Current submissions use scripts/secure/authority-entry.mjs with
+// src/families/checker-required-memory-poisoning/cases.ts; never fall back here.
 
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";

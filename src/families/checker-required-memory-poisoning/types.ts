@@ -213,7 +213,15 @@ export interface CheckerReport {
 
 export interface CheckerInput {
   readonly cases: readonly CheckerCase[];
+  /** Runs a supplied/generated case; unknown IDs throw CASE_UNKNOWN, not a fabricated trace.
+   * At most 64 invocations per checker run. Generated cases run the submitted implementation.
+   * Supplied diagnostic cases may exercise other implementations or controlled trace violations. */
   readonly runCase: (caseId: string) => CaseTrace;
+  /** Deterministic content and ID; omitted parameters inherit the supplied case. Seed is an integer
+   * in [0,2147483647]; other domains are the literal unions above. At most 16 distinct generated
+   * cases per run; repeated generation is free. Generated IDs never alias supplied diagnostic IDs,
+   * even when their parameters match. Invalid parameters throw CASE_PARAMS, bounds
+   * throw CASE_LIMIT. Each repeat checker run has fresh case/observation budgets. */
   readonly makeCase: (params: Partial<CheckerCaseParams>) => CheckerCase;
 }
 

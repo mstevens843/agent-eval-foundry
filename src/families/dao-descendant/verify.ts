@@ -65,7 +65,8 @@ export function verify(value: unknown): readonly Failure[] {
   if (
     input.reports.length !== input.scenario.views.length ||
     input.reports.some((report, index) => {
-      const call = ownCalls[index];
+      const view = input.scenario.views[index];
+      const call = ownCalls.find((c) => c.workerId === view?.workerId && c.leaseEpoch === view?.leaseEpoch);
       return (
         call === undefined ||
         report.actionId !== call.actionId ||

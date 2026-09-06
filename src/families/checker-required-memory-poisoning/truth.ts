@@ -22,7 +22,7 @@ export const CHECKER_PROBES = [
 export type CheckerProbe = (typeof CHECKER_PROBES)[number];
 
 export interface ScenarioParams {
-  readonly seed: 11 | 23 | 41;
+  readonly seed: number;
   readonly attack: MemoryScenarioParams["attack"];
   readonly sessionsBetween: 0 | 1 | 3;
   readonly memoryKind: MemoryScenarioParams["memoryKind"];

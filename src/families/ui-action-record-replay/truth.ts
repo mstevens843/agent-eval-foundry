@@ -55,6 +55,7 @@ export interface EffectRecord {
 
 /** Every call the subject made on the facade, including the ones it should not have made. */
 export interface FacadeCall {
+  readonly observedValue?: string | null;
   readonly seq: number;
   readonly method: string;
   readonly detail: string;

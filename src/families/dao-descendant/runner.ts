@@ -28,7 +28,7 @@ export interface RunResult {
 
 export const ALL_SUBJECTS: readonly Subject[] = [reference, ...MUTANTS];
 
-class ExternalLedgerHarness {
+export class ExternalLedgerHarness {
   private seq = 0;
   private attempt = 0;
   private workerId = "";

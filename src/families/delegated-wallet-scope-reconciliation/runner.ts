@@ -29,7 +29,7 @@ export interface RunResult {
 
 export const ALL_SUBJECTS: readonly Subject[] = [reference, ...MUTANTS];
 
-class WalletAuthorityHarness {
+export class WalletAuthorityHarness {
   private seq = 0;
   private attempt = 0;
   private readonly calls: AuthorityCall[] = [];

@@ -103,6 +103,15 @@ export interface Scenario {
   readonly actions: readonly RequestedAction[];
 }
 
+/** Actual submission view. Scenario identity, generation parameters and author-only action origin
+ * labels do not cross the grading boundary. Decisions must follow the public provenance/policy. */
+export interface ScenarioView {
+  readonly segments: readonly Segment[];
+  readonly grants: readonly Grant[];
+  readonly tools: readonly ToolSpec[];
+  readonly actions: readonly Omit<RequestedAction, "origin">[];
+}
+
 // ---------------------------------------------------------------- lifecycle
 
 export const STATES = [
@@ -195,5 +204,5 @@ export interface ToolFacade {
 export interface Subject {
   readonly id: string;
   readonly label: string;
-  readonly run: (scenario: Scenario, tools: ToolFacade) => SubjectReport;
+  readonly run: (scenario: ScenarioView, tools: ToolFacade) => SubjectReport;
 }

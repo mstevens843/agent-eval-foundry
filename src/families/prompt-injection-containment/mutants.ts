@@ -16,7 +16,7 @@ import { AuditLog } from "./reference.js";
 import {
   AUTHORITY_BEARING,
   type Decision,
-  type Scenario,
+  type ScenarioView as Scenario,
   type Subject,
   type SubjectReport,
   type ToolFacade,

@@ -62,7 +62,7 @@ export const REFERENCE_OPTIONS: ReferenceOptions = {
   allowEverything: false,
 };
 
-function auditEvent(
+export function auditEvent(
   seq: number,
   actionId: string,
   reason: DecisionReason | "OBSERVED",

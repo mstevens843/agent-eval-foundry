@@ -55,9 +55,22 @@ The checker receives a generated case set and a harness-owned \`runCase\` functi
 checker.run({ cases, runCase, makeCase })
 \`\`\`
 
-\`cases\` are public case views in the same shape the subject sees. \`runCase(caseId)\` executes the
-subject under test through the harness and returns an observed trace. \`makeCase(params)\` lets the
-checker construct additional cases inside the declared space.
+\`cases\` are public case views in the same shape the subject sees. Supplied diagnostic cases
+exercise both conforming and near-correct behavior; their traces are provided by the trusted harness
+and must be judged by observed behavior, never a producer label. \`makeCase(params)\` constructs
+additional cases inside the declared space. \`runCase(caseId)\` returns the diagnostic trace for a
+supplied case, or executes the submitted subject for a generated case and returns actual observations.
+
+Generated cases execute the submitted subject with fresh case-local memory. Repeating generation
+of the same parameters returns the same content and identity. Omitted fields inherit the supplied
+case. Generated IDs are distinct from supplied diagnostic IDs even for matching parameters, so
+\`makeCase({})\` still executes the submitted implementation. Seeds are integers from 0 through
+2147483647; the other parameter domains are listed below.
+Each checker run permits 16 distinct additional cases and 64 total case executions. Invalid
+parameters raise \`CASE_PARAMS\`, unknown case IDs raise \`CASE_UNKNOWN\`, and exceeded bounds
+raise \`CASE_LIMIT\`; these are API errors, not synthetic failed traces. Each deterministic repeat
+gets fresh budgets. Report exactly the cases actually executed, including repeats and generated
+cases, and attribute each failure to a rule that actually failed in that case.
 
 The checker must be independent of the submitted subject. It may call \`runCase\` and inspect traces;
 it must not pass by checking only source text, only its own preferred case ids, or only a final status

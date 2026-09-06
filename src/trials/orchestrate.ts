@@ -25,6 +25,7 @@ import type { Scenario, Subject } from "../families/prompt-injection-containment
 import { verify } from "../families/prompt-injection-containment/verify.js";
 import { fail, isRecord, numNullable, optionalText, str, strNullable } from "../foundry/schema.js";
 import { type OrchestrateResult, PIC_INSTRUCTION, orchestrateTrial } from "./orchestrator.js";
+import { gradeProtectedFamily } from "./router.js";
 import { type SubjectRunner, inProcessRunner, subprocessRunner } from "./runners.js";
 import type { IsolationLevel, SubjectType, TrialCell, TrialRecord, TrialSet } from "./types.js";
 import { parseTrialRecord } from "./validate.js";
@@ -154,15 +155,18 @@ export function importAgentTrial(dir: string): TrialRecord {
   const scenarios = measuredScenarios();
   const setId = scenarioSetId(scenarios);
   const status = str(o["status"], `${metaPath}.status`);
-  const counts = o["counts"] === true;
+  const requestedGrade = o["counts"] === true;
 
   const artifact = join(dir, "subject.mjs");
   const hasArtifact = existsSync(artifact);
 
   // Only grade when the run actually produced something AND the importer says it counts. A refusal
   // with a stray artifact must not be silently graded into a zero.
-  const cells: TrialCell[] =
-    counts && hasArtifact ? gradeWithRunner(scenarios, subprocessRunner({ modulePath: artifact })).cells : [];
+  const evaluation = requestedGrade && hasArtifact ? gradeProtectedFamily(FAMILY_ID, artifact) : null;
+  const cells = evaluation?.cells ?? [];
+  // This legacy metadata schema carries no verified PackageRecord or stage-aware evidence identity.
+  // Preserve a diagnostic regrade, never accept its self-declared counting authority.
+  const counts = false;
 
   return parseTrialRecord(
     {
@@ -174,13 +178,13 @@ export function importAgentTrial(dir: string): TrialRecord {
       effort: strNullable(o["effort"], `${metaPath}.effort`),
       status,
       counts,
-      countsReason: strNullable(o["countsReason"], `${metaPath}.countsReason`),
+      countsReason: "legacy import lacks package-bound evidence; use the versioned external-intake route",
       scenarioSetId: setId,
       cells,
       runtimeSeconds: numNullable(o["runtimeSeconds"], `${metaPath}.runtimeSeconds`),
       costUsd: numNullable(o["costUsd"], `${metaPath}.costUsd`),
       artifactPath: hasArtifact ? artifact : null,
-      isolation: "subprocess",
+      isolation: "cell-container",
       notes: optionalText(o["notes"], `${metaPath}.notes`),
     },
     metaPath,
@@ -205,7 +209,10 @@ export function importAgentTrials(root: string): readonly TrialRecord[] {
  * Exported so the orchestrator can be handed a family grader without knowing anything about this
  * family, and so the CLI's `trials run` path and the checked-in trials are graded by identical code.
  */
-export function gradeSubmission(modulePath: string): { cells: readonly TrialCell[]; detail: string } {
+export function gradeSubmissionHistorical(modulePath: string): {
+  cells: readonly TrialCell[];
+  detail: string;
+} {
   const scenarios = measuredScenarios();
   const { cells, errors } = gradeWithRunner(scenarios, subprocessRunner({ modulePath }));
   const failed = cells.filter((c) => c.failed.length > 0).length;
@@ -214,6 +221,8 @@ export function gradeSubmission(modulePath: string): { cells: readonly TrialCell
     detail: `${failed}/${cells.length} scenarios failed (${errors} subject errors) under subprocess isolation`,
   };
 }
+
+export const gradeSubmission = (modulePath: string) => gradeProtectedFamily(FAMILY_ID, modulePath);
 
 export interface AgentTrialOptions {
   readonly root: string;

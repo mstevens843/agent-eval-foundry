@@ -49,7 +49,7 @@ export const REFERENCE_OPTIONS: ReferenceOptions = {
   overBlock: false,
 };
 
-function auditEvent(
+export function auditEvent(
   seq: number,
   actionId: string,
   reason: DecisionReason | "OBSERVED",
