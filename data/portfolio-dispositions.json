@@ -1,0 +1,227 @@
+{
+  "schemaVersion": 1,
+  "scope": "Prompt 4 construction-priority review, not a readiness policy or a second family registry. PackageRecord and package-stages-v1 remain authoritative.",
+  "reviewBasis": "Current source assets, domain legitimacy, normalized solution outline and missing construction. Ranking is a reasoned priority, not measured failure probability.",
+  "families": [
+    {
+      "familyId": "caa-revalidation",
+      "rank": 1,
+      "disposition": "native-candidate",
+      "packageId": "caa-revalidation-repair",
+      "leverage": "Concurrent per-name authorization, temporal cache and selective writeback in the existing Go service.",
+      "remaining": "Generic CAA remains a calibration kernel. Native task may still admit a short planner repair.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "browser-action-replay",
+      "rank": 2,
+      "disposition": "concepts-incorporated",
+      "packageId": "browser-replay-repair",
+      "leverage": "Real DOM form actions, remount recovery, confirmation and repeated execution.",
+      "remaining": "The abstract shape's viewport/locale/ambiguous-step policy is not claimed implemented by the new contract.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "ui-replay-live-dom",
+      "rank": 3,
+      "disposition": "protected-calibration",
+      "packageId": "browser-replay-repair",
+      "leverage": "Retain synthetic timing controls and historical effort-unpinned observations; transfer temporal questions.",
+      "remaining": "Real-browser successor has its own contract; no old outcome qualifies it.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "ui-action-record-replay",
+      "rank": 4,
+      "disposition": "protected-calibration",
+      "packageId": "browser-replay-repair",
+      "leverage": "Retain all-attempt/value/order regressions and valid skip alternatives.",
+      "remaining": "Historical adjudication disputes remain; generic UI is not counted as an extra professional package.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "prompt-injection-memory-poisoning",
+      "rank": 5,
+      "disposition": "professional-descendant",
+      "packageId": "persistent-knowledge-repair",
+      "leverage": "Actual disk serialization, revision-aware derivation and current publication grants.",
+      "remaining": "Historical same-object semantics stay in the kernel. Old host-error failures are not model evidence.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "delegated-wallet-scope-reconciliation",
+      "rank": 6,
+      "disposition": "professional-descendant",
+      "packageId": "delegated-budget-repair",
+      "leverage": "Multi-request allocation, identity, changing grants and bounded receipt reconciliation.",
+      "remaining": "Fictional credit workflow is new; old token-scope kernel remains distinct calibration.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "deployment-model-alias-rollout-drift",
+      "rank": 7,
+      "disposition": "professional-descendant",
+      "packageId": "compatible-rollout-repair",
+      "leverage": "Compatibility-specific fleet staging, generation-bound health, alias/cache publication and scoped rollback.",
+      "remaining": "New package is not the kernel's model-eval decision table.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "deployment-rollback-partial-effects",
+      "rank": 8,
+      "disposition": "retained-research",
+      "packageId": null,
+      "leverage": "Potentially distinct DAG and compensation problem with meaningful irreversible boundaries.",
+      "remaining": "Full effect DAG, compensation and roll-forward substrate absent. Partial-success ideas inform rollout; this shape is not completed.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "model-alias-drift-sentinel",
+      "rank": 9,
+      "disposition": "concepts-incorporated",
+      "packageId": "compatible-rollout-repair",
+      "leverage": "Immutable served identity versus an alias supports version-attributed observation.",
+      "remaining": "Quantitative calibration artifacts and mixed-model aggregate pipeline remain unbuilt.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "stale-crm-ticket-automation",
+      "rank": 10,
+      "disposition": "retained-research",
+      "packageId": null,
+      "leverage": "Moving authority with authoritative change logs can support a professional workflow.",
+      "remaining": "Needs real ticket service, schedule grammar and attainable terminal policy; not a hidden-seed variant of replay.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "audit-truth-financial-workflow",
+      "rank": 11,
+      "disposition": "retained-research",
+      "packageId": null,
+      "leverage": "Bitemporal history and correction query semantics offer a different algorithmic task.",
+      "remaining": "Needs independent domain/contract review and actual append-only/as-of implementation. Not inferred from outbox.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "durable-approval-outbox",
+      "rank": 12,
+      "disposition": "historical-evidence",
+      "packageId": null,
+      "leverage": "Rich preserved service, effect-boundary controls and trial artifacts.",
+      "remaining": "Six zeros preserved; five attribution disputes and one unresolved. No current native foundry package is invented.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "permission-boundary-tools",
+      "rank": 13,
+      "disposition": "retained-research",
+      "packageId": null,
+      "leverage": "Ownership attenuation across async invokers is plausible substantive broker work.",
+      "remaining": "Needs multi-hop broker/scheduler rather than short tier classifier; boundary principles reused only.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "access-token-scope-expansion",
+      "rank": 14,
+      "disposition": "protected-calibration",
+      "packageId": null,
+      "leverage": "Useful exact principal/resource/scope/freshness regression controls.",
+      "remaining": "No substantial consumer constructed in this lane; prior easy solve is not rehabilitated by extra cases.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "checker-required-memory-poisoning",
+      "rank": 15,
+      "disposition": "protected-calibration",
+      "packageId": null,
+      "leverage": "Working generated cases and nested submitted subject execution retained.",
+      "remaining": "Explicit checker requirement measures a different construct; no additional professional portfolio slot.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "prompt-injection-capability-routing",
+      "rank": 16,
+      "disposition": "retained-research",
+      "packageId": null,
+      "leverage": "Provenance across tool boundaries is a potentially useful graph problem.",
+      "remaining": "Memory incorporates derivation ideas, not the shape's minimal-egress rule or full routing service.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "prompt-injection-approval-scope-drift",
+      "rank": 17,
+      "disposition": "retained-research",
+      "packageId": null,
+      "leverage": "Current approval versions and exact identity inform grant consumers.",
+      "remaining": "Overlapping policy-classifier geometry; needs a distinct professional workflow before promotion.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "prompt-injection-cross-tool-escalation",
+      "rank": 18,
+      "disposition": "retained-research",
+      "packageId": null,
+      "leverage": "Multi-step capability ownership could complement an actual application.",
+      "remaining": "Tool chain and independent effect collection not built as a separate professional package.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "prompt-injection-containment",
+      "rank": 19,
+      "disposition": "protected-calibration",
+      "packageId": null,
+      "leverage": "Positive-work, descriptor and provenance controls useful for foundation regressions.",
+      "remaining": "Small policy-transcription kernel; adding strings is not construction substance.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "dao-descendant",
+      "rank": 20,
+      "disposition": "protected-calibration",
+      "packageId": null,
+      "leverage": "Durable-key and full-payload controls test recovery infrastructure.",
+      "remaining": "Not the imported multi-file outbox. Same core key repair as the next two kernels.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "rank": 21,
+      "disposition": "protected-calibration",
+      "packageId": null,
+      "leverage": "Venue payload/population and idempotent-retry controls retained.",
+      "remaining": "No real venue reconciliation or partial-fill task; avoid counting renamed key recovery as diversity.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "rank": 22,
+      "disposition": "protected-calibration",
+      "packageId": null,
+      "leverage": "Compensation payload/population and correct retry controls retained.",
+      "remaining": "No fleet compatibility/control plane here; stronger rollout successor is not a promotion of this tiny kernel.",
+      "hardnessEvidence": "not-established-for-current-package",
+      "qualification": "pending independent review and separately authorized target trials"
+    }
+  ]
+}

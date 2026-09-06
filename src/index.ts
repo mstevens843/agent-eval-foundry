@@ -1035,3 +1035,5 @@ export * from "./packages/gaps.js";
 export * from "./packages/assembly.js";
 export * from "./packages/assurance.js";
 export * from "./trials/outcome.js";
+export * from "./packages/portfolio.js";
+export { browserProduction } from "./families/ui-replay-browser-backed/production.js";

@@ -4,6 +4,7 @@ import { createReadStream, createWriteStream, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import { performance } from "node:perf_hooks";
 import { finished } from "node:stream/promises";
+import { StringDecoder } from "node:string_decoder";
 
 export async function hashFile(path: string): Promise<string> {
   const hash = createHash("sha256");
@@ -20,6 +21,8 @@ export async function localProcess(
     timeoutMs?: number;
     limitBytes?: number;
     log?: string;
+    /** Bounded host-owned input for local collectors. Never a provider prompt. */
+    input?: string;
   } = {},
 ): Promise<{ stdout: string; stderr: string; milliseconds: number }> {
   const start = performance.now();
@@ -27,6 +30,8 @@ export async function localProcess(
   const timeout = options.timeoutMs ?? 120000;
   if (!Number.isSafeInteger(limit) || limit <= 0 || !Number.isFinite(timeout) || timeout <= 0)
     throw new Error("LOCAL_PROCESS_INVALID_LIMIT");
+  if (options.input && Buffer.byteLength(options.input) > 16 * 1024 * 1024)
+    throw new Error("LOCAL_PROCESS_INPUT_LIMIT");
   if (options.log) mkdirSync(dirname(options.log), { recursive: true });
   const log = options.log ? createWriteStream(options.log, { flags: "wx" }) : undefined;
   // Attach rejection handling immediately; resolve only after all evidence bytes have flushed.
@@ -34,13 +39,18 @@ export async function localProcess(
   return new Promise((resolve, reject) => {
     const child = spawn(command, [...args], {
       cwd: options.cwd,
-      stdio: ["ignore", "pipe", "pipe"],
+      stdio: [options.input === undefined ? "ignore" : "pipe", "pipe", "pipe"],
       detached: true,
     });
     let stdout = "";
     let stderr = "";
+    const decoders = { stdout: new StringDecoder("utf8"), stderr: new StringDecoder("utf8") };
     let count = 0;
     let failure = "";
+    child.stdin?.on("error", (error) => {
+      failure = `input: ${String(error)}`;
+    });
+    if (options.input !== undefined) child.stdin?.end(options.input);
     const kill = () => {
       try {
         if (child.pid) process.kill(-child.pid, "SIGKILL");
@@ -60,19 +70,21 @@ export async function localProcess(
         return;
       }
       if (log && !log.write(chunk)) {
-        child[stream].pause();
-        log.once("drain", () => child[stream].resume());
+        child[stream]?.pause();
+        log.once("drain", () => child[stream]?.resume());
       }
-      if (stream === "stdout") stdout += chunk.toString();
-      else stderr += chunk.toString();
+      if (stream === "stdout") stdout += decoders.stdout.write(chunk);
+      else stderr += decoders.stderr.write(chunk);
     };
-    child.stdout.on("data", (chunk) => consume("stdout", chunk));
-    child.stderr.on("data", (chunk) => consume("stderr", chunk));
+    child.stdout?.on("data", (chunk) => consume("stdout", chunk));
+    child.stderr?.on("data", (chunk) => consume("stderr", chunk));
     child.on("error", (error) => {
       failure = String(error);
     });
     child.on("close", async (code) => {
       clearTimeout(timer);
+      stdout += decoders.stdout.end();
+      stderr += decoders.stderr.end();
       kill();
       log?.end();
       const logError = await logFinished;

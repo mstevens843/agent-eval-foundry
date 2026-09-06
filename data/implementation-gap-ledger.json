@@ -192,16 +192,17 @@
       "source": "System G12",
       "packageId": null,
       "owner": 4,
-      "status": "blocked",
-      "summary": "Isomorphic recovery-key kernels do not prove a diverse professional portfolio.",
+      "status": "verified",
+      "summary": "Five locally validated professional candidates now have different useful outcomes, interfaces and normalized solutions; recovery-key siblings are explicitly retained as calibration, not counted as additional packages.",
       "dependencies": [
         "G6"
       ],
       "proof": [
-        "src/families/dao-descendant/runner.ts",
-        "src/families/trading-reconciliation-recompute/runner.ts"
+        "docs/professional-portfolio.md",
+        "data/portfolio-dispositions.json",
+        "reports/verification/prompt-04.json"
       ],
-      "nextAction": "Build distinct professional workloads and record essential-solution diversity; retain calibration roles honestly."
+      "nextAction": "Prompt 6: test actual transfer and solution similarity on future results. Five distinct constructions do not establish prospective diversity or yield for 1000 tasks."
     },
     {
       "id": "G13",
@@ -351,23 +352,24 @@
         "test/protected-family-routes.test.ts",
         "docs/protected-family-routes.md"
       ],
-      "nextAction": "Prompt 4: explicitly retain as calibration or build a substantial professional package; preserve Prompt 3 contract and route regressions."
+      "nextAction": "Retained as protected calibration in data/portfolio-dispositions.json; preserve Prompt 3 contracts/routes. Incorporated concepts do not count this kernel as an additional professional package."
     },
     {
       "id": "PKG-MEMORY",
       "source": "Package audit 2",
       "packageId": "prompt-injection-memory-poisoning",
       "owner": 4,
-      "status": "blocked",
-      "summary": "Authority/stable-facade/late-history controls repaired; still synthetic explicit policy, not an UNKNOWN reconciliation task.",
+      "status": "verified",
+      "summary": "New persistent-knowledge-repair package uses real disk/restarts, revisions, full derivation lineage, current grants, immutable publications, distinct storage alternatives and protected local controls. Historical facade semantics are unchanged.",
       "dependencies": [
         "G6"
       ],
       "proof": [
-        "test/package-authority-boundary.test.ts",
-        "test/memory-facade-contract.test.ts"
+        "tasks/persistent-knowledge-repair/private/domain.mjs",
+        "src/packages/portfolio.ts",
+        "reports/verification/prompt-04.json"
       ],
-      "nextAction": "Build coherent multi-file persistence/provenance/authority changes with real alternatives; do not reuse invalid host-failure signatures."
+      "nextAction": "Use the actual exported submission interface in Prompt 5. Human review and target-model hardness remain pending; no UNKNOWN outcome or old host-failure signal is fabricated."
     },
     {
       "id": "PKG-UI",
@@ -385,7 +387,7 @@
         "test/protected-family-routes.test.ts",
         "docs/protected-family-routes.md"
       ],
-      "nextAction": "Prompt 4: explicitly retain as calibration or build a substantial professional package; preserve Prompt 3 contract and route regressions."
+      "nextAction": "Retained as protected calibration in data/portfolio-dispositions.json; preserve Prompt 3 contracts/routes. Incorporated concepts do not count this kernel as an additional professional package."
     },
     {
       "id": "PKG-LIVE-DOM",
@@ -403,7 +405,7 @@
         "test/protected-family-routes.test.ts",
         "docs/protected-family-routes.md"
       ],
-      "nextAction": "Prompt 4: explicitly retain as calibration or build a substantial professional package; preserve Prompt 3 contract and route regressions."
+      "nextAction": "Retained as protected calibration in data/portfolio-dispositions.json; preserve Prompt 3 contracts/routes. Incorporated concepts do not count this kernel as an additional professional package."
     },
     {
       "id": "PKG-CHECKER",
@@ -421,7 +423,7 @@
         "test/protected-family-routes.test.ts",
         "docs/protected-family-routes.md"
       ],
-      "nextAction": "Prompt 4: explicitly retain as calibration or build a substantial professional package; preserve Prompt 3 contract and route regressions."
+      "nextAction": "Retained as protected calibration in data/portfolio-dispositions.json; preserve Prompt 3 contracts/routes. Incorporated concepts do not count this kernel as an additional professional package."
     },
     {
       "id": "PKG-ACCESS",
@@ -439,38 +441,42 @@
         "test/protected-family-routes.test.ts",
         "docs/protected-family-routes.md"
       ],
-      "nextAction": "Prompt 4: explicitly retain as calibration or build a substantial professional package; preserve Prompt 3 contract and route regressions."
+      "nextAction": "Retained as protected calibration in data/portfolio-dispositions.json; preserve Prompt 3 contracts/routes. Incorporated concepts do not count this kernel as an additional professional package."
     },
     {
       "id": "PKG-WALLET",
       "source": "Package audit 7",
       "packageId": "delegated-wallet-scope-reconciliation",
       "owner": 4,
-      "status": "blocked",
-      "summary": "Owner/delegate/payload/population controls improved; actual changing authority and collateral obligations need coherent substrate.",
+      "status": "verified",
+      "summary": "New delegated-budget-repair package integrates ordered shared budgets, current owner/delegate/version authority, retries and bounded authoritative receipts with independent per-job state/effect validation.",
       "dependencies": [
         "G1",
         "G6"
       ],
       "proof": [
-        "src/families/delegated-wallet-scope-reconciliation/verify.ts"
+        "tasks/delegated-budget-repair/private/domain.mjs",
+        "src/packages/portfolio.ts",
+        "reports/verification/prompt-04.json"
       ],
-      "nextAction": "Construct a distinct multi-file wallet reconciliation task with protected effects, attainable resolution and alternative strategies."
+      "nextAction": "Prompt 5 consumes the exported artifact and exact route. Independent human-time review and model evidence are separate qualification work."
     },
     {
       "id": "PKG-CAA-KERNEL",
       "source": "Package audit 8",
       "packageId": "caa-revalidation",
       "owner": 4,
-      "status": "blocked",
+      "status": "verified",
       "summary": "Protected authority and actual query semantics repaired; small function remains calibration, distinct from native CAA.",
       "dependencies": [
         "G5"
       ],
       "proof": [
-        "test/package-authority-boundary.test.ts"
+        "test/package-authority-boundary.test.ts",
+        "data/portfolio-dispositions.json",
+        "docs/professional-portfolio.md"
       ],
-      "nextAction": "Native production is implemented separately. Keep this generic route as calibration; Prompt 4 owns disposition and any substantive construction, not an automatic hardness claim."
+      "nextAction": "Keep the protected generic route as calibration. Native CAA was revalidated without artificial new rules; its short keyed-planner solution remains a candid construction risk."
     },
     {
       "id": "PKG-DAO",
@@ -489,7 +495,7 @@
         "test/protected-family-routes.test.ts",
         "docs/protected-family-routes.md"
       ],
-      "nextAction": "Prompt 4: explicitly retain as calibration or build a substantial professional package; preserve Prompt 3 contract and route regressions."
+      "nextAction": "Retained as protected calibration in data/portfolio-dispositions.json; preserve Prompt 3 contracts/routes. Incorporated concepts do not count this kernel as an additional professional package."
     },
     {
       "id": "PKG-TRADING",
@@ -508,7 +514,7 @@
         "test/protected-family-routes.test.ts",
         "docs/protected-family-routes.md"
       ],
-      "nextAction": "Prompt 4: explicitly retain as calibration or build a substantial professional package; preserve Prompt 3 contract and route regressions."
+      "nextAction": "Retained as protected calibration in data/portfolio-dispositions.json; preserve Prompt 3 contracts/routes. Incorporated concepts do not count this kernel as an additional professional package."
     },
     {
       "id": "PKG-ROLLBACK",
@@ -527,23 +533,25 @@
         "test/protected-family-routes.test.ts",
         "docs/protected-family-routes.md"
       ],
-      "nextAction": "Prompt 4: explicitly retain as calibration or build a substantial professional package; preserve Prompt 3 contract and route regressions."
+      "nextAction": "Retained as protected calibration in data/portfolio-dispositions.json; preserve Prompt 3 contracts/routes. Incorporated concepts do not count this kernel as an additional professional package."
     },
     {
       "id": "PKG-ALIAS",
       "source": "Package audit 12",
       "packageId": "deployment-model-alias-rollout-drift",
       "owner": 4,
-      "status": "blocked",
-      "summary": "Population/duplicate repairs exist; protected rollout/telemetry/cache interactions and actual cleanup correctness remain.",
+      "status": "verified",
+      "summary": "New compatible-rollout-repair package integrates mixed ABI, actual staged generations, observed health, alias/cache updates, per-service rollback and scoped cleanup with sequential and batch alternatives.",
       "dependencies": [
         "G1",
         "G6"
       ],
       "proof": [
-        "src/families/deployment-model-alias-rollout-drift/verify.ts"
+        "tasks/compatible-rollout-repair/private/domain.mjs",
+        "src/packages/portfolio.ts",
+        "reports/verification/prompt-04.json"
       ],
-      "nextAction": "Build coherent multi-surface rollout task, alternatives and independent collector; preserve old external campaign evidence as historical."
+      "nextAction": "Prompt 5 receives a runnable artifact; old campaigns remain historical. Human reviews and observed target-agent difficulty remain separate."
     },
     {
       "id": "PKG-NATIVE-CAA",
@@ -569,32 +577,39 @@
       "source": "Adjacent browser prototype",
       "packageId": "ui-replay-browser-backed",
       "owner": 4,
-      "status": "blocked",
-      "summary": "A built-in browser demonstration is not protected grading of arbitrary submitted implementations.",
+      "status": "verified",
+      "summary": "Real Chromium successor accepts arbitrary multi-file submissions through protected operations, records backend effects and ZIP traces, checks every attempt, and accepts two different replay strategies; no known-subject dispatcher or page-visible effect ledger grades the new package.",
       "dependencies": [
         "G6",
         "PKG-UI",
         "PKG-LIVE-DOM"
       ],
       "proof": [
-        "src/families/ui-replay-browser-backed/runner.ts"
+        "src/families/ui-replay-browser-backed/production.ts",
+        "tasks/browser-replay-repair/private/domain.mjs",
+        "scripts/verify-portfolio-exports.mjs",
+        "reports/verification/prompt-04.json"
       ],
-      "nextAction": "Complete a real browser professional package, isolated submission route and independent observed actions."
+      "nextAction": "Inspect actual exported traces in Prompt 6; do not reinterpret historical prototype labels as evidence for the new contract."
     },
     {
       "id": "PUBLIC-CONTRACTS",
       "source": "Package S4; remaining public cues",
       "packageId": null,
       "owner": 4,
-      "status": "blocked",
-      "summary": "Common opaque manifest and misleading prose repaired; each substantive package still needs contract/selection-cue/alternative-solution review.",
+      "status": "verified",
+      "summary": "Five professional contracts specify attainable behavioral obligations and bounded interfaces. Useful visible tests pass on incomplete starters; distinct correct implementations pass protected suites. Memory publication ordering was relaxed where the contract permits it.",
       "dependencies": [
         "G6"
       ],
       "proof": [
-        "test/package-public-surface.test.ts"
+        "test/package-public-surface.test.ts",
+        "test/portfolio-production.test.ts",
+        "docs/portfolio-design-records.md",
+        "docs/professional-portfolio.md",
+        "reports/verification/prompt-04.json"
       ],
-      "nextAction": "Review all visible artifacts without deleting necessary domain information or hiding rules."
+      "nextAction": "Independent human fairness/time review and destination-specific human-authored rubric material remain QUALIFICATION. Local contract review is not a human solve."
     },
     {
       "id": "QUALIFICATION",
@@ -661,6 +676,17 @@
         "test/protected-contracts.test.ts"
       ],
       "nextAction": "Keep fresh build and source snapshot checks in final integration."
+    },
+    {
+      "id": "P4-RUNTIME-ORDER",
+      "source": "Prompt 4 repeat-build reproduction",
+      "packageId": "caa-revalidation-repair",
+      "owner": 4,
+      "status": "verified",
+      "summary": "Docker emitted the same image set in varying top-level manifest order. Bounded canonicalization now stabilizes those unordered indexes without changing image blobs or layer order; old archives remain intact.",
+      "dependencies": ["G6"],
+      "proof": ["src/packages/runtime-archive.ts", "test/runtime-archive.test.ts", "reports/verification/prompt-04.json"],
+      "nextAction": "Retain repeated native build/archive parity checks; changed image contents still require a new package identity."
     },
     {
       "id": "P3-HISTORICAL-AUDIT-VIEW",

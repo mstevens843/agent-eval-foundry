@@ -1,0 +1,46 @@
+[
+  {
+    "id": "early-report",
+    "overlay": { "entry.mjs": "controls/early-report.mjs" },
+    "check": "reports",
+    "clean": "case-000",
+    "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "first-candidate",
+    "overlay": {
+      "src/resolver.mjs": "controls/first-candidate.mjs",
+      "entry.mjs": "controls/incomplete-work.mjs"
+    },
+    "check": "exact_effects",
+    "clean": "case-000"
+  },
+  {
+    "id": "pre-fill-read",
+    "overlay": { "src/form.mjs": "controls/pre-fill-read.mjs" },
+    "check": "current_preconditions",
+    "clean": "case-000"
+  },
+  {
+    "id": "no-confirmation",
+    "overlay": {
+      "src/form.mjs": "controls/no-confirmation.mjs",
+      "entry.mjs": "controls/incomplete-work.mjs"
+    },
+    "check": "completion",
+    "clean": "case-000"
+  },
+  {
+    "id": "repeated-delivery",
+    "overlay": { "src/replay.mjs": "controls/repeated-delivery.mjs" },
+    "check": "exact_effects",
+    "clean": "case-000"
+  },
+  { "id": "claim-only", "overlay": { "entry.mjs": "controls/claim-only.mjs" }, "check": "completion" },
+  {
+    "id": "isolation",
+    "overlay": { "entry.mjs": "controls/isolation.mjs" },
+    "check": "completion",
+    "isolation": true
+  }
+]

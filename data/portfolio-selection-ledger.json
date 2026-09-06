@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "scope": "Local scenario/control design history, not agent-trial results.",
+  "selection": "Deterministic bounded scenario grids retained in full; no post-hoc selection on target-model outcomes. First local runs used development controls and identified infrastructure setup defects. Scenario generator bytes below were frozen before adding the four validation-bank controls.",
+  "generators": [
+    {
+      "id": "browser-replay-repair",
+      "generatorSha256": "ae2b03cb33bc171622f3d7551482f8eacdbf7d9caa153a141e0a31a5e18e0953"
+    },
+    {
+      "id": "persistent-knowledge-repair",
+      "generatorSha256": "f83540744124e27490e839a2ae5ac243e111ef0f6bf295021d5543ea24171a81"
+    },
+    {
+      "id": "delegated-budget-repair",
+      "generatorSha256": "ad0e0ba4cece2aa6fb838cb733aad06f9fcc7de7bff0fc7ef0fa3819ef1163ab"
+    },
+    {
+      "id": "compatible-rollout-repair",
+      "generatorSha256": "232cef0b68b083c9a3b9cbf61a66d4f95ac4ba1bcb4d90413eff124a779e2a3a"
+    }
+  ],
+  "developmentControls": "Every non-post-selection control in each retained manifest is a development/regression control, not held out.",
+  "validationControls": [
+    {
+      "packageId": "browser-replay-repair",
+      "id": "early-report"
+    },
+    {
+      "packageId": "persistent-knowledge-repair",
+      "id": "report-lineage"
+    },
+    {
+      "packageId": "delegated-budget-repair",
+      "id": "receipt-claim"
+    },
+    {
+      "packageId": "compatible-rollout-repair",
+      "id": "wrong-binding"
+    }
+  ],
+  "qualification": "The four new controls were not used to choose scenario membership. After their first inspected results they become regression evidence, not a perpetually unseen bank. Any resulting repair must be recorded in the Prompt 4 verification report.",
+  "providerCallsMade": 0
+}

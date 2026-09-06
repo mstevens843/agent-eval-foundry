@@ -1,0 +1,35 @@
+[
+  {
+    "id": "wrong-binding",
+    "overlay": { "entry.mjs": "controls/wrong-binding.mjs" },
+    "check": "binding",
+    "clean": "case-000",
+    "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "wrong-abi",
+    "overlay": { "src/catalog.mjs": "controls/wrong-abi.mjs" },
+    "check": "compatibility",
+    "clean": "case-000"
+  },
+  {
+    "id": "green-history",
+    "overlay": { "src/health.mjs": "controls/green-history.mjs" },
+    "check": "observed_health",
+    "clean": "case-000"
+  },
+  { "id": "skip-cache", "overlay": { "src/publish.mjs": "controls/skip-cache.mjs" }, "check": "cache" },
+  {
+    "id": "broad-cleanup",
+    "overlay": { "src/cleanup.mjs": "controls/broad-cleanup.mjs" },
+    "check": "preservation",
+    "clean": "case-000"
+  },
+  { "id": "no-work", "overlay": { "entry.mjs": "controls/no-work.mjs" }, "check": "completion" },
+  {
+    "id": "isolation",
+    "overlay": { "entry.mjs": "controls/isolation.mjs" },
+    "check": "completion",
+    "isolation": true
+  }
+]

@@ -28,6 +28,7 @@ import {
   resolvePackage,
   sha256,
 } from "./record.js";
+import { canonicalizeRuntimeArchive } from "./runtime-archive.js";
 import { readPackageTree } from "./source.js";
 
 const TARGET = "caa-revalidation-repair";
@@ -312,6 +313,7 @@ export async function buildNativeCaa(root: string, output: string): Promise<Buil
   await docker(["image", "save", "--output", archive, images.environment, images.verifier], {
     timeoutMs: 300000,
   });
+  canonicalizeRuntimeArchive(archive);
   const runtime: RuntimeLock = {
     schemaVersion: 1,
     platform,

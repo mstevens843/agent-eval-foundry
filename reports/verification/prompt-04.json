@@ -1,0 +1,1205 @@
+{
+  "promptId": "04",
+  "status": "complete-local-engineering",
+  "sourceSnapshot": {
+    "head": "0ca519174aeddfe352dcda2fa53c391975c1a480",
+    "digest": "52aa95386893e1cd663930643bc3e57778de9979ca58a728e4110cd980dbffa2",
+    "files": 3376,
+    "unchangedDuringFinalVerification": true,
+    "historicalFilesUnchanged": 1019,
+    "excludedReportPaths": [
+      "reports/PROMPT-04-PROFESSIONAL-PORTFOLIO.md",
+      "reports/verification/prompt-04.json"
+    ],
+    "beforeInventory": ".local/prompt-04/source-before.json",
+    "afterInventory": ".local/prompt-04/source-after.json"
+  },
+  "portfolioCandidates": 5,
+  "newProfessionalPackages": 4,
+  "researchShapesDispositioned": 22,
+  "genericFamiliesPreserved": 12,
+  "providerCallsMade": 0,
+  "subjectModelTrials": 0,
+  "packages": [
+    {
+      "packageId": "caa-revalidation-repair",
+      "packageDigest": "b75735fc458b016a10d482dab328fc91a7cd9ba96acd80bdba6c363e9c30a244",
+      "build": ".local/prompt-04/canonical-native",
+      "export": ".local/prompt-04/canonical-native-export",
+      "receipt": ".local/prompt-04/canonical-native/validations/f9eb30fe-6918-4052-8abf-633efff09b73/assurance.json",
+      "receiptSha256": "69e040e2d5ebc200e83e7908dbc0a91c6f3bf9c51c7ffb239410a289aea93d7b",
+      "operations": 27,
+      "totalAssuranceMilliseconds": 369556.0604190001,
+      "controls": [
+        {
+          "id": "visible-workspace-smoke",
+          "status": "pass",
+          "milliseconds": 2763.9454170000004,
+          "artifactDigest": "0c9ac54fd343f0cb6fc6dbbabcaa49b9f67c3291797a90f32f0e1429ea868d6d"
+        },
+        {
+          "id": "contract-manifest",
+          "status": "pass",
+          "milliseconds": 267.6533329999993,
+          "artifactDigest": "3f6695d9fe7fbff29a8a5cd72d67f70f6ddd76d678633e3e1199839289923c58"
+        },
+        {
+          "id": "static-format",
+          "status": "pass",
+          "milliseconds": 933.2972919999993,
+          "artifactDigest": "825171ebb44387cd7fcaae9ae2265cd675be2d5e668ac96532dc39a0a979ddfb"
+        },
+        {
+          "id": "public-interface/oracle",
+          "status": "pass",
+          "milliseconds": 12967.693167000001,
+          "artifactDigest": "8afaa1db2317005f7686c85e5f741c90fcefb1515a57d428660cce7cf1772b9c"
+        },
+        {
+          "id": "public-interface/alternative",
+          "status": "pass",
+          "milliseconds": 9958.524291000002,
+          "artifactDigest": "eedcb9c55e5977c8e2904244ee2f37c31f76af834dd34471cdbb4205c72fb826"
+        },
+        {
+          "id": "public-interface/feature-alternative",
+          "status": "pass",
+          "milliseconds": 9842.560292000002,
+          "artifactDigest": "1c564f4433dd94c5fadf8b5ae6a56d77d697dacaac7f4d2de4b06e2eca531ea9"
+        },
+        {
+          "id": "public-interface/nop",
+          "status": "pass",
+          "milliseconds": 10036.723834000004,
+          "artifactDigest": "99fa15217ab694677c4a50bc1553215dc40967ebff839a1daac2e898788d3566"
+        },
+        {
+          "id": "public-interface/identity-collapse",
+          "status": "pass",
+          "milliseconds": 10216.747834000002,
+          "artifactDigest": "988a537587ddf04b4f11278506facc779e26369e779823e7f9e16e60205f6a88"
+        },
+        {
+          "id": "public-interface/completion-order-association",
+          "status": "pass",
+          "milliseconds": 10025.018375,
+          "artifactDigest": "ab874485125044e2a75f854f4325df689801b8497665b78e1f477d1024b969a7"
+        },
+        {
+          "id": "public-interface/stale-boundary",
+          "status": "pass",
+          "milliseconds": 10206.085042000006,
+          "artifactDigest": "425c7c2ece598f1b676afe925d9071be46a83b8834e8e165284d0dac24ab289b"
+        },
+        {
+          "id": "public-interface/cached-stale",
+          "status": "pass",
+          "milliseconds": 11071.817332999999,
+          "artifactDigest": "de8b271c808a6c6e0829db6b3fd02aa18c72216a4fa574b81b4df32c68352f41"
+        },
+        {
+          "id": "public-interface/any-authorizes",
+          "status": "pass",
+          "milliseconds": 9701.987208000006,
+          "artifactDigest": "bc628bd5660e46e5543f44ae89f004993357c8c0d509cb50d29e3787bc9c8ec9"
+        },
+        {
+          "id": "public-interface/always-issue",
+          "status": "pass",
+          "milliseconds": 10234.139750000002,
+          "artifactDigest": "a4e61e48226f25534f8cf3a709e82d927c55eef3e1daf9a72de29609f7ae8dda"
+        },
+        {
+          "id": "public-interface/always-refuse",
+          "status": "pass",
+          "milliseconds": 9925.449458000003,
+          "artifactDigest": "35ad29d985f6c618d18ee6c839cd9aa7ac768aeb4fcfeef73136ad88fd34373d"
+        },
+        {
+          "id": "public-interface/no-work",
+          "status": "pass",
+          "milliseconds": 4091.1273749999964,
+          "artifactDigest": "102a5dc731ea24e8a172803824a2739177c65ea14b092de62990b4e5cb2929c1"
+        },
+        {
+          "id": "public-interface/fabricated-audit",
+          "status": "pass",
+          "milliseconds": 10011.136167000019,
+          "artifactDigest": "a2bf80135d50e7fafb67ad5f6a0b6b24cb6c9a89320cf8848b37833116b10112"
+        },
+        {
+          "id": "public-interface/visible-example-hardcoding",
+          "status": "pass",
+          "milliseconds": 4160.959667000017,
+          "artifactDigest": "4306960d84fce0d749f831e01fe5cf455f61573506ea3b32e1e9fd3225a20ef6"
+        },
+        {
+          "id": "public-interface/serial-repair",
+          "status": "pass",
+          "milliseconds": 12075.799333000003,
+          "artifactDigest": "f13b66e7337aad6b27f823af7722e8f4703dafe47f7ef4666a55a86136e42998"
+        },
+        {
+          "id": "public-interface/mutex-serialized",
+          "status": "pass",
+          "milliseconds": 12249.894499999995,
+          "artifactDigest": "ad888745d842de4f5f58d4ecafb43215060d728fd79c47c4084aa7549c91944e"
+        },
+        {
+          "id": "public-interface/two-query-batches",
+          "status": "pass",
+          "milliseconds": 10410.143917000009,
+          "artifactDigest": "3ebf18f5ed002447ecd1ca11145dd2de33125ccc0f64038eca6e47bb1434ab96"
+        },
+        {
+          "id": "public-interface/wrong-order-id",
+          "status": "pass",
+          "milliseconds": 9927.835167000012,
+          "artifactDigest": "564baa13ed59e5c6f85314793e91a5c22e8af6e503bacc872bb6826aec0e6c05"
+        },
+        {
+          "id": "public-interface/unrelated-cache-loss",
+          "status": "pass",
+          "milliseconds": 10226.800374999992,
+          "artifactDigest": "beac7a6a4dd834433b43b90bd2ca6bb50f43a467001c0e447381b01fd956e104"
+        },
+        {
+          "id": "public-interface/artifact-symlink",
+          "status": "pass",
+          "milliseconds": 248.05791700002737,
+          "artifactDigest": "0434cf55eb352b455a3ee2e3c3a3e616257737ee78e2738f993cc5112356ad52"
+        },
+        {
+          "id": "public-interface/artifact-hardlink",
+          "status": "pass",
+          "milliseconds": 227.91874999998254,
+          "artifactDigest": "cf341d044069799374b8d016c9c0a97c33f5d75f850c3e2f6112b6b8c592d0dc"
+        },
+        {
+          "id": "public-interface/artifact-fifo",
+          "status": "pass",
+          "milliseconds": 268.4798329999903,
+          "artifactDigest": "3e3d7201f9d93079c6987beaaed0efae75150fb0025c597dd9f6a130309338b3"
+        },
+        {
+          "id": "artifact-and-process-integrity",
+          "status": "pass",
+          "milliseconds": 1889.595417000004,
+          "artifactDigest": "88867301be3f0da229401e6796c478e35513f97fa6405ef2229f48543a6cea9b"
+        },
+        {
+          "id": "activation-nonactivation-and-repeatability",
+          "status": "pass",
+          "milliseconds": 175616.66937500003,
+          "artifactDigest": "dbcd41a82fecef375c1a227e94d2d5a6aa3182fd5b778a482e7e283b50613cd2"
+        }
+      ],
+      "repeatBuildIdentity": true,
+      "readOnlyInspection": true,
+      "runtime": {
+        "archive": {
+          "path": "runtime.tar",
+          "sha256": "5c4b0a518e965af31969f1e4f9bf09239c7826fb3613e2d3e009f661e8363ec7",
+          "size": 317566464
+        },
+        "boundary": "Exact built image IDs and streamed archive digest are included in package identity. Source recipes pin Go and Debian snapshot; a changed runtime creates a new identity. Logs/timestamps are observations, not task semantics. Recipient can load these exact images offline; no authoring-network restriction is set.",
+        "images": {
+          "environment": "sha256:948613e43689f45087dc21a2dfd91a0419e473850042862e795838e2d6013159",
+          "verifier": "sha256:7a4c731ecbc30ab06b823071e80c2bc9a0df82fcf3aa52441b5c8f974fbff703"
+        },
+        "platform": "linux/arm64",
+        "schemaVersion": 1,
+        "toolchain": "go version go1.25.14 linux/arm64"
+      },
+      "decision": {
+        "policyVersion": "package-stages-v1",
+        "packageDigest": "b75735fc458b016a10d482dab328fc91a7cd9ba96acd80bdba6c363e9c30a244",
+        "observedProviderFamilies": [],
+        "failureProviderFamilies": [],
+        "stages": {
+          "local-valid": {
+            "allowed": true,
+            "blockers": [],
+            "notApplicable": [
+              "model-evidence",
+              "spend-approval",
+              "axis-breadth"
+            ]
+          },
+          "trial-eligible": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence"
+            ],
+            "notApplicable": [
+              "prior-model-failure",
+              "spend-approval",
+              "axis-breadth"
+            ]
+          },
+          "trial-authorized": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence",
+              "explicit-approval-missing"
+            ],
+            "notApplicable": []
+          },
+          "hardness-observed": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence",
+              "no-qualified-capability-failure"
+            ],
+            "notApplicable": [
+              "full-six-trial-qualification"
+            ]
+          },
+          "release-eligible": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence",
+              "no-qualified-capability-failure",
+              "required-destinationChecks",
+              "exact-two-target-profiles-missing"
+            ],
+            "notApplicable": []
+          }
+        }
+      }
+    },
+    {
+      "packageId": "browser-replay-repair",
+      "packageDigest": "43b7ae61f5dda199139796e765e81f31ad7f9da133ca6ac16e770c9664680941",
+      "operations": 12,
+      "scenarioCount": 16,
+      "browserTraces": 16,
+      "invalidExecutionExcluded": true,
+      "artifactDriftRejected": true,
+      "evidenceDriftRejected": true,
+      "sourceCheckoutRequired": false,
+      "providerCallsMade": 0,
+      "build": ".local/prompt-04/release-browser",
+      "export": ".local/prompt-04/release-browser-export",
+      "receipt": ".local/prompt-04/release-browser-validation/assurance.json",
+      "receiptSha256": "29693bc964a2dcbbbe2e95fd134f57dd5b916821f3d4b9c5b28f5cfbd957a2eb",
+      "referenceScenarioCount": 16,
+      "referenceChecks": 96,
+      "referenceProcesses": 46,
+      "referenceMilliseconds": 10813.342625000001,
+      "totalAssuranceMilliseconds": 79173.49050099998,
+      "repeatBuildIdentity": true,
+      "sourceBoundary": "Task sources, collector and portfolio producer match the final tree. Bundled CLI was frozen before the unrelated native archive-index repair; its exact bytes were revalidated by the recipient proof.",
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "artifactDigest": "0380ff2e5d4e01a620e7d03452c83366fed9aa353635dce70b735cd311e3fd4d",
+          "milliseconds": 10944.704041,
+          "cells": 16,
+          "semanticFailures": 0,
+          "invalid": 0
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "artifactDigest": "f1a41c426fd4a04faa61c8abeb98e46ab350499cb0dd8d73d0b18f22496d9791",
+          "milliseconds": 7924.193874999999,
+          "cells": 16,
+          "semanticFailures": 0,
+          "invalid": 0
+        },
+        {
+          "id": "starter",
+          "status": "pass",
+          "artifactDigest": "eb946d0a81121db16a1a4631e530bc05b9df3dc396b5a4d59263bfece014e562",
+          "milliseconds": 6479.056042,
+          "cells": 16,
+          "semanticFailures": 15,
+          "invalid": 0
+        },
+        {
+          "id": "early-report",
+          "status": "pass",
+          "artifactDigest": "22cd6aaee20d091e88a4eb392f498b302ec65ac1fd249588780d1a0c4c985d3c",
+          "milliseconds": 6789.231499999998,
+          "cells": 16,
+          "semanticFailures": 15,
+          "invalid": 0
+        },
+        {
+          "id": "first-candidate",
+          "status": "pass",
+          "artifactDigest": "d0d12eb6d205c952d1eb4b862435316eb327a91e86c861c11539d73963e78a9a",
+          "milliseconds": 7507.9878750000025,
+          "cells": 16,
+          "semanticFailures": 8,
+          "invalid": 0
+        },
+        {
+          "id": "pre-fill-read",
+          "status": "pass",
+          "artifactDigest": "93143b8bd0b80653f2b769db5f30ceebcf0564fde89893b7600685697385c9b4",
+          "milliseconds": 6533.858207999998,
+          "cells": 16,
+          "semanticFailures": 15,
+          "invalid": 0
+        },
+        {
+          "id": "no-confirmation",
+          "status": "pass",
+          "artifactDigest": "69071642271daee2e715513ff13f7b3aace77e88588c64f17be2688fd500fcca",
+          "milliseconds": 8282.136833999997,
+          "cells": 16,
+          "semanticFailures": 8,
+          "invalid": 0
+        },
+        {
+          "id": "repeated-delivery",
+          "status": "pass",
+          "artifactDigest": "13d512e1838da8b954d1884566165fee3d2314bc3f4ee204b303451eb06a705c",
+          "milliseconds": 13223.745958,
+          "cells": 16,
+          "semanticFailures": 15,
+          "invalid": 0
+        },
+        {
+          "id": "claim-only",
+          "status": "pass",
+          "artifactDigest": "8e37f2f6eb71ef048127ad4e3b117e671794d3eeaeff8c9dd92550e29281a49f",
+          "milliseconds": 2466.831542,
+          "cells": 16,
+          "semanticFailures": 16,
+          "invalid": 0
+        },
+        {
+          "id": "isolation",
+          "status": "pass",
+          "artifactDigest": "7a5e3b0112c3ce0695666f25e737e083fd82f12ca0bfead8db454657d3259d68",
+          "milliseconds": 2396.725916999989,
+          "cells": 16,
+          "semanticFailures": 16,
+          "invalid": 0
+        },
+        {
+          "id": "visible-workspace-smoke",
+          "status": "pass",
+          "artifactDigest": "4965511fd3e4ef88c3c2aefa7393835fea438cd1c5b05e8c2c6d8a27fcdffb79",
+          "milliseconds": 193.27983400000085,
+          "cells": null,
+          "semanticFailures": null,
+          "invalid": null
+        },
+        {
+          "id": "reference-repeat",
+          "status": "pass",
+          "artifactDigest": "0380ff2e5d4e01a620e7d03452c83366fed9aa353635dce70b735cd311e3fd4d",
+          "milliseconds": 6431.7388749999955,
+          "cells": null,
+          "semanticFailures": null,
+          "invalid": null
+        }
+      ],
+      "decision": {
+        "failureProviderFamilies": [],
+        "observedProviderFamilies": [],
+        "packageDigest": "43b7ae61f5dda199139796e765e81f31ad7f9da133ca6ac16e770c9664680941",
+        "policyVersion": "package-stages-v1",
+        "stages": {
+          "hardness-observed": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence",
+              "no-qualified-capability-failure"
+            ],
+            "notApplicable": [
+              "full-six-trial-qualification"
+            ]
+          },
+          "local-valid": {
+            "allowed": true,
+            "blockers": [],
+            "notApplicable": [
+              "model-evidence",
+              "spend-approval",
+              "axis-breadth"
+            ]
+          },
+          "release-eligible": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence",
+              "no-qualified-capability-failure",
+              "required-destinationChecks",
+              "exact-two-target-profiles-missing"
+            ],
+            "notApplicable": []
+          },
+          "trial-authorized": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence",
+              "explicit-approval-missing"
+            ],
+            "notApplicable": []
+          },
+          "trial-eligible": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence"
+            ],
+            "notApplicable": [
+              "prior-model-failure",
+              "spend-approval",
+              "axis-breadth"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "packageId": "persistent-knowledge-repair",
+      "packageDigest": "dbddb8f44f2d39ed7193ededc7c9600ec1171eb4300661c31974762d152a01d5",
+      "operations": 12,
+      "scenarioCount": 12,
+      "browserTraces": 0,
+      "invalidExecutionExcluded": true,
+      "artifactDriftRejected": true,
+      "evidenceDriftRejected": true,
+      "sourceCheckoutRequired": false,
+      "providerCallsMade": 0,
+      "build": ".local/prompt-04/release-memory",
+      "export": ".local/prompt-04/release-memory-export",
+      "receipt": ".local/prompt-04/release-memory-validation/assurance.json",
+      "receiptSha256": "607e3eb466e091a49e5b6512ff768f77e6a5bd28fedca4635a9a19beb43a2160",
+      "referenceScenarioCount": 12,
+      "referenceChecks": 84,
+      "referenceProcesses": 36,
+      "referenceMilliseconds": 2164.579708,
+      "totalAssuranceMilliseconds": 11788.139497999999,
+      "repeatBuildIdentity": true,
+      "sourceBoundary": "Task sources, collector and portfolio producer match the final tree. Bundled CLI was frozen before the unrelated native archive-index repair; its exact bytes were revalidated by the recipient proof.",
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "artifactDigest": "447b1c2451c5780bc03b4a7ec1ddf580ee308968663bf2fdc592f207b6cc8bdc",
+          "milliseconds": 2218.7936250000002,
+          "cells": 12,
+          "semanticFailures": 0,
+          "invalid": 0
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "artifactDigest": "68069e7e6bbee9bf504e61f513bb7e83a4280bea33844fc0c34c29eeaeb0ab9d",
+          "milliseconds": 796.6845410000001,
+          "cells": 12,
+          "semanticFailures": 0,
+          "invalid": 0
+        },
+        {
+          "id": "starter",
+          "status": "pass",
+          "artifactDigest": "2208189169f3e54ceeee71cf645e1cfe444c89697be671367a5093753e09d0cf",
+          "milliseconds": 880.9345839999996,
+          "cells": 12,
+          "semanticFailures": 12,
+          "invalid": 0
+        },
+        {
+          "id": "report-lineage",
+          "status": "pass",
+          "artifactDigest": "d81f8283b3a6687235ae041165ddbfac7b1578191937dab922960cfb7d6a7da7",
+          "milliseconds": 1016.1749160000004,
+          "cells": 12,
+          "semanticFailures": 11,
+          "invalid": 0
+        },
+        {
+          "id": "first-parent",
+          "status": "pass",
+          "artifactDigest": "58fa68a946a1987a5b3530637f269c4f6f6cc19889377a41fb9f24e677f4bc6b",
+          "milliseconds": 910.1629999999996,
+          "cells": 12,
+          "semanticFailures": 12,
+          "invalid": 0
+        },
+        {
+          "id": "stale-revision",
+          "status": "pass",
+          "artifactDigest": "09be544d46adfd398827d00a434cba8e432c79d0afa2c9382eb44fadef3b8759",
+          "milliseconds": 1075.6701249999996,
+          "cells": 12,
+          "semanticFailures": 11,
+          "invalid": 0
+        },
+        {
+          "id": "stale-grant",
+          "status": "pass",
+          "artifactDigest": "7cf671b58b598917fe994a9829c99a763641f4bd9471bcb0ebc7b9d7cdfe2481",
+          "milliseconds": 1018.9467919999997,
+          "cells": 12,
+          "semanticFailures": 5,
+          "invalid": 0
+        },
+        {
+          "id": "replace-store",
+          "status": "pass",
+          "artifactDigest": "f2cedcb1a9e38c7bbb57cfd6e3422d65949b446a1fe08f2e13cf675a13c17bcd",
+          "milliseconds": 940.3181250000007,
+          "cells": 12,
+          "semanticFailures": 11,
+          "invalid": 0
+        },
+        {
+          "id": "no-work",
+          "status": "pass",
+          "artifactDigest": "ae25f29602104a39d7632c191f9ed701b2e1192ad78318662834bfedff403f1a",
+          "milliseconds": 801.7453749999986,
+          "cells": 12,
+          "semanticFailures": 12,
+          "invalid": 0
+        },
+        {
+          "id": "isolation",
+          "status": "pass",
+          "artifactDigest": "3bb6f379e54105728cb482da04b6a0294c1fba061018d546572b8c87a3e40b55",
+          "milliseconds": 841.6966659999998,
+          "cells": 12,
+          "semanticFailures": 12,
+          "invalid": 0
+        },
+        {
+          "id": "visible-workspace-smoke",
+          "status": "pass",
+          "artifactDigest": "3bcd5ad59f24781b90391d82ab996708fcd1ee00ccef67a7b102fb11bc6f3753",
+          "milliseconds": 316.1748329999991,
+          "cells": null,
+          "semanticFailures": null,
+          "invalid": null
+        },
+        {
+          "id": "reference-repeat",
+          "status": "pass",
+          "artifactDigest": "447b1c2451c5780bc03b4a7ec1ddf580ee308968663bf2fdc592f207b6cc8bdc",
+          "milliseconds": 970.8369160000002,
+          "cells": null,
+          "semanticFailures": null,
+          "invalid": null
+        }
+      ],
+      "decision": {
+        "failureProviderFamilies": [],
+        "observedProviderFamilies": [],
+        "packageDigest": "dbddb8f44f2d39ed7193ededc7c9600ec1171eb4300661c31974762d152a01d5",
+        "policyVersion": "package-stages-v1",
+        "stages": {
+          "hardness-observed": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence",
+              "no-qualified-capability-failure"
+            ],
+            "notApplicable": [
+              "full-six-trial-qualification"
+            ]
+          },
+          "local-valid": {
+            "allowed": true,
+            "blockers": [],
+            "notApplicable": [
+              "model-evidence",
+              "spend-approval",
+              "axis-breadth"
+            ]
+          },
+          "release-eligible": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence",
+              "no-qualified-capability-failure",
+              "required-destinationChecks",
+              "exact-two-target-profiles-missing"
+            ],
+            "notApplicable": []
+          },
+          "trial-authorized": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence",
+              "explicit-approval-missing"
+            ],
+            "notApplicable": []
+          },
+          "trial-eligible": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence"
+            ],
+            "notApplicable": [
+              "prior-model-failure",
+              "spend-approval",
+              "axis-breadth"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "packageId": "delegated-budget-repair",
+      "packageDigest": "6e549ef997d55d8d084ad49dacd0e4dc7bb1333a2bf573fa43c66634f9d486ee",
+      "operations": 12,
+      "scenarioCount": 12,
+      "browserTraces": 0,
+      "invalidExecutionExcluded": true,
+      "artifactDriftRejected": true,
+      "evidenceDriftRejected": true,
+      "sourceCheckoutRequired": false,
+      "providerCallsMade": 0,
+      "build": ".local/prompt-04/release-wallet",
+      "export": ".local/prompt-04/release-wallet-export",
+      "receipt": ".local/prompt-04/release-wallet-validation/assurance.json",
+      "receiptSha256": "a425f605e9e9c8efef0d974e0f59ae6e1784159a9d4ad33fe691053f88b9b491",
+      "referenceScenarioCount": 12,
+      "referenceChecks": 84,
+      "referenceProcesses": 23,
+      "referenceMilliseconds": 618.134541,
+      "totalAssuranceMilliseconds": 7524.421539000001,
+      "repeatBuildIdentity": true,
+      "sourceBoundary": "Task sources, collector and portfolio producer match the final tree. Bundled CLI was frozen before the unrelated native archive-index repair; its exact bytes were revalidated by the recipient proof.",
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "artifactDigest": "3a7aaef4d65797f0be11110a4eac6c87bfc50c90fd6ae5b5b0aa4888f49382a9",
+          "milliseconds": 715.691083,
+          "cells": 12,
+          "semanticFailures": 0,
+          "invalid": 0
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "artifactDigest": "4254cf99615cd237705830790526cfa84185406be25a8242e711ef1708e7c61b",
+          "milliseconds": 596.5993750000001,
+          "cells": 12,
+          "semanticFailures": 0,
+          "invalid": 0
+        },
+        {
+          "id": "starter",
+          "status": "pass",
+          "artifactDigest": "2f507c5bbba96eb15fdf7b0e2b25a445c96cc892364741a621168f13a1f315e9",
+          "milliseconds": 645.135458,
+          "cells": 12,
+          "semanticFailures": 12,
+          "invalid": 0
+        },
+        {
+          "id": "receipt-claim",
+          "status": "pass",
+          "artifactDigest": "5d8dfe065ee4adf5710b4b4026459c938879705a2d19c26a36117ef710b22b50",
+          "milliseconds": 678.9602910000001,
+          "cells": 12,
+          "semanticFailures": 11,
+          "invalid": 0
+        },
+        {
+          "id": "per-request-budget",
+          "status": "pass",
+          "artifactDigest": "3b932742d52c5ebdaf85c9af8b75873975c37c046c0cabdb06eda7157d603f9c",
+          "milliseconds": 669.6675829999999,
+          "cells": 12,
+          "semanticFailures": 7,
+          "invalid": 0
+        },
+        {
+          "id": "owner-blind",
+          "status": "pass",
+          "artifactDigest": "165c73e5a92fdfe29369136259039fdd026f9f96da37737354dc12c30b08fecd",
+          "milliseconds": 665.1219169999999,
+          "cells": 12,
+          "semanticFailures": 10,
+          "invalid": 0
+        },
+        {
+          "id": "stale-version",
+          "status": "pass",
+          "artifactDigest": "ab60e27af165529d0225dbbd717755cd8893836e56b490033a8e28e81d708422",
+          "milliseconds": 698.9167920000004,
+          "cells": 12,
+          "semanticFailures": 1,
+          "invalid": 0
+        },
+        {
+          "id": "unknown-abandon",
+          "status": "pass",
+          "artifactDigest": "fc591fcc7948f7f412531e78117f6cd97c1187d9ea0c1062cdeccc1d262be9be",
+          "milliseconds": 684.4522500000003,
+          "cells": 12,
+          "semanticFailures": 8,
+          "invalid": 0
+        },
+        {
+          "id": "no-work",
+          "status": "pass",
+          "artifactDigest": "d0c3b493bf648e80a3fd562ddcdfc6dae661184164b2983d0b328e769c1d9652",
+          "milliseconds": 561.6774159999995,
+          "cells": 12,
+          "semanticFailures": 12,
+          "invalid": 0
+        },
+        {
+          "id": "isolation",
+          "status": "pass",
+          "artifactDigest": "b2faad7de7d9e765aefb92624d19f301c0e1e9f9e0d21c8737c7a74420c53c87",
+          "milliseconds": 647.7750420000002,
+          "cells": 12,
+          "semanticFailures": 12,
+          "invalid": 0
+        },
+        {
+          "id": "visible-workspace-smoke",
+          "status": "pass",
+          "artifactDigest": "f009c79c0169c17ace1ac27c819f0aaf8ffa70d54702c97eb3e8a13b371369b0",
+          "milliseconds": 268.5500410000004,
+          "cells": null,
+          "semanticFailures": null,
+          "invalid": null
+        },
+        {
+          "id": "reference-repeat",
+          "status": "pass",
+          "artifactDigest": "3a7aaef4d65797f0be11110a4eac6c87bfc50c90fd6ae5b5b0aa4888f49382a9",
+          "milliseconds": 691.8742910000001,
+          "cells": null,
+          "semanticFailures": null,
+          "invalid": null
+        }
+      ],
+      "decision": {
+        "failureProviderFamilies": [],
+        "observedProviderFamilies": [],
+        "packageDigest": "6e549ef997d55d8d084ad49dacd0e4dc7bb1333a2bf573fa43c66634f9d486ee",
+        "policyVersion": "package-stages-v1",
+        "stages": {
+          "hardness-observed": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence",
+              "no-qualified-capability-failure"
+            ],
+            "notApplicable": [
+              "full-six-trial-qualification"
+            ]
+          },
+          "local-valid": {
+            "allowed": true,
+            "blockers": [],
+            "notApplicable": [
+              "model-evidence",
+              "spend-approval",
+              "axis-breadth"
+            ]
+          },
+          "release-eligible": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence",
+              "no-qualified-capability-failure",
+              "required-destinationChecks",
+              "exact-two-target-profiles-missing"
+            ],
+            "notApplicable": []
+          },
+          "trial-authorized": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence",
+              "explicit-approval-missing"
+            ],
+            "notApplicable": []
+          },
+          "trial-eligible": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence"
+            ],
+            "notApplicable": [
+              "prior-model-failure",
+              "spend-approval",
+              "axis-breadth"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "packageId": "compatible-rollout-repair",
+      "packageDigest": "bb59d2f6b61d137764bc650e1200b3ea8c48ba4545fa47fbbdf0e34ea7172a82",
+      "operations": 12,
+      "scenarioCount": 12,
+      "browserTraces": 0,
+      "invalidExecutionExcluded": true,
+      "artifactDriftRejected": true,
+      "evidenceDriftRejected": true,
+      "sourceCheckoutRequired": false,
+      "providerCallsMade": 0,
+      "build": ".local/prompt-04/release-rollout",
+      "export": ".local/prompt-04/release-rollout-export",
+      "receipt": ".local/prompt-04/release-rollout-validation/assurance.json",
+      "receiptSha256": "59ff32f88ae546507f653c54e83999f141eddd6c12f7d7f629c6326299ae2f9f",
+      "referenceScenarioCount": 12,
+      "referenceChecks": 108,
+      "referenceProcesses": 18,
+      "referenceMilliseconds": 515.982958,
+      "totalAssuranceMilliseconds": 6354.109293000001,
+      "repeatBuildIdentity": true,
+      "sourceBoundary": "Task sources, collector and portfolio producer match the final tree. Bundled CLI was frozen before the unrelated native archive-index repair; its exact bytes were revalidated by the recipient proof.",
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "artifactDigest": "b61ef835906e5bb9e0cee00c2c40ef5e559bff333bb628c68bb5cd781aac9036",
+          "milliseconds": 558.334375,
+          "cells": 12,
+          "semanticFailures": 0,
+          "invalid": 0
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "artifactDigest": "700dd5871e6bca4243ba9e27d8ee658a711e3b1647b33ea660bf0db3130b8b06",
+          "milliseconds": 539.1515,
+          "cells": 12,
+          "semanticFailures": 0,
+          "invalid": 0
+        },
+        {
+          "id": "starter",
+          "status": "pass",
+          "artifactDigest": "ce1c915880b558720c9831ec0ccc7c886018f13cbdab56d6cbbfbbd8af02ff03",
+          "milliseconds": 541.3596249999998,
+          "cells": 12,
+          "semanticFailures": 11,
+          "invalid": 0
+        },
+        {
+          "id": "wrong-binding",
+          "status": "pass",
+          "artifactDigest": "38ef0870d61da6ff975b245dcada87acf7195aeaca92cf1ebc564f36e12d46f3",
+          "milliseconds": 586.377708,
+          "cells": 12,
+          "semanticFailures": 11,
+          "invalid": 0
+        },
+        {
+          "id": "wrong-abi",
+          "status": "pass",
+          "artifactDigest": "8fb01f21f7ff3b728faa5ba6a8de562dba65274e675ab1f38619b3076a9ef832",
+          "milliseconds": 559.4026250000002,
+          "cells": 12,
+          "semanticFailures": 11,
+          "invalid": 0
+        },
+        {
+          "id": "green-history",
+          "status": "pass",
+          "artifactDigest": "372f0660b68af642477e6dc790791c88b9bb72e727914a4a9bdb69f8f6032d83",
+          "milliseconds": 616.9197090000002,
+          "cells": 12,
+          "semanticFailures": 10,
+          "invalid": 0
+        },
+        {
+          "id": "skip-cache",
+          "status": "pass",
+          "artifactDigest": "f2ec79e3adf4eec93629c27311eb84aea6823b29f45951b9203b532769fefd5d",
+          "milliseconds": 564.086209,
+          "cells": 12,
+          "semanticFailures": 12,
+          "invalid": 0
+        },
+        {
+          "id": "broad-cleanup",
+          "status": "pass",
+          "artifactDigest": "04681c1391e69549ebf19cf5e5d41ae3d9112006ed4a90c9af34da0b1837dc08",
+          "milliseconds": 592.9880420000004,
+          "cells": 12,
+          "semanticFailures": 11,
+          "invalid": 0
+        },
+        {
+          "id": "no-work",
+          "status": "pass",
+          "artifactDigest": "79ae54ad7f6d2b1637772134c33541a4db4b8d605d500cf414c657af5169340e",
+          "milliseconds": 464.0154170000005,
+          "cells": 12,
+          "semanticFailures": 12,
+          "invalid": 0
+        },
+        {
+          "id": "isolation",
+          "status": "pass",
+          "artifactDigest": "c3a1ff71a1c8f69802491dcb5f1e534c40eb186771be7074233e5b00573207ea",
+          "milliseconds": 515.8491249999997,
+          "cells": 12,
+          "semanticFailures": 12,
+          "invalid": 0
+        },
+        {
+          "id": "visible-workspace-smoke",
+          "status": "pass",
+          "artifactDigest": "41b075d63b6f7b38d8d8e55cd9ee73360a2056238f65b159d21cef0e5ef3c629",
+          "milliseconds": 237.68520799999988,
+          "cells": null,
+          "semanticFailures": null,
+          "invalid": null
+        },
+        {
+          "id": "reference-repeat",
+          "status": "pass",
+          "artifactDigest": "b61ef835906e5bb9e0cee00c2c40ef5e559bff333bb628c68bb5cd781aac9036",
+          "milliseconds": 577.9397500000005,
+          "cells": null,
+          "semanticFailures": null,
+          "invalid": null
+        }
+      ],
+      "decision": {
+        "failureProviderFamilies": [],
+        "observedProviderFamilies": [],
+        "packageDigest": "bb59d2f6b61d137764bc650e1200b3ea8c48ba4545fa47fbbdf0e34ea7172a82",
+        "policyVersion": "package-stages-v1",
+        "stages": {
+          "hardness-observed": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence",
+              "no-qualified-capability-failure"
+            ],
+            "notApplicable": [
+              "full-six-trial-qualification"
+            ]
+          },
+          "local-valid": {
+            "allowed": true,
+            "blockers": [],
+            "notApplicable": [
+              "model-evidence",
+              "spend-approval",
+              "axis-breadth"
+            ]
+          },
+          "release-eligible": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence",
+              "no-qualified-capability-failure",
+              "required-destinationChecks",
+              "exact-two-target-profiles-missing"
+            ],
+            "notApplicable": []
+          },
+          "trial-authorized": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence",
+              "explicit-approval-missing"
+            ],
+            "notApplicable": []
+          },
+          "trial-eligible": {
+            "allowed": false,
+            "blockers": [
+              "required-boundedSolveEvidence"
+            ],
+            "notApplicable": [
+              "prior-model-failure",
+              "spend-approval",
+              "axis-breadth"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "verification": [
+    {
+      "command": "pnpm exec vitest run test/protected-contracts.test.ts test/protected-family-semantics.test.ts test/portfolio-production.test.ts test/runtime-archive.test.ts test/package-production.test.ts test/package-evidence-decisions.test.ts test/package-semantic-integrity.test.ts test/package-population-integrity.test.ts test/package-public-surface.test.ts test/package-checker-integrity.test.ts test/history-task-attribution.test.ts",
+      "path": ".local/prompt-04/final-regressions-03.json",
+      "sha256": "871bd163abc82c1e5dc73e8b8846296448d2acc684c10a173293ecad6cced1f3",
+      "passed": 138,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 26.827968994140626,
+      "files": [
+        {
+          "path": "test/history-task-attribution.test.ts",
+          "passed": 13
+        },
+        {
+          "path": "test/package-checker-integrity.test.ts",
+          "passed": 6
+        },
+        {
+          "path": "test/package-evidence-decisions.test.ts",
+          "passed": 45
+        },
+        {
+          "path": "test/package-population-integrity.test.ts",
+          "passed": 7
+        },
+        {
+          "path": "test/package-production.test.ts",
+          "passed": 10
+        },
+        {
+          "path": "test/package-public-surface.test.ts",
+          "passed": 14
+        },
+        {
+          "path": "test/package-semantic-integrity.test.ts",
+          "passed": 13
+        },
+        {
+          "path": "test/portfolio-production.test.ts",
+          "passed": 10
+        },
+        {
+          "path": "test/protected-contracts.test.ts",
+          "passed": 5
+        },
+        {
+          "path": "test/protected-family-semantics.test.ts",
+          "passed": 13
+        },
+        {
+          "path": "test/runtime-archive.test.ts",
+          "passed": 2
+        }
+      ]
+    },
+    {
+      "command": "pnpm exec vitest run test/protected-family-routes.test.ts",
+      "path": ".local/prompt-04/protected-route-regressions-03.json",
+      "sha256": "9e1428c406984d4c8cde0243eceb9dc359290714c6a204bdfd44e3442cc976a6",
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 258.6624748535156,
+      "files": [
+        {
+          "path": "test/protected-family-routes.test.ts",
+          "passed": 15
+        }
+      ]
+    },
+    {
+      "command": "pnpm exec tsc --noEmit",
+      "status": "pass"
+    },
+    {
+      "command": "pnpm lint",
+      "status": "pass"
+    },
+    {
+      "command": "pnpm build",
+      "status": "pass"
+    },
+    {
+      "command": "git diff --check",
+      "status": "pass"
+    },
+    {
+      "command": "ESM and CJS public export loading",
+      "status": "pass"
+    },
+    {
+      "command": "pnpm exec biome format tasks/portfolio-runtime tasks/browser-replay-repair tasks/persistent-knowledge-repair tasks/delegated-budget-repair tasks/compatible-rollout-repair scripts/verify-portfolio-exports.mjs",
+      "status": "pass"
+    }
+  ],
+  "runtime": {
+    "archive": {
+      "sha256": "14f91cf6505957e438c3686f9fc75ccc2940e1d721b9ab1d20038a6398a5d3d5",
+      "size": 974869504
+    },
+    "browser": "1.62.1",
+    "image": "sha256:9462df8de5e2ea66b6fa2f2e20d59e3955760f420f8dc386d9aa85212348cc40",
+    "node": "v24.18.1",
+    "platform": "linux/arm64"
+  },
+  "recipients": {
+    "path": ".local/prompt-04/recipient-proof/result.json",
+    "sha256": "a44a3fd7c429adbcc52022803ede7fa406376234a1b0f0f4925138afff871c5a",
+    "proofs": [
+      {
+        "packageId": "browser-replay-repair",
+        "packageDigest": "43b7ae61f5dda199139796e765e81f31ad7f9da133ca6ac16e770c9664680941",
+        "operations": 12,
+        "scenarioCount": 16,
+        "browserTraces": 16,
+        "invalidExecutionExcluded": true,
+        "artifactDriftRejected": true,
+        "evidenceDriftRejected": true,
+        "sourceCheckoutRequired": false,
+        "providerCallsMade": 0
+      },
+      {
+        "packageId": "persistent-knowledge-repair",
+        "packageDigest": "dbddb8f44f2d39ed7193ededc7c9600ec1171eb4300661c31974762d152a01d5",
+        "operations": 12,
+        "scenarioCount": 12,
+        "browserTraces": 0,
+        "invalidExecutionExcluded": true,
+        "artifactDriftRejected": true,
+        "evidenceDriftRejected": true,
+        "sourceCheckoutRequired": false,
+        "providerCallsMade": 0
+      },
+      {
+        "packageId": "delegated-budget-repair",
+        "packageDigest": "6e549ef997d55d8d084ad49dacd0e4dc7bb1333a2bf573fa43c66634f9d486ee",
+        "operations": 12,
+        "scenarioCount": 12,
+        "browserTraces": 0,
+        "invalidExecutionExcluded": true,
+        "artifactDriftRejected": true,
+        "evidenceDriftRejected": true,
+        "sourceCheckoutRequired": false,
+        "providerCallsMade": 0
+      },
+      {
+        "packageId": "compatible-rollout-repair",
+        "packageDigest": "bb59d2f6b61d137764bc650e1200b3ea8c48ba4545fa47fbbdf0e34ea7172a82",
+        "operations": 12,
+        "scenarioCount": 12,
+        "browserTraces": 0,
+        "invalidExecutionExcluded": true,
+        "artifactDriftRejected": true,
+        "evidenceDriftRejected": true,
+        "sourceCheckoutRequired": false,
+        "providerCallsMade": 0
+      }
+    ]
+  },
+  "knownNonPassingChecks": [
+    {
+      "command": "node dist/cli.js check",
+      "code": "ADV_COUNTED_HASH_STALE",
+      "owner": 6,
+      "meaning": "Preserved checker adversarial record is not current after an earlier contract migration; historical bytes unchanged."
+    }
+  ],
+  "developmentFailures": [
+    "uncached offline npm runtime build",
+    "missing CHOWN for child storage",
+    "temporary ledger proof path/report errors",
+    "stale source-bound generic bundle while ledger/source edits were ongoing",
+    "native Docker archive image-order nondeterminism"
+  ],
+  "qualification": "Independent expert-time/fairness, destination packaging/rubrics and all model/adversarial trials pending. No maximum-hardness claim.",
+  "storage": "Intermediate archives and diagnostics retained; no destructive cleanup. Exact per-runtime archive sizes above are logical byte counts, not measured peak RSS or overall construction cost."
+}
