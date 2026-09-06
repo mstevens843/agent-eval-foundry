@@ -61,7 +61,7 @@ describe("adaptive funnel planning", () => {
     return { registry, funnel };
   };
 
-  it("chooses cheap evidence before model trials", () => {
+  it("keeps legacy producer order instead of treating cheapest evidence as best package work", () => {
     const { registry, funnel } = input();
     const summary = planAdaptiveFunnel(funnel, registry, [
       { familyId: "smoke-later", trialReady: true, countedAgentTrials: 0 },
@@ -72,7 +72,8 @@ describe("adaptive funnel planning", () => {
       ["paper", "static", "local", "mutant"].includes(a.evidenceCost),
     );
     expect(firstCheap).toBeGreaterThanOrEqual(0);
-    expect(firstModel).toBeGreaterThan(firstCheap);
+    expect(firstModel).toBeLessThan(firstCheap);
+    expect(summary.nextActions[0]?.action).toContain("separate execution authority");
   });
 
   it("does not recommend a full matrix before a smoke trial", () => {
@@ -142,7 +143,7 @@ describe("adaptive funnel planning", () => {
     expect(action?.stage).not.toBe("full_matrix");
   });
 
-  it("sends stale challenge hashes with no counted current-hash trial to repair", () => {
+  it("sends stale history alone to current eligibility review, not repeated repair", () => {
     const { registry, funnel } = input();
     const summary = planAdaptiveFunnel(funnel, registry, [
       {
@@ -156,7 +157,7 @@ describe("adaptive funnel planning", () => {
     ]);
 
     const action = summary.nextActions.find((a) => a.targetId === "stale-family");
-    expect(action?.decision).toBe("repair");
+    expect(action?.decision).toBe("hold");
     expect(action?.stage).toBe("task_shape");
     expect(action?.mode).toBe("validation");
   });
@@ -222,8 +223,9 @@ describe("adaptive funnel planning", () => {
     ]);
 
     const action = summary.nextActions.find((a) => a.targetId === "chain-family");
-    expect(action?.decision).toBe("evolve");
-    expect(action?.stage).toBe("transfer_test");
+    expect(action?.decision).toBe("promote");
+    expect(action?.stage).toBe("full_matrix");
+    expect(action?.action).toContain("review qualified package evidence");
   });
 
   it("renders the adaptive funnel report deterministically", () => {

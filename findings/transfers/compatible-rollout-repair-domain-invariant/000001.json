@@ -1,0 +1,65 @@
+{
+  "digest": "bbb75eb8f12e02679facaac5b21fffcb21be9595ed153e9d27eefbb2b53833b9",
+  "previous": null,
+  "record": {
+    "applicability": "A mixed fleet needs compatible releases, generation-specific health and selective recovery without collateral cleanup.",
+    "category": "domain-invariant",
+    "correctAlternatives": [
+      "Reconcile services independently.",
+      "Plan compatible targets first and apply verified per-service recovery."
+    ],
+    "counterevidence": [
+      "More telemetry fields alone can be a simple lookup task; actual solution difficulty remains unmeasured.",
+      "Outbox capability attribution remains disputed/unresolved; no target model hardness transfer is proven."
+    ],
+    "exposures": [
+      {
+        "at": "2026-09-06T00:00:00.000Z",
+        "evidence": "Prompt 4 constructed portfolio and Prompt 6 source/contract inspection; these packages are not untouched holdouts.",
+        "role": "inspected"
+      }
+    ],
+    "falsifiers": [
+      "Final-state-only checking accepts forbidden intermediate effects, or a generic rollback solves all variants."
+    ],
+    "id": "compatible-rollout-repair-domain-invariant",
+    "independentObservations": [
+      "Stages, telemetry, bindings, caches and exact cleanup IDs."
+    ],
+    "layers": [
+      "professional-objective",
+      "public-contract",
+      "implementation",
+      "scenarios",
+      "reference-alternatives",
+      "near-miss-controls"
+    ],
+    "narrowControls": [
+      "green-history",
+      "wrong-abi",
+      "wrong-binding",
+      "skip-cache",
+      "broad-cleanup"
+    ],
+    "schemaVersion": 1,
+    "solutionDifference": "Per-consumer compatibility plus generation-specific health and selective rollback; no hidden concurrent mutation.",
+    "source": {
+      "claimId": "engineering-lessons",
+      "findingId": "durableoutbox-cc267",
+      "revisionDigest": "4c6f160f53273285f7c7ab60820879b36d8deaca6adc7ec48ab658944a4f1d89"
+    },
+    "target": {
+      "contractDigest": "d94945de2ddb2f197c9bdbbd13f68cc639b679bcd635c16b54f43837b09ff707",
+      "familyId": "deployment-model-alias-rollout-drift",
+      "packageDigest": "bb59d2f6b61d137764bc650e1200b3ea8c48ba4545fa47fbbdf0e34ea7172a82",
+      "packageId": "compatible-rollout-repair"
+    },
+    "targetClaim": null,
+    "visibleObligations": [
+      "Bind/warm only the correct healthy service/release/generation/ABI.",
+      "Rollback only unhealthy targets and delete only newly owned temporary records."
+    ]
+  },
+  "revision": 1,
+  "schemaVersion": 1
+}

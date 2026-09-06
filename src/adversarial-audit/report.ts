@@ -86,6 +86,14 @@ export function renderAdversarialAuditReport(summaries: readonly AdversarialEvid
     "No-bypass evidence is an attempted-exploit result, not a proof of security. A single no-bypass",
     "audit says one attacker under one declared threat model did not find a bypass.",
     "",
+    "## Historical scope, excluded from current claims",
+    "",
+    ...summaries.flatMap((s) =>
+      (s.historicalAudits ?? []).map(
+        (a) => `- ${a.attackId}: ${a.scope}; original counts=${a.originalCounts}; ${a.reason}`,
+      ),
+    ),
+    "",
     "## Status Counts",
     "",
     "| family | not-run | no-bypass-found | bypass-found | exploit-attempt-blocked | provider-refusal | infrastructure-error | timeout | invalid-attack | stale-hash | contaminated | superseded |",

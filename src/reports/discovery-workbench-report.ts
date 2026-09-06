@@ -49,7 +49,7 @@ function scoreRows(
   const byId = candidateById(candidates);
   return scores.map((s) => {
     const candidate = byId.get(s.candidateId);
-    return `| \`${s.candidateId}\` | ${esc(candidate?.domain ?? "unknown")} | ${s.totalScore.toFixed(1)} | ${s.confidence.toFixed(2)} | ${s.recommendedAction} | ${s.cheapestNextEvidence} | ${esc(s.blockingReasons.map((b) => b.code).join(", ") || "none")} |`;
+    return `| \`${s.candidateId}\` | ${esc(candidate?.domain ?? "unknown")} | ${s.totalScore.toFixed(1)} | uncalibrated | ${s.recommendedAction} | ${s.cheapestNextEvidence} | ${esc(s.blockingReasons.map((b) => b.code).join(", ") || "none")} |`;
   });
 }
 
@@ -99,7 +99,7 @@ export function renderDiscoveryScores(
     "# Discovery candidate scores",
     "",
     "Scores route cheap evidence. They are not model-difficulty evidence and must not be quoted as",
-    "agent performance.",
+    "agent performance. This is a legacy advisory view; package production uses `package:local learning select`. Zero legacy difficulty/confidence fields mean unknown, not measured inability or a probability.",
     "",
     "| candidate | domain | score | confidence | recommended action | cheapest evidence | blockers |",
     "|---|---|---:|---:|---|---|---|",
@@ -214,7 +214,7 @@ export function renderDiscoveryWorkbenchReport(input: DiscoveryWorkbenchReportIn
     ...summary.topBuildOrProbeCandidates.map((s) => {
       const candidate = candidateById(workbench.candidates).get(s.candidateId);
       const status = evidence.get(s.candidateId);
-      return `| \`${s.candidateId}\` | ${esc(candidate?.domain ?? "unknown")} | ${s.totalScore.toFixed(1)} | ${s.confidence.toFixed(2)} | ${s.recommendedAction} | ${s.cheapestNextEvidence} | ${evidenceCell(status)} | ${esc(s.blockingReasons.map((b) => b.code).join(", ") || "none")} |`;
+      return `| \`${s.candidateId}\` | ${esc(candidate?.domain ?? "unknown")} | ${s.totalScore.toFixed(1)} | uncalibrated | ${s.recommendedAction} | ${s.cheapestNextEvidence} | ${evidenceCell(status)} | ${esc(s.blockingReasons.map((b) => b.code).join(", ") || "none")} |`;
     }),
     "",
     "## Probe Evidence Overlay",

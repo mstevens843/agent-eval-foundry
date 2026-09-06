@@ -90,11 +90,9 @@ const writeDir = (opts: { trial?: Partial<TrialRecord>; rootCause?: unknown } = 
     submissionFiles: [{ path: "subject.mjs", content: "export const subject = {};" }],
     verifierOutput: { cells: rec.cells, detail: "graded" },
     metadata: { runId: rec.runId },
+    ...(opts.rootCause !== undefined ? { rootCause: opts.rootCause } : {}),
   });
   const dir = join(root, rec.familyId, rec.runId);
-  if (opts.rootCause !== undefined) {
-    writeFileSync(join(dir, ROOT_CAUSE_FILE), `${JSON.stringify(opts.rootCause, null, 2)}\n`, "utf8");
-  }
   return dir;
 };
 

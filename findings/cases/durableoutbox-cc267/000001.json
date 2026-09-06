@@ -1,0 +1,460 @@
+{
+  "schemaVersion": 1,
+  "findingId": "durableoutbox-cc267",
+  "revision": 1,
+  "previous": null,
+  "createdAt": "2026-09-06T00:00:00.000Z",
+  "author": {
+    "kind": "automated",
+    "id": "prompt-06-primary-artifact-import"
+  },
+  "review": null,
+  "packageVersion": "dao-24-267; legacy-visible-only identity",
+  "sources": [
+    {
+      "id": "cc267-claude-1",
+      "directory": "trials/durable-approval-outbox/cc267-claude-1",
+      "runId": "cc267-claude-1",
+      "sourceDigest": "51fa6ea22eef04a375872cabd69ae4cdac100a5c56d9cfd30d29de775212b197",
+      "packageDigest": null,
+      "pointers": [
+        {
+          "path": "challenge/spec/SEMANTICS.md",
+          "sha256": "400e4189df41fde84489f84c059d103d9df75cd2b8d5d1605028c51bff0c17a9",
+          "locator": ""
+        },
+        {
+          "path": "metadata.json",
+          "sha256": "07c904885de712b8dff0410fb9fbc22221c02cb5be15aebad20c730f75475cb2",
+          "locator": ""
+        },
+        {
+          "path": "result.json",
+          "sha256": "99b010577f73f1face6768aaea2af333e72080ec4bb9be400e46116c112f7441",
+          "locator": ""
+        },
+        {
+          "path": "root-cause.json",
+          "sha256": "3a7438c4caf87dbb4faf4dd320eeb2410598a45ce79f42299c17c1d1c9d60d77",
+          "locator": ""
+        },
+        {
+          "path": "transcript.txt",
+          "sha256": "2211a3903db8c190ae98621140b0303bdd4b8481d1a72d376f63e3e58b48fd3b",
+          "locator": ""
+        },
+        {
+          "path": "verifier-output.json",
+          "sha256": "981e18d879c8fec7e8d0eceeaace596954933e6fad2fff339b2e522d21d6201c",
+          "locator": ""
+        }
+      ]
+    },
+    {
+      "id": "cc267-claude-2",
+      "directory": "trials/durable-approval-outbox/cc267-claude-2",
+      "runId": "cc267-claude-2",
+      "sourceDigest": "99a833eea58876836cb2e90e66f73a31436affabe326d53bca67b46afe8d51e6",
+      "packageDigest": null,
+      "pointers": [
+        {
+          "path": "challenge/spec/SEMANTICS.md",
+          "sha256": "400e4189df41fde84489f84c059d103d9df75cd2b8d5d1605028c51bff0c17a9",
+          "locator": ""
+        },
+        {
+          "path": "metadata.json",
+          "sha256": "376d6a55bf1fbac7ca9a32a8362b5b7e0ac33396f317590c8530cc8e59f17cda",
+          "locator": ""
+        },
+        {
+          "path": "result.json",
+          "sha256": "d52937dece882987b8b66edd62ff7cf13791b477e3336c670d4e1208fd916fc4",
+          "locator": ""
+        },
+        {
+          "path": "root-cause.json",
+          "sha256": "566bb675f0fd7636d921501e03b1cecbebf771b9ad03ca95b90eaebeb2b04539",
+          "locator": ""
+        },
+        {
+          "path": "transcript.txt",
+          "sha256": "51e36a7ee894ed11a8030f28dbfd9562601acef3ce0cf524a19772ed0b90c59e",
+          "locator": ""
+        },
+        {
+          "path": "verifier-output.json",
+          "sha256": "1369cb720712c6b16987e9968f4b62a8a06a35c398388b8190cebadb4cf4bef3",
+          "locator": ""
+        }
+      ]
+    },
+    {
+      "id": "cc267-claude-3",
+      "directory": "trials/durable-approval-outbox/cc267-claude-3",
+      "runId": "cc267-claude-3",
+      "sourceDigest": "48b760af8a70fce216418f337cec76805a431367944dceaa7255c6f66f862220",
+      "packageDigest": null,
+      "pointers": [
+        {
+          "path": "challenge/spec/SEMANTICS.md",
+          "sha256": "400e4189df41fde84489f84c059d103d9df75cd2b8d5d1605028c51bff0c17a9",
+          "locator": ""
+        },
+        {
+          "path": "metadata.json",
+          "sha256": "050a89438090d5306a9448ea603e73d95bc8bdc3656e4c7342e7e3730343b053",
+          "locator": ""
+        },
+        {
+          "path": "result.json",
+          "sha256": "8e4d811759196bdcc69c84f5f2a271332e1d62ba3dc2c76d2ba96ce7528e6947",
+          "locator": ""
+        },
+        {
+          "path": "root-cause.json",
+          "sha256": "359e575f7299fb6e9eaf071f23347c363f99d25e637cfa07e39f53b3d49d7ad6",
+          "locator": ""
+        },
+        {
+          "path": "transcript.txt",
+          "sha256": "9971453323df55b822e9574cb9abdcb932e7a664b1a909117aeb166316d46280",
+          "locator": ""
+        },
+        {
+          "path": "verifier-output.json",
+          "sha256": "fccb824d031c6ef4450c6b480f89fd742d623167eeb86f747c2a971aee1bcc43",
+          "locator": ""
+        }
+      ]
+    },
+    {
+      "id": "cc267-codex-1",
+      "directory": "trials/durable-approval-outbox/cc267-codex-1",
+      "runId": "cc267-codex-1",
+      "sourceDigest": "a45ed3a06c82e1ace7c35948e0488942069e379839aee4106711f095f485b59e",
+      "packageDigest": null,
+      "pointers": [
+        {
+          "path": "challenge/spec/SEMANTICS.md",
+          "sha256": "400e4189df41fde84489f84c059d103d9df75cd2b8d5d1605028c51bff0c17a9",
+          "locator": ""
+        },
+        {
+          "path": "metadata.json",
+          "sha256": "609c1097877d3eb98f7583dc4f78a70818e4a212f666055369f74d907f395a8d",
+          "locator": ""
+        },
+        {
+          "path": "result.json",
+          "sha256": "a3d750136b9b8d811dc2d34946fcb403f423a75bc015619779a8eb65798cc776",
+          "locator": ""
+        },
+        {
+          "path": "root-cause.json",
+          "sha256": "70441546692de723fff871ef4b828155cfdb7337b5aa33b3a71aa801eb88f0df",
+          "locator": ""
+        },
+        {
+          "path": "transcript.txt",
+          "sha256": "da8dcafdf45c6d57dad7c34b8dd253782de71c16cbcc5eea3cc7ab2d0c7ee62e",
+          "locator": ""
+        },
+        {
+          "path": "verifier-output.json",
+          "sha256": "4e0afa4794ce12d4577a2fbbe4865241f5f16a99bb99596ded3af9bb97743780",
+          "locator": ""
+        }
+      ]
+    },
+    {
+      "id": "cc267-codex-2",
+      "directory": "trials/durable-approval-outbox/cc267-codex-2",
+      "runId": "cc267-codex-2",
+      "sourceDigest": "c94bebb168a92d5d3fb7b9f9353efde7b9952bfa5563597bb40c8ab316dd7432",
+      "packageDigest": null,
+      "pointers": [
+        {
+          "path": "challenge/spec/SEMANTICS.md",
+          "sha256": "400e4189df41fde84489f84c059d103d9df75cd2b8d5d1605028c51bff0c17a9",
+          "locator": ""
+        },
+        {
+          "path": "metadata.json",
+          "sha256": "8f3bd832796f4eddf760b9e1aa50888043bb2d2e4ae1ac83cf87c6cb48656ece",
+          "locator": ""
+        },
+        {
+          "path": "result.json",
+          "sha256": "32d3716567a4aa3fe0e2642284e0eff4cec88f797cfce74ba3892026660115fa",
+          "locator": ""
+        },
+        {
+          "path": "root-cause.json",
+          "sha256": "d45d43820199b2e975d0f79a3fdbda512f91d6050ed27cb2b8cdab105b133649",
+          "locator": ""
+        },
+        {
+          "path": "transcript.txt",
+          "sha256": "ab0cb7eace0912a88621d8b90d06d6d550adb5534a191d38c3470fc8cd1825ab",
+          "locator": ""
+        },
+        {
+          "path": "verifier-output.json",
+          "sha256": "63cb632dfb3acb8a7249e78fbd9f62f139c6e3bd2cd4b5ad562c8f9e07611ef5",
+          "locator": ""
+        }
+      ]
+    },
+    {
+      "id": "cc267-codex-3",
+      "directory": "trials/durable-approval-outbox/cc267-codex-3",
+      "runId": "cc267-codex-3",
+      "sourceDigest": "804dc970f6b378b2d0001ccde26df48d4aa197fceef99f798ce082c3c056cbc9",
+      "packageDigest": null,
+      "pointers": [
+        {
+          "path": "challenge/spec/SEMANTICS.md",
+          "sha256": "400e4189df41fde84489f84c059d103d9df75cd2b8d5d1605028c51bff0c17a9",
+          "locator": ""
+        },
+        {
+          "path": "metadata.json",
+          "sha256": "d0df8cf0b1c792b310766fbe884f3e37ef78318db499bc51cb3460224a4dabda",
+          "locator": ""
+        },
+        {
+          "path": "result.json",
+          "sha256": "f4e1ae92148c3d5c3208d6de455eb1f5eaf3ec07ef6308c1beb52e6c63ea729b",
+          "locator": ""
+        },
+        {
+          "path": "root-cause.json",
+          "sha256": "9a7802a7826a09e7c6ad57aa1251bf444d5600ff6ee900181fefd5b9a262d165",
+          "locator": ""
+        },
+        {
+          "path": "transcript.txt",
+          "sha256": "d430d3c8b7d2e1aff537c0663bd5e4c231feb49c577b12ca993d2ab19352b16f",
+          "locator": ""
+        },
+        {
+          "path": "verifier-output.json",
+          "sha256": "6eef4cdffabff2f12cb12f3283a0726deba1c4bd0c8e65a7226aa816fad3553a",
+          "locator": ""
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "sources": [
+        "cc267-claude-1",
+        "cc267-claude-2",
+        "cc267-claude-3",
+        "cc267-codex-1",
+        "cc267-codex-2",
+        "cc267-codex-3"
+      ],
+      "dependencies": [],
+      "whatWorked": [
+        "Multi-file submissions, graded cells, public contract and visible commands were preserved.",
+        "Checks can be inspected without executing submissions."
+      ],
+      "visibleChecking": [
+        "cc267-claude-1: 5 extracted or retained checking-source candidates; adequacy requires inspecting their assertions.",
+        "cc267-claude-2: 4 extracted or retained checking-source candidates; adequacy requires inspecting their assertions.",
+        "cc267-claude-3: 11 extracted or retained checking-source candidates; adequacy requires inspecting their assertions.",
+        "cc267-codex-1: 32 extracted or retained checking-source candidates; adequacy requires inspecting their assertions.",
+        "cc267-codex-2: 20 extracted or retained checking-source candidates; adequacy requires inspecting their assertions.",
+        "cc267-codex-3: 30 extracted or retained checking-source candidates; adequacy requires inspecting their assertions."
+      ],
+      "counterevidence": [
+        "Six selected zeros do not estimate future package yield.",
+        "The retained legacy import lacks a complete evaluator/runtime identity and effective-profile attestation."
+      ],
+      "promotionConditions": [
+        "Bind any stronger interpretation to primary artifacts, complete identities and appropriate review."
+      ],
+      "withdrawalConditions": [
+        "Changed source bytes, contradictory observation, or revised adjudication requires new assessment."
+      ],
+      "id": "recorded-outcomes",
+      "status": "observation",
+      "statement": "Six preserved completed reward-zero evaluations; five audit failures and one completion failure.",
+      "observedOutcome": "Six recorded zeros, five spec-underspecified, one unlabelled. No fair-capability or exact-target qualification is established.",
+      "failedObligation": "audit_explains or completion under the historical grader",
+      "mechanism": {
+        "interpretation": "The per-check matrix is an observation. Current adjudications constrain its interpretation.",
+        "basis": "observed",
+        "alternatives": [
+          "The hidden audit edge may not follow from the visible contract; the completion case remains unresolved."
+        ]
+      }
+    },
+    {
+      "sources": [
+        "cc267-claude-1",
+        "cc267-claude-2",
+        "cc267-claude-3",
+        "cc267-codex-1",
+        "cc267-codex-2",
+        "cc267-codex-3"
+      ],
+      "dependencies": [],
+      "whatWorked": [
+        "Multi-file submissions, graded cells, public contract and visible commands were preserved.",
+        "Checks can be inspected without executing submissions."
+      ],
+      "visibleChecking": [
+        "cc267-claude-1: 5 extracted or retained checking-source candidates; adequacy requires inspecting their assertions.",
+        "cc267-claude-2: 4 extracted or retained checking-source candidates; adequacy requires inspecting their assertions.",
+        "cc267-claude-3: 11 extracted or retained checking-source candidates; adequacy requires inspecting their assertions.",
+        "cc267-codex-1: 32 extracted or retained checking-source candidates; adequacy requires inspecting their assertions.",
+        "cc267-codex-2: 20 extracted or retained checking-source candidates; adequacy requires inspecting their assertions.",
+        "cc267-codex-3: 30 extracted or retained checking-source candidates; adequacy requires inspecting their assertions."
+      ],
+      "counterevidence": [
+        "Six selected zeros do not estimate future package yield.",
+        "The retained legacy import lacks a complete evaluator/runtime identity and effective-profile attestation."
+      ],
+      "promotionConditions": [
+        "Bind any stronger interpretation to primary artifacts, complete identities and appropriate review."
+      ],
+      "withdrawalConditions": [
+        "Changed source bytes, contradictory observation, or revised adjudication requires new assessment."
+      ],
+      "id": "checking-behavior",
+      "status": "observation",
+      "statement": "All six traces retain authored verification source; named-file-only inspection misses inline scripts.",
+      "observedOutcome": "Checking effort is visible; its adequacy is not established by presence or green output.",
+      "failedObligation": null,
+      "mechanism": {
+        "interpretation": "Codex 3's extracted transition table permits the disputed ACKED to REVOKED edge. The contract interpretation may be shared by implementation and checker.",
+        "basis": "inferred",
+        "alternatives": [
+          "Pattern extraction may duplicate command start/completion records or miss unsupported logging formats.",
+          "A checker can be thorough under a different legitimate contract interpretation."
+        ]
+      }
+    },
+    {
+      "sources": [
+        "cc267-claude-1",
+        "cc267-claude-2",
+        "cc267-claude-3",
+        "cc267-codex-1",
+        "cc267-codex-2",
+        "cc267-codex-3"
+      ],
+      "dependencies": [],
+      "whatWorked": [
+        "Multi-file submissions, graded cells, public contract and visible commands were preserved.",
+        "Checks can be inspected without executing submissions."
+      ],
+      "visibleChecking": [
+        "cc267-claude-1: 5 extracted or retained checking-source candidates; adequacy requires inspecting their assertions.",
+        "cc267-claude-2: 4 extracted or retained checking-source candidates; adequacy requires inspecting their assertions.",
+        "cc267-claude-3: 11 extracted or retained checking-source candidates; adequacy requires inspecting their assertions.",
+        "cc267-codex-1: 32 extracted or retained checking-source candidates; adequacy requires inspecting their assertions.",
+        "cc267-codex-2: 20 extracted or retained checking-source candidates; adequacy requires inspecting their assertions.",
+        "cc267-codex-3: 30 extracted or retained checking-source candidates; adequacy requires inspecting their assertions."
+      ],
+      "counterevidence": [
+        "Six selected zeros do not estimate future package yield.",
+        "The retained legacy import lacks a complete evaluator/runtime identity and effective-profile attestation."
+      ],
+      "promotionConditions": [
+        "Bind any stronger interpretation to primary artifacts, complete identities and appropriate review."
+      ],
+      "withdrawalConditions": [
+        "Changed source bytes, contradictory observation, or revised adjudication requires new assessment."
+      ],
+      "id": "fair-hardness",
+      "status": "disputed",
+      "statement": "The historical six zeros do not currently establish six fair capability failures.",
+      "observedOutcome": "Five spec-underspecified adjudications; Claude 1 unresolved, not automatically capability.",
+      "failedObligation": "The hidden absorbing-state rule is disputed; completion has competing causal explanations.",
+      "mechanism": {
+        "interpretation": "Visible contract, actual behavior, trusted grading and adjudication must be linked before promotion.",
+        "basis": "inferred",
+        "alternatives": [
+          "Human review might resolve one or more interpretations; that would require new provenance, not overwriting results."
+        ]
+      }
+    },
+    {
+      "sources": [
+        "cc267-claude-1",
+        "cc267-claude-2",
+        "cc267-claude-3",
+        "cc267-codex-1",
+        "cc267-codex-2",
+        "cc267-codex-3"
+      ],
+      "dependencies": [],
+      "whatWorked": [
+        "Multi-file submissions, graded cells, public contract and visible commands were preserved.",
+        "Checks can be inspected without executing submissions."
+      ],
+      "visibleChecking": [
+        "cc267-claude-1: 5 extracted or retained checking-source candidates; adequacy requires inspecting their assertions.",
+        "cc267-claude-2: 4 extracted or retained checking-source candidates; adequacy requires inspecting their assertions.",
+        "cc267-claude-3: 11 extracted or retained checking-source candidates; adequacy requires inspecting their assertions.",
+        "cc267-codex-1: 32 extracted or retained checking-source candidates; adequacy requires inspecting their assertions.",
+        "cc267-codex-2: 20 extracted or retained checking-source candidates; adequacy requires inspecting their assertions.",
+        "cc267-codex-3: 30 extracted or retained checking-source candidates; adequacy requires inspecting their assertions."
+      ],
+      "counterevidence": [
+        "Six selected zeros do not estimate future package yield.",
+        "The retained legacy import lacks a complete evaluator/runtime identity and effective-profile attestation."
+      ],
+      "promotionConditions": [
+        "Bind any stronger interpretation to primary artifacts, complete identities and appropriate review."
+      ],
+      "withdrawalConditions": [
+        "Changed source bytes, contradictory observation, or revised adjudication requires new assessment."
+      ],
+      "id": "engineering-lessons",
+      "status": "observation",
+      "statement": "Retained public service interfaces distinguish intent, execution, receipts, history and progress; independently checked obligations enable useful investigation.",
+      "observedOutcome": "The preserved package and checks expose separate completion and history outcomes. This is engineering evidence, not a universal model weakness.",
+      "failedObligation": null,
+      "mechanism": {
+        "interpretation": "Reuse protected observation and positive work; adapt identity, uncertainty and history obligations to each target domain.",
+        "basis": "inferred",
+        "alternatives": [
+          "A target without external effects may need recomputation instead of a ledger.",
+          "A copied state machine can be a reskin rather than a different professional task."
+        ]
+      }
+    }
+  ],
+  "corrections": [
+    {
+      "previousClaim": "Earlier prose called all six zeros fair capability failures.",
+      "correction": "Keep the six observed zeros; current adjudications are five spec-underspecified and one unlabelled.",
+      "sources": [
+        "cc267-claude-1",
+        "cc267-claude-2",
+        "cc267-claude-3",
+        "cc267-codex-1",
+        "cc267-codex-2",
+        "cc267-codex-3"
+      ]
+    },
+    {
+      "previousClaim": "Earlier prose said Codex wrote no verification and Claude 1 wrote the only legality table.",
+      "correction": "All six retain verification source. Codex 3's table permits the disputed edge; checker presence and checker adequacy are different claims.",
+      "sources": [
+        "cc267-claude-1",
+        "cc267-claude-2",
+        "cc267-claude-3",
+        "cc267-codex-1",
+        "cc267-codex-2",
+        "cc267-codex-3"
+      ]
+    }
+  ],
+  "digest": "4c6f160f53273285f7c7ab60820879b36d8deaca6adc7ec48ab658944a4f1d89"
+}

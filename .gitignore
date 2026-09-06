@@ -30,5 +30,8 @@ secrets.json
 # First private evidence-backed finding; other findings are not automatically ignored.
 /findings/durableoutbox/README.md
 
+# Generated private trial timelines and checking source. Tracked case schemas/records stay reproducible.
+/findings/generated/
+
 # Private implementation briefs derived from the local analyses.
 /IMPLEMENTATION-PROMPTS/

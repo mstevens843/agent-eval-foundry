@@ -305,6 +305,16 @@ export interface AdversarialReadinessAudit {
 }
 
 export interface AdversarialEvidenceSummary {
+  readonly historicalAudits?: readonly {
+    readonly attackId: string;
+    readonly scope: string;
+    readonly originalCounts: boolean;
+    readonly recordedHash: string | null;
+    readonly currentHash: string | null;
+    readonly currentSupport: boolean;
+    readonly historicalPackageVerified: boolean;
+    readonly reason: string;
+  }[];
   readonly familyId: string;
   readonly packageHash: string | null;
   readonly adversarialReady: boolean;

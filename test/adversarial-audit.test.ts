@@ -611,10 +611,15 @@ describe("adversarial readiness and reports", () => {
     const durable = summaries.find((s) => s.familyId === "durable-approval-outbox");
     expect(durable?.uncountedRecords).toBe(1);
     expect(durable?.countedNoBypassAudits).toBe(0);
-    expect(summaries.find((s) => s.familyId === FAMILY)?.countedNoBypassV2Audits).toBe(1);
+    expect(summaries.find((s) => s.familyId === FAMILY)?.countedNoBypassV2Audits).toBe(0);
     expect(
       summaries.find((s) => s.familyId === "checker-required-memory-poisoning")?.countedNoBypassV2Audits,
-    ).toBe(1);
+    ).toBe(0);
+    expect(
+      summaries
+        .find((s) => s.familyId === FAMILY)
+        ?.historicalAudits?.some((a) => a.originalCounts && !a.currentSupport),
+    ).toBe(true);
   });
 
   it("preserves container/no-network infrastructure records without counting them", () => {
@@ -722,7 +727,7 @@ describe("adversarial readiness and reports", () => {
     expect(renderTriageResult(record, replay, triage)).toContain("Bypass triage");
   });
 
-  it("adversarial gates are advisory and do not rewrite difficulty SHIP", () => {
+  it("legacy difficulty and adversarial declarations cannot bypass package release policy", () => {
     const registry = loadRegistry(ROOT);
     const evidence: Record<string, FamilyEvidence> = {
       [FAMILY]: {
@@ -760,7 +765,7 @@ describe("adversarial readiness and reports", () => {
     const shape = registry.shapes.find((s) => s.familyId === FAMILY);
     if (shape === undefined) throw new Error("ui-replay-live-dom shape missing");
     const assessment = assessFamily(shape, registry, evidence[FAMILY]);
-    expect(assessment.verdict).toBe("SHIP");
+    expect(assessment.verdict).toBe("NOT-READY");
     expect(assessment.results.find((r) => r.gate.id === "adversarial-audit-evidenced")?.verdict).toBe("fail");
     const report = renderShipReport(registry.shapes, registry, evidence);
     expect(report).toContain("Verifier-integrity claim levels");

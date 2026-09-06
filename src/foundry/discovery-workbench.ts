@@ -616,14 +616,12 @@ export function scoreDiscoveryCandidate(candidate: DiscoveryCandidate): Discover
   const dimensions = scoreDimensions(candidate);
   const blockingReasons = cheapScreenFindings(candidate, dimensions);
   const totalScore = clamp(
-    dimensions.expectedAgentDifficulty * 1.1 +
-      dimensions.fairness * 1.25 +
+    dimensions.fairness * 1.25 +
       dimensions.referenceSolvability * 1.1 +
       dimensions.verifierFeasibility * 1.15 +
       dimensions.cheatResistance +
       dimensions.transferPotential * 0.85 +
       dimensions.surfaceCoverageValue * 0.85 +
-      dimensions.axisPotential * 1.1 +
       dimensions.buildCost * 0.65 +
       dimensions.trialCost * 0.45 -
       dimensions.alreadySolvedRisk * 0.85 -
@@ -631,11 +629,12 @@ export function scoreDiscoveryCandidate(candidate: DiscoveryCandidate): Discover
     0,
     100,
   );
-  const recommendedAction = chooseAction(candidate, dimensions, blockingReasons, totalScore);
+  const recommendedAction = chooseAction(candidate, dimensions, blockingReasons);
   return {
     candidateId: candidate.id,
     totalScore: Math.round(totalScore * 10) / 10,
-    confidence: confidenceFor(candidate, dimensions, blockingReasons),
+    // Legacy numeric field retained; no calibrated predictive confidence exists.
+    confidence: 0,
     recommendedAction,
     blockingReasons,
     cheapestNextEvidence: cheapestEvidence(candidate, recommendedAction),
@@ -764,26 +763,17 @@ export function candidateToTaskShapeDraft(candidate: DiscoveryCandidate): Discov
 }
 
 function scoreDimensions(candidate: DiscoveryCandidate): DiscoveryScoreDimensions {
-  const difficulty = clamp(
-    3 +
-      candidate.failureMechanisms.length * 0.75 +
-      candidate.expectedAxisPotential * 0.85 +
-      Math.min(2, candidate.expectedKnobs.length * 0.35) +
-      (candidate.riskNotes.alreadySolvedRisk.level === "low" ? 1 : 0),
-  );
+  // Unknown, not a solve/failure probability. Mechanism/knob counts cannot estimate difficulty.
+  const difficulty = 0;
   const fairness = clamp(
     inverseRiskScore(candidate.riskNotes.fairnessRisk.level) -
       (candidate.hiddenRegionSketch.addsUndeclaredRules ? 4 : 0) -
       (candidate.requiresPrivateContext ? 5 : 0),
   );
-  const referenceSolvability = clamp(
-    (candidate.referenceSolvability.plausible ? 8 : 2) +
-      (candidate.authoritativeTruthSource.whyIndependent.length > 20 ? 1 : 0),
-  );
+  const referenceSolvability = clamp(candidate.referenceSolvability.plausible ? 8 : 2);
   const verifierFeasibility = clamp(
     inverseRiskScore(candidate.riskNotes.verifierRisk.level) +
-      Math.min(2, candidate.expectedMutants.length * 0.25) +
-      (candidate.authoritativeTruthSource.whyIndependent.length > 20 ? 1 : 0),
+      Math.min(2, candidate.expectedMutants.length * 0.25),
   );
   const cheatResistance = clamp(
     inverseRiskScore(candidate.riskNotes.cheatRisk.level) +
@@ -882,13 +872,6 @@ function cheapScreenFindings(
       reason: "cheat-prone candidates need an isolation plan before promotion",
     });
   }
-  if (candidate.expectedBuildHours > 36 && candidate.expectedAxisPotential < 3) {
-    findings.push({
-      code: "expensive-low-axis",
-      severity: "hold",
-      reason: "expected build hours are too high for the stated axis potential",
-    });
-  }
   if (candidate.riskNotes.alreadySolvedRisk.level === "high" && candidate.evolutionOperator === null) {
     findings.push({
       code: "already-solved-no-evolution",
@@ -917,11 +900,10 @@ function chooseAction(
   candidate: DiscoveryCandidate,
   dimensions: DiscoveryScoreDimensions,
   blockingReasons: readonly DiscoveryBlockingReason[],
-  totalScore: number,
 ): DiscoveryNextStep {
   if (candidate.proposedNextStep === "kill") return "kill";
   if (blockingReasons.some((b) => b.severity === "kill")) return "kill";
-  if (blockingReasons.length > 0 || totalScore < 48) return "hold";
+  if (blockingReasons.length > 0) return "hold";
   if (candidate.proposedNextStep === "evolve_existing") return "evolve_existing";
   if (candidate.proposedNextStep === "transfer_existing") return "transfer_existing";
   if (candidate.proposedNextStep === "task_shape" && dimensions.verifierFeasibility >= 6) return "task_shape";
@@ -937,22 +919,6 @@ function cheapestEvidence(candidate: DiscoveryCandidate, action: DiscoveryNextSt
     candidate.cheapScreens.map((c) => c.cost).sort((a, b) => evidenceCostRank(a) - evidenceCostRank(b))[0] ??
     "static"
   );
-}
-
-function confidenceFor(
-  candidate: DiscoveryCandidate,
-  dimensions: DiscoveryScoreDimensions,
-  blockingReasons: readonly DiscoveryBlockingReason[],
-): number {
-  const base =
-    0.42 +
-    Math.min(0.18, candidate.cheapScreens.length * 0.04) +
-    Math.min(0.15, candidate.expectedMutants.length * 0.025) +
-    Math.min(0.12, candidate.transferPotential.targetDomains.length * 0.035) +
-    (candidate.referenceSolvability.plausible ? 0.08 : -0.08) -
-    blockingReasons.length * 0.06 -
-    Math.max(0, dimensions.ambiguityRisk - 6) * 0.02;
-  return Math.round(clamp(base, 0.05, 0.95) * 100) / 100;
 }
 
 function countBy(items: readonly string[]): Record<string, number> {

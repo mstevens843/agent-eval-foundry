@@ -104,14 +104,46 @@ export function assertAdversarialAuditsValid(root: string): void {
     return pass;
   };
   for (const loaded of loadAdversarialAttackRecords(root)) {
+    // The archived claim survives version changes. Its recorded hash names historical scope,
+    // not today's package. Absence of full historical bytes remains unknown in the view below.
+    const historical =
+      adversarialEvidenceScope(loaded, current.get(loaded.record.familyId) ?? null).scope !== "current";
     assertAdversarialAttackRecordCounts(loaded.record, {
-      currentChallengeHash: current.get(loaded.record.familyId) ?? null,
+      currentChallengeHash: historical
+        ? loaded.record.challengeHash
+        : (current.get(loaded.record.familyId) ?? null),
       transcriptText: loaded.transcriptText,
       exploitText: loaded.exploitText,
       verifierText: loaded.verifierText,
-      hardeningProbesPass: loaded.record.auditVersion === "v2" ? hardeningPass(loaded.record.familyId) : true,
+      ...(!historical
+        ? {
+            hardeningProbesPass:
+              loaded.record.auditVersion === "v2" ? hardeningPass(loaded.record.familyId) : true,
+          }
+        : {}),
     });
   }
+}
+
+/** Historical metadata is not full historical package verification and never supports today's audit. */
+export function adversarialEvidenceScope(loaded: LoadedAdversarialAttack, currentHash: string | null) {
+  const scope =
+    loaded.record.challengeHash !== null && loaded.record.challengeHash === currentHash
+      ? "current"
+      : "historical-unverified";
+  return {
+    attackId: loaded.record.attackId,
+    scope,
+    originalCounts: loaded.record.counts,
+    recordedHash: loaded.record.challengeHash,
+    currentHash,
+    currentSupport: scope === "current",
+    historicalPackageVerified: false,
+    reason:
+      scope === "current"
+        ? "Current challenge match; all other audit gates still apply."
+        : "Retained historical observation; full original package/evaluator bytes are not attested by this record. Excluded from current qualification.",
+  };
 }
 
 export function summarizeAdversarialEvidence(
@@ -147,6 +179,7 @@ export function summarizeAdversarialEvidence(
     let countedContainerBypassAudits = 0;
     let importedAdversarialAudits = 0;
     let invalidImportedAudits = 0;
+    const historicalAudits: ReturnType<typeof adversarialEvidenceScope>[] = [];
     const containerReadinessFailures = new Set<string>();
     const validationFailures: { attackId: string; codes: readonly string[] }[] = [];
     for (const item of loaded) {
@@ -170,6 +203,12 @@ export function summarizeAdversarialEvidence(
         verifierText: item.verifierText,
         hardeningProbesPass,
       };
+      const scope = adversarialEvidenceScope(item, context.currentChallengeHash);
+      if (scope.scope !== "current") {
+        historicalAudits.push(scope);
+        uncountedRecords += 1;
+        continue;
+      }
       const failures = adversarialAttackFailures(record, context);
       if (!record.counts) uncountedRecords += 1;
       else if (failures.length > 0) invalidCountedRecords += 1;
@@ -232,6 +271,7 @@ export function summarizeAdversarialEvidence(
       containerReadinessFailures: [...containerReadinessFailures].sort(),
       importedAdversarialAudits,
       invalidImportedAudits,
+      historicalAudits,
       claimLevel,
       isolationCounts,
       statusCounts,

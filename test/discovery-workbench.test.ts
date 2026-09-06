@@ -112,7 +112,7 @@ describe("Discovery Workbench scoring", () => {
     };
     const score = scoreDiscoveryCandidate(candidate);
 
-    expect(score.dimensions.expectedAgentDifficulty).toBeGreaterThanOrEqual(8);
+    expect(score.dimensions.expectedAgentDifficulty).toBe(0); // unknown, not inferred from axis count
     expect(score.recommendedAction).toBe("hold");
     expect(score.blockingReasons.map((b) => b.code)).toContain("low-fairness");
   });

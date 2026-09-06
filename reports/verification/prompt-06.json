@@ -1,0 +1,518 @@
+{
+  "schemaVersion": 1,
+  "promptId": 6,
+  "status": "complete-local-engineering",
+  "sourceSnapshot": {
+    "baseCommit": "e71d30c717630d1e3018c0e3a484f20ed909fd46",
+    "digest": "02d33e42c9a268e4637f484ba3c829617f13bc86534efc035b988576e9d72e73",
+    "files": 2102,
+    "inventoryBefore": ".local/prompt-06/source-final-before-02.json",
+    "inventoryAfter": ".local/prompt-06/source-final-after.json",
+    "unchangedAcrossFinalVerification": true,
+    "historicalFiles": 904,
+    "historicalDigest": "0f8c7429e52bf3a340f8dde804e84e60a33adcfa235981f089960f972ce61c95",
+    "historicalAndTaskDiffEmpty": true,
+    "changedSource": [
+      {
+        "path": ".gitignore",
+        "sha256": "4492cbff1a9191da81429ac57b4baf0ec1d2d473d2cd2f23ea47cc884ef712a6"
+      },
+      {
+        "path": "data/implementation-gap-ledger.json",
+        "sha256": "761b74c4018aa25aabdb4c99c3a8366d2d1b570241f167fb1af0b5e1738ef680"
+      },
+      {
+        "path": "docs/evidence-learning.md",
+        "sha256": "d457b97d008c59bf1335cddd4568019b342efdbe7bdf59c1bd9e25bb4a00e9d1"
+      },
+      {
+        "path": "findings/README.md",
+        "sha256": "7d7e7120fb4dbec95fdde12cdf1eaab30ffdf50a146ab6667525d0303d25751e"
+      },
+      {
+        "path": "findings/cases/durableoutbox-cc267/000001.json",
+        "sha256": "390804a6bb96c91b3f1ccc9ef7f7d28ef897ad3c85f191bfdb67bc7b7e0c0fbd"
+      },
+      {
+        "path": "findings/cases/memory-host-contract-correction/000001.json",
+        "sha256": "dcd63a44f0879bdd414fb12859fa8ed49ac91157c16bb848d99070ab7311d6f8"
+      },
+      {
+        "path": "findings/transfers/browser-replay-repair-domain-invariant/000001.json",
+        "sha256": "d914841f83aeb5bd1bbc231f10567438f35fd23c2b4e3b0e07b13c30da46345a"
+      },
+      {
+        "path": "findings/transfers/browser-replay-repair-hardness-hypothesis/000001.json",
+        "sha256": "1fd69a0c99e92ec6cd28c88241f6783e142ed1d0fed0acdb7bf4db052311a0ed"
+      },
+      {
+        "path": "findings/transfers/browser-replay-repair-validity-infrastructure/000001.json",
+        "sha256": "5197b85df283e4117c5afa83faeb686d108e43a3d4842e5c3427e77d55a67649"
+      },
+      {
+        "path": "findings/transfers/caa-revalidation-repair-domain-invariant/000001.json",
+        "sha256": "0afc9ae20dc6dfb072abc1bdb013735201891477604090089f8232002fca1d46"
+      },
+      {
+        "path": "findings/transfers/caa-revalidation-repair-hardness-hypothesis/000001.json",
+        "sha256": "977de85f6dec4142c16cecf8ac5faf6142d21c1c4c1a57f43332aae1348f3ebd"
+      },
+      {
+        "path": "findings/transfers/caa-revalidation-repair-validity-infrastructure/000001.json",
+        "sha256": "1195f8030f87f66305ad101d0c64f32f59722418561b2685750d737feda5cb88"
+      },
+      {
+        "path": "findings/transfers/compatible-rollout-repair-domain-invariant/000001.json",
+        "sha256": "096edefe9afbd772e035782743c1ea8ff0f8053b64271e1576fba15f0007d1fc"
+      },
+      {
+        "path": "findings/transfers/compatible-rollout-repair-hardness-hypothesis/000001.json",
+        "sha256": "b3d1cca6e04e698c0206921846a4b2e871270bbeb6a3d888446093d5f5ccb74b"
+      },
+      {
+        "path": "findings/transfers/compatible-rollout-repair-validity-infrastructure/000001.json",
+        "sha256": "d7c27a985b48b3568cee673fa5d7de4e599758c1597136573d4dc723c8b1af65"
+      },
+      {
+        "path": "findings/transfers/delegated-budget-repair-domain-invariant/000001.json",
+        "sha256": "882922f06185ff25fcc72ffb56322e893f65d34c39bc925f9c94a2ed62ac9c8b"
+      },
+      {
+        "path": "findings/transfers/delegated-budget-repair-hardness-hypothesis/000001.json",
+        "sha256": "fdac25d9f61e57fdaba7c82952ad0eebce880ae70c7e64546209c20dc7a4df07"
+      },
+      {
+        "path": "findings/transfers/delegated-budget-repair-validity-infrastructure/000001.json",
+        "sha256": "70d9f86749d43955208434524fe3250989ce59f0343ee3fd317791ca5b9019ef"
+      },
+      {
+        "path": "findings/transfers/persistent-knowledge-repair-domain-invariant/000001.json",
+        "sha256": "69b302215d767b1546f7ea9219d1b679f217adb3250c5b609ee9fda5cbcc2280"
+      },
+      {
+        "path": "findings/transfers/persistent-knowledge-repair-hardness-hypothesis/000001.json",
+        "sha256": "134eb7b52e29047438cc2a781f8288c63e6d1d0d7fd46375e1cd6cd1c370093e"
+      },
+      {
+        "path": "findings/transfers/persistent-knowledge-repair-validity-infrastructure/000001.json",
+        "sha256": "252fcfede353010b05c273ec44bff6ca4e8507567ca8ccdf8cedb7f036386098"
+      },
+      {
+        "path": "scripts/execution/source-inventory.mjs",
+        "sha256": "4c6bf2b4f8af796080d00c373a9f3e38c9c4a7e310e6b595a0d9d483a7638845"
+      },
+      {
+        "path": "scripts/verify-evidence-learning.mjs",
+        "sha256": "892b8fd6480b4ba69cb0b2ff9a1a2b2b4efd7fff2184934d4e2075197768be57"
+      },
+      {
+        "path": "src/adversarial-audit/records.ts",
+        "sha256": "854d00f280bdef47eac58b73c75f3b12aa1dd5cb6cea5831b482087f00d891fe"
+      },
+      {
+        "path": "src/adversarial-audit/report.ts",
+        "sha256": "2a0a382ff7b9fe5175d0e0b070082bd82046994cc63e88e0ed1698123587178c"
+      },
+      {
+        "path": "src/adversarial-audit/types.ts",
+        "sha256": "93bf3684595c0b2cb390d0c552ccd1b3b7e03b30f2d34b1bb210835faaba02af"
+      },
+      {
+        "path": "src/cli.ts",
+        "sha256": "3f5341f554682885a51721d82e2c9123ccfcdf9b5c6e65aa767c5324ad36212e"
+      },
+      {
+        "path": "src/foundry/adaptive-funnel.ts",
+        "sha256": "7239313825c370a60da1287aeb3ee47c944907256898c33bdb4e0a11c42ab58c"
+      },
+      {
+        "path": "src/foundry/discovery-workbench.ts",
+        "sha256": "57db5a3fd26b2c240909196cf02e245ffa9bf772a0cef316949fb0c31da031df"
+      },
+      {
+        "path": "src/index.ts",
+        "sha256": "133f6b78a586bc4329b6015df12e9d06e2cbd814363d1fd59e32ba175a14763c"
+      },
+      {
+        "path": "src/learning/cases.ts",
+        "sha256": "aabd5c041e145c9a4373094bb415cf2803dc4d3fc270f50e143c9b6196b628fe"
+      },
+      {
+        "path": "src/learning/command.ts",
+        "sha256": "ee1aa400fd2aebd95168a90b0e7f9ccb89b055e72d3f275c84fda01280138bcb"
+      },
+      {
+        "path": "src/learning/findings.ts",
+        "sha256": "207c209bc76865fa83607e7c5803a4debebe51fc40f49387ceccf51cfb3603a0"
+      },
+      {
+        "path": "src/learning/inspection.ts",
+        "sha256": "7bb2d1f0c2fd024a9dcfd2eb6ab407c7259d86c6bd26ed0440c64f4906a89a85"
+      },
+      {
+        "path": "src/learning/render.ts",
+        "sha256": "6c248cb66d12720f83512677aaba41aee4fcddcde1d41c5b71fa9359569eb32a"
+      },
+      {
+        "path": "src/learning/selection.ts",
+        "sha256": "0ad7f04aa678f3de740dec4ec7cdf7496819cad7f5a971db6ff67c8aff00f4fa"
+      },
+      {
+        "path": "src/learning/transfers.ts",
+        "sha256": "389b708ed54b04c0b806ee916e22055ef353e42def65cafdf709bc33766eeba8"
+      },
+      {
+        "path": "src/packages/local-cli.ts",
+        "sha256": "b15d5ad7d6f46e27d297bba02134dff40b2bbebb28df4380a027ed0b0e66ab8d"
+      },
+      {
+        "path": "src/reports/adaptive-funnel-report.ts",
+        "sha256": "8177c65752fbcc93c0d1bcf0eecdc9133c4da751c68dc67cd3a943a0d180abb5"
+      },
+      {
+        "path": "src/reports/discovery-workbench-report.ts",
+        "sha256": "d46b051785a807495a17a6c5ada131ccf15986f1c5968d486327c3016f526268"
+      },
+      {
+        "path": "src/trials/directory.ts",
+        "sha256": "63709415190ac78eeb2c73509c3f899dbb2277dc6511fb2d2a74d8a1cd0157ba"
+      },
+      {
+        "path": "test/adaptive-funnel.test.ts",
+        "sha256": "ed41a85a6248aa7d10a68870cc42c50c995fca871bdcd4d008efb367fdcf51b8"
+      },
+      {
+        "path": "test/adversarial-audit.test.ts",
+        "sha256": "b516ffa50261486854a1e30cfd6b7062a77b0efba0f1e59f24f5ae7fd3af9daf"
+      },
+      {
+        "path": "test/discovery-workbench.test.ts",
+        "sha256": "df36cdb36e708d8be005a648f6e03cc045da69a57ff882b63e88fa47c8518530"
+      },
+      {
+        "path": "test/learning.test.ts",
+        "sha256": "d7e197630a6b53e731094845581067cde40429f32609b5af0f544ee75e48dc93"
+      },
+      {
+        "path": "test/root-cause.test.ts",
+        "sha256": "a2727aa6031fdddb4290d1077049d3d386a53d2e6b02dea4424fc61e1adf539b"
+      }
+    ]
+  },
+  "verification": [
+    {
+      "path": ".local/prompt-06/final-core-02.json",
+      "sha256": "a0039220a86598ac7bbd3f2ca3b7102fefca612e3df451022c69204c2be95dfc",
+      "passed": 205,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 24.325141845703126,
+      "files": [
+        {
+          "path": "test/adaptive-funnel.test.ts",
+          "passed": 16,
+          "failed": 0
+        },
+        {
+          "path": "test/discovery-workbench.test.ts",
+          "passed": 21,
+          "failed": 0
+        },
+        {
+          "path": "test/execution-lifecycle.test.ts",
+          "passed": 29,
+          "failed": 0
+        },
+        {
+          "path": "test/history-task-attribution.test.ts",
+          "passed": 13,
+          "failed": 0
+        },
+        {
+          "path": "test/learning.test.ts",
+          "passed": 27,
+          "failed": 0
+        },
+        {
+          "path": "test/package-evidence-decisions.test.ts",
+          "passed": 45,
+          "failed": 0
+        },
+        {
+          "path": "test/portfolio-production.test.ts",
+          "passed": 10,
+          "failed": 0
+        },
+        {
+          "path": "test/root-cause.test.ts",
+          "passed": 29,
+          "failed": 0
+        },
+        {
+          "path": "test/zz-outbox-probe.test.ts",
+          "passed": 15,
+          "failed": 0
+        }
+      ],
+      "failures": [],
+      "command": "pnpm exec vitest run test/learning.test.ts test/root-cause.test.ts test/adaptive-funnel.test.ts test/discovery-workbench.test.ts test/execution-lifecycle.test.ts test/package-evidence-decisions.test.ts test/zz-outbox-probe.test.ts test/portfolio-production.test.ts test/history-task-attribution.test.ts test/self-check.test.ts --reporter=json --outputFile=.local/prompt-06/final-core-02.json",
+      "status": "pass",
+      "note": "Vitest matched the nine files listed. The self-check helper is covered through learning and outbox tests; no separate self-check.test.ts file was collected."
+    },
+    {
+      "path": ".local/prompt-06/final-compatibility.json",
+      "sha256": "ac096661996446758072c79c579d6aceca434f09d1f504ce1f560d32bd42fb8d",
+      "passed": 98,
+      "failed": 8,
+      "skipped": 0,
+      "seconds": 53.32843237304687,
+      "files": [
+        {
+          "path": "test/adversarial-audit.test.ts",
+          "passed": 48,
+          "failed": 2
+        },
+        {
+          "path": "test/trials.test.ts",
+          "passed": 50,
+          "failed": 6
+        }
+      ],
+      "failures": [
+        {
+          "file": "test/adversarial-audit.test.ts",
+          "name": "adversarial readiness and reports prepares deterministic attack bundles with the current challenge hash"
+        },
+        {
+          "file": "test/adversarial-audit.test.ts",
+          "name": "adversarial readiness and reports marks package-backed families ready once campaign files and bundles exist"
+        },
+        {
+          "file": "test/trials.test.ts",
+          "name": "manual agent import grades an imported artifact under subprocess isolation"
+        },
+        {
+          "file": "test/trials.test.ts",
+          "name": "checker-required measured family is measured in the ledger but not shipped without real-agent difficulty"
+        },
+        {
+          "file": "test/trials.test.ts",
+          "name": "ship gate with computed evidence a verifier-only family cannot be SHIP however good its mutant evidence is"
+        },
+        {
+          "file": "test/trials.test.ts",
+          "name": "ship gate with computed evidence a shape declaring trials that all passed is blocked even with no live evidence attached"
+        },
+        {
+          "file": "test/trials.test.ts",
+          "name": "ship gate with computed evidence a family whose reference fails is NOT-READY whatever else passes"
+        },
+        {
+          "file": "test/trials.test.ts",
+          "name": "ship gate with computed evidence a family whose baselines pass is NOT-READY — refusing everything must not win"
+        }
+      ],
+      "command": "pnpm exec vitest run test/adversarial-audit.test.ts test/trials.test.ts --reporter=json --outputFile=.local/prompt-06/final-compatibility.json",
+      "status": "known-compatibility-failures"
+    },
+    {
+      "command": "pnpm exec tsc --noEmit",
+      "status": "pass"
+    },
+    {
+      "command": "pnpm lint",
+      "status": "pass",
+      "files": 457
+    },
+    {
+      "command": "pnpm build",
+      "status": "pass",
+      "formats": [
+        "ESM",
+        "CJS",
+        "declarations"
+      ]
+    },
+    {
+      "command": "node dist/cli.js check",
+      "status": "pass",
+      "note": "Historical adversarial scope remains separate from current assurance."
+    },
+    {
+      "command": "git diff --check",
+      "status": "pass"
+    },
+    {
+      "command": "ESM/CJS learning exports and stored-transfer query",
+      "status": "pass",
+      "transfers": 15,
+      "provenHardness": 0
+    }
+  ],
+  "integration": {
+    "path": ".local/learning/prompt-06-final-proof.json",
+    "sha256": "9f2b3aef0e0b08718a642c8f0eb73bcd19fb09683f01e0cc59297d7fd3959ef4",
+    "sourcePreserved": true,
+    "elapsedMs": 3533.993917,
+    "maxRssKiB": 411600,
+    "cases": [
+      {
+        "id": "native-correct",
+        "sourceDigest": "b85cb7fc8082e0675ec45c584f6f11849de396fd5ec1f5bfa7b56691aee8f1b8",
+        "observation": {
+          "status": "semantic-pass",
+          "reward": 1,
+          "failedScenarios": 0,
+          "failedChecks": [],
+          "newAgentAttempts": 0,
+          "evidenceClass": "simulation",
+          "semanticComplete": true
+        }
+      },
+      {
+        "id": "native-incorrect",
+        "sourceDigest": "0cf9cc04d4833a100fee57d0eab378e88b9ceb83fd5d599eae4ede899cee4817",
+        "observation": {
+          "status": "semantic-fail",
+          "reward": 0,
+          "failedScenarios": 23,
+          "failedChecks": [
+            "outcome"
+          ],
+          "newAgentAttempts": 0,
+          "evidenceClass": "simulation",
+          "semanticComplete": true
+        }
+      },
+      {
+        "id": "native-missing-file",
+        "sourceDigest": "c3b17c48897267358f3297698cfce592335064453cee0b5da4da22600f748115",
+        "observation": {
+          "status": "invalid-execution",
+          "reward": null,
+          "failedScenarios": 0,
+          "failedChecks": [],
+          "newAgentAttempts": 0,
+          "evidenceClass": "simulation",
+          "semanticComplete": false
+        }
+      },
+      {
+        "id": "browser-correct",
+        "sourceDigest": "ad8acf47a4ea80d886a28705b40898e71a9fa31ee5a1adddfb0bd73cb8af5a76",
+        "observation": {
+          "status": "semantic-pass",
+          "reward": 1,
+          "failedScenarios": 0,
+          "failedChecks": [],
+          "newAgentAttempts": 0,
+          "evidenceClass": "simulation",
+          "semanticComplete": true
+        }
+      },
+      {
+        "id": "browser-incorrect",
+        "sourceDigest": "520bb0a0cde97d376cd010ae820da0c515e70855cc908a9e9eaf35d8188d1c87",
+        "observation": {
+          "status": "semantic-fail",
+          "reward": 0,
+          "failedScenarios": 15,
+          "failedChecks": [
+            "completion",
+            "current_preconditions",
+            "exact_effects",
+            "preservation",
+            "reports"
+          ],
+          "newAgentAttempts": 0,
+          "evidenceClass": "simulation",
+          "semanticComplete": true
+        }
+      }
+    ],
+    "regrade": {
+      "status": "semantic-fail",
+      "reward": 0,
+      "failedScenarios": 15,
+      "failedChecks": [
+        "completion",
+        "current_preconditions",
+        "exact_effects",
+        "preservation",
+        "reports"
+      ],
+      "newAgentAttempts": 0,
+      "evidenceClass": "unknown",
+      "semanticComplete": true
+    },
+    "selectionDigest": "8d6f10e9ae1d250256b30a6dd6ea46e0f647797aa68aa36bf0976d860c15c106",
+    "transferCount": 15,
+    "provenHardness": 0,
+    "command": "node scripts/verify-evidence-learning.mjs .local/prompt-04/canonical-native-export .local/prompt-04/release-browser-export .local/prompt-04/release-memory-export .local/prompt-04/release-wallet-export .local/prompt-04/release-rollout-export .local/prompt-05/final-route-04 .local/learning/prompt-06-final",
+    "status": "pass",
+    "note": "Inspects retained actual receipts and simulation records, does not rerun graders. Measurements are this local invocation, not prospective cost estimates."
+  },
+  "index": {
+    "command": "package:local learning index trials",
+    "rows": 48,
+    "unavailable": 0,
+    "qualifiedCapability": 0,
+    "exactTarget": 0,
+    "note": "Original labels remain visible. Complete-package qualification is not inferred for legacy visible-only imports."
+  },
+  "gapDispositions": [
+    {
+      "id": "G7",
+      "status": "verified",
+      "proof": "src/learning/selection.ts"
+    },
+    {
+      "id": "G11",
+      "status": "verified",
+      "proof": "test/learning.test.ts"
+    },
+    {
+      "id": "G12",
+      "status": "verified-local-workflow",
+      "proof": "findings/transfers",
+      "limit": "Prospective diversity unmeasured."
+    },
+    {
+      "id": "G13",
+      "status": "verified-accounting",
+      "proof": "src/learning/selection.ts",
+      "limit": "Supplied accounting requires underlying evidence; total costs/yield unknown."
+    },
+    {
+      "id": "P3-HISTORICAL-AUDIT-VIEW",
+      "status": "verified",
+      "proof": "node dist/cli.js check"
+    }
+  ],
+  "remainingBlockers": [
+    {
+      "id": "G14",
+      "owner": 7,
+      "detail": "Six inherited trials.test.ts compatibility assertions remain; exact names are preserved in verification. No full-suite-green claim."
+    },
+    {
+      "id": "P6-LEGACY-CAMPAIGN-PREPARATION",
+      "owner": 7,
+      "detail": "Two legacy bundle/readiness assertions expose stale campaign-versus-current package behavior. Preserve old campaign hashes; use explicit stale refusal or newly versioned preparation before a real audit."
+    },
+    {
+      "id": "P5-BROWSER-VISIBLE-MOCK",
+      "owner": 7,
+      "detail": "Retained browser mock lacks api.settle. Selection returns repair; fix public/reference parity and validate a new package version."
+    },
+    {
+      "id": "QUALIFICATION",
+      "owner": "external",
+      "detail": "No provider enrollment, spending authority, trusted effective-profile observation, independent expert-time/fairness review or real standard/adversarial qualification added. No current target-model hardness or 1000-task yield claim."
+    }
+  ],
+  "providerCallsMade": 0,
+  "automaticRegrades": 0,
+  "newAgentAttempts": 0,
+  "sourcePreserved": true
+}

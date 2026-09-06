@@ -123,6 +123,8 @@ export interface WriteTrialInput {
   readonly workspaceFiles?: readonly { readonly path: string; readonly content: string }[];
   readonly verifierOutput: unknown;
   readonly metadata: Record<string, unknown>;
+  /** A historical adjudication imported WITH the record. Later assessments belong outside its seal. */
+  readonly rootCause?: unknown;
 }
 
 /** Write a complete trial directory. Everything the run produced, nothing inferred. */
@@ -170,6 +172,7 @@ export function writeTrialDirectory(input: WriteTrialInput): string {
   write(TRIAL_FILES.verifier, input.verifierOutput);
   write(TRIAL_FILES.result, input.record);
   write(TRIAL_FILES.countability, input.countability);
+  if (input.rootCause !== undefined) write(ROOT_CAUSE_FILE, input.rootCause);
   return publishEvidence(dir, reservation.destination, {
     runId: input.runId,
     familyId: input.familyId,

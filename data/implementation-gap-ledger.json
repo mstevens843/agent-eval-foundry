@@ -105,16 +105,19 @@
       "source": "System G7",
       "packageId": null,
       "owner": 6,
-      "status": "blocked",
-      "summary": "Funnel ranking still rewards intermediate measurement more than valid distinct hard packages.",
+      "status": "verified",
+      "summary": "Package-first selection now uses authoritative stages, explicit construction reviews, bounded WIP, diversity, qualified support and cost sensitivity; axes, knobs and prose length do not predict difficulty.",
       "dependencies": [
         "G6",
         "G11"
       ],
       "proof": [
-        "src/foundry/adaptive-funnel.ts"
+        "src/foundry/adaptive-funnel.ts",
+        "src/learning/selection.ts",
+        "src/learning/command.ts",
+        "test/learning.test.ts"
       ],
-      "nextAction": "Select by complete package yield, explicit costs and evidence-backed promise; keep cheap validity checks separate from expensive decomposition."
+      "nextAction": "Prompt 7 integrates public presentation. Priorities remain planning judgments, not calibrated model-failure probabilities."
     },
     {
       "id": "G8",
@@ -181,17 +184,21 @@
       "source": "System G11; corrected outbox evidence",
       "packageId": null,
       "owner": 6,
-      "status": "blocked",
-      "summary": "Findings/withdrawal workflow is not fully integrated; six preserved outbox zeroes do not establish six fair capability failures.",
+      "status": "verified",
+      "summary": "Read-only inspection, claim-level revisions, signed review overlays and dependency corrections drive regenerated findings, transfers and rankings. Corrected outbox and memory primary cases preserve historical results.",
       "dependencies": [
         "G3",
         "G5"
       ],
       "proof": [
         "test/zz-outbox-probe.test.ts",
-        "src/trials/root-cause.ts"
+        "src/trials/root-cause.ts",
+        "src/learning/findings.ts",
+        "src/learning/inspection.ts",
+        "test/learning.test.ts",
+        "scripts/verify-evidence-learning.mjs"
       ],
-      "nextAction": "Build evidence-linked findings, correction/withdrawal propagation and specific-versus-conceptual transfer records."
+      "nextAction": "Obtain qualified review for stronger claims and re-render after corrections. Original trials and dissent stay immutable; no new model evidence is established."
     },
     {
       "id": "G12",
@@ -206,26 +213,33 @@
       "proof": [
         "docs/professional-portfolio.md",
         "data/portfolio-dispositions.json",
-        "reports/verification/prompt-04.json"
+        "reports/verification/prompt-04.json",
+        "src/learning/transfers.ts",
+        "src/learning/selection.ts",
+        "findings/README.md",
+        "test/learning.test.ts"
       ],
-      "nextAction": "Prompt 6: test actual transfer and solution similarity on future results. Five distinct constructions do not establish prospective diversity or yield for 1000 tasks."
+      "nextAction": "Prompt 6 added exact-version diversity reviews and fifteen versioned transfer maps with immutable exposure history. Future outcomes must establish actual transfer and prospective diversity; no 1000-task yield is claimed."
     },
     {
       "id": "G13",
       "source": "System G13",
       "packageId": null,
       "owner": 6,
-      "status": "blocked",
-      "summary": "Total-cycle cost/yield and prospective 1000-task production are uncalibrated.",
+      "status": "verified",
+      "summary": "Version-cohort accounting exposes valid/promising/qualification denominators, invalid attempts, ordered diagnosis timing, rework, explicit cost unknowns and duplicate-adjusted deliverables. Prospective production remains unmeasured.",
       "dependencies": [
         "G9",
         "G10",
         "G11"
       ],
       "proof": [
-        "src/trials/types.ts"
+        "src/trials/types.ts",
+        "src/learning/selection.ts",
+        "test/learning.test.ts",
+        "docs/evidence-learning.md"
       ],
-      "nextAction": "Measure construction, validation, invalid execution and qualified distinct-package yield; never turn null costs into zero."
+      "nextAction": "Collect source-backed costs and cohort events. The aggregation is not qualification authority; null costs never become measured zero. Prompt 7 measures whole-system performance."
     },
     {
       "id": "G14",
@@ -707,17 +721,19 @@
       "source": "Prompt 3 final CLI diagnostic",
       "packageId": null,
       "owner": 6,
-      "status": "blocked",
-      "summary": "Legacy registry check fails closed on ADV_COUNTED_HASH_STALE for preserved checker adversarial evidence after the public contract migration. Keep original audit bytes; distinguish historical audit validity from current assurance in reporting.",
+      "status": "verified",
+      "summary": "Registry check passes while preserving historical checker audit bytes/counts. Changed-package audits are historical-unverified and excluded from current support; no old hash is rewritten.",
       "dependencies": [
         "G5"
       ],
       "proof": [
         "src/adversarial-audit/records.ts",
         "src/adversarial-audit/validate.ts",
-        "docs/protected-family-routes.md"
+        "docs/protected-family-routes.md",
+        "test/learning.test.ts",
+        "reports/PROMPT-06-EVIDENCE-LEARNING.md"
       ],
-      "nextAction": "Prompt 6 historical/current evidence views, then Prompt 7 full integration. Never alter a historical audit hash to make it current."
+      "nextAction": "Prompt 7 reconciles stale legacy campaign/bundle preparation separately. An old hash alone does not prove historical evaluator validity."
     },
     {
       "id": "P5-BROWSER-VISIBLE-MOCK",
@@ -735,6 +751,17 @@
         "reports/verification/prompt-05.json"
       ],
       "nextAction": "Prompt 7: run every legitimate reference against visible tests as well as protected suites, correct the browser mock and issue a new validated package. Do not rewrite the Prompt 4 package or assurance."
+    },
+    {
+      "id": "P6-LEGACY-CAMPAIGN-PREPARATION",
+      "source": "Prompt 6 compatibility tier; adversarial-audit.test.ts",
+      "packageId": null,
+      "owner": 7,
+      "status": "blocked",
+      "summary": "Legacy bundle preparation can combine a retained campaign hash with current generated challenge bytes; old package-backed readiness expectations also assume campaigns stay current after migrations. Historical reporting is fixed separately; no real audit is authorized by these bundles.",
+      "dependencies": ["P3-HISTORICAL-AUDIT-VIEW"],
+      "proof": ["src/adversarial-audit/bundles.ts", "test/adversarial-audit.test.ts", "reports/verification/prompt-06.json"],
+      "nextAction": "Prompt 7 must reconcile new-bundle identity versus preserved campaign intent and test stale refusal or explicit new campaign versions. Do not mutate preserved campaigns to satisfy current-readiness assertions."
     }
   ]
 }

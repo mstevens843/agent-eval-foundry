@@ -513,10 +513,11 @@ function familyNextAction(evidence: FamilyFunnelEvidence): FunnelNextAction {
       targetType: "family",
       mode: "validation",
       stage: "task_shape",
-      decision: "repair",
+      decision: "hold",
       evidenceCost: "static",
-      action: "repair/reissue the package and invalidate stale evidence before further trials",
-      reason: "stale challenge hashes cannot feed production-mode claims",
+      action: "review current package eligibility; retain old trials as historical observations",
+      reason:
+        "stale history alone does not establish an unrepaired defect; use the package-first selection policy",
     };
   }
   if (evidence.trialReady === true && (evidence.countedAgentTrials ?? 0) === 0) {
@@ -527,7 +528,7 @@ function familyNextAction(evidence: FamilyFunnelEvidence): FunnelNextAction {
       stage: "smoke_trial",
       decision: "promote",
       evidenceCost: "one_agent",
-      action: "run one counted smoke trial before any full matrix",
+      action: "review complete package eligibility and separate execution authority",
       reason: "mutant-detection evidence does not prove real-agent difficulty",
     };
   }
@@ -546,18 +547,6 @@ function familyNextAction(evidence: FamilyFunnelEvidence): FunnelNextAction {
       action: "treat the clean smoke pass as already_solved_or_needs_evolution before matrix spend",
       reason:
         "a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty",
-    };
-  }
-  if ((evidence.countedAgentTrials ?? 0) > 0 && evidence.agentFailuresChain === true) {
-    return {
-      targetId: evidence.familyId,
-      targetType: "family",
-      mode: "validation",
-      stage: "transfer_test",
-      decision: "evolve",
-      evidenceCost: "static",
-      action: "evolve or transfer before broad ship claims",
-      reason: "nested failure sets are one axis at multiple sensitivities, not breadth",
     };
   }
   if ((evidence.countedAgentTrials ?? 0) > 0 && new Set(evidence.sharedProviderFamilies ?? []).size < 2) {
@@ -591,7 +580,7 @@ function familyNextAction(evidence: FamilyFunnelEvidence): FunnelNextAction {
         "OpenAI failed on target but a counted non-OpenAI run solved, so cross-lab smoke is mixed rather than cross-lab difficulty",
     };
   }
-  if ((evidence.countedAgentTrials ?? 0) > 0 && (evidence.agentAxes ?? 0) >= 2) {
+  if ((evidence.countedAgentTrials ?? 0) > 0 && new Set(evidence.sharedProviderFamilies ?? []).size >= 2) {
     return {
       targetId: evidence.familyId,
       targetType: "family",
@@ -599,8 +588,9 @@ function familyNextAction(evidence: FamilyFunnelEvidence): FunnelNextAction {
       stage: "full_matrix",
       decision: "promote",
       evidenceCost: "cross_provider",
-      action: "earn a production-mode matrix while preserving human/adversarial evidence separately",
-      reason: "the family has smoke evidence and non-collapsed difficulty structure",
+      action: "review qualified package evidence before any separately authorized matrix",
+      reason:
+        "axis count does not disqualify a valid single-mechanism task; this legacy summary cannot authorize execution",
     };
   }
   return {
@@ -634,11 +624,9 @@ export function planAdaptiveFunnel(
       action: "execute the transfer test and require preserved evidence before claiming transfer",
       reason: "transfer proposed is not transfer proven",
     }));
-  const nextActions = [...probeActions, ...transferActions, ...familyActions].sort((a, b) => {
-    const cost = evidenceCostRank(a.evidenceCost) - evidenceCostRank(b.evidenceCost);
-    if (cost !== 0) return cost;
-    return a.targetId.localeCompare(b.targetId);
-  });
+  // Retain producer order in this compatibility view. Package construction prioritization lives
+  // in learning/selection and uses current PackageDecision, qualified claims and explicit reviews.
+  const nextActions = [...familyActions, ...probeActions, ...transferActions];
   return {
     candidateMechanisms: registry.mechanisms.length,
     probes: funnel.probes.length,

@@ -2384,7 +2384,7 @@ function checkCommand(root: string): string {
     "  coverage    every mechanism has a mutant; no mutant is orphaned",
     "  consistency ledger statuses agree with the ship gate; every kill has a postmortem",
     "  human       counted clean-room reviews validate against current package hashes",
-    "  adversarial counted verifier-integrity audits validate against current package hashes",
+    "  adversarial current audits validate; changed-package records retain historical scope without current support",
     "  external    returned third-party intake packets validate before countability",
     "  funnel      mechanism probes and transfer tests validate against the registry",
     "  workbench   discovery scoring inputs validate against mechanisms and transfers",

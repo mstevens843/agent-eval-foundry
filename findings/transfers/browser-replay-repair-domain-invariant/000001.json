@@ -1,0 +1,64 @@
+{
+  "digest": "eb9fdd0ff3cccf2dfc05a3887252441df0e3902e8edca6ad5d52649272605e02",
+  "previous": null,
+  "record": {
+    "applicability": "Real forms may remount or await confirmation before an effect commits.",
+    "category": "domain-invariant",
+    "correctAlternatives": [
+      "Settle first then resolve and fill.",
+      "Recover stale handles and revalidate values before committing."
+    ],
+    "counterevidence": [
+      "Frozen reference has a visible mock mismatch assigned to Prompt 7; old live-DOM effort was missing.",
+      "Outbox capability attribution remains disputed/unresolved; no target model hardness transfer is proven."
+    ],
+    "exposures": [
+      {
+        "at": "2026-09-06T00:00:00.000Z",
+        "evidence": "Prompt 4 constructed portfolio and Prompt 6 source/contract inspection; these packages are not untouched holdouts.",
+        "role": "inspected"
+      }
+    ],
+    "falsifiers": [
+      "The interface does not allow bounded stabilization, or a universal wrapper removes the whole challenge."
+    ],
+    "id": "browser-replay-repair-domain-invariant",
+    "independentObservations": [
+      "Backend receipts and actual page input/click/confirmation events."
+    ],
+    "layers": [
+      "professional-objective",
+      "public-contract",
+      "implementation",
+      "scenarios",
+      "reference-alternatives",
+      "near-miss-controls"
+    ],
+    "narrowControls": [
+      "pre-fill-read",
+      "no-confirmation",
+      "repeated-delivery",
+      "incomplete-work"
+    ],
+    "schemaVersion": 1,
+    "solutionDifference": "DOM handle/value/confirmation lifecycle and trace idempotency, not domain authorization or an outbox audit table.",
+    "source": {
+      "claimId": "engineering-lessons",
+      "findingId": "durableoutbox-cc267",
+      "revisionDigest": "4c6f160f53273285f7c7ab60820879b36d8deaca6adc7ec48ab658944a4f1d89"
+    },
+    "target": {
+      "contractDigest": "0b00e481e93db6f17f6880398639710c33de1a3127ea462cb0299e623e0b251f",
+      "familyId": "ui-replay-browser-backed",
+      "packageDigest": "43b7ae61f5dda199139796e765e81f31ad7f9da133ca6ac16e770c9664680941",
+      "packageId": "browser-replay-repair"
+    },
+    "targetClaim": null,
+    "visibleObligations": [
+      "Observe current connected ready form and exact value after fill/remount.",
+      "Complete every event once in order and preserve prior/unrelated effects."
+    ]
+  },
+  "revision": 1,
+  "schemaVersion": 1
+}
