@@ -3,10 +3,10 @@
 | item | value |
 |---|---:|
 | visible files | 9 |
-| bytes | 116546 |
+| bytes | 118337 |
 | worked examples | 4 |
 | visible rule codes found | 13 |
-| hash | `18c3f5afc5973604205cd7df23ce4cad` |
+| hash | `b79ba7c2d564aa9b83775bfe064c2f78` |
 
 ## Visible files
 

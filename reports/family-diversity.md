@@ -1,7 +1,7 @@
 # Family diversity
 
-What the declared families are expected to measure, in axes rather than task count. **One family
-has a measured axis count; the rest are estimates.** The marker is on every row for that reason —
+Declared calibration families: **13 rows with measured axis values**; other values are estimates.
+These are not distinct deliverable packages or a forecast of target-agent difficulty. The marker is on every row —
 a column mixing the two without labels is how an estimate becomes a fact.
 
 | family | status | mechanisms | axes | build h | frontier $ | data |
@@ -10,7 +10,7 @@ a column mixing the two without labels is how an estimate becomes a fact.
 | `audit-truth-financial-workflow` | candidate | false-audit-history, oracle-probing, permission-boundary | — | 45 | 60 | est. |
 | `browser-action-replay` | idea | ui-replay-mismatch, stale-state, hidden-environment-dependency | — | 90 | 80 | est. |
 | `caa-revalidation` | built | stale-state, cardinality-preserved-identity-collapse | 3 | 24 | 40 | measured |
-| `checker-required-memory-poisoning` | shipped | checker-quality-gap, context-contamination, false-audit-history, prompt-injection-via-retrieval | 12 | 85 | 35 | measured |
+| `checker-required-memory-poisoning` | trialed | checker-quality-gap, context-contamination, false-audit-history, prompt-injection-via-retrieval | 12 | 85 | 35 | measured |
 | `dao-descendant` | built | uncertain-external-effects, duplicate-side-effects | 1 | 120 | 145 | measured |
 | `delegated-wallet-scope-reconciliation` | built | permission-boundary, stale-state, false-audit-history, duplicate-side-effects, liveness-stall, tool-result-ambiguity | 3 | 36 | 45 | measured |
 | `deployment-model-alias-rollout-drift` | built | model-alias-drift, stale-state, false-audit-history, liveness-stall, tool-result-ambiguity | 20 | 40 | 45 | measured |
@@ -23,10 +23,10 @@ a column mixing the two without labels is how an estimate becomes a fact.
 | `prompt-injection-capability-routing` | idea | permission-boundary, tool-result-ambiguity, prompt-injection-via-retrieval | 3 | 60 | 55 | est. |
 | `prompt-injection-containment` | trialed | prompt-injection-via-retrieval, context-contamination, permission-boundary | 4 | 70 | 65 | measured |
 | `prompt-injection-cross-tool-escalation` | idea | permission-boundary, tool-result-ambiguity, duplicate-side-effects | 3 | 55 | 50 | est. |
-| `prompt-injection-memory-poisoning` | shipped | context-contamination, false-audit-history, prompt-injection-via-retrieval | 5 | 75 | 70 | measured |
+| `prompt-injection-memory-poisoning` | shipped | context-contamination, false-audit-history, prompt-injection-via-retrieval | 8 | 75 | 70 | measured |
 | `stale-crm-ticket-automation` | candidate | stale-state, tool-result-ambiguity, duplicate-side-effects | 2 | 70 | 55 | est. |
 | `trading-reconciliation-recompute` | built | uncertain-external-effects, duplicate-side-effects | 1 | 24 | 145 | measured |
-| `ui-action-record-replay` | shipped | ui-replay-mismatch, stale-state, hidden-environment-dependency | 6 | 55 | 40 | measured |
+| `ui-action-record-replay` | shipped | ui-replay-mismatch, stale-state, hidden-environment-dependency | 4 | 55 | 40 | measured |
 | `ui-replay-live-dom` | shipped | ui-replay-mismatch, stale-state, hidden-environment-dependency, duplicate-side-effects | 19 | 95 | 55 | measured |
 
 ## Totals
@@ -34,8 +34,8 @@ a column mixing the two without labels is how an estimate becomes a fact.
 | | |
 |---|---:|
 | families | 22 |
-| expected axes (all) | 95 |
-| of which measured | **81** |
+| expected axes (all) | 96 |
+| of which measured | **82** |
 | of which estimated | 14 |
 | declared build hours | 1316 |
 | declared frontier spend | $1433.66 |

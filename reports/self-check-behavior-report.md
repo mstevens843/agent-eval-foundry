@@ -37,32 +37,32 @@ columns are never added together.
 | run | family | subject | observed | unshipped | shipped files | self-reported | evidence state | scenarios failed |
 |---|---|---|---|---|---|---|---|---:|
 | `access-token-2026-08-o1` | expansion | `gpt-5.6-sol` | **none** | — | graded files only | syntax-only | **superseded** | 0 |
-| `phase17-caa-slot-1-openai-attempt-1` | revalidation | `openai-gpt-5.6-sol` | **none** | example-harness | graded files only | — | counted | 0 |
-| `phase17-caa-slot-2-anthropic-attempt-1` | revalidation | `anthropic-claude-opus` | **none** | example-harness | graded files only | example-harness | counted | 0 |
-| `phase17-caa-slot-3-openai-attempt-1` | revalidation | `openai-gpt-5.6-sol` | **none** | assertions | graded files only | assertions | counted | 0 |
-| `phase17-caa-slot-4-anthropic-attempt-1` | revalidation | `anthropic-claude-opus` | **none** | example-harness | graded files only | example-harness | counted | 0 |
-| `checker-required-2026-08-o1` | poisoning | `gpt-5.6-sol` | **none** | — | graded files only | — | counted | 614 |
+| `phase17-caa-slot-1-openai-attempt-1` | revalidation | `openai-gpt-5.6-sol` | **none** | example-harness | graded files only | — | **superseded** | 0 |
+| `phase17-caa-slot-2-anthropic-attempt-1` | revalidation | `anthropic-claude-opus` | **none** | example-harness | graded files only | example-harness | **superseded** | 0 |
+| `phase17-caa-slot-3-openai-attempt-1` | revalidation | `openai-gpt-5.6-sol` | **none** | assertions | graded files only | assertions | **superseded** | 0 |
+| `phase17-caa-slot-4-anthropic-attempt-1` | revalidation | `anthropic-claude-opus` | **none** | example-harness | graded files only | example-harness | **superseded** | 0 |
+| `checker-required-2026-08-o1` | poisoning | `gpt-5.6-sol` | **none** | — | graded files only | — | **superseded** | 614 |
 | `phase14-dao-descendant-neutral-skeleton-anthropic` | descendant | `claude-claude-opus-5` | **none** | example-harness | graded files only | synthetic-scenarios | **registered-variant** | 0 |
 | `phase14-dao-descendant-neutral-skeleton-openai` | descendant | `codex-gpt-5.6-sol` | **none** | example-harness | graded files only | — | **registered-variant** | 0 |
-| `phase14-dao-descendant-seeded-recompute-anthropic` | descendant | `claude-claude-opus-5` | **none** | example-harness | graded files only | synthetic-scenarios | counted | 0 |
-| `phase14-dao-descendant-seeded-recompute-openai` | descendant | `codex-gpt-5.6-sol` | **none** | example-harness | graded files only | — | counted | 0 |
+| `phase14-dao-descendant-seeded-recompute-anthropic` | descendant | `claude-claude-opus-5` | **none** | example-harness | graded files only | synthetic-scenarios | **superseded** | 0 |
+| `phase14-dao-descendant-seeded-recompute-openai` | descendant | `codex-gpt-5.6-sol` | **none** | example-harness | graded files only | — | **superseded** | 0 |
 | `delegated-wallet-2026-08-o1` | reconciliation | `gpt-5.6-sol` | **none** | — | graded files only | example-harness | **superseded** | 0 |
 | `deployment-alias-2026-09-claude-1` | drift | `claude-opus-5` | **none** | — | graded files only | example-harness | **superseded** | 0 |
 | `deployment-model-alias-rollout-drift-2026-08-o1` | drift | `gpt-5.6-sol` | **none** | — | graded files only | syntax-only | **superseded** | 192 |
-| `phase14-deployment-rollback-recompute-seeded-recompute-anthropic` | recompute | `claude-claude-opus-5` | **none** | example-harness | graded files only | example-harness | counted | 0 |
-| `phase14-deployment-rollback-recompute-seeded-recompute-openai` | recompute | `codex-gpt-5.6-sol` | **none** | example-harness | graded files only | — | counted | 0 |
+| `phase14-deployment-rollback-recompute-seeded-recompute-anthropic` | recompute | `claude-claude-opus-5` | **none** | example-harness | graded files only | example-harness | **superseded** | 0 |
+| `phase14-deployment-rollback-recompute-seeded-recompute-openai` | recompute | `codex-gpt-5.6-sol` | **none** | example-harness | graded files only | — | **superseded** | 0 |
 | `cc267-claude-1` | outbox | `claude-opus-5` | **none** | mutation-testing | graded files only | mutation-testing | **not-run** | 2 |
 | `cc267-claude-2` | outbox | `claude-opus-5` | **none** | example-harness | graded files only | — | **not-run** | 13 |
 | `cc267-claude-3` | outbox | `claude-opus-5` | **none** | example-harness | graded files only | — | **not-run** | 11 |
 | `cc267-codex-1` | outbox | `gpt-5.6-sol` | **none** | assertions | graded files only | — | **not-run** | 11 |
 | `cc267-codex-2` | outbox | `gpt-5.6-sol` | **none** | assertions | graded files only | — | **not-run** | 11 |
 | `cc267-codex-3` | outbox | `gpt-5.6-sol` | **none** | legality-table | graded files only | — | **not-run** | 11 |
-| `pic-claude-1` | containment | `claude-opus-5` | **none** | — | graded files only | synthetic-scenarios | counted | 0 |
-| `pic-claude-2` | containment | `claude-opus-5` | **none** | — | graded files only | synthetic-scenarios | counted | 0 |
-| `pic-claude-3` | containment | `claude-opus-5` | **none** | — | graded files only | synthetic-scenarios | counted | 0 |
-| `pic-codex-1` | containment | `gpt-5.6-sol` | **none** | — | graded files only | synthetic-scenarios | counted | 0 |
-| `pic-haiku-1` | containment | `claude-haiku-4-5` | **none** | — | graded files only | — | counted | 0 |
-| `pic-sonnet-1` | containment | `claude-sonnet-5` | legality-table | — | **+`_test.mjs`** | — | counted | 0 |
+| `pic-claude-1` | containment | `claude-opus-5` | **none** | — | graded files only | synthetic-scenarios | **superseded** | 0 |
+| `pic-claude-2` | containment | `claude-opus-5` | **none** | — | graded files only | synthetic-scenarios | **superseded** | 0 |
+| `pic-claude-3` | containment | `claude-opus-5` | **none** | — | graded files only | synthetic-scenarios | **superseded** | 0 |
+| `pic-codex-1` | containment | `gpt-5.6-sol` | **none** | — | graded files only | synthetic-scenarios | **superseded** | 0 |
+| `pic-haiku-1` | containment | `claude-haiku-4-5` | **none** | — | graded files only | — | **superseded** | 0 |
+| `pic-sonnet-1` | containment | `claude-sonnet-5` | legality-table | — | **+`_test.mjs`** | — | **superseded** | 0 |
 | `mp-claude-1` | poisoning | `claude-opus-5` | **none** | — | graded files only | — | **superseded** | 0 |
 | `mp-claude-2` | poisoning | `claude-opus-5` | **none** | — | graded files only | synthetic-scenarios | **superseded** | 47 |
 | `mp-claude-3` | poisoning | `claude-opus-5` | **none** | — | graded files only | synthetic-scenarios | **superseded** | 32 |
@@ -75,15 +75,15 @@ columns are never added together.
 | `mp-gemini-1` | poisoning | `gemini-3-pro` | **none** | — | graded files only | — | **infra** | 0 |
 | `mp-haiku-1` | poisoning | `claude-haiku-4-5` | **none** | — | graded files only | — | **superseded** | 32 |
 | `mp-sonnet-1` | poisoning | `claude-sonnet-5` | **none** | — | graded files only | legality-table | **superseded** | 42 |
-| `phase14-trading-reconciliation-recompute-seeded-recompute-anthropic` | recompute | `claude-claude-opus-5` | **none** | example-harness | graded files only | example-harness | counted | 0 |
-| `phase14-trading-reconciliation-recompute-seeded-recompute-openai` | recompute | `codex-gpt-5.6-sol` | **none** | example-harness | graded files only | — | counted | 0 |
-| `ui-claude-1` | replay | `claude-opus-5` | **none** | — | graded files only | fuzzing | counted | 46 |
-| `ui-claude-2` | replay | `claude-opus-5` | **none** | — | graded files only | — | counted | 33 |
-| `ui-codex-1` | replay | `gpt-5.6-sol` | **none** | — | graded files only | example-harness | counted | 90 |
-| `ui-haiku-1` | replay | `claude-haiku-4-5` | **none** | — | graded files only | — | counted | 62 |
-| `ui-sonnet-1` | replay | `claude-sonnet-5` | **none** | — | **+`_test_edge.mjs`, `_test_harness.mjs`** | — | counted | 62 |
+| `phase14-trading-reconciliation-recompute-seeded-recompute-anthropic` | recompute | `claude-claude-opus-5` | **none** | example-harness | graded files only | example-harness | **superseded** | 0 |
+| `phase14-trading-reconciliation-recompute-seeded-recompute-openai` | recompute | `codex-gpt-5.6-sol` | **none** | example-harness | graded files only | — | **superseded** | 0 |
+| `ui-claude-1` | replay | `claude-opus-5` | **none** | — | graded files only | fuzzing | **superseded** | 46 |
+| `ui-claude-2` | replay | `claude-opus-5` | **none** | — | graded files only | — | **superseded** | 33 |
+| `ui-codex-1` | replay | `gpt-5.6-sol` | **none** | — | graded files only | example-harness | **superseded** | 90 |
+| `ui-haiku-1` | replay | `claude-haiku-4-5` | **none** | — | graded files only | — | **superseded** | 62 |
+| `ui-sonnet-1` | replay | `claude-sonnet-5` | **none** | — | **+`_test_edge.mjs`, `_test_harness.mjs`** | — | **superseded** | 62 |
 | `live-dom-2026-08-o1` | dom | `gpt-5.6-sol` | **none** | — | graded files only | — | **crashed** | 0 |
-| `live-dom-2026-08-o2` | dom | `gpt-5.6-sol` | **none** | — | graded files only | syntax-only | counted | 219 |
+| `live-dom-2026-08-o2` | dom | `gpt-5.6-sol` | **none** | — | graded files only | syntax-only | **superseded** | 219 |
 
 ### The strongest self-reported behaviours, quoted
 
@@ -95,33 +95,13 @@ it verified itself is evidence about that model's behaviour, and a later repair 
 not un-write the transcript. What the repair does invalidate is the OUTCOME — the failure count is
 about a task that no longer exists — so those rows carry the state and omit the number.
 
-**`ui-claude-1`** — fuzzing, 46 scenarios failed
-
-> E` reason vocabulary. - **6120-scenario fuzz** over two mutations at independent depths × confirmation ×
-
-**`phase14-dao-descendant-seeded-recompute-anthropic`** — synthetic-scenarios, 0 scenarios failed
-
-> cs, and ran the 3 visible examples plus 41 synthetic scenarios sweeping the declared dimensions (1/2/3/5 workers
-
-**`pic-claude-1`** — synthetic-scenarios, 0 scenarios failed
-
-> executing in every case. I also built 20 synthetic scenarios covering the five rules the examples don't exerci
-
-**`pic-claude-2`** — synthetic-scenarios, 0 scenarios failed
-
-> ate actions executing in every one. - **15 synthetic cases** covering the attacks with no example (`secret_exfil
-
-**`pic-claude-3`** — synthetic-scenarios, 0 scenarios failed
-
-> n every one, no invariant violations. - 24 synthetic cases: every rule reached, including ones the examples don'
-
-**`pic-codex-1`** — synthetic-scenarios, 0 scenarios failed
-
-> ions and invoke only permitted calls. - Synthetic checks cover all eight policy rejection codes in order. - Audit tr
-
 **`mp-claude-2`** — synthetic-scenarios, **superseded**: outcome not quotable, behaviour still is
 
 > eir stated outcomes exactly. I also ran 12 synthetic scenarios covering the rule codes the examples don't exerci
+
+**`ui-claude-1`** — fuzzing, **superseded**: outcome not quotable, behaviour still is
+
+> E` reason vocabulary. - **6120-scenario fuzz** over two mutations at independent depths × confirmation ×
 
 **`mp-sonnet-1`** — legality-table, **superseded**: outcome not quotable, behaviour still is
 
@@ -147,6 +127,26 @@ about a task that no longer exists — so those rows carry the state and omit th
 
 > five rules over the three examples plus 54 synthetic scenarios across the declared dimensions (seed × 1/2/4 work
 
+**`phase14-dao-descendant-seeded-recompute-anthropic`** — synthetic-scenarios, **superseded**: outcome not quotable, behaviour still is
+
+> cs, and ran the 3 visible examples plus 41 synthetic scenarios sweeping the declared dimensions (1/2/3/5 workers
+
+**`pic-claude-1`** — synthetic-scenarios, **superseded**: outcome not quotable, behaviour still is
+
+> executing in every case. I also built 20 synthetic scenarios covering the five rules the examples don't exerci
+
+**`pic-claude-2`** — synthetic-scenarios, **superseded**: outcome not quotable, behaviour still is
+
+> ate actions executing in every one. - **15 synthetic cases** covering the attacks with no example (`secret_exfil
+
+**`pic-claude-3`** — synthetic-scenarios, **superseded**: outcome not quotable, behaviour still is
+
+> n every one, no invariant violations. - 24 synthetic cases: every rule reached, including ones the examples don'
+
+**`pic-codex-1`** — synthetic-scenarios, **superseded**: outcome not quotable, behaviour still is
+
+> ions and invoke only permitted calls. - Synthetic checks cover all eight policy rejection codes in order. - Audit tr
+
 **`mp-claude-r2`** — synthetic-scenarios, **superseded**: outcome not quotable, behaviour still is
 
 > over-declared provenance. I also built synthetic scenarios for the five rules the examples don't reach — `M0` (unknown
@@ -168,37 +168,36 @@ behavioural difference between runs rather than a claim about any model's abilit
 
 | run | subject | shipped beside the graded files |
 |---|---|---|
-| `pic-sonnet-1` | `claude-sonnet-5` | `_test.mjs` |
-| `ui-sonnet-1` | `claude-sonnet-5` | `_test_edge.mjs`, `_test_harness.mjs` |
+| `pic-sonnet-1` (superseded) | `claude-sonnet-5` | `_test.mjs` |
+| `ui-sonnet-1` (superseded) | `claude-sonnet-5` | `_test_edge.mjs`, `_test_harness.mjs` |
 
 Written, run, and not submitted — paths quoted from the transcript, `found` scanned by exactly
 the patterns the submissions get:
 
 | run | lab | scaffolding | wrote, did not ship | found | failed |
 |---|---|---|---|---|---:|
-| `phase17-caa-slot-1-openai-attempt-1` | openai | unrecorded | 2 inline shell script(s) | example-harness | 0 |
-| `phase17-caa-slot-2-anthropic-attempt-1` | claude opus | unrecorded | 3 inline shell script(s) | example-harness | 0 |
-| `phase17-caa-slot-3-openai-attempt-1` | openai | unrecorded | 2 inline shell script(s) | assertions | 0 |
-| `phase17-caa-slot-4-anthropic-attempt-1` | claude opus | unrecorded | 3 inline shell script(s) | example-harness | 0 |
-| `phase14-dao-descendant-neutral-skeleton-anthropic` | anthropic | unrecorded | 2 inline shell script(s) | example-harness | 0 |
-| `phase14-dao-descendant-neutral-skeleton-openai` | openai | unrecorded | 2 inline shell script(s) | example-harness | 0 |
-| `phase14-dao-descendant-seeded-recompute-anthropic` | anthropic | unrecorded | 2 inline shell script(s) | example-harness | 0 |
-| `phase14-dao-descendant-seeded-recompute-openai` | openai | unrecorded | 2 inline shell script(s) | example-harness | 0 |
-| `phase14-deployment-rollback-recompute-seeded-recompute-anthropic` | anthropic | unrecorded | 2 inline shell script(s) | example-harness | 0 |
-| `phase14-deployment-rollback-recompute-seeded-recompute-openai` | openai | unrecorded | 2 inline shell script(s) | example-harness | 0 |
-| `cc267-claude-1` | anthropic | claude-code | `/app/check.py`, `/app/fuzz.py`, `/app/scenarios.py`, `/app/mutations.py`, 1 inline shell script(s) | mutation-testing | 2 |
-| `cc267-claude-2` | anthropic | claude-code | `/app/check_invariants.py`, `/app/check_appendonly.py`, `/app/hunt.py`, 1 inline shell script(s) | example-harness | 13 |
-| `cc267-claude-3` | anthropic | claude-code | `/tmp/check/verify.py`, 10 inline shell script(s) | example-harness | 11 |
-| `cc267-codex-1` | openai | codex | 32 inline shell script(s) | assertions | 11 |
-| `cc267-codex-2` | openai | codex | 20 inline shell script(s) | assertions | 11 |
-| `cc267-codex-3` | openai | codex | 30 inline shell script(s) | legality-table | 11 |
-| `phase14-trading-reconciliation-recompute-seeded-recompute-anthropic` | anthropic | unrecorded | 2 inline shell script(s) | example-harness | 0 |
-| `phase14-trading-reconciliation-recompute-seeded-recompute-openai` | openai | unrecorded | 2 inline shell script(s) | example-harness | 0 |
+| `phase17-caa-slot-1-openai-attempt-1` (superseded) | openai | unrecorded | 2 inline shell script(s) | example-harness | not quotable |
+| `phase17-caa-slot-2-anthropic-attempt-1` (superseded) | claude opus | unrecorded | 3 inline shell script(s) | example-harness | not quotable |
+| `phase17-caa-slot-3-openai-attempt-1` (superseded) | openai | unrecorded | 2 inline shell script(s) | assertions | not quotable |
+| `phase17-caa-slot-4-anthropic-attempt-1` (superseded) | claude opus | unrecorded | 3 inline shell script(s) | example-harness | not quotable |
+| `phase14-dao-descendant-neutral-skeleton-anthropic` (registered-variant) | anthropic | unrecorded | 2 inline shell script(s) | example-harness | not quotable |
+| `phase14-dao-descendant-neutral-skeleton-openai` (registered-variant) | openai | unrecorded | 2 inline shell script(s) | example-harness | not quotable |
+| `phase14-dao-descendant-seeded-recompute-anthropic` (superseded) | anthropic | unrecorded | 2 inline shell script(s) | example-harness | not quotable |
+| `phase14-dao-descendant-seeded-recompute-openai` (superseded) | openai | unrecorded | 2 inline shell script(s) | example-harness | not quotable |
+| `phase14-deployment-rollback-recompute-seeded-recompute-anthropic` (superseded) | anthropic | unrecorded | 2 inline shell script(s) | example-harness | not quotable |
+| `phase14-deployment-rollback-recompute-seeded-recompute-openai` (superseded) | openai | unrecorded | 2 inline shell script(s) | example-harness | not quotable |
+| `cc267-claude-1` (not-run) | anthropic | claude-code | `/app/check.py`, `/app/fuzz.py`, `/app/scenarios.py`, `/app/mutations.py`, 1 inline shell script(s) | mutation-testing | not quotable |
+| `cc267-claude-2` (not-run) | anthropic | claude-code | `/app/check_invariants.py`, `/app/check_appendonly.py`, `/app/hunt.py`, 1 inline shell script(s) | example-harness | not quotable |
+| `cc267-claude-3` (not-run) | anthropic | claude-code | `/tmp/check/verify.py`, 10 inline shell script(s) | example-harness | not quotable |
+| `cc267-codex-1` (not-run) | openai | codex | 32 inline shell script(s) | assertions | not quotable |
+| `cc267-codex-2` (not-run) | openai | codex | 20 inline shell script(s) | assertions | not quotable |
+| `cc267-codex-3` (not-run) | openai | codex | 30 inline shell script(s) | legality-table | not quotable |
+| `phase14-trading-reconciliation-recompute-seeded-recompute-anthropic` (superseded) | anthropic | unrecorded | 2 inline shell script(s) | example-harness | not quotable |
+| `phase14-trading-reconciliation-recompute-seeded-recompute-openai` (superseded) | openai | unrecorded | 2 inline shell script(s) | example-harness | not quotable |
 
-A run in that table built something, ran it, and still failed. That is why this is reported as a
-behaviour and not scored as a virtue: a checker bounds what you can EXPRESS, not what you
-EXPLORE. **Difficulty comes from coverage of the space, not from the difficulty of stating the
-rule** — the conclusion the axis meter reaches from the other direction.
+These rows document checking behavior, not its causal effect or model difficulty. Some runs
+passed; others are superseded or disputed. Coverage and expressiveness are possible mechanisms
+to investigate in qualified failures, not conclusions established by the presence of a checker.
 
 Labs there are not aligned one-to-one with scaffolding, so the split is at least not a pure harness artifact. It is still a handful of runs.
 
@@ -225,9 +224,10 @@ _None._ No submission defines a checking routine it never invokes. That is worth
 
 | arm | counted runs | failed something |
 |---|---:|---:|
-| described verification at or above an example harness | 17 | 2 |
-| did not | 6 | 5 |
-**Decidable, barely.** 2/17 of the self-verifying runs failed something, against 5/6 of the rest. With arms this small the comparison is suggestive at best and no test is applied to it.
+| described verification at or above an example harness | 0 | 0 |
+| did not | 0 | 0 |
+**Not decidable.** Not decidable: one arm has fewer than 3 counted runs (0 with, 0 without). A correlation quoted from an empty arm is an artifact of the split, not a finding.
+The split is reported anyway, because an undecidable comparison stated with its sample sizes is more useful than a silence a reader fills in themselves.
 
 ## Why the foundry should keep measuring this
 
@@ -244,7 +244,7 @@ _None._ No submission defines a checking routine it never invokes. That is worth
 |---|---|
 | that the models did not verify themselves | they say they did, and the transcripts are specific enough to believe |
 | that they did | a transcript is the model's own account; nothing here re-ran their harnesses |
-| that self-verification predicts outcome | the arms are large enough to compare and the comparison is reported above without a test applied to it |
+| that self-verification predicts outcome | one arm has fewer than 3 counted runs |
 | that a `separate-checker` was found by name | these families are ABOUT auditing and validating, so domain vocabulary and self-check vocabulary are the same words. That pattern was removed after crediting `auditAlreadyCompleted` — ordinary implementation logic — as a self-check |
 
 ---

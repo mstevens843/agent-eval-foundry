@@ -127,6 +127,11 @@ export async function runInertAuthor(
     "--init",
     "--read-only",
     `--network=${profile.authoring.network}`,
+    // Docker Desktop supplies this alias; Linux Engine needs the explicit host gateway for
+    // the inert integration's owner-controlled public-tool fixture. No change to offline jobs.
+    ...(options.toolURL && process.platform === "linux" && profile.authoring.network !== "none"
+      ? ["--add-host=host.docker.internal:host-gateway"]
+      : []),
     `--cpus=${profile.limits.cpus}`,
     `--memory=${profile.limits.memoryMiB}m`,
     `--pids-limit=${profile.limits.pids}`,

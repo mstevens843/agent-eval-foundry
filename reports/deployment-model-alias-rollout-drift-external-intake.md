@@ -6,12 +6,13 @@ identity, transcript, submission, verifier output and no hidden artifacts.
 
 | item | value |
 |---|---|
-| expected challenge hash | `805efb58c923f9e081db1b41967392d7` |
+| expected challenge hash | `5b3171584b8a190743067d745b22e586` |
 | expected scenario set | `drift-339-590affe3` |
 | prepared packets | 3/3 |
 | imported returned packets | 2 |
-| countable returned packets | 0 |
-| preserved no-count packets | 1 |
+| current semantic evaluations established by packet validation alone | 0 |
+| legacy packet countability assertions preserved | 1 |
+| preserved packets requiring separate graded evidence | 2 |
 | withdrawn by a challenge migration | 1 |
 
 ## Prepared Packets
@@ -24,12 +25,12 @@ identity, transcript, submission, verifier output and no hidden artifacts.
 
 ## Returned Packet Results
 
-| run | provider family | status | countable | reason |
+| run | provider family | status | original packet countability (not current grading) | reason |
 |---|---|---|---|---|
-| `deployment-alias-2026-09-claude-1` — **superseded** by the 2026-09-01 `deployment-model-alias-rollout-drift` challenge migration; it does not count and its numbers are withdrawn | `anthropic` | `completed` | **no longer** | imported as countable, and withdrawn since: completed external packet with current hash and preserved artifacts. The hash it preserved is not the hash this family produces now |
+| `deployment-alias-2026-09-claude-1` — **superseded** by the 2026-09-06 `deployment-model-alias-rollout-drift` challenge migration; it does not count and its numbers are withdrawn | `anthropic` | `completed` | **no longer** | imported as countable, and withdrawn since: completed external packet with current hash and preserved artifacts. The hash it preserved is not the hash this family produces now |
 | `deployment-alias-2026-09-claude-1-infra` | `anthropic` | `infrastructure_error` | no | infrastructure error preserved as no-count evidence |
 
-**Withdrawn evidence.** `deployment-alias-2026-09-claude-1` was invalidated by the 2026-09-01 `deployment-model-alias-rollout-drift` challenge migration: it was graded against a package this repository no longer produces, so that row does not count and every number on it is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read this row as spend that was made, not as a result about the family as it stands.
+**Withdrawn evidence.** `deployment-alias-2026-09-claude-1` was invalidated by the 2026-09-06 `deployment-model-alias-rollout-drift` challenge migration: it was graded against a package this repository no longer produces, so that row does not count and every number on it is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read this row as spend that was made, not as a result about the family as it stands.
 
 ## Countability Rules
 
@@ -39,10 +40,11 @@ identity, transcript, submission, verifier output and no hidden artifacts.
 - Hidden verifier, reference, scenario, mutant or answer-matrix artifacts contaminate the packet.
 - Provider and model identity must be explicit; external/manual is not a provider-lab claim.
 - A verifier output file must name the same `runId` as the metadata.
+- Packet validation never establishes a complete semantic evaluation. Inspect the separately preserved, package-bound host grading to determine that.
 
 ## Cross-Lab Boundary
 
-Current countable external provider families: none.
+Current countable external provider families established by packet validation alone: none.
 **The cross-lab smoke claim is WITHDRAWN.** A non-OpenAI packet did import cleanly, and the hash it imported against is not the hash this family produces now, so it establishes neither cross-lab presence nor a provider-delta solve. There is no cross-lab claim of any kind on this family until a non-OpenAI completed run imports cleanly under the current hash.
 
 ---

@@ -1,6 +1,6 @@
 # Kill analysis — Deployment rollback recompute recovery
 
-`deployment-rollback-recompute` · verdict **NOT-READY** · primary reason **`already_solved`** · disposition **`harden`**
+`deployment-rollback-recompute` · verdict **NOT-READY** · primary reason **`redundant_axis`** · disposition **`mutate`**
 
 Every finding below is derived from a gate result or a trial record. Nothing here is an opinion.
 
@@ -15,49 +15,39 @@ It targets `uncertain-external-effects`, `duplicate-side-effects` across a decla
 | claim | evidence | status |
 |---|---|---|
 | The reference is solvable | reference sweep over every graded scenario | **proved** |
-| The verifier discriminates | 4 of 4 mutants caught by the check each was written to trip | **proved** |
+| The verifier discriminates | 6 of 6 mutants caught by the check each was written to trip | **proved** |
 | Trivial strategies lose | 1 of 1 baselines rejected | **proved** |
 | Scenarios exercise their mechanism | every attack blocks on its governing rule | **proved** |
-| Real models can be graded on it | 2 counted agent trial(s) under container isolation, artifacts preserved | **proved** |
 
 ## What it did **not** prove
 
-**That it is hard.** All 2 counted agent trials passed every graded scenario. The
-submissions were genuine implementations, not refusals or stubs — which makes this a
-measurement rather than a harness failure, and the measurement is that the task is easy for
-the models it was built to separate.
+**That it is anything.** Every trial this family has is WITHDRAWN: each was graded against a
+package this repository no longer produces, so none of them is evidence about the task as it
+stands. That is not the same as never having been attempted — an attempt was made and paid
+for — and it is not a difficulty reading in either direction. A clean pass against a package
+that contained its own answer distinguishes nothing, and a failure against a package with a
+defect in it measures the defect.
 
-A clean smoke pass is useful evidence ONLY when the package withheld the answer. Given that, it prevents wasting a `/6` matrix and routes the family into evolution.
-
-It also did not prove the opposite: 2 counted clean passes by the available model family is a signal, not a proof about every provider. What it forecloses is *shipping on the current evidence*.
+What those runs bought is the discovery that invalidated them. The family's status is UNKNOWN
+until one counted trial exists under the current hash, and no routing decision — evolution,
+matrix spend, lineage verdict — may be made on the withdrawn numbers.
 
 ### The trials
 
 | run | evidence state | model | runtime | scenarios | failed | isolation |
 |---|---|---|---:|---:|---:|---|
-| `phase14-deployment-rollback-recompute-seeded-recompute-anthropic` | canonical counted | anthropic/claude-opus-5 | 114s | 24 | 0 | container |
-| `phase14-deployment-rollback-recompute-seeded-recompute-openai` | canonical counted | openai/gpt-5.6-sol | 39s | 24 | 0 | container |
+| `phase14-deployment-rollback-recompute-seeded-recompute-anthropic` (superseded by the 2026-09-06 challenge migration; it does not count) — **superseded** by the 2026-09-06 `deployment-rollback-recompute` challenge migration; it does not count and its numbers are withdrawn | **superseded**; withdrawn | anthropic/claude-opus-5 | 114s | 24 | 0 | container |
+| `phase14-deployment-rollback-recompute-seeded-recompute-openai` (superseded by the 2026-09-06 challenge migration; it does not count) — **superseded** by the 2026-09-06 `deployment-rollback-recompute` challenge migration; it does not count and its numbers are withdrawn | **superseded**; withdrawn | openai/gpt-5.6-sol | 39s | 24 | 0 | container |
+
+**Withdrawn evidence.** `phase14-deployment-rollback-recompute-seeded-recompute-anthropic` (superseded by the 2026-09-06 challenge migration; it does not count), `phase14-deployment-rollback-recompute-seeded-recompute-openai` (superseded by the 2026-09-06 challenge migration; it does not count) were invalidated by the 2026-09-06 `deployment-rollback-recompute` challenge migration: they were graded against a package this repository no longer produces, so those rows do not count and every number on them is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read these rows as spend that was made, not as a result about the family as it stands.
 
 ## Why it is not ready
 
-Blocking gates failing: `difficulty-evidenced`, `not-already-solved`.
+Blocking gates failing: `content-verified-package-missing`, `ambiguity-status-unknown`, `bypass-status-unknown`, `required-reference`, `required-positiveWork`, `required-nearMissControls`, `required-contractReviewed`, `required-publicPackageComplete`, `required-protectedGrading`, `required-localIntegrityControls`, `required-boundedSolveEvidence`, `no-qualified-capability-failure`, `required-destinationChecks`, `not-destination-professional-package`, `exact-two-target-profiles-missing`.
 
 Advisory gates failing: `measured-axes`, `shared-bank-ready`.
 
 ## Findings
-
-### `already_solved` — weakness, derived
-
-Every counted agent trial passed cleanly. Whatever the verifier can detect, no subject in this bank exhibits it.
-
-**Disposition:** `harden`. **Evidence required:** at least one counted agent trial, and every one of them passing.
-
-| evidence |
-|---|
-| 2 counted agent trial(s), 2 of them passing every graded scenario |
-| isolation: container |
-
-Supporting gates: `not-already-solved`.
 
 ### `redundant_axis` — weakness, derived
 
@@ -71,6 +61,19 @@ The instances collapse: the suite is one measurement wearing many names.
 
 Supporting gates: `measured-axes`.
 
+### `verifier_only` — absence, derived
+
+The verifier discriminates against implementations written alongside it. That is a fact about the verifier, and it is not evidence that the family is hard.
+
+**Disposition:** `trial`. **Evidence required:** mutants caught by their intended checks, and zero counted agent trials.
+
+| evidence |
+|---|
+| 6 of 6 mutants caught by their intended check |
+| 0 counted agent trials |
+
+Supporting gates: `difficulty-evidenced`.
+
 ### `insufficient_shared_bank` — absence, derived
 
 Too few subjects have attempted this family and another, so its axes cannot be compared with any other family's.
@@ -79,7 +82,7 @@ Too few subjects have attempted this family and another, so its axes cannot be c
 
 | evidence |
 |---|
-| 2 subject(s) shared with another family (need 3) |
+| 0 subject(s) shared with another family (need 3) |
 
 Supporting gates: `shared-bank-ready`.
 
@@ -90,11 +93,11 @@ the spec, the data, or the absence of evidence? Each row is a hypothesis with a 
 
 | hypothesis | verdict here | how it was decided |
 |---|---|---|
-| **Task weakness** — the family is too easy | **yes, primary** | counted trials all passing |
+| **Task weakness** — the family is too easy | no | counted trials all passing |
 | **Model strength** — the models are simply good at this | contributory | the submissions were real implementations citing the rules, not lucky guesses. That is a fact about the models AND about the task: the task did not distinguish them. |
 | **Policy explicitness** — the spec gave away the answer | likely contributory | the published rule order made attribution a lookup rather than a derivation. `reduce_policy_explicitness` is the operator that tests this directly. |
 | **Synthetic data** — the fixtures are too clean to transfer | unmeasured | scenarios are single-turn and fully observable; nothing has tested whether a pass transfers to a longer, noisier setting |
-| **Lack of trial evidence** — nothing has attempted it | no — trials exist | 2 counted trials |
+| **Lack of trial evidence** — nothing has attempted it | **yes, by withdrawal** | 0 counted trials; 2 preserved and withdrawn, which is spend without evidence rather than an untried family |
 
 ## What would make it stronger
 
@@ -113,8 +116,8 @@ See `reports/foundry-evolution-report.md` for each variant in full.
 
 ## Next actions
 
-1. Evolve the family with hardening operators — the mechanism is intact and the difficulty is not.
-2. Evolve the family by changing mechanism or domain, not by adding scenarios.
+1. Evolve the family by changing mechanism or domain, not by adding scenarios.
+2. Run counted agent trials. Nothing else moves until difficulty is measured.
 3. Schedule infrastructure work: Too few subjects have attempted this family and another, so cross-family axes are unmeasurable.
 
 ## The taxonomy this was graded against
@@ -125,8 +128,8 @@ disposition column is why the distinction is worth keeping.
 
 | reason | kind | disposition | found here |
 |---|---|---|---|
-| `already_solved` | weakness | `harden` | **yes** |
-| `verifier_only` | absence | `trial` | no |
+| `already_solved` | weakness | `harden` | no |
+| `verifier_only` | absence | `trial` | **yes** |
 | `redundant_axis` | weakness | `mutate` | **yes** |
 | `unfair_hidden_rule` | defect | `repair` | no |
 | `hidden_artifact_leak` | defect | `repair` | no |

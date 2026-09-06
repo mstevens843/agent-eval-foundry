@@ -23,7 +23,7 @@ describe("checked-in challenge packages are not stale", () => {
   for (const familyId of BUILT_FAMILY_IDS) {
     it(`${familyId} — every generated file matches its builder`, () => {
       const generatedDir = join(ROOT, "examples/families", familyId, "challenge");
-      if (!existsSync(generatedDir)) return;
+      expect(existsSync(generatedDir), `${familyId}: required public package absent`).toBe(true);
 
       const built = prepareChallenge(ROOT, familyId);
       const drifted: string[] = [];

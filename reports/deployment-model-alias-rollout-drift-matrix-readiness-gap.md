@@ -6,7 +6,7 @@ from what is only planned or still missing.
 | requirement | state | reading |
 |---|---|---|
 | local reference/verifier/mutant evidence | **pass** | reference clean; intended known-bad bank caught |
-| package hash current | **pass** | current hash `805efb58c923f9e081db1b41967392d7` |
+| package hash current | **pass** | current hash `5b3171584b8a190743067d745b22e586` |
 | scenario set current | **pass** | scenario set `drift-339-590affe3` |
 | OpenAI smoke | **pending** | no counted OpenAI on-target failure |
 | cross-lab smoke | **missing** | no non-OpenAI counted smoke under the current hash |
@@ -19,7 +19,7 @@ from what is only planned or still missing.
 | transfer | **declared** | feature-flag/model-routing transfer plans exist; not proved |
 | OpenAI half-matrix | **planned** | 3 OpenAI slot(s); 0 already recorded, and 1 withdrawn by a challenge migration — a withdrawn slot is an empty slot |
 | Anthropic half-matrix | **blocked** | Anthropic quota unavailable; import only until restored |
-| full `/6` matrix | **blocked** | run or import one counted smoke trial under the current hash |
+| full `/6` matrix | **blocked** | Resolve package blockers: content-verified-package-missing, ambiguity-status-unknown, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence |
 
 ## OpenAI Half-Matrix Plan
 
@@ -27,11 +27,11 @@ Campaign: `deployment-model-alias-rollout-drift-openai-half-matrix-2026-09`.
 
 | slot | model | state | run | note |
 |---|---|---|---|---|
-| `O1` | `openai/gpt-5.6-sol` | `RUN`, **WITHDRAWN** | `deployment-model-alias-rollout-drift-2026-08-o1` — **superseded** by the 2026-09-01 `deployment-model-alias-rollout-drift` challenge migration; it does not count and its numbers are withdrawn | Slot is EMPTY. Its pre-registered note said: "Existing counted OpenAI/Codex smoke slot. It failed 192/339 scenarios on target and can serve as OpenAI half-matrix slot 1 while the hash remains current." — the hash did not remain current, so the run cannot serve as a half-matrix slot and its on-target failure count is withdrawn. |
+| `O1` | `openai/gpt-5.6-sol` | `RUN`, **WITHDRAWN** | `deployment-model-alias-rollout-drift-2026-08-o1` — **superseded** by the 2026-09-06 `deployment-model-alias-rollout-drift` challenge migration; it does not count and its numbers are withdrawn | Slot is EMPTY. Its pre-registered note said: "Existing counted OpenAI/Codex smoke slot. It failed 192/339 scenarios on target and can serve as OpenAI half-matrix slot 1 while the hash remains current." — the hash did not remain current, so the run cannot serve as a half-matrix slot and its on-target failure count is withdrawn. |
 | `O2` | `openai/gpt-5.6-sol` | `NOT_RUN` | pending | Planned OpenAI/Codex repeat. Same model/provider means same-provider stability only, not a new provider lab. |
 | `O3` | `openai/gpt-5.6-sol` | `NOT_RUN` | pending | Planned OpenAI/Codex repeat. Do not report this as cross-lab evidence even if it is later counted. |
 
-**Withdrawn evidence.** `deployment-model-alias-rollout-drift-2026-08-o1` was invalidated by the 2026-09-01 `deployment-model-alias-rollout-drift` challenge migration: it was graded against a package this repository no longer produces, so that row does not count and every number on it is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read this row as spend that was made, not as a result about the family as it stands.
+**Withdrawn evidence.** `deployment-model-alias-rollout-drift-2026-08-o1` was invalidated by the 2026-09-06 `deployment-model-alias-rollout-drift` challenge migration: it was graded against a package this repository no longer produces, so that row does not count and every number on it is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read this row as spend that was made, not as a result about the family as it stands.
 
 With 1 of 3 slot(s) withdrawn, the OpenAI half-matrix has 0 slot(s) actually filled. The plan is a plan, not partial evidence.
 

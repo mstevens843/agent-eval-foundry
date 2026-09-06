@@ -1,3 +1,5 @@
+> Historical report — original narrative retained, not current-package qualification. Trial versions below may be superseded; current interpretation and limitations are in [evidence corrections](../docs/evidence-corrections.md) and generated package/evidence reports. This notice does not alter original trial bytes or adjudications.
+
 # Phase 1 — Truth Repair
 
 **Hand-authored. Not generated.** Every other file in `reports/` is produced by `node dist/cli.js all`

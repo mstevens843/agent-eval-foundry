@@ -64,7 +64,7 @@ describe("diagnosis-radius — validity gates (validity checks, not hardness evi
     expect(treated.referenceClean).toBe(true);
   });
 
-  it("every mutant is caught by at least one arm, jointly", () => {
+  it("the retained pre-dispute arms cannot certify coverage of the current mutant bank", () => {
     const baseline = runValidityGates(BASELINE_ARM);
     const treated = runValidityGates(TREATED_ARM);
     const caughtByEither = new Map<string, boolean>();
@@ -73,7 +73,11 @@ describe("diagnosis-radius — validity gates (validity checks, not hardness evi
       caughtByEither.set(m.mutantId, (caughtByEither.get(m.mutantId) ?? false) || m.caught);
     }
     expect(caughtByEither.size).toBeGreaterThan(0);
-    for (const [, caught] of caughtByEither) expect(caught).toBe(true);
+    expect([...caughtByEither].filter(([, caught]) => !caught).map(([id]) => id)).toEqual([
+      "retroactive-auditor",
+    ]);
+    expect(baseline.allMutantsCaught).toBe(false);
+    expect(treated.allMutantsCaught).toBe(false);
   });
 
   it("same-session-resolver is specifically NOT caught at sessionsBetween=0 (expected, documented family behavior)", () => {
@@ -119,28 +123,23 @@ describe("diagnosis-radius — matched-pair and package freezing", () => {
 });
 
 describe("route parity (Docker-gated, real container path)", () => {
-  let dockerAvailable = false;
   beforeAll(() => {
     try {
       execFileSync("docker", ["info"], { stdio: "ignore", timeout: 20_000 });
-      dockerAvailable = true;
     } catch {
-      dockerAvailable = false;
+      throw Error("REQUIRED_DOCKER_RUNTIME_UNAVAILABLE");
     }
   });
 
-  it.runIf(() => dockerAvailable)(
-    "a preserved honest submission grades identically through both the pre- and post-Phase-20 routes",
-    () => {
-      const modulePath = join(
-        ROOT,
-        "trials/caa-revalidation/phase17-caa-slot-1-openai-attempt-1/submission/subject.mjs",
-      );
-      const result = checkRouteParity("test-slot-1", modulePath);
-      expect(result.identical).toBe(true);
-      expect(result.discrepancies).toEqual([]);
-      expect(result.preRouteHostErrors).toBe(0);
-      expect(result.postRouteHostErrors).toBe(0);
-    },
-  );
+  it("a preserved honest submission grades identically through both the pre- and post-Phase-20 routes", () => {
+    const modulePath = join(
+      ROOT,
+      "trials/caa-revalidation/phase17-caa-slot-1-openai-attempt-1/submission/subject.mjs",
+    );
+    const result = checkRouteParity("test-slot-1", modulePath);
+    expect(result.identical).toBe(true);
+    expect(result.discrepancies).toEqual([]);
+    expect(result.preRouteHostErrors).toBe(0);
+    expect(result.postRouteHostErrors).toBe(0);
+  });
 });

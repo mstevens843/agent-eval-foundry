@@ -46,13 +46,13 @@ scenario set.
 | distinct catch sets | 56 |
 | **independent axes** | **19** |
 | instances separating nothing | 0 |
-| challenge package | 9 files, hash `18c3f5afc5973604205cd7df23ce4cad` |
-| counted real-agent trials | 1 |
-| live-DOM status | **difficulty-evidenced** |
+| challenge package | 9 files, hash `b79ba7c2d564aa9b83775bfe064c2f78` |
+| counted real-agent trials | 0 |
+| live-DOM status | **HOLD** |
 
 The axis count is over a MUTANT bank: it says the verifier can distinguish 19 kinds of
 wrong, and it is bounded by how many kinds were written.
-Because at least one real agent trial now counts, difficulty evidence is present. The report still keeps mutant-detection axes and real-agent difficulty separate.
+It says nothing about whether the family is hard, because no counted real-agent trial has attempted it yet. That distinction is a gate in this repository, not a footnote.
 
 ## The realism upgrade, mechanic by mechanic
 
@@ -79,8 +79,8 @@ correction can never change a hash and invalidate the evidence that motivated it
 | | |
 |---|---|
 | browser-backed | **no.** No renderer, no layout, no compositing, no real CSS matching |
-| challenge package | **yes.** 9 leak-checked visible files, hash `18c3f5afc5973604205cd7df23ce4cad` |
-| trialed | **yes.** 1 counted real-agent trial(s) |
+| challenge package | **yes.** 9 leak-checked visible files, hash `b79ba7c2d564aa9b83775bfe064c2f78` |
+| trialed | **not yet.** campaign prepared, no counted real-agent trial |
 | shippable | **no**. SHIP requires counted agent evidence, not only mutant-detection evidence |
 
 The package exists now, and its hash is the stale-evidence guard. Any spec or visible-example

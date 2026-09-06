@@ -11,6 +11,8 @@
 // measured is that the task is too easy, and the report says so in the headline.
 
 import type { TrialDirectory } from "../trials/directory.js";
+import type { EvidenceLedger } from "../trials/evidence-lifecycle.js";
+import { isSupersededRun, renderRunRef } from "../trials/migration.js";
 import { PROVIDERS } from "../trials/providers.js";
 import type { TrialSet } from "../trials/types.js";
 import { ISOLATION_GUARANTEES, NEVER_COUNTS, TRIAL_STATUSES, countedAgentTrials } from "../trials/types.js";
@@ -20,11 +22,13 @@ export interface OrchestrationReportInput {
   readonly trials: TrialSet;
   /** Durable directories, for the per-run artifact table. */
   readonly directories: readonly TrialDirectory[];
+  readonly ledgers?: readonly EvidenceLedger[];
 }
 
 const secs = (n: number | null): string => (n === null ? "—" : `${Math.round(n)}s`);
 
 export function renderOrchestrationReport(input: OrchestrationReportInput): string {
+  const ledgers = input.ledgers ?? [];
   const agents = input.trials.records.filter((r) => r.subjectType === "agent");
   const counted = countedAgentTrials(input.trials);
   const uncounted = agents.filter((r) => !r.counts);
@@ -50,7 +54,7 @@ export function renderOrchestrationReport(input: OrchestrationReportInput): stri
     `| counted trials that passed every graded scenario | ${passed.length} |`,
     "",
     counted.length === 0
-      ? "No counted agent trial exists yet. Nothing in this repository may be described as difficulty evidence."
+      ? "No current counted agent trial exists for this family. Preserved results do not establish difficulty for its revised package."
       : [
           "| run | model | isolation | status | runtime | scenarios | failed | counts |",
           "|---|---|---|---|---:|---:|---:|---|",
@@ -124,12 +128,9 @@ export function renderOrchestrationReport(input: OrchestrationReportInput): stri
     "|---|---|",
     ...Object.entries(ISOLATION_GUARANTEES).map(([k, v]) => `| \`${k}\` | ${v} |`),
     "",
-    "The counted trials above ran at `subprocess`. That is the level at which a hostile submission",
-    "cannot reach the verifier's memory: the artifact is imported in a child process, and the test",
-    "suite proves it by grading a subject that deliberately mutates globals and checking the parent's",
-    "are untouched. `container` is declared and planned (read-only challenge mount, writable",
-    "submission mount, `--network=none`, no verifier path mounted at all) and is not claimed as",
-    "achieved, because the daemon is not running on this machine.",
+    "Recorded isolation describes the historical attempt, not current assurance. All twelve current",
+    "generic routes use protected subject execution and independent operation authority. Required",
+    "runtime controls must actually pass; a missing daemon is an infrastructure error, never a model failure.",
     "",
     "## Artifacts kept per trial",
     "",
@@ -140,7 +141,7 @@ export function renderOrchestrationReport(input: OrchestrationReportInput): stri
           "|---|---|---:|---|---|",
           ...input.directories.map(
             (d) =>
-              `| \`${d.runId}\` | ${d.submissionFiles.map((f) => `\`${f}\``).join(", ") || "none"} | ${d.record.cells.length} | ${d.countability.counts ? "yes" : "**no**"} | ${d.countability.reason} |`,
+              `| ${renderRunRef(d.runId, ledgers)} | ${d.submissionFiles.map((f) => `\`${f}\``).join(", ") || "none"} | ${d.record.cells.length} | ${!isSupersededRun(d.runId, ledgers) && d.countability.counts ? "yes" : "**no**"} | ${isSupersededRun(d.runId, ledgers) ? "Historical grading retained; superseded package does not count now." : d.countability.reason} |`,
           ),
         ].join("\n"),
     "",

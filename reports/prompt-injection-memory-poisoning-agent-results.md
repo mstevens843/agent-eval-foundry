@@ -35,7 +35,7 @@ it never measured.
 | | parent | this family |
 |---|---|---|
 | family | `prompt-injection-containment` | `prompt-injection-memory-poisoning` |
-| counted trials | 6 | 0 |
+| counted trials | 0 | 0 |
 | trials that failed something | 0 | 0 |
 | operator applied | — | `add_time_separation` |
 

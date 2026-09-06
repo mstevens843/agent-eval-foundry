@@ -43,26 +43,15 @@ import {
   STARTER_MIN_FAILING_FRACTION,
   checkStarterFailsEnough,
 } from "../src/challenge/package-check.js";
+import { BUILT_FAMILY_IDS } from "../src/families/registry.js";
 import { routeFor } from "../src/trials/router.js";
 
 const ROOT = new URL("..", import.meta.url).pathname;
 
-/**
- * The nine built, routable families. Written out rather than derived from a registry constant on
- * purpose: this is the list a reader can check against the repository by eye, and a family quietly
- * dropping out of a derived list would silently shrink the gate to whatever remained.
- */
-const FAMILIES = [
-  "prompt-injection-containment",
-  "prompt-injection-memory-poisoning",
-  "ui-action-record-replay",
-  "ui-replay-live-dom",
-  "checker-required-memory-poisoning",
-  "access-token-scope-expansion",
-  "delegated-wallet-scope-reconciliation",
-  "dao-descendant",
-  "deployment-model-alias-rollout-drift",
-] as const;
+// Derive coverage from the registry; an explicit floor catches accidental registry shrinkage.
+const FAMILIES = BUILT_FAMILY_IDS;
+it("retains at least the twelve maintained family contracts", () =>
+  expect(FAMILIES.length).toBeGreaterThanOrEqual(12));
 
 const packageDir = (id: string): string => `${ROOT}examples/families/${id}/challenge`;
 

@@ -5,7 +5,7 @@ solve exists.
 
 | item | value |
 |---|---|
-| challenge hash | `805efb58c923f9e081db1b41967392d7` |
+| challenge hash | `5b3171584b8a190743067d745b22e586` |
 | scenario set | `drift-339-590affe3` |
 | packet path | `human-reviews/deployment-model-alias-rollout-drift` |
 | human-ready | yes |

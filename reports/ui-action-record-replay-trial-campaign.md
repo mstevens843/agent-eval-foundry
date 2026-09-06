@@ -1,6 +1,6 @@
 # Trial campaign — ui-action-record-replay
 
-`ui-2026-08` · 4 slots · 3 run · 3 counted · 1 not run
+`ui-2026-08` · 4 slots · 3 run · 0 counted · 1 not run
 
 ## Pre-registration
 
@@ -16,17 +16,13 @@ Written before any slot ran, so the result below cannot be reinterpreted into a 
 
 | | |
 |---|---|
-| verdict | did not fire — at least one counted failure is root-caused to `capability` |
-| counted trials in this campaign's slots | 3 |
+| verdict | **not evaluable** — no counted trial belongs to this campaign's slots |
+| counted trials in this campaign's slots | 0 |
 | passed everything | 0 |
-| failed something | 3 |
-| root-caused `capability` | 2 |
+| failed something | 0 |
+| root-caused `capability` | 0 |
 
-2 of 3 counted trial(s) failed with root cause `capability`; the family survives its own kill condition on the mechanical clauses
-
-Counted failures that are NOT difficulty evidence, and why:
-
-- `ui-codex-1` — root cause `unlabelled`
+no counted trial belongs to this campaign's slots; the pre-registration stands and neither signal has fired
 
 Only the mechanical clauses are evaluated: whether every counted trial passed, and whether any
 counted failure has been root-caused to `capability`. Whatever else the prose above says — that
@@ -38,8 +34,8 @@ judgement no code here makes, and it is printed rather than scored.
 | | |
 |---|---|
 | challenge hash (plan) | `1050e79f4804a96a5327d50dd81765b0` |
-| challenge hash (now) | `1050e79f4804a96a5327d50dd81765b0` |
-| match | **yes** — every slot measured the task this repository currently holds |
+| challenge hash (now) | `9b00f533f3fd08718ddb96394f92fa48` |
+| match | **NO** — the family changed after the plan was written; these slots measured a different task |
 | scenario set | `replay-324-2255de40`, 324 scenarios |
 | isolation | `subprocess` |
 | timeout | 25 minutes per slot |
@@ -49,10 +45,16 @@ judgement no code here makes, and it is printed rather than scored.
 
 | slot | model | runner | state | run |
 |---|---|---|---|---|
-| A1 | `anthropic/claude-opus-5` | shell | RUN | `ui-claude-1` |
-| A2 | `anthropic/claude-opus-5` | shell | RUN | `ui-claude-2` |
+| A1 | `anthropic/claude-opus-5` | shell | RUN, **WITHDRAWN** | `ui-claude-1` — **superseded** by the 2026-09-06 `ui-action-record-replay` challenge migration; it does not count and its numbers are withdrawn |
+| A2 | `anthropic/claude-opus-5` | shell | RUN, **WITHDRAWN** | `ui-claude-2` — **superseded** by the 2026-09-06 `ui-action-record-replay` challenge migration; it does not count and its numbers are withdrawn |
 | A3 | `anthropic/claude-opus-5` | shell | **NOT_RUN** | — |
-| B1 | `openai/gpt-5.6-sol` | shell | RUN | `ui-codex-1` |
+| B1 | `openai/gpt-5.6-sol` | shell | RUN, **WITHDRAWN** | `ui-codex-1` — **superseded** by the 2026-09-06 `ui-action-record-replay` challenge migration; it does not count and its numbers are withdrawn |
+
+**Withdrawn evidence.** `ui-claude-1`, `ui-claude-2`, `ui-codex-1` were invalidated by the 2026-09-06 `ui-action-record-replay` challenge migration: they were graded against a package this repository no longer produces, so those rows do not count and every number on them is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read these rows as spend that was made, not as a result about the family as it stands.
+
+A slot whose recorded run has been withdrawn is an unfilled slot, not a finished one. The
+header line counts it under `run` and not under `counted`, and only the second number says
+anything about the task this campaign now describes: this campaign has no result yet, and neither its kill signal nor its confirm signal has been tested.
 
 ### Why the unrun slots are unrun
 
@@ -78,6 +80,17 @@ Declared in the plan and cross-checked against the code — a plan may not redef
 - transcript.txt is preserved verbatim, including for refusals and crashes.
 - challenge/ holds the exact bundle the model saw; submission/ holds the artifact it produced.
 - verifier-output.json holds the graded cells; countability.json holds the counting decision and its reason.
+
+## Superseded trials
+
+These ran against an earlier version of this challenge and are preserved without counting.
+A trial is evidence about the task it was run against, and that task no longer exists.
+
+- `ui-claude-1`
+- `ui-claude-2`
+- `ui-codex-1`
+- `ui-haiku-1`
+- `ui-sonnet-1`
 
 The plan and the trial directories on disk agree.
 

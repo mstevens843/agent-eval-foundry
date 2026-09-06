@@ -34,8 +34,8 @@ judgement no code here makes, and it is printed rather than scored.
 | | |
 |---|---|
 | challenge hash (plan) | `9d89b49307a960f65f2e6e8f204fd15e` |
-| challenge hash (now) | `9d89b49307a960f65f2e6e8f204fd15e` |
-| match | **yes** — every slot measured the task this repository currently holds |
+| challenge hash (now) | `bbb02380b6f8633fec7bc0e9d2956ec1` |
+| match | **NO** — the family changed after the plan was written; these slots measured a different task |
 | scenario set | `descendant-24-21639a0f`, 24 scenarios |
 | isolation | `subprocess` |
 | timeout | 30 minutes per slot |
@@ -80,6 +80,8 @@ A trial is evidence about the task it was run against, and that task no longer e
 
 - `phase14-dao-descendant-neutral-skeleton-anthropic`
 - `phase14-dao-descendant-neutral-skeleton-openai`
+- `phase14-dao-descendant-seeded-recompute-anthropic`
+- `phase14-dao-descendant-seeded-recompute-openai`
 
 The plan and the trial directories on disk agree.
 

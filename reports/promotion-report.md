@@ -79,9 +79,11 @@ Pre-registered kill signal: A counted smoke trial solves every scenario or failu
 
 Blockers:
 
+- challenge package hash is stale
 - no counted smoke trial
+- smoke campaign hash is stale
 
-Next action: run one OpenAI/Codex smoke trial
+Next action: reissue the challenge/campaign hash before any run can count
 
 Exact smoke command: `node dist/cli.js trials campaign run --family access-token-scope-expansion --only O1`.
 
@@ -92,9 +94,9 @@ does not retroactively turn promotion evidence into difficulty evidence.
 
 | promotion | family | scenarios | mutant axes | smoke state | counted smoke | matrix | next action |
 |---|---|---:|---:|---|---|---|---|
-| `access-token-scope-expansion-from-probe` | `access-token-scope-expansion` | 384 | 3 | smoke-planned | no | blocked | run one OpenAI/Codex smoke trial |
-| `delegated-wallet-scope-reconciliation-from-access-token-evolution` | `delegated-wallet-scope-reconciliation` | 804 | 3 | smoke-planned | no | blocked | run one OpenAI/Codex smoke trial |
-| `deployment-model-alias-rollout-drift-from-lineage-reallocation` | `deployment-model-alias-rollout-drift` | 339 | 20 | smoke-planned | no | blocked | run one OpenAI/Codex smoke trial |
+| `access-token-scope-expansion-from-probe` | `access-token-scope-expansion` | 384 | 3 | smoke-planned | no | blocked | reissue the challenge/campaign hash before any run can count |
+| `delegated-wallet-scope-reconciliation-from-access-token-evolution` | `delegated-wallet-scope-reconciliation` | 804 | 3 | smoke-planned | no | blocked | reissue the challenge/campaign hash before any run can count |
+| `deployment-model-alias-rollout-drift-from-lineage-reallocation` | `deployment-model-alias-rollout-drift` | 339 | 20 | smoke-planned | no | blocked | reissue the challenge/campaign hash before any run can count |
 
 ## Ready Promotions
 

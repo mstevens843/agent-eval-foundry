@@ -400,6 +400,7 @@ const COVERED_IN_PROVIDER_DELTA_TEST: readonly RuleCode[] = [
 
 /** Rules whose known-bad case lives in deployment-alias tests: production routing. */
 const COVERED_IN_DEPLOYMENT_ALIAS_TEST: readonly RuleCode[] = [
+  "PRODUCTION_PACKAGE_POLICY_DENIED",
   "PRODUCTION_LOCAL_VERIFIER_NOT_READY",
   "PRODUCTION_PACKAGE_NOT_BACKED",
   "PRODUCTION_NO_COUNTED_SMOKE",

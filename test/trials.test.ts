@@ -288,7 +288,7 @@ describe("manual agent import", () => {
     );
     const rec = importAgentTrial(dir);
     expect(rec.subjectType).toBe("agent");
-    expect(rec.isolation).toBe("subprocess");
+    expect(rec.isolation).toBe("cell-container");
     expect(rec.cells.length).toBeGreaterThan(0);
     // It blocks everything, so it must fail liveness — an over-blocker cannot pass by importing.
     expect(rec.cells.some((c) => c.failed.includes("liveness"))).toBe(true);
@@ -667,7 +667,7 @@ describe("checker-required measured family", () => {
       reportsDeterministic: true,
       trialReady: true,
     });
-    expect(assessment.blockingFailures).toContain("difficulty-evidenced");
+    expect(assessment.blockingFailures).toContain("no-qualified-capability-failure");
     expect(assessment.verdict).not.toBe("SHIP");
   });
 });
@@ -763,7 +763,9 @@ describe("ship gate with computed evidence", () => {
     const a = assessFamily(untried, registry, evidence);
     // Blocking since the campaign layer: mutant evidence alone cannot ship a family, and the gate
     // now says so by refusing rather than by noting it.
-    expect(a.blockingFailures).toEqual(["difficulty-evidenced"]);
+    // Package stages supersede the old single diagnostic as release authority.
+    expect(a.blockingFailures).toContain("no-qualified-capability-failure");
+    expect(a.blockingFailures).toContain("content-verified-package-missing");
     expect(a.results.find((r) => r.gate.id === "mutants-caught-by-intended-check")?.verdict).toBe("pass");
     expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("fail");
     expect(a.verdict).toBe("NOT-READY");
@@ -775,7 +777,7 @@ describe("ship gate with computed evidence", () => {
     // now falls back to the shape's declared outcome, and the schema forces that outcome to exist.
     const shape = registry.shapes.find((s) => s.familyId === "prompt-injection-containment");
     const a = assessFamily(shape as NonNullable<typeof shape>, registry, evidence);
-    expect(a.blockingFailures).toContain("not-already-solved");
+    expect(a.blockingFailures).toContain("no-qualified-capability-failure");
     expect(a.results.find((r) => r.gate.id === "not-already-solved")?.detail).toMatch(
       /declared by the shape, not measured here/,
     );
@@ -786,7 +788,9 @@ describe("ship gate with computed evidence", () => {
     const shape = registry.shapes.find((s) => s.familyId === "prompt-injection-containment");
     const broken = { ...evidence, referencePasses: false };
     const a = assessFamily(shape as NonNullable<typeof shape>, registry, broken);
-    expect(a.blockingFailures).toContain("reference-passes");
+    expect(a.blockingFailures).toContain("required-reference");
+    expect(a.verdict).toBe("NOT-READY");
+    expect(a.results.find((r) => r.gate.id === "reference-passes")?.verdict).toBe("fail");
     expect(a.verdict).toBe("NOT-READY");
   });
 
@@ -796,7 +800,9 @@ describe("ship gate with computed evidence", () => {
       ...evidence,
       baselinesBlocked: [],
     });
-    expect(a.blockingFailures).toContain("baselines-blocked");
+    expect(a.blockingFailures).toContain("required-positiveWork");
+    expect(a.verdict).toBe("NOT-READY");
+    expect(a.results.find((r) => r.gate.id === "baselines-blocked")?.verdict).toBe("fail");
   });
 
   it("in-process isolation fails once an agent artifact is being graded", () => {

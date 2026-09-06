@@ -34,8 +34,8 @@ judgement no code here makes, and it is printed rather than scored.
 | | |
 |---|---|
 | challenge hash (plan) | `805efb58c923f9e081db1b41967392d7` |
-| challenge hash (now) | `805efb58c923f9e081db1b41967392d7` |
-| match | **yes** — every slot measured the task this repository currently holds |
+| challenge hash (now) | `5b3171584b8a190743067d745b22e586` |
+| match | **NO** — the family changed after the plan was written; these slots measured a different task |
 | scenario set | `drift-339-590affe3`, 339 scenarios |
 | isolation | `subprocess` |
 | timeout | 30 minutes per slot |
@@ -45,11 +45,11 @@ judgement no code here makes, and it is printed rather than scored.
 
 | slot | model | runner | state | run |
 |---|---|---|---|---|
-| O1 | `openai/gpt-5.6-sol` | shell | RUN, **WITHDRAWN** | `deployment-model-alias-rollout-drift-2026-08-o1` — **superseded** by the 2026-09-01 `deployment-model-alias-rollout-drift` challenge migration; it does not count and its numbers are withdrawn |
+| O1 | `openai/gpt-5.6-sol` | shell | RUN, **WITHDRAWN** | `deployment-model-alias-rollout-drift-2026-08-o1` — **superseded** by the 2026-09-06 `deployment-model-alias-rollout-drift` challenge migration; it does not count and its numbers are withdrawn |
 | O2 | `openai/gpt-5.6-sol` | shell | **NOT_RUN** | — |
 | O3 | `openai/gpt-5.6-sol` | shell | **NOT_RUN** | — |
 
-**Withdrawn evidence.** `deployment-model-alias-rollout-drift-2026-08-o1` was invalidated by the 2026-09-01 `deployment-model-alias-rollout-drift` challenge migration: it was graded against a package this repository no longer produces, so that row does not count and every number on it is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read this row as spend that was made, not as a result about the family as it stands.
+**Withdrawn evidence.** `deployment-model-alias-rollout-drift-2026-08-o1` was invalidated by the 2026-09-06 `deployment-model-alias-rollout-drift` challenge migration: it was graded against a package this repository no longer produces, so that row does not count and every number on it is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read this row as spend that was made, not as a result about the family as it stands.
 
 A slot whose recorded run has been withdrawn is an unfilled slot, not a finished one. The
 header line counts it under `run` and not under `counted`, and only the second number says

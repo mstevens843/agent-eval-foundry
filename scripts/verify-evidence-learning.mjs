@@ -32,6 +32,13 @@ const before = source.sources.map((s) => ({
 const published = await learningCommand(root, ["publish-case", source.findingId, output]);
 const directions = (await learningCommand(root, ["directions"])).packages;
 const exports = [native, browser, memory, wallet, rollout];
+const browserReceipt = JSON.parse(readFileSync(join(browser, "verification/assurance.json"), "utf8"));
+const visibleProof = browserReceipt.results.find((r) => r.id === "visible-workspace-smoke");
+const browserParityVerified =
+  visibleProof?.status === "pass" &&
+  ["starter", "reference", "alternative"].every((name) =>
+    visibleProof.detail?.observations?.some((o) => o.name === name),
+  );
 const packages = exports.map((directory, i) => {
   const d = directions[i];
   assert(d);
@@ -43,7 +50,7 @@ const packages = exports.map((directory, i) => {
     trialDirectories: [],
     triagedSourceDigests: [],
     knownIssues:
-      i === 1
+      i === 1 && !browserParityVerified
         ? [
             "P5-BROWSER-VISIBLE-MOCK: retained mock lacks api.settle; requires a new package version, not altered history.",
           ]
@@ -80,10 +87,11 @@ const selected = await inspectPortfolioSelection(root, input);
 assert.equal(selected.transfers.length, 15);
 assert(selected.transfers.every((t) => !t.assessment.provenHardness && !t.assessment.untouchedHeldOut));
 assert(selected.selection.decisions.every((d) => !d.policy.stages["trial-authorized"].allowed));
-assert.equal(
-  selected.selection.decisions.find((d) => d.id === "browser-replay-repair").recommendedAction,
-  "repair",
-);
+if (!browserParityVerified)
+  assert.equal(
+    selected.selection.decisions.find((d) => d.id === "browser-replay-repair").recommendedAction,
+    "repair",
+  );
 const exposureStore = `${resolve(output)}-transfers`;
 for (const t of selected.transfers) appendTransfer(exposureStore, t.record, null);
 assert(assessStoredTransfers(exposureStore, selected.learning).every((t) => !t.assessment.provenHardness));

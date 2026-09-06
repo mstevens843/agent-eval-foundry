@@ -208,27 +208,22 @@ describe("within-family replication", () => {
 });
 
 describe("regraded-real-submission evidence (Docker-gated, real container path)", () => {
-  let dockerAvailable = false;
   beforeAll(() => {
     try {
       execFileSync("docker", ["info"], { stdio: "ignore", timeout: 20_000 });
-      dockerAvailable = true;
     } catch {
-      dockerAvailable = false;
+      throw Error("REQUIRED_DOCKER_RUNTIME_UNAVAILABLE");
     }
   });
 
-  it.runIf(() => dockerAvailable)(
-    "regrades a preserved real Phase 17 submission against a small suite through the trusted executor",
-    () => {
-      const suite = ALL_SCENARIOS.slice(0, 2);
-      const modulePath = join(
-        ROOT,
-        "trials/caa-revalidation/phase17-caa-slot-1-openai-attempt-1/submission/subject.mjs",
-      );
-      const result = regradeSubmissionAgainstSuite("test-slot-1", modulePath, "test-2-scenario", suite);
-      expect(result.cells.length).toBe(2);
-      for (const cell of result.cells) expect(cell.hostError).toBeNull();
-    },
-  );
+  it("regrades a preserved real Phase 17 submission against a small suite through the trusted executor", () => {
+    const suite = ALL_SCENARIOS.slice(0, 2);
+    const modulePath = join(
+      ROOT,
+      "trials/caa-revalidation/phase17-caa-slot-1-openai-attempt-1/submission/subject.mjs",
+    );
+    const result = regradeSubmissionAgainstSuite("test-slot-1", modulePath, "test-2-scenario", suite);
+    expect(result.cells.length).toBe(2);
+    for (const cell of result.cells) expect(cell.hostError).toBeNull();
+  });
 });

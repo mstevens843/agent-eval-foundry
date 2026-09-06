@@ -48,6 +48,7 @@ import {
 import { loadRegistry } from "../src/foundry/load.js";
 import { buildAdversarialCampaign, loadAdversarialCampaigns } from "../src/index.js";
 import { type FamilyEvidence, assessFamily, renderShipReport } from "../src/reports/ship-report.js";
+import { hashChallengeDir } from "../src/trials/run.js";
 
 const ROOT = new URL("..", import.meta.url).pathname;
 const FAMILY = "ui-replay-live-dom";
@@ -565,7 +566,8 @@ describe("adversarial readiness and reports", () => {
   it("prepares deterministic attack bundles with the current challenge hash", () => {
     const tmp = mkdtempSync(join(tmpdir(), "foundry-adv-test-"));
     const bundle = prepareAdversarialBundle(ROOT, FAMILY, tmp);
-    expect(bundle.campaign.challengeHash).toBe(hash());
+    expect(bundle.campaign.challengeHash).toBe(hashChallengeDir(join(tmp, "challenge")));
+    expect(() => prepareAdversarialBundle(ROOT, FAMILY, tmp)).toThrow(/BUNDLE_EXISTS/);
     expect(bundle.files).toContain("ATTACKER-INSTRUCTION.txt");
     expect(bundle.files).toContain("THREAT-MODEL.md");
     expect(bundle.files).toContain("ISOLATION.json");
@@ -588,7 +590,7 @@ describe("adversarial readiness and reports", () => {
     expect(verification.failures.join("; ")).toMatch(/container smoke not run|runtime unavailable/);
   });
 
-  it("marks package-backed families ready once campaign files and bundles exist", () => {
+  it("does not promote preserved bundles whose campaign no longer matches the current package", () => {
     const audits = auditAdversarialReadinessForFamilies(ROOT);
     const byFamily = new Map(audits.map((a) => [a.familyId, a]));
     for (const familyId of [
@@ -599,7 +601,10 @@ describe("adversarial readiness and reports", () => {
       "ui-replay-live-dom",
       "delegated-wallet-scope-reconciliation",
     ]) {
-      expect(byFamily.get(familyId)?.verdict, familyId).toBe("adversarial-ready");
+      const audit = byFamily.get(familyId);
+      expect(audit, familyId).toBeDefined();
+      // Migrations create a new assurance obligation; an existing directory is not current proof.
+      expect(audit?.verdict, familyId).toBe("audit-pending");
     }
     expect(byFamily.get("durable-approval-outbox")?.verdict).toBe("audit-pending");
   });

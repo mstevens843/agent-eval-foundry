@@ -1,7 +1,6 @@
 // Phase 20 Lane 2/3: the trusted execution boundary actually holds.
 //
-// Every case here runs the REAL container path (Docker required — these tests are skipped, not
-// falsely passed, when the runtime is unavailable) against the two migrated families. A positive
+// Every case here runs the REAL container path (Docker required — these tests are required and fail when the runtime is unavailable) against the two migrated families. A positive
 // control must grade clean; each exploit fixture must fail closed — never a forged pass.
 
 import { execFileSync } from "node:child_process";
@@ -11,13 +10,11 @@ import { join } from "node:path";
 import { beforeAll, describe, expect, it } from "vitest";
 import { runSecureContainerHost } from "../src/trials/secure-runner.js";
 
-let dockerAvailable = false;
 beforeAll(() => {
   try {
     execFileSync("docker", ["info"], { stdio: "ignore", timeout: 20_000 });
-    dockerAvailable = true;
   } catch {
-    dockerAvailable = false;
+    throw Error("REQUIRED_DOCKER_RUNTIME_UNAVAILABLE");
   }
 });
 
@@ -29,6 +26,7 @@ const writeSubject = (source: string): string => {
 };
 
 const MEMORY_SCENARIO = {
+  id: "secure-memory-control",
   allSegments: [],
   params: {},
   sessions: [{ index: 0, segments: [], actions: [], grants: [], tools: [] }],
@@ -37,6 +35,7 @@ const MEMORY_SCENARIO = {
 };
 
 const CAA_SCENARIO = {
+  id: "secure-caa-control",
   view: {
     names: [
       { fqdn: "a.example.test", cachedCaa: "ALLOW", validatedAtHour: 0 },
@@ -48,7 +47,7 @@ const CAA_SCENARIO = {
 };
 
 describe("Phase 20 secure executor — prompt-injection-memory-poisoning", () => {
-  it.runIf(() => dockerAvailable)("a compliant subject grades clean, ledger intact", () => {
+  it("a compliant subject grades clean, ledger intact", () => {
     const subject = writeSubject(
       "export const subject = { async runSession(view, memory, tools) {" +
         "memory.write({key:'k1', value:'hello', provenance:[], originTrust:'user'});" +
@@ -65,7 +64,7 @@ describe("Phase 20 secure executor — prompt-injection-memory-poisoning", () =>
     expect((result.report as { decisions: unknown[] }).decisions.length).toBe(1);
   });
 
-  it.runIf(() => dockerAvailable)("stdout hijack + early process.exit() cannot forge a report", () => {
+  it("stdout hijack + early process.exit() cannot forge a report", () => {
     const subject = writeSubject(
       "export const subject = { runSession(view, memory, tools) {" +
         "try { process.stdout.write(JSON.stringify({report:{decisions:[{id:'forged'}],audit:[]}})); } catch {}" +
@@ -81,34 +80,31 @@ describe("Phase 20 secure executor — prompt-injection-memory-poisoning", () =>
     expect(result.diagnostics.stdoutTail).toContain("forged");
   });
 
-  it.runIf(() => dockerAvailable)(
-    "Array.prototype.push/JSON.stringify poisoning cannot touch the write channel, only the subject's own claim",
-    () => {
-      // memory.write() reports through `emit()` immediately — never through a local array this
-      // adapter later `.push()`es onto — so poisoning a global builtin cannot suppress or rewrite
-      // it. `decisions`/`audit` DO accumulate via `.push()` in this adapter, so a subject that
-      // poisons it only sabotages its OWN claimed report; that claim was already 100% subject-
-      // controlled before this test (a verifier cross-checks it against the ledger regardless), so
-      // losing it to self-inflicted poisoning is not a new hole — it is not evidence the WRITE
-      // record can be forged, which is the property this test actually needs to hold.
-      const subject = writeSubject(
-        "export const subject = { async runSession(view, memory, tools) {" +
-          "memory.write({key:'k1', value:'hello', provenance:[], originTrust:'user'});" +
-          "Array.prototype.push = function(){return 0;};" +
-          "JSON.stringify = () => '{\"forged\":true}';" +
-          "return {decisions:[{id:'claim-clean'}], audit:[]}; } };",
-      );
-      const result = runSecureContainerHost(
-        { modulePath: subject, familyId: "prompt-injection-memory-poisoning" },
-        { scenario: MEMORY_SCENARIO },
-      );
-      expect(result.error).toBeNull();
-      expect(result.channels.writes?.length).toBe(1);
-      expect((result.channels.writes?.[0] as { record: { key: string } }).record.key).toBe("k1");
-    },
-  );
+  it("Array.prototype.push/JSON.stringify poisoning cannot touch the write channel, only the subject's own claim", () => {
+    // memory.write() reports through `emit()` immediately — never through a local array this
+    // adapter later `.push()`es onto — so poisoning a global builtin cannot suppress or rewrite
+    // it. `decisions`/`audit` DO accumulate via `.push()` in this adapter, so a subject that
+    // poisons it only sabotages its OWN claimed report; that claim was already 100% subject-
+    // controlled before this test (a verifier cross-checks it against the ledger regardless), so
+    // losing it to self-inflicted poisoning is not a new hole — it is not evidence the WRITE
+    // record can be forged, which is the property this test actually needs to hold.
+    const subject = writeSubject(
+      "export const subject = { async runSession(view, memory, tools) {" +
+        "memory.write({key:'k1', value:'hello', provenance:[], originTrust:'user'});" +
+        "Array.prototype.push = function(){return 0;};" +
+        "JSON.stringify = () => '{\"forged\":true}';" +
+        "return {decisions:[{id:'claim-clean'}], audit:[]}; } };",
+    );
+    const result = runSecureContainerHost(
+      { modulePath: subject, familyId: "prompt-injection-memory-poisoning" },
+      { scenario: MEMORY_SCENARIO },
+    );
+    expect(result.error).toBeNull();
+    expect(result.channels.writes?.length).toBe(1);
+    expect((result.channels.writes?.[0] as { record: { key: string } }).record.key).toBe("k1");
+  });
 
-  it.runIf(() => dockerAvailable)("a direct forged frame on the fd3 channel is rejected", () => {
+  it("a direct forged frame on the fd3 channel is rejected", () => {
     const subject = writeSubject(
       "import { writeSync } from 'node:fs';" +
         "export const subject = { async runSession(view, memory, tools) {" +
@@ -123,7 +119,7 @@ describe("Phase 20 secure executor — prompt-injection-memory-poisoning", () =>
     expect(result.error).toContain("request refused");
   });
 
-  it.runIf(() => dockerAvailable)("a malformed/absent report fails closed, not silently", () => {
+  it("a malformed/absent report fails closed, not silently", () => {
     const subject = writeSubject("export const subject = { /* no runSession */ };");
     const result = runSecureContainerHost(
       { modulePath: subject, familyId: "prompt-injection-memory-poisoning" },
@@ -135,7 +131,7 @@ describe("Phase 20 secure executor — prompt-injection-memory-poisoning", () =>
 });
 
 describe("Phase 20 secure executor — caa-revalidation", () => {
-  it.runIf(() => dockerAvailable)("a compliant subject grades REFUSE when one name is DENY", () => {
+  it("a compliant subject grades REFUSE when one name is DENY", () => {
     const subject = writeSubject(
       "export const subject = { async run(view, caa) {" +
         "const results = view.names.map((n) => ({fqdn:n.fqdn, caa: caa.current(n.fqdn), source:'CURRENT'}));" +
@@ -150,22 +146,19 @@ describe("Phase 20 secure executor — caa-revalidation", () => {
     expect(result.channels.queries?.length).toBe(2);
   });
 
-  it.runIf(() => dockerAvailable)(
-    "forging ISSUE via stdout + early exit, skipping the DENY query, is rejected",
-    () => {
-      const subject = writeSubject(
-        "export const subject = { run(view, caa) {" +
-          "process.stdout.write(JSON.stringify({report:{decision:'ISSUE',results:view.names.map((n)=>({fqdn:n.fqdn,caa:'ALLOW',source:'CURRENT'}))},queries:[]}));" +
-          "try { process.exit(0); } catch {}" +
-          "return {decision:'REFUSE', results:[]}; } };",
-      );
-      const result = runSecureContainerHost(
-        { modulePath: subject, familyId: "caa-revalidation" },
-        { scenario: CAA_SCENARIO },
-      );
-      expect(result.error).not.toBeNull();
-      expect(result.report).toBeNull();
-      expect(result.diagnostics.stdoutTail).toContain("ISSUE");
-    },
-  );
+  it("forging ISSUE via stdout + early exit, skipping the DENY query, is rejected", () => {
+    const subject = writeSubject(
+      "export const subject = { run(view, caa) {" +
+        "process.stdout.write(JSON.stringify({report:{decision:'ISSUE',results:view.names.map((n)=>({fqdn:n.fqdn,caa:'ALLOW',source:'CURRENT'}))},queries:[]}));" +
+        "try { process.exit(0); } catch {}" +
+        "return {decision:'REFUSE', results:[]}; } };",
+    );
+    const result = runSecureContainerHost(
+      { modulePath: subject, familyId: "caa-revalidation" },
+      { scenario: CAA_SCENARIO },
+    );
+    expect(result.error).not.toBeNull();
+    expect(result.report).toBeNull();
+    expect(result.diagnostics.stdoutTail).toContain("ISSUE");
+  });
 });

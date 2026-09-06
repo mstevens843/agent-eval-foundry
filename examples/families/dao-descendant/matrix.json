@@ -5,10 +5,11 @@
     "repo": "agent-eval-foundry",
     "artifact_commit": null,
     "task_sha256": null,
-    "suite_shape": "24 scenarios / 3 subjects / 72 points in the declared space",
+    "suite_shape": "24 scenarios / 5 subjects / 72 points in the declared space",
     "checks_total": 24,
     "checks_declared": [
       "exactly_once",
+      "effect_matches_intent",
       "stable_key_recovered",
       "liveness",
       "report_matches_call_ledger",
@@ -45,6 +46,22 @@
       "model": null,
       "effort": null,
       "note": "stable_key_recovered"
+    },
+    {
+      "id": "correct-key-wrong-payload",
+      "label": "Recover the key but execute a changed payload",
+      "family": "mutant",
+      "model": null,
+      "effort": null,
+      "note": "effect_matches_intent"
+    },
+    {
+      "id": "unrequested-work",
+      "label": "Complete the intent and perform unrelated work",
+      "family": "mutant",
+      "model": null,
+      "effort": null,
+      "note": "effect_matches_intent"
     }
   ],
   "instances": [
@@ -269,6 +286,7 @@
     "recovery-11-w2-k4-after_tool": {
       "recompute-current-epoch": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "stable_key_recovered"
         ]
@@ -282,15 +300,27 @@
       },
       "forged-stable-report": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "report_matches_call_ledger",
           "stable_key_recovered"
+        ]
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
         ]
       }
     },
     "recovery-11-w2-k6-after_tool": {
       "recompute-current-epoch": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "stable_key_recovered"
         ]
@@ -304,15 +334,27 @@
       },
       "forged-stable-report": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "report_matches_call_ledger",
           "stable_key_recovered"
+        ]
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
         ]
       }
     },
     "recovery-11-w2-k12-after_tool": {
       "recompute-current-epoch": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "stable_key_recovered"
         ]
@@ -326,15 +368,27 @@
       },
       "forged-stable-report": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "report_matches_call_ledger",
           "stable_key_recovered"
+        ]
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
         ]
       }
     },
     "recovery-11-w3-k4-after_tool": {
       "recompute-current-epoch": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "stable_key_recovered"
         ]
@@ -348,15 +402,27 @@
       },
       "forged-stable-report": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "report_matches_call_ledger",
           "stable_key_recovered"
+        ]
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
         ]
       }
     },
     "recovery-11-w3-k6-after_tool": {
       "recompute-current-epoch": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "stable_key_recovered"
         ]
@@ -370,15 +436,27 @@
       },
       "forged-stable-report": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "report_matches_call_ledger",
           "stable_key_recovered"
+        ]
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
         ]
       }
     },
     "recovery-11-w3-k12-after_tool": {
       "recompute-current-epoch": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "stable_key_recovered"
         ]
@@ -392,15 +470,27 @@
       },
       "forged-stable-report": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "report_matches_call_ledger",
           "stable_key_recovered"
+        ]
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
         ]
       }
     },
     "recovery-11-w4-k4-after_tool": {
       "recompute-current-epoch": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "stable_key_recovered"
         ]
@@ -414,15 +504,27 @@
       },
       "forged-stable-report": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "report_matches_call_ledger",
           "stable_key_recovered"
+        ]
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
         ]
       }
     },
     "recovery-11-w4-k6-after_tool": {
       "recompute-current-epoch": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "stable_key_recovered"
         ]
@@ -436,15 +538,27 @@
       },
       "forged-stable-report": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "report_matches_call_ledger",
           "stable_key_recovered"
+        ]
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
         ]
       }
     },
     "recovery-11-w4-k12-after_tool": {
       "recompute-current-epoch": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "stable_key_recovered"
         ]
@@ -458,15 +572,27 @@
       },
       "forged-stable-report": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "report_matches_call_ledger",
           "stable_key_recovered"
+        ]
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
         ]
       }
     },
     "recovery-23-w2-k4-after_tool": {
       "recompute-current-epoch": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "stable_key_recovered"
         ]
@@ -480,15 +606,27 @@
       },
       "forged-stable-report": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "report_matches_call_ledger",
           "stable_key_recovered"
+        ]
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
         ]
       }
     },
     "recovery-23-w2-k6-after_tool": {
       "recompute-current-epoch": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "stable_key_recovered"
         ]
@@ -502,15 +640,27 @@
       },
       "forged-stable-report": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "report_matches_call_ledger",
           "stable_key_recovered"
+        ]
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
         ]
       }
     },
     "recovery-23-w2-k12-after_tool": {
       "recompute-current-epoch": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "stable_key_recovered"
         ]
@@ -524,15 +674,27 @@
       },
       "forged-stable-report": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "report_matches_call_ledger",
           "stable_key_recovered"
+        ]
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
         ]
       }
     },
     "recovery-23-w3-k4-after_tool": {
       "recompute-current-epoch": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "stable_key_recovered"
         ]
@@ -546,15 +708,27 @@
       },
       "forged-stable-report": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "report_matches_call_ledger",
           "stable_key_recovered"
+        ]
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
         ]
       }
     },
     "recovery-23-w3-k6-after_tool": {
       "recompute-current-epoch": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "stable_key_recovered"
         ]
@@ -568,15 +742,27 @@
       },
       "forged-stable-report": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "report_matches_call_ledger",
           "stable_key_recovered"
+        ]
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
         ]
       }
     },
     "recovery-23-w3-k12-after_tool": {
       "recompute-current-epoch": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "stable_key_recovered"
         ]
@@ -590,15 +776,27 @@
       },
       "forged-stable-report": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "report_matches_call_ledger",
           "stable_key_recovered"
+        ]
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
         ]
       }
     },
     "recovery-23-w4-k4-after_tool": {
       "recompute-current-epoch": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "stable_key_recovered"
         ]
@@ -612,15 +810,27 @@
       },
       "forged-stable-report": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "report_matches_call_ledger",
           "stable_key_recovered"
+        ]
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
         ]
       }
     },
     "recovery-23-w4-k6-after_tool": {
       "recompute-current-epoch": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "stable_key_recovered"
         ]
@@ -634,15 +844,27 @@
       },
       "forged-stable-report": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "report_matches_call_ledger",
           "stable_key_recovered"
+        ]
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
         ]
       }
     },
     "recovery-23-w4-k12-after_tool": {
       "recompute-current-epoch": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "stable_key_recovered"
         ]
@@ -656,9 +878,20 @@
       },
       "forged-stable-report": {
         "failed": [
+          "effect_matches_intent",
           "exactly_once",
           "report_matches_call_ledger",
           "stable_key_recovered"
+        ]
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
         ]
       }
     },
@@ -675,6 +908,16 @@
       },
       "forged-stable-report": {
         "failed": []
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
+        ]
       }
     },
     "recovery-41-w1-k6-after_tool": {
@@ -690,6 +933,16 @@
       },
       "forged-stable-report": {
         "failed": []
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
+        ]
       }
     },
     "recovery-41-w1-k12-after_tool": {
@@ -705,6 +958,16 @@
       },
       "forged-stable-report": {
         "failed": []
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
+        ]
       }
     },
     "recovery-41-w2-k4-none": {
@@ -720,6 +983,16 @@
       },
       "forged-stable-report": {
         "failed": []
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
+        ]
       }
     },
     "recovery-41-w3-k6-none": {
@@ -735,6 +1008,16 @@
       },
       "forged-stable-report": {
         "failed": []
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
+        ]
       }
     },
     "recovery-41-w4-k12-none": {
@@ -750,6 +1033,16 @@
       },
       "forged-stable-report": {
         "failed": []
+      },
+      "correct-key-wrong-payload": {
+        "failed": [
+          "effect_matches_intent"
+        ]
+      },
+      "unrequested-work": {
+        "failed": [
+          "effect_matches_intent"
+        ]
       }
     }
   }

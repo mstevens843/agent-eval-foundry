@@ -141,7 +141,8 @@ export function renderSelfCheckBehavior(input: SelfCheckReportInput): string {
           "| run | defined and never called |",
           "|---|---|",
           ...unusedCheckers.map(
-            (x) => `| \`${x.runId}\` | ${x.definedButUnused.map((n) => `\`${n}\``).join(", ")} |`,
+            (x) =>
+              `| \`${x.runId}\` (${x.state}) | ${x.definedButUnused.map((n) => `\`${n}\``).join(", ")} |`,
           ),
           "",
         ]),
@@ -245,7 +246,7 @@ function whereTheCheckersWent(profiles: readonly SelfCheckProfile[]): string {
           "|---|---|---|",
           ...shipped.map(
             (x) =>
-              `| \`${x.runId}\` | \`${x.subjectId}\` | ${x.extraFiles.map((f) => `\`${f}\``).join(", ")} |`,
+              `| \`${x.runId}\` (${x.state}) | \`${x.subjectId}\` | ${x.extraFiles.map((f) => `\`${f}\``).join(", ")} |`,
           ),
           "",
         ]),
@@ -259,13 +260,12 @@ function whereTheCheckersWent(profiles: readonly SelfCheckProfile[]): string {
           "|---|---|---|---|---|---:|",
           ...wrote.map(
             (x) =>
-              `| \`${x.runId}\` | ${x.providerFamily} | ${x.harness ?? "unrecorded"} | ${unshippedSummary(x.unshipped)} | ${x.strongestEphemeral ?? "no pattern matched"} | ${x.scenariosFailed} |`,
+              `| \`${x.runId}\` (${x.state}) | ${x.providerFamily} | ${x.harness ?? "unrecorded"} | ${unshippedSummary(x.unshipped)} | ${x.strongestEphemeral ?? "no pattern matched"} | ${x.state === "counted" ? x.scenariosFailed : "not quotable"} |`,
           ),
           "",
-          "A run in that table built something, ran it, and still failed. That is why this is reported as a",
-          "behaviour and not scored as a virtue: a checker bounds what you can EXPRESS, not what you",
-          "EXPLORE. **Difficulty comes from coverage of the space, not from the difficulty of stating the",
-          "rule** — the conclusion the axis meter reaches from the other direction.",
+          "These rows document checking behavior, not its causal effect or model difficulty. Some runs",
+          "passed; others are superseded or disputed. Coverage and expressiveness are possible mechanisms",
+          "to investigate in qualified failures, not conclusions established by the presence of a checker.",
           "",
           confounded
             ? [

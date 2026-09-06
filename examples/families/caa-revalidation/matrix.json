@@ -1,0 +1,1503 @@
+{
+  "schema": "agent-eval-foundry/matrix@1",
+  "suite": "caa-revalidation",
+  "provenance": {
+    "repo": "agent-eval-foundry",
+    "artifact_commit": null,
+    "task_sha256": null,
+    "suite_shape": "24 scenarios / 9 subjects / 192 points in the declared space",
+    "checks_total": 24,
+    "checks_declared": [
+      "caa_result_shape",
+      "caa_per_name_binding",
+      "caa_applicable_answer",
+      "caa_safe_issuance",
+      "caa_decision_faithful",
+      "caa_positive_query_work"
+    ],
+    "extracted_from": [
+      "src/families/caa-revalidation/runner.ts (B6-gated sweep with a leak canary)",
+      "src/families/caa-revalidation/verify.ts (host-ledger identity grading)"
+    ],
+    "caveat": "A Phase 17 candidate package derived from the 2020 Let's Encrypt CAA rechecking incident. It carries measured local mutant discrimination and the agent-trial result recorded in reports/PHASE-17-CAA-VALIDATION.md. It is not a proven task family."
+  },
+  "reference_subject": "reference",
+  "subjects": [
+    {
+      "id": "first-name-reuse",
+      "label": "Query the first stale name once per stale list position",
+      "family": "mutant",
+      "model": null,
+      "effort": null,
+      "note": "caa_per_name_binding"
+    },
+    {
+      "id": "boundary-inclusive",
+      "label": "Recheck at age eight as well as above it",
+      "family": "mutant",
+      "model": null,
+      "effort": null,
+      "note": "caa_applicable_answer"
+    },
+    {
+      "id": "boundary-lenient",
+      "label": "Recheck only above age nine",
+      "family": "mutant",
+      "model": null,
+      "effort": null,
+      "note": "caa_per_name_binding"
+    },
+    {
+      "id": "cardinality-only-queries",
+      "label": "Make the right number of calls against one name and report the cache",
+      "family": "mutant",
+      "model": null,
+      "effort": null,
+      "note": "caa_per_name_binding"
+    },
+    {
+      "id": "reversed-order",
+      "label": "Correct answers emitted in reverse order",
+      "family": "mutant",
+      "model": null,
+      "effort": null,
+      "note": "caa_result_shape"
+    },
+    {
+      "id": "no-query",
+      "label": "Never call the authority; report the cache",
+      "family": "baseline",
+      "model": null,
+      "effort": null,
+      "note": "caa_positive_query_work"
+    },
+    {
+      "id": "always-refuse",
+      "label": "Do the work, then refuse every order",
+      "family": "cheat",
+      "model": null,
+      "effort": null,
+      "note": "caa_decision_faithful"
+    },
+    {
+      "id": "always-issue",
+      "label": "Do the work, then issue every order",
+      "family": "cheat",
+      "model": null,
+      "effort": null,
+      "note": "caa_safe_issuance"
+    },
+    {
+      "id": "fabricated-result",
+      "label": "Emit plausible current results without querying the authority",
+      "family": "cheat",
+      "model": null,
+      "effort": null,
+      "note": "caa_per_name_binding"
+    }
+  ],
+  "instances": [
+    {
+      "id": "caa-s31-d5-mixed-none",
+      "schedule": "mixed/deny-none",
+      "seed": 31,
+      "keys": 5,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "5 name(s), activated"
+    },
+    {
+      "id": "caa-s7-d5-mixed-middle",
+      "schedule": "mixed/deny-middle",
+      "seed": 7,
+      "keys": 5,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "5 name(s), activated"
+    },
+    {
+      "id": "caa-s7-d3-all-stale-first",
+      "schedule": "all-stale/deny-first",
+      "seed": 7,
+      "keys": 3,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "3 name(s), activated"
+    },
+    {
+      "id": "caa-s7-d5-mixed-last",
+      "schedule": "mixed/deny-last",
+      "seed": 7,
+      "keys": 5,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "5 name(s), activated"
+    },
+    {
+      "id": "caa-s19-d3-all-stale-middle",
+      "schedule": "all-stale/deny-middle",
+      "seed": 19,
+      "keys": 3,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "3 name(s), activated"
+    },
+    {
+      "id": "caa-s31-d5-boundary-eight-last",
+      "schedule": "boundary-eight/deny-last",
+      "seed": 31,
+      "keys": 5,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "5 name(s), activated"
+    },
+    {
+      "id": "caa-s31-d5-boundary-nine-none",
+      "schedule": "boundary-nine/deny-none",
+      "seed": 31,
+      "keys": 5,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "5 name(s), activated"
+    },
+    {
+      "id": "caa-s7-d2-all-stale-first",
+      "schedule": "all-stale/deny-first",
+      "seed": 7,
+      "keys": 2,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "2 name(s), activated"
+    },
+    {
+      "id": "caa-s7-d5-all-stale-none",
+      "schedule": "all-stale/deny-none",
+      "seed": 7,
+      "keys": 5,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "5 name(s), activated"
+    },
+    {
+      "id": "caa-s31-d5-boundary-eight-none",
+      "schedule": "boundary-eight/deny-none",
+      "seed": 31,
+      "keys": 5,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "5 name(s), activated"
+    },
+    {
+      "id": "caa-s7-d5-boundary-nine-none",
+      "schedule": "boundary-nine/deny-none",
+      "seed": 7,
+      "keys": 5,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "5 name(s), activated"
+    },
+    {
+      "id": "caa-s19-d5-boundary-eight-last",
+      "schedule": "boundary-eight/deny-last",
+      "seed": 19,
+      "keys": 5,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "5 name(s), activated"
+    },
+    {
+      "id": "caa-s7-d5-boundary-nine-first",
+      "schedule": "boundary-nine/deny-first",
+      "seed": 7,
+      "keys": 5,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "5 name(s), activated"
+    },
+    {
+      "id": "caa-s31-d3-all-stale-last",
+      "schedule": "all-stale/deny-last",
+      "seed": 31,
+      "keys": 3,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "3 name(s), activated"
+    },
+    {
+      "id": "caa-s19-d5-all-stale-none",
+      "schedule": "all-stale/deny-none",
+      "seed": 19,
+      "keys": 5,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "5 name(s), activated"
+    },
+    {
+      "id": "caa-s19-d3-all-stale-none",
+      "schedule": "all-stale/deny-none",
+      "seed": 19,
+      "keys": 3,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "3 name(s), activated"
+    },
+    {
+      "id": "caa-s7-d5-boundary-eight-first",
+      "schedule": "boundary-eight/deny-first",
+      "seed": 7,
+      "keys": 5,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "5 name(s), activated"
+    },
+    {
+      "id": "caa-s31-d5-boundary-eight-first",
+      "schedule": "boundary-eight/deny-first",
+      "seed": 31,
+      "keys": 5,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "5 name(s), activated"
+    },
+    {
+      "id": "caa-s7-d1-boundary-eight-none",
+      "schedule": "boundary-eight/deny-none",
+      "seed": 7,
+      "keys": 1,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "1 name(s), non-activating"
+    },
+    {
+      "id": "caa-s19-d2-mixed-middle",
+      "schedule": "mixed/deny-middle",
+      "seed": 19,
+      "keys": 2,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "2 name(s), non-activating"
+    },
+    {
+      "id": "caa-s31-d1-boundary-nine-none",
+      "schedule": "boundary-nine/deny-none",
+      "seed": 31,
+      "keys": 1,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "1 name(s), non-activating"
+    },
+    {
+      "id": "caa-s31-d2-mixed-middle",
+      "schedule": "mixed/deny-middle",
+      "seed": 31,
+      "keys": 2,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "2 name(s), non-activating"
+    },
+    {
+      "id": "caa-s31-d2-boundary-nine-none",
+      "schedule": "boundary-nine/deny-none",
+      "seed": 31,
+      "keys": 2,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "2 name(s), non-activating"
+    },
+    {
+      "id": "caa-s7-d3-boundary-eight-none",
+      "schedule": "boundary-eight/deny-none",
+      "seed": 7,
+      "keys": 3,
+      "family": "multi-name-authorization-revalidation",
+      "source": "generated",
+      "note": "3 name(s), non-activating"
+    }
+  ],
+  "results": {
+    "caa-s31-d5-mixed-none": {
+      "first-name-reuse": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "boundary-inclusive": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_decision_faithful"
+        ]
+      },
+      "boundary-lenient": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "cardinality-only-queries": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      },
+      "always-refuse": {
+        "failed": [
+          "caa_decision_faithful"
+        ]
+      },
+      "always-issue": {
+        "failed": []
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      }
+    },
+    "caa-s7-d5-mixed-middle": {
+      "first-name-reuse": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "boundary-inclusive": {
+        "failed": [
+          "caa_applicable_answer"
+        ]
+      },
+      "boundary-lenient": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "cardinality-only-queries": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      },
+      "always-refuse": {
+        "failed": []
+      },
+      "always-issue": {
+        "failed": [
+          "caa_safe_issuance"
+        ]
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      }
+    },
+    "caa-s7-d3-all-stale-first": {
+      "first-name-reuse": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding"
+        ]
+      },
+      "boundary-inclusive": {
+        "failed": []
+      },
+      "boundary-lenient": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "cardinality-only-queries": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      },
+      "always-refuse": {
+        "failed": []
+      },
+      "always-issue": {
+        "failed": [
+          "caa_safe_issuance"
+        ]
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      }
+    },
+    "caa-s7-d5-mixed-last": {
+      "first-name-reuse": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "boundary-inclusive": {
+        "failed": [
+          "caa_applicable_answer"
+        ]
+      },
+      "boundary-lenient": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "cardinality-only-queries": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      },
+      "always-refuse": {
+        "failed": []
+      },
+      "always-issue": {
+        "failed": [
+          "caa_safe_issuance"
+        ]
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      }
+    },
+    "caa-s19-d3-all-stale-middle": {
+      "first-name-reuse": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "boundary-inclusive": {
+        "failed": []
+      },
+      "boundary-lenient": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "cardinality-only-queries": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      },
+      "always-refuse": {
+        "failed": []
+      },
+      "always-issue": {
+        "failed": [
+          "caa_safe_issuance"
+        ]
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      }
+    },
+    "caa-s31-d5-boundary-eight-last": {
+      "first-name-reuse": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "boundary-inclusive": {
+        "failed": [
+          "caa_applicable_answer"
+        ]
+      },
+      "boundary-lenient": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "cardinality-only-queries": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      },
+      "always-refuse": {
+        "failed": []
+      },
+      "always-issue": {
+        "failed": [
+          "caa_safe_issuance"
+        ]
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      }
+    },
+    "caa-s31-d5-boundary-nine-none": {
+      "first-name-reuse": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "boundary-inclusive": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_decision_faithful"
+        ]
+      },
+      "boundary-lenient": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "cardinality-only-queries": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      },
+      "always-refuse": {
+        "failed": [
+          "caa_decision_faithful"
+        ]
+      },
+      "always-issue": {
+        "failed": []
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      }
+    },
+    "caa-s7-d2-all-stale-first": {
+      "first-name-reuse": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding"
+        ]
+      },
+      "boundary-inclusive": {
+        "failed": []
+      },
+      "boundary-lenient": {
+        "failed": []
+      },
+      "cardinality-only-queries": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      },
+      "always-refuse": {
+        "failed": []
+      },
+      "always-issue": {
+        "failed": [
+          "caa_safe_issuance"
+        ]
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      }
+    },
+    "caa-s7-d5-all-stale-none": {
+      "first-name-reuse": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "boundary-inclusive": {
+        "failed": []
+      },
+      "boundary-lenient": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "cardinality-only-queries": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      },
+      "always-refuse": {
+        "failed": [
+          "caa_decision_faithful"
+        ]
+      },
+      "always-issue": {
+        "failed": []
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      }
+    },
+    "caa-s31-d5-boundary-eight-none": {
+      "first-name-reuse": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "boundary-inclusive": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_decision_faithful"
+        ]
+      },
+      "boundary-lenient": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "cardinality-only-queries": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      },
+      "always-refuse": {
+        "failed": [
+          "caa_decision_faithful"
+        ]
+      },
+      "always-issue": {
+        "failed": []
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      }
+    },
+    "caa-s7-d5-boundary-nine-none": {
+      "first-name-reuse": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "boundary-inclusive": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_decision_faithful"
+        ]
+      },
+      "boundary-lenient": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "cardinality-only-queries": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      },
+      "always-refuse": {
+        "failed": [
+          "caa_decision_faithful"
+        ]
+      },
+      "always-issue": {
+        "failed": []
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      }
+    },
+    "caa-s19-d5-boundary-eight-last": {
+      "first-name-reuse": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "boundary-inclusive": {
+        "failed": [
+          "caa_applicable_answer"
+        ]
+      },
+      "boundary-lenient": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "cardinality-only-queries": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      },
+      "always-refuse": {
+        "failed": []
+      },
+      "always-issue": {
+        "failed": [
+          "caa_safe_issuance"
+        ]
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      }
+    },
+    "caa-s7-d5-boundary-nine-first": {
+      "first-name-reuse": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding"
+        ]
+      },
+      "boundary-inclusive": {
+        "failed": [
+          "caa_applicable_answer"
+        ]
+      },
+      "boundary-lenient": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "cardinality-only-queries": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      },
+      "always-refuse": {
+        "failed": []
+      },
+      "always-issue": {
+        "failed": [
+          "caa_safe_issuance"
+        ]
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      }
+    },
+    "caa-s31-d3-all-stale-last": {
+      "first-name-reuse": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "boundary-inclusive": {
+        "failed": []
+      },
+      "boundary-lenient": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "cardinality-only-queries": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      },
+      "always-refuse": {
+        "failed": []
+      },
+      "always-issue": {
+        "failed": [
+          "caa_safe_issuance"
+        ]
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      }
+    },
+    "caa-s19-d5-all-stale-none": {
+      "first-name-reuse": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "boundary-inclusive": {
+        "failed": []
+      },
+      "boundary-lenient": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "cardinality-only-queries": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      },
+      "always-refuse": {
+        "failed": [
+          "caa_decision_faithful"
+        ]
+      },
+      "always-issue": {
+        "failed": []
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      }
+    },
+    "caa-s19-d3-all-stale-none": {
+      "first-name-reuse": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "boundary-inclusive": {
+        "failed": []
+      },
+      "boundary-lenient": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "cardinality-only-queries": {
+        "failed": [
+          "caa_per_name_binding"
+        ]
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      },
+      "always-refuse": {
+        "failed": [
+          "caa_decision_faithful"
+        ]
+      },
+      "always-issue": {
+        "failed": []
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      }
+    },
+    "caa-s7-d5-boundary-eight-first": {
+      "first-name-reuse": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding"
+        ]
+      },
+      "boundary-inclusive": {
+        "failed": [
+          "caa_applicable_answer"
+        ]
+      },
+      "boundary-lenient": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "cardinality-only-queries": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      },
+      "always-refuse": {
+        "failed": []
+      },
+      "always-issue": {
+        "failed": [
+          "caa_safe_issuance"
+        ]
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      }
+    },
+    "caa-s31-d5-boundary-eight-first": {
+      "first-name-reuse": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding"
+        ]
+      },
+      "boundary-inclusive": {
+        "failed": [
+          "caa_applicable_answer"
+        ]
+      },
+      "boundary-lenient": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "cardinality-only-queries": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_safe_issuance"
+        ]
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      },
+      "always-refuse": {
+        "failed": []
+      },
+      "always-issue": {
+        "failed": [
+          "caa_safe_issuance"
+        ]
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      }
+    },
+    "caa-s7-d1-boundary-eight-none": {
+      "first-name-reuse": {
+        "failed": []
+      },
+      "boundary-inclusive": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_decision_faithful"
+        ]
+      },
+      "boundary-lenient": {
+        "failed": []
+      },
+      "cardinality-only-queries": {
+        "failed": []
+      },
+      "reversed-order": {
+        "failed": []
+      },
+      "no-query": {
+        "failed": []
+      },
+      "always-refuse": {
+        "failed": [
+          "caa_decision_faithful"
+        ]
+      },
+      "always-issue": {
+        "failed": []
+      },
+      "fabricated-result": {
+        "failed": []
+      }
+    },
+    "caa-s19-d2-mixed-middle": {
+      "first-name-reuse": {
+        "failed": []
+      },
+      "boundary-inclusive": {
+        "failed": []
+      },
+      "boundary-lenient": {
+        "failed": []
+      },
+      "cardinality-only-queries": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_safe_issuance"
+        ]
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      },
+      "always-refuse": {
+        "failed": []
+      },
+      "always-issue": {
+        "failed": [
+          "caa_safe_issuance"
+        ]
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      }
+    },
+    "caa-s31-d1-boundary-nine-none": {
+      "first-name-reuse": {
+        "failed": []
+      },
+      "boundary-inclusive": {
+        "failed": []
+      },
+      "boundary-lenient": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      },
+      "cardinality-only-queries": {
+        "failed": []
+      },
+      "reversed-order": {
+        "failed": []
+      },
+      "no-query": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      },
+      "always-refuse": {
+        "failed": [
+          "caa_decision_faithful"
+        ]
+      },
+      "always-issue": {
+        "failed": []
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      }
+    },
+    "caa-s31-d2-mixed-middle": {
+      "first-name-reuse": {
+        "failed": []
+      },
+      "boundary-inclusive": {
+        "failed": []
+      },
+      "boundary-lenient": {
+        "failed": []
+      },
+      "cardinality-only-queries": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_safe_issuance"
+        ]
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      },
+      "always-refuse": {
+        "failed": []
+      },
+      "always-issue": {
+        "failed": [
+          "caa_safe_issuance"
+        ]
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_per_name_binding",
+          "caa_positive_query_work",
+          "caa_safe_issuance"
+        ]
+      }
+    },
+    "caa-s31-d2-boundary-nine-none": {
+      "first-name-reuse": {
+        "failed": []
+      },
+      "boundary-inclusive": {
+        "failed": []
+      },
+      "boundary-lenient": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      },
+      "cardinality-only-queries": {
+        "failed": []
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      },
+      "always-refuse": {
+        "failed": [
+          "caa_decision_faithful"
+        ]
+      },
+      "always-issue": {
+        "failed": []
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      }
+    },
+    "caa-s7-d3-boundary-eight-none": {
+      "first-name-reuse": {
+        "failed": []
+      },
+      "boundary-inclusive": {
+        "failed": [
+          "caa_applicable_answer",
+          "caa_decision_faithful"
+        ]
+      },
+      "boundary-lenient": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      },
+      "cardinality-only-queries": {
+        "failed": []
+      },
+      "reversed-order": {
+        "failed": [
+          "caa_result_shape"
+        ]
+      },
+      "no-query": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      },
+      "always-refuse": {
+        "failed": [
+          "caa_decision_faithful"
+        ]
+      },
+      "always-issue": {
+        "failed": []
+      },
+      "fabricated-result": {
+        "failed": [
+          "caa_per_name_binding",
+          "caa_positive_query_work"
+        ]
+      }
+    }
+  }
+}

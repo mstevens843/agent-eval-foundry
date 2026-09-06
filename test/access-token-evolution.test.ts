@@ -83,7 +83,12 @@ describe("Access-Token Evolution v1", () => {
       const bundle = familyEvidenceFor(ROOT, familyId);
       return {
         ...bundle,
-        evidence: { ...bundle.evidence, countedAgentTrials: 1, agentTrialsPassed: 1 },
+        evidence: {
+          ...bundle.evidence,
+          countedAgentTrials: 1,
+          agentTrialsPassed: 1,
+          isolation: "cell-container",
+        },
       };
     });
     const selected = state.variants.find((variant) => variant.id === SELECTED_VARIANT);

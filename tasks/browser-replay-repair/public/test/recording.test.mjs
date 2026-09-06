@@ -9,8 +9,14 @@ test("recording retains entity and normalizes entered text", () => {
 });
 test("a stable recorded locator resolves its form", () => {
   assert.equal(
-    resolveTarget({ step: 0, selector: "save" }, { query: () => [{ handle: "one", selector: "save" }] })
-      .handle,
+    resolveTarget(
+      { step: 0, selector: "save", entity: "order", field: "memo" },
+      {
+        query: () => [{ handle: "one", selector: "save", entity: "order", field: "memo" }],
+        settle: () => ({ stable: true }),
+        observe: () => ({ connected: true, ready: true, entity: "order", field: "memo", generation: "0" }),
+      },
+    ).handle,
     "one",
   );
 });

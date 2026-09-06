@@ -30,3 +30,5 @@ Existing evolution operators: 6/21 have measured precedent. The rest remain expl
 
 Example generated deltas:
 
+- `mechanism-set`: `["duplicate-side-effects","uncertain-external-effects"]` -> `["permission-boundary","prompt-injection-via-retrieval","tool-result-ambiguity"]` (the targeted mechanism set changed)
+- `operator-bundle`: `["concentrate_activated_scenarios","external_authoritative_ledger","harden_verifier_with_cheat_oracles","recover_committed_authority","repair_specification"]` -> `["add_benign_noise","add_cross_tool_interaction","add_partial_observability","concentrate_activated_scenarios","external_authoritative_ledger","harden_verifier_with_cheat_oracles","recover_committed_authority","repair_specification"]` (operator-bundle changed)

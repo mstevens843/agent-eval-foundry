@@ -23,6 +23,7 @@ import {
   parseDiscoveryCandidates,
 } from "./discovery-workbench.js";
 import { type FamilyLineage, assertLineagesValid, parseFamilyLineages } from "./lineage.js";
+import { commandMemo } from "./operation-context.js";
 import {
   EXECUTABLE_PROBES,
   type ProbeDefinition,
@@ -30,7 +31,7 @@ import {
   assertProbeDefinitionsValid,
   runMechanismProbes,
 } from "./probe-runner.js";
-import { type ProbeToFamilyPromotion, assertPromotionsValid, parsePromotions } from "./promotion.js";
+import { type ProbeToFamilyPromotion, assertPromotionReferences, parsePromotions } from "./promotion.js";
 import { type Registry, buildRegistry } from "./registry.js";
 import type { Candidate, Mechanism, Mutant, TaskShape } from "./schema.js";
 import { parseCandidates, parseMechanisms, parseMutants, parseTaskShape } from "./validate.js";
@@ -83,11 +84,13 @@ export interface LoadOptions {
 export function loadRegistry(root: string, options: LoadOptions = {}): Registry {
   const dataDir = options.dataDir ?? join(root, "data");
   const shapesDir = options.shapesDir ?? join(root, "examples", "shapes");
-  return buildRegistry(
-    loadMechanisms(join(dataDir, "mechanisms.json")),
-    loadMutants(join(dataDir, "mutants.json")),
-    loadShapes(shapesDir),
-    loadCandidates(dataDir),
+  return commandMemo(`registry:${JSON.stringify([dataDir, shapesDir])}`, () =>
+    buildRegistry(
+      loadMechanisms(join(dataDir, "mechanisms.json")),
+      loadMutants(join(dataDir, "mutants.json")),
+      loadShapes(shapesDir),
+      loadCandidates(dataDir),
+    ),
   );
 }
 
@@ -146,7 +149,13 @@ export function loadPromotions(
   workbench = loadDiscoveryWorkbench(root, registry),
 ): readonly ProbeToFamilyPromotion[] {
   const promotions = parsePromotions(readJson(join(root, "data", "promotions.json")), "data/promotions.json");
-  assertPromotionsValid(promotions, loadProbeRunSummary(root, registry, workbench), workbench);
+  // Loading validates declarations and references, but does not execute a calibration sweep.
+  // checkCommand explicitly validates observed probe verdicts against these declarations.
+  assertPromotionReferences(
+    promotions,
+    loadProbeDefinitions(root, registry, workbench).map((p) => p.id),
+    workbench,
+  );
   return promotions;
 }
 

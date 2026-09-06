@@ -168,18 +168,18 @@ it may be a check that cannot fail, or a hygiene rail that is supposed to stay q
 
 | check | cells | instances | subjects |
 |---|---:|---:|---:|
-| replay_completes | 4809 | 864 | 13 |
+| replay_completes | 4934 | 864 | 13 |
 | precondition_observed | 2901 | 864 | 4 |
+| action_applied | 2592 | 864 | 3 |
 | unreplayable_reported | 1975 | 183 | 16 |
 | no_forbidden_effect | 1758 | 813 | 12 |
-| action_applied | 1728 | 864 | 2 |
 | replay_audit_explains | 1728 | 864 | 2 |
-| selector_resolved_live | 1440 | 864 | 2 |
+| selector_resolved_live | 1584 | 864 | 2 |
 | correct_anchor_resolution | 837 | 169 | 7 |
 | anchor_ambiguity_refused | 799 | 68 | 15 |
+| replay_order_preserved | 755 | 755 | 1 |
 | effect_targets_recorded_entity | 585 | 355 | 5 |
 | no_orphaned_transaction | 552 | 276 | 2 |
-| replay_order_preserved | 496 | 496 | 1 |
 | confirmation_observed | 479 | 479 | 1 |
 | no_model_in_loop | 355 | 355 | 1 |
 | no_speculative_write | 355 | 355 | 1 |

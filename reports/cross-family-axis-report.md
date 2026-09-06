@@ -6,17 +6,17 @@ What the families measure, together — and the arithmetic this report refuses t
 
 | family | bank | instances | subjects | blind | distinct catch sets | axes |
 |---|---|---:|---:|---:|---:|---:|
-| `prompt-injection-containment` | `agent` | 128 | 4 | 128 | 0 | **0** |
+| `prompt-injection-containment` | `mutant` | 128 | 9 | 4 | 7 | **4** |
 | `prompt-injection-memory-poisoning` | `mutant` | 864 | 14 | 0 | 30 | **8** |
-| `ui-action-record-replay` | `agent` | 324 | 4 | 234 | 3 | **1** |
-| `ui-replay-live-dom` | `agent` | 864 | 1 | 645 | 1 | — |
-| `checker-required-memory-poisoning` | `agent` | 792 | 1 | 178 | 1 | — |
+| `ui-action-record-replay` | `mutant` | 324 | 10 | 0 | 8 | **4** |
+| `ui-replay-live-dom` | `mutant` | 864 | 24 | 0 | 56 | **19** |
+| `checker-required-memory-poisoning` | `mutant` | 792 | 20 | 0 | 30 | **12** |
 | `access-token-scope-expansion` | `mutant` | 384 | 9 | 0 | 6 | **3** |
 | `delegated-wallet-scope-reconciliation` | `mutant` | 804 | 10 | 0 | 9 | **3** |
-| `caa-revalidation` | `agent` | 24 | 2 | 24 | 0 | **0** |
-| `dao-descendant` | `agent` | 24 | 2 | 24 | 0 | **0** |
-| `trading-reconciliation-recompute` | `agent` | 24 | 2 | 24 | 0 | **0** |
-| `deployment-rollback-recompute` | `agent` | 24 | 2 | 24 | 0 | **0** |
+| `caa-revalidation` | `mutant` | 24 | 9 | 0 | 10 | **3** |
+| `dao-descendant` | `mutant` | 24 | 5 | 0 | 2 | **1** |
+| `trading-reconciliation-recompute` | `mutant` | 24 | 6 | 0 | 2 | **1** |
+| `deployment-rollback-recompute` | `mutant` | 24 | 6 | 0 | 2 | **1** |
 | `deployment-model-alias-rollout-drift` | `mutant` | 339 | 17 | 0 | 72 | **20** |
 | `durable-approval-outbox` | `imported` | 24 | 2 | 10 | 2 | **1** |
 
@@ -24,19 +24,14 @@ What the families measure, together — and the arithmetic this report refuses t
 
 | naive total | value | why it is not a result |
 |---|---:|---|
-| every family added together | 36 | mixes detection and difficulty; the two answer different questions |
-| detection banks added | 34 | the banks are disjoint by construction — no mutant appears in two families, so the union's width is the sum whatever the families measure |
-| difficulty banks added | 2 | excludes one-subject banks; valid only over subjects that attempted both, and the overlap is below threshold |
+| every family added together | 80 | mixes detection and difficulty; the two answer different questions |
+| detection banks added | 79 | the banks are disjoint by construction — no mutant appears in two families, so the union's width is the sum whatever the families measure |
+| difficulty banks added | 1 | fewer than two difficulty banks exist |
 
 A combined axis count requires the same subjects in every bank being combined. Until that holds,
 each family's number stands alone and the portfolio total does not exist.
 
 ## What each claim needs
-
-**`agent`:** nothing: the banks share no subject, so co-failure across families is unobservable and the union's width is the sum by construction.
-
-- Run the same subjects against every `agent` family until 3 share all of them.
-- Currently shared: none.
 
 **`imported`:** nothing cross-family: only one `imported` bank exists, so there is nothing to compare it with.
 

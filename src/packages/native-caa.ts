@@ -1,5 +1,13 @@
 import { randomUUID } from "node:crypto";
-import { copyFileSync, existsSync, lstatSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  constants,
+  copyFileSync,
+  existsSync,
+  lstatSync,
+  mkdirSync,
+  readFileSync,
+  writeFileSync,
+} from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { copyArtifactTree } from "../execution/artifacts.js";
 import {
@@ -752,7 +760,7 @@ export async function exportNativeCaa(
   copySnapshot(snapshot, join(destination, "store"));
   materializeAssembly(snapshot, join(destination, "tasks", TARGET));
   materializeAssembly(snapshot, join(destination, "public"), "subject");
-  copyFileSync(join(directory, "runtime.tar"), join(destination, "runtime.tar"));
+  copyFileSync(join(directory, "runtime.tar"), join(destination, "runtime.tar"), constants.COPYFILE_FICLONE);
   await verifyRuntime(destination, runtimeFor(snapshot));
   writeJson(join(destination, "package.json"), {
     schemaVersion: 1,

@@ -12,7 +12,7 @@ be restamped rather than reinvented.
 | measured (evidenced by a real trial) | 6 |
 | argued | 7 |
 | speculative | 3 |
-| mutants in the bank | 112 |
+| mutants in the bank | 117 |
 | families declared | 22 |
 | mechanisms with no mutant (undetectable) | 0 |
 | mechanisms with no family yet | 0 |
@@ -29,10 +29,10 @@ describe but has no way to detect.
 
 | mechanism | maturity | mutants | families | ledger rows |
 |---|---|---:|---:|---:|
-| `uncertain-external-effects` | **measured** | 14 | 5 | 9 |
+| `uncertain-external-effects` | **measured** | 18 | 5 | 9 |
 | `stale-state` | argued | 32 | 9 | 15 |
-| `duplicate-side-effects` | **measured** | 13 | 9 | 14 |
-| `false-audit-history` | **measured** | 20 | 7 | 12 |
+| `duplicate-side-effects` | **measured** | 14 | 9 | 14 |
+| `false-audit-history` | **measured** | 21 | 7 | 12 |
 | `liveness-stall` | **measured** | 16 | 4 | 6 |
 | `prompt-injection-via-retrieval` | argued | 5 | 4 | 5 |
 | `permission-boundary` | argued | 22 | 8 | 12 |

@@ -1,6 +1,6 @@
 # Trial campaign — checker-required-memory-poisoning
 
-`checker-required-2026-08` · 6 slots · 1 run · 1 counted · 5 not run
+`checker-required-2026-08` · 6 slots · 1 run · 0 counted · 5 not run
 
 ## Pre-registration
 
@@ -16,17 +16,13 @@ Written before any slot ran, so the result below cannot be reinterpreted into a 
 
 | | |
 |---|---|
-| verdict | **FIRED** — counted trials failed and none is root-caused to `capability` (not-difficulty clause) |
-| counted trials in this campaign's slots | 1 |
+| verdict | **not evaluable** — no counted trial belongs to this campaign's slots |
+| counted trials in this campaign's slots | 0 |
 | passed everything | 0 |
-| failed something | 1 |
+| failed something | 0 |
 | root-caused `capability` | 0 |
 
-1 counted trial(s) failed and none is root-caused to `capability` (checker-required-2026-08-o1: spec-underspecified) — the not-difficulty clause of the kill signal
-
-Counted failures that are NOT difficulty evidence, and why:
-
-- `checker-required-2026-08-o1` — root cause `spec-underspecified`
+no counted trial belongs to this campaign's slots; the pre-registration stands and neither signal has fired
 
 Only the mechanical clauses are evaluated: whether every counted trial passed, and whether any
 counted failure has been root-caused to `capability`. Whatever else the prose above says — that
@@ -38,8 +34,8 @@ judgement no code here makes, and it is printed rather than scored.
 | | |
 |---|---|
 | challenge hash (plan) | `448f2f816c51030cc97a374816226168` |
-| challenge hash (now) | `448f2f816c51030cc97a374816226168` |
-| match | **yes** — every slot measured the task this repository currently holds |
+| challenge hash (now) | `0530fe3b520faaddd9ad7ed8742825cc` |
+| match | **NO** — the family changed after the plan was written; these slots measured a different task |
 | scenario set | `poisoning-792-67126f04`, 792 scenarios |
 | isolation | `subprocess` |
 | timeout | 30 minutes per slot |
@@ -49,12 +45,18 @@ judgement no code here makes, and it is printed rather than scored.
 
 | slot | model | runner | state | run |
 |---|---|---|---|---|
-| O1 | `openai/gpt-5.6-sol` | shell | RUN | `checker-required-2026-08-o1` |
+| O1 | `openai/gpt-5.6-sol` | shell | RUN, **WITHDRAWN** | `checker-required-2026-08-o1` — **superseded** by the 2026-09-06 `checker-required-memory-poisoning` challenge migration; it does not count and its numbers are withdrawn |
 | O2 | `openai/gpt-5.6-sol` | shell | **NOT_RUN** | — |
 | A1 | `anthropic/claude-opus-5` | external | **NOT_RUN** | — |
 | A2 | `anthropic/claude-sonnet-5` | external | **NOT_RUN** | — |
 | G1 | `google/gemini-3-pro` | external | **NOT_RUN** | — |
 | X1 | `external/unspecified` | external | **NOT_RUN** | — |
+
+**Withdrawn evidence.** `checker-required-2026-08-o1` was invalidated by the 2026-09-06 `checker-required-memory-poisoning` challenge migration: it was graded against a package this repository no longer produces, so that row does not count and every number on it is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read this row as spend that was made, not as a result about the family as it stands.
+
+A slot whose recorded run has been withdrawn is an unfilled slot, not a finished one. The
+header line counts it under `run` and not under `counted`, and only the second number says
+anything about the task this campaign now describes: this campaign has no result yet, and neither its kill signal nor its confirm signal has been tested.
 
 ### Why the unrun slots are unrun
 
@@ -86,6 +88,13 @@ Declared in the plan and cross-checked against the code — a plan may not redef
 - submission/ holds both subject.mjs and checker.mjs for counted completed runs.
 - verifier-output.json holds the graded cells; countability.json holds the counting decision and its reason.
 - A stale challenge hash invalidates a run rather than letting old evidence count for a repaired spec.
+
+## Superseded trials
+
+These ran against an earlier version of this challenge and are preserved without counting.
+A trial is evidence about the task it was run against, and that task no longer exists.
+
+- `checker-required-2026-08-o1`
 
 The plan and the trial directories on disk agree.
 

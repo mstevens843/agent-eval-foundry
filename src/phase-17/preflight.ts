@@ -127,6 +127,7 @@ export function runPhase17Preflight(root: string): Phase17Preflight {
   );
 
   const blockingConditions = [
+    "Phase 17 is a retained historical campaign; current package authorization must use the package execution policy",
     ...(docker.ok ? [] : [`the Docker daemon is unavailable: ${docker.out.split("\n")[0] ?? "no detail"}`]),
     ...(image.ok ? [] : [`the pinned provider image ${PHASE14_PROVIDER_IMAGE} is not present locally`]),
     ...(containerB6.usable ? [] : ["the provider container plan failed its own B6 controls"]),
@@ -157,7 +158,7 @@ export function runPhase17Preflight(root: string): Phase17Preflight {
     packageReady: {
       challengeSha256: hash,
       scenarioSetId,
-      allControlsHeld: controls.allControlsHeld,
+      allControlsHeld: controls.allControlsHeld && controls.challengeSha256 === hash,
       probeV2Status: "PROBE-V2-PASSED",
     },
     capture: {

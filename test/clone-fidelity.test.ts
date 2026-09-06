@@ -36,9 +36,22 @@ function clonedFiles(): ReadonlySet<string> {
 /** Directories that exist on disk and hold no file a clone would carry. */
 function invisibleDirectories(): string[] {
   const cloned = clonedFiles();
+  // Ignored private planning and build directories are not deliverables. Required public empty
+  // directories still need tracked .gitkeep files and remain covered by this check.
+  const ignored = new Set(
+    execFileSync("git", ["ls-files", "--others", "--ignored", "--exclude-standard", "--directory", "-z"], {
+      cwd: ROOT,
+      encoding: "utf8",
+      maxBuffer: 4 * 1024 * 1024,
+    })
+      .split("\0")
+      .filter((p) => p.endsWith("/")),
+  );
   const found: string[] = [];
   const walk = (dir: string): void => {
-    const entries = readdirSync(dir, { withFileTypes: true }).filter((e) => !SKIP.has(e.name));
+    const entries = readdirSync(dir, { withFileTypes: true }).filter(
+      (e) => !SKIP.has(e.name) && !ignored.has(`${relative(ROOT, join(dir, e.name))}/`),
+    );
     const files = entries.filter((e) => e.isFile());
     const subdirs = entries.filter((e) => e.isDirectory());
     for (const sub of subdirs) walk(join(dir, sub.name));

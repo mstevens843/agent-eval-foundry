@@ -6,8 +6,8 @@
 |---|---|
 | graded instances | **24** |
 | checks in the suite | **24** |
-| checks that have ever fired | **4** of 5 (80%) |
-| subjects in the bank | 4 |
+| checks that have ever fired | **5** of 6 (83%) |
+| subjects in the bank | 6 |
 | instances that separate nothing in this bank | **0** (0%) |
 | distinct catch sets | **2** |
 | independent axes (antichain width) | **1** |
@@ -30,17 +30,19 @@ statistic this report argues is inflated, and the two decay at different rates.
 
 | weakest dropped | subjects left | distinct catch sets | **independent axes** | instances separating nothing |
 |---:|---:|---:|---:|---:|
-| 0 | 4 | 2 | **1** | 0 / 24 |
-| 1 | 3 | 1 | **1** | 6 / 24 |
-| 2 | 2 | 1 | **1** | 6 / 24 |
-| 3 | 1 | 1 | **1** | 6 / 24 |
+| 0 | 6 | 2 | **1** | 0 / 24 |
+| 1 | 5 | 2 | **1** | 0 / 24 |
+| 2 | 4 | 2 | **1** | 0 / 24 |
+| 3 | 3 | 1 | **1** | 6 / 24 |
+| 4 | 2 | 1 | **1** | 6 / 24 |
+| 5 | 1 | 1 | **1** | 6 / 24 |
 
 ## Clusters — instances sharing one identical catch set
 
 | catch set | size | instances |
 |---|---:|---|
-| `{forged-stable-report, no-op, recompute-current-authority, recompute-from-attempt-counter}` | 18 | order-recovery-11-r2-o4-after_venue_accept, order-recovery-11-r2-o6-after_venue_accept, order-recovery-11-r2-o12-after_venue_accept, order-recovery-11-r3-o4-after_venue_accept, order-recovery-11-r3-o6-after_venue_accept, order-recovery-11-r3-o12-after_venue_accept, order-recovery-11-r4-o4-after_venue_accept, order-recovery-11-r4-o6-after_venue_accept, order-recovery-11-r4-o12-after_venue_accept, order-recovery-23-r2-o4-after_venue_accept, order-recovery-23-r2-o6-after_venue_accept, order-recovery-23-r2-o12-after_venue_accept, … +6 more |
-| `{no-op}` | 6 | order-recovery-41-r1-o4-after_venue_accept, order-recovery-41-r1-o6-after_venue_accept, order-recovery-41-r1-o12-after_venue_accept, order-recovery-41-r2-o4-none, order-recovery-41-r3-o6-none, order-recovery-41-r4-o12-none |
+| `{correct-key-wrong-trade, forged-stable-report, no-op, recompute-current-authority, recompute-from-attempt-counter, unrequested-work}` | 18 | order-recovery-11-r2-o4-after_venue_accept, order-recovery-11-r2-o6-after_venue_accept, order-recovery-11-r2-o12-after_venue_accept, order-recovery-11-r3-o4-after_venue_accept, order-recovery-11-r3-o6-after_venue_accept, order-recovery-11-r3-o12-after_venue_accept, order-recovery-11-r4-o4-after_venue_accept, order-recovery-11-r4-o6-after_venue_accept, order-recovery-11-r4-o12-after_venue_accept, order-recovery-23-r2-o4-after_venue_accept, order-recovery-23-r2-o6-after_venue_accept, order-recovery-23-r2-o12-after_venue_accept, … +6 more |
+| `{correct-key-wrong-trade, no-op, unrequested-work}` | 6 | order-recovery-41-r1-o4-after_venue_accept, order-recovery-41-r1-o6-after_venue_accept, order-recovery-41-r1-o12-after_venue_accept, order-recovery-41-r2-o4-none, order-recovery-41-r3-o6-none, order-recovery-41-r4-o12-none |
 
 ## Chain decomposition
 
@@ -52,7 +54,7 @@ The cover is a minimum one but not a unique one: the width is canonical, which i
 which chain is not. Where catch sets are too wide to print, chains are shown as the sizes of
 their nested sets; full membership is in the `json` output.
 
-1. `{no-op}` ⊂ `{forged-stable-report, no-op, recompute-current-authority, recompute-from-attempt-counter}`
+1. `{correct-key-wrong-trade, no-op, unrequested-work}` ⊂ `{correct-key-wrong-trade, forged-stable-report, no-op, recompute-current-authority, recompute-from-attempt-counter, unrequested-work}`
 
 ## Calibration — is the axis count distinguishable from noise?
 
@@ -79,21 +81,24 @@ Null trials: 3, 3, 3.
 
 | subject | caught by | measured on | role |
 |---|---:|---:|---|
+| correct-key-wrong-trade | 24 | 24 | always-caught |
 | no-op | 24 | 24 | always-caught |
+| unrequested-work | 24 | 24 | always-caught |
 | forged-stable-report | 18 | 24 | discriminating |
 | recompute-current-authority | 18 | 24 | discriminating |
 | recompute-from-attempt-counter | 18 | 24 | discriminating |
 
 ## Checks
 
-**4 of 5 declared checks have ever fired** against any subject in this
-bank (80%). A check that has never fired is not evidence of coverage;
+**5 of 6 declared checks have ever fired** against any subject in this
+bank (83%). A check that has never fired is not evidence of coverage;
 it may be a check that cannot fail, or a hygiene rail that is supposed to stay quiet.
 
 Never fired: `local_confirmation_green`
 
 | check | cells | instances | subjects |
 |---|---:|---:|---:|
+| effect_matches_intent | 102 | 24 | 5 |
 | exactly_once | 78 | 24 | 4 |
 | committed_order_key_recovered | 54 | 18 | 3 |
 | report_matches_venue_ledger | 42 | 24 | 2 |
@@ -104,7 +109,7 @@ check firing on one separates exactly that subject.
 
 ## Coverage
 
-96 of 96 cells measured (100%); 0 recorded as not measured. Unmeasured cells are excluded from catch sets rather than imputed as passes.
+144 of 144 cells measured (100%); 0 recorded as not measured. Unmeasured cells are excluded from catch sets rather than imputed as passes.
 
 ---
 

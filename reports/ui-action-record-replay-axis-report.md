@@ -9,11 +9,11 @@
 | checks that have ever fired | **10** of 10 (100%) |
 | subjects in the bank | 10 |
 | instances that separate nothing in this bank | **0** (0%) |
-| distinct catch sets | **12** |
-| independent axes (antichain width) | **6** |
-| redundancy (discriminating instances per distinct catch set) | 27.00× |
+| distinct catch sets | **8** |
+| independent axes (antichain width) | **4** |
+| redundancy (discriminating instances per distinct catch set) | 40.50× |
 
-324 of 324 instances separate at least one subject. Between them they produce 12 distinct catch sets, of which 6 cannot be explained as one defect observed at different sensitivities.
+324 of 324 instances separate at least one subject. Between them they produce 8 distinct catch sets, of which 4 cannot be explained as one defect observed at different sensitivities.
 
 ## Provenance — read before quoting any number above
 
@@ -30,15 +30,15 @@ statistic this report argues is inflated, and the two decay at different rates.
 
 | weakest dropped | subjects left | distinct catch sets | **independent axes** | instances separating nothing |
 |---:|---:|---:|---:|---:|
-| 0 | 10 | 12 | **6** | 0 / 324 |
-| 1 | 9 | 12 | **6** | 0 / 324 |
-| 2 | 8 | 12 | **6** | 0 / 324 |
-| 3 | 7 | 11 | **5** | 0 / 324 |
-| 4 | 6 | 11 | **5** | 0 / 324 |
-| 5 | 5 | 10 | **5** | 29 / 324 |
-| 6 | 4 | 6 | **4** | 41 / 324 |
-| 7 | 3 | 3 | **3** | 133 / 324 |
-| 8 | 2 | 2 | **2** | 241 / 324 |
+| 0 | 10 | 8 | **4** | 0 / 324 |
+| 1 | 9 | 8 | **4** | 0 / 324 |
+| 2 | 8 | 8 | **4** | 0 / 324 |
+| 3 | 7 | 7 | **3** | 0 / 324 |
+| 4 | 6 | 7 | **3** | 0 / 324 |
+| 5 | 5 | 7 | **3** | 0 / 324 |
+| 6 | 4 | 6 | **3** | 35 / 324 |
+| 7 | 3 | 4 | **3** | 133 / 324 |
+| 8 | 2 | 3 | **2** | 241 / 324 |
 | 9 | 1 | 1 | **1** | 290 / 324 |
 
 ## Clusters — instances sharing one identical catch set
@@ -47,16 +47,12 @@ statistic this report argues is inflated, and the two decay at different rates.
 |---|---:|---|
 | `{audit-forger, halter-not-reporter, model-in-the-loop, nop-recorder}` | 108 | ui-attribute_renamed-d0-absent-pending-r1-11, ui-attribute_renamed-d0-absent-pending-r2-11, ui-attribute_renamed-d0-absent-pending-r2-41, ui-attribute_renamed-d0-absent-settled-r1-11, ui-attribute_renamed-d0-absent-settled-r2-11, ui-attribute_renamed-d0-present-pending-r2-11, ui-attribute_renamed-d0-present-pending-r2-23, ui-attribute_renamed-d0-present-settled-r1-23, ui-attribute_renamed-d0-present-settled-r1-41, ui-attribute_renamed-d0-present-settled-r2-11, ui-attribute_renamed-d0-present-settled-r2-23, ui-attribute_renamed-d0-present-settled-r2-41, … +96 more |
 | `{action-order-reorderer, audit-forger, eager-resolver, model-in-the-loop, nop-recorder, over-blocker, stale-state-reader}` | 82 | ui-node_reordered-d0-absent-pending-r2-11, ui-node_reordered-d0-absent-pending-r2-23, ui-node_reordered-d0-present-pending-r1-23, ui-node_reordered-d0-present-pending-r1-41, ui-node_reordered-d0-present-pending-r2-11, ui-node_reordered-d0-present-pending-r2-41, ui-node_reordered-d2-absent-pending-r1-11, ui-node_reordered-d2-absent-pending-r2-23, ui-node_reordered-d2-present-pending-r1-11, ui-node_reordered-d2-present-pending-r1-23, ui-node_reordered-d2-present-pending-r1-41, ui-node_reordered-d2-present-pending-r2-41, … +70 more |
-| `{audit-forger, eager-resolver, model-in-the-loop, nop-recorder, over-blocker}` | 29 | ui-node_reordered-d0-suppressed-pending-r1-11, ui-node_reordered-d0-suppressed-pending-r1-41, ui-node_reordered-d0-suppressed-pending-r2-23, ui-node_reordered-d0-suppressed-pending-r2-41, ui-node_reordered-d2-suppressed-pending-r1-23, ui-node_reordered-d2-suppressed-pending-r1-41, ui-node_reordered-d2-suppressed-pending-r2-11, ui-node_reordered-d2-suppressed-pending-r2-23, ui-node_reordered-d2-suppressed-pending-r2-41, ui-node_reordered-d4-suppressed-pending-r1-23, ui-node_reordered-d4-suppressed-pending-r1-41, ui-node_reordered-d4-suppressed-pending-r2-11, … +17 more |
-| `{action-order-reorderer, audit-forger, duplicate-executor, eager-resolver, nop-recorder, over-blocker}` | 27 | ui-node_reordered-d0-absent-settled-r2-23, ui-node_reordered-d0-absent-settled-r2-41, ui-node_reordered-d0-present-settled-r2-11, ui-node_reordered-d2-absent-settled-r2-11, ui-node_reordered-d2-present-settled-r2-23, ui-node_reordered-d2-present-settled-r2-41, ui-node_reordered-d4-absent-settled-r2-11, ui-node_reordered-d4-present-settled-r2-11, ui-node_reordered-d4-present-settled-r2-23, ui-none-d0-absent-settled-r2-23, ui-none-d0-absent-settled-r2-41, ui-none-d0-present-settled-r2-11, … +15 more |
-| `{audit-forger, eager-resolver, hidden-confirmation-skipper, nop-recorder, over-blocker}` | 26 | ui-node_reordered-d0-suppressed-settled-r1-11, ui-node_reordered-d0-suppressed-settled-r1-23, ui-node_reordered-d0-suppressed-settled-r2-41, ui-node_reordered-d2-suppressed-settled-r2-11, ui-node_reordered-d2-suppressed-settled-r2-41, ui-node_reordered-d4-suppressed-settled-r1-23, ui-node_reordered-d4-suppressed-settled-r1-41, ui-node_reordered-d4-suppressed-settled-r2-41, ui-none-d0-suppressed-settled-r1-11, ui-none-d0-suppressed-settled-r1-41, ui-none-d0-suppressed-settled-r2-23, ui-none-d0-suppressed-settled-r2-41, … +14 more |
-| `{action-order-reorderer, audit-forger, eager-resolver, nop-recorder, over-blocker}` | 12 | ui-node_reordered-d0-absent-settled-r1-41, ui-node_reordered-d2-absent-settled-r1-11, ui-node_reordered-d4-absent-settled-r1-11, ui-node_reordered-d4-absent-settled-r1-23, ui-none-d4-absent-settled-r1-11, ui-none-d4-absent-settled-r1-23, ui-text_changed-d0-absent-settled-r1-11, ui-text_changed-d0-absent-settled-r1-23, ui-text_changed-d0-absent-settled-r1-41, ui-text_changed-d2-absent-settled-r1-11, ui-text_changed-d2-absent-settled-r1-23, ui-text_changed-d4-absent-settled-r1-41 |
-| `{action-order-reorderer, audit-forger, eager-resolver, hidden-confirmation-skipper, nop-recorder, over-blocker}` | 11 | ui-node_reordered-d0-present-settled-r1-23, ui-node_reordered-d2-present-settled-r1-41, ui-node_reordered-d4-present-settled-r1-11, ui-none-d0-present-settled-r1-11, ui-none-d0-present-settled-r1-23, ui-none-d4-present-settled-r1-23, ui-none-d4-present-settled-r1-41, ui-text_changed-d0-present-settled-r1-41, ui-text_changed-d2-present-settled-r1-11, ui-text_changed-d4-present-settled-r1-11, ui-text_changed-d4-present-settled-r1-23 |
-| `{audit-forger, eager-resolver, hidden-confirmation-skipper, nop-recorder, over-blocker, stale-state-reader}` | 7 | ui-node_wrapped-d0-suppressed-settled-r1-11, ui-node_wrapped-d0-suppressed-settled-r2-23, ui-node_wrapped-d2-suppressed-settled-r1-11, ui-node_wrapped-d2-suppressed-settled-r1-23, ui-node_wrapped-d4-suppressed-settled-r1-11, ui-node_wrapped-d4-suppressed-settled-r2-11, ui-node_wrapped-d4-suppressed-settled-r2-41 |
-| `{action-order-reorderer, audit-forger, duplicate-executor, eager-resolver, nop-recorder, over-blocker, stale-state-reader}` | 7 | ui-node_wrapped-d0-absent-settled-r2-11, ui-node_wrapped-d0-absent-settled-r2-41, ui-node_wrapped-d0-present-settled-r2-23, ui-node_wrapped-d2-absent-settled-r2-11, ui-node_wrapped-d2-absent-settled-r2-23, ui-node_wrapped-d4-absent-settled-r2-23, ui-node_wrapped-d4-present-settled-r2-23 |
-| `{audit-forger, eager-resolver, model-in-the-loop, nop-recorder, over-blocker, stale-state-reader}` | 6 | ui-node_wrapped-d0-suppressed-pending-r1-23, ui-node_wrapped-d0-suppressed-pending-r1-41, ui-node_wrapped-d2-suppressed-pending-r1-23, ui-node_wrapped-d2-suppressed-pending-r2-11, ui-node_wrapped-d4-suppressed-pending-r1-23, ui-node_wrapped-d4-suppressed-pending-r2-11 |
-| `{action-order-reorderer, audit-forger, eager-resolver, hidden-confirmation-skipper, nop-recorder, over-blocker, stale-state-reader}` | 5 | ui-node_wrapped-d0-present-settled-r1-11, ui-node_wrapped-d0-present-settled-r1-41, ui-node_wrapped-d2-present-settled-r1-11, ui-node_wrapped-d2-present-settled-r1-23, ui-node_wrapped-d4-present-settled-r1-41 |
-| `{action-order-reorderer, audit-forger, eager-resolver, nop-recorder, over-blocker, stale-state-reader}` | 4 | ui-node_wrapped-d0-absent-settled-r1-23, ui-node_wrapped-d0-absent-settled-r1-41, ui-node_wrapped-d2-absent-settled-r1-11, ui-node_wrapped-d4-absent-settled-r1-11 |
+| `{audit-forger, eager-resolver, model-in-the-loop, nop-recorder, over-blocker, stale-state-reader}` | 35 | ui-node_reordered-d0-suppressed-pending-r1-11, ui-node_reordered-d0-suppressed-pending-r1-41, ui-node_reordered-d0-suppressed-pending-r2-23, ui-node_reordered-d0-suppressed-pending-r2-41, ui-node_reordered-d2-suppressed-pending-r1-23, ui-node_reordered-d2-suppressed-pending-r1-41, ui-node_reordered-d2-suppressed-pending-r2-11, ui-node_reordered-d2-suppressed-pending-r2-23, ui-node_reordered-d2-suppressed-pending-r2-41, ui-node_reordered-d4-suppressed-pending-r1-23, ui-node_reordered-d4-suppressed-pending-r1-41, ui-node_reordered-d4-suppressed-pending-r2-11, … +23 more |
+| `{audit-forger, eager-resolver, hidden-confirmation-skipper, nop-recorder, over-blocker, stale-state-reader}` | 33 | ui-node_reordered-d0-suppressed-settled-r1-11, ui-node_reordered-d0-suppressed-settled-r1-23, ui-node_reordered-d0-suppressed-settled-r2-41, ui-node_reordered-d2-suppressed-settled-r2-11, ui-node_reordered-d2-suppressed-settled-r2-41, ui-node_reordered-d4-suppressed-settled-r1-23, ui-node_reordered-d4-suppressed-settled-r1-41, ui-node_reordered-d4-suppressed-settled-r2-41, ui-node_wrapped-d0-suppressed-settled-r1-11, ui-node_wrapped-d0-suppressed-settled-r2-23, ui-node_wrapped-d2-suppressed-settled-r1-11, ui-node_wrapped-d2-suppressed-settled-r1-23, … +21 more |
+| `{action-order-reorderer, audit-forger, duplicate-executor, eager-resolver, nop-recorder, over-blocker, stale-state-reader}` | 21 | ui-node_reordered-d0-absent-settled-r2-23, ui-node_reordered-d0-absent-settled-r2-41, ui-node_reordered-d2-absent-settled-r2-11, ui-node_reordered-d4-absent-settled-r2-11, ui-node_wrapped-d0-absent-settled-r2-11, ui-node_wrapped-d0-absent-settled-r2-41, ui-node_wrapped-d2-absent-settled-r2-11, ui-node_wrapped-d2-absent-settled-r2-23, ui-node_wrapped-d4-absent-settled-r2-23, ui-none-d0-absent-settled-r2-23, ui-none-d0-absent-settled-r2-41, ui-none-d2-absent-settled-r2-11, … +9 more |
+| `{action-order-reorderer, audit-forger, eager-resolver, nop-recorder, over-blocker, stale-state-reader}` | 16 | ui-node_reordered-d0-absent-settled-r1-41, ui-node_reordered-d2-absent-settled-r1-11, ui-node_reordered-d4-absent-settled-r1-11, ui-node_reordered-d4-absent-settled-r1-23, ui-node_wrapped-d0-absent-settled-r1-23, ui-node_wrapped-d0-absent-settled-r1-41, ui-node_wrapped-d2-absent-settled-r1-11, ui-node_wrapped-d4-absent-settled-r1-11, ui-none-d4-absent-settled-r1-11, ui-none-d4-absent-settled-r1-23, ui-text_changed-d0-absent-settled-r1-11, ui-text_changed-d0-absent-settled-r1-23, … +4 more |
+| `{action-order-reorderer, audit-forger, eager-resolver, hidden-confirmation-skipper, nop-recorder, over-blocker, stale-state-reader}` | 16 | ui-node_reordered-d0-present-settled-r1-23, ui-node_reordered-d2-present-settled-r1-41, ui-node_reordered-d4-present-settled-r1-11, ui-node_wrapped-d0-present-settled-r1-11, ui-node_wrapped-d0-present-settled-r1-41, ui-node_wrapped-d2-present-settled-r1-11, ui-node_wrapped-d2-present-settled-r1-23, ui-node_wrapped-d4-present-settled-r1-41, ui-none-d0-present-settled-r1-11, ui-none-d0-present-settled-r1-23, ui-none-d4-present-settled-r1-23, ui-none-d4-present-settled-r1-41, … +4 more |
+| `{action-order-reorderer, audit-forger, duplicate-executor, eager-resolver, hidden-confirmation-skipper, nop-recorder, over-blocker, stale-state-reader}` | 13 | ui-node_reordered-d0-present-settled-r2-11, ui-node_reordered-d2-present-settled-r2-23, ui-node_reordered-d2-present-settled-r2-41, ui-node_reordered-d4-present-settled-r2-11, ui-node_reordered-d4-present-settled-r2-23, ui-node_wrapped-d0-present-settled-r2-23, ui-node_wrapped-d4-present-settled-r2-23, ui-none-d0-present-settled-r2-11, ui-none-d2-present-settled-r2-11, ui-none-d4-present-settled-r2-11, ui-text_changed-d0-present-settled-r2-41, ui-text_changed-d2-present-settled-r2-23, … +1 more |
 
 ## Chain decomposition
 
@@ -68,12 +64,10 @@ The cover is a minimum one but not a unique one: the width is canonical, which i
 which chain is not. Where catch sets are too wide to print, chains are shown as the sizes of
 their nested sets; full membership is in the `json` output.
 
-1. `{audit-forger, eager-resolver, model-in-the-loop, nop-recorder, over-blocker}` ⊂ `{audit-forger, eager-resolver, model-in-the-loop, nop-recorder, over-blocker, stale-state-reader}` ⊂ `{action-order-reorderer, audit-forger, eager-resolver, model-in-the-loop, nop-recorder, over-blocker, stale-state-reader}`
-2. `{audit-forger, eager-resolver, hidden-confirmation-skipper, nop-recorder, over-blocker}` ⊂ `{action-order-reorderer, audit-forger, eager-resolver, hidden-confirmation-skipper, nop-recorder, over-blocker}` ⊂ `{action-order-reorderer, audit-forger, eager-resolver, hidden-confirmation-skipper, nop-recorder, over-blocker, stale-state-reader}`
-3. `{action-order-reorderer, audit-forger, eager-resolver, nop-recorder, over-blocker}` ⊂ `{action-order-reorderer, audit-forger, duplicate-executor, eager-resolver, nop-recorder, over-blocker}` ⊂ `{action-order-reorderer, audit-forger, duplicate-executor, eager-resolver, nop-recorder, over-blocker, stale-state-reader}`
+1. `{action-order-reorderer, audit-forger, eager-resolver, nop-recorder, over-blocker, stale-state-reader}` ⊂ `{action-order-reorderer, audit-forger, duplicate-executor, eager-resolver, nop-recorder, over-blocker, stale-state-reader}` ⊂ `{action-order-reorderer, audit-forger, duplicate-executor, eager-resolver, hidden-confirmation-skipper, nop-recorder, over-blocker, stale-state-reader}`
+2. `{audit-forger, eager-resolver, model-in-the-loop, nop-recorder, over-blocker, stale-state-reader}` ⊂ `{action-order-reorderer, audit-forger, eager-resolver, model-in-the-loop, nop-recorder, over-blocker, stale-state-reader}`
+3. `{audit-forger, eager-resolver, hidden-confirmation-skipper, nop-recorder, over-blocker, stale-state-reader}` ⊂ `{action-order-reorderer, audit-forger, eager-resolver, hidden-confirmation-skipper, nop-recorder, over-blocker, stale-state-reader}`
 4. `{audit-forger, halter-not-reporter, model-in-the-loop, nop-recorder}`
-5. `{audit-forger, eager-resolver, hidden-confirmation-skipper, nop-recorder, over-blocker, stale-state-reader}`
-6. `{action-order-reorderer, audit-forger, eager-resolver, nop-recorder, over-blocker, stale-state-reader}`
 
 ## Calibration — is the axis count distinguishable from noise?
 
@@ -85,13 +79,13 @@ cells, but which instances it passes is redrawn at random.
 
 | | axes |
 |---|---:|
-| **measured** | **6** |
-| null model, mean of 3 trial(s) (seed 20260828) | 32.0 |
+| **measured** | **4** |
+| null model, mean of 3 trial(s) (seed 20260828) | 31.0 |
 | ceiling (one axis per discriminating instance) | 324 |
 
 The measured width sits close to the null. On this corpus the axis count is largely explained by bank size and run-to-run noise rather than by shared structure, and should not be read as a count of distinct capabilities.
 
-Null trials: 31, 34, 31.
+Null trials: 31, 31, 31.
 
 ## Subjects
 
@@ -105,10 +99,10 @@ Null trials: 31, 34, 31.
 | model-in-the-loop | 225 | 324 | discriminating |
 | eager-resolver | 216 | 324 | discriminating |
 | over-blocker | 216 | 324 | discriminating |
+| stale-state-reader | 216 | 324 | discriminating |
 | action-order-reorderer | 148 | 324 | discriminating |
-| stale-state-reader | 111 | 324 | discriminating |
 | halter-not-reporter | 108 | 324 | discriminating |
-| hidden-confirmation-skipper | 49 | 324 | discriminating |
+| hidden-confirmation-skipper | 62 | 324 | discriminating |
 | duplicate-executor | 34 | 324 | discriminating |
 
 ## Checks
@@ -119,15 +113,15 @@ it may be a check that cannot fail, or a hygiene rail that is supposed to stay q
 
 | check | cells | instances | subjects |
 |---|---:|---:|---:|
+| precondition_observed | 1269 | 324 | 5 |
 | replay_completes | 797 | 216 | 6 |
+| replay_audit_explains | 720 | 324 | 3 |
 | selector_resolved_live | 491 | 324 | 3 |
-| precondition_observed | 441 | 324 | 2 |
+| no_forbidden_effect | 472 | 226 | 7 |
 | unreplayable_reported | 432 | 108 | 4 |
-| replay_audit_explains | 324 | 324 | 1 |
-| no_forbidden_effect | 306 | 160 | 4 |
+| replay_order_preserved | 303 | 239 | 2 |
 | no_model_in_loop | 225 | 225 | 1 |
-| replay_order_preserved | 107 | 107 | 1 |
-| confirmation_observed | 34 | 34 | 1 |
+| confirmation_observed | 62 | 62 | 1 |
 | replay_idempotent | 34 | 34 | 1 |
 
 `subjects` is the column that matters. A check firing on every subject separates nothing; a

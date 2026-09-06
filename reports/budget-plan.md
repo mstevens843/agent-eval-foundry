@@ -226,16 +226,16 @@ trial directories rather than assumed.
 | slots planned | 35 |
 | slots run | 11 |
 | slots **not run** | 24 |
-| counted trials | 13 |
-| of those, failing something | 7 |
-| superseded by a challenge repair | 18 |
-| median counted-trial runtime | 2.8 min |
+| counted trials | 0 |
+| of those, failing something | 0 |
+| superseded by a challenge repair | 32 |
+| median counted-trial runtime | — |
 | budget declared across campaigns | $190.00 |
-| **budget per counted failure** | $27.14 |
+| **budget per counted failure** | — (no counted failure yet) |
 
 ### The line item nobody budgets for
 
-18 counted trials were invalidated by a repair to the family they measured. They
+32 counted trials were invalidated by a repair to the family they measured. They
 are preserved and they do not count, because the task they were run against no longer exists.
 
 That is not waste in the ordinary sense — the repair came FROM those trials, which found a rule
@@ -259,18 +259,18 @@ Runs are priced at the measured $9.62 — the mean of the 19 real Harbor trials 
 
 | provider | counted | of those failed | refused | infra | superseded | model-minutes |
 |---|---:|---:|---:|---:|---:|---:|
-| `anthropic` | 12 | 4 | 0 | 0 | 10 | 130 |
-| `claude opus` | 2 | 0 | 0 | 0 | 0 | 3 |
+| `anthropic` | 0 | 0 | 0 | 0 | 22 | 130 |
+| `claude opus` | 0 | 0 | 0 | 0 | 2 | 3 |
 | `google` | 0 | 0 | 0 | 0 | 1 | 0 |
-| `openai` | 9 | 3 | 0 | 1 | 7 | 80 |
+| `openai` | 0 | 0 | 0 | 0 | 17 | 80 |
 
 | | |
 |---|---:|
 | runs attempted | 42 |
-| counted | 23 |
-| **produced no usable evidence** | **19** (45%) |
-| at $9.62 per run, spend on runs that produced nothing | $182.78 |
-| **cost per counted FAILURE** | $57.72 |
+| counted | 0 |
+| **produced no usable evidence** | **42** (100%) |
+| at $9.62 per run, spend on runs that produced nothing | $404.04 |
+| **cost per counted FAILURE** | — (no counted failure) |
 
 **Cost per counted failure is the number to plan against.** A counted solve tells you the family
 is solvable, which the reference already told you. A counted failure is the only kind of trial
@@ -282,10 +282,10 @@ single run does.
 | kind | count | can it be engineered away? |
 |---|---:|---|
 | provider refusal | 0 | no — it is a property of the provider, and re-running until it complies would fabricate a sample |
-| infrastructure / auth | 1 | partly — an account-tier error is fixable by paying; a harness bug is fixable by fixing it |
-| superseded by repair | 18 | no, and it should not be. These runs found the defect that invalidated them |
+| infrastructure / auth | 0 | partly — an account-tier error is fixable by paying; a harness bug is fixable by fixing it |
+| superseded by repair | 42 | no, and it should not be. These runs found the defect that invalidated them |
 
-Priced into the plan, 19 wasted runs against 3 matrices per family is
+Priced into the plan, 42 wasted runs against 3 matrices per family is
 a real multiplier on trial cost — and still a rounding error beside labour, which is the finding
 the whole budget model exists to make.
 
@@ -300,7 +300,7 @@ directories.
 |---|---:|---|---|
 | mutant-measured -> trial-ready | $2,790 (23.3 h) | estimated | fairness SPEC, challenge package, leak tests, route, campaign plan |
 | trial-ready -> difficulty-evidenced | $251.06 + provider availability | estimated | one counted provider run, grading, reconcile, report update |
-| spec ambiguity waste already observed | $919.13 | measured trials + estimated repair | stale/superseded trials plus repair time |
+| spec ambiguity waste already observed | $1,074 | measured trials + estimated repair | stale/superseded trials plus repair time |
 | checker-required package-ready -> difficulty-evidenced | $15 campaign budget; provider cost not recorded | measured campaign | package, route, two submitted artifacts, 792 graded scenarios and one counted Codex/OpenAI failure; no cross-lab breadth |
 
 Trial-ready is not SHIP. Trial-ready means the package builds, the leak checker passes, the hash

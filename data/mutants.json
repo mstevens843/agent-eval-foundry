@@ -1,5 +1,71 @@
 [
   {
+    "id": "correct-key-wrong-payload",
+    "name": "Stable key with changed payload",
+    "bug": "Recovers the durable action identity but changes the external payload before execution.",
+    "mechanisms": [
+      "uncertain-external-effects"
+    ],
+    "caughtBy": [
+      "Compare authority-observed payload and action identity against the requested intent, not just the idempotency key."
+    ],
+    "falseConfidence": "Exactly-once counts can be correct while the wrong effect is executed.",
+    "sketch": "src/families/dao-descendant/mutants.ts: changedPayload"
+  },
+  {
+    "id": "correct-key-wrong-trade",
+    "name": "Stable key with changed trade quantity",
+    "bug": "Recovers the durable key but increases the order quantity.",
+    "mechanisms": [
+      "uncertain-external-effects"
+    ],
+    "caughtBy": [
+      "effect_matches_intent compares the independently observed order payload to the original intent."
+    ],
+    "falseConfidence": "A correct key and one accepted trade do not prove the quantity is correct.",
+    "sketch": "src/families/trading-reconciliation-recompute/mutants.ts: changedPayload"
+  },
+  {
+    "id": "correct-key-wrong-compensation",
+    "name": "Stable key with wrong rollback configuration",
+    "bug": "Recovers the durable key but restores a different configuration.",
+    "mechanisms": [
+      "uncertain-external-effects"
+    ],
+    "caughtBy": [
+      "effect_matches_intent compares compensation payloads and intent identities through the external controller."
+    ],
+    "falseConfidence": "Completing rollback once is insufficient if it restores the wrong target.",
+    "sketch": "src/families/deployment-rollback-recompute/mutants.ts: changedPayload"
+  },
+  {
+    "id": "unrequested-work",
+    "name": "Complete intended work and perform an unrelated effect",
+    "bug": "Performs the requested effect correctly, then adds an unrelated order, tool action or compensation.",
+    "mechanisms": [
+      "uncertain-external-effects",
+      "duplicate-side-effects"
+    ],
+    "caughtBy": [
+      "Compare the complete external-effect collection, including action IDs outside the requested set."
+    ],
+    "falseConfidence": "A verifier that filters to expected IDs sees all intended work and misses collateral effects.",
+    "sketch": "unrequestedWork in the DAO, trading and rollback calibration families"
+  },
+  {
+    "id": "retroactive-auditor",
+    "name": "Revise an already closed payment audit",
+    "bug": "Handles a late dispute as authorized new work but also appends a transition to the original AUDITED payment.",
+    "mechanisms": [
+      "false-audit-history"
+    ],
+    "caughtBy": [
+      "audit_legal_transitions checks the entire per-action history, including late sessions."
+    ],
+    "falseConfidence": "The dispute result is correct while the earlier immutable payment history has been corrupted.",
+    "sketch": "src/families/memory-poisoning/mutants.ts: retroactiveAuditor"
+  },
+  {
     "id": "nop-faker",
     "name": "No-op faker (empty external ledger)",
     "bug": "The engine leases actions and then drives every one straight to a clean terminal state without ever calling the external tool, so the outbox produces zero side effects. This is the cheat-empty-ledger oracle from the source repo, which scored a perfect 113/113 with an entirely empty tool ledger before check_expected_executions was written.",
@@ -19,7 +85,7 @@
   {
     "id": "eager-resolver",
     "name": "Eager resolver (guesses the unknown outcome)",
-    "bug": "When the tool returns UNKNOWN the engine picks an answer instead of parking the action, and it withdraws already-acknowledged work by writing an ACKED -> REVOKED audit transition. The state machine in SEMANTICS.md §4 gives ACKED no outgoing arrow and §6 names EXECUTED -> REVOKED as the one post-execution withdrawal path, so this is a transition that the normative spec does not contain. Five of the six frontier trials in the source repo wrote exactly this bug.",
+    "bug": "A constructed eager resolver treats unknown effects as decided and permits withdrawal transitions after acknowledgment. Five retained outbox submissions violated the hidden ACKED-terminal check, but current adjudications classify those five as specification ambiguity; these observations do not establish a fair capability gap.",
     "mechanisms": [
       "false-audit-history",
       "tool-result-ambiguity",
@@ -31,7 +97,7 @@
       "for every action whose invoke returned UNKNOWN, assert the engine's final state agrees with the receipt's LANDED/NOT_LANDED verdict rather than a guess made before the receipt arrived",
       "assert no side effect exists in the external ledger for an action the engine resolved as not-landed"
     ],
-    "falseConfidence": "Its audit log is perfectly continuous — every entry's from_state equals the previous to_state — and every action reaches a terminal state promptly, so completeness, append-only ordering, and liveness all pass. The one Opus trial that avoided the bug still wrote a local checker with no legal-transition table, which would have passed ACKED -> REVOKED as a valid chain link; an author who checks chain continuity instead of chain legality gets a green suite over a spec violation stated three separate times.",
+    "falseConfidence": "A continuous audit chain need not be a legal state history. All six retained outbox agents wrote checking machinery, but their coverage differed. This taxonomy proposes an explicit public transition contract with independent history checks; it does not retroactively add that contract to the old trials.",
     "sketch": "receipt, outcome = tool.invoke(k, aid, payload)\nif outcome == UNKNOWN:\n    # guess: assume it landed and move on\n    set_state(aid, EXECUTED); audit(aid, LEASED, EXECUTED, w, e, \"assumed\")\n\ndef revoke(key):\n    a = action_for(key)\n    set_state(a.id, REVOKED)\n    # a.state may be ACKED here; the log records it anyway\n    audit(a.id, a.state, REVOKED, None, a.epoch, \"revoked\")\n    # chain is continuous: ACKED -> REVOKED reads as a valid link\n    # but LEGAL[ACKED] is the empty set"
   },
   {

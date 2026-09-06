@@ -11,7 +11,7 @@ Verdict: **non_openai_missing**. Decision: **run_non_openai_smoke**.
 | item | value |
 |---|---|
 | family | `deployment-model-alias-rollout-drift` |
-| challenge hash | `805efb58c923f9e081db1b41967392d7` |
+| challenge hash | `5b3171584b8a190743067d745b22e586` |
 | scenario set | `drift-339-590affe3` |
 | counted OpenAI runs | 0 |
 | counted non-OpenAI runs | 0 |

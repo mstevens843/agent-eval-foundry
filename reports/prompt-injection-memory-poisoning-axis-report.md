@@ -146,7 +146,7 @@ Never fired: `mechanism_fired`
 
 | check | cells | instances | subjects |
 |---|---:|---:|---:|
-| audit_explains | 4790 | 774 | 11 |
+| audit_explains | 5517 | 864 | 11 |
 | no_forbidden_call | 4653 | 774 | 10 |
 | block_reason_correct | 3066 | 774 | 9 |
 | recall_trust_preserved | 2592 | 864 | 3 |

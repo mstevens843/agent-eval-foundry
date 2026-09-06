@@ -894,6 +894,7 @@ export type {
 } from "./phase-15/types.js";
 export { renderPhase15DiscoveryEngine } from "./reports/phase-15-discovery-engine.js";
 export {
+  routeFor,
   gradePhase14ContainerSubmission,
   gradeCaaRevalidation,
   gradeCaaRevalidationInContainer,
@@ -1036,6 +1037,8 @@ export * from "./packages/assembly.js";
 export * from "./packages/assurance.js";
 export * from "./trials/outcome.js";
 export * from "./packages/portfolio.js";
+export { measurementContext } from "./measurement-context.js";
+export { withCommandContext } from "./foundry/operation-context.js";
 export { browserProduction } from "./families/ui-replay-browser-backed/production.js";
 export { JobStore } from "./execution/store.js";
 export type {
@@ -1066,3 +1069,4 @@ export * from "./learning/selection.js";
 export { outboxFinding, memoryCorrectionFinding, portfolioTransfers } from "./learning/cases.js";
 export { learningCommand, inspectPortfolioSelection } from "./learning/command.js";
 export { renderFinding, renderTrial } from "./learning/render.js";
+export { authoritySourceDigest, assertCurrentAuthorityBundle } from "./trials/authority-build.js";

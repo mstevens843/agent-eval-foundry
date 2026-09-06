@@ -290,8 +290,13 @@ const starterGrade = (
   };
 };
 
-/** Recompute every locked package and calibrate the delta checker in the same invocation. */
+/** Retained experimental input, not execution evidence for today's collector. */
 export function buildPhase14PackageLock(root: string): Phase14PackageLock {
+  return parsePhase14PackageLock(readLockedHistory(root, "data/phase-14-package-lock.json"));
+}
+
+/** Explicit diagnostic on the current route. Never overwrites or requalifies the historical lock. */
+export function runCurrentPhase14PackageControls(root: string): Phase14PackageLock {
   const preregistrationPath = join(root, PREREGISTRATION_PATH);
   const registered = JSON.parse(readFileSync(preregistrationPath, "utf8")) as Record<string, unknown>;
   const frozen = requireShape(registered.frozenPhase13Inputs, "phase14.frozenPhase13Inputs", [

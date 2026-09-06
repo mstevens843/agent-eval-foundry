@@ -1,3 +1,5 @@
+> Historical report — original narrative retained, not current-package qualification. Trial versions below may be superseded; current interpretation and limitations are in [evidence corrections](../docs/evidence-corrections.md) and generated package/evidence reports. This notice does not alter original trial bytes or adjudications.
+
 # Phase 4 — Settled
 
 **Hand-authored. Not generated.** Dated 2026-09-02.

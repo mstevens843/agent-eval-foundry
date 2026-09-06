@@ -1,0 +1,175 @@
+{
+  "node": "v22.22.1",
+  "platform": "darwin",
+  "arch": "arm64",
+  "cpu": "Apple M4 Pro",
+  "memoryBytes": 25769803776,
+  "revision": "70024e1f56e7a5492d6370c8f4e167889b533990",
+  "sourceDigest": "f3fc4009e628a731496bf7e4bb6c54daa5b2f48ee9213ee89d714c34e74c823c",
+  "measurements": [
+    {
+      "name": "registry",
+      "workerSubprocesses": 1,
+      "totalMs": 103.05024999999999,
+      "rows": [
+        {
+          "temperature": "cold",
+          "elapsedMs": 9.398749999999993,
+          "maxRssKiB": 90192,
+          "rssBytes": 92356608,
+          "outputBytes": 451486,
+          "artifactBytes": null,
+          "directSubprocesses": 0,
+          "digest": "633db75e2b99b39b6a0969baae271502d8506bf03348bb38fde1b855b59c9920"
+        },
+        {
+          "temperature": "warm",
+          "elapsedMs": 2.615415999999996,
+          "maxRssKiB": 93456,
+          "rssBytes": 95698944,
+          "outputBytes": 451486,
+          "artifactBytes": null,
+          "directSubprocesses": 0,
+          "digest": "633db75e2b99b39b6a0969baae271502d8506bf03348bb38fde1b855b59c9920"
+        }
+      ]
+    },
+    {
+      "name": "history-index",
+      "workerSubprocesses": 1,
+      "totalMs": 149.129167,
+      "rows": [
+        {
+          "temperature": "cold",
+          "elapsedMs": 35.93137499999999,
+          "maxRssKiB": 103248,
+          "rssBytes": 105742336,
+          "outputBytes": 265573,
+          "artifactBytes": null,
+          "directSubprocesses": 0,
+          "digest": "531fb5fa1bac4fd8743babb086e53d020722cd9c56469b21be8bada5d4c89313"
+        },
+        {
+          "temperature": "warm",
+          "elapsedMs": 23.576582999999985,
+          "maxRssKiB": 113856,
+          "rssBytes": 116588544,
+          "outputBytes": 265573,
+          "artifactBytes": null,
+          "directSubprocesses": 0,
+          "digest": "531fb5fa1bac4fd8743babb086e53d020722cd9c56469b21be8bada5d4c89313"
+        }
+      ]
+    },
+    {
+      "name": "wallet-selection",
+      "workerSubprocesses": 1,
+      "totalMs": 358.36016600000005,
+      "rows": [
+        {
+          "temperature": "cold",
+          "elapsedMs": 146.96304200000003,
+          "maxRssKiB": 217008,
+          "rssBytes": 222216192,
+          "outputBytes": 281135,
+          "artifactBytes": null,
+          "directSubprocesses": 0,
+          "digest": "f79cb36f2f2179d2edaf8f641bcee3fc933ab664080caec8459a6bd28b0af79a"
+        },
+        {
+          "temperature": "warm",
+          "elapsedMs": 116.15516699999998,
+          "maxRssKiB": 227264,
+          "rssBytes": 232718336,
+          "outputBytes": 281135,
+          "artifactBytes": null,
+          "directSubprocesses": 0,
+          "digest": "f79cb36f2f2179d2edaf8f641bcee3fc933ab664080caec8459a6bd28b0af79a"
+        }
+      ]
+    },
+    {
+      "name": "memory-validation",
+      "workerSubprocesses": 1,
+      "totalMs": 1315.454584,
+      "rows": [
+        {
+          "temperature": "cold",
+          "elapsedMs": 742.799084,
+          "maxRssKiB": 193760,
+          "rssBytes": 198410240,
+          "outputBytes": 1084333,
+          "artifactBytes": null,
+          "directSubprocesses": 0,
+          "digest": "1a79af34930d8919735fe97347c44d55efbd09448960f0e77d6c31dc790ece41"
+        },
+        {
+          "temperature": "warm",
+          "elapsedMs": 476.84341700000004,
+          "maxRssKiB": 213392,
+          "rssBytes": 218513408,
+          "outputBytes": 1084333,
+          "artifactBytes": null,
+          "directSubprocesses": 0,
+          "digest": "1a79af34930d8919735fe97347c44d55efbd09448960f0e77d6c31dc790ece41"
+        }
+      ]
+    },
+    {
+      "name": "one-family",
+      "workerSubprocesses": 1,
+      "totalMs": 37857.724084,
+      "rows": [
+        {
+          "temperature": "cold",
+          "elapsedMs": 19109.401916000003,
+          "maxRssKiB": 297184,
+          "rssBytes": 304332800,
+          "outputBytes": 31995,
+          "artifactBytes": null,
+          "directSubprocesses": 0,
+          "digest": "774b15608fb2556b0f4f7c5a149a95518b5035a9853df2bea384276bf6131b31"
+        },
+        {
+          "temperature": "warm",
+          "elapsedMs": 18649.321083,
+          "maxRssKiB": 305888,
+          "rssBytes": 313229312,
+          "outputBytes": 31995,
+          "artifactBytes": null,
+          "directSubprocesses": 0,
+          "digest": "774b15608fb2556b0f4f7c5a149a95518b5035a9853df2bea384276bf6131b31"
+        }
+      ]
+    },
+    {
+      "name": "all-reports",
+      "workerSubprocesses": 1,
+      "totalMs": 534309.333208,
+      "rows": [
+        {
+          "temperature": "cold",
+          "elapsedMs": 286481.354583,
+          "maxRssKiB": 864208,
+          "rssBytes": 858210304,
+          "outputBytes": 19792,
+          "artifactBytes": 1804013,
+          "directSubprocesses": 10,
+          "digest": "9001399edca320177dcaa5612f22200816a58e665e4651810ce1462958d500f5"
+        },
+        {
+          "temperature": "warm",
+          "elapsedMs": 247692.47341699997,
+          "maxRssKiB": 931216,
+          "rssBytes": 884948992,
+          "outputBytes": 19792,
+          "artifactBytes": 1804013,
+          "directSubprocesses": 10,
+          "digest": "9001399edca320177dcaa5612f22200816a58e665e4651810ce1462958d500f5"
+        }
+      ]
+    }
+  ],
+  "method": "fresh Node per workload, repeated direct calls within each worker; no cache shared between evidence operations",
+  "providerCallsMade": 0
+}

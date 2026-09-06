@@ -83,7 +83,7 @@ describe("dao recompute descendant", () => {
     );
   });
 
-  it("grades a clean implementation through the real subprocess host", () => {
+  it("grades a clean implementation through the current protected route", () => {
     const dir = mkdtempSync(join(tmpdir(), "dao-descendant-reference-"));
     const modulePath = join(dir, "subject.mjs");
     writeFileSync(

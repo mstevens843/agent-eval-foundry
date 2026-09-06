@@ -22,11 +22,11 @@
 import { cluster, blindInstances, catchSets, checkStats, subjectStats } from "./catch-sets.js";
 import { nullBaseline } from "./null-model.js";
 import { antichainWidth } from "./similarity.js";
-import type { AxisReport, CurvePoint, Matrix } from "./types.js";
+import type { AxisReport, CatchSet, CurvePoint, Matrix } from "./types.js";
 
-const distinctSets = (matrix: Matrix, scope: readonly string[]): readonly (readonly string[])[] => {
+const distinctSets = (sets: readonly CatchSet[]): readonly (readonly string[])[] => {
   const seen = new Map<string, readonly string[]>();
-  for (const s of catchSets(matrix, scope)) {
+  for (const s of sets) {
     if (s.caught.length === 0) continue;
     seen.set(s.caught.join(" "), s.caught);
   }
@@ -48,7 +48,7 @@ export function axisCurve(matrix: Matrix, explicitOrder?: readonly string[]): re
   for (let k = 0; k < weakestFirst.length; k += 1) {
     const remaining = [...weakestFirst.slice(k), ...neverCaught];
     const sets = catchSets(matrix, remaining);
-    const distinct = distinctSets(matrix, remaining);
+    const distinct = distinctSets(sets);
     points.push({
       droppedWeakest: k,
       remainingSubjects: remaining,

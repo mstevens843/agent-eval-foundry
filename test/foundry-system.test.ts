@@ -23,6 +23,7 @@ import {
   summarizeAdversarialEvidence,
 } from "../src/adversarial-audit/records.js";
 import { measure } from "../src/axis-meter.js";
+import { reportLedgers } from "../src/commands/evidence.js";
 import { runFamily as runPicFamily } from "../src/families/prompt-injection-containment/runner.js";
 import { MEASURED_DEFAULTS, handAuthoredComparison, planBudget } from "../src/foundry/budget.js";
 import { loadRegistry } from "../src/foundry/load.js";
@@ -211,10 +212,11 @@ describe("the checked-in registry", () => {
     for (const m of measured) expect(m.results, `${m.id} claims measured`).not.toBeNull();
   });
 
-  it("twelve families now have measured axis counts", () => {
+  it("thirteen shapes carry measured axis counts, twelve of them executable", () => {
     const measured = registry.shapes.filter((s) => s.dataQuality === "measured");
     expect(measured.map((s) => s.familyId).sort()).toEqual([
       "access-token-scope-expansion",
+      "caa-revalidation",
       "checker-required-memory-poisoning",
       "dao-descendant",
       "delegated-wallet-scope-reconciliation",
@@ -259,7 +261,7 @@ describe("the checked-in registry", () => {
     expect(outbox?.agentTrialsRun).toBeGreaterThan(0);
     const outboxAssessment = assessFamily(outbox as NonNullable<typeof outbox>, registry);
     expect(outboxAssessment.verdict).toBe("NOT-READY");
-    expect(outboxAssessment.blockingFailures).toEqual(["difficulty-evidenced"]);
+    expect(outboxAssessment.blockingFailures).toContain("no-qualified-capability-failure");
     expect(outboxAssessment.results.find((r) => r.gate.id === "difficulty-evidenced")?.detail).toMatch(
       /declaration cannot say why a trial failed/,
     );
@@ -277,7 +279,8 @@ describe("the checked-in registry", () => {
   it("one live-DOM subject is difficulty evidence, not an agent-axis breadth claim", () => {
     const state = familyLoop(ROOT, "ui-replay-live-dom", registry);
     const shape = registry.shapes.find((s) => s.familyId === "ui-replay-live-dom");
-    expect(state.evidence?.countedAgentTrials).toBe(1);
+    expect(state.evidence?.countedAgentTrials).toBe(0);
+    expect(state.evidence?.staleTrials).toContain("live-dom-2026-08-o2");
     expect(state.evidence?.agentAxes).toBeNull();
     const assessment = assessFamily(shape as NonNullable<typeof shape>, registry, state.evidence);
     // Phase 20: the one counted agent trial was graded under `container` isolation, where the
@@ -286,7 +289,7 @@ describe("the checked-in registry", () => {
     // NOT-READY rather than SHIP. Everything below about agent-axes independence is unaffected: that
     // gate still correctly reads n/a for the same reason it always did.
     expect(assessment.verdict).toBe("NOT-READY");
-    expect(assessment.blockingFailures).toEqual(["isolation-level"]);
+    expect(assessment.blockingFailures).toContain("no-qualified-capability-failure");
     const agentAxes = assessment.results.find((r) => r.gate.id === "agent-axes-independent");
     expect(agentAxes?.verdict).toBe("n/a");
     expect(agentAxes?.detail).toMatch(/fewer than two counted failing subjects/);
@@ -340,7 +343,7 @@ describe("ship gate on real data", () => {
     const shape = registry.shapes.find((s) => s.familyId === "durable-approval-outbox");
     expect(shape).toBeDefined();
     const a = assessFamily(shape as NonNullable<typeof shape>, registry);
-    expect(a.blockingFailures).toEqual(["difficulty-evidenced"]);
+    expect(a.blockingFailures).toContain("no-qualified-capability-failure");
     expect(a.results.find((r) => r.gate.id === "measured-axes")?.verdict).toBe("pass");
     expect(a.results.find((r) => r.gate.id === "reference-passes")?.verdict).not.toBe("fail");
     expect(a.verdict).toBe("NOT-READY");
@@ -349,7 +352,7 @@ describe("ship gate on real data", () => {
   it("a measured family with no agent trials is held, not shipped", () => {
     const pic = registry.shapes.find((s) => s.familyId === "prompt-injection-containment");
     const a = assessFamily({ ...(pic as NonNullable<typeof pic>), agentTrialsRun: null }, registry);
-    expect(a.blockingFailures).toEqual(["difficulty-evidenced"]);
+    expect(a.blockingFailures).toContain("no-qualified-capability-failure");
     expect(a.results.find((r) => r.gate.id === "measured-axes")?.verdict).toBe("pass");
     expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("fail");
     expect(a.verdict).toBe("NOT-READY");
@@ -368,8 +371,8 @@ describe("ship gate on real data", () => {
     const pic = registry.shapes.find((s) => s.familyId === "prompt-injection-containment");
     const a = assessFamily(pic as NonNullable<typeof pic>, registry, picEvidence[PIC_FAMILY]);
     expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("fail");
-    expect(a.blockingFailures).toContain("not-already-solved");
-    expect(a.blockingFailures).toContain("difficulty-evidenced");
+    expect(a.blockingFailures).toContain("no-qualified-capability-failure");
+    expect(a.results.find((r) => r.gate.id === "difficulty-evidenced")?.verdict).toBe("fail");
     expect(a.verdict).toBe("NOT-READY");
   });
 
@@ -482,7 +485,7 @@ describe("report determinism", () => {
     const pairs: readonly (readonly [string, string])[] = [
       ["reports/mechanism-registry.md", renderMechanismReport(registry, cov)],
       ["reports/mutant-bank.md", renderMutantReport(registry, cov)],
-      ["reports/candidate-ledger.md", renderLedgerReport(registry)],
+      ["reports/candidate-ledger.md", renderLedgerReport(registry, reportLedgers(ROOT))],
       ["reports/family-diversity.md", renderFamilyDiversityReport(registry.shapes)],
       [
         "reports/ship-recommendation.md",

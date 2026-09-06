@@ -60,24 +60,12 @@ describe("the kill taxonomy", () => {
     }
   });
 
-  it("the containment family is grader-gameable before it is already-solved", () => {
-    // Phase 20 activated a kill-reason branch that was already written and waiting: this family's
-    // three counted trials were genuinely graded under `subprocess` isolation, which Phase 20
-    // demonstrated lets a subject reach the grader (test/phase-20-lane1-exploits/). `grader_gameable`
-    // outranks `already_solved` in the priority order (src/foundry/kill.ts) for exactly this reason —
-    // a pass under a gameable grader is not trustworthy evidence that everyone solved it. Both
-    // findings are still present; only which one is PRIMARY changed.
-    expect(picState.analysis.primary?.reason).toBe("grader_gameable");
-    // `grader_gameable` dispositions to `repair` (fix the grading path), not `harden` (make the
-    // family itself harder) — a deeper, more precise diagnosis than `already_solved` gave.
-    expect(picState.analysis.disposition).toBe("repair");
-    const gameable = picState.analysis.findings.find((f) => f.reason === "grader_gameable");
-    expect(gameable?.source).toBe("derived");
-    expect(gameable?.gates).toContain("isolation-level");
-    const alreadySolved = picState.analysis.findings.find((f) => f.reason === "already_solved");
-    expect(alreadySolved?.source).toBe("derived");
-    expect(alreadySolved?.gates).toContain("not-already-solved");
-    expect(alreadySolved?.evidence.join(" ")).toMatch(/counted agent trial/);
+  it("current containment does not inherit old solves or old isolation evidence", () => {
+    expect(picState.evidence?.countedAgentTrials).toBe(0);
+    expect(picState.analysis.primary?.reason).toBe("too_synthetic");
+    expect(picState.analysis.primary?.source).toBe("declared");
+    expect(picState.analysis.findings.some((f) => f.reason === "already_solved")).toBe(false);
+    expect(picState.analysis.findings.some((f) => f.reason === "verifier_only")).toBe(true);
   });
 
   it("declared judgements are labelled as declared and never as derived", () => {
@@ -115,7 +103,7 @@ describe("known-bad kill analyses", () => {
   });
 
   it("KILL_REASON_UNSUPPORTED — derived from no gate at all", () => {
-    const first = base.findings[0] as NonNullable<(typeof base.findings)[0]>;
+    const first = base.findings.find((f) => f.source === "derived") as NonNullable<(typeof base.findings)[0]>;
     const floating = { ...base, findings: [{ ...first, gates: [] }] };
     expect(() => assertKillAnalysis(floating as typeof base)).toThrowError(
       expect.objectContaining({ code: "KILL_REASON_UNSUPPORTED" }),

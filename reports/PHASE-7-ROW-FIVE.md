@@ -1,3 +1,5 @@
+> Historical report — original narrative retained, not current-package qualification. Trial versions below may be superseded; current interpretation and limitations are in [evidence corrections](../docs/evidence-corrections.md) and generated package/evidence reports. This notice does not alter original trial bytes or adjudications.
+
 # Phase 7 — Exploit row 5
 
 *Hand-authored. Every number is reproducible from the script named beside it.*

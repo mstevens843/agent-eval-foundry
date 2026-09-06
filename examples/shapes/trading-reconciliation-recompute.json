@@ -97,6 +97,14 @@
     {
       "mutantId": "forged-stable-report",
       "mustFailCheck": "report_matches_venue_ledger"
+    },
+    {
+      "mutantId": "correct-key-wrong-trade",
+      "mustFailCheck": "effect_matches_intent"
+    },
+    {
+      "mutantId": "unrequested-work",
+      "mustFailCheck": "effect_matches_intent"
     }
   ],
   "fairnessConstraints": [

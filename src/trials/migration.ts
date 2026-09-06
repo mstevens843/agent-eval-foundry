@@ -255,9 +255,19 @@ export function assertMigrationAccountsForLosses(
   ledger: EvidenceLedger,
   records: readonly ChallengeMigration[] = MIGRATIONS,
 ): void {
-  const record = records.find((m) => m.familyId === familyId && m.toHash === ledger.currentHash);
-  if (record === undefined) return;
-  const missing = ledger.superseded.filter((runId) => !record.invalidated.includes(runId));
+  const migrations = records.filter((m) => m.familyId === familyId && m.toHash === ledger.currentHash);
+  if (migrations.length === 0) return;
+  // Distinct old versions have distinct migration records. Checking only the first record
+  // falsely rejects a fully accounted migration; merging unrelated source versions hides losses.
+  const sources = new Map(ledger.entries.map((entry) => [entry.runId, entry.ranAgainst]));
+  const missing = ledger.superseded.filter(
+    (runId) =>
+      !migrations.some(
+        (record) =>
+          record.invalidated.includes(runId) &&
+          (sources.get(runId) == null || record.fromHash === sources.get(runId)),
+      ),
+  );
   if (missing.length > 0) {
     fail(
       "MIGRATION_LOSSES_UNRECORDED",

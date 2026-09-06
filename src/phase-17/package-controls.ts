@@ -24,7 +24,8 @@ import { isActivated } from "../families/caa-revalidation/scenarios.js";
 import { RULES, RULE_CODES } from "../families/caa-revalidation/spec.js";
 import { CHECKS, CHECK_RULES } from "../families/caa-revalidation/verify.js";
 import { builtFamily } from "../families/registry.js";
-import { gradeCaaRevalidation, routeFor } from "../trials/router.js";
+import { readLockedHistory } from "../packages/history.js";
+import { routeFor } from "../trials/router.js";
 import { hashChallengeDir } from "../trials/run.js";
 
 export const CAA_FAMILY_ID = "caa-revalidation";
@@ -99,6 +100,12 @@ export const challengeHash = (root: string): { hash: string; scenarioSetId: stri
 };
 
 export function runPhase17PackageControls(root: string): Phase17PackageControls {
+  // Compatibility reader for the frozen phase, not a current-control execution receipt.
+  // Today's CAA package is validated by the package-production protected route.
+  return readLockedHistory(root, "data/phase-17-package-controls.json") as Phase17PackageControls;
+}
+
+export function runCurrentCaaCalibrationControls(root: string): Phase17PackageControls {
   const family = builtFamily(CAA_FAMILY_ID);
   const typesSource = readFileSync(join(root, family.typesPath), "utf8");
   const { hash, scenarioSetId, files } = challengeHash(root);
@@ -109,7 +116,7 @@ export function runPhase17PackageControls(root: string): Phase17PackageControls 
   const fatalityFor = (id: string): number => fatality.find((row) => row.mutantId === id)?.fatalIn ?? 0;
 
   // Screen 7. The shipped starter graded through the family's own verifier.
-  const starter = checkStarterFailsEnough(CAA_FAMILY_ID, pkg.files, gradeCaaRevalidation);
+  const starter = checkStarterFailsEnough(CAA_FAMILY_ID, pkg.files, routeFor(CAA_FAMILY_ID).grade);
 
   // Screen 3, the leak audit, plus the visible-surface fairness half.
   let leakDetail = "no leak or missing-surface finding";

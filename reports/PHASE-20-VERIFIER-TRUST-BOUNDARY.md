@@ -1,3 +1,5 @@
+> Historical report — original narrative retained, not current-package qualification. Trial versions below may be superseded; current interpretation and limitations are in [evidence corrections](../docs/evidence-corrections.md) and generated package/evidence reports. This notice does not alter original trial bytes or adjudications.
+
 # Phase 20 — Trusted Execution Repair, Evidence Reconciliation, And Candidate Continuation
 
 This report is hand-authored (not a canonical-generator report like `ship-recommendation.md`), because

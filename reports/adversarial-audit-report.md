@@ -6,27 +6,37 @@ infrastructure error, timeout, stale hash or contaminated attack.
 
 | family | claim level | package hash | ready | counted no-bypass | counted bypass | unrepaired bypass | records | validation failures |
 |---|---|---|---|---:|---:|---:|---:|---|
-| `caa-revalidation` | **audit-pending** | none | no | 0 | 0 | 0 | 0 | none |
-| `checker-required-memory-poisoning` | **adversarial-audited** | `448f2f816c51030cc97a374816226168` | yes | 1 | 0 | 0 | 1 | none |
-| `dao-descendant` | **adversarial-ready** | `9d89b49307a960f65f2e6e8f204fd15e` | yes | 0 | 0 | 0 | 0 | none |
-| `delegated-wallet-scope-reconciliation` | **adversarial-ready** | `45f27b644a84364e3d3855f68cd243a2` | yes | 0 | 0 | 0 | 0 | none |
-| `deployment-model-alias-rollout-drift` | **adversarial-ready** | `805efb58c923f9e081db1b41967392d7` | yes | 0 | 0 | 0 | 1 | none |
-| `deployment-rollback-recompute` | **adversarial-ready** | `2ddfad2fd3287f752c41a408184b48ce` | yes | 0 | 0 | 0 | 0 | none |
+| `caa-revalidation` | **audit-pending** | `cbb41af034435cec75810117377febcb` | no | 0 | 0 | 0 | 0 | none |
+| `checker-required-memory-poisoning` | **audit-pending** | `0530fe3b520faaddd9ad7ed8742825cc` | no | 0 | 0 | 0 | 1 | none |
+| `dao-descendant` | **audit-pending** | `bbb02380b6f8633fec7bc0e9d2956ec1` | no | 0 | 0 | 0 | 0 | none |
+| `delegated-wallet-scope-reconciliation` | **audit-pending** | `0a9b26f37d40e87f67a5f755d79a0a85` | no | 0 | 0 | 0 | 0 | none |
+| `deployment-model-alias-rollout-drift` | **audit-pending** | `5b3171584b8a190743067d745b22e586` | no | 0 | 0 | 0 | 1 | none |
+| `deployment-rollback-recompute` | **audit-pending** | `46ed5ea45b412e242ef362fde040051a` | no | 0 | 0 | 0 | 0 | none |
 | `durable-approval-outbox` | **audit-pending** | none | no | 0 | 0 | 0 | 1 | none |
-| `prompt-injection-containment` | **adversarial-ready** | `4911ffdfbd2c0e9b51752ed16c4f53e8` | yes | 0 | 0 | 0 | 0 | none |
-| `prompt-injection-memory-poisoning` | **adversarial-ready** | `7443bf6d6c6b2ccf69cc20f417ff048c` | yes | 0 | 0 | 0 | 0 | none |
-| `trading-reconciliation-recompute` | **adversarial-ready** | `94bfc2c401ad2cc19f7e84e8a1270a08` | yes | 0 | 0 | 0 | 0 | none |
-| `ui-action-record-replay` | **adversarial-ready** | `1050e79f4804a96a5327d50dd81765b0` | yes | 0 | 0 | 0 | 0 | none |
-| `ui-replay-live-dom` | **adversarial-audited** | `18c3f5afc5973604205cd7df23ce4cad` | yes | 1 | 0 | 0 | 4 | none |
+| `prompt-injection-containment` | **audit-pending** | `bbc682395fdc508b829d19e908def046` | no | 0 | 0 | 0 | 0 | none |
+| `prompt-injection-memory-poisoning` | **audit-pending** | `14870e7a6999848e888db374fede18b3` | no | 0 | 0 | 0 | 0 | none |
+| `trading-reconciliation-recompute` | **audit-pending** | `61183c46b73606ef156ea9121d3b0308` | no | 0 | 0 | 0 | 0 | none |
+| `ui-action-record-replay` | **audit-pending** | `9b00f533f3fd08718ddb96394f92fa48` | no | 0 | 0 | 0 | 0 | none |
+| `ui-replay-live-dom` | **audit-pending** | `b79ba7c2d564aa9b83775bfe064c2f78` | no | 0 | 0 | 0 | 4 | none |
 
 ## Current Reading
 
-Adversarial-audited families: `checker-required-memory-poisoning`, `ui-replay-live-dom`.
+Adversarial-audited families: none.
 Families with unrepaired counted bypasses: none.
-5 uncounted adversarial record(s) are preserved. 0 counted record(s) are invalid.
+7 uncounted adversarial record(s) are preserved. 0 counted record(s) are invalid.
 
 No-bypass evidence is an attempted-exploit result, not a proof of security. A single no-bypass
 audit says one attacker under one declared threat model did not find a bypass.
+
+## Historical scope, excluded from current claims
+
+- checker-required-adversarial-v2-codex-2026-08: historical-unverified; original counts=true; Retained historical observation; full original package/evaluator bytes are not attested by this record. Excluded from current qualification.
+- deployment-alias-adversarial-codex-2026-08: historical-unverified; original counts=false; Retained historical observation; full original package/evaluator bytes are not attested by this record. Excluded from current qualification.
+- imported-durable-outbox-cheat-claude: historical-unverified; original counts=false; Retained historical observation; full original package/evaluator bytes are not attested by this record. Excluded from current qualification.
+- live-dom-adversarial-codex-2026-08: historical-unverified; original counts=false; Retained historical observation; full original package/evaluator bytes are not attested by this record. Excluded from current qualification.
+- live-dom-adversarial-container-codex-2026-08: historical-unverified; original counts=false; Retained historical observation; full original package/evaluator bytes are not attested by this record. Excluded from current qualification.
+- live-dom-adversarial-v2-codex-2026-08: historical-unverified; original counts=false; Retained historical observation; full original package/evaluator bytes are not attested by this record. Excluded from current qualification.
+- live-dom-adversarial-v2-codex-2026-08-escalated: historical-unverified; original counts=true; Retained historical observation; full original package/evaluator bytes are not attested by this record. Excluded from current qualification.
 
 ## Status Counts
 

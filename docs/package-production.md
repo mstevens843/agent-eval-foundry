@@ -96,7 +96,7 @@ Receipts are trusted local-author records with byte consistency checks, not cryp
 - `src/packages/local-process.ts`: bounded trusted-tool execution with fully flushed logs, explicit timeout/output errors and streamed large-file hashing.
 - `src/packages/native-caa.ts`: the domain adapter—CAA control names, Docker assembly and per-check interpretation live here, not in generic components.
 
-The numeric fixture in `test/package-production.test.ts` actually assembles, executes an oracle/verifier, records assurance and copies an export using these APIs without CAA fields. It is an abstraction regression, not the second serious task package. Prompt 4 owns that second production proof.
+The numeric fixture in `test/package-production.test.ts` actually assembles, executes an oracle/verifier, records assurance and copies an export using these APIs without CAA fields. It is an abstraction regression, not a serious task package. The [professional portfolio](professional-portfolio.md) supplies materially different production adapters, including real-browser replay.
 
 ## Performance and compatibility
 
@@ -117,4 +117,4 @@ Measured results and their hardware/memory scope are retained in `reports/verifi
 
 Independent human-time/fairness review, human-authored reviewer material, official implementation rubric, standard model trials and official adversarial trials remain pending. The task metadata's historical six-hour expert estimate is not evidence for the owner's desired two-to-three-hour human solve. No estimate was silently changed to make that gate pass. The shared package policy denies trial/release qualification until required evidence and authorization exist.
 
-Native CAA is the first integration vehicle, not a proven-hard winner and not the generic 24-case CAA calibration route. The ten remaining protected family adapters, checker API completion, substantial portfolio construction and durable provider execution remain separate later assignments. See the tracked Prompt 2 report and implementation gap ledger for exact current proof and ownership.
+Native CAA is the first integration vehicle, not a proven-hard winner and not the generic 24-case CAA calibration route. All twelve generic protected routes, the checker API, professional descendants and durable inert execution are now implemented. See the [current integration report](../reports/PROMPT-07-INTEGRATION.md) and gap ledger for actual verification and remaining runtime/qualification limits; older prompt reports retain their tested-version scope.

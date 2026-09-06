@@ -9,7 +9,9 @@ const yesNo = (value: boolean): string => (value ? "yes" : "no");
 const pct = (value: number): string => `${(value * 100).toFixed(1)}%`;
 
 const sourceLocator = (locator: string): string =>
-  locator.startsWith("https://") ? `[primary source](${locator})` : `\`${cell(locator)}\``;
+  locator.startsWith("https://")
+    ? `[primary source](${locator})`
+    : `\`${cell(locator)}\` (historical input, preserved without counting as current-package evidence)`;
 
 const readerDecision = (
   decisions: readonly CandidateReaderDecision[],

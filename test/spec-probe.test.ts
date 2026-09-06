@@ -11,7 +11,7 @@
 // that states the rule. The probe must flag the arm without it and clear the arm with it. That is
 // not a fixture; it is the real task, and the same two directories the paid A2 experiment runs on.
 
-import { existsSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
@@ -34,6 +34,25 @@ const target = (hidden: readonly ProbeFile[], visible: readonly ProbeFile[]): Pr
 });
 
 const detectors = (t: ProbeTarget) => probe(t).findings.map((f) => f.detector);
+
+it("does not interpret a nearby verifier failure code as an observed call", () => {
+  const result = probe(
+    target(
+      [
+        ts(
+          "verify.ts",
+          `if (calls.some(c => c.method === "issueToken" && c.actionId !== actionId)) {
+    failures.push(fail("no_forbidden_effect", "unrequested token work"));
+  }`,
+        ),
+      ],
+      [md("SPEC.md", "You must not call issueToken for unrequested actions.")],
+    ),
+  );
+  expect(
+    result.findings.some((finding) => finding.missing.some((m) => m.includes("no_forbidden_effect"))),
+  ).toBe(false);
+});
 
 describe("D1 — a graded threshold the specification never prints", () => {
   const verifier = ts(
@@ -296,16 +315,16 @@ describe("silence is reported as silence, not as cleanliness", () => {
 
 // ---------------------------------------------------------------- the real thing
 
-const SOURCE_REPO = "/Users/devlegacy/Desktop/projects/klavis-terminal-bench-task";
-const hasArms = existsSync(join(SOURCE_REPO, "tasks", "dao-a2-control", "tests", "invariants.py"));
+const A2 = JSON.parse(readFileSync(join(__dirname, "fixtures/a2-normative-inputs.json"), "utf8")) as {
+  arms: Record<string, ProbeTarget>;
+};
 
-describe.runIf(hasArms)("the A2 arms: the same two directories the paid experiment runs on", () => {
-  const arm = (name: string) =>
-    directoryTarget(
-      name,
-      join(SOURCE_REPO, "tasks", name, "tests"),
-      join(SOURCE_REPO, "tasks", name, "environment"),
-    );
+describe("portable A2 normative audit inputs, not whole-package or provider reexecution", () => {
+  const arm = (name: string): ProbeTarget => {
+    const result = A2.arms[name.replace("dao-a2-", "")];
+    if (!result) throw Error("missing A2 input");
+    return result;
+  };
 
   it("flags ACKED-terminal on the control arm", () => {
     const result = probe(arm("dao-a2-control"));
@@ -327,7 +346,7 @@ describe.runIf(hasArms)("the A2 arms: the same two directories the paid experime
     const treatment = probe(arm("dao-a2-treatment")).findings.map(
       (f) => `${f.detector}|${f.missing.join(",")}`,
     );
-    const onlyInControl = control.filter((f) => !treatment.includes(f));
+    const onlyInControl = control.filter((f) => !treatment.includes(f)).sort();
     expect(onlyInControl).toEqual([
       "unstated-transition|ACKED is terminal",
       "unstated-transition|REVOKED is terminal",

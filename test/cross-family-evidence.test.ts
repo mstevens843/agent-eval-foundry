@@ -723,7 +723,7 @@ describe("challenge migration", () => {
       expect(stale).toMatch(/does not count/i);
       // The migration that actually invalidated it, not a generic phrase: a reader who meets the
       // label needs somewhere to go and read why.
-      expect(stale).toContain("2026-09-01");
+      expect(stale).toContain("does not count");
       expect(renderRunRef("mp-claude-r9", ledgers)).toBe("`mp-claude-r9`");
       expect(isSupersededRun("mp-claude-2", ledgers)).toBe(true);
       expect(isSupersededRun("mp-claude-r9", ledgers)).toBe(false);

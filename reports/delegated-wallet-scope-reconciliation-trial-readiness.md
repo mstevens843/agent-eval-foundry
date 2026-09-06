@@ -4,7 +4,7 @@ Status: **smoke-planned**.
 
 | gate | value |
 |---|---|
-| challenge hash | `45f27b644a84364e3d3855f68cd243a2` |
+| challenge hash | `0a9b26f37d40e87f67a5f755d79a0a85` |
 | scenario set | `reconciliation-804-4b4cc8ff` |
 | visible package files | 9 |
 | route present | yes |
@@ -15,7 +15,9 @@ Status: **smoke-planned**.
 
 Blocking reasons:
 
+- challenge package hash is stale
 - no counted smoke trial
+- smoke campaign hash is stale
 
 Provider handling: Codex/OpenAI may run one smoke trial when configured. Anthropic/Claude is not run in this phase. Gemini remains import-only unless entitlement is available.
 

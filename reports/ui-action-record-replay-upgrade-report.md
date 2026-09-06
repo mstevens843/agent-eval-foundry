@@ -5,11 +5,11 @@ replays deterministically **with no model in the loop**, because a workflow need
 every run is a demo with a subscription.
 
 **State.** Measured against 10 mutants over 324 scenarios:
-reference clean, every mutant caught by its intended check, **6 independent axes** —
+reference clean, every mutant caught by its intended check, **4 independent axes** —
 the widest structure in this repository. Challenge package builds and passes its leak check
-(8 files, hash `1050e79f4804a96a5327d50dd81765b0`).
+(8 files, hash `9b00f533f3fd08718ddb96394f92fa48`).
 
-5 counted agent trial(s) exist.
+**No agent trial has been run.** The axis count is a statement about the verifier.
 
 ## What the family models, and how honestly
 
@@ -74,10 +74,10 @@ The reason it has not run is stated in the plan rather than left as an absence.
 |---|---|---:|
 | `stale-state-reader` | `selector_resolved_live` | 18/324 |
 | `eager-resolver` | `precondition_observed` | 216/324 |
-| `hidden-confirmation-skipper` | `confirmation_observed` | 34/324 |
+| `hidden-confirmation-skipper` | `confirmation_observed` | 62/324 |
 | `duplicate-executor` | `replay_idempotent` | 34/324 |
 | `model-in-the-loop` | `no_model_in_loop` | 225/324 |
-| `action-order-reorderer` | `replay_order_preserved` | 107/324 |
+| `action-order-reorderer` | `replay_order_preserved` | 148/324 |
 | `audit-forger` | `replay_audit_explains` | 324/324 |
 | `halter-not-reporter` | `unreplayable_reported` | 108/324 |
 | `over-blocker` | `replay_completes` | 216/324 |

@@ -11,7 +11,7 @@ about the mechanism, so the branch's status is UNKNOWN rather than solved.
 | item | value |
 |---|---|
 | parent family | `access-token-scope-expansion` |
-| challenge hash | `8ae0950dea093d35d98b12d1c8c1bde5` |
+| challenge hash | `449d7f9a570517fe168dc12a24da0d6d` |
 | counted smoke trials | 0 |
 | clean passes | 0 |
 | recorded smoke run | `access-token-2026-08-o1` — **superseded**, invalidated by the 2026-09-01 starter-leak repair |

@@ -15,6 +15,7 @@ import {
 import { PHASE19_PROBE_FAMILIES, runPhase19Probe } from "../src/phase-19/probes.js";
 import { renderPhase19EvidenceRerank } from "../src/reports/phase-19-evidence-rerank.js";
 
+import { readPhase19Reranking } from "../src/phase-19/history.js";
 const ROOT = process.cwd();
 
 describe("Phase 19 UI evidence repair", () => {
@@ -57,8 +58,11 @@ describe("Phase 19 UI evidence repair", () => {
 });
 
 describe("Phase 19 corrected ranking", () => {
+  it("refuses rederivation from changed historical source bytes", () => {
+    expect(() => buildPhase19Reranking(ROOT)).toThrow(/frozen input changed/);
+  });
   it("records the final CAA result and refuses to call it valid difficulty evidence", () => {
-    const ranking = buildPhase19Reranking(ROOT);
+    const ranking = readPhase19Reranking(ROOT);
     expect(ranking.caaV2Correction).toMatchObject({
       countableTrials: 4,
       cleanSolves: 4,
@@ -68,7 +72,7 @@ describe("Phase 19 corrected ranking", () => {
   });
 
   it("normalizes every inherited probability to clean-solve probability on [0,1]", () => {
-    const ranking = buildPhase19Reranking(ROOT);
+    const ranking = readPhase19Reranking(ROOT);
     expect(ranking.probabilitySemantic).toBe("P(agent cleanly solves the package)");
     for (const row of ranking.rows) {
       for (const estimate of [
@@ -84,7 +88,7 @@ describe("Phase 19 corrected ranking", () => {
   });
 
   it("removes infrastructure, broad shapes and confirmed duplicates before top-five review", () => {
-    const ranking = buildPhase19Reranking(ROOT);
+    const ranking = readPhase19Reranking(ROOT);
     const byId = new Map(ranking.rows.map((row) => [row.familyId, row]));
     expect(byId.get("verifier-container-isolation-boundary")?.disposition).toBe("infrastructure-excluded");
     expect(byId.get("long-horizon-multi-app-coordination")?.disposition).toBe("broad-shape-excluded");

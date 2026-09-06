@@ -34,8 +34,8 @@ judgement no code here makes, and it is printed rather than scored.
 | | |
 |---|---|
 | challenge hash (plan) | `2ddfad2fd3287f752c41a408184b48ce` |
-| challenge hash (now) | `2ddfad2fd3287f752c41a408184b48ce` |
-| match | **yes** — every slot measured the task this repository currently holds |
+| challenge hash (now) | `46ed5ea45b412e242ef362fde040051a` |
+| match | **NO** — the family changed after the plan was written; these slots measured a different task |
 | scenario set | `recompute-24-80da6d41`, 24 scenarios |
 | isolation | `subprocess` |
 | timeout | 30 minutes per slot |
@@ -72,6 +72,14 @@ Declared in the plan and cross-checked against the code — a plan may not redef
 - The challenge hash and scenario-set id must match this manifest before any result counts.
 - B6 controls run in the same grading invocation and a failed control voids the run.
 - Root-cause labels are separate sidecars produced by two blind provider-family-independent readers; only agreed capability counts as difficulty evidence.
+
+## Superseded trials
+
+These ran against an earlier version of this challenge and are preserved without counting.
+A trial is evidence about the task it was run against, and that task no longer exists.
+
+- `phase14-deployment-rollback-recompute-seeded-recompute-anthropic`
+- `phase14-deployment-rollback-recompute-seeded-recompute-openai`
 
 The plan and the trial directories on disk agree.
 

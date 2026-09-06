@@ -6,7 +6,7 @@ import cleanly under the current hash.
 
 | item | value |
 |---|---|
-| expected challenge hash | `805efb58c923f9e081db1b41967392d7` |
+| expected challenge hash | `5b3171584b8a190743067d745b22e586` |
 | expected scenario set | `drift-339-590affe3` |
 | providers prepared | 3/3 |
 | counted smoke trials | 0 |
@@ -20,9 +20,9 @@ import cleanly under the current hash.
 
 | provider | state | hash | leak check | metadata template | hidden files | reports |
 |---|---|---|---|---|---|---|
-| `claude` | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally | `805efb58c923f9e081db1b41967392d7` | pass | pass | absent | absent |
-| `gemini` | 0.46.0; entitlement previously blocked with IneligibleTierError, so this phase treats Gemini as import-only until a real authenticated run changes that | `805efb58c923f9e081db1b41967392d7` | pass | pass | absent | absent |
-| `external` | external by declaration: prepare a bundle and import the result | `805efb58c923f9e081db1b41967392d7` | pass | pass | absent | absent |
+| `claude` | Anthropic execution requires an explicit CLAUDE_CODE_OAUTH_TOKEN in the runner environment; defaulting to import-only so prepared bundles cannot spend tokens accidentally | `805efb58c923f9e081db1b41967392d7` | pass | fail | absent | absent |
+| `gemini` | 0.46.0; entitlement previously blocked with IneligibleTierError, so this phase treats Gemini as import-only until a real authenticated run changes that | `805efb58c923f9e081db1b41967392d7` | pass | fail | absent | absent |
+| `external` | external by declaration: prepare a bundle and import the result | `805efb58c923f9e081db1b41967392d7` | pass | fail | absent | absent |
 
 ## Commands For Later
 

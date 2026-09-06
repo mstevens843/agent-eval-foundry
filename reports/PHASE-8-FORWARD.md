@@ -1,5 +1,7 @@
 # Phase 8 — Run it forward
 
+> Historical record, not current qualification. Statements below about no Codex checking, six conclusive fair capability failures, universal solve-probability ranges, or self-verifiability disqualifying a task are superseded by [current evidence corrections](../docs/evidence-corrections.md). All six outbox agents wrote checks; five present adjudications concern specification ambiguity and one remains unresolved. Probability ranges are uncalibrated priors. Original reasoning and observations remain below for auditability; the current production process is package-first.
+
 *Hand-authored. Every number is reproducible from the script or data file named beside it.*
 
 ---

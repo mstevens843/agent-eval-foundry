@@ -529,7 +529,21 @@ export function detectMandatoryCalls(source: HiddenSource, corpus: Corpus, tally
       // `c.method === "query" || c.method === "queryAnchor"` is ONE obligation with two acceptable
       // ways to satisfy it. Reporting it as two separate mandatory calls says the subject must make
       // both, which is the opposite of what the code requires, and it double-counts the finding.
-      const alternatives = stringsIn(source, line, line + 2).filter((m) => /^[a-z][A-Za-z0-9_]{2,}$/.test(m));
+      // A nearby failure code is not an observed method. Scope comparison literals to their
+      // actual predicate; the old three-line string sweep mistook fail("check_name") for a call.
+      const predicateText = source.lines
+        .slice(line - 1, line + 2)
+        .map((row) => row.raw)
+        .join("\n");
+      const alternatives = (
+        pattern === CALL_PREDICATE
+          ? [
+              ...predicateText.matchAll(
+                /\.\s*(?:method|name|call|fn|op)\s*(?:===|==|!==|!=)\s*["']([A-Za-z_]\w*)["']/g,
+              ),
+            ].map((match) => match[1] ?? "")
+          : stringsIn(source, line, line + 2)
+      ).filter((method) => /^[a-z][A-Za-z0-9_]{2,}$/.test(method));
       if (alternatives.length === 0) continue;
       const disjunctive = /\|\||\bor\b/.test(
         (source.lines[line - 1]?.code ?? "") + (source.lines[line]?.code ?? ""),

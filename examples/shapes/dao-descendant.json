@@ -93,6 +93,14 @@
     {
       "mutantId": "forged-stable-report",
       "mustFailCheck": "stable_key_recovered"
+    },
+    {
+      "mutantId": "correct-key-wrong-payload",
+      "mustFailCheck": "effect_matches_intent"
+    },
+    {
+      "mutantId": "unrequested-work",
+      "mustFailCheck": "effect_matches_intent"
     }
   ],
   "fairnessConstraints": [

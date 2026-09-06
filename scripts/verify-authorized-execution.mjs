@@ -21,7 +21,9 @@ const run = async (...args) => {
     maxBuffer: 1024 * 1024,
     env: { ...process.env, OPENAI_API_KEY: "INERT_PRIVATE_ENV_SENTINEL" },
   });
-  return JSON.parse(r.stdout);
+  // The compatibility CLI intentionally prints regrade's immutable directory as text.
+  // Other execution subcommands expose structured JSON; do not conflate the contracts.
+  return args[0] === "regrade" ? r.stdout.trim() : JSON.parse(r.stdout);
 };
 const runtime = await run("build-inert", join(output, "runtime"), goImage);
 const jobs = join(output, "jobs");
@@ -108,6 +110,11 @@ try {
       );
       if (network) assert(events.some((e) => e.type === "external-tool" && e.status === 200));
       if (pkg === native) assert(events.some((e) => e.type === "tool" && e.cwd === "/app/certd"));
+      if (id === "browser-correct")
+        assert(
+          events.some((e) => e.type === "isolation" && e.selfCheckPassed === true),
+          "current browser reference must pass its visible tests as well as protected grading",
+        );
       assert(events.filter((e) => e.type === "artifact" && e.kind === "submission").length > 1);
       assert(events.some((e) => e.type === "artifact" && e.kind === "workspace"));
     }

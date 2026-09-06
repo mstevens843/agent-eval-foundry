@@ -1,6 +1,6 @@
 # Trial campaign — ui-replay-live-dom
 
-`live-dom-2026-08` · 5 slots · 1 run · 1 counted · 3 not run
+`live-dom-2026-08` · 5 slots · 1 run · 0 counted · 3 not run
 
 ## Pre-registration
 
@@ -16,13 +16,13 @@ Written before any slot ran, so the result below cannot be reinterpreted into a 
 
 | | |
 |---|---|
-| verdict | did not fire — at least one counted failure is root-caused to `capability` |
-| counted trials in this campaign's slots | 1 |
+| verdict | **not evaluable** — no counted trial belongs to this campaign's slots |
+| counted trials in this campaign's slots | 0 |
 | passed everything | 0 |
-| failed something | 1 |
-| root-caused `capability` | 1 |
+| failed something | 0 |
+| root-caused `capability` | 0 |
 
-1 of 1 counted trial(s) failed with root cause `capability`; the family survives its own kill condition on the mechanical clauses
+no counted trial belongs to this campaign's slots; the pre-registration stands and neither signal has fired
 
 Only the mechanical clauses are evaluated: whether every counted trial passed, and whether any
 counted failure has been root-caused to `capability`. Whatever else the prose above says — that
@@ -34,8 +34,8 @@ judgement no code here makes, and it is printed rather than scored.
 | | |
 |---|---|
 | challenge hash (plan) | `18c3f5afc5973604205cd7df23ce4cad` |
-| challenge hash (now) | `18c3f5afc5973604205cd7df23ce4cad` |
-| match | **yes** — every slot measured the task this repository currently holds |
+| challenge hash (now) | `b79ba7c2d564aa9b83775bfe064c2f78` |
+| match | **NO** — the family changed after the plan was written; these slots measured a different task |
 | scenario set | `dom-864-3a8cb30a`, 864 scenarios |
 | isolation | `subprocess` |
 | timeout | 30 minutes per slot |
@@ -46,10 +46,16 @@ judgement no code here makes, and it is printed rather than scored.
 | slot | model | runner | state | run |
 |---|---|---|---|---|
 | O1 | `openai/gpt-5.6-sol` | shell | FAILED_INFRA | `live-dom-2026-08-o1` |
-| O2 | `openai/gpt-5.6-sol` | shell | RUN | `live-dom-2026-08-o2` |
+| O2 | `openai/gpt-5.6-sol` | shell | RUN, **WITHDRAWN** | `live-dom-2026-08-o2` — **superseded** by the 2026-09-06 `ui-replay-live-dom` challenge migration; it does not count and its numbers are withdrawn |
 | A1 | `anthropic/claude-opus-5` | external | **NOT_RUN** | — |
 | A2 | `anthropic/claude-sonnet-5` | external | **NOT_RUN** | — |
 | G1 | `google/gemini-3-pro` | external | **NOT_RUN** | — |
+
+**Withdrawn evidence.** `live-dom-2026-08-o2` was invalidated by the 2026-09-06 `ui-replay-live-dom` challenge migration: it was graded against a package this repository no longer produces, so that row does not count and every number on it is withdrawn. The trial record's own `counts` field is about grading and says nothing about whether the task still exists, which is exactly how an invalidated run was once presented as live evidence. Read this row as spend that was made, not as a result about the family as it stands.
+
+A slot whose recorded run has been withdrawn is an unfilled slot, not a finished one. The
+header line counts it under `run` and not under `counted`, and only the second number says
+anything about the task this campaign now describes: this campaign has no result yet, and neither its kill signal nor its confirm signal has been tested.
 
 ### Why the unrun slots are unrun
 
@@ -78,6 +84,14 @@ Declared in the plan and cross-checked against the code — a plan may not redef
 - challenge/ holds the exact bundle the model saw; submission/ holds the artifact it produced.
 - verifier-output.json holds the graded cells; countability.json holds the counting decision and its reason.
 - A stale challenge hash invalidates a run rather than letting old evidence count for a repaired spec.
+
+## Superseded trials
+
+These ran against an earlier version of this challenge and are preserved without counting.
+A trial is evidence about the task it was run against, and that task no longer exists.
+
+- `live-dom-2026-08-o1`
+- `live-dom-2026-08-o2`
 
 The plan and the trial directories on disk agree.
 

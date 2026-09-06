@@ -1,16 +1,16 @@
 # checker-required memory poisoning trial readiness
 
-Status: **trial-ready**.
+Status: **HOLD**.
 
 | gate | value |
 |---|---|
-| challenge hash | `448f2f816c51030cc97a374816226168` |
+| challenge hash | `0530fe3b520faaddd9ad7ed8742825cc` |
 | scenario set | `poisoning-792-67126f04` |
 | visible package files | 8 |
 | required submission files | `subject.mjs`, `checker.mjs` |
 | route present | yes |
 | scenarios expected | 792 |
-| counted real-agent trials | 1 |
+| counted real-agent trials | 0 |
 | agent-difficulty axes | not measured |
 
 Countability rules: provider refusal, entitlement failure, infrastructure failure, timeout,

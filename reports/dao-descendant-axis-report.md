@@ -6,8 +6,8 @@
 |---|---|
 | graded instances | **24** |
 | checks in the suite | **24** |
-| checks that have ever fired | **4** of 5 (80%) |
-| subjects in the bank | 3 |
+| checks that have ever fired | **5** of 6 (83%) |
+| subjects in the bank | 5 |
 | instances that separate nothing in this bank | **0** (0%) |
 | distinct catch sets | **2** |
 | independent axes (antichain width) | **1** |
@@ -30,16 +30,18 @@ statistic this report argues is inflated, and the two decay at different rates.
 
 | weakest dropped | subjects left | distinct catch sets | **independent axes** | instances separating nothing |
 |---:|---:|---:|---:|---:|
-| 0 | 3 | 2 | **1** | 0 / 24 |
-| 1 | 2 | 1 | **1** | 6 / 24 |
-| 2 | 1 | 1 | **1** | 6 / 24 |
+| 0 | 5 | 2 | **1** | 0 / 24 |
+| 1 | 4 | 2 | **1** | 0 / 24 |
+| 2 | 3 | 2 | **1** | 0 / 24 |
+| 3 | 2 | 1 | **1** | 6 / 24 |
+| 4 | 1 | 1 | **1** | 6 / 24 |
 
 ## Clusters — instances sharing one identical catch set
 
 | catch set | size | instances |
 |---|---:|---|
-| `{forged-stable-report, no-op, recompute-current-epoch}` | 18 | recovery-11-w2-k4-after_tool, recovery-11-w2-k6-after_tool, recovery-11-w2-k12-after_tool, recovery-11-w3-k4-after_tool, recovery-11-w3-k6-after_tool, recovery-11-w3-k12-after_tool, recovery-11-w4-k4-after_tool, recovery-11-w4-k6-after_tool, recovery-11-w4-k12-after_tool, recovery-23-w2-k4-after_tool, recovery-23-w2-k6-after_tool, recovery-23-w2-k12-after_tool, … +6 more |
-| `{no-op}` | 6 | recovery-41-w1-k4-after_tool, recovery-41-w1-k6-after_tool, recovery-41-w1-k12-after_tool, recovery-41-w2-k4-none, recovery-41-w3-k6-none, recovery-41-w4-k12-none |
+| `{correct-key-wrong-payload, forged-stable-report, no-op, recompute-current-epoch, unrequested-work}` | 18 | recovery-11-w2-k4-after_tool, recovery-11-w2-k6-after_tool, recovery-11-w2-k12-after_tool, recovery-11-w3-k4-after_tool, recovery-11-w3-k6-after_tool, recovery-11-w3-k12-after_tool, recovery-11-w4-k4-after_tool, recovery-11-w4-k6-after_tool, recovery-11-w4-k12-after_tool, recovery-23-w2-k4-after_tool, recovery-23-w2-k6-after_tool, recovery-23-w2-k12-after_tool, … +6 more |
+| `{correct-key-wrong-payload, no-op, unrequested-work}` | 6 | recovery-41-w1-k4-after_tool, recovery-41-w1-k6-after_tool, recovery-41-w1-k12-after_tool, recovery-41-w2-k4-none, recovery-41-w3-k6-none, recovery-41-w4-k12-none |
 
 ## Chain decomposition
 
@@ -51,7 +53,7 @@ The cover is a minimum one but not a unique one: the width is canonical, which i
 which chain is not. Where catch sets are too wide to print, chains are shown as the sizes of
 their nested sets; full membership is in the `json` output.
 
-1. `{no-op}` ⊂ `{forged-stable-report, no-op, recompute-current-epoch}`
+1. `{correct-key-wrong-payload, no-op, unrequested-work}` ⊂ `{correct-key-wrong-payload, forged-stable-report, no-op, recompute-current-epoch, unrequested-work}`
 
 ## Calibration — is the axis count distinguishable from noise?
 
@@ -78,20 +80,23 @@ Null trials: 2, 2, 2.
 
 | subject | caught by | measured on | role |
 |---|---:|---:|---|
+| correct-key-wrong-payload | 24 | 24 | always-caught |
 | no-op | 24 | 24 | always-caught |
+| unrequested-work | 24 | 24 | always-caught |
 | forged-stable-report | 18 | 24 | discriminating |
 | recompute-current-epoch | 18 | 24 | discriminating |
 
 ## Checks
 
-**4 of 5 declared checks have ever fired** against any subject in this
-bank (80%). A check that has never fired is not evidence of coverage;
+**5 of 6 declared checks have ever fired** against any subject in this
+bank (83%). A check that has never fired is not evidence of coverage;
 it may be a check that cannot fail, or a hygiene rail that is supposed to stay quiet.
 
 Never fired: `local_confirmation_green`
 
 | check | cells | instances | subjects |
 |---|---:|---:|---:|
+| effect_matches_intent | 84 | 24 | 4 |
 | exactly_once | 60 | 24 | 3 |
 | report_matches_call_ledger | 42 | 24 | 2 |
 | stable_key_recovered | 36 | 18 | 2 |
@@ -102,7 +107,7 @@ check firing on one separates exactly that subject.
 
 ## Coverage
 
-72 of 72 cells measured (100%); 0 recorded as not measured. Unmeasured cells are excluded from catch sets rather than imputed as passes.
+120 of 120 cells measured (100%); 0 recorded as not measured. Unmeasured cells are excluded from catch sets rather than imputed as passes.
 
 ---
 

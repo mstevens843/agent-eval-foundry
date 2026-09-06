@@ -1,39 +1,37 @@
 # Ship / no-ship
 
-Each family against a fixed gate table. The verdict is a pure function of the gates — no
-weighting, no score, no override. **SHIP** means every blocking gate passes and the family has a
-measured axis count of at least 2; **HOLD** means it is structurally sound but its diversity is still an
-estimate or current provider-delta routing blocks production claims; **NOT-READY** means at least one blocking gate fails.
+SHIP is the package-stages-v1 release decision: verified professional package identity, valid local
+assurance, resolved contract/integrity issues and qualified exact-profile standard/adversarial evidence.
+HOLD means locally valid but not release-qualified; NOT-READY means local validity is incomplete.
+The historical gate table remains diagnostic. Axis breadth and prior smoke failures do not authorize release or spend.
 
-The human layer is reported as advisory claim levels. `reference-solvable`, `human-ready` and
-`human-evidenced` are separate claims and do not silently rewrite the model/verifier verdict.
-The verifier-integrity layer is also advisory here: `audit-pending`, `adversarial-ready`,
-`adversarial-audited`, `bypass-found` and `bypass-repaired` are separate claims from difficulty.
+Reference solvability, human readiness and measured expert solvability remain distinct. Missing required
+package evidence, unresolved material ambiguity and known unrepaired bypasses block the relevant package stages.
 
 | family | verdict | blocking failures |
 |---|---|---|
-| `access-token-scope-expansion` | **NOT-READY** | difficulty-evidenced, not-already-solved |
-| `audit-truth-financial-workflow` | **NOT-READY** | difficulty-evidenced |
-| `browser-action-replay` | **NOT-READY** | difficulty-evidenced |
-| `caa-revalidation` | **NOT-READY** | isolation-level, difficulty-evidenced, not-already-solved |
-| `checker-required-memory-poisoning` | **NOT-READY** | isolation-level, difficulty-evidenced |
-| `dao-descendant` | **NOT-READY** | isolation-level, difficulty-evidenced, not-already-solved |
-| `delegated-wallet-scope-reconciliation` | **NOT-READY** | difficulty-evidenced |
-| `deployment-model-alias-rollout-drift` | **NOT-READY** | difficulty-evidenced |
-| `deployment-rollback-partial-effects` | **NOT-READY** | difficulty-evidenced |
-| `deployment-rollback-recompute` | **NOT-READY** | isolation-level, difficulty-evidenced, not-already-solved |
-| `durable-approval-outbox` | **NOT-READY** | isolation-level, difficulty-evidenced |
-| `model-alias-drift-sentinel` | **NOT-READY** | difficulty-evidenced |
-| `permission-boundary-tools` | **NOT-READY** | difficulty-evidenced |
-| `prompt-injection-approval-scope-drift` | **NOT-READY** | difficulty-evidenced |
-| `prompt-injection-capability-routing` | **NOT-READY** | difficulty-evidenced |
-| `prompt-injection-containment` | **NOT-READY** | isolation-level, difficulty-evidenced, not-already-solved |
-| `prompt-injection-cross-tool-escalation` | **NOT-READY** | difficulty-evidenced |
-| `prompt-injection-memory-poisoning` | **NOT-READY** | difficulty-evidenced |
-| `stale-crm-ticket-automation` | **NOT-READY** | difficulty-evidenced |
-| `trading-reconciliation-recompute` | **NOT-READY** | isolation-level, difficulty-evidenced, not-already-solved |
-| `ui-action-record-replay` | **NOT-READY** | isolation-level |
-| `ui-replay-live-dom` | **NOT-READY** | isolation-level |
+| `access-token-scope-expansion` | **NOT-READY** | content-verified-package-missing, bypass-status-unknown, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `audit-truth-financial-workflow` | **NOT-READY** | content-verified-package-missing, ambiguity-status-unknown, bypass-status-unknown, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `browser-action-replay` | **NOT-READY** | content-verified-package-missing, ambiguity-status-unknown, bypass-status-unknown, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `caa-revalidation` | **NOT-READY** | content-verified-package-missing, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `checker-required-memory-poisoning` | **NOT-READY** | content-verified-package-missing, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `dao-descendant` | **NOT-READY** | content-verified-package-missing, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `delegated-wallet-scope-reconciliation` | **NOT-READY** | content-verified-package-missing, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `deployment-model-alias-rollout-drift` | **NOT-READY** | content-verified-package-missing, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `deployment-rollback-partial-effects` | **NOT-READY** | content-verified-package-missing, ambiguity-status-unknown, bypass-status-unknown, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `deployment-rollback-recompute` | **NOT-READY** | content-verified-package-missing, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `durable-approval-outbox` | **NOT-READY** | content-verified-package-missing, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `model-alias-drift-sentinel` | **NOT-READY** | content-verified-package-missing, ambiguity-status-unknown, bypass-status-unknown, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `permission-boundary-tools` | **NOT-READY** | content-verified-package-missing, ambiguity-status-unknown, bypass-status-unknown, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `prompt-injection-approval-scope-drift` | **NOT-READY** | content-verified-package-missing, ambiguity-status-unknown, bypass-status-unknown, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `prompt-injection-capability-routing` | **NOT-READY** | content-verified-package-missing, ambiguity-status-unknown, bypass-status-unknown, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `prompt-injection-containment` | **NOT-READY** | content-verified-package-missing, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `prompt-injection-cross-tool-escalation` | **NOT-READY** | content-verified-package-missing, ambiguity-status-unknown, bypass-status-unknown, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `prompt-injection-memory-poisoning` | **NOT-READY** | content-verified-package-missing, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `stale-crm-ticket-automation` | **NOT-READY** | content-verified-package-missing, ambiguity-status-unknown, bypass-status-unknown, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `trading-reconciliation-recompute` | **NOT-READY** | content-verified-package-missing, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `ui-action-record-replay` | **NOT-READY** | content-verified-package-missing, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
+| `ui-replay-live-dom` | **NOT-READY** | content-verified-package-missing, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, no-qualified-capability-failure, required-destinationChecks, not-destination-professional-package, exact-two-target-profiles-missing |
 
 ## Gate table
 
@@ -117,25 +115,25 @@ table does.
 | `access-token-scope-expansion` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 0 | audit-pending |
 | `audit-truth-financial-workflow` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 0 | audit-pending |
 | `browser-action-replay` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 0 | audit-pending |
-| `caa-revalidation` | no | no | no | no | fail | 0 | 0 | 0 | 0 | audit-pending |
-| `checker-required-memory-poisoning` | yes | yes | yes | yes | pass | 1 | 0 | 0 | 0 | adversarial-audited |
-| `dao-descendant` | yes | yes | yes | yes | pass | 0 | 0 | 0 | 0 | adversarial-ready |
-| `delegated-wallet-scope-reconciliation` | yes | yes | yes | yes | pass | 0 | 0 | 0 | 0 | adversarial-ready |
-| `deployment-model-alias-rollout-drift` | yes | yes | yes | yes | pass | 0 | 0 | 0 | 0 | adversarial-ready |
+| `caa-revalidation` | no | no | no | no | pass | 0 | 0 | 0 | 0 | audit-pending |
+| `checker-required-memory-poisoning` | yes | no | yes | no | pass | 0 | 0 | 0 | 0 | audit-pending |
+| `dao-descendant` | yes | no | no | no | pass | 0 | 0 | 0 | 0 | audit-pending |
+| `delegated-wallet-scope-reconciliation` | yes | no | no | no | pass | 0 | 0 | 0 | 0 | audit-pending |
+| `deployment-model-alias-rollout-drift` | yes | no | yes | no | pass | 0 | 0 | 0 | 0 | audit-pending |
 | `deployment-rollback-partial-effects` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 0 | audit-pending |
-| `deployment-rollback-recompute` | yes | yes | yes | yes | pass | 0 | 0 | 0 | 0 | adversarial-ready |
+| `deployment-rollback-recompute` | yes | no | no | no | pass | 0 | 0 | 0 | 0 | audit-pending |
 | `durable-approval-outbox` | no | no | no | no | fail | 0 | 0 | 0 | 0 | audit-pending |
 | `model-alias-drift-sentinel` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 0 | audit-pending |
 | `permission-boundary-tools` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 0 | audit-pending |
 | `prompt-injection-approval-scope-drift` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 0 | audit-pending |
 | `prompt-injection-capability-routing` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 0 | audit-pending |
-| `prompt-injection-containment` | yes | yes | yes | yes | pass | 0 | 0 | 0 | 0 | adversarial-ready |
+| `prompt-injection-containment` | yes | no | no | no | pass | 0 | 0 | 0 | 0 | audit-pending |
 | `prompt-injection-cross-tool-escalation` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 0 | audit-pending |
-| `prompt-injection-memory-poisoning` | yes | yes | yes | yes | pass | 0 | 0 | 0 | 0 | adversarial-ready |
+| `prompt-injection-memory-poisoning` | yes | no | no | no | pass | 0 | 0 | 0 | 0 | audit-pending |
 | `stale-crm-ticket-automation` | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | 0 | audit-pending |
-| `trading-reconciliation-recompute` | yes | yes | yes | yes | pass | 0 | 0 | 0 | 0 | adversarial-ready |
-| `ui-action-record-replay` | yes | yes | yes | yes | pass | 0 | 0 | 0 | 0 | adversarial-ready |
-| `ui-replay-live-dom` | yes | yes | yes | yes | pass | 1 | 0 | 0 | 0 | adversarial-audited |
+| `trading-reconciliation-recompute` | yes | no | no | no | pass | 0 | 0 | 0 | 0 | audit-pending |
+| `ui-action-record-replay` | yes | no | no | no | pass | 0 | 0 | 0 | 0 | audit-pending |
+| `ui-replay-live-dom` | yes | no | yes | no | pass | 0 | 0 | 0 | 0 | audit-pending |
 
 ## Per family
 
@@ -282,14 +280,14 @@ table does.
 | `baselines-blocked` | pass | 1/1 baselines rejected |
 | `mutants-caught-by-intended-check` | pass | 9/9 caught by intended check |
 | `mechanisms-exercised` | pass | 24/24 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
-| `isolation-level` | **FAIL** | container with 4 agent trial(s); Phase 20 requires cell-container |
+| `isolation-level` | pass | subprocess; adequate while no agent artifact is graded |
 | `shared-bank-ready` | **FAIL** | 0 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
-| `difficulty-evidenced` | **FAIL** | 4 counted agent trial(s), none root-caused to `capability` (4 unlabelled); a counted failure is not a difficulty finding until somebody says why it failed |
+| `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
 | `production-matrix-ready` | n/a | no production-readiness layer for this family |
-| `not-already-solved` | **FAIL** | all 4 counted trial(s) passed every scenario — the family is already-solved |
+| `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 24h build, $40 frontier |
 | `human-package-ready` | **FAIL** | public package is incomplete or not generated here |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
@@ -300,7 +298,7 @@ table does.
 | `no-known-unrepaired-bypass` | pass | 0 counted bypass(es), none unrepaired |
 | `adversarial-isolation-adequate` | **FAIL** | legacy subprocess profile only |
 | `adversarial-exploit-replay-ready` | **FAIL** | claimed bypasses cannot be replayed mechanically |
-| `adversarial-hardening-probes-pass` | **FAIL** | 0 hardening probe failure(s) |
+| `adversarial-hardening-probes-pass` | pass | deterministic hardening probes pass |
 | `adversarial-container-isolation-ready` | **FAIL** | container/no-network isolation not ready |
 | `adversarial-container-no-network` | **FAIL** | no counted container/no-network audit on record |
 | `adversarial-import-replay-valid` | n/a | no counted imported adversarial audit |
@@ -324,24 +322,24 @@ table does.
 | `baselines-blocked` | pass | 5/5 baselines rejected |
 | `mutants-caught-by-intended-check` | pass | 20/20 caught by intended check |
 | `mechanisms-exercised` | pass | 792/792 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
-| `isolation-level` | **FAIL** | subprocess with 1 agent trial(s); Phase 20 requires cell-container |
-| `shared-bank-ready` | **FAIL** | 1 subject(s) shared with another family (need 3) |
+| `isolation-level` | pass | subprocess; adequate while no agent artifact is graded |
+| `shared-bank-ready` | **FAIL** | 0 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
-| `difficulty-evidenced` | **FAIL** | 1 counted agent trial(s), none root-caused to `capability` (0 unlabelled); a counted failure is not a difficulty finding until somebody says why it failed |
+| `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
 | `production-matrix-ready` | n/a | no production-readiness layer for this family |
-| `not-already-solved` | pass | 1 of 1 counted trial(s) failed at least one scenario |
+| `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 85h build, $35 frontier |
 | `human-package-ready` | pass | public package passed human-readiness audit |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
 | `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
 | `adversarial-threat-model-declared` | pass | threat model declared |
-| `adversarial-package-ready` | pass | adversarial campaign, package hash and attack bundle are ready |
-| `adversarial-audit-evidenced` | pass | 1 counted no-bypass audit(s) |
+| `adversarial-package-ready` | **FAIL** | adversarial campaign or attack bundle is incomplete |
+| `adversarial-audit-evidenced` | **FAIL** | no counted no-bypass audit on record |
 | `no-known-unrepaired-bypass` | pass | 0 counted bypass(es), none unrepaired |
 | `adversarial-isolation-adequate` | pass | fs-sandbox/container isolation profile available |
-| `adversarial-exploit-replay-ready` | pass | exploit replay command and schema are available |
+| `adversarial-exploit-replay-ready` | **FAIL** | claimed bypasses cannot be replayed mechanically |
 | `adversarial-hardening-probes-pass` | pass | deterministic hardening probes pass |
 | `adversarial-container-isolation-ready` | **FAIL** | container/no-network isolation not ready |
 | `adversarial-container-no-network` | **FAIL** | no counted container/no-network audit on record |
@@ -354,7 +352,7 @@ table does.
 | gate | result | detail |
 |---|---|---|
 | `solvable` | pass | 5 contract item(s) |
-| `verifier-graded` | pass | 3 expected mutant(s) |
+| `verifier-graded` | pass | 5 expected mutant(s) |
 | `trust-boundary` | pass | 3/3 source(s) state unforgeability |
 | `detectable` | pass | all mechanisms detectable |
 | `fairness` | pass | 5 constraint(s) |
@@ -364,26 +362,26 @@ table does.
 | `measured-axes` | **FAIL** | 1 measured axes |
 | `reference-passes` | pass | reference clean |
 | `baselines-blocked` | pass | 1/1 baselines rejected |
-| `mutants-caught-by-intended-check` | pass | 3/3 caught by intended check |
+| `mutants-caught-by-intended-check` | pass | 5/5 caught by intended check |
 | `mechanisms-exercised` | pass | 24/24 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
-| `isolation-level` | **FAIL** | container with 2 agent trial(s); Phase 20 requires cell-container |
-| `shared-bank-ready` | **FAIL** | 2 subject(s) shared with another family (need 3) |
+| `isolation-level` | pass | subprocess; adequate while no agent artifact is graded |
+| `shared-bank-ready` | **FAIL** | 0 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
-| `difficulty-evidenced` | **FAIL** | 2 counted agent trial(s), none root-caused to `capability` (2 unlabelled); a counted failure is not a difficulty finding until somebody says why it failed |
+| `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
 | `production-matrix-ready` | n/a | no production-readiness layer for this family |
-| `not-already-solved` | **FAIL** | all 2 counted trial(s) passed every scenario — the family is already-solved |
+| `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 120h build, $145 frontier |
 | `human-package-ready` | **FAIL** | public package is incomplete or not generated here |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
 | `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
 | `adversarial-threat-model-declared` | pass | threat model declared |
-| `adversarial-package-ready` | pass | adversarial campaign, package hash and attack bundle are ready |
+| `adversarial-package-ready` | **FAIL** | adversarial campaign or attack bundle is incomplete |
 | `adversarial-audit-evidenced` | **FAIL** | no counted no-bypass audit on record |
 | `no-known-unrepaired-bypass` | pass | 0 counted bypass(es), none unrepaired |
-| `adversarial-isolation-adequate` | pass | fs-sandbox/container isolation profile available |
-| `adversarial-exploit-replay-ready` | pass | exploit replay command and schema are available |
+| `adversarial-isolation-adequate` | **FAIL** | legacy subprocess profile only |
+| `adversarial-exploit-replay-ready` | **FAIL** | claimed bypasses cannot be replayed mechanically |
 | `adversarial-hardening-probes-pass` | pass | deterministic hardening probes pass |
 | `adversarial-container-isolation-ready` | **FAIL** | container/no-network isolation not ready |
 | `adversarial-container-no-network` | **FAIL** | no counted container/no-network audit on record |
@@ -421,11 +419,11 @@ table does.
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
 | `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
 | `adversarial-threat-model-declared` | pass | threat model declared |
-| `adversarial-package-ready` | pass | adversarial campaign, package hash and attack bundle are ready |
+| `adversarial-package-ready` | **FAIL** | adversarial campaign or attack bundle is incomplete |
 | `adversarial-audit-evidenced` | **FAIL** | no counted no-bypass audit on record |
 | `no-known-unrepaired-bypass` | pass | 0 counted bypass(es), none unrepaired |
-| `adversarial-isolation-adequate` | pass | fs-sandbox/container isolation profile available |
-| `adversarial-exploit-replay-ready` | pass | exploit replay command and schema are available |
+| `adversarial-isolation-adequate` | **FAIL** | legacy subprocess profile only |
+| `adversarial-exploit-replay-ready` | **FAIL** | claimed bypasses cannot be replayed mechanically |
 | `adversarial-hardening-probes-pass` | pass | deterministic hardening probes pass |
 | `adversarial-container-isolation-ready` | **FAIL** | container/no-network isolation not ready |
 | `adversarial-container-no-network` | **FAIL** | no counted container/no-network audit on record |
@@ -456,18 +454,18 @@ table does.
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
 | `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
-| `production-matrix-ready` | **FAIL** | blocked; run or import one counted smoke trial under the current hash |
+| `production-matrix-ready` | **FAIL** | blocked; Resolve package blockers: content-verified-package-missing, ambiguity-status-unknown, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence |
 | `not-already-solved` | pass | 2 of 2 declared trial(s) failed — declared by the shape, not measured here |
 | `priced` | pass | 40h build, $45 frontier |
 | `human-package-ready` | pass | public package passed human-readiness audit |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
 | `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
 | `adversarial-threat-model-declared` | pass | threat model declared |
-| `adversarial-package-ready` | pass | adversarial campaign, package hash and attack bundle are ready |
+| `adversarial-package-ready` | **FAIL** | adversarial campaign or attack bundle is incomplete |
 | `adversarial-audit-evidenced` | **FAIL** | no counted no-bypass audit on record |
 | `no-known-unrepaired-bypass` | pass | 0 counted bypass(es), none unrepaired |
 | `adversarial-isolation-adequate` | pass | fs-sandbox/container isolation profile available |
-| `adversarial-exploit-replay-ready` | pass | exploit replay command and schema are available |
+| `adversarial-exploit-replay-ready` | **FAIL** | claimed bypasses cannot be replayed mechanically |
 | `adversarial-hardening-probes-pass` | pass | deterministic hardening probes pass |
 | `adversarial-container-isolation-ready` | **FAIL** | container/no-network isolation not ready |
 | `adversarial-container-no-network` | **FAIL** | no counted container/no-network audit on record |
@@ -522,7 +520,7 @@ table does.
 | gate | result | detail |
 |---|---|---|
 | `solvable` | pass | 5 contract item(s) |
-| `verifier-graded` | pass | 4 expected mutant(s) |
+| `verifier-graded` | pass | 6 expected mutant(s) |
 | `trust-boundary` | pass | 3/3 source(s) state unforgeability |
 | `detectable` | pass | all mechanisms detectable |
 | `fairness` | pass | 5 constraint(s) |
@@ -532,26 +530,26 @@ table does.
 | `measured-axes` | **FAIL** | 1 measured axes |
 | `reference-passes` | pass | reference clean |
 | `baselines-blocked` | pass | 1/1 baselines rejected |
-| `mutants-caught-by-intended-check` | pass | 4/4 caught by intended check |
+| `mutants-caught-by-intended-check` | pass | 6/6 caught by intended check |
 | `mechanisms-exercised` | pass | 24/24 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
-| `isolation-level` | **FAIL** | container with 2 agent trial(s); Phase 20 requires cell-container |
-| `shared-bank-ready` | **FAIL** | 2 subject(s) shared with another family (need 3) |
+| `isolation-level` | pass | subprocess; adequate while no agent artifact is graded |
+| `shared-bank-ready` | **FAIL** | 0 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
-| `difficulty-evidenced` | **FAIL** | 2 counted agent trial(s), none root-caused to `capability` (2 unlabelled); a counted failure is not a difficulty finding until somebody says why it failed |
+| `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
 | `production-matrix-ready` | n/a | no production-readiness layer for this family |
-| `not-already-solved` | **FAIL** | all 2 counted trial(s) passed every scenario — the family is already-solved |
+| `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 24h build, $145 frontier |
 | `human-package-ready` | **FAIL** | public package is incomplete or not generated here |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
 | `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
 | `adversarial-threat-model-declared` | pass | threat model declared |
-| `adversarial-package-ready` | pass | adversarial campaign, package hash and attack bundle are ready |
+| `adversarial-package-ready` | **FAIL** | adversarial campaign or attack bundle is incomplete |
 | `adversarial-audit-evidenced` | **FAIL** | no counted no-bypass audit on record |
 | `no-known-unrepaired-bypass` | pass | 0 counted bypass(es), none unrepaired |
-| `adversarial-isolation-adequate` | pass | fs-sandbox/container isolation profile available |
-| `adversarial-exploit-replay-ready` | pass | exploit replay command and schema are available |
+| `adversarial-isolation-adequate` | **FAIL** | legacy subprocess profile only |
+| `adversarial-exploit-replay-ready` | **FAIL** | claimed bypasses cannot be replayed mechanically |
 | `adversarial-hardening-probes-pass` | pass | deterministic hardening probes pass |
 | `adversarial-container-isolation-ready` | **FAIL** | container/no-network isolation not ready |
 | `adversarial-container-no-network` | **FAIL** | no counted container/no-network audit on record |
@@ -577,7 +575,7 @@ table does.
 | `mutants-caught-by-intended-check` | n/a | family not built |
 | `mechanisms-exercised` | n/a | family not built |
 | `isolation-level` | **FAIL** | container with 6 agent trial(s); Phase 20 requires cell-container |
-| `shared-bank-ready` | **FAIL** | 2 subject(s) shared with another family (need 3) |
+| `shared-bank-ready` | **FAIL** | 0 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |
 | `trial-ready` | **FAIL** | no route: this family cannot be handed to an agent as it stands |
 | `difficulty-evidenced` | **FAIL** | 6 counted agent trial(s), none root-caused to `capability` (1 unlabelled); a counted failure is not a difficulty finding until somebody says why it failed |
@@ -786,24 +784,24 @@ table does.
 | `baselines-blocked` | pass | 2/2 baselines rejected |
 | `mutants-caught-by-intended-check` | pass | 9/9 caught by intended check |
 | `mechanisms-exercised` | pass | 124/128 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 4 blind |
-| `isolation-level` | **FAIL** | subprocess with 6 agent trial(s); Phase 20 requires cell-container |
-| `shared-bank-ready` | pass | 4 subject(s) shared with another family (need 3) |
+| `isolation-level` | pass | in-process; adequate while no agent artifact is graded |
+| `shared-bank-ready` | **FAIL** | 0 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
-| `difficulty-evidenced` | **FAIL** | 6 counted agent trial(s), none root-caused to `capability` (0 unlabelled); a counted failure is not a difficulty finding until somebody says why it failed |
+| `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
 | `production-matrix-ready` | n/a | no production-readiness layer for this family |
-| `not-already-solved` | **FAIL** | all 6 counted trial(s) passed every scenario — the family is already-solved |
+| `not-already-solved` | **FAIL** | 0 of 3 declared trial(s) failed — declared by the shape, not measured here |
 | `priced` | pass | 70h build, $65 frontier |
 | `human-package-ready` | pass | public package passed human-readiness audit |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
 | `human-ambiguity-reviewed` | pass | 1 human review record(s), no open ambiguity |
 | `adversarial-threat-model-declared` | pass | threat model declared |
-| `adversarial-package-ready` | pass | adversarial campaign, package hash and attack bundle are ready |
+| `adversarial-package-ready` | **FAIL** | adversarial campaign or attack bundle is incomplete |
 | `adversarial-audit-evidenced` | **FAIL** | no counted no-bypass audit on record |
 | `no-known-unrepaired-bypass` | pass | 0 counted bypass(es), none unrepaired |
-| `adversarial-isolation-adequate` | pass | fs-sandbox/container isolation profile available |
-| `adversarial-exploit-replay-ready` | pass | exploit replay command and schema are available |
+| `adversarial-isolation-adequate` | **FAIL** | legacy subprocess profile only |
+| `adversarial-exploit-replay-ready` | **FAIL** | claimed bypasses cannot be replayed mechanically |
 | `adversarial-hardening-probes-pass` | pass | deterministic hardening probes pass |
 | `adversarial-container-isolation-ready` | **FAIL** | container/no-network isolation not ready |
 | `adversarial-container-no-network` | **FAIL** | no counted container/no-network audit on record |
@@ -858,14 +856,14 @@ table does.
 | gate | result | detail |
 |---|---|---|
 | `solvable` | pass | 6 contract item(s) |
-| `verifier-graded` | pass | 13 expected mutant(s) |
+| `verifier-graded` | pass | 14 expected mutant(s) |
 | `trust-boundary` | pass | 3/3 source(s) state unforgeability |
 | `detectable` | pass | all mechanisms detectable |
 | `fairness` | pass | 5 constraint(s) |
 | `cheat-resistance` | pass | 4 requirement(s) |
-| `is-a-family` | pass | 6 knob(s): seed, attack, sessionsBetween, memoryKind, benignActions, decoySimilarity |
+| `is-a-family` | pass | 7 knob(s): seed, attack, sessionsBetween, memoryKind, benignActions, decoySimilarity, lateDispute |
 | `hidden-region-declared` | pass | The hidden suite samples the declared memory space: which attack shape is presen |
-| `measured-axes` | pass | 5 measured axes |
+| `measured-axes` | pass | 8 measured axes |
 | `reference-passes` | pass | reference clean |
 | `baselines-blocked` | pass | 2/2 baselines rejected |
 | `mutants-caught-by-intended-check` | pass | 14/14 caught by intended check |
@@ -883,11 +881,11 @@ table does.
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
 | `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
 | `adversarial-threat-model-declared` | pass | threat model declared |
-| `adversarial-package-ready` | pass | adversarial campaign, package hash and attack bundle are ready |
+| `adversarial-package-ready` | **FAIL** | adversarial campaign or attack bundle is incomplete |
 | `adversarial-audit-evidenced` | **FAIL** | no counted no-bypass audit on record |
 | `no-known-unrepaired-bypass` | pass | 0 counted bypass(es), none unrepaired |
-| `adversarial-isolation-adequate` | pass | fs-sandbox/container isolation profile available |
-| `adversarial-exploit-replay-ready` | pass | exploit replay command and schema are available |
+| `adversarial-isolation-adequate` | **FAIL** | legacy subprocess profile only |
+| `adversarial-exploit-replay-ready` | **FAIL** | claimed bypasses cannot be replayed mechanically |
 | `adversarial-hardening-probes-pass` | pass | deterministic hardening probes pass |
 | `adversarial-container-isolation-ready` | **FAIL** | container/no-network isolation not ready |
 | `adversarial-container-no-network` | **FAIL** | no counted container/no-network audit on record |
@@ -942,7 +940,7 @@ table does.
 | gate | result | detail |
 |---|---|---|
 | `solvable` | pass | 5 contract item(s) |
-| `verifier-graded` | pass | 4 expected mutant(s) |
+| `verifier-graded` | pass | 6 expected mutant(s) |
 | `trust-boundary` | pass | 3/3 source(s) state unforgeability |
 | `detectable` | pass | all mechanisms detectable |
 | `fairness` | pass | 5 constraint(s) |
@@ -952,26 +950,26 @@ table does.
 | `measured-axes` | **FAIL** | 1 measured axes |
 | `reference-passes` | pass | reference clean |
 | `baselines-blocked` | pass | 1/1 baselines rejected |
-| `mutants-caught-by-intended-check` | pass | 4/4 caught by intended check |
+| `mutants-caught-by-intended-check` | pass | 6/6 caught by intended check |
 | `mechanisms-exercised` | pass | 24/24 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
-| `isolation-level` | **FAIL** | container with 2 agent trial(s); Phase 20 requires cell-container |
-| `shared-bank-ready` | **FAIL** | 2 subject(s) shared with another family (need 3) |
+| `isolation-level` | pass | subprocess; adequate while no agent artifact is graded |
+| `shared-bank-ready` | **FAIL** | 0 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
-| `difficulty-evidenced` | **FAIL** | 2 counted agent trial(s), none root-caused to `capability` (2 unlabelled); a counted failure is not a difficulty finding until somebody says why it failed |
+| `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
 | `production-matrix-ready` | n/a | no production-readiness layer for this family |
-| `not-already-solved` | **FAIL** | all 2 counted trial(s) passed every scenario — the family is already-solved |
+| `not-already-solved` | n/a | no counted agent trials yet |
 | `priced` | pass | 24h build, $145 frontier |
 | `human-package-ready` | **FAIL** | public package is incomplete or not generated here |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
 | `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
 | `adversarial-threat-model-declared` | pass | threat model declared |
-| `adversarial-package-ready` | pass | adversarial campaign, package hash and attack bundle are ready |
+| `adversarial-package-ready` | **FAIL** | adversarial campaign or attack bundle is incomplete |
 | `adversarial-audit-evidenced` | **FAIL** | no counted no-bypass audit on record |
 | `no-known-unrepaired-bypass` | pass | 0 counted bypass(es), none unrepaired |
-| `adversarial-isolation-adequate` | pass | fs-sandbox/container isolation profile available |
-| `adversarial-exploit-replay-ready` | pass | exploit replay command and schema are available |
+| `adversarial-isolation-adequate` | **FAIL** | legacy subprocess profile only |
+| `adversarial-exploit-replay-ready` | **FAIL** | claimed bypasses cannot be replayed mechanically |
 | `adversarial-hardening-probes-pass` | pass | deterministic hardening probes pass |
 | `adversarial-container-isolation-ready` | **FAIL** | container/no-network isolation not ready |
 | `adversarial-container-no-network` | **FAIL** | no counted container/no-network audit on record |
@@ -991,29 +989,29 @@ table does.
 | `cheat-resistance` | pass | 5 requirement(s) |
 | `is-a-family` | pass | 6 knob(s): seed, mutation, mutationDepth, confirmation, asyncSettled, replayCount |
 | `hidden-region-declared` | pass | The hidden suite samples the declared UI-mutation space: which change occurred b |
-| `measured-axes` | pass | 6 measured axes |
+| `measured-axes` | pass | 4 measured axes |
 | `reference-passes` | pass | reference clean |
 | `baselines-blocked` | pass | 2/2 baselines rejected |
 | `mutants-caught-by-intended-check` | pass | 10/10 caught by intended check |
 | `mechanisms-exercised` | pass | 324/324 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
-| `isolation-level` | **FAIL** | subprocess with 5 agent trial(s); Phase 20 requires cell-container |
-| `shared-bank-ready` | pass | 4 subject(s) shared with another family (need 3) |
+| `isolation-level` | pass | subprocess; adequate while no agent artifact is graded |
+| `shared-bank-ready` | **FAIL** | 0 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
-| `difficulty-evidenced` | pass | 2 of 5 counted agent trial(s) failed with root cause `capability` |
-| `agent-axes-independent` | **FAIL** | every counted subject's failures nest (claude-opus-5 ⊂ claude-haiku-4-5 ⊂ claude-sonnet-5 ⊂ gpt-5.6-sol); one difficulty axis however many subjects attempt it. Only new scenarios with a genuine trade-off can raise it — see reports/scenario-diversity-report.md |
+| `difficulty-evidenced` | **FAIL** | no counted agent trials |
+| `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
 | `production-matrix-ready` | n/a | no production-readiness layer for this family |
-| `not-already-solved` | pass | 5 of 5 counted trial(s) failed at least one scenario |
+| `not-already-solved` | pass | 4 of 5 declared trial(s) failed — declared by the shape, not measured here |
 | `priced` | pass | 55h build, $40 frontier |
 | `human-package-ready` | pass | public package passed human-readiness audit |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
 | `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
 | `adversarial-threat-model-declared` | pass | threat model declared |
-| `adversarial-package-ready` | pass | adversarial campaign, package hash and attack bundle are ready |
+| `adversarial-package-ready` | **FAIL** | adversarial campaign or attack bundle is incomplete |
 | `adversarial-audit-evidenced` | **FAIL** | no counted no-bypass audit on record |
 | `no-known-unrepaired-bypass` | pass | 0 counted bypass(es), none unrepaired |
-| `adversarial-isolation-adequate` | pass | fs-sandbox/container isolation profile available |
-| `adversarial-exploit-replay-ready` | pass | exploit replay command and schema are available |
+| `adversarial-isolation-adequate` | **FAIL** | legacy subprocess profile only |
+| `adversarial-exploit-replay-ready` | **FAIL** | claimed bypasses cannot be replayed mechanically |
 | `adversarial-hardening-probes-pass` | pass | deterministic hardening probes pass |
 | `adversarial-container-isolation-ready` | **FAIL** | container/no-network isolation not ready |
 | `adversarial-container-no-network` | **FAIL** | no counted container/no-network audit on record |
@@ -1038,24 +1036,24 @@ table does.
 | `baselines-blocked` | pass | 2/2 baselines rejected |
 | `mutants-caught-by-intended-check` | pass | 22/22 caught by intended check |
 | `mechanisms-exercised` | pass | 864/864 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
-| `isolation-level` | **FAIL** | subprocess with 1 agent trial(s); Phase 20 requires cell-container |
-| `shared-bank-ready` | **FAIL** | 1 subject(s) shared with another family (need 3) |
+| `isolation-level` | pass | subprocess; adequate while no agent artifact is graded |
+| `shared-bank-ready` | **FAIL** | 0 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | pass | verified |
 | `trial-ready` | pass | challenge package builds, leak check passes, router can grade it |
-| `difficulty-evidenced` | pass | 1 of 1 counted agent trial(s) failed with root cause `capability` |
+| `difficulty-evidenced` | **FAIL** | no counted agent trials |
 | `agent-axes-independent` | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
 | `production-matrix-ready` | n/a | no production-readiness layer for this family |
-| `not-already-solved` | pass | 1 of 1 counted trial(s) failed at least one scenario |
+| `not-already-solved` | pass | 1 of 1 declared trial(s) failed — declared by the shape, not measured here |
 | `priced` | pass | 95h build, $55 frontier |
 | `human-package-ready` | pass | public package passed human-readiness audit |
 | `human-solvability-evidenced` | **FAIL** | no clean independent human solve on record |
 | `human-ambiguity-reviewed` | pass | 0 human review record(s), no open ambiguity |
 | `adversarial-threat-model-declared` | pass | threat model declared |
-| `adversarial-package-ready` | pass | adversarial campaign, package hash and attack bundle are ready |
-| `adversarial-audit-evidenced` | pass | 1 counted no-bypass audit(s) |
+| `adversarial-package-ready` | **FAIL** | adversarial campaign or attack bundle is incomplete |
+| `adversarial-audit-evidenced` | **FAIL** | no counted no-bypass audit on record |
 | `no-known-unrepaired-bypass` | pass | 0 counted bypass(es), none unrepaired |
 | `adversarial-isolation-adequate` | pass | fs-sandbox/container isolation profile available |
-| `adversarial-exploit-replay-ready` | pass | exploit replay command and schema are available |
+| `adversarial-exploit-replay-ready` | **FAIL** | claimed bypasses cannot be replayed mechanically |
 | `adversarial-hardening-probes-pass` | pass | deterministic hardening probes pass |
 | `adversarial-container-isolation-ready` | **FAIL** | container/no-network isolation not ready: docker daemon unavailable: failed to connect to the docker API at unix:///Users/devlegacy/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/devlegacy/.docker/run/docker.sock: connect: no such file or directory |
 | `adversarial-container-no-network` | **FAIL** | no counted container/no-network audit on record |

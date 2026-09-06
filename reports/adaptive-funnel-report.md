@@ -1,9 +1,9 @@
 # Adaptive benchmark-production funnel
 
 The foundry is no longer a mostly linear task-family funnel. It now has three explicit modes:
-`discovery`, `validation` and `production`. The operating rule is simple: spend the cheapest
-useful evidence first, and let pass/fail/refusal/ambiguity/stale-hash/axis-collapse outcomes
-choose the next action.
+`discovery`, `validation` and `production`. This is a legacy advisory view, not production priority.
+Use `package:local learning select INPUT_JSON` for current package-first decisions.
+These retained mechanism/axis diagnostics do not establish difficulty or authorize execution.
 
 ```text
 candidate mechanisms
@@ -26,32 +26,32 @@ candidate mechanisms
 | probes needing repair/hold | 4 |
 | transfer tests | 11 |
 | transfer tests ready | 5 |
-| production-mode families | 0 |
+| production-mode families | 1 |
 
 ## Cheapest Next Evidence
 
 | cost tier | queued actions |
 |---|---:|
-| static | 19 |
+| static | 20 |
 | local | 7 |
-| cross-provider | 2 |
+| cross-provider | 1 |
 
 | target | type | mode | stage | decision | evidence cost | next action |
 |---|---|---|---|---|---|---|
-| `access-token-scope-expansion` | family | validation | task_shape | repair | static | repair/reissue the package and invalidate stale evidence before further trials |
-| `audit-history-rewrite-probe` | probe | validation | transfer_test | transfer | static | run the declared transfer test before expanding scenarios |
-| `caa-revalidation` | family | validation | task_shape | evolve | static | treat the clean smoke pass as already_solved_or_needs_evolution before matrix spend |
-| `cross-tool-authority-laundering-probe` | probe | discovery | mechanism_probe | hold | static | run or repair the cheapest declared mechanism screen |
-| `dao-descendant` | family | validation | task_shape | evolve | static | treat the clean smoke pass as already_solved_or_needs_evolution before matrix spend |
-| `delegated-wallet-scope-reconciliation` | family | validation | task_shape | repair | static | repair/reissue the package and invalidate stale evidence before further trials |
-| `deployment-model-alias-rollout-drift` | family | validation | task_shape | repair | static | repair/reissue the package and invalidate stale evidence before further trials |
-| `deployment-rollback-recompute` | family | validation | task_shape | evolve | static | treat the clean smoke pass as already_solved_or_needs_evolution before matrix spend |
-| `durable-approval-outbox` | family | validation | transfer_test | evolve | static | evolve or transfer before broad ship claims |
-| `durable-memory-injection-probe` | probe | validation | task_shape | promote | static | promote probe into a full task shape |
-| `hidden-dependency-discovery-probe` | probe | discovery | mechanism_probe | repair | static | run or repair the cheapest declared mechanism screen |
-| `memory-to-cross-tool-authority-laundering` | transfer | validation | transfer_test | transfer | static | execute the transfer test and require preserved evidence before claiming transfer |
-| `permission-scope-drift-probe` | probe | discovery | mechanism_probe | hold | static | run or repair the cheapest declared mechanism screen |
-| `prompt-injection-containment` | family | validation | task_shape | evolve | static | treat the clean smoke pass as already_solved_or_needs_evolution before matrix spend |
+| `access-token-scope-expansion` | family | validation | task_shape | hold | static | review current package eligibility; retain old trials as historical observations |
+| `caa-revalidation` | family | validation | task_shape | hold | static | review current package eligibility; retain old trials as historical observations |
+| `checker-required-memory-poisoning` | family | validation | task_shape | hold | static | review current package eligibility; retain old trials as historical observations |
+| `dao-descendant` | family | validation | task_shape | hold | static | review current package eligibility; retain old trials as historical observations |
+| `delegated-wallet-scope-reconciliation` | family | validation | task_shape | hold | static | review current package eligibility; retain old trials as historical observations |
+| `deployment-model-alias-rollout-drift` | family | validation | task_shape | hold | static | review current package eligibility; retain old trials as historical observations |
+| `deployment-rollback-recompute` | family | validation | task_shape | hold | static | review current package eligibility; retain old trials as historical observations |
+| `durable-approval-outbox` | family | production | full_matrix | promote | cross-provider | review qualified package evidence before any separately authorized matrix |
+| `prompt-injection-containment` | family | validation | task_shape | hold | static | review current package eligibility; retain old trials as historical observations |
+| `prompt-injection-memory-poisoning` | family | validation | task_shape | hold | static | review current package eligibility; retain old trials as historical observations |
+| `trading-reconciliation-recompute` | family | validation | task_shape | hold | static | review current package eligibility; retain old trials as historical observations |
+| `ui-action-record-replay` | family | validation | task_shape | hold | static | review current package eligibility; retain old trials as historical observations |
+| `ui-replay-live-dom` | family | validation | task_shape | hold | static | review current package eligibility; retain old trials as historical observations |
+| `uncertain-external-receipt-probe` | probe | validation | transfer_test | transfer | static | run the declared transfer test before expanding scenarios |
 
 ## Rules The Planner Enforces
 
@@ -102,41 +102,40 @@ candidate mechanisms
 
 | family | stage | decision | reason |
 |---|---|---|---|
-| `access-token-scope-expansion` | task_shape | repair | stale challenge hashes cannot feed production-mode claims |
-| `caa-revalidation` | task_shape | evolve | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
-| `dao-descendant` | task_shape | evolve | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
-| `delegated-wallet-scope-reconciliation` | task_shape | repair | stale challenge hashes cannot feed production-mode claims |
-| `deployment-model-alias-rollout-drift` | task_shape | repair | stale challenge hashes cannot feed production-mode claims |
-| `deployment-rollback-recompute` | task_shape | evolve | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
-| `durable-approval-outbox` | transfer_test | evolve | nested failure sets are one axis at multiple sensitivities, not breadth |
-| `prompt-injection-containment` | task_shape | evolve | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
-| `prompt-injection-memory-poisoning` | task_shape | repair | stale challenge hashes cannot feed production-mode claims |
-| `trading-reconciliation-recompute` | task_shape | evolve | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
-| `ui-action-record-replay` | transfer_test | evolve | nested failure sets are one axis at multiple sensitivities, not breadth |
-| `checker-required-memory-poisoning` | transfer_test | transfer | repeated same-provider trials estimate stability, not cross-lab transfer |
-| `ui-replay-live-dom` | transfer_test | transfer | repeated same-provider trials estimate stability, not cross-lab transfer |
+| `access-token-scope-expansion` | task_shape | hold | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `caa-revalidation` | task_shape | hold | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `checker-required-memory-poisoning` | task_shape | hold | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `dao-descendant` | task_shape | hold | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `delegated-wallet-scope-reconciliation` | task_shape | hold | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `deployment-model-alias-rollout-drift` | task_shape | hold | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `deployment-rollback-recompute` | task_shape | hold | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `prompt-injection-containment` | task_shape | hold | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `prompt-injection-memory-poisoning` | task_shape | hold | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `trading-reconciliation-recompute` | task_shape | hold | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `ui-action-record-replay` | task_shape | hold | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `ui-replay-live-dom` | task_shape | hold | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
 
 ## Production-Mode Candidates
 
-No family is automatically recommended for a fresh full matrix by this planner pass.
+- `durable-approval-outbox`
 
 ## Evidence Missing By Family
 
 | family | next required evidence | reason |
 |---|---|---|
-| `access-token-scope-expansion` | static at `task_shape` | stale challenge hashes cannot feed production-mode claims |
-| `caa-revalidation` | static at `task_shape` | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
-| `dao-descendant` | static at `task_shape` | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
-| `delegated-wallet-scope-reconciliation` | static at `task_shape` | stale challenge hashes cannot feed production-mode claims |
-| `deployment-model-alias-rollout-drift` | static at `task_shape` | stale challenge hashes cannot feed production-mode claims |
-| `deployment-rollback-recompute` | static at `task_shape` | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
-| `durable-approval-outbox` | static at `transfer_test` | nested failure sets are one axis at multiple sensitivities, not breadth |
-| `prompt-injection-containment` | static at `task_shape` | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
-| `prompt-injection-memory-poisoning` | static at `task_shape` | stale challenge hashes cannot feed production-mode claims |
-| `trading-reconciliation-recompute` | static at `task_shape` | a counted smoke pass is evidence the available subject solved this family, not evidence of difficulty |
-| `ui-action-record-replay` | static at `transfer_test` | nested failure sets are one axis at multiple sensitivities, not breadth |
-| `checker-required-memory-poisoning` | cross-provider at `transfer_test` | repeated same-provider trials estimate stability, not cross-lab transfer |
-| `ui-replay-live-dom` | cross-provider at `transfer_test` | repeated same-provider trials estimate stability, not cross-lab transfer |
+| `access-token-scope-expansion` | static at `task_shape` | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `caa-revalidation` | static at `task_shape` | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `checker-required-memory-poisoning` | static at `task_shape` | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `dao-descendant` | static at `task_shape` | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `delegated-wallet-scope-reconciliation` | static at `task_shape` | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `deployment-model-alias-rollout-drift` | static at `task_shape` | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `deployment-rollback-recompute` | static at `task_shape` | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `durable-approval-outbox` | cross-provider at `full_matrix` | axis count does not disqualify a valid single-mechanism task; this legacy summary cannot authorize execution |
+| `prompt-injection-containment` | static at `task_shape` | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `prompt-injection-memory-poisoning` | static at `task_shape` | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `trading-reconciliation-recompute` | static at `task_shape` | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `ui-action-record-replay` | static at `task_shape` | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
+| `ui-replay-live-dom` | static at `task_shape` | stale history alone does not establish an unrepaired defect; use the package-first selection policy |
 
 ## Registry Link
 

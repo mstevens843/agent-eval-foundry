@@ -196,7 +196,7 @@ describe("human-readiness audit", () => {
     expect(renderHumanSolvabilityReport(summaries)).toBe(renderHumanSolvabilityReport(summaries));
   });
 
-  it("human gates are advisory and do not rewrite existing ship verdicts", () => {
+  it("declared human readiness cannot substitute for package qualification", () => {
     const registry = loadRegistry(ROOT);
     const evidence: Record<string, FamilyEvidence> = {
       "ui-replay-live-dom": {
@@ -231,7 +231,8 @@ describe("human-readiness audit", () => {
     const shape = registry.shapes.find((s) => s.familyId === "ui-replay-live-dom");
     if (shape === undefined) throw new Error("ui-replay-live-dom shape missing");
     const assessment = assessFamily(shape, registry, evidence["ui-replay-live-dom"]);
-    expect(assessment.verdict).toBe("SHIP");
+    expect(assessment.verdict).toBe("NOT-READY");
+    expect(assessment.blockingFailures).toContain("content-verified-package-missing");
     expect(assessment.results.find((r) => r.gate.id === "human-solvability-evidenced")?.verdict).toBe("fail");
     const report = renderShipReport(registry.shapes, registry, evidence);
     expect(report).toContain("human-package-ready");

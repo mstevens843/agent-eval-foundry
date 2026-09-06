@@ -1,15 +1,15 @@
 # Agent trial results — ui-action-record-replay
 
-**5 counted agent trial(s): 5 failed at least one scenario, 0 passed everything.**
+**No counted agent trial exists.** Nothing below is difficulty evidence.
 
-The family **discriminates**: at least one real attempt failed, so the suite separates something.
+**No evidence either way.**
 
 ## Outcomes, kept apart
 
 | kind | count | what it means |
 |---|---:|---|
 | `counted_solve` | 0 | **counted solve** — a real attempt that passed every graded scenario |
-| `counted_failure` | 5 | **counted failure** — a real attempt that failed at least one scenario |
+| `counted_failure` | 0 | **counted failure** — a real attempt that failed at least one scenario |
 | `provider_refusal` | 0 | provider refusal — no attempt was made; never counted |
 | `infra_failure` | 0 | infrastructure failure — the harness, not the subject; never counted |
 | `not_run` | 1 | not run — a declared slot with no attempt yet |
@@ -22,83 +22,11 @@ it never measured.
 
 | run | model | outcome | graded | failed | runtime |
 |---|---|---|---:|---:|---:|
-| `ui-claude-1` | anthropic/claude-opus-5 | counted_failure | 324 | 46 | 791s |
-| `ui-claude-2` | anthropic/claude-opus-5 | counted_failure | 324 | 33 | 964s |
 | `ui-2026-08:a3:not_run` | anthropic/claude-opus-5 | not_run | 0 | 0 | — |
-| `ui-codex-1` | openai/gpt-5.6-sol | counted_failure | 324 | 90 | 552s |
-| `ui-haiku-1` | anthropic/claude-haiku-4-5 | counted_failure | 324 | 62 | 167s |
-| `ui-sonnet-1` | anthropic/claude-sonnet-5 | counted_failure | 324 | 62 | 320s |
-
-## Which checks failed
-
-Pooled across counted trials. A check that never fires is not evidence it cannot.
-
-| check | scenarios |
-|---|---:|
-| `no_forbidden_effect` | 193 |
-| `replay_idempotent` | 119 |
-| `unreplayable_reported` | 76 |
-
-## Where the failures fall
-
-The analysis that decides whether an evolution operator worked. A knob whose values produce
-different failure rates is a knob that is doing something; a flat split means the difficulty
-came from somewhere else.
-
-### `asyncSettled` — **the failure rate moves with this knob**
-
-| value | scenarios | failed | rate |
-|---|---:|---:|---:|
-| `false` | 840 | 59 | 7% |
-| `true` | 780 | 234 | 30% |
-
-### `confirmation` — **the failure rate moves with this knob**
-
-| value | scenarios | failed | rate |
-|---|---:|---:|---:|
-| `absent` | 555 | 26 | 5% |
-| `present` | 530 | 74 | 14% |
-| `suppressed` | 535 | 193 | 36% |
-
-### `mutation` — **the failure rate moves with this knob**
-
-| value | scenarios | failed | rate |
-|---|---:|---:|---:|
-| `attribute_renamed` | 270 | 52 | 19% |
-| `node_removed` | 270 | 24 | 9% |
-| `node_reordered` | 270 | 60 | 22% |
-| `node_wrapped` | 270 | 43 | 16% |
-| `none` | 270 | 52 | 19% |
-| `text_changed` | 270 | 62 | 23% |
-
-### `mutationDepth`
-
-| value | scenarios | failed | rate |
-|---|---:|---:|---:|
-| `0` | 540 | 81 | 15% |
-| `2` | 540 | 79 | 15% |
-| `4` | 540 | 133 | 25% |
-
-### `replayCount`
-
-| value | scenarios | failed | rate |
-|---|---:|---:|---:|
-| `1` | 835 | 133 | 16% |
-| `2` | 785 | 160 | 20% |
-
-### `seed`
-
-| value | scenarios | failed | rate |
-|---|---:|---:|---:|
-| `11` | 565 | 122 | 22% |
-| `23` | 520 | 86 | 17% |
-| `41` | 535 | 85 | 16% |
-
-**3 knob(s) move the failure rate: `asyncSettled`, `confirmation`, `mutation`.**
 
 ## Model coverage
 
-Counted trials span 2 model families: anthropic, openai.
+Counted trials come from **one model family** (none). One family has no measured variance: a result here says what that lab's model does, not what models do. The unrun slots in the campaign are the planned fix, and they are still unrun.
 
 ## Against the pre-registration
 
@@ -106,7 +34,7 @@ Counted trials span 2 model families: anthropic, openai.
 
 **Confirm signal was:** At least one counted trial fails at least one scenario, with failures spread across more than one check — in particular `replay_idempotent` at replayCount 2, or `no_model_in_loop`, which no amount of care about clicking prevents.
 
-**The kill signal did not fire.** Read the knob splits above against the confirm signal: the claim is only as strong as the pattern, not the pass rate.
+Neither signal fired: there is no counted evidence.
 
 ---
 

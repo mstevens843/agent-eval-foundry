@@ -34,7 +34,7 @@ judgement no code here makes, and it is printed rather than scored.
 | | |
 |---|---|
 | challenge hash (plan) | `7443bf6d6c6b2ccf69cc20f417ff048c` |
-| challenge hash (now) | `6966852cf74afd8e336918f527217c47` |
+| challenge hash (now) | `14870e7a6999848e888db374fede18b3` |
 | match | **NO** — the family changed after the plan was written; these slots measured a different task |
 | scenario set | `poisoning-288-b8b5b81e`, 288 scenarios |
 | isolation | `subprocess` |

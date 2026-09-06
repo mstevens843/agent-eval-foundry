@@ -4,15 +4,59 @@
 // A report that cannot be reproduced is a report nobody can audit, so this is a build gate rather
 // than a convenience. It exists as a script instead of a test because it exercises the CLI end to
 // end -- the same path a user takes -- rather than the render functions the tests already cover.
-import { execFileSync } from "node:child_process";
+import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 const run = (args) =>
   execFileSync("node", ["dist/cli.js", ...args], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+// This gate includes a real external-return grading smoke, not only text rendering.
+// Diagnose unavailable execution before spending minutes regenerating all the inputs.
+const runtime = spawnSync("docker", ["run", "--rm", "--pull=never", "--network=none", "node:22-alpine", "true"], {
+  encoding: "utf8", timeout: 60_000, killSignal: "SIGKILL",
+});
+if (runtime.error || runtime.status !== 0) {
+  throw new Error("REQUIRED_RUNTIME_UNAVAILABLE: full report/export reproduction includes protected external grading and remains incomplete. Read-only all rendering is a separate check.");
+}
 const tmp = mkdtempSync(join(tmpdir(), "foundry-verify-"));
 let failures = 0;
+const digest = (bytes) => createHash("sha256").update(bytes).digest("hex");
+const history = JSON.parse(readFileSync("data/legacy-bundle-history-lock.json", "utf8"));
+for (const [path, expected] of Object.entries(history.files)) {
+  assert.equal(digest(readFileSync(path)), expected, "retained historical bytes changed: " + path);
+}
+console.log("ok     retained bundle/campaign byte identities, not current qualification");
+const historical = JSON.parse(readFileSync("data/package-history-lock.json", "utf8"));
+assert.equal(
+  digest(readFileSync("data/phase-13-activation-results.json")),
+  historical.files["data/phase-13-activation-results.json"],
+);
+console.log("ok     retained Phase 13 calibration identity, not current runtime reproduction");
+const walkFresh = (dir, prefix = "") =>
+  readdirSync(dir, { withFileTypes: true })
+    .flatMap((e) =>
+      e.isDirectory() ? walkFresh(join(dir, e.name), prefix + e.name + "/") : [prefix + e.name],
+    )
+    .sort();
+const assertRepeatable = (args, label) => {
+  const a = mkdtempSync(join(tmpdir(), "foundry-fresh-a-"));
+  const b = mkdtempSync(join(tmpdir(), "foundry-fresh-b-"));
+  run([...args, "--out", a]);
+  run([...args, "--out", b]);
+  const files = walkFresh(a);
+  assert.deepEqual(walkFresh(b), files, label + " file set");
+  assert.ok(files.length > 0, label + " empty construction");
+  for (const path of files)
+    assert.equal(
+      digest(readFileSync(join(a, path))),
+      digest(readFileSync(join(b, path))),
+      label + ":" + path,
+    );
+  console.log("ok     current repeatable construction: " + label);
+};
 
 const axis = [
   ["reports/durable-outbox-axis-report.md", ["report", "examples/durable-outbox/matrix.json"]],
@@ -38,10 +82,7 @@ for (const [path, args] of axis) {
 
 // Phase 13's structured measurements are inputs to the generated prose report. Keep the JSON and
 // the preregistered design on the same CLI-level freshness path as the report they support.
-for (const [path, args] of [
-  ["data/phase-13-activation-results.json", ["phase13", "results"]],
-  ["data/phase-13-design-matrix.json", ["phase13", "design"]],
-]) {
+for (const [path, args] of [["data/phase-13-design-matrix.json", ["phase13", "design"]]]) {
   if (run(args) !== readFileSync(path, "utf8")) {
     console.error(`STALE  ${path}`);
     failures += 1;
@@ -513,12 +554,11 @@ const ADVERSARIAL_FAMILIES = [
   "ui-replay-live-dom",
 ];
 for (const familyId of ADVERSARIAL_FAMILIES) {
-  const generatedCampaign = run(["adversarial", "campaign", familyId, "--json"]);
-  const committed = join("adversarial-audits", "campaigns", `${familyId}-adversarial.json`);
-  if (generatedCampaign !== readFileSync(committed, "utf8")) {
-    console.error(`STALE  ${committed}`);
-    failures += 1;
-  } else console.log(`ok     ${committed}`);
+  assert.equal(
+    run(["adversarial", "campaign", familyId, "--json"]),
+    run(["adversarial", "campaign", familyId, "--json"]),
+    familyId + " current campaign nondeterminism",
+  );
 }
 
 // The prepared external bundles are generated too, and they are the artifact a third party actually
@@ -545,61 +585,17 @@ const BUNDLE_TARGETS = [
   ["deployment-model-alias-rollout-drift", "claude", "deployment-model-alias-rollout-drift-claude"],
   ["deployment-model-alias-rollout-drift", "gemini", "deployment-model-alias-rollout-drift-gemini"],
 ];
-for (const [familyId, providerId, bundleDir] of BUNDLE_TARGETS) {
-  const bunTmp = mkdtempSync(join(tmpdir(), "foundry-bundle-"));
-  run(["trials", "campaign", "prepare", "--family", familyId, "--provider", providerId, "--out", bunTmp]);
-  const walkBundle = (dir, prefix = "") =>
-    readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
-      e.isDirectory() ? walkBundle(join(dir, e.name), `${prefix}${e.name}/`) : [`${prefix}${e.name}`],
-    );
-  for (const rel of walkBundle(bunTmp).sort()) {
-    const committed = join("bundles", bundleDir, rel);
-    if (readFileSync(join(bunTmp, rel), "utf8") !== readFileSync(committed, "utf8")) {
-      console.error(`STALE  ${committed}`);
-      failures += 1;
-    } else console.log(`ok     ${committed}`);
-  }
-}
-
-// Verifier-integrity bundles carry a different objective from model trials: attack the grader rather
-// than solve the task. They still pin the same public challenge package and must be reproducible.
+for (const [familyId, providerId, bundleDir] of BUNDLE_TARGETS)
+  assertRepeatable(
+    ["trials", "campaign", "prepare", "--family", familyId, "--provider", providerId],
+    bundleDir,
+  );
 for (const familyId of ADVERSARIAL_FAMILIES) {
-  const advTmp = mkdtempSync(join(tmpdir(), "foundry-adv-bundle-"));
-  run(["adversarial", "prepare", familyId, "--out", advTmp]);
-  const walkAdversarialBundle = (dir, prefix = "") =>
-    readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
-      e.isDirectory()
-        ? walkAdversarialBundle(join(dir, e.name), `${prefix}${e.name}/`)
-        : [`${prefix}${e.name}`],
-    );
-  for (const rel of walkAdversarialBundle(advTmp).sort()) {
-    const committed = join("bundles", `${familyId}-adversarial`, rel);
-    if (readFileSync(join(advTmp, rel), "utf8") !== readFileSync(committed, "utf8")) {
-      console.error(`STALE  ${committed}`);
-      failures += 1;
-    } else console.log(`ok     ${committed}`);
-  }
-}
-
-// Container/no-network bundles are generated separately from fs-sandbox bundles. The committed
-// form deliberately records "smoke not run" so this diff is deterministic across machines where
-// Docker may or may not be running; the runtime smoke is a separate command.
-for (const familyId of ADVERSARIAL_FAMILIES) {
-  const advTmp = mkdtempSync(join(tmpdir(), "foundry-adv-container-bundle-"));
-  run(["adversarial", "isolate", "container", "prepare", familyId, "--out", advTmp]);
-  const walkContainerBundle = (dir, prefix = "") =>
-    readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
-      e.isDirectory()
-        ? walkContainerBundle(join(dir, e.name), `${prefix}${e.name}/`)
-        : [`${prefix}${e.name}`],
-    );
-  for (const rel of walkContainerBundle(advTmp).sort()) {
-    const committed = join("bundles", `${familyId}-adversarial-container`, rel);
-    if (readFileSync(join(advTmp, rel), "utf8") !== readFileSync(committed, "utf8")) {
-      console.error(`STALE  ${committed}`);
-      failures += 1;
-    } else console.log(`ok     ${committed}`);
-  }
+  assertRepeatable(["adversarial", "prepare", familyId], familyId + " adversarial");
+  assertRepeatable(
+    ["adversarial", "isolate", "container", "prepare", familyId],
+    familyId + " adversarial container",
+  );
 }
 
 // The scaffolded family artifacts are generated too. Regenerating into a temp directory and diffing
@@ -664,6 +660,32 @@ if (generated.length < REPORT_FLOOR) {
 // default for anything describing current numbers is to generate it instead.
 const HAND_AUTHORED = new Map([
   [
+    "PHASE-20-VERIFIER-TRUST-BOUNDARY.md",
+    "Retained dated engineering investigation, not current qualification.",
+  ],
+  ["PHASE-21-OPERATOR-CAUSAL-LAB.md", "Retained dated operator investigation and limitations."],
+  ["PHASE-22-TRANSFER-AND-CONSTRUCTION.md", "Retained dated construction investigation and limitations."],
+  [
+    "PHASE-23-OPERATOR-CLASSIFICATION-AND-TRUSTED-TRIAL.md",
+    "Retained dated proposed experiment, not authorization or a valid current campaign.",
+  ],
+  [
+    "RESEARCH-TASK-FAMILY-LANDSCAPE.md",
+    "Retained dated research and hypotheses, not a live readiness report.",
+  ],
+  ...[
+    "01-PACKAGE-EVIDENCE",
+    "02-PACKAGE-PRODUCTION",
+    "03-PROTECTED-FAMILY-ROUTES",
+    "04-PROFESSIONAL-PORTFOLIO",
+    "05-AUTHORIZED-EXECUTION",
+    "06-EVIDENCE-LEARNING",
+    "07-INTEGRATION",
+  ].map((id) => [
+    `PROMPT-${id}.md`,
+    "Versioned engineering acceptance narrative; paired machine-readable proof under verification/.",
+  ]),
+  [
     "PHASE-1-TRUTH-REPAIR.md",
     "the truth-repair phase writeup: an argument about the repo rather than a measurement of it, so it is not regenerated. Its numbers are quoted from the generated reports beside it and go stale by design once those move",
   ],
@@ -717,12 +739,19 @@ for (const [name, why] of HAND_AUTHORED) {
   } else console.log(`ok     reports/${name} (hand-authored, not regenerated)`);
 }
 
+// Versioned acceptance measurements are retained records, not fresh runtime attestations.
+for (const name of readdirSync("reports/verification")) {
+  assert.ok(name.endsWith(".json"), "unknown acceptance artifact: " + name);
+  const value = JSON.parse(readFileSync(join("reports/verification", name), "utf8"));
+  assert.ok(value && typeof value === "object" && !Array.isArray(value), name + ": structured proof missing");
+}
 // Nothing may sit in reports/ that no command regenerates: an orphan is a document that has stopped
 // being checked and starts drifting the moment the code under it changes.
 const covered = new Set([
   ...generated,
   ...axis.map(([path]) => path.replace("reports/", "")),
   ...HAND_AUTHORED.keys(),
+  "verification",
 ]);
 for (const name of readdirSync("reports").filter((n) => !covered.has(n))) {
   console.error(`ORPHAN ${join("reports", name)} is committed but nothing regenerates it`);
@@ -743,7 +772,7 @@ for (const name of readdirSync(tmp).sort()) {
 
 if (failures > 0) {
   console.error(
-    `\n${failures} generated artifact(s) differ from a fresh render. Run \`pnpm report && pnpm phase13:artifacts && pnpm phase14:artifacts && pnpm bundles\`.`,
+    `\n${failures} generated artifact(s) differ from a fresh render. Regenerate current views with \`pnpm report\`; investigate retained-input mismatches without rewriting historical hash locks. Construct new bundles only in fresh explicitly named output directories.`,
   );
   process.exit(1);
 }

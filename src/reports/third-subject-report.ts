@@ -18,7 +18,7 @@ import type { ProviderAvailability } from "../trials/provider-registry.js";
 const SKIP = "\u0000skip";
 
 export interface ThirdSubjectInput {
-  readonly completion: BankCompletion;
+  readonly completion: BankCompletion | null;
   readonly availability: readonly ProviderAvailability[];
   /** Trials run to close the bank, in the order they were executed. */
   readonly campaign: readonly {
@@ -54,6 +54,24 @@ export function renderThirdSubjectCampaign(input: ThirdSubjectInput): string {
     ledgers,
   );
   const withdrawnRuns = input.campaign.filter((r) => isSupersededRun(r.runId, ledgers));
+  if (c === null)
+    return [
+      "# Third-subject campaign",
+      "",
+      "No current agent bank exists. The retained campaign does not establish a current shared-subject threshold or a cross-family capability count.",
+      "",
+      "## Retained trials — not current counted evidence",
+      "",
+      "| run | family | observed failed scenarios | observed graded scenarios |",
+      "|---|---|---:|---:|",
+      ...input.campaign.map(
+        (r) =>
+          `| ${renderRunRef(r.runId, ledgers)} | ${r.familyId} | ${r.scenariosFailed} | ${r.scenariosGraded} |`,
+      ),
+      "",
+      "These preserved observations are not new trials and authorize no dispatch. Inspect the individual adjudications before drawing any capability conclusion.",
+      "",
+    ].join("\n");
   // The threshold this campaign was run to cross. If it is not crossed now, the two rows below that
   // say the campaign bought a cross-family number are claims about a bank that no longer exists.
   const thresholdHolds = c.sharedSubjects.length >= c.threshold;

@@ -242,48 +242,6 @@ const QUOTED: readonly {
   readonly sentence: (v: string) => string;
 }[] = [
   {
-    what: "counted adversarial no-bypass audits (README)",
-    file: "README.md",
-    live: () =>
-      String(
-        (report("adversarial-audit-report.md").match(/^Adversarial-audited families: (.+)$/m)?.[1] ?? "")
-          .split(",")
-          .filter((s) => s.trim().length > 0).length,
-      ),
-    sentence: (v) => (v === "2" ? "**Two** real Codex/OpenAI adversarial audits" : `__EXPECT_${v}__`),
-  },
-  {
-    what: "live-DOM counted trial, graded and failed (README)",
-    file: "README.md",
-    live: () =>
-      captured("ui-replay-live-dom-agent-results.md", /\| `live-dom-2026-08-o2` \|[^|]+\|[^|]+\| (\d+) \|/),
-    sentence: (v) => `${v} graded scenarios, 219 failed`,
-  },
-  {
-    what: "live-DOM failed-scenario count (README)",
-    file: "README.md",
-    live: () =>
-      captured(
-        "ui-replay-live-dom-agent-results.md",
-        /\| `live-dom-2026-08-o2` \|[^|]+\|[^|]+\|[^|]+\| (\d+) \|/,
-      ),
-    sentence: (v) => `864 graded scenarios, ${v} failed`,
-  },
-  {
-    what: "browser-backed measured slice (README)",
-    file: "README.md",
-    live: () =>
-      [
-        tableValue("ui-replay-browser-backed-report.md", "measured scenarios"),
-        tableValue("ui-replay-browser-backed-report.md", "measured subjects"),
-        tableValue("ui-replay-browser-backed-report.md", "measured cells"),
-      ].join("/"),
-    sentence: (v) => {
-      const [s, sub, c] = v.split("/");
-      return `has ${s} scenarios, ${sub} subjects, ${c} cells`;
-    },
-  },
-  {
     what: "durable-outbox axis headline (MEMO section 2)",
     file: "MEMO.md",
     live: () => tableValue("durable-outbox-axis-report.md", "independent axes (antichain width)"),
@@ -368,5 +326,15 @@ describe("the freshness check is wired to something that can move", () => {
       "a replaced hash must not be in the current set — otherwise the guard is vacuous",
     ).toBe(false);
     expect(currentHashes().has("deadbeefdeadbeefdeadbeefdeadbeef")).toBe(false);
+  });
+});
+
+describe("current public entry point", () => {
+  it("links qualified evidence rather than copying outdated headline counts", () => {
+    const text = read("README.md");
+    expect(text).toContain("docs/evidence-corrections.md");
+    expect(text).toContain("docs/testing.md");
+    expect(text).not.toContain("**Two** real Codex/OpenAI adversarial audits");
+    expect(text).not.toContain("IMPLEMENTATION-PROMPTS/");
   });
 });

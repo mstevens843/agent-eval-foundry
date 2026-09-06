@@ -22,10 +22,10 @@ pressure.
 | mutant-detection axes | 3 |
 | blind scenarios | 0 |
 | package files | 9 |
-| package bytes | 24632 |
+| package bytes | 26797 |
 | visible rule codes found | 10 |
 | scenario set id | `reconciliation-804-4b4cc8ff` |
-| challenge hash | `45f27b644a84364e3d3855f68cd243a2` |
+| challenge hash | `0a9b26f37d40e87f67a5f755d79a0a85` |
 | counted real-agent trials | 0 |
 | stale/superseded trials | 1 |
 

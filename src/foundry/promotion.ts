@@ -297,16 +297,16 @@ export function parsePromotions(v: unknown, path = "promotions"): readonly Probe
   return list;
 }
 
-export function assertPromotionsValid(
+export function assertPromotionReferences(
   promotions: readonly ProbeToFamilyPromotion[],
-  probeSummary: ProbeRunSummary,
+  sourceProbeIds: readonly string[],
   workbench: DiscoveryWorkbench,
 ): void {
   uniqueIds(
     promotions.map((promotion) => promotion.id),
     "promotions",
   );
-  const probeIds = new Set(probeSummary.probes.map((probe) => probe.probeId));
+  const probeIds = new Set(sourceProbeIds);
   const candidateIds = new Set(workbench.candidates.map((candidate) => candidate.id));
   mustExist(
     promotions.map((promotion) => promotion.sourceProbeId),
@@ -320,7 +320,18 @@ export function assertPromotionsValid(
     "promotions.sourceCandidateId",
     "source candidate",
   );
+}
 
+export function assertPromotionsValid(
+  promotions: readonly ProbeToFamilyPromotion[],
+  probeSummary: ProbeRunSummary,
+  workbench: DiscoveryWorkbench,
+): void {
+  assertPromotionReferences(
+    promotions,
+    probeSummary.probes.map((p) => p.probeId),
+    workbench,
+  );
   for (const promotion of promotions) {
     const probe = probeSummary.probes.find((result) => result.probeId === promotion.sourceProbeId);
     if (probe === undefined) {

@@ -26,10 +26,7 @@
       "status": "verified",
       "summary": "Package stages are authoritative across ship, production, execution and intake; legacy readiness fields cannot authorize execution or release.",
       "dependencies": [],
-      "proof": [
-        "src/packages/policy.ts",
-        "test/package-evidence-decisions.test.ts"
-      ],
+      "proof": ["src/packages/policy.ts", "test/package-evidence-decisions.test.ts"],
       "nextAction": "Retain the Prompt 1 regressions. Later implementation owners must supply actual package/runtime assurance and must not reinterpret this closure as qualification."
     },
     {
@@ -54,10 +51,7 @@
       "owner": 2,
       "status": "verified",
       "summary": "Native same-route local assurance records bind exact controls, artifacts, route and evidence bytes; model/human evidence remains separate.",
-      "dependencies": [
-        "G2",
-        "G5"
-      ],
+      "dependencies": ["G2", "G5"],
       "proof": [
         "src/packages/assurance.ts",
         "test/package-production.test.ts",
@@ -88,10 +82,7 @@
       "owner": 2,
       "status": "verified",
       "summary": "One-command native CAA assembly, actual local validation and parity-checked recipient export now use the immutable package graph.",
-      "dependencies": [
-        "G2",
-        "G5"
-      ],
+      "dependencies": ["G2", "G5"],
       "proof": [
         "src/packages/native-caa.ts",
         "test/package-production.test.ts",
@@ -107,10 +98,7 @@
       "owner": 6,
       "status": "verified",
       "summary": "Package-first selection now uses authoritative stages, explicit construction reviews, bounded WIP, diversity, qualified support and cost sensitivity; axes, knobs and prose length do not predict difficulty.",
-      "dependencies": [
-        "G6",
-        "G11"
-      ],
+      "dependencies": ["G6", "G11"],
       "proof": [
         "src/foundry/adaptive-funnel.ts",
         "src/learning/selection.ts",
@@ -126,10 +114,7 @@
       "owner": 2,
       "status": "verified",
       "summary": "Reusable assembly and executable assurance interfaces are exercised by native CAA and a numeric fixture without domain fields.",
-      "dependencies": [
-        "G2",
-        "G5"
-      ],
+      "dependencies": ["G2", "G5"],
       "proof": [
         "src/packages/assembly.ts",
         "test/package-production.test.ts",
@@ -145,10 +130,7 @@
       "owner": 5,
       "status": "verified",
       "summary": "Pinned requested profiles, explicit unobservable runtime identity, isolated multi-file authoring and separate grading are implemented and exercised using inert containers. Simulations and unknown or fallback identities cannot satisfy exact-target release qualification.",
-      "dependencies": [
-        "G2",
-        "G5"
-      ],
+      "dependencies": ["G2", "G5"],
       "proof": [
         "src/execution/profiles.ts",
         "src/execution/authoring.ts",
@@ -165,10 +147,7 @@
       "owner": 5,
       "status": "verified",
       "summary": "Signed version-bound authorization, transactional reservations, fenced leases, conservative unknown-cost accounting, bounded capture, explicit uncertain-dispatch reconciliation, reasoned infrastructure retries and exclusive atomic publication implement the durable local lifecycle. Real provider entry points remain disabled unless enrolled through the reserved host-service interface.",
-      "dependencies": [
-        "G2",
-        "G5"
-      ],
+      "dependencies": ["G2", "G5"],
       "proof": [
         "src/execution/store.ts",
         "src/execution/execute.ts",
@@ -186,10 +165,7 @@
       "owner": 6,
       "status": "verified",
       "summary": "Read-only inspection, claim-level revisions, signed review overlays and dependency corrections drive regenerated findings, transfers and rankings. Corrected outbox and memory primary cases preserve historical results.",
-      "dependencies": [
-        "G3",
-        "G5"
-      ],
+      "dependencies": ["G3", "G5"],
       "proof": [
         "test/zz-outbox-probe.test.ts",
         "src/trials/root-cause.ts",
@@ -207,9 +183,7 @@
       "owner": 4,
       "status": "verified",
       "summary": "Five locally validated professional candidates now have different useful outcomes, interfaces and normalized solutions; recovery-key siblings are explicitly retained as calibration, not counted as additional packages.",
-      "dependencies": [
-        "G6"
-      ],
+      "dependencies": ["G6"],
       "proof": [
         "docs/professional-portfolio.md",
         "data/portfolio-dispositions.json",
@@ -228,11 +202,7 @@
       "owner": 6,
       "status": "verified",
       "summary": "Version-cohort accounting exposes valid/promising/qualification denominators, invalid attempts, ordered diagnosis timing, rework, explicit cost unknowns and duplicate-adjusted deliverables. Prospective production remains unmeasured.",
-      "dependencies": [
-        "G9",
-        "G10",
-        "G11"
-      ],
+      "dependencies": ["G9", "G10", "G11"],
       "proof": [
         "src/trials/types.ts",
         "src/learning/selection.ts",
@@ -247,17 +217,16 @@
       "packageId": null,
       "owner": 7,
       "status": "blocked",
-      "summary": "Prompt 1 captures baseline and repairs scoped history; full clean-checkout integration and cheap mandatory test tiers remain.",
-      "dependencies": [
-        "HISTORY-1",
-        "G2",
-        "G3",
-        "G5"
-      ],
+      "summary": "Cohesive command services, exhaustive test tiers, report reproduction and recipient checks are implemented. Full protected/native/browser proof is incomplete after host ENOSPC and Docker I/O failure; no completion claim is authorized.",
+      "dependencies": ["HISTORY-1", "G2", "G3", "G5"],
       "proof": [
-        "reports/PROMPT-01-PACKAGE-EVIDENCE.md"
+        "scripts/run-test-tier.mjs",
+        "scripts/test-tiers.mjs",
+        "scripts/verify-local-integration.mjs",
+        "scripts/candidate-snapshot.mjs",
+        "reports/PROMPT-07-INTEGRATION.md"
       ],
-      "nextAction": "Close owned baseline failures, run all tiers, publish pass/fail/skip counts and remove misleading public/generated claims."
+      "nextAction": "Recover Docker Desktop with owner approval and rerun the complete frozen-source protected and five-package integrations. Missing runtime is not a pass."
     },
     {
       "id": "HISTORY-1",
@@ -266,9 +235,7 @@
       "owner": 1,
       "status": "verified",
       "summary": "Read registered historical variants against their frozen parent, not current source; Phase 14 uses locked retained Phase 13 calibration instead of reissuing old campaigns.",
-      "dependencies": [
-        "G5"
-      ],
+      "dependencies": ["G5"],
       "proof": [
         "src/packages/history.ts",
         "data/package-history-lock.json",
@@ -283,14 +250,8 @@
       "owner": 1,
       "status": "verified",
       "summary": "Package inspection and current challenge hashing are read-only; campaign counts exclude unrelated runs and expose historical observations separately.",
-      "dependencies": [
-        "G5"
-      ],
-      "proof": [
-        "src/packages/command.ts",
-        "src/trials/run.ts",
-        "src/trials/campaign-run.ts"
-      ],
+      "dependencies": ["G5"],
+      "proof": ["src/packages/command.ts", "src/trials/run.ts", "src/trials/campaign-run.ts"],
       "nextAction": "Retain the Prompt 1 regressions. Later implementation owners must supply actual package/runtime assurance and must not reinterpret this closure as qualification."
     },
     {
@@ -346,15 +307,18 @@
       "source": "Engineering matrix/report performance",
       "packageId": null,
       "owner": 7,
-      "status": "blocked",
-      "summary": "Command-level evidence contexts, memory/storage budgets and repeated matrix analysis need measured optimization.",
-      "dependencies": [
-        "STATUS-1"
-      ],
+      "status": "implemented",
+      "summary": "Exact matrix indexing and bounded full-input memoization reduce the largest sparse fixture from about 6.4 seconds to 1.28 seconds with identical outputs. Command-scoped registry/evidence/runtime snapshots avoid redundant work. Final whole-system verification remains G14.",
+      "dependencies": ["STATUS-1"],
       "proof": [
-        "src/reports/evidence.ts"
+        "src/measurement-context.ts",
+        "src/foundry/operation-context.ts",
+        "test/engineering-integration.test.ts",
+        "test/runtime-readiness.test.ts",
+        "reports/verification/prompt-07-matrix-performance.json",
+        "scripts/benchmark-system.mjs"
       ],
-      "nextAction": "Profile representative small/large workloads before selecting bounded caches or algorithmic changes."
+      "nextAction": "Retain exact-output and invalidation regressions; record final stable-source system performance and archive storage in the acceptance report."
     },
     {
       "id": "PKG-CONTAINMENT",
@@ -363,9 +327,7 @@
       "owner": 3,
       "status": "verified",
       "summary": "Prompt 3 implemented protected execution, full local semantic and independent alternative controls, and package-bound assurance. Substantial professional construction and external qualification remain separate.",
-      "dependencies": [
-        "G1"
-      ],
+      "dependencies": ["G1"],
       "proof": [
         "test/package-semantic-integrity.test.ts",
         "test/protected-family-semantics.test.ts",
@@ -381,9 +343,7 @@
       "owner": 4,
       "status": "verified",
       "summary": "New persistent-knowledge-repair package uses real disk/restarts, revisions, full derivation lineage, current grants, immutable publications, distinct storage alternatives and protected local controls. Historical facade semantics are unchanged.",
-      "dependencies": [
-        "G6"
-      ],
+      "dependencies": ["G6"],
       "proof": [
         "tasks/persistent-knowledge-repair/private/domain.mjs",
         "src/packages/portfolio.ts",
@@ -398,9 +358,7 @@
       "owner": 3,
       "status": "verified",
       "summary": "Prompt 3 implemented protected execution, full local semantic and independent alternative controls, and package-bound assurance. Every replay is checked for ordered value-bearing observations and truthful work. Substantial professional construction and external qualification remain separate.",
-      "dependencies": [
-        "G1"
-      ],
+      "dependencies": ["G1"],
       "proof": [
         "src/families/ui-action-record-replay/verify.ts",
         "test/protected-family-semantics.test.ts",
@@ -416,9 +374,7 @@
       "owner": 3,
       "status": "verified",
       "summary": "Prompt 3 implemented protected execution, full local semantic and independent alternative controls, and package-bound assurance. Every replay is checked for ordered value-bearing observations and truthful work. Substantial professional construction and external qualification remain separate.",
-      "dependencies": [
-        "G1"
-      ],
+      "dependencies": ["G1"],
       "proof": [
         "src/families/ui-replay-live-dom/verify.ts",
         "test/protected-family-semantics.test.ts",
@@ -434,9 +390,7 @@
       "owner": 3,
       "status": "verified",
       "summary": "Prompt 3 implemented protected execution, full local semantic and independent alternative controls, and package-bound assurance. Generated case registry executes actual submitted code; checker evidence is behavior-based. Substantial professional construction and external qualification remain separate.",
-      "dependencies": [
-        "G1"
-      ],
+      "dependencies": ["G1"],
       "proof": [
         "test/package-checker-integrity.test.ts",
         "test/protected-family-semantics.test.ts",
@@ -452,9 +406,7 @@
       "owner": 3,
       "status": "verified",
       "summary": "Prompt 3 implemented protected execution, full local semantic and independent alternative controls, and package-bound assurance. Substantial professional construction and external qualification remain separate.",
-      "dependencies": [
-        "G1"
-      ],
+      "dependencies": ["G1"],
       "proof": [
         "src/families/access-token-scope-expansion/verify.ts",
         "test/protected-family-semantics.test.ts",
@@ -470,10 +422,7 @@
       "owner": 4,
       "status": "verified",
       "summary": "New delegated-budget-repair package integrates ordered shared budgets, current owner/delegate/version authority, retries and bounded authoritative receipts with independent per-job state/effect validation.",
-      "dependencies": [
-        "G1",
-        "G6"
-      ],
+      "dependencies": ["G1", "G6"],
       "proof": [
         "tasks/delegated-budget-repair/private/domain.mjs",
         "src/packages/portfolio.ts",
@@ -488,9 +437,7 @@
       "owner": 4,
       "status": "verified",
       "summary": "Protected authority and actual query semantics repaired; small function remains calibration, distinct from native CAA.",
-      "dependencies": [
-        "G5"
-      ],
+      "dependencies": ["G5"],
       "proof": [
         "test/package-authority-boundary.test.ts",
         "data/portfolio-dispositions.json",
@@ -505,10 +452,7 @@
       "owner": 3,
       "status": "verified",
       "summary": "Prompt 3 implemented protected execution, full local semantic and independent alternative controls, and package-bound assurance. Substantial professional construction and external qualification remain separate.",
-      "dependencies": [
-        "G1",
-        "HISTORY-1"
-      ],
+      "dependencies": ["G1", "HISTORY-1"],
       "proof": [
         "test/package-semantic-integrity.test.ts",
         "test/protected-family-semantics.test.ts",
@@ -524,10 +468,7 @@
       "owner": 3,
       "status": "verified",
       "summary": "Prompt 3 implemented protected execution, full local semantic and independent alternative controls, and package-bound assurance. Substantial professional construction and external qualification remain separate.",
-      "dependencies": [
-        "G1",
-        "HISTORY-1"
-      ],
+      "dependencies": ["G1", "HISTORY-1"],
       "proof": [
         "test/package-semantic-integrity.test.ts",
         "test/protected-family-semantics.test.ts",
@@ -543,10 +484,7 @@
       "owner": 3,
       "status": "verified",
       "summary": "Prompt 3 implemented protected execution, full local semantic and independent alternative controls, and package-bound assurance. Substantial professional construction and external qualification remain separate.",
-      "dependencies": [
-        "G1",
-        "HISTORY-1"
-      ],
+      "dependencies": ["G1", "HISTORY-1"],
       "proof": [
         "test/package-semantic-integrity.test.ts",
         "test/protected-family-semantics.test.ts",
@@ -562,10 +500,7 @@
       "owner": 4,
       "status": "verified",
       "summary": "New compatible-rollout-repair package integrates mixed ABI, actual staged generations, observed health, alias/cache updates, per-service rollback and scoped cleanup with sequential and batch alternatives.",
-      "dependencies": [
-        "G1",
-        "G6"
-      ],
+      "dependencies": ["G1", "G6"],
       "proof": [
         "tasks/compatible-rollout-repair/private/domain.mjs",
         "src/packages/portfolio.ts",
@@ -580,10 +515,7 @@
       "owner": 2,
       "status": "verified",
       "summary": "Native local production now covers pinned/runtime-archived assembly, bounded unprivileged compilation/collection, legitimate alternatives, fifteen wrong controls and exact export parity.",
-      "dependencies": [
-        "G2",
-        "G5"
-      ],
+      "dependencies": ["G2", "G5"],
       "proof": [
         "src/packages/native-caa.ts",
         "test/package-production.test.ts",
@@ -599,11 +531,7 @@
       "owner": 4,
       "status": "verified",
       "summary": "Real Chromium successor accepts arbitrary multi-file submissions through protected operations, records backend effects and ZIP traces, checks every attempt, and accepts two different replay strategies; no known-subject dispatcher or page-visible effect ledger grades the new package.",
-      "dependencies": [
-        "G6",
-        "PKG-UI",
-        "PKG-LIVE-DOM"
-      ],
+      "dependencies": ["G6", "PKG-UI", "PKG-LIVE-DOM"],
       "proof": [
         "src/families/ui-replay-browser-backed/production.ts",
         "tasks/browser-replay-repair/private/domain.mjs",
@@ -619,9 +547,7 @@
       "owner": 4,
       "status": "verified",
       "summary": "Five professional contracts specify attainable behavioral obligations and bounded interfaces. Useful visible tests pass on incomplete starters; distinct correct implementations pass protected suites. Memory publication ordering was relaxed where the contract permits it.",
-      "dependencies": [
-        "G6"
-      ],
+      "dependencies": ["G6"],
       "proof": [
         "test/package-public-surface.test.ts",
         "test/portfolio-production.test.ts",
@@ -638,14 +564,8 @@
       "owner": 7,
       "status": "pending-external",
       "summary": "Independent expert-time/fairness review, exact-target standard/adversarial runs and destination acceptance remain unmeasured on revised packages.",
-      "dependencies": [
-        "G4",
-        "G9",
-        "G10"
-      ],
-      "proof": [
-        "src/packages/policy.ts"
-      ],
+      "dependencies": ["G4", "G9", "G10"],
+      "proof": ["src/packages/policy.ts"],
       "nextAction": "Obtain separate explicit authority only after required local package gates; never label local controls or ambiguous historical zeroes as qualification."
     },
     {
@@ -655,9 +575,7 @@
       "owner": 5,
       "status": "verified",
       "summary": "Timeout, missing-artifact and usage fixtures now use bounded inert process capture; direct unreserved provider dispatch stays denied. Dedicated lifecycle tests exercise signed authority, independent worker races, drift, interruption, retries and immutable evidence.",
-      "dependencies": [
-        "G10"
-      ],
+      "dependencies": ["G10"],
       "proof": [
         "test/orchestration.test.ts",
         "src/packages/policy.ts",
@@ -673,13 +591,8 @@
       "owner": 4,
       "status": "pending-external",
       "summary": "Local validity is distinct from independent expert-time/fairness, human-authored reviewer material, official rubric and real standard/adversarial trial qualification.",
-      "dependencies": [
-        "PKG-NATIVE-CAA"
-      ],
-      "proof": [
-        "docs/package-production.md",
-        "src/packages/native-caa.ts"
-      ],
+      "dependencies": ["PKG-NATIVE-CAA"],
+      "proof": ["docs/package-production.md", "src/packages/native-caa.ts"],
       "nextAction": "Obtain independent reviews and separate explicit model-trial authority; do not use local controls to claim 6 of 6 genuine model failures."
     },
     {
@@ -689,9 +602,7 @@
       "owner": 3,
       "status": "verified",
       "summary": "Current collectors bind an embedded source digest and exact bundle bytes; stale bundles refuse. Historical Phase 23 selector explicitly pins lateDispute none instead of duplicate sampling identities at library import.",
-      "dependencies": [
-        "G1"
-      ],
+      "dependencies": ["G1"],
       "proof": [
         "src/trials/authority-build.ts",
         "src/phase-23/diagnosis-radius.ts",
@@ -706,9 +617,7 @@
       "owner": 4,
       "status": "verified",
       "summary": "Docker emitted the same image set in varying top-level manifest order. Bounded canonicalization now stabilizes those unordered indexes without changing image blobs or layer order; old archives remain intact.",
-      "dependencies": [
-        "G6"
-      ],
+      "dependencies": ["G6"],
       "proof": [
         "src/packages/runtime-archive.ts",
         "test/runtime-archive.test.ts",
@@ -723,9 +632,7 @@
       "owner": 6,
       "status": "verified",
       "summary": "Registry check passes while preserving historical checker audit bytes/counts. Changed-package audits are historical-unverified and excluded from current support; no old hash is rewritten.",
-      "dependencies": [
-        "G5"
-      ],
+      "dependencies": ["G5"],
       "proof": [
         "src/adversarial-audit/records.ts",
         "src/adversarial-audit/validate.ts",
@@ -740,28 +647,48 @@
       "source": "Prompt 5 actual reference authoring self-check",
       "packageId": "browser-replay-repair",
       "owner": 7,
-      "status": "blocked",
-      "summary": "The frozen browser reference passes the protected suite but one visible unit-test mock omits api.settle, so the reference fails that mock test. Starter tests pass. Preserve the artifact and repair parity in a new package version before real qualification.",
-      "dependencies": [
-        "PKG-BROWSER"
-      ],
+      "status": "verified",
+      "summary": "New professional-v2 corrects the browser recording mock. Actual starter, reference and alternative visible tests execute separately alongside protected controls; professional-v1 bytes remain unchanged.",
+      "dependencies": ["PKG-BROWSER"],
       "proof": [
-        "tasks/browser-replay-repair/public/test/replay.test.mjs",
+        "tasks/browser-replay-repair/public/test/recording.test.mjs",
+        "src/packages/portfolio.ts",
         "scripts/verify-authorized-execution.mjs",
-        "reports/verification/prompt-05.json"
+        "reports/PROMPT-07-INTEGRATION.md"
       ],
-      "nextAction": "Prompt 7: run every legitimate reference against visible tests as well as protected suites, correct the browser mock and issue a new validated package. Do not rewrite the Prompt 4 package or assurance."
+      "nextAction": "Retain observed v2 parity; current full integration is blocked under G14, not inferred from the earlier artifact receipt."
     },
     {
       "id": "P6-LEGACY-CAMPAIGN-PREPARATION",
       "source": "Prompt 6 compatibility tier; adversarial-audit.test.ts",
       "packageId": null,
       "owner": 7,
-      "status": "blocked",
-      "summary": "Legacy bundle preparation can combine a retained campaign hash with current generated challenge bytes; old package-backed readiness expectations also assume campaigns stay current after migrations. Historical reporting is fixed separately; no real audit is authorized by these bundles.",
+      "status": "verified",
+      "summary": "New bundles bind current challenge and verifier bytes with a new campaign identity when retained campaigns are stale; occupied outputs refuse. Preserved campaigns/bundles are hash-locked historical inputs, not current qualification.",
       "dependencies": ["P3-HISTORICAL-AUDIT-VIEW"],
-      "proof": ["src/adversarial-audit/bundles.ts", "test/adversarial-audit.test.ts", "reports/verification/prompt-06.json"],
-      "nextAction": "Prompt 7 must reconcile new-bundle identity versus preserved campaign intent and test stale refusal or explicit new campaign versions. Do not mutate preserved campaigns to satisfy current-readiness assertions."
+      "proof": [
+        "src/adversarial-audit/bundles.ts",
+        "test/adversarial-audit.test.ts",
+        "data/legacy-bundle-history-lock.json",
+        "scripts/verify-reports.mjs"
+      ],
+      "nextAction": "Retain separate current double-construction and historical preservation checks; no bundle authorizes provider execution."
+    },
+    {
+      "id": "HISTORY-2",
+      "source": "Prompt 7 original Phase 19 corpus unavailable",
+      "packageId": null,
+      "owner": 7,
+      "status": "pending-external",
+      "summary": "Registered original corpus differs from both committed and current bytes. Strict rederivation refuses; locked ranking and captured packets remain historical views only.",
+      "dependencies": ["G5"],
+      "proof": [
+        "src/phase-19/history.ts",
+        "src/phase-19/candidate-review.ts",
+        "data/package-history-lock.json",
+        "docs/evidence-corrections.md"
+      ],
+      "nextAction": "Recover original bytes to restore original-input reranking; never rewrite preregistration or backfill a new source as historical evidence."
     }
   ]
 }

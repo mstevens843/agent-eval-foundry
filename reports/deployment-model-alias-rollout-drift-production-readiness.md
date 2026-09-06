@@ -11,11 +11,11 @@ Production matrix: **blocked**.
 | item | value |
 |---|---|
 | family | `deployment-model-alias-rollout-drift` |
-| challenge hash | `805efb58c923f9e081db1b41967392d7` |
+| challenge hash | `5b3171584b8a190743067d745b22e586` |
 | scenario set | `drift-339-590affe3` |
 | declared behavior space | 663552 |
 | measured scenarios | 339 |
-| package | 9 files, 28278 bytes |
+| package | 9 files, 30123 bytes |
 | mutant-detection axes | 20 |
 | counted smoke trials | 0 |
 | counted smoke failures | 0 |
@@ -33,6 +33,7 @@ Production matrix: **blocked**.
 - `package-backed`
 - `smoke-planned`
 - `cross-lab-smoke-needed`
+- `stale-hash-blocked`
 - `adversarial-audit-needed`
 - `human-evidence-needed`
 - `matrix-blocked`
@@ -41,15 +42,17 @@ Production matrix: **blocked**.
 
 | code | detail |
 |---|---|
-| `PRODUCTION_NO_COUNTED_SMOKE` | campaign exists but no counted smoke trial exists |
+| `PRODUCTION_PACKAGE_POLICY_DENIED` | content-verified-package-missing, ambiguity-status-unknown, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, current-public-hash-mismatch |
 
 ## Advisory Rules
 
 | code | detail |
 |---|---|
-| `PRODUCTION_ADVERSARIAL_READY_NOT_AUDITED` | attack materials are ready, but no counted adversarial audit exists |
+| `PRODUCTION_ADVERSARIAL_NOT_READY` | verifier-integrity attack campaign or bundle is not ready |
 | `PRODUCTION_HUMAN_READY_NOT_EVIDENCED` | public package is human-ready, but no independent clean-room human solve exists |
 | `PRODUCTION_LOCAL_MUTANTS_NOT_DIFFICULTY` | local mutant axes prove verifier discrimination, not real-agent difficulty |
+| `PRODUCTION_NO_COUNTED_SMOKE` | campaign exists but no counted smoke trial exists |
+| `PRODUCTION_STALE_HASH_BLOCKS_MATRIX` | challenge package and campaign hashes must match before production evidence can count |
 
 ## Matrix Plan
 
@@ -60,7 +63,7 @@ Production matrix: **blocked**.
 - If a non-OpenAI smoke also fails on target, production matrix spend can be considered.
 - If the smoke passes cleanly, route to evolve/repair instead of buying a matrix by default.
 
-Next action: run or import one counted smoke trial under the current hash
+Next action: Resolve package blockers: content-verified-package-missing, ambiguity-status-unknown, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence
 
 Provider-delta diagnosis is present; the generated diagnosis routes the mixed smoke state to evolution rather than `/6` spend.
 Evolution options are ready; the selected next step is a mechanism probe, not a full descendant build.

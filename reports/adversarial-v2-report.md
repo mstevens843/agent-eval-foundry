@@ -6,18 +6,18 @@ model evidence.
 
 | family | v2 records | counted v2 no-bypass | counted v2 bypass | container audits | imports | isolation records | replay ready | probes | claim level |
 |---|---:|---:|---:|---:|---:|---|---|---|---|
-| `caa-revalidation` | 0 | 0 | 0 | 0 | 0 | none | no | n/a | audit-pending |
-| `checker-required-memory-poisoning` | 1 | 1 | 0 | 0 | 0 | fs-sandbox:1 | yes | pass | adversarial-audited |
-| `dao-descendant` | 0 | 0 | 0 | 0 | 0 | none | yes | pass | adversarial-ready |
-| `delegated-wallet-scope-reconciliation` | 0 | 0 | 0 | 0 | 0 | none | yes | pass | adversarial-ready |
-| `deployment-model-alias-rollout-drift` | 1 | 0 | 0 | 0 | 0 | fs-sandbox:1 | yes | pass | adversarial-ready |
-| `deployment-rollback-recompute` | 0 | 0 | 0 | 0 | 0 | none | yes | pass | adversarial-ready |
+| `caa-revalidation` | 0 | 0 | 0 | 0 | 0 | none | no | pass | audit-pending |
+| `checker-required-memory-poisoning` | 1 | 0 | 0 | 0 | 0 | fs-sandbox:1 | no | pass | audit-pending |
+| `dao-descendant` | 0 | 0 | 0 | 0 | 0 | none | no | pass | audit-pending |
+| `delegated-wallet-scope-reconciliation` | 0 | 0 | 0 | 0 | 0 | none | no | pass | audit-pending |
+| `deployment-model-alias-rollout-drift` | 1 | 0 | 0 | 0 | 0 | fs-sandbox:1 | no | pass | audit-pending |
+| `deployment-rollback-recompute` | 0 | 0 | 0 | 0 | 0 | none | no | pass | audit-pending |
 | `durable-approval-outbox` | 0 | 0 | 0 | 0 | 0 | subprocess:1 | no | n/a | audit-pending |
-| `prompt-injection-containment` | 0 | 0 | 0 | 0 | 0 | none | yes | pass | adversarial-ready |
-| `prompt-injection-memory-poisoning` | 0 | 0 | 0 | 0 | 0 | none | yes | pass | adversarial-ready |
-| `trading-reconciliation-recompute` | 0 | 0 | 0 | 0 | 0 | none | yes | pass | adversarial-ready |
-| `ui-action-record-replay` | 0 | 0 | 0 | 0 | 0 | none | yes | pass | adversarial-ready |
-| `ui-replay-live-dom` | 3 | 1 | 0 | 0 | 0 | subprocess:1, fs-sandbox:2, container-no-network:1 | yes | pass | adversarial-audited |
+| `prompt-injection-containment` | 0 | 0 | 0 | 0 | 0 | none | no | pass | audit-pending |
+| `prompt-injection-memory-poisoning` | 0 | 0 | 0 | 0 | 0 | none | no | pass | audit-pending |
+| `trading-reconciliation-recompute` | 0 | 0 | 0 | 0 | 0 | none | no | pass | audit-pending |
+| `ui-action-record-replay` | 0 | 0 | 0 | 0 | 0 | none | no | pass | audit-pending |
+| `ui-replay-live-dom` | 3 | 0 | 0 | 0 | 0 | subprocess:1, fs-sandbox:2, container-no-network:1 | no | pass | audit-pending |
 
 ## Evidence Boundary
 

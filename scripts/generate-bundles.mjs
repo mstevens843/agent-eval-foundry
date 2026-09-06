@@ -4,6 +4,12 @@
 // These are evidence artifacts, not convenience zips. The pinned challenge hash inside each bundle
 // is what makes later imported trials countable, so bundle generation is explicit and deterministic.
 import { execFileSync } from "node:child_process";
+import { mkdirSync } from "node:fs";
+import { join, resolve } from "node:path";
+const requested = process.argv[2];
+if (!requested) throw Error("usage: pnpm bundles FRESH_OUTPUT; retained bundles are never overwritten");
+const output = resolve(requested);
+mkdirSync(output, { recursive: false });
 
 const targets = [
   ["prompt-injection-containment", "external", "bundles/prompt-injection-containment-external"],
@@ -37,16 +43,8 @@ const targets = [
     "external",
     "bundles/deployment-model-alias-rollout-drift-external",
   ],
-  [
-    "deployment-model-alias-rollout-drift",
-    "claude",
-    "bundles/deployment-model-alias-rollout-drift-claude",
-  ],
-  [
-    "deployment-model-alias-rollout-drift",
-    "gemini",
-    "bundles/deployment-model-alias-rollout-drift-gemini",
-  ],
+  ["deployment-model-alias-rollout-drift", "claude", "bundles/deployment-model-alias-rollout-drift-claude"],
+  ["deployment-model-alias-rollout-drift", "gemini", "bundles/deployment-model-alias-rollout-drift-gemini"],
 ];
 
 for (const [familyId, providerId, outDir] of targets) {
@@ -62,10 +60,10 @@ for (const [familyId, providerId, outDir] of targets) {
       "--provider",
       providerId,
       "--out",
-      outDir,
+      join(output, outDir.replace(/^bundles\//, "")),
     ],
     { stdio: "inherit" },
   );
 }
 
-execFileSync("node", ["dist/cli.js", "adversarial", "all"], { stdio: "inherit" });
+// Adversarial campaigns are prepared explicitly into fresh directories; no historical all-write.

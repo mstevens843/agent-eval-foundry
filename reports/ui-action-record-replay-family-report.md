@@ -9,7 +9,7 @@ Every figure below is measured: produced by running the family, not by declaring
 | | |
 |---|---|
 | ship gate | **NOT-READY** |
-| blocking failures | `isolation-level` |
+| blocking failures | `content-verified-package-missing`, `required-reference`, `required-positiveWork`, `required-nearMissControls`, `required-contractReviewed`, `required-publicPackageComplete`, `required-protectedGrading`, `required-localIntegrityControls`, `required-boundedSolveEvidence`, `no-qualified-capability-failure`, `required-destinationChecks`, `not-destination-professional-package`, `exact-two-target-profiles-missing` |
 | data quality | `measured` |
 | status | `shipped` |
 | agent trials run | 5 |
@@ -24,29 +24,29 @@ Every figure below is measured: produced by running the family, not by declaring
 | `cheat-resistance` | yes | pass | 5 requirement(s) |
 | `is-a-family` | yes | pass | 6 knob(s): seed, mutation, mutationDepth, confirmation, asyncSettled, replayCount |
 | `hidden-region-declared` | yes | pass | The hidden suite samples the declared UI-mutation space: which change occurred b |
-| `measured-axes` | no | pass | 6 measured axes |
+| `measured-axes` | no | pass | 4 measured axes |
 | `reference-passes` | yes | pass | reference clean |
 | `baselines-blocked` | yes | pass | 2/2 baselines rejected |
 | `mutants-caught-by-intended-check` | yes | pass | 10/10 caught by intended check |
 | `mechanisms-exercised` | yes | pass | 324/324 scenario(s) trip a declared mutant's intended check; 0 block on a check no mutant was written for; 0 blind |
-| `isolation-level` | yes | fail | subprocess with 5 agent trial(s); Phase 20 requires cell-container |
-| `shared-bank-ready` | no | pass | 4 subject(s) shared with another family (need 3) |
+| `isolation-level` | yes | pass | subprocess; adequate while no agent artifact is graded |
+| `shared-bank-ready` | no | fail | 0 subject(s) shared with another family (need 3) |
 | `deterministic-reports` | no | pass | verified |
 | `trial-ready` | no | pass | challenge package builds, leak check passes, router can grade it |
-| `difficulty-evidenced` | yes | pass | 2 of 5 counted agent trial(s) failed with root cause `capability` |
-| `agent-axes-independent` | no | fail | every counted subject's failures nest (claude-opus-5 ⊂ claude-haiku-4-5 ⊂ claude-sonnet-5 ⊂ gpt-5.6-sol); one difficulty axis however many subjects attempt it. Only new scenarios with a genuine trade-off can raise it — see reports/scenario-diversity-report.md |
+| `difficulty-evidenced` | yes | fail | no counted agent trials |
+| `agent-axes-independent` | no | n/a | fewer than two counted failing subjects; no real-agent axis breadth claim yet |
 | `production-matrix-ready` | no | n/a | no production-readiness layer for this family |
-| `not-already-solved` | yes | pass | 5 of 5 counted trial(s) failed at least one scenario |
+| `not-already-solved` | yes | pass | 4 of 5 declared trial(s) failed — declared by the shape, not measured here |
 | `priced` | no | pass | 55h build, $40 frontier |
 | `human-package-ready` | no | pass | public package passed human-readiness audit |
 | `human-solvability-evidenced` | no | fail | no clean independent human solve on record |
 | `human-ambiguity-reviewed` | no | pass | 0 human review record(s), no open ambiguity |
 | `adversarial-threat-model-declared` | no | pass | threat model declared |
-| `adversarial-package-ready` | no | pass | adversarial campaign, package hash and attack bundle are ready |
+| `adversarial-package-ready` | no | fail | adversarial campaign or attack bundle is incomplete |
 | `adversarial-audit-evidenced` | no | fail | no counted no-bypass audit on record |
 | `no-known-unrepaired-bypass` | no | pass | 0 counted bypass(es), none unrepaired |
-| `adversarial-isolation-adequate` | no | pass | fs-sandbox/container isolation profile available |
-| `adversarial-exploit-replay-ready` | no | pass | exploit replay command and schema are available |
+| `adversarial-isolation-adequate` | no | fail | legacy subprocess profile only |
+| `adversarial-exploit-replay-ready` | no | fail | claimed bypasses cannot be replayed mechanically |
 | `adversarial-hardening-probes-pass` | no | pass | deterministic hardening probes pass |
 | `adversarial-container-isolation-ready` | no | fail | container/no-network isolation not ready |
 | `adversarial-container-no-network` | no | fail | no counted container/no-network audit on record |
@@ -182,7 +182,7 @@ How a real attempt is expected to go wrong. Written before any trial, so the tri
 |---|---:|
 | build hours | 55 |
 | frontier spend to measure | $40 |
-| independent axes | 6 |
+| independent axes | 4 |
 
 
 

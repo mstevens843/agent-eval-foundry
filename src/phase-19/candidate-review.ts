@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
+import { readLockedHistory } from "../packages/history.js";
 import { RigInputError, rigIntegrity } from "../screens/rig-integrity.js";
 import type { TrialUsage } from "../trials/types.js";
 import {
@@ -10,6 +11,7 @@ import {
   phase19CandidateCorpus,
   phase19CapturedFiles,
 } from "./evidence-rerank.js";
+import { readPhase19Reranking } from "./history.js";
 import { phase19ProbeDefinition, runPhase19Probe } from "./probes.js";
 import type { Phase19ProbeResult } from "./probes.js";
 
@@ -262,15 +264,21 @@ export interface Phase19CandidateReview extends Phase19RawCandidateReview {
 const reviewFile = (root: string, candidateId: string, provider: string): string =>
   join(root, "data", "phase-19-candidate-review-runs", candidateId, provider, "normalized-review.json");
 
+function retainedPacketHash(root: string, candidateId: string): string {
+  const path = `data/phase-19-candidate-review-packets/${candidateId}.json`;
+  readLockedHistory(root, path);
+  return hash(readFileSync(join(root, path)));
+}
+
 export function loadPhase19CandidateReviews(root: string): readonly Phase19CandidateReview[] {
-  const ranking = buildPhase19Reranking(root);
+  const ranking = readPhase19Reranking(root);
   if (ranking.uiEvidence.labelsReceived !== 10) return [];
   return ranking.topFive.flatMap((candidateId) =>
     (["openai", "anthropic"] as const).flatMap((provider) => {
       const path = reviewFile(root, candidateId, provider);
       if (!existsSync(path)) return [];
       const review = JSON.parse(readFileSync(path, "utf8")) as Phase19CandidateReview;
-      const packetSha256 = hash(phase19CandidatePacketBytes(root, candidateId));
+      const packetSha256 = retainedPacketHash(root, candidateId);
       parsePhase19CandidateReview(
         {
           candidateId: review.candidateId,
@@ -331,12 +339,14 @@ export interface Phase19ReviewLedger {
 }
 
 export function buildPhase19ReviewLedger(root: string): Phase19ReviewLedger {
-  const reranking = buildPhase19Reranking(root);
+  const reranking = readPhase19Reranking(root);
   const reviews = loadPhase19CandidateReviews(root);
   const decisions = reranking.topFive.map((candidateId): Phase19CandidateDecision => {
     const rows = reviews.filter((review) => review.candidateId === candidateId);
     const providers = [...new Set(rows.map((review) => review.providerFamily))].sort();
-    const packetSha256 = hash(phase19CandidatePacketBytes(root, candidateId));
+    const packetPath = join(root, "data/phase-19-candidate-review-packets", `${candidateId}.json`);
+    // An unmaterialized historical packet has no hash. Do not reconstruct it from a changed corpus.
+    const packetSha256 = existsSync(packetPath) ? retainedPacketHash(root, candidateId) : "";
     if (rows.length < 2) {
       return {
         candidateId,
@@ -389,8 +399,7 @@ export function buildPhase19ReviewLedger(root: string): Phase19ReviewLedger {
     : null;
   const executed = probes.filter((probe) => probe.result !== null);
   const probeSurvivors = complete ? executed.filter((probe) => probe.status === "survived").length : null;
-  const fullBuildsAuthorized =
-    complete && reranking.uiEvidence.difficultyEvidenceSurvives && (probeSurvivors ?? 0) > 0;
+  const fullBuildsAuthorized = false; // Historical review is not current package authorization.
   const decision = !complete ? "PENDING" : fullBuildsAuthorized ? "BUILD-SELECTIVELY" : "REPAIR-CANDIDATES";
   const capturedArtifacts = [
     ...phase19CapturedFiles(root, "data/phase-19-ui-label-runs"),
@@ -422,7 +431,7 @@ export function phase19CandidateReviewB6(root: string): {
   readonly malformedInputRefused: boolean;
   readonly nondegenerate: boolean;
 } {
-  const candidateId = buildPhase19Reranking(root).topFive[0];
+  const candidateId = readPhase19Reranking(root).topFive[0];
   if (candidateId === undefined) throw new RigInputError("Phase 19 top-five queue is empty");
   const packetSha256 = "a".repeat(64);
   const dimensions = Object.fromEntries(PHASE19_REVIEW_DIMENSIONS.map((dimension) => [dimension, "pass"]));

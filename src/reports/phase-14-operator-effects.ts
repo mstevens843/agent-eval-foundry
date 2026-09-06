@@ -112,6 +112,8 @@ export function renderPhase14OperatorEffects(root: string): string {
   return [
     "# Phase 14 - Controlled Agent Operator Ablations",
     "",
+    "> Historical view. Package/control locks are retained bytes, not fresh executions on the current grader. This report does not authorize execution; current package assurance and signed reservations are separate.",
+    "",
     "## Verdict",
     "",
     ...verdict(trials),

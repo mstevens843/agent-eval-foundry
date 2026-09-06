@@ -235,11 +235,11 @@ export const SHAPE_PROSE: Readonly<Record<string, ShapeProse>> = {
   },
 
   "checker-required-memory-poisoning": {
-    status: "shipped",
-    agentTrialsRun: 1,
+    status: "trialed",
+    agentTrialsRun: 0,
     agentTrialsPassed: 0,
     evidence:
-      "Built, measured, packaged and trialed in this repository: src/families/checker-required-memory-poisoning/ (typed public contract, scenario generator, reference subject/checker, 20 known-bad submissions, hidden verifier and runner), examples/families/checker-required-memory-poisoning/matrix.json, a leak-checked challenge package requiring subject.mjs plus checker.mjs, campaigns/checker-required-memory-poisoning-2026-08.json and trials/checker-required-memory-poisoning/checker-required-2026-08-o1/. The sweep has 792 measured scenarios from a 2,376-point declared space, a clean reference, 27 named verifier checks, and 20/20 expected mutants caught by intended checks. One counted Codex/OpenAI trial failed 614/792 scenarios under challenge hash 448f2f816c51030cc97a374816226168, giving OpenAI-only real-agent difficulty evidence with no cross-lab breadth claim.",
+      "Current typed subject/checker contract, generated cases, protected execution and local controls are implemented. Historical checker-required-2026-08-o1 failed 614/792 scenarios on a superseded package and remains unlabelled: it is not current difficulty evidence or release qualification. See the generated family report for current population and control counts; original trials and campaigns remain unchanged.",
     visibleRules: [
       "A valid submission contains both `subject.mjs` and `checker.mjs`; a subject-only submission is incomplete.",
       "`subject.mjs` implements the memory-poisoning policy across sessions, preserving provenance at write time and resolving trust at recall time.",

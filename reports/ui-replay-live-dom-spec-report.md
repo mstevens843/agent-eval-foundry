@@ -5,8 +5,8 @@
 | realism label | dom-like |
 | visible rule codes | 13 |
 | required sections present | 14/14 |
-| spec bytes | 15476 |
-| challenge hash | `18c3f5afc5973604205cd7df23ce4cad` |
+| spec bytes | 17448 |
+| challenge hash | `b79ba7c2d564aa9b83775bfe064c2f78` |
 
 ## Rule codes
 

@@ -260,10 +260,23 @@ function metadataTemplate(
 }
 
 function campaignFor(root: string, familyId: string): AdversarialCampaign {
-  return (
-    loadAdversarialCampaigns(root).find((c) => c.familyId === familyId) ??
-    buildAdversarialCampaign(root, familyId)
-  );
+  const current = {
+    ...buildAdversarialCampaign(root, familyId),
+    challengeHash: prepareChallenge(root, familyId).hash,
+  };
+  const retained = loadAdversarialCampaigns(root).find((c) => c.familyId === familyId);
+  if (
+    retained &&
+    retained.challengeHash === current.challengeHash &&
+    retained.verifierHash === current.verifierHash
+  )
+    return retained;
+  // New construction is a distinct intent. Never pair today's public bytes with yesterday's
+  // campaign identity, or rewrite the preserved campaign to make it appear current.
+  return {
+    ...current,
+    campaignId: `${current.campaignId}-${current.challengeHash}-${current.verifierHash ?? "unknown"}`,
+  };
 }
 
 export function prepareAdversarialBundle(
@@ -273,10 +286,16 @@ export function prepareAdversarialBundle(
   providerId = "external",
   isolationProfileId: IsolationProfileId = "fs-sandbox",
 ): PreparedAdversarialBundle {
+  if (existsSync(outDir) && readdirSync(outDir).length > 0)
+    throw new Error(
+      `BUNDLE_EXISTS: choose a fresh output directory; preserved bundles cannot be overwritten: ${outDir}`,
+    );
   const campaign = campaignFor(root, familyId);
   const provider = providerById(providerId === "claude-import-only" ? "external" : providerId);
   const availability = checkProvider(provider);
   const challenge = prepareChallenge(root, familyId, join(outDir, "challenge"));
+  if (challenge.hash !== campaign.challengeHash)
+    throw new Error("BUNDLE_IDENTITY_DRIFT: challenge changed during preparation");
   const instruction = attackInstruction(campaign, provider);
   const command = buildCommand(provider, instruction);
 

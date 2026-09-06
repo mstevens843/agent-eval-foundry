@@ -16,23 +16,23 @@ Which subjects have attempted which families, and what that permits.
 
 | family | subjects | counted trials | instances | axes |
 |---|---|---:|---:|---:|
-| `prompt-injection-containment` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 6 | 128 | 0 |
-| `ui-action-record-replay` | `claude-haiku-4-5`, `claude-opus-5`, `claude-sonnet-5`, `gpt-5.6-sol` | 5 | 324 | 1 |
-| `ui-replay-live-dom` | `gpt-5.6-sol` | 1 | 864 | — |
-| `checker-required-memory-poisoning` | `gpt-5.6-sol` | 1 | 792 | — |
-| `caa-revalidation` | `anthropic-claude-opus`, `openai-gpt-5.6-sol` | 4 | 24 | 0 |
-| `dao-descendant` | `claude-claude-opus-5`, `codex-gpt-5.6-sol` | 2 | 24 | 0 |
-| `trading-reconciliation-recompute` | `claude-claude-opus-5`, `codex-gpt-5.6-sol` | 2 | 24 | 0 |
-| `deployment-rollback-recompute` | `claude-claude-opus-5`, `codex-gpt-5.6-sol` | 2 | 24 | 0 |
 | `durable-approval-outbox` | `claude-opus-5`, `gpt-5.6-sol` | 6 | 24 | 1 |
 
 ## Detection banks — written mutants
 
 | family | subjects | instances | axes |
 |---|---:|---:|---:|
+| `prompt-injection-containment` | 9 | 128 | 4 |
 | `prompt-injection-memory-poisoning` | 14 | 864 | 8 |
+| `ui-action-record-replay` | 10 | 324 | 4 |
+| `ui-replay-live-dom` | 24 | 864 | 19 |
+| `checker-required-memory-poisoning` | 20 | 792 | 12 |
 | `access-token-scope-expansion` | 9 | 384 | 3 |
 | `delegated-wallet-scope-reconciliation` | 10 | 804 | 3 |
+| `caa-revalidation` | 9 | 24 | 3 |
+| `dao-descendant` | 5 | 24 | 1 |
+| `trading-reconciliation-recompute` | 6 | 24 | 1 |
+| `deployment-rollback-recompute` | 6 | 24 | 1 |
 | `deployment-model-alias-rollout-drift` | 17 | 339 | 20 |
 
 **These numbers may not be added to the ones above, or to each other as a portfolio total.** A
@@ -41,27 +41,9 @@ and it is not a measurement of difficulty.
 
 ## Subjects appearing in more than one family
 
-| subject | families |
-|---|---|
-| `claude-claude-opus-5` | `dao-descendant`, `deployment-rollback-recompute`, `trading-reconciliation-recompute` |
-| `claude-haiku-4-5` | `prompt-injection-containment`, `ui-action-record-replay` |
-| `claude-opus-5` | `durable-approval-outbox`, `prompt-injection-containment`, `ui-action-record-replay` |
-| `claude-sonnet-5` | `prompt-injection-containment`, `ui-action-record-replay` |
-| `codex-gpt-5.6-sol` | `dao-descendant`, `deployment-rollback-recompute`, `trading-reconciliation-recompute` |
-| `gpt-5.6-sol` | `checker-required-memory-poisoning`, `durable-approval-outbox`, `prompt-injection-containment`, `ui-action-record-replay`, `ui-replay-live-dom` |
+_None. Every subject appears in exactly one family._
 
 ## What each kind of bank currently licenses
-
-### `agent` banks — 8 family(ies)
-
-**Verdict:** REFUSED. nothing: the banks share no subject, so co-failure across families is unobservable and the union's width is the sum by construction.
-
-No subject attempted more than one family, so co-failure across families is unobservable. The union matrix is null in every cross cell and its antichain width is the sum of the parts by construction — two families testing the identical mechanism would also 'add'. No combined count is available.
-
-**To strengthen this:**
-
-- Run the same subjects against every `agent` family until 3 share all of them.
-- Currently shared: none.
 
 ### `imported` banks — 1 family(ies)
 
@@ -74,7 +56,7 @@ Only 2 subject(s) attempted every family, below the threshold of 3. The combined
 - Build or trial a second family whose bank is `imported`.
 - For a mutant bank that means a second family with a written mutant set.
 
-### `mutant` banks — 4 family(ies)
+### `mutant` banks — 12 family(ies)
 
 **Verdict:** REFUSED. nothing: the banks share no subject, so co-failure across families is unobservable and the union's width is the sum by construction.
 

@@ -6,7 +6,7 @@ is provenance for the recipe; the numbers below are recomputed from this package
 | property | measured value |
 |---|---:|
 | challenge files | 8 |
-| challenge hash | `9d89b49307a960f65f2e6e8f204fd15e` |
+| challenge hash | `bbb02380b6f8633fec7bc0e9d2956ec1` |
 | declared scenario space | 72 |
 | selected scenarios | 24 |
 | activated target stratum | 18 |
@@ -15,7 +15,7 @@ is provenance for the recipe; the numbers below are recomputed from this package
 | narrow recompute failures in target stratum | 18/18 |
 | narrow mutant locally green in target stratum | 18/18 |
 | narrow mutant failures in non-activation controls | 0/6 |
-| intended mutants caught | 3/3 |
+| intended mutants caught | 5/5 |
 | B6 controls usable | yes |
 | malformed input refused | yes |
 | challenge leak/manifest gate | pass |

@@ -27,38 +27,9 @@ failing-scenario set contained in one dominant check's — catches it without na
 does not fire when a check fails a scenario the dominant check passed, which is what a genuinely
 independent second failure mode looks like.
 
-## Diagnoses
+## No counted trial failed anything
 
-### `live-dom-2026-08-o2` — openai/gpt-5.6-sol
-
-**Reading: capability** (concentrated on some knob values — the shape of a real capability gap). Matches the pre-registered hypothesis: **yes**.
-
-219 of 864 scenarios failed.
-
-| check | scenarios | share of failures |
-|---|---:|---:|
-| `replay_completes` | 139 | 63% |
-| `precondition_observed` | 80 | 37% |
-
-**Knob values implicated** — failure rate within each value:
-
-| knob | value | scenarios | failed | rate |
-|---|---|---:|---:|---:|
-| `regionFate` | `superseded` | 144 | 80 | 56% |
-| `priorState` | `clean` | 288 | 127 | 44% |
-| `anchorConflict` | `testid_wins` | 216 | 88 | 41% |
-| `anchorConflict` | `path_wins` | 216 | 86 | 40% |
-| `settleBudget` | `2` | 292 | 94 | 32% |
-| `priorState` | `arming` | 288 | 92 | 32% |
-| `regionFate` | `disabled_then_enabled` | 144 | 46 | 32% |
-| `settleBudget` | `6` | 303 | 90 | 30% |
-| `seed` | `41` | 428 | 122 | 29% |
-| `anchorFidelity` | `duplicated` | 445 | 123 | 28% |
-| `regionFate` | `stable` | 144 | 39 | 27% |
-| `replayCount` | `2` | 437 | 117 | 27% |
-
-> Failures are confined to specific knob values and land on checks the pre-registered hypothesis named. This is the pattern that supports a difficulty claim.
-
+Nothing to diagnose.
 
 No trial shows a single-cause fanout.
 

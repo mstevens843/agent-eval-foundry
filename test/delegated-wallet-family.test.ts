@@ -44,7 +44,8 @@ import type { TrialSet } from "../src/trials/types.js";
 const ROOT = new URL("..", import.meta.url).pathname;
 const FAMILY_ID = "delegated-wallet-scope-reconciliation";
 const CHALLENGE_HASH = "45f27b644a84364e3d3855f68cd243a2";
-const CURRENT_CHALLENGE_HASH = "b3eb59318b3a120a3c6316755402b584";
+// Corrected public contract/types from the package-hardening pass, not a historical regrade.
+const CURRENT_CHALLENGE_HASH = "0a9b26f37d40e87f67a5f755d79a0a85";
 const SCENARIO_SET_ID = "reconciliation-804-4b4cc8ff";
 const budgetBlindFixture = makeSubject("budget-blind-fixture", "Ignores remaining wallet budget", {
   ...REFERENCE_OPTIONS,

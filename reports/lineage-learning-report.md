@@ -29,8 +29,8 @@ Reason: access-token-scope-expansion and delegated-wallet-scope-reconciliation w
 
 | family | local evidence | smoke | informative | counted | solves | failures | provider families | scenarios | mutant axes | matrix | hash |
 |---|---|---|---|---:|---:|---:|---|---:|---:|---|---|
-| `access-token-scope-expansion` | local-pass | withdrawn | withdrawn | 0 | 0 | 0 | none | 384 | 3 | blocked | current |
-| `delegated-wallet-scope-reconciliation` | local-pass | withdrawn | withdrawn | 0 | 0 | 0 | none | 804 | 3 | blocked | current |
+| `access-token-scope-expansion` | local-pass | withdrawn | withdrawn | 0 | 0 | 0 | none | 384 | 3 | blocked | stale |
+| `delegated-wallet-scope-reconciliation` | local-pass | withdrawn | withdrawn | 0 | 0 | 0 | none | 804 | 3 | blocked | stale |
 
 **`access-token-scope-expansion` — evidence withdrawn (`package-leak`).**
 

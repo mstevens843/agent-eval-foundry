@@ -20,10 +20,10 @@ cluster: model alias drift during deployment and eval rollout decisions.
 | mutant-detection axes | 20 |
 | blind scenarios | 0 |
 | package files | 9 |
-| package bytes | 28278 |
+| package bytes | 30123 |
 | visible rule codes found | 10 |
 | scenario set id | `drift-339-590affe3` |
-| challenge hash | `805efb58c923f9e081db1b41967392d7` |
+| challenge hash | `5b3171584b8a190743067d745b22e586` |
 | counted real-agent trials | 0 |
 | stale/superseded trials | 2 |
 

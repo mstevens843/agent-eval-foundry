@@ -50,7 +50,9 @@ export function assertAssuranceCoverage(
       !Number.isFinite(actual.milliseconds) ||
       actual.milliseconds < 0
     )
-      throw new Error(`ASSURANCE_BINDING: ${wanted.id}`);
+      throw new Error(
+        `ASSURANCE_BINDING: ${wanted.id}; status=${actual?.status ?? "missing"}; ${JSON.stringify(actual?.detail ?? null)}`,
+      );
   }
 }
 

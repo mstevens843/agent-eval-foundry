@@ -86,7 +86,8 @@ export function familyLoop(
   // frontier trial directories and no built family — and when it has, the gate reads those trials
   // rather than the `agentTrialsRun` integer in its shape. `shapeTrialEvidence` returns a bundle with
   // `sweepRun: false`, so the verifier-grading gates go on reading `n/a` for it.
-  const trialOnly = readFamilyTrials(join(root, "trials"), familyId).length > 0;
+  const recordedTrials = readFamilyTrials(join(root, "trials"), familyId);
+  const trialOnly = recordedTrials.length > 0;
   const evidence = bundle?.evidence ?? (trialOnly ? shapeTrialEvidence(root, familyId) : undefined);
   const assessment = assessFamily(shape, reg, evidence);
   const analysis = analyzeFamily(shape, assessment, evidence, DECLARED_CONCERNS[familyId] ?? {});
@@ -97,7 +98,7 @@ export function familyLoop(
   const variants = evolve(analysis, shape, reg);
   for (const v of variants) assertVariantNovel(v, shape, reg);
 
-  const trials = readFamilyTrials(join(root, "trials"), familyId)
+  const trials = recordedTrials
     .filter((t) => t.record.counts && t.record.subjectType === "agent")
     .map((t) => ({
       runId: t.runId,

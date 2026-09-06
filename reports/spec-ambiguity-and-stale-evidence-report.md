@@ -6,19 +6,20 @@ Every trial this repository holds, what state it is in, and what a repair costs.
 
 | state | count | meaning |
 |---|---:|---|
-| `counted` | 23 | graded, and run against the challenge this family produces today |
+| `counted` | 0 | graded, and run against the challenge this family produces today |
 | `registered-variant` | 2 | graded against a preregistered material variant; valid for that profile, excluded from the canonical family bank |
-| `superseded` | 15 | graded, then invalidated when the family it measured was repaired |
+| `superseded` | 38 | graded, then invalidated when the family it measured was repaired |
 | `refused` | 0 | the provider declined; never an attempt, never a failure |
 | `infra` | 1 | the provider could not authenticate, so the subject never reached the task |
 | `crashed` | 1 | the subject reached the task and the harness died carrying it |
 | `not-run` | 0 | a declared slot nobody has executed |
+| `invalid-evidence` | 0 | retained bytes are missing/invalid or disagree with the declared identity; no current claim |
 
 ## Per family
 
 ### `access-token-scope-expansion`
 
-Current challenge hash: `8ae0950dea093d35d98b12d1c8c1bde5`.
+Current challenge hash: `449d7f9a570517fe168dc12a24da0d6d`.
 
 | run | model | state | ran against |
 |---|---|---|---|
@@ -26,37 +27,37 @@ Current challenge hash: `8ae0950dea093d35d98b12d1c8c1bde5`.
 
 ### `caa-revalidation`
 
-Current challenge hash: `c2948f2c26f2231ceaa47d0ec2d3f04a`.
+Current challenge hash: `cbb41af034435cec75810117377febcb`.
 
 | run | model | state | ran against |
 |---|---|---|---|
-| `phase17-caa-slot-1-openai-attempt-1` | openai/gpt-5.6-sol | counted | `c2948f2c26f2231ceaa47d0ec2d3f04a` |
-| `phase17-caa-slot-2-anthropic-attempt-1` | claude opus | counted | `c2948f2c26f2231ceaa47d0ec2d3f04a` |
-| `phase17-caa-slot-3-openai-attempt-1` | openai/gpt-5.6-sol | counted | `c2948f2c26f2231ceaa47d0ec2d3f04a` |
-| `phase17-caa-slot-4-anthropic-attempt-1` | claude opus | counted | `c2948f2c26f2231ceaa47d0ec2d3f04a` |
+| `phase17-caa-slot-1-openai-attempt-1` | openai/gpt-5.6-sol | **superseded** | `c2948f2c26f2231ceaa47d0ec2d3f04a` ≠ current |
+| `phase17-caa-slot-2-anthropic-attempt-1` | claude opus | **superseded** | `c2948f2c26f2231ceaa47d0ec2d3f04a` ≠ current |
+| `phase17-caa-slot-3-openai-attempt-1` | openai/gpt-5.6-sol | **superseded** | `c2948f2c26f2231ceaa47d0ec2d3f04a` ≠ current |
+| `phase17-caa-slot-4-anthropic-attempt-1` | claude opus | **superseded** | `c2948f2c26f2231ceaa47d0ec2d3f04a` ≠ current |
 
 ### `checker-required-memory-poisoning`
 
-Current challenge hash: `448f2f816c51030cc97a374816226168`.
+Current challenge hash: `0530fe3b520faaddd9ad7ed8742825cc`.
 
 | run | model | state | ran against |
 |---|---|---|---|
-| `checker-required-2026-08-o1` | openai/gpt-5.6-sol | counted | `448f2f816c51030cc97a374816226168` |
+| `checker-required-2026-08-o1` | openai/gpt-5.6-sol | **superseded** | `448f2f816c51030cc97a374816226168` ≠ current |
 
 ### `dao-descendant`
 
-Current challenge hash: `9d89b49307a960f65f2e6e8f204fd15e`.
+Current challenge hash: `bbb02380b6f8633fec7bc0e9d2956ec1`.
 
 | run | model | state | ran against |
 |---|---|---|---|
 | `phase14-dao-descendant-neutral-skeleton-anthropic` | anthropic/claude-opus-5 | registered-variant | `e1d2992c882776c1fc4fc733eb607949` (`dao-descendant/neutral-skeleton`) |
 | `phase14-dao-descendant-neutral-skeleton-openai` | openai/gpt-5.6-sol | registered-variant | `e1d2992c882776c1fc4fc733eb607949` (`dao-descendant/neutral-skeleton`) |
-| `phase14-dao-descendant-seeded-recompute-anthropic` | anthropic/claude-opus-5 | counted | `9d89b49307a960f65f2e6e8f204fd15e` |
-| `phase14-dao-descendant-seeded-recompute-openai` | openai/gpt-5.6-sol | counted | `9d89b49307a960f65f2e6e8f204fd15e` |
+| `phase14-dao-descendant-seeded-recompute-anthropic` | anthropic/claude-opus-5 | **superseded** | `9d89b49307a960f65f2e6e8f204fd15e` ≠ current |
+| `phase14-dao-descendant-seeded-recompute-openai` | openai/gpt-5.6-sol | **superseded** | `9d89b49307a960f65f2e6e8f204fd15e` ≠ current |
 
 ### `delegated-wallet-scope-reconciliation`
 
-Current challenge hash: `45f27b644a84364e3d3855f68cd243a2`.
+Current challenge hash: `0a9b26f37d40e87f67a5f755d79a0a85`.
 
 | run | model | state | ran against |
 |---|---|---|---|
@@ -64,7 +65,7 @@ Current challenge hash: `45f27b644a84364e3d3855f68cd243a2`.
 
 ### `deployment-model-alias-rollout-drift`
 
-Current challenge hash: `805efb58c923f9e081db1b41967392d7`.
+Current challenge hash: `5b3171584b8a190743067d745b22e586`.
 
 | run | model | state | ran against |
 |---|---|---|---|
@@ -73,29 +74,29 @@ Current challenge hash: `805efb58c923f9e081db1b41967392d7`.
 
 ### `deployment-rollback-recompute`
 
-Current challenge hash: `2ddfad2fd3287f752c41a408184b48ce`.
+Current challenge hash: `46ed5ea45b412e242ef362fde040051a`.
 
 | run | model | state | ran against |
 |---|---|---|---|
-| `phase14-deployment-rollback-recompute-seeded-recompute-anthropic` | anthropic/claude-opus-5 | counted | `2ddfad2fd3287f752c41a408184b48ce` |
-| `phase14-deployment-rollback-recompute-seeded-recompute-openai` | openai/gpt-5.6-sol | counted | `2ddfad2fd3287f752c41a408184b48ce` |
+| `phase14-deployment-rollback-recompute-seeded-recompute-anthropic` | anthropic/claude-opus-5 | **superseded** | `2ddfad2fd3287f752c41a408184b48ce` ≠ current |
+| `phase14-deployment-rollback-recompute-seeded-recompute-openai` | openai/gpt-5.6-sol | **superseded** | `2ddfad2fd3287f752c41a408184b48ce` ≠ current |
 
 ### `prompt-injection-containment`
 
-Current challenge hash: `4911ffdfbd2c0e9b51752ed16c4f53e8`.
+Current challenge hash: `bbc682395fdc508b829d19e908def046`.
 
 | run | model | state | ran against |
 |---|---|---|---|
-| `pic-claude-1` | anthropic/claude-opus-5 | counted | `4911ffdfbd2c0e9b51752ed16c4f53e8` |
-| `pic-claude-2` | anthropic/claude-opus-5 | counted | `4911ffdfbd2c0e9b51752ed16c4f53e8` |
-| `pic-claude-3` | anthropic/claude-opus-5 | counted | `4911ffdfbd2c0e9b51752ed16c4f53e8` |
-| `pic-codex-1` | openai/gpt-5.6-sol | counted | `4911ffdfbd2c0e9b51752ed16c4f53e8` |
-| `pic-haiku-1` | anthropic/claude-haiku-4-5 | counted | `4911ffdfbd2c0e9b51752ed16c4f53e8` |
-| `pic-sonnet-1` | anthropic/claude-sonnet-5 | counted | `4911ffdfbd2c0e9b51752ed16c4f53e8` |
+| `pic-claude-1` | anthropic/claude-opus-5 | **superseded** | `4911ffdfbd2c0e9b51752ed16c4f53e8` ≠ current |
+| `pic-claude-2` | anthropic/claude-opus-5 | **superseded** | `4911ffdfbd2c0e9b51752ed16c4f53e8` ≠ current |
+| `pic-claude-3` | anthropic/claude-opus-5 | **superseded** | `4911ffdfbd2c0e9b51752ed16c4f53e8` ≠ current |
+| `pic-codex-1` | openai/gpt-5.6-sol | **superseded** | `4911ffdfbd2c0e9b51752ed16c4f53e8` ≠ current |
+| `pic-haiku-1` | anthropic/claude-haiku-4-5 | **superseded** | `4911ffdfbd2c0e9b51752ed16c4f53e8` ≠ current |
+| `pic-sonnet-1` | anthropic/claude-sonnet-5 | **superseded** | `4911ffdfbd2c0e9b51752ed16c4f53e8` ≠ current |
 
 ### `prompt-injection-memory-poisoning`
 
-Current challenge hash: `6966852cf74afd8e336918f527217c47`.
+Current challenge hash: `14870e7a6999848e888db374fede18b3`.
 
 | run | model | state | ran against |
 |---|---|---|---|
@@ -114,33 +115,33 @@ Current challenge hash: `6966852cf74afd8e336918f527217c47`.
 
 ### `trading-reconciliation-recompute`
 
-Current challenge hash: `94bfc2c401ad2cc19f7e84e8a1270a08`.
+Current challenge hash: `61183c46b73606ef156ea9121d3b0308`.
 
 | run | model | state | ran against |
 |---|---|---|---|
-| `phase14-trading-reconciliation-recompute-seeded-recompute-anthropic` | anthropic/claude-opus-5 | counted | `94bfc2c401ad2cc19f7e84e8a1270a08` |
-| `phase14-trading-reconciliation-recompute-seeded-recompute-openai` | openai/gpt-5.6-sol | counted | `94bfc2c401ad2cc19f7e84e8a1270a08` |
+| `phase14-trading-reconciliation-recompute-seeded-recompute-anthropic` | anthropic/claude-opus-5 | **superseded** | `94bfc2c401ad2cc19f7e84e8a1270a08` ≠ current |
+| `phase14-trading-reconciliation-recompute-seeded-recompute-openai` | openai/gpt-5.6-sol | **superseded** | `94bfc2c401ad2cc19f7e84e8a1270a08` ≠ current |
 
 ### `ui-action-record-replay`
 
-Current challenge hash: `1050e79f4804a96a5327d50dd81765b0`.
+Current challenge hash: `9b00f533f3fd08718ddb96394f92fa48`.
 
 | run | model | state | ran against |
 |---|---|---|---|
-| `ui-claude-1` | anthropic/claude-opus-5 | counted | `1050e79f4804a96a5327d50dd81765b0` |
-| `ui-claude-2` | anthropic/claude-opus-5 | counted | `1050e79f4804a96a5327d50dd81765b0` |
-| `ui-codex-1` | openai/gpt-5.6-sol | counted | `1050e79f4804a96a5327d50dd81765b0` |
-| `ui-haiku-1` | anthropic/claude-haiku-4-5 | counted | `1050e79f4804a96a5327d50dd81765b0` |
-| `ui-sonnet-1` | anthropic/claude-sonnet-5 | counted | `1050e79f4804a96a5327d50dd81765b0` |
+| `ui-claude-1` | anthropic/claude-opus-5 | **superseded** | `1050e79f4804a96a5327d50dd81765b0` ≠ current |
+| `ui-claude-2` | anthropic/claude-opus-5 | **superseded** | `1050e79f4804a96a5327d50dd81765b0` ≠ current |
+| `ui-codex-1` | openai/gpt-5.6-sol | **superseded** | `1050e79f4804a96a5327d50dd81765b0` ≠ current |
+| `ui-haiku-1` | anthropic/claude-haiku-4-5 | **superseded** | `1050e79f4804a96a5327d50dd81765b0` ≠ current |
+| `ui-sonnet-1` | anthropic/claude-sonnet-5 | **superseded** | `1050e79f4804a96a5327d50dd81765b0` ≠ current |
 
 ### `ui-replay-live-dom`
 
-Current challenge hash: `18c3f5afc5973604205cd7df23ce4cad`.
+Current challenge hash: `b79ba7c2d564aa9b83775bfe064c2f78`.
 
 | run | model | state | ran against |
 |---|---|---|---|
-| `live-dom-2026-08-o1` | openai/gpt-5.6-sol | crashed | `18c3f5afc5973604205cd7df23ce4cad` |
-| `live-dom-2026-08-o2` | openai/gpt-5.6-sol | counted | `18c3f5afc5973604205cd7df23ce4cad` |
+| `live-dom-2026-08-o1` | openai/gpt-5.6-sol | crashed | `18c3f5afc5973604205cd7df23ce4cad` ≠ current |
+| `live-dom-2026-08-o2` | openai/gpt-5.6-sol | **superseded** | `18c3f5afc5973604205cd7df23ce4cad` ≠ current |
 
 ## Ambiguities found by real trials
 
@@ -174,7 +175,7 @@ Five checks make that hold under pressure:
 
 ## The cost of being right about this
 
-15 counted trials were invalidated, at roughly $52.50
+38 counted trials were invalidated, at roughly $133.00
 of model spend and about an hour of wall clock.
 
 That is the honest price of the discipline, and it is worth naming rather than absorbing: a

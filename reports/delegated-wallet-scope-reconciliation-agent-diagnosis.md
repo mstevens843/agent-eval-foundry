@@ -30,9 +30,11 @@ Campaign: `delegated-wallet-2026-08`.
 
 Blocking reasons:
 
+- challenge package hash is stale
 - no counted smoke trial
+- smoke campaign hash is stale
 
-Next action: run one OpenAI/Codex smoke trial
+Next action: reissue the challenge/campaign hash before any run can count
 
 ## Failed Checks
 

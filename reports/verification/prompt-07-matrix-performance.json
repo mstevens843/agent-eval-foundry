@@ -1,0 +1,232 @@
+{
+  "baseline": {
+    "schemaVersion": 1,
+    "revision": "70024e1f56e7a5492d6370c8f4e167889b533990",
+    "node": "v22.22.1",
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M4 Pro",
+    "memoryBytes": 25769803776,
+    "source": "c3ba8d40b7f7a210340d88d9ea0d3e3896585c969b21d6be9d23f37e8b98828d",
+    "method": "fresh Node process, then repeated measurements; RSS includes V8; two seeded null trials; no process reuse across evidence cells",
+    "subprocesses": 1,
+    "elapsedMs": 14110.009625,
+    "matrix": [
+      {
+        "instances": 256,
+        "subjects": 16,
+        "patterns": 32,
+        "distinct": 156,
+        "temperature": "cold",
+        "elapsedMs": 34.611333,
+        "rssBytes": 103628800,
+        "maxRssKiB": 101200,
+        "outputBytes": 24081,
+        "digest": "a5ff833658debacf6589e0f921c8fc2ed6bf1111c0be5d9fd6db3d5f116c4e48"
+      },
+      {
+        "instances": 256,
+        "subjects": 16,
+        "patterns": 32,
+        "distinct": 156,
+        "temperature": "warm",
+        "elapsedMs": 27.329833000000008,
+        "rssBytes": 105611264,
+        "maxRssKiB": 103136,
+        "outputBytes": 24081,
+        "digest": "a5ff833658debacf6589e0f921c8fc2ed6bf1111c0be5d9fd6db3d5f116c4e48"
+      },
+      {
+        "instances": 512,
+        "subjects": 32,
+        "patterns": 128,
+        "distinct": 459,
+        "temperature": "cold",
+        "elapsedMs": 559.065875,
+        "rssBytes": 131186688,
+        "maxRssKiB": 128112,
+        "outputBytes": 107224,
+        "digest": "fe86e81b3d600573a4df1d832da8725d69fffdd9b7704c66ca40822a5de219e3"
+      },
+      {
+        "instances": 512,
+        "subjects": 32,
+        "patterns": 128,
+        "distinct": 459,
+        "temperature": "warm",
+        "elapsedMs": 557.367542,
+        "rssBytes": 140541952,
+        "maxRssKiB": 137248,
+        "outputBytes": 107224,
+        "digest": "fe86e81b3d600573a4df1d832da8725d69fffdd9b7704c66ca40822a5de219e3"
+      },
+      {
+        "instances": 1000,
+        "subjects": 48,
+        "patterns": 512,
+        "distinct": 986,
+        "temperature": "cold",
+        "elapsedMs": 6366.315958,
+        "rssBytes": 189628416,
+        "maxRssKiB": 185184,
+        "outputBytes": 314721,
+        "digest": "db1fcd265474ebb516aaded4c4c77f9f9f8ad9dc1f8e3f4df8b3b688d044ace7"
+      },
+      {
+        "instances": 1000,
+        "subjects": 48,
+        "patterns": 512,
+        "distinct": 986,
+        "temperature": "warm",
+        "elapsedMs": 6434.589792000001,
+        "rssBytes": 205668352,
+        "maxRssKiB": 200848,
+        "outputBytes": 314721,
+        "digest": "db1fcd265474ebb516aaded4c4c77f9f9f8ad9dc1f8e3f4df8b3b688d044ace7"
+      }
+    ]
+  },
+  "optimized": {
+    "schemaVersion": 1,
+    "revision": "70024e1f56e7a5492d6370c8f4e167889b533990",
+    "node": "v22.22.1",
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M4 Pro",
+    "memoryBytes": 25769803776,
+    "source": "53c3c52482725ffbc432b4ed31bd2cac2bbf9392fe5883297599e4060d03db9b",
+    "method": "fresh Node process, then repeated measurements; RSS includes V8; two seeded null trials; no process reuse across evidence cells",
+    "subprocesses": 1,
+    "elapsedMs": 3057.429292,
+    "matrix": [
+      {
+        "instances": 256,
+        "subjects": 16,
+        "patterns": 32,
+        "distinct": 156,
+        "temperature": "cold",
+        "elapsedMs": 23.6015,
+        "rssBytes": 92291072,
+        "maxRssKiB": 90128,
+        "outputBytes": 24081,
+        "digest": "a5ff833658debacf6589e0f921c8fc2ed6bf1111c0be5d9fd6db3d5f116c4e48"
+      },
+      {
+        "instances": 256,
+        "subjects": 16,
+        "patterns": 32,
+        "distinct": 156,
+        "temperature": "warm",
+        "elapsedMs": 19.881875000000008,
+        "rssBytes": 92913664,
+        "maxRssKiB": 90736,
+        "outputBytes": 24081,
+        "digest": "a5ff833658debacf6589e0f921c8fc2ed6bf1111c0be5d9fd6db3d5f116c4e48"
+      },
+      {
+        "instances": 512,
+        "subjects": 32,
+        "patterns": 128,
+        "distinct": 459,
+        "temperature": "cold",
+        "elapsedMs": 143.53320800000003,
+        "rssBytes": 107315200,
+        "maxRssKiB": 104800,
+        "outputBytes": 107224,
+        "digest": "fe86e81b3d600573a4df1d832da8725d69fffdd9b7704c66ca40822a5de219e3"
+      },
+      {
+        "instances": 512,
+        "subjects": 32,
+        "patterns": 128,
+        "distinct": 459,
+        "temperature": "warm",
+        "elapsedMs": 160.959334,
+        "rssBytes": 125009920,
+        "maxRssKiB": 122080,
+        "outputBytes": 107224,
+        "digest": "fe86e81b3d600573a4df1d832da8725d69fffdd9b7704c66ca40822a5de219e3"
+      },
+      {
+        "instances": 1000,
+        "subjects": 48,
+        "patterns": 512,
+        "distinct": 986,
+        "temperature": "cold",
+        "elapsedMs": 1285.152625,
+        "rssBytes": 141410304,
+        "maxRssKiB": 138096,
+        "outputBytes": 314721,
+        "digest": "db1fcd265474ebb516aaded4c4c77f9f9f8ad9dc1f8e3f4df8b3b688d044ace7"
+      },
+      {
+        "instances": 1000,
+        "subjects": 48,
+        "patterns": 512,
+        "distinct": 986,
+        "temperature": "warm",
+        "elapsedMs": 1279.0128750000001,
+        "rssBytes": 117981184,
+        "maxRssKiB": 143392,
+        "outputBytes": 314721,
+        "digest": "db1fcd265474ebb516aaded4c4c77f9f9f8ad9dc1f8e3f4df8b3b688d044ace7"
+      }
+    ]
+  },
+  "comparison": [
+    {
+      "instances": 256,
+      "subjects": 16,
+      "distinct": 156,
+      "temperature": "cold",
+      "speedup": 1.4664886977522615,
+      "sameDigest": true,
+      "sameBytes": true
+    },
+    {
+      "instances": 256,
+      "subjects": 16,
+      "distinct": 156,
+      "temperature": "warm",
+      "speedup": 1.3746104429285466,
+      "sameDigest": true,
+      "sameBytes": true
+    },
+    {
+      "instances": 512,
+      "subjects": 32,
+      "distinct": 459,
+      "temperature": "cold",
+      "speedup": 3.89502807601151,
+      "sameDigest": true,
+      "sameBytes": true
+    },
+    {
+      "instances": 512,
+      "subjects": 32,
+      "distinct": 459,
+      "temperature": "warm",
+      "speedup": 3.4627848422881766,
+      "sameDigest": true,
+      "sameBytes": true
+    },
+    {
+      "instances": 1000,
+      "subjects": 48,
+      "distinct": 986,
+      "temperature": "cold",
+      "speedup": 4.953743107360498,
+      "sameDigest": true,
+      "sameBytes": true
+    },
+    {
+      "instances": 1000,
+      "subjects": 48,
+      "distinct": 986,
+      "temperature": "warm",
+      "speedup": 5.030903064208795,
+      "sameDigest": true,
+      "sameBytes": true
+    }
+  ]
+}

@@ -10,6 +10,11 @@ checkers too weak to express the rule, so their own fuzzers ran clean over the b
 
 | mutant | mechanisms | caught by | referenced |
 |---|---|---:|---|
+| `correct-key-wrong-payload` | uncertain-external-effects | 1 | yes |
+| `correct-key-wrong-trade` | uncertain-external-effects | 1 | yes |
+| `correct-key-wrong-compensation` | uncertain-external-effects | 1 | yes |
+| `unrequested-work` | uncertain-external-effects, duplicate-side-effects | 1 | yes |
+| `retroactive-auditor` | false-audit-history | 1 | yes |
 | `nop-faker` | uncertain-external-effects, liveness-stall | 4 | yes |
 | `eager-resolver` | false-audit-history, tool-result-ambiguity, uncertain-external-effects | 4 | yes |
 | `liveness-staller` | liveness-stall, tool-result-ambiguity, uncertain-external-effects | 4 | yes |
@@ -123,6 +128,71 @@ checkers too weak to express the rule, so their own fuzzers ran clean over the b
 | `always-issue` | cardinality-preserved-identity-collapse | 1 | yes |
 | `fabricated-result` | cardinality-preserved-identity-collapse, false-audit-history | 2 | yes |
 
+### Stable key with changed payload `correct-key-wrong-payload`
+
+**Bug.** Recovers the durable action identity but changes the external payload before execution.
+
+**False confidence.** Exactly-once counts can be correct while the wrong effect is executed.
+
+**Must be caught by**
+- Compare authority-observed payload and action identity against the requested intent, not just the idempotency key.
+
+```
+src/families/dao-descendant/mutants.ts: changedPayload
+```
+
+### Stable key with changed trade quantity `correct-key-wrong-trade`
+
+**Bug.** Recovers the durable key but increases the order quantity.
+
+**False confidence.** A correct key and one accepted trade do not prove the quantity is correct.
+
+**Must be caught by**
+- effect_matches_intent compares the independently observed order payload to the original intent.
+
+```
+src/families/trading-reconciliation-recompute/mutants.ts: changedPayload
+```
+
+### Stable key with wrong rollback configuration `correct-key-wrong-compensation`
+
+**Bug.** Recovers the durable key but restores a different configuration.
+
+**False confidence.** Completing rollback once is insufficient if it restores the wrong target.
+
+**Must be caught by**
+- effect_matches_intent compares compensation payloads and intent identities through the external controller.
+
+```
+src/families/deployment-rollback-recompute/mutants.ts: changedPayload
+```
+
+### Complete intended work and perform an unrelated effect `unrequested-work`
+
+**Bug.** Performs the requested effect correctly, then adds an unrelated order, tool action or compensation.
+
+**False confidence.** A verifier that filters to expected IDs sees all intended work and misses collateral effects.
+
+**Must be caught by**
+- Compare the complete external-effect collection, including action IDs outside the requested set.
+
+```
+unrequestedWork in the DAO, trading and rollback calibration families
+```
+
+### Revise an already closed payment audit `retroactive-auditor`
+
+**Bug.** Handles a late dispute as authorized new work but also appends a transition to the original AUDITED payment.
+
+**False confidence.** The dispute result is correct while the earlier immutable payment history has been corrupted.
+
+**Must be caught by**
+- audit_legal_transitions checks the entire per-action history, including late sessions.
+
+```
+src/families/memory-poisoning/mutants.ts: retroactiveAuditor
+```
+
 ### No-op faker (empty external ledger) `nop-faker`
 
 **Bug.** The engine leases actions and then drives every one straight to a clean terminal state without ever calling the external tool, so the outbox produces zero side effects. This is the cheat-empty-ledger oracle from the source repo, which scored a perfect 113/113 with an entirely empty tool ledger before check_expected_executions was written.
@@ -152,9 +222,9 @@ def worker_step(worker_id):
 
 ### Eager resolver (guesses the unknown outcome) `eager-resolver`
 
-**Bug.** When the tool returns UNKNOWN the engine picks an answer instead of parking the action, and it withdraws already-acknowledged work by writing an ACKED -> REVOKED audit transition. The state machine in SEMANTICS.md §4 gives ACKED no outgoing arrow and §6 names EXECUTED -> REVOKED as the one post-execution withdrawal path, so this is a transition that the normative spec does not contain. Five of the six frontier trials in the source repo wrote exactly this bug.
+**Bug.** A constructed eager resolver treats unknown effects as decided and permits withdrawal transitions after acknowledgment. Five retained outbox submissions violated the hidden ACKED-terminal check, but current adjudications classify those five as specification ambiguity; these observations do not establish a fair capability gap.
 
-**False confidence.** Its audit log is perfectly continuous — every entry's from_state equals the previous to_state — and every action reaches a terminal state promptly, so completeness, append-only ordering, and liveness all pass. The one Opus trial that avoided the bug still wrote a local checker with no legal-transition table, which would have passed ACKED -> REVOKED as a valid chain link; an author who checks chain continuity instead of chain legality gets a green suite over a spec violation stated three separate times.
+**False confidence.** A continuous audit chain need not be a legal state history. All six retained outbox agents wrote checking machinery, but their coverage differed. This taxonomy proposes an explicit public transition contract with independent history checks; it does not retroactively add that contract to the old trials.
 
 **Must be caught by**
 - enforce an explicit legal-transition table over the audit log with LEGAL[ACKED] empty, rather than only checking that consecutive entries chain (from_state == current_state)

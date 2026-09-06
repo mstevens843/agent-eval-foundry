@@ -5,12 +5,12 @@ tracked as its own evidence stream.
 
 | item | value |
 |---|---|
-| challenge hash | `805efb58c923f9e081db1b41967392d7` |
-| verifier hash | `27a37e29c63216002726cd3515c087fb` |
+| challenge hash | `5b3171584b8a190743067d745b22e586` |
+| verifier hash | `7d875252ee6103854639e1c53b90c073` |
 | campaign path | `adversarial-audits/campaigns/deployment-model-alias-rollout-drift-adversarial.json` |
 | bundle path | `bundles/deployment-model-alias-rollout-drift-adversarial` |
-| claim level | `adversarial-ready` |
-| adversarial ready | yes |
+| claim level | `audit-pending` |
+| adversarial ready | no |
 | counted no-bypass audits | 0 |
 | counted bypass audits | 0 |
 | unrepaired bypasses | 0 |
@@ -20,7 +20,7 @@ tracked as its own evidence stream.
 
 ## Reading
 
-The campaign and bundle are ready, but no counted deployment-alias adversarial audit exists yet.
+The family is not adversarial-ready yet; prepare the campaign and attack bundle before claiming verifier-integrity coverage.
 
 ## Evidence Boundary
 

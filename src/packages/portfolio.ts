@@ -227,7 +227,7 @@ export async function buildPortfolioPackage(
     {
       id,
       familyId: PORTFOLIO_PACKAGES[id],
-      version: "professional-v1",
+      version: "professional-v2",
       kind: "professional-package",
       dependencies: { strategy: "conservative-repository-closure", unresolved: [] },
       files,
@@ -546,42 +546,48 @@ export async function validatePortfolioPackage(directory: string, output: string
     evidenceClass: "local-execution" as const,
     artifactDigest: snapshot.record.components.workspace.digest,
     run: async () => {
-      const publicPath = join(output, "variants", "starter");
-      const tests = readPackageTree(publicPath)
-        .filter((f) => /^test\/.*\.test\.mjs$/.test(f.path))
-        .map((f) => `/submission/${f.path}`);
-      if (!tests.length) throw Error("VISIBLE_TESTS_MISSING");
-      const result = await docker(
-        [
-          "run",
-          "--rm",
-          "--network",
-          "none",
-          "--read-only",
-          "--user",
-          "1000:1000",
-          "--cap-drop",
-          "ALL",
-          "--security-opt",
-          "no-new-privileges",
-          "--tmpfs",
-          "/tmp:rw,size=64m",
-          "--cpus",
-          "2",
-          "--memory",
-          "2g",
-          "--pids-limit",
-          "128",
-          "--mount",
-          `type=bind,src=${resolve(publicPath)},dst=/submission,readonly`,
-          runtime.image,
-          "node",
-          "--test",
-          ...tests,
-        ],
-        { timeoutMs: 60000, log: join(output, "visible-tests.log") },
-      );
-      return { passed: true, detail: { stdout: result.stdout, tests } };
+      const observations = [];
+      // Visible checks are part of the contract too. A fixture that rejects a legitimate
+      // solution is a packaging defect even when protected grading accepts that solution.
+      for (const name of ["starter", "reference", "alternative"]) {
+        const publicPath = join(output, "variants", name);
+        const tests = readPackageTree(publicPath)
+          .filter((f) => /^test\/.*\.test\.mjs$/.test(f.path))
+          .map((f) => `/submission/${f.path}`);
+        if (!tests.length) throw Error("VISIBLE_TESTS_MISSING");
+        const result = await docker(
+          [
+            "run",
+            "--rm",
+            "--network",
+            "none",
+            "--read-only",
+            "--user",
+            "1000:1000",
+            "--cap-drop",
+            "ALL",
+            "--security-opt",
+            "no-new-privileges",
+            "--tmpfs",
+            "/tmp:rw,size=64m",
+            "--cpus",
+            "2",
+            "--memory",
+            "2g",
+            "--pids-limit",
+            "128",
+            "--mount",
+            `type=bind,src=${resolve(publicPath)},dst=/submission,readonly`,
+            runtime.image,
+            "node",
+            "--test",
+            ...tests,
+          ],
+          { timeoutMs: 60000, log: join(output, `visible-tests-${name}.log`) },
+        );
+        observations.push({ name, stdout: result.stdout, tests });
+      }
+      return { passed: true, detail: { observations } };
     },
   });
   operations.push({
@@ -696,6 +702,23 @@ export async function verifyPortfolioReceipt(directory: string, receiptPath: str
   );
   if (!Array.isArray(receipt.evidenceFiles) || !receipt.evidenceFiles.length)
     throw Error("PORTFOLIO_EVIDENCE_MISSING");
+  if (snapshot.record.version === "professional-v2") {
+    const visible = receipt.results.find((r) => r.id === "visible-workspace-smoke");
+    const observations = (
+      visible?.detail as { observations?: { name: string; tests: string[] }[] } | undefined
+    )?.observations;
+    if (
+      !Array.isArray(observations) ||
+      observations.length !== 3 ||
+      ["starter", "reference", "alternative"].some(
+        (name) => !observations.some((o) => o.name === name && Array.isArray(o.tests) && o.tests.length > 0),
+      )
+    )
+      throw Error("PORTFOLIO_VISIBLE_PARITY_REQUIRED");
+    for (const name of ["starter", "reference", "alternative"])
+      if (!receipt.evidenceFiles.some((f) => f.path === `visible-tests-${name}.log`))
+        throw Error("PORTFOLIO_VISIBLE_PARITY_REQUIRED");
+  }
   const evidence = readPackageTree(dirname(receiptPath)).filter((f) => f.path !== "assurance.json");
   if (
     canonicalJson(evidence.map((f) => ({ path: f.path, sha256: sha256(f.bytes), size: f.bytes.length }))) !==

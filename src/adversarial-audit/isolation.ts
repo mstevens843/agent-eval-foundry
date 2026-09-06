@@ -10,6 +10,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { dirname, join, relative } from "node:path";
+import { commandMemo } from "../foundry/operation-context.js";
 import type { AdversarialIsolationProfile, IsolationProfileId } from "./types.js";
 
 export const ISOLATION_PROFILES: Readonly<Record<IsolationProfileId, AdversarialIsolationProfile>> = {
@@ -101,10 +102,24 @@ export interface ContainerRuntimeReadiness {
 }
 
 export function containerRuntimeReadiness(): ContainerRuntimeReadiness {
+  // Advisory status snapshot only. Sharing within one command avoids repeatedly waiting
+  // on the same unavailable daemon. Actual protected controls still execute independently;
+  // this observation never grants assurance or dispatch authority. New commands re-probe.
+  const key = JSON.stringify([
+    "docker-readiness",
+    process.env.PATH,
+    process.env.DOCKER_HOST,
+    process.env.DOCKER_CONTEXT,
+  ]);
+  return commandMemo(key, readContainerRuntimeReadiness);
+}
+
+function readContainerRuntimeReadiness(): ContainerRuntimeReadiness {
   const version = spawnSync("docker", ["--version"], {
     encoding: "utf8",
     stdio: ["ignore", "pipe", "pipe"],
     timeout: 20_000,
+    killSignal: "SIGKILL",
   });
   if (version.error !== undefined || version.status !== 0) {
     return {
@@ -113,10 +128,13 @@ export function containerRuntimeReadiness(): ContainerRuntimeReadiness {
       detail: `docker client unavailable: ${version.error?.message ?? version.stderr.trim()}`,
     };
   }
-  const info = spawnSync("docker", ["info"], {
+  // Ask only the server version. `docker info` also discovers client plugins; a hung
+  // plugin can inherit pipes and keep spawnSync blocked even after its parent times out.
+  const info = spawnSync("docker", ["version", "--format", "{{.Server.Version}}"], {
     encoding: "utf8",
     stdio: ["ignore", "pipe", "pipe"],
-    timeout: 20_000,
+    timeout: 5_000,
+    killSignal: "SIGKILL",
   });
   if (info.error !== undefined || info.status !== 0) {
     const detail = `${info.stderr || info.stdout || info.error?.message || "docker daemon unavailable"}`

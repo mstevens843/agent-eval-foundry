@@ -1,5 +1,7 @@
 # Coverage is not diversity
 
+> Historical record, not current qualification. Statements below about no Codex checking, six conclusive fair capability failures, universal solve-probability ranges, or self-verifiability disqualifying a task are superseded by [current evidence corrections](docs/evidence-corrections.md). All six outbox agents wrote checks; five present adjudications concern specification ambiguity and one remains unresolved. Probability ranges are uncalibrated priors. Original reasoning and observations remain below for auditability; the current production process is package-first.
+
 **What the durable-outbox task actually measured, and what the second one costs.**
 
 Mathew Stevens · follow-up to the Klavis conversation of 2026-08-28
@@ -482,7 +484,7 @@ report and in `reports/ui-replay-live-dom-axis-report.md`; read the axis count t
 the null-model row directly beneath it, which is the gate that says whether the width beats noise.
 
 It also has the missing agent-facing surface now: a leak-checked 9-file challenge package with a
-precise fairness spec, hash `18c3f5afc5973604205cd7df23ce4cad`, and a campaign plan that treats
+precise fairness spec (its quoted historical package is now superseded; consult the current family report), and a campaign plan that treats
 Anthropic as import-only and Gemini as entitlement-blocked. One real Codex/OpenAI trial counted:
 `live-dom-2026-08-o2`, 864 scenarios graded, 219 failed on `replay_completes` and
 `precondition_observed`. That is real-agent difficulty evidence for one OpenAI subject. It is not a

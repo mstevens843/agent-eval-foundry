@@ -54,7 +54,8 @@ import type { TrialRecord, TrialSet } from "../src/trials/types.js";
 const ROOT = new URL("..", import.meta.url).pathname;
 const FAMILY_ID = "deployment-model-alias-rollout-drift";
 const CHALLENGE_HASH = "805efb58c923f9e081db1b41967392d7";
-const CURRENT_CHALLENGE_HASH = "3fcb6594208934c438b964219f3af4dd";
+// Current public contract after package hardening; old trials retain their old identities.
+const CURRENT_CHALLENGE_HASH = "5b3171584b8a190743067d745b22e586";
 const SCENARIO_SET_ID = "drift-339-590affe3";
 
 let cachedScenarios: readonly Scenario[] | null = null;
@@ -603,13 +604,13 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
       cleanHumanSolves: 0,
     });
 
-    expect(readiness.smokeDifficultyEvidenced).toBe(true);
+    expect(readiness.smokeDifficultyEvidenced).toBe(false);
     expect(readiness.crossLabSmokeEvidenced).toBe(false);
     expect(readiness.fullMatrixReady).toBe(false);
-    expect(readiness.statuses).toContain("smoke-failed-on-target");
+    expect(readiness.blockers.map((f) => f.code)).toContain("PRODUCTION_PACKAGE_POLICY_DENIED");
     expect(readiness.statuses).toContain("cross-lab-smoke-needed");
     expect(readiness.statuses).toContain("matrix-blocked");
-    expect(readiness.blockers.map((finding) => finding.code)).toContain(
+    expect(readiness.advisories.map((finding) => finding.code)).toContain(
       "PRODUCTION_MATRIX_NEEDS_NON_OPENAI_SMOKE",
     );
     expect(readiness.advisories.map((finding) => finding.code)).toContain(
@@ -644,14 +645,14 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
       cleanHumanSolves: 0,
     });
 
-    expect(readiness.crossLabSmokeEvidenced).toBe(true);
+    expect(readiness.crossLabSmokeEvidenced).toBe(false);
     expect(readiness.crossLabDifficultyEvidenced).toBe(false);
-    expect(readiness.mixedCrossLabSmoke).toBe(true);
+    expect(readiness.mixedCrossLabSmoke).toBe(false);
     expect(readiness.fullMatrixReady).toBe(false);
-    expect(readiness.statuses).toContain("cross-lab-smoke-present");
-    expect(readiness.statuses).toContain("cross-lab-smoke-mixed");
-    expect(readiness.blockers.map((finding) => finding.code)).toContain("PRODUCTION_CROSS_LAB_SMOKE_MIXED");
-    expect(readiness.nextAction).toMatch(/provider delta|evolve/);
+    expect(readiness.statuses).toContain("matrix-blocked");
+    expect(readiness.advisories.map((f) => f.code)).toContain("PRODUCTION_CROSS_LAB_SMOKE_MIXED");
+    expect(readiness.advisories.map((finding) => finding.code)).toContain("PRODUCTION_CROSS_LAB_SMOKE_MIXED");
+    expect(readiness.packageDecision?.stages["trial-eligible"].allowed).toBe(false);
   });
 
   it("renders mixed OpenAI failure and Claude clean solve as provider-delta diagnosis", () => {
@@ -741,13 +742,13 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
 
     expect(refusal.fullMatrixReady).toBe(false);
     expect(refusal.statuses).toContain("smoke-attempted");
-    expect(refusal.blockers.map((finding) => finding.code)).toContain("PRODUCTION_NO_COUNTED_SMOKE");
+    expect(refusal.advisories.map((finding) => finding.code)).toContain("PRODUCTION_NO_COUNTED_SMOKE");
     expect(refusal.advisories.map((finding) => finding.code)).toContain(
       "PRODUCTION_PROVIDER_FAILURE_NO_COUNT",
     );
     expect(stale.fullMatrixReady).toBe(false);
     expect(stale.statuses).toContain("stale-hash-blocked");
-    expect(stale.blockers.map((finding) => finding.code)).toContain("PRODUCTION_STALE_HASH_BLOCKS_MATRIX");
+    expect(stale.advisories.map((finding) => finding.code)).toContain("PRODUCTION_STALE_HASH_BLOCKS_MATRIX");
   });
 
   it("requires counted no-bypass or bypass audit before calling adversarial-ready audited", () => {
@@ -782,11 +783,11 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
       countedNoBypassAudits: 1,
     });
 
-    expect(readyNotAudited.fullMatrixReady).toBe(true);
+    expect(readyNotAudited.fullMatrixReady).toBe(false);
     expect(readyNotAudited.advisories.map((finding) => finding.code)).toContain(
       "PRODUCTION_ADVERSARIAL_READY_NOT_AUDITED",
     );
-    expect(audited.fullMatrixReady).toBe(true);
+    expect(audited.fullMatrixReady).toBe(false);
     expect(audited.advisories.map((finding) => finding.code)).not.toContain(
       "PRODUCTION_ADVERSARIAL_READY_NOT_AUDITED",
     );
@@ -794,14 +795,14 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
 
   it("exercises every production-readiness rule code through intended known-bad cases", () => {
     const cases = [
-      ["PRODUCTION_LOCAL_VERIFIER_NOT_READY", { localVerifierReady: false }, "blockers"],
-      ["PRODUCTION_PACKAGE_NOT_BACKED", { packageBacked: false }, "blockers"],
+      ["PRODUCTION_LOCAL_VERIFIER_NOT_READY", { localVerifierReady: false }, "advisories"],
+      ["PRODUCTION_PACKAGE_NOT_BACKED", { packageBacked: false }, "advisories"],
       [
         "PRODUCTION_NO_COUNTED_SMOKE",
         { countedSmokeTrials: 0, countedSmokeFailures: 0, modelFamilies: [] },
-        "blockers",
+        "advisories",
       ],
-      ["PRODUCTION_STALE_HASH_BLOCKS_MATRIX", { challengeHash: "stale" }, "blockers"],
+      ["PRODUCTION_STALE_HASH_BLOCKS_MATRIX", { challengeHash: "stale" }, "advisories"],
       ["PRODUCTION_PROVIDER_FAILURE_NO_COUNT", { providerRefusals: 1, infraFailures: 1 }, "advisories"],
       [
         "PRODUCTION_CLEAN_PASS_NOT_DIFFICULTY",
@@ -811,26 +812,28 @@ describe("deployment-alias smoke campaign, transfer and diagnosis", () => {
           countedSmokeSolves: 1,
           diagnosisStatus: "clean",
         },
-        "blockers",
+        "advisories",
       ],
-      ["PRODUCTION_OFF_TARGET_SMOKE_REPAIR", { diagnosisStatus: "off-target" }, "blockers"],
-      ["PRODUCTION_TRANSFER_NOT_DECLARED", { transferDeclared: false }, "blockers"],
-      ["PRODUCTION_MATRIX_NEEDS_NON_OPENAI_SMOKE", { modelFamilies: ["openai"] }, "blockers"],
+      ["PRODUCTION_OFF_TARGET_SMOKE_REPAIR", { diagnosisStatus: "off-target" }, "advisories"],
+      ["PRODUCTION_TRANSFER_NOT_DECLARED", { transferDeclared: false }, "advisories"],
+      ["PRODUCTION_MATRIX_NEEDS_NON_OPENAI_SMOKE", { modelFamilies: ["openai"] }, "advisories"],
       [
         "PRODUCTION_CROSS_LAB_SMOKE_MIXED",
         { modelFamilies: ["openai", "anthropic"], countedFailureModelFamilies: ["openai"] },
-        "blockers",
+        "advisories",
       ],
       ["PRODUCTION_OPENAI_ONLY_NO_CROSS_LAB", { modelFamilies: ["openai"] }, "advisories"],
       ["PRODUCTION_LOCAL_MUTANTS_NOT_DIFFICULTY", {}, "advisories"],
-      ["PRODUCTION_ADVERSARIAL_NOT_READY", { adversarialReady: false }, "blockers"],
+      ["PRODUCTION_ADVERSARIAL_NOT_READY", { adversarialReady: false }, "advisories"],
       [
         "PRODUCTION_ADVERSARIAL_READY_NOT_AUDITED",
         { countedNoBypassAudits: 0, countedBypassAudits: 0 },
         "advisories",
       ],
       ["PRODUCTION_HUMAN_READY_NOT_EVIDENCED", { humanReady: true, cleanHumanSolves: 0 }, "advisories"],
-      ["PRODUCTION_UNREPAIRED_BYPASS", { unrepairedBypasses: 1 }, "blockers"],
+      ["PRODUCTION_UNREPAIRED_BYPASS", { unrepairedBypasses: 1 }, "advisories"],
+
+      ["PRODUCTION_PACKAGE_POLICY_DENIED", {}, "blockers"],
     ] as const;
 
     for (const [code, overrides, bucket] of cases) {

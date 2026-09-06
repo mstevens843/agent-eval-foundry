@@ -1,15 +1,15 @@
 # ui-replay-live-dom trial readiness
 
-Status: **difficulty-evidenced**.
+Status: **HOLD**.
 
 | gate | value |
 |---|---|
 | challenge package | 9 files |
-| challenge hash | `18c3f5afc5973604205cd7df23ce4cad` |
+| challenge hash | `b79ba7c2d564aa9b83775bfe064c2f78` |
 | scenario set | `dom-864-3a8cb30a` |
 | scenarios expected | 864 |
 | route | present |
-| counted real-agent trials | 1 |
+| counted real-agent trials | 0 |
 
 Provider handling: Codex/OpenAI is runnable locally when configured. Anthropic/Claude is import-only for this phase. Gemini is entitlement-blocked unless a future authenticated run changes that.
 

@@ -1,10 +1,7 @@
 import { buildPhase19ReviewLedger } from "../phase-19/candidate-review.js";
 import { phase19CandidateReviewB6 } from "../phase-19/candidate-review.js";
-import {
-  buildPhase19Reranking,
-  buildPhase19UiLabelLedger,
-  phase19CoreB6,
-} from "../phase-19/evidence-rerank.js";
+import { buildPhase19UiLabelLedger, phase19CoreB6 } from "../phase-19/evidence-rerank.js";
+import { readPhase19Reranking as buildPhase19Reranking } from "../phase-19/history.js";
 
 const pct = (value: number): string => `${(value * 100).toFixed(0)}%`;
 const dash = (value: string | number | null): string => (value === null ? "-" : String(value));
@@ -24,6 +21,8 @@ export function renderPhase19EvidenceRerank(root: string): string {
   const finalDecision = reviews?.summary.decision ?? "PENDING";
   const lines: string[] = [
     "# Phase 19 - Evidence Repair And Candidate Reranking",
+    "",
+    "> Historical view: ranking and candidate-review input packets are hash-locked retained records. The registered research-corpus bytes were not preserved; their current file has a different hash. The ranking is not freshly rederived and authorizes no current package or trial. UI packet/label checks and pure normalizer controls still execute. See docs/evidence-corrections.md.",
     "",
     `**Decision: ${finalDecision}. UI verdict: ${uiVerdict}.**`,
     "",

@@ -94,9 +94,19 @@ export function antichainWidth(sets: readonly (readonly string[])[]): AntichainR
   const n = sets.length;
   if (n === 0) return { width: 0, chains: [] };
 
-  const adj: number[][] = sets.map((a, i) =>
-    sets.flatMap((b, j) => (i !== j && isProperSubset(a, b) ? [j] : [])),
-  );
+  // Preserve oriented edges and traversal order exactly, but allocate membership sets once
+  // per node, not once per candidate edge. Matching and chain reconstruction stay canonical.
+  const memberships = sets.map((s) => new Set(s));
+  const adj: number[][] = sets.map((a, i) => {
+    const edges: number[] = [];
+    for (let j = 0; j < sets.length; j += 1) {
+      const b = sets[j];
+      const membership = memberships[j];
+      if (i !== j && b && membership && a.length < b.length && a.every((x) => membership.has(x)))
+        edges.push(j);
+    }
+    return edges;
+  });
 
   const matchRight = new Array<number>(n).fill(-1);
   const matchLeft = new Array<number>(n).fill(-1);
