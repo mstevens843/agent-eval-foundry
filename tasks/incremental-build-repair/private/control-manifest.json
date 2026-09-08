@@ -1,0 +1,105 @@
+[
+  {
+    "id": "ignore-tool",
+    "overlay": {
+      "src/key.mjs": "controls/ignore-tool.mjs"
+    },
+    "check": "current_artifacts",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "ignore-flags",
+    "overlay": {
+      "src/key.mjs": "controls/ignore-flags.mjs"
+    },
+    "check": "current_artifacts",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "ignore-includes",
+    "overlay": {
+      "src/key.mjs": "controls/ignore-includes.mjs"
+    },
+    "check": "current_artifacts",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "ignore-dependency-order",
+    "overlay": {
+      "src/key.mjs": "controls/ignore-dependency-order.mjs"
+    },
+    "check": "current_artifacts",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "always-rebuild",
+    "overlay": {
+      "entry.mjs": "controls/always-rebuild.mjs"
+    },
+    "check": "incremental_budget",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "foreign-publication",
+    "overlay": {
+      "entry.mjs": "controls/foreign-publication.mjs"
+    },
+    "check": "current_artifacts",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "duplicate-publication",
+    "overlay": {
+      "entry.mjs": "controls/duplicate-publication.mjs"
+    },
+    "check": "publication_scope",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "partial-publication",
+    "overlay": {
+      "entry.mjs": "controls/partial-publication.mjs"
+    },
+    "check": "current_artifacts",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "forged-completion",
+    "overlay": {
+      "entry.mjs": "controls/forged-completion.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "isolation",
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
+    "check": "completion",
+    "isolation": true,
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "wrong-dependency-alias",
+    "overlay": {
+      "entry.mjs": "controls/wrong-dependency-alias.mjs"
+    },
+    "check": "current_artifacts",
+    "clean": "case-024",
+    "selectionRole": "post-selection-validation"
+  }
+]

@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "kind": "construction-exposure-ledger",
+  "frozenAt": "2026-09-08T02:14:05.534Z",
+  "revisedAt": "2026-09-08T04:15:00.000Z",
+  "currentExposure": "Exposed regression selection after a fairness correction; no untouched holdout claim for the revised replica package.",
+  "generators": [
+    {
+      "id": "partition-index-repair",
+      "generatorSha256": "a2c9febce986444bb4e0bb062cff9209b3359af1557293bab68a6d0408aedc5c"
+    },
+    {
+      "id": "causal-replica-repair",
+      "generatorSha256": "df776bd54c729edc55621a019369f8b5b9aad5ec5badb13c156a5191386378c0"
+    },
+    {
+      "id": "partial-release-repair",
+      "generatorSha256": "ef8e644c729503d69f1df9ed72589b645ebf7dc637b7b058e376eb6fa3a24a06"
+    },
+    {
+      "id": "ticket-consolidation-repair",
+      "generatorSha256": "7a2f7c2dfdd3b816439a3e60b05a05208d58b14a927f10ac598abcedd2292b35"
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "generatorSha256": "acdc8c03e0675ac937c7cd39b65b3eb25fe316fbb2973d2e12cd42e9be259fa9"
+    }
+  ],
+  "developmentControls": 43,
+  "providerCallsMade": 0,
+  "history": [
+    {
+      "revision": "initial",
+      "evidence": "../validation/portfolio-v1",
+      "result": "Four local controls pass; partition-index vacuous success caught and not accepted."
+    },
+    {
+      "revision": "pre-freeze",
+      "change": "Compute index obligations before execution; cover mixed per-row ticket conflicts; accept already present labels and harmless report metadata.",
+      "evidence": "test/next-portfolio.test.ts"
+    },
+    {
+      "revision": "replica-outcome-correction",
+      "change": "Completion now checks actual convergence rather than mandatory writes. The independent alternative skips already-correct documents. Added a concurrent first-replica edit so partial propagation fails on real state, not write count.",
+      "previousGeneratorSha256": "392a8f3de73f691b9d67f8244294125de889c9f452d58076c7c33d96289815d6",
+      "evidence": "../validation/final and test/next-portfolio.test.ts",
+      "exposure": "All existing controls were already inspected; revised scenarios are development/regression evidence. Prior final exports remain preserved."
+    },
+    {
+      "revision": "checker-required-scenario-coverage",
+      "date": "2026-09-08",
+      "change": "A checker-required grading mechanism was added (submissions must include an independently-written checker.mjs, judged against real verdict-stripped traces of the reference/alternative/every control). Building it honestly surfaced real, per-package scenario-coverage gaps: causal-replica-repair's forget-tombstones control was only ever masked by the starter's own unrelated causal_values bug because the one context-only fixture that distinguishes them was gated behind the same seed bit as replica count, fixed by making it unconditional. partial-release-repair's abandon-unknown control needed the uncertain-outcome distribution skewed so a real crash-required scenario reliably falls inside the graded window. ticket-consolidation-repair's positional-batch-results control needed its trigger broadened from a rare seed bit to any batch with heterogeneous per-row conflicts. partition-index-repair's and temporal-capacity-repair's generators were not touched in this pass (partition-index-repair's own generator hash already diverged from this ledger's prior freeze due to an earlier, separate scenario-selection fix made before checker-required work began; temporal-capacity-repair needed no change).",
+      "evidence": "HARDENING-APPLIED.md Remediation section, third-five/2026-09-07-build/HARDENING-APPLIED.md",
+      "exposure": "Generator bytes changed after the controls listed in validationControls above were already authored/inspected; this is a disclosed re-freeze, not a silent replacement."
+    }
+  ],
+  "qualification": "Generation frozen before five additional independently authored near misses; no statistical/model hardness claim. First evaluation retained, then all controls become regression exposure.",
+  "validationControls": [
+    {
+      "packageId": "partition-index-repair",
+      "id": "reset-prefix-on-reassignment",
+      "check": "completion",
+      "sha256": "054c6c549c5c7025776b2b3df5ee79869fc056a60d9b7e38eb5fe2aaf2cffde7",
+      "firstEvaluation": "../validation/portfolio-v3",
+      "author": "same implementing agent, independently written implementation; not independent human review",
+      "afterFirstEvaluation": "regression control, no longer held out"
+    },
+    {
+      "packageId": "causal-replica-repair",
+      "id": "payload-dedup",
+      "check": "causal_values",
+      "sha256": "b3248239cf822dbd0e7d86ceb2e64dbda0552b7cc879f4a42becc8e221f72d30",
+      "firstEvaluation": "../validation/portfolio-v3",
+      "author": "same implementing agent, independently written implementation; not independent human review",
+      "afterFirstEvaluation": "regression control, no longer held out"
+    },
+    {
+      "packageId": "partial-release-repair",
+      "id": "missing-restoration",
+      "check": "completion",
+      "sha256": "8ef767e730e001db19e6dcc90731f66812fc1df87d1063f22327185c0fb0aed9",
+      "firstEvaluation": "../validation/portfolio-v3",
+      "author": "same implementing agent, independently written implementation; not independent human review",
+      "afterFirstEvaluation": "regression control, no longer held out"
+    },
+    {
+      "packageId": "ticket-consolidation-repair",
+      "id": "positional-batch-results",
+      "check": "completion",
+      "sha256": "9ba9c0419a438c184dabbead6c2cdd3010f0ecfc1a05f4c6616ae596e4d23463",
+      "firstEvaluation": "../validation/portfolio-v3",
+      "author": "same implementing agent, independently written implementation; not independent human review",
+      "afterFirstEvaluation": "regression control, no longer held out"
+    },
+    {
+      "packageId": "temporal-capacity-repair",
+      "id": "strict-knowledge-cutoff",
+      "check": "exact_integral",
+      "sha256": "a2f4c39172df4fc52f028c4c3fab768c2eb9fbf8633b1711d45cd7211f034abe",
+      "firstEvaluation": "../validation/portfolio-v3",
+      "author": "same implementing agent, independently written implementation; not independent human review",
+      "afterFirstEvaluation": "regression control, no longer held out"
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+[
+  {
+    "id": "nested-message-skip",
+    "overlay": {
+      "src/transform.mjs": "controls/nested-message-skip.mjs"
+    },
+    "check": "privacy",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "sequential-literals",
+    "overlay": {
+      "src/policy.mjs": "controls/sequential-literals.mjs"
+    },
+    "check": "privacy",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "field-policy-omitted",
+    "overlay": {
+      "entry.mjs": "controls/field-policy-omitted.mjs"
+    },
+    "check": "privacy",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "over-redaction",
+    "overlay": {
+      "entry.mjs": "controls/over-redaction.mjs"
+    },
+    "check": "preservation",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "drop-binary",
+    "overlay": {
+      "entry.mjs": "controls/drop-binary.mjs"
+    },
+    "check": "preservation",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "wrong-ticket",
+    "overlay": {
+      "entry.mjs": "controls/wrong-ticket.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "duplicate-export",
+    "overlay": {
+      "entry.mjs": "controls/duplicate-export.mjs"
+    },
+    "check": "unique_publication",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "forged-completion",
+    "overlay": {
+      "entry.mjs": "controls/forged-completion.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "isolation",
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression",
+    "isolation": true
+  },
+  {
+    "id": "discard-part-links",
+    "overlay": {
+      "entry.mjs": "controls/discard-part-links.mjs"
+    },
+    "check": "preservation",
+    "clean": "case-024",
+    "selectionRole": "post-selection-validation"
+  }
+]

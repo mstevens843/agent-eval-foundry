@@ -1,0 +1,106 @@
+[
+  {
+    "id": "immediate-parent-origin",
+    "overlay": {
+      "src/context.mjs": "controls/immediate-parent-origin.mjs"
+    },
+    "check": "origin_identity",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "redecide-terminal-job",
+    "overlay": {
+      "src/dispatcher.mjs": "controls/redecide-terminal-job.mjs"
+    },
+    "check": "terminal_history",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "deny-all",
+    "overlay": {
+      "src/grants.mjs": "controls/deny-all.mjs"
+    },
+    "check": "positive_work",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "ignore-action-attenuation",
+    "overlay": {
+      "src/grants.mjs": "controls/ignore-action-attenuation.mjs"
+    },
+    "check": "policy_at_effect",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "reactivate-revoked-path",
+    "overlay": {
+      "entry.mjs": "controls/reactivate-revoked-path.mjs"
+    },
+    "check": "policy_at_effect",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "wrong-effect-payload",
+    "overlay": {
+      "entry.mjs": "controls/wrong-effect-payload.mjs"
+    },
+    "check": "effect_payload",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "abandon-stale-admission",
+    "overlay": {
+      "entry.mjs": "controls/abandon-stale-admission.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "forged-completion",
+    "overlay": {
+      "entry.mjs": "controls/forged-completion.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "isolation",
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression",
+    "isolation": true
+  },
+  {
+    "id": "misattribute-delivery",
+    "overlay": {
+      "entry.mjs": "controls/misattribute-delivery.mjs"
+    },
+    "check": "completion",
+    "clean": "case-024",
+    "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "crash-unsafe-memoization",
+    "overlay": {
+      "entry.mjs": "controls/crash-unsafe-memoization.mjs"
+    },
+    "check": "terminal_history",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  }
+]

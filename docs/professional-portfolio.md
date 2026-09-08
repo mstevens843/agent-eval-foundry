@@ -1,6 +1,6 @@
 # Professional package portfolio
 
-This is the Prompt 4 construction layer. It adds four professional descendants to
+This page describes the original Prompt 4 layer and shared production path. See the [current 25-package status](project-status.md) for all maintained packages and screening results. The original layer added four professional descendants to
 the existing native CAA package. Twelve protected generic families remain available
 for calibration; they are not twelve additional professional contenders. The 22
 research shapes, browser prototype, kernels, packages and qualified releases are
@@ -37,7 +37,7 @@ pnpm build
 pnpm package:local portfolio runtime /absolute/new/runtime-directory
 ```
 
-For each of the four new package IDs:
+For any of the twenty-four Node portfolio IDs (CAA uses the native path below):
 
 ```sh
 pnpm package:local portfolio build browser-replay-repair /absolute/new/build /absolute/runtime-directory

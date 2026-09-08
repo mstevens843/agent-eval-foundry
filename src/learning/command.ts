@@ -4,7 +4,7 @@ import { publishEvidence, reserveDirectory, writeEvidence } from "../execution/a
 import { executionPackage } from "../execution/package-route.js";
 import { readNativeReceipt } from "../packages/native-caa.js";
 import type { PackagePolicyInput } from "../packages/policy.js";
-import { verifyPortfolioReceipt } from "../packages/portfolio.js";
+import { PORTFOLIO_PACKAGES, verifyPortfolioReceipt } from "../packages/portfolio.js";
 import { outboxFinding, outboxViews, portfolioDirection, portfolioTransfers } from "./cases.js";
 import {
   type FindingInput,
@@ -245,13 +245,10 @@ export async function learningCommand(root: string, args: readonly string[]): Pr
   if (cmd === "directions" && args.length === 1)
     return {
       note: "Construction hypotheses, not agent evidence. Supply exact package versions and current assurance receipts to learning select.",
-      packages: [
-        "caa-revalidation-repair",
-        "browser-replay-repair",
-        "persistent-knowledge-repair",
-        "delegated-budget-repair",
-        "compatible-rollout-repair",
-      ].map((id) => ({ id, ...portfolioDirection(id) })),
+      packages: ["caa-revalidation-repair", ...Object.keys(PORTFOLIO_PACKAGES)].map((id) => ({
+        id,
+        ...portfolioDirection(id),
+      })),
     };
   if (cmd === "outbox-sources" && args.length === 1)
     return outboxViews(root).map((v) => ({

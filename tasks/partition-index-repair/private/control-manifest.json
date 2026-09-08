@@ -1,0 +1,89 @@
+[
+  {
+    "id": "checkpoint-max",
+    "clean": "case-032",
+    "overlay": {
+      "src/progress.mjs": "controls/checkpoint-max.mjs"
+    },
+    "check": "checkpoint_prefix",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "overwrite-newer",
+    "clean": "case-032",
+    "overlay": {
+      "src/index.mjs": "controls/overwrite-newer.mjs"
+    },
+    "check": "version_order",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "stale-owner",
+    "clean": "case-032",
+    "overlay": {
+      "src/ownership.mjs": "controls/stale-owner.mjs"
+    },
+    "check": "ownership",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "cross-partition-cache",
+    "clean": "case-032",
+    "overlay": {
+      "src/index.mjs": "controls/cross-partition-cache.mjs"
+    },
+    "check": "index_payload",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "complete-before-effect",
+    "overlay": {
+      "src/consumer.mjs": "controls/complete-before-effect.mjs"
+    },
+    "check": "checkpoint_prefix",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "foreign-partition",
+    "clean": "case-032",
+    "overlay": {
+      "src/ownership.mjs": "controls/foreign-partition.mjs"
+    },
+    "check": "preservation",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "forged-completion",
+    "overlay": {
+      "entry.mjs": "controls/forged-completion.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "isolation",
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
+    "check": "completion",
+    "isolation": true,
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "reset-prefix-on-reassignment",
+    "overlay": {
+      "src/consumer.mjs": "controls/reset-prefix-on-reassignment.mjs"
+    },
+    "check": "completion",
+    "clean": "case-032",
+    "selectionRole": "post-selection-validation"
+  }
+]

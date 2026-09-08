@@ -16,58 +16,79 @@
 // missing from a clone.
 
 import { execFileSync } from "node:child_process";
-import { readdirSync, statSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 import { describe, expect, it } from "vitest";
+// @ts-expect-error - dependency-free .mjs source inventory shared with the scan gate
+import { candidateFiles } from "../scripts/secret-scan.mjs";
 
 const ROOT = join(__dirname, "..");
-const SKIP = new Set(["node_modules", ".git", "dist", ".turbo", "coverage"]);
+const SKIP = new Set(["node_modules", ".git", ".local", "dist", ".turbo", "coverage", "candidate-rendered"]);
 
 /** Everything a fresh clone would have: tracked files, plus untracked files git would accept. */
-function clonedFiles(): ReadonlySet<string> {
-  const out = execFileSync("git", ["ls-files", "-co", "--exclude-standard"], {
-    cwd: ROOT,
-    encoding: "utf8",
-    maxBuffer: 64 * 1024 * 1024,
-  });
-  return new Set(out.split("\n").filter(Boolean));
+function clonedFiles(root = ROOT): ReadonlySet<string> {
+  // A non-Git candidate snapshot carries its own files, not its ignored parent's tree.
+  return new Set(candidateFiles(root));
 }
 
 /** Directories that exist on disk and hold no file a clone would carry. */
-function invisibleDirectories(): string[] {
-  const cloned = clonedFiles();
+function invisibleDirectories(root = ROOT): string[] {
+  const cloned = clonedFiles(root);
   // Ignored private planning and build directories are not deliverables. Required public empty
   // directories still need tracked .gitkeep files and remain covered by this check.
-  const ignored = new Set(
-    execFileSync("git", ["ls-files", "--others", "--ignored", "--exclude-standard", "--directory", "-z"], {
-      cwd: ROOT,
-      encoding: "utf8",
-      maxBuffer: 4 * 1024 * 1024,
-    })
-      .split("\0")
-      .filter((p) => p.endsWith("/")),
-  );
+  const ignored = existsSync(join(root, ".git"))
+    ? new Set(
+        execFileSync(
+          "git",
+          ["ls-files", "--others", "--ignored", "--exclude-standard", "--directory", "-z"],
+          {
+            cwd: root,
+            encoding: "utf8",
+            maxBuffer: 4 * 1024 * 1024,
+          },
+        )
+          .split("\0")
+          .filter((p) => p.endsWith("/")),
+      )
+    : new Set(["findings/generated/"]);
   const found: string[] = [];
   const walk = (dir: string): void => {
     const entries = readdirSync(dir, { withFileTypes: true }).filter(
-      (e) => !SKIP.has(e.name) && !ignored.has(`${relative(ROOT, join(dir, e.name))}/`),
+      (e) => !SKIP.has(e.name) && !ignored.has(`${relative(root, join(dir, e.name))}/`),
     );
     const files = entries.filter((e) => e.isFile());
     const subdirs = entries.filter((e) => e.isDirectory());
     for (const sub of subdirs) walk(join(dir, sub.name));
-    if (dir === ROOT) return;
-    const rel = relative(ROOT, dir);
+    if (dir === root) return;
+    const rel = relative(root, dir);
     if (rel.startsWith(".")) return;
     const carried = files.some((f) => cloned.has(join(rel, f.name)));
     // A directory with subdirectories still reaches a clone through them; only a leaf with no
     // carried file vanishes.
     if (!carried && subdirs.length === 0) found.push(rel);
   };
-  walk(ROOT);
+  walk(root);
   return found.sort();
 }
 
 describe("a fresh clone gets everything the gates read", () => {
+  it("still rejects uncarried empty directories in an independently writable source snapshot", () => {
+    const root = mkdtempSync(join(tmpdir(), "snapshot-clone-fidelity-"));
+    try {
+      writeFileSync(
+        join(root, "candidate-source.json"),
+        JSON.stringify({ kind: "candidate-source-snapshot", files: [{ path: "public/source.txt" }] }),
+      );
+      mkdirSync(join(root, "public/empty"), { recursive: true });
+      writeFileSync(join(root, "public/source.txt"), "source");
+      expect(invisibleDirectories(root)).toEqual(["public/empty"]);
+      writeFileSync(join(root, "public/empty/.gitkeep"), "Required empty directory\n");
+      expect(invisibleDirectories(root)).toEqual([]);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
   it("no directory on disk is missing from a clone", () => {
     // If this fails, the named directory exists only because a command was run here. Add a
     // `.gitkeep` explaining why the directory matters — do NOT weaken whatever check reads it.

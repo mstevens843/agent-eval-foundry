@@ -1,0 +1,108 @@
+[
+  {
+    "id": "global-identity",
+    "overlay": {
+      "src/identity.mjs": "controls/global-identity.mjs"
+    },
+    "check": "window_values",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "fastest-partition",
+    "overlay": {
+      "src/frontier.mjs": "controls/fastest-partition.mjs"
+    },
+    "check": "publication_boundary",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "flush-all-idle",
+    "overlay": {
+      "src/frontier.mjs": "controls/flush-all-idle.mjs"
+    },
+    "check": "late_output",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "regress-on-resume",
+    "overlay": {
+      "src/frontier.mjs": "controls/regress-on-resume.mjs"
+    },
+    "check": "late_output",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "ignore-idle",
+    "overlay": {
+      "entry.mjs": "controls/ignore-idle.mjs"
+    },
+    "check": "publication_boundary",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "drop-zero-group",
+    "overlay": {
+      "entry.mjs": "controls/drop-zero-group.mjs"
+    },
+    "check": "window_values",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "drop-late",
+    "overlay": {
+      "entry.mjs": "controls/drop-late.mjs"
+    },
+    "check": "late_output",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "forged-completion",
+    "overlay": {
+      "entry.mjs": "controls/forged-completion.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "isolation",
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
+    "check": "completion",
+    "isolation": true,
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "duplicate-late-delivery",
+    "overlay": {
+      "entry.mjs": "controls/duplicate-late-delivery.mjs"
+    },
+    "check": "late_output",
+    "clean": "case-024",
+    "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "late-before-dedup",
+    "overlay": {
+      "entry.mjs": "controls/late-before-dedup.mjs"
+    },
+    "check": "late_output",
+    "clean": "case-024",
+    "selectionRole": "post-selection-validation"
+  }
+]

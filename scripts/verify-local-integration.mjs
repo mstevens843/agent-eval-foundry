@@ -9,14 +9,16 @@ const exec = promisify(execFile);
 const requested = process.argv[2];
 if (!requested) throw Error("usage: verify-local-integration.mjs FRESH_OUTPUT");
 const output = resolve(requested);
-// Measured five-package verification materializes approximately ten GiB of archives.
-// Budget full copies plus four GiB reserve and two GiB build overhead, even with CoW.
+const api = await import("../dist/index.js");
+// Two GiB/package for build and recipient archives plus six GiB reserve/build overhead.
+const requiredBytes = (2 * (Object.keys(api.PORTFOLIO_PACKAGES).length + 1) + 6) * 1024 ** 3;
 const space = statfsSync(process.cwd());
 const availableBytes = space.bavail * space.bsize;
-if (availableBytes < 16 * 1024 ** 3)
-  throw Error(`INTEGRATION_STORAGE_INCOMPLETE: need 16 GiB free, found ${availableBytes} bytes`);
+if (availableBytes < requiredBytes)
+  throw Error(
+    `INTEGRATION_STORAGE_INCOMPLETE: need ${requiredBytes} bytes free, found ${availableBytes} bytes`,
+  );
 mkdirSync(output, { recursive: false });
-const api = await import("../dist/index.js");
 const stages = [];
 const packages = [];
 const storage = { initialAvailableBytes: availableBytes, minimumAvailableBytes: availableBytes };

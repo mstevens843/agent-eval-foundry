@@ -44,10 +44,30 @@ import { assertStorageHeadroom, copyRuntimeArchive } from "./storage.js";
 
 /** Professional descendants have independent versions; these are not additional generic families. */
 export const PORTFOLIO_PACKAGES = {
+  "incremental-build-repair": "incremental-build-provenance",
+  "event-window-repair": "event-time-window-finalization",
+  "staged-allocation-repair": "staged-resource-allocation",
+  "diagnostic-transport-repair": "diagnostic-stream-normalization",
+  "issued-report-repair": "issued-report-amendment",
+  "document-export-repair": "structure-preserving-document-export",
+  "analytical-reconciliation-repair": "cross-system-analytical-reconciliation",
+  "recurring-calendar-repair": "recurring-calendar-reconciliation",
+  "variant-cache-repair": "multi-tier-variant-cache",
+  "workflow-authority-repair": "revocation-aware-workflow-broker",
+  "snapshot-recovery-repair": "restore-proven-backup-orchestrator",
+  "verified-installation-repair": "layered-artifact-installation",
+  "capacity-maintenance-repair": "cell-capacity-removal-planner",
+  "route-policy-repair": "bgp-route-scope-patch-validator",
+  "rule-index-repair": "waf-semantic-complexity-repair",
   "browser-replay-repair": "ui-replay-browser-backed",
   "persistent-knowledge-repair": "prompt-injection-memory-poisoning",
   "delegated-budget-repair": "delegated-wallet-scope-reconciliation",
   "compatible-rollout-repair": "deployment-model-alias-rollout-drift",
+  "partition-index-repair": "worker-rebalance-partition-callback-dedup",
+  "causal-replica-repair": "replica-lag-stale-read-reconciliation",
+  "partial-release-repair": "deployment-rollback-partial-effects",
+  "ticket-consolidation-repair": "stale-crm-ticket-automation",
+  "temporal-capacity-repair": "audit-truth-financial-workflow",
 } as const;
 export type PortfolioId = keyof typeof PORTFOLIO_PACKAGES;
 type InputFile = PackageInput["files"][Component][number];
@@ -196,9 +216,14 @@ export async function buildPortfolioPackage(
   >;
   const part = (path: string) => (path.startsWith("runtime/") ? "collector" : classify(path));
   for (const f of tree) files[part(f.path)].push(f);
+  const checkerRequiredMarker = join(directory, "private/checker-required.json");
+  const checkerRequired = existsSync(checkerRequiredMarker)
+    ? json<{ required: boolean }>(checkerRequiredMarker).required === true
+    : false;
   files.scenarios.push(
     { path: "scenario-ids.json", bytes: Buffer.from(canonicalJson(scenarios.map((s) => s.id))) },
     { path: "check-ids.json", bytes: Buffer.from(canonicalJson(generator.checkIds)) },
+    { path: "checker-required.json", bytes: Buffer.from(canonicalJson({ required: checkerRequired })) },
   );
   files.dependencies.push({ path: "runtime.json", bytes: Buffer.from(canonicalJson(runtime)) });
   files.policy.push(
@@ -434,6 +459,393 @@ const variantDigest = (snapshot: PackageSnapshot, name: string, control?: Contro
         .map(([path, bytes]) => ({ path, hash: sha256(bytes) })),
     ),
   );
+
+/** Materializes any named candidate — "starter" (public/src only), "reference", "alternative", or
+ * a specific `private/controls/*` mutant by id — into a fresh directory shaped like a submission.
+ * For checker-required grading: the same known-good/known-bad candidates already used to validate
+ * this package's own verifier, made available to run through the ordinary submission execution
+ * path (`runPortfolioSubmission`) so a submitted checker can be graded against real, observed
+ * behavior rather than against a description of what the behavior should be. */
+export function materializeCandidate(directory: string, path: string, name: string, controlId?: string) {
+  const snapshot = snapshotAt(directory);
+  let control: Control | undefined;
+  if (controlId) {
+    const controls = get<Control[]>(snapshot, "controls", "private/control-manifest.json");
+    control = controls.find((c) => c.id === controlId);
+    if (!control) throw Error(`PORTFOLIO_CONTROL_UNKNOWN:${controlId}`);
+  }
+  variant(snapshot, path, name, control);
+}
+
+export function listPortfolioControls(directory: string): readonly { id: string; check: string }[] {
+  const snapshot = snapshotAt(directory);
+  return get<Control[]>(snapshot, "controls", "private/control-manifest.json").map((c) => ({
+    id: c.id,
+    check: c.check,
+  }));
+}
+
+export interface CheckerGradeDetail {
+  readonly candidateId: string;
+  readonly expectedFailingCheck: string | null;
+  readonly outcome:
+    | "correct-accept"
+    | "correct-reject-named"
+    | "correct-reject-unnamed"
+    | "false-positive"
+    | "missed";
+}
+export interface CheckerGradeResult {
+  readonly present: boolean;
+  readonly deterministic: boolean;
+  readonly total: number;
+  readonly correct: number;
+  readonly falsePositives: number;
+  readonly missed: number;
+  readonly namedRightCheck: number;
+  readonly details: readonly CheckerGradeDetail[];
+  /** Pass requires: checker present, deterministic, zero false positives, zero missed candidates,
+   * and the violated obligation correctly named on every correct rejection. A checker that catches
+   * a defect but cannot say which obligation it violates has not demonstrated it understood the
+   * defect — it may just be pattern-matching "this candidate looks different." */
+  readonly pass: boolean;
+}
+
+/** Deterministic string shuffle so token order carries no positional signal a checker could
+ * exploit (e.g. "candidate-A is always the reference"), yet is reproducible for regrading. */
+function seededShuffle<T>(items: readonly T[], seed: string): T[] {
+  let s = [...seed].reduce((acc, ch) => (acc * 31 + ch.charCodeAt(0)) >>> 0, 7);
+  const rand = () => {
+    s = (s * 1103515245 + 12345) >>> 0;
+    return s / 0xffffffff;
+  };
+  const out = [...items];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    const temp = out[i] as T;
+    out[i] = out[j] as T;
+    out[j] = temp;
+  }
+  return out;
+}
+
+const CHECKER_BOOTSTRAP = `
+import { readFileSync } from "node:fs";
+const { cases } = JSON.parse(readFileSync("/cases/cases.json", "utf8"));
+const { run } = await import("/checker/checker.mjs");
+const first = await run({ cases });
+const second = await run({ cases });
+process.stdout.write(JSON.stringify({ first, second }));
+`;
+
+/** Removes any key literally named "expected", "truth" or "groundTruth" from the TOP LEVEL of a
+ * cell only — deliberately not recursive. These are the grader's own independently-computed
+ * answer, and every confirmed leak of this shape across every package has been exactly that: a
+ * direct top-level property of what a package's own domain.mjs `runScenario()` returns (nested
+ * sub-fields of a stripped `expected` object are removed for free once the whole key is gone).
+ * Recursing into every surviving field's own substructure was too broad: candidate- or
+ * scenario-controlled application data is free-form (e.g. an untyped `payload: unknown`) and can
+ * legitimately use one of these exact words for its own unrelated purpose — a real field
+ * silently deleted because it happens to share a name with the grader's verdict is itself an
+ * unfairness bug, and was reproduced concretely by external review. A genuine PACKAGE-SPECIFIC
+ * leak that isn't literally one of these three top-level words (e.g. a precomputed verdict
+ * boolean nested inside `actual`) is not this function's job to catch — it must be fixed at the
+ * source, in that package's own domain.mjs, exactly as done for several packages this session
+ * (actual.publications[].validAtPublication, actual.deliveries[].allowed, and so on). */
+function stripGroundTruth<T extends Record<string, unknown>>(value: T): T {
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(value)) {
+    if (k === "expected" || k === "truth" || k === "groundTruth") continue;
+    out[k] = v;
+  }
+  return out as T;
+}
+
+const stripCells = (cells: unknown) =>
+  (cells as unknown as Record<string, unknown>[]).map(
+    ({ checks: _checks, status: _status, failures: _failures, ...rest }) => stripGroundTruth(rest),
+  );
+
+/** Runs one candidate for real against exactly `scenarioIds` and returns its stripped,
+ * verdict-free trace, keyed by scenarioId so callers can compare across different scenario sets
+ * without caring about result order. */
+async function candidateTrace(
+  directory: string,
+  output: string,
+  candidateId: string,
+  base: "reference" | "alternative" | "starter",
+  controlId: string | undefined,
+  scenarioIds: readonly string[],
+) {
+  const candidateDir = join(output, `candidate-${candidateId}-${scenarioIds.length}`);
+  materializeCandidate(directory, candidateDir, base, controlId);
+  const runOutput = join(output, `run-${candidateId}-${scenarioIds.length}`);
+  const result = await runPortfolioSubmission(directory, candidateDir, runOutput, [...scenarioIds]);
+  return stripCells(result.cells);
+}
+
+/** Runs one control (reference base + its overlay) against exactly `scenarioIds` and returns
+ * whether it AUTHORITATIVELY fails its own declared check — the same semantic-fail-plus-
+ * failures-includes-check test `controlPass()`/`validatePortfolioPackage` already use to certify
+ * a control as valid in the first place. This is deliberately NOT "does the raw observable trace
+ * differ from the reference somehow" — two real packages demonstrated a control's raw trace can
+ * differ from the reference's for reasons entirely UNRELATED to its planted defect, which let a
+ * raw-trace version of this check report "distinguishable" on a scenario window where the
+ * control's actual bug was never exercised at all. Checking the authoritative status/failures
+ * signal directly is the correct, non-spurious test for "is this scenario window sufficient." */
+async function controlAuthoritativelyFails(
+  directory: string,
+  output: string,
+  control: Control,
+  scenarioIds: readonly string[],
+): Promise<boolean> {
+  const candidateDir = join(output, `authoritative-${control.id}-${scenarioIds.length}`);
+  materializeCandidate(directory, candidateDir, "reference", control.id);
+  const runOutput = join(output, `authoritative-run-${control.id}-${scenarioIds.length}`);
+  const result = await runPortfolioSubmission(directory, candidateDir, runOutput, [...scenarioIds]);
+  return result.cells.some((c) => c.status === "semantic-fail" && (c.failures ?? []).includes(control.check));
+}
+
+/** Prefix sampling over a bit-flag-indexed scenario space silently biases toward the all-zero
+ * corner and can select a subset where a real defect is genuinely undetectable — not merely
+ * unlikely to be found, but never actually triggered by any scenario in the window. Rather than
+ * trust a fixed subset size, this shuffles the full declared space once (seeded on the package
+ * digest, reproducible) and grows the graded window until every control AUTHORITATIVELY fails its
+ * own declared check somewhere in the window (see `controlAuthoritativelyFails`), or the full
+ * space is exhausted. A control that remains undetected across the ENTIRE declared space is a
+ * real scenario-coverage defect, surfaced as an error rather than silently graded as if fine. */
+async function resolveDistinguishingScenarios(
+  directory: string,
+  output: string,
+  controls: readonly Control[],
+  allScenarios: readonly Scenario[],
+  digest: string,
+): Promise<{ scenarioIds: readonly string[]; undetectable: readonly string[] }> {
+  const shuffledIds = seededShuffle(allScenarios, digest).map((s) => s.id);
+  let size = Math.min(2, shuffledIds.length);
+  let stillTied = controls;
+  let scenarioIds: readonly string[] = shuffledIds.slice(0, size);
+  for (;;) {
+    const nextTied: Control[] = [];
+    for (const control of stillTied) {
+      const fails = await controlAuthoritativelyFails(directory, output, control, scenarioIds);
+      if (!fails) nextTied.push(control);
+    }
+    stillTied = nextTied;
+    if (!stillTied.length || size >= shuffledIds.length) break;
+    size = Math.min(shuffledIds.length, size * 2);
+    scenarioIds = shuffledIds.slice(0, size);
+  }
+  return { scenarioIds, undetectable: stillTied.map((c) => c.id) };
+}
+
+export async function gradeChecker(
+  directory: string,
+  submission: string,
+  output: string,
+): Promise<CheckerGradeResult> {
+  fresh(output);
+  const checkerPath = join(submission, "checker.mjs");
+  if (!existsSync(checkerPath))
+    return {
+      present: false,
+      deterministic: false,
+      total: 0,
+      correct: 0,
+      falsePositives: 0,
+      missed: 0,
+      namedRightCheck: 0,
+      details: [],
+      pass: false,
+    };
+
+  const snapshot = snapshotAt(directory);
+  const controls = get<Control[]>(snapshot, "controls", "private/control-manifest.json");
+  const allScenarios = get<Scenario[]>(snapshot, "scenarios", "private/scenarios.json");
+  const { scenarioIds, undetectable } = await resolveDistinguishingScenarios(
+    directory,
+    join(output, "resolve"),
+    controls,
+    allScenarios,
+    snapshot.record.digest,
+  );
+  if (undetectable.length)
+    throw Error(
+      `PORTFOLIO_CONTROL_UNDETECTABLE: ${undetectable.join(", ")} produce no observable difference from the reference anywhere in the declared scenario space — this is a scenario-coverage defect in the package, not a sampling issue, and must be fixed before checker grading is meaningful.`,
+    );
+
+  // "reference" and "alternative" are BOTH genuinely correct, differently-shaped implementations.
+  // Testing only one risks a checker that has learned one specific correct shape rather than the
+  // actual rule — exactly what "zero false positives" should mean is acceptance of *any* correct
+  // behavior, not just the one the checker's author happened to compare against.
+  // materializeCandidate/variantFiles does NOT throw when a package has no private/alternative/*
+  // files — an absent overlay just silently falls back to starter-shaped code, which would then
+  // get graded as if it were a genuinely correct "alternative" and could spuriously false-positive
+  // a perfectly good checker. So "alternative" is only included when the snapshot actually has
+  // files under that prefix, checked directly rather than inferred from a caught exception.
+  const hasAlternative = snapshot.record.components.reference.files.some((f) =>
+    f.path.startsWith("private/alternative/"),
+  );
+  const candidates: {
+    id: string;
+    base: "reference" | "alternative" | "starter";
+    expectedFailingCheck: string | null;
+  }[] = [
+    { id: "reference", base: "reference", expectedFailingCheck: null },
+    ...(hasAlternative
+      ? [{ id: "alternative", base: "alternative" as const, expectedFailingCheck: null }]
+      : []),
+    // Controls overlay onto REFERENCE, not starter — matching validatePortfolioPackage's own,
+    // pre-existing convention (its `names` array passes each control's own id straight to
+    // `variant()`, which merges in private/reference/* for any name other than "starter" before
+    // applying the control overlay). Every control's `check` field was authored and calibrated
+    // against that reference-based shape; overlaying onto starter instead would let starter's own,
+    // unrelated pre-existing bugs mask or relabel what a control's own defect actually violates.
+    ...controls.map((c) => ({ id: c.id, base: "reference" as const, expectedFailingCheck: c.check })),
+  ];
+
+  const cases: { token: string; cells: unknown[] }[] = [];
+  const groundTruth = new Map<string, { candidateId: string; expectedFailingCheck: string | null }>();
+  const order = seededShuffle(candidates, snapshot.record.digest);
+  let index = 0;
+  for (const candidate of order) {
+    const cells = await candidateTrace(
+      directory,
+      output,
+      candidate.id,
+      candidate.base,
+      candidate.id === "reference" || candidate.id === "alternative" ? undefined : candidate.id,
+      scenarioIds,
+    );
+    const token = `candidate-${String.fromCharCode(65 + index)}`;
+    index += 1;
+    cases.push({ token, cells });
+    groundTruth.set(token, {
+      candidateId: candidate.id,
+      expectedFailingCheck: candidate.expectedFailingCheck,
+    });
+  }
+
+  const casesPath = join(output, "cases");
+  mkdirSync(casesPath, { recursive: true });
+  writeFileSync(join(casesPath, "cases.json"), JSON.stringify({ cases }));
+  const checkerStagePath = join(output, "checker-stage");
+  mkdirSync(checkerStagePath, { recursive: true });
+  writeFileSync(join(checkerStagePath, "checker.mjs"), readFileSync(checkerPath));
+
+  const runtime = get<Runtime>(snapshot, "dependencies", "runtime.json");
+  const name = `foundry-checker-${randomUUID()}`;
+  let stdout: string;
+  try {
+    const result = await docker(
+      [
+        "run",
+        "--name",
+        name,
+        "--network",
+        "none",
+        "--read-only",
+        "--tmpfs",
+        "/tmp:rw,size=256m",
+        "--cpus",
+        "1",
+        "--memory",
+        "1g",
+        "--pids-limit",
+        "128",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--mount",
+        `type=bind,src=${resolve(casesPath)},dst=/cases,readonly`,
+        "--mount",
+        `type=bind,src=${resolve(checkerStagePath)},dst=/checker,readonly`,
+        "-i",
+        runtime.image,
+        "node",
+        "--input-type=module",
+        "-e",
+        CHECKER_BOOTSTRAP,
+      ],
+      { timeoutMs: 60000, limitBytes: 8 * 1024 * 1024, log: join(output, "checker-process.log") },
+    );
+    stdout = result.stdout;
+  } catch (err) {
+    // A failed checker process is invalid execution, not a measured semantic rejection.
+    throw new Error("CHECKER_EXECUTION_INVALID", { cause: err });
+  }
+
+  let parsed: { first: { verdicts: Record<string, { ok: boolean; reasons?: string[] }> }; second: unknown };
+  try {
+    parsed = JSON.parse(stdout);
+    if (
+      !parsed ||
+      typeof parsed.first !== "object" ||
+      !parsed.first ||
+      typeof parsed.first.verdicts !== "object" ||
+      !parsed.first.verdicts
+    )
+      throw new Error("CHECKER_OUTPUT_SHAPE");
+  } catch {
+    return {
+      present: true,
+      deterministic: false,
+      total: cases.length,
+      correct: 0,
+      falsePositives: 0,
+      missed: cases.length,
+      namedRightCheck: 0,
+      details: [],
+      pass: false,
+    };
+  }
+  const deterministic = canonicalJson(parsed.first) === canonicalJson(parsed.second);
+
+  let correct = 0;
+  let falsePositives = 0;
+  let missed = 0;
+  let namedRightCheck = 0;
+  const details: CheckerGradeDetail[] = [];
+  for (const [token, truth] of groundTruth) {
+    const verdict = parsed.first.verdicts?.[token];
+    const isOk = verdict?.ok === true;
+    const shouldBeOk = truth.expectedFailingCheck === null;
+    let outcome: CheckerGradeDetail["outcome"];
+    if (shouldBeOk && isOk) {
+      correct++;
+      outcome = "correct-accept";
+    } else if (shouldBeOk && !isOk) {
+      falsePositives++;
+      outcome = "false-positive";
+    } else if (!shouldBeOk && !isOk) {
+      correct++;
+      const named = (verdict?.reasons ?? []).includes(truth.expectedFailingCheck as string);
+      if (named) namedRightCheck++;
+      outcome = named ? "correct-reject-named" : "correct-reject-unnamed";
+    } else {
+      missed++;
+      outcome = "missed";
+    }
+    details.push({
+      candidateId: truth.candidateId,
+      expectedFailingCheck: truth.expectedFailingCheck,
+      outcome,
+    });
+  }
+
+  return {
+    present: true,
+    deterministic,
+    total: cases.length,
+    correct,
+    falsePositives,
+    missed,
+    namedRightCheck,
+    details,
+    pass: deterministic && falsePositives === 0 && missed === 0 && namedRightCheck === controls.length,
+  };
+}
 
 export function validatePortfolioExecution(
   value: unknown,

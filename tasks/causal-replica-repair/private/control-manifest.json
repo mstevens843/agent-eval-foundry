@@ -1,0 +1,79 @@
+[
+  {
+    "id": "union-resurrection",
+    "clean": "case-032",
+    "overlay": {
+      "src/merge.mjs": "controls/union-resurrection.mjs"
+    },
+    "check": "causal_values",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "one-sibling",
+    "clean": "case-032",
+    "overlay": {
+      "src/merge.mjs": "controls/one-sibling.mjs"
+    },
+    "check": "causal_values",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "forget-tombstones",
+    "clean": "case-032",
+    "overlay": {
+      "src/identity.mjs": "controls/forget-tombstones.mjs"
+    },
+    "check": "causal_context",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "single-replica",
+    "overlay": {
+      "entry.mjs": "controls/single-replica.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "overbroad",
+    "overlay": {
+      "entry.mjs": "controls/overbroad.mjs"
+    },
+    "check": "preservation",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "forged-completion",
+    "overlay": {
+      "entry.mjs": "controls/forged-completion.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "isolation",
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
+    "check": "completion",
+    "isolation": true,
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "payload-dedup",
+    "overlay": {
+      "src/merge.mjs": "controls/payload-dedup.mjs"
+    },
+    "check": "causal_values",
+    "clean": "case-032",
+    "selectionRole": "post-selection-validation"
+  }
+]

@@ -32,6 +32,8 @@ export interface Authorization {
   maxCpuUnits: number;
   maxOutputBytes: number;
   retryInfrastructure: boolean;
+  /** Omitted means metered. Subscription-only reserves calls/resources, not fictional dollars. */
+  billingMode?: "metered" | "subscription-only";
 }
 export interface SignedAuthorization {
   authority: string;
@@ -228,15 +230,11 @@ export class JobStore {
       a.expires <= a.notBefore ||
       !positive(a.notBefore) ||
       !positive(a.expires) ||
-      ![
-        a.maxAttempts,
-        a.maxConcurrent,
-        a.maxMicroUsd,
-        a.perAttemptMicroUsd,
-        a.maxMemoryMiB,
-        a.maxCpuUnits,
-        a.maxOutputBytes,
-      ].every(positive) ||
+      ![a.maxAttempts, a.maxConcurrent, a.maxMemoryMiB, a.maxCpuUnits, a.maxOutputBytes].every(positive) ||
+      !["metered", "subscription-only"].includes(a.billingMode ?? "metered") ||
+      (a.billingMode === "subscription-only"
+        ? a.realm !== "real-provider" || a.maxMicroUsd !== 0 || a.perAttemptMicroUsd !== 0
+        : !positive(a.maxMicroUsd) || !positive(a.perAttemptMicroUsd)) ||
       a.perAttemptMicroUsd > a.maxMicroUsd ||
       typeof a.retryInfrastructure !== "boolean"
     )

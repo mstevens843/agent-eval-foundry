@@ -165,12 +165,26 @@ export async function driveReservedJob(
         }
         writeEvidence(join(stage, "grade.json"), grade);
       }
-      const evaluation = (grade as { evaluation?: { complete?: boolean; status?: string } }).evaluation;
+      const graded = grade as {
+        evaluation?: { complete?: boolean; status?: string };
+        checkerRequired?: boolean;
+        checkerPassed?: boolean | null;
+      };
+      const evaluation = graded.evaluation;
+      // A checker-required package demands both a correct repair AND a submitted checker that
+      // genuinely discriminates the reference from its mutant bank. `evaluation.status` stays an
+      // honest, unmutated fact about the entry.mjs alone; the trial's recorded outcome — the field
+      // package-eligibility policy actually counts — must fail here too, or the checker
+      // requirement is invisible to every downstream consumer that reads `outcome` instead of the
+      // raw grade record.
+      const checkerSatisfied = !graded.checkerRequired || graded.checkerPassed === true;
       const outcome =
         capture.status === "completed" &&
         evaluation?.complete === true &&
         ["semantic-pass", "semantic-fail"].includes(evaluation.status ?? "")
-          ? evaluation.status
+          ? evaluation.status === "semantic-pass" && !checkerSatisfied
+            ? "semantic-fail"
+            : evaluation.status
           : "invalid-execution";
       job = store.transition(job.id, job.fence, "graded", { grade: "grade.json", outcome });
       failpoint("grading", crashAfter);
@@ -195,6 +209,12 @@ export async function driveReservedJob(
             reservedMicroUsd: job.reservedMicroUsd,
             settledMicroUsd: job.settledMicroUsd,
             kind: job.realm === "simulation" ? "simulated" : "provider",
+            billingMode:
+              (
+                store.authorizationEvidence(job.authorization) as {
+                  payload: { billingMode?: string };
+                }
+              ).payload.billingMode ?? "metered",
           },
         });
       job = store.transition(job.id, job.fence, "publishing");

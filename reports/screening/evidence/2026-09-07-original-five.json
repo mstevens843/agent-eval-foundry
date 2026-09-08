@@ -1,0 +1,521 @@
+{
+  "schemaVersion": 1,
+  "campaign": "2026-09-07-original-five",
+  "evidenceClass": "real-provider-screening",
+  "limitations": [
+    "Exploratory screening, not official standard/adversarial qualification.",
+    "Requested effort is not independent backend attestation.",
+    "One final attempt per package is not a replicated failure rate.",
+    "Raw transcripts, credentials, runtime archives and full submissions are not published here. Hashes identify retained artifacts but are not a substitute for independently inspecting them.",
+    "CLI price estimates are not actual subscription charges; cached input is included in input totals.",
+    "Results describe frozen historical packages, not automatically the current source tree."
+  ],
+  "packages": [
+    {
+      "id": "caa-revalidation-repair",
+      "runId": "caa-attempt-2-clean-instruction",
+      "target": "codex",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "reportedElapsedSeconds": 784,
+      "timingBasis": "campaign report, dispatch through grading; rounded seconds",
+      "outcome": "semantic-pass",
+      "reward": 1,
+      "packageDigest": "95fe0836850bd635dd8a11a3f187da625ebd6602be7458cc462d3fcbfa57bc3d",
+      "profileDigest": "fb53dd2bad63bdb113930e4af8d9311cc791100dce2d2fe0c33f7d2b115e5212",
+      "executionSourceDigest": "f4523d41160edc33620da54b45d0a8fe3595b02115dc66ddfc0b9b83ebeede1b",
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "usage": {
+        "cachedInputTokens": 920704,
+        "costUsd": null,
+        "inputTokens": 995638,
+        "outputTokens": 16019,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "service": {
+        "complete": true,
+        "duplicateIds": [],
+        "expectedCheckIds": [
+          "report_present",
+          "outcome",
+          "decisions_cover_identifiers",
+          "authorization_applied",
+          "authorization_source",
+          "store_recorded",
+          "audit_matches_report",
+          "rechecked_exactly_the_stale",
+          "rechecks_issued_together",
+          "no_unnamed_or_late_query"
+        ],
+        "expectedIds": [
+          "sel-01",
+          "sel-02",
+          "sel-03",
+          "sel-04",
+          "sel-05",
+          "sel-06",
+          "sel-07",
+          "sel-08",
+          "sel-09",
+          "sel-10",
+          "sel-11",
+          "sel-12",
+          "sel-13",
+          "sel-14",
+          "sel-15",
+          "sel-16",
+          "sel-17",
+          "sel-18",
+          "sel-19",
+          "sel-20",
+          "sel-21",
+          "sel-22",
+          "sel-23",
+          "sel-24"
+        ],
+        "missingIds": [],
+        "observedIds": [
+          "sel-01",
+          "sel-02",
+          "sel-03",
+          "sel-04",
+          "sel-05",
+          "sel-06",
+          "sel-07",
+          "sel-08",
+          "sel-09",
+          "sel-10",
+          "sel-11",
+          "sel-12",
+          "sel-13",
+          "sel-14",
+          "sel-15",
+          "sel-16",
+          "sel-17",
+          "sel-18",
+          "sel-19",
+          "sel-20",
+          "sel-21",
+          "sel-22",
+          "sel-23",
+          "sel-24"
+        ],
+        "problems": [],
+        "schemaVersion": 1,
+        "status": "semantic-pass",
+        "unexpectedIds": []
+      },
+      "completionSha256": "74111455d28864551d7624640460272bb88083920d3588c1f0ca865e3d787486",
+      "resultSha256": "ca0a8cc42130d04de34a2a3a771bf111b98393c313d0c8e950454609745ce547",
+      "gradeSha256": "57b86fc23f50e56dbb50a98c12cf05991a315caf4f425e59f54a68e337832fd9",
+      "verifiedFiles": 315,
+      "verifiedBytes": 12983364
+    },
+    {
+      "id": "persistent-knowledge-repair",
+      "runId": "persistent-knowledge-attempt-1",
+      "target": "codex",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "reportedElapsedSeconds": 370,
+      "timingBasis": "campaign report, dispatch through grading; rounded seconds",
+      "outcome": "semantic-pass",
+      "reward": 1,
+      "packageDigest": "7f8de0169979d7e2bb89b2508303def0ac0311635169eccd532f81c34424b3ee",
+      "profileDigest": "c39bef062d707686331175b72f9d7112904ca8e5a9733e538058c723ce69b489",
+      "executionSourceDigest": "a588b09033dcdc472bed73517bddcd3d4bf850537c8404c707cec1d4e01e176f",
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "usage": {
+        "cachedInputTokens": 160256,
+        "costUsd": null,
+        "inputTokens": 186929,
+        "outputTokens": 10436,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "service": {
+        "complete": true,
+        "duplicateIds": [],
+        "expectedCheckIds": [
+          "completion",
+          "authority",
+          "values",
+          "lineage",
+          "history",
+          "decisions",
+          "preservation"
+        ],
+        "expectedIds": [
+          "case-000",
+          "case-001",
+          "case-002",
+          "case-003",
+          "case-004",
+          "case-005",
+          "case-006",
+          "case-007",
+          "case-008",
+          "case-009",
+          "case-010",
+          "case-011"
+        ],
+        "missingIds": [],
+        "observedIds": [
+          "case-000",
+          "case-001",
+          "case-002",
+          "case-003",
+          "case-004",
+          "case-005",
+          "case-006",
+          "case-007",
+          "case-008",
+          "case-009",
+          "case-010",
+          "case-011"
+        ],
+        "problems": [],
+        "schemaVersion": 1,
+        "status": "semantic-pass",
+        "unexpectedIds": []
+      },
+      "completionSha256": "6fa15f6242577db61acb2e4ac81addd2d311f47e00c91a695c1ec076aa73770f",
+      "resultSha256": "955464cb79917a2d5430edb81dc8854f64641754ea9e070df81ff349bb113892",
+      "gradeSha256": "b46b255e5f700e024324a10b8deb8a4cec90b255702d7c540d55e47a424f180e",
+      "verifiedFiles": 97,
+      "verifiedBytes": 787841
+    },
+    {
+      "id": "browser-replay-repair",
+      "runId": "browser-replay-attempt-2",
+      "target": "claude",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "reportedElapsedSeconds": 1535,
+      "timingBasis": "campaign report, dispatch through grading; rounded seconds",
+      "outcome": "semantic-pass",
+      "reward": 1,
+      "packageDigest": "e432823cde1ea977af429116fc9ae21cd349d5976d7f3735a615fac0b39efa1b",
+      "profileDigest": "a5d5a05f14a1c48dcbc8b2b9d5f58c9b0b7f847b1df38c90af1ba481d5da7e7b",
+      "executionSourceDigest": "f4523d41160edc33620da54b45d0a8fe3595b02115dc66ddfc0b9b83ebeede1b",
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "usage": {
+        "cachedInputTokens": 5173628,
+        "costUsd": 7.151554999999998,
+        "inputTokens": 5323543,
+        "outputTokens": 122598,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "service": {
+        "complete": true,
+        "duplicateIds": [],
+        "expectedCheckIds": [
+          "completion",
+          "exact_effects",
+          "current_preconditions",
+          "confirmation",
+          "reports",
+          "preservation"
+        ],
+        "expectedIds": [
+          "case-000",
+          "case-001",
+          "case-002",
+          "case-003",
+          "case-004",
+          "case-005",
+          "case-006",
+          "case-007",
+          "case-008",
+          "case-009",
+          "case-010",
+          "case-011",
+          "case-012",
+          "case-013",
+          "case-014",
+          "case-015"
+        ],
+        "missingIds": [],
+        "observedIds": [
+          "case-000",
+          "case-001",
+          "case-002",
+          "case-003",
+          "case-004",
+          "case-005",
+          "case-006",
+          "case-007",
+          "case-008",
+          "case-009",
+          "case-010",
+          "case-011",
+          "case-012",
+          "case-013",
+          "case-014",
+          "case-015"
+        ],
+        "problems": [],
+        "schemaVersion": 1,
+        "status": "semantic-pass",
+        "unexpectedIds": []
+      },
+      "completionSha256": "2277e37969c98ba3a9f3bbc46060815e405350200c3bd3e26cc786fc01b2d04a",
+      "resultSha256": "dbdbaf903a394288ec65717b21db0b80db43f1470faec4b032c7cc465770393b",
+      "gradeSha256": "bab91eb750e250b78f8d7bd5a8343e045c5bde6aea0ca36dfd360e9065a6f3f6",
+      "verifiedFiles": 126,
+      "verifiedBytes": 4074748
+    },
+    {
+      "id": "delegated-budget-repair",
+      "runId": "delegated-budget-attempt-3",
+      "target": "claude",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "reportedElapsedSeconds": 719,
+      "timingBasis": "campaign report, dispatch through grading; rounded seconds",
+      "outcome": "semantic-pass",
+      "reward": 1,
+      "packageDigest": "12bac23b75df39162336ebaf8f6d43615d8ddf57d3a8e6aaaf1d1e3ae7fbee5a",
+      "profileDigest": "a5d5a05f14a1c48dcbc8b2b9d5f58c9b0b7f847b1df38c90af1ba481d5da7e7b",
+      "executionSourceDigest": "f4523d41160edc33620da54b45d0a8fe3595b02115dc66ddfc0b9b83ebeede1b",
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "usage": {
+        "cachedInputTokens": 1264161,
+        "costUsd": 2.7361235,
+        "inputTokens": 1331790,
+        "outputTokens": 57075,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "service": {
+        "complete": true,
+        "duplicateIds": [],
+        "expectedCheckIds": [
+          "completion",
+          "ownership",
+          "aggregate_budget",
+          "payload",
+          "receipt_history",
+          "decisions",
+          "preservation"
+        ],
+        "expectedIds": [
+          "case-000",
+          "case-001",
+          "case-002",
+          "case-003",
+          "case-004",
+          "case-005",
+          "case-006",
+          "case-007",
+          "case-008",
+          "case-009",
+          "case-010",
+          "case-011"
+        ],
+        "missingIds": [],
+        "observedIds": [
+          "case-000",
+          "case-001",
+          "case-002",
+          "case-003",
+          "case-004",
+          "case-005",
+          "case-006",
+          "case-007",
+          "case-008",
+          "case-009",
+          "case-010",
+          "case-011"
+        ],
+        "problems": [],
+        "schemaVersion": 1,
+        "status": "semantic-pass",
+        "unexpectedIds": []
+      },
+      "completionSha256": "118d8ca62603299f6a4d238067086d63fee8e985d5684461756d8524e4881a4d",
+      "resultSha256": "d985435962083738d2162fb8fbec18bc6df79bd2d198e2d26bb75612ce7871b8",
+      "gradeSha256": "9a57cd167781fd07f806adec8f255c4818bc4195c8dc9f1ef7013b82f6e5c6c2",
+      "verifiedFiles": 107,
+      "verifiedBytes": 1721663
+    },
+    {
+      "id": "compatible-rollout-repair",
+      "runId": "compatible-rollout-attempt-2",
+      "target": "claude",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "reportedElapsedSeconds": 441,
+      "timingBasis": "campaign report, dispatch through grading; rounded seconds",
+      "outcome": "semantic-pass",
+      "reward": 1,
+      "packageDigest": "648342f682e9e288688c6d20fba1e23ccafc095fdcd825f2bcc5430ebfa02ce3",
+      "profileDigest": "a5d5a05f14a1c48dcbc8b2b9d5f58c9b0b7f847b1df38c90af1ba481d5da7e7b",
+      "executionSourceDigest": "0e1bb5b29053bc7d1033c191ec1f419c773e37b4f64cf1b35836a9355ea48b99",
+      "observedProfile": {
+        "effort": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "usage": {
+        "cachedInputTokens": 693887,
+        "costUsd": 1.7587595,
+        "inputTokens": 742674,
+        "outputTokens": 36920,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "service": {
+        "complete": true,
+        "duplicateIds": [],
+        "expectedCheckIds": [
+          "completion",
+          "compatibility",
+          "observed_health",
+          "binding",
+          "cache",
+          "rollback",
+          "preservation",
+          "cleanup",
+          "reports"
+        ],
+        "expectedIds": [
+          "case-000",
+          "case-001",
+          "case-002",
+          "case-003",
+          "case-004",
+          "case-005",
+          "case-006",
+          "case-007",
+          "case-008",
+          "case-009",
+          "case-010",
+          "case-011"
+        ],
+        "missingIds": [],
+        "observedIds": [
+          "case-000",
+          "case-001",
+          "case-002",
+          "case-003",
+          "case-004",
+          "case-005",
+          "case-006",
+          "case-007",
+          "case-008",
+          "case-009",
+          "case-010",
+          "case-011"
+        ],
+        "problems": [],
+        "schemaVersion": 1,
+        "status": "semantic-pass",
+        "unexpectedIds": []
+      },
+      "completionSha256": "77b5de8c89cd9796b4d43cc98af7be57b66d33789ed118c1807721bac705be40",
+      "resultSha256": "d5336c3374dd34e5c291993a8f48257fc2c67bfa1f180db503b093ca1a2ee4ea",
+      "gradeSha256": "4cf68a401bc274d36bc3717692ade6793d1c19350d625ced8387635a26a10be3",
+      "verifiedFiles": 97,
+      "verifiedBytes": 1586801
+    }
+  ],
+  "excludedAttempts": [
+    {
+      "id": "caa-attempt-1",
+      "reason": "Author README with solution explanation dispatched instead of instruction.md; contaminated, even though recorded semantic-pass."
+    },
+    {
+      "id": "browser-replay-attempt-1",
+      "reason": "Capture rejected a valid oversized JSON event; infrastructure invalid."
+    },
+    {
+      "id": "delegated-budget-attempt-2",
+      "reason": "Retained invalid capture record; naming in the earlier narrative differed from the actual record directory."
+    }
+  ],
+  "setupIncident": "The campaign reports an additional accidental, timed-out provider call during setup. It is excluded from these five final attempts and not concealed as local-only testing."
+}

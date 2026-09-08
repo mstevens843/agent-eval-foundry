@@ -1,0 +1,97 @@
+[
+  {
+    "id": "filter-before-revision",
+    "overlay": {
+      "src/revisions.mjs": "controls/filter-before-revision.mjs"
+    },
+    "check": "attribution",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "round-per-event",
+    "overlay": {
+      "src/reconcile.mjs": "controls/round-per-event.mjs"
+    },
+    "check": "exact_amounts",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "unscoped-revision-id",
+    "overlay": {
+      "src/revisions.mjs": "controls/unscoped-revision-id.mjs"
+    },
+    "check": "attribution",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "stop-at-empty-page",
+    "overlay": {
+      "src/pages.mjs": "controls/stop-at-empty-page.mjs"
+    },
+    "check": "attribution",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "credit-join-fanout",
+    "overlay": {
+      "entry.mjs": "controls/credit-join-fanout.mjs"
+    },
+    "check": "exact_amounts",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "omit-zero-customers",
+    "overlay": {
+      "entry.mjs": "controls/omit-zero-customers.mjs"
+    },
+    "check": "population",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "duplicate-report",
+    "overlay": {
+      "entry.mjs": "controls/duplicate-report.mjs"
+    },
+    "check": "unique_rows",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "forged-completion",
+    "overlay": {
+      "entry.mjs": "controls/forged-completion.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "isolation",
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression",
+    "isolation": true
+  },
+  {
+    "id": "discard-source-lineage",
+    "overlay": {
+      "entry.mjs": "controls/discard-source-lineage.mjs"
+    },
+    "check": "provenance",
+    "clean": "case-024",
+    "selectionRole": "post-selection-validation"
+  }
+]

@@ -4,6 +4,9 @@ import { join } from "node:path";
 import { finished } from "node:stream/promises";
 import { parseProviderUsage } from "../trials/providers.js";
 
+// Claude max-effort stream events may exceed 64 KiB. The total capture remains bounded.
+const MAX_EVENT_LINE_BYTES = 4 * 1024 * 1024;
+
 export interface CaptureResult {
   status:
     | "completed"
@@ -108,7 +111,7 @@ export async function captureProcess(
   const eventLine = (bytes: Buffer) => {
     if (!bytes.length || result.status !== "completed") return;
     try {
-      if (bytes.length > 65536) throw Error("event line limit");
+      if (bytes.length > MAX_EVENT_LINE_BYTES) throw Error("event line limit");
       const e: unknown = JSON.parse(bytes.toString("utf8"));
       if (
         !e ||
@@ -149,7 +152,7 @@ export async function captureProcess(
           line = line.subarray(newline + 1);
           newline = line.indexOf(10);
         }
-        if (line.length > 65536) fail("malformed-events", "unterminated oversized event");
+        if (line.length > MAX_EVENT_LINE_BYTES) fail("malformed-events", "unterminated oversized event");
       }
     });
   const cancel = () => fail("cancelled", "explicit cancellation");

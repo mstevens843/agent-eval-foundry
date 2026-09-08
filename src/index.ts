@@ -1057,8 +1057,13 @@ export {
   qualify,
 } from "./execution/profiles.js";
 export type { ExecutionProfile, ProfileObservation, QualificationEvidence } from "./execution/profiles.js";
-export { executeSimulation, driveReservedJob } from "./execution/execute.js";
-export { executionPackage } from "./execution/package-route.js";
+export { executeSimulation, driveReservedJob, executionSourceIdentity } from "./execution/execute.js";
+export { executionPackage, gradeExecutionPackage } from "./execution/package-route.js";
+export {
+  executeRealProvider,
+  stageCodexCredential,
+  cleanupCredentialStaging,
+} from "./execution/real-provider.js";
 export { regradeExecution } from "./execution/regrade.js";
 export { executionCommand } from "./execution/command.js";
 export { inspectRun, evidenceIndex, INSPECTION_VERSION } from "./learning/inspection.js";

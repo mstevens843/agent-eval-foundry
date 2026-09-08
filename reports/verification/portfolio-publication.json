@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-08",
+  "scope": "Source integration and reviewer-facing publication, not official qualification",
+  "providerCallsMade": 0,
+  "checks": {
+    "typecheck": "pass",
+    "lint": "pass",
+    "build": "pass",
+    "registry": "pass",
+    "secretScan": "pass",
+    "diffWhitespace": "pass",
+    "publicationNavigation": "pass"
+  },
+  "focusedRegression": {
+    "sha256": "a522aca85936b90fc34e38d72e01f74d26ccbdf6cd770a258ec343644ebfceb0",
+    "passed": 147,
+    "failed": 0,
+    "pending": 0,
+    "failedSuites": 0,
+    "files": 14
+  },
+  "authorChecks": [
+    {
+      "check": "third-author",
+      "summarySha256": "2ab4f6f28038066d62eda30cedbb87625491566bf1bd5e1c0a22645ee56ffc67",
+      "groups": 61,
+      "passed": 61,
+      "failed": 0,
+      "executions": null,
+      "protectedRoute": false,
+      "providerCallsMade": 0
+    },
+    {
+      "check": "fourth-author",
+      "summarySha256": "42395c19fddf15a28ff3da63e62758e12c4427efbdb1380aa6479ce78abe2dfb",
+      "groups": 66,
+      "passed": 66,
+      "failed": 0,
+      "executions": null,
+      "protectedRoute": false,
+      "providerCallsMade": 0
+    },
+    {
+      "check": "fourth-properties",
+      "summarySha256": "9cc8a4121d44d284eba8dce7f3bc517f1ef68f45290bbfad693711f62476129c",
+      "groups": 21,
+      "passed": 21,
+      "failed": 0,
+      "executions": 721,
+      "protectedRoute": false,
+      "providerCallsMade": 0
+    },
+    {
+      "check": "fifth-author",
+      "summarySha256": "ee42ab9f98a31f1b4a5242a5c8c897e38450410a654adcb664389f3dc33fd1f5",
+      "groups": 67,
+      "passed": 67,
+      "failed": 0,
+      "executions": null,
+      "protectedRoute": false,
+      "providerCallsMade": 0
+    },
+    {
+      "check": "fifth-properties",
+      "summarySha256": "8d7716cf8b910705b916f7949eedaaffa93a6338528ecf60a2fbed45f7f8a8af",
+      "groups": 21,
+      "passed": 21,
+      "failed": 0,
+      "executions": 993,
+      "protectedRoute": false,
+      "providerCallsMade": 0
+    }
+  ],
+  "retainedEvidence": {
+    "selectedFinalAttempts": 10,
+    "verifiedManifestListedFiles": 4057,
+    "rawEvidencePublished": false
+  },
+  "incomplete": [
+    {
+      "command": "pnpm test",
+      "status": "interrupted",
+      "reason": "Broad historical run stopped in favor of focused integration regressions; no full-suite pass claimed."
+    },
+    {
+      "command": "pnpm test:integration .local/publication-full-integration",
+      "status": "storage-preflight-incomplete",
+      "requiredBytes": 60129542144,
+      "observedAvailableBytes": 12399837184,
+      "providerCallsMade": 0
+    },
+    {
+      "command": "pnpm verify",
+      "status": "not-rerun-in-full",
+      "reason": "Registry and dedicated publication gate checked; long historical report/export reproduction not rerun."
+    }
+  ],
+  "correctionsDuringIntegration": [
+    "Initial focused run: 143 passed, 4 failed. Matched generator files with existing cohort re-freeze ledgers and retained the added authority-workflow control.",
+    "Follow-up: 145 passed, 2 failed due to concurrently appended private links. Preserved notes with restricted evidence locators.",
+    "Final focused regression retained separately; earlier outputs not overwritten."
+  ]
+}

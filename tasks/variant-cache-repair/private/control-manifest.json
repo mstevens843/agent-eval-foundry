@@ -1,0 +1,99 @@
+[
+  {
+    "id": "ignore-response-age",
+    "overlay": {
+      "src/entries.mjs": "controls/ignore-response-age.mjs"
+    },
+    "check": "representation",
+    "selectionRole": "development-regression",
+    "clean": "case-020"
+  },
+  {
+    "id": "reset-age-on-tier-copy",
+    "overlay": {
+      "src/resolve.mjs": "controls/reset-age-on-tier-copy.mjs"
+    },
+    "check": "cache_provenance",
+    "selectionRole": "development-regression",
+    "clean": "case-020"
+  },
+  {
+    "id": "path-only-key",
+    "overlay": {
+      "src/entries.mjs": "controls/path-only-key.mjs"
+    },
+    "check": "representation",
+    "selectionRole": "development-regression",
+    "clean": "case-020"
+  },
+  {
+    "id": "unconditional-revalidation",
+    "overlay": {
+      "src/resolve.mjs": "controls/unconditional-revalidation.mjs"
+    },
+    "check": "origin_load",
+    "selectionRole": "development-regression",
+    "clean": "case-020"
+  },
+  {
+    "id": "flush-unrelated-tiers",
+    "overlay": {
+      "entry.mjs": "controls/flush-unrelated-tiers.mjs"
+    },
+    "check": "invalidation_scope",
+    "selectionRole": "development-regression",
+    "clean": "case-020"
+  },
+  {
+    "id": "store-private-response",
+    "overlay": {
+      "src/store.mjs": "controls/store-private-response.mjs"
+    },
+    "check": "no_store",
+    "selectionRole": "development-regression",
+    "clean": "case-020"
+  },
+  {
+    "id": "always-origin",
+    "overlay": {
+      "src/resolve.mjs": "controls/always-origin.mjs"
+    },
+    "check": "origin_load",
+    "selectionRole": "development-regression",
+    "clean": "case-020"
+  },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "forged-completion",
+    "overlay": {
+      "entry.mjs": "controls/forged-completion.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "isolation",
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression",
+    "isolation": true
+  },
+  {
+    "id": "empty-304-body",
+    "overlay": {
+      "entry.mjs": "controls/empty-304-body.mjs"
+    },
+    "check": "representation",
+    "clean": "case-020",
+    "selectionRole": "post-selection-validation"
+  }
+]

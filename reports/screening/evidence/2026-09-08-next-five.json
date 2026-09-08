@@ -1,0 +1,805 @@
+{
+  "schemaVersion": 1,
+  "campaign": "2026-09-08-next-five",
+  "evidenceClass": "real-provider-screening",
+  "limitations": [
+    "Exploratory screening, not official standard/adversarial qualification.",
+    "Requested effort is not independent backend attestation.",
+    "One final attempt per package is not a replicated failure rate.",
+    "Raw transcripts, credentials, runtime archives and full submissions are not published here. Hashes identify retained artifacts but are not a substitute for independently inspecting them.",
+    "CLI price estimates are not actual subscription charges; cached input is included in input totals.",
+    "Results describe frozen historical packages, not automatically the current source tree."
+  ],
+  "actualScheduling": "Sequential. Requested parallel takeover exited before reserving or dispatching because all five jobs already existed.",
+  "concurrencyRequestFulfilled": false,
+  "automaticRetries": 0,
+  "invalidExecutionCount": 0,
+  "sourceDigest": "e2b239705c18e9199ee30e22ede85896254bd5c71705c12de9e5b010cd3f8423",
+  "packages": [
+    {
+      "authoringMilliseconds": 1127819,
+      "captureStatus": "completed",
+      "checker": {
+        "correct": 12,
+        "details": [
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "cross-partition-cache",
+            "expectedFailingCheck": "index_payload",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "reset-prefix-on-reassignment",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "complete-before-effect",
+            "expectedFailingCheck": "checkpoint_prefix",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "foreign-partition",
+            "expectedFailingCheck": "preservation",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "overwrite-newer",
+            "expectedFailingCheck": "version_order",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "checkpoint-max",
+            "expectedFailingCheck": "checkpoint_prefix",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "stale-owner",
+            "expectedFailingCheck": "ownership",
+            "outcome": "correct-reject-named"
+          }
+        ],
+        "deterministic": true,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 10,
+        "pass": true,
+        "present": true,
+        "total": 12
+      },
+      "id": "partition-index-repair",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-pass",
+      "packageDigest": "cf3c51e792c0daf3298b1049e7d36c640a3aa030ebf58cea910034737cb95ef2",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "requestedEffort": "xhigh",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "reward": 1,
+      "service": {
+        "failedScenarios": 0,
+        "failures": {},
+        "invalidScenarios": 0,
+        "scenarios": 17
+      },
+      "target": "codex",
+      "usage": {
+        "cachedInputTokens": 961152,
+        "costUsd": null,
+        "inputTokens": 1011104,
+        "outputTokens": 32362,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "usageNote": "Provider cost estimates are not subscription charges; cached tokens are included in input totals.",
+      "runId": "partition-index-repair-attempt-1",
+      "start": "2026-09-08T13:36:59.635Z",
+      "end": "2026-09-08T13:55:52.669Z",
+      "commandCount": 17,
+      "sourceDelta": [
+        {
+          "after": "daceee75a9478f841ad2dcb6a368001b1dc72fe4970e98e19b3ed42423a52d51",
+          "before": null,
+          "change": "added",
+          "path": "checker.mjs"
+        },
+        {
+          "after": "d8564cd012b82d30e03c17540b8a6d6f7f0d43ce5b448c91900c0c3b1d1e582d",
+          "before": "037cf8680426bb03be8ebbc872414c0b6bca5d365160da3b1aa0deaf3068ed78",
+          "change": "modified",
+          "path": "src/index.mjs"
+        },
+        {
+          "after": "402b46cdc483c5082103a36ee7ff62dfef2e1f85a6ff4ab0edebb7140fe071d4",
+          "before": "a64dd6e7d15107b23547b419302fa47ee7b572c8a25ac8c1d074f4f46e66eb9d",
+          "change": "modified",
+          "path": "src/progress.mjs"
+        }
+      ],
+      "completionSha256": "b13aada85ee2f9206ce4e1a80c5fc7cc09b719218eb1935a115bace51ef2bc15",
+      "resultSha256": "f6299453df22dd95fdb6cecf9b6243a0557bda2e5574d8c8599cdd74e2eca12d",
+      "gradeSha256": "d6a72fb023a2c4225c7afb4ef1e8e325d5d8ba86bc91ba9004810ff597de6f19",
+      "verifiedFiles": 679,
+      "verifiedBytes": 2738781,
+      "assessment": "successful-solve"
+    },
+    {
+      "authoringMilliseconds": 680503,
+      "captureStatus": "completed",
+      "checker": {
+        "correct": 10,
+        "details": [
+          {
+            "candidateId": "union-resurrection",
+            "expectedFailingCheck": "causal_values",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "one-sibling",
+            "expectedFailingCheck": "causal_values",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "forget-tombstones",
+            "expectedFailingCheck": "causal_context",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "single-replica",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "outcome": "false-positive"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "overbroad",
+            "expectedFailingCheck": "preservation",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "payload-dedup",
+            "expectedFailingCheck": "causal_values",
+            "outcome": "correct-reject-named"
+          }
+        ],
+        "deterministic": true,
+        "falsePositives": 1,
+        "missed": 0,
+        "namedRightCheck": 9,
+        "pass": false,
+        "present": true,
+        "total": 11
+      },
+      "id": "causal-replica-repair",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "packageDigest": "d61eeff5395548208ef829d95ea7c35da063fe9a460be4e9efc157abdbafbc4d",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "requestedEffort": "xhigh",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "reward": 0,
+      "service": {
+        "failedScenarios": 0,
+        "failures": {},
+        "invalidScenarios": 0,
+        "scenarios": 33
+      },
+      "target": "codex",
+      "usage": {
+        "cachedInputTokens": 475136,
+        "costUsd": null,
+        "inputTokens": 527081,
+        "outputTokens": 18909,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "usageNote": "Provider cost estimates are not subscription charges; cached tokens are included in input totals.",
+      "runId": "causal-replica-repair-attempt-1",
+      "start": "2026-09-08T13:55:52.921Z",
+      "end": "2026-09-08T14:07:18.452Z",
+      "commandCount": 12,
+      "sourceDelta": [
+        {
+          "after": "78cde3dd96f77c25cfa42e0b596038e9a1b8c9bcd76da37ed404562a19c58e7d",
+          "before": null,
+          "change": "added",
+          "path": "checker.mjs"
+        },
+        {
+          "after": "44adae8f68181ec727d404b047551c1de876d403231dc2f76121309e654d8cc8",
+          "before": "b913a5d514eb82815a2eb4239fc439852e92b37a2c846995cc6da03a8c9432a6",
+          "change": "modified",
+          "path": "src/identity.mjs"
+        },
+        {
+          "after": "b944d04b1d4923b96ed9bbacb790a0b1aa5c289e34818a79760c5ad4d5f44493",
+          "before": "74ea9b951f9e694dbed6e7860b3c16d33495266df59349f4c809a17f6b42296b",
+          "change": "modified",
+          "path": "src/merge.mjs"
+        },
+        {
+          "after": "266a2d9c5e22be1353b0b962566a22e85379d3bf41455ad6b2be1375f7417ed6",
+          "before": "d72d68be9f15249dc8e276695993c7bd0786f03152dc4e9a58cc6a0cc5d2ca2a",
+          "change": "modified",
+          "path": "src/service.mjs"
+        }
+      ],
+      "completionSha256": "e0cc3528173bae14ac3b2043959a86b4ac6e2f6b7f6479b694d1a8e013fc2546",
+      "resultSha256": "084946ef7af39fb8c783ec4986076e48c638f8527aba81deefa36721817f3d5d",
+      "gradeSha256": "e45d379a152f354688664440ecc9f550cb4dc614b1bfc6fc26ff2d8113f713c4",
+      "verifiedFiles": 625,
+      "verifiedBytes": 2234855,
+      "assessment": "checker-overconstraint-observed-not-blind-adjudicated"
+    },
+    {
+      "authoringMilliseconds": 1224525,
+      "captureStatus": "completed",
+      "checker": {
+        "correct": 11,
+        "details": [
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "missing-dependent-closure",
+            "expectedFailingCheck": "dependency_order",
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "wrong-payload",
+            "expectedFailingCheck": "payload",
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "parent-first-removal",
+            "expectedFailingCheck": "dependency_order",
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "missing-restoration",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "abandon-unknown",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "overbroad",
+            "expectedFailingCheck": "preservation",
+            "outcome": "correct-reject-unnamed"
+          }
+        ],
+        "deterministic": true,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 0,
+        "pass": false,
+        "present": true,
+        "total": 11
+      },
+      "id": "partial-release-repair",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "runtime event type=assistant",
+          "status": "observed",
+          "value": "claude-opus-5"
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "packageDigest": "7b5984f69dee18d1492fb5b0ec69f41fc854feda34adbe490485825257304f80",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "requestedEffort": "max",
+      "requestedModel": "anthropic/claude-opus-5",
+      "reward": 0,
+      "service": {
+        "failedScenarios": 0,
+        "failures": {},
+        "invalidScenarios": 0,
+        "scenarios": 33
+      },
+      "target": "claude",
+      "usage": {
+        "cachedInputTokens": 4394087,
+        "costUsd": 5.937698499999999,
+        "inputTokens": 4525957,
+        "outputTokens": 96840,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "usageNote": "Provider cost estimates are not subscription charges; cached tokens are included in input totals.",
+      "runId": "partial-release-repair-attempt-1",
+      "start": "2026-09-08T14:07:18.700Z",
+      "end": "2026-09-08T14:27:48.734Z",
+      "commandCount": 34,
+      "sourceDelta": [
+        {
+          "after": "8b6ad3247a5409c6461137694d4ca1e585c56acae3797d520a41bfcbc7742acd",
+          "before": null,
+          "change": "added",
+          "path": "checker.mjs"
+        },
+        {
+          "after": "f9374a2fbba516747b3d244168f2cfe5bc2caefcbac304acf86152fe449997c9",
+          "before": "fb8df23c4a9e272cffcac862595e3930412feca06c1b88b3164fadd38d9d7e8b",
+          "change": "modified",
+          "path": "entry.mjs"
+        },
+        {
+          "after": "f06c9e764370b8cac7306839de74ba7b67d28a1e1e5196fbebc576e22382f378",
+          "before": "efcad267ae7e2e323c640d3227f042c8c59944bd0ec2d2de92d3072e859f4397",
+          "change": "modified",
+          "path": "src/graph.mjs"
+        },
+        {
+          "after": "c96162b6177d34f66d90330465a31f19a76a8e187b502bc5ed70efa7b7540373",
+          "before": "58c33a6f2e04dee921e646792bfe290b8a57cb63f2eba79223d298f0327819fc",
+          "change": "modified",
+          "path": "src/plan.mjs"
+        },
+        {
+          "after": "55b1eb5ddf5898d02533ea7e7ecab111c5816d5e5f50fd79b955960738643c43",
+          "before": "59fef3a1489b8ebf8061b08e589d06d5023bcedf2b58e8a3c6d9e4430293e4ee",
+          "change": "modified",
+          "path": "src/release.mjs"
+        },
+        {
+          "after": "95bfc1d869ff75dbd2dfc1d642002e699adef596cb67008d880759ff61729e19",
+          "before": "96182969e6d2c2dfa7b94ec311c728ba2c19fe78613a3f658c69c979000d6f17",
+          "change": "modified",
+          "path": "src/transport.mjs"
+        },
+        {
+          "after": "797d8bae55fc5fec46d5b0200f40e0f60aca62fa15dedd00c8ead11e2ffca8d9",
+          "before": "a337cc0b19eb3b4d141f1c1f228bb681dcbcd13ba8e0a72be6888a377ed3f733",
+          "change": "modified",
+          "path": "test/release.test.mjs"
+        }
+      ],
+      "completionSha256": "edef69a10bb578ed5c61e8e152e562e35cbdeca9727dcdbb03acc0ce56523673",
+      "resultSha256": "5186739b9a57772579e8af55c225d048c94f390b02c5cae8bd6b723f129a14e3",
+      "gradeSha256": "caf41993e5de4a95f5cfa0a5087f9a1d03bbc63639122ff3ae2321b3dd27dc40",
+      "verifiedFiles": 651,
+      "verifiedBytes": 4278026,
+      "assessment": "contract-grader-alignment-concern"
+    },
+    {
+      "authoringMilliseconds": 847238,
+      "captureStatus": "completed",
+      "checker": {
+        "correct": 12,
+        "details": [
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "ignore-partial-result",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "lost-concurrent-label",
+            "expectedFailingCheck": "labels",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "empty-page-stop",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "all-statuses",
+            "expectedFailingCheck": "preservation",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "global-directory",
+            "expectedFailingCheck": "ownership",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "unqualified-identity",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "positional-batch-results",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          }
+        ],
+        "deterministic": true,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 10,
+        "pass": true,
+        "present": true,
+        "total": 12
+      },
+      "id": "ticket-consolidation-repair",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "runtime event type=assistant",
+          "status": "observed",
+          "value": "claude-opus-5"
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-pass",
+      "packageDigest": "78265c85b8e8f2de638f46e1a5d1adbb34f772647fdbd4ffd308d6fec38936c8",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "requestedEffort": "max",
+      "requestedModel": "anthropic/claude-opus-5",
+      "reward": 1,
+      "service": {
+        "failedScenarios": 0,
+        "failures": {},
+        "invalidScenarios": 0,
+        "scenarios": 33
+      },
+      "target": "claude",
+      "usage": {
+        "cachedInputTokens": 1865074,
+        "costUsd": 3.6602629999999996,
+        "inputTokens": 1962443,
+        "outputTokens": 70115,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "usageNote": "Provider cost estimates are not subscription charges; cached tokens are included in input totals.",
+      "runId": "ticket-consolidation-repair-attempt-1",
+      "start": "2026-09-08T14:27:49.027Z",
+      "end": "2026-09-08T14:42:01.674Z",
+      "commandCount": 32,
+      "sourceDelta": [
+        {
+          "after": "4a5b3f159a715b2539764cfeac3d711541b27009059a88fd855a7b40c9b518d0",
+          "before": null,
+          "change": "added",
+          "path": "checker.mjs"
+        },
+        {
+          "after": "aa8624c0a2d1ebe1464a95b4d67ba20510c7cb251fc97ec913450ed50415f011",
+          "before": "7ccd65e85461394adba27e166fd728c5d8613ba4c679e2525ab719b425a0e6fd",
+          "change": "modified",
+          "path": "src/pages.mjs"
+        },
+        {
+          "after": "ef7c49aeac6cb5250c796e76c945a73a534b058282afd6ede2eb2e3c220a71e2",
+          "before": "11d037a703cc18392df59eab1697a8f3ec49f1cc6367e4959ae7331bb223ea9e",
+          "change": "modified",
+          "path": "src/selection.mjs"
+        },
+        {
+          "after": "a7ac7deb6a4368759327fa1e17a4dcb2bd2ad3e876c4ca94d3430380cec30b4e",
+          "before": "86d154c6bbb96fb0617695cb541ae0fd4b8667a44ef41565af1dc497508224ea",
+          "change": "modified",
+          "path": "src/service.mjs"
+        },
+        {
+          "after": "3591aea82e0a55d9c4b48d0534bce5b14a62471e1196154486f0e539025a05fb",
+          "before": "435ef0cd83eb37c599d43c9f75a06bc5bd7ef2be0614013311e1ca7bed019e41",
+          "change": "modified",
+          "path": "src/update.mjs"
+        }
+      ],
+      "completionSha256": "85ace4ff9609742a501011bd38e0456a7d25808378217773bbe951504f90d927",
+      "resultSha256": "60bfd236641d7b6e2a25feb234f316a65462d3f1f612f789d9a418f03377a5f5",
+      "gradeSha256": "bcbc63acde7feb35027793c6d291894858b197ac49d3e4be1d5f1d079ee09b95",
+      "verifiedFiles": 679,
+      "verifiedBytes": 3716452,
+      "assessment": "successful-solve"
+    },
+    {
+      "authoringMilliseconds": 686672,
+      "captureStatus": "completed",
+      "checker": {
+        "correct": 12,
+        "details": [
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "effective-before-revision",
+            "expectedFailingCheck": "exact_integral",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "strict-knowledge-cutoff",
+            "expectedFailingCheck": "exact_integral",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "floating-total",
+            "expectedFailingCheck": "exact_integral",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "future-revision",
+            "expectedFailingCheck": "exact_integral",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "inclusive-end",
+            "expectedFailingCheck": "exact_integral",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "duplicate-report",
+            "expectedFailingCheck": "unique_reports",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "extra-report",
+            "expectedFailingCheck": "population",
+            "outcome": "correct-reject-named"
+          }
+        ],
+        "deterministic": true,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 10,
+        "pass": true,
+        "present": true,
+        "total": 12
+      },
+      "id": "temporal-capacity-repair",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "runtime event type=assistant",
+          "status": "observed",
+          "value": "claude-opus-5"
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-pass",
+      "packageDigest": "1fcfba7f15649f0728b24139e7fe6e3f91d06d39c30228e7ebfc608c2eda4201",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "requestedEffort": "max",
+      "requestedModel": "anthropic/claude-opus-5",
+      "reward": 1,
+      "service": {
+        "failedScenarios": 0,
+        "failures": {},
+        "invalidScenarios": 0,
+        "scenarios": 33
+      },
+      "target": "claude",
+      "usage": {
+        "cachedInputTokens": 1908644,
+        "costUsd": 3.247034,
+        "inputTokens": 1996291,
+        "outputTokens": 56605,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "usageNote": "Provider cost estimates are not subscription charges; cached tokens are included in input totals.",
+      "runId": "temporal-capacity-repair-attempt-1",
+      "start": "2026-09-08T14:42:01.965Z",
+      "end": "2026-09-08T14:53:34.047Z",
+      "commandCount": 23,
+      "sourceDelta": [
+        {
+          "after": "5c83ecc19f9c6c0d847c42f990610d57fce38a0c7991e8ff2b227bf7da0c1259",
+          "before": null,
+          "change": "added",
+          "path": "checker.mjs"
+        },
+        {
+          "after": "a7b35ff88d544919a39d533680c8df74b345352d6fe915b514e08144268abbee",
+          "before": "8fba665bc9d8be0b8978a4e28406643db72f52d09d2e634aba8551bfc9f273b4",
+          "change": "modified",
+          "path": "src/integral.mjs"
+        },
+        {
+          "after": "326a58543261a8bcb6cef564acf08c8584c6e4fa9e9e66b5ea364c385d2b92ed",
+          "before": "74f0861785d386cc42b2de01dc4de99226425e7b15d14b394406acf9d482f318",
+          "change": "modified",
+          "path": "src/pages.mjs"
+        },
+        {
+          "after": "89a1ffd79da243096c5f92282179a9b811de791af524da0dd2f3ca3a721303ab",
+          "before": "b6079d585dab2e806e4c9f1bb7c8d67add313291fbcd5ffda3d13b878bcb158c",
+          "change": "modified",
+          "path": "src/revisions.mjs"
+        },
+        {
+          "after": "12da52c8e9efa1a38f5d80718b60087b8289e267797275e2e107816313445ce1",
+          "before": "ce6354be8c9e00294c3319697e3e1bd3d511f2ccb69ed477153456999a6d9445",
+          "change": "modified",
+          "path": "src/service.mjs"
+        },
+        {
+          "after": "6dcf0c61f7bf72eafd27e59e0fbc4500176353573e16288f1642db497b442670",
+          "before": null,
+          "change": "added",
+          "path": "test/semantics.test.mjs"
+        }
+      ],
+      "completionSha256": "81e27139f6a8e07b62f077b3426a3ccc46c8067fffafc48f3cb5df63ba05b595",
+      "resultSha256": "d2cdc05c7b6e5e6e1316fb7ee7e418a1b8ba4f0451a7650741d3096adb4afd9f",
+      "gradeSha256": "d9e3313d70d67b47215313b15b7a4c7ff881a09ab7d687cffe1872e9b848ddb3",
+      "verifiedFiles": 681,
+      "verifiedBytes": 2534398,
+      "assessment": "successful-solve"
+    }
+  ]
+}

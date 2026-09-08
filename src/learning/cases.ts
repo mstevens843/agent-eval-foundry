@@ -253,6 +253,7 @@ export function memoryCorrectionFinding(root: string): FindingRevision {
 }
 
 interface Direction {
+  exposure?: { at: string; evidence: string };
   family: string;
   applicability: string;
   obligations: string[];
@@ -264,6 +265,466 @@ interface Direction {
   falsifier: string;
 }
 const DIRECTIONS: Record<string, Direction> = {
+  "incremental-build-repair": {
+    family: "incremental-build-provenance",
+    applicability:
+      "Current tool, included sources and ordered dependency attestations must agree across incremental rounds.",
+    obligations: [
+      "Current tool, included sources and ordered dependency attestations must agree across incremental rounds.",
+      "Complete all requested work without forging independent evidence.",
+    ],
+    difference:
+      "Time-of-publication provenance and independently counted compiler calls, not cache-key style.",
+    observations: [
+      "Time-of-publication provenance and independently counted compiler calls, not cache-key style.",
+    ],
+    alternatives: ["Recipe-key memoization", "Recursive attestation validation"],
+    controls: ["no-work", "forged-completion", "isolation"],
+    counter:
+      "A complete dependency closure may solve this quickly; tool-assisted rebuilding is allowed within the product budget.",
+    falsifier:
+      "A valid alternative is rejected, a narrow incorrect control passes, or ordinary correct repairs consistently solve it.",
+  },
+  "event-window-repair": {
+    family: "event-time-window-finalization",
+    applicability:
+      "Partition progress, duplicate identity and late output must agree at each irreversible window publication.",
+    obligations: [
+      "Partition progress, duplicate identity and late output must agree at each irreversible window publication.",
+      "Complete all requested work without forging independent evidence.",
+    ],
+    difference: "Per-input consumer publication boundaries, not a final aggregate alone.",
+    observations: ["Per-input consumer publication boundaries, not a final aggregate alone."],
+    alternatives: ["Incremental window map", "Full-prefix replay and grouping"],
+    controls: ["no-work", "forged-completion", "isolation"],
+    counter: "A standard correct stream-processing abstraction may solve this task.",
+    falsifier:
+      "A valid alternative is rejected, a narrow incorrect control passes, or ordinary correct repairs consistently solve it.",
+  },
+  "staged-allocation-repair": {
+    family: "staged-resource-allocation",
+    applicability:
+      "Irrevocable allocations must preserve feasibility for every published possible continuation.",
+    obligations: [
+      "Irrevocable allocations must preserve feasibility for every published possible continuation.",
+      "Complete all requested work without forging independent evidence.",
+    ],
+    difference:
+      "Exists-current-choice and all-future-branches feasibility, not only the realized path or total capacity.",
+    observations: [
+      "Exists-current-choice and all-future-branches feasibility, not only the realized path or total capacity.",
+    ],
+    alternatives: ["Memoized winning continuation search", "Explicit contingent policy construction"],
+    controls: ["no-work", "forged-completion", "isolation"],
+    counter: "The bounded tree admits ordinary exhaustive search; that valid solution must remain accepted.",
+    falsifier:
+      "A valid alternative is rejected, a narrow incorrect control passes, or ordinary correct repairs consistently solve it.",
+  },
+  "diagnostic-transport-repair": {
+    family: "diagnostic-stream-normalization",
+    applicability:
+      "Reconstruct split UTF-8 records and preserve highest-attempt identity, error and partial data.",
+    obligations: [
+      "Reconstruct split UTF-8 records and preserve highest-attempt identity, error and partial data.",
+      "Complete all requested work without forging independent evidence.",
+    ],
+    difference: "Independent canonical source records and actual normalized consumer rows.",
+    observations: ["Independent canonical source records and actual normalized consumer rows."],
+    alternatives: ["Incremental per-channel decoder", "Buffer and parse each complete channel"],
+    controls: ["no-work", "forged-completion", "isolation"],
+    counter: "A careful standard streaming decoder plus complete outcome table may solve this task.",
+    falsifier:
+      "A valid alternative is rejected, a narrow incorrect control passes, or ordinary correct repairs consistently solve it.",
+  },
+  "issued-report-repair": {
+    family: "issued-report-amendment",
+    applicability:
+      "Amend changed report lineage, preserve issued history and notify the exact affected historical population.",
+    obligations: [
+      "Amend changed report lineage, preserve issued history and notify the exact affected historical population.",
+      "Complete all requested work without forging independent evidence.",
+    ],
+    difference: "Captured immutable publications, actual delivered payloads and historical answers.",
+    observations: ["Captured immutable publications, actual delivered payloads and historical answers."],
+    alternatives: ["Dependency-first incremental reconciliation", "Level-based full reconstruction"],
+    controls: ["no-work", "forged-completion", "isolation"],
+    counter: "This is a fictional publication contract, not clinical knowledge or proof of a model weakness.",
+    falsifier:
+      "A valid alternative is rejected, a narrow incorrect control passes, or ordinary correct repairs consistently solve it.",
+  },
+  "document-export-repair": {
+    family: "structure-preserving-document-export",
+    applicability:
+      "Decode nested content and apply public literal/field policy while preserving structure and useful content.",
+    obligations: [
+      "Decode nested content and apply public literal/field policy while preserving structure and useful content.",
+      "Complete the declared work without forging independent evidence.",
+    ],
+    difference: "Semantic decoded artifact comparison, not claimed redaction counts.",
+    observations: ["Semantic decoded artifact comparison, not claimed redaction counts."],
+    alternatives: ["Recursive transform", "iterative traversal with escaped literal alternation."],
+    controls: ["no-work", "forged-completion", "isolation"],
+    counter: "A uniform complete transform may be easy for a capable agent.",
+    falsifier:
+      "A legitimate alternate solution is rejected, a known near-miss passes, or complete ordinary repairs consistently solve it.",
+  },
+  "analytical-reconciliation-repair": {
+    family: "cross-system-analytical-reconciliation",
+    applicability:
+      "Reconcile separate fact populations, compound identities and exact customer-level rounding.",
+    obligations: [
+      "Reconcile separate fact populations, compound identities and exact customer-level rounding.",
+      "Complete the declared work without forging independent evidence.",
+    ],
+    difference: "Independent source calculation and captured customer rows.",
+    observations: ["Independent source calculation and captured customer rows."],
+    alternatives: ["Indexed reduced rational sums", "anti-join filtering with common denominators."],
+    controls: ["no-work", "forged-completion", "isolation"],
+    counter: "A complete relational specification may admit a straightforward SQL or procedural repair.",
+    falsifier:
+      "A legitimate alternate solution is rejected, a known near-miss passes, or complete ordinary repairs consistently solve it.",
+  },
+  "recurring-calendar-repair": {
+    family: "recurring-calendar-reconciliation",
+    applicability:
+      "Preserve original recurrence identity through zone resolution, exceptions and scoped changes.",
+    obligations: [
+      "Preserve original recurrence identity through zone resolution, exceptions and scoped changes.",
+      "Complete the declared work without forging independent evidence.",
+    ],
+    difference: "Independent bounded minute-search realization and complete events/bookings.",
+    observations: ["Independent bounded minute-search realization and complete events/bookings."],
+    alternatives: ["Offset candidate enumeration", "transition-interval inversion."],
+    controls: ["no-work", "forged-completion", "isolation"],
+    counter: "Bounded recurrence may be easy with a correct existing calendar abstraction.",
+    falsifier:
+      "A legitimate alternate solution is rejected, a known near-miss passes, or complete ordinary repairs consistently solve it.",
+  },
+  "variant-cache-repair": {
+    family: "multi-tier-variant-cache",
+    applicability:
+      "Reuse matching representations without resetting age, reconcile304 metadata and preserve purge scope.",
+    obligations: [
+      "Reuse matching representations without resetting age, reconcile304 metadata and preserve purge scope.",
+      "Complete the declared work without forging independent evidence.",
+    ],
+    difference: "Actual origin responses, copied entries, delivered bytes and independently counted load.",
+    observations: [
+      "Actual origin responses, copied entries, delivered bytes and independently counted load.",
+    ],
+    alternatives: ["Sequential edge/shield handling", "a full-tier snapshot controller."],
+    controls: ["no-work", "forged-completion", "isolation"],
+    counter: "Correct standard cache logic is legal and may solve the task quickly.",
+    falsifier:
+      "A legitimate alternate solution is rejected, a known near-miss passes, or complete ordinary repairs consistently solve it.",
+  },
+  "workflow-authority-repair": {
+    family: "revocation-aware-workflow-broker",
+    applicability:
+      "Preserve origin through queued routes, reconsider changed policy and retain terminal decisions.",
+    obligations: [
+      "Preserve origin through queued routes, reconsider changed policy and retain terminal decisions.",
+      "Complete the declared work without forging independent evidence.",
+    ],
+    difference: "Policy-at-effect snapshots, actual effects and durable delivery associations.",
+    observations: ["Policy-at-effect snapshots, actual effects and durable delivery associations."],
+    alternatives: ["Breadth-first grant paths", "memoized ancestry with depth-first paths."],
+    controls: ["no-work", "forged-completion", "isolation"],
+    counter:
+      "Grant reachability itself is small; the promise rests on its integration with changing policy and history.",
+    falsifier:
+      "A legitimate alternate solution is rejected, a known near-miss passes, or complete ordinary repairs consistently solve it.",
+  },
+  "snapshot-recovery-repair": {
+    family: "restore-proven-backup-orchestrator",
+    exposure: {
+      at: "2026-09-08T06:40:31.000Z",
+      evidence:
+        "Third-cohort author construction, property fuzzing and controls; see third-portfolio-selection-ledger.json. Not pristine model holdout evidence.",
+    },
+    applicability:
+      "Snapshot lineage, committed data, relationships and allocation state must agree in both a portable artifact and a fresh restore.",
+    obligations: [
+      "Snapshot lineage, committed data, relationships and allocation state must agree in both a portable artifact and a fresh restore.",
+      "Finish required work without fabricating independent evidence.",
+    ],
+    difference: "Independent SQLite readback and separately reconstructed history.",
+    observations: ["Independent SQLite readback and separately reconstructed history."],
+    alternatives: ["Sequential transaction replay.", "Array-based whole-state reconstruction."],
+    controls: [
+      "drop-deletes",
+      "reuse-deleted-id",
+      "cross-branch-journal",
+      "trusted-cache",
+      "rows-only-backup",
+      "no-work",
+      "forged-completion",
+      "isolation",
+    ],
+    counter: "A small fully specified restore may still be easy; no target-model trial exists.",
+    falsifier:
+      "A valid alternative is rejected, a stale artifact passes, or ordinary reconstruction repeatedly solves it.",
+  },
+  "verified-installation-repair": {
+    family: "layered-artifact-installation",
+    exposure: {
+      at: "2026-09-08T06:40:31.000Z",
+      evidence:
+        "Third-cohort author construction, property fuzzing and controls; see third-portfolio-selection-ledger.json. Not pristine model holdout evidence.",
+    },
+    applicability:
+      "Pinned compressed and plain bytes, lower-layer removal semantics, file metadata and atomic publication must agree.",
+    obligations: [
+      "Pinned compressed and plain bytes, lower-layer removal semantics, file metadata and atomic publication must agree.",
+      "Finish required work without fabricating independent evidence.",
+    ],
+    difference: "Independent filesystem readback and actual content digests.",
+    observations: ["Independent filesystem readback and actual content digests."],
+    alternatives: [
+      "Map-based layer reconstruction.",
+      "List-based tree reconstruction from authoritative fetches.",
+    ],
+    controls: [
+      "array-order-removal",
+      "url-only-cache",
+      "default-permissions",
+      "accept-unavailable",
+      "reverse-commitments",
+      "no-work",
+      "forged-completion",
+      "isolation",
+    ],
+    counter: "This bounded custom format is not full OCI; standard layer algorithms remain valid.",
+    falsifier:
+      "A correct installer is rejected, unavailable content installs, or a routine layer implementation solves it.",
+  },
+  "capacity-maintenance-repair": {
+    family: "cell-capacity-removal-planner",
+    exposure: {
+      at: "2026-09-08T06:40:31.000Z",
+      evidence:
+        "Third-cohort author construction, property fuzzing and controls; see third-portfolio-selection-ledger.json. Not pristine model holdout evidence.",
+    },
+    applicability:
+      "Maintain all requested hosts while every intermediate placement respects capacity, eligibility and zone limits.",
+    obligations: [
+      "Maintain all requested hosts while every intermediate placement respects capacity, eligibility and zone limits.",
+      "Finish required work without fabricating independent evidence.",
+    ],
+    difference: "Complete host-owned transition history, not only accepted final outcomes.",
+    observations: ["Complete host-owned transition history, not only accepted final outcomes."],
+    alternatives: [
+      "Global breadth-first placement search.",
+      "Per-host evacuation with reversal of a verified safe path.",
+    ],
+    controls: [
+      "count-not-weight",
+      "zone-blind",
+      "remove-before-replacement",
+      "one-upgrade-only",
+      "omit-restoration",
+      "no-work",
+      "forged-completion",
+      "isolation",
+    ],
+    counter: "A standard finite-state search is an allowed and possibly easy solution.",
+    falsifier:
+      "A blind host gains safety credit, or ordinary planning consistently satisfies all obligations.",
+  },
+  "route-policy-repair": {
+    family: "bgp-route-scope-patch-validator",
+    exposure: {
+      at: "2026-09-08T06:40:31.000Z",
+      evidence:
+        "Third-cohort author construction, property fuzzing and controls; see third-portfolio-selection-ledger.json. Not pristine model holdout evidence.",
+    },
+    applicability:
+      "Requested preference changes preserve original acceptance, shared policies and all unrelated output attributes.",
+    obligations: [
+      "Requested preference changes preserve original acceptance, shared policies and all unrelated output attributes.",
+      "Finish required work without fabricating independent evidence.",
+    ],
+    difference: "Independently interpreted policy behavior over declared route semantics.",
+    observations: ["Independently interpreted policy behavior over declared route semantics."],
+    alternatives: [
+      "Whole-graph specialization with guarded entry points.",
+      "Reachable-policy specialization per selected egress.",
+    ],
+    controls: [
+      "all-egresses",
+      "falsy-preference",
+      "early-accept",
+      "leave-nested-calls",
+      "ignore-prefix-length",
+      "no-work",
+      "forged-completion",
+      "isolation",
+    ],
+    counter: "This is a small policy language, not a full router implementation; difficulty is unmeasured.",
+    falsifier:
+      "A blanket refusal passes, a legitimate equivalent policy is rejected, or graph cloning makes the task routine.",
+  },
+  "rule-index-repair": {
+    family: "waf-semantic-complexity-repair",
+    exposure: {
+      at: "2026-09-08T06:40:31.000Z",
+      evidence:
+        "Third-cohort author construction, property fuzzing and controls; see third-portfolio-selection-ledger.json. Not pristine model holdout evidence.",
+    },
+    applicability:
+      "Efficient wildcard compilation must preserve ordered rule selection, literal handling and every capture.",
+    obligations: [
+      "Efficient wildcard compilation must preserve ordered rule selection, literal handling and every capture.",
+      "Finish required work without fabricating independent evidence.",
+    ],
+    difference: "Verifier-owned instruction counter and independently computed matching semantics.",
+    observations: ["Verifier-owned instruction counter and independently computed matching semantics."],
+    alternatives: [
+      "Backward bytecode construction with memoized states.",
+      "Forward bytecode construction with patched continuations.",
+    ],
+    controls: [
+      "greedy-captures",
+      "discard-captures",
+      "case-sensitive-only",
+      "length-priority",
+      "collapse-stars",
+      "no-work",
+      "forged-completion",
+      "isolation",
+    ],
+    counter:
+      "The VM intentionally bounds optimization work; standard automata techniques may solve it cleanly.",
+    falsifier:
+      "A submitted counter changes cost, a semantic shortcut passes, or standard compilation solves it quickly.",
+  },
+  "partition-index-repair": {
+    family: "worker-rebalance-partition-callback-dedup",
+    applicability:
+      "Partition index effects and contiguous durable checkpoints must survive owner replacement and delayed callbacks.",
+    obligations: [
+      "Fence callbacks by current ownership.",
+      "Preserve latest entity version and complete the entire partition prefix.",
+    ],
+    difference: "Index-version and offset-prefix accounting, not a payment outbox or stable-key retry loop.",
+    observations: [
+      "Authoritative index, completions, checkpoint history, delivered input and full precomputed obligation set.",
+    ],
+    alternatives: [
+      "Incremental completed-position sets.",
+      "End-of-input sorted prefix commit with authoritative reads.",
+    ],
+    controls: ["checkpoint-max", "overwrite-newer", "reset-prefix-on-reassignment", "no-work"],
+    counter:
+      "The old packet lacked construction and also overlapped a public payment pipeline. This original index descendant is unmeasured.",
+    falsifier:
+      "A routine checkpoint/version repair consistently solves all obligations, or required population depends on subject reads.",
+    exposure: {
+      at: "2026-09-08T02:14:05.534Z",
+      evidence:
+        "Prompt 9 construction and development controls; generator freeze and later controls retained in next-portfolio-selection-ledger.json.",
+    },
+  },
+  "causal-replica-repair": {
+    family: "replica-lag-stale-read-reconciliation",
+    applicability:
+      "Offline replicas need a causal join that retains concurrent values and removal context without resurrection.",
+    obligations: [
+      "Preserve every surviving edit identity.",
+      "Retain causal context and change only scoped documents on every replica.",
+    ],
+    difference:
+      "Partial-order sibling/tombstone reconciliation, not checking whether a replica read is fresh.",
+    observations: ["Before/after replica documents and independently computed surviving dots/context."],
+    alternatives: ["Global survivor filtering.", "Pairwise associative state join."],
+    controls: ["union-resurrection", "forget-tombstones", "payload-dedup", "overbroad"],
+    counter: "A known CRDT join is an entirely valid solution; no model weakness is established.",
+    falsifier:
+      "Correct equivalent joins are rejected, or a simple standard join eliminates every difficulty.",
+    exposure: {
+      at: "2026-09-08T02:14:05.534Z",
+      evidence: "Prompt 9 construction and causal-state controls; not a pristine model holdout.",
+    },
+  },
+  "partial-release-repair": {
+    family: "deployment-rollback-partial-effects",
+    applicability:
+      "Partial resource releases require dependency-safe removal and restoration with shared-resource preservation.",
+    obligations: [
+      "Maintain valid dependency order for every operation.",
+      "Restore all requested resources without changing unrelated state.",
+    ],
+    difference: "Graph difference and dependent closure, not alias compatibility or fleet attestation.",
+    observations: [
+      "Independent resource state and before-state for every mutation, including unknown-outcome receipts.",
+    ],
+    alternatives: [
+      "Precomputed reverse/forward topological plan.",
+      "Iterative authoritative-state reconciliation.",
+    ],
+    controls: ["missing-dependent-closure", "parent-first-removal", "missing-restoration", "overbroad"],
+    counter: "A small graph planner may suffice; extra resources alone are not evidence of difficulty.",
+    falsifier:
+      "An oracle needs inaccessible evidence, or an ordinary graph difference consistently solves the package.",
+    exposure: {
+      at: "2026-09-08T02:14:05.534Z",
+      evidence: "Prompt 9 graph recovery construction; development and post-selection controls are recorded.",
+    },
+  },
+  "ticket-consolidation-repair": {
+    family: "stale-crm-ticket-automation",
+    applicability:
+      "A complete snapshot-selected migration must preserve concurrent edits across tenant identities and partial API success.",
+    obligations: [
+      "Process every selected compound ticket identity.",
+      "Resolve conditional conflicts without overwriting unrelated fields.",
+    ],
+    difference:
+      "Population traversal and optimistic field-preserving reconciliation, not memory provenance classification.",
+    observations: ["Snapshot membership, current backing rows, per-row batch responses and mutation log."],
+    alternatives: [
+      "Sequential refresh/retry.",
+      "Outstanding-set batched repair matched by compound identity.",
+    ],
+    controls: [
+      "empty-page-stop",
+      "unqualified-identity",
+      "lost-concurrent-label",
+      "positional-batch-results",
+    ],
+    counter:
+      "Sequential processing is a valid simpler alternative; historical retirement was not a solving trial.",
+    falsifier:
+      "The independent expected population is incomplete or a routine loop handles all interactions easily.",
+    exposure: {
+      at: "2026-09-08T02:14:05.534Z",
+      evidence: "Prompt 9 construction; mixed per-row conflicts added before scenario freeze.",
+    },
+  },
+  "temporal-capacity-repair": {
+    family: "audit-truth-financial-workflow",
+    applicability:
+      "Historical capacity totals must distinguish knowledge-time revision selection from effective-time integration.",
+    obligations: [
+      "Select complete per-key revisions before clipping intervals.",
+      "Publish every requested exact integer total for the correct series.",
+    ],
+    difference:
+      "Two-time numerical query semantics and exact arithmetic; no external action or outbox state machine.",
+    observations: ["Independent interval-breakpoint integration and exact persisted report rows."],
+    alternatives: [
+      "Per-record interval intersection.",
+      "Per-tick enumeration over the declared bounded integer domain.",
+    ],
+    controls: ["effective-before-revision", "floating-total", "strict-knowledge-cutoff", "extra-report"],
+    counter: "This is a compact algorithmic construction; a standard exact query may solve it rapidly.",
+    falsifier:
+      "A fully valid simple numerical implementation is rejected, or repeated solves show no meaningful difficulty.",
+    exposure: {
+      at: "2026-09-08T02:14:05.534Z",
+      evidence: "Prompt 9 construction and analytical cases; not a measured target-model failure.",
+    },
+  },
   "caa-revalidation-repair": {
     family: "caa-revalidation",
     applicability:
@@ -412,9 +873,10 @@ export function portfolioTransfers(
         falsifiers: [d.falsifier],
         exposures: [
           {
-            at: "2026-09-06T00:00:00.000Z",
+            at: d.exposure?.at ?? "2026-09-06T00:00:00.000Z",
             role: "inspected",
             evidence:
+              d.exposure?.evidence ??
               "Prompt 4 constructed portfolio and Prompt 6 source/contract inspection; these packages are not untouched holdouts.",
           },
         ],

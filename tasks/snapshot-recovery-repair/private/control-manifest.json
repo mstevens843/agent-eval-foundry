@@ -1,0 +1,88 @@
+[
+  {
+    "id": "drop-deletes",
+    "overlay": {
+      "src/recovery.mjs": "controls/drop-deletes.mjs"
+    },
+    "check": "restored_rows",
+    "clean": "case-032",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "reuse-deleted-id",
+    "overlay": {
+      "src/recovery.mjs": "controls/reuse-deleted-id.mjs"
+    },
+    "check": "allocation",
+    "clean": "case-032",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "cross-branch-journal",
+    "overlay": {
+      "src/catalog.mjs": "controls/cross-branch-journal.mjs"
+    },
+    "check": "restored_rows",
+    "clean": "case-032",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "trusted-cache",
+    "overlay": {
+      "src/blob.mjs": "controls/trusted-cache.mjs"
+    },
+    "check": "portable_backup",
+    "clean": "case-032",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "rows-only-backup",
+    "overlay": {
+      "src/backup.mjs": "controls/rows-only-backup.mjs"
+    },
+    "check": "portable_backup",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "forged-completion",
+    "overlay": {
+      "entry.mjs": "controls/forged-completion.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "isolation",
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression",
+    "isolation": true
+  },
+  {
+    "id": "boundary-cutoff",
+    "overlay": {
+      "src/catalog.mjs": "controls/boundary-cutoff.mjs"
+    },
+    "check": "restored_rows",
+    "clean": "case-032",
+    "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "example-hardcoding",
+    "overlay": {
+      "entry.mjs": "controls/example-hardcoding.mjs"
+    },
+    "check": "restored_rows",
+    "selectionRole": "correction-regression"
+  }
+]

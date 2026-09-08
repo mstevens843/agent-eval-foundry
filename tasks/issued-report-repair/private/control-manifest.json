@@ -1,0 +1,96 @@
+[
+  {
+    "id": "only-requested-recipients",
+    "overlay": {
+      "src/audience.mjs": "controls/only-requested-recipients.mjs"
+    },
+    "check": "recipient_scope",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "reuse-issued-version",
+    "overlay": {
+      "entry.mjs": "controls/reuse-issued-version.mjs"
+    },
+    "check": "issued_history",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "drop-source-lineage",
+    "overlay": {
+      "entry.mjs": "controls/drop-source-lineage.mjs"
+    },
+    "check": "amendment_content",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "corrections-labelled-initial",
+    "overlay": {
+      "entry.mjs": "controls/corrections-labelled-initial.mjs"
+    },
+    "check": "recipient_scope",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "current-for-historical",
+    "overlay": {
+      "entry.mjs": "controls/current-for-historical.mjs"
+    },
+    "check": "historical_answers",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "duplicate-notification",
+    "overlay": {
+      "entry.mjs": "controls/duplicate-notification.mjs"
+    },
+    "check": "recipient_scope",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "unrelated-recipient",
+    "overlay": {
+      "entry.mjs": "controls/unrelated-recipient.mjs"
+    },
+    "check": "recipient_scope",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "forged-completion",
+    "overlay": {
+      "entry.mjs": "controls/forged-completion.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "isolation",
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
+    "check": "completion",
+    "isolation": true,
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "stale-dependent-lineage",
+    "overlay": {
+      "entry.mjs": "controls/stale-dependent-lineage.mjs"
+    },
+    "check": "amendment_content",
+    "clean": "case-024",
+    "selectionRole": "post-selection-validation"
+  }
+]

@@ -1,0 +1,98 @@
+[
+  {
+    "id": "erase-errors",
+    "overlay": {
+      "entry.mjs": "controls/erase-errors.mjs"
+    },
+    "check": "error_semantics",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "drop-partial-error-data",
+    "overlay": {
+      "entry.mjs": "controls/drop-partial-error-data.mjs"
+    },
+    "check": "content",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "omit-empty-success",
+    "overlay": {
+      "entry.mjs": "controls/omit-empty-success.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "omit-unobserved-request",
+    "overlay": {
+      "entry.mjs": "controls/omit-unobserved-request.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "gaps-as-success",
+    "overlay": {
+      "entry.mjs": "controls/gaps-as-success.mjs"
+    },
+    "check": "error_semantics",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "wrong-attempt",
+    "overlay": {
+      "entry.mjs": "controls/wrong-attempt.mjs"
+    },
+    "check": "attempt_identity",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "duplicate-row",
+    "overlay": {
+      "entry.mjs": "controls/duplicate-row.mjs"
+    },
+    "check": "exact_rows",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "forged-completion",
+    "overlay": {
+      "entry.mjs": "controls/forged-completion.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "isolation",
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
+    "check": "completion",
+    "isolation": true,
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "lose-unicode-payload",
+    "overlay": {
+      "entry.mjs": "controls/lose-unicode-payload.mjs"
+    },
+    "check": "content",
+    "clean": "case-024",
+    "selectionRole": "post-selection-validation"
+  }
+]

@@ -1,0 +1,89 @@
+[
+  {
+    "id": "count-not-weight",
+    "overlay": {
+      "src/capacity.mjs": "controls/count-not-weight.mjs"
+    },
+    "check": "capacity",
+    "clean": "case-024",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "zone-blind",
+    "overlay": {
+      "src/capacity.mjs": "controls/zone-blind.mjs"
+    },
+    "check": "placement",
+    "clean": "case-024",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "remove-before-replacement",
+    "overlay": {
+      "entry.mjs": "controls/remove-before-replacement.mjs"
+    },
+    "check": "availability",
+    "clean": "case-024",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "one-upgrade-only",
+    "overlay": {
+      "entry.mjs": "controls/one-upgrade-only.mjs"
+    },
+    "check": "completion",
+    "clean": "case-024",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "omit-restoration",
+    "overlay": {
+      "entry.mjs": "controls/omit-restoration.mjs"
+    },
+    "check": "restoration",
+    "clean": "case-024",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "forged-completion",
+    "overlay": {
+      "entry.mjs": "controls/forged-completion.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "isolation",
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression",
+    "isolation": true
+  },
+  {
+    "id": "repeated-upgrade",
+    "overlay": {
+      "entry.mjs": "controls/repeated-upgrade.mjs"
+    },
+    "check": "legal_operations",
+    "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "example-hardcoding",
+    "overlay": {
+      "entry.mjs": "controls/example-hardcoding.mjs"
+    },
+    "check": "completion",
+    "clean": "case-024",
+    "selectionRole": "correction-regression"
+  }
+]

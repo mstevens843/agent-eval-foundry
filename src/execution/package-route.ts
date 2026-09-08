@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { copySnapshot, inspectAssembly, materializeAssembly } from "../packages/assembly.js";
 import { runNativeCaaSubmission } from "../packages/native-caa.js";
-import { runPortfolioSubmission } from "../packages/portfolio.js";
+import { gradeChecker, runPortfolioSubmission } from "../packages/portfolio.js";
 import {
   type PackageSnapshot,
   canonicalJson,
@@ -21,6 +21,7 @@ export interface ExecutionPackage {
   image: string;
   scenarioIds: string[];
   checkIds: string[];
+  checkerRequired: boolean;
 }
 export function executionPackage(directory: string): ExecutionPackage {
   const pointer = JSON.parse(readFileSync(join(directory, "package.json"), "utf8")) as {
@@ -49,6 +50,22 @@ export function executionPackage(directory: string): ExecutionPackage {
     checkIds: native
       ? manifest.checkIds
       : JSON.parse(Buffer.from(readSnapshotFile(snapshot, "scenarios", "check-ids.json")).toString()),
+    // Absent for native packages and for any portfolio package built before this flag existed —
+    // defaults to false so existing, already-hardened packages are unaffected.
+    checkerRequired: (() => {
+      if (native) return false;
+      try {
+        return (
+          (
+            JSON.parse(
+              Buffer.from(readSnapshotFile(snapshot, "scenarios", "checker-required.json")).toString(),
+            ) as { required: boolean }
+          ).required === true
+        );
+      } catch {
+        return false;
+      }
+    })(),
   };
 }
 export function prepareExecutionPackage(pkg: ExecutionPackage, stage: string) {
@@ -87,7 +104,12 @@ export async function gradeExecutionPackage(
   pkg: ExecutionPackage,
   submission: string,
   output: string,
-): Promise<{ evaluation: EvaluationOutcome; reward: number | null }> {
+): Promise<{
+  evaluation: EvaluationOutcome;
+  reward: number | null;
+  checkerRequired: boolean;
+  checkerPassed: boolean | null;
+}> {
   refreshSnapshot(pkg.snapshot);
   regularTree(submission, 8 * 1024 * 1024);
   if (pkg.native) {
@@ -116,7 +138,12 @@ export async function gradeExecutionPackage(
         canonicalJson(raw.scenarioIds) !== canonicalJson(pkg.scenarioIds))
     )
       throw Error("NATIVE_EVALUATION_CONFLICT");
-    return { evaluation, reward: evaluation.complete ? result.reward : null };
+    return {
+      evaluation,
+      reward: evaluation.complete ? result.reward : null,
+      checkerRequired: false,
+      checkerPassed: null,
+    };
   }
   const result = await runPortfolioSubmission(pkg.directory, submission, output);
   const evaluation = evaluateOutcome({
@@ -127,5 +154,19 @@ export async function gradeExecutionPackage(
     hostErrors: result.cells.some((c) => c.status === "invalid") ? 1 : 0,
     cells: result.cells.map((c) => ({ scenarioId: c.scenarioId, failed: c.failures ?? [] })),
   });
-  return { evaluation, reward: evaluation.complete ? (evaluation.status === "semantic-pass" ? 1 : 0) : null };
+  const entryReward = evaluation.complete ? (evaluation.status === "semantic-pass" ? 1 : 0) : null;
+  // A checker-required package's reward is gated on BOTH the repaired implementation and a
+  // submitted checker that genuinely discriminates this package's own reference from its full
+  // mutant bank — an entry.mjs semantic-pass with no checker, or a checker that doesn't clear
+  // gradeChecker's bar, is not a pass. Skipped entirely (checkerPassed stays null) when the
+  // entry.mjs side is already invalid/incomplete — that failure mode doesn't need a second cause.
+  if (!pkg.checkerRequired || entryReward === null)
+    return { evaluation, reward: entryReward, checkerRequired: pkg.checkerRequired, checkerPassed: null };
+  const checkerGrade = await gradeChecker(pkg.directory, submission, join(output, "checker-grade"));
+  return {
+    evaluation,
+    reward: checkerGrade.pass ? entryReward : 0,
+    checkerRequired: true,
+    checkerPassed: checkerGrade.pass,
+  };
 }

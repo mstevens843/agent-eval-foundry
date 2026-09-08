@@ -6,6 +6,7 @@ import { join, resolve } from "node:path";
 import { performance } from "node:perf_hooks";
 import {
   appendTransfer,
+  executionPackage,
   assessFindings,
   assessStoredTransfers,
   inspectPortfolioSelection,
@@ -15,8 +16,12 @@ import {
   renderTrial,
 } from "../dist/index.js";
 
-const [native, browser, memory, wallet, rollout, executionRoot, output] = process.argv.slice(2);
-if (![native, browser, memory, wallet, rollout, executionRoot, output].every(Boolean))
+const args = process.argv.slice(2);
+const output = args.at(-1),
+  executionRoot = args.at(-2),
+  exports = args.slice(0, -2);
+const [native, browser] = exports;
+if (exports.length < 5 || !executionRoot || !output)
   throw Error(
     "usage: node scripts/verify-evidence-learning.mjs NATIVE_EXPORT BROWSER_EXPORT MEMORY_EXPORT WALLET_EXPORT ROLLOUT_EXPORT PRESERVED_EXECUTION_ROOT FRESH_PRIVATE_OUTPUT",
   );
@@ -31,7 +36,6 @@ const before = source.sources.map((s) => ({
 }));
 const published = await learningCommand(root, ["publish-case", source.findingId, output]);
 const directions = (await learningCommand(root, ["directions"])).packages;
-const exports = [native, browser, memory, wallet, rollout];
 const browserReceipt = JSON.parse(readFileSync(join(browser, "verification/assurance.json"), "utf8"));
 const visibleProof = browserReceipt.results.find((r) => r.id === "visible-workspace-smoke");
 const browserParityVerified =
@@ -40,7 +44,8 @@ const browserParityVerified =
     visibleProof.detail?.observations?.some((o) => o.name === name),
   );
 const packages = exports.map((directory, i) => {
-  const d = directions[i];
+  const packageId = executionPackage(directory).snapshot.record.id;
+  const d = directions.find((d) => d.id === packageId);
   assert(d);
   return {
     directory,
@@ -84,7 +89,7 @@ const input = {
   packages,
 };
 const selected = await inspectPortfolioSelection(root, input);
-assert.equal(selected.transfers.length, 15);
+assert.equal(selected.transfers.length, exports.length * 3);
 assert(selected.transfers.every((t) => !t.assessment.provenHardness && !t.assessment.untouchedHeldOut));
 assert(selected.selection.decisions.every((d) => !d.policy.stages["trial-authorized"].allowed));
 if (!browserParityVerified)

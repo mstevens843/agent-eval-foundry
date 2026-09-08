@@ -1,0 +1,95 @@
+[
+  {
+    "id": "locally-greedy",
+    "overlay": {
+      "src/policy.mjs": "controls/locally-greedy.mjs"
+    },
+    "check": "future_promise",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "existential-future",
+    "overlay": {
+      "src/policy.mjs": "controls/existential-future.mjs"
+    },
+    "check": "future_promise",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "ignore-anti-affinity",
+    "overlay": {
+      "entry.mjs": "controls/ignore-anti-affinity.mjs"
+    },
+    "check": "capacity_and_constraints",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "ignore-zone-affinity",
+    "overlay": {
+      "entry.mjs": "controls/ignore-zone-affinity.mjs"
+    },
+    "check": "capacity_and_constraints",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "ignore-zone-count",
+    "overlay": {
+      "entry.mjs": "controls/ignore-zone-count.mjs"
+    },
+    "check": "capacity_and_constraints",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "mint-capacity",
+    "overlay": {
+      "entry.mjs": "controls/mint-capacity.mjs"
+    },
+    "check": "capacity_and_constraints",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "duplicate-placement",
+    "overlay": {
+      "entry.mjs": "controls/duplicate-placement.mjs"
+    },
+    "check": "irreversible_sequence",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "forged-completion",
+    "overlay": {
+      "entry.mjs": "controls/forged-completion.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "isolation",
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
+    "check": "completion",
+    "isolation": true,
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "coalesce-requested-units",
+    "overlay": {
+      "entry.mjs": "controls/coalesce-requested-units.mjs"
+    },
+    "check": "capacity_and_constraints",
+    "clean": "case-024",
+    "selectionRole": "post-selection-validation"
+  }
+]

@@ -22,7 +22,7 @@
 
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
-import { readFileSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 
 const ROOT = new URL("..", import.meta.url).pathname.replace(/\/$/, "");
@@ -76,9 +76,10 @@ const PATTERNS = [
     id: "bearer",
     what: "Authorization header carrying a literal credential",
     // A real bearer value, not `Bearer ${token}` and not `Bearer <token>`.
-    probe: /(?:Authorization|authorization)\s*[:=]\s*["'`]?\s*(?:Bearer|Basic)\s+(?!\$\{|<|\*|\.\.\.|"|'|`)[A-Za-z0-9+/=_-]{20,}/g,
+    probe:
+      /(?:Authorization|authorization)\s*[:=]\s*["'`]?\s*(?:Bearer|Basic)\s+(?!\$\{|<|\*|\.\.\.|"|'|`)[A-Za-z0-9+/=_-]{20,}/g,
     positive: `Authorization: Bearer ${"F".repeat(40)}`,
-    placeholder: 'Authorization: Bearer ${token}',
+    placeholder: "Authorization: Bearer ${token}",
   },
   {
     id: "private-key",
@@ -90,22 +91,51 @@ const PATTERNS = [
 ];
 
 // Structurally a placeholder rather than a credential.
-const PLACEHOLDER = /\$\{|<[a-zA-Z_-]+>|\*{3,}|\bREDACTED\b|\bredacted\b|\bEXAMPLE\b|YOUR[_-]|\bxxx+\b|\.\.\./;
+const PLACEHOLDER =
+  /\$\{|<[a-zA-Z_-]+>|\*{3,}|\bREDACTED\b|\bredacted\b|\bEXAMPLE\b|YOUR[_-]|\bxxx+\b|\.\.\./;
 
 // This file necessarily contains synthetic positives; so does its test. Scanning them would make the
 // scanner permanently red, which is the fastest way to teach people to pass --no-verify.
 const SELF = new Set(["scripts/secret-scan.mjs", "test/secret-scan.test.ts"]);
 
-const SKIP_DIRS = new Set(["node_modules", ".git", "dist", ".turbo", "coverage"]);
+const SKIP_DIRS = new Set([
+  "node_modules",
+  ".git",
+  ".local",
+  "dist",
+  ".turbo",
+  "coverage",
+  "candidate-rendered",
+]);
 
 /** Every file git knows about, plus untracked ones git would accept. Ignored files are ignored. */
-function candidateFiles() {
-  const out = execFileSync("git", ["ls-files", "-co", "--exclude-standard"], {
-    cwd: ROOT,
+export function candidateFiles(root = ROOT) {
+  // A source-only snapshot inside an ignored parent must never use that parent's git identity.
+  if (!existsSync(join(root, ".git"))) {
+    const manifest = JSON.parse(readFileSync(join(root, "candidate-source.json"), "utf8"));
+    if (
+      manifest.kind !== "candidate-source-snapshot" ||
+      !Array.isArray(manifest.files) ||
+      !manifest.files.length
+    )
+      throw Error("SECRET_SCAN_SOURCE_MANIFEST_REQUIRED");
+    const walk = (relative = "") =>
+      readdirSync(join(root, relative), { withFileTypes: true }).flatMap((e) => {
+        const path = relative ? relative + "/" + e.name : e.name;
+        if (SKIP_DIRS.has(e.name) || path.startsWith("findings/generated/")) return [];
+        if (e.isSymbolicLink()) throw Error("SECRET_SCAN_SOURCE_SYMLINK:" + path);
+        return e.isDirectory() ? walk(path) : e.isFile() ? [path] : [];
+      });
+    // Scan current snapshot additions too, not only the baseline manifest. This is intentionally
+    // stricter than ignored-file discovery in a Git checkout; snapshots carry source, not credentials.
+    return walk().sort();
+  }
+  const out = execFileSync("git", ["ls-files", "-co", "--exclude-standard", "-z"], {
+    cwd: root,
     encoding: "utf8",
     maxBuffer: 64 * 1024 * 1024,
   });
-  return out.split("\n").filter((p) => p && !SKIP_DIRS.has(p.split("/")[0]));
+  return [...new Set(out.split("\0"))].filter((p) => p && !SKIP_DIRS.has(p.split("/")[0]));
 }
 
 /** Enough to locate the finding, useless to anyone who wants to use it. */
@@ -144,13 +174,13 @@ function scanText(relPath, text, findings, skipped) {
   }
 }
 
-export function scanRepo() {
+export function scanRepo(root = ROOT) {
   const findings = [];
   const skipped = [];
   let scanned = 0;
-  for (const rel of candidateFiles()) {
+  for (const rel of candidateFiles(root)) {
     if (SELF.has(rel)) continue;
-    const abs = join(ROOT, rel);
+    const abs = join(root, rel);
     let st;
     try {
       st = statSync(abs);
@@ -202,23 +232,30 @@ function main() {
   const st = selfTest();
   if (st.dead.length > 0 || !st.endToEndFired) {
     console.error("SECRET SCAN IS BROKEN — it cannot detect what it claims to detect.");
-    if (st.dead.length > 0) console.error(`  patterns that no longer match their own positive: ${st.dead.join(", ")}`);
+    if (st.dead.length > 0)
+      console.error(`  patterns that no longer match their own positive: ${st.dead.join(", ")}`);
     if (!st.endToEndFired) console.error("  end-to-end: a synthetic secret was NOT reported");
     process.exit(2);
   }
   if (st.overeager.length > 0) {
-    console.error(`SECRET SCAN IS TOO EAGER — these patterns flag their own placeholder: ${st.overeager.join(", ")}`);
+    console.error(
+      `SECRET SCAN IS TOO EAGER — these patterns flag their own placeholder: ${st.overeager.join(", ")}`,
+    );
     process.exit(2);
   }
   if (args.has("--self-test")) {
-    console.log(`secret-scan self-test: ${PATTERNS.length} patterns live, placeholders ignored, end-to-end fires`);
+    console.log(
+      `secret-scan self-test: ${PATTERNS.length} patterns live, placeholders ignored, end-to-end fires`,
+    );
     return;
   }
 
   const { findings, skipped, scanned } = scanRepo();
 
   if (findings.length === 0) {
-    console.log(`secret-scan: clean (${scanned} files, ${PATTERNS.length} patterns, ${skipped.length} placeholders ignored)`);
+    console.log(
+      `secret-scan: clean (${scanned} files, ${PATTERNS.length} patterns, ${skipped.length} placeholders ignored)`,
+    );
     return;
   }
 

@@ -1,0 +1,89 @@
+[
+  {
+    "id": "empty-page-stop",
+    "clean": "case-032",
+    "overlay": {
+      "src/pages.mjs": "controls/empty-page-stop.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "unqualified-identity",
+    "clean": "case-032",
+    "overlay": {
+      "src/selection.mjs": "controls/unqualified-identity.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "ignore-partial-result",
+    "clean": "case-032",
+    "overlay": {
+      "src/update.mjs": "controls/ignore-partial-result.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "lost-concurrent-label",
+    "clean": "case-032",
+    "overlay": {
+      "src/update.mjs": "controls/lost-concurrent-label.mjs"
+    },
+    "check": "labels",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "global-directory",
+    "clean": "case-032",
+    "overlay": {
+      "src/update.mjs": "controls/global-directory.mjs"
+    },
+    "check": "ownership",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "all-statuses",
+    "overlay": {
+      "src/selection.mjs": "controls/all-statuses.mjs"
+    },
+    "check": "preservation",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "forged-completion",
+    "overlay": {
+      "entry.mjs": "controls/forged-completion.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "isolation",
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
+    "check": "completion",
+    "isolation": true,
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "positional-batch-results",
+    "overlay": {
+      "entry.mjs": "controls/positional-batch-results.mjs"
+    },
+    "check": "completion",
+    "clean": "case-032",
+    "selectionRole": "post-selection-validation"
+  }
+]

@@ -59,6 +59,26 @@ describe("the working tree is clean", () => {
 });
 
 describe("the scanner does not become the leak", () => {
+  it("scans source-only snapshots and additions without consulting an ignored parent Git tree", () => {
+    const dir = mkdtempSync(join(tmpdir(), "snapshot-scan-"));
+    try {
+      writeFileSync(
+        join(dir, "candidate-source.json"),
+        JSON.stringify({
+          kind: "candidate-source-snapshot",
+          files: [{ path: "original.txt" }],
+        }),
+      );
+      writeFileSync(join(dir, "original.txt"), "ordinary source");
+      writeFileSync(join(dir, "added.txt"), FAKE_OAUTH);
+      const result = scanRepo(dir);
+      expect(result.scanned).toBe(3);
+      expect(result.findings.some((f: { path: string }) => f.path === "added.txt")).toBe(true);
+      expect(JSON.stringify(result)).not.toContain(FAKE_OAUTH);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
   it("reports a planted credential by fingerprint and never prints its value", () => {
     const dir = mkdtempSync(join(tmpdir(), "secret-scan-"));
     const planted = join(dir, "planted.txt");

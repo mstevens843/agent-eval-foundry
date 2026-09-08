@@ -55,7 +55,16 @@ for (const [index, input] of inputs.entries()) {
   call("validate", ["validate", directory, validation]);
   const receipt = json(join(validation, "assurance.json"));
   assert.equal(receipt.packageDigest, digest);
-  assert.equal(receipt.results.length, 12);
+  const manifest = json(join(directory, "package/private/control-manifest.json"));
+  const expectedControls = [
+    "reference",
+    "alternative",
+    "starter",
+    ...manifest.map((c) => c.id),
+    "visible-workspace-smoke",
+    "reference-repeat",
+  ];
+  assert.deepEqual(receipt.results.map((r) => r.id).sort(), expectedControls.sort());
   assert(receipt.results.every((r) => r.status === "pass"));
   assert.equal(receipt.decision.stages["local-valid"].allowed, true);
   assert.equal(receipt.decision.stages["trial-authorized"].allowed, false);

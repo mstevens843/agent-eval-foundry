@@ -1,0 +1,89 @@
+[
+  {
+    "id": "greedy-captures",
+    "overlay": {
+      "src/pattern.mjs": "controls/greedy-captures.mjs"
+    },
+    "check": "semantics",
+    "clean": "case-024",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "discard-captures",
+    "overlay": {
+      "src/pattern.mjs": "controls/discard-captures.mjs"
+    },
+    "check": "semantics",
+    "clean": "case-024",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "case-sensitive-only",
+    "overlay": {
+      "src/pattern.mjs": "controls/case-sensitive-only.mjs"
+    },
+    "check": "semantics",
+    "clean": "case-024",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "length-priority",
+    "overlay": {
+      "src/compiler.mjs": "controls/length-priority.mjs"
+    },
+    "check": "semantics",
+    "clean": "case-024",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "collapse-stars",
+    "overlay": {
+      "src/tokens.mjs": "controls/collapse-stars.mjs"
+    },
+    "check": "semantics",
+    "clean": "case-024",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "forged-completion",
+    "overlay": {
+      "entry.mjs": "controls/forged-completion.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "isolation",
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression",
+    "isolation": true
+  },
+  {
+    "id": "prefix-instead-of-full-match",
+    "overlay": {
+      "src/compiler.mjs": "controls/prefix-instead-of-full-match.mjs"
+    },
+    "check": "semantics",
+    "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "example-hardcoding",
+    "overlay": {
+      "entry.mjs": "controls/example-hardcoding.mjs"
+    },
+    "check": "semantics",
+    "clean": "case-024",
+    "selectionRole": "correction-regression"
+  }
+]

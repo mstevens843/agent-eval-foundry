@@ -1,0 +1,87 @@
+[
+  {
+    "id": "effective-before-revision",
+    "clean": "case-032",
+    "overlay": {
+      "src/revisions.mjs": "controls/effective-before-revision.mjs"
+    },
+    "check": "exact_integral",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "future-revision",
+    "clean": "case-032",
+    "overlay": {
+      "src/revisions.mjs": "controls/future-revision.mjs"
+    },
+    "check": "exact_integral",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "inclusive-end",
+    "overlay": {
+      "src/integral.mjs": "controls/inclusive-end.mjs"
+    },
+    "check": "exact_integral",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "floating-total",
+    "clean": "case-032",
+    "overlay": {
+      "src/integral.mjs": "controls/floating-total.mjs"
+    },
+    "check": "exact_integral",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "extra-report",
+    "overlay": {
+      "entry.mjs": "controls/extra-report.mjs"
+    },
+    "check": "population",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "duplicate-report",
+    "overlay": {
+      "entry.mjs": "controls/duplicate-report.mjs"
+    },
+    "check": "unique_reports",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "forged-completion",
+    "overlay": {
+      "entry.mjs": "controls/forged-completion.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "isolation",
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
+    "check": "completion",
+    "isolation": true,
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "strict-knowledge-cutoff",
+    "overlay": {
+      "src/revisions.mjs": "controls/strict-knowledge-cutoff.mjs"
+    },
+    "check": "exact_integral",
+    "clean": "case-032",
+    "selectionRole": "post-selection-validation"
+  }
+]

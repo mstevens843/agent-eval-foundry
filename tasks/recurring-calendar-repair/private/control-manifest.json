@@ -1,0 +1,99 @@
+[
+  {
+    "id": "fixed-zone-offset",
+    "overlay": {
+      "src/time.mjs": "controls/fixed-zone-offset.mjs"
+    },
+    "check": "civil_time",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "display-time-identity",
+    "overlay": {
+      "src/changes.mjs": "controls/display-time-identity.mjs"
+    },
+    "check": "occurrence_identity",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "erase-cancelled-history",
+    "overlay": {
+      "entry.mjs": "controls/erase-cancelled-history.mjs"
+    },
+    "check": "history",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "reset-attendee-responses",
+    "overlay": {
+      "entry.mjs": "controls/reset-attendee-responses.mjs"
+    },
+    "check": "preservation",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "global-series-change",
+    "overlay": {
+      "entry.mjs": "controls/global-series-change.mjs"
+    },
+    "check": "preservation",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "booking-display-key",
+    "overlay": {
+      "entry.mjs": "controls/booking-display-key.mjs"
+    },
+    "check": "bookings",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "drop-external-bookings",
+    "overlay": {
+      "entry.mjs": "controls/drop-external-bookings.mjs"
+    },
+    "check": "bookings",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "forged-completion",
+    "overlay": {
+      "entry.mjs": "controls/forged-completion.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "isolation",
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression",
+    "isolation": true
+  },
+  {
+    "id": "wall-clock-duration",
+    "overlay": {
+      "entry.mjs": "controls/wall-clock-duration.mjs"
+    },
+    "check": "civil_time",
+    "clean": "case-024",
+    "selectionRole": "post-selection-validation"
+  }
+]

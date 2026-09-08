@@ -10,6 +10,7 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { verifyPublication } from "./verify-publication.mjs";
 
 const run = (args) =>
   execFileSync("node", ["dist/cli.js", ...args], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
@@ -669,6 +670,9 @@ if (generated.length < REPORT_FLOOR) {
 // Keep this list at one or two entries. Every addition is a document nothing can check, and the honest
 // default for anything describing current numbers is to generate it instead.
 const HAND_AUTHORED = new Map([
+  ["PORTFOLIO-PUBLICATION.md", "Dated source integration and scoped verification; checked by verify-publication.mjs."],
+  ["portfolio-promotion-manifest.json", "Retained source provenance receipt, not a current readiness declaration."],
+  ["screening", "Explicitly inventoried editorial trial analyses and sanitized evidence; verify-publication.mjs checks every member and link."],
   [
     "PHASE-20-VERIFIER-TRUST-BOUNDARY.md",
     "Retained dated engineering investigation, not current qualification.",
@@ -750,6 +754,7 @@ for (const [name, why] of HAND_AUTHORED) {
 }
 
 // Versioned acceptance measurements are retained records, not fresh runtime attestations.
+console.log("ok     screening publication", verifyPublication());
 for (const name of readdirSync("reports/verification")) {
   assert.ok(name.endsWith(".json"), "unknown acceptance artifact: " + name);
   const value = JSON.parse(readFileSync(join("reports/verification", name), "utf8"));

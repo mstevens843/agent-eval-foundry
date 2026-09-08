@@ -1,0 +1,312 @@
+{
+  "schemaVersion": 1,
+  "status": "post-selection-controls-added",
+  "providerCallsMade": 0,
+  "generators": [
+    {
+      "id": "snapshot-recovery-repair",
+      "generatorSha256": "23d10e651a80cf2dbf7a477ef9d328fc512702e21790103b53c01eef7b2947c6"
+    },
+    {
+      "id": "verified-installation-repair",
+      "generatorSha256": "67cfb04ba2d998325c9c86c740291dec9e5cc2b2549d75196f19fe23c6e3440d"
+    },
+    {
+      "id": "capacity-maintenance-repair",
+      "generatorSha256": "0952dd52e9e4c0819ad191f8bf07973379ad7754308e6df8a40daa932e1af075"
+    },
+    {
+      "id": "route-policy-repair",
+      "generatorSha256": "df8961fc298643a7fc4c5c3150a8e0bdaf702fbd3b3d3f3a6bf7f61ec78067e8"
+    },
+    {
+      "id": "rule-index-repair",
+      "generatorSha256": "168508dded6108f1743a31f076af9a500e69930e54bd10f58c3585982ed65e0f"
+    }
+  ],
+  "developmentReceipt": "../author-03/summary.json",
+  "validationControls": [
+    {
+      "id": "snapshot-recovery-repair",
+      "control": "boundary-cutoff",
+      "generatorUnchanged": true,
+      "exposure": "Author-created after generator freeze; once validated, regression evidence, not a pristine holdout."
+    },
+    {
+      "id": "verified-installation-repair",
+      "control": "preserve-whiteouted-descendants",
+      "generatorUnchanged": false,
+      "exposure": "Author-created after generator freeze; once validated, regression evidence, not a pristine holdout."
+    },
+    {
+      "id": "capacity-maintenance-repair",
+      "control": "repeated-upgrade",
+      "generatorUnchanged": true,
+      "exposure": "Author-created after generator freeze; once validated, regression evidence, not a pristine holdout."
+    },
+    {
+      "id": "route-policy-repair",
+      "control": "match-mutated-community",
+      "generatorUnchanged": true,
+      "exposure": "Author-created after generator freeze; once validated, regression evidence, not a pristine holdout."
+    },
+    {
+      "id": "rule-index-repair",
+      "control": "prefix-instead-of-full-match",
+      "generatorUnchanged": true,
+      "exposure": "Author-created after generator freeze; once validated, regression evidence, not a pristine holdout."
+    }
+  ],
+  "qualification": "Generator freeze precedes additional controls. No model or human-solvability evidence.",
+  "previousPreformatFreeze": [
+    {
+      "id": "snapshot-recovery-repair",
+      "generatorSha256": "5829116901d72f6c2400de068da195a69914743a82485968e87665d403061e05",
+      "controls": [
+        {
+          "id": "drop-deletes",
+          "sha256": "f4405fa365ec231546eb2e0b452a17ed336bea0bb4b8df2c6c193418ed334966"
+        },
+        {
+          "id": "reuse-deleted-id",
+          "sha256": "4da0c650d658f807f5529318f1e37197b7c753bce5317fa85890864cd8f7fcdc"
+        },
+        {
+          "id": "cross-branch-journal",
+          "sha256": "b59f1667e1fbfdd51349bcc182d9e4b74f037afc71d806068ac8b27891de35ba"
+        },
+        {
+          "id": "trusted-cache",
+          "sha256": "10a054096f5ab0d8493cca7555e38b5fe975225d91a60661a57a8ecbb58b705d"
+        },
+        {
+          "id": "rows-only-backup",
+          "sha256": "5db4aa9169ed755374a1b477030ff1e40b39df780421e43975de145731cd22d2"
+        },
+        {
+          "id": "no-work",
+          "sha256": "7ad56e15aad48745bd5f95638f11a02afe8106d582da7c837970bf8d382cfb4a"
+        },
+        {
+          "id": "forged-completion",
+          "sha256": "b4c89f40adf6415a5e133d56e09ca38fd19b7d3d0c53c3cf854d1238d0825315"
+        },
+        {
+          "id": "isolation",
+          "sha256": "5cb0fe8d8addd65dc72cbf04795ca088df98e5bb7b20a87c16b3c01463d9066b"
+        }
+      ]
+    },
+    {
+      "id": "verified-installation-repair",
+      "generatorSha256": "4f67866950c924b2e01e6eaf809c6e3ee0ca04f05d8fe4967fa66bbdaa087b03",
+      "controls": [
+        {
+          "id": "array-order-removal",
+          "sha256": "c4faf8fa233813e4a480feabede78cbef1aa018c58899dfbcaeb6653f3059814"
+        },
+        {
+          "id": "url-only-cache",
+          "sha256": "de0c678ff8f6796989a69cbac43d4b7ecdf8a758aa6b07ed02522d4d37e5d5f5"
+        },
+        {
+          "id": "default-permissions",
+          "sha256": "6aad31c63d7f7606f9d41607de66f292c94a172107d45650f79aba0959fb4329"
+        },
+        {
+          "id": "accept-unavailable",
+          "sha256": "69dd374ef3f95e0f7d33f344330e2b5513922d1c2ced2e699c801db4d40e2fda"
+        },
+        {
+          "id": "reverse-commitments",
+          "sha256": "1a9c22b2078bf6a74f674cdd1b131a51b31f60979e8752c9071b3ca52f5320e1"
+        },
+        {
+          "id": "no-work",
+          "sha256": "7ad56e15aad48745bd5f95638f11a02afe8106d582da7c837970bf8d382cfb4a"
+        },
+        {
+          "id": "forged-completion",
+          "sha256": "b4c89f40adf6415a5e133d56e09ca38fd19b7d3d0c53c3cf854d1238d0825315"
+        },
+        {
+          "id": "isolation",
+          "sha256": "5cb0fe8d8addd65dc72cbf04795ca088df98e5bb7b20a87c16b3c01463d9066b"
+        }
+      ]
+    },
+    {
+      "id": "capacity-maintenance-repair",
+      "generatorSha256": "8069ab73b67ff453b8b42dd47b004a4091037be462279724ab724a204b613f71",
+      "controls": [
+        {
+          "id": "count-not-weight",
+          "sha256": "153b9c1afebcc053bb0bd19e308b9edd48cc57086155b2b7ed5e19a992efddee"
+        },
+        {
+          "id": "zone-blind",
+          "sha256": "1a530e269fd3a1adf9704638c9188d5c3773f0d03def616613803817ed444959"
+        },
+        {
+          "id": "remove-before-replacement",
+          "sha256": "b8b2efa18a11da3d1539ba4b02b1fbd6ded7b50d6cfd658c5a30715e086d00aa"
+        },
+        {
+          "id": "one-upgrade-only",
+          "sha256": "c84bf83fe9c85e9407d55bd52bb1432d6072a071db1e637a890fc44111d04928"
+        },
+        {
+          "id": "omit-restoration",
+          "sha256": "a9547f22be644bf4a423331841638ac7476aa97c7637c1f1736a111cc6225eaf"
+        },
+        {
+          "id": "no-work",
+          "sha256": "7ad56e15aad48745bd5f95638f11a02afe8106d582da7c837970bf8d382cfb4a"
+        },
+        {
+          "id": "forged-completion",
+          "sha256": "b4c89f40adf6415a5e133d56e09ca38fd19b7d3d0c53c3cf854d1238d0825315"
+        },
+        {
+          "id": "isolation",
+          "sha256": "5cb0fe8d8addd65dc72cbf04795ca088df98e5bb7b20a87c16b3c01463d9066b"
+        }
+      ]
+    },
+    {
+      "id": "route-policy-repair",
+      "generatorSha256": "ffec05366f060806bf1663c710e70090fd6c43cb2490b57b6a8fc023d42549dc",
+      "controls": [
+        {
+          "id": "all-egresses",
+          "sha256": "4e81551e2e4c9661f9bce25979de1cdb4523d6c3882bd725de1be07d8ea62bcd"
+        },
+        {
+          "id": "falsy-preference",
+          "sha256": "50c33de18bcef9ea55742d95ae316af42d2459174fb5737574f21f401847e5d5"
+        },
+        {
+          "id": "early-accept",
+          "sha256": "72b08e4fe7240479c303ea2a1159f7d187181744af6bd97569936b9111896923"
+        },
+        {
+          "id": "leave-nested-calls",
+          "sha256": "43477f3628c1237ffc9109ec9edc9bab138a6c04c5c7ef20bcb5af46e89f29f7"
+        },
+        {
+          "id": "ignore-prefix-length",
+          "sha256": "895169752092c2041438f44d43919451c24c47c724250b6b2a06aec60a207d06"
+        },
+        {
+          "id": "no-work",
+          "sha256": "7ad56e15aad48745bd5f95638f11a02afe8106d582da7c837970bf8d382cfb4a"
+        },
+        {
+          "id": "forged-completion",
+          "sha256": "b4c89f40adf6415a5e133d56e09ca38fd19b7d3d0c53c3cf854d1238d0825315"
+        },
+        {
+          "id": "isolation",
+          "sha256": "5cb0fe8d8addd65dc72cbf04795ca088df98e5bb7b20a87c16b3c01463d9066b"
+        }
+      ]
+    },
+    {
+      "id": "rule-index-repair",
+      "generatorSha256": "896938f4948cf9eb8174059a09b738564bf3349b6012b2870dcc56c41843683f",
+      "controls": [
+        {
+          "id": "greedy-captures",
+          "sha256": "995848ba275cee2a9742a5224d9353fdd24045795b32e01a33f0383febe0460e"
+        },
+        {
+          "id": "discard-captures",
+          "sha256": "7b0a211dba22c1b13dc3e0a4ff03101b4264177b8643e63e9ee4eddd5ad57b29"
+        },
+        {
+          "id": "case-sensitive-only",
+          "sha256": "4292cab12707c4649b2f115ff1fee532762b97df92fbb775d10332cf64c91e2f"
+        },
+        {
+          "id": "length-priority",
+          "sha256": "12dcffa2c840bdd093cb110e61cb6fcef650d16d316375ac825f9b10c1afc743"
+        },
+        {
+          "id": "collapse-stars",
+          "sha256": "83b3d3c1def8c50c6eb986d6cfbf3427c340692eff1760a03480bf321e3ed6d0"
+        },
+        {
+          "id": "no-work",
+          "sha256": "7ad56e15aad48745bd5f95638f11a02afe8106d582da7c837970bf8d382cfb4a"
+        },
+        {
+          "id": "forged-completion",
+          "sha256": "b4c89f40adf6415a5e133d56e09ca38fd19b7d3d0c53c3cf854d1238d0825315"
+        },
+        {
+          "id": "isolation",
+          "sha256": "5cb0fe8d8addd65dc72cbf04795ca088df98e5bb7b20a87c16b3c01463d9066b"
+        }
+      ]
+    }
+  ],
+  "revision": 3,
+  "previousRevision2GeneratorFreeze": [
+    {
+      "id": "snapshot-recovery-repair",
+      "generatorSha256": "23d10e651a80cf2dbf7a477ef9d328fc512702e21790103b53c01eef7b2947c6"
+    },
+    {
+      "id": "verified-installation-repair",
+      "generatorSha256": "c590a60d8bf04a86b27e9546e0a0680eb859c997de74e42b00a37a783205ef1e"
+    },
+    {
+      "id": "capacity-maintenance-repair",
+      "generatorSha256": "cfb11ae14e9095d9a7101b97f40db80e067c46a486eec6478393a1ca7b45cdf2"
+    },
+    {
+      "id": "route-policy-repair",
+      "generatorSha256": "df8961fc298643a7fc4c5c3150a8e0bdaf702fbd3b3d3f3a6bf7f61ec78067e8"
+    },
+    {
+      "id": "rule-index-repair",
+      "generatorSha256": "168508dded6108f1743a31f076af9a500e69930e54bd10f58c3585982ed65e0f"
+    }
+  ],
+  "previousGeneratorFreeze": [
+    {
+      "id": "snapshot-recovery-repair",
+      "generatorSha256": "23d10e651a80cf2dbf7a477ef9d328fc512702e21790103b53c01eef7b2947c6"
+    },
+    {
+      "id": "verified-installation-repair",
+      "generatorSha256": "e47bf5c4fe47d54d925b9dee398cfdec48c47c4db810efa4c97d020f6022ac99"
+    },
+    {
+      "id": "capacity-maintenance-repair",
+      "generatorSha256": "cfb11ae14e9095d9a7101b97f40db80e067c46a486eec6478393a1ca7b45cdf2"
+    },
+    {
+      "id": "route-policy-repair",
+      "generatorSha256": "df8961fc298643a7fc4c5c3150a8e0bdaf702fbd3b3d3f3a6bf7f61ec78067e8"
+    },
+    {
+      "id": "rule-index-repair",
+      "generatorSha256": "168508dded6108f1743a31f076af9a500e69930e54bd10f58c3585982ed65e0f"
+    }
+  ],
+  "corrections": [
+    {
+      "id": "verified-cache-origin-unavailable",
+      "diagnostic": "../cache-boundary-diagnostic.json",
+      "change": "Verified cache can satisfy a descriptor despite missing/corrupt origin. Three new cases and an origin-only wrong-solution control. Opaque release identifiers.",
+      "exposure": "Artifact generator expanded after original post-selection control exposure; all current artifact controls are regression controls, not fresh holdouts."
+    },
+    {
+      "id": "checker-required-scenario-window-coverage",
+      "date": "2026-09-08",
+      "change": "A checker-required grading mechanism was added (submissions must include an independently-written checker.mjs, judged against real verdict-stripped traces of the reference/alternative/every control). Building it honestly surfaced a real coverage gap in verified-installation-repair and capacity-maintenance-repair: the reference's own incidental behavior (cache-probing order; the still-buggy starter's early termination) let the scenario-window auto-selector report a control as \"distinguishable\" before its actual planted defect was ever exercised. Both generators' scenario counts were widened (verified-installation-repair 33->44 cases; capacity-maintenance-repair 25->138 cases, via duplicated independently-confirmed witnessing scenarios) so every control's real, declared defect is authoritatively exercised somewhere in the space, not just something that happens to look different. route-policy-repair, rule-index-repair and snapshot-recovery-repair needed no scenario changes for this.",
+      "exposure": "Generator bytes changed after the controls listed in validationControls above were already authored/inspected; this is a disclosed re-freeze, not a silent replacement. verified-installation-repair's generator was extended (new cases appended past the prior 33). capacity-maintenance-repair's generator was restructured, not just appended to: duplicated copies of the specific witnessing scenarios were added via cloning loops so the checker-required scenario-window selector reliably lands on them; case ids there are not guaranteed to match the prior freeze's numbering."
+    }
+  ]
+}

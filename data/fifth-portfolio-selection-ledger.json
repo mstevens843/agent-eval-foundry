@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "cohort": "fifth-five",
+  "evidenceClass": "author-local-construction",
+  "reFreeze": {
+    "date": "2026-09-08",
+    "reason": "A checker-required grading mechanism (submissions must include an independently-written checker.mjs, judged against real verdict-stripped traces of the reference/alternative/every control) was ported into this tree and applied to all five packages. Doing so honestly required closing real, evidence-based scenario-coverage gaps in each generator, most notably staged-allocation-repair's ignore-anti-affinity/ignore-zone-affinity/ignore-zone-count controls, each of which was detected by only 1 of the original 28 scenarios (the seed loop's fixed resource template made all three constraints structurally vacuous outside three dedicated edge cases) -- a checker cannot be fairly required to detect a defect the scenario bank almost never actually triggers. All five generators below are intentionally modified and re-frozen as of this date; every original case id from the prior freeze is still present and unchanged (only new cases were appended), so this is a disclosed, additive re-freeze, not a silent replacement.",
+    "priorGeneratorSha256": {
+      "incremental-build-repair": "7e0fd040dc55fa12737fb30c9c74769fd20ee34b33367567059af8e425265621",
+      "event-window-repair": "20b758d4bed4777d25c5071fa0b6b95314040bbbfbe43181aaa21c9a167250dc",
+      "staged-allocation-repair": "13024e7c341ebc20d5f2d320f19cf4cfc97e8021bd8ba1432778cdb8e8db2149",
+      "diagnostic-transport-repair": "889919f42a27a448b7bdd5b75739b8f6c8398dc9680e11fc8489a3fbd5ffc5f4",
+      "issued-report-repair": "d18f69b4f731623c8791aa29f8fd786799219457ac8210484feb2447a9bdc660"
+    }
+  },
+  "generators": [
+    {
+      "id": "incremental-build-repair",
+      "generatorSha256": "34709b8e0a0a69f6c2ff367b1db26c351f723335c409577258b7b5318fbc13f9"
+    },
+    {
+      "id": "event-window-repair",
+      "generatorSha256": "73692dee7373ed9664eb2ecf9e897412bef89eb2d7d40495e47756015bc4e517"
+    },
+    {
+      "id": "staged-allocation-repair",
+      "generatorSha256": "5a5f26426da76fed3757b4553394482a6739b69b50241df7c0b37802109bb551"
+    },
+    {
+      "id": "diagnostic-transport-repair",
+      "generatorSha256": "f831e519a684210492fb4ad3c12135623ca7b50c76307057045cdaf4926767b8"
+    },
+    {
+      "id": "issued-report-repair",
+      "generatorSha256": "a047cb46b5f3d6ff6cede603e1822f4601ea114213f17a9696b3ca02f61cdaca"
+    }
+  ],
+  "selection": "Task-native interaction scenarios, non-activation witnesses and empty boundaries. These exact generator bytes are frozen before authoring post-selection validation controls.",
+  "exposure": "Development controls and generated properties have already been inspected. Post-selection controls become regressions once inspected; no independent model holdout or panel claim.",
+  "providerCallsMade": 0,
+  "validationControls": [
+    {
+      "id": "incremental-build-repair",
+      "control": "wrong-dependency-alias",
+      "check": "current_artifacts"
+    },
+    {
+      "id": "event-window-repair",
+      "control": "duplicate-late-delivery",
+      "check": "late_output"
+    },
+    {
+      "id": "staged-allocation-repair",
+      "control": "coalesce-requested-units",
+      "check": "capacity_and_constraints"
+    },
+    {
+      "id": "diagnostic-transport-repair",
+      "control": "lose-unicode-payload",
+      "check": "content"
+    },
+    {
+      "id": "issued-report-repair",
+      "control": "stale-dependent-lineage",
+      "check": "amendment_content"
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+[
+  {
+    "id": "missing-dependent-closure",
+    "clean": "case-032",
+    "overlay": {
+      "src/plan.mjs": "controls/missing-dependent-closure.mjs",
+      "src/transport.mjs": "controls/abandon-unknown.mjs"
+    },
+    "check": "dependency_order",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "parent-first-removal",
+    "clean": "case-032",
+    "overlay": {
+      "src/graph.mjs": "controls/parent-first-removal.mjs",
+      "src/transport.mjs": "controls/abandon-unknown.mjs"
+    },
+    "check": "dependency_order",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "abandon-unknown",
+    "clean": "case-032",
+    "overlay": {
+      "src/transport.mjs": "controls/abandon-unknown.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "wrong-payload",
+    "overlay": {
+      "entry.mjs": "controls/wrong-payload.mjs"
+    },
+    "check": "payload",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "overbroad",
+    "overlay": {
+      "entry.mjs": "controls/overbroad.mjs"
+    },
+    "check": "preservation",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "forged-completion",
+    "overlay": {
+      "entry.mjs": "controls/forged-completion.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "isolation",
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
+    "check": "completion",
+    "isolation": true,
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "missing-restoration",
+    "overlay": {
+      "src/plan.mjs": "controls/missing-restoration.mjs"
+    },
+    "check": "completion",
+    "clean": "case-032",
+    "selectionRole": "post-selection-validation"
+  }
+]

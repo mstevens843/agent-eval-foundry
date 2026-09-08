@@ -10,7 +10,7 @@ Use the pinned Node and pnpm versions. Dependencies are installed with the froze
 | Historical evidence | `pnpm test:history` | Preserved outcomes, adjudications, inspection, findings, correction propagation and current prose |
 | Required protected routes | `pnpm test:protected` | Actual Docker execution, all twelve generic routes and full retained population tests |
 | All maintained tests | `pnpm test` | Every file under `test/`, with zero allowed silent skips |
-| Native/browser production | `pnpm test:integration .local/integration-NEW` | Five package builds/controls/exports, primary native/browser inert execution and recipient reproduction |
+| Native/browser production | `pnpm test:integration .local/integration-NEW` | All registered professional packages, primary native/browser inert execution and recipient reproduction |
 
 The suite inventory is `scripts/test-tiers.mjs`. New test files default to the semantic tier until explicitly reviewed. Vitest discovers only `test/**/*.test.ts`: private archived workspaces and their test copies are not repository test inputs. Two workers limit duplicated large sweeps and idle memory. Every tier writes an exclusive JSON result and counts passed, failed and skipped tests. A missing required runtime fails the tier before execution; any skipped assertion or empty/failed suite also makes the tier fail.
 
@@ -32,7 +32,15 @@ pnpm test:integration .local/integration-NEW
 
 The Go tag only bootstraps an inert test-author binary; the integration records and uses its actual image digest. It is not a target model. Native package builds independently retain their pinned images.
 
-Allow at least 16 GiB of free host space for the five-package integration and additional room for unrelated Docker activity. The observed archive/export population is about 10 GiB; the preflight also budgets four GiB reserve and two GiB build overhead. Archive publication budgets a complete copy even when cloning succeeds; each integration stage checks the remaining reserve. On macOS the runtime copier uses APFS cloning through the system copy tool because the measured Node forced-clone API returns ENOSYS. Recipients receive independent files, never links to another package's archive. On an I/O failure, retain logs and treat the run as incomplete; do not relabel failed startup as a subject failure or prune unrelated Docker data.
+Allow two GiB per registered professional package plus six GiB reserve/build overhead,
+and additional room for unrelated Docker activity: 56 GiB for twenty-five packages,
+26 GiB for ten, versus the original 16 GiB five-package budget. The original measured archive/export population
+was about 10 GiB for five packages. Archive publication budgets a complete copy even
+when cloning succeeds; each stage checks the remaining reserve. On macOS the runtime
+copier uses APFS cloning because the measured Node forced-clone API returns ENOSYS.
+Recipients receive independent files, never links to another package's archive. On an
+I/O failure, retain logs and treat the run as incomplete. Do not relabel failed startup
+as a subject failure or prune unrelated Docker data.
 
 ## Required final checks
 

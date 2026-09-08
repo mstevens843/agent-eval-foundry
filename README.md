@@ -6,13 +6,17 @@ The unit of progress is a **valid, materially distinct task package**—not a re
 
 ## What works and what remains
 
-Five professional candidates have local production adapters: native Go certificate authorization, real-browser replay, persistent knowledge, delegated budgets and compatible rollouts. The foundry assembles public workspaces and private validators, runs correct/incorrect controls, exports retained artifacts, and inspects immutable execution evidence.
+Twenty-five professional package source trees are maintained here: native Go/browser/persistence/budget/rollout tasks plus twenty packages covering recovery, installation, planning, reconciliation, documents, calendars, caching, streaming and more. The foundry assembles public workspaces and private validators, runs correct/incorrect controls, exports retained artifacts, and inspects immutable execution evidence.
+
+**Start with the [five-minute project status](docs/project-status.md)** for the complete package list and code links. The [ten screening analyses](reports/screening/README.md) show what agents repaired, what their checking missed, and where our own measurement needed correction. All ten screened service implementations passed; two second-batch checker gates recorded zero, one with a contract/grader alignment concern. These are exploratory observations, not a qualified hard-task portfolio.
+
+[Progress and decisions](docs/engineering-progress.md) connects the results to what we changed, what we rejected and what the next experiments must establish.
 
 Twelve protected generic families remain calibration tools, not twelve additional professional deliverables. Historical discovery/scaffold commands produce drafts, not finished packages. Local controls do not prove task difficulty.
 
-Independent expert fairness/time review, destination-specific acceptance, effective live-provider enrollment, and official standard/adversarial qualification remain pending. No current package is advertised as six fair target-model failures or a demonstrated thousand-task yield. Real provider dispatch is not enabled by the local simulation commands.
+Independent expert fairness/time review, destination-specific acceptance, exact effective-profile qualification, and official standard/adversarial qualification remain pending. No current package is advertised as six fair target-model failures or a demonstrated thousand-task yield. Real subscription-backed screening has run through explicit authorization; local simulation commands do not dispatch providers.
 
-See the [integration acceptance report](reports/PROMPT-07-INTEGRATION.md), [gap ledger](data/implementation-gap-ledger.json), and [portfolio](docs/professional-portfolio.md) for scoped evidence and remaining work.
+See the [current publication report](reports/PORTFOLIO-PUBLICATION.md), [historical Phase 7 acceptance](reports/PROMPT-07-INTEGRATION.md), and [production guide](docs/professional-portfolio.md) for scoped evidence and remaining work. The [artifact policy](docs/artifact-lifecycle.md) explains what is tracked versus intentionally private.
 
 ## Start here—no credentials needed
 

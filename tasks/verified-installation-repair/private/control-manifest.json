@@ -1,0 +1,99 @@
+[
+  {
+    "id": "array-order-removal",
+    "overlay": {
+      "src/layers.mjs": "controls/array-order-removal.mjs"
+    },
+    "check": "contents",
+    "clean": "case-032",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "url-only-cache",
+    "overlay": {
+      "src/content.mjs": "controls/url-only-cache.mjs"
+    },
+    "check": "contents",
+    "clean": "case-032",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "default-permissions",
+    "overlay": {
+      "src/staging.mjs": "controls/default-permissions.mjs"
+    },
+    "check": "contents",
+    "clean": "case-032",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "accept-unavailable",
+    "overlay": {
+      "src/install.mjs": "controls/accept-unavailable.mjs"
+    },
+    "check": "availability",
+    "clean": "case-032",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "reverse-commitments",
+    "overlay": {
+      "src/install.mjs": "controls/reverse-commitments.mjs"
+    },
+    "check": "commitment",
+    "clean": "case-032",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "forged-completion",
+    "overlay": {
+      "entry.mjs": "controls/forged-completion.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression"
+  },
+  {
+    "id": "isolation",
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression",
+    "isolation": true
+  },
+  {
+    "id": "preserve-whiteouted-descendants",
+    "overlay": {
+      "src/tree.mjs": "controls/preserve-whiteouted-descendants.mjs"
+    },
+    "check": "contents",
+    "clean": "case-032",
+    "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "origin-only-availability",
+    "overlay": {
+      "entry.mjs": "controls/origin-only-availability.mjs"
+    },
+    "check": "availability",
+    "clean": "case-032",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "example-hardcoding",
+    "overlay": {
+      "entry.mjs": "controls/example-hardcoding.mjs"
+    },
+    "check": "contents",
+    "clean": "case-032",
+    "selectionRole": "correction-regression"
+  }
+]

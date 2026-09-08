@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "cohort": "fourth-five",
+  "evidenceClass": "author-local-construction",
+  "reFreeze": {
+    "date": "2026-09-08",
+    "reason": "A checker-required grading mechanism (submissions must include an independently-written checker.mjs, judged against real verdict-stripped traces of the reference/alternative/every control) was ported into this tree and applied to all five packages. Doing so honestly required closing real, independently-confirmed scenario-coverage gaps in each generator (e.g. an obligation that was never actually exercised by any of the original 26 cases, or two obligations that could be satisfied independently rather than jointly) — a checker cannot be fairly required to detect a defect the scenario bank never actually triggers. All five generators below were intentionally modified and are re-frozen as of this date; the original 'generatorSha256' values and the original scenario ids are preserved verbatim as prefixes of the new files (every original case id is still present and unchanged), so this is a disclosed, additive re-freeze, not a silent replacement.",
+    "priorGeneratorSha256": {
+      "document-export-repair": "44571d7f08db8ca2a71cd387481790f386b6884c1784b3d5ae5a5de9a2187600",
+      "analytical-reconciliation-repair": "2cd97f333e3d99389bc48fa589f5c7b4c81dd8e1c605fb87d82cb4b58ac95614",
+      "recurring-calendar-repair": "553c419406d802d229748f1a9560bd1eceeb9badaf66e32bb2fc9766e731e5b7",
+      "variant-cache-repair": "f0f345327cdf65c95f945d6f105df75facbf25a7c36d3a550711cc41fff8c456",
+      "workflow-authority-repair": "67d8dfe97d34c2477353a2789b1a13f5259ae0516f7ce7449d11080863dbac7e"
+    }
+  },
+  "generators": [
+    {
+      "id": "document-export-repair",
+      "generatorSha256": "571eb73cebe1a41fc129c2480772f57171b1ddff35f1f5f4a3736cb7d37de209"
+    },
+    {
+      "id": "analytical-reconciliation-repair",
+      "generatorSha256": "688dcb3559a58af6182a77dbfd2fe222c1f5af176372a238ed4e7a531483d5c2"
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "generatorSha256": "87f447c08d0c8c0c89fa8ebea9d87ed64e3519423da949bcb2d48f94ffbc20dd"
+    },
+    {
+      "id": "variant-cache-repair",
+      "generatorSha256": "bbdf7a1918fb9b1745d595a29f8a8089188deb5f4866dc055ba9516119c9bdeb"
+    },
+    {
+      "id": "workflow-authority-repair",
+      "generatorSha256": "e08d628ac19fd598c9b8c99548e5fee355b3ffa1e64b3acc22c9a329c3d18c2b"
+    }
+  ],
+  "validationControls": [
+    {
+      "id": "document-export-repair",
+      "control": "discard-part-links",
+      "check": "preservation"
+    },
+    {
+      "id": "analytical-reconciliation-repair",
+      "control": "discard-source-lineage",
+      "check": "provenance"
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "control": "wall-clock-duration",
+      "check": "civil_time"
+    },
+    {
+      "id": "variant-cache-repair",
+      "control": "empty-304-body",
+      "check": "representation"
+    },
+    {
+      "id": "workflow-authority-repair",
+      "control": "misattribute-delivery",
+      "check": "completion"
+    }
+  ],
+  "selection": "Deterministic task-native interaction cases plus clean/empty boundaries. Generator bytes frozen before the five listed validation controls were authored.",
+  "exposure": "Previously inspected controls and generated cases are development evidence. Once inspected the five post-selection controls become regressions; no permanent holdout claim.",
+  "providerCallsMade": 0
+}
