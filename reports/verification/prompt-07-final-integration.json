@@ -1,0 +1,302 @@
+{
+  "schemaVersion": 1,
+  "kind": "executed-final-local-integration",
+  "status": "pass",
+  "authoritySource": "43138b6e32b962f47021929bfeabbe1a4b42e44ebd285358df97e76e1c03b6a5",
+  "providerCallsMade": 0,
+  "qualification": "Local validity and inert execution only; no human or model qualification.",
+  "stages": [
+    {
+      "name": "native production and local assurance",
+      "status": "pass",
+      "elapsedMs": 377731.37170799996
+    },
+    {
+      "name": "native repeat build",
+      "status": "pass",
+      "elapsedMs": 3865.4894579999964
+    },
+    {
+      "name": "native byte-identical reproduction",
+      "status": "pass",
+      "elapsedMs": 1206.366250000021
+    },
+    {
+      "name": "pinned portfolio runtime capture",
+      "status": "pass",
+      "elapsedMs": 7793.824499999988
+    },
+    {
+      "name": "browser-replay-repair assembly",
+      "status": "pass",
+      "elapsedMs": 499.95712500001537
+    },
+    {
+      "name": "browser-replay-repair complete controls and visible parity",
+      "status": "pass",
+      "elapsedMs": 73269.45900000003
+    },
+    {
+      "name": "browser-replay-repair export",
+      "status": "pass",
+      "elapsedMs": 615.7467499999912
+    },
+    {
+      "name": "persistent-knowledge-repair assembly",
+      "status": "pass",
+      "elapsedMs": 545.6938329999684
+    },
+    {
+      "name": "persistent-knowledge-repair complete controls and visible parity",
+      "status": "pass",
+      "elapsedMs": 8689.944374999963
+    },
+    {
+      "name": "persistent-knowledge-repair export",
+      "status": "pass",
+      "elapsedMs": 559.907957999967
+    },
+    {
+      "name": "delegated-budget-repair assembly",
+      "status": "pass",
+      "elapsedMs": 491.40016700001433
+    },
+    {
+      "name": "delegated-budget-repair complete controls and visible parity",
+      "status": "pass",
+      "elapsedMs": 6453.765333999996
+    },
+    {
+      "name": "delegated-budget-repair export",
+      "status": "pass",
+      "elapsedMs": 602.6050829999731
+    },
+    {
+      "name": "compatible-rollout-repair assembly",
+      "status": "pass",
+      "elapsedMs": 506.2398750000284
+    },
+    {
+      "name": "compatible-rollout-repair complete controls and visible parity",
+      "status": "pass",
+      "elapsedMs": 5689.8132500000065
+    },
+    {
+      "name": "compatible-rollout-repair export",
+      "status": "pass",
+      "elapsedMs": 556.2374169999966
+    },
+    {
+      "name": "unapproved reservations fail before dispatch",
+      "status": "pass",
+      "elapsedMs": 44.554624999989755
+    },
+    {
+      "name": "all portfolio recipient controls",
+      "status": "pass",
+      "elapsedMs": 94850.085709
+    },
+    {
+      "name": "inert authoring capture recovery and regrade",
+      "status": "pass",
+      "elapsedMs": 77685.38070800004
+    },
+    {
+      "name": "read-only findings corrections and transfer",
+      "status": "pass",
+      "elapsedMs": 3250.435541999992
+    }
+  ],
+  "packages": [
+    {
+      "id": "caa-revalidation-repair",
+      "packageDigest": "95fe0836850bd635dd8a11a3f187da625ebd6602be7458cc462d3fcbfa57bc3d"
+    },
+    {
+      "id": "browser-replay-repair",
+      "packageDigest": "99c0987fa44925e4e2d670c5738ea2ce7ace28568b33b576c6204394134c6f0d"
+    },
+    {
+      "id": "persistent-knowledge-repair",
+      "packageDigest": "51416487d282b647dde85b1dbe812e2bd32088cd3056dd0411e06def4ca5f970"
+    },
+    {
+      "id": "delegated-budget-repair",
+      "packageDigest": "e1c64442ba1128420858a5e90038ab6db4737c6caa9fa2d0e0315d9ee141d2ce"
+    },
+    {
+      "id": "compatible-rollout-repair",
+      "packageDigest": "9465557080d9dfc9ecd17b70699816b25f9b16556fae87ef205f4fe93c9b3497"
+    }
+  ],
+  "storage": {
+    "initialAvailableBytes": 24625647616,
+    "minimumAvailableBytes": 21685964800
+  },
+  "recipients": [
+    {
+      "packageId": "browser-replay-repair",
+      "packageDigest": "99c0987fa44925e4e2d670c5738ea2ce7ace28568b33b576c6204394134c6f0d",
+      "operations": 12,
+      "scenarioCount": 16,
+      "browserTraces": 16,
+      "invalidExecutionExcluded": true,
+      "artifactDriftRejected": true,
+      "evidenceDriftRejected": true,
+      "sourceCheckoutRequired": false,
+      "providerCallsMade": 0
+    },
+    {
+      "packageId": "persistent-knowledge-repair",
+      "packageDigest": "51416487d282b647dde85b1dbe812e2bd32088cd3056dd0411e06def4ca5f970",
+      "operations": 12,
+      "scenarioCount": 12,
+      "browserTraces": 0,
+      "invalidExecutionExcluded": true,
+      "artifactDriftRejected": true,
+      "evidenceDriftRejected": true,
+      "sourceCheckoutRequired": false,
+      "providerCallsMade": 0
+    },
+    {
+      "packageId": "delegated-budget-repair",
+      "packageDigest": "e1c64442ba1128420858a5e90038ab6db4737c6caa9fa2d0e0315d9ee141d2ce",
+      "operations": 12,
+      "scenarioCount": 12,
+      "browserTraces": 0,
+      "invalidExecutionExcluded": true,
+      "artifactDriftRejected": true,
+      "evidenceDriftRejected": true,
+      "sourceCheckoutRequired": false,
+      "providerCallsMade": 0
+    },
+    {
+      "packageId": "compatible-rollout-repair",
+      "packageDigest": "9465557080d9dfc9ecd17b70699816b25f9b16556fae87ef205f4fe93c9b3497",
+      "operations": 12,
+      "scenarioCount": 12,
+      "browserTraces": 0,
+      "invalidExecutionExcluded": true,
+      "artifactDriftRejected": true,
+      "evidenceDriftRejected": true,
+      "sourceCheckoutRequired": false,
+      "providerCallsMade": 0
+    }
+  ],
+  "inertCases": [
+    {
+      "id": "native-correct",
+      "expected": "semantic-pass",
+      "observed": "semantic-pass",
+      "captureStatus": "completed",
+      "bytesRetained": 72948,
+      "milliseconds": 4409,
+      "packageDigest": "95fe0836850bd635dd8a11a3f187da625ebd6602be7458cc462d3fcbfa57bc3d",
+      "profileDigest": "4dd9e09700c30435da798b3a636b8fa49dc6988fe210db9b74c062f27e38448e"
+    },
+    {
+      "id": "native-missing-file",
+      "expected": "invalid-execution",
+      "observed": "invalid-execution",
+      "captureStatus": "completed",
+      "bytesRetained": 67326,
+      "milliseconds": 4387,
+      "packageDigest": "95fe0836850bd635dd8a11a3f187da625ebd6602be7458cc462d3fcbfa57bc3d",
+      "profileDigest": "4dd9e09700c30435da798b3a636b8fa49dc6988fe210db9b74c062f27e38448e"
+    },
+    {
+      "id": "native-incorrect",
+      "expected": "semantic-fail",
+      "observed": "semantic-fail",
+      "captureStatus": "completed",
+      "bytesRetained": 73388,
+      "milliseconds": 4414,
+      "packageDigest": "95fe0836850bd635dd8a11a3f187da625ebd6602be7458cc462d3fcbfa57bc3d",
+      "profileDigest": "0402fa93afa9c00e979cd3b9774abb11b3e900a1dd87607eae8625ada1908e10"
+    },
+    {
+      "id": "browser-correct",
+      "expected": "semantic-pass",
+      "observed": "semantic-pass",
+      "captureStatus": "completed",
+      "bytesRetained": 29768,
+      "milliseconds": 271,
+      "packageDigest": "99c0987fa44925e4e2d670c5738ea2ce7ace28568b33b576c6204394134c6f0d",
+      "profileDigest": "171b11a38f25e1fa6f98a00cd11e1d32738909f9e85e999a67448dd9d8217ca4"
+    },
+    {
+      "id": "browser-incorrect",
+      "expected": "semantic-fail",
+      "observed": "semantic-fail",
+      "captureStatus": "completed",
+      "bytesRetained": 27546,
+      "milliseconds": 328,
+      "packageDigest": "99c0987fa44925e4e2d670c5738ea2ce7ace28568b33b576c6204394134c6f0d",
+      "profileDigest": "3e2c18403091136aadc153cdc486996082e4855e756fe61454c5d5889f90c649"
+    },
+    {
+      "id": "resource-timeout",
+      "expected": "invalid-execution",
+      "observed": "invalid-execution",
+      "captureStatus": "timeout",
+      "bytesRetained": 376,
+      "milliseconds": 4116,
+      "packageDigest": "99c0987fa44925e4e2d670c5738ea2ce7ace28568b33b576c6204394134c6f0d",
+      "profileDigest": "19fbfcba93f941d9bc3b4a1d022657e20790b384d2e8889ef7e353dbd30eb0d9"
+    },
+    {
+      "id": "resource-malformed",
+      "expected": "invalid-execution",
+      "observed": "invalid-execution",
+      "captureStatus": "malformed-events",
+      "bytesRetained": 397,
+      "milliseconds": 175,
+      "packageDigest": "99c0987fa44925e4e2d670c5738ea2ce7ace28568b33b576c6204394134c6f0d",
+      "profileDigest": "2e78d5d8a8895faba3a72ac669574ed38a87a5df4afaea85bd2afc114bb8509d"
+    },
+    {
+      "id": "resource-large-output",
+      "expected": "invalid-execution",
+      "observed": "invalid-execution",
+      "captureStatus": "output-limit",
+      "bytesRetained": 33554432,
+      "milliseconds": 277,
+      "packageDigest": "99c0987fa44925e4e2d670c5738ea2ce7ace28568b33b576c6204394134c6f0d",
+      "profileDigest": "2e78d5d8a8895faba3a72ac669574ed38a87a5df4afaea85bd2afc114bb8509d"
+    },
+    {
+      "id": "resource-interrupted",
+      "expected": "invalid-execution",
+      "observed": "invalid-execution",
+      "captureStatus": "process-error",
+      "bytesRetained": 376,
+      "milliseconds": 186,
+      "packageDigest": "99c0987fa44925e4e2d670c5738ea2ce7ace28568b33b576c6204394134c6f0d",
+      "profileDigest": "2e78d5d8a8895faba3a72ac669574ed38a87a5df4afaea85bd2afc114bb8509d"
+    },
+    {
+      "id": "resource-child-process",
+      "expected": "invalid-execution",
+      "observed": "invalid-execution",
+      "captureStatus": "timeout",
+      "bytesRetained": 376,
+      "milliseconds": 4115,
+      "packageDigest": "99c0987fa44925e4e2d670c5738ea2ce7ace28568b33b576c6204394134c6f0d",
+      "profileDigest": "19fbfcba93f941d9bc3b4a1d022657e20790b384d2e8889ef7e353dbd30eb0d9"
+    }
+  ],
+  "sourceArtifacts": [
+    {
+      "path": ".local/prompt-07/resume-2026-09-07/integration-04/result.json",
+      "sha256": "35fa32cd8e6f266351829cc1487326aee59a27e67cd04e2746b0b2f873f00c8a"
+    },
+    {
+      "path": ".local/prompt-07/resume-2026-09-07/integration-04/recipients/result.json",
+      "sha256": "df1667327b5c546b6d78967b8076e82a7f193644844de9f18d45e9f7721a108f"
+    },
+    {
+      "path": ".local/prompt-07/resume-2026-09-07/integration-04/execution/result.json",
+      "sha256": "7d26c5fdb82387d5c2df4b7ea4ec6411e08d5ab140bbb9507c442b0314bab749"
+    }
+  ]
+}

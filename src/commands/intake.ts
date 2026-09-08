@@ -69,6 +69,8 @@ export function externalVerifierOutputCommand(packetDir: string, root: string, f
     cells: graded.cells,
     detail: graded.detail,
     hostErrors: graded.hostErrors,
+    errors: graded.errors ?? [],
+    evaluation: graded.outcome ?? null,
   };
   writeFileSync(
     join(packetDir, "verifier-output.json"),

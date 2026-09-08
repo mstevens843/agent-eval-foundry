@@ -52,9 +52,10 @@ REGISTRY (what could be built, and can we detect it?)
                                   deployment-alias conditional evolution options
   deployment-alias readiness [--out dir]
                                   targeted deployment-alias readiness reports
-  phase13 report [--out f]       controlled family x recipe transfer report
-  phase13 results [--out f]      structured transfer activation measurements
+  phase13 report [--out f]       retained historical family x recipe transfer report
+  phase13 results [--out f]      retained structured transfer activation measurements
   phase13 design [--out f]       preregistered minimal design matrix
+  phase13 measure [--out f]      explicitly run current local transfer measurements and grading
   phase14 report [--out f]       controlled agent-ablation status and effects report
   phase14 packages [--out f]     frozen seeded/neutral package hashes and B6 evidence
   phase14 scenarios [--out f]    frozen concentrated and balanced scenario views

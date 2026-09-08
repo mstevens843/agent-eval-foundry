@@ -790,7 +790,10 @@ export function renderPhase13DesignMatrix(results: Phase13Results): string {
   )}\n`;
 }
 
-export function renderPhase13TransferLab(results: Phase13Results): string {
+export function renderPhase13TransferLab(
+  results: Phase13Results,
+  view: "current" | "historical" = "current",
+): string {
   const probeRows = results.substrates.flatMap((substrate) =>
     substrate.probe.cells.map(
       (cell) =>
@@ -832,9 +835,15 @@ export function renderPhase13TransferLab(results: Phase13Results): string {
   return [
     "# Phase 13 - Controlled Family x Recipe Transfer Laboratory",
     "",
+    ...(view === "historical"
+      ? [
+          "> Retained historical calibration, checked against its byte lock. No current grading or campaign preflight runs while rendering this report. Historical collector and readiness claims below do not attest today's protected routes or authorize trials.",
+          "",
+        ]
+      : []),
     "## Verdict",
     "",
-    `The committed-authority recipe transferred mechanically in **${results.summary.probeSurvivors}/${results.summary.probesRun}** substrates, and **${results.summary.packagesTrialReady}/${results.substrates.length}** packages are trial-ready.`,
+    `The committed-authority recipe transferred mechanically in **${results.summary.probeSurvivors}/${results.summary.probesRun}** substrates, and **${results.summary.packagesTrialReady}/${results.substrates.length}** packages ${view === "historical" ? "were reported trial-ready at that time; current eligibility is separate" : "are trial-ready"}.`,
     "The result is local verifier, activation and package evidence. It is **not agent-difficulty evidence**:",
     `${results.summary.modelReads} model reads ran and $${results.summary.paidUsd.toFixed(2)} was spent.`,
     "",

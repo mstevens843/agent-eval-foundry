@@ -169,7 +169,11 @@ export function verifyContainerIsolationBundle(bundleDir: string): ContainerIsol
   const manifest = join(bundleDir, "CONTAINER.json");
   const metadata = existsSync(manifest)
     ? (JSON.parse(readFileSync(manifest, "utf8")) as AdversarialContainerMetadata)
-    : containerMetadataFor(bundleDir);
+    : containerMetadataFor(bundleDir, {
+        runtime: "docker",
+        available: false,
+        detail: "retained container metadata is missing; no runtime smoke was recorded",
+      });
   const failures = [
     ...(metadata.runtimeAvailable ? [] : [metadata.readinessFailures[0] ?? "container runtime unavailable"]),
     ...(metadata.networkMode === "none" ? [] : [`network mode is ${metadata.networkMode}`]),

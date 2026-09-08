@@ -234,6 +234,8 @@ no part of the mechanism.
 
 ### Package controls
 
+> Retained historical control receipt, verified by byte hash only. This is not an execution of current CAA controls and cannot authorize a new trial. Current native package assurance is separate.
+
 All controls held: **yes**.
 
 | control | screen | held | detail |
@@ -276,6 +278,8 @@ is the threshold.
 what the agents actually did.
 
 ## 6. Trial Preflight And Spending Authorization
+
+> Retained historical preflight observed at 2026-09-04T18:07:08Z. Rendering does not inspect current credentials, run Docker, or grant present-day spending authority. This receipt preserves the recorded blocked state; later campaign outcomes do not overwrite it.
 
 | item | status |
 |---|---|
@@ -369,9 +373,9 @@ as the one that decides a hard task - *does the agent's natural self-check cover
 4 exercised the recheck-window boundary, and 4 named the identity-collapse failure mode explicitly in
 the transcript.
 
-That is the exact inverse of the durable-outbox 6/6 result, where five of six either wrote no checker or
-wrote one that could not express the rule under test. Here every agent's natural self-check covered the
-rule, so the wall the outbox found is simply not present. Machine-readable self-check outcomes do not
+Correction: all six preserved outbox agents wrote checks. Its six observed zeros are not six
+qualified capability failures: five current labels concern specification ambiguity and one remains unresolved.
+Here the CAA self-checks covered query identity; transfer remains a hypothesis. Machine-readable self-check outcomes do not
 survive capture, so `selfCheckOutcomeCaptured` stays false rather than being read out of model prose.
 
 The submissions corroborate it directly: all four are close paraphrases of the reference, and both

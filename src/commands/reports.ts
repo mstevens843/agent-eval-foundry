@@ -167,6 +167,7 @@ import { measurePhase13, renderPhase13TransferLab } from "../reports/phase-13-tr
 import { renderPhase14OperatorEffects } from "../reports/phase-14-operator-effects.js";
 import { renderPhase15DiscoveryEngine } from "../reports/phase-15-discovery-engine.js";
 import { renderPhase16DiscoveryV3 } from "../reports/phase-16-discovery-v3.js";
+import { renderPhase17CaaValidation } from "../reports/phase-17-caa-validation.js";
 import { renderMechanismProbeReport } from "../reports/probe-runner-report.js";
 import { renderPromotionReport } from "../reports/promotion-report.js";
 import {
@@ -1834,11 +1835,12 @@ export function allCommand(argv: readonly string[], root: string): string {
     "PHASE-12-HARDNESS-FOUNDATION.md",
     renderPhase12FoundationSummary({ ledger: hardnessLedger, facts: daoFacts }),
   );
-  const phase13Results = measurePhase13(root);
-  write("PHASE-13-TRANSFER-LAB.md", renderPhase13TransferLab(phase13Results));
+  const phase13Results = measurePhase13(root, "historical");
+  write("PHASE-13-TRANSFER-LAB.md", renderPhase13TransferLab(phase13Results, "historical"));
   write("PHASE-14-OPERATOR-EFFECTS.md", renderPhase14OperatorEffects(root));
   write("PHASE-15-DISCOVERY-ENGINE.md", renderPhase15DiscoveryEngine(root));
   write("PHASE-16-DISCOVERY-V3.md", renderPhase16DiscoveryV3(root));
+  write("PHASE-17-CAA-VALIDATION.md", renderPhase17CaaValidation(root));
   const inputs = { ...MEASURED_DEFAULTS, totalUsd: 100_000, labourRateUsdPerHour: 120 };
   assertBudgetInputs(inputs);
   assertPlanHonest(planBudget(inputs));

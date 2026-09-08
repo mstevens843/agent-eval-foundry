@@ -532,11 +532,21 @@ writeFileSync(
   )}\n`,
 );
 run(["external", "verify", externalPacketTmp]);
-const externalVerifierOutput = readFileSync(join(externalPacketTmp, "verifier-output.json"), "utf8");
-if (!externalVerifierOutput.includes('"runId": "verify-smoke-external"')) {
-  console.error("SMOKE  `external verify` did not write verifier output for the smoke run");
-  failures += 1;
-} else console.log("ok     cli: external verify");
+const externalVerifierOutput = JSON.parse(readFileSync(join(externalPacketTmp, "verifier-output.json"), "utf8"));
+const { evaluateOutcome, routeFor } = await import("../dist/index.js");
+const smokeRoute = routeFor(EXTERNAL_PACKET_FAMILY);
+const smokeOutcome = evaluateOutcome({
+  providerStatus: "completed", expectedIds: [...smokeRoute.scenarioParams().keys()],
+  expectedCheckIds: smokeRoute.family.checks, cells: externalVerifierOutput.cells,
+  hostErrors: externalVerifierOutput.hostErrors, artifactPresent: true,
+});
+assert.equal(externalVerifierOutput.runId, "verify-smoke-external");
+assert.equal(externalVerifierOutput.familyId, EXTERNAL_PACKET_FAMILY);
+assert.equal(externalVerifierOutput.challengeHash, expectedPacketHash);
+assert.equal(externalVerifierOutput.hostErrors, 0, "external smoke runtime errors: " + JSON.stringify(externalVerifierOutput.errors));
+assert.equal(smokeOutcome.complete, true, "external smoke incomplete: " + JSON.stringify(smokeOutcome));
+assert.equal(smokeOutcome.status, "semantic-fail", "the unchanged starter must be graded, not merely captured");
+console.log("ok     cli: external verify, complete population and no host errors");
 
 // The adversarial campaign files are generated artifacts too. They are the threat model that
 // decides what the attacker saw and which hashes can count, so a stale campaign file is a stale

@@ -1,13 +1,5 @@
 import { randomUUID } from "node:crypto";
-import {
-  constants,
-  copyFileSync,
-  existsSync,
-  lstatSync,
-  mkdirSync,
-  readFileSync,
-  writeFileSync,
-} from "node:fs";
+import { constants, existsSync, lstatSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { copyArtifactTree } from "../execution/artifacts.js";
 import {
@@ -39,6 +31,7 @@ import {
 } from "./record.js";
 import { canonicalizeRuntimeArchive } from "./runtime-archive.js";
 import { readPackageTree } from "./source.js";
+import { assertStorageHeadroom, copyRuntimeArchive } from "./storage.js";
 
 const TARGET = "caa-revalidation-repair";
 const ROUTE = "native-caa/separate-container/test.sh@2";
@@ -319,6 +312,13 @@ export async function buildNativeCaa(root: string, output: string): Promise<Buil
     await container(images.verifier, ["python3", "-I", "/tests/manifest.py"]),
   ) as NativeManifest;
   const archive = join(output, "runtime.tar");
+  const imageSizes = (
+    await docker(["inspect", images.environment, images.verifier, "--format", "{{.Size}}"])
+  ).stdout
+    .trim()
+    .split(/\s+/)
+    .map(Number);
+  assertStorageHeadroom(output, Math.ceil(imageSizes.reduce((sum, n) => sum + n, 0) * 1.1));
   await docker(["image", "save", "--output", archive, images.environment, images.verifier], {
     timeoutMs: 300000,
   });
@@ -760,7 +760,7 @@ export async function exportNativeCaa(
   copySnapshot(snapshot, join(destination, "store"));
   materializeAssembly(snapshot, join(destination, "tasks", TARGET));
   materializeAssembly(snapshot, join(destination, "public"), "subject");
-  copyFileSync(join(directory, "runtime.tar"), join(destination, "runtime.tar"), constants.COPYFILE_FICLONE);
+  copyRuntimeArchive(join(directory, "runtime.tar"), join(destination, "runtime.tar"));
   await verifyRuntime(destination, runtimeFor(snapshot));
   writeJson(join(destination, "package.json"), {
     schemaVersion: 1,

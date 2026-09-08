@@ -1,0 +1,953 @@
+{
+  "schemaVersion": 1,
+  "kind": "executed-protected-transport-regression",
+  "status": "pass",
+  "authoritySource": "43138b6e32b962f47021929bfeabbe1a4b42e44ebd285358df97e76e1c03b6a5",
+  "providerCallsMade": 0,
+  "change": "Captured public bytes arrive over root stdin and become root-owned read-only files in private container tmpfs; no transient host staging bind. Same network/rootfs/capability limits and unprivileged subject identity; no retries.",
+  "observation": "Earlier full suites exposed intermittent Docker Desktop pre-start mount failures. The small 80-bind/80-tmpfs diagnostic passed both and did not identify Docker internals as a root cause.",
+  "scope": "Executed family-boundary control coverage, not exhaustive Cartesian route coverage, real-model qualification, or a universal Docker reliability guarantee. Full selected populations are separately exercised by the complete maintained suite.",
+  "units": [
+    {
+      "name": "protected transport without per-cell host mounts captures exact public bytes on stdin, not argv or a host bind, and keeps isolation",
+      "status": "passed"
+    },
+    {
+      "name": "protected transport without per-cell host mounts retains bounded Docker startup diagnostics and labels setup, not a subject artifact",
+      "status": "passed"
+    },
+    {
+      "name": "protected transport without per-cell host mounts keeps missing submission files distinct from startup errors",
+      "status": "passed"
+    },
+    {
+      "name": "protected transport without per-cell host mounts labels malformed host JSON as protocol, not a bad submission",
+      "status": "passed"
+    },
+    {
+      "name": "protected transport without per-cell host mounts retains wall-clock exhaustion as an execution error without retrying",
+      "status": "passed"
+    }
+  ],
+  "controls": [
+    {
+      "familyId": "prompt-injection-containment",
+      "packageDigest": "aa971400650966ff48f690da8cab00fa3c21b2a0586e913ff584f2ecd9672364",
+      "imageIdentity": "sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32",
+      "selectedBoundaryScenarios": 12,
+      "totalSelectedPopulation": 128,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 3268.5969579999996,
+          "executions": 12
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 3603.4702500000003,
+          "executions": 12
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 959.8912500000006,
+          "executions": 2
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 593.0269589999989,
+          "executions": 2
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 699.9497499999998,
+          "executions": 1
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 1577.9871249999997,
+          "executions": 3
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1063.5570000000007,
+          "executions": 4
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 57.54199999999946,
+          "executions": 0
+        }
+      ],
+      "trialEligible": {
+        "allowed": false,
+        "blockers": [
+          "required-publicPackageComplete",
+          "required-boundedSolveEvidence",
+          "runtime-dependencies-unresolved"
+        ],
+        "notApplicable": [
+          "prior-model-failure",
+          "spend-approval",
+          "axis-breadth"
+        ]
+      },
+      "evidence": {
+        "path": ".local/prompt-03/routes/prompt-injection-containment.json",
+        "sha256": "41ca7f068651ac925da51117d82ac3dc2aa2b8c5cd9476a954e67e7fd9a64642"
+      }
+    },
+    {
+      "familyId": "prompt-injection-memory-poisoning",
+      "packageDigest": "e0ed9984a955314f3169dfe6a638f2fe4fc5234534bd1a69157fa8f8072c64db",
+      "imageIdentity": "sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32",
+      "selectedBoundaryScenarios": 14,
+      "totalSelectedPopulation": 864,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 3804.0329999999994,
+          "executions": 14
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 4193.797957999999,
+          "executions": 14
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 1521.669084000001,
+          "executions": 2
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 606.671875,
+          "executions": 2
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 700.7255829999995,
+          "executions": 1
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 2076.334750000002,
+          "executions": 3
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1108.6900840000017,
+          "executions": 4
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 59.494417000001704,
+          "executions": 0
+        }
+      ],
+      "trialEligible": {
+        "allowed": false,
+        "blockers": [
+          "required-publicPackageComplete",
+          "required-boundedSolveEvidence",
+          "runtime-dependencies-unresolved"
+        ],
+        "notApplicable": [
+          "prior-model-failure",
+          "spend-approval",
+          "axis-breadth"
+        ]
+      },
+      "evidence": {
+        "path": ".local/prompt-03/routes/prompt-injection-memory-poisoning.json",
+        "sha256": "c898ed0dbe04abcbc13bf4fab48a8896fe8269d67e6207c7a55fb85c4fb05bf3"
+      }
+    },
+    {
+      "familyId": "ui-action-record-replay",
+      "packageDigest": "e6a06cdcdfaac43ede1f040f2ca0c5832fb0757fba92c60c4f7d43e290335987",
+      "imageIdentity": "sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32",
+      "selectedBoundaryScenarios": 15,
+      "totalSelectedPopulation": 324,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 4121.374249999997,
+          "executions": 15
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 4550.666583999999,
+          "executions": 15
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 1090.1632919999975,
+          "executions": 2
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 571.8835000000036,
+          "executions": 2
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 690.1939999999959,
+          "executions": 1
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 1701.2127089999994,
+          "executions": 3
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1132.3827909999964,
+          "executions": 4
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 62.56245800000033,
+          "executions": 0
+        }
+      ],
+      "trialEligible": {
+        "allowed": false,
+        "blockers": [
+          "required-publicPackageComplete",
+          "required-boundedSolveEvidence",
+          "runtime-dependencies-unresolved"
+        ],
+        "notApplicable": [
+          "prior-model-failure",
+          "spend-approval",
+          "axis-breadth"
+        ]
+      },
+      "evidence": {
+        "path": ".local/prompt-03/routes/ui-action-record-replay.json",
+        "sha256": "c3d6c0518dd8a0200fe2ec40c81971d29cbc644cdc6d18cf46fbca7beb06b91f"
+      }
+    },
+    {
+      "familyId": "ui-replay-live-dom",
+      "packageDigest": "0bf92b3075d4aac16d0cf0d2b0e4425b7ddb336fedcd25cbe692a342c80a3064",
+      "imageIdentity": "sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32",
+      "selectedBoundaryScenarios": 15,
+      "totalSelectedPopulation": 864,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 4125.961207999993,
+          "executions": 15
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 4638.670790999997,
+          "executions": 15
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 18362.247334,
+          "executions": 2
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 599.3196659999958,
+          "executions": 2
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 690.9557080000086,
+          "executions": 1
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 18317.160208,
+          "executions": 3
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1103.7747919999965,
+          "executions": 4
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 64.1157499999972,
+          "executions": 0
+        }
+      ],
+      "trialEligible": {
+        "allowed": false,
+        "blockers": [
+          "required-publicPackageComplete",
+          "required-boundedSolveEvidence",
+          "runtime-dependencies-unresolved"
+        ],
+        "notApplicable": [
+          "prior-model-failure",
+          "spend-approval",
+          "axis-breadth"
+        ]
+      },
+      "evidence": {
+        "path": ".local/prompt-03/routes/ui-replay-live-dom.json",
+        "sha256": "188dbc44f375c42ae789fe3042d7e84d3a9a26ac211a0837c5b0765f00770fc9"
+      }
+    },
+    {
+      "familyId": "checker-required-memory-poisoning",
+      "packageDigest": "6dd9215bd7c8e69059112ad06838aeedcdc33cf000f09d5a9fd3de35a297093c",
+      "imageIdentity": "sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32",
+      "selectedBoundaryScenarios": 21,
+      "totalSelectedPopulation": 792,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 5503.977958000003,
+          "executions": 21
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 6738.087124999991,
+          "executions": 21
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 3847.0296669999952,
+          "executions": 2
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 551.1222080000007,
+          "executions": 2
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 663.6250839999993,
+          "executions": 1
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 11931.991167000015,
+          "executions": 10
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1044.1146249999874,
+          "executions": 4
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 59.15487500000745,
+          "executions": 0
+        }
+      ],
+      "trialEligible": {
+        "allowed": false,
+        "blockers": [
+          "required-publicPackageComplete",
+          "required-boundedSolveEvidence",
+          "runtime-dependencies-unresolved"
+        ],
+        "notApplicable": [
+          "prior-model-failure",
+          "spend-approval",
+          "axis-breadth"
+        ]
+      },
+      "evidence": {
+        "path": ".local/prompt-03/routes/checker-required-memory-poisoning.json",
+        "sha256": "f636224fe3d355a90e5a5fdbc78ae0b25b3b8eef7660831fc9cbb78e7d1a3411"
+      }
+    },
+    {
+      "familyId": "access-token-scope-expansion",
+      "packageDigest": "84932dab904ccc6895b421c75a441e23a7eb5fbef6438b8af28fd812dfc2dfc3",
+      "imageIdentity": "sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32",
+      "selectedBoundaryScenarios": 15,
+      "totalSelectedPopulation": 384,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 3805.525874999992,
+          "executions": 15
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 4220.433875000017,
+          "executions": 15
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 1003.8884580000013,
+          "executions": 2
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 577.9836249999935,
+          "executions": 2
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 679.3007920000236,
+          "executions": 1
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 1592.8910000000033,
+          "executions": 3
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1034.3553750000137,
+          "executions": 4
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 55.122332999977516,
+          "executions": 0
+        }
+      ],
+      "trialEligible": {
+        "allowed": false,
+        "blockers": [
+          "required-publicPackageComplete",
+          "required-boundedSolveEvidence",
+          "runtime-dependencies-unresolved"
+        ],
+        "notApplicable": [
+          "prior-model-failure",
+          "spend-approval",
+          "axis-breadth"
+        ]
+      },
+      "evidence": {
+        "path": ".local/prompt-03/routes/access-token-scope-expansion.json",
+        "sha256": "004c98541d51db0d1cd1dc9564467a09f5b4d5bb3bdd4b1e76865f97db49fa7f"
+      }
+    },
+    {
+      "familyId": "delegated-wallet-scope-reconciliation",
+      "packageDigest": "39c388bd6b318291a14752d2b5ed2a9b10f8da87a3760d44fc9cf36ff8ce6d35",
+      "imageIdentity": "sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32",
+      "selectedBoundaryScenarios": 18,
+      "totalSelectedPopulation": 804,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 4569.058625000005,
+          "executions": 18
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 5045.818415999995,
+          "executions": 18
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 1230.7167499999923,
+          "executions": 2
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 552.0919580000045,
+          "executions": 2
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 656.5164579999982,
+          "executions": 1
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 1822.4029580000206,
+          "executions": 3
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1082.802708000003,
+          "executions": 4
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 65.35995800001547,
+          "executions": 0
+        }
+      ],
+      "trialEligible": {
+        "allowed": false,
+        "blockers": [
+          "required-publicPackageComplete",
+          "required-boundedSolveEvidence",
+          "runtime-dependencies-unresolved"
+        ],
+        "notApplicable": [
+          "prior-model-failure",
+          "spend-approval",
+          "axis-breadth"
+        ]
+      },
+      "evidence": {
+        "path": ".local/prompt-03/routes/delegated-wallet-scope-reconciliation.json",
+        "sha256": "944c0b06ded73c157ac71ceab23309b7a1e649ea52d08dd3c3c582470ba465e2"
+      }
+    },
+    {
+      "familyId": "caa-revalidation",
+      "packageDigest": "3f06dff2e702754436c27e439e910f504b13e09096e9611525eef80a150762b6",
+      "imageIdentity": "sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32",
+      "selectedBoundaryScenarios": 9,
+      "totalSelectedPopulation": 24,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 2341.3952500000014,
+          "executions": 9
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 2749.9320000000007,
+          "executions": 9
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 920.8081670000101,
+          "executions": 2
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 591.0884169999918,
+          "executions": 2
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 661.2983329999843,
+          "executions": 1
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 2130.0045420000097,
+          "executions": 4
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1080.8098749999772,
+          "executions": 4
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 55.410084000002826,
+          "executions": 0
+        }
+      ],
+      "trialEligible": {
+        "allowed": false,
+        "blockers": [
+          "required-publicPackageComplete",
+          "required-boundedSolveEvidence",
+          "runtime-dependencies-unresolved"
+        ],
+        "notApplicable": [
+          "prior-model-failure",
+          "spend-approval",
+          "axis-breadth"
+        ]
+      },
+      "evidence": {
+        "path": ".local/prompt-03/routes/caa-revalidation.json",
+        "sha256": "e46050c5de96203558262b91d4d2d7e7ce142cd23325f27cf0298d64100bf34e"
+      }
+    },
+    {
+      "familyId": "dao-descendant",
+      "packageDigest": "71d9412619b3d8769b58192bc73f40115d59f8cd89aed89e35ef91eda3341df0",
+      "imageIdentity": "sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32",
+      "selectedBoundaryScenarios": 8,
+      "totalSelectedPopulation": 24,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 2031.399000000005,
+          "executions": 8
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 2466.619207999989,
+          "executions": 8
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 921.9025839999958,
+          "executions": 2
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 544.6766249999928,
+          "executions": 2
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 658.4148749999877,
+          "executions": 1
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 2158.8542920000036,
+          "executions": 4
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1092.3000830000092,
+          "executions": 4
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 60.13420900001074,
+          "executions": 0
+        }
+      ],
+      "trialEligible": {
+        "allowed": false,
+        "blockers": [
+          "required-publicPackageComplete",
+          "required-boundedSolveEvidence",
+          "runtime-dependencies-unresolved"
+        ],
+        "notApplicable": [
+          "prior-model-failure",
+          "spend-approval",
+          "axis-breadth"
+        ]
+      },
+      "evidence": {
+        "path": ".local/prompt-03/routes/dao-descendant.json",
+        "sha256": "7b30651c3897837557648422ce60b1be0f85e1134cc7c031f1f10655f9753888"
+      }
+    },
+    {
+      "familyId": "trading-reconciliation-recompute",
+      "packageDigest": "2c289624e021dd8d8ef00051f9f030947b7aa923d85fd59ce0b56c21397c8d2b",
+      "imageIdentity": "sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32",
+      "selectedBoundaryScenarios": 8,
+      "totalSelectedPopulation": 24,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 2062.632833999989,
+          "executions": 8
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 2391.8119169999845,
+          "executions": 8
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 959.176833000005,
+          "executions": 2
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 553.3049579999933,
+          "executions": 2
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 676.0198329999985,
+          "executions": 1
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 2131.0151250000054,
+          "executions": 4
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1096.9250839999877,
+          "executions": 4
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 63.36449999999604,
+          "executions": 0
+        }
+      ],
+      "trialEligible": {
+        "allowed": false,
+        "blockers": [
+          "required-publicPackageComplete",
+          "required-boundedSolveEvidence",
+          "runtime-dependencies-unresolved"
+        ],
+        "notApplicable": [
+          "prior-model-failure",
+          "spend-approval",
+          "axis-breadth"
+        ]
+      },
+      "evidence": {
+        "path": ".local/prompt-03/routes/trading-reconciliation-recompute.json",
+        "sha256": "0c67b2c4131d3edc69cfc1ac963fb285ef36f3c9b3e39e6e1892f49cd4682636"
+      }
+    },
+    {
+      "familyId": "deployment-rollback-recompute",
+      "packageDigest": "e207f38fbb1749415f3f2de923811002c19d6e2df8404ca2d70c6c306a2936c5",
+      "imageIdentity": "sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32",
+      "selectedBoundaryScenarios": 8,
+      "totalSelectedPopulation": 24,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 2049.0933339999756,
+          "executions": 8
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 2470.7497079999885,
+          "executions": 8
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 918.4822920000006,
+          "executions": 2
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 586.8812909999979,
+          "executions": 2
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 672.6354160000046,
+          "executions": 1
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 2156.4249999999884,
+          "executions": 4
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1057.1840000000084,
+          "executions": 4
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 65.30400000000373,
+          "executions": 0
+        }
+      ],
+      "trialEligible": {
+        "allowed": false,
+        "blockers": [
+          "required-publicPackageComplete",
+          "required-boundedSolveEvidence",
+          "runtime-dependencies-unresolved"
+        ],
+        "notApplicable": [
+          "prior-model-failure",
+          "spend-approval",
+          "axis-breadth"
+        ]
+      },
+      "evidence": {
+        "path": ".local/prompt-03/routes/deployment-rollback-recompute.json",
+        "sha256": "0ace95bb32dfba14f23d03a57022ad1f87ef2427756d07758b795ddba268b738"
+      }
+    },
+    {
+      "familyId": "deployment-model-alias-rollout-drift",
+      "packageDigest": "a274e3ab63400fa95db6807504d0fd50a7a042d372c0bc4235f14dbf68b54a19",
+      "imageIdentity": "sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32",
+      "selectedBoundaryScenarios": 13,
+      "totalSelectedPopulation": 339,
+      "controls": [
+        {
+          "id": "reference",
+          "status": "pass",
+          "milliseconds": 3345.4966249999998,
+          "executions": 13
+        },
+        {
+          "id": "alternative",
+          "status": "pass",
+          "milliseconds": 3749.2422500000102,
+          "executions": 13
+        },
+        {
+          "id": "near-miss",
+          "status": "pass",
+          "milliseconds": 3248.491167,
+          "executions": 2
+        },
+        {
+          "id": "repeatability",
+          "status": "pass",
+          "milliseconds": 593.6237090000068,
+          "executions": 2
+        },
+        {
+          "id": "private-boundary",
+          "status": "pass",
+          "milliseconds": 679.7695830000157,
+          "executions": 1
+        },
+        {
+          "id": "positive-work",
+          "status": "pass",
+          "milliseconds": 3854.866417000012,
+          "executions": 3
+        },
+        {
+          "id": "protocol",
+          "status": "pass",
+          "milliseconds": 1061.3181249999907,
+          "executions": 4
+        },
+        {
+          "id": "exact-coverage",
+          "status": "pass",
+          "milliseconds": 56.6632919999829,
+          "executions": 0
+        }
+      ],
+      "trialEligible": {
+        "allowed": false,
+        "blockers": [
+          "required-publicPackageComplete",
+          "required-boundedSolveEvidence",
+          "runtime-dependencies-unresolved"
+        ],
+        "notApplicable": [
+          "prior-model-failure",
+          "spend-approval",
+          "axis-breadth"
+        ]
+      },
+      "evidence": {
+        "path": ".local/prompt-03/routes/deployment-model-alias-rollout-drift.json",
+        "sha256": "a8773ad0fb897978343d05ae7bfaf0c669bf59b89da7427d1626ac89ba503097"
+      }
+    }
+  ],
+  "newGate": "Report smoke must independently establish complete expected IDs/checks and zero host errors, not merely result-file presence. Whole-population starter tests reject infrastructure errors.",
+  "sources": [
+    {
+      "path": "src/trials/secure-runner.ts",
+      "sha256": "8557f720282d36f2b019d12ca08e81a7fadf867589ceac5011f89522583c3b47"
+    },
+    {
+      "path": "scripts/secure/bootstrap.mjs",
+      "sha256": "5e325d1560aa4eb3f6c0828ab007476393cd35883126a667b5cc894fb061c6f1"
+    },
+    {
+      "path": "src/adversarial-audit/readiness.ts",
+      "sha256": "da2ab39a55ea635cd1d07f50fe4510fad9fc01a0023cbfda3250175a80b820f9"
+    },
+    {
+      "path": "scripts/verify-reports.mjs",
+      "sha256": "f72250282e5134a2b14150984206cc3cd1af3cb940bf0d121ec56f38c902d8b8"
+    },
+    {
+      "path": "test/protected-family-routes.test.ts",
+      "sha256": "c3330d4f7cd964f4bc1a25cafed30b345986a1076b22fd7035558281fbc1e428"
+    },
+    {
+      "path": "test/secure-runner-transport.test.ts",
+      "sha256": "6c77c8122901581e30ec619939e77bcd881a019985938aaf78167a92eeea7bdd"
+    },
+    {
+      "path": "test/starter-must-fail.test.ts",
+      "sha256": "e3429c9e275c144e83ca1c7659ebe66b1ac01aab8828149b7b42c855d969a0e8"
+    }
+  ]
+}

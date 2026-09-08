@@ -1,0 +1,556 @@
+{
+  "schemaVersion": 1,
+  "kind": "complete-regression-coverage-with-explicit-followup",
+  "status": "pass",
+  "authoritySource": "e27395a1ecf2344c5d127f9c3db00deadb3c20066fbb036d16939b20059f8571",
+  "providerCallsMade": 0,
+  "originalRun": {
+    "passed": 1499,
+    "failed": 3,
+    "skipped": 0,
+    "elapsedMs": 1963627.2767079999
+  },
+  "followup": {
+    "command": "pnpm exec vitest run test/trials-routing.test.ts test/protected-family-routes.test.ts --maxWorkers=1 --reporter=json",
+    "files": [
+      "test/protected-family-routes.test.ts",
+      "test/trials-routing.test.ts"
+    ],
+    "passed": 58,
+    "failed": 0,
+    "skipped": 0
+  },
+  "effectiveCoverage": {
+    "files": 84,
+    "passed": 1502,
+    "failed": 0,
+    "skipped": 0
+  },
+  "explanation": [
+    "The first full run is retained as failed, not relabelled green.",
+    "Both affected files were rerun completely, with the same scenario populations and stronger host-success assertions.",
+    "The missing required checker expectation was corrected from synthesized semantic failure to incomplete artifact execution.",
+    "Two Docker mount/setup failures did not recur in the follow-up. Their root cause is not claimed repaired; no automatic grading retry was added.",
+    "This is complete coverage across explicit runs, not a claim that the original single invocation passed."
+  ],
+  "coverage": [
+    {
+      "path": "test/a2-differential.test.ts",
+      "assertions": 10,
+      "sourceSha256": "08023cf9df83c6c181b9774e6ba25ef787ff58d9672c577c4efd4f14b0f9cad0",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/access-token-evolution.test.ts",
+      "assertions": 5,
+      "sourceSha256": "7991f031d6dc7b8241f99332e5194f44ef7474cece42e577f1d3978062bf8054",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/access-token-smoke.test.ts",
+      "assertions": 9,
+      "sourceSha256": "590e176a3a451559aedfedb0f3313c5847e3cfe2c9a4e4ef4d74ca3c66270bc6",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/adaptive-funnel.test.ts",
+      "assertions": 16,
+      "sourceSha256": "ed41a85a6248aa7d10a68870cc42c50c995fca871bdcd4d008efb367fdcf51b8",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/adversarial-audit.test.ts",
+      "assertions": 50,
+      "sourceSha256": "65692355d224aab412e735cf61187af452aa08504b6a7c68d0f0db0539a54dbc",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/axis-meter.test.ts",
+      "assertions": 21,
+      "sourceSha256": "4f33780576ac2657ea1fb72dabed4bd0eea23c5f591e80049c62b353fb826e02",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/clone-fidelity.test.ts",
+      "assertions": 2,
+      "sourceSha256": "3931e8830b2fcbf5d4d0b021b937969c15b784e39bc3b23e47f1618827bc0ca8",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/container-runner.test.ts",
+      "assertions": 9,
+      "sourceSha256": "ccb686cd2e0ed83d5bb2ed38b68786d0e508072b6bb4065cc33a394f68c86dc9",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/container-staging-mode.test.ts",
+      "assertions": 2,
+      "sourceSha256": "9fd29fcb8070c5c0756d0ad740c21eb15984c71a3037572339302f182a1afe4e",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/cross-family-evidence.test.ts",
+      "assertions": 54,
+      "sourceSha256": "e5072486087504c94828781669b5adfedf700e474c3137ab808cbbaf5804392d",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/cross-provider.test.ts",
+      "assertions": 62,
+      "sourceSha256": "8e541b0a8f2e79ceab37e928f17e9877badde25ce8c095791c9f4f1af17e292b",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/dao-descendant.test.ts",
+      "assertions": 6,
+      "sourceSha256": "d23d3082981da29a5a5a09e33c1d9f76acc4993dfc5f47115c5068d7d313b508",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/delegated-wallet-family.test.ts",
+      "assertions": 8,
+      "sourceSha256": "da4ecd4c72c860d5138aef5ba60f663de11f59f0f70245b540dcdf01cae87425",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/deployment-alias-family.test.ts",
+      "assertions": 21,
+      "sourceSha256": "332fa236081d62310c51f8e9c49f8c230ab4a24bbc66e94164ad47fd3aa41db7",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/diagnosis-fanout.test.ts",
+      "assertions": 11,
+      "sourceSha256": "31f6200dbf6721810cf63e92b03b86912a370ca95f472c0fbe909b5e69f9f738",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/discovery-workbench.test.ts",
+      "assertions": 21,
+      "sourceSha256": "df36cdb36e708d8be005a648f6e03cc045da69a57ff882b63e88fa47c8518530",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/engineering-integration.test.ts",
+      "assertions": 5,
+      "sourceSha256": "9da569fa2bf9b6edfacb13ad81f729f61a1415c3f024576e681be8a7d78168dc",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/evidence-snapshot.test.ts",
+      "assertions": 6,
+      "sourceSha256": "067cfa67591cb7f0edb3e467a4b2cd3e25313e3e13cdb0afa7ca8b677cf18e4f",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/evolution.test.ts",
+      "assertions": 115,
+      "sourceSha256": "b01aec07afbbd44ffd2934816a51e8012a82167faf49e4dd705176b714ee264a",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/execution-lifecycle.test.ts",
+      "assertions": 29,
+      "sourceSha256": "27f84d751aa06b5bde84cbfe285503273f3c25f382c4d5ce736f3624790d5b76",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/external-intake.test.ts",
+      "assertions": 9,
+      "sourceSha256": "36055205a8cb63ba3f3eabeab36eafd1bc28be89fcda3533f79a701c989481e1",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/family-list-drift.test.ts",
+      "assertions": 22,
+      "sourceSha256": "859342200aa5f829b0406c0fdcf376bc7ccaa0b30e62afca17211ae5db4206b2",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/family-pic.test.ts",
+      "assertions": 30,
+      "sourceSha256": "090406c8e1b34a99865d5ea15d3a8932ab75f81b60855b9a8b8201419c004ec5",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/foundry-system.test.ts",
+      "assertions": 38,
+      "sourceSha256": "31d1922af5d54eed0ab240127ab3e167cc1ef202bb1631b58fc3808636bb38c2",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/foundry-validators.test.ts",
+      "assertions": 80,
+      "sourceSha256": "8c59460bd005a7a72e8fa9e7ef2dd602769bba75ceba508539e130ce20701cde",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/history-task-attribution.test.ts",
+      "assertions": 13,
+      "sourceSha256": "ef83a122f3ff4c058dd030f36140f613f50fe158316ec8cd73ff6ec25965d0b5",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/human-solvability.test.ts",
+      "assertions": 16,
+      "sourceSha256": "2ecaf8440e22c99896b673ef276b988e0d0f5cf3475937f6ae1754f458afc341",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/import-swebench.test.ts",
+      "assertions": 14,
+      "sourceSha256": "ef9afe1d0abca1dc12f134d30e32b2b504688ed78580838d37f50c5e7d433497",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/label-parity.test.ts",
+      "assertions": 9,
+      "sourceSha256": "82af07cf1d6397b1e09d78413cfab958b8a391f3cd4bee914f0d7f60e79c1d4a",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/learning.test.ts",
+      "assertions": 27,
+      "sourceSha256": "d7e197630a6b53e731094845581067cde40429f32609b5af0f544ee75e48dc93",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/lineage.test.ts",
+      "assertions": 26,
+      "sourceSha256": "c93f00cdad0fd63b886324772f0b408b501c33addaf4eb91bbb1490d14a9a758",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/memory-facade-contract.test.ts",
+      "assertions": 4,
+      "sourceSha256": "211c90b7df3ddc2f1198bb89353aabeb7fdcbde5c948b784fd75e4daa1b0ff45",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/orchestration.test.ts",
+      "assertions": 54,
+      "sourceSha256": "db1a8ab94ce9c0c3e396c1f5679883a6356315799c5fc126d949f9cb07b30487",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/outbox-import-validators.test.ts",
+      "assertions": 6,
+      "sourceSha256": "1dc67ef1991465bde590b2f739c042d31eb43803079e0ddb85d02ed274511626",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/package-authority-boundary.test.ts",
+      "assertions": 9,
+      "sourceSha256": "011a3d9c40f0bdf245db3a5f796c35dd5519908eae7f931ce3270dc9778ee2a6",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/package-checker-integrity.test.ts",
+      "assertions": 6,
+      "sourceSha256": "62a3d42c9b30195648a1d55d487f2f946d3092f7045e09dbd58c927f7b801ff6",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/package-evidence-decisions.test.ts",
+      "assertions": 45,
+      "sourceSha256": "a63a9ede6a57e0a8356d9134b9d4da0c7d107e1b2bf7147053ad3e56a9596e85",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/package-population-integrity.test.ts",
+      "assertions": 7,
+      "sourceSha256": "961584830c4ca98268e154654cfbd8ca84aba0fede10dc1dc4b8bb1696e3b1c1",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/package-production.test.ts",
+      "assertions": 10,
+      "sourceSha256": "7f4722fc4e3211f9adecfbfcd6c15fbac9457eadce2d5978d3024b3f428fef97",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/package-public-surface.test.ts",
+      "assertions": 14,
+      "sourceSha256": "1742459555cbe489335ec3abf282e33631d15058833c1af464f772433eb8e8c2",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/package-semantic-integrity.test.ts",
+      "assertions": 13,
+      "sourceSha256": "f57ef1551b2a0f9fa42b6727da6f855c7d4f233c6e0cf9e384ff6cffbf152a31",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/package-storage.test.ts",
+      "assertions": 3,
+      "sourceSha256": "a34c2e7e7af20a5c60cd05d3253f82ed3065c274e7177c0149a44578a51c102c",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/phase-11-discovery.test.ts",
+      "assertions": 4,
+      "sourceSha256": "3064b4f414bec0a20293c54f2285fc04ad350ce456ed3b25f985d14525616673",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/phase-13-transfer.test.ts",
+      "assertions": 6,
+      "sourceSha256": "8701492cf6759c64a6c27f406366e8224b5b5dacad006bd6d95d667aa7a1ccd0",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/phase-14-operator-effects.test.ts",
+      "assertions": 8,
+      "sourceSha256": "2817be69fe2636b1d0ed42950cbb592346e1a9e81c59a910739c9ac7a9fe9666",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/phase-14-provider-runtime.test.ts",
+      "assertions": 4,
+      "sourceSha256": "a213ab46ec53dcbaea47fe6c683eee9e114de504f31333b1feceda447aa5d65f",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/phase-15-discovery-engine.test.ts",
+      "assertions": 10,
+      "sourceSha256": "c2d2a9ad6084accb12ba2ceb27c5f55b721f2a644d0215daf855bed0f9693cb3",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/phase-16-continuation.test.ts",
+      "assertions": 3,
+      "sourceSha256": "e43346d36dad1acc0daa5c52d17d7327f13d38252903c9d4f6092be3f8650010",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/phase-16-contract-gate.test.ts",
+      "assertions": 7,
+      "sourceSha256": "e39a1508002fba08d7cb672e856b82f5ff5d2794bc8b4b198a370af9c49ed994",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/phase-16-discovery-v3.test.ts",
+      "assertions": 7,
+      "sourceSha256": "fb4d070b584406960b586625cf7ab521c8456530d775406a068cdba42b459790",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/phase-17-caa-validation.test.ts",
+      "assertions": 24,
+      "sourceSha256": "033ae24056d42a8768d4ffdab9a891935e14402d3f2dd7c56760d17620417689",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/phase-18-caa-v2.test.ts",
+      "assertions": 20,
+      "sourceSha256": "21d5ed80253565974f74b5924f9aa2b8f1cc91033f02cd1d99d6d08ca3f14992",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/phase-19-evidence-rerank.test.ts",
+      "assertions": 10,
+      "sourceSha256": "4d8d26879d81ed67ce5ffa95df1280f3ce5995f2492fc59f1037a9fd5838139a",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/phase-20-secure-executor.test.ts",
+      "assertions": 7,
+      "sourceSha256": "2b5278e3caa68b316aa7624f40b053f5ff3f9ab12c85aa2c82d6018d1701bb3a",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/phase-21-operator-lab.test.ts",
+      "assertions": 19,
+      "sourceSha256": "2f845353b3cfe0cb09eeca134089562618fa947fa72f849a95924fd0454cf929",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/phase-22-transfer.test.ts",
+      "assertions": 16,
+      "sourceSha256": "10e3cc3943469600baf8d331a686bbabb67a668c38a710040d53373c3b60d29a",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/phase-23-classification-and-trial.test.ts",
+      "assertions": 10,
+      "sourceSha256": "d8a685bfd603f5b77c45edb6cb4e7dc6ba5fe9721a37f2486a59c39ba93da747",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/portfolio-production.test.ts",
+      "assertions": 10,
+      "sourceSha256": "35e8fd4351ba14be17b17cbebcf09872534bffcca1f648cb57794101a85552b5",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/probe-runner.test.ts",
+      "assertions": 18,
+      "sourceSha256": "3d6f186b45a6e1a649e14727c9cdd8d22ea0abc543bf29d202a68ad496ae25e0",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/promotion.test.ts",
+      "assertions": 15,
+      "sourceSha256": "08e0a54405e5163acaf8d9b9ac0e9743b2b110d624de80f18cc86101f4e16e61",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/prose-freshness.test.ts",
+      "assertions": 14,
+      "sourceSha256": "ca40277febbf64e834c43206fddb22db670fe0c0d75f92d13d8d1564704eae27",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/protected-contracts.test.ts",
+      "assertions": 5,
+      "sourceSha256": "f96d7f7333fb46a67349d2453fa66384fc8acae3bce2f28497289a59c410e6f5",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/protected-family-routes.test.ts",
+      "assertions": 15,
+      "sourceSha256": "ef8d40af31b7ba98dcfbd303f9cd41068ec8578897c79249da724e1da03c6147",
+      "resultSource": "affected-rerun-01.json"
+    },
+    {
+      "path": "test/protected-family-semantics.test.ts",
+      "assertions": 13,
+      "sourceSha256": "58e04f2f55220b3448b7afe48d854a961ac136d81163cdf81c4eeb4eb2fb45f3",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/provider-delta-diagnosis.test.ts",
+      "assertions": 7,
+      "sourceSha256": "7c01355204df48bf4289a243db225b554b8ac5648cfc5728a556394a78bf6fee",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/provider-delta.test.ts",
+      "assertions": 8,
+      "sourceSha256": "76c0f91f90bc2d5ef6269b07892cd53615d96a27077aaab5e63beae47300f830",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/rig-integrity.test.ts",
+      "assertions": 8,
+      "sourceSha256": "1c68da7cdd8505311dd07396eeaf50059b8699736ac63e6b6211b04421544e03",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/root-cause.test.ts",
+      "assertions": 29,
+      "sourceSha256": "a2727aa6031fdddb4290d1077049d3d386a53d2e6b02dea4424fc61e1adf539b",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/row-five.test.ts",
+      "assertions": 15,
+      "sourceSha256": "8e29830b6ffaa56d7c6931457d3e2e095bc8d23800a5940d80ad279c22f3aca5",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/runtime-archive.test.ts",
+      "assertions": 2,
+      "sourceSha256": "d9be7a4cdbbe90c46f26c34acdac886da0cf3cd2751fc0b7a77e4a2bb855abd4",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/runtime-readiness.test.ts",
+      "assertions": 1,
+      "sourceSha256": "4757f6d7eff094a4c5f0a0a4de09470c4e388c8b7241acfeaf0441a7ca940f74",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/screens.test.ts",
+      "assertions": 27,
+      "sourceSha256": "b5240e72d14515257e35fa37d24cfaece156f10fab721a272ed75902c8f1bada",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/secret-scan.test.ts",
+      "assertions": 6,
+      "sourceSha256": "0d79282c2d7a7300c2729e7a6a4bedf2724f7ed6f8295c6a75bec7826762fee2",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/spec-probe-forward.test.ts",
+      "assertions": 7,
+      "sourceSha256": "a6fd01e7819792dab97d27078a8b4abf39f299394f4677aae4ea432da4f93d04",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/spec-probe.test.ts",
+      "assertions": 26,
+      "sourceSha256": "c325172a5b698aa1a9f6c820edf956186c8ad81987d8fb026adc9c4d88031631",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/starter-must-fail.test.ts",
+      "assertions": 14,
+      "sourceSha256": "21f69a490f43040935be67631640c690a6548c03dc1a6ab842edb02d00f0429d",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/trials-routing.test.ts",
+      "assertions": 43,
+      "sourceSha256": "af98ec5591ff4a477ed61e05ffabe927a630d313cdbdbb1853cbabd344a537dd",
+      "resultSource": "affected-rerun-01.json"
+    },
+    {
+      "path": "test/trials.test.ts",
+      "assertions": 56,
+      "sourceSha256": "d135b6907c5ec83e5cf2e13f23d8f9fcb0ff32b125562b83bdd2ea9f1ac85273",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/ui-replay-live-dom.test.ts",
+      "assertions": 10,
+      "sourceSha256": "9f74929a91da65e78343c03437010d509633060ec6cc7d57b42d3aee43359eba",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/vacuous-gates.test.ts",
+      "assertions": 10,
+      "sourceSha256": "3be85a4468a07466b0fc7e3653eca994c19660bc5d7c18e4a3d32aacb71d1e9a",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/zz-outbox-probe.test.ts",
+      "assertions": 15,
+      "sourceSha256": "558a229de5b057977a285ce115f6a29fee1faf6cf806132690d76a05572021a2",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/zz-outbox-probe2.test.ts",
+      "assertions": 1,
+      "sourceSha256": "0ad737b846447fde01ad4d49801f1d048d60cde85907ca5ff6f9d66b107a329e",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/zz-scratch-starters.test.ts",
+      "assertions": 12,
+      "sourceSha256": "390291c52712540e63c1ac15a352fb39b0e4dcd1ae6c8ec12813c4afb6db1e5d",
+      "resultSource": "all-01/tests.json"
+    },
+    {
+      "path": "test/phase-20-lane1-exploits/exploits.test.ts",
+      "assertions": 43,
+      "sourceSha256": "60e234560efd72d356d4c57e1501160e007ef0f45839382932c7806470cc6ebc",
+      "resultSource": "all-01/tests.json"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": ".local/prompt-07/resume-2026-09-07/all-01/tests.json",
+      "sha256": "a20999ca3e7780ac7c0cc153cef710abaf66ef76ef992c532c3e70ebc8f6aaac"
+    },
+    {
+      "path": ".local/prompt-07/resume-2026-09-07/all-01/summary.json",
+      "sha256": "ab5d7971ac44d04185fdedf26b28cdc05f9a1a546df3a3c85f4d381a5d39f65f"
+    },
+    {
+      "path": ".local/prompt-07/resume-2026-09-07/affected-rerun-01.json",
+      "sha256": "6de75d074ee7b3542f8a2ada83d20399e993b5eec2725bafbb27411ea3e3f7af"
+    }
+  ]
+}

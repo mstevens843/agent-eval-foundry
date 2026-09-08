@@ -361,6 +361,7 @@ export const HARNESS_PATHS: readonly string[] = [
   "src/trials/checker-authority.ts",
   "src/trials/router.ts",
   "src/families/verification-contract.ts",
+  "scripts/secure/bootstrap.mjs",
   "scripts/secure/authority-entry.mjs",
   "scripts/secure/authority-engine.mjs",
   "scripts/secure/cell-entry.mjs",

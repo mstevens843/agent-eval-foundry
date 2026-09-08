@@ -190,6 +190,10 @@ describe("actual protected family interfaces", () => {
       control("repeatability", () => {
         const repeated = execute({ familyId, modulePath }, { scenario: scenarios[0] });
         const repeatedAgain = execute({ familyId, modulePath }, { scenario: scenarios[0] });
+        // Equal setup failures are not repeatability proof. Keep the concrete host diagnostic when
+        // a runtime fault interrupts either execution instead of reporting a truncated object diff.
+        expect(repeated.error, JSON.stringify(repeated)).toBeNull();
+        expect(repeatedAgain.error, JSON.stringify(repeatedAgain)).toBeNull();
         expect({ channels: repeated.channels, report: repeated.report, error: repeated.error }).toEqual({
           channels: repeatedAgain.channels,
           report: repeatedAgain.report,
@@ -202,6 +206,16 @@ describe("actual protected family interfaces", () => {
           "private-boundary",
           `import fs from 'node:fs';
         if (process.getuid() !== 1000) throw Error('wrong subject identity');
+        if (process.cwd() !== '/work') throw Error('changed subject working directory');
+        for (const path of ['/work/subject.mjs','/work/authority-entry.mjs','/work/authority-engine.mjs','/work/cell-entry.mjs','/work/protocol.mjs']) {
+          const stat=fs.statSync(path);
+          if(stat.uid!==0 || (stat.mode&0o222)!==0) throw Error('public code is not authority-owned read-only');
+          if(!fs.readFileSync(path).length) throw Error('missing public-file positive control');
+          for(const operation of [()=>fs.writeFileSync(path,'changed'),()=>fs.unlinkSync(path),()=>fs.chmodSync(path,0o666)]) {
+            try { operation();throw Error('PUBLIC_MUTATION_SUCCEEDED'); }
+            catch(e) { if(!['EACCES','EPERM','EROFS'].includes(e.code)) throw e; }
+          }
+        }
         const dirs=fs.readdirSync('/tmp').filter(n=>n.startsWith('authority-private-'));
         if(dirs.length!==1) throw Error('missing private-file positive control');
         for(const path of ['/proc/1/environ','/proc/1/fd/0','/proc/1/mem', '/tmp/'+dirs[0]+'/adapter.mjs']) {
@@ -284,6 +298,7 @@ describe("actual protected family interfaces", () => {
         writeFileSync(invalid, "process.exit(0); export const subject={};");
         const graded = gradeProtectedScenarios(familyId, invalid, scenarios.slice(0, 1));
         expect(graded.hostErrors).toBe(1);
+        expect(graded.errors?.[0]?.kind).toBe("artifact");
         expect(graded.outcome?.complete).toBe(false);
         expect(graded.isolation).toBe("cell-container");
         executions.push({
@@ -299,6 +314,7 @@ describe("actual protected family interfaces", () => {
         );
         const malformedResult = gradeProtectedScenarios(familyId, malformed, scenarios.slice(0, 1));
         expect(malformedResult.outcome?.complete).toBe(false);
+        expect(malformedResult.errors?.[0]?.kind).toBe("protocol");
         executions.push({
           control: active,
           kind: "malformed",
@@ -312,6 +328,7 @@ describe("actual protected family interfaces", () => {
         );
         const oversizedResult = gradeProtectedScenarios(familyId, oversized, scenarios.slice(0, 1));
         expect(oversizedResult.outcome?.complete).toBe(false);
+        expect(oversizedResult.errors?.[0]?.kind).toBe("protocol");
         executions.push({
           control: active,
           kind: "oversized",

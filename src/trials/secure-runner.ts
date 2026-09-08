@@ -140,6 +140,7 @@ export function runSecureContainerHost(options: SecureHostOptions, payload: unkn
   const name = containerName("secure-host");
   const stage = stagingDir("foundry-secure-host-");
   const scriptDir = secureScriptDir();
+  let phase: "setup" | "artifact" | "protocol" = "setup";
   try {
     const adapterSource = readFileSync(adapterScript, "utf8");
     assertCurrentAuthorityBundle(join(scriptDir, "..", ".."), adapterSource);
@@ -147,16 +148,35 @@ export function runSecureContainerHost(options: SecureHostOptions, payload: unkn
     stageFile(join(scriptDir, "authority-engine.mjs"), join(stage, "authority-engine.mjs"));
     stageFile(join(scriptDir, "cell-entry.mjs"), join(stage, "cell-entry.mjs"));
     stageFile(join(scriptDir, "protocol.mjs"), join(stage, "protocol.mjs"));
+    phase = "artifact";
     stageSubmissionArtifact(options.modulePath, join(stage, "subject.mjs"));
     if (options.familyId === "checker-required-memory-poisoning") {
       stageSubmissionArtifact(join(dirname(options.modulePath), "checker.mjs"), join(stage, "checker.mjs"));
     }
+    phase = "setup";
+    const publicNames = [
+      "authority-entry.mjs",
+      "authority-engine.mjs",
+      "cell-entry.mjs",
+      "protocol.mjs",
+      "subject.mjs",
+    ];
+    if (options.familyId === "checker-required-memory-poisoning") publicNames.push("checker.mjs");
+    const publicFiles = Object.fromEntries(
+      publicNames.map((name) => [name, readFileSync(join(stage, name)).toString("base64")]),
+    );
     const stdout = execFileSync(
       "docker",
       [
         // Only the authority runs as root. SETUID/SETGID launch an unprivileged child and KILL
         // permits cleanup across that UID boundary. No writable root filesystem or network is added.
-        ...containerFlags(name, stage, "none", limits).filter((flag) => flag !== "--user=1000:1000"),
+        // Retain the common restrictions, but materialize captured bytes inside a private tmpfs.
+        // A transient host path must not depend on Docker Desktop's asynchronous file-sharing mount.
+        ...containerFlags(name, stage, "none", limits).filter(
+          (flag) => flag !== "--user=1000:1000" && !flag.startsWith("--mount=") && flag !== "--workdir=/work",
+        ),
+        "--workdir=/",
+        "--tmpfs=/work:rw,nosuid,nodev,size=32m,mode=0700",
         "--user=0:0",
         "--cap-add=SETUID",
         "--cap-add=SETGID",
@@ -164,21 +184,24 @@ export function runSecureContainerHost(options: SecureHostOptions, payload: unkn
         "--interactive",
         image,
         "node",
-        "/work/authority-entry.mjs",
-        "/work/cell-entry.mjs",
-        "/work/subject.mjs",
+        "--input-type=module",
+        "-e",
+        readFileSync(join(scriptDir, "bootstrap.mjs"), "utf8"),
       ],
       {
         input: JSON.stringify({
           adapterSource,
+          publicFiles,
           input: { ...(payload as object), familyId: options.familyId },
         }),
         encoding: "utf8",
+        stdio: ["pipe", "pipe", "pipe"],
         timeout,
         maxBuffer: 64 * 1024 * 1024,
         env: { PATH: process.env["PATH"] ?? "", HOME: process.env["HOME"] ?? "" },
       },
     );
+    phase = "protocol";
     const parsed: unknown = JSON.parse(stdout);
     if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) {
       return {
@@ -234,12 +257,16 @@ export function runSecureContainerHost(options: SecureHostOptions, payload: unkn
     };
   } catch (err) {
     forceRemove(name);
+    const failure = err as NodeJS.ErrnoException & { stdout?: string | Buffer; stderr?: string | Buffer };
     return {
       channels: {},
       report: null,
-      diagnostics: empty,
+      diagnostics: {
+        stdoutTail: String(failure.stdout ?? "").slice(-8192),
+        stderrTail: String(failure.stderr ?? "").slice(-8192),
+      },
       error: `secure container host failed: ${(err as Error).message.slice(0, 300)}`,
-      errorKind: (err as NodeJS.ErrnoException).code === "ETIMEDOUT" ? "resource" : "artifact",
+      errorKind: ["ETIMEDOUT", "ENOBUFS"].includes(failure.code ?? "") ? "resource" : phase,
     };
   } finally {
     rmSync(stage, { recursive: true, force: true });

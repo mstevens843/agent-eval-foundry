@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "kind": "read-only-reporting-regression",
+  "status": "pass",
+  "authoritySource": "034fd04f63c5ca5eb9fe75c871c345334441597a62104419daff8a232c4b6794",
+  "providerCallsMade": 0,
+  "before": {
+    "passed": 0,
+    "failed": 4
+  },
+  "after": {
+    "targetedPassed": 62,
+    "failed": 0,
+    "readOnlyAssertions": 5
+  },
+  "repairs": [
+    "Historical Phase 13 report/results/design use locked retained measurements; new grading is explicit phase13 measure.",
+    "Historical Phase 17 preflight reads the unchanged recorded receipt; no credential or Docker probe is performed while rendering.",
+    "Missing retained container metadata fails closed without querying current machine availability.",
+    "Aggregate all generation now includes the Phase 17 report. Full report-set reproduction is independently required."
+  ],
+  "compatibility": "The existing Phase 17 preflight bytes match HEAD; the additional byte lock is adopted now, not claimed as contemporaneous registration or current qualification.",
+  "checks": [
+    "read-only historical reports phase13 report reads retained evidence without inspecting credentials or launching processes",
+    "read-only historical reports phase13 results reads retained evidence without inspecting credentials or launching processes",
+    "read-only historical reports phase13 design reads retained evidence without inspecting credentials or launching processes",
+    "read-only historical reports phase17 report reads retained evidence without inspecting credentials or launching processes",
+    "read-only historical reports a missing container receipt is unknown evidence, never the current machine's runtime status"
+  ],
+  "artifacts": [
+    {
+      "path": ".local/prompt-07/resume-2026-09-07/readonly-before.json",
+      "sha256": "fdf79d9489e7b1ba270eec8a29ebaf6f024d0668d832a898f0f92e01a0e50814"
+    },
+    {
+      "path": ".local/prompt-07/resume-2026-09-07/readonly-after.json",
+      "sha256": "ce7cbd19bf2d1989805033205736593eb74cffe037a195c0da9572b90e20b6d0"
+    }
+  ],
+  "testSha256": "b1121668f3200570b03668fd0dc340fdf2aa290bb72d9e3c0eab6ef285f34390"
+}

@@ -216,17 +216,21 @@
       "source": "System G14",
       "packageId": null,
       "owner": 7,
-      "status": "blocked",
-      "summary": "Cohesive command services, exhaustive test tiers, report reproduction and recipient checks are implemented. Full protected/native/browser proof is incomplete after host ENOSPC and Docker I/O failure; no completion claim is authorized.",
+      "status": "verified",
+      "summary": "Complete frozen-source regression passed 1512 tests with zero failures/skips. Five-package integration passed all twenty stages and ten inert execution cases; strict report/export reproduction and isolated recipient-source verification passed. Transient host mounts, misclassified startup errors, ambient historical rendering and file-existence-only smoke assertions were repaired; earlier failed attempts remain recorded.",
       "dependencies": ["HISTORY-1", "G2", "G3", "G5"],
       "proof": [
         "scripts/run-test-tier.mjs",
         "scripts/test-tiers.mjs",
         "scripts/verify-local-integration.mjs",
         "scripts/candidate-snapshot.mjs",
-        "reports/PROMPT-07-INTEGRATION.md"
+        "reports/PROMPT-07-INTEGRATION.md",
+        "reports/verification/prompt-07-final-regression.json",
+        "reports/verification/prompt-07-final-integration.json",
+        "reports/verification/prompt-07-startup-transport.json",
+        "reports/verification/prompt-07-readonly-reporting.json"
       ],
-      "nextAction": "Recover Docker Desktop with owner approval and rerun the complete frozen-source protected and five-package integrations. Missing runtime is not a pass."
+      "nextAction": "Retain required executable tiers and frozen artifact identities. This completion-ledger update changes the conservative build stamp; the acceptance report distinguishes the tested exports from newly stamped assemblies. Human/model/destination qualification remains external."
     },
     {
       "id": "HISTORY-1",
@@ -307,8 +311,8 @@
       "source": "Engineering matrix/report performance",
       "packageId": null,
       "owner": 7,
-      "status": "implemented",
-      "summary": "Exact matrix indexing and bounded full-input memoization reduce the largest sparse fixture from about 6.4 seconds to 1.28 seconds with identical outputs. Command-scoped registry/evidence/runtime snapshots avoid redundant work. Final whole-system verification remains G14.",
+      "status": "verified",
+      "summary": "Exact matrix indexing and bounded full-input memoization reduce the largest sparse fixture from about 6.4 seconds to 1.28 seconds with identical outputs. Command-scoped snapshots avoid redundant work; complete regression and five-package integration passed. Storage clone behavior and startup-transport overhead are documented separately, without claiming an unmeasured whole-render speedup.",
       "dependencies": ["STATUS-1"],
       "proof": [
         "src/measurement-context.ts",
@@ -316,9 +320,13 @@
         "test/engineering-integration.test.ts",
         "test/runtime-readiness.test.ts",
         "reports/verification/prompt-07-matrix-performance.json",
-        "scripts/benchmark-system.mjs"
+        "scripts/benchmark-system.mjs",
+        "reports/verification/prompt-07-system-performance.json",
+        "reports/verification/prompt-07-storage-performance.json",
+        "reports/verification/prompt-07-final-regression.json",
+        "reports/verification/prompt-07-final-integration.json"
       ],
-      "nextAction": "Retain exact-output and invalidation regressions; record final stable-source system performance and archive storage in the acceptance report."
+      "nextAction": "Retain exact-output, invalidation and resource-bound regressions. Earlier workload profiles keep their original source/output scope; new workload or algorithm changes require fresh measurements."
     },
     {
       "id": "PKG-CONTAINMENT",
@@ -656,7 +664,7 @@
         "scripts/verify-authorized-execution.mjs",
         "reports/PROMPT-07-INTEGRATION.md"
       ],
-      "nextAction": "Retain observed v2 parity; current full integration is blocked under G14, not inferred from the earlier artifact receipt."
+      "nextAction": "Retain professional-v1 historical bytes and observed v2 parity. The final five-package integration executes the current visible and protected controls; future package changes require new version-bound checks."
     },
     {
       "id": "P6-LEGACY-CAMPAIGN-PREPARATION",

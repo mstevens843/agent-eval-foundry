@@ -5,7 +5,7 @@
 // `test/trials.test.ts` pins the RULE — the 20% floor, the boundary, the refusal to certify on zero
 // cells — against fixtures with an injected grader, in milliseconds. This file pins the FACT: that
 // every shipped family's own visible `starter/subject.mjs`, graded by that family's real grader in
-// real subprocesses, fails a large fraction of that family's own suite.
+// real protected containers, fails a large fraction of that family's own suite.
 //
 // Both are needed and neither substitutes for the other. A rule tested only against fixtures is a
 // rule nobody has pointed at the repository; a fact asserted only in prose is not asserted at all.
@@ -30,7 +30,7 @@
 //
 // SLOW, ON PURPOSE, AND NOT SKIPPABLE
 //
-// This grades nine families in subprocesses and takes roughly 90 seconds. That is why the rule is
+// This grades all twelve maintained families and can take around eighteen minutes. The rule is
 // not in `checkChallengePackage`, which runs on every build — but it is also why the rule cannot
 // live only behind a CLI flag. This file is the enforcement point: it runs on every `pnpm test`, it
 // has no skip condition, and a family that starts shipping its answer key fails here by name.
@@ -82,7 +82,15 @@ describe("every family's shipped starter must fail its own suite", () => {
 
   for (const id of FAMILIES) {
     it(`${id} — starter fails at least ${(STARTER_MIN_FAILING_FRACTION * 100).toFixed(0)}% of its own suite`, () => {
-      const result = checkStarterFailsEnough(id, visibleFiles(id), (p) => routeFor(id).grade(p));
+      const result = checkStarterFailsEnough(id, visibleFiles(id), (p) => {
+        const graded = routeFor(id).grade(p);
+        // An incomplete starter may legitimately throw (artifact), but a container that never
+        // starts or exhausts its runtime does not establish anything about the starter's behavior.
+        const infrastructure = graded.errors?.filter((e) => e.kind !== "artifact") ?? [];
+        expect(infrastructure, JSON.stringify(infrastructure)).toEqual([]);
+        expect(graded.errors?.length ?? 0).toBe(graded.hostErrors);
+        return graded;
+      });
 
       // Stated as an explicit assertion as well as via the throw, so the number is in the record
       // and a future regression reads as "3 of 384" rather than only "it threw".

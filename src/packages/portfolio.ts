@@ -2,7 +2,6 @@ import { randomUUID } from "node:crypto";
 import {
   constants,
   closeSync,
-  copyFileSync,
   existsSync,
   fstatSync,
   lstatSync,
@@ -41,6 +40,7 @@ import {
   sha256,
 } from "./record.js";
 import { readPackageTree } from "./source.js";
+import { assertStorageHeadroom, copyRuntimeArchive } from "./storage.js";
 
 /** Professional descendants have independent versions; these are not additional generic families. */
 export const PORTFOLIO_PACKAGES = {
@@ -143,6 +143,8 @@ export async function preparePortfolioRuntime(root: string, output: string): Pro
     ])
   ).stdout;
   const { node, browser } = JSON.parse(versions) as { node: string; browser: string };
+  const imageBytes = Number((await docker(["inspect", image, "--format", "{{.Size}}"])).stdout.trim());
+  assertStorageHeadroom(output, Math.ceil(imageBytes * 1.1));
   await docker(["image", "save", "--output", join(output, "runtime.tar"), image], { timeoutMs: 300000 });
   const runtime = {
     image,
@@ -237,12 +239,7 @@ export async function buildPortfolioPackage(
   materializeAssembly(snapshot, join(output, "package"));
   materializeAssembly(snapshot, join(output, "visible"), "subject");
   write(join(output, "package.json"), { schemaVersion: 1, packageDigest: snapshot.record.digest });
-  // Copy-on-write when supported; exact bytes are still checked on inspect/export.
-  copyFileSync(
-    join(runtimeDirectory, "runtime.tar"),
-    join(output, "runtime.tar"),
-    constants.COPYFILE_FICLONE,
-  );
+  copyRuntimeArchive(join(runtimeDirectory, "runtime.tar"), join(output, "runtime.tar"));
   return snapshot.record;
 }
 
@@ -765,7 +762,7 @@ export async function exportPortfolioPackage(directory: string, output: string, 
   copySnapshot(snapshot, join(output, "store"));
   materializeAssembly(snapshot, join(output, "package"));
   materializeAssembly(snapshot, join(output, "visible"), "subject");
-  copyFileSync(join(directory, "runtime.tar"), join(output, "runtime.tar"), constants.COPYFILE_FICLONE);
+  copyRuntimeArchive(join(directory, "runtime.tar"), join(output, "runtime.tar"));
   write(join(output, "package.json"), { schemaVersion: 1, packageDigest: snapshot.record.digest });
   for (const f of evidence) {
     const path = join(output, "verification", f.path);

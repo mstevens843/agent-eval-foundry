@@ -1,437 +1,27 @@
 {
   "schemaVersion": 1,
   "promptId": 7,
-  "status": "incomplete-required-runtime",
+  "status": "complete-local-engineering",
   "sourceSnapshot": {
-    "baseCommit": "70024e1f56e7a5492d6370c8f4e167889b533990",
-    "digest": "efe2f9ff9abd2c3d07e04c8af6d13158707cfe31455b22b2e14cd923a05f2a28",
-    "files": 2135,
-    "authorityClosure": "45606a5142e79bd4345e0a3789575893d840a9a3b6611ea0b7f60c12f0fee476",
-    "historicalFiles": 904,
-    "historicalDigest": "0f8c7429e52bf3a340f8dde804e84e60a33adcfa235981f089960f972ce61c95",
-    "historicalBytesUnchanged": true,
-    "changedSource": [
-      {
-        "path": ".github/workflows/verify.yml",
-        "sha256": "f0f8593e0375e2945b878e287c34c2851be1bd20f9ed14d640cfa9c8300237a3"
-      },
-      {
-        "path": "MEMO.md",
-        "sha256": "9f8f92ae54b6b1f8feaa105d42849420e7426d4eb631f55cc11637a0ceeae27b"
-      },
-      {
-        "path": "README.md",
-        "sha256": "fe13d0ea6ae87d727f3ef79704ae6424a7fde6bc772db7c33e6600570bd73c29"
-      },
-      {
-        "path": "data/candidates-checker-required.json",
-        "sha256": "39bb4bbc35bcf94c684d57281fd70dd050200cb9561b229e5a86d860b2b23e63"
-      },
+    "baseCommit": "dedc1df18aa66b70bc587ee257898159f698441f",
+    "committedRelease": false,
+    "digest": "417d38b9e471398d95eb9adb7043ee2180fa5e3ebe30ec4923758ed348b15b4d",
+    "files": 2140,
+    "testedAuthorityClosure": "43138b6e32b962f47021929bfeabbe1a4b42e44ebd285358df97e76e1c03b6a5",
+    "workingAuthorityClosure": "f9a7669c4a831132699e028220dfd5e925e96337ea6675589b472fec59150c4f",
+    "postProofDelta": [
       {
         "path": "data/implementation-gap-ledger.json",
-        "sha256": "64a944970dc12663c9b11635446a19649ecc214f33cfe77cb6b0c18de5e7e18e"
-      },
-      {
-        "path": "data/legacy-bundle-history-lock.json",
-        "sha256": "257530d65a2187a6781079b200e9541668711b298aff9144851f0fceebd73584"
-      },
-      {
-        "path": "data/mutants.json",
-        "sha256": "0ed863cb7445f183cd314b2c8f66a457b6a60b7c810da20bc66484830f1b8064"
-      },
-      {
-        "path": "data/package-history-lock.json",
-        "sha256": "a2a54d7e774328bedd03c3b218d49da087c5b054e79098baf14d3bc6b7cbc45f"
-      },
-      {
-        "path": "docs/INHERITED-EVIDENCE.md",
-        "sha256": "816cdb00d2877d44f6ead6baf9ec84b75c3986ac4d1905bfdac9ebcefe20d111"
-      },
-      {
-        "path": "docs/architecture.md",
-        "sha256": "62dd2b36e048d90bce901c871929b0aaf6cb4401ad9bed9b5a4813e4fda7dbc3"
-      },
-      {
-        "path": "docs/evidence-corrections.md",
-        "sha256": "50e30324b6e514a8f2b4437dc23152953bbeedd1f163e1ff5d04edc6a15a0329"
-      },
-      {
-        "path": "docs/package-production.md",
-        "sha256": "35ab2d5186c7fdb4ba01c6e0b9352d782923538cf5f6a36c5865d59b15e09c5b"
-      },
-      {
-        "path": "docs/performance.md",
-        "sha256": "804cab141c57597b2b3cbd444c199afb2b9a09cc3f485a6f2e7737d8092ae2d7"
-      },
-      {
-        "path": "docs/testing.md",
-        "sha256": "ddc84e971b039f6c4e6ad8d440b65e22d18ab3670d00585cb012a5c203729740"
-      },
-      {
-        "path": "package.json",
-        "sha256": "621387ba0b0d7cac46ecf5e58086f7e75cef568c8fd085eb0a230e17b5e6ea82"
-      },
-      {
-        "path": "scripts/benchmark-integration.mjs",
-        "sha256": "72f04ddf8d33711256ab8c436dbe3f9c31dda5b8768c6783d1739e0ae5083ac6"
-      },
-      {
-        "path": "scripts/benchmark-system.mjs",
-        "sha256": "908c671c4b5bb5e6a4312dcf04275c3949265614519412afc8152feae0817d33"
-      },
-      {
-        "path": "scripts/candidate-snapshot.mjs",
-        "sha256": "320adcbe8d55c6687c9d2b1583173269d3d18bf822d3333a5a0aa1eb84270c48"
-      },
-      {
-        "path": "scripts/clean-checkout-check.mjs",
-        "sha256": "893b843ae6f1101032de7599a7b81755d1bb5674abb7aa9f45bb010f85f96646"
-      },
-      {
-        "path": "scripts/generate-bundles.mjs",
-        "sha256": "903e184d0d6ab8fda1c1b7a9d3e350ae7e1e411fd5891542ea4ffffbaa3927bf"
-      },
-      {
-        "path": "scripts/refresh-current-artifacts.mjs",
-        "sha256": "2dabd463d6c8655f703fd24397c39135e08938a6c1d836a0b060d58353675389"
-      },
-      {
-        "path": "scripts/run-test-tier.mjs",
-        "sha256": "454249ed8bd57aafa1ad05609a88ecdd071090953a95a20ac30d9c3b2ce98a76"
-      },
-      {
-        "path": "scripts/test-tiers.mjs",
-        "sha256": "a92da776629abb0e958493c7b86201e0817a3d7472e3f683f8dd233534f48da5"
-      },
-      {
-        "path": "scripts/verify-authorized-execution.mjs",
-        "sha256": "d276866be5b7bbefce5c2e74ea7bd80f6c2105e1475c42b71ebcabc4833573c1"
-      },
-      {
-        "path": "scripts/verify-evidence-learning.mjs",
-        "sha256": "366d44310cd93a0924393aa2f8263aa19446bf69cf5a6f6c1c036c22f2978c07"
-      },
-      {
-        "path": "scripts/verify-local-integration.mjs",
-        "sha256": "6c7262108fae03ac5e7c1152d2a201394c52b2c59f2807657df2f41995db6862"
-      },
-      {
-        "path": "scripts/verify-reports.mjs",
-        "sha256": "c0c580fb2ae82ed80c1974f9be1ad28bb16fcbfe281742cd7813b8e33c6e4e72"
-      },
-      {
-        "path": "src/adversarial-audit/bundles.ts",
-        "sha256": "3b6b12fad2358a5d3dd6adaf6c8200bbabd457983e370241db7c8b1cf3b3dd0d"
-      },
-      {
-        "path": "src/adversarial-audit/isolation.ts",
-        "sha256": "0d34f17704c30db3aebf22872e9f02409f7f701714c0ab70d6194b9006594e2b"
-      },
-      {
-        "path": "src/axis-meter.ts",
-        "sha256": "186e932c723ac2f7b1f50c6a7382c2e30deb7f09d572a9f17fdf8045e1242d98"
-      },
-      {
-        "path": "src/catch-sets.ts",
-        "sha256": "39955cea744b16b2842535bd7e4ff122a66523a4c68bd9c2d7dea9d445a52b43"
-      },
-      {
-        "path": "src/cli.ts",
-        "sha256": "0d8dee8a3f01a88137d4b46cf078558cfa0bfd8d414898b2fe9201664b30cf7e"
-      },
-      {
-        "path": "src/commands/arguments.ts",
-        "sha256": "e5154df98f55bfaf739d82a0b27f996f2e32a04641c1c241f13078ce5f7ffcde"
-      },
-      {
-        "path": "src/commands/assurance.ts",
-        "sha256": "44a9ed9f4a704866c2b6cdb6000777e11e1a05995df7d9d6ea757fa7008368e9"
-      },
-      {
-        "path": "src/commands/check.ts",
-        "sha256": "4f87a89186028f243339425416d1bd436c20e459fcb45b61c87301c9d9ab99e6"
-      },
-      {
-        "path": "src/commands/construction.ts",
-        "sha256": "bcefcc4d6b44e5200b0cd6d9e962a035b7f3bf5bb10bfbf6bcf7a8c940e12238"
-      },
-      {
-        "path": "src/commands/context.ts",
-        "sha256": "829dff3296778461ef58bdce44e890ec835b7430c85a2e1c3961722e59674742"
-      },
-      {
-        "path": "src/commands/discovery.ts",
-        "sha256": "2581cfe5c8b9804098617fe96d62993bc70b1892ad07b478038949d48852da22"
-      },
-      {
-        "path": "src/commands/dispatch.ts",
-        "sha256": "b0d10c78b81147b4435012113d5227e0e2b66bc8e37fe3d536aff1433a0dcd9e"
-      },
-      {
-        "path": "src/commands/evidence.ts",
-        "sha256": "8da66fdeb4883fe04a43ebe8b23982eaf64869879f5f386756b62edd23d9fb46"
-      },
-      {
-        "path": "src/commands/family-dispatch.ts",
-        "sha256": "769646c691e4f295c063873f7b014d842e078dcb80a49d4fbd52653c56a3cbe1"
-      },
-      {
-        "path": "src/commands/files.ts",
-        "sha256": "675acc04d6a03a0460e6e2945c833cc2c9d253a63d42614f831a430204e5056a"
-      },
-      {
-        "path": "src/commands/intake.ts",
-        "sha256": "1501f97dcca5608d4be4dcc1f85d30836fa1a66af0f88c4343e7b55b2929d103"
-      },
-      {
-        "path": "src/commands/matrix.ts",
-        "sha256": "2dcc61f29bcce68e2081f6a15938d1e689b530b9048d9a41d8cc5c628bc1aa99"
-      },
-      {
-        "path": "src/commands/phases-dispatch.ts",
-        "sha256": "d07f34b74397a233b8745eb7bbb8f7c76791d9f3a8d0e689afca264011a5c733"
-      },
-      {
-        "path": "src/commands/reports.ts",
-        "sha256": "d7760dfabacfcbed2797d74b1cd1d45a3521dc09456be45be6f73d306b937f6c"
-      },
-      {
-        "path": "src/commands/trials.ts",
-        "sha256": "dade020d76a3873e4f86fea78dc3d800ce4f0c33ad00c9d4ab3d6b123792cd44"
-      },
-      {
-        "path": "src/execution/authoring.ts",
-        "sha256": "1ebdf3a90cb066a96edec90f84de68a0729abaf8a6655a46ef268194e72b22b0"
-      },
-      {
-        "path": "src/foundry/load.ts",
-        "sha256": "e6ea77b56732b36851b0f2d7d748dbb2dcf52f31f985b175e789e20beb52a970"
-      },
-      {
-        "path": "src/foundry/loop.ts",
-        "sha256": "4894a0322bd54c743e22ddc2c4a7630242404898871d1d0d052162886f7aef0b"
-      },
-      {
-        "path": "src/foundry/operation-context.ts",
-        "sha256": "e94458f340c5b6389517b5b16e0ede7812b2401bd864e20419b13d2be1903e02"
-      },
-      {
-        "path": "src/foundry/promotion.ts",
-        "sha256": "d1566b399add2c37cc247bc8c87b67de7a918d1f494306aca564a4a23217c7ba"
-      },
-      {
-        "path": "src/foundry/shape-prose.ts",
-        "sha256": "13c0d48ba584524fe6e6517ea4271dff0f142c719d49c51b9fa14f384343f3a7"
-      },
-      {
-        "path": "src/index.ts",
-        "sha256": "2f089848e5f2e3dd05be9bdb548f6cfb6d5c921d8c5b51d7c29d324444e616f1"
-      },
-      {
-        "path": "src/measurement-context.ts",
-        "sha256": "17a48f67648e9db9ffeaf8ee194ccd64d000c908d42147d60b045ffe9449d546"
-      },
-      {
-        "path": "src/packages/assurance.ts",
-        "sha256": "f9648dbecb8760e7c9400ecbacff575af3772efd302cff6083b3ce1886ed8de4"
-      },
-      {
-        "path": "src/packages/native-caa.ts",
-        "sha256": "508da364425bbaec0e6775f0ab9ad634e30d91cd88e8caf13a2dad0401bddc3f"
-      },
-      {
-        "path": "src/packages/portfolio.ts",
-        "sha256": "853c1858ce7bed906ee29df77d738e0849355bddcc1994855dad9e6af2be4d3f"
-      },
-      {
-        "path": "src/phase-14/packages.ts",
-        "sha256": "c4b3f67cb5c447dc683d04e31996484a428066735e31ed95a8298b5ce2fcbdd3"
-      },
-      {
-        "path": "src/phase-17/package-controls.ts",
-        "sha256": "6f44adaefbee1ae05aca48afe8c1591ef340f5b40217693056b0db64051d5fc5"
-      },
-      {
-        "path": "src/phase-17/preflight.ts",
-        "sha256": "337e7547bc43f281c37aa911a072c3a8ae8a8d7cfd1d1a4b8f5a67f56001791b"
-      },
-      {
-        "path": "src/phase-19/candidate-review.ts",
-        "sha256": "7c2e885a46e01eeb0c443c88b9b7f6970ef08c644c136e18c40c9937fa588615"
-      },
-      {
-        "path": "src/phase-19/history.ts",
-        "sha256": "84e143cae50cc72dda6912dc6410640fe57c94ee823380c68376adde9dfc6148"
-      },
-      {
-        "path": "src/phase-23/adapters/.gitkeep",
-        "sha256": "3e0d178480b9026fc249aec6766defed453a32b67d182f91e0b271e0f8908728"
-      },
-      {
-        "path": "src/reports/kill-report.ts",
-        "sha256": "8bf0a8472be18d7f397b9a56d2d655b28fdf570d2720e32a025d2232e783b3c9"
-      },
-      {
-        "path": "src/reports/ledger-report.ts",
-        "sha256": "598bceee8f791148dd6994ff007ef5c8fdb49398cfba48e0328bfc8dbf0efb63"
-      },
-      {
-        "path": "src/reports/orchestration-report.ts",
-        "sha256": "505e6a52f9274f342663db7eef32b345c97a7b011fb094b72180fcd4835af277"
-      },
-      {
-        "path": "src/reports/phase-14-operator-effects.ts",
-        "sha256": "db646c9e9d18c6d486c54cbcbad8ed15b87d61a2a35b30de76801e74731fd640"
-      },
-      {
-        "path": "src/reports/phase-15-discovery-engine.ts",
-        "sha256": "0e2f23fbf64134c69e637a56aeeadfa74fb2a5dc9809f20bb262d6ac7ed118ce"
-      },
-      {
-        "path": "src/reports/phase-17-caa-validation.ts",
-        "sha256": "db7151267a0f1ee2c107818c3336b451987bc77b386700203de6316d68c9b7d2"
-      },
-      {
-        "path": "src/reports/phase-19-evidence-rerank.ts",
-        "sha256": "a5a7fcdc1babae1c38a163c711776e1db20dd060b78288baf0e30a2ab05a31e4"
-      },
-      {
-        "path": "src/reports/self-check-report.ts",
-        "sha256": "c93d734dcd0d690a648ac81a73aa5864b86811ada09065f83a33405e32218d51"
-      },
-      {
-        "path": "src/reports/third-subject-report.ts",
-        "sha256": "f1d9954e039cf2bde9b8de479614849c0f4729ea0e90fcecbecb809f64a85c0a"
-      },
-      {
-        "path": "src/similarity.ts",
-        "sha256": "8f286cad671dab988ed121fda7de7b1259637362c5273a49bb8bb31f6bb07b97"
-      },
-      {
-        "path": "src/spec-probe/detectors.ts",
-        "sha256": "0c629a537f94a8e9ad6b400c07ef80d427b292f9c54cc46a9596dffae142acf6"
-      },
-      {
-        "path": "src/trials/migration.ts",
-        "sha256": "bd81549f7ad4db03b0164442527a5dc13a82dc4534c4e8c3fdee78fcc009398c"
-      },
-      {
-        "path": "tasks/browser-replay-repair/public/test/recording.test.mjs",
-        "sha256": "c162c22bd3b4e1170637e59fcb75f892b9521585763f909f69eee94c0f7a1e48"
-      },
-      {
-        "path": "test/access-token-evolution.test.ts",
-        "sha256": "7991f031d6dc7b8241f99332e5194f44ef7474cece42e577f1d3978062bf8054"
-      },
-      {
-        "path": "test/adversarial-audit.test.ts",
-        "sha256": "65692355d224aab412e735cf61187af452aa08504b6a7c68d0f0db0539a54dbc"
-      },
-      {
-        "path": "test/clone-fidelity.test.ts",
-        "sha256": "3931e8830b2fcbf5d4d0b021b937969c15b784e39bc3b23e47f1618827bc0ca8"
-      },
-      {
-        "path": "test/cross-family-evidence.test.ts",
-        "sha256": "e5072486087504c94828781669b5adfedf700e474c3137ab808cbbaf5804392d"
-      },
-      {
-        "path": "test/dao-descendant.test.ts",
-        "sha256": "d23d3082981da29a5a5a09e33c1d9f76acc4993dfc5f47115c5068d7d313b508"
-      },
-      {
-        "path": "test/delegated-wallet-family.test.ts",
-        "sha256": "da4ecd4c72c860d5138aef5ba60f663de11f59f0f70245b540dcdf01cae87425"
-      },
-      {
-        "path": "test/deployment-alias-family.test.ts",
-        "sha256": "332fa236081d62310c51f8e9c49f8c230ab4a24bbc66e94164ad47fd3aa41db7"
-      },
-      {
-        "path": "test/engineering-integration.test.ts",
-        "sha256": "9da569fa2bf9b6edfacb13ad81f729f61a1415c3f024576e681be8a7d78168dc"
-      },
-      {
-        "path": "test/evolution.test.ts",
-        "sha256": "b01aec07afbbd44ffd2934816a51e8012a82167faf49e4dd705176b714ee264a"
-      },
-      {
-        "path": "test/fixtures/a2-normative-inputs.json",
-        "sha256": "ade2ae01e9759e91a4c50b175ff9a80a50c0655d32ac10f9fdf6a72671b06d49"
-      },
-      {
-        "path": "test/foundry-system.test.ts",
-        "sha256": "31d1922af5d54eed0ab240127ab3e167cc1ef202bb1631b58fc3808636bb38c2"
-      },
-      {
-        "path": "test/foundry-validators.test.ts",
-        "sha256": "8c59460bd005a7a72e8fa9e7ef2dd602769bba75ceba508539e130ce20701cde"
-      },
-      {
-        "path": "test/human-solvability.test.ts",
-        "sha256": "2ecaf8440e22c99896b673ef276b988e0d0f5cf3475937f6ae1754f458afc341"
-      },
-      {
-        "path": "test/package-authority-boundary.test.ts",
-        "sha256": "011a3d9c40f0bdf245db3a5f796c35dd5519908eae7f931ce3270dc9778ee2a6"
-      },
-      {
-        "path": "test/phase-19-evidence-rerank.test.ts",
-        "sha256": "4d8d26879d81ed67ce5ffa95df1280f3ce5995f2492fc59f1037a9fd5838139a"
-      },
-      {
-        "path": "test/phase-20-lane1-exploits/exploits.test.ts",
-        "sha256": "60e234560efd72d356d4c57e1501160e007ef0f45839382932c7806470cc6ebc"
-      },
-      {
-        "path": "test/phase-20-secure-executor.test.ts",
-        "sha256": "2b5278e3caa68b316aa7624f40b053f5ff3f9ab12c85aa2c82d6018d1701bb3a"
-      },
-      {
-        "path": "test/phase-22-transfer.test.ts",
-        "sha256": "10e3cc3943469600baf8d331a686bbabb67a668c38a710040d53373c3b60d29a"
-      },
-      {
-        "path": "test/phase-23-classification-and-trial.test.ts",
-        "sha256": "d8a685bfd603f5b77c45edb6cb4e7dc6ba5fe9721a37f2486a59c39ba93da747"
-      },
-      {
-        "path": "test/prose-freshness.test.ts",
-        "sha256": "ca40277febbf64e834c43206fddb22db670fe0c0d75f92d13d8d1564704eae27"
-      },
-      {
-        "path": "test/runtime-readiness.test.ts",
-        "sha256": "4757f6d7eff094a4c5f0a0a4de09470c4e388c8b7241acfeaf0441a7ca940f74"
-      },
-      {
-        "path": "test/spec-probe.test.ts",
-        "sha256": "c325172a5b698aa1a9f6c820edf956186c8ad81987d8fb026adc9c4d88031631"
-      },
-      {
-        "path": "test/starter-must-fail.test.ts",
-        "sha256": "21f69a490f43040935be67631640c690a6548c03dc1a6ab842edb02d00f0429d"
-      },
-      {
-        "path": "test/trials.test.ts",
-        "sha256": "d135b6907c5ec83e5cf2e13f23d8f9fcb0ff32b125562b83bdd2ea9f1ac85273"
-      },
-      {
-        "path": "test/zz-outbox-probe2.test.ts",
-        "sha256": "0ad737b846447fde01ad4d49801f1d048d60cde85907ca5ff6f9d66b107a329e"
-      },
-      {
-        "path": "test/zz-scratch-starters.test.ts",
-        "sha256": "390291c52712540e63c1ac15a352fb39b0e4dcd1ae6c8ec12813c4afb6db1e5d"
-      },
-      {
-        "path": "vitest.config.ts",
-        "sha256": "097cf9cb2e19c7b5517e392636d1d24d2449ce22bd3eeff639990a28634408c9"
+        "before": "5721e5da38772a7e6d42c17bcae4a0272215842bce4f6a4154e31f04d4b7e736",
+        "after": "b11df41c01bd0fd679b52164c04b9827c9aa70c7347606c4ab62110203bf5b89"
       }
     ],
-    "deletedSource": [
-      "test/tmp-recipe-classify.test.ts",
-      "test/zzz-debug-secure.test.ts"
-    ]
+    "postProofExecutableLogicUnchanged": true,
+    "finalCandidateDigest": "9649fa83308b52d985d6c02210bde3369686fdc062e33506ade5dd2a02ae8f3e",
+    "finalCandidateFiles": 3477,
+    "historicalFiles": 904,
+    "historicalDigest": "0f8c7429e52bf3a340f8dde804e84e60a33adcfa235981f089960f972ce61c95",
+    "historicalBytesUnchanged": true
   },
   "prerequisitesVerified": [
     1,
@@ -443,319 +33,131 @@
   ],
   "implementedInterfaces": [
     "cohesive CLI commands",
-    "command-scoped registry/evidence/runtime snapshots",
-    "exact bounded matrix memoization",
-    "exhaustive mandatory test tiers",
-    "five-package local integration",
-    "offline intended-source recipient verification",
-    "corrected current/historical report views"
+    "operation-scoped immutable inputs and exact matrix indexing",
+    "exhaustive required test tiers",
+    "space-bounded independent runtime archive publication",
+    "five-package local production and recipient proof",
+    "immutable inert execution and qualified learning",
+    "read-only historical reports with retained identity",
+    "offline intended-source recipient build"
   ],
-  "verification": {
-    "tiers": [
-      {
-        "artifact": ".local/prompt-07/pure-final-03/summary.json",
-        "tier": "pure",
-        "selected": [
-          "test/axis-meter.test.ts",
-          "test/engineering-integration.test.ts",
-          "test/import-swebench.test.ts",
-          "test/package-checker-integrity.test.ts",
-          "test/package-evidence-decisions.test.ts",
-          "test/package-population-integrity.test.ts",
-          "test/package-semantic-integrity.test.ts",
-          "test/runtime-archive.test.ts",
-          "test/runtime-readiness.test.ts"
-        ],
-        "passed": 114,
-        "failed": 0,
-        "skipped": 0,
-        "suitesFailed": 0,
-        "elapsedMs": 10377.982,
-        "providerCallsMade": 0,
-        "sourceBefore": "f3fc4009e628a731496bf7e4bb6c54daa5b2f48ee9213ee89d714c34e74c823c",
-        "sourceAfter": "f3fc4009e628a731496bf7e4bb6c54daa5b2f48ee9213ee89d714c34e74c823c"
-      },
-      {
-        "artifact": ".local/prompt-07/semantic-final-03/summary.json",
-        "tier": "semantic",
-        "selected": [
-          "test/a2-differential.test.ts",
-          "test/access-token-evolution.test.ts",
-          "test/access-token-smoke.test.ts",
-          "test/adaptive-funnel.test.ts",
-          "test/adversarial-audit.test.ts",
-          "test/cross-family-evidence.test.ts",
-          "test/cross-provider.test.ts",
-          "test/deployment-alias-family.test.ts",
-          "test/diagnosis-fanout.test.ts",
-          "test/discovery-workbench.test.ts",
-          "test/evolution.test.ts",
-          "test/external-intake.test.ts",
-          "test/family-list-drift.test.ts",
-          "test/family-pic.test.ts",
-          "test/foundry-system.test.ts",
-          "test/foundry-validators.test.ts",
-          "test/human-solvability.test.ts",
-          "test/lineage.test.ts",
-          "test/memory-facade-contract.test.ts",
-          "test/orchestration.test.ts",
-          "test/package-production.test.ts",
-          "test/package-public-surface.test.ts",
-          "test/phase-11-discovery.test.ts",
-          "test/phase-13-transfer.test.ts",
-          "test/phase-14-operator-effects.test.ts",
-          "test/phase-14-provider-runtime.test.ts",
-          "test/phase-15-discovery-engine.test.ts",
-          "test/phase-16-continuation.test.ts",
-          "test/phase-16-contract-gate.test.ts",
-          "test/phase-16-discovery-v3.test.ts",
-          "test/phase-17-caa-validation.test.ts",
-          "test/phase-18-caa-v2.test.ts",
-          "test/phase-19-evidence-rerank.test.ts",
-          "test/phase-21-operator-lab.test.ts",
-          "test/portfolio-production.test.ts",
-          "test/probe-runner.test.ts",
-          "test/promotion.test.ts",
-          "test/protected-contracts.test.ts",
-          "test/protected-family-semantics.test.ts",
-          "test/provider-delta-diagnosis.test.ts",
-          "test/provider-delta.test.ts",
-          "test/rig-integrity.test.ts",
-          "test/row-five.test.ts",
-          "test/screens.test.ts",
-          "test/secret-scan.test.ts",
-          "test/spec-probe-forward.test.ts",
-          "test/spec-probe.test.ts",
-          "test/ui-replay-live-dom.test.ts",
-          "test/vacuous-gates.test.ts",
-          "test/zz-scratch-starters.test.ts"
-        ],
-        "passed": 996,
-        "failed": 0,
-        "skipped": 0,
-        "suitesFailed": 0,
-        "elapsedMs": 299105.563625,
-        "providerCallsMade": 0,
-        "sourceBefore": "f3fc4009e628a731496bf7e4bb6c54daa5b2f48ee9213ee89d714c34e74c823c",
-        "sourceAfter": "f3fc4009e628a731496bf7e4bb6c54daa5b2f48ee9213ee89d714c34e74c823c"
-      },
-      {
-        "artifact": ".local/prompt-07/history-final-03/summary.json",
-        "tier": "history",
-        "selected": [
-          "test/clone-fidelity.test.ts",
-          "test/evidence-snapshot.test.ts",
-          "test/history-task-attribution.test.ts",
-          "test/label-parity.test.ts",
-          "test/learning.test.ts",
-          "test/outbox-import-validators.test.ts",
-          "test/prose-freshness.test.ts",
-          "test/root-cause.test.ts",
-          "test/zz-outbox-probe.test.ts",
-          "test/zz-outbox-probe2.test.ts"
-        ],
-        "passed": 122,
-        "failed": 0,
-        "skipped": 0,
-        "suitesFailed": 0,
-        "elapsedMs": 49823.079792000004,
-        "providerCallsMade": 0,
-        "sourceBefore": "f3fc4009e628a731496bf7e4bb6c54daa5b2f48ee9213ee89d714c34e74c823c",
-        "sourceAfter": "f3fc4009e628a731496bf7e4bb6c54daa5b2f48ee9213ee89d714c34e74c823c"
-      },
-      {
-        "artifact": ".local/prompt-07/execution-tests-final-03/summary.json",
-        "tier": "execution",
-        "selected": [
-          "test/execution-lifecycle.test.ts"
-        ],
-        "passed": 29,
-        "failed": 0,
-        "skipped": 0,
-        "suitesFailed": 0,
-        "elapsedMs": 2090.853833,
-        "providerCallsMade": 0,
-        "sourceBefore": "f3fc4009e628a731496bf7e4bb6c54daa5b2f48ee9213ee89d714c34e74c823c",
-        "sourceAfter": "f3fc4009e628a731496bf7e4bb6c54daa5b2f48ee9213ee89d714c34e74c823c"
-      }
-    ],
-    "totalPassed": 1261,
-    "totalFailed": 0,
-    "totalSkipped": 0,
-    "completeRequiredSuitePassed": false,
-    "protectedPreflight": {
-      "tier": "protected",
-      "selected": [
-        "test/container-runner.test.ts",
-        "test/container-staging-mode.test.ts",
-        "test/dao-descendant.test.ts",
-        "test/delegated-wallet-family.test.ts",
-        "test/package-authority-boundary.test.ts",
-        "test/phase-20-lane1-exploits/exploits.test.ts",
-        "test/phase-20-secure-executor.test.ts",
-        "test/phase-22-transfer.test.ts",
-        "test/phase-23-classification-and-trial.test.ts",
-        "test/protected-family-routes.test.ts",
-        "test/starter-must-fail.test.ts",
-        "test/trials-routing.test.ts",
-        "test/trials.test.ts"
-      ],
-      "status": "incomplete",
-      "reason": "required-runtime-unavailable",
-      "passed": 0,
-      "skipped": 0,
-      "providerCallsMade": 0
-    },
-    "candidateSnapshots": [
-      {
-        "artifact": ".local/prompt-07/candidate-01",
-        "sourceDigest": "8d267fe0b9b4aa65db735d5b7884cc25517974a311206589c3ba9682bf33bc86",
-        "files": 3462,
-        "bytes": 60582574,
-        "commands": [
-          {
-            "command": [
-              "pnpm",
-              "install",
-              "--offline",
-              "--frozen-lockfile"
-            ],
-            "milliseconds": 439,
-            "stdoutSha256": "b00edb141af0541a929f33ef552ec7276adadff99fa5da15fb2f907773ba7927"
-          },
-          {
-            "command": [
-              "pnpm",
-              "typecheck"
-            ],
-            "milliseconds": 3355,
-            "stdoutSha256": "823716837a59868f5c644ef6383d52753bb6791066b700ad773a721066916648"
-          },
-          {
-            "command": [
-              "pnpm",
-              "lint"
-            ],
-            "milliseconds": 660,
-            "stdoutSha256": "0b6f9249af22db1e830e62da58eefbf0d1a8856dae1976073daf60c792ed87ac"
-          },
-          {
-            "command": [
-              "pnpm",
-              "build"
-            ],
-            "milliseconds": 6776,
-            "stdoutSha256": "eea488c9fd655958d093db303ae7774720c61a186f80ffce1bd07ef3f2951ffb"
-          },
-          {
-            "command": [
-              "node",
-              "dist/cli.js",
-              "check"
-            ],
-            "milliseconds": 45161,
-            "stdoutSha256": "46bdc793caf32edd3e3e72e6ea835fe5b61b94936bc50df0c87ad16fa4cdb9fd"
-          }
-        ],
-        "gateReportsMatched": 6,
-        "ambientBuildReused": false,
-        "ignoredInputsIncluded": false
-      }
-    ],
-    "reportReproduction": {
-      "status": "pending",
-      "command": "node scripts/verify-reports.mjs",
-      "note": "Current all renders successfully; full CLI/bundle reproduction must finish before claiming this gate."
-    },
-    "typecheck": "pass",
-    "lint": "pass",
-    "build": [
-      "esm",
-      "cjs",
-      "declarations"
-    ],
-    "registryCheck": "pass",
-    "secretScan": "pass",
-    "historicalBytesUnchanged": true
-  },
-  "performance": {
-    "matrix": "reports/verification/prompt-07-matrix-performance.json",
-    "system": "reports/verification/prompt-07-system-performance.json",
-    "fullRenderSpeedupEstablished": false
-  },
-  "partialRuntime": {
-    "status": "invalid-final-integration",
-    "artifact": ".local/prompt-07/integration-02/progress.json",
-    "stages": [
-      {
-        "name": "native production and local assurance",
-        "status": "pass",
-        "elapsedMs": 394195.355625
-      },
-      {
-        "name": "native repeat build",
-        "status": "pass",
-        "elapsedMs": 8144.672333000053
-      },
-      {
-        "name": "native byte-identical reproduction",
-        "status": "pass",
-        "elapsedMs": 2922.0242089999956
-      },
-      {
-        "name": "pinned portfolio runtime capture",
-        "status": "pass",
-        "elapsedMs": 17180.805333000026
-      },
-      {
-        "name": "browser-replay-repair assembly",
-        "status": "pass",
-        "elapsedMs": 5544.481541000016
-      },
-      {
-        "name": "browser-replay-repair complete controls and visible parity",
-        "status": "pass",
-        "elapsedMs": 140984.67108300002
-      },
-      {
-        "name": "browser-replay-repair export",
-        "status": "pass",
-        "elapsedMs": 7336.701083999942
-      },
-      {
-        "name": "persistent-knowledge-repair assembly",
-        "status": "pass",
-        "elapsedMs": 5333.4688750000205
-      },
-      {
-        "name": "persistent-knowledge-repair complete controls and visible parity",
-        "status": "pass",
-        "elapsedMs": 19955.764833000023
-      },
-      {
-        "name": "persistent-knowledge-repair export",
-        "status": "fail",
-        "elapsedMs": 11302.185707999975,
-        "error": "Error: ENOSPC: no space left on device, copyfile '/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry/.local/prompt-07/integration-02/persistent-knowledge-repair/runtime.tar' -> '/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry/.local/prompt-07/integration-02/persistent-knowledge-repair-export/runtime.tar'"
-      }
-    ],
-    "packages": [
-      {
-        "id": "caa-revalidation-repair",
-        "export": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry/.local/prompt-07/integration-02/native-export",
-        "packageDigest": "7a595dff9d41fd02383858afef67253eb9f1c998e74a9282e8040f1c0144eb1e",
-        "schemaVersion": 1,
-        "taskDirectory": "tasks/caa-revalidation-repair"
-      },
-      {
-        "id": "browser-replay-repair",
-        "export": "/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry/.local/prompt-07/integration-02/browser-replay-repair-export",
-        "packageDigest": "1186de2b84ccb4021789c4e27f07549a2a627f07d72313b8afd1aba43b58eaf2",
-        "schemaVersion": 1
-      }
-    ],
-    "reason": "ENOSPC while copying runtime archive; subsequent Docker/containerd I/O failure. Earlier successful controls are versioned partial diagnostics, not a final current-source pass."
-  },
+  "changedFiles": [
+    ".github/workflows/verify.yml",
+    "MEMO.md",
+    "README.md",
+    "data/candidates-checker-required.json",
+    "data/implementation-gap-ledger.json",
+    "data/legacy-bundle-history-lock.json",
+    "data/mutants.json",
+    "data/package-history-lock.json",
+    "docs/INHERITED-EVIDENCE.md",
+    "docs/architecture.md",
+    "docs/evidence-corrections.md",
+    "docs/package-production.md",
+    "docs/performance.md",
+    "docs/testing.md",
+    "package.json",
+    "scripts/benchmark-integration.mjs",
+    "scripts/benchmark-system.mjs",
+    "scripts/candidate-snapshot.mjs",
+    "scripts/clean-checkout-check.mjs",
+    "scripts/generate-bundles.mjs",
+    "scripts/refresh-current-artifacts.mjs",
+    "scripts/run-test-tier.mjs",
+    "scripts/secure/bootstrap.mjs",
+    "scripts/test-tiers.mjs",
+    "scripts/verify-authorized-execution.mjs",
+    "scripts/verify-evidence-learning.mjs",
+    "scripts/verify-local-integration.mjs",
+    "scripts/verify-reports.mjs",
+    "src/adversarial-audit/bundles.ts",
+    "src/adversarial-audit/container.ts",
+    "src/adversarial-audit/isolation.ts",
+    "src/adversarial-audit/readiness.ts",
+    "src/axis-meter.ts",
+    "src/catch-sets.ts",
+    "src/cli.ts",
+    "src/commands/arguments.ts",
+    "src/commands/assurance.ts",
+    "src/commands/check.ts",
+    "src/commands/construction.ts",
+    "src/commands/context.ts",
+    "src/commands/discovery.ts",
+    "src/commands/dispatch.ts",
+    "src/commands/evidence.ts",
+    "src/commands/family-dispatch.ts",
+    "src/commands/files.ts",
+    "src/commands/intake.ts",
+    "src/commands/matrix.ts",
+    "src/commands/phases-dispatch.ts",
+    "src/commands/reports.ts",
+    "src/commands/trials.ts",
+    "src/execution/authoring.ts",
+    "src/foundry/load.ts",
+    "src/foundry/loop.ts",
+    "src/foundry/operation-context.ts",
+    "src/foundry/promotion.ts",
+    "src/foundry/shape-prose.ts",
+    "src/index.ts",
+    "src/measurement-context.ts",
+    "src/packages/assurance.ts",
+    "src/packages/native-caa.ts",
+    "src/packages/portfolio.ts",
+    "src/packages/storage.ts",
+    "src/phase-14/packages.ts",
+    "src/phase-17/package-controls.ts",
+    "src/phase-17/preflight.ts",
+    "src/phase-19/candidate-review.ts",
+    "src/phase-19/history.ts",
+    "src/phase-23/adapters/.gitkeep",
+    "src/reports/kill-report.ts",
+    "src/reports/ledger-report.ts",
+    "src/reports/orchestration-report.ts",
+    "src/reports/phase-13-transfer.ts",
+    "src/reports/phase-14-operator-effects.ts",
+    "src/reports/phase-15-discovery-engine.ts",
+    "src/reports/phase-17-caa-validation.ts",
+    "src/reports/phase-19-evidence-rerank.ts",
+    "src/reports/self-check-report.ts",
+    "src/reports/third-subject-report.ts",
+    "src/similarity.ts",
+    "src/spec-probe/detectors.ts",
+    "src/trials/migration.ts",
+    "src/trials/secure-runner.ts",
+    "tasks/browser-replay-repair/public/test/recording.test.mjs",
+    "test/access-token-evolution.test.ts",
+    "test/adversarial-audit.test.ts",
+    "test/clone-fidelity.test.ts",
+    "test/cross-family-evidence.test.ts",
+    "test/dao-descendant.test.ts",
+    "test/delegated-wallet-family.test.ts",
+    "test/deployment-alias-family.test.ts",
+    "test/engineering-integration.test.ts",
+    "test/evolution.test.ts",
+    "test/fixtures/a2-normative-inputs.json",
+    "test/foundry-system.test.ts",
+    "test/foundry-validators.test.ts",
+    "test/human-solvability.test.ts",
+    "test/package-authority-boundary.test.ts",
+    "test/package-storage.test.ts",
+    "test/phase-19-evidence-rerank.test.ts",
+    "test/phase-20-lane1-exploits/exploits.test.ts",
+    "test/phase-20-secure-executor.test.ts",
+    "test/phase-22-transfer.test.ts",
+    "test/phase-23-classification-and-trial.test.ts",
+    "test/prose-freshness.test.ts",
+    "test/protected-family-routes.test.ts",
+    "test/report-readonly.test.ts",
+    "test/runtime-readiness.test.ts",
+    "test/secure-runner-transport.test.ts",
+    "test/spec-probe.test.ts",
+    "test/starter-must-fail.test.ts",
+    "test/trials-routing.test.ts",
+    "test/trials.test.ts",
+    "test/zz-outbox-probe2.test.ts",
+    "test/zz-scratch-starters.test.ts",
+    "vitest.config.ts"
+  ],
   "gapDispositions": [
     {
       "id": "G1",
@@ -837,9 +239,9 @@
     },
     {
       "id": "G14",
-      "status": "blocked",
+      "status": "verified",
       "owner": 7,
-      "nextAction": "Recover Docker Desktop with owner approval and rerun the complete frozen-source protected and five-package integrations. Missing runtime is not a pass."
+      "nextAction": "Retain required executable tiers and frozen artifact identities. This completion-ledger update changes the conservative build stamp; the acceptance report distinguishes the tested exports from newly stamped assemblies. Human/model/destination qualification remains external."
     },
     {
       "id": "HISTORY-1",
@@ -873,9 +275,9 @@
     },
     {
       "id": "E4",
-      "status": "implemented",
+      "status": "verified",
       "owner": 7,
-      "nextAction": "Retain exact-output and invalidation regressions; record final stable-source system performance and archive storage in the acceptance report."
+      "nextAction": "Retain exact-output, invalidation and resource-bound regressions. Earlier workload profiles keep their original source/output scope; new workload or algorithm changes require fresh measurements."
     },
     {
       "id": "PKG-CONTAINMENT",
@@ -1007,7 +409,7 @@
       "id": "P5-BROWSER-VISIBLE-MOCK",
       "status": "verified",
       "owner": 7,
-      "nextAction": "Retain observed v2 parity; current full integration is blocked under G14, not inferred from the earlier artifact receipt."
+      "nextAction": "Retain professional-v1 historical bytes and observed v2 parity. The final five-package integration executes the current visible and protected controls; future package changes require new version-bound checks."
     },
     {
       "id": "P6-LEGACY-CAMPAIGN-PREPARATION",
@@ -1022,26 +424,236 @@
       "nextAction": "Recover original bytes to restore original-input reranking; never rewrite preregistration or backfill a new source as historical evidence."
     }
   ],
+  "verification": {
+    "tests": {
+      "tier": "all",
+      "selected": [
+        "test/a2-differential.test.ts",
+        "test/access-token-evolution.test.ts",
+        "test/access-token-smoke.test.ts",
+        "test/adaptive-funnel.test.ts",
+        "test/adversarial-audit.test.ts",
+        "test/axis-meter.test.ts",
+        "test/clone-fidelity.test.ts",
+        "test/container-runner.test.ts",
+        "test/container-staging-mode.test.ts",
+        "test/cross-family-evidence.test.ts",
+        "test/cross-provider.test.ts",
+        "test/dao-descendant.test.ts",
+        "test/delegated-wallet-family.test.ts",
+        "test/deployment-alias-family.test.ts",
+        "test/diagnosis-fanout.test.ts",
+        "test/discovery-workbench.test.ts",
+        "test/engineering-integration.test.ts",
+        "test/evidence-snapshot.test.ts",
+        "test/evolution.test.ts",
+        "test/execution-lifecycle.test.ts",
+        "test/external-intake.test.ts",
+        "test/family-list-drift.test.ts",
+        "test/family-pic.test.ts",
+        "test/foundry-system.test.ts",
+        "test/foundry-validators.test.ts",
+        "test/history-task-attribution.test.ts",
+        "test/human-solvability.test.ts",
+        "test/import-swebench.test.ts",
+        "test/label-parity.test.ts",
+        "test/learning.test.ts",
+        "test/lineage.test.ts",
+        "test/memory-facade-contract.test.ts",
+        "test/orchestration.test.ts",
+        "test/outbox-import-validators.test.ts",
+        "test/package-authority-boundary.test.ts",
+        "test/package-checker-integrity.test.ts",
+        "test/package-evidence-decisions.test.ts",
+        "test/package-population-integrity.test.ts",
+        "test/package-production.test.ts",
+        "test/package-public-surface.test.ts",
+        "test/package-semantic-integrity.test.ts",
+        "test/package-storage.test.ts",
+        "test/phase-11-discovery.test.ts",
+        "test/phase-13-transfer.test.ts",
+        "test/phase-14-operator-effects.test.ts",
+        "test/phase-14-provider-runtime.test.ts",
+        "test/phase-15-discovery-engine.test.ts",
+        "test/phase-16-continuation.test.ts",
+        "test/phase-16-contract-gate.test.ts",
+        "test/phase-16-discovery-v3.test.ts",
+        "test/phase-17-caa-validation.test.ts",
+        "test/phase-18-caa-v2.test.ts",
+        "test/phase-19-evidence-rerank.test.ts",
+        "test/phase-20-lane1-exploits/exploits.test.ts",
+        "test/phase-20-secure-executor.test.ts",
+        "test/phase-21-operator-lab.test.ts",
+        "test/phase-22-transfer.test.ts",
+        "test/phase-23-classification-and-trial.test.ts",
+        "test/portfolio-production.test.ts",
+        "test/probe-runner.test.ts",
+        "test/promotion.test.ts",
+        "test/prose-freshness.test.ts",
+        "test/protected-contracts.test.ts",
+        "test/protected-family-routes.test.ts",
+        "test/protected-family-semantics.test.ts",
+        "test/provider-delta-diagnosis.test.ts",
+        "test/provider-delta.test.ts",
+        "test/report-readonly.test.ts",
+        "test/rig-integrity.test.ts",
+        "test/root-cause.test.ts",
+        "test/row-five.test.ts",
+        "test/runtime-archive.test.ts",
+        "test/runtime-readiness.test.ts",
+        "test/screens.test.ts",
+        "test/secret-scan.test.ts",
+        "test/secure-runner-transport.test.ts",
+        "test/spec-probe-forward.test.ts",
+        "test/spec-probe.test.ts",
+        "test/starter-must-fail.test.ts",
+        "test/trials-routing.test.ts",
+        "test/trials.test.ts",
+        "test/ui-replay-live-dom.test.ts",
+        "test/vacuous-gates.test.ts",
+        "test/zz-outbox-probe.test.ts",
+        "test/zz-outbox-probe2.test.ts",
+        "test/zz-scratch-starters.test.ts"
+      ],
+      "passed": 1512,
+      "failed": 0,
+      "skipped": 0,
+      "suitesFailed": 0,
+      "elapsedMs": 2028453.122125,
+      "providerCallsMade": 0,
+      "sourceBefore": "43138b6e32b962f47021929bfeabbe1a4b42e44ebd285358df97e76e1c03b6a5",
+      "sourceAfter": "43138b6e32b962f47021929bfeabbe1a4b42e44ebd285358df97e76e1c03b6a5"
+    },
+    "completeRequiredSuitePassed": true,
+    "reportReproduction": {
+      "command": "node scripts/verify-reports.mjs",
+      "status": "pass",
+      "reason": null,
+      "code": 0,
+      "signal": null,
+      "sourceBefore": "43138b6e32b962f47021929bfeabbe1a4b42e44ebd285358df97e76e1c03b6a5",
+      "sourceAfter": "43138b6e32b962f47021929bfeabbe1a4b42e44ebd285358df97e76e1c03b6a5",
+      "milliseconds": 2214994,
+      "providerCallsMade": 0,
+      "streams": [
+        {
+          "name": "stdout",
+          "bytes": 28435,
+          "sha256": "89a58237d233869d72f03f0b4bc1a90e2e12c048aa0c48002a3b961e81979779"
+        },
+        {
+          "name": "stderr",
+          "bytes": 1650,
+          "sha256": "7159015e922c5ce50c383ac0245c57d8f922dcc80ff6776921278e02e73c3d0b"
+        }
+      ]
+    },
+    "finalIntegration": "reports/verification/prompt-07-final-integration.json",
+    "earlierRegression": "reports/verification/prompt-07-regression-followup.json",
+    "readOnlyRegression": "reports/verification/prompt-07-readonly-reporting.json",
+    "startupTransport": "reports/verification/prompt-07-startup-transport.json",
+    "closingRegression": {
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0,
+      "path": ".local/prompt-07/resume-2026-09-07/closing-regression.json",
+      "sha256": "0ca781fb23af5cfa5ae99d96dfa41880666f91059aff516e38c71a7383817702"
+    },
+    "candidate": {
+      "path": ".local/prompt-07/resume-2026-09-07/candidate-04",
+      "digest": "9649fa83308b52d985d6c02210bde3369686fdc062e33506ade5dd2a02ae8f3e",
+      "commands": [
+        {
+          "command": [
+            "pnpm",
+            "install",
+            "--offline",
+            "--frozen-lockfile"
+          ],
+          "milliseconds": 362,
+          "stdoutSha256": "66d288d875756c24743120f9e2fd3703dea684ce29f8e1eacb8775f7c5903b00"
+        },
+        {
+          "command": [
+            "pnpm",
+            "typecheck"
+          ],
+          "milliseconds": 3006,
+          "stdoutSha256": "893a928f0c3c5c6e6f5436745e1b191adf177addb6b2681c4f46e664342a40c7"
+        },
+        {
+          "command": [
+            "pnpm",
+            "lint"
+          ],
+          "milliseconds": 668,
+          "stdoutSha256": "60e9a7a0e2f0d20ab47a86166ba9d6b2817dd69462a221613314c17aa5c0b485"
+        },
+        {
+          "command": [
+            "pnpm",
+            "build"
+          ],
+          "milliseconds": 6490,
+          "stdoutSha256": "dcc93b529ee1da88d82ee6dde3ea94d2d8ded15c8c227679f7ffd3c56a114414"
+        },
+        {
+          "command": [
+            "node",
+            "dist/cli.js",
+            "check"
+          ],
+          "milliseconds": 43483,
+          "stdoutSha256": "46bdc793caf32edd3e3e72e6ea835fe5b61b94936bc50df0c87ad16fa4cdb9fd"
+        }
+      ],
+      "gateReportsMatched": 6,
+      "ambientBuildReused": false,
+      "ignoredInputsIncluded": false
+    },
+    "build": [
+      "esm",
+      "cjs",
+      "declarations"
+    ],
+    "historicalBytesUnchanged": true,
+    "modelQualification": false
+  },
+  "performance": {
+    "matrix": "reports/verification/prompt-07-matrix-performance.json",
+    "systemCheckpoint": "reports/verification/prompt-07-system-performance.json",
+    "storage": "reports/verification/prompt-07-storage-performance.json",
+    "fullRenderSpeedupEstablished": false
+  },
   "compatibilityNotes": [
-    "Original trial/campaign/audit bytes and adjudications unchanged.",
-    "Six historical outbox zeros remain five specification-ambiguity labels and one unlabelled, not six fair capability failures.",
-    "Original Phase19 corpus bytes unavailable; strict rederivation refuses, retained views labelled.",
-    "Browser professional-v2 is a new artifact; professional-v1 retained.",
-    "DAO whole test file remains in the mandatory protected tier; unavailable Docker is not silently skipped.",
-    "Post-tier executable delta is the report-verifier remediation message only; final current protected/native/browser proof remains incomplete."
+    "Original 904 trial/campaign/audit files remain byte-identical.",
+    "Six historical outbox zeros remain five specification-ambiguity labels and one unresolved, not six fair capability failures.",
+    "Phase13 report/results/design are historical queries; phase13 measure explicitly starts current local grading.",
+    "The unchanged Phase17 preflight receipt received an additional identity lock, not a retroactive timestamp attestation.",
+    "The post-proof completion-ledger change produces a new conservative build stamp. Full runtime proofs retain their tested stamp and exact package IDs; they do not silently qualify a newly assembled package identity."
   ],
-  "remainingBlockers": [
-    "Owner-approved Docker Desktop recovery and a successful real offline container startup.",
-    "Complete frozen-source protected populations and five-package native/browser/inert/learning/recipient integration.",
-    "Finish full current report/bundle reproduction and recipient verification after final executable changes."
+  "artifactLocations": [
+    "reports/PROMPT-07-INTEGRATION.md",
+    "reports/verification/prompt-07.json",
+    ".local/prompt-07/resume-2026-09-07/"
   ],
+  "remainingBlockers": [],
   "externalQualification": [
-    "independent fairness/expert time",
-    "destination rubric and packaging",
-    "effective live-provider enrollment and separate trial authority",
-    "official standard and adversarial model evidence"
+    {
+      "id": "QUALIFICATION",
+      "required": "Obtain separate explicit authority only after required local package gates; never label local controls or ambiguous historical zeroes as qualification."
+    },
+    {
+      "id": "PKG-NATIVE-QUALIFICATION",
+      "required": "Obtain independent reviews and separate explicit model-trial authority; do not use local controls to claim 6 of 6 genuine model failures."
+    },
+    {
+      "id": "HISTORY-2",
+      "required": "Recover original bytes to restore original-input reranking; never rewrite preregistration or backfill a new source as historical evidence."
+    }
   ],
+  "runtimeCaveat": "Intermittent Docker Desktop pre-start mount errors were observed and retained. The generic runner now materializes bounded public files in container-local tmpfs via stdin, removing the transient host mount dependency without relaxing subject permissions. Startup diagnostics, negative controls and complete-population smoke assertions were strengthened. No Docker-internal root cause, universal runtime reliability or automatic grading retry is claimed.",
   "providerCallsMade": 0,
-  "nextOwner": 7,
+  "nextOwner": null,
   "continuation": ".local/prompt-07/CONTINUATION-LATEST.md"
 }

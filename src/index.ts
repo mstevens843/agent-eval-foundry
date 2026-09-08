@@ -1070,3 +1070,9 @@ export { outboxFinding, memoryCorrectionFinding, portfolioTransfers } from "./le
 export { learningCommand, inspectPortfolioSelection } from "./learning/command.js";
 export { renderFinding, renderTrial } from "./learning/render.js";
 export { authoritySourceDigest, assertCurrentAuthorityBundle } from "./trials/authority-build.js";
+export {
+  assertStorageHeadroom,
+  copyRuntimeArchive,
+  requireStorageHeadroom,
+  STORAGE_RESERVE_BYTES,
+} from "./packages/storage.js";

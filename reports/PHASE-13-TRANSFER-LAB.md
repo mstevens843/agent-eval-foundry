@@ -1,8 +1,10 @@
 # Phase 13 - Controlled Family x Recipe Transfer Laboratory
 
+> Retained historical calibration, checked against its byte lock. No current grading or campaign preflight runs while rendering this report. Historical collector and readiness claims below do not attest today's protected routes or authorize trials.
+
 ## Verdict
 
-The committed-authority recipe transferred mechanically in **0/3** substrates, and **0/3** packages are trial-ready.
+The committed-authority recipe transferred mechanically in **3/3** substrates, and **3/3** packages were reported trial-ready at that time; current eligibility is separate.
 The result is local verifier, activation and package evidence. It is **not agent-difficulty evidence**:
 0 model reads ran and $0.00 was spent.
 
@@ -119,9 +121,9 @@ formula.
 
 | family | challenge hash | scenario set | files | starter failures | host errors | campaign |
 |---|---|---|---:|---:|---:|---|
-| `dao-descendant` | `bbb02380b6f8633fec7bc0e9d2956ec1` | `descendant-24-21639a0f` | 8 | 0/24 | 24 | blocked |
-| `trading-reconciliation-recompute` | `61183c46b73606ef156ea9121d3b0308` | `recompute-24-1063a653` | 8 | 0/24 | 24 | blocked |
-| `deployment-rollback-recompute` | `46ed5ea45b412e242ef362fde040051a` | `recompute-24-80da6d41` | 8 | 0/24 | 24 | blocked |
+| `dao-descendant` | `9d89b49307a960f65f2e6e8f204fd15e` | `descendant-24-21639a0f` | 8 | 18/24 | 0 | ready |
+| `trading-reconciliation-recompute` | `94bfc2c401ad2cc19f7e84e8a1270a08` | `recompute-24-1063a653` | 8 | 18/24 | 0 | ready |
+| `deployment-rollback-recompute` | `2ddfad2fd3287f752c41a408184b48ce` | `recompute-24-80da6d41` | 8 | 18/24 | 0 | ready |
 
 Each matched campaign has one Codex slot and one Claude import slot, both `NOT_RUN`. Its future
 $30 ceiling is a campaign authorization limit, not Phase 13 spend. A countable failure still needs
@@ -134,9 +136,9 @@ adversarial-audited, or agent-difficulty-evidenced.
 
 | substrate | triggered |
 |---|---|
-| `dao-descendant` | trial route produced host errors; matched not-run campaign is absent or stale |
-| `trading-reconciliation-recompute` | trial route produced host errors; matched not-run campaign is absent or stale |
-| `deployment-rollback-recompute` | trial route produced host errors; matched not-run campaign is absent or stale |
+| `dao-descendant` | none |
+| `trading-reconciliation-recompute` | none |
+| `deployment-rollback-recompute` | none |
 
 ## Interpretation
 

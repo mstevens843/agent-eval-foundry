@@ -1,0 +1,16 @@
+{
+  "node": "v22.22.1",
+  "platform": "darwin",
+  "sourceDigest": "e27395a1ecf2344c5d127f9c3db00deadb3c20066fbb036d16939b20059f8571",
+  "nativeForcedClone": "ENOSYS",
+  "method": "clone",
+  "archiveBytes": 974869504,
+  "elapsedMs": 4.5903749999999945,
+  "availableBefore": 25914970112,
+  "availableAfter": 25914658816,
+  "sha256": "14f91cf6505957e438c3686f9fc75ccc2940e1d721b9ab1d20038a6398a5d3d5",
+  "independentInode": true,
+  "exactBytes": true,
+  "concurrentWork": true,
+  "note": "Disk delta may include concurrent tests. No source-linked inode; temporary diagnostic copy removed after verification."
+}

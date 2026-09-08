@@ -16,6 +16,8 @@ The suite inventory is `scripts/test-tiers.mjs`. New test files default to the s
 
 The protected tier includes long whole-population compatibility checks, not just a schema or one representative cell. It is intentionally separate from the fast tier. Broad local semantic sweeps, boundary controls and whole-population route tests establish different properties; none is a substitute for another.
 
+Generic protected cells capture bounded module bytes once, transfer them over the authority's input pipe and materialize root-owned read-only public files in a private container tmpfs. They do not mount a short-lived host staging directory. This removes a dependency that intermittently failed during Docker Desktop mount setup; it does not claim to repair Docker itself. Real route controls check the subject UID, working directory, public-file immutability and protected authority state. Startup, protocol, artifact and resource errors retain bounded diagnostics and are never automatically retried into a passing result.
+
 ## Runtime setup
 
 Docker must start real containers. The generic tests use `node:22-alpine`; the professional runtime is pinned in its Dockerfile. Native CAA has pinned environment/verifier recipes. First-time setup may download dependencies; later validation and submitted compilation are offline.
@@ -30,7 +32,7 @@ pnpm test:integration .local/integration-NEW
 
 The Go tag only bootstraps an inert test-author binary; the integration records and uses its actual image digest. It is not a target model. Native package builds independently retain their pinned images.
 
-Allow at least 12 GiB of free host space for the five-package integration and additional room for Docker's own storage. The observed archive/export population is about 10 GiB; copy-on-write is best-effort, not a storage guarantee. The integration refuses insufficient space before building. On an I/O failure, retain logs and treat the run as incomplete; do not relabel failed startup as a subject failure or prune unrelated Docker data.
+Allow at least 16 GiB of free host space for the five-package integration and additional room for unrelated Docker activity. The observed archive/export population is about 10 GiB; the preflight also budgets four GiB reserve and two GiB build overhead. Archive publication budgets a complete copy even when cloning succeeds; each integration stage checks the remaining reserve. On macOS the runtime copier uses APFS cloning through the system copy tool because the measured Node forced-clone API returns ENOSYS. Recipients receive independent files, never links to another package's archive. On an I/O failure, retain logs and treat the run as incomplete; do not relabel failed startup as a subject failure or prune unrelated Docker data.
 
 ## Required final checks
 
@@ -44,5 +46,7 @@ pnpm verify:candidate .local/candidate-NEW
 ```
 
 `verify` reproduces current generated reports and verifies preserved-version compatibility. `verify:candidate` copies the explicit intended-file manifest, excludes ignored/private artifacts, installs locked dependencies offline, rebuilds ESM/CJS/declarations, validates the registry and compares recipient gate reports. It does not use ambient `dist`, credentials, a sibling repository or private prompts. Candidate verification is not a claim that an uncommitted tree is already released. Existing destinations are refused; failed checks retain evidence.
+
+Historical queries do not perform new grading: `phase13 report`, `phase13 results` and `phase13 design` read the retained calibration; `phase13 measure` explicitly starts current local measurements. The Phase 17 report reads its retained preflight instead of inspecting current credentials or Docker. Missing container receipts remain missing evidence, even on a healthy machine. Tests forbid child-process dispatch from these historical query paths. Full `verify` still performs its separately declared protected grading smoke; read-only report generation does not substitute for that check.
 
 CI treats required Docker/native/browser failures as failures, not informational green skips. Destination rubric/model runs and independent human reviews remain separate external qualification requirements.

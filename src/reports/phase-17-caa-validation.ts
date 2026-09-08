@@ -1,8 +1,9 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { readLockedHistory } from "../packages/history.js";
 import { buildPhase17TrialLedger } from "../phase-17/measurement.js";
 import { runPhase17PackageControls } from "../phase-17/package-controls.js";
-import { runPhase17Preflight } from "../phase-17/preflight.js";
+import type { Phase17Preflight } from "../phase-17/preflight.js";
 import { runPhase17ProbeAudit } from "../phase-17/probe-audit.js";
 import { runPhase17ProbeV2 } from "../phase-17/probe-v2-run.js";
 
@@ -77,7 +78,7 @@ export function renderPhase17CaaValidation(root: string): string {
   const audit = runPhase17ProbeAudit(root);
   const probe = runPhase17ProbeV2(root);
   const controls = runPhase17PackageControls(root);
-  const preflight = runPhase17Preflight(root);
+  const preflight = readLockedHistory(root, "data/phase-17-trial-preflight.json") as Phase17Preflight;
   const ledger = buildPhase17TrialLedger(root);
   const probeRegistration = JSON.parse(
     readFileSync(join(root, "data/phase-17-probe-v2-preregistration.json"), "utf8"),
@@ -320,6 +321,8 @@ export function renderPhase17CaaValidation(root: string): string {
     "what the agents actually did.",
     "",
     "## 6. Trial Preflight And Spending Authorization",
+    "",
+    `> Retained historical preflight observed at ${preflight.observedAt}. Rendering does not inspect current credentials, run Docker, or grant present-day spending authority. This receipt preserves the recorded blocked state; later campaign outcomes do not overwrite it.`,
     "",
     "| item | status |",
     "|---|---|",

@@ -104,11 +104,13 @@ import { emit, flag, positional } from "./arguments.js";
 export function phase13Dispatch(argv: readonly string[], root: string, command: string): number {
   {
     const sub = positional(argv, 1) ?? "report";
-    const results = measurePhase13(root);
-    if (sub === "report") emit(argv, renderPhase13TransferLab(results));
-    else if (sub === "results") emit(argv, renderPhase13Results(results));
+    if (!["report", "results", "design", "measure"].includes(sub))
+      throw new Error(`unknown phase13 subcommand "${sub}"; expected report, results, design or measure`);
+    // Queries reproduce the retained experiment. Only an explicit measurement starts new grading.
+    const results = measurePhase13(root, sub === "measure" ? "current" : "historical");
+    if (sub === "report") emit(argv, renderPhase13TransferLab(results, "historical"));
+    else if (sub === "results" || sub === "measure") emit(argv, renderPhase13Results(results));
     else if (sub === "design") emit(argv, renderPhase13DesignMatrix(results));
-    else throw new Error(`unknown phase13 subcommand "${sub}"; expected report, results or design`);
     return 0;
   }
 }

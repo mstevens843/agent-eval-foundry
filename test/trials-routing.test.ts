@@ -1,11 +1,10 @@
 // Tests for the family-aware trial layer: routing, campaign plans, challenge hashing, the agent
 // bank, and the status coherence checks.
 //
-// The group that earns its place is "host equivalence". Each family is graded through a plain-
-// JavaScript host script that rebuilds the family's facades rather than importing them — isolation
-// bought with duplication. These tests run each family's own reference through its own host and
-// assert the cells are identical to the in-process sweep. If the two implementations drift, the
-// graded result silently drifts with them, and this is the only place that would notice.
+// Current routes use the protected authority/subject boundary, not the old duplicated plain-
+// JavaScript host. These tests retain the complete selected populations and distinguish semantic
+// rejection from missing artifacts and host errors. Reference/alternative equivalence is exercised
+// in protected-family-routes.test.ts; an invalid execution must never become capability evidence.
 //
 // The second group is "a repaired family loses its evidence". Repairing an ambiguity in the memory
 // family's spec — one a real trial exposed — changed the challenge package, and three counted trials
@@ -93,7 +92,7 @@ describe("the trial router", () => {
   });
 });
 
-describe("host equivalence — the subprocess host grades like the family does", () => {
+describe("protected host — complete populations and honest execution outcomes", () => {
   for (const familyId of ["prompt-injection-memory-poisoning", "ui-action-record-replay"]) {
     it(`${familyId}: a do-nothing artifact fails every scenario through the host`, () => {
       const dir = mkdtempSync(join(tmpdir(), "host-equiv-"));
@@ -106,7 +105,8 @@ describe("host equivalence — the subprocess host grades like the family does",
       const route = routeFor(familyId);
       const graded = route.grade(stub);
       expect(graded.cells.length).toBe(route.scenarioCount());
-      expect(graded.hostErrors).toBe(0);
+      expect(graded.hostErrors, JSON.stringify(graded.errors)).toBe(0);
+      expect(graded.outcome?.status).toBe("semantic-fail");
       expect(graded.cells.every((c) => c.failed.length > 0)).toBe(true);
     });
 
@@ -121,7 +121,7 @@ describe("host equivalence — the subprocess host grades like the family does",
     });
   }
 
-  it("checker-required: a subject-only artifact is complete enough to grade and fails checker_present", () => {
+  it("checker-required: missing the required checker is incomplete execution, not a semantic result", () => {
     const dir = mkdtempSync(join(tmpdir(), "checker-host-"));
     const subject = join(dir, "subject.mjs");
     writeFileSync(
@@ -132,8 +132,21 @@ describe("host equivalence — the subprocess host grades like the family does",
     const route = routeFor("checker-required-memory-poisoning");
     const graded = route.grade(subject);
     expect(graded.cells.length).toBe(route.scenarioCount());
-    expect(graded.hostErrors).toBe(0);
-    expect(graded.cells.some((c) => c.failed.includes("checker_present"))).toBe(true);
+    // The protected contract requires two executable files. The old subprocess host tolerated an
+    // absent checker and synthesized checker_present failures; that is not a completed submission
+    // under the current route. Retain exact population accounting without inventing graded cells.
+    expect(graded.hostErrors).toBe(route.scenarioCount());
+    expect(graded.errors?.length).toBe(route.scenarioCount());
+    for (const error of graded.errors ?? []) {
+      expect(error.kind).toBe("artifact");
+      expect(error.message).toContain("ENOENT");
+      expect(error.message).toContain("checker.mjs");
+    }
+    expect(graded.cells.every((c) => c.failed.length === 0)).toBe(true);
+    expect(graded.outcome?.complete).toBe(false);
+    expect(graded.outcome?.status).toBe("collector-failure");
+    expect(graded.outcome?.missingIds).toEqual([]);
+    expect(graded.outcome?.duplicateIds).toEqual([]);
   });
 });
 

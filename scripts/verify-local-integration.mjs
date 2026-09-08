@@ -10,20 +10,25 @@ const requested = process.argv[2];
 if (!requested) throw Error("usage: verify-local-integration.mjs FRESH_OUTPUT");
 const output = resolve(requested);
 // Measured five-package verification materializes approximately ten GiB of archives.
-// CoW is best-effort, not an assumed storage guarantee. Fail before producing partial exports.
+// Budget full copies plus four GiB reserve and two GiB build overhead, even with CoW.
 const space = statfsSync(process.cwd());
 const availableBytes = space.bavail * space.bsize;
-if (availableBytes < 12 * 1024 ** 3)
-  throw Error(`INTEGRATION_STORAGE_INCOMPLETE: need 12 GiB free, found ${availableBytes} bytes`);
+if (availableBytes < 16 * 1024 ** 3)
+  throw Error(`INTEGRATION_STORAGE_INCOMPLETE: need 16 GiB free, found ${availableBytes} bytes`);
 mkdirSync(output, { recursive: false });
 const api = await import("../dist/index.js");
 const stages = [];
 const packages = [];
+const storage = { initialAvailableBytes: availableBytes, minimumAvailableBytes: availableBytes };
 async function stage(name, fn) {
   console.log(`integration: ${name}`);
   const started = performance.now();
   try {
+    const before = api.assertStorageHeadroom(output, 0);
+    storage.minimumAvailableBytes = Math.min(storage.minimumAvailableBytes, before);
     const result = await fn();
+    const after = api.assertStorageHeadroom(output, 0);
+    storage.minimumAvailableBytes = Math.min(storage.minimumAvailableBytes, after);
     stages.push({ name, status: "pass", elapsedMs: performance.now() - started });
     return result;
   } catch (e) {
@@ -32,7 +37,7 @@ async function stage(name, fn) {
   } finally {
     writeFileSync(
       join(output, "progress.json"),
-      `${JSON.stringify({ stages, packages, providerCallsMade: 0 }, null, 2)}\n`,
+      `${JSON.stringify({ stages, packages, storage, providerCallsMade: 0 }, null, 2)}\n`,
     );
   }
 }
@@ -146,6 +151,7 @@ try {
     status: "pass",
     stages,
     packages,
+    storage,
     learning,
     providerCallsMade: 0,
     qualification: "pending independent human review, destination and explicitly authorized real trials",
