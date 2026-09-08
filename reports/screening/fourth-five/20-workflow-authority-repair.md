@@ -124,3 +124,13 @@ assessment alongside it. Raw submissions, command output and the original-label 
 remain private. This is one exploratory attempt, not a replicated capability finding,
 official benchmark qualification or independent blind adjudication. Observable tool
 use is described; private internal reasoning is not analyzed.
+
+## Changes applied since this trial (2026-09-08)
+
+This report's diagnosis was exact and is the cleanest case in the batch: the public instruction explicitly names `terminal_history` for exactly this defect, the checker reported it, and the original protected authority confirms both `terminal_history` and `completion` genuinely failed — yet grading required only the one privately-designated primary label, `completion`, and rejected a correct diagnosis for using the contract's own stated name.
+
+**Fix applied**, in `src/packages/portfolio.ts` (harness-wide, all four source trees this project maintains, plus the separate frozen tree the real dispatch actually ran against): `gradeChecker`'s `namedRightCheck` now credits a checker for naming ANY obligation a control's own real, authoritative trace actually failed, not just the one designated primary. `control.check` keeps its original, narrower job (deciding whether a scenario window is wide enough to make a control's defect observable at all) untouched. This is a harness change — no scenario, control or reference file for this task was touched.
+
+**Regrade confirms the fix, exactly as this report anticipated.** The same preserved submission bytes, under a separately versioned diagnostic, not overwriting this result or counting as a new trial: re-run against the fixed harness with zero new model calls, now scores a full pass (14/14 correct, 0 false positives, 0 missed, all 12 controls correctly named — up from 11/12). The `misattribute-delivery` control that triggered this specifically is now credited for its `terminal_history` naming, which the public instruction always required to be acceptable.
+
+**When trials run again:** this package's grading should now correctly accept any submitted checker that names an obligation the public instruction itself directs it to name, per this report's exact recommendation ("retaining private primary labels as construction activation checks" while fixing "the universal reason-label rule").

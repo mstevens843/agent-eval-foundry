@@ -111,3 +111,52 @@ tests and original command output substantiate the verification account; they we
 not executed unprotected during analysis. This is a single exploratory pass, not
 universal correctness, official qualification or a backend attestation. Observable
 actions are described, not private internal reasoning.
+
+## Changes applied since this trial (2026-09-08)
+
+Despite reward 1 on this trial, reviewers identified two real gaps in the checker's own
+judgment (not the package's grading of this submission), plus one severe pre-existing
+infrastructure bug was found independently while implementing the fixes. All three are
+now closed.
+
+**Fix 1 — publish-before-exhaustion ordering**, in `private/domain.mjs`. SEMANTICS.md
+requires publishing "after exhausting input", but `completion`'s original formula
+(`index > s.chunks.length && equal(...)`) only checked that both eventually became true,
+never that exhaustion happened *before* any `record()` call. Folded into `completion`
+(not a new check id, since SEMANTICS.md groups these as one obligation and the public
+`instruction.md` reason-code table has no free slot): a candidate must have observed the
+first terminal-null `next()` before any of its `record()` calls, computed directly from
+the real ordered `observations` call log. Verified via direct construction (a trace that
+records fully correct rows but calls `record()` before ever draining input): rejected
+for `completion` after the fix, silently accepted before it. Regression-checked against
+all 28 scenarios and every existing control — no failure-set shape changed.
+
+**Fix 2 — four new negative controls**, in `control-manifest.json` and
+`private/controls/{skip-processing-when-empty,omit-data-when-empty,omit-attempt-when-null,omit-error-when-null}.mjs`,
+targeting missing-key-vs-null/empty normalization blind spots the real checker's own
+code exhibits (`dataOf`/`attemptOf`/`sameError` in `checker.mjs` all coalesce a missing
+key to `""`/`null` before comparing). Each isolates cleanly to its predicted check
+(`completion`/`content`/`attempt_identity`/`exact_rows` respectively, verified via
+direct isolation checks matching exact scenario counts).
+
+**Fix 3 — a severe pre-existing exposure bug, found while verifying Fixes 1–2.** A free
+regrade of the real preserved checker against the newly-fixed package showed reference
+and alternative *both* rejected as false positives, with the checker reporting "the
+greatest observed attempt is null" for every request — i.e. it believed zero wire
+records existed anywhere. Root cause: the real checker's `framesOf(cell)` reads
+`cell.input.chunks` (`checker.mjs:24-27`) to reassemble the raw transport bytes it
+independently decodes and grades against, but the canonical tree's `domain.mjs` never
+exposed this field at all — only `requests: s.requests` was present. The frozen dispatch
+tree this trial actually ran against already had `input: { chunks: s.chunks }`; this was
+a canonical-tree-only staleness bug (the same class as #21's and #22's), not a defect in
+the dispatched package. Added to canonical for consistency.
+
+**Combined result**, verified via real Docker build+validate (`local-valid: true` in
+both trees) and a full free regrade of the real preserved checker against the fully
+fixed package: **0 false positives** (reference/alternative correctly accepted) and
+**exactly the 4 new controls "missed"** — confirming, with zero new model calls, that
+the real checker genuinely has the missing-vs-null/empty blind spot reviewers predicted,
+now with concrete distinguishing evidence for future checker submissions. All fixes
+ported to and independently re-verified in `source-fifth-v2`. **When trials run again:**
+#24 should continue to pass; a future checker will need to handle the 4 new controls and
+the ordering case correctly to earn full credit.

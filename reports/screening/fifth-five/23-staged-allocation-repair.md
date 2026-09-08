@@ -116,3 +116,31 @@ hashes. Temporary self-test code survives in captured commands; the submitted po
 checker and four tests are retained. This is one exploratory pass, not universal
 correctness, official qualification or backend attestation. The analysis describes
 observable tools and artifacts rather than private internal reasoning.
+
+## Changes applied since this trial (2026-09-08)
+
+All three reviewers independently recommended no package change for #23 — the reward-1
+result and clean 13/13 checker classification stand as genuine evidence of a well-built
+package. No SEMANTICS.md-supported defect was found, and none is introduced here.
+
+**One latent leniency bug was found and fixed, proactively, in the frozen dispatch tree
+this trial ran against.** While auditing all five batch-5 packages for cross-tree
+consistency, `private/domain.mjs`'s `completion` check in
+`screening/2026-09-08-batches-3-5/source-fifth-v2` read
+`index >= s.path.length - 1 && actual.length === s.path.length`, one step short of the
+canonical development tree's `index >= s.path.length`. Given this task's `next()`
+(`index++; return s.path[index] ?? null`, starting at `index = -1`), `index` only
+reaches `s.path.length` after a candidate has actually called `next()` past the last
+real element and observed the terminal `null` — the `- 1` variant granted completion
+credit one call early, without ever requiring the candidate to observe genuine
+exhaustion. This is the same "did input actually drain" pattern found and fixed
+elsewhere in this batch (#21, #24).
+
+**No control in the manifest exercised this exact boundary**, so it produced no
+observed misgrading in this trial: a free regrade of the real preserved checker scores
+identically before and after the fix (**13/13 correct, 0 false positives, 0 missed,
+pass: true** either way). The fix was applied to `source-fifth-v2` only (the canonical
+tree already had the stricter form) and verified via real Docker build+validate
+(`local-valid: true`). This closes a latent gap a future candidate or checker could
+otherwise have exploited; it is not evidence of any defect in this submission. **When
+trials run again:** #23 should continue to score exactly as it did here.

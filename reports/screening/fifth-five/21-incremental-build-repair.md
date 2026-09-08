@@ -133,3 +133,54 @@ timing and capture hashes. Analysis reads retained submissions and original grad
 outputs without rerunning the model. This is one exploratory attempt and a documented
 alignment concern, not independent blind adjudication, official qualification or a
 backend attestation. No private internal reasoning is analyzed.
+
+## Changes applied since this trial (2026-09-08)
+
+The multi-label harness fix (crediting any obligation a control's real trace actually
+failed, not just one private primary label) was already applied to the frozen dispatch
+tree before this trial ran, so #21's zero is a genuine remaining defect, not a repeat
+of the labeling bug fixed for batch 4. Three separate fixes were made this pass:
+
+**Fix 1 — `current_artifacts`/`publication_scope` check-boundary split**, in
+`private/domain.mjs`. The `publish()` handler's content-correctness check
+(`correct(o.handle, o.target, ...)`) ran against every output regardless of whether its
+target was actually requested, so a foreign or partial target set was misattributed to
+`current_artifacts` (content correctness) instead of `publication_scope` — the check
+whose own name, and SEMANTICS.md's own wording ("no duplicate, missing or foreign
+targets"), promises to cover exactly that. `binding`/`current_artifacts` and a new
+`scoped`/`publication_scope` boolean are now computed separately; `foreign-publication`
+and `partial-publication` in `control-manifest.json` are relabeled to `publication_scope`
+accordingly. Verified via real Docker build+validate (`local-valid: true`) and direct
+isolation checks: both controls now fail exactly `["publication_scope"]`.
+
+**Fix 2 — two pre-existing, unrelated exposure bugs found while verifying Fix 1.** A
+free regrade of the real preserved checker against the fixed package initially showed
+`correct:9, missed:3, falsePositives:2` — reference and alternative rejected, no-work
+wrongly accepted — which did not match Fix 1's own logic (untouched by the split) and
+did not reproduce against the frozen dispatch tree's *unmodified* baseline. Root cause,
+found by diffing `domain.mjs` against the frozen tree directly: the canonical
+`fifth-five` tree's `runScenario` return object was missing `input: { rounds: s.rounds }`
+(the real checker's `completion` check reads `cell.input.rounds`, silently treating it
+as zero expected rounds without it) and missing a dependency-closure expansion over
+`touchedHandles` (so a candidate's own recipe dependencies could be absent from the
+exposed `artifacts` array, breaking the checker's own bytes-recomputation). Both fields
+already existed in the frozen dispatch tree the real trial ran against — this was a
+canonical-tree-only staleness bug, not a defect in the actual dispatched package — but
+both are now present in both trees for consistency. After both fixes: a full free
+regrade scores **14/14 correct, 0 false positives, 0 missed, pass: true**.
+
+**Fix 3 — new `premature-publication` negative control**, added to
+`control-manifest.json` and `private/controls/premature-publication.mjs` (temporal
+attestation ordering — a candidate that predicts a not-yet-issued `compile()` handle and
+publishes with it before actually calling `compile()`). Isolates cleanly to
+`current_artifacts` on 26/27 scenarios (the zero-target round is correctly inert).
+**The real preserved checker misses this control** (confirmed via free regrade:
+`missed: ["premature-publication"]`, all other 14 candidates still correct) — a genuine,
+now-documented blind spot to temporal ordering, distinct from the harness fixes above.
+
+All three fixes were ported to the frozen dispatch tree
+(`screening/2026-09-08-batches-3-5/source-fifth-v2`) and re-verified there independently
+(`local-valid: true`; free regrade also 14/14 with the new control correctly missed).
+**When trials run again:** #21 should score a genuine pass on the check-boundary defect
+this report diagnosed; `premature-publication` remains available as a harder distinguishing
+case for future checker submissions.

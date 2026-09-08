@@ -117,3 +117,13 @@ submissions and the detailed original-label audit remain retained privately. Thi
 one exploratory run, not an independently blind-adjudicated result or a failure rate.
 Requested model settings are not independent backend attestations. The report describes
 observable commands and artifacts, not private internal reasoning.
+
+## Changes applied since this trial (2026-09-08)
+
+This report's diagnosis was exact: the frozen grader required a control's `reasons` to name the ONE privately-designated "primary" label (`control.check`), even though the original protected authority captures show every reported label (`exact_amounts`, `provenance`, `population`, `completion`) genuinely failed alongside the designated primary. Demanding the one designated label graded taxonomy-guessing, not diagnosis.
+
+**Fix applied**, in `src/packages/portfolio.ts` (harness-wide, all four source trees this project maintains, plus the separate frozen tree the real dispatch actually ran against): `gradeChecker`'s `namedRightCheck` now credits a checker for naming ANY obligation that control's own real, authoritative trace actually failed, not just the one designated primary. `control.check` keeps its original, narrower job (deciding whether a scenario window is wide enough to make a control's defect observable at all) untouched. This is a harness change — no scenario, control or reference file for this task was touched.
+
+**Regrade performed exactly as this report's audit implies is possible** — the same preserved submission bytes, under a separately versioned diagnostic, not overwriting this result or counting as a new trial. Re-run against the fixed harness with zero new model calls: now scores a full pass (13/13 correct, 0 false positives, 0 missed, all 11 controls correctly named — up from 5/11). This is the confirmed fix: the label-attribution defect this report identified is resolved, not merely explained.
+
+**When trials run again:** a fresh attempt against this package should now score correctly on checker grading whenever it correctly names any of the obligations a control's own trace actually violates, without needing to guess the package author's private taxonomy preference.

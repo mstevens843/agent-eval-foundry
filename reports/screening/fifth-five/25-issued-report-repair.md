@@ -131,3 +131,46 @@ hashes. The retained fixtures and original tool output support the self-test acc
 no model submission was executed unprotected during analysis. This is one exploratory
 pass, not official qualification, a replicated solve rate or backend attestation.
 The report describes observable work, not private internal reasoning.
+
+## Changes applied since this trial (2026-09-08)
+
+Despite reward 1 on this trial, reviewers identified a genuine "layer 2" gap: the
+private check decomposition never named a distinct "dependency order" obligation, even
+though SEMANTICS.md separately requires reconciling "ALL definitions in dependency
+order" and that a report's named source version already be published at the moment it
+is itself published — a real, order-sensitive property no existing check (all of which
+compare final publication *sets*, order-blind by construction) could ever catch.
+
+**Fix — new `dependency_order` check**, in `private/domain.mjs`. Tracks, against the
+real incremental history this candidate's own `publish()` calls build one call at a
+time, whether every `report`-kind source names a version already present in that history
+at the moment of publication — not merely present in the final, precomputed
+`expected()` set (which only ever emits parents before children by construction and so
+can never observe this defect). Added `dependency_order` to `scenarios.mjs`'s
+`checkIds`. **New `reverse-dependency-order` control**
+(`private/controls/reverse-dependency-order.mjs`): computes every report's payload in
+correct dependency order (so all recorded values/sources are fully correct) but issues
+the `publish()` calls themselves in the reverse of that order. Verified via real Docker
+build+validate (`local-valid: true`) and direct isolation: fails exactly
+`["dependency_order"]` on 24/27 scenarios, clean on the remaining 3.
+
+**A pre-existing, unrelated exposure bug was found and fixed while verifying this fix.**
+The canonical development tree's `domain.mjs` was missing
+`input: { definitions, readings, initial, steps }` — present in the frozen dispatch tree
+(`source-fifth-v2`) this trial actually ran against, and read extensively by the real
+checker (`checker.mjs` recomputes its own expected state entirely from `cell.input`).
+As with #21/#22/#24, this trial was never at risk — only the separate canonical copy was
+stale; added there for consistency, confirmed via free regrade that behavior is
+unaffected.
+
+**Combined free regrade of the real preserved checker** against the fully fixed
+canonical tree: **13/14 correct, 0 false positives, missed exactly
+`reverse-dependency-order`** — confirming, with zero new model calls, that the real
+checker's private decomposition genuinely never names this obligation, exactly as
+reviewers predicted. Both fixes ported to and independently re-verified in
+`source-fifth-v2` (identical result). This trial's multi-label harness fix (crediting
+any obligation a control's real trace actually failed) was already applied to the
+frozen dispatch tree before this trial ran and is unaffected by this change. **When
+trials run again:** a future checker will need to name `dependency_order` on
+`reverse-dependency-order` specifically to earn full credit; #25's existing 13/13 on the
+other controls should be unaffected.

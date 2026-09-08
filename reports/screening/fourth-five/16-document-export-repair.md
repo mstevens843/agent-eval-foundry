@@ -49,3 +49,11 @@ Increasing nesting or file count alone is not a supported hardness improvement. 
 ## Evidence boundary
 
 [Sanitized batch record](../evidence/2026-09-08-fourth-five.json) preserves the original package/profile/source identities, results and verified artifact hashes. [Current task source](../../../tasks/document-export-repair/) is separately maintained. This report uses observable commands, outputs and submitted code, not private internal reasoning or independent blind adjudication. No additional provider calls or diagnostic regrades were used for the analysis.
+
+## Changes applied since this trial (2026-09-08)
+
+None to this package specifically — every reviewing agent independently converged that this trial's clean reward-1 result (all 143 batch-wide service scenarios and 66 checker classifications reproduced correct) needed no fix, and recommended parking it. A shared grading-harness fix did land afterward (see [17-analytical-reconciliation-repair](17-analytical-reconciliation-repair.md) and [20-workflow-authority-repair](20-workflow-authority-repair.md)): `gradeChecker`'s `namedRightCheck` previously required a submitted checker to name the ONE privately-designated "primary" obligation for a control, even when that control's own real trace genuinely violated several public obligations at once. Fixed to credit any obligation the control's own authoritative trace actually failed. No scenario, control or reference file belonging to this package was touched, and this package's own checker already named its primary labels correctly (11/11), so this fix changes nothing here.
+
+**Regrade confirms no regression.** This trial's already-preserved checker.mjs was re-run against the fixed harness with zero new model calls: still a full pass (13/13 correct, 0 false positives, 0 missed, all 11 controls correctly named), unchanged from the original result.
+
+**When trials run again:** this package's grading should behave exactly as before.

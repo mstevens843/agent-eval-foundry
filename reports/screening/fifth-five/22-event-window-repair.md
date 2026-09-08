@@ -104,3 +104,27 @@ original reward, service/checker counts, source changes, exact reason policy and
 capture hashes. Raw commands and submitted files remain retained privately. This is
 one exploratory attempt, not official qualification, a replicated solve rate or a
 backend attestation. The analysis describes observable actions, not private reasoning.
+
+## Changes applied since this trial (2026-09-08)
+
+All three reviewers independently recommended no package change for #22 — the reward-1
+result and clean 14/14 checker classification stand as genuine evidence of a well-built
+package. No SEMANTICS.md-supported defect was found, and none is introduced here.
+
+**One infrastructure inconsistency was found and fixed, unrelated to this trial's
+outcome.** While auditing all five batch-5 packages for the class of bug found in #21
+(a checker-required `input` field silently absent from a `runScenario` return object),
+the canonical `fifth-five` development tree's `private/domain.mjs` was found missing
+`input: { events: s.events }` — present in the frozen dispatch tree
+(`source-fifth-v2`) this trial actually ran against. The real submitted checker reads
+`cell.input.events` to recompute its own expected rows (`checker.mjs:122`); confirmed
+empirically that removing this field causes 2 false positives (reference and
+alternative both wrongly rejected for `completion`), and restoring it returns the
+checker to **14/14 correct, 0 false positives, 0 missed, pass: true**.
+
+**This trial was never at risk** — the frozen tree it actually dispatched against
+already had the field; only the separate canonical development copy was stale. The
+field has been added there for consistency, verified via real Docker build+validate
+(`local-valid: true`) and a full free regrade of the real preserved checker. No control,
+scenario, or check semantics changed. **When trials run again:** #22 should continue to
+score exactly as it did here.
