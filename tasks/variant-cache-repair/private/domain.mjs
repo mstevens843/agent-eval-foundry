@@ -162,6 +162,7 @@ export async function runScenario(s, execute, storage) {
       no_store: noStore,
     }),
     actual: { cache, deliveries, originRequests: calls, originBytes: bytes },
+    input: { events: s.events, initial: Object.fromEntries(tiers.map((tier) => [tier, []])) },
     // `limits` is public (== view.limits, already handed to the subject) and genuinely needed to
     // judge origin_load; it lives at the top level, never inside `expected`, so it survives
     // ground-truth stripping. `expected` itself carries only verdict-adjacent scenario shape and

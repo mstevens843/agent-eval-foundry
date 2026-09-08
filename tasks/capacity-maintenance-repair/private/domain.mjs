@@ -93,7 +93,7 @@ export async function runScenario(s, execute, storage) {
     }),
     actual: { placement: canonical(rows), done },
     expected: truth,
-    history,
+    history: history.map(({ placement, done }) => ({ placement, done })),
     observations,
     reports,
     // Legitimate PROBLEM input, not the answer: {hosts, services, placement, requests,

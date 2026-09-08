@@ -1,0 +1,1202 @@
+{
+  "schemaVersion": 1,
+  "campaign": "2026-09-08-fifth-five",
+  "evidenceClass": "real-provider-screening",
+  "limitations": [
+    "One exploratory attempt per package, not a replicated failure rate or official standard/adversarial qualification.",
+    "Requested model and effort are not independent backend attestations.",
+    "Reports describe observable commands, submitted artifacts and original protected grading, not private internal reasoning or independent blind adjudication.",
+    "Raw transcripts, credentials, runtime archives and full submissions remain private. Public hashes identify retained artifacts but do not make this an independently reproducible raw-evidence release.",
+    "CLI price estimates are not subscription charges.",
+    "Frozen trial versions may differ from later maintained sources."
+  ],
+  "sourceDigest": "3da555df3fc3a48bbb3c1c87b33df16b7d3c91336798094818f3bf9e0d02ff69",
+  "actualScheduling": "All five jobs reserved before parallel dispatch; all five author containers observed running together.",
+  "concurrencyRequestFulfilled": true,
+  "concurrencyObservation": {
+    "count": 5,
+    "observedAt": "2026-09-08T19:10:43.269Z",
+    "packageIds": [
+      "incremental-build-repair",
+      "event-window-repair",
+      "staged-allocation-repair",
+      "diagnostic-transport-repair",
+      "issued-report-repair"
+    ],
+    "firstLaunch": "2026-09-08T19:04:24.904Z",
+    "lastLaunch": "2026-09-08T19:04:25.172Z",
+    "launchSpreadMs": 268,
+    "sourceSha256": "fb6f62d03b28d02b254abc47f06a47890b78ea0f821b3806d19ffef93eb46eb6"
+  },
+  "automaticRetries": 0,
+  "invalidExecutionCount": 0,
+  "packages": [
+    {
+      "id": "incremental-build-repair",
+      "target": "codex",
+      "runId": "incremental-build-repair-attempt-1",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "cliReportedModel": null,
+      "packageDigest": "e56c672a00d58a4d89a11bb511b6d4d4b83d2e937317b231a5d1ab768b4ee823",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "outcome": "semantic-fail",
+      "reward": 0,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 930767,
+      "start": "2026-09-08T19:04:24.904Z",
+      "end": "2026-09-08T19:20:11.831Z",
+      "service": {
+        "scenarios": 27,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "any-observed-public-obligation",
+        "present": true,
+        "deterministic": true,
+        "pass": false,
+        "total": 14,
+        "correct": 14,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 10,
+        "details": [
+          {
+            "candidateId": "ignore-flags",
+            "expectedFailingCheck": "current_artifacts",
+            "observedFailingChecks": [
+              "current_artifacts"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "duplicate-publication",
+            "expectedFailingCheck": "publication_scope",
+            "observedFailingChecks": [
+              "completion",
+              "publication_scope"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "wrong-dependency-alias",
+            "expectedFailingCheck": "current_artifacts",
+            "observedFailingChecks": [
+              "current_artifacts",
+              "incremental_budget"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "foreign-publication",
+            "expectedFailingCheck": "current_artifacts",
+            "observedFailingChecks": [
+              "current_artifacts"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "ignore-dependency-order",
+            "expectedFailingCheck": "current_artifacts",
+            "observedFailingChecks": [
+              "current_artifacts"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "publication_scope"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "ignore-tool",
+            "expectedFailingCheck": "current_artifacts",
+            "observedFailingChecks": [
+              "current_artifacts"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "partial-publication",
+            "expectedFailingCheck": "current_artifacts",
+            "observedFailingChecks": [
+              "current_artifacts"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "publication_scope"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "always-rebuild",
+            "expectedFailingCheck": "incremental_budget",
+            "observedFailingChecks": [
+              "incremental_budget"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "ignore-includes",
+            "expectedFailingCheck": "current_artifacts",
+            "observedFailingChecks": [
+              "current_artifacts"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "publication_scope"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          }
+        ],
+        "processSha256": "548ad15cf9faa2ab5132a142474e44b067da2b471337251d66e526d7bab57be1",
+        "gradeSummarySha256": "b02a8facb0fcd169b705a2b4acc7680a69fcb66d820725fcdd29918d657b838c"
+      },
+      "commandCount": 12,
+      "sourceDelta": [
+        {
+          "path": "checker.mjs",
+          "change": "added",
+          "before": null,
+          "after": "5db9104ae7c0525c760a52fa4c6f51820b83a27cf453d687b949056ab598530a"
+        },
+        {
+          "path": "src/builder.mjs",
+          "change": "modified",
+          "before": "39c7bfbdf8ecd8269aa589f736aee214d2a2beeb01b0cef53c7e6e63aa7ed8fd",
+          "after": "8ea581000ad6c0095a9519bef4cdc4d80c21b9cb0bda5dcb6359152bec64d811"
+        },
+        {
+          "path": "src/includes.mjs",
+          "change": "modified",
+          "before": "ec2167eac3fce1f68469ab73922fa36f86aec7b5dddb065f2b306fabb8b0add4",
+          "after": "2f0677c45fea1f4f93cab8798c9c0f22c7fcb96cf5b5fc41cbc7de492a42de05"
+        },
+        {
+          "path": "src/key.mjs",
+          "change": "modified",
+          "before": "e6e36c666049c167abc44bd88339030a333f0622cbfb2591603aa95d857d045f",
+          "after": "fa8c867609c76fdfe5d59ef6eaa81bbeedc2919b7435e4b5ed3dd4d5fe3be472"
+        }
+      ],
+      "usage": {
+        "cachedInputTokens": 681472,
+        "costUsd": null,
+        "inputTokens": 726865,
+        "outputTokens": 27559,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; cached input is included in input totals.",
+      "completionSha256": "59ab4bf1e9fe5b11882d7f49afda7f9a7b5ff48b648c1b7af2e4452025814413",
+      "resultSha256": "5bb8487d4a7c588e4f5949f586649a396daf8a3e917f45c69856df50937e9202",
+      "gradeSha256": "6cf6fd4d904353a0a18bc84c141c5b62713e347f37d5da982ef3792aa36b9456",
+      "verifiedFiles": 826,
+      "verifiedBytes": 57377435,
+      "assessment": "contract-grader-alignment-concern",
+      "rationale": "Original reward zero retained. Service 27/27 and all 14 checker classifications correct. Missing/foreign targets were rejected as publication_scope; private taxonomy classifies target-set equality only as current_artifacts, without explaining that split publicly. New any-observed-label policy correctly accepted completion for duplicate-publication but cannot resolve undefined label semantics."
+    },
+    {
+      "id": "event-window-repair",
+      "target": "codex",
+      "runId": "event-window-repair-attempt-1",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "cliReportedModel": null,
+      "packageDigest": "f95d987962b6f6e666d9f40142fb25ee80b1021ab1aab925e42e85a69b8d6fdb",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "outcome": "semantic-pass",
+      "reward": 1,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 461354,
+      "start": "2026-09-08T19:04:24.963Z",
+      "end": "2026-09-08T19:12:19.846Z",
+      "service": {
+        "scenarios": 27,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "any-observed-public-obligation",
+        "present": true,
+        "deterministic": true,
+        "pass": true,
+        "total": 14,
+        "correct": 14,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 12,
+        "details": [
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "late_output",
+              "publication_boundary",
+              "window_values"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "fastest-partition",
+            "expectedFailingCheck": "publication_boundary",
+            "observedFailingChecks": [
+              "completion",
+              "late_output",
+              "publication_boundary",
+              "window_values"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "duplicate-late-delivery",
+            "expectedFailingCheck": "late_output",
+            "observedFailingChecks": [
+              "completion",
+              "late_output"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "drop-zero-group",
+            "expectedFailingCheck": "window_values",
+            "observedFailingChecks": [
+              "completion",
+              "publication_boundary",
+              "window_values"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "global-identity",
+            "expectedFailingCheck": "window_values",
+            "observedFailingChecks": [
+              "publication_boundary",
+              "window_values"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "late-before-dedup",
+            "expectedFailingCheck": "late_output",
+            "observedFailingChecks": [
+              "completion",
+              "late_output"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "flush-all-idle",
+            "expectedFailingCheck": "late_output",
+            "observedFailingChecks": [
+              "completion",
+              "late_output",
+              "publication_boundary",
+              "window_values"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "drop-late",
+            "expectedFailingCheck": "late_output",
+            "observedFailingChecks": [
+              "completion",
+              "late_output"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "late_output",
+              "publication_boundary",
+              "window_values"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "regress-on-resume",
+            "expectedFailingCheck": "late_output",
+            "observedFailingChecks": [
+              "completion",
+              "late_output",
+              "publication_boundary",
+              "unique_windows",
+              "window_values"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "late_output",
+              "publication_boundary",
+              "window_values"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "ignore-idle",
+            "expectedFailingCheck": "publication_boundary",
+            "observedFailingChecks": [
+              "completion",
+              "late_output",
+              "publication_boundary",
+              "window_values"
+            ],
+            "outcome": "correct-reject-named"
+          }
+        ],
+        "processSha256": "b8b32dbdcc5a9c66aefc4a240a4963c7dd99c64515705ed8abbcb679e282f667",
+        "gradeSummarySha256": "f5d43136fc19ceb2a246143138db86998793f6eece46199c63e00d934a5f6c25"
+      },
+      "commandCount": 8,
+      "sourceDelta": [
+        {
+          "path": "checker.mjs",
+          "change": "added",
+          "before": null,
+          "after": "ca49f27788b63aa3458064f635dd1ab2f98d9da2a6dacaca2638caaaf1cb835d"
+        },
+        {
+          "path": "src/frontier.mjs",
+          "change": "modified",
+          "before": "adcf29d76c32715c41f157d11cad60636c5c5fac97760385b3dafc938c28b61c",
+          "after": "d1a50dcd83a458ac0dd4b78d52753999b9848e6758d872ba8e2f6fa13bc6fed6"
+        },
+        {
+          "path": "src/identity.mjs",
+          "change": "modified",
+          "before": "64325c3bf245ede68a5156d4b53958ac5e8d618b417bf892ed99c0f7dd71a815",
+          "after": "122a3f51b7e9af1c9bece63de3b11e0685cebb4f6269db1e1c4e7dfae588b4e3"
+        }
+      ],
+      "usage": {
+        "cachedInputTokens": 260352,
+        "costUsd": null,
+        "inputTokens": 283335,
+        "outputTokens": 13486,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; cached input is included in input totals.",
+      "completionSha256": "2be09fdf3b629163fe5d8169e6f36794426dbbb7e5568a1981a7012cd3c05c0c",
+      "resultSha256": "31b52aeabf912209081e5d65efb0bbfe4e59e90a46022ad3d377c4bbf31099b6",
+      "gradeSha256": "c5a24cf6ca9b866a0e0c680640ffeca4b6578166953c7c5c1b52f5bff25e24e8",
+      "verifiedFiles": 825,
+      "verifiedBytes": 9891630,
+      "assessment": "screening-pass",
+      "rationale": "Service 27/27 and checker 14/14 pass. Repair concentrated in frontier aggregation, all-idle handling and compound event identity; no target-model failure measured."
+    },
+    {
+      "id": "staged-allocation-repair",
+      "target": "claude",
+      "runId": "staged-allocation-repair-attempt-1",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "runtime event type=assistant",
+          "status": "observed",
+          "value": "claude-opus-5"
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "cliReportedModel": "claude-opus-5",
+      "packageDigest": "727104224beed8aa6e12a47d80cf0d19ac785ce5a5805495c14369b40669c3e7",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "outcome": "semantic-pass",
+      "reward": 1,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1091353,
+      "start": "2026-09-08T19:04:25.022Z",
+      "end": "2026-09-08T19:22:45.768Z",
+      "service": {
+        "scenarios": 41,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "any-observed-public-obligation",
+        "present": true,
+        "deterministic": true,
+        "pass": true,
+        "total": 13,
+        "correct": 13,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 11,
+        "details": [
+          {
+            "candidateId": "coalesce-requested-units",
+            "expectedFailingCheck": "capacity_and_constraints",
+            "observedFailingChecks": [
+              "capacity_and_constraints",
+              "future_promise"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "duplicate-placement",
+            "expectedFailingCheck": "irreversible_sequence",
+            "observedFailingChecks": [
+              "capacity_and_constraints",
+              "completion",
+              "future_promise",
+              "irreversible_sequence"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "irreversible_sequence"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "irreversible_sequence"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "ignore-anti-affinity",
+            "expectedFailingCheck": "capacity_and_constraints",
+            "observedFailingChecks": [
+              "capacity_and_constraints",
+              "future_promise"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "irreversible_sequence"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "existential-future",
+            "expectedFailingCheck": "future_promise",
+            "observedFailingChecks": [
+              "capacity_and_constraints",
+              "future_promise"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "locally-greedy",
+            "expectedFailingCheck": "future_promise",
+            "observedFailingChecks": [
+              "capacity_and_constraints",
+              "future_promise"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "ignore-zone-affinity",
+            "expectedFailingCheck": "capacity_and_constraints",
+            "observedFailingChecks": [
+              "capacity_and_constraints",
+              "future_promise"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "ignore-zone-count",
+            "expectedFailingCheck": "capacity_and_constraints",
+            "observedFailingChecks": [
+              "capacity_and_constraints",
+              "future_promise"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "mint-capacity",
+            "expectedFailingCheck": "capacity_and_constraints",
+            "observedFailingChecks": [
+              "capacity_and_constraints",
+              "future_promise"
+            ],
+            "outcome": "correct-reject-named"
+          }
+        ],
+        "processSha256": "14a7dca1ec0fdf592bb0def4f5bb58cb4ffc79a2914e7a5a3b528eb182118199",
+        "gradeSummarySha256": "239744c8364cca44ab88328cfb6d4647ab0df1d39b1e0536f7af2d01a1f10ff4"
+      },
+      "commandCount": 39,
+      "sourceDelta": [
+        {
+          "path": "checker.mjs",
+          "change": "added",
+          "before": null,
+          "after": "26fc15f07003a1ff55628fe5fc4389e370613a4a58a957fa04e9932870fef753"
+        },
+        {
+          "path": "src/policy.mjs",
+          "change": "modified",
+          "before": "0677b810f1e7e828af6b9e056cceb4e7440880ec56f673ee0f41d8585d8b8200",
+          "after": "0a7eaf3e0da2e1d51760928aa7fca6c5b894025d5c6969b8215dac963a14ca06"
+        },
+        {
+          "path": "test/allocation.test.mjs",
+          "change": "modified",
+          "before": "81125c34fd15d4b5ba64361dacf4e4813487b607c1e0fed32b31a94e19a38a4f",
+          "after": "a4ac441c3b051776ac75636dea3aa2d82f18086777c674c7032c2ce23c6e2a3c"
+        }
+      ],
+      "usage": {
+        "cachedInputTokens": 3018675,
+        "costUsd": 4.9100635,
+        "inputTokens": 3134740,
+        "outputTokens": 89559,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; cached input is included in input totals.",
+      "completionSha256": "415417f84d6033019ad78021a8e850a39612dd2d4dc338631a39b9500428a62b",
+      "resultSha256": "5057c5a42ed2070eb42fbd93c5bced7b1d4c8d5572d1da51a0c79cc2ed7c445b",
+      "gradeSha256": "191a6afa5d08bf497d7e9e0d2ee9bc03052d964d3f14065d8b83642ff03936f0",
+      "verifiedFiles": 848,
+      "verifiedBytes": 3621475,
+      "assessment": "screening-pass",
+      "rationale": "Service 41/41 and checker 13/13 pass. Fifteen-line recursive policy module composes supplied local constraints over a bounded complete tree. Agent self-testing included a broken unrealized-future promise even when realized work succeeds."
+    },
+    {
+      "id": "diagnostic-transport-repair",
+      "target": "claude",
+      "runId": "diagnostic-transport-repair-attempt-1",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "runtime event type=assistant",
+          "status": "observed",
+          "value": "claude-opus-5"
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "cliReportedModel": "claude-opus-5",
+      "packageDigest": "890bc0f4e8bee00c989cad11b9bcf61f4f1a1c2472e975fc96a89a1be0397a7a",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "outcome": "semantic-pass",
+      "reward": 1,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 762865,
+      "start": "2026-09-08T19:04:25.098Z",
+      "end": "2026-09-08T19:17:14.402Z",
+      "service": {
+        "scenarios": 28,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "any-observed-public-obligation",
+        "present": true,
+        "deterministic": true,
+        "pass": true,
+        "total": 13,
+        "correct": 13,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 11,
+        "details": [
+          {
+            "candidateId": "lose-unicode-payload",
+            "expectedFailingCheck": "content",
+            "observedFailingChecks": [
+              "content",
+              "exact_rows"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "attempt_identity",
+              "completion",
+              "content",
+              "error_semantics",
+              "exact_rows"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "duplicate-row",
+            "expectedFailingCheck": "exact_rows",
+            "observedFailingChecks": [
+              "completion",
+              "exact_rows"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "wrong-attempt",
+            "expectedFailingCheck": "attempt_identity",
+            "observedFailingChecks": [
+              "attempt_identity",
+              "exact_rows"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "erase-errors",
+            "expectedFailingCheck": "error_semantics",
+            "observedFailingChecks": [
+              "error_semantics",
+              "exact_rows"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "omit-unobserved-request",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "attempt_identity",
+              "completion",
+              "content",
+              "error_semantics",
+              "exact_rows"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "drop-partial-error-data",
+            "expectedFailingCheck": "content",
+            "observedFailingChecks": [
+              "content",
+              "exact_rows"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "omit-empty-success",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "attempt_identity",
+              "completion",
+              "content",
+              "error_semantics",
+              "exact_rows"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "attempt_identity",
+              "completion",
+              "content",
+              "error_semantics",
+              "exact_rows"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "gaps-as-success",
+            "expectedFailingCheck": "error_semantics",
+            "observedFailingChecks": [
+              "error_semantics",
+              "exact_rows"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "attempt_identity",
+              "completion",
+              "content",
+              "error_semantics",
+              "exact_rows"
+            ],
+            "outcome": "correct-reject-named"
+          }
+        ],
+        "processSha256": "9035d22bf1934df5deb7f327fac0f34bbb08f82f2ef66c854c50cf242ee848eb",
+        "gradeSummarySha256": "deecab98cd22cf109aee4f59cd0b236fa235d65fb3ceb77a0f95193ebdcb2385"
+      },
+      "commandCount": 22,
+      "sourceDelta": [
+        {
+          "path": "checker.mjs",
+          "change": "added",
+          "before": null,
+          "after": "962b4fcf450cc9349781cbf01e9eba260251e96f1420caa8f6869c1c64b1e453"
+        },
+        {
+          "path": "src/decoder.mjs",
+          "change": "modified",
+          "before": "bd00d59b9825e570650664a7138b90846a33464dd58c1e9f2058582223280608",
+          "after": "e278b5146efd70443a2b3c73a2b0a32e1c246219befd1e6bf5242dcb7afa3d38"
+        },
+        {
+          "path": "src/outcome.mjs",
+          "change": "modified",
+          "before": "8c00fff2b6aee00ab3f4d0d28856887605337ba762771bdea38708c8fa130473",
+          "after": "f33fa00c8b20debd9ac00dce620db222ffa3e8faaa1cbf02d0597111ff159370"
+        },
+        {
+          "path": "src/service.mjs",
+          "change": "modified",
+          "before": "3533aac10d60429220c20fcfe7007ad5718db403551398e86b5ebfc5cded2431",
+          "after": "deafd8e48334dd8ef2bf0e76e7c972d8c4e330d8eea41e181bf4edb3549108c4"
+        },
+        {
+          "path": "test/checker.test.mjs",
+          "change": "added",
+          "before": null,
+          "after": "61a8daf17c1a6e9794715740742b31408c5b7d3914745eab92b0f05df60ec11a"
+        },
+        {
+          "path": "test/gateway.test.mjs",
+          "change": "modified",
+          "before": "c35cbcc28a721451f0e53c44472c64552525be683f3564b5c9407c4376cdb5c3",
+          "after": "d62606f2fe64ef02c5411968b2dadb6792f65c061c3c85872f9d3528f65889ec"
+        },
+        {
+          "path": "test/helpers.mjs",
+          "change": "added",
+          "before": null,
+          "after": "594b4426f47aece4321a3f8af41ccd3ef3b2f58b11e5976c865ab86bb521fe2f"
+        },
+        {
+          "path": "test/mutants.mjs",
+          "change": "added",
+          "before": null,
+          "after": "6f143f3d8962796f544a9428d060e684a2225b4c31d1f33de0a6149a98df719b"
+        },
+        {
+          "path": "test/property.test.mjs",
+          "change": "added",
+          "before": null,
+          "after": "df98a8db6a83210b24cb4d103465f934c5fa843f2697923c0669576ae83a50ad"
+        }
+      ],
+      "usage": {
+        "cachedInputTokens": 1246214,
+        "costUsd": 2.9709100000000013,
+        "inputTokens": 1326454,
+        "outputTokens": 61764,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; cached input is included in input totals.",
+      "completionSha256": "3036f6290c521686bb703b0ccf0c9b14fa372da5daf0e9c5f3057325c7443798",
+      "resultSha256": "f3d0b2badef26f3bcc69d68273f8f6fbfd140960b0a9e0ec00ff5a5beab7aa0e",
+      "gradeSha256": "57240dbed7016afe5339844ab07116b336eadefc5c509edb2041f4ae6885aaef",
+      "verifiedFiles": 693,
+      "verifiedBytes": 5547577,
+      "assessment": "screening-pass",
+      "rationale": "Service 28/28 and checker 13/13 pass. Repaired per-channel byte reassembly and terminal-error preservation, with 54 retained tests including generator-plan-based randomized wire checks."
+    },
+    {
+      "id": "issued-report-repair",
+      "target": "claude",
+      "runId": "issued-report-repair-attempt-1",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "runtime event type=assistant",
+          "status": "observed",
+          "value": "claude-opus-5"
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "cliReportedModel": "claude-opus-5",
+      "packageDigest": "0b638a93b90088f074d0bf3e8828f3980edd525aeef2c749f53c423ceca2dfe3",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "outcome": "semantic-pass",
+      "reward": 1,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1556632,
+      "start": "2026-09-08T19:04:25.172Z",
+      "end": "2026-09-08T19:30:28.284Z",
+      "service": {
+        "scenarios": 27,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "any-observed-public-obligation",
+        "present": true,
+        "deterministic": true,
+        "pass": true,
+        "total": 13,
+        "correct": 13,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 11,
+        "details": [
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "amendment_content",
+              "completion",
+              "historical_answers",
+              "issued_history",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "amendment_content",
+              "completion",
+              "historical_answers",
+              "issued_history",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "drop-source-lineage",
+            "expectedFailingCheck": "amendment_content",
+            "observedFailingChecks": [
+              "amendment_content",
+              "completion",
+              "issued_history",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "current-for-historical",
+            "expectedFailingCheck": "historical_answers",
+            "observedFailingChecks": [
+              "historical_answers"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "reuse-issued-version",
+            "expectedFailingCheck": "issued_history",
+            "observedFailingChecks": [
+              "amendment_content",
+              "completion",
+              "issued_history",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "corrections-labelled-initial",
+            "expectedFailingCheck": "recipient_scope",
+            "observedFailingChecks": [
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "amendment_content",
+              "completion",
+              "historical_answers",
+              "issued_history",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "only-requested-recipients",
+            "expectedFailingCheck": "recipient_scope",
+            "observedFailingChecks": [
+              "completion",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "stale-dependent-lineage",
+            "expectedFailingCheck": "amendment_content",
+            "observedFailingChecks": [
+              "amendment_content",
+              "completion",
+              "issued_history",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "unrelated-recipient",
+            "expectedFailingCheck": "recipient_scope",
+            "observedFailingChecks": [
+              "completion",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "duplicate-notification",
+            "expectedFailingCheck": "recipient_scope",
+            "observedFailingChecks": [
+              "completion",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          }
+        ],
+        "processSha256": "a145edbd03b3a5641b6ee2a187b653b7dcef713dfa08fce3e5c6b6ecfaf3d9cc",
+        "gradeSummarySha256": "24751da6d8915d4e323a0bde20ec4ad17a4534d4ef75bb6bc615177fd683fa82"
+      },
+      "commandCount": 47,
+      "sourceDelta": [
+        {
+          "path": "checker.mjs",
+          "change": "added",
+          "before": null,
+          "after": "a710ec5d730b32f038ebbea5f0bf156c1d7deb113f7a70d83a7cd74d2296a22d"
+        },
+        {
+          "path": "src/audience.mjs",
+          "change": "modified",
+          "before": "e5b1535b070370a59a11d0a44c4fa22200c65b6812187bdd74dd6d5f2a2a85c8",
+          "after": "d015c275dc6b1ffc8ddabf0ba8ff1ca0a166dfa1fe92f4e37ab99668b5455244"
+        },
+        {
+          "path": "src/payload.mjs",
+          "change": "modified",
+          "before": "5cb0dc904c139f500ec5a54b37b198b0fe31b3043c4627e4a6a868d974962261",
+          "after": "5c67efaec963e7886c9e8f4f1a11c982bd426faa98022b89377e5dc7a5e4211c"
+        },
+        {
+          "path": "test/checker.test.mjs",
+          "change": "added",
+          "before": null,
+          "after": "f6b19dc95571003118ba1da1ebd3811e184b47ef766dae2b8f8cbd365dd91f45"
+        },
+        {
+          "path": "test/fixtures/candidates.mjs",
+          "change": "added",
+          "before": null,
+          "after": "1d9407ef8993d27fe68c2b149d62e8485abf19bd1159b8df4f934d8d8667fe0a"
+        },
+        {
+          "path": "test/fixtures/generate.mjs",
+          "change": "added",
+          "before": null,
+          "after": "3304bb3f4979476cf0d7f4756053ca7557c4039d0c314be39826026fa2bbef7f"
+        },
+        {
+          "path": "test/fixtures/golden.mjs",
+          "change": "added",
+          "before": null,
+          "after": "17369043714167005318200f0e88285c0f102d31daed1cd9df119aea636b59a7"
+        },
+        {
+          "path": "test/fixtures/host.mjs",
+          "change": "added",
+          "before": null,
+          "after": "efd8ab1a9a465af760dc4c56421eba9209d87dc1113ff140fc5c445d7a1ac454"
+        },
+        {
+          "path": "test/fixtures/scenarios.mjs",
+          "change": "added",
+          "before": null,
+          "after": "659075ff16b1dfd80d2d2312f2f4464f37345981a724a8a820e979d55fe48aa3"
+        },
+        {
+          "path": "test/fuzz.test.mjs",
+          "change": "added",
+          "before": null,
+          "after": "5b2e546398afce7635d4bfaf8f45c1b506bca87a24c7d6a421b53f0e233cb91a"
+        },
+        {
+          "path": "test/reports.test.mjs",
+          "change": "modified",
+          "before": "39e51a80877b852e87c4b748c5af9e3af6b31d2051c87d5d9212d69e7a96d801",
+          "after": "8043d3c16e48e71995a65b69e20b83f8d636241d0a52e83c0de48d28878edffa"
+        }
+      ],
+      "usage": {
+        "cachedInputTokens": 5094491,
+        "costUsd": 7.0124875000000015,
+        "inputTokens": 5249007,
+        "outputTokens": 116761,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; cached input is included in input totals.",
+      "completionSha256": "5f2071c4a249cb4b32df3f411d790781302119c6b883156ad67720253174e672",
+      "resultSha256": "0e801cdbb1d2a546f038826000d6cad711817120a9d266837f0bbd55ea8884f8",
+      "gradeSha256": "0c7a529523787ed47428425ebcc9ab232cae53c325e198f39706bd1d5def845d",
+      "verifiedFiles": 702,
+      "verifiedBytes": 10066200,
+      "assessment": "screening-pass",
+      "rationale": "Service 27/27 and checker 13/13 pass. Repaired ordered-source-version change detection and prior-recipient propagation; 26 retained tests and a captured 2000-seed extended property run support the self-verification account."
+    }
+  ]
+}

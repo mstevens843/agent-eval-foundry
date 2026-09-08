@@ -87,7 +87,7 @@ export async function runScenario(s, execute, storage) {
   }
   return {
     ...checks({
-      completion: index >= s.path.length && actual.length === s.path.length,
+      completion: index >= s.path.length - 1 && actual.length === s.path.length,
       capacity_and_constraints: local,
       future_promise: promise,
       irreversible_sequence:

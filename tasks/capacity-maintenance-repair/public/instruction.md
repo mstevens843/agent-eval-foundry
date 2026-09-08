@@ -15,12 +15,13 @@ Grading rejects a submission missing either one.
 `checker.mjs` must export `run({ cases })`. `cases` is an array of `{ token, cells }`:
 `token` is an opaque label, `cells` is that candidate's real observed execution trace
 against this task's own scenarios — the full `add`/`remove`/`maintain`/`finish` call log,
-the placement and per-step capacity/availability/placement invariant results after every
-acknowledged operation, and the final placement and upgrade set versus the original. You
+the placement and upgrade set after every acknowledged operation, and the original
+fleet requirements. Compute the per-step invariants yourself; no grading verdicts are
+supplied. Read CHECKER-INPUT.md for the exact fields and check vocabulary. You
 are not told which candidate is correct. Independently judge each one from its observed
 behavior and return `{ verdicts: { [token]: { ok: boolean, reasons: string[] } } }`, where
 a `reasons` entry names which obligation you believe is violated, using this task's own
-check names from SEMANTICS.md: `completion` (every requested host upgraded exactly once,
+check names: `completion` (every requested host upgraded exactly once,
 dependencies honored, and `finish` acknowledged), `capacity` (no host ever exceeds its
 capacity, at every step, not just at the end), `availability` (every service's instance
 count stays within its min/max at every step), `placement` (eligibility and per-zone limits

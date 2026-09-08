@@ -4,6 +4,14 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+export const SCREENING_BATCHES = [
+  ["original-five", "2026-09-07-original-five"],
+  ["next-five", "2026-09-08-next-five"],
+  ["third-five", "2026-09-08-third-five"],
+  ["fourth-five", "2026-09-08-fourth-five"],
+  ["fifth-five", "2026-09-08-fifth-five"],
+];
+
 export function verifyPublication(root = process.cwd()) {
   const read = (p) => JSON.parse(readFileSync(join(root, p), "utf8"));
   const hash = /^[a-f0-9]{64}$/;
@@ -13,14 +21,33 @@ export function verifyPublication(root = process.cwd()) {
   let verifiedFiles = 0;
   const expected = ["README.md"];
   let index = 0;
-  for (const [folder, file, batch] of [
-    ["original-five", "2026-09-07-original-five", first],
-    ["next-five", "2026-09-08-next-five", next],
-  ]) {
+  let missingBatch = false;
+  for (const [batchIndex, [folder, file]] of SCREENING_BATCHES.entries()) {
+    const path = `reports/screening/evidence/${file}.json`;
+    if (!existsSync(join(root, path))) {
+      assert.ok(batchIndex >= 2, "historical evidence must remain present");
+      missingBatch = true;
+      continue;
+    }
+    assert.ok(!missingBatch, "screening publication must preserve batch order");
+    const batch = read(path);
     assert.equal(batch.schemaVersion, 1);
     assert.equal(batch.evidenceClass, "real-provider-screening");
     assert.equal(batch.packages.length, 5);
     assert.ok(batch.limitations.length > 0);
+    if (batchIndex >= 2) {
+      assert.equal(batch.automaticRetries, 0);
+      assert.equal(batch.packages.filter((p) => p.target === "codex").length, 2);
+      assert.equal(batch.packages.filter((p) => p.target === "claude").length, 3);
+      assert.equal(batch.concurrencyRequestFulfilled, true);
+      assert.equal(batch.concurrencyObservation.count, 5);
+      assert.equal(new Set(batch.concurrencyObservation.packageIds).size, 5);
+      assert.deepEqual(
+        [...batch.concurrencyObservation.packageIds].sort(),
+        batch.packages.map((p) => p.id).sort(),
+      );
+      assert.match(batch.sourceDigest, hash);
+    }
     expected.push(`evidence/${file}.json`);
     for (const record of batch.packages) {
       assert.match(record.id, /^[a-z0-9-]+$/);
@@ -33,6 +60,31 @@ export function verifyPublication(root = process.cwd()) {
       verifiedFiles += record.verifiedFiles;
       assert.ok(!Object.hasOwn(record, "directory"));
       assert.ok(!/\/Users\/|\.local\//.test(JSON.stringify(record)), "nonportable/private record path");
+      if (record.checker?.reasonPolicy === "any-observed-public-obligation") {
+        const checker = record.checker;
+        assert.match(checker.gradeSummarySha256, hash);
+        assert.equal(checker.details.length, checker.total);
+        for (const detail of checker.details) {
+          assert.ok(Array.isArray(detail.observedFailingChecks));
+          if (detail.expectedFailingCheck === null) assert.equal(detail.observedFailingChecks.length, 0);
+          else
+            assert.ok(
+              detail.observedFailingChecks.includes(detail.expectedFailingCheck),
+              "negative candidate's primary control must actually activate",
+            );
+        }
+        assert.equal(
+          checker.namedRightCheck,
+          checker.details.filter((d) => d.outcome === "correct-reject-named").length,
+        );
+        assert.equal(
+          checker.pass,
+          checker.deterministic &&
+            checker.falsePositives === 0 &&
+            checker.missed === 0 &&
+            checker.namedRightCheck === checker.details.filter((d) => d.expectedFailingCheck !== null).length,
+        );
+      }
       expected.push(`${folder}/${String(++index).padStart(2, "0")}-${record.id}.md`);
     }
   }
@@ -43,15 +95,23 @@ export function verifyPublication(root = process.cwd()) {
   assert.equal(partial.assessment, "contract-grader-alignment-concern");
   assert.equal(partial.service.failedScenarios, 0);
   assert.equal(partial.checker.correct, partial.checker.total);
-  const walk = (dir, prefix = "") => readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
-    assert.ok(!entry.isSymbolicLink(), "publication symlink");
-    return entry.isDirectory()
-      ? walk(join(dir, entry.name), `${prefix}${entry.name}/`)
-      : [`${prefix}${entry.name}`];
-  });
-  assert.deepEqual(walk(join(root, "reports/screening")).sort(), expected.sort(), "unaccounted screening artifact");
+  const walk = (dir, prefix = "") =>
+    readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+      assert.ok(!entry.isSymbolicLink(), "publication symlink");
+      return entry.isDirectory()
+        ? walk(join(dir, entry.name), `${prefix}${entry.name}/`)
+        : [`${prefix}${entry.name}`];
+    });
+  assert.deepEqual(
+    walk(join(root, "reports/screening")).sort(),
+    expected.sort(),
+    "unaccounted screening artifact",
+  );
   const documents = [
-    "README.md", "docs/project-status.md", "docs/engineering-progress.md", "docs/artifact-lifecycle.md",
+    "README.md",
+    "docs/project-status.md",
+    "docs/engineering-progress.md",
+    "docs/artifact-lifecycle.md",
     "reports/PORTFOLIO-PUBLICATION.md",
     ...expected.filter((p) => p.endsWith(".md")).map((p) => `reports/screening/${p}`),
   ];
@@ -60,7 +120,10 @@ export function verifyPublication(root = process.cwd()) {
     for (const [, target] of text.matchAll(/\]\(([^)]+)\)/g)) {
       if (/^https?:|^#/.test(target)) continue;
       const path = resolve(root, dirname(doc), target.split("#")[0]);
-      assert.ok(!target.startsWith("/") && !target.includes(".local/") && !relative(root, path).startsWith(".."), `${doc}: nonportable link`);
+      assert.ok(
+        !target.startsWith("/") && !target.includes(".local/") && !relative(root, path).startsWith(".."),
+        `${doc}: nonportable link`,
+      );
       assert.ok(existsSync(path), `${doc}: missing ${target}`);
     }
   }
@@ -73,7 +136,13 @@ export function verifyPublication(root = process.cwd()) {
     assert.match(p.selectedSourceSha256, hash);
     assert.ok(!p.path.startsWith("/") && !p.path.split("/").includes(".."));
   }
-  return { screenedPackages: ids.size, manifestListedFilesVerifiedAtPublication: verifiedFiles, documents: documents.length, promotedPaths: promotion.paths.length, providerCallsMade: 0 };
+  return {
+    screenedPackages: ids.size,
+    manifestListedFilesVerifiedAtPublication: verifiedFiles,
+    documents: documents.length,
+    promotedPaths: promotion.paths.length,
+    providerCallsMade: 0,
+  };
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url))

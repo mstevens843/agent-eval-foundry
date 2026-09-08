@@ -22,7 +22,7 @@ per SEMANTICS.md, and not authoritative on its own). No answer key is ever suppl
 `{ verdicts: { [token]: { ok, reasons? } } }`. When rejecting a candidate, `reasons` must name
 which obligation it violated, using these codes:
 
-- `completion` -- did not consume the full input or publish/report a matching count of rows
+- `completion` -- did not consume the full input or publish a matching count of rows
   and late events
 - `window_values` -- a published window's total/count is wrong (including a real,
   zero-total accumulator that was dropped instead of published)
@@ -34,8 +34,12 @@ which obligation it violated, using these codes:
 
 Your checker must be deterministic, must accept every genuinely correct candidate (zero false
 positives), must reject every genuinely incorrect one (zero misses), and must name a correct
-code for each rejection. Reasoning from only the fields above -- there is nothing else to
-read the answer off of.
+code for each rejection. Original event input is also supplied as specified in CHECKER-INPUT.md;
+it is not a precomputed output or verdict.
 
-`checker.mjs` must be fully self-contained: only that single file is staged for grading, so it cannot `import` from any other submitted file (helper modules, shared utilities, or `entry.mjs` itself). Write all checking logic directly in `checker.mjs`, or duplicate any shared logic you need.
+## Exact checker schema and execution limits
 
+Read CHECKER-INPUT.md for the complete cell schema, including original source inputs,
+obligation names and the deterministic two-run execution envelope. Those source inputs
+are available even when a candidate performs no reads. Judge each candidate independently.
+Only checker.mjs is staged; standard Node modules are allowed, other submitted files are not.

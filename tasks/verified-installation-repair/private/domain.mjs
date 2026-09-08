@@ -184,6 +184,11 @@ export async function runScenario(s, execute, storage) {
       // content from the CANDIDATE's own observed fetch/cache bytes, instead of from any
       // grader-only field.
       descriptors: s.descriptors,
+      initial,
+      // Raw available artifact sources let a checker assess availability even when a
+      // candidate omits a fetch. These are inputs, not the computed installation tree.
+      blobs: s.blobs,
+      cache: s.cache,
     };
   } finally {
     rmSync(root, { recursive: true });

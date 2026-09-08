@@ -16,9 +16,10 @@ submission missing either one.
 `checker.mjs` must export `run({ cases })`. `cases` is an array of `{ token, cells }`:
 `token` is an opaque label, `cells` is that candidate's real observed execution trace against
 this task's own scenarios — for each scenario, the tree actually left in place, the
-independently computed expected tree, every `finish` call the candidate made, and the full API
+original installation inputs, every `finish` call the candidate made, and the full API
 call log (`cache`/`fetch`/`list`/`remove`/`write`/`finish` requests and responses). You are not
-told which candidate is correct. Independently judge each one from its observed behavior and
+told which candidate is correct, and no expected tree is supplied. Read CHECKER-INPUT.md.
+Independently judge each one from its observed behavior and
 return `{ verdicts: { [token]: { ok: boolean, reasons: string[] } } }`, where a `reasons` entry
 names which obligation you believe is violated (use the section of SEMANTICS.md it violates,
 e.g. an active tree that doesn't match the required content or permissions names `contents`; a

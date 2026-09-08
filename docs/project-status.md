@@ -8,7 +8,7 @@ Twenty-five professional task source trees are now maintained in Git. Twenty wer
 
 The foundry assembles separate solver/verifier workspaces, validates local controls, retains exact versions, and records authorized attempts for read-only analysis. The registry contains twenty-four Node portfolio IDs plus native Go CAA. Twelve older generic families are calibration tools, not twelve additional professional packages.
 
-Ten packages have exploratory real-agent screening evidence on earlier frozen versions. All ten service implementations passed. One second-batch checker rejected a valid alternative; another exposed an instruction/grader reason-format mismatch. Fifteen constructed packages have not been screened in these campaigns. None is represented as fully qualified or empirically maximally hard.
+Twenty-five packages have exploratory real-agent screening evidence on frozen versions. All twenty-five service implementations passed. One second-batch checker rejected a valid alternative; another exposed a reason-format mismatch. Across batches 3–5, all fifteen services and all checker classifications were correct; four original zeroes expose reason-label grading defects or taxonomy concerns, not clean model failures. This fifteen-attempt campaign is complete, with five concurrent jobs per batch and no retries or recorded execution errors. None is represented as fully qualified or empirically maximally hard. See [screening results](../reports/screening/README.md).
 
 ## The portfolio
 
@@ -26,21 +26,21 @@ These links are reviewer-facing and include private grading material. Solvers re
 | Next | [partial-release-repair](../tasks/partial-release-repair/) | Dependency-graph recovery under partial effects | [Trial 08](../reports/screening/next-five/08-partial-release-repair.md) |
 | Next | [ticket-consolidation-repair](../tasks/ticket-consolidation-repair/) | Complete population, qualified identities and concurrent edits | [Trial 09](../reports/screening/next-five/09-ticket-consolidation-repair.md) |
 | Next | [temporal-capacity-repair](../tasks/temporal-capacity-repair/) | Knowledge-time revision selection and exact integration | [Trial 10](../reports/screening/next-five/10-temporal-capacity-repair.md) |
-| Third | [snapshot-recovery-repair](../tasks/snapshot-recovery-repair/) | Portable snapshot and independently verified SQLite restore | [Construction](third-portfolio-construction.md) |
-| Third | [verified-installation-repair](../tasks/verified-installation-repair/) | Verified bytes and ordered filesystem layers | [Construction](third-portfolio-construction.md) |
-| Third | [capacity-maintenance-repair](../tasks/capacity-maintenance-repair/) | Maintenance with overlapping capacity requirements | [Construction](third-portfolio-construction.md) |
-| Third | [route-policy-repair](../tasks/route-policy-repair/) | Routing changes with preserved unrelated behavior | [Construction](third-portfolio-construction.md) |
-| Third | [rule-index-repair](../tasks/rule-index-repair/) | Efficient matching with unchanged semantics | [Construction](third-portfolio-construction.md) |
-| Fourth | [document-export-repair](../tasks/document-export-repair/) | Nested redaction with useful structure preserved | [Construction](fourth-portfolio-construction.md) |
-| Fourth | [analytical-reconciliation-repair](../tasks/analytical-reconciliation-repair/) | Cross-system populations, identity and exact arithmetic | [Construction](fourth-portfolio-construction.md) |
-| Fourth | [recurring-calendar-repair](../tasks/recurring-calendar-repair/) | Occurrence identity, timezone changes and exceptions | [Construction](fourth-portfolio-construction.md) |
-| Fourth | [variant-cache-repair](../tasks/variant-cache-repair/) | Variants, age, revalidation and scoped invalidation | [Construction](fourth-portfolio-construction.md) |
-| Fourth | [workflow-authority-repair](../tasks/workflow-authority-repair/) | Changing grants across queued work and completed history | [Construction](fourth-portfolio-construction.md) |
-| Fifth | [incremental-build-repair](../tasks/incremental-build-repair/) | Current dependency attestations and legitimate build reuse | [Construction](fifth-portfolio-construction.md) |
-| Fifth | [event-window-repair](../tasks/event-window-repair/) | Event-time finalization, duplicates, idleness and late input | [Construction](fifth-portfolio-construction.md) |
-| Fifth | [staged-allocation-repair](../tasks/staged-allocation-repair/) | Irrevocable choices preserving declared future feasibility | [Construction](fifth-portfolio-construction.md) |
-| Fifth | [diagnostic-transport-repair](../tasks/diagnostic-transport-repair/) | Fragmented decoding, attempt identity, errors and partial data | [Construction](fifth-portfolio-construction.md) |
-| Fifth | [issued-report-repair](../tasks/issued-report-repair/) | Dependent amendments and immutable historical publications | [Construction](fifth-portfolio-construction.md) |
+| Third | [snapshot-recovery-repair](../tasks/snapshot-recovery-repair/) | Portable snapshot and independently verified SQLite restore | [Trial 11](../reports/screening/third-five/11-snapshot-recovery-repair.md) |
+| Third | [verified-installation-repair](../tasks/verified-installation-repair/) | Verified bytes and ordered filesystem layers | [Trial 12](../reports/screening/third-five/12-verified-installation-repair.md) |
+| Third | [capacity-maintenance-repair](../tasks/capacity-maintenance-repair/) | Maintenance with overlapping capacity requirements | [Trial 13](../reports/screening/third-five/13-capacity-maintenance-repair.md) |
+| Third | [route-policy-repair](../tasks/route-policy-repair/) | Routing changes with preserved unrelated behavior | [Trial 14](../reports/screening/third-five/14-route-policy-repair.md) |
+| Third | [rule-index-repair](../tasks/rule-index-repair/) | Efficient matching with unchanged semantics | [Trial 15](../reports/screening/third-five/15-rule-index-repair.md) |
+| Fourth | [document-export-repair](../tasks/document-export-repair/) | Nested redaction with useful structure preserved | [Trial 16](../reports/screening/fourth-five/16-document-export-repair.md) |
+| Fourth | [analytical-reconciliation-repair](../tasks/analytical-reconciliation-repair/) | Cross-system populations, identity and exact arithmetic | [Trial 17](../reports/screening/fourth-five/17-analytical-reconciliation-repair.md) |
+| Fourth | [recurring-calendar-repair](../tasks/recurring-calendar-repair/) | Occurrence identity, timezone changes and exceptions | [Trial 18](../reports/screening/fourth-five/18-recurring-calendar-repair.md) |
+| Fourth | [variant-cache-repair](../tasks/variant-cache-repair/) | Variants, age, revalidation and scoped invalidation | [Trial 19](../reports/screening/fourth-five/19-variant-cache-repair.md) |
+| Fourth | [workflow-authority-repair](../tasks/workflow-authority-repair/) | Changing grants across queued work and completed history | [Trial 20](../reports/screening/fourth-five/20-workflow-authority-repair.md) |
+| Fifth | [incremental-build-repair](../tasks/incremental-build-repair/) | Current dependency attestations and legitimate build reuse | [Trial 21](../reports/screening/fifth-five/21-incremental-build-repair.md) |
+| Fifth | [event-window-repair](../tasks/event-window-repair/) | Event-time finalization, duplicates, idleness and late input | [Trial 22](../reports/screening/fifth-five/22-event-window-repair.md) |
+| Fifth | [staged-allocation-repair](../tasks/staged-allocation-repair/) | Irrevocable choices preserving declared future feasibility | [Trial 23](../reports/screening/fifth-five/23-staged-allocation-repair.md) |
+| Fifth | [diagnostic-transport-repair](../tasks/diagnostic-transport-repair/) | Fragmented decoding, attempt identity, errors and partial data | [Trial 24](../reports/screening/fifth-five/24-diagnostic-transport-repair.md) |
+| Fifth | [issued-report-repair](../tasks/issued-report-repair/) | Dependent amendments and immutable historical publications | [Trial 25](../reports/screening/fifth-five/25-issued-report-repair.md) |
 
 ## Engineering decisions worth inspecting
 
@@ -54,7 +54,13 @@ These links are reviewer-facing and include private grading material. Solvers re
 
 Construction is not empirical hardness or authorization. Independent fairness/bounded-time review, exact effective-profile evidence, destination acceptance and official standard/adversarial qualification remain per-version requirements.
 
-The partial-release reason-format issue remains a blocker for treating its zero as a capability failure. Shared exact-label semantics need a versioned contract repair before reuse as difficulty evidence. No historical result is overwritten by this publication.
+The partial-release reason-format issue remains a blocker for treating its historical zero as a capability failure. Shared reason-prefix matching and explicit checker schemas were repaired in new versions before batch 3. No historical result is overwritten by that repair.
+
+The private-primary-label rule was repaired before batch 5, with fresh protected validation.
+Calendar and incremental-build still require explicit public obligation-label mappings;
+calendar also needs cancelled-move clarification. Cache's self-tested wildcard-preservation
+gap needs a narrow, contract-reviewed control. These findings are documented, not claimed
+closed or used as authorization for another round of provider attempts.
 
 Separate post-screening crash-recovery changes to four original packages remain in local successor snapshots and are **not** silently merged here. Their revised contracts, control activation and recipient routes need their own integration review. This avoids claiming that old trials measured newer work.
 

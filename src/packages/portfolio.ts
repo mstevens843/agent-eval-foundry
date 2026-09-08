@@ -26,6 +26,7 @@ import {
   assertAssuranceCoverage,
   runAssurance,
 } from "./assurance.js";
+import { namesObservedFailure, positiveVariantKeys } from "./checker-contract.js";
 import { hashFile, localProcess } from "./local-process.js";
 import { decidePackage } from "./policy.js";
 import {
@@ -132,7 +133,9 @@ const classify = (path: string): Component =>
       ? /instruction\.md$|SEMANTICS\.md$/.test(path)
         ? "contract"
         : "workspace"
-      : path.startsWith("private/reference/") || path.startsWith("private/alternative/")
+      : path.startsWith("private/reference/") ||
+          path.startsWith("private/alternative/") ||
+          path.startsWith("private/variants/")
         ? "reference"
         : path.includes("controls/") || path.endsWith("control-manifest.json")
           ? "controls"
@@ -424,13 +427,31 @@ export async function runPortfolioSubmission(
   }
 }
 
+/** Extra genuinely-correct, differently-shaped positive candidates beyond "reference" and
+ * "alternative", named `variant-<key>` and stored under `private/variants/<key>/`. Optional: a
+ * package with none of these directories behaves exactly as before. See the `variantKeys`
+ * discovery in `gradeChecker` for why this exists — a checker tested against only two correct
+ * shapes can overfit to "looks like reference or alternative" rather than the actual rule. */
+const NAMED_VARIANT_PREFIX = "variant-";
+const namedVariantFilePrefix = (key: string) => `private/variants/${key}/`;
+
 function variantFiles(snapshot: PackageSnapshot, name: string, control?: Control) {
   const files = new Map<string, Uint8Array>();
   for (const part of ["contract", "workspace"] as const)
     for (const f of snapshot.record.components[part].files)
       if (f.path.startsWith("public/")) files.set(f.path.slice(7), readSnapshotFile(snapshot, part, f.path));
   if (name !== "starter") {
-    const prefix = name === "alternative" ? "private/alternative/" : "private/reference/";
+    const prefix =
+      name === "alternative"
+        ? "private/alternative/"
+        : name.startsWith(NAMED_VARIANT_PREFIX)
+          ? namedVariantFilePrefix(name.slice(NAMED_VARIANT_PREFIX.length))
+          : "private/reference/";
+    if (
+      name.startsWith(NAMED_VARIANT_PREFIX) &&
+      !snapshot.record.components.reference.files.some((f) => f.path.startsWith(prefix))
+    )
+      throw Error(`PORTFOLIO_POSITIVE_VARIANT_MISSING:${name}`);
     for (const f of snapshot.record.components.reference.files)
       if (f.path.startsWith(prefix))
         files.set(f.path.slice(prefix.length), readSnapshotFile(snapshot, "reference", f.path));
@@ -488,6 +509,7 @@ export function listPortfolioControls(directory: string): readonly { id: string;
 export interface CheckerGradeDetail {
   readonly candidateId: string;
   readonly expectedFailingCheck: string | null;
+  readonly observedFailingChecks?: readonly string[];
   readonly outcome:
     | "correct-accept"
     | "correct-reject-named"
@@ -496,6 +518,7 @@ export interface CheckerGradeDetail {
     | "missed";
 }
 export interface CheckerGradeResult {
+  readonly reasonPolicy?: "any-observed-public-obligation";
   readonly present: boolean;
   readonly deterministic: boolean;
   readonly total: number;
@@ -573,7 +596,7 @@ async function candidateTrace(
   directory: string,
   output: string,
   candidateId: string,
-  base: "reference" | "alternative" | "starter",
+  base: "reference" | "alternative" | "starter" | `variant-${string}`,
   controlId: string | undefined,
   scenarioIds: readonly string[],
 ) {
@@ -581,7 +604,12 @@ async function candidateTrace(
   materializeCandidate(directory, candidateDir, base, controlId);
   const runOutput = join(output, `run-${candidateId}-${scenarioIds.length}`);
   const result = await runPortfolioSubmission(directory, candidateDir, runOutput, [...scenarioIds]);
-  return stripCells(result.cells);
+  if (result.cells.some((cell) => cell.status === "invalid"))
+    throw Error(`CHECKER_CANDIDATE_EXECUTION_INVALID: ${candidateId}`);
+  return {
+    cells: stripCells(result.cells),
+    observedFailingChecks: [...new Set(result.cells.flatMap((cell) => cell.failures ?? []))].sort(),
+  };
 }
 
 /** Runs one control (reference base + its overlay) against exactly `scenarioIds` and returns
@@ -639,6 +667,8 @@ async function resolveDistinguishingScenarios(
   return { scenarioIds, undetectable: stillTied.map((c) => c.id) };
 }
 
+/** Grade independent checker outputs on observed executions, accepting explanatory
+ * check-name suffixes without weakening obligation attribution. Process failures propagate. */
 export async function gradeChecker(
   directory: string,
   submission: string,
@@ -677,24 +707,38 @@ export async function gradeChecker(
   // "reference" and "alternative" are BOTH genuinely correct, differently-shaped implementations.
   // Testing only one risks a checker that has learned one specific correct shape rather than the
   // actual rule — exactly what "zero false positives" should mean is acceptance of *any* correct
-  // behavior, not just the one the checker's author happened to compare against.
+  // behavior, not just the one the checker's author happened to compare against. A real trial
+  // batch confirmed this is not hypothetical: across five packages, submitted checkers went 48/48
+  // on rejecting negative controls but only 9/10 on accepting the two positive shapes on offer —
+  // every package's positive bank was just reference + alternative, never enough implementation
+  // diversity to pressure-test the "accept" side the way the negative-control bank pressure-tests
+  // the "reject" side. `private/variants/<key>/` (see `NAMED_VARIANT_PREFIX` above) is the
+  // generalization: any number of additional genuinely-correct, differently-shaped candidates a
+  // package chooses to author, each graded exactly like "alternative" is today.
   // materializeCandidate/variantFiles does NOT throw when a package has no private/alternative/*
-  // files — an absent overlay just silently falls back to starter-shaped code, which would then
-  // get graded as if it were a genuinely correct "alternative" and could spuriously false-positive
-  // a perfectly good checker. So "alternative" is only included when the snapshot actually has
-  // files under that prefix, checked directly rather than inferred from a caught exception.
+  // (or private/variants/*/) files — an absent overlay just silently falls back to starter-shaped
+  // code, which would then get graded as if it were a genuinely correct candidate and could
+  // spuriously false-positive a perfectly good checker. So each of these is only included when the
+  // snapshot actually has files under its own prefix, checked directly rather than inferred from a
+  // caught exception.
   const hasAlternative = snapshot.record.components.reference.files.some((f) =>
     f.path.startsWith("private/alternative/"),
   );
+  const variantKeys = positiveVariantKeys(snapshot.record.components.reference.files.map((f) => f.path));
   const candidates: {
     id: string;
-    base: "reference" | "alternative" | "starter";
+    base: "reference" | "alternative" | "starter" | `variant-${string}`;
     expectedFailingCheck: string | null;
   }[] = [
     { id: "reference", base: "reference", expectedFailingCheck: null },
     ...(hasAlternative
       ? [{ id: "alternative", base: "alternative" as const, expectedFailingCheck: null }]
       : []),
+    ...variantKeys.map((key) => ({
+      id: `variant-${key}`,
+      base: `variant-${key}` as const,
+      expectedFailingCheck: null,
+    })),
     // Controls overlay onto REFERENCE, not starter — matching validatePortfolioPackage's own,
     // pre-existing convention (its `names` array passes each control's own id straight to
     // `variant()`, which merges in private/reference/* for any name other than "starter" before
@@ -705,24 +749,39 @@ export async function gradeChecker(
   ];
 
   const cases: { token: string; cells: unknown[] }[] = [];
-  const groundTruth = new Map<string, { candidateId: string; expectedFailingCheck: string | null }>();
+  const groundTruth = new Map<
+    string,
+    { candidateId: string; expectedFailingCheck: string | null; observedFailingChecks: string[] }
+  >();
   const order = seededShuffle(candidates, snapshot.record.digest);
   let index = 0;
   for (const candidate of order) {
-    const cells = await candidateTrace(
+    const { cells, observedFailingChecks } = await candidateTrace(
       directory,
       output,
       candidate.id,
       candidate.base,
-      candidate.id === "reference" || candidate.id === "alternative" ? undefined : candidate.id,
+      // Every positive candidate (reference, alternative, a named variant) stands alone with no
+      // control overlay; only a genuine negative control — recognizable by having a non-null
+      // expectedFailingCheck — passes its own id through as the overlay's controlId. Driven by
+      // that intent rather than by matching against the growing list of positive-candidate id
+      // shapes, so a new candidate kind never has to remember to update this condition too.
+      candidate.expectedFailingCheck === null ? undefined : candidate.id,
       scenarioIds,
     );
+    if (
+      candidate.expectedFailingCheck === null
+        ? observedFailingChecks.length > 0
+        : !observedFailingChecks.includes(candidate.expectedFailingCheck)
+    )
+      throw Error(`CHECKER_CANDIDATE_TRUTH_MISMATCH: ${candidate.id}`);
     const token = `candidate-${String.fromCharCode(65 + index)}`;
     index += 1;
     cases.push({ token, cells });
     groundTruth.set(token, {
       candidateId: candidate.id,
       expectedFailingCheck: candidate.expectedFailingCheck,
+      observedFailingChecks,
     });
   }
 
@@ -820,7 +879,7 @@ export async function gradeChecker(
       outcome = "false-positive";
     } else if (!shouldBeOk && !isOk) {
       correct++;
-      const named = (verdict?.reasons ?? []).includes(truth.expectedFailingCheck as string);
+      const named = namesObservedFailure(verdict?.reasons, truth.observedFailingChecks);
       if (named) namedRightCheck++;
       outcome = named ? "correct-reject-named" : "correct-reject-unnamed";
     } else {
@@ -830,11 +889,13 @@ export async function gradeChecker(
     details.push({
       candidateId: truth.candidateId,
       expectedFailingCheck: truth.expectedFailingCheck,
+      observedFailingChecks: truth.observedFailingChecks,
       outcome,
     });
   }
 
-  return {
+  const grade: CheckerGradeResult = {
+    reasonPolicy: "any-observed-public-obligation",
     present: true,
     deterministic,
     total: cases.length,
@@ -845,6 +906,10 @@ export async function gradeChecker(
     details,
     pass: deterministic && falsePositives === 0 && missed === 0 && namedRightCheck === controls.length,
   };
+  // Retain the exact private grading policy and authoritative failures. None are
+  // included in cases.json or mounted into the checker process.
+  writeFileSync(join(output, "grade-summary.json"), `${JSON.stringify(grade, null, 2)}\n`, { flag: "wx" });
+  return grade;
 }
 
 export function validatePortfolioExecution(
@@ -894,7 +959,10 @@ export function validatePortfolioExecution(
 function controlPass(result: Execution, name: string, control?: Control): boolean {
   const valid = result.cells.every((c) => c.status !== "invalid");
   const semantic =
-    name === "reference" || name === "alternative" || name === "reference-repeat"
+    name === "reference" ||
+    name === "alternative" ||
+    name === "reference-repeat" ||
+    (!control && name.startsWith(NAMED_VARIANT_PREFIX))
       ? valid && result.cells.every((c) => c.status === "semantic-pass")
       : valid &&
         result.cells.some(
@@ -920,7 +988,12 @@ export async function validatePortfolioPackage(directory: string, output: string
   const snapshot = snapshotAt(directory);
   const controls = get<Control[]>(snapshot, "controls", "private/control-manifest.json");
   const operations: AssuranceOperation[] = [];
-  const names = ["reference", "alternative", "starter", ...controls.map((c) => c.id)];
+  const positiveVariants = positiveVariantKeys(
+    snapshot.record.components.reference.files.map((f) => f.path),
+  ).map((key) => `${NAMED_VARIANT_PREFIX}${key}`);
+  if (controls.some((c) => c.id.startsWith(NAMED_VARIANT_PREFIX)))
+    throw Error("PORTFOLIO_CANDIDATE_NAME_COLLISION");
+  const names = ["reference", "alternative", ...positiveVariants, "starter", ...controls.map((c) => c.id)];
   for (const name of names) {
     const control = controls.find((c) => c.id === name);
     const submission = join(output, "variants", name);
@@ -958,7 +1031,7 @@ export async function validatePortfolioPackage(directory: string, output: string
       const observations = [];
       // Visible checks are part of the contract too. A fixture that rejects a legitimate
       // solution is a packaging defect even when protected grading accepts that solution.
-      for (const name of ["starter", "reference", "alternative"]) {
+      for (const name of ["starter", "reference", "alternative", ...positiveVariants]) {
         const publicPath = join(output, "variants", name);
         const tests = readPackageTree(publicPath)
           .filter((f) => /^test\/.*\.test\.mjs$/.test(f.path))

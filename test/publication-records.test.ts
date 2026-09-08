@@ -1,14 +1,13 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { verifyPublication } from "../scripts/verify-publication.mjs";
+import { SCREENING_BATCHES, verifyPublication } from "../scripts/verify-publication.mjs";
 import { PORTFOLIO_PACKAGES } from "../src/packages/portfolio.js";
 
 const read = (path: string) => JSON.parse(readFileSync(path, "utf8"));
-const batches = [
-  "reports/screening/evidence/2026-09-07-original-five.json",
-  "reports/screening/evidence/2026-09-08-next-five.json",
-] as const;
+const batches = SCREENING_BATCHES.map(([, file]) => `reports/screening/evidence/${file}.json`).filter(
+  existsSync,
+);
 const hash = /^[a-f0-9]{64}$/;
 function markdown(dir: string): string[] {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
@@ -23,8 +22,10 @@ function markdown(dir: string): string[] {
 describe("reviewable source and honest screening publication", () => {
   it("uses the same portable evidence and navigation gate as report verification", () => {
     expect(verifyPublication()).toMatchObject({
-      screenedPackages: 10,
-      manifestListedFilesVerifiedAtPublication: 4057,
+      screenedPackages: batches.length * 5,
+      manifestListedFilesVerifiedAtPublication: batches
+        .flatMap((path) => read(path).packages)
+        .reduce((sum, r) => sum + r.verifiedFiles, 0),
       providerCallsMade: 0,
     });
   });
@@ -37,10 +38,16 @@ describe("reviewable source and honest screening publication", () => {
     }
   });
 
-  it("publishes ten distinct final attempts with raw evidence identities but no local machine paths", () => {
+  it("publishes complete distinct batches with raw evidence identities but no local machine paths", () => {
     const records = batches.flatMap((path) => read(path).packages);
-    expect(records).toHaveLength(10);
-    expect(new Set(records.map((record) => record.id)).size).toBe(10);
+    expect(records).toHaveLength(batches.length * 5);
+    expect(new Set(records.map((record) => record.id)).size).toBe(batches.length * 5);
+    expect(
+      batches
+        .slice(0, 2)
+        .flatMap((path) => read(path).packages)
+        .reduce((sum, r) => sum + r.verifiedFiles, 0),
+    ).toBe(4057);
     for (const record of records) {
       for (const key of ["packageDigest", "profileDigest", "completionSha256", "resultSha256", "gradeSha256"])
         expect(record[key]).toMatch(hash);
@@ -56,11 +63,11 @@ describe("reviewable source and honest screening publication", () => {
   });
 
   it("does not convert checker-format failure or invalid captures into clean capability wins", () => {
-    const first = read(batches[0]);
+    const first = read("reports/screening/evidence/2026-09-07-original-five.json");
     expect(first.excludedAttempts).toHaveLength(3);
     expect(first.setupIncident).toContain("accidental");
     expect(first.packages.every((r: { outcome: string }) => r.outcome === "semantic-pass")).toBe(true);
-    const next = read(batches[1]);
+    const next = read("reports/screening/evidence/2026-09-08-next-five.json");
     expect(next.concurrencyRequestFulfilled).toBe(false);
     expect(next.packages.filter((r: { reward: number }) => r.reward === 0)).toHaveLength(2);
     const partial = next.packages.find((r: { id: string }) => r.id === "partial-release-repair");
@@ -86,6 +93,25 @@ describe("reviewable source and honest screening publication", () => {
         expect(target, `${doc}: private/nonportable link`).not.toMatch(/^\/|\.local\//);
         expect(existsSync(resolve(dirname(doc), target.split("#")[0] ?? "")), `${doc}: ${target}`).toBe(true);
       }
+    }
+  });
+
+  it("preserves batch-four grading defects instead of counting its zeros as model failures", () => {
+    const path = "reports/screening/evidence/2026-09-08-fourth-five.json";
+    if (!existsSync(path)) return;
+    const batch = read(path);
+    expect(batch.packages.filter((r: { reward: number }) => r.reward === 0)).toHaveLength(3);
+    for (const id of [
+      "analytical-reconciliation-repair",
+      "recurring-calendar-repair",
+      "workflow-authority-repair",
+    ]) {
+      const record = batch.packages.find((r: { id: string }) => r.id === id);
+      expect(record.reward).toBe(0);
+      expect(record.service.failedScenarios).toBe(0);
+      expect(record.checker.correct).toBe(record.checker.total);
+      expect(record.checker.pass).toBe(false);
+      expect(record.assessment).toMatch(/^contract-grader-alignment-/);
     }
   });
 });

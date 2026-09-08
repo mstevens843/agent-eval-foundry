@@ -220,6 +220,8 @@ export async function runScenario(s, execute, storage) {
     }),
     actual,
     expected: truth,
+    // Documents are stimulus data, not correct match results.
+    documents: s.documents,
     observations,
     reports,
     // Legitimate PROBLEM data, not answer data: view.rules is handed directly to every

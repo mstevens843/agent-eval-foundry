@@ -14,7 +14,8 @@ No-store and private responses are represented by noStore:true.
 
 ## Stored entries and reuse
 read({tier}) returns {entries}. write({tier,entries}) replaces that tier's entries.
-There is one shield shared by both edges. Entries have exactly
+There is one shield shared by both edges. All three tiers are empty at job start.
+Entries have exactly
 {path,headers,vary,etag,body,maxAge,age,storedAt,noStore}.
 storedAt is when an origin response was received; age is that response's age.
 Copying entries between tiers preserves their age and storedAt.

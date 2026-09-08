@@ -71,3 +71,22 @@ it("checks independent solutions, generated properties and alternative-valid beh
   expect(report.executions).toBeGreaterThan(650);
   expect(report.providerCallsMade).toBe(0);
 });
+
+it("gives checkers complete raw inputs even when a candidate performs no reads", () => {
+  const output = join(scratch, "checker-inputs");
+  const r = spawnSync(process.execPath, ["scripts/verify-fourth-checker-inputs.mjs", output], {
+    encoding: "utf8",
+    timeout: 60000,
+    maxBuffer: 1024 * 1024,
+  });
+  expect(r.error, r.stderr).toBeUndefined();
+  expect(r.status, `${r.stdout}\n${r.stderr}`).toBe(0);
+  const report = JSON.parse(readFileSync(join(output, "summary.json"), "utf8"));
+  expect(report.results).toHaveLength(5);
+  expect(report.results.every((result: { passed: boolean }) => result.passed)).toBe(true);
+  expect(report.protectedRoute).toBe(false);
+  for (const id of ids) {
+    expect(readFileSync(`tasks/${id}/public/instruction.md`, "utf8")).toContain("CHECKER-INPUT.md");
+    expect(readFileSync(`tasks/${id}/public/CHECKER-INPUT.md`, "utf8")).toContain("candidate");
+  }
+});

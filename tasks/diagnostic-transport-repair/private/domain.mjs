@@ -77,6 +77,7 @@ export async function runScenario(s, execute, storage) {
     // jobs, correctly publishing nothing, versus one unobserved requested job, incorrectly
     // publishing nothing — produce identical exposed evidence without this field.)
     requests: s.requests,
+    input: { chunks: s.chunks },
     expected: want,
     observations,
     reports,

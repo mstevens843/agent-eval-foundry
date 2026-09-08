@@ -206,17 +206,19 @@ export function scenarios() {
     });
   }
   // Combined scenario: antiWith, shareZoneWith and minZones all simultaneously binding on
-  // the same node (SEMANTICS.md: "these conditions are simultaneous"). root spans 2 zones
-  // itself (satisfying its own minZones); child must land in a zone root used (shareZoneWith)
-  // while also avoiding a resource root itself already selected (antiWith), and a same-zone,
-  // same-tag decoy with spare capacity is available for both wrong turns.
+  // the same path. Root has a real one-zone/two-zone choice; the child has independently
+  // wrong used-resource and wrong-zone choices. The earlier forced-root variant did not
+  // activate all three constraints independently. Adopted from the later construction
+  // snapshot, with a separate retained re-freeze record and fresh activation tests.
   out.push({
     id: "combined-constraints-000",
     view: {
       resources: [
         { id: "root-a", tags: ["start", "g"], zone: "a", capacity: 2, used: 0 },
-        { id: "root-b", tags: ["start"], zone: "b", capacity: 1, used: 0 },
-        { id: "decoy", tags: ["g"], zone: "b", capacity: 1, used: 0 },
+        { id: "root-same-zone", tags: ["start"], zone: "a", capacity: 1, used: 0 },
+        { id: "root-other-zone", tags: ["start"], zone: "b", capacity: 1, used: 0 },
+        { id: "wrong-zone-g", tags: ["g"], zone: "c", capacity: 1, used: 0 },
+        { id: "right-zone-g", tags: ["g"], zone: "a", capacity: 1, used: 0 },
       ],
       tree: {
         id: "root",

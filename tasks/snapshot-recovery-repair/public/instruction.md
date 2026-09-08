@@ -18,13 +18,14 @@ a submission missing either one.
 
 `checker.mjs` must export `run({ cases })`. `cases` is an array of `{ token, cells }`:
 `token` is an opaque label, `cells` is that candidate's real observed execution trace
-against this task's own scenarios — the restored database state, the independently
-derived expected state, whether the portable backup archive could be restored, what was
-published, and the actual API call log. You are not told which candidate is correct.
+against this task's own scenarios — the restored database state, original recovery inputs
+and checkpoint bytes, backup restoration errors, publications, and the actual API call log.
+No expected result is supplied. See CHECKER-INPUT.md for the complete trace contract.
+You are not told which candidate is correct.
 Independently judge each one from its observed behavior and return
 `{ verdicts: { [token]: { ok: boolean, reasons: string[] } } }`, where a `reasons` entry
 names which obligation you believe is violated, using this task's own check vocabulary
-(the names used by `checks()` in the domain, e.g. `completion`, `restored_rows`,
+(the public names defined in CHECKER-INPUT.md, e.g. `completion`, `restored_rows`,
 `allocation`, `portable_backup` — restored rows or allocation state that don't match the
 independently derived expected state name the recovery/replay requirement; a portable
 backup that doesn't decode, or decodes to something other than the expected state, names

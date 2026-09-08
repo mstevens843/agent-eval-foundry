@@ -20,3 +20,9 @@ rejection, and be deterministic. An entry.mjs that semantically passes is not en
 without a checker.mjs that clears this bar.
 
 `checker.mjs` must be fully self-contained: only that single file is staged for grading, so it cannot `import` from any other submitted file (helper modules, shared utilities, or `entry.mjs` itself). Write all checking logic directly in `checker.mjs`, or duplicate any shared logic you need.
+
+## Exact checker schema and execution limits
+
+Read CHECKER-INPUT.md for the normative raw input fields, independent-candidate
+judging rule, reason format and checker runtime envelope. It supplements the domain
+contract in SEMANTICS.md; no answer key or other candidate's output is needed.

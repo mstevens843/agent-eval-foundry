@@ -96,6 +96,8 @@ export async function runScenario(s, execute, storage) {
     ids = (rows) => rows.map((r) => r.customerId).sort();
   return {
     view: s.view,
+    // Stable raw source rows remain observable even if a candidate under-fetches.
+    tables: s.tables,
     ...checks({
       completion: want.every((e) => lookup(e.customerId)),
       population: equal(ids(actual), ids(want)),

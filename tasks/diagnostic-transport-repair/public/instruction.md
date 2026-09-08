@@ -33,5 +33,9 @@ alternative, and every planted defect: it must accept both correct implementatio
 every defective one, name the violated obligation correctly each time, and be deterministic
 across repeated runs.
 
-`checker.mjs` must be fully self-contained: only that single file is staged for grading, so it cannot `import` from any other submitted file (helper modules, shared utilities, or `entry.mjs` itself). Write all checking logic directly in `checker.mjs`, or duplicate any shared logic you need.
+## Exact checker schema and execution limits
 
+Read CHECKER-INPUT.md for the complete cell schema, including original source inputs,
+obligation names and the deterministic two-run execution envelope. Those source inputs
+are available even when a candidate performs no reads. Judge each candidate independently.
+Only checker.mjs is staged; standard Node modules are allowed, other submitted files are not.

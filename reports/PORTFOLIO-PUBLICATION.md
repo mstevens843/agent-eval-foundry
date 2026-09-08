@@ -1,5 +1,20 @@
 # Maintained portfolio and screening publication
 
+September 8 screening update: the original publication below is retained as history.
+Twenty-five completed package analyses are now public; batches 3–5 are complete.
+All twenty-five service suites passed. Batch 4 additionally exposed two private-primary-label
+grading defects and one undefined reason-taxonomy concern. Its three original zeroes
+are preserved, not counted as clean capability failures. The shared reason-policy
+repair preceded a new batch-5 freeze and fresh protected validation; no historical
+grade was overwritten. Batch 5 exposed a separate incremental-build label-taxonomy concern;
+all five services and checker classifications passed. Across the fifteen new attempts,
+eleven rewards are one and four original reason-only zeroes remain annotated. The
+publication check now covers 15,410 manifest-listed files across 25 selected records.
+See [current screening](screening/README.md) and the
+[campaign checkpoint](../docs/screening-batches-3-5.md) for current counts and repairs.
+
+## Original source publication
+
 September 8, 2026. Integrated from source snapshots based on `4b974a21aba09a7bb434d20b2ed1a6a0b9dd2135`. No commit, push or provider call is part of this publication.
 
 ## Scope

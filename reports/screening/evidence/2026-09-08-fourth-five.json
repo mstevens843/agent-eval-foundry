@@ -1,0 +1,964 @@
+{
+  "schemaVersion": 1,
+  "campaign": "2026-09-08-fourth-five",
+  "evidenceClass": "real-provider-screening",
+  "limitations": [
+    "One exploratory attempt per package, not a replicated failure rate or official standard/adversarial qualification.",
+    "Requested model and effort are not independent backend attestations.",
+    "Reports describe observable commands, submitted artifacts and original protected grading, not private internal reasoning or independent blind adjudication.",
+    "Raw transcripts, credentials, runtime archives and full submissions remain private. Public hashes identify retained artifacts but do not make this an independently reproducible raw-evidence release.",
+    "CLI price estimates are not subscription charges.",
+    "Frozen trial versions may differ from later maintained sources."
+  ],
+  "sourceDigest": "21241df2b42140c9aff79a8e74d568f97c7c184f5ebb2b4035077d5251fc9e69",
+  "actualScheduling": "All five jobs reserved before parallel dispatch; all five author containers observed running together.",
+  "concurrencyRequestFulfilled": true,
+  "concurrencyObservation": {
+    "count": 5,
+    "observedAt": "2026-09-08T18:29:38.568Z",
+    "packageIds": [
+      "document-export-repair",
+      "analytical-reconciliation-repair",
+      "recurring-calendar-repair",
+      "variant-cache-repair",
+      "workflow-authority-repair"
+    ],
+    "firstLaunch": "2026-09-08T18:29:10.453Z",
+    "lastLaunch": "2026-09-08T18:29:10.686Z",
+    "launchSpreadMs": 233,
+    "sourceSha256": "b9e89755575bcd1f2c5fdcb63d5fbb4fd03c42aad99a3480aabbdc066c18d627"
+  },
+  "automaticRetries": 0,
+  "invalidExecutionCount": 0,
+  "packages": [
+    {
+      "id": "document-export-repair",
+      "target": "codex",
+      "runId": "document-export-repair-attempt-1",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "cliReportedModel": null,
+      "packageDigest": "775681102a9de9a1a85ad236baec0b29773ff6b54158f0864d9cf872b4985f2f",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "outcome": "semantic-pass",
+      "reward": 1,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 929941,
+      "start": "2026-09-08T18:29:10.453Z",
+      "end": "2026-09-08T18:44:48.250Z",
+      "service": {
+        "scenarios": 29,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "present": true,
+        "deterministic": true,
+        "pass": true,
+        "total": 13,
+        "correct": 13,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 11,
+        "details": [
+          {
+            "candidateId": "wrong-ticket",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "sequential-literals",
+            "expectedFailingCheck": "privacy",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "over-redaction",
+            "expectedFailingCheck": "preservation",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "nested-message-skip",
+            "expectedFailingCheck": "privacy",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "field-policy-omitted",
+            "expectedFailingCheck": "privacy",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "duplicate-export",
+            "expectedFailingCheck": "unique_publication",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "drop-binary",
+            "expectedFailingCheck": "preservation",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "discard-part-links",
+            "expectedFailingCheck": "preservation",
+            "outcome": "correct-reject-named"
+          }
+        ],
+        "processSha256": "ff30ec3e9a8c7d85ba0cb0602e07c64e6116c4bc646fa508169501833fb570c6"
+      },
+      "commandCount": 8,
+      "sourceDelta": [
+        {
+          "path": "checker.mjs",
+          "change": "added",
+          "before": null,
+          "after": "2ccd8cbab4a6c7d778f1ee3e7623704957958bcb7d45947aaea19c37b654ac3b"
+        },
+        {
+          "path": "src/policy.mjs",
+          "change": "modified",
+          "before": "30403a00f162b8ee7eeede0f583ac5b89feef6e1561541b3ad516b317c7ef855",
+          "after": "a0cbd47b7d06ae5cb0f60e4b633f94d85217c29f180d60f9335685181c73beaf"
+        },
+        {
+          "path": "src/transform.mjs",
+          "change": "modified",
+          "before": "b2cd969f3837c7dbeba551b5a250f79c45fa8273724fec2ae9bff090b617352d",
+          "after": "435f0f7836da28dc71a88df8f32633c17a4f0941e4b4b2e42d8004a68594e29c"
+        }
+      ],
+      "usage": {
+        "cachedInputTokens": 302720,
+        "costUsd": null,
+        "inputTokens": 349123,
+        "outputTokens": 27685,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; cached input is included in input totals.",
+      "completionSha256": "ae0aa73cb37dda182aa30325247d7ea6a4c04eb90256f051038c9700ee2c84f3",
+      "resultSha256": "38085f82951d8bdf38bef0ebf98c63be4e74a9944616b31660c0252c3b6f5f43",
+      "gradeSha256": "f85717643194f3a8942e5dcb9ff0ceb4da7f542b027431129907fefb39acaf32",
+      "verifiedFiles": 782,
+      "verifiedBytes": 5843473,
+      "assessment": "screening-pass",
+      "rationale": "Service 29/29 and checker 13/13 pass. Targeted recursive transformation and replacement policy repair; no model failure measured."
+    },
+    {
+      "id": "analytical-reconciliation-repair",
+      "target": "codex",
+      "runId": "analytical-reconciliation-repair-attempt-1",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "cliReportedModel": null,
+      "packageDigest": "62c1eb9aaaae5bdb82d5f6430088c2a87f71182f23d166d42b8d29b9ea3e9142",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "outcome": "semantic-fail",
+      "reward": 0,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1108368,
+      "start": "2026-09-08T18:29:10.508Z",
+      "end": "2026-09-08T18:47:45.466Z",
+      "service": {
+        "scenarios": 28,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "present": true,
+        "deterministic": true,
+        "pass": false,
+        "total": 13,
+        "correct": 13,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 5,
+        "details": [
+          {
+            "candidateId": "credit-join-fanout",
+            "expectedFailingCheck": "exact_amounts",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "filter-before-revision",
+            "expectedFailingCheck": "attribution",
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "unscoped-revision-id",
+            "expectedFailingCheck": "attribution",
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "duplicate-report",
+            "expectedFailingCheck": "unique_rows",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "round-per-event",
+            "expectedFailingCheck": "exact_amounts",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "stop-at-empty-page",
+            "expectedFailingCheck": "attribution",
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "omit-zero-customers",
+            "expectedFailingCheck": "population",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "discard-source-lineage",
+            "expectedFailingCheck": "provenance",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-unnamed"
+          }
+        ],
+        "processSha256": "b2b8df8a285d9bbe7a1ad47a1fce05e35001e807d1ab2a837d9cb6cbcbd75b42"
+      },
+      "commandCount": 14,
+      "sourceDelta": [
+        {
+          "path": "checker.mjs",
+          "change": "added",
+          "before": null,
+          "after": "45f318ebd2e2ef769bc8d590a9687d7ca21a1216a60925dba034b3f3a9124d7b"
+        },
+        {
+          "path": "src/reconcile.mjs",
+          "change": "modified",
+          "before": "d07e4766902d6e827d5757a351ba0cee1d0e30d1474ef449217ee45a3ee914f7",
+          "after": "9fa335830eb8a1ea0063f1bfd53ee9c2980b174af76ed79553dfa0b77cc30428"
+        },
+        {
+          "path": "src/revisions.mjs",
+          "change": "modified",
+          "before": "0392c971a60f4cf2a762c997fe27313cb4aa8eec14164cb761ee6ecec7cb17ec",
+          "after": "56d20bf922e4b2b023e5d3004bc81418f2edec5b5d1d34111afbe041205654fa"
+        },
+        {
+          "path": "test/edge-cases.test.mjs",
+          "change": "added",
+          "before": null,
+          "after": "122b31c8d8090a9309a27d0353d1c561cefd0fd518e59ff4dddcd143d4ad8265"
+        }
+      ],
+      "usage": {
+        "cachedInputTokens": 826880,
+        "costUsd": null,
+        "inputTokens": 884434,
+        "outputTokens": 30928,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; cached input is included in input totals.",
+      "completionSha256": "4eeb56003dfcb046c1a93ed5eb466e6337e76a3588366e608ba6c60cce738b74",
+      "resultSha256": "9b3953575c66eeba1df951760cd2af9a9104099a072c6053646eb86f8465fc4b",
+      "gradeSha256": "5c5aecf73721fac418d458988c180ff63d1043aee316d25ec26d1e27bee234fb",
+      "verifiedFiles": 759,
+      "verifiedBytes": 3713685,
+      "assessment": "contract-grader-alignment-defect",
+      "rationale": "Original reward zero retained. Service 28/28 and all 13 checker classifications are correct. Six primary-label disagreements name other obligations marked failed in the original authority captures; not clean capability failure."
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "target": "claude",
+      "runId": "recurring-calendar-repair-attempt-1",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "runtime event type=assistant",
+          "status": "observed",
+          "value": "claude-opus-5"
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "cliReportedModel": "claude-opus-5",
+      "packageDigest": "aa49e807a9a4e50c398f5fff4891233ca54d8ae1c33cda123c83fdb9ab823887",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "outcome": "semantic-fail",
+      "reward": 0,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1636332,
+      "start": "2026-09-08T18:29:10.568Z",
+      "end": "2026-09-08T18:56:33.923Z",
+      "service": {
+        "scenarios": 31,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "present": true,
+        "deterministic": true,
+        "pass": false,
+        "total": 13,
+        "correct": 13,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 10,
+        "details": [
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "fixed-zone-offset",
+            "expectedFailingCheck": "civil_time",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "wall-clock-duration",
+            "expectedFailingCheck": "civil_time",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "drop-external-bookings",
+            "expectedFailingCheck": "bookings",
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "booking-display-key",
+            "expectedFailingCheck": "bookings",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "global-series-change",
+            "expectedFailingCheck": "preservation",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "display-time-identity",
+            "expectedFailingCheck": "occurrence_identity",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "erase-cancelled-history",
+            "expectedFailingCheck": "history",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "reset-attendee-responses",
+            "expectedFailingCheck": "preservation",
+            "outcome": "correct-reject-named"
+          }
+        ],
+        "processSha256": "dd31f15a8bb8060a16e3d959efa43ee6452b09feb41d37f70cbaaba31d0d0e95"
+      },
+      "commandCount": 48,
+      "sourceDelta": [
+        {
+          "path": "checker.mjs",
+          "change": "added",
+          "before": null,
+          "after": "670af9bfa487c15e346bb7d38c873f5c9de86fb38ef11c559c62522829daf7e9"
+        },
+        {
+          "path": "src/changes.mjs",
+          "change": "modified",
+          "before": "9642b689e4aaecc8ed4f9603f584456e49e9c769292b6b1df12ae3bad4cb89ac",
+          "after": "40a93d0bd26bde3756a4bd58606644353cef1f9761f28e9e2d457883e85e62ee"
+        },
+        {
+          "path": "src/time.mjs",
+          "change": "modified",
+          "before": "7b291e46627ce103b85cfd0db44b23bf7e711b4bc7c5a821b2f016b6b4e6ed0f",
+          "after": "bb030b05a5cfa45a3734a4b879c1d0c90d6bb7e4ace67a70800520107559f75f"
+        },
+        {
+          "path": "test/calendar.test.mjs",
+          "change": "modified",
+          "before": "07617b5052752f255a751acef87cabdd4463b349dbb98e1cb244b9ede238679c",
+          "after": "c5732be2f931b42cebe51f6ca8a5c5acb69abf61fdcd69252f0c1177561fec79"
+        },
+        {
+          "path": "test/checker.test.mjs",
+          "change": "added",
+          "before": null,
+          "after": "7a39106d0012bd04fae592b6b1b64df87c1eeb173a7f56eda45e82d56726c209"
+        }
+      ],
+      "usage": {
+        "cachedInputTokens": 7058002,
+        "costUsd": 8.411893999999998,
+        "inputTokens": 7233262,
+        "outputTokens": 125178,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; cached input is included in input totals.",
+      "completionSha256": "a04ffe77f77663ddcfe622faf56c95a1bdad10ae2aa56fba179903df92403b56",
+      "resultSha256": "507eeaccd1587102bcf5b8b6233d2de67735123ecf582bf8a5558c83c1cfc9d5",
+      "gradeSha256": "919624ac3f51b89fa26bae9bbe9679622b06d80380372b9add5fd3d2d94692dc",
+      "verifiedFiles": 733,
+      "verifiedBytes": 5883015,
+      "assessment": "contract-grader-alignment-concern",
+      "rationale": "Original reward zero retained. Service 31/31 and all 13 checker classifications are correct. Deleted external bookings were correctly rejected as preservation; hidden taxonomy restricts that label to event rows and demands bookings. Public label scope is not defined that narrowly; cancelled-move semantics also need clarification."
+    },
+    {
+      "id": "variant-cache-repair",
+      "target": "claude",
+      "runId": "variant-cache-repair-attempt-1",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "runtime event type=assistant",
+          "status": "observed",
+          "value": "claude-opus-5"
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "cliReportedModel": "claude-opus-5",
+      "packageDigest": "082a0ada9b2016d63b952ddaf784f396c3adc1db859b441fe3512f71dea0e8b3",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "outcome": "semantic-pass",
+      "reward": 1,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1745517,
+      "start": "2026-09-08T18:29:10.629Z",
+      "end": "2026-09-08T18:58:23.956Z",
+      "service": {
+        "scenarios": 25,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "present": true,
+        "deterministic": true,
+        "pass": true,
+        "total": 13,
+        "correct": 13,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 11,
+        "details": [
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "store-private-response",
+            "expectedFailingCheck": "no_store",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "reset-age-on-tier-copy",
+            "expectedFailingCheck": "cache_provenance",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "path-only-key",
+            "expectedFailingCheck": "representation",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "empty-304-body",
+            "expectedFailingCheck": "representation",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "unconditional-revalidation",
+            "expectedFailingCheck": "origin_load",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "flush-unrelated-tiers",
+            "expectedFailingCheck": "invalidation_scope",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "ignore-response-age",
+            "expectedFailingCheck": "representation",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "always-origin",
+            "expectedFailingCheck": "origin_load",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "outcome": "correct-accept"
+          }
+        ],
+        "processSha256": "a10ceb61c59593c2634f7c824251b34703af61f8a9b763066594216a8e01fa34"
+      },
+      "commandCount": 36,
+      "sourceDelta": [
+        {
+          "path": "checker.mjs",
+          "change": "added",
+          "before": null,
+          "after": "baee6f238e39035650a121e57b71bc58652be40ebca36bf429b4dd99c5f1f416"
+        },
+        {
+          "path": "dev/alt.mjs",
+          "change": "added",
+          "before": null,
+          "after": "27379dc550ac772db72ba80a1adcb9c9919bf8501c9ac3e0c72443cd0402a107"
+        },
+        {
+          "path": "dev/bench.mjs",
+          "change": "added",
+          "before": null,
+          "after": "bca9b054ce77a3ad9c084e8028864c81e41c2e3c60157a96b7f3c8ee1c67e9c4"
+        },
+        {
+          "path": "dev/candidates.mjs",
+          "change": "added",
+          "before": null,
+          "after": "0daf2c6886a7b795b22caa0124815250faa661b87a323a30e6164704f481808a"
+        },
+        {
+          "path": "dev/check-test.mjs",
+          "change": "added",
+          "before": null,
+          "after": "0908819013317f6d4f32b8f2458618abd1ce5982c937ba48e27fa6c83140c6bd"
+        },
+        {
+          "path": "dev/fuzz.mjs",
+          "change": "added",
+          "before": null,
+          "after": "8e5bef58ead806de4f328eb766af3fa485adce548286898f903185851b16f5e9"
+        },
+        {
+          "path": "dev/fuzz2.mjs",
+          "change": "added",
+          "before": null,
+          "after": "358546d29cf3b8f2bbce9244ed35c88d5329600c96b308dafaa5be905ebc00d3"
+        },
+        {
+          "path": "dev/host.mjs",
+          "change": "added",
+          "before": null,
+          "after": "8fd431f7a79067fccbc1cb79317c2ee19f672b9994959ea83fb198f875513fd7"
+        },
+        {
+          "path": "dev/oracle.mjs",
+          "change": "added",
+          "before": null,
+          "after": "3fda26ff74c14301052d087c3f8a2053d139ad1507da15f0734c918735cba41d"
+        },
+        {
+          "path": "dev/robust.mjs",
+          "change": "added",
+          "before": null,
+          "after": "ea51a31c301b787bf3ef63bc5d67cd8a78e225149573973bd12a3681efc6e454"
+        },
+        {
+          "path": "dev/run-repair.mjs",
+          "change": "added",
+          "before": null,
+          "after": "3584e061c257d79a35911267ce86b254bcabb4bfe2d3a643061ed88c911a80f1"
+        },
+        {
+          "path": "dev/run-repair2.mjs",
+          "change": "added",
+          "before": null,
+          "after": "428b5bcda4c15c7794682b42d04ba33a4875d620911339736774e80d47f59790"
+        },
+        {
+          "path": "dev/scenarios.mjs",
+          "change": "added",
+          "before": null,
+          "after": "3b15d15d37fbcb3b4c716ff0d54b96147e7ec5db9f7566e5c41b49cb5b2d70c9"
+        },
+        {
+          "path": "dev/scenarios2.mjs",
+          "change": "added",
+          "before": null,
+          "after": "93d673028c956588d35b4e82fbad25ad6a409bd4c528006d86d0c989b2767041"
+        },
+        {
+          "path": "src/entries.mjs",
+          "change": "modified",
+          "before": "750c9411bef902c6a3abd35c802c3e76f8b4e34612206d39f3019e8679cd0cfe",
+          "after": "6cb8d5a8472352834d3371ac62fe3ae5018d659c62b7b0e2474e1eb1080dd355"
+        },
+        {
+          "path": "src/resolve.mjs",
+          "change": "modified",
+          "before": "1ba9afbc0bb287b94138ebb9d4cd5e79c1e1908c5d34ea6f42cafdbb509b58dc",
+          "after": "b0d5b9f03a6f0e9e161583fdb3a15e089ebe97197cd84fda78c90bb543860fa1"
+        },
+        {
+          "path": "src/service.mjs",
+          "change": "modified",
+          "before": "4d44939747dcaba3e2698e993f94a26826fa105a2e5411a2116d58d51e233e7d",
+          "after": "95b3cb17407a1e5883847f151856f3aaaef199c675c7ece3b28eb135c8c0746f"
+        },
+        {
+          "path": "src/store.mjs",
+          "change": "modified",
+          "before": "fa04783b1cfaf10de51388140716e38ddee4c50dec52b7aed29c1c417807d2e1",
+          "after": "cd44c7d9d467e895f476a1e072678fdb72f8668083f6cab5c0d6f840253d33d1"
+        }
+      ],
+      "usage": {
+        "cachedInputTokens": 3933739,
+        "costUsd": 7.3430765000000005,
+        "inputTokens": 4113244,
+        "outputTokens": 143197,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; cached input is included in input totals.",
+      "completionSha256": "f2171963175979c3ab24856d799a40d52c1384a3546def7026bfad869496839c",
+      "resultSha256": "6f12819ba2b41954ee4ce803f7086ad811b2e1545ed8bf3ae4569038f325793f",
+      "gradeSha256": "424bb6b927b13607248732de51b8ab27864f8ec1d4730a070b83d115146a0f05",
+      "verifiedFiles": 717,
+      "verifiedBytes": 12968611,
+      "assessment": "screening-pass-with-follow-up",
+      "rationale": "Service 25/25 and checker 13/13 pass. Captured self-fuzz output nevertheless shows nine wildcard-entry preservation misses among 2989 locally oracle-flagged executions. This is a narrow control/contract follow-up, not a failed frozen trial."
+    },
+    {
+      "id": "workflow-authority-repair",
+      "target": "claude",
+      "runId": "workflow-authority-repair-attempt-1",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "runtime event type=assistant",
+          "status": "observed",
+          "value": "claude-opus-5"
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "cliReportedModel": "claude-opus-5",
+      "packageDigest": "6eb0b382a3112e5babe6a2790b3e1c56a3a68b8d4ac962cd13ce8cf27cd9a035",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "outcome": "semantic-fail",
+      "reward": 0,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1093227,
+      "start": "2026-09-08T18:29:10.686Z",
+      "end": "2026-09-08T18:47:32.556Z",
+      "service": {
+        "scenarios": 30,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "present": true,
+        "deterministic": true,
+        "pass": false,
+        "total": 14,
+        "correct": 14,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 11,
+        "details": [
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "wrong-effect-payload",
+            "expectedFailingCheck": "effect_payload",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "misattribute-delivery",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "reactivate-revoked-path",
+            "expectedFailingCheck": "policy_at_effect",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "crash-unsafe-memoization",
+            "expectedFailingCheck": "terminal_history",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "deny-all",
+            "expectedFailingCheck": "positive_work",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "abandon-stale-admission",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "ignore-action-attenuation",
+            "expectedFailingCheck": "policy_at_effect",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "immediate-parent-origin",
+            "expectedFailingCheck": "origin_identity",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "outcome": "correct-reject-named"
+          },
+          {
+            "candidateId": "redecide-terminal-job",
+            "expectedFailingCheck": "terminal_history",
+            "outcome": "correct-reject-named"
+          }
+        ],
+        "processSha256": "b23daad81987f2885bc76e999e67c6779c36df28f9c48d02186867d264d21a93"
+      },
+      "commandCount": 27,
+      "sourceDelta": [
+        {
+          "path": "checker.mjs",
+          "change": "added",
+          "before": null,
+          "after": "ce75b487297c44ab044737cf814875a2a4fd5386f7b0ee42fe5a2424138b1f90"
+        },
+        {
+          "path": "entry.mjs",
+          "change": "modified",
+          "before": "6a3aebc000d1aa658f7a3bcad31c771ad83e2e8ae7244bb000e70b004faed371",
+          "after": "78dfbeb8e4735c5fbe3abeb5c9f99efb43f39c40af246163da1ca62a9e1eefca"
+        },
+        {
+          "path": "src/admission.mjs",
+          "change": "modified",
+          "before": "683f2a8f4a3fe37070b3142d34dc79d430ff71fe6a85ab01ebae5104d1072da8",
+          "after": "339fa21d51bef54feaeee5af747261e4aef1fe3f0fd8a00aed0e65199b54b0f9"
+        },
+        {
+          "path": "src/context.mjs",
+          "change": "modified",
+          "before": "f8be4ab1db84ac7775b39ae1afefa86617718e39b3cf160a3793b13856b583d5",
+          "after": "cefe1a604a6ff9278ceb2f5e52f5e512f617d43cc26520ec53288fdf8626d1e9"
+        },
+        {
+          "path": "src/dispatcher.mjs",
+          "change": "modified",
+          "before": "e761f60aa9ddfef5cf06aedae5b9e0dc22735c4b07c659d7444d47584304b6be",
+          "after": "284c23e5f3d401c24d0222e7b4084ca5d3237bc515f97ae0942514f9309cabcd"
+        },
+        {
+          "path": "src/grants.mjs",
+          "change": "modified",
+          "before": "f447c09ca3e552bee4f502bbb4567da2281975c6d8c192ff57a17ad12a338317",
+          "after": "3755a1f67bc4af92df1bc3b5b4dc348d4cdda46ffd42f6442b2cf9c5330d4bf0"
+        },
+        {
+          "path": "src/service.mjs",
+          "change": "modified",
+          "before": "eb7a63e3c8144555a4ff93fe4436076963c794efc23bef7dfc554e2a1d7d2195",
+          "after": "2e27c58c6ea16448643c63f52eaa6ccad927d41b31ba3fa61c637417181a09e2"
+        },
+        {
+          "path": "test/harness.mjs",
+          "change": "added",
+          "before": null,
+          "after": "b9d9b58f15deab209ceb51dab604b2f3d1b1c2a4cdea73c0732a957e32b984e7"
+        },
+        {
+          "path": "test/workflow.test.mjs",
+          "change": "modified",
+          "before": "7bd0aa1a640aa9cd070d6b5097e8b53387dcaa388c0848434e1b13a9ed227d16",
+          "after": "125d46c5e2719d13e74fc10818807616e45d4d4ae04172feb64f9f65c6ecb5e2"
+        }
+      ],
+      "usage": {
+        "cachedInputTokens": 2540883,
+        "costUsd": 4.813930500000002,
+        "inputTokens": 2661806,
+        "outputTokens": 93311,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; cached input is included in input totals.",
+      "completionSha256": "9b46f9c25239ff967a4b1eaa419649268eaef4c478976729d15d5650c388beba",
+      "resultSha256": "6caaf7e07c1f1041f9fc60e40b90f9ba8a6aad26e5de5f8c5f459c6f4b81d895",
+      "gradeSha256": "bd4dddae95aa47bc030e7da59d942a7d246ae2a4cd44f23f2e673da908526745",
+      "verifiedFiles": 838,
+      "verifiedBytes": 12938164,
+      "assessment": "contract-grader-alignment-defect",
+      "rationale": "Original reward zero retained. Service 30/30 and all 14 checker classifications are correct. A wrong-job finish was rejected as terminal_history exactly as the public prompt directs; grader instead required completion. Original authority marks both failed."
+    }
+  ]
+}

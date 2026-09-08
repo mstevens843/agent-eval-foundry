@@ -89,6 +89,7 @@ export async function runScenario(s, execute, storage) {
       unique_windows: new Set(rows.map((x) => JSON.stringify([x.row.start, x.row.key]))).size === rows.length,
     }),
     actual: { rows, late },
+    input: { events: s.events },
     expected: want,
     // The view (partitions/width/lateness) is already given to the subject directly via
     // adapter.begin(index) -- it is not secret -- but begin() calls are not logged into

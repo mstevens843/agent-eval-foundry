@@ -158,6 +158,7 @@ export async function runScenario(s, execute, storage) {
       historical_answers: equal(sorted(answers), sorted(want.answers)),
     }),
     actual: { publications, deliveries, answers, history },
+    input: { definitions: s.definitions, readings: s.readings, initial: initial(s), steps: s.steps },
     expected: want,
     observations,
     reports,

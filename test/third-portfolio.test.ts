@@ -89,6 +89,26 @@ it("retains the third cohort alongside later professional packages and qualified
   for (const id of ids)
     expect(portfolioDirection(id)?.family).toBe(PORTFOLIO_PACKAGES[id as keyof typeof PORTFOLIO_PACKAGES]);
 });
+it("provides checker stimulus data without leaking maintenance invariant verdicts", async () => {
+  for (const id of ids) {
+    const f = await get(id);
+    const scenario = f.generator.scenarios()[0];
+    const result = await run(id, scenario);
+    expect(readFileSync(`tasks/${id}/public/instruction.md`, "utf8")).toContain("CHECKER-INPUT.md");
+    expect(readFileSync(`tasks/${id}/public/CHECKER-INPUT.md`, "utf8")).toContain("60 seconds TOTAL");
+    if (id === "capacity-maintenance-repair") {
+      expect(result.history.length).toBeGreaterThan(0);
+      for (const state of result.history) expect(Object.keys(state).sort()).toEqual(["done", "placement"]);
+    }
+    if (id === "verified-installation-repair") {
+      expect(result.initial).toEqual(scenario.initial);
+      expect(result.blobs).toEqual(scenario.blobs);
+      expect(result.cache).toEqual(scenario.cache);
+    }
+    if (id === "route-policy-repair") expect(result.routes).toEqual(scenario.routes);
+    if (id === "rule-index-repair") expect(result.documents).toEqual(scenario.documents);
+  }
+});
 it("preserves generator hashes through post-selection validation", () => {
   const ledger = JSON.parse(readFileSync("data/third-portfolio-selection-ledger.json", "utf8"));
   for (const g of ledger.generators)

@@ -5,3 +5,4 @@ export function verifyPublication(root?: string): {
   promotedPaths: number;
   providerCallsMade: number;
 };
+export const SCREENING_BATCHES: readonly (readonly [string, string])[];

@@ -180,6 +180,8 @@ export async function runScenario(s, execute, storage) {
     }),
     actual,
     expected,
+    // Pair observed decisions with the route inputs that produced them.
+    routes: s.routes,
     observations,
     reports,
     // Legitimate PROBLEM data, not answer data: view.config and view.request are handed

@@ -1,0 +1,106 @@
+# 22 — Event window repair
+
+## Outcome
+
+Codex, requested Sol / xhigh, completed in **7 minutes 41 seconds**, with **reward 1**.
+The service passed **27/27 protected scenarios**. Its checker correctly classified
+**14/14 candidates**—two correct implementations and twelve negative controls—and
+supplied an actually violated public obligation on every rejection. No invalid execution
+was recorded. This run used the corrected, explicitly public reason-grading policy.
+
+## What the task was, in plain English
+
+A streaming service groups events into time windows and publishes final totals when
+all relevant partitions have progressed far enough. Each partition has its own watermark.
+An idle partition temporarily stops holding the frontier back; an ended partition is
+finished permanently. If every remaining partition is idle, time does not suddenly
+jump to infinity. If every partition has ended, remaining windows can close.
+
+The service must deduplicate by partition plus event ID, preserve real windows whose
+sum happens to be zero, and route genuinely late events to a separate output exactly
+once. A correct final sum emitted at the wrong input boundary is still wrong: consumers
+depend on publication before the next event is consumed.
+
+The mechanism is a combination of event identity, aggregation, partition state and
+publication ordering. All timestamps, bounds and frontier rules are public; this is
+a small deterministic stream, not a full distributed streaming platform.
+
+## What was in the package
+
+The starter had separate frontier, identity, window and orchestration modules, a
+visible test suite, precise semantics and API definitions. A standalone checker was
+required in addition to the service repair. It received the complete original input
+stream, window parameters, actual emitted rows/late events and their authoritative
+input positions, plus observed API calls. It did not receive expected answers.
+
+Protected grading used 27 service scenarios and fourteen checker candidates. Repeated
+checker execution tested determinism. Correct alternatives could emit independent
+windows in different orders. Real external observations, not service summaries, were
+used to establish work and timing.
+
+## What the agent actually did
+
+The capture contains eight completed shell commands. The service delta is only
+`src/frontier.mjs` and `src/identity.mjs`; it added `checker.mjs` but retained the
+supplied window and service-loop implementations unchanged.
+
+1. It changed frontier calculation from the greatest active watermark to the least
+   active watermark, then kept the frontier monotonic by comparing with its previous
+   value. The former calculation closed windows prematurely.
+2. It separated no-active-partition cases: all-ended advances to infinity; all-idle
+   holds the previous frontier. The starter conflated them.
+3. It changed the deduplication key to a structured pair of partition and event ID.
+   IDs reused legitimately across partitions no longer suppress each other's data.
+4. It wrote an independent stream replay inside the checker, then compared output
+   values, publication positions, late-event multisets, window uniqueness and consumed
+   input. It used order-insensitive comparisons where the public contract permits them.
+
+The visible tests and syntax checks passed. In inline shell scripts it built three
+targeted correct traces, including equal IDs across partitions, an all-idle/resume
+sequence, a zero-total accumulator, repeated late data and negative timestamps. It
+then checked deliberately wrong values, wrong boundaries, missing late output,
+duplicate windows and a trace with no reads.
+
+Finally, it generated **300 randomized traces from its repaired service** and verified
+that its checker accepted them without mutating the input. This is useful internal
+consistency testing, but it is not 300 independent oracle validations: service and
+checker share the author's interpretation. The separate protected bank provides the
+independent result. These scripts are in captured command text rather than retained
+new test files. One exploratory `git status` failed because the workspace was not a
+Git repository; the agent recovered and continued, so that is not an invalid trial.
+
+## Why the package was solved quickly
+
+Most of the intended behavior was already correctly implemented. The event loop
+already deduplicated before late routing, preserved accumulator counts and emitted
+closed windows before advancing input. The actual repair reduced to a minimum-versus-
+maximum decision, the all-idle distinction and a compound key. Those are compact,
+explicitly stated rules that can be checked directly against a few small functions.
+
+Requiring a checker did add implementation work, but the complete small input makes
+independent replay straightforward. This attempt is evidence against treating this
+version as a strong difficulty contender, despite its valid external grading and
+collection of negative controls. It did not expose the intended incomplete-self-check
+failure; the delivered service and checker both passed.
+
+## What could make a successor stronger
+
+First preserve this solved submission as a positive regression control. Combine
+partition resumption, repeated late identities, zero-sum windows and exact closure
+boundaries against narrow near-correct implementations to identify any remaining
+coverage gap. Do not mistake a broader scenario count for new difficulty.
+
+A materially stronger descendant may need a real ingestion/publication workflow with
+additional legitimate cross-component obligations. Such a redesign must publish its
+new semantics and validate attainability before being tested. Inventing inaccessible
+future data, silently changing late-event rules, or merely making the stream larger
+would not be fair hardening. Nothing in this pass establishes a new failure mechanism
+or warrants claiming that the original successful submission is wrong.
+
+## Evidence and limits
+
+[Sanitized batch evidence](../evidence/2026-09-08-fifth-five.json) records timing,
+original reward, service/checker counts, source changes, exact reason policy and
+capture hashes. Raw commands and submitted files remain retained privately. This is
+one exploratory attempt, not official qualification, a replicated solve rate or a
+backend attestation. The analysis describes observable actions, not private reasoning.

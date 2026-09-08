@@ -196,6 +196,9 @@ export async function runScenario(s, execute, storage) {
       effect_payload: payload,
     }),
     actual: { decisions, effects, finished },
+    deliveries: s.deliveries,
+    // Raw policy snapshots at admitted effects, without the derived permitted verdict.
+    admissionPolicies: expected.map(({ jobId, revision, policy }) => ({ jobId, revision, policy })),
     expected,
     observations,
     reports,

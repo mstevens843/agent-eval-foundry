@@ -22,12 +22,18 @@ correctness the same way you would verify any other repair, from the raw trace
 against SEMANTICS.md.
 Return `{ verdicts: { [token]: { ok: boolean, reasons?: string[] } } }`. Accept every
 genuinely correct candidate and reject every genuinely defective one; for each
-rejection, name which obligation it violates using the check ids from
-check-ids.json (completion, representation, cache_provenance, invalidation_scope,
-origin_load, no_store).
+rejection, name which obligation it violates using the public names
+completion, representation, cache_provenance, invalidation_scope,
+origin_load and no_store.
 Your checker is graded for zero false positives, zero missed defects, correctly
 named rejections and determinism (it is run twice and must agree with itself). A
 missing, stub, or always-accepting checker fails this requirement outright,
 regardless of how good the repair itself is.
 
 `checker.mjs` must be fully self-contained: only that single file is staged for grading, so it cannot `import` from any other submitted file (helper modules, shared utilities, or `entry.mjs` itself). Write all checking logic directly in `checker.mjs`, or duplicate any shared logic you need.
+
+## Exact checker schema and execution limits
+
+Read CHECKER-INPUT.md for the normative raw input fields, independent-candidate
+judging rule, reason format and checker runtime envelope. It supplements the domain
+contract in SEMANTICS.md; no answer key or other candidate's output is needed.

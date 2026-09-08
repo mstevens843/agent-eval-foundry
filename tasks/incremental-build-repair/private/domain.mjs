@@ -173,6 +173,12 @@ export async function runScenario(s, execute, storage) {
       for (const out of o.request.outputs)
         if (out && typeof out.handle === "string") touchedHandles.add(out.handle);
   }
+  // A published attestation may name cached dependencies without re-inspecting them.
+  // Include that raw attestation closure so alternative correct read strategies remain
+  // independently checkable. Recipes and bytes are evidence, not validity booleans.
+  for (const handle of touchedHandles)
+    for (const dependency of ledger.get(handle)?.recipe.dependencies ?? [])
+      touchedHandles.add(dependency.handle);
   return {
     ...checks({
       completion: index >= s.rounds.length && publications.length === s.rounds.length,
@@ -203,6 +209,7 @@ export async function runScenario(s, execute, storage) {
         .filter(([handle]) => touchedHandles.has(handle))
         .map(([handle, r]) => ({ handle, ...r })),
     },
+    input: { rounds: s.rounds },
     expected: { rounds: s.rounds.map((r) => ({ id: r.id, targets: r.targets, callBudget: r.callBudget })) },
     observations,
     reports,

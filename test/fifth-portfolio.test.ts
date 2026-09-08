@@ -73,3 +73,19 @@ it("checks independent solutions, generated properties and alternative-valid beh
   expect(report.executions).toBeGreaterThan(650);
   expect(report.providerCallsMade).toBe(0);
 });
+
+it("makes independent checker inputs complete without candidate-derived answers", () => {
+  const output = join(scratch, "checker-inputs");
+  const r = spawnSync(process.execPath, ["scripts/verify-fifth-checker-inputs.mjs", output], {
+    encoding: "utf8",
+    timeout: 60000,
+    maxBuffer: 1024 * 1024,
+  });
+  expect(r.error, r.stderr).toBeUndefined();
+  expect(r.status, `${r.stdout}\n${r.stderr}`).toBe(0);
+  const report = JSON.parse(readFileSync(join(output, "summary.json"), "utf8"));
+  expect(report.results).toHaveLength(5);
+  expect(report.results.every((r: { passed: boolean }) => r.passed)).toBe(true);
+  for (const id of ids)
+    expect(readFileSync(`tasks/${id}/public/instruction.md`, "utf8")).toContain("CHECKER-INPUT.md");
+});

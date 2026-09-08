@@ -8,7 +8,7 @@ The unit of progress is a **valid, materially distinct task package**—not a re
 
 Twenty-five professional package source trees are maintained here: native Go/browser/persistence/budget/rollout tasks plus twenty packages covering recovery, installation, planning, reconciliation, documents, calendars, caching, streaming and more. The foundry assembles public workspaces and private validators, runs correct/incorrect controls, exports retained artifacts, and inspects immutable execution evidence.
 
-**Start with the [five-minute project status](docs/project-status.md)** for the complete package list and code links. The [ten screening analyses](reports/screening/README.md) show what agents repaired, what their checking missed, and where our own measurement needed correction. All ten screened service implementations passed; two second-batch checker gates recorded zero, one with a contract/grader alignment concern. These are exploratory observations, not a qualified hard-task portfolio.
+**Start with the [five-minute project status](docs/project-status.md)** for the complete package list and code links. The [twenty-five screening analyses](reports/screening/README.md) show what agents repaired, what their checking missed, and where our own measurement needed correction. All twenty-five service implementations passed their frozen suites; several original checker zeroes expose grading-alignment problems rather than model failures. The fifteen-attempt batches 3–5 campaign is complete, with five concurrent trials per batch. These are exploratory observations, not a qualified hard-task portfolio.
 
 [Progress and decisions](docs/engineering-progress.md) connects the results to what we changed, what we rejected and what the next experiments must establish.
 

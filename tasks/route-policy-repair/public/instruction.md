@@ -9,6 +9,8 @@ Run `node --test test/*.test.mjs`. Entry: subject.run(view, api).
 
 ## Also required: submit a checker
 
+Read CHECKER-INPUT.md for the complete input schema, check vocabulary and checker limits.
+
 Submit two files: `entry.mjs` (the repaired configuration-change service) and `checker.mjs`.
 Grading rejects a submission missing either one.
 

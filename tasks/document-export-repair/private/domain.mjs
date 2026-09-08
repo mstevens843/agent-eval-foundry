@@ -110,6 +110,10 @@ export async function runScenario(s, execute, storage) {
     }),
     actual,
     expected,
+    // Original source population, not another candidate's reads or a redacted answer.
+    // Empty work must be distinguishable from abandoning a nonempty request.
+    view: { ticketIds: s.tickets.map((ticket) => ticket.id), policy: s.policy },
+    tickets: s.tickets,
     // The redaction policy in force for this scenario. This is the same object every
     // candidate already receives at runtime via view.policy — it is problem input, not an
     // answer. A checker-required submission's checker needs it to independently recompute
