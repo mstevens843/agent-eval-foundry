@@ -273,3 +273,134 @@ checker; a correct service does not cancel a checker failure.
 This unchanged successor has **1 failure and 1 solver pass in two scored attempts**, both on Claude. The user reports that the CEO accepts at least **five failures out of six**, with three attempts per provider; six consecutive failures is the stricter aspiration, not the acceptance threshold. This package remains within that threshold and needs **4 failures from the remaining four attempts**. Different failure mechanisms can count; no identical-bug requirement is added.
 
 The next attempt is **Trial 4 in this document, the third attempt on this successor**, using the same provider, package and saved profile again. Afterward, this package will have three runs on its original provider and will need three on the other provider. [Prepared Trial 4 handoff](../../../docs/round-four-failing-five-handoff.md). Preparation launches no model calls.
+
+## Trial 4 — third unchanged-successor attempt — September 9, 2026
+
+### A. Identity and execution
+
+Run `temporal-capacity-repair-attempt-1` in the fresh `round-four-failing-five`
+campaign slot, package digest `05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede`
+— byte-identical to Trial 2 and Trial 3's package — route
+`professional-multifile/authority-process@1`. Evidence retained at
+`.local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/temporal-capacity-repair-attempt-1/`.
+Dispatched under a fresh signed JobStore reservation (Ed25519, `realm: real-provider`,
+`billingMode: subscription-only`, `maxMicroUsd: 0`, `maxAttempts: 1`) — `attempt-1` in
+this campaign's own store. Runtime: the same isolated `frozen-source` build used
+throughout this session, re-verified byte-identical immediately before this
+dispatch; author image `sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a`.
+
+Target: **claude**, third consecutive attempt on this original provider. Requested
+`anthropic/claude-opus-5`, effort `max`, CLI `scaffoldVersion 2.1.263`. The controller
+hard-asserted the profile digest and instruction hash were identical to the Trial 2/3
+record before dispatching, and the solver received only the original public task
+inputs — no prior submission, analysis, or this handoff.
+
+Dispatched 2026-09-09T19:56:47.080Z as one of five reservations installed within a
+223ms window; `docker ps` confirmed all five `foundry-real-*` containers running
+concurrently. Completed 2026-09-09T20:12:32.627Z. Total elapsed ≈945,547ms
+(~15m46s), well under the 10,800s (3h) cap. Token usage: 2,739,579 input tokens
+(2,647,513 cached), 75,200 output, `total_cost_usd` $4.13 — a CLI price estimate,
+not a charge, under the subscription-only reservation. Execution reached a clean
+`completed` state with no invalid-execution or infrastructure error.
+
+Completion manifest: 864 files, 5,129,655 bytes, all hash-verified with zero errors
+this session. `completionSha256` `efdb3903eb6120c1b90a1515b80f2c6e5d5e23ffaa0e8ad32ab20f24f943d859`,
+`resultSha256` `95668ae819f500851968cadc7a6d1af495634642c5c9a8772848f43edf4815b9`,
+`gradeSha256` `986881fbcb08e757e0d87e279eb272e31502ba499badfef41ae3d53f5d50aaef`.
+
+### B. Results
+
+**Reward 0 — the checker-only failure recurs, service still fully correct.**
+Service: 34/34 scenarios pass, zero failures (matching Trial 2 and Trial 3, both
+also fully correct). Checker: 12/13 candidates correctly classified, 0 false
+positives, 1 missed — `unread-empty-source`, `expectedFailingCheck: completion`.
+Both `reference` and `alternative` known-good candidates were correctly accepted.
+This is the exact same named candidate Trial 2's checker missed. Trial 3, in
+between, caught it and passed cleanly (reward 1) — the pattern across three
+attempts on this provider is **fail → pass → fail**, not a clean streak.
+
+### C. Code-level recurrence assessment: same candidate, a different and more fundamental gap
+
+Reading all three submitted `checker.mjs` files shows this is **not** the same
+mechanism recurring — it is a structurally different gap that happens to miss the
+identical named candidate.
+
+Trial 2's checker had an explicit pagination/fetch-completeness check with a
+narrow, targeted exemption:
+```js
+if (fetches.length === 0) {
+  return queryCount > 0 && recordCount > 0 ? 'no page was ever fetched, so the revision log was never read' : null;
+}
+```
+It checked for fetches, but only flagged the omission when `recordCount > 0` —
+missing exactly the zero-record case.
+
+Trial 3's checker fixed that by making the same kind of check unconditional
+(`observations.length > 0 && streamLooksComplete(observations)` → flag a missing
+fetch regardless of record count), plus added its own defense against the
+opposite risk (a truncated log misread as "never fetched").
+
+**Trial 4's checker contains no fetch/pagination-completeness check of any kind.**
+Its `judgeCell()` (lines 62–140) never inspects `cell.observations` for `fetch`
+calls at all — the only observation-derived signal it reads is `record`
+acknowledgments (`acknowledgedRecords()`, lines 38–50), used solely to detect
+duplicate/extra writes. Ground truth (`expected`) is computed directly from the
+full `publicInput.records`/`queries` via `computeTotals()`, and every candidate is
+judged purely by whether its persisted totals match that computed value — never by
+whether it actually read the source. For `unread-empty-source` specifically,
+records is empty, so the computed expected total is trivially correct regardless
+of whether any fetch occurred, and nothing in this checker's logic asks the
+question "did the candidate read the source" at all. Other negative candidates
+(e.g. `no-work`, correctly rejected here) are caught only because skipping the
+work also produces a *wrong total* on non-empty inputs — an incidental catch, not
+a deliberate pagination check.
+
+So Trial 2's gap was a narrow exemption inside an existing structural check; Trial
+4's gap is the absence of any structural check on the source-traversal obligation
+at all, substituted entirely by outcome-only verification. Both independently
+converge on missing the same named candidate because both, for different reasons,
+never ask the process question `SEMANTICS.md`'s "Exhaust all pages" requires —
+Trial 3 is the one submission of three that added an explicit process check. Two
+of three independent Claude/max attempts have now failed this exact required
+control via two different code paths; that is meaningful recurrence evidence at
+the level of "which named obligation keeps getting missed," even though it is not
+evidence of one recurring bug.
+
+### D. Progress toward the reported five-of-six acceptance threshold
+
+This package now has **2 failures and 1 pass across its first 3 (Claude) attempts** —
+fail (Trial 2), pass (Trial 3), fail (Trial 4). The user reports the CEO accepts at
+least **five failures out of six** with three Claude and three Codex attempts per
+package. Arithmetic: 2 failures banked; the remaining 3 attempts are all Codex, and
+**all three must fail** to reach 5-of-6 (2 + 3 = 5). If even one of the three
+remaining Codex attempts passes, the maximum reachable is 2 + 2 = 4, below
+threshold. Unlike `incremental-build-repair`, `issued-report-repair` and
+`variant-cache-repair` (each now at a clean 3/3 same-provider failure streak), this
+package's non-monotonic fail→pass→fail history means it cannot be described as
+having "three consecutive zeroes" — Trial 3 broke the streak before Trial 4
+restored a failure, so its six-run record so far is less uniform evidence than the
+other three packages', even though the raw failure count (2/3) is the same.
+
+### E. Next step
+
+The three remaining attempts on this package are Codex, not Claude — this session's
+own Trial 4 authorization was same-provider only (three Claude, two Codex across
+the batch) and does not launch those opposite-provider runs. Evaluate the complete
+task, including its required checker, on any future attempt; a correct service does
+not cancel a checker failure. Keep the raw fail→pass→fail history intact rather than
+normalizing it to a streak.
+
+### Next batch prepared — September 9, 2026
+
+This package continues at **2/3 failures**. Its
+three Claude attempts are complete. The user authorized the next attempt on
+**Codex**, using the exact same package and grading. This is **Trial 5**
+in this history, the fourth attempt on the unchanged successor and the first
+with the opposite provider. It runs concurrently with the other three continuing
+packages. The remaining three provider slots need all three failures to
+reach 5/6; only the first of those slots is prepared for this launch.
+
+[Prepared controller and handoff](../../../docs/round-five-continuing-four-handoff.md).
+No new model attempt was launched during preparation. Different valid failure
+mechanisms and required-checker-only failures can count; the provider switch
+does not reset or discard the existing results.

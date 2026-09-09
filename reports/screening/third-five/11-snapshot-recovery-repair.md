@@ -282,3 +282,101 @@ that threshold; one pass alone does not require optimization or a restart.
 This unchanged successor has **1 failure and 1 solver pass in two scored attempts**, both on Codex. The user reports that the CEO accepts at least **five failures out of six**, with three attempts per provider; six consecutive failures is the stricter aspiration, not the acceptance threshold. This package remains within that threshold and needs **4 failures from the remaining four attempts**. Different failure mechanisms can count; no identical-bug requirement is added.
 
 The next attempt is **Trial 4 in this document, the third attempt on this successor**, using the same provider, package and saved profile again. Afterward, this package will have three runs on its original provider and will need three on the other provider. [Prepared Trial 4 handoff](../../../docs/round-four-failing-five-handoff.md). Preparation launches no model calls.
+
+### Trial 4 — third unchanged-successor attempt — September 9, 2026
+
+#### A. Identity and execution
+
+Run `snapshot-recovery-repair-attempt-1` in a fresh campaign slot
+(`.local/round-four-failing-five-2026-09-09/`), package digest
+`719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b` — byte-identical
+to Trial 2 and Trial 3's package; public contract and private controls unchanged.
+Route `professional-multifile/authority-process@1`, profile digest
+`a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641` — identical to
+Trial 3's. Target: **codex**, the third consecutive attempt with this provider.
+Requested `openai/gpt-5.6-sol`, effort `xhigh`, CLI `scaffoldVersion 0.153.2`, same
+author image and frozen runtime as Trials 2–3; model/effort/scaffold identity were
+again unobservable from the Codex CLI's event stream. The controller hard-asserted
+the profile and instruction hash matched the retained Trial 3 record before
+dispatch, and the solver received only the original public task inputs — no prior
+submission, analysis, or this campaign's handoff.
+
+Dispatched as one of five reservations installed within a 223ms window
+(2026-09-09T19:56:46.857Z–19:56:47.080Z); `docker ps` confirmed all five
+`foundry-real-*` containers running concurrently. Completed 2026-09-09T20:14:46.043Z.
+Elapsed ≈1,079,020ms (~17m59s), well under the 10,800,000ms (3h) cap. Token usage:
+660,084 input tokens (610,048 cached), 32,372 output; Codex reports no price
+estimate. Execution reached a clean `completed` state, no invalid execution or
+infrastructure error. `completionSha256 bc61d25e8b3e42ba9d9e7415d0d2bff5a1f316e3c705b4ade0b6dad5fbf395c5`,
+`resultSha256 454675027f6f209ce920c8ee2c20151a1dea16596e40ccc112d8113df4bd1f24`,
+`gradeSha256 a0ffadc5012ac85ec683a1097998828ddcb035ab6a1f59843809104025093387`; all 785
+manifest-listed files (2,665,141 bytes) reverified against these hashes with no errors.
+
+#### B. Results
+
+**Reward 1 — a second consecutive clean pass.** Service (`entry.mjs`) passes all
+33 scenarios, matching Trials 2 and 3. Checker: 12/12 candidates correctly
+classified — 0 missed, 0 false positives, `pass: true`. Both known-good candidates
+(`reference`, `alternative`) are accepted; all ten negative controls are rejected
+with their named required obligation observed.
+
+#### C. Comparison with Trials 2–3
+
+Trial 2's specific defect — `archiveBytes()` assuming the archive field always
+arrived as a base64 string or a `{bytes}` wrapper, rejecting the harness's actual
+already-decoded object shape — did not recur for a second independent submission.
+Trial 3's checker avoided it with `decodeArchiveValue()`, which type-checks the
+value before deciding whether to unwrap or decode it. This Trial 4 submission
+uses a differently-named but equally defensive function, `archiveObject()`
+(`checker.mjs:142-149`):
+
+```js
+function archiveObject(publication) {
+  if (ownKeysAre(publication.archive, ['tenant', 'branch', 'cutoff', 'accounts', 'entries', 'nextId'])) {
+    return publication.archive;
+  }
+  const encoded = typeof publication.archive === 'string'
+    ? publication.archive
+    : publication.archive?.bytes;
+  ...
+}
+```
+
+Rather than type-checking the value directly (Trial 3's approach), this submission
+checks whether `publication.archive` already carries the expected materialized-object
+keys and returns it unchanged if so (line 143-144), only falling through to the
+string/`{bytes}`-wrapper cases otherwise. Two independent Codex sessions, with no
+shared context, arrived at structurally different but equally defensive solutions
+to the same ambiguity — neither assumed the `SEMANTICS.md` outbound wire-format
+description also described the checker's own input shape.
+
+#### D. Acceptance-threshold ceiling — this package's six-run set can no longer reach 5-of-6
+
+This package's Codex run history is now **fail (Trial 2, reward 0) → pass (Trial 3,
+reward 1) → pass (Trial 4, reward 1)**: 1 failure and 2 passes across its first three
+of six planned attempts. The user-reported CEO acceptance rule for this project is
+**at least 5 failures out of 6 scored attempts**, three Claude and three Codex, with
+the explicit corollary that a second solver pass puts the planned six-run set below
+5-of-6. With 2 passes already recorded and only 3 attempts remaining — all Claude,
+the opposite provider — the maximum possible total failures for this package's
+six-run set is now **1 + 3 = 4**, which is below the 5-of-6 threshold even in the
+worst case where all three remaining Claude attempts fail. **This package's planned
+six-run set can no longer reach the reported 5-of-6 acceptance bar, regardless of the
+outcome of its remaining attempts.** This is a hard ceiling that follows directly
+from the recorded run count, not a prediction about future attempts. The three
+remaining Claude attempts still have independent value for characterizing this
+package's failure rate; they just cannot restore this specific six-run set to the
+reported threshold.
+
+[Round Four results](../round-four-failing-five-2026-09-09.md) ·
+[Sanitized evidence](../evidence/2026-09-09-round-four-failing-five.json). Trials 1–3
+are preserved above.
+
+### Next-round selection — September 9, 2026
+
+The user excluded this package from the next campaign. Its unchanged successor
+record is **0 → 1 → 1**, one failure and two passes from three Codex attempts;
+even three later Claude failures would produce only 4/6. Preserve all three
+results. This exclusion applies to the current six-run set, not a claim that a
+future revised package cannot qualify. No further attempt is prepared here.
+[Four continuing packages](../../../docs/round-five-continuing-four-handoff.md).

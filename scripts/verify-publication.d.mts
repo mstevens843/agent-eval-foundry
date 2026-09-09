@@ -7,6 +7,12 @@ export function verifyPublication(root?: string): {
   trialThreeAttempts: number;
   trialThreeZeroRewards: number;
   packagesWithTwoConsecutiveZeroes: number;
+  trialFourAttempts: number;
+  trialFourZeroRewards: number;
+  packagesWithThreeConsecutiveZeroes: number;
+  packagesBelowFiveOfSixThreshold: number;
+  continuingPackages: number;
+  nextPreparedAttempts: number;
   successorTrials: number;
   successorPackages: number;
   successorCompletedTrials: number;

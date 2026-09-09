@@ -360,3 +360,129 @@ or disqualify this Trial 3 failure.
 This unchanged successor has **2 failures and 0 solver passes in two scored attempts**, both on Claude. The user reports that the CEO accepts at least **five failures out of six**, with three attempts per provider; six consecutive failures is the stricter aspiration, not the acceptance threshold. This package remains within that threshold and needs **3 failures from the remaining four attempts**. Different failure mechanisms can count; no identical-bug requirement is added.
 
 The next attempt is **Trial 4 in this document, the third attempt on this successor**, using the same provider, package and saved profile again. Afterward, this package will have three runs on its original provider and will need three on the other provider. [Prepared Trial 4 handoff](../../../docs/round-four-failing-five-handoff.md). Preparation launches no model calls.
+
+## Trial 4 — third unchanged-successor attempt — September 9, 2026
+
+### Identity and execution
+
+Run `variant-cache-repair-attempt-1` in a fresh Trial-4 campaign slot, package digest
+`73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b` — byte-identical to
+Trials 2 and 3; the controller hard-asserted the profile and instruction hash matched
+the Trial 3 record before dispatching. Requested target **claude** (third consecutive
+Claude attempt), `anthropic/claude-opus-5`, effort `max`, CLI `2.1.263`. Frozen execution
+source `2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4`, reused
+byte-for-byte from Trials 2–3. Pinned author image
+`sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a`.
+
+Dispatched `2026-09-09T19:56:46.857Z`, completed `2026-09-09T20:28:24.888Z` (~31m38s),
+well under the 10,800s (3h) cap. One of exactly five fresh Trial-4 attempts, reserved
+and dispatched within a 223ms window, confirmed running concurrently via `docker ps`.
+The solver received only the original public task inputs — no prior submission,
+analysis, or this campaign's handoff. Tokens: 11,337,067 in (11,141,458 cached),
+151,534 out; CLI cost estimate $11.32 (not a charge — subscription-only,
+`maxMicroUsd: 0`). completionSha256
+`789d651e3ccdb264313820f15be8d75e9415fa9b90e10a9678659c3089ce5f22`, resultSha256
+`9d0f5007f5512c7339939c48707543403dd047156b4d4e289c47df89e99a52ce`, gradeSha256
+`86e4df4215c871709e7e60dc1408913288b8aff37dc6c00dc8e6ca7c10126693`. 1,028
+manifest-listed files (63,782,538 bytes) reverified with zero errors this session.
+
+### Results
+
+**Recorded reward 0. Service 3/25 passed, 22/25 failed; checker 14/15.**
+
+- **Service: 22 of 25 scenarios fail, every one on `cache_provenance`** (case-000
+  through case-020 and case-023; case-021/022/024 pass). This is a *third* distinct
+  service-failure magnitude on this package: Trial 2 failed 1/25 (`cache_provenance`,
+  case-022 only), Trial 3 failed 20/25 (`origin_load`), Trial 4 fails 22/25
+  (`cache_provenance` again — the same named check as Trial 2, at far greater scale).
+- **Checker (14/15, unchanged count from Trials 2–3): the exact same candidate is
+  missed.** `wildcard-eviction`, `expectedFailingCheck: cache_provenance`,
+  `observedFailingChecks: ["cache_provenance"]`, `outcome: missed` — the third
+  independently-written checker in a row to accept this negative control. 0 false
+  positives; both `reference` and `alternative` correctly accepted.
+
+### Code-level recurrence verification
+
+**The checker-side miss is a confirmed exact recurrence across all three trials, via
+three different code shapes converging on the identical behavioral gap.** Reading each
+submission's `checker.mjs`:
+
+- Trial 2's `matchesRequest(entry, path, headers)` loops `for (const name of entry.vary)`
+  and compares `hv(entry.headers, name)` against `hv(headers, name)` with **no special
+  case for `"*"`** — for a `vary: ["*"]` entry, this looks up a header literally named
+  `"*"` on both sides, which is absent from both and so trivially equal, making the loop
+  fall through to `return true`.
+- Trial 3 took a different shape: `entryMatches()` explicitly returns `false` for a
+  wildcard entry, but the removal-legality check is
+  `entryMatches(...) || isWildcard(r.vary) || r.noStore === true` — an explicit
+  wildcard exception that always treats the removal as legal regardless.
+- Trial 4's `matchesReq(entry, path, headers)` loops `for (const name of entry.vary)`
+  with `if (name === "*") continue;` — skipping the wildcard name outright, so with no
+  other vary names left to check it also falls through to `return true`.
+
+All three independently-written checkers therefore classify a same-path write as
+legally entitled to evict a pre-existing `vary: ["*"]` entry, despite `SEMANTICS.md`
+stating a wildcard is "never reusable" — none of the three ever encode that a wildcard
+entry's *removal* needs separate justification from its *reuse*. This is the same
+missing check, not merely the same symptom, expressed through three distinct code
+paths (an omitted special case, an unconditional true-branch, and an explicit
+exception) — a genuine third-consecutive exact recurrence, not just a repeated label.
+
+**The service-side failure is also the same root cause as Trial 2's, not Trial 3's.**
+Trial 4's `entry.mjs` defines its own `matchesRequest(entry, path, headers)`
+identically to its checker's `matchesReq`: `for (const name of varyOf(entry)) { if
+(name === "*") continue; ... }`, again trivially returning `true` for any `vary: ["*"]`
+entry regardless of request headers. This function is used in **two** write paths:
+(1) the shield→edge "pull down" copy on a cache hit — `edge.filter(e =>
+!matchesRequest(e, path, headers))` before writing the copied entry — and (2) storing
+a freshly-fetched response — `edge.filter(...)`/`shield.filter(...)` before appending
+the new entry. Both unconditionally strip any pre-existing wildcard entry at that path
+from the tier being written, on every hit *and* every miss. This is structurally the
+same bug Trial 2's write-up already established (Trial 2: "the private predicate
+regards every wildcard as nonmatching and therefore protected from replacement... the
+submitted service explicitly excludes wildcards from delivery reuse, while its
+replacement follows the literal path/header-equality definition" — i.e. reuse and
+removal-legitimacy are decided by two different rules, and only the reuse rule
+excludes wildcards). Trial 4 has the identical mismatch between `reusable()` (excludes
+wildcards) and `matchesRequest()` (does not), just exercised on both the hit and miss
+paths instead of Trial 2's narrower single-scenario trigger — which is the direct,
+code-confirmed explanation for the 1/25 → 22/25 jump. Trial 3's separate `origin_load`
+defect did not recur here; Trial 4 shows 0 `origin_load` failures.
+
+**Self-test contradiction.** The agent's final message claims: "Verified against a
+tier-faithful reference model over 800 randomised scenarios: identical origin-request
+count in every one," and separately states as an intentional design choice that
+"No-store and `Vary:*` responses are delivered but never stored." Its self-testing
+narrative covers origin-request-count parity and the checker's own 32-candidate/2,100-run
+false-rejection fuzz — but never describes testing whether a *pre-existing* wildcard
+entry survives an unrelated same-path write, which is exactly the scenario the scored
+bank probes and exactly where this submission fails 22/25 times. The claimed self-test
+coverage does not contradict the grading result outright, but it does not touch the
+actual failure surface either.
+
+### Acceptance progress and next prepared attempt
+
+This package now has **3 failures in 3 scored Claude attempts (3/3) — three consecutive
+recorded zeroes**, the strongest possible outcome on its original-provider allocation.
+The user reports the CEO accepts at least **five failures out of six**, three Claude and
+three Codex; this package needs **at least 2 more failures from its remaining 3 Codex
+attempts** to reach 5/6. Those opposite-provider attempts are not part of this batch and
+are not authorized here. The existing Trial 2 matching/replacement contract-attribution
+note (the "never reusable does not necessarily mean never matching for replacement"
+question) remains open and unresolved by this repeat — it now has three consecutive
+supporting service/checker observations behind it rather than one.
+
+### Next batch prepared — September 9, 2026
+
+This package continues at **3/3 failures**. Its
+three Claude attempts are complete. The user authorized the next attempt on
+**Codex**, using the exact same package and grading. This is **Trial 5**
+in this history, the fourth attempt on the unchanged successor and the first
+with the opposite provider. It runs concurrently with the other three continuing
+packages. The remaining three provider slots need at least two failures to
+reach 5/6; only the first of those slots is prepared for this launch.
+
+[Prepared controller and handoff](../../../docs/round-five-continuing-four-handoff.md).
+No new model attempt was launched during preparation. Different valid failure
+mechanisms and required-checker-only failures can count; the provider switch
+does not reset or discard the existing results.

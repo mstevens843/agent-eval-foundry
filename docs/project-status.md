@@ -4,26 +4,47 @@ September 9, 2026. Navigation and status, not a package-policy approval.
 
 ## Latest measured progress
 
-**Three packages have two consecutive recorded reward-zero results on unchanged
+**Three packages have three consecutive recorded reward-zero results on unchanged
 successors: incremental build (21), issued report (25), and variant cache (19).**
-All five Trial 3 attempts completed without infrastructure errors. Snapshot recovery
-(11) and temporal capacity (10) passed this attempt, retaining their earlier failures
-in the same-version record. [Trial 3 results](../reports/screening/round-three-failing-five-2026-09-09.md).
+All five Trial 4 attempts completed without infrastructure errors, keeping each
+package's same provider a third consecutive time. Snapshot recovery (11) passed a
+second consecutive time; temporal capacity (10) reverted to failing after passing
+in Trial 3. [Trial 4 results](../reports/screening/round-four-failing-five-2026-09-09.md).
+Earlier: [Trial 3 results](../reports/screening/round-three-failing-five-2026-09-09.md).
+
+Reading the actual submitted code (not just comparing raw rewards) found that raw
+recurrence is not the same as an identical defect: incremental build's checker
+missed the identical candidate via a structurally identical gap in all three
+independent submissions — genuine exact recurrence. Variant cache's Trial 4
+failure was confirmed to share Trial 2's exact root cause, making Trial 3 the
+outlier attempt with a separate, unrelated bug. Issued report's checker fixed the
+Trial 2/3 defect outright (both known-good candidates are now correctly accepted)
+and failed on a new, unrelated gap instead — its third zero is not a third
+instance of the same bug. Temporal capacity's checker missed the same named
+candidate as Trial 2, but via a different, more fundamental omission (no
+fetch/pagination-completeness check at all, versus Trial 2's narrow exemption).
 
 The user reports that the CEO accepts **at least five failures out of six**, with
-**three Claude and three Codex attempts per package**. All five remain within the
-numerical threshold. The three at 2/2 need at least 3 failures from the remaining
-4 attempts; the two at 1/2 need all 4. Different valid failure mechanisms can count;
-one solver pass does not require restarting under this criterion.
+**three Claude and three Codex attempts per package**. All five packages have now
+completed their first three (same-provider) attempts. The three at 3/3 each need
+at least 2 more failures from their 3 remaining opposite-provider attempts;
+temporal capacity (2/3) needs all 3 remaining attempts to fail. **Snapshot
+recovery (1/3, two passes) can no longer reach the threshold regardless of
+outcome** — with two passes recorded, its six-run set caps at 4 possible
+failures, below the 5-of-6 bar. Different valid failure mechanisms can count;
+one solver pass does not require restarting under this criterion. The three
+opposite-provider attempts will complete the six-run sets for continuing packages.
 
-**The next five attempts are prepared with the same providers again:** Claude for
-19/25/10, Codex for 21/11. This completes three same-provider attempts on each
-successor; the opposite-provider runs come afterward. It is labeled **Trial 4** in
-the full histories. [Prepared handoff](round-four-failing-five-handoff.md).
-Preparation made zero provider calls.
+**Four packages continue: 19, 21, 25 and 10. Trial 5 is prepared with providers
+switched:** Codex for 19/25/10, Claude for 21. The user authorized one fresh
+attempt per package, four concurrently; this is the first opposite-provider
+attempt, with two further attempts per package left for later. Snapshot recovery
+(11) is excluded from this campaign; its three results remain documented.
+[Prepared controller and handoff](round-five-continuing-four-handoff.md).
+Package bytes and grading are unchanged. Preparation made zero provider calls.
 
-Successor Trials 2 and 3 total **31 attempts: 30 scored, 8 recorded zeroes,
-22 solver passes and 1 historical infrastructure interruption**, across the same
+Successor Trials 2, 3 and 4 total **36 attempts: 35 scored, 12 recorded zeroes,
+23 solver passes and 1 historical infrastructure interruption**, across the same
 25 packages. The historical Trial 2 totals below remain separate.
 
 **All 25 packages have completed Trial 2: five recorded zero rewards and twenty

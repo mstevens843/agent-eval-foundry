@@ -28,10 +28,10 @@ describe("reviewable source and honest screening publication", () => {
         .reduce((sum, r) => sum + r.verifiedFiles, 0),
       providerCallsMade: 0,
       successorPackages: 25,
-      successorTrials: 31,
-      successorCompletedTrials: 30,
-      successorRecordedZeroRewards: 8,
-      successorSolverPasses: 22,
+      successorTrials: 36,
+      successorCompletedTrials: 35,
+      successorRecordedZeroRewards: 12,
+      successorSolverPasses: 23,
       successorInterruptedTrials: 1,
       trialTwoAttempts: 26,
       trialTwoScored: 25,
@@ -40,6 +40,12 @@ describe("reviewable source and honest screening publication", () => {
       trialThreeAttempts: 5,
       trialThreeZeroRewards: 3,
       packagesWithTwoConsecutiveZeroes: 3,
+      trialFourAttempts: 5,
+      trialFourZeroRewards: 4,
+      packagesWithThreeConsecutiveZeroes: 3,
+      packagesBelowFiveOfSixThreshold: 1,
+      continuingPackages: 4,
+      nextPreparedAttempts: 4,
     });
   });
   it("links all twenty-five actual package trees without counting calibration kernels", () => {

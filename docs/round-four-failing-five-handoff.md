@@ -1,5 +1,9 @@
 # Third attempt on the unchanged successors — Trial 4 in the histories
 
+**Completed campaign; retained historical handoff.** See [Trial 4 results](../reports/screening/round-four-failing-five-2026-09-09.md).
+The [next handoff](round-five-continuing-four-handoff.md) prepares four continuing
+packages with providers switched. Do not relaunch this completed campaign.
+
 Prepared September 9, 2026. **All five are ready for one more attempt each, running
 concurrently, with the same provider again.** Preparation made zero provider calls.
 This is the third attempt on each successor: original Trial 1 used an earlier

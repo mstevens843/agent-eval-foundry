@@ -1,0 +1,509 @@
+{
+  "schemaVersion": 1,
+  "evidenceClass": "trial-preparation-no-provider-calls",
+  "created": "2026-09-09T20:48:41.585Z",
+  "campaign": "2026-09-09-round-five-continuing-four",
+  "trialLabel": "Trial 5",
+  "successorAttemptNumber": 4,
+  "oppositeProviderAttemptNumber": 1,
+  "status": "verified-for-preparation-not-dispatched",
+  "providerCallsMade": 0,
+  "concurrency": 4,
+  "maxProviderCalls": 4,
+  "automaticRetries": 0,
+  "billingMode": "subscription-only",
+  "acceptanceTarget": {
+    "source": "User-reported CEO acceptance criterion, clarified after Trial 3",
+    "minimumFailures": 5,
+    "totalScoredTrials": 6,
+    "claudeTrials": 3,
+    "codexTrials": 3,
+    "unchangedPackage": true,
+    "consecutiveFailuresRequired": false
+  },
+  "currentPurpose": "One opposite-provider attempt each for the four continuing packages. Two further opposite-provider attempts per package remain outside this authorization.",
+  "runtime": {
+    "root": ".local/round-two-top-five-2026-09-09/frozen-source",
+    "path": ".local/round-two-top-five-2026-09-09/frozen-source/dist/index.js",
+    "sha256": "60695de963e5085dfe8ee4fb09353b1db0169219d9ad9425ac2a997a73b69b26",
+    "sourceDigest": "2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4"
+  },
+  "controllerTemplate": {
+    "path": ".local/round-four-failing-five-2026-09-09/campaign.mjs",
+    "sha256": "6d92c9178096de7ac2be18d05463c5c8d29a45d2149093023e1b5f3a009c72ce"
+  },
+  "validationScope": "Unchanged exports, instructions, retained assurance and previous run identities rehashed. Switched providers use exact previously exercised provider presets; common resources, image, network and route match.",
+  "excludedPackages": [
+    {
+      "id": "snapshot-recovery-repair",
+      "analysis": "reports/screening/third-five/11-snapshot-recovery-repair.md",
+      "priorRewards": [
+        0,
+        1,
+        1
+      ],
+      "reason": "Two passes limit this unchanged six-run set to at most four failures; user excluded it from this round."
+    }
+  ],
+  "packages": [
+    {
+      "number": 19,
+      "id": "variant-cache-repair",
+      "target": "codex",
+      "previousTarget": "claude",
+      "analysis": "reports/screening/fourth-five/19-variant-cache-repair.md",
+      "foundry": {
+        "export": ".local/top-five-implementation-2026-09-09/release-ready/variant-cache-repair/export",
+        "digest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+        "assurance": {
+          "path": ".local/top-five-implementation-2026-09-09/release-ready/variant-cache-repair/validation/assurance.json",
+          "sha256": "310d712f9d1885d6b41b47e97f7da10a2ba73fd443cc3ef14f604f9028082200"
+        },
+        "assuranceChecks": 18
+      },
+      "native": {
+        "digest": "d291ca623b9d2112cfb28670110870c5e5b19dfe3602f6f2c16fc9f79b95f3a3"
+      },
+      "assignedProfile": {
+        "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/incremental-build-repair-attempt-1/profile.json",
+        "sha256": "d5e786f8e5e59bc690f24c6d7b31f425ac7d0cc08d6f89f54240ea1243e9ef81",
+        "sourcePackage": "incremental-build-repair",
+        "target": "codex",
+        "digest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+        "requested": {
+          "effort": "xhigh",
+          "model": "openai/gpt-5.6-sol",
+          "provider": "openai",
+          "scaffold": "codex"
+        }
+      },
+      "previousTrial": {
+        "label": "Trial 4",
+        "campaign": "2026-09-09-round-four-failing-five",
+        "reward": 0,
+        "target": "claude",
+        "ready": {
+          "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/READY.json",
+          "sha256": "514ed6c32121c232ae3db36407f02ec55c0dbc1b9c52e723e0a177c4f5def2d4"
+        },
+        "profile": {
+          "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/variant-cache-repair-attempt-1/profile.json",
+          "sha256": "f41fde8ae983375d6bfc47f9eaf5838fce2e0d2854728176d80df1de5dab42c2"
+        },
+        "result": {
+          "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/variant-cache-repair-attempt-1/result.json",
+          "sha256": "9d0f5007f5512c7339939c48707543403dd047156b4d4e289c47df89e99a52ce"
+        },
+        "grade": {
+          "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/variant-cache-repair-attempt-1/grade.json",
+          "sha256": "86e4df4215c871709e7e60dc1408913288b8aff37dc6c00dc8e6ca7c10126693"
+        },
+        "completion": {
+          "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/variant-cache-repair-attempt-1/completion.json",
+          "sha256": "789d651e3ccdb264313820f15be8d75e9415fa9b90e10a9678659c3089ce5f22"
+        },
+        "publication": {
+          "path": "reports/screening/evidence/2026-09-09-round-four-failing-five.json",
+          "sha256": "ddc006b9106e7cfcd403a46120496a045fc3620ddc368cabb77f8bcc1609f949"
+        },
+        "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+        "instructionSha256": "9d3ed7b2d39fc5a9cbddb56f636539686cec895b6961cac1e6004eefdca28f0a",
+        "service": {
+          "scenarios": 25,
+          "failedScenarios": 22,
+          "invalidScenarios": 0,
+          "failures": {
+            "case-000": [
+              "cache_provenance"
+            ],
+            "case-001": [
+              "cache_provenance"
+            ],
+            "case-002": [
+              "cache_provenance"
+            ],
+            "case-003": [
+              "cache_provenance"
+            ],
+            "case-004": [
+              "cache_provenance"
+            ],
+            "case-005": [
+              "cache_provenance"
+            ],
+            "case-006": [
+              "cache_provenance"
+            ],
+            "case-007": [
+              "cache_provenance"
+            ],
+            "case-008": [
+              "cache_provenance"
+            ],
+            "case-009": [
+              "cache_provenance"
+            ],
+            "case-010": [
+              "cache_provenance"
+            ],
+            "case-011": [
+              "cache_provenance"
+            ],
+            "case-012": [
+              "cache_provenance"
+            ],
+            "case-013": [
+              "cache_provenance"
+            ],
+            "case-014": [
+              "cache_provenance"
+            ],
+            "case-015": [
+              "cache_provenance"
+            ],
+            "case-016": [
+              "cache_provenance"
+            ],
+            "case-017": [
+              "cache_provenance"
+            ],
+            "case-018": [
+              "cache_provenance"
+            ],
+            "case-019": [
+              "cache_provenance"
+            ],
+            "case-020": [
+              "cache_provenance"
+            ],
+            "case-023": [
+              "cache_provenance"
+            ]
+          }
+        },
+        "checker": {
+          "correct": 14,
+          "total": 15
+        },
+        "assessment": "repeat-fail-exact-recurrence-vs-trial-2"
+      },
+      "priorRewards": [
+        0,
+        0,
+        0
+      ],
+      "progressBeforeDispatch": {
+        "successorAttempts": 3,
+        "failures": 3,
+        "solverPasses": 0,
+        "consecutiveRecordedZeroes": 3,
+        "attemptsByProvider": {
+          "claude": 3,
+          "codex": 0
+        },
+        "remainingAttempts": 3,
+        "failuresNeeded": 2,
+        "withinFiveOfSix": true,
+        "remainingByProvider": {
+          "claude": 0,
+          "codex": 3
+        }
+      },
+      "retainedAuditNote": "The existing matching/replacement contract-attribution note remains open. This unchanged exploratory repeat neither resolves it nor changes the recorded reward."
+    },
+    {
+      "number": 21,
+      "id": "incremental-build-repair",
+      "target": "claude",
+      "previousTarget": "codex",
+      "analysis": "reports/screening/fifth-five/21-incremental-build-repair.md",
+      "foundry": {
+        "export": ".local/top-five-implementation-2026-09-09/release-ready/incremental-build-repair/export",
+        "digest": "34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a",
+        "assurance": {
+          "path": ".local/top-five-implementation-2026-09-09/release-ready/incremental-build-repair/validation/assurance.json",
+          "sha256": "429858e2d66eb09119bc4a210c9de9a81e77aa517189379a55e0a473519a9359"
+        },
+        "assuranceChecks": 18
+      },
+      "native": {
+        "digest": "3517d6932c67baba9803be6c8c153c9c958c10357a35503ecb15879655f2f2b8"
+      },
+      "assignedProfile": {
+        "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/variant-cache-repair-attempt-1/profile.json",
+        "sha256": "f41fde8ae983375d6bfc47f9eaf5838fce2e0d2854728176d80df1de5dab42c2",
+        "sourcePackage": "variant-cache-repair",
+        "target": "claude",
+        "digest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+        "requested": {
+          "effort": "max",
+          "model": "anthropic/claude-opus-5",
+          "provider": "anthropic",
+          "scaffold": "claude-code"
+        }
+      },
+      "previousTrial": {
+        "label": "Trial 4",
+        "campaign": "2026-09-09-round-four-failing-five",
+        "reward": 0,
+        "target": "codex",
+        "ready": {
+          "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/READY.json",
+          "sha256": "514ed6c32121c232ae3db36407f02ec55c0dbc1b9c52e723e0a177c4f5def2d4"
+        },
+        "profile": {
+          "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/incremental-build-repair-attempt-1/profile.json",
+          "sha256": "d5e786f8e5e59bc690f24c6d7b31f425ac7d0cc08d6f89f54240ea1243e9ef81"
+        },
+        "result": {
+          "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/incremental-build-repair-attempt-1/result.json",
+          "sha256": "5ba969e5d37570ed33031c9a4b46d596bd47e363bc48fc7dfeb4942a823c40c2"
+        },
+        "grade": {
+          "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/incremental-build-repair-attempt-1/grade.json",
+          "sha256": "6cf6fd4d904353a0a18bc84c141c5b62713e347f37d5da982ef3792aa36b9456"
+        },
+        "completion": {
+          "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/incremental-build-repair-attempt-1/completion.json",
+          "sha256": "d0d8500fad3c1c12bfbfac6c851ff01ccc6e2b5f86276975291b9b32c341616d"
+        },
+        "publication": {
+          "path": "reports/screening/evidence/2026-09-09-round-four-failing-five.json",
+          "sha256": "ddc006b9106e7cfcd403a46120496a045fc3620ddc368cabb77f8bcc1609f949"
+        },
+        "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+        "instructionSha256": "9d25b52d206cba5ee9401a33edd071c8c3c278aab9380d28d93a28ac2a281b70",
+        "service": {
+          "scenarios": 27,
+          "failedScenarios": 0,
+          "invalidScenarios": 0,
+          "failures": {}
+        },
+        "checker": {
+          "correct": 14,
+          "total": 15
+        },
+        "assessment": "repeat-fail-exact-recurrence"
+      },
+      "priorRewards": [
+        0,
+        0,
+        0
+      ],
+      "progressBeforeDispatch": {
+        "successorAttempts": 3,
+        "failures": 3,
+        "solverPasses": 0,
+        "consecutiveRecordedZeroes": 3,
+        "attemptsByProvider": {
+          "claude": 0,
+          "codex": 3
+        },
+        "remainingAttempts": 3,
+        "failuresNeeded": 2,
+        "withinFiveOfSix": true,
+        "remainingByProvider": {
+          "claude": 3,
+          "codex": 0
+        }
+      },
+      "retainedAuditNote": null
+    },
+    {
+      "number": 25,
+      "id": "issued-report-repair",
+      "target": "codex",
+      "previousTarget": "claude",
+      "analysis": "reports/screening/fifth-five/25-issued-report-repair.md",
+      "foundry": {
+        "export": ".local/top-five-implementation-2026-09-09/release-ready/issued-report-repair/export",
+        "digest": "32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170",
+        "assurance": {
+          "path": ".local/top-five-implementation-2026-09-09/release-ready/issued-report-repair/validation/assurance.json",
+          "sha256": "127fb137b0ee965a144958d13247f82e6d045a5f340a769e7f13a2216195eb4a"
+        },
+        "assuranceChecks": 17
+      },
+      "native": {
+        "digest": "df8d825785f3e7b5d9376b248d73e7353f7b31a7933ee7c4a4ada15de58278cc"
+      },
+      "assignedProfile": {
+        "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/incremental-build-repair-attempt-1/profile.json",
+        "sha256": "d5e786f8e5e59bc690f24c6d7b31f425ac7d0cc08d6f89f54240ea1243e9ef81",
+        "sourcePackage": "incremental-build-repair",
+        "target": "codex",
+        "digest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+        "requested": {
+          "effort": "xhigh",
+          "model": "openai/gpt-5.6-sol",
+          "provider": "openai",
+          "scaffold": "codex"
+        }
+      },
+      "previousTrial": {
+        "label": "Trial 4",
+        "campaign": "2026-09-09-round-four-failing-five",
+        "reward": 0,
+        "target": "claude",
+        "ready": {
+          "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/READY.json",
+          "sha256": "514ed6c32121c232ae3db36407f02ec55c0dbc1b9c52e723e0a177c4f5def2d4"
+        },
+        "profile": {
+          "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/issued-report-repair-attempt-1/profile.json",
+          "sha256": "f41fde8ae983375d6bfc47f9eaf5838fce2e0d2854728176d80df1de5dab42c2"
+        },
+        "result": {
+          "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/issued-report-repair-attempt-1/result.json",
+          "sha256": "7c76354dfa1f1d1bd380cc3a1f065c7af3a53292a1dd733cea38fda2c925e498"
+        },
+        "grade": {
+          "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/issued-report-repair-attempt-1/grade.json",
+          "sha256": "ca818a8a6a6c1f8516dfb121a3411cc62f5bf8ba6675b079de0fb6146b430df3"
+        },
+        "completion": {
+          "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/issued-report-repair-attempt-1/completion.json",
+          "sha256": "49d1f80d3c7b3294cd779cbf59f895207852ee35d2ae76851bc73da784374ad6"
+        },
+        "publication": {
+          "path": "reports/screening/evidence/2026-09-09-round-four-failing-five.json",
+          "sha256": "ddc006b9106e7cfcd403a46120496a045fc3620ddc368cabb77f8bcc1609f949"
+        },
+        "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+        "instructionSha256": "4f536dfe221dbd4f3eb801af636e4d21e783d5386aa2ead1776d33cca4dced6a",
+        "service": {
+          "scenarios": 27,
+          "failedScenarios": 0,
+          "invalidScenarios": 0,
+          "failures": {}
+        },
+        "checker": {
+          "correct": 13,
+          "total": 14
+        },
+        "assessment": "repeat-fail-unrelated-mechanism"
+      },
+      "priorRewards": [
+        0,
+        0,
+        0
+      ],
+      "progressBeforeDispatch": {
+        "successorAttempts": 3,
+        "failures": 3,
+        "solverPasses": 0,
+        "consecutiveRecordedZeroes": 3,
+        "attemptsByProvider": {
+          "claude": 3,
+          "codex": 0
+        },
+        "remainingAttempts": 3,
+        "failuresNeeded": 2,
+        "withinFiveOfSix": true,
+        "remainingByProvider": {
+          "claude": 0,
+          "codex": 3
+        }
+      },
+      "retainedAuditNote": null
+    },
+    {
+      "number": 10,
+      "id": "temporal-capacity-repair",
+      "target": "codex",
+      "previousTarget": "claude",
+      "analysis": "reports/screening/next-five/10-temporal-capacity-repair.md",
+      "foundry": {
+        "export": ".local/final-five-implementation-2026-09-09/release-ready/temporal-capacity-repair/export",
+        "digest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+        "assurance": {
+          "path": ".local/final-five-implementation-2026-09-09/release-ready/temporal-capacity-repair/validation/assurance.json",
+          "sha256": "52645fe892098d6064f22eb3f8817cb2895039f8c5c3817235421f7c3cf182e2"
+        },
+        "assuranceChecks": 16
+      },
+      "native": {
+        "digest": "6d5b00c7164f9602bc5e3ca9207924ac66650a3becff24f674589650689879a3"
+      },
+      "assignedProfile": {
+        "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/incremental-build-repair-attempt-1/profile.json",
+        "sha256": "d5e786f8e5e59bc690f24c6d7b31f425ac7d0cc08d6f89f54240ea1243e9ef81",
+        "sourcePackage": "incremental-build-repair",
+        "target": "codex",
+        "digest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+        "requested": {
+          "effort": "xhigh",
+          "model": "openai/gpt-5.6-sol",
+          "provider": "openai",
+          "scaffold": "codex"
+        }
+      },
+      "previousTrial": {
+        "label": "Trial 4",
+        "campaign": "2026-09-09-round-four-failing-five",
+        "reward": 0,
+        "target": "claude",
+        "ready": {
+          "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/READY.json",
+          "sha256": "514ed6c32121c232ae3db36407f02ec55c0dbc1b9c52e723e0a177c4f5def2d4"
+        },
+        "profile": {
+          "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/temporal-capacity-repair-attempt-1/profile.json",
+          "sha256": "f41fde8ae983375d6bfc47f9eaf5838fce2e0d2854728176d80df1de5dab42c2"
+        },
+        "result": {
+          "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/temporal-capacity-repair-attempt-1/result.json",
+          "sha256": "95668ae819f500851968cadc7a6d1af495634642c5c9a8772848f43edf4815b9"
+        },
+        "grade": {
+          "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/temporal-capacity-repair-attempt-1/grade.json",
+          "sha256": "986881fbcb08e757e0d87e279eb272e31502ba499badfef41ae3d53f5d50aaef"
+        },
+        "completion": {
+          "path": ".local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/temporal-capacity-repair-attempt-1/completion.json",
+          "sha256": "efdb3903eb6120c1b90a1515b80f2c6e5d5e23ffaa0e8ad32ab20f24f943d859"
+        },
+        "publication": {
+          "path": "reports/screening/evidence/2026-09-09-round-four-failing-five.json",
+          "sha256": "ddc006b9106e7cfcd403a46120496a045fc3620ddc368cabb77f8bcc1609f949"
+        },
+        "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+        "instructionSha256": "051ecc01b96d4b25362f370676df04b41249e6ac8a46eda875b23f0b3c3f54a7",
+        "service": {
+          "scenarios": 34,
+          "failedScenarios": 0,
+          "invalidScenarios": 0,
+          "failures": {}
+        },
+        "checker": {
+          "correct": 12,
+          "total": 13
+        },
+        "assessment": "repeat-fail-same-symptom-different-mechanism"
+      },
+      "priorRewards": [
+        0,
+        1,
+        0
+      ],
+      "progressBeforeDispatch": {
+        "successorAttempts": 3,
+        "failures": 2,
+        "solverPasses": 1,
+        "consecutiveRecordedZeroes": 1,
+        "attemptsByProvider": {
+          "claude": 3,
+          "codex": 0
+        },
+        "remainingAttempts": 3,
+        "failuresNeeded": 3,
+        "withinFiveOfSix": true,
+        "remainingByProvider": {
+          "claude": 0,
+          "codex": 3
+        }
+      },
+      "retainedAuditNote": null
+    }
+  ]
+}

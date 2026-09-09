@@ -414,3 +414,146 @@ required-deliverable failure, not a grading-alignment artifact. This is the
 This unchanged successor has **2 failures and 0 solver passes in two scored attempts**, both on Claude. The user reports that the CEO accepts at least **five failures out of six**, with three attempts per provider; six consecutive failures is the stricter aspiration, not the acceptance threshold. This package remains within that threshold and needs **3 failures from the remaining four attempts**. Different failure mechanisms can count; no identical-bug requirement is added.
 
 The next attempt is **Trial 4 in this document, the third attempt on this successor**, using the same provider, package and saved profile again. Afterward, this package will have three runs on its original provider and will need three on the other provider. [Prepared Trial 4 handoff](../../../docs/round-four-failing-five-handoff.md). Preparation launches no model calls.
+
+## Trial 4 — third unchanged-successor attempt — September 9, 2026
+
+### A. Identity and execution
+
+Run `issued-report-repair-attempt-1` in a fresh round-four campaign (a new JobStore
+slot), package digest `32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170`
+— byte-identical to Trial 2 and Trial 3. Route `professional-multifile/authority-process@1`.
+Evidence: `.local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/issued-report-repair-attempt-1/`.
+
+Requested target **claude**, `anthropic/claude-opus-5`, effort `max`, CLI `2.1.263` —
+the same provider as Trials 2 and 3, copied verbatim from the completed Trial 3
+record (the controller asserted `profileDigest` and instruction hash identical to
+Trial 3 before dispatch). Same frozen runtime and author image as every prior round
+(`sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a`). A
+genuinely fresh solver session, given only the original public task inputs — no
+access to any prior trial, this document, or any earlier submission.
+
+Dispatched `2026-09-09T19:56:46.969Z`, completed `2026-09-09T20:22:39.675Z` — total
+elapsed ≈1,552,706 ms (~25m 53s), well under the 10,800 s (3 h) cap. Tokens:
+8,590,726 input (8,424,952 cached), 127,117 output; CLI cost estimate $9.05
+(subscription-only billing, `maxMicroUsd: 0` — not a charge). All five round-four
+jobs were reserved and began dispatching within a 223 ms window and were confirmed
+running concurrently via `docker ps`; no timeout, no invalid execution.
+`completionSha256 49d1f80d3c7b3294cd779cbf59f895207852ee35d2ae76851bc73da784374ad6`,
+`resultSha256 7c76354dfa1f1d1bd380cc3a1f065c7af3a53292a1dd733cea38fda2c925e498`,
+`gradeSha256 ca818a8a6a6c1f8516dfb121a3411cc62f5bf8ba6675b079de0fb6146b430df3` — 837
+manifest-listed files (11,365,543 bytes), reverified byte-for-byte with zero errors.
+
+### B. Results
+
+**Reward 0. Service 27/27 — fully correct, matching Trials 2 and 3.** Checker:
+13/14 correct, **1 missed, 0 false positives**: the negative
+candidate `reverse-dependency-order` (`expectedFailingCheck: dependency_order`)
+was wrongly accepted. Both `reference` and `alternative` — the known-good
+candidates that Trials 2 and 3 both wrongly rejected — are **correctly accepted**
+this time (`correct-accept`).
+
+### C. This is not a recurrence — a different checker, a different defect
+
+Trial 2 and Trial 3 both failed by rejecting 100% of the known-good candidate bank
+through a checker-side wrapper-unwrapping gap on aggregate `deliveries`/`publications`
+arrays. Trial 4's `checker.mjs` is architecturally unrelated to either: it contains
+no `unwrap()` function at all. Instead it (1) rebuilds the one legitimate trajectory
+per cell from raw input via `simulate()`/`reconcile()` (shared with `core.mjs`), and
+(2) checks the submission's recorded run against **two independent evidence views** —
+the submission's self-reported `actual.publications`/`.deliveries`/`.answers`
+arrays, and a second view (`fromObservations()`) built directly from the raw
+`api.publish`/`api.deliver`/`api.answer` **call arguments** in the observation
+stream — accepting the candidate if *either* view matches exactly. Confirmed by
+reading `checker.mjs`: `fromObservations()` reads `req.report`/`req.version`/etc.
+straight off `o.request`, never touching any wrapped aggregate array, so even if
+the `actual.deliveries` items are wrapped the same way that broke Trials 2/3
+(confirmed from the real `grading/result.json` fixture: delivery rows are still
+shaped `{after, receipt: {...}}`), the call-argument view is immune to that shape
+and rescues `reference`/`alternative`. This checker did not "fix" the T2/T3 bug by
+patching the same code path — it side-steps the whole wrapper question with an
+architecture that never depends on it for correctness.
+
+The actual T4 defect is new and narrowly scoped. `checker.mjs`'s own docstring
+states its design assumption directly: "the set of new publications, the set of
+deliveries and the set of answers are all determined — so only the ordering among
+independent outputs is free, which makes an unordered multiset comparison exactly
+the right test." Comparison keys (`pubKey`/`delivKey`) tag each record only with
+its **step index** (`after`), never a finer-grained emission order within a step.
+The `reverse-dependency-order` candidate (read directly from
+`grading/checker-grade/candidate-reverse-dependency-order-2/entry.mjs`) computes
+every payload value in fully correct dependency order — its own inline comment
+says so explicitly: *"the actual publish({record}) calls for reports computed in
+this step are issued in the REVERSE of that order, so a dependent's api.publish()
+lands before its own parent's api.publish() ... violating SEMANTICS.md's
+'reconcile ALL definitions in dependency order' without touching any computed
+value, delivery or answer."* Because content and step attribution are both
+correct and only the intra-step call sequence is wrong, and the checker's
+multiset comparison structurally cannot see intra-step call sequence, this
+candidate matches the expected trajectory under **both** of the checker's
+evidence views and is wrongly accepted. The checker's stated assumption
+("ordering among independent outputs is free") is false specifically for
+outputs the contract declares dependency-ordered — a genuine, narrow gap, not a
+coincidental grading artifact.
+
+Net: this Claude/max attempt independently avoided the Trial 2/3 defect entirely
+(a different architecture, not a patch) and failed on an unrelated required
+control. Two different bugs across three attempts, one fixed, a third failure
+via neither prior mechanism — the raw reward stays 0 regardless.
+
+### D. Observable solving behavior
+
+The submission's own final report (`capture/stdout.log`) explicitly states the
+comparison design later shown to be the gap: *"Rebuilds the single legitimate
+trajectory from the raw input and compares it against the recorded run as
+unordered multisets keyed by step, since only ordering among independent outputs
+is free."* It claims extensive verification: seven hand-worked scenarios, an
+independently-written second reference implementation cross-checked on 1,300+
+random scenarios with zero divergences, "26 defect variants" replayed (including
+"deferred work," "spurious versions," and other timing-adjacent cases), and a
+5,400-verdict layout-robustness sweep across 14 plausible schema variants. None of
+the described defect variants specifically targets same-step, correct-value,
+wrong-emission-order publish sequencing — a real, narrow gap in an otherwise
+substantial self-test suite, not a contradicted claim (unlike Trials 2/3, where
+the "accepts all known-good candidates" self-claim was directly contradicted by
+100% rejection).
+
+### E. Failure-mechanism attribution and next step
+
+Per the benchmark rules, a required-checker failure counts even though the service
+passes, and reason text is diagnostic-only — this is a supported, substantive
+required-deliverable failure, not a grading-alignment artifact, and a different
+valid failure mechanism counts independently of Trials 2 and 3. This is the
+**third** consecutive recorded zero for issued-report-repair on Claude by raw
+reward count (Trial 2, Trial 3, Trial 4) — but, per the code-level finding above,
+only two of those three zeroes share a mechanism (Trials 2 and 3); Trial 4 is a
+distinct, independently-discovered required-checker gap. Do not read "three
+zeroes" as "the same bug three times" for this package.
+
+### Acceptance progress and next prepared attempt
+
+This unchanged successor now has **3 failures and 0 solver passes in three scored
+attempts**, all on Claude — three consecutive recorded zeroes by raw count. Under
+the user-reported CEO threshold (at least five failures out of six, three Claude
+and three Codex per package), this package needs **at least 2 more failures from
+its remaining 3 (Codex) attempts** to reach 5/6; those opposite-provider runs are
+not part of this batch and are not authorized here. Different failure mechanisms
+count toward this threshold without requiring an identical bug — but the three
+Claude mechanisms observed so far (T2 wrapper gap on both fields, T3 wrapper gap on
+one field, T4 intra-step ordering gap) argue for describing this package as
+"reliably breaks required-checker authoring in varied ways" rather than "has one
+specific recurring bug."
+
+### Next batch prepared — September 9, 2026
+
+This package continues at **3/3 failures**. Its
+three Claude attempts are complete. The user authorized the next attempt on
+**Codex**, using the exact same package and grading. This is **Trial 5**
+in this history, the fourth attempt on the unchanged successor and the first
+with the opposite provider. It runs concurrently with the other three continuing
+packages. The remaining three provider slots need at least two failures to
+reach 5/6; only the first of those slots is prepared for this launch.
+
+[Prepared controller and handoff](../../../docs/round-five-continuing-four-handoff.md).
+No new model attempt was launched during preparation. Different valid failure
+mechanisms and required-checker-only failures can count; the provider switch
+does not reset or discard the existing results.

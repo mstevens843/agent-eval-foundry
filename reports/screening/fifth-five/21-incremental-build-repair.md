@@ -380,3 +380,118 @@ checkers. Continue measuring on the unchanged package. The ordering consequence 
 This unchanged successor has **2 failures and 0 solver passes in two scored attempts**, both on Codex. The user reports that the CEO accepts at least **five failures out of six**, with three attempts per provider; six consecutive failures is the stricter aspiration, not the acceptance threshold. This package remains within that threshold and needs **3 failures from the remaining four attempts**. Different failure mechanisms can count; no identical-bug requirement is added.
 
 The next attempt is **Trial 4 in this document, the third attempt on this successor**, using the same provider, package and saved profile again. Afterward, this package will have three runs on its original provider and will need three on the other provider. [Prepared Trial 4 handoff](../../../docs/round-four-failing-five-handoff.md). Preparation launches no model calls.
+
+## Trial 4 — third unchanged-successor attempt — September 9, 2026
+
+### Identity and execution
+
+Run `incremental-build-repair-attempt-1` in a fresh campaign slot
+(`.local/round-four-failing-five-2026-09-09/`), package digest
+`34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a` — byte-identical
+to Trial 2 and Trial 3's; the controller hard-asserted the profile and instruction
+hash matched the Trial 3 record before dispatching. Requested target **codex**,
+`openai/gpt-5.6-sol`, effort `xhigh`, CLI `0.153.2` — same provider as Trials 2–3.
+Observed model/effort/scaffold version remain unobservable from the Codex CLI's
+event stream. Same author image (`sha256:3e9a15ec...a225d39a`), 2 CPUs, 2,048 MiB,
+and the same frozen runtime (source digest
+`2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4`) reused since
+Trial 2.
+
+Dispatched `2026-09-09T19:56:46.914Z`, completed `2026-09-09T20:13:04.601Z` —
+16m18s elapsed, well inside the 10,800s (3h) budget. Tokens: 587,049 input
+(518,016 cached), 28,784 output; the Codex CLI reports token counts but never a
+price, so `costUsd` is genuinely null, not missing. All five Trial 4 jobs were
+reserved within a 223ms window and confirmed running concurrently via `docker ps`
+immediately after dispatch. `completionSha256`
+`d0d8500fad3c1c12bfbfac6c851ff01ccc6e2b5f86276975291b9b32c341616d`,
+`resultSha256` `5ba969e5d37570ed33031c9a4b46d596bd47e363bc48fc7dfeb4942a823c40c2`,
+`gradeSha256` `6cf6fd4d904353a0a18bc84c141c5b62713e347f37d5da982ef3792aa36b9456` —
+974 manifest-listed files (34,053,789 bytes), reverified with zero errors. This
+is a fresh solver session given only the original public task inputs — no access
+to any prior submission, analysis, or this handoff.
+
+### Results
+
+**Reward 0. Service 27/27 (fully correct, matching Trials 2 and 3's 27/27
+exactly). Checker 14/15.** Both valid candidates (`reference`, `alternative`)
+correctly accepted, 13 of 14 negative controls correctly rejected, zero false
+positives — and, for the third consecutive independently-written checker, the
+same single candidate is wrongly accepted: `premature-publication`
+(`expectedFailingCheck: "current_artifacts"`, `observedFailingChecks:
+["current_artifacts"]`, ground truth confirms the violation; the submitted
+checker's verdict was `ok: true`).
+
+### Comparison with Trials 2–3 and recurrence assessment
+
+**Three for three, confirmed at the code level.** This session read all three
+independently-written `checker.mjs` submissions side by side (Trial 2, Trial 3,
+and this Trial 4). All three implement the identical two-part verification
+strategy: (1) a memoized recursive attestation check (`validAttestation()` /
+`artifactIsValid()`) that recomputes each artifact's expected bytes from
+`[tool, flags, transformed-source, dependencyBytes]` and requires every
+dependency to be recursively valid too; (2) a per-round "is this handle current
+for this target" check (`isCurrent()` / `matcher.matches()`) that walks the
+round's action table. None of the three ever inspects *when*, relative to
+`publish()`, the `compile()` call that minted a given handle actually occurred.
+
+The `premature-publication` candidate (read directly from
+`.local/round-four-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/incremental-build-repair-attempt-1/grading/checker-grade/candidate-premature-publication-16/entry.mjs`)
+exploits exactly this gap: for each round it predicts the handle a not-yet-issued
+`compile()` call will receive, calls `publish()` with that predicted handle
+first, and only afterward actually calls `compile()` — by which point the
+prediction happens to resolve to a byte-correct attestation. Every checker's
+"is the artifact correct" and "is the artifact current for this target" checks
+end up trivially satisfied because they are evaluated against the *final* ledger
+state, not against what existed at the moment of publication. Trial 4's checker
+does track `compile`/`publish`/`next` observations in strict sequence order
+(`lastSeq` monotonicity, round activation/deactivation) and even cross-checks
+that the *count* of observed `compile` calls per round matches the recorded
+`calls[index]` vector — closer bookkeeping than Trial 2's or Trial 3's — but it
+still never asserts that a round's `compile()` observations occur *before* that
+round's `publish()` observation. The added rigor tightens count-matching and
+duplicate-publish detection without touching the specific ordering dimension
+the negative control targets.
+
+Three fresh Codex/xhigh sessions, no shared context between any of them,
+converged on the identical structural blind spot: exhaustive content-addressed
+verification, zero issuance-before-use ordering verification. This is the
+strongest recurrence evidence in this document's history — not a shared bug in
+copied code (each submission is independently structured, using different
+helper-module names and control-flow shapes), but a shared gap in what "verify
+publication correctness" was interpreted to mean across three separate attempts.
+
+### Failure-mechanism attribution and next step
+
+This is a supported required-deliverable failure under the unchanged public
+contract (a required checker failing counts even though the service passes;
+reason text remains diagnostic-only) — not a calibration bug, an infrastructure
+error, or a disputed label. Incremental-build-repair now has **three consecutive
+reward-zero results on Codex/xhigh (3/3)**, all three attributable to the
+identical specific gap (missing issuance-before-use ordering), from three
+independently-written checkers.
+
+### Acceptance progress
+
+This unchanged successor has **3 failures and 0 solver passes in three scored
+Codex attempts — three consecutive recorded zeroes.** The user reports the CEO
+accepts at least **five failures out of six**, with three Claude and three Codex
+attempts per package. This package needs **at least 2 failures from its
+remaining 3 (Claude) attempts** to reach 5/6; those opposite-provider runs are
+not part of this batch and are not yet authorized. Different failure mechanisms
+can count; no identical-bug requirement is added — this package simply happens
+to have one, confirmed independently three times.
+
+### Next batch prepared — September 9, 2026
+
+This package continues at **3/3 failures**. Its
+three Codex attempts are complete. The user authorized the next attempt on
+**Claude**, using the exact same package and grading. This is **Trial 5**
+in this history, the fourth attempt on the unchanged successor and the first
+with the opposite provider. It runs concurrently with the other three continuing
+packages. The remaining three provider slots need at least two failures to
+reach 5/6; only the first of those slots is prepared for this launch.
+
+[Prepared controller and handoff](../../../docs/round-five-continuing-four-handoff.md).
+No new model attempt was launched during preparation. Different valid failure
+mechanisms and required-checker-only failures can count; the provider switch
+does not reset or discard the existing results.
