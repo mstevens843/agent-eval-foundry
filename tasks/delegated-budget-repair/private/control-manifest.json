@@ -1,40 +1,67 @@
 [
   {
     "id": "receipt-claim",
-    "overlay": { "entry.mjs": "controls/receipt-claim.mjs" },
+    "overlay": {
+      "entry.mjs": "controls/receipt-claim.mjs"
+    },
     "check": "decisions",
     "clean": "case-000",
     "selectionRole": "post-selection-validation"
   },
   {
     "id": "per-request-budget",
-    "overlay": { "src/allocation.mjs": "controls/per-request-budget.mjs" },
+    "overlay": {
+      "src/allocation.mjs": "controls/per-request-budget.mjs"
+    },
     "check": "aggregate_budget",
     "clean": "case-000"
   },
   {
     "id": "owner-blind",
-    "overlay": { "src/allocation.mjs": "controls/owner-blind.mjs" },
+    "overlay": {
+      "src/allocation.mjs": "controls/owner-blind.mjs"
+    },
     "check": "ownership",
     "clean": "case-000"
   },
   {
     "id": "stale-version",
-    "overlay": { "src/allocation.mjs": "controls/stale-version.mjs" },
+    "overlay": {
+      "src/allocation.mjs": "controls/stale-version.mjs"
+    },
     "check": "ownership",
     "clean": "case-000"
   },
   {
     "id": "unknown-abandon",
-    "overlay": { "src/transport.mjs": "controls/unknown-abandon.mjs" },
+    "overlay": {
+      "src/transport.mjs": "controls/unknown-abandon.mjs"
+    },
     "check": "decisions",
     "clean": "case-000"
   },
-  { "id": "no-work", "overlay": { "entry.mjs": "controls/no-work.mjs" }, "check": "completion" },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion"
+  },
   {
     "id": "isolation",
-    "overlay": { "entry.mjs": "controls/isolation.mjs" },
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
     "check": "completion",
     "isolation": true
+  },
+  {
+    "id": "local-receipt-only",
+    "overlay": {
+      "src/dispatcher.mjs": "controls/local-receipt-only.mjs"
+    },
+    "check": "decisions",
+    "clean": "case-011",
+    "selectionRole": "restart-regression"
   }
 ]

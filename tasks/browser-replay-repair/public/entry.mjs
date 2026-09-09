@@ -1,2 +1,5 @@
-import { replay } from "./src/replay.mjs";
-export const subject = { run: replay };
+export const subject = {
+  async run(view, api) {
+    return {};
+  },
+};

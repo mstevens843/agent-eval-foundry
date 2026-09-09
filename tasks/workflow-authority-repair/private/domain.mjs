@@ -164,12 +164,13 @@ export async function runScenario(s, execute, storage) {
   // eventually redeliver it. `active` is reset here — outside any operation — so the next `take()`
   // redelivers the interrupted delivery rather than reporting "unfinished" forever.
   for (;;) {
+    const crashCount = crashedOnce.size;
     try {
       await execute(session({ jobs: s.jobs, storage }, operations, (r) => reports.push(r), observations));
       break;
     } catch (err) {
       const message = String(err?.message ?? err);
-      if (active && crashTargets.has(active.id) && message.includes(CRASH_MARKER)) {
+      if (active && crashedOnce.size > crashCount && crashTargets.has(active.id) && message.includes(CRASH_MARKER)) {
         active = null;
         continue;
       }

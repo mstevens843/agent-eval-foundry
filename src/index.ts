@@ -1037,6 +1037,7 @@ export * from "./packages/assembly.js";
 export * from "./packages/assurance.js";
 export * from "./trials/outcome.js";
 export * from "./packages/portfolio.js";
+export { positiveVariantKeys } from "./packages/checker-contract.js";
 export { measurementContext } from "./measurement-context.js";
 export { withCommandContext } from "./foundry/operation-context.js";
 export { browserProduction } from "./families/ui-replay-browser-backed/production.js";

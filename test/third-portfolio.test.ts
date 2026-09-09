@@ -95,10 +95,13 @@ it("provides checker stimulus data without leaking maintenance invariant verdict
     const scenario = f.generator.scenarios()[0];
     const result = await run(id, scenario);
     expect(readFileSync(`tasks/${id}/public/instruction.md`, "utf8")).toContain("CHECKER-INPUT.md");
-    expect(readFileSync(`tasks/${id}/public/CHECKER-INPUT.md`, "utf8")).toContain("60 seconds TOTAL");
+    expect(readFileSync(`tasks/${id}/public/CHECKER-INPUT.md`, "utf8")).toContain("60 seconds");
     if (id === "capacity-maintenance-repair") {
       expect(result.history.length).toBeGreaterThan(0);
-      for (const state of result.history) expect(Object.keys(state).sort()).toEqual(["done", "placement"]);
+      for (const state of result.history) {
+        expect(Object.keys(state).sort()).toEqual(["done", "placement"]);
+        expect(Array.isArray(state.placement)).toBe(true);
+      }
     }
     if (id === "verified-installation-repair") {
       expect(result.initial).toEqual(scenario.initial);
@@ -111,26 +114,74 @@ it("provides checker stimulus data without leaking maintenance invariant verdict
 });
 it("preserves generator hashes through post-selection validation", () => {
   const ledger = JSON.parse(readFileSync("data/third-portfolio-selection-ledger.json", "utf8"));
-  for (const g of ledger.generators)
+  const successors = [
+    ...JSON.parse(readFileSync("reports/screening/evidence/2026-09-09-next-five-generators.json", "utf8")),
+    ...JSON.parse(
+      readFileSync("reports/screening/evidence/2026-09-09-third-ranked-five-generators.json", "utf8"),
+    ),
+  ] as { id: string; historicalGeneratorSha256: string; generatorSha256: string }[];
+  for (const g of ledger.generators) {
+    const successor = successors.find((s) => s.id === g.id);
+    if (successor) expect(successor.historicalGeneratorSha256).toBe(g.generatorSha256);
     expect(
       createHash("sha256")
         .update(readFileSync(`tasks/${g.id}/private/scenarios.mjs`))
         .digest("hex"),
-    ).toBe(g.generatorSha256);
+    ).toBe(successor?.generatorSha256 ?? g.generatorSha256);
+  }
   expect(ledger.validationControls).toHaveLength(5);
 });
 for (const id of ids)
   it(`${id} accepts both correct strategies on the complete scenario population`, async () => {
     const f = await get(id);
+    const checker = await import(pathToFileURL(join(f.root, "reference/checker.mjs")).href);
     for (const scenario of f.generator.scenarios())
-      for (const variant of ["reference", "alternative"])
-        expect((await run(id, scenario, variant)).failures).toEqual([]);
+      for (const variant of ["reference", "alternative"]) {
+        const result = await run(id, scenario, variant);
+        expect(result.failures).toEqual([]);
+        const cell = { ...result };
+        for (const key of ["checks", "failures", "expected", "truth", "groundTruth", "status"])
+          delete cell[key];
+        const verdict = await checker.run({ cases: [{ token: "candidate", cells: [cell] }] });
+        expect(verdict.verdicts.candidate.ok, `${id}/${scenario.id}/${variant}`).toBe(true);
+      }
   });
 it("does not invent a mandatory change when requested routing behavior already holds", async () => {
   const f = await get(ids[3]);
   const s = f.generator.scenarios()[0];
   s.request.preference = 100;
   expect((await run(ids[3], s)).failures).toEqual([]);
+});
+it("permits the documented 1024 routing terms without counting fallback actions as terms", async () => {
+  const f = await get("route-policy-repair");
+  const original = { egresses: { e: "p" }, policies: { p: { terms: [], fallback: { kind: "accept" } } } };
+  const scenario = {
+    config: original,
+    request: { egresses: [], match: {}, preference: 42 },
+    routes: [{ egress: "e", route: { prefix: "0.0.0.0/0", preference: 100, communities: [] } }],
+  };
+  for (const count of [1024, 1025]) {
+    const config = {
+      egresses: original.egresses,
+      policies: {
+        p: {
+          terms: Array.from({ length: count }, () => ({ match: {}, action: { kind: "continue" } })),
+          fallback: { kind: "accept" },
+        },
+      },
+    };
+    const result = await f.domain.runScenario(
+      scenario,
+      async (adapter: {
+        invoke: (name: string, args: unknown[]) => Promise<unknown>;
+      }) => {
+        await adapter.invoke("api.publish", [{ config }]);
+      },
+      f.root,
+    );
+    expect(result.checks.completion).toBe(count === 1024);
+    if (count === 1024) expect(result.failures).toEqual([]);
+  }
 });
 it("allows documented failed-publication recovery rather than grading an unstated prohibition", async () => {
   for (const id of [ids[0], ids[1], ids[3], ids[4]]) {

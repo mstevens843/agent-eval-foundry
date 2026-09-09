@@ -7,6 +7,8 @@ export const subject = {
     const decisions = [];
     for (const r of view.requests) {
       let result = api.lookup({ key: r.id });
+      for (let poll = 1; result.status === "PENDING" && poll < 3; poll++) result = api.lookup({ key: r.id });
+      if (result.status === "PENDING") throw Error("receipt resolution bound");
       if (result.status !== "ACCEPTED") {
         const w = wallets.get(r.wallet),
           g = w?.grants.find((g) => g.id === r.grant);

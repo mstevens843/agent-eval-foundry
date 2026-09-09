@@ -27,3 +27,26 @@ The capture bug was concrete: valid large streamed JSON events exceeded the old 
 ## Evidence boundary
 
 [Sanitized records](../evidence/2026-09-07-original-five.json) distinguish the failed capture from the completed retry and preserve artifact hashes. [Maintained task](../../../tasks/browser-replay-repair/) and [batch limitations](../README.md) provide context. The reported CLI dollar estimate is not an actual subscription charge.
+
+## 2026-09-09 — Engineering successor prepared for Trial 2
+
+**Ready for a second exploratory Foundry trial; no second model trial has run for this version.** This section is an engineering record, not a new reward result. Priority in the next group: 2/5. See the [selection and implementation report](../next-five-implementation-plan-2026-09-09.md) and [hashed validation evidence](../evidence/2026-09-09-next-five-implementation.json). Earlier trial results and package descriptions above remain historical.
+
+Integrated the four interruption successor scenarios (20 scenarios total), using a task-private adapter that actually ends the submitted process after a host operation commits and before its response reaches the submission. Restart preserves the real browser, storage and external effects. The public contract describes that failure boundary and redelivery without prescribing a journal design. Added a whole-trace-only memoization negative control with an ordinary non-crash witness. The reference and alternative service closures are now entirely private; the public service entry point is empty.
+
+This version also adds a release-validator deliverable. Its raw inputs include recorded events, complete attempts and confirmation behavior; the independent private checker evaluates committed effects, order, current preconditions and reports. Real Playwright ZIP traces are retained as verifier artifacts, while archive payloads and derived correctness fields are excluded from checker input. This is a versioned task change: compare Trial 2 with the historical service-only trial accordingly.
+
+Local validation passed 13 service-assurance checks, including correct reference and alternative services, semantic failure of the untouched starter, repeatability and negative-control activation. The independent checker correctly classified 10/10 candidates: two correct implementations and 8 negative controls, with zero false accepts or misses. The Foundry export rebuilt identically and passed fresh recipient validation. All 22 native static checks passed. These controls are author-side evidence, not model attempts or proof that an unseen solver will fail.
+
+The native browser integrity attempt timed out at 600 seconds with an infrastructure error during browser-context shutdown after the reference, alternative and one negative control passed. The final native export adds an init process to reap orphaned browser processes; the direct integrity command also uses --init. This is a suspected fix, with a Docker rerun pending while the first group occupies the host. It does not change the separately validated Foundry export. All five native Harbor end-to-end oracle/nop jobs remain pending; this does not prevent using the validated Foundry path for exploratory trials.
+
+Use this exact Foundry export:
+
+- Directory: `.local/next-five-implementation-2026-09-09/release-ready/browser-replay-repair/export`
+- Package digest: `ab3f64e81500aa342ff899eba2a0a9a24421345e91a78f7d900cfd044aec1d71`
+- Native build, with the validation boundary above: `.local/next-five-implementation-2026-09-09/harbor-final/browser-replay-repair`
+- Native digest: `87ee896596d463215fa65ca067ba308f68161a370c8154909d2b9fd08ae061d9`
+
+Both deliverables are required. The checker must return complete deterministic Boolean verdicts; reasons are optional diagnostics and submitted helpers are available. Public API, output schemas and observable requirements remain provided, without a worked implementation.
+
+When Trial 2 finishes, append its actual model/profile, frozen package digest, service and checker outcomes, elapsed time, infrastructure exclusions and observed submission defects here. Do not overwrite Trial 1 or count an infrastructure error, an author control or an old label dispute as a new standard model failure.

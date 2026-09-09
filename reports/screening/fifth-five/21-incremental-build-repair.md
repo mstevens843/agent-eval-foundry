@@ -184,3 +184,124 @@ All three fixes were ported to the frozen dispatch tree
 **When trials run again:** #21 should score a genuine pass on the check-boundary defect
 this report diagnosed; `premature-publication` remains available as a harder distinguishing
 case for future checker submissions.
+
+## September 9 implementation successor — ready for exploratory trials
+
+The currentness, publication-scope and compiler-handle availability fixes are integrated. The input exposes original rounds and the complete observed dependency closure. The premature-publication control remains private. Duplicate unchanged-entry diagnosis is removed; include handling, build traversal and caching are no longer supplied in the starter.
+
+Both deliverables now have complete private oracle implementations. The public service
+starts from an empty entry point. The checker classifies every supplied case with a
+Boolean verdict; optional reasons are ungraded diagnostics, and helper modules are
+allowed. Original results above remain historical; no second model trial was run.
+
+Executed validation on this successor:
+
+- Service oracle: 27/27 scenarios; checker oracle: 15/15 candidates.
+- Protected Foundry assurance: 18 operations passed; deterministic rebuild and
+  exported-CLI recipient reproduction passed, including drift and invalid-execution checks.
+- Native Harbor oracle reward 1; native nop reward 0; no Harbor exceptions.
+- All 22 pinned upstream static checks and all six local checker/integrity controls passed.
+  These local controls are not the official model-powered cheat qualification trials.
+
+Canonical source: `tasks/incremental-build-repair`. Native export:
+`.local/top-five-implementation-2026-09-09/harbor-ready/incremental-build-repair`.
+
+Native export digest: `3517d6932c67baba9803be6c8c153c9c958c10357a35503ecb15879655f2f2b8`.
+Foundry package digest: `34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a`.
+
+[Versioned evidence](../evidence/2026-09-09-top-five-implementation.json) records source
+hashes, logs, per-check CTRF results and both package identities. The
+[shared implementation record](../top-five-implementation-plan-2026-09-09.md) explains
+policy and tooling changes. Use these maintained sources or the identified exports
+for the next trial, rather than the older local successor copies named above.
+
+Readiness means engineering readiness for exploration. Removing supplied implementation
+code changes the difficulty hypothesis and invalidates any attempt to reuse earlier
+model results as qualification for this version. Fresh model evidence is still needed.
+The eventual chosen submission also needs human-authored reviewer material and the
+required rubric, standard and cheat qualification runs; those requirements do not
+justify delaying exploration to qualify all five candidates.
+
+## Trial 2 — implementation successor — September 9, 2026
+
+### Identity and execution
+
+Run `incremental-build-repair-attempt-1`, package digest
+`34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a`. Requested target **codex**,
+`openai/gpt-5.6-sol`, effort `xhigh`. Frozen execution source:
+`2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4`.
+The pinned author image was
+`sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a`.
+
+Started `2026-09-09T11:35:50.944Z`, completed `2026-09-09T11:49:56.133Z`.
+One of exactly five fresh campaign attempts, reserved within **232 ms** and reported
+running concurrently by the dispatching agent's `docker ps` observation. Budget:
+10,800 seconds, 2 CPUs, 2 GiB; signed subscription-only authorization, one attempt,
+no automatic retries or recorded paid-API fallback. No timeout is recorded.
+Requested settings are not runtime attestations: Claude model strings were observed;
+Codex model identity and effort/scaffold versions were unobservable in the captures.
+CLI dollar estimates are not subscription charges.
+
+### Changes and results
+
+The service starts from an empty entry point. The successor integrated currentness/
+publication-scope corrections, complete raw rounds and dependency provenance, and the
+`premature-publication` control before dispatch. The service and checker were required
+in both trials; Trial 2 scores Boolean checker verdicts with diagnostic-only reasons.
+
+**Reward 0. Service 27/27; checker 14/15.** Both valid candidates are accepted, twelve
+negative controls rejected, and `premature-publication` wrongly accepted. No service
+scenario failed. This is a substantive failure of a required deliverable.
+
+The frozen SEMANTICS.md says: **“Only compiler-issued handles can be published.”**
+CHECKER-INPUT.md supplies ordered `{seq, method, request, value}` observations.
+In the first premature-publication control cell, target `t` publishes `built-4` at
+sequence **13**, while the compiler only returns that handle at sequence **17**.
+The same cell has further publish-before-issue pairs at 28/30, 43/45 and 60/61.
+The handle names are predictable ordinals, not the content-addressed identifiers
+asserted in the initial campaign analysis.
+
+The submitted checker validates artifact structure against the final ledger and
+counts compile/publish operations per round, but does not enforce issuance before
+use. A later compile therefore makes a premature publication appear valid to it.
+An offline replay of the unchanged submission reproduces both recorded verdict sets,
+including acceptance of this defective candidate. The private control violates a
+consequence of the public attestation rule; no undisclosed reason label is involved.
+
+### Observable solving behavior
+
+The capture analysis records twelve shell/file-change actions, a shared
+`artifact-semantics.mjs` helper, service and checker revisions, and local checks for
+cache reuse, invalidation and checker verdicts. The final message says the checker
+validates “protocol ordering.” It enforces round boundaries, but misses the specific
+issuance-before-publication relation above. That is a concrete completion-claim gap.
+
+### Comparison and decision
+
+Trial 1 also recorded reward 0, but its scored cause was a reason-taxonomy ambiguity.
+A later diagnostic regrade found that older checker missed the new premature-publication
+control too. That regrade is not an independent model attempt. Trial 2 is a fresh
+checker written by the **same requested Codex model pairing**, not a different model.
+
+Prioritize another independent attempt on this unchanged frozen version. Preserve the
+submitted checker as evidence; repairing its omission or supplying an ordering tutorial
+would defeat the experiment. The service suite passed, and the required checker failed
+for a contract-supported reason. This meets the exploratory completed-but-wrong objective,
+but is one fresh observation, not six qualifying failures or an established failure rate.
+
+### Evidence and qualification boundary
+
+The publication audit checked **974 manifest-listed files**
+for this record with zero mismatches and compared all four supplied contract/interface
+files against the frozen export. Raw evidence remains at
+`.local/round-two-top-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/incremental-build-repair-attempt-1/`.
+The earlier Trial 1 text and dated engineering additions above are preserved.
+
+[Campaign results and audited decisions](../round-two-top-five-2026-09-09.md) ·
+[Sanitized trial evidence](../evidence/2026-09-09-round-two-top-five.json) ·
+[Integrity and diagnostic evidence](../evidence/2026-09-09-round-two-top-five-audit.json).
+
+This is an exploratory repository assessment. The immutable result still records
+`adjudication: unlabelled`, `modelEvidenceEligible: false` and
+`countsAsModelFailure: false`; publication does not change those fields or claim
+six standard failures, official cheat qualification or independent blind review.

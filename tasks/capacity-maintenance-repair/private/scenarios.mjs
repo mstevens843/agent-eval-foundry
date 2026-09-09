@@ -49,36 +49,22 @@ export function scenarios() {
     return { id: "case-" + String(i).padStart(3, "0"), hosts, services, placement, requests, dependencies };
   });
   const cases = [...base, fullScaleCase()];
-  // More copies of already-confirmed witnessing configurations, purely additive (every case
-  // above is untouched). checker-required grading (gradeChecker) resolves its graded scenario
-  // subset dynamically: it grows only until every private/controls/* mutant's raw observable
-  // trace differs from the reference SOMEHOW, not necessarily via the specific check.mjs
-  // violation it plants. Almost every control here (however it's overlaid) ends up running
-  // through the STILL-BUGGY starter src/planner.mjs, whose search stops as soon as every
-  // requested host is upgraded WITHOUT requiring placement to be restored first -- so nearly
-  // every control shows a "restoration" trace difference from the reference immediately, which
-  // is enough on its own to satisfy that dynamic resolver at the smallest possible window, long
-  // before a scenario that actually exercises count-not-weight's true-weighted-capacity bug,
-  // zone-blind's true-perZone bug, or remove-before-replacement's temporary-under-min bug is
-  // ever reached. Those bugs are real and independently confirmed to manifest on specific
-  // existing case ids (case-003/004/005/006/020/022/025 for count-not-weight; case-015/017 for
-  // zone-blind, the scarcest at only 2 of 26; most of case-000 through case-023 for
-  // remove-before-replacement) -- this just gives each of those known-good configurations
-  // several more independently-shuffled ids in the declared space, so whatever small window the
-  // resolver settles on has a much better chance of actually containing one, without weakening
-  // or changing any existing scenario's semantics.
-  const clone = (sourceId, suffix) => {
-    const source = cases.find((c) => c.id === sourceId);
-    const copy = structuredClone(source);
-    copy.id = sourceId + "-w" + suffix;
-    return copy;
-  };
-  for (const sourceId of ["case-015", "case-017"])
-    for (let i = 0; i < 25; i++) cases.push(clone(sourceId, i));
-  for (const sourceId of ["case-003", "case-004", "case-005", "case-006", "case-020", "case-022", "case-025"])
-    for (let i = 0; i < 8; i++) cases.push(clone(sourceId, i));
-  for (const sourceId of ["case-000", "case-007", "case-016"])
-    for (let i = 0; i < 2; i++) cases.push(clone(sourceId, i));
+  const identity = structuredClone(base[0]);
+  identity.id = "case-026";
+  const hostIds = new Map(identity.hosts.map((h, i) => [h.id, ["h:0", "h,1", "h/2", "constructor", "__proto__"][i]]));
+  const serviceIds = new Map(identity.services.map((s, i) => [s.id, ["constructor", "__proto__"][i]]));
+  for (const h of identity.hosts) {
+    h.id = hostIds.get(h.id);
+    h.zone = h.zone === "a" ? "__proto__" : h.zone === "b" ? "constructor" : "z/other";
+  }
+  for (const s of identity.services) {
+    s.id = serviceIds.get(s.id);
+    s.eligible = s.eligible.map(id => hostIds.get(id));
+  }
+  identity.placement = identity.placement.map(p => ({ host: hostIds.get(p.host), service: serviceIds.get(p.service) }));
+  identity.requests = identity.requests.map(id => hostIds.get(id));
+  identity.dependencies = identity.dependencies.map(d => ({ before: hostIds.get(d.before), after: hostIds.get(d.after) }));
+  cases.push(identity);
   return cases;
 }
 

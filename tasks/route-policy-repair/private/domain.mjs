@@ -80,7 +80,7 @@ function validate(config) {
         throw Error("communities");
   }
   for (const p of Object.values(config.policies)) {
-    if (!Array.isArray(p.terms) || ++terms + p.terms.length > 1024) throw Error("terms");
+    if (!Array.isArray(p.terms) || terms + p.terms.length > 1024) throw Error("terms");
     terms += p.terms.length;
     action(p.fallback);
     for (const t of p.terms) {
@@ -184,16 +184,6 @@ export async function runScenario(s, execute, storage) {
     routes: s.routes,
     observations,
     reports,
-    // Legitimate PROBLEM data, not answer data: view.config and view.request are handed
-    // directly to every candidate's own run(view, api) as its input (see runScenario's
-    // session() call above and SEMANTICS.md's `view has config ... request ...` description) —
-    // every solver already sees both in full. Echoing them back here lets an independent
-    // checker reimplement SEMANTICS.md's own evaluate()/matches() rules itself, so it can
-    // determine — from the candidate's own published config (observed via `observations`, the
-    // real request+response of its api.publish call) — which routes it constructs to probe with
-    // are in request-scope and what the ORIGINAL (unpublished) configuration would have done
-    // with them. The private per-scenario routes themselves (s.routes) and the precomputed
-    // correct outcome (the stripped `expected[].result`) remain entirely unseen.
     config: s.config,
     request: s.request,
   };

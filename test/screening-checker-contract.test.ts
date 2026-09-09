@@ -1,7 +1,30 @@
 import { describe, expect, it } from "vitest";
-import { namesCheck, namesObservedFailure, positiveVariantKeys } from "../src/packages/checker-contract.js";
+import {
+  completeVerdicts,
+  namesCheck,
+  namesObservedFailure,
+  positiveVariantKeys,
+} from "../src/packages/checker-contract.js";
 
 describe("screening checker contracts", () => {
+  it("requires a Boolean verdict for every token, independently of optional diagnostics", () => {
+    const tokens = ["good", "bad"];
+    expect(completeVerdicts({ verdicts: { good: { ok: true }, bad: { ok: false } } }, tokens)).toBe(true);
+    expect(
+      completeVerdicts(
+        { verdicts: { good: { ok: true }, bad: { ok: false, reasons: ["free explanation"] } } },
+        tokens,
+      ),
+    ).toBe(true);
+    for (const bad of [
+      { good: { ok: true } },
+      { good: { ok: true }, bad: {} },
+      { good: { ok: true }, bad: { ok: 0 } },
+      { good: { ok: true }, bad: { ok: false }, extra: { ok: false } },
+      { good: { ok: true }, bad: { ok: false, reasons: [3] } },
+    ])
+      expect(completeVerdicts({ verdicts: bad }, tokens)).toBe(false);
+  });
   it("accepts another genuinely violated obligation instead of a private primary label", () => {
     expect(
       namesObservedFailure(["terminal_history: wrong decision"], ["completion", "terminal_history"]),

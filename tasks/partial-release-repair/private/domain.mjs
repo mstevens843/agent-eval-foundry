@@ -1,5 +1,5 @@
 import { session, checks, equal } from "./adapter.mjs";
-const normalized = (r) => ({ ...r, parents: [...r.parents].sort() });
+const normalized = (r) => ({ ...r, parents: [...new Set(r.parents)].sort() });
 export async function runScenario(s, execute, storage) {
   const actual = new Map(s.current.map((r) => [r.id, structuredClone(r)])),
     operations = [],
@@ -80,7 +80,7 @@ export async function runScenario(s, execute, storage) {
     requestedScope: s.scope,
     requestedTarget: s.target,
     initialResources: s.current,
-    operations,
+    operations: operations.map(({ method, args, before }) => ({ method, args, before })),
     observations,
     reports,
   };

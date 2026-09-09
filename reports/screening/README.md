@@ -1,10 +1,51 @@
 # Screening results and what they changed
 
+The [audited round-two screening](round-two-top-five-2026-09-09.md) records **three
+zero rewards from five fresh trials**: 21 — incremental build, 25 — issued report,
+and 19 — variant cache. **21 and 25 are supported substantive required-checker
+failures.** Both agents completed services that passed their suites and still
+submitted incorrect required validators. 07 and 24 passed both deliverables.
+
+Issued report's supplied API observations provided a sufficient documented route to
+the required facts. An offline diagnostic confirmed that route using the submitted
+checker's own fallback; its original false rejections came from preferring misparsed
+aggregate arrays. The diagnostic is separate from the original model trial and score.
+
+Cache's recorded service and checker failures remain real observations, but its public
+matching rule and the private wildcard replacement predicate require resolution before
+calling all three zeroes undisputed fair failures. This is one concrete contract question,
+not a rule against expert inference or hidden tests. See
+[campaign evidence](evidence/2026-09-09-round-two-top-five.json) and
+[audit evidence](evidence/2026-09-09-round-two-top-five-audit.json): 4,644 manifest files
+verified with zero mismatches. All five original analysis files have dated Trial 2
+sections. Workflow authority (20) did not run in this campaign.
+
+The [completed five-package implementation](top-five-implementation-plan-2026-09-09.md)
+records the September 9 successors, all local checks and exact exports for the next
+exploratory trials. Each affected trial document has an appended change record.
+
+The [next five implementation](next-five-implementation-plan-2026-09-09.md)
+prepares **14 → 03 → 18 → 20 → 04** for exploratory Foundry retrials. All five
+Foundry exports passed local assurance and reproduction. Native browser integrity
+and native Harbor oracle/nop jobs remain pending; the report distinguishes those
+checks from Foundry readiness. No new model trials were launched for this group.
+
+The [September 9 second-trial review](second-trial-priority-2026-09-09.md) ranks all 25
+packages, recommends five candidates, and identifies remaining source-integration and
+readiness work. It preserves the original results below and records no new model trials.
+
+The [third ranked group](third-ranked-five-implementation-plan-2026-09-09.md)
+prepares **13 → 08 → 15 → 12 → 11**, bringing engineering preparation to fifteen
+candidates. All five new Foundry/native exports passed local assurance,
+reproduction, 110 static checks, 30 integrity controls and Harbor oracle/nop runs.
+Their analysis files contain dated engineering records; no new model trials were
+launched for this group. The preceding group's deferred native checks are unchanged.
+
 Batches 3, 4 and 5 are complete and analyzed: fifteen attempts, five concurrent jobs per batch, no retries or recorded execution errors. See the
 [batches 3–5 preflight checkpoint](../../docs/screening-batches-3-5.md) for current
 readiness repairs and resolved storage blocker. The ten historical results below are unchanged.
 
-Twenty-five different professional packages have a completed real-agent screening attempt on record. All twenty-five submitted **service implementations** passed their frozen service suites. In the second batch, one submitted checker rejected a valid alternative; another received zero solely because the grader demanded exact reason strings where the public wording did not clearly require that format. In batch 4, every checker correctly classified every candidate, but three received zero for reason-label disagreements. Two contradict actual failed-obligation sets; the third exposes undefined public label scope. Batch 5 adds four reward-one results and an incremental-build zero for another undefined label-scope distinction, despite correct classification of every candidate.
+The original screening covered twenty-five different professional packages. All twenty-five original submitted **service implementations** passed their frozen service suites. In the second batch, one submitted checker rejected a valid alternative; another received zero solely because the grader demanded exact reason strings where the public wording did not clearly require that format. In batch 4, every checker correctly classified every candidate, but three received zero for reason-label disagreements. Two contradict actual failed-obligation sets; the third exposes undefined public label scope. Batch 5 adds four reward-one results and an incremental-build zero for another undefined label-scope distinction, despite correct classification of every candidate. The historical table below continues to describe Trial 1 only.
 
 That is useful negative evidence about our difficulty hypotheses—not twenty-five hard tasks, and not six clean benchmark wins. The engineering response is to preserve the successful solutions, correct invalid measurements, and build stronger *contract-valid* successors.
 

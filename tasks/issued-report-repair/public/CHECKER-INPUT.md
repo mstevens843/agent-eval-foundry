@@ -1,8 +1,8 @@
-# Checker input and execution contract
+# Release-validator interface
 
-Submit a standalone checker.mjs exporting run({cases}); it may be async. Each case
-is {token,cells}, containing one candidate's actual executions. All source fields below
-are task inputs or external observations, never supplied correctness answers.
+Export `run({ cases })` from `checker.mjs`; it may be asynchronous. Each case is
+`{ token, cells }` and represents one candidate implementation. Each cell is an
+independent execution. Accept a case exactly when every cell satisfies SEMANTICS.md.
 
 ## Cell fields
 
@@ -13,26 +13,20 @@ are task inputs or external observations, never supplied correctness answers.
   the zero-based source step at publication. History includes initial and appended records.
 - observations: actual next/snapshot/publish/deliver/answer requests and responses.
 
-Obligation names: completion, amendment_content, issued_history, recipient_scope, historical_answers.
-Accept independent output order and correct alternative snapshot/read strategies.
+## Common fields and output
 
-## Common trace and output rules
+Observations are ordered `{seq, method, request, value}` API-call records.
+`scenarioId` and `token` are opaque identifiers. `reports` are candidate-returned
+diagnostics. `executions`, when present, is execution metadata. Original input and
+host-recorded effects are authoritative; no expected result or correctness verdict
+is supplied. Candidates are judged independently.
 
-Each cell also has an opaque scenarioId and reports containing untrusted diagnostics.
-Observations are ordered {seq,method,request,value} records from the external host.
-No top-level checks, failures, status, expected, truth or groundTruth verdict is supplied.
-Nested application keys are retained even if their name resembles an oracle field.
+Return `{verdicts: {[token]: {ok: boolean, reasons?: string[]}}}` with exactly one
+verdict for every supplied token. `reasons` is optional explanatory text and does
+not affect grading. Verdicts must be deterministic. Inputs must not be mutated.
+The runner invokes the checker twice with the same cases; the combined budget is
+60 seconds, with at least one CPU and 1 GiB memory available.
 
-Return {verdicts:{[token]:{ok:boolean,reasons:string[]}}} for every token. Name each
-violated public obligation you identify, either alone or as "check_name: explanation".
-For a rejected candidate, naming at least one public obligation that its actual trace
-violates satisfies reason grading. If several obligations fail, no particular primary
-label is required; a private control's authoring label is not something to guess.
-Judge each candidate independently of the existence, identity or output of another.
-Accept correct outputs regardless of object-key order or diagnostic report contents.
-
-Only checker.mjs is staged. Standard Node modules are available; other submission files,
-service APIs and network access are not. The runner invokes run twice on the same cases
-in one process. Results must be deterministic, and inputs must not be mutated. Both
-invocations combined have 60 seconds, one CPU and 1 GiB memory. Missing or malformed
-checker output fails the requirement. Both the service and checker must pass.
+The submission workspace, including helper modules, is available during checking.
+The Node 24 runtime has built-in modules. The checker must be self-contained and
+work without service APIs or network access. Missing or malformed verdicts fail validation.

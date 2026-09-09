@@ -7,7 +7,9 @@ export function dispatch(view, api) {
   const state = journal(view.storage),
     decisions = [];
   for (const request of ordered(view.requests)) {
-    const known = api.lookup({ key: request.id });
+    let known = api.lookup({ key: request.id });
+    for (let poll = 1; known.status === "PENDING" && poll < 3; poll++) known = api.lookup({ key: request.id });
+    if (known.status === "PENDING") throw Error("receipt resolution bound");
     let receipt = known.status === "ACCEPTED" ? known.receipt : (state.data.receipts[request.id] ?? null);
     if (!receipt && eligible(request, describe(request, api))) receipt = settle(request, view.job, api);
     if (receipt) state.data.receipts[request.id] = receipt;

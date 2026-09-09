@@ -92,5 +92,14 @@
     "check": "amendment_content",
     "clean": "case-024",
     "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "reverse-dependency-order",
+    "overlay": {
+      "entry.mjs": "controls/reverse-dependency-order.mjs"
+    },
+    "check": "dependency_order",
+    "clean": "case-024",
+    "selectionRole": "post-selection-validation"
   }
 ]

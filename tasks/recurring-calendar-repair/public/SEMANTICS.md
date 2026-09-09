@@ -27,7 +27,7 @@ Then apply changes in supplied order. Each names uid, rid, scope single or futur
 and action cancel or move. Match by ORIGINAL rid: equality for single, rid >= boundary
 for future. Never affect another uid. A cancel leaves a cancelled history record.
 A move adds delta minutes to the current civil start; if zone or room is supplied,
-replace that field. Moves do not revive cancelled occurrences. Changing display time
+replace that field. Moves targeting an already-cancelled occurrence leave its scheduled fields unchanged. Changing display time
 or zone does not change rid. Missing targets are valid no-ops. Attendees and their
 response values are preserved unless overridden by a source exception.
 

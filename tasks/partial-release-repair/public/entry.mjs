@@ -1,2 +1,3 @@
-import { run } from "./src/release.mjs";
-export const subject = { run };
+export const subject = {
+  async run(view, api) { return {}; },
+};

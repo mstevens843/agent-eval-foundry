@@ -47,7 +47,17 @@ it("runs full author-side control activation with clean non-activation witnesses
     protectedRoute: boolean;
   };
   // The current authority-workflow package adds crash-unsafe-memoization; retain that control.
-  expect(report.results).toHaveLength(66);
+  expect(report.results).toHaveLength(
+    ids.reduce(
+      (n, id) =>
+        n +
+        3 +
+        JSON.parse(readFileSync(`tasks/${id}/private/control-manifest.json`, "utf8")).filter(
+          (c: { isolation?: boolean }) => !c.isolation,
+        ).length,
+      0,
+    ),
+  );
   expect(report.results.every((r) => r.passed)).toBe(true);
   expect(report.providerCallsMade).toBe(0);
   expect(report.protectedRoute).toBe(false);

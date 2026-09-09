@@ -1,0 +1,32 @@
+[
+  {
+    "id": "variant-cache-repair",
+    "successorSource": ".local/post-program/fourth-five/2026-09-08-build/source/tasks/variant-cache-repair",
+    "starter": "interface-only",
+    "reasonPolicy": "diagnostic-only"
+  },
+  {
+    "id": "incremental-build-repair",
+    "successorSource": ".local/post-program/fifth-five/2026-09-08-build/source/tasks/incremental-build-repair",
+    "starter": "interface-only",
+    "reasonPolicy": "diagnostic-only"
+  },
+  {
+    "id": "issued-report-repair",
+    "successorSource": ".local/post-program/fifth-five/2026-09-08-build/source/tasks/issued-report-repair",
+    "starter": "interface-only",
+    "reasonPolicy": "diagnostic-only"
+  },
+  {
+    "id": "diagnostic-transport-repair",
+    "successorSource": ".local/post-program/fifth-five/2026-09-08-build/source/tasks/diagnostic-transport-repair",
+    "starter": "interface-only",
+    "reasonPolicy": "diagnostic-only"
+  },
+  {
+    "id": "causal-replica-repair",
+    "successorSource": ".local/post-program/next-five/2026-09-07-p09/source/tasks/causal-replica-repair",
+    "starter": "interface-only",
+    "reasonPolicy": "diagnostic-only"
+  }
+]

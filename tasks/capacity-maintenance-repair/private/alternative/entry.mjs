@@ -2,11 +2,7 @@ export const subject = {
   async run(v, api) {
     const initial = await api.state({});
     // Find a safe temporary placement independently for one upgrade, restore, then continue.
-    const encoded = (rows) =>
-      rows
-        .map((p) => p.host + "/" + p.service)
-        .sort()
-        .join(",");
+    const encoded = (rows) => JSON.stringify(rows.map(p => [p.host, p.service]).sort((a, b) => a[0].localeCompare(b[0]) || a[1].localeCompare(b[1])));
     const valid = (rows) => {
       for (const h of v.hosts) {
         let load = 0;

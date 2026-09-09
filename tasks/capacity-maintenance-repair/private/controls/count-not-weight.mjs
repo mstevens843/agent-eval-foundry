@@ -5,7 +5,7 @@ export function admissible(v, s) {
     return false;
   return v.services.every((service) => {
     const rows = s.placement.filter((p) => p.service === service.id),
-      zones = {};
+      zones = Object.create(null);
     for (const p of rows) {
       const z = hosts.get(p.host).zone;
       zones[z] = (zones[z] ?? 0) + 1;

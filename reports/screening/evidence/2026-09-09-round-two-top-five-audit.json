@@ -1,0 +1,602 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-09",
+  "scope": "Publication audit of five retained Trial 2 attempts; no new solver attempts and no original evidence mutations.",
+  "evidenceClass": "local-audit-and-diagnostic-replay",
+  "manifestVerification": [
+    {
+      "id": "causal-replica-repair",
+      "manifestFilesVerified": 777,
+      "errors": [],
+      "publishedRecordHashesMatch": true,
+      "recordedReward": 1,
+      "recordedOutcome": "semantic-pass",
+      "recordedAdjudication": "unlabelled",
+      "recordedModelEvidenceEligible": false,
+      "recordedCountsAsModelFailure": false
+    },
+    {
+      "id": "diagnostic-transport-repair",
+      "manifestFilesVerified": 1060,
+      "errors": [],
+      "publishedRecordHashesMatch": true,
+      "recordedReward": 1,
+      "recordedOutcome": "semantic-pass",
+      "recordedAdjudication": "unlabelled",
+      "recordedModelEvidenceEligible": false,
+      "recordedCountsAsModelFailure": false
+    },
+    {
+      "id": "incremental-build-repair",
+      "manifestFilesVerified": 974,
+      "errors": [],
+      "publishedRecordHashesMatch": true,
+      "recordedReward": 0,
+      "recordedOutcome": "semantic-fail",
+      "recordedAdjudication": "unlabelled",
+      "recordedModelEvidenceEligible": false,
+      "recordedCountsAsModelFailure": false
+    },
+    {
+      "id": "issued-report-repair",
+      "manifestFilesVerified": 837,
+      "errors": [],
+      "publishedRecordHashesMatch": true,
+      "recordedReward": 0,
+      "recordedOutcome": "semantic-fail",
+      "recordedAdjudication": "unlabelled",
+      "recordedModelEvidenceEligible": false,
+      "recordedCountsAsModelFailure": false
+    },
+    {
+      "id": "variant-cache-repair",
+      "manifestFilesVerified": 996,
+      "errors": [],
+      "publishedRecordHashesMatch": true,
+      "recordedReward": 0,
+      "recordedOutcome": "semantic-fail",
+      "recordedAdjudication": "unlabelled",
+      "recordedModelEvidenceEligible": false,
+      "recordedCountsAsModelFailure": false
+    }
+  ],
+  "frozenPublicContractsMatch": true,
+  "frozenPublicContractFilesCompared": 20,
+  "originalTrial1PrefixesPreserved": true,
+  "newModelCalls": 0,
+  "formalAdjudicationChanged": false,
+  "incrementalBuild": {
+    "assessment": "substantive-required-checker-failure",
+    "replay": {
+      "originalReproduced": true,
+      "candidates": [
+        {
+          "candidateId": "no-work",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "wrong-dependency-alias",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "ignore-includes",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "ignore-flags",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "reference",
+          "expectedAccept": true,
+          "originalAccept": true
+        },
+        {
+          "candidateId": "isolation",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "foreign-publication",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "ignore-dependency-order",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "duplicate-publication",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "forged-completion",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "ignore-tool",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "always-rebuild",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "partial-publication",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "premature-publication",
+          "expectedAccept": false,
+          "originalAccept": true
+        },
+        {
+          "candidateId": "alternative",
+          "expectedAccept": true,
+          "originalAccept": true
+        }
+      ]
+    },
+    "witness": {
+      "candidateId": "premature-publication",
+      "scenarioId": "case-000",
+      "witnesses": [
+        {
+          "round": "r1",
+          "publishSeq": 13,
+          "compileSeq": 17,
+          "handle": "built-4",
+          "target": "t"
+        },
+        {
+          "round": "r2",
+          "publishSeq": 28,
+          "compileSeq": 30,
+          "handle": "built-6",
+          "target": "t"
+        },
+        {
+          "round": "r3",
+          "publishSeq": 43,
+          "compileSeq": 45,
+          "handle": "built-8",
+          "target": "t"
+        },
+        {
+          "round": "r4",
+          "publishSeq": 60,
+          "compileSeq": 61,
+          "handle": "built-9",
+          "target": "t"
+        }
+      ]
+    }
+  },
+  "variantCache": {
+    "assessment": "service-failure-contract-attribution-held",
+    "replay": {
+      "originalReproduced": true,
+      "candidates": [
+        {
+          "candidateId": "reset-age-on-tier-copy",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "isolation",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "no-work",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "intermediate-wipe",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "wildcard-eviction",
+          "expectedAccept": false,
+          "originalAccept": true
+        },
+        {
+          "candidateId": "always-origin",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "store-private-response",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "unconditional-revalidation",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "ignore-response-age",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "path-only-key",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "reference",
+          "expectedAccept": true,
+          "originalAccept": true
+        },
+        {
+          "candidateId": "forged-completion",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "alternative",
+          "expectedAccept": true,
+          "originalAccept": true
+        },
+        {
+          "candidateId": "flush-unrelated-tiers",
+          "expectedAccept": false,
+          "originalAccept": false
+        },
+        {
+          "candidateId": "empty-304-body",
+          "expectedAccept": false,
+          "originalAccept": false
+        }
+      ]
+    },
+    "serviceWitness": {
+      "scenarioId": "case-022",
+      "failingChecks": [
+        "cache_provenance"
+      ],
+      "eventPath": "/wildcard",
+      "firstShieldWriteSeq": 5,
+      "replacementShieldWriteSeq": 12,
+      "oldStoredAt": 0,
+      "newStoredAt": 1,
+      "requestHeaders": {},
+      "oldVary": [
+        "*"
+      ],
+      "literalPublicHeaderEqualityMatches": true,
+      "privateFitsMatches": false
+    },
+    "contractConcern": "Public rule says wildcard is never reusable, but private fits also makes it never match for replacement. Custom bounded API explicitly does not adopt complete HTTP semantics."
+  },
+  "issuedReport": {
+    "assessment": "substantive-required-checker-failure",
+    "replay": {
+      "originalReproduced": true,
+      "intervention": "Flatten only actual.publications[].record and actual.deliveries[].receipt; preserve every semantic fact, observation and submitted source byte.",
+      "candidates": [
+        {
+          "candidateId": "reuse-issued-version",
+          "expectedAccept": false,
+          "originalAccept": false,
+          "shapeNormalizedAccept": false
+        },
+        {
+          "candidateId": "reverse-dependency-order",
+          "expectedAccept": false,
+          "originalAccept": false,
+          "shapeNormalizedAccept": true
+        },
+        {
+          "candidateId": "duplicate-notification",
+          "expectedAccept": false,
+          "originalAccept": false,
+          "shapeNormalizedAccept": false
+        },
+        {
+          "candidateId": "forged-completion",
+          "expectedAccept": false,
+          "originalAccept": false,
+          "shapeNormalizedAccept": false
+        },
+        {
+          "candidateId": "current-for-historical",
+          "expectedAccept": false,
+          "originalAccept": false,
+          "shapeNormalizedAccept": false
+        },
+        {
+          "candidateId": "only-requested-recipients",
+          "expectedAccept": false,
+          "originalAccept": false,
+          "shapeNormalizedAccept": false
+        },
+        {
+          "candidateId": "alternative",
+          "expectedAccept": true,
+          "originalAccept": false,
+          "shapeNormalizedAccept": true
+        },
+        {
+          "candidateId": "no-work",
+          "expectedAccept": false,
+          "originalAccept": false,
+          "shapeNormalizedAccept": false
+        },
+        {
+          "candidateId": "unrelated-recipient",
+          "expectedAccept": false,
+          "originalAccept": false,
+          "shapeNormalizedAccept": false
+        },
+        {
+          "candidateId": "isolation",
+          "expectedAccept": false,
+          "originalAccept": false,
+          "shapeNormalizedAccept": false
+        },
+        {
+          "candidateId": "corrections-labelled-initial",
+          "expectedAccept": false,
+          "originalAccept": false,
+          "shapeNormalizedAccept": false
+        },
+        {
+          "candidateId": "reference",
+          "expectedAccept": true,
+          "originalAccept": false,
+          "shapeNormalizedAccept": true
+        },
+        {
+          "candidateId": "stale-dependent-lineage",
+          "expectedAccept": false,
+          "originalAccept": false,
+          "shapeNormalizedAccept": false
+        },
+        {
+          "candidateId": "drop-source-lineage",
+          "expectedAccept": false,
+          "originalAccept": false,
+          "shapeNormalizedAccept": false
+        }
+      ]
+    },
+    "originalCorrect": 12,
+    "diagnosticCorrect": 13,
+    "total": 14,
+    "omittedPublicShapes": [
+      "actual.publications[] = {after, record: Publication}",
+      "actual.deliveries[] = {after, receipt: Receipt}"
+    ],
+    "latentMiss": "reverse-dependency-order",
+    "originalRewardUnchanged": 0,
+    "documentedObservationReplay": {
+      "intervention": "Omit the two aggregate arrays only; use the original checker and its existing documented-observation fallback. No semantic facts changed.",
+      "candidates": [
+        {
+          "candidateId": "reuse-issued-version",
+          "expectedAccept": false,
+          "accepted": false
+        },
+        {
+          "candidateId": "reverse-dependency-order",
+          "expectedAccept": false,
+          "accepted": true
+        },
+        {
+          "candidateId": "duplicate-notification",
+          "expectedAccept": false,
+          "accepted": false
+        },
+        {
+          "candidateId": "forged-completion",
+          "expectedAccept": false,
+          "accepted": false
+        },
+        {
+          "candidateId": "current-for-historical",
+          "expectedAccept": false,
+          "accepted": false
+        },
+        {
+          "candidateId": "only-requested-recipients",
+          "expectedAccept": false,
+          "accepted": false
+        },
+        {
+          "candidateId": "alternative",
+          "expectedAccept": true,
+          "accepted": true
+        },
+        {
+          "candidateId": "no-work",
+          "expectedAccept": false,
+          "accepted": false
+        },
+        {
+          "candidateId": "unrelated-recipient",
+          "expectedAccept": false,
+          "accepted": false
+        },
+        {
+          "candidateId": "isolation",
+          "expectedAccept": false,
+          "accepted": false
+        },
+        {
+          "candidateId": "corrections-labelled-initial",
+          "expectedAccept": false,
+          "accepted": false
+        },
+        {
+          "candidateId": "reference",
+          "expectedAccept": true,
+          "accepted": true
+        },
+        {
+          "candidateId": "stale-dependent-lineage",
+          "expectedAccept": false,
+          "accepted": false
+        },
+        {
+          "candidateId": "drop-source-lineage",
+          "expectedAccept": false,
+          "accepted": false
+        }
+      ]
+    },
+    "rulesReview": "Expected-output schema rules do not automatically disqualify undocumented aggregate inputs. The supplied observation envelope and API specification provide a sufficient alternative; the submitted checker's existing fallback can read it. Original false rejections are supported as a checker implementation failure."
+  },
+  "artifactHashes": [
+    {
+      "packageId": "incremental-build-repair",
+      "recordRelativePath": "submission/checker.mjs",
+      "sha256": "1b76832333457a0f1d3977dbaa3c4c87f37c1e378d5adf8241b8bf2e2926ffd8"
+    },
+    {
+      "packageId": "incremental-build-repair",
+      "recordRelativePath": "public/public/SEMANTICS.md",
+      "sha256": "958b07d09bac49d95e9204de40bba88d752737c61b4f415e9ca926a3567d6eab"
+    },
+    {
+      "packageId": "incremental-build-repair",
+      "recordRelativePath": "public/public/CHECKER-INPUT.md",
+      "sha256": "eb03ff18cc342c7c52a72a34f6a4051c84b7dc6dacdad7dcb2bbb56e84d576ed"
+    },
+    {
+      "packageId": "incremental-build-repair",
+      "recordRelativePath": "grading/checker-grade/cases/cases.json",
+      "sha256": "afb93b5e5f8f0ce34508bdd2aa5a6e0645c23a27c8a96924593082b32c34e35f"
+    },
+    {
+      "packageId": "incremental-build-repair",
+      "recordRelativePath": "grading/checker-grade/checker-process.log",
+      "sha256": "939627922964d71a2f0350536c8a021efa63ef6f6c5e08d50030424a8bedfffe"
+    },
+    {
+      "packageId": "incremental-build-repair",
+      "recordRelativePath": "grading/checker-grade/grade-summary.json",
+      "sha256": "689fe9f88a21705d4a226324a31cbd35b1570c39bd9396148e8d39d5fc50daa9"
+    },
+    {
+      "packageId": "variant-cache-repair",
+      "recordRelativePath": "submission/checker.mjs",
+      "sha256": "8896eb993c1cb167907f95139d5ed2a8ea040bfcbe0189a87284cc486922d209"
+    },
+    {
+      "packageId": "variant-cache-repair",
+      "recordRelativePath": "public/public/SEMANTICS.md",
+      "sha256": "131623e354649247acf5fd07c0ab3f36c7ebb2f149da84ec83864d47209cb410"
+    },
+    {
+      "packageId": "variant-cache-repair",
+      "recordRelativePath": "public/public/CHECKER-INPUT.md",
+      "sha256": "dd155554bda143054abbaecf5d93312608e6f340edc2ddae71c1ae568e030e7f"
+    },
+    {
+      "packageId": "variant-cache-repair",
+      "recordRelativePath": "grading/checker-grade/cases/cases.json",
+      "sha256": "f5bba51dbf1579e8d81e40a8a68face962476970e54875b30ad8243125d07772"
+    },
+    {
+      "packageId": "variant-cache-repair",
+      "recordRelativePath": "grading/checker-grade/checker-process.log",
+      "sha256": "4c966f1626fc84fe6d6f757688815048e999e92a649b631c275ee9f90d993b5d"
+    },
+    {
+      "packageId": "variant-cache-repair",
+      "recordRelativePath": "grading/checker-grade/grade-summary.json",
+      "sha256": "685391885e1162afbd8360a3d56fd9e68ede39c8075ad97181393a4969193151"
+    },
+    {
+      "packageId": "issued-report-repair",
+      "recordRelativePath": "submission/checker.mjs",
+      "sha256": "ef3b07622701455373472ea49146d1cf730b7cc36b44bac44211cef04f72853b"
+    },
+    {
+      "packageId": "issued-report-repair",
+      "recordRelativePath": "public/public/SEMANTICS.md",
+      "sha256": "bd604848c0c65a4311743dd87ab1bbf0834a9e603abee13b79dff6e20734983c"
+    },
+    {
+      "packageId": "issued-report-repair",
+      "recordRelativePath": "public/public/CHECKER-INPUT.md",
+      "sha256": "b89c18a12504ddb13d5cebe1047d284f49d4565374df116f5064479854d18979"
+    },
+    {
+      "packageId": "issued-report-repair",
+      "recordRelativePath": "grading/checker-grade/cases/cases.json",
+      "sha256": "59729881854e75932783aef3118f1b9e1c4a6631c772296832224697ded5d1ef"
+    },
+    {
+      "packageId": "issued-report-repair",
+      "recordRelativePath": "grading/checker-grade/checker-process.log",
+      "sha256": "6c87e012681f350fbcc75f289fac286ba4ea9d7bc8df4d999e45dc966aa1899b"
+    },
+    {
+      "packageId": "issued-report-repair",
+      "recordRelativePath": "grading/checker-grade/grade-summary.json",
+      "sha256": "b2f67e0cb74903b066a3c140c6846f1b2bf191f5404c8015598dcb906e208b8d"
+    }
+  ],
+  "diagnosticDriverHashes": [
+    {
+      "path": ".local/round-two-audit-2026-09-09/replay-issued.mjs",
+      "sha256": "7c12e8eb70517752b6932260cf6709dfc34d61f1a72a574a5b68e732a9759c20"
+    },
+    {
+      "path": ".local/round-two-audit-2026-09-09/replay-checker.mjs",
+      "sha256": "1665e99b32c0b9d94d249acc2885ea6cab70f06b574ab8cbe47f369c718512ac"
+    },
+    {
+      "path": ".local/round-two-audit-2026-09-09/observations-issued.mjs",
+      "sha256": "a814f7b819312d5473a0ccbd89772f3826689542d498ae90d803459e32af25d2"
+    }
+  ],
+  "publicationValidation": {
+    "typecheck": "passed",
+    "lint": "passed",
+    "pureTests": {
+      "passed": 128,
+      "failed": 0
+    },
+    "focusedRegressionTests": {
+      "passed": 65,
+      "failed": 0
+    },
+    "secretScan": "passed",
+    "whitespace": "passed",
+    "initialFailureCorrected": "A ledger proof path referenced a removed browser starter test. Updated the historical record to point to maintained integration/successor evidence; the pure suite then passed.",
+    "portablePublicationTests": {
+      "passed": 6,
+      "failed": 0
+    },
+    "publicationRepairs": [
+      "Replaced a deleted browser starter-test ledger link with maintained historical/successor evidence.",
+      "Registered versioned follow-up reports without counting retrials as new distinct packages.",
+      "Replaced a machine-specific assignment hyperlink with its original document URL."
+    ]
+  },
+  "rulesReview": {
+    "date": "2026-09-09",
+    "recordedZeroRewards": 3,
+    "substantiveRecordedFailuresSupported": 2,
+    "remainingConcern": "variant-cache-repair: matching for replacement versus reuse",
+    "newModelCalls": 0,
+    "formalAdjudicationChanged": false
+  }
+}

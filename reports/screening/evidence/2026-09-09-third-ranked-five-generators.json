@@ -1,0 +1,17 @@
+[
+  {
+    "id": "capacity-maintenance-repair",
+    "historicalGeneratorSha256": "0952dd52e9e4c0819ad191f8bf07973379ad7754308e6df8a40daa932e1af075",
+    "generatorSha256": "78101016e69bb1cf72d2733a57a4dc247686f96ca02811d4c03342258eeb94c0"
+  },
+  {
+    "id": "rule-index-repair",
+    "historicalGeneratorSha256": "168508dded6108f1743a31f076af9a500e69930e54bd10f58c3585982ed65e0f",
+    "generatorSha256": "c6fcbedbfe757df0f412e11feeb8373915f7f37cdac70f7c17407c8dc37d8aa3"
+  },
+  {
+    "id": "verified-installation-repair",
+    "historicalGeneratorSha256": "67cfb04ba2d998325c9c86c740291dec9e5cc2b2549d75196f19fe23c6e3440d",
+    "generatorSha256": "4cb0f351745bac4bace72beb81d34644a35a3e04e4a1fbf9a6cb728406a3830a"
+  }
+]

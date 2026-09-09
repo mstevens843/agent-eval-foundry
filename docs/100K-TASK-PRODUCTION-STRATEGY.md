@@ -151,7 +151,7 @@ The improved funnel has three modes.
 - paper-screen aggressively
 - build tiny probes
 - identify cheap evidence
-- kill closed-world, self-verifiable, unfair or author-context-dependent ideas
+- reject unfair or author-context-dependent ideas; measure self-verification cost without treating it as disqualification
 
 **Validation Mode**
 
@@ -166,7 +166,7 @@ The improved funnel has three modes.
 - transfer the mechanism to another domain
 - run cross-provider trials only after smoke evidence is on target
 - run the full `/6` only after smoke and transfer evidence
-- collect human clean-room and adversarial verifier-integrity evidence
+- collect optional human clean-room evidence and required adversarial verifier-integrity evidence
 - ship only after evidence streams are separated and current
 
 The current adaptive funnel is:
@@ -448,7 +448,7 @@ Kill candidates before writing code.
 
 A candidate should die early if it is:
 
-- closed-world and easily self-verifiable
+- cheaply solved in observed trials (self-verifiability alone is not a rejection)
 - solved by obvious local tests
 - mostly prompt wording, not a systems failure
 - unfair because the hidden tests add secret rules
@@ -769,7 +769,7 @@ Suggested promotion rules:
 
 | stage | promote when | kill or repair when |
 |---|---|---|
-| candidate | mechanism is plausible and fair | closed-world, unfair, self-verifiable or no authoritative truth |
+| candidate | mechanism is plausible and fair | unfair or no authoritative truth; self-verifiability informs priority only |
 | shape | visible rules and hidden region are declared | hidden coverage would add secret rules |
 | verifier | reference passes, mutants fail intended checks | mutants/baselines pass |
 | smoke | one real agent fails intended mechanism | agent passes easily or failure is off-target |

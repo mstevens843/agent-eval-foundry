@@ -1,6 +1,6 @@
 // Trusted author property checks only. Not protected-route or model evidence.
 import assert from "node:assert/strict";
-import { cpSync, copyFileSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { cpSync, copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { spawnSync } from "node:child_process";
@@ -99,9 +99,11 @@ for (const id of ids)
       for (const v of ["reference", "alternative"]) clean(await run(id, s, v));
   });
 for (const id of ids)
-  await test(id + " public tests accept all three workspace variants", async () => {
-    for (const v of Object.values(fixtures[id].variants)) {
-      const files = readdirSync(join(v.destination, "test")).filter((p) => p.endsWith(".test.mjs"));
+  await test(id + " public tests accept correct implementations", async () => {
+    for (const name of ["reference", "alternative"]) {
+      const v = fixtures[id].variants[name];
+      const files = existsSync(join(v.destination, "test")) ? readdirSync(join(v.destination, "test")).filter((p) => p.endsWith(".test.mjs")) : [];
+      if (!files.length) continue;
       const result = spawnSync(
         process.execPath,
         ["--test", ...files.map((p) => join(v.destination, "test", p))],

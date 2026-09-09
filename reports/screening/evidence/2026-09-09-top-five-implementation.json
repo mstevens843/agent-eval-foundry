@@ -1,0 +1,1657 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-09",
+  "scope": "Engineering validation of five implementation successors; no new model trials",
+  "status": "engineering-ready-for-exploratory-trials",
+  "upstream": {
+    "revision": "83c7a6172d629c6575b785ab12c8db787bb2e323",
+    "files": [
+      {
+        "path": "check-allow-internet.sh",
+        "sha256": "3381127a1fe657c350f4d84b261757865311d3eb252afabfa1bc6e96490c394c"
+      },
+      {
+        "path": "check-canary.sh",
+        "sha256": "364754f72e349828587afaa7473daaebf36ba5758446deedf622041115b24980"
+      },
+      {
+        "path": "check-compose-host-binds.sh",
+        "sha256": "05a3d0b56248764a417af54ce105e06241b640c0a0afe70385ae79d211d7920e"
+      },
+      {
+        "path": "check-dockerfile-platform.sh",
+        "sha256": "278cb32f983bbc2406686d2145d0ee6d37a146734a47549a4e6935fa105254b7"
+      },
+      {
+        "path": "check-dockerfile-references.sh",
+        "sha256": "42109fb65183b24959755afa0b88e6a3c562b89bcd18c24461cbfc6d0af13043"
+      },
+      {
+        "path": "check-dockerfile-sanity.sh",
+        "sha256": "519805bf87fdaaa0c5082e061f99ba050a920a1738c1a5d2b8ef77e0963fa222"
+      },
+      {
+        "path": "check-gpu-types.sh",
+        "sha256": "f556fa27ac25b3eb9dc9cee0252466a3ef4078f6e55255df4c38280db9c3cb88"
+      },
+      {
+        "path": "check-instruction-suffix.sh",
+        "sha256": "71470461d67710c9a1ecd357a93a0b8a19fafb7c27b5056a289cb95492332206"
+      },
+      {
+        "path": "check-no-allow-internet-true.sh",
+        "sha256": "5fb646301d5ea0e6d3a6b55d607f7a553ca4c9c81aec82892a527b0b4e7e59ca"
+      },
+      {
+        "path": "check-nproc.sh",
+        "sha256": "302c073877da7a52fff4ce4906a27e1562a45097ce3adcdf7405da32ca47afc5"
+      },
+      {
+        "path": "check-pip-pinning.sh",
+        "sha256": "8b0cd9bb6002ba4d9e72b7084f903ecc13bc3c8c0c7cba77cdee6a3f2c55fa75"
+      },
+      {
+        "path": "check-pytest-version.sh",
+        "sha256": "c418f7bc2f76304c7a89ccb1de41efdc036796a6c4a344122ce2d007ca04262e"
+      },
+      {
+        "path": "check-separate-verifier.sh",
+        "sha256": "34b55c6fad6dbb67d0f6a97a03ff70f2c96d890a8d6508694ea9744865dc047f"
+      },
+      {
+        "path": "check-task-absolute-path.sh",
+        "sha256": "1a12d0d6d0d6d9e6685e4a3f5ada189b6e6242217d03866c7e77369336367388"
+      },
+      {
+        "path": "check-task-fields.sh",
+        "sha256": "576419e5f7c3994984d066ae14b91460c6525848b2b0ee1a768d601ba9d886e3"
+      },
+      {
+        "path": "check-task-package-name.sh",
+        "sha256": "75430aa745dbc14d41c84c3bd517c65b323469b9543dcfb942c1fb08fe29151c"
+      },
+      {
+        "path": "check-task-slug.sh",
+        "sha256": "2a0d5bfac2c859280241de609be6c1df5059d046f6cce606a9138e1d77468210"
+      },
+      {
+        "path": "check-task-timeout.sh",
+        "sha256": "279d4a835e4b7d9a5e2c4d761c2d36b5b81e8f1b950acf36fcd6113eb0de8b18"
+      },
+      {
+        "path": "check-test-file-references.sh",
+        "sha256": "c648e513ba8f7c8e2b8e699dd08313c8bee32e6359ec92be514f499394d02ea6"
+      },
+      {
+        "path": "check-test-sh-sanity.sh",
+        "sha256": "d80628b61b69c5a5a4f879b23869259fb21ff4a3575f54f281991e7c4b39002d"
+      },
+      {
+        "path": "check-trial-network-fetch.sh",
+        "sha256": "54dd5c1431f03364e128696a054629719e0b93df9f37b89badb655fcc5537ef7"
+      },
+      {
+        "path": "check-verifier-tooling-baked.sh",
+        "sha256": "c3a7d305634aac433dec50a5ec55bcbae6515b8346d6beeb0bb11efd336171f6"
+      }
+    ]
+  },
+  "providerCallsMade": 0,
+  "sharedChanges": [
+    "Optional/failing starter public tests; positives must pass supplied tests",
+    "Measured human solve optional for exploratory eligibility",
+    "Self-verifiability no longer an automatic rejection",
+    "Complete Boolean verdicts; reasons diagnostic only in these five",
+    "Submitted checker helper modules staged",
+    "Selected-package checks; release rebuild and recipient reproduction explicit",
+    "Complete private service and checker oracles; native separate verifier",
+    "Private grading data retained internally until submitted processes stop",
+    "Atomic trusted output publication; CTRF per-check reports; infrastructure errors distinguished"
+  ],
+  "checks": {
+    "pureTests": 128,
+    "focusedTestsAfterCorrections": 90,
+    "note": "These two test populations overlap; do not sum as unique tests.",
+    "staticChecks": 110,
+    "nativeIntegrityChecks": 30,
+    "oracleRewards": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "nopRewards": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "nativeOracleNamedChecks": 791,
+    "typecheck": "passed",
+    "build": "passed",
+    "lint": "passed",
+    "brokenAuthorCalibration": "Infrastructure error with nonzero exit and no reward file; tested once against shared runtime."
+  },
+  "packages": [
+    {
+      "id": "variant-cache-repair",
+      "analysisDocument": "reports/screening/fourth-five/19-variant-cache-repair.md",
+      "changeSummary": "The wildcard-eviction and intermediate-wipe controls are now in the maintained source. The public contract retains preservation and legal cache reuse, without worked examples explaining those controls. The starter no longer supplies entry matching, origin resolution, cache writes or the event loop.",
+      "maintainedSource": "tasks/variant-cache-repair",
+      "nativeExport": ".local/top-five-implementation-2026-09-09/harbor-ready/variant-cache-repair",
+      "nativeDigest": "d291ca623b9d2112cfb28670110870c5e5b19dfe3602f6f2c16fc9f79b95f3a3",
+      "foundryExport": ".local/top-five-implementation-2026-09-09/release-ready/variant-cache-repair/export",
+      "foundryDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+      "scenarioCount": 25,
+      "checkerCandidates": 15,
+      "checkerCorrect": 15,
+      "reasonPolicy": "diagnostic-only",
+      "assuranceOperations": 18,
+      "recipientReproduction": {
+        "packageId": "variant-cache-repair",
+        "packageDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+        "operations": 18,
+        "scenarioCount": 25,
+        "browserTraces": 0,
+        "invalidExecutionExcluded": true,
+        "artifactDriftRejected": true,
+        "evidenceDriftRejected": true,
+        "sourceCheckoutRequired": false,
+        "providerCallsMade": 0
+      },
+      "localIntegrity": [
+        {
+          "name": "missing-verdicts",
+          "passed": true,
+          "accepted": false,
+          "outputValid": false
+        },
+        {
+          "name": "always-accept",
+          "passed": true,
+          "accepted": false,
+          "outputValid": true
+        },
+        {
+          "name": "always-reject",
+          "passed": true,
+          "accepted": false,
+          "outputValid": true
+        },
+        {
+          "name": "mutated-input",
+          "passed": true,
+          "accepted": false,
+          "outputValid": false
+        },
+        {
+          "name": "private-read-and-reward-write-denied",
+          "passed": true,
+          "accepted": true,
+          "outputValid": true
+        },
+        {
+          "name": "forged-reward-and-output-symlink-rejected",
+          "passed": true
+        }
+      ],
+      "humanReadmeProvided": false,
+      "sourceFiles": [
+        {
+          "path": "private/alternative/entry.mjs",
+          "sha256": "4b4e39c5db0903019c185410f4be562e1d28ae8ed680f642e17a84d4f627ad05"
+        },
+        {
+          "path": "private/alternative/src/entries.mjs",
+          "sha256": "750c9411bef902c6a3abd35c802c3e76f8b4e34612206d39f3019e8679cd0cfe"
+        },
+        {
+          "path": "private/alternative/src/resolve.mjs",
+          "sha256": "1ba9afbc0bb287b94138ebb9d4cd5e79c1e1908c5d34ea6f42cafdbb509b58dc"
+        },
+        {
+          "path": "private/alternative/src/service.mjs",
+          "sha256": "4d44939747dcaba3e2698e993f94a26826fa105a2e5411a2116d58d51e233e7d"
+        },
+        {
+          "path": "private/alternative/src/store.mjs",
+          "sha256": "fa04783b1cfaf10de51388140716e38ddee4c50dec52b7aed29c1c417807d2e1"
+        },
+        {
+          "path": "private/checker-required.json",
+          "sha256": "201650dccec4b11c8d4f51dbe1ed0243b8056700e80da5526a1a5833cdd4c040"
+        },
+        {
+          "path": "private/control-manifest.json",
+          "sha256": "3cbb9dc005e4947863f5bad2d9422b005cbbeea917ed7a2aa4e119c85b78d03e"
+        },
+        {
+          "path": "private/controls/always-origin.mjs",
+          "sha256": "d50426c53020bb69e3dfa9d2a3ed5e3fe460b6ed4c8685f4d4fe4ccbe55c30da"
+        },
+        {
+          "path": "private/controls/empty-304-body.mjs",
+          "sha256": "98267f5971a71ac33099d6b3554eacd103e9987b53a2bcca0afb5bf2b75c1777"
+        },
+        {
+          "path": "private/controls/flush-unrelated-tiers.mjs",
+          "sha256": "1974cde6c4f19ea336ef79c2563bc89dbac87e24088cb0c1cd9b4cfbb033ae82"
+        },
+        {
+          "path": "private/controls/forged-completion.mjs",
+          "sha256": "9b6ca5fe17341cefd04a0f860e844e06aed65cab70070ef8ed5673326ace6366"
+        },
+        {
+          "path": "private/controls/ignore-response-age.mjs",
+          "sha256": "750c9411bef902c6a3abd35c802c3e76f8b4e34612206d39f3019e8679cd0cfe"
+        },
+        {
+          "path": "private/controls/intermediate-wipe.mjs",
+          "sha256": "715d02785408136f137d133883a9eb912646743ead0b008efecf611c6136ca1c"
+        },
+        {
+          "path": "private/controls/isolation.mjs",
+          "sha256": "5cb0fe8d8addd65dc72cbf04795ca088df98e5bb7b20a87c16b3c01463d9066b"
+        },
+        {
+          "path": "private/controls/no-work.mjs",
+          "sha256": "1a13543eb23501e77da041735b1ec2d65398a46ac89b54f7d20b9d337ab31336"
+        },
+        {
+          "path": "private/controls/path-only-key.mjs",
+          "sha256": "1aa0e010c56fc9599c6ad9b3800efe1f8e206db92f231cd56764918206889fb2"
+        },
+        {
+          "path": "private/controls/reset-age-on-tier-copy.mjs",
+          "sha256": "1ba9afbc0bb287b94138ebb9d4cd5e79c1e1908c5d34ea6f42cafdbb509b58dc"
+        },
+        {
+          "path": "private/controls/store-private-response.mjs",
+          "sha256": "49b776875d5a529b0a36ca2caf283caeb281ceb8ea343738507eff68150d9d75"
+        },
+        {
+          "path": "private/controls/unconditional-revalidation.mjs",
+          "sha256": "3c687009cc0e54d5595d9161649337b42f8d2a91bbd64477d258607ce9087457"
+        },
+        {
+          "path": "private/controls/wildcard-eviction.mjs",
+          "sha256": "783ed95ae9d70491e25050ae5774889d07b3cb51e42adcf0c795e2099ef3596d"
+        },
+        {
+          "path": "private/domain.mjs",
+          "sha256": "562a14ea758fdf8d70b03d3703ba189684668cce4677041d0ac3bd973c6a38db"
+        },
+        {
+          "path": "private/reference/checker-utils.mjs",
+          "sha256": "ec46af9f8839d7e0ec479fb841783160dd2c3d382e0b4ce40f01dc8ebe87f19c"
+        },
+        {
+          "path": "private/reference/checker.mjs",
+          "sha256": "266d31bda77f509a8e724aac2326604e985dd194de11f4bb0c249c94cfb59c28"
+        },
+        {
+          "path": "private/reference/entry.mjs",
+          "sha256": "6a3aebc000d1aa658f7a3bcad31c771ad83e2e8ae7244bb000e70b004faed371"
+        },
+        {
+          "path": "private/reference/src/entries.mjs",
+          "sha256": "cc5b3d253ce56f955c148084df88343737f2b4f309f1342d5507e40155018755"
+        },
+        {
+          "path": "private/reference/src/resolve.mjs",
+          "sha256": "fff5cf57bbd662d566ce9674e04fc0eefe43b0c765796147f4370bce6687a84a"
+        },
+        {
+          "path": "private/reference/src/service.mjs",
+          "sha256": "4d44939747dcaba3e2698e993f94a26826fa105a2e5411a2116d58d51e233e7d"
+        },
+        {
+          "path": "private/reference/src/store.mjs",
+          "sha256": "fa04783b1cfaf10de51388140716e38ddee4c50dec52b7aed29c1c417807d2e1"
+        },
+        {
+          "path": "private/scenarios.mjs",
+          "sha256": "bbdf7a1918fb9b1745d595a29f8a8089188deb5f4866dc055ba9516119c9bdeb"
+        },
+        {
+          "path": "public/api.d.ts",
+          "sha256": "9aab7c86e43d67417142a7bffa60a66eacfef9fbb4c93e9484f3a7fe31918bd2"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "sha256": "dd155554bda143054abbaecf5d93312608e6f340edc2ddae71c1ae568e030e7f"
+        },
+        {
+          "path": "public/entry.mjs",
+          "sha256": "6226b682bcbdb1ce72b85c760c0f830b6ca37f946c8db7dfe9bf0a786346277d"
+        },
+        {
+          "path": "public/instruction.md",
+          "sha256": "9d3ed7b2d39fc5a9cbddb56f636539686cec895b6961cac1e6004eefdca28f0a"
+        },
+        {
+          "path": "public/package.json",
+          "sha256": "516928974526599db68d893e06f2ac1d5d1e5493d6dbe077db0126797035f500"
+        },
+        {
+          "path": "public/SEMANTICS.md",
+          "sha256": "131623e354649247acf5fd07c0ab3f36c7ebb2f149da84ec83864d47209cb410"
+        },
+        {
+          "path": "public/test/cache.test.mjs",
+          "sha256": "6e850b0a1088fe4f3361583c7ce7a74d25cadfec6c68f6e2ef0da7de08e1874a"
+        }
+      ],
+      "nativeRuns": {
+        "oracle": {
+          "reward": 1,
+          "service": true,
+          "checker": true,
+          "ctrfSummary": {
+            "tests": 165,
+            "passed": 165,
+            "failed": 0,
+            "pending": 0,
+            "skipped": 0,
+            "other": 0,
+            "start": 1788949495197,
+            "stop": 1788949506279
+          },
+          "resultFile": {
+            "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/variant-cache-repair__nGd24P4/verifier/summary.json",
+            "sha256": "9f5427ed90f1d7ac8615a36e2eca402ecee5b4e4f6c4319ced794eb446b11d31",
+            "bytes": 1532
+          },
+          "ctrfFile": {
+            "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/variant-cache-repair__nGd24P4/verifier/ctrf.json",
+            "sha256": "c939cf5fb76a7a44ac82d1ebc1e4dac4437ffba7964c651ba051eaf25712086a",
+            "bytes": 19792
+          }
+        },
+        "nop": {
+          "reward": 0,
+          "service": false,
+          "checker": false,
+          "ctrfSummary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "pending": 0,
+            "skipped": 0,
+            "other": 0,
+            "start": 1788949498496,
+            "stop": 1788949498506
+          },
+          "resultFile": {
+            "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/variant-cache-repair__TqTLYMU/verifier/summary.json",
+            "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1",
+            "bytes": 460
+          },
+          "ctrfFile": {
+            "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/variant-cache-repair__TqTLYMU/verifier/ctrf.json",
+            "sha256": "65415fe4dee31a4486ce2b951b87a1701ba3885bcc61d632f7d3a8bfb3d5cda7",
+            "bytes": 717
+          }
+        }
+      }
+    },
+    {
+      "id": "incremental-build-repair",
+      "analysisDocument": "reports/screening/fifth-five/21-incremental-build-repair.md",
+      "changeSummary": "The currentness, publication-scope and compiler-handle availability fixes are integrated. The input exposes original rounds and the complete observed dependency closure. The premature-publication control remains private. Duplicate unchanged-entry diagnosis is removed; include handling, build traversal and caching are no longer supplied in the starter.",
+      "maintainedSource": "tasks/incremental-build-repair",
+      "nativeExport": ".local/top-five-implementation-2026-09-09/harbor-ready/incremental-build-repair",
+      "nativeDigest": "3517d6932c67baba9803be6c8c153c9c958c10357a35503ecb15879655f2f2b8",
+      "foundryExport": ".local/top-five-implementation-2026-09-09/release-ready/incremental-build-repair/export",
+      "foundryDigest": "34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a",
+      "scenarioCount": 27,
+      "checkerCandidates": 15,
+      "checkerCorrect": 15,
+      "reasonPolicy": "diagnostic-only",
+      "assuranceOperations": 18,
+      "recipientReproduction": {
+        "packageId": "incremental-build-repair",
+        "packageDigest": "34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a",
+        "operations": 18,
+        "scenarioCount": 27,
+        "browserTraces": 0,
+        "invalidExecutionExcluded": true,
+        "artifactDriftRejected": true,
+        "evidenceDriftRejected": true,
+        "sourceCheckoutRequired": false,
+        "providerCallsMade": 0
+      },
+      "localIntegrity": [
+        {
+          "name": "missing-verdicts",
+          "passed": true,
+          "accepted": false,
+          "outputValid": false
+        },
+        {
+          "name": "always-accept",
+          "passed": true,
+          "accepted": false,
+          "outputValid": true
+        },
+        {
+          "name": "always-reject",
+          "passed": true,
+          "accepted": false,
+          "outputValid": true
+        },
+        {
+          "name": "mutated-input",
+          "passed": true,
+          "accepted": false,
+          "outputValid": false
+        },
+        {
+          "name": "private-read-and-reward-write-denied",
+          "passed": true,
+          "accepted": true,
+          "outputValid": true
+        },
+        {
+          "name": "forged-reward-and-output-symlink-rejected",
+          "passed": true
+        }
+      ],
+      "humanReadmeProvided": false,
+      "sourceFiles": [
+        {
+          "path": "private/alternative/entry.mjs",
+          "sha256": "9151a7429ada5a53ce6a64c4e9e325f9cc28739885f40f9ba405b2d987a194c4"
+        },
+        {
+          "path": "private/alternative/src/builder.mjs",
+          "sha256": "39c7bfbdf8ecd8269aa589f736aee214d2a2beeb01b0cef53c7e6e63aa7ed8fd"
+        },
+        {
+          "path": "private/alternative/src/includes.mjs",
+          "sha256": "ec2167eac3fce1f68469ab73922fa36f86aec7b5dddb065f2b306fabb8b0add4"
+        },
+        {
+          "path": "private/alternative/src/key.mjs",
+          "sha256": "e6e36c666049c167abc44bd88339030a333f0622cbfb2591603aa95d857d045f"
+        },
+        {
+          "path": "private/alternative/src/service.mjs",
+          "sha256": "bbbce66610ca56024a38f1a38b2d04a2af3ce073d82e236d49ca2532c02e04ba"
+        },
+        {
+          "path": "private/checker-required.json",
+          "sha256": "201650dccec4b11c8d4f51dbe1ed0243b8056700e80da5526a1a5833cdd4c040"
+        },
+        {
+          "path": "private/control-manifest.json",
+          "sha256": "59bf5c271203d45b32cbb11bc0108fc64818a5f56ecf8602c9e4fc70a131abc0"
+        },
+        {
+          "path": "private/controls/always-rebuild.mjs",
+          "sha256": "92aee77f616065bd5ac99bdeeff8ef6ee9a34ee446217219122a6e354f821be7"
+        },
+        {
+          "path": "private/controls/duplicate-publication.mjs",
+          "sha256": "44074add79223429c57aff2b0f05f8a3d1cd3442cb634d2815b37b699334c141"
+        },
+        {
+          "path": "private/controls/foreign-publication.mjs",
+          "sha256": "41081fb4152f4340b02b018447913cfbd2fd59002e72724f8316dd593b4579c9"
+        },
+        {
+          "path": "private/controls/forged-completion.mjs",
+          "sha256": "b33409e352152604038a935c92e6b9c119129fa2cd2e6e05011c471e191f8cc3"
+        },
+        {
+          "path": "private/controls/ignore-dependency-order.mjs",
+          "sha256": "5a71751bea06fcab47b2d7da0506b54789c4ce6e609000d9a59a3d5098c07832"
+        },
+        {
+          "path": "private/controls/ignore-flags.mjs",
+          "sha256": "67fe2025f505ac1a25e3b0fab22b036edad7fa088cbea7b268e51ad57a2935c8"
+        },
+        {
+          "path": "private/controls/ignore-includes.mjs",
+          "sha256": "95e9ac1dbeee3402c8322e1e612967cfc3d72eb3fb12cd1f1ccdfae741a3acff"
+        },
+        {
+          "path": "private/controls/ignore-tool.mjs",
+          "sha256": "be5acea64cc770caff375b8c071fc6cbd8337aacc0ce9087c77ddbbe4e2704b8"
+        },
+        {
+          "path": "private/controls/isolation.mjs",
+          "sha256": "68826056a96d1b4b890e3bc5e0d0a3568d201ce4dede9c98eec4f16e785d4997"
+        },
+        {
+          "path": "private/controls/no-work.mjs",
+          "sha256": "a3dea1be110cb1bc209744584060bb342db1a33bb89973dbc1ed7e1f86500335"
+        },
+        {
+          "path": "private/controls/partial-publication.mjs",
+          "sha256": "dacc307a8f52f69d357b9650f937d65b85efc0f4f2921b3b90d53fc90b4e4b45"
+        },
+        {
+          "path": "private/controls/premature-publication.mjs",
+          "sha256": "9ab0395ec225d035ebdf1ee2c4cb83b06111580599d0314b70a009f53dcbec83"
+        },
+        {
+          "path": "private/controls/wrong-dependency-alias.mjs",
+          "sha256": "26c9087c07eaf88d9a4824cb159ba9a9816575b3aacd9a8efe4b492a392e49bb"
+        },
+        {
+          "path": "private/domain.mjs",
+          "sha256": "ccdd011462c1f213175e2874a3928116d0e1161b66daa32b84221195eb77b014"
+        },
+        {
+          "path": "private/reference/checker-utils.mjs",
+          "sha256": "ec46af9f8839d7e0ec479fb841783160dd2c3d382e0b4ce40f01dc8ebe87f19c"
+        },
+        {
+          "path": "private/reference/checker.mjs",
+          "sha256": "a22d0cf88cbdbc94bef594692c4e08b2baa44472ea50d385b381f8c3235c5bc1"
+        },
+        {
+          "path": "private/reference/entry.mjs",
+          "sha256": "6a3aebc000d1aa658f7a3bcad31c771ad83e2e8ae7244bb000e70b004faed371"
+        },
+        {
+          "path": "private/reference/src/builder.mjs",
+          "sha256": "39c7bfbdf8ecd8269aa589f736aee214d2a2beeb01b0cef53c7e6e63aa7ed8fd"
+        },
+        {
+          "path": "private/reference/src/includes.mjs",
+          "sha256": "7869265de50d2a1bf1078b5e637d117b622cc941058e4016973cd7698fddf86d"
+        },
+        {
+          "path": "private/reference/src/key.mjs",
+          "sha256": "266872f8cc60eb2fbdebabf80a0bf8f3bac68e2f5370d7878fde984fcdbd0ccb"
+        },
+        {
+          "path": "private/reference/src/service.mjs",
+          "sha256": "bbbce66610ca56024a38f1a38b2d04a2af3ce073d82e236d49ca2532c02e04ba"
+        },
+        {
+          "path": "private/scenarios.mjs",
+          "sha256": "34709b8e0a0a69f6c2ff367b1db26c351f723335c409577258b7b5318fbc13f9"
+        },
+        {
+          "path": "public/api.d.ts",
+          "sha256": "e762db8581948876a58fcff8627ff6e5c6b31d04f46f3d6db8be77066b4aad8e"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "sha256": "eb03ff18cc342c7c52a72a34f6a4051c84b7dc6dacdad7dcb2bbb56e84d576ed"
+        },
+        {
+          "path": "public/entry.mjs",
+          "sha256": "6226b682bcbdb1ce72b85c760c0f830b6ca37f946c8db7dfe9bf0a786346277d"
+        },
+        {
+          "path": "public/instruction.md",
+          "sha256": "9d25b52d206cba5ee9401a33edd071c8c3c278aab9380d28d93a28ac2a281b70"
+        },
+        {
+          "path": "public/package.json",
+          "sha256": "c67f20efda60a692d4b49847adfb879f1b3f544023597b8176264dcb74855588"
+        },
+        {
+          "path": "public/SEMANTICS.md",
+          "sha256": "958b07d09bac49d95e9204de40bba88d752737c61b4f415e9ca926a3567d6eab"
+        },
+        {
+          "path": "public/test/build.test.mjs",
+          "sha256": "e38034b95f9e67fb0137d462cbe98c96781066c16d6585618d15ca285de63257"
+        }
+      ],
+      "nativeRuns": {
+        "oracle": {
+          "reward": 1,
+          "service": true,
+          "checker": true,
+          "ctrfSummary": {
+            "tests": 150,
+            "passed": 150,
+            "failed": 0,
+            "pending": 0,
+            "skipped": 0,
+            "other": 0,
+            "start": 1788949515396,
+            "stop": 1788949525280
+          },
+          "resultFile": {
+            "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/incremental-build-repair__dT7HCGg/verifier/summary.json",
+            "sha256": "5cc29128e5a34f8327c2e14296e96f97740ffa7a7943e1d0126a5eb6aee4ab94",
+            "bytes": 1525
+          },
+          "ctrfFile": {
+            "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/incremental-build-repair__dT7HCGg/verifier/ctrf.json",
+            "sha256": "f9be3fbbb0ebdd6954dfcdc4f0203d35d1734a9ad5734aab853dae3a422c07d1",
+            "bytes": 18548
+          }
+        },
+        "nop": {
+          "reward": 0,
+          "service": false,
+          "checker": false,
+          "ctrfSummary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "pending": 0,
+            "skipped": 0,
+            "other": 0,
+            "start": 1788949507860,
+            "stop": 1788949507866
+          },
+          "resultFile": {
+            "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/incremental-build-repair__hvMVy5D/verifier/summary.json",
+            "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1",
+            "bytes": 460
+          },
+          "ctrfFile": {
+            "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/incremental-build-repair__hvMVy5D/verifier/ctrf.json",
+            "sha256": "c6db604b4e31b362e904522e4dff5390e84f301d0af5fccbfaac643f9b199b97",
+            "bytes": 717
+          }
+        }
+      }
+    },
+    {
+      "id": "issued-report-repair",
+      "analysisDocument": "reports/screening/fifth-five/25-issued-report-repair.md",
+      "changeSummary": "Ordered source-version identity remains part of the contract; the repeated unchanged-value amendment example is removed. The reverse-dependency-order control and its substantive dependency-order check are integrated. Exact reason labels are no longer graded, resolving the missing-label interface problem. Dependency ordering, audience handling and publication sequencing are no longer supplied in the starter.",
+      "maintainedSource": "tasks/issued-report-repair",
+      "nativeExport": ".local/top-five-implementation-2026-09-09/harbor-ready/issued-report-repair",
+      "nativeDigest": "df8d825785f3e7b5d9376b248d73e7353f7b31a7933ee7c4a4ada15de58278cc",
+      "foundryExport": ".local/top-five-implementation-2026-09-09/release-ready/issued-report-repair/export",
+      "foundryDigest": "32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170",
+      "scenarioCount": 27,
+      "checkerCandidates": 14,
+      "checkerCorrect": 14,
+      "reasonPolicy": "diagnostic-only",
+      "assuranceOperations": 17,
+      "recipientReproduction": {
+        "packageId": "issued-report-repair",
+        "packageDigest": "32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170",
+        "operations": 17,
+        "scenarioCount": 27,
+        "browserTraces": 0,
+        "invalidExecutionExcluded": true,
+        "artifactDriftRejected": true,
+        "evidenceDriftRejected": true,
+        "sourceCheckoutRequired": false,
+        "providerCallsMade": 0
+      },
+      "localIntegrity": [
+        {
+          "name": "missing-verdicts",
+          "passed": true,
+          "accepted": false,
+          "outputValid": false
+        },
+        {
+          "name": "always-accept",
+          "passed": true,
+          "accepted": false,
+          "outputValid": true
+        },
+        {
+          "name": "always-reject",
+          "passed": true,
+          "accepted": false,
+          "outputValid": true
+        },
+        {
+          "name": "mutated-input",
+          "passed": true,
+          "accepted": false,
+          "outputValid": false
+        },
+        {
+          "name": "private-read-and-reward-write-denied",
+          "passed": true,
+          "accepted": true,
+          "outputValid": true
+        },
+        {
+          "name": "forged-reward-and-output-symlink-rejected",
+          "passed": true
+        }
+      ],
+      "humanReadmeProvided": false,
+      "sourceFiles": [
+        {
+          "path": "private/alternative/entry.mjs",
+          "sha256": "8854ab2c5cb38b2e101353f25e7a51d352f46beb8bcc7809e9e57acad7fe6b5e"
+        },
+        {
+          "path": "private/alternative/src/audience.mjs",
+          "sha256": "e5b1535b070370a59a11d0a44c4fa22200c65b6812187bdd74dd6d5f2a2a85c8"
+        },
+        {
+          "path": "private/alternative/src/graph.mjs",
+          "sha256": "7f4483021f70b6ebf008501535271e190d7c53707fcb79722b2f69f005449b5d"
+        },
+        {
+          "path": "private/alternative/src/payload.mjs",
+          "sha256": "5cb0dc904c139f500ec5a54b37b198b0fe31b3043c4627e4a6a868d974962261"
+        },
+        {
+          "path": "private/alternative/src/service.mjs",
+          "sha256": "de345a4454ca8466620a8df149be2f952208a5132dfbe29f712924c3da557807"
+        },
+        {
+          "path": "private/checker-required.json",
+          "sha256": "201650dccec4b11c8d4f51dbe1ed0243b8056700e80da5526a1a5833cdd4c040"
+        },
+        {
+          "path": "private/control-manifest.json",
+          "sha256": "22558fdfad7b6091d26e297eebdc2cca1758588ceca9dc7269c80eea27b1fd88"
+        },
+        {
+          "path": "private/controls/corrections-labelled-initial.mjs",
+          "sha256": "2a727f79d9da8f83473d031da500e72f4db763a4f9c5204b50e8c8f956c90b8c"
+        },
+        {
+          "path": "private/controls/current-for-historical.mjs",
+          "sha256": "45c1b55a1a6b8aa24f81fcf3823005e41823d8e29f2b7a36ee24c5cef0607ca4"
+        },
+        {
+          "path": "private/controls/drop-source-lineage.mjs",
+          "sha256": "835342245b46da5284e8f13ce65b911ec45d657a237b0ece82ea7365876b095a"
+        },
+        {
+          "path": "private/controls/duplicate-notification.mjs",
+          "sha256": "6cbf68129efbb93b203e7052f50ca8b2a6a494c9701a9d10ffab8ebd93ef51d1"
+        },
+        {
+          "path": "private/controls/forged-completion.mjs",
+          "sha256": "b33409e352152604038a935c92e6b9c119129fa2cd2e6e05011c471e191f8cc3"
+        },
+        {
+          "path": "private/controls/isolation.mjs",
+          "sha256": "68826056a96d1b4b890e3bc5e0d0a3568d201ce4dede9c98eec4f16e785d4997"
+        },
+        {
+          "path": "private/controls/no-work.mjs",
+          "sha256": "a3dea1be110cb1bc209744584060bb342db1a33bb89973dbc1ed7e1f86500335"
+        },
+        {
+          "path": "private/controls/only-requested-recipients.mjs",
+          "sha256": "7da735281eac10e936eb9562bb953f441fff0f4055f48c813d6ce76111cb7556"
+        },
+        {
+          "path": "private/controls/reuse-issued-version.mjs",
+          "sha256": "323aa415fe4ab83397edc9fca6938e2f899751c137eafc8f69232a075f494541"
+        },
+        {
+          "path": "private/controls/reverse-dependency-order.mjs",
+          "sha256": "43965d5c7945bb67e172fead901ce49f19a327ce01dac18caa6ce431583fc2c7"
+        },
+        {
+          "path": "private/controls/stale-dependent-lineage.mjs",
+          "sha256": "f99e8db27dabf39c167ce1c9230f996c10fd0cbd4aa75a8d2bab0998ba299696"
+        },
+        {
+          "path": "private/controls/unrelated-recipient.mjs",
+          "sha256": "4c7d435de38392200c9f7e22a52e93867b1ea59cbb82972cd74db42859f0b0bb"
+        },
+        {
+          "path": "private/domain.mjs",
+          "sha256": "4501643fa8a37e6d51d5c0b2503f467a01d765c6b6d49e6b759aecf4555d8a09"
+        },
+        {
+          "path": "private/reference/checker-utils.mjs",
+          "sha256": "ec46af9f8839d7e0ec479fb841783160dd2c3d382e0b4ce40f01dc8ebe87f19c"
+        },
+        {
+          "path": "private/reference/checker.mjs",
+          "sha256": "461afa5147a3cd0a7d64a322e7b58f02a75bbe3e380334cc27596f8ce33d11d2"
+        },
+        {
+          "path": "private/reference/entry.mjs",
+          "sha256": "6a3aebc000d1aa658f7a3bcad31c771ad83e2e8ae7244bb000e70b004faed371"
+        },
+        {
+          "path": "private/reference/src/audience.mjs",
+          "sha256": "c59c95c08eb424390001132d7320a33c4778d462017e22e383d19f815709eebd"
+        },
+        {
+          "path": "private/reference/src/graph.mjs",
+          "sha256": "7f4483021f70b6ebf008501535271e190d7c53707fcb79722b2f69f005449b5d"
+        },
+        {
+          "path": "private/reference/src/payload.mjs",
+          "sha256": "8dd2ecd700ae6d4eb2927b16e9f1843e50a144e22fc50f1b8919628d2f6c1144"
+        },
+        {
+          "path": "private/reference/src/service.mjs",
+          "sha256": "de345a4454ca8466620a8df149be2f952208a5132dfbe29f712924c3da557807"
+        },
+        {
+          "path": "private/scenarios.mjs",
+          "sha256": "1bcd6a8299e49f3281df14450c316379b3ec87d8b7cfded31e757dc351eeeb86"
+        },
+        {
+          "path": "public/api.d.ts",
+          "sha256": "7c3078a65181545ae34880d88aefa11595640a48bed79ea1ee8a19901581d81d"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "sha256": "b89c18a12504ddb13d5cebe1047d284f49d4565374df116f5064479854d18979"
+        },
+        {
+          "path": "public/entry.mjs",
+          "sha256": "6226b682bcbdb1ce72b85c760c0f830b6ca37f946c8db7dfe9bf0a786346277d"
+        },
+        {
+          "path": "public/instruction.md",
+          "sha256": "4f536dfe221dbd4f3eb801af636e4d21e783d5386aa2ead1776d33cca4dced6a"
+        },
+        {
+          "path": "public/package.json",
+          "sha256": "9a426e26dc6f811a29c5219ef7e63373517c472eccbdce4c68415d1cc7fdefad"
+        },
+        {
+          "path": "public/SEMANTICS.md",
+          "sha256": "bd604848c0c65a4311743dd87ab1bbf0834a9e603abee13b79dff6e20734983c"
+        },
+        {
+          "path": "public/test/reports.test.mjs",
+          "sha256": "39e51a80877b852e87c4b748c5af9e3af6b31d2051c87d5d9212d69e7a96d801"
+        }
+      ],
+      "nativeRuns": {
+        "oracle": {
+          "reward": 1,
+          "service": true,
+          "checker": true,
+          "ctrfSummary": {
+            "tests": 176,
+            "passed": 176,
+            "failed": 0,
+            "pending": 0,
+            "skipped": 0,
+            "other": 0,
+            "start": 1788949498840,
+            "stop": 1788949507086
+          },
+          "resultFile": {
+            "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/issued-report-repair__vAShL6A/verifier/summary.json",
+            "sha256": "192ca35ab49aacb277b292385d90427ac7a748dae10408838cd3ebe3a9b59d34",
+            "bytes": 1475
+          },
+          "ctrfFile": {
+            "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/issued-report-repair__vAShL6A/verifier/ctrf.json",
+            "sha256": "ce7a1a2f737d7caeb3eb924fd0ae0583788b1de85d99b6d8e338094d555a6f5c",
+            "bytes": 21414
+          }
+        },
+        "nop": {
+          "reward": 0,
+          "service": false,
+          "checker": false,
+          "ctrfSummary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "pending": 0,
+            "skipped": 0,
+            "other": 0,
+            "start": 1788949498497,
+            "stop": 1788949498505
+          },
+          "resultFile": {
+            "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/issued-report-repair__qTnZzRV/verifier/summary.json",
+            "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1",
+            "bytes": 460
+          },
+          "ctrfFile": {
+            "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/issued-report-repair__qTnZzRV/verifier/ctrf.json",
+            "sha256": "652133b8b6e05a057da1cd6d18fdb328dba53b21ed46e0510f9a7b00725764b9",
+            "bytes": 717
+          }
+        }
+      }
+    },
+    {
+      "id": "diagnostic-transport-repair",
+      "analysisDocument": "reports/screening/fifth-five/24-diagnostic-transport-repair.md",
+      "changeSummary": "The checker input retains exact wire and result shapes but no longer tells the solver to concatenate channel bytes before decoding. Four successor controls cover omitted output properties and empty-drain processing. Attempt selection, decoding, outcome classification and service orchestration are no longer supplied in the starter.",
+      "maintainedSource": "tasks/diagnostic-transport-repair",
+      "nativeExport": ".local/top-five-implementation-2026-09-09/harbor-ready/diagnostic-transport-repair",
+      "nativeDigest": "3bb08ac6038ab6f3019ab9243472c035ef02be42b1085f02f2b0d3fb8f2aca21",
+      "foundryExport": ".local/top-five-implementation-2026-09-09/release-ready/diagnostic-transport-repair/export",
+      "foundryDigest": "72f4c5c5ccd89bf7c80804c0ab5536396a5911caa8c7eff7afd9dde92c59cef9",
+      "scenarioCount": 28,
+      "checkerCandidates": 17,
+      "checkerCorrect": 17,
+      "reasonPolicy": "diagnostic-only",
+      "assuranceOperations": 20,
+      "recipientReproduction": {
+        "packageId": "diagnostic-transport-repair",
+        "packageDigest": "72f4c5c5ccd89bf7c80804c0ab5536396a5911caa8c7eff7afd9dde92c59cef9",
+        "operations": 20,
+        "scenarioCount": 28,
+        "browserTraces": 0,
+        "invalidExecutionExcluded": true,
+        "artifactDriftRejected": true,
+        "evidenceDriftRejected": true,
+        "sourceCheckoutRequired": false,
+        "providerCallsMade": 0
+      },
+      "localIntegrity": [
+        {
+          "name": "missing-verdicts",
+          "passed": true,
+          "accepted": false,
+          "outputValid": false
+        },
+        {
+          "name": "always-accept",
+          "passed": true,
+          "accepted": false,
+          "outputValid": true
+        },
+        {
+          "name": "always-reject",
+          "passed": true,
+          "accepted": false,
+          "outputValid": true
+        },
+        {
+          "name": "mutated-input",
+          "passed": true,
+          "accepted": false,
+          "outputValid": false
+        },
+        {
+          "name": "private-read-and-reward-write-denied",
+          "passed": true,
+          "accepted": true,
+          "outputValid": true
+        },
+        {
+          "name": "forged-reward-and-output-symlink-rejected",
+          "passed": true
+        }
+      ],
+      "humanReadmeProvided": false,
+      "sourceFiles": [
+        {
+          "path": "private/alternative/entry.mjs",
+          "sha256": "8052c772d566fa719b1d127f33ff4bd356825791db4473abf86bda67fb544315"
+        },
+        {
+          "path": "private/alternative/src/attempts.mjs",
+          "sha256": "9a1c596b40e2132d1bff637f30b5ce974402cd3702cb0f2781c370b5b117b5a7"
+        },
+        {
+          "path": "private/alternative/src/decoder.mjs",
+          "sha256": "bd00d59b9825e570650664a7138b90846a33464dd58c1e9f2058582223280608"
+        },
+        {
+          "path": "private/alternative/src/outcome.mjs",
+          "sha256": "8c00fff2b6aee00ab3f4d0d28856887605337ba762771bdea38708c8fa130473"
+        },
+        {
+          "path": "private/alternative/src/service.mjs",
+          "sha256": "3533aac10d60429220c20fcfe7007ad5718db403551398e86b5ebfc5cded2431"
+        },
+        {
+          "path": "private/checker-required.json",
+          "sha256": "201650dccec4b11c8d4f51dbe1ed0243b8056700e80da5526a1a5833cdd4c040"
+        },
+        {
+          "path": "private/control-manifest.json",
+          "sha256": "f0d1fa37db86ca85f22300da7f6c94de48492ccdf5b9e7052af276bf164e8b6c"
+        },
+        {
+          "path": "private/controls/drop-partial-error-data.mjs",
+          "sha256": "d23255bfa9c41d70d3faf577587ce385a3f8d88e740b0a40bb84fa65fb555a37"
+        },
+        {
+          "path": "private/controls/duplicate-row.mjs",
+          "sha256": "64507234e832687a764e4539b274090786fcc6ef0bb8f77d351872fed59003de"
+        },
+        {
+          "path": "private/controls/erase-errors.mjs",
+          "sha256": "26ae9f0e97705131295d93072bfff9b143adb47a51592e16ca7218852c2c1fe2"
+        },
+        {
+          "path": "private/controls/forged-completion.mjs",
+          "sha256": "b33409e352152604038a935c92e6b9c119129fa2cd2e6e05011c471e191f8cc3"
+        },
+        {
+          "path": "private/controls/gaps-as-success.mjs",
+          "sha256": "957b4212899e584cbad490c1a28f5ee3be5cbc2d11db93d4dace8daf390a9d09"
+        },
+        {
+          "path": "private/controls/isolation.mjs",
+          "sha256": "68826056a96d1b4b890e3bc5e0d0a3568d201ce4dede9c98eec4f16e785d4997"
+        },
+        {
+          "path": "private/controls/lose-unicode-payload.mjs",
+          "sha256": "e3b109febaf6b86322a391c58adf3082264b272b63a6154d4877d709a7697dfd"
+        },
+        {
+          "path": "private/controls/no-work.mjs",
+          "sha256": "a3dea1be110cb1bc209744584060bb342db1a33bb89973dbc1ed7e1f86500335"
+        },
+        {
+          "path": "private/controls/omit-attempt-when-null.mjs",
+          "sha256": "32404561021a68d71d21df97a75224707ccd6e3f7741e5dbc87a5800042d238e"
+        },
+        {
+          "path": "private/controls/omit-data-when-empty.mjs",
+          "sha256": "c294b9657559b360bde86250448dcb1cd880aa28165103338b5810a7d1c25d57"
+        },
+        {
+          "path": "private/controls/omit-empty-success.mjs",
+          "sha256": "6569738313f21f408392fca7abc4ce9ab8786e2b17a40902e8328693c243f177"
+        },
+        {
+          "path": "private/controls/omit-error-when-null.mjs",
+          "sha256": "1eb3bbb8d57ee4eeecd85939aedb8063f3c1da315131b7eddb66d0edf06b5ced"
+        },
+        {
+          "path": "private/controls/omit-unobserved-request.mjs",
+          "sha256": "37dc274fd409d0b243b0a490117d262e1f86e86b3d193d29e8593fcd5b781550"
+        },
+        {
+          "path": "private/controls/skip-processing-when-empty.mjs",
+          "sha256": "32d339b094122afe05fa19ddff55354bc8a64becaa54af02496f7952656ef3ef"
+        },
+        {
+          "path": "private/controls/wrong-attempt.mjs",
+          "sha256": "86566e7b34d731649f2069104d5a02149fc1b2135a14d094025aa451f1ed35ad"
+        },
+        {
+          "path": "private/domain.mjs",
+          "sha256": "090dab8400fdec360958a7230f9adf940c6d0a61bc157b9a85bbd9efb2abfce1"
+        },
+        {
+          "path": "private/reference/checker-utils.mjs",
+          "sha256": "ec46af9f8839d7e0ec479fb841783160dd2c3d382e0b4ce40f01dc8ebe87f19c"
+        },
+        {
+          "path": "private/reference/checker.mjs",
+          "sha256": "c1aef9e2b81b0cfe71d7efb6c4d89469b0e7ad82b3c155c5440d3289c7b58e71"
+        },
+        {
+          "path": "private/reference/entry.mjs",
+          "sha256": "6a3aebc000d1aa658f7a3bcad31c771ad83e2e8ae7244bb000e70b004faed371"
+        },
+        {
+          "path": "private/reference/src/attempts.mjs",
+          "sha256": "9a1c596b40e2132d1bff637f30b5ce974402cd3702cb0f2781c370b5b117b5a7"
+        },
+        {
+          "path": "private/reference/src/decoder.mjs",
+          "sha256": "854b7af5dd4a9e3796b821661149b66c7e360ae218305cea6c259b4360750f4b"
+        },
+        {
+          "path": "private/reference/src/outcome.mjs",
+          "sha256": "d8d6d8a220ca6669eb0338233e7183b9e55b44f2e83d57196e2aee352845f6d4"
+        },
+        {
+          "path": "private/reference/src/service.mjs",
+          "sha256": "3533aac10d60429220c20fcfe7007ad5718db403551398e86b5ebfc5cded2431"
+        },
+        {
+          "path": "private/scenarios.mjs",
+          "sha256": "f831e519a684210492fb4ad3c12135623ca7b50c76307057045cdaf4926767b8"
+        },
+        {
+          "path": "public/api.d.ts",
+          "sha256": "e1e35cef594f624c4b85996ba249f37dd6bfdad0aee97171af090ace9f3bf110"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "sha256": "1316900c7060eaf2e909f6d63f0aac466e50c08c8b0ccba95fe234ee39bbad97"
+        },
+        {
+          "path": "public/entry.mjs",
+          "sha256": "6226b682bcbdb1ce72b85c760c0f830b6ca37f946c8db7dfe9bf0a786346277d"
+        },
+        {
+          "path": "public/instruction.md",
+          "sha256": "8dfed4a3057fb858fa9508e16dfef27fa877a4516e6c78049d2e12112844b943"
+        },
+        {
+          "path": "public/package.json",
+          "sha256": "470ff97f078e26dec67635457efaf0c523a8422cfa3cc4b4b0a895b7be0be19c"
+        },
+        {
+          "path": "public/SEMANTICS.md",
+          "sha256": "258348cca451a8bf4ad0d417ec268c1eae4f29f822b31daffca73f224c74cf67"
+        },
+        {
+          "path": "public/test/gateway.test.mjs",
+          "sha256": "c35cbcc28a721451f0e53c44472c64552525be683f3564b5c9407c4376cdb5c3"
+        }
+      ],
+      "nativeRuns": {
+        "oracle": {
+          "reward": 1,
+          "service": true,
+          "checker": true,
+          "ctrfSummary": {
+            "tests": 157,
+            "passed": 157,
+            "failed": 0,
+            "pending": 0,
+            "skipped": 0,
+            "other": 0,
+            "start": 1788949478650,
+            "stop": 1788949489332
+          },
+          "resultFile": {
+            "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/diagnostic-transport-repair__qTyH4C8/verifier/summary.json",
+            "sha256": "2ca3a4319ebedcc9860f032934886b529ea6bd0f2c52e78b15c8e5930b14a937",
+            "bytes": 1723
+          },
+          "ctrfFile": {
+            "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/diagnostic-transport-repair__qTyH4C8/verifier/ctrf.json",
+            "sha256": "7ea1627865822d6e1d0334ca2fe12e60b49797028957f072889f7913e8eed67d",
+            "bytes": 18713
+          }
+        },
+        "nop": {
+          "reward": 0,
+          "service": false,
+          "checker": false,
+          "ctrfSummary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "pending": 0,
+            "skipped": 0,
+            "other": 0,
+            "start": 1788949488966,
+            "stop": 1788949488974
+          },
+          "resultFile": {
+            "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/diagnostic-transport-repair__NBihDtd/verifier/summary.json",
+            "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1",
+            "bytes": 460
+          },
+          "ctrfFile": {
+            "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/diagnostic-transport-repair__NBihDtd/verifier/ctrf.json",
+            "sha256": "d11e5bab8d47975c0d51cb724957256e50a26a580bcbf8d788c3fa9303ae59f5",
+            "bytes": 717
+          }
+        }
+      }
+    },
+    {
+      "id": "causal-replica-repair",
+      "analysisDocument": "reports/screening/next-five/07-causal-replica-repair.md",
+      "changeSummary": "The contract specifies final causal state and retained observation clocks, with no requirement to write redundantly to every replica. The contradictory deleted-document gloss is removed; missing-document semantics remain explicit. Identity handling, snapshot collection, merge and writes are no longer supplied in the starter.",
+      "maintainedSource": "tasks/causal-replica-repair",
+      "nativeExport": ".local/top-five-implementation-2026-09-09/harbor-ready/causal-replica-repair",
+      "nativeDigest": "6167354e302ce2a36e8af16248350da9a4f4e252fb1c66fef766f5c65e456ef5",
+      "foundryExport": ".local/top-five-implementation-2026-09-09/release-ready/causal-replica-repair/export",
+      "foundryDigest": "dd9d140e1cda83fc41fc86cd17b5522f4020b406075728892133b7e4ba0a3eea",
+      "scenarioCount": 33,
+      "checkerCandidates": 11,
+      "checkerCorrect": 11,
+      "reasonPolicy": "diagnostic-only",
+      "assuranceOperations": 14,
+      "recipientReproduction": {
+        "packageId": "causal-replica-repair",
+        "packageDigest": "dd9d140e1cda83fc41fc86cd17b5522f4020b406075728892133b7e4ba0a3eea",
+        "operations": 14,
+        "scenarioCount": 33,
+        "browserTraces": 0,
+        "invalidExecutionExcluded": true,
+        "artifactDriftRejected": true,
+        "evidenceDriftRejected": true,
+        "sourceCheckoutRequired": false,
+        "providerCallsMade": 0
+      },
+      "localIntegrity": [
+        {
+          "name": "missing-verdicts",
+          "passed": true,
+          "accepted": false,
+          "outputValid": false
+        },
+        {
+          "name": "always-accept",
+          "passed": true,
+          "accepted": false,
+          "outputValid": true
+        },
+        {
+          "name": "always-reject",
+          "passed": true,
+          "accepted": false,
+          "outputValid": true
+        },
+        {
+          "name": "mutated-input",
+          "passed": true,
+          "accepted": false,
+          "outputValid": false
+        },
+        {
+          "name": "private-read-and-reward-write-denied",
+          "passed": true,
+          "accepted": true,
+          "outputValid": true
+        },
+        {
+          "name": "forged-reward-and-output-symlink-rejected",
+          "passed": true
+        }
+      ],
+      "humanReadmeProvided": false,
+      "sourceFiles": [
+        {
+          "path": "private/alternative/entry.mjs",
+          "sha256": "2f39c435a4751334cbfd40bddadeefffb346da9f2e06fef2c8ed14600a9545a9"
+        },
+        {
+          "path": "private/alternative/src/identity.mjs",
+          "sha256": "b913a5d514eb82815a2eb4239fc439852e92b37a2c846995cc6da03a8c9432a6"
+        },
+        {
+          "path": "private/alternative/src/merge.mjs",
+          "sha256": "74ea9b951f9e694dbed6e7860b3c16d33495266df59349f4c809a17f6b42296b"
+        },
+        {
+          "path": "private/alternative/src/service.mjs",
+          "sha256": "d72d68be9f15249dc8e276695993c7bd0786f03152dc4e9a58cc6a0cc5d2ca2a"
+        },
+        {
+          "path": "private/alternative/src/snapshot.mjs",
+          "sha256": "9905b10e713f6249b3a5f8b53cf865cafe684bff9bcab1328663a01c23e22386"
+        },
+        {
+          "path": "private/checker-required.json",
+          "sha256": "201650dccec4b11c8d4f51dbe1ed0243b8056700e80da5526a1a5833cdd4c040"
+        },
+        {
+          "path": "private/control-manifest.json",
+          "sha256": "fbdc3c7f322b5eff2b3c2cf06c7bd7e545d7107f1860abf444ad64494488d802"
+        },
+        {
+          "path": "private/controls/forged-completion.mjs",
+          "sha256": "4c3f4e61f6153aae8fc715bb044015cf91ee4fc85d8ccda4da4aaf63e0ee21b2"
+        },
+        {
+          "path": "private/controls/forget-tombstones.mjs",
+          "sha256": "e2e7bd623753a353e93006f776d2b13be9cee0a2ad60a550a399501a19382f4c"
+        },
+        {
+          "path": "private/controls/isolation.mjs",
+          "sha256": "5cb0fe8d8addd65dc72cbf04795ca088df98e5bb7b20a87c16b3c01463d9066b"
+        },
+        {
+          "path": "private/controls/no-work.mjs",
+          "sha256": "c7c1a8dedf433830a7446151634ac116449e61923804aa64eb367d99f97d0e6a"
+        },
+        {
+          "path": "private/controls/one-sibling.mjs",
+          "sha256": "78ad570d580c5c4fee7245806683699df25fb795e686e4e2b2565d4b7660c2c3"
+        },
+        {
+          "path": "private/controls/overbroad.mjs",
+          "sha256": "23a64959d2f0dee6136af43e6fb2111020158234454fa775b2c4717913e1fceb"
+        },
+        {
+          "path": "private/controls/payload-dedup.mjs",
+          "sha256": "b3248239cf822dbd0e7d86ceb2e64dbda0552b7cc879f4a42becc8e221f72d30"
+        },
+        {
+          "path": "private/controls/single-replica.mjs",
+          "sha256": "64218f88d02cacb51ab62be354f5dd20bbcceecabd77949b407919ef3cdc1a2f"
+        },
+        {
+          "path": "private/controls/union-resurrection.mjs",
+          "sha256": "1618530483b9da9c0a66075074046a253a4758e14dc57204746b375bc444fc2d"
+        },
+        {
+          "path": "private/domain.mjs",
+          "sha256": "8f5b6443aca2cc23e29f156e02f696c057642d1bb79d175c3f5ddba750a57a1b"
+        },
+        {
+          "path": "private/reference/checker-utils.mjs",
+          "sha256": "ec46af9f8839d7e0ec479fb841783160dd2c3d382e0b4ce40f01dc8ebe87f19c"
+        },
+        {
+          "path": "private/reference/checker.mjs",
+          "sha256": "e84e96f09d8327da0eb6128ba8c5967dc7ab29d38c5395276d15737a9f211ce2"
+        },
+        {
+          "path": "private/reference/entry.mjs",
+          "sha256": "afb96aae0d4134e4d3104b26ca45453be32fbd0abfccfb8d24de18b800c64449"
+        },
+        {
+          "path": "private/reference/src/identity.mjs",
+          "sha256": "b913a5d514eb82815a2eb4239fc439852e92b37a2c846995cc6da03a8c9432a6"
+        },
+        {
+          "path": "private/reference/src/merge.mjs",
+          "sha256": "e7f248f82a2b00f8d7094688cbc0afbda0c235d4c8f2e524d1bd624672cadfca"
+        },
+        {
+          "path": "private/reference/src/service.mjs",
+          "sha256": "d72d68be9f15249dc8e276695993c7bd0786f03152dc4e9a58cc6a0cc5d2ca2a"
+        },
+        {
+          "path": "private/reference/src/snapshot.mjs",
+          "sha256": "9905b10e713f6249b3a5f8b53cf865cafe684bff9bcab1328663a01c23e22386"
+        },
+        {
+          "path": "private/scenarios.mjs",
+          "sha256": "df776bd54c729edc55621a019369f8b5b9aad5ec5badb13c156a5191386378c0"
+        },
+        {
+          "path": "public/api.d.ts",
+          "sha256": "08fc7c84116a719d1a838773ea4afaf0e423726c2359cb38b59d59abf3e42464"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "sha256": "4202c24f9d51842ae151807b964e6927cd8b5e66db6fc8ffaec4b2845b1b788d"
+        },
+        {
+          "path": "public/entry.mjs",
+          "sha256": "6226b682bcbdb1ce72b85c760c0f830b6ca37f946c8db7dfe9bf0a786346277d"
+        },
+        {
+          "path": "public/instruction.md",
+          "sha256": "e1e72e654d38691998c58ddccdf47915cdb3dc8ce6ce64eaafef020934674fe8"
+        },
+        {
+          "path": "public/package.json",
+          "sha256": "927e166e8e367313700f919a6054bfc4f7b31a0e5421764ab4fed32bdbfbe50f"
+        },
+        {
+          "path": "public/SEMANTICS.md",
+          "sha256": "24bc398a3a7b18973e7267a69f8b975f7890b4947ac96249ee80aadc6a2c192d"
+        },
+        {
+          "path": "public/test/service.test.mjs",
+          "sha256": "f4b08447038c1958178bb5a017149207e6e871b2e89b9c218339ed93bacce122"
+        }
+      ],
+      "nativeRuns": {
+        "oracle": {
+          "reward": 1,
+          "service": true,
+          "checker": true,
+          "ctrfSummary": {
+            "tests": 143,
+            "passed": 143,
+            "failed": 0,
+            "pending": 0,
+            "skipped": 0,
+            "other": 0,
+            "start": 1788949478650,
+            "stop": 1788949485306
+          },
+          "resultFile": {
+            "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/causal-replica-repair__Be4NKAu/verifier/summary.json",
+            "sha256": "57c589f1a9e5f4cdfac1c1be92b7a8e92f41d06a3d8e5bb89e1e909f54ebdd10",
+            "bytes": 1130
+          },
+          "ctrfFile": {
+            "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/causal-replica-repair__Be4NKAu/verifier/ctrf.json",
+            "sha256": "3137d952a1c9b63ea89626a353283f1c200f6f2b80223fd62866b6615beb0119",
+            "bytes": 17088
+          }
+        },
+        "nop": {
+          "reward": 0,
+          "service": false,
+          "checker": false,
+          "ctrfSummary": {
+            "tests": 1,
+            "passed": 0,
+            "failed": 1,
+            "pending": 0,
+            "skipped": 0,
+            "other": 0,
+            "start": 1788949488969,
+            "stop": 1788949488974
+          },
+          "resultFile": {
+            "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/causal-replica-repair__N7GHpJq/verifier/summary.json",
+            "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1",
+            "bytes": 460
+          },
+          "ctrfFile": {
+            "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/causal-replica-repair__N7GHpJq/verifier/ctrf.json",
+            "sha256": "5378c5ccaa448800dc0ba80e6635646f28d3eeb771c6ac31cc79c9702fbce654",
+            "bytes": 717
+          }
+        }
+      }
+    }
+  ],
+  "remainingFinalQualification": [
+    "Final chosen task: human-authored README and final instruction review",
+    "Model-powered implementation rubric review",
+    "Six qualifying standard failures on the final task",
+    "Two zero-reward official cheat trials on the final task"
+  ],
+  "engineeringIterations": [
+    "Earlier native oracle runs exposed canary insertion before shebang; fixed and covered by export syntax tests.",
+    "An optional-public-tests property helper missed an import; corrected and failing test rerun successfully.",
+    "The first release invocation passed a runtime file where a directory was expected; CLI now accepts either.",
+    "A rebuild detected runtime/harbor-grade.mjs changing during active editing; the final frozen build/rebuild and recipient reproduction agree.",
+    "Local isolation controls exposed host-mounted log permission behavior; private labels now stay internal until process cleanup, and output forgery/symlinks are rejected."
+  ],
+  "evidenceFiles": [
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/variant-cache-repair__nGd24P4/verifier/summary.json",
+      "sha256": "9f5427ed90f1d7ac8615a36e2eca402ecee5b4e4f6c4319ced794eb446b11d31",
+      "bytes": 1532
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/variant-cache-repair__nGd24P4/verifier/ctrf.json",
+      "sha256": "c939cf5fb76a7a44ac82d1ebc1e4dac4437ffba7964c651ba051eaf25712086a",
+      "bytes": 19792
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/variant-cache-repair__TqTLYMU/verifier/summary.json",
+      "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1",
+      "bytes": 460
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/variant-cache-repair__TqTLYMU/verifier/ctrf.json",
+      "sha256": "65415fe4dee31a4486ce2b951b87a1701ba3885bcc61d632f7d3a8bfb3d5cda7",
+      "bytes": 717
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/harbor-ready/variant-cache-repair/export-manifest.json",
+      "sha256": "a8e77a8e5f434eef985db21f7cb71aed1f575183ff5f27bfbdf654933a67d7dd",
+      "bytes": 13155
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/release-ready/variant-cache-repair/validation/assurance.json",
+      "sha256": "310d712f9d1885d6b41b47e97f7da10a2ba73fd443cc3ef14f604f9028082200",
+      "bytes": 105583
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/incremental-build-repair__dT7HCGg/verifier/summary.json",
+      "sha256": "5cc29128e5a34f8327c2e14296e96f97740ffa7a7943e1d0126a5eb6aee4ab94",
+      "bytes": 1525
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/incremental-build-repair__dT7HCGg/verifier/ctrf.json",
+      "sha256": "f9be3fbbb0ebdd6954dfcdc4f0203d35d1734a9ad5734aab853dae3a422c07d1",
+      "bytes": 18548
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/incremental-build-repair__hvMVy5D/verifier/summary.json",
+      "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1",
+      "bytes": 460
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/incremental-build-repair__hvMVy5D/verifier/ctrf.json",
+      "sha256": "c6db604b4e31b362e904522e4dff5390e84f301d0af5fccbfaac643f9b199b97",
+      "bytes": 717
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/harbor-ready/incremental-build-repair/export-manifest.json",
+      "sha256": "495fa1510f82bfd64544f2af1677f822ee939cc10540c5af507f5f6b593ef1a1",
+      "bytes": 13140
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/release-ready/incremental-build-repair/validation/assurance.json",
+      "sha256": "429858e2d66eb09119bc4a210c9de9a81e77aa517189379a55e0a473519a9359",
+      "bytes": 111993
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/issued-report-repair__vAShL6A/verifier/summary.json",
+      "sha256": "192ca35ab49aacb277b292385d90427ac7a748dae10408838cd3ebe3a9b59d34",
+      "bytes": 1475
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/issued-report-repair__vAShL6A/verifier/ctrf.json",
+      "sha256": "ce7a1a2f737d7caeb3eb924fd0ae0583788b1de85d99b6d8e338094d555a6f5c",
+      "bytes": 21414
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/issued-report-repair__qTnZzRV/verifier/summary.json",
+      "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1",
+      "bytes": 460
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/issued-report-repair__qTnZzRV/verifier/ctrf.json",
+      "sha256": "652133b8b6e05a057da1cd6d18fdb328dba53b21ed46e0510f9a7b00725764b9",
+      "bytes": 717
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/harbor-ready/issued-report-repair/export-manifest.json",
+      "sha256": "8b081716903b92ba17f6e6da208ed11a4113b5c19a0cb4ad99ddf91d3dde09dd",
+      "bytes": 12932
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/release-ready/issued-report-repair/validation/assurance.json",
+      "sha256": "127fb137b0ee965a144958d13247f82e6d045a5f340a769e7f13a2216195eb4a",
+      "bytes": 115885
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/diagnostic-transport-repair__qTyH4C8/verifier/summary.json",
+      "sha256": "2ca3a4319ebedcc9860f032934886b529ea6bd0f2c52e78b15c8e5930b14a937",
+      "bytes": 1723
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/diagnostic-transport-repair__qTyH4C8/verifier/ctrf.json",
+      "sha256": "7ea1627865822d6e1d0334ca2fe12e60b49797028957f072889f7913e8eed67d",
+      "bytes": 18713
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/diagnostic-transport-repair__NBihDtd/verifier/summary.json",
+      "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1",
+      "bytes": 460
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/diagnostic-transport-repair__NBihDtd/verifier/ctrf.json",
+      "sha256": "d11e5bab8d47975c0d51cb724957256e50a26a580bcbf8d788c3fa9303ae59f5",
+      "bytes": 717
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/harbor-ready/diagnostic-transport-repair/export-manifest.json",
+      "sha256": "ad47d9a13758648d575b1ba622b56156fdddb37d17b9d7420e26bd633a48a0bb",
+      "bytes": 13799
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/release-ready/diagnostic-transport-repair/validation/assurance.json",
+      "sha256": "38657f5548f940449757ebf35859cd568e69c1c5e404cb03555bd526c093b505",
+      "bytes": 134625
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/causal-replica-repair__Be4NKAu/verifier/summary.json",
+      "sha256": "57c589f1a9e5f4cdfac1c1be92b7a8e92f41d06a3d8e5bb89e1e909f54ebdd10",
+      "bytes": 1130
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/causal-replica-repair__Be4NKAu/verifier/ctrf.json",
+      "sha256": "3137d952a1c9b63ea89626a353283f1c200f6f2b80223fd62866b6615beb0119",
+      "bytes": 17088
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/causal-replica-repair__N7GHpJq/verifier/summary.json",
+      "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1",
+      "bytes": 460
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/causal-replica-repair__N7GHpJq/verifier/ctrf.json",
+      "sha256": "5378c5ccaa448800dc0ba80e6635646f28d3eeb771c6ac31cc79c9702fbce654",
+      "bytes": 717
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/harbor-ready/causal-replica-repair/export-manifest.json",
+      "sha256": "96d715148b8c076530533bfd77199c484f2193e8b4654facb46ab2c389c5d13b",
+      "bytes": 11894
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/release-ready/causal-replica-repair/validation/assurance.json",
+      "sha256": "0bcc75f2becfa247f9e366569f224a424fca392765ab9eeedfeb7c3b9e18d6df",
+      "bytes": 92406
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/release-ready/summary.json",
+      "sha256": "e654f876182490b6af8782e442071c4b4d462df2a7bfde7e00eab7b54bfe64d4",
+      "bytes": 22675
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/release-ready/recipient/result.json",
+      "sha256": "d9aa36c042a1a21ab0c73ba07e31aa111094a02f459a1986fe660e85cfe00ea6",
+      "bytes": 2208
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/native-integrity-ready/summary.json",
+      "sha256": "6e189b2a600f069cab054c32ceed6b9baf4cfeeef1806b218f99182b7744a851",
+      "bytes": 5340
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/static-ready/summary.json",
+      "sha256": "c57025ebad43bb9dd39971e8ff09c271758551c85614626103a48ef64ee0ef90",
+      "bytes": 26582
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-oracle-ready/result.json",
+      "sha256": "48e0307f5c33979f79b2f3fbde1af627942351c510c88cfca5b5f08d55803490",
+      "bytes": 1374
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/jobs/five-nop-ready/result.json",
+      "sha256": "a406f4049817b3080c59b60616cc530059dcb1e798225cebedd6ad49dc7bc57e",
+      "bytes": 1371
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/unit-final.json",
+      "sha256": "0a095d17adaa26400f3c24c7e99050a8dc77a84bfb0527aa89829105e0787810",
+      "bytes": 36426
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/unit-fifth-corrected.json",
+      "sha256": "599cdbe969e975832ecc4bbe5cc0fbb52aa69a3cca835da6b0c8deb1c0bf9c39",
+      "bytes": 2059
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/final-regressions.json",
+      "sha256": "769cc933badd608dcac64780d1723c4d23bd5f0282255c8075443d328ca1cb07",
+      "bytes": 2273
+    },
+    {
+      "path": ".local/test-runs/pure-1788949068007/summary.json",
+      "sha256": "eff9222e8f436226d996e95982ef9e9acbda4f1189812d9893e151266a23293a",
+      "bytes": 832
+    },
+    {
+      "path": ".local/top-five-implementation-2026-09-09/infrastructure-control/logs/summary.json",
+      "sha256": "644ec2aac019ca2592651fcb96cf8b4bc47102c0b23fb414c6732c3bb935b088",
+      "bytes": 521
+    }
+  ]
+}

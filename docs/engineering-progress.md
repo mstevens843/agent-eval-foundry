@@ -2,6 +2,34 @@
 
 The goal is a portfolio of fair, useful tasks that agents genuinely fail—not a large pile of generated exercises or zero rewards caused by bad measurement. Progress includes discovering that a candidate is easy, identifying our own mistakes, and making the next decision better informed.
 
+## September 9: three reward-zero successor results
+
+Five optimized packages have now been retrialled. **Three recorded reward 0, with
+two supported substantive required-checker failures: incremental build and issued
+report.** The agents completed service implementations that passed their frozen
+suites, but their required validators remained wrong. Cache also failed its service
+suite; its wildcard matching/replacement interpretation remains under review.
+
+The loop is visible end to end: analyze earlier submissions, integrate contract-valid
+controls, remove mostly solved starter code, validate correct alternatives, run fresh
+attempts and preserve the observed failures. Changes were bundled, so the trials do
+not isolate the causal effect of starter removal alone.
+
+Issued report's documented API observations provided sufficient input facts. A
+diagnostic exercised the submitted checker's own fallback and demonstrated that path.
+Its choice to prefer misparsed aggregate arrays caused the original false rejections.
+Build's issuance-order omission and report's input-processing error both left required
+checker deliverables incorrect despite passing service suites.
+
+The remaining cache concern is an actual difference between the published matching
+predicate and the private replacement predicate, not a demand to explain every expert
+inference. Its zero stays recorded while that interpretation is resolved.
+
+The [campaign report](../reports/screening/round-two-top-five-2026-09-09.md) links all
+five appended Trial 2 analyses and [audit evidence](../reports/screening/evidence/2026-09-09-round-two-top-five-audit.json).
+All 4,644 manifest-listed files verified. Original grades, submissions and formal
+qualification fields remain unchanged; diagnostics do not add model attempts.
+
 ## How the work has progressed
 
 | Observation | Decision and implementation | What that earns—and does not earn |
@@ -16,6 +44,10 @@ The goal is a portfolio of fair, useful tasks that agents genuinely fail—not a
 | Causal replica's checker rejected an already-correct implementation that skipped unnecessary writes | Record the exact legitimate alternative and the checker overconstraint | One concrete self-check omission, not a universal Codex weakness or replicated failure rate |
 | Partial release classified every candidate correctly but used explanatory reason strings | Treat the zero as a contract/grader alignment concern; require a versioned format repair before claiming hardness | A correction to our evaluation, not a successful difficult task |
 | Useful work remained in ignored snapshots | Integrate maintained source/tests, publish vetted analyses and preserve raw evidence privately | Reviewable engineering and an honest history, without exposing credentials or filling Git with archives |
+| Mostly solved starters and exact reason labels weakened the experiment | Prepare fifteen ranked successors with empty entry points, complete private oracles, diagnostic-only reasons and native exports | More work is required from the solver; local validation still does not prove hardness, and group two's native checks remain deferred |
+| A fresh incremental-build checker accepts publication before compiler issuance | Preserve the submission and exact ordering witness; prioritize an unchanged-version repeat | One substantive new required-checker failure, not a replicated failure rate |
+| Issued report's required checker rejects valid candidates despite sufficient documented observations | Replay the unchanged submission and exercise its existing observation fallback in a separate diagnostic | A supported required-checker failure; a separate latent ordering miss remains diagnostic evidence |
+| Cache's first scored service failure depends on wildcard replacement | Compare the explicit public matching rule with the private predicate | One concrete unresolved contract interpretation; original zero preserved |
 
 ## What the agents' work taught us
 
@@ -27,10 +59,10 @@ The historical outbox case must be read with its [qualified evidence and correct
 
 ## The next loop
 
-1. Review and integrate the separately implemented local checker-interface repair under a new version; keep the original trial immutable. Concurrent follow-up notes describe diagnostic regrades, not newly dispatched trials or a fix already merged into this source.
-2. Use the saved passing submissions as strong regression controls against additional contract-valid scenarios. A newly exposed failure needs an explanation and a valid alternative—not just another seed.
-3. Review the four local crash-recovery successors separately. Where they change the public contract, acknowledge a new task version and establish attainable recovery before testing it.
-4. Select unscreened packages for material professional differences and complete local assurance, not to reach a round number. Independently review fairness and bounded solvability, then obtain explicit trial authorization.
-5. Inspect each new outcome briefly. Reserve deeper causal decomposition and transfer experiments for a real, explainable, promising signal. Track negative results and invalid executions as carefully as successes.
+1. Repeat incremental build and issued report on their frozen versions when the next trials are authorized. Keep the original solver artifacts intact and avoid adding a tutorial about the missed ordering rule.
+2. Resolve cache wildcard matching for replacement. If the public rule changes, validate that successor and retrial. Extra issued-report aggregate-input documentation is optional; its documented observations already provide the needed facts.
+3. Complete the deferred native checks for 14/03/18/20/04. The third ranked group 13/08/15/12/11 already has its own native oracle/nop evidence; one group's success cannot close another's pending checks.
+4. Continue the remaining candidates according to their observed solving behavior and contract-valid difficulty opportunities. A longer runtime or more controls alone does not justify priority.
+5. Record subsequent attempts under their original analysis documents with exact package identities, service/checker results and attribution. Local diagnostic replays are distinct from fresh model trials and formal qualification.
 
 These are next decisions, not actions or trials silently authorized by this document. The [trial index](../reports/screening/README.md), [portfolio](project-status.md), [construction records](next-portfolio-construction.md) and [publication report](../reports/PORTFOLIO-PUBLICATION.md) provide the detailed evidence.

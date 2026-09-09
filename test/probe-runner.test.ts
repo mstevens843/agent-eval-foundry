@@ -206,6 +206,12 @@ describe("Mechanism Probe Runner v1", () => {
     );
   });
 
+  it("does not reject an otherwise valid probe just because the solver can self-test", () => {
+    const definition = firstDefinition();
+    const result = runProbe({ ...definition, preferredVerdict: "kill_self_verifiable" });
+    expect(result.verdict).toBe("promote_to_task_shape");
+  });
+
   it("rejects a known-bad subject that escapes intended checks", () => {
     const definition = firstDefinition();
     expectSchemaCode(

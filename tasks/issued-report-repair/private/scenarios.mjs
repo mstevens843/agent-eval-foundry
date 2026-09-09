@@ -4,6 +4,7 @@ export const checkIds = [
   "issued_history",
   "recipient_scope",
   "historical_answers",
+  "dependency_order",
 ];
 export function scenarios() {
   const out = [];

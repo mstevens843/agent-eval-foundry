@@ -1,3 +1,5 @@
 {
-  "required": true
+  "required": true,
+  "reasonPolicy": "diagnostic-only",
+  "submissionModules": "workspace"
 }

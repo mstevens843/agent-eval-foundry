@@ -244,6 +244,16 @@ describe("complete package identity", () => {
 });
 
 describe("one stage-aware policy", () => {
+  it("permits exploratory eligibility without claiming a measured human solve", () => {
+    const f = fixture();
+    const decision = decidePackage({
+      snapshot: f.snapshot,
+      checks: { ...CHECKS, boundedSolveEvidence: false },
+    });
+    expect(decision.stages["trial-eligible"].allowed).toBe(true);
+    expect(decision.stages["trial-authorized"].allowed).toBe(false);
+    expect(decision.stages["release-eligible"].allowed).toBe(false);
+  });
   it("local validity needs no trials, and one-mechanism calibration can be trial-eligible, not releasable", () => {
     const { snapshot } = fixture("calibration-kernel");
     const decision = decidePackage({ snapshot, checks: CHECKS });

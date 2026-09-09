@@ -1,0 +1,20 @@
+[
+  {
+    "id": "route-policy-repair",
+    "historicalGeneratorSha256": "df8961fc298643a7fc4c5c3150a8e0bdaf702fbd3b3d3f3a6bf7f61ec78067e8",
+    "generatorSha256": "01131a405e32d14125a663c19a7f27268f74464da697423489a9ebcb5f22b21c",
+    "reason": "Integrated documented successor scenarios; budget additionally covers response loss with pending and absent outcomes."
+  },
+  {
+    "id": "browser-replay-repair",
+    "historicalGeneratorSha256": "ae2b03cb33bc171622f3d7551482f8eacdbf7d9caa153a141e0a31a5e18e0953",
+    "generatorSha256": "e405f0560df34bfc01a7d91422f521ec072b6fdda053746d770acf6140270652",
+    "reason": "Integrated documented successor scenarios; budget additionally covers response loss with pending and absent outcomes."
+  },
+  {
+    "id": "delegated-budget-repair",
+    "historicalGeneratorSha256": "ad0e0ba4cece2aa6fb838cb733aad06f9fcc7de7bff0fc7ef0fa3819ef1163ab",
+    "generatorSha256": "6c628d845637f2b0c7d57f6172d287615cab99ef18334c137c5905eab9b47dc3",
+    "reason": "Integrated documented successor scenarios; budget additionally covers response loss with pending and absent outcomes."
+  }
+]

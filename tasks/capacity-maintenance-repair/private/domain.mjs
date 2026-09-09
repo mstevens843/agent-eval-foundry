@@ -3,8 +3,8 @@ const canonical = (rows) =>
   [...rows].sort((a, b) => a.host.localeCompare(b.host) || a.service.localeCompare(b.service));
 export function invariants(v, rows) {
   const loads = Object.fromEntries(v.hosts.map((h) => [h.id, 0])),
-    counts = {},
-    zones = {};
+    counts = Object.create(null),
+    zones = Object.create(null);
   let eligibility = true;
   for (const p of rows) {
     const service = v.services.find((s) => s.id === p.service),
@@ -12,7 +12,7 @@ export function invariants(v, rows) {
     if (!service || !host) return { capacity: false, availability: false, placement: false };
     loads[host.id] += service.size;
     counts[service.id] = (counts[service.id] ?? 0) + 1;
-    const k = service.id + "/" + host.zone;
+    const k = JSON.stringify([service.id, host.zone]);
     zones[k] = (zones[k] ?? 0) + 1;
     eligibility &&= service.eligible.includes(host.id);
   }
@@ -21,7 +21,7 @@ export function invariants(v, rows) {
     availability: v.services.every((s) => (counts[s.id] ?? 0) >= s.min && (counts[s.id] ?? 0) <= s.max),
     placement:
       eligibility &&
-      v.services.every((s) => v.hosts.every((h) => (zones[s.id + "/" + h.zone] ?? 0) <= s.perZone)),
+      v.services.every((s) => v.hosts.every((h) => (zones[JSON.stringify([s.id, h.zone])] ?? 0) <= s.perZone)),
   };
 }
 export async function runScenario(s, execute, storage) {
@@ -40,7 +40,7 @@ export async function runScenario(s, execute, storage) {
     }
     try {
       fn(x);
-      history.push({ placement: structuredClone(rows), done: [...done], ...invariants(s, rows) });
+      history.push({ placement: structuredClone(rows), done: [...done], safety: invariants(s, rows) });
       return { ok: true };
     } catch (e) {
       legal = false;
@@ -85,9 +85,9 @@ export async function runScenario(s, execute, storage) {
   return {
     ...checks({
       completion: closed && equal([...done].sort(), truth.done),
-      capacity: history.every((h) => h.capacity),
-      availability: history.every((h) => h.availability),
-      placement: history.every((h) => h.placement),
+      capacity: history.every((h) => h.safety.capacity),
+      availability: history.every((h) => h.safety.availability),
+      placement: history.every((h) => h.safety.placement),
       restoration: equal(canonical(rows), truth.placement),
       legal_operations: legal,
     }),

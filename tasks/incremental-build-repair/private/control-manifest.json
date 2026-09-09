@@ -49,7 +49,7 @@
     "overlay": {
       "entry.mjs": "controls/foreign-publication.mjs"
     },
-    "check": "current_artifacts",
+    "check": "publication_scope",
     "selectionRole": "development-regression"
   },
   {
@@ -65,7 +65,7 @@
     "overlay": {
       "entry.mjs": "controls/partial-publication.mjs"
     },
-    "check": "current_artifacts",
+    "check": "publication_scope",
     "selectionRole": "development-regression"
   },
   {
@@ -101,5 +101,13 @@
     "check": "current_artifacts",
     "clean": "case-024",
     "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "premature-publication",
+    "overlay": {
+      "entry.mjs": "controls/premature-publication.mjs"
+    },
+    "check": "current_artifacts",
+    "selectionRole": "development-regression"
   }
 ]

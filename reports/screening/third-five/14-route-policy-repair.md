@@ -55,3 +55,24 @@ An expanded successor could support professionally justified additional language
 [Sanitized batch record](../evidence/2026-09-08-third-five.json) records frozen package/profile/source identities, original results, source deltas and manifest hashes. [Current task source](../../../tasks/route-policy-repair/) is separately maintained.
 
 This report analyzes observable commands, tool results and submitted artifacts, not private internal reasoning. The agent's oracle and fuzz counts are explicitly self-verification evidence. No additional provider calls, diagnostic regrades or independent blind adjudications were performed for this report.
+
+## 2026-09-09 — Engineering successor prepared for Trial 2
+
+**Ready for a second exploratory Foundry trial; no second model trial has run for this version.** This section is an engineering record, not a new reward result. Priority in the next group: 1/5. See the [selection and implementation report](../next-five-implementation-plan-2026-09-09.md) and [hashed validation evidence](../evidence/2026-09-09-next-five-implementation.json). Earlier trial results and package descriptions above remain historical.
+
+Integrated the two successor community-combination scenarios into the maintained generator (27 scenarios total). Retained raw routes in checker inputs and acceptance of alternative-correct policy layouts. Removed the public cloning/inlining repair recipe and completed both private service implementations before removing public implementation modules. Corrected an internal term-count boundary that counted policies as terms; the documented 1,024-term limit now means terms. Public bounds for community matches and mutations match the authority. The independent private checker uses an explicit-stack policy interpreter and judges behavior against raw inputs rather than comparing a preferred output layout.
+
+Local validation passed 15 service-assurance checks, including correct reference and alternative services, semantic failure of the untouched starter, repeatability and negative-control activation. The independent checker correctly classified 12/12 candidates: two correct implementations and 10 negative controls, with zero false accepts or misses. The Foundry export rebuilt identically and passed fresh recipient validation. All 22 native static checks passed. These controls are author-side evidence, not model attempts or proof that an unseen solver will fail.
+
+Six native verifier integrity controls passed. The final native wording differs from the tested export; verifier and oracle file bytes were independently compared and are identical. All five native Harbor end-to-end oracle/nop jobs remain pending; this does not prevent using the validated Foundry path for exploratory trials.
+
+Use this exact Foundry export:
+
+- Directory: `.local/next-five-implementation-2026-09-09/release-ready/route-policy-repair/export`
+- Package digest: `b6490e6b9cd68f23bba0d63ce101b6c7b49f48113f2a90e320a7fc015c32ab01`
+- Native build, with the validation boundary above: `.local/next-five-implementation-2026-09-09/harbor-final/route-policy-repair`
+- Native digest: `2bb38e0fef0b2cedb9681ec70adb4efd56e1954dd6a7d8ee321349e2cd627dad`
+
+Both deliverables are required. The checker must return complete deterministic Boolean verdicts; reasons are optional diagnostics and submitted helpers are available. Public API, output schemas and observable requirements remain provided, without a worked implementation.
+
+When Trial 2 finishes, append its actual model/profile, frozen package digest, service and checker outcomes, elapsed time, infrastructure exclusions and observed submission defects here. Do not overwrite Trial 1 or count an infrastructure error, an author control or an old label dispute as a new standard model failure.

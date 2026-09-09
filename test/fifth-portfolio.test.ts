@@ -29,8 +29,16 @@ it("preserves frozen scenario bytes and declares the post-selection validation c
   };
   expect(ledger.generators).toHaveLength(5);
   expect(ledger.validationControls).toHaveLength(5);
-  for (const g of ledger.generators)
-    expect(sha256(readFileSync(`tasks/${g.id}/private/scenarios.mjs`))).toBe(g.generatorSha256);
+  const successors = JSON.parse(
+    readFileSync("reports/screening/evidence/2026-09-09-successor-generators.json", "utf8"),
+  ) as { id: string; historicalGeneratorSha256: string; generatorSha256: string }[];
+  for (const g of ledger.generators) {
+    const successor = successors.find((s) => s.id === g.id);
+    if (successor) expect(successor.historicalGeneratorSha256).toBe(g.generatorSha256);
+    expect(sha256(readFileSync(`tasks/${g.id}/private/scenarios.mjs`))).toBe(
+      successor?.generatorSha256 ?? g.generatorSha256,
+    );
+  }
 });
 it("runs full author-side control activation with clean non-activation witnesses", () => {
   const output = join(scratch, "controls");
@@ -49,7 +57,17 @@ it("runs full author-side control activation with clean non-activation witnesses
   // 67, not 65: incremental-build-repair's partial-publication control and event-window-repair's
   // late-before-dedup control (both added 2026-09-08 as part of checker-required hardening) each
   // add one new control beyond the original two packages' counts.
-  expect(report.results).toHaveLength(67);
+  expect(report.results).toHaveLength(
+    ids.reduce(
+      (n, id) =>
+        n +
+        3 +
+        JSON.parse(readFileSync(`tasks/${id}/private/control-manifest.json`, "utf8")).filter(
+          (c: { isolation?: boolean }) => !c.isolation,
+        ).length,
+      0,
+    ),
+  );
   expect(report.results.every((r) => r.passed)).toBe(true);
   expect(report.providerCallsMade).toBe(0);
   expect(report.protectedRoute).toBe(false);

@@ -1,5 +1,14 @@
 # Maintained portfolio and screening publication
 
+**September 9 update:** fifteen ranked successors are implemented, and the first five
+completed Trial 2 with **three zero rewards**. The [audited campaign](screening/round-two-top-five-2026-09-09.md)
+supports substantive required-checker failures for incremental build and issued report.
+Cache's service/checker zero has a remaining matching/replacement contract question;
+07 and 24 passed. The report links the exact failure mechanisms and diagnostic evidence.
+All 4,644 manifest-listed trial files verified, and all five original analyses include
+Trial 2. [Current status](../docs/project-status.md) distinguishes this progress from
+deferred native checks and uncompleted empirical qualification.
+
 September 8 screening update: the original publication below is retained as history.
 Twenty-five completed package analyses are now public; batches 3–5 are complete.
 All twenty-five service suites passed. Batch 4 additionally exposed two private-primary-label

@@ -1626,7 +1626,11 @@ function verdictFor(
     );
   }
   if (definition.transferTargets.length === 0) return "hold_needs_transfer";
-  return definition.preferredVerdict;
+  // Retain historical labels when reading evidence, but do not kill new probes solely
+  // because a solver can test its own answer. Hardness needs empirical evaluation.
+  return definition.preferredVerdict === "kill_self_verifiable"
+    ? "promote_to_task_shape"
+    : definition.preferredVerdict;
 }
 
 function nextEvidenceForVerdict(verdict: ProbeVerdict, fallback: EvidenceCost): EvidenceCost {

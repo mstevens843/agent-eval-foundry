@@ -49,3 +49,28 @@ Keep the accepted implementation and its alternative-correct controls. For a suc
 [Sanitized batch record](../evidence/2026-09-08-third-five.json) records the frozen identities, original results, file deltas and manifest verification. [Current task source](../../../tasks/rule-index-repair/) is separate from the immutable historical submission. Self-test counts above come from recorded tool output, not independent benchmark scenarios or new model trials.
 
 This is observable-artifact analysis, not private internal reasoning or independent blind adjudication. One pass is evidence against this package's present difficulty hypothesis, not proof that the entire domain is easy.
+
+## 2026-09-09 — Third ranked group: engineering successor for Trial 2
+
+**Ready for a second exploratory trial. No new model attempt was launched for this version.** Priority within the third ranked group: 3/5. Earlier sections describe historical source and results. See the [implementation report](../third-ranked-five-implementation-plan-2026-09-09.md) and [hashed validation evidence](../evidence/2026-09-09-third-ranked-five-implementation.json).
+
+Completed both private compiler implementations, then removed the supplied lexer, builder, pattern and compiler modules from the public workspace. Retained the instruction-set contract, ordered matching semantics, capture preference and deterministic work formula. Removed repeated implementation advice and reason-label examples; explicitly documented the exact instruction object fields already enforced by the interpreter.
+
+Integrated the local no-memo negative control and its distinguishing case-025 scenario, bringing the suite to 26 scenarios and 11 negative controls. In that witness, the observed match outputs are correct while executed work exceeds the public formula. A regression verifies that bounded_work alone fails and that the independent checker rejects it. No memo instruction is required as an implementation strategy; any valid program meeting the behavior and work contract is accepted.
+
+Checker-visible interpreter data now contains actual values, step counts and instruction counts, without computed budget/withinBudget verdict fields. Original rules and documents remain supplied. The private checker uses bottom-up suffix reachability and a separate shortest-capture reconstruction, independently of the grader's recursive matcher.
+
+Validation passed 16 Foundry assurance checks across 26 scenarios, including the complete reference and alternative services, semantic failure of the untouched service starter, repeatability and control activation. The private checker correctly classified 13/13 candidates: two correct implementations and 11 negative controls, with zero false accepts or misses. Rebuild and fresh recipient reproduction passed.
+
+Native validation passed all 22 static checks and six verifier integrity controls. Harbor's complete oracle returned reward 1; nop returned reward 0, with no Harbor exceptions or verifier infrastructure errors. Nop is rejected for its missing checker deliverable; the separate Foundry starter execution establishes the service's semantic failure. These are provider-free local validation jobs, not new standard/cheat model trials.
+
+Use these exact exports:
+
+- Foundry: `.local/third-ranked-five-implementation-2026-09-09/release-ready/rule-index-repair/export`
+- Foundry digest: `6d649cfd3fee1d3c95aecf3f97a06eccb5b83796201c2ef801b817f5ef7749af`
+- Native Harbor: `.local/third-ranked-five-implementation-2026-09-09/harbor-ready/rule-index-repair`
+- Native digest: `e711789617b90b7eca98932460f2459376c649dd73699dcab13df55b3bbf0a98`
+
+Both deliverables are required. The checker returns complete deterministic Boolean verdicts; optional reason text does not affect grading, and submitted helper modules are available. Public requirements and custom schemas remain supplied without a worked implementation.
+
+When Trial 2 completes, append the actual model/profile, frozen digest, service/checker outcomes, elapsed time, exclusions and final submission defect here. Keep original Trial 1 rewards intact. Local controls, old grading disputes and infrastructure errors are not additional model failures. The final hiring submission still requires its human-authored material and rubric, standard and cheat qualification on the final selected version.

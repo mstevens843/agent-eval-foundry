@@ -35,7 +35,7 @@ describe("next-five provider-free adapter preparation", () => {
     expect(result.bytesRetained).toBeLessThanOrEqual(32 * 1024 * 1024);
   });
 
-  it("denies the real adapter before reservation when bounded solve evidence is absent", async () => {
+  it("denies the real adapter before reservation when contract review is absent", async () => {
     const snapshot = publishPackage(
       join(temporary(), "packages"),
       buildPackageRecord({
@@ -78,7 +78,7 @@ describe("next-five provider-free adapter preparation", () => {
             reference: true,
             positiveWork: true,
             nearMissControls: true,
-            contractReviewed: true,
+            contractReviewed: false,
             publicPackageComplete: true,
             protectedGrading: true,
             localIntegrityControls: true,
@@ -107,7 +107,7 @@ describe("next-five provider-free adapter preparation", () => {
         instruction: "must never dispatch",
         credential: {},
       }),
-    ).rejects.toThrow(/required-boundedSolveEvidence/);
+    ).rejects.toThrow(/required-contractReviewed/);
     expect(reservations).toBe(0);
   });
 });

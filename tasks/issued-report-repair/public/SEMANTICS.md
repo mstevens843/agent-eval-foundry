@@ -27,7 +27,6 @@ Before next is called again, reconcile ALL definitions in dependency order:
 Use publish({record}) to append the immutable version. Existing versions cannot be
 changed, renumbered, removed or reused. Multiple new versions of one report in a step
 are unnecessary and invalid. Independent reports may be processed in any order.
-A source-version change can require an amendment even when the numerical value is unchanged.
 
 For every new version, deliver it to EVERY recipient who previously received any version
 of that report. Also satisfy all step.requests with the latest version. Deliver at most

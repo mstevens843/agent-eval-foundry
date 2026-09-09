@@ -13,16 +13,16 @@ values. Preserve all surviving identities and their exact payloads. Order of val
 object keys is immaterial; zero clock entries may be omitted.
 view.replicas lists distinct replica IDs; view.documents lists scoped document IDs.
 api.read({replica}) returns {documents:{id:state}} including unrelated documents.
-A missing document is empty context/values. api.replace({replica,document,state}) writes
-one document, returning {stored:true}. Every scoped document must be reconciled onto
-every replica, including an all-deleted document. Unrelated documents cannot be written.
-Reads and writes are synchronous, successful and bounded. Capture participating snapshots
-before changing them; no concurrent external updates happen within an invocation.
+A missing document has empty context and values. api.replace({replica,document,state})
+writes one document and returns {stored:true}. At completion, every scoped document
+on every replica must equal the reconciled state. Unrelated documents cannot be written.
+Reads and writes are synchronous, successful and bounded. The reconciliation uses the states at invocation entry;
+no concurrent external updates happen within an invocation.
 Multiple invocations may follow with new offline observations; they use the same API and
 must converge again. At most 5 replicas, 12 documents, 100 values per invocation.
 Return diagnostics freely; only independently collected writes and resulting state count.
 # Execution envelope
 
-The submitted program has 45 seconds per invocation and up to 4000 API operations.
+The Node 24 submitted program has 45 seconds per invocation and up to 4000 API operations.
 These are generous execution limits, not the human repair time budget. The public
 API and hidden data obey the bounds below; no delay or starvation is used for hardness.

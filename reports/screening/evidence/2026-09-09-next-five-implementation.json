@@ -1,0 +1,306 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-09-09T11:46:03.920Z",
+  "providerCallsMade": 0,
+  "status": "five-foundry-exploratory-retrial-exports-ready; native-browser-validation-pending",
+  "rankingSource": "reports/screening/second-trial-priority-2026-09-09.md",
+  "releaseEvidence": {
+    "path": ".local/next-five-implementation-2026-09-09/release-ready/summary.json",
+    "sha256": "bc561b4a4d6a1feced3c1062d58d116bff010af2078249ef25e610e3b3724a0a"
+  },
+  "staticEvidence": {
+    "path": ".local/next-five-implementation-2026-09-09/static-final/summary.json",
+    "sha256": "46f80eb2ef5875cc38c4d36afbaa91165be7775ff02d72e25f7e7e5346da4efb"
+  },
+  "totals": {
+    "completeFoundryOracles": 5,
+    "rejectedUntouchedStarters": 5,
+    "assuranceChecks": 74,
+    "checkerCandidates": 59,
+    "negativeControls": 49,
+    "staticChecks": 110,
+    "nativeIntegrityChecksPassed": 24,
+    "regressionTestsPassed": 25
+  },
+  "preservation": {
+    "baseline": {
+      "path": ".local/next-five-implementation-2026-09-09/preservation-before.json",
+      "sha256": "05236b5fd64ab7a7c0e2bea196dd5d74c96818dfd6bf055c82f09543a5f70e7f"
+    },
+    "sourceFilesChecked": 586,
+    "sourceFilesUnchanged": true,
+    "concurrentlyRebuiltDistFiles": [
+      "dist/index.cjs",
+      "dist/index.js",
+      "dist/packages/local-cli.cjs",
+      "dist/packages/local-cli.js",
+      "dist/trials/operation-authority.cjs",
+      "dist/trials/operation-authority.js"
+    ],
+    "note": "The six recorded dist changes arose during the external trial agent build; no main-tree build was run by this implementation. The trial controller now imports its own frozen-source build.",
+    "firstGroupReproduction": [
+      {
+        "id": "variant-cache-repair",
+        "digest": "d291ca623b9d2112cfb28670110870c5e5b19dfe3602f6f2c16fc9f79b95f3a3",
+        "passed": true
+      },
+      {
+        "id": "incremental-build-repair",
+        "digest": "3517d6932c67baba9803be6c8c153c9c958c10357a35503ecb15879655f2f2b8",
+        "passed": true
+      },
+      {
+        "id": "issued-report-repair",
+        "digest": "df8d825785f3e7b5d9376b248d73e7353f7b31a7933ee7c4a4ada15de58278cc",
+        "passed": true
+      },
+      {
+        "id": "diagnostic-transport-repair",
+        "digest": "3bb08ac6038ab6f3019ab9243472c035ef02be42b1085f02f2b0d3fb8f2aca21",
+        "passed": true
+      },
+      {
+        "id": "causal-replica-repair",
+        "digest": "6167354e302ce2a36e8af16248350da9a4f4e252fb1c66fef766f5c65e456ef5",
+        "passed": true
+      }
+    ]
+  },
+  "pending": [
+    "Browser native integrity run previously timed out at 600 seconds after an infrastructure error; tests/docker-compose.yaml init:true and docker run --init are now present, with rerun pending.",
+    "Native Harbor oracle/nop jobs for all five have not run; the existing Foundry exports are separately validated for exploratory retrials.",
+    "No Trial 2 model results for this group. Final submission requires the assignment human-authored material and rubric, standard and cheat qualification."
+  ],
+  "results": [
+    {
+      "id": "route-policy-repair",
+      "priority": 1,
+      "analysis": "reports/screening/third-five/14-route-policy-repair.md",
+      "foundry": {
+        "digest": "b6490e6b9cd68f23bba0d63ce101b6c7b49f48113f2a90e320a7fc015c32ab01",
+        "export": ".local/next-five-implementation-2026-09-09/release-ready/route-policy-repair/export",
+        "componentFilesVerified": 48,
+        "trialEligible": true,
+        "assurance": {
+          "path": ".local/next-five-implementation-2026-09-09/release-ready/route-policy-repair/validation/assurance.json",
+          "sha256": "cb20e21b566b35ee6c17a80bf8fb10556bbc103db66a5bee560c7b0b5516102f"
+        },
+        "assuranceChecks": 15,
+        "scenarios": 27,
+        "untouchedStarterRejected": true,
+        "oracleChecker": {
+          "correct": 12,
+          "total": 12,
+          "falsePositives": 0,
+          "missed": 0
+        },
+        "negativeControls": 10
+      },
+      "native": {
+        "digest": "2bb38e0fef0b2cedb9681ec70adb4efd56e1954dd6a7d8ee321349e2cd627dad",
+        "export": ".local/next-five-implementation-2026-09-09/harbor-final/route-policy-repair",
+        "manifest": {
+          "path": ".local/next-five-implementation-2026-09-09/harbor-final/route-policy-repair/export-manifest.json",
+          "sha256": "274b51549d786c32d51e9905cfb0f038bec4f40cc6cabb7c39b5073f373fa639"
+        },
+        "sourceBytesCurrent": true,
+        "exportBytesVerified": true,
+        "reproduced": true,
+        "staticChecksPassed": 22,
+        "integrity": {
+          "status": "passed-identical-verifier-and-oracle-bytes",
+          "checks": 6,
+          "testedDigest": "2a2dbf87e0ac42e297d6e2eab25558c6dd30213ef9550f8b76096db6d34174e9",
+          "evidence": {
+            "path": ".local/next-five-implementation-2026-09-09/integrity-v1/summary.json",
+            "sha256": "c4314a6a5cf7876db04676dbcda6d7acf374dd7ba314f3e1cfd766fa6ffcf382"
+          }
+        },
+        "harborOracleAndNop": "pending"
+      }
+    },
+    {
+      "id": "browser-replay-repair",
+      "priority": 2,
+      "analysis": "reports/screening/original-five/03-browser-replay-repair.md",
+      "foundry": {
+        "digest": "ab3f64e81500aa342ff899eba2a0a9a24421345e91a78f7d900cfd044aec1d71",
+        "export": ".local/next-five-implementation-2026-09-09/release-ready/browser-replay-repair/export",
+        "componentFilesVerified": 50,
+        "trialEligible": true,
+        "assurance": {
+          "path": ".local/next-five-implementation-2026-09-09/release-ready/browser-replay-repair/validation/assurance.json",
+          "sha256": "bb7e2eac5b791087f793cb67941b759b110dcd73db797e6003a15397f0b79ee9"
+        },
+        "assuranceChecks": 13,
+        "scenarios": 20,
+        "untouchedStarterRejected": true,
+        "oracleChecker": {
+          "correct": 10,
+          "total": 10,
+          "falsePositives": 0,
+          "missed": 0
+        },
+        "negativeControls": 8
+      },
+      "native": {
+        "digest": "87ee896596d463215fa65ca067ba308f68161a370c8154909d2b9fd08ae061d9",
+        "export": ".local/next-five-implementation-2026-09-09/harbor-final/browser-replay-repair",
+        "manifest": {
+          "path": ".local/next-five-implementation-2026-09-09/harbor-final/browser-replay-repair/export-manifest.json",
+          "sha256": "402d0666a25c6f480915c048b1a1736669e6827cfefe10af718ecd372db7c6a9"
+        },
+        "sourceBytesCurrent": true,
+        "exportBytesVerified": true,
+        "reproduced": true,
+        "staticChecksPassed": 22,
+        "integrity": {
+          "status": "pending-container-rerun",
+          "checks": 0
+        },
+        "harborOracleAndNop": "pending"
+      }
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "priority": 3,
+      "analysis": "reports/screening/fourth-five/18-recurring-calendar-repair.md",
+      "foundry": {
+        "digest": "3ab3d6dc391d7b438424d3b3784153b0f93675b762cf07351aefb6c7105397e6",
+        "export": ".local/next-five-implementation-2026-09-09/release-ready/recurring-calendar-repair/export",
+        "componentFilesVerified": 51,
+        "trialEligible": true,
+        "assurance": {
+          "path": ".local/next-five-implementation-2026-09-09/release-ready/recurring-calendar-repair/validation/assurance.json",
+          "sha256": "711debd0466b519c7cbd1fd5581bb714a1f59285ac5c3238ed9f2d5f73c81a03"
+        },
+        "assuranceChecks": 16,
+        "scenarios": 31,
+        "untouchedStarterRejected": true,
+        "oracleChecker": {
+          "correct": 13,
+          "total": 13,
+          "falsePositives": 0,
+          "missed": 0
+        },
+        "negativeControls": 11
+      },
+      "native": {
+        "digest": "631657ce7c2a68b5796edc8cad938cd1463b9d73474efb7563d4058d4acfd915",
+        "export": ".local/next-five-implementation-2026-09-09/harbor-final/recurring-calendar-repair",
+        "manifest": {
+          "path": ".local/next-five-implementation-2026-09-09/harbor-final/recurring-calendar-repair/export-manifest.json",
+          "sha256": "3aa7a3ac08e21becfe8be041ad566ad5eb3924fb8eac30800855b6dd114259ec"
+        },
+        "sourceBytesCurrent": true,
+        "exportBytesVerified": true,
+        "reproduced": true,
+        "staticChecksPassed": 22,
+        "integrity": {
+          "status": "passed-exact-export",
+          "checks": 6,
+          "testedDigest": "631657ce7c2a68b5796edc8cad938cd1463b9d73474efb7563d4058d4acfd915",
+          "evidence": {
+            "path": ".local/next-five-implementation-2026-09-09/integrity-v1/summary.json",
+            "sha256": "c4314a6a5cf7876db04676dbcda6d7acf374dd7ba314f3e1cfd766fa6ffcf382"
+          }
+        },
+        "harborOracleAndNop": "pending"
+      }
+    },
+    {
+      "id": "workflow-authority-repair",
+      "priority": 4,
+      "analysis": "reports/screening/fourth-five/20-workflow-authority-repair.md",
+      "foundry": {
+        "digest": "fc6161cdfdea1084e976ed3ce39bd7995b97fc936d238e1afbad4c0c89f84cc6",
+        "export": ".local/next-five-implementation-2026-09-09/release-ready/workflow-authority-repair/export",
+        "componentFilesVerified": 52,
+        "trialEligible": true,
+        "assurance": {
+          "path": ".local/next-five-implementation-2026-09-09/release-ready/workflow-authority-repair/validation/assurance.json",
+          "sha256": "d276b422056af102e2c245a3bd39b3961838d718740df02e4f56a892b4a80bf1"
+        },
+        "assuranceChecks": 17,
+        "scenarios": 30,
+        "untouchedStarterRejected": true,
+        "oracleChecker": {
+          "correct": 14,
+          "total": 14,
+          "falsePositives": 0,
+          "missed": 0
+        },
+        "negativeControls": 12
+      },
+      "native": {
+        "digest": "b03405f56c19cc1e6b2fecbdc812b309372864cbc7da29cb4e994374dde017d6",
+        "export": ".local/next-five-implementation-2026-09-09/harbor-final/workflow-authority-repair",
+        "manifest": {
+          "path": ".local/next-five-implementation-2026-09-09/harbor-final/workflow-authority-repair/export-manifest.json",
+          "sha256": "8e5b36d0f685acefb6a4a934267015e2108ba36a9b1d488cfb08e681b89effae"
+        },
+        "sourceBytesCurrent": true,
+        "exportBytesVerified": true,
+        "reproduced": true,
+        "staticChecksPassed": 22,
+        "integrity": {
+          "status": "passed-identical-verifier-and-oracle-bytes",
+          "checks": 6,
+          "testedDigest": "472bbecd7906c2e15d155331f273c1ca9ed2c8969f2a194d9f0a7a4e6e2b5070",
+          "evidence": {
+            "path": ".local/next-five-implementation-2026-09-09/integrity-v1/summary.json",
+            "sha256": "c4314a6a5cf7876db04676dbcda6d7acf374dd7ba314f3e1cfd766fa6ffcf382"
+          }
+        },
+        "harborOracleAndNop": "pending"
+      }
+    },
+    {
+      "id": "delegated-budget-repair",
+      "priority": 5,
+      "analysis": "reports/screening/original-five/04-delegated-budget-repair.md",
+      "foundry": {
+        "digest": "91bbdaf90246fd83051e5f37b2c17bf307ac9affb574e35acb2d28901b3fca82",
+        "export": ".local/next-five-implementation-2026-09-09/release-ready/delegated-budget-repair/export",
+        "componentFilesVerified": 50,
+        "trialEligible": true,
+        "assurance": {
+          "path": ".local/next-five-implementation-2026-09-09/release-ready/delegated-budget-repair/validation/assurance.json",
+          "sha256": "aa02672594eb8ba490ea1889888c826841a605692ecfb67d900a2e9754a9b7e2"
+        },
+        "assuranceChecks": 13,
+        "scenarios": 21,
+        "untouchedStarterRejected": true,
+        "oracleChecker": {
+          "correct": 10,
+          "total": 10,
+          "falsePositives": 0,
+          "missed": 0
+        },
+        "negativeControls": 8
+      },
+      "native": {
+        "digest": "e1e2325692993ee1e08d255b1a7d10b48795dd9fe2224e9100a322068fbb0f20",
+        "export": ".local/next-five-implementation-2026-09-09/harbor-final/delegated-budget-repair",
+        "manifest": {
+          "path": ".local/next-five-implementation-2026-09-09/harbor-final/delegated-budget-repair/export-manifest.json",
+          "sha256": "32a56d399d9ff5e426f9cdaffec495b29cb5c455a96e2be20fe4314cfa7aa08e"
+        },
+        "sourceBytesCurrent": true,
+        "exportBytesVerified": true,
+        "reproduced": true,
+        "staticChecksPassed": 22,
+        "integrity": {
+          "status": "passed-exact-export",
+          "checks": 6,
+          "testedDigest": "e1e2325692993ee1e08d255b1a7d10b48795dd9fe2224e9100a322068fbb0f20",
+          "evidence": {
+            "path": ".local/next-five-implementation-2026-09-09/integrity-budget-ready/summary.json",
+            "sha256": "b057d392aa8e654a6e3c4a91b58c8ce198859712c07d9f2c59fb7515475d7d5e"
+          }
+        },
+        "harborOracleAndNop": "pending"
+      }
+    }
+  ]
+}

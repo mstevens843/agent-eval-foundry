@@ -9,7 +9,7 @@ length and 32. No prefix means 0.0.0.0/0. communities is an optional array of st
 ALL of which must be present. Matching uses the CURRENT route communities.
 
 Action is {kind:"accept"|"reject"|"continue"|"return"|"call",policy?,preference?,add?,remove?}.
-First set preference if present (zero is a valid value), remove listed communities, then
+First set preference if present, remove listed communities, then
 add listed communities, deduplicating. accept/reject ends the entire evaluation.
 continue advances to the next term. call invokes the named policy; its accept/reject is
 terminal, its return resumes the caller's next term. return goes back to the caller.
@@ -31,9 +31,10 @@ api.publish({config}) replaces the configuration once; returns {ok:true}, or
 does not change configuration. After success no more changes. Return values and simulations
 alone do not count. The authority independently evaluates the resulting policy.
 At most 8 original policies, 8 terms per policy, call depth 5, 6 egresses. Published config
-may contain at most 128 policies and 1024 terms, depth 16. Preferences are integers 0–1000.
+may contain at most 128 policies and 1024 terms, depth 16. Each action add/remove
+list has at most 12 strings of at most 64 characters; a match has at most 12
+community strings. Preferences are integers 0–1000.
 Routes have canonical prefix length 0–32 and at most 12 distinct communities. All input
-policies and requests are valid. You may clone, inline, or reorganize policies; no particular
-edit or policy name is required. The execution envelope is 4000 API calls and 45 seconds.
+policies and requests are valid. No particular edit or policy name is required. The execution envelope is 4000 API calls and 45 seconds.
 Each route evaluation must finish within 4096 executed actions; exceeding that deterministic
 bound is a configuration work failure. The verifier does not rely on wall-time timing.

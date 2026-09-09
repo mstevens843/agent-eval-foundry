@@ -51,3 +51,28 @@ No model weakness was demonstrated here. This trial instead shows that a fully e
 [Sanitized batch record](../evidence/2026-09-08-third-five.json) preserves frozen package/profile/source identities, original results, source deltas and verified manifest/result/grade hashes. [Current task source](../../../tasks/capacity-maintenance-repair/) may later evolve independently.
 
 This is analysis of recorded actions, submitted code and grading artifacts, not private internal reasoning or an independently blind adjudication. Self-generated impossible fixtures were outside the graded solvability guarantee and are not model failures. No additional model calls or diagnostic regrades were performed for this report.
+
+## 2026-09-09 — Third ranked group: engineering successor for Trial 2
+
+**Ready for a second exploratory trial. No new model attempt was launched for this version.** Priority within the third ranked group: 1/5. Earlier sections describe historical source and results. See the [implementation report](../third-ranked-five-implementation-plan-2026-09-09.md) and [hashed validation evidence](../evidence/2026-09-09-third-ranked-five-implementation.json).
+
+The public search implementation and supporting state/coordinator modules were removed after completing both private service closures. The agent now implements the planner from the fleet/API contract. Reasons are diagnostic only; the independent private checker reconstructs operations, intermediate safety, upgrade order and restoration without requiring a particular plan.
+
+Fixed a concrete collector defect: the invariant Boolean named placement overwrote the actual placement array inside history. Safety verdicts now remain private, and checker-visible history contains actual placements and completed hosts. Corrected private state-key/counter handling for legal string identities and added an identity regression. The count-not-weight control received the same counter correction so its intended defect remains weighted capacity rather than an unrelated exception.
+
+Removed 112 duplicate witnessing scenarios that had been added for an older checker-selection workaround. The 26 distinct original scenarios remain, plus the new identity case, for 27 total. Full assurance and fresh recipient reproduction still activate all ten negative controls with their clean witnesses. This reduces repeated author-side execution without claiming broader model difficulty from duplicate counts. The historical 138/138 result above is unchanged.
+
+Validation passed 15 Foundry assurance checks across 27 scenarios, including the complete reference and alternative services, semantic failure of the untouched service starter, repeatability and control activation. The private checker correctly classified 12/12 candidates: two correct implementations and 10 negative controls, with zero false accepts or misses. Rebuild and fresh recipient reproduction passed.
+
+Native validation passed all 22 static checks and six verifier integrity controls. Harbor's complete oracle returned reward 1; nop returned reward 0, with no Harbor exceptions or verifier infrastructure errors. Nop is rejected for its missing checker deliverable; the separate Foundry starter execution establishes the service's semantic failure. These are provider-free local validation jobs, not new standard/cheat model trials.
+
+Use these exact exports:
+
+- Foundry: `.local/third-ranked-five-implementation-2026-09-09/release-ready/capacity-maintenance-repair/export`
+- Foundry digest: `6cf1ac0fcd0339cb51353a0c0dbdd267b501489d7db26faf8fcc7898d6f2a0be`
+- Native Harbor: `.local/third-ranked-five-implementation-2026-09-09/harbor-ready/capacity-maintenance-repair`
+- Native digest: `d7428c2b76d60da60236d03bc48bf1b85c6f0962525bd8056212d59df8a98cf6`
+
+Both deliverables are required. The checker returns complete deterministic Boolean verdicts; optional reason text does not affect grading, and submitted helper modules are available. Public requirements and custom schemas remain supplied without a worked implementation.
+
+When Trial 2 completes, append the actual model/profile, frozen digest, service/checker outcomes, elapsed time, exclusions and final submission defect here. Keep original Trial 1 rewards intact. Local controls, old grading disputes and infrastructure errors are not additional model failures. The final hiring submission still requires its human-authored material and rubric, standard and cheat qualification on the final selected version.

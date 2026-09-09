@@ -31,7 +31,7 @@ All API methods take one object and return JSON:
 - `dialog({})`: null or `{handle, entity, field, value, generation}` for the current
   confirmation. `confirm({handle})` clicks that actual dialog's confirmation.
 - `receipts({})`: committed `{traceId, step, entity, field, value}` records for this
-  trace, including earlier attempts. This is the supported completion evidence.
+  trace, including earlier attempts. These records are durable.
 
 Before each submission, observe its current connected, ready form and exact value
 after the last fill/remount. Before confirmation, observe the dialog and ensure it
@@ -40,8 +40,12 @@ or value, even if a later action corrects it. Confirmations are required only wh
 present. Retrying a stale handle is allowed; repeating a committed effect is not.
 
 Return `{traceId, steps:[{step, status:'completed'}]}` covering every event exactly
-once on each attempt, in event order. Completed prior work may be skipped using
-receipts; reports must agree with real effects by the end of that attempt.
+once on each attempt, in event order. Reports must agree with real effects by the end of that attempt.
+
+The process may be interrupted after an API operation has completed externally
+but before its response arrives. The same trace and attempt are then redelivered
+to a fresh process; DOM state, effects and storage survive. At most one such
+interruption occurs per trace. Local files are not interrupted during writes.
 
 Bounds: one to four events, one to three attempts, finite noncyclic render work,
 strings up to 256 characters. Node ESM, `entry.mjs` exports `subject` with `run`.

@@ -58,9 +58,20 @@ export async function runScenario(s, execute, storage) {
   );
   const want = expected(s),
     get = (id) => rows.find((r) => r.request === id);
+  // SEMANTICS.md: "After exhausting input, publish..." -- exhaustion and requested-population
+  // completion must happen in THAT order, not merely both eventually be true. `observations`
+  // is the real, ordered next/record call log (adapter.mjs), so it can see what the two static
+  // booleans below cannot: a candidate that records rows before ever draining input to null.
+  const drainedAt = observations.findIndex((o) => o.method === "next" && o.value === null);
+  const publishedAfterExhaustion = observations
+    .filter((o) => o.method === "record")
+    .every((o) => drainedAt !== -1 && o.seq > drainedAt);
   return {
     ...checks({
-      completion: index > s.chunks.length && equal(rows.map((r) => r.request).sort(), s.requests.toSorted()),
+      completion:
+        index > s.chunks.length &&
+        publishedAfterExhaustion &&
+        equal(rows.map((r) => r.request).sort(), s.requests.toSorted()),
       content: want.every((r) => get(r.request)?.data === r.data),
       attempt_identity: want.every((r) => get(r.request)?.attempt === r.attempt),
       error_semantics: want.every(

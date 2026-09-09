@@ -60,7 +60,7 @@ export function expected(s) {
   return Object.fromEntries(rows.map(({ path, ...entry }) => [path, entry]));
 }
 function readTree(root, relative = "") {
-  const result = {};
+  const result = Object.create(null);
   for (const name of readdirSync(join(root, relative))) {
     const p = relative ? relative + "/" + name : name,
       st = lstatSync(join(root, p));

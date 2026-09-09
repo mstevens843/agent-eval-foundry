@@ -218,7 +218,7 @@ export async function runScenario(s, execute, storage) {
         !truth.some(Boolean) || actual.some((a, i) => truth[i] !== null && equal(a.value, truth[i])),
       legal_program: legal,
     }),
-    actual,
+    actual: actual.map(({ value, steps, counts }) => ({ value, steps, counts: counts ?? {} })),
     expected: truth,
     // Documents are stimulus data, not correct match results.
     documents: s.documents,

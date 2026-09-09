@@ -53,3 +53,28 @@ If a successor adds partial release updates, shared-file ownership or recovery d
 [Sanitized batch record](../evidence/2026-09-08-third-five.json) contains frozen identities, original service/checker results, source deltas and verified completion/result/grade hashes. [Current task source](../../../tasks/verified-installation-repair/) is not a replacement for the immutable trial package.
 
 This report describes recorded commands, submitted artifacts and original grading. It is not private internal reasoning, an independent blind assessment, a full correct-program proof or a new diagnostic regrade. One pass provides no replicated estimate of model-family difficulty.
+
+## 2026-09-09 — Third ranked group: engineering successor for Trial 2
+
+**Ready for a second exploratory trial. No new model attempt was launched for this version.** Priority within the third ranked group: 4/5. Earlier sections describe historical source and results. See the [implementation report](../third-ranked-five-implementation-plan-2026-09-09.md) and [hashed validation evidence](../evidence/2026-09-09-third-ranked-five-implementation.json).
+
+Removed the five public solution modules and completed private reference/alternative service closures. The new independent checker verifies compressed and plain commitments, availability from either raw source, layered contents, metadata, finish history and atomicity. Reason text is diagnostic only.
+
+Integrated the local legal-filename scenario and fixes for ordinary names such as constructor and __proto__. The filesystem collector and reference tree construction now preserve these as data rather than inherited or special object properties. Kept the maintained raw initial tree, blobs and cache maps; the local successor would have removed facts needed to judge availability when a candidate never requests an available copy. The suite now has 45 scenarios.
+
+Replaced the imprecise path-character prose with the actual segment expression and path-length bound enforced by the API, and removed repeated source-fallback instructions. The underlying both-source availability and layer ordering requirements remain. This is a collector/contract correction, not evidence that the earlier successful agent mishandled these names.
+
+Validation passed 16 Foundry assurance checks across 45 scenarios, including the complete reference and alternative services, semantic failure of the untouched service starter, repeatability and control activation. The private checker correctly classified 13/13 candidates: two correct implementations and 11 negative controls, with zero false accepts or misses. Rebuild and fresh recipient reproduction passed.
+
+Native validation passed all 22 static checks and six verifier integrity controls. Harbor's complete oracle returned reward 1; nop returned reward 0, with no Harbor exceptions or verifier infrastructure errors. Nop is rejected for its missing checker deliverable; the separate Foundry starter execution establishes the service's semantic failure. These are provider-free local validation jobs, not new standard/cheat model trials.
+
+Use these exact exports:
+
+- Foundry: `.local/third-ranked-five-implementation-2026-09-09/release-ready/verified-installation-repair/export`
+- Foundry digest: `4c4610d6242251cb95f3acbe167940ce0d62fbba67d81cb97df195a3db211cfc`
+- Native Harbor: `.local/third-ranked-five-implementation-2026-09-09/harbor-ready/verified-installation-repair`
+- Native digest: `a94f03dc5e19463997c9052d68b0ac261989b3970e1654b3ac2edf510254b3e3`
+
+Both deliverables are required. The checker returns complete deterministic Boolean verdicts; optional reason text does not affect grading, and submitted helper modules are available. Public requirements and custom schemas remain supplied without a worked implementation.
+
+When Trial 2 completes, append the actual model/profile, frozen digest, service/checker outcomes, elapsed time, exclusions and final submission defect here. Keep original Trial 1 rewards intact. Local controls, old grading disputes and infrastructure errors are not additional model failures. The final hiring submission still requires its human-authored material and rubric, standard and cheat qualification on the final selected version.

@@ -24,11 +24,11 @@ create authority. Grant IDs are unique within a snapshot.
 Policy can change between deliveries and once between the first policy read for a
 delivery and its admission attempt. decide({jobId,revision,principal,resource,action,
 payload,outcome,path}) takes the active job, outcome executed or denied and the chosen
-grant-ID path ([] for denied). A stale revision returns {stale:true} WITHOUT any effect
-or decision. Obtain a fresh snapshot and reconsider. The next fresh snapshot is stable
+grant-ID path ([] for denied). A stale revision returns {stale:true} without an effect
+or decision. The next fresh snapshot is stable
 for that delivery; the race is attainable to resolve, not irreducible uncertainty.
 The revision barrier checks revision equality ONLY; it does not decide whether your
-principal, grant path, outcome or payload is correct. Those are the repair's job.
+principal, grant path, outcome or payload is correct. The implementation must satisfy those requirements.
 Accepted admission records a durable decision {id,jobId,revision,principal,resource,
 action,payload,outcome,path}; executed also performs the actual effect. Returns {decision}.
 receipt({jobId}) returns {decision} or {decision:null}. A job already decided is terminal:
@@ -38,12 +38,10 @@ finish({deliveryId,decisionId}) associates the active delivery with its durable 
 then advances. Host collection records associations; it does not repair a wrong one.
 Every delivery must finish, including denied work and duplicates. Exactly one decision
 per encountered job and one effect per executed job; no extra work.
-The submitted process may also be killed between decide() returning a decision (its effect
-already applied, if the outcome was executed) and finish() durably closing that delivery; the
-identical delivery is then redelivered to a fresh process against the same storage. Recognize
-the already-recorded decision via receipt() before redelivering — do not call decide() again
-or reapply its effect. Only storage and durable decisions (queryable through receipt()) survive
-this restart; in-memory bookkeeping built up during a run does not.
+The process may be killed after decide() records its durable decision and effect
+but before finish() durably closes the delivery. The identical delivery is then
+redelivered to a fresh process; storage, decisions and effects survive. Terminal
+history and completion requirements also apply across these interruptions.
 
 ## APIs, errors and bounds
 All calls are asynchronous, one object each. Unknown receipt jobs return {decision:null}.

@@ -95,5 +95,23 @@
     "check": "representation",
     "clean": "case-020",
     "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "wildcard-eviction",
+    "overlay": {
+      "src/store.mjs": "controls/wildcard-eviction.mjs"
+    },
+    "check": "cache_provenance",
+    "clean": "case-020",
+    "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "intermediate-wipe",
+    "overlay": {
+      "src/store.mjs": "controls/intermediate-wipe.mjs"
+    },
+    "check": "cache_provenance",
+    "clean": "case-020",
+    "selectionRole": "post-selection-validation"
   }
 ]

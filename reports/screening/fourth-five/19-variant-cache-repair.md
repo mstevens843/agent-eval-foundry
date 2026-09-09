@@ -132,3 +132,142 @@ This report's "useful self-check gap" — the agent's own randomized sweep findi
 **Also addressed, preventively:** this report notes the agent's own oracle disagreed with its checker on whether a wildcard drop is a `preservation`/`invalidation-scope` matter. A second, independently-dispatched investigation confirmed the real submitted checker did label a get-time eviction `invalidation_scope` (line 548) where `domain.mjs` says `cache_provenance` — a genuine mislabel, though not one that flipped this trial's already-passing reward. Added an explicit disambiguation to `instruction.md`: `cache_provenance` covers every write during a `get` event (including unrelated-entry eviction); `invalidation_scope` covers only `purge`/`acknowledge` scope.
 
 **When trials run again:** a future checker will need to independently verify legal storage history — not just correct final deliveries and contents — to pass against the widened bank.
+
+## September 9 implementation successor — ready for exploratory trials
+
+The wildcard-eviction and intermediate-wipe controls are now in the maintained source. The public contract retains preservation and legal cache reuse, without worked examples explaining those controls. The starter no longer supplies entry matching, origin resolution, cache writes or the event loop.
+
+Both deliverables now have complete private oracle implementations. The public service
+starts from an empty entry point. The checker classifies every supplied case with a
+Boolean verdict; optional reasons are ungraded diagnostics, and helper modules are
+allowed. Original results above remain historical; no second model trial was run.
+
+Executed validation on this successor:
+
+- Service oracle: 25/25 scenarios; checker oracle: 15/15 candidates.
+- Protected Foundry assurance: 18 operations passed; deterministic rebuild and
+  exported-CLI recipient reproduction passed, including drift and invalid-execution checks.
+- Native Harbor oracle reward 1; native nop reward 0; no Harbor exceptions.
+- All 22 pinned upstream static checks and all six local checker/integrity controls passed.
+  These local controls are not the official model-powered cheat qualification trials.
+
+Canonical source: `tasks/variant-cache-repair`. Native export:
+`.local/top-five-implementation-2026-09-09/harbor-ready/variant-cache-repair`.
+
+Native export digest: `d291ca623b9d2112cfb28670110870c5e5b19dfe3602f6f2c16fc9f79b95f3a3`.
+Foundry package digest: `73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b`.
+
+[Versioned evidence](../evidence/2026-09-09-top-five-implementation.json) records source
+hashes, logs, per-check CTRF results and both package identities. The
+[shared implementation record](../top-five-implementation-plan-2026-09-09.md) explains
+policy and tooling changes. Use these maintained sources or the identified exports
+for the next trial, rather than the older local successor copies named above.
+
+Readiness means engineering readiness for exploration. Removing supplied implementation
+code changes the difficulty hypothesis and invalidates any attempt to reuse earlier
+model results as qualification for this version. Fresh model evidence is still needed.
+The eventual chosen submission also needs human-authored reviewer material and the
+required rubric, standard and cheat qualification runs; those requirements do not
+justify delaying exploration to qualify all five candidates.
+
+## Trial 2 — implementation successor — September 9, 2026
+
+### Identity and execution
+
+Run `variant-cache-repair-attempt-1`, package digest
+`73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b`. Requested target **claude**,
+`anthropic/claude-opus-5`, effort `max`. Frozen execution source:
+`2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4`.
+The pinned author image was
+`sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a`.
+
+Started `2026-09-09T11:35:51.061Z`, completed `2026-09-09T12:18:26.116Z`.
+One of exactly five fresh campaign attempts, reserved within **232 ms** and reported
+running concurrently by the dispatching agent's `docker ps` observation. Budget:
+10,800 seconds, 2 CPUs, 2 GiB; signed subscription-only authorization, one attempt,
+no automatic retries or recorded paid-API fallback. No timeout is recorded.
+Requested settings are not runtime attestations: Claude model strings were observed;
+Codex model identity and effort/scaffold versions were unobservable in the captures.
+CLI dollar estimates are not subscription charges.
+
+### Changes and recorded results
+
+The public starter's entry-selection, storage, resolution and service modules were
+removed. The checker was already a required deliverable in Trial 1. Trial 2 uses
+diagnostic-only reasons and includes the `wildcard-eviction` and `intermediate-wipe`
+controls added after the earlier self-fuzz analysis. `case-022` was already a service
+scenario; the wildcard checker control is new to the scored bank.
+
+**Recorded reward 0. Service 24/25; checker 14/15.** Only service `case-022` fails,
+on `cache_provenance`. The checker accepts both valid implementations and rejects
+twelve defective candidates, but accepts `wildcard-eviction`. Offline replay of the
+unchanged checker reproduces both captured verdict sets. The execution completed;
+this was not a timeout, malformed checker or exact-label failure.
+
+The service's `withStored` uses `matchesRequest` to remove old entries on a write.
+For an old `vary: ["*"]` entry and empty request headers, its header comparison
+succeeds because both absent values default to `""`. In `case-022`, the shield write
+at sequence 12 replaces the wildcard entry stored at time 0 with the fresh response
+stored at time 1. The private predicate regards every wildcard as nonmatching and
+therefore protected from replacement. Deliveries and all other service checks pass.
+
+### Publication audit: public-contract attribution is held
+
+The service fails the private preservation predicate. Whether that violates the
+supplied requirement depends on the public definition of matching. The frozen
+SEMANTICS.md says:
+
+> A stored representation matches a request if path matches and every header named by
+> vary has equal value (absent header means empty string). vary may be empty or ["*"];
+> a wildcard is never reusable.
+
+Its update rule replaces old entries matching the current request under the old
+`vary`. **Never reusable does not necessarily mean never matching for replacement.**
+The submitted service explicitly excludes wildcards from delivery reuse, while its
+replacement follows the literal path/header-equality definition. The private `fits`
+predicate adds `!e.vary.includes("*")` to matching itself. The task describes a custom
+bounded API, not a complete HTTP proxy, so outside HTTP conventions cannot silently
+resolve this discrepancy against its own written matching rule.
+
+The first recorded service-suite failure is a real observation. Attribution as a fair
+capability failure remains held until the wildcard matching rule is resolved. The
+checker miss has the same normative concern. This is not an objection to implied
+expert knowledge: it is a concrete difference between two readings of a custom rule.
+
+### Observable effort and historical comparison
+
+The capture analysis reports 76 Bash calls and extensive self-authored fuzzing,
+including fixes for two other bugs. Authoring took about 42m20s, within the three-hour
+budget. That effort makes the case worth investigating, but duration and self-reported
+test counts cannot settle whether a grading requirement was fairly supplied.
+
+Trial 1's service passed 25/25 and its checker passed the then-current 13/13 bank.
+Its additional self-fuzzing exposed related wildcard-preservation misses; it did not
+produce a scored service failure. Trial 2 is the first scored service failure for
+this package. Do not present those two observations as two independent scored failures
+or as established durability.
+
+### Next step
+
+Retain the original zero, code and trace. In a new version, state whether a wildcard
+matches a request at all, including for replacement, in one compact normative sentence.
+Validate the existing preservation controls and correct alternatives against that rule,
+then retrial. A worked wildcard-eviction example or implementation hint is unnecessary.
+Do not count the current result as an undisputed service-level win before that repair.
+
+### Evidence and qualification boundary
+
+The publication audit checked **996 manifest-listed files**
+for this record with zero mismatches and compared all four supplied contract/interface
+files against the frozen export. Raw evidence remains at
+`.local/round-two-top-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/variant-cache-repair-attempt-1/`.
+The earlier Trial 1 text and dated engineering additions above are preserved.
+
+[Campaign results and audited decisions](../round-two-top-five-2026-09-09.md) ·
+[Sanitized trial evidence](../evidence/2026-09-09-round-two-top-five.json) ·
+[Integrity and diagnostic evidence](../evidence/2026-09-09-round-two-top-five-audit.json).
+
+This is an exploratory repository assessment. The immutable result still records
+`adjudication: unlabelled`, `modelEvidenceEligible: false` and
+`countsAsModelFailure: false`; publication does not change those fields or claim
+six standard failures, official cheat qualification or independent blind review.

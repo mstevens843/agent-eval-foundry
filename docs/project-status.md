@@ -1,14 +1,50 @@
 # Project status — a five-minute review
 
-September 8, 2026. Navigation and status, not a package-policy approval.
+September 9, 2026. Navigation and status, not a package-policy approval.
+
+## Latest measured progress
+
+**Five optimized successors completed Trial 2: three zero rewards and two complete
+solver passes.** Incremental build (21) and issued report (25) are supported substantive
+required-checker failures. Their service suites passed, but their release validators
+respectively accepted premature publication and rejected valid implementations.
+This is concrete completed-but-wrong progress from the Foundry's iteration loop.
+
+Issued report's documented API observations supplied the needed facts, confirmed
+through the original checker's existing fallback in an offline diagnostic. Its choice
+to prefer incorrectly parsed aggregate arrays caused the two original false rejections.
+Both this implementation error and build's missing issuance-order check are supported
+failures of required deliverables.
+
+Cache (19) also recorded a service-suite failure and checker miss, but the public
+matching/reuse distinction leaves one concrete contract question. We preserve its
+zero without claiming three undisputed fair failures. All five Trial 2 records remain
+in their original analysis files, and 4,644 retained manifest files verified. Read the
+[campaign report](../reports/screening/round-two-top-five-2026-09-09.md). Repeatability
+and formal qualification remain separate milestones.
 
 ## What is implemented
 
-Twenty-five professional task source trees are now maintained in Git. Twenty were integrated from construction snapshots; the original five retain their maintained pre-successor baseline. This includes public multi-file services and contracts, private verifiers, references, valid alternatives, deliberately incorrect controls, scenario generators and regression tests—not just reports.
+Twenty-five professional task source trees are maintained in Git. Fifteen ranked
+successors replace mostly solved public starter modules with empty entry points and
+retain complete private service/checker references, valid alternatives, deliberately
+incorrect controls, scenario generators and regression tests. Public contracts and
+interfaces remain the authority for judging fair failures.
 
 The foundry assembles separate solver/verifier workspaces, validates local controls, retains exact versions, and records authorized attempts for read-only analysis. The registry contains twenty-four Node portfolio IDs plus native Go CAA. Twelve older generic families are calibration tools, not twelve additional professional packages.
 
-Twenty-five packages have exploratory real-agent screening evidence on frozen versions. All twenty-five service implementations passed. One second-batch checker rejected a valid alternative; another exposed a reason-format mismatch. Across batches 3–5, all fifteen services and all checker classifications were correct; four original zeroes expose reason-label grading defects or taxonomy concerns, not clean model failures. This fifteen-attempt campaign is complete, with five concurrent jobs per batch and no retries or recorded execution errors. None is represented as fully qualified or empirically maximally hard. See [screening results](../reports/screening/README.md).
+The original 25 screenings all passed their service suites. Their recorded checker
+outcomes and historical grading concerns remain intact in the [trial index](../reports/screening/README.md).
+Five additional successor attempts now extend that history; the Trial 2 results above
+must not be merged into the original table or treated as repeat runs of identical versions.
+
+Engineering preparation covers [19/21/25/24/07](../reports/screening/top-five-implementation-plan-2026-09-09.md),
+[14/03/18/20/04](../reports/screening/next-five-implementation-plan-2026-09-09.md), and
+[13/08/15/12/11](../reports/screening/third-ranked-five-implementation-plan-2026-09-09.md).
+The first and third groups completed local native oracle/nop validation. The second
+group's browser integrity rerun and five native Harbor oracle/nop jobs remain pending.
+Only the first group has these new Trial 2 results; local validation of the other ten
+does not establish difficulty.
 
 ## The portfolio
 
@@ -56,13 +92,17 @@ Construction is not empirical hardness or authorization. Independent fairness/bo
 
 The partial-release reason-format issue remains a blocker for treating its historical zero as a capability failure. Shared reason-prefix matching and explicit checker schemas were repaired in new versions before batch 3. No historical result is overwritten by that repair.
 
-The private-primary-label rule was repaired before batch 5, with fresh protected validation.
-Calendar and incremental-build still require explicit public obligation-label mappings;
-calendar also needs cancelled-move clarification. Cache's self-tested wildcard-preservation
-gap needs a narrow, contract-reviewed control. These findings are documented, not claimed
-closed or used as authorization for another round of provider attempts.
+The ranked successors make checker reasons diagnostic-only, integrate protected controls
+and resolve several earlier contradictions. The remaining Trial 2 contract question is
+cache wildcard matching for replacement. Resolve that narrowly before treating its zero
+as an undisputed fair failure. Incremental build and issued report can be repeated on
+their frozen versions without adding solution guidance. Additional issued-report
+aggregate-input documentation is optional; its documented observations already suffice.
 
-Separate post-screening crash-recovery changes to four original packages remain in local successor snapshots and are **not** silently merged here. Their revised contracts, control activation and recipient routes need their own integration review. This avoids claiming that old trials measured newer work.
+Browser and delegated-budget successor recovery work is now integrated with retained
+validation evidence. Their old Trial 1 results still measure the old versions. The two
+other original packages with separate local successor work are not silently covered by
+this fifteen-package preparation milestone.
 
 Fresh verification and limits appear in [the publication report](../reports/PORTFOLIO-PUBLICATION.md). Historical snapshot-local assurance does not automatically certify a new merged build. No new provider attempts or release approvals are made by publication.
 

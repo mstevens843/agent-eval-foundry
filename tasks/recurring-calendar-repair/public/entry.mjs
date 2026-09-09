@@ -1,2 +1,5 @@
-import { run } from "./src/service.mjs";
-export const subject = { run };
+export const subject = {
+  async run(view, api) {
+    return {};
+  },
+};

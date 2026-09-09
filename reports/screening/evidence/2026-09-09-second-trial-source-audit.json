@@ -1,0 +1,1808 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-09",
+  "kind": "read-only source comparison and historical evidence extraction",
+  "rootCommit": "4ad3f045c1dce3ddc34695d8d0259af9f795edd2",
+  "newModelTrials": 0,
+  "newDiagnosticRegrades": 0,
+  "limitations": [
+    "Local successor sources are development trees, not immutable historical packages.",
+    "Hashes are per-file SHA-256 comparisons, not Foundry package digests.",
+    "This review did not rerun submitted agent code, protected validation, or the historical completion-manifest integrity checks.",
+    "Original first-batch times use a different measurement scope; see the trial index."
+  ],
+  "packages": [
+    {
+      "number": 1,
+      "task": "caa-revalidation-repair",
+      "analysisFile": "reports/screening/original-five/01-caa-revalidation-repair.md",
+      "analysisSha256": "bee5285f02b5b47d03e607da9a31c7f06c3a3b422f68e68e36d29f5b28b0f979",
+      "rootSource": "tasks/caa-revalidation-repair",
+      "localSuccessorSource": ".local/post-program/screening/2026-09-07-p08/source/tasks/caa-revalidation-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-07-original-five.json",
+        "runId": "caa-attempt-2-clean-instruction",
+        "reward": 1,
+        "authoringMilliseconds": null,
+        "packageDigest": "95fe0836850bd635dd8a11a3f187da625ebd6602be7458cc462d3fcbfa57bc3d",
+        "serviceStatus": "semantic-pass",
+        "serviceScenarios": 24,
+        "serviceFailedScenarios": null,
+        "checker": {}
+      },
+      "differences": []
+    },
+    {
+      "number": 2,
+      "task": "persistent-knowledge-repair",
+      "analysisFile": "reports/screening/original-five/02-persistent-knowledge-repair.md",
+      "analysisSha256": "57e99da3950e75f1a6b812577da22a9a8d063206cdbb194515817ceeb812d4dc",
+      "rootSource": "tasks/persistent-knowledge-repair",
+      "localSuccessorSource": ".local/post-program/screening/2026-09-07-p08/source/tasks/persistent-knowledge-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-07-original-five.json",
+        "runId": "persistent-knowledge-attempt-1",
+        "reward": 1,
+        "authoringMilliseconds": null,
+        "packageDigest": "7f8de0169979d7e2bb89b2508303def0ac0311635169eccd532f81c34424b3ee",
+        "serviceStatus": "semantic-pass",
+        "serviceScenarios": 12,
+        "serviceFailedScenarios": null,
+        "checker": {}
+      },
+      "differences": [
+        {
+          "path": "private/domain.mjs",
+          "rootSha256": "8bbb9d48552cbefeadb97578d9120fc3cffd94df26dc7522728adc30008cfc19",
+          "localSha256": "d25c73a5da98fe450d43a6b7ddaeb52ecf1b363de079236623aba2ff70e399cc"
+        },
+        {
+          "path": "private/scenarios.mjs",
+          "rootSha256": "f83540744124e27490e839a2ae5ac243e111ef0f6bf295021d5543ea24171a81",
+          "localSha256": "b2056d6956f8c563672057ce70960d6cf91e4b87c59a1d671669801c15b9ba10"
+        },
+        {
+          "path": "public/SEMANTICS.md",
+          "rootSha256": "2ce93178246b1f73edd915aa613b442b4418534cea59fbf9f800b072c8f4c870",
+          "localSha256": "9910cb7cc0438586e76f9a041fbf3d6e5d4bfc27d6736765c319aedd60a3dc2e"
+        }
+      ],
+      "rootControlCount": 7,
+      "rootControlIds": [
+        "report-lineage",
+        "first-parent",
+        "stale-revision",
+        "stale-grant",
+        "replace-store",
+        "no-work",
+        "isolation"
+      ],
+      "localControlCount": 7,
+      "localControlIds": [
+        "report-lineage",
+        "first-parent",
+        "stale-revision",
+        "stale-grant",
+        "replace-store",
+        "no-work",
+        "isolation"
+      ]
+    },
+    {
+      "number": 3,
+      "task": "browser-replay-repair",
+      "analysisFile": "reports/screening/original-five/03-browser-replay-repair.md",
+      "analysisSha256": "8eae920f5bc5255f05e9e2df1c12d48855845ac5282b6d1d758c8a9fe7db7b31",
+      "rootSource": "tasks/browser-replay-repair",
+      "localSuccessorSource": ".local/post-program/screening/2026-09-07-p08/source/tasks/browser-replay-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-07-original-five.json",
+        "runId": "browser-replay-attempt-2",
+        "reward": 1,
+        "authoringMilliseconds": null,
+        "packageDigest": "e432823cde1ea977af429116fc9ae21cd349d5976d7f3735a615fac0b39efa1b",
+        "serviceStatus": "semantic-pass",
+        "serviceScenarios": 16,
+        "serviceFailedScenarios": null,
+        "checker": {}
+      },
+      "differences": [
+        {
+          "path": "private/domain.mjs",
+          "rootSha256": "62c4093d99c10626d3d806025d584b52228ac03ed5fd01c9e5ff465baf57c749",
+          "localSha256": "75ce4adf58881979951a5e62bdf714f74698a0a42a7c8b899d7daf574f477040"
+        },
+        {
+          "path": "private/scenarios.mjs",
+          "rootSha256": "ae2b03cb33bc171622f3d7551482f8eacdbf7d9caa153a141e0a31a5e18e0953",
+          "localSha256": "e405f0560df34bfc01a7d91422f521ec072b6fdda053746d770acf6140270652"
+        }
+      ],
+      "rootControlCount": 7,
+      "rootControlIds": [
+        "early-report",
+        "first-candidate",
+        "pre-fill-read",
+        "no-confirmation",
+        "repeated-delivery",
+        "claim-only",
+        "isolation"
+      ],
+      "localControlCount": 7,
+      "localControlIds": [
+        "early-report",
+        "first-candidate",
+        "pre-fill-read",
+        "no-confirmation",
+        "repeated-delivery",
+        "claim-only",
+        "isolation"
+      ]
+    },
+    {
+      "number": 4,
+      "task": "delegated-budget-repair",
+      "analysisFile": "reports/screening/original-five/04-delegated-budget-repair.md",
+      "analysisSha256": "89e1b47fbe09df09732bf1a253f835fdd99378ba2ff4d726f82f071ac4b18936",
+      "rootSource": "tasks/delegated-budget-repair",
+      "localSuccessorSource": ".local/post-program/screening/2026-09-07-p08/source/tasks/delegated-budget-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-07-original-five.json",
+        "runId": "delegated-budget-attempt-3",
+        "reward": 1,
+        "authoringMilliseconds": null,
+        "packageDigest": "12bac23b75df39162336ebaf8f6d43615d8ddf57d3a8e6aaaf1d1e3ae7fbee5a",
+        "serviceStatus": "semantic-pass",
+        "serviceScenarios": 12,
+        "serviceFailedScenarios": null,
+        "checker": {}
+      },
+      "differences": [
+        {
+          "path": "private/domain.mjs",
+          "rootSha256": "b3fcea3d6d310afb087410c274cd032626b8de5953b725fed893a2109af44f07",
+          "localSha256": "fe40c5e078c3d897cd7c499aad7621967ea8070e533d6abd3418e38ef7b46518"
+        },
+        {
+          "path": "private/scenarios.mjs",
+          "rootSha256": "ad0e0ba4cece2aa6fb838cb733aad06f9fcc7de7bff0fc7ef0fa3819ef1163ab",
+          "localSha256": "e4e16d383ace9636817b3acce76454cf750da90cb04522376fd0c422e424525a"
+        },
+        {
+          "path": "public/SEMANTICS.md",
+          "rootSha256": "e6b643bcfaeb846891601c42183c1a8bd76ba82d2219e5c04f159233b9769403",
+          "localSha256": "110ec7d746b2b365b828e06b4fd4197931fbd470e0f482db4ff54c65a0ca87db"
+        }
+      ],
+      "rootControlCount": 7,
+      "rootControlIds": [
+        "receipt-claim",
+        "per-request-budget",
+        "owner-blind",
+        "stale-version",
+        "unknown-abandon",
+        "no-work",
+        "isolation"
+      ],
+      "localControlCount": 7,
+      "localControlIds": [
+        "receipt-claim",
+        "per-request-budget",
+        "owner-blind",
+        "stale-version",
+        "unknown-abandon",
+        "no-work",
+        "isolation"
+      ]
+    },
+    {
+      "number": 5,
+      "task": "compatible-rollout-repair",
+      "analysisFile": "reports/screening/original-five/05-compatible-rollout-repair.md",
+      "analysisSha256": "c17156029da16214c1136d990c34e18db2e314870dffaa1d49c69f6ce0e671f0",
+      "rootSource": "tasks/compatible-rollout-repair",
+      "localSuccessorSource": ".local/post-program/screening/2026-09-07-p08/source/tasks/compatible-rollout-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-07-original-five.json",
+        "runId": "compatible-rollout-attempt-2",
+        "reward": 1,
+        "authoringMilliseconds": null,
+        "packageDigest": "648342f682e9e288688c6d20fba1e23ccafc095fdcd825f2bcc5430ebfa02ce3",
+        "serviceStatus": "semantic-pass",
+        "serviceScenarios": 12,
+        "serviceFailedScenarios": null,
+        "checker": {}
+      },
+      "differences": [
+        {
+          "path": "private/domain.mjs",
+          "rootSha256": "5fae17d36ba8e3c4b113fe926ee71c369261477b802ddc724cbb2fe8127bbbaf",
+          "localSha256": "7246a20262d52cf4516abcb2bf94fc09b58f9c063ca7cc385fac92b2239d4d8e"
+        },
+        {
+          "path": "private/scenarios.mjs",
+          "rootSha256": "232cef0b68b083c9a3b9cbf61a66d4f95ac4ba1bcb4d90413eff124a779e2a3a",
+          "localSha256": "c255cc68e4c7fc11091886d85f837d4458752d88bf087561edb31b3c5a47f1c3"
+        }
+      ],
+      "rootControlCount": 7,
+      "rootControlIds": [
+        "wrong-binding",
+        "wrong-abi",
+        "green-history",
+        "skip-cache",
+        "broad-cleanup",
+        "no-work",
+        "isolation"
+      ],
+      "localControlCount": 7,
+      "localControlIds": [
+        "wrong-binding",
+        "wrong-abi",
+        "green-history",
+        "skip-cache",
+        "broad-cleanup",
+        "no-work",
+        "isolation"
+      ]
+    },
+    {
+      "number": 6,
+      "task": "partition-index-repair",
+      "analysisFile": "reports/screening/next-five/06-partition-index-repair.md",
+      "analysisSha256": "1356793d201fa64595773909fa17e9588c941cddf9b7ebd62315430c226b8d2b",
+      "rootSource": "tasks/partition-index-repair",
+      "localSuccessorSource": ".local/post-program/next-five/2026-09-07-p09/source/tasks/partition-index-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-08-next-five.json",
+        "runId": "partition-index-repair-attempt-1",
+        "reward": 1,
+        "authoringMilliseconds": 1127819,
+        "packageDigest": "cf3c51e792c0daf3298b1049e7d36c640a3aa030ebf58cea910034737cb95ef2",
+        "serviceStatus": null,
+        "serviceScenarios": 17,
+        "serviceFailedScenarios": 0,
+        "checker": {
+          "present": true,
+          "total": 12,
+          "correct": 12,
+          "missed": 0,
+          "falsePositives": 0,
+          "pass": true,
+          "namedRightCheck": 10
+        }
+      },
+      "differences": [
+        {
+          "path": "private/domain.mjs",
+          "rootSha256": "51964cffe16b5b084d7c3a7acc44eefaa1ce64983edc41d42ac69c4ca340d7b9",
+          "localSha256": "7eadaf60f8412c183779dfb4c9095c24ba1febbe5910b8e2884f814be6f8998c"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "rootSha256": "f2e6dc7078bd5b0931221d7db3756abcf12626def6fffbb2f5f88bcdb368660f",
+          "localSha256": null
+        },
+        {
+          "path": "public/instruction.md",
+          "rootSha256": "68d7c515a7aa52e04b7c35b104bf8f23ddb25e962c2a9b1cf833257fd2f1fc3b",
+          "localSha256": "e9050f6b1bab42c726e83f21a45708f93dc979fd2f5f4aae593f4252fb6ba29e"
+        }
+      ],
+      "rootControlCount": 10,
+      "rootControlIds": [
+        "checkpoint-max",
+        "overwrite-newer",
+        "stale-owner",
+        "cross-partition-cache",
+        "complete-before-effect",
+        "foreign-partition",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "reset-prefix-on-reassignment"
+      ],
+      "localControlCount": 10,
+      "localControlIds": [
+        "checkpoint-max",
+        "overwrite-newer",
+        "stale-owner",
+        "cross-partition-cache",
+        "complete-before-effect",
+        "foreign-partition",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "reset-prefix-on-reassignment"
+      ]
+    },
+    {
+      "number": 7,
+      "task": "causal-replica-repair",
+      "analysisFile": "reports/screening/next-five/07-causal-replica-repair.md",
+      "analysisSha256": "cd3518619afaa0db729b3bbed57b6bf33833652d3cd9d845226e5370e5b95054",
+      "rootSource": "tasks/causal-replica-repair",
+      "localSuccessorSource": ".local/post-program/next-five/2026-09-07-p09/source/tasks/causal-replica-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-08-next-five.json",
+        "runId": "causal-replica-repair-attempt-1",
+        "reward": 0,
+        "authoringMilliseconds": 680503,
+        "packageDigest": "d61eeff5395548208ef829d95ea7c35da063fe9a460be4e9efc157abdbafbc4d",
+        "serviceStatus": null,
+        "serviceScenarios": 33,
+        "serviceFailedScenarios": 0,
+        "checker": {
+          "present": true,
+          "total": 11,
+          "correct": 10,
+          "missed": 0,
+          "falsePositives": 1,
+          "pass": false,
+          "namedRightCheck": 9
+        }
+      },
+      "differences": [
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "rootSha256": "934fc12d0a07ae30f3ff3987a59a4851d7ff108f87d97729a2b128ad65e713e9",
+          "localSha256": null
+        },
+        {
+          "path": "public/SEMANTICS.md",
+          "rootSha256": "e0d4c316b5228f6e29bb07009d175cb86cc4cc966d66b885b8c4c8d7abb78de2",
+          "localSha256": "28798fbec696f84591ffdf31a70ff3fcb567a643e4471a88535f5a62172ace9c"
+        },
+        {
+          "path": "public/instruction.md",
+          "rootSha256": "bde71c164693cb09a3814d355aa290855998e86fefd520fe6e560c33cd0d1387",
+          "localSha256": "0d6f22b34d0daafc35963bddef3a7f19504cb5c678bc2d3255b9aacc9ee945f6"
+        }
+      ],
+      "rootControlCount": 9,
+      "rootControlIds": [
+        "union-resurrection",
+        "one-sibling",
+        "forget-tombstones",
+        "single-replica",
+        "overbroad",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "payload-dedup"
+      ],
+      "localControlCount": 9,
+      "localControlIds": [
+        "union-resurrection",
+        "one-sibling",
+        "forget-tombstones",
+        "single-replica",
+        "overbroad",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "payload-dedup"
+      ]
+    },
+    {
+      "number": 8,
+      "task": "partial-release-repair",
+      "analysisFile": "reports/screening/next-five/08-partial-release-repair.md",
+      "analysisSha256": "3ede5b0a5b23ce944d0b2970131b9f6c25194296946f36a01faf64258794417d",
+      "rootSource": "tasks/partial-release-repair",
+      "localSuccessorSource": ".local/post-program/next-five/2026-09-07-p09/source/tasks/partial-release-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-08-next-five.json",
+        "runId": "partial-release-repair-attempt-1",
+        "reward": 0,
+        "authoringMilliseconds": 1224525,
+        "packageDigest": "7b5984f69dee18d1492fb5b0ec69f41fc854feda34adbe490485825257304f80",
+        "serviceStatus": null,
+        "serviceScenarios": 33,
+        "serviceFailedScenarios": 0,
+        "checker": {
+          "present": true,
+          "total": 11,
+          "correct": 11,
+          "missed": 0,
+          "falsePositives": 0,
+          "pass": false,
+          "namedRightCheck": 0
+        }
+      },
+      "differences": [
+        {
+          "path": "private/domain.mjs",
+          "rootSha256": "907790e22c501008a8dd1bb39f863871dfed2e21145f532a1b82beb684452560",
+          "localSha256": "1853fe20292315e101cf44d5475ac593109939f3a8f1cd4dcfd679ca6cd353e4"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "rootSha256": "1db9b74226772080fc46eccf00096bcbf459ddf7eb7393e3490154d15c21339f",
+          "localSha256": null
+        }
+      ],
+      "rootControlCount": 9,
+      "rootControlIds": [
+        "missing-dependent-closure",
+        "parent-first-removal",
+        "abandon-unknown",
+        "wrong-payload",
+        "overbroad",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "missing-restoration"
+      ],
+      "localControlCount": 9,
+      "localControlIds": [
+        "missing-dependent-closure",
+        "parent-first-removal",
+        "abandon-unknown",
+        "wrong-payload",
+        "overbroad",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "missing-restoration"
+      ]
+    },
+    {
+      "number": 9,
+      "task": "ticket-consolidation-repair",
+      "analysisFile": "reports/screening/next-five/09-ticket-consolidation-repair.md",
+      "analysisSha256": "ce1150e80bda30d226c36d8cce1fc34a69de05921e8bd2b76ff23bb088d345a9",
+      "rootSource": "tasks/ticket-consolidation-repair",
+      "localSuccessorSource": ".local/post-program/next-five/2026-09-07-p09/source/tasks/ticket-consolidation-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-08-next-five.json",
+        "runId": "ticket-consolidation-repair-attempt-1",
+        "reward": 1,
+        "authoringMilliseconds": 847238,
+        "packageDigest": "78265c85b8e8f2de638f46e1a5d1adbb34f772647fdbd4ffd308d6fec38936c8",
+        "serviceStatus": null,
+        "serviceScenarios": 33,
+        "serviceFailedScenarios": 0,
+        "checker": {
+          "present": true,
+          "total": 12,
+          "correct": 12,
+          "missed": 0,
+          "falsePositives": 0,
+          "pass": true,
+          "namedRightCheck": 10
+        }
+      },
+      "differences": [
+        {
+          "path": "private/domain.mjs",
+          "rootSha256": "86c8898a20e46b8ecd805d9839479d35a816e0105a53afb1c8fdccde01baf3c8",
+          "localSha256": "b0c0e2ff37a60a2f2fe2e83a2cb92e6bd05840c0befb2c807c5c8e90eee4402f"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "rootSha256": "73efb73bf27a028b7f6c257dbb62ec88e207e501856d149c0b6932bd2bc4284a",
+          "localSha256": null
+        }
+      ],
+      "rootControlCount": 10,
+      "rootControlIds": [
+        "empty-page-stop",
+        "unqualified-identity",
+        "ignore-partial-result",
+        "lost-concurrent-label",
+        "global-directory",
+        "all-statuses",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "positional-batch-results"
+      ],
+      "localControlCount": 10,
+      "localControlIds": [
+        "empty-page-stop",
+        "unqualified-identity",
+        "ignore-partial-result",
+        "lost-concurrent-label",
+        "global-directory",
+        "all-statuses",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "positional-batch-results"
+      ]
+    },
+    {
+      "number": 10,
+      "task": "temporal-capacity-repair",
+      "analysisFile": "reports/screening/next-five/10-temporal-capacity-repair.md",
+      "analysisSha256": "f2b825aef986bc47e9cabb266829e9a9646283f4ba86ceb8f4a1be71bd82e41e",
+      "rootSource": "tasks/temporal-capacity-repair",
+      "localSuccessorSource": ".local/post-program/next-five/2026-09-07-p09/source/tasks/temporal-capacity-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-08-next-five.json",
+        "runId": "temporal-capacity-repair-attempt-1",
+        "reward": 1,
+        "authoringMilliseconds": 686672,
+        "packageDigest": "1fcfba7f15649f0728b24139e7fe6e3f91d06d39c30228e7ebfc608c2eda4201",
+        "serviceStatus": null,
+        "serviceScenarios": 33,
+        "serviceFailedScenarios": 0,
+        "checker": {
+          "present": true,
+          "total": 12,
+          "correct": 12,
+          "missed": 0,
+          "falsePositives": 0,
+          "pass": true,
+          "namedRightCheck": 10
+        }
+      },
+      "differences": [
+        {
+          "path": "private/domain.mjs",
+          "rootSha256": "99fde11c9457555c3478043997ffb842a9008715e8f54b72485845d5f902d7f8",
+          "localSha256": "936a6cd1f34e3cdb7aef26aad9f8be7ea4cf716b0946f5e062c6be944e26f84c"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "rootSha256": "a0505d2e2d4fdd3c90569d0d5523dea8f04fc238d9b0b4b790ab73d8433cae6e",
+          "localSha256": null
+        },
+        {
+          "path": "public/instruction.md",
+          "rootSha256": "781adf3b44939fbf24a1726faad5cfd41337b4f6c2a2f197158e5850bf87c56f",
+          "localSha256": "378963fdaef2b81f8a6da82690c539dba7fda258af231f401cab2c85f8534d97"
+        }
+      ],
+      "rootControlCount": 10,
+      "rootControlIds": [
+        "effective-before-revision",
+        "future-revision",
+        "inclusive-end",
+        "floating-total",
+        "extra-report",
+        "duplicate-report",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "strict-knowledge-cutoff"
+      ],
+      "localControlCount": 10,
+      "localControlIds": [
+        "effective-before-revision",
+        "future-revision",
+        "inclusive-end",
+        "floating-total",
+        "extra-report",
+        "duplicate-report",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "strict-knowledge-cutoff"
+      ]
+    },
+    {
+      "number": 11,
+      "task": "snapshot-recovery-repair",
+      "analysisFile": "reports/screening/third-five/11-snapshot-recovery-repair.md",
+      "analysisSha256": "5757e0f2708cee338c2c1d122bfbbf87a1c171f4573c4d1839b740d591cf460b",
+      "rootSource": "tasks/snapshot-recovery-repair",
+      "localSuccessorSource": ".local/post-program/third-five/2026-09-07-build/source-v2/tasks/snapshot-recovery-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-08-third-five.json",
+        "runId": "snapshot-recovery-repair-attempt-1",
+        "reward": 1,
+        "authoringMilliseconds": 867065,
+        "packageDigest": "8c01cc09a9657b6ddb7e6f86e8b09eb3b7024727cf9c0723c00e398c7bac661e",
+        "serviceStatus": null,
+        "serviceScenarios": 33,
+        "serviceFailedScenarios": 0,
+        "checker": {
+          "present": true,
+          "total": 12,
+          "correct": 12,
+          "missed": 0,
+          "falsePositives": 0,
+          "pass": true,
+          "namedRightCheck": 10
+        }
+      },
+      "differences": [
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "rootSha256": "51cdc74bd789697e3520af2c3ea68c10a018b0ebe609c2a8f13867f6ca44e8a5",
+          "localSha256": null
+        },
+        {
+          "path": "public/instruction.md",
+          "rootSha256": "7aee87639467e41af5bb018931106d4f758ce04d0e0e69ad483616e97756a48b",
+          "localSha256": "c053daf8e07b0e0b3c764c32e4b175e860a57f8254c40143a0510a0e74aca227"
+        }
+      ],
+      "rootControlCount": 10,
+      "rootControlIds": [
+        "drop-deletes",
+        "reuse-deleted-id",
+        "cross-branch-journal",
+        "trusted-cache",
+        "rows-only-backup",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "boundary-cutoff",
+        "example-hardcoding"
+      ],
+      "localControlCount": 10,
+      "localControlIds": [
+        "drop-deletes",
+        "reuse-deleted-id",
+        "cross-branch-journal",
+        "trusted-cache",
+        "rows-only-backup",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "boundary-cutoff",
+        "example-hardcoding"
+      ]
+    },
+    {
+      "number": 12,
+      "task": "verified-installation-repair",
+      "analysisFile": "reports/screening/third-five/12-verified-installation-repair.md",
+      "analysisSha256": "ccfc48a97faaaad6af496e2deccbce283f1464b8a9244aff805f38a884138a85",
+      "rootSource": "tasks/verified-installation-repair",
+      "localSuccessorSource": ".local/post-program/third-five/2026-09-07-build/source-v2/tasks/verified-installation-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-08-third-five.json",
+        "runId": "verified-installation-repair-attempt-1",
+        "reward": 1,
+        "authoringMilliseconds": 986987,
+        "packageDigest": "bc5c4bdf7e587e13c4b926f0cf2d7d3d44d18a61f3899a2db63c7dd6b0c0efb4",
+        "serviceStatus": null,
+        "serviceScenarios": 44,
+        "serviceFailedScenarios": 0,
+        "checker": {
+          "present": true,
+          "total": 13,
+          "correct": 13,
+          "missed": 0,
+          "falsePositives": 0,
+          "pass": true,
+          "namedRightCheck": 11
+        }
+      },
+      "differences": [
+        {
+          "path": "private/domain.mjs",
+          "rootSha256": "dadbb0a28cff7a42293e84cf0d9349ead9639a366e3793e685efd5ab4f635b9a",
+          "localSha256": "8c843e775c8f248604a30589064c177408d8d3bc782deee017ed8ba211728d17"
+        },
+        {
+          "path": "private/reference/src/layers.mjs",
+          "rootSha256": "d30db95ad9852c7f7fae85fa68829fc87d1a8cf2853e5ba97d65b3075f34bb66",
+          "localSha256": "c8c6d255adbc46b3966b4888e57b15a296b1bd3f2dfeac73c45747f3c8b4c0b2"
+        },
+        {
+          "path": "private/scenarios.mjs",
+          "rootSha256": "67cfb04ba2d998325c9c86c740291dec9e5cc2b2549d75196f19fe23c6e3440d",
+          "localSha256": "4cb0f351745bac4bace72beb81d34644a35a3e04e4a1fbf9a6cb728406a3830a"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "rootSha256": "8b3c74e0a646f3472008a169eaa0f68239b2fa396a3fc94c2fbb75520cc50a84",
+          "localSha256": null
+        },
+        {
+          "path": "public/instruction.md",
+          "rootSha256": "4a439f9eee5d51075333c67dbfd6f15f488f4efadc1397f235e61e73d0050873",
+          "localSha256": "f3617ad3ce119f3557965e9fa72b467ef070ba1ed901d77ffb421cbcd1947aa0"
+        },
+        {
+          "path": "public/src/layers.mjs",
+          "rootSha256": "08f80abc86db806bef46e66e90ecb5ba2e8e4b4f14811e625f6ea956b5151971",
+          "localSha256": "29fe68f9b5154fbaf6b29bcc5361f8c552d2ab8c353304fe628c9792959ea3ed"
+        }
+      ],
+      "rootControlCount": 11,
+      "rootControlIds": [
+        "array-order-removal",
+        "url-only-cache",
+        "default-permissions",
+        "accept-unavailable",
+        "reverse-commitments",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "preserve-whiteouted-descendants",
+        "origin-only-availability",
+        "example-hardcoding"
+      ],
+      "localControlCount": 11,
+      "localControlIds": [
+        "array-order-removal",
+        "url-only-cache",
+        "default-permissions",
+        "accept-unavailable",
+        "reverse-commitments",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "preserve-whiteouted-descendants",
+        "origin-only-availability",
+        "example-hardcoding"
+      ]
+    },
+    {
+      "number": 13,
+      "task": "capacity-maintenance-repair",
+      "analysisFile": "reports/screening/third-five/13-capacity-maintenance-repair.md",
+      "analysisSha256": "e1c6665d59d535b1e224b58a9809393b0557d3b05fde8264a48984e67c5419cc",
+      "rootSource": "tasks/capacity-maintenance-repair",
+      "localSuccessorSource": ".local/post-program/third-five/2026-09-07-build/source-v2/tasks/capacity-maintenance-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-08-third-five.json",
+        "runId": "capacity-maintenance-repair-attempt-1",
+        "reward": 1,
+        "authoringMilliseconds": 1465517,
+        "packageDigest": "ba1f2ec05f1de2f59fb22639a6e90e22be5fd87b7f499e5977d0d75d597dcda7",
+        "serviceStatus": null,
+        "serviceScenarios": 138,
+        "serviceFailedScenarios": 0,
+        "checker": {
+          "present": true,
+          "total": 12,
+          "correct": 12,
+          "missed": 0,
+          "falsePositives": 0,
+          "pass": true,
+          "namedRightCheck": 10
+        }
+      },
+      "differences": [
+        {
+          "path": "private/domain.mjs",
+          "rootSha256": "3f52ab53ba23ed6e6bde4cd22db7eedcb079f4dff826629c103ce749f4b53102",
+          "localSha256": "a04a3ee4d75e1c755e1929747f7bde373e423f2e5d09a8cca0c756254a14f300"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "rootSha256": "57d1acd5b34bcca7ac1d01ee922e04984ab70593e8c237222cad65313d216b25",
+          "localSha256": null
+        },
+        {
+          "path": "public/instruction.md",
+          "rootSha256": "c4e13a6a1bc52899e546b9f325c5110c916b9bbf0fc730014338044c5eb429c0",
+          "localSha256": "203fe4bd04788d5d55c6ea4047d4056abb4e8ef0b4545293613610921cdb6874"
+        }
+      ],
+      "rootControlCount": 10,
+      "rootControlIds": [
+        "count-not-weight",
+        "zone-blind",
+        "remove-before-replacement",
+        "one-upgrade-only",
+        "omit-restoration",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "repeated-upgrade",
+        "example-hardcoding"
+      ],
+      "localControlCount": 10,
+      "localControlIds": [
+        "count-not-weight",
+        "zone-blind",
+        "remove-before-replacement",
+        "one-upgrade-only",
+        "omit-restoration",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "repeated-upgrade",
+        "example-hardcoding"
+      ]
+    },
+    {
+      "number": 14,
+      "task": "route-policy-repair",
+      "analysisFile": "reports/screening/third-five/14-route-policy-repair.md",
+      "analysisSha256": "fc8eec8df3eb378917b8a8839ea82d218a55cecc15870ded1a6e91c43fb14ded",
+      "rootSource": "tasks/route-policy-repair",
+      "localSuccessorSource": ".local/post-program/third-five/2026-09-07-build/source-v2/tasks/route-policy-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-08-third-five.json",
+        "runId": "route-policy-repair-attempt-1",
+        "reward": 1,
+        "authoringMilliseconds": 2715140,
+        "packageDigest": "a8f9a8cf3a2a4c7bc321031cd3cae66295187186a169e38168e802ff55f806a8",
+        "serviceStatus": null,
+        "serviceScenarios": 25,
+        "serviceFailedScenarios": 0,
+        "checker": {
+          "present": true,
+          "total": 12,
+          "correct": 12,
+          "missed": 0,
+          "falsePositives": 0,
+          "pass": true,
+          "namedRightCheck": 10
+        }
+      },
+      "differences": [
+        {
+          "path": "private/alternative/entry.mjs",
+          "rootSha256": "1e4815e793495cc1a2b0feaed6cf5b885bdb322e763449705daddb6593784adb",
+          "localSha256": "740be62cd6e58c360093097c8a23d11c865de92cfa0237b0d676360f9fad8501"
+        },
+        {
+          "path": "private/domain.mjs",
+          "rootSha256": "a2adf9f97d85b6643a4bd8b2533d78e285a1e6fc9ab13fe7ec59c33f4c5c5a84",
+          "localSha256": "095dccb1ed88780a3ef0fe03eacd5f3683bd55b3e0524312c7f7ed0e107c1196"
+        },
+        {
+          "path": "private/reference/src/plan.mjs",
+          "rootSha256": "c7547c70aaca98085dc0f706b3366da72d57369f319660fb2bc41c1a3f5a047c",
+          "localSha256": "bb2d59ac6c8cda990d18e749ba2215dc583e8a0b8c53a9167755410663b15304"
+        },
+        {
+          "path": "private/scenarios.mjs",
+          "rootSha256": "df8961fc298643a7fc4c5c3150a8e0bdaf702fbd3b3d3f3a6bf7f61ec78067e8",
+          "localSha256": "01131a405e32d14125a663c19a7f27268f74464da697423489a9ebcb5f22b21c"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "rootSha256": "68bfb5b9d13fb3bcb67fae86fffe55e419a57958a6cc290b281703c2558386c7",
+          "localSha256": null
+        },
+        {
+          "path": "public/instruction.md",
+          "rootSha256": "3a0ab8ae2023063c934c16dcad028218baaabd327581f707e4009f3dd538ab43",
+          "localSha256": "d367772c52e8cf911fd96376e552983fb5b4e149b6e6e2e5390e1fa4b2abad8e"
+        }
+      ],
+      "rootControlCount": 10,
+      "rootControlIds": [
+        "all-egresses",
+        "falsy-preference",
+        "early-accept",
+        "leave-nested-calls",
+        "ignore-prefix-length",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "match-mutated-community",
+        "example-hardcoding"
+      ],
+      "localControlCount": 10,
+      "localControlIds": [
+        "all-egresses",
+        "falsy-preference",
+        "early-accept",
+        "leave-nested-calls",
+        "ignore-prefix-length",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "match-mutated-community",
+        "example-hardcoding"
+      ]
+    },
+    {
+      "number": 15,
+      "task": "rule-index-repair",
+      "analysisFile": "reports/screening/third-five/15-rule-index-repair.md",
+      "analysisSha256": "4a5095078ffd0b376ac6ecff16f428c8933bc81f2be1c5daabf4e856d5a1912a",
+      "rootSource": "tasks/rule-index-repair",
+      "localSuccessorSource": ".local/post-program/third-five/2026-09-07-build/source-v2/tasks/rule-index-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-08-third-five.json",
+        "runId": "rule-index-repair-attempt-1",
+        "reward": 1,
+        "authoringMilliseconds": 912157,
+        "packageDigest": "cc6e092a63ce8aeaad7fbe320fb58fa513834642ac743c917563c201fa264c3f",
+        "serviceStatus": null,
+        "serviceScenarios": 25,
+        "serviceFailedScenarios": 0,
+        "checker": {
+          "present": true,
+          "total": 12,
+          "correct": 12,
+          "missed": 0,
+          "falsePositives": 0,
+          "pass": true,
+          "namedRightCheck": 10
+        }
+      },
+      "differences": [
+        {
+          "path": "private/control-manifest.json",
+          "rootSha256": "4eb5f2610a54c4cbe3f277c8e965db54fd6768596bdfc1c0dc8d86869d199e9e",
+          "localSha256": "463c3cd69e3ba0ba68cd11d76663c3164f0d5a30b6c5400464af17a938a40f24"
+        },
+        {
+          "path": "private/controls/no-memo.mjs",
+          "rootSha256": null,
+          "localSha256": "00e83c7f87f471f152ea8639c9c8ed54a4e012744895461473a12e65c9bc6271"
+        },
+        {
+          "path": "private/domain.mjs",
+          "rootSha256": "f6ff8d501902a1c4f13e08d520b0ab9db0b851c9106874c4b3bd6cfe16b522f8",
+          "localSha256": "2a041bd0438859d967535c7f3c5f94fcad56fcb7ff3605dd0c4527ac793b48f2"
+        },
+        {
+          "path": "private/scenarios.mjs",
+          "rootSha256": "168508dded6108f1743a31f076af9a500e69930e54bd10f58c3585982ed65e0f",
+          "localSha256": "c6fcbedbfe757df0f412e11feeb8373915f7f37cdac70f7c17407c8dc37d8aa3"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "rootSha256": "58e3c3421c4bb552f293b5517fcfdf142e0ccba550f4cdbaeaa84d2a9d8f3d50",
+          "localSha256": null
+        },
+        {
+          "path": "public/instruction.md",
+          "rootSha256": "aa7222f5d6586548a09740b29928285de563dea0c6bf94821d3bee7c6acd899e",
+          "localSha256": "0c0231fe57e3034ed385856ff912f39f1e0dd2e692b2afac5c7760117eba1bed"
+        }
+      ],
+      "rootControlCount": 10,
+      "rootControlIds": [
+        "greedy-captures",
+        "discard-captures",
+        "case-sensitive-only",
+        "length-priority",
+        "collapse-stars",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "prefix-instead-of-full-match",
+        "example-hardcoding"
+      ],
+      "localControlCount": 11,
+      "localControlIds": [
+        "greedy-captures",
+        "discard-captures",
+        "case-sensitive-only",
+        "length-priority",
+        "collapse-stars",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "prefix-instead-of-full-match",
+        "example-hardcoding",
+        "no-memo"
+      ]
+    },
+    {
+      "number": 16,
+      "task": "document-export-repair",
+      "analysisFile": "reports/screening/fourth-five/16-document-export-repair.md",
+      "analysisSha256": "c5a709f93015690ccf0e6bd382f4d7500e1e904ccc7803cdb8cbca56cdc3424c",
+      "rootSource": "tasks/document-export-repair",
+      "localSuccessorSource": ".local/post-program/fourth-five/2026-09-08-build/source/tasks/document-export-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-08-fourth-five.json",
+        "runId": "document-export-repair-attempt-1",
+        "reward": 1,
+        "authoringMilliseconds": 929941,
+        "packageDigest": "775681102a9de9a1a85ad236baec0b29773ff6b54158f0864d9cf872b4985f2f",
+        "serviceStatus": null,
+        "serviceScenarios": 29,
+        "serviceFailedScenarios": 0,
+        "checker": {
+          "present": true,
+          "total": 13,
+          "correct": 13,
+          "missed": 0,
+          "falsePositives": 0,
+          "pass": true,
+          "namedRightCheck": 11
+        }
+      },
+      "differences": [
+        {
+          "path": "private/domain.mjs",
+          "rootSha256": "b2610494e295b55c4bdf987ee7b338f5c333629f23c51aaa1444210137cdda29",
+          "localSha256": "aec7c2b72b1c74478f12a757707f99d969dac1cd13a50e9140911302b0a760b4"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "rootSha256": "c963a0e291ecf201878e99322478d5c001fbad3b29b9e189a6fc9e71fca03bf7",
+          "localSha256": null
+        },
+        {
+          "path": "public/instruction.md",
+          "rootSha256": "1de3095a3f83982c79ae1511687133bb914f5c8345a69f1a320b0ef795867fea",
+          "localSha256": "ebf79adcae1978bbd3f0836497ee8489d6691e24b254542ef583850ac5e6428b"
+        }
+      ],
+      "rootControlCount": 11,
+      "rootControlIds": [
+        "nested-message-skip",
+        "sequential-literals",
+        "field-policy-omitted",
+        "over-redaction",
+        "drop-binary",
+        "wrong-ticket",
+        "duplicate-export",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "discard-part-links"
+      ],
+      "localControlCount": 11,
+      "localControlIds": [
+        "nested-message-skip",
+        "sequential-literals",
+        "field-policy-omitted",
+        "over-redaction",
+        "drop-binary",
+        "wrong-ticket",
+        "duplicate-export",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "discard-part-links"
+      ]
+    },
+    {
+      "number": 17,
+      "task": "analytical-reconciliation-repair",
+      "analysisFile": "reports/screening/fourth-five/17-analytical-reconciliation-repair.md",
+      "analysisSha256": "118bfd10123c64f9d3e3ee26f7186872e7b3a04ad2274ca14dcd2cbc5efd80bb",
+      "rootSource": "tasks/analytical-reconciliation-repair",
+      "localSuccessorSource": ".local/post-program/fourth-five/2026-09-08-build/source/tasks/analytical-reconciliation-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-08-fourth-five.json",
+        "runId": "analytical-reconciliation-repair-attempt-1",
+        "reward": 0,
+        "authoringMilliseconds": 1108368,
+        "packageDigest": "62c1eb9aaaae5bdb82d5f6430088c2a87f71182f23d166d42b8d29b9ea3e9142",
+        "serviceStatus": null,
+        "serviceScenarios": 28,
+        "serviceFailedScenarios": 0,
+        "checker": {
+          "present": true,
+          "total": 13,
+          "correct": 13,
+          "missed": 0,
+          "falsePositives": 0,
+          "pass": false,
+          "namedRightCheck": 5
+        }
+      },
+      "differences": [
+        {
+          "path": "private/domain.mjs",
+          "rootSha256": "d93653691b1f3f1dc4fd9d73f7568626f698f6fff501b7bbea1fb2cb3033147b",
+          "localSha256": "c36af576a0544d0ddcc46b5249410b276ade161597351b02cd415f93c4358338"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "rootSha256": "61f80232969112022c0d7abd6d14479e8859666500ef40be833f4d41e6d68c16",
+          "localSha256": null
+        },
+        {
+          "path": "public/instruction.md",
+          "rootSha256": "310bf9545394b2dfe22b8ed61d2b9019d2609b801bd6a56242f110990b2ab688",
+          "localSha256": "1a5213a4971cf2bd20830b9b939e087b5fee0947c5537596e91be1e456d07913"
+        }
+      ],
+      "rootControlCount": 11,
+      "rootControlIds": [
+        "filter-before-revision",
+        "round-per-event",
+        "unscoped-revision-id",
+        "stop-at-empty-page",
+        "credit-join-fanout",
+        "omit-zero-customers",
+        "duplicate-report",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "discard-source-lineage"
+      ],
+      "localControlCount": 11,
+      "localControlIds": [
+        "filter-before-revision",
+        "round-per-event",
+        "unscoped-revision-id",
+        "stop-at-empty-page",
+        "credit-join-fanout",
+        "omit-zero-customers",
+        "duplicate-report",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "discard-source-lineage"
+      ]
+    },
+    {
+      "number": 18,
+      "task": "recurring-calendar-repair",
+      "analysisFile": "reports/screening/fourth-five/18-recurring-calendar-repair.md",
+      "analysisSha256": "0971707cb46c9863b88214dd38d3788f9991129f408b993fd2dffa8b8fbc2c29",
+      "rootSource": "tasks/recurring-calendar-repair",
+      "localSuccessorSource": ".local/post-program/fourth-five/2026-09-08-build/source/tasks/recurring-calendar-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-08-fourth-five.json",
+        "runId": "recurring-calendar-repair-attempt-1",
+        "reward": 0,
+        "authoringMilliseconds": 1636332,
+        "packageDigest": "aa49e807a9a4e50c398f5fff4891233ca54d8ae1c33cda123c83fdb9ab823887",
+        "serviceStatus": null,
+        "serviceScenarios": 31,
+        "serviceFailedScenarios": 0,
+        "checker": {
+          "present": true,
+          "total": 13,
+          "correct": 13,
+          "missed": 0,
+          "falsePositives": 0,
+          "pass": false,
+          "namedRightCheck": 10
+        }
+      },
+      "differences": [
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "rootSha256": "96291ee320f208ed4d55bd7135e1897c0a140f522f9af542295d45d448ccab8a",
+          "localSha256": null
+        },
+        {
+          "path": "public/SEMANTICS.md",
+          "rootSha256": "8cf4ad082405026cb1c1a4e6720905e6b41378e7f395c89dfe5bd1610e41cc05",
+          "localSha256": "026d2580a4cbffdce54e6630df072b72950b059dc377c95a4768fe4e7b9fa834"
+        },
+        {
+          "path": "public/instruction.md",
+          "rootSha256": "ccb230e45eb3d319fa38faeafe5033e700527c1dfa3c4eb54d7b28dfcbb37a32",
+          "localSha256": "3920a67fe6f1df0bbc03a7afd4cc26bfc091ed579368ae6ee62cc95db76e600d"
+        }
+      ],
+      "rootControlCount": 11,
+      "rootControlIds": [
+        "fixed-zone-offset",
+        "display-time-identity",
+        "erase-cancelled-history",
+        "reset-attendee-responses",
+        "global-series-change",
+        "booking-display-key",
+        "drop-external-bookings",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "wall-clock-duration"
+      ],
+      "localControlCount": 11,
+      "localControlIds": [
+        "fixed-zone-offset",
+        "display-time-identity",
+        "erase-cancelled-history",
+        "reset-attendee-responses",
+        "global-series-change",
+        "booking-display-key",
+        "drop-external-bookings",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "wall-clock-duration"
+      ]
+    },
+    {
+      "number": 19,
+      "task": "variant-cache-repair",
+      "analysisFile": "reports/screening/fourth-five/19-variant-cache-repair.md",
+      "analysisSha256": "3fc6f399a71acfee8b035772b84e123a22f3c1aa31241cc352e903190f3e4d93",
+      "rootSource": "tasks/variant-cache-repair",
+      "localSuccessorSource": ".local/post-program/fourth-five/2026-09-08-build/source/tasks/variant-cache-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-08-fourth-five.json",
+        "runId": "variant-cache-repair-attempt-1",
+        "reward": 1,
+        "authoringMilliseconds": 1745517,
+        "packageDigest": "082a0ada9b2016d63b952ddaf784f396c3adc1db859b441fe3512f71dea0e8b3",
+        "serviceStatus": null,
+        "serviceScenarios": 25,
+        "serviceFailedScenarios": 0,
+        "checker": {
+          "present": true,
+          "total": 13,
+          "correct": 13,
+          "missed": 0,
+          "falsePositives": 0,
+          "pass": true,
+          "namedRightCheck": 11
+        }
+      },
+      "differences": [
+        {
+          "path": "private/control-manifest.json",
+          "rootSha256": "260e51f8d1a9791bcd89f853dcef12fffd0b32b689235dfde9af54adc8e47c2b",
+          "localSha256": "3cbb9dc005e4947863f5bad2d9422b005cbbeea917ed7a2aa4e119c85b78d03e"
+        },
+        {
+          "path": "private/controls/intermediate-wipe.mjs",
+          "rootSha256": null,
+          "localSha256": "715d02785408136f137d133883a9eb912646743ead0b008efecf611c6136ca1c"
+        },
+        {
+          "path": "private/controls/wildcard-eviction.mjs",
+          "rootSha256": null,
+          "localSha256": "783ed95ae9d70491e25050ae5774889d07b3cb51e42adcf0c795e2099ef3596d"
+        },
+        {
+          "path": "private/domain.mjs",
+          "rootSha256": "562a14ea758fdf8d70b03d3703ba189684668cce4677041d0ac3bd973c6a38db",
+          "localSha256": "75690bbf3a96bd06163d7852a1ec082efcd7529c66f47dc75d7d52e5258f385a"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "rootSha256": "ffa62098b2032b6fcb2c65e7fbced2c09706b5912edc801adaf8528d84b764ed",
+          "localSha256": null
+        },
+        {
+          "path": "public/SEMANTICS.md",
+          "rootSha256": "131623e354649247acf5fd07c0ab3f36c7ebb2f149da84ec83864d47209cb410",
+          "localSha256": "95bae3b19173c20d51ba9d9f49c87b503ce6e3876ca2f4e1e9c0827bc3fc4ade"
+        },
+        {
+          "path": "public/instruction.md",
+          "rootSha256": "1560efce10058ec2861b7c93acc9371b09b114a5a5c64d6144a52d709c857315",
+          "localSha256": "9bdf773a8a335f4347860fb023b618270f7bd0f2a999f99f649ee740f0e9ad73"
+        }
+      ],
+      "rootControlCount": 11,
+      "rootControlIds": [
+        "ignore-response-age",
+        "reset-age-on-tier-copy",
+        "path-only-key",
+        "unconditional-revalidation",
+        "flush-unrelated-tiers",
+        "store-private-response",
+        "always-origin",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "empty-304-body"
+      ],
+      "localControlCount": 13,
+      "localControlIds": [
+        "ignore-response-age",
+        "reset-age-on-tier-copy",
+        "path-only-key",
+        "unconditional-revalidation",
+        "flush-unrelated-tiers",
+        "store-private-response",
+        "always-origin",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "empty-304-body",
+        "wildcard-eviction",
+        "intermediate-wipe"
+      ]
+    },
+    {
+      "number": 20,
+      "task": "workflow-authority-repair",
+      "analysisFile": "reports/screening/fourth-five/20-workflow-authority-repair.md",
+      "analysisSha256": "31b30f52f47e71b994c0fe85b802be9e22d0d78d7586c0bed308b7b8fa5dbe26",
+      "rootSource": "tasks/workflow-authority-repair",
+      "localSuccessorSource": ".local/post-program/fourth-five/2026-09-08-build/source/tasks/workflow-authority-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-08-fourth-five.json",
+        "runId": "workflow-authority-repair-attempt-1",
+        "reward": 0,
+        "authoringMilliseconds": 1093227,
+        "packageDigest": "6eb0b382a3112e5babe6a2790b3e1c56a3a68b8d4ac962cd13ce8cf27cd9a035",
+        "serviceStatus": null,
+        "serviceScenarios": 30,
+        "serviceFailedScenarios": 0,
+        "checker": {
+          "present": true,
+          "total": 14,
+          "correct": 14,
+          "missed": 0,
+          "falsePositives": 0,
+          "pass": false,
+          "namedRightCheck": 11
+        }
+      },
+      "differences": [
+        {
+          "path": "private/domain.mjs",
+          "rootSha256": "21c34090c483722e9a3cc30cbd597bbe71ac50011cb37f3574c9741aaae2747b",
+          "localSha256": "01ad47399ef866c1716a07bd12f985ceecb30c4117fb64c74f541f38841a25a5"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "rootSha256": "9d41de3dd0c5c0637c97a2f7f87e38b44ecf079a09edde650a99fd2b3d7c828b",
+          "localSha256": null
+        },
+        {
+          "path": "public/instruction.md",
+          "rootSha256": "c747b44a85add8e02b1568e44f20e9b761d0dae0d474f4c972e32708bd6efe5e",
+          "localSha256": "160b72d9f4e7a71ad2b06d7ca172051b986d9db9c41a8442499a43b8fd90136a"
+        }
+      ],
+      "rootControlCount": 12,
+      "rootControlIds": [
+        "immediate-parent-origin",
+        "redecide-terminal-job",
+        "deny-all",
+        "ignore-action-attenuation",
+        "reactivate-revoked-path",
+        "wrong-effect-payload",
+        "abandon-stale-admission",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "misattribute-delivery",
+        "crash-unsafe-memoization"
+      ],
+      "localControlCount": 12,
+      "localControlIds": [
+        "immediate-parent-origin",
+        "redecide-terminal-job",
+        "deny-all",
+        "ignore-action-attenuation",
+        "reactivate-revoked-path",
+        "wrong-effect-payload",
+        "abandon-stale-admission",
+        "no-work",
+        "forged-completion",
+        "isolation",
+        "misattribute-delivery",
+        "crash-unsafe-memoization"
+      ]
+    },
+    {
+      "number": 21,
+      "task": "incremental-build-repair",
+      "analysisFile": "reports/screening/fifth-five/21-incremental-build-repair.md",
+      "analysisSha256": "90afdc5feb1223466532af5e137cc04196f32441502e0cd1037bfede35ffea36",
+      "rootSource": "tasks/incremental-build-repair",
+      "localSuccessorSource": ".local/post-program/fifth-five/2026-09-08-build/source/tasks/incremental-build-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-08-fifth-five.json",
+        "runId": "incremental-build-repair-attempt-1",
+        "reward": 0,
+        "authoringMilliseconds": 930767,
+        "packageDigest": "e56c672a00d58a4d89a11bb511b6d4d4b83d2e937317b231a5d1ab768b4ee823",
+        "serviceStatus": null,
+        "serviceScenarios": 27,
+        "serviceFailedScenarios": 0,
+        "checker": {
+          "present": true,
+          "total": 14,
+          "correct": 14,
+          "missed": 0,
+          "falsePositives": 0,
+          "pass": false,
+          "namedRightCheck": 10
+        }
+      },
+      "differences": [
+        {
+          "path": "private/control-manifest.json",
+          "rootSha256": "37c4ef3052231c8f334b91af69e7961148af51477f28885bc7c0ddc6a221c713",
+          "localSha256": "59bf5c271203d45b32cbb11bc0108fc64818a5f56ecf8602c9e4fc70a131abc0"
+        },
+        {
+          "path": "private/controls/premature-publication.mjs",
+          "rootSha256": null,
+          "localSha256": "9ab0395ec225d035ebdf1ee2c4cb83b06111580599d0314b70a009f53dcbec83"
+        },
+        {
+          "path": "private/domain.mjs",
+          "rootSha256": "8e32b6d9206d72b9b66ea0aef80b0b4627ab3431f9f9fc6988caaf46f60d7bec",
+          "localSha256": "ccdd011462c1f213175e2874a3928116d0e1161b66daa32b84221195eb77b014"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "rootSha256": "4db11c44cb747d433c724d1031df6a3099d796644f1366cd5d4f3b3edd9008c4",
+          "localSha256": null
+        },
+        {
+          "path": "public/instruction.md",
+          "rootSha256": "3608990df4ba6e54512d3c1e4483d298b1bb12db709734da0a4365091bce56f2",
+          "localSha256": "527e0e9e0e76cb5b19acc02f9bc5accc9207015d8b972cb61f893eb731a1d7b4"
+        }
+      ],
+      "rootControlCount": 12,
+      "rootControlIds": [
+        "ignore-tool",
+        "ignore-flags",
+        "ignore-includes",
+        "ignore-dependency-order",
+        "always-rebuild",
+        "foreign-publication",
+        "duplicate-publication",
+        "partial-publication",
+        "forged-completion",
+        "no-work",
+        "isolation",
+        "wrong-dependency-alias"
+      ],
+      "localControlCount": 13,
+      "localControlIds": [
+        "ignore-tool",
+        "ignore-flags",
+        "ignore-includes",
+        "ignore-dependency-order",
+        "always-rebuild",
+        "foreign-publication",
+        "duplicate-publication",
+        "partial-publication",
+        "forged-completion",
+        "no-work",
+        "isolation",
+        "wrong-dependency-alias",
+        "premature-publication"
+      ]
+    },
+    {
+      "number": 22,
+      "task": "event-window-repair",
+      "analysisFile": "reports/screening/fifth-five/22-event-window-repair.md",
+      "analysisSha256": "ef521f6581afc1f3542654498102a1e4232185f9bc714b35feffab867c1a2146",
+      "rootSource": "tasks/event-window-repair",
+      "localSuccessorSource": ".local/post-program/fifth-five/2026-09-08-build/source/tasks/event-window-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-08-fifth-five.json",
+        "runId": "event-window-repair-attempt-1",
+        "reward": 1,
+        "authoringMilliseconds": 461354,
+        "packageDigest": "f95d987962b6f6e666d9f40142fb25ee80b1021ab1aab925e42e85a69b8d6fdb",
+        "serviceStatus": null,
+        "serviceScenarios": 27,
+        "serviceFailedScenarios": 0,
+        "checker": {
+          "present": true,
+          "total": 14,
+          "correct": 14,
+          "missed": 0,
+          "falsePositives": 0,
+          "pass": true,
+          "namedRightCheck": 12
+        }
+      },
+      "differences": [
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "rootSha256": "530040924b272267676b7a046da2b29ab7d1cc566b4f999e22cd108047340c11",
+          "localSha256": null
+        },
+        {
+          "path": "public/instruction.md",
+          "rootSha256": "6aa01c0c10a63935275c7b7b3d6e2fb386439d4fc1e4471c17887f0fe5d106d7",
+          "localSha256": "8a8d5d1fe7b8e18a98a0449deb1072e63ce09e78fcae443e71b5c67fa2815785"
+        }
+      ],
+      "rootControlCount": 12,
+      "rootControlIds": [
+        "global-identity",
+        "fastest-partition",
+        "flush-all-idle",
+        "regress-on-resume",
+        "ignore-idle",
+        "drop-zero-group",
+        "drop-late",
+        "forged-completion",
+        "no-work",
+        "isolation",
+        "duplicate-late-delivery",
+        "late-before-dedup"
+      ],
+      "localControlCount": 12,
+      "localControlIds": [
+        "global-identity",
+        "fastest-partition",
+        "flush-all-idle",
+        "regress-on-resume",
+        "ignore-idle",
+        "drop-zero-group",
+        "drop-late",
+        "forged-completion",
+        "no-work",
+        "isolation",
+        "duplicate-late-delivery",
+        "late-before-dedup"
+      ]
+    },
+    {
+      "number": 23,
+      "task": "staged-allocation-repair",
+      "analysisFile": "reports/screening/fifth-five/23-staged-allocation-repair.md",
+      "analysisSha256": "c5ab50a6903f0f74b069778a6dff13d9fad3305287d354690eb52d27d6b2bf42",
+      "rootSource": "tasks/staged-allocation-repair",
+      "localSuccessorSource": ".local/post-program/fifth-five/2026-09-08-build/source/tasks/staged-allocation-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-08-fifth-five.json",
+        "runId": "staged-allocation-repair-attempt-1",
+        "reward": 1,
+        "authoringMilliseconds": 1091353,
+        "packageDigest": "727104224beed8aa6e12a47d80cf0d19ac785ce5a5805495c14369b40669c3e7",
+        "serviceStatus": null,
+        "serviceScenarios": 41,
+        "serviceFailedScenarios": 0,
+        "checker": {
+          "present": true,
+          "total": 13,
+          "correct": 13,
+          "missed": 0,
+          "falsePositives": 0,
+          "pass": true,
+          "namedRightCheck": 11
+        }
+      },
+      "differences": [
+        {
+          "path": "private/domain.mjs",
+          "rootSha256": "bb3b0884e93896671aa29a5aa47f8d7ac57d01587f2af6d563530d592b40e678",
+          "localSha256": "d58dd5142a1ef62f8f05ce9aa32a4e6dd751c9a098af62efe4abd63842cc5f68"
+        },
+        {
+          "path": "private/scenarios.mjs",
+          "rootSha256": "4e392a0d9ad20469105901e4d32b0d0c6b24e0e3d88a5195c46bf5db176d4c58",
+          "localSha256": "bf2b7ba9449edac394afe16d8d3b677ae7787cf4e0b5a41678b15b12fb3773d7"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "rootSha256": "a37fceeaa44c6943741923146a3e18525b1a45b1e7cfbd4c0de90af82deaeee5",
+          "localSha256": null
+        },
+        {
+          "path": "public/instruction.md",
+          "rootSha256": "1e168550492e2d60dadc7d44dae079bd55eadf6433d54a1dd48b5298ddfcd0e4",
+          "localSha256": "9ab3cf0b73ca9c9d686a0aefb2b54f303489f2dcf3c966da691e499bfc47a3a9"
+        }
+      ],
+      "rootControlCount": 11,
+      "rootControlIds": [
+        "locally-greedy",
+        "existential-future",
+        "ignore-anti-affinity",
+        "ignore-zone-affinity",
+        "ignore-zone-count",
+        "mint-capacity",
+        "duplicate-placement",
+        "forged-completion",
+        "no-work",
+        "isolation",
+        "coalesce-requested-units"
+      ],
+      "localControlCount": 11,
+      "localControlIds": [
+        "locally-greedy",
+        "existential-future",
+        "ignore-anti-affinity",
+        "ignore-zone-affinity",
+        "ignore-zone-count",
+        "mint-capacity",
+        "duplicate-placement",
+        "forged-completion",
+        "no-work",
+        "isolation",
+        "coalesce-requested-units"
+      ]
+    },
+    {
+      "number": 24,
+      "task": "diagnostic-transport-repair",
+      "analysisFile": "reports/screening/fifth-five/24-diagnostic-transport-repair.md",
+      "analysisSha256": "c94c66c20a3405e0934afc2e7f42d508b6391b5ef1a4309eb90a4ef4e117b5fd",
+      "rootSource": "tasks/diagnostic-transport-repair",
+      "localSuccessorSource": ".local/post-program/fifth-five/2026-09-08-build/source/tasks/diagnostic-transport-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-08-fifth-five.json",
+        "runId": "diagnostic-transport-repair-attempt-1",
+        "reward": 1,
+        "authoringMilliseconds": 762865,
+        "packageDigest": "890bc0f4e8bee00c989cad11b9bcf61f4f1a1c2472e975fc96a89a1be0397a7a",
+        "serviceStatus": null,
+        "serviceScenarios": 28,
+        "serviceFailedScenarios": 0,
+        "checker": {
+          "present": true,
+          "total": 13,
+          "correct": 13,
+          "missed": 0,
+          "falsePositives": 0,
+          "pass": true,
+          "namedRightCheck": 11
+        }
+      },
+      "differences": [
+        {
+          "path": "private/control-manifest.json",
+          "rootSha256": "c194f19f0b3e135cf07eaeef0b2d4bc6b29de9eb7053d8f7697c6d6b972ab17e",
+          "localSha256": "f0d1fa37db86ca85f22300da7f6c94de48492ccdf5b9e7052af276bf164e8b6c"
+        },
+        {
+          "path": "private/controls/omit-attempt-when-null.mjs",
+          "rootSha256": null,
+          "localSha256": "32404561021a68d71d21df97a75224707ccd6e3f7741e5dbc87a5800042d238e"
+        },
+        {
+          "path": "private/controls/omit-data-when-empty.mjs",
+          "rootSha256": null,
+          "localSha256": "c294b9657559b360bde86250448dcb1cd880aa28165103338b5810a7d1c25d57"
+        },
+        {
+          "path": "private/controls/omit-error-when-null.mjs",
+          "rootSha256": null,
+          "localSha256": "1eb3bbb8d57ee4eeecd85939aedb8063f3c1da315131b7eddb66d0edf06b5ced"
+        },
+        {
+          "path": "private/controls/skip-processing-when-empty.mjs",
+          "rootSha256": null,
+          "localSha256": "32d339b094122afe05fa19ddff55354bc8a64becaa54af02496f7952656ef3ef"
+        },
+        {
+          "path": "private/domain.mjs",
+          "rootSha256": "fed2a4f0b6404807a8334e5a14d49e0563809e7c6683017eb62ebf6d7efc06ce",
+          "localSha256": "090dab8400fdec360958a7230f9adf940c6d0a61bc157b9a85bbd9efb2abfce1"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "rootSha256": "8477d94abfbd791c8a22a834115f774fe9636118bd9aba1ad96d15087c84026a",
+          "localSha256": null
+        },
+        {
+          "path": "public/instruction.md",
+          "rootSha256": "f3fdd33bfd917055dab220b4e864e088e3c9695cc9e96bcd91c53ba973314512",
+          "localSha256": "0208a372fd8312696d4cb07e959d02ad8bd7e13e59d7e74055ddcc3096958e91"
+        }
+      ],
+      "rootControlCount": 11,
+      "rootControlIds": [
+        "erase-errors",
+        "drop-partial-error-data",
+        "omit-empty-success",
+        "omit-unobserved-request",
+        "gaps-as-success",
+        "wrong-attempt",
+        "duplicate-row",
+        "forged-completion",
+        "no-work",
+        "isolation",
+        "lose-unicode-payload"
+      ],
+      "localControlCount": 15,
+      "localControlIds": [
+        "erase-errors",
+        "drop-partial-error-data",
+        "omit-empty-success",
+        "omit-unobserved-request",
+        "gaps-as-success",
+        "wrong-attempt",
+        "duplicate-row",
+        "forged-completion",
+        "no-work",
+        "isolation",
+        "lose-unicode-payload",
+        "skip-processing-when-empty",
+        "omit-data-when-empty",
+        "omit-attempt-when-null",
+        "omit-error-when-null"
+      ]
+    },
+    {
+      "number": 25,
+      "task": "issued-report-repair",
+      "analysisFile": "reports/screening/fifth-five/25-issued-report-repair.md",
+      "analysisSha256": "d1f5096bec287318a04f5fc8e0a82b1c6274368d252419234ea59483dce8ba88",
+      "rootSource": "tasks/issued-report-repair",
+      "localSuccessorSource": ".local/post-program/fifth-five/2026-09-08-build/source/tasks/issued-report-repair",
+      "localSuccessorExists": true,
+      "originalTrial": {
+        "evidenceFile": "reports/screening/evidence/2026-09-08-fifth-five.json",
+        "runId": "issued-report-repair-attempt-1",
+        "reward": 1,
+        "authoringMilliseconds": 1556632,
+        "packageDigest": "0b638a93b90088f074d0bf3e8828f3980edd525aeef2c749f53c423ceca2dfe3",
+        "serviceStatus": null,
+        "serviceScenarios": 27,
+        "serviceFailedScenarios": 0,
+        "checker": {
+          "present": true,
+          "total": 13,
+          "correct": 13,
+          "missed": 0,
+          "falsePositives": 0,
+          "pass": true,
+          "namedRightCheck": 11
+        }
+      },
+      "differences": [
+        {
+          "path": "private/control-manifest.json",
+          "rootSha256": "9a11c20c3ec4c1d090499cd5f8135f242d1f4f7c759c91cae3b56e40172bf73c",
+          "localSha256": "22558fdfad7b6091d26e297eebdc2cca1758588ceca9dc7269c80eea27b1fd88"
+        },
+        {
+          "path": "private/controls/reverse-dependency-order.mjs",
+          "rootSha256": null,
+          "localSha256": "43965d5c7945bb67e172fead901ce49f19a327ce01dac18caa6ce431583fc2c7"
+        },
+        {
+          "path": "private/domain.mjs",
+          "rootSha256": "e684d43ba5081e95c347d7e889f4f9c3ea9b7d7a09030ae1f0156dbcf72ccecc",
+          "localSha256": "4501643fa8a37e6d51d5c0b2503f467a01d765c6b6d49e6b759aecf4555d8a09"
+        },
+        {
+          "path": "private/scenarios.mjs",
+          "rootSha256": "a047cb46b5f3d6ff6cede603e1822f4601ea114213f17a9696b3ca02f61cdaca",
+          "localSha256": "1bcd6a8299e49f3281df14450c316379b3ec87d8b7cfded31e757dc351eeeb86"
+        },
+        {
+          "path": "public/CHECKER-INPUT.md",
+          "rootSha256": "6ac578b1b1917ecd70d5308aec8b1de4b065895a8cbf9d8f886f300b4956514e",
+          "localSha256": null
+        },
+        {
+          "path": "public/instruction.md",
+          "rootSha256": "61154692dc5c7c8d35f011ddc3d58d07757102f9f5d574acf45ca5b0d2e5c5da",
+          "localSha256": "15924cda4d0e8b52b33b90440818dbaa1a5eafec7cf320f3c674604d13ee1331"
+        }
+      ],
+      "rootControlCount": 11,
+      "rootControlIds": [
+        "only-requested-recipients",
+        "reuse-issued-version",
+        "drop-source-lineage",
+        "corrections-labelled-initial",
+        "current-for-historical",
+        "duplicate-notification",
+        "unrelated-recipient",
+        "forged-completion",
+        "no-work",
+        "isolation",
+        "stale-dependent-lineage"
+      ],
+      "localControlCount": 12,
+      "localControlIds": [
+        "only-requested-recipients",
+        "reuse-issued-version",
+        "drop-source-lineage",
+        "corrections-labelled-initial",
+        "current-for-historical",
+        "duplicate-notification",
+        "unrelated-recipient",
+        "forged-completion",
+        "no-work",
+        "isolation",
+        "stale-dependent-lineage",
+        "reverse-dependency-order"
+      ]
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import { deliver } from "./restart.mjs";
 import { createRequire } from "node:module";
 import { readFileSync, mkdirSync } from "node:fs";
 import { session, equal, checks } from "./adapter.mjs";
@@ -15,7 +16,8 @@ export async function runScenario(s, execute, storage) {
     actions = [],
     observations = [],
     reports = [],
-    perAttempt = [];
+    perAttempt = [],
+    interruptions = [];
   const handles = new Map(),
     reads = new Map();
   let remounted = false,
@@ -126,13 +128,15 @@ export async function runScenario(s, execute, storage) {
   };
   try {
     for (attempt = 0; attempt < s.attempts; attempt++) {
-      await execute(
-        session(
+      await deliver(
+        execute, () => session(
           { traceId, events: s.events, attempt, storage },
           operations,
           (r) => reports.push(r),
           observations,
         ),
+        attempt === 0 && s.crashAfterSubmit ? { method: "api.act", count: s.crashAfterSubmit, observations } : null,
+        interruptions, { attempt },
       );
       perAttempt.push(structuredClone(effects));
     }
@@ -171,6 +175,8 @@ export async function runScenario(s, execute, storage) {
           ),
         preservation: effects.every((e) => s.events.some((x) => x.entity === e.entity)),
       }),
+      input: { traceId, events: s.events, attempts: s.attempts, confirmation: s.confirmation },
+      interruptions,
       observations,
       effects,
       actions,

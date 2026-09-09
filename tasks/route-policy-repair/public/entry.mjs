@@ -1,2 +1,5 @@
-import { change } from "./src/change.mjs";
-export const subject = { run: change };
+export const subject = {
+  async run(view, api) {
+    return {};
+  },
+};

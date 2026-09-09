@@ -1,2 +1,3 @@
-import { install } from "./src/install.mjs";
-export const subject = { run: install };
+export const subject = {
+  async run(view, api) { return {}; },
+};

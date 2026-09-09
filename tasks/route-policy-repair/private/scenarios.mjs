@@ -1,6 +1,36 @@
 export const checkIds = ["completion", "positive_change", "scoped_behavior", "preservation", "legal_config"];
+// Every base scenario's request.match.communities is either absent or a single community
+// (["tagged"]), so a checker whose own community-matching logic works for zero or one required
+// community but is wrong for two-or-more (e.g. checks only one of several, or uses OR instead of
+// AND across the required set) was never actually exercised. A real submitted checker
+// demonstrated exactly this: correct on {}, {a}, {b} and {a,b,c} route-community sets against a
+// three-community match, wrong on {a,b}. These two scenarios require ALL of three communities
+// and test every one of the 8 possible route-community subsets against that requirement, closing
+// the gap without touching the existing 25 scenarios' shape, ids or count.
+function multiCommunityScenario(id, egresses) {
+  const policies = {
+    root: {
+      terms: [{ match: {}, action: { kind: "call", policy: "leaf" } }],
+      fallback: { kind: "reject" },
+    },
+    leaf: {
+      terms: [{ match: {}, action: { kind: "accept", preference: 10 } }],
+      fallback: { kind: "reject" },
+    },
+  };
+  const config = { egresses: { east: "root", west: "root" }, policies };
+  const request = { egresses, match: { communities: ["a", "b", "c"] }, preference: 200 };
+  const subsets = [[], ["a"], ["b"], ["c"], ["a", "b"], ["a", "c"], ["b", "c"], ["a", "b", "c"]];
+  const routes = [];
+  for (const egress of ["east", "west"])
+    for (const communities of subsets)
+      for (const prefix of ["10.0.0.0/16", "0.0.0.0/0"])
+        routes.push({ egress, route: { prefix, preference: 17, communities } });
+  return { id, config, request, routes };
+}
 export function scenarios() {
-  return Array.from({ length: 25 }, (_, n) => {
+  return [
+    ...Array.from({ length: 25 }, (_, n) => {
     const simple = n === 24,
       policies = {
         root: {
@@ -52,6 +82,9 @@ export function scenarios() {
       ])
         for (const communities of [[], ["tagged"], ["blocked"], ["tagged", "blocked"]])
           routes.push({ egress, route: { prefix, preference: 17, communities } });
-    return { id: "case-" + String(n).padStart(3, "0"), config, request, routes };
-  });
+      return { id: "case-" + String(n).padStart(3, "0"), config, request, routes };
+    }),
+    multiCommunityScenario("case-025", ["east"]),
+    multiCommunityScenario("case-026", ["east", "west"]),
+  ];
 }

@@ -12,7 +12,7 @@ lexicographically smallest vector of star lengths (earlier stars shortest first)
 Output is null or {ruleId,tag,captures:string[]}. Empty captures must be retained.
 
 api.publish({program}) installs one complete plan {entry:number,code:Instruction[]}.
-Each instruction has op and fields:
+Each instruction contains exactly op and the fields listed below:
 - char {value:one ASCII byte,fold:boolean,next}: consume that byte if equal, else fail.
 - any {next}: consume any single byte, or fail at end.
 - split {first,second}: push a copy of current position/capture state for second, then first.
@@ -25,9 +25,7 @@ Each instruction has op and fields:
 - fail {}: fail this branch.
 On failure pop the most recent saved branch, or return null if no branch remains.
 A new document starts at entry, offset zero, empty captures, empty stack and empty memo.
-Memo does not include captures or rule identity automatically; sharing a program location
-changes which paths it prunes. The first successful accept wins; the VM does not choose
-rule precedence or capture preference for you. It never executes arbitrary JS.
+The first successful accept wins. The interpreter does not execute arbitrary JS.
 
 Each dispatched instruction costs one step, including failed checks and memo visits.
 Work must be <= 8*(document.length+1)*(T+rules.length+1)+32, where T is the total number

@@ -134,10 +134,16 @@ export async function runScenario(s, execute, storage) {
           )
             return { error: "shape" };
           const current = s.rounds[index];
+          // Content-correctness only makes sense to ask for a legitimately-requested target --
+          // an "unrequested"/foreign target has no correct answer to be right or wrong about, so
+          // it must never affect this (current_artifacts is a content check; publishing outside
+          // scope is purely a publication_scope defect, judged separately below).
           const validAtPublication =
             !!current &&
             round === current.id &&
-            outputs.every((o) => correct(o.handle, o.target, current, ledger));
+            outputs.every(
+              (o) => !current.targets.includes(o.target) || correct(o.handle, o.target, current, ledger),
+            );
           publications.push({ after: index, round, outputs, validAtPublication });
           return { stored: true };
         },
@@ -146,18 +152,30 @@ export async function runScenario(s, execute, storage) {
       observations,
     ),
   );
+  // `binding` (current_artifacts) and `scoped` (publication_scope) are deliberately kept as two
+  // SEPARATE booleans, computed in the same pass but never merged: `binding` answers "is the
+  // published CONTENT correct" (does each published handle's actual recipe/bytes match what a
+  // correct build of that target should produce, and was it valid at the moment it was
+  // published), while `scoped` answers "did publication target exactly the right set" (no
+  // foreign target published, no required target omitted, at the right round, at the right
+  // time). A publication naming an "unrequested" target or omitting a required one is purely a
+  // scope defect -- its underlying artifact content may be entirely correct -- so folding it into
+  // `current_artifacts` misattributes it: `publication_scope` is the check whose own name (and
+  // the public contract's use of the word "scope") promises to cover exactly this.
   let binding = publications.every((p) => p.validAtPublication);
+  let scoped =
+    publications.length === s.rounds.length &&
+    publications.every((p, i) => p.after === i && p.round === s.rounds[i].id);
   for (const p of publications) {
     const round = s.rounds[p.after];
-    if (
-      !round ||
-      p.round !== round.id ||
-      !equal(p.outputs.map((o) => o.target).sort(), round.targets.toSorted())
-    ) {
+    if (!round || p.round !== round.id) {
       binding = false;
+      scoped = false;
       continue;
     }
-    for (const o of p.outputs) if (!correct(o.handle, o.target, round, ledger)) binding = false;
+    if (!equal(p.outputs.map((o) => o.target).sort(), round.targets.toSorted())) scoped = false;
+    for (const o of p.outputs) if (round.targets.includes(o.target) && !correct(o.handle, o.target, round, ledger))
+      binding = false;
   }
   // Handles the candidate's own compile()/inspect()/publish() calls actually referenced, per the
   // real observed API traffic -- used below to trim the exposed artifact dump to what a checker
@@ -183,9 +201,7 @@ export async function runScenario(s, execute, storage) {
     ...checks({
       completion: index >= s.rounds.length && publications.length === s.rounds.length,
       current_artifacts: binding,
-      publication_scope:
-        publications.length === s.rounds.length &&
-        publications.every((p, i) => p.after === i && p.round === s.rounds[i].id),
+      publication_scope: scoped,
       incremental_budget: calls.every((n, i) => n <= s.rounds[i].callBudget),
       // Structural invariant, not a falsifiable subject property: the only operation that ever
       // writes to the ledger is compile(), and it always mints a brand-new "built-N" handle --

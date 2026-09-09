@@ -102,7 +102,8 @@ export async function runScenario(s, execute, storage) {
     answers = [],
     observations = [],
     reports = [];
-  let index = -1;
+  let index = -1,
+    dependencyOrder = true;
   await execute(
     session(
       { storage },
@@ -122,6 +123,22 @@ export async function runScenario(s, execute, storage) {
         snapshot: () => ({ readings, definitions: s.definitions, history, receipts }),
         publish: ({ record }) => {
           if (!record || typeof record.report !== "string" || !record.payload) return { error: "shape" };
+          // SEMANTICS.md: "reconcile ALL definitions in dependency order" and "A report's direct
+          // source version is that input report's current publication version" -- a source of
+          // kind "report" must name a version that is ALREADY published (present in `history` as
+          // actually observed so far, in real publish-call order) at the moment THIS record is
+          // published, not one that will only exist after some later call. `equal(sorted(...))`
+          // below compares the two publication SETS, which is order-blind by construction and
+          // cannot see this: two candidates that publish the same records in different orders
+          // compare equal under it. This is a genuinely separate obligation, checked here against
+          // the real, incremental history this candidate itself built one publish() call at a
+          // time -- not the precomputed `expected()` side, which only ever emits parents first.
+          for (const source of record.payload?.sources ?? [])
+            if (
+              source?.kind === "report" &&
+              !history.some((r) => r.report === source.id && r.version === source.version)
+            )
+              dependencyOrder = false;
           history.push(record);
           publications.push({ after: index, record });
           return { stored: true };
@@ -156,6 +173,7 @@ export async function runScenario(s, execute, storage) {
       issued_history: equal(sorted(history), sorted(want.history)),
       recipient_scope: equal(sorted(deliveries), sorted(want.deliveries)),
       historical_answers: equal(sorted(answers), sorted(want.answers)),
+      dependency_order: dependencyOrder,
     }),
     actual: { publications, deliveries, answers, history },
     input: { definitions: s.definitions, readings: s.readings, initial: initial(s), steps: s.steps },

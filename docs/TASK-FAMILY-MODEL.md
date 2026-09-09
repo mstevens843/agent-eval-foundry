@@ -1,3 +1,7 @@
+> September 9 policy: a clean-room human solve is optional additional evidence, not a
+> prerequisite for exploratory trials or a substitute for the required passing oracle.
+> Self-verification by an agent is legitimate problem solving, not automatic rejection.
+
 # Task Family Model
 
 This document explains the model behind `agent-eval-foundry`.

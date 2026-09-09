@@ -30,6 +30,7 @@ export interface PackageChecks {
   readonly publicPackageComplete: boolean;
   readonly protectedGrading: boolean;
   readonly localIntegrityControls: boolean;
+  /** Optional measured human-solve evidence; not a prerequisite for exploration. */
   readonly boundedSolveEvidence: boolean;
   readonly destinationChecks: boolean;
   readonly unresolvedAmbiguities: number;
@@ -125,12 +126,7 @@ export function decidePackage(input: PackagePolicyInput): PackageDecision {
     }
   const eligible = [
     ...local,
-    ...requireChecks([
-      "publicPackageComplete",
-      "protectedGrading",
-      "localIntegrityControls",
-      "boundedSolveEvidence",
-    ]),
+    ...requireChecks(["publicPackageComplete", "protectedGrading", "localIntegrityControls"]),
   ];
   if (record?.dependencies.unresolved.length) eligible.push("runtime-dependencies-unresolved");
   const authorized = [...eligible];

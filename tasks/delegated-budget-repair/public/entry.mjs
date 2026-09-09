@@ -1,2 +1,5 @@
-import { dispatch } from "./src/dispatcher.mjs";
-export const subject = { run: dispatch };
+export const subject = {
+  async run(view, api) {
+    return {};
+  },
+};

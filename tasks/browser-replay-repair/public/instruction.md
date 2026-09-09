@@ -1,13 +1,12 @@
-# Repair the recorded workflow player
+# Implement browser workflow replay
 
-The operations team records form workflows, then replays them after UI releases.
-The application starts and its basic tests pass, but production playback does not
-reliably preserve the recorded intent. Repair the service under `src/` and its
-`entry.mjs` entry point. Preserve the public interface and satisfy `SEMANTICS.md`.
+Build the service and its independent release validator in `/work/task`.
+Read `SEMANTICS.md` for the domain contract.
 
-Run `node --test test/*.test.mjs` for useful local examples. Extend your checks as
-needed. The immutable driver runs real Chromium; it supplies the `api` passed to
-`subject.run(view, api)`. You may restructure the implementation and journal.
-No model calls are needed at replay time. Do not edit the driver or contract.
+`entry.mjs` must export `subject.run(view, api)`. The supplied entry point is empty;
+implement the required behavior using any correct design.
 
-This is a new professional package, not the historical synthetic replay task.
+Also submit `checker.mjs`, exporting `run({cases})` as specified in
+`CHECKER-INPUT.md`. It evaluates candidate execution traces against the same
+contract. Both the service and validator must pass. Submitted helper modules are
+allowed. Node built-ins are available.

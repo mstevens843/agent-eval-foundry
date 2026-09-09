@@ -116,5 +116,49 @@ export function scenarios() {
     }
     cases.push(scenario);
   }
+  // Publicly legal filenames include JavaScript-reserved-looking names like "constructor" and
+  // "__proto__" (the path rule only restricts characters). A grading harness that tracks staged
+  // files with a plain object literal as a path->entry map would spuriously reject "constructor"
+  // as already existing (Object.prototype.constructor is inherited and truthy before it is ever
+  // written) and would silently lose a write to "__proto__" (plain assignment reassigns the
+  // object's own prototype instead of storing an entry) -- a real, reproduced grading-adapter
+  // bug, not a candidate defect. This scenario writes an initial file, then a layer that adds
+  // "constructor" and "__proto__" as ordinary new files alongside a normal path, so any
+  // recurrence of that bug surfaces as a real, isolated completion/contents failure.
+  {
+    const blobs = {},
+      cache = {},
+      descriptors = [];
+    const file = (path, text, mode = 420) => ({
+      kind: "file",
+      path,
+      data: Buffer.from(text).toString("base64"),
+      mode,
+    });
+    const layer = (entries, url) => {
+      const plain = Buffer.from(JSON.stringify({ entries })),
+        raw = gzipSync(plain),
+        hash = (b) => createHash("sha256").update(b).digest("hex");
+      const d = { url, digest: hash(raw), size: raw.length, plainDigest: hash(plain) };
+      blobs[d.digest] = raw.toString("base64");
+      descriptors.push(d);
+      return d;
+    };
+    layer([file("keep", "first-layer")], "repo/base");
+    layer(
+      [file("constructor", "reserved-name-one"), file("__proto__", "reserved-name-two"), file("normal", "ordinary")],
+      "repo/reserved-names",
+    );
+    cases.push({
+      id: "case-" + String(cases.length).padStart(3, "0"),
+      release: createHash("sha256").update("meridian-release-reserved-names").digest("hex").slice(0, 16),
+      descriptors,
+      blobs,
+      cache,
+      initial: {
+        "old-release": { kind: "file", mode: 420, data: Buffer.from("keep-on-failure").toString("base64") },
+      },
+    });
+  }
   return cases;
 }

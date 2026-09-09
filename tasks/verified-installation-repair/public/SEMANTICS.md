@@ -9,13 +9,13 @@ bytes; plainDigest is SHA256 of uncompressed bytes. api.cache({url}) returns nul
 returns {bytes:base64} or null. A layer is available if EITHER the cache or the origin
 provides bytes satisfying all descriptor checks; neither source has precedence over a
 verified copy from the other. Only when neither does is the release unavailable.
-Never install uncommitted bytes. URLs can be reused across layers. A cache mismatch is
-recoverable by fetching; an origin failure is recoverable from verified cache contents.
+Never install uncommitted bytes. URLs can be reused across layers.
 All committed, available layers are valid JSON.
 
 A tree maps safe relative paths to {kind:"file",mode,data:base64} or {kind:"dir",mode}.
-Path segments match [a-zA-Z0-9_-]+ with optional interior dots, excluding . and ..;
-no absolute paths, links, devices, duplicate regular entries in a layer, or special bits.
+Each path segment matches [A-Za-z0-9_-][A-Za-z0-9_.-]*; paths are shorter than 512
+characters. No absolute paths, links, devices, duplicate regular entries in a layer,
+or special permission bits are supported.
 Modes are integers 0600 through 0755. Root is implicit. Missing parent directories use 0755.
 
 Entries are:

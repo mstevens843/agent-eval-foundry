@@ -58,3 +58,28 @@ This report's diagnosis was exact: the frozen grader required a whole `reasons` 
 **Regrade performed exactly as this report requested** — the same preserved submission bytes, under a separately versioned diagnostic, not overwriting this result or counting as a new trial. Re-run against the fixed harness with zero new model calls: now scores as a full pass (11/11 correct, 0 false positives, 0 missed, all 9 controls correctly named). This is the confirmed fix — the "contract/grader alignment concern" this report identified is resolved. Full numbers: restricted regrade record `regrade-2026-09-08.json` (restricted local storage, same evidence boundary as the sanitized trial record above).
 
 **When trials run again:** a fresh attempt against this package should now score correctly on checker grading if it produces reasons in this same explanatory-prefix style.
+
+## 2026-09-09 — Third ranked group: engineering successor for Trial 2
+
+**Ready for a second exploratory trial. No new model attempt was launched for this version.** Priority within the third ranked group: 2/5. Earlier sections describe historical source and results. See the [implementation report](../third-ranked-five-implementation-plan-2026-09-09.md) and [hashed validation evidence](../evidence/2026-09-09-third-ranked-five-implementation.json).
+
+Completed both private service closures, removed all four public implementation modules and old tests importing them, and supplied an empty service entry point. Removed worked dependency/uncertainty and rejection-label explanations from the instruction. The resource, API and checker schemas remain available.
+
+Reason text is now diagnostic only; the previous exact-label disagreement is not a success criterion in this successor. Kept the maintained initialResources, requestedScope and requestedTarget inputs, which the local successor did not fully retain. Removed the computed valid/scope annotations from operation records; the independent checker evaluates the raw before-state and attempted operation.
+
+Aligned idempotent creation with the existing statement that parent lists are sets: duplicate list entries no longer cause an otherwise equivalent resource to be rejected. A regression accepts that legal alternative and rejects an illegal parent removal even when the final graph remains correct. All 33 existing scenarios remain; no hidden crash, concurrent edit or unavailable-receipt obligation was introduced.
+
+Validation passed 14 Foundry assurance checks across 33 scenarios, including the complete reference and alternative services, semantic failure of the untouched service starter, repeatability and control activation. The private checker correctly classified 11/11 candidates: two correct implementations and 9 negative controls, with zero false accepts or misses. Rebuild and fresh recipient reproduction passed.
+
+Native validation passed all 22 static checks and six verifier integrity controls. Harbor's complete oracle returned reward 1; nop returned reward 0, with no Harbor exceptions or verifier infrastructure errors. Nop is rejected for its missing checker deliverable; the separate Foundry starter execution establishes the service's semantic failure. These are provider-free local validation jobs, not new standard/cheat model trials.
+
+Use these exact exports:
+
+- Foundry: `.local/third-ranked-five-implementation-2026-09-09/release-ready/partial-release-repair/export`
+- Foundry digest: `5c5b111476f3f48d97db15dac6bb165b0076f8c4363acd0899e434877b709387`
+- Native Harbor: `.local/third-ranked-five-implementation-2026-09-09/harbor-ready/partial-release-repair`
+- Native digest: `a099f591f32003dee69235a565046eca248dca79e39d45c41b3b6623b090bc5c`
+
+Both deliverables are required. The checker returns complete deterministic Boolean verdicts; optional reason text does not affect grading, and submitted helper modules are available. Public requirements and custom schemas remain supplied without a worked implementation.
+
+When Trial 2 completes, append the actual model/profile, frozen digest, service/checker outcomes, elapsed time, exclusions and final submission defect here. Keep original Trial 1 rewards intact. Local controls, old grading disputes and infrastructure errors are not additional model failures. The final hiring submission still requires its human-authored material and rubric, standard and cheat qualification on the final selected version.

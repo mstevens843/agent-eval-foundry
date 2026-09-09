@@ -1,3 +1,4 @@
+import { deliver } from "./restart.mjs";
 import { session, equal, checks } from "./adapter.mjs";
 export async function runScenario(s, execute, storage) {
   const actual = new Map(s.wallets.map((w) => [w.id, structuredClone(w)])),
@@ -10,7 +11,8 @@ export async function runScenario(s, execute, storage) {
     expectedReports = [],
     pending = new Map(),
     attempted = new Set(),
-    prefixes = [];
+    prefixes = [],
+    interruptions = [];
   const describe = ({ wallet }) => structuredClone(actual.get(wallet) ?? null);
   const lookup = ({ key }) => {
     const p = pending.get(key);
@@ -68,13 +70,15 @@ export async function runScenario(s, execute, storage) {
       decisions.push({ id: r.id, status: receipt ? "accepted" : "rejected", receipt });
     }
     expectedReports.push({ job, decisions });
-    await execute(
-      session(
+    await deliver(
+      execute, () => session(
         { job, storage, requests: input.requests },
         { describe, lookup, debit },
         (r) => reports.push(r),
         observations,
       ),
+      input.crashAfterDebit ? { method: "api.debit", count: input.crashAfterDebit, observations } : null,
+      interruptions, { job },
     );
     prefixes.push({
       actual: structuredClone(effects),
@@ -106,9 +110,9 @@ export async function runScenario(s, execute, storage) {
     calls,
     reports,
     observations,
-    expected,
-    expectedReports,
+    input: { wallets: s.wallets, jobs: s.jobs.map(({ grants, requests }) => ({ grants, requests })) },
+    interruptions,
     actual: [...actual],
-    prefixes,
+    prefixes: prefixes.map(({ actual, calls, actualState }) => ({ actual, calls, actualState })),
   };
 }

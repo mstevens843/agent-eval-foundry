@@ -94,5 +94,41 @@
     "check": "content",
     "clean": "case-024",
     "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "skip-processing-when-empty",
+    "overlay": {
+      "entry.mjs": "controls/skip-processing-when-empty.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "omit-data-when-empty",
+    "overlay": {
+      "entry.mjs": "controls/omit-data-when-empty.mjs"
+    },
+    "check": "content",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "omit-attempt-when-null",
+    "overlay": {
+      "entry.mjs": "controls/omit-attempt-when-null.mjs"
+    },
+    "check": "attempt_identity",
+    "selectionRole": "development-regression",
+    "clean": "case-024"
+  },
+  {
+    "id": "omit-error-when-null",
+    "overlay": {
+      "entry.mjs": "controls/omit-error-when-null.mjs"
+    },
+    "check": "exact_rows",
+    "selectionRole": "development-regression",
+    "clean": "case-025"
   }
 ]

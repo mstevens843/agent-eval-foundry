@@ -174,3 +174,144 @@ frozen dispatch tree before this trial ran and is unaffected by this change. **W
 trials run again:** a future checker will need to name `dependency_order` on
 `reverse-dependency-order` specifically to earn full credit; #25's existing 13/13 on the
 other controls should be unaffected.
+
+## September 9 implementation successor — ready for exploratory trials
+
+Ordered source-version identity remains part of the contract; the repeated unchanged-value amendment example is removed. The reverse-dependency-order control and its substantive dependency-order check are integrated. Exact reason labels are no longer graded, resolving the missing-label interface problem. Dependency ordering, audience handling and publication sequencing are no longer supplied in the starter.
+
+Both deliverables now have complete private oracle implementations. The public service
+starts from an empty entry point. The checker classifies every supplied case with a
+Boolean verdict; optional reasons are ungraded diagnostics, and helper modules are
+allowed. Original results above remain historical; no second model trial was run.
+
+Executed validation on this successor:
+
+- Service oracle: 27/27 scenarios; checker oracle: 14/14 candidates.
+- Protected Foundry assurance: 17 operations passed; deterministic rebuild and
+  exported-CLI recipient reproduction passed, including drift and invalid-execution checks.
+- Native Harbor oracle reward 1; native nop reward 0; no Harbor exceptions.
+- All 22 pinned upstream static checks and all six local checker/integrity controls passed.
+  These local controls are not the official model-powered cheat qualification trials.
+
+Canonical source: `tasks/issued-report-repair`. Native export:
+`.local/top-five-implementation-2026-09-09/harbor-ready/issued-report-repair`.
+
+Native export digest: `df8d825785f3e7b5d9376b248d73e7353f7b31a7933ee7c4a4ada15de58278cc`.
+Foundry package digest: `32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170`.
+
+[Versioned evidence](../evidence/2026-09-09-top-five-implementation.json) records source
+hashes, logs, per-check CTRF results and both package identities. The
+[shared implementation record](../top-five-implementation-plan-2026-09-09.md) explains
+policy and tooling changes. Use these maintained sources or the identified exports
+for the next trial, rather than the older local successor copies named above.
+
+Readiness means engineering readiness for exploration. Removing supplied implementation
+code changes the difficulty hypothesis and invalidates any attempt to reuse earlier
+model results as qualification for this version. Fresh model evidence is still needed.
+The eventual chosen submission also needs human-authored reviewer material and the
+required rubric, standard and cheat qualification runs; those requirements do not
+justify delaying exploration to qualify all five candidates.
+
+## Trial 2 — implementation successor — September 9, 2026
+
+### Identity and execution
+
+Run `issued-report-repair-attempt-1`, package digest
+`32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170`. Requested target **claude**,
+`anthropic/claude-opus-5`, effort `max`. Frozen execution source:
+`2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4`.
+The pinned author image was
+`sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a`.
+
+Started `2026-09-09T11:35:51.120Z`, completed `2026-09-09T11:55:55.282Z`.
+One of exactly five fresh campaign attempts, reserved within **232 ms** and reported
+running concurrently by the dispatching agent's `docker ps` observation. Budget:
+10,800 seconds, 2 CPUs, 2 GiB; signed subscription-only authorization, one attempt,
+no automatic retries or recorded paid-API fallback. No timeout is recorded.
+Requested settings are not runtime attestations: Claude model strings were observed;
+Codex model identity and effort/scaffold versions were unobservable in the captures.
+CLI dollar estimates are not subscription charges.
+
+### Changes and recorded results
+
+The public graph, payload, recipient and orchestration modules were removed. Ordered
+source-version identity remains normative without repeated examples. The checker was
+required in both trials; Trial 2 makes reasons diagnostic-only and adds the
+`reverse-dependency-order` control to the frozen checker bank.
+
+**Recorded reward 0. Service 27/27; checker 12/14.** The checker rejects every one of
+the fourteen candidates, including the valid reference and alternative. The original
+bank records two false rejections and no missed negative controls. The service suite
+passes; that does not establish universal correctness of the service or complete task.
+
+### Publication audit: exact failure mechanism
+
+The actual publications array contains `{after, record: Publication}` rows and the
+actual deliveries array contains `{after, receipt: Receipt}` rows. The submitted
+checker takes these arrays directly and accesses `r.report`, `r.version` and
+`r.payload` on the outer wrapper. Those fields are undefined, causing the
+`unexpected publication null vnull` messages. These are undefined fields on actual
+wrapper objects; the failure occurs when extracting their contents for comparison.
+
+The frozen CHECKER-INPUT.md names the aggregate arrays but omits their nested
+wrappers. It also supplies ordered `{seq, method, request, value}` observations,
+and the API declares the publication/delivery request and response meanings. Those
+observations are another documented route to the required facts.
+
+The task's Boolean verdict output schema is explicit. The documented observation
+route supplies the required facts independently of the aggregate arrays, so a correct
+checker does not have to guess private correctness rules or depend on their wrappers.
+
+An unchanged replay reproduces both original verdict sets. A separate shape-only
+normalization accepts both valid implementations, exposing a missed
+`reverse-dependency-order` control (13/14). A further diagnostic omits only the two
+aggregate arrays, exercising the **unchanged submitted checker's existing observation
+fallback**. It produces the same classifications: both positives accepted, dependency
+order missed. The original API observations and source code are unchanged.
+
+This establishes that the checker could obtain the needed facts through the documented
+interface. Its decision to prefer misparsed aggregates caused the original false
+rejections. **This is a supported substantive required-checker failure.** The original service 27/27, checker 12/14 and reward 0 remain
+unchanged; neither diagnostic is a new model trial or a replacement score.
+
+### Observable effort and comparison
+
+The capture analysis reports a shared `core.mjs`, a replay/diff checker and a final
+self-report of 300 random scenarios across 23 mutants with no false accepts or rejects.
+Those synthetic fixtures did not catch the real wrapper shape. The input/code/replay
+comparison identifies the parsing mistake and the sufficient observation route.
+
+Trial 1 recorded reward 1 and accepted both valid implementations. A later diagnostic
+regrade exposed missing dependency-order coverage in that older checker. Trial 2's
+shape-normalized diagnostic reveals the same kind of ordering omission in a fresh
+submission. Neither diagnostic is a scored independent replication, and the new service
+and checker construction work cannot by itself establish causal difficulty gains.
+
+### Next step
+
+Prioritize an independent repeat on this frozen package alongside incremental build.
+Do not repair the retained submitted checker or add a solution tutorial. Documenting
+aggregate wrappers more fully is an optional interface improvement, not a required
+benchmark repair established by the output-schema criterion. Keep the dependency-order
+control, whose violation follows from the existing public contract.
+
+[Rules and supporting evidence](../round-two-top-five-2026-09-09.md#rules-boundary-used-in-this-review)
+explain the assessment. Cache's distinct matching/replacement question is evaluated
+separately.
+
+### Evidence and qualification boundary
+
+The publication audit checked **837 manifest-listed files**
+for this record with zero mismatches and compared all four supplied contract/interface
+files against the frozen export. Raw evidence remains at
+`.local/round-two-top-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/issued-report-repair-attempt-1/`.
+The earlier Trial 1 text and dated engineering additions above are preserved.
+
+[Campaign results and audited decisions](../round-two-top-five-2026-09-09.md) ·
+[Sanitized trial evidence](../evidence/2026-09-09-round-two-top-five.json) ·
+[Integrity and diagnostic evidence](../evidence/2026-09-09-round-two-top-five-audit.json).
+
+This is an exploratory repository assessment. The immutable result still records
+`adjudication: unlabelled`, `modelEvidenceEligible: false` and
+`countsAsModelFailure: false`; publication does not change those fields or claim
+six standard failures, official cheat qualification or independent blind review.

@@ -85,5 +85,14 @@
     "check": "semantics",
     "clean": "case-024",
     "selectionRole": "correction-regression"
+  },
+  {
+    "id": "no-memo",
+    "overlay": {
+      "src/pattern.mjs": "controls/no-memo.mjs"
+    },
+    "check": "bounded_work",
+    "clean": "case-024",
+    "selectionRole": "post-selection-validation"
   }
 ]

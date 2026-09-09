@@ -21,8 +21,7 @@ within a job except for spent credits. No minimum parallelism is required.
 `api.debit({...request, key})` is a low-level transport, not a policy check: it can
 execute an incorrect descriptor. Use the stable request ID as `key`. Repeating
 the same key and exact descriptor is idempotent; reusing it for different business
-is forbidden. Do not substitute delivery ID, job number, delegate or wallet for
-the logical request identity. Debits return `{status:'ACCEPTED', receipt}` or
+is forbidden. Debits return `{status:'ACCEPTED', receipt}` or
 `{status:'UNKNOWN'}`. UNKNOWN may already have executed. `api.lookup({key})`
 returns `{status:'PENDING'}`, `{status:'ABSENT'}` or `{status:'ACCEPTED', receipt}`.
 After at most three lookups an attempted key becomes ACCEPTED or ABSENT. ABSENT
@@ -38,8 +37,10 @@ receipts are immutable. Do not invent receipts or leave eligible work pending.
 Return `{job, decisions:[{id, status:'accepted'|'rejected', receipt:null|Receipt}]}`
 in request order. Every receipt and status must agree with authoritative external
 execution. Rejected decisions have null receipt. APIs each take one JSON object.
-Any disk format is valid. Jobs restart only between completed calls; storage is
-retained, JavaScript globals are not. No hidden mid-write crash requirement.
+Any disk format is valid. Jobs use fresh processes with retained storage. A process may also be interrupted
+after a debit completes externally but before its response arrives; the identical
+job is redelivered with storage, receipts and spending retained. At most one such
+interruption occurs per scenario. Local files are not interrupted during writes.
 
 1–4 jobs, 1–8 requests/job, up to 4 wallets and grants/wallet, credits/limits at most
 10000. Node ESM `entry.mjs` exports `subject.run`. At most 128 regular single-link

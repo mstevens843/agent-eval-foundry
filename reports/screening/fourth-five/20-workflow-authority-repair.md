@@ -134,3 +134,24 @@ This report's diagnosis was exact and is the cleanest case in the batch: the pub
 **Regrade confirms the fix, exactly as this report anticipated.** The same preserved submission bytes, under a separately versioned diagnostic, not overwriting this result or counting as a new trial: re-run against the fixed harness with zero new model calls, now scores a full pass (14/14 correct, 0 false positives, 0 missed, all 12 controls correctly named — up from 11/12). The `misattribute-delivery` control that triggered this specifically is now credited for its `terminal_history` naming, which the public instruction always required to be acceptable.
 
 **When trials run again:** this package's grading should now correctly accept any submitted checker that names an obligation the public instruction itself directs it to name, per this report's exact recommendation ("retaining private primary labels as construction activation checks" while fixing "the universal reason-label rule").
+
+## 2026-09-09 — Engineering successor prepared for Trial 2
+
+**Ready for a second exploratory Foundry trial; no second model trial has run for this version.** This section is an engineering record, not a new reward result. Priority in the next group: 4/5. See the [selection and implementation report](../next-five-implementation-plan-2026-09-09.md) and [hashed validation evidence](../evidence/2026-09-09-next-five-implementation.json). Earlier trial results and package descriptions above remain historical.
+
+Replaced the supplied service modules with an empty entry point and completed both private service closures. Removed explicit receipt-first recovery and policy-refresh implementation advice while preserving observable origin, authority-at-effect and terminal-history requirements. Kept the maintained raw job catalog and admission-policy facts needed by the checker; did not adopt the successor's loss of those inputs. Tightened restart handling so a fabricated submission exception cannot cause an authority restart. Retained 30 scenarios and the crash-history control. The independent private checker derives root origin and authorization paths separately from the grader, then validates effect and terminal records. Reason text is diagnostic only; the historical exact-label discussion above applies to older versions.
+
+Local validation passed 17 service-assurance checks, including correct reference and alternative services, semantic failure of the untouched starter, repeatability and negative-control activation. The independent checker correctly classified 14/14 candidates: two correct implementations and 12 negative controls, with zero false accepts or misses. The Foundry export rebuilt identically and passed fresh recipient validation. All 22 native static checks passed. These controls are author-side evidence, not model attempts or proof that an unseen solver will fail.
+
+Six native verifier integrity controls passed. The final native wording differs from the tested export; verifier and oracle file bytes were independently compared and are identical. All five native Harbor end-to-end oracle/nop jobs remain pending; this does not prevent using the validated Foundry path for exploratory trials.
+
+Use this exact Foundry export:
+
+- Directory: `.local/next-five-implementation-2026-09-09/release-ready/workflow-authority-repair/export`
+- Package digest: `fc6161cdfdea1084e976ed3ce39bd7995b97fc936d238e1afbad4c0c89f84cc6`
+- Native build, with the validation boundary above: `.local/next-five-implementation-2026-09-09/harbor-final/workflow-authority-repair`
+- Native digest: `b03405f56c19cc1e6b2fecbdc812b309372864cbc7da29cb4e994374dde017d6`
+
+Both deliverables are required. The checker must return complete deterministic Boolean verdicts; reasons are optional diagnostics and submitted helpers are available. Public API, output schemas and observable requirements remain provided, without a worked implementation.
+
+When Trial 2 finishes, append its actual model/profile, frozen package digest, service and checker outcomes, elapsed time, infrastructure exclusions and observed submission defects here. Do not overwrite Trial 1 or count an infrastructure error, an author control or an old label dispute as a new standard model failure.

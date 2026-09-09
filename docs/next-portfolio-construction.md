@@ -39,8 +39,9 @@ to the historical outbox. A bad retirement rationale does not prove a strong can
 | temporal-capacity-repair | audit-truth-financial-workflow, data/population research direction | Compute exact capacity exposure from bitemporal interval corrections: revision choice at knowledge time precedes clipping/integration at effective time, with retractions, overlapping dimensions and half-open boundaries. | Sweep disjoint breakpoints using integer arithmetic, or per-tick analytical enumeration over bounded time. No outbox or external effect pattern; both valid strategies accepted. |
 
 Author estimate: roughly two to three hours per complete repair, not yet a timed
-independent human solve. Each package requires independent contract/time review before
-trial eligibility. All difficulty predictions remain hypotheses.
+independent human solve. September 9 policy update: a measured independent solve is
+optional author evidence, not an exploratory-trial gate. Contract validation and
+credible expert estimates remain required. All difficulty predictions remain hypotheses.
 
 ## Pairwise diversity
 

@@ -15,7 +15,7 @@ uppercases that expanded text iff flags=upper, and emits UTF-8 JSON.stringify of
 The issued {handle} identifies immutable {recipe,bytes}. inspect({handle}) returns
 that record or null; artifacts({}) lists all currently available handles, including
 retained earlier builds. Only compiler-issued handles can be published. This attestation
-is a required deliverable, not a requirement about which local algorithm/editor to use.
+is a required deliverable.
 A stale handle or correct-looking claimed metadata does not create a current attestation.
 
 For every requested target, the published handle must bind that action's exact entry,
@@ -34,8 +34,6 @@ Every compile CALL counts toward that round's callBudget, including unsuccessful
 This product requires incremental reuse; rebuilding everything is allowed only when it
 fits the declared budget. Every supplied round has a valid solution within that budget.
 Inspecting all cached handles and reading current source has no compile cost.
-New rounds may change included files, tool identity, flags or dependency associations.
-An unchanged entry file does not itself promise unchanged artifacts.
 
 next advances even if output is missing. compile returns {error:"recipe"} without an
 artifact for missing sources/dependencies or malformed shapes. inspect unknown returns

@@ -656,15 +656,15 @@
       "packageId": "browser-replay-repair",
       "owner": 7,
       "status": "verified",
-      "summary": "New professional-v2 corrects the browser recording mock. Actual starter, reference and alternative visible tests execute separately alongside protected controls; professional-v1 bytes remain unchanged.",
+      "summary": "Historical professional-v2 corrected the browser recording mock and executed starter/reference/alternative visible tests separately. The September 9 professional-v3 successor removes the supplied starter tests and implementation modules; historical v1/v2 evidence remains in the integration report and frozen exports.",
       "dependencies": ["PKG-BROWSER"],
       "proof": [
-        "tasks/browser-replay-repair/public/test/recording.test.mjs",
+        "reports/screening/next-five-implementation-plan-2026-09-09.md",
         "src/packages/portfolio.ts",
         "scripts/verify-authorized-execution.mjs",
         "reports/PROMPT-07-INTEGRATION.md"
       ],
-      "nextAction": "Retain professional-v1 historical bytes and observed v2 parity. The final five-package integration executes the current visible and protected controls; future package changes require new version-bound checks."
+      "nextAction": "Retain historical v1/v2 bytes and visible-test parity as historical evidence. Use the successor's protected reference/alternative controls for current Foundry validation; its deferred native browser integrity and Harbor oracle/nop checks remain pending."
     },
     {
       "id": "P6-LEGACY-CAMPAIGN-PREPARATION",

@@ -129,3 +129,24 @@ This is the one case, of three label-attribution zeros in this batch, that a har
 **This cannot retroactively change the recorded zero.** The already-submitted checker's own code still says `preservation` for this defect; the spec fix protects a *future* checker author from making the same mistake, it cannot rewrite an already-submitted implementation. Real build+validate confirms the fix breaks nothing (`local-valid: true`, every candidate including reference/alternative still pass).
 
 **When trials run again:** a fresh attempt against this package should now correctly attribute a dropped external booking to `bookings`, since the contract explicitly rules out the `preservation` misreading.
+
+## 2026-09-09 — Engineering successor prepared for Trial 2
+
+**Ready for a second exploratory Foundry trial; no second model trial has run for this version.** This section is an engineering record, not a new reward result. Priority in the next group: 3/5. See the [selection and implementation report](../next-five-implementation-plan-2026-09-09.md) and [hashed validation evidence](../evidence/2026-09-09-next-five-implementation.json). Earlier trial results and package descriptions above remain historical.
+
+Replaced the supplied implementation modules with an empty entry point and completed both private service closures. Removed the worked rejection-label mappings; accept/reject is now graded and reason text is diagnostic only. The previous label-related zero remains historical evidence and is not credited as a demonstrated capability failure for this version. Retained the clarification that moving an already-cancelled occurrence does not change its scheduled fields, and retained all 31 scenarios. The independent private checker inverts civil-time offset intervals rather than using the grader's minute-by-minute search, and checks occurrence identity, cancelled history, attendee state and external bookings. The earlier instructions about mandatory reason names in this document describe prior versions and no longer govern this successor.
+
+Local validation passed 16 service-assurance checks, including correct reference and alternative services, semantic failure of the untouched starter, repeatability and negative-control activation. The independent checker correctly classified 13/13 candidates: two correct implementations and 11 negative controls, with zero false accepts or misses. The Foundry export rebuilt identically and passed fresh recipient validation. All 22 native static checks passed. These controls are author-side evidence, not model attempts or proof that an unseen solver will fail.
+
+Six native verifier integrity controls passed. That run matches the final native export digest. All five native Harbor end-to-end oracle/nop jobs remain pending; this does not prevent using the validated Foundry path for exploratory trials.
+
+Use this exact Foundry export:
+
+- Directory: `.local/next-five-implementation-2026-09-09/release-ready/recurring-calendar-repair/export`
+- Package digest: `3ab3d6dc391d7b438424d3b3784153b0f93675b762cf07351aefb6c7105397e6`
+- Native build, with the validation boundary above: `.local/next-five-implementation-2026-09-09/harbor-final/recurring-calendar-repair`
+- Native digest: `631657ce7c2a68b5796edc8cad938cd1463b9d73474efb7563d4058d4acfd915`
+
+Both deliverables are required. The checker must return complete deterministic Boolean verdicts; reasons are optional diagnostics and submitted helpers are available. Public API, output schemas and observable requirements remain provided, without a worked implementation.
+
+When Trial 2 finishes, append its actual model/profile, frozen package digest, service and checker outcomes, elapsed time, infrastructure exclusions and observed submission defects here. Do not overwrite Trial 1 or count an infrastructure error, an author control or an old label dispute as a new standard model failure.

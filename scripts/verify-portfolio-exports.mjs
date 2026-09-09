@@ -56,10 +56,12 @@ for (const [index, input] of inputs.entries()) {
   const receipt = json(join(validation, "assurance.json"));
   assert.equal(receipt.packageDigest, digest);
   const manifest = json(join(directory, "package/private/control-manifest.json"));
+  const { positiveVariantKeys } = await import("../dist/index.js");
   const expectedControls = [
     "reference",
     "alternative",
     "starter",
+    ...positiveVariantKeys(inspected.record.components.reference.files.map((f) => f.path)).map((key) => `variant-${key}`),
     ...manifest.map((c) => c.id),
     "visible-workspace-smoke",
     "reference-repeat",

@@ -26,7 +26,7 @@ import {
   assertAssuranceCoverage,
   runAssurance,
 } from "./assurance.js";
-import { namesObservedFailure, positiveVariantKeys } from "./checker-contract.js";
+import { completeVerdicts, namesObservedFailure, positiveVariantKeys } from "./checker-contract.js";
 import { hashFile, localProcess } from "./local-process.js";
 import { decidePackage } from "./policy.js";
 import {
@@ -257,7 +257,7 @@ export async function buildPortfolioPackage(
     {
       id,
       familyId: PORTFOLIO_PACKAGES[id],
-      version: "professional-v2",
+      version: "professional-v3",
       kind: "professional-package",
       dependencies: { strategy: "conservative-repository-closure", unresolved: [] },
       files,
@@ -518,7 +518,7 @@ export interface CheckerGradeDetail {
     | "missed";
 }
 export interface CheckerGradeResult {
-  readonly reasonPolicy?: "any-observed-public-obligation";
+  readonly reasonPolicy?: "any-observed-public-obligation" | "diagnostic-only";
   readonly present: boolean;
   readonly deterministic: boolean;
   readonly total: number;
@@ -527,10 +527,7 @@ export interface CheckerGradeResult {
   readonly missed: number;
   readonly namedRightCheck: number;
   readonly details: readonly CheckerGradeDetail[];
-  /** Pass requires: checker present, deterministic, zero false positives, zero missed candidates,
-   * and the violated obligation correctly named on every correct rejection. A checker that catches
-   * a defect but cannot say which obligation it violates has not demonstrated it understood the
-   * defect — it may just be pattern-matching "this candidate looks different." */
+  /** Complete deterministic classification is required. Legacy packages also grade obligation names. */
   readonly pass: boolean;
 }
 
@@ -556,9 +553,11 @@ const CHECKER_BOOTSTRAP = `
 import { readFileSync } from "node:fs";
 const { cases } = JSON.parse(readFileSync("/cases/cases.json", "utf8"));
 const { run } = await import("/checker/checker.mjs");
+const before = JSON.stringify(cases);
 const first = await run({ cases });
+const firstJSON = JSON.stringify(first);
 const second = await run({ cases });
-process.stdout.write(JSON.stringify({ first, second }));
+process.stdout.write(JSON.stringify({ first: JSON.parse(firstJSON), second, mutated: before !== JSON.stringify(cases) }));
 `;
 
 /** Removes any key literally named "expected", "truth" or "groundTruth" from the TOP LEVEL of a
@@ -690,6 +689,13 @@ export async function gradeChecker(
     };
 
   const snapshot = snapshotAt(directory);
+  const checkerConfigFile = snapshot.record.components.verifier.files.find(
+    (f) => f.path === "private/checker-required.json",
+  );
+  const checkerConfig = checkerConfigFile
+    ? get<{ reasonPolicy?: string; submissionModules?: string }>(snapshot, "verifier", checkerConfigFile.path)
+    : {};
+  const diagnosticReasons = checkerConfig.reasonPolicy === "diagnostic-only";
   const controls = get<Control[]>(snapshot, "controls", "private/control-manifest.json");
   const allScenarios = get<Scenario[]>(snapshot, "scenarios", "private/scenarios.json");
   const { scenarioIds, undetectable } = await resolveDistinguishingScenarios(
@@ -789,8 +795,11 @@ export async function gradeChecker(
   mkdirSync(casesPath, { recursive: true });
   writeFileSync(join(casesPath, "cases.json"), JSON.stringify({ cases }));
   const checkerStagePath = join(output, "checker-stage");
-  mkdirSync(checkerStagePath, { recursive: true });
-  writeFileSync(join(checkerStagePath, "checker.mjs"), readFileSync(checkerPath));
+  if (checkerConfig.submissionModules === "workspace") stagePortfolioSubmission(submission, checkerStagePath);
+  else {
+    mkdirSync(checkerStagePath, { recursive: true });
+    writeFileSync(join(checkerStagePath, "checker.mjs"), readFileSync(checkerPath));
+  }
 
   const runtime = get<Runtime>(snapshot, "dependencies", "runtime.json");
   const name = `foundry-checker-${randomUUID()}`;
@@ -835,15 +844,23 @@ export async function gradeChecker(
     throw new Error("CHECKER_EXECUTION_INVALID", { cause: err });
   }
 
-  let parsed: { first: { verdicts: Record<string, { ok: boolean; reasons?: string[] }> }; second: unknown };
+  let parsed: {
+    first: { verdicts: Record<string, { ok: boolean; reasons?: string[] }> };
+    second: { verdicts: Record<string, { ok: boolean }> };
+    mutated?: boolean;
+  };
   try {
     parsed = JSON.parse(stdout);
     if (
       !parsed ||
-      typeof parsed.first !== "object" ||
-      !parsed.first ||
-      typeof parsed.first.verdicts !== "object" ||
-      !parsed.first.verdicts
+      !completeVerdicts(
+        parsed.first,
+        cases.map((c) => c.token),
+      ) ||
+      !completeVerdicts(
+        parsed.second,
+        cases.map((c) => c.token),
+      )
     )
       throw new Error("CHECKER_OUTPUT_SHAPE");
   } catch {
@@ -859,7 +876,11 @@ export async function gradeChecker(
       pass: false,
     };
   }
-  const deterministic = canonicalJson(parsed.first) === canonicalJson(parsed.second);
+  const deterministic =
+    parsed.mutated !== true &&
+    (diagnosticReasons
+      ? cases.every(({ token }) => parsed.first.verdicts[token]?.ok === parsed.second.verdicts[token]?.ok)
+      : canonicalJson(parsed.first) === canonicalJson(parsed.second));
 
   let correct = 0;
   let falsePositives = 0;
@@ -895,7 +916,7 @@ export async function gradeChecker(
   }
 
   const grade: CheckerGradeResult = {
-    reasonPolicy: "any-observed-public-obligation",
+    reasonPolicy: diagnosticReasons ? "diagnostic-only" : "any-observed-public-obligation",
     present: true,
     deterministic,
     total: cases.length,
@@ -904,7 +925,11 @@ export async function gradeChecker(
     missed,
     namedRightCheck,
     details,
-    pass: deterministic && falsePositives === 0 && missed === 0 && namedRightCheck === controls.length,
+    pass:
+      deterministic &&
+      falsePositives === 0 &&
+      missed === 0 &&
+      (diagnosticReasons || namedRightCheck === controls.length),
   };
   // Retain the exact private grading policy and authoritative failures. None are
   // included in cases.json or mounted into the checker process.
@@ -1036,7 +1061,10 @@ export async function validatePortfolioPackage(directory: string, output: string
         const tests = readPackageTree(publicPath)
           .filter((f) => /^test\/.*\.test\.mjs$/.test(f.path))
           .map((f) => `/submission/${f.path}`);
-        if (!tests.length) throw Error("VISIBLE_TESTS_MISSING");
+        if (!tests.length) {
+          observations.push({ name, tests, status: "not-supplied" });
+          continue;
+        }
         const result = await docker(
           [
             "run",
@@ -1062,7 +1090,9 @@ export async function validatePortfolioPackage(directory: string, output: string
             `type=bind,src=${resolve(publicPath)},dst=/submission,readonly`,
             runtime.image,
             "node",
-            "--test",
+            "-e",
+            // Test failures are expected on a skeleton. Spawn/timeout errors remain errors.
+            `const {spawnSync}=require('node:child_process');const r=spawnSync(process.execPath,['--test',...process.argv.slice(1)],{stdio:'inherit'});if(r.error||r.signal)process.exit(2);process.exit(${name === "starter" ? "r.status === 0 || r.status === 1 ? 0 : 2" : "r.status ?? 2"});`,
             ...tests,
           ],
           { timeoutMs: 60000, log: join(output, `visible-tests-${name}.log`) },
@@ -1129,7 +1159,7 @@ export async function validatePortfolioPackage(directory: string, output: string
       sha256: sha256(f.bytes),
       size: f.bytes.length,
     })),
-    qualification: "Local controls only; independent human review and all model trials pending.",
+    qualification: "Local controls only; final reviewer material, rubric and all model trials pending.",
   });
   return { results, decision };
 }
@@ -1146,6 +1176,9 @@ export async function verifyPortfolioReceipt(directory: string, receiptPath: str
     "reference",
     "alternative",
     "starter",
+    ...positiveVariantKeys(snapshot.record.components.reference.files.map((f) => f.path)).map(
+      (key) => `${NAMED_VARIANT_PREFIX}${key}`,
+    ),
     ...controls.map((c) => c.id),
     "visible-workspace-smoke",
     "reference-repeat",
@@ -1200,6 +1233,34 @@ export async function verifyPortfolioReceipt(directory: string, receiptPath: str
     for (const name of ["starter", "reference", "alternative"])
       if (!receipt.evidenceFiles.some((f) => f.path === `visible-tests-${name}.log`))
         throw Error("PORTFOLIO_VISIBLE_PARITY_REQUIRED");
+  }
+  if (snapshot.record.version === "professional-v3") {
+    const names = [
+      "starter",
+      "reference",
+      "alternative",
+      ...expected.filter((id) => id.startsWith(NAMED_VARIANT_PREFIX)),
+    ];
+    const visible = receipt.results.find((r) => r.id === "visible-workspace-smoke");
+    const observations = (
+      visible?.detail as
+        | {
+            observations?: { name: string; tests: string[]; status?: string }[];
+          }
+        | undefined
+    )?.observations;
+    if (
+      !Array.isArray(observations) ||
+      observations.length !== names.length ||
+      names.some((name) => {
+        const row = observations.find((o) => o.name === name);
+        if (!row || !Array.isArray(row.tests)) return true;
+        return row.tests.length === 0
+          ? row.status !== "not-supplied"
+          : !receipt.evidenceFiles.some((f) => f.path === `visible-tests-${name}.log`);
+      })
+    )
+      throw Error("PORTFOLIO_VISIBLE_PARITY_REQUIRED");
   }
   const evidence = readPackageTree(dirname(receiptPath)).filter((f) => f.path !== "assurance.json");
   if (

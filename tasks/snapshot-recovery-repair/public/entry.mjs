@@ -1,2 +1,3 @@
-import { recover } from "./src/coordinator.mjs";
-export const subject = { run: recover };
+export const subject = {
+  async run(view, api) { return {}; },
+};

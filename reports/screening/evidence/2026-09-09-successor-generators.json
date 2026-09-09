@@ -1,0 +1,8 @@
+[
+  {
+    "id": "issued-report-repair",
+    "historicalGeneratorSha256": "a047cb46b5f3d6ff6cede603e1822f4601ea114213f17a9696b3ca02f61cdaca",
+    "generatorSha256": "1bcd6a8299e49f3281df14450c316379b3ec87d8b7cfded31e757dc351eeeb86",
+    "reason": "Integrated the documented successor check registry; historical selection hash retained."
+  }
+]
