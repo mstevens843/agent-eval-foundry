@@ -192,3 +192,93 @@ recurs. One observed failure does not yet establish a repeated failure rate.
 Reward **0**; service **33/33**; checker **10/12**. All **785** completion-manifest files matched their recorded sizes and hashes.
 
 [Campaign results](../round-two-third-ranked-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-third-ranked-five.json). Trial 1 is preserved.
+
+## Trial 3 — repeat attempt — September 9, 2026
+
+### A. Identity and execution
+
+Run `snapshot-recovery-repair-attempt-1` in a fresh campaign slot
+(`.local/round-three-failing-five-2026-09-09/`), package digest
+`719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b` — byte-identical
+to Trial 2's package; the public contract and private controls did not change.
+Route `professional-multifile/authority-process@1`. Target: **codex**, the same
+provider as Trial 2. Requested `openai/gpt-5.6-sol`, effort `xhigh`, CLI
+`scaffoldVersion 0.153.2`; model/effort/scaffold version were unobservable from
+the codex CLI's event stream, as before. The controller re-verified the profile
+and instruction hash were identical to the retained Trial 2 record before
+dispatching, and gave the solver only the original public task inputs — no prior
+submission, analysis, or this handoff.
+
+Dispatched 2026-09-09T19:02:12.794Z as one of five reservations installed within
+a 217ms window (19:02:12.628Z–19:02:12.845Z); `docker ps` confirmed all five
+`foundry-real-*` containers running concurrently. Completed 2026-09-09T19:20:05.212Z.
+Total elapsed ≈1,072,418ms (~17m52s); solver authoring time ≈1,065,515ms (~17m45s);
+grading ≈6.9s. Token usage: 527,349 input tokens (481,920 cached), 32,368 output;
+codex reports no price estimate. Execution reached a clean `completed` state, no
+invalid execution or infrastructure error.
+
+### B. Results
+
+**Reward 1 — a clean pass, resolving Trial 2's reward-zero outcome.** Service
+(`entry.mjs`) passes all 33 scenarios, matching Trial 2's already-correct service.
+Checker: `checkerRequired: true`, `checkerPassed: true`, 12/12 candidates correctly
+classified — 0 missed, 0 false positives. Both known-good candidates (`reference`,
+`alternative`) are accepted this time, and all ten negative controls are rejected.
+
+### C. Comparison with Trial 2 and recurrence assessment
+
+**Trial 2's specific checker defect did not recur.** Trial 2's `archiveBytes()`
+unconditionally treated `publications[0].archive` as either a base64 string or a
+`{bytes: string}` wrapper, and threw "missing its bytes" on the actual harness
+shape — an already-decoded state object — failing all twelve candidates on that
+path alone. This Trial 3 submission's equivalent function, `decodeArchiveValue()`
+(`checker.mjs:156-165`), is defensive by construction:
+
+```js
+function decodeArchiveValue(value) {
+  if (value && typeof value === "object" && typeof value.bytes === "string") value = value.bytes;
+  if (typeof value !== "string") return value;
+  ...
+}
+```
+
+It checks the runtime type of `value` before deciding whether to unwrap or
+base64-decode it: an already-materialized object is returned unchanged (line 158),
+a `{bytes}` wrapper is unwrapped first (line 157), and only an actual string gets
+the base64/JSON decode path. This single type check is exactly the generalization
+Trial 2's checker lacked — it never assumed one fixed wire shape for the archive
+field, so the ambiguity between `SEMANTICS.md`'s documented `api.archive({bytes})`
+outbound-call shape and the checker's actual already-decoded input shape never
+produced a false rejection.
+
+This attempt avoided Trial 2's input-parsing mistake. It ends the literal
+consecutive-zero streak, while preserving Trial 2's failure in the six-attempt
+record. One failure and one pass are insufficient to establish a stable failure
+rate or label the earlier failure a one-off.
+
+### D. Observable solving behavior
+
+The capture is compact: 31 events, 14 command executions, 10 file changes, 4 agent
+messages. After implementing `entry.mjs` and `checker.mjs`, the agent's self-testing
+included direct scrutiny of the observation/publication shapes it would receive —
+`decodeArchiveValue`'s type-guarded structure itself is evidence the agent considered
+more than one possible input shape for `archive`, rather than assuming the wire-format
+description in `SEMANTICS.md` also described the checker's own input. No failed
+self-test or reverted approach is visible in the capture; the file-change history
+shows a single, direct implementation of both deliverables without a later patch to
+fix an archive-decoding assumption, unlike a scenario where the bug would have been
+caught and fixed after failing self-tests — here it appears to have been avoided by
+construction rather than caught and repaired.
+
+### E. Next step
+
+Retest the unchanged package on Codex. It has used the one solver pass permitted
+by the reported 5-of-6 acceptance threshold and needs four failures in the
+remaining four attempts. A second pass would put this planned six-run set below
+that threshold; one pass alone does not require optimization or a restart.
+
+### Acceptance progress and next prepared attempt
+
+This unchanged successor has **1 failure and 1 solver pass in two scored attempts**, both on Codex. The user reports that the CEO accepts at least **five failures out of six**, with three attempts per provider; six consecutive failures is the stricter aspiration, not the acceptance threshold. This package remains within that threshold and needs **4 failures from the remaining four attempts**. Different failure mechanisms can count; no identical-bug requirement is added.
+
+The next attempt is **Trial 4 in this document, the third attempt on this successor**, using the same provider, package and saved profile again. Afterward, this package will have three runs on its original provider and will need three on the other provider. [Prepared Trial 4 handoff](../../../docs/round-four-failing-five-handoff.md). Preparation launches no model calls.

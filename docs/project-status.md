@@ -4,6 +4,28 @@ September 9, 2026. Navigation and status, not a package-policy approval.
 
 ## Latest measured progress
 
+**Three packages have two consecutive recorded reward-zero results on unchanged
+successors: incremental build (21), issued report (25), and variant cache (19).**
+All five Trial 3 attempts completed without infrastructure errors. Snapshot recovery
+(11) and temporal capacity (10) passed this attempt, retaining their earlier failures
+in the same-version record. [Trial 3 results](../reports/screening/round-three-failing-five-2026-09-09.md).
+
+The user reports that the CEO accepts **at least five failures out of six**, with
+**three Claude and three Codex attempts per package**. All five remain within the
+numerical threshold. The three at 2/2 need at least 3 failures from the remaining
+4 attempts; the two at 1/2 need all 4. Different valid failure mechanisms can count;
+one solver pass does not require restarting under this criterion.
+
+**The next five attempts are prepared with the same providers again:** Claude for
+19/25/10, Codex for 21/11. This completes three same-provider attempts on each
+successor; the opposite-provider runs come afterward. It is labeled **Trial 4** in
+the full histories. [Prepared handoff](round-four-failing-five-handoff.md).
+Preparation made zero provider calls.
+
+Successor Trials 2 and 3 total **31 attempts: 30 scored, 8 recorded zeroes,
+22 solver passes and 1 historical infrastructure interruption**, across the same
+25 packages. The historical Trial 2 totals below remain separate.
+
 **All 25 packages have completed Trial 2: five recorded zero rewards and twenty
 solver passes.** There were 26 attempts, including route policy's earlier unscored
 interruption and successful separate retry. The latest two groups added one zero,
@@ -46,6 +68,16 @@ and the existing documented matching/replacement contract question. This update
 adds temporal capacity's failure and route policy's resolved retry without changing
 the earlier audit or any other raw scores.
 
+**Trial 3 failure mechanisms:** incremental build again omitted issuance-before-use
+ordering; issued report again rejected both known-good candidates, this time because
+delivery wrappers were not handled. Variant cache passed 5/25 service scenarios and
+failed 20 on `origin_load`, while its checker missed the same candidate as Trial 2.
+Its new origin-budget service failure is supported independently of the earlier
+matching/replacement note. Mechanism differences describe what happened; they are
+not a requirement that failures repeat the same bug. The two passing submissions
+avoided their earlier checker mistakes; two runs are too few to call those failures
+one-off or estimate a dependable failure rate.
+
 The second group is now fully documented: four completed solver passes and route
 policy's infrastructure interruption, now resolved by the separate retry above
 (reward null is preserved on the original interrupted record; the retry is its own,
@@ -57,6 +89,12 @@ completion-manifest files have been verified: 11,525 from the first three groups
 3,945 from the fourth, 3,627 from the fifth and 745 from the route-policy retry.
 No package remains without a completed Trial 2 result. The original interruption
 is preserved, and no package, submission or raw grade changed in this publication.
+
+All five original analysis files also contain Trial 3 results. Their **4,448**
+completion-manifest files were reverified, giving **24,290** across scored successor
+attempts. Two Trial 3 publication rows incorrectly copied the service outcome as the
+overall outcome; they now match raw results, with the service outcome separate.
+No recorded reward changed.
 
 Prioritize observed required-deliverable failures for further trials; retain solver
 passes as correct controls. Temporal capacity and snapshot recovery can be repeated
@@ -75,7 +113,7 @@ The foundry assembles separate solver/verifier workspaces, validates local contr
 
 The original 25 screenings all passed their service suites. Their recorded checker
 outcomes and historical grading concerns remain intact in the [trial index](../reports/screening/README.md).
-Twenty-six successor attempts, twenty-five scored, now extend that history; the Trial 2 results above
+Thirty-one successor attempts, thirty scored, now extend that history; the Trial 2 results above
 must not be merged into the original table or treated as repeat runs of identical versions.
 
 Engineering preparation covers [19/21/25/24/07](../reports/screening/top-five-implementation-plan-2026-09-09.md),
@@ -134,7 +172,9 @@ These links are reviewer-facing and include private grading material. Solvers re
 
 ## What remains
 
-Construction is not empirical hardness or authorization. Independent fairness/bounded-time review, exact effective-profile evidence, destination acceptance and official standard/adversarial qualification remain per-version requirements.
+The planned six-run sets and required final standard/adversarial qualification remain
+incomplete. The current acceptance threshold is the user's reported 5-of-6 criterion;
+this progress report adds no requirement for identical bugs or six consecutive zeroes.
 
 The partial-release reason-format issue remains a blocker for treating its historical zero as a capability failure. Shared reason-prefix matching and explicit checker schemas were repaired in new versions before batch 3. No historical result is overwritten by that repair.
 
@@ -145,10 +185,9 @@ as an undisputed fair failure. Incremental build and issued report can be repeat
 their frozen versions without adding solution guidance. Additional issued-report
 aggregate-input documentation is optional; its documented observations already suffice.
 
-Browser and delegated-budget successor recovery work is now integrated with retained
-validation evidence. Their old Trial 1 results still measure the old versions. The two
-other original packages with separate local successor work are not silently covered by
-this fifteen-package preparation milestone.
+All twenty-five successor packages have retained validation evidence. Their old
+Trial 1 results still measure the old versions. Trial 2 and Trial 3 results retain
+their exact package and profile identities; preparation of Trial 4 changes neither.
 
 Fresh verification and limits appear in [the publication report](../reports/PORTFOLIO-PUBLICATION.md). Historical snapshot-local assurance does not automatically certify a new merged build. No new provider attempts or release approvals are made by publication.
 

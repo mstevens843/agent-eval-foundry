@@ -1,0 +1,361 @@
+{
+  "schemaVersion": 1,
+  "evidenceClass": "trial-preparation-no-provider-calls",
+  "created": "2026-09-09T18:53:40.498Z",
+  "campaign": "2026-09-09-round-three-failing-five",
+  "trialLabel": "Trial 3",
+  "status": "verified-for-preparation-not-dispatched",
+  "providerCallsMade": 0,
+  "concurrency": 5,
+  "maxProviderCalls": 5,
+  "automaticRetries": 0,
+  "billingMode": "subscription-only",
+  "qualificationTarget": {
+    "perUnchangedPackage": true,
+    "consecutiveCleanFailures": 6,
+    "claude": 3,
+    "codex": 3
+  },
+  "currentPurpose": "Test whether each Trial 2 zero repeats in one fresh same-provider attempt. Do not pool failures across packages.",
+  "runtime": {
+    "root": ".local/round-two-top-five-2026-09-09/frozen-source",
+    "path": ".local/round-two-top-five-2026-09-09/frozen-source/dist/index.js",
+    "sha256": "60695de963e5085dfe8ee4fb09353b1db0169219d9ad9425ac2a997a73b69b26",
+    "sourceDigest": "2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4"
+  },
+  "controllerTemplate": {
+    "path": ".local/round-two-final-five-2026-09-09/campaign.mjs",
+    "sha256": "2e1b7bc53c13cc6a2ca24e0a0d7dacd6a4d52fc29539e429aefbdb6e24257004"
+  },
+  "validationScope": "Rehashed unchanged export snapshots, instructions, profiles, previous results and assurance records; reused existing complete validation. No new oracle or model runs.",
+  "packages": [
+    {
+      "number": 19,
+      "id": "variant-cache-repair",
+      "target": "claude",
+      "analysis": "reports/screening/fourth-five/19-variant-cache-repair.md",
+      "foundry": {
+        "export": ".local/top-five-implementation-2026-09-09/release-ready/variant-cache-repair/export",
+        "digest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+        "assurance": {
+          "path": ".local/top-five-implementation-2026-09-09/release-ready/variant-cache-repair/validation/assurance.json",
+          "sha256": "310d712f9d1885d6b41b47e97f7da10a2ba73fd443cc3ef14f604f9028082200"
+        },
+        "assuranceChecks": 18
+      },
+      "native": {
+        "digest": "d291ca623b9d2112cfb28670110870c5e5b19dfe3602f6f2c16fc9f79b95f3a3"
+      },
+      "authoringEvidence": {
+        "path": "reports/screening/evidence/2026-09-09-top-five-implementation.json",
+        "sha256": "9f036284985ef8fe750fd22bdfeb9154ec9441529a7c289b6e38106ce5cbc3ad"
+      },
+      "previousTrial": {
+        "label": "Trial 2",
+        "campaign": "2026-09-09-round-two-top-five",
+        "reward": 0,
+        "ready": {
+          "path": ".local/round-two-top-five-2026-09-09/real-campaign-frozen/READY.json",
+          "sha256": "b130389a0d47f3ba853a8054d08d69e15832ec76fda5a39973dd3fd59ab6b7b5"
+        },
+        "profile": {
+          "path": ".local/round-two-top-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/variant-cache-repair-attempt-1/profile.json",
+          "sha256": "f41fde8ae983375d6bfc47f9eaf5838fce2e0d2854728176d80df1de5dab42c2"
+        },
+        "result": {
+          "path": ".local/round-two-top-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/variant-cache-repair-attempt-1/result.json",
+          "sha256": "cfc6a938bd349e8794fdcdda198a0e6136f505d13704b211b2dfde52ebc940ef"
+        },
+        "grade": {
+          "path": ".local/round-two-top-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/variant-cache-repair-attempt-1/grade.json",
+          "sha256": "86e4df4215c871709e7e60dc1408913288b8aff37dc6c00dc8e6ca7c10126693"
+        },
+        "completion": {
+          "path": ".local/round-two-top-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/variant-cache-repair-attempt-1/completion.json",
+          "sha256": "66e218606d576f59b4db0c2577e7e146959641a787ca2fd16fdf7673f0868632"
+        },
+        "publication": {
+          "path": "reports/screening/evidence/2026-09-09-round-two-top-five.json",
+          "sha256": "e8d3f2c9ea55aff9e35e2d1515ef7e432bb621a2b141def30aa0da7afedf1e5f"
+        },
+        "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+        "instructionSha256": "9d3ed7b2d39fc5a9cbddb56f636539686cec895b6961cac1e6004eefdca28f0a",
+        "service": {
+          "scenarios": 25,
+          "failedScenarios": 1,
+          "invalidScenarios": 0,
+          "failures": {
+            "case-022": [
+              "cache_provenance"
+            ]
+          }
+        },
+        "checker": {
+          "correct": 14,
+          "total": 15
+        },
+        "assessment": "service-failure-contract-attribution-held"
+      },
+      "retainedAuditNote": "The existing matching/replacement contract-attribution note remains open. This unchanged exploratory repeat neither resolves it nor changes the recorded reward."
+    },
+    {
+      "number": 21,
+      "id": "incremental-build-repair",
+      "target": "codex",
+      "analysis": "reports/screening/fifth-five/21-incremental-build-repair.md",
+      "foundry": {
+        "export": ".local/top-five-implementation-2026-09-09/release-ready/incremental-build-repair/export",
+        "digest": "34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a",
+        "assurance": {
+          "path": ".local/top-five-implementation-2026-09-09/release-ready/incremental-build-repair/validation/assurance.json",
+          "sha256": "429858e2d66eb09119bc4a210c9de9a81e77aa517189379a55e0a473519a9359"
+        },
+        "assuranceChecks": 18
+      },
+      "native": {
+        "digest": "3517d6932c67baba9803be6c8c153c9c958c10357a35503ecb15879655f2f2b8"
+      },
+      "authoringEvidence": {
+        "path": "reports/screening/evidence/2026-09-09-top-five-implementation.json",
+        "sha256": "9f036284985ef8fe750fd22bdfeb9154ec9441529a7c289b6e38106ce5cbc3ad"
+      },
+      "previousTrial": {
+        "label": "Trial 2",
+        "campaign": "2026-09-09-round-two-top-five",
+        "reward": 0,
+        "ready": {
+          "path": ".local/round-two-top-five-2026-09-09/real-campaign-frozen/READY.json",
+          "sha256": "b130389a0d47f3ba853a8054d08d69e15832ec76fda5a39973dd3fd59ab6b7b5"
+        },
+        "profile": {
+          "path": ".local/round-two-top-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/incremental-build-repair-attempt-1/profile.json",
+          "sha256": "d5e786f8e5e59bc690f24c6d7b31f425ac7d0cc08d6f89f54240ea1243e9ef81"
+        },
+        "result": {
+          "path": ".local/round-two-top-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/incremental-build-repair-attempt-1/result.json",
+          "sha256": "4d09e540b0805855fc56c2a27b033d7138e6b1b6d926952b7163e00ec718be0d"
+        },
+        "grade": {
+          "path": ".local/round-two-top-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/incremental-build-repair-attempt-1/grade.json",
+          "sha256": "6cf6fd4d904353a0a18bc84c141c5b62713e347f37d5da982ef3792aa36b9456"
+        },
+        "completion": {
+          "path": ".local/round-two-top-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/incremental-build-repair-attempt-1/completion.json",
+          "sha256": "98f222b90defb92d6ca6a9c5c7d2a945db1905efa1fcb193220476aa8f5989b7"
+        },
+        "publication": {
+          "path": "reports/screening/evidence/2026-09-09-round-two-top-five.json",
+          "sha256": "e8d3f2c9ea55aff9e35e2d1515ef7e432bb621a2b141def30aa0da7afedf1e5f"
+        },
+        "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+        "instructionSha256": "9d25b52d206cba5ee9401a33edd071c8c3c278aab9380d28d93a28ac2a281b70",
+        "service": {
+          "scenarios": 27,
+          "failedScenarios": 0,
+          "invalidScenarios": 0,
+          "failures": {}
+        },
+        "checker": {
+          "correct": 14,
+          "total": 15
+        },
+        "assessment": "substantive-required-checker-failure"
+      },
+      "retainedAuditNote": null
+    },
+    {
+      "number": 25,
+      "id": "issued-report-repair",
+      "target": "claude",
+      "analysis": "reports/screening/fifth-five/25-issued-report-repair.md",
+      "foundry": {
+        "export": ".local/top-five-implementation-2026-09-09/release-ready/issued-report-repair/export",
+        "digest": "32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170",
+        "assurance": {
+          "path": ".local/top-five-implementation-2026-09-09/release-ready/issued-report-repair/validation/assurance.json",
+          "sha256": "127fb137b0ee965a144958d13247f82e6d045a5f340a769e7f13a2216195eb4a"
+        },
+        "assuranceChecks": 17
+      },
+      "native": {
+        "digest": "df8d825785f3e7b5d9376b248d73e7353f7b31a7933ee7c4a4ada15de58278cc"
+      },
+      "authoringEvidence": {
+        "path": "reports/screening/evidence/2026-09-09-top-five-implementation.json",
+        "sha256": "9f036284985ef8fe750fd22bdfeb9154ec9441529a7c289b6e38106ce5cbc3ad"
+      },
+      "previousTrial": {
+        "label": "Trial 2",
+        "campaign": "2026-09-09-round-two-top-five",
+        "reward": 0,
+        "ready": {
+          "path": ".local/round-two-top-five-2026-09-09/real-campaign-frozen/READY.json",
+          "sha256": "b130389a0d47f3ba853a8054d08d69e15832ec76fda5a39973dd3fd59ab6b7b5"
+        },
+        "profile": {
+          "path": ".local/round-two-top-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/issued-report-repair-attempt-1/profile.json",
+          "sha256": "f41fde8ae983375d6bfc47f9eaf5838fce2e0d2854728176d80df1de5dab42c2"
+        },
+        "result": {
+          "path": ".local/round-two-top-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/issued-report-repair-attempt-1/result.json",
+          "sha256": "f163ed68f1415e4a6a4a37155ca743505c48852b6b4ddd36e0a0699cab462af2"
+        },
+        "grade": {
+          "path": ".local/round-two-top-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/issued-report-repair-attempt-1/grade.json",
+          "sha256": "ca818a8a6a6c1f8516dfb121a3411cc62f5bf8ba6675b079de0fb6146b430df3"
+        },
+        "completion": {
+          "path": ".local/round-two-top-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/issued-report-repair-attempt-1/completion.json",
+          "sha256": "0de3deffe7cfdcc23daf5ee127990b917f5b5d3abc6d7227dfef3fc406045f19"
+        },
+        "publication": {
+          "path": "reports/screening/evidence/2026-09-09-round-two-top-five.json",
+          "sha256": "e8d3f2c9ea55aff9e35e2d1515ef7e432bb621a2b141def30aa0da7afedf1e5f"
+        },
+        "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+        "instructionSha256": "4f536dfe221dbd4f3eb801af636e4d21e783d5386aa2ead1776d33cca4dced6a",
+        "service": {
+          "scenarios": 27,
+          "failedScenarios": 0,
+          "invalidScenarios": 0,
+          "failures": {}
+        },
+        "checker": {
+          "correct": 12,
+          "total": 14
+        },
+        "assessment": "substantive-required-checker-failure"
+      },
+      "retainedAuditNote": null
+    },
+    {
+      "number": 11,
+      "id": "snapshot-recovery-repair",
+      "target": "codex",
+      "analysis": "reports/screening/third-five/11-snapshot-recovery-repair.md",
+      "foundry": {
+        "export": ".local/third-ranked-five-implementation-2026-09-09/release-ready/snapshot-recovery-repair/export",
+        "digest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+        "assurance": {
+          "path": ".local/third-ranked-five-implementation-2026-09-09/release-ready/snapshot-recovery-repair/validation/assurance.json",
+          "sha256": "d8ecbce96fdbf2845f6c4e6b022ebff19089757d733ec342a0d759363acbf845"
+        },
+        "assuranceChecks": 15
+      },
+      "native": {
+        "digest": "0f6dc04823c9325db86c4b613bd53ccbea9f3c2e46b34001b47c92d048bf6f70"
+      },
+      "authoringEvidence": {
+        "path": "reports/screening/evidence/2026-09-09-third-ranked-five-implementation.json",
+        "sha256": "68721643c040b28cb803942486e6964687fbaa243b8acc74dfa368507394eddb"
+      },
+      "previousTrial": {
+        "label": "Trial 2",
+        "campaign": "2026-09-09-round-two-third-ranked-five",
+        "reward": 0,
+        "ready": {
+          "path": ".local/round-two-third-ranked-five-2026-09-09/real-campaign-frozen/READY.json",
+          "sha256": "60233643e562be5c517c897da0275cb9e5f045f2852cb1417c8a48b678639a03"
+        },
+        "profile": {
+          "path": ".local/round-two-third-ranked-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/snapshot-recovery-repair-attempt-1/profile.json",
+          "sha256": "d5e786f8e5e59bc690f24c6d7b31f425ac7d0cc08d6f89f54240ea1243e9ef81"
+        },
+        "result": {
+          "path": ".local/round-two-third-ranked-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/snapshot-recovery-repair-attempt-1/result.json",
+          "sha256": "867282ea7d8b1caba10139fe6d21049fb01b025bdec5b33b11d23f508857a43e"
+        },
+        "grade": {
+          "path": ".local/round-two-third-ranked-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/snapshot-recovery-repair-attempt-1/grade.json",
+          "sha256": "7f5be95df41e0e808bb7e13416d9c0697ed2005587de1237217347832bf428b9"
+        },
+        "completion": {
+          "path": ".local/round-two-third-ranked-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/snapshot-recovery-repair-attempt-1/completion.json",
+          "sha256": "f17e14b59f72b52b8c41a0d44c14c051f3453415783f3ea85e97906a323068cc"
+        },
+        "publication": {
+          "path": "reports/screening/evidence/2026-09-09-round-two-third-ranked-five.json",
+          "sha256": "ec82b4dfbcaa79d16b6659acd432e2b54c7b42e728939f57382e739d07c5c875"
+        },
+        "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+        "instructionSha256": "f2943b58bcb8caf0b9ac4923faad365b7de28b8a2da2f912121146f2aada4e4c",
+        "service": {
+          "scenarios": 33,
+          "failedScenarios": 0,
+          "invalidScenarios": 0,
+          "failures": {}
+        },
+        "checker": {
+          "correct": 10,
+          "total": 12
+        },
+        "assessment": "substantive-required-checker-failure"
+      },
+      "retainedAuditNote": null
+    },
+    {
+      "number": 10,
+      "id": "temporal-capacity-repair",
+      "target": "claude",
+      "analysis": "reports/screening/next-five/10-temporal-capacity-repair.md",
+      "foundry": {
+        "export": ".local/final-five-implementation-2026-09-09/release-ready/temporal-capacity-repair/export",
+        "digest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+        "assurance": {
+          "path": ".local/final-five-implementation-2026-09-09/release-ready/temporal-capacity-repair/validation/assurance.json",
+          "sha256": "52645fe892098d6064f22eb3f8817cb2895039f8c5c3817235421f7c3cf182e2"
+        },
+        "assuranceChecks": 16
+      },
+      "native": {
+        "digest": "6d5b00c7164f9602bc5e3ca9207924ac66650a3becff24f674589650689879a3"
+      },
+      "authoringEvidence": {
+        "path": "reports/screening/evidence/2026-09-09-final-five-implementation.json",
+        "sha256": "36ffa3235d451f6806c5715a3a9d812dbcb094989fcd2e33f13758880e55ec2d"
+      },
+      "previousTrial": {
+        "label": "Trial 2",
+        "campaign": "2026-09-09-round-two-final-five",
+        "reward": 0,
+        "ready": {
+          "path": ".local/round-two-final-five-2026-09-09/real-campaign-frozen/READY.json",
+          "sha256": "506f1a2c07739b9f565803f2872710cee1e45f1913aba7e12f8b8b96909183b8"
+        },
+        "profile": {
+          "path": ".local/round-two-final-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/temporal-capacity-repair-attempt-1/profile.json",
+          "sha256": "f41fde8ae983375d6bfc47f9eaf5838fce2e0d2854728176d80df1de5dab42c2"
+        },
+        "result": {
+          "path": ".local/round-two-final-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/temporal-capacity-repair-attempt-1/result.json",
+          "sha256": "7f8ce6bd6233ccbc0a0ce84da74faf6dcff9e1014563be8deaf11a3fdcb57437"
+        },
+        "grade": {
+          "path": ".local/round-two-final-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/temporal-capacity-repair-attempt-1/grade.json",
+          "sha256": "986881fbcb08e757e0d87e279eb272e31502ba499badfef41ae3d53f5d50aaef"
+        },
+        "completion": {
+          "path": ".local/round-two-final-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/temporal-capacity-repair-attempt-1/completion.json",
+          "sha256": "1f5c683f47944ade7246b20c6b44eba57abdb4604e462f0ecfb565532a154870"
+        },
+        "publication": {
+          "path": "reports/screening/evidence/2026-09-09-round-two-final-five.json",
+          "sha256": "383bd1ea53575f7f3a935eb094ad7e2fb7b51b2aa9f358328e4141c8ee5a960f"
+        },
+        "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+        "instructionSha256": "051ecc01b96d4b25362f370676df04b41249e6ac8a46eda875b23f0b3c3f54a7",
+        "service": {
+          "scenarios": 34,
+          "failedScenarios": 0,
+          "invalidScenarios": 0
+        },
+        "checker": {
+          "correct": 12,
+          "total": 13
+        },
+        "assessment": "substantive-required-checker-failure"
+      },
+      "retainedAuditNote": null
+    }
+  ]
+}

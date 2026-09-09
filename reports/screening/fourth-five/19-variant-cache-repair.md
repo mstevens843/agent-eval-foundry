@@ -271,3 +271,92 @@ This is an exploratory repository assessment. The immutable result still records
 `adjudication: unlabelled`, `modelEvidenceEligible: false` and
 `countsAsModelFailure: false`; publication does not change those fields or claim
 six standard failures, official cheat qualification or independent blind review.
+
+## Trial 3 — repeat attempt — September 9, 2026
+
+### Identity and execution
+
+Run `variant-cache-repair-attempt-1` in a fresh Trial-3 campaign slot, package digest
+`73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b` — byte-identical to
+Trial 2's package; the controller hard-asserted the profile and instruction hash matched
+the Trial 2 record before dispatching, so any behavioral difference here is attributable
+to the solver, not to a changed contract or setting. Requested target **claude** (same
+provider as Trial 2), `anthropic/claude-opus-5`, effort `max`, CLI `2.1.263`. Observed:
+model `claude-opus-5` confirmed; effort and scaffold version unobservable, as in Trial 2.
+Frozen execution source `2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4`,
+reused byte-for-byte from Trial 2's runtime build. Pinned author image
+`sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a`.
+
+Started `2026-09-09T19:02:12.628Z`, completed `2026-09-09T19:26:50.546Z`. Total elapsed
+≈1,477,918 ms (~24m38s); authoring ≈1,463,282 ms (~24m23s); grading ≈14.6s. One of exactly
+five fresh Trial-3 attempts, reserved and dispatched within a 217ms window, confirmed
+running concurrently via `docker ps`. The solver received only the original public task
+inputs (`SEMANTICS.md`, `CHECKER-INPUT.md`, `api.d.ts`, the empty starter) — no prior
+submission, analysis, or this handoff — so this is a genuinely independent fresh
+implementation, not a resubmission. Input/output tokens: 4,049,109 in (3,902,452 cached),
+123,574 out; CLI cost estimate $6.51 (not a charge — subscription-only, `maxMicroUsd: 0`).
+
+### Results
+
+**Reward 0. Service 5/25 passed; checker 14/15 correct.** The checker missed the same candidate; the service failed on a different obligation:
+
+- **Service (24/25 in Trial 2 → this attempt fails far more broadly): 20 of 25 scenarios**
+  (`case-000` through `case-019`) fail on `origin_load`, not `cache_provenance`. In the one
+  fully-inspected cell (`case-000`), the final cache state is `{"edge-a":[],"edge-b":[],
+  "shield":[]}` — completely empty — despite many repeated identical-path/header requests
+  in the delivered sequence that a working cache should have served from a stored entry
+  without re-hitting the origin. The consequence is exactly what `origin_load` polices:
+  the origin is consulted far more than the declared `maxOriginRequests` budget permits.
+  This is a different check, a different scenario range, and a more severe defect than
+  Trial 2's single-scenario `case-022`/`cache_provenance` miss.
+- **Checker (14/15, unchanged from Trial 2's own count): the exact same candidate is
+  missed.** `wildcard-eviction`, `expectedFailingCheck: cache_provenance`,
+  `observedFailingChecks: ["cache_provenance"]`, `outcome: missed` — byte-identical
+  classification outcome to Trial 2, produced by an independently-written `checker.mjs`.
+  0 false positives.
+
+### Comparison with Trial 2 and recurrence assessment
+
+**The checker-side defect recurred identically.** Two independently-written checkers,
+from the same model/provider, on the same unchanged package, both wrongly accepted the
+`wildcard-eviction` negative control against the same `cache_provenance` obligation. That
+records a repeated missed candidate. The existing Trial 2 matching/replacement
+contract-attribution note remains attached to that earlier result; this repeat does
+not resolve it by itself.
+
+**The service failed on a different obligation.** Trial 3 exceeded the declared
+origin-request budget in 20 scenarios, while Trial 2 failed one cache-provenance
+scenario. The empty final cache in the inspected cell is recorded evidence, but the
+precise code-level cause has not been established. The earlier wildcard-storage
+hypothesis was not confirmed and should not be treated as the root cause.
+
+These are two consecutive recorded zeroes on an unchanged package. A valid service
+or required-checker failure can count even when the concrete bug changes between
+attempts. Exact defect recurrence is additional analysis, not an acceptance gate.
+
+### Observable solving behavior
+
+The capture (887 events) shows extensive self-testing focused heavily on the *checker's*
+correctness: the final completion message reports checker self-tests against 40 targeted
+plus 7 hand-written plus 143 fuzzed negative executions (all correctly rejected) and 128
+runs across seven distinct legitimate alternative service strategies (all correctly
+accepted), plus a 300-cell performance run. The same summary explicitly discusses two
+self-identified interpretive judgment calls about cross-tier copying and observationally
+equivalent encodings, disclosed rather than hidden. Notably, this final self-report is
+about checker quality; it does not mention validating `entry.mjs` itself against an
+origin-load budget or a wildcard-vary-heavy traffic scenario, which is consistent with
+that specific service-side gap going unnoticed by the agent's own testing.
+
+### Failure-mechanism attribution and next step
+
+Trial 3 has a supported service failure: its origin-request counts exceed the
+public budget. The checker also missed the same retained control. Keep the scores
+and causes distinct, including Trial 2's earlier matching/replacement note. Continue
+testing the unchanged package; a different service defect does not require a reset
+or disqualify this Trial 3 failure.
+
+### Acceptance progress and next prepared attempt
+
+This unchanged successor has **2 failures and 0 solver passes in two scored attempts**, both on Claude. The user reports that the CEO accepts at least **five failures out of six**, with three attempts per provider; six consecutive failures is the stricter aspiration, not the acceptance threshold. This package remains within that threshold and needs **3 failures from the remaining four attempts**. Different failure mechanisms can count; no identical-bug requirement is added.
+
+The next attempt is **Trial 4 in this document, the third attempt on this successor**, using the same provider, package and saved profile again. Afterward, this package will have three runs on its original provider and will need three on the other provider. [Prepared Trial 4 handoff](../../../docs/round-four-failing-five-handoff.md). Preparation launches no model calls.

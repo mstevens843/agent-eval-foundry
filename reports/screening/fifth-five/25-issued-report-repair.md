@@ -315,3 +315,102 @@ This is an exploratory repository assessment. The immutable result still records
 `adjudication: unlabelled`, `modelEvidenceEligible: false` and
 `countsAsModelFailure: false`; publication does not change those fields or claim
 six standard failures, official cheat qualification or independent blind review.
+
+## Trial 3 — repeat attempt — September 9, 2026
+
+### A. Identity and execution
+
+Run `issued-report-repair-attempt-1` in the fresh round-three campaign (a new
+JobStore slot, not a resume of Trial 2), package digest
+`32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170` — byte-identical
+to Trial 2's package. Route `professional-multifile/authority-process@1`. Evidence:
+`.local/round-three-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/issued-report-repair-attempt-1/`.
+
+Requested target **claude**, `anthropic/claude-opus-5`, effort `max` — the same
+provider as Trial 2, copied verbatim from the Trial 2 saved profile (the controller
+asserted `profileDigest` and instruction hash identical to Trial 2 before dispatch).
+Observed: model `claude-opus-5` confirmed; effort/scaffold version unobservable, as
+before. This was a genuinely fresh solver session given only the original public
+task inputs — no access to Trial 1, Trial 2, this document, or any prior submission.
+
+Dispatched `2026-09-09T19:02:12.743Z`, completed `2026-09-09T19:25:06.747Z`. Total
+elapsed ≈1,374,004 ms (~22m 54s); solver authoring time ≈1,366,536 ms (~22m 47s);
+grading ≈7.5 s. One of five reservations installed within a 217 ms window
+(19:02:12.628Z–19:02:12.845Z); `docker ps` confirmed all five `foundry-real-*`
+containers running concurrently at launch. No timeout, no invalid execution.
+
+### B. Results
+
+**Reward 0. Service 27/27 — fully correct, matching Trial 2 exactly.** Checker:
+12/14 correct, 0 missed, **2 false positives — the exact same two candidates as
+Trial 2**: `reference` and `alternative` (both `expectedFailingCheck: null`,
+genuinely correct implementations). The submitted checker's verdict for both was
+`ok: false`. As in Trial 2, this checker rejects every known-good candidate it was
+graded against.
+
+### C. Comparison with Trial 2 and recurrence assessment
+
+This is a genuine, exact recurrence of the symptom — 100% false-positive rejection
+of known-good candidates — in a completely independently-written checker, same
+provider, same package. Reading this checker's code directly against the real
+grading fixtures shows the **mechanical cause is related but not identical** to
+Trial 2's:
+
+- Trial 2's checker never unwrapped either aggregate array, accessing `r.report`/
+  `r.version`/`r.payload` directly on the outer `{after, record}` and
+  `{after, receipt}` wrappers for *both* publications and deliveries.
+- This Trial 3 checker's `unwrap()` (line 168) explicitly checks for and merges
+  `entry.record` — so publication rows (`{after, record: {...}}`, confirmed from
+  the real `cases.json` fixture) are unwrapped correctly. But `unwrap()` never
+  checks `entry.receipt` (confirmed: zero occurrences of `.receipt` anywhere in
+  `checker.mjs`), and the real delivery rows are shaped `{after, receipt: {...}}`
+  (confirmed from the same fixture: `{"after":0,"receipt":{"report":"sum",...}}`).
+  So delivery rows pass through `unwrap()` unchanged, and `deliveryEntryKey()`
+  computes its key from the wrapper's (nonexistent) `.report`/`.version`/etc.
+  fields — garbage keys that can never match the expected, correctly-derived
+  delivery keys. The `reconcileSource()` fallback to the raw observation-call log
+  (which *would* read delivery data correctly, since call arguments aren't
+  wrapped) does not rescue this: its distinct-key-count guard (`left.size !==
+  right.size`) diverges precisely because the garbage keys collapse differently
+  than the correct ones, so it keeps the broken data instead of falling back.
+
+So: Trial 2 missed the wrapper shape entirely on both fields; Trial 3 explicitly
+defended against it for publications but the identical asymmetry claimed deliveries
+instead. Two independent Claude/max attempts on September 9, with no shared context, both tripped on the same underlying interface property —
+that `Publication` and `Receipt` are wrapped under *differently-named* keys
+(`record` vs `receipt`) in the actual/observed-effects arrays, a detail neither
+`CHECKER-INPUT.md` nor `api.d.ts` states explicitly for the aggregate arrays. That
+convergence records two required-checker failures involving related input handling.
+The different bugs do not reduce either score; two attempts do not establish a
+long-run failure probability.
+
+### D. Observable solving behavior
+
+The submission's own final report (captured verbatim in `capture/stdout.log`)
+explicitly lists, among its verification steps, "field-spelling variants
+(renamed change/request/query keys, id-keyed change maps, unwrapped entry state,
+**wrapped publication records**, missing `after`, missing call log) reach identical
+verdicts" — i.e., the agent *did* specifically stress-test the publication-wrapper
+question and defended against it. It did not describe an equivalent test for
+delivery/receipt wrapping, and the code confirms that defense was never generalized
+to `.receipt`. The same report claims "3000 generated scenarios: ... the validator
+accepts all of them" and "1800 cells validated twice in 139 ms, byte-identical
+results" — strong claims of thoroughness and correctness that the actual grading
+(rejection of both known-good candidates in the bank) directly contradicts. This is not
+evidence of a fabricated claim — the self-tests plausibly did pass on the agent's
+own synthetic fixtures — but the self-testing had a real, identifiable blind spot
+that the official candidate bank exposed and the agent's own fixtures did not.
+
+### E. Failure-mechanism attribution and next step
+
+Per the benchmark rules, a required-checker failure counts even though the service
+passes, and reason text is diagnostic-only — this is a supported, substantive
+required-deliverable failure, not a grading-alignment artifact. This is the
+**second** consecutive recorded zero for issued-report-repair on Claude
+(Trial 2 and Trial 3). Continue on the exact package, using the documented raw observations and existing interfaces. No extra aggregate-array tutorial or worked solution is required for this repeat.
+
+### Acceptance progress and next prepared attempt
+
+This unchanged successor has **2 failures and 0 solver passes in two scored attempts**, both on Claude. The user reports that the CEO accepts at least **five failures out of six**, with three attempts per provider; six consecutive failures is the stricter aspiration, not the acceptance threshold. This package remains within that threshold and needs **3 failures from the remaining four attempts**. Different failure mechanisms can count; no identical-bug requirement is added.
+
+The next attempt is **Trial 4 in this document, the third attempt on this successor**, using the same provider, package and saved profile again. Afterward, this package will have three runs on its original provider and will need three on the other provider. [Prepared Trial 4 handoff](../../../docs/round-four-failing-five-handoff.md). Preparation launches no model calls.

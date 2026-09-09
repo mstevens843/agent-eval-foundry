@@ -6,6 +6,26 @@ attempt remains an unscored infrastructure interruption; its separate retry pass
 Temporal capacity is the one new reward-zero success in the latest two groups.
 The fourth group added none. [All 25 results](round-two-portfolio-2026-09-09.md).
 
+**Three packages now have two consecutive recorded zero rewards: 21, 25 and 19.**
+All five Trial 3 attempts completed without infrastructure errors on byte-identical
+packages with the same providers. Snapshot recovery (11) and temporal capacity
+(10) passed this attempt. Their prior failures remain in the unchanged-version record.
+[Trial 3 results](round-three-failing-five-2026-09-09.md) ·
+[sanitized evidence](evidence/2026-09-09-round-three-failing-five.json).
+
+The user reports a CEO threshold of **at least 5 failures in 6 attempts**, with
+**3 Claude and 3 Codex per package**. All five remain within that threshold:
+the three at 2/2 need at least three more failures; the two at 1/2 need all four
+remaining attempts to fail. Exact bug repetition is not required. The
+[next five-way campaign is prepared](../../docs/round-four-failing-five-handoff.md):
+Trial 4 in each history, the third attempt on each unchanged successor, keeping
+the same provider again. Preparation made zero provider calls.
+
+Across successor Trials 2 and 3: **31 attempts, 30 scored, 8 recorded zeroes,
+22 solver passes and 1 historical interruption**, across 25 distinct packages.
+Trial 3 adds **4,448 verified manifest files**, bringing the successor total to
+**24,290**. Historical Trial 2 campaign totals below remain unchanged.
+
 | Campaign | Reward zero | Solver pass | Interrupted/unscored | Analysis |
 | --- | --- | --- | --- | --- |
 | First group: 19/21/25/24/07 | 3 | 2 | 0 | [Five completed trials](round-two-top-five-2026-09-09.md) |
@@ -15,11 +35,20 @@ The fourth group added none. [All 25 results](round-two-portfolio-2026-09-09.md)
 | Fifth group: 23/02/10/01/22 + route-policy retry | 1 | 5 | 0 | [Temporal capacity's checker gap and the route-policy retry](round-two-final-five-2026-09-09.md) |
 
 Incremental build (21), issued report (25), snapshot recovery (11) and temporal
-capacity (10) have supported substantive required-checker failures. A correct
-service does not cancel failure of a required checker. Cache (19) retains its
-recorded zero and the earlier audit's specific matching/replacement contract
-question; that prior assessment is unchanged. See the
-[first campaign audit](evidence/2026-09-09-round-two-top-five-audit.json).
+capacity (10) each had a supported substantive required-checker failure in Trial 2.
+A correct service does not cancel failure of a required checker. Trial 3 found
+snapshot recovery's and temporal capacity's specific defects did not recur on a
+fresh, independent attempt — both now show one Trial-2 failure and one Trial-3
+pass. Two observations do not establish their long-run failure rate. Incremental build's checker missed the
+identical candidate in both trials (confirmed by code reading to share the same
+root cause); issued report's checker rejected the same known-good candidates in
+both trials via a related but not identical bug. Cache (19) retains its recorded
+zero and the earlier audit's specific matching/replacement contract question, and
+Trial 3 adds a supported origin-budget service failure (5/25 passed, 20 failed)
+and the identical missed checker candidate. A different failure mechanism does
+not invalidate a required-deliverable failure. See the
+[first campaign audit](evidence/2026-09-09-round-two-top-five-audit.json) and
+[Trial 3 results](round-three-failing-five-2026-09-09.md).
 
 Batch 2's four complete attempts passed both deliverables. Route policy's original
 attempt was interrupted before capture and grading (reward null); a separately

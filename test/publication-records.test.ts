@@ -28,11 +28,18 @@ describe("reviewable source and honest screening publication", () => {
         .reduce((sum, r) => sum + r.verifiedFiles, 0),
       providerCallsMade: 0,
       successorPackages: 25,
-      successorTrials: 26,
-      successorCompletedTrials: 25,
-      successorRecordedZeroRewards: 5,
-      successorSolverPasses: 20,
+      successorTrials: 31,
+      successorCompletedTrials: 30,
+      successorRecordedZeroRewards: 8,
+      successorSolverPasses: 22,
       successorInterruptedTrials: 1,
+      trialTwoAttempts: 26,
+      trialTwoScored: 25,
+      trialTwoZeroRewards: 5,
+      trialTwoSolverPasses: 20,
+      trialThreeAttempts: 5,
+      trialThreeZeroRewards: 3,
+      packagesWithTwoConsecutiveZeroes: 3,
     });
   });
   it("links all twenty-five actual package trees without counting calibration kernels", () => {

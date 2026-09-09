@@ -46,6 +46,10 @@ export const SCREENING_FOLLOWUPS = [
   "round-two-final-five-2026-09-09.md",
   "evidence/2026-09-09-round-two-final-five.json",
   "evidence/2026-09-09-route-policy-repair-retry.json",
+  "evidence/2026-09-09-round-three-failing-five-preparation.json",
+  "round-three-failing-five-2026-09-09.md",
+  "evidence/2026-09-09-round-three-failing-five.json",
+  "evidence/2026-09-09-round-four-failing-five-preparation.json",
 ];
 
 export function verifyPublication(root = process.cwd()) {
@@ -240,6 +244,73 @@ export function verifyPublication(root = process.cwd()) {
     retrialVerifiedFiles += campaignFiles;
     successorRecords.push(...records);
   }
+  const trialTwoCounts = {
+    attempts: successorRecords.length,
+    scored: successorRecords.filter((p) => p.reward !== null).length,
+    zeroes: successorRecords.filter((p) => p.reward === 0).length,
+    passes: successorRecords.filter((p) => p.reward === 1).length,
+  };
+  const repeat = read("reports/screening/evidence/2026-09-09-round-three-failing-five.json");
+  assert.equal(repeat.packages.length, 5);
+  assert.equal(new Set(repeat.packages.map((p) => p.id)).size, 5);
+  assert.equal(repeat.automaticRetries, 0);
+  assert.equal(repeat.invalidExecutionCount, 0);
+  assert.equal(repeat.packages.filter((p) => p.target === "claude").length, 3);
+  assert.equal(repeat.packages.filter((p) => p.target === "codex").length, 2);
+  assert.equal(repeat.acceptanceTarget.minimumFailures, 5);
+  assert.equal(repeat.acceptanceTarget.totalScoredTrials, 6);
+  assert.equal(repeat.acceptanceTarget.consecutiveFailuresRequired, false);
+  let repeatFiles = 0;
+  let repeatBytes = 0;
+  for (const record of repeat.packages) {
+    const prior = successorRecords.find((p) => p.id === record.id && p.reward !== null);
+    assert.ok(prior, "repeat must extend an existing scored package");
+    assert.equal(prior.reward, 0);
+    assert.equal(record.packageDigest, prior.packageDigest, "repeat changed the package");
+    assert.equal(record.profileDigest, prior.profileDigest, "repeat changed the profile");
+    assert.equal(record.target, prior.target, "repeat changed the provider");
+    const attemptKey = `${repeat.campaign}/${record.runId}`;
+    assert.ok(!attemptKeys.has(attemptKey), "duplicate campaign attempt");
+    attemptKeys.add(attemptKey);
+    assert.equal(record.captureStatus, "completed");
+    assert.equal(record.service.invalidScenarios, 0);
+    const checker = record.checker;
+    assert.equal(checker.reasonPolicy, "diagnostic-only");
+    assert.equal(checker.details.length, checker.total);
+    assert.equal(checker.falsePositives, checker.details.filter((d) => d.outcome === "false-positive").length);
+    assert.equal(checker.missed, checker.details.filter((d) => d.outcome === "missed").length);
+    assert.equal(checker.correct, checker.total - checker.falsePositives - checker.missed);
+    assert.equal(checker.pass, checker.deterministic && checker.falsePositives === 0 && checker.missed === 0);
+    assert.equal(record.serviceOutcome, record.service.failedScenarios === 0 ? "semantic-pass" : "semantic-fail");
+    assert.equal(record.reward, record.serviceOutcome === "semantic-pass" && checker.pass ? 1 : 0);
+    assert.equal(record.outcome, record.reward === 1 ? "semantic-pass" : "semantic-fail", "overall outcome must include required checker");
+    assert.equal(record.recurrence, record.reward === 0);
+    assert.equal(record.progress.successorAttempts, 2);
+    assert.equal(record.progress.failures, 1 + (record.reward === 0 ? 1 : 0));
+    assert.equal(record.progress.solverPasses, record.reward === 1 ? 1 : 0);
+    assert.equal(record.progress.consecutiveRecordedZeroes, record.reward === 0 ? 2 : 0);
+    assert.equal(record.progress.failuresNeeded, 5 - record.progress.failures);
+    assert.equal(record.progress.remainingAttempts, 4);
+    assert.equal(record.progress.withinFiveOfSix, record.progress.failures + 4 >= 5);
+    for (const provider of ["claude", "codex"]) {
+      assert.equal(record.progress.attemptsByProvider[provider], record.target === provider ? 2 : 0);
+      assert.equal(record.progress.remainingByProvider[provider], 3 - record.progress.attemptsByProvider[provider]);
+    }
+    for (const key of ["completionSha256", "resultSha256", "gradeSha256", "packageDigest", "profileDigest"])
+      assert.match(record[key], hash, `${record.id}:${key}`);
+    assert.ok(record.manifestFilesVerified > 0 && record.manifestBytesVerified > 0);
+    assert.equal(record.totalElapsedMilliseconds, Date.parse(record.end) - Date.parse(record.start));
+    assert.ok(!/\/Users\/|\.local\//.test(JSON.stringify(record)), "nonportable/private repeat record");
+    assert.ok(readFileSync(join(root, record.analysis), "utf8").includes("## Trial 3"));
+    repeatFiles += record.manifestFilesVerified;
+    repeatBytes += record.manifestBytesVerified;
+  }
+  assert.equal(repeat.audit.manifestFilesVerified, repeatFiles);
+  assert.equal(repeat.audit.manifestBytesVerified, repeatBytes);
+  assert.equal(repeat.audit.newModelCalls, 0);
+  assert.deepEqual(repeat.audit.errors, []);
+  successorRecords.push(...repeat.packages);
+  retrialVerifiedFiles += repeatFiles;
   const successorPackageIds = new Set(successorRecords.map((p) => p.id));
   const scoredPackageIds = new Set(successorRecords.filter((p) => p.reward !== null).map((p) => p.id));
   assert.deepEqual([...successorPackageIds].sort(), [...ids].sort(), "every package has a Trial 2 record");
@@ -259,6 +330,8 @@ export function verifyPublication(root = process.cwd()) {
   const documents = [
     "README.md",
     "docs/project-status.md",
+    "docs/round-three-failing-five-handoff.md",
+    "docs/round-four-failing-five-handoff.md",
     "docs/engineering-progress.md",
     "docs/artifact-lifecycle.md",
     "reports/PORTFOLIO-PUBLICATION.md",
@@ -287,6 +360,13 @@ export function verifyPublication(root = process.cwd()) {
   }
   return {
     screenedPackages: ids.size,
+    trialTwoAttempts: trialTwoCounts.attempts,
+    trialTwoScored: trialTwoCounts.scored,
+    trialTwoZeroRewards: trialTwoCounts.zeroes,
+    trialTwoSolverPasses: trialTwoCounts.passes,
+    trialThreeAttempts: repeat.packages.length,
+    trialThreeZeroRewards: repeat.packages.filter((p) => p.reward === 0).length,
+    packagesWithTwoConsecutiveZeroes: repeat.packages.filter((p) => p.progress.consecutiveRecordedZeroes === 2).length,
     manifestListedFilesVerifiedAtPublication: verifiedFiles,
     successorTrials: successorRecords.length,
     successorPackages: successorPackageIds.size,

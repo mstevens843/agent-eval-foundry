@@ -180,3 +180,96 @@ repairing it or adding a solution hint before measuring whether the failure recu
 Reward **0**; service **34/34**; checker **12/13**. All **876** completion-manifest files matched their recorded sizes and hashes.
 
 [Campaign results](../round-two-final-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-final-five.json). Earlier trial records are preserved.
+
+## Trial 3 — repeat attempt — September 9, 2026
+
+### A. Identity and execution
+
+Run `temporal-capacity-repair-attempt-1` in the fresh `round-three-failing-five`
+campaign slot, package digest `05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede`
+— byte-identical to Trial 2's package — route `professional-multifile/authority-process@1`.
+Evidence retained at
+`.local/round-three-failing-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/temporal-capacity-repair-attempt-1/`.
+Dispatched under a fresh signed JobStore reservation (Ed25519, `realm: real-provider`,
+`billingMode: subscription-only`, `maxMicroUsd: 0`, `maxAttempts: 1`) — `attempt-1` in
+this campaign's own store, not a resume of Trial 2. Runtime: the same isolated
+`frozen-source` build used throughout this session, re-verified byte-identical
+immediately before this dispatch.
+
+Target: **claude**, same provider as Trial 2. Requested `anthropic/claude-opus-5`,
+effort `max`, CLI `scaffoldVersion 2.1.263`. Observed: `model="claude-opus-5"`
+(matches requested); effort and scaffold version remain unobserved. The controller
+verified the profile digest and instruction hash were identical to the Trial 2
+record before dispatching, and the solver received only the original public task
+inputs — no prior submission, analysis, or this handoff.
+
+Dispatched 2026-09-09T19:02:12.845Z as one of five reservations installed within a
+217ms window (19:02:12.628Z–19:02:12.845Z); `docker ps` confirmed all five
+`foundry-real-*` containers running concurrently. Completed 2026-09-09T19:19:05.104Z.
+Total elapsed ≈1,012,259ms (~16m52s) — authoring ≈1,002,304ms (~16m42s), grading
+≈10.0s. Token usage: 3,049,074 input tokens (2,942,313 cached), 80,017 output,
+`total_cost_usd` $4.54 — a CLI price estimate, not a charge, under the
+subscription-only reservation. Execution reached a clean `completed` state with no
+invalid-execution or infrastructure error.
+
+### B. Results
+
+**Reward 1 — a clean pass on both dimensions, resolving Trial 2's reward-zero.**
+Service: 34/34 scenarios pass, zero failures (fully correct, matching Trial 2's
+also-fully-correct service). Checker: `checkerRequired: true`, `checkerPassed: true`,
+13/13 candidates correctly classified — 0 missed, 0 false positives. This checker
+catches `unread-empty-source`, the exact candidate Trial 2's checker let through.
+
+### C. Comparison with Trial 2 and recurrence assessment
+
+**Trial 2's specific defect did not recur.** Trial 2's `paginationViolation()` only
+flagged "never fetched the source" when `recordCount > 0`, exempting exactly the
+zero-record, no-fetch case. This Trial 3 submission's equivalent check, in
+`judgeCell()`, is unconditional:
+
+```js
+if (observations.length > 0 && streamLooksComplete(observations)) {
+  if (fetches.length === 0) {
+    reasons.push('no fetch call was observed, so the history was never read');
+  } else { ... }
+}
+```
+
+There is no `recordCount`/total-based exemption anywhere in this logic — it flags a
+missing fetch whenever the observation stream looks complete, regardless of how many
+records existed or what the resulting total was. It also independently defends
+against the *opposite* risk (a truncated observation log being misread as proof
+nothing happened) via `streamLooksComplete()`, a distinct design choice not present
+in Trial 2's code at all.
+
+This attempt avoided Trial 2's checker mistake. The different outcome is
+useful evidence about variation between attempts, but two runs cannot establish
+that the earlier failure was rare, one-off or a reliable capability limit. The
+literal zero streak ends; Trial 2's failure remains in the six-attempt record.
+
+### D. Observable solving behavior
+
+The submission's own test suite includes `test('checker uses publicInput, including
+records the run never fetched', ...)`, which passed — i.e., the agent specifically
+authored and ran a test naming this exact scenario class (records present in
+`publicInput` that the run never fetched), and its checker design held up against it.
+Capture also shows explicit reasoning recorded inline: *"a filtered or truncated
+observation log shouldn't be read as proof a page was never fetched"* — the rationale
+behind `streamLooksComplete()`. Unlike Trial 2's transcript (which tested its
+pagination audit "and its conservatism" but never constructed the zero-record
+instance), this run's self-testing directly named and exercised the never-fetched
+condition as a first-class case, which plausibly explains why it did not repeat
+Trial 2's specific miss.
+
+### E. Next step
+
+Retest the unchanged package on Claude. The package has one failure and one pass,
+so it remains within the reported 5-of-6 threshold and needs four failures from
+the remaining four attempts. Evaluate the complete task, including its required
+checker; a correct service does not cancel a checker failure.
+
+### Acceptance progress and next prepared attempt
+
+This unchanged successor has **1 failure and 1 solver pass in two scored attempts**, both on Claude. The user reports that the CEO accepts at least **five failures out of six**, with three attempts per provider; six consecutive failures is the stricter aspiration, not the acceptance threshold. This package remains within that threshold and needs **4 failures from the remaining four attempts**. Different failure mechanisms can count; no identical-bug requirement is added.
+
+The next attempt is **Trial 4 in this document, the third attempt on this successor**, using the same provider, package and saved profile again. Afterward, this package will have three runs on its original provider and will need three on the other provider. [Prepared Trial 4 handoff](../../../docs/round-four-failing-five-handoff.md). Preparation launches no model calls.

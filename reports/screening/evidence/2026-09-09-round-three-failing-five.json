@@ -1,0 +1,1191 @@
+{
+  "schemaVersion": 1,
+  "campaign": "2026-09-09-round-three-failing-five",
+  "evidenceClass": "real-provider-screening",
+  "label": "Trial 3",
+  "limitations": [
+    "One exploratory attempt per package (attempt=1 in the execution store for this fresh campaign slot), a second data point per package, not a full repeated-failure-rate measurement or official standard/adversarial qualification.",
+    "Requested model and effort are not independent backend attestations; Claude model strings were observable in these captures, Codex model identity was not, and effort/scaffoldVersion were unobservable for both CLIs.",
+    "Package bytes, public contract, private controls and requested profile match Trial 2. The different results are from fresh solver attempts under the same recorded setup; backend identity observability remains as described above.",
+    "Solvers were given only the original public task inputs -- no access to Trial 1/2 submissions, analysis, or this campaign's operator handoff.",
+    "CLI dollar estimates (Claude runs only) are not subscription charges; billingMode was subscription-only with maxMicroUsd 0 and no paid API fallback.",
+    "Three packages have two consecutive recorded zeroes; two have one zero and one pass. All five remain mathematically within the user-reported 5-of-6 criterion. Two observations do not establish a reliable failure probability."
+  ],
+  "sourceDigest": "2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4",
+  "sourceProvenance": "Reused, byte-for-byte, the isolated runtime built and independently verified for the first round-two campaign. No new runtime was built for this campaign.",
+  "authorImage": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+  "actualScheduling": "All five jobs reserved before parallel dispatch; all five author containers observed running together via docker ps.",
+  "concurrencyRequestFulfilled": true,
+  "concurrencyObservation": {
+    "count": 5,
+    "packageIds": [
+      "variant-cache-repair",
+      "incremental-build-repair",
+      "issued-report-repair",
+      "snapshot-recovery-repair",
+      "temporal-capacity-repair"
+    ],
+    "firstLaunch": "2026-09-09T19:02:12.628Z",
+    "lastLaunch": "2026-09-09T19:02:12.845Z",
+    "launchSpreadMs": 217
+  },
+  "automaticRetries": 0,
+  "invalidExecutionCount": 0,
+  "extraModelCallsBeyondFive": 0,
+  "packages": [
+    {
+      "id": "variant-cache-repair",
+      "target": "claude",
+      "runId": "variant-cache-repair-attempt-1",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "runtime event type=assistant",
+          "status": "observed",
+          "value": "claude-opus-5"
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "reward": 0,
+      "trial2Reward": 0,
+      "recurrence": true,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1463282,
+      "start": "2026-09-09T19:02:12.628Z",
+      "end": "2026-09-09T19:26:50.546Z",
+      "service": {
+        "scenarios": 25,
+        "failedScenarios": 20,
+        "invalidScenarios": 0,
+        "failures": {
+          "case-000": [
+            "origin_load"
+          ],
+          "case-001": [
+            "origin_load"
+          ],
+          "case-002": [
+            "origin_load"
+          ],
+          "case-003": [
+            "origin_load"
+          ],
+          "case-004": [
+            "origin_load"
+          ],
+          "case-005": [
+            "origin_load"
+          ],
+          "case-006": [
+            "origin_load"
+          ],
+          "case-007": [
+            "origin_load"
+          ],
+          "case-008": [
+            "origin_load"
+          ],
+          "case-009": [
+            "origin_load"
+          ],
+          "case-010": [
+            "origin_load"
+          ],
+          "case-011": [
+            "origin_load"
+          ],
+          "case-012": [
+            "origin_load"
+          ],
+          "case-013": [
+            "origin_load"
+          ],
+          "case-014": [
+            "origin_load"
+          ],
+          "case-015": [
+            "origin_load"
+          ],
+          "case-016": [
+            "origin_load"
+          ],
+          "case-017": [
+            "origin_load"
+          ],
+          "case-018": [
+            "origin_load"
+          ],
+          "case-019": [
+            "origin_load"
+          ]
+        }
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "pass": false,
+        "total": 15,
+        "correct": 14,
+        "falsePositives": 0,
+        "missed": 1,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "reset-age-on-tier-copy",
+            "expectedFailingCheck": "cache_provenance",
+            "observedFailingChecks": [
+              "cache_provenance"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "intermediate-wipe",
+            "expectedFailingCheck": "cache_provenance",
+            "observedFailingChecks": [
+              "cache_provenance"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "wildcard-eviction",
+            "expectedFailingCheck": "cache_provenance",
+            "observedFailingChecks": [
+              "cache_provenance"
+            ],
+            "outcome": "missed"
+          },
+          {
+            "candidateId": "always-origin",
+            "expectedFailingCheck": "origin_load",
+            "observedFailingChecks": [
+              "origin_load"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "store-private-response",
+            "expectedFailingCheck": "no_store",
+            "observedFailingChecks": [
+              "no_store"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "unconditional-revalidation",
+            "expectedFailingCheck": "origin_load",
+            "observedFailingChecks": [
+              "origin_load"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "ignore-response-age",
+            "expectedFailingCheck": "representation",
+            "observedFailingChecks": [
+              "representation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "path-only-key",
+            "expectedFailingCheck": "representation",
+            "observedFailingChecks": [
+              "cache_provenance",
+              "representation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "flush-unrelated-tiers",
+            "expectedFailingCheck": "invalidation_scope",
+            "observedFailingChecks": [
+              "invalidation_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "empty-304-body",
+            "expectedFailingCheck": "representation",
+            "observedFailingChecks": [
+              "representation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          }
+        ],
+        "gradeSummarySha256": "685391885e1162afbd8360a3d56fd9e68ede39c8075ad97181393a4969193151",
+        "processSha256": "af0e258b5f7f6bcb3e2ead34129b18f239492faed4fec0380eee5b9f6dd2f565"
+      },
+      "usage": {
+        "cachedInputTokens": 3902452,
+        "costUsd": 6.507915999999999,
+        "inputTokens": 4049109,
+        "outputTokens": 123574,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates (costUsd on Claude runs) are not subscription charges; billingMode was subscription-only with maxMicroUsd 0. Cached input is included in input totals.",
+      "completionSha256": "78753dce98625cd0d07365225373a9dd5193f6110dcd2902fd04a58d5cb8ac09",
+      "resultSha256": "a06ffe15ebfae1d72adfa6ff7394a96f44620649d923169f8beaabe64cb08d7e",
+      "gradeSha256": "86e4df4215c871709e7e60dc1408913288b8aff37dc6c00dc8e6ca7c10126693",
+      "assessment": "repeat-fail-mixed-recurrence",
+      "rationale": "Second consecutive recorded reward zero: service passed 5/25 scenarios, with 20 origin_load failures, and the checker missed wildcard-eviction again. The service failure is different from Trial 2. Its precise code-level cause has not been established; a different failure mechanism does not invalidate a required-deliverable failure. The existing Trial 2 matching/replacement attribution note remains attached to that earlier result.",
+      "packageDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "serviceOutcome": "semantic-fail",
+      "analysis": "reports/screening/fourth-five/19-variant-cache-repair.md",
+      "totalElapsedMilliseconds": 1477918,
+      "manifestFilesVerified": 968,
+      "manifestBytesVerified": 60629821,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "progress": {
+        "successorAttempts": 2,
+        "failures": 2,
+        "solverPasses": 0,
+        "consecutiveRecordedZeroes": 2,
+        "attemptsByProvider": {
+          "claude": 2,
+          "codex": 0
+        },
+        "remainingAttempts": 4,
+        "failuresNeeded": 3,
+        "withinFiveOfSix": true,
+        "remainingByProvider": {
+          "claude": 1,
+          "codex": 3
+        }
+      }
+    },
+    {
+      "id": "incremental-build-repair",
+      "target": "codex",
+      "runId": "incremental-build-repair-attempt-1",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "reward": 0,
+      "trial2Reward": 0,
+      "recurrence": true,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 902611,
+      "start": "2026-09-09T19:02:12.686Z",
+      "end": "2026-09-09T19:17:28.768Z",
+      "service": {
+        "scenarios": 27,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "pass": false,
+        "total": 15,
+        "correct": 14,
+        "falsePositives": 0,
+        "missed": 1,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "publication_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "wrong-dependency-alias",
+            "expectedFailingCheck": "current_artifacts",
+            "observedFailingChecks": [
+              "current_artifacts",
+              "incremental_budget"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "ignore-includes",
+            "expectedFailingCheck": "current_artifacts",
+            "observedFailingChecks": [
+              "current_artifacts"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "ignore-flags",
+            "expectedFailingCheck": "current_artifacts",
+            "observedFailingChecks": [
+              "current_artifacts"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "publication_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "foreign-publication",
+            "expectedFailingCheck": "publication_scope",
+            "observedFailingChecks": [
+              "publication_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "ignore-dependency-order",
+            "expectedFailingCheck": "current_artifacts",
+            "observedFailingChecks": [
+              "current_artifacts"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "duplicate-publication",
+            "expectedFailingCheck": "publication_scope",
+            "observedFailingChecks": [
+              "completion",
+              "publication_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "publication_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "ignore-tool",
+            "expectedFailingCheck": "current_artifacts",
+            "observedFailingChecks": [
+              "current_artifacts"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "always-rebuild",
+            "expectedFailingCheck": "incremental_budget",
+            "observedFailingChecks": [
+              "incremental_budget"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "partial-publication",
+            "expectedFailingCheck": "publication_scope",
+            "observedFailingChecks": [
+              "publication_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "premature-publication",
+            "expectedFailingCheck": "current_artifacts",
+            "observedFailingChecks": [
+              "current_artifacts"
+            ],
+            "outcome": "missed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          }
+        ],
+        "gradeSummarySha256": "689fe9f88a21705d4a226324a31cbd35b1570c39bd9396148e8d39d5fc50daa9",
+        "processSha256": "d5adbd5a864ac88d47c3b1e5a5a6841e3d987a5fa62785aaa1919153e705599d"
+      },
+      "usage": {
+        "cachedInputTokens": 448512,
+        "costUsd": null,
+        "inputTokens": 488277,
+        "outputTokens": 27187,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates (costUsd on Claude runs) are not subscription charges; billingMode was subscription-only with maxMicroUsd 0. Cached input is included in input totals.",
+      "completionSha256": "969fc3db2d650f5bd70bed50acb8632ee18f214625a48bfe62ffd9fac903b714",
+      "resultSha256": "854b2155b8d14fc46a89866a5bac755da405eb51a55a6ee9348e353de6d7fdf8",
+      "gradeSha256": "6cf6fd4d904353a0a18bc84c141c5b62713e347f37d5da982ef3792aa36b9456",
+      "assessment": "repeat-fail-exact-recurrence",
+      "rationale": "Reward 0, second consecutive failure for this package/provider. Service fully correct both trials (27/27). Checker missed the EXACT SAME candidate as Trial 2 (premature-publication, current_artifacts), confirmed by direct code reading to share the identical root cause: verifies structural/content-addressed correctness recursively but never compares the sequence at which a handle was minted against the sequence at which it was published. Two independently-written Codex/xhigh checkers, fresh sessions with no shared context, missed the same specific ordering dimension. This is Codex failure #2 of 3 tracked toward a six-consecutive-failure target on this package.",
+      "packageDigest": "34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "serviceOutcome": "semantic-pass",
+      "analysis": "reports/screening/fifth-five/21-incremental-build-repair.md",
+      "totalElapsedMilliseconds": 916082,
+      "manifestFilesVerified": 974,
+      "manifestBytesVerified": 34427064,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "progress": {
+        "successorAttempts": 2,
+        "failures": 2,
+        "solverPasses": 0,
+        "consecutiveRecordedZeroes": 2,
+        "attemptsByProvider": {
+          "claude": 0,
+          "codex": 2
+        },
+        "remainingAttempts": 4,
+        "failuresNeeded": 3,
+        "withinFiveOfSix": true,
+        "remainingByProvider": {
+          "claude": 3,
+          "codex": 1
+        }
+      }
+    },
+    {
+      "id": "issued-report-repair",
+      "target": "claude",
+      "runId": "issued-report-repair-attempt-1",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "runtime event type=assistant",
+          "status": "observed",
+          "value": "claude-opus-5"
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "reward": 0,
+      "trial2Reward": 0,
+      "recurrence": true,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1366536,
+      "start": "2026-09-09T19:02:12.743Z",
+      "end": "2026-09-09T19:25:06.747Z",
+      "service": {
+        "scenarios": 27,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "pass": false,
+        "total": 14,
+        "correct": 12,
+        "falsePositives": 2,
+        "missed": 0,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "reuse-issued-version",
+            "expectedFailingCheck": "issued_history",
+            "observedFailingChecks": [
+              "amendment_content",
+              "completion",
+              "dependency_order",
+              "issued_history",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reverse-dependency-order",
+            "expectedFailingCheck": "dependency_order",
+            "observedFailingChecks": [
+              "dependency_order"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "duplicate-notification",
+            "expectedFailingCheck": "recipient_scope",
+            "observedFailingChecks": [
+              "completion",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "amendment_content",
+              "completion",
+              "historical_answers",
+              "issued_history",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "current-for-historical",
+            "expectedFailingCheck": "historical_answers",
+            "observedFailingChecks": [
+              "historical_answers"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "only-requested-recipients",
+            "expectedFailingCheck": "recipient_scope",
+            "observedFailingChecks": [
+              "completion",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "false-positive"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "amendment_content",
+              "completion",
+              "historical_answers",
+              "issued_history",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "unrelated-recipient",
+            "expectedFailingCheck": "recipient_scope",
+            "observedFailingChecks": [
+              "completion",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "amendment_content",
+              "completion",
+              "historical_answers",
+              "issued_history",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "corrections-labelled-initial",
+            "expectedFailingCheck": "recipient_scope",
+            "observedFailingChecks": [
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "false-positive"
+          },
+          {
+            "candidateId": "stale-dependent-lineage",
+            "expectedFailingCheck": "amendment_content",
+            "observedFailingChecks": [
+              "amendment_content",
+              "completion",
+              "issued_history",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "drop-source-lineage",
+            "expectedFailingCheck": "amendment_content",
+            "observedFailingChecks": [
+              "amendment_content",
+              "completion",
+              "issued_history",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          }
+        ],
+        "gradeSummarySha256": "b2f67e0cb74903b066a3c140c6846f1b2bf191f5404c8015598dcb906e208b8d",
+        "processSha256": "9b589aaf48c0f41f934e293a7c2a6c0b435e94710265b301b3fbda96abd76438"
+      },
+      "usage": {
+        "cachedInputTokens": 6606821,
+        "costUsd": 7.512335499999998,
+        "inputTokens": 6747254,
+        "outputTokens": 112164,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates (costUsd on Claude runs) are not subscription charges; billingMode was subscription-only with maxMicroUsd 0. Cached input is included in input totals.",
+      "completionSha256": "33e3a3b37be27b73ef9b9048f4126418da2a6a535015a18ac85d998e8ffb47a6",
+      "resultSha256": "21d8ca139a02dbef56bf393a9402f882bab047754d92fbec3891f494f51d6081",
+      "gradeSha256": "ca818a8a6a6c1f8516dfb121a3411cc62f5bf8ba6675b079de0fb6146b430df3",
+      "assessment": "repeat-fail-related-recurrence",
+      "rationale": "Reward 0, second consecutive failure for this package/provider. Service fully correct both trials (27/27). Checker again false-positived on the exact same two candidates (reference, alternative) as Trial 2 -- rejecting 100% of the known-good bank both times -- but the mechanical root cause is related, not identical: this checker correctly unwraps the {after,record} Publication wrapper (unlike Trial 2) but never checks for .receipt on delivery rows, so deliveries pass through unwrapped. Two independent Claude/max attempts converged on the same asymmetric-wrapper interface trap via different concrete bugs. The agent's own completion claim (\"3000 generated scenarios... accepts all of them\") is directly contradicted by the actual 100%-rejection result. This is Claude failure #2 of 3 tracked toward a six-consecutive-failure target on this package.",
+      "packageDigest": "32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "serviceOutcome": "semantic-pass",
+      "analysis": "reports/screening/fifth-five/25-issued-report-repair.md",
+      "totalElapsedMilliseconds": 1374004,
+      "manifestFilesVerified": 853,
+      "manifestBytesVerified": 11366015,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "progress": {
+        "successorAttempts": 2,
+        "failures": 2,
+        "solverPasses": 0,
+        "consecutiveRecordedZeroes": 2,
+        "attemptsByProvider": {
+          "claude": 2,
+          "codex": 0
+        },
+        "remainingAttempts": 4,
+        "failuresNeeded": 3,
+        "withinFiveOfSix": true,
+        "remainingByProvider": {
+          "claude": 1,
+          "codex": 3
+        }
+      }
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "target": "codex",
+      "runId": "snapshot-recovery-repair-attempt-1",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-pass",
+      "reward": 1,
+      "trial2Reward": 0,
+      "recurrence": false,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1065515,
+      "start": "2026-09-09T19:02:12.794Z",
+      "end": "2026-09-09T19:20:05.212Z",
+      "service": {
+        "scenarios": 33,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "pass": true,
+        "total": 12,
+        "correct": 12,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "rows-only-backup",
+            "expectedFailingCheck": "portable_backup",
+            "observedFailingChecks": [
+              "portable_backup"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reuse-deleted-id",
+            "expectedFailingCheck": "allocation",
+            "observedFailingChecks": [
+              "allocation",
+              "portable_backup",
+              "publication"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "allocation",
+              "completion",
+              "portable_backup",
+              "publication",
+              "restored_rows"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "boundary-cutoff",
+            "expectedFailingCheck": "restored_rows",
+            "observedFailingChecks": [
+              "allocation",
+              "portable_backup",
+              "publication",
+              "restored_rows"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "example-hardcoding",
+            "expectedFailingCheck": "restored_rows",
+            "observedFailingChecks": [
+              "allocation",
+              "portable_backup",
+              "publication",
+              "restored_rows"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "trusted-cache",
+            "expectedFailingCheck": "portable_backup",
+            "observedFailingChecks": [
+              "portable_backup",
+              "publication",
+              "restored_rows"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "allocation",
+              "completion",
+              "portable_backup",
+              "publication",
+              "restored_rows"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "cross-branch-journal",
+            "expectedFailingCheck": "restored_rows",
+            "observedFailingChecks": [
+              "allocation",
+              "portable_backup",
+              "publication",
+              "restored_rows"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "drop-deletes",
+            "expectedFailingCheck": "restored_rows",
+            "observedFailingChecks": [
+              "portable_backup",
+              "publication",
+              "restored_rows"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "allocation",
+              "completion",
+              "portable_backup",
+              "publication",
+              "restored_rows"
+            ],
+            "outcome": "correct-reject-unnamed"
+          }
+        ],
+        "gradeSummarySha256": "102ab7cb97da84b1a6c459f88ed571e7da55fad1adb8f4771ecc94bebd2d09f4",
+        "processSha256": "d3662bfbb52083f15b8071513b48afe4f688dea2c4582508d1dd19ccb7b8e5e7"
+      },
+      "usage": {
+        "cachedInputTokens": 481920,
+        "costUsd": null,
+        "inputTokens": 527349,
+        "outputTokens": 32368,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates (costUsd on Claude runs) are not subscription charges; billingMode was subscription-only with maxMicroUsd 0. Cached input is included in input totals.",
+      "completionSha256": "c481b7500dc3d1faed67841510f935ba0401c8912d7ab3bb681873da8e81d4e1",
+      "resultSha256": "458a2c450dd0a03b22b7e648f69d1e265a4778f16aaa4ba250f1ea5b0b8cce8c",
+      "gradeSha256": "a0ffadc5012ac85ec683a1097998828ddcb035ab6a1f59843809104025093387",
+      "assessment": "resolved",
+      "rationale": "Reward 1, clean pass, resolving Trial 2's failure. Trial 2's archiveBytes() unconditionally assumed a wrapped/base64 shape; this Trial 3 checker's decodeArchiveValue() type-checks the value first (an already-decoded object passes through unchanged, a {bytes} wrapper is unwrapped, only an actual string is base64/JSON-decoded), avoiding Trial 2's exact mistake. No failed self-test or later patch is visible -- appears to have been built in from the start. The literal zero streak ends, but the prior failure remains in the unchanged-version record: one failure and one pass, with four failures from the remaining four attempts needed for 5/6.",
+      "packageDigest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "serviceOutcome": "semantic-pass",
+      "analysis": "reports/screening/third-five/11-snapshot-recovery-repair.md",
+      "totalElapsedMilliseconds": 1072418,
+      "manifestFilesVerified": 785,
+      "manifestBytesVerified": 2710826,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "progress": {
+        "successorAttempts": 2,
+        "failures": 1,
+        "solverPasses": 1,
+        "consecutiveRecordedZeroes": 0,
+        "attemptsByProvider": {
+          "claude": 0,
+          "codex": 2
+        },
+        "remainingAttempts": 4,
+        "failuresNeeded": 4,
+        "withinFiveOfSix": true,
+        "remainingByProvider": {
+          "claude": 3,
+          "codex": 1
+        }
+      }
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "target": "claude",
+      "runId": "temporal-capacity-repair-attempt-1",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "runtime event type=assistant",
+          "status": "observed",
+          "value": "claude-opus-5"
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-pass",
+      "reward": 1,
+      "trial2Reward": 0,
+      "recurrence": false,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1002304,
+      "start": "2026-09-09T19:02:12.845Z",
+      "end": "2026-09-09T19:19:05.104Z",
+      "service": {
+        "scenarios": 34,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "pass": true,
+        "total": 13,
+        "correct": 13,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "inclusive-end",
+            "expectedFailingCheck": "exact_integral",
+            "observedFailingChecks": [
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "effective-before-revision",
+            "expectedFailingCheck": "exact_integral",
+            "observedFailingChecks": [
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "strict-knowledge-cutoff",
+            "expectedFailingCheck": "exact_integral",
+            "observedFailingChecks": [
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "future-revision",
+            "expectedFailingCheck": "exact_integral",
+            "observedFailingChecks": [
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "unread-empty-source",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "extra-report",
+            "expectedFailingCheck": "population",
+            "observedFailingChecks": [
+              "population"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "duplicate-report",
+            "expectedFailingCheck": "unique_reports",
+            "observedFailingChecks": [
+              "unique_reports"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "floating-total",
+            "expectedFailingCheck": "exact_integral",
+            "observedFailingChecks": [
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          }
+        ],
+        "gradeSummarySha256": "31d3c6ac2169df1fe37bed826ce9bc18bf35ef7c6fad0263676f19da0976381e",
+        "processSha256": "023e4502670053a971d5a050c24fff8e53fdc7db298a04eae8bc1951c39d009b"
+      },
+      "usage": {
+        "cachedInputTokens": 2942313,
+        "costUsd": 4.539875499999999,
+        "inputTokens": 3049074,
+        "outputTokens": 80017,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates (costUsd on Claude runs) are not subscription charges; billingMode was subscription-only with maxMicroUsd 0. Cached input is included in input totals.",
+      "completionSha256": "c691d4ea4767ad2e086dc5043a0e26a35dc18bdf76effc39545f7c98c24eb5fc",
+      "resultSha256": "cc7e6a6e01e5c55413c8a5efa6e00d79ec469f55bd86ee321b6155ce20a47eb2",
+      "gradeSha256": "0e306a47f676db83ee284a736c02b400933d610691a79bb13f84db17386a12ff",
+      "assessment": "resolved",
+      "rationale": "Reward 1, clean pass, resolving Trial 2's failure. Trial 2's paginationViolation() only flagged \"never fetched the source\" when recordCount > 0, exempting the zero-record case; this Trial 3 checker's equivalent check is unconditional, with a self-authored test named exactly for this scenario (\"checker uses publicInput, including records the run never fetched\") that passed. Specifically identified and tested the edge case Trial 2 missed. The literal zero streak ends, but the prior failure remains in the unchanged-version record: one failure and one pass, with four failures from the remaining four attempts needed for 5/6.",
+      "packageDigest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "serviceOutcome": "semantic-pass",
+      "analysis": "reports/screening/next-five/10-temporal-capacity-repair.md",
+      "totalElapsedMilliseconds": 1012259,
+      "manifestFilesVerified": 868,
+      "manifestBytesVerified": 5129671,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "progress": {
+        "successorAttempts": 2,
+        "failures": 1,
+        "solverPasses": 1,
+        "consecutiveRecordedZeroes": 0,
+        "attemptsByProvider": {
+          "claude": 2,
+          "codex": 0
+        },
+        "remainingAttempts": 4,
+        "failuresNeeded": 4,
+        "withinFiveOfSix": true,
+        "remainingByProvider": {
+          "claude": 1,
+          "codex": 3
+        }
+      }
+    }
+  ],
+  "acceptanceTarget": {
+    "source": "User-reported CEO acceptance criterion, clarified after Trial 3",
+    "minimumFailures": 5,
+    "totalScoredTrials": 6,
+    "claudeTrials": 3,
+    "codexTrials": 3,
+    "unchangedPackage": true,
+    "consecutiveFailuresRequired": false
+  },
+  "audit": {
+    "checkedAt": "2026-09-09T19:40:22.476Z",
+    "newModelCalls": 0,
+    "manifestFilesVerified": 4448,
+    "manifestBytesVerified": 114263397,
+    "errors": [],
+    "publicationCorrections": [
+      "Overall outcome for incremental build and issued report now comes from result.json, with serviceOutcome stored separately. Raw reward and result files are unchanged.",
+      "Added actual completion-manifest verification counts and per-package 5-of-6 progress."
+    ]
+  }
+}

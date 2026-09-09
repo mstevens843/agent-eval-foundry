@@ -1,5 +1,19 @@
 export function verifyPublication(root?: string): {
   screenedPackages: number;
+  trialTwoAttempts: number;
+  trialTwoScored: number;
+  trialTwoZeroRewards: number;
+  trialTwoSolverPasses: number;
+  trialThreeAttempts: number;
+  trialThreeZeroRewards: number;
+  packagesWithTwoConsecutiveZeroes: number;
+  successorTrials: number;
+  successorPackages: number;
+  successorCompletedTrials: number;
+  successorRecordedZeroRewards: number;
+  successorSolverPasses: number;
+  successorInterruptedTrials: number;
+  successorManifestListedFilesVerifiedAtPublication: number;
   manifestListedFilesVerifiedAtPublication: number;
   documents: number;
   promotedPaths: number;

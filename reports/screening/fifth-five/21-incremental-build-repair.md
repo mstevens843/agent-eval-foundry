@@ -305,3 +305,78 @@ This is an exploratory repository assessment. The immutable result still records
 `adjudication: unlabelled`, `modelEvidenceEligible: false` and
 `countsAsModelFailure: false`; publication does not change those fields or claim
 six standard failures, official cheat qualification or independent blind review.
+
+## Trial 3 — repeat attempt — September 9, 2026
+
+### Identity and execution
+
+Run `incremental-build-repair-attempt-1` in a fresh campaign slot
+(`.local/round-three-failing-five-2026-09-09/`), package digest
+`34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a` — byte-identical
+to Trial 2's; the controller re-verified the profile and instruction hash matched
+the Trial 2 record before dispatching. Requested target **codex**,
+`openai/gpt-5.6-sol`, effort `xhigh` — same provider as Trial 2. Observed: model,
+effort and scaffold version all unobservable from the Codex CLI's event stream.
+
+Dispatched `2026-09-09T19:02:12.686Z`, completed `2026-09-09T19:17:28.768Z`. Total
+elapsed ≈15m16s; solver authoring time (capture wall clock) 902,611ms (≈15m3s,
+the fastest of this five-job batch); grading ≈13.5s. One of five reservations
+installed within a 217ms window (19:02:12.628Z–19:02:12.845Z); `docker ps`
+confirmed all five `foundry-real-*` containers running concurrently. This is a
+fresh solver session given only the original public task inputs — no access to
+Trial 1/2 submissions, analysis, or this handoff.
+
+### Results
+
+**Reward 0. Service 27/27 (fully correct, matching Trial 2's 27/27). Checker
+14/15.** Both valid candidates accepted, 12 of 13 negative controls rejected
+correctly, and — the same single candidate Trial 2 missed — `premature-publication`
+wrongly accepted (`expectedFailingCheck: "current_artifacts"`,
+`observedFailingChecks: ["current_artifacts"]`, ground truth confirms it genuinely
+violates that check; the submitted checker's verdict was `ok: true`).
+
+### Comparison with Trial 2 and recurrence assessment
+
+This is an exact recurrence, not just a matching label. Reading this Trial 3
+`checker.mjs` directly: its `isCurrent()`/`validAttestation()` pair verifies that
+an artifact's recipe is structurally well-formed, that its bytes match a
+recomputed hash of `[tool, flags, transformed-source, dependencyBytes]`, and that
+every dependency is itself recursively "current" — but at no point does it compare
+the *sequence* at which a handle was minted (via `compile()`) against the sequence
+at which it was published. It is the identical mechanical gap Trial 2's checker
+had: content-addressed/structural attestation is checked exhaustively; temporal
+issuance-before-use ordering is never checked at all. Two independently-written
+Codex/xhigh checkers, from two fresh solver sessions with no shared context, both
+omitted the same specific ordering dimension. That is meaningfully stronger
+evidence of a stable, reproducible checker-authoring blind spot for this package
+than either attempt alone — the same class of recurrence seen elsewhere in this
+series (e.g. capacity-maintenance-repair's repeated NUL-separator friction).
+
+### Observable solving behavior
+
+The capture is compact: one continuous turn producing `entry.mjs`, `checker.mjs`
+and a shared `semantics.mjs` helper, closing with `npm test && node --check
+entry.mjs && node --check checker.mjs` plus one inline probe asserting the
+checker's verdict object has no `__proto__` pollution. The final agent message
+claims "100 generated multi-round scenarios passed" and lists the adversarial
+cases it covered: "stale-source, bad-byte, invalid-target, unknown-handle, and
+over-budget." Notably, no ordering- or issuance-sequence case appears in that
+list — the agent's own account of what it tested is consistent with the actual
+gap in its checker; it does not overclaim coverage of temporal ordering, it
+simply never tests that dimension.
+
+### Failure-mechanism attribution and next step
+
+This is a supported required-deliverable failure under the unchanged public
+contract (a required checker failing counts even though the service passes;
+reason text remains diagnostic-only) — not a calibration bug, an infrastructure
+error, or a disputed label. Incremental-build-repair now has **two consecutive
+reward-zero results on Codex/xhigh**, both attributable to the identical specific
+gap (missing issuance-before-use ordering), from two independently-written
+checkers. Continue measuring on the unchanged package. The ordering consequence can remain implied by the public contract; two misses do not create a requirement to disclose the hidden control or add solution hints.
+
+### Acceptance progress and next prepared attempt
+
+This unchanged successor has **2 failures and 0 solver passes in two scored attempts**, both on Codex. The user reports that the CEO accepts at least **five failures out of six**, with three attempts per provider; six consecutive failures is the stricter aspiration, not the acceptance threshold. This package remains within that threshold and needs **3 failures from the remaining four attempts**. Different failure mechanisms can count; no identical-bug requirement is added.
+
+The next attempt is **Trial 4 in this document, the third attempt on this successor**, using the same provider, package and saved profile again. Afterward, this package will have three runs on its original provider and will need three on the other provider. [Prepared Trial 4 handoff](../../../docs/round-four-failing-five-handoff.md). Preparation launches no model calls.
