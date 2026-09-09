@@ -57,3 +57,16 @@ None to this package specifically — every reviewing agent independently conver
 **Regrade confirms no regression.** This trial's already-preserved checker.mjs was re-run against the fixed harness with zero new model calls: still a full pass (13/13 correct, 0 false positives, 0 missed, all 11 controls correctly named), unchanged from the original result.
 
 **When trials run again:** this package's grading should behave exactly as before.
+
+
+## Trial 2 preparation — fourth ranked group (2026-09-09)
+
+**Ready for second exploratory trials through Foundry or native Harbor.** No new model attempt is recorded by this engineering work. Removed the public codec, publisher, service and transformation modules after completing the private reference closure. Retained the independent iterative/regex-based alternative. The new checker independently decodes successful publication bytes, derives the required redactions from original documents/policy and verifies structural and binary preservation. Equivalent JSON/gzip serialization remains valid; the checker does not import the grader or rely on its normalized document output.
+
+Both service and checker are required. The public entry is empty, reason strings are optional diagnostics, helper modules are allowed, and the contract retains the facts needed to judge correctness. Existing shared authoring-policy improvements apply; no additional exploration gates were introduced.
+
+Local validation passed 16 assurance checks across 29 service scenarios, including complete reference/alternative services and semantic rejection of the untouched starter. The independent checker classified **13/13** candidates correctly, with zero false accepts or misses. All 22 native static checks and six verifier integrity controls passed. The exact native export earned oracle reward 1 and nop reward 0, with no infrastructure error; nop rejects the absent required checker. Foundry assurance separately verifies the empty service's semantic failure. Export reproduction and targeted regression checks passed.
+
+Foundry export: `.local/fourth-ranked-five-implementation-2026-09-09/release-ready/document-export-repair/export`. Package digest: `3111ac16dd55679ad87eb03666de42479344a0906efb1406ee80bc6abef5e6ab`. Native digest: `ddc03ad7ecda3d7cf6cf129d51dffe455eef13b705b86433ebadb106ba24d1c8`. Suggested Trial 2 target: **Codex**, retaining this package's original model family. Append the eventual Trial 2 result below this engineering record, preserving Trial 1.
+
+[Group implementation and selection](../fourth-ranked-five-implementation-plan-2026-09-09.md) and [exact validation evidence](../evidence/2026-09-09-fourth-ranked-five-implementation.json) retain file hashes, native trial identities and the remaining final-qualification requirements.

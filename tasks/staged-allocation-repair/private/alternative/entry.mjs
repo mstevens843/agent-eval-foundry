@@ -47,6 +47,7 @@ export const subject = {
       if (!first) policy = policy.children[node];
       first = false;
       await api.place({ node, resources: policy.resources });
+      if (Object.keys(policy.children).length === 0) break;
     }
     return { complete: true };
   },

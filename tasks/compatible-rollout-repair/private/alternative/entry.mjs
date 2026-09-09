@@ -1,8 +1,9 @@
+import { origin } from "./src/origin.mjs";
 // Two passes: stage all compatible consumers, then observe and publish each independently.
 export const subject = {
   run(view, api) {
-    const inventory = new Map(api.inventory({}).map((s) => [s.id, s])),
-      retained = new Set(api.stages({}).map((x) => x.id)),
+    const saved = origin(view, api), inventory = new Map(saved.services.map((s) => [s.id, s])),
+      retained = new Set(saved.stages.map((x) => x.id)),
       plans = [];
     for (const request of view.requests) {
       const service = inventory.get(request.service),

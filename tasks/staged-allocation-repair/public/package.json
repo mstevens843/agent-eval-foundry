@@ -1,8 +1,5 @@
 {
   "name": "staged-allocation-repair",
   "private": true,
-  "type": "module",
-  "scripts": {
-    "test": "node --test test/*.test.mjs"
-  }
+  "type": "module"
 }

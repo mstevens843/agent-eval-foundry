@@ -131,7 +131,7 @@ pairing must pass, are graded alongside.
 Reward is binary and is written by root before the artifact is touched: `0` first, `1` only
 on the single path where every derived check ran and passed.
 
-## Relevant professional experience
+## Relevant experience
 
 I build and operate SolPulse, a Solana trading platform, and Agentic, a multi-wallet
 AI-agent signer whose approval pipeline turns policy decisions into wallet actions. The part

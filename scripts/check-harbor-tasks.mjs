@@ -1,9 +1,12 @@
 // Run pinned upstream static checks without a container or runtime dependency install.
 import { spawnSync, execFileSync } from "node:child_process";
-import { mkdirSync, readdirSync, symlinkSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, symlinkSync, writeFileSync } from "node:fs";
 import { join, resolve, delimiter } from "node:path";
 const [destination, checksDirectory, ...tasks] = process.argv.slice(2);
 if (!destination || !checksDirectory || !tasks.length) throw Error("Usage: check-harbor-tasks.mjs FRESH_OUTPUT CHECKS_DIR TASK...");
+for (const task of tasks) for (const required of ["task.toml", "instruction.md", "environment/Dockerfile", "tests/test.sh", "solution/solve.sh"]) {
+  if (!existsSync(join(resolve(task), required))) throw Error(`Incomplete native task: ${task}/${required}`);
+}
 const output = resolve(destination), bin = join(output, "bin");
 mkdirSync(output, { recursive: false }); mkdirSync(bin);
 let python;

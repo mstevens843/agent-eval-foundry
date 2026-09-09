@@ -35,9 +35,10 @@ and helper modules are allowed. Raw input/effect data is available to the checke
 computed grading verdicts and expected outputs are private.
 
 Use only an export whose full digest and completed validation are recorded in the
-implementation evidence. A later model campaign should freeze its executor source
-separately and create a fresh job store and output directory. It must not reuse the
-running first group's reservations or controller records. Keep actual model,
+implementation evidence. The [prepared Trial 2 handoff](third-ranked-five-trial-2-handoff.md)
+reuses the completed first campaign's unchanged frozen runtime with a fresh job
+store and output directory. All five exports and retained validation evidence were
+reverified during the September 9 preflight. Keep actual model,
 profile, package digest, service outcome, checker outcome and elapsed time in each
 new Trial 2 record. This engineering work makes no model calls.
 
@@ -53,4 +54,4 @@ Those are provider-free local checks, not the assignment's standard or cheat mod
 trials. Future validation should use fresh job names/output directories. The final
 submission still requires its human-authored material and all
 rubric, standard and cheat qualification on the final selected version. The prior
-group's deferred native checks remain a separate work item.
+group's deferred native checks have also completed.

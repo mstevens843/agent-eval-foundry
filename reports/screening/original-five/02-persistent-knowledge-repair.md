@@ -27,3 +27,13 @@ A successor could explore genuine interruption between durable local updates and
 ## Evidence boundary
 
 [Sanitized record](../evidence/2026-09-07-original-five.json) preserves the exact package identity, final grade and completion hashes. [Maintained source](../../../tasks/persistent-knowledge-repair/) is separate from the captured submitted solution. Self-tests are observations of the agent's checking process, not an independent proof of correctness. See [batch limitations](../README.md).
+
+## Trial 2 preparation — final group (2026-09-09)
+
+**Ready for second exploratory trials through Foundry or native Harbor.** Removed the public revision, derivation, policy, persistence and publication implementations after completing both private services. Integrated four committed-publication lost-response cases with actual process termination and identical job redelivery, for 16 scenarios. Added a typed API and required independent checker; only raw jobs and execution histories are exposed. Receipt-blind redelivery is a negative history control. Empty decision reports now produce semantic failures rather than verifier exceptions. This successor adds a checker deliverable; Trial 1 required the service only.
+
+Local validation passed **13 assurance checks**, including a semantic failure for the untouched starter. Its independent checker classifies **10/10 candidates** correctly; reason text is diagnostic. The final native export passed 22 static checks, Harbor oracle reward 1 and nop reward 0, with no infrastructure exceptions. Both export formats reproduce. No model attempt was launched by this engineering work.
+
+Foundry export: `.local/final-five-implementation-2026-09-09/release-ready/persistent-knowledge-repair/export`. Package digest: `9d40456cb7d7456aee236396cc374fa3e17c9f2b1ce1ad71641e3234efe62eea`. Native export: `.local/final-five-implementation-2026-09-09/harbor-ready/persistent-knowledge-repair`. Native digest: `8f9453df86143808c306966acc54ac1b14a886a1d2d8e16c0fd356e2413b6643`. Suggested target: **Codex**, retaining the original model family. Append the eventual Trial 2 outcome below this engineering record; preserve Trial 1.
+
+[Implementation and completed checks](../final-five-implementation-plan-2026-09-09.md) · [Exact evidence](../evidence/2026-09-09-final-five-implementation.json).

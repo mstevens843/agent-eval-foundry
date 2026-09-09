@@ -74,3 +74,102 @@ Use these exact exports:
 Both deliverables are required. The checker returns complete deterministic Boolean verdicts; optional reason text does not affect grading, and submitted helper modules are available. Public requirements and custom schemas remain supplied without a worked implementation.
 
 When Trial 2 completes, append the actual model/profile, frozen digest, service/checker outcomes, elapsed time, exclusions and final submission defect here. Keep original Trial 1 rewards intact. Local controls, old grading disputes and infrastructure errors are not additional model failures. The final hiring submission still requires its human-authored material and rubric, standard and cheat qualification on the final selected version.
+
+## Trial 2 — implementation successor — September 9, 2026
+
+### A. Identity and execution
+
+Run `rule-index-repair-attempt-1`, package digest
+`6d649cfd3fee1d3c95aecf3f97a06eccb5b83796201c2ef801b817f5ef7749af`, route
+`professional-multifile/authority-process@1`. Dispatched through this session's
+`real-provider` execution route (signed JobStore reservation, Ed25519, realm
+`real-provider`, `billingMode: subscription-only`, `maxMicroUsd: 0`, `maxAttempts: 1`) —
+a fresh campaign slot (`attempt-1`), not an infrastructure retry of any prior run.
+Controller `campaign.mjs` in `.local/round-two-third-ranked-five-2026-09-09/` is a
+small, independently-verified adaptation of the completed top-five campaign's
+controller, importing the same frozen, previously-verified runtime
+(`.local/round-two-top-five-2026-09-09/frozen-source/dist/index.js`; its SHA-256 was
+re-verified unchanged immediately before this dispatch). Author image
+`sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a`. Evidence
+retained at
+`.local/round-two-third-ranked-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/rule-index-repair-attempt-1/`.
+
+Target: **codex** (Trial 1 used Claude — this is an explicit model-family switch,
+not a same-model repeat; see Comparison below). Requested `openai/gpt-5.6-sol`,
+effort `xhigh`, CLI `scaffoldVersion 0.153.2` (verified baked into the pinned author
+image). Observed from runtime events: model, effort and scaffold version are all
+unobservable — the Codex CLI's event stream does not expose them, a known
+instrumentation limit, not a data quality problem.
+
+Dispatched 2026-09-09T15:08:41.899Z as one of five reservations installed within a
+231ms window (15:08:41.798Z–15:08:42.029Z); `docker ps` confirmed all five
+`foundry-real-*` containers running concurrently, so this was a genuinely concurrent
+five-way campaign. Completed 2026-09-09T15:28:31.797Z. Total elapsed ≈1,189,898ms
+(~19m50s) — solver authoring time (capture wall clock) ≈1,183,634ms (~19m44s),
+grading ≈6.3s. Token usage: 1,001,128 input tokens (945,152 cached), 35,421 output
+tokens; the Codex CLI reports no price estimate. Execution reached a clean
+`completed` state with no invalid-execution or infrastructure error.
+
+### B. What changed since Trial 1
+
+Trial 1's starter already supplied most compiler machinery; this successor's public
+starter is reduced to the empty entry point, with lexer/builder/pattern/compiler
+modules removed from the public workspace (per the engineering successor note
+above). The checker is a required, separately-graded deliverable in both trials, but
+the protected bank grew from 25 scenarios/12 candidates (Trial 1) to 26
+scenarios/13 candidates here, adding the no-memo bounded-work negative control and
+its `case-025` distinguishing scenario. Most consequentially for this comparison:
+**the requested model switched from Claude (Trial 1) to Codex this round.**
+
+### C. Results
+
+Reward **1** — a clean pass on both required deliverables. Service: all 26 expected
+scenarios observed, zero failures, zero missing/unexpected IDs. Checker: present,
+deterministic, `checkerRequired: true`, `checkerPassed: true`, **13/13 candidates
+correctly classified** (0 missed, 0 false positives) — including the newer
+bounded-work negative control absent from Trial 1's smaller bank. `reasonPolicy` is
+not relevant to this package's grading outcome either way; the boolean verdict
+alone was graded.
+
+### D. Observable solving behavior
+
+Codex read the full contract in its first two commands (`SEMANTICS.md`, `api.d.ts`,
+`CHECKER-INPUT.md`, `entry.mjs`, `instruction.md`, `package.json`, plus a file
+listing), then worked from a series of ad-hoc inline `node --input-type=module`
+probe scripts against its own draft `entry.mjs`/`checker.mjs` before ever running
+`node --check` as a final gate. Concretely, across the 50 captured events it: (1)
+tested case-insensitive fold equality logic directly against `subject.run`; (2)
+built a small standalone program interpreter inline to cross-check its own
+compiler's emitted instructions against expected step/backtracking behavior; (3)
+stress-tested the bounded-work formula with a synthetic 32-rule, 64-character-pattern
+workload run 1,000 times, matching the newly-added no-memo negative control's exact
+concern; (4) fed its `checker.mjs`'s `run()` function malformed/empty-cell input
+directly to check its verdict shape and prototype safety; (5) checked for trailing
+whitespace and searched for any `AGENTS.md` files in the workspace; and (6) probed
+specific greedy/lazy-star and fallback-rule interactions (`A*?\*` with `fold:true`
+against a bare `*` fallback) before finalizing. Every commit gate was
+`node --check entry.mjs && node --check checker.mjs` plus, in one pass, `git diff
+--check`. No failed self-test or reverted approach is visible in the captured
+commands — each probe script ran once and the agent moved on, consistent with a
+solver that had already converged on its approach before writing the inline checks.
+
+### E. Comparison and next step
+
+Trial 1 (Claude) and Trial 2 (Codex) are both clean passes, but on different
+models against different-sized checker banks — this is not a controlled same-model
+comparison, and the fact that both models solved a materially similar task cleanly
+is itself informative: nothing about the harder empty-starter successor or the
+added bounded-work control proved model-specific here. Codex's inline-interpreter
+verification approach (building a second independent executable model of the
+instruction set to cross-check its own compiler) mirrors the same general strategy
+Trial 1's write-up already identified as the transferable lesson for this package.
+Recommend treating this package as calibration-stable across at least two model
+families under the current successor contract, and prioritizing it lower for
+further difficulty-search trials than packages with an open service or checker
+defect.
+
+### F. Verified publication record — September 9, 2026
+
+Reward **1**; service **26/26**; checker **13/13**. All **718** completion-manifest files matched their recorded sizes and hashes.
+
+[Campaign results](../round-two-third-ranked-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-third-ranked-five.json). Trial 1 is preserved.

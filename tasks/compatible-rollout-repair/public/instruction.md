@@ -1,11 +1,11 @@
-# Repair the compatibility-aware rollout controller
+# Implement compatible fleet rollout
 
-The controller stages model-service releases and publishes deployment aliases and
-consumer caches. Its happy-path test passes, but mixed consumer fleets and failed
-canaries can leave bindings inconsistent. Repair the application under `src/`.
-Preserve the interface in `SEMANTICS.md`; the model names here are fictional.
+Build the service and its independent release validator in `/work/task`.
+Read `SEMANTICS.md` for the domain contract and `api.d.ts` for the service interface.
 
-Run `node --test test/*.test.mjs` and add whatever local checks you need. The driver
-owns actual deployment, telemetry, alias and cache state. Your reports are compared
-with those observations. The whole requested fleet must converge while unrelated
-services retain their state. Distinct correct rollout strategies are accepted.
+`entry.mjs` must export `subject.run(view, api)`. Implement the required behavior
+using any correct design.
+
+Also submit `checker.mjs`, exporting `run({cases})` as specified in
+`CHECKER-INPUT.md`. Both the service and validator must pass. Submitted helper
+modules and Node built-ins are available.

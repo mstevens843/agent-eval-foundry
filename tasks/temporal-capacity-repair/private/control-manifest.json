@@ -83,5 +83,14 @@
     "check": "exact_integral",
     "clean": "case-032",
     "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "unread-empty-source",
+    "overlay": {
+      "entry.mjs": "controls/unread-empty-source.mjs"
+    },
+    "check": "completion",
+    "clean": "case-032",
+    "selectionRole": "post-selection-validation"
   }
 ]

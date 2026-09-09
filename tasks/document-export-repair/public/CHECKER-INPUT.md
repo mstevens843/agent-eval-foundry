@@ -26,9 +26,9 @@ No top-level checks, failures, status, expected, truth or groundTruth verdict is
 Legitimate nested application fields are not recursively removed because of their name.
 Execution metadata is not a semantic verdict. Use the original input and actual effects.
 
-Return {verdicts: {[token]: {ok: boolean, reasons: string[]}}} for every token. For a
-rejection, include each violated public obligation you identify using its exact name,
-either alone or as "check_name: explanation". Accept correct alternatives regardless
+Return {verdicts: {[token]: {ok: boolean, reasons?: string[]}}} for every case.
+Reasons are optional diagnostics; their wording is not graded.
+Accept correct alternatives regardless
 of object-key ordering, equivalent operation choices or unrelated diagnostic messages.
 
 Only checker.mjs is staged. Standard Node modules are available; other submitted files,

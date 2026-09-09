@@ -43,15 +43,20 @@ Elapsed time supports this ordering but is not a failure probability.
    publish exact retrial paths/digests. No model calls are part of this task.
 
 The first two groups' authoring-policy improvements already apply globally; this
-group does not need another policy rewrite. The prior group's pending native work
-is explicitly deferred by the user and is outside this implementation.
+group did not need another policy rewrite. The prior group's native work was
+deferred during this implementation and completed in the September 9 preflight.
 
 ## Status
 
 **All five are ready for second exploratory trials through Foundry or native
 Harbor.** Implementation, local validation, native integrity, complete oracle/nop
 jobs and export reproduction are complete. No new model trials were launched.
-The preceding group's native validation remains deferred as requested.
+The September 9 preflight reverified all five Foundry/native exports and their
+retained validation evidence, and confirmed compatibility with the completed first
+campaign's unchanged frozen runtime. The preceding group's deferred native checks
+have also passed. The [prepared Trial 2 handoff](../../docs/third-ranked-five-trial-2-handoff.md)
+assigns maintenance/release to Claude and rule index/installation/recovery to Codex.
+No new model calls were made.
 
 Baseline sources, exports and execution evidence are under
 `.local/third-ranked-five-implementation-2026-09-09/`. The

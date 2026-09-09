@@ -1,39 +1,20 @@
 # Checker input and output contract
 
-Submit checker.mjs exporting run({ cases }); it may be async. The checker executes as a
-standalone Node ES module with no task-specific imports or network access. Standard
-Node modules are available. Keep its implementation self-contained in checker.mjs.
+Export run({cases}) from checker.mjs. It may be async and import submitted helper
+modules and Node built-ins. Service APIs and network access are unavailable.
+Each case is {token,cells}; each cell is one complete independent execution.
+A candidate is correct only if every cell satisfies SEMANTICS.md.
+Tokens and scenario IDs are opaque identifiers. Observations are ordered
+{seq,method,request,value} host records. Reports contain untrusted diagnostics.
 
-Each case is {token, cells}. Tokens and scenarioId values are opaque and carry no
-correctness meaning. Cells are independent runs, not successive states of one run.
-A case is correct only when every cell satisfies the task's public obligations.
+- publicInput: original {queries,records}, including records never fetched.
+- writes: persisted report requests {id,total}, in call order.
+- observations: fetch/record calls and actual responses.
 
-Each cell includes scenarioId and observations. Observation entries are
-{seq, method, request, value}: an ordered actual API call, its arguments and its
-actual response. reports contains candidate-returned diagnostics, not proof of
-correctness. executions contains execution metadata, not a correctness verdict.
-No top-level checks, failures, status or reference answer is provided. Ignore
-additional metadata fields not needed to establish a public obligation.
-
-## Task-specific fields
-
-- `publicInput.queries`: original requested queries {id, series, knownAt, from, to}.
-- `publicInput.records`: the complete original raw revision records, including records a broken candidate did not fetch.
-- `writes`: persisted report requests {id,total}, in call order.
-- `observations`: fetch/record calls and actual responses.
-Raw records follow SEMANTICS.md. No reference-computed totals are provided. Reconstruct the required population and exact arithmetic yourself.
-
-## Verdicts
-
-Return {verdicts: {[token]: {ok: boolean, reasons: string[]}}} for every case.
-For a rejected case, reasons must include the public check name of the violated
-obligation; the names and their meanings are listed in instruction.md.
-Accept correct alternative implementations. Do not infer correctness from token
-order, scenario identifiers, reports or similarity to another candidate.
-
-The runner invokes run twice with the same cases in the same process. Both outputs
-must be identical. Do not mutate the supplied cases. The checker has 60 seconds total for both calls,
-one CPU and 1 GiB memory per grading invocation. Its inputs contain a bounded bank
-of finite executions governed by SEMANTICS.md; no service API calls are made by
-the checker. Missing, malformed or nondeterministic checker results fail this
-requirement. The repair and checker must both pass for overall reward one.
+Return {verdicts:{[token]:{ok:boolean,reasons?:string[]}}} for every token.
+Reasons are optional diagnostics and are not graded. Correct alternative algorithms,
+object-key ordering and diagnostic reports are permitted. Judge cases independently.
+The runner calls run twice on the same input in one process; return deterministic
+results without mutating inputs. Both calls share 60 seconds, one CPU and 1 GiB.
+Missing, malformed or nondeterministic output fails the checker deliverable.
+Both the service and checker must pass.

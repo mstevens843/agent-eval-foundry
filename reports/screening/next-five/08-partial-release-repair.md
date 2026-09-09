@@ -83,3 +83,132 @@ Use these exact exports:
 Both deliverables are required. The checker returns complete deterministic Boolean verdicts; optional reason text does not affect grading, and submitted helper modules are available. Public requirements and custom schemas remain supplied without a worked implementation.
 
 When Trial 2 completes, append the actual model/profile, frozen digest, service/checker outcomes, elapsed time, exclusions and final submission defect here. Keep original Trial 1 rewards intact. Local controls, old grading disputes and infrastructure errors are not additional model failures. The final hiring submission still requires its human-authored material and rubric, standard and cheat qualification on the final selected version.
+
+## Trial 2 — implementation successor — September 9, 2026
+
+### A. Identity and execution
+
+Run `partial-release-repair-attempt-1`, package digest
+`5c5b111476f3f48d97db15dac6bb165b0076f8c4363acd0899e434877b709387`, route
+`professional-multifile/authority-process@1`. Dispatched through this
+session's `real-provider` execution route (signed JobStore reservation,
+Ed25519, realm `real-provider`, `billingMode: subscription-only`,
+`maxMicroUsd: 0`, `maxAttempts: 1`) — a fresh campaign slot (`attempt-1`), not
+an infrastructure retry. Controller `campaign.mjs` under
+`.local/round-two-third-ranked-five-2026-09-09/`, a small, independently
+verified adaptation of the completed top-five campaign's controller, importing
+the same isolated, previously-verified runtime
+(`.local/round-two-top-five-2026-09-09/frozen-source/dist/index.js`; its
+SHA-256 was re-verified unchanged immediately before this dispatch). Author
+image `sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a`.
+Evidence retained at
+`.local/round-two-third-ranked-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/partial-release-repair-attempt-1/`.
+
+Target: **claude**. Requested `anthropic/claude-opus-5`, effort `max`, CLI
+`scaffoldVersion 2.1.263` (verified baked into the pinned author image, not
+merely asserted). Observed from runtime events: `model="claude-opus-5"`
+(matches requested); effort and scaffold version are not exposed by the CLI's
+event stream and remain unobserved — a known instrumentation limit, not a
+data quality problem.
+
+Dispatched 2026-09-09T15:08:41.851Z as one of five reservations installed
+within a 231ms window (15:08:41.798Z–15:08:42.029Z); `docker ps` confirmed all
+five `foundry-real-*` containers running concurrently, so this was a
+genuinely concurrent five-way campaign, not sequential dispatch disguised as
+parallel. Completed 2026-09-09T15:24:21.398Z. Total elapsed ≈939,547ms
+(~15m40s) — solver authoring time (capture wall clock) ≈932,580ms (~15m33s),
+grading ≈7.0s. Token usage: 2,203,919 input tokens (2,105,519 cached), 77,850
+output. The CLI's own `total_cost_usd` reports $3.98 for this run; that is
+the CLI's internal metered-price estimate for reporting purposes only — no
+actual charge occurred, since the signed authorization was
+`subscription-only` with `maxMicroUsd: 0`. Execution reached a clean
+`completed` state with no invalid-execution or infrastructure error.
+
+### B. What changed since Trial 1
+
+The starter is now a single empty entry point (Trial 1's starter already
+supplied the graph/plan/release/transport modules); the checker is a
+required, separately-graded deliverable in both trials, and —
+directly relevant to Trial 1's own failure — checker reasons are now
+diagnostic-only. Trial 1's grader required a `reasons` array element to
+equal the check name exactly; every one of its rejections had already named
+the check correctly as a sentence prefix, and that grader defect was
+identified and fixed on the harness side (see "Changes applied since this
+trial" above) before this attempt ran.
+
+### C. Results
+
+**Reward 1 — a clean pass on both deliverables.** Service: `evaluateOutcome`
+complete, status `semantic-pass`, all 33 expected scenario IDs observed with
+zero failures, zero missing/unexpected IDs. Checker: present, deterministic,
+`checkerRequired: true`, `checkerPassed: true`, 11/11 candidates correctly
+classified (0 missed, 0 false positives). This directly resolves Trial 1's
+original reward-0 — the same underlying planning and checking logic Trial 1
+already had would very likely have passed here too, since the exact-string
+gate that sank it no longer exists.
+
+### D. Observable solving behavior
+
+The transcript shows the agent read `SEMANTICS.md` and `api.d.ts` first, then
+wrote the full `entry.mjs` service in one initial pass. Its documented
+algorithm: re-`inspect` the authoritative graph before every single write,
+derive fresh (from that exact state, not a cached plan) the one next legal
+operation that makes progress, issue it, drain any receipt for hygiene only
+(never trusted as the source of truth), and repeat. Ordering is enforced by
+computing a child-closed `removeSet` (a parent cannot be torn down while a
+current child still references it) and always exhausting removals before any
+creation, so a repaired child is never re-attached to a parent that still has
+to be replaced. It explicitly reasons in the code comments that this
+re-derive-from-ground-truth-every-round design makes every write
+dependency-safe by construction and every retry idempotent-safe by the
+contract's own idempotency guarantee.
+
+For the checker, it built an independent trace validator that judges each
+recorded write's legality against the graph state immediately preceding it
+(`before`), preferring the host-recorded `before` when present and falling
+back to replaying the observation/receipt stream when it is absent, then
+separately checks final-graph completeness and that unrelated resources were
+left byte-for-byte untouched. It deliberately does not treat a host-reported
+REJECTED/UNKNOWN status as evidence on its own, reasoning in its own comments
+that the contract defines the fault as issuing an illegal *request*, decided
+from `before`, independent of what the host happened to answer.
+
+Before finalizing, it built a `dev/` self-test harness (`test.mjs`,
+`harness.mjs`, `adversarial.mjs`, `diag.mjs`, `verify.mjs`) and iterated on it
+live: one visible edit tuned the harness's random-graph generator to scale
+with the package's own 40-resource bound (`pick(4)` → `pick(Math.max(1,
+Math.min(12, 40 - initial.length)))`) rather than a fixed small number, and a
+`python3` patch mid-session refactored `planRemovals`'s internal note-taking
+from a plain array into a callback — a real, visible revision during
+development, not a one-shot draft. It ran `dev/test.mjs`, a dedicated
+`dev/adversarial.mjs` sweep, and a throwaway `dev/diag.mjs` script (deleted
+before submission) to chase down specific behavior before settling. Its final
+message states plainly: "Both modules are complete, self-contained, and
+passing" — a claim the actual grading confirms exactly; no overclaim beyond
+what was true.
+
+### E. Comparison and next step
+
+Trial 1 reached the same substantive outcome — correct service, checker
+correctly classifying every candidate — and was scored reward 0 purely
+because the grader required byte-exact equality against a `reasons` array
+element while the checker's rejections legitimately led with the check name
+as a sentence prefix. That grader defect was diagnosed in Trial 1's own
+analysis, fixed on the harness side, and confirmed via an offline regrade of
+Trial 1's preserved submission (11/11, 0 false positives, 0 missed) before
+this Trial 2 attempt ever ran. Trial 2's fresh submission — independently
+written, not a repair of Trial 1's bytes — passes cleanly under the same
+fixed, diagnostic-only-reasons policy, which is exactly the outcome predicted:
+this is a genuine resolution of the original interface problem, not a
+different submission that merely avoided triggering it (the underlying
+planning/checking approach is materially similar to Trial 1's, and both
+would score identically under either the old or the fixed grader on the
+checker's actual classifications). No further engineering action is needed
+on this package's checker-reason interface; retain this correct submission as a control and prioritize packages with observed
+service or required-checker failures for further difficulty-search trials.
+
+### F. Verified publication record — September 9, 2026
+
+Reward **1**; service **33/33**; checker **11/11**. All **680** completion-manifest files matched their recorded sizes and hashes.
+
+[Campaign results](../round-two-third-ranked-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-third-ranked-five.json). Trial 1 is preserved.

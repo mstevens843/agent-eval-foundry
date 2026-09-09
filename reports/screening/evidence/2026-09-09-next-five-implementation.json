@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "recordedAt": "2026-09-09T11:46:03.920Z",
   "providerCallsMade": 0,
-  "status": "five-foundry-exploratory-retrial-exports-ready; native-browser-validation-pending",
+  "status": "five-foundry-and-native-exploratory-retrial-exports-ready",
   "rankingSource": "reports/screening/second-trial-priority-2026-09-09.md",
   "releaseEvidence": {
     "path": ".local/next-five-implementation-2026-09-09/release-ready/summary.json",
@@ -19,8 +19,10 @@
     "checkerCandidates": 59,
     "negativeControls": 49,
     "staticChecks": 110,
-    "nativeIntegrityChecksPassed": 24,
-    "regressionTestsPassed": 25
+    "nativeIntegrityChecksPassed": 30,
+    "regressionTestsPassed": 25,
+    "harborOraclePasses": 5,
+    "harborNopZeroes": 5
   },
   "preservation": {
     "baseline": {
@@ -67,8 +69,6 @@
     ]
   },
   "pending": [
-    "Browser native integrity run previously timed out at 600 seconds after an infrastructure error; tests/docker-compose.yaml init:true and docker run --init are now present, with rerun pending.",
-    "Native Harbor oracle/nop jobs for all five have not run; the existing Foundry exports are separately validated for exploratory retrials.",
     "No Trial 2 model results for this group. Final submission requires the assignment human-authored material and rubric, standard and cheat qualification."
   ],
   "results": [
@@ -116,7 +116,38 @@
             "sha256": "c4314a6a5cf7876db04676dbcda6d7acf374dd7ba314f3e1cfd766fa6ffcf382"
           }
         },
-        "harborOracleAndNop": "pending"
+        "harborOracleAndNop": "passed-exact-export",
+        "oracle": {
+          "id": "route-policy-repair",
+          "agent": "oracle",
+          "trial": "route-policy-repair__7gqVFB3",
+          "reward": 1,
+          "result": {
+            "path": ".local/next-five-implementation-2026-09-09/jobs/five-oracle-final/route-policy-repair__7gqVFB3/result.json",
+            "sha256": "6557f337514d013b6a426a9d292cff17d3e53d216851b25bb4f6630de89de846"
+          },
+          "verifier": {
+            "path": ".local/next-five-implementation-2026-09-09/jobs/five-oracle-final/route-policy-repair__7gqVFB3/verifier/summary.json",
+            "sha256": "e8801f2cbc63af65b6d5c23ab2aa2863536619ec26adf4773edc1ee3e5275db8"
+          },
+          "infrastructureError": false
+        },
+        "nop": {
+          "id": "route-policy-repair",
+          "agent": "nop",
+          "trial": "route-policy-repair__Kfh6kSX",
+          "reward": 0,
+          "result": {
+            "path": ".local/next-five-implementation-2026-09-09/jobs/five-nop-final/route-policy-repair__Kfh6kSX/result.json",
+            "sha256": "9cd412414924106bf0ea5f6567375e4af81fa7f878aaaea9a9081f4fd8ead393"
+          },
+          "verifier": {
+            "path": ".local/next-five-implementation-2026-09-09/jobs/five-nop-final/route-policy-repair__Kfh6kSX/verifier/summary.json",
+            "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1"
+          },
+          "infrastructureError": false,
+          "nopReason": "missing-required-checker-deliverable"
+        }
       }
     },
     {
@@ -155,10 +186,46 @@
         "reproduced": true,
         "staticChecksPassed": 22,
         "integrity": {
-          "status": "pending-container-rerun",
-          "checks": 0
+          "status": "passed-exact-export",
+          "checks": 6,
+          "testedDigest": "87ee896596d463215fa65ca067ba308f68161a370c8154909d2b9fd08ae061d9",
+          "evidence": {
+            "path": ".local/next-five-implementation-2026-09-09/integrity-browser-final/summary.json",
+            "sha256": "54afa72a35632c9c5c545762a0002d6a839078988f1e7d9b2f5a8738cadd7596"
+          }
         },
-        "harborOracleAndNop": "pending"
+        "harborOracleAndNop": "passed-exact-export",
+        "oracle": {
+          "id": "browser-replay-repair",
+          "agent": "oracle",
+          "trial": "browser-replay-repair__Nb3q8RL",
+          "reward": 1,
+          "result": {
+            "path": ".local/next-five-implementation-2026-09-09/jobs/five-oracle-final/browser-replay-repair__Nb3q8RL/result.json",
+            "sha256": "2fc1fa58d20d9c3d0f479703c54bab9989912b8ee62d7cae5d974c97b4632b74"
+          },
+          "verifier": {
+            "path": ".local/next-five-implementation-2026-09-09/jobs/five-oracle-final/browser-replay-repair__Nb3q8RL/verifier/summary.json",
+            "sha256": "490369d7de4d522cb4362888f289445bc6a627ad45fff984f421e9a3e3192c62"
+          },
+          "infrastructureError": false
+        },
+        "nop": {
+          "id": "browser-replay-repair",
+          "agent": "nop",
+          "trial": "browser-replay-repair__ZrHsuco",
+          "reward": 0,
+          "result": {
+            "path": ".local/next-five-implementation-2026-09-09/jobs/five-nop-final/browser-replay-repair__ZrHsuco/result.json",
+            "sha256": "5ccdcafa2890e01dd4ecb18bf2de9023eaa5c20526a1cd568da418f6e7c54192"
+          },
+          "verifier": {
+            "path": ".local/next-five-implementation-2026-09-09/jobs/five-nop-final/browser-replay-repair__ZrHsuco/verifier/summary.json",
+            "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1"
+          },
+          "infrastructureError": false,
+          "nopReason": "missing-required-checker-deliverable"
+        }
       }
     },
     {
@@ -205,7 +272,38 @@
             "sha256": "c4314a6a5cf7876db04676dbcda6d7acf374dd7ba314f3e1cfd766fa6ffcf382"
           }
         },
-        "harborOracleAndNop": "pending"
+        "harborOracleAndNop": "passed-exact-export",
+        "oracle": {
+          "id": "recurring-calendar-repair",
+          "agent": "oracle",
+          "trial": "recurring-calendar-repair__Hd5FTXk",
+          "reward": 1,
+          "result": {
+            "path": ".local/next-five-implementation-2026-09-09/jobs/five-oracle-final/recurring-calendar-repair__Hd5FTXk/result.json",
+            "sha256": "c0f51d5a72a99f922a9a82f372408737dc44fc04b5f61b4bd7ea1a793aed7de7"
+          },
+          "verifier": {
+            "path": ".local/next-five-implementation-2026-09-09/jobs/five-oracle-final/recurring-calendar-repair__Hd5FTXk/verifier/summary.json",
+            "sha256": "1b6f39a006d1ac5383239eedfe44a65e9c1678cd0b88f4a365d85836d8b7ec0f"
+          },
+          "infrastructureError": false
+        },
+        "nop": {
+          "id": "recurring-calendar-repair",
+          "agent": "nop",
+          "trial": "recurring-calendar-repair__AiUdwmj",
+          "reward": 0,
+          "result": {
+            "path": ".local/next-five-implementation-2026-09-09/jobs/five-nop-final/recurring-calendar-repair__AiUdwmj/result.json",
+            "sha256": "b0ba40d79c138ffb362fdc6c1e90cfc86cacecd27637e24ec7492e997f47ec1a"
+          },
+          "verifier": {
+            "path": ".local/next-five-implementation-2026-09-09/jobs/five-nop-final/recurring-calendar-repair__AiUdwmj/verifier/summary.json",
+            "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1"
+          },
+          "infrastructureError": false,
+          "nopReason": "missing-required-checker-deliverable"
+        }
       }
     },
     {
@@ -252,7 +350,38 @@
             "sha256": "c4314a6a5cf7876db04676dbcda6d7acf374dd7ba314f3e1cfd766fa6ffcf382"
           }
         },
-        "harborOracleAndNop": "pending"
+        "harborOracleAndNop": "passed-exact-export",
+        "oracle": {
+          "id": "workflow-authority-repair",
+          "agent": "oracle",
+          "trial": "workflow-authority-repair__Ntbt5An",
+          "reward": 1,
+          "result": {
+            "path": ".local/next-five-implementation-2026-09-09/jobs/five-oracle-final/workflow-authority-repair__Ntbt5An/result.json",
+            "sha256": "ceaaf782a255bb00726cb37738b93f939c6f0c55233f6920db76fee6104f01e7"
+          },
+          "verifier": {
+            "path": ".local/next-five-implementation-2026-09-09/jobs/five-oracle-final/workflow-authority-repair__Ntbt5An/verifier/summary.json",
+            "sha256": "d46eebb249d1c2a8f38950f43480e9b494ee74aa637b824431c8f2265718db83"
+          },
+          "infrastructureError": false
+        },
+        "nop": {
+          "id": "workflow-authority-repair",
+          "agent": "nop",
+          "trial": "workflow-authority-repair__Po6P4J4",
+          "reward": 0,
+          "result": {
+            "path": ".local/next-five-implementation-2026-09-09/jobs/five-nop-final/workflow-authority-repair__Po6P4J4/result.json",
+            "sha256": "d598a6fc493a07d3e6250a76aa009f7ff641a66cd1e605e516f9c757aff13122"
+          },
+          "verifier": {
+            "path": ".local/next-five-implementation-2026-09-09/jobs/five-nop-final/workflow-authority-repair__Po6P4J4/verifier/summary.json",
+            "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1"
+          },
+          "infrastructureError": false,
+          "nopReason": "missing-required-checker-deliverable"
+        }
       }
     },
     {
@@ -299,8 +428,83 @@
             "sha256": "b057d392aa8e654a6e3c4a91b58c8ce198859712c07d9f2c59fb7515475d7d5e"
           }
         },
-        "harborOracleAndNop": "pending"
+        "harborOracleAndNop": "passed-exact-export",
+        "oracle": {
+          "id": "delegated-budget-repair",
+          "agent": "oracle",
+          "trial": "delegated-budget-repair__GvUzQot",
+          "reward": 1,
+          "result": {
+            "path": ".local/next-five-implementation-2026-09-09/jobs/five-oracle-final/delegated-budget-repair__GvUzQot/result.json",
+            "sha256": "103e7d9ab4865982bfc0016e4ad0dca46fc97d2d5cef8579eb15a463da9650ef"
+          },
+          "verifier": {
+            "path": ".local/next-five-implementation-2026-09-09/jobs/five-oracle-final/delegated-budget-repair__GvUzQot/verifier/summary.json",
+            "sha256": "b445a3784d63e3d69c4d52f8184d79cbfc99b4069920ae06b7565917aa96f00b"
+          },
+          "infrastructureError": false
+        },
+        "nop": {
+          "id": "delegated-budget-repair",
+          "agent": "nop",
+          "trial": "delegated-budget-repair__kbhjiUr",
+          "reward": 0,
+          "result": {
+            "path": ".local/next-five-implementation-2026-09-09/jobs/five-nop-final/delegated-budget-repair__kbhjiUr/result.json",
+            "sha256": "09f2bdd92c0d560d892ab0d88364e31a8d3fc7e7425e4e7f0e3e950069116e89"
+          },
+          "verifier": {
+            "path": ".local/next-five-implementation-2026-09-09/jobs/five-nop-final/delegated-budget-repair__kbhjiUr/verifier/summary.json",
+            "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1"
+          },
+          "infrastructureError": false,
+          "nopReason": "missing-required-checker-deliverable"
+        }
       }
     }
-  ]
+  ],
+  "nativeCompletion": {
+    "recordedAt": "2026-09-09T13:24:42.357213+00:00",
+    "providerCallsMade": 0,
+    "browserIntegrity": {
+      "path": ".local/next-five-implementation-2026-09-09/integrity-browser-final/summary.json",
+      "sha256": "54afa72a35632c9c5c545762a0002d6a839078988f1e7d9b2f5a8738cadd7596"
+    },
+    "oracleJob": {
+      "path": ".local/next-five-implementation-2026-09-09/jobs/five-oracle-final/result.json",
+      "sha256": "aa083b2aa0cb3bdf8f6acc2f56f3c454ca98f7d6c3f1820aceadb0a7e15396ed"
+    },
+    "nopJob": {
+      "path": ".local/next-five-implementation-2026-09-09/jobs/five-nop-final/result.json",
+      "sha256": "c0eb0a9d542acd61aee63b0a4292fb4ba33d8edb16e95fa9e7f3ba8fcf9db815"
+    },
+    "oracleConfig": {
+      "path": ".local/next-five-implementation-2026-09-09/oracle-final-job.json",
+      "sha256": "775b262fc70b76b2e25de03ee31c0f8b422ef9d8497be6699550f1f68b240d92"
+    },
+    "nopConfig": {
+      "path": ".local/next-five-implementation-2026-09-09/nop-final-job.json",
+      "sha256": "eef22db570b316bf401b0b47f9cc5009b66c3401bdcfbb3ba309779d6e01e33d"
+    },
+    "note": "The earlier browser timeout is retained as development evidence. The final export passed all six integrity controls and its Harbor oracle/nop trials without infrastructure errors. Foundry and native package digests did not change."
+  },
+  "retrialPreflight": {
+    "recordedAt": "2026-09-09T13:22:09.196Z",
+    "providerCallsMade": 0,
+    "artifactVerification": {
+      "path": ".local/retrial-preflight-2026-09-09/retained-artifacts.json",
+      "sha256": "397315044d907a5f5bb7f42b85d9deb00cee393c65da8c15c27d05eb59e51b3a"
+    },
+    "packagesVerified": 5,
+    "foundryComponentFilesVerified": 251,
+    "nativeFilesVerified": 267,
+    "sourceFilesVerified": 171,
+    "frozenRuntime": {
+      "path": ".local/round-two-top-five-2026-09-09/frozen-source",
+      "sourceDigest": "2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4",
+      "distSha256": "60695de963e5085dfe8ee4fb09353b1db0169219d9ad9425ac2a997a73b69b26",
+      "packagesLoadable": 10
+    },
+    "packageDigestsUnchanged": true
+  }
 }

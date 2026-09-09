@@ -1,35 +1,74 @@
 [
   {
     "id": "wrong-binding",
-    "overlay": { "entry.mjs": "controls/wrong-binding.mjs" },
+    "overlay": {
+      "entry.mjs": "controls/wrong-binding.mjs"
+    },
     "check": "binding",
     "clean": "case-000",
     "selectionRole": "post-selection-validation"
   },
   {
     "id": "wrong-abi",
-    "overlay": { "src/catalog.mjs": "controls/wrong-abi.mjs" },
+    "overlay": {
+      "src/catalog.mjs": "controls/wrong-abi.mjs"
+    },
     "check": "compatibility",
     "clean": "case-000"
   },
   {
     "id": "green-history",
-    "overlay": { "src/health.mjs": "controls/green-history.mjs" },
+    "overlay": {
+      "src/health.mjs": "controls/green-history.mjs"
+    },
     "check": "observed_health",
     "clean": "case-000"
   },
-  { "id": "skip-cache", "overlay": { "src/publish.mjs": "controls/skip-cache.mjs" }, "check": "cache" },
+  {
+    "id": "skip-cache",
+    "overlay": {
+      "src/publish.mjs": "controls/skip-cache.mjs"
+    },
+    "check": "cache"
+  },
   {
     "id": "broad-cleanup",
-    "overlay": { "src/cleanup.mjs": "controls/broad-cleanup.mjs" },
+    "overlay": {
+      "src/cleanup.mjs": "controls/broad-cleanup.mjs"
+    },
     "check": "preservation",
     "clean": "case-000"
   },
-  { "id": "no-work", "overlay": { "entry.mjs": "controls/no-work.mjs" }, "check": "completion" },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion"
+  },
   {
     "id": "isolation",
-    "overlay": { "entry.mjs": "controls/isolation.mjs" },
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
     "check": "completion",
     "isolation": true
+  },
+  {
+    "id": "resume-without-health",
+    "overlay": {
+      "entry.mjs": "controls/resume-without-health.mjs"
+    },
+    "check": "observed_health",
+    "clean": "case-000"
+  },
+  {
+    "id": "forget-job-origin",
+    "overlay": {
+      "src/origin.mjs": "controls/forget-job-origin.mjs",
+      "entry.mjs": "controls/forget-origin-entry.mjs"
+    },
+    "check": "rollback",
+    "clean": "case-000"
   }
 ]

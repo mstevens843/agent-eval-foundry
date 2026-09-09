@@ -144,3 +144,13 @@ tree already had the stricter form) and verified via real Docker build+validate
 (`local-valid: true`). This closes a latent gap a future candidate or checker could
 otherwise have exploited; it is not evidence of any defect in this submission. **When
 trials run again:** #23 should continue to score exactly as it did here.
+
+## Trial 2 preparation — final group (2026-09-09)
+
+**Ready for second exploratory trials through Foundry or native Harbor.** Removed the public catalog, option generator, policy implementation and service loop after completing the private service closures. Added an independent checker based on raw constraints and disclosure/write history. The alternative correct service stops at a disclosed leaf; a regression rejects a stranded unrealized branch even when the realized placements succeed. The earlier addendum’s redundant-terminal-read requirement is not adopted: the public leaf-completion rule and maintained grader permit stopping there.
+
+Local validation passed **16 assurance checks**, including a semantic failure for the untouched starter. Its independent checker classifies **13/13 candidates** correctly; reason text is diagnostic. The final native export passed 22 static checks, Harbor oracle reward 1 and nop reward 0, with no infrastructure exceptions. Both export formats reproduce. No model attempt was launched by this engineering work.
+
+Foundry export: `.local/final-five-implementation-2026-09-09/release-ready/staged-allocation-repair/export`. Package digest: `0afe425904375bbba305ded2589ff08432c37657e7459d9003f9f66a55fee8c5`. Native export: `.local/final-five-implementation-2026-09-09/harbor-ready/staged-allocation-repair`. Native digest: `477c19170e0bfcbf674b476e78e7d12dc4cb3a6fe098424f1d10514c4bc899a4`. Suggested target: **Claude**, retaining the original model family. Append the eventual Trial 2 outcome below this engineering record; preserve Trial 1.
+
+[Implementation and completed checks](../final-five-implementation-plan-2026-09-09.md) · [Exact evidence](../evidence/2026-09-09-final-five-implementation.json).

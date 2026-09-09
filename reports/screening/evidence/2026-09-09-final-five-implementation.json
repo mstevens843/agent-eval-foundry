@@ -1,0 +1,373 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-09-09T15:04:59.194613+00:00",
+  "group": "final-five",
+  "providerCallsMade": 0,
+  "status": "ready-for-second-exploratory-trials",
+  "preparedPackageCount": 25,
+  "packages": [
+    {
+      "id": "staged-allocation-repair",
+      "number": "23",
+      "priority": 1,
+      "analysis": "reports/screening/fifth-five/23-staged-allocation-repair.md",
+      "recommendedTarget": "claude",
+      "foundry": {
+        "digest": "0afe425904375bbba305ded2589ff08432c37657e7459d9003f9f66a55fee8c5",
+        "export": ".local/final-five-implementation-2026-09-09/release-ready/staged-allocation-repair/export",
+        "assurance": {
+          "path": ".local/final-five-implementation-2026-09-09/release-ready/staged-allocation-repair/validation/assurance.json",
+          "sha256": "e9e6c59655362950e29eb29be0bd95669ff00cb4175e49f33e74ff777d593621"
+        },
+        "assuranceChecks": 16,
+        "scenarios": 41,
+        "trialEligible": true,
+        "untouchedStarterSemanticFailure": true,
+        "checkerOracle": {
+          "total": 13,
+          "correct": 13,
+          "falsePositives": 0,
+          "missed": 0,
+          "pass": true
+        }
+      },
+      "native": {
+        "export": ".local/final-five-implementation-2026-09-09/harbor-ready/staged-allocation-repair",
+        "digest": "477c19170e0bfcbf674b476e78e7d12dc4cb3a6fe098424f1d10514c4bc899a4",
+        "manifest": {
+          "path": ".local/final-five-implementation-2026-09-09/harbor-ready/staged-allocation-repair/export-manifest.json",
+          "sha256": "8a9313aaf3fe9382b09341fee3e03e5a0fbf015c5c3db4b7d57af0b3594b7aab"
+        },
+        "staticChecks": 22,
+        "oracle": {
+          "reward": 1.0,
+          "result": {
+            "path": ".local/final-five-implementation-2026-09-09/jobs/final-five-oracle/staged-allocation-repair__4CiW6Rg/result.json",
+            "sha256": "5344d7262df61ffa7339ff6ed0658becb3dbae145b5fffd3c5b55b8048b205f5"
+          },
+          "verifier": {
+            "path": ".local/final-five-implementation-2026-09-09/jobs/final-five-oracle/staged-allocation-repair__4CiW6Rg/verifier/summary.json",
+            "sha256": "f6f221a4b8558d4a496088ffe4ee924c434030f507ada38758136ea4664b28e3"
+          },
+          "infrastructureError": false
+        },
+        "nop": {
+          "reward": 0.0,
+          "result": {
+            "path": ".local/final-five-implementation-2026-09-09/jobs/final-five-nop/staged-allocation-repair__G7ZYztJ/result.json",
+            "sha256": "78ac265dcd7193f2770ab233ce35298d93bd539319ea999b76c6745980c595b5"
+          },
+          "verifier": {
+            "path": ".local/final-five-implementation-2026-09-09/jobs/final-five-nop/staged-allocation-repair__G7ZYztJ/verifier/summary.json",
+            "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1"
+          },
+          "infrastructureError": false
+        },
+        "exportReproduced": true
+      }
+    },
+    {
+      "id": "persistent-knowledge-repair",
+      "number": "02",
+      "priority": 2,
+      "analysis": "reports/screening/original-five/02-persistent-knowledge-repair.md",
+      "recommendedTarget": "codex",
+      "foundry": {
+        "digest": "9d40456cb7d7456aee236396cc374fa3e17c9f2b1ce1ad71641e3234efe62eea",
+        "export": ".local/final-five-implementation-2026-09-09/release-ready/persistent-knowledge-repair/export",
+        "assurance": {
+          "path": ".local/final-five-implementation-2026-09-09/release-ready/persistent-knowledge-repair/validation/assurance.json",
+          "sha256": "ede7ce88462cd666e7269fab95d9ebb5ad48ba625a35c16b66d1d501d7ea24bb"
+        },
+        "assuranceChecks": 13,
+        "scenarios": 16,
+        "trialEligible": true,
+        "untouchedStarterSemanticFailure": true,
+        "checkerOracle": {
+          "total": 10,
+          "correct": 10,
+          "falsePositives": 0,
+          "missed": 0,
+          "pass": true
+        }
+      },
+      "native": {
+        "export": ".local/final-five-implementation-2026-09-09/harbor-ready/persistent-knowledge-repair",
+        "digest": "8f9453df86143808c306966acc54ac1b14a886a1d2d8e16c0fd356e2413b6643",
+        "manifest": {
+          "path": ".local/final-five-implementation-2026-09-09/harbor-ready/persistent-knowledge-repair/export-manifest.json",
+          "sha256": "ee3b610857129a5faf78acadd73eda2755cab9615eb9e24b881fc09c960b21c5"
+        },
+        "staticChecks": 22,
+        "oracle": {
+          "reward": 1.0,
+          "result": {
+            "path": ".local/final-five-implementation-2026-09-09/jobs/final-five-oracle/persistent-knowledge-repair__47rbQZt/result.json",
+            "sha256": "66149c8a9cbc4f2cef13fb814f399a6ee62688e6b0b1fbc794ba549385d600ec"
+          },
+          "verifier": {
+            "path": ".local/final-five-implementation-2026-09-09/jobs/final-five-oracle/persistent-knowledge-repair__47rbQZt/verifier/summary.json",
+            "sha256": "8e22e40252503206df76b4fa30dfdf2b061436af0a5e6e1ce882175fc66eca29"
+          },
+          "infrastructureError": false
+        },
+        "nop": {
+          "reward": 0.0,
+          "result": {
+            "path": ".local/final-five-implementation-2026-09-09/jobs/final-five-nop/persistent-knowledge-repair__uxP6HCE/result.json",
+            "sha256": "38fc16d067d04823285b0805744cd5afef93941a0c960f6cd2672cf7256d776b"
+          },
+          "verifier": {
+            "path": ".local/final-five-implementation-2026-09-09/jobs/final-five-nop/persistent-knowledge-repair__uxP6HCE/verifier/summary.json",
+            "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1"
+          },
+          "infrastructureError": false
+        },
+        "exportReproduced": true
+      }
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "number": "10",
+      "priority": 3,
+      "analysis": "reports/screening/next-five/10-temporal-capacity-repair.md",
+      "recommendedTarget": "claude",
+      "foundry": {
+        "digest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+        "export": ".local/final-five-implementation-2026-09-09/release-ready/temporal-capacity-repair/export",
+        "assurance": {
+          "path": ".local/final-five-implementation-2026-09-09/release-ready/temporal-capacity-repair/validation/assurance.json",
+          "sha256": "52645fe892098d6064f22eb3f8817cb2895039f8c5c3817235421f7c3cf182e2"
+        },
+        "assuranceChecks": 16,
+        "scenarios": 34,
+        "trialEligible": true,
+        "untouchedStarterSemanticFailure": true,
+        "checkerOracle": {
+          "total": 13,
+          "correct": 13,
+          "falsePositives": 0,
+          "missed": 0,
+          "pass": true
+        }
+      },
+      "native": {
+        "export": ".local/final-five-implementation-2026-09-09/harbor-ready/temporal-capacity-repair",
+        "digest": "6d5b00c7164f9602bc5e3ca9207924ac66650a3becff24f674589650689879a3",
+        "manifest": {
+          "path": ".local/final-five-implementation-2026-09-09/harbor-ready/temporal-capacity-repair/export-manifest.json",
+          "sha256": "d10bbad191456ef98677ad5adfeb9fc7f87f8f0aafca825e18f12eaec4d721b8"
+        },
+        "staticChecks": 22,
+        "oracle": {
+          "reward": 1.0,
+          "result": {
+            "path": ".local/final-five-implementation-2026-09-09/jobs/final-five-oracle/temporal-capacity-repair__hgfnznC/result.json",
+            "sha256": "f65fa311694c18c23aebe1b621a0500f54d5cf6d4d297a54f0ad347ebdfdbf09"
+          },
+          "verifier": {
+            "path": ".local/final-five-implementation-2026-09-09/jobs/final-five-oracle/temporal-capacity-repair__hgfnznC/verifier/summary.json",
+            "sha256": "b65fd4f50499f9f172ff9a2233f8f1b36f3f3ac7207a666860ba6277bbc612ff"
+          },
+          "infrastructureError": false
+        },
+        "nop": {
+          "reward": 0.0,
+          "result": {
+            "path": ".local/final-five-implementation-2026-09-09/jobs/final-five-nop/temporal-capacity-repair__N6h2mAu/result.json",
+            "sha256": "d79745ea7fcd4809dde10bd0ab6e92bd8c34f59154b3039ca02956842feb5795"
+          },
+          "verifier": {
+            "path": ".local/final-five-implementation-2026-09-09/jobs/final-five-nop/temporal-capacity-repair__N6h2mAu/verifier/summary.json",
+            "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1"
+          },
+          "infrastructureError": false
+        },
+        "exportReproduced": true
+      }
+    },
+    {
+      "id": "caa-revalidation-repair",
+      "number": "01",
+      "priority": 4,
+      "analysis": "reports/screening/original-five/01-caa-revalidation-repair.md",
+      "recommendedTarget": "codex",
+      "foundry": {
+        "digest": "b60aea7eb0a356f87215b0f366fa63d4f97047f290e9784b2cbc031eb0899eac",
+        "export": ".local/final-five-implementation-2026-09-09/caa-export",
+        "assurance": {
+          "path": ".local/final-five-implementation-2026-09-09/caa-export/assurance.json",
+          "sha256": "b0aabc315020797d7cbf20cf1a3cefad9b3c5f429c2c8b63db4fea11534ef5f7"
+        },
+        "assuranceChecks": 27,
+        "scenarios": 24,
+        "trialEligible": true,
+        "untouchedStarterSemanticFailure": true,
+        "checkerOracle": null,
+        "requiredDeliverable": "native Go service",
+        "nativeServiceChecks": 243
+      },
+      "native": {
+        "export": ".local/final-five-implementation-2026-09-09/harbor-ready/caa-revalidation-repair",
+        "digest": "c649ff8980eda3fad1cb981ef930cda16d609e98df87e1441184388857ba169f",
+        "manifest": {
+          "path": ".local/final-five-implementation-2026-09-09/harbor-ready/caa-revalidation-repair/export-manifest.json",
+          "sha256": "0efd175e2729acbe22e316f5f148c15481fabce1761381958a9c72315d34307c"
+        },
+        "staticChecks": 22,
+        "oracle": {
+          "reward": 1.0,
+          "result": {
+            "path": ".local/final-five-implementation-2026-09-09/jobs/final-caa-oracle-ready/caa-revalidation-repair__2NgTuCb/result.json",
+            "sha256": "7e7b3370b42acf88aa46795a4ebfcb385a065f0a32d6c52db107a5e0ab82b771"
+          },
+          "verifier": {
+            "path": ".local/final-five-implementation-2026-09-09/jobs/final-caa-oracle-ready/caa-revalidation-repair__2NgTuCb/verifier/evaluation.json",
+            "sha256": "9802751ca8b089e1b0917c2585685ba23bc3ae5a3c37d192e455348fc223393a"
+          },
+          "infrastructureError": false
+        },
+        "nop": {
+          "reward": 0.0,
+          "result": {
+            "path": ".local/final-five-implementation-2026-09-09/jobs/final-five-nop/caa-revalidation-repair__BcFkXWR/result.json",
+            "sha256": "b973bd1ac04e13e20f8d00448f31efbc46d6c26e35639bc39ce78f4e8d5d777f"
+          },
+          "verifier": {
+            "path": ".local/final-five-implementation-2026-09-09/jobs/final-five-nop/caa-revalidation-repair__BcFkXWR/verifier/evaluation.json",
+            "sha256": "3a315d4dfb5d64a66d38b6b6f9747ad93d2d96b71906136cf45d7a10e315a370"
+          },
+          "infrastructureError": false
+        },
+        "exportReproduced": true
+      }
+    },
+    {
+      "id": "event-window-repair",
+      "number": "22",
+      "priority": 5,
+      "analysis": "reports/screening/fifth-five/22-event-window-repair.md",
+      "recommendedTarget": "codex",
+      "foundry": {
+        "digest": "39ca36d3e401ee3ddce6c772b8033be619078ea79598f1162329063824909258",
+        "export": ".local/final-five-implementation-2026-09-09/release-ready/event-window-repair/export",
+        "assurance": {
+          "path": ".local/final-five-implementation-2026-09-09/release-ready/event-window-repair/validation/assurance.json",
+          "sha256": "4add3e6c499c7e61049cd41e9585d49881904b63f6f7f06a9cdd611e538acd9d"
+        },
+        "assuranceChecks": 18,
+        "scenarios": 27,
+        "trialEligible": true,
+        "untouchedStarterSemanticFailure": true,
+        "checkerOracle": {
+          "total": 15,
+          "correct": 15,
+          "falsePositives": 0,
+          "missed": 0,
+          "pass": true
+        }
+      },
+      "native": {
+        "export": ".local/final-five-implementation-2026-09-09/harbor-ready/event-window-repair",
+        "digest": "6f1ee379fa6aed8db6bb5d98042c8c1b58fbb9d8cdc51651d7092e1ab3120cdc",
+        "manifest": {
+          "path": ".local/final-five-implementation-2026-09-09/harbor-ready/event-window-repair/export-manifest.json",
+          "sha256": "77426e7e1da98f9ccdfbbe76691d75c3f4c670904ce24ee8beab98614fec7b5c"
+        },
+        "staticChecks": 22,
+        "oracle": {
+          "reward": 1.0,
+          "result": {
+            "path": ".local/final-five-implementation-2026-09-09/jobs/final-five-oracle/event-window-repair__cBV4bJh/result.json",
+            "sha256": "28aec8671d31a889edfa647ff70db39cd2509ab26f6507b11187536ea534ab52"
+          },
+          "verifier": {
+            "path": ".local/final-five-implementation-2026-09-09/jobs/final-five-oracle/event-window-repair__cBV4bJh/verifier/summary.json",
+            "sha256": "292d8f4a16f8524303dede3ac5a9cd45dd18fedbae9b53662a932afa00439a91"
+          },
+          "infrastructureError": false
+        },
+        "nop": {
+          "reward": 0.0,
+          "result": {
+            "path": ".local/final-five-implementation-2026-09-09/jobs/final-five-nop/event-window-repair__3UhKDw3/result.json",
+            "sha256": "1c5d13031c47dfa4e4b26365f05970fd4101f5919df67e881b56e32dcf67fd22"
+          },
+          "verifier": {
+            "path": ".local/final-five-implementation-2026-09-09/jobs/final-five-nop/event-window-repair__3UhKDw3/verifier/summary.json",
+            "sha256": "36ce50ed153bf194919483fd7f8a1ac3bcc56411b7289ae451d0c96cfb1ea2d1"
+          },
+          "infrastructureError": false
+        },
+        "exportReproduced": true
+      }
+    }
+  ],
+  "totals": {
+    "assuranceChecks": 90,
+    "nodeCheckerClassifications": 51,
+    "nodeCorrectImplementations": 8,
+    "nodeNegativeControls": 43,
+    "nativeStaticChecks": 110,
+    "nodeIntegrityControls": 24,
+    "caaAssuranceChecks": 27,
+    "harborOraclePasses": 5,
+    "harborNopZeroes": 5,
+    "untouchedStarterSemanticFailures": 5,
+    "regressionTestsPassed": 67,
+    "typecheckPassed": true,
+    "changedTestsLintPassed": true
+  },
+  "evidence": {
+    "nodeAssurance": {
+      "path": ".local/final-five-implementation-2026-09-09/release-ready/summary.json",
+      "sha256": "03d2ed0b88d89800a6099f409f1d7d976b5aa15e6dd7e0b529e2210e469bcaab"
+    },
+    "nodeRecipient": {
+      "path": ".local/final-five-implementation-2026-09-09/node-assurance-rest.log",
+      "sha256": "fcdddfd7be8dc0ab5265a2684374316bb6adb41bcac4d022bb3624c2925e6c32"
+    },
+    "stagedRecipient": {
+      "path": ".local/final-five-implementation-2026-09-09/staged-recipient.log",
+      "sha256": "7a1bbea79a747099a1d444394514524c850490cf74029cbb1688e3662ee2a3e5"
+    },
+    "caaReproduction": {
+      "path": ".local/final-five-implementation-2026-09-09/caa-reproduction.json",
+      "sha256": "86be233b82a92411e5a37d89642bb7ea6d1321c5067760d5c178cf9bbe402512"
+    },
+    "static": {
+      "path": ".local/final-five-implementation-2026-09-09/static-summary.json",
+      "sha256": "71130aec16339aacd711272cfffb3eb08822536ad38c8fa0058dc04e146bbc26"
+    },
+    "nodeIntegrity": {
+      "path": ".local/final-five-implementation-2026-09-09/integrity/summary.json",
+      "sha256": "1dd6ed4c431b735d29165c0795c84a69096e975a429ad15b76db65b433e2363a"
+    },
+    "artifactReproduction": {
+      "path": ".local/final-five-implementation-2026-09-09/artifact-reproduction.json",
+      "sha256": "b18b24411cabc8e957b17f4ca39145a2fef1c38379f8cc57e7f15945182092d9"
+    },
+    "generatorVersions": {
+      "path": "reports/screening/evidence/2026-09-09-final-five-generators.json",
+      "sha256": "fd37a7d9b84639359110c8d874871f5c31fbe26d78045edd2f2e0db8a8fa7774"
+    }
+  },
+  "preservation": {
+    "baseline": {
+      "path": ".local/final-five-implementation-2026-09-09/preservation-before.json",
+      "sha256": "e13e5b69653fc853a6931b7fbd98043fc52e9973b2af6591729808addba808b2"
+    },
+    "protectedFiles": 1120,
+    "protectedFilesUnchanged": true,
+    "previousNativeExportsReproduced": 20,
+    "newNativeExportsReproduced": 5,
+    "mainDistRebuilt": false,
+    "activeCampaignsModified": false
+  },
+  "limits": [
+    "These are authored local controls, not new model trials or a measured failure rate.",
+    "Knowledge gains a required checker and explicit committed-publication redelivery; compare Trial 2 as a versioned successor.",
+    "CAA retains its native Go service deliverable; the four Node packages require service and checker.",
+    "Final submission qualification remains separate."
+  ]
+}

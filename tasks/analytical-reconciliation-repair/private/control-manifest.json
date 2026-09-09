@@ -93,5 +93,13 @@
     "check": "provenance",
     "clean": "case-024",
     "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "undrained-empty-source",
+    "overlay": {
+      "entry.mjs": "controls/undrained-empty-source.mjs"
+    },
+    "check": "completion",
+    "clean": "case-024"
   }
 ]

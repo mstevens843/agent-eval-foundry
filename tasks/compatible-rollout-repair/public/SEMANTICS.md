@@ -1,4 +1,4 @@
-# Fleet rollout contract, version one
+# Fleet rollout contract, version two
 
 Submission directory bounds: at most 256 directories and 16 nested path components.
 
@@ -18,8 +18,7 @@ a new generation. Unrequested services must never be staged or otherwise modifie
 `telemetry({service})` returns samples `{service,release,generation,ok,sequence}`.
 Samples include previous releases/generations and other services. A healthy stage
 requires the latest two samples for that exact service/release/generation, both
-ok. Two current samples are always available after staging. A ready-looking sample
-for another generation is not evidence about this one. No timing guess is required.
+ok. Two current samples are always available after staging. 
 
 Only a healthy current deployment compatible with the consumer ABI may be published with
 `bind({service,release,generation})`. `warm({service,release,abi})` sets the consumer
@@ -50,7 +49,11 @@ and telemetry, not cached local reports, define current state.
 
 1–4 services requested, up to 8 total services, up to 8 releases/model, 1–3 jobs,
 integer ranks/generations at most 10000. No independent mutations occur during a
-job. The challenge is interpreting observed state, not winning a race. Node ESM
+job. At most once per job, the process may end after a stage commits but before its
+response is delivered. The identical job is redelivered to a fresh process. External
+state and the storage directory survive; job entry means before the first delivery.
+All staged records, including those created by interrupted deliveries, retain the
+normal cleanup obligation. No further interruption occurs during that job. Node ESM
 entry.mjs exports subject.run; 128 regular single-link files, 8 MiB total, no
 symlinks/special files. Read-only source; 45 seconds/process, 4000 RPC calls,
 64 KiB/frame, 16 MiB/channel. Container: 2 CPUs, 2 GiB, 256 PIDs, no network during

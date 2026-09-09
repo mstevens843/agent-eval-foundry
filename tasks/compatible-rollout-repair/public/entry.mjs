@@ -1,2 +1,5 @@
-import { rollout } from "./src/controller.mjs";
-export const subject = { run: rollout };
+export const subject = {
+  run(view, api) {
+    return {};
+  },
+};

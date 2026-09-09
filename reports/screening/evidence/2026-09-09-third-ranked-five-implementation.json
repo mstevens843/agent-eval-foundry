@@ -394,5 +394,24 @@
     "Native nop rejects the missing required checker before service execution; the separate Foundry starter runs establish semantic service failure.",
     "The preceding group's native validation remains deferred by user instruction.",
     "Final submission still requires human-authored material and the required rubric, standard and cheat qualification on its final version."
-  ]
+  ],
+  "retrialPreflight": {
+    "recordedAt": "2026-09-09T13:22:09.196Z",
+    "providerCallsMade": 0,
+    "artifactVerification": {
+      "path": ".local/retrial-preflight-2026-09-09/retained-artifacts.json",
+      "sha256": "397315044d907a5f5bb7f42b85d9deb00cee393c65da8c15c27d05eb59e51b3a"
+    },
+    "packagesVerified": 5,
+    "foundryComponentFilesVerified": 247,
+    "nativeFilesVerified": 260,
+    "sourceFilesVerified": 167,
+    "frozenRuntime": {
+      "path": ".local/round-two-top-five-2026-09-09/frozen-source",
+      "sourceDigest": "2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4",
+      "distSha256": "60695de963e5085dfe8ee4fb09353b1db0169219d9ad9425ac2a997a73b69b26",
+      "packagesLoadable": 10
+    },
+    "packageDigestsUnchanged": true
+  }
 }

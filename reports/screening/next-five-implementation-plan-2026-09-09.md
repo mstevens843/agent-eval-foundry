@@ -49,16 +49,16 @@ selected packages' interacting state/history requirements.
 
 ## Status
 
-**All five Foundry exports are ready for second exploratory trials.** No model
-trials for this group were launched. Native Harbor exports are built and pass the
-static checks, but native browser integrity and the five Harbor oracle/nop jobs
-remain pending. These are separate execution paths: the browser Foundry export
-already passed its full local validation and recipient reproduction.
+**All five Foundry and native Harbor exports are ready for second exploratory
+trials.** The September 9 preflight completed the deferred browser integrity run
+and all five Harbor oracle/nop pairs. Every oracle earned reward 1; every untouched
+starter earned reward 0 for a missing required deliverable, with no infrastructure
+errors. No model trials for this group were launched.
 
-The first group's five model trials now run from their controller's isolated
-`frozen-source/` build. This implementation leaves that build, campaign, exported
-packages and results alone. Heavy Docker validation is deferred while those trials
-occupy the host; source review, packaging and host-only checks can continue.
+The completed first campaign's isolated `frozen-source/` runtime can load all ten
+remaining successor exports. It is reused without modification, with separate
+controllers, readiness records and job directories for each new group. Package
+and native export digests are unchanged by this preflight.
 
 ## Implemented changes
 
@@ -105,9 +105,9 @@ Artifacts are under `.local/next-five-implementation-2026-09-09/`.
 | Private independent checker oracles | 59/59 candidate verdicts correct, comprising 10 correct implementations and 49 negative controls; zero false accepts or misses. |
 | Foundry export reproduction | All five rebuilt identically and passed fresh recipient validation, including evidence/artifact drift rejection. |
 | Native static checks | 110/110 passed on `harbor-final/` (22 checks per task). |
-| Native verifier integrity | 24 passed across route, calendar, workflow and budget. For route/workflow, final wording changed after those runs; verifier and oracle bytes were independently compared and are identical. Calendar/budget checks match their final export digests. |
-| Native browser integrity | Pending rerun. The previous attempt timed out at 600 seconds and retained an infrastructure error during browser-context shutdown after reference, alternative and one negative control passed. This is not a model failure. |
-| Native Harbor end-to-end oracle/nop | Not run for these five. Prepared as separate, provider-free jobs with concurrency one. |
+| Native verifier integrity | 30 controls passed: 24 retained across route, calendar, workflow and budget, plus six fresh browser controls. For route/workflow, final wording changed after those runs; verifier and oracle bytes were independently compared and are identical. Calendar/budget/browser checks match their final export digests. |
+| Native browser integrity | All six controls passed on the final export, including forged reward/output rejection; private checker oracle 10/10. The earlier 600-second infrastructure timeout remains retained development evidence. |
+| Native Harbor end-to-end oracle/nop | Five oracle reward-one results and five expected nop zeroes on the exact final exports, with zero infrastructure exceptions. Nop rejects the missing required checker; Foundry assurance separately verifies semantic failure of each empty service starter. |
 | Regression checks | 25 tests passed across next-five export/restart, top-five export, third-portfolio and fourth-portfolio tests. Changed TypeScript tests pass formatting/lint checks. |
 | Preservation | Protected task/runtime/source bytes unchanged. All first-group native exports reproduce exactly with the extended builder. Six main-tree `dist/` files changed during the other agent's rebuild; the earlier full-tree preservation failure is retained rather than relabeled as a pass. |
 
@@ -115,10 +115,10 @@ The native browser verifier now uses `init: true` in its task-local Compose
 configuration; direct integrity runs use `docker run --init`. Harbor's installed
 separate-verifier path loads the `tests/` build context and its Compose overrides.
 An init process is recommended by [Playwright's Docker guidance](https://playwright.dev/docs/docker#recommended-docker-configuration)
-to reap orphaned browser processes. Missing process reaping is a suspected cause
-of the stall, not a confirmed diagnosis; the Docker rerun must establish whether
-this fixes it. The change affects native packaging only, not the validated Foundry
-browser export.
+to reap orphaned browser processes. The rerun passed with this configuration,
+including native Harbor execution. This confirms the final package works without
+establishing process reaping as the sole cause of the earlier stall. The change
+affects native packaging only, not the validated Foundry browser export.
 
 ## Retrial handoff
 
@@ -133,10 +133,13 @@ full digest from the evidence JSON rather than rebuilding from the live checkout
 | 4 | workflow-authority-repair | `release-ready/workflow-authority-repair/export` |
 | 5 | delegated-budget-repair | `release-ready/delegated-budget-repair/export` |
 
-Freeze the next campaign's execution source independently, as the running campaign
-now does. Do not reuse its job store, reservations, output directory or prepared
-records. Browser replay must use the retained Chromium-capable runtime declared
-by its export. No new model dispatch is part of this implementation task.
+The [prepared Trial 2 handoff](../../docs/next-five-trial-2-handoff.md) gives the
+exact launch command and assignments: route/browser to Claude, calendar/workflow/
+budget to Codex. A prepared controller under
+`.local/round-two-next-five-2026-09-09/` reuses the completed first campaign's
+frozen runtime with a fresh job store and output directory. Browser replay retains
+the Chromium-capable verifier runtime declared by its export. No model dispatch
+is part of this preflight.
 
 Append actual second-trial results to each existing analysis document, preserving
 Trial 1 and this engineering record. Record actual model/profile, digest, service
@@ -145,8 +148,8 @@ submission defects. Neither a local control nor an infrastructure failure counts
 as a new standard model failure. Empty starters and broader controls create a
 stronger experiment; they do not establish that a model will fail.
 
-For provider-free native completion after Docker capacity is available, use the
-commands in [the implementation guide](../../docs/next-five-implementation.md).
+Completed native commands and result locations are retained in
+[the implementation guide](../../docs/next-five-implementation.md).
 The final hiring submission still needs the required human-authored material,
 rubric checks, six genuine standard failures and two zero-reward cheat trials on
 the selected final version. No such qualification is claimed by this report.

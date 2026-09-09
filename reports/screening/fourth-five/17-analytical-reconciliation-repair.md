@@ -127,3 +127,16 @@ This report's diagnosis was exact: the frozen grader required a control's `reaso
 **Regrade performed exactly as this report's audit implies is possible** — the same preserved submission bytes, under a separately versioned diagnostic, not overwriting this result or counting as a new trial. Re-run against the fixed harness with zero new model calls: now scores a full pass (13/13 correct, 0 false positives, 0 missed, all 11 controls correctly named — up from 5/11). This is the confirmed fix: the label-attribution defect this report identified is resolved, not merely explained.
 
 **When trials run again:** a fresh attempt against this package should now score correctly on checker grading whenever it correctly names any of the obligations a control's own trace actually violates, without needing to guess the package author's private taxonomy preference.
+
+
+## Trial 2 preparation — fourth ranked group (2026-09-09)
+
+**Ready for second exploratory trials through Foundry or native Harbor.** No new model attempt is recorded by this engineering work. Removed the public pagination, revision, arithmetic and reporting implementation after completing private service closures. The independent checker derives effective revisions, customer population, exact rational amounts and source IDs from raw tables and actual record calls. The grader now enforces the already-public requirement to traverse every source through its terminal cursor. `undrained-empty-source` isolates incomplete traversal with an otherwise correct empty report. Repeated solution advice was trimmed while retaining the mathematical definition and custom output schema.
+
+Both service and checker are required. The public entry is empty, reason strings are optional diagnostics, helper modules are allowed, and the contract retains the facts needed to judge correctness. Existing shared authoring-policy improvements apply; no additional exploration gates were introduced.
+
+Local validation passed 17 assurance checks across 28 service scenarios, including complete reference/alternative services and semantic rejection of the untouched starter. The independent checker classified **14/14** candidates correctly, with zero false accepts or misses. All 22 native static checks and six verifier integrity controls passed. The exact native export earned oracle reward 1 and nop reward 0, with no infrastructure error; nop rejects the absent required checker. Foundry assurance separately verifies the empty service's semantic failure. Export reproduction and targeted regression checks passed.
+
+Foundry export: `.local/fourth-ranked-five-implementation-2026-09-09/release-ready/analytical-reconciliation-repair/export`. Package digest: `c1e754da99fb64c00fb3b8e39407448b98e0ae54aa934d75007b1fc141aa410e`. Native digest: `bf8e9c89b48c2ee029b2bc1d4126d673f1d4f4691ada122e4f95b3e6fb10bf19`. Suggested Trial 2 target: **Codex**, retaining this package's original model family. Append the eventual Trial 2 result below this engineering record, preserving Trial 1.
+
+[Group implementation and selection](../fourth-ranked-five-implementation-plan-2026-09-09.md) and [exact validation evidence](../evidence/2026-09-09-fourth-ranked-five-implementation.json) retain file hashes, native trial identities and the remaining final-qualification requirements.

@@ -1,4 +1,5 @@
 import { session, equal, checks } from "./adapter.mjs";
+import { deliver } from "./restart.mjs";
 const norm = (xs) => [...xs].sort((a, b) => a.id.localeCompare(b.id));
 // Independent graph walk over authoritative revisions; not imported from either solution.
 function evaluate(records, id, path = []) {
@@ -21,7 +22,7 @@ export async function runScenario(s, execute, storage) {
     reports = [],
     expected = [],
     expectedReports = [],
-    prefixes = [];
+    prefixes = [], runs = [], interruptions = [];
   for (const [job, input] of s.jobs.entries()) {
     for (const r of input.updates) records.set(r.id, structuredClone(r));
     const decisions = [];
@@ -48,9 +49,9 @@ export async function runScenario(s, execute, storage) {
       });
     }
     expectedReports.push({ job, decisions });
-    await execute(
-      session(
-        { storage, job, ...input },
+    const observationStart = observations.length, reportStart = reports.length;
+    await deliver(execute, () => session(
+        { storage, job, updates: input.updates, requests: input.requests, grants: input.grants },
         {
           publish: (value) => {
             const copy = structuredClone(value);
@@ -61,8 +62,8 @@ export async function runScenario(s, execute, storage) {
         },
         (r) => reports.push(r),
         observations,
-      ),
-    );
+      ), input.crashAfterPublish ? { method: "api.publish", count: input.crashAfterPublish, observations } : null, interruptions, { job });
+    runs.push({ job, effects: structuredClone(effects), observations: observations.slice(observationStart), reports: reports.slice(reportStart) });
     prefixes.push({ actual: structuredClone(effects), expected: structuredClone(expected) });
   }
   const normalizedEffects = effects.map((e) => ({
@@ -71,7 +72,7 @@ export async function runScenario(s, execute, storage) {
   }));
   const normalizedReports = reports.map((r) => ({
     ...r,
-    decisions: r.decisions?.map((d) => ({ ...d, lineage: Array.isArray(d.lineage) ? norm(d.lineage) : [] })),
+    decisions: Array.isArray(r?.decisions) ? r.decisions.map((d) => ({ ...d, lineage: Array.isArray(d?.lineage) ? norm(d.lineage) : [] })) : [],
   }));
   return {
     ...checks({
@@ -96,8 +97,8 @@ export async function runScenario(s, execute, storage) {
     observations,
     effects,
     reports,
-    expected,
-    expectedReports,
-    prefixes,
+    jobs: s.jobs.map((input, job) => ({ job, updates: input.updates, requests: input.requests, grants: input.grants })),
+    runs,
+    interruptions,
   };
 }

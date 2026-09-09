@@ -16,7 +16,7 @@ Maintained sources are `tasks/<id>`. **Foundry exploratory retrial exports are r
 under `.local/next-five-implementation-2026-09-09/release-ready/<id>/export`.
 Built native tasks are under
 `.local/next-five-implementation-2026-09-09/harbor-final/<id>`; native browser
-integrity and all five native Harbor oracle/nop jobs remain pending. Exact digests
+integrity and all five native Harbor oracle/nop pairs passed. Exact digests
 and checked bytes are recorded in
 [the evidence](../reports/screening/evidence/2026-09-09-next-five-implementation.json).
 
@@ -44,12 +44,12 @@ rejection or unrelated whole-batch revalidation for exploratory iteration.
 Final submission still needs the human-authored material and required rubric,
 standard and cheat qualification runs on the selected final version.
 
-## Complete native validation when Docker capacity is available
+## Completed native validation — September 9
 
-These commands make no model/provider calls. Keep the five active model trials and
-their grading runs free of competing browser validation load. The two JSON job
-configs below explicitly select `oracle` and `nop`, with concurrency one. Run from
-the repository root; output directories are fresh and prior evidence stays intact.
+The deferred runs completed after the model campaign released Docker capacity.
+These recorded commands made no model/provider calls. The two JSON job configs
+explicitly select `oracle` and `nop`, with concurrency one within each local job.
+Their output directories now contain evidence; use fresh names for any future rerun.
 
 ```sh
 node scripts/verify-harbor-integrity.mjs \
@@ -61,11 +61,11 @@ harbor run --config .local/next-five-implementation-2026-09-09/oracle-final-job.
 harbor run --config .local/next-five-implementation-2026-09-09/nop-final-job.json
 ```
 
-Require browser integrity to finish without infrastructure errors, every oracle
-trial to return reward 1, and every untouched-starter trial to return reward 0 for
-semantic incompleteness rather than infrastructure failure. Inspect each trial's
-result and verifier summary; a command exiting successfully alone is insufficient.
-Then append the exact results and digests to the implementation evidence/report.
-If browser validation stalls again, retain its logs and diagnose that native path;
-do not relabel it as a capability failure or invalidate the separately passing
-Foundry path without evidence.
+Browser integrity passed six controls. All five oracle trials returned reward 1;
+all five nop trials returned reward 0 because the required checker was absent.
+Trial results and verifier summaries confirm no infrastructure errors. Foundry
+assurance separately confirms semantic failure of every empty service starter.
+The earlier browser timeout remains retained development evidence.
+
+The [Trial 2 handoff](next-five-trial-2-handoff.md) contains the prepared controller,
+model assignments, exact launch command and per-task reporting instructions.

@@ -1,4 +1,5 @@
 import { session, equal, checks } from "./adapter.mjs";
+import { deliver } from "./restart.mjs";
 export async function runScenario(s, execute, storage) {
   const services = new Map(s.services.map((x) => [x.id, structuredClone(x)])),
     stages = structuredClone(s.stages),
@@ -82,8 +83,9 @@ export async function runScenario(s, execute, storage) {
       return { ok: true };
     },
   };
-  const verdicts = [];
+  const verdicts = [], runs = [], interruptions = [];
   for (const input of s.jobs) {
+    const observationStart = observations.length;
     entry = new Map([...services].map(([id, v]) => [id, structuredClone(v)]));
     currentRequests = input.requests;
     const expected = input.requests.map((r) => {
@@ -97,9 +99,13 @@ export async function runScenario(s, execute, storage) {
         release: !target || !good(r.service, target.id) ? service.deployment.release : target.id,
       };
     });
-    await execute(
-      session({ job, storage, requests: input.requests }, operations, (r) => reports.push(r), observations),
-    );
+    await deliver(execute, () => session(
+      { job, storage, requests: input.requests }, operations, (r) => reports.push(r), observations),
+      input.crashAfterStage ? {method: "api.stage", count: input.crashAfterStage, observations} : null,
+      interruptions, {job});
+    runs.push({job, requests: input.requests, entry: [...entry], state: structuredClone([...services]),
+      stages: structuredClone(stages), observations: structuredClone(observations.slice(observationStart)),
+      report: structuredClone(reports.at(-1) ?? null)});
     verdicts.push({
       completion: expected.every((e) => services.get(e.service).deployment.release === e.release),
       compatibility: expected.every(
@@ -148,9 +154,10 @@ export async function runScenario(s, execute, storage) {
     observations,
     reports,
     actions,
-    violations,
     state: [...services],
     stages,
-    verdicts,
+    runs,
+    interruptions,
+    input: {services:s.services, releases:s.releases, stages:s.stages},
   };
 }

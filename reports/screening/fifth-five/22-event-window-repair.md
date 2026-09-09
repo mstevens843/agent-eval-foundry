@@ -128,3 +128,13 @@ field has been added there for consistency, verified via real Docker build+valid
 (`local-valid: true`) and a full free regrade of the real preserved checker. No control,
 scenario, or check semantics changed. **When trials run again:** #22 should continue to
 score exactly as it did here.
+
+## Trial 2 preparation — final group (2026-09-09)
+
+**Ready for second exploratory trials through Foundry or native Harbor.** Removed the public frontier, deduplication, aggregation and service implementations after completing private closures. Added an independent checker deriving rows and late events from raw input and observed publication boundaries. The terminal-null completion boundary is explicit. A new control produces correct output but stops after the final end marker without consuming the terminal response, and fails completion.
+
+Local validation passed **18 assurance checks**, including a semantic failure for the untouched starter. Its independent checker classifies **15/15 candidates** correctly; reason text is diagnostic. The final native export passed 22 static checks, Harbor oracle reward 1 and nop reward 0, with no infrastructure exceptions. Both export formats reproduce. No model attempt was launched by this engineering work.
+
+Foundry export: `.local/final-five-implementation-2026-09-09/release-ready/event-window-repair/export`. Package digest: `39ca36d3e401ee3ddce6c772b8033be619078ea79598f1162329063824909258`. Native export: `.local/final-five-implementation-2026-09-09/harbor-ready/event-window-repair`. Native digest: `6f1ee379fa6aed8db6bb5d98042c8c1b58fbb9d8cdc51651d7092e1ab3120cdc`. Suggested target: **Codex**, retaining the original model family. Append the eventual Trial 2 outcome below this engineering record; preserve Trial 1.
+
+[Implementation and completed checks](../final-five-implementation-plan-2026-09-09.md) · [Exact evidence](../evidence/2026-09-09-final-five-implementation.json).

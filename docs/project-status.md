@@ -4,28 +4,40 @@ September 9, 2026. Navigation and status, not a package-policy approval.
 
 ## Latest measured progress
 
-**Five optimized successors completed Trial 2: three zero rewards and two complete
-solver passes.** Incremental build (21) and issued report (25) are supported substantive
-required-checker failures. Their service suites passed, but their release validators
-respectively accepted premature publication and rejected valid implementations.
-This is concrete completed-but-wrong progress from the Foundry's iteration loop.
+**Four Trial 2 zero rewards are now recorded across fourteen scored attempts.**
+Snapshot recovery (11) adds one new Foundry success: its service passed **33/33**,
+but its required checker rejected both correct reference implementations (**10/12**
+classifications). The needed archive facts were available through documented API
+observations. Prioritize a repeat attempt on this unchanged package version.
 
-Issued report's documented API observations supplied the needed facts, confirmed
-through the original checker's existing fallback in an offline diagnostic. Its choice
-to prefer incorrectly parsed aggregate arrays caused the two original false rejections.
-Both this implementation error and build's missing issuance-order check are supported
-failures of required deliverables.
+| Trial 2 group | Attempts launched | Scored | Reward-zero results | Solver passes | Interrupted/unscored |
+| --- | --- | --- | --- | --- | --- |
+| [First: 19/21/25/24/07](../reports/screening/round-two-top-five-2026-09-09.md) | 5 | 5 | 3 | 2 | 0 |
+| [Second: 14/03/18/20/04](../reports/screening/round-two-next-five-2026-09-09.md) | 5 | 4 | 0 | 4 | 1 |
+| [Third: 13/08/15/12/11](../reports/screening/round-two-third-ranked-five-2026-09-09.md) | 5 | 5 | 1 | 4 | 0 |
+| **Total** | **15** | **14** | **4** | **10** | **1** |
 
-Cache (19) also recorded a service-suite failure and checker miss, but the public
-matching/reuse distinction leaves one concrete contract question. We preserve its
-zero without claiming three undisputed fair failures. All five Trial 2 records remain
-in their original analysis files, and 4,644 retained manifest files verified. Read the
-[campaign report](../reports/screening/round-two-top-five-2026-09-09.md). Repeatability
-and formal qualification remain separate milestones.
+Incremental build (21), issued report (25) and snapshot recovery (11) have supported
+substantive failures of required agent-written checkers. Their services passed;
+the incomplete or incorrect required validators still make these task failures.
+Cache (19) retains its recorded service/checker zero and the existing documented
+matching/replacement contract question. This update adds snapshot recovery's success
+without changing the earlier audit or its raw scores.
+
+The second group is now fully documented: four completed solver passes and route
+policy's infrastructure interruption. Route policy has no finalized submission or
+grade, so its reward is null. The user deferred its retry. The third group completed
+without infrastructure errors and supplies the new checker failure above.
+
+All fifteen original analysis files contain dated Trial 2 records. Publication
+verified **6,881** manifest-listed files for the nine newly reported completions,
+in addition to **4,644** from the first group: **11,525** total. The interrupted
+attempt has no completion manifest and is not counted in that total. This
+publication made no model calls and changed no package, submission or raw grade.
 
 ## What is implemented
 
-Twenty-five professional task source trees are maintained in Git. Fifteen ranked
+Twenty-five professional task source trees are maintained in Git. All twenty-five
 successors replace mostly solved public starter modules with empty entry points and
 retain complete private service/checker references, valid alternatives, deliberately
 incorrect controls, scenario generators and regression tests. Public contracts and
@@ -35,16 +47,25 @@ The foundry assembles separate solver/verifier workspaces, validates local contr
 
 The original 25 screenings all passed their service suites. Their recorded checker
 outcomes and historical grading concerns remain intact in the [trial index](../reports/screening/README.md).
-Five additional successor attempts now extend that history; the Trial 2 results above
+Fifteen successor attempts, fourteen scored, now extend that history; the Trial 2 results above
 must not be merged into the original table or treated as repeat runs of identical versions.
 
 Engineering preparation covers [19/21/25/24/07](../reports/screening/top-five-implementation-plan-2026-09-09.md),
-[14/03/18/20/04](../reports/screening/next-five-implementation-plan-2026-09-09.md), and
-[13/08/15/12/11](../reports/screening/third-ranked-five-implementation-plan-2026-09-09.md).
-The first and third groups completed local native oracle/nop validation. The second
-group's browser integrity rerun and five native Harbor oracle/nop jobs remain pending.
-Only the first group has these new Trial 2 results; local validation of the other ten
-does not establish difficulty.
+[14/03/18/20/04](../reports/screening/next-five-implementation-plan-2026-09-09.md),
+[13/08/15/12/11](../reports/screening/third-ranked-five-implementation-plan-2026-09-09.md),
+[09/06/05/16/17](../reports/screening/fourth-ranked-five-implementation-plan-2026-09-09.md), and
+[23/02/10/01/22](../reports/screening/final-five-implementation-plan-2026-09-09.md).
+All five groups completed local native oracle/nop validation. The second group's
+browser integrity rerun passed all six controls. The first three groups have published
+Trial 2 campaign summaries, sanitized evidence and per-task analyses. Prepared handoffs
+for the remaining groups are [09/06/05/16/17](fourth-ranked-five-trial-2-handoff.md) and
+[23/02/10/01/22](final-five-trial-2-handoff.md), each with three Codex and two Claude
+assignments and its own frozen campaign directory. Campaign results remain
+separate from local validation. The [final group](final-five-implementation.md)
+passed 90 assurance checks, 51 Node checker classifications, 110 static checks and all
+native oracle/nop runs. CAA retains its native Go service deliverable; the other four
+require service and checker. All 25 native exports reproduce. No candidates remain
+unimplemented. This preparation launched no model attempts.
 
 ## The portfolio
 

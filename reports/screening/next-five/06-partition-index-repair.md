@@ -48,3 +48,16 @@ No fix specific to this package was needed from the reasons-formatting review ro
 **Practical implication.** The reward **1** and "full service and checker solve" evidence above remain accurate for the package as it existed at trial time, but should not be read as still-current evidence about today's version of this package. Full numbers: restricted regrade record `regrade-2026-09-08.json` (restricted local storage, same evidence boundary as the sanitized trial record above).
 
 **When trials run again:** treat a new partition-index-repair attempt as a first read on the current package, not a replication of this one.
+
+
+## Trial 2 preparation — fourth ranked group (2026-09-09)
+
+**Ready for second exploratory trials through Foundry or native Harbor.** No new model attempt is recorded by this engineering work. Removed the public consumer, ownership, index and progress modules after completing the private service closures. Retained the maintained 17-scenario version and its raw event/partition inputs. The independent checker reconstructs ownership, durable versions, delivered callbacks, completed positions and committed prefixes. Both the incremental reference and the alternative that commits after draining input pass. The historical checker regrade against a different package remains a diagnostic version comparison, not a new model failure.
+
+Both service and checker are required. The public entry is empty, reason strings are optional diagnostics, helper modules are allowed, and the contract retains the facts needed to judge correctness. Existing shared authoring-policy improvements apply; no additional exploration gates were introduced.
+
+Local validation passed 15 assurance checks across 17 service scenarios, including complete reference/alternative services and semantic rejection of the untouched starter. The independent checker classified **12/12** candidates correctly, with zero false accepts or misses. All 22 native static checks and six verifier integrity controls passed. The exact native export earned oracle reward 1 and nop reward 0, with no infrastructure error; nop rejects the absent required checker. Foundry assurance separately verifies the empty service's semantic failure. Export reproduction and targeted regression checks passed.
+
+Foundry export: `.local/fourth-ranked-five-implementation-2026-09-09/release-ready/partition-index-repair/export`. Package digest: `9447162fe6bc8d6e1ba8f421b9c82f2a91f80e693891e7be1f282e5cd055ffb9`. Native digest: `12cd6b995d909f5f7b4ed97fe188f8bfd0a1a68b8f6f8838565e4be7cfe50669`. Suggested Trial 2 target: **Codex**, retaining this package's original model family. Append the eventual Trial 2 result below this engineering record, preserving Trial 1.
+
+[Group implementation and selection](../fourth-ranked-five-implementation-plan-2026-09-09.md) and [exact validation evidence](../evidence/2026-09-09-fourth-ranked-five-implementation.json) retain file hashes, native trial identities and the remaining final-qualification requirements.

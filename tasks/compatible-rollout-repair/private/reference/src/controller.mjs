@@ -1,10 +1,11 @@
+import { origin } from "./origin.mjs";
 import { choose } from "./catalog.mjs";
 import { healthy } from "./health.mjs";
 import { publish } from "./publish.mjs";
 import { cleanup } from "./cleanup.mjs";
 export function rollout(view, api) {
-  const services = api.inventory({}),
-    before = api.stages({}),
+  const saved = origin(view, api), services = saved.services,
+    before = saved.stages,
     results = [];
   for (const request of view.requests) {
     const service = services.find((s) => s.id === request.service),

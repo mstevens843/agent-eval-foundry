@@ -51,5 +51,6 @@ export function scenarios() {
     rows: [{ series: "A", key: "one", revision: 1, knownAt: 0, from: 0, to: 4, value: "3" }],
     queries: [{ id: "normal", series: "A", knownAt: 2, from: 0, to: 4 }],
   });
+  cases.push({ id: "case-033", pageSize: 1, rows: [], queries: [{ id: "empty", series: "empty", knownAt: 0, from: 0, to: 1 }] });
   return cases;
 }

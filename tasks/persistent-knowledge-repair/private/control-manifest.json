@@ -1,35 +1,65 @@
 [
   {
     "id": "report-lineage",
-    "overlay": { "entry.mjs": "controls/report-lineage.mjs" },
+    "overlay": {
+      "entry.mjs": "controls/report-lineage.mjs"
+    },
     "check": "decisions",
     "clean": "case-000",
     "selectionRole": "post-selection-validation"
   },
-  { "id": "first-parent", "overlay": { "src/derive.mjs": "controls/first-parent.mjs" }, "check": "lineage" },
+  {
+    "id": "first-parent",
+    "overlay": {
+      "src/derive.mjs": "controls/first-parent.mjs"
+    },
+    "check": "lineage"
+  },
   {
     "id": "stale-revision",
-    "overlay": { "src/revisions.mjs": "controls/stale-revision.mjs" },
+    "overlay": {
+      "src/revisions.mjs": "controls/stale-revision.mjs"
+    },
     "check": "values",
     "clean": "case-000"
   },
   {
     "id": "stale-grant",
-    "overlay": { "src/policy.mjs": "controls/stale-grant.mjs" },
+    "overlay": {
+      "src/policy.mjs": "controls/stale-grant.mjs"
+    },
     "check": "authority",
     "clean": "case-000"
   },
   {
     "id": "replace-store",
-    "overlay": { "src/revisions.mjs": "controls/replace-store.mjs" },
+    "overlay": {
+      "src/revisions.mjs": "controls/replace-store.mjs"
+    },
     "check": "preservation",
     "clean": "case-000"
   },
-  { "id": "no-work", "overlay": { "entry.mjs": "controls/no-work.mjs" }, "check": "completion" },
+  {
+    "id": "no-work",
+    "overlay": {
+      "entry.mjs": "controls/no-work.mjs"
+    },
+    "check": "completion"
+  },
   {
     "id": "isolation",
-    "overlay": { "entry.mjs": "controls/isolation.mjs" },
+    "overlay": {
+      "entry.mjs": "controls/isolation.mjs"
+    },
     "check": "completion",
     "isolation": true
+  },
+  {
+    "id": "receipt-blind-retry",
+    "overlay": {
+      "entry.mjs": "controls/receipt-blind-retry.mjs"
+    },
+    "check": "history",
+    "selectionRole": "post-selection-validation"
   }
 ]

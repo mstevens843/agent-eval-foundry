@@ -14,8 +14,8 @@ Exactly one row is required for each active customer in view.tenant, including c
 with no usage/credits. Inactive/foreign customers must not appear.
 
 ## Metering and credits
-Usage records have {tenant,id,revision,accountId,at,quantity,unit,state}. Select the
-greatest revision for each (tenant,id) before applying any other filter. Exact repeated
+Usage records have {tenant,id,revision,accountId,at,quantity,unit,state}. The effective record for each
+(tenant,id) is its greatest revision. Exact repeated
 rows are duplicates, not new work; two distinct rows never tie at the same revision.
 state is posted or void. Only posted records in [from,to), belonging to an account
 mapped to a required customer, contribute. A revision can change time, account or state.
@@ -31,9 +31,9 @@ record({row}) records one JSON row and returns {stored:true}; malformed bounded 
 returns {error:"row"}. Each required row contains exactly
 {customerId,name,usageUs,chargeMicrocents,creditMicrocents,balanceMicrocents,usageIds,creditIds}.
 Amounts and usageUs are canonical signed integer strings (zero is "0").
-Compute charge as the sum of usageUs * account.price.n/account.price.d over all
-qualifying usage for this customer, THEN round once to the nearest integer with exact
-halfway ties to even. Do not round each event/account separately. Credits are integer
+Charge is the sum of usageUs * account.price.n/account.price.d over all
+qualifying usage for this customer, rounded to the nearest integer with exact
+halfway ties to even. Credits are integer
 sums; balance is rounded charge minus credits and can be negative.
 usageIds and creditIds list contributing logical IDs, each once, sorted in JS string
 code-unit order. Output row order is irrelevant. Preserve each customer's catalog name.
@@ -43,7 +43,7 @@ Recoverable API errors may be retried. All operations are async and take one obj
 ## Bounds
 0–12 customers/tenant, up to 3 tenants, 30 accounts, 100 logical usage records and
 50 logical credits, revisions 1–8, pages 0–20 rows, 300 pages/table maximum.
-Quantities may be as large as 1000000000000; price numerator/denominator at most 1000000.
+Quantity integer parts may be as large as 1000000000000; price numerator/denominator at most 1000000.
 Use exact arithmetic where needed. IDs are case-sensitive opaque strings; they may
 repeat across tenants or tables, never within a compound identity at the same revision.
 Node 24 and built-ins available offline. 128 regular source files/8 MiB/depth16 maximum.

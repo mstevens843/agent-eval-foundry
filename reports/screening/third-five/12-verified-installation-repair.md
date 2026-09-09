@@ -78,3 +78,94 @@ Use these exact exports:
 Both deliverables are required. The checker returns complete deterministic Boolean verdicts; optional reason text does not affect grading, and submitted helper modules are available. Public requirements and custom schemas remain supplied without a worked implementation.
 
 When Trial 2 completes, append the actual model/profile, frozen digest, service/checker outcomes, elapsed time, exclusions and final submission defect here. Keep original Trial 1 rewards intact. Local controls, old grading disputes and infrastructure errors are not additional model failures. The final hiring submission still requires its human-authored material and rubric, standard and cheat qualification on the final selected version.
+
+## Trial 2 — implementation successor — September 9, 2026
+
+### A. Identity and execution
+
+Run `verified-installation-repair-attempt-1`, package digest
+`4c4610d6242251cb95f3acbe167940ce0d62fbba67d81cb97df195a3db211cfc`, route
+`professional-multifile/authority-process@1`. Dispatched through this session's
+`real-provider` execution route (signed JobStore reservation, Ed25519, realm
+`real-provider`, `billingMode: subscription-only`, `maxMicroUsd: 0`, `maxAttempts: 1`) —
+a fresh campaign slot (`attempt-1`), not an infrastructure retry. Author image
+`sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a`. Evidence
+retained at
+`.local/round-two-third-ranked-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/verified-installation-repair-attempt-1/`.
+
+Target: **codex**. Requested `openai/gpt-5.6-sol`, effort `xhigh`, CLI
+`scaffoldVersion 0.153.2` (verified baked into the pinned author image). Observed
+from runtime events: model, effort and scaffold version are all unobservable from
+the Codex CLI's event stream — a known instrumentation limit for this CLI, not a
+data quality problem.
+
+Dispatched 2026-09-09T15:08:41.967Z as one of five reservations installed within a
+231ms window (15:08:41.798Z–15:08:42.029Z); `docker ps` confirmed all five
+`foundry-real-*` containers running concurrently, so this was a genuinely
+concurrent five-way campaign. Completed 2026-09-09T15:26:45.713Z. Total elapsed
+≈1,083,746ms (~18m4s) — solver authoring time (capture wall clock) ≈1,071,307ms
+(~17m51s), grading ≈12.4s. Token usage: 528,593 input tokens (477,312 cached),
+31,739 output; the Codex CLI reports no price estimate. Execution reached a clean
+`completed` state with no invalid-execution or infrastructure error.
+
+### B. What changed since Trial 1
+
+Per the September 9 successor section above, the starter is now empty (Trial 1's
+starter already supplied all five service modules and the agent only needed to
+find and fix the layer-ordering bug); the scenario count grew from 44 to 45 with
+an added legal-filename control; the filesystem collector and reference tree now
+explicitly preserve `constructor`/`__proto__` as ordinary path segments. The
+checker remains a required, independently-graded deliverable, as it was in Trial 1.
+
+### C. Results
+
+Reward 1 — a clean pass on both dimensions, consistent with Trial 1. Service:
+all 45 expected scenarios observed with zero failures, zero missing/unexpected
+IDs. Checker: `checkerRequired: true`, `checkerPassed: true`, 13/13 candidates
+correctly classified (0 missed, 0 false positives). `reasonPolicy` is
+diagnostic-only for this package; only the boolean verdict was graded.
+
+### D. Observable solving behavior
+
+Codex read the full contract in two `bash` calls (`SEMANTICS.md`, `api.d.ts`,
+`CHECKER-INPUT.md`, `entry.mjs`, `package.json`, then `instruction.md` and a file
+listing) before writing anything. It then wrote `checker.mjs` (new) and updated
+`entry.mjs` in the same turn — from the submission, `entry.mjs` uses the same
+two-pass `applyLayers()` structure as Trial 1's fix (all `remove`/`opaque`
+markers across every layer's entries first, then regular file/dir writes),
+confirming this specific bug class stayed fixed rather than being independently
+rediscovered from scratch. It revised `checker.mjs` three more times, each
+followed by `node --check` and, once, a `git diff --check`/`git diff --stat`
+sanity pass on both files.
+
+It validated with inline Node scripts rather than a test framework: one heredoc
+script builds a synthetic release (via `gzipSync`/`createHash`) and exercises
+`entry.mjs`/`checker.mjs` directly against it; another passes the checker two
+empty-`cells` cases to confirm it returns a complete verdict shape without
+crashing on trivial input; a final `assert`-based scenario runner
+(`structuredClone`d initial/staged/cache/blob state, with call-tracking) drives
+multiple constructed scenarios through `subject.run` directly. It also ran a
+whitespace-in-string-literal lint check (`rg` for a literal blank inside quotes)
+before finishing. No failed self-test or reverted change appears in the capture;
+the agent's own tool calls show incremental hardening of `checker.mjs`, not
+correction of a wrong `entry.mjs`.
+
+### E. Comparison and next step
+
+Trial 1 (16m27s) and Trial 2 (17m51s authoring) are both clean passes with the
+same fundamental repair (two-pass layer merge) and the same checker design
+(independent tree reconstruction from raw cache/origin bytes, not trusting the
+submitted service's own reports). The consistency across a materially changed
+package (empty starter instead of a mostly-complete one, one more scenario, a
+new legal-filename control) suggests this is a stable, low-difficulty result for
+this package under Codex/xhigh, not a fragile pass. Recommend deprioritizing
+further exploratory trials on this package in favor of packages that have shown
+checker-authoring or service gaps, and retaining its correct submissions as controls. The similar two-pass structure
+shows convergence on an approach; it does not establish reuse of the earlier
+submission or qualify this version as a task that reliably defeats the model.
+
+### F. Verified publication record — September 9, 2026
+
+Reward **1**; service **45/45**; checker **13/13**. All **851** completion-manifest files matched their recorded sizes and hashes.
+
+[Campaign results](../round-two-third-ranked-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-third-ranked-five.json). Trial 1 is preserved.

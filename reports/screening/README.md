@@ -1,24 +1,39 @@
 # Screening results and what they changed
 
-The [audited round-two screening](round-two-top-five-2026-09-09.md) records **three
-zero rewards from five fresh trials**: 21 — incremental build, 25 — issued report,
-and 19 — variant cache. **21 and 25 are supported substantive required-checker
-failures.** Both agents completed services that passed their suites and still
-submitted incorrect required validators. 07 and 24 passed both deliverables.
+**Trial 2 now records four zero rewards, ten solver passes and one infrastructure
+interruption across fifteen launched attempts (fourteen scored). Snapshot recovery
+adds the newest Foundry success:** its required checker rejected both correct
+implementations while the service passed 33/33 scenarios.
 
-Issued report's supplied API observations provided a sufficient documented route to
-the required facts. An offline diagnostic confirmed that route using the submitted
-checker's own fallback; its original false rejections came from preferring misparsed
-aggregate arrays. The diagnostic is separate from the original model trial and score.
+| Campaign | Reward zero | Solver pass | Interrupted/unscored | Analysis |
+| --- | --- | --- | --- | --- |
+| First group: 19/21/25/24/07 | 3 | 2 | 0 | [Five completed trials](round-two-top-five-2026-09-09.md) |
+| Second group: 14/03/18/20/04 | 0 | 4 | 1 | [Four completions and the route-policy interruption](round-two-next-five-2026-09-09.md) |
+| Third group: 13/08/15/12/11 | 1 | 4 | 0 | [Snapshot recovery's new required-checker failure](round-two-third-ranked-five-2026-09-09.md) |
 
-Cache's recorded service and checker failures remain real observations, but its public
-matching rule and the private wildcard replacement predicate require resolution before
-calling all three zeroes undisputed fair failures. This is one concrete contract question,
-not a rule against expert inference or hidden tests. See
-[campaign evidence](evidence/2026-09-09-round-two-top-five.json) and
-[audit evidence](evidence/2026-09-09-round-two-top-five-audit.json): 4,644 manifest files
-verified with zero mismatches. All five original analysis files have dated Trial 2
-sections. Workflow authority (20) did not run in this campaign.
+Incremental build (21), issued report (25) and snapshot recovery (11) have supported
+substantive required-checker failures. A correct service does not cancel failure
+of a required checker. Cache (19) retains its recorded zero and the earlier audit's
+specific matching/replacement contract question; that prior assessment is unchanged.
+See the [first campaign audit](evidence/2026-09-09-round-two-top-five-audit.json).
+
+Batch 2's four complete attempts passed both deliverables. Route policy was
+interrupted before capture and grading; its reward is null and its retry is
+user-deferred. Batch 3 adds four solver passes and one reward-zero success. Partial
+release now passes under corrected reason handling; rule index repeats a pass with
+Codex after the earlier Claude pass. Verified installation independently converged
+on the same two-pass approach; similar code structure alone does not establish reuse.
+
+All fifteen original analyses have dated Trial 2 sections. **11,525 completion-manifest
+files verified** across the fourteen scored attempts; the partial route-policy capture
+has no completion manifest and is accounted for separately. New evidence:
+[second group](evidence/2026-09-09-round-two-next-five.json) ·
+[third group](evidence/2026-09-09-round-two-third-ranked-five.json).
+
+For further failure-finding trials, prioritize the supported reward-zero candidates.
+Snapshot recovery is ready to repeat on its unchanged version; no additional decoder
+hints or service failure requirement is imposed. Retain the solved submissions as
+correct controls. The original Trial 1 table below remains unchanged.
 
 The [completed five-package implementation](top-five-implementation-plan-2026-09-09.md)
 records the September 9 successors, all local checks and exact exports for the next
@@ -26,9 +41,11 @@ exploratory trials. Each affected trial document has an appended change record.
 
 The [next five implementation](next-five-implementation-plan-2026-09-09.md)
 prepares **14 → 03 → 18 → 20 → 04** for exploratory Foundry retrials. All five
-Foundry exports passed local assurance and reproduction. Native browser integrity
-and native Harbor oracle/nop jobs remain pending; the report distinguishes those
-checks from Foundry readiness. No new model trials were launched for this group.
+Foundry exports passed local assurance and reproduction. The deferred native checks
+are now complete: six browser integrity controls, five Harbor oracle passes and
+five expected nop zeroes without infrastructure errors. The
+[Trial 2 handoff](../../docs/next-five-trial-2-handoff.md) was used for the [recorded campaign](round-two-next-five-2026-09-09.md);
+its implementation work itself made no model calls.
 
 The [September 9 second-trial review](second-trial-priority-2026-09-09.md) ranks all 25
 packages, recommends five candidates, and identifies remaining source-integration and
@@ -38,8 +55,24 @@ The [third ranked group](third-ranked-five-implementation-plan-2026-09-09.md)
 prepares **13 → 08 → 15 → 12 → 11**, bringing engineering preparation to fifteen
 candidates. All five new Foundry/native exports passed local assurance,
 reproduction, 110 static checks, 30 integrity controls and Harbor oracle/nop runs.
-Their analysis files contain dated engineering records; no new model trials were
-launched for this group. The preceding group's deferred native checks are unchanged.
+Their analysis files contain dated engineering and Trial 2 records. The
+[recorded campaign](round-two-third-ranked-five-2026-09-09.md) followed its
+[prepared handoff](../../docs/third-ranked-five-trial-2-handoff.md).
+
+The [fourth ranked implementation group](fourth-ranked-five-implementation-plan-2026-09-09.md)
+selects **09 → 06 → 05 → 16 → 17** from the ten remaining candidates, bringing
+preparation to **twenty successors**. All five Foundry/native packages passed
+78 assurance checks, 63/63 checker classifications, 110 static checks, 30 integrity
+controls and native oracle/nop runs. Their original analysis files have appended
+engineering records; no model attempts were launched by this implementation.
+
+The [final implementation group](final-five-implementation-plan-2026-09-09.md) completes
+**23 → 02 → 10 → 01 → 22**, bringing preparation to **all 25 successors**. It passed
+90 assurance checks, 51/51 Node checker classifications, 110 static checks, Node and
+CAA integrity controls, five Harbor oracle passes and five expected nop zeroes.
+All 25 native exports reproduce. Each original analysis has an appended engineering
+record. This preparation launched no model trials; future Trial 2 outcomes belong
+in those same analysis documents. [Final group guide](../../docs/final-five-implementation.md).
 
 Batches 3, 4 and 5 are complete and analyzed: fifteen attempts, five concurrent jobs per batch, no retries or recorded execution errors. See the
 [batches 3–5 preflight checkpoint](../../docs/screening-batches-3-5.md) for current

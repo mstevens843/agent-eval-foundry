@@ -85,5 +85,13 @@
     "check": "completion",
     "clean": "case-032",
     "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "intermediate-label-loss",
+    "overlay": {
+      "entry.mjs": "controls/intermediate-label-loss.mjs"
+    },
+    "check": "labels",
+    "clean": "case-032"
   }
 ]

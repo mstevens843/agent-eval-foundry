@@ -1,0 +1,808 @@
+{
+  "schemaVersion": 1,
+  "campaign": "2026-09-09-round-two-next-five",
+  "evidenceClass": "real-provider-screening",
+  "label": "Trial 2",
+  "limitations": [
+    "One exploratory attempt per package; this is not a replicated failure rate or final qualification.",
+    "Requested model/effort are separate from observed CLI metadata.",
+    "One attempt was interrupted before capture and grading; its reward is null.",
+    "Raw captures and submissions remain private; this publication retains allowlisted fields and artifact hashes.",
+    "Host-memory termination is the trial operator report; retained files directly establish interruption and four complete results."
+  ],
+  "sourceDigest": "2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4",
+  "authorImage": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+  "actualScheduling": "Five dispatch events within the recorded spread; the trial operator reported observing all five solver containers together.",
+  "concurrencyRequestFulfilled": true,
+  "concurrencyObservation": {
+    "count": 5,
+    "packageIds": [
+      "route-policy-repair",
+      "browser-replay-repair",
+      "recurring-calendar-repair",
+      "workflow-authority-repair",
+      "delegated-budget-repair"
+    ],
+    "firstLaunch": "2026-09-09T13:43:45.249Z",
+    "lastLaunch": "2026-09-09T13:43:45.479Z",
+    "launchSpreadMs": 230,
+    "containerObservationSource": "trial operator docker ps observation reported in handoff"
+  },
+  "automaticRetries": 0,
+  "extraModelCallsBeyondFive": 0,
+  "counts": {
+    "attemptsLaunched": 5,
+    "completedScoredAttempts": 4,
+    "recordedZeroRewards": 0,
+    "solverPasses": 4,
+    "infrastructureInterruptedAttempts": 1
+  },
+  "packages": [
+    {
+      "id": "route-policy-repair",
+      "target": "claude",
+      "runId": "route-policy-repair-attempt-1",
+      "analysis": "reports/screening/third-five/14-route-policy-repair.md",
+      "packageDigest": "b6490e6b9cd68f23bba0d63ce101b6c7b49f48113f2a90e320a7fc015c32ab01",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "outcome": null,
+      "reward": null,
+      "captureStatus": "incomplete",
+      "assessment": "infrastructure-interrupted",
+      "service": null,
+      "checker": null,
+      "start": "2026-09-09T13:43:45.249Z",
+      "end": null,
+      "authoringMilliseconds": null,
+      "completionSha256": null,
+      "resultSha256": null,
+      "gradeSha256": null,
+      "partialEvidence": {
+        "eventsSha256": "6bc383d07f4de904cc83b545022726cef4adcd2f448d682dd300855dbcde71f4",
+        "eventBytes": 1336359,
+        "eventCount": 1136,
+        "captureResultPresent": false,
+        "finalizedSubmissionPresent": false,
+        "gradePresent": false,
+        "completionPresent": false
+      },
+      "interruptionCause": {
+        "reported": "Host memory pressure terminated the controller and remaining solver before capture completed.",
+        "source": "trial operator report supplied by user; no independent OS kill trace retained in this publication"
+      },
+      "nextAction": "User deferred the retry; retain this attempt and append the later graded retry separately."
+    },
+    {
+      "id": "browser-replay-repair",
+      "target": "claude",
+      "runId": "browser-replay-repair-attempt-1",
+      "analysis": "reports/screening/original-five/03-browser-replay-repair.md",
+      "packageDigest": "ab3f64e81500aa342ff899eba2a0a9a24421345e91a78f7d900cfd044aec1d71",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "runtime event type=assistant",
+          "status": "observed",
+          "value": "claude-opus-5"
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-pass",
+      "serviceOutcome": "semantic-pass",
+      "reward": 1,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1564889,
+      "totalElapsedMilliseconds": 1627749,
+      "start": "2026-09-09T13:43:45.310Z",
+      "end": "2026-09-09T14:10:53.059Z",
+      "service": {
+        "scenarios": 20,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "total": 10,
+        "correct": 10,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "early-report",
+            "expectedFailingCheck": "reports",
+            "observedFailingChecks": [
+              "reports"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "repeated-delivery",
+            "expectedFailingCheck": "exact_effects",
+            "observedFailingChecks": [
+              "exact_effects"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "no-confirmation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "exact_effects"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "whole-trace-memoization",
+            "expectedFailingCheck": "exact_effects",
+            "observedFailingChecks": [
+              "exact_effects"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "first-candidate",
+            "expectedFailingCheck": "exact_effects",
+            "observedFailingChecks": [
+              "completion",
+              "exact_effects",
+              "preservation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "claim-only",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "exact_effects"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "pre-fill-read",
+            "expectedFailingCheck": "current_preconditions",
+            "observedFailingChecks": [
+              "current_preconditions"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "exact_effects"
+            ],
+            "outcome": "correct-reject-unnamed"
+          }
+        ],
+        "pass": true,
+        "gradeSummarySha256": "f2d1bd7edced134ead981002ed3ee09cd96457e019c1fa063303c64d23c2ea0f"
+      },
+      "usage": {
+        "cachedInputTokens": 6072113,
+        "costUsd": 7.912497000000002,
+        "inputTokens": 6231871,
+        "outputTokens": 127035,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "2b3d4489cd67ceeeb26eb0640407ec9f4d95a5a98895b0fbd514c79b24f2da5d",
+      "resultSha256": "bc8a28b6b9c94f1cb2ad6077c60c7abb596b6166191d38bc44b9eefef62180d2",
+      "gradeSha256": "cd27e7cc776a0efe09cc37601f68c0b1522c15ef668fce09d51f533dbcf94fb1",
+      "manifestFilesVerified": 770,
+      "manifestBytesVerified": 17535727,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "clean-solver-pass"
+    },
+    {
+      "id": "recurring-calendar-repair",
+      "target": "codex",
+      "runId": "recurring-calendar-repair-attempt-1",
+      "analysis": "reports/screening/fourth-five/18-recurring-calendar-repair.md",
+      "packageDigest": "3ab3d6dc391d7b438424d3b3784153b0f93675b762cf07351aefb6c7105397e6",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-pass",
+      "serviceOutcome": "semantic-pass",
+      "reward": 1,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 747487,
+      "totalElapsedMilliseconds": 753990,
+      "start": "2026-09-09T13:43:45.368Z",
+      "end": "2026-09-09T13:56:19.358Z",
+      "service": {
+        "scenarios": 31,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "total": 13,
+        "correct": 13,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "reset-attendee-responses",
+            "expectedFailingCheck": "preservation",
+            "observedFailingChecks": [
+              "preservation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "bookings",
+              "civil_time",
+              "completion",
+              "history",
+              "occurrence_identity",
+              "preservation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "erase-cancelled-history",
+            "expectedFailingCheck": "history",
+            "observedFailingChecks": [
+              "civil_time",
+              "history",
+              "occurrence_identity",
+              "preservation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "display-time-identity",
+            "expectedFailingCheck": "occurrence_identity",
+            "observedFailingChecks": [
+              "bookings",
+              "civil_time",
+              "history",
+              "occurrence_identity",
+              "preservation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "drop-external-bookings",
+            "expectedFailingCheck": "bookings",
+            "observedFailingChecks": [
+              "bookings"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "bookings",
+              "civil_time",
+              "completion",
+              "history",
+              "occurrence_identity",
+              "preservation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "booking-display-key",
+            "expectedFailingCheck": "bookings",
+            "observedFailingChecks": [
+              "bookings"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "wall-clock-duration",
+            "expectedFailingCheck": "civil_time",
+            "observedFailingChecks": [
+              "civil_time",
+              "preservation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "global-series-change",
+            "expectedFailingCheck": "preservation",
+            "observedFailingChecks": [
+              "bookings",
+              "civil_time",
+              "preservation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "bookings",
+              "civil_time",
+              "completion",
+              "history",
+              "occurrence_identity",
+              "preservation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "fixed-zone-offset",
+            "expectedFailingCheck": "civil_time",
+            "observedFailingChecks": [
+              "civil_time",
+              "preservation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          }
+        ],
+        "pass": true,
+        "gradeSummarySha256": "37d41192e08d1ed79c6bebe94b5773502c292c75ab55fdf62ddd1f4c0c7e40d4"
+      },
+      "usage": {
+        "cachedInputTokens": 564096,
+        "costUsd": null,
+        "inputTokens": 627861,
+        "outputTokens": 21711,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "ea004304d54d179376f331f358aef7737797f922c5eeb76dc2ba72fcdd531622",
+      "resultSha256": "83eed2d117b327f8f4b7c29205b770db6d06248254da8dde6ea4b6874ba56533",
+      "gradeSha256": "b3eb4a9d48ede5a6fbdef28e14e655406e7212d9981549605ff99fab7c4c4a48",
+      "manifestFilesVerified": 770,
+      "manifestBytesVerified": 4133961,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "clean-solver-pass"
+    },
+    {
+      "id": "workflow-authority-repair",
+      "target": "codex",
+      "runId": "workflow-authority-repair-attempt-1",
+      "analysis": "reports/screening/fourth-five/20-workflow-authority-repair.md",
+      "packageDigest": "fc6161cdfdea1084e976ed3ce39bd7995b97fc936d238e1afbad4c0c89f84cc6",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-pass",
+      "serviceOutcome": "semantic-pass",
+      "reward": 1,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 756299,
+      "totalElapsedMilliseconds": 765369,
+      "start": "2026-09-09T13:43:45.423Z",
+      "end": "2026-09-09T13:56:30.792Z",
+      "service": {
+        "scenarios": 30,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "total": 14,
+        "correct": 14,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "immediate-parent-origin",
+            "expectedFailingCheck": "origin_identity",
+            "observedFailingChecks": [
+              "origin_identity",
+              "positive_work"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "ignore-action-attenuation",
+            "expectedFailingCheck": "policy_at_effect",
+            "observedFailingChecks": [
+              "policy_at_effect"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "wrong-effect-payload",
+            "expectedFailingCheck": "effect_payload",
+            "observedFailingChecks": [
+              "effect_payload"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reactivate-revoked-path",
+            "expectedFailingCheck": "policy_at_effect",
+            "observedFailingChecks": [
+              "policy_at_effect"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "crash-unsafe-memoization",
+            "expectedFailingCheck": "terminal_history",
+            "observedFailingChecks": [
+              "terminal_history"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "deny-all",
+            "expectedFailingCheck": "positive_work",
+            "observedFailingChecks": [
+              "positive_work"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "misattribute-delivery",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "terminal_history"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "terminal_history"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "terminal_history"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "abandon-stale-admission",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "terminal_history"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "redecide-terminal-job",
+            "expectedFailingCheck": "terminal_history",
+            "observedFailingChecks": [
+              "terminal_history"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "terminal_history"
+            ],
+            "outcome": "correct-reject-unnamed"
+          }
+        ],
+        "pass": true,
+        "gradeSummarySha256": "867b64cf8d0b2b34538678a489b08f85f648b79a1efb409424111a0cb5f225f2"
+      },
+      "usage": {
+        "cachedInputTokens": 327936,
+        "costUsd": null,
+        "inputTokens": 367865,
+        "outputTokens": 22637,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "c62d57fd97f47422bb0e8236675a5390124fcb585883b26099198eb212e2f875",
+      "resultSha256": "3ebbd3cd8dee84fd403fc7493a5b9e28df55af350e0329926ef543f6dffbb838",
+      "gradeSha256": "e3e384a0f856ee351cd9da72c07a77363e4278c6d8c3b32872b2d98557291e7d",
+      "manifestFilesVerified": 879,
+      "manifestBytesVerified": 14122902,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "clean-solver-pass"
+    },
+    {
+      "id": "delegated-budget-repair",
+      "target": "codex",
+      "runId": "delegated-budget-repair-attempt-1",
+      "analysis": "reports/screening/original-five/04-delegated-budget-repair.md",
+      "packageDigest": "91bbdaf90246fd83051e5f37b2c17bf307ac9affb574e35acb2d28901b3fca82",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-pass",
+      "serviceOutcome": "semantic-pass",
+      "reward": 1,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1125848,
+      "totalElapsedMilliseconds": 1138802,
+      "start": "2026-09-09T13:43:45.479Z",
+      "end": "2026-09-09T14:02:44.281Z",
+      "service": {
+        "scenarios": 21,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "total": 10,
+        "correct": 10,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "local-receipt-only",
+            "expectedFailingCheck": "decisions",
+            "observedFailingChecks": [
+              "decisions"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "stale-version",
+            "expectedFailingCheck": "ownership",
+            "observedFailingChecks": [
+              "aggregate_budget",
+              "decisions",
+              "ownership",
+              "payload",
+              "preservation",
+              "receipt_history"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "aggregate_budget",
+              "completion",
+              "decisions",
+              "receipt_history"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "owner-blind",
+            "expectedFailingCheck": "ownership",
+            "observedFailingChecks": [
+              "aggregate_budget",
+              "completion",
+              "decisions",
+              "ownership",
+              "payload",
+              "preservation",
+              "receipt_history"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "aggregate_budget",
+              "completion",
+              "decisions",
+              "receipt_history"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "receipt-claim",
+            "expectedFailingCheck": "decisions",
+            "observedFailingChecks": [
+              "decisions"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "unknown-abandon",
+            "expectedFailingCheck": "decisions",
+            "observedFailingChecks": [
+              "aggregate_budget",
+              "completion",
+              "decisions",
+              "payload",
+              "receipt_history"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "per-request-budget",
+            "expectedFailingCheck": "aggregate_budget",
+            "observedFailingChecks": [
+              "aggregate_budget",
+              "decisions",
+              "ownership",
+              "payload",
+              "preservation",
+              "receipt_history"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          }
+        ],
+        "pass": true,
+        "gradeSummarySha256": "b8c1159f3d5b9f32efde30f7a028501239a07d97e3e3b222cb4aa226a429c6f7"
+      },
+      "usage": {
+        "cachedInputTokens": 690944,
+        "costUsd": null,
+        "inputTokens": 747020,
+        "outputTokens": 33119,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates are not subscription charges; billing was subscription-only with no paid API fallback.",
+      "completionSha256": "3560def9dc5eb3c04960e2137535f1ac02ebf2d4e80477709119a9cd015b3824",
+      "resultSha256": "a71828e0071d4325358e8844898c5e1e6c79df27781a23da08dfa48ae6a4dc6e",
+      "gradeSha256": "a38458e5881d029d62f181828084ebc6cbd0656b2521ee87ca7de2021ce933be",
+      "manifestFilesVerified": 736,
+      "manifestBytesVerified": 9671581,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "assessment": "clean-solver-pass"
+    }
+  ],
+  "audit": {
+    "newModelCalls": 0,
+    "manifestFilesVerified": 3155,
+    "manifestBytesVerified": 45464171,
+    "errors": [],
+    "formalAdjudicationChanged": false
+  }
+}

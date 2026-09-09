@@ -64,7 +64,7 @@ Integrated the two successor community-combination scenarios into the maintained
 
 Local validation passed 15 service-assurance checks, including correct reference and alternative services, semantic failure of the untouched starter, repeatability and negative-control activation. The independent checker correctly classified 12/12 candidates: two correct implementations and 10 negative controls, with zero false accepts or misses. The Foundry export rebuilt identically and passed fresh recipient validation. All 22 native static checks passed. These controls are author-side evidence, not model attempts or proof that an unseen solver will fail.
 
-Six native verifier integrity controls passed. The final native wording differs from the tested export; verifier and oracle file bytes were independently compared and are identical. All five native Harbor end-to-end oracle/nop jobs remain pending; this does not prevent using the validated Foundry path for exploratory trials.
+Six native verifier integrity controls passed. The final native wording differs from the tested export; verifier and oracle file bytes were independently compared and are identical. September 9 native preflight: this exact final export passed its Harbor oracle with reward 1 and nop with reward 0, with no infrastructure error. Nop rejects the missing required checker; Foundry assurance separately verifies the empty service starter fails semantically. All five packages in this group passed both native jobs. These are local checks, not Trial 2 model attempts.
 
 Use this exact Foundry export:
 
@@ -76,3 +76,88 @@ Use this exact Foundry export:
 Both deliverables are required. The checker must return complete deterministic Boolean verdicts; reasons are optional diagnostics and submitted helpers are available. Public API, output schemas and observable requirements remain provided, without a worked implementation.
 
 When Trial 2 finishes, append its actual model/profile, frozen package digest, service and checker outcomes, elapsed time, infrastructure exclusions and observed submission defects here. Do not overwrite Trial 1 or count an infrastructure error, an author control or an old label dispute as a new standard model failure.
+
+## Trial 2 — implementation successor — September 9, 2026 — INCONCLUSIVE (infrastructure interruption)
+
+### A. Identity and execution
+
+Run `route-policy-repair-attempt-1`, package digest
+`b6490e6b9cd68f23bba0d63ce101b6c7b49f48113f2a90e320a7fc015c32ab01`, route
+`professional-multifile/authority-process@1`. Dispatched through this session's
+`real-provider` execution route (signed JobStore reservation, Ed25519, realm
+`real-provider`, `billingMode: subscription-only`, `maxMicroUsd: 0`, `maxAttempts: 1`) —
+a fresh campaign slot (`attempt-1`), not an infrastructure retry of any prior run.
+Evidence retained at
+`.local/round-two-next-five-2026-09-09/real-campaign-frozen/jobs/real-provider/.incomplete/route-policy-repair-attempt-1/`
+(this job never reached the normal `records/` publication step).
+
+Target: **claude**. Requested `anthropic/claude-opus-5`, effort `max`
+(`profile.json`: `{effort:"max", model:"anthropic/claude-opus-5", provider:"anthropic",
+scaffold:"claude-code"}`), limits `{cpus:2, memoryMiB:2048, wallMs:10800000}`.
+
+Dispatched 2026-09-09T13:43:45.249Z as one of five reservations installed within a
+230ms window (13:43:45.249Z–13:43:45.479Z); `docker ps` confirmed all five
+`foundry-real-*` containers running concurrently at launch, so this was a genuinely
+concurrent five-way campaign — the concurrency requirement was met even though this
+one job did not finish. Interrupted approximately 39+ minutes in; the last captured
+event is timestamped 2026-09-09T14:22:56.805Z.
+
+### B. What happened
+
+The host system entered severe memory pressure during this campaign: five concurrent
+2 GiB-limited Docker containers plus several other already-running Codex/Claude
+sessions and Docker Desktop itself, all on the same machine. Claude Code's own
+background-task memory-pressure protection killed the controller's background shell
+process. The Docker container itself
+(`foundry-real-route-policy-repair-attempt-1-8d8b87ae`) shows status `Exited (143)`
+(SIGTERM) in `docker ps -a` — it was terminated, not crashed on its own. No
+`capture.json` was ever written (the process-resolution step that writes it never
+ran), so there is no final exit code, no submission copy, and no grade. **This is an
+infrastructure-interrupted invalid execution, not a solver outcome.** It must not be
+scored, guessed at, or silently retried in this same slot. No other job in this
+five-job campaign was affected; the other four completed cleanly with valid graded
+results — this was the only casualty, plausibly because it was still mid-flight when
+memory pressure peaked.
+
+### C. What the partial transcript shows (context only, not a result)
+
+The 1,136 captured events show the agent had already written a full implementation
+attempt before the interruption: `entry.mjs`, `lib/aster.mjs` (described in its own
+comment as "Aster routing language v1 — core semantics"), `lib/verify.mjs`, and
+`checker.mjs`, plus a self-built test harness (`test/harness.mjs`,
+`test/candidates.mjs`, `test/diag.mjs`, and several `test/run-*.mjs` scale/stress
+scripts). Of 34 captured `Bash` calls, the later ones are repeated, increasing-scale
+invocations of `test/run-checker.mjs`, `test/run-service.mjs`, `test/run-stress.mjs`
+and `test/run-shapes.mjs` (arguments scaling from single digits up to `20000`
+generated cases), interleaved with `Edit`s to `checker.mjs` (13 edits, the
+most-touched file) and `lib/verify.mjs` (4 edits) — a pattern consistent with
+iterative checker self-hardening, similar in shape to this package's own Trial 1
+addendum above. The very last captured event is an assistant message still mid
+extended-thinking (500 estimated thinking tokens accumulated), with no subsequent
+tool call recorded. **This shows the agent was actively engaged in iterative
+self-testing at the moment of interruption — it does not show whether the
+implementation or checker it had built at that point was correct.** No conclusion
+about correctness should be drawn from this partial transcript.
+
+### D. Disposition
+
+This attempt does not count as a solver success or failure. Real solver authoring
+time was genuinely spent (39+ minutes, real subscription usage) but produced no
+gradeable artifact — no `capture.json`, no `submission/`, no `grade.json`. It should
+not be silently retried in this same slot; a later retry must have its own preserved attempt record and final grade to actually measure this package's Trial 2 performance. The raw
+partial evidence (events, logs, staged workspace, and the package-store snapshot) is
+preserved unmodified at the `.incomplete/` path above.
+
+### E. Recommendation
+
+Retry this package alone (not bundled with four others) once host memory headroom is
+confirmed, or defer until other concurrently running agent sessions on this machine
+are reduced — five concurrent 2 GiB containers plus several already-active CLI agent
+sessions exceeded the host's available memory once. The infrastructure interruption is recorded, but there is no scored Trial 2
+outcome. The user has deferred its retry; no retry was launched by this publication.
+
+### F. Verified publication record — September 9, 2026
+
+Reward **unscored (`null`)**. The preserved partial capture has 1,136 events and no completed capture, finalized submission or grade. It is excluded from both reward-zero successes and solver passes.
+
+[Campaign results](../round-two-next-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-next-five.json). Trial 1 is preserved.

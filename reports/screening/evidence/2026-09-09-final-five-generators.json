@@ -1,0 +1,14 @@
+[
+  {
+    "id": "persistent-knowledge-repair",
+    "historicalGeneratorSha256": "f83540744124e27490e839a2ae5ac243e111ef0f6bf295021d5543ea24171a81",
+    "generatorSha256": "b2056d6956f8c563672057ce70960d6cf91e4b87c59a1d671669801c15b9ba10",
+    "reason": "Integrated four committed-publication lost-response scenarios with identical job redelivery."
+  },
+  {
+    "id": "temporal-capacity-repair",
+    "historicalGeneratorSha256": "acdc8c03e0675ac937c7cd39b65b3eb25fe316fbb2973d2e12cd42e9be259fa9",
+    "generatorSha256": "4d62dc835c4125dcc9594730beed589565310d46cd36fb9c9999e88dd433666b",
+    "reason": "Added an empty source to isolate mandatory source exhaustion from correct zero arithmetic."
+  }
+]

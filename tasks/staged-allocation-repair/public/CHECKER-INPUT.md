@@ -1,36 +1,20 @@
-# Checker input and execution contract
+# Checker input and output contract
 
-Submit a standalone checker.mjs exporting run({cases}); it may be async. Each case
-is {token,cells}, containing one candidate's actual executions. All source fields below
-are task inputs or external observations, never supplied correctness answers.
+Export run({cases}) from checker.mjs. It may be async and import submitted helper
+modules and Node built-ins. Service APIs and network access are unavailable.
+Each case is {token,cells}; each cell is one complete independent execution.
+A candidate is correct only if every cell satisfies SEMANTICS.md.
+Tokens and scenario IDs are opaque identifiers. Observations are ordered
+{seq,method,request,value} host records. Reports contain untrusted diagnostics.
 
-## Cell fields
+- view: original {resources,tree}.
+- actual: ordered {after,node,resources} placements; after is the disclosed path index.
+- observations: next/place calls, including each disclosed node and actual write.
 
-- view: {resources, tree}, the original resource catalog and full declared future tree.
-- actual: ordered {after,node,resources} placement records; after is the disclosed path index.
-- observations: actual next/place calls. next returns a node ID or null. Reconstruct
-  disclosure and placement order from this log, not a hidden path or a supplied winning-policy answer.
-
-Obligation names: completion, capacity_and_constraints, future_promise,
-irreversible_sequence, preservation. Accept any legal promise-preserving choices.
-
-## Common trace and output rules
-
-Each cell also has an opaque scenarioId and reports containing untrusted diagnostics.
-Observations are ordered {seq,method,request,value} records from the external host.
-No top-level checks, failures, status, expected, truth or groundTruth verdict is supplied.
-Nested application keys are retained even if their name resembles an oracle field.
-
-Return {verdicts:{[token]:{ok:boolean,reasons:string[]}}} for every token. Name each
-violated public obligation you identify, either alone or as "check_name: explanation".
-For a rejected candidate, naming at least one public obligation that its actual trace
-violates satisfies reason grading. If several obligations fail, no particular primary
-label is required; a private control's authoring label is not something to guess.
-Judge each candidate independently of the existence, identity or output of another.
-Accept correct outputs regardless of object-key order or diagnostic report contents.
-
-Only checker.mjs is staged. Standard Node modules are available; other submission files,
-service APIs and network access are not. The runner invokes run twice on the same cases
-in one process. Results must be deterministic, and inputs must not be mutated. Both
-invocations combined have 60 seconds, one CPU and 1 GiB memory. Missing or malformed
-checker output fails the requirement. Both the service and checker must pass.
+Return {verdicts:{[token]:{ok:boolean,reasons?:string[]}}} for every token.
+Reasons are optional diagnostics and are not graded. Correct alternative algorithms,
+object-key ordering and diagnostic reports are permitted. Judge cases independently.
+The runner calls run twice on the same input in one process; return deterministic
+results without mutating inputs. Both calls share 60 seconds, one CPU and 1 GiB.
+Missing, malformed or nondeterministic output fails the checker deliverable.
+Both the service and checker must pass.

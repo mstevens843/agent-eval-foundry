@@ -19,6 +19,8 @@ export const SCREENING_FOLLOWUPS = [
   "top-five-implementation-plan-2026-09-09.md",
   "next-five-implementation-plan-2026-09-09.md",
   "third-ranked-five-implementation-plan-2026-09-09.md",
+  "fourth-ranked-five-implementation-plan-2026-09-09.md",
+  "final-five-implementation-plan-2026-09-09.md",
   "round-two-top-five-2026-09-09.md",
   "evidence/2026-09-09-second-trial-source-audit.json",
   "evidence/2026-09-09-successor-generators.json",
@@ -28,8 +30,16 @@ export const SCREENING_FOLLOWUPS = [
   "evidence/2026-09-09-next-five-implementation.json",
   "evidence/2026-09-09-third-ranked-five-generators.json",
   "evidence/2026-09-09-third-ranked-five-implementation.json",
+  "evidence/2026-09-09-fourth-ranked-five-generators.json",
+  "evidence/2026-09-09-fourth-ranked-five-implementation.json",
+  "evidence/2026-09-09-final-five-generators.json",
+  "evidence/2026-09-09-final-five-implementation.json",
   "evidence/2026-09-09-round-two-top-five.json",
   "evidence/2026-09-09-round-two-top-five-audit.json",
+  "round-two-next-five-2026-09-09.md",
+  "evidence/2026-09-09-round-two-next-five.json",
+  "round-two-third-ranked-five-2026-09-09.md",
+  "evidence/2026-09-09-round-two-third-ranked-five.json",
 ];
 
 export function verifyPublication(root = process.cwd()) {
@@ -147,6 +157,60 @@ export function verifyPublication(root = process.cwd()) {
     retrialVerifiedFiles += record.manifestFilesVerified;
   }
   assert.equal(retrials.audit.manifestFilesVerified, retrialVerifiedFiles);
+  const successorRecords = [...retrials.packages];
+  for (const group of ["next-five", "third-ranked-five"]) {
+    const campaign = read(`reports/screening/evidence/2026-09-09-round-two-${group}.json`);
+    assert.equal(campaign.packages.length, 5);
+    assert.equal(campaign.automaticRetries, 0);
+    assert.equal(campaign.packages.filter((p) => p.target === "codex").length, 3);
+    assert.equal(campaign.packages.filter((p) => p.target === "claude").length, 2);
+    let campaignFiles = 0;
+    for (const record of campaign.packages) {
+      assert.ok(ids.has(record.id), "retrial must extend an existing package history");
+      assert.match(record.packageDigest, hash);
+      assert.match(record.profileDigest, hash);
+      assert.ok(!/\/Users\/|\.local\//.test(JSON.stringify(record)), "nonportable/private record path");
+      const analysis = readFileSync(join(root, record.analysis), "utf8");
+      assert.ok(analysis.includes("## Trial 2"), "missing per-task Trial 2 analysis");
+      if (record.reward === null) {
+        assert.equal(record.assessment, "infrastructure-interrupted");
+        assert.equal(record.captureStatus, "incomplete");
+        for (const key of ["outcome", "service", "checker", "completionSha256", "resultSha256", "gradeSha256"])
+          assert.equal(record[key], null, "interruption must not invent a grade or completed record");
+        assert.match(record.partialEvidence.eventsSha256, hash);
+        assert.equal(record.partialEvidence.gradePresent, false);
+        assert.equal(record.partialEvidence.finalizedSubmissionPresent, false);
+        continue;
+      }
+      for (const key of ["completionSha256", "resultSha256", "gradeSha256"])
+        assert.match(record[key], hash);
+      assert.equal(record.captureStatus, "completed");
+      const checker = record.checker;
+      assert.equal(checker.reasonPolicy, "diagnostic-only");
+      assert.equal(checker.details.length, checker.total);
+      assert.equal(checker.falsePositives, checker.details.filter((d) => d.outcome === "false-positive").length);
+      assert.equal(checker.missed, checker.details.filter((d) => d.outcome === "missed").length);
+      assert.equal(checker.correct, checker.total - checker.falsePositives - checker.missed);
+      assert.equal(checker.pass, checker.deterministic && checker.falsePositives === 0 && checker.missed === 0);
+      assert.equal(record.reward, record.serviceOutcome === "semantic-pass" && checker.pass ? 1 : 0);
+      assert.equal(record.outcome, record.reward === 1 ? "semantic-pass" : "semantic-fail");
+      assert.ok(Number.isInteger(record.manifestFilesVerified) && record.manifestFilesVerified > 0);
+      campaignFiles += record.manifestFilesVerified;
+    }
+    assert.deepEqual(campaign.counts, {
+      attemptsLaunched: campaign.packages.length,
+      completedScoredAttempts: campaign.packages.filter((p) => p.reward !== null).length,
+      recordedZeroRewards: campaign.packages.filter((p) => p.reward === 0).length,
+      solverPasses: campaign.packages.filter((p) => p.reward === 1).length,
+      infrastructureInterruptedAttempts: campaign.packages.filter((p) => p.reward === null).length,
+    });
+    assert.equal(campaign.audit.manifestFilesVerified, campaignFiles);
+    assert.deepEqual(campaign.audit.errors, []);
+    assert.equal(campaign.audit.newModelCalls, 0);
+    retrialVerifiedFiles += campaignFiles;
+    successorRecords.push(...campaign.packages);
+  }
+  assert.equal(new Set(successorRecords.map((p) => p.id)).size, successorRecords.length);
   const walk = (dir, prefix = "") =>
     readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
       assert.ok(!entry.isSymbolicLink(), "publication symlink");
@@ -191,7 +255,11 @@ export function verifyPublication(root = process.cwd()) {
   return {
     screenedPackages: ids.size,
     manifestListedFilesVerifiedAtPublication: verifiedFiles,
-    successorTrials: retrials.packages.length,
+    successorTrials: successorRecords.length,
+    successorCompletedTrials: successorRecords.filter((p) => p.reward !== null).length,
+    successorRecordedZeroRewards: successorRecords.filter((p) => p.reward === 0).length,
+    successorSolverPasses: successorRecords.filter((p) => p.reward === 1).length,
+    successorInterruptedTrials: successorRecords.filter((p) => p.reward === null).length,
     successorManifestListedFilesVerifiedAtPublication: retrialVerifiedFiles,
     documents: documents.length,
     promotedPaths: promotion.paths.length,

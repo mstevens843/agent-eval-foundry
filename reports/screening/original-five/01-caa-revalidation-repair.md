@@ -27,3 +27,13 @@ The right lesson is not that isolation was unnecessary: isolation protects the m
 ## Evidence boundary
 
 [Sanitized records and hashes](../evidence/2026-09-07-original-five.json) identify the clean retry and explicitly exclude the contaminated attempt. [Maintained task](../../../tasks/caa-revalidation-repair/) is author-facing; only its approved public assembly belongs in a solver workspace. Requested Sol/xhigh settings are not independent runtime attestation. [Batch limitations](../README.md) apply.
+
+## Trial 2 preparation — final group (2026-09-09)
+
+**Ready for second exploratory trials through Foundry or native Harbor.** Replaced the mostly implemented Go service with a compilable CLI stub and read-only public types. The private oracle now installs the complete Go service rather than a single planner file. Retained the independent alternative, separate authority/verifier, 24 scenarios and artifact/process controls. Shortened the prompt to its normative contract and interfaces. Configured the upstream canary template with CAA’s existing unique GUID and renamed the existing experience heading to match the static schema. CAA retains its native Go service deliverable; no Node checker is required.
+
+Local validation passed **27 assurance checks**, including a semantic failure for the untouched starter. Its native Go oracle passes the 24-scenario suite; no submitted checker is part of this task. The final native export passed 22 static checks, Harbor oracle reward 1 and nop reward 0, with no infrastructure exceptions. Both export formats reproduce. No model attempt was launched by this engineering work.
+
+Foundry export: `.local/final-five-implementation-2026-09-09/caa-export`. Package digest: `b60aea7eb0a356f87215b0f366fa63d4f97047f290e9784b2cbc031eb0899eac`. Native export: `.local/final-five-implementation-2026-09-09/harbor-ready/caa-revalidation-repair`. Native digest: `c649ff8980eda3fad1cb981ef930cda16d609e98df87e1441184388857ba169f`. Suggested target: **Codex**, retaining the original model family. Append the eventual Trial 2 outcome below this engineering record; preserve Trial 1.
+
+[Implementation and completed checks](../final-five-implementation-plan-2026-09-09.md) · [Exact evidence](../evidence/2026-09-09-final-five-implementation.json).

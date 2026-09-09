@@ -138,7 +138,7 @@ Replaced the supplied implementation modules with an empty entry point and compl
 
 Local validation passed 16 service-assurance checks, including correct reference and alternative services, semantic failure of the untouched starter, repeatability and negative-control activation. The independent checker correctly classified 13/13 candidates: two correct implementations and 11 negative controls, with zero false accepts or misses. The Foundry export rebuilt identically and passed fresh recipient validation. All 22 native static checks passed. These controls are author-side evidence, not model attempts or proof that an unseen solver will fail.
 
-Six native verifier integrity controls passed. That run matches the final native export digest. All five native Harbor end-to-end oracle/nop jobs remain pending; this does not prevent using the validated Foundry path for exploratory trials.
+Six native verifier integrity controls passed. That run matches the final native export digest. September 9 native preflight: this exact final export passed its Harbor oracle with reward 1 and nop with reward 0, with no infrastructure error. Nop rejects the missing required checker; Foundry assurance separately verifies the empty service starter fails semantically. All five packages in this group passed both native jobs. These are local checks, not Trial 2 model attempts.
 
 Use this exact Foundry export:
 
@@ -150,3 +150,130 @@ Use this exact Foundry export:
 Both deliverables are required. The checker must return complete deterministic Boolean verdicts; reasons are optional diagnostics and submitted helpers are available. Public API, output schemas and observable requirements remain provided, without a worked implementation.
 
 When Trial 2 finishes, append its actual model/profile, frozen package digest, service and checker outcomes, elapsed time, infrastructure exclusions and observed submission defects here. Do not overwrite Trial 1 or count an infrastructure error, an author control or an old label dispute as a new standard model failure.
+
+## Trial 2 — implementation successor — September 9, 2026
+
+### A. Identity and execution
+
+Run `recurring-calendar-repair-attempt-1`, package digest
+`3ab3d6dc391d7b438424d3b3784153b0f93675b762cf07351aefb6c7105397e6`, route
+`professional-multifile/authority-process@1`. Dispatched through this session's
+`real-provider` execution route (signed JobStore reservation, Ed25519, realm
+`real-provider`, `billingMode: subscription-only`, `maxMicroUsd: 0`, `maxAttempts: 1`)
+— a fresh campaign slot (`attempt-1`), not an infrastructure retry. The controller is
+a verified adaptation of the prior top-five campaign's controller, reusing that
+campaign's independently-built and re-verified `frozen-source/` runtime unchanged.
+Author image `sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a`
+(`foundry-provider-agent-portfolio:2026-09-07`). Evidence retained at
+`.local/round-two-next-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/recurring-calendar-repair-attempt-1/`.
+
+Target: **codex**. Requested `openai/gpt-5.6-sol`, effort `xhigh`, CLI
+`scaffoldVersion 0.153.2` (verified baked into the pinned author image). Observed
+from runtime events: model, effort and scaffold version are all unexposed by the
+Codex CLI's event stream and remain unobserved — a known instrumentation limit, not
+a data quality problem.
+
+Dispatched 2026-09-09T13:43:45.368Z as one of five reservations installed within a
+230ms window (13:43:45.249Z–13:43:45.479Z); `docker ps` confirmed all five
+`foundry-real-*` containers running concurrently at launch — a genuinely concurrent
+five-way campaign. Completed 2026-09-09T13:56:19.358Z. Total elapsed ≈753,990ms
+(~12m34s) — solver authoring time ≈747,487ms (~12m27s), grading ≈6.5s. Execution
+reached a clean `completed` state with no invalid-execution or infrastructure error.
+(A separate sibling package in this same launch batch, route-policy-repair, was later
+interrupted by a host memory-pressure kill of the controller process; that is
+unrelated to this job, which had already finished and been graded well before that
+kill.)
+
+### B. What changed since Trial 1
+
+Trial 1 (documented above) used **Claude**; this round the assignment switches to
+**Codex** — any difference in outcome cannot be attributed to the same model
+improving or regressing, only compared side by side. Per the engineering record
+above, the starter is now a single empty `subject.run` entry point (Trial 1's
+starter already supplied time/expansion/change-application/publication/orchestration
+modules); the checker is a required, separately-graded deliverable; reasons are
+diagnostic-only. The label-taxonomy defect that caused Trial 1's reward-0
+(`preservation` vs. `bookings` for a dropped external booking) was fixed at the
+documentation level before this trial — `SEMANTICS.md` and `instruction.md` now
+state explicitly which check name each obligation maps to.
+
+### C. Results
+
+**Reward 1 — a clean pass on both required deliverables.** Service: all 31 expected
+scenario IDs observed, zero failures, zero missing/unexpected IDs. Checker: present,
+deterministic, `checkerRequired: true`, `checkerPassed: true`, all 13 candidates
+(two correct implementations, eleven negative controls) correctly classified — 0
+missed, 0 false positives. `reasonPolicy` is diagnostic-only for this package; only
+the boolean verdict was graded.
+
+### D. Observable solving behavior
+
+48 captured tool-call events (24 command executions, 12 file changes, 5 progress
+messages). The agent's own stated plan, verbatim from its first message: *"I'll read
+the contract, API declarations, and checker input format first, then implement both
+sides and exercise them against focused trace cases."* It followed that plan exactly:
+
+1. Read `SEMANTICS.md`, `api.d.ts`, `CHECKER-INPUT.md`, the empty starter `entry.mjs`
+   and stub `checker.mjs` in one pass (first command touched all of them together).
+2. Stated the central edge cases up front, verbatim: *"original recurrence gaps
+   remove identity entirely, while gaps introduced by exceptions or moves retain a
+   skipped row; cancellation then takes precedence while preserving null schedule
+   fields."* It explicitly chose to build **one shared deterministic model** —
+   `reconcile.mjs`, a dependency-free, `Date`-free pure module implementing its own
+   proleptic-Gregorian civil-date conversion (`daysFromCivil`/`civilFromDays`) so
+   neither the service nor the checker can silently drift from each other or depend
+   on the host's timezone database. `entry.mjs` and `checker.mjs` both import from
+   it.
+3. Wrote `reconcile.mjs`, `entry.mjs`, `checker.mjs` together (one `file_change`
+   event lists all three: `checker.mjs` added, `entry.mjs` updated, `reconcile.mjs`
+   added), then immediately re-read all three back before proceeding.
+4. Ran `node --check` on all three files, then began targeted boundary testing —
+   its own stated checklist: *"Gregorian rollover, weekly anchoring, offset
+   gaps/folds, exception eligibility, cancelled-move behavior, and checker
+   acceptance/rejection."* It exercised these via inline `node --input-type=module`
+   heredoc scripts constructing hand-built `view` fixtures and calling `reconcile`,
+   `subject.run` and the checker's `run` directly — not a separate test framework,
+   but real executable probes against its own code, several of which failed on
+   first attempt (one heredoc run exited 1 with a stack trace) and were corrected in
+   the next command.
+5. Iterated on `checker.mjs` four more times (four separate `file_change` "update"
+   events) while testing it against constructed candidates. One probe explicitly
+   used a candidate token of `__proto__` and checked the resulting verdicts object
+   for prototype pollution (`{"verdicts":{"__proto__":{"ok":true}}}`) — a
+   security-aware self-test of its own verdict-construction code, not something the
+   task instructions asked for.
+6. Ran `git diff` against the three changed files as a final review step, then a
+   last combined `node --check` plus semantic smoke test before its closing message:
+   *"The reconciliation and validator behaviors now agree on a pure,
+   timezone-independent model. The validator also canonicalizes only the
+   contract-declared fields, so reordered rows/attendees pass while duplicates,
+   extra fields, wrong publications, and multiple successful commits fail."*
+
+Its final completion message accurately described what it had built (service entry,
+independent validator, shared recurrence model covering recurrence generation, DST
+gaps/folds, exceptions, ordered changes, cancellations, bookings, external-booking
+preservation, and commit-trace validation) — this matches the actual grading result;
+the agent did not overclaim.
+
+### E. Comparison and next step
+
+Trial 1 (Claude, empty-starter era not yet in effect — it worked from a
+substantially pre-implemented starter) reached the same service/checker correctness
+(31/31, 13/13) but scored reward 0 purely on the since-fixed `preservation`/
+`bookings` label ambiguity — not a capability gap. Trial 2 (Codex, empty starter, the
+label ambiguity already resolved in the contract text) reached full correctness on
+both deliverables and scored reward 1 cleanly. Starter removal did not visibly
+increase difficulty for this package on this attempt: the agent still isolated the
+task to two independent concerns (a shared timezone/recurrence model, and validator
+logic built against that same model) inside 12.5 minutes. Given a clean pass here and
+in causal-replica-repair/diagnostic-transport-repair from the prior round, this
+package is a reasonable candidate to deprioritize in the immediate difficulty search
+relative to packages with unresolved service or checker defects — one clean
+exploratory pass does not establish six-run qualification, but nothing here suggests
+this task currently discriminates model capability at this difficulty level.
+
+### F. Verified publication record — September 9, 2026
+
+Reward **1**; service **31/31**; checker **13/13**. All **770** completion-manifest files matched their recorded sizes and hashes.
+
+[Campaign results](../round-two-next-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-next-five.json). Trial 1 is preserved.

@@ -80,7 +80,10 @@ export async function runScenario(s, execute, storage) {
           actual.get(key(r)).labels.includes(s.marker),
       ),
       ownership: selected.every((r) => actual.get(key(r)).owner === r.tenant + ":" + s.team),
-      labels: selected.every((r) => {
+      labels: calls.filter((c) => c.status === "APPLIED").every((c) =>
+        c.validPatch && new Set(c.request.patch.labels).size === c.request.patch.labels.length &&
+        c.before.labels.every((label) => c.request.patch.labels.includes(label)),
+      ) && selected.every((r) => {
         const expected = [
           ...new Set([
             ...r.labels,
@@ -105,23 +108,10 @@ export async function runScenario(s, execute, storage) {
         .every((c) => c.before.revision === c.request.revision),
     }),
     actual: [...actual.values()],
-    selected,
     edits: [...edits],
-    calls,
+    calls: calls.map(({ request, before, status }) => ({ request, before, status })),
     observations,
     reports,
-    // Legitimate PROBLEM data for an independent checker (not an answer-key leak under a new
-    // name): `requestedTeam`/`requestedMarker` are exactly `view.team`/`view.marker`, the same
-    // input every candidate's entry.mjs is handed at the start of the run via `session(view, ...)`
-    // above. They are not a verdict computed from any particular candidate's behavior -- they're
-    // the fixed migration parameters stated to every candidate up front, identical across the
-    // reference, the alternative, and every control run against a given scenario. Without them a
-    // checker cannot tell which observed `resolve` responses are legitimate (tenant AND team both
-    // correct) versus a stale/wrong-team lookup, nor which literal string a row's labels must gain
-    // to count as migrated -- exactly the same two facts a candidate needs to attempt the task.
-    // `selected` above already gives the correct migration population (a pure function of the raw
-    // rows and `view.tenants`, independent of any candidate's behavior) so `view.tenants` itself
-    // is not additionally required here.
     requestedTeam: s.team,
     requestedMarker: s.marker,
     initialRows: s.rows,

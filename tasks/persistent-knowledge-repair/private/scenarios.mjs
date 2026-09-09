@@ -1,5 +1,39 @@
+// Real mid-job process death: `crashAfterPublish: N` kills the subject's process after its Nth
+// `api.publish` call has already landed server-side, before it can see the response, report, or
+// finish. The job is then redelivered identically (the real-world response to an unconfirmed
+// attempt). A subject that doesn't consult `receipts()` before redelivering double-publishes the
+// interrupted request, which the pre-existing `history` check already catches — no crash-specific
+// check is needed, only a genuine interruption the pre-existing checks were never exercised against.
+function crashCases() {
+  return Array.from({ length: 4 }, (_, seed) => {
+    const grant = { destination: "archive", version: 1, allowed: true };
+    const src = (id, value) => ({
+      id,
+      revision: 1,
+      kind: "source",
+      value,
+      authority: "approved",
+      retracted: false,
+    });
+    const request = (id, root) => ({ id, root, destination: "archive", grantVersion: 1 });
+    return {
+      id: `case-crash-${String(seed).padStart(3, "0")}`,
+      jobs: [
+        {
+          updates: [src("x", `x${seed}`), src("y", `y${seed}`), src("z", `z${seed}`)],
+          // Three independently-eligible requests in one job, crash lands after the first
+          // publish: the redelivery must recognize that one via receipts and still complete
+          // the other two, in order, exactly once each.
+          requests: [request("r1", "x"), request("r2", "y"), request("r3", "z")],
+          grants: [grant],
+          crashAfterPublish: 1,
+        },
+      ],
+    };
+  });
+}
 export function scenarios() {
-  return Array.from({ length: 12 }, (_, seed) => {
+  return [...Array.from({ length: 12 }, (_, seed) => {
     const a = {
       id: "a",
       revision: 1,
@@ -69,7 +103,7 @@ export function scenarios() {
         },
       ],
     };
-  });
+  }), ...crashCases()];
 }
 export const checkIds = [
   "completion",

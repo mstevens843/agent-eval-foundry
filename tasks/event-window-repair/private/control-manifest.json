@@ -104,5 +104,13 @@
     "check": "late_output",
     "clean": "case-024",
     "selectionRole": "post-selection-validation"
+  },
+  {
+    "id": "stop-after-ends",
+    "overlay": {
+      "entry.mjs": "controls/stop-after-ends.mjs"
+    },
+    "check": "completion",
+    "selectionRole": "post-selection-validation"
   }
 ]

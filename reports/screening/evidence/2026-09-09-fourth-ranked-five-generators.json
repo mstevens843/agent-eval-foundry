@@ -1,0 +1,8 @@
+[
+  {
+    "id": "compatible-rollout-repair",
+    "historicalGeneratorSha256": "232cef0b68b083c9a3b9cbf61a66d4f95ac4ba1bcb4d90413eff124a779e2a3a",
+    "generatorSha256": "86469621eadac658123fbe5fc7a3f58fd94dbcc39146f1d3791073aa2d87087f",
+    "reason": "Integrated four stage-interruption cases and two interrupted unhealthy-stage rollback cases; historical Trial 1 remains unchanged."
+  }
+]

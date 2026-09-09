@@ -1,2 +1,5 @@
-import { migrate } from "./src/service.mjs";
-export const subject = { run: migrate };
+export const subject = {
+  run(view, api) {
+    return {};
+  },
+};

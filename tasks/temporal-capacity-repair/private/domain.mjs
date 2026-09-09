@@ -55,9 +55,14 @@ export async function runScenario(s, execute, storage) {
       observations,
     ),
   );
+  const cursors = new Set([null]);
+  let exhausted = false;
+  for (const o of observations) if (o.method === "fetch" && cursors.has(o.request.cursor)) {
+    if (o.value.next === null) exhausted = true; else cursors.add(o.value.next);
+  }
   return {
     ...checks({
-      completion: expected.every((e) => writes.some((w) => w.id === e.id)),
+      completion: exhausted && expected.every((e) => writes.some((w) => w.id === e.id)),
       exact_integral: expected.every((e) => writes.some((w) => e.id === w.id && e.total === w.total)),
       population: writes.every((w) => expected.some((e) => e.id === w.id)),
       unique_reports: new Set(writes.map((w) => w.id)).size === writes.length,

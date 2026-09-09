@@ -46,3 +46,13 @@ This trial already scored reward **1** with every control correctly named, so no
 **Regrade confirms no regression.** This trial's already-preserved checker.mjs was re-run against the fixed harness with zero new model calls: still a full pass (12/12 correct, 0 false positives, 0 missed, all 10 controls correctly named), unchanged from the original result. Full numbers: restricted regrade record `regrade-2026-09-08.json` (restricted local storage, same evidence boundary as the sanitized trial record above).
 
 **When trials run again:** this package's grading should behave exactly as before; the fix is purely defensive against the reasons-formatting defect class observed elsewhere in this batch.
+
+## Trial 2 preparation — final group (2026-09-09)
+
+**Ready for second exploratory trials through Foundry or native Harbor.** Removed the public pagination, revision, integral and reporting modules after completing private service closures. The independent checker derives exact integrals from original revisions and actual writes. The grader now enforces the existing requirement to exhaust the source. A new empty-source case isolates omission of the source read despite a correct zero total, for 34 scenarios.
+
+Local validation passed **16 assurance checks**, including a semantic failure for the untouched starter. Its independent checker classifies **13/13 candidates** correctly; reason text is diagnostic. The final native export passed 22 static checks, Harbor oracle reward 1 and nop reward 0, with no infrastructure exceptions. Both export formats reproduce. No model attempt was launched by this engineering work.
+
+Foundry export: `.local/final-five-implementation-2026-09-09/release-ready/temporal-capacity-repair/export`. Package digest: `05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede`. Native export: `.local/final-five-implementation-2026-09-09/harbor-ready/temporal-capacity-repair`. Native digest: `6d5b00c7164f9602bc5e3ca9207924ac66650a3becff24f674589650689879a3`. Suggested target: **Claude**, retaining the original model family. Append the eventual Trial 2 outcome below this engineering record; preserve Trial 1.
+
+[Implementation and completed checks](../final-five-implementation-plan-2026-09-09.md) · [Exact evidence](../evidence/2026-09-09-final-five-implementation.json).

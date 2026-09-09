@@ -91,6 +91,14 @@ export async function runScenario(s, execute, storage) {
       observations,
     ),
   );
+  const exhausted = Object.keys(s.tables).every((table) => {
+    const reached = new Set([null]);
+    for (const o of observations) if (o.method === "fetch" && o.request.table === table && reached.has(o.request.cursor) && Array.isArray(o.value?.rows)) {
+      if (o.value.next === null) return true;
+      reached.add(o.value.next);
+    }
+    return false;
+  });
   const want = expected(s),
     lookup = (id) => actual.find((r) => r.customerId === id),
     ids = (rows) => rows.map((r) => r.customerId).sort();
@@ -99,7 +107,7 @@ export async function runScenario(s, execute, storage) {
     // Stable raw source rows remain observable even if a candidate under-fetches.
     tables: s.tables,
     ...checks({
-      completion: want.every((e) => lookup(e.customerId)),
+      completion: exhausted && want.every((e) => lookup(e.customerId)),
       population: equal(ids(actual), ids(want)),
       attribution: want.every((e) => {
         const a = lookup(e.customerId);

@@ -143,7 +143,7 @@ Replaced the supplied service modules with an empty entry point and completed bo
 
 Local validation passed 17 service-assurance checks, including correct reference and alternative services, semantic failure of the untouched starter, repeatability and negative-control activation. The independent checker correctly classified 14/14 candidates: two correct implementations and 12 negative controls, with zero false accepts or misses. The Foundry export rebuilt identically and passed fresh recipient validation. All 22 native static checks passed. These controls are author-side evidence, not model attempts or proof that an unseen solver will fail.
 
-Six native verifier integrity controls passed. The final native wording differs from the tested export; verifier and oracle file bytes were independently compared and are identical. All five native Harbor end-to-end oracle/nop jobs remain pending; this does not prevent using the validated Foundry path for exploratory trials.
+Six native verifier integrity controls passed. The final native wording differs from the tested export; verifier and oracle file bytes were independently compared and are identical. September 9 native preflight: this exact final export passed its Harbor oracle with reward 1 and nop with reward 0, with no infrastructure error. Nop rejects the missing required checker; Foundry assurance separately verifies the empty service starter fails semantically. All five packages in this group passed both native jobs. These are local checks, not Trial 2 model attempts.
 
 Use this exact Foundry export:
 
@@ -155,3 +155,113 @@ Use this exact Foundry export:
 Both deliverables are required. The checker must return complete deterministic Boolean verdicts; reasons are optional diagnostics and submitted helpers are available. Public API, output schemas and observable requirements remain provided, without a worked implementation.
 
 When Trial 2 finishes, append its actual model/profile, frozen package digest, service and checker outcomes, elapsed time, infrastructure exclusions and observed submission defects here. Do not overwrite Trial 1 or count an infrastructure error, an author control or an old label dispute as a new standard model failure.
+
+## Trial 2 — implementation successor — September 9, 2026
+
+### A. Identity and execution
+
+Run `workflow-authority-repair-attempt-1`, package digest
+`fc6161cdfdea1084e976ed3ce39bd7995b97fc936d238e1afbad4c0c89f84cc6`, route
+`professional-multifile/authority-process@1`. Dispatched through the round-two-next-five
+campaign's `real-provider` execution route (signed JobStore reservation, Ed25519, realm
+`real-provider`, `billingMode: subscription-only`, `maxMicroUsd: 0`, `maxAttempts: 1`) — a
+fresh campaign slot (`attempt-1`), not an infrastructure retry. Runtime: the isolated
+`frozen-source/` build made and independently verified earlier this session (its SHA-256
+was re-checked unchanged immediately before this dispatch). Author image
+`sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a`
+(`foundry-provider-agent-portfolio:2026-09-07`). Evidence retained at
+`.local/round-two-next-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/workflow-authority-repair-attempt-1/`.
+
+Target: **codex**. Requested `openai/gpt-5.6-sol`, effort `xhigh`, CLI
+`scaffoldVersion 0.153.2` (verified baked into the pinned author image). Model, effort
+and scaffold version were not exposed by the Codex CLI's event stream and remain
+unobserved for this run — a known instrumentation limit for Codex specifically, not a
+data quality problem.
+
+Dispatched 2026-09-09T13:43:45.423Z as one of five reservations installed within a
+230ms window (13:43:45.249Z–13:43:45.479Z); `docker ps` confirmed all five
+`foundry-real-*` containers running concurrently at launch. One sibling job in this
+same batch (route-policy-repair, a different package) was later interrupted by a
+host memory-pressure kill of the controller process; that interruption is unrelated
+to this job, which completed its own full lifecycle independently and cleanly.
+Completed 2026-09-09T13:56:30.792Z. Total elapsed ≈765,369ms (~12m45s) — solver
+authoring time (capture wall clock) ≈756,299ms (~12m36s), grading ≈9.1s. Execution
+reached a clean `completed` state with no invalid-execution or infrastructure error.
+
+### B. What changed since Trial 1
+
+Model target switches from Claude (Trial 1) to Codex this round. The starter is now a
+single empty `subject.run` entry point, replacing Trial 1's already-partially-repaired
+source-module split. The independent checker is a required, separately-graded
+deliverable. Most directly relevant to Trial 1's outcome: the harness-side fix recorded
+above (`gradeChecker`'s `namedRightCheck` crediting any obligation a control's real
+trace actually failed, not only the one privately-designated primary label) is now
+built into the grading path this attempt was scored against — Trial 1's own confirmed
+grading-alignment defect is structurally no longer possible for a checker that behaves
+the way Trial 1's did.
+
+### C. Results
+
+**Reward 1 — a clean pass on both required deliverables.** Service: all 30 expected
+scenarios observed with zero failures, zero missing/unexpected IDs (`evaluation.status:
+semantic-pass`). Checker: `checkerRequired: true`, `checkerPassed: true`, 14/14
+candidates correctly classified — 0 missed, 0 false positives. `reasonPolicy` is
+diagnostic-only for this package; only the boolean accept/reject verdict was graded,
+not reason text. This directly resolves Trial 1's original reward-0 outcome.
+
+### D. Observable solving behavior
+
+30 captured events across a single Codex turn. The agent first read the whole
+workspace in two `bash` calls (`rg --files`, then `sed -n` over `SEMANTICS.md`,
+`api.d.ts`, `CHECKER-INPUT.md`, `instruction.md`, the empty `entry.mjs` starter, and
+`package.json`) before writing any code — a single `file_change` produced both
+`entry.mjs` and `checker.mjs` together. `entry.mjs`'s core logic: `buildOrigins()`
+walks each job's `parent` chain to the root principal (memoizing per chain node);
+`authorityPath()` runs a breadth-first search from the resource's owner outward over
+active grants matching the resource/action, marking visited principals to block
+cycles, and returns the first simple path reaching the origin. `run()` consults
+`api.receipt()` before ever calling `decideFresh()`, so duplicate/replayed deliveries
+reuse the durable decision instead of re-deciding; `decideFresh()` loops on
+`stale`/`request`-error responses to re-read policy and re-decide under the current
+revision; `finish()` is retried on non-`stored` results without advancing `take()`.
+
+After writing the code, the agent ran `node --check` on both files, then a sequence of
+hand-authored inline Node scripts (`node - <<'NODE' ... NODE`) importing `entry.mjs`
+and `checker.mjs` directly to simulate specific scenarios: a parent/child job pair
+checking origin resolution, a `git diff`-paired sanity run, an explicit reachability-search
+test mirroring `authorityPath()`'s own algorithm, and an empty-input edge case
+(`cells: []`) against the checker. `grep`-confirmed in the raw capture: a
+`Math.random`-driven loop generating on the order of 300 synthetic scenarios did run
+(the stdout log contains two `Math.random` call sites and matching `for (let i` loop
+bodies alongside literal "300" references), substantiating the agent's own final
+claim of "300 randomized service scenarios passed" rather than that being an
+unverified assertion. No failed self-test, reverted edit, or contradicted completion
+claim was observed in this run — its final summary ("Node syntax checks passed / 300
+randomized service scenarios passed / Adversarial checker mutations were correctly
+rejected / Checker is deterministic and does not mutate inputs") matches the actual
+grading outcome.
+
+### E. Comparison and next step
+
+Trial 1 (Claude) also produced a fully correct 30/30 service and a checker that
+correctly classified all 14 candidates — its reward-0 was traced, confirmed, and
+fixed as a harness label-naming defect unrelated to the submission's own correctness
+(documented above, with a diagnostic regrade of Trial 1's *original, unchanged*
+submission scoring 14/14 under the fixed harness). Trial 2, on a different model and a
+freshly empty starter, independently reached the same outcome — full service
+correctness and a checker with zero missed defects and zero false positives — cleanly,
+with no reason-label ambiguity to navigate at all under the now-diagnostic-only reason
+policy. This is not evidence the harness fix specifically enabled this pass (Codex's
+checker never emitted a `terminal_history`/`completion`-style secondary-label
+disagreement to be credited), but it does confirm the *starter-removal* change alone
+did not make this package harder for a capable submission: two different models, two
+different starters (partially-repaired vs. empty), same clean result. Given two
+consecutive clean passes (accounting for the harness-fixed regrade), this package
+looks solid; recommend deprioritizing further exploratory trials here in favor of
+packages with an unresolved genuine capability gap.
+
+### F. Verified publication record — September 9, 2026
+
+Reward **1**; service **30/30**; checker **14/14**. All **879** completion-manifest files matched their recorded sizes and hashes.
+
+[Campaign results](../round-two-next-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-next-five.json). Trial 1 is preserved.

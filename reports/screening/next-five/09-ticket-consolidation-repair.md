@@ -48,3 +48,16 @@ This trial already scored reward **1** with every control correctly named, so no
 **Regrade confirms no regression.** This trial's already-preserved checker.mjs was re-run against the fixed harness with zero new model calls: still a full pass (12/12 correct, 0 false positives, 0 missed, all 10 controls correctly named), unchanged from the original result. Full numbers: restricted regrade record `regrade-2026-09-08.json` (restricted local storage, same evidence boundary as the sanitized trial record above).
 
 **When trials run again:** this package's grading should behave exactly as before; the fix is purely defensive against the reasons-formatting defect class observed elsewhere in this batch.
+
+
+## Trial 2 preparation — fourth ranked group (2026-09-09)
+
+**Ready for second exploratory trials through Foundry or native Harbor.** No new model attempt is recorded by this engineering work. Removed the public pagination, selection, update and orchestration implementations after completing both private service closures. Added an independent history/state checker. The grader now rejects an applied patch that drops an existing label even if a later patch restores the final set; `intermediate-label-loss` isolates this case. Checker inputs retain raw rows, write requests, pre-write states and external edit facts, with computed `selected` and `validPatch` annotations removed.
+
+Both service and checker are required. The public entry is empty, reason strings are optional diagnostics, helper modules are allowed, and the contract retains the facts needed to judge correctness. Existing shared authoring-policy improvements apply; no additional exploration gates were introduced.
+
+Local validation passed 16 assurance checks across 33 service scenarios, including complete reference/alternative services and semantic rejection of the untouched starter. The independent checker classified **13/13** candidates correctly, with zero false accepts or misses. All 22 native static checks and six verifier integrity controls passed. The exact native export earned oracle reward 1 and nop reward 0, with no infrastructure error; nop rejects the absent required checker. Foundry assurance separately verifies the empty service's semantic failure. Export reproduction and targeted regression checks passed.
+
+Foundry export: `.local/fourth-ranked-five-implementation-2026-09-09/release-ready/ticket-consolidation-repair/export`. Package digest: `61056ab84d9aa2532dec0a292f0a84360046c0ff56a5336e6f3dca09d2b8d466`. Native digest: `1b35bc501ffb1672a350b5ccc44a7079d6cdd2048d3b332a443be17bd903a1e9`. Suggested Trial 2 target: **Claude**, retaining this package's original model family. Append the eventual Trial 2 result below this engineering record, preserving Trial 1.
+
+[Group implementation and selection](../fourth-ranked-five-implementation-plan-2026-09-09.md) and [exact validation evidence](../evidence/2026-09-09-fourth-ranked-five-implementation.json) retain file hashes, native trial identities and the remaining final-qualification requirements.

@@ -2,7 +2,7 @@
 
 A run has width W (positive integer), lateness L (nonnegative integer) and a complete
 partition list. Each partition starts active with watermark -1000. Events arrive in
-the order returned by next({}); null means input exhausted. Event kinds:
+the order returned by next({}); consume through its terminal null. Event kinds:
 data {partition,id,time,key,delta}, watermark {partition,value}, idle {partition},
 resume {partition}, end {partition}. Data identity is (partition,id); repeated identities
 are byte-identical. A duplicate, including a repeated late event, has no further effect.

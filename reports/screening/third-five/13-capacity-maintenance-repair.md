@@ -76,3 +76,112 @@ Use these exact exports:
 Both deliverables are required. The checker returns complete deterministic Boolean verdicts; optional reason text does not affect grading, and submitted helper modules are available. Public requirements and custom schemas remain supplied without a worked implementation.
 
 When Trial 2 completes, append the actual model/profile, frozen digest, service/checker outcomes, elapsed time, exclusions and final submission defect here. Keep original Trial 1 rewards intact. Local controls, old grading disputes and infrastructure errors are not additional model failures. The final hiring submission still requires its human-authored material and rubric, standard and cheat qualification on the final selected version.
+
+## Trial 2 — implementation successor — September 9, 2026
+
+### A. Identity and execution
+
+Run `capacity-maintenance-repair-attempt-1`, package digest
+`6cf1ac0fcd0339cb51353a0c0dbdd267b501489d7db26faf8fcc7898d6f2a0be`, route
+`professional-multifile/authority-process@1`. Dispatched through this session's
+`real-provider` execution route (signed JobStore reservation, Ed25519, realm
+`real-provider`, `billingMode: subscription-only`, `maxMicroUsd: 0`, `maxAttempts: 1`)
+— a fresh campaign slot (`attempt-1`), not an infrastructure retry. Campaign:
+`.local/round-two-third-ranked-five-2026-09-09/`, controller `campaign.mjs`, an
+independently-verified small adaptation of the prior campaign's controller,
+importing the same isolated, byte-verified runtime built earlier this session
+(`.local/round-two-top-five-2026-09-09/frozen-source/dist/index.js`). Author image
+`sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a`. Evidence
+retained at `.local/round-two-third-ranked-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/capacity-maintenance-repair-attempt-1/`.
+
+Target: **claude**. Requested `anthropic/claude-opus-5`, effort `max`, CLI
+`scaffoldVersion 2.1.263` (verified baked into the pinned author image). Observed
+from runtime events: `model="claude-opus-5"` (matches requested); effort and
+scaffold version are not exposed by the CLI's event stream and remain unobserved.
+
+Dispatched 2026-09-09T15:08:41.798Z as one of five reservations installed within a
+231ms window (15:08:41.798Z–15:08:42.029Z); `docker ps` confirmed all five
+`foundry-real-*` containers running concurrently — a genuinely concurrent five-way
+campaign. Completed 2026-09-09T15:27:17.327Z. Total elapsed ≈1,115,529ms (~18m36s)
+— solver authoring time (capture wall clock) ≈1,108,416ms (~18m28s), grading ≈7.1s.
+Token usage: 3,485,269 input tokens (3,361,544 cached), 97,981 output tokens; the
+CLI's own `total_cost_usd` reports $5.37 — a metered-price estimate only, no actual
+charge occurred since authorization was `subscription-only` with `maxMicroUsd: 0`.
+Execution reached a clean `completed` state with no invalid-execution or
+infrastructure error.
+
+### B. What changed since Trial 1
+
+Per the engineering-successor section above: the public search/state/coordinator
+modules were removed after completing the private service closures, so this trial
+started from the fleet/API contract alone rather than a substantially pre-implemented
+starter. A collector defect (an invariant boolean overwriting the real placement
+array in checker-visible history) was fixed; checker-visible history now carries
+actual placements/completed hosts, safety verdicts stay private. 112 duplicate
+witnessing scenarios were removed (138 service scenarios became 26 distinct
+original cases plus one new identity case, 27 total), and checker reasons remain diagnostic-only.
+
+### C. Results
+
+**Reward 1 — a clean pass on both required deliverables**, consistent with Trial 1's
+own clean pass on the pre-successor package. Service: all 27 expected scenarios
+observed, zero failures, zero missing/unexpected IDs. Checker: `checkerRequired: true`,
+`checkerPassed: true`, 12/12 candidates correctly classified (0 missed, 0 false
+positives), deterministic across repeat judgments.
+
+### D. Observable solving behavior
+
+25 `Bash` calls captured. The agent read `SEMANTICS.md`, `api.d.ts`, `CHECKER-INPUT.md`,
+the starter `entry.mjs` and `instruction.md` in three calls, then wrote a complete
+`entry.mjs` in one shot: a bitmask state-space model — state = (placement bitmask over
+host×service pairs, upgraded bitmask over requested hosts) — with a dense validity
+table pre-screening all `2^(H·S)` placements against capacity/eligibility/min-max/
+per-zone *before* BFS ever visits them, so the search can never enter a state that
+would grade as a violation. The goal state requires both full upgrade completion and
+restored original placement, so BFS's shortest-path property produces the
+"add-elsewhere → remove → maintain → restore → clean up" temporary-relocation dance
+automatically wherever a service's `min` leaves no slack — the agent did not hand-code
+that dance as a special case.
+
+It hit the same class of authoring friction Trial 1 recorded: a literal `\x00`
+separator constant caused inconsistent encoding between `entry.mjs` and `checker.mjs`.
+It diagnosed this with `grep`/`cat -A` byte inspection, then wrote a small Node script
+(`fixsep.cjs`) to normalize both files programmatically rather than hand-editing raw
+bytes — the same defect class recurring across two independent trials, self-corrected
+both times without being a graded failure.
+
+It then built an unusually layered self-test suite, all outside the graded package:
+`run-subject.mjs` (standalone service fuzzer, escalated from 400 to 4,000 random
+scenarios), `run-mutants.mjs` (300, later 1,200 scenarios × candidate set), `run-hard.mjs`
+(3,000 scenarios), `run-edge.mjs`, `run-robust.mjs`, `run-rules.mjs` (per-rule isolation:
+min/max/perZone/capacity/eligibility breaches each individually triggered and checked),
+and `run-throughput.mjs` (40,000-cell timing under a 1 GiB cap). It patched its own
+harness twice (`patch-harness.cjs`, `patch2.cjs`, `patch3.cjs`) to track strict-mode
+rejections and fix an infeasible hand-built fixture — iterating on its *test tooling*,
+not the submission's correctness logic. It closed with `node --check` on both files
+and a full re-run of all seven test scripts in one sweep before declaring done.
+
+Its final completion claim (3,480 feasible random scenarios; 328 "tight" scenarios
+with 321 requiring temporary relocation; 13 candidates × 720 scenarios = 9,360 traces
+with 0 false accepts/rejects; 40,000 cells checked twice in 525ms) matches the actual
+graded result (27/27 service, 12/12 checker) — no overclaiming found.
+
+### E. Comparison and next step
+
+Trial 1 (pre-successor, substantially pre-implemented starter) also reached reward 1,
+138/138 service, 12/12 checker, in 24m26s. Trial 2, working from the fleet/API contract
+alone after the starter's search/state/coordinator modules were removed, reached the
+same clean-pass outcome in less authoring time (18m28s) despite writing materially
+more code from scratch — consistent with this being a stable, low-difficulty result for
+this package/model pairing rather than one that depended on the removed starter
+scaffolding. The recurring `\x00`-separator encoding friction across both trials is a
+tooling quirk worth noting for future package authoring, not a capability signal.
+Both trials were solved. Retain these submissions as correct controls and prioritize
+packages with observed required-deliverable failures for the next difficulty-search
+attempts; a solver pass is not a Foundry reward-zero success.
+
+### F. Verified publication record — September 9, 2026
+
+Reward **1**; service **27/27**; checker **12/12**. All **692** completion-manifest files matched their recorded sizes and hashes.
+
+[Campaign results](../round-two-third-ranked-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-third-ranked-five.json). Trial 1 is preserved.

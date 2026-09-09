@@ -46,7 +46,9 @@ const observed = JSON.parse(
 const after = await inventory(exported);
 if (JSON.stringify(before) !== JSON.stringify(after)) throw new Error("inspection changed artifact bytes");
 if (!observed.decision.stages["local-valid"].allowed) throw new Error("matching receipt not consumed");
-for (const stage of ["trial-eligible", "trial-authorized", "hardness-observed", "release-eligible"])
+// Local assurance can establish exploratory eligibility; it cannot authorize a
+// provider call or establish measured hardness or final submission qualification.
+for (const stage of ["trial-authorized", "hardness-observed", "release-eligible"])
   if (observed.decision.stages[stage].allowed)
     throw new Error("local controls promoted into external qualification");
 const publicRows = await inventory(join(exported, "public"));

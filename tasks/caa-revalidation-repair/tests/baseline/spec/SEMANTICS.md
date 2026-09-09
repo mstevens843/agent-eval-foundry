@@ -30,6 +30,9 @@ A recheck establishes that identifier's authorization: `certd` records it in the
 store against that identifier, established at the evaluation time, so that a
 later order inside the window applies it without asking again.
 
+Stored authorizations not rechecked by this order remain unchanged, including
+authorizations belonging to identifiers absent from the order.
+
 The authority answers one identifier per query. It serves queries concurrently,
 and the order in which its answers arrive is not the order in which they were
 asked.
@@ -65,9 +68,11 @@ carries the identifier's name, the authorization applied to it, and where that
 authorization came from: `CACHE` for a current stored authorization, `AUTHORITY`
 for a recheck, `INDETERMINATE` for an identifier that could not be settled. An
 indeterminate decision carries no authorization.
+For this case, an omitted field, JSON null, or an empty string denotes the same
+absence of an established authorization; other strings are not authorizations.
 
     Report   = { order_id: string, outcome: "ISSUED" | "REFUSED", decisions: Decision[] }
-    Decision = { name: string, authorization?: "PERMIT" | "FORBID",
+    Decision = { name: string, authorization?: "PERMIT" | "FORBID" | "" | null,
                  source: "CACHE" | "AUTHORITY" | "INDETERMINATE", detail?: string }
 
 Every well-formed order produces a report and exits zero, whatever the outcome. A
@@ -80,7 +85,7 @@ outcome, and one entry per decision carrying the same name, authorization and
 source, in the same order. It records what happened, not what was intended.
 
     Audit = { order_id: string, reconciled_at: string, outcome: string, entries: Entry[] }
-    Entry = { name: string, authorization?: string, source: string, detail?: string }
+    Entry = { name: string, authorization?: string | null, source: string, detail?: string }
 
 ## 8. Interface
 

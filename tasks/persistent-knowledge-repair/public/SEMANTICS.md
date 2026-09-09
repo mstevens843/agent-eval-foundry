@@ -1,4 +1,4 @@
-# Durable knowledge contract, version one
+# Durable knowledge contract, version two
 
 Submission directory bounds: at most 256 directories and 16 nested path components.
 
@@ -38,9 +38,10 @@ publications and the policy above; no preferred reason strings or storage layout
 
 1–4 jobs, 1–12 records, 1–6 requests per job, revisions 1–8, at most 8 dependency
 edges per node, values at most 256 characters and combined output at most 4 KiB.
-All required observations are supplied in updates, grants and receipts. A process
-is restarted only between complete jobs; atomic-write crash recovery mid-file is
-not a hidden requirement. `entry.mjs` exports `subject.run(view, api)` as Node ESM.
+All required observations are supplied in updates, grants and receipts. At most once per job, the process may terminate after a publication commits but
+before its response arrives. The identical job is redelivered in a fresh process;
+external publications and storage survive. Completed jobs are not interrupted.
+No interruption occurs during a local file write. `entry.mjs` exports `subject.run(view, api)` as Node ESM.
 At most 128 regular single-link submission files, 8 MiB total, no symlinks/special
 files. Code is read-only during grading; only `storage` persists. Each process:
 45 seconds, 4000 requests, 64 KiB JSON frames, 16 MiB/channel. Container: 2 CPUs,

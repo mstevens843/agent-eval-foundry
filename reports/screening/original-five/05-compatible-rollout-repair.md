@@ -27,3 +27,16 @@ The earlier proposal to make the rollback target unhealthy contradicts this vers
 ## Evidence boundary
 
 [Sanitized record](../evidence/2026-09-07-original-five.json) contains the frozen package/profile identity, recorded result and completion hashes. [Maintained source](../../../tasks/compatible-rollout-repair/) is not the submitted solution. [Batch limitations](../README.md) cover profile uncertainty and the distinction between exploratory screening and official qualification.
+
+
+## Trial 2 preparation — fourth ranked group (2026-09-09)
+
+**Ready for second exploratory trials through Foundry or native Harbor.** No new model attempt is recorded by this engineering work. Removed the public catalog, health, publication, cleanup and controller implementations. Integrated four stage-response-loss cases and two interrupted unhealthy-stage rollback cases, for 18 scenarios. A task-private adapter actually ends the submitted process after stage commits and redelivers the same job with external state/storage intact. Both private services retain original job-entry rollback targets and cleanup scope. Added `resume-without-health` and `forget-job-origin` controls. Kept explicit cleanup rather than the local prototype’s automatic stage-record retirement on bind. Added a typed API and a required independent checker using raw per-job state/history; no private legality verdicts are supplied. This successor has two required deliverables; Trial 1 required only the service.
+
+Both service and checker are required. The public entry is empty, reason strings are optional diagnostics, helper modules are allowed, and the contract retains the facts needed to judge correctness. Existing shared authoring-policy improvements apply; no additional exploration gates were introduced.
+
+Local validation passed 14 assurance checks across 18 service scenarios, including complete reference/alternative services and semantic rejection of the untouched starter. The independent checker classified **11/11** candidates correctly, with zero false accepts or misses. All 22 native static checks and six verifier integrity controls passed. The exact native export earned oracle reward 1 and nop reward 0, with no infrastructure error; nop rejects the absent required checker. Foundry assurance separately verifies the empty service's semantic failure. Export reproduction and targeted regression checks passed.
+
+Foundry export: `.local/fourth-ranked-five-implementation-2026-09-09/release-ready/compatible-rollout-repair/export`. Package digest: `1d016de5fe639a81300ee633d5eb49606400f142eb1e0de37e03926d91f86c7d`. Native digest: `6f94432217f8991a65f9e188a7fb84b49bcde756e7f8950682e9fc54ca03c5be`. Suggested Trial 2 target: **Claude**, retaining this package's original model family. Append the eventual Trial 2 result below this engineering record, preserving Trial 1.
+
+[Group implementation and selection](../fourth-ranked-five-implementation-plan-2026-09-09.md) and [exact validation evidence](../evidence/2026-09-09-fourth-ranked-five-implementation.json) retain file hashes, native trial identities and the remaining final-qualification requirements.

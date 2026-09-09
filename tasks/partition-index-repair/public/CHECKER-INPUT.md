@@ -1,8 +1,7 @@
 # Checker input and output contract
 
 Submit checker.mjs exporting run({ cases }); it may be async. The checker executes as a
-standalone Node ES module with no task-specific imports or network access. Standard
-Node modules are available. Keep its implementation self-contained in checker.mjs.
+standalone Node ES module with no network access. Standard Node modules and submitted helper modules are available.
 
 Each case is {token, cells}. Tokens and scenarioId values are opaque and carry no
 correctness meaning. Cells are independent runs, not successive states of one run.
@@ -25,9 +24,8 @@ additional metadata fields not needed to establish a public obligation.
 
 ## Verdicts
 
-Return {verdicts: {[token]: {ok: boolean, reasons: string[]}}} for every case.
-For a rejected case, reasons must include the public check name of the violated
-obligation; the names and their meanings are listed in instruction.md.
+Return {verdicts: {[token]: {ok: boolean, reasons?: string[]}}} for every case.
+Reasons are optional diagnostics; their wording is not graded.
 Accept correct alternative implementations. Do not infer correctness from token
 order, scenario identifiers, reports or similarity to another candidate.
 

@@ -1,12 +1,8 @@
-# Repair the durable knowledge consumer
+Implement the service in /work/task and its independent execution checker.
 
-The support export service stores source revisions and derived summaries between
-jobs. Its ordinary ingestion tests pass, but restarted jobs can publish an outdated
-or incorrectly attributed value. Repair `src/` and `entry.mjs` so legitimate
-exports complete and restricted material does not acquire authority through storage
-or derivation. `SEMANTICS.md` is normative. Run `node --test test/*.test.mjs`.
+SEMANTICS.md defines the required behavior; api.d.ts defines the service interface.
+entry.mjs must export subject.run(view, api). Implement the required effects through
+the supplied API. The writable storage directory is provided at execution time.
 
-Use the existing serialization, revision, derivation, policy and publication layers
-or replace them. Grading restarts Node between jobs and preserves only the writable
-directory named by `view.storage`. No inference about the trust of a string is
-required: authoritative metadata and grant versions are explicit task data.
+checker.mjs must export run({cases}) as defined in CHECKER-INPUT.md. Both deliverables
+are required. You may add helper modules and tests; Node built-ins are available.

@@ -87,8 +87,21 @@ describe("professional portfolio contracts", () => {
   });
   it("binds the scenario selection record to the retained generator bytes", () => {
     const ledger = JSON.parse(readFileSync("data/portfolio-selection-ledger.json", "utf8"));
+    const successors = [
+      "2026-09-09-next-five-generators",
+      "2026-09-09-fourth-ranked-five-generators",
+      "2026-09-09-final-five-generators",
+    ].flatMap((name) => JSON.parse(readFileSync(`reports/screening/evidence/${name}.json`, "utf8"))) as {
+      id: string;
+      historicalGeneratorSha256: string;
+      generatorSha256: string;
+    }[];
     for (const { id, generatorSha256 } of ledger.generators) {
-      expect(sha256(readFileSync(`tasks/${id}/private/scenarios.mjs`))).toBe(generatorSha256);
+      const successor = successors.find((row) => row.id === id);
+      if (successor) expect(successor.historicalGeneratorSha256).toBe(generatorSha256);
+      expect(sha256(readFileSync(`tasks/${id}/private/scenarios.mjs`))).toBe(
+        successor?.generatorSha256 ?? generatorSha256,
+      );
     }
     expect(ledger.validationControls).toHaveLength(4);
   });

@@ -38,8 +38,9 @@ export const subject = {
       }
     const decisions = [],
       publications = [];
+    const pending = new Map();
     for (const request of view.requests) {
-      const prior = api.receipts({}).find((r) => r.id === request.id);
+      const prior = pending.get(request.id) ?? api.receipts({}).find((r) => r.id === request.id);
       const r = ready.get(request.root);
       const lineage =
         prior?.lineage ?? (r ? [...r.versions].map(([id, revision]) => ({ id, revision })) : []);
@@ -49,8 +50,10 @@ export const subject = {
           view.grants.some(
             (g) => g.destination === request.destination && g.version === request.grantVersion && g.allowed,
           ));
-      if (allowed && !prior)
-        publications.push({ id: request.id, destination: request.destination, value: r.value, lineage });
+      if (allowed && !prior) {
+        const publication = { id: request.id, destination: request.destination, value: r.value, lineage };
+        publications.push(publication); pending.set(request.id, publication);
+      }
       decisions.push({ id: request.id, outcome: allowed ? "published" : "blocked", lineage });
     }
     for (const publication of publications.reverse()) api.publish(publication);
