@@ -1,0 +1,633 @@
+{
+  "schemaVersion": 1,
+  "gradingRevision": "final-six-coverage-v1",
+  "providerCallsMade": 0,
+  "manifestFilesVerified": 5811,
+  "manifestBytesVerified": 27544710,
+  "errors": [],
+  "oracles": [
+    {
+      "id": "temporal-capacity-repair",
+      "schemaVersion": 1,
+      "gradingRevision": "final-six-coverage-v1",
+      "policySha256": "b3e9e100b0e3fa7f032a1e2a7b3b85f33196a15e40f20831c4fdb8bde8969604",
+      "fixtureSha256": "a649e4df717702949d1f6f60c26b83b760010545d82986bc8c77fd6bfe6d83d4",
+      "checkerSha256": "3f3d4c38190c97c2cf54dbcd90a4de362923610fbb097d58f179d82fc9112dfa",
+      "deterministic": true,
+      "reasonPolicy": "diagnostic-only",
+      "correct": 2,
+      "total": 2,
+      "pass": true,
+      "details": [
+        {
+          "token": "f7102606e878dd7a8e7bb840",
+          "expectedOk": true,
+          "actualOk": true,
+          "correct": true
+        },
+        {
+          "token": "f6508a8a65d57cef7ad56407",
+          "expectedOk": false,
+          "actualOk": false,
+          "correct": true
+        }
+      ],
+      "observed": {
+        "first": {
+          "verdicts": {
+            "f7102606e878dd7a8e7bb840": {
+              "ok": true
+            },
+            "f6508a8a65d57cef7ad56407": {
+              "ok": false
+            }
+          }
+        },
+        "second": {
+          "verdicts": {
+            "f7102606e878dd7a8e7bb840": {
+              "ok": true
+            },
+            "f6508a8a65d57cef7ad56407": {
+              "ok": false
+            }
+          }
+        },
+        "mutated": false
+      }
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "schemaVersion": 1,
+      "gradingRevision": "final-six-coverage-v1",
+      "policySha256": "b3e9e100b0e3fa7f032a1e2a7b3b85f33196a15e40f20831c4fdb8bde8969604",
+      "fixtureSha256": "7d3fb7543e243a7d37ecad8d0d579629edfc8e1fbcf1104ffe9469100c3558d7",
+      "checkerSha256": "85dca56125c07639acbb5888793f9aeb6e1988fba2d76aad049c1e66ff77071a",
+      "deterministic": true,
+      "reasonPolicy": "diagnostic-only",
+      "correct": 2,
+      "total": 2,
+      "pass": true,
+      "details": [
+        {
+          "token": "60ef8f7b2097c4c934031a11",
+          "expectedOk": true,
+          "actualOk": true,
+          "correct": true
+        },
+        {
+          "token": "0021c8f79876bc501f21eeff",
+          "expectedOk": true,
+          "actualOk": true,
+          "correct": true
+        }
+      ],
+      "observed": {
+        "first": {
+          "verdicts": {
+            "60ef8f7b2097c4c934031a11": {
+              "ok": true
+            },
+            "0021c8f79876bc501f21eeff": {
+              "ok": true
+            }
+          }
+        },
+        "second": {
+          "verdicts": {
+            "60ef8f7b2097c4c934031a11": {
+              "ok": true
+            },
+            "0021c8f79876bc501f21eeff": {
+              "ok": true
+            }
+          }
+        },
+        "mutated": false
+      }
+    }
+  ],
+  "rows": [
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 2,
+      "group": "round-two-final-five",
+      "target": "claude",
+      "packageDigest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+      "recordedReward": 0,
+      "effectiveReward": 0,
+      "completionSha256": "1f5c683f47944ade7246b20c6b44eba57abdb4604e462f0ecfb565532a154870",
+      "gradeSha256": "986881fbcb08e757e0d87e279eb272e31502ba499badfef41ae3d53f5d50aaef",
+      "supplement": {
+        "schemaVersion": 1,
+        "gradingRevision": "final-six-coverage-v1",
+        "policySha256": "b3e9e100b0e3fa7f032a1e2a7b3b85f33196a15e40f20831c4fdb8bde8969604",
+        "fixtureSha256": "a649e4df717702949d1f6f60c26b83b760010545d82986bc8c77fd6bfe6d83d4",
+        "checkerSha256": "4e85bb4cbbcbbcae71e37f1e91e9590b53662bb2336b71d2c7a99ce3e4c89acd",
+        "deterministic": true,
+        "reasonPolicy": "diagnostic-only",
+        "correct": 1,
+        "total": 2,
+        "pass": false,
+        "details": [
+          {
+            "token": "f7102606e878dd7a8e7bb840",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f6508a8a65d57cef7ad56407",
+            "expectedOk": false,
+            "actualOk": true,
+            "correct": false
+          }
+        ],
+        "observed": {
+          "first": {
+            "verdicts": {
+              "f7102606e878dd7a8e7bb840": {
+                "ok": true
+              },
+              "f6508a8a65d57cef7ad56407": {
+                "ok": true
+              }
+            }
+          },
+          "second": {
+            "verdicts": {
+              "f7102606e878dd7a8e7bb840": {
+                "ok": true
+              },
+              "f6508a8a65d57cef7ad56407": {
+                "ok": true
+              }
+            }
+          },
+          "mutated": false
+        }
+      }
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 3,
+      "group": "round-three-failing-five",
+      "target": "claude",
+      "packageDigest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+      "recordedReward": 1,
+      "effectiveReward": 0,
+      "completionSha256": "c691d4ea4767ad2e086dc5043a0e26a35dc18bdf76effc39545f7c98c24eb5fc",
+      "gradeSha256": "0e306a47f676db83ee284a736c02b400933d610691a79bb13f84db17386a12ff",
+      "supplement": {
+        "schemaVersion": 1,
+        "gradingRevision": "final-six-coverage-v1",
+        "policySha256": "b3e9e100b0e3fa7f032a1e2a7b3b85f33196a15e40f20831c4fdb8bde8969604",
+        "fixtureSha256": "a649e4df717702949d1f6f60c26b83b760010545d82986bc8c77fd6bfe6d83d4",
+        "checkerSha256": "fee14f6e3cfcb8d82373826db2167dbc860f0f56b5bdb111d4cb0e7a35bf9d90",
+        "deterministic": true,
+        "reasonPolicy": "diagnostic-only",
+        "correct": 1,
+        "total": 2,
+        "pass": false,
+        "details": [
+          {
+            "token": "f7102606e878dd7a8e7bb840",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f6508a8a65d57cef7ad56407",
+            "expectedOk": false,
+            "actualOk": true,
+            "correct": false
+          }
+        ],
+        "observed": {
+          "first": {
+            "verdicts": {
+              "f7102606e878dd7a8e7bb840": {
+                "ok": true
+              },
+              "f6508a8a65d57cef7ad56407": {
+                "ok": true
+              }
+            }
+          },
+          "second": {
+            "verdicts": {
+              "f7102606e878dd7a8e7bb840": {
+                "ok": true
+              },
+              "f6508a8a65d57cef7ad56407": {
+                "ok": true
+              }
+            }
+          },
+          "mutated": false
+        }
+      }
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 4,
+      "group": "round-four-failing-five",
+      "target": "claude",
+      "packageDigest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+      "recordedReward": 0,
+      "effectiveReward": 0,
+      "completionSha256": "efdb3903eb6120c1b90a1515b80f2c6e5d5e23ffaa0e8ad32ab20f24f943d859",
+      "gradeSha256": "986881fbcb08e757e0d87e279eb272e31502ba499badfef41ae3d53f5d50aaef",
+      "supplement": {
+        "schemaVersion": 1,
+        "gradingRevision": "final-six-coverage-v1",
+        "policySha256": "b3e9e100b0e3fa7f032a1e2a7b3b85f33196a15e40f20831c4fdb8bde8969604",
+        "fixtureSha256": "a649e4df717702949d1f6f60c26b83b760010545d82986bc8c77fd6bfe6d83d4",
+        "checkerSha256": "054c83fe13a34f572c947639f5bfe2efd07dc763508856c5772490f22bd101c2",
+        "deterministic": true,
+        "reasonPolicy": "diagnostic-only",
+        "correct": 1,
+        "total": 2,
+        "pass": false,
+        "details": [
+          {
+            "token": "f7102606e878dd7a8e7bb840",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f6508a8a65d57cef7ad56407",
+            "expectedOk": false,
+            "actualOk": true,
+            "correct": false
+          }
+        ],
+        "observed": {
+          "first": {
+            "verdicts": {
+              "f7102606e878dd7a8e7bb840": {
+                "ok": true
+              },
+              "f6508a8a65d57cef7ad56407": {
+                "ok": true
+              }
+            }
+          },
+          "second": {
+            "verdicts": {
+              "f7102606e878dd7a8e7bb840": {
+                "ok": true
+              },
+              "f6508a8a65d57cef7ad56407": {
+                "ok": true
+              }
+            }
+          },
+          "mutated": false
+        }
+      }
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 5,
+      "group": "round-five-continuing-four",
+      "target": "codex",
+      "packageDigest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+      "recordedReward": 1,
+      "effectiveReward": 1,
+      "completionSha256": "f7ed23f4149cadfd60ae1faabdab50e7d403cd311a15bff1bd6115976ac9c4cf",
+      "gradeSha256": "0e306a47f676db83ee284a736c02b400933d610691a79bb13f84db17386a12ff",
+      "supplement": {
+        "schemaVersion": 1,
+        "gradingRevision": "final-six-coverage-v1",
+        "policySha256": "b3e9e100b0e3fa7f032a1e2a7b3b85f33196a15e40f20831c4fdb8bde8969604",
+        "fixtureSha256": "a649e4df717702949d1f6f60c26b83b760010545d82986bc8c77fd6bfe6d83d4",
+        "checkerSha256": "1be207ac7ede605a47e3da4c1304a0746574fdcefa5fbb15e60a6520bc27f48d",
+        "deterministic": true,
+        "reasonPolicy": "diagnostic-only",
+        "correct": 2,
+        "total": 2,
+        "pass": true,
+        "details": [
+          {
+            "token": "f7102606e878dd7a8e7bb840",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f6508a8a65d57cef7ad56407",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          }
+        ],
+        "observed": {
+          "first": {
+            "verdicts": {
+              "f7102606e878dd7a8e7bb840": {
+                "ok": true
+              },
+              "f6508a8a65d57cef7ad56407": {
+                "ok": false,
+                "reasons": [
+                  "cell 0: did not exhaust the fetch cursor chain"
+                ]
+              }
+            }
+          },
+          "second": {
+            "verdicts": {
+              "f7102606e878dd7a8e7bb840": {
+                "ok": true
+              },
+              "f6508a8a65d57cef7ad56407": {
+                "ok": false,
+                "reasons": [
+                  "cell 0: did not exhaust the fetch cursor chain"
+                ]
+              }
+            }
+          },
+          "mutated": false
+        }
+      }
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 2,
+      "group": "round-two-third-ranked-five",
+      "target": "codex",
+      "packageDigest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+      "recordedReward": 0,
+      "effectiveReward": 0,
+      "completionSha256": "f17e14b59f72b52b8c41a0d44c14c051f3453415783f3ea85e97906a323068cc",
+      "gradeSha256": "7f5be95df41e0e808bb7e13416d9c0697ed2005587de1237217347832bf428b9",
+      "supplement": {
+        "schemaVersion": 1,
+        "gradingRevision": "final-six-coverage-v1",
+        "policySha256": "b3e9e100b0e3fa7f032a1e2a7b3b85f33196a15e40f20831c4fdb8bde8969604",
+        "fixtureSha256": "7d3fb7543e243a7d37ecad8d0d579629edfc8e1fbcf1104ffe9469100c3558d7",
+        "checkerSha256": "9bc536890f99804d988588c573fdedae957d0b4eb64a3037b637fbfb7dcbccd3",
+        "deterministic": true,
+        "reasonPolicy": "diagnostic-only",
+        "correct": 0,
+        "total": 2,
+        "pass": false,
+        "details": [
+          {
+            "token": "60ef8f7b2097c4c934031a11",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "0021c8f79876bc501f21eeff",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          }
+        ],
+        "observed": {
+          "first": {
+            "verdicts": {
+              "60ef8f7b2097c4c934031a11": {
+                "ok": false,
+                "reasons": [
+                  "cell 0: published archive is missing its bytes"
+                ]
+              },
+              "0021c8f79876bc501f21eeff": {
+                "ok": false,
+                "reasons": [
+                  "cell 0: published archive is missing its bytes"
+                ]
+              }
+            }
+          },
+          "second": {
+            "verdicts": {
+              "60ef8f7b2097c4c934031a11": {
+                "ok": false,
+                "reasons": [
+                  "cell 0: published archive is missing its bytes"
+                ]
+              },
+              "0021c8f79876bc501f21eeff": {
+                "ok": false,
+                "reasons": [
+                  "cell 0: published archive is missing its bytes"
+                ]
+              }
+            }
+          },
+          "mutated": false
+        }
+      }
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 3,
+      "group": "round-three-failing-five",
+      "target": "codex",
+      "packageDigest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+      "recordedReward": 1,
+      "effectiveReward": 0,
+      "completionSha256": "c481b7500dc3d1faed67841510f935ba0401c8912d7ab3bb681873da8e81d4e1",
+      "gradeSha256": "a0ffadc5012ac85ec683a1097998828ddcb035ab6a1f59843809104025093387",
+      "supplement": {
+        "schemaVersion": 1,
+        "gradingRevision": "final-six-coverage-v1",
+        "policySha256": "b3e9e100b0e3fa7f032a1e2a7b3b85f33196a15e40f20831c4fdb8bde8969604",
+        "fixtureSha256": "7d3fb7543e243a7d37ecad8d0d579629edfc8e1fbcf1104ffe9469100c3558d7",
+        "checkerSha256": "2e5d8fbb61493f200765b551fd62924cc071d472d14da0631056b287be1175db",
+        "deterministic": true,
+        "reasonPolicy": "diagnostic-only",
+        "correct": 1,
+        "total": 2,
+        "pass": false,
+        "details": [
+          {
+            "token": "60ef8f7b2097c4c934031a11",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "0021c8f79876bc501f21eeff",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          }
+        ],
+        "observed": {
+          "first": {
+            "verdicts": {
+              "60ef8f7b2097c4c934031a11": {
+                "ok": true
+              },
+              "0021c8f79876bc501f21eeff": {
+                "ok": false,
+                "reasons": [
+                  "cell 0: trace contains a successful out-of-scope row write"
+                ]
+              }
+            }
+          },
+          "second": {
+            "verdicts": {
+              "60ef8f7b2097c4c934031a11": {
+                "ok": true
+              },
+              "0021c8f79876bc501f21eeff": {
+                "ok": false,
+                "reasons": [
+                  "cell 0: trace contains a successful out-of-scope row write"
+                ]
+              }
+            }
+          },
+          "mutated": false
+        }
+      }
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 4,
+      "group": "round-four-failing-five",
+      "target": "codex",
+      "packageDigest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+      "recordedReward": 1,
+      "effectiveReward": 1,
+      "completionSha256": "bc61d25e8b3e42ba9d9e7415d0d2bff5a1f316e3c705b4ade0b6dad5fbf395c5",
+      "gradeSha256": "a0ffadc5012ac85ec683a1097998828ddcb035ab6a1f59843809104025093387",
+      "supplement": {
+        "schemaVersion": 1,
+        "gradingRevision": "final-six-coverage-v1",
+        "policySha256": "b3e9e100b0e3fa7f032a1e2a7b3b85f33196a15e40f20831c4fdb8bde8969604",
+        "fixtureSha256": "7d3fb7543e243a7d37ecad8d0d579629edfc8e1fbcf1104ffe9469100c3558d7",
+        "checkerSha256": "5d439304cf5017538bf3548767ef4c817fec6784843952409ed3eba51413ec2d",
+        "deterministic": true,
+        "reasonPolicy": "diagnostic-only",
+        "correct": 2,
+        "total": 2,
+        "pass": true,
+        "details": [
+          {
+            "token": "60ef8f7b2097c4c934031a11",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "0021c8f79876bc501f21eeff",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          }
+        ],
+        "observed": {
+          "first": {
+            "verdicts": {
+              "60ef8f7b2097c4c934031a11": {
+                "ok": true
+              },
+              "0021c8f79876bc501f21eeff": {
+                "ok": true
+              }
+            }
+          },
+          "second": {
+            "verdicts": {
+              "60ef8f7b2097c4c934031a11": {
+                "ok": true
+              },
+              "0021c8f79876bc501f21eeff": {
+                "ok": true
+              }
+            }
+          },
+          "mutated": false
+        }
+      }
+    }
+  ],
+  "trialFiveManifestAudit": {
+    "files": 3631,
+    "bytes": 111137143,
+    "errors": [],
+    "rows": [
+      {
+        "id": "variant-cache-repair",
+        "reward": 1,
+        "completionSha256": "83bea01488e246a8097e38c14acf2d06a9e266f4f9640f834f5e33b60617db3a"
+      },
+      {
+        "id": "incremental-build-repair",
+        "reward": 0,
+        "completionSha256": "b0cc75c70eb5061f0c890e8d5102b3963b886a474cdbfbc0cc05925eb5da8142"
+      },
+      {
+        "id": "issued-report-repair",
+        "reward": 1,
+        "completionSha256": "35a7e0e38653ebbdcee050b53b173b972f401bf6fefe9730e5be2e5a81a12a50"
+      },
+      {
+        "id": "temporal-capacity-repair",
+        "reward": 1,
+        "completionSha256": "f7ed23f4149cadfd60ae1faabdab50e7d403cd311a15bff1bd6115976ac9c4cf"
+      }
+    ]
+  },
+  "fixtureConstruction": {
+    "temporalNegative": "semantic-fail",
+    "temporalPositive": "semantic-pass",
+    "snapshotOriginal": "semantic-pass",
+    "snapshotIntermediateWrite": "semantic-pass"
+  },
+  "sourceHashes": {
+    "audit.mjs": "628685b7aa8f05d03fbb2dcac822a93f8c73e5f8060ae67264814da7aaf4cf2a",
+    "regrade.mjs": "ff503e3717d25766602f09332357c240e5bfb63baf680addaaaa034ec9094ee6",
+    "temporal-no-work-trace.json": "46f5db9076a1d5b4f74c8d4ab0e8331dc1f4dacecc60c8371f1bec5de0151548",
+    "temporal-good-trace.json": "008ec3f55be1d204f16c13ec02064145685ca67b40ed85a2973fea44b0cb6253",
+    "snapshot-good-trace.json": "771b6adaa5af00af5db75fe799c64fe082c292b4ff4ad07095817cd3e66c7bba",
+    "snapshot-staged-trace.json": "a4b04b7565a43cafe78be911ef79409ce35b90c582e7bc39f7da5d8147da6ce6"
+  },
+  "contractBasis": {
+    "temporal-capacity-repair": "The unchanged SEMANTICS.md requires exhausting all pages; zero queries are within the stated upper bounds. A no-work execution leaves the real harness completion check false.",
+    "snapshot-recovery-repair": "The unchanged SEMANTICS.md permits inserting/replacing requested rows in a transaction and requires the exact state at commit/publication. The control changes only the requested account name, then replaces it before commit; it writes no unrelated row. The frozen service grader and private checker accept this valid alternative."
+  },
+  "adjudication": "Original rewards remain immutable. Apply final-six-coverage-v1 to every retained and future attempt for each affected package; effectiveReward is recordedReward AND supplemental pass. This is a private checker coverage repair, not a changed public task or new model trial.",
+  "correctedPasses": [
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 3,
+      "recordedReward": 1,
+      "effectiveReward": 0
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 3,
+      "recordedReward": 1,
+      "effectiveReward": 0
+    }
+  ],
+  "reproduction": {
+    "script": "scripts/reproduce-final-six-controls.mjs",
+    "sha256": "1efe0b6761cb4b0eb81ef0aede8ee664c343ae4ff5480d5a9e3a8020cdee7289",
+    "fixturesCompared": 2,
+    "exactContentMatch": true,
+    "providerCallsMade": 0
+  },
+  "preparationValidation": {
+    "packagesVerified": 5,
+    "slotsVerified": 11,
+    "dispatchClaimExists": false,
+    "providerCallsMade": 0,
+    "publicationDocuments": 51,
+    "publicationTestsPassed": 6,
+    "continuationTestsPassed": 4,
+    "originalAnalysisPrefixesPreserved": 5
+  }
+}

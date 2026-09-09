@@ -380,3 +380,21 @@ even three later Claude failures would produce only 4/6. Preserve all three
 results. This exclusion applies to the current six-run set, not a claim that a
 future revised package cannot qualify. No further attempt is prepared here.
 [Four continuing packages](../../../docs/round-five-continuing-four-handoff.md).
+
+
+### Final-six audit and preparation — September 9, 2026
+
+The Trial 3 reward remains recorded as 1. Its checker falsely rejects a valid service
+that replaces a temporary account name inside the transaction before committing and
+publishing the exact restore. No unrelated row is written and no temporary value is
+published. The unchanged contract allows transactional row replacement; both the frozen
+service grader and private reference checker accept the alternative. Trial 4’s checker
+also accepts it. Regrading all three retained submissions gives effective history
+**0 → 0 → 1**. The earlier exclusion is superseded: **2 failures in 3 attempts**, with
+three Claude slots left. All three must fail to reach 5/6.
+
+The [audit](../final-six-pass-audit-2026-09-09.md) preserves raw records and documents
+the separate `final-six-coverage-v1` regrade. The same revision applies to all retained
+and future attempts for affected tasks; this is no new public task requirement. See the
+[prepared identities](../evidence/2026-09-09-final-six-preparation.json) and
+[operator handoff](../../../docs/final-six-handoff.md). No new model trial has launched.

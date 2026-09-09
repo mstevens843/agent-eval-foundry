@@ -495,3 +495,126 @@ reach 5/6; only the first of those slots is prepared for this launch.
 No new model attempt was launched during preparation. Different valid failure
 mechanisms and required-checker-only failures can count; the provider switch
 does not reset or discard the existing results.
+
+## Trial 5 — first opposite-provider attempt — September 9, 2026
+
+### Identity and execution
+
+Run `incremental-build-repair-attempt-1` in a fresh campaign slot
+(`.local/round-five-continuing-four-2026-09-09/`), package digest
+`34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a` — byte-identical
+to Trials 2–4's. **Provider switched for the first time on this package**: requested
+target **claude**, `anthropic/claude-opus-5`, effort `max`, CLI `2.1.263` (Trials 2–4
+all used Codex, `openai/gpt-5.6-sol`, effort `xhigh`, CLI `0.153.2`). Observed model
+`claude-opus-5` via the runtime's `type=assistant` event; effort and scaffold version
+remain unobservable. Same author image (`sha256:3e9a15ec...a225d39a`), 2 CPUs, 2,048 MiB,
+and the same frozen runtime (source digest
+`2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4`) reused since Trial 2.
+The controller hard-asserted the assigned Claude profile matched the package's saved
+Claude preset (from variant-cache-repair's Trial 4 record) and that the switched
+provider's `target` actually differed from the previous trial's before dispatch.
+
+Dispatched `2026-09-09T20:55:29.332Z`, completed `2026-09-09T21:25:37.067Z` — 30m8s
+elapsed, well inside the 10,800s (3h) budget, and noticeably longer than any of this
+package's three Codex attempts (15–16m each). Tokens: 10,804,684 input (10,613,114
+cached), 148,119 output, $10.93 CLI cost estimate (subscription-only billing,
+`maxMicroUsd: 0`, not a subscription charge) — roughly 2–3× the token volume of a
+typical prior attempt in this series, consistent with a longer, more thorough Claude
+session rather than any error or retry. All four Trial 5 jobs were reserved within a
+223ms window and confirmed running concurrently via `docker ps` immediately after
+dispatch. `completionSha256` `b0cc75c70eb5061f0c890e8d5102b3963b886a474cdbfbc0cc05925eb5da8142`,
+`resultSha256` `6aa07dae761949531d7f64b0792024f56462620e18fd031382f09263e692612f`,
+`gradeSha256` `6cf6fd4d904353a0a18bc84c141c5b62713e347f37d5da982ef3792aa36b9456` — 978
+manifest-listed files (37,327,202 bytes), reverified with zero errors. This is a fresh
+solver session given only the original public task inputs — no access to any prior
+submission, analysis, or this handoff.
+
+### Results
+
+**Reward 0. Service 27/27 (fully correct, matching all three Codex trials exactly).
+Checker 14/15.** Both valid candidates (`reference`, `alternative`) correctly
+accepted, 13 of 14 negative controls correctly rejected, zero false positives —
+and, for a **fourth consecutive independently-written checker, now from a second
+provider**, the same single candidate is wrongly accepted: `premature-publication`
+(`expectedFailingCheck: "current_artifacts"`, `observedFailingChecks:
+["current_artifacts"]`, ground truth confirms the violation; the submitted checker's
+verdict was `ok: true`).
+
+### Comparison with Trials 2–4 and the cross-provider recurrence finding
+
+**The checker-grade summary file for this Trial 5 record is byte-identical
+(SHA-256 `689fe9f88a21705d4a226324a31cbd35b1570c39bd9396148e8d39d5fc50daa9`) to both
+Trial 3's and Trial 4's.** That means this first-ever Claude/max checker produced
+the exact same accept/reject verdict on every one of the 15 candidates as two
+independently-written Codex/xhigh checkers before it — a striking behavioral
+fingerprint match across a provider switch, verified by direct comparison of the
+raw grade-summary files rather than assumed from the matching reward.
+
+Reading this Trial 5 `checker.mjs` and its shared `core.mjs` helper directly confirms
+the match is not coincidental. Its validation strategy (`evaluateCell()` →
+`checkOutputs()` → `makeValidator().valid()`) is structurally analogous to all three
+Codex submissions': `readLedger()` walks every `compile`/`inspect`/`artifacts`
+observation in the cell (already sorted by `seq`) and builds one Map from handle to
+final recipe/bytes, with no record of *when* each handle was minted relative to
+anything else. `makeValidator()`'s `matches()` then checks a published handle's
+recipe against the *current* ledger entry — exact `entry`/`tool`/`flags`, every used
+source path bound to its current text, and each ordered dependency alias recursively
+valid by the same rule — and `valid()` recurses through dependencies with memoization.
+At no point in `core.mjs` or `checker.mjs` is a `compile` observation's sequence
+number compared against the `publish` observation's sequence number for the round
+that references it. The `premature-publication` candidate predicts a handle, calls
+`publish()` with it, and only afterward calls `compile()` for real; because
+`readLedger()` builds one post-hoc, order-blind Map from the *entire* observation
+list, the predicted handle resolves to a structurally byte-correct entry by the time
+`checkOutputs()` looks it up, regardless of whether the compile happened before or
+after the publish that used it. This is the identical mechanical gap documented in
+the Trial 3 and Trial 4 sections above, now confirmed in a fourth independently-written
+checker and, for the first time, from a different model provider entirely.
+
+**Four independent submissions — three Codex/xhigh, one Claude/max, four fresh
+sessions with no shared context — have now converged on the identical
+issuance-before-use ordering blind spot.** This is meaningfully stronger evidence
+than the three-Codex-only finding in Trial 4: it weighs against "this is a
+Codex-specific weakness" and toward "this is a genuine, provider-independent gap,"
+whether that gap sits in how naturally this specific ordering invariant gets
+inferred from the public contract, or reflects a blind spot shared broadly across
+current-generation coding agents for this class of temporal-ordering requirement.
+This finding rests only on what both providers' actual code does — it does not
+extend to claiming the public contract is ambiguous, or that a fifth or sixth
+submission would necessarily repeat it.
+
+### Failure-mechanism attribution and next step
+
+This is a supported required-deliverable failure under the unchanged public
+contract (a required checker failing counts even though the service passes; reason
+text remains diagnostic-only) — not a calibration bug, an infrastructure error, or
+a disputed label. Incremental-build-repair now has **four consecutive reward-zero
+results across both providers (3 Codex + 1 Claude)**, all four attributable to the
+identical specific gap (missing issuance-before-use ordering), from four
+independently-written checkers.
+
+### Acceptance progress
+
+This unchanged successor has **4 failures and 0 solver passes in four scored
+attempts (3 Codex, 1 Claude)**. The user reports the CEO accepts at least **five
+failures out of six**, with three Claude and three Codex attempts per package. Two
+Claude attempts remain. This package needs only **1 more failure from its
+remaining 2 Claude attempts** to reach 5/6 (4 + 1 = 5) — the shortest remaining
+path to the threshold of any of the four continuing packages; even one pass among
+the remaining two still leaves the other attempt able to close it. Different
+failure mechanisms can count; no identical-bug requirement is added — this package
+has simply had one, confirmed independently four times across two providers.
+
+
+### Final-six audit and preparation — September 9, 2026
+
+No additional grading defect was established for this package in the targeted audit.
+Its recorded and effective histories remain **0 → 0 → 0 → 0**:
+**4 failures in 4 scored attempts**. Two Claude
+slots are prepared on the unchanged package and pinned provider profile. Run both; at least one must fail to reach 5/6.
+
+The [audit](../final-six-pass-audit-2026-09-09.md) preserves raw records and documents
+the separate `final-six-coverage-v1` regrade. The same revision applies to all retained
+and future attempts for affected tasks; this is no new public task requirement. See the
+[prepared identities](../evidence/2026-09-09-final-six-preparation.json) and
+[operator handoff](../../../docs/final-six-handoff.md). No new model trial has launched.

@@ -13,6 +13,16 @@ export function verifyPublication(root?: string): {
   packagesBelowFiveOfSixThreshold: number;
   continuingPackages: number;
   nextPreparedAttempts: number;
+  trialFiveAttempts: number;
+  trialFiveZeroRewards: number;
+  trialFiveProviderSwitchesConfirmed: number;
+  packagesBelowFiveOfSixThresholdAfterTrialFive: number;
+  regradedFalsePasses: number;
+  continuingPackagesAfterCoverageRepair: number;
+  finalPreparedPackages: number;
+  finalPreparedSlots: number;
+  successorEffectiveZeroRewards: number;
+  successorEffectivePasses: number;
   successorTrials: number;
   successorPackages: number;
   successorCompletedTrials: number;

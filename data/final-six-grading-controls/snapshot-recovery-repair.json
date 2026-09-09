@@ -1,0 +1,1036 @@
+{
+  "cases": [
+    {
+      "token": "60ef8f7b2097c4c934031a11",
+      "cells": [
+        {
+          "scenarioId": "case-000",
+          "actual": {
+            "accounts": [
+              {
+                "id": 1,
+                "name": "alpha"
+              },
+              {
+                "id": 2,
+                "name": "beta"
+              },
+              {
+                "id": 3,
+                "name": "gamma"
+              }
+            ],
+            "entries": [
+              {
+                "id": 2,
+                "account": 3,
+                "amount": 0
+              }
+            ],
+            "nextId": 31
+          },
+          "backupError": null,
+          "publications": [
+            {
+              "state": {
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "alpha"
+                  },
+                  {
+                    "id": 2,
+                    "name": "beta"
+                  },
+                  {
+                    "id": 3,
+                    "name": "gamma"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 2,
+                    "account": 3,
+                    "amount": 0
+                  }
+                ],
+                "nextId": 31
+              },
+              "archive": {
+                "tenant": "t1",
+                "branch": "b1",
+                "cutoff": 20,
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "alpha"
+                  },
+                  {
+                    "id": 2,
+                    "name": "beta"
+                  },
+                  {
+                    "id": 3,
+                    "name": "gamma"
+                  }
+                ],
+                "entries": [
+                  {
+                    "account": 3,
+                    "amount": 0,
+                    "id": 2
+                  }
+                ],
+                "nextId": 31
+              }
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "cache",
+              "request": {
+                "digest": "26ed598c8a02519b4d632e2afd9d1e85cb3a0770b4dd1c1778fedd5f1244dcde"
+              },
+              "value": null
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "digest": "26ed598c8a02519b4d632e2afd9d1e85cb3a0770b4dd1c1778fedd5f1244dcde"
+              },
+              "value": {
+                "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiJhbHBoYSJ9LHsiaWQiOjIsIm5hbWUiOiJiZXRhIn1dLCJlbnRyaWVzIjpbeyJpZCI6MSwiYWNjb3VudCI6MSwiYW1vdW50IjoxMX1dLCJuZXh0SWQiOjJ9"
+              }
+            },
+            {
+              "seq": 2,
+              "method": "archive",
+              "request": {
+                "bytes": "eyJ0ZW5hbnQiOiJ0MSIsImJyYW5jaCI6ImIxIiwiY3V0b2ZmIjoyMCwiYWNjb3VudHMiOlt7ImlkIjoxLCJuYW1lIjoiYWxwaGEifSx7ImlkIjoyLCJuYW1lIjoiYmV0YSJ9LHsiaWQiOjMsIm5hbWUiOiJnYW1tYSJ9XSwiZW50cmllcyI6W3siYWNjb3VudCI6MywiYW1vdW50IjowLCJpZCI6Mn1dLCJuZXh0SWQiOjMxfQ=="
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 3,
+              "method": "begin",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 1,
+                  "name": "alpha"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 2,
+                  "name": "beta"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 3,
+                  "name": "gamma"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 7,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "account": 3,
+                  "amount": 0,
+                  "id": 2
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "allocate",
+              "request": {
+                "nextId": 31
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "commit",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 10,
+              "method": "publish",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "completed": true
+            }
+          ],
+          "view": {
+            "tenant": "t1",
+            "branch": "b1",
+            "cutoff": 20,
+            "catalog": [
+              {
+                "at": 1,
+                "branch": "other",
+                "digest": "e025c1db2207daf341423ea098334a1074ff3f20d6afd594a521152abd6568c3",
+                "id": "foreign",
+                "lsn": 7,
+                "size": 85,
+                "tenant": "t1"
+              },
+              {
+                "at": 30,
+                "branch": "b1",
+                "digest": "168b807e5710aa115c171091c5650f8fc0f6bf9a05e3ae788d1497dae473fa6d",
+                "id": "future",
+                "lsn": 4,
+                "size": 119,
+                "tenant": "t1"
+              },
+              {
+                "at": 0,
+                "branch": "b1",
+                "digest": "26ed598c8a02519b4d632e2afd9d1e85cb3a0770b4dd1c1778fedd5f1244dcde",
+                "id": "old",
+                "lsn": 0,
+                "size": 117,
+                "tenant": "t1"
+              }
+            ],
+            "logs": [
+              {
+                "at": 10,
+                "branch": "b1",
+                "changes": [
+                  {
+                    "op": "put",
+                    "row": {
+                      "account": 3,
+                      "amount": -1,
+                      "id": 2
+                    },
+                    "table": "entries"
+                  },
+                  {
+                    "op": "put",
+                    "row": {
+                      "id": 3,
+                      "name": "gamma"
+                    },
+                    "table": "accounts"
+                  }
+                ],
+                "lsn": 1,
+                "nextId": 3,
+                "tenant": "t1"
+              },
+              {
+                "at": 20,
+                "branch": "b1",
+                "changes": [
+                  {
+                    "op": "delete",
+                    "row": {
+                      "id": 1
+                    },
+                    "table": "entries"
+                  },
+                  {
+                    "op": "put",
+                    "row": {
+                      "account": 3,
+                      "amount": 0,
+                      "id": 2
+                    },
+                    "table": "entries"
+                  }
+                ],
+                "lsn": 2,
+                "nextId": 31,
+                "tenant": "t1"
+              },
+              {
+                "at": 21,
+                "branch": "b1",
+                "changes": [
+                  {
+                    "op": "put",
+                    "row": {
+                      "account": 1,
+                      "amount": 999,
+                      "id": 99
+                    },
+                    "table": "entries"
+                  }
+                ],
+                "lsn": 3,
+                "nextId": 100,
+                "tenant": "t1"
+              },
+              {
+                "at": 12,
+                "branch": "b1",
+                "changes": [
+                  {
+                    "op": "put",
+                    "row": {
+                      "id": 1,
+                      "name": "foreign"
+                    },
+                    "table": "accounts"
+                  }
+                ],
+                "lsn": 8,
+                "nextId": 2,
+                "tenant": "other"
+              },
+              {
+                "at": 13,
+                "branch": "other",
+                "changes": [
+                  {
+                    "op": "delete",
+                    "row": {
+                      "id": 2
+                    },
+                    "table": "entries"
+                  }
+                ],
+                "lsn": 9,
+                "nextId": 2,
+                "tenant": "t1"
+              }
+            ]
+          },
+          "blobs": {
+            "168b807e5710aa115c171091c5650f8fc0f6bf9a05e3ae788d1497dae473fa6d": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiJhbHBoYSJ9LHsiaWQiOjIsIm5hbWUiOiJiZXRhIn1dLCJlbnRyaWVzIjpbeyJpZCI6MSwiYWNjb3VudCI6MSwiYW1vdW50IjoxMX1dLCJuZXh0SWQiOjEwMH0=",
+            "26ed598c8a02519b4d632e2afd9d1e85cb3a0770b4dd1c1778fedd5f1244dcde": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiJhbHBoYSJ9LHsiaWQiOjIsIm5hbWUiOiJiZXRhIn1dLCJlbnRyaWVzIjpbeyJpZCI6MSwiYWNjb3VudCI6MSwiYW1vdW50IjoxMX1dLCJuZXh0SWQiOjJ9",
+            "e025c1db2207daf341423ea098334a1074ff3f20d6afd594a521152abd6568c3": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiJhbHBoYSJ9LHsiaWQiOjIsIm5hbWUiOiJiZXRhIn1dLCJlbnRyaWVzIjpbXSwibmV4dElkIjoyfQ=="
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "cache",
+                    "request": {
+                      "digest": "26ed598c8a02519b4d632e2afd9d1e85cb3a0770b4dd1c1778fedd5f1244dcde"
+                    },
+                    "value": null
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "digest": "26ed598c8a02519b4d632e2afd9d1e85cb3a0770b4dd1c1778fedd5f1244dcde"
+                    },
+                    "value": {
+                      "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiJhbHBoYSJ9LHsiaWQiOjIsIm5hbWUiOiJiZXRhIn1dLCJlbnRyaWVzIjpbeyJpZCI6MSwiYWNjb3VudCI6MSwiYW1vdW50IjoxMX1dLCJuZXh0SWQiOjJ9"
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "archive",
+                    "request": {
+                      "bytes": "eyJ0ZW5hbnQiOiJ0MSIsImJyYW5jaCI6ImIxIiwiY3V0b2ZmIjoyMCwiYWNjb3VudHMiOlt7ImlkIjoxLCJuYW1lIjoiYWxwaGEifSx7ImlkIjoyLCJuYW1lIjoiYmV0YSJ9LHsiaWQiOjMsIm5hbWUiOiJnYW1tYSJ9XSwiZW50cmllcyI6W3siYWNjb3VudCI6MywiYW1vdW50IjowLCJpZCI6Mn1dLCJuZXh0SWQiOjMxfQ=="
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "begin",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 1,
+                        "name": "alpha"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 2,
+                        "name": "beta"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 3,
+                        "name": "gamma"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "account": 3,
+                        "amount": 0,
+                        "id": 2
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "allocate",
+                    "request": {
+                      "nextId": 31
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "commit",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "publish",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 14,
+                "requestBytes": 1293,
+                "responseBytes": 2065,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "0021c8f79876bc501f21eeff",
+      "cells": [
+        {
+          "scenarioId": "case-000",
+          "actual": {
+            "accounts": [
+              {
+                "id": 1,
+                "name": "alpha"
+              },
+              {
+                "id": 2,
+                "name": "beta"
+              },
+              {
+                "id": 3,
+                "name": "gamma"
+              }
+            ],
+            "entries": [
+              {
+                "id": 2,
+                "account": 3,
+                "amount": 0
+              }
+            ],
+            "nextId": 31
+          },
+          "backupError": null,
+          "publications": [
+            {
+              "state": {
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "alpha"
+                  },
+                  {
+                    "id": 2,
+                    "name": "beta"
+                  },
+                  {
+                    "id": 3,
+                    "name": "gamma"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 2,
+                    "account": 3,
+                    "amount": 0
+                  }
+                ],
+                "nextId": 31
+              },
+              "archive": {
+                "tenant": "t1",
+                "branch": "b1",
+                "cutoff": 20,
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "alpha"
+                  },
+                  {
+                    "id": 2,
+                    "name": "beta"
+                  },
+                  {
+                    "id": 3,
+                    "name": "gamma"
+                  }
+                ],
+                "entries": [
+                  {
+                    "account": 3,
+                    "amount": 0,
+                    "id": 2
+                  }
+                ],
+                "nextId": 31
+              }
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "cache",
+              "request": {
+                "digest": "26ed598c8a02519b4d632e2afd9d1e85cb3a0770b4dd1c1778fedd5f1244dcde"
+              },
+              "value": null
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "digest": "26ed598c8a02519b4d632e2afd9d1e85cb3a0770b4dd1c1778fedd5f1244dcde"
+              },
+              "value": {
+                "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiJhbHBoYSJ9LHsiaWQiOjIsIm5hbWUiOiJiZXRhIn1dLCJlbnRyaWVzIjpbeyJpZCI6MSwiYWNjb3VudCI6MSwiYW1vdW50IjoxMX1dLCJuZXh0SWQiOjJ9"
+              }
+            },
+            {
+              "seq": 2,
+              "method": "archive",
+              "request": {
+                "bytes": "eyJ0ZW5hbnQiOiJ0MSIsImJyYW5jaCI6ImIxIiwiY3V0b2ZmIjoyMCwiYWNjb3VudHMiOlt7ImlkIjoxLCJuYW1lIjoiYWxwaGEifSx7ImlkIjoyLCJuYW1lIjoiYmV0YSJ9LHsiaWQiOjMsIm5hbWUiOiJnYW1tYSJ9XSwiZW50cmllcyI6W3siYWNjb3VudCI6MywiYW1vdW50IjowLCJpZCI6Mn1dLCJuZXh0SWQiOjMxfQ=="
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 3,
+              "method": "begin",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 1,
+                  "name": "alpha temporary"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 1,
+                  "name": "alpha"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 2,
+                  "name": "beta"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 7,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 3,
+                  "name": "gamma"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "account": 3,
+                  "amount": 0,
+                  "id": 2
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "allocate",
+              "request": {
+                "nextId": 31
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 10,
+              "method": "commit",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 11,
+              "method": "publish",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "completed": true
+            }
+          ],
+          "view": {
+            "tenant": "t1",
+            "branch": "b1",
+            "cutoff": 20,
+            "catalog": [
+              {
+                "at": 1,
+                "branch": "other",
+                "digest": "e025c1db2207daf341423ea098334a1074ff3f20d6afd594a521152abd6568c3",
+                "id": "foreign",
+                "lsn": 7,
+                "size": 85,
+                "tenant": "t1"
+              },
+              {
+                "at": 30,
+                "branch": "b1",
+                "digest": "168b807e5710aa115c171091c5650f8fc0f6bf9a05e3ae788d1497dae473fa6d",
+                "id": "future",
+                "lsn": 4,
+                "size": 119,
+                "tenant": "t1"
+              },
+              {
+                "at": 0,
+                "branch": "b1",
+                "digest": "26ed598c8a02519b4d632e2afd9d1e85cb3a0770b4dd1c1778fedd5f1244dcde",
+                "id": "old",
+                "lsn": 0,
+                "size": 117,
+                "tenant": "t1"
+              }
+            ],
+            "logs": [
+              {
+                "at": 10,
+                "branch": "b1",
+                "changes": [
+                  {
+                    "op": "put",
+                    "row": {
+                      "account": 3,
+                      "amount": -1,
+                      "id": 2
+                    },
+                    "table": "entries"
+                  },
+                  {
+                    "op": "put",
+                    "row": {
+                      "id": 3,
+                      "name": "gamma"
+                    },
+                    "table": "accounts"
+                  }
+                ],
+                "lsn": 1,
+                "nextId": 3,
+                "tenant": "t1"
+              },
+              {
+                "at": 20,
+                "branch": "b1",
+                "changes": [
+                  {
+                    "op": "delete",
+                    "row": {
+                      "id": 1
+                    },
+                    "table": "entries"
+                  },
+                  {
+                    "op": "put",
+                    "row": {
+                      "account": 3,
+                      "amount": 0,
+                      "id": 2
+                    },
+                    "table": "entries"
+                  }
+                ],
+                "lsn": 2,
+                "nextId": 31,
+                "tenant": "t1"
+              },
+              {
+                "at": 21,
+                "branch": "b1",
+                "changes": [
+                  {
+                    "op": "put",
+                    "row": {
+                      "account": 1,
+                      "amount": 999,
+                      "id": 99
+                    },
+                    "table": "entries"
+                  }
+                ],
+                "lsn": 3,
+                "nextId": 100,
+                "tenant": "t1"
+              },
+              {
+                "at": 12,
+                "branch": "b1",
+                "changes": [
+                  {
+                    "op": "put",
+                    "row": {
+                      "id": 1,
+                      "name": "foreign"
+                    },
+                    "table": "accounts"
+                  }
+                ],
+                "lsn": 8,
+                "nextId": 2,
+                "tenant": "other"
+              },
+              {
+                "at": 13,
+                "branch": "other",
+                "changes": [
+                  {
+                    "op": "delete",
+                    "row": {
+                      "id": 2
+                    },
+                    "table": "entries"
+                  }
+                ],
+                "lsn": 9,
+                "nextId": 2,
+                "tenant": "t1"
+              }
+            ]
+          },
+          "blobs": {
+            "168b807e5710aa115c171091c5650f8fc0f6bf9a05e3ae788d1497dae473fa6d": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiJhbHBoYSJ9LHsiaWQiOjIsIm5hbWUiOiJiZXRhIn1dLCJlbnRyaWVzIjpbeyJpZCI6MSwiYWNjb3VudCI6MSwiYW1vdW50IjoxMX1dLCJuZXh0SWQiOjEwMH0=",
+            "26ed598c8a02519b4d632e2afd9d1e85cb3a0770b4dd1c1778fedd5f1244dcde": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiJhbHBoYSJ9LHsiaWQiOjIsIm5hbWUiOiJiZXRhIn1dLCJlbnRyaWVzIjpbeyJpZCI6MSwiYWNjb3VudCI6MSwiYW1vdW50IjoxMX1dLCJuZXh0SWQiOjJ9",
+            "e025c1db2207daf341423ea098334a1074ff3f20d6afd594a521152abd6568c3": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiJhbHBoYSJ9LHsiaWQiOjIsIm5hbWUiOiJiZXRhIn1dLCJlbnRyaWVzIjpbXSwibmV4dElkIjoyfQ=="
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "cache",
+                    "request": {
+                      "digest": "26ed598c8a02519b4d632e2afd9d1e85cb3a0770b4dd1c1778fedd5f1244dcde"
+                    },
+                    "value": null
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "digest": "26ed598c8a02519b4d632e2afd9d1e85cb3a0770b4dd1c1778fedd5f1244dcde"
+                    },
+                    "value": {
+                      "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiJhbHBoYSJ9LHsiaWQiOjIsIm5hbWUiOiJiZXRhIn1dLCJlbnRyaWVzIjpbeyJpZCI6MSwiYWNjb3VudCI6MSwiYW1vdW50IjoxMX1dLCJuZXh0SWQiOjJ9"
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "archive",
+                    "request": {
+                      "bytes": "eyJ0ZW5hbnQiOiJ0MSIsImJyYW5jaCI6ImIxIiwiY3V0b2ZmIjoyMCwiYWNjb3VudHMiOlt7ImlkIjoxLCJuYW1lIjoiYWxwaGEifSx7ImlkIjoyLCJuYW1lIjoiYmV0YSJ9LHsiaWQiOjMsIm5hbWUiOiJnYW1tYSJ9XSwiZW50cmllcyI6W3siYWNjb3VudCI6MywiYW1vdW50IjowLCJpZCI6Mn1dLCJuZXh0SWQiOjMxfQ=="
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "begin",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 1,
+                        "name": "alpha temporary"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 1,
+                        "name": "alpha"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 2,
+                        "name": "beta"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 3,
+                        "name": "gamma"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "account": 3,
+                        "amount": 0,
+                        "id": 2
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "allocate",
+                    "request": {
+                      "nextId": 31
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "commit",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 11,
+                    "method": "publish",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 15,
+                "requestBytes": 1400,
+                "responseBytes": 2097,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

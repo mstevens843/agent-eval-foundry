@@ -1,0 +1,272 @@
+{
+  "schemaVersion": 1,
+  "providerCallsMade": 0,
+  "gradingRevision": "final-six-coverage-v1",
+  "gradingPolicySha256": "b3e9e100b0e3fa7f032a1e2a7b3b85f33196a15e40f20831c4fdb8bde8969604",
+  "supplementRunnerSha256": "3e2caf90efa93746928edd7bec601b58cd15602bf80c06a2a31b87d93dcfc378",
+  "controllerTemplateSha256": "cefc045c35795e3b3d03737c06734ac4b9abbf80e2e4d4439ce5a09093fc2317",
+  "maxProviderCalls": 11,
+  "maxConcurrent": 3,
+  "automaticRetries": false,
+  "minimumFailures": 5,
+  "totalScored": 6,
+  "perProvider": 3,
+  "packages": [
+    {
+      "id": "incremental-build-repair",
+      "target": "claude",
+      "analysis": "reports/screening/fifth-five/21-incremental-build-repair.md",
+      "scored": 4,
+      "failures": 4,
+      "remaining": 2,
+      "recordedHistory": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "effectiveHistory": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "packageDigest": "34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a",
+      "instructionSha256": "9d25b52d206cba5ee9401a33edd071c8c3c278aab9380d28d93a28ac2a281b70",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "foundry": {
+        "export": ".local/top-five-implementation-2026-09-09/release-ready/incremental-build-repair/export",
+        "digest": "34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a",
+        "assurance": {
+          "path": ".local/top-five-implementation-2026-09-09/release-ready/incremental-build-repair/validation/assurance.json",
+          "sha256": "429858e2d66eb09119bc4a210c9de9a81e77aa517189379a55e0a473519a9359"
+        },
+        "assuranceChecks": 18
+      },
+      "slots": [
+        {
+          "trial": 6,
+          "successorAttempt": 5,
+          "directory": ".local/final-six-2026-09-09/incremental-build-repair/trial-6",
+          "controller": ".local/final-six-2026-09-09/incremental-build-repair/trial-6/campaign.mjs",
+          "controllerSha256": "c50d6dc910047ffffbcfa220a6742eecbf06e10d434a658c6769b61d50c5e648",
+          "evidenceSha256": "c72fb9477bfd6e700b9d0504da54fa9436c438bba269f1e8ddb3d8049d23e3ea"
+        },
+        {
+          "trial": 7,
+          "successorAttempt": 6,
+          "directory": ".local/final-six-2026-09-09/incremental-build-repair/trial-7",
+          "controller": ".local/final-six-2026-09-09/incremental-build-repair/trial-7/campaign.mjs",
+          "controllerSha256": "6c45ff06929195472b451b2a8bfef0ff8baa6c705f3666c435e5dbb32c9d5168",
+          "evidenceSha256": "c72fb9477bfd6e700b9d0504da54fa9436c438bba269f1e8ddb3d8049d23e3ea"
+        }
+      ]
+    },
+    {
+      "id": "variant-cache-repair",
+      "target": "codex",
+      "analysis": "reports/screening/fourth-five/19-variant-cache-repair.md",
+      "scored": 4,
+      "failures": 3,
+      "remaining": 2,
+      "recordedHistory": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "effectiveHistory": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "packageDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+      "instructionSha256": "9d3ed7b2d39fc5a9cbddb56f636539686cec895b6961cac1e6004eefdca28f0a",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "foundry": {
+        "export": ".local/top-five-implementation-2026-09-09/release-ready/variant-cache-repair/export",
+        "digest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+        "assurance": {
+          "path": ".local/top-five-implementation-2026-09-09/release-ready/variant-cache-repair/validation/assurance.json",
+          "sha256": "310d712f9d1885d6b41b47e97f7da10a2ba73fd443cc3ef14f604f9028082200"
+        },
+        "assuranceChecks": 18
+      },
+      "slots": [
+        {
+          "trial": 6,
+          "successorAttempt": 5,
+          "directory": ".local/final-six-2026-09-09/variant-cache-repair/trial-6",
+          "controller": ".local/final-six-2026-09-09/variant-cache-repair/trial-6/campaign.mjs",
+          "controllerSha256": "e6c9a6accb195b95a8dcb93587a30b305ac4702684cea2c70686a8fa5b899795",
+          "evidenceSha256": "b4406101ddd63ff7ece4f08269d187ebd05cce536b9d7b1b25afa3b8fedae189"
+        },
+        {
+          "trial": 7,
+          "successorAttempt": 6,
+          "directory": ".local/final-six-2026-09-09/variant-cache-repair/trial-7",
+          "controller": ".local/final-six-2026-09-09/variant-cache-repair/trial-7/campaign.mjs",
+          "controllerSha256": "c26d65bc5c9040c8b75dfc532d95c652c4ca670155759bee02bad103854d9fc0",
+          "evidenceSha256": "b4406101ddd63ff7ece4f08269d187ebd05cce536b9d7b1b25afa3b8fedae189"
+        }
+      ]
+    },
+    {
+      "id": "issued-report-repair",
+      "target": "codex",
+      "analysis": "reports/screening/fifth-five/25-issued-report-repair.md",
+      "scored": 4,
+      "failures": 3,
+      "remaining": 2,
+      "recordedHistory": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "effectiveHistory": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "packageDigest": "32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170",
+      "instructionSha256": "4f536dfe221dbd4f3eb801af636e4d21e783d5386aa2ead1776d33cca4dced6a",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "foundry": {
+        "export": ".local/top-five-implementation-2026-09-09/release-ready/issued-report-repair/export",
+        "digest": "32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170",
+        "assurance": {
+          "path": ".local/top-five-implementation-2026-09-09/release-ready/issued-report-repair/validation/assurance.json",
+          "sha256": "127fb137b0ee965a144958d13247f82e6d045a5f340a769e7f13a2216195eb4a"
+        },
+        "assuranceChecks": 17
+      },
+      "slots": [
+        {
+          "trial": 6,
+          "successorAttempt": 5,
+          "directory": ".local/final-six-2026-09-09/issued-report-repair/trial-6",
+          "controller": ".local/final-six-2026-09-09/issued-report-repair/trial-6/campaign.mjs",
+          "controllerSha256": "e31e06190356c25af2366fd7eca53eece114f7846951f6196711a936ce03e575",
+          "evidenceSha256": "d04f2cf666262e8aed2361da04e228f1a2a41e261b7d28cbe72a1d5a426f182c"
+        },
+        {
+          "trial": 7,
+          "successorAttempt": 6,
+          "directory": ".local/final-six-2026-09-09/issued-report-repair/trial-7",
+          "controller": ".local/final-six-2026-09-09/issued-report-repair/trial-7/campaign.mjs",
+          "controllerSha256": "4977a81f63109664db47ede79a3d29f2bd35ecc0548dd26af78f4a30cf9f3067",
+          "evidenceSha256": "d04f2cf666262e8aed2361da04e228f1a2a41e261b7d28cbe72a1d5a426f182c"
+        }
+      ]
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "target": "codex",
+      "analysis": "reports/screening/next-five/10-temporal-capacity-repair.md",
+      "scored": 4,
+      "failures": 3,
+      "remaining": 2,
+      "recordedHistory": [
+        0,
+        1,
+        0,
+        1
+      ],
+      "effectiveHistory": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "packageDigest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+      "instructionSha256": "051ecc01b96d4b25362f370676df04b41249e6ac8a46eda875b23f0b3c3f54a7",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "foundry": {
+        "export": ".local/final-five-implementation-2026-09-09/release-ready/temporal-capacity-repair/export",
+        "digest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+        "assurance": {
+          "path": ".local/final-five-implementation-2026-09-09/release-ready/temporal-capacity-repair/validation/assurance.json",
+          "sha256": "52645fe892098d6064f22eb3f8817cb2895039f8c5c3817235421f7c3cf182e2"
+        },
+        "assuranceChecks": 16
+      },
+      "slots": [
+        {
+          "trial": 6,
+          "successorAttempt": 5,
+          "directory": ".local/final-six-2026-09-09/temporal-capacity-repair/trial-6",
+          "controller": ".local/final-six-2026-09-09/temporal-capacity-repair/trial-6/campaign.mjs",
+          "controllerSha256": "52d3e742b9a4044132a9566c4b55c7e6b31ccfd55cd2b4ffc766a13b76dc4967",
+          "evidenceSha256": "fdfa65553d48f46a9c24e54497edf5a01cac1c60348b1b7c5c683e506932688b"
+        },
+        {
+          "trial": 7,
+          "successorAttempt": 6,
+          "directory": ".local/final-six-2026-09-09/temporal-capacity-repair/trial-7",
+          "controller": ".local/final-six-2026-09-09/temporal-capacity-repair/trial-7/campaign.mjs",
+          "controllerSha256": "e1cca7a7a47a1a1fd24557bbc0d5b974acc9188488008aefa25f7442030e1611",
+          "evidenceSha256": "fdfa65553d48f46a9c24e54497edf5a01cac1c60348b1b7c5c683e506932688b"
+        }
+      ]
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "target": "claude",
+      "analysis": "reports/screening/third-five/11-snapshot-recovery-repair.md",
+      "scored": 3,
+      "failures": 2,
+      "remaining": 3,
+      "recordedHistory": [
+        0,
+        1,
+        1
+      ],
+      "effectiveHistory": [
+        0,
+        0,
+        1
+      ],
+      "packageDigest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+      "instructionSha256": "f2943b58bcb8caf0b9ac4923faad365b7de28b8a2da2f912121146f2aada4e4c",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "foundry": {
+        "export": ".local/third-ranked-five-implementation-2026-09-09/release-ready/snapshot-recovery-repair/export",
+        "digest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+        "assurance": {
+          "path": ".local/third-ranked-five-implementation-2026-09-09/release-ready/snapshot-recovery-repair/validation/assurance.json",
+          "sha256": "d8ecbce96fdbf2845f6c4e6b022ebff19089757d733ec342a0d759363acbf845"
+        },
+        "assuranceChecks": 15
+      },
+      "slots": [
+        {
+          "trial": 5,
+          "successorAttempt": 4,
+          "directory": ".local/final-six-2026-09-09/snapshot-recovery-repair/trial-5",
+          "controller": ".local/final-six-2026-09-09/snapshot-recovery-repair/trial-5/campaign.mjs",
+          "controllerSha256": "b5648daa1ba821d521f3c3f302410c87a4aae98d00004f662c3228f4bf302045",
+          "evidenceSha256": "c7a257c68532b0484c46406c6d9bfc84d50448af2294ec5761c220c3d7dac3a9"
+        },
+        {
+          "trial": 6,
+          "successorAttempt": 5,
+          "directory": ".local/final-six-2026-09-09/snapshot-recovery-repair/trial-6",
+          "controller": ".local/final-six-2026-09-09/snapshot-recovery-repair/trial-6/campaign.mjs",
+          "controllerSha256": "33d123dba6631275dee2116b7a9414ae73136bd3b630945c3fd4fc565376797e",
+          "evidenceSha256": "c7a257c68532b0484c46406c6d9bfc84d50448af2294ec5761c220c3d7dac3a9"
+        },
+        {
+          "trial": 7,
+          "successorAttempt": 6,
+          "directory": ".local/final-six-2026-09-09/snapshot-recovery-repair/trial-7",
+          "controller": ".local/final-six-2026-09-09/snapshot-recovery-repair/trial-7/campaign.mjs",
+          "controllerSha256": "28f845947af1b8c9440a7174cb21d29a07f13363b2446b169046225e8a406971",
+          "evidenceSha256": "c7a257c68532b0484c46406c6d9bfc84d50448af2294ec5761c220c3d7dac3a9"
+        }
+      ]
+    }
+  ]
+}

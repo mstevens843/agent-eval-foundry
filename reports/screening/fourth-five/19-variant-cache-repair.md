@@ -486,3 +486,77 @@ reach 5/6; only the first of those slots is prepared for this launch.
 No new model attempt was launched during preparation. Different valid failure
 mechanisms and required-checker-only failures can count; the provider switch
 does not reset or discard the existing results.
+
+## Trial 5 — first opposite-provider attempt — September 9, 2026
+
+### Identity and execution
+
+Run `variant-cache-repair-attempt-1` in a fresh Trial-5 campaign slot, package digest
+`73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b` — byte-identical to
+Trials 2–4. Requested target switched to **codex** (first Codex attempt on this
+package, after three consecutive Claude attempts), `openai/gpt-5.6-sol`, effort
+`xhigh`, CLI `0.153.2`, replacing Trials 2–4's `anthropic/claude-opus-5` / `max` /
+CLI `2.1.263`. Same frozen execution source
+`2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4` and pinned author
+image `sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a` as all
+prior trials.
+
+Dispatched `2026-09-09T20:55:29.274Z`, completed `2026-09-09T21:26:25.227Z` (~30m56s),
+well under the 10,800s (3h) cap. One of exactly four fresh Trial-5 attempts (the other
+continuing packages, minus snapshot recovery, which is excluded from this six-run
+threshold), confirmed running concurrently via `docker ps`. The solver received only
+the original public task inputs — no prior submission, analysis, or this campaign's
+handoff. Tokens: 1,963,212 in (1,875,328 cached), 55,609 out; the Codex CLI reports
+tokens but never a price (cost null). completionSha256
+`83bea01488e246a8097e38c14acf2d06a9e266f4f9640f834f5e33b60617db3a`, resultSha256
+`9b61c103cf8d2bccf0ecb10a7bfae33ec4867b3ccb6984c60c658f256464de4a`, gradeSha256
+`424bb6b927b13607248732de51b8ab27864f8ec1d4730a070b83d115146a0f05`. 972
+manifest-listed files (61,047,451 bytes) reverified with zero errors this session.
+
+### Results
+
+**Recorded reward 1 — this package's first pass, ending three consecutive Claude
+failures. Service 25/25 passed; checker 15/15.**
+
+- **Service: all 25 scenarios pass, 0 failures.** This first Codex submission avoided
+  both prior service defects: Trial 4's `matchesRequest()` wildcard blind spot
+  (confirmed to share Trial 2's exact root cause) and Trial 3's separate `origin_load`
+  failure.
+- **Checker: 15/15 correct, 0 missed, 0 false positives, deterministic, pass=true.**
+  Notably, this checker correctly caught `wildcard-eviction`
+  (`expectedFailingCheck: cache_provenance`) — the exact candidate all three prior
+  Claude checkers (Trials 2, 3, 4) missed via three different code shapes. Reading
+  `checker.mjs`: its `matches(entry, event)` predicate returns `false` whenever
+  `entry.vary.includes("*")`, and its write-legality check
+  (`unrelatedRemoved = removed.filter((entry) => !matches(entry, event))`) flags *any*
+  removed entry that doesn't match as an illegal "unrelated eviction" — so a wildcard
+  entry, which never matches by construction, can never be legally removed at all. This
+  closes the gap directly: unlike the three prior checkers (which only withheld
+  wildcard entries from *reuse* but left their *removal* unguarded), this one ties
+  removal-legality to the same non-matching predicate that already excludes wildcards,
+  so the reuse and removal rules can no longer disagree.
+
+### Progress toward the reported five-of-six acceptance threshold
+
+This package's six-run record is now **3 Claude failures (Trials 2–4) + 1 Codex pass
+(Trial 5) = 3 failures, 1 pass, across 4 of 6 planned attempts.** Two Codex attempts
+remain. Reaching the reported "at least five failures out of six" threshold now
+requires **both** remaining Codex attempts to fail (3 + 2 = 5); a single additional
+pass among them caps the total at 4, below threshold. This is a real tightening from
+before Trial 5, when 2 of the remaining 3 attempts needed to fail — with only 2 slots
+left, the margin for error is gone. Neither remaining attempt is authorized or
+dispatched by this campaign.
+
+
+### Final-six audit and preparation — September 9, 2026
+
+No additional grading defect was established for this package in the targeted audit.
+Its recorded and effective histories remain **0 → 0 → 0 → 1**:
+**3 failures in 4 scored attempts**. Two Codex
+slots are prepared on the unchanged package and pinned provider profile. Both must fail to reach 5/6; stop after a pass.
+
+The [audit](../final-six-pass-audit-2026-09-09.md) preserves raw records and documents
+the separate `final-six-coverage-v1` regrade. The same revision applies to all retained
+and future attempts for affected tasks; this is no new public task requirement. See the
+[prepared identities](../evidence/2026-09-09-final-six-preparation.json) and
+[operator handoff](../../../docs/final-six-handoff.md). No new model trial has launched.

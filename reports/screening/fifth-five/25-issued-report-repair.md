@@ -557,3 +557,57 @@ reach 5/6; only the first of those slots is prepared for this launch.
 No new model attempt was launched during preparation. Different valid failure
 mechanisms and required-checker-only failures can count; the provider switch
 does not reset or discard the existing results.
+
+## Trial 5 — first opposite-provider attempt — September 9, 2026
+
+**Reward 1, overall `semantic-pass` — the first pass for this package after three
+consecutive Claude failures.** This is the fourth successor attempt and the first
+with the provider switched: Codex (`openai/gpt-5.6-sol`, effort `xhigh`, CLI
+`0.153.2`) replaced Claude (`anthropic/claude-opus-5`, effort `max`, CLI `2.1.263`)
+for the first time on this package. Same author image
+(`sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a`), same
+frozen runtime, unchanged package bytes/contract/controls, verified identical to
+Trials 2–4 before dispatch. Ran 14m7s, well under the 10,800s cap. Tokens: 598,393
+input (536,576 cached), 25,058 output; Codex's CLI does not report a price
+(subscription-only billing regardless). completionSha256
+`35a7e0e38653ebbdcee050b53b173b972f401bf6fefe9730e5be2e5a81a12a50`, resultSha256
+`5878ce177ac3d641571c0813753025e3ee51144eceeef61d0a62f42065bb4825`, gradeSha256
+`baa3de2f18fb7494bd5791ffe0bdfe5029060269131ad9119baa7161e32cda65`. 833 manifest
+files (9,012,103 bytes) reverified this session, 0 errors. packageDigest
+`32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170`, profileDigest
+`d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794`.
+
+**Service:** 27/27 scenarios, 0 failures — fully correct, matching every prior trial.
+
+**Checker:** 14/14 correct, 0 missed, 0 false positives, `pass: true`. This Codex
+checker caught `reverse-dependency-order` (expected `dependency_order`) — the exact
+candidate Trial 4's Claude checker missed — and correctly accepted both `reference`
+and `alternative`, avoiding the wrapper-unwrapping bug that broke Trials 2/3. Its
+`reconcile()` in `model.mjs` recursively resolves each report's own dependencies
+first (with cycle detection via `visiting`/`visited` sets) before computing its
+value, then compares that freshly-reconstructed, dependency-order-correct
+trajectory against the submission's recorded run — a different design from Trial
+4's step-granularity multiset comparison, and one that structurally can't miss an
+out-of-order emission the way Trial 4's did.
+
+**Progress toward the 5-of-6 threshold:** this package's six-run record is now
+3 Claude failures (T2–T4) + 1 Codex pass (T5) = **3 failures, 1 pass, 4 of 6
+scored.** Two Codex attempts remain. Reaching "at least 5 failures out of 6" now
+requires **both** remaining Codex attempts to fail (3 + 2 = 5); a single additional
+pass among them caps the total at 4, below the reported threshold. This is a real
+tightening from before Trial 5, when either one or both remaining opposite-provider
+runs failing would have sufficed.
+
+
+### Final-six audit and preparation — September 9, 2026
+
+No additional grading defect was established for this package in the targeted audit.
+Its recorded and effective histories remain **0 → 0 → 0 → 1**:
+**3 failures in 4 scored attempts**. Two Codex
+slots are prepared on the unchanged package and pinned provider profile. Both must fail to reach 5/6; stop after a pass.
+
+The [audit](../final-six-pass-audit-2026-09-09.md) preserves raw records and documents
+the separate `final-six-coverage-v1` regrade. The same revision applies to all retained
+and future attempts for affected tasks; this is no new public task requirement. See the
+[prepared identities](../evidence/2026-09-09-final-six-preparation.json) and
+[operator handoff](../../../docs/final-six-handoff.md). No new model trial has launched.

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "revision": "final-six-coverage-v1",
+  "image": "sha256:0d111d755a70b9f8a3e8fec4f7bc641b3211bcf6ebb03bfd6fbded7c776176ab",
+  "combination": "effectiveReward = min(recordedReward, supplementalPass ? 1 : 0); grader revision applies to all retained and future attempts for each affected task",
+  "controls": [
+    {
+      "id": "temporal-capacity-repair",
+      "fixture": "data/final-six-grading-controls/temporal-capacity-repair.json",
+      "sha256": "a649e4df717702949d1f6f60c26b83b760010545d82986bc8c77fd6bfe6d83d4",
+      "expected": [
+        {
+          "token": "f7102606e878dd7a8e7bb840",
+          "ok": true
+        },
+        {
+          "token": "f6508a8a65d57cef7ad56407",
+          "ok": false
+        }
+      ]
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "fixture": "data/final-six-grading-controls/snapshot-recovery-repair.json",
+      "sha256": "7d3fb7543e243a7d37ecad8d0d579629edfc8e1fbcf1104ffe9469100c3558d7",
+      "expected": [
+        {
+          "token": "60ef8f7b2097c4c934031a11",
+          "ok": true
+        },
+        {
+          "token": "0021c8f79876bc501f21eeff",
+          "ok": true
+        }
+      ]
+    }
+  ]
+}

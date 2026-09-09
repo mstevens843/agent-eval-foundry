@@ -1,0 +1,935 @@
+{
+  "schemaVersion": 1,
+  "campaign": "2026-09-09-round-five-continuing-four",
+  "evidenceClass": "real-provider-screening",
+  "label": "Trial 5",
+  "limitations": [
+    "One exploratory attempt per package (attempt=1 in the execution store for this fresh campaign slot), the first opposite-provider data point per package, not a full repeated-failure-rate measurement or official standard/adversarial qualification.",
+    "Requested model and effort are not independent backend attestations; Claude model strings were observable in these captures, Codex model identity was not, and effort/scaffoldVersion were unobservable for both CLIs.",
+    "Package bytes, public contract, private controls and grading route match Trials 2-4; only the provider/model/scaffold-specific profile fields switched, and the controller hard-asserted the switch and every unchanged field before dispatch.",
+    "Solvers were given only the original public task inputs -- no access to any prior trial's submissions, analysis, private controls, or this campaign's operator handoff.",
+    "CLI dollar estimates (Claude runs only) are not subscription charges; billingMode was subscription-only with maxMicroUsd 0 and no paid API fallback.",
+    "Snapshot recovery (11) was excluded from this campaign; its 0-1-1 record already falls below the reported 5-of-6 threshold and is unaffected by this round. Three of four continuing packages passed their first opposite-provider attempt; one (incremental build) failed via a defect independently confirmed, at the code level, to be identical to all three prior same-provider failures. A single provider switch does not establish a stable pass rate."
+  ],
+  "sourceDigest": "2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4",
+  "sourceProvenance": "Reused, byte-for-byte, the isolated runtime built and independently verified for the first round-two campaign. No new runtime was built for this campaign.",
+  "authorImage": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+  "actualScheduling": "All four jobs reserved before parallel dispatch; all four author containers observed running together via docker ps.",
+  "concurrencyRequestFulfilled": true,
+  "concurrencyObservation": {
+    "count": 4,
+    "packageIds": [
+      "variant-cache-repair",
+      "incremental-build-repair",
+      "issued-report-repair",
+      "temporal-capacity-repair"
+    ],
+    "firstLaunch": "2026-09-09T20:55:29.274Z",
+    "lastLaunch": "2026-09-09T20:55:29.446Z",
+    "launchSpreadMs": 172
+  },
+  "automaticRetries": 0,
+  "invalidExecutionCount": 0,
+  "extraModelCallsBeyondFour": 0,
+  "excludedPackage": {
+    "id": "snapshot-recovery-repair",
+    "reason": "Record 0-1-1 (one failure, two passes) already caps its six-run set at 4 possible failures, below the reported 5-of-6 threshold. Excluded from this campaign; its history is unchanged."
+  },
+  "packages": [
+    {
+      "id": "variant-cache-repair",
+      "target": "codex",
+      "previousTarget": "claude",
+      "providerSwitched": true,
+      "runId": "variant-cache-repair-attempt-1",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-pass",
+      "reward": 1,
+      "trial2Reward": 0,
+      "trial3Reward": 0,
+      "trial4Reward": 0,
+      "recurrence": false,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1855953,
+      "start": "2026-09-09T20:55:29.274Z",
+      "end": "2026-09-09T21:26:25.227Z",
+      "service": {
+        "scenarios": 25,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "pass": true,
+        "total": 15,
+        "correct": 15,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "reset-age-on-tier-copy",
+            "expectedFailingCheck": "cache_provenance",
+            "observedFailingChecks": [
+              "cache_provenance"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "intermediate-wipe",
+            "expectedFailingCheck": "cache_provenance",
+            "observedFailingChecks": [
+              "cache_provenance"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "wildcard-eviction",
+            "expectedFailingCheck": "cache_provenance",
+            "observedFailingChecks": [
+              "cache_provenance"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "always-origin",
+            "expectedFailingCheck": "origin_load",
+            "observedFailingChecks": [
+              "origin_load"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "store-private-response",
+            "expectedFailingCheck": "no_store",
+            "observedFailingChecks": [
+              "no_store"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "unconditional-revalidation",
+            "expectedFailingCheck": "origin_load",
+            "observedFailingChecks": [
+              "origin_load"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "ignore-response-age",
+            "expectedFailingCheck": "representation",
+            "observedFailingChecks": [
+              "representation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "path-only-key",
+            "expectedFailingCheck": "representation",
+            "observedFailingChecks": [
+              "cache_provenance",
+              "representation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "flush-unrelated-tiers",
+            "expectedFailingCheck": "invalidation_scope",
+            "observedFailingChecks": [
+              "invalidation_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "empty-304-body",
+            "expectedFailingCheck": "representation",
+            "observedFailingChecks": [
+              "representation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          }
+        ],
+        "gradeSummarySha256": "17fe891ba5111c2542aa9960d42ce0f626a721254a83a5bfd6f005c1cefc46dd",
+        "processSha256": "b29ae99ef383425d7df6c938069f003945700e8963a16788e3ca88e627fdd4cf"
+      },
+      "usage": {
+        "cachedInputTokens": 1875328,
+        "costUsd": null,
+        "inputTokens": 1963212,
+        "outputTokens": 55609,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates (costUsd on Claude runs) are not subscription charges; billingMode was subscription-only with maxMicroUsd 0. Cached input is included in input totals.",
+      "completionSha256": "83bea01488e246a8097e38c14acf2d06a9e266f4f9640f834f5e33b60617db3a",
+      "resultSha256": "9b61c103cf8d2bccf0ecb10a7bfae33ec4867b3ccb6984c60c658f256464de4a",
+      "gradeSha256": "424bb6b927b13607248732de51b8ab27864f8ec1d4730a070b83d115146a0f05",
+      "assessment": "resolved-first-opposite-provider-pass",
+      "rationale": "Reward 1, semantic-pass -- the package's first pass after three consecutive Claude failures (T2-T4, all reward 0), on its first-ever Codex attempt. Service 25/25, checker 15/15. Direct code reading of checker.mjs found the checker's unrelatedRemoved write-legality check ties removal-eligibility to the same matches() predicate that already excludes wildcard entries, closing the exact wildcard-eviction gap all three prior Claude checkers missed. This is one data point on one provider switch, not evidence the underlying defect is resolved for the package generally. With 3 failures and 1 pass now recorded across 4 of 6 planned attempts, both remaining Codex attempts must fail to reach the reported 5-of-6 threshold -- a single further pass caps the total at 4.",
+      "packageDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "serviceOutcome": "semantic-pass",
+      "analysis": "reports/screening/fourth-five/19-variant-cache-repair.md",
+      "totalElapsedMilliseconds": 1855953,
+      "manifestFilesVerified": 972,
+      "manifestBytesVerified": 61047451,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "progress": {
+        "successorAttempts": 4,
+        "failures": 3,
+        "solverPasses": 1,
+        "consecutiveRecordedZeroes": 0,
+        "attemptsByProvider": {
+          "claude": 3,
+          "codex": 1
+        },
+        "remainingAttempts": 2,
+        "failuresNeeded": 2,
+        "withinFiveOfSix": true,
+        "remainingByProvider": {
+          "claude": 0,
+          "codex": 2
+        }
+      }
+    },
+    {
+      "id": "incremental-build-repair",
+      "target": "claude",
+      "previousTarget": "codex",
+      "providerSwitched": true,
+      "runId": "incremental-build-repair-attempt-1",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "runtime event type=assistant",
+          "status": "observed",
+          "value": "claude-opus-5"
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "reward": 0,
+      "trial2Reward": 0,
+      "trial3Reward": 0,
+      "trial4Reward": 0,
+      "recurrence": true,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1807735,
+      "start": "2026-09-09T20:55:29.332Z",
+      "end": "2026-09-09T21:25:37.067Z",
+      "service": {
+        "scenarios": 27,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "pass": false,
+        "total": 15,
+        "correct": 14,
+        "falsePositives": 0,
+        "missed": 1,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "publication_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "wrong-dependency-alias",
+            "expectedFailingCheck": "current_artifacts",
+            "observedFailingChecks": [
+              "current_artifacts",
+              "incremental_budget"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "ignore-includes",
+            "expectedFailingCheck": "current_artifacts",
+            "observedFailingChecks": [
+              "current_artifacts"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "ignore-flags",
+            "expectedFailingCheck": "current_artifacts",
+            "observedFailingChecks": [
+              "current_artifacts"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "publication_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "foreign-publication",
+            "expectedFailingCheck": "publication_scope",
+            "observedFailingChecks": [
+              "publication_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "ignore-dependency-order",
+            "expectedFailingCheck": "current_artifacts",
+            "observedFailingChecks": [
+              "current_artifacts"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "duplicate-publication",
+            "expectedFailingCheck": "publication_scope",
+            "observedFailingChecks": [
+              "completion",
+              "publication_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "publication_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "ignore-tool",
+            "expectedFailingCheck": "current_artifacts",
+            "observedFailingChecks": [
+              "current_artifacts"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "always-rebuild",
+            "expectedFailingCheck": "incremental_budget",
+            "observedFailingChecks": [
+              "incremental_budget"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "partial-publication",
+            "expectedFailingCheck": "publication_scope",
+            "observedFailingChecks": [
+              "publication_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "premature-publication",
+            "expectedFailingCheck": "current_artifacts",
+            "observedFailingChecks": [
+              "current_artifacts"
+            ],
+            "outcome": "missed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          }
+        ],
+        "gradeSummarySha256": "689fe9f88a21705d4a226324a31cbd35b1570c39bd9396148e8d39d5fc50daa9",
+        "processSha256": "e06ca1613dca8016563186fe262fd08ca7b704d5323158f3e8bc056566343674"
+      },
+      "usage": {
+        "cachedInputTokens": 10613114,
+        "costUsd": 10.925581000000003,
+        "inputTokens": 10804684,
+        "outputTokens": 148119,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates (costUsd on Claude runs) are not subscription charges; billingMode was subscription-only with maxMicroUsd 0. Cached input is included in input totals.",
+      "completionSha256": "b0cc75c70eb5061f0c890e8d5102b3963b886a474cdbfbc0cc05925eb5da8142",
+      "resultSha256": "6aa07dae761949531d7f64b0792024f56462620e18fd031382f09263e692612f",
+      "gradeSha256": "6cf6fd4d904353a0a18bc84c141c5b62713e347f37d5da982ef3792aa36b9456",
+      "assessment": "repeat-fail-exact-recurrence-cross-provider",
+      "rationale": "Reward 0, semantic-fail -- a fourth consecutive zero, now spanning both providers (3 Codex + this first-ever Claude attempt). Service 27/27 (fully correct). Checker missed the exact same premature-publication candidate as all three Codex attempts. Direct code reading of this Trial 5 checker.mjs and its shared core.mjs helper confirms the identical mechanical gap already established for the Codex submissions: readLedger() builds one post-hoc, order-blind map of every handle from all compile/inspect/artifacts observations, and the validator checks a published handle only against that final ledger entry's structural correctness -- never comparing a compile observation's sequence number against the publish observation's sequence for the round that references it. Independently corroborated: this record's checker-grade-summary.json is byte-identical (same SHA-256) to Trial 3's and Trial 4's, meaning the accept/reject verdict matched on every one of the 15 candidates across the provider switch. Four independent submissions, two different providers, have now converged on the identical ordering blind spot -- meaningfully stronger evidence of a provider-independent gap than the three-Codex-only finding from Trial 4. This package now needs only 1 more failure from its 2 remaining Claude attempts to reach the reported 5-of-6 threshold -- the shortest remaining path of the four continuing packages.",
+      "packageDigest": "34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "serviceOutcome": "semantic-pass",
+      "analysis": "reports/screening/fifth-five/21-incremental-build-repair.md",
+      "totalElapsedMilliseconds": 1807735,
+      "manifestFilesVerified": 978,
+      "manifestBytesVerified": 37327202,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "progress": {
+        "successorAttempts": 4,
+        "failures": 4,
+        "solverPasses": 0,
+        "consecutiveRecordedZeroes": 4,
+        "attemptsByProvider": {
+          "claude": 1,
+          "codex": 3
+        },
+        "remainingAttempts": 2,
+        "failuresNeeded": 1,
+        "withinFiveOfSix": true,
+        "remainingByProvider": {
+          "claude": 2,
+          "codex": 0
+        }
+      }
+    },
+    {
+      "id": "issued-report-repair",
+      "target": "codex",
+      "previousTarget": "claude",
+      "providerSwitched": true,
+      "runId": "issued-report-repair-attempt-1",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-pass",
+      "reward": 1,
+      "trial2Reward": 0,
+      "trial3Reward": 0,
+      "trial4Reward": 0,
+      "recurrence": false,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 846551,
+      "start": "2026-09-09T20:55:29.387Z",
+      "end": "2026-09-09T21:09:35.938Z",
+      "service": {
+        "scenarios": 27,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "pass": true,
+        "total": 14,
+        "correct": 14,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "reuse-issued-version",
+            "expectedFailingCheck": "issued_history",
+            "observedFailingChecks": [
+              "amendment_content",
+              "completion",
+              "dependency_order",
+              "issued_history",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reverse-dependency-order",
+            "expectedFailingCheck": "dependency_order",
+            "observedFailingChecks": [
+              "dependency_order"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "duplicate-notification",
+            "expectedFailingCheck": "recipient_scope",
+            "observedFailingChecks": [
+              "completion",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "amendment_content",
+              "completion",
+              "historical_answers",
+              "issued_history",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "current-for-historical",
+            "expectedFailingCheck": "historical_answers",
+            "observedFailingChecks": [
+              "historical_answers"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "only-requested-recipients",
+            "expectedFailingCheck": "recipient_scope",
+            "observedFailingChecks": [
+              "completion",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "amendment_content",
+              "completion",
+              "historical_answers",
+              "issued_history",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "unrelated-recipient",
+            "expectedFailingCheck": "recipient_scope",
+            "observedFailingChecks": [
+              "completion",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "amendment_content",
+              "completion",
+              "historical_answers",
+              "issued_history",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "corrections-labelled-initial",
+            "expectedFailingCheck": "recipient_scope",
+            "observedFailingChecks": [
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "stale-dependent-lineage",
+            "expectedFailingCheck": "amendment_content",
+            "observedFailingChecks": [
+              "amendment_content",
+              "completion",
+              "issued_history",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "drop-source-lineage",
+            "expectedFailingCheck": "amendment_content",
+            "observedFailingChecks": [
+              "amendment_content",
+              "completion",
+              "issued_history",
+              "recipient_scope"
+            ],
+            "outcome": "correct-reject-unnamed"
+          }
+        ],
+        "gradeSummarySha256": "154f8bdf775f8560666fb7a5c0d096759cdb570ba12e754e29e0534467271c8d",
+        "processSha256": "ef8bb528487941ee44a05ea247259ac18e8db4337b9a4082a9d036ae937d6dfd"
+      },
+      "usage": {
+        "cachedInputTokens": 536576,
+        "costUsd": null,
+        "inputTokens": 598393,
+        "outputTokens": 25058,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates (costUsd on Claude runs) are not subscription charges; billingMode was subscription-only with maxMicroUsd 0. Cached input is included in input totals.",
+      "completionSha256": "35a7e0e38653ebbdcee050b53b173b972f401bf6fefe9730e5be2e5a81a12a50",
+      "resultSha256": "5878ce177ac3d641571c0813753025e3ee51144eceeef61d0a62f42065bb4825",
+      "gradeSha256": "baa3de2f18fb7494bd5791ffe0bdfe5029060269131ad9119baa7161e32cda65",
+      "assessment": "resolved-first-opposite-provider-pass",
+      "rationale": "Reward 1, semantic-pass -- first pass after three consecutive Claude failures via three different mechanisms (T2/T3 wrapper bugs rejecting all known-good candidates; T4 a narrow missed negative candidate). Service 27/27, checker 14/14. This Codex checker correctly caught reverse-dependency-order (the exact candidate Trial 4's Claude checker missed) via a recursive dependency-order reconstruction in reconcile(), a different design from Trial 4's step-granularity comparison, and correctly accepted both known-good candidates. With 3 failures and 1 pass now recorded across 4 of 6 planned attempts, both remaining Codex attempts must fail to reach the reported 5-of-6 threshold -- a single further pass caps the total at 4.",
+      "packageDigest": "32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "serviceOutcome": "semantic-pass",
+      "analysis": "reports/screening/fifth-five/25-issued-report-repair.md",
+      "totalElapsedMilliseconds": 846551,
+      "manifestFilesVerified": 833,
+      "manifestBytesVerified": 9012103,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "progress": {
+        "successorAttempts": 4,
+        "failures": 3,
+        "solverPasses": 1,
+        "consecutiveRecordedZeroes": 0,
+        "attemptsByProvider": {
+          "claude": 3,
+          "codex": 1
+        },
+        "remainingAttempts": 2,
+        "failuresNeeded": 2,
+        "withinFiveOfSix": true,
+        "remainingByProvider": {
+          "claude": 0,
+          "codex": 2
+        }
+      }
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "target": "codex",
+      "previousTarget": "claude",
+      "providerSwitched": true,
+      "runId": "temporal-capacity-repair-attempt-1",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-pass",
+      "reward": 1,
+      "trial2Reward": 0,
+      "trial3Reward": 1,
+      "trial4Reward": 0,
+      "recurrence": false,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 409055,
+      "start": "2026-09-09T20:55:29.446Z",
+      "end": "2026-09-09T21:02:18.501Z",
+      "service": {
+        "scenarios": 34,
+        "failedScenarios": 0,
+        "invalidScenarios": 0,
+        "failures": {}
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "pass": true,
+        "total": 13,
+        "correct": 13,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "inclusive-end",
+            "expectedFailingCheck": "exact_integral",
+            "observedFailingChecks": [
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "effective-before-revision",
+            "expectedFailingCheck": "exact_integral",
+            "observedFailingChecks": [
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "strict-knowledge-cutoff",
+            "expectedFailingCheck": "exact_integral",
+            "observedFailingChecks": [
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "future-revision",
+            "expectedFailingCheck": "exact_integral",
+            "observedFailingChecks": [
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "unread-empty-source",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "extra-report",
+            "expectedFailingCheck": "population",
+            "observedFailingChecks": [
+              "population"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "duplicate-report",
+            "expectedFailingCheck": "unique_reports",
+            "observedFailingChecks": [
+              "unique_reports"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "floating-total",
+            "expectedFailingCheck": "exact_integral",
+            "observedFailingChecks": [
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          }
+        ],
+        "gradeSummarySha256": "31d3c6ac2169df1fe37bed826ce9bc18bf35ef7c6fad0263676f19da0976381e",
+        "processSha256": "80cbca3798edc577f16ca5df9c0d8d906f7b45446a6eee4584393d55808dc320"
+      },
+      "usage": {
+        "cachedInputTokens": 148608,
+        "costUsd": null,
+        "inputTokens": 167636,
+        "outputTokens": 11705,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI price estimates (costUsd on Claude runs) are not subscription charges; billingMode was subscription-only with maxMicroUsd 0. Cached input is included in input totals.",
+      "completionSha256": "f7ed23f4149cadfd60ae1faabdab50e7d403cd311a15bff1bd6115976ac9c4cf",
+      "resultSha256": "de146cf816584fde106403f60a7deded8d1e778348eb537432f9871fe4d8b475",
+      "gradeSha256": "0e306a47f676db83ee284a736c02b400933d610691a79bb13f84db17386a12ff",
+      "assessment": "ceiling-breached",
+      "rationale": "Reward 1, semantic-pass. Service 34/34, checker 13/13 -- this Codex checker correctly caught unread-empty-source (missed by two of the three Claude attempts, T2 and T4) via a third distinct fetch-completeness approach: unconditional cursor-chain traversal. Run history is now fail-pass-fail-pass across T2-T5 (2 failures, 2 passes) with only 2 attempts remaining. The maximum possible total failures for this package's six-run set is 2 + 2 = 4, below the reported 5-of-6 threshold regardless of the outcome of the two remaining Codex attempts. This is a hard arithmetic ceiling, not a prediction. Temporal capacity is now the second package (after snapshot recovery) whose six-run set can no longer reach the reported acceptance bar.",
+      "packageDigest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "serviceOutcome": "semantic-pass",
+      "analysis": "reports/screening/next-five/10-temporal-capacity-repair.md",
+      "totalElapsedMilliseconds": 409055,
+      "manifestFilesVerified": 848,
+      "manifestBytesVerified": 3750387,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "progress": {
+        "successorAttempts": 4,
+        "failures": 2,
+        "solverPasses": 2,
+        "consecutiveRecordedZeroes": 0,
+        "attemptsByProvider": {
+          "claude": 3,
+          "codex": 1
+        },
+        "remainingAttempts": 2,
+        "failuresNeeded": 3,
+        "withinFiveOfSix": false,
+        "remainingByProvider": {
+          "claude": 0,
+          "codex": 2
+        }
+      }
+    }
+  ],
+  "acceptanceTarget": {
+    "source": "User-reported CEO acceptance criterion, clarified after Trial 3",
+    "minimumFailures": 5,
+    "totalScoredTrials": 6,
+    "claudeTrials": 3,
+    "codexTrials": 3,
+    "unchangedPackage": true,
+    "consecutiveFailuresRequired": false
+  },
+  "audit": {
+    "checkedAt": "2026-09-09T21:31:37.128Z",
+    "newModelCalls": 0,
+    "manifestFilesVerified": 3631,
+    "manifestBytesVerified": 111137143,
+    "errors": [],
+    "publicationCorrections": []
+  },
+  "subsequentAudit": {
+    "evidence": "reports/screening/evidence/2026-09-09-final-six-pass-audit.json",
+    "note": "Original trial grades and original-coverage progress remain unchanged here. A subsequent uniform grading coverage repair changes the effective Trial 3 rewards for temporal capacity and snapshot recovery to zero and reopens both candidates."
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "cases": [
+    {
+      "token": "f7102606e878dd7a8e7bb840",
+      "cells": [
+        {
+          "scenarioId": "audit-empty-query-source",
+          "writes": [],
+          "reports": [
+            {
+              "reports": 0
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [],
+                "next": null
+              }
+            }
+          ],
+          "publicInput": {
+            "queries": [],
+            "records": []
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [],
+                      "next": null
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 4,
+                "requestBytes": 183,
+                "responseBytes": 273,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "f6508a8a65d57cef7ad56407",
+      "cells": [
+        {
+          "scenarioId": "audit-empty-query-source",
+          "writes": [],
+          "reports": [
+            {}
+          ],
+          "observations": [],
+          "publicInput": {
+            "queries": [],
+            "records": []
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": []
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 3,
+                "requestBytes": 109,
+                "responseBytes": 230,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

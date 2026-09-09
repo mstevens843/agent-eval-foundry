@@ -4,123 +4,44 @@ September 9, 2026. Navigation and status, not a package-policy approval.
 
 ## Latest measured progress
 
-**Three packages have three consecutive recorded reward-zero results on unchanged
-successors: incremental build (21), issued report (25), and variant cache (19).**
-All five Trial 4 attempts completed without infrastructure errors, keeping each
-package's same provider a third consecutive time. Snapshot recovery (11) passed a
-second consecutive time; temporal capacity (10) reverted to failing after passing
-in Trial 3. [Trial 4 results](../reports/screening/round-four-failing-five-2026-09-09.md).
-Earlier: [Trial 3 results](../reports/screening/round-three-failing-five-2026-09-09.md).
+**Incremental build now has four consecutive failures across Codex and Claude. A targeted
+pass audit also found two missed checker defects and reopened temporal capacity and
+snapshot recovery. Five packages remain in contention.**
 
-Reading the actual submitted code (not just comparing raw rewards) found that raw
-recurrence is not the same as an identical defect: incremental build's checker
-missed the identical candidate via a structurally identical gap in all three
-independent submissions — genuine exact recurrence. Variant cache's Trial 4
-failure was confirmed to share Trial 2's exact root cause, making Trial 3 the
-outlier attempt with a separate, unrelated bug. Issued report's checker fixed the
-Trial 2/3 defect outright (both known-good candidates are now correctly accepted)
-and failed on a new, unrelated gap instead — its third zero is not a third
-instance of the same bug. Temporal capacity's checker missed the same named
-candidate as Trial 2, but via a different, more fundamental omission (no
-fetch/pagination-completeness check at all, versus Trial 2's narrow exemption).
+The original Trial 5 grades are three passes and one failure. The coverage repair
+`final-six-coverage-v1` changes the effective Trial 3 result for 10 and 11 from 1 to 0,
+after replaying every retained submission for those tasks. Original rewards and manifests
+remain intact. No new model calls were made by the audit or preparation.
 
-The user reports that the CEO accepts **at least five failures out of six**, with
-**three Claude and three Codex attempts per package**. All five packages have now
-completed their first three (same-provider) attempts. The three at 3/3 each need
-at least 2 more failures from their 3 remaining opposite-provider attempts;
-temporal capacity (2/3) needs all 3 remaining attempts to fail. **Snapshot
-recovery (1/3, two passes) can no longer reach the threshold regardless of
-outcome** — with two passes recorded, its six-run set caps at 4 possible
-failures, below the 5-of-6 bar. Different valid failure mechanisms can count;
-one solver pass does not require restarting under this criterion. The three
-opposite-provider attempts will complete the six-run sets for continuing packages.
+| Package | Effective failures/scored | Remaining provider | Remaining slots | Requirement |
+| --- | --- | --- | --- | --- |
+| 21 Incremental build | **4/4** | Claude | 2 | At least one failure; run both |
+| 19 Variant cache | **3/4** | Codex | 2 | Both must fail |
+| 25 Issued report | **3/4** | Codex | 2 | Both must fail |
+| 10 Temporal capacity | **3/4** | Codex | 2 | Both must fail |
+| 11 Snapshot recovery | **2/3** | Claude | 3 | All three must fail |
 
-**Four packages continue: 19, 21, 25 and 10. Trial 5 is prepared with providers
-switched:** Codex for 19/25/10, Claude for 21. The user authorized one fresh
-attempt per package, four concurrently; this is the first opposite-provider
-attempt, with two further attempts per package left for later. Snapshot recovery
-(11) is excluded from this campaign; its three results remain documented.
-[Prepared controller and handoff](round-five-continuing-four-handoff.md).
-Package bytes and grading are unchanged. Preparation made zero provider calls.
+The target is the user-reported **at least five failures in six scored attempts**, with
+**three Claude and three Codex**. Different legitimate failure mechanisms count. The
+private coverage repair adds no public requirements or solution hints. The eleven
+remaining slots are prepared with at most three concurrent attempts and per-package
+early stopping after 5/6 becomes impossible. None has launched.
 
-Successor Trials 2, 3 and 4 total **36 attempts: 35 scored, 12 recorded zeroes,
-23 solver passes and 1 historical infrastructure interruption**, across the same
-25 packages. The historical Trial 2 totals below remain separate.
+Across successor Trials 2–5, the immutable raw record is **40 attempts, 39 scored,
+13 recorded zeroes, 26 recorded passes and 1 infrastructure interruption**, across
+25 distinct packages. Applying the documented repair gives **15 effective failures and
+24 effective passes** among those same 39 scored attempts; these are not extra trials.
+All 25 packages completed Trial 2: five recorded zeroes and twenty passes, with the
+route-policy retry resolving its separately retained interruption.
 
-**All 25 packages have completed Trial 2: five recorded zero rewards and twenty
-solver passes.** There were 26 attempts, including route policy's earlier unscored
-interruption and successful separate retry. The latest two groups added one zero,
-temporal capacity—not two. The fourth group returned five reward-one results.
-See the [complete 25-package result table](../reports/screening/round-two-portfolio-2026-09-09.md).
-
-| Trial 2 group | Attempts launched | Scored | Reward-zero results | Solver passes | Interrupted/unscored |
-| --- | --- | --- | --- | --- | --- |
-| [First: 19/21/25/24/07](../reports/screening/round-two-top-five-2026-09-09.md) | 5 | 5 | 3 | 2 | 0 |
-| [Second: 14/03/18/20/04](../reports/screening/round-two-next-five-2026-09-09.md) | 5 | 4 | 0 | 4 | 1 |
-| [Third: 13/08/15/12/11](../reports/screening/round-two-third-ranked-five-2026-09-09.md) | 5 | 5 | 1 | 4 | 0 |
-| [Fourth: 09/06/05/16/17](../reports/screening/round-two-fourth-ranked-five-2026-09-09.md) | 5 | 5 | 0 | 5 | 0 |
-| [Fifth: 23/02/10/01/22](../reports/screening/round-two-final-five-2026-09-09.md) | 5 | 5 | 1 | 4 | 0 |
-| [Route-policy retry](../reports/screening/round-two-final-five-2026-09-09.md) | 1 | 1 | 0 | 1 | 0 |
-| **Total** | **26** | **25** | **5** | **20** | **1 historical interruption** |
-
-The fourth group is a clean sweep: all five reward 1, all five services and checkers
-fully correct. Two are notable beyond a repeat pass: compatible rollout (05) had its
-checker graded for the first time and gained new stage lost-response/recovery
-semantics, both passing cleanly; analytical reconciliation (17) had Trial 1 scored
-zero by the same private-label harness bug fixed above, and this independently-written
-Trial 2 submission reaches the same clean pass under the corrected rule — a second,
-independent confirmation of the capability, not a re-scored old result.
-
-The fifth group: staged allocation, persistent knowledge, CAA revalidation (native,
-no checker) and event window all passed cleanly. Persistent knowledge's checker and
-new committed-publication redelivery contract were graded for the first time and
-passed. Temporal capacity's service is fully correct (34/34); its checker's
-`paginationViolation()` deliberately exempts "never fetched the source" when
-`recordCount` is zero — a submitted exception that the source-traversal requirement does not permit — which happens to exempt exactly the `unread-empty-source` control this check
-exists to catch. A separately-dispatched retry of route policy (14), run alongside
-the fifth group to reach three Claude/three Codex for that round, finally resolved
-its earlier interruption: 27/27 service, 12/12 checker, clean pass.
-
-Incremental build (21), issued report (25), snapshot recovery (11) and temporal
-capacity (10) have supported substantive failures of required agent-written
-checkers. Their services passed; the incomplete or incorrect required validators
-still make these task failures. Cache (19) retains its recorded service/checker zero
-and the existing documented matching/replacement contract question. This update
-adds temporal capacity's failure and route policy's resolved retry without changing
-the earlier audit or any other raw scores.
-
-**Trial 3 failure mechanisms:** incremental build again omitted issuance-before-use
-ordering; issued report again rejected both known-good candidates, this time because
-delivery wrappers were not handled. Variant cache passed 5/25 service scenarios and
-failed 20 on `origin_load`, while its checker missed the same candidate as Trial 2.
-Its new origin-budget service failure is supported independently of the earlier
-matching/replacement note. Mechanism differences describe what happened; they are
-not a requirement that failures repeat the same bug. The two passing submissions
-avoided their earlier checker mistakes; two runs are too few to call those failures
-one-off or estimate a dependable failure rate.
-
-The second group is now fully documented: four completed solver passes and route
-policy's infrastructure interruption, now resolved by the separate retry above
-(reward null is preserved on the original interrupted record; the retry is its own,
-later, separately-evidenced attempt). The third group completed without
-infrastructure errors and supplies the checker failure noted above.
-
-All twenty-five original analysis files contain dated Trial 2 records. **19,842**
-completion-manifest files have been verified: 11,525 from the first three groups,
-3,945 from the fourth, 3,627 from the fifth and 745 from the route-policy retry.
-No package remains without a completed Trial 2 result. The original interruption
-is preserved, and no package, submission or raw grade changed in this publication.
-
-All five original analysis files also contain Trial 3 results. Their **4,448**
-completion-manifest files were reverified, giving **24,290** across scored successor
-attempts. Two Trial 3 publication rows incorrectly copied the service outcome as the
-overall outcome; they now match raw results, with the service outcome separate.
-No recorded reward changed.
-
-Prioritize observed required-deliverable failures for further trials; retain solver
-passes as correct controls. Temporal capacity and snapshot recovery can be repeated
-on their unchanged versions without adding solution hints or fixing the agents'
-failed submissions. No additional model calls were made for documentation.
+[Audit and corrected standings](../reports/screening/final-six-pass-audit-2026-09-09.md) ·
+[Regrade evidence](../reports/screening/evidence/2026-09-09-final-six-pass-audit.json) ·
+[Prepared final campaign](../reports/screening/evidence/2026-09-09-final-six-preparation.json) ·
+[Operator handoff](final-six-handoff.md).
+[Trial 5](../reports/screening/round-five-continuing-four-2026-09-09.md) ·
+[Trial 4](../reports/screening/round-four-failing-five-2026-09-09.md) ·
+[Trial 3](../reports/screening/round-three-failing-five-2026-09-09.md) ·
+[All 25 Trial 2 results](../reports/screening/round-two-portfolio-2026-09-09.md).
 
 ## What is implemented
 
@@ -200,15 +121,14 @@ this progress report adds no requirement for identical bugs or six consecutive z
 The partial-release reason-format issue remains a blocker for treating its historical zero as a capability failure. Shared reason-prefix matching and explicit checker schemas were repaired in new versions before batch 3. No historical result is overwritten by that repair.
 
 The ranked successors make checker reasons diagnostic-only, integrate protected controls
-and resolve several earlier contradictions. The remaining Trial 2 contract question is
-cache wildcard matching for replacement. Resolve that narrowly before treating its zero
-as an undisputed fair failure. Incremental build and issued report can be repeated on
-their frozen versions without adding solution guidance. Additional issued-report
-aggregate-input documentation is optional; its documented observations already suffice.
+and resolve earlier contradictions. Historical attribution notes remain in each trial
+document. The current six-run campaign uses the unchanged public tasks and exact provider
+profiles, plus the documented private coverage repair for 10 and 11. No extra solution
+guidance or requirement for identical failure mechanisms is needed.
 
 All twenty-five successor packages have retained validation evidence. Their old
-Trial 1 results still measure the old versions. Trial 2 and Trial 3 results retain
-their exact package and profile identities; preparation of Trial 4 changes neither.
+Trial 1 results still measure the old versions. Trials 2–5 retain their exact package
+and profile identities. Raw grades remain immutable alongside the separate coverage regrade.
 
 Fresh verification and limits appear in [the publication report](../reports/PORTFOLIO-PUBLICATION.md). Historical snapshot-local assurance does not automatically certify a new merged build. No new provider attempts or release approvals are made by publication.
 

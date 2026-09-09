@@ -404,3 +404,63 @@ reach 5/6; only the first of those slots is prepared for this launch.
 No new model attempt was launched during preparation. Different valid failure
 mechanisms and required-checker-only failures can count; the provider switch
 does not reset or discard the existing results.
+
+## Trial 5 — first opposite-provider attempt — September 9, 2026
+
+**Reward 1. Pass.** This is the fourth successor attempt on this unchanged package
+and the first with the opposite provider: Codex (`openai/gpt-5.6-sol`, effort
+`xhigh`, CLI `0.153.2`), switched from the three Claude (`anthropic/claude-opus-5`,
+effort `max`, CLI `2.1.263`) attempts in Trials 2–4. Same author image
+(`sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a`) and
+frozen runtime as every prior trial. Completed in **6m 49s** — notably fast, well
+under the 10,800s (3h) cap. Tokens: 167,636 input (148,608 cached), 11,705 output;
+the Codex CLI never reports a price. `packageDigest`
+`05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede`, `profileDigest`
+`a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641`. `completionSha256`
+`f7ed23f4149cadfd60ae1faabdab50e7d403cd311a15bff1bd6115976ac9c4cf`, `resultSha256`
+`de146cf816584fde106403f60a7deded8d1e778348eb537432f9871fe4d8b475`, `gradeSha256`
+`0e306a47f676db83ee284a736c02b400933d610691a79bb13f84db17386a12ff`. All 848
+manifest-listed files (3,750,387 bytes) reverified this session with no errors.
+
+**Service:** 34/34 scenarios passed, 0 failures — fully correct, matching all prior
+trials. **Checker:** 13/13 candidates correct, 0 missed, 0 false positives, pass.
+Notably, this checker correctly caught `unread-empty-source` (expected failing
+check `completion`) — the exact candidate that two of the three Claude checkers
+(Trials 2 and 4) missed, each via a different underlying gap (see Trial 4's section
+above). Its `hasCompleteFetchTraversal()` walks the observation list as a cursor
+chain, requiring it to actually reach a `next: null` terminus, and is invoked
+unconditionally regardless of record count — a third distinct correct approach to
+the fetch-completeness question, independent of both Trial 3's unconditional
+boolean check and Trial 2's narrow (and buggy) `recordCount > 0` exemption.
+
+### Progress toward the reported five-of-six acceptance threshold — updated
+
+This package's six-run record is now: fail (T2, Claude) → pass (T3, Claude) →
+fail (T4, Claude) → **pass (T5, Codex)** — 2 failures and 2 passes across 4 of the
+6 planned attempts. Two Codex attempts remain. The user-reported CEO threshold is
+**at least 5 failures out of 6 scored attempts**. With 2 failures already recorded
+and only 2 attempts left, the maximum possible total failures for this package's
+six-run set is **2 + 2 = 4 — below the 5-of-6 threshold regardless of the outcome
+of the two remaining Codex attempts.** This is a hard arithmetic ceiling that
+follows directly from the recorded run count, not a prediction about what those
+attempts will show. **Temporal capacity is now the second package in this program
+(after snapshot recovery, which hit the same ceiling after its second pass in
+Trial 4) whose six-run set can no longer reach the reported 5-of-6 acceptance bar.**
+
+
+### Final-six audit and preparation — September 9, 2026
+
+The Trial 3 reward remains recorded as 1. A real no-work execution with zero queries
+and zero source rows demonstrates an additional required-checker failure: the checker
+accepts without fetching, despite the unchanged requirement to exhaust all pages. The
+frozen service grader rejects this execution for completion; the private reference checker
+rejects it and accepts a matching valid execution. Trial 5’s Codex checker passes the new
+controls. Regrading all four retained submissions gives effective history **0 → 0 → 0 → 1**.
+The earlier exclusion is superseded: **3 failures in 4 attempts**, with two Codex slots
+left. Both must fail to reach 5/6.
+
+The [audit](../final-six-pass-audit-2026-09-09.md) preserves raw records and documents
+the separate `final-six-coverage-v1` regrade. The same revision applies to all retained
+and future attempts for affected tasks; this is no new public task requirement. See the
+[prepared identities](../evidence/2026-09-09-final-six-preparation.json) and
+[operator handoff](../../../docs/final-six-handoff.md). No new model trial has launched.
