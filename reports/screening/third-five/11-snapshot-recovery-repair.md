@@ -398,3 +398,130 @@ the separate `final-six-coverage-v1` regrade. The same revision applies to all r
 and future attempts for affected tasks; this is no new public task requirement. See the
 [prepared identities](../evidence/2026-09-09-final-six-preparation.json) and
 [operator handoff](../../../docs/final-six-handoff.md). No new model trial has launched.
+
+## Trial 5 — final-six campaign, coverage correction and stopped after a pass — September 9, 2026
+
+### A. Identity and execution
+
+Run `snapshot-recovery-repair-attempt-1` in the final-six campaign slot
+`.local/final-six-2026-09-09/snapshot-recovery-repair/trial-5/real-campaign-frozen/jobs/real-provider/records/snapshot-recovery-repair-attempt-1/`,
+package digest `719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b` —
+byte-identical to Trials 2–4; profile digest
+`d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794`, route
+`professional-multifile/authority-process@1`. Author image
+`sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a` — the same
+author image and frozen runtime as every prior trial for this package.
+
+Target: **Claude**, requested `anthropic/claude-opus-5`, effort `max`, CLI
+`scaffoldVersion 2.1.263`. **This is this package's first-ever Claude attempt; all
+four prior trials (2–4, and Trial 1) ran on Codex.** Reserved
+2026-09-09T22:36:02.596Z, dispatched 2026-09-09T22:36:02.672Z; authoring captured
+2026-09-09T23:01:28.124Z, graded 2026-09-09T23:01:35.304Z. Total elapsed ≈1,532,720ms
+(~25m33s). Token usage: 5,698,582 input tokens (5,542,977 cached), 126,262 output;
+CLI cost estimate $7.48 (subscription-only billing — not a charge). Dispatched under
+this campaign's [concurrency amendment](../final-six-pass-audit-2026-09-09.md), which
+launched this trial alongside build Trial 7 and temporal Trial 6. Execution reached a
+clean `completed` state, no invalid execution or infrastructure error.
+`completionSha256 d54e0b6dd2ef1db9d09bb019eeb307875c19006bfb7fe60bf46baeae9bb95fe8`,
+`resultSha256 5f53c10cdf771ca68a321e3598cdcec0799e71851a0714c636c3696c0109381d`,
+`gradeSha256 a0ffadc5012ac85ec683a1097998828ddcb035ab6a1f59843809104025093387`; all 789
+manifest-listed files (4,272,759 bytes) reverified against these hashes with no errors
+this session.
+
+### B. Why this trial exists: the coverage correction
+
+This trial was authorized only because of a targeted pass audit — published as
+[final-six-pass-audit-2026-09-09.md](../final-six-pass-audit-2026-09-09.md),
+regrading revision `final-six-coverage-v1` — that found a checker-grading coverage
+gap specific to this package: no existing candidate had tested a valid service
+pattern where a temporary value is written to a requested account inside a
+transaction and then replaced with the correct value before commit. That is a
+legitimate atomic-transaction pattern the unchanged public contract permits; the
+frozen service grader and the private reference checker both accept it. The audit
+reproduced the gap directly from the actual unchanged grading harness, not from an
+invented scenario.
+
+Under that regrade, this package's **Trial 3 (Codex)** — recorded and published
+above as reward 1 (pass), and **left untouched in this document** — is now known
+to have been a **false pass**: Trial 3's checker rejected the temp-write pattern as
+an "out-of-scope write," because it wrongly required every intermediate write during
+the transaction to already equal the final committed row, rather than judging
+correctness at commit and publication. Under the coverage-corrected accounting,
+Trial 3's **effective** reward is 0, while its recorded reward of 1 stays exactly as
+originally published in the Trial 3 section above — this section only adds the
+correction, it does not alter that record. Trial 4's checker already accepted the
+pattern correctly, so Trial 4's effective reward is unchanged at 1.
+
+That gives an effective run history through Trial 4 of **T2=0, T3=0 (effective; was
+recorded as 1), T4=1** — 2 failures out of 3 scored Codex attempts. This is exactly
+what reopened this package as a candidate for further testing: without the
+correction, the *raw*-recorded numbers (1 failure out of 3 scored) were already
+below the 5-of-6 threshold on their own, before this trial ever ran. The coverage
+correction is what changed that from "excluded, no path to threshold" to "still
+mathematically alive, pending the opposite-provider attempts this package had never
+run" — it is the reason Trial 5 exists at all.
+
+### C. Results
+
+**Recorded reward 1, effective reward 1 — a clean pass, and the first Claude checker
+run against this package's new coverage case.** Base service (`entry.mjs`) passes
+all 33 scenarios (33/33). Base checker (`checker.mjs`): `checkerRequired: true`,
+`checkerPassed: true`, 12/12 candidates correctly classified — 0 missed, 0 false
+positives, `pass: true`. Both known-good candidates (`reference`, `alternative`) are
+accepted; all ten negative controls are rejected, each with its expected obligation
+observed as failing.
+
+The supplemental `final-six-coverage-v1` grade
+(`.local/final-six-2026-09-09/snapshot-recovery-repair/trial-5/supplement/grade.json`)
+— the new fixture built specifically for this package's coverage gap — ran this same
+submitted `checker.mjs` against two cases in an isolated, network-disabled Docker
+sandbox: **2/2 correct, deterministic, `pass: true`**. This checker correctly accepts
+both the original reference pattern and the new intermediate-write-then-replace
+pattern as valid, closing the exact gap the audit identified. Because both the base
+grade and the supplemental grade pass, effective reward equals recorded reward here:
+1.
+
+Reading the submitted `checker.mjs` confirms why by construction rather than
+coincidence: its out-of-scope-write check (`ALLOWED_TABLES`, around line 275) flags a
+write only when it targets a table outside `{'accounts', 'entries'}` — it never
+compares an intermediate write's value against the final row. Correctness of the
+recovered state is instead judged from the committed restore and publication
+(`describeStateDiff` against `cell.actual` and the published state), which is exactly
+the commit-time judgment the audit says the contract requires. This submission never
+carried Trial 3's assumption that every intermediate write must already equal the
+final value.
+
+### D. Observable execution
+
+The capture recorded 953 events over the full authoring window, producing a 286-line
+`entry.mjs` and a 315-line `checker.mjs` — both deliverables required, as in every
+prior trial on this package. No execution error, retry, or truncated capture is
+present (`exitCode 0`, `status: completed`, `truncated: false`). This is the same
+frozen starter and public contract Trials 2–4 received; nothing about the coverage
+correction changed the package the solver saw.
+
+### E. Final classification — this six-run set is incomplete and cannot reach 5-of-6
+
+Effective history for this package is now **T2=0 (Codex), T3=0 effective — recorded
+1, Codex — T4=1 (Codex), Trial 5=1 (Claude, pass)**: **2 failures out of 4 scored
+attempts**, using only 3 Codex + 1 Claude — not the full 3-Claude/3-Codex balance this
+project's six-run sets otherwise complete. Two more Claude slots, Trials 6 and 7, were
+authorized under this campaign's prepared schedule but **never dispatched**: with 2
+failures already recorded and at most 2 attempts remaining, the maximum reachable
+total is 2 + 2 = 4 failures, below the reported 5-of-6 acceptance bar regardless of
+how Trials 6–7 would have resolved. That is why they were skipped — this package's
+six-run set stopped immediately after Trial 5's pass, the same "stop after a pass"
+rule applied to the other continuing packages in this campaign's remaining schedule.
+
+To state the full picture plainly: without the coverage correction, this package's
+raw-recorded numbers (1 failure out of 3 scored, already below threshold on raw
+numbers alone even before this trial) would have looked even further from the
+threshold than the corrected picture does. The coverage correction is precisely what
+reopened this package as a candidate for further testing in the first place, by
+revealing that Trial 3's recorded pass did not reflect a checker that actually covered
+this contract. Trial 5's result confirms that, under the consistently applied
+coverage repair, this package's six-run set still cannot reach the 5-of-6 threshold: 2
+failures and only 2 remaining possible attempts cap the total at 4.
+
+[Final campaign and standings](../final-six-2026-09-09.md) ·
+[Sanitized evidence](../evidence/2026-09-09-final-six.json).

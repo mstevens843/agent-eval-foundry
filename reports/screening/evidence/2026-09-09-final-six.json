@@ -1,0 +1,1543 @@
+{
+  "schemaVersion": 1,
+  "campaign": "2026-09-09-final-six",
+  "evidenceClass": "real-provider-screening",
+  "label": "Final-six campaign (Trials 5-7 continuation, mid-campaign concurrency amendment 3 to 6)",
+  "gradingRevision": "final-six-coverage-v1",
+  "limitations": [
+    "The final screening campaign is complete: incremental build meets the reported 5-of-6 criterion at 6/6 with three attempts per provider; four other finalists stopped after passing made 5/6 unreachable. Effective histories use the documented historical coverage repairs where applicable.",
+    "Early stopping applies per the user-reported acceptance rule: once a package can no longer reach 5 failures out of 6 scored attempts, its remaining authorized slots are not dispatched. Four of five packages stopped one or more attempts short of a complete, balanced three-Claude/three-Codex six-run set for exactly this reason -- not infrastructure or budget exhaustion.",
+    "Concurrency was raised from 3 to 6 mid-campaign by explicit user authorization. The original three-slot scheduler was paused (not killed) so its three in-flight attempts could complete undisturbed; a separate expansion controller adopted those three and launched three more. The superseded scheduler was terminated only after all six attempts were scored and it had been confirmed to still be in a paused state, never resumed.",
+    "The two packages carrying a supplemental grading policy (temporal-capacity-repair, snapshot-recovery-repair) were graded against `final-six-coverage-v1` in addition to the base service/checker grade; effectiveReward is the conjunction of the recorded grade and the supplemental result. The other three packages have no supplemental policy; their effective and recorded rewards are identical.",
+    "CLI dollar estimates (Claude runs only) are not subscription charges; billingMode was subscription-only with maxMicroUsd 0 and no paid API fallback. Requested model/effort are not independent backend attestations.",
+    "Solvers were given only the original public task inputs -- no access to any prior trial, analysis, the audit, or this campaign's operator handoff."
+  ],
+  "sourceDigest": "2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4",
+  "sourceProvenance": "Reused, byte-for-byte, the isolated runtime built and independently verified for the first round-two campaign. No new runtime was built for this campaign.",
+  "authorImage": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+  "maxProviderCallsAuthorized": 11,
+  "providerCallsMade": 6,
+  "automaticRetries": 0,
+  "concurrencyAmendment": {
+    "originalMaxConcurrent": 3,
+    "amendedMaxConcurrent": 6,
+    "initialThreeSlotsLaunched": [
+      "incremental-build-repair trial-6",
+      "variant-cache-repair trial-6",
+      "issued-report-repair trial-6"
+    ],
+    "threeAdditionalSlotsLaunchedAfterAmendment": [
+      "incremental-build-repair trial-7",
+      "temporal-capacity-repair trial-6",
+      "snapshot-recovery-repair trial-5"
+    ],
+    "originalSchedulerPid": 49386,
+    "originalSchedulerHandling": "Paused via SIGSTOP before its three in-flight children were adopted by a separate expansion controller (which independently confirmed the pause via `ps -o stat`, and would have resumed it automatically had adoption failed). Never resumed. Terminated via SIGKILL only after all six attempts were scored and FINAL.json reported zero errors; SIGTERM was attempted first and had no effect, which is expected for a stopped process.",
+    "liveContainersOrCredentialsDisturbed": false
+  },
+  "packages": [
+    {
+      "id": "incremental-build-repair",
+      "analysis": "reports/screening/fifth-five/21-incremental-build-repair.md",
+      "classification": "meets-5-of-6",
+      "attempts": [
+        {
+          "trial": 6,
+          "target": "claude",
+          "recordedReward": 0,
+          "effectiveReward": 0,
+          "outcome": "semantic-fail",
+          "service": {
+            "scenarios": 27,
+            "failedScenarios": 0,
+            "invalidScenarios": 0,
+            "failures": {}
+          },
+          "checker": {
+            "reasonPolicy": "diagnostic-only",
+            "deterministic": true,
+            "pass": false,
+            "total": 15,
+            "correct": 14,
+            "falsePositives": 0,
+            "missed": 1,
+            "details": [
+              {
+                "candidateId": "no-work",
+                "expectedFailingCheck": "completion",
+                "observedFailingChecks": [
+                  "completion",
+                  "publication_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "wrong-dependency-alias",
+                "expectedFailingCheck": "current_artifacts",
+                "observedFailingChecks": [
+                  "current_artifacts",
+                  "incremental_budget"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "ignore-includes",
+                "expectedFailingCheck": "current_artifacts",
+                "observedFailingChecks": [
+                  "current_artifacts"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "ignore-flags",
+                "expectedFailingCheck": "current_artifacts",
+                "observedFailingChecks": [
+                  "current_artifacts"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "reference",
+                "expectedFailingCheck": null,
+                "observedFailingChecks": [],
+                "outcome": "correct-accept"
+              },
+              {
+                "candidateId": "isolation",
+                "expectedFailingCheck": "completion",
+                "observedFailingChecks": [
+                  "completion",
+                  "publication_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "foreign-publication",
+                "expectedFailingCheck": "publication_scope",
+                "observedFailingChecks": [
+                  "publication_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "ignore-dependency-order",
+                "expectedFailingCheck": "current_artifacts",
+                "observedFailingChecks": [
+                  "current_artifacts"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "duplicate-publication",
+                "expectedFailingCheck": "publication_scope",
+                "observedFailingChecks": [
+                  "completion",
+                  "publication_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "forged-completion",
+                "expectedFailingCheck": "completion",
+                "observedFailingChecks": [
+                  "completion",
+                  "publication_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "ignore-tool",
+                "expectedFailingCheck": "current_artifacts",
+                "observedFailingChecks": [
+                  "current_artifacts"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "always-rebuild",
+                "expectedFailingCheck": "incremental_budget",
+                "observedFailingChecks": [
+                  "incremental_budget"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "partial-publication",
+                "expectedFailingCheck": "publication_scope",
+                "observedFailingChecks": [
+                  "publication_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "premature-publication",
+                "expectedFailingCheck": "current_artifacts",
+                "observedFailingChecks": [
+                  "current_artifacts"
+                ],
+                "outcome": "missed"
+              },
+              {
+                "candidateId": "alternative",
+                "expectedFailingCheck": null,
+                "observedFailingChecks": [],
+                "outcome": "correct-accept"
+              }
+            ],
+            "gradeSummarySha256": "689fe9f88a21705d4a226324a31cbd35b1570c39bd9396148e8d39d5fc50daa9"
+          },
+          "supplement": null,
+          "usage": {
+            "cachedInputTokens": 6607668,
+            "costUsd": 8.229543000000001,
+            "inputTokens": 6778571,
+            "outputTokens": 128644,
+            "source": "claude `result` event `usage` and `total_cost_usd`"
+          },
+          "completionSha256": "a0e8469ddb5848e280116d388771dac08aba9dfa106a0268a63836a08d8359ed",
+          "resultSha256": "fcc2c4a98880e619ac52d7270bff75813b83dcc404032e1fa06202ccfb7a8f6a",
+          "gradeSha256": "6cf6fd4d904353a0a18bc84c141c5b62713e347f37d5da982ef3792aa36b9456",
+          "packageDigest": "34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "manifestFilesVerified": 998,
+          "manifestBytesVerified": 36546287,
+          "cumulativeFailures": 5,
+          "cumulativeScored": 5,
+          "canStillReachFive": true
+        },
+        {
+          "trial": 7,
+          "target": "claude",
+          "recordedReward": 0,
+          "effectiveReward": 0,
+          "outcome": "semantic-fail",
+          "service": {
+            "scenarios": 27,
+            "failedScenarios": 0,
+            "invalidScenarios": 0,
+            "failures": {}
+          },
+          "checker": {
+            "reasonPolicy": "diagnostic-only",
+            "deterministic": true,
+            "pass": false,
+            "total": 15,
+            "correct": 14,
+            "falsePositives": 0,
+            "missed": 1,
+            "details": [
+              {
+                "candidateId": "no-work",
+                "expectedFailingCheck": "completion",
+                "observedFailingChecks": [
+                  "completion",
+                  "publication_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "wrong-dependency-alias",
+                "expectedFailingCheck": "current_artifacts",
+                "observedFailingChecks": [
+                  "current_artifacts",
+                  "incremental_budget"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "ignore-includes",
+                "expectedFailingCheck": "current_artifacts",
+                "observedFailingChecks": [
+                  "current_artifacts"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "ignore-flags",
+                "expectedFailingCheck": "current_artifacts",
+                "observedFailingChecks": [
+                  "current_artifacts"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "reference",
+                "expectedFailingCheck": null,
+                "observedFailingChecks": [],
+                "outcome": "correct-accept"
+              },
+              {
+                "candidateId": "isolation",
+                "expectedFailingCheck": "completion",
+                "observedFailingChecks": [
+                  "completion",
+                  "publication_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "foreign-publication",
+                "expectedFailingCheck": "publication_scope",
+                "observedFailingChecks": [
+                  "publication_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "ignore-dependency-order",
+                "expectedFailingCheck": "current_artifacts",
+                "observedFailingChecks": [
+                  "current_artifacts"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "duplicate-publication",
+                "expectedFailingCheck": "publication_scope",
+                "observedFailingChecks": [
+                  "completion",
+                  "publication_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "forged-completion",
+                "expectedFailingCheck": "completion",
+                "observedFailingChecks": [
+                  "completion",
+                  "publication_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "ignore-tool",
+                "expectedFailingCheck": "current_artifacts",
+                "observedFailingChecks": [
+                  "current_artifacts"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "always-rebuild",
+                "expectedFailingCheck": "incremental_budget",
+                "observedFailingChecks": [
+                  "incremental_budget"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "partial-publication",
+                "expectedFailingCheck": "publication_scope",
+                "observedFailingChecks": [
+                  "publication_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "premature-publication",
+                "expectedFailingCheck": "current_artifacts",
+                "observedFailingChecks": [
+                  "current_artifacts"
+                ],
+                "outcome": "missed"
+              },
+              {
+                "candidateId": "alternative",
+                "expectedFailingCheck": null,
+                "observedFailingChecks": [],
+                "outcome": "correct-accept"
+              }
+            ],
+            "gradeSummarySha256": "689fe9f88a21705d4a226324a31cbd35b1570c39bd9396148e8d39d5fc50daa9"
+          },
+          "supplement": null,
+          "usage": {
+            "cachedInputTokens": 9224653,
+            "costUsd": 9.9255955,
+            "inputTokens": 9405208,
+            "outputTokens": 140292,
+            "source": "claude `result` event `usage` and `total_cost_usd`"
+          },
+          "completionSha256": "a14ce7d5d1413d84ee2636799e7b84ee41db060c00f4ef5fd8ffd45af69cf35a",
+          "resultSha256": "b1662badabf371dc3f3e0434cc485276a3613ef76c168bd0eed9b38103de423e",
+          "gradeSha256": "6cf6fd4d904353a0a18bc84c141c5b62713e347f37d5da982ef3792aa36b9456",
+          "packageDigest": "34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "manifestFilesVerified": 1002,
+          "manifestBytesVerified": 37116701,
+          "cumulativeFailures": 6,
+          "cumulativeScored": 6,
+          "canStillReachFive": false
+        }
+      ],
+      "finalFailures": 6,
+      "finalScored": 6,
+      "attemptsByProvider": {
+        "claude": 3,
+        "codex": 3
+      },
+      "recordedHistory": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "effectiveHistory": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "unusedTrials": []
+    },
+    {
+      "id": "variant-cache-repair",
+      "analysis": "reports/screening/fourth-five/19-variant-cache-repair.md",
+      "classification": "cannot-reach-5-of-6",
+      "attempts": [
+        {
+          "trial": 6,
+          "target": "codex",
+          "recordedReward": 1,
+          "effectiveReward": 1,
+          "outcome": "semantic-pass",
+          "service": {
+            "scenarios": 25,
+            "failedScenarios": 0,
+            "invalidScenarios": 0,
+            "failures": {}
+          },
+          "checker": {
+            "reasonPolicy": "diagnostic-only",
+            "deterministic": true,
+            "pass": true,
+            "total": 15,
+            "correct": 15,
+            "falsePositives": 0,
+            "missed": 0,
+            "details": [
+              {
+                "candidateId": "reset-age-on-tier-copy",
+                "expectedFailingCheck": "cache_provenance",
+                "observedFailingChecks": [
+                  "cache_provenance"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "isolation",
+                "expectedFailingCheck": "completion",
+                "observedFailingChecks": [
+                  "completion"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "no-work",
+                "expectedFailingCheck": "completion",
+                "observedFailingChecks": [
+                  "completion"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "intermediate-wipe",
+                "expectedFailingCheck": "cache_provenance",
+                "observedFailingChecks": [
+                  "cache_provenance"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "wildcard-eviction",
+                "expectedFailingCheck": "cache_provenance",
+                "observedFailingChecks": [
+                  "cache_provenance"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "always-origin",
+                "expectedFailingCheck": "origin_load",
+                "observedFailingChecks": [
+                  "origin_load"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "store-private-response",
+                "expectedFailingCheck": "no_store",
+                "observedFailingChecks": [
+                  "no_store"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "unconditional-revalidation",
+                "expectedFailingCheck": "origin_load",
+                "observedFailingChecks": [
+                  "origin_load"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "ignore-response-age",
+                "expectedFailingCheck": "representation",
+                "observedFailingChecks": [
+                  "representation"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "path-only-key",
+                "expectedFailingCheck": "representation",
+                "observedFailingChecks": [
+                  "cache_provenance",
+                  "representation"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "reference",
+                "expectedFailingCheck": null,
+                "observedFailingChecks": [],
+                "outcome": "correct-accept"
+              },
+              {
+                "candidateId": "forged-completion",
+                "expectedFailingCheck": "completion",
+                "observedFailingChecks": [
+                  "completion"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "alternative",
+                "expectedFailingCheck": null,
+                "observedFailingChecks": [],
+                "outcome": "correct-accept"
+              },
+              {
+                "candidateId": "flush-unrelated-tiers",
+                "expectedFailingCheck": "invalidation_scope",
+                "observedFailingChecks": [
+                  "invalidation_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "empty-304-body",
+                "expectedFailingCheck": "representation",
+                "observedFailingChecks": [
+                  "representation"
+                ],
+                "outcome": "correct-reject-unnamed"
+              }
+            ],
+            "gradeSummarySha256": "17fe891ba5111c2542aa9960d42ce0f626a721254a83a5bfd6f005c1cefc46dd"
+          },
+          "supplement": null,
+          "usage": {
+            "cachedInputTokens": 1283840,
+            "costUsd": null,
+            "inputTokens": 1357907,
+            "outputTokens": 39000,
+            "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+          },
+          "completionSha256": "173758cc990a4c52c07cdbcf4ecabb03431fe08a16f8bd5e24b5ffc2f2ef56cc",
+          "resultSha256": "3201d09c89dcab588f3da762f47f6ea9f97fb8c0e08380327088bbc18c27c855",
+          "gradeSha256": "424bb6b927b13607248732de51b8ab27864f8ec1d4730a070b83d115146a0f05",
+          "packageDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "manifestFilesVerified": 972,
+          "manifestBytesVerified": 61145106,
+          "cumulativeFailures": 3,
+          "cumulativeScored": 5,
+          "canStillReachFive": false
+        }
+      ],
+      "finalFailures": 3,
+      "finalScored": 5,
+      "attemptsByProvider": {
+        "claude": 3,
+        "codex": 2
+      },
+      "recordedHistory": [
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "effectiveHistory": [
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "unusedTrials": [
+        7
+      ]
+    },
+    {
+      "id": "issued-report-repair",
+      "analysis": "reports/screening/fifth-five/25-issued-report-repair.md",
+      "classification": "cannot-reach-5-of-6",
+      "attempts": [
+        {
+          "trial": 6,
+          "target": "codex",
+          "recordedReward": 1,
+          "effectiveReward": 1,
+          "outcome": "semantic-pass",
+          "service": {
+            "scenarios": 27,
+            "failedScenarios": 0,
+            "invalidScenarios": 0,
+            "failures": {}
+          },
+          "checker": {
+            "reasonPolicy": "diagnostic-only",
+            "deterministic": true,
+            "pass": true,
+            "total": 14,
+            "correct": 14,
+            "falsePositives": 0,
+            "missed": 0,
+            "details": [
+              {
+                "candidateId": "reuse-issued-version",
+                "expectedFailingCheck": "issued_history",
+                "observedFailingChecks": [
+                  "amendment_content",
+                  "completion",
+                  "dependency_order",
+                  "issued_history",
+                  "recipient_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "reverse-dependency-order",
+                "expectedFailingCheck": "dependency_order",
+                "observedFailingChecks": [
+                  "dependency_order"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "duplicate-notification",
+                "expectedFailingCheck": "recipient_scope",
+                "observedFailingChecks": [
+                  "completion",
+                  "recipient_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "forged-completion",
+                "expectedFailingCheck": "completion",
+                "observedFailingChecks": [
+                  "amendment_content",
+                  "completion",
+                  "historical_answers",
+                  "issued_history",
+                  "recipient_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "current-for-historical",
+                "expectedFailingCheck": "historical_answers",
+                "observedFailingChecks": [
+                  "historical_answers"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "only-requested-recipients",
+                "expectedFailingCheck": "recipient_scope",
+                "observedFailingChecks": [
+                  "completion",
+                  "recipient_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "alternative",
+                "expectedFailingCheck": null,
+                "observedFailingChecks": [],
+                "outcome": "correct-accept"
+              },
+              {
+                "candidateId": "no-work",
+                "expectedFailingCheck": "completion",
+                "observedFailingChecks": [
+                  "amendment_content",
+                  "completion",
+                  "historical_answers",
+                  "issued_history",
+                  "recipient_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "unrelated-recipient",
+                "expectedFailingCheck": "recipient_scope",
+                "observedFailingChecks": [
+                  "completion",
+                  "recipient_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "isolation",
+                "expectedFailingCheck": "completion",
+                "observedFailingChecks": [
+                  "amendment_content",
+                  "completion",
+                  "historical_answers",
+                  "issued_history",
+                  "recipient_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "corrections-labelled-initial",
+                "expectedFailingCheck": "recipient_scope",
+                "observedFailingChecks": [
+                  "recipient_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "reference",
+                "expectedFailingCheck": null,
+                "observedFailingChecks": [],
+                "outcome": "correct-accept"
+              },
+              {
+                "candidateId": "stale-dependent-lineage",
+                "expectedFailingCheck": "amendment_content",
+                "observedFailingChecks": [
+                  "amendment_content",
+                  "completion",
+                  "issued_history",
+                  "recipient_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "drop-source-lineage",
+                "expectedFailingCheck": "amendment_content",
+                "observedFailingChecks": [
+                  "amendment_content",
+                  "completion",
+                  "issued_history",
+                  "recipient_scope"
+                ],
+                "outcome": "correct-reject-unnamed"
+              }
+            ],
+            "gradeSummarySha256": "154f8bdf775f8560666fb7a5c0d096759cdb570ba12e754e29e0534467271c8d"
+          },
+          "supplement": null,
+          "usage": {
+            "cachedInputTokens": 1079808,
+            "costUsd": null,
+            "inputTokens": 1134489,
+            "outputTokens": 32864,
+            "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+          },
+          "completionSha256": "ce8a7362531966127a16b4d1a89a43b2e567bcb31bc5d02d8056cd025baa5c8f",
+          "resultSha256": "a07976239e0067c4dc2de94d95926ad2b75d43d2b8fb5810f66bf754246158ae",
+          "gradeSha256": "baa3de2f18fb7494bd5791ffe0bdfe5029060269131ad9119baa7161e32cda65",
+          "packageDigest": "32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "manifestFilesVerified": 829,
+          "manifestBytesVerified": 9087130,
+          "cumulativeFailures": 3,
+          "cumulativeScored": 5,
+          "canStillReachFive": false
+        }
+      ],
+      "finalFailures": 3,
+      "finalScored": 5,
+      "attemptsByProvider": {
+        "claude": 3,
+        "codex": 2
+      },
+      "recordedHistory": [
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "effectiveHistory": [
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "unusedTrials": [
+        7
+      ]
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "analysis": "reports/screening/next-five/10-temporal-capacity-repair.md",
+      "classification": "cannot-reach-5-of-6",
+      "attempts": [
+        {
+          "trial": 6,
+          "target": "codex",
+          "recordedReward": 1,
+          "effectiveReward": 1,
+          "outcome": "semantic-pass",
+          "service": {
+            "scenarios": 34,
+            "failedScenarios": 0,
+            "invalidScenarios": 0,
+            "failures": {}
+          },
+          "checker": {
+            "reasonPolicy": "diagnostic-only",
+            "deterministic": true,
+            "pass": true,
+            "total": 13,
+            "correct": 13,
+            "falsePositives": 0,
+            "missed": 0,
+            "details": [
+              {
+                "candidateId": "inclusive-end",
+                "expectedFailingCheck": "exact_integral",
+                "observedFailingChecks": [
+                  "exact_integral"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "effective-before-revision",
+                "expectedFailingCheck": "exact_integral",
+                "observedFailingChecks": [
+                  "exact_integral"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "reference",
+                "expectedFailingCheck": null,
+                "observedFailingChecks": [],
+                "outcome": "correct-accept"
+              },
+              {
+                "candidateId": "no-work",
+                "expectedFailingCheck": "completion",
+                "observedFailingChecks": [
+                  "completion",
+                  "exact_integral"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "strict-knowledge-cutoff",
+                "expectedFailingCheck": "exact_integral",
+                "observedFailingChecks": [
+                  "exact_integral"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "future-revision",
+                "expectedFailingCheck": "exact_integral",
+                "observedFailingChecks": [
+                  "exact_integral"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "unread-empty-source",
+                "expectedFailingCheck": "completion",
+                "observedFailingChecks": [
+                  "completion"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "alternative",
+                "expectedFailingCheck": null,
+                "observedFailingChecks": [],
+                "outcome": "correct-accept"
+              },
+              {
+                "candidateId": "extra-report",
+                "expectedFailingCheck": "population",
+                "observedFailingChecks": [
+                  "population"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "isolation",
+                "expectedFailingCheck": "completion",
+                "observedFailingChecks": [
+                  "completion",
+                  "exact_integral"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "duplicate-report",
+                "expectedFailingCheck": "unique_reports",
+                "observedFailingChecks": [
+                  "unique_reports"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "floating-total",
+                "expectedFailingCheck": "exact_integral",
+                "observedFailingChecks": [
+                  "exact_integral"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "forged-completion",
+                "expectedFailingCheck": "completion",
+                "observedFailingChecks": [
+                  "completion",
+                  "exact_integral"
+                ],
+                "outcome": "correct-reject-unnamed"
+              }
+            ],
+            "gradeSummarySha256": "31d3c6ac2169df1fe37bed826ce9bc18bf35ef7c6fad0263676f19da0976381e"
+          },
+          "supplement": {
+            "schemaVersion": 1,
+            "gradingRevision": "final-six-coverage-v1",
+            "policySha256": "b3e9e100b0e3fa7f032a1e2a7b3b85f33196a15e40f20831c4fdb8bde8969604",
+            "fixtureSha256": "a649e4df717702949d1f6f60c26b83b760010545d82986bc8c77fd6bfe6d83d4",
+            "checkerSha256": "401b5a29cb06814e1019c5c06f5102a428943e9d8fb119e024b998d23c4262c8",
+            "deterministic": true,
+            "reasonPolicy": "diagnostic-only",
+            "correct": 2,
+            "total": 2,
+            "pass": true,
+            "details": [
+              {
+                "token": "f7102606e878dd7a8e7bb840",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "f6508a8a65d57cef7ad56407",
+                "expectedOk": false,
+                "actualOk": false,
+                "correct": true
+              }
+            ],
+            "observed": {
+              "first": {
+                "verdicts": {
+                  "f7102606e878dd7a8e7bb840": {
+                    "ok": true
+                  },
+                  "f6508a8a65d57cef7ad56407": {
+                    "ok": false,
+                    "reasons": [
+                      "record pages were not exhausted"
+                    ]
+                  }
+                }
+              },
+              "second": {
+                "verdicts": {
+                  "f7102606e878dd7a8e7bb840": {
+                    "ok": true
+                  },
+                  "f6508a8a65d57cef7ad56407": {
+                    "ok": false,
+                    "reasons": [
+                      "record pages were not exhausted"
+                    ]
+                  }
+                }
+              },
+              "mutated": false
+            }
+          },
+          "usage": {
+            "cachedInputTokens": 418304,
+            "costUsd": null,
+            "inputTokens": 444377,
+            "outputTokens": 12379,
+            "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+          },
+          "completionSha256": "0234066fbfb6d6b4a5042c3db09c296964069df48e49522760b9f2dca23cec23",
+          "resultSha256": "877502c10f6718ac76260a3d003f89a90fd436df9affa15746f10e98a5669dad",
+          "gradeSha256": "0e306a47f676db83ee284a736c02b400933d610691a79bb13f84db17386a12ff",
+          "packageDigest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "manifestFilesVerified": 848,
+          "manifestBytesVerified": 3780301,
+          "cumulativeFailures": 3,
+          "cumulativeScored": 5,
+          "canStillReachFive": false
+        }
+      ],
+      "finalFailures": 3,
+      "finalScored": 5,
+      "attemptsByProvider": {
+        "claude": 3,
+        "codex": 2
+      },
+      "recordedHistory": [
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "effectiveHistory": [
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "unusedTrials": [
+        7
+      ]
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "analysis": "reports/screening/third-five/11-snapshot-recovery-repair.md",
+      "classification": "cannot-reach-5-of-6",
+      "attempts": [
+        {
+          "trial": 5,
+          "target": "claude",
+          "recordedReward": 1,
+          "effectiveReward": 1,
+          "outcome": "semantic-pass",
+          "service": {
+            "scenarios": 33,
+            "failedScenarios": 0,
+            "invalidScenarios": 0,
+            "failures": {}
+          },
+          "checker": {
+            "reasonPolicy": "diagnostic-only",
+            "deterministic": true,
+            "pass": true,
+            "total": 12,
+            "correct": 12,
+            "falsePositives": 0,
+            "missed": 0,
+            "details": [
+              {
+                "candidateId": "rows-only-backup",
+                "expectedFailingCheck": "portable_backup",
+                "observedFailingChecks": [
+                  "portable_backup"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "reuse-deleted-id",
+                "expectedFailingCheck": "allocation",
+                "observedFailingChecks": [
+                  "allocation",
+                  "portable_backup",
+                  "publication"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "alternative",
+                "expectedFailingCheck": null,
+                "observedFailingChecks": [],
+                "outcome": "correct-accept"
+              },
+              {
+                "candidateId": "no-work",
+                "expectedFailingCheck": "completion",
+                "observedFailingChecks": [
+                  "allocation",
+                  "completion",
+                  "portable_backup",
+                  "publication",
+                  "restored_rows"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "boundary-cutoff",
+                "expectedFailingCheck": "restored_rows",
+                "observedFailingChecks": [
+                  "allocation",
+                  "portable_backup",
+                  "publication",
+                  "restored_rows"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "example-hardcoding",
+                "expectedFailingCheck": "restored_rows",
+                "observedFailingChecks": [
+                  "allocation",
+                  "portable_backup",
+                  "publication",
+                  "restored_rows"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "trusted-cache",
+                "expectedFailingCheck": "portable_backup",
+                "observedFailingChecks": [
+                  "portable_backup",
+                  "publication",
+                  "restored_rows"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "forged-completion",
+                "expectedFailingCheck": "completion",
+                "observedFailingChecks": [
+                  "allocation",
+                  "completion",
+                  "portable_backup",
+                  "publication",
+                  "restored_rows"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "cross-branch-journal",
+                "expectedFailingCheck": "restored_rows",
+                "observedFailingChecks": [
+                  "allocation",
+                  "portable_backup",
+                  "publication",
+                  "restored_rows"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "reference",
+                "expectedFailingCheck": null,
+                "observedFailingChecks": [],
+                "outcome": "correct-accept"
+              },
+              {
+                "candidateId": "drop-deletes",
+                "expectedFailingCheck": "restored_rows",
+                "observedFailingChecks": [
+                  "portable_backup",
+                  "publication",
+                  "restored_rows"
+                ],
+                "outcome": "correct-reject-unnamed"
+              },
+              {
+                "candidateId": "isolation",
+                "expectedFailingCheck": "completion",
+                "observedFailingChecks": [
+                  "allocation",
+                  "completion",
+                  "portable_backup",
+                  "publication",
+                  "restored_rows"
+                ],
+                "outcome": "correct-reject-unnamed"
+              }
+            ],
+            "gradeSummarySha256": "102ab7cb97da84b1a6c459f88ed571e7da55fad1adb8f4771ecc94bebd2d09f4"
+          },
+          "supplement": {
+            "schemaVersion": 1,
+            "gradingRevision": "final-six-coverage-v1",
+            "policySha256": "b3e9e100b0e3fa7f032a1e2a7b3b85f33196a15e40f20831c4fdb8bde8969604",
+            "fixtureSha256": "7d3fb7543e243a7d37ecad8d0d579629edfc8e1fbcf1104ffe9469100c3558d7",
+            "checkerSha256": "f8a60628fdb5cab20a9bcc547935344f1dde34e57f3b158da91ad2c9b59f970b",
+            "deterministic": true,
+            "reasonPolicy": "diagnostic-only",
+            "correct": 2,
+            "total": 2,
+            "pass": true,
+            "details": [
+              {
+                "token": "60ef8f7b2097c4c934031a11",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "0021c8f79876bc501f21eeff",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              }
+            ],
+            "observed": {
+              "first": {
+                "verdicts": {
+                  "60ef8f7b2097c4c934031a11": {
+                    "ok": true
+                  },
+                  "0021c8f79876bc501f21eeff": {
+                    "ok": true
+                  }
+                }
+              },
+              "second": {
+                "verdicts": {
+                  "60ef8f7b2097c4c934031a11": {
+                    "ok": true
+                  },
+                  "0021c8f79876bc501f21eeff": {
+                    "ok": true
+                  }
+                }
+              },
+              "mutated": false
+            }
+          },
+          "usage": {
+            "cachedInputTokens": 5542977,
+            "costUsd": 7.484679500000001,
+            "inputTokens": 5698582,
+            "outputTokens": 126262,
+            "source": "claude `result` event `usage` and `total_cost_usd`"
+          },
+          "completionSha256": "d54e0b6dd2ef1db9d09bb019eeb307875c19006bfb7fe60bf46baeae9bb95fe8",
+          "resultSha256": "5f53c10cdf771ca68a321e3598cdcec0799e71851a0714c636c3696c0109381d",
+          "gradeSha256": "a0ffadc5012ac85ec683a1097998828ddcb035ab6a1f59843809104025093387",
+          "packageDigest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "manifestFilesVerified": 789,
+          "manifestBytesVerified": 4272759,
+          "cumulativeFailures": 2,
+          "cumulativeScored": 4,
+          "canStillReachFive": false
+        }
+      ],
+      "finalFailures": 2,
+      "finalScored": 4,
+      "attemptsByProvider": {
+        "claude": 1,
+        "codex": 3
+      },
+      "recordedHistory": [
+        0,
+        1,
+        1,
+        1
+      ],
+      "effectiveHistory": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "unusedTrials": [
+        6,
+        7
+      ]
+    }
+  ],
+  "acceptanceTarget": {
+    "source": "User-reported CEO acceptance criterion",
+    "minimumFailures": 5,
+    "totalScoredTrials": 6,
+    "claudeTrials": 3,
+    "codexTrials": 3,
+    "unchangedPackage": true,
+    "consecutiveFailuresRequired": false
+  },
+  "classificationSummary": {
+    "meetsFiveOfSix": [
+      "incremental-build-repair"
+    ],
+    "cannotReachFiveOfSix": [
+      "variant-cache-repair",
+      "issued-report-repair",
+      "temporal-capacity-repair",
+      "snapshot-recovery-repair"
+    ],
+    "unresolvedInfrastructure": []
+  },
+  "auditReference": {
+    "document": "final-six-pass-audit-2026-09-09.md",
+    "evidence": "evidence/2026-09-09-final-six-pass-audit.json",
+    "gradingRevision": "final-six-coverage-v1",
+    "correctedPasses": [
+      {
+        "id": "temporal-capacity-repair",
+        "trial": 3,
+        "recordedReward": 1,
+        "effectiveReward": 0
+      },
+      {
+        "id": "snapshot-recovery-repair",
+        "trial": 3,
+        "recordedReward": 1,
+        "effectiveReward": 0
+      }
+    ]
+  },
+  "audit": {
+    "checkedAt": "2026-09-09T23:16:35.604Z",
+    "newModelCalls": 0,
+    "manifestFilesVerified": 5438,
+    "manifestBytesVerified": 151948284,
+    "errors": []
+  },
+  "publicationReview": {
+    "manifestFilesVerified": 5438,
+    "manifestBytesVerified": 151948284,
+    "priorBuildManifestFilesVerified": 3900,
+    "priorBuildManifestBytesVerified": 140251930,
+    "providerCallsMade": 0,
+    "errors": [],
+    "allFiveTaskWriteupsReviewed": true,
+    "buildSixRunHistory": [
+      {
+        "id": "incremental-build-repair",
+        "trial": 2,
+        "target": "codex",
+        "recordedReward": 0,
+        "completionSha256": "98f222b90defb92d6ca6a9c5c7d2a945db1905efa1fcb193220476aa8f5989b7",
+        "checkerGradeSummarySha256": "689fe9f88a21705d4a226324a31cbd35b1570c39bd9396148e8d39d5fc50daa9",
+        "checkerSourceSha256": "1b76832333457a0f1d3977dbaa3c4c87f37c1e378d5adf8241b8bf2e2926ffd8",
+        "packageDigest": "34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a",
+        "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+        "instructionSha256": "9d25b52d206cba5ee9401a33edd071c8c3c278aab9380d28d93a28ac2a281b70",
+        "servicePassed": 27,
+        "serviceTotal": 27,
+        "checkerCorrect": 14,
+        "checkerTotal": 15,
+        "missedCandidates": [
+          "premature-publication"
+        ],
+        "falsePositives": 0
+      },
+      {
+        "id": "incremental-build-repair",
+        "trial": 3,
+        "target": "codex",
+        "recordedReward": 0,
+        "completionSha256": "969fc3db2d650f5bd70bed50acb8632ee18f214625a48bfe62ffd9fac903b714",
+        "checkerGradeSummarySha256": "689fe9f88a21705d4a226324a31cbd35b1570c39bd9396148e8d39d5fc50daa9",
+        "checkerSourceSha256": "5b7b1c9c2d043954dd7a7f1f6fa483de2b7ca4a91be152c1d8921a56b9d46a5f",
+        "packageDigest": "34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a",
+        "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+        "instructionSha256": "9d25b52d206cba5ee9401a33edd071c8c3c278aab9380d28d93a28ac2a281b70",
+        "servicePassed": 27,
+        "serviceTotal": 27,
+        "checkerCorrect": 14,
+        "checkerTotal": 15,
+        "missedCandidates": [
+          "premature-publication"
+        ],
+        "falsePositives": 0
+      },
+      {
+        "id": "incremental-build-repair",
+        "trial": 4,
+        "target": "codex",
+        "recordedReward": 0,
+        "completionSha256": "d0d8500fad3c1c12bfbfac6c851ff01ccc6e2b5f86276975291b9b32c341616d",
+        "checkerGradeSummarySha256": "689fe9f88a21705d4a226324a31cbd35b1570c39bd9396148e8d39d5fc50daa9",
+        "checkerSourceSha256": "7fafb725392685b2eba08ba5dcba5f68d99da25d2ada36aa94596128773f27f0",
+        "packageDigest": "34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a",
+        "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+        "instructionSha256": "9d25b52d206cba5ee9401a33edd071c8c3c278aab9380d28d93a28ac2a281b70",
+        "servicePassed": 27,
+        "serviceTotal": 27,
+        "checkerCorrect": 14,
+        "checkerTotal": 15,
+        "missedCandidates": [
+          "premature-publication"
+        ],
+        "falsePositives": 0
+      },
+      {
+        "id": "incremental-build-repair",
+        "trial": 5,
+        "target": "claude",
+        "recordedReward": 0,
+        "completionSha256": "b0cc75c70eb5061f0c890e8d5102b3963b886a474cdbfbc0cc05925eb5da8142",
+        "checkerGradeSummarySha256": "689fe9f88a21705d4a226324a31cbd35b1570c39bd9396148e8d39d5fc50daa9",
+        "checkerSourceSha256": "712001185387fa843d66db9683d4adf23944f7b729cd8f298247e73ecd83d944",
+        "packageDigest": "34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a",
+        "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+        "instructionSha256": "9d25b52d206cba5ee9401a33edd071c8c3c278aab9380d28d93a28ac2a281b70",
+        "servicePassed": 27,
+        "serviceTotal": 27,
+        "checkerCorrect": 14,
+        "checkerTotal": 15,
+        "missedCandidates": [
+          "premature-publication"
+        ],
+        "falsePositives": 0
+      },
+      {
+        "id": "incremental-build-repair",
+        "trial": 6,
+        "target": "claude",
+        "recordedReward": 0,
+        "completionSha256": "a0e8469ddb5848e280116d388771dac08aba9dfa106a0268a63836a08d8359ed",
+        "checkerGradeSummarySha256": "689fe9f88a21705d4a226324a31cbd35b1570c39bd9396148e8d39d5fc50daa9",
+        "checkerSourceSha256": "906cd6eedaf34b80150cad575b7738114d4ce378bf069892382dcb6f7a777221",
+        "packageDigest": "34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a",
+        "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+        "instructionSha256": "9d25b52d206cba5ee9401a33edd071c8c3c278aab9380d28d93a28ac2a281b70",
+        "servicePassed": 27,
+        "serviceTotal": 27,
+        "checkerCorrect": 14,
+        "checkerTotal": 15,
+        "missedCandidates": [
+          "premature-publication"
+        ],
+        "falsePositives": 0
+      },
+      {
+        "id": "incremental-build-repair",
+        "trial": 7,
+        "target": "claude",
+        "recordedReward": 0,
+        "completionSha256": "a14ce7d5d1413d84ee2636799e7b84ee41db060c00f4ef5fd8ffd45af69cf35a",
+        "checkerGradeSummarySha256": "689fe9f88a21705d4a226324a31cbd35b1570c39bd9396148e8d39d5fc50daa9",
+        "checkerSourceSha256": "ced01cdd7d6ec7909306834ed2b20155b5497c5ac98184bef08b1fb96f112cb9",
+        "packageDigest": "34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a",
+        "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+        "instructionSha256": "9d25b52d206cba5ee9401a33edd071c8c3c278aab9380d28d93a28ac2a281b70",
+        "servicePassed": 27,
+        "serviceTotal": 27,
+        "checkerCorrect": 14,
+        "checkerTotal": 15,
+        "missedCandidates": [
+          "premature-publication"
+        ],
+        "falsePositives": 0
+      }
+    ],
+    "finalAttemptIdentities": [
+      {
+        "id": "incremental-build-repair",
+        "trial": 6,
+        "target": "claude",
+        "recordedReward": 0,
+        "completionSha256": "a0e8469ddb5848e280116d388771dac08aba9dfa106a0268a63836a08d8359ed",
+        "checkerGradeSummarySha256": "689fe9f88a21705d4a226324a31cbd35b1570c39bd9396148e8d39d5fc50daa9",
+        "checkerSourceSha256": "906cd6eedaf34b80150cad575b7738114d4ce378bf069892382dcb6f7a777221",
+        "packageDigest": "34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a",
+        "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+        "instructionSha256": "9d25b52d206cba5ee9401a33edd071c8c3c278aab9380d28d93a28ac2a281b70"
+      },
+      {
+        "id": "incremental-build-repair",
+        "trial": 7,
+        "target": "claude",
+        "recordedReward": 0,
+        "completionSha256": "a14ce7d5d1413d84ee2636799e7b84ee41db060c00f4ef5fd8ffd45af69cf35a",
+        "checkerGradeSummarySha256": "689fe9f88a21705d4a226324a31cbd35b1570c39bd9396148e8d39d5fc50daa9",
+        "checkerSourceSha256": "ced01cdd7d6ec7909306834ed2b20155b5497c5ac98184bef08b1fb96f112cb9",
+        "packageDigest": "34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a",
+        "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+        "instructionSha256": "9d25b52d206cba5ee9401a33edd071c8c3c278aab9380d28d93a28ac2a281b70"
+      },
+      {
+        "id": "variant-cache-repair",
+        "trial": 6,
+        "target": "codex",
+        "recordedReward": 1,
+        "completionSha256": "173758cc990a4c52c07cdbcf4ecabb03431fe08a16f8bd5e24b5ffc2f2ef56cc",
+        "checkerGradeSummarySha256": "17fe891ba5111c2542aa9960d42ce0f626a721254a83a5bfd6f005c1cefc46dd",
+        "checkerSourceSha256": "21a3707a66622f42bddabefcdc5517e3f76309ce79dc5a052bd4bfecbf72c322",
+        "packageDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+        "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+        "instructionSha256": "9d3ed7b2d39fc5a9cbddb56f636539686cec895b6961cac1e6004eefdca28f0a"
+      },
+      {
+        "id": "issued-report-repair",
+        "trial": 6,
+        "target": "codex",
+        "recordedReward": 1,
+        "completionSha256": "ce8a7362531966127a16b4d1a89a43b2e567bcb31bc5d02d8056cd025baa5c8f",
+        "checkerGradeSummarySha256": "154f8bdf775f8560666fb7a5c0d096759cdb570ba12e754e29e0534467271c8d",
+        "checkerSourceSha256": "2e9d7aa3caef70a53de26fe0aec13a8629d9371b4a415cf37235d1d15bc04b38",
+        "packageDigest": "32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170",
+        "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+        "instructionSha256": "4f536dfe221dbd4f3eb801af636e4d21e783d5386aa2ead1776d33cca4dced6a"
+      },
+      {
+        "id": "temporal-capacity-repair",
+        "trial": 6,
+        "target": "codex",
+        "recordedReward": 1,
+        "completionSha256": "0234066fbfb6d6b4a5042c3db09c296964069df48e49522760b9f2dca23cec23",
+        "checkerGradeSummarySha256": "31d3c6ac2169df1fe37bed826ce9bc18bf35ef7c6fad0263676f19da0976381e",
+        "checkerSourceSha256": "401b5a29cb06814e1019c5c06f5102a428943e9d8fb119e024b998d23c4262c8",
+        "packageDigest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+        "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+        "instructionSha256": "051ecc01b96d4b25362f370676df04b41249e6ac8a46eda875b23f0b3c3f54a7"
+      },
+      {
+        "id": "snapshot-recovery-repair",
+        "trial": 5,
+        "target": "claude",
+        "recordedReward": 1,
+        "completionSha256": "d54e0b6dd2ef1db9d09bb019eeb307875c19006bfb7fe60bf46baeae9bb95fe8",
+        "checkerGradeSummarySha256": "102ab7cb97da84b1a6c459f88ed571e7da55fad1adb8f4771ecc94bebd2d09f4",
+        "checkerSourceSha256": "f8a60628fdb5cab20a9bcc547935344f1dde34e57f3b158da91ad2c9b59f970b",
+        "packageDigest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+        "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+        "instructionSha256": "f2943b58bcb8caf0b9ac4923faad365b7de28b8a2da2f912121146f2aada4e4c"
+      }
+    ],
+    "unusedSlotsVerifiedWithoutDispatchOrJobs": 5,
+    "checks": {
+      "publicationDocuments": 52,
+      "focusedTestsPassed": 11,
+      "committedAnalysisHistoriesPreserved": 5,
+      "whitespaceCheck": "pass",
+      "newProviderCalls": 0
+    }
+  },
+  "milestone": {
+    "packagesMeetingFiveOfSix": 1,
+    "packageId": "incremental-build-repair",
+    "recordedFailures": 6,
+    "scoredTrials": 6,
+    "claudeAttempts": 3,
+    "codexAttempts": 3,
+    "samePackageAndInstructionAcrossSix": true,
+    "supplementalGradingAppliedToWinner": false
+  },
+  "successorTotals": {
+    "distinctPackages": 25,
+    "attempts": 46,
+    "scored": 45,
+    "recordedZeroRewards": 15,
+    "recordedPasses": 30,
+    "effectiveFailures": 17,
+    "effectivePasses": 28,
+    "historicalInfrastructureInterruptions": 1
+  }
+}

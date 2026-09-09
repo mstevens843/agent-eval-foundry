@@ -1,8 +1,19 @@
 import {describe,it,expect} from 'vitest';
 import {readFileSync} from 'node:fs';
 import {canReachFive,validateSchedule} from '../scripts/run-final-six.mjs';
+import {initialExpandedSlots} from '../scripts/run-final-six-expanded.mjs';
 const plan=validateSchedule(JSON.parse(readFileSync('reports/screening/evidence/2026-09-09-final-six-preparation.json','utf8')));
 describe('final six continuation budget',()=>{
+ it('fills six concurrent slots with both unconditional build trials and one per other package',()=>{
+  const raw=JSON.parse(readFileSync('reports/screening/evidence/2026-09-09-final-six-preparation.json','utf8'));
+  const initial=initialExpandedSlots(raw);
+  expect(initial).toHaveLength(6);
+  expect(initial.filter(p=>p.id==='incremental-build-repair').map(p=>p.trial)).toEqual([6,7]);
+  expect(initial.filter(p=>p.id!=='incremental-build-repair')).toHaveLength(4);
+  expect(new Set(initial.map(p=>p.id)).size).toBe(5);
+  expect(initial.filter(p=>p.target==='codex')).toHaveLength(3);
+  expect(initial.filter(p=>p.target==='claude')).toHaveLength(3);
+ });
  it('prepares the corrected histories and exactly the missing provider slots',()=>{
   expect(validateSchedule(plan).packages).toHaveLength(5);
   expect(plan.packages.reduce((n,p)=>n+p.remaining,0)).toBe(11);

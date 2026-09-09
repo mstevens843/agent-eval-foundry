@@ -611,3 +611,72 @@ the separate `final-six-coverage-v1` regrade. The same revision applies to all r
 and future attempts for affected tasks; this is no new public task requirement. See the
 [prepared identities](../evidence/2026-09-09-final-six-preparation.json) and
 [operator handoff](../../../docs/final-six-handoff.md). No new model trial has launched.
+
+## Trial 6 — final-six campaign, stopped after a pass — September 9, 2026
+
+**Reward 1, overall `semantic-pass` — the second consecutive Codex pass on this
+package.** Run `issued-report-repair-attempt-1` in the `final-six-2026-09-09`
+campaign, package digest
+`32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170` — unchanged across
+successor Trials 2–6. Identity: Codex (`openai/gpt-5.6-sol`, effort `xhigh`, CLI
+`0.153.2`), same author image and frozen runtime as every prior trial in this
+history. Duration 19m59s. Tokens: 1,134,489 input (1,079,808 cached), 32,864
+output; as with Trial 5, the Codex CLI never reports a price, so cost is `null`
+rather than a $0 charge. Evidence:
+`.local/final-six-2026-09-09/issued-report-repair/trial-6/real-campaign-frozen/jobs/real-provider/records/issued-report-repair-attempt-1/`.
+`completionSha256 ce8a7362531966127a16b4d1a89a43b2e567bcb31bc5d02d8056cd025baa5c8f`,
+`resultSha256 a07976239e0067c4dc2de94d95926ad2b75d43d2b8fb5810f66bf754246158ae`,
+`gradeSha256 baa3de2f18fb7494bd5791ffe0bdfe5029060269131ad9119baa7161e32cda65` — 829
+manifest files (9,087,130 bytes), reverified this session with zero errors.
+`profileDigest a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641`.
+No supplemental grading policy applies to this package; raw and effective reward
+are identical (both 1).
+
+**Service:** 27/27 scenarios, 0 failures — fully correct, matching every prior trial.
+
+**Checker:** 14/14 correct, 0 missed, 0 false positives, `pass: true`. This
+checker again caught `reverse-dependency-order` and again correctly accepted both
+`reference` and `alternative` — the same net verdict set as Trial 5, but by a
+different route. Trial 5's `checker.mjs` reconstructs one full expected
+trajectory via a recursive `reconcile()` (dependencies resolved before their own
+value, with cycle detection) and diffs the submission's recorded run against it.
+Trial 6's `checker.mjs` instead keeps a dedicated `validateDependencyOrder()`
+function that walks the actual publication list directly: for any two
+publications issued at the same source step, it looks up whether one depends on
+the other via each definition's declared `inputs`, and flags the pair if the
+dependent was published before (or same-step out of order relative to) what it
+depends on. Same obligation caught, but Trial 6 checks it as an explicit
+pairwise ordering rule against the dependency graph rather than as a byproduct of
+rebuilding a full reference trajectory.
+
+**Trial 7 was never dispatched — stopped because passing made the threshold
+mathematically unreachable, not for any infrastructure or budget reason.** This
+package's second authorized final-six slot (Trial 7) was withheld once Trial 6's
+result came back. The five scored attempts are: T2=0 (Claude),
+T3=0 (Claude), T4=0 (Claude), T5=1 (Codex, pass), Trial6=1 (Codex, pass) — **3
+failures out of 5 scored attempts**, using only 3 Claude + 2 Codex, not the full
+3-Claude/3-Codex balance a completed six-run set requires. With 3 failures
+already recorded and at most 1 attempt remaining, the maximum total failures
+this package could still reach is 3 + 1 = 4 — below the reported 5-of-6
+threshold regardless of what Trial 7 would have done. Dispatching it could not
+change the outcome, so it was not launched. **This package's six-run set is now
+incomplete and cannot reach the reported 5-of-6 bar**, stopping one attempt
+short of a complete set specifically because the threshold became
+mathematically unreachable — not because of any infrastructure failure or
+exhausted budget.
+
+Worth recording as an observation, not a provider-capability claim from two data
+points: three independent Claude/max attempts (Trials 2–4) failed this package
+via three different underlying mechanisms — a two-field wrapper-unwrapping gap,
+a one-field wrapper-unwrapping gap, and a step-granularity ordering blind spot —
+while both Codex attempts (Trial 5 and this Trial 6) passed cleanly, each with
+its own independently-built checker that rejected the dependency-order violation.
+Reason text remained diagnostic-only.
+
+**Identity correction for the earlier Trial 5 prose:** the retained Codex profile digest
+is `a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641`, matching Trial 6.
+The earlier section mistakenly printed the Claude digest; its recorded reward and the
+raw completion/profile files are unchanged.
+
+[Final campaign and standings](../final-six-2026-09-09.md) ·
+[Sanitized evidence](../evidence/2026-09-09-final-six.json).

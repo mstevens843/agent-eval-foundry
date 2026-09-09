@@ -618,3 +618,128 @@ the separate `final-six-coverage-v1` regrade. The same revision applies to all r
 and future attempts for affected tasks; this is no new public task requirement. See the
 [prepared identities](../evidence/2026-09-09-final-six-preparation.json) and
 [operator handoff](../../../docs/final-six-handoff.md). No new model trial has launched.
+
+## Trials 6-7 — final-six campaign, fifth and sixth successor attempts — September 9, 2026
+
+### Identity and execution
+
+Both slots ran unconditionally on this package (its final-six rule was "run both
+regardless of the first result"), each in its own fresh campaign record under
+`.local/final-six-2026-09-09/incremental-build-repair/`. Both use package digest
+`34aa5b163fb0b44d29e89e3ceb4be36bb12d8f6a8d47fb2b445568a5f89fd33a` and profile digest
+`d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794`. The package is
+unchanged since Trial 2; the profile matches Claude Trial 5. Codex Trials 2–4 used
+their separately pinned Codex profile. Both requested target **claude**, `anthropic/claude-opus-5`,
+effort `max`, CLI `2.1.263`; both used the same author image
+(`sha256:3e9a15ec...a225d39a`), 2 CPUs, 2,048 MiB, subscription-only billing
+(`maxMicroUsd: 0`), and the same frozen execution source digest
+(`2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4`) reused since Trial 2.
+Each is a fresh solver session given only the original public task inputs — no access
+to any prior submission, analysis, or this handoff.
+
+Trial 6 (`.../trial-6/.../incremental-build-repair-attempt-1/`) reserved
+`2026-09-09T22:24:22.354Z` and reached its last recorded execution event
+(`publishing`) at `2026-09-09T22:49:45.883Z` — elapsed ≈25m24s, matching the reported
+duration exactly. Trial 7 (`.../trial-7/.../incremental-build-repair-attempt-1/`)
+reserved `2026-09-09T22:36:02.596Z` and reached `publishing` at
+`2026-09-09T23:04:39.127Z` — elapsed ≈28m37s, again an exact match. Tokens: Trial 6
+6,778,571 input (6,607,668 cached) / 128,644 output ($8.23 CLI estimate); Trial 7
+9,405,208 input (9,224,653 cached) / 140,292 output ($9.93 CLI estimate) — both
+subscription-only estimates, not charges. `completionSha256`
+`a0e8469ddb5848e280116d388771dac08aba9dfa106a0268a63836a08d8359ed` (Trial 6) and
+`a14ce7d5d1413d84ee2636799e7b84ee41db060c00f4ef5fd8ffd45af69cf35a` (Trial 7);
+`resultSha256` `fcc2c4a98880e619ac52d7270bff75813b83dcc404032e1fa06202ccfb7a8f6a` (Trial 6)
+and `b1662badabf371dc3f3e0434cc485276a3613ef76c168bd0eed9b38103de423e` (Trial 7) — 998
+manifest-listed files / 36,546,287 bytes (Trial 6) and 1,002 files / 37,116,701 bytes
+(Trial 7), both reverified with zero errors, as part of a combined 5,438-file /
+151,948,284-byte reverification across the whole final-six batch.
+
+### Results
+
+**Trial 6 — reward 0, semantic-fail.** `grade.json` confirms directly: `reward: 0`,
+`checkerPassed: false`, `checkerRequired: true`, service `evaluation.status:
+"semantic-pass"` with all 27 of 27 expected case IDs observed and zero problems —
+i.e. the service itself is fully correct. The checker's own
+`grading/checker-grade/grade-summary.json` records `correct: 14, missed: 1,
+falsePositives: 0` against 15 candidates: both `reference` and `alternative` are
+`correct-accept`, all twelve other negative controls are `correct-reject-unnamed`,
+and the sole miss is `premature-publication`
+(`expectedFailingCheck: "current_artifacts"`, `outcome: "missed"`).
+
+**Trial 7 — reward 0, semantic-fail.** Its `grade.json` shows the identical pattern:
+`reward: 0`, `checkerPassed: false`, service `evaluation.status: "semantic-pass"`,
+all 27 of 27 case IDs observed, zero problems. Its own
+`checker-grade/grade-summary.json` records the same `correct: 14, missed: 1,
+falsePositives: 0`, with `premature-publication` as the one miss and both valid
+candidates correctly accepted.
+
+Independent rehashing of all six retained checker-grade summaries, Trials 2–7, gives
+the same SHA-256: `689fe9f88a21705d4a226324a31cbd35b1570c39bd9396148e8d39d5fc50daa9`.
+Each grade records 14/15 correct, one missed negative, zero false positives and both
+valid candidates accepted. The six submitted `checker.mjs` source hashes are distinct.
+The complete per-trial identity table is in the
+[publication review evidence](../evidence/2026-09-09-final-six.json).
+
+### Code-level recurrence: the complete six-run set
+
+Both new submissions were inspected directly. In Trial 6, `checker.mjs:54`
+contains `readRecords()`, which merges `actual.artifacts`, `inspect` responses and
+`compile` responses into one handle map. `readObservations()` in that same file
+counts compiles and tracks round/publication placement, but never connects each
+published handle to an earlier issuance event. The imported `lib/core.mjs` helper
+validates content and currentness against the final map.
+
+In Trial 7, `checker.mjs:79` contains `buildLedger()`. It also merges artifacts and
+observations into one final handle map. `observationsOf()` sorts by `seq`, but
+`buildLedger()` keeps no issuance time for the handles checked at publication.
+`checkCell()` and the `common.mjs` attestation helper therefore validate against the
+completed ledger, including artifacts compiled after publication.
+
+The `premature-publication` control publishes a predicted, not-yet-issued handle,
+then calls the real compiler. Its final artifact is structurally correct, so both
+checkers accept it even though it did not exist at publication. This is the same
+issuance-before-use omission documented in the earlier attempts. All six independently
+submitted checkers miss the same existing control; no new requirement or grading change
+was needed to produce this result.
+
+### Final classification for this package
+
+Incremental-build-repair now has a **complete six-run set** (3 Codex: Trial 2, Trial
+3, Trial 4; 3 Claude: Trial 5, Trial 6, Trial 7) with **6 failures out of 6 scored
+attempts** — a full 6/6 sweep. This decisively meets the user-reported "at least 5
+failures out of 6" acceptance threshold with three attempts per provider, and does so
+with the strictest possible margin: every one of the six attempts failed, and all six
+failed via the identical, code-confirmed defect (missing issuance-before-use ordering
+in the checker). No supplemental grading policy applies to this package — that gate
+applies only to temporal-capacity-repair and snapshot-recovery-repair — so raw and
+effective reward are identical here; nothing softens or reclassifies these six zeroes.
+
+This is the first complete 6/6 result in the 25-package successor campaign and the
+only finalist to meet the reported 5/6 target. The other four stopped after passes
+made their six-attempt targets unreachable. Final submission review and required
+cheat checks are separate from this completed screening result.
+
+| Trial | Provider | Service | Checker | Recorded reward |
+| --- | --- | --- | --- | --- |
+| 2 | Codex | 27/27 | 14/15 | 0 |
+| 3 | Codex | 27/27 | 14/15 | 0 |
+| 4 | Codex | 27/27 | 14/15 | 0 |
+| 5 | Claude | 27/27 | 14/15 | 0 |
+| 6 | Claude | 27/27 | 14/15 | 0 |
+| 7 | Claude | 27/27 | 14/15 | 0 |
+
+[Final campaign and standings](../final-six-2026-09-09.md).
+
+### Evidence and record locations
+
+Trial 6:
+`.local/final-six-2026-09-09/incremental-build-repair/trial-6/real-campaign-frozen/jobs/real-provider/records/incremental-build-repair-attempt-1/`.
+Trial 7:
+`.local/final-six-2026-09-09/incremental-build-repair/trial-7/real-campaign-frozen/jobs/real-provider/records/incremental-build-repair-attempt-1/`.
+Trial 5, for comparison:
+`.local/round-five-continuing-four-2026-09-09/real-campaign-frozen/jobs/real-provider/records/incremental-build-repair-attempt-1/`.
+Both new records' `grade.json`, `grading/checker-grade/grade-summary.json`,
+`submission/checker.mjs` and `submission/lib/core.mjs` or `submission/common.mjs`
+were read directly this session to produce the findings above; no private internal
+model reasoning is analyzed, and this remains an exploratory repository assessment,
+not independent blind adjudication or official qualification.

@@ -1,5 +1,7 @@
 # Finish the six-attempt screening sets
 
+**Completed campaign:** incremental build met the target at **6/6** (3 Codex + 3 Claude). The other four finalists stopped below 5/6. [Final results](../reports/screening/final-six-2026-09-09.md). The preparation and launch instructions below are historical; no trials remain to dispatch under this campaign.
+
 Work in `/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry`.
 The user authorizes the remaining attempts described below. This handoff is for the
 operator only; it must never enter a solver workspace.
@@ -38,20 +40,36 @@ private coverage policy are pinned in the preparation evidence. The live root is
 only for those fixed artifacts, not as a source build. No provider calls have been made
 by preparation.
 
-Through the normal tool permission path, from the repository root run:
+The user amended concurrency from three to **six** after the original controller
+started three attempts. Preserve the running children and the frozen original readiness.
+Use the prepared expansion controller through the normal tool permission path:
 
 ```sh
-node scripts/run-final-six.mjs verify
-node scripts/run-final-six.mjs run --user-authorized-final-six
+node scripts/run-final-six-expanded.mjs verify
+node scripts/run-final-six-expanded.mjs run --user-authorized-six-concurrent
 ```
 
-The second command is a long-lived controller: keep it alive in the supported background
-execution mechanism and monitor its output. It allows at most three simultaneous solver
-attempts, exactly one per package. It starts 21/19/25, and admits 10/11 as worker slots free.
-Each package's second or third slot starts only after its preceding result is graded.
-This reduces the memory pressure observed in the earlier five-way campaign. Check current
-host memory and Docker availability at launch; reduce unrelated workload before dispatch
-if needed. The pinned 2-CPU/2-GiB profiles and 10,800-second budgets are unchanged.
+The expansion verifies the original controller and all eleven frozen slots, identifies
+the one active Node queue manager, pauses only that manager with SIGSTOP, and adopts
+its running child controllers. Existing Docker trials and their credential brokers keep
+running. It then fills six slots: build Trials 6 and 7 (both Claude), cache Trial 6
+(Codex), issued-report Trial 6 (Codex), temporal Trial 6 (Codex), and snapshot Trial 5
+(Claude). Both build trials are unconditional, so running them together does not defeat
+early stopping. The other four packages still run their own attempts sequentially.
+The total authorization stays at eleven attempts, including the three already launched.
+
+Keep the expansion controller alive through completion. Its adoption record and final
+summary are in `.local/final-six-2026-09-09/expanded/`; individual raw records and
+`ADJUDICATED.json` remain in their original package/trial directories. The original
+`READY.json`, runner, child controllers and evidence hashes remain unchanged. Do not
+restart or resume the superseded original queue, which would compete for those same
+slots. After the expansion finishes and all children have exited, terminate only the
+superseded queue-manager PID recorded in `expanded/ADOPTION.json`; do not target a
+child controller or Docker container. If expansion reports dispatch uncertainty, retain
+the existing evidence and investigate without rerunning a claimed slot.
+
+Each trial retains the pinned 2-CPU/2-GiB profile and 10,800-second budget. This
+concurrency change makes no task, profile, grading or provider-assignment changes.
 
 Claude uses the existing inherited `CLAUDE_CODE_OAUTH_TOKEN` from the established Keychain
 login setup. Codex uses the same existing credential staging/broker as Trial 5. Do not
@@ -63,7 +81,7 @@ to bypass them. User authorization for these specified attempts is already given
 
 Campaign root: `.local/final-six-2026-09-09/`. Each package/trial has its own controller,
 `READY.json`, dispatch claim and JobStore; a local `attempt-1` ID is unique to that trial's
-directory. The parent has its own global dispatch claim. Do not relaunch after a claim
+directory. The original parent and its expansion each have an exclusive dispatch claim. Do not relaunch after a claim
 exists. Inspect the existing process, containers and records first if execution is
 interrupted. Incomplete captures, controller kills and grading infrastructure errors are
 unscored; preserve them and report the open slot rather than guessing a reward or retrying.
@@ -79,8 +97,8 @@ submissions stay private from solvers. Every attempt is fresh and blind to earli
 Do not change the frozen task exports, profile, budgets or grading controls during this
 campaign. Record both the original and effective rewards; never overwrite raw grades.
 
-The parent verifies completion manifests and writes `ADJUDICATED.json` for each completed
-slot, per-package outcomes, then `FINAL.json`. Analyze the actual submitted code and failing
+The expansion verifies completion manifests and writes `ADJUDICATED.json` for each completed
+slot, per-package outcomes, then `expanded/FINAL.json`. Analyze the actual submitted code and failing
 cells before making recurrence claims. Audit scored passes for concrete contract violations
 or grader defects; finite tests are not proof of universal correctness. If a new coverage
 defect is demonstrated, preserve the raw pass and publish a consistent regrade before

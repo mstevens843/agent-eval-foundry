@@ -1,5 +1,7 @@
 # Final-six preparation: two grader coverage gaps reopen two candidates
 
+**Completed campaign:** incremental build met the target at **6/6** (3 Codex + 3 Claude). The other four finalists stopped below 5/6. [Final results](final-six-2026-09-09.md). The preparation and launch instructions below are historical; no trials remain to dispatch under this campaign.
+
 **Five packages remain in contention under the corrected grading coverage.** Incremental
 build has four failures in four attempts. Variant cache, issued report and temporal
 capacity have three in four; snapshot recovery has two in three. No new model calls
@@ -95,10 +97,11 @@ For the other four, the provider remains the one used in Trial 5. Every complete
 set ends with three Claude and three Codex attempts. Different legitimate failure
 mechanisms count; identical bugs or six consecutive failures are not extra requirements.
 
-The prepared controller uses at most three simultaneous solver attempts to avoid repeating
-the observed five-container memory interruption. It completes one attempt at a time for
-each package, grades it, and makes the continuation decision before launching that
-package's next slot. Maximum additional calls: eleven; no retries or paid API fallback.
+The original controller launched three simultaneous attempts. The user then authorized
+**six simultaneous attempts**. The prepared expansion adopts those running attempts and
+launches the other three, including both unconditional build slots. The other four
+packages retain one attempt at a time so each graded result determines continuation.
+The original frozen preparation is preserved alongside the concurrency amendment. Maximum additional calls: eleven; no retries or paid API fallback.
 If all initially required calls complete, at least six calls occur (including both build
 slots). A package reaching five failures at its fifth scored attempt still runs its sixth
 slot to complete the provider balance. Any infrastructure interruption leaves that package
@@ -114,3 +117,14 @@ controllers, with no dispatch claim and zero provider calls. Publication validat
 passed for 51 documents; six publication tests and four continuation/regrade tests passed.
 All five original analysis histories remain exact byte prefixes of the updated files.
 `git diff --check` passed. No model trials, commits or pushes were made by this work.
+
+
+### Concurrency amendment after launch — September 9, 2026
+
+The user explicitly requested six trials at a time. Three trials were observed active
+when preparing the expansion: build Trial 6, cache Trial 6 and issued-report Trial 6.
+The expansion adds build Trial 7, temporal Trial 6 and snapshot Trial 5. Both build
+slots run regardless of the first result; no extra attempt is added. The original
+queue must be superseded without restarting its children. The revised
+[handoff](../../docs/final-six-handoff.md) contains the exact commands.
+[Concurrency amendment evidence](evidence/2026-09-09-final-six-concurrency-amendment.json).

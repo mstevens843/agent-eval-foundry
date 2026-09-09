@@ -464,3 +464,91 @@ the separate `final-six-coverage-v1` regrade. The same revision applies to all r
 and future attempts for affected tasks; this is no new public task requirement. See the
 [prepared identities](../evidence/2026-09-09-final-six-preparation.json) and
 [operator handoff](../../../docs/final-six-handoff.md). No new model trial has launched.
+
+## Trial 6 — final-six campaign, coverage correction and stopped after a pass — September 9, 2026
+
+**Reward 1 (recorded), reward 1 (effective) — a clean pass on both accountings.** This is
+the fifth successor attempt on this unchanged package and the second with the opposite
+provider: Codex (`openai/gpt-5.6-sol`, effort `xhigh`, CLI `0.153.2`), same as Trial 5.
+Same author image and frozen runtime as every prior trial; same `packageDigest`
+`05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede` and `profileDigest`
+`a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641` as Trial 5. Completed
+in **7m 19s** — notably the fastest attempt in this whole batch. Tokens: 444,377 input
+(418,304 cached), 12,379 output; the Codex CLI never reports a price (`total_cost_usd`
+null). `completionSha256` `0234066fbfb6d6b4a5042c3db09c296964069df48e49522760b9f2dca23cec23`,
+`resultSha256` `877502c10f6718ac76260a3d003f89a90fd436df9affa15746f10e98a5669dad`, `gradeSha256`
+`0e306a47f676db83ee284a736c02b400933d610691a79bb13f84db17386a12ff`. All 848 manifest-listed
+files (3,780,301 bytes) reverified this session with zero errors. Record directory:
+`.local/final-six-2026-09-09/temporal-capacity-repair/trial-6/real-campaign-frozen/jobs/real-provider/records/temporal-capacity-repair-attempt-1/`.
+
+**Service:** 34/34 scenarios passed, 0 failures — fully correct, matching every prior
+trial. **Checker:** 13/13 candidates correctly classified, 0 missed, 0 false positives,
+pass. It correctly catches `unread-empty-source` — the same named candidate Trial 2's and
+Trial 4's Claude checkers each missed, for different underlying reasons (see those trials'
+sections above).
+
+### The coverage correction: why Trial 3's recorded pass is not this package's effective history
+
+A targeted pass audit, published as
+[`final-six-pass-audit-2026-09-09.md`](../final-six-pass-audit-2026-09-09.md) (grading
+revision `final-six-coverage-v1`), found a gap in this package's checker-grading coverage:
+no candidate in the original bank exercised a real "zero-query, no-work" execution against
+the checker's completion requirement. The audit independently reproduced this gap directly
+from the actual, unchanged grading harness — not an invented scenario — and determined
+that this package's **Trial 3 (Claude), originally recorded and published above as reward 1
+(pass), was actually a false pass**: Trial 3's submitted checker accepted a no-work
+execution that issued zero queries and touched zero source records, which the real harness
+treats as a genuine completion failure under the unchanged `SEMANTICS.md` requirement to
+"exhaust all pages" — the same requirement Trial 2's and Trial 4's checkers separately
+failed to enforce, each via its own distinct gap (see those trials' sections above).
+
+Under the coverage-corrected accounting, Trial 3's **effective reward is 0**, not the 1
+recorded there. **Trial 3's own section above is left exactly as originally published —
+its raw/recorded reward of 1 is not edited or altered.** This section only adds the
+correction and its consequences. The correction changes what this package's run history
+through Trial 5 means: read on the raw numbers alone, it was T2=0, T3=1, T4=0, T5=1 — 2
+failures out of 4 scored. Under the coverage-corrected effective accounting it is instead
+**T2=0, T3=0 (effective; recorded as 1), T4=0, T5=1 — 3 failures out of 4 scored**, not 2.
+
+This trial's own submitted checker was additionally run against the audit's new
+supplemental fixture — the coverage-v1 negative/positive pair built specifically for this
+gap — in an isolated, network-disabled Docker sandbox:
+`.local/final-six-2026-09-09/temporal-capacity-repair/trial-6/supplement/grade.json`
+records **2/2 correct, deterministic, pass=true**. This Trial 6 checker correctly rejects
+the new "zero-query, no-work" negative case (`reason: "record pages were not exhausted"`)
+and correctly accepts its valid positive counterpart — this fresh Codex checker handles the
+new coverage case correctly, unlike Trial 3's.
+
+### Final classification: unreachable, and Trial 7 was never dispatched
+
+Trial 6 **passed** on both service and checker, and this combined with the corrected
+3-failure history makes the reported 5-of-6 threshold mathematically unreachable
+immediately. This package's six-run set is now **incomplete and cannot reach** that
+threshold under the coverage-corrected effective accounting.
+
+Effective history: **T2=0, T3=0 (effective; recorded 1), T4=0, T5=1, Trial 6=1** — 3
+failures out of 5 scored attempts, using only 3 Claude + 2 Codex attempts, not the full
+3-Claude/3-Codex balance the campaign otherwise completes. With 3 failures already banked
+and at most 1 attempt remaining (a hypothetical Trial 7), the maximum reachable total is
+**3 + 1 = 4**, below the 5-of-6 bar regardless of that attempt's outcome. **Trial 7 was
+never dispatched.**
+
+It is worth being precise about what the raw, uncorrected numbers implied at each point,
+rather than letting the correction read as if it made things worse. This document's own
+Trial 5 section above already concluded, using the then-recorded numbers (Trial 3 counted
+as its recorded pass), that this package had hit a ceiling of 2 + 2 = 4 and could no
+longer reach the threshold — that conclusion was reached before the audit ran, using raw
+numbers alone. The coverage audit is what reopened this package's contention: by exposing
+Trial 3's false pass, it changed the effective banked-failure count from 2 to 3 and, with
+two Codex slots still open, restored a genuinely reachable ceiling of 3 + 2 = 5 (both
+remaining slots would need to fail). It was under that reopened, corrected accounting that
+this Trial 6 was dispatched at all, as one of the two remaining slots in the
+[final-six preparation](../final-six-pass-audit-2026-09-09.md) above. Trial 6's pass then
+closed the door again — this time permanently, since the maximum reachable total (4) now
+falls short of the threshold regardless of which accounting is used for the five scored
+attempts. The audit surfaced the corrected, reopened arithmetic before this Trial 6 was
+even dispatched, and Trial 6's own result is what settled the question before any further,
+now-pointless Trial 7 dispatch could be wasted.
+
+[Final campaign and standings](../final-six-2026-09-09.md) ·
+[Sanitized evidence](../evidence/2026-09-09-final-six.json).

@@ -560,3 +560,99 @@ the separate `final-six-coverage-v1` regrade. The same revision applies to all r
 and future attempts for affected tasks; this is no new public task requirement. See the
 [prepared identities](../evidence/2026-09-09-final-six-preparation.json) and
 [operator handoff](../../../docs/final-six-handoff.md). No new model trial has launched.
+
+## Trial 6 — final-six campaign, stopped after a pass — September 9, 2026
+
+### Identity and execution
+
+Run `variant-cache-repair-attempt-1` in the final-six campaign's Trial-6 slot
+(`variant-cache-repair-final-six-trial-6`), package digest
+`73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b` — byte-identical to
+Trials 2–5 — profile digest `a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641`.
+Requested target **codex** (second consecutive Codex attempt, after Trial 5),
+`openai/gpt-5.6-sol`, effort `xhigh`, CLI `0.153.2`. Same frozen execution source
+`2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4` and pinned author
+image `sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a` as every
+prior trial.
+
+Dispatched `2026-09-09T22:24:22.447Z`, completed `2026-09-09T22:46:28.860Z` (~22m7s),
+well under the 10,800s (3h) cap. The solver received only the original public task
+inputs — no prior submission, analysis, or this campaign's handoff. Tokens: 1,357,907 in
+(1,283,840 cached), 39,000 out; the Codex CLI reports tokens but never a price (cost
+null). completionSha256
+`173758cc990a4c52c07cdbcf4ecabb03431fe08a16f8bd5e24b5ffc2f2ef56cc`, resultSha256
+`3201d09c89dcab588f3da762f47f6ea9f97fb8c0e08380327088bbc18c27c855`, gradeSha256
+`424bb6b927b13607248732de51b8ab27864f8ec1d4730a070b83d115146a0f05`. 972 manifest-listed
+files (61,145,106 bytes) reverified with zero errors this session. No supplemental
+grading policy applies to this package (unlike temporal-capacity-repair and
+snapshot-recovery-repair); raw and effective reward are identical, both 1.
+
+### Results
+
+**Recorded reward 1 (outcome `semantic-pass`) — this package's second consecutive pass.
+Service 25/25 passed; checker 15/15.**
+
+- **Service: all 25 scenarios pass, 0 failures** — fully correct, matching Trial 5's
+  clean run and avoiding every defect recorded across Trials 2–4.
+- **Checker: 15/15 correct, 0 missed, 0 false positives, deterministic, pass=true.**
+  Notably, this checker again correctly caught `wildcard-eviction`
+  (`expectedFailingCheck: cache_provenance`) — the same candidate Trial 5's checker also
+  caught, and the exact candidate all three prior Claude checkers (Trials 2, 3, 4) missed.
+  Reading this submission's `checker.mjs`: its `matching(entry, event)` predicate returns
+  `false` whenever `entry.vary.includes("*")`, and `legalGetWrite()` flags any removed
+  entry that fails that same predicate as an illegal unrelated eviction — the same
+  structural fix as Trial 5's checker (tying removal-legality to the identical
+  non-matching predicate that already excludes wildcards from reuse), expressed through
+  differently-named functions (`matching`/`legalGetWrite` here vs. Trial 5's
+  `matches`/inline `unrelatedRemoved`). Two independently-written Codex checkers now
+  close this gap the same way; neither of the two Codex submissions has repeated the
+  three Claude checkers' miss.
+
+### Final classification for this package — six-run set incomplete, threshold unreachable
+
+This package's second authorized Codex slot, Trial 7, was never launched — no attempt
+was reserved, no model call was made, and no cost was incurred. Its full recorded
+history is:
+
+**T2 = 0 (Claude) · T3 = 0 (Claude) · T4 = 0 (Claude) · T5 = 1 (Codex, pass) · Trial 6 =
+1 (Codex, pass) — 3 failures out of 5 scored attempts, using only 3 Claude + 2 Codex
+attempts, not the full 3-Claude/3-Codex balance a completed six-run set requires.**
+Recorded and effective outcomes are identical across all five scored attempts:
+0 → 0 → 0 → 1 → 1.
+
+The campaign's own acceptance rule is `failures + remainingAttempts >= 5`. With 3
+recorded failures and at most 1 remaining attempt (the unused Trial 7 slot), the maximum
+reachable total is **3 + 1 = 4**, below the reported five-of-six bar regardless of what a
+hypothetical Trial 7 would have scored. Passing on Trial 6 is exactly what made
+continuing pointless: the prior progress note above (after Trial 5) held that *both*
+remaining Codex attempts needed to fail to reach 5/6 — with only two slots left, a single
+additional pass among them would already cap the total at 4. Trial 6 was that pass, so
+the threshold became mathematically unreachable the moment it graded, and dispatching
+Trial 7 could no longer change the outcome.
+
+State this plainly: **this package stopped one attempt short of a complete six-run set
+specifically because reaching the threshold became impossible, not because of any
+infrastructure issue, grading error, or exhausted budget.** It remains an incomplete,
+stopped-early set — not a completed six-run failure count and not a completed six-run
+pass count — and is not eligible to be reported as a scored 5-of-6 (or any other
+six-of-six-denominated) result, because only 5 of the 6 authorized attempts were ever
+run.
+
+### Evidence
+
+Raw evidence for this trial remains at
+`.local/final-six-2026-09-09/variant-cache-repair/trial-6/real-campaign-frozen/jobs/real-provider/records/variant-cache-repair-attempt-1/`,
+with Trial 5 (the first Codex pass) at
+`.local/round-five-continuing-four-2026-09-09/real-campaign-frozen/jobs/real-provider/records/variant-cache-repair-attempt-1/`
+for comparison. The prepared-but-unused Trial 7 slot is recorded at
+`.local/final-six-2026-09-09/variant-cache-repair/trial-7/` — a prepared READY file and
+preparation event log only. No reservation, dispatch claim, JobStore or completed
+job record was created there. The campaign's own outcome record,
+`.local/final-six-2026-09-09/expanded/outcomes/variant-cache-repair.json`, independently
+confirms this arithmetic: `failures: 3, scored: 5, qualified: false, stoppedBelowThreshold: true`. The [final campaign](../final-six-2026-09-09.md)
+records all six completed attempts.
+
+This is an exploratory repository assessment. The Trial 6 result still records
+`adjudication: unlabelled`, `modelEvidenceEligible: false` and
+`countsAsModelFailure: false`; nothing above claims a completed six-run set, official
+cheat qualification, or independent blind review.

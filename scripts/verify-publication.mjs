@@ -59,6 +59,9 @@ export const SCREENING_FOLLOWUPS = [
   "final-six-pass-audit-2026-09-09.md",
   "evidence/2026-09-09-final-six-pass-audit.json",
   "evidence/2026-09-09-final-six-preparation.json",
+  "evidence/2026-09-09-final-six-concurrency-amendment.json",
+  "final-six-2026-09-09.md",
+  "evidence/2026-09-09-final-six.json",
 ];
 
 export function verifyPublication(root = process.cwd()) {
@@ -511,6 +514,14 @@ export function verifyPublication(root = process.cwd()) {
   assert.equal(finalPrepared.providerCallsMade, 0);
   assert.equal(finalPrepared.maxProviderCalls, 11);
   assert.equal(finalPrepared.maxConcurrent, 3);
+  const expansion = read("reports/screening/evidence/2026-09-09-final-six-concurrency-amendment.json");
+  assert.equal(expansion.maxConcurrent, 6);
+  assert.equal(expansion.maximumTotalAttempts, finalPrepared.maxProviderCalls);
+  assert.equal(expansion.providerCallsMadeByPreparation, 0);
+  assert.equal(expansion.originalPreparationPreserved, true);
+  assert.equal(expansion.originalPreparationSha256, sha("reports/screening/evidence/2026-09-09-final-six-preparation.json"));
+  assert.equal(expansion.expansionScriptSha256, sha(expansion.expansionScript));
+  assert.equal(expansion.activeSlotsObserved.length + expansion.additionalInitialSlots.length, 6);
   assert.equal(finalPrepared.packages.length, 5);
   for (const p of finalPrepared.packages) {
     assert.equal(p.scored,p.effectiveHistory.length);
@@ -522,6 +533,106 @@ export function verifyPublication(root = process.cwd()) {
     assert.ok(readFileSync(join(root,p.analysis),"utf8").includes("Final-six audit and preparation"));
     for (const r of coverage.rows.filter(r => r.id === p.id)) assert.equal(p.effectiveHistory[r.trial-2],r.effectiveReward);
   }
+  const canReachFive = (failures, scored) => scored < 6 && failures + (6 - scored) >= 5;
+  const finalSix = read("reports/screening/evidence/2026-09-09-final-six.json");
+  assert.equal(finalSix.gradingRevision, "final-six-coverage-v1");
+  assert.equal(finalSix.automaticRetries, 0);
+  assert.equal(finalSix.maxProviderCallsAuthorized, 11);
+  assert.equal(finalSix.providerCallsMade, 6);
+  assert.equal(finalSix.concurrencyAmendment.originalMaxConcurrent, 3);
+  assert.equal(finalSix.concurrencyAmendment.amendedMaxConcurrent, 6);
+  assert.equal(finalSix.concurrencyAmendment.liveContainersOrCredentialsDisturbed, false);
+  assert.equal(finalSix.packages.length, 5);
+  assert.deepEqual(finalSix.packages.map((p) => p.id).sort(), finalPrepared.packages.map((p) => p.id).sort());
+  let finalSixFiles = 0;
+  let finalSixBytes = 0;
+  let finalSixAttempts = 0;
+  for (const record of finalSix.packages) {
+    const plan = finalPrepared.packages.find((p) => p.id === record.id);
+    assert.ok(plan, "final-six result must extend a prepared package");
+    assert.ok(readFileSync(join(root, record.analysis), "utf8").includes("final-six campaign"));
+    let failures = plan.failures;
+    let scored = plan.scored;
+    const providerCounts = {claude: plan.target === "claude" ? plan.scored - 3 : 3, codex: plan.target === "codex" ? plan.scored - 3 : 3};
+    let slotIndex = 0;
+    for (const a of record.attempts) {
+      finalSixAttempts++;
+      assert.ok(canReachFive(failures, scored), "final-six dispatched after elimination");
+      assert.equal(a.trial, plan.slots[slotIndex++].trial);
+      assert.equal(a.target, plan.target);
+      assert.equal(a.packageDigest, plan.packageDigest);
+      assert.equal(a.profileDigest, plan.profileDigest);
+      providerCounts[a.target]++;
+      const key = `${finalSix.campaign}/${record.id}/trial-${a.trial}`;
+      assert.ok(!attemptKeys.has(key), "duplicate final-six attempt");
+      attemptKeys.add(key);
+      assert([0, 1].includes(a.recordedReward));
+      assert.equal(a.service.invalidScenarios, 0);
+      assert.equal(a.checker.pass, a.checker.deterministic && a.checker.falsePositives === 0 && a.checker.missed === 0);
+      assert.equal(a.recordedReward, a.service.failedScenarios === 0 && a.checker.pass ? 1 : 0);
+      if (a.supplement !== null) assert.equal(a.supplement.pass, a.supplement.deterministic && a.supplement.correct === a.supplement.total);
+      assert.equal(a.effectiveReward, Math.min(a.recordedReward, a.supplement === null || a.supplement.pass ? 1 : 0));
+      scored++;
+      if (a.effectiveReward === 0) failures++;
+      assert.equal(a.cumulativeFailures, failures);
+      assert.equal(a.cumulativeScored, scored);
+      assert.equal(a.canStillReachFive, canReachFive(failures, scored));
+      for (const key of ["completionSha256", "resultSha256", "gradeSha256", "packageDigest", "profileDigest"])
+        assert.match(a[key], hash, `${record.id} Trial ${a.trial}: ${key}`);
+      assert.ok(a.manifestFilesVerified > 0 && a.manifestBytesVerified > 0);
+      finalSixFiles += a.manifestFilesVerified;
+      finalSixBytes += a.manifestBytesVerified;
+      successorRecords.push({...a, id: record.id, reward: a.recordedReward});
+    }
+    assert.deepEqual(record.attemptsByProvider, providerCounts);
+    assert.deepEqual(record.recordedHistory, [...plan.recordedHistory,...record.attempts.map(a => a.recordedReward)]);
+    assert.deepEqual(record.effectiveHistory, [...plan.effectiveHistory,...record.attempts.map(a => a.effectiveReward)]);
+    assert.deepEqual(record.unusedTrials, plan.slots.slice(slotIndex).map(s => s.trial));
+    assert.equal(record.finalFailures, failures);
+    assert.equal(record.finalScored, scored);
+    if (record.classification === "meets-5-of-6") {
+      assert.ok(failures >= 5 && scored === 6);
+      assert.deepEqual(providerCounts, {claude:3,codex:3});
+    }
+    else if (record.classification === "cannot-reach-5-of-6") assert.ok(failures + 6 - scored < 5);
+    else assert.equal(record.classification, "unresolved-infrastructure");
+    assert.ok(!/\/Users\/|\.local\//.test(JSON.stringify(record)), "nonportable/private final-six record");
+  }
+  assert.equal(finalSixAttempts, 6);
+  assert.equal(finalSix.audit.manifestFilesVerified, finalSixFiles);
+  assert.equal(finalSix.audit.manifestBytesVerified, finalSixBytes);
+  retrialVerifiedFiles += finalSixFiles;
+  assert.equal(finalSix.audit.newModelCalls, 0);
+  assert.deepEqual(finalSix.audit.errors, []);
+  assert.deepEqual(finalSix.classificationSummary.meetsFiveOfSix, ["incremental-build-repair"]);
+  assert.deepEqual(
+    finalSix.classificationSummary.cannotReachFiveOfSix.sort(),
+    ["variant-cache-repair", "issued-report-repair", "temporal-capacity-repair", "snapshot-recovery-repair"].sort(),
+  );
+  assert.deepEqual(finalSix.classificationSummary.unresolvedInfrastructure, []);
+  assert.deepEqual(finalSix.auditReference.correctedPasses, coverage.rows.filter(r => r.recordedReward !== r.effectiveReward).map(r => ({id: r.id, trial: r.trial, recordedReward: r.recordedReward, effectiveReward: r.effectiveReward})));
+  const buildHistory = finalSix.publicationReview.buildSixRunHistory;
+  assert.deepEqual(buildHistory.map(r => r.trial), [2,3,4,5,6,7]);
+  assert.deepEqual(buildHistory.map(r => r.target), ["codex","codex","codex","claude","claude","claude"]);
+  assert.equal(new Set(buildHistory.map(r => r.packageDigest)).size, 1);
+  assert.equal(new Set(buildHistory.map(r => r.instructionSha256)).size, 1);
+  assert.equal(new Set(buildHistory.map(r => r.checkerGradeSummarySha256)).size, 1);
+  assert.equal(new Set(buildHistory.map(r => r.checkerSourceSha256)).size, 6);
+  for (const r of buildHistory) {
+    assert.equal(r.recordedReward, 0);
+    assert.equal(r.servicePassed,27); assert.equal(r.serviceTotal,27);
+    assert.equal(r.checkerCorrect,14); assert.equal(r.checkerTotal,15);
+    assert.equal(r.falsePositives,0); assert.deepEqual(r.missedCandidates,["premature-publication"]);
+  }
+  assert.deepEqual(finalSix.successorTotals, {
+    distinctPackages:25, attempts:successorRecords.length,
+    scored:successorRecords.filter(r => r.reward !== null).length,
+    recordedZeroRewards:successorRecords.filter(r => r.reward === 0).length,
+    recordedPasses:successorRecords.filter(r => r.reward === 1).length,
+    effectiveFailures:successorRecords.filter(r => r.reward === 0).length + correctedPasses.length,
+    effectivePasses:successorRecords.filter(r => r.reward === 1).length - correctedPasses.length,
+    historicalInfrastructureInterruptions:successorRecords.filter(r => r.reward === null).length,
+  });
   const successorPackageIds = new Set(successorRecords.map((p) => p.id));
   const scoredPackageIds = new Set(successorRecords.filter((p) => p.reward !== null).map((p) => p.id));
   assert.deepEqual([...successorPackageIds].sort(), [...ids].sort(), "every package has a Trial 2 record");
@@ -594,6 +705,10 @@ export function verifyPublication(root = process.cwd()) {
     continuingPackagesAfterCoverageRepair: finalPrepared.packages.length,
     finalPreparedPackages: finalPrepared.packages.length,
     finalPreparedSlots: finalPrepared.packages.reduce((n,p) => n+p.remaining,0),
+    finalSixAttemptsMade: finalSixAttempts,
+    finalSixMeetsFiveOfSix: finalSix.classificationSummary.meetsFiveOfSix.length,
+    finalSixCannotReachFiveOfSix: finalSix.classificationSummary.cannotReachFiveOfSix.length,
+    finalSixUnresolvedInfrastructure: finalSix.classificationSummary.unresolvedInfrastructure.length,
     successorEffectiveZeroRewards: successorRecords.filter(p => p.reward === 0).length + correctedPasses.length,
     successorEffectivePasses: successorRecords.filter(p => p.reward === 1).length - correctedPasses.length,
     manifestListedFilesVerifiedAtPublication: verifiedFiles,

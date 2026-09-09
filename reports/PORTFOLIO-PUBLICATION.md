@@ -1,13 +1,21 @@
 # Maintained portfolio and screening publication
 
-**September 9 update:** fifteen ranked successors are implemented, and the first five
-completed Trial 2 with **three zero rewards**. The [audited campaign](screening/round-two-top-five-2026-09-09.md)
-supports substantive required-checker failures for incremental build and issued report.
-Cache's service/checker zero has a remaining matching/replacement contract question;
-07 and 24 passed. The report links the exact failure mechanisms and diagnostic evidence.
-All 4,644 manifest-listed trial files verified, and all five original analyses include
-Trial 2. [Current status](../docs/project-status.md) distinguishes this progress from
-deferred native checks and uncompleted empirical qualification.
+**1 task meets the target of at least 5/6 failures: incremental-build-repair (21)
+achieved 6/6 failures, with three Codex and three Claude attempts on the same package.**
+All six services passed 27/27 scenarios. Each required checker missed the same
+defect allowing publication before compiler issuance. All six recorded rewards are zero;
+this result uses the original grader and requires no retroactive correction.
+
+All twenty-five successors were implemented and screened. The completed final campaign
+added six scored attempts: two more build failures and four solver passes. One task meets
+the reported 5/6 target; the four other finalists stopped once it became unreachable.
+All 5,438 final-campaign manifest files verified with zero errors.
+[Final results](screening/final-six-2026-09-09.md) ·
+[Current status](../docs/project-status.md) ·
+[Sanitized evidence](screening/evidence/2026-09-09-final-six.json).
+
+The source-publication checks below describe their original snapshot. Current screening
+results and final submission work are tracked separately.
 
 September 8 screening update: the original publication below is retained as history.
 Twenty-five completed package analyses are now public; batches 3–5 are complete.
@@ -48,7 +56,7 @@ The broad `pnpm test` historical run was deliberately interrupted in favor of fo
 
 [Machine-readable verification](verification/portfolio-publication.json) contains exact counts, result hashes and incomplete checks. The [source promotion manifest](portfolio-promotion-manifest.json) identifies 606 selected source paths and their captured/integrated hashes. Editorial additions and report-gate integration are described here separately. Original snapshots and trial records remain unchanged by this publication.
 
-## Explicit limits
+## Original source-publication limits
 
 The latest screening had five successful service repairs, three passing submitted checkers, one checker rejecting a valid alternative, and one reason-format mismatch. Do not turn those last two zeros into two proven hard tasks. The shared exact-reason gate needs a contract-aligned successor repair; original grades remain immutable.
 

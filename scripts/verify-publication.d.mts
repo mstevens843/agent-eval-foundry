@@ -21,6 +21,10 @@ export function verifyPublication(root?: string): {
   continuingPackagesAfterCoverageRepair: number;
   finalPreparedPackages: number;
   finalPreparedSlots: number;
+  finalSixAttemptsMade: number;
+  finalSixMeetsFiveOfSix: number;
+  finalSixCannotReachFiveOfSix: number;
+  finalSixUnresolvedInfrastructure: number;
   successorEffectiveZeroRewards: number;
   successorEffectivePasses: number;
   successorTrials: number;

@@ -4,44 +4,49 @@ September 9, 2026. Navigation and status, not a package-policy approval.
 
 ## Latest measured progress
 
-**Incremental build now has four consecutive failures across Codex and Claude. A targeted
-pass audit also found two missed checker defects and reopened temporal capacity and
-snapshot recovery. Five packages remain in contention.**
+**1 task meets the target of at least 5/6 failures: incremental-build-repair (21)
+achieved 6/6 failures, with three Codex and three Claude attempts on the same package.**
+All six services passed 27/27 scenarios. Each required checker missed the same
+defect allowing publication before compiler issuance. All six recorded rewards are zero;
+this result uses the original grader and requires no retroactive correction.
 
-The original Trial 5 grades are three passes and one failure. The coverage repair
-`final-six-coverage-v1` changes the effective Trial 3 result for 10 and 11 from 1 to 0,
-after replaying every retained submission for those tasks. Original rewards and manifests
-remain intact. No new model calls were made by the audit or preparation.
+| Package | Final effective failures/scored | Provider counts | Final outcome |
+| --- | --- | --- | --- |
+| **21 Incremental build** | **6/6** | **3 Codex + 3 Claude** | **Meets 5/6** |
+| 19 Variant cache | 3/5 | 3 Claude + 2 Codex | Cannot reach 5/6 |
+| 25 Issued report | 3/5 | 3 Claude + 2 Codex | Cannot reach 5/6 |
+| 10 Temporal capacity | 3/5 | 3 Claude + 2 Codex | Cannot reach 5/6 |
+| 11 Snapshot recovery | 2/4 | 3 Codex + 1 Claude | Cannot reach 5/6 |
 
-| Package | Effective failures/scored | Remaining provider | Remaining slots | Requirement |
-| --- | --- | --- | --- | --- |
-| 21 Incremental build | **4/4** | Claude | 2 | At least one failure; run both |
-| 19 Variant cache | **3/4** | Codex | 2 | Both must fail |
-| 25 Issued report | **3/4** | Codex | 2 | Both must fail |
-| 10 Temporal capacity | **3/4** | Codex | 2 | Both must fail |
-| 11 Snapshot recovery | **2/3** | Claude | 3 | All three must fail |
+The other four finalists each stopped after a pass made five failures in six attempts
+unreachable. Their outcomes are settled; no package remains unresolved by infrastructure.
+The target uses three attempts per provider for a completed six-run set. Different
+legitimate failure mechanisms count; the build task happened to reproduce the same gap
+in every attempt.
 
-The target is the user-reported **at least five failures in six scored attempts**, with
-**three Claude and three Codex**. Different legitimate failure mechanisms count. The
-private coverage repair adds no public requirements or solution hints. The eleven
-remaining slots are prepared with at most three concurrent attempts and per-package
-early stopping after 5/6 becomes impossible. None has launched.
+The earlier pass audit corrected temporal and snapshot Trial 3 to effective failures,
+with original rewards and manifests preserved separately. Both reopened candidates
+passed their next attempt, including the added controls, and stopped. Their corrections
+do not affect build's six original zero rewards.
 
-Across successor Trials 2–5, the immutable raw record is **40 attempts, 39 scored,
-13 recorded zeroes, 26 recorded passes and 1 infrastructure interruption**, across
-25 distinct packages. Applying the documented repair gives **15 effective failures and
-24 effective passes** among those same 39 scored attempts; these are not extra trials.
-All 25 packages completed Trial 2: five recorded zeroes and twenty passes, with the
-route-policy retry resolving its separately retained interruption.
+The successor campaign now totals **46 attempts across 25 packages: 45 scored and
+one historical infrastructure interruption**. The original grades contain **15 zero
+rewards and 30 passes**. Applying the two documented historical coverage corrections
+gives **17 effective failures and 28 effective passes**, covering the same 45 scored
+attempts. The six new attempts contributed two failures and four passes, with no
+infrastructure errors. Five unnecessary slots were left unlaunched after early stopping.
 
-[Audit and corrected standings](../reports/screening/final-six-pass-audit-2026-09-09.md) ·
-[Regrade evidence](../reports/screening/evidence/2026-09-09-final-six-pass-audit.json) ·
-[Prepared final campaign](../reports/screening/evidence/2026-09-09-final-six-preparation.json) ·
-[Operator handoff](final-six-handoff.md).
-[Trial 5](../reports/screening/round-five-continuing-four-2026-09-09.md) ·
-[Trial 4](../reports/screening/round-four-failing-five-2026-09-09.md) ·
-[Trial 3](../reports/screening/round-three-failing-five-2026-09-09.md) ·
+The final campaign used six of its eleven authorized slots. Concurrency increased
+from three to six by user instruction; the expansion retained the three active jobs and
+added three more. All six completed. The superseded scheduler was terminated after
+completion. All 5,438 final-campaign manifest files were reverified without errors.
+
+[Final results and six-run build table](../reports/screening/final-six-2026-09-09.md) ·
+[Sanitized evidence](../reports/screening/evidence/2026-09-09-final-six.json) ·
+[Historical coverage audit](../reports/screening/final-six-pass-audit-2026-09-09.md) ·
 [All 25 Trial 2 results](../reports/screening/round-two-portfolio-2026-09-09.md).
+The six-run screening target is complete for build; final submission review and
+required cheat checks remain separate from this measured result.
 
 ## What is implemented
 
@@ -55,7 +60,7 @@ The foundry assembles separate solver/verifier workspaces, validates local contr
 
 The original 25 screenings all passed their service suites. Their recorded checker
 outcomes and historical grading concerns remain intact in the [trial index](../reports/screening/README.md).
-Thirty-one successor attempts, thirty scored, now extend that history; the Trial 2 results above
+Forty-six successor attempts, forty-five scored, now extend that history; the Trial 2 results above
 must not be merged into the original table or treated as repeat runs of identical versions.
 
 Engineering preparation covers [19/21/25/24/07](../reports/screening/top-five-implementation-plan-2026-09-09.md),
@@ -114,8 +119,9 @@ These links are reviewer-facing and include private grading material. Solvers re
 
 ## What remains
 
-The planned six-run sets and required final standard/adversarial qualification remain
-incomplete. The current acceptance threshold is the user's reported 5-of-6 criterion;
+The final screening campaign is complete: one task meets the 5/6 target at 6/6,
+and four finalists stopped after their outcomes were settled. Final submission review
+and required cheat checks remain separate. The current acceptance threshold is the user's reported 5-of-6 criterion;
 this progress report adds no requirement for identical bugs or six consecutive zeroes.
 
 The partial-release reason-format issue remains a blocker for treating its historical zero as a capability failure. Shared reason-prefix matching and explicit checker schemas were repaired in new versions before batch 3. No historical result is overwritten by that repair.

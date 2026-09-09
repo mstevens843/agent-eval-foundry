@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "maxConcurrent": 6,
+  "maximumTotalAttempts": 11,
+  "providerCallsMadeByPreparation": 0,
+  "originalPreparationPreserved": true,
+  "originalPreparationSha256": "c44afe122b180188108a2ce598065eb475be883aa835a87e4fed1e1efb611719",
+  "expansionScript": "scripts/run-final-six-expanded.mjs",
+  "expansionScriptSha256": "702c8c9a1931fb1ee8f6727cc3a89addd2d8ac6d138cb8d272fbbbf81c25b1b9",
+  "activeSlotsObserved": [
+    {
+      "id": "incremental-build-repair",
+      "trial": 6
+    },
+    {
+      "id": "variant-cache-repair",
+      "trial": 6
+    },
+    {
+      "id": "issued-report-repair",
+      "trial": 6
+    }
+  ],
+  "additionalInitialSlots": [
+    {
+      "id": "incremental-build-repair",
+      "trial": 7
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 6
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 5
+    }
+  ],
+  "status": "prepared-and-verified-not-launched-by-preparation",
+  "handoff": "docs/final-six-handoff.md"
+}
