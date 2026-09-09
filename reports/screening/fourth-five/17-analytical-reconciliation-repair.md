@@ -140,3 +140,111 @@ Local validation passed 17 assurance checks across 28 service scenarios, includi
 Foundry export: `.local/fourth-ranked-five-implementation-2026-09-09/release-ready/analytical-reconciliation-repair/export`. Package digest: `c1e754da99fb64c00fb3b8e39407448b98e0ae54aa934d75007b1fc141aa410e`. Native digest: `bf8e9c89b48c2ee029b2bc1d4126d673f1d4f4691ada122e4f95b3e6fb10bf19`. Suggested Trial 2 target: **Codex**, retaining this package's original model family. Append the eventual Trial 2 result below this engineering record, preserving Trial 1.
 
 [Group implementation and selection](../fourth-ranked-five-implementation-plan-2026-09-09.md) and [exact validation evidence](../evidence/2026-09-09-fourth-ranked-five-implementation.json) retain file hashes, native trial identities and the remaining final-qualification requirements.
+
+## Trial 2 — implementation successor — September 9, 2026
+
+### A. Identity and execution
+
+Run `analytical-reconciliation-repair-attempt-1`, package digest
+`c1e754da99fb64c00fb3b8e39407448b98e0ae54aa934d75007b1fc141aa410e`, route
+`professional-multifile/authority-process@1`. Dispatched through the
+`round-two-fourth-ranked-five-2026-09-09` campaign's signed, subscription-only
+JobStore reservation (Ed25519, realm `real-provider`, `maxMicroUsd: 0`,
+`maxAttempts: 1`) — a fresh campaign slot (`attempt-1`), not an infrastructure
+retry. Evidence retained at
+`.local/round-two-fourth-ranked-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/analytical-reconciliation-repair-attempt-1/`.
+
+Target: **codex**. Requested `openai/gpt-5.6-sol`, effort `xhigh`, CLI
+`scaffoldVersion 0.153.2` (verified baked into the pinned author image). Observed
+from runtime events: model, effort and scaffold version were not exposed by the
+codex CLI's event stream and remain unobserved — a known instrumentation limit
+for this CLI, not a data quality problem.
+
+Dispatched 2026-09-09T16:47:55.159Z, one of five reservations installed within a
+216ms window (16:47:54.943Z–16:47:55.159Z); `docker ps` confirmed all five
+`foundry-real-*` containers running concurrently at launch, so this campaign's
+concurrency requirement was genuinely met. Completed 2026-09-09T17:00:59.734Z.
+Total elapsed ≈784,575ms (~13m5s) — the fastest of this campaign's five attempts.
+Solver authoring time (capture wall clock) ≈777,687ms (~12m58s); grading ≈6.9s.
+Well inside the 10,800,000ms (3h) budget. Execution reached a clean `completed`
+state with no invalid-execution or infrastructure error.
+
+### B. What changed since Trial 1
+
+Per the engineering record above, the public starter is now a single empty
+`subject.run` entry point (Trial 1's starter already supplied pagination,
+exact-number helpers, a reconciliation pipeline and visible tests). The checker
+is now a required, separately-graded deliverable. Most directly relevant to
+Trial 1's failure: the harness-wide fix to `gradeChecker`'s `namedRightCheck` (in
+`src/packages/portfolio.ts`) now credits a checker for naming *any* obligation a
+control's own trace actually violated, not only the one private "primary" label —
+resolving the exact defect this package's Trial 1 audit identified. The bank also
+grew by one control (`undrained-empty-source`, isolating incomplete pagination
+with an otherwise-correct empty report), so Trial 2's checker bank is 14
+candidates against Trial 1's 13.
+
+### C. Results
+
+Reward **1**. Service: all 28 expected scenario IDs observed with zero failures,
+zero missing/unexpected IDs — status `semantic-pass`. Checker: `checkerRequired:
+true`, `checkerPassed: true`, 14/14 candidates correctly classified (0 missed, 0
+false positives), deterministic across repeat judgments. A clean pass on both
+deliverables. This is a genuinely fresh, independently-written submission — not
+a rerun of Trial 1's preserved bytes — reaching the same correct outcome Trial 1's
+own regrade already demonstrated was achievable once the harness defect was fixed.
+
+### D. Observable solving behavior
+
+The capture holds 28 events and 14 completed shell commands — compact, matching
+the fastest authoring time in this batch. The agent's first two commands read
+every contract file (`SEMANTICS.md`, `api.d.ts`, `CHECKER-INPUT.md`, the starter
+`entry.mjs`, `instruction.md`) before writing anything, and it explicitly noted
+the two design points the task hinges on: round once after summing exact rational
+charges (not per usage event), and treat pagination completion as verifiable from
+the observation trace's cursor chains rather than trusted from the candidate's own
+report.
+
+It then wrote `entry.mjs` (a `Map`-keyed latest-revision selector per tenant/id,
+BigInt rational-fraction accumulation via explicit `gcd`-reduced addition, and a
+half-even final rounding helper) and `checker.mjs` as a **separately authored**
+oracle — `checker.mjs`'s `expectedRows()` reimplements the same reconciliation
+logic independently rather than importing `entry.mjs`'s functions, so the two
+files can't silently share a bug.
+
+Self-testing ran in three escalating passes, all via ad hoc `node --input-type=module`
+scripts, no test framework: (1) a hand-built integration case combining an
+injected cursor error, a forced empty middle page, duplicate/foreign-tenant rows,
+a voided credit, a revision moved outside the window, and a fractional-rounding
+case — asserting the checker's verdict twice for determinism, asserting the input
+object was never mutated, and asserting it correctly rejected both a tampered
+amount and an incomplete-pagination trace; (2) a seeded-random 120-scenario fuzz
+run (two tenants, up to four revisions per record, ~8% injected transient fetch
+errors) asserting zero valid cases rejected and, separately, that flipping one
+`usageIds` entry on 20 of those cases is always caught; (3) a final export/syntax/
+empty-population edge check. All three passed on the first reported run — no
+failed self-test or reverted approach appears in the capture. Its final summary
+("Implemented both deliverables... Validation passed") matches the actual grading
+exactly; it did not overclaim.
+
+### E. Comparison and next step
+
+Trial 1 reached the *same* correct result on the *same* preserved submission
+bytes once the harness's label-naming defect was fixed and confirmed by regrade
+(13/13, up from 5/11) — this report's own "Changes applied" section already
+established that the capability was there all along. Trial 2 confirms this
+independently: a brand-new submission, written from an empty starter against a
+checker bank one control larger, reaches the same clean pass without needing the
+fix explained to it — the fix is a harness correction, not a hint the solver had
+to receive. This is a genuine resolution of Trial 1's original failure cause, not
+merely a different submission that happened to dodge it: the mechanism Trial 1
+was penalized for (naming a real-but-non-primary obligation) is exactly what the
+fixed grader now accepts, and Trial 2's checker was graded under that fixed rule
+from the start. Given two independent confirmations (a regrade and now a fresh
+attempt) of a clean pass, retain this package as a correct control and give the observed reward-zero
+candidates priority in the next failure-finding trials.
+
+### F. Verified publication record — September 9, 2026
+
+Reward **1**; service **28/28**; checker **14/14**. All **823** completion-manifest files matched their recorded sizes and hashes.
+
+[Campaign results](../round-two-fourth-ranked-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-fourth-ranked-five.json). Earlier trial records are preserved.

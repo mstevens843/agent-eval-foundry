@@ -61,3 +61,95 @@ Local validation passed 16 assurance checks across 33 service scenarios, includi
 Foundry export: `.local/fourth-ranked-five-implementation-2026-09-09/release-ready/ticket-consolidation-repair/export`. Package digest: `61056ab84d9aa2532dec0a292f0a84360046c0ff56a5336e6f3dca09d2b8d466`. Native digest: `1b35bc501ffb1672a350b5ccc44a7079d6cdd2048d3b332a443be17bd903a1e9`. Suggested Trial 2 target: **Claude**, retaining this package's original model family. Append the eventual Trial 2 result below this engineering record, preserving Trial 1.
 
 [Group implementation and selection](../fourth-ranked-five-implementation-plan-2026-09-09.md) and [exact validation evidence](../evidence/2026-09-09-fourth-ranked-five-implementation.json) retain file hashes, native trial identities and the remaining final-qualification requirements.
+
+## Trial 2 — implementation successor — September 9, 2026
+
+### A. Identity and execution
+
+Run `ticket-consolidation-repair-attempt-1`, package digest
+`61056ab84d9aa2532dec0a292f0a84360046c0ff56a5336e6f3dca09d2b8d466`, route
+`professional-multifile/authority-process@1`. Evidence retained at
+`.local/round-two-fourth-ranked-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/ticket-consolidation-repair-attempt-1/`.
+Dispatched through the signed, subscription-only JobStore real-provider route
+(Ed25519 reservation, `maxMicroUsd: 0`, `maxAttempts: 1`) — a fresh campaign slot
+(`attempt-1`), not an infrastructure retry. Reused, byte-for-byte, the isolated
+runtime built and independently verified for the first round-two campaign; its
+`dist/index.js` SHA-256 was re-verified unchanged immediately before this dispatch.
+Author image `sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a`.
+
+Target: **claude**. Requested `anthropic/claude-opus-5`, effort `max`, CLI
+`scaffoldVersion 2.1.263` (verified baked into the pinned author image). Observed
+from runtime events: `model="claude-opus-5"` (matches requested); effort and
+scaffold version are not exposed by the CLI's event stream and remain unobserved.
+
+Dispatched 2026-09-09T16:47:54.943Z as one of five reservations installed within a
+216ms window (16:47:54.943Z–16:47:55.159Z); `docker ps` confirmed all five
+`foundry-real-*` containers running concurrently — a genuinely concurrent five-way
+campaign. Completed 2026-09-09T17:05:23.606Z. Total elapsed ≈1,048,663ms (~17m29s);
+solver authoring time (capture wall clock) ≈1,040,491ms (~17m20s); grading ≈8.2s.
+Well inside the 10,800,000ms (3h) budget. Execution reached a clean `completed`
+state with no invalid-execution or infrastructure error.
+
+### B. What changed since Trial 1
+
+Trial 1's starter already supplied pagination, selection, update and orchestration
+modules; this successor removes all of them, leaving a single empty `subject.run`
+entry point, and adds the `intermediate-label-loss` control (rejecting a patch
+sequence that drops an existing label even if a later patch restores the final
+set). The checker is now a required, separately-graded deliverable rather than
+diagnostic output, and reason strings are optional diagnostics only.
+
+### C. Results
+
+Reward **1** — a clean pass on both deliverables. Service: all 33 expected
+scenarios pass (completion, ownership, labels, preservation, conditional_writes),
+zero missing/unexpected IDs. Checker: `checkerRequired: true`, `checkerPassed:
+true`, 13/13 candidates correctly classified — 0 missed, 0 false positives,
+deterministic across repeat judgment.
+
+### D. Observable solving behavior
+
+All 32 captured tool calls were `Bash`. The agent wrote `entry.mjs` and
+`checker.mjs` directly via heredocs, then built a self-contained test harness
+under `/tmp/h`: a mock backend (`mock.mjs`) implementing the pager/batch/resolve
+contract "as adversarially as [SEMANTICS.md] allows" (overlapping pages, forced
+expiry, reordered/dropped batch results, injected concurrent edits immediately
+before update evaluation), a scenario generator, and a candidates bank of 14
+deliberately broken implementations (expiry-stops, first-page-only, id-only
+identity, closed/unrelated-tenant writes, no conflict retry, double-marker,
+single-resolve, wrong-team, note/status overwrites, stale/stripped labels,
+no-op) plus one differently-shaped *correct* alternative (read-first, one row
+per batch, redundant rewrites, sorted labels).
+
+It ran the checker against independently computed ground truth across 16
+candidates × 5 scenarios (accepting both correct implementations, rejecting all
+14 mutants), then 20 synthetic edge cases, determinism and input-immutability
+checks, a no-throw check on malformed input, and a 300-case × 5-cell performance
+run (139ms against a 60s budget). It used `python3` inline scripts to patch its
+own harness files mid-session rather than rewriting them via heredoc each time.
+It explicitly flagged one interpretive judgment call in its final report: treating
+a *submitted* write to a closed or unrelated-tenant ticket as a failure even if
+the write had no effect (reading the prohibition as covering the request itself,
+not just landed mutations) — noting this is stricter than a "landed-mutations-only"
+reading might require, but costs nothing against a correct implementation. Its
+final completion claim matches the actual graded result exactly: no overclaiming
+found.
+
+### E. Comparison and next step
+
+Trial 1, working from a substantially pre-implemented starter, also reached
+reward 1 (33/33 service, 12/12 checker, 14m07s). Trial 2, working from an empty
+entry point and facing one additional control (`intermediate-label-loss`) absent
+from Trial 1's bank, reached the same clean-pass outcome in comparable wall-clock
+time (17m29s) while writing the full implementation and an independently-designed
+adversarial test harness from scratch. This is a second consecutive clean pass for
+this package/model pairing across a materially different starter and an expanded
+control set — consistent with a stable, low-difficulty result rather than one that
+depended on the removed scaffolding. Retain this successful submission as a correct control. Prioritize packages with
+observed required-deliverable failures for further failure-finding trials.
+
+### F. Verified publication record — September 9, 2026
+
+Reward **1**; service **33/33**; checker **13/13**. All **821** completion-manifest files matched their recorded sizes and hashes.
+
+[Campaign results](../round-two-fourth-ranked-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-fourth-ranked-five.json). Earlier trial records are preserved.

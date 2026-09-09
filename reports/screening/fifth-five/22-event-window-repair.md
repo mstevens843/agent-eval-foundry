@@ -138,3 +138,124 @@ Local validation passed **18 assurance checks**, including a semantic failure fo
 Foundry export: `.local/final-five-implementation-2026-09-09/release-ready/event-window-repair/export`. Package digest: `39ca36d3e401ee3ddce6c772b8033be619078ea79598f1162329063824909258`. Native export: `.local/final-five-implementation-2026-09-09/harbor-ready/event-window-repair`. Native digest: `6f1ee379fa6aed8db6bb5d98042c8c1b58fbb9d8cdc51651d7092e1ab3120cdc`. Suggested target: **Codex**, retaining the original model family. Append the eventual Trial 2 outcome below this engineering record; preserve Trial 1.
 
 [Implementation and completed checks](../final-five-implementation-plan-2026-09-09.md) · [Exact evidence](../evidence/2026-09-09-final-five-implementation.json).
+
+## Trial 2 — implementation successor — September 9, 2026
+
+### A. Identity and execution
+
+Run `event-window-repair-attempt-1`, package digest
+`39ca36d3e401ee3ddce6c772b8033be619078ea79598f1162329063824909258`, route
+`professional-multifile/authority-process@1`. Dispatched through this session's
+`real-provider` execution route (signed JobStore reservation, Ed25519, realm
+`real-provider`, `billingMode: subscription-only`, `maxMicroUsd: 0`, `maxAttempts: 1`)
+— a fresh campaign slot (`attempt-1`), not an infrastructure retry of any prior run.
+Author image `sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a`
+(`foundry-provider-agent-portfolio:2026-09-07`). Evidence retained at
+`.local/round-two-final-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/event-window-repair-attempt-1/`.
+
+Target: **codex**. Requested `openai/gpt-5.6-sol`, effort `xhigh`, CLI
+`scaffoldVersion 0.153.2` (verified baked into the pinned author image). Observed
+from runtime events: model, effort and scaffold version are not exposed by the
+codex CLI's event stream and remain unobserved — a known instrumentation limit,
+not a data quality problem.
+
+Dispatched 2026-09-09T17:31:23.413Z as one of five reservations installed within a
+334ms window (17:31:23.079Z–17:31:23.413Z); `docker ps` confirmed all five
+`foundry-real-*` containers running concurrently, so this was a genuinely concurrent
+five-way campaign, not sequential dispatch. A sixth, separately-authorized job
+(route-policy-repair, a retry of a package interrupted in an earlier campaign) was
+deliberately dispatched roughly 102 seconds later as an additional concurrent job on
+this same host, bringing the round's total to three Claude and three Codex attempts;
+that job is unrelated to this one's own valid execution. Completed
+2026-09-09T17:40:19.543Z. Total elapsed ≈536,130ms (~8m56s) — the fastest and
+leanest job in this batch — with solver authoring time (capture wall clock)
+≈526,529ms (~8m47s) and grading ≈9.6s. Token usage was the smallest in the batch
+(206,036 input tokens, 177,920 cached; 15,823 output tokens; codex reports no price
+estimate). Execution reached a clean `completed` state with no invalid-execution or
+infrastructure error.
+
+### B. What changed since Trial 1
+
+The starter is now a single empty `subject.run` entry point (Trial 1's starter
+already supplied separate frontier/identity/window/orchestration modules and a
+visible test suite); the engineering record above confirms the checker bank grew
+from Trial 1's 14 candidates to 15, adding a control where a service produces
+correct output but stops without consuming the terminal `null`, which must fail
+`completion`.
+
+### C. Results
+
+**Reward 1 — a clean pass on both required deliverables.** Service: all 27
+protected scenarios pass, zero missing/unexpected IDs. Checker: `checkerRequired:
+true`, `checkerPassed: true`, all 15/15 candidates correctly classified (0 missed,
+0 false positives), including the new stopped-before-terminal-null control.
+`reasonPolicy` is diagnostic-only; only the boolean verdict was graded.
+
+### D. Observable solving behavior
+
+The capture is lean — 22 events, 4 shell commands total. Codex opened by listing
+files and searching the tree, then read `instruction.md`/`SEMANTICS.md` in full
+before writing anything, and named the hard parts up front in its own words:
+"deduplication before lateness checks, excluding idle partitions from frontier
+calculation, and comparing simultaneous window publications without imposing an
+artificial row order" — plus checking "the checker's host-record details so it can
+reject incomplete consumption, not merely compare final aggregates." It then wrote
+both `entry.mjs` and `checker.mjs` in one file-change action, with no starter code
+to build from.
+
+`entry.mjs` tracks per-partition `{watermark, active, ended}` state; the frontier
+only advances to `Math.max(frontier, Math.min(...activeWatermarks))` when any
+partition is active, or to `Infinity` once every partition has ended, and windows
+close only once `start + width + lateness <= frontier`. Deduplication uses a
+length-prefixed composite key (`` `${partition.length}:${partition}${id}` ``) so
+that a partition name and an ID cannot collide when concatenated. `checker.mjs`
+deliberately reimplements the same semantics as an independent reference model
+(explicitly commented: "This keeps failures in entry.mjs from being repeated by
+the oracle") rather than importing anything from `entry.mjs`, and validates timing,
+output shape, complete input consumption and determinism from the observation log
+alone.
+
+Three rounds of self-testing followed, all captured verbatim, not just claimed:
+1. A hand-built 11-event trace (negative-time windows, an idle/resume partition, a
+   cancelling delta, a duplicate late event) checked against three verdict cases —
+   the correct trace, a corrupted-count variant, and a variant with the terminal
+   `null` read dropped — confirming the checker distinguishes all three
+   (`{"ok":true}`, then two distinct rejection reasons).
+2. A 300-trial seeded random-event generator (variable partition counts, widths,
+   lateness, watermark/idle/resume/end sequences, deliberate ID reuse) run through
+   both `entry.mjs` and `checker.mjs` together; the actual captured output reads
+   `validated 300 randomized executions` — independently confirmed present in the
+   raw capture, not inferred from the agent's summary.
+3. A final adversarial audit of `checker.mjs` alone: re-running the same input
+   twice and asserting byte-identical verdicts and an unmutated input snapshot
+   (determinism/immutability), an opaque `[REDACTED_SECRET]`-token case, a
+   deliberately mistimed late-event trace expected to fail, and — notably — an
+   explicit `assert.equal(one.verdicts.__proto__.ok, true)` check, i.e. a
+   prototype-pollution-shaped token probed against the verdicts object and
+   confirmed to resolve correctly rather than being silently treated as a real key.
+
+Its final completion claim ("300 randomized executions passed. Negative
+timestamps, zero-total accumulators, duplicates, late events, idleness/resume,
+malformed results, timing violations, determinism, and input immutability were
+tested") matches both the actual capture and the final grading exactly — no
+overclaiming found.
+
+### E. Comparison and next step
+
+Trial 1, working from a starter with most of the machinery already in place,
+reached the same reward 1 with 14/14 on the checker in 7m41s. Trial 2, writing
+both files from nothing against an empty starter, reached the same clean outcome
+in 8m47s of authoring (8m56s total), compared with Trial 1's 7m41s of authoring and
+against a checker bank one control larger. That is consistent with this package
+remaining a low-difficulty result for this Codex pairing rather than one that
+depended on the removed starter scaffolding — echoing Trial 1's own conclusion
+that the intended behavior was already mostly correct and the remaining repair was
+compact. Given two independent clean passes across different starter conditions,
+retain its passing submissions as controls and prioritize observed reward-zero
+candidates for the next failure-finding trials.
+
+### F. Verified publication record — September 9, 2026
+
+Reward **1**; service **27/27**; checker **15/15**. All **934** completion-manifest files matched their recorded sizes and hashes.
+
+[Campaign results](../round-two-final-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-final-five.json). Earlier trial records are preserved.

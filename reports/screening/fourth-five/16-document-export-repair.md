@@ -70,3 +70,99 @@ Local validation passed 16 assurance checks across 29 service scenarios, includi
 Foundry export: `.local/fourth-ranked-five-implementation-2026-09-09/release-ready/document-export-repair/export`. Package digest: `3111ac16dd55679ad87eb03666de42479344a0906efb1406ee80bc6abef5e6ab`. Native digest: `ddc03ad7ecda3d7cf6cf129d51dffe455eef13b705b86433ebadb106ba24d1c8`. Suggested Trial 2 target: **Codex**, retaining this package's original model family. Append the eventual Trial 2 result below this engineering record, preserving Trial 1.
 
 [Group implementation and selection](../fourth-ranked-five-implementation-plan-2026-09-09.md) and [exact validation evidence](../evidence/2026-09-09-fourth-ranked-five-implementation.json) retain file hashes, native trial identities and the remaining final-qualification requirements.
+
+## Trial 2 — implementation successor — September 9, 2026
+
+### A. Identity and execution
+
+Run `document-export-repair-attempt-1`, package digest
+`3111ac16dd55679ad87eb03666de42479344a0906efb1406ee80bc6abef5e6ab`, route
+`professional-multifile/authority-process@1`. Dispatched through the `real-provider`
+execution route (signed JobStore reservation, Ed25519, realm `real-provider`,
+`billingMode: subscription-only`, `maxMicroUsd: 0`, `maxAttempts: 1`) — a fresh
+campaign slot (`attempt-1`), not an infrastructure retry. Controller adapted from the
+third-ranked-five campaign, importing the same isolated runtime built and
+independently verified earlier in this session (`.local/round-two-top-five-2026-09-09/frozen-source/dist/index.js`,
+re-hashed unchanged immediately before this dispatch). Author image
+`sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a`. Evidence
+retained at `.local/round-two-fourth-ranked-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/document-export-repair-attempt-1/`.
+
+Target: **codex**. Requested `openai/gpt-5.6-sol`, effort `xhigh`, CLI
+`scaffoldVersion 0.153.2` (verified baked into the pinned author image). Observed:
+model, effort and scaffold version are all unobservable from the Codex CLI's event
+stream — a known instrumentation limit, not a data quality problem.
+
+Dispatched 2026-09-09T16:47:55.106Z as one of five reservations installed within a
+216ms window (16:47:54.943Z–16:47:55.159Z); `docker ps` confirmed all five
+`foundry-real-*` containers running concurrently, so this was a genuinely concurrent
+five-way campaign. Completed 2026-09-09T17:07:07.039Z. Total elapsed ≈1,151,933ms
+(~19m12s) — solver authoring time (capture wall clock) ≈1,141,164ms (~19m1s), grading
+≈10.8s. Execution reached a clean `completed` state with no invalid-execution or
+infrastructure error.
+
+### B. What changed since Trial 1
+
+Trial 1's starter already contained a functioning multi-file exporter with two
+specific defects (successive-replacement literal matching instead of longest-match
+scanning, and missing recursive nested-message handling); Codex's Trial 1 fix was
+concentrated in those two modules, on top of substantial pre-existing machinery.
+This successor's starter is empty — the public codec, publisher, service and
+transformation modules were all removed after the private reference closure was
+completed, so Trial 2 had to author the entire service and its independent checker
+from nothing, not patch two functions in an otherwise-working implementation.
+Reason strings remain optional diagnostics; both service and checker stay required
+deliverables.
+
+### C. Results
+
+Reward **1**. Service: all 29 expected scenario IDs observed, zero failures, zero
+missing/unexpected IDs — full pass. Checker: `checkerRequired: true`,
+`checkerPassed: true`, 13/13 candidates correctly classified (0 missed, 0 false
+positives), deterministic. A clean pass on both required deliverables, matching
+Trial 1's outcome under the same Codex/xhigh pairing despite starting from an empty
+starter this time.
+
+### D. Observable solving behavior
+
+The capture is lean: 40 events total (5 agent messages, 22 command executions, 10
+file edits) — the leanest of this round's five attempts. Codex opened by listing the
+workspace and reading `SEMANTICS.md`, `api.d.ts` and `CHECKER-INPUT.md` in one
+command, then the (empty) `entry.mjs`/`instruction.md` in a second. It wrote
+`entry.mjs` and `checker.mjs` together before any test ran, then validated
+iteratively via `node --check` plus a sequence of ad hoc `node --input-type=module`
+heredoc scripts rather than a persistent test suite file — each one constructing a
+synthetic ticket/policy pair and importing both `subject.run` and the checker's
+`run()` directly.
+
+Two concrete, evidenced revisions during that validation: (1) it caught and fixed a
+BOM/edge-case literal-matching scenario using a `﻿`-prefixed string it
+constructed by hand; (2) its own agent messages record that the checker's
+decompression-size guard was originally too tight — "a 256 KiB compressed text part
+can legitimately become about 2.5 MiB" once a one-character literal expands to the
+ten-byte `[REDACTED]` marker — and it widened `MAX_INFLATED_PART` accordingly while
+keeping the decompression-bomb protection. Its final message lists exactly what it
+built and tested ("syntax checks, complex nested fixtures, alternate valid
+serialization, negative cases, empty input, and maximum redaction expansion") and
+that claim matches the actual grading result — no overclaiming found.
+
+### E. Comparison and next step
+
+Trial 1 (working from a substantially pre-implemented starter with two isolated
+defects) reached reward 1 in 15m30s. Trial 2 (empty starter, full from-scratch
+implementation of both `entry.mjs` and `checker.mjs`) reached the same reward-1
+outcome in 19m1s of authoring time — modestly longer, consistent with writing
+materially more code, but not a large gap given the starter removed nearly
+everything. Both trials are clean passes on the same model/effort pairing with no
+disputed element on either dimension. This package now has two independent clean
+passes (one against a partial starter, one from empty) using the same Codex
+assignment; it looks like a stable, low-difficulty result for this specific
+package/model pairing rather than one that depended on the removed starter
+scaffolding. Recommend treating it as a control/calibration task rather than a
+priority for further failure-finding trials, consistent with the existing
+recommendation in the "Changes applied since this trial" section above.
+
+### F. Verified publication record — September 9, 2026
+
+Reward **1**; service **29/29**; checker **13/13**. All **850** completion-manifest files matched their recorded sizes and hashes.
+
+[Campaign results](../round-two-fourth-ranked-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-fourth-ranked-five.json). Earlier trial records are preserved.

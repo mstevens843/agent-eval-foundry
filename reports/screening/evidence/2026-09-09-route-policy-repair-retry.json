@@ -1,0 +1,215 @@
+{
+  "schemaVersion": 1,
+  "campaign": "2026-09-09-route-policy-repair-retry",
+  "evidenceClass": "real-provider-screening",
+  "label": "Trial 2 (retry)",
+  "limitations": [
+    "One exploratory attempt in a genuinely new campaign slot (attempt=1 in its own JobStore), not a resume or in-place retry of the earlier interrupted attempt, which remains a separate, preserved invalid-execution record at .local/round-two-next-five-2026-09-09/real-campaign-frozen/jobs/real-provider/.incomplete/route-policy-repair-attempt-1/.",
+    "Requested model and effort are not independent backend attestations; Claude model strings were observable in this capture.",
+    "CLI dollar estimates are not subscription charges; billingMode was subscription-only with maxMicroUsd 0 and no paid API fallback.",
+    "Dispatched deliberately alongside the separately-authorized round-two-final-five campaign (~102s after that batch's five containers were confirmed running) to reach 3 Claude/3 Codex total for that round; the operator observed all six containers running together after dispatch. Completion timestamps show this overlap covered only the initial part of the retry."
+  ],
+  "sourceDigest": "2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4",
+  "sourceProvenance": "Reused, byte-for-byte, the isolated runtime built and independently verified for the first round-two campaign. No new runtime was built.",
+  "authorImage": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+  "package": {
+    "id": "route-policy-repair",
+    "target": "claude",
+    "native": false,
+    "runId": "route-policy-repair-attempt-1",
+    "requestedModel": "anthropic/claude-opus-5",
+    "requestedEffort": "max",
+    "packageDigest": "b6490e6b9cd68f23bba0d63ce101b6c7b49f48113f2a90e320a7fc015c32ab01",
+    "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+    "observedProfile": {
+      "effort": {
+        "source": "not exposed by either CLI's event stream",
+        "status": "unobservable",
+        "value": null
+      },
+      "evidenceClass": "real-provider",
+      "fallback": null,
+      "model": {
+        "source": "runtime event type=assistant",
+        "status": "observed",
+        "value": "claude-opus-5"
+      },
+      "scaffoldVersion": {
+        "source": "not exposed by either CLI's event stream",
+        "status": "unobservable",
+        "value": null
+      }
+    },
+    "outcome": "semantic-pass",
+    "reward": 1,
+    "captureStatus": "completed",
+    "authoringMilliseconds": 2539156,
+    "start": "2026-09-09T17:33:05.336Z",
+    "end": "2026-09-09T18:15:31.372Z",
+    "service": {
+      "scenarios": 27,
+      "failedScenarios": 0,
+      "invalidScenarios": 0
+    },
+    "checker": {
+      "reasonPolicy": "diagnostic-only",
+      "present": true,
+      "deterministic": true,
+      "total": 12,
+      "correct": 12,
+      "falsePositives": 0,
+      "missed": 0,
+      "namedRightCheck": 0,
+      "details": [
+        {
+          "candidateId": "forged-completion",
+          "expectedFailingCheck": "completion",
+          "observedFailingChecks": [
+            "completion",
+            "positive_change",
+            "scoped_behavior"
+          ],
+          "outcome": "correct-reject-unnamed"
+        },
+        {
+          "candidateId": "ignore-prefix-length",
+          "expectedFailingCheck": "preservation",
+          "observedFailingChecks": [
+            "preservation"
+          ],
+          "outcome": "correct-reject-unnamed"
+        },
+        {
+          "candidateId": "reference",
+          "expectedFailingCheck": null,
+          "observedFailingChecks": [],
+          "outcome": "correct-accept"
+        },
+        {
+          "candidateId": "falsy-preference",
+          "expectedFailingCheck": "scoped_behavior",
+          "observedFailingChecks": [
+            "positive_change",
+            "scoped_behavior"
+          ],
+          "outcome": "correct-reject-unnamed"
+        },
+        {
+          "candidateId": "all-egresses",
+          "expectedFailingCheck": "preservation",
+          "observedFailingChecks": [
+            "preservation"
+          ],
+          "outcome": "correct-reject-unnamed"
+        },
+        {
+          "candidateId": "match-mutated-community",
+          "expectedFailingCheck": "scoped_behavior",
+          "observedFailingChecks": [
+            "positive_change",
+            "scoped_behavior"
+          ],
+          "outcome": "correct-reject-unnamed"
+        },
+        {
+          "candidateId": "isolation",
+          "expectedFailingCheck": "completion",
+          "observedFailingChecks": [
+            "completion",
+            "positive_change",
+            "scoped_behavior"
+          ],
+          "outcome": "correct-reject-unnamed"
+        },
+        {
+          "candidateId": "no-work",
+          "expectedFailingCheck": "completion",
+          "observedFailingChecks": [
+            "completion",
+            "positive_change",
+            "scoped_behavior"
+          ],
+          "outcome": "correct-reject-unnamed"
+        },
+        {
+          "candidateId": "early-accept",
+          "expectedFailingCheck": "scoped_behavior",
+          "observedFailingChecks": [
+            "positive_change",
+            "preservation",
+            "scoped_behavior"
+          ],
+          "outcome": "correct-reject-unnamed"
+        },
+        {
+          "candidateId": "alternative",
+          "expectedFailingCheck": null,
+          "observedFailingChecks": [],
+          "outcome": "correct-accept"
+        },
+        {
+          "candidateId": "example-hardcoding",
+          "expectedFailingCheck": "positive_change",
+          "observedFailingChecks": [
+            "positive_change",
+            "preservation",
+            "scoped_behavior"
+          ],
+          "outcome": "correct-reject-unnamed"
+        },
+        {
+          "candidateId": "leave-nested-calls",
+          "expectedFailingCheck": "positive_change",
+          "observedFailingChecks": [
+            "positive_change",
+            "scoped_behavior"
+          ],
+          "outcome": "correct-reject-unnamed"
+        }
+      ],
+      "pass": true,
+      "gradeSummarySha256": "1fae6969222105f31c0f8680d021ca0efdf5d04e648f7677a4a32a6f853a5060"
+    },
+    "usage": {
+      "cachedInputTokens": 12518623,
+      "costUsd": 12.653566499999995,
+      "inputTokens": 12735955,
+      "outputTokens": 168825,
+      "source": "claude `result` event `usage` and `total_cost_usd`"
+    },
+    "subscriptionCharge": null,
+    "usageNote": "CLI cost estimates are not subscription charges; this attempt used subscription-only authorization with no paid API fallback.",
+    "completionSha256": "7ac8bec1789e43fb83d16087d44431a02923f57935f3e15d4bf62e777763d3dc",
+    "resultSha256": "5d9fe3b2e41507ff1043c1c41ce45c5a985c403f48f9ba517eaf9076e1f1069c",
+    "gradeSha256": "db2847fe3bf5a147b36d4d19efc3caed07546054613a484d1b7d72d235d02705",
+    "assessment": "clean-pass-retry",
+    "rationale": "Service 27/27 and checker 12/12 all correct. Checker built via symbolic community-delta exploration validated against independent brute-force enumeration; replayed every counterexample as a concrete route; caught all 7 of its own deliberately-injected breakages. Explicitly disclosed a known scaling limitation (exponential blowup past ~16 independent communities) with mitigation and stress-test evidence, rather than hiding it. Longest, most token-heavy run of this session (42m26s, 12.7M input tokens); no overclaiming.",
+    "analysis": "reports/screening/third-five/14-route-policy-repair.md",
+    "serviceOutcome": "semantic-pass",
+    "checkerRequired": true,
+    "totalElapsedMilliseconds": 2546036,
+    "manifestFilesVerified": 745,
+    "manifestBytesVerified": 10358482,
+    "recordedAdjudication": "unlabelled",
+    "recordedCountsAsModelFailure": false,
+    "recordedModelEvidenceEligible": false,
+    "retryOfCampaign": "2026-09-09-round-two-next-five",
+    "retryOfRunId": "route-policy-repair-attempt-1",
+    "retryReason": "Original attempt interrupted before capture and grading; this is a separate completed attempt."
+  },
+  "automaticRetries": 0,
+  "counts": {
+    "attemptsLaunched": 1,
+    "completedScoredAttempts": 1,
+    "recordedZeroRewards": 0,
+    "solverPasses": 1,
+    "infrastructureInterruptedAttempts": 0
+  },
+  "audit": {
+    "newModelCalls": 0,
+    "manifestFilesVerified": 745,
+    "manifestBytesVerified": 10358482,
+    "errors": [],
+    "formalAdjudicationChanged": false
+  }
+}

@@ -27,6 +27,12 @@ describe("reviewable source and honest screening publication", () => {
         .flatMap((path) => read(path).packages)
         .reduce((sum, r) => sum + r.verifiedFiles, 0),
       providerCallsMade: 0,
+      successorPackages: 25,
+      successorTrials: 26,
+      successorCompletedTrials: 25,
+      successorRecordedZeroRewards: 5,
+      successorSolverPasses: 20,
+      successorInterruptedTrials: 1,
     });
   });
   it("links all twenty-five actual package trees without counting calibration kernels", () => {

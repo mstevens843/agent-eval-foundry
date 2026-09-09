@@ -37,3 +37,105 @@ Local validation passed **13 assurance checks**, including a semantic failure fo
 Foundry export: `.local/final-five-implementation-2026-09-09/release-ready/persistent-knowledge-repair/export`. Package digest: `9d40456cb7d7456aee236396cc374fa3e17c9f2b1ce1ad71641e3234efe62eea`. Native export: `.local/final-five-implementation-2026-09-09/harbor-ready/persistent-knowledge-repair`. Native digest: `8f9453df86143808c306966acc54ac1b14a886a1d2d8e16c0fd356e2413b6643`. Suggested target: **Codex**, retaining the original model family. Append the eventual Trial 2 outcome below this engineering record; preserve Trial 1.
 
 [Implementation and completed checks](../final-five-implementation-plan-2026-09-09.md) · [Exact evidence](../evidence/2026-09-09-final-five-implementation.json).
+
+## Trial 2 — implementation successor — September 9, 2026
+
+### A. Identity and execution
+
+Run `persistent-knowledge-repair-attempt-1`, package digest
+`9d40456cb7d7456aee236396cc374fa3e17c9f2b1ce1ad71641e3234efe62eea`, route
+`professional-multifile/authority-process@1`. Dispatched through the session's
+`real-provider` execution route (signed JobStore reservation, Ed25519, realm
+`real-provider`, `billingMode: subscription-only`, `maxMicroUsd: 0`, `maxAttempts: 1`)
+— a fresh campaign slot (`attempt-1`), not an infrastructure retry of any prior run.
+Author image `sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a`.
+Evidence retained at
+`.local/round-two-final-five-2026-09-09/real-campaign-frozen/jobs/real-provider/records/persistent-knowledge-repair-attempt-1/`.
+
+Target: **codex**. Requested `openai/gpt-5.6-sol`, effort `xhigh`, CLI
+`scaffoldVersion 0.153.2` (verified baked into the pinned author image). Model,
+effort and scaffold version were not exposed by the codex CLI's event stream and
+remain unobserved — a known instrumentation limit, not a data quality problem.
+
+Dispatched 2026-09-09T17:31:23.135Z as one of five reservations installed within a
+334ms window (17:31:23.079Z–17:31:23.413Z); `docker ps` confirmed all five
+`foundry-real-*` containers running concurrently, so this was a genuinely concurrent
+five-way campaign. A sixth, separately-authorized job (`route-policy-repair`) was
+deliberately dispatched roughly 102 seconds later as an additional concurrent job on
+this host, bringing the round's total to three Claude and three Codex attempts; that
+job's own timing and outcome are recorded in its own analysis document and do not
+affect this job's validity. Completed 2026-09-09T17:42:49.682Z. Total elapsed
+≈686,547ms (~11m27s) — solver authoring time (capture wall clock) ≈677,809ms
+(~11m18s), grading ≈8.7s. This was the fastest and leanest job in the batch (38
+captured events). Execution reached a clean `completed` state with no invalid
+execution or infrastructure error.
+
+### B. What changed since Trial 1
+
+Trial 1 required only the service (12/12 scenarios, reward 1, no checker). This
+successor removed the public revision, derivation, policy, persistence and
+publication implementations, leaving an empty `subject.run` entry point, and added
+two genuinely new required obligations that Trial 1 never faced: (1) a standalone,
+separately-graded checker, and (2) committed-publication redelivery — the contract
+now integrates four lost-response scenarios where a publish commits but the caller
+never receives the response (simulated process termination), followed by identical
+job redelivery, expanding the scenario count from 12 to 16.
+
+### C. Results
+
+Reward 1 — a clean pass on both required deliverables. Service: all 16 expected
+scenario IDs observed, zero failures, zero missing/unexpected IDs. Checker: present,
+deterministic, `checkerRequired: true`, `checkerPassed: true`, 10/10 candidates
+correctly classified (0 missed, 0 false positives). This is the first time this
+package's checker has ever been graded and the first time the redelivery contract has
+been tested, and both passed cleanly on a single attempt.
+
+### D. Observable solving behavior
+
+The agent read `SEMANTICS.md`, `api.d.ts` and `CHECKER-INPUT.md` in one combined
+`sed`/`rg` pass, then the (empty) starter and `instruction.md`, then wrote `entry.mjs`
+directly. Its redelivery mechanism: on every `run`, it calls `api.receipts({})` and
+builds a `published` map keyed by request id from the *existing* receipt history
+before doing any new work; if an incoming request id already has a receipt, it
+returns `{outcome: 'published', lineage: prior.lineage}` immediately, using the
+already-committed lineage rather than re-evaluating or re-publishing. Revision
+handling only applies an incoming update when `update.revision > previous.revision`,
+and lineage evaluation (`evaluate()`) walks derived-record parent chains with cycle
+detection (`active`/`finished` sets) and merges all contributing ancestors' lineage,
+not just the first parent.
+
+It validated this mechanism directly rather than asserting it: a single
+`node --input-type=module` heredoc script built a mock `api` whose `publish()` throws
+`'simulated lost response'` on its first call (`interrupt = true`), ran the job once
+expecting that thrown error, then re-ran the *same* job object and asserted
+`effects.length === 1` (the publish was not duplicated) and
+`report1.decisions[0].outcome === 'published'` — i.e. it directly exercised the exact
+lost-response-then-redelivery sequence the new contract requires, not just a
+service-scenario replay. The same script also checked a blocked derived candidate
+(mixed-authority parent) rejects with the correct partial lineage length, a cycle
+resolves to a blocked/empty-lineage decision, and a second job with revised sources
+correctly retains the original (job 1) publication's revision-1 lineage rather than
+picking up the newer revision-2 values. It closed with `node --check` on both
+`entry.mjs` and `checker.mjs`. No failed assertion or reverted approach appears in the
+38-event capture; the run went straight from reading the contract to a working,
+self-verified submission.
+
+### E. Comparison and next step
+
+Trial 1, working from a starter that already supplied revision/derivation/consumer/
+store/policy/publication modules, reached reward 1 on 12 service-only scenarios in
+6m10s. Trial 2, working from an empty starter and facing two entirely new required
+obligations (a checker, and redelivery semantics), reached the same clean-pass outcome
+in 11m27s — roughly double the wall-clock time but for substantively more scope, not
+a like-for-like repeat. The compact 38-event capture and single self-test script
+covering both the original service logic and the new redelivery mechanism suggest this
+package's difficulty profile remains low for this Codex pairing even after starter
+removal and contract expansion. Given a clean pass on a first-ever test of both new
+requirements, retain the submission as a correct control and give observed reward-zero
+candidates priority for further failure-finding trials.
+
+### F. Verified publication record — September 9, 2026
+
+Reward **1**; service **16/16**; checker **10/10**. All **698** completion-manifest files matched their recorded sizes and hashes.
+
+[Campaign results](../round-two-final-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-final-five.json). Earlier trial records are preserved.

@@ -4,36 +4,64 @@ September 9, 2026. Navigation and status, not a package-policy approval.
 
 ## Latest measured progress
 
-**Four Trial 2 zero rewards are now recorded across fourteen scored attempts.**
-Snapshot recovery (11) adds one new Foundry success: its service passed **33/33**,
-but its required checker rejected both correct reference implementations (**10/12**
-classifications). The needed archive facts were available through documented API
-observations. Prioritize a repeat attempt on this unchanged package version.
+**All 25 packages have completed Trial 2: five recorded zero rewards and twenty
+solver passes.** There were 26 attempts, including route policy's earlier unscored
+interruption and successful separate retry. The latest two groups added one zero,
+temporal capacity—not two. The fourth group returned five reward-one results.
+See the [complete 25-package result table](../reports/screening/round-two-portfolio-2026-09-09.md).
 
 | Trial 2 group | Attempts launched | Scored | Reward-zero results | Solver passes | Interrupted/unscored |
 | --- | --- | --- | --- | --- | --- |
 | [First: 19/21/25/24/07](../reports/screening/round-two-top-five-2026-09-09.md) | 5 | 5 | 3 | 2 | 0 |
 | [Second: 14/03/18/20/04](../reports/screening/round-two-next-five-2026-09-09.md) | 5 | 4 | 0 | 4 | 1 |
 | [Third: 13/08/15/12/11](../reports/screening/round-two-third-ranked-five-2026-09-09.md) | 5 | 5 | 1 | 4 | 0 |
-| **Total** | **15** | **14** | **4** | **10** | **1** |
+| [Fourth: 09/06/05/16/17](../reports/screening/round-two-fourth-ranked-five-2026-09-09.md) | 5 | 5 | 0 | 5 | 0 |
+| [Fifth: 23/02/10/01/22](../reports/screening/round-two-final-five-2026-09-09.md) | 5 | 5 | 1 | 4 | 0 |
+| [Route-policy retry](../reports/screening/round-two-final-five-2026-09-09.md) | 1 | 1 | 0 | 1 | 0 |
+| **Total** | **26** | **25** | **5** | **20** | **1 historical interruption** |
 
-Incremental build (21), issued report (25) and snapshot recovery (11) have supported
-substantive failures of required agent-written checkers. Their services passed;
-the incomplete or incorrect required validators still make these task failures.
-Cache (19) retains its recorded service/checker zero and the existing documented
-matching/replacement contract question. This update adds snapshot recovery's success
-without changing the earlier audit or its raw scores.
+The fourth group is a clean sweep: all five reward 1, all five services and checkers
+fully correct. Two are notable beyond a repeat pass: compatible rollout (05) had its
+checker graded for the first time and gained new stage lost-response/recovery
+semantics, both passing cleanly; analytical reconciliation (17) had Trial 1 scored
+zero by the same private-label harness bug fixed above, and this independently-written
+Trial 2 submission reaches the same clean pass under the corrected rule — a second,
+independent confirmation of the capability, not a re-scored old result.
+
+The fifth group: staged allocation, persistent knowledge, CAA revalidation (native,
+no checker) and event window all passed cleanly. Persistent knowledge's checker and
+new committed-publication redelivery contract were graded for the first time and
+passed. Temporal capacity's service is fully correct (34/34); its checker's
+`paginationViolation()` deliberately exempts "never fetched the source" when
+`recordCount` is zero — a submitted exception that the source-traversal requirement does not permit — which happens to exempt exactly the `unread-empty-source` control this check
+exists to catch. A separately-dispatched retry of route policy (14), run alongside
+the fifth group to reach three Claude/three Codex for that round, finally resolved
+its earlier interruption: 27/27 service, 12/12 checker, clean pass.
+
+Incremental build (21), issued report (25), snapshot recovery (11) and temporal
+capacity (10) have supported substantive failures of required agent-written
+checkers. Their services passed; the incomplete or incorrect required validators
+still make these task failures. Cache (19) retains its recorded service/checker zero
+and the existing documented matching/replacement contract question. This update
+adds temporal capacity's failure and route policy's resolved retry without changing
+the earlier audit or any other raw scores.
 
 The second group is now fully documented: four completed solver passes and route
-policy's infrastructure interruption. Route policy has no finalized submission or
-grade, so its reward is null. The user deferred its retry. The third group completed
-without infrastructure errors and supplies the new checker failure above.
+policy's infrastructure interruption, now resolved by the separate retry above
+(reward null is preserved on the original interrupted record; the retry is its own,
+later, separately-evidenced attempt). The third group completed without
+infrastructure errors and supplies the checker failure noted above.
 
-All fifteen original analysis files contain dated Trial 2 records. Publication
-verified **6,881** manifest-listed files for the nine newly reported completions,
-in addition to **4,644** from the first group: **11,525** total. The interrupted
-attempt has no completion manifest and is not counted in that total. This
-publication made no model calls and changed no package, submission or raw grade.
+All twenty-five original analysis files contain dated Trial 2 records. **19,842**
+completion-manifest files have been verified: 11,525 from the first three groups,
+3,945 from the fourth, 3,627 from the fifth and 745 from the route-policy retry.
+No package remains without a completed Trial 2 result. The original interruption
+is preserved, and no package, submission or raw grade changed in this publication.
+
+Prioritize observed required-deliverable failures for further trials; retain solver
+passes as correct controls. Temporal capacity and snapshot recovery can be repeated
+on their unchanged versions without adding solution hints or fixing the agents'
+failed submissions. No additional model calls were made for documentation.
 
 ## What is implemented
 
@@ -47,7 +75,7 @@ The foundry assembles separate solver/verifier workspaces, validates local contr
 
 The original 25 screenings all passed their service suites. Their recorded checker
 outcomes and historical grading concerns remain intact in the [trial index](../reports/screening/README.md).
-Fifteen successor attempts, fourteen scored, now extend that history; the Trial 2 results above
+Twenty-six successor attempts, twenty-five scored, now extend that history; the Trial 2 results above
 must not be merged into the original table or treated as repeat runs of identical versions.
 
 Engineering preparation covers [19/21/25/24/07](../reports/screening/top-five-implementation-plan-2026-09-09.md),
@@ -56,12 +84,9 @@ Engineering preparation covers [19/21/25/24/07](../reports/screening/top-five-im
 [09/06/05/16/17](../reports/screening/fourth-ranked-five-implementation-plan-2026-09-09.md), and
 [23/02/10/01/22](../reports/screening/final-five-implementation-plan-2026-09-09.md).
 All five groups completed local native oracle/nop validation. The second group's
-browser integrity rerun passed all six controls. The first three groups have published
-Trial 2 campaign summaries, sanitized evidence and per-task analyses. Prepared handoffs
-for the remaining groups are [09/06/05/16/17](fourth-ranked-five-trial-2-handoff.md) and
-[23/02/10/01/22](final-five-trial-2-handoff.md), each with three Codex and two Claude
-assignments and its own frozen campaign directory. Campaign results remain
-separate from local validation. The [final group](final-five-implementation.md)
+browser integrity rerun passed all six controls. All five groups have now published
+Trial 2 campaign summaries, sanitized evidence and per-task analyses; the route-policy retry has its own separate campaign directory and evidence.
+Campaign results remain separate from local validation. The [final group](final-five-implementation.md)
 passed 90 assurance checks, 51 Node checker classifications, 110 static checks and all
 native oracle/nop runs. CAA retains its native Go service deliverable; the other four
 require service and checker. All 25 native exports reproduce. No candidates remain

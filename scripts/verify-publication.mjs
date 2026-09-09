@@ -22,6 +22,7 @@ export const SCREENING_FOLLOWUPS = [
   "fourth-ranked-five-implementation-plan-2026-09-09.md",
   "final-five-implementation-plan-2026-09-09.md",
   "round-two-top-five-2026-09-09.md",
+  "round-two-portfolio-2026-09-09.md",
   "evidence/2026-09-09-second-trial-source-audit.json",
   "evidence/2026-09-09-successor-generators.json",
   "evidence/2026-09-09-top-five-integration.json",
@@ -40,6 +41,11 @@ export const SCREENING_FOLLOWUPS = [
   "evidence/2026-09-09-round-two-next-five.json",
   "round-two-third-ranked-five-2026-09-09.md",
   "evidence/2026-09-09-round-two-third-ranked-five.json",
+  "round-two-fourth-ranked-five-2026-09-09.md",
+  "evidence/2026-09-09-round-two-fourth-ranked-five.json",
+  "round-two-final-five-2026-09-09.md",
+  "evidence/2026-09-09-round-two-final-five.json",
+  "evidence/2026-09-09-route-policy-repair-retry.json",
 ];
 
 export function verifyPublication(root = process.cwd()) {
@@ -158,15 +164,34 @@ export function verifyPublication(root = process.cwd()) {
   }
   assert.equal(retrials.audit.manifestFilesVerified, retrialVerifiedFiles);
   const successorRecords = [...retrials.packages];
-  for (const group of ["next-five", "third-ranked-five"]) {
-    const campaign = read(`reports/screening/evidence/2026-09-09-round-two-${group}.json`);
-    assert.equal(campaign.packages.length, 5);
+  const attemptKeys = new Set(retrials.packages.map((p) => `${retrials.campaign}/${p.runId}`));
+  const campaigns = [
+    ...["next-five", "third-ranked-five", "fourth-ranked-five", "final-five"].map((group) =>
+      read(`reports/screening/evidence/2026-09-09-round-two-${group}.json`),
+    ),
+    read("reports/screening/evidence/2026-09-09-route-policy-repair-retry.json"),
+  ];
+  for (const campaign of campaigns) {
+    const records = campaign.packages ?? [campaign.package];
+    const isRetry = !campaign.packages;
+    assert.equal(records.length, isRetry ? 1 : 5);
     assert.equal(campaign.automaticRetries, 0);
-    assert.equal(campaign.packages.filter((p) => p.target === "codex").length, 3);
-    assert.equal(campaign.packages.filter((p) => p.target === "claude").length, 2);
+    assert.equal(records.filter((p) => p.target === "codex").length, isRetry ? 0 : 3);
+    assert.equal(records.filter((p) => p.target === "claude").length, isRetry ? 1 : 2);
     let campaignFiles = 0;
-    for (const record of campaign.packages) {
+    for (const record of records) {
+      const attemptKey = `${campaign.campaign}/${record.runId}`;
+      assert.ok(!attemptKeys.has(attemptKey), "duplicate campaign attempt");
+      attemptKeys.add(attemptKey);
       assert.ok(ids.has(record.id), "retrial must extend an existing package history");
+      if (isRetry) {
+        const interrupted = successorRecords.find((p) => p.id === record.id && p.reward === null);
+        assert.ok(interrupted, "retry must preserve its earlier interrupted record");
+        assert.equal(record.retryOfRunId, interrupted.runId);
+        assert.equal(record.retryOfCampaign, "2026-09-09-round-two-next-five");
+        assert.equal(record.packageDigest, interrupted.packageDigest);
+        assert.equal(record.profileDigest, interrupted.profileDigest);
+      }
       assert.match(record.packageDigest, hash);
       assert.match(record.profileDigest, hash);
       assert.ok(!/\/Users\/|\.local\//.test(JSON.stringify(record)), "nonportable/private record path");
@@ -186,31 +211,39 @@ export function verifyPublication(root = process.cwd()) {
         assert.match(record[key], hash);
       assert.equal(record.captureStatus, "completed");
       const checker = record.checker;
-      assert.equal(checker.reasonPolicy, "diagnostic-only");
-      assert.equal(checker.details.length, checker.total);
-      assert.equal(checker.falsePositives, checker.details.filter((d) => d.outcome === "false-positive").length);
-      assert.equal(checker.missed, checker.details.filter((d) => d.outcome === "missed").length);
-      assert.equal(checker.correct, checker.total - checker.falsePositives - checker.missed);
-      assert.equal(checker.pass, checker.deterministic && checker.falsePositives === 0 && checker.missed === 0);
-      assert.equal(record.reward, record.serviceOutcome === "semantic-pass" && checker.pass ? 1 : 0);
+      if (record.id === "caa-revalidation-repair") {
+        assert.equal(record.checkerRequired, false);
+        assert.equal(checker, null, "native CAA has no submitted-checker deliverable");
+      } else {
+        assert.equal(checker.reasonPolicy, "diagnostic-only");
+        assert.equal(checker.details.length, checker.total);
+        assert.equal(checker.falsePositives, checker.details.filter((d) => d.outcome === "false-positive").length);
+        assert.equal(checker.missed, checker.details.filter((d) => d.outcome === "missed").length);
+        assert.equal(checker.correct, checker.total - checker.falsePositives - checker.missed);
+        assert.equal(checker.pass, checker.deterministic && checker.falsePositives === 0 && checker.missed === 0);
+      }
+      assert.equal(record.reward, record.serviceOutcome === "semantic-pass" && (checker === null || checker.pass) ? 1 : 0);
       assert.equal(record.outcome, record.reward === 1 ? "semantic-pass" : "semantic-fail");
       assert.ok(Number.isInteger(record.manifestFilesVerified) && record.manifestFilesVerified > 0);
       campaignFiles += record.manifestFilesVerified;
     }
     assert.deepEqual(campaign.counts, {
-      attemptsLaunched: campaign.packages.length,
-      completedScoredAttempts: campaign.packages.filter((p) => p.reward !== null).length,
-      recordedZeroRewards: campaign.packages.filter((p) => p.reward === 0).length,
-      solverPasses: campaign.packages.filter((p) => p.reward === 1).length,
-      infrastructureInterruptedAttempts: campaign.packages.filter((p) => p.reward === null).length,
+      attemptsLaunched: records.length,
+      completedScoredAttempts: records.filter((p) => p.reward !== null).length,
+      recordedZeroRewards: records.filter((p) => p.reward === 0).length,
+      solverPasses: records.filter((p) => p.reward === 1).length,
+      infrastructureInterruptedAttempts: records.filter((p) => p.reward === null).length,
     });
     assert.equal(campaign.audit.manifestFilesVerified, campaignFiles);
     assert.deepEqual(campaign.audit.errors, []);
     assert.equal(campaign.audit.newModelCalls, 0);
     retrialVerifiedFiles += campaignFiles;
-    successorRecords.push(...campaign.packages);
+    successorRecords.push(...records);
   }
-  assert.equal(new Set(successorRecords.map((p) => p.id)).size, successorRecords.length);
+  const successorPackageIds = new Set(successorRecords.map((p) => p.id));
+  const scoredPackageIds = new Set(successorRecords.filter((p) => p.reward !== null).map((p) => p.id));
+  assert.deepEqual([...successorPackageIds].sort(), [...ids].sort(), "every package has a Trial 2 record");
+  assert.deepEqual([...scoredPackageIds].sort(), [...ids].sort(), "every package has a scored Trial 2 result");
   const walk = (dir, prefix = "") =>
     readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
       assert.ok(!entry.isSymbolicLink(), "publication symlink");
@@ -256,6 +289,7 @@ export function verifyPublication(root = process.cwd()) {
     screenedPackages: ids.size,
     manifestListedFilesVerifiedAtPublication: verifiedFiles,
     successorTrials: successorRecords.length,
+    successorPackages: successorPackageIds.size,
     successorCompletedTrials: successorRecords.filter((p) => p.reward !== null).length,
     successorRecordedZeroRewards: successorRecords.filter((p) => p.reward === 0).length,
     successorSolverPasses: successorRecords.filter((p) => p.reward === 1).length,

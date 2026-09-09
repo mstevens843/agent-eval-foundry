@@ -161,3 +161,121 @@ outcome. The user has deferred its retry; no retry was launched by this publicat
 Reward **unscored (`null`)**. The preserved partial capture has 1,136 events and no completed capture, finalized submission or grade. It is excluded from both reward-zero successes and solver passes.
 
 [Campaign results](../round-two-next-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-round-two-next-five.json). Trial 1 is preserved.
+
+## Trial 2 (retry) — implementation successor — September 9, 2026
+
+### A. Identity and execution
+
+A genuinely new, freshly-authorized campaign slot — `route-policy-repair-attempt-1` in
+its own store at `.local/round-two-route-policy-retry-2026-09-09/real-campaign-frozen/`,
+distinct from the interrupted attempt's slot above (`.local/round-two-next-five-2026-09-09/`,
+left untouched). Package digest
+`b6490e6b9cd68f23bba0d63ce101b6c7b49f48113f2a90e320a7fc015c32ab01`, route
+`professional-multifile/authority-process@1`. Signed JobStore reservation (Ed25519,
+self-minted for this slot), realm `real-provider`, `billingMode: subscription-only`,
+`maxMicroUsd: 0`, `maxAttempts: 1` — `attempt-1` in this store, not a resume-in-place of
+the earlier interruption.
+
+Target: **claude**. Requested `anthropic/claude-opus-5`, effort `max`, CLI
+`scaffoldVersion 2.1.263` (verified baked into the pinned author image). Observed:
+`model="claude-opus-5"` (matches requested); effort/scaffold version unobservable from
+the CLI's event stream.
+
+Dispatched 2026-09-09T17:33:05.336Z, roughly 102 seconds after a separate,
+separately-authorized five-job campaign (round-two-final-five: staged-allocation-repair,
+persistent-knowledge-repair, temporal-capacity-repair, caa-revalidation-repair,
+event-window-repair) had its five containers confirmed running — this job was launched
+deliberately alongside that batch, specifically to reach a 3-Claude/3-Codex total for
+this round (final-five alone was 2 Claude/3 Codex). `docker ps` confirmed all six
+containers running concurrently after dispatch. The overlap covered the initial
+part of this retry: the first final-five job completed at 17:40:19.543Z, while this
+retry continued until 18:15:31.372Z. This job
+is tracked and evidenced entirely separately from final-five's own frozen `READY.json`
+and evidence file. Completed 2026-09-09T18:15:31.372Z. Total elapsed ≈2,546,036ms
+(~42m26s) — the longest and most token-heavy run of this session's campaigns. Solver
+authoring time (capture wall clock) ≈2,539,156ms (~42m19s); grading ≈6.9s. Token usage:
+12,735,955 input tokens (12,518,623 cached), 168,825 output tokens; the CLI's own
+metered-price estimate is $12.65 — a reporting figure only, no actual charge occurred
+(subscription-only, `maxMicroUsd: 0`). Well inside the 10,800,000ms (3h) budget. Execution
+reached a clean `completed` state with no invalid-execution or infrastructure error.
+
+### B. What changed since Trial 1
+
+Same successor version as the earlier interrupted attempt today: starter reduced to an
+empty `subject.run` entry point (Trial 1's starter changed every accept action to the
+requested preference — see "What Claude changed" above); checker required as a
+separately-graded deliverable; reasons diagnostic-only. The earlier attempt today on
+this exact package was interrupted by host memory pressure before producing any
+capture, submission, or grade (Section B–F above) — this retry is a separate, complete
+attempt, not a continuation of it.
+
+### C. Results
+
+**Reward 1 — a clean pass on both required deliverables.** Service: all 27 expected
+scenarios pass, zero failures, zero missing/unexpected IDs. Checker: `checkerRequired:
+true`, `checkerPassed: true`, 12/12 candidates correctly classified (0 missed, 0 false
+positives). This is a genuine, freshly-authorized, complete result — not a retroactive
+score applied to the earlier interrupted transcript.
+
+### D. Observable solving behavior
+
+The submission includes `entry.mjs`, `checker.mjs`, and a `dev/` self-test harness
+(`test.mjs`, `gen.mjs`, `stress.mjs`, `perf.mjs`, `load.mjs`, `edge.mjs`, `host.mjs` — a
+reference host, generators, brute-force oracle, and stress/load/perf scripts, each
+guarded not to execute on import). The capture records 44 `Bash` calls, 25 `Edit` calls
+(concentrated on the checker) and 9 `Write` calls across 1,310 events.
+
+Per its own final report (verbatim from `capture/stdout.log`), the checker's approach
+differs structurally from Trial 1's explicit-stack interpreter: it partitions prefixes
+into finitely many equivalence classes (each witnessed by a concrete probe), explores
+communities symbolically as `(added, removed)` deltas over the unknown input set, and
+keeps preference symbolic so "keeps the route's own preference" and "sets a constant"
+stay distinguished exactly. It validated this design against an **independent
+brute-force enumeration** (not against its own validator), replayed every reported
+counterexample as a concrete route to confirm it was real, and confirmed all seven
+of its own deliberately-injected breakages (does-nothing, boosts-up-front,
+ignores-the-match, loses-return-means-reject, mutates-shared-policies,
+matches-on-current-communities, drops-a-community) were caught on 100% of the
+scenarios where they actually violate the contract. It load-tested at the published
+bounds (128 policies / 1,024 terms) in ~137ms.
+
+It also explicitly disclosed a known limitation rather than hiding it: for configurations
+whose control flow branches on roughly 16+ independent communities, the exhaustive
+sweep is exponential and truncates. It reports ordering the search by how many
+communities a witnessing route must carry and draining match-derived seeds first, so
+that truncation still proves the property for all low-cardinality routes; in its own
+stress tests, broken configurations on exactly those high-cardinality inputs were still
+caught in 17–2,209 probes, well before truncation — its stated reasoning being that
+truncation only costs proof depth on configurations that are already correct. This is a
+self-reported design limitation with a stated (not independently re-verified here)
+mitigation, not a claim of exhaustive proof.
+
+The final captured result matches the actual grade (reward 1, checker 12/12) — no
+overclaiming found in the final report relative to the recorded outcome.
+
+### E. Comparison and next step
+
+Trial 1 (substantially pre-implemented starter, 45m15s authoring) reached the same
+reward-1 / checker-12/12 outcome via a graph-cloning transformation with an
+original-input scope dispatcher and an explicit-stack policy interpreter for the
+checker. This retry, working from an empty starter with 42m19s of authoring
+(42m26s total, shorter than Trial 1's 45m15s authoring, with over 12.7M input tokens), reached the same clean outcome via a structurally
+different checker design (symbolic community deltas plus brute-force cross-validation,
+versus Trial 1's explicit-stack interpreter). The earlier interrupted attempt today on
+this same package (Section C above) had independently converged on yet another
+structure (`lib/aster.mjs`, `lib/verify.mjs`) with a similar iterative
+checker-hardening pattern, before being cut off mid-flight — consistent context, not
+treated as a result.
+
+Given two independent complete clean passes now on record for this package (Trial 1 and
+this retry), it looks like a stable, low-difficulty result for this
+package/model pairing rather than one that depended on the removed starter scaffolding.
+Retain this successful submission as a correct control and prioritize the observed
+reward-zero candidates for further failure-finding trials. The long runtime and heavy token usage here reflect thorough, largely genuine
+self-verification (per Section D), not evidence of difficulty on their own.
+
+### F. Verified publication record — September 9, 2026
+
+Reward **1**; service **27/27**; checker **12/12**. All **745** completion-manifest files matched their recorded sizes and hashes.
+
+[Campaign results](../round-two-final-five-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-route-policy-repair-retry.json). Earlier trial records are preserved.

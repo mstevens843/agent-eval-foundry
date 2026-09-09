@@ -1,38 +1,50 @@
 # Screening results and what they changed
 
-**Trial 2 now records four zero rewards, ten solver passes and one infrastructure
-interruption across fifteen launched attempts (fourteen scored). Snapshot recovery
-adds the newest Foundry success:** its required checker rejected both correct
-implementations while the service passed 33/33 scenarios.
+**All 25 packages now have a completed Trial 2 result: five recorded zero rewards
+and twenty solver passes.** Across 26 launched attempts, one earlier route-policy
+attempt remains an unscored infrastructure interruption; its separate retry passed.
+Temporal capacity is the one new reward-zero success in the latest two groups.
+The fourth group added none. [All 25 results](round-two-portfolio-2026-09-09.md).
 
 | Campaign | Reward zero | Solver pass | Interrupted/unscored | Analysis |
 | --- | --- | --- | --- | --- |
 | First group: 19/21/25/24/07 | 3 | 2 | 0 | [Five completed trials](round-two-top-five-2026-09-09.md) |
 | Second group: 14/03/18/20/04 | 0 | 4 | 1 | [Four completions and the route-policy interruption](round-two-next-five-2026-09-09.md) |
 | Third group: 13/08/15/12/11 | 1 | 4 | 0 | [Snapshot recovery's new required-checker failure](round-two-third-ranked-five-2026-09-09.md) |
+| Fourth group: 09/06/05/16/17 | 0 | 5 | 0 | [A clean sweep](round-two-fourth-ranked-five-2026-09-09.md) |
+| Fifth group: 23/02/10/01/22 + route-policy retry | 1 | 5 | 0 | [Temporal capacity's checker gap and the route-policy retry](round-two-final-five-2026-09-09.md) |
 
-Incremental build (21), issued report (25) and snapshot recovery (11) have supported
-substantive required-checker failures. A correct service does not cancel failure
-of a required checker. Cache (19) retains its recorded zero and the earlier audit's
-specific matching/replacement contract question; that prior assessment is unchanged.
-See the [first campaign audit](evidence/2026-09-09-round-two-top-five-audit.json).
+Incremental build (21), issued report (25), snapshot recovery (11) and temporal
+capacity (10) have supported substantive required-checker failures. A correct
+service does not cancel failure of a required checker. Cache (19) retains its
+recorded zero and the earlier audit's specific matching/replacement contract
+question; that prior assessment is unchanged. See the
+[first campaign audit](evidence/2026-09-09-round-two-top-five-audit.json).
 
-Batch 2's four complete attempts passed both deliverables. Route policy was
-interrupted before capture and grading; its reward is null and its retry is
-user-deferred. Batch 3 adds four solver passes and one reward-zero success. Partial
-release now passes under corrected reason handling; rule index repeats a pass with
-Codex after the earlier Claude pass. Verified installation independently converged
-on the same two-pass approach; similar code structure alone does not establish reuse.
+Batch 2's four complete attempts passed both deliverables. Route policy's original
+attempt was interrupted before capture and grading (reward null); a separately
+authorized retry, dispatched alongside the fifth group to reach three Claude/three
+Codex for that round, resolved it with a clean pass (27/27 service, 12/12 checker).
+Batch 3 adds four solver passes and one reward-zero success. Partial release now
+passes under corrected reason handling; rule index repeats a pass with Codex after
+the earlier Claude pass. Verified installation independently converged on the same
+two-pass approach; similar code structure alone does not establish reuse.
 
-All fifteen original analyses have dated Trial 2 sections. **11,525 completion-manifest
-files verified** across the fourteen scored attempts; the partial route-policy capture
-has no completion manifest and is accounted for separately. New evidence:
+All twenty-five original analyses have dated Trial 2 sections; route policy carries
+both an INCONCLUSIVE record and a separate, later "Trial 2 (retry)" record, neither
+overwriting the other. **19,842 completion-manifest files verified** across the twenty-five scored
+results, including 8,317 files from the latest eleven completions. The interrupted
+capture is retained separately and has no completion manifest. No package is waiting
+for its first completed Trial 2 result. New evidence:
 [second group](evidence/2026-09-09-round-two-next-five.json) ·
-[third group](evidence/2026-09-09-round-two-third-ranked-five.json).
+[third group](evidence/2026-09-09-round-two-third-ranked-five.json) ·
+[fourth group](evidence/2026-09-09-round-two-fourth-ranked-five.json) ·
+[fifth group](evidence/2026-09-09-round-two-final-five.json) ·
+[route-policy retry](evidence/2026-09-09-route-policy-repair-retry.json).
 
 For further failure-finding trials, prioritize the supported reward-zero candidates.
-Snapshot recovery is ready to repeat on its unchanged version; no additional decoder
-hints or service failure requirement is imposed. Retain the solved submissions as
+Temporal capacity and snapshot recovery are ready to repeat on their unchanged
+versions; no additional solution hints or service failure requirement is imposed. Retain the solved submissions as
 correct controls. The original Trial 1 table below remains unchanged.
 
 The [completed five-package implementation](top-five-implementation-plan-2026-09-09.md)
@@ -71,8 +83,8 @@ The [final implementation group](final-five-implementation-plan-2026-09-09.md) c
 90 assurance checks, 51/51 Node checker classifications, 110 static checks, Node and
 CAA integrity controls, five Harbor oracle passes and five expected nop zeroes.
 All 25 native exports reproduce. Each original analysis has an appended engineering
-record. This preparation launched no model trials; future Trial 2 outcomes belong
-in those same analysis documents. [Final group guide](../../docs/final-five-implementation.md).
+record. The preparation itself launched no model trials; completed Trial 2 outcomes
+are now appended to those same analysis documents. [Final group guide](../../docs/final-five-implementation.md).
 
 Batches 3, 4 and 5 are complete and analyzed: fifteen attempts, five concurrent jobs per batch, no retries or recorded execution errors. See the
 [batches 3–5 preflight checkpoint](../../docs/screening-batches-3-5.md) for current

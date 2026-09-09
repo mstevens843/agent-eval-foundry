@@ -1,0 +1,904 @@
+{
+  "schemaVersion": 1,
+  "campaign": "2026-09-09-round-two-final-five",
+  "evidenceClass": "real-provider-screening",
+  "label": "Trial 2",
+  "limitations": [
+    "One exploratory attempt per package (attempt=1 in the execution store for this fresh campaign slot), not a replicated failure rate or official standard/adversarial qualification.",
+    "Requested model and effort are not independent backend attestations; Claude model strings were observable in these captures, Codex model identity was not, and effort/scaffoldVersion were unobservable for both CLIs.",
+    "CAA (caa-revalidation-repair) is a native Go service with no checker requirement; its checker field is null, not a missed grading.",
+    "Reports describe observable commands, submitted artifacts and independent protected grading, not private internal reasoning or independently blind-adjudicated review.",
+    "Raw transcripts, credentials, runtime archives and full submissions remain private. Public hashes identify retained artifacts but do not make this an independently reproducible raw-evidence release.",
+    "CLI dollar estimates (Claude runs only) are not subscription charges; billingMode was subscription-only with maxMicroUsd 0 and no paid API fallback.",
+    "A sixth job (route-policy-repair, a fresh retry of a package interrupted in an earlier campaign) was deliberately dispatched ~102s after this batch to reach 3 Claude/3 Codex total this round. It is tracked in a wholly separate campaign/evidence file (evidence/2026-09-09-route-policy-repair-retry.json) and is not part of this five-package campaign's own frozen READY.json."
+  ],
+  "sourceDigest": "2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4",
+  "sourceProvenance": "Reused, byte-for-byte, the isolated runtime built and independently verified for the first round-two campaign (.local/round-two-top-five-2026-09-09/frozen-source/) -- SHA-256 of dist/index.js re-verified unchanged immediately before this dispatch. No new runtime was built for this campaign.",
+  "authorImage": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+  "nativeAuthorImage": "sha256:c1e434806d5b8b83ec5d3c3b85408d56d8c3f0768a56a93ad1c478587b40b674",
+  "actualScheduling": "All five jobs reserved before parallel dispatch; all five author containers observed running together via docker ps.",
+  "concurrencyRequestFulfilled": true,
+  "concurrencyObservation": {
+    "count": 5,
+    "packageIds": [
+      "staged-allocation-repair",
+      "persistent-knowledge-repair",
+      "temporal-capacity-repair",
+      "caa-revalidation-repair",
+      "event-window-repair"
+    ],
+    "firstLaunch": "2026-09-09T17:31:23.079Z",
+    "lastLaunch": "2026-09-09T17:31:23.413Z",
+    "launchSpreadMs": 334
+  },
+  "automaticRetries": 0,
+  "invalidExecutionCount": 0,
+  "extraModelCallsBeyondFive": 0,
+  "packages": [
+    {
+      "id": "staged-allocation-repair",
+      "target": "claude",
+      "native": false,
+      "runId": "staged-allocation-repair-attempt-1",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "runtime event type=assistant",
+          "status": "observed",
+          "value": "claude-opus-5"
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-pass",
+      "reward": 1,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1179773,
+      "start": "2026-09-09T17:31:23.079Z",
+      "end": "2026-09-09T17:51:13.447Z",
+      "service": {
+        "scenarios": 41,
+        "failedScenarios": 0,
+        "invalidScenarios": 0
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "total": 13,
+        "correct": 13,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "duplicate-placement",
+            "expectedFailingCheck": "irreversible_sequence",
+            "observedFailingChecks": [
+              "capacity_and_constraints",
+              "completion",
+              "future_promise",
+              "irreversible_sequence"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "irreversible_sequence"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "existential-future",
+            "expectedFailingCheck": "future_promise",
+            "observedFailingChecks": [
+              "capacity_and_constraints",
+              "future_promise"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "ignore-zone-affinity",
+            "expectedFailingCheck": "capacity_and_constraints",
+            "observedFailingChecks": [
+              "capacity_and_constraints",
+              "future_promise"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "coalesce-requested-units",
+            "expectedFailingCheck": "capacity_and_constraints",
+            "observedFailingChecks": [
+              "capacity_and_constraints",
+              "future_promise"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "locally-greedy",
+            "expectedFailingCheck": "future_promise",
+            "observedFailingChecks": [
+              "capacity_and_constraints",
+              "future_promise"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "irreversible_sequence"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "mint-capacity",
+            "expectedFailingCheck": "capacity_and_constraints",
+            "observedFailingChecks": [
+              "capacity_and_constraints",
+              "future_promise"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "ignore-anti-affinity",
+            "expectedFailingCheck": "capacity_and_constraints",
+            "observedFailingChecks": [
+              "capacity_and_constraints",
+              "future_promise"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "ignore-zone-count",
+            "expectedFailingCheck": "capacity_and_constraints",
+            "observedFailingChecks": [
+              "capacity_and_constraints",
+              "future_promise"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "irreversible_sequence"
+            ],
+            "outcome": "correct-reject-unnamed"
+          }
+        ],
+        "pass": true,
+        "gradeSummarySha256": "626fc21eda10bf65aaffd24b94758f15e873b382dac59cdc656f71e043591f2f"
+      },
+      "usage": {
+        "cachedInputTokens": 2339912,
+        "costUsd": 4.82133,
+        "inputTokens": 2459348,
+        "outputTokens": 98249,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI cost estimates are not subscription charges; this attempt used subscription-only authorization with no paid API fallback.",
+      "completionSha256": "d49659c52d9d700cd00d507522480f5122d30362d785d785e5a5c99723f3acfc",
+      "resultSha256": "c0bff70b93eb385a41c533739e67c2a06add40769cd8fea64958a943d0c64640",
+      "gradeSha256": "191a6afa5d08bf497d7e9e0d2ee9bc03052d964d3f14065d8b83642ff03936f0",
+      "assessment": "clean-pass",
+      "rationale": "Service 41/41 and checker 13/13 all correct, matching Trial 1. Shared domain module (lib/model.mjs) used by both entry.mjs and checker.mjs implementing the recursive feasibility rule directly. Self-testing corroborated by raw capture: 9,064 test assertions, 3,224 cross-checks against an independent naive semantics transcription, 54,808 mutant-cell comparisons across 17 broken services. Two interpretive judgment calls explicitly flagged rather than presented as certainties.",
+      "packageDigest": "0afe425904375bbba305ded2589ff08432c37657e7459d9003f9f66a55fee8c5",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "analysis": "reports/screening/fifth-five/23-staged-allocation-repair.md",
+      "serviceOutcome": "semantic-pass",
+      "checkerRequired": true,
+      "totalElapsedMilliseconds": 1190368,
+      "manifestFilesVerified": 850,
+      "manifestBytesVerified": 4374383,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false
+    },
+    {
+      "id": "persistent-knowledge-repair",
+      "target": "codex",
+      "native": false,
+      "runId": "persistent-knowledge-repair-attempt-1",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-pass",
+      "reward": 1,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 677809,
+      "start": "2026-09-09T17:31:23.135Z",
+      "end": "2026-09-09T17:42:49.682Z",
+      "service": {
+        "scenarios": 16,
+        "failedScenarios": 0,
+        "invalidScenarios": 0
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "total": 10,
+        "correct": 10,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "stale-revision",
+            "expectedFailingCheck": "values",
+            "observedFailingChecks": [
+              "completion",
+              "decisions",
+              "history",
+              "lineage",
+              "values"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "report-lineage",
+            "expectedFailingCheck": "decisions",
+            "observedFailingChecks": [
+              "decisions"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "replace-store",
+            "expectedFailingCheck": "preservation",
+            "observedFailingChecks": [
+              "completion",
+              "decisions",
+              "history",
+              "preservation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "receipt-blind-retry",
+            "expectedFailingCheck": "history",
+            "observedFailingChecks": [
+              "decisions",
+              "history",
+              "lineage",
+              "values"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "first-parent",
+            "expectedFailingCheck": "lineage",
+            "observedFailingChecks": [
+              "authority",
+              "decisions",
+              "history",
+              "lineage",
+              "values"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "stale-grant",
+            "expectedFailingCheck": "authority",
+            "observedFailingChecks": [
+              "authority",
+              "decisions",
+              "history",
+              "lineage",
+              "values"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "decisions",
+              "history",
+              "preservation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "decisions",
+              "history",
+              "preservation"
+            ],
+            "outcome": "correct-reject-unnamed"
+          }
+        ],
+        "pass": true,
+        "gradeSummarySha256": "2cea7b1e80b3dfef9559d912399553ff98fabb536ce27cc8bc8483e9b0b53435"
+      },
+      "usage": {
+        "cachedInputTokens": 442368,
+        "costUsd": null,
+        "inputTokens": 479837,
+        "outputTokens": 19845,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI cost estimates are not subscription charges; this attempt used subscription-only authorization with no paid API fallback.",
+      "completionSha256": "bb2533480e7f6f4948693a5b0332fedc800ff48628c16abf200f07be4c8f8b5c",
+      "resultSha256": "84cbe9cea14577efdfc66bbebae252708f0045269fc3c69d7e6ad9ad38d404a5",
+      "gradeSha256": "18dca1b833a92af3cfda596be5ee80c68593badffae7fc880cb0ee2e528ae896",
+      "assessment": "clean-pass-new-checker",
+      "rationale": "Service 16/16 and checker 10/10 all correct -- first-ever grading of this package's checker and of its new committed-publication redelivery contract (Trial 1 was service-only). entry.mjs checks for an existing receipt by request id before doing new work, returning committed lineage idempotently. Validated directly with a mock api simulating a lost response then redelivery, asserting no duplicate publish. Fastest/leanest job in the batch.",
+      "packageDigest": "9d40456cb7d7456aee236396cc374fa3e17c9f2b1ce1ad71641e3234efe62eea",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "analysis": "reports/screening/original-five/02-persistent-knowledge-repair.md",
+      "serviceOutcome": "semantic-pass",
+      "checkerRequired": true,
+      "totalElapsedMilliseconds": 686547,
+      "manifestFilesVerified": 698,
+      "manifestBytesVerified": 3911902,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "target": "claude",
+      "native": false,
+      "runId": "temporal-capacity-repair-attempt-1",
+      "requestedModel": "anthropic/claude-opus-5",
+      "requestedEffort": "max",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "runtime event type=assistant",
+          "status": "observed",
+          "value": "claude-opus-5"
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-fail",
+      "reward": 0,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1487086,
+      "start": "2026-09-09T17:31:23.192Z",
+      "end": "2026-09-09T17:56:20.485Z",
+      "service": {
+        "scenarios": 34,
+        "failedScenarios": 0,
+        "invalidScenarios": 0
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "total": 13,
+        "correct": 12,
+        "falsePositives": 0,
+        "missed": 1,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "inclusive-end",
+            "expectedFailingCheck": "exact_integral",
+            "observedFailingChecks": [
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "effective-before-revision",
+            "expectedFailingCheck": "exact_integral",
+            "observedFailingChecks": [
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "strict-knowledge-cutoff",
+            "expectedFailingCheck": "exact_integral",
+            "observedFailingChecks": [
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "future-revision",
+            "expectedFailingCheck": "exact_integral",
+            "observedFailingChecks": [
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "unread-empty-source",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion"
+            ],
+            "outcome": "missed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "extra-report",
+            "expectedFailingCheck": "population",
+            "observedFailingChecks": [
+              "population"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "duplicate-report",
+            "expectedFailingCheck": "unique_reports",
+            "observedFailingChecks": [
+              "unique_reports"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "floating-total",
+            "expectedFailingCheck": "exact_integral",
+            "observedFailingChecks": [
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "exact_integral"
+            ],
+            "outcome": "correct-reject-unnamed"
+          }
+        ],
+        "pass": false,
+        "gradeSummarySha256": "6a3a11ffe5f18e2336134ff512d43b05499715e9b54f6ab62b27b53bded9497a"
+      },
+      "usage": {
+        "cachedInputTokens": 4341069,
+        "costUsd": 5.979128499999999,
+        "inputTokens": 4474832,
+        "outputTokens": 98816,
+        "source": "claude `result` event `usage` and `total_cost_usd`"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI cost estimates are not subscription charges; this attempt used subscription-only authorization with no paid API fallback.",
+      "completionSha256": "1f5c683f47944ade7246b20c6b44eba57abdb4604e462f0ecfb565532a154870",
+      "resultSha256": "7f8ce6bd6233ccbc0a0ce84da74faf6dcff9e1014563be8deaf11a3fdcb57437",
+      "gradeSha256": "986881fbcb08e757e0d87e279eb272e31502ba499badfef41ae3d53f5d50aaef",
+      "assessment": "substantive-required-checker-failure",
+      "rationale": "New Foundry reward-zero success: service 34/34; required checker 12/13, missing unread-empty-source. The public contract requires exhausting all pages. The checker adds an unsupported recordCount > 0 exemption, accepting the no-fetch empty-source case. Prioritize another trial on this unchanged version; do not repair the failed submitted checker before measuring recurrence.",
+      "packageDigest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+      "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+      "analysis": "reports/screening/next-five/10-temporal-capacity-repair.md",
+      "serviceOutcome": "semantic-pass",
+      "checkerRequired": true,
+      "totalElapsedMilliseconds": 1497293,
+      "manifestFilesVerified": 876,
+      "manifestBytesVerified": 5451954,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false,
+      "analysisCountsAsSemanticFailure": true
+    },
+    {
+      "id": "caa-revalidation-repair",
+      "target": "codex",
+      "native": true,
+      "runId": "caa-revalidation-repair-attempt-1",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-pass",
+      "reward": 1,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 1095043,
+      "start": "2026-09-09T17:31:23.247Z",
+      "end": "2026-09-09T17:49:48.817Z",
+      "service": {
+        "scenarios": 24,
+        "failedScenarios": 0,
+        "invalidScenarios": 0
+      },
+      "checker": null,
+      "usage": {
+        "cachedInputTokens": 819456,
+        "costUsd": null,
+        "inputTokens": 893634,
+        "outputTokens": 32155,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI cost estimates are not subscription charges; this attempt used subscription-only authorization with no paid API fallback.",
+      "completionSha256": "8b15581b3b3ae6e4b9d43692700c4faf0af73745a0f83dd2961529488b510243",
+      "resultSha256": "2afb8215e741e7f3335e97e9fa8b69a5822347c8645d3d061fdfd87fd6efafde",
+      "gradeSha256": "02b18ad75e3e53ffee0abb6c382a96c1166b92cb372a37c71bd6f87090a2b432",
+      "assessment": "clean-pass-native",
+      "rationale": "Native Go service, no checker requirement (N/A). All 24 scenarios passed, zero missing/unexpected IDs. Read the mock authority server's own source code (not just the spec) to get ground truth on the wire protocol, then keyed concurrent authority responses by identifier in a mutex-protected map -- the exact concurrency/identity defect Trial 1's retrospective flagged as this package's core difficulty. Validated with go test -race across multiple iterations plus 3 self-written regression tests including one forcing genuine concurrency.",
+      "packageDigest": "b60aea7eb0a356f87215b0f366fa63d4f97047f290e9784b2cbc031eb0899eac",
+      "profileDigest": "4badbbcf73de55d0a4ce9905b99203e63dc5ea6cf5204385149654a381a9f239",
+      "analysis": "reports/screening/original-five/01-caa-revalidation-repair.md",
+      "serviceOutcome": "semantic-pass",
+      "checkerRequired": false,
+      "totalElapsedMilliseconds": 1105570,
+      "manifestFilesVerified": 269,
+      "manifestBytesVerified": 12853919,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false
+    },
+    {
+      "id": "event-window-repair",
+      "target": "codex",
+      "native": false,
+      "runId": "event-window-repair-attempt-1",
+      "requestedModel": "openai/gpt-5.6-sol",
+      "requestedEffort": "xhigh",
+      "observedProfile": {
+        "effort": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        },
+        "evidenceClass": "real-provider",
+        "fallback": null,
+        "model": {
+          "source": "no trusted runtime observation",
+          "status": "unobservable",
+          "value": null
+        },
+        "scaffoldVersion": {
+          "source": "not exposed by either CLI's event stream",
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "outcome": "semantic-pass",
+      "reward": 1,
+      "captureStatus": "completed",
+      "authoringMilliseconds": 526529,
+      "start": "2026-09-09T17:31:23.413Z",
+      "end": "2026-09-09T17:40:19.543Z",
+      "service": {
+        "scenarios": 27,
+        "failedScenarios": 0,
+        "invalidScenarios": 0
+      },
+      "checker": {
+        "reasonPolicy": "diagnostic-only",
+        "present": true,
+        "deterministic": true,
+        "total": 15,
+        "correct": 15,
+        "falsePositives": 0,
+        "missed": 0,
+        "namedRightCheck": 0,
+        "details": [
+          {
+            "candidateId": "late-before-dedup",
+            "expectedFailingCheck": "late_output",
+            "observedFailingChecks": [
+              "completion",
+              "late_output"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "alternative",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "flush-all-idle",
+            "expectedFailingCheck": "late_output",
+            "observedFailingChecks": [
+              "completion",
+              "late_output",
+              "publication_boundary",
+              "window_values"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "reference",
+            "expectedFailingCheck": null,
+            "observedFailingChecks": [],
+            "outcome": "correct-accept"
+          },
+          {
+            "candidateId": "fastest-partition",
+            "expectedFailingCheck": "publication_boundary",
+            "observedFailingChecks": [
+              "completion",
+              "late_output",
+              "publication_boundary",
+              "window_values"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "stop-after-ends",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "forged-completion",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "late_output",
+              "publication_boundary",
+              "window_values"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "global-identity",
+            "expectedFailingCheck": "window_values",
+            "observedFailingChecks": [
+              "publication_boundary",
+              "window_values"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "ignore-idle",
+            "expectedFailingCheck": "publication_boundary",
+            "observedFailingChecks": [
+              "completion",
+              "late_output",
+              "publication_boundary",
+              "window_values"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "drop-zero-group",
+            "expectedFailingCheck": "window_values",
+            "observedFailingChecks": [
+              "completion",
+              "publication_boundary",
+              "window_values"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "isolation",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "late_output",
+              "publication_boundary",
+              "window_values"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "duplicate-late-delivery",
+            "expectedFailingCheck": "late_output",
+            "observedFailingChecks": [
+              "completion",
+              "late_output"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "no-work",
+            "expectedFailingCheck": "completion",
+            "observedFailingChecks": [
+              "completion",
+              "late_output",
+              "publication_boundary",
+              "window_values"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "regress-on-resume",
+            "expectedFailingCheck": "late_output",
+            "observedFailingChecks": [
+              "completion",
+              "late_output",
+              "publication_boundary",
+              "unique_windows",
+              "window_values"
+            ],
+            "outcome": "correct-reject-unnamed"
+          },
+          {
+            "candidateId": "drop-late",
+            "expectedFailingCheck": "late_output",
+            "observedFailingChecks": [
+              "completion",
+              "late_output"
+            ],
+            "outcome": "correct-reject-unnamed"
+          }
+        ],
+        "pass": true,
+        "gradeSummarySha256": "2ac04a4b1171fcb5bb6a27e6652618cf6432fcbaf622bc8dccf53f625b07697b"
+      },
+      "usage": {
+        "cachedInputTokens": 177920,
+        "costUsd": null,
+        "inputTokens": 206036,
+        "outputTokens": 15823,
+        "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+      },
+      "subscriptionCharge": null,
+      "usageNote": "CLI cost estimates are not subscription charges; this attempt used subscription-only authorization with no paid API fallback.",
+      "completionSha256": "0b8a9fdd2418a575f20c5b6cf2dbc2e632f8e3558395c57664f9cd16d284efd1",
+      "resultSha256": "3fa5b3b7bd67667597210b043e8e9b58fa7dd93531757d3ce4e1fb803c0e2f6c",
+      "gradeSha256": "c5a24cf6ca9b866a0e0c680640ffeca4b6578166953c7c5c1b52f5bff25e24e8",
+      "assessment": "clean-pass",
+      "rationale": "Service 27/27 and checker 15/15 all correct, including a new stopped-before-terminal-null control absent from Trial 1's 14-candidate bank. Wrote both entry.mjs and checker.mjs from an empty starter in one action; checker deliberately reimplements its own independent reference model rather than importing from entry.mjs. Self-testing verified as real: a 300-trial seeded random generator confirmed present in the raw capture output, plus a final adversarial audit including an explicit __proto__-token probe.",
+      "packageDigest": "39ca36d3e401ee3ddce6c772b8033be619078ea79598f1162329063824909258",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "analysis": "reports/screening/fifth-five/22-event-window-repair.md",
+      "serviceOutcome": "semantic-pass",
+      "checkerRequired": true,
+      "totalElapsedMilliseconds": 536130,
+      "manifestFilesVerified": 934,
+      "manifestBytesVerified": 4358686,
+      "recordedAdjudication": "unlabelled",
+      "recordedCountsAsModelFailure": false,
+      "recordedModelEvidenceEligible": false
+    }
+  ],
+  "counts": {
+    "attemptsLaunched": 5,
+    "completedScoredAttempts": 5,
+    "recordedZeroRewards": 1,
+    "solverPasses": 4,
+    "infrastructureInterruptedAttempts": 0
+  },
+  "audit": {
+    "newModelCalls": 0,
+    "manifestFilesVerified": 3627,
+    "manifestBytesVerified": 30950844,
+    "errors": [],
+    "formalAdjudicationChanged": false,
+    "publicationCorrections": [
+      "Temporal capacity overall outcome corrected from semantic-pass to the retained result.json semantic-fail; reward remains zero and serviceOutcome remains semantic-pass."
+    ]
+  },
+  "temporalDiagnostic": {
+    "newModelCalls": 0,
+    "submittedCheckerChanged": false,
+    "candidateId": "unread-empty-source",
+    "accepted": true,
+    "expected": "reject",
+    "scenarioId": "case-033",
+    "sourceRecords": 0,
+    "queries": 1,
+    "fetches": 0,
+    "writes": 1,
+    "publicRequirement": "Exhaust all pages.",
+    "frozenSemanticsSha256": "22483ba1a6b702a3e271cd8664305f958b4b67403009140a2a8a286b702b16b9",
+    "diagnosticSha256": "50a8a3eee86270cf42bc364a5c3967668ee654906b266e478d4af87f6b7757b0"
+  }
+}
