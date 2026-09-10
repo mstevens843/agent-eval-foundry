@@ -40,7 +40,7 @@ get written in the same font unless something forces them apart.
 
 ## Why it is not ready
 
-Blocking gates failing: `content-verified-package-missing`, `ambiguity-status-unknown`, `bypass-status-unknown`, `required-reference`, `required-positiveWork`, `required-nearMissControls`, `required-contractReviewed`, `required-publicPackageComplete`, `required-protectedGrading`, `required-localIntegrityControls`, `required-boundedSolveEvidence`, `no-qualified-capability-failure`, `required-destinationChecks`, `not-destination-professional-package`, `exact-two-target-profiles-missing`.
+Blocking gates failing: `content-verified-package-missing`, `ambiguity-status-unknown`, `bypass-status-unknown`, `required-reference`, `required-positiveWork`, `required-nearMissControls`, `required-contractReviewed`, `required-publicPackageComplete`, `required-protectedGrading`, `required-localIntegrityControls`, `no-qualified-capability-failure`, `required-destinationChecks`, `not-destination-professional-package`, `exact-two-target-profiles-missing`.
 
 Advisory gates failing: `measured-axes`, `shared-bank-ready`.
 

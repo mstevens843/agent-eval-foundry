@@ -29,6 +29,8 @@ jobs:
       - run: pnpm secret-scan
       - run: pnpm typecheck
       - run: pnpm lint
+      - name: Verify published screening results and trial accounting
+        run: node scripts/verify-publication.mjs
       - run: pnpm build
       - name: Fast pure tier
         run: pnpm test:pure

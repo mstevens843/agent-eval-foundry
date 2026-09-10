@@ -37,9 +37,8 @@ A counted trial on a second family. Every built family is routable and packaged,
 model time rather than engineering:
 
 ```bash
-foundry trials run --family ui-action-record-replay --run-id replay-claude-1 \
-  --model anthropic/claude-opus-5 --provider shell --inherit-env \
-  --command claude --model claude-opus-5 --effort max -p '{instruction}'
+foundry trials campaign prepare --family ui-action-record-replay --provider claude --out bundles/ui-action-record-replay-claude
+foundry trials campaign import --family ui-action-record-replay bundles/ui-action-record-replay-claude
 ```
 
 ---

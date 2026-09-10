@@ -1,5 +1,7 @@
 # Three fresh replacements for newly voided false passes
 
+> **Completed campaign — historical operator instructions.** All three attempts finished. All five finalists now qualify: three at 6/6 reward=0 and two at 5/6. [Final results](../reports/screening/final-results-2026-09-09.md). The launch instructions below preserve the original handoff and do not authorize another run.
+
 Work in `/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry`.
 You are the same trial operator who completed the previous campaigns. The user
 authorizes exactly three fresh subscription-only Codex attempts, launched together,

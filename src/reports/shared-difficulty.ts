@@ -15,7 +15,7 @@
 import { measure } from "../axis-meter.js";
 import type { KindedBank } from "../trials/bank.js";
 import { combineOverSharedSubjects, computeOverlap } from "../trials/bank.js";
-import { PROVIDERS, checkProvider } from "../trials/provider-registry.js";
+import { PROVIDERS } from "../trials/provider-registry.js";
 import { ROUTABLE_FAMILY_IDS } from "../trials/router.js";
 import type { Matrix } from "../types.js";
 
@@ -78,7 +78,6 @@ function runCommands(missing: readonly MissingTrial[]): readonly string[] {
   if (missing.length === 0) return ["# Nothing missing."];
   return missing.flatMap((m, i) => {
     const provider = providerFor(m.subject);
-    const slug = m.familyId.split("-").pop() ?? m.familyId;
     if (!(ROUTABLE_FAMILY_IDS as readonly string[]).includes(m.familyId)) {
       return [
         ...(i === 0 ? [] : [""]),
@@ -92,23 +91,12 @@ function runCommands(missing: readonly MissingTrial[]): readonly string[] {
         `foundry trials campaign import --family ${m.familyId} bundles/${m.familyId}-external`,
       ];
     }
-    const availability = checkProvider(provider);
-    if (!availability.available) {
-      return [
-        ...(i === 0 ? [] : [""]),
-        `foundry trials campaign prepare --family ${m.familyId} --provider ${provider.id} --out bundles/${m.familyId}-${provider.id}`,
-        `foundry trials campaign import --family ${m.familyId} bundles/${m.familyId}-${provider.id}`,
-      ];
-    }
-    const rest = provider.command
-      .slice(1)
-      .map((arg) => (arg === "{instruction}" ? "'{instruction}'" : arg))
-      .join(" ");
+    // Preparing a bundle is portable. Local execution availability belongs to the live preflight,
+    // so a report generated on a credential-free CI runner is identical to one on an author's Mac.
     return [
       ...(i === 0 ? [] : [""]),
-      `foundry trials run --family ${m.familyId} --run-id ${slug}-${provider.id}-1 \\`,
-      `  --model ${provider.family === "openai" ? "openai" : provider.family}/${m.subject} --provider shell --inherit-env \\`,
-      `  --command ${provider.command[0]} ${rest}`,
+      `foundry trials campaign prepare --family ${m.familyId} --provider ${provider.id} --out bundles/${m.familyId}-${provider.id}`,
+      `foundry trials campaign import --family ${m.familyId} bundles/${m.familyId}-${provider.id}`,
     ];
   });
 }

@@ -1,5 +1,7 @@
 # 19 — Variant cache repair
 
+> **Final counted result: 6/6 reward=0 — meets the reported ≥5/6 target.** Three Codex and three Claude trials; no slots pending. [Final results and counting method](../final-results-2026-09-09.md). The dated analysis below preserves the complete trial and grading history.
+
 ## Outcome
 
 Claude, requested Opus 5 / max, completed in **29 minutes 6 seconds**, with **reward 1**.
@@ -802,3 +804,189 @@ Current counted record: **4/4 failures**; 2 fresh replacement slot(s) pending.
 Original submissions and grades were preserved and manifest-verified before and after
 the audit. The same cumulative controls covered all 24 retained submissions across
 the four audited packages. No new model calls were made during this audit.
+
+## Trials 8-9 — remaining-pass-coverage-v3 replacements for voided Trials 6-7 — September 9, 2026
+
+### Background: why Trials 6 and 7 are voided, not counted as failures
+
+A third audit, `remaining-pass-coverage-v3` (see
+[the audit](../remaining-pass-audit-2026-09-09.md)), found that Trials 6 and 7 —
+both previously published above as effective passes, with recorded reward 1 —
+were rejecting a legitimate tier-copy execution that the contract permits. Rather
+than fold these two into the six-run denominator as counted failures, the user
+elected a **void-and-replace policy**: Trials 6 and 7 are marked **VOID**. Their
+original reward of 1 is preserved permanently, their diagnostic v3 regrade of 0 is
+recorded for transparency, but their **counted** reward is set to `null` — neither
+a pass nor a failure in the six-run tally. Nothing in the Trial 6, Trial 7,
+"Post-final pass audit", or "Remaining-pass audit" sections above is edited,
+removed, or renumbered by this disposition; this section is a pure append.
+
+Two fresh Codex replacements were dispatched together, in independent blind
+workspaces, under the same `remaining-pass-coverage-v3` grading: **Trial 8**
+replaces the void at Trial 6, and **Trial 9** replaces the void at Trial 7.
+
+### Identity and execution
+
+Both trials share package digest
+`73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b` and profile
+digest `a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641` —
+byte-identical to Trials 2–7. Both were requested target **codex**,
+`openai/gpt-5.6-sol`, effort `xhigh`, CLI `0.153.2` — the same author image and
+frozen runtime as every prior trial. Each trial ran in its own independent blind
+workspace with no knowledge of the other's submission or of the voided Trial 6/7
+submissions it replaces.
+
+- **Trial 8** (replacing voided Trial 6): duration 25m33s. Tokens: 1,530,146 input
+  (1,459,584 cached), 45,582 output; the Codex CLI reports tokens but never a price
+  (cost null). completionSha256
+  `50ace9d914c339a4c3ad2564bdadac0d3792aa7ce9fab00920dec813d11d12f4`, resultSha256
+  `57efc0876953a5bc9e853ff58aea5a9d674d514d6f18fe835fd63109b39e8d2d`, gradeSha256
+  `424bb6b927b13607248732de51b8ab27864f8ec1d4730a070b83d115146a0f05`. 972
+  manifest-listed files (59,385,129 bytes).
+- **Trial 9** (replacing voided Trial 7): duration 18m14s. Tokens: 658,882 input
+  (604,544 cached), 32,088 output; cost null. completionSha256
+  `f53f94c0dcc4d7403505a6fc84e6acd3006d495e49856a00badd8e5314b2d476`, resultSha256
+  `cc1b0910b210a5202cbba7e91456b18a593929e1583bbe11526bb3bb32311082`, gradeSha256
+  `424bb6b927b13607248732de51b8ab27864f8ec1d4730a070b83d115146a0f05`. 972
+  manifest-listed files (60,923,707 bytes).
+
+Both manifests were reverified with zero errors this session; that check was
+combined with a third package's replacement trial into a single
+2,729-file / 123,073,664-byte reverification spanning this entire
+three-attempt `remaining-pass-coverage-v3` replacement round, not just this
+package's two trials.
+
+### Results — Trial 8 (replacing voided Trial 6)
+
+**Recorded (raw) reward 1. Counted (effective) reward 0.**
+
+- **Base service: 25/25 scenarios passed** — fully correct.
+- **Base checker (original candidate bank): 15/15 correct, 0 missed, 0 false
+  positives, pass=true.**
+- **Cumulative `remaining-pass-coverage-v3` checker supplement: 6/8 correct,
+  deterministic, exactTokens true, pass=FALSE.** Two controls fail:
+  **`copy-other-path-control`** is a valid tier-copy of an existing edge-a entry
+  into an empty edge-b during a different-path `get`. The checker rejects it
+  (`expectedOk: true`, `actualOk: false`) with *"cell 0: get b stored a fabricated
+  or non-storable entry."* **`stale-304-metadata-control`** retains stale cache
+  metadata after successful revalidation; the checker incorrectly accepts it
+  (`expectedOk: false`, `actualOk: true`). Six of eight classifications are correct.
+- **Service replay:** a separate service-level replay against the same three
+  new scenarios (`stale-304-metadata`, `fresh-plus-origin`, `copy-other-path`),
+  using the newly repaired private 304-metadata validator, confirms the
+  **submitted service itself is fully correct on all three**
+  (`metadataCurrent: true` in every case). This is a required-checker-only
+  failure, not a service defect.
+
+### Results — Trial 9 (replacing voided Trial 7)
+
+**Recorded (raw) reward 1. Counted (effective) reward 0.**
+
+- **Base service: 25/25 scenarios passed** — fully correct.
+- **Base checker (original candidate bank): 15/15 correct, 0 missed, 0 false
+  positives, pass=true.**
+- **Cumulative supplement: 6/8 correct, deterministic, exactTokens true,
+  pass=FALSE.** The same two controls fail: it rejects `copy-other-path-control`
+  (`expectedOk: true`, `actualOk: false`) with *"cell 0: illegal cache write to edge-b,"*
+  and accepts `stale-304-metadata-control` (`expectedOk: false`, `actualOk: true`).
+  The copy-rejection message differs from Trial 8, but the same legitimate
+  tier-copy behavior is rejected in both attempts.
+- **Service replay:** the same three-scenario replay again confirms the
+  submitted service is fully correct on all three; this is again a
+  required-checker-only failure.
+
+### Code-level recurrence: the same copy rejection across four independent Codex checkers
+
+Reading both replacement checkers directly and comparing them to what the
+Trial 6 and Trial 7 sections above already established about those voided
+checkers' tier-restriction logic (`legalGetWrite`, `matching`/`matches`,
+`entry.path`/`event.path`) shows the same class of defect recurring in two
+fresh, independently written submissions:
+
+- **Trial 8's `checker.mjs`** builds its get-write legality check around
+  `matches(entry, event)`, which requires `entry.path === event.path`, and a
+  `derivedFromCopy(entry, source, event)` helper that — whenever the copied
+  entry's headers don't already equal the source's exactly — falls back to
+  requiring `matches(source, event)`, i.e. the *copy source* must match the
+  *current* event's path. On top of that, the write-legality loop itself
+  disqualifies any added entry outright when `entry.path !== event.path`
+  (the branch that raises `"get ${event.id} stored a fabricated or
+  non-storable entry"` — precisely the observed reason above). A copy of an
+  edge-a entry for path `/asset` during a `get` for path `/revalidate` fails
+  this gate before any legitimacy check even runs, purely because the two
+  paths differ.
+- **Trial 9's `checker.mjs`** reaches the same outcome through its own
+  `legalGetWrite(before, after, state, event, derived)`: candidate copies come
+  from `possibleCopyReps(state, event)`, which is itself filtered by
+  `matches(entry, event)` (also requiring `entry.path === event.path`), and
+  `legalGetWrite` applies `entry.path === event.path` a second time as an
+  explicit filter on `choices`. No candidate whose path differs from the
+  active event's path can ever appear in `choices`, so `legalGetWrite` returns
+  false and the checker raises `` `illegal cache write to ${tier}` `` —
+  precisely the observed reason above.
+
+Both fresh checkers therefore impose the same unrequested restriction: they
+tie a cache write's legality to the specific event/path currently being
+served, rather than allowing a legitimate cross-tier copy of an
+already-cached entry for a path other than the one the active request is
+for. The contract permits exactly this kind of copy and requires preserving
+unrelated entries; it does not impose an active-path-only copying
+restriction — the same conclusion the Trial 6/7 audit above reached about the
+voided submissions, now independently re-derived from two brand-new
+submissions' source.
+
+State this plainly: **this is now the third and fourth independent Codex
+submission — across the voided Trials 6 and 7 and these two fresh
+replacements — to reject this exact same class of valid tier-copy behavior.
+Four for four**, even though two of those four (Trials 6 and 7) were voided
+from the official count rather than counted as failures.
+
+### Final classification for this package — six-run set closed at 6/6
+
+This package's six-run set is now closed, with the exact void/replacement
+accounting stated precisely:
+
+**T2 = 0 (Claude) · T3 = 0 (Claude) · T4 = 0 (Claude) · T5 = 0 (Codex,
+effective; recorded 1) · Trial 8 = 0 (Codex, replacing VOIDED Trial 6) ·
+Trial 9 = 0 (Codex, replacing VOIDED Trial 7) = 6 counted failures out of 6
+counted trials**, with exactly **3 Claude + 3 Codex** counted attempts.
+
+| Trial | Provider | Original reward | Cumulative v3 diagnostic reward | Counted reward |
+| --- | --- | --- | --- | --- |
+| 2 | claude | 0 | 0 | 0 |
+| 3 | claude | 0 | 0 | 0 |
+| 4 | claude | 0 | 0 | 0 |
+| 5 | codex | 1 | 0 | 0 |
+| 6 | codex | 1 | 0 | **VOID — null (unscored)** |
+| 7 | codex | 1 | 0 | **VOID — null (unscored)** |
+| 8 (replaces void 6) | codex | 1 | 0 | 0 |
+| 9 (replaces void 7) | codex | 1 | 0 | 0 |
+
+Trials 6 and 7 remain **permanently VOID** in the record — original reward 1,
+diagnostic v3 regrade 0, counted reward null for both — neither counted as a
+pass nor a failure, and never overwritten or renumbered. This package's
+six-run set now decisively **MEETS** the reported "at least 5 failures out of
+6" threshold, at **6/6**.
+
+### Evidence
+
+Raw evidence for these trials remains at
+`.local/three-replacements-2026-09-09/variant-cache-repair/trial-8/real-campaign-frozen/jobs/real-provider/records/variant-cache-repair-attempt-1/`
+and
+`.local/three-replacements-2026-09-09/variant-cache-repair/trial-9/real-campaign-frozen/jobs/real-provider/records/variant-cache-repair-attempt-1/`,
+each with `grading/submission/entry.mjs` and `grading/submission/checker.mjs`
+holding that trial's actual submitted code, `grading/result.json` and
+`grading/checker-grade/grade-summary.json` the base-grade results. All prior
+Trial 1–7 sections and both earlier audit sections above are preserved
+unchanged.
+
+[Full audit](../remaining-pass-audit-2026-09-09.md) ·
+[Verified evidence](../evidence/2026-09-09-remaining-pass-audit.json) ·
+[User-selected counting disposition](../evidence/2026-09-09-three-replacement-disposition.json).
+
+This is an exploratory repository assessment. The Trial 8 and Trial 9 results
+still record `adjudication: unlabelled`, `modelEvidenceEligible: false` and
+`countsAsModelFailure: false`; nothing above claims official cheat
+qualification or independent blind review. It does state, without
+qualification, that this package's complete six-run set is now closed at
+6 counted failures out of 6 counted trials.

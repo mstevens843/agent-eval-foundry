@@ -212,7 +212,7 @@ import {
   assertStaleRunsLabelled,
 } from "../trials/migration.js";
 import { measuredScenarios, scenarioSetId } from "../trials/orchestrate.js";
-import { checkAllProviders } from "../trials/provider-registry.js";
+import { PROVIDERS, checkProvider, uninspectedProvider } from "../trials/provider-registry.js";
 import { ROUTABLE_FAMILY_IDS, routeFor } from "../trials/router.js";
 import { currentChallenge } from "../trials/run.js";
 import { challengeHash } from "../trials/run.js";
@@ -252,6 +252,7 @@ export function completionsFor(
   banks: readonly ReturnType<typeof kindedBank>[],
   allTrials: readonly { familyId: string; trial: TrialDirectory }[],
   evidenceState: ReadonlyMap<string, EvidenceState>,
+  providerAvailability = checkProvider,
 ): readonly BankCompletion[] {
   const trials = allTrials
     .filter(({ trial }) => trial.record.subjectType === "agent")
@@ -267,6 +268,7 @@ export function completionsFor(
   const kinds = [...new Set(banks.map((b) => b.kind))].sort();
   return kinds.map((kind) =>
     bankCompletion({
+      providerAvailability,
       banks: banks.filter((b) => b.kind === kind),
       trials: trials.filter((t) => banks.some((b) => b.kind === kind && b.familyId === t.familyId)),
     }),
@@ -1177,7 +1179,7 @@ export function allCommand(argv: readonly string[], root: string): string {
       "provider-variance-report.md",
       renderProviderVariance({
         families: perFamily.map((f) => ({ familyId: f.familyId, curve: f.curve, records: f.records })),
-        availability: checkAllProviders(),
+        availability: PROVIDERS.map(uninspectedProvider),
         artifacts,
       }),
     );
@@ -1197,7 +1199,7 @@ export function allCommand(argv: readonly string[], root: string): string {
     // Shared-bank completion, per bank kind, with the combined width computed only where the guard
     // allows it. `assertCombinedWidthAllowed` is what makes the refusal a property of the code.
     const completionBanks = bankInput(root, registry, evidenceFor, measureFor).banks;
-    const completions = completionsFor(completionBanks, allTrials, evidenceState);
+    const completions = completionsFor(completionBanks, allTrials, evidenceState, uninspectedProvider);
     const combinedResults = new Map<string, CombinedResult>();
     for (const completion of completions) {
       const group = completionBanks.filter((b) => b.kind === completion.kind);
@@ -1243,7 +1245,7 @@ export function allCommand(argv: readonly string[], root: string): string {
         // fidelities, and `assertComparableKinds` refuses the pairing in code.
         if (a.kind !== b.kind) continue;
         const group = [a, b];
-        const completion = completionsFor(group, allTrials, evidenceState)[0];
+        const completion = completionsFor(group, allTrials, evidenceState, uninspectedProvider)[0];
         if (completion === undefined) continue;
         let combined: CombinedResult | null = null;
         try {
@@ -1568,7 +1570,7 @@ export function allCommand(argv: readonly string[], root: string): string {
       "third-subject-campaign-report.md",
       renderThirdSubjectCampaign({
         completion: agentCompletion ?? null,
-        availability: agentCompletion === undefined ? [] : checkAllProviders(),
+        availability: agentCompletion === undefined ? [] : PROVIDERS.map(uninspectedProvider),
         campaign: allTrials
           .filter(({ trial }) => THIRD_SUBJECT_RUNS.includes(trial.runId))
           .map(({ familyId, trial }) => ({

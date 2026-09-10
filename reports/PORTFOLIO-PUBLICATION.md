@@ -1,28 +1,14 @@
 # Maintained portfolio and screening publication
 
-**Three finalists have completed the reported ≥5/6 failure target: incremental build
-and issued report at 6/6, temporal capacity at 5/6.** Cache is pending at 4/4 and
-snapshot at 4/5 after the user elected to void and replace three newly confirmed false
-passes. Three fresh Codex slots are prepared, all concurrent, with a cap of six.
+**Five task packages meet the reported ≥5/6 target: three at 6/6 reward=0 and two at 5/6.** Each has three counted Codex and three counted Claude trials, for 28 reward=0 outcomes across 30 finalist trials.
 
-The new private coverage catches valid alternatives wrongly rejected by submitted
-checkers, plus missing cache metadata validation in our own verifier/reference. The
-audit applied identical cumulative controls to all 24 retained submissions across the
-four audited packages: 50/50 private-oracle classifications, 29 passing-service replays,
-and 20,836 original files verified before and after without drift. No new model calls
-were made by the audit or replacement preparation.
+All 25 successor packages have been implemented and screened. The successor program contains 54 attempts, of which 50 count; three grading voids and one infrastructure interruption remain documented separately. All finalist sets are complete.
 
-Original raw evidence and diagnostic regrades remain intact. The current selected
-record is 47 counted trials, three grading voids and one historical infrastructure
-interruption, from 51 physical successor attempts. Earlier documented regrades remain
-counted; the three new diagnostic failures are not counted as reward-zero trials.
+[Final results and evidence](screening/final-results-2026-09-09.md) · [Current portfolio](../docs/project-status.md) · [Latest campaign](screening/three-replacements-2026-09-09.md).
 
-[Latest audit](screening/remaining-pass-audit-2026-09-09.md) ·
-[Current status](../docs/project-status.md) ·
-[Prepared replacements](../docs/three-replacements-handoff.md).
+## Publication history
 
-The source-publication checks below describe their original snapshot. Current screening
-results and final submission work are tracked separately.
+The sections below preserve their original source snapshots and verification scope.
 
 September 8 screening update: the original publication below is retained as history.
 Twenty-five completed package analyses are now public; batches 3–5 are complete.

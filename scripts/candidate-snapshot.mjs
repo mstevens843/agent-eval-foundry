@@ -81,6 +81,9 @@ if (mode === "verify") {
     "adversarial-audit-report.md",
     "evidence-snapshot.md",
     "human-readiness-report.md",
+    "provider-variance-report.md",
+    "shared-bank-completion-report.md",
+    "shared-difficulty-bank-report.md",
   ]) {
     const expected = join(root, "reports", name),
       actual = join(rendered, name);

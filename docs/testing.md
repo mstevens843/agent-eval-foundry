@@ -55,6 +55,18 @@ pnpm verify:candidate .local/candidate-NEW
 
 `verify` reproduces current generated reports and verifies preserved-version compatibility. `verify:candidate` copies the explicit intended-file manifest, excludes ignored/private artifacts, installs locked dependencies offline, rebuilds ESM/CJS/declarations, validates the registry and compares recipient gate reports. It does not use ambient `dist`, credentials, a sibling repository or private prompts. Candidate verification is not a claim that an uncommitted tree is already released. Existing destinations are refused; failed checks retain evidence.
 
+Generated provider and shared-bank reports use the declared provider registry and retained trial evidence. They mark local availability as **not inspected**, so installed CLI versions and credential presence cannot change the checked-in output. Use `foundry trials providers` for live availability; execution preflight still performs its normal checks. Candidate verification also compares these portable provider reports.
+
 Historical queries do not perform new grading: `phase13 report`, `phase13 results` and `phase13 design` read the retained calibration; `phase13 measure` explicitly starts current local measurements. The Phase 17 report reads its retained preflight instead of inspecting current credentials or Docker. Missing container receipts remain missing evidence, even on a healthy machine. Tests forbid child-process dispatch from these historical query paths. Full `verify` still performs its separately declared protected grading smoke; read-only report generation does not substitute for that check.
 
 CI treats required Docker/native/browser failures as failures, not informational green skips. Destination rubric/model runs and the required human-authored reviewer README remain separate final qualification requirements. A separately measured human solve is optional and does not block exploratory trials. See [selected-package validation](top-five-implementation.md).
+
+## Retained service audit
+
+The service-replay regression always verifies the published scenario coverage and results in a clean checkout. An additional Docker replay uses private retained submissions and frozen runtime archives; enable it explicitly on the authoring machine:
+
+```sh
+FOUNDRY_DOCKER_AUDIT=1 pnpm exec vitest run test/remaining-service-replay.test.ts
+```
+
+This command makes no model calls. Missing private archives are an error when the replay is requested. Normal CI checks the portable published evidence and runs its separate required Docker/native/browser suites.

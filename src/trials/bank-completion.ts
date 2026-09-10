@@ -32,6 +32,7 @@
 // width it produces is a number about two different tasks.
 
 import {
+  type ProviderAvailability,
   type ProviderFamily,
   type ProviderSpec,
   checkProvider,
@@ -99,6 +100,7 @@ export interface UnlockStep {
   readonly providerId: string;
   readonly providerFamily: ProviderFamily;
   readonly runnableHere: boolean;
+  readonly availabilityState?: ProviderAvailability["state"];
   readonly availability: string;
   readonly command: readonly string[] | null;
   /** What this one trial buys, stated so a reader can decide whether to pay for it. */
@@ -148,6 +150,8 @@ export interface CompletionInput {
     readonly countsReason: string;
   }[];
   readonly threshold?: number;
+  /** Report callers can supply an uninspected snapshot; execution callers retain live checks. */
+  readonly providerAvailability?: (provider: ProviderSpec) => ProviderAvailability;
 }
 
 const providerFor = (subjectId: string): ProviderSpec | undefined =>
@@ -313,7 +317,7 @@ export function bankCompletion(input: CompletionInput): BankCompletion {
     const availability =
       spec === undefined
         ? { available: false, detail: "no provider in the registry hosts this subject" }
-        : checkProvider(spec);
+        : (input.providerAvailability ?? checkProvider)(spec);
     const known = presence.find((p) => p.subjectId === subjectId);
     const targets = known === undefined ? families : known.absent.map((h) => h.familyId);
     for (const familyId of targets) {
@@ -323,6 +327,7 @@ export function bankCompletion(input: CompletionInput): BankCompletion {
         providerId: spec?.id ?? "external",
         providerFamily: spec?.family ?? "external",
         runnableHere: availability.available,
+        ...("state" in availability ? { availabilityState: availability.state } : {}),
         availability: availability.detail,
         command: spec?.command ?? null,
         unlocks:

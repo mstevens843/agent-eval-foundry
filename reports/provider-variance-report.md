@@ -5,20 +5,20 @@ model. A benchmark run against a single provider measures that provider.
 
 **No family yet has counted failures from more than one model family.** 0 counted trials exist and the mechanism claims are, so far, claims about the labs that produced them.
 
-## Provider availability on this machine
+## Provider registry
 
-Checked by executing the binary, not assumed. A provider that is not available produces NOT_RUN
+Local availability is not inspected in this portable report. Run `foundry trials providers` for a live check. An unavailable provider produces NOT_RUN
 slots and a prepared bundle — never a zero.
 
 | provider | family | available | detail |
 |---|---|---|---|
-| `claude` | anthropic | yes | 2.1.263 (Claude Code) |
-| `claude-sonnet` | anthropic | yes | 2.1.263 (Claude Code) |
-| `claude-haiku` | anthropic | yes | 2.1.263 (Claude Code) |
-| `claude-fable` | anthropic | yes | 2.1.263 (Claude Code) |
-| `codex` | openai | yes | codex-cli 0.153.2 |
-| `gemini` | google | **no** | 0.46.0; entitlement previously blocked with IneligibleTierError, so this phase treats Gemini as import-only until a real authenticated run changes that |
-| `external` | external | **no** | external by declaration: prepare a bundle and import the result |
+| `claude` | anthropic | not inspected | not inspected during report generation; run foundry trials providers for live availability |
+| `claude-sonnet` | anthropic | not inspected | not inspected during report generation; run foundry trials providers for live availability |
+| `claude-haiku` | anthropic | not inspected | not inspected during report generation; run foundry trials providers for live availability |
+| `claude-fable` | anthropic | not inspected | not inspected during report generation; run foundry trials providers for live availability |
+| `codex` | openai | not inspected | not inspected during report generation; run foundry trials providers for live availability |
+| `gemini` | google | not inspected | not inspected during report generation; run foundry trials providers for live availability |
+| `external` | external | not inspected | not inspected during report generation; run foundry trials providers for live availability |
 
 ## Per family, per provider
 
@@ -258,7 +258,7 @@ family states its contract as invariants rather than a policy table, so there is
 
 | claim | supported? |
 |---|---|
-| the foundry can run multiple providers | **yes** — more than one CLI is runnable here and trials exist |
+| multiple providers are available locally | not inspected — use the live provider preflight |
 | refusals and infra failures are kept out of the counted set | **yes** — enforced in code, not convention |
 | a mechanism transfers across labs | **not yet** — see the per-family tables |
 | rates are precise | **no** — every count here is below the 5-trial threshold and the intervals show it |

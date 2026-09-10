@@ -175,7 +175,13 @@ export const providerById = (id: string): ProviderSpec => {
 export interface ProviderAvailability {
   readonly provider: ProviderSpec;
   readonly available: boolean;
-  readonly state: "configured" | "unavailable" | "entitlement-blocked" | "not-installed" | "import-only";
+  readonly state:
+    | "configured"
+    | "unavailable"
+    | "entitlement-blocked"
+    | "not-installed"
+    | "import-only"
+    | "not-inspected";
   /** Version string when the binary answered, or the reason it did not. */
   readonly detail: string;
 }
@@ -245,6 +251,14 @@ export function checkProvider(spec: ProviderSpec): ProviderAvailability {
 }
 
 export const checkAllProviders = (): readonly ProviderAvailability[] => PROVIDERS.map(checkProvider);
+
+/** Portable reports describe registry entries without probing credentials or executing CLIs. */
+export const uninspectedProvider = (provider: ProviderSpec): ProviderAvailability => ({
+  provider,
+  available: false,
+  state: "not-inspected",
+  detail: "not inspected during report generation; run foundry trials providers for live availability",
+});
 
 /** Substitute the instruction into a provider's argv template. */
 export function buildCommand(spec: ProviderSpec, instruction: string): readonly string[] | null {

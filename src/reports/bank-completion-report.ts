@@ -112,7 +112,7 @@ export function renderBankCompletion(input: CompletionReportInput): string {
             "|---|---|---|---|---|",
             ...agent.unlocks.map(
               (u) =>
-                `| \`${u.subjectId}\` | \`${u.familyId}\` | \`${u.providerId}\` | ${u.runnableHere ? "**yes**" : `no — ${u.availability}`} | ${u.unlocks} |`,
+                `| \`${u.subjectId}\` | \`${u.familyId}\` | \`${u.providerId}\` | ${u.availabilityState === "not-inspected" ? u.availability : u.runnableHere ? "**yes**" : `no — ${u.availability}`} | ${u.unlocks} |`,
             ),
             "",
             ...(agent.unlocks.some((u) => u.runnableHere && u.command !== null)
@@ -134,7 +134,7 @@ export function renderBankCompletion(input: CompletionReportInput): string {
               : []),
             ...(agent.unlocks.some((u) => !u.runnableHere)
               ? [
-                  "For the subjects that cannot run here, prepare a bundle. The bundle pins the challenge",
+                  "For subjects without confirmed local availability, prepare a bundle. The bundle pins the challenge",
                   "hash, so a result someone else produces either measures this exact task or is refused on",
                   "import:",
                   "",

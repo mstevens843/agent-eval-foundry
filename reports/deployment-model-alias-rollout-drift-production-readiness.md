@@ -42,7 +42,7 @@ Production matrix: **blocked**.
 
 | code | detail |
 |---|---|
-| `PRODUCTION_PACKAGE_POLICY_DENIED` | content-verified-package-missing, ambiguity-status-unknown, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence, current-public-hash-mismatch |
+| `PRODUCTION_PACKAGE_POLICY_DENIED` | content-verified-package-missing, ambiguity-status-unknown, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, current-public-hash-mismatch |
 
 ## Advisory Rules
 
@@ -63,7 +63,7 @@ Production matrix: **blocked**.
 - If a non-OpenAI smoke also fails on target, production matrix spend can be considered.
 - If the smoke passes cleanly, route to evolve/repair instead of buying a matrix by default.
 
-Next action: Resolve package blockers: content-verified-package-missing, ambiguity-status-unknown, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence
+Next action: Resolve package blockers: content-verified-package-missing, ambiguity-status-unknown, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls
 
 Provider-delta diagnosis is present; the generated diagnosis routes the mixed smoke state to evolution rather than `/6` spend.
 Evolution options are ready; the selected next step is a mechanism probe, not a full descendant build.

@@ -47,7 +47,8 @@ export function renderThirdSubjectCampaign(input: ThirdSubjectInput): string {
   const total = input.campaign.length;
   const counted = input.campaign.filter((r) => r.counted).length;
   const seconds = input.campaign.reduce((n, r) => n + (r.runtimeSeconds ?? 0), 0);
-  const unavailable = input.availability.filter((a) => !a.available);
+  const unavailable = input.availability.filter((a) => !a.available && a.state !== "not-inspected");
+  const uninspected = input.availability.some((a) => a.state === "not-inspected");
   const ledgers = input.ledgers ?? [];
   const campaignNote = staleRunNote(
     input.campaign.map((r) => r.runId),
@@ -88,15 +89,17 @@ export function renderThirdSubjectCampaign(input: ThirdSubjectInput): string {
     "The combined width was bounded above by two, which cannot distinguish 'these families measure the",
     "same thing' from 'they measure different things'. Every cross-family number was refused, correctly.",
     "",
-    "## What was actually available",
+    uninspected ? "## Provider registry" : "## What was actually available",
     "",
-    "Three CLIs are installed here and exactly one of them was a new LAB:",
+    uninspected
+      ? "Local availability is not inspected in this portable report. Run `foundry trials providers` for a live check."
+      : "Three CLIs are installed here and exactly one of them was a new LAB:",
     "",
     "| provider | family | available | detail |",
     "|---|---|---|---|",
     ...input.availability.map(
       (a) =>
-        `| \`${a.provider.id}\` | ${a.provider.family} | ${a.available ? "yes" : "**no**"} | ${a.detail} |`,
+        `| \`${a.provider.id}\` | ${a.provider.family} | ${a.state === "not-inspected" ? "not inspected" : a.available ? "yes" : "**no**"} | ${a.detail} |`,
     ),
     "",
     "Google's binary answers `--version` and its account is not entitled: authentication fails with",

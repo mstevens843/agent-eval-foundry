@@ -16,7 +16,7 @@ teach the wrong lesson. Work through every risk the registry records for these m
 ## Kill taxonomy — apply before building
 
 - [ ] **already-solved** — do current models already handle this correctly? Measure before building.
-- [ ] **self-verifiable** — can the agent cheaply brute-force a check and confirm its own answer?
+- [ ] **self-verification cost** — record how a solver can test its answer; this is a difficulty hypothesis, not a rejection rule.
 - [ ] **unfair-or-defused** — is the mechanism that makes the task solvable the same one that
       defuses its trap?
 - [ ] **no-window** — is the race or interleaving this depends on reliably reachable?

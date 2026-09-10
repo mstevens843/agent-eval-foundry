@@ -16,6 +16,8 @@ export const SCREENING_BATCHES = [
 // Versioned follow-ups reuse the original per-package analysis files. They are
 // additional trials or engineering evidence, not additional distinct packages.
 export const SCREENING_FOLLOWUPS = [
+  "final-results-2026-09-09.md",
+  "evidence/2026-09-09-final-results.json",
   "second-trial-priority-2026-09-09.md",
   "top-five-implementation-plan-2026-09-09.md",
   "next-five-implementation-plan-2026-09-09.md",
@@ -71,6 +73,8 @@ export const SCREENING_FOLLOWUPS = [
   "evidence/2026-09-09-remaining-pass-audit.json",
   "evidence/2026-09-09-three-replacement-disposition.json",
   "evidence/2026-09-09-three-replacements-preparation.json",
+  "three-replacements-2026-09-09.md",
+  "evidence/2026-09-09-three-replacements.json",
 ];
 
 export function verifyPublication(root = process.cwd()) {
@@ -922,6 +926,136 @@ export function verifyPublication(root = process.cwd()) {
   assert(!/\/Users\/|\.local\//.test(JSON.stringify(remainingAudit)),"Nonportable audit evidence");
   successorRecords.push(...latestOriginals);
   retrialVerifiedFiles += postFinalFiles;
+  const threeReplacements = read("reports/screening/evidence/2026-09-09-three-replacements.json");
+  assert.equal(threeReplacements.gradingRevision, "remaining-pass-coverage-v3");
+  assert.equal(threeReplacements.automaticRetries, 0);
+  assert.equal(threeReplacements.maxProviderCallsAuthorized, 3);
+  assert.equal(threeReplacements.providerCallsMade, 3);
+  assert.equal(threeReplacements.concurrencyCap, 6);
+  assert.equal(threeReplacements.packages.length, 2);
+  assert.deepEqual(
+    threeReplacements.packages.map((p) => p.id).sort(),
+    replacements.packages.map((p) => p.id).sort(),
+  );
+  let threeReplacementsFiles = 0;
+  let threeReplacementsBytes = 0;
+  let threeReplacementsAttempts = 0;
+  for (const record of threeReplacements.packages) {
+    const plan = disposition.packages.find((p) => p.id === record.id);
+    assert.ok(plan, "three-replacements result must extend a package with pending replacements");
+    assert.ok(readFileSync(join(root, record.analysis), "utf8").includes("remaining-pass-coverage-v3 replacement"));
+    assert.deepEqual(record.previousCountedAttempts, plan.countedAttempts);
+    assert.deepEqual(record.voidAttempts, plan.voidAttempts);
+    let failures = plan.failures;
+    let scored = plan.scored;
+    for (const a of record.attempts) {
+      threeReplacementsAttempts++;
+      assert([0, 1].includes(a.recordedReward));
+      assert.ok(
+        plan.voidAttempts.some((v) => v.trial === a.replacesTrial),
+        `${record.id} Trial ${a.trial} must replace a voided trial`,
+      );
+      assert.equal(a.checker.pass, a.checker.correct === a.checker.total && a.checker.missed === 0 && a.checker.falsePositives === 0);
+      assert.equal(a.supplement.pass, a.supplement.deterministic && a.supplement.exactTokens && a.supplement.correct === a.supplement.total);
+      assert.equal(a.serviceSupplement.pass, a.serviceSupplement.details.every((d) => d.pass));
+      assert.equal(a.effectiveReward, Math.min(a.recordedReward, a.supplement.pass && a.serviceSupplement.pass ? 1 : 0));
+      scored++;
+      if (a.effectiveReward === 0) failures++;
+      assert.equal(a.cumulativeCountedFailures, failures);
+      assert.equal(a.cumulativeCountedScored, scored);
+      for (const key of ["completionSha256", "resultSha256", "gradeSha256", "packageDigest", "profileDigest"])
+        assert.match(a[key], hash, `${record.id} Trial ${a.trial}: ${key}`);
+      assert.ok(a.manifestFilesVerified > 0 && a.manifestBytesVerified > 0);
+      threeReplacementsFiles += a.manifestFilesVerified;
+      threeReplacementsBytes += a.manifestBytesVerified;
+    }
+    assert.equal(scored, 6, `${record.id}: three-replacements campaign must close a complete six-run set`);
+    assert.equal(record.finalCountedFailures, failures);
+    assert.equal(record.finalCountedScored, scored);
+    if (record.classification === "meets-5-of-6") assert.ok(failures >= 5);
+    else if (record.classification === "cannot-reach-5-of-6") assert.ok(failures < 5);
+    else assert.equal(record.classification, "unresolved-infrastructure");
+    assert.ok(!/\/Users\/|\.local\//.test(JSON.stringify(record)), "nonportable/private three-replacements record");
+  }
+  assert.equal(threeReplacementsAttempts, 3);
+  assert.equal(threeReplacements.audit.manifestFilesVerified, threeReplacementsFiles);
+  assert.equal(threeReplacements.audit.manifestBytesVerified, threeReplacementsBytes);
+  assert.equal(threeReplacements.audit.newModelCalls, 0);
+  assert.deepEqual(threeReplacements.audit.errors, []);
+  assert.deepEqual(
+    threeReplacements.classificationSummary.meetsFiveOfSix.sort(),
+    ["variant-cache-repair", "snapshot-recovery-repair"].sort(),
+  );
+  assert.deepEqual(threeReplacements.classificationSummary.cannotReachFiveOfSix, []);
+  assert.deepEqual(threeReplacements.classificationSummary.unresolvedInfrastructure, []);
+  successorRecords.push(
+    ...threeReplacements.packages.flatMap((p) =>
+      p.attempts.map((a) => ({ id: p.id, reward: a.recordedReward, target: a.target, ...a })),
+    ),
+  );
+  retrialVerifiedFiles += threeReplacementsFiles;
+  // The front-facing result is derived from counted attempts, including explicit
+  // void disposition. Historical campaign summaries retain their original scope.
+  const finalResults = read("reports/screening/evidence/2026-09-09-final-results.json");
+  for (const source of finalResults.sources) assert.equal(source.sha256, sha(source.path));
+  assert.deepEqual(finalResults.sources.map((s) => s.path), [
+    "reports/screening/evidence/2026-09-09-three-replacement-disposition.json",
+    "reports/screening/evidence/2026-09-09-three-replacements.json",
+  ]);
+  assert.deepEqual(finalResults.target, threeReplacements.acceptanceTarget);
+  assert.deepEqual(finalResults.packages.map((p) => p.id).sort(), disposition.packages.map((p) => p.id).sort());
+  const originalPreparation = read("reports/screening/evidence/2026-09-09-round-three-failing-five-preparation.json");
+  for (const p of finalResults.packages) {
+    const base = disposition.packages.find((b) => b.id === p.id);
+    const fresh = threeReplacements.packages.find((b) => b.id === p.id);
+    const counted = [...base.countedAttempts, ...(fresh?.attempts ?? []).map((a) => ({
+      trial: a.trial, provider: a.target, recordedReward: a.recordedReward,
+      auditEffectiveReward: a.effectiveReward, countedReward: a.effectiveReward, replacesTrial: a.replacesTrial,
+    }))].sort((a, b) => a.trial - b.trial);
+    assert.deepEqual(p.countedAttempts, counted);
+    assert.deepEqual(p.voidAttempts, base.voidAttempts);
+    assert.equal(p.analysis, base.analysis);
+    assert.equal(p.packageDigest, originalPreparation.packages.find((b) => b.id === p.id).foundry.digest);
+    assert.equal(new Set(counted.map((a) => a.trial)).size, 6);
+    assert.equal(p.scored, counted.length);
+    assert.equal(p.failures, counted.filter((a) => a.countedReward === 0).length);
+    assert(!counted.some((a) => p.voidAttempts.some((v) => v.trial === a.trial)), "void counted twice");
+    const providers = Object.fromEntries(["codex", "claude"].map((provider) => [provider, counted.filter((a) => a.provider === provider).length]));
+    assert.deepEqual(p.attemptsByProvider, providers);
+    assert.deepEqual(providers, { codex: 3, claude: 3 });
+    for (const a of fresh?.attempts ?? []) {
+      const slot = replacements.slots.find((s) => s.id === p.id && s.trial === a.trial);
+      assert(slot, "fresh trial must occupy an authorized slot");
+      for (const key of ["target", "replacesTrial", "packageDigest", "profileDigest"]) assert.equal(a[key], slot[key]);
+    }
+    const analysis = readFileSync(join(root, p.analysis), "utf8");
+    assert(analysis.includes(`Final counted result: ${p.failures}/6 reward=0`), "stale task result pointer");
+  }
+  const finalSummary = {
+    packages: finalResults.packages.length,
+    sixOfSix: finalResults.packages.filter((p) => p.failures === 6).length,
+    fiveOfSix: finalResults.packages.filter((p) => p.failures === 5).length,
+    countedTrials: finalResults.packages.reduce((n, p) => n + p.scored, 0),
+    zeroRewards: finalResults.packages.reduce((n, p) => n + p.failures, 0),
+    oneRewards: finalResults.packages.reduce((n, p) => n + p.scored - p.failures, 0),
+    codexTrials: finalResults.packages.reduce((n, p) => n + p.attemptsByProvider.codex, 0),
+    claudeTrials: finalResults.packages.reduce((n, p) => n + p.attemptsByProvider.claude, 0),
+    pendingTrials: finalResults.packages.reduce((n, p) => n + 6 - p.scored, 0),
+    gradingVoids: voidCount,
+  };
+  assert.deepEqual(finalResults.summary, finalSummary);
+  const finalCampaignTotals = {
+    originalScreenedPackages: ids.size,
+    successorAttempts: successorRecords.length,
+    successorRawGrades: successorRecords.filter((p) => p.reward !== null).length,
+    successorCountedTrials: disposition.totals.countedTrials + threeReplacementsAttempts,
+    successorZeroRewards: disposition.totals.effectiveFailures + threeReplacements.packages.reduce((n,p) => n + p.attempts.filter((a) => a.effectiveReward === 0).length, 0),
+    successorOneRewards: disposition.totals.effectivePasses + threeReplacements.packages.reduce((n,p) => n + p.attempts.filter((a) => a.effectiveReward === 1).length, 0),
+    gradingVoids: voidCount,
+    infrastructureInterruptions: successorRecords.filter((p) => p.reward === null).length,
+    publishedCampaignEntries: ids.size + successorRecords.length,
+  };
+  assert.deepEqual(finalResults.campaignTotals, finalCampaignTotals);
   const successorPackageIds = new Set(successorRecords.map((p) => p.id));
   const scoredPackageIds = new Set(successorRecords.filter((p) => p.reward !== null).map((p) => p.id));
   assert.deepEqual([...successorPackageIds].sort(), [...ids].sort(), "every package has a Trial 2 record");
@@ -1009,14 +1143,25 @@ export function verifyPublication(root = process.cwd()) {
     postFinalFiveMeetsFiveOfSix: postFinal.classificationSummary.meetsFiveOfSix.length,
     postFinalFiveCannotReachFiveOfSix: postFinal.classificationSummary.cannotReachFiveOfSix.length,
     postFinalFiveUnresolvedInfrastructure: postFinal.classificationSummary.unresolvedInfrastructure.length,
-    successorEffectiveZeroRewards: disposition.totals.effectiveFailures,
-    successorEffectivePasses: disposition.totals.effectivePasses,
-    successorCountedTrials: disposition.totals.countedTrials,
+    successorEffectiveZeroRewards: disposition.totals.effectiveFailures + threeReplacements.packages.reduce((n, p) => n + p.attempts.filter((a) => a.effectiveReward === 0).length, 0),
+    successorEffectivePasses: disposition.totals.effectivePasses + threeReplacements.packages.reduce((n, p) => n + p.attempts.filter((a) => a.effectiveReward === 1).length, 0),
+    successorCountedTrials: disposition.totals.countedTrials + threeReplacementsAttempts,
     successorGradingVoids: disposition.totals.gradingVoids,
     remainingAuditAdditionalFalsePasses: remainingAudit.correctedPasses.length,
-    completedFinalistsMeetingTarget: disposition.totals.completedFinalistsMeetingTarget,
-    pendingFinalists: disposition.totals.pendingFinalists,
+    completedFinalistsMeetingTarget: finalSummary.sixOfSix + finalSummary.fiveOfSix,
+    pendingFinalists: finalResults.packages.filter((p) => p.scored < 6).length,
+    finalistCountedTrials: finalSummary.countedTrials,
+    finalistZeroRewards: finalSummary.zeroRewards,
+    finalistsAtSixOfSix: finalSummary.sixOfSix,
+    finalistsAtFiveOfSix: finalSummary.fiveOfSix,
+    publishedScreeningCampaignEntries: finalCampaignTotals.publishedCampaignEntries,
     preparedReplacementAttempts: replacements.slots.length,
+    threeReplacementsAttemptsMade: threeReplacementsAttempts,
+    threeReplacementsMeetsFiveOfSix: threeReplacements.classificationSummary.meetsFiveOfSix.length,
+    threeReplacementsCannotReachFiveOfSix: threeReplacements.classificationSummary.cannotReachFiveOfSix.length,
+    threeReplacementsUnresolvedInfrastructure: threeReplacements.classificationSummary.unresolvedInfrastructure.length,
+    allFinalistsMeetingTargetAfterReplacements:
+      disposition.totals.completedFinalistsMeetingTarget + threeReplacements.classificationSummary.meetsFiveOfSix.length,
     manifestListedFilesVerifiedAtPublication: verifiedFiles,
     successorTrials: successorRecords.length,
     successorPackages: successorPackageIds.size,

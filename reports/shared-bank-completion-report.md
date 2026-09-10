@@ -176,14 +176,14 @@ No subject has a counted, hash-current trial in every family. Co-failure across 
 
 | subject | family | provider | runnable here | what it unlocks |
 |---|---|---|---|---|
-| `claude-sonnet-5` | `durable-approval-outbox` | `claude-sonnet` | **yes** | adds a new subject; it needs a counted trial in all 1 families before it widens the shared bank |
+| `claude-sonnet-5` | `durable-approval-outbox` | `claude-sonnet` | not inspected during report generation; run foundry trials providers for live availability | adds a new subject; it needs a counted trial in all 1 families before it widens the shared bank |
 
-Runnable here, as written:
+For subjects without confirmed local availability, prepare a bundle. The bundle pins the challenge
+hash, so a result someone else produces either measures this exact task or is refused on
+import:
 
 ```bash
-foundry trials run --family durable-approval-outbox --run-id outbox-claude-sonnet-1 \
-  --model anthropic/claude-sonnet-5 --provider shell --inherit-env \
-  --command claude --model sonnet -p '{instruction}' --permission-mode bypassPermissions
+foundry trials campaign prepare --family durable-approval-outbox --provider external --out bundles/durable-approval-outbox-external
 ```
 
 

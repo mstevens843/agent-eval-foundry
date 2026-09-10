@@ -26,18 +26,23 @@ it("schedules only the five unrun slots, including both independent snapshot att
 it("uses corrected histories rather than the recorded passes that caused early stopping", () => {
   const plan = makePostFinalPlan(audit(), original());
   expect(plan.packages.map(({ failures, scored }) => [failures, scored])).toEqual([
-    [4, 5], [5, 5], [5, 5], [3, 4],
+    [4, 5],
+    [5, 5],
+    [5, 5],
+    [3, 4],
   ]);
   for (const pkg of plan.packages) {
     const counts = { ...pkg.attemptsByProvider };
-    for (const slot of plan.slots.filter(slot => slot.id === pkg.id)) counts[slot.target]++;
+    for (const slot of plan.slots.filter((slot) => slot.id === pkg.id)) counts[slot.target]++;
     expect(counts).toEqual({ claude: 3, codex: 3 });
   }
 });
 
 it("rejects changing provider balance or assigning a nonexistent frozen trial", () => {
   const changed = audit();
-  changed.classifications.find((p: { id: string }) => p.id === "issued-report-repair").attemptsByProvider.codex = 1;
+  changed.classifications.find(
+    (p: { id: string }) => p.id === "issued-report-repair",
+  ).attemptsByProvider.codex = 1;
   expect(() => makePostFinalPlan(changed, original())).toThrow();
   const missing = original();
   missing.packages.find((p: { id: string }) => p.id === "snapshot-recovery-repair").slots.pop();

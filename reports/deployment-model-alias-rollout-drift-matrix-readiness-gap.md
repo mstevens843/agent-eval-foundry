@@ -19,7 +19,7 @@ from what is only planned or still missing.
 | transfer | **declared** | feature-flag/model-routing transfer plans exist; not proved |
 | OpenAI half-matrix | **planned** | 3 OpenAI slot(s); 0 already recorded, and 1 withdrawn by a challenge migration — a withdrawn slot is an empty slot |
 | Anthropic half-matrix | **blocked** | Anthropic quota unavailable; import only until restored |
-| full `/6` matrix | **blocked** | Resolve package blockers: content-verified-package-missing, ambiguity-status-unknown, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls, required-boundedSolveEvidence |
+| full `/6` matrix | **blocked** | Resolve package blockers: content-verified-package-missing, ambiguity-status-unknown, required-reference, required-positiveWork, required-nearMissControls, required-contractReviewed, required-publicPackageComplete, required-protectedGrading, required-localIntegrityControls |
 
 ## OpenAI Half-Matrix Plan
 

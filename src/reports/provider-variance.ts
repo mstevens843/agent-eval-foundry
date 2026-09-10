@@ -269,6 +269,7 @@ export function renderProviderVariance(input: ProviderVarianceInput): string {
 
   const anyCrossProvider = input.families.some((f) => f.curve.familiesWithFailures.length > 1);
   const totalCounted = input.families.reduce((n, f) => n + f.curve.totalCounted, 0);
+  const uninspected = input.availability.some((a) => a.state === "not-inspected");
 
   return [
     "# Provider variance",
@@ -280,16 +281,18 @@ export function renderProviderVariance(input: ProviderVarianceInput): string {
       ? "**At least one family has counted failures from more than one model family.**"
       : `**No family yet has counted failures from more than one model family.** ${totalCounted} counted trials exist and the mechanism claims are, so far, claims about the labs that produced them.`,
     "",
-    "## Provider availability on this machine",
+    uninspected ? "## Provider registry" : "## Provider availability on this machine",
     "",
-    "Checked by executing the binary, not assumed. A provider that is not available produces NOT_RUN",
+    uninspected
+      ? "Local availability is not inspected in this portable report. Run `foundry trials providers` for a live check. An unavailable provider produces NOT_RUN"
+      : "Checked by executing the binary, not assumed. A provider that is not available produces NOT_RUN",
     "slots and a prepared bundle — never a zero.",
     "",
     "| provider | family | available | detail |",
     "|---|---|---|---|",
     ...input.availability.map(
       (a) =>
-        `| \`${a.provider.id}\` | ${a.provider.family} | ${a.available ? "yes" : "**no**"} | ${esc(a.detail)} |`,
+        `| \`${a.provider.id}\` | ${a.provider.family} | ${a.state === "not-inspected" ? "not inspected" : a.available ? "yes" : "**no**"} | ${esc(a.detail)} |`,
     ),
     "",
     "## Per family, per provider",
@@ -374,7 +377,7 @@ export function renderProviderVariance(input: ProviderVarianceInput): string {
     "",
     "| claim | supported? |",
     "|---|---|",
-    `| the foundry can run multiple providers | ${input.availability.filter((a) => a.available).length >= 2 ? "**yes** — more than one CLI is runnable here and trials exist" : "no"} |`,
+    `| multiple providers are available locally | ${uninspected ? "not inspected — use the live provider preflight" : input.availability.filter((a) => a.available).length >= 2 ? "**yes** — more than one CLI is runnable here" : "no"} |`,
     "| refusals and infra failures are kept out of the counted set | **yes** — enforced in code, not convention |",
     `| a mechanism transfers across labs | ${anyCrossProvider ? "**yes, for at least one family**" : "**not yet** — see the per-family tables"} |`,
     `| rates are precise | **no** — every count here is below the ${MIN_TRIALS_FOR_RATE}-trial threshold and the intervals show it |`,

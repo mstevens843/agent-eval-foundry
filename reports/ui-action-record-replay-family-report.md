@@ -9,7 +9,7 @@ Every figure below is measured: produced by running the family, not by declaring
 | | |
 |---|---|
 | ship gate | **NOT-READY** |
-| blocking failures | `content-verified-package-missing`, `required-reference`, `required-positiveWork`, `required-nearMissControls`, `required-contractReviewed`, `required-publicPackageComplete`, `required-protectedGrading`, `required-localIntegrityControls`, `required-boundedSolveEvidence`, `no-qualified-capability-failure`, `required-destinationChecks`, `not-destination-professional-package`, `exact-two-target-profiles-missing` |
+| blocking failures | `content-verified-package-missing`, `required-reference`, `required-positiveWork`, `required-nearMissControls`, `required-contractReviewed`, `required-publicPackageComplete`, `required-protectedGrading`, `required-localIntegrityControls`, `no-qualified-capability-failure`, `required-destinationChecks`, `not-destination-professional-package`, `exact-two-target-profiles-missing` |
 | data quality | `measured` |
 | status | `shipped` |
 | agent trials run | 5 |

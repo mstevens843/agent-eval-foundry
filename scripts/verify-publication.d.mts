@@ -36,6 +36,11 @@ export function verifyPublication(root?: string): {
   successorGradingVoids: number;
   completedFinalistsMeetingTarget: number;
   pendingFinalists: number;
+  finalistCountedTrials: number;
+  finalistZeroRewards: number;
+  finalistsAtSixOfSix: number;
+  finalistsAtFiveOfSix: number;
+  publishedScreeningCampaignEntries: number;
   preparedReplacementAttempts: number;
   successorTrials: number;
   successorPackages: number;

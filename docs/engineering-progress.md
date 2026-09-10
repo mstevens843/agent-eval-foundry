@@ -2,6 +2,18 @@
 
 The goal is a portfolio of fair, useful tasks that agents genuinely fail—not a large pile of generated exercises or zero rewards caused by bad measurement. Progress includes discovering that a candidate is easy, identifying our own mistakes, and making the next decision better informed.
 
+## September 9: five completed finalists, three at 6/6 and two at 5/6
+
+All five finalists meet the reported standard-trial target. Incremental build, issued report, and variant cache finished at 6/6 reward=0; snapshot recovery and temporal capacity finished at 5/6. Each has three counted trials per provider. The 30-trial result contains 28 failures and two retained agent passes.
+
+The final three fresh Codex attempts all failed required checker obligations, completing cache T8/T9 and snapshot T8. Their services passed both original and additional replay coverage. The earlier grading voids remain excluded; new trials occupy their counted slots without overwriting physical history.
+
+This completes the screening progression from 25 candidates to five repeated cross-provider results. The program also improved its own measurements: code-level audits uncovered missing checker coverage and a cache metadata omission in the service verifier, preserved original artifacts, and tested the corrected coverage.
+
+[Final results](../reports/screening/final-results-2026-09-09.md) · [Last campaign](../reports/screening/three-replacements-2026-09-09.md).
+
+The dated milestones below are historical; their pending counts describe those earlier stages.
+
 ## September 9: three finished finalists; three replacement slots prepared
 
 The final campaign completed all five attempted runs. Build and issued report have

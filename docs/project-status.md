@@ -1,46 +1,22 @@
-# Project status — a five-minute review
+# Project status
 
-September 9, 2026. Navigation and status, not a package-policy approval.
+September 9, 2026. **Five qualifying finalists: three at 6/6 reward=0 and two at 5/6.**
 
-## Latest measured progress
+## Completed screening results
 
-**Three finalists have completed the reported ≥5/6 failure target: two at 6/6 and
-one at 5/6. Two finalists await three fresh Codex replacements.** The latest audit
-confirmed three more false passes. At the user's request those three are unscored,
-with their raw records and diagnostic regrades preserved. Earlier agreed regrades
-remain counted.
+| Package and trial history | Reward=0 / counted trials | Provider balance |
+| --- | ---: | --- |
+| [21 — Incremental build](../reports/screening/fifth-five/21-incremental-build-repair.md) | **6/6** | 3 Codex + 3 Claude |
+| [25 — Issued report](../reports/screening/fifth-five/25-issued-report-repair.md) | **6/6** | 3 Codex + 3 Claude |
+| [19 — Variant cache](../reports/screening/fourth-five/19-variant-cache-repair.md) | **6/6** | 3 Codex + 3 Claude |
+| [11 — Snapshot recovery](../reports/screening/third-five/11-snapshot-recovery-repair.md) | **5/6** | 3 Codex + 3 Claude |
+| [10 — Temporal capacity](../reports/screening/next-five/10-temporal-capacity-repair.md) | **5/6** | 3 Codex + 3 Claude |
 
-| Package | Counted failures / trials | Status | Remaining provider slots |
-| --- | --- | --- | --- |
-| **21 Incremental build** | **6/6** | Complete; meets ≥5/6 | None |
-| **25 Issued report** | **6/6** | Complete; meets ≥5/6 | None |
-| **10 Temporal capacity** | **5/6** | Complete; meets ≥5/6 | None |
-| 19 Variant cache | **4/4** | Pending; T6/T7 grading voids | Codex T8 and T9 |
-| 11 Snapshot recovery | **4/5** | Pending; T4 grading void | Codex T8 |
+**30 counted finalist trials: 28 reward=0, two reward=1.** All five sets are complete. The broader successor program contains 54 attempts across 25 packages: 50 counted trials, three grading voids, and one infrastructure interruption.
 
-The new audit found that cache Trials 6/7 reject a legitimate tier copy, and snapshot
-Trial 4 rejects a valid empty recovery without a database commit. It also repaired
-missing private verification of metadata after a 304 validation. Snapshot Trial 7
-and temporal Trial 7 survived the broader checks and remain passes.
+[Final results and counting method](../reports/screening/final-results-2026-09-09.md) · [Machine-readable results](../reports/screening/evidence/2026-09-09-final-results.json) · [Latest campaign](../reports/screening/three-replacements-2026-09-09.md).
 
-Verification covered **24 retained submissions, 50/50 private-oracle classifications,
-29 passing-service replays, and 20,836 original files verified before and after with
-zero drift**. No additional model calls were made. Agent-visible packages remain
-unchanged; fresh replacements receive cumulative checker and service grading.
-
-There are **51 successor attempts across 25 packages**, with 50 completed raw grades
-and one historical infrastructure interruption. The current selected record contains
-**47 counted trials: 25 failures and 22 passes**, plus three grading voids awaiting
-replacement. Original grades remain visible (15 zeroes, 35 passes); audit findings
-are retained separately. We do not count a void as a failure or silently erase it.
-
-[Latest audit](../reports/screening/remaining-pass-audit-2026-09-09.md) ·
-[Counting disposition](../reports/screening/evidence/2026-09-09-three-replacement-disposition.json) ·
-[Three-replacement handoff](../docs/three-replacements-handoff.md).
-
-The completed sets have three counted Codex and three counted Claude attempts. The
-remaining slots restore that balance for cache and snapshot. The reported ≥5/6
-screening target remains separate from final rubric and adversarial qualification.
+Reward=0 denotes a failed required deliverable, including an incorrect submitted checker. Published counts incorporate documented grading corrections; original rewards and excluded records remain available. These are standard screening results against the reported ≥5/6 target.
 
 ## What is implemented
 
@@ -54,8 +30,7 @@ The foundry assembles separate solver/verifier workspaces, validates local contr
 
 The original 25 screenings all passed their service suites. Their recorded checker
 outcomes and historical grading concerns remain intact in the [trial index](../reports/screening/README.md).
-Fifty-one successor attempts, fifty scored, now extend that history; the Trial 2 results above
-must not be merged into the original table or treated as repeat runs of identical versions.
+Fifty-four successor attempts now extend that history: 50 counted trials, three grading voids, and one infrastructure interruption. Original and successor versions remain separately documented.
 
 Engineering preparation covers [19/21/25/24/07](../reports/screening/top-five-implementation-plan-2026-09-09.md),
 [14/03/18/20/04](../reports/screening/next-five-implementation-plan-2026-09-09.md),
@@ -111,8 +86,6 @@ These links are reviewer-facing and include private grading material. Solvers re
 - [Tests](../test/): correct alternatives, near misses, protected-route checks, capture limits and accounting boundaries.
 - [Next-cohort selection](../data/next-portfolio-selection-ledger.json), [third](../data/third-portfolio-selection-ledger.json), [fourth](../data/fourth-portfolio-selection-ledger.json) and [fifth](../data/fifth-portfolio-selection-ledger.json): decisions and exposure, not measured solve probabilities.
 
-## What remains
+## Screening is complete
 
-Three Codex replacements remain: cache T8/T9 and snapshot T8. They are prepared to
-start together with a cap of six. Three other finalists are complete at 6/6, 6/6 and
-5/6. Final submission review and required cheat checks remain separate.
+All five finalist sets are complete and meet the reported ≥5/6 target. There are no pending standard screening slots. Destination-specific submission review and required adversarial qualification remain separate from these results.

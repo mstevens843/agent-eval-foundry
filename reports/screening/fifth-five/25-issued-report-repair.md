@@ -1,5 +1,7 @@
 # 25 — Issued report repair
 
+> **Final counted result: 6/6 reward=0 — meets the reported ≥5/6 target.** Three Codex and three Claude trials; no slots pending. [Final results and counting method](../final-results-2026-09-09.md). The dated analysis below preserves the complete trial and grading history.
+
 ## Outcome
 
 Claude, requested Opus 5 / max, completed in **25 minutes 57 seconds**, with **reward 1**.

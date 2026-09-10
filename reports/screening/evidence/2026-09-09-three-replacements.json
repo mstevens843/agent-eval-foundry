@@ -1,0 +1,906 @@
+{
+  "schemaVersion": 1,
+  "campaign": "2026-09-09-three-replacements",
+  "evidenceClass": "real-provider-screening",
+  "label": "Three fresh Codex replacements for grading-void attempts (remaining-pass-coverage-v3)",
+  "gradingRevision": "remaining-pass-coverage-v3",
+  "limitations": [
+    "Replaces three attempts the user elected to void (variant-cache-repair Trials 6 and 7; snapshot-recovery-repair Trial 4) after a third checker-coverage audit confirmed genuine defects in their submitted checkers. Voided attempts keep their original recorded reward (1) and diagnostic v3 regrade (0) permanently, but their counted reward is null -- neither a pass nor a failure in the six-run tally. They are never overwritten, renumbered, or counted alongside their replacement.",
+    "All three replacement attempts were launched together (concurrency cap of six); both variant-cache-repair replacements ran in independent, blind workspaces, neither aware of the other.",
+    "Grading applies the original package grade, the cumulative remaining-pass-coverage-v3 checker supplement (including all earlier v1/v2 controls), and an additional service-coverage replay (including the repaired 304-metadata check) to every submission. A raw pass alone is not the final result.",
+    "Every base service and base (original-bank) checker result in this batch was fully correct; all three replacement attempts failed entirely because of the newer, narrowly-targeted supplemental checker controls -- confirmed as required-checker-only failures by a passing service-level replay in every case.",
+    "This is the last authorized batch for these two packages under this disposition: both six-run sets are now closed with all six counted slots filled (four counted plus two replacements for cache; five counted plus one replacement for snapshot).",
+    "Earlier documented regrades (from final-six-coverage-v1 and post-final-coverage-v2) remain counted as before; only the three newly-identified false passes from remaining-pass-coverage-v3 were voided, per explicit user disposition.",
+    "CLI dollar estimates would apply to Claude runs only; all three attempts here were Codex, which never reports a price. Requested model/effort are not independent backend attestations.",
+    "Solvers were given only the original public task inputs -- no access to any prior trial, analysis, any audit, or this campaign's operator handoff."
+  ],
+  "sourceDigest": "2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4",
+  "sourceProvenance": "Reused, byte-for-byte, the isolated runtime built and independently verified for the first round-two campaign. No new runtime was built for this campaign.",
+  "authorImage": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+  "maxProviderCallsAuthorized": 3,
+  "providerCallsMade": 3,
+  "automaticRetries": 0,
+  "concurrencyCap": 6,
+  "packages": [
+    {
+      "id": "variant-cache-repair",
+      "analysis": "reports/screening/fourth-five/19-variant-cache-repair.md",
+      "previousCountedAttempts": [
+        {
+          "trial": 2,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 3,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 4,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 5,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        }
+      ],
+      "voidAttempts": [
+        {
+          "trial": 6,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": null
+        },
+        {
+          "trial": 7,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": null
+        }
+      ],
+      "attempts": [
+        {
+          "trial": 8,
+          "target": "codex",
+          "replacesTrial": 6,
+          "recordedReward": 1,
+          "effectiveReward": 0,
+          "service": {
+            "scenarios": 25,
+            "failedScenarios": 0
+          },
+          "checker": {
+            "total": 15,
+            "correct": 15,
+            "missed": 0,
+            "falsePositives": 0,
+            "pass": true
+          },
+          "supplement": {
+            "schemaVersion": 1,
+            "gradingRevision": "remaining-pass-coverage-v3",
+            "policySha256": "410d0071628803564350a44cde99a7c8425e602dea3cb86d2df34931562c49e6",
+            "checkerSha256": "5a27f1a214a90d2a5ab5072b24bf3419a20d7daea77b3f661356ff8b734eaab1",
+            "fixtureSha256s": [
+              "a9a2efdabde6ca65ebc4a51e0c42447ff6ca351df681ab4994135694709fcccb",
+              "5fb40da2dedd0670c4706ff17bc9626d398cee0852c6df1c3d654aa27e4815be"
+            ],
+            "reasonPolicy": "diagnostic-only",
+            "deterministic": true,
+            "exactTokens": true,
+            "correct": 6,
+            "total": 8,
+            "pass": false,
+            "details": [
+              {
+                "token": "db141be670ff3bd75a54e983",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "9c644993125a14fb521924b6",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "317f2df180e4cdb3098e2db5",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "3dee4fd5227f802f034982b3",
+                "expectedOk": false,
+                "actualOk": true,
+                "correct": false
+              },
+              {
+                "token": "39254bac0cc93e4bca06d1ca",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "f117e58ac5e920eb294cdf60",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "65a72eb8f8465d6428965e18",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "b0b340ef902561caacd4186f",
+                "expectedOk": true,
+                "actualOk": false,
+                "correct": false
+              }
+            ],
+            "observed": {
+              "first": {
+                "verdicts": {
+                  "db141be670ff3bd75a54e983": {
+                    "ok": true
+                  },
+                  "9c644993125a14fb521924b6": {
+                    "ok": true
+                  },
+                  "317f2df180e4cdb3098e2db5": {
+                    "ok": true
+                  },
+                  "3dee4fd5227f802f034982b3": {
+                    "ok": true
+                  },
+                  "39254bac0cc93e4bca06d1ca": {
+                    "ok": true
+                  },
+                  "f117e58ac5e920eb294cdf60": {
+                    "ok": true
+                  },
+                  "65a72eb8f8465d6428965e18": {
+                    "ok": true
+                  },
+                  "b0b340ef902561caacd4186f": {
+                    "ok": false,
+                    "reasons": [
+                      "cell 0: get b stored a fabricated or non-storable entry"
+                    ]
+                  }
+                }
+              },
+              "second": {
+                "verdicts": {
+                  "db141be670ff3bd75a54e983": {
+                    "ok": true
+                  },
+                  "9c644993125a14fb521924b6": {
+                    "ok": true
+                  },
+                  "317f2df180e4cdb3098e2db5": {
+                    "ok": true
+                  },
+                  "3dee4fd5227f802f034982b3": {
+                    "ok": true
+                  },
+                  "39254bac0cc93e4bca06d1ca": {
+                    "ok": true
+                  },
+                  "f117e58ac5e920eb294cdf60": {
+                    "ok": true
+                  },
+                  "65a72eb8f8465d6428965e18": {
+                    "ok": true
+                  },
+                  "b0b340ef902561caacd4186f": {
+                    "ok": false,
+                    "reasons": [
+                      "cell 0: get b stored a fabricated or non-storable entry"
+                    ]
+                  }
+                }
+              },
+              "mutated": false
+            }
+          },
+          "serviceSupplement": {
+            "id": "variant-cache-repair",
+            "gradingRevision": "remaining-pass-coverage-v3",
+            "packageDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+            "sourceSha256": "0594e4dc09c6375582967a25b9019da735cf409433bb77ae2e93335d9e088eb5",
+            "pass": true,
+            "details": [
+              {
+                "scenario": "stale-304-metadata",
+                "originalStatus": "semantic-pass",
+                "metadataCurrent": true,
+                "pass": true
+              },
+              {
+                "scenario": "fresh-plus-origin",
+                "originalStatus": "semantic-pass",
+                "metadataCurrent": true,
+                "pass": true
+              },
+              {
+                "scenario": "copy-other-path",
+                "originalStatus": "semantic-pass",
+                "metadataCurrent": true,
+                "pass": true
+              }
+            ]
+          },
+          "completionSha256": "50ace9d914c339a4c3ad2564bdadac0d3792aa7ce9fab00920dec813d11d12f4",
+          "gradeSha256": "424bb6b927b13607248732de51b8ab27864f8ec1d4730a070b83d115146a0f05",
+          "resultSha256": "57efc0876953a5bc9e853ff58aea5a9d674d514d6f18fe835fd63109b39e8d2d",
+          "packageDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "manifestFilesVerified": 972,
+          "manifestBytesVerified": 59385129,
+          "cumulativeCountedFailures": 5,
+          "cumulativeCountedScored": 5
+        },
+        {
+          "trial": 9,
+          "target": "codex",
+          "replacesTrial": 7,
+          "recordedReward": 1,
+          "effectiveReward": 0,
+          "service": {
+            "scenarios": 25,
+            "failedScenarios": 0
+          },
+          "checker": {
+            "total": 15,
+            "correct": 15,
+            "missed": 0,
+            "falsePositives": 0,
+            "pass": true
+          },
+          "supplement": {
+            "schemaVersion": 1,
+            "gradingRevision": "remaining-pass-coverage-v3",
+            "policySha256": "410d0071628803564350a44cde99a7c8425e602dea3cb86d2df34931562c49e6",
+            "checkerSha256": "1ac82c48a3ac59fa010129a4bd698ea1bde4a9a82dcbf5d9a7ec9a7982358a27",
+            "fixtureSha256s": [
+              "a9a2efdabde6ca65ebc4a51e0c42447ff6ca351df681ab4994135694709fcccb",
+              "5fb40da2dedd0670c4706ff17bc9626d398cee0852c6df1c3d654aa27e4815be"
+            ],
+            "reasonPolicy": "diagnostic-only",
+            "deterministic": true,
+            "exactTokens": true,
+            "correct": 6,
+            "total": 8,
+            "pass": false,
+            "details": [
+              {
+                "token": "db141be670ff3bd75a54e983",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "9c644993125a14fb521924b6",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "317f2df180e4cdb3098e2db5",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "3dee4fd5227f802f034982b3",
+                "expectedOk": false,
+                "actualOk": true,
+                "correct": false
+              },
+              {
+                "token": "39254bac0cc93e4bca06d1ca",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "f117e58ac5e920eb294cdf60",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "65a72eb8f8465d6428965e18",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "b0b340ef902561caacd4186f",
+                "expectedOk": true,
+                "actualOk": false,
+                "correct": false
+              }
+            ],
+            "observed": {
+              "first": {
+                "verdicts": {
+                  "db141be670ff3bd75a54e983": {
+                    "ok": true
+                  },
+                  "9c644993125a14fb521924b6": {
+                    "ok": true
+                  },
+                  "317f2df180e4cdb3098e2db5": {
+                    "ok": true
+                  },
+                  "3dee4fd5227f802f034982b3": {
+                    "ok": true
+                  },
+                  "39254bac0cc93e4bca06d1ca": {
+                    "ok": true
+                  },
+                  "f117e58ac5e920eb294cdf60": {
+                    "ok": true
+                  },
+                  "65a72eb8f8465d6428965e18": {
+                    "ok": true
+                  },
+                  "b0b340ef902561caacd4186f": {
+                    "ok": false,
+                    "reasons": [
+                      "cell 0: illegal cache write to edge-b"
+                    ]
+                  }
+                }
+              },
+              "second": {
+                "verdicts": {
+                  "db141be670ff3bd75a54e983": {
+                    "ok": true
+                  },
+                  "9c644993125a14fb521924b6": {
+                    "ok": true
+                  },
+                  "317f2df180e4cdb3098e2db5": {
+                    "ok": true
+                  },
+                  "3dee4fd5227f802f034982b3": {
+                    "ok": true
+                  },
+                  "39254bac0cc93e4bca06d1ca": {
+                    "ok": true
+                  },
+                  "f117e58ac5e920eb294cdf60": {
+                    "ok": true
+                  },
+                  "65a72eb8f8465d6428965e18": {
+                    "ok": true
+                  },
+                  "b0b340ef902561caacd4186f": {
+                    "ok": false,
+                    "reasons": [
+                      "cell 0: illegal cache write to edge-b"
+                    ]
+                  }
+                }
+              },
+              "mutated": false
+            }
+          },
+          "serviceSupplement": {
+            "id": "variant-cache-repair",
+            "gradingRevision": "remaining-pass-coverage-v3",
+            "packageDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+            "sourceSha256": "26c2e050c26c6af93b7819c52eb563e1a9b71a161e62d01b7330657f8e5ded86",
+            "pass": true,
+            "details": [
+              {
+                "scenario": "stale-304-metadata",
+                "originalStatus": "semantic-pass",
+                "metadataCurrent": true,
+                "pass": true
+              },
+              {
+                "scenario": "fresh-plus-origin",
+                "originalStatus": "semantic-pass",
+                "metadataCurrent": true,
+                "pass": true
+              },
+              {
+                "scenario": "copy-other-path",
+                "originalStatus": "semantic-pass",
+                "metadataCurrent": true,
+                "pass": true
+              }
+            ]
+          },
+          "completionSha256": "f53f94c0dcc4d7403505a6fc84e6acd3006d495e49856a00badd8e5314b2d476",
+          "gradeSha256": "424bb6b927b13607248732de51b8ab27864f8ec1d4730a070b83d115146a0f05",
+          "resultSha256": "cc1b0910b210a5202cbba7e91456b18a593929e1583bbe11526bb3bb32311082",
+          "packageDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "manifestFilesVerified": 972,
+          "manifestBytesVerified": 60923707,
+          "cumulativeCountedFailures": 6,
+          "cumulativeCountedScored": 6
+        }
+      ],
+      "finalCountedFailures": 6,
+      "finalCountedScored": 6,
+      "classification": "meets-5-of-6"
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "analysis": "reports/screening/third-five/11-snapshot-recovery-repair.md",
+      "previousCountedAttempts": [
+        {
+          "trial": 2,
+          "provider": "codex",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 3,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 5,
+          "provider": "claude",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 6,
+          "provider": "claude",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 7,
+          "provider": "claude",
+          "recordedReward": 1,
+          "auditEffectiveReward": 1,
+          "countedReward": 1
+        }
+      ],
+      "voidAttempts": [
+        {
+          "trial": 4,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": null
+        }
+      ],
+      "attempts": [
+        {
+          "trial": 8,
+          "target": "codex",
+          "replacesTrial": 4,
+          "recordedReward": 1,
+          "effectiveReward": 0,
+          "service": {
+            "scenarios": 33,
+            "failedScenarios": 0
+          },
+          "checker": {
+            "total": 12,
+            "correct": 12,
+            "missed": 0,
+            "falsePositives": 0,
+            "pass": true
+          },
+          "supplement": {
+            "schemaVersion": 1,
+            "gradingRevision": "remaining-pass-coverage-v3",
+            "policySha256": "410d0071628803564350a44cde99a7c8425e602dea3cb86d2df34931562c49e6",
+            "checkerSha256": "2f203819e40e2a44286f79cc3afe05e452089110c3d55cff1ada29bedfd620b6",
+            "fixtureSha256s": [
+              "7d3fb7543e243a7d37ecad8d0d579629edfc8e1fbcf1104ffe9469100c3558d7",
+              "c55f090a922cb29f91f5d5a45a0fb2d1dee30b20230495ac5a6df0323e55325c",
+              "de17e70f4b290146c36bce58c6cc9bdf7f910be396fdce8a8e12bd5006d91bf4"
+            ],
+            "reasonPolicy": "diagnostic-only",
+            "deterministic": true,
+            "exactTokens": true,
+            "correct": 17,
+            "total": 18,
+            "pass": false,
+            "details": [
+              {
+                "token": "60ef8f7b2097c4c934031a11",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "0021c8f79876bc501f21eeff",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "061441bce76280e001c9980c",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "617d7a6c7ad87c9ea0833f65",
+                "expectedOk": false,
+                "actualOk": false,
+                "correct": true
+              },
+              {
+                "token": "e8af17a27ac07d0946e82088",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "cedcb51b3c997f661dbdb8c0",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "2bdf91aec96fad4b45dcb021",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "7138d9518c13a240a93d8c66",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "df1c49c86b82d48ff4cd19cd",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "c04f215f1c245d5ed81b8989",
+                "expectedOk": true,
+                "actualOk": false,
+                "correct": false
+              },
+              {
+                "token": "7e564d6dff2273e840c2e312",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "f3d284b0405a9cbe81c9d14f",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "b8f45b1f95727ac6bd891e91",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "a25cf456294faf5d736b7acd",
+                "expectedOk": false,
+                "actualOk": false,
+                "correct": true
+              },
+              {
+                "token": "87c035fb63a704b863b66592",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "ef59d28e12f352ce5d0eec2d",
+                "expectedOk": false,
+                "actualOk": false,
+                "correct": true
+              },
+              {
+                "token": "2e87b4e6c9f2ceb17f2daa49",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "e15718d4b10a38f3f4c0ac78",
+                "expectedOk": false,
+                "actualOk": false,
+                "correct": true
+              }
+            ],
+            "observed": {
+              "first": {
+                "verdicts": {
+                  "60ef8f7b2097c4c934031a11": {
+                    "ok": true
+                  },
+                  "0021c8f79876bc501f21eeff": {
+                    "ok": true
+                  },
+                  "061441bce76280e001c9980c": {
+                    "ok": true
+                  },
+                  "617d7a6c7ad87c9ea0833f65": {
+                    "ok": false,
+                    "reasons": [
+                      "cell 0: committed restore is not the requested state",
+                      "cell 0: published database is not the requested state",
+                      "cell 0: published archive is not the requested portable backup",
+                      "cell 0: trace did not build the requested database before publication",
+                      "cell 0: trace did not stage the requested archive before publication"
+                    ]
+                  },
+                  "e8af17a27ac07d0946e82088": {
+                    "ok": true
+                  },
+                  "cedcb51b3c997f661dbdb8c0": {
+                    "ok": true
+                  },
+                  "2bdf91aec96fad4b45dcb021": {
+                    "ok": true
+                  },
+                  "7138d9518c13a240a93d8c66": {
+                    "ok": true
+                  },
+                  "df1c49c86b82d48ff4cd19cd": {
+                    "ok": true
+                  },
+                  "c04f215f1c245d5ed81b8989": {
+                    "ok": false,
+                    "reasons": [
+                      "cell 0: archive used an out-of-contract request"
+                    ]
+                  },
+                  "7e564d6dff2273e840c2e312": {
+                    "ok": true
+                  },
+                  "f3d284b0405a9cbe81c9d14f": {
+                    "ok": true
+                  },
+                  "b8f45b1f95727ac6bd891e91": {
+                    "ok": true
+                  },
+                  "a25cf456294faf5d736b7acd": {
+                    "ok": false,
+                    "reasons": [
+                      "cell 0: committed restore is not the requested state",
+                      "cell 0: published database is not the requested state",
+                      "cell 0: trace did not build the requested database before publication"
+                    ]
+                  },
+                  "87c035fb63a704b863b66592": {
+                    "ok": true
+                  },
+                  "ef59d28e12f352ce5d0eec2d": {
+                    "ok": false,
+                    "reasons": [
+                      "cell 0: there must be exactly one successful publication",
+                      "cell 0: trace does not contain exactly one successful publish"
+                    ]
+                  },
+                  "2e87b4e6c9f2ceb17f2daa49": {
+                    "ok": true
+                  },
+                  "e15718d4b10a38f3f4c0ac78": {
+                    "ok": false,
+                    "reasons": [
+                      "cell 0: published archive is not the requested portable backup",
+                      "cell 0: trace did not stage the requested archive before publication"
+                    ]
+                  }
+                }
+              },
+              "second": {
+                "verdicts": {
+                  "60ef8f7b2097c4c934031a11": {
+                    "ok": true
+                  },
+                  "0021c8f79876bc501f21eeff": {
+                    "ok": true
+                  },
+                  "061441bce76280e001c9980c": {
+                    "ok": true
+                  },
+                  "617d7a6c7ad87c9ea0833f65": {
+                    "ok": false,
+                    "reasons": [
+                      "cell 0: committed restore is not the requested state",
+                      "cell 0: published database is not the requested state",
+                      "cell 0: published archive is not the requested portable backup",
+                      "cell 0: trace did not build the requested database before publication",
+                      "cell 0: trace did not stage the requested archive before publication"
+                    ]
+                  },
+                  "e8af17a27ac07d0946e82088": {
+                    "ok": true
+                  },
+                  "cedcb51b3c997f661dbdb8c0": {
+                    "ok": true
+                  },
+                  "2bdf91aec96fad4b45dcb021": {
+                    "ok": true
+                  },
+                  "7138d9518c13a240a93d8c66": {
+                    "ok": true
+                  },
+                  "df1c49c86b82d48ff4cd19cd": {
+                    "ok": true
+                  },
+                  "c04f215f1c245d5ed81b8989": {
+                    "ok": false,
+                    "reasons": [
+                      "cell 0: archive used an out-of-contract request"
+                    ]
+                  },
+                  "7e564d6dff2273e840c2e312": {
+                    "ok": true
+                  },
+                  "f3d284b0405a9cbe81c9d14f": {
+                    "ok": true
+                  },
+                  "b8f45b1f95727ac6bd891e91": {
+                    "ok": true
+                  },
+                  "a25cf456294faf5d736b7acd": {
+                    "ok": false,
+                    "reasons": [
+                      "cell 0: committed restore is not the requested state",
+                      "cell 0: published database is not the requested state",
+                      "cell 0: trace did not build the requested database before publication"
+                    ]
+                  },
+                  "87c035fb63a704b863b66592": {
+                    "ok": true
+                  },
+                  "ef59d28e12f352ce5d0eec2d": {
+                    "ok": false,
+                    "reasons": [
+                      "cell 0: there must be exactly one successful publication",
+                      "cell 0: trace does not contain exactly one successful publish"
+                    ]
+                  },
+                  "2e87b4e6c9f2ceb17f2daa49": {
+                    "ok": true
+                  },
+                  "e15718d4b10a38f3f4c0ac78": {
+                    "ok": false,
+                    "reasons": [
+                      "cell 0: published archive is not the requested portable backup",
+                      "cell 0: trace did not stage the requested archive before publication"
+                    ]
+                  }
+                }
+              },
+              "mutated": false
+            }
+          },
+          "serviceSupplement": {
+            "id": "snapshot-recovery-repair",
+            "gradingRevision": "remaining-pass-coverage-v3",
+            "packageDigest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+            "sourceSha256": "f1af72c515c76a76061c56045eea319afda0ef386b2afc0f33e7e40102081220",
+            "pass": true,
+            "details": [
+              {
+                "scenario": "empty-no-commit",
+                "originalStatus": "semantic-pass",
+                "metadataCurrent": true,
+                "pass": true
+              },
+              {
+                "scenario": "retry-rolled-back-transaction",
+                "originalStatus": "semantic-pass",
+                "metadataCurrent": true,
+                "pass": true
+              },
+              {
+                "scenario": "replace-staged-archive",
+                "originalStatus": "semantic-pass",
+                "metadataCurrent": true,
+                "pass": true
+              },
+              {
+                "scenario": "reverse-archive-row-order",
+                "originalStatus": "semantic-pass",
+                "metadataCurrent": true,
+                "pass": true
+              },
+              {
+                "scenario": "wrong-allocation",
+                "originalStatus": "semantic-pass",
+                "metadataCurrent": true,
+                "pass": true
+              },
+              {
+                "scenario": "no-publication",
+                "originalStatus": "semantic-pass",
+                "metadataCurrent": true,
+                "pass": true
+              },
+              {
+                "scenario": "missing-backup-row",
+                "originalStatus": "semantic-pass",
+                "metadataCurrent": true,
+                "pass": true
+              }
+            ]
+          },
+          "completionSha256": "8525627ae5de62a798ebe04a53f6626d4a07f4f8aee4091007373a4bf65f62eb",
+          "gradeSha256": "a0ffadc5012ac85ec683a1097998828ddcb035ab6a1f59843809104025093387",
+          "resultSha256": "53e533cc4756267e6b5e3ac2cbcb56fcf9ac0894adf088ddfc7de5117362b1a1",
+          "packageDigest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "manifestFilesVerified": 785,
+          "manifestBytesVerified": 2764828,
+          "cumulativeCountedFailures": 5,
+          "cumulativeCountedScored": 6
+        }
+      ],
+      "finalCountedFailures": 5,
+      "finalCountedScored": 6,
+      "classification": "meets-5-of-6"
+    }
+  ],
+  "acceptanceTarget": {
+    "source": "User-reported CEO acceptance criterion",
+    "minimumFailures": 5,
+    "totalScoredTrials": 6,
+    "claudeTrials": 3,
+    "codexTrials": 3,
+    "unchangedPackage": true,
+    "consecutiveFailuresRequired": false
+  },
+  "classificationSummary": {
+    "meetsFiveOfSix": [
+      "variant-cache-repair",
+      "snapshot-recovery-repair"
+    ],
+    "cannotReachFiveOfSix": [],
+    "unresolvedInfrastructure": []
+  },
+  "auditReference": {
+    "document": "remaining-pass-audit-2026-09-09.md",
+    "evidence": "evidence/2026-09-09-remaining-pass-audit.json",
+    "disposition": "evidence/2026-09-09-three-replacement-disposition.json",
+    "gradingRevision": "remaining-pass-coverage-v3"
+  },
+  "audit": {
+    "checkedAt": "2026-09-10T02:53:13.500Z",
+    "newModelCalls": 0,
+    "manifestFilesVerified": 2729,
+    "manifestBytesVerified": 123073664,
+    "errors": []
+  }
+}

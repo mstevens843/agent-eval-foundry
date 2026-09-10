@@ -1,5 +1,7 @@
 # Coverage is not diversity
 
+> **Current result:** five successor packages now meet the reported ≥5/6 target: three at 6/6 reward=0 and two at 5/6. See the [final screening results](reports/screening/final-results-2026-09-09.md). This memo preserves the earlier research argument.
+
 > Historical record, not current qualification. Statements below about no Codex checking, six conclusive fair capability failures, universal solve-probability ranges, or self-verifiability disqualifying a task are superseded by [current evidence corrections](docs/evidence-corrections.md). All six outbox agents wrote checks; five present adjudications concern specification ambiguity and one remains unresolved. Probability ranges are uncalibrated priors. Original reasoning and observations remain below for auditability; the current production process is package-first.
 
 **What the durable-outbox task actually measured, and what the second one costs.**

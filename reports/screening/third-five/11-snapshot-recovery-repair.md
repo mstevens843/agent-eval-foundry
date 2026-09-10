@@ -1,5 +1,7 @@
 # 11 — Snapshot recovery repair
 
+> **Final counted result: 5/6 reward=0 — meets the reported ≥5/6 target.** Three Codex and three Claude trials; no slots pending. [Final results and counting method](../final-results-2026-09-09.md). The dated analysis below preserves the complete trial and grading history.
+
 One Codex attempt, requested Sol / xhigh. Authoring **14m 27s**. Recorded reward **1**: service **33/33 scenarios**, checker **12/12 candidates**, with both correct implementations accepted and all ten negative controls rejected with the required obligation named. No execution error or retry was recorded.
 
 ## What the task was, in plain English
@@ -794,3 +796,177 @@ Current counted record: **4/5 failures**; 1 fresh replacement slot(s) pending.
 Original submissions and grades were preserved and manifest-verified before and after
 the audit. The same cumulative controls covered all 24 retained submissions across
 the four audited packages. No new model calls were made during this audit.
+
+## Trial 8 — remaining-pass-coverage-v3 replacement for voided Trial 4 — September 9, 2026
+
+### A. Identity and execution
+
+Run `snapshot-recovery-repair-attempt-1` in the replacement campaign slot
+`.local/three-replacements-2026-09-09/snapshot-recovery-repair/trial-8/real-campaign-frozen/jobs/real-provider/records/snapshot-recovery-repair-attempt-1/`,
+package digest `719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b` —
+byte-identical to every prior trial on this package — profile digest
+`a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641`, route
+`professional-multifile/authority-process@1`. Author image
+`sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a` — the same
+author image and frozen runtime as every prior trial for this package.
+
+Target: **codex**, requested `openai/gpt-5.6-sol`, effort `xhigh`, CLI
+`scaffoldVersion 0.153.2` — identical requested identity to Trials 2–4, this
+package's three prior Codex attempts; model, effort and scaffold version were again
+unobservable from the Codex CLI's event stream, as in every earlier trial. Authoring
+took **20m20s**. Token usage: 642,877 input tokens (590,848 cached), 36,800 output;
+the Codex CLI reports no price estimate (subscription-only billing). Execution
+reached a clean `completed` state, no invalid execution or infrastructure error.
+`completionSha256 8525627ae5de62a798ebe04a53f6626d4a07f4f8aee4091007373a4bf65f62eb`,
+`resultSha256 53e533cc4756267e6b5e3ac2cbcb56fcf9ac0894adf088ddfc7de5117362b1a1`,
+`gradeSha256 a0ffadc5012ac85ec683a1097998828ddcb035ab6a1f59843809104025093387` —
+the same `gradeSha256` as every prior trial on this package, since the base grading
+harness itself never changed. All 785 manifest-listed files (2,764,828 bytes)
+reverified against these hashes with no errors this session.
+
+### B. Why this trial exists: replacing the voided Trial 4
+
+The [remaining-pass-coverage-v3 audit](../remaining-pass-audit-2026-09-09.md) found
+that Trial 4's submitted checker, `validateObservations()`, required
+`successfulCommits > 0` before accepting a publication — rejecting a genuinely valid
+empty recovery (source checkpoint, fresh database and staged backup all empty,
+`nextId: 1`) that legitimately needs no database write transaction, since there is
+nothing to change. The frozen verifier and private reference checker both accept
+that empty recovery; Trial 4's own service replayed correctly against it. Rather
+than count this as an ordinary sixth failure, the user elected a **void-and-replace**
+policy for Trial 4 specifically: Trial 4's original recorded reward stays **1**
+forever, its diagnostic `remaining-pass-coverage-v3` regrade is recorded as **0** for
+transparency, but its **counted** reward is set to **null** — it is permanently
+excluded from this package's six-run tally, neither a pass nor a failure, and is
+never renumbered or overwritten. This Trial 8 is the one fresh Codex replacement
+attempt dispatched to fill that voided slot, graded under the same cumulative
+`remaining-pass-coverage-v3` policy as the rest of this package's retained
+submissions.
+
+### C. Results
+
+**Recorded (raw) reward: 1. Counted (effective) reward: 0.** Base service
+(`entry.mjs`) passes all 33 scenarios (33/33), matching every prior trial on this
+package. Base checker (`checker.mjs`): `checkerRequired: true`, `checkerPassed:
+true`, 12/12 original candidates correctly classified — 0 missed, 0 false
+positives, `pass: true`. Both known-good candidates (`reference`, `alternative`)
+are accepted; all ten negative controls are rejected.
+
+The cumulative `remaining-pass-coverage-v3` supplemental grade
+(`.local/three-replacements-2026-09-09/supplements/snapshot-recovery-repair-trial-8/grade.json`)
+tells a different story: **17/18 correct, deterministic, `exactTokens: true`, `pass:
+false`.** This bank is cumulative across all three revisions (v1 + v2 + v3
+combined) — the numeric-name-coercion control, the intermediate-write control, and
+six new v3 controls (`empty-no-commit`, `retry-rolled-back-transaction`,
+`replace-staged-archive`, `reverse-archive-row-order`, `wrong-allocation`,
+`no-publication`, `missing-backup-row`), each contributing a baseline/control token
+pair. The one failing token, `c04f215f1c245d5ed81b8989` (`expectedOk: true`,
+`actualOk: false`), is the `replace-staged-archive` positive control, with the
+checker's observed reason: `"cell 0: archive used an out-of-contract request"`. The
+numeric-name-coercion token (`617d7a6c7ad87c9ea0833f65`) and every other new v3
+control were classified correctly by this checker — only the staged-archive-
+replacement case tripped it up.
+
+A separate service-level replay of all seven new v3 scenarios against the submitted
+`entry.mjs` (`.local/three-replacements-2026-09-09/service-supplements/snapshot-recovery-repair-trial-8/grade.json`)
+passed all seven, `pass: true` — this is entirely a required-checker failure, not a
+service defect.
+
+### D. Code-level finding: a distinct new defect, not a recurrence of Trial 4's mistake
+
+The `replace-staged-archive` control tests a pattern the contract explicitly
+permits: the service stages one `archive()` payload, then legitimately **replaces**
+it with a different, correct payload before publication completes. Only the final
+published state has to be correct — not every intermediate call made while staging
+it. Reading the fixture directly
+(`.local/three-replacements-2026-09-09/supplements/snapshot-recovery-repair-trial-8/cases/input.json`,
+token `c04f215f1c245d5ed81b8989`) shows exactly what the submitted service does:
+its first observation is `archive({ bytes: "e30=" })` — `"e30="` base64-decodes to
+the literal empty object `{}` — followed by fetching the real checkpoint, and only
+then a second `archive()` call carrying the fully correct, schema-complete portable
+payload, before `begin`/`put`/`commit`/`publish`. The final published archive and
+database both match the expected state exactly; this is a legitimate stage-then-
+replace sequence, not a corrupted one.
+
+Trial 8's `checker.mjs` breaks on this because its per-observation request
+validation is applied to **every** `archive` call in the trace, not only the
+final one before publish:
+
+```js
+if (method === "archive") {
+  const portable = exactKeys(request, ["bytes"])
+    ? normalizedPortable(decodeJson(request.bytes))
+    : null;
+  requestValid = portable !== null &&
+    portable.tenant === expected.portable.tenant &&
+    portable.branch === expected.portable.branch &&
+    portable.cutoff === expected.portable.cutoff;
+} else if (...) { ... }
+if (!requestValid) {
+  fail(`${method} used an out-of-contract request`);
+  continue;
+}
+```
+
+For the placeholder call, `decodeJson("e30=")` yields `{}`, and `normalizedPortable({})`
+returns `null` because `{}` has none of the six required portable keys — so
+`portable !== null` is false, `requestValid` is false, and the checker immediately
+records `"archive used an out-of-contract request"` for that observation and
+`continue`s. The second, real `archive()` call two steps later passes this same
+check fine and correctly becomes the trace's authoritative `stagedArchive` value
+(the code reassigns `stagedArchive` on every accepted `archive` call, so the
+*last* one wins by construction — the replacement logic itself is not broken).
+The problem is that the checker still applies the same full-schema request check to
+the *first*, placeholder call, and a single failure anywhere in the `failures` array
+is enough to fail the whole cell — so a legitimate empty/placeholder archive
+opener, made before the real payload is ready, gets treated as a contract violation
+in its own right, even though nothing about the final committed and published
+result is wrong.
+
+This is a genuinely different, independently-discovered defect from Trial 4's
+mistake, not the same bug recurring. Trial 4's `validateObservations()` imposed an
+extra *process* requirement on **publication** — it demanded at least one committed
+write transaction (`successfulCommits > 0`) regardless of whether the recovery
+actually needed one. Trial 8's defect is in the **request-shape validation applied
+to every `archive` call**, unrelated to commit counting — it fails a legitimate
+staging call's schema, not the number or presence of commits. Both are instances of
+a checker being stricter than the contract requires by judging an intermediate step
+of the trace instead of only the final committed/published result, but they sit in
+different validation paths, over different obligations, and were written by two
+independent Codex sessions with no shared code between them.
+
+### E. Final classification — this package's six-run set is closed at 5/6, meeting the reported threshold
+
+**This package's counted six-run history is now complete, with Trial 4 permanently
+void and Trial 8 as its replacement:**
+
+| Counted slot | Trial | Provider | Recorded reward | Counted (effective) reward |
+| --- | --- | --- | --- | --- |
+| 1 | 2 | Codex | 0 | 0 |
+| 2 | 3 | Codex | 1 | 0 |
+| 3 | 5 | Claude | 1 | 0 |
+| 4 | 6 | Claude | 1 | 0 |
+| 5 | 7 | Claude | 1 | 1 |
+| 6 | 8 (replaces voided 4) | Codex | 1 | 0 |
+
+That is **5 counted failures out of 6 counted trials**, with exactly 3 Codex (Trials
+2, 3, 8) and 3 Claude (Trials 5, 6, 7) counted attempts — the required balanced
+split. Trial 4 itself remains permanently **void** and outside this table: its
+original recorded reward stays 1, its diagnostic `remaining-pass-coverage-v3`
+regrade stays 0, and its counted reward stays null — it is never counted as either a
+pass or a failure, and this table does not renumber it. This package's six-run set
+now **meets the reported "at least 5 failures out of 6" threshold, at exactly 5/6,
+the minimum boundary** — the last counted slot, Trial 8, was the one attempt that
+still needed to fail for the threshold to be met, and it did, through this
+newly-identified staged-archive-replacement defect rather than any repeat of an
+earlier mistake. No further attempt is authorized or possible under the fixed
+six-run design; this package's screening record is closed.
+
+[Full audit](../remaining-pass-audit-2026-09-09.md) · [Sanitized evidence](../evidence/2026-09-09-remaining-pass-audit.json).
+
+Raw evidence (private, not linked): Trial 8 record at
+`.local/three-replacements-2026-09-09/snapshot-recovery-repair/trial-8/real-campaign-frozen/jobs/real-provider/records/snapshot-recovery-repair-attempt-1/`,
+with the cumulative supplemental grade at
+`.local/three-replacements-2026-09-09/supplements/snapshot-recovery-repair-trial-8/grade.json`
+and the service-level v3 replay at
+`.local/three-replacements-2026-09-09/service-supplements/snapshot-recovery-repair-trial-8/grade.json`.
