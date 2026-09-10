@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "revision": "post-final-coverage-v2",
+  "image": "sha256:0d111d755a70b9f8a3e8fec4f7bc641b3211bcf6ebb03bfd6fbded7c776176ab",
+  "extends": {
+    "path": "data/final-six-grading-controls/policy.json",
+    "sha256": "b3e9e100b0e3fa7f032a1e2a7b3b85f33196a15e40f20831c4fdb8bde8969604"
+  },
+  "combination": "effectiveReward = min(recordedReward, cumulativeSupplementPass ? 1 : 0); apply the same controls to every retained and future attempt of each affected immutable package",
+  "controls": [
+    {
+      "id": "variant-cache-repair",
+      "fixture": "data/post-final-grading-controls/variant-cache-repair.json",
+      "sha256": "a9a2efdabde6ca65ebc4a51e0c42447ff6ca351df681ab4994135694709fcccb",
+      "expected": [
+        {
+          "token": "db141be670ff3bd75a54e983",
+          "ok": true
+        },
+        {
+          "token": "9c644993125a14fb521924b6",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "id": "issued-report-repair",
+      "fixture": "data/post-final-grading-controls/issued-report-repair.json",
+      "sha256": "a43b1220648553e2e3bda939778db3e2ab3db966d027e5f52b5b515f2cb25f70",
+      "expected": [
+        {
+          "token": "225c4a714b06230d28229f58",
+          "ok": true
+        },
+        {
+          "token": "93001fb54b889f98414aa81d",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "fixture": "data/post-final-grading-controls/temporal-capacity-repair.json",
+      "sha256": "00beef9ffb1f275f38c971bfddc53e39ad981af71360169793d50a02f4c0737c",
+      "expected": [
+        {
+          "token": "4ad0610014321106d71c833f",
+          "ok": true
+        },
+        {
+          "token": "395b9126fdf0dbaa04802787",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "fixture": "data/post-final-grading-controls/snapshot-recovery-repair.json",
+      "sha256": "c55f090a922cb29f91f5d5a45a0fb2d1dee30b20230495ac5a6df0323e55325c",
+      "expected": [
+        {
+          "token": "061441bce76280e001c9980c",
+          "ok": true
+        },
+        {
+          "token": "617d7a6c7ad87c9ea0833f65",
+          "ok": false
+        }
+      ]
+    }
+  ]
+}

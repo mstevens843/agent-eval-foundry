@@ -6,41 +6,35 @@ All six services passed 27/27 scenarios. Each required checker missed the same
 defect allowing publication before compiler issuance. All six recorded rewards are zero;
 this result uses the original grader and requires no retroactive correction.
 
-| Package | Final effective failures/scored | Provider counts | Final outcome |
+| Package | Current effective failures/scored | Provider counts | Current outcome |
 | --- | --- | --- | --- |
-| **21 Incremental build** | **6/6** | **3 Codex + 3 Claude** | **Meets 5/6** |
-| 19 Variant cache | 3/5 | 3 Claude + 2 Codex | Cannot reach 5/6 |
-| 25 Issued report | 3/5 | 3 Claude + 2 Codex | Cannot reach 5/6 |
-| 10 Temporal capacity | 3/5 | 3 Claude + 2 Codex | Cannot reach 5/6 |
-| 11 Snapshot recovery | 2/4 | 3 Codex + 1 Claude | Cannot reach 5/6 |
+| **21 Incremental build** | **6/6** | **3 Codex + 3 Claude** | **Completed; meets ≥5/6** |
+| 25 Issued report | **5/5** | 3 Claude + 2 Codex | Final Codex slot pending; either result gives ≥5/6 |
+| 10 Temporal capacity | **5/5** | 3 Claude + 2 Codex | Final Codex slot pending; either result gives ≥5/6 |
+| 19 Variant cache | **4/5** | 3 Claude + 2 Codex | Reopened; last Codex attempt must fail |
+| 11 Snapshot recovery | **3/4** | 3 Codex + 1 Claude | Reopened; two Claude attempts must fail |
 
-The other four finalists each stopped after a pass made five failures in six attempts
-unreachable. Their outcomes are settled; no package remains unresolved by infrastructure.
-The target uses three attempts per provider for a completed six-run set. Different
-legitimate failure mechanisms count; the build task happened to reproduce the same gap
-in every attempt.
+**The post-final audit confirmed six additional false passes and reopened all four
+eliminated finalists.** This adds no model trials. One balanced set is complete; two
+more packages already have five failures and need their sixth attempt for the requested
+three-per-provider balance. Different valid failure mechanisms count.
 
-The earlier pass audit corrected temporal and snapshot Trial 3 to effective failures,
-with original rewards and manifests preserved separately. Both reopened candidates
-passed their next attempt, including the added controls, and stopped. Their corrections
-do not affect build's six original zero rewards.
+Our checker grader lacked three valid alternative-execution controls and one invalid
+string-preservation control. The frozen service verifier and private reference checker
+agree on all four cases. The same cumulative controls were applied to every retained
+attempt of each affected package: **19 regrades, four private oracle passes, and eight
+passing-service replays**. All 16,573 original manifest-listed files verified before
+and after with zero drift. Original task packages, rewards and evidence remain intact.
 
-The successor campaign now totals **46 attempts across 25 packages: 45 scored and
-one historical infrastructure interruption**. The original grades contain **15 zero
-rewards and 30 passes**. Applying the two documented historical coverage corrections
-gives **17 effective failures and 28 effective passes**, covering the same 45 scored
-attempts. The six new attempts contributed two failures and four passes, with no
-infrastructure errors. Five unnecessary slots were left unlaunched after early stopping.
+The successor campaign still totals **46 attempts across 25 packages: 45 scored and
+one historical infrastructure interruption**. Original grades contain **15 zero rewards
+and 30 passes**. The two earlier corrections plus six new corrections give **23 effective
+failures and 22 passes** on those same 45 scored attempts. Regrades are documented
+corrections to existing attempts, not new model runs. Five provider slots remain unrun.
 
-The final campaign used six of its eleven authorized slots. Concurrency increased
-from three to six by user instruction; the expansion retained the three active jobs and
-added three more. All six completed. The superseded scheduler was terminated after
-completion. All 5,438 final-campaign manifest files were reverified without errors.
-
-[Final results and six-run build table](final-six-2026-09-09.md) ·
-[Sanitized evidence](evidence/2026-09-09-final-six.json) ·
-[Historical coverage audit](final-six-pass-audit-2026-09-09.md) ·
-[All 25 Trial 2 results](round-two-portfolio-2026-09-09.md).
+[Current audit and exact remaining slots](post-final-pass-audit-2026-09-09.md) ·
+[Sanitized regrade evidence](evidence/2026-09-09-post-final-pass-audit.json) ·
+[Original final-six campaign and build results](final-six-2026-09-09.md).
 The six-run screening target is complete for build; final submission review and
 required cheat checks remain separate from this measured result.
 

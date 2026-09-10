@@ -6,13 +6,18 @@ All six services passed 27/27 scenarios. Each required checker missed the same
 defect allowing publication before compiler issuance. All six recorded rewards are zero;
 this result uses the original grader and requires no retroactive correction.
 
-All twenty-five successors were implemented and screened. The completed final campaign
-added six scored attempts: two more build failures and four solver passes. One task meets
-the reported 5/6 target; the four other finalists stopped once it became unreachable.
-All 5,438 final-campaign manifest files verified with zero errors.
-[Final results](screening/final-six-2026-09-09.md) ·
+All twenty-five successors were implemented and screened. A later pass audit has
+confirmed **six additional required-checker failures** and reopened four finalists.
+Issued report and temporal capacity are each at 5/5 pending their sixth Codex trial;
+variant cache is at 4/5 and snapshot recovery at 3/4. Build's six original zero rewards
+are unchanged. One balanced qualifying set is complete, and five provider slots remain.
+
+The audit regraded all 19 retained attempts of the affected packages under the same
+cumulative controls. Four private oracles passed; 16,573 original manifest-listed
+files verified before and after with zero drift. No model calls were made.
+[Current audit](screening/post-final-pass-audit-2026-09-09.md) ·
 [Current status](../docs/project-status.md) ·
-[Sanitized evidence](screening/evidence/2026-09-09-final-six.json).
+[Sanitized evidence](screening/evidence/2026-09-09-post-final-pass-audit.json).
 
 The source-publication checks below describe their original snapshot. Current screening
 results and final submission work are tracked separately.

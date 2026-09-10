@@ -1,0 +1,152 @@
+{
+  "definitions": [
+    {
+      "id": "combined",
+      "inputs": [
+        {
+          "id": "sum",
+          "kind": "report"
+        },
+        {
+          "id": "c",
+          "kind": "reading"
+        }
+      ],
+      "op": "difference"
+    },
+    {
+      "id": "sum",
+      "inputs": [
+        {
+          "id": "a",
+          "kind": "reading"
+        },
+        {
+          "id": "b",
+          "kind": "reading"
+        }
+      ],
+      "op": "sum"
+    },
+    {
+      "id": "unrelated",
+      "inputs": [
+        {
+          "id": "c",
+          "kind": "reading"
+        }
+      ],
+      "op": "sum"
+    }
+  ],
+  "id": "case-000",
+  "initialAudience": [
+    {
+      "recipient": "reader",
+      "report": "sum"
+    },
+    {
+      "recipient": "reviewer",
+      "report": "combined"
+    },
+    {
+      "recipient": "outsider",
+      "report": "unrelated"
+    }
+  ],
+  "initialPublished": true,
+  "readings": [
+    {
+      "id": "a",
+      "value": 10,
+      "version": 1
+    },
+    {
+      "id": "b",
+      "value": 2,
+      "version": 1
+    },
+    {
+      "id": "c",
+      "value": 7,
+      "version": 1
+    }
+  ],
+  "steps": [
+    {
+      "changes": [
+        {
+          "id": "a",
+          "value": 10,
+          "version": 2
+        }
+      ],
+      "id": "s0",
+      "queries": [
+        {
+          "id": "q0",
+          "report": "combined",
+          "version": 1
+        }
+      ],
+      "requests": [
+        {
+          "recipient": "new",
+          "report": "combined"
+        }
+      ]
+    },
+    {
+      "changes": [
+        {
+          "id": "b",
+          "value": null,
+          "version": 2
+        }
+      ],
+      "id": "s1",
+      "queries": [
+        {
+          "id": "q1",
+          "report": "sum",
+          "version": 1
+        }
+      ],
+      "requests": []
+    },
+    {
+      "changes": [
+        {
+          "id": "b",
+          "value": 5,
+          "version": 3
+        }
+      ],
+      "id": "s2",
+      "queries": [
+        {
+          "id": "q2",
+          "report": "combined",
+          "version": 1
+        }
+      ],
+      "requests": [
+        {
+          "recipient": "new",
+          "report": "combined"
+        }
+      ]
+    },
+    {
+      "changes": [],
+      "id": "s3",
+      "queries": [],
+      "requests": [
+        {
+          "recipient": "new",
+          "report": "combined"
+        }
+      ]
+    }
+  ]
+}

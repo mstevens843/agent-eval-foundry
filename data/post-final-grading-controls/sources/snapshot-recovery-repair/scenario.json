@@ -1,0 +1,22 @@
+{
+  "id": "audit-exact-string-name",
+  "tenant": "tenant",
+  "branch": "main",
+  "cutoff": 1,
+  "catalog": [
+    {
+      "id": "checkpoint",
+      "tenant": "tenant",
+      "branch": "main",
+      "at": 1,
+      "lsn": 1,
+      "digest": "d1e1379f504b784cb4e9a192e409b0efa9663b415cf8154ad4379ca3c04ba54b",
+      "size": 91
+    }
+  ],
+  "blobs": {
+    "d1e1379f504b784cb4e9a192e409b0efa9663b415cf8154ad4379ca3c04ba54b": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifV0sImVudHJpZXMiOlt7ImlkIjoxLCJhY2NvdW50IjoxLCJhbW91bnQiOjV9XSwibmV4dElkIjoyfQ=="
+  },
+  "cache": {},
+  "logs": []
+}

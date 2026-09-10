@@ -525,3 +525,22 @@ failures and only 2 remaining possible attempts cap the total at 4.
 
 [Final campaign and standings](../final-six-2026-09-09.md) ·
 [Sanitized evidence](../evidence/2026-09-09-final-six.json).
+
+## Post-final pass audit — September 9, 2026
+
+**Current effective score: 3 failures / 4 scored trials. Reopened for the remaining provider slots.**
+
+The new invalid control changes account name "001" to "1" in both the database and portable backup. Trial 5's shared recovery.mjs compares account names with numeric coercion and accepts the corruption. The frozen verifier, private reference checker and Trial 4 checker reject it. The earlier Trial 3 valid temporary-write correction remains in force.
+
+| Trial | Provider | Original reward | Previous effective reward | Current effective reward | Cumulative supplemental classifications |
+| --- | --- | --- | --- | --- | --- |
+| 2 | Codex | 0 | 0 | **0** | 1/4 |
+| 3 | Codex | 1 | 0 | **0** | 3/4 |
+| 4 | Codex | 1 | 1 | **1** | 4/4 |
+| 5 | Claude | 1 | 1 | **0** | 3/4 |
+
+Trials 6 and 7, Claude: both must fail to reach 5/6. No new model trial was launched by this audit.
+
+All retained attempts received the same cumulative `post-final-coverage-v2` controls. Original rewards, manifests and the preceding trial sections remain unchanged. Local replay of both previously passing services on this task's new scenario passed; the new failure is in the required checker.
+
+[Full audit and contract basis](../post-final-pass-audit-2026-09-09.md) · [Sanitized per-trial evidence](../evidence/2026-09-09-post-final-pass-audit.json).

@@ -1,0 +1,26 @@
+{
+  "id": "audit-warm-second-edge",
+  "seed": 0,
+  "events": [
+    {
+      "id": "g0",
+      "kind": "get",
+      "tier": "edge-a",
+      "path": "/asset",
+      "headers": {},
+      "now": 0
+    },
+    {
+      "id": "g1",
+      "kind": "get",
+      "tier": "edge-b",
+      "path": "/asset",
+      "headers": {},
+      "now": 1
+    }
+  ],
+  "limits": {
+    "maxOriginRequests": 1,
+    "maxOriginBytes": 1024
+  }
+}

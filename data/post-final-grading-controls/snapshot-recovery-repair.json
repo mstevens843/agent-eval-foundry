@@ -1,0 +1,602 @@
+{
+  "cases": [
+    {
+      "token": "061441bce76280e001c9980c",
+      "cells": [
+        {
+          "scenarioId": "audit-exact-string-name",
+          "actual": {
+            "accounts": [
+              {
+                "id": 1,
+                "name": "001"
+              }
+            ],
+            "entries": [
+              {
+                "id": 1,
+                "account": 1,
+                "amount": 5
+              }
+            ],
+            "nextId": 2
+          },
+          "backupError": null,
+          "publications": [
+            {
+              "state": {
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 1,
+                    "account": 1,
+                    "amount": 5
+                  }
+                ],
+                "nextId": 2
+              },
+              "archive": {
+                "tenant": "tenant",
+                "branch": "main",
+                "cutoff": 1,
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 1,
+                    "account": 1,
+                    "amount": 5
+                  }
+                ],
+                "nextId": 2
+              }
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "cache",
+              "request": {
+                "digest": "d1e1379f504b784cb4e9a192e409b0efa9663b415cf8154ad4379ca3c04ba54b"
+              },
+              "value": null
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "digest": "d1e1379f504b784cb4e9a192e409b0efa9663b415cf8154ad4379ca3c04ba54b"
+              },
+              "value": {
+                "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifV0sImVudHJpZXMiOlt7ImlkIjoxLCJhY2NvdW50IjoxLCJhbW91bnQiOjV9XSwibmV4dElkIjoyfQ=="
+              }
+            },
+            {
+              "seq": 2,
+              "method": "archive",
+              "request": {
+                "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifV0sImVudHJpZXMiOlt7ImlkIjoxLCJhY2NvdW50IjoxLCJhbW91bnQiOjV9XSwibmV4dElkIjoyfQ=="
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 3,
+              "method": "begin",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 1,
+                  "name": "001"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 1,
+                  "account": 1,
+                  "amount": 5
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "allocate",
+              "request": {
+                "nextId": 2
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 7,
+              "method": "commit",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "publish",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "completed": true
+            }
+          ],
+          "view": {
+            "tenant": "tenant",
+            "branch": "main",
+            "cutoff": 1,
+            "catalog": [
+              {
+                "id": "checkpoint",
+                "tenant": "tenant",
+                "branch": "main",
+                "at": 1,
+                "lsn": 1,
+                "digest": "d1e1379f504b784cb4e9a192e409b0efa9663b415cf8154ad4379ca3c04ba54b",
+                "size": 91
+              }
+            ],
+            "logs": []
+          },
+          "blobs": {
+            "d1e1379f504b784cb4e9a192e409b0efa9663b415cf8154ad4379ca3c04ba54b": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifV0sImVudHJpZXMiOlt7ImlkIjoxLCJhY2NvdW50IjoxLCJhbW91bnQiOjV9XSwibmV4dElkIjoyfQ=="
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "cache",
+                    "request": {
+                      "digest": "d1e1379f504b784cb4e9a192e409b0efa9663b415cf8154ad4379ca3c04ba54b"
+                    },
+                    "value": null
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "digest": "d1e1379f504b784cb4e9a192e409b0efa9663b415cf8154ad4379ca3c04ba54b"
+                    },
+                    "value": {
+                      "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifV0sImVudHJpZXMiOlt7ImlkIjoxLCJhY2NvdW50IjoxLCJhbW91bnQiOjV9XSwibmV4dElkIjoyfQ=="
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "archive",
+                    "request": {
+                      "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifV0sImVudHJpZXMiOlt7ImlkIjoxLCJhY2NvdW50IjoxLCJhbW91bnQiOjV9XSwibmV4dElkIjoyfQ=="
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "begin",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 1,
+                        "name": "001"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 1,
+                        "account": 1,
+                        "amount": 5
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "allocate",
+                    "request": {
+                      "nextId": 2
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "commit",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "publish",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 12,
+                "requestBytes": 1037,
+                "responseBytes": 902,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "617d7a6c7ad87c9ea0833f65",
+      "cells": [
+        {
+          "scenarioId": "audit-exact-string-name",
+          "actual": {
+            "accounts": [
+              {
+                "id": 1,
+                "name": "1"
+              }
+            ],
+            "entries": [
+              {
+                "id": 1,
+                "account": 1,
+                "amount": 5
+              }
+            ],
+            "nextId": 2
+          },
+          "backupError": null,
+          "publications": [
+            {
+              "state": {
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "1"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 1,
+                    "account": 1,
+                    "amount": 5
+                  }
+                ],
+                "nextId": 2
+              },
+              "archive": {
+                "tenant": "tenant",
+                "branch": "main",
+                "cutoff": 1,
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "1"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 1,
+                    "account": 1,
+                    "amount": 5
+                  }
+                ],
+                "nextId": 2
+              }
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "cache",
+              "request": {
+                "digest": "d1e1379f504b784cb4e9a192e409b0efa9663b415cf8154ad4379ca3c04ba54b"
+              },
+              "value": null
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "digest": "d1e1379f504b784cb4e9a192e409b0efa9663b415cf8154ad4379ca3c04ba54b"
+              },
+              "value": {
+                "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifV0sImVudHJpZXMiOlt7ImlkIjoxLCJhY2NvdW50IjoxLCJhbW91bnQiOjV9XSwibmV4dElkIjoyfQ=="
+              }
+            },
+            {
+              "seq": 2,
+              "method": "archive",
+              "request": {
+                "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIxIn1dLCJlbnRyaWVzIjpbeyJpZCI6MSwiYWNjb3VudCI6MSwiYW1vdW50Ijo1fV0sIm5leHRJZCI6Mn0="
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 3,
+              "method": "begin",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 1,
+                  "name": "1"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 1,
+                  "account": 1,
+                  "amount": 5
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "allocate",
+              "request": {
+                "nextId": 2
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 7,
+              "method": "commit",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "publish",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "completed": true
+            }
+          ],
+          "view": {
+            "tenant": "tenant",
+            "branch": "main",
+            "cutoff": 1,
+            "catalog": [
+              {
+                "id": "checkpoint",
+                "tenant": "tenant",
+                "branch": "main",
+                "at": 1,
+                "lsn": 1,
+                "digest": "d1e1379f504b784cb4e9a192e409b0efa9663b415cf8154ad4379ca3c04ba54b",
+                "size": 91
+              }
+            ],
+            "logs": []
+          },
+          "blobs": {
+            "d1e1379f504b784cb4e9a192e409b0efa9663b415cf8154ad4379ca3c04ba54b": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifV0sImVudHJpZXMiOlt7ImlkIjoxLCJhY2NvdW50IjoxLCJhbW91bnQiOjV9XSwibmV4dElkIjoyfQ=="
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "cache",
+                    "request": {
+                      "digest": "d1e1379f504b784cb4e9a192e409b0efa9663b415cf8154ad4379ca3c04ba54b"
+                    },
+                    "value": null
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "digest": "d1e1379f504b784cb4e9a192e409b0efa9663b415cf8154ad4379ca3c04ba54b"
+                    },
+                    "value": {
+                      "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifV0sImVudHJpZXMiOlt7ImlkIjoxLCJhY2NvdW50IjoxLCJhbW91bnQiOjV9XSwibmV4dElkIjoyfQ=="
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "archive",
+                    "request": {
+                      "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIxIn1dLCJlbnRyaWVzIjpbeyJpZCI6MSwiYWNjb3VudCI6MSwiYW1vdW50Ijo1fV0sIm5leHRJZCI6Mn0="
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "begin",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 1,
+                        "name": "1"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 1,
+                        "account": 1,
+                        "amount": 5
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "allocate",
+                    "request": {
+                      "nextId": 2
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "commit",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "publish",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 12,
+                "requestBytes": 1031,
+                "responseBytes": 902,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -25,6 +25,11 @@ export function verifyPublication(root?: string): {
   finalSixMeetsFiveOfSix: number;
   finalSixCannotReachFiveOfSix: number;
   finalSixUnresolvedInfrastructure: number;
+  postFinalAdditionalFalsePasses: number;
+  postFinalRegradedAttempts: number;
+  postFinalReopenedPackages: number;
+  postFinalFiveFailuresPendingBalance: number;
+  postFinalRemainingSlots: number;
   successorEffectiveZeroRewards: number;
   successorEffectivePasses: number;
   successorTrials: number;

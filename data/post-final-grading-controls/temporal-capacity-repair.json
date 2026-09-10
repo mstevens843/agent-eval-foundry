@@ -1,0 +1,414 @@
+{
+  "cases": [
+    {
+      "token": "4ad0610014321106d71c833f",
+      "cells": [
+        {
+          "scenarioId": "audit-restarted-traversal",
+          "writes": [
+            {
+              "id": "q",
+              "total": "48"
+            }
+          ],
+          "reports": [
+            {
+              "reports": 1
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 1,
+                    "from": 0,
+                    "to": 4,
+                    "value": "7"
+                  }
+                ],
+                "next": "cursor-1"
+              }
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-1"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 1,
+                    "knownAt": 1,
+                    "from": 0,
+                    "to": 4,
+                    "value": "9"
+                  }
+                ],
+                "next": null
+              }
+            },
+            {
+              "seq": 2,
+              "method": "record",
+              "request": {
+                "id": "q",
+                "total": "48"
+              },
+              "value": {
+                "stored": true
+              }
+            }
+          ],
+          "publicInput": {
+            "queries": [
+              {
+                "id": "q",
+                "series": "s",
+                "knownAt": 2,
+                "from": 0,
+                "to": 3
+              }
+            ],
+            "records": [
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 1,
+                "from": 0,
+                "to": 4,
+                "value": "7"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 1,
+                "knownAt": 1,
+                "from": 0,
+                "to": 4,
+                "value": "9"
+              }
+            ]
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 1,
+                          "from": 0,
+                          "to": 4,
+                          "value": "7"
+                        }
+                      ],
+                      "next": "cursor-1"
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-1"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 1,
+                          "knownAt": 1,
+                          "from": 0,
+                          "to": 4,
+                          "value": "9"
+                        }
+                      ],
+                      "next": null
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "record",
+                    "request": {
+                      "id": "q",
+                      "total": "48"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 6,
+                "requestBytes": 324,
+                "responseBytes": 562,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "395b9126fdf0dbaa04802787",
+      "cells": [
+        {
+          "scenarioId": "audit-restarted-traversal",
+          "writes": [
+            {
+              "id": "q",
+              "total": "48"
+            }
+          ],
+          "reports": [
+            {
+              "reports": 1
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 1,
+                    "from": 0,
+                    "to": 4,
+                    "value": "7"
+                  }
+                ],
+                "next": "cursor-1"
+              }
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 1,
+                    "from": 0,
+                    "to": 4,
+                    "value": "7"
+                  }
+                ],
+                "next": "cursor-2"
+              }
+            },
+            {
+              "seq": 2,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-2"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 1,
+                    "knownAt": 1,
+                    "from": 0,
+                    "to": 4,
+                    "value": "9"
+                  }
+                ],
+                "next": null
+              }
+            },
+            {
+              "seq": 3,
+              "method": "record",
+              "request": {
+                "id": "q",
+                "total": "48"
+              },
+              "value": {
+                "stored": true
+              }
+            }
+          ],
+          "publicInput": {
+            "queries": [
+              {
+                "id": "q",
+                "series": "s",
+                "knownAt": 2,
+                "from": 0,
+                "to": 3
+              }
+            ],
+            "records": [
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 1,
+                "from": 0,
+                "to": 4,
+                "value": "7"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 1,
+                "knownAt": 1,
+                "from": 0,
+                "to": 4,
+                "value": "9"
+              }
+            ]
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 1,
+                          "from": 0,
+                          "to": 4,
+                          "value": "7"
+                        }
+                      ],
+                      "next": "cursor-1"
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 1,
+                          "from": 0,
+                          "to": 4,
+                          "value": "7"
+                        }
+                      ],
+                      "next": "cursor-2"
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-2"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 1,
+                          "knownAt": 1,
+                          "from": 0,
+                          "to": 4,
+                          "value": "9"
+                        }
+                      ],
+                      "next": null
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "record",
+                    "request": {
+                      "id": "q",
+                      "total": "48"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 7,
+                "requestBytes": 387,
+                "responseBytes": 688,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

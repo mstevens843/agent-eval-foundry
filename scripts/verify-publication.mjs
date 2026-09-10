@@ -62,6 +62,8 @@ export const SCREENING_FOLLOWUPS = [
   "evidence/2026-09-09-final-six-concurrency-amendment.json",
   "final-six-2026-09-09.md",
   "evidence/2026-09-09-final-six.json",
+  "post-final-pass-audit-2026-09-09.md",
+  "evidence/2026-09-09-post-final-pass-audit.json",
 ];
 
 export function verifyPublication(root = process.cwd()) {
@@ -633,6 +635,120 @@ export function verifyPublication(root = process.cwd()) {
     effectivePasses:successorRecords.filter(r => r.reward === 1).length - correctedPasses.length,
     historicalInfrastructureInterruptions:successorRecords.filter(r => r.reward === null).length,
   });
+  // Preserve campaign-close evidence above; apply the later audit as a separate
+  // grading revision over the SAME attempts, never by changing the denominator.
+  const postAudit = read("reports/screening/evidence/2026-09-09-post-final-pass-audit.json");
+  const postPolicy = read(postAudit.policy.path);
+  assert.equal(postAudit.gradingRevision, "post-final-coverage-v2");
+  assert.equal(postAudit.gradingRevision, postPolicy.revision);
+  assert.equal(postAudit.providerCallsMade, 0);
+  assert.equal(postAudit.previousEvidence.sha256, sha(postAudit.previousEvidence.path));
+  assert.equal(postAudit.previousEvidence.path, "reports/screening/evidence/2026-09-09-final-six.json");
+  assert.equal(postAudit.policy.sha256, sha(postAudit.policy.path));
+  assert.equal(postPolicy.extends.path, policyPath);
+  assert.equal(postPolicy.extends.sha256, sha(policyPath));
+  assert.equal(postAudit.runnerSha256, sha("scripts/grade-post-final-supplement.mjs"));
+  assert.equal(postAudit.reproductionSha256, sha("scripts/reproduce-post-final-pass-audit.mjs"));
+  assert.equal(postAudit.rows.length, 19);
+  assert.equal(postAudit.generated.length, 4);
+  assert.equal(postPolicy.controls.length, 4);
+  const auditedIds = new Set(postPolicy.controls.map(c => c.id));
+  assert.equal(auditedIds.size, 4);
+  for (const control of postPolicy.controls) {
+    assert.equal(control.sha256, sha(control.fixture));
+    const fixture = read(control.fixture);
+    assert.equal(fixture.cases.length, 2);
+    assert.deepEqual(fixture.cases.map(c => c.token), control.expected.map(c => c.token));
+    assert.deepEqual(control.expected.map(c => c.ok), [true, control.id !== "snapshot-recovery-repair"]);
+    for (const candidate of fixture.cases) for (const cell of candidate.cells) {
+      for (const forbidden of ["expected", "checks", "status", "failures", "truth", "groundTruth"])
+        assert.equal(Object.hasOwn(cell, forbidden), false, "Private verdict leaked into checker input");
+    }
+  }
+  for (const generated of postAudit.generated) {
+    assert.equal(generated.sourceSha256, sha(generated.sourcePath));
+    assert.equal(generated.scenarioSha256, sha(generated.scenarioPath));
+    assert.equal(generated.baselineStatus, "semantic-pass");
+    assert.equal(generated.controlStatus, generated.id === "snapshot-recovery-repair" ? "semantic-fail" : "semantic-pass");
+    assert.match(generated.baselineTraceSha256, hash);
+    assert.match(generated.controlTraceSha256, hash);
+    assert.equal(generated.packageDigest, finalPrepared.packages.find(p => p.id === generated.id).packageDigest);
+  }
+  const postKeys = new Set();
+  for (const row of postAudit.rows) {
+    const prior = finalSix.packages.find(p => p.id === row.id);
+    assert(auditedIds.has(row.id));
+    assert(!postKeys.has(`${row.id}:${row.trial}`), "Duplicate regraded attempt");
+    postKeys.add(`${row.id}:${row.trial}`);
+    assert.equal(row.recordedReward, prior.recordedHistory[row.trial - 2]);
+    assert.equal(row.previousEffectiveReward, prior.effectiveHistory[row.trial - 2]);
+    const source = successorRecords.find(p => p.id === row.id && p.gradeSha256 === row.gradeSha256
+      && p.resultSha256 === row.resultSha256 && p.completionSha256 === row.completionSha256);
+    assert(source, "Post-final regrade has no original published grade");
+    assert.equal(source.reward, row.recordedReward);
+    assert.equal(source.packageDigest, row.packageDigest);
+    assert.equal(source.resultSha256, row.resultSha256);
+    assert.equal(source.completionSha256, row.completionSha256);
+    assert.equal(source.target, row.provider);
+    for (const key of ["checkerSha256", "publicContractSha256", "instructionSha256"]) assert.match(row[key], hash);
+    const expectedControls = [...policy.controls, ...postPolicy.controls].filter(c => c.id === row.id).flatMap(c => c.expected);
+    assert.deepEqual(row.supplement.details.map(d => ({token:d.token, ok:d.expectedOk})), expectedControls);
+    for (const detail of row.supplement.details) assert.equal(detail.correct, detail.actualOk === detail.expectedOk);
+    assert.equal(row.supplement.total, expectedControls.length);
+    assert.equal(row.supplement.correct, row.supplement.details.filter(d => d.correct).length);
+    assert.equal(row.supplement.pass, row.supplement.deterministic && row.supplement.exactTokens && row.supplement.correct === row.supplement.total);
+    assert.equal(row.effectiveReward, Math.min(row.recordedReward, row.supplement.pass ? 1 : 0));
+    assert(row.effectiveReward <= row.previousEffectiveReward);
+    assert(readFileSync(join(root, prior.analysis), "utf8").includes("Post-final pass audit — September 9, 2026"));
+  }
+  for (const id of auditedIds) {
+    const rows = postAudit.rows.filter(r => r.id === id);
+    const prior = finalSix.packages.find(p => p.id === id);
+    assert.deepEqual(rows.map(r => r.trial), prior.recordedHistory.map((_, i) => i + 2), "Every retained attempt must receive the same regrade");
+    assert.equal(new Set(rows.map(r => r.publicContractSha256)).size, 1);
+    assert.equal(new Set(rows.map(r => r.instructionSha256)).size, 1);
+  }
+  const postCorrections = postAudit.rows.filter(r => r.previousEffectiveReward !== r.effectiveReward);
+  assert.deepEqual(postCorrections.map(r => [r.id, r.trial]), [
+    ["variant-cache-repair", 5], ["issued-report-repair", 5], ["issued-report-repair", 6],
+    ["temporal-capacity-repair", 5], ["temporal-capacity-repair", 6], ["snapshot-recovery-repair", 5],
+  ]);
+  assert.deepEqual(postAudit.correctedPasses, postCorrections.map(({id, trial, provider, recordedReward, previousEffectiveReward, effectiveReward}) => ({id, trial, provider, recordedReward, previousEffectiveReward, effectiveReward})));
+  assert.equal(postAudit.oracles.length, 4);
+  assert(postAudit.oracles.every(o => o.pass && o.correct === o.total));
+  assert.equal(postAudit.oracles.reduce((n, o) => n + o.total, 0), 12);
+  assert.equal(postAudit.serviceChecks.length, 8);
+  assert(postAudit.serviceChecks.every(s => s.status === "semantic-pass" && s.failures.length === 0));
+  assert.equal(postAudit.manifests.recordsVerified, 19);
+  assert(postAudit.manifests.filesVerified > 0 && postAudit.manifests.bytesVerified > 0);
+  assert.equal(postAudit.manifests.verifiedBeforeAndAfter, true);
+  assert.deepEqual(postAudit.manifests.errors, []);
+  assert.deepEqual(postAudit.classifications.map(p => p.id), finalSix.packages.map(p => p.id));
+  for (const current of postAudit.classifications) {
+    const prior = finalSix.packages.find(p => p.id === current.id);
+    const rows = postAudit.rows.filter(r => r.id === current.id);
+    assert.deepEqual(current.recordedHistory, prior.recordedHistory);
+    assert.deepEqual(current.previousEffectiveHistory, prior.effectiveHistory);
+    assert.deepEqual(current.effectiveHistory, rows.length ? rows.map(r => r.effectiveReward) : prior.effectiveHistory);
+    assert.deepEqual(current.attemptsByProvider, prior.attemptsByProvider);
+    assert.equal(current.scored, prior.finalScored);
+    assert.equal(current.remaining, 6 - current.scored);
+    assert.equal(current.failures, current.effectiveHistory.filter(r => r === 0).length);
+    assert.equal(current.failuresNeeded, Math.max(0, 5 - current.failures));
+    if (current.classification === "meets-5-of-6-complete") {
+      assert.equal(current.scored, 6);
+      assert(current.failures >= 5);
+      assert.deepEqual(current.attemptsByProvider, {claude:3,codex:3});
+    } else {
+      assert.equal(current.classification, "reopened");
+      assert(canReachFive(current.failures, current.scored));
+    }
+  }
+  assert.deepEqual(postAudit.successorTotals, {...finalSix.successorTotals,
+    effectiveFailures: finalSix.successorTotals.effectiveFailures + postCorrections.length,
+    effectivePasses: finalSix.successorTotals.effectivePasses - postCorrections.length,
+  });
+  assert(!/\/Users\/|\.local\//.test(JSON.stringify(postAudit)), "Nonportable/private post-final evidence");
   const successorPackageIds = new Set(successorRecords.map((p) => p.id));
   const scoredPackageIds = new Set(successorRecords.filter((p) => p.reward !== null).map((p) => p.id));
   assert.deepEqual([...successorPackageIds].sort(), [...ids].sort(), "every package has a Trial 2 record");
@@ -709,8 +825,13 @@ export function verifyPublication(root = process.cwd()) {
     finalSixMeetsFiveOfSix: finalSix.classificationSummary.meetsFiveOfSix.length,
     finalSixCannotReachFiveOfSix: finalSix.classificationSummary.cannotReachFiveOfSix.length,
     finalSixUnresolvedInfrastructure: finalSix.classificationSummary.unresolvedInfrastructure.length,
-    successorEffectiveZeroRewards: successorRecords.filter(p => p.reward === 0).length + correctedPasses.length,
-    successorEffectivePasses: successorRecords.filter(p => p.reward === 1).length - correctedPasses.length,
+    postFinalAdditionalFalsePasses: postCorrections.length,
+    postFinalRegradedAttempts: postAudit.rows.length,
+    postFinalReopenedPackages: postAudit.classifications.filter(p => p.classification === "reopened").length,
+    postFinalFiveFailuresPendingBalance: postAudit.classifications.filter(p => p.failures >= 5 && p.scored < 6).length,
+    postFinalRemainingSlots: postAudit.classifications.reduce((n, p) => n + p.remaining, 0),
+    successorEffectiveZeroRewards: postAudit.successorTotals.effectiveFailures,
+    successorEffectivePasses: postAudit.successorTotals.effectivePasses,
     manifestListedFilesVerifiedAtPublication: verifiedFiles,
     successorTrials: successorRecords.length,
     successorPackages: successorPackageIds.size,

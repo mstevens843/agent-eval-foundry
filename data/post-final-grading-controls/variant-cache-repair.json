@@ -1,0 +1,1142 @@
+{
+  "cases": [
+    {
+      "token": "db141be670ff3bd75a54e983",
+      "cells": [
+        {
+          "scenarioId": "audit-warm-second-edge",
+          "actual": {
+            "cache": {
+              "edge-a": [
+                {
+                  "path": "/asset",
+                  "headers": {},
+                  "vary": [],
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                  "body": "0|/asset|||1|🟦",
+                  "maxAge": 100,
+                  "age": 0,
+                  "storedAt": 0,
+                  "noStore": false
+                }
+              ],
+              "edge-b": [
+                {
+                  "path": "/asset",
+                  "headers": {},
+                  "vary": [],
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                  "body": "0|/asset|||1|🟦",
+                  "maxAge": 100,
+                  "age": 0,
+                  "storedAt": 0,
+                  "noStore": false
+                }
+              ],
+              "shield": [
+                {
+                  "path": "/asset",
+                  "headers": {},
+                  "vary": [],
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                  "body": "0|/asset|||1|🟦",
+                  "maxAge": 100,
+                  "age": 0,
+                  "storedAt": 0,
+                  "noStore": false
+                }
+              ]
+            },
+            "deliveries": [
+              {
+                "id": "g0",
+                "response": {
+                  "body": "0|/asset|||1|🟦",
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y="
+                }
+              },
+              {
+                "id": "g1",
+                "response": {
+                  "body": "0|/asset|||1|🟦",
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y="
+                }
+              }
+            ],
+            "originRequests": 1,
+            "originBytes": 17
+          },
+          "input": {
+            "events": [
+              {
+                "id": "g0",
+                "kind": "get",
+                "tier": "edge-a",
+                "path": "/asset",
+                "headers": {},
+                "now": 0
+              },
+              {
+                "id": "g1",
+                "kind": "get",
+                "tier": "edge-b",
+                "path": "/asset",
+                "headers": {},
+                "now": 1
+              }
+            ],
+            "initial": {
+              "edge-a": [],
+              "edge-b": [],
+              "shield": []
+            }
+          },
+          "limits": {
+            "maxOriginRequests": 1,
+            "maxOriginBytes": 1024
+          },
+          "observations": [
+            {
+              "seq": 0,
+              "method": "next",
+              "request": {},
+              "value": {
+                "event": {
+                  "id": "g0",
+                  "kind": "get",
+                  "tier": "edge-a",
+                  "path": "/asset",
+                  "headers": {},
+                  "now": 0
+                }
+              }
+            },
+            {
+              "seq": 1,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 2,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 3,
+              "method": "origin",
+              "request": {},
+              "value": {
+                "status": 200,
+                "body": "0|/asset|||1|🟦",
+                "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                "vary": [],
+                "maxAge": 100,
+                "age": 0,
+                "noStore": false
+              }
+            },
+            {
+              "seq": 4,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 5,
+              "method": "write",
+              "request": {
+                "tier": "shield",
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 7,
+              "method": "write",
+              "request": {
+                "tier": "edge-a",
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "deliver",
+              "request": {
+                "response": {
+                  "body": "0|/asset|||1|🟦",
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y="
+                }
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "next",
+              "request": {},
+              "value": {
+                "event": {
+                  "id": "g1",
+                  "kind": "get",
+                  "tier": "edge-b",
+                  "path": "/asset",
+                  "headers": {},
+                  "now": 1
+                }
+              }
+            },
+            {
+              "seq": 10,
+              "method": "read",
+              "request": {
+                "tier": "edge-b"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 11,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 12,
+              "method": "read",
+              "request": {
+                "tier": "edge-b"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 13,
+              "method": "write",
+              "request": {
+                "tier": "edge-b",
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 14,
+              "method": "deliver",
+              "request": {
+                "response": {
+                  "body": "0|/asset|||1|🟦",
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y="
+                }
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 15,
+              "method": "next",
+              "request": {},
+              "value": {
+                "done": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "complete": true
+            }
+          ],
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "event": {
+                        "id": "g0",
+                        "kind": "get",
+                        "tier": "edge-a",
+                        "path": "/asset",
+                        "headers": {},
+                        "now": 0
+                      }
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "origin",
+                    "request": {},
+                    "value": {
+                      "status": 200,
+                      "body": "0|/asset|||1|🟦",
+                      "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                      "vary": [],
+                      "maxAge": 100,
+                      "age": 0,
+                      "noStore": false
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "write",
+                    "request": {
+                      "tier": "shield",
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "write",
+                    "request": {
+                      "tier": "edge-a",
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "deliver",
+                    "request": {
+                      "response": {
+                        "body": "0|/asset|||1|🟦",
+                        "etag": "MHwvYXNzZXR8fHwxfPCfn6Y="
+                      }
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "event": {
+                        "id": "g1",
+                        "kind": "get",
+                        "tier": "edge-b",
+                        "path": "/asset",
+                        "headers": {},
+                        "now": 1
+                      }
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-b"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 11,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 12,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-b"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 13,
+                    "method": "write",
+                    "request": {
+                      "tier": "edge-b",
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 14,
+                    "method": "deliver",
+                    "request": {
+                      "response": {
+                        "body": "0|/asset|||1|🟦",
+                        "etag": "MHwvYXNzZXR8fHwxfPCfn6Y="
+                      }
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 15,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "done": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 19,
+                "requestBytes": 1717,
+                "responseBytes": 1273,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "9c644993125a14fb521924b6",
+      "cells": [
+        {
+          "scenarioId": "audit-warm-second-edge",
+          "actual": {
+            "cache": {
+              "edge-a": [
+                {
+                  "path": "/asset",
+                  "headers": {},
+                  "vary": [],
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                  "body": "0|/asset|||1|🟦",
+                  "maxAge": 100,
+                  "age": 0,
+                  "storedAt": 0,
+                  "noStore": false
+                }
+              ],
+              "edge-b": [
+                {
+                  "path": "/asset",
+                  "headers": {},
+                  "vary": [],
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                  "body": "0|/asset|||1|🟦",
+                  "maxAge": 100,
+                  "age": 0,
+                  "storedAt": 0,
+                  "noStore": false
+                }
+              ],
+              "shield": [
+                {
+                  "path": "/asset",
+                  "headers": {},
+                  "vary": [],
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                  "body": "0|/asset|||1|🟦",
+                  "maxAge": 100,
+                  "age": 0,
+                  "storedAt": 0,
+                  "noStore": false
+                }
+              ]
+            },
+            "deliveries": [
+              {
+                "id": "g0",
+                "response": {
+                  "body": "0|/asset|||1|🟦",
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y="
+                }
+              },
+              {
+                "id": "g1",
+                "response": {
+                  "body": "0|/asset|||1|🟦",
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y="
+                }
+              }
+            ],
+            "originRequests": 1,
+            "originBytes": 17
+          },
+          "input": {
+            "events": [
+              {
+                "id": "g0",
+                "kind": "get",
+                "tier": "edge-a",
+                "path": "/asset",
+                "headers": {},
+                "now": 0
+              },
+              {
+                "id": "g1",
+                "kind": "get",
+                "tier": "edge-b",
+                "path": "/asset",
+                "headers": {},
+                "now": 1
+              }
+            ],
+            "initial": {
+              "edge-a": [],
+              "edge-b": [],
+              "shield": []
+            }
+          },
+          "limits": {
+            "maxOriginRequests": 1,
+            "maxOriginBytes": 1024
+          },
+          "observations": [
+            {
+              "seq": 0,
+              "method": "next",
+              "request": {},
+              "value": {
+                "event": {
+                  "id": "g0",
+                  "kind": "get",
+                  "tier": "edge-a",
+                  "path": "/asset",
+                  "headers": {},
+                  "now": 0
+                }
+              }
+            },
+            {
+              "seq": 1,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 2,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 3,
+              "method": "origin",
+              "request": {},
+              "value": {
+                "status": 200,
+                "body": "0|/asset|||1|🟦",
+                "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                "vary": [],
+                "maxAge": 100,
+                "age": 0,
+                "noStore": false
+              }
+            },
+            {
+              "seq": 4,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 5,
+              "method": "write",
+              "request": {
+                "tier": "shield",
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 7,
+              "method": "write",
+              "request": {
+                "tier": "edge-a",
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "write",
+              "request": {
+                "tier": "edge-b",
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "deliver",
+              "request": {
+                "response": {
+                  "body": "0|/asset|||1|🟦",
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y="
+                }
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 10,
+              "method": "next",
+              "request": {},
+              "value": {
+                "event": {
+                  "id": "g1",
+                  "kind": "get",
+                  "tier": "edge-b",
+                  "path": "/asset",
+                  "headers": {},
+                  "now": 1
+                }
+              }
+            },
+            {
+              "seq": 11,
+              "method": "read",
+              "request": {
+                "tier": "edge-b"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 12,
+              "method": "deliver",
+              "request": {
+                "response": {
+                  "body": "0|/asset|||1|🟦",
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y="
+                }
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 13,
+              "method": "next",
+              "request": {},
+              "value": {
+                "done": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "complete": true
+            }
+          ],
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "event": {
+                        "id": "g0",
+                        "kind": "get",
+                        "tier": "edge-a",
+                        "path": "/asset",
+                        "headers": {},
+                        "now": 0
+                      }
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "origin",
+                    "request": {},
+                    "value": {
+                      "status": 200,
+                      "body": "0|/asset|||1|🟦",
+                      "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                      "vary": [],
+                      "maxAge": 100,
+                      "age": 0,
+                      "noStore": false
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "write",
+                    "request": {
+                      "tier": "shield",
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "write",
+                    "request": {
+                      "tier": "edge-a",
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "write",
+                    "request": {
+                      "tier": "edge-b",
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "deliver",
+                    "request": {
+                      "response": {
+                        "body": "0|/asset|||1|🟦",
+                        "etag": "MHwvYXNzZXR8fHwxfPCfn6Y="
+                      }
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "event": {
+                        "id": "g1",
+                        "kind": "get",
+                        "tier": "edge-b",
+                        "path": "/asset",
+                        "headers": {},
+                        "now": 1
+                      }
+                    }
+                  },
+                  {
+                    "seq": 11,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-b"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 12,
+                    "method": "deliver",
+                    "request": {
+                      "response": {
+                        "body": "0|/asset|||1|🟦",
+                        "etag": "MHwvYXNzZXR8fHwxfPCfn6Y="
+                      }
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 13,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "done": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 17,
+                "requestBytes": 1587,
+                "responseBytes": 1203,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

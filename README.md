@@ -16,20 +16,26 @@ Twenty-five professional package source trees are maintained here: native Go/bro
 
 This is the first complete 6/6 result in the 25-package successor screening campaign.
 The full set is **Codex Trials 2–4 and Claude Trials 5–7**, all fresh attempts on
-unchanged task bytes. The other four finalists cannot reach 5/6 and stopped early.
+unchanged task bytes. A subsequent audit confirmed **six additional false passes**
+and reopened all four other finalists: **issued report 5/5, temporal capacity 5/5,
+variant cache 4/5, snapshot recovery 3/4**. Report and capacity each need one final
+Codex attempt to complete their balanced six-run set; cache needs one Codex failure,
+and snapshot needs two Claude failures.
 
 [Final results](reports/screening/final-six-2026-09-09.md) ·
 [Build trial analysis](reports/screening/fifth-five/21-incremental-build-repair.md) ·
 [Verified evidence](reports/screening/evidence/2026-09-09-final-six.json).
 
-The successor campaign now totals **46 attempts across 25 packages: 45 scored and
-one historical infrastructure interruption**. The original grades contain **15 zero
-rewards and 30 passes**. Applying the two documented historical coverage corrections
-gives **17 effective failures and 28 effective passes**, covering the same 45 scored
-attempts. The six new attempts contributed two failures and four passes, with no
-infrastructure errors. Five unnecessary slots were left unlaunched after early stopping.
+[Latest pass audit and remaining slots](reports/screening/post-final-pass-audit-2026-09-09.md) ·
+[Regrade evidence](reports/screening/evidence/2026-09-09-post-final-pass-audit.json).
 
-**Start with the [five-minute project status](docs/project-status.md)** for final
+The successor campaign still totals **46 attempts across 25 packages: 45 scored and
+one historical infrastructure interruption**. Original grades contain **15 zero rewards
+and 30 passes**. The two earlier corrections plus six new corrections give **23 effective
+failures and 22 passes** on those same 45 scored attempts. Regrades are documented
+corrections to existing attempts, not new model runs. Five provider slots remain unrun.
+
+**Start with the [five-minute project status](docs/project-status.md)** for current
 standings, package links and the measurement history. The
 [screening index](reports/screening/README.md) preserves all 25 original trials and
 subsequent attempts. All 25 successors were implemented and completed local native

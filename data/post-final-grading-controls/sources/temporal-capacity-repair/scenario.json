@@ -1,0 +1,33 @@
+{
+  "id": "audit-restarted-traversal",
+  "rows": [
+    {
+      "series": "s",
+      "key": "a",
+      "revision": 1,
+      "knownAt": 1,
+      "from": 0,
+      "to": 4,
+      "value": "7"
+    },
+    {
+      "series": "s",
+      "key": "b",
+      "revision": 1,
+      "knownAt": 1,
+      "from": 0,
+      "to": 4,
+      "value": "9"
+    }
+  ],
+  "queries": [
+    {
+      "id": "q",
+      "series": "s",
+      "knownAt": 2,
+      "from": 0,
+      "to": 3
+    }
+  ],
+  "pageSize": 1
+}

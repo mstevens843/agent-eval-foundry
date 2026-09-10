@@ -1,5 +1,10 @@
 # Finish the six-attempt screening sets
 
+> **Later audit:** The [post-final pass audit](../reports/screening/post-final-pass-audit-2026-09-09.md)
+> reopened all four stopped finalists. This is the historical campaign handoff;
+> future attempts must add `post-final-coverage-v2` cumulative grading.
+> No new attempt was launched by that audit.
+
 **Completed campaign:** incremental build met the target at **6/6** (3 Codex + 3 Claude). The other four finalists stopped below 5/6. [Final results](../reports/screening/final-six-2026-09-09.md). The preparation and launch instructions below are historical; no trials remain to dispatch under this campaign.
 
 Work in `/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry`.

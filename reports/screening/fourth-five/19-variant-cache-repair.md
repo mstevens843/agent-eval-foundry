@@ -656,3 +656,23 @@ This is an exploratory repository assessment. The Trial 6 result still records
 `adjudication: unlabelled`, `modelEvidenceEligible: false` and
 `countsAsModelFailure: false`; nothing above claims a completed six-run set, official
 cheat qualification, or independent blind review.
+
+## Post-final pass audit — September 9, 2026
+
+**Current effective score: 4 failures / 5 scored trials. Reopened for the remaining provider slots.**
+
+The new valid control warms the second edge with a legitimate copy of the first origin-derived asset. Trial 5 rejects that copy because its checker restricts get writes to the active edge and shield. Trial 6 accepts it. The frozen service verifier and private reference checker accept the control.
+
+| Trial | Provider | Original reward | Previous effective reward | Current effective reward | Cumulative supplemental classifications |
+| --- | --- | --- | --- | --- | --- |
+| 2 | Claude | 0 | 0 | **0** | 2/2 |
+| 3 | Claude | 0 | 0 | **0** | 2/2 |
+| 4 | Claude | 0 | 0 | **0** | 2/2 |
+| 5 | Codex | 1 | 1 | **0** | 1/2 |
+| 6 | Codex | 1 | 1 | **1** | 2/2 |
+
+Trial 7, Codex: one failure is needed for 5/6. No new model trial was launched by this audit.
+
+All retained attempts received the same cumulative `post-final-coverage-v2` controls. Original rewards, manifests and the preceding trial sections remain unchanged. Local replay of both previously passing services on this task's new scenario passed; the new failure is in the required checker.
+
+[Full audit and contract basis](../post-final-pass-audit-2026-09-09.md) · [Sanitized per-trial evidence](../evidence/2026-09-09-post-final-pass-audit.json).

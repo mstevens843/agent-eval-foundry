@@ -552,3 +552,23 @@ now-pointless Trial 7 dispatch could be wasted.
 
 [Final campaign and standings](../final-six-2026-09-09.md) ·
 [Sanitized evidence](../evidence/2026-09-09-final-six.json).
+
+## Post-final pass audit — September 9, 2026
+
+**Current effective score: 5 failures / 5 scored trials. Reopened for the remaining provider slots.**
+
+The new valid control reads the first page, restarts from null, exhausts the restarted cursor chain and writes the exact integral. Trials 5 and 6 track only the first issued cursor and wrongly reject the completed traversal. The frozen verifier and private reference checker accept it. The earlier Trial 3 no-query correction remains in force.
+
+| Trial | Provider | Original reward | Previous effective reward | Current effective reward | Cumulative supplemental classifications |
+| --- | --- | --- | --- | --- | --- |
+| 2 | Claude | 0 | 0 | **0** | 3/4 |
+| 3 | Claude | 1 | 0 | **0** | 3/4 |
+| 4 | Claude | 0 | 0 | **0** | 3/4 |
+| 5 | Codex | 1 | 1 | **0** | 3/4 |
+| 6 | Codex | 1 | 1 | **0** | 3/4 |
+
+Trial 7, Codex: the sixth attempt completes the 3+3 provider balance; either result yields at least 5/6. No new model trial was launched by this audit.
+
+All retained attempts received the same cumulative `post-final-coverage-v2` controls. Original rewards, manifests and the preceding trial sections remain unchanged. Local replay of both previously passing services on this task's new scenario passed; the new failure is in the required checker.
+
+[Full audit and contract basis](../post-final-pass-audit-2026-09-09.md) · [Sanitized per-trial evidence](../evidence/2026-09-09-post-final-pass-audit.json).

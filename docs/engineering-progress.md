@@ -2,6 +2,23 @@
 
 The goal is a portfolio of fair, useful tasks that agents genuinely fail—not a large pile of generated exercises or zero rewards caused by bad measurement. Progress includes discovering that a candidate is easy, identifying our own mistakes, and making the next decision better informed.
 
+## September 9: six additional false passes confirmed
+
+The post-final audit reopened all four eliminated finalists through **six reproduced
+checker-coverage corrections**. Issued report and temporal capacity now each have
+5 failures from 5 trials; variant cache has 4/5 and snapshot recovery 3/4. Build remains
+the complete 6/6 result. All original rewards and prior reports remain preserved.
+
+Three submitted checkers rejected valid alternate executions; another accepted account
+name corruption. The frozen service verifier and private reference checker already
+judge the new cases correctly. We added cumulative private checker controls and applied
+them consistently across all 19 retained submissions. We changed neither the public
+contract nor the service requirements and made no model calls.
+
+[Audit, contract basis and remaining slots](../reports/screening/post-final-pass-audit-2026-09-09.md) ·
+[Verified evidence](../reports/screening/evidence/2026-09-09-post-final-pass-audit.json).
+The chronological milestones below describe what was known at each earlier point.
+
 ## September 9: first complete 6/6 successor result
 
 **1 task meets the target of at least 5/6 failures: incremental-build-repair (21)
