@@ -1,0 +1,1 @@
+import{subject as reference}from'./reference-entry.mjs';export const subject={run(view,api){let first=true;return reference.run(view,{...api,record:r=>{if(first){first=false;return {stored:true};}return api.record(r);}});}};

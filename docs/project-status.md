@@ -4,43 +4,43 @@ September 9, 2026. Navigation and status, not a package-policy approval.
 
 ## Latest measured progress
 
-**1 task meets the target of at least 5/6 failures: incremental-build-repair (21)
-achieved 6/6 failures, with three Codex and three Claude attempts on the same package.**
-All six services passed 27/27 scenarios. Each required checker missed the same
-defect allowing publication before compiler issuance. All six recorded rewards are zero;
-this result uses the original grader and requires no retroactive correction.
+**Three finalists have completed the reported ≥5/6 failure target: two at 6/6 and
+one at 5/6. Two finalists await three fresh Codex replacements.** The latest audit
+confirmed three more false passes. At the user's request those three are unscored,
+with their raw records and diagnostic regrades preserved. Earlier agreed regrades
+remain counted.
 
-| Package | Current effective failures/scored | Provider counts | Current outcome |
+| Package | Counted failures / trials | Status | Remaining provider slots |
 | --- | --- | --- | --- |
-| **21 Incremental build** | **6/6** | **3 Codex + 3 Claude** | **Completed; meets ≥5/6** |
-| 25 Issued report | **5/5** | 3 Claude + 2 Codex | Final Codex slot pending; either result gives ≥5/6 |
-| 10 Temporal capacity | **5/5** | 3 Claude + 2 Codex | Final Codex slot pending; either result gives ≥5/6 |
-| 19 Variant cache | **4/5** | 3 Claude + 2 Codex | Reopened; last Codex attempt must fail |
-| 11 Snapshot recovery | **3/4** | 3 Codex + 1 Claude | Reopened; two Claude attempts must fail |
+| **21 Incremental build** | **6/6** | Complete; meets ≥5/6 | None |
+| **25 Issued report** | **6/6** | Complete; meets ≥5/6 | None |
+| **10 Temporal capacity** | **5/6** | Complete; meets ≥5/6 | None |
+| 19 Variant cache | **4/4** | Pending; T6/T7 grading voids | Codex T8 and T9 |
+| 11 Snapshot recovery | **4/5** | Pending; T4 grading void | Codex T8 |
 
-**The post-final audit confirmed six additional false passes and reopened all four
-eliminated finalists.** This adds no model trials. One balanced set is complete; two
-more packages already have five failures and need their sixth attempt for the requested
-three-per-provider balance. Different valid failure mechanisms count.
+The new audit found that cache Trials 6/7 reject a legitimate tier copy, and snapshot
+Trial 4 rejects a valid empty recovery without a database commit. It also repaired
+missing private verification of metadata after a 304 validation. Snapshot Trial 7
+and temporal Trial 7 survived the broader checks and remain passes.
 
-Our checker grader lacked three valid alternative-execution controls and one invalid
-string-preservation control. The frozen service verifier and private reference checker
-agree on all four cases. The same cumulative controls were applied to every retained
-attempt of each affected package: **19 regrades, four private oracle passes, and eight
-passing-service replays**. All 16,573 original manifest-listed files verified before
-and after with zero drift. Original task packages, rewards and evidence remain intact.
+Verification covered **24 retained submissions, 50/50 private-oracle classifications,
+29 passing-service replays, and 20,836 original files verified before and after with
+zero drift**. No additional model calls were made. Agent-visible packages remain
+unchanged; fresh replacements receive cumulative checker and service grading.
 
-The successor campaign still totals **46 attempts across 25 packages: 45 scored and
-one historical infrastructure interruption**. Original grades contain **15 zero rewards
-and 30 passes**. The two earlier corrections plus six new corrections give **23 effective
-failures and 22 passes** on those same 45 scored attempts. Regrades are documented
-corrections to existing attempts, not new model runs. Five provider slots remain unrun.
+There are **51 successor attempts across 25 packages**, with 50 completed raw grades
+and one historical infrastructure interruption. The current selected record contains
+**47 counted trials: 25 failures and 22 passes**, plus three grading voids awaiting
+replacement. Original grades remain visible (15 zeroes, 35 passes); audit findings
+are retained separately. We do not count a void as a failure or silently erase it.
 
-[Current audit and exact remaining slots](../reports/screening/post-final-pass-audit-2026-09-09.md) ·
-[Sanitized regrade evidence](../reports/screening/evidence/2026-09-09-post-final-pass-audit.json) ·
-[Original final-six campaign and build results](../reports/screening/final-six-2026-09-09.md).
-The six-run screening target is complete for build; final submission review and
-required cheat checks remain separate from this measured result.
+[Latest audit](../reports/screening/remaining-pass-audit-2026-09-09.md) ·
+[Counting disposition](../reports/screening/evidence/2026-09-09-three-replacement-disposition.json) ·
+[Three-replacement handoff](../docs/three-replacements-handoff.md).
+
+The completed sets have three counted Codex and three counted Claude attempts. The
+remaining slots restore that balance for cache and snapshot. The reported ≥5/6
+screening target remains separate from final rubric and adversarial qualification.
 
 ## What is implemented
 
@@ -54,7 +54,7 @@ The foundry assembles separate solver/verifier workspaces, validates local contr
 
 The original 25 screenings all passed their service suites. Their recorded checker
 outcomes and historical grading concerns remain intact in the [trial index](../reports/screening/README.md).
-Forty-six successor attempts, forty-five scored, now extend that history; the Trial 2 results above
+Fifty-one successor attempts, fifty scored, now extend that history; the Trial 2 results above
 must not be merged into the original table or treated as repeat runs of identical versions.
 
 Engineering preparation covers [19/21/25/24/07](../reports/screening/top-five-implementation-plan-2026-09-09.md),
@@ -113,25 +113,6 @@ These links are reviewer-facing and include private grading material. Solvers re
 
 ## What remains
 
-The final screening campaign is complete: one task meets the 5/6 target at 6/6,
-and four finalists stopped after their outcomes were settled. Final submission review
-and required cheat checks remain separate. The current acceptance threshold is the user's reported 5-of-6 criterion;
-this progress report adds no requirement for identical bugs or six consecutive zeroes.
-
-The partial-release reason-format issue remains a blocker for treating its historical zero as a capability failure. Shared reason-prefix matching and explicit checker schemas were repaired in new versions before batch 3. No historical result is overwritten by that repair.
-
-The ranked successors make checker reasons diagnostic-only, integrate protected controls
-and resolve earlier contradictions. Historical attribution notes remain in each trial
-document. The current six-run campaign uses the unchanged public tasks and exact provider
-profiles, plus the documented private coverage repair for 10 and 11. No extra solution
-guidance or requirement for identical failure mechanisms is needed.
-
-All twenty-five successor packages have retained validation evidence. Their old
-Trial 1 results still measure the old versions. Trials 2–5 retain their exact package
-and profile identities. Raw grades remain immutable alongside the separate coverage regrade.
-
-Fresh verification and limits appear in [the publication report](../reports/PORTFOLIO-PUBLICATION.md). Historical snapshot-local assurance does not automatically certify a new merged build. No new provider attempts or release approvals are made by publication.
-
-## A reproducible review path
-
-Read this page, one package's public semantics, its independent verifier and its trial analysis. Then follow [testing](testing.md) and [production](professional-portfolio.md) to reproduce local checks. A reviewer should not need private scratch notes to understand the work.
+Three Codex replacements remain: cache T8/T9 and snapshot T8. They are prepared to
+start together with a cap of six. Three other finalists are complete at 6/6, 6/6 and
+5/6. Final submission review and required cheat checks remain separate.

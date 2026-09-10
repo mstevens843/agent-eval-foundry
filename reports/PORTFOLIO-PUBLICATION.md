@@ -1,23 +1,25 @@
 # Maintained portfolio and screening publication
 
-**1 task meets the target of at least 5/6 failures: incremental-build-repair (21)
-achieved 6/6 failures, with three Codex and three Claude attempts on the same package.**
-All six services passed 27/27 scenarios. Each required checker missed the same
-defect allowing publication before compiler issuance. All six recorded rewards are zero;
-this result uses the original grader and requires no retroactive correction.
+**Three finalists have completed the reported ≥5/6 failure target: incremental build
+and issued report at 6/6, temporal capacity at 5/6.** Cache is pending at 4/4 and
+snapshot at 4/5 after the user elected to void and replace three newly confirmed false
+passes. Three fresh Codex slots are prepared, all concurrent, with a cap of six.
 
-All twenty-five successors were implemented and screened. A later pass audit has
-confirmed **six additional required-checker failures** and reopened four finalists.
-Issued report and temporal capacity are each at 5/5 pending their sixth Codex trial;
-variant cache is at 4/5 and snapshot recovery at 3/4. Build's six original zero rewards
-are unchanged. One balanced qualifying set is complete, and five provider slots remain.
+The new private coverage catches valid alternatives wrongly rejected by submitted
+checkers, plus missing cache metadata validation in our own verifier/reference. The
+audit applied identical cumulative controls to all 24 retained submissions across the
+four audited packages: 50/50 private-oracle classifications, 29 passing-service replays,
+and 20,836 original files verified before and after without drift. No new model calls
+were made by the audit or replacement preparation.
 
-The audit regraded all 19 retained attempts of the affected packages under the same
-cumulative controls. Four private oracles passed; 16,573 original manifest-listed
-files verified before and after with zero drift. No model calls were made.
-[Current audit](screening/post-final-pass-audit-2026-09-09.md) ·
+Original raw evidence and diagnostic regrades remain intact. The current selected
+record is 47 counted trials, three grading voids and one historical infrastructure
+interruption, from 51 physical successor attempts. Earlier documented regrades remain
+counted; the three new diagnostic failures are not counted as reward-zero trials.
+
+[Latest audit](screening/remaining-pass-audit-2026-09-09.md) ·
 [Current status](../docs/project-status.md) ·
-[Sanitized evidence](screening/evidence/2026-09-09-post-final-pass-audit.json).
+[Prepared replacements](../docs/three-replacements-handoff.md).
 
 The source-publication checks below describe their original snapshot. Current screening
 results and final submission work are tracked separately.

@@ -700,3 +700,119 @@ Trial 7, Codex: the sixth attempt completes the 3+3 provider balance; either res
 All retained attempts received the same cumulative `post-final-coverage-v2` controls. Original rewards, manifests and the preceding trial sections remain unchanged. Local replay of both previously passing services on this task's new scenario passed; the new failure is in the required checker.
 
 [Full audit and contract basis](../post-final-pass-audit-2026-09-09.md) · [Sanitized per-trial evidence](../evidence/2026-09-09-post-final-pass-audit.json).
+
+## Trial 7 — post-final-coverage-v2 campaign, final attempt, meets 5/6 — September 9, 2026
+
+**Recorded reward 1, effective reward 0 — this package's sixth and final authorized
+attempt.** Run `issued-report-repair-attempt-1`, package digest
+`32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170` — unchanged
+across successor Trials 2–7. Identity: Codex (`openai/gpt-5.6-sol`, effort
+`xhigh`, CLI `0.153.2`), same author image and frozen runtime as every prior
+trial in this history. Duration 12m47s. Tokens: 402,770 input (353,664 cached),
+22,836 output; as with Trials 5 and 6, the Codex CLI never reports a price, so
+cost is `null` rather than a $0 charge. Evidence:
+`.local/final-six-2026-09-09/issued-report-repair/trial-7/real-campaign-frozen/jobs/real-provider/records/issued-report-repair-attempt-1/`.
+`completionSha256 ca4c8bdf4650e2e0cef100863de728ecdbe4a4a28460d9607feb8eee9a208eb1`,
+`resultSha256 46084d0d30c594a398c496aaffa743965e60fc05db8021bcae95b93107a7150c`,
+`gradeSha256 baa3de2f18fb7494bd5791ffe0bdfe5029060269131ad9119baa7161e32cda65` —
+829 manifest files (8,956,510 bytes), reverified this session with zero errors.
+`profileDigest a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641`.
+
+**Service:** 27/27 scenarios, 0 failures — fully correct, matching every prior trial.
+
+**Base checker (original candidate bank):** 14/14 correct, 0 missed, 0 false
+positives, `pass: true`. Confirmed directly from
+`grading/checker-grade/grade-summary.json` and `grading/result.json`
+(`checkerPassed: true`, `reward: 1`). Against the fourteen original candidates
+this checker performs exactly as well as Trials 5 and 6.
+
+**Supplemental grade (`post-final-coverage-v2`):** 1/2 correct, deterministic,
+`exactTokens: true`, **pass: false.** The new targeted control specific to this
+package attempts a delivery *before* the corresponding new version is
+published, correctly receives the documented `error:"version"` no-receipt
+response, then proceeds with normal publication and delivery — every failed
+call verified to have returned that documented error, with no successful
+duplicate delivery anywhere in the trace. This submitted checker rejects that
+valid execution, with reasons `cell 0: deliver call was not stored` and
+`cell 0: deliver calls do not match required receipts` — a different exact
+message from both Trial 5 (`malformed or unsuccessful deliver call`) and
+Trial 6 (`an invalid delivery call was attempted`), but the same underlying
+category of defect.
+
+### Code-level verification: a third checker, a third instance of the same category
+
+Reading `grading/submission/checker.mjs` directly confirms the structural gap.
+Its `inspectObservations()` walks every observed `deliver` call and, per call,
+runs one blanket test at line 323:
+
+```js
+if (!value || value.stored !== true) reasons.push(`${method} call was not stored`);
+```
+
+This fires for *any* `deliver` observation whose response is not a stored
+receipt — including the documented, correct `error:"version"` response to a
+deliberate premature-delivery attempt — with no check for whether that
+response is the specific documented no-op error the contract promises rather
+than an actual defect. The same premature call then poisons the aggregate
+comparison two steps later: `expectedDeliverCalls` (line 341) is built solely
+from `expected.deliveries`, the model's reconstruction of the successful
+deliveries that should exist, which has no slot for a call that was supposed
+to fail. The premature call shows up in `actualDeliverCalls` with no
+counterpart in `expectedDeliverCalls`, so the `sameMultiset` check at line 347
+also fails with `deliver calls do not match required receipts`. Both observed
+reasons trace to this same design choice: the checker treats "a deliver call
+whose response is not a stored receipt" as itself disqualifying, rather than
+checking whether that response is the one specific documented error the
+contract requires for a premature call.
+
+**Three independently-written Codex checkers — Trials 5, 6 and 7 — have now
+all rejected this specific documented-error-recovery pattern**, each via a
+different exact error message (`malformed or unsuccessful deliver call`;
+`an invalid delivery call was attempted`; `deliver call was not stored` /
+`deliver calls do not match required receipts`) but the same underlying
+category of over-strict validation: treating any failed or errored `deliver()`
+attempt as itself a violation, instead of verifying that the call correctly
+returned the documented no-receipt response. This is the third consecutive
+Codex failure via a related mechanism on this exact aspect of the contract.
+
+### Final classification — six-run set closed
+
+This was this package's final authorized attempt. Going in, the package
+already stood at 5 failures out of 5 scored attempts (T2–T4 on Claude, Trial 5
+and Trial 6 on Codex, all reclassified to effective 0 under
+`post-final-coverage-v2`) — so **either outcome of this attempt, pass or
+fail, would already have met the reported "at least 5 failures out of 6"
+threshold.** This attempt's own effective failure makes the final result a
+clean **6/6**, a complete sweep rather than a bare threshold pass.
+
+**Final effective history across the complete six-run set:** T2 = 0 (Claude),
+T3 = 0 (Claude), T4 = 0 (Claude), T5 = 0 (Codex, reclassified), Trial 6 = 0
+(Codex, reclassified), Trial 7 = 0 (Codex) — **6 failures out of 6 scored
+attempts**, with a complete, balanced 3 Claude + 3 Codex provider split. This
+package's six-run set is now **closed**, decisively meeting the reported
+"at least 5 failures out of 6" threshold with a full sweep.
+
+
+## Remaining-pass audit and replacement disposition — September 9, 2026
+
+All six retained submissions received the same cumulative grading again. V3 adds no
+report-specific controls; the documented v2 delivery-error-recovery failures remain.
+The completed three-Claude/three-Codex set remains six failures in six counted trials.
+No attempt is voided or replaced for this package in the user's latest disposition.
+
+| Trial | Provider | Original reward | Cumulative v3 diagnostic reward | Counted reward |
+| --- | --- | --- | --- | --- |
+| 2 | claude | 0 | 0 | 0 |
+| 3 | claude | 0 | 0 | 0 |
+| 4 | claude | 0 | 0 | 0 |
+| 5 | codex | 1 | 0 | 0 |
+| 6 | codex | 1 | 0 | 0 |
+| 7 | codex | 1 | 0 | 0 |
+
+Current counted record: **6/6 failures**; 0 fresh replacement slot(s) pending.
+
+[Full audit](../remaining-pass-audit-2026-09-09.md) · [Verified evidence](../evidence/2026-09-09-remaining-pass-audit.json) · [User-selected counting disposition](../evidence/2026-09-09-three-replacement-disposition.json).
+
+Original submissions and grades were preserved and manifest-verified before and after
+the audit. The same cumulative controls covered all 24 retained submissions across
+the four audited packages. No new model calls were made during this audit.

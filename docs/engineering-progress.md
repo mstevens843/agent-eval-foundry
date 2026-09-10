@@ -2,6 +2,27 @@
 
 The goal is a portfolio of fair, useful tasks that agents genuinely fail—not a large pile of generated exercises or zero rewards caused by bad measurement. Progress includes discovering that a candidate is easy, identifying our own mistakes, and making the next decision better informed.
 
+## September 9: three finished finalists; three replacement slots prepared
+
+The final campaign completed all five attempted runs. Build and issued report have
+completed 6/6 failure sets; temporal capacity has completed 5/6. A subsequent audit
+reproduced three more false passes: cache T6/T7 and snapshot T4. It also repaired an
+omitted cache metadata check in our private verifier/reference coverage.
+
+At the user's request these three newly affected attempts are grading voids awaiting
+fresh Codex replacements. Cache is pending at 4/4 and snapshot at 4/5. Earlier agreed
+regrades remain counted. Snapshot T7 and temporal T7 survived the expanded audit.
+
+The replacement campaign is prepared for cache T8/T9 and snapshot T8, all concurrent
+with a cap of six. Preparation made zero provider calls. Every prior submission,
+raw reward and diagnostic regrade is preserved. The audit verified 24 records,
+50/50 private-oracle classifications and 29 passing-service replays.
+
+[Latest audit](../reports/screening/remaining-pass-audit-2026-09-09.md) ·
+[Current counting disposition](../reports/screening/evidence/2026-09-09-three-replacement-disposition.json) ·
+[Prepared handoff](three-replacements-handoff.md).
+The milestones below retain the findings known at each earlier point.
+
 ## September 9: six additional false passes confirmed
 
 The post-final audit reopened all four eliminated finalists through **six reproduced

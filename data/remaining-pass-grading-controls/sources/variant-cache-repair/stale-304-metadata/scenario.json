@@ -1,0 +1,26 @@
+{
+  "id": "stale-304-metadata",
+  "seed": 0,
+  "events": [
+    {
+      "id": "a",
+      "kind": "get",
+      "tier": "edge-a",
+      "path": "/revalidate",
+      "headers": {},
+      "now": 0
+    },
+    {
+      "id": "b",
+      "kind": "get",
+      "tier": "edge-a",
+      "path": "/revalidate",
+      "headers": {},
+      "now": 2
+    }
+  ],
+  "limits": {
+    "maxOriginRequests": 20,
+    "maxOriginBytes": 20000
+  }
+}

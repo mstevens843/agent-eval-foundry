@@ -1,0 +1,652 @@
+{
+  "schemaVersion": 1,
+  "campaign": "2026-09-09-post-final-five",
+  "evidenceClass": "real-provider-screening",
+  "label": "Post-final five: last authorized attempts under post-final-coverage-v2",
+  "gradingRevision": "post-final-coverage-v2",
+  "limitations": [
+    "Completes the final authorized attempt(s) for each of the four packages reopened by the post-final pass audit, under the cumulative effective-reward accounting (post-final-coverage-v2, which extends final-six-coverage-v1).",
+    "All five attempts were launched together (five concurrent, cap of six); both snapshot-recovery-repair attempts (Trials 6 and 7) ran independently and blind to one another, dispatched within the same launch batch, neither waiting on the other.",
+    "Grading applies both the original package grade and the cumulative supplemental grader to every submission; effectiveReward is the conjunction of the two. A base reward of 1 is not a final pass until the cumulative supplement also passes.",
+    "Every base service and base (original-bank) checker result in this batch was fully correct; all five effective-reward outcomes were determined entirely by the two new post-final-coverage-v2 supplemental controls per package.",
+    "This is the last authorized batch for these four packages: each package's six-run set is now closed (no further attempts remain authorized or possible under the fixed six-run design).",
+    "CLI dollar estimates (Claude runs only) are not subscription charges; billingMode was subscription-only with maxMicroUsd 0 and no paid API fallback. Requested model/effort are not independent backend attestations.",
+    "Solvers were given only the original public task inputs -- no access to any prior trial, analysis, either audit, or this campaign's operator handoff."
+  ],
+  "sourceDigest": "2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4",
+  "sourceProvenance": "Reused, byte-for-byte, the isolated runtime built and independently verified for the first round-two campaign. No new runtime was built for this campaign.",
+  "authorImage": "sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a",
+  "maxProviderCallsAuthorized": 5,
+  "providerCallsMade": 5,
+  "automaticRetries": 0,
+  "concurrencyCap": 6,
+  "packages": [
+    {
+      "id": "variant-cache-repair",
+      "analysis": "reports/screening/fourth-five/19-variant-cache-repair.md",
+      "classification": "cannot-reach-5-of-6",
+      "attempts": [
+        {
+          "trial": 7,
+          "target": "codex",
+          "recordedReward": 1,
+          "effectiveReward": 1,
+          "outcome": "semantic-pass",
+          "service": {
+            "scenarios": 25,
+            "failedScenarios": 0
+          },
+          "checker": {
+            "total": 15,
+            "correct": 15,
+            "missed": 0,
+            "falsePositives": 0,
+            "pass": true
+          },
+          "supplement": {
+            "schemaVersion": 1,
+            "gradingRevision": "post-final-coverage-v2",
+            "policySha256": "6b085af92e4b903f6b46cb93e430fafa946316818970c7eb89fd27b4298ac6d7",
+            "fixtureSha256s": [
+              "a9a2efdabde6ca65ebc4a51e0c42447ff6ca351df681ab4994135694709fcccb"
+            ],
+            "checkerSha256": "108b907c071b74daa3d861f39e02cd40d881f2d39c12b7f98ae0a6b32dfe70da",
+            "deterministic": true,
+            "exactTokens": true,
+            "reasonPolicy": "diagnostic-only",
+            "correct": 2,
+            "total": 2,
+            "pass": true,
+            "details": [
+              {
+                "token": "db141be670ff3bd75a54e983",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "9c644993125a14fb521924b6",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              }
+            ],
+            "observed": {
+              "first": {
+                "verdicts": {
+                  "db141be670ff3bd75a54e983": {
+                    "ok": true
+                  },
+                  "9c644993125a14fb521924b6": {
+                    "ok": true
+                  }
+                }
+              },
+              "second": {
+                "verdicts": {
+                  "db141be670ff3bd75a54e983": {
+                    "ok": true
+                  },
+                  "9c644993125a14fb521924b6": {
+                    "ok": true
+                  }
+                }
+              },
+              "mutated": false
+            }
+          },
+          "usage": {
+            "cachedInputTokens": 1252480,
+            "costUsd": null,
+            "inputTokens": 1384789,
+            "outputTokens": 38457,
+            "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+          },
+          "completionSha256": "7744062b2ddc978507e091021088925498e3206ddf1b9c9744f0f99315bb4c30",
+          "resultSha256": "a088e5a2ec0f6a806039b9f63f0348b7e5164e3510d6b2722d1545125db38a9d",
+          "gradeSha256": "424bb6b927b13607248732de51b8ab27864f8ec1d4730a070b83d115146a0f05",
+          "packageDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "manifestFilesVerified": 972,
+          "manifestBytesVerified": 59345897,
+          "cumulativeFailures": 4,
+          "cumulativeScored": 6
+        }
+      ],
+      "finalFailures": 4,
+      "finalScored": 6
+    },
+    {
+      "id": "issued-report-repair",
+      "analysis": "reports/screening/fifth-five/25-issued-report-repair.md",
+      "classification": "meets-5-of-6",
+      "attempts": [
+        {
+          "trial": 7,
+          "target": "codex",
+          "recordedReward": 1,
+          "effectiveReward": 0,
+          "outcome": "semantic-pass",
+          "service": {
+            "scenarios": 27,
+            "failedScenarios": 0
+          },
+          "checker": {
+            "total": 14,
+            "correct": 14,
+            "missed": 0,
+            "falsePositives": 0,
+            "pass": true
+          },
+          "supplement": {
+            "schemaVersion": 1,
+            "gradingRevision": "post-final-coverage-v2",
+            "policySha256": "6b085af92e4b903f6b46cb93e430fafa946316818970c7eb89fd27b4298ac6d7",
+            "fixtureSha256s": [
+              "a43b1220648553e2e3bda939778db3e2ab3db966d027e5f52b5b515f2cb25f70"
+            ],
+            "checkerSha256": "a5f22a1468673624c04dd0027d38beb537cee6457058b8ccf1b9f4ed83f491b8",
+            "deterministic": true,
+            "exactTokens": true,
+            "reasonPolicy": "diagnostic-only",
+            "correct": 1,
+            "total": 2,
+            "pass": false,
+            "details": [
+              {
+                "token": "225c4a714b06230d28229f58",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "93001fb54b889f98414aa81d",
+                "expectedOk": true,
+                "actualOk": false,
+                "correct": false
+              }
+            ],
+            "observed": {
+              "first": {
+                "verdicts": {
+                  "225c4a714b06230d28229f58": {
+                    "ok": true
+                  },
+                  "93001fb54b889f98414aa81d": {
+                    "ok": false,
+                    "reasons": [
+                      "cell 0: deliver call was not stored",
+                      "cell 0: deliver calls do not match required receipts"
+                    ]
+                  }
+                }
+              },
+              "second": {
+                "verdicts": {
+                  "225c4a714b06230d28229f58": {
+                    "ok": true
+                  },
+                  "93001fb54b889f98414aa81d": {
+                    "ok": false,
+                    "reasons": [
+                      "cell 0: deliver call was not stored",
+                      "cell 0: deliver calls do not match required receipts"
+                    ]
+                  }
+                }
+              },
+              "mutated": false
+            }
+          },
+          "usage": {
+            "cachedInputTokens": 353664,
+            "costUsd": null,
+            "inputTokens": 402770,
+            "outputTokens": 22836,
+            "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+          },
+          "completionSha256": "ca4c8bdf4650e2e0cef100863de728ecdbe4a4a28460d9607feb8eee9a208eb1",
+          "resultSha256": "46084d0d30c594a398c496aaffa743965e60fc05db8021bcae95b93107a7150c",
+          "gradeSha256": "baa3de2f18fb7494bd5791ffe0bdfe5029060269131ad9119baa7161e32cda65",
+          "packageDigest": "32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "manifestFilesVerified": 829,
+          "manifestBytesVerified": 8956510,
+          "cumulativeFailures": 6,
+          "cumulativeScored": 6
+        }
+      ],
+      "finalFailures": 6,
+      "finalScored": 6
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "analysis": "reports/screening/next-five/10-temporal-capacity-repair.md",
+      "classification": "meets-5-of-6",
+      "attempts": [
+        {
+          "trial": 7,
+          "target": "codex",
+          "recordedReward": 1,
+          "effectiveReward": 1,
+          "outcome": "semantic-pass",
+          "service": {
+            "scenarios": 34,
+            "failedScenarios": 0
+          },
+          "checker": {
+            "total": 13,
+            "correct": 13,
+            "missed": 0,
+            "falsePositives": 0,
+            "pass": true
+          },
+          "supplement": {
+            "schemaVersion": 1,
+            "gradingRevision": "post-final-coverage-v2",
+            "policySha256": "6b085af92e4b903f6b46cb93e430fafa946316818970c7eb89fd27b4298ac6d7",
+            "fixtureSha256s": [
+              "a649e4df717702949d1f6f60c26b83b760010545d82986bc8c77fd6bfe6d83d4",
+              "00beef9ffb1f275f38c971bfddc53e39ad981af71360169793d50a02f4c0737c"
+            ],
+            "checkerSha256": "924c9e82b9982be415866d01c3fe91b4625e8678f71a2eb0ce45cb7585e9e1e7",
+            "deterministic": true,
+            "exactTokens": true,
+            "reasonPolicy": "diagnostic-only",
+            "correct": 4,
+            "total": 4,
+            "pass": true,
+            "details": [
+              {
+                "token": "f7102606e878dd7a8e7bb840",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "f6508a8a65d57cef7ad56407",
+                "expectedOk": false,
+                "actualOk": false,
+                "correct": true
+              },
+              {
+                "token": "4ad0610014321106d71c833f",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "395b9126fdf0dbaa04802787",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              }
+            ],
+            "observed": {
+              "first": {
+                "verdicts": {
+                  "f7102606e878dd7a8e7bb840": {
+                    "ok": true
+                  },
+                  "f6508a8a65d57cef7ad56407": {
+                    "ok": false,
+                    "reasons": [
+                      "cell 0: pagination was not started at the null cursor"
+                    ]
+                  },
+                  "4ad0610014321106d71c833f": {
+                    "ok": true
+                  },
+                  "395b9126fdf0dbaa04802787": {
+                    "ok": true
+                  }
+                }
+              },
+              "second": {
+                "verdicts": {
+                  "f7102606e878dd7a8e7bb840": {
+                    "ok": true
+                  },
+                  "f6508a8a65d57cef7ad56407": {
+                    "ok": false,
+                    "reasons": [
+                      "cell 0: pagination was not started at the null cursor"
+                    ]
+                  },
+                  "4ad0610014321106d71c833f": {
+                    "ok": true
+                  },
+                  "395b9126fdf0dbaa04802787": {
+                    "ok": true
+                  }
+                }
+              },
+              "mutated": false
+            }
+          },
+          "usage": {
+            "cachedInputTokens": 209664,
+            "costUsd": null,
+            "inputTokens": 232169,
+            "outputTokens": 12460,
+            "source": "codex `turn.completed` usage; the Codex CLI reports tokens and never a price"
+          },
+          "completionSha256": "fbf325034a7ea35c5e45d5753a8d43ae05708c531107c35a57da348c4bdf6d37",
+          "resultSha256": "cd6f78aedad1c2381723118b54432f4db9867b657263a23286c01c10129f25a7",
+          "gradeSha256": "0e306a47f676db83ee284a736c02b400933d610691a79bb13f84db17386a12ff",
+          "packageDigest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "manifestFilesVerified": 848,
+          "manifestBytesVerified": 3802104,
+          "cumulativeFailures": 5,
+          "cumulativeScored": 6
+        }
+      ],
+      "finalFailures": 5,
+      "finalScored": 6
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "analysis": "reports/screening/third-five/11-snapshot-recovery-repair.md",
+      "classification": "cannot-reach-5-of-6",
+      "attempts": [
+        {
+          "trial": 6,
+          "target": "claude",
+          "recordedReward": 1,
+          "effectiveReward": 0,
+          "outcome": "semantic-pass",
+          "service": {
+            "scenarios": 33,
+            "failedScenarios": 0
+          },
+          "checker": {
+            "total": 12,
+            "correct": 12,
+            "missed": 0,
+            "falsePositives": 0,
+            "pass": true
+          },
+          "supplement": {
+            "schemaVersion": 1,
+            "gradingRevision": "post-final-coverage-v2",
+            "policySha256": "6b085af92e4b903f6b46cb93e430fafa946316818970c7eb89fd27b4298ac6d7",
+            "fixtureSha256s": [
+              "7d3fb7543e243a7d37ecad8d0d579629edfc8e1fbcf1104ffe9469100c3558d7",
+              "c55f090a922cb29f91f5d5a45a0fb2d1dee30b20230495ac5a6df0323e55325c"
+            ],
+            "checkerSha256": "7e5e9cbc122e2e27c6deede56942875beb5275f4b56f6b36026672da4930addc",
+            "deterministic": true,
+            "exactTokens": true,
+            "reasonPolicy": "diagnostic-only",
+            "correct": 3,
+            "total": 4,
+            "pass": false,
+            "details": [
+              {
+                "token": "60ef8f7b2097c4c934031a11",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "0021c8f79876bc501f21eeff",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "061441bce76280e001c9980c",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "617d7a6c7ad87c9ea0833f65",
+                "expectedOk": false,
+                "actualOk": true,
+                "correct": false
+              }
+            ],
+            "observed": {
+              "first": {
+                "verdicts": {
+                  "60ef8f7b2097c4c934031a11": {
+                    "ok": true,
+                    "reasons": [
+                      "every cell reproduces the requested point exactly once"
+                    ]
+                  },
+                  "0021c8f79876bc501f21eeff": {
+                    "ok": true,
+                    "reasons": [
+                      "every cell reproduces the requested point exactly once"
+                    ]
+                  },
+                  "061441bce76280e001c9980c": {
+                    "ok": true,
+                    "reasons": [
+                      "every cell reproduces the requested point exactly once"
+                    ]
+                  },
+                  "617d7a6c7ad87c9ea0833f65": {
+                    "ok": true,
+                    "reasons": [
+                      "every cell reproduces the requested point exactly once"
+                    ]
+                  }
+                }
+              },
+              "second": {
+                "verdicts": {
+                  "60ef8f7b2097c4c934031a11": {
+                    "ok": true,
+                    "reasons": [
+                      "every cell reproduces the requested point exactly once"
+                    ]
+                  },
+                  "0021c8f79876bc501f21eeff": {
+                    "ok": true,
+                    "reasons": [
+                      "every cell reproduces the requested point exactly once"
+                    ]
+                  },
+                  "061441bce76280e001c9980c": {
+                    "ok": true,
+                    "reasons": [
+                      "every cell reproduces the requested point exactly once"
+                    ]
+                  },
+                  "617d7a6c7ad87c9ea0833f65": {
+                    "ok": true,
+                    "reasons": [
+                      "every cell reproduces the requested point exactly once"
+                    ]
+                  }
+                }
+              },
+              "mutated": false
+            }
+          },
+          "usage": {
+            "cachedInputTokens": 3787448,
+            "costUsd": 7.483969999999999,
+            "inputTokens": 3966705,
+            "outputTokens": 151876,
+            "source": "claude `result` event `usage` and `total_cost_usd`"
+          },
+          "completionSha256": "f83eb12a4e4fef2b2d6e75759bae5dfb3b519f82effc91a87e0d595ca29ec801",
+          "resultSha256": "c76aedea0faa8c201a0a0ba443d9b38c45e212dce612bef0e0db62b8ef00ffaf",
+          "gradeSha256": "a0ffadc5012ac85ec683a1097998828ddcb035ab6a1f59843809104025093387",
+          "packageDigest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "manifestFilesVerified": 829,
+          "manifestBytesVerified": 4778327,
+          "cumulativeFailures": 4,
+          "cumulativeScored": 5
+        },
+        {
+          "trial": 7,
+          "target": "claude",
+          "recordedReward": 1,
+          "effectiveReward": 1,
+          "outcome": "semantic-pass",
+          "service": {
+            "scenarios": 33,
+            "failedScenarios": 0
+          },
+          "checker": {
+            "total": 12,
+            "correct": 12,
+            "missed": 0,
+            "falsePositives": 0,
+            "pass": true
+          },
+          "supplement": {
+            "schemaVersion": 1,
+            "gradingRevision": "post-final-coverage-v2",
+            "policySha256": "6b085af92e4b903f6b46cb93e430fafa946316818970c7eb89fd27b4298ac6d7",
+            "fixtureSha256s": [
+              "7d3fb7543e243a7d37ecad8d0d579629edfc8e1fbcf1104ffe9469100c3558d7",
+              "c55f090a922cb29f91f5d5a45a0fb2d1dee30b20230495ac5a6df0323e55325c"
+            ],
+            "checkerSha256": "8a97e65102a8731bf19896dc0b8ad612288467a04507bed685d77c552c1af556",
+            "deterministic": true,
+            "exactTokens": true,
+            "reasonPolicy": "diagnostic-only",
+            "correct": 4,
+            "total": 4,
+            "pass": true,
+            "details": [
+              {
+                "token": "60ef8f7b2097c4c934031a11",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "0021c8f79876bc501f21eeff",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "061441bce76280e001c9980c",
+                "expectedOk": true,
+                "actualOk": true,
+                "correct": true
+              },
+              {
+                "token": "617d7a6c7ad87c9ea0833f65",
+                "expectedOk": false,
+                "actualOk": false,
+                "correct": true
+              }
+            ],
+            "observed": {
+              "first": {
+                "verdicts": {
+                  "60ef8f7b2097c4c934031a11": {
+                    "ok": true
+                  },
+                  "0021c8f79876bc501f21eeff": {
+                    "ok": true
+                  },
+                  "061441bce76280e001c9980c": {
+                    "ok": true
+                  },
+                  "617d7a6c7ad87c9ea0833f65": {
+                    "ok": false,
+                    "reasons": [
+                      "cell 0: published restore accounts: missing (1,\"001\")",
+                      "cell 0: published restore accounts: unexpected (1,\"1\")",
+                      "cell 0: backup accounts: missing (1,\"001\")",
+                      "cell 0: backup accounts: unexpected (1,\"1\")",
+                      "cell 0: committed restore accounts: missing (1,\"001\")",
+                      "cell 0: committed restore accounts: unexpected (1,\"1\")"
+                    ]
+                  }
+                }
+              },
+              "second": {
+                "verdicts": {
+                  "60ef8f7b2097c4c934031a11": {
+                    "ok": true
+                  },
+                  "0021c8f79876bc501f21eeff": {
+                    "ok": true
+                  },
+                  "061441bce76280e001c9980c": {
+                    "ok": true
+                  },
+                  "617d7a6c7ad87c9ea0833f65": {
+                    "ok": false,
+                    "reasons": [
+                      "cell 0: published restore accounts: missing (1,\"001\")",
+                      "cell 0: published restore accounts: unexpected (1,\"1\")",
+                      "cell 0: backup accounts: missing (1,\"001\")",
+                      "cell 0: backup accounts: unexpected (1,\"1\")",
+                      "cell 0: committed restore accounts: missing (1,\"001\")",
+                      "cell 0: committed restore accounts: unexpected (1,\"1\")"
+                    ]
+                  }
+                }
+              },
+              "mutated": false
+            }
+          },
+          "usage": {
+            "cachedInputTokens": 4942159,
+            "costUsd": 6.781770499999999,
+            "inputTokens": 5094782,
+            "outputTokens": 111353,
+            "source": "claude `result` event `usage` and `total_cost_usd`"
+          },
+          "completionSha256": "20b9ba1be744e03a59562cfeb8f66993f5be3595d4804ee415b87bde7def5f4c",
+          "resultSha256": "6af2d6aa3498997721041dbb2ee83cb0d31e26163cf30a1bed3ccbfb842e5f6a",
+          "gradeSha256": "a0ffadc5012ac85ec683a1097998828ddcb035ab6a1f59843809104025093387",
+          "packageDigest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "manifestFilesVerified": 785,
+          "manifestBytesVerified": 4660055,
+          "cumulativeFailures": 4,
+          "cumulativeScored": 6
+        }
+      ],
+      "finalFailures": 4,
+      "finalScored": 6
+    }
+  ],
+  "acceptanceTarget": {
+    "source": "User-reported CEO acceptance criterion",
+    "minimumFailures": 5,
+    "totalScoredTrials": 6,
+    "claudeTrials": 3,
+    "codexTrials": 3,
+    "unchangedPackage": true,
+    "consecutiveFailuresRequired": false
+  },
+  "classificationSummary": {
+    "meetsFiveOfSix": [
+      "issued-report-repair",
+      "temporal-capacity-repair"
+    ],
+    "cannotReachFiveOfSix": [
+      "variant-cache-repair",
+      "snapshot-recovery-repair"
+    ],
+    "unresolvedInfrastructure": []
+  },
+  "auditReference": {
+    "document": "post-final-pass-audit-2026-09-09.md",
+    "evidence": "evidence/2026-09-09-post-final-pass-audit.json",
+    "gradingRevision": "post-final-coverage-v2"
+  },
+  "audit": {
+    "checkedAt": "2026-09-10T01:32:08.092Z",
+    "newModelCalls": 0,
+    "manifestFilesVerified": 4263,
+    "manifestBytesVerified": 81542893,
+    "errors": []
+  }
+}

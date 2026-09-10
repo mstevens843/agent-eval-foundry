@@ -64,6 +64,13 @@ export const SCREENING_FOLLOWUPS = [
   "evidence/2026-09-09-final-six.json",
   "post-final-pass-audit-2026-09-09.md",
   "evidence/2026-09-09-post-final-pass-audit.json",
+  "evidence/2026-09-09-post-final-five-preparation.json",
+  "post-final-five-2026-09-09.md",
+  "evidence/2026-09-09-post-final-five.json",
+  "remaining-pass-audit-2026-09-09.md",
+  "evidence/2026-09-09-remaining-pass-audit.json",
+  "evidence/2026-09-09-three-replacement-disposition.json",
+  "evidence/2026-09-09-three-replacements-preparation.json",
 ];
 
 export function verifyPublication(root = process.cwd()) {
@@ -749,6 +756,172 @@ export function verifyPublication(root = process.cwd()) {
     effectivePasses: finalSix.successorTotals.effectivePasses - postCorrections.length,
   });
   assert(!/\/Users\/|\.local\//.test(JSON.stringify(postAudit)), "Nonportable/private post-final evidence");
+  const postPrepared = read("reports/screening/evidence/2026-09-09-post-final-five-preparation.json");
+  assert.equal(postPrepared.maxConcurrent, 6);
+  assert.equal(postPrepared.plannedConcurrentAttempts, 5);
+  assert.equal(postPrepared.maxProviderCalls, 5);
+  assert.equal(postPrepared.providerCallsMadeByPreparation, 0);
+  assert.equal(postPrepared.automaticRetries, false);
+  assert.equal(postPrepared.allSlotsStartTogether, true);
+  assert.equal(postPrepared.snapshotTrialsIndependentAndUnconditional, true);
+  assert.equal(postPrepared.gradingRevision, postAudit.gradingRevision);
+  assert.equal(postPrepared.auditSha256, sha("reports/screening/evidence/2026-09-09-post-final-pass-audit.json"));
+  assert.equal(postPrepared.originalPreparationSha256, sha("reports/screening/evidence/2026-09-09-final-six-preparation.json"));
+  assert.equal(postPrepared.policySha256, postAudit.policy.sha256);
+  assert.equal(postPrepared.graderSha256, postAudit.runnerSha256);
+  assert.equal(postPrepared.runnerSha256, sha("scripts/run-post-final-five.mjs"));
+  assert.deepEqual(postPrepared.packages, postAudit.classifications.filter(p => p.classification === "reopened"));
+  assert.deepEqual(postPrepared.slots.map(s => [s.id, s.trial, s.target]), [
+    ["variant-cache-repair", 7, "codex"], ["issued-report-repair", 7, "codex"],
+    ["temporal-capacity-repair", 7, "codex"],
+    ["snapshot-recovery-repair", 6, "claude"], ["snapshot-recovery-repair", 7, "claude"],
+  ]);
+  for (const slot of postPrepared.slots) {
+    const original = finalPrepared.packages.find(p => p.id === slot.id);
+    const frozen = original.slots.find(s => s.trial === slot.trial);
+    assert.deepEqual(slot, {...frozen, id: original.id, target: original.target,
+      analysis: original.analysis, packageDigest: original.packageDigest,
+      profileDigest: original.profileDigest, instructionSha256: original.instructionSha256});
+  }
+  const postFinal = read("reports/screening/evidence/2026-09-09-post-final-five.json");
+  assert.equal(postFinal.gradingRevision, "post-final-coverage-v2");
+  assert.equal(postFinal.automaticRetries, 0);
+  assert.equal(postFinal.maxProviderCallsAuthorized, 5);
+  assert.equal(postFinal.providerCallsMade, 5);
+  assert.equal(postFinal.concurrencyCap, 6);
+  assert.equal(postFinal.packages.length, 4);
+  assert.deepEqual(postFinal.packages.map((p) => p.id).sort(), postPrepared.packages.map((p) => p.id).sort());
+  let postFinalFiles = 0;
+  let postFinalBytes = 0;
+  let postFinalAttempts = 0;
+  for (const record of postFinal.packages) {
+    const plan = postPrepared.packages.find((p) => p.id === record.id);
+    assert.ok(plan, "post-final result must extend a reopened package");
+    assert.ok(readFileSync(join(root, record.analysis), "utf8").includes("post-final-coverage-v2 campaign"));
+    let failures = plan.failures;
+    let scored = plan.scored;
+    for (const a of record.attempts) {
+      postFinalAttempts++;
+      assert([0, 1].includes(a.recordedReward));
+      assert.equal(a.checker.pass, a.checker.correct === a.checker.total && a.checker.missed === 0 && a.checker.falsePositives === 0);
+      assert.equal(a.supplement.pass, a.supplement.deterministic && a.supplement.exactTokens && a.supplement.correct === a.supplement.total);
+      assert.equal(a.effectiveReward, Math.min(a.recordedReward, a.supplement.pass ? 1 : 0));
+      scored++;
+      if (a.effectiveReward === 0) failures++;
+      assert.equal(a.cumulativeFailures, failures);
+      assert.equal(a.cumulativeScored, scored);
+      for (const key of ["completionSha256", "resultSha256", "gradeSha256", "packageDigest", "profileDigest"])
+        assert.match(a[key], hash, `${record.id} Trial ${a.trial}: ${key}`);
+      assert.ok(a.manifestFilesVerified > 0 && a.manifestBytesVerified > 0);
+      postFinalFiles += a.manifestFilesVerified;
+      postFinalBytes += a.manifestBytesVerified;
+    }
+    assert.equal(scored, 6, `${record.id}: post-final campaign must close a complete six-run set`);
+    assert.equal(record.finalFailures, failures);
+    assert.equal(record.finalScored, scored);
+    if (record.classification === "meets-5-of-6") assert.ok(failures >= 5);
+    else if (record.classification === "cannot-reach-5-of-6") assert.ok(failures < 5);
+    else assert.equal(record.classification, "unresolved-infrastructure");
+    assert.ok(!/\/Users\/|\.local\//.test(JSON.stringify(record)), "nonportable/private post-final-five record");
+  }
+  assert.equal(postFinalAttempts, 5);
+  assert.equal(postFinal.audit.manifestFilesVerified, postFinalFiles);
+  assert.equal(postFinal.audit.manifestBytesVerified, postFinalBytes);
+  assert.equal(postFinal.audit.newModelCalls, 0);
+  assert.deepEqual(postFinal.audit.errors, []);
+  assert.deepEqual(postFinal.classificationSummary.meetsFiveOfSix.sort(), ["issued-report-repair", "temporal-capacity-repair"].sort());
+  assert.deepEqual(postFinal.classificationSummary.cannotReachFiveOfSix.sort(), ["variant-cache-repair", "snapshot-recovery-repair"].sort());
+  assert.deepEqual(postFinal.classificationSummary.unresolvedInfrastructure, []);
+  const remainingAudit = read("reports/screening/evidence/2026-09-09-remaining-pass-audit.json");
+  assert.equal(remainingAudit.providerCallsMade, 0);
+  assert.equal(remainingAudit.gradingRevision, "remaining-pass-coverage-v3");
+  assert.equal(remainingAudit.previousEvidence.sha256, sha(remainingAudit.previousEvidence.path));
+  assert.equal(remainingAudit.policy.sha256, sha(remainingAudit.policy.path));
+  assert.equal(remainingAudit.runnerSha256, sha("scripts/grade-remaining-pass-supplement.mjs"));
+  assert.equal(remainingAudit.reproductionSha256, sha("scripts/reproduce-remaining-pass-audit.mjs"));
+  assert.equal(remainingAudit.authorityPatch.sha256, sha(remainingAudit.authorityPatch.path));
+  const remainingPolicy = read(remainingAudit.policy.path);
+  assert.equal(remainingPolicy.extends.sha256, sha(remainingPolicy.extends.path));
+  for (const c of remainingPolicy.controls) assert.equal(c.sha256, sha(c.fixture));
+  for (const c of remainingAudit.generated) {
+    assert.equal(c.sourceSha256, sha(c.sourcePath));
+    assert.equal(c.scenarioSha256, sha(c.scenarioPath));
+  }
+  const latestOriginals = postFinal.packages.flatMap(p => p.attempts.map(a => ({...a,id:p.id,reward:a.recordedReward})));
+  const allOriginals = [...successorRecords, ...latestOriginals];
+  assert.equal(remainingAudit.rows.length, 24);
+  for (const id of auditedIds) {
+    const rows = remainingAudit.rows.filter(r=>r.id===id);
+    assert.deepEqual(rows.map(r=>r.trial),[2,3,4,5,6,7]);
+    assert.equal(new Set(rows.map(r=>r.publicContractSha256)).size,1);
+    assert.equal(new Set(rows.map(r=>r.instructionSha256)).size,1);
+    for (const r of rows) {
+      const original=allOriginals.find(p=>p.id===id&&p.resultSha256===r.resultSha256&&p.completionSha256===r.completionSha256&&p.gradeSha256===r.gradeSha256);
+      assert(original,"Regrade must bind to the original submitted artifact");
+      assert.equal(original.reward,r.recordedReward);assert.equal(original.packageDigest,r.packageDigest);assert.equal(original.target,r.provider);
+      const previous=postFinal.packages.find(p=>p.id===id).attempts.find(a=>a.trial===r.trial)
+        ?? postAudit.rows.find(a=>a.id===id&&a.trial===r.trial);
+      assert.equal(r.previousEffectiveReward,previous.effectiveReward);
+      const wanted=[...policy.controls,...postPolicy.controls,...remainingPolicy.controls].filter(c=>c.id===id).flatMap(c=>c.expected).map(({token,ok})=>({token,ok}));
+      assert.deepEqual(r.supplement.details.map(d=>({token:d.token,ok:d.expectedOk})),wanted);
+      for(const d of r.supplement.details)assert.equal(d.correct,d.actualOk===d.expectedOk);
+      assert.equal(r.supplement.correct,r.supplement.details.filter(d=>d.correct).length);
+      assert.equal(r.supplement.total,wanted.length);
+      assert.equal(r.supplement.pass,r.supplement.deterministic&&r.supplement.exactTokens&&r.supplement.correct===r.supplement.total);
+      assert.equal(r.effectiveReward,Math.min(r.recordedReward,r.supplement.pass?1:0));
+    }
+  }
+  assert.deepEqual(remainingAudit.correctedPasses.map(r=>[r.id,r.trial]),[
+    ["variant-cache-repair",6],["variant-cache-repair",7],["snapshot-recovery-repair",4],
+  ]);
+  assert.equal(remainingAudit.oracles.reduce((n,o)=>n+o.total,0),50);
+  assert(remainingAudit.oracles.every(o=>o.pass&&o.correct===o.total));
+  assert.equal(remainingAudit.serviceChecks.length,29);
+  assert(remainingAudit.serviceChecks.every(s=>s.correctedStatus==="semantic-pass"));
+  assert.equal(remainingAudit.manifests.recordsVerified,24);
+  assert.equal(remainingAudit.manifests.verifiedBeforeAndAfter,true);
+  assert.deepEqual(remainingAudit.manifests.errors,[]);
+  const disposition=read("reports/screening/evidence/2026-09-09-three-replacement-disposition.json");
+  assert.equal(disposition.audit.sha256,sha(disposition.audit.path));
+  assert.equal(disposition.providerCallsMade,0);
+  for(const p of disposition.packages){
+    const audited=remainingAudit.classifications.find(a=>a.id===p.id);
+    assert.equal(p.scored,p.countedAttempts.length);
+    assert.equal(p.failures,p.countedAttempts.filter(a=>a.countedReward===0).length);
+    assert.equal(p.remaining,6-p.scored);
+    const both=[...p.countedAttempts,...p.voidAttempts].sort((a,b)=>a.trial-b.trial);
+    assert.deepEqual(both.map(a=>a.trial),[2,3,4,5,6,7]);
+    assert.deepEqual(both.map(a=>a.recordedReward),audited.recordedHistory);
+    assert.deepEqual(both.map(a=>a.auditEffectiveReward),audited.effectiveHistory);
+    for(const a of p.countedAttempts)assert.equal(a.countedReward,a.auditEffectiveReward);
+    for(const a of p.voidAttempts){assert.equal(a.countedReward,null);assert(remainingAudit.correctedPasses.some(r=>r.id===p.id&&r.trial===a.trial));}
+    if(p.remaining===0){assert(p.failures>=5);assert.deepEqual(p.attemptsByProvider,{claude:3,codex:3});}
+  }
+  assert.deepEqual(disposition.packages.map(p=>[p.id,p.failures,p.scored]),[
+    ["incremental-build-repair",6,6],["variant-cache-repair",4,4],["issued-report-repair",6,6],["temporal-capacity-repair",5,6],["snapshot-recovery-repair",4,5],
+  ]);
+  const replacements=read("reports/screening/evidence/2026-09-09-three-replacements-preparation.json");
+  assert.equal(replacements.auditSha256,sha("reports/screening/evidence/2026-09-09-three-replacement-disposition.json"));
+  assert.equal(replacements.runnerSha256,sha("scripts/run-three-replacements.mjs"));
+  assert.equal(replacements.graderSha256,remainingAudit.runnerSha256);
+  assert.equal(replacements.serviceGraderSha256,sha("scripts/replay-remaining-service-coverage.mjs"));
+  assert.equal(replacements.policySha256,remainingAudit.policy.sha256);
+  assert.equal(replacements.providerCallsMadeByPreparation,0);
+  assert.equal(replacements.maxConcurrent,6);assert.equal(replacements.maxProviderCalls,3);
+  assert.deepEqual(replacements.slots.map(({id,trial,replacesTrial,target})=>({id,trial,replacesTrial,target})),disposition.replacementSlots);
+  assert.deepEqual(replacements.packages,disposition.packages.filter(p=>p.remaining>0));
+  const voidCount=disposition.packages.reduce((n,p)=>n+p.voidAttempts.length,0);
+  assert.equal(disposition.totals.gradingVoids,voidCount);
+  assert.equal(disposition.totals.countedTrials,allOriginals.filter(p=>p.reward!==null).length-voidCount);
+  assert.equal(disposition.totals.effectiveFailures,remainingAudit.successorTotals.effectiveFailures-voidCount);
+  assert.equal(disposition.totals.effectivePasses,remainingAudit.successorTotals.effectivePasses);
+  assert.equal(disposition.totals.countedTrials,disposition.totals.effectiveFailures+disposition.totals.effectivePasses);
+  assert.equal(disposition.totals.completedFinalistsMeetingTarget,disposition.packages.filter(p=>p.remaining===0&&p.failures>=5).length);
+  assert.equal(disposition.totals.pendingFinalists,replacements.packages.length);
+  assert.equal(disposition.totals.remainingReplacementAttempts,replacements.slots.length);
+  assert(!/\/Users\/|\.local\//.test(JSON.stringify(remainingAudit)),"Nonportable audit evidence");
+  successorRecords.push(...latestOriginals);
+  retrialVerifiedFiles += postFinalFiles;
   const successorPackageIds = new Set(successorRecords.map((p) => p.id));
   const scoredPackageIds = new Set(successorRecords.filter((p) => p.reward !== null).map((p) => p.id));
   assert.deepEqual([...successorPackageIds].sort(), [...ids].sort(), "every package has a Trial 2 record");
@@ -772,6 +945,8 @@ export function verifyPublication(root = process.cwd()) {
     "docs/round-four-failing-five-handoff.md",
     "docs/round-five-continuing-four-handoff.md",
     "docs/final-six-handoff.md",
+    "docs/post-final-five-handoff.md",
+    "docs/three-replacements-handoff.md",
     "docs/engineering-progress.md",
     "docs/artifact-lifecycle.md",
     "reports/PORTFOLIO-PUBLICATION.md",
@@ -830,8 +1005,18 @@ export function verifyPublication(root = process.cwd()) {
     postFinalReopenedPackages: postAudit.classifications.filter(p => p.classification === "reopened").length,
     postFinalFiveFailuresPendingBalance: postAudit.classifications.filter(p => p.failures >= 5 && p.scored < 6).length,
     postFinalRemainingSlots: postAudit.classifications.reduce((n, p) => n + p.remaining, 0),
-    successorEffectiveZeroRewards: postAudit.successorTotals.effectiveFailures,
-    successorEffectivePasses: postAudit.successorTotals.effectivePasses,
+    postFinalFiveAttemptsMade: postFinalAttempts,
+    postFinalFiveMeetsFiveOfSix: postFinal.classificationSummary.meetsFiveOfSix.length,
+    postFinalFiveCannotReachFiveOfSix: postFinal.classificationSummary.cannotReachFiveOfSix.length,
+    postFinalFiveUnresolvedInfrastructure: postFinal.classificationSummary.unresolvedInfrastructure.length,
+    successorEffectiveZeroRewards: disposition.totals.effectiveFailures,
+    successorEffectivePasses: disposition.totals.effectivePasses,
+    successorCountedTrials: disposition.totals.countedTrials,
+    successorGradingVoids: disposition.totals.gradingVoids,
+    remainingAuditAdditionalFalsePasses: remainingAudit.correctedPasses.length,
+    completedFinalistsMeetingTarget: disposition.totals.completedFinalistsMeetingTarget,
+    pendingFinalists: disposition.totals.pendingFinalists,
+    preparedReplacementAttempts: replacements.slots.length,
     manifestListedFilesVerifiedAtPublication: verifiedFiles,
     successorTrials: successorRecords.length,
     successorPackages: successorPackageIds.size,

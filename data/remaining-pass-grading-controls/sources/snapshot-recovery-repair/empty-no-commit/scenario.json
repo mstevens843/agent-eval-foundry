@@ -1,0 +1,22 @@
+{
+  "id": "empty-no-commit",
+  "tenant": "tenant",
+  "branch": "main",
+  "cutoff": 1,
+  "catalog": [
+    {
+      "id": "cp",
+      "tenant": "tenant",
+      "branch": "main",
+      "at": 1,
+      "lsn": 1,
+      "digest": "cea0f39ffa3ad2cd377fb3d726c6fa1e1e33eb991495421857a358a203280599",
+      "size": 39
+    }
+  ],
+  "blobs": {
+    "cea0f39ffa3ad2cd377fb3d726c6fa1e1e33eb991495421857a358a203280599": "eyJhY2NvdW50cyI6W10sImVudHJpZXMiOltdLCJuZXh0SWQiOjF9"
+  },
+  "cache": {},
+  "logs": []
+}

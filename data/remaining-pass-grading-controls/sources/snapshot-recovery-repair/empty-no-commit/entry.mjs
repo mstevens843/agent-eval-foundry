@@ -1,0 +1,1 @@
+export const subject={async run(view,api){const cp=view.catalog[0];const response=await api.fetch({digest:cp.digest});const s=JSON.parse(Buffer.from(response.bytes,'base64'));await api.archive({bytes:Buffer.from(JSON.stringify({tenant:view.tenant,branch:view.branch,cutoff:view.cutoff,...s})).toString('base64')});return api.publish({});}};

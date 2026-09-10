@@ -1,0 +1,1 @@
+import{subject as reference}from'./reference-entry.mjs';export const subject={async run(view,api){await api.archive({bytes:Buffer.from('{}').toString('base64')});return reference.run(view,api);}};

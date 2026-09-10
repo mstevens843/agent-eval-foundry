@@ -1,0 +1,74 @@
+{
+  "id": "noncanonical-total",
+  "rows": [
+    {
+      "series": "s",
+      "key": "a",
+      "revision": 1,
+      "knownAt": 0,
+      "from": -32,
+      "to": 64,
+      "value": "90071992547409931234567890"
+    },
+    {
+      "series": "s",
+      "key": "a",
+      "revision": 2,
+      "knownAt": 2,
+      "from": 0,
+      "to": 3,
+      "value": "0007"
+    },
+    {
+      "series": "s",
+      "key": "b",
+      "revision": 1,
+      "knownAt": 0,
+      "from": -1,
+      "to": 4,
+      "value": "11"
+    },
+    {
+      "series": "s",
+      "key": "b",
+      "revision": 2,
+      "knownAt": 3,
+      "from": -1,
+      "to": 4,
+      "value": null
+    },
+    {
+      "series": "other",
+      "key": "a",
+      "revision": 1,
+      "knownAt": 0,
+      "from": -32,
+      "to": 64,
+      "value": "42"
+    }
+  ],
+  "queries": [
+    {
+      "id": "__proto__",
+      "series": "s",
+      "knownAt": 0,
+      "from": -32,
+      "to": 64
+    },
+    {
+      "id": "constructor",
+      "series": "s",
+      "knownAt": 2,
+      "from": -32,
+      "to": 64
+    },
+    {
+      "id": "q",
+      "series": "s",
+      "knownAt": 3,
+      "from": -32,
+      "to": 64
+    }
+  ],
+  "pageSize": 2
+}

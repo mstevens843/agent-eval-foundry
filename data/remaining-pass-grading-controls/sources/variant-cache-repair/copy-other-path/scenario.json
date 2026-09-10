@@ -1,0 +1,26 @@
+{
+  "id": "copy-other-path",
+  "seed": 0,
+  "events": [
+    {
+      "id": "a",
+      "kind": "get",
+      "tier": "edge-a",
+      "path": "/asset",
+      "headers": {},
+      "now": 0
+    },
+    {
+      "id": "b",
+      "kind": "get",
+      "tier": "edge-a",
+      "path": "/revalidate",
+      "headers": {},
+      "now": 1
+    }
+  ],
+  "limits": {
+    "maxOriginRequests": 20,
+    "maxOriginBytes": 20000
+  }
+}

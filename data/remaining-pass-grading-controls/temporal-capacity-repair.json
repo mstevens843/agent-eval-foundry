@@ -1,0 +1,5494 @@
+{
+  "cases": [
+    {
+      "token": "aa5e845c45b4dbf086e38713",
+      "cells": [
+        {
+          "scenarioId": "large-values-retractions",
+          "writes": [
+            {
+              "id": "__proto__",
+              "total": "8646911284551353398518517495"
+            },
+            {
+              "id": "constructor",
+              "total": "76"
+            },
+            {
+              "id": "q",
+              "total": "21"
+            }
+          ],
+          "reports": [
+            {
+              "reports": 3
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "90071992547409931234567890"
+                  },
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 2,
+                    "knownAt": 2,
+                    "from": 0,
+                    "to": 3,
+                    "value": "0007"
+                  }
+                ],
+                "next": "cursor-1"
+              }
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-1"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -1,
+                    "to": 4,
+                    "value": "11"
+                  },
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 2,
+                    "knownAt": 3,
+                    "from": -1,
+                    "to": 4,
+                    "value": null
+                  }
+                ],
+                "next": "cursor-2"
+              }
+            },
+            {
+              "seq": 2,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-2"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "other",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "42"
+                  }
+                ],
+                "next": null
+              }
+            },
+            {
+              "seq": 3,
+              "method": "record",
+              "request": {
+                "id": "__proto__",
+                "total": "8646911284551353398518517495"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "record",
+              "request": {
+                "id": "constructor",
+                "total": "76"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "record",
+              "request": {
+                "id": "q",
+                "total": "21"
+              },
+              "value": {
+                "stored": true
+              }
+            }
+          ],
+          "publicInput": {
+            "queries": [
+              {
+                "id": "__proto__",
+                "series": "s",
+                "knownAt": 0,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "constructor",
+                "series": "s",
+                "knownAt": 2,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "q",
+                "series": "s",
+                "knownAt": 3,
+                "from": -32,
+                "to": 64
+              }
+            ],
+            "records": [
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "90071992547409931234567890"
+              },
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 2,
+                "knownAt": 2,
+                "from": 0,
+                "to": 3,
+                "value": "0007"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -1,
+                "to": 4,
+                "value": "11"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 2,
+                "knownAt": 3,
+                "from": -1,
+                "to": 4,
+                "value": null
+              },
+              {
+                "series": "other",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "42"
+              }
+            ]
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "90071992547409931234567890"
+                        },
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 2,
+                          "knownAt": 2,
+                          "from": 0,
+                          "to": 3,
+                          "value": "0007"
+                        }
+                      ],
+                      "next": "cursor-1"
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-1"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -1,
+                          "to": 4,
+                          "value": "11"
+                        },
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 2,
+                          "knownAt": 3,
+                          "from": -1,
+                          "to": 4,
+                          "value": null
+                        }
+                      ],
+                      "next": "cursor-2"
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-2"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "other",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "42"
+                        }
+                      ],
+                      "next": null
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "record",
+                    "request": {
+                      "id": "__proto__",
+                      "total": "8646911284551353398518517495"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "record",
+                    "request": {
+                      "id": "constructor",
+                      "total": "76"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "record",
+                    "request": {
+                      "id": "q",
+                      "total": "21"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 9,
+                "requestBytes": 581,
+                "responseBytes": 1088,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "d03aa8fc6cf3fd33b2f7ab59",
+      "cells": [
+        {
+          "scenarioId": "large-values-retractions",
+          "writes": [
+            {
+              "id": "__proto__",
+              "total": "8646911284551353398518517495"
+            },
+            {
+              "id": "constructor",
+              "total": "76"
+            },
+            {
+              "id": "q",
+              "total": "21"
+            }
+          ],
+          "reports": [
+            {
+              "reports": 3
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "90071992547409931234567890"
+                  },
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 2,
+                    "knownAt": 2,
+                    "from": 0,
+                    "to": 3,
+                    "value": "0007"
+                  }
+                ],
+                "next": "cursor-1"
+              }
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-1"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -1,
+                    "to": 4,
+                    "value": "11"
+                  },
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 2,
+                    "knownAt": 3,
+                    "from": -1,
+                    "to": 4,
+                    "value": null
+                  }
+                ],
+                "next": "cursor-2"
+              }
+            },
+            {
+              "seq": 2,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-2"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "other",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "42"
+                  }
+                ],
+                "next": null
+              }
+            },
+            {
+              "seq": 3,
+              "method": "record",
+              "request": {
+                "id": "__proto__",
+                "total": "8646911284551353398518517495"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "record",
+              "request": {
+                "id": "constructor",
+                "total": "76"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "record",
+              "request": {
+                "id": "q",
+                "total": "21"
+              },
+              "value": {
+                "stored": true
+              }
+            }
+          ],
+          "publicInput": {
+            "queries": [
+              {
+                "id": "__proto__",
+                "series": "s",
+                "knownAt": 0,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "constructor",
+                "series": "s",
+                "knownAt": 2,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "q",
+                "series": "s",
+                "knownAt": 3,
+                "from": -32,
+                "to": 64
+              }
+            ],
+            "records": [
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "90071992547409931234567890"
+              },
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 2,
+                "knownAt": 2,
+                "from": 0,
+                "to": 3,
+                "value": "0007"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -1,
+                "to": 4,
+                "value": "11"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 2,
+                "knownAt": 3,
+                "from": -1,
+                "to": 4,
+                "value": null
+              },
+              {
+                "series": "other",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "42"
+              }
+            ]
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "90071992547409931234567890"
+                        },
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 2,
+                          "knownAt": 2,
+                          "from": 0,
+                          "to": 3,
+                          "value": "0007"
+                        }
+                      ],
+                      "next": "cursor-1"
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-1"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -1,
+                          "to": 4,
+                          "value": "11"
+                        },
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 2,
+                          "knownAt": 3,
+                          "from": -1,
+                          "to": 4,
+                          "value": null
+                        }
+                      ],
+                      "next": "cursor-2"
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-2"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "other",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "42"
+                        }
+                      ],
+                      "next": null
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "record",
+                    "request": {
+                      "id": "__proto__",
+                      "total": "8646911284551353398518517495"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "record",
+                    "request": {
+                      "id": "constructor",
+                      "total": "76"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "record",
+                    "request": {
+                      "id": "q",
+                      "total": "21"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 9,
+                "requestBytes": 581,
+                "responseBytes": 1088,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "0f87e40c818b423ac47512d5",
+      "cells": [
+        {
+          "scenarioId": "restart-and-repeat-pagination",
+          "writes": [
+            {
+              "id": "__proto__",
+              "total": "8646911284551353398518517495"
+            },
+            {
+              "id": "constructor",
+              "total": "76"
+            },
+            {
+              "id": "q",
+              "total": "21"
+            }
+          ],
+          "reports": [
+            {
+              "reports": 3
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "90071992547409931234567890"
+                  },
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 2,
+                    "knownAt": 2,
+                    "from": 0,
+                    "to": 3,
+                    "value": "0007"
+                  }
+                ],
+                "next": "cursor-1"
+              }
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-1"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -1,
+                    "to": 4,
+                    "value": "11"
+                  },
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 2,
+                    "knownAt": 3,
+                    "from": -1,
+                    "to": 4,
+                    "value": null
+                  }
+                ],
+                "next": "cursor-2"
+              }
+            },
+            {
+              "seq": 2,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-2"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "other",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "42"
+                  }
+                ],
+                "next": null
+              }
+            },
+            {
+              "seq": 3,
+              "method": "record",
+              "request": {
+                "id": "__proto__",
+                "total": "8646911284551353398518517495"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "record",
+              "request": {
+                "id": "constructor",
+                "total": "76"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "record",
+              "request": {
+                "id": "q",
+                "total": "21"
+              },
+              "value": {
+                "stored": true
+              }
+            }
+          ],
+          "publicInput": {
+            "queries": [
+              {
+                "id": "__proto__",
+                "series": "s",
+                "knownAt": 0,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "constructor",
+                "series": "s",
+                "knownAt": 2,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "q",
+                "series": "s",
+                "knownAt": 3,
+                "from": -32,
+                "to": 64
+              }
+            ],
+            "records": [
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "90071992547409931234567890"
+              },
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 2,
+                "knownAt": 2,
+                "from": 0,
+                "to": 3,
+                "value": "0007"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -1,
+                "to": 4,
+                "value": "11"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 2,
+                "knownAt": 3,
+                "from": -1,
+                "to": 4,
+                "value": null
+              },
+              {
+                "series": "other",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "42"
+              }
+            ]
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "90071992547409931234567890"
+                        },
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 2,
+                          "knownAt": 2,
+                          "from": 0,
+                          "to": 3,
+                          "value": "0007"
+                        }
+                      ],
+                      "next": "cursor-1"
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-1"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -1,
+                          "to": 4,
+                          "value": "11"
+                        },
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 2,
+                          "knownAt": 3,
+                          "from": -1,
+                          "to": 4,
+                          "value": null
+                        }
+                      ],
+                      "next": "cursor-2"
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-2"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "other",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "42"
+                        }
+                      ],
+                      "next": null
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "record",
+                    "request": {
+                      "id": "__proto__",
+                      "total": "8646911284551353398518517495"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "record",
+                    "request": {
+                      "id": "constructor",
+                      "total": "76"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "record",
+                    "request": {
+                      "id": "q",
+                      "total": "21"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 9,
+                "requestBytes": 581,
+                "responseBytes": 1088,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "1fdbbe458f07a950d3f5f636",
+      "cells": [
+        {
+          "scenarioId": "restart-and-repeat-pagination",
+          "writes": [
+            {
+              "id": "__proto__",
+              "total": "8646911284551353398518517495"
+            },
+            {
+              "id": "constructor",
+              "total": "76"
+            },
+            {
+              "id": "q",
+              "total": "21"
+            }
+          ],
+          "reports": [
+            {
+              "reports": 3
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "90071992547409931234567890"
+                  },
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 2,
+                    "knownAt": 2,
+                    "from": 0,
+                    "to": 3,
+                    "value": "0007"
+                  }
+                ],
+                "next": "cursor-1"
+              }
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "90071992547409931234567890"
+                  },
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 2,
+                    "knownAt": 2,
+                    "from": 0,
+                    "to": 3,
+                    "value": "0007"
+                  }
+                ],
+                "next": "cursor-2"
+              }
+            },
+            {
+              "seq": 2,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-2"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -1,
+                    "to": 4,
+                    "value": "11"
+                  },
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 2,
+                    "knownAt": 3,
+                    "from": -1,
+                    "to": 4,
+                    "value": null
+                  }
+                ],
+                "next": "cursor-3"
+              }
+            },
+            {
+              "seq": 3,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-3"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "other",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "42"
+                  }
+                ],
+                "next": null
+              }
+            },
+            {
+              "seq": 4,
+              "method": "record",
+              "request": {
+                "id": "__proto__",
+                "total": "8646911284551353398518517495"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "record",
+              "request": {
+                "id": "constructor",
+                "total": "76"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "record",
+              "request": {
+                "id": "q",
+                "total": "21"
+              },
+              "value": {
+                "stored": true
+              }
+            }
+          ],
+          "publicInput": {
+            "queries": [
+              {
+                "id": "__proto__",
+                "series": "s",
+                "knownAt": 0,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "constructor",
+                "series": "s",
+                "knownAt": 2,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "q",
+                "series": "s",
+                "knownAt": 3,
+                "from": -32,
+                "to": 64
+              }
+            ],
+            "records": [
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "90071992547409931234567890"
+              },
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 2,
+                "knownAt": 2,
+                "from": 0,
+                "to": 3,
+                "value": "0007"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -1,
+                "to": 4,
+                "value": "11"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 2,
+                "knownAt": 3,
+                "from": -1,
+                "to": 4,
+                "value": null
+              },
+              {
+                "series": "other",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "42"
+              }
+            ]
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "90071992547409931234567890"
+                        },
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 2,
+                          "knownAt": 2,
+                          "from": 0,
+                          "to": 3,
+                          "value": "0007"
+                        }
+                      ],
+                      "next": "cursor-1"
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "90071992547409931234567890"
+                        },
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 2,
+                          "knownAt": 2,
+                          "from": 0,
+                          "to": 3,
+                          "value": "0007"
+                        }
+                      ],
+                      "next": "cursor-2"
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-2"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -1,
+                          "to": 4,
+                          "value": "11"
+                        },
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 2,
+                          "knownAt": 3,
+                          "from": -1,
+                          "to": 4,
+                          "value": null
+                        }
+                      ],
+                      "next": "cursor-3"
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-3"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "other",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "42"
+                        }
+                      ],
+                      "next": null
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "record",
+                    "request": {
+                      "id": "__proto__",
+                      "total": "8646911284551353398518517495"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "record",
+                    "request": {
+                      "id": "constructor",
+                      "total": "76"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "record",
+                    "request": {
+                      "id": "q",
+                      "total": "21"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 10,
+                "requestBytes": 645,
+                "responseBytes": 1324,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "66e973e277c7619a65a9cffd",
+      "cells": [
+        {
+          "scenarioId": "record-before-second-traversal",
+          "writes": [
+            {
+              "id": "__proto__",
+              "total": "8646911284551353398518517495"
+            },
+            {
+              "id": "constructor",
+              "total": "76"
+            },
+            {
+              "id": "q",
+              "total": "21"
+            }
+          ],
+          "reports": [
+            {
+              "reports": 3
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "90071992547409931234567890"
+                  },
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 2,
+                    "knownAt": 2,
+                    "from": 0,
+                    "to": 3,
+                    "value": "0007"
+                  }
+                ],
+                "next": "cursor-1"
+              }
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-1"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -1,
+                    "to": 4,
+                    "value": "11"
+                  },
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 2,
+                    "knownAt": 3,
+                    "from": -1,
+                    "to": 4,
+                    "value": null
+                  }
+                ],
+                "next": "cursor-2"
+              }
+            },
+            {
+              "seq": 2,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-2"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "other",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "42"
+                  }
+                ],
+                "next": null
+              }
+            },
+            {
+              "seq": 3,
+              "method": "record",
+              "request": {
+                "id": "__proto__",
+                "total": "8646911284551353398518517495"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "record",
+              "request": {
+                "id": "constructor",
+                "total": "76"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "record",
+              "request": {
+                "id": "q",
+                "total": "21"
+              },
+              "value": {
+                "stored": true
+              }
+            }
+          ],
+          "publicInput": {
+            "queries": [
+              {
+                "id": "__proto__",
+                "series": "s",
+                "knownAt": 0,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "constructor",
+                "series": "s",
+                "knownAt": 2,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "q",
+                "series": "s",
+                "knownAt": 3,
+                "from": -32,
+                "to": 64
+              }
+            ],
+            "records": [
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "90071992547409931234567890"
+              },
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 2,
+                "knownAt": 2,
+                "from": 0,
+                "to": 3,
+                "value": "0007"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -1,
+                "to": 4,
+                "value": "11"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 2,
+                "knownAt": 3,
+                "from": -1,
+                "to": 4,
+                "value": null
+              },
+              {
+                "series": "other",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "42"
+              }
+            ]
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "90071992547409931234567890"
+                        },
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 2,
+                          "knownAt": 2,
+                          "from": 0,
+                          "to": 3,
+                          "value": "0007"
+                        }
+                      ],
+                      "next": "cursor-1"
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-1"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -1,
+                          "to": 4,
+                          "value": "11"
+                        },
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 2,
+                          "knownAt": 3,
+                          "from": -1,
+                          "to": 4,
+                          "value": null
+                        }
+                      ],
+                      "next": "cursor-2"
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-2"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "other",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "42"
+                        }
+                      ],
+                      "next": null
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "record",
+                    "request": {
+                      "id": "__proto__",
+                      "total": "8646911284551353398518517495"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "record",
+                    "request": {
+                      "id": "constructor",
+                      "total": "76"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "record",
+                    "request": {
+                      "id": "q",
+                      "total": "21"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 9,
+                "requestBytes": 581,
+                "responseBytes": 1088,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "e9e273322e02d9df74bf6ceb",
+      "cells": [
+        {
+          "scenarioId": "record-before-second-traversal",
+          "writes": [
+            {
+              "id": "__proto__",
+              "total": "8646911284551353398518517495"
+            },
+            {
+              "id": "constructor",
+              "total": "76"
+            },
+            {
+              "id": "q",
+              "total": "21"
+            }
+          ],
+          "reports": [
+            {
+              "reports": 3
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "90071992547409931234567890"
+                  },
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 2,
+                    "knownAt": 2,
+                    "from": 0,
+                    "to": 3,
+                    "value": "0007"
+                  }
+                ],
+                "next": "cursor-1"
+              }
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-1"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -1,
+                    "to": 4,
+                    "value": "11"
+                  },
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 2,
+                    "knownAt": 3,
+                    "from": -1,
+                    "to": 4,
+                    "value": null
+                  }
+                ],
+                "next": "cursor-2"
+              }
+            },
+            {
+              "seq": 2,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-2"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "other",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "42"
+                  }
+                ],
+                "next": null
+              }
+            },
+            {
+              "seq": 3,
+              "method": "record",
+              "request": {
+                "id": "__proto__",
+                "total": "8646911284551353398518517495"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "record",
+              "request": {
+                "id": "constructor",
+                "total": "76"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "record",
+              "request": {
+                "id": "q",
+                "total": "21"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "90071992547409931234567890"
+                  },
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 2,
+                    "knownAt": 2,
+                    "from": 0,
+                    "to": 3,
+                    "value": "0007"
+                  }
+                ],
+                "next": "cursor-3"
+              }
+            },
+            {
+              "seq": 7,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-3"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -1,
+                    "to": 4,
+                    "value": "11"
+                  },
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 2,
+                    "knownAt": 3,
+                    "from": -1,
+                    "to": 4,
+                    "value": null
+                  }
+                ],
+                "next": "cursor-4"
+              }
+            },
+            {
+              "seq": 8,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-4"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "other",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "42"
+                  }
+                ],
+                "next": null
+              }
+            }
+          ],
+          "publicInput": {
+            "queries": [
+              {
+                "id": "__proto__",
+                "series": "s",
+                "knownAt": 0,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "constructor",
+                "series": "s",
+                "knownAt": 2,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "q",
+                "series": "s",
+                "knownAt": 3,
+                "from": -32,
+                "to": 64
+              }
+            ],
+            "records": [
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "90071992547409931234567890"
+              },
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 2,
+                "knownAt": 2,
+                "from": 0,
+                "to": 3,
+                "value": "0007"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -1,
+                "to": 4,
+                "value": "11"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 2,
+                "knownAt": 3,
+                "from": -1,
+                "to": 4,
+                "value": null
+              },
+              {
+                "series": "other",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "42"
+              }
+            ]
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "90071992547409931234567890"
+                        },
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 2,
+                          "knownAt": 2,
+                          "from": 0,
+                          "to": 3,
+                          "value": "0007"
+                        }
+                      ],
+                      "next": "cursor-1"
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-1"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -1,
+                          "to": 4,
+                          "value": "11"
+                        },
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 2,
+                          "knownAt": 3,
+                          "from": -1,
+                          "to": 4,
+                          "value": null
+                        }
+                      ],
+                      "next": "cursor-2"
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-2"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "other",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "42"
+                        }
+                      ],
+                      "next": null
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "record",
+                    "request": {
+                      "id": "__proto__",
+                      "total": "8646911284551353398518517495"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "record",
+                    "request": {
+                      "id": "constructor",
+                      "total": "76"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "record",
+                    "request": {
+                      "id": "q",
+                      "total": "21"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "90071992547409931234567890"
+                        },
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 2,
+                          "knownAt": 2,
+                          "from": 0,
+                          "to": 3,
+                          "value": "0007"
+                        }
+                      ],
+                      "next": "cursor-3"
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-3"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -1,
+                          "to": 4,
+                          "value": "11"
+                        },
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 2,
+                          "knownAt": 3,
+                          "from": -1,
+                          "to": 4,
+                          "value": null
+                        }
+                      ],
+                      "next": "cursor-4"
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-4"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "other",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "42"
+                        }
+                      ],
+                      "next": null
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 12,
+                "requestBytes": 785,
+                "responseBytes": 1662,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "ca26f869b6581172abe185fb",
+      "cells": [
+        {
+          "scenarioId": "wrong-exact-total",
+          "writes": [
+            {
+              "id": "__proto__",
+              "total": "8646911284551353398518517495"
+            },
+            {
+              "id": "constructor",
+              "total": "76"
+            },
+            {
+              "id": "q",
+              "total": "21"
+            }
+          ],
+          "reports": [
+            {
+              "reports": 3
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "90071992547409931234567890"
+                  },
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 2,
+                    "knownAt": 2,
+                    "from": 0,
+                    "to": 3,
+                    "value": "0007"
+                  }
+                ],
+                "next": "cursor-1"
+              }
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-1"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -1,
+                    "to": 4,
+                    "value": "11"
+                  },
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 2,
+                    "knownAt": 3,
+                    "from": -1,
+                    "to": 4,
+                    "value": null
+                  }
+                ],
+                "next": "cursor-2"
+              }
+            },
+            {
+              "seq": 2,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-2"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "other",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "42"
+                  }
+                ],
+                "next": null
+              }
+            },
+            {
+              "seq": 3,
+              "method": "record",
+              "request": {
+                "id": "__proto__",
+                "total": "8646911284551353398518517495"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "record",
+              "request": {
+                "id": "constructor",
+                "total": "76"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "record",
+              "request": {
+                "id": "q",
+                "total": "21"
+              },
+              "value": {
+                "stored": true
+              }
+            }
+          ],
+          "publicInput": {
+            "queries": [
+              {
+                "id": "__proto__",
+                "series": "s",
+                "knownAt": 0,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "constructor",
+                "series": "s",
+                "knownAt": 2,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "q",
+                "series": "s",
+                "knownAt": 3,
+                "from": -32,
+                "to": 64
+              }
+            ],
+            "records": [
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "90071992547409931234567890"
+              },
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 2,
+                "knownAt": 2,
+                "from": 0,
+                "to": 3,
+                "value": "0007"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -1,
+                "to": 4,
+                "value": "11"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 2,
+                "knownAt": 3,
+                "from": -1,
+                "to": 4,
+                "value": null
+              },
+              {
+                "series": "other",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "42"
+              }
+            ]
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "90071992547409931234567890"
+                        },
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 2,
+                          "knownAt": 2,
+                          "from": 0,
+                          "to": 3,
+                          "value": "0007"
+                        }
+                      ],
+                      "next": "cursor-1"
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-1"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -1,
+                          "to": 4,
+                          "value": "11"
+                        },
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 2,
+                          "knownAt": 3,
+                          "from": -1,
+                          "to": 4,
+                          "value": null
+                        }
+                      ],
+                      "next": "cursor-2"
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-2"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "other",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "42"
+                        }
+                      ],
+                      "next": null
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "record",
+                    "request": {
+                      "id": "__proto__",
+                      "total": "8646911284551353398518517495"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "record",
+                    "request": {
+                      "id": "constructor",
+                      "total": "76"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "record",
+                    "request": {
+                      "id": "q",
+                      "total": "21"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 9,
+                "requestBytes": 581,
+                "responseBytes": 1088,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "451b5ef940d9bdefa85f80f3",
+      "cells": [
+        {
+          "scenarioId": "wrong-exact-total",
+          "writes": [
+            {
+              "id": "__proto__",
+              "total": "8646911284551353398518517496"
+            },
+            {
+              "id": "constructor",
+              "total": "77"
+            },
+            {
+              "id": "q",
+              "total": "22"
+            }
+          ],
+          "reports": [
+            {
+              "reports": 3
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "90071992547409931234567890"
+                  },
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 2,
+                    "knownAt": 2,
+                    "from": 0,
+                    "to": 3,
+                    "value": "0007"
+                  }
+                ],
+                "next": "cursor-1"
+              }
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-1"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -1,
+                    "to": 4,
+                    "value": "11"
+                  },
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 2,
+                    "knownAt": 3,
+                    "from": -1,
+                    "to": 4,
+                    "value": null
+                  }
+                ],
+                "next": "cursor-2"
+              }
+            },
+            {
+              "seq": 2,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-2"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "other",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "42"
+                  }
+                ],
+                "next": null
+              }
+            },
+            {
+              "seq": 3,
+              "method": "record",
+              "request": {
+                "id": "__proto__",
+                "total": "8646911284551353398518517496"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "record",
+              "request": {
+                "id": "constructor",
+                "total": "77"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "record",
+              "request": {
+                "id": "q",
+                "total": "22"
+              },
+              "value": {
+                "stored": true
+              }
+            }
+          ],
+          "publicInput": {
+            "queries": [
+              {
+                "id": "__proto__",
+                "series": "s",
+                "knownAt": 0,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "constructor",
+                "series": "s",
+                "knownAt": 2,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "q",
+                "series": "s",
+                "knownAt": 3,
+                "from": -32,
+                "to": 64
+              }
+            ],
+            "records": [
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "90071992547409931234567890"
+              },
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 2,
+                "knownAt": 2,
+                "from": 0,
+                "to": 3,
+                "value": "0007"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -1,
+                "to": 4,
+                "value": "11"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 2,
+                "knownAt": 3,
+                "from": -1,
+                "to": 4,
+                "value": null
+              },
+              {
+                "series": "other",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "42"
+              }
+            ]
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "90071992547409931234567890"
+                        },
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 2,
+                          "knownAt": 2,
+                          "from": 0,
+                          "to": 3,
+                          "value": "0007"
+                        }
+                      ],
+                      "next": "cursor-1"
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-1"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -1,
+                          "to": 4,
+                          "value": "11"
+                        },
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 2,
+                          "knownAt": 3,
+                          "from": -1,
+                          "to": 4,
+                          "value": null
+                        }
+                      ],
+                      "next": "cursor-2"
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-2"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "other",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "42"
+                        }
+                      ],
+                      "next": null
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "record",
+                    "request": {
+                      "id": "__proto__",
+                      "total": "8646911284551353398518517496"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "record",
+                    "request": {
+                      "id": "constructor",
+                      "total": "77"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "record",
+                    "request": {
+                      "id": "q",
+                      "total": "22"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 9,
+                "requestBytes": 581,
+                "responseBytes": 1088,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "d1aea6fa9415802c8acd5795",
+      "cells": [
+        {
+          "scenarioId": "noncanonical-total",
+          "writes": [
+            {
+              "id": "__proto__",
+              "total": "8646911284551353398518517495"
+            },
+            {
+              "id": "constructor",
+              "total": "76"
+            },
+            {
+              "id": "q",
+              "total": "21"
+            }
+          ],
+          "reports": [
+            {
+              "reports": 3
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "90071992547409931234567890"
+                  },
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 2,
+                    "knownAt": 2,
+                    "from": 0,
+                    "to": 3,
+                    "value": "0007"
+                  }
+                ],
+                "next": "cursor-1"
+              }
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-1"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -1,
+                    "to": 4,
+                    "value": "11"
+                  },
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 2,
+                    "knownAt": 3,
+                    "from": -1,
+                    "to": 4,
+                    "value": null
+                  }
+                ],
+                "next": "cursor-2"
+              }
+            },
+            {
+              "seq": 2,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-2"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "other",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "42"
+                  }
+                ],
+                "next": null
+              }
+            },
+            {
+              "seq": 3,
+              "method": "record",
+              "request": {
+                "id": "__proto__",
+                "total": "8646911284551353398518517495"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "record",
+              "request": {
+                "id": "constructor",
+                "total": "76"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "record",
+              "request": {
+                "id": "q",
+                "total": "21"
+              },
+              "value": {
+                "stored": true
+              }
+            }
+          ],
+          "publicInput": {
+            "queries": [
+              {
+                "id": "__proto__",
+                "series": "s",
+                "knownAt": 0,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "constructor",
+                "series": "s",
+                "knownAt": 2,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "q",
+                "series": "s",
+                "knownAt": 3,
+                "from": -32,
+                "to": 64
+              }
+            ],
+            "records": [
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "90071992547409931234567890"
+              },
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 2,
+                "knownAt": 2,
+                "from": 0,
+                "to": 3,
+                "value": "0007"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -1,
+                "to": 4,
+                "value": "11"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 2,
+                "knownAt": 3,
+                "from": -1,
+                "to": 4,
+                "value": null
+              },
+              {
+                "series": "other",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "42"
+              }
+            ]
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "90071992547409931234567890"
+                        },
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 2,
+                          "knownAt": 2,
+                          "from": 0,
+                          "to": 3,
+                          "value": "0007"
+                        }
+                      ],
+                      "next": "cursor-1"
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-1"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -1,
+                          "to": 4,
+                          "value": "11"
+                        },
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 2,
+                          "knownAt": 3,
+                          "from": -1,
+                          "to": 4,
+                          "value": null
+                        }
+                      ],
+                      "next": "cursor-2"
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-2"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "other",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "42"
+                        }
+                      ],
+                      "next": null
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "record",
+                    "request": {
+                      "id": "__proto__",
+                      "total": "8646911284551353398518517495"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "record",
+                    "request": {
+                      "id": "constructor",
+                      "total": "76"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "record",
+                    "request": {
+                      "id": "q",
+                      "total": "21"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 9,
+                "requestBytes": 581,
+                "responseBytes": 1088,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "11f450da5311cce2f6b4b997",
+      "cells": [
+        {
+          "scenarioId": "noncanonical-total",
+          "writes": [
+            {
+              "id": "__proto__",
+              "total": "08646911284551353398518517495"
+            },
+            {
+              "id": "constructor",
+              "total": "076"
+            },
+            {
+              "id": "q",
+              "total": "021"
+            }
+          ],
+          "reports": [
+            {
+              "reports": 3
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "90071992547409931234567890"
+                  },
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 2,
+                    "knownAt": 2,
+                    "from": 0,
+                    "to": 3,
+                    "value": "0007"
+                  }
+                ],
+                "next": "cursor-1"
+              }
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-1"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -1,
+                    "to": 4,
+                    "value": "11"
+                  },
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 2,
+                    "knownAt": 3,
+                    "from": -1,
+                    "to": 4,
+                    "value": null
+                  }
+                ],
+                "next": "cursor-2"
+              }
+            },
+            {
+              "seq": 2,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-2"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "other",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "42"
+                  }
+                ],
+                "next": null
+              }
+            },
+            {
+              "seq": 3,
+              "method": "record",
+              "request": {
+                "id": "__proto__",
+                "total": "08646911284551353398518517495"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "record",
+              "request": {
+                "id": "constructor",
+                "total": "076"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "record",
+              "request": {
+                "id": "q",
+                "total": "021"
+              },
+              "value": {
+                "stored": true
+              }
+            }
+          ],
+          "publicInput": {
+            "queries": [
+              {
+                "id": "__proto__",
+                "series": "s",
+                "knownAt": 0,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "constructor",
+                "series": "s",
+                "knownAt": 2,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "q",
+                "series": "s",
+                "knownAt": 3,
+                "from": -32,
+                "to": 64
+              }
+            ],
+            "records": [
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "90071992547409931234567890"
+              },
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 2,
+                "knownAt": 2,
+                "from": 0,
+                "to": 3,
+                "value": "0007"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -1,
+                "to": 4,
+                "value": "11"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 2,
+                "knownAt": 3,
+                "from": -1,
+                "to": 4,
+                "value": null
+              },
+              {
+                "series": "other",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "42"
+              }
+            ]
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "90071992547409931234567890"
+                        },
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 2,
+                          "knownAt": 2,
+                          "from": 0,
+                          "to": 3,
+                          "value": "0007"
+                        }
+                      ],
+                      "next": "cursor-1"
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-1"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -1,
+                          "to": 4,
+                          "value": "11"
+                        },
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 2,
+                          "knownAt": 3,
+                          "from": -1,
+                          "to": 4,
+                          "value": null
+                        }
+                      ],
+                      "next": "cursor-2"
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-2"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "other",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "42"
+                        }
+                      ],
+                      "next": null
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "record",
+                    "request": {
+                      "id": "__proto__",
+                      "total": "08646911284551353398518517495"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "record",
+                    "request": {
+                      "id": "constructor",
+                      "total": "076"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "record",
+                    "request": {
+                      "id": "q",
+                      "total": "021"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 9,
+                "requestBytes": 584,
+                "responseBytes": 1088,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "153dce72a7f969e7ed6e4f28",
+      "cells": [
+        {
+          "scenarioId": "duplicate-report",
+          "writes": [
+            {
+              "id": "__proto__",
+              "total": "8646911284551353398518517495"
+            },
+            {
+              "id": "constructor",
+              "total": "76"
+            },
+            {
+              "id": "q",
+              "total": "21"
+            }
+          ],
+          "reports": [
+            {
+              "reports": 3
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "90071992547409931234567890"
+                  },
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 2,
+                    "knownAt": 2,
+                    "from": 0,
+                    "to": 3,
+                    "value": "0007"
+                  }
+                ],
+                "next": "cursor-1"
+              }
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-1"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -1,
+                    "to": 4,
+                    "value": "11"
+                  },
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 2,
+                    "knownAt": 3,
+                    "from": -1,
+                    "to": 4,
+                    "value": null
+                  }
+                ],
+                "next": "cursor-2"
+              }
+            },
+            {
+              "seq": 2,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-2"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "other",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "42"
+                  }
+                ],
+                "next": null
+              }
+            },
+            {
+              "seq": 3,
+              "method": "record",
+              "request": {
+                "id": "__proto__",
+                "total": "8646911284551353398518517495"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "record",
+              "request": {
+                "id": "constructor",
+                "total": "76"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "record",
+              "request": {
+                "id": "q",
+                "total": "21"
+              },
+              "value": {
+                "stored": true
+              }
+            }
+          ],
+          "publicInput": {
+            "queries": [
+              {
+                "id": "__proto__",
+                "series": "s",
+                "knownAt": 0,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "constructor",
+                "series": "s",
+                "knownAt": 2,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "q",
+                "series": "s",
+                "knownAt": 3,
+                "from": -32,
+                "to": 64
+              }
+            ],
+            "records": [
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "90071992547409931234567890"
+              },
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 2,
+                "knownAt": 2,
+                "from": 0,
+                "to": 3,
+                "value": "0007"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -1,
+                "to": 4,
+                "value": "11"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 2,
+                "knownAt": 3,
+                "from": -1,
+                "to": 4,
+                "value": null
+              },
+              {
+                "series": "other",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "42"
+              }
+            ]
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "90071992547409931234567890"
+                        },
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 2,
+                          "knownAt": 2,
+                          "from": 0,
+                          "to": 3,
+                          "value": "0007"
+                        }
+                      ],
+                      "next": "cursor-1"
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-1"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -1,
+                          "to": 4,
+                          "value": "11"
+                        },
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 2,
+                          "knownAt": 3,
+                          "from": -1,
+                          "to": 4,
+                          "value": null
+                        }
+                      ],
+                      "next": "cursor-2"
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-2"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "other",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "42"
+                        }
+                      ],
+                      "next": null
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "record",
+                    "request": {
+                      "id": "__proto__",
+                      "total": "8646911284551353398518517495"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "record",
+                    "request": {
+                      "id": "constructor",
+                      "total": "76"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "record",
+                    "request": {
+                      "id": "q",
+                      "total": "21"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 9,
+                "requestBytes": 581,
+                "responseBytes": 1088,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "4b75a0cdfc4e652a00d1f036",
+      "cells": [
+        {
+          "scenarioId": "duplicate-report",
+          "writes": [
+            {
+              "id": "__proto__",
+              "total": "8646911284551353398518517495"
+            },
+            {
+              "id": "__proto__",
+              "total": "8646911284551353398518517495"
+            },
+            {
+              "id": "constructor",
+              "total": "76"
+            },
+            {
+              "id": "constructor",
+              "total": "76"
+            },
+            {
+              "id": "q",
+              "total": "21"
+            },
+            {
+              "id": "q",
+              "total": "21"
+            }
+          ],
+          "reports": [
+            {
+              "reports": 3
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "90071992547409931234567890"
+                  },
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 2,
+                    "knownAt": 2,
+                    "from": 0,
+                    "to": 3,
+                    "value": "0007"
+                  }
+                ],
+                "next": "cursor-1"
+              }
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-1"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -1,
+                    "to": 4,
+                    "value": "11"
+                  },
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 2,
+                    "knownAt": 3,
+                    "from": -1,
+                    "to": 4,
+                    "value": null
+                  }
+                ],
+                "next": "cursor-2"
+              }
+            },
+            {
+              "seq": 2,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-2"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "other",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "42"
+                  }
+                ],
+                "next": null
+              }
+            },
+            {
+              "seq": 3,
+              "method": "record",
+              "request": {
+                "id": "__proto__",
+                "total": "8646911284551353398518517495"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "record",
+              "request": {
+                "id": "__proto__",
+                "total": "8646911284551353398518517495"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "record",
+              "request": {
+                "id": "constructor",
+                "total": "76"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "record",
+              "request": {
+                "id": "constructor",
+                "total": "76"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 7,
+              "method": "record",
+              "request": {
+                "id": "q",
+                "total": "21"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "record",
+              "request": {
+                "id": "q",
+                "total": "21"
+              },
+              "value": {
+                "stored": true
+              }
+            }
+          ],
+          "publicInput": {
+            "queries": [
+              {
+                "id": "__proto__",
+                "series": "s",
+                "knownAt": 0,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "constructor",
+                "series": "s",
+                "knownAt": 2,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "q",
+                "series": "s",
+                "knownAt": 3,
+                "from": -32,
+                "to": 64
+              }
+            ],
+            "records": [
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "90071992547409931234567890"
+              },
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 2,
+                "knownAt": 2,
+                "from": 0,
+                "to": 3,
+                "value": "0007"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -1,
+                "to": 4,
+                "value": "11"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 2,
+                "knownAt": 3,
+                "from": -1,
+                "to": 4,
+                "value": null
+              },
+              {
+                "series": "other",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "42"
+              }
+            ]
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "90071992547409931234567890"
+                        },
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 2,
+                          "knownAt": 2,
+                          "from": 0,
+                          "to": 3,
+                          "value": "0007"
+                        }
+                      ],
+                      "next": "cursor-1"
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-1"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -1,
+                          "to": 4,
+                          "value": "11"
+                        },
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 2,
+                          "knownAt": 3,
+                          "from": -1,
+                          "to": 4,
+                          "value": null
+                        }
+                      ],
+                      "next": "cursor-2"
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-2"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "other",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "42"
+                        }
+                      ],
+                      "next": null
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "record",
+                    "request": {
+                      "id": "__proto__",
+                      "total": "8646911284551353398518517495"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "record",
+                    "request": {
+                      "id": "__proto__",
+                      "total": "8646911284551353398518517495"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "record",
+                    "request": {
+                      "id": "constructor",
+                      "total": "76"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "record",
+                    "request": {
+                      "id": "constructor",
+                      "total": "76"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "record",
+                    "request": {
+                      "id": "q",
+                      "total": "21"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "record",
+                    "request": {
+                      "id": "q",
+                      "total": "21"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 12,
+                "requestBytes": 844,
+                "responseBytes": 1196,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "980bf58909143c60121f0fb1",
+      "cells": [
+        {
+          "scenarioId": "missing-report",
+          "writes": [
+            {
+              "id": "__proto__",
+              "total": "8646911284551353398518517495"
+            },
+            {
+              "id": "constructor",
+              "total": "76"
+            },
+            {
+              "id": "q",
+              "total": "21"
+            }
+          ],
+          "reports": [
+            {
+              "reports": 3
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "90071992547409931234567890"
+                  },
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 2,
+                    "knownAt": 2,
+                    "from": 0,
+                    "to": 3,
+                    "value": "0007"
+                  }
+                ],
+                "next": "cursor-1"
+              }
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-1"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -1,
+                    "to": 4,
+                    "value": "11"
+                  },
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 2,
+                    "knownAt": 3,
+                    "from": -1,
+                    "to": 4,
+                    "value": null
+                  }
+                ],
+                "next": "cursor-2"
+              }
+            },
+            {
+              "seq": 2,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-2"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "other",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "42"
+                  }
+                ],
+                "next": null
+              }
+            },
+            {
+              "seq": 3,
+              "method": "record",
+              "request": {
+                "id": "__proto__",
+                "total": "8646911284551353398518517495"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "record",
+              "request": {
+                "id": "constructor",
+                "total": "76"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "record",
+              "request": {
+                "id": "q",
+                "total": "21"
+              },
+              "value": {
+                "stored": true
+              }
+            }
+          ],
+          "publicInput": {
+            "queries": [
+              {
+                "id": "__proto__",
+                "series": "s",
+                "knownAt": 0,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "constructor",
+                "series": "s",
+                "knownAt": 2,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "q",
+                "series": "s",
+                "knownAt": 3,
+                "from": -32,
+                "to": 64
+              }
+            ],
+            "records": [
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "90071992547409931234567890"
+              },
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 2,
+                "knownAt": 2,
+                "from": 0,
+                "to": 3,
+                "value": "0007"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -1,
+                "to": 4,
+                "value": "11"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 2,
+                "knownAt": 3,
+                "from": -1,
+                "to": 4,
+                "value": null
+              },
+              {
+                "series": "other",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "42"
+              }
+            ]
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "90071992547409931234567890"
+                        },
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 2,
+                          "knownAt": 2,
+                          "from": 0,
+                          "to": 3,
+                          "value": "0007"
+                        }
+                      ],
+                      "next": "cursor-1"
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-1"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -1,
+                          "to": 4,
+                          "value": "11"
+                        },
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 2,
+                          "knownAt": 3,
+                          "from": -1,
+                          "to": 4,
+                          "value": null
+                        }
+                      ],
+                      "next": "cursor-2"
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-2"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "other",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "42"
+                        }
+                      ],
+                      "next": null
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "record",
+                    "request": {
+                      "id": "__proto__",
+                      "total": "8646911284551353398518517495"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "record",
+                    "request": {
+                      "id": "constructor",
+                      "total": "76"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "record",
+                    "request": {
+                      "id": "q",
+                      "total": "21"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 9,
+                "requestBytes": 581,
+                "responseBytes": 1088,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "d772c28c2bf85c077c7ce6ee",
+      "cells": [
+        {
+          "scenarioId": "missing-report",
+          "writes": [
+            {
+              "id": "constructor",
+              "total": "76"
+            },
+            {
+              "id": "q",
+              "total": "21"
+            }
+          ],
+          "reports": [
+            {
+              "reports": 3
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "90071992547409931234567890"
+                  },
+                  {
+                    "series": "s",
+                    "key": "a",
+                    "revision": 2,
+                    "knownAt": 2,
+                    "from": 0,
+                    "to": 3,
+                    "value": "0007"
+                  }
+                ],
+                "next": "cursor-1"
+              }
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-1"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -1,
+                    "to": 4,
+                    "value": "11"
+                  },
+                  {
+                    "series": "s",
+                    "key": "b",
+                    "revision": 2,
+                    "knownAt": 3,
+                    "from": -1,
+                    "to": 4,
+                    "value": null
+                  }
+                ],
+                "next": "cursor-2"
+              }
+            },
+            {
+              "seq": 2,
+              "method": "fetch",
+              "request": {
+                "cursor": "cursor-2"
+              },
+              "value": {
+                "rows": [
+                  {
+                    "series": "other",
+                    "key": "a",
+                    "revision": 1,
+                    "knownAt": 0,
+                    "from": -32,
+                    "to": 64,
+                    "value": "42"
+                  }
+                ],
+                "next": null
+              }
+            },
+            {
+              "seq": 3,
+              "method": "record",
+              "request": {
+                "id": "constructor",
+                "total": "76"
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "record",
+              "request": {
+                "id": "q",
+                "total": "21"
+              },
+              "value": {
+                "stored": true
+              }
+            }
+          ],
+          "publicInput": {
+            "queries": [
+              {
+                "id": "__proto__",
+                "series": "s",
+                "knownAt": 0,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "constructor",
+                "series": "s",
+                "knownAt": 2,
+                "from": -32,
+                "to": 64
+              },
+              {
+                "id": "q",
+                "series": "s",
+                "knownAt": 3,
+                "from": -32,
+                "to": 64
+              }
+            ],
+            "records": [
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "90071992547409931234567890"
+              },
+              {
+                "series": "s",
+                "key": "a",
+                "revision": 2,
+                "knownAt": 2,
+                "from": 0,
+                "to": 3,
+                "value": "0007"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -1,
+                "to": 4,
+                "value": "11"
+              },
+              {
+                "series": "s",
+                "key": "b",
+                "revision": 2,
+                "knownAt": 3,
+                "from": -1,
+                "to": 4,
+                "value": null
+              },
+              {
+                "series": "other",
+                "key": "a",
+                "revision": 1,
+                "knownAt": 0,
+                "from": -32,
+                "to": 64,
+                "value": "42"
+              }
+            ]
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "90071992547409931234567890"
+                        },
+                        {
+                          "series": "s",
+                          "key": "a",
+                          "revision": 2,
+                          "knownAt": 2,
+                          "from": 0,
+                          "to": 3,
+                          "value": "0007"
+                        }
+                      ],
+                      "next": "cursor-1"
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-1"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -1,
+                          "to": 4,
+                          "value": "11"
+                        },
+                        {
+                          "series": "s",
+                          "key": "b",
+                          "revision": 2,
+                          "knownAt": 3,
+                          "from": -1,
+                          "to": 4,
+                          "value": null
+                        }
+                      ],
+                      "next": "cursor-2"
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": "cursor-2"
+                    },
+                    "value": {
+                      "rows": [
+                        {
+                          "series": "other",
+                          "key": "a",
+                          "revision": 1,
+                          "knownAt": 0,
+                          "from": -32,
+                          "to": 64,
+                          "value": "42"
+                        }
+                      ],
+                      "next": null
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "record",
+                    "request": {
+                      "id": "constructor",
+                      "total": "76"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "record",
+                    "request": {
+                      "id": "q",
+                      "total": "21"
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 8,
+                "requestBytes": 475,
+                "responseBytes": 1053,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "b1c935f8985a6c2362b8d5b7",
+      "cells": [
+        {
+          "scenarioId": "skip-pagination-empty-input",
+          "writes": [],
+          "reports": [
+            {
+              "reports": 0
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [],
+                "next": null
+              }
+            }
+          ],
+          "publicInput": {
+            "queries": [],
+            "records": []
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [],
+                      "next": null
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 4,
+                "requestBytes": 183,
+                "responseBytes": 273,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "845f2d9e6f187d6277bb2872",
+      "cells": [
+        {
+          "scenarioId": "skip-pagination-empty-input",
+          "writes": [],
+          "reports": [
+            {}
+          ],
+          "observations": [],
+          "publicInput": {
+            "queries": [],
+            "records": []
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": []
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 3,
+                "requestBytes": 109,
+                "responseBytes": 230,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "7733aa0d7ccb1e460ceb9b60",
+      "cells": [
+        {
+          "scenarioId": "complete-empty-input",
+          "writes": [],
+          "reports": [
+            {
+              "reports": 0
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [],
+                "next": null
+              }
+            }
+          ],
+          "publicInput": {
+            "queries": [],
+            "records": []
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [],
+                      "next": null
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 4,
+                "requestBytes": 183,
+                "responseBytes": 273,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "1a4041e152af5697db0e4798",
+      "cells": [
+        {
+          "scenarioId": "complete-empty-input",
+          "writes": [],
+          "reports": [
+            {
+              "reports": 0
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "cursor": null
+              },
+              "value": {
+                "rows": [],
+                "next": null
+              }
+            }
+          ],
+          "publicInput": {
+            "queries": [],
+            "records": []
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "cursor": null
+                    },
+                    "value": {
+                      "rows": [],
+                      "next": null
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 4,
+                "requestBytes": 183,
+                "responseBytes": 273,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+import{subject as reference}from'./reference-entry.mjs';export const subject={run(view,api){return reference.run(view,{...api,record:r=>api.record({...r,total:String(BigInt(r.total)+1n)})});}};

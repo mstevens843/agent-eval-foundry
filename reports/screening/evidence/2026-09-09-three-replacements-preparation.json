@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 1,
+  "gradingRevision": "remaining-pass-coverage-v3",
+  "maxConcurrent": 6,
+  "plannedConcurrentAttempts": 3,
+  "maxProviderCalls": 3,
+  "automaticRetries": false,
+  "allSlotsStartTogether": true,
+  "packages": [
+    {
+      "id": "variant-cache-repair",
+      "analysis": "reports/screening/fourth-five/19-variant-cache-repair.md",
+      "failures": 4,
+      "scored": 4,
+      "remaining": 2,
+      "attemptsByProvider": {
+        "claude": 3,
+        "codex": 1
+      },
+      "classification": "pending-replacements",
+      "countedAttempts": [
+        {
+          "trial": 2,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 3,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 4,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 5,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        }
+      ],
+      "voidAttempts": [
+        {
+          "trial": 6,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": null
+        },
+        {
+          "trial": 7,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": null
+        }
+      ]
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "analysis": "reports/screening/third-five/11-snapshot-recovery-repair.md",
+      "failures": 4,
+      "scored": 5,
+      "remaining": 1,
+      "attemptsByProvider": {
+        "claude": 3,
+        "codex": 2
+      },
+      "classification": "pending-replacements",
+      "countedAttempts": [
+        {
+          "trial": 2,
+          "provider": "codex",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 3,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 5,
+          "provider": "claude",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 6,
+          "provider": "claude",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 7,
+          "provider": "claude",
+          "recordedReward": 1,
+          "auditEffectiveReward": 1,
+          "countedReward": 1
+        }
+      ],
+      "voidAttempts": [
+        {
+          "trial": 4,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": null
+        }
+      ]
+    }
+  ],
+  "slots": [
+    {
+      "id": "variant-cache-repair",
+      "trial": 8,
+      "replacesTrial": 6,
+      "target": "codex",
+      "directory": ".local/three-replacements-2026-09-09/variant-cache-repair/trial-8",
+      "controller": ".local/three-replacements-2026-09-09/variant-cache-repair/trial-8/campaign.mjs",
+      "analysis": "reports/screening/fourth-five/19-variant-cache-repair.md",
+      "controllerSha256": "8f5743d95b95f560cac88e6edfeecd83e812fd1d352f9734692d3914cabcb6bb",
+      "evidenceSha256": "ec1d09bce79a804c43b76188487d05e125c1062e3dec7a2d29213f205cd9ca92",
+      "templateController": ".local/final-six-2026-09-09/variant-cache-repair/trial-7/campaign.mjs",
+      "templateControllerSha256": "c26d65bc5c9040c8b75dfc532d95c652c4ca670155759bee02bad103854d9fc0",
+      "packageDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "instructionSha256": "9d3ed7b2d39fc5a9cbddb56f636539686cec895b6961cac1e6004eefdca28f0a"
+    },
+    {
+      "id": "variant-cache-repair",
+      "trial": 9,
+      "replacesTrial": 7,
+      "target": "codex",
+      "directory": ".local/three-replacements-2026-09-09/variant-cache-repair/trial-9",
+      "controller": ".local/three-replacements-2026-09-09/variant-cache-repair/trial-9/campaign.mjs",
+      "analysis": "reports/screening/fourth-five/19-variant-cache-repair.md",
+      "controllerSha256": "b12fcbb46fab949fb154e94e2fc69eb520c5521825604a3d24661dbf72d95a3d",
+      "evidenceSha256": "0e3501bbf5834866f835c7b7c0b02be36b5b66a1ddc85d16d239292389840d0a",
+      "templateController": ".local/final-six-2026-09-09/variant-cache-repair/trial-7/campaign.mjs",
+      "templateControllerSha256": "c26d65bc5c9040c8b75dfc532d95c652c4ca670155759bee02bad103854d9fc0",
+      "packageDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "instructionSha256": "9d3ed7b2d39fc5a9cbddb56f636539686cec895b6961cac1e6004eefdca28f0a"
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 8,
+      "replacesTrial": 4,
+      "target": "codex",
+      "directory": ".local/three-replacements-2026-09-09/snapshot-recovery-repair/trial-8",
+      "controller": ".local/three-replacements-2026-09-09/snapshot-recovery-repair/trial-8/campaign.mjs",
+      "analysis": "reports/screening/third-five/11-snapshot-recovery-repair.md",
+      "controllerSha256": "6ae462779bbdb517004ab46d945dc4d1754999de19bcce6199c7c8f0447c7931",
+      "evidenceSha256": "892987e14ad3afa7038b1275bbe5911153314f2a3298032253d9cc7df765d53a",
+      "templateController": ".local/final-six-2026-09-09/variant-cache-repair/trial-7/campaign.mjs",
+      "templateControllerSha256": "c26d65bc5c9040c8b75dfc532d95c652c4ca670155759bee02bad103854d9fc0",
+      "packageDigest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+      "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+      "instructionSha256": "f2943b58bcb8caf0b9ac4923faad365b7de28b8a2da2f912121146f2aada4e4c"
+    }
+  ],
+  "providerCallsMadeByPreparation": 0,
+  "auditSha256": "ff3e629d142bf7eeb3381c01a5905c9004b975fc04d63a039483d176f2bf94b6",
+  "originalPreparationSha256": "c44afe122b180188108a2ce598065eb475be883aa835a87e4fed1e1efb611719",
+  "policySha256": "410d0071628803564350a44cde99a7c8425e602dea3cb86d2df34931562c49e6",
+  "graderSha256": "dbb12e79f9784a7657debd99c6f5ee04acdc36200d3712b61d1cf965642b8b85",
+  "serviceGraderSha256": "c2890ccb1343c4fd29e5124b45d8fd86b93bb0235d99681010aa551015cbecd7",
+  "runnerSha256": "93f9eadb8c0be4c03f4bcd7813f8ebc77cdcd674824cd7268691950cd251a7c2"
+}

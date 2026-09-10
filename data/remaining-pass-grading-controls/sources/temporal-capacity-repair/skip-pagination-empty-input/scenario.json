@@ -1,0 +1,6 @@
+{
+  "id": "skip-pagination-empty-input",
+  "rows": [],
+  "queries": [],
+  "pageSize": 2
+}

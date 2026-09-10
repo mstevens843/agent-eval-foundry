@@ -1,0 +1,1 @@
+import{subject as reference}from'./reference-entry.mjs';export const subject={async run(view,api){return reference.run(view,{...api,archive:async r=>{const doc=JSON.parse(Buffer.from(r.bytes,'base64'));doc.accounts.reverse();doc.entries.reverse();return api.archive({bytes:Buffer.from(JSON.stringify(doc)).toString('base64')});}});}};

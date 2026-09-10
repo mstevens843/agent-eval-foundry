@@ -572,3 +572,101 @@ Trial 7, Codex: the sixth attempt completes the 3+3 provider balance; either res
 All retained attempts received the same cumulative `post-final-coverage-v2` controls. Original rewards, manifests and the preceding trial sections remain unchanged. Local replay of both previously passing services on this task's new scenario passed; the new failure is in the required checker.
 
 [Full audit and contract basis](../post-final-pass-audit-2026-09-09.md) · [Sanitized per-trial evidence](../evidence/2026-09-09-post-final-pass-audit.json).
+
+## Trial 7 -- post-final-coverage-v2 campaign, final attempt, meets 5/6 -- September 9, 2026
+
+**Reward 1 (recorded), reward 1 (effective) — a clean pass on both accountings, and this
+package's last authorized attempt.** This is the sixth and final successor attempt on this
+unchanged package, completing the 3-Claude/3-Codex balance: Codex (`openai/gpt-5.6-sol`,
+effort `xhigh`, CLI `0.153.2`), the third Codex attempt after Trials 5 and 6. Same author
+image and frozen runtime as every prior trial; same `packageDigest`
+`05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede` and `profileDigest`
+`a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641` as Trials 5 and 6.
+Completed in **7m 10s** — the fastest attempt in this whole batch. Tokens: 232,169 input
+(209,664 cached), 12,460 output; the Codex CLI never reports a price (`total_cost_usd`
+null). `completionSha256` `fbf325034a7ea35c5e45d5753a8d43ae05708c531107c35a57da348c4bdf6d37`,
+`resultSha256` `cd6f78aedad1c2381723118b54432f4db9867b657263a23286c01c10129f25a7`,
+`gradeSha256` `0e306a47f676db83ee284a736c02b400933d610691a79bb13f84db17386a12ff`. All 848
+manifest-listed files (3,802,104 bytes) reverified this session with zero errors. Record
+directory:
+`.local/final-six-2026-09-09/temporal-capacity-repair/trial-7/real-campaign-frozen/jobs/real-provider/records/temporal-capacity-repair-attempt-1/`.
+
+**Service:** 34/34 scenarios passed, 0 failures — fully correct, matching every prior
+trial. **Checker (original candidate bank):** 13/13 candidates correctly classified, 0
+missed, 0 false positives, pass=true — including `unread-empty-source`, the candidate
+Trials 2 and 4's Claude checkers each missed for different underlying reasons (see those
+trials' sections above).
+
+### The cumulative post-final-coverage-v2 supplement: the first checker to clear the full bank
+
+Under the `post-final-coverage-v2` policy this package carries a **cumulative** supplemental
+bank of two controls: the earlier v1 zero-query/no-work control from the
+[final-six pass audit](../final-six-pass-audit-2026-09-09.md) that reopened this package
+after Trial 6, plus a new v2 control testing a restarted pagination traversal — fetch the
+first page, restart the traversal from `null` again, then fetch a second page via the
+returned cursor, persisting one correct exact-integral answer. This trial's submitted
+checker scored **4/4 correct, deterministic, exactTokens true, pass=TRUE** against that full
+cumulative bank, correctly handling all four cases — both the original v1 zero-query
+control and the new v2 restarted-traversal control.
+
+Both prior Codex checkers on this package (Trials 5 and 6), per the
+[post-final pass audit](../post-final-pass-audit-2026-09-09.md) table above, locked onto
+only the single most-recently-issued cursor and wrongly reported "pages were not exhausted"
+when a restart occurred. This Trial 7 checker does not make that mistake. Its
+`checkPagination()` tracks reachable cursors as a growing set seeded with `null`, rather
+than a single current cursor, with the code's own comment explaining the intent: "Follow
+every possible chronological chain beginning at the required null cursor. Keeping prior
+branches permits a legitimate retry/full second pass." A restart from `null` therefore
+stays valid, and a chain that reaches a second `next: null` terminus after restarting is
+still correctly recognized as exhausted. This is the first Codex checker on this package
+observed to pass the full cumulative bank; it is one data point, not a pattern claim.
+
+### Final classification: package closed, meeting the threshold at the minimum margin
+
+This was **temporal-capacity-repair's final authorized attempt** — the sixth and last of
+its six-run set. Going into this trial the package was already at 5 effective failures out
+of 5 scored attempts (see the post-final pass audit table above), so **either outcome of
+this attempt — pass or fail — would have met the reported "at least 5 failures out of 6"
+threshold.** This attempt passed, making the final result exactly **5 out of 6** — the
+threshold met at the minimum required margin, not exceeded.
+
+Final effective history across the complete six-run set: T2=0, T3=0 (effective; corrected
+from a raw recorded pass by the first audit), T4=0, T5=0 (effective; corrected by this
+campaign's audit), Trial 6=0 (effective; corrected by this campaign's audit), Trial 7=1 —
+5 failures out of 6 scored attempts, with a complete, balanced 3 Claude + 3 Codex provider
+split. **This package's six-run set is CLOSED, MEETING the reported "at least 5 failures out
+of 6" threshold exactly at the boundary.**
+
+[Final campaign and standings](../final-six-2026-09-09.md) ·
+[Post-final pass audit](../post-final-pass-audit-2026-09-09.md) ·
+[Sanitized evidence](../evidence/2026-09-09-final-six.json).
+
+
+## Remaining-pass audit and replacement disposition — September 9, 2026
+
+Trial 7 Codex remains a pass: 22/22 cumulative checker classifications, plus nine
+passing service replays. Coverage includes repeated/restarted pagination, empty
+input exhaustion, large exact arithmetic, retractions, complete revision replacement,
+canonical totals, missing/duplicate reports and prototype-like query IDs. The code
+uses independent per-key revision selection and a reachable-cursor set.
+
+No additional defect was reproduced. This is a bounded audit, not proof of correctness
+on every possible input. All six counted attempts remain in place, three per provider,
+with five failures. No replacement or additional solver run is scheduled for this task.
+
+| Trial | Provider | Original reward | Cumulative v3 diagnostic reward | Counted reward |
+| --- | --- | --- | --- | --- |
+| 2 | claude | 0 | 0 | 0 |
+| 3 | claude | 1 | 0 | 0 |
+| 4 | claude | 0 | 0 | 0 |
+| 5 | codex | 1 | 0 | 0 |
+| 6 | codex | 1 | 0 | 0 |
+| 7 | codex | 1 | 1 | 1 |
+
+Current counted record: **5/6 failures**; 0 fresh replacement slot(s) pending.
+
+[Full audit](../remaining-pass-audit-2026-09-09.md) · [Verified evidence](../evidence/2026-09-09-remaining-pass-audit.json) · [User-selected counting disposition](../evidence/2026-09-09-three-replacement-disposition.json).
+
+Original submissions and grades were preserved and manifest-verified before and after
+the audit. The same cumulative controls covered all 24 retained submissions across
+the four audited packages. No new model calls were made during this audit.

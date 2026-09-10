@@ -2,11 +2,11 @@
 
 Build complete, fair benchmark task packages, verify them independently, and learn from preserved agent attempts.
 
-**1 task meets the target of at least 5/6 failures: incremental-build-repair (21)
-achieved 6/6 failures, with three Codex and three Claude attempts on the same package.**
-All six services passed 27/27 scenarios. Each required checker missed the same
-defect allowing publication before compiler issuance. All six recorded rewards are zero;
-this result uses the original grader and requires no retroactive correction.
+**Three finalists have completed the reported ≥5/6 failure target: two at 6/6 and
+one at 5/6. Two finalists await three fresh Codex replacements.** The latest audit
+confirmed three more false passes. At the user's request those three are unscored,
+with their raw records and diagnostic regrades preserved. Earlier agreed regrades
+remain counted.
 
 The unit of progress is a **valid, materially distinct task package**—not a report, a parameter sweep, or an axis count. Construct strong coherent contenders; validate locally; briefly classify each authorized result; investigate promising failures and test transfers.
 
@@ -14,26 +14,37 @@ The unit of progress is a **valid, materially distinct task package**—not a re
 
 Twenty-five professional package source trees are maintained here: native Go/browser/persistence/budget/rollout tasks plus twenty packages covering recovery, installation, planning, reconciliation, documents, calendars, caching, streaming and more. The foundry assembles public workspaces and private validators, runs correct/incorrect controls, exports retained artifacts, and inspects immutable execution evidence.
 
-This is the first complete 6/6 result in the 25-package successor screening campaign.
-The full set is **Codex Trials 2–4 and Claude Trials 5–7**, all fresh attempts on
-unchanged task bytes. A subsequent audit confirmed **six additional false passes**
-and reopened all four other finalists: **issued report 5/5, temporal capacity 5/5,
-variant cache 4/5, snapshot recovery 3/4**. Report and capacity each need one final
-Codex attempt to complete their balanced six-run set; cache needs one Codex failure,
-and snapshot needs two Claude failures.
+| Package | Counted failures / trials | Status | Remaining provider slots |
+| --- | --- | --- | --- |
+| **21 Incremental build** | **6/6** | Complete; meets ≥5/6 | None |
+| **25 Issued report** | **6/6** | Complete; meets ≥5/6 | None |
+| **10 Temporal capacity** | **5/6** | Complete; meets ≥5/6 | None |
+| 19 Variant cache | **4/4** | Pending; T6/T7 grading voids | Codex T8 and T9 |
+| 11 Snapshot recovery | **4/5** | Pending; T4 grading void | Codex T8 |
 
-[Final results](reports/screening/final-six-2026-09-09.md) ·
-[Build trial analysis](reports/screening/fifth-five/21-incremental-build-repair.md) ·
-[Verified evidence](reports/screening/evidence/2026-09-09-final-six.json).
+The new audit found that cache Trials 6/7 reject a legitimate tier copy, and snapshot
+Trial 4 rejects a valid empty recovery without a database commit. It also repaired
+missing private verification of metadata after a 304 validation. Snapshot Trial 7
+and temporal Trial 7 survived the broader checks and remain passes.
 
-[Latest pass audit and remaining slots](reports/screening/post-final-pass-audit-2026-09-09.md) ·
-[Regrade evidence](reports/screening/evidence/2026-09-09-post-final-pass-audit.json).
+Verification covered **24 retained submissions, 50/50 private-oracle classifications,
+29 passing-service replays, and 20,836 original files verified before and after with
+zero drift**. No additional model calls were made. Agent-visible packages remain
+unchanged; fresh replacements receive cumulative checker and service grading.
 
-The successor campaign still totals **46 attempts across 25 packages: 45 scored and
-one historical infrastructure interruption**. Original grades contain **15 zero rewards
-and 30 passes**. The two earlier corrections plus six new corrections give **23 effective
-failures and 22 passes** on those same 45 scored attempts. Regrades are documented
-corrections to existing attempts, not new model runs. Five provider slots remain unrun.
+There are **51 successor attempts across 25 packages**, with 50 completed raw grades
+and one historical infrastructure interruption. The current selected record contains
+**47 counted trials: 25 failures and 22 passes**, plus three grading voids awaiting
+replacement. Original grades remain visible (15 zeroes, 35 passes); audit findings
+are retained separately. We do not count a void as a failure or silently erase it.
+
+[Latest audit](reports/screening/remaining-pass-audit-2026-09-09.md) ·
+[Counting disposition](reports/screening/evidence/2026-09-09-three-replacement-disposition.json) ·
+[Three-replacement handoff](docs/three-replacements-handoff.md).
+
+The completed sets have three counted Codex and three counted Claude attempts. The
+remaining slots restore that balance for cache and snapshot. The reported ≥5/6
+screening target remains separate from final rubric and adversarial qualification.
 
 **Start with the [five-minute project status](docs/project-status.md)** for current
 standings, package links and the measurement history. The
@@ -45,7 +56,7 @@ Harbor checks before screening; the original and successor versions remain disti
 
 Twelve protected generic families remain calibration tools, not twelve additional professional deliverables. Historical discovery/scaffold commands produce drafts, not finished packages. Local controls do not prove task difficulty.
 
-Incremental build has completed the six-run screening target at 6/6. Final submission review and the required cheat checks remain separate. Real subscription-backed screening runs only through explicit authorization; local simulation commands do not dispatch providers.
+Three finalists have completed the reported six-run screening target; two await replacement trials. Final submission review and the required cheat checks remain separate. Real subscription-backed screening runs only through explicit authorization; local simulation commands do not dispatch providers.
 
 See the [current publication report](reports/PORTFOLIO-PUBLICATION.md), [historical Phase 7 acceptance](reports/PROMPT-07-INTEGRATION.md), and [production guide](docs/professional-portfolio.md) for scoped evidence and remaining work. The [artifact policy](docs/artifact-lifecycle.md) explains what is tracked versus intentionally private.
 

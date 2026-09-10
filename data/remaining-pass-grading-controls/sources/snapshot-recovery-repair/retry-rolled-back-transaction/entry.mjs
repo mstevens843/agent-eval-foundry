@@ -1,0 +1,1 @@
+import{subject as reference}from'./reference-entry.mjs';export const subject={async run(view,api){await api.begin({});await api.put({table:'entries',row:{id:150,account:199,amount:1}});const failed=await api.commit({});if(failed.ok)throw Error('expected foreign-key rollback');return reference.run(view,api);}};

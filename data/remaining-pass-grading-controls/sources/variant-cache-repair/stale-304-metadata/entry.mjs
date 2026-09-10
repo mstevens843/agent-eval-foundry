@@ -1,0 +1,1 @@
+import{subject as reference}from'./reference-entry.mjs';export const subject={async run(view,api){let validation=false;return reference.run(view,new Proxy({...api},{get(t,k){if(k==='origin')return async r=>{const x=await t.origin(r);validation=x.status===304;return x};if(k==='write')return async r=>validation?{stored:true}:t.write(r);return t[k]}}));}};

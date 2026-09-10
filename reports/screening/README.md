@@ -1,42 +1,42 @@
 # Screening results and what they changed
 
-**1 task meets the target of at least 5/6 failures: incremental-build-repair (21)
-achieved 6/6 failures, with three Codex and three Claude attempts on the same package.**
-All six services passed 27/27 scenarios. Each required checker missed the same
-defect allowing publication before compiler issuance. All six recorded rewards are zero;
-this result uses the original grader and requires no retroactive correction.
+**Three finalists have completed the reported ≥5/6 failure target: two at 6/6 and
+one at 5/6. Two finalists await three fresh Codex replacements.** The latest audit
+confirmed three more false passes. At the user's request those three are unscored,
+with their raw records and diagnostic regrades preserved. Earlier agreed regrades
+remain counted.
 
-| Package | Current effective failures/scored | Provider counts | Current outcome |
+| Package | Counted failures / trials | Status | Remaining provider slots |
 | --- | --- | --- | --- |
-| **21 Incremental build** | **6/6** | **3 Codex + 3 Claude** | **Completed; meets ≥5/6** |
-| 25 Issued report | **5/5** | 3 Claude + 2 Codex | Final Codex slot pending; either result gives ≥5/6 |
-| 10 Temporal capacity | **5/5** | 3 Claude + 2 Codex | Final Codex slot pending; either result gives ≥5/6 |
-| 19 Variant cache | **4/5** | 3 Claude + 2 Codex | Reopened; last Codex attempt must fail |
-| 11 Snapshot recovery | **3/4** | 3 Codex + 1 Claude | Reopened; two Claude attempts must fail |
+| **21 Incremental build** | **6/6** | Complete; meets ≥5/6 | None |
+| **25 Issued report** | **6/6** | Complete; meets ≥5/6 | None |
+| **10 Temporal capacity** | **5/6** | Complete; meets ≥5/6 | None |
+| 19 Variant cache | **4/4** | Pending; T6/T7 grading voids | Codex T8 and T9 |
+| 11 Snapshot recovery | **4/5** | Pending; T4 grading void | Codex T8 |
 
-**The post-final audit confirmed six additional false passes and reopened all four
-eliminated finalists.** This adds no model trials. One balanced set is complete; two
-more packages already have five failures and need their sixth attempt for the requested
-three-per-provider balance. Different valid failure mechanisms count.
+The new audit found that cache Trials 6/7 reject a legitimate tier copy, and snapshot
+Trial 4 rejects a valid empty recovery without a database commit. It also repaired
+missing private verification of metadata after a 304 validation. Snapshot Trial 7
+and temporal Trial 7 survived the broader checks and remain passes.
 
-Our checker grader lacked three valid alternative-execution controls and one invalid
-string-preservation control. The frozen service verifier and private reference checker
-agree on all four cases. The same cumulative controls were applied to every retained
-attempt of each affected package: **19 regrades, four private oracle passes, and eight
-passing-service replays**. All 16,573 original manifest-listed files verified before
-and after with zero drift. Original task packages, rewards and evidence remain intact.
+Verification covered **24 retained submissions, 50/50 private-oracle classifications,
+29 passing-service replays, and 20,836 original files verified before and after with
+zero drift**. No additional model calls were made. Agent-visible packages remain
+unchanged; fresh replacements receive cumulative checker and service grading.
 
-The successor campaign still totals **46 attempts across 25 packages: 45 scored and
-one historical infrastructure interruption**. Original grades contain **15 zero rewards
-and 30 passes**. The two earlier corrections plus six new corrections give **23 effective
-failures and 22 passes** on those same 45 scored attempts. Regrades are documented
-corrections to existing attempts, not new model runs. Five provider slots remain unrun.
+There are **51 successor attempts across 25 packages**, with 50 completed raw grades
+and one historical infrastructure interruption. The current selected record contains
+**47 counted trials: 25 failures and 22 passes**, plus three grading voids awaiting
+replacement. Original grades remain visible (15 zeroes, 35 passes); audit findings
+are retained separately. We do not count a void as a failure or silently erase it.
 
-[Current audit and exact remaining slots](post-final-pass-audit-2026-09-09.md) ·
-[Sanitized regrade evidence](evidence/2026-09-09-post-final-pass-audit.json) ·
-[Original final-six campaign and build results](final-six-2026-09-09.md).
-The six-run screening target is complete for build; final submission review and
-required cheat checks remain separate from this measured result.
+[Latest audit](../../reports/screening/remaining-pass-audit-2026-09-09.md) ·
+[Counting disposition](../../reports/screening/evidence/2026-09-09-three-replacement-disposition.json) ·
+[Three-replacement handoff](../../docs/three-replacements-handoff.md).
+
+The completed sets have three counted Codex and three counted Claude attempts. The
+remaining slots restore that balance for cache and snapshot. The reported ≥5/6
+screening target remains separate from final rubric and adversarial qualification.
 
 The [completed five-package implementation](top-five-implementation-plan-2026-09-09.md)
 records the September 9 successors, all local checks and exact exports for the next

@@ -1,0 +1,1 @@
+import{subject as reference}from'./reference-entry.mjs';export const subject={run(view,api){const r=reference.run(view,api);let cursor=null;do{cursor=api.fetch({cursor}).next;}while(cursor!==null);return r;}};

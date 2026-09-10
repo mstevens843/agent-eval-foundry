@@ -1,0 +1,1 @@
+import{subject as reference}from'./reference-entry.mjs';export const subject={async run(view,api){let n=0;return reference.run(view,new Proxy({...api},{get(t,k){if(k==='next')return async r=>{const x=await t.next(r);if(x.event&&++n===2){const {entries}=await t.read({tier:'edge-a'});await t.write({tier:'edge-b',entries});}return x};return t[k]}}));}};

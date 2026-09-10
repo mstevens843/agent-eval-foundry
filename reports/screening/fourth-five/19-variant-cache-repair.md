@@ -676,3 +676,129 @@ Trial 7, Codex: one failure is needed for 5/6. No new model trial was launched b
 All retained attempts received the same cumulative `post-final-coverage-v2` controls. Original rewards, manifests and the preceding trial sections remain unchanged. Local replay of both previously passing services on this task's new scenario passed; the new failure is in the required checker.
 
 [Full audit and contract basis](../post-final-pass-audit-2026-09-09.md) · [Sanitized per-trial evidence](../evidence/2026-09-09-post-final-pass-audit.json).
+
+## Trial 7 -- post-final-coverage-v2 campaign, final attempt -- September 9, 2026
+
+### Identity and execution
+
+Run `variant-cache-repair-attempt-1` in the `post-final-coverage-v2` campaign's
+Trial-7 slot, this package's **last authorized attempt**, package digest
+`73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b` -- byte-identical to
+Trials 2-6 -- profile digest `a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641`.
+Requested target **codex** (third consecutive Codex attempt, after Trials 5-6),
+`openai/gpt-5.6-sol`, effort `xhigh`, CLI `0.153.2`. Same frozen execution source
+`2184eee80cf416d7c7dd07c884bdef27919889cbfeaaaa4e7cb9e0f7f6fe74c4` and pinned author
+image `sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a` as every
+prior trial.
+
+Dispatched `2026-09-10T00:51:23.856Z`, completed `2026-09-10T01:14:04.271Z` (~22m41s),
+well under the 10,800s (3h) cap. The solver received only the original public task
+inputs -- no prior submission, analysis, or this campaign's handoff. Tokens: 1,384,789 in
+(1,252,480 cached), 38,457 out; the Codex CLI reports tokens but never a price (cost
+null). completionSha256
+`7744062b2ddc978507e091021088925498e3206ddf1b9c9744f0f99315bb4c30`, resultSha256
+`a088e5a2ec0f6a806039b9f63f0348b7e5164e3510d6b2722d1545125db38a9d`, gradeSha256
+`424bb6b927b13607248732de51b8ab27864f8ec1d4730a070b83d115146a0f05`. 972 manifest-listed
+files (59,345,897 bytes) reverified with zero errors this session. This package now
+carries the `post-final-coverage-v2` supplemental grading policy, first applied in the
+audit above; effective reward is the conjunction of the recorded grade and the
+supplemental result.
+
+### Results
+
+**Recorded (raw) reward 1. Effective reward 1 -- both the base grade and the
+post-final-coverage-v2 supplement pass; no divergence on this trial.**
+
+- **Base service: 25/25 scenarios passed** -- fully correct against the original
+  protected bank.
+- **Base checker (original candidate bank): 15/15 correct, 0 missed, 0 false
+  positives, deterministic, pass=true.** This is the same 15-candidate bank Trials 5
+  and 6 also passed cleanly, including `wildcard-eviction` and `intermediate-wipe`.
+- **Supplemental grade (`post-final-coverage-v2`, the new targeted control specific
+  to this package): 2/2 correct, deterministic, exactTokens true, pass=true.** The
+  control legitimately copies an origin-derived asset into a second, initially-empty
+  edge cache during a first `GET`, preserving `age`/`storedAt` and using only one
+  origin call -- the exact valid alternative that Trial 5's checker wrongly rejected
+  as `get changed unrelated tier edge-b`, and that Trial 6's checker had already
+  fixed. Trial 7's checker correctly accepts it too: reading `checker.mjs`, its
+  get-write legality check builds a `possibleCopies` list from every entry already
+  present in the other tiers for that event and accepts a new entry that deep-equals
+  one of them (`possibleCopies.some((source) => isDeepStrictEqual(entry, source))`),
+  rather than restricting a get's legal writes to only the tier that was hit.
+
+### Final classification for this package -- six-run set closed at 4/6
+
+**This was the package's final authorized attempt, and it needed to FAIL to reach
+the reported "at least five failures out of six" threshold. It passed both the base
+bank and the new supplemental control instead.**
+
+Final effective history across the complete six-run set:
+
+**T2 = 0 (Claude) -- T3 = 0 (Claude) -- T4 = 0 (Claude) -- T5 = 0 (Codex, effective;
+recorded 1, corrected by the post-final pass audit above) -- Trial 6 = 1 (Codex) --
+Trial 7 = 1 (Codex) -- 4 failures out of 6 scored attempts**, with a complete,
+balanced **3 Claude + 3 Codex** provider split.
+
+This package's six-run set is now **CLOSED at 4/6**, which cannot reach the reported
+"at least 5 failures out of 6" threshold. No further attempts remain authorized or
+possible under the fixed six-run design. State this plainly: this is the package's
+final, settled outcome -- not an incomplete or stopped-early set like the earlier
+five-run record after Trial 6, but a complete six-run set that fell one failure
+short.
+
+### Evidence
+
+Raw evidence for this trial remains at
+`.local/final-six-2026-09-09/variant-cache-repair/trial-7/real-campaign-frozen/jobs/real-provider/records/variant-cache-repair-attempt-1/`,
+with `grading/submission/entry.mjs` and `grading/submission/checker.mjs` holding this
+trial's actual submitted code, `result.json` and `grading/checker-grade/grade-summary.json`
+the base-grade results, and the `post-final-coverage-v2` supplement recorded separately
+at `.local/post-final-five-2026-09-09/adjudicated/variant-cache-repair-trial-7.json`
+(policySha256 `6b085af92e4b903f6b46cb93e430fafa946316818970c7eb89fd27b4298ac6d7`). The
+prior Trial 5, Trial 6 and post-final-pass-audit sections above are preserved unchanged.
+
+This is an exploratory repository assessment. The Trial 7 result still records
+`adjudication: unlabelled`, `modelEvidenceEligible: false` and
+`countsAsModelFailure: false`; nothing above claims official cheat qualification or
+independent blind review. It does state, without qualification, that this package's
+complete six-run set is closed at 4 failures out of 6.
+
+
+## Remaining-pass audit and replacement disposition — September 9, 2026
+
+Trials 6 and 7 Codex both reject a legitimate origin-derived `/asset` copy into the
+empty second edge while the active get is for `/revalidate`. The contract permits
+legitimate tier copies and requires preserving unrelated entries; it does not impose
+an active-path-only copying restriction. All fields and unrelated content survive,
+there is no additional origin request for the copy, and the frozen service verifier
+and private reference checker accept the execution. T6 rejects `get b stored an
+unrelated path`; T7 rejects `cache write fabricated or evicted a representation`.
+
+T7 also accepts retained stale metadata after a 304 validation. This exposed missing
+coverage in our frozen service verifier and original private reference checker too;
+the new private metadata validator rejects it under the pre-existing refresh rule.
+T6 correctly rejects that negative control. T7 additionally rejects a valid fresh
+cache response after an extra origin call. These are checker defects; both actual
+services pass the three new scenario replays apiece.
+
+The user elected **grading voids, not counted failures**, for these newly discovered
+false passes. T6/T7 raw grades remain 1; their diagnostic v3 regrades are 0; their
+counted rewards are null. Retained T2–T5 are four failures. Fresh independent Codex
+T8/T9 replace T6/T7. At least one must fail to finish at ≥5/6.
+
+| Trial | Provider | Original reward | Cumulative v3 diagnostic reward | Counted reward |
+| --- | --- | --- | --- | --- |
+| 2 | claude | 0 | 0 | 0 |
+| 3 | claude | 0 | 0 | 0 |
+| 4 | claude | 0 | 0 | 0 |
+| 5 | codex | 1 | 0 | 0 |
+| 6 | codex | 1 | 0 | Unscored — grading void |
+| 7 | codex | 1 | 0 | Unscored — grading void |
+
+Current counted record: **4/4 failures**; 2 fresh replacement slot(s) pending.
+
+[Full audit](../remaining-pass-audit-2026-09-09.md) · [Verified evidence](../evidence/2026-09-09-remaining-pass-audit.json) · [User-selected counting disposition](../evidence/2026-09-09-three-replacement-disposition.json).
+
+Original submissions and grades were preserved and manifest-verified before and after
+the audit. The same cumulative controls covered all 24 retained submissions across
+the four audited packages. No new model calls were made during this audit.

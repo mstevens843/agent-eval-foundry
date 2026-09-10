@@ -1,0 +1,223 @@
+{
+  "schemaVersion": 1,
+  "revision": "remaining-pass-coverage-v3",
+  "image": "sha256:0d111d755a70b9f8a3e8fec4f7bc641b3211bcf6ebb03bfd6fbded7c776176ab",
+  "extends": {
+    "path": "data/post-final-grading-controls/policy.json",
+    "sha256": "6b085af92e4b903f6b46cb93e430fafa946316818970c7eb89fd27b4298ac6d7"
+  },
+  "combination": "effectiveReward = min(recordedReward, cumulativeSupplementPass ? 1 : 0); same coverage for all retained attempts, original records unchanged",
+  "controls": [
+    {
+      "id": "variant-cache-repair",
+      "fixture": "data/remaining-pass-grading-controls/variant-cache-repair.json",
+      "sha256": "5fb40da2dedd0670c4706ff17bc9626d398cee0852c6df1c3d654aa27e4815be",
+      "expected": [
+        {
+          "token": "317f2df180e4cdb3098e2db5",
+          "ok": true,
+          "name": "stale-304-metadata-baseline"
+        },
+        {
+          "token": "3dee4fd5227f802f034982b3",
+          "ok": false,
+          "name": "stale-304-metadata-control"
+        },
+        {
+          "token": "39254bac0cc93e4bca06d1ca",
+          "ok": true,
+          "name": "fresh-plus-origin-baseline"
+        },
+        {
+          "token": "f117e58ac5e920eb294cdf60",
+          "ok": true,
+          "name": "fresh-plus-origin-control"
+        },
+        {
+          "token": "65a72eb8f8465d6428965e18",
+          "ok": true,
+          "name": "copy-other-path-baseline"
+        },
+        {
+          "token": "b0b340ef902561caacd4186f",
+          "ok": true,
+          "name": "copy-other-path-control"
+        }
+      ]
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "fixture": "data/remaining-pass-grading-controls/snapshot-recovery-repair.json",
+      "sha256": "de17e70f4b290146c36bce58c6cc9bdf7f910be396fdce8a8e12bd5006d91bf4",
+      "expected": [
+        {
+          "token": "e8af17a27ac07d0946e82088",
+          "ok": true,
+          "name": "empty-no-commit-baseline"
+        },
+        {
+          "token": "cedcb51b3c997f661dbdb8c0",
+          "ok": true,
+          "name": "empty-no-commit-control"
+        },
+        {
+          "token": "2bdf91aec96fad4b45dcb021",
+          "ok": true,
+          "name": "retry-rolled-back-transaction-baseline"
+        },
+        {
+          "token": "7138d9518c13a240a93d8c66",
+          "ok": true,
+          "name": "retry-rolled-back-transaction-control"
+        },
+        {
+          "token": "df1c49c86b82d48ff4cd19cd",
+          "ok": true,
+          "name": "replace-staged-archive-baseline"
+        },
+        {
+          "token": "c04f215f1c245d5ed81b8989",
+          "ok": true,
+          "name": "replace-staged-archive-control"
+        },
+        {
+          "token": "7e564d6dff2273e840c2e312",
+          "ok": true,
+          "name": "reverse-archive-row-order-baseline"
+        },
+        {
+          "token": "f3d284b0405a9cbe81c9d14f",
+          "ok": true,
+          "name": "reverse-archive-row-order-control"
+        },
+        {
+          "token": "b8f45b1f95727ac6bd891e91",
+          "ok": true,
+          "name": "wrong-allocation-baseline"
+        },
+        {
+          "token": "a25cf456294faf5d736b7acd",
+          "ok": false,
+          "name": "wrong-allocation-control"
+        },
+        {
+          "token": "87c035fb63a704b863b66592",
+          "ok": true,
+          "name": "no-publication-baseline"
+        },
+        {
+          "token": "ef59d28e12f352ce5d0eec2d",
+          "ok": false,
+          "name": "no-publication-control"
+        },
+        {
+          "token": "2e87b4e6c9f2ceb17f2daa49",
+          "ok": true,
+          "name": "missing-backup-row-baseline"
+        },
+        {
+          "token": "e15718d4b10a38f3f4c0ac78",
+          "ok": false,
+          "name": "missing-backup-row-control"
+        }
+      ]
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "fixture": "data/remaining-pass-grading-controls/temporal-capacity-repair.json",
+      "sha256": "13c22fd40d4875a135c4c70bc51772495be9bafd06cb2f5abd0a500f3770550d",
+      "expected": [
+        {
+          "token": "aa5e845c45b4dbf086e38713",
+          "ok": true,
+          "name": "large-values-retractions-baseline"
+        },
+        {
+          "token": "d03aa8fc6cf3fd33b2f7ab59",
+          "ok": true,
+          "name": "large-values-retractions-control"
+        },
+        {
+          "token": "0f87e40c818b423ac47512d5",
+          "ok": true,
+          "name": "restart-and-repeat-pagination-baseline"
+        },
+        {
+          "token": "1fdbbe458f07a950d3f5f636",
+          "ok": true,
+          "name": "restart-and-repeat-pagination-control"
+        },
+        {
+          "token": "66e973e277c7619a65a9cffd",
+          "ok": true,
+          "name": "record-before-second-traversal-baseline"
+        },
+        {
+          "token": "e9e273322e02d9df74bf6ceb",
+          "ok": true,
+          "name": "record-before-second-traversal-control"
+        },
+        {
+          "token": "ca26f869b6581172abe185fb",
+          "ok": true,
+          "name": "wrong-exact-total-baseline"
+        },
+        {
+          "token": "451b5ef940d9bdefa85f80f3",
+          "ok": false,
+          "name": "wrong-exact-total-control"
+        },
+        {
+          "token": "d1aea6fa9415802c8acd5795",
+          "ok": true,
+          "name": "noncanonical-total-baseline"
+        },
+        {
+          "token": "11f450da5311cce2f6b4b997",
+          "ok": false,
+          "name": "noncanonical-total-control"
+        },
+        {
+          "token": "153dce72a7f969e7ed6e4f28",
+          "ok": true,
+          "name": "duplicate-report-baseline"
+        },
+        {
+          "token": "4b75a0cdfc4e652a00d1f036",
+          "ok": false,
+          "name": "duplicate-report-control"
+        },
+        {
+          "token": "980bf58909143c60121f0fb1",
+          "ok": true,
+          "name": "missing-report-baseline"
+        },
+        {
+          "token": "d772c28c2bf85c077c7ce6ee",
+          "ok": false,
+          "name": "missing-report-control"
+        },
+        {
+          "token": "b1c935f8985a6c2362b8d5b7",
+          "ok": true,
+          "name": "skip-pagination-empty-input-baseline"
+        },
+        {
+          "token": "845f2d9e6f187d6277bb2872",
+          "ok": false,
+          "name": "skip-pagination-empty-input-control"
+        },
+        {
+          "token": "7733aa0d7ccb1e460ceb9b60",
+          "ok": true,
+          "name": "complete-empty-input-baseline"
+        },
+        {
+          "token": "1a4041e152af5697db0e4798",
+          "ok": true,
+          "name": "complete-empty-input-control"
+        }
+      ]
+    }
+  ]
+}

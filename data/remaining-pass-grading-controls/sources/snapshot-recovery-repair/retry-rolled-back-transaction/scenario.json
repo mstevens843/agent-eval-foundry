@@ -1,0 +1,22 @@
+{
+  "id": "retry-rolled-back-transaction",
+  "tenant": "tenant",
+  "branch": "main",
+  "cutoff": 1,
+  "catalog": [
+    {
+      "id": "cp",
+      "tenant": "tenant",
+      "branch": "main",
+      "at": 1,
+      "lsn": 1,
+      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3",
+      "size": 160
+    }
+  ],
+  "blobs": {
+    "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+  },
+  "cache": {},
+  "logs": []
+}

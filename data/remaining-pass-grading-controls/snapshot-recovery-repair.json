@@ -1,0 +1,4967 @@
+{
+  "cases": [
+    {
+      "token": "e8af17a27ac07d0946e82088",
+      "cells": [
+        {
+          "scenarioId": "empty-no-commit",
+          "actual": {
+            "accounts": [],
+            "entries": [],
+            "nextId": 1
+          },
+          "backupError": null,
+          "publications": [
+            {
+              "state": {
+                "accounts": [],
+                "entries": [],
+                "nextId": 1
+              },
+              "archive": {
+                "tenant": "tenant",
+                "branch": "main",
+                "cutoff": 1,
+                "accounts": [],
+                "entries": [],
+                "nextId": 1
+              }
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "cache",
+              "request": {
+                "digest": "cea0f39ffa3ad2cd377fb3d726c6fa1e1e33eb991495421857a358a203280599"
+              },
+              "value": null
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "digest": "cea0f39ffa3ad2cd377fb3d726c6fa1e1e33eb991495421857a358a203280599"
+              },
+              "value": {
+                "bytes": "eyJhY2NvdW50cyI6W10sImVudHJpZXMiOltdLCJuZXh0SWQiOjF9"
+              }
+            },
+            {
+              "seq": 2,
+              "method": "archive",
+              "request": {
+                "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W10sImVudHJpZXMiOltdLCJuZXh0SWQiOjF9"
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 3,
+              "method": "begin",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "allocate",
+              "request": {
+                "nextId": 1
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "commit",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "publish",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "completed": true
+            }
+          ],
+          "view": {
+            "tenant": "tenant",
+            "branch": "main",
+            "cutoff": 1,
+            "catalog": [
+              {
+                "id": "cp",
+                "tenant": "tenant",
+                "branch": "main",
+                "at": 1,
+                "lsn": 1,
+                "digest": "cea0f39ffa3ad2cd377fb3d726c6fa1e1e33eb991495421857a358a203280599",
+                "size": 39
+              }
+            ],
+            "logs": []
+          },
+          "blobs": {
+            "cea0f39ffa3ad2cd377fb3d726c6fa1e1e33eb991495421857a358a203280599": "eyJhY2NvdW50cyI6W10sImVudHJpZXMiOltdLCJuZXh0SWQiOjF9"
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "cache",
+                    "request": {
+                      "digest": "cea0f39ffa3ad2cd377fb3d726c6fa1e1e33eb991495421857a358a203280599"
+                    },
+                    "value": null
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "digest": "cea0f39ffa3ad2cd377fb3d726c6fa1e1e33eb991495421857a358a203280599"
+                    },
+                    "value": {
+                      "bytes": "eyJhY2NvdW50cyI6W10sImVudHJpZXMiOltdLCJuZXh0SWQiOjF9"
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "archive",
+                    "request": {
+                      "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W10sImVudHJpZXMiOltdLCJuZXh0SWQiOjF9"
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "begin",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "allocate",
+                    "request": {
+                      "nextId": 1
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "commit",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "publish",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 10,
+                "requestBytes": 766,
+                "responseBytes": 758,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "cedcb51b3c997f661dbdb8c0",
+      "cells": [
+        {
+          "scenarioId": "empty-no-commit",
+          "actual": {
+            "accounts": [],
+            "entries": [],
+            "nextId": 1
+          },
+          "backupError": null,
+          "publications": [
+            {
+              "state": {
+                "accounts": [],
+                "entries": [],
+                "nextId": 1
+              },
+              "archive": {
+                "tenant": "tenant",
+                "branch": "main",
+                "cutoff": 1,
+                "accounts": [],
+                "entries": [],
+                "nextId": 1
+              }
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "fetch",
+              "request": {
+                "digest": "cea0f39ffa3ad2cd377fb3d726c6fa1e1e33eb991495421857a358a203280599"
+              },
+              "value": {
+                "bytes": "eyJhY2NvdW50cyI6W10sImVudHJpZXMiOltdLCJuZXh0SWQiOjF9"
+              }
+            },
+            {
+              "seq": 1,
+              "method": "archive",
+              "request": {
+                "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W10sImVudHJpZXMiOltdLCJuZXh0SWQiOjF9"
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 2,
+              "method": "publish",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "ok": true
+            }
+          ],
+          "view": {
+            "tenant": "tenant",
+            "branch": "main",
+            "cutoff": 1,
+            "catalog": [
+              {
+                "id": "cp",
+                "tenant": "tenant",
+                "branch": "main",
+                "at": 1,
+                "lsn": 1,
+                "digest": "cea0f39ffa3ad2cd377fb3d726c6fa1e1e33eb991495421857a358a203280599",
+                "size": 39
+              }
+            ],
+            "logs": []
+          },
+          "blobs": {
+            "cea0f39ffa3ad2cd377fb3d726c6fa1e1e33eb991495421857a358a203280599": "eyJhY2NvdW50cyI6W10sImVudHJpZXMiOltdLCJuZXh0SWQiOjF9"
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "fetch",
+                    "request": {
+                      "digest": "cea0f39ffa3ad2cd377fb3d726c6fa1e1e33eb991495421857a358a203280599"
+                    },
+                    "value": {
+                      "bytes": "eyJhY2NvdW50cyI6W10sImVudHJpZXMiOltdLCJuZXh0SWQiOjF9"
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "archive",
+                    "request": {
+                      "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W10sImVudHJpZXMiOltdLCJuZXh0SWQiOjF9"
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "publish",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 6,
+                "requestBytes": 469,
+                "responseBytes": 640,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "2bdf91aec96fad4b45dcb021",
+      "cells": [
+        {
+          "scenarioId": "retry-rolled-back-transaction",
+          "actual": {
+            "accounts": [
+              {
+                "id": 1,
+                "name": "001"
+              },
+              {
+                "id": 2,
+                "name": "Zoë, (account)"
+              }
+            ],
+            "entries": [
+              {
+                "id": 2,
+                "account": 1,
+                "amount": -17
+              },
+              {
+                "id": 7,
+                "account": 2,
+                "amount": 0
+              }
+            ],
+            "nextId": 99
+          },
+          "backupError": null,
+          "publications": [
+            {
+              "state": {
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  },
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  }
+                ],
+                "nextId": 99
+              },
+              "archive": {
+                "tenant": "tenant",
+                "branch": "main",
+                "cutoff": 1,
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  },
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  }
+                ],
+                "nextId": 99
+              }
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "cache",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": null
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": {
+                "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              }
+            },
+            {
+              "seq": 2,
+              "method": "archive",
+              "request": {
+                "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 3,
+              "method": "begin",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 1,
+                  "name": "001"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 2,
+                  "name": "Zoë, (account)"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 7,
+                  "account": 2,
+                  "amount": 0
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 7,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 2,
+                  "account": 1,
+                  "amount": -17
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "allocate",
+              "request": {
+                "nextId": 99
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "commit",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 10,
+              "method": "publish",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "completed": true
+            }
+          ],
+          "view": {
+            "tenant": "tenant",
+            "branch": "main",
+            "cutoff": 1,
+            "catalog": [
+              {
+                "id": "cp",
+                "tenant": "tenant",
+                "branch": "main",
+                "at": 1,
+                "lsn": 1,
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3",
+                "size": 160
+              }
+            ],
+            "logs": []
+          },
+          "blobs": {
+            "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "cache",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": null
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": {
+                      "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "archive",
+                    "request": {
+                      "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "begin",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 1,
+                        "name": "001"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 2,
+                        "name": "Zoë, (account)"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 7,
+                        "account": 2,
+                        "amount": 0
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 2,
+                        "account": 1,
+                        "amount": -17
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "allocate",
+                    "request": {
+                      "nextId": 99
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "commit",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "publish",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 14,
+                "requestBytes": 1343,
+                "responseBytes": 1051,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "7138d9518c13a240a93d8c66",
+      "cells": [
+        {
+          "scenarioId": "retry-rolled-back-transaction",
+          "actual": {
+            "accounts": [
+              {
+                "id": 1,
+                "name": "001"
+              },
+              {
+                "id": 2,
+                "name": "Zoë, (account)"
+              }
+            ],
+            "entries": [
+              {
+                "id": 2,
+                "account": 1,
+                "amount": -17
+              },
+              {
+                "id": 7,
+                "account": 2,
+                "amount": 0
+              }
+            ],
+            "nextId": 99
+          },
+          "backupError": null,
+          "publications": [
+            {
+              "state": {
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  },
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  }
+                ],
+                "nextId": 99
+              },
+              "archive": {
+                "tenant": "tenant",
+                "branch": "main",
+                "cutoff": 1,
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  },
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  }
+                ],
+                "nextId": 99
+              }
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "begin",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 1,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 150,
+                  "account": 199,
+                  "amount": 1
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 2,
+              "method": "commit",
+              "request": {},
+              "value": {
+                "ok": false,
+                "error": "FOREIGN KEY constraint failed"
+              }
+            },
+            {
+              "seq": 3,
+              "method": "cache",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": null
+            },
+            {
+              "seq": 4,
+              "method": "fetch",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": {
+                "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              }
+            },
+            {
+              "seq": 5,
+              "method": "archive",
+              "request": {
+                "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "begin",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 7,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 1,
+                  "name": "001"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 2,
+                  "name": "Zoë, (account)"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 7,
+                  "account": 2,
+                  "amount": 0
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 10,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 2,
+                  "account": 1,
+                  "amount": -17
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 11,
+              "method": "allocate",
+              "request": {
+                "nextId": 99
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 12,
+              "method": "commit",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 13,
+              "method": "publish",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "completed": true
+            }
+          ],
+          "view": {
+            "tenant": "tenant",
+            "branch": "main",
+            "cutoff": 1,
+            "catalog": [
+              {
+                "id": "cp",
+                "tenant": "tenant",
+                "branch": "main",
+                "at": 1,
+                "lsn": 1,
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3",
+                "size": 160
+              }
+            ],
+            "logs": []
+          },
+          "blobs": {
+            "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "begin",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 150,
+                        "account": 199,
+                        "amount": 1
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "commit",
+                    "request": {},
+                    "value": {
+                      "ok": false,
+                      "error": "FOREIGN KEY constraint failed"
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "cache",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": null
+                  },
+                  {
+                    "seq": 4,
+                    "method": "fetch",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": {
+                      "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "archive",
+                    "request": {
+                      "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "begin",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 1,
+                        "name": "001"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 2,
+                        "name": "Zoë, (account)"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 7,
+                        "account": 2,
+                        "amount": 0
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 2,
+                        "account": 1,
+                        "amount": -17
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 11,
+                    "method": "allocate",
+                    "request": {
+                      "nextId": 99
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 12,
+                    "method": "commit",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 13,
+                    "method": "publish",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 17,
+                "requestBytes": 1554,
+                "responseBytes": 1188,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "df1c49c86b82d48ff4cd19cd",
+      "cells": [
+        {
+          "scenarioId": "replace-staged-archive",
+          "actual": {
+            "accounts": [
+              {
+                "id": 1,
+                "name": "001"
+              },
+              {
+                "id": 2,
+                "name": "Zoë, (account)"
+              }
+            ],
+            "entries": [
+              {
+                "id": 2,
+                "account": 1,
+                "amount": -17
+              },
+              {
+                "id": 7,
+                "account": 2,
+                "amount": 0
+              }
+            ],
+            "nextId": 99
+          },
+          "backupError": null,
+          "publications": [
+            {
+              "state": {
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  },
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  }
+                ],
+                "nextId": 99
+              },
+              "archive": {
+                "tenant": "tenant",
+                "branch": "main",
+                "cutoff": 1,
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  },
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  }
+                ],
+                "nextId": 99
+              }
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "cache",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": null
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": {
+                "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              }
+            },
+            {
+              "seq": 2,
+              "method": "archive",
+              "request": {
+                "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 3,
+              "method": "begin",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 1,
+                  "name": "001"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 2,
+                  "name": "Zoë, (account)"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 7,
+                  "account": 2,
+                  "amount": 0
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 7,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 2,
+                  "account": 1,
+                  "amount": -17
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "allocate",
+              "request": {
+                "nextId": 99
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "commit",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 10,
+              "method": "publish",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "completed": true
+            }
+          ],
+          "view": {
+            "tenant": "tenant",
+            "branch": "main",
+            "cutoff": 1,
+            "catalog": [
+              {
+                "id": "cp",
+                "tenant": "tenant",
+                "branch": "main",
+                "at": 1,
+                "lsn": 1,
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3",
+                "size": 160
+              }
+            ],
+            "logs": []
+          },
+          "blobs": {
+            "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "cache",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": null
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": {
+                      "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "archive",
+                    "request": {
+                      "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "begin",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 1,
+                        "name": "001"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 2,
+                        "name": "Zoë, (account)"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 7,
+                        "account": 2,
+                        "amount": 0
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 2,
+                        "account": 1,
+                        "amount": -17
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "allocate",
+                    "request": {
+                      "nextId": 99
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "commit",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "publish",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 14,
+                "requestBytes": 1343,
+                "responseBytes": 1051,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "c04f215f1c245d5ed81b8989",
+      "cells": [
+        {
+          "scenarioId": "replace-staged-archive",
+          "actual": {
+            "accounts": [
+              {
+                "id": 1,
+                "name": "001"
+              },
+              {
+                "id": 2,
+                "name": "Zoë, (account)"
+              }
+            ],
+            "entries": [
+              {
+                "id": 2,
+                "account": 1,
+                "amount": -17
+              },
+              {
+                "id": 7,
+                "account": 2,
+                "amount": 0
+              }
+            ],
+            "nextId": 99
+          },
+          "backupError": null,
+          "publications": [
+            {
+              "state": {
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  },
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  }
+                ],
+                "nextId": 99
+              },
+              "archive": {
+                "tenant": "tenant",
+                "branch": "main",
+                "cutoff": 1,
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  },
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  }
+                ],
+                "nextId": 99
+              }
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "archive",
+              "request": {
+                "bytes": "e30="
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 1,
+              "method": "cache",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": null
+            },
+            {
+              "seq": 2,
+              "method": "fetch",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": {
+                "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              }
+            },
+            {
+              "seq": 3,
+              "method": "archive",
+              "request": {
+                "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "begin",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 1,
+                  "name": "001"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 2,
+                  "name": "Zoë, (account)"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 7,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 7,
+                  "account": 2,
+                  "amount": 0
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 2,
+                  "account": 1,
+                  "amount": -17
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "allocate",
+              "request": {
+                "nextId": 99
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 10,
+              "method": "commit",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 11,
+              "method": "publish",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "completed": true
+            }
+          ],
+          "view": {
+            "tenant": "tenant",
+            "branch": "main",
+            "cutoff": 1,
+            "catalog": [
+              {
+                "id": "cp",
+                "tenant": "tenant",
+                "branch": "main",
+                "at": 1,
+                "lsn": 1,
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3",
+                "size": 160
+              }
+            ],
+            "logs": []
+          },
+          "blobs": {
+            "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "archive",
+                    "request": {
+                      "bytes": "e30="
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "cache",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": null
+                  },
+                  {
+                    "seq": 2,
+                    "method": "fetch",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": {
+                      "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "archive",
+                    "request": {
+                      "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "begin",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 1,
+                        "name": "001"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 2,
+                        "name": "Zoë, (account)"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 7,
+                        "account": 2,
+                        "amount": 0
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 2,
+                        "account": 1,
+                        "amount": -17
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "allocate",
+                    "request": {
+                      "nextId": 99
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "commit",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 11,
+                    "method": "publish",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 15,
+                "requestBytes": 1410,
+                "responseBytes": 1083,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "7e564d6dff2273e840c2e312",
+      "cells": [
+        {
+          "scenarioId": "reverse-archive-row-order",
+          "actual": {
+            "accounts": [
+              {
+                "id": 1,
+                "name": "001"
+              },
+              {
+                "id": 2,
+                "name": "Zoë, (account)"
+              }
+            ],
+            "entries": [
+              {
+                "id": 2,
+                "account": 1,
+                "amount": -17
+              },
+              {
+                "id": 7,
+                "account": 2,
+                "amount": 0
+              }
+            ],
+            "nextId": 99
+          },
+          "backupError": null,
+          "publications": [
+            {
+              "state": {
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  },
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  }
+                ],
+                "nextId": 99
+              },
+              "archive": {
+                "tenant": "tenant",
+                "branch": "main",
+                "cutoff": 1,
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  },
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  }
+                ],
+                "nextId": 99
+              }
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "cache",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": null
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": {
+                "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              }
+            },
+            {
+              "seq": 2,
+              "method": "archive",
+              "request": {
+                "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 3,
+              "method": "begin",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 1,
+                  "name": "001"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 2,
+                  "name": "Zoë, (account)"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 7,
+                  "account": 2,
+                  "amount": 0
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 7,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 2,
+                  "account": 1,
+                  "amount": -17
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "allocate",
+              "request": {
+                "nextId": 99
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "commit",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 10,
+              "method": "publish",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "completed": true
+            }
+          ],
+          "view": {
+            "tenant": "tenant",
+            "branch": "main",
+            "cutoff": 1,
+            "catalog": [
+              {
+                "id": "cp",
+                "tenant": "tenant",
+                "branch": "main",
+                "at": 1,
+                "lsn": 1,
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3",
+                "size": 160
+              }
+            ],
+            "logs": []
+          },
+          "blobs": {
+            "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "cache",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": null
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": {
+                      "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "archive",
+                    "request": {
+                      "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "begin",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 1,
+                        "name": "001"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 2,
+                        "name": "Zoë, (account)"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 7,
+                        "account": 2,
+                        "amount": 0
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 2,
+                        "account": 1,
+                        "amount": -17
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "allocate",
+                    "request": {
+                      "nextId": 99
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "commit",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "publish",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 14,
+                "requestBytes": 1343,
+                "responseBytes": 1051,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "f3d284b0405a9cbe81c9d14f",
+      "cells": [
+        {
+          "scenarioId": "reverse-archive-row-order",
+          "actual": {
+            "accounts": [
+              {
+                "id": 1,
+                "name": "001"
+              },
+              {
+                "id": 2,
+                "name": "Zoë, (account)"
+              }
+            ],
+            "entries": [
+              {
+                "id": 2,
+                "account": 1,
+                "amount": -17
+              },
+              {
+                "id": 7,
+                "account": 2,
+                "amount": 0
+              }
+            ],
+            "nextId": 99
+          },
+          "backupError": null,
+          "publications": [
+            {
+              "state": {
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  },
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  }
+                ],
+                "nextId": 99
+              },
+              "archive": {
+                "tenant": "tenant",
+                "branch": "main",
+                "cutoff": 1,
+                "accounts": [
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  },
+                  {
+                    "id": 1,
+                    "name": "001"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  },
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  }
+                ],
+                "nextId": 99
+              }
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "cache",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": null
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": {
+                "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              }
+            },
+            {
+              "seq": 2,
+              "method": "archive",
+              "request": {
+                "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjIsIm5hbWUiOiJab8OrLCAoYWNjb3VudCkifSx7ImlkIjoxLCJuYW1lIjoiMDAxIn1dLCJlbnRyaWVzIjpbeyJpZCI6MiwiYWNjb3VudCI6MSwiYW1vdW50IjotMTd9LHsiaWQiOjcsImFjY291bnQiOjIsImFtb3VudCI6MH1dLCJuZXh0SWQiOjk5fQ=="
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 3,
+              "method": "begin",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 1,
+                  "name": "001"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 2,
+                  "name": "Zoë, (account)"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 7,
+                  "account": 2,
+                  "amount": 0
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 7,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 2,
+                  "account": 1,
+                  "amount": -17
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "allocate",
+              "request": {
+                "nextId": 99
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "commit",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 10,
+              "method": "publish",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "completed": true
+            }
+          ],
+          "view": {
+            "tenant": "tenant",
+            "branch": "main",
+            "cutoff": 1,
+            "catalog": [
+              {
+                "id": "cp",
+                "tenant": "tenant",
+                "branch": "main",
+                "at": 1,
+                "lsn": 1,
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3",
+                "size": 160
+              }
+            ],
+            "logs": []
+          },
+          "blobs": {
+            "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "cache",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": null
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": {
+                      "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "archive",
+                    "request": {
+                      "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjIsIm5hbWUiOiJab8OrLCAoYWNjb3VudCkifSx7ImlkIjoxLCJuYW1lIjoiMDAxIn1dLCJlbnRyaWVzIjpbeyJpZCI6MiwiYWNjb3VudCI6MSwiYW1vdW50IjotMTd9LHsiaWQiOjcsImFjY291bnQiOjIsImFtb3VudCI6MH1dLCJuZXh0SWQiOjk5fQ=="
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "begin",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 1,
+                        "name": "001"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 2,
+                        "name": "Zoë, (account)"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 7,
+                        "account": 2,
+                        "amount": 0
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 2,
+                        "account": 1,
+                        "amount": -17
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "allocate",
+                    "request": {
+                      "nextId": 99
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "commit",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "publish",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 14,
+                "requestBytes": 1343,
+                "responseBytes": 1051,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "b8f45b1f95727ac6bd891e91",
+      "cells": [
+        {
+          "scenarioId": "wrong-allocation",
+          "actual": {
+            "accounts": [
+              {
+                "id": 1,
+                "name": "001"
+              },
+              {
+                "id": 2,
+                "name": "Zoë, (account)"
+              }
+            ],
+            "entries": [
+              {
+                "id": 2,
+                "account": 1,
+                "amount": -17
+              },
+              {
+                "id": 7,
+                "account": 2,
+                "amount": 0
+              }
+            ],
+            "nextId": 99
+          },
+          "backupError": null,
+          "publications": [
+            {
+              "state": {
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  },
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  }
+                ],
+                "nextId": 99
+              },
+              "archive": {
+                "tenant": "tenant",
+                "branch": "main",
+                "cutoff": 1,
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  },
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  }
+                ],
+                "nextId": 99
+              }
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "cache",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": null
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": {
+                "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              }
+            },
+            {
+              "seq": 2,
+              "method": "archive",
+              "request": {
+                "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 3,
+              "method": "begin",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 1,
+                  "name": "001"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 2,
+                  "name": "Zoë, (account)"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 7,
+                  "account": 2,
+                  "amount": 0
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 7,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 2,
+                  "account": 1,
+                  "amount": -17
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "allocate",
+              "request": {
+                "nextId": 99
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "commit",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 10,
+              "method": "publish",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "completed": true
+            }
+          ],
+          "view": {
+            "tenant": "tenant",
+            "branch": "main",
+            "cutoff": 1,
+            "catalog": [
+              {
+                "id": "cp",
+                "tenant": "tenant",
+                "branch": "main",
+                "at": 1,
+                "lsn": 1,
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3",
+                "size": 160
+              }
+            ],
+            "logs": []
+          },
+          "blobs": {
+            "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "cache",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": null
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": {
+                      "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "archive",
+                    "request": {
+                      "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "begin",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 1,
+                        "name": "001"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 2,
+                        "name": "Zoë, (account)"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 7,
+                        "account": 2,
+                        "amount": 0
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 2,
+                        "account": 1,
+                        "amount": -17
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "allocate",
+                    "request": {
+                      "nextId": 99
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "commit",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "publish",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 14,
+                "requestBytes": 1343,
+                "responseBytes": 1051,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "a25cf456294faf5d736b7acd",
+      "cells": [
+        {
+          "scenarioId": "wrong-allocation",
+          "actual": {
+            "accounts": [
+              {
+                "id": 1,
+                "name": "001"
+              },
+              {
+                "id": 2,
+                "name": "Zoë, (account)"
+              }
+            ],
+            "entries": [
+              {
+                "id": 2,
+                "account": 1,
+                "amount": -17
+              },
+              {
+                "id": 7,
+                "account": 2,
+                "amount": 0
+              }
+            ],
+            "nextId": 8
+          },
+          "backupError": null,
+          "publications": [
+            {
+              "state": {
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  },
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  }
+                ],
+                "nextId": 8
+              },
+              "archive": {
+                "tenant": "tenant",
+                "branch": "main",
+                "cutoff": 1,
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  },
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  }
+                ],
+                "nextId": 99
+              }
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "cache",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": null
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": {
+                "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              }
+            },
+            {
+              "seq": 2,
+              "method": "archive",
+              "request": {
+                "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 3,
+              "method": "begin",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 1,
+                  "name": "001"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 2,
+                  "name": "Zoë, (account)"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 7,
+                  "account": 2,
+                  "amount": 0
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 7,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 2,
+                  "account": 1,
+                  "amount": -17
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "allocate",
+              "request": {
+                "nextId": 8
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "commit",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 10,
+              "method": "publish",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "completed": true
+            }
+          ],
+          "view": {
+            "tenant": "tenant",
+            "branch": "main",
+            "cutoff": 1,
+            "catalog": [
+              {
+                "id": "cp",
+                "tenant": "tenant",
+                "branch": "main",
+                "at": 1,
+                "lsn": 1,
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3",
+                "size": 160
+              }
+            ],
+            "logs": []
+          },
+          "blobs": {
+            "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "cache",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": null
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": {
+                      "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "archive",
+                    "request": {
+                      "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "begin",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 1,
+                        "name": "001"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 2,
+                        "name": "Zoë, (account)"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 7,
+                        "account": 2,
+                        "amount": 0
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 2,
+                        "account": 1,
+                        "amount": -17
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "allocate",
+                    "request": {
+                      "nextId": 8
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "commit",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "publish",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 14,
+                "requestBytes": 1342,
+                "responseBytes": 1051,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "87c035fb63a704b863b66592",
+      "cells": [
+        {
+          "scenarioId": "no-publication",
+          "actual": {
+            "accounts": [
+              {
+                "id": 1,
+                "name": "001"
+              },
+              {
+                "id": 2,
+                "name": "Zoë, (account)"
+              }
+            ],
+            "entries": [
+              {
+                "id": 2,
+                "account": 1,
+                "amount": -17
+              },
+              {
+                "id": 7,
+                "account": 2,
+                "amount": 0
+              }
+            ],
+            "nextId": 99
+          },
+          "backupError": null,
+          "publications": [
+            {
+              "state": {
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  },
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  }
+                ],
+                "nextId": 99
+              },
+              "archive": {
+                "tenant": "tenant",
+                "branch": "main",
+                "cutoff": 1,
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  },
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  }
+                ],
+                "nextId": 99
+              }
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "cache",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": null
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": {
+                "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              }
+            },
+            {
+              "seq": 2,
+              "method": "archive",
+              "request": {
+                "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 3,
+              "method": "begin",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 1,
+                  "name": "001"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 2,
+                  "name": "Zoë, (account)"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 7,
+                  "account": 2,
+                  "amount": 0
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 7,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 2,
+                  "account": 1,
+                  "amount": -17
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "allocate",
+              "request": {
+                "nextId": 99
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "commit",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 10,
+              "method": "publish",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "completed": true
+            }
+          ],
+          "view": {
+            "tenant": "tenant",
+            "branch": "main",
+            "cutoff": 1,
+            "catalog": [
+              {
+                "id": "cp",
+                "tenant": "tenant",
+                "branch": "main",
+                "at": 1,
+                "lsn": 1,
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3",
+                "size": 160
+              }
+            ],
+            "logs": []
+          },
+          "blobs": {
+            "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "cache",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": null
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": {
+                      "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "archive",
+                    "request": {
+                      "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "begin",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 1,
+                        "name": "001"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 2,
+                        "name": "Zoë, (account)"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 7,
+                        "account": 2,
+                        "amount": 0
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 2,
+                        "account": 1,
+                        "amount": -17
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "allocate",
+                    "request": {
+                      "nextId": 99
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "commit",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "publish",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 14,
+                "requestBytes": 1343,
+                "responseBytes": 1051,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "ef59d28e12f352ce5d0eec2d",
+      "cells": [
+        {
+          "scenarioId": "no-publication",
+          "actual": {
+            "accounts": [
+              {
+                "id": 1,
+                "name": "001"
+              },
+              {
+                "id": 2,
+                "name": "Zoë, (account)"
+              }
+            ],
+            "entries": [
+              {
+                "id": 2,
+                "account": 1,
+                "amount": -17
+              },
+              {
+                "id": 7,
+                "account": 2,
+                "amount": 0
+              }
+            ],
+            "nextId": 99
+          },
+          "backupError": null,
+          "publications": [],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "cache",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": null
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": {
+                "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              }
+            },
+            {
+              "seq": 2,
+              "method": "archive",
+              "request": {
+                "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 3,
+              "method": "begin",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 1,
+                  "name": "001"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 2,
+                  "name": "Zoë, (account)"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 7,
+                  "account": 2,
+                  "amount": 0
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 7,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 2,
+                  "account": 1,
+                  "amount": -17
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "allocate",
+              "request": {
+                "nextId": 99
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "commit",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "completed": true
+            }
+          ],
+          "view": {
+            "tenant": "tenant",
+            "branch": "main",
+            "cutoff": 1,
+            "catalog": [
+              {
+                "id": "cp",
+                "tenant": "tenant",
+                "branch": "main",
+                "at": 1,
+                "lsn": 1,
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3",
+                "size": 160
+              }
+            ],
+            "logs": []
+          },
+          "blobs": {
+            "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "cache",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": null
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": {
+                      "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "archive",
+                    "request": {
+                      "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "begin",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 1,
+                        "name": "001"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 2,
+                        "name": "Zoë, (account)"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 7,
+                        "account": 2,
+                        "amount": 0
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 2,
+                        "account": 1,
+                        "amount": -17
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "allocate",
+                    "request": {
+                      "nextId": 99
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "commit",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 13,
+                "requestBytes": 1290,
+                "responseBytes": 1019,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "2e87b4e6c9f2ceb17f2daa49",
+      "cells": [
+        {
+          "scenarioId": "missing-backup-row",
+          "actual": {
+            "accounts": [
+              {
+                "id": 1,
+                "name": "001"
+              },
+              {
+                "id": 2,
+                "name": "Zoë, (account)"
+              }
+            ],
+            "entries": [
+              {
+                "id": 2,
+                "account": 1,
+                "amount": -17
+              },
+              {
+                "id": 7,
+                "account": 2,
+                "amount": 0
+              }
+            ],
+            "nextId": 99
+          },
+          "backupError": null,
+          "publications": [
+            {
+              "state": {
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  },
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  }
+                ],
+                "nextId": 99
+              },
+              "archive": {
+                "tenant": "tenant",
+                "branch": "main",
+                "cutoff": 1,
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  },
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  }
+                ],
+                "nextId": 99
+              }
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "cache",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": null
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": {
+                "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              }
+            },
+            {
+              "seq": 2,
+              "method": "archive",
+              "request": {
+                "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 3,
+              "method": "begin",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 1,
+                  "name": "001"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 2,
+                  "name": "Zoë, (account)"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 7,
+                  "account": 2,
+                  "amount": 0
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 7,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 2,
+                  "account": 1,
+                  "amount": -17
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "allocate",
+              "request": {
+                "nextId": 99
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "commit",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 10,
+              "method": "publish",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "completed": true
+            }
+          ],
+          "view": {
+            "tenant": "tenant",
+            "branch": "main",
+            "cutoff": 1,
+            "catalog": [
+              {
+                "id": "cp",
+                "tenant": "tenant",
+                "branch": "main",
+                "at": 1,
+                "lsn": 1,
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3",
+                "size": 160
+              }
+            ],
+            "logs": []
+          },
+          "blobs": {
+            "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "cache",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": null
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": {
+                      "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "archive",
+                    "request": {
+                      "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "begin",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 1,
+                        "name": "001"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 2,
+                        "name": "Zoë, (account)"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 7,
+                        "account": 2,
+                        "amount": 0
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 2,
+                        "account": 1,
+                        "amount": -17
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "allocate",
+                    "request": {
+                      "nextId": 99
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "commit",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "publish",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 14,
+                "requestBytes": 1343,
+                "responseBytes": 1051,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "e15718d4b10a38f3f4c0ac78",
+      "cells": [
+        {
+          "scenarioId": "missing-backup-row",
+          "actual": {
+            "accounts": [
+              {
+                "id": 1,
+                "name": "001"
+              },
+              {
+                "id": 2,
+                "name": "Zoë, (account)"
+              }
+            ],
+            "entries": [
+              {
+                "id": 2,
+                "account": 1,
+                "amount": -17
+              },
+              {
+                "id": 7,
+                "account": 2,
+                "amount": 0
+              }
+            ],
+            "nextId": 99
+          },
+          "backupError": null,
+          "publications": [
+            {
+              "state": {
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 2,
+                    "account": 1,
+                    "amount": -17
+                  },
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  }
+                ],
+                "nextId": 99
+              },
+              "archive": {
+                "tenant": "tenant",
+                "branch": "main",
+                "cutoff": 1,
+                "accounts": [
+                  {
+                    "id": 1,
+                    "name": "001"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Zoë, (account)"
+                  }
+                ],
+                "entries": [
+                  {
+                    "id": 7,
+                    "account": 2,
+                    "amount": 0
+                  }
+                ],
+                "nextId": 99
+              }
+            }
+          ],
+          "observations": [
+            {
+              "seq": 0,
+              "method": "cache",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": null
+            },
+            {
+              "seq": 1,
+              "method": "fetch",
+              "request": {
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+              },
+              "value": {
+                "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+              }
+            },
+            {
+              "seq": 2,
+              "method": "archive",
+              "request": {
+                "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfV0sIm5leHRJZCI6OTl9"
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 3,
+              "method": "begin",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 4,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 1,
+                  "name": "001"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 5,
+              "method": "put",
+              "request": {
+                "table": "accounts",
+                "row": {
+                  "id": 2,
+                  "name": "Zoë, (account)"
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 7,
+                  "account": 2,
+                  "amount": 0
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 7,
+              "method": "put",
+              "request": {
+                "table": "entries",
+                "row": {
+                  "id": 2,
+                  "account": 1,
+                  "amount": -17
+                }
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "allocate",
+              "request": {
+                "nextId": 99
+              },
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "commit",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            },
+            {
+              "seq": 10,
+              "method": "publish",
+              "request": {},
+              "value": {
+                "ok": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "completed": true
+            }
+          ],
+          "view": {
+            "tenant": "tenant",
+            "branch": "main",
+            "cutoff": 1,
+            "catalog": [
+              {
+                "id": "cp",
+                "tenant": "tenant",
+                "branch": "main",
+                "at": 1,
+                "lsn": 1,
+                "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3",
+                "size": 160
+              }
+            ],
+            "logs": []
+          },
+          "blobs": {
+            "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+          },
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "cache",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": null
+                  },
+                  {
+                    "seq": 1,
+                    "method": "fetch",
+                    "request": {
+                      "digest": "a1a2f460f203ac77fc46bb7e0cb1cda06544957717d52fcef10ddbfffd5ea3d3"
+                    },
+                    "value": {
+                      "bytes": "eyJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfSx7ImlkIjoyLCJhY2NvdW50IjoxLCJhbW91bnQiOi0xN31dLCJuZXh0SWQiOjk5fQ=="
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "archive",
+                    "request": {
+                      "bytes": "eyJ0ZW5hbnQiOiJ0ZW5hbnQiLCJicmFuY2giOiJtYWluIiwiY3V0b2ZmIjoxLCJhY2NvdW50cyI6W3siaWQiOjEsIm5hbWUiOiIwMDEifSx7ImlkIjoyLCJuYW1lIjoiWm/DqywgKGFjY291bnQpIn1dLCJlbnRyaWVzIjpbeyJpZCI6NywiYWNjb3VudCI6MiwiYW1vdW50IjowfV0sIm5leHRJZCI6OTl9"
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "begin",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 1,
+                        "name": "001"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "put",
+                    "request": {
+                      "table": "accounts",
+                      "row": {
+                        "id": 2,
+                        "name": "Zoë, (account)"
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 7,
+                        "account": 2,
+                        "amount": 0
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "put",
+                    "request": {
+                      "table": "entries",
+                      "row": {
+                        "id": 2,
+                        "account": 1,
+                        "amount": -17
+                      }
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "allocate",
+                    "request": {
+                      "nextId": 99
+                    },
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "commit",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "publish",
+                    "request": {},
+                    "value": {
+                      "ok": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 14,
+                "requestBytes": 1295,
+                "responseBytes": 1051,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

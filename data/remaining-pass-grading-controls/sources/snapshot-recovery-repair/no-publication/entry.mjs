@@ -1,0 +1,1 @@
+import{subject as reference}from'./reference-entry.mjs';export const subject={async run(view,api){return reference.run(view,{...api,publish:async()=>({ok:true})});}};

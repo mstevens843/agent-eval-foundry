@@ -1,0 +1,331 @@
+{
+  "schemaVersion": 1,
+  "policy": "User elected to void and replace only the three false passes newly identified by remaining-pass-coverage-v3. Earlier documented regrades remain counted. Original raw records and audit verdicts are preserved.",
+  "audit": {
+    "path": "reports/screening/evidence/2026-09-09-remaining-pass-audit.json",
+    "sha256": "c7579671f81b606fd70a411ec2874d60655cced85110591c3e93610442badf45"
+  },
+  "providerCallsMade": 0,
+  "gradingRevision": "remaining-pass-coverage-v3",
+  "packages": [
+    {
+      "id": "incremental-build-repair",
+      "analysis": "reports/screening/fifth-five/21-incremental-build-repair.md",
+      "failures": 6,
+      "scored": 6,
+      "remaining": 0,
+      "attemptsByProvider": {
+        "claude": 3,
+        "codex": 3
+      },
+      "classification": "complete-meets-5-of-6",
+      "countedAttempts": [
+        {
+          "trial": 2,
+          "provider": "codex",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 3,
+          "provider": "codex",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 4,
+          "provider": "codex",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 5,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 6,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 7,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        }
+      ],
+      "voidAttempts": []
+    },
+    {
+      "id": "variant-cache-repair",
+      "analysis": "reports/screening/fourth-five/19-variant-cache-repair.md",
+      "failures": 4,
+      "scored": 4,
+      "remaining": 2,
+      "attemptsByProvider": {
+        "claude": 3,
+        "codex": 1
+      },
+      "classification": "pending-replacements",
+      "countedAttempts": [
+        {
+          "trial": 2,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 3,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 4,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 5,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        }
+      ],
+      "voidAttempts": [
+        {
+          "trial": 6,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": null
+        },
+        {
+          "trial": 7,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": null
+        }
+      ]
+    },
+    {
+      "id": "issued-report-repair",
+      "analysis": "reports/screening/fifth-five/25-issued-report-repair.md",
+      "failures": 6,
+      "scored": 6,
+      "remaining": 0,
+      "attemptsByProvider": {
+        "claude": 3,
+        "codex": 3
+      },
+      "classification": "complete-meets-5-of-6",
+      "countedAttempts": [
+        {
+          "trial": 2,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 3,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 4,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 5,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 6,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 7,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        }
+      ],
+      "voidAttempts": []
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "analysis": "reports/screening/next-five/10-temporal-capacity-repair.md",
+      "failures": 5,
+      "scored": 6,
+      "remaining": 0,
+      "attemptsByProvider": {
+        "claude": 3,
+        "codex": 3
+      },
+      "classification": "complete-meets-5-of-6",
+      "countedAttempts": [
+        {
+          "trial": 2,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 3,
+          "provider": "claude",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 4,
+          "provider": "claude",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 5,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 6,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 7,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 1,
+          "countedReward": 1
+        }
+      ],
+      "voidAttempts": []
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "analysis": "reports/screening/third-five/11-snapshot-recovery-repair.md",
+      "failures": 4,
+      "scored": 5,
+      "remaining": 1,
+      "attemptsByProvider": {
+        "claude": 3,
+        "codex": 2
+      },
+      "classification": "pending-replacements",
+      "countedAttempts": [
+        {
+          "trial": 2,
+          "provider": "codex",
+          "recordedReward": 0,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 3,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 5,
+          "provider": "claude",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 6,
+          "provider": "claude",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": 0
+        },
+        {
+          "trial": 7,
+          "provider": "claude",
+          "recordedReward": 1,
+          "auditEffectiveReward": 1,
+          "countedReward": 1
+        }
+      ],
+      "voidAttempts": [
+        {
+          "trial": 4,
+          "provider": "codex",
+          "recordedReward": 1,
+          "auditEffectiveReward": 0,
+          "countedReward": null
+        }
+      ]
+    }
+  ],
+  "replacementSlots": [
+    {
+      "id": "variant-cache-repair",
+      "trial": 8,
+      "replacesTrial": 6,
+      "target": "codex"
+    },
+    {
+      "id": "variant-cache-repair",
+      "trial": 9,
+      "replacesTrial": 7,
+      "target": "codex"
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 8,
+      "replacesTrial": 4,
+      "target": "codex"
+    }
+  ],
+  "totals": {
+    "successorAttempts": 51,
+    "completedRawGrades": 50,
+    "countedTrials": 47,
+    "effectiveFailures": 25,
+    "effectivePasses": 22,
+    "gradingVoids": 3,
+    "historicalInfrastructureInterruptions": 1,
+    "remainingReplacementAttempts": 3,
+    "completedFinalistsMeetingTarget": 3,
+    "pendingFinalists": 2
+  }
+}

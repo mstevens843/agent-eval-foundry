@@ -1,0 +1,4619 @@
+{
+  "schemaVersion": 1,
+  "gradingRevision": "remaining-pass-coverage-v3",
+  "providerCallsMade": 0,
+  "previousEvidence": {
+    "path": "reports/screening/evidence/2026-09-09-post-final-five.json",
+    "sha256": "448bd43ad72df02a94181ac598d2936292a77d30430283473b72086665e1284d"
+  },
+  "policy": {
+    "path": "data/remaining-pass-grading-controls/policy.json",
+    "sha256": "410d0071628803564350a44cde99a7c8425e602dea3cb86d2df34931562c49e6"
+  },
+  "runnerSha256": "dbb12e79f9784a7657debd99c6f5ee04acdc36200d3712b61d1cf965642b8b85",
+  "reproductionSha256": "ee89238366ec3b7c40f80d0c9c0c54d341539123ea10f31f833eb473233f20bc",
+  "authorityPatch": {
+    "path": "data/remaining-pass-grading-controls/cache-metadata.mjs",
+    "sha256": "1de8a5cd690973c7aa53a476958919700a799096a26e08599614e8476579dd57"
+  },
+  "frozenRuntimeSha256": "60695de963e5085dfe8ee4fb09353b1db0169219d9ad9425ac2a997a73b69b26",
+  "generated": [
+    {
+      "id": "snapshot-recovery-repair",
+      "name": "empty-no-commit",
+      "expectedOk": true,
+      "originalBaselineStatus": "semantic-pass",
+      "originalControlStatus": "semantic-pass",
+      "correctedServiceStatus": "semantic-pass",
+      "originalControlFailures": [],
+      "sourcePath": "data/remaining-pass-grading-controls/sources/snapshot-recovery-repair/empty-no-commit/entry.mjs",
+      "sourceSha256": "3392f4e684439cc347d182d330f088a3f1f431230097ddee00cd4ef712d0c0fc",
+      "scenarioPath": "data/remaining-pass-grading-controls/sources/snapshot-recovery-repair/empty-no-commit/scenario.json",
+      "scenarioSha256": "125108096c742d8aae3486ddcb6968e86a9068c6383e9a46335658493eeee2da",
+      "baselineTraceSha256": "c60c5e0e45613e4bf5676c8e567ab3d57d2f810dc24b2f443f8b7ac3b7764a98",
+      "controlTraceSha256": "9f6da88e09768b26f541c1e7f77fc6189dd4f749cb46078f9a1c6a299c9d46be"
+    },
+    {
+      "id": "variant-cache-repair",
+      "name": "stale-304-metadata",
+      "expectedOk": false,
+      "originalBaselineStatus": "semantic-pass",
+      "originalControlStatus": "semantic-pass",
+      "correctedServiceStatus": "semantic-fail",
+      "originalControlFailures": [],
+      "sourcePath": "data/remaining-pass-grading-controls/sources/variant-cache-repair/stale-304-metadata/entry.mjs",
+      "sourceSha256": "ec02f807f2c4556f4608f4eda53f668a06c6658d55116377d9aff2d5f3b89b57",
+      "scenarioPath": "data/remaining-pass-grading-controls/sources/variant-cache-repair/stale-304-metadata/scenario.json",
+      "scenarioSha256": "2825af40420d7a9d11da0e7f45ff6a526cadae88a9e0b950e2e99538fd384694",
+      "baselineTraceSha256": "2241aceaa26b6913f6d994aa9d7c61053ecfcd6226bde47428cecb1b943360d3",
+      "controlTraceSha256": "c0af94b0d1179dce60fd0db0b29dc3dfeae0a8592c318f5f38744cb3c108796b"
+    },
+    {
+      "id": "variant-cache-repair",
+      "name": "fresh-plus-origin",
+      "expectedOk": true,
+      "originalBaselineStatus": "semantic-pass",
+      "originalControlStatus": "semantic-pass",
+      "correctedServiceStatus": "semantic-pass",
+      "originalControlFailures": [],
+      "sourcePath": "data/remaining-pass-grading-controls/sources/variant-cache-repair/fresh-plus-origin/entry.mjs",
+      "sourceSha256": "9e2f4006d1b8e2bb1cc6d89f50debb260f2f93d0c8bda47d8723c0781da5606f",
+      "scenarioPath": "data/remaining-pass-grading-controls/sources/variant-cache-repair/fresh-plus-origin/scenario.json",
+      "scenarioSha256": "9a70a32a9cde6c4672e8499fa0766f06645e618df9c6733cb038d25a78517c91",
+      "baselineTraceSha256": "e4d56294fdea6cfd339d03aa5549f92994f39eb31762fc30a53e1c2d3941b88f",
+      "controlTraceSha256": "ca47d6b502f565bb6c3e18a3e22a338d4f117f648e11e0350cb54e4cca48c66d"
+    },
+    {
+      "id": "variant-cache-repair",
+      "name": "copy-other-path",
+      "expectedOk": true,
+      "originalBaselineStatus": "semantic-pass",
+      "originalControlStatus": "semantic-pass",
+      "correctedServiceStatus": "semantic-pass",
+      "originalControlFailures": [],
+      "sourcePath": "data/remaining-pass-grading-controls/sources/variant-cache-repair/copy-other-path/entry.mjs",
+      "sourceSha256": "15dd7014a9ae5bc19a5fb89f1a5b537df6c3d47dc1b2331443e455b341a87dfe",
+      "scenarioPath": "data/remaining-pass-grading-controls/sources/variant-cache-repair/copy-other-path/scenario.json",
+      "scenarioSha256": "7a033f3328bc7f0d9bf72c56d1a99364ce537b0fb4331186d24c51e30035e476",
+      "baselineTraceSha256": "5df4968ec352f1314a25661e9463601357f9fff6f88ca26ea1fe05b8e6a87d9a",
+      "controlTraceSha256": "4de6747de088330f1a099c36f6f1f5af705413a834d9e55ec0e2eba2e770d6de"
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "name": "retry-rolled-back-transaction",
+      "expectedOk": true,
+      "originalBaselineStatus": "semantic-pass",
+      "originalControlStatus": "semantic-pass",
+      "correctedServiceStatus": "semantic-pass",
+      "originalControlFailures": [],
+      "sourcePath": "data/remaining-pass-grading-controls/sources/snapshot-recovery-repair/retry-rolled-back-transaction/entry.mjs",
+      "sourceSha256": "67aa7a19f1f7cafe7e78091a58d3e43104b84a8d1cf9193a5e7b4a734db4c859",
+      "scenarioPath": "data/remaining-pass-grading-controls/sources/snapshot-recovery-repair/retry-rolled-back-transaction/scenario.json",
+      "scenarioSha256": "fefabe176564047c6ffc9bee54774a9186f161f25ac066bc2b994385928dd69c",
+      "baselineTraceSha256": "261bfe491b713aa1ce0abfd8c395249d6106380f086e284567b34e91ce6081ae",
+      "controlTraceSha256": "cf5d0f8e17c36e1f654f28054cd1c927be56b22226778dacfb7725f6c9fdb2b4"
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "name": "replace-staged-archive",
+      "expectedOk": true,
+      "originalBaselineStatus": "semantic-pass",
+      "originalControlStatus": "semantic-pass",
+      "correctedServiceStatus": "semantic-pass",
+      "originalControlFailures": [],
+      "sourcePath": "data/remaining-pass-grading-controls/sources/snapshot-recovery-repair/replace-staged-archive/entry.mjs",
+      "sourceSha256": "47174610ac929ea22c1d501fab28a5a5561164ef26f1d9445d375b3576fff46d",
+      "scenarioPath": "data/remaining-pass-grading-controls/sources/snapshot-recovery-repair/replace-staged-archive/scenario.json",
+      "scenarioSha256": "c0c6bb3d1dfd002ffafb09f992bec5b0792eec2e9e4082acdd49e15e5a937792",
+      "baselineTraceSha256": "dfd13f06a8ef7a17103a25c32dc466c66e198a7bc32c73459102c8ee0548a730",
+      "controlTraceSha256": "2c597d88c88562243a468cb6bf1e78e53eb49d368ac5f1c682acc73d28fcd0f0"
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "name": "reverse-archive-row-order",
+      "expectedOk": true,
+      "originalBaselineStatus": "semantic-pass",
+      "originalControlStatus": "semantic-pass",
+      "correctedServiceStatus": "semantic-pass",
+      "originalControlFailures": [],
+      "sourcePath": "data/remaining-pass-grading-controls/sources/snapshot-recovery-repair/reverse-archive-row-order/entry.mjs",
+      "sourceSha256": "a7c544f90f968630c408aa1c046dc7a9bb19ea28b1214639c55f007ce0c30dc4",
+      "scenarioPath": "data/remaining-pass-grading-controls/sources/snapshot-recovery-repair/reverse-archive-row-order/scenario.json",
+      "scenarioSha256": "b0f943df57fadd582b3944a8d16d9fbe7abd1e6186990b135985002a8556b618",
+      "baselineTraceSha256": "cf6295519911a8b33b293d12b091e028a4c5b36aac50fc9f0a26e88152efa86d",
+      "controlTraceSha256": "bd04384377e76b53dc5ba05580e08a5ba1b2b1cc67a5d49529d3c286f6178b41"
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "name": "wrong-allocation",
+      "expectedOk": false,
+      "originalBaselineStatus": "semantic-pass",
+      "originalControlStatus": "semantic-fail",
+      "correctedServiceStatus": "semantic-fail",
+      "originalControlFailures": [
+        "allocation",
+        "publication"
+      ],
+      "sourcePath": "data/remaining-pass-grading-controls/sources/snapshot-recovery-repair/wrong-allocation/entry.mjs",
+      "sourceSha256": "7b0afa17ee10ef73b1ddd2fefbe3ff679237bc36d601a39a3869fed09ca770d5",
+      "scenarioPath": "data/remaining-pass-grading-controls/sources/snapshot-recovery-repair/wrong-allocation/scenario.json",
+      "scenarioSha256": "407e90bc9484b575b7414ae5653259c22f1590f46db3fd3ab5cc1aa81d016745",
+      "baselineTraceSha256": "ee972bcb6843dcf5fcaa0f8d84090141c1474961d05dad45fa770b4c6127573e",
+      "controlTraceSha256": "0c491d76d009a402d862ce7780f1de96c20709b7e92e370a54d4843c98d8ab8f"
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "name": "no-publication",
+      "expectedOk": false,
+      "originalBaselineStatus": "semantic-pass",
+      "originalControlStatus": "semantic-fail",
+      "correctedServiceStatus": "semantic-fail",
+      "originalControlFailures": [
+        "completion",
+        "publication"
+      ],
+      "sourcePath": "data/remaining-pass-grading-controls/sources/snapshot-recovery-repair/no-publication/entry.mjs",
+      "sourceSha256": "d7c48f62d576b2c8a94e4725c1f8bcc3a4fffdce7584fb646607e9feb72cc940",
+      "scenarioPath": "data/remaining-pass-grading-controls/sources/snapshot-recovery-repair/no-publication/scenario.json",
+      "scenarioSha256": "4b48b5f590d555c1930960e16865f8a2b6100520840f757b4a38f988f27b16df",
+      "baselineTraceSha256": "5df9edd7d5fbc9e9374ce6c27f9587c75d7eaaecb1f0b202009c997602a6b5ef",
+      "controlTraceSha256": "c503167cc20957088b231d9e024d88fb191a266aa6035e3dfbf0fbe7949ffcfc"
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "name": "missing-backup-row",
+      "expectedOk": false,
+      "originalBaselineStatus": "semantic-pass",
+      "originalControlStatus": "semantic-fail",
+      "correctedServiceStatus": "semantic-fail",
+      "originalControlFailures": [
+        "portable_backup"
+      ],
+      "sourcePath": "data/remaining-pass-grading-controls/sources/snapshot-recovery-repair/missing-backup-row/entry.mjs",
+      "sourceSha256": "60a15dc3b845931f4e1ce2014f02357fe0e359f90d6240932eae611e944311f9",
+      "scenarioPath": "data/remaining-pass-grading-controls/sources/snapshot-recovery-repair/missing-backup-row/scenario.json",
+      "scenarioSha256": "35e0137107e5ad3cd7dab549e106f2bf8045866c2ef79da95f129a9e94cc5738",
+      "baselineTraceSha256": "92b50a17cb99de0c4ba4ececab1d46d53263d4da730fd7ecbb770a0f2d539552",
+      "controlTraceSha256": "67036e4e34c6d9b1a15af030e44bbc3c8fc0a5c2c17e8275004d88b18e865f2a"
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "name": "large-values-retractions",
+      "expectedOk": true,
+      "originalBaselineStatus": "semantic-pass",
+      "originalControlStatus": "semantic-pass",
+      "correctedServiceStatus": "semantic-pass",
+      "originalControlFailures": [],
+      "sourcePath": "data/remaining-pass-grading-controls/sources/temporal-capacity-repair/large-values-retractions/entry.mjs",
+      "sourceSha256": "bb41df160752d72fdd5fcf667ba54982d4de9c9927b385afcb1ea8e748d9586c",
+      "scenarioPath": "data/remaining-pass-grading-controls/sources/temporal-capacity-repair/large-values-retractions/scenario.json",
+      "scenarioSha256": "45e8869ed4b60630b3d88c5fc2f5dd285c15505c25b6b0a4a93caf813321f790",
+      "baselineTraceSha256": "0d23b8fc81ef1ffa811ea7cfc0a9630c0a7f6dfee976f3eafd937c7d91e01688",
+      "controlTraceSha256": "0d23b8fc81ef1ffa811ea7cfc0a9630c0a7f6dfee976f3eafd937c7d91e01688"
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "name": "restart-and-repeat-pagination",
+      "expectedOk": true,
+      "originalBaselineStatus": "semantic-pass",
+      "originalControlStatus": "semantic-pass",
+      "correctedServiceStatus": "semantic-pass",
+      "originalControlFailures": [],
+      "sourcePath": "data/remaining-pass-grading-controls/sources/temporal-capacity-repair/restart-and-repeat-pagination/entry.mjs",
+      "sourceSha256": "1f22150ae81706fdfe02656255de95bd40a2fbd4636e20a0b2ae713bdcfdf3f5",
+      "scenarioPath": "data/remaining-pass-grading-controls/sources/temporal-capacity-repair/restart-and-repeat-pagination/scenario.json",
+      "scenarioSha256": "3a0bcd31ecd8ee9e4eb94704767b0e6d268a8a945bc38c56ecf9e6cb9d183845",
+      "baselineTraceSha256": "81e45ea9ac8964247f33a53b23b3d1a85e93bc7f2c1e00badbde7e40df274dcc",
+      "controlTraceSha256": "3e162dde4120772ec046a9a5946640c8ec22e2e898b48f27d3bbe8f52a2b3c64"
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "name": "record-before-second-traversal",
+      "expectedOk": true,
+      "originalBaselineStatus": "semantic-pass",
+      "originalControlStatus": "semantic-pass",
+      "correctedServiceStatus": "semantic-pass",
+      "originalControlFailures": [],
+      "sourcePath": "data/remaining-pass-grading-controls/sources/temporal-capacity-repair/record-before-second-traversal/entry.mjs",
+      "sourceSha256": "f8f8ae29aa0e49ef94062f860344c8996f01238a23c1d0dbb120b30d86e16d4a",
+      "scenarioPath": "data/remaining-pass-grading-controls/sources/temporal-capacity-repair/record-before-second-traversal/scenario.json",
+      "scenarioSha256": "4e9d15283fd44ff9c5fc73e259112ec61c267293c365dfd3fba90b1b26dbab17",
+      "baselineTraceSha256": "91f650db011e23f0736653044b1b8e41084f9d0cdc3e2d05fbb8e2223dc2cb1e",
+      "controlTraceSha256": "07de06fcbc846f12786f9607cf830ebdc09ac8a2b19fa31d69ad7cef2396a9b5"
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "name": "wrong-exact-total",
+      "expectedOk": false,
+      "originalBaselineStatus": "semantic-pass",
+      "originalControlStatus": "semantic-fail",
+      "correctedServiceStatus": "semantic-fail",
+      "originalControlFailures": [
+        "exact_integral"
+      ],
+      "sourcePath": "data/remaining-pass-grading-controls/sources/temporal-capacity-repair/wrong-exact-total/entry.mjs",
+      "sourceSha256": "ed1f3461fa329f2b5abe0f2eafdb486cc1626d93de2c8842762db7fea687a699",
+      "scenarioPath": "data/remaining-pass-grading-controls/sources/temporal-capacity-repair/wrong-exact-total/scenario.json",
+      "scenarioSha256": "2e76746218775c5be64d296467859537e81948e3792865a119ecb05cb3c58035",
+      "baselineTraceSha256": "d262660d8b49a0a339a7080497d0560c1068ea97ea2b687172173aee5111c9a6",
+      "controlTraceSha256": "e40a0bcf3e4df098adb435aa00264c90a550d1cf08bbdcbede18ba2d01131fa7"
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "name": "noncanonical-total",
+      "expectedOk": false,
+      "originalBaselineStatus": "semantic-pass",
+      "originalControlStatus": "semantic-fail",
+      "correctedServiceStatus": "semantic-fail",
+      "originalControlFailures": [
+        "exact_integral"
+      ],
+      "sourcePath": "data/remaining-pass-grading-controls/sources/temporal-capacity-repair/noncanonical-total/entry.mjs",
+      "sourceSha256": "2bb401ae2a5d8c7582e6c65b49d37eb99c7e3be1d9e690a7141854dad946acfc",
+      "scenarioPath": "data/remaining-pass-grading-controls/sources/temporal-capacity-repair/noncanonical-total/scenario.json",
+      "scenarioSha256": "2d1803dcfa0225d13c4b2f78ff0b482c4f5321cb5ad92b43fcd9e6f9ac238197",
+      "baselineTraceSha256": "d2fbb7be73f950ef1db5ffeca920482867ef395ef387840c0e5daa43ac38a8cf",
+      "controlTraceSha256": "6874b8ef0fd61fc79bc07ad8c19ca452877f4c2f907b0e2f00010d6753439af1"
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "name": "duplicate-report",
+      "expectedOk": false,
+      "originalBaselineStatus": "semantic-pass",
+      "originalControlStatus": "semantic-fail",
+      "correctedServiceStatus": "semantic-fail",
+      "originalControlFailures": [
+        "unique_reports"
+      ],
+      "sourcePath": "data/remaining-pass-grading-controls/sources/temporal-capacity-repair/duplicate-report/entry.mjs",
+      "sourceSha256": "f5a7fd8be7ac4527e45376aa9d2f0d7ecfcd3875b82d5bd4e8c980ace43cb5b1",
+      "scenarioPath": "data/remaining-pass-grading-controls/sources/temporal-capacity-repair/duplicate-report/scenario.json",
+      "scenarioSha256": "acf06f673b334eadd2efc44b98148a9f855de55279cb1763113abc0c927feb52",
+      "baselineTraceSha256": "09fc4b39685c1340b995d2f9f90845dce6895a70b1338c983aaab93af098a276",
+      "controlTraceSha256": "12683c7351de4366c3beb1917c979b164e48575f2023907f0877762ed851643a"
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "name": "missing-report",
+      "expectedOk": false,
+      "originalBaselineStatus": "semantic-pass",
+      "originalControlStatus": "semantic-fail",
+      "correctedServiceStatus": "semantic-fail",
+      "originalControlFailures": [
+        "completion",
+        "exact_integral"
+      ],
+      "sourcePath": "data/remaining-pass-grading-controls/sources/temporal-capacity-repair/missing-report/entry.mjs",
+      "sourceSha256": "e0d755abc4b43c49aa2e502b399cd53968c88ff5cf64b030e21fee855c5d6fa1",
+      "scenarioPath": "data/remaining-pass-grading-controls/sources/temporal-capacity-repair/missing-report/scenario.json",
+      "scenarioSha256": "eb0199353240bf9094615081e8e73754bb04862c8db9792a4b73f2ef433269af",
+      "baselineTraceSha256": "f03440595e6e9833357a11f2ad59aee14eefbba96b1c78c3ff0158ff33fea9bc",
+      "controlTraceSha256": "74d2acb1acfc4450d54b065ba883328c39885a1bec255d85796daea7ae469d6d"
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "name": "skip-pagination-empty-input",
+      "expectedOk": false,
+      "originalBaselineStatus": "semantic-pass",
+      "originalControlStatus": "semantic-fail",
+      "correctedServiceStatus": "semantic-fail",
+      "originalControlFailures": [
+        "completion"
+      ],
+      "sourcePath": "data/remaining-pass-grading-controls/sources/temporal-capacity-repair/skip-pagination-empty-input/entry.mjs",
+      "sourceSha256": "53e459c0b423ad654615fdbc9f4f3eb1ca87937234d137ec771d0a81d113d67b",
+      "scenarioPath": "data/remaining-pass-grading-controls/sources/temporal-capacity-repair/skip-pagination-empty-input/scenario.json",
+      "scenarioSha256": "820d054ece7bf8eff529f7baa85a2b60fbdb6fa064b4bbf12085a4e47bcd3921",
+      "baselineTraceSha256": "f7ad54fa113cc36fe4c56909d8bc855bc8ed455f1df96bb56391ea7ebc3d934f",
+      "controlTraceSha256": "03317f9dc231b5972e7d79abf7488ba854f3a6b45ab470d3c02c81d2fe6a4b9a"
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "name": "complete-empty-input",
+      "expectedOk": true,
+      "originalBaselineStatus": "semantic-pass",
+      "originalControlStatus": "semantic-pass",
+      "correctedServiceStatus": "semantic-pass",
+      "originalControlFailures": [],
+      "sourcePath": "data/remaining-pass-grading-controls/sources/temporal-capacity-repair/complete-empty-input/entry.mjs",
+      "sourceSha256": "bb41df160752d72fdd5fcf667ba54982d4de9c9927b385afcb1ea8e748d9586c",
+      "scenarioPath": "data/remaining-pass-grading-controls/sources/temporal-capacity-repair/complete-empty-input/scenario.json",
+      "scenarioSha256": "acffa8ec33c92e4eeb8e4aa83756c0b053d630dd1b51945fc83a737bd7400a63",
+      "baselineTraceSha256": "e4cc91821ade3414e7414af065cc55f02a326fa63570cfc8e48ba7c5dfc98f7c",
+      "controlTraceSha256": "e4cc91821ade3414e7414af065cc55f02a326fa63570cfc8e48ba7c5dfc98f7c"
+    }
+  ],
+  "oracles": [
+    {
+      "id": "variant-cache-repair",
+      "pass": true,
+      "correct": 8,
+      "total": 8,
+      "originalOracle": {
+        "317f2df180e4cdb3098e2db5": {
+          "ok": true
+        },
+        "3dee4fd5227f802f034982b3": {
+          "ok": true
+        },
+        "39254bac0cc93e4bca06d1ca": {
+          "ok": true
+        },
+        "f117e58ac5e920eb294cdf60": {
+          "ok": true
+        },
+        "65a72eb8f8465d6428965e18": {
+          "ok": true
+        },
+        "b0b340ef902561caacd4186f": {
+          "ok": true
+        }
+      },
+      "checkerSha256": "0ffaa2ef604d4126c94f04e53c15f77b8bd66b7926ff78ebc3be0bacf3b6c500"
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "pass": true,
+      "correct": 18,
+      "total": 18,
+      "originalOracle": null,
+      "checkerSha256": "85dca56125c07639acbb5888793f9aeb6e1988fba2d76aad049c1e66ff77071a"
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "pass": true,
+      "correct": 22,
+      "total": 22,
+      "originalOracle": null,
+      "checkerSha256": "3f3d4c38190c97c2cf54dbcd90a4de362923610fbb097d58f179d82fc9112dfa"
+    },
+    {
+      "id": "issued-report-repair",
+      "pass": true,
+      "correct": 2,
+      "total": 2,
+      "originalOracle": null,
+      "checkerSha256": "461afa5147a3cd0a7d64a322e7b58f02a75bbe3e380334cc27596f8ce33d11d2"
+    }
+  ],
+  "rows": [
+    {
+      "id": "variant-cache-repair",
+      "trial": 2,
+      "provider": "claude",
+      "packageDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+      "recordedReward": 0,
+      "previousEffectiveReward": 0,
+      "effectiveReward": 0,
+      "checkerSha256": "8896eb993c1cb167907f95139d5ed2a8ea040bfcbe0189a87284cc486922d209",
+      "gradeSha256": "86e4df4215c871709e7e60dc1408913288b8aff37dc6c00dc8e6ca7c10126693",
+      "resultSha256": "cfc6a938bd349e8794fdcdda198a0e6136f505d13704b211b2dfde52ebc940ef",
+      "completionSha256": "66e218606d576f59b4db0c2577e7e146959641a787ca2fd16fdf7673f0868632",
+      "publicContractSha256": "131623e354649247acf5fd07c0ab3f36c7ebb2f149da84ec83864d47209cb410",
+      "instructionSha256": "9d3ed7b2d39fc5a9cbddb56f636539686cec895b6961cac1e6004eefdca28f0a",
+      "supplement": {
+        "pass": false,
+        "correct": 6,
+        "total": 8,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "db141be670ff3bd75a54e983",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "9c644993125a14fb521924b6",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "317f2df180e4cdb3098e2db5",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "3dee4fd5227f802f034982b3",
+            "expectedOk": false,
+            "actualOk": true,
+            "correct": false
+          },
+          {
+            "token": "39254bac0cc93e4bca06d1ca",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f117e58ac5e920eb294cdf60",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "65a72eb8f8465d6428965e18",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "b0b340ef902561caacd4186f",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "db141be670ff3bd75a54e983": {
+              "ok": true
+            },
+            "9c644993125a14fb521924b6": {
+              "ok": true
+            },
+            "317f2df180e4cdb3098e2db5": {
+              "ok": true
+            },
+            "3dee4fd5227f802f034982b3": {
+              "ok": true
+            },
+            "39254bac0cc93e4bca06d1ca": {
+              "ok": true
+            },
+            "f117e58ac5e920eb294cdf60": {
+              "ok": false,
+              "reasons": [
+                "cell 0: get b delivered a representation the origin did not return for it"
+              ]
+            },
+            "65a72eb8f8465d6428965e18": {
+              "ok": true
+            },
+            "b0b340ef902561caacd4186f": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "variant-cache-repair",
+      "trial": 3,
+      "provider": "claude",
+      "packageDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+      "recordedReward": 0,
+      "previousEffectiveReward": 0,
+      "effectiveReward": 0,
+      "checkerSha256": "2aa2fb30529e85ae0357838b92eb3c1b9fd04334ccf821eb661a8c19092759e8",
+      "gradeSha256": "86e4df4215c871709e7e60dc1408913288b8aff37dc6c00dc8e6ca7c10126693",
+      "resultSha256": "a06ffe15ebfae1d72adfa6ff7394a96f44620649d923169f8beaabe64cb08d7e",
+      "completionSha256": "78753dce98625cd0d07365225373a9dd5193f6110dcd2902fd04a58d5cb8ac09",
+      "publicContractSha256": "131623e354649247acf5fd07c0ab3f36c7ebb2f149da84ec83864d47209cb410",
+      "instructionSha256": "9d3ed7b2d39fc5a9cbddb56f636539686cec895b6961cac1e6004eefdca28f0a",
+      "supplement": {
+        "pass": false,
+        "correct": 6,
+        "total": 8,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "db141be670ff3bd75a54e983",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "9c644993125a14fb521924b6",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "317f2df180e4cdb3098e2db5",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "3dee4fd5227f802f034982b3",
+            "expectedOk": false,
+            "actualOk": true,
+            "correct": false
+          },
+          {
+            "token": "39254bac0cc93e4bca06d1ca",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f117e58ac5e920eb294cdf60",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "65a72eb8f8465d6428965e18",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "b0b340ef902561caacd4186f",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "db141be670ff3bd75a54e983": {
+              "ok": true
+            },
+            "9c644993125a14fb521924b6": {
+              "ok": true
+            },
+            "317f2df180e4cdb3098e2db5": {
+              "ok": true
+            },
+            "3dee4fd5227f802f034982b3": {
+              "ok": true
+            },
+            "39254bac0cc93e4bca06d1ca": {
+              "ok": true
+            },
+            "f117e58ac5e920eb294cdf60": {
+              "ok": false,
+              "reasons": [
+                "get b delivered a representation that no fresh entry or origin response supports"
+              ]
+            },
+            "65a72eb8f8465d6428965e18": {
+              "ok": true
+            },
+            "b0b340ef902561caacd4186f": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "variant-cache-repair",
+      "trial": 4,
+      "provider": "claude",
+      "packageDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+      "recordedReward": 0,
+      "previousEffectiveReward": 0,
+      "effectiveReward": 0,
+      "checkerSha256": "dc43357c5d4f674a0f50faa837a1a3873c4e8f8d6ffac2a618d4745828c877aa",
+      "gradeSha256": "86e4df4215c871709e7e60dc1408913288b8aff37dc6c00dc8e6ca7c10126693",
+      "resultSha256": "9d0f5007f5512c7339939c48707543403dd047156b4d4e289c47df89e99a52ce",
+      "completionSha256": "789d651e3ccdb264313820f15be8d75e9415fa9b90e10a9678659c3089ce5f22",
+      "publicContractSha256": "131623e354649247acf5fd07c0ab3f36c7ebb2f149da84ec83864d47209cb410",
+      "instructionSha256": "9d3ed7b2d39fc5a9cbddb56f636539686cec895b6961cac1e6004eefdca28f0a",
+      "supplement": {
+        "pass": false,
+        "correct": 7,
+        "total": 8,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "db141be670ff3bd75a54e983",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "9c644993125a14fb521924b6",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "317f2df180e4cdb3098e2db5",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "3dee4fd5227f802f034982b3",
+            "expectedOk": false,
+            "actualOk": true,
+            "correct": false
+          },
+          {
+            "token": "39254bac0cc93e4bca06d1ca",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f117e58ac5e920eb294cdf60",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "65a72eb8f8465d6428965e18",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "b0b340ef902561caacd4186f",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "db141be670ff3bd75a54e983": {
+              "ok": true
+            },
+            "9c644993125a14fb521924b6": {
+              "ok": true
+            },
+            "317f2df180e4cdb3098e2db5": {
+              "ok": true
+            },
+            "3dee4fd5227f802f034982b3": {
+              "ok": true
+            },
+            "39254bac0cc93e4bca06d1ca": {
+              "ok": true
+            },
+            "f117e58ac5e920eb294cdf60": {
+              "ok": true
+            },
+            "65a72eb8f8465d6428965e18": {
+              "ok": true
+            },
+            "b0b340ef902561caacd4186f": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "variant-cache-repair",
+      "trial": 5,
+      "provider": "codex",
+      "packageDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+      "recordedReward": 1,
+      "previousEffectiveReward": 0,
+      "effectiveReward": 0,
+      "checkerSha256": "076cc24e7f35444be483be54ee3effb1a90b8b5d26d2adf83e7203a226dc1e31",
+      "gradeSha256": "424bb6b927b13607248732de51b8ab27864f8ec1d4730a070b83d115146a0f05",
+      "resultSha256": "9b61c103cf8d2bccf0ecb10a7bfae33ec4867b3ccb6984c60c658f256464de4a",
+      "completionSha256": "83bea01488e246a8097e38c14acf2d06a9e266f4f9640f834f5e33b60617db3a",
+      "publicContractSha256": "131623e354649247acf5fd07c0ab3f36c7ebb2f149da84ec83864d47209cb410",
+      "instructionSha256": "9d3ed7b2d39fc5a9cbddb56f636539686cec895b6961cac1e6004eefdca28f0a",
+      "supplement": {
+        "pass": false,
+        "correct": 4,
+        "total": 8,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "db141be670ff3bd75a54e983",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "9c644993125a14fb521924b6",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "317f2df180e4cdb3098e2db5",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "3dee4fd5227f802f034982b3",
+            "expectedOk": false,
+            "actualOk": true,
+            "correct": false
+          },
+          {
+            "token": "39254bac0cc93e4bca06d1ca",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f117e58ac5e920eb294cdf60",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "65a72eb8f8465d6428965e18",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "b0b340ef902561caacd4186f",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "db141be670ff3bd75a54e983": {
+              "ok": true
+            },
+            "9c644993125a14fb521924b6": {
+              "ok": false,
+              "reasons": [
+                "get changed unrelated tier edge-b"
+              ]
+            },
+            "317f2df180e4cdb3098e2db5": {
+              "ok": true
+            },
+            "3dee4fd5227f802f034982b3": {
+              "ok": true
+            },
+            "39254bac0cc93e4bca06d1ca": {
+              "ok": true
+            },
+            "f117e58ac5e920eb294cdf60": {
+              "ok": false,
+              "reasons": [
+                "delivered body/etag lacks a legal fresh source",
+                "origin result left an obsolete fresh entry in edge-a",
+                "origin result left an obsolete fresh entry in shield"
+              ]
+            },
+            "65a72eb8f8465d6428965e18": {
+              "ok": true
+            },
+            "b0b340ef902561caacd4186f": {
+              "ok": false,
+              "reasons": [
+                "get changed unrelated tier edge-b"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "variant-cache-repair",
+      "trial": 6,
+      "provider": "codex",
+      "packageDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+      "recordedReward": 1,
+      "previousEffectiveReward": 1,
+      "effectiveReward": 0,
+      "checkerSha256": "21a3707a66622f42bddabefcdc5517e3f76309ce79dc5a052bd4bfecbf72c322",
+      "gradeSha256": "424bb6b927b13607248732de51b8ab27864f8ec1d4730a070b83d115146a0f05",
+      "resultSha256": "3201d09c89dcab588f3da762f47f6ea9f97fb8c0e08380327088bbc18c27c855",
+      "completionSha256": "173758cc990a4c52c07cdbcf4ecabb03431fe08a16f8bd5e24b5ffc2f2ef56cc",
+      "publicContractSha256": "131623e354649247acf5fd07c0ab3f36c7ebb2f149da84ec83864d47209cb410",
+      "instructionSha256": "9d3ed7b2d39fc5a9cbddb56f636539686cec895b6961cac1e6004eefdca28f0a",
+      "supplement": {
+        "pass": false,
+        "correct": 7,
+        "total": 8,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "db141be670ff3bd75a54e983",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "9c644993125a14fb521924b6",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "317f2df180e4cdb3098e2db5",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "3dee4fd5227f802f034982b3",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "39254bac0cc93e4bca06d1ca",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f117e58ac5e920eb294cdf60",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "65a72eb8f8465d6428965e18",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "b0b340ef902561caacd4186f",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "db141be670ff3bd75a54e983": {
+              "ok": true
+            },
+            "9c644993125a14fb521924b6": {
+              "ok": true
+            },
+            "317f2df180e4cdb3098e2db5": {
+              "ok": true
+            },
+            "3dee4fd5227f802f034982b3": {
+              "ok": false,
+              "reasons": [
+                "cell 0: get b retained pre-validation metadata"
+              ]
+            },
+            "39254bac0cc93e4bca06d1ca": {
+              "ok": true
+            },
+            "f117e58ac5e920eb294cdf60": {
+              "ok": true
+            },
+            "65a72eb8f8465d6428965e18": {
+              "ok": true
+            },
+            "b0b340ef902561caacd4186f": {
+              "ok": false,
+              "reasons": [
+                "cell 0: get b stored an unrelated path"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "variant-cache-repair",
+      "trial": 7,
+      "provider": "codex",
+      "packageDigest": "73ca8249918c234c875550b5e7f18a0816847f6f7a54a33e8849ab9f6d9e2e9b",
+      "recordedReward": 1,
+      "previousEffectiveReward": 1,
+      "effectiveReward": 0,
+      "checkerSha256": "108b907c071b74daa3d861f39e02cd40d881f2d39c12b7f98ae0a6b32dfe70da",
+      "gradeSha256": "424bb6b927b13607248732de51b8ab27864f8ec1d4730a070b83d115146a0f05",
+      "resultSha256": "a088e5a2ec0f6a806039b9f63f0348b7e5164e3510d6b2722d1545125db38a9d",
+      "completionSha256": "7744062b2ddc978507e091021088925498e3206ddf1b9c9744f0f99315bb4c30",
+      "publicContractSha256": "131623e354649247acf5fd07c0ab3f36c7ebb2f149da84ec83864d47209cb410",
+      "instructionSha256": "9d3ed7b2d39fc5a9cbddb56f636539686cec895b6961cac1e6004eefdca28f0a",
+      "supplement": {
+        "pass": false,
+        "correct": 5,
+        "total": 8,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "db141be670ff3bd75a54e983",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "9c644993125a14fb521924b6",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "317f2df180e4cdb3098e2db5",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "3dee4fd5227f802f034982b3",
+            "expectedOk": false,
+            "actualOk": true,
+            "correct": false
+          },
+          {
+            "token": "39254bac0cc93e4bca06d1ca",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f117e58ac5e920eb294cdf60",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "65a72eb8f8465d6428965e18",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "b0b340ef902561caacd4186f",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "db141be670ff3bd75a54e983": {
+              "ok": true
+            },
+            "9c644993125a14fb521924b6": {
+              "ok": true
+            },
+            "317f2df180e4cdb3098e2db5": {
+              "ok": true
+            },
+            "3dee4fd5227f802f034982b3": {
+              "ok": true
+            },
+            "39254bac0cc93e4bca06d1ca": {
+              "ok": true
+            },
+            "f117e58ac5e920eb294cdf60": {
+              "ok": false,
+              "reasons": [
+                "delivery did not come from a fresh or validated representation"
+              ]
+            },
+            "65a72eb8f8465d6428965e18": {
+              "ok": true
+            },
+            "b0b340ef902561caacd4186f": {
+              "ok": false,
+              "reasons": [
+                "cache write fabricated or evicted a representation"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 2,
+      "provider": "codex",
+      "packageDigest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+      "recordedReward": 0,
+      "previousEffectiveReward": 0,
+      "effectiveReward": 0,
+      "checkerSha256": "9bc536890f99804d988588c573fdedae957d0b4eb64a3037b637fbfb7dcbccd3",
+      "gradeSha256": "7f5be95df41e0e808bb7e13416d9c0697ed2005587de1237217347832bf428b9",
+      "resultSha256": "867282ea7d8b1caba10139fe6d21049fb01b025bdec5b33b11d23f508857a43e",
+      "completionSha256": "f17e14b59f72b52b8c41a0d44c14c051f3453415783f3ea85e97906a323068cc",
+      "publicContractSha256": "776a124acd25b1574ecc6e6693825a95cfd68638f0ba7d597e4891ae92ef4a08",
+      "instructionSha256": "f2943b58bcb8caf0b9ac4923faad365b7de28b8a2da2f912121146f2aada4e4c",
+      "supplement": {
+        "pass": false,
+        "correct": 4,
+        "total": 18,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "60ef8f7b2097c4c934031a11",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "0021c8f79876bc501f21eeff",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "061441bce76280e001c9980c",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "617d7a6c7ad87c9ea0833f65",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "e8af17a27ac07d0946e82088",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "cedcb51b3c997f661dbdb8c0",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "2bdf91aec96fad4b45dcb021",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "7138d9518c13a240a93d8c66",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "df1c49c86b82d48ff4cd19cd",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "c04f215f1c245d5ed81b8989",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "7e564d6dff2273e840c2e312",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "f3d284b0405a9cbe81c9d14f",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "b8f45b1f95727ac6bd891e91",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "a25cf456294faf5d736b7acd",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "87c035fb63a704b863b66592",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "ef59d28e12f352ce5d0eec2d",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "2e87b4e6c9f2ceb17f2daa49",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "e15718d4b10a38f3f4c0ac78",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "60ef8f7b2097c4c934031a11": {
+              "ok": false,
+              "reasons": [
+                "cell 0: published archive is missing its bytes"
+              ]
+            },
+            "0021c8f79876bc501f21eeff": {
+              "ok": false,
+              "reasons": [
+                "cell 0: published archive is missing its bytes"
+              ]
+            },
+            "061441bce76280e001c9980c": {
+              "ok": false,
+              "reasons": [
+                "cell 0: published archive is missing its bytes"
+              ]
+            },
+            "617d7a6c7ad87c9ea0833f65": {
+              "ok": false,
+              "reasons": [
+                "cell 0: actual restore.accounts are incorrect"
+              ]
+            },
+            "e8af17a27ac07d0946e82088": {
+              "ok": false,
+              "reasons": [
+                "cell 0: published archive is missing its bytes"
+              ]
+            },
+            "cedcb51b3c997f661dbdb8c0": {
+              "ok": false,
+              "reasons": [
+                "cell 0: published archive is missing its bytes"
+              ]
+            },
+            "2bdf91aec96fad4b45dcb021": {
+              "ok": false,
+              "reasons": [
+                "cell 0: published archive is missing its bytes"
+              ]
+            },
+            "7138d9518c13a240a93d8c66": {
+              "ok": false,
+              "reasons": [
+                "cell 0: published archive is missing its bytes"
+              ]
+            },
+            "df1c49c86b82d48ff4cd19cd": {
+              "ok": false,
+              "reasons": [
+                "cell 0: published archive is missing its bytes"
+              ]
+            },
+            "c04f215f1c245d5ed81b8989": {
+              "ok": false,
+              "reasons": [
+                "cell 0: published archive is missing its bytes"
+              ]
+            },
+            "7e564d6dff2273e840c2e312": {
+              "ok": false,
+              "reasons": [
+                "cell 0: published archive is missing its bytes"
+              ]
+            },
+            "f3d284b0405a9cbe81c9d14f": {
+              "ok": false,
+              "reasons": [
+                "cell 0: published archive is missing its bytes"
+              ]
+            },
+            "b8f45b1f95727ac6bd891e91": {
+              "ok": false,
+              "reasons": [
+                "cell 0: published archive is missing its bytes"
+              ]
+            },
+            "a25cf456294faf5d736b7acd": {
+              "ok": false,
+              "reasons": [
+                "cell 0: actual restore.nextId is incorrect"
+              ]
+            },
+            "87c035fb63a704b863b66592": {
+              "ok": false,
+              "reasons": [
+                "cell 0: published archive is missing its bytes"
+              ]
+            },
+            "ef59d28e12f352ce5d0eec2d": {
+              "ok": false,
+              "reasons": [
+                "cell 0: there must be exactly one successful publication"
+              ]
+            },
+            "2e87b4e6c9f2ceb17f2daa49": {
+              "ok": false,
+              "reasons": [
+                "cell 0: published archive is missing its bytes"
+              ]
+            },
+            "e15718d4b10a38f3f4c0ac78": {
+              "ok": false,
+              "reasons": [
+                "cell 0: published archive is missing its bytes"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 3,
+      "provider": "codex",
+      "packageDigest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+      "recordedReward": 1,
+      "previousEffectiveReward": 0,
+      "effectiveReward": 0,
+      "checkerSha256": "2e5d8fbb61493f200765b551fd62924cc071d472d14da0631056b287be1175db",
+      "gradeSha256": "a0ffadc5012ac85ec683a1097998828ddcb035ab6a1f59843809104025093387",
+      "resultSha256": "458a2c450dd0a03b22b7e648f69d1e265a4778f16aaa4ba250f1ea5b0b8cce8c",
+      "completionSha256": "c481b7500dc3d1faed67841510f935ba0401c8912d7ab3bb681873da8e81d4e1",
+      "publicContractSha256": "776a124acd25b1574ecc6e6693825a95cfd68638f0ba7d597e4891ae92ef4a08",
+      "instructionSha256": "f2943b58bcb8caf0b9ac4923faad365b7de28b8a2da2f912121146f2aada4e4c",
+      "supplement": {
+        "pass": false,
+        "correct": 16,
+        "total": 18,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "60ef8f7b2097c4c934031a11",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "0021c8f79876bc501f21eeff",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "061441bce76280e001c9980c",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "617d7a6c7ad87c9ea0833f65",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "e8af17a27ac07d0946e82088",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "cedcb51b3c997f661dbdb8c0",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "2bdf91aec96fad4b45dcb021",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "7138d9518c13a240a93d8c66",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "df1c49c86b82d48ff4cd19cd",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "c04f215f1c245d5ed81b8989",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "7e564d6dff2273e840c2e312",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f3d284b0405a9cbe81c9d14f",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "b8f45b1f95727ac6bd891e91",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "a25cf456294faf5d736b7acd",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "87c035fb63a704b863b66592",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "ef59d28e12f352ce5d0eec2d",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "2e87b4e6c9f2ceb17f2daa49",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "e15718d4b10a38f3f4c0ac78",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "60ef8f7b2097c4c934031a11": {
+              "ok": true
+            },
+            "0021c8f79876bc501f21eeff": {
+              "ok": false,
+              "reasons": [
+                "cell 0: trace contains a successful out-of-scope row write"
+              ]
+            },
+            "061441bce76280e001c9980c": {
+              "ok": true
+            },
+            "617d7a6c7ad87c9ea0833f65": {
+              "ok": false,
+              "reasons": [
+                "cell 0: final committed restore differs from recovery point",
+                "cell 0: published database differs from recovery point",
+                "cell 0: published archive differs from recovery point",
+                "cell 0: trace contains a successful out-of-scope row write",
+                "cell 0: the archive staged at publication is not the required portable backup"
+              ]
+            },
+            "e8af17a27ac07d0946e82088": {
+              "ok": true
+            },
+            "cedcb51b3c997f661dbdb8c0": {
+              "ok": true
+            },
+            "2bdf91aec96fad4b45dcb021": {
+              "ok": true
+            },
+            "7138d9518c13a240a93d8c66": {
+              "ok": false,
+              "reasons": [
+                "cell 0: trace contains a successful out-of-scope row write"
+              ]
+            },
+            "df1c49c86b82d48ff4cd19cd": {
+              "ok": true
+            },
+            "c04f215f1c245d5ed81b8989": {
+              "ok": true
+            },
+            "7e564d6dff2273e840c2e312": {
+              "ok": true
+            },
+            "f3d284b0405a9cbe81c9d14f": {
+              "ok": true
+            },
+            "b8f45b1f95727ac6bd891e91": {
+              "ok": true
+            },
+            "a25cf456294faf5d736b7acd": {
+              "ok": false,
+              "reasons": [
+                "cell 0: final committed restore differs from recovery point",
+                "cell 0: published database differs from recovery point",
+                "cell 0: trace contains a successful out-of-scope allocation write"
+              ]
+            },
+            "87c035fb63a704b863b66592": {
+              "ok": true
+            },
+            "ef59d28e12f352ce5d0eec2d": {
+              "ok": false,
+              "reasons": [
+                "cell 0: expected exactly one successful publication",
+                "cell 0: trace does not contain exactly one successful publish call",
+                "cell 0: the archive staged at publication is not the required portable backup"
+              ]
+            },
+            "2e87b4e6c9f2ceb17f2daa49": {
+              "ok": true
+            },
+            "e15718d4b10a38f3f4c0ac78": {
+              "ok": false,
+              "reasons": [
+                "cell 0: published archive differs from recovery point",
+                "cell 0: the archive staged at publication is not the required portable backup"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 4,
+      "provider": "codex",
+      "packageDigest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+      "recordedReward": 1,
+      "previousEffectiveReward": 1,
+      "effectiveReward": 0,
+      "checkerSha256": "5d439304cf5017538bf3548767ef4c817fec6784843952409ed3eba51413ec2d",
+      "gradeSha256": "a0ffadc5012ac85ec683a1097998828ddcb035ab6a1f59843809104025093387",
+      "resultSha256": "454675027f6f209ce920c8ee2c20151a1dea16596e40ccc112d8113df4bd1f24",
+      "completionSha256": "bc61d25e8b3e42ba9d9e7415d0d2bff5a1f316e3c705b4ade0b6dad5fbf395c5",
+      "publicContractSha256": "776a124acd25b1574ecc6e6693825a95cfd68638f0ba7d597e4891ae92ef4a08",
+      "instructionSha256": "f2943b58bcb8caf0b9ac4923faad365b7de28b8a2da2f912121146f2aada4e4c",
+      "supplement": {
+        "pass": false,
+        "correct": 17,
+        "total": 18,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "60ef8f7b2097c4c934031a11",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "0021c8f79876bc501f21eeff",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "061441bce76280e001c9980c",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "617d7a6c7ad87c9ea0833f65",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "e8af17a27ac07d0946e82088",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "cedcb51b3c997f661dbdb8c0",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "2bdf91aec96fad4b45dcb021",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "7138d9518c13a240a93d8c66",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "df1c49c86b82d48ff4cd19cd",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "c04f215f1c245d5ed81b8989",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "7e564d6dff2273e840c2e312",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f3d284b0405a9cbe81c9d14f",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "b8f45b1f95727ac6bd891e91",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "a25cf456294faf5d736b7acd",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "87c035fb63a704b863b66592",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "ef59d28e12f352ce5d0eec2d",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "2e87b4e6c9f2ceb17f2daa49",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "e15718d4b10a38f3f4c0ac78",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "60ef8f7b2097c4c934031a11": {
+              "ok": true
+            },
+            "0021c8f79876bc501f21eeff": {
+              "ok": true
+            },
+            "061441bce76280e001c9980c": {
+              "ok": true
+            },
+            "617d7a6c7ad87c9ea0833f65": {
+              "ok": false,
+              "reasons": [
+                "committed restore differs from the requested point"
+              ]
+            },
+            "e8af17a27ac07d0946e82088": {
+              "ok": true
+            },
+            "cedcb51b3c997f661dbdb8c0": {
+              "ok": false,
+              "reasons": [
+                "execution trace violates the publication contract"
+              ]
+            },
+            "2bdf91aec96fad4b45dcb021": {
+              "ok": true
+            },
+            "7138d9518c13a240a93d8c66": {
+              "ok": true
+            },
+            "df1c49c86b82d48ff4cd19cd": {
+              "ok": true
+            },
+            "c04f215f1c245d5ed81b8989": {
+              "ok": true
+            },
+            "7e564d6dff2273e840c2e312": {
+              "ok": true
+            },
+            "f3d284b0405a9cbe81c9d14f": {
+              "ok": true
+            },
+            "b8f45b1f95727ac6bd891e91": {
+              "ok": true
+            },
+            "a25cf456294faf5d736b7acd": {
+              "ok": false,
+              "reasons": [
+                "committed restore differs from the requested point"
+              ]
+            },
+            "87c035fb63a704b863b66592": {
+              "ok": true
+            },
+            "ef59d28e12f352ce5d0eec2d": {
+              "ok": false,
+              "reasons": [
+                "recovery was not published exactly once"
+              ]
+            },
+            "2e87b4e6c9f2ceb17f2daa49": {
+              "ok": true
+            },
+            "e15718d4b10a38f3f4c0ac78": {
+              "ok": false,
+              "reasons": [
+                "published archive differs from the requested point"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 5,
+      "provider": "claude",
+      "packageDigest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+      "recordedReward": 1,
+      "previousEffectiveReward": 0,
+      "effectiveReward": 0,
+      "checkerSha256": "f8a60628fdb5cab20a9bcc547935344f1dde34e57f3b158da91ad2c9b59f970b",
+      "gradeSha256": "a0ffadc5012ac85ec683a1097998828ddcb035ab6a1f59843809104025093387",
+      "resultSha256": "5f53c10cdf771ca68a321e3598cdcec0799e71851a0714c636c3696c0109381d",
+      "completionSha256": "d54e0b6dd2ef1db9d09bb019eeb307875c19006bfb7fe60bf46baeae9bb95fe8",
+      "publicContractSha256": "776a124acd25b1574ecc6e6693825a95cfd68638f0ba7d597e4891ae92ef4a08",
+      "instructionSha256": "f2943b58bcb8caf0b9ac4923faad365b7de28b8a2da2f912121146f2aada4e4c",
+      "supplement": {
+        "pass": false,
+        "correct": 17,
+        "total": 18,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "60ef8f7b2097c4c934031a11",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "0021c8f79876bc501f21eeff",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "061441bce76280e001c9980c",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "617d7a6c7ad87c9ea0833f65",
+            "expectedOk": false,
+            "actualOk": true,
+            "correct": false
+          },
+          {
+            "token": "e8af17a27ac07d0946e82088",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "cedcb51b3c997f661dbdb8c0",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "2bdf91aec96fad4b45dcb021",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "7138d9518c13a240a93d8c66",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "df1c49c86b82d48ff4cd19cd",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "c04f215f1c245d5ed81b8989",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "7e564d6dff2273e840c2e312",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f3d284b0405a9cbe81c9d14f",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "b8f45b1f95727ac6bd891e91",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "a25cf456294faf5d736b7acd",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "87c035fb63a704b863b66592",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "ef59d28e12f352ce5d0eec2d",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "2e87b4e6c9f2ceb17f2daa49",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "e15718d4b10a38f3f4c0ac78",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "60ef8f7b2097c4c934031a11": {
+              "ok": true
+            },
+            "0021c8f79876bc501f21eeff": {
+              "ok": true
+            },
+            "061441bce76280e001c9980c": {
+              "ok": true
+            },
+            "617d7a6c7ad87c9ea0833f65": {
+              "ok": true
+            },
+            "e8af17a27ac07d0946e82088": {
+              "ok": true
+            },
+            "cedcb51b3c997f661dbdb8c0": {
+              "ok": true
+            },
+            "2bdf91aec96fad4b45dcb021": {
+              "ok": true
+            },
+            "7138d9518c13a240a93d8c66": {
+              "ok": true
+            },
+            "df1c49c86b82d48ff4cd19cd": {
+              "ok": true
+            },
+            "c04f215f1c245d5ed81b8989": {
+              "ok": true
+            },
+            "7e564d6dff2273e840c2e312": {
+              "ok": true
+            },
+            "f3d284b0405a9cbe81c9d14f": {
+              "ok": true
+            },
+            "b8f45b1f95727ac6bd891e91": {
+              "ok": true
+            },
+            "a25cf456294faf5d736b7acd": {
+              "ok": false,
+              "reasons": [
+                "cell 0: published restore: nextId: expected 99, got 8",
+                "cell 0: committed restore: nextId: expected 99, got 8"
+              ]
+            },
+            "87c035fb63a704b863b66592": {
+              "ok": true
+            },
+            "ef59d28e12f352ce5d0eec2d": {
+              "ok": false,
+              "reasons": [
+                "cell 0: no successful publication: the recovery was never published"
+              ]
+            },
+            "2e87b4e6c9f2ceb17f2daa49": {
+              "ok": true
+            },
+            "e15718d4b10a38f3f4c0ac78": {
+              "ok": false,
+              "reasons": [
+                "cell 0: published backup: entries row id=2 is missing",
+                "cell 0: archived backup: entries row id=2 is missing"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 6,
+      "provider": "claude",
+      "packageDigest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+      "recordedReward": 1,
+      "previousEffectiveReward": 0,
+      "effectiveReward": 0,
+      "checkerSha256": "7e5e9cbc122e2e27c6deede56942875beb5275f4b56f6b36026672da4930addc",
+      "gradeSha256": "a0ffadc5012ac85ec683a1097998828ddcb035ab6a1f59843809104025093387",
+      "resultSha256": "c76aedea0faa8c201a0a0ba443d9b38c45e212dce612bef0e0db62b8ef00ffaf",
+      "completionSha256": "f83eb12a4e4fef2b2d6e75759bae5dfb3b519f82effc91a87e0d595ca29ec801",
+      "publicContractSha256": "776a124acd25b1574ecc6e6693825a95cfd68638f0ba7d597e4891ae92ef4a08",
+      "instructionSha256": "f2943b58bcb8caf0b9ac4923faad365b7de28b8a2da2f912121146f2aada4e4c",
+      "supplement": {
+        "pass": false,
+        "correct": 17,
+        "total": 18,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "60ef8f7b2097c4c934031a11",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "0021c8f79876bc501f21eeff",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "061441bce76280e001c9980c",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "617d7a6c7ad87c9ea0833f65",
+            "expectedOk": false,
+            "actualOk": true,
+            "correct": false
+          },
+          {
+            "token": "e8af17a27ac07d0946e82088",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "cedcb51b3c997f661dbdb8c0",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "2bdf91aec96fad4b45dcb021",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "7138d9518c13a240a93d8c66",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "df1c49c86b82d48ff4cd19cd",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "c04f215f1c245d5ed81b8989",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "7e564d6dff2273e840c2e312",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f3d284b0405a9cbe81c9d14f",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "b8f45b1f95727ac6bd891e91",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "a25cf456294faf5d736b7acd",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "87c035fb63a704b863b66592",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "ef59d28e12f352ce5d0eec2d",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "2e87b4e6c9f2ceb17f2daa49",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "e15718d4b10a38f3f4c0ac78",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "60ef8f7b2097c4c934031a11": {
+              "ok": true,
+              "reasons": [
+                "every cell reproduces the requested point exactly once"
+              ]
+            },
+            "0021c8f79876bc501f21eeff": {
+              "ok": true,
+              "reasons": [
+                "every cell reproduces the requested point exactly once"
+              ]
+            },
+            "061441bce76280e001c9980c": {
+              "ok": true,
+              "reasons": [
+                "every cell reproduces the requested point exactly once"
+              ]
+            },
+            "617d7a6c7ad87c9ea0833f65": {
+              "ok": true,
+              "reasons": [
+                "every cell reproduces the requested point exactly once"
+              ]
+            },
+            "e8af17a27ac07d0946e82088": {
+              "ok": true,
+              "reasons": [
+                "every cell reproduces the requested point exactly once"
+              ]
+            },
+            "cedcb51b3c997f661dbdb8c0": {
+              "ok": true,
+              "reasons": [
+                "every cell reproduces the requested point exactly once"
+              ]
+            },
+            "2bdf91aec96fad4b45dcb021": {
+              "ok": true,
+              "reasons": [
+                "every cell reproduces the requested point exactly once"
+              ]
+            },
+            "7138d9518c13a240a93d8c66": {
+              "ok": true,
+              "reasons": [
+                "every cell reproduces the requested point exactly once"
+              ]
+            },
+            "df1c49c86b82d48ff4cd19cd": {
+              "ok": true,
+              "reasons": [
+                "every cell reproduces the requested point exactly once"
+              ]
+            },
+            "c04f215f1c245d5ed81b8989": {
+              "ok": true,
+              "reasons": [
+                "every cell reproduces the requested point exactly once"
+              ]
+            },
+            "7e564d6dff2273e840c2e312": {
+              "ok": true,
+              "reasons": [
+                "every cell reproduces the requested point exactly once"
+              ]
+            },
+            "f3d284b0405a9cbe81c9d14f": {
+              "ok": true,
+              "reasons": [
+                "every cell reproduces the requested point exactly once"
+              ]
+            },
+            "b8f45b1f95727ac6bd891e91": {
+              "ok": true,
+              "reasons": [
+                "every cell reproduces the requested point exactly once"
+              ]
+            },
+            "a25cf456294faf5d736b7acd": {
+              "ok": false,
+              "reasons": [
+                "cell[0] wrong-allocation: committed restore: nextId=8, expected 99",
+                "cell[0] wrong-allocation: publication[0] restore: nextId=8, expected 99"
+              ]
+            },
+            "87c035fb63a704b863b66592": {
+              "ok": true,
+              "reasons": [
+                "every cell reproduces the requested point exactly once"
+              ]
+            },
+            "ef59d28e12f352ce5d0eec2d": {
+              "ok": false,
+              "reasons": [
+                "cell[0] no-publication: no successful publication was made"
+              ]
+            },
+            "2e87b4e6c9f2ceb17f2daa49": {
+              "ok": true,
+              "reasons": [
+                "every cell reproduces the requested point exactly once"
+              ]
+            },
+            "e15718d4b10a38f3f4c0ac78": {
+              "ok": false,
+              "reasons": [
+                "cell[0] missing-backup-row: staged backup: entries is missing 1 row(s) [2]",
+                "cell[0] missing-backup-row: publication[0] backup: entries is missing 1 row(s) [2]"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 7,
+      "provider": "claude",
+      "packageDigest": "719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b",
+      "recordedReward": 1,
+      "previousEffectiveReward": 1,
+      "effectiveReward": 1,
+      "checkerSha256": "8a97e65102a8731bf19896dc0b8ad612288467a04507bed685d77c552c1af556",
+      "gradeSha256": "a0ffadc5012ac85ec683a1097998828ddcb035ab6a1f59843809104025093387",
+      "resultSha256": "6af2d6aa3498997721041dbb2ee83cb0d31e26163cf30a1bed3ccbfb842e5f6a",
+      "completionSha256": "20b9ba1be744e03a59562cfeb8f66993f5be3595d4804ee415b87bde7def5f4c",
+      "publicContractSha256": "776a124acd25b1574ecc6e6693825a95cfd68638f0ba7d597e4891ae92ef4a08",
+      "instructionSha256": "f2943b58bcb8caf0b9ac4923faad365b7de28b8a2da2f912121146f2aada4e4c",
+      "supplement": {
+        "pass": true,
+        "correct": 18,
+        "total": 18,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "60ef8f7b2097c4c934031a11",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "0021c8f79876bc501f21eeff",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "061441bce76280e001c9980c",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "617d7a6c7ad87c9ea0833f65",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "e8af17a27ac07d0946e82088",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "cedcb51b3c997f661dbdb8c0",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "2bdf91aec96fad4b45dcb021",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "7138d9518c13a240a93d8c66",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "df1c49c86b82d48ff4cd19cd",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "c04f215f1c245d5ed81b8989",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "7e564d6dff2273e840c2e312",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f3d284b0405a9cbe81c9d14f",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "b8f45b1f95727ac6bd891e91",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "a25cf456294faf5d736b7acd",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "87c035fb63a704b863b66592",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "ef59d28e12f352ce5d0eec2d",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "2e87b4e6c9f2ceb17f2daa49",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "e15718d4b10a38f3f4c0ac78",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "60ef8f7b2097c4c934031a11": {
+              "ok": true
+            },
+            "0021c8f79876bc501f21eeff": {
+              "ok": true
+            },
+            "061441bce76280e001c9980c": {
+              "ok": true
+            },
+            "617d7a6c7ad87c9ea0833f65": {
+              "ok": false,
+              "reasons": [
+                "cell 0: published restore accounts: missing (1,\"001\")",
+                "cell 0: published restore accounts: unexpected (1,\"1\")",
+                "cell 0: backup accounts: missing (1,\"001\")",
+                "cell 0: backup accounts: unexpected (1,\"1\")",
+                "cell 0: committed restore accounts: missing (1,\"001\")",
+                "cell 0: committed restore accounts: unexpected (1,\"1\")"
+              ]
+            },
+            "e8af17a27ac07d0946e82088": {
+              "ok": true
+            },
+            "cedcb51b3c997f661dbdb8c0": {
+              "ok": true
+            },
+            "2bdf91aec96fad4b45dcb021": {
+              "ok": true
+            },
+            "7138d9518c13a240a93d8c66": {
+              "ok": true
+            },
+            "df1c49c86b82d48ff4cd19cd": {
+              "ok": true
+            },
+            "c04f215f1c245d5ed81b8989": {
+              "ok": true
+            },
+            "7e564d6dff2273e840c2e312": {
+              "ok": true
+            },
+            "f3d284b0405a9cbe81c9d14f": {
+              "ok": true
+            },
+            "b8f45b1f95727ac6bd891e91": {
+              "ok": true
+            },
+            "a25cf456294faf5d736b7acd": {
+              "ok": false,
+              "reasons": [
+                "cell 0: published restore: nextId is 8, expected 99",
+                "cell 0: committed restore: nextId is 8, expected 99"
+              ]
+            },
+            "87c035fb63a704b863b66592": {
+              "ok": true
+            },
+            "ef59d28e12f352ce5d0eec2d": {
+              "ok": false,
+              "reasons": [
+                "cell 0: expected exactly one successful publication, recorded 0"
+              ]
+            },
+            "2e87b4e6c9f2ceb17f2daa49": {
+              "ok": true
+            },
+            "e15718d4b10a38f3f4c0ac78": {
+              "ok": false,
+              "reasons": [
+                "cell 0: backup entries: missing (2,1,-17)"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 2,
+      "provider": "claude",
+      "packageDigest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+      "recordedReward": 0,
+      "previousEffectiveReward": 0,
+      "effectiveReward": 0,
+      "checkerSha256": "4e85bb4cbbcbbcae71e37f1e91e9590b53662bb2336b71d2c7a99ce3e4c89acd",
+      "gradeSha256": "986881fbcb08e757e0d87e279eb272e31502ba499badfef41ae3d53f5d50aaef",
+      "resultSha256": "7f8ce6bd6233ccbc0a0ce84da74faf6dcff9e1014563be8deaf11a3fdcb57437",
+      "completionSha256": "1f5c683f47944ade7246b20c6b44eba57abdb4604e462f0ecfb565532a154870",
+      "publicContractSha256": "22483ba1a6b702a3e271cd8664305f958b4b67403009140a2a8a286b702b16b9",
+      "instructionSha256": "051ecc01b96d4b25362f370676df04b41249e6ac8a46eda875b23f0b3c3f54a7",
+      "supplement": {
+        "pass": false,
+        "correct": 20,
+        "total": 22,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "f7102606e878dd7a8e7bb840",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f6508a8a65d57cef7ad56407",
+            "expectedOk": false,
+            "actualOk": true,
+            "correct": false
+          },
+          {
+            "token": "4ad0610014321106d71c833f",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "395b9126fdf0dbaa04802787",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "aa5e845c45b4dbf086e38713",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "d03aa8fc6cf3fd33b2f7ab59",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "0f87e40c818b423ac47512d5",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "1fdbbe458f07a950d3f5f636",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "66e973e277c7619a65a9cffd",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "e9e273322e02d9df74bf6ceb",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "ca26f869b6581172abe185fb",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "451b5ef940d9bdefa85f80f3",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "d1aea6fa9415802c8acd5795",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "11f450da5311cce2f6b4b997",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "153dce72a7f969e7ed6e4f28",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "4b75a0cdfc4e652a00d1f036",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "980bf58909143c60121f0fb1",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "d772c28c2bf85c077c7ce6ee",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "b1c935f8985a6c2362b8d5b7",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "845f2d9e6f187d6277bb2872",
+            "expectedOk": false,
+            "actualOk": true,
+            "correct": false
+          },
+          {
+            "token": "7733aa0d7ccb1e460ceb9b60",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "1a4041e152af5697db0e4798",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "f7102606e878dd7a8e7bb840": {
+              "ok": true
+            },
+            "f6508a8a65d57cef7ad56407": {
+              "ok": true
+            },
+            "4ad0610014321106d71c833f": {
+              "ok": true
+            },
+            "395b9126fdf0dbaa04802787": {
+              "ok": true
+            },
+            "aa5e845c45b4dbf086e38713": {
+              "ok": true
+            },
+            "d03aa8fc6cf3fd33b2f7ab59": {
+              "ok": true
+            },
+            "0f87e40c818b423ac47512d5": {
+              "ok": true
+            },
+            "1fdbbe458f07a950d3f5f636": {
+              "ok": true
+            },
+            "66e973e277c7619a65a9cffd": {
+              "ok": true
+            },
+            "e9e273322e02d9df74bf6ceb": {
+              "ok": true
+            },
+            "ca26f869b6581172abe185fb": {
+              "ok": true
+            },
+            "451b5ef940d9bdefa85f80f3": {
+              "ok": false,
+              "reasons": [
+                "cell wrong-exact-total: query \"__proto__\": total 8646911284551353398518517496 is wrong (expected 8646911284551353398518517495)",
+                "cell wrong-exact-total: query \"constructor\": total 77 is wrong (expected 76)",
+                "cell wrong-exact-total: query \"q\": total 22 is wrong (expected 21)"
+              ]
+            },
+            "d1aea6fa9415802c8acd5795": {
+              "ok": true
+            },
+            "11f450da5311cce2f6b4b997": {
+              "ok": false,
+              "reasons": [
+                "cell noncanonical-total: query \"__proto__\": total \"08646911284551353398518517495\" is not canonical (expected 8646911284551353398518517495)",
+                "cell noncanonical-total: query \"constructor\": total \"076\" is not canonical (expected 76)",
+                "cell noncanonical-total: query \"q\": total \"021\" is not canonical (expected 21)"
+              ]
+            },
+            "153dce72a7f969e7ed6e4f28": {
+              "ok": true
+            },
+            "4b75a0cdfc4e652a00d1f036": {
+              "ok": false,
+              "reasons": [
+                "cell duplicate-report: query \"__proto__\": 2 report rows persisted, expected exactly 1",
+                "cell duplicate-report: query \"constructor\": 2 report rows persisted, expected exactly 1",
+                "cell duplicate-report: query \"q\": 2 report rows persisted, expected exactly 1"
+              ]
+            },
+            "980bf58909143c60121f0fb1": {
+              "ok": true
+            },
+            "d772c28c2bf85c077c7ce6ee": {
+              "ok": false,
+              "reasons": [
+                "cell missing-report: query \"__proto__\": no report row was persisted (expected total 8646911284551353398518517495)"
+              ]
+            },
+            "b1c935f8985a6c2362b8d5b7": {
+              "ok": true
+            },
+            "845f2d9e6f187d6277bb2872": {
+              "ok": true
+            },
+            "7733aa0d7ccb1e460ceb9b60": {
+              "ok": true
+            },
+            "1a4041e152af5697db0e4798": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 3,
+      "provider": "claude",
+      "packageDigest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+      "recordedReward": 1,
+      "previousEffectiveReward": 0,
+      "effectiveReward": 0,
+      "checkerSha256": "fee14f6e3cfcb8d82373826db2167dbc860f0f56b5bdb111d4cb0e7a35bf9d90",
+      "gradeSha256": "0e306a47f676db83ee284a736c02b400933d610691a79bb13f84db17386a12ff",
+      "resultSha256": "cc7e6a6e01e5c55413c8a5efa6e00d79ec469f55bd86ee321b6155ce20a47eb2",
+      "completionSha256": "c691d4ea4767ad2e086dc5043a0e26a35dc18bdf76effc39545f7c98c24eb5fc",
+      "publicContractSha256": "22483ba1a6b702a3e271cd8664305f958b4b67403009140a2a8a286b702b16b9",
+      "instructionSha256": "051ecc01b96d4b25362f370676df04b41249e6ac8a46eda875b23f0b3c3f54a7",
+      "supplement": {
+        "pass": false,
+        "correct": 20,
+        "total": 22,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "f7102606e878dd7a8e7bb840",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f6508a8a65d57cef7ad56407",
+            "expectedOk": false,
+            "actualOk": true,
+            "correct": false
+          },
+          {
+            "token": "4ad0610014321106d71c833f",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "395b9126fdf0dbaa04802787",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "aa5e845c45b4dbf086e38713",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "d03aa8fc6cf3fd33b2f7ab59",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "0f87e40c818b423ac47512d5",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "1fdbbe458f07a950d3f5f636",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "66e973e277c7619a65a9cffd",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "e9e273322e02d9df74bf6ceb",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "ca26f869b6581172abe185fb",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "451b5ef940d9bdefa85f80f3",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "d1aea6fa9415802c8acd5795",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "11f450da5311cce2f6b4b997",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "153dce72a7f969e7ed6e4f28",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "4b75a0cdfc4e652a00d1f036",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "980bf58909143c60121f0fb1",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "d772c28c2bf85c077c7ce6ee",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "b1c935f8985a6c2362b8d5b7",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "845f2d9e6f187d6277bb2872",
+            "expectedOk": false,
+            "actualOk": true,
+            "correct": false
+          },
+          {
+            "token": "7733aa0d7ccb1e460ceb9b60",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "1a4041e152af5697db0e4798",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "f7102606e878dd7a8e7bb840": {
+              "ok": true
+            },
+            "f6508a8a65d57cef7ad56407": {
+              "ok": true
+            },
+            "4ad0610014321106d71c833f": {
+              "ok": true
+            },
+            "395b9126fdf0dbaa04802787": {
+              "ok": true
+            },
+            "aa5e845c45b4dbf086e38713": {
+              "ok": true
+            },
+            "d03aa8fc6cf3fd33b2f7ab59": {
+              "ok": true
+            },
+            "0f87e40c818b423ac47512d5": {
+              "ok": true
+            },
+            "1fdbbe458f07a950d3f5f636": {
+              "ok": true
+            },
+            "66e973e277c7619a65a9cffd": {
+              "ok": true
+            },
+            "e9e273322e02d9df74bf6ceb": {
+              "ok": true
+            },
+            "ca26f869b6581172abe185fb": {
+              "ok": true
+            },
+            "451b5ef940d9bdefa85f80f3": {
+              "ok": false,
+              "reasons": [
+                "cell 0: writes total for \"__proto__\" is \"8646911284551353398518517496\", expected \"8646911284551353398518517495\"",
+                "cell 0: writes total for \"constructor\" is \"77\", expected \"76\"",
+                "cell 0: writes total for \"q\" is \"22\", expected \"21\"",
+                "cell 0: record calls total for \"__proto__\" is \"8646911284551353398518517496\", expected \"8646911284551353398518517495\"",
+                "cell 0: record calls total for \"constructor\" is \"77\", expected \"76\"",
+                "cell 0: record calls total for \"q\" is \"22\", expected \"21\""
+              ]
+            },
+            "d1aea6fa9415802c8acd5795": {
+              "ok": true
+            },
+            "11f450da5311cce2f6b4b997": {
+              "ok": false,
+              "reasons": [
+                "cell 0: writes total for \"__proto__\" is \"08646911284551353398518517495\", expected \"8646911284551353398518517495\"",
+                "cell 0: writes total for \"constructor\" is \"076\", expected \"76\"",
+                "cell 0: writes total for \"q\" is \"021\", expected \"21\"",
+                "cell 0: record calls total for \"__proto__\" is \"08646911284551353398518517495\", expected \"8646911284551353398518517495\"",
+                "cell 0: record calls total for \"constructor\" is \"076\", expected \"76\"",
+                "cell 0: record calls total for \"q\" is \"021\", expected \"21\""
+              ]
+            },
+            "153dce72a7f969e7ed6e4f28": {
+              "ok": true
+            },
+            "4b75a0cdfc4e652a00d1f036": {
+              "ok": false,
+              "reasons": [
+                "cell 0: writes reports query \"__proto__\" more than once",
+                "cell 0: writes reports query \"constructor\" more than once",
+                "cell 0: writes reports query \"q\" more than once",
+                "cell 0: record calls reports query \"__proto__\" more than once",
+                "cell 0: record calls reports query \"constructor\" more than once",
+                "cell 0: record calls reports query \"q\" more than once"
+              ]
+            },
+            "980bf58909143c60121f0fb1": {
+              "ok": true
+            },
+            "d772c28c2bf85c077c7ce6ee": {
+              "ok": false,
+              "reasons": [
+                "cell 0: no report row for query \"__proto__\""
+              ]
+            },
+            "b1c935f8985a6c2362b8d5b7": {
+              "ok": true
+            },
+            "845f2d9e6f187d6277bb2872": {
+              "ok": true
+            },
+            "7733aa0d7ccb1e460ceb9b60": {
+              "ok": true
+            },
+            "1a4041e152af5697db0e4798": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 4,
+      "provider": "claude",
+      "packageDigest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+      "recordedReward": 0,
+      "previousEffectiveReward": 0,
+      "effectiveReward": 0,
+      "checkerSha256": "054c83fe13a34f572c947639f5bfe2efd07dc763508856c5772490f22bd101c2",
+      "gradeSha256": "986881fbcb08e757e0d87e279eb272e31502ba499badfef41ae3d53f5d50aaef",
+      "resultSha256": "95668ae819f500851968cadc7a6d1af495634642c5c9a8772848f43edf4815b9",
+      "completionSha256": "efdb3903eb6120c1b90a1515b80f2c6e5d5e23ffaa0e8ad32ab20f24f943d859",
+      "publicContractSha256": "22483ba1a6b702a3e271cd8664305f958b4b67403009140a2a8a286b702b16b9",
+      "instructionSha256": "051ecc01b96d4b25362f370676df04b41249e6ac8a46eda875b23f0b3c3f54a7",
+      "supplement": {
+        "pass": false,
+        "correct": 20,
+        "total": 22,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "f7102606e878dd7a8e7bb840",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f6508a8a65d57cef7ad56407",
+            "expectedOk": false,
+            "actualOk": true,
+            "correct": false
+          },
+          {
+            "token": "4ad0610014321106d71c833f",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "395b9126fdf0dbaa04802787",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "aa5e845c45b4dbf086e38713",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "d03aa8fc6cf3fd33b2f7ab59",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "0f87e40c818b423ac47512d5",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "1fdbbe458f07a950d3f5f636",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "66e973e277c7619a65a9cffd",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "e9e273322e02d9df74bf6ceb",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "ca26f869b6581172abe185fb",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "451b5ef940d9bdefa85f80f3",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "d1aea6fa9415802c8acd5795",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "11f450da5311cce2f6b4b997",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "153dce72a7f969e7ed6e4f28",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "4b75a0cdfc4e652a00d1f036",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "980bf58909143c60121f0fb1",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "d772c28c2bf85c077c7ce6ee",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "b1c935f8985a6c2362b8d5b7",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "845f2d9e6f187d6277bb2872",
+            "expectedOk": false,
+            "actualOk": true,
+            "correct": false
+          },
+          {
+            "token": "7733aa0d7ccb1e460ceb9b60",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "1a4041e152af5697db0e4798",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "f7102606e878dd7a8e7bb840": {
+              "ok": true
+            },
+            "f6508a8a65d57cef7ad56407": {
+              "ok": true
+            },
+            "4ad0610014321106d71c833f": {
+              "ok": true
+            },
+            "395b9126fdf0dbaa04802787": {
+              "ok": true
+            },
+            "aa5e845c45b4dbf086e38713": {
+              "ok": true
+            },
+            "d03aa8fc6cf3fd33b2f7ab59": {
+              "ok": true
+            },
+            "0f87e40c818b423ac47512d5": {
+              "ok": true
+            },
+            "1fdbbe458f07a950d3f5f636": {
+              "ok": true
+            },
+            "66e973e277c7619a65a9cffd": {
+              "ok": true
+            },
+            "e9e273322e02d9df74bf6ceb": {
+              "ok": true
+            },
+            "ca26f869b6581172abe185fb": {
+              "ok": true
+            },
+            "451b5ef940d9bdefa85f80f3": {
+              "ok": false,
+              "reasons": [
+                "cell 0: total for query \"__proto__\" is \"8646911284551353398518517496\", expected \"8646911284551353398518517495\"",
+                "cell 0: total for query \"constructor\" is \"77\", expected \"76\"",
+                "cell 0: total for query \"q\" is \"22\", expected \"21\""
+              ]
+            },
+            "d1aea6fa9415802c8acd5795": {
+              "ok": true
+            },
+            "11f450da5311cce2f6b4b997": {
+              "ok": false,
+              "reasons": [
+                "cell 0: total for query \"__proto__\" is not a canonical decimal integer: \"08646911284551353398518517495\"",
+                "cell 0: total for query \"constructor\" is not a canonical decimal integer: \"076\"",
+                "cell 0: total for query \"q\" is not a canonical decimal integer: \"021\""
+              ]
+            },
+            "153dce72a7f969e7ed6e4f28": {
+              "ok": true
+            },
+            "4b75a0cdfc4e652a00d1f036": {
+              "ok": false,
+              "reasons": [
+                "cell 0: 2 report rows for query \"__proto__\", expected exactly one",
+                "cell 0: 2 report rows for query \"constructor\", expected exactly one",
+                "cell 0: 2 report rows for query \"q\", expected exactly one"
+              ]
+            },
+            "980bf58909143c60121f0fb1": {
+              "ok": true
+            },
+            "d772c28c2bf85c077c7ce6ee": {
+              "ok": false,
+              "reasons": [
+                "cell 0: no report row for query \"__proto__\""
+              ]
+            },
+            "b1c935f8985a6c2362b8d5b7": {
+              "ok": true
+            },
+            "845f2d9e6f187d6277bb2872": {
+              "ok": true
+            },
+            "7733aa0d7ccb1e460ceb9b60": {
+              "ok": true
+            },
+            "1a4041e152af5697db0e4798": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 5,
+      "provider": "codex",
+      "packageDigest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+      "recordedReward": 1,
+      "previousEffectiveReward": 0,
+      "effectiveReward": 0,
+      "checkerSha256": "1be207ac7ede605a47e3da4c1304a0746574fdcefa5fbb15e60a6520bc27f48d",
+      "gradeSha256": "0e306a47f676db83ee284a736c02b400933d610691a79bb13f84db17386a12ff",
+      "resultSha256": "de146cf816584fde106403f60a7deded8d1e778348eb537432f9871fe4d8b475",
+      "completionSha256": "f7ed23f4149cadfd60ae1faabdab50e7d403cd311a15bff1bd6115976ac9c4cf",
+      "publicContractSha256": "22483ba1a6b702a3e271cd8664305f958b4b67403009140a2a8a286b702b16b9",
+      "instructionSha256": "051ecc01b96d4b25362f370676df04b41249e6ac8a46eda875b23f0b3c3f54a7",
+      "supplement": {
+        "pass": false,
+        "correct": 20,
+        "total": 22,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "f7102606e878dd7a8e7bb840",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f6508a8a65d57cef7ad56407",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "4ad0610014321106d71c833f",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "395b9126fdf0dbaa04802787",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "aa5e845c45b4dbf086e38713",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "d03aa8fc6cf3fd33b2f7ab59",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "0f87e40c818b423ac47512d5",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "1fdbbe458f07a950d3f5f636",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "66e973e277c7619a65a9cffd",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "e9e273322e02d9df74bf6ceb",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "ca26f869b6581172abe185fb",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "451b5ef940d9bdefa85f80f3",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "d1aea6fa9415802c8acd5795",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "11f450da5311cce2f6b4b997",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "153dce72a7f969e7ed6e4f28",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "4b75a0cdfc4e652a00d1f036",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "980bf58909143c60121f0fb1",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "d772c28c2bf85c077c7ce6ee",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "b1c935f8985a6c2362b8d5b7",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "845f2d9e6f187d6277bb2872",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "7733aa0d7ccb1e460ceb9b60",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "1a4041e152af5697db0e4798",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "f7102606e878dd7a8e7bb840": {
+              "ok": true
+            },
+            "f6508a8a65d57cef7ad56407": {
+              "ok": false,
+              "reasons": [
+                "cell 0: did not exhaust the fetch cursor chain"
+              ]
+            },
+            "4ad0610014321106d71c833f": {
+              "ok": true
+            },
+            "395b9126fdf0dbaa04802787": {
+              "ok": false,
+              "reasons": [
+                "cell 0: did not exhaust the fetch cursor chain"
+              ]
+            },
+            "aa5e845c45b4dbf086e38713": {
+              "ok": true
+            },
+            "d03aa8fc6cf3fd33b2f7ab59": {
+              "ok": true
+            },
+            "0f87e40c818b423ac47512d5": {
+              "ok": true
+            },
+            "1fdbbe458f07a950d3f5f636": {
+              "ok": false,
+              "reasons": [
+                "cell 0: did not exhaust the fetch cursor chain"
+              ]
+            },
+            "66e973e277c7619a65a9cffd": {
+              "ok": true
+            },
+            "e9e273322e02d9df74bf6ceb": {
+              "ok": true
+            },
+            "ca26f869b6581172abe185fb": {
+              "ok": true
+            },
+            "451b5ef940d9bdefa85f80f3": {
+              "ok": false,
+              "reasons": [
+                "cell 0: query __proto__ has an incorrect total",
+                "cell 0: query constructor has an incorrect total",
+                "cell 0: query q has an incorrect total"
+              ]
+            },
+            "d1aea6fa9415802c8acd5795": {
+              "ok": true
+            },
+            "11f450da5311cce2f6b4b997": {
+              "ok": false,
+              "reasons": [
+                "cell 0: query __proto__ has a non-canonical total",
+                "cell 0: query constructor has a non-canonical total",
+                "cell 0: query q has a non-canonical total"
+              ]
+            },
+            "153dce72a7f969e7ed6e4f28": {
+              "ok": true
+            },
+            "4b75a0cdfc4e652a00d1f036": {
+              "ok": false,
+              "reasons": [
+                "cell 0: persisted a duplicate query id",
+                "cell 0: persisted a duplicate query id",
+                "cell 0: persisted a duplicate query id",
+                "cell 0: did not persist exactly one report for every query"
+              ]
+            },
+            "980bf58909143c60121f0fb1": {
+              "ok": true
+            },
+            "d772c28c2bf85c077c7ce6ee": {
+              "ok": false,
+              "reasons": [
+                "cell 0: did not persist exactly one report for every query"
+              ]
+            },
+            "b1c935f8985a6c2362b8d5b7": {
+              "ok": true
+            },
+            "845f2d9e6f187d6277bb2872": {
+              "ok": false,
+              "reasons": [
+                "cell 0: did not exhaust the fetch cursor chain"
+              ]
+            },
+            "7733aa0d7ccb1e460ceb9b60": {
+              "ok": true
+            },
+            "1a4041e152af5697db0e4798": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 6,
+      "provider": "codex",
+      "packageDigest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+      "recordedReward": 1,
+      "previousEffectiveReward": 0,
+      "effectiveReward": 0,
+      "checkerSha256": "401b5a29cb06814e1019c5c06f5102a428943e9d8fb119e024b998d23c4262c8",
+      "gradeSha256": "0e306a47f676db83ee284a736c02b400933d610691a79bb13f84db17386a12ff",
+      "resultSha256": "877502c10f6718ac76260a3d003f89a90fd436df9affa15746f10e98a5669dad",
+      "completionSha256": "0234066fbfb6d6b4a5042c3db09c296964069df48e49522760b9f2dca23cec23",
+      "publicContractSha256": "22483ba1a6b702a3e271cd8664305f958b4b67403009140a2a8a286b702b16b9",
+      "instructionSha256": "051ecc01b96d4b25362f370676df04b41249e6ac8a46eda875b23f0b3c3f54a7",
+      "supplement": {
+        "pass": false,
+        "correct": 20,
+        "total": 22,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "f7102606e878dd7a8e7bb840",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f6508a8a65d57cef7ad56407",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "4ad0610014321106d71c833f",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "395b9126fdf0dbaa04802787",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "aa5e845c45b4dbf086e38713",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "d03aa8fc6cf3fd33b2f7ab59",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "0f87e40c818b423ac47512d5",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "1fdbbe458f07a950d3f5f636",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "66e973e277c7619a65a9cffd",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "e9e273322e02d9df74bf6ceb",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "ca26f869b6581172abe185fb",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "451b5ef940d9bdefa85f80f3",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "d1aea6fa9415802c8acd5795",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "11f450da5311cce2f6b4b997",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "153dce72a7f969e7ed6e4f28",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "4b75a0cdfc4e652a00d1f036",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "980bf58909143c60121f0fb1",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "d772c28c2bf85c077c7ce6ee",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "b1c935f8985a6c2362b8d5b7",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "845f2d9e6f187d6277bb2872",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "7733aa0d7ccb1e460ceb9b60",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "1a4041e152af5697db0e4798",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "f7102606e878dd7a8e7bb840": {
+              "ok": true
+            },
+            "f6508a8a65d57cef7ad56407": {
+              "ok": false,
+              "reasons": [
+                "record pages were not exhausted"
+              ]
+            },
+            "4ad0610014321106d71c833f": {
+              "ok": true
+            },
+            "395b9126fdf0dbaa04802787": {
+              "ok": false,
+              "reasons": [
+                "record pages were not exhausted"
+              ]
+            },
+            "aa5e845c45b4dbf086e38713": {
+              "ok": true
+            },
+            "d03aa8fc6cf3fd33b2f7ab59": {
+              "ok": true
+            },
+            "0f87e40c818b423ac47512d5": {
+              "ok": true
+            },
+            "1fdbbe458f07a950d3f5f636": {
+              "ok": false,
+              "reasons": [
+                "record pages were not exhausted"
+              ]
+            },
+            "66e973e277c7619a65a9cffd": {
+              "ok": true
+            },
+            "e9e273322e02d9df74bf6ceb": {
+              "ok": true
+            },
+            "ca26f869b6581172abe185fb": {
+              "ok": true
+            },
+            "451b5ef940d9bdefa85f80f3": {
+              "ok": false,
+              "reasons": [
+                "incorrect total",
+                "incorrect total",
+                "incorrect total"
+              ]
+            },
+            "d1aea6fa9415802c8acd5795": {
+              "ok": true
+            },
+            "11f450da5311cce2f6b4b997": {
+              "ok": false,
+              "reasons": [
+                "incorrect total",
+                "incorrect total",
+                "incorrect total"
+              ]
+            },
+            "153dce72a7f969e7ed6e4f28": {
+              "ok": true
+            },
+            "4b75a0cdfc4e652a00d1f036": {
+              "ok": false,
+              "reasons": [
+                "duplicate report",
+                "duplicate report",
+                "duplicate report"
+              ]
+            },
+            "980bf58909143c60121f0fb1": {
+              "ok": true
+            },
+            "d772c28c2bf85c077c7ce6ee": {
+              "ok": false,
+              "reasons": [
+                "missing report"
+              ]
+            },
+            "b1c935f8985a6c2362b8d5b7": {
+              "ok": true
+            },
+            "845f2d9e6f187d6277bb2872": {
+              "ok": false,
+              "reasons": [
+                "record pages were not exhausted"
+              ]
+            },
+            "7733aa0d7ccb1e460ceb9b60": {
+              "ok": true
+            },
+            "1a4041e152af5697db0e4798": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 7,
+      "provider": "codex",
+      "packageDigest": "05f7f231c38cd9c0242bb58543a92a888375f114a29ff1caeb4e42a893011ede",
+      "recordedReward": 1,
+      "previousEffectiveReward": 1,
+      "effectiveReward": 1,
+      "checkerSha256": "924c9e82b9982be415866d01c3fe91b4625e8678f71a2eb0ce45cb7585e9e1e7",
+      "gradeSha256": "0e306a47f676db83ee284a736c02b400933d610691a79bb13f84db17386a12ff",
+      "resultSha256": "cd6f78aedad1c2381723118b54432f4db9867b657263a23286c01c10129f25a7",
+      "completionSha256": "fbf325034a7ea35c5e45d5753a8d43ae05708c531107c35a57da348c4bdf6d37",
+      "publicContractSha256": "22483ba1a6b702a3e271cd8664305f958b4b67403009140a2a8a286b702b16b9",
+      "instructionSha256": "051ecc01b96d4b25362f370676df04b41249e6ac8a46eda875b23f0b3c3f54a7",
+      "supplement": {
+        "pass": true,
+        "correct": 22,
+        "total": 22,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "f7102606e878dd7a8e7bb840",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "f6508a8a65d57cef7ad56407",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "4ad0610014321106d71c833f",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "395b9126fdf0dbaa04802787",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "aa5e845c45b4dbf086e38713",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "d03aa8fc6cf3fd33b2f7ab59",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "0f87e40c818b423ac47512d5",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "1fdbbe458f07a950d3f5f636",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "66e973e277c7619a65a9cffd",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "e9e273322e02d9df74bf6ceb",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "ca26f869b6581172abe185fb",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "451b5ef940d9bdefa85f80f3",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "d1aea6fa9415802c8acd5795",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "11f450da5311cce2f6b4b997",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "153dce72a7f969e7ed6e4f28",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "4b75a0cdfc4e652a00d1f036",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "980bf58909143c60121f0fb1",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "d772c28c2bf85c077c7ce6ee",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "b1c935f8985a6c2362b8d5b7",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "845f2d9e6f187d6277bb2872",
+            "expectedOk": false,
+            "actualOk": false,
+            "correct": true
+          },
+          {
+            "token": "7733aa0d7ccb1e460ceb9b60",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "1a4041e152af5697db0e4798",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "f7102606e878dd7a8e7bb840": {
+              "ok": true
+            },
+            "f6508a8a65d57cef7ad56407": {
+              "ok": false,
+              "reasons": [
+                "cell 0: pagination was not started at the null cursor"
+              ]
+            },
+            "4ad0610014321106d71c833f": {
+              "ok": true
+            },
+            "395b9126fdf0dbaa04802787": {
+              "ok": true
+            },
+            "aa5e845c45b4dbf086e38713": {
+              "ok": true
+            },
+            "d03aa8fc6cf3fd33b2f7ab59": {
+              "ok": true
+            },
+            "0f87e40c818b423ac47512d5": {
+              "ok": true
+            },
+            "1fdbbe458f07a950d3f5f636": {
+              "ok": true
+            },
+            "66e973e277c7619a65a9cffd": {
+              "ok": true
+            },
+            "e9e273322e02d9df74bf6ceb": {
+              "ok": true
+            },
+            "ca26f869b6581172abe185fb": {
+              "ok": true
+            },
+            "451b5ef940d9bdefa85f80f3": {
+              "ok": false,
+              "reasons": [
+                "cell 0: query \"__proto__\" has an incorrect total",
+                "cell 0: query \"constructor\" has an incorrect total",
+                "cell 0: query \"q\" has an incorrect total"
+              ]
+            },
+            "d1aea6fa9415802c8acd5795": {
+              "ok": true
+            },
+            "11f450da5311cce2f6b4b997": {
+              "ok": false,
+              "reasons": [
+                "cell 0: query \"__proto__\" has a non-canonical total",
+                "cell 0: query \"constructor\" has a non-canonical total",
+                "cell 0: query \"q\" has a non-canonical total"
+              ]
+            },
+            "153dce72a7f969e7ed6e4f28": {
+              "ok": true
+            },
+            "4b75a0cdfc4e652a00d1f036": {
+              "ok": false,
+              "reasons": [
+                "cell 0: query \"__proto__\" was persisted more than once",
+                "cell 0: query \"constructor\" was persisted more than once",
+                "cell 0: query \"q\" was persisted more than once"
+              ]
+            },
+            "980bf58909143c60121f0fb1": {
+              "ok": true
+            },
+            "d772c28c2bf85c077c7ce6ee": {
+              "ok": false,
+              "reasons": [
+                "cell 0: query \"__proto__\" has no persisted report"
+              ]
+            },
+            "b1c935f8985a6c2362b8d5b7": {
+              "ok": true
+            },
+            "845f2d9e6f187d6277bb2872": {
+              "ok": false,
+              "reasons": [
+                "cell 0: pagination was not started at the null cursor"
+              ]
+            },
+            "7733aa0d7ccb1e460ceb9b60": {
+              "ok": true
+            },
+            "1a4041e152af5697db0e4798": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "issued-report-repair",
+      "trial": 2,
+      "provider": "claude",
+      "packageDigest": "32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170",
+      "recordedReward": 0,
+      "previousEffectiveReward": 0,
+      "effectiveReward": 0,
+      "checkerSha256": "ef3b07622701455373472ea49146d1cf730b7cc36b44bac44211cef04f72853b",
+      "gradeSha256": "ca818a8a6a6c1f8516dfb121a3411cc62f5bf8ba6675b079de0fb6146b430df3",
+      "resultSha256": "f163ed68f1415e4a6a4a37155ca743505c48852b6b4ddd36e0a0699cab462af2",
+      "completionSha256": "0de3deffe7cfdcc23daf5ee127990b917f5b5d3abc6d7227dfef3fc406045f19",
+      "publicContractSha256": "bd604848c0c65a4311743dd87ab1bbf0834a9e603abee13b79dff6e20734983c",
+      "instructionSha256": "4f536dfe221dbd4f3eb801af636e4d21e783d5386aa2ead1776d33cca4dced6a",
+      "supplement": {
+        "pass": false,
+        "correct": 0,
+        "total": 2,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "225c4a714b06230d28229f58",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "93001fb54b889f98414aa81d",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "225c4a714b06230d28229f58": {
+              "ok": false,
+              "reasons": [
+                "cell 0: missing publication sum v2 (step 0, supersedes 1, payload [\"available\",12,[[\"reading\",\"a\",2],[\"reading\",\"b\",1]]])",
+                "cell 0: missing publication combined v2 (step 0, supersedes 1, payload [\"available\",5,[[\"report\",\"sum\",2],[\"reading\",\"c\",1]]])",
+                "cell 0: missing publication sum v3 (step 1, supersedes 2, payload [\"unavailable\",null,[[\"reading\",\"a\",2],[\"reading\",\"b\",2]]])",
+                "cell 0: missing publication combined v3 (step 1, supersedes 2, payload [\"unavailable\",null,[[\"report\",\"sum\",3],[\"reading\",\"c\",1]]])",
+                "cell 0: unexpected publication null vnull (step 0, supersedes null, payload null)",
+                "cell 0: unexpected publication null vnull (step 0, supersedes null, payload null)"
+              ]
+            },
+            "93001fb54b889f98414aa81d": {
+              "ok": false,
+              "reasons": [
+                "cell 0: missing publication sum v2 (step 0, supersedes 1, payload [\"available\",12,[[\"reading\",\"a\",2],[\"reading\",\"b\",1]]])",
+                "cell 0: missing publication combined v2 (step 0, supersedes 1, payload [\"available\",5,[[\"report\",\"sum\",2],[\"reading\",\"c\",1]]])",
+                "cell 0: missing publication sum v3 (step 1, supersedes 2, payload [\"unavailable\",null,[[\"reading\",\"a\",2],[\"reading\",\"b\",2]]])",
+                "cell 0: missing publication combined v3 (step 1, supersedes 2, payload [\"unavailable\",null,[[\"report\",\"sum\",3],[\"reading\",\"c\",1]]])",
+                "cell 0: unexpected publication null vnull (step 0, supersedes null, payload null)",
+                "cell 0: unexpected publication null vnull (step 0, supersedes null, payload null)"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "issued-report-repair",
+      "trial": 3,
+      "provider": "claude",
+      "packageDigest": "32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170",
+      "recordedReward": 0,
+      "previousEffectiveReward": 0,
+      "effectiveReward": 0,
+      "checkerSha256": "9fe4d7c3ebb8b072bb8f95dac515aca7f79e4b1147d5c8d6cabc5c69a5ddf461",
+      "gradeSha256": "ca818a8a6a6c1f8516dfb121a3411cc62f5bf8ba6675b079de0fb6146b430df3",
+      "resultSha256": "21d8ca139a02dbef56bf393a9402f882bab047754d92fbec3891f494f51d6081",
+      "completionSha256": "33e3a3b37be27b73ef9b9048f4126418da2a6a535015a18ac85d998e8ffb47a6",
+      "publicContractSha256": "bd604848c0c65a4311743dd87ab1bbf0834a9e603abee13b79dff6e20734983c",
+      "instructionSha256": "4f536dfe221dbd4f3eb801af636e4d21e783d5386aa2ead1776d33cca4dced6a",
+      "supplement": {
+        "pass": false,
+        "correct": 0,
+        "total": 2,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "225c4a714b06230d28229f58",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          },
+          {
+            "token": "93001fb54b889f98414aa81d",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "225c4a714b06230d28229f58": {
+              "ok": false,
+              "reasons": [
+                "cell 0: missing delivery: delivery @step0 sum 2 reader correction",
+                "cell 0: missing delivery: delivery @step0 combined 2 reviewer correction",
+                "cell 0: missing delivery: delivery @step0 combined 2 new initial",
+                "cell 0: missing delivery: delivery @step1 sum 3 reader correction",
+                "cell 0: missing delivery: delivery @step1 combined 3 reviewer correction",
+                "cell 0: missing delivery: delivery @step1 combined 3 new correction",
+                "cell 0: missing delivery: delivery @step2 sum 4 reader correction",
+                "cell 0: missing delivery: delivery @step2 combined 4 reviewer correction",
+                "cell 0: missing delivery: delivery @step2 combined 4 new correction",
+                "cell 0: unexpected delivery: delivery @step0  null  null x3",
+                "cell 0: unexpected delivery: delivery @step1  null  null x3",
+                "cell 0: unexpected delivery: delivery @step2  null  null x3"
+              ]
+            },
+            "93001fb54b889f98414aa81d": {
+              "ok": false,
+              "reasons": [
+                "cell 0: missing delivery: delivery @step0 sum 2 reader correction",
+                "cell 0: missing delivery: delivery @step0 combined 2 reviewer correction",
+                "cell 0: missing delivery: delivery @step0 combined 2 new initial",
+                "cell 0: missing delivery: delivery @step1 sum 3 reader correction",
+                "cell 0: missing delivery: delivery @step1 combined 3 reviewer correction",
+                "cell 0: missing delivery: delivery @step1 combined 3 new correction",
+                "cell 0: missing delivery: delivery @step2 sum 4 reader correction",
+                "cell 0: missing delivery: delivery @step2 combined 4 reviewer correction",
+                "cell 0: missing delivery: delivery @step2 combined 4 new correction",
+                "cell 0: unexpected delivery: delivery @step0  null  null x3",
+                "cell 0: unexpected delivery: delivery @step1  null  null x3",
+                "cell 0: unexpected delivery: delivery @step2  null  null x3"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "issued-report-repair",
+      "trial": 4,
+      "provider": "claude",
+      "packageDigest": "32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170",
+      "recordedReward": 0,
+      "previousEffectiveReward": 0,
+      "effectiveReward": 0,
+      "checkerSha256": "4695dbcd2ae30e7ba0da1ffe8d3c9b3e1218ae3f9b15ad1d2e5082c3c86d7da5",
+      "gradeSha256": "ca818a8a6a6c1f8516dfb121a3411cc62f5bf8ba6675b079de0fb6146b430df3",
+      "resultSha256": "7c76354dfa1f1d1bd380cc3a1f065c7af3a53292a1dd733cea38fda2c925e498",
+      "completionSha256": "49d1f80d3c7b3294cd779cbf59f895207852ee35d2ae76851bc73da784374ad6",
+      "publicContractSha256": "bd604848c0c65a4311743dd87ab1bbf0834a9e603abee13b79dff6e20734983c",
+      "instructionSha256": "4f536dfe221dbd4f3eb801af636e4d21e783d5386aa2ead1776d33cca4dced6a",
+      "supplement": {
+        "pass": true,
+        "correct": 2,
+        "total": 2,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "225c4a714b06230d28229f58",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "93001fb54b889f98414aa81d",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "225c4a714b06230d28229f58": {
+              "ok": true
+            },
+            "93001fb54b889f98414aa81d": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "issued-report-repair",
+      "trial": 5,
+      "provider": "codex",
+      "packageDigest": "32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170",
+      "recordedReward": 1,
+      "previousEffectiveReward": 0,
+      "effectiveReward": 0,
+      "checkerSha256": "1c1e6f843f053ab7c75881656e8e9cde0fa54d4d4a142e6b4c32d696db6b609e",
+      "gradeSha256": "baa3de2f18fb7494bd5791ffe0bdfe5029060269131ad9119baa7161e32cda65",
+      "resultSha256": "5878ce177ac3d641571c0813753025e3ee51144eceeef61d0a62f42065bb4825",
+      "completionSha256": "35a7e0e38653ebbdcee050b53b173b972f401bf6fefe9730e5be2e5a81a12a50",
+      "publicContractSha256": "bd604848c0c65a4311743dd87ab1bbf0834a9e603abee13b79dff6e20734983c",
+      "instructionSha256": "4f536dfe221dbd4f3eb801af636e4d21e783d5386aa2ead1776d33cca4dced6a",
+      "supplement": {
+        "pass": false,
+        "correct": 1,
+        "total": 2,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "225c4a714b06230d28229f58",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "93001fb54b889f98414aa81d",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "225c4a714b06230d28229f58": {
+              "ok": true
+            },
+            "93001fb54b889f98414aa81d": {
+              "ok": false,
+              "reasons": [
+                "cell 0: malformed or unsuccessful deliver call"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "issued-report-repair",
+      "trial": 6,
+      "provider": "codex",
+      "packageDigest": "32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170",
+      "recordedReward": 1,
+      "previousEffectiveReward": 0,
+      "effectiveReward": 0,
+      "checkerSha256": "2e9d7aa3caef70a53de26fe0aec13a8629d9371b4a415cf37235d1d15bc04b38",
+      "gradeSha256": "baa3de2f18fb7494bd5791ffe0bdfe5029060269131ad9119baa7161e32cda65",
+      "resultSha256": "a07976239e0067c4dc2de94d95926ad2b75d43d2b8fb5810f66bf754246158ae",
+      "completionSha256": "ce8a7362531966127a16b4d1a89a43b2e567bcb31bc5d02d8056cd025baa5c8f",
+      "publicContractSha256": "bd604848c0c65a4311743dd87ab1bbf0834a9e603abee13b79dff6e20734983c",
+      "instructionSha256": "4f536dfe221dbd4f3eb801af636e4d21e783d5386aa2ead1776d33cca4dced6a",
+      "supplement": {
+        "pass": false,
+        "correct": 1,
+        "total": 2,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "225c4a714b06230d28229f58",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "93001fb54b889f98414aa81d",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "225c4a714b06230d28229f58": {
+              "ok": true
+            },
+            "93001fb54b889f98414aa81d": {
+              "ok": false,
+              "reasons": [
+                "cell 0: an invalid delivery call was attempted"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "issued-report-repair",
+      "trial": 7,
+      "provider": "codex",
+      "packageDigest": "32287026a0f9909c99b6a0a6c43bdd42f9e1549dfa292d6aeea2423258dfe170",
+      "recordedReward": 1,
+      "previousEffectiveReward": 0,
+      "effectiveReward": 0,
+      "checkerSha256": "a5f22a1468673624c04dd0027d38beb537cee6457058b8ccf1b9f4ed83f491b8",
+      "gradeSha256": "baa3de2f18fb7494bd5791ffe0bdfe5029060269131ad9119baa7161e32cda65",
+      "resultSha256": "46084d0d30c594a398c496aaffa743965e60fc05db8021bcae95b93107a7150c",
+      "completionSha256": "ca4c8bdf4650e2e0cef100863de728ecdbe4a4a28460d9607feb8eee9a208eb1",
+      "publicContractSha256": "bd604848c0c65a4311743dd87ab1bbf0834a9e603abee13b79dff6e20734983c",
+      "instructionSha256": "4f536dfe221dbd4f3eb801af636e4d21e783d5386aa2ead1776d33cca4dced6a",
+      "supplement": {
+        "pass": false,
+        "correct": 1,
+        "total": 2,
+        "deterministic": true,
+        "exactTokens": true,
+        "details": [
+          {
+            "token": "225c4a714b06230d28229f58",
+            "expectedOk": true,
+            "actualOk": true,
+            "correct": true
+          },
+          {
+            "token": "93001fb54b889f98414aa81d",
+            "expectedOk": true,
+            "actualOk": false,
+            "correct": false
+          }
+        ],
+        "observed": {
+          "verdicts": {
+            "225c4a714b06230d28229f58": {
+              "ok": true
+            },
+            "93001fb54b889f98414aa81d": {
+              "ok": false,
+              "reasons": [
+                "cell 0: deliver call was not stored",
+                "cell 0: deliver calls do not match required receipts"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ],
+  "serviceChecks": [
+    {
+      "id": "variant-cache-repair",
+      "trial": 6,
+      "scenario": "stale-304-metadata",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "variant-cache-repair",
+      "trial": 6,
+      "scenario": "fresh-plus-origin",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "variant-cache-repair",
+      "trial": 6,
+      "scenario": "copy-other-path",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "variant-cache-repair",
+      "trial": 7,
+      "scenario": "stale-304-metadata",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "variant-cache-repair",
+      "trial": 7,
+      "scenario": "fresh-plus-origin",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "variant-cache-repair",
+      "trial": 7,
+      "scenario": "copy-other-path",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 4,
+      "scenario": "empty-no-commit",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 4,
+      "scenario": "retry-rolled-back-transaction",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 4,
+      "scenario": "replace-staged-archive",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 4,
+      "scenario": "reverse-archive-row-order",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 4,
+      "scenario": "wrong-allocation",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 4,
+      "scenario": "no-publication",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 4,
+      "scenario": "missing-backup-row",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 7,
+      "scenario": "empty-no-commit",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 7,
+      "scenario": "retry-rolled-back-transaction",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 7,
+      "scenario": "replace-staged-archive",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 7,
+      "scenario": "reverse-archive-row-order",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 7,
+      "scenario": "wrong-allocation",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 7,
+      "scenario": "no-publication",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 7,
+      "scenario": "missing-backup-row",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 7,
+      "scenario": "large-values-retractions",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 7,
+      "scenario": "restart-and-repeat-pagination",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 7,
+      "scenario": "record-before-second-traversal",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 7,
+      "scenario": "wrong-exact-total",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 7,
+      "scenario": "noncanonical-total",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 7,
+      "scenario": "duplicate-report",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 7,
+      "scenario": "missing-report",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 7,
+      "scenario": "skip-pagination-empty-input",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "trial": 7,
+      "scenario": "complete-empty-input",
+      "status": "semantic-pass",
+      "correctedStatus": "semantic-pass",
+      "failures": []
+    }
+  ],
+  "correctedPasses": [
+    {
+      "id": "variant-cache-repair",
+      "trial": 6,
+      "provider": "codex",
+      "recordedReward": 1,
+      "previousEffectiveReward": 1,
+      "effectiveReward": 0
+    },
+    {
+      "id": "variant-cache-repair",
+      "trial": 7,
+      "provider": "codex",
+      "recordedReward": 1,
+      "previousEffectiveReward": 1,
+      "effectiveReward": 0
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "trial": 4,
+      "provider": "codex",
+      "recordedReward": 1,
+      "previousEffectiveReward": 1,
+      "effectiveReward": 0
+    }
+  ],
+  "classifications": [
+    {
+      "id": "incremental-build-repair",
+      "analysis": "reports/screening/fifth-five/21-incremental-build-repair.md",
+      "recordedHistory": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "previousEffectiveHistory": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "effectiveHistory": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "failures": 6,
+      "scored": 6,
+      "attemptsByProvider": {
+        "claude": 3,
+        "codex": 3
+      },
+      "classification": "meets-5-of-6-complete"
+    },
+    {
+      "id": "variant-cache-repair",
+      "analysis": "reports/screening/fourth-five/19-variant-cache-repair.md",
+      "recordedHistory": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "previousEffectiveHistory": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "effectiveHistory": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "failures": 6,
+      "scored": 6,
+      "attemptsByProvider": {
+        "claude": 3,
+        "codex": 3
+      },
+      "classification": "meets-5-of-6-complete"
+    },
+    {
+      "id": "issued-report-repair",
+      "analysis": "reports/screening/fifth-five/25-issued-report-repair.md",
+      "recordedHistory": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "previousEffectiveHistory": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "effectiveHistory": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "failures": 6,
+      "scored": 6,
+      "attemptsByProvider": {
+        "claude": 3,
+        "codex": 3
+      },
+      "classification": "meets-5-of-6-complete"
+    },
+    {
+      "id": "temporal-capacity-repair",
+      "analysis": "reports/screening/next-five/10-temporal-capacity-repair.md",
+      "recordedHistory": [
+        0,
+        1,
+        0,
+        1,
+        1,
+        1
+      ],
+      "previousEffectiveHistory": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "effectiveHistory": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "failures": 5,
+      "scored": 6,
+      "attemptsByProvider": {
+        "claude": 3,
+        "codex": 3
+      },
+      "classification": "meets-5-of-6-complete"
+    },
+    {
+      "id": "snapshot-recovery-repair",
+      "analysis": "reports/screening/third-five/11-snapshot-recovery-repair.md",
+      "recordedHistory": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "previousEffectiveHistory": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "effectiveHistory": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "failures": 5,
+      "scored": 6,
+      "attemptsByProvider": {
+        "claude": 3,
+        "codex": 3
+      },
+      "classification": "meets-5-of-6-complete"
+    }
+  ],
+  "manifests": {
+    "recordsVerified": 24,
+    "filesVerified": 20836,
+    "bytesVerified": 479087992,
+    "verifiedBeforeAndAfter": true,
+    "errors": []
+  },
+  "successorTotals": {
+    "distinctPackages": 25,
+    "attempts": 51,
+    "scored": 50,
+    "recordedZeroRewards": 15,
+    "recordedPasses": 35,
+    "effectiveFailures": 28,
+    "effectivePasses": 22,
+    "historicalInfrastructureInterruptions": 1
+  }
+}

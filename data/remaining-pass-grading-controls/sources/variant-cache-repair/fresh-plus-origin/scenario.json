@@ -1,0 +1,30 @@
+{
+  "id": "fresh-plus-origin",
+  "seed": 0,
+  "events": [
+    {
+      "id": "a",
+      "kind": "get",
+      "tier": "edge-a",
+      "path": "/asset",
+      "headers": {
+        "accept-language": "en"
+      },
+      "now": 0
+    },
+    {
+      "id": "b",
+      "kind": "get",
+      "tier": "edge-a",
+      "path": "/asset",
+      "headers": {
+        "accept-language": "fr"
+      },
+      "now": 1
+    }
+  ],
+  "limits": {
+    "maxOriginRequests": 20,
+    "maxOriginBytes": 20000
+  }
+}

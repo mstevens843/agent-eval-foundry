@@ -1,0 +1,4356 @@
+{
+  "cases": [
+    {
+      "token": "317f2df180e4cdb3098e2db5",
+      "cells": [
+        {
+          "scenarioId": "stale-304-metadata",
+          "actual": {
+            "cache": {
+              "edge-a": [
+                {
+                  "path": "/revalidate",
+                  "headers": {},
+                  "vary": [
+                    "accept-language",
+                    "x-edition"
+                  ],
+                  "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                  "body": "0|/revalidate|||1|🟦",
+                  "maxAge": 0,
+                  "age": 1,
+                  "storedAt": 2,
+                  "noStore": false
+                }
+              ],
+              "edge-b": [],
+              "shield": [
+                {
+                  "path": "/revalidate",
+                  "headers": {},
+                  "vary": [
+                    "accept-language",
+                    "x-edition"
+                  ],
+                  "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                  "body": "0|/revalidate|||1|🟦",
+                  "maxAge": 0,
+                  "age": 1,
+                  "storedAt": 2,
+                  "noStore": false
+                }
+              ]
+            },
+            "deliveries": [
+              {
+                "id": "a",
+                "response": {
+                  "body": "0|/revalidate|||1|🟦",
+                  "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+                }
+              },
+              {
+                "id": "b",
+                "response": {
+                  "body": "0|/revalidate|||1|🟦",
+                  "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+                }
+              }
+            ],
+            "originRequests": 2,
+            "originBytes": 22
+          },
+          "input": {
+            "events": [
+              {
+                "id": "a",
+                "kind": "get",
+                "tier": "edge-a",
+                "path": "/revalidate",
+                "headers": {},
+                "now": 0
+              },
+              {
+                "id": "b",
+                "kind": "get",
+                "tier": "edge-a",
+                "path": "/revalidate",
+                "headers": {},
+                "now": 2
+              }
+            ],
+            "initial": {
+              "edge-a": [],
+              "edge-b": [],
+              "shield": []
+            }
+          },
+          "limits": {
+            "maxOriginRequests": 20,
+            "maxOriginBytes": 20000
+          },
+          "observations": [
+            {
+              "seq": 0,
+              "method": "next",
+              "request": {},
+              "value": {
+                "event": {
+                  "id": "a",
+                  "kind": "get",
+                  "tier": "edge-a",
+                  "path": "/revalidate",
+                  "headers": {},
+                  "now": 0
+                }
+              }
+            },
+            {
+              "seq": 1,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 2,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 3,
+              "method": "origin",
+              "request": {},
+              "value": {
+                "status": 200,
+                "body": "0|/revalidate|||1|🟦",
+                "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                "vary": [
+                  "accept-language",
+                  "x-edition"
+                ],
+                "maxAge": 0,
+                "age": 1,
+                "noStore": false
+              }
+            },
+            {
+              "seq": 4,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 5,
+              "method": "write",
+              "request": {
+                "tier": "shield",
+                "entries": [
+                  {
+                    "path": "/revalidate",
+                    "headers": {},
+                    "vary": [
+                      "accept-language",
+                      "x-edition"
+                    ],
+                    "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                    "body": "0|/revalidate|||1|🟦",
+                    "maxAge": 0,
+                    "age": 1,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 7,
+              "method": "write",
+              "request": {
+                "tier": "edge-a",
+                "entries": [
+                  {
+                    "path": "/revalidate",
+                    "headers": {},
+                    "vary": [
+                      "accept-language",
+                      "x-edition"
+                    ],
+                    "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                    "body": "0|/revalidate|||1|🟦",
+                    "maxAge": 0,
+                    "age": 1,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "deliver",
+              "request": {
+                "response": {
+                  "body": "0|/revalidate|||1|🟦",
+                  "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+                }
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "next",
+              "request": {},
+              "value": {
+                "event": {
+                  "id": "b",
+                  "kind": "get",
+                  "tier": "edge-a",
+                  "path": "/revalidate",
+                  "headers": {},
+                  "now": 2
+                }
+              }
+            },
+            {
+              "seq": 10,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/revalidate",
+                    "headers": {},
+                    "vary": [
+                      "accept-language",
+                      "x-edition"
+                    ],
+                    "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                    "body": "0|/revalidate|||1|🟦",
+                    "maxAge": 0,
+                    "age": 1,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 11,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/revalidate",
+                    "headers": {},
+                    "vary": [
+                      "accept-language",
+                      "x-edition"
+                    ],
+                    "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                    "body": "0|/revalidate|||1|🟦",
+                    "maxAge": 0,
+                    "age": 1,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 12,
+              "method": "origin",
+              "request": {
+                "ifNoneMatch": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+              },
+              "value": {
+                "status": 304,
+                "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                "vary": [
+                  "accept-language",
+                  "x-edition"
+                ],
+                "maxAge": 0,
+                "age": 1,
+                "noStore": false
+              }
+            },
+            {
+              "seq": 13,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/revalidate",
+                    "headers": {},
+                    "vary": [
+                      "accept-language",
+                      "x-edition"
+                    ],
+                    "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                    "body": "0|/revalidate|||1|🟦",
+                    "maxAge": 0,
+                    "age": 1,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 14,
+              "method": "write",
+              "request": {
+                "tier": "shield",
+                "entries": [
+                  {
+                    "path": "/revalidate",
+                    "headers": {},
+                    "vary": [
+                      "accept-language",
+                      "x-edition"
+                    ],
+                    "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                    "body": "0|/revalidate|||1|🟦",
+                    "maxAge": 0,
+                    "age": 1,
+                    "storedAt": 2,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 15,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/revalidate",
+                    "headers": {},
+                    "vary": [
+                      "accept-language",
+                      "x-edition"
+                    ],
+                    "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                    "body": "0|/revalidate|||1|🟦",
+                    "maxAge": 0,
+                    "age": 1,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 16,
+              "method": "write",
+              "request": {
+                "tier": "edge-a",
+                "entries": [
+                  {
+                    "path": "/revalidate",
+                    "headers": {},
+                    "vary": [
+                      "accept-language",
+                      "x-edition"
+                    ],
+                    "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                    "body": "0|/revalidate|||1|🟦",
+                    "maxAge": 0,
+                    "age": 1,
+                    "storedAt": 2,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 17,
+              "method": "deliver",
+              "request": {
+                "response": {
+                  "body": "0|/revalidate|||1|🟦",
+                  "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+                }
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 18,
+              "method": "next",
+              "request": {},
+              "value": {
+                "done": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "complete": true
+            }
+          ],
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "event": {
+                        "id": "a",
+                        "kind": "get",
+                        "tier": "edge-a",
+                        "path": "/revalidate",
+                        "headers": {},
+                        "now": 0
+                      }
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "origin",
+                    "request": {},
+                    "value": {
+                      "status": 200,
+                      "body": "0|/revalidate|||1|🟦",
+                      "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                      "vary": [
+                        "accept-language",
+                        "x-edition"
+                      ],
+                      "maxAge": 0,
+                      "age": 1,
+                      "noStore": false
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "write",
+                    "request": {
+                      "tier": "shield",
+                      "entries": [
+                        {
+                          "path": "/revalidate",
+                          "headers": {},
+                          "vary": [
+                            "accept-language",
+                            "x-edition"
+                          ],
+                          "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                          "body": "0|/revalidate|||1|🟦",
+                          "maxAge": 0,
+                          "age": 1,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "write",
+                    "request": {
+                      "tier": "edge-a",
+                      "entries": [
+                        {
+                          "path": "/revalidate",
+                          "headers": {},
+                          "vary": [
+                            "accept-language",
+                            "x-edition"
+                          ],
+                          "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                          "body": "0|/revalidate|||1|🟦",
+                          "maxAge": 0,
+                          "age": 1,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "deliver",
+                    "request": {
+                      "response": {
+                        "body": "0|/revalidate|||1|🟦",
+                        "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+                      }
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "event": {
+                        "id": "b",
+                        "kind": "get",
+                        "tier": "edge-a",
+                        "path": "/revalidate",
+                        "headers": {},
+                        "now": 2
+                      }
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/revalidate",
+                          "headers": {},
+                          "vary": [
+                            "accept-language",
+                            "x-edition"
+                          ],
+                          "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                          "body": "0|/revalidate|||1|🟦",
+                          "maxAge": 0,
+                          "age": 1,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 11,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/revalidate",
+                          "headers": {},
+                          "vary": [
+                            "accept-language",
+                            "x-edition"
+                          ],
+                          "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                          "body": "0|/revalidate|||1|🟦",
+                          "maxAge": 0,
+                          "age": 1,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 12,
+                    "method": "origin",
+                    "request": {
+                      "ifNoneMatch": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+                    },
+                    "value": {
+                      "status": 304,
+                      "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                      "vary": [
+                        "accept-language",
+                        "x-edition"
+                      ],
+                      "maxAge": 0,
+                      "age": 1,
+                      "noStore": false
+                    }
+                  },
+                  {
+                    "seq": 13,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/revalidate",
+                          "headers": {},
+                          "vary": [
+                            "accept-language",
+                            "x-edition"
+                          ],
+                          "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                          "body": "0|/revalidate|||1|🟦",
+                          "maxAge": 0,
+                          "age": 1,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 14,
+                    "method": "write",
+                    "request": {
+                      "tier": "shield",
+                      "entries": [
+                        {
+                          "path": "/revalidate",
+                          "headers": {},
+                          "vary": [
+                            "accept-language",
+                            "x-edition"
+                          ],
+                          "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                          "body": "0|/revalidate|||1|🟦",
+                          "maxAge": 0,
+                          "age": 1,
+                          "storedAt": 2,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 15,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/revalidate",
+                          "headers": {},
+                          "vary": [
+                            "accept-language",
+                            "x-edition"
+                          ],
+                          "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                          "body": "0|/revalidate|||1|🟦",
+                          "maxAge": 0,
+                          "age": 1,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 16,
+                    "method": "write",
+                    "request": {
+                      "tier": "edge-a",
+                      "entries": [
+                        {
+                          "path": "/revalidate",
+                          "headers": {},
+                          "vary": [
+                            "accept-language",
+                            "x-edition"
+                          ],
+                          "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                          "body": "0|/revalidate|||1|🟦",
+                          "maxAge": 0,
+                          "age": 1,
+                          "storedAt": 2,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 17,
+                    "method": "deliver",
+                    "request": {
+                      "response": {
+                        "body": "0|/revalidate|||1|🟦",
+                        "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+                      }
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 18,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "done": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 22,
+                "requestBytes": 2318,
+                "responseBytes": 2178,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "3dee4fd5227f802f034982b3",
+      "cells": [
+        {
+          "scenarioId": "stale-304-metadata",
+          "actual": {
+            "cache": {
+              "edge-a": [
+                {
+                  "path": "/revalidate",
+                  "headers": {},
+                  "vary": [
+                    "accept-language",
+                    "x-edition"
+                  ],
+                  "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                  "body": "0|/revalidate|||1|🟦",
+                  "maxAge": 0,
+                  "age": 1,
+                  "storedAt": 0,
+                  "noStore": false
+                }
+              ],
+              "edge-b": [],
+              "shield": [
+                {
+                  "path": "/revalidate",
+                  "headers": {},
+                  "vary": [
+                    "accept-language",
+                    "x-edition"
+                  ],
+                  "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                  "body": "0|/revalidate|||1|🟦",
+                  "maxAge": 0,
+                  "age": 1,
+                  "storedAt": 0,
+                  "noStore": false
+                }
+              ]
+            },
+            "deliveries": [
+              {
+                "id": "a",
+                "response": {
+                  "body": "0|/revalidate|||1|🟦",
+                  "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+                }
+              },
+              {
+                "id": "b",
+                "response": {
+                  "body": "0|/revalidate|||1|🟦",
+                  "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+                }
+              }
+            ],
+            "originRequests": 2,
+            "originBytes": 22
+          },
+          "input": {
+            "events": [
+              {
+                "id": "a",
+                "kind": "get",
+                "tier": "edge-a",
+                "path": "/revalidate",
+                "headers": {},
+                "now": 0
+              },
+              {
+                "id": "b",
+                "kind": "get",
+                "tier": "edge-a",
+                "path": "/revalidate",
+                "headers": {},
+                "now": 2
+              }
+            ],
+            "initial": {
+              "edge-a": [],
+              "edge-b": [],
+              "shield": []
+            }
+          },
+          "limits": {
+            "maxOriginRequests": 20,
+            "maxOriginBytes": 20000
+          },
+          "observations": [
+            {
+              "seq": 0,
+              "method": "next",
+              "request": {},
+              "value": {
+                "event": {
+                  "id": "a",
+                  "kind": "get",
+                  "tier": "edge-a",
+                  "path": "/revalidate",
+                  "headers": {},
+                  "now": 0
+                }
+              }
+            },
+            {
+              "seq": 1,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 2,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 3,
+              "method": "origin",
+              "request": {},
+              "value": {
+                "status": 200,
+                "body": "0|/revalidate|||1|🟦",
+                "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                "vary": [
+                  "accept-language",
+                  "x-edition"
+                ],
+                "maxAge": 0,
+                "age": 1,
+                "noStore": false
+              }
+            },
+            {
+              "seq": 4,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 5,
+              "method": "write",
+              "request": {
+                "tier": "shield",
+                "entries": [
+                  {
+                    "path": "/revalidate",
+                    "headers": {},
+                    "vary": [
+                      "accept-language",
+                      "x-edition"
+                    ],
+                    "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                    "body": "0|/revalidate|||1|🟦",
+                    "maxAge": 0,
+                    "age": 1,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 7,
+              "method": "write",
+              "request": {
+                "tier": "edge-a",
+                "entries": [
+                  {
+                    "path": "/revalidate",
+                    "headers": {},
+                    "vary": [
+                      "accept-language",
+                      "x-edition"
+                    ],
+                    "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                    "body": "0|/revalidate|||1|🟦",
+                    "maxAge": 0,
+                    "age": 1,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "deliver",
+              "request": {
+                "response": {
+                  "body": "0|/revalidate|||1|🟦",
+                  "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+                }
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "next",
+              "request": {},
+              "value": {
+                "event": {
+                  "id": "b",
+                  "kind": "get",
+                  "tier": "edge-a",
+                  "path": "/revalidate",
+                  "headers": {},
+                  "now": 2
+                }
+              }
+            },
+            {
+              "seq": 10,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/revalidate",
+                    "headers": {},
+                    "vary": [
+                      "accept-language",
+                      "x-edition"
+                    ],
+                    "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                    "body": "0|/revalidate|||1|🟦",
+                    "maxAge": 0,
+                    "age": 1,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 11,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/revalidate",
+                    "headers": {},
+                    "vary": [
+                      "accept-language",
+                      "x-edition"
+                    ],
+                    "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                    "body": "0|/revalidate|||1|🟦",
+                    "maxAge": 0,
+                    "age": 1,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 12,
+              "method": "origin",
+              "request": {
+                "ifNoneMatch": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+              },
+              "value": {
+                "status": 304,
+                "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                "vary": [
+                  "accept-language",
+                  "x-edition"
+                ],
+                "maxAge": 0,
+                "age": 1,
+                "noStore": false
+              }
+            },
+            {
+              "seq": 13,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/revalidate",
+                    "headers": {},
+                    "vary": [
+                      "accept-language",
+                      "x-edition"
+                    ],
+                    "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                    "body": "0|/revalidate|||1|🟦",
+                    "maxAge": 0,
+                    "age": 1,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 14,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/revalidate",
+                    "headers": {},
+                    "vary": [
+                      "accept-language",
+                      "x-edition"
+                    ],
+                    "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                    "body": "0|/revalidate|||1|🟦",
+                    "maxAge": 0,
+                    "age": 1,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 15,
+              "method": "deliver",
+              "request": {
+                "response": {
+                  "body": "0|/revalidate|||1|🟦",
+                  "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+                }
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 16,
+              "method": "next",
+              "request": {},
+              "value": {
+                "done": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "complete": true
+            }
+          ],
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "event": {
+                        "id": "a",
+                        "kind": "get",
+                        "tier": "edge-a",
+                        "path": "/revalidate",
+                        "headers": {},
+                        "now": 0
+                      }
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "origin",
+                    "request": {},
+                    "value": {
+                      "status": 200,
+                      "body": "0|/revalidate|||1|🟦",
+                      "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                      "vary": [
+                        "accept-language",
+                        "x-edition"
+                      ],
+                      "maxAge": 0,
+                      "age": 1,
+                      "noStore": false
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "write",
+                    "request": {
+                      "tier": "shield",
+                      "entries": [
+                        {
+                          "path": "/revalidate",
+                          "headers": {},
+                          "vary": [
+                            "accept-language",
+                            "x-edition"
+                          ],
+                          "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                          "body": "0|/revalidate|||1|🟦",
+                          "maxAge": 0,
+                          "age": 1,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "write",
+                    "request": {
+                      "tier": "edge-a",
+                      "entries": [
+                        {
+                          "path": "/revalidate",
+                          "headers": {},
+                          "vary": [
+                            "accept-language",
+                            "x-edition"
+                          ],
+                          "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                          "body": "0|/revalidate|||1|🟦",
+                          "maxAge": 0,
+                          "age": 1,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "deliver",
+                    "request": {
+                      "response": {
+                        "body": "0|/revalidate|||1|🟦",
+                        "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+                      }
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "event": {
+                        "id": "b",
+                        "kind": "get",
+                        "tier": "edge-a",
+                        "path": "/revalidate",
+                        "headers": {},
+                        "now": 2
+                      }
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/revalidate",
+                          "headers": {},
+                          "vary": [
+                            "accept-language",
+                            "x-edition"
+                          ],
+                          "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                          "body": "0|/revalidate|||1|🟦",
+                          "maxAge": 0,
+                          "age": 1,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 11,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/revalidate",
+                          "headers": {},
+                          "vary": [
+                            "accept-language",
+                            "x-edition"
+                          ],
+                          "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                          "body": "0|/revalidate|||1|🟦",
+                          "maxAge": 0,
+                          "age": 1,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 12,
+                    "method": "origin",
+                    "request": {
+                      "ifNoneMatch": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+                    },
+                    "value": {
+                      "status": 304,
+                      "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                      "vary": [
+                        "accept-language",
+                        "x-edition"
+                      ],
+                      "maxAge": 0,
+                      "age": 1,
+                      "noStore": false
+                    }
+                  },
+                  {
+                    "seq": 13,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/revalidate",
+                          "headers": {},
+                          "vary": [
+                            "accept-language",
+                            "x-edition"
+                          ],
+                          "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                          "body": "0|/revalidate|||1|🟦",
+                          "maxAge": 0,
+                          "age": 1,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 14,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/revalidate",
+                          "headers": {},
+                          "vary": [
+                            "accept-language",
+                            "x-edition"
+                          ],
+                          "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                          "body": "0|/revalidate|||1|🟦",
+                          "maxAge": 0,
+                          "age": 1,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 15,
+                    "method": "deliver",
+                    "request": {
+                      "response": {
+                        "body": "0|/revalidate|||1|🟦",
+                        "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+                      }
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 16,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "done": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 20,
+                "requestBytes": 1768,
+                "responseBytes": 2106,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "39254bac0cc93e4bca06d1ca",
+      "cells": [
+        {
+          "scenarioId": "fresh-plus-origin",
+          "actual": {
+            "cache": {
+              "edge-a": [
+                {
+                  "path": "/asset",
+                  "headers": {
+                    "accept-language": "en"
+                  },
+                  "vary": [],
+                  "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg==",
+                  "body": "0|/asset|en||1|🟦",
+                  "maxAge": 100,
+                  "age": 0,
+                  "storedAt": 0,
+                  "noStore": false
+                }
+              ],
+              "edge-b": [],
+              "shield": [
+                {
+                  "path": "/asset",
+                  "headers": {
+                    "accept-language": "en"
+                  },
+                  "vary": [],
+                  "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg==",
+                  "body": "0|/asset|en||1|🟦",
+                  "maxAge": 100,
+                  "age": 0,
+                  "storedAt": 0,
+                  "noStore": false
+                }
+              ]
+            },
+            "deliveries": [
+              {
+                "id": "a",
+                "response": {
+                  "body": "0|/asset|en||1|🟦",
+                  "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg=="
+                }
+              },
+              {
+                "id": "b",
+                "response": {
+                  "body": "0|/asset|en||1|🟦",
+                  "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg=="
+                }
+              }
+            ],
+            "originRequests": 1,
+            "originBytes": 19
+          },
+          "input": {
+            "events": [
+              {
+                "id": "a",
+                "kind": "get",
+                "tier": "edge-a",
+                "path": "/asset",
+                "headers": {
+                  "accept-language": "en"
+                },
+                "now": 0
+              },
+              {
+                "id": "b",
+                "kind": "get",
+                "tier": "edge-a",
+                "path": "/asset",
+                "headers": {
+                  "accept-language": "fr"
+                },
+                "now": 1
+              }
+            ],
+            "initial": {
+              "edge-a": [],
+              "edge-b": [],
+              "shield": []
+            }
+          },
+          "limits": {
+            "maxOriginRequests": 20,
+            "maxOriginBytes": 20000
+          },
+          "observations": [
+            {
+              "seq": 0,
+              "method": "next",
+              "request": {},
+              "value": {
+                "event": {
+                  "id": "a",
+                  "kind": "get",
+                  "tier": "edge-a",
+                  "path": "/asset",
+                  "headers": {
+                    "accept-language": "en"
+                  },
+                  "now": 0
+                }
+              }
+            },
+            {
+              "seq": 1,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 2,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 3,
+              "method": "origin",
+              "request": {},
+              "value": {
+                "status": 200,
+                "body": "0|/asset|en||1|🟦",
+                "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg==",
+                "vary": [],
+                "maxAge": 100,
+                "age": 0,
+                "noStore": false
+              }
+            },
+            {
+              "seq": 4,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 5,
+              "method": "write",
+              "request": {
+                "tier": "shield",
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {
+                      "accept-language": "en"
+                    },
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg==",
+                    "body": "0|/asset|en||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 7,
+              "method": "write",
+              "request": {
+                "tier": "edge-a",
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {
+                      "accept-language": "en"
+                    },
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg==",
+                    "body": "0|/asset|en||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "deliver",
+              "request": {
+                "response": {
+                  "body": "0|/asset|en||1|🟦",
+                  "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg=="
+                }
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "next",
+              "request": {},
+              "value": {
+                "event": {
+                  "id": "b",
+                  "kind": "get",
+                  "tier": "edge-a",
+                  "path": "/asset",
+                  "headers": {
+                    "accept-language": "fr"
+                  },
+                  "now": 1
+                }
+              }
+            },
+            {
+              "seq": 10,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {
+                      "accept-language": "en"
+                    },
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg==",
+                    "body": "0|/asset|en||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 11,
+              "method": "deliver",
+              "request": {
+                "response": {
+                  "body": "0|/asset|en||1|🟦",
+                  "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg=="
+                }
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 12,
+              "method": "next",
+              "request": {},
+              "value": {
+                "done": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "complete": true
+            }
+          ],
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "event": {
+                        "id": "a",
+                        "kind": "get",
+                        "tier": "edge-a",
+                        "path": "/asset",
+                        "headers": {
+                          "accept-language": "en"
+                        },
+                        "now": 0
+                      }
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "origin",
+                    "request": {},
+                    "value": {
+                      "status": 200,
+                      "body": "0|/asset|en||1|🟦",
+                      "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg==",
+                      "vary": [],
+                      "maxAge": 100,
+                      "age": 0,
+                      "noStore": false
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "write",
+                    "request": {
+                      "tier": "shield",
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {
+                            "accept-language": "en"
+                          },
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg==",
+                          "body": "0|/asset|en||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "write",
+                    "request": {
+                      "tier": "edge-a",
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {
+                            "accept-language": "en"
+                          },
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg==",
+                          "body": "0|/asset|en||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "deliver",
+                    "request": {
+                      "response": {
+                        "body": "0|/asset|en||1|🟦",
+                        "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg=="
+                      }
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "event": {
+                        "id": "b",
+                        "kind": "get",
+                        "tier": "edge-a",
+                        "path": "/asset",
+                        "headers": {
+                          "accept-language": "fr"
+                        },
+                        "now": 1
+                      }
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {
+                            "accept-language": "en"
+                          },
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg==",
+                          "body": "0|/asset|en||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 11,
+                    "method": "deliver",
+                    "request": {
+                      "response": {
+                        "body": "0|/asset|en||1|🟦",
+                        "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg=="
+                      }
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 12,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "done": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 16,
+                "requestBytes": 1425,
+                "responseBytes": 1245,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "f117e58ac5e920eb294cdf60",
+      "cells": [
+        {
+          "scenarioId": "fresh-plus-origin",
+          "actual": {
+            "cache": {
+              "edge-a": [
+                {
+                  "path": "/asset",
+                  "headers": {
+                    "accept-language": "en"
+                  },
+                  "vary": [],
+                  "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg==",
+                  "body": "0|/asset|en||1|🟦",
+                  "maxAge": 100,
+                  "age": 0,
+                  "storedAt": 0,
+                  "noStore": false
+                }
+              ],
+              "edge-b": [],
+              "shield": [
+                {
+                  "path": "/asset",
+                  "headers": {
+                    "accept-language": "en"
+                  },
+                  "vary": [],
+                  "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg==",
+                  "body": "0|/asset|en||1|🟦",
+                  "maxAge": 100,
+                  "age": 0,
+                  "storedAt": 0,
+                  "noStore": false
+                }
+              ]
+            },
+            "deliveries": [
+              {
+                "id": "a",
+                "response": {
+                  "body": "0|/asset|en||1|🟦",
+                  "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg=="
+                }
+              },
+              {
+                "id": "b",
+                "response": {
+                  "body": "0|/asset|en||1|🟦",
+                  "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg=="
+                }
+              }
+            ],
+            "originRequests": 2,
+            "originBytes": 38
+          },
+          "input": {
+            "events": [
+              {
+                "id": "a",
+                "kind": "get",
+                "tier": "edge-a",
+                "path": "/asset",
+                "headers": {
+                  "accept-language": "en"
+                },
+                "now": 0
+              },
+              {
+                "id": "b",
+                "kind": "get",
+                "tier": "edge-a",
+                "path": "/asset",
+                "headers": {
+                  "accept-language": "fr"
+                },
+                "now": 1
+              }
+            ],
+            "initial": {
+              "edge-a": [],
+              "edge-b": [],
+              "shield": []
+            }
+          },
+          "limits": {
+            "maxOriginRequests": 20,
+            "maxOriginBytes": 20000
+          },
+          "observations": [
+            {
+              "seq": 0,
+              "method": "next",
+              "request": {},
+              "value": {
+                "event": {
+                  "id": "a",
+                  "kind": "get",
+                  "tier": "edge-a",
+                  "path": "/asset",
+                  "headers": {
+                    "accept-language": "en"
+                  },
+                  "now": 0
+                }
+              }
+            },
+            {
+              "seq": 1,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 2,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 3,
+              "method": "origin",
+              "request": {},
+              "value": {
+                "status": 200,
+                "body": "0|/asset|en||1|🟦",
+                "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg==",
+                "vary": [],
+                "maxAge": 100,
+                "age": 0,
+                "noStore": false
+              }
+            },
+            {
+              "seq": 4,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 5,
+              "method": "write",
+              "request": {
+                "tier": "shield",
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {
+                      "accept-language": "en"
+                    },
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg==",
+                    "body": "0|/asset|en||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 7,
+              "method": "write",
+              "request": {
+                "tier": "edge-a",
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {
+                      "accept-language": "en"
+                    },
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg==",
+                    "body": "0|/asset|en||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "deliver",
+              "request": {
+                "response": {
+                  "body": "0|/asset|en||1|🟦",
+                  "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg=="
+                }
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "next",
+              "request": {},
+              "value": {
+                "event": {
+                  "id": "b",
+                  "kind": "get",
+                  "tier": "edge-a",
+                  "path": "/asset",
+                  "headers": {
+                    "accept-language": "fr"
+                  },
+                  "now": 1
+                }
+              }
+            },
+            {
+              "seq": 10,
+              "method": "origin",
+              "request": {},
+              "value": {
+                "status": 200,
+                "body": "0|/asset|fr||1|🟦",
+                "etag": "MHwvYXNzZXR8ZnJ8fDF88J+fpg==",
+                "vary": [],
+                "maxAge": 100,
+                "age": 0,
+                "noStore": false
+              }
+            },
+            {
+              "seq": 11,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {
+                      "accept-language": "en"
+                    },
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg==",
+                    "body": "0|/asset|en||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 12,
+              "method": "deliver",
+              "request": {
+                "response": {
+                  "body": "0|/asset|en||1|🟦",
+                  "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg=="
+                }
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 13,
+              "method": "next",
+              "request": {},
+              "value": {
+                "done": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "complete": true
+            }
+          ],
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "event": {
+                        "id": "a",
+                        "kind": "get",
+                        "tier": "edge-a",
+                        "path": "/asset",
+                        "headers": {
+                          "accept-language": "en"
+                        },
+                        "now": 0
+                      }
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "origin",
+                    "request": {},
+                    "value": {
+                      "status": 200,
+                      "body": "0|/asset|en||1|🟦",
+                      "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg==",
+                      "vary": [],
+                      "maxAge": 100,
+                      "age": 0,
+                      "noStore": false
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "write",
+                    "request": {
+                      "tier": "shield",
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {
+                            "accept-language": "en"
+                          },
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg==",
+                          "body": "0|/asset|en||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "write",
+                    "request": {
+                      "tier": "edge-a",
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {
+                            "accept-language": "en"
+                          },
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg==",
+                          "body": "0|/asset|en||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "deliver",
+                    "request": {
+                      "response": {
+                        "body": "0|/asset|en||1|🟦",
+                        "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg=="
+                      }
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "event": {
+                        "id": "b",
+                        "kind": "get",
+                        "tier": "edge-a",
+                        "path": "/asset",
+                        "headers": {
+                          "accept-language": "fr"
+                        },
+                        "now": 1
+                      }
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "origin",
+                    "request": {},
+                    "value": {
+                      "status": 200,
+                      "body": "0|/asset|fr||1|🟦",
+                      "etag": "MHwvYXNzZXR8ZnJ8fDF88J+fpg==",
+                      "vary": [],
+                      "maxAge": 100,
+                      "age": 0,
+                      "noStore": false
+                    }
+                  },
+                  {
+                    "seq": 11,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {
+                            "accept-language": "en"
+                          },
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg==",
+                          "body": "0|/asset|en||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 12,
+                    "method": "deliver",
+                    "request": {
+                      "response": {
+                        "body": "0|/asset|en||1|🟦",
+                        "etag": "MHwvYXNzZXR8ZW58fDF88J+fpg=="
+                      }
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 13,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "done": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 17,
+                "requestBytes": 1477,
+                "responseBytes": 1394,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "65a72eb8f8465d6428965e18",
+      "cells": [
+        {
+          "scenarioId": "copy-other-path",
+          "actual": {
+            "cache": {
+              "edge-a": [
+                {
+                  "path": "/asset",
+                  "headers": {},
+                  "vary": [],
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                  "body": "0|/asset|||1|🟦",
+                  "maxAge": 100,
+                  "age": 0,
+                  "storedAt": 0,
+                  "noStore": false
+                },
+                {
+                  "path": "/revalidate",
+                  "headers": {},
+                  "vary": [
+                    "accept-language",
+                    "x-edition"
+                  ],
+                  "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                  "body": "0|/revalidate|||1|🟦",
+                  "maxAge": 0,
+                  "age": 1,
+                  "storedAt": 1,
+                  "noStore": false
+                }
+              ],
+              "edge-b": [],
+              "shield": [
+                {
+                  "path": "/asset",
+                  "headers": {},
+                  "vary": [],
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                  "body": "0|/asset|||1|🟦",
+                  "maxAge": 100,
+                  "age": 0,
+                  "storedAt": 0,
+                  "noStore": false
+                },
+                {
+                  "path": "/revalidate",
+                  "headers": {},
+                  "vary": [
+                    "accept-language",
+                    "x-edition"
+                  ],
+                  "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                  "body": "0|/revalidate|||1|🟦",
+                  "maxAge": 0,
+                  "age": 1,
+                  "storedAt": 1,
+                  "noStore": false
+                }
+              ]
+            },
+            "deliveries": [
+              {
+                "id": "a",
+                "response": {
+                  "body": "0|/asset|||1|🟦",
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y="
+                }
+              },
+              {
+                "id": "b",
+                "response": {
+                  "body": "0|/revalidate|||1|🟦",
+                  "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+                }
+              }
+            ],
+            "originRequests": 2,
+            "originBytes": 39
+          },
+          "input": {
+            "events": [
+              {
+                "id": "a",
+                "kind": "get",
+                "tier": "edge-a",
+                "path": "/asset",
+                "headers": {},
+                "now": 0
+              },
+              {
+                "id": "b",
+                "kind": "get",
+                "tier": "edge-a",
+                "path": "/revalidate",
+                "headers": {},
+                "now": 1
+              }
+            ],
+            "initial": {
+              "edge-a": [],
+              "edge-b": [],
+              "shield": []
+            }
+          },
+          "limits": {
+            "maxOriginRequests": 20,
+            "maxOriginBytes": 20000
+          },
+          "observations": [
+            {
+              "seq": 0,
+              "method": "next",
+              "request": {},
+              "value": {
+                "event": {
+                  "id": "a",
+                  "kind": "get",
+                  "tier": "edge-a",
+                  "path": "/asset",
+                  "headers": {},
+                  "now": 0
+                }
+              }
+            },
+            {
+              "seq": 1,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 2,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 3,
+              "method": "origin",
+              "request": {},
+              "value": {
+                "status": 200,
+                "body": "0|/asset|||1|🟦",
+                "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                "vary": [],
+                "maxAge": 100,
+                "age": 0,
+                "noStore": false
+              }
+            },
+            {
+              "seq": 4,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 5,
+              "method": "write",
+              "request": {
+                "tier": "shield",
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 7,
+              "method": "write",
+              "request": {
+                "tier": "edge-a",
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "deliver",
+              "request": {
+                "response": {
+                  "body": "0|/asset|||1|🟦",
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y="
+                }
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "next",
+              "request": {},
+              "value": {
+                "event": {
+                  "id": "b",
+                  "kind": "get",
+                  "tier": "edge-a",
+                  "path": "/revalidate",
+                  "headers": {},
+                  "now": 1
+                }
+              }
+            },
+            {
+              "seq": 10,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 11,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 12,
+              "method": "origin",
+              "request": {},
+              "value": {
+                "status": 200,
+                "body": "0|/revalidate|||1|🟦",
+                "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                "vary": [
+                  "accept-language",
+                  "x-edition"
+                ],
+                "maxAge": 0,
+                "age": 1,
+                "noStore": false
+              }
+            },
+            {
+              "seq": 13,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 14,
+              "method": "write",
+              "request": {
+                "tier": "shield",
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  },
+                  {
+                    "path": "/revalidate",
+                    "headers": {},
+                    "vary": [
+                      "accept-language",
+                      "x-edition"
+                    ],
+                    "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                    "body": "0|/revalidate|||1|🟦",
+                    "maxAge": 0,
+                    "age": 1,
+                    "storedAt": 1,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 15,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 16,
+              "method": "write",
+              "request": {
+                "tier": "edge-a",
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  },
+                  {
+                    "path": "/revalidate",
+                    "headers": {},
+                    "vary": [
+                      "accept-language",
+                      "x-edition"
+                    ],
+                    "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                    "body": "0|/revalidate|||1|🟦",
+                    "maxAge": 0,
+                    "age": 1,
+                    "storedAt": 1,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 17,
+              "method": "deliver",
+              "request": {
+                "response": {
+                  "body": "0|/revalidate|||1|🟦",
+                  "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+                }
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 18,
+              "method": "next",
+              "request": {},
+              "value": {
+                "done": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "complete": true
+            }
+          ],
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "event": {
+                        "id": "a",
+                        "kind": "get",
+                        "tier": "edge-a",
+                        "path": "/asset",
+                        "headers": {},
+                        "now": 0
+                      }
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "origin",
+                    "request": {},
+                    "value": {
+                      "status": 200,
+                      "body": "0|/asset|||1|🟦",
+                      "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                      "vary": [],
+                      "maxAge": 100,
+                      "age": 0,
+                      "noStore": false
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "write",
+                    "request": {
+                      "tier": "shield",
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "write",
+                    "request": {
+                      "tier": "edge-a",
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "deliver",
+                    "request": {
+                      "response": {
+                        "body": "0|/asset|||1|🟦",
+                        "etag": "MHwvYXNzZXR8fHwxfPCfn6Y="
+                      }
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "event": {
+                        "id": "b",
+                        "kind": "get",
+                        "tier": "edge-a",
+                        "path": "/revalidate",
+                        "headers": {},
+                        "now": 1
+                      }
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 11,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 12,
+                    "method": "origin",
+                    "request": {},
+                    "value": {
+                      "status": 200,
+                      "body": "0|/revalidate|||1|🟦",
+                      "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                      "vary": [
+                        "accept-language",
+                        "x-edition"
+                      ],
+                      "maxAge": 0,
+                      "age": 1,
+                      "noStore": false
+                    }
+                  },
+                  {
+                    "seq": 13,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 14,
+                    "method": "write",
+                    "request": {
+                      "tier": "shield",
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        },
+                        {
+                          "path": "/revalidate",
+                          "headers": {},
+                          "vary": [
+                            "accept-language",
+                            "x-edition"
+                          ],
+                          "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                          "body": "0|/revalidate|||1|🟦",
+                          "maxAge": 0,
+                          "age": 1,
+                          "storedAt": 1,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 15,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 16,
+                    "method": "write",
+                    "request": {
+                      "tier": "edge-a",
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        },
+                        {
+                          "path": "/revalidate",
+                          "headers": {},
+                          "vary": [
+                            "accept-language",
+                            "x-edition"
+                          ],
+                          "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                          "body": "0|/revalidate|||1|🟦",
+                          "maxAge": 0,
+                          "age": 1,
+                          "storedAt": 1,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 17,
+                    "method": "deliver",
+                    "request": {
+                      "response": {
+                        "body": "0|/revalidate|||1|🟦",
+                        "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+                      }
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 18,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "done": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 22,
+                "requestBytes": 2471,
+                "responseBytes": 1985,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "token": "b0b340ef902561caacd4186f",
+      "cells": [
+        {
+          "scenarioId": "copy-other-path",
+          "actual": {
+            "cache": {
+              "edge-a": [
+                {
+                  "path": "/asset",
+                  "headers": {},
+                  "vary": [],
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                  "body": "0|/asset|||1|🟦",
+                  "maxAge": 100,
+                  "age": 0,
+                  "storedAt": 0,
+                  "noStore": false
+                },
+                {
+                  "path": "/revalidate",
+                  "headers": {},
+                  "vary": [
+                    "accept-language",
+                    "x-edition"
+                  ],
+                  "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                  "body": "0|/revalidate|||1|🟦",
+                  "maxAge": 0,
+                  "age": 1,
+                  "storedAt": 1,
+                  "noStore": false
+                }
+              ],
+              "edge-b": [
+                {
+                  "path": "/asset",
+                  "headers": {},
+                  "vary": [],
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                  "body": "0|/asset|||1|🟦",
+                  "maxAge": 100,
+                  "age": 0,
+                  "storedAt": 0,
+                  "noStore": false
+                }
+              ],
+              "shield": [
+                {
+                  "path": "/asset",
+                  "headers": {},
+                  "vary": [],
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                  "body": "0|/asset|||1|🟦",
+                  "maxAge": 100,
+                  "age": 0,
+                  "storedAt": 0,
+                  "noStore": false
+                },
+                {
+                  "path": "/revalidate",
+                  "headers": {},
+                  "vary": [
+                    "accept-language",
+                    "x-edition"
+                  ],
+                  "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                  "body": "0|/revalidate|||1|🟦",
+                  "maxAge": 0,
+                  "age": 1,
+                  "storedAt": 1,
+                  "noStore": false
+                }
+              ]
+            },
+            "deliveries": [
+              {
+                "id": "a",
+                "response": {
+                  "body": "0|/asset|||1|🟦",
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y="
+                }
+              },
+              {
+                "id": "b",
+                "response": {
+                  "body": "0|/revalidate|||1|🟦",
+                  "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+                }
+              }
+            ],
+            "originRequests": 2,
+            "originBytes": 39
+          },
+          "input": {
+            "events": [
+              {
+                "id": "a",
+                "kind": "get",
+                "tier": "edge-a",
+                "path": "/asset",
+                "headers": {},
+                "now": 0
+              },
+              {
+                "id": "b",
+                "kind": "get",
+                "tier": "edge-a",
+                "path": "/revalidate",
+                "headers": {},
+                "now": 1
+              }
+            ],
+            "initial": {
+              "edge-a": [],
+              "edge-b": [],
+              "shield": []
+            }
+          },
+          "limits": {
+            "maxOriginRequests": 20,
+            "maxOriginBytes": 20000
+          },
+          "observations": [
+            {
+              "seq": 0,
+              "method": "next",
+              "request": {},
+              "value": {
+                "event": {
+                  "id": "a",
+                  "kind": "get",
+                  "tier": "edge-a",
+                  "path": "/asset",
+                  "headers": {},
+                  "now": 0
+                }
+              }
+            },
+            {
+              "seq": 1,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 2,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 3,
+              "method": "origin",
+              "request": {},
+              "value": {
+                "status": 200,
+                "body": "0|/asset|||1|🟦",
+                "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                "vary": [],
+                "maxAge": 100,
+                "age": 0,
+                "noStore": false
+              }
+            },
+            {
+              "seq": 4,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 5,
+              "method": "write",
+              "request": {
+                "tier": "shield",
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 6,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": []
+              }
+            },
+            {
+              "seq": 7,
+              "method": "write",
+              "request": {
+                "tier": "edge-a",
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 8,
+              "method": "deliver",
+              "request": {
+                "response": {
+                  "body": "0|/asset|||1|🟦",
+                  "etag": "MHwvYXNzZXR8fHwxfPCfn6Y="
+                }
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 9,
+              "method": "next",
+              "request": {},
+              "value": {
+                "event": {
+                  "id": "b",
+                  "kind": "get",
+                  "tier": "edge-a",
+                  "path": "/revalidate",
+                  "headers": {},
+                  "now": 1
+                }
+              }
+            },
+            {
+              "seq": 10,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 11,
+              "method": "write",
+              "request": {
+                "tier": "edge-b",
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 12,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 13,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 14,
+              "method": "origin",
+              "request": {},
+              "value": {
+                "status": 200,
+                "body": "0|/revalidate|||1|🟦",
+                "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                "vary": [
+                  "accept-language",
+                  "x-edition"
+                ],
+                "maxAge": 0,
+                "age": 1,
+                "noStore": false
+              }
+            },
+            {
+              "seq": 15,
+              "method": "read",
+              "request": {
+                "tier": "shield"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 16,
+              "method": "write",
+              "request": {
+                "tier": "shield",
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  },
+                  {
+                    "path": "/revalidate",
+                    "headers": {},
+                    "vary": [
+                      "accept-language",
+                      "x-edition"
+                    ],
+                    "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                    "body": "0|/revalidate|||1|🟦",
+                    "maxAge": 0,
+                    "age": 1,
+                    "storedAt": 1,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 17,
+              "method": "read",
+              "request": {
+                "tier": "edge-a"
+              },
+              "value": {
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 18,
+              "method": "write",
+              "request": {
+                "tier": "edge-a",
+                "entries": [
+                  {
+                    "path": "/asset",
+                    "headers": {},
+                    "vary": [],
+                    "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                    "body": "0|/asset|||1|🟦",
+                    "maxAge": 100,
+                    "age": 0,
+                    "storedAt": 0,
+                    "noStore": false
+                  },
+                  {
+                    "path": "/revalidate",
+                    "headers": {},
+                    "vary": [
+                      "accept-language",
+                      "x-edition"
+                    ],
+                    "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                    "body": "0|/revalidate|||1|🟦",
+                    "maxAge": 0,
+                    "age": 1,
+                    "storedAt": 1,
+                    "noStore": false
+                  }
+                ]
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 19,
+              "method": "deliver",
+              "request": {
+                "response": {
+                  "body": "0|/revalidate|||1|🟦",
+                  "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+                }
+              },
+              "value": {
+                "stored": true
+              }
+            },
+            {
+              "seq": 20,
+              "method": "next",
+              "request": {},
+              "value": {
+                "done": true
+              }
+            }
+          ],
+          "reports": [
+            {
+              "complete": true
+            }
+          ],
+          "executions": [
+            {
+              "channels": {
+                "observations": [
+                  {
+                    "seq": 0,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "event": {
+                        "id": "a",
+                        "kind": "get",
+                        "tier": "edge-a",
+                        "path": "/asset",
+                        "headers": {},
+                        "now": 0
+                      }
+                    }
+                  },
+                  {
+                    "seq": 1,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 2,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 3,
+                    "method": "origin",
+                    "request": {},
+                    "value": {
+                      "status": 200,
+                      "body": "0|/asset|||1|🟦",
+                      "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                      "vary": [],
+                      "maxAge": 100,
+                      "age": 0,
+                      "noStore": false
+                    }
+                  },
+                  {
+                    "seq": 4,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 5,
+                    "method": "write",
+                    "request": {
+                      "tier": "shield",
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 6,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": []
+                    }
+                  },
+                  {
+                    "seq": 7,
+                    "method": "write",
+                    "request": {
+                      "tier": "edge-a",
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 8,
+                    "method": "deliver",
+                    "request": {
+                      "response": {
+                        "body": "0|/asset|||1|🟦",
+                        "etag": "MHwvYXNzZXR8fHwxfPCfn6Y="
+                      }
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 9,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "event": {
+                        "id": "b",
+                        "kind": "get",
+                        "tier": "edge-a",
+                        "path": "/revalidate",
+                        "headers": {},
+                        "now": 1
+                      }
+                    }
+                  },
+                  {
+                    "seq": 10,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 11,
+                    "method": "write",
+                    "request": {
+                      "tier": "edge-b",
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 12,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 13,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 14,
+                    "method": "origin",
+                    "request": {},
+                    "value": {
+                      "status": 200,
+                      "body": "0|/revalidate|||1|🟦",
+                      "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                      "vary": [
+                        "accept-language",
+                        "x-edition"
+                      ],
+                      "maxAge": 0,
+                      "age": 1,
+                      "noStore": false
+                    }
+                  },
+                  {
+                    "seq": 15,
+                    "method": "read",
+                    "request": {
+                      "tier": "shield"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 16,
+                    "method": "write",
+                    "request": {
+                      "tier": "shield",
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        },
+                        {
+                          "path": "/revalidate",
+                          "headers": {},
+                          "vary": [
+                            "accept-language",
+                            "x-edition"
+                          ],
+                          "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                          "body": "0|/revalidate|||1|🟦",
+                          "maxAge": 0,
+                          "age": 1,
+                          "storedAt": 1,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 17,
+                    "method": "read",
+                    "request": {
+                      "tier": "edge-a"
+                    },
+                    "value": {
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "seq": 18,
+                    "method": "write",
+                    "request": {
+                      "tier": "edge-a",
+                      "entries": [
+                        {
+                          "path": "/asset",
+                          "headers": {},
+                          "vary": [],
+                          "etag": "MHwvYXNzZXR8fHwxfPCfn6Y=",
+                          "body": "0|/asset|||1|🟦",
+                          "maxAge": 100,
+                          "age": 0,
+                          "storedAt": 0,
+                          "noStore": false
+                        },
+                        {
+                          "path": "/revalidate",
+                          "headers": {},
+                          "vary": [
+                            "accept-language",
+                            "x-edition"
+                          ],
+                          "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg==",
+                          "body": "0|/revalidate|||1|🟦",
+                          "maxAge": 0,
+                          "age": 1,
+                          "storedAt": 1,
+                          "noStore": false
+                        }
+                      ]
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 19,
+                    "method": "deliver",
+                    "request": {
+                      "response": {
+                        "body": "0|/revalidate|||1|🟦",
+                        "etag": "MHwvcmV2YWxpZGF0ZXx8fDF88J+fpg=="
+                      }
+                    },
+                    "value": {
+                      "stored": true
+                    }
+                  },
+                  {
+                    "seq": 20,
+                    "method": "next",
+                    "request": {},
+                    "value": {
+                      "done": true
+                    }
+                  }
+                ]
+              },
+              "report": {
+                "captured": true
+              },
+              "error": null,
+              "errorKind": null,
+              "diagnostics": {
+                "stdoutTail": "",
+                "stderrTail": ""
+              },
+              "execution": {
+                "expectedAttempts": 1,
+                "reportedAttempts": 1,
+                "completed": true,
+                "requests": 24,
+                "requestBytes": 2766,
+                "responseBytes": 2207,
+                "diagnosticBytes": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -544,3 +544,253 @@ Trials 6 and 7, Claude: both must fail to reach 5/6. No new model trial was laun
 All retained attempts received the same cumulative `post-final-coverage-v2` controls. Original rewards, manifests and the preceding trial sections remain unchanged. Local replay of both previously passing services on this task's new scenario passed; the new failure is in the required checker.
 
 [Full audit and contract basis](../post-final-pass-audit-2026-09-09.md) · [Sanitized per-trial evidence](../evidence/2026-09-09-post-final-pass-audit.json).
+
+## Trials 6–7 — post-final-coverage-v2 campaign, both final attempts — September 9, 2026
+
+### A. Identity and execution
+
+This package's last two remaining authorized attempts. Trial 6 ran in
+`.local/final-six-2026-09-09/snapshot-recovery-repair/trial-6/real-campaign-frozen/jobs/real-provider/records/snapshot-recovery-repair-attempt-1/`;
+Trial 7 ran in the sibling
+`.local/final-six-2026-09-09/snapshot-recovery-repair/trial-7/real-campaign-frozen/jobs/real-provider/records/snapshot-recovery-repair-attempt-1/`.
+Both share package digest
+`719dab934ecc20172b4a809f69b4b353db18185c1c15f4c2ed417dcf8902fb5b` — byte-identical
+to every prior trial on this package — and profile digest
+`d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794`, the same
+profile as Trial 5. Author image
+`sha256:3e9a15ec4fbc5c8a1d4603025392a946bb9a3ab1418ed33406eca970a225d39a` — the
+same author image and frozen runtime as every prior trial for this package,
+Trial 5 included.
+
+Target: **Claude**, requested `anthropic/claude-opus-5`, effort `max`, CLI
+`scaffoldVersion 2.1.263` — identical identity to Trial 5. Both were dispatched
+together as one concurrency batch and ran in fully independent, blind
+workspaces: the controller logged `dispatching` for Trial 6 at
+2026-09-10T00:51:23.811Z and for Trial 7 at 2026-09-10T00:51:23.779Z (32ms
+apart), and their two containers report `StartedAt`
+2026-09-10T00:51:24.039597799Z and 2026-09-10T00:51:24.017969799Z respectively
+(22ms apart) — a genuinely concurrent, independent launch, not a queued
+sequence. Trial 7 completed at 2026-09-10T01:12:26.015Z, roughly nine minutes
+before Trial 6 completed at 2026-09-10T01:21:05.924Z: Trial 7 did not, and
+could not, wait for Trial 6's result. Neither workspace had access to the
+other's submission, capture, or grade. Both executions reached a clean
+`completed` state, no invalid execution or infrastructure error.
+
+Trial 6: authoring ≈29m42s. Tokens: 3,966,705 input (3,787,448 cached),
+151,876 output; CLI cost estimate $7.48 (subscription-only billing — not a
+charge). `completionSha256 f83eb12a4e4fef2b2d6e75759bae5dfb3b519f82effc91a87e0d595ca29ec801`,
+`resultSha256 c76aedea0faa8c201a0a0ba443d9b38c45e212dce612bef0e0db62b8ef00ffaf`,
+`gradeSha256 a0ffadc5012ac85ec683a1097998828ddcb035ab6a1f59843809104025093387`;
+all 829 manifest-listed files (4,778,327 bytes) reverified against these
+hashes with no errors this session.
+
+Trial 7: authoring ≈21m2s. Tokens: 5,094,782 input (4,942,159 cached),
+111,353 output; CLI cost estimate $6.78. `completionSha256 20b9ba1be744e03a59562cfeb8f66993f5be3595d4804ee415b87bde7def5f4c`,
+`resultSha256 6af2d6aa3498997721041dbb2ee83cb0d31e26163cf30a1bed3ccbfb842e5f6a`,
+`gradeSha256 a0ffadc5012ac85ec683a1097998828ddcb035ab6a1f59843809104025093387`;
+all 785 manifest-listed files (4,660,055 bytes) reverified against these
+hashes with no errors this session. Both reverifications are combined into
+this batch's 4,263-file/81,542,893-byte reverification.
+
+### B. Why these trials exist: the new post-final-coverage-v2 control
+
+The post-final pass audit above already reopened this package at 3 failures
+out of 4 scored attempts by adding a new invalid control on top of the
+standing v1 intermediate-write control: change account name `"001"` to `"1"`
+in both the restored database and the portable backup. The contract treats
+this as a genuinely invalid corruption — account names are string data in a
+TEXT column, not numeric, even though `"001"` and `"1"` look like numbers.
+That audit found Trial 5's checker wrongly accepted this corruption because
+its `sameScalar()` helper coerced both values to the number `1` before
+comparing. Trials 6 and 7 are this package's two remaining authorized
+attempts — its last two slots — both scored under this same cumulative
+`post-final-coverage-v2` supplemental policy, which carries forward the v1
+intermediate-write-then-replace control alongside this new name-corruption
+control. Both needed to fail to reach the reported 5-of-6 threshold.
+
+### C. Results — Trial 6 (fail)
+
+Base service (`entry.mjs`) passes all 33 scenarios (33/33). Base checker
+(`checker.mjs`): `checkerRequired: true`, `checkerPassed: true`, 12/12
+candidates correctly classified — 0 missed, 0 false positives, `pass: true`.
+
+The supplemental `post-final-coverage-v2` grade tells a different story:
+**3/4 correct, deterministic, `exactTokens: true`, `pass: false`.** This
+checker failed the new v2 control specifically. For token
+`617d7a6c7ad87c9ea0833f65` (`expectedOk: false`), the checker returned
+`actualOk: true` — it incorrectly accepted the `"001"`→`"1"` name corruption
+as valid, with observed verdict
+`{ ok: true, reasons: ["every cell reproduces the requested point exactly once"] }`
+for the token that should have been rejected. Recorded (raw) reward: 1.
+Effective reward: 0.
+
+### D. Results — Trial 7 (pass)
+
+Base service (`entry.mjs`) passes all 33 scenarios (33/33). Base checker
+(`checker.mjs`): `checkerRequired: true`, `checkerPassed: true`, 12/12
+candidates correctly classified — 0 missed, 0 false positives, `pass: true`.
+
+The supplemental `post-final-coverage-v2` grade: **4/4 correct,
+deterministic, `exactTokens: true`, `pass: true`.** This checker correctly
+rejected the same `"001"`→`"1"` corruption on the same token,
+`617d7a6c7ad87c9ea0833f65`, with an exact-string-mismatch detection recorded
+across all three views the checker inspects:
+
+```
+cell 0: published restore accounts: missing (1,"001")
+cell 0: published restore accounts: unexpected (1,"1")
+cell 0: backup accounts: missing (1,"001")
+cell 0: backup accounts: unexpected (1,"1")
+cell 0: committed restore accounts: missing (1,"001")
+cell 0: committed restore accounts: unexpected (1,"1")
+```
+
+The account names in those reasons are literally the strings `001` and `1`.
+Recorded (raw) reward: 1. Effective reward: 1.
+
+### E. Code-level finding: a third instance of the same coercion mistake — and the first fix
+
+Reading both submitted checkers directly against this same defect confirms it
+is not a coincidence of outcome; it is the identical class of bug, independently
+written for a third time, plus — for the first time on this package — a
+correct fix.
+
+**Trial 6 has the same structurally-coercing defect as Trial 5.** Its
+`checker.mjs` compares every account/entry field, `name` included, through one
+shared scalar-equality helper:
+
+```js
+function numeric(v) {
+  if (typeof v === 'number') return Number.isFinite(v) ? v : null;
+  if (typeof v === 'bigint') return Number(v);
+  if (typeof v === 'string') {
+    const t = v.trim();
+    if (/^[+-]?\d+$/.test(t)) { const n = Number(t); return Number.isFinite(n) ? n : null; }
+  }
+  return null;
+}
+
+function sameValue(a, b) {
+  if (a === b) return true;
+  if (a == null && b == null) return true;
+  if (a == null || b == null) return false;
+  const na = numeric(a); const nb = numeric(b);
+  if (na !== null && nb !== null) return na === nb;
+  return false;
+}
+```
+
+`diffRows()` then calls `sameValue(er[f], gr[f])` for every field named in
+`ACCOUNT_FIELDS = ['id', 'name']` — it applies the same helper to `name` that
+it applies to `id`, with no field-specific exemption. Because `numeric()`
+accepts any all-digit string, `numeric("001")` and `numeric("1")` both
+evaluate to `1`, so `sameValue("001", "1")` returns `true` and the corrupted
+name is judged identical to the expected one. This is the same structural
+mistake documented for Trial 5's `sameScalar()`: a generic numeric-coercion
+comparator applied to a field the contract defines as string data, written
+independently by a different session with no shared code. **This is the
+third occurrence of the identical "numeric-looking string coerced to number"
+mistake on this package (Trial 5 and Trial 6 both wrong this way).**
+(Trial 6's `projectRow()` does skip numeric coercion when *storing* the
+`name` field — `if (f !== 'name') { ... }` — but that exemption never reaches
+the comparison step, since `sameValue()`/`numeric()` re-coerces both sides
+from scratch at compare time regardless of which field they came from.)
+
+**Trial 7 avoids it by keying rows on an explicitly string-typed name.**
+Instead of a shared scalar comparator, Trial 7's `checker.mjs` compares
+account rows via a composite key that stringifies `id` and `name` through
+two different, deliberately-chosen helpers:
+
+```js
+function accountKey(row) {
+  return "(" + label(numOf(row.id)) + "," + label(nameOf(row.name)) + ")";
+}
+
+// Names round-trip through a TEXT column, so compare them as text rather than
+// letting a host-side coercion look like a divergence. Absent stays distinct.
+function nameOf(value) {
+  return value === null || value === undefined ? "<<absent>>" : String(value);
+}
+```
+
+`id` goes through `numOf()` (numeric coercion, appropriate for a numeric
+column); `name` goes through `nameOf()`, which always calls `String(value)` —
+never attempting numeric coercion — and the code comment explicitly names the
+reason: names are TEXT-column data, and a host-side coercion must not be
+allowed to look like a divergence. `"001"` and `"1"` therefore produce
+different keys, `(1,"001")` and `(1,"1")`, so `compareRows()` correctly
+reports one as missing and the other as unexpected — exactly the six reasons
+observed in Trial 7's supplemental grade above. **Trial 7 is this package's
+first-ever checker, across all seven trials, to get this specific comparison
+right**, by treating `id` and `name` as different types requiring different
+comparison rules instead of running every field through one shared coercion
+path.
+
+### F. Final classification — this six-run set is closed at 4/6, below the reported threshold
+
+**This package needed both Trial 6 and Trial 7 to fail to reach the reported
+5-of-6 threshold. Only one of the two failures occurred.** Trial 6 failed
+(effective reward 0); Trial 7 passed (effective reward 1).
+
+The complete effective history across this package's full six-run set is now:
+
+| Trial | Provider | Recorded reward | Effective reward |
+| --- | --- | --- | --- |
+| 2 | Codex | 0 | 0 |
+| 3 | Codex | 1 | 0 (corrected by the first audit) |
+| 4 | Codex | 1 | 1 |
+| 5 | Claude | 1 | 0 (corrected by this campaign's audit) |
+| 6 | Claude | 1 | 0 (corrected by this campaign's audit) |
+| 7 | Claude | 1 | 1 |
+
+That is **4 failures out of 6 scored attempts** — a complete, balanced 3
+Codex + 3 Claude provider split, with Trials 5–7 standing as this package's
+first-ever Claude attempts, following the three Codex attempts of Trials 2–4.
+4/6 cannot reach the reported "at least 5 failures out of 6" acceptance
+threshold. This package's six-run set is now **closed**: its six authorized
+attempts are exhausted, both of the final two authorized slots have now been
+used, and no further attempt is authorized or possible under the fixed
+six-run design.
+
+Raw evidence (private, not linked): Trial 6 and Trial 7 records at
+`.local/final-six-2026-09-09/snapshot-recovery-repair/trial-{6,7}/real-campaign-frozen/jobs/real-provider/records/snapshot-recovery-repair-attempt-1/`,
+with supplemental adjudications at
+`.local/post-final-five-2026-09-09/adjudicated/snapshot-recovery-repair-trial-{6,7}.json`.
+
+
+## Remaining-pass audit and replacement disposition — September 9, 2026
+
+Trial 4 Codex rejects a valid empty recovery: the source checkpoint, fresh database
+and correct staged backup all have empty tables and nextId 1. Publication needs no
+database write transaction. The frozen verifier and private reference checker accept
+it, while T4's `validateObservations()` requires `successfulCommits > 0` and rejects
+it as a publication-contract violation. That additional process restriction is absent
+from the contract. T4's actual service still passes all seven new scenario replays.
+
+The user elected a **grading void, not a counted failure**, for T4. Its original
+reward remains 1, diagnostic v3 reward is 0, and counted reward is null. The remaining
+five attempts contain four failures and one pass. Fresh Codex T8 replaces T4 and must
+fail to reach 5/6; the two existing Claude T6/T7 attempts are not repeated.
+
+Trial 7 Claude remains a pass: 18/18 cumulative checker classifications and seven
+passing service replays. It handles empty publication, rollback/retry, staged backup
+replacement, row ordering and the negative allocation/publication/backup controls.
+The prior campaign's "first ever" numeric-name statement was too broad: T4 already
+rejected that corruption. No additional defect was reproduced in T7 during this audit.
+
+| Trial | Provider | Original reward | Cumulative v3 diagnostic reward | Counted reward |
+| --- | --- | --- | --- | --- |
+| 2 | codex | 0 | 0 | 0 |
+| 3 | codex | 1 | 0 | 0 |
+| 4 | codex | 1 | 0 | Unscored — grading void |
+| 5 | claude | 1 | 0 | 0 |
+| 6 | claude | 1 | 0 | 0 |
+| 7 | claude | 1 | 1 | 1 |
+
+Current counted record: **4/5 failures**; 1 fresh replacement slot(s) pending.
+
+[Full audit](../remaining-pass-audit-2026-09-09.md) · [Verified evidence](../evidence/2026-09-09-remaining-pass-audit.json) · [User-selected counting disposition](../evidence/2026-09-09-three-replacement-disposition.json).
+
+Original submissions and grades were preserved and manifest-verified before and after
+the audit. The same cumulative controls covered all 24 retained submissions across
+the four audited packages. No new model calls were made during this audit.
