@@ -3,6 +3,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve, dirname } from "node:path";
 import { performance } from "node:perf_hooks";
 import { TIERS, testFiles, tierFor } from "./test-tiers.mjs";
+import { failedTestDiagnostics } from "./test-result-diagnostics.mjs";
 const [tier, requestedOutput] = process.argv.slice(2);
 if (![...TIERS, "all"].includes(tier)) throw Error("usage: run-test-tier.mjs TIER FRESH_OUTPUT");
 const output = resolve(requestedOutput ?? `.local/test-runs/${tier}-${Date.now()}`);
@@ -44,7 +45,7 @@ if (tier === "all" || tier === "protected") {
 const report = join(output, "tests.json");
 const result = spawnSync(
   "pnpm",
-  ["exec", "vitest", "run", ...selected, "--reporter=json", `--outputFile=${report}`],
+  ["exec", "vitest", "run", ...selected, "--reporter=default", "--reporter=json", `--outputFile=${report}`],
   {
     stdio: "inherit",
     env: { ...process.env, FOUNDRY_REQUIRE_CONTAINER: "1" },
@@ -62,6 +63,7 @@ const summary = {
   failed: json.numFailedTests,
   skipped: skipped.length,
   suitesFailed: json.numFailedTestSuites,
+  failures: failedTestDiagnostics(json),
   elapsedMs: performance.now() - start,
   providerCallsMade: 0,
   sourceBefore,
@@ -69,6 +71,10 @@ const summary = {
 };
 writeFileSync(join(output, "summary.json"), JSON.stringify(summary, null, 2) + "\n", { flag: "wx" });
 console.log(JSON.stringify(summary));
+for (const failure of summary.failures) {
+  console.error(`FAIL ${failure.file} > ${failure.test}`);
+  for (const message of failure.messages) console.error(message);
+}
 if (
   result.status !== 0 ||
   summary.failed ||

@@ -477,7 +477,15 @@ export function containerDryRun(
   const stage = stagingDir("foundry-dryrun-");
   writeFileSync(join(stage, "probe.mjs"), PROBE_SOURCE, { encoding: "utf8", mode: 0o644 });
   writeFileSync(join(stage, "bundle-marker.txt"), "mounted bundle\n", { encoding: "utf8", mode: 0o644 });
-  const argv = [...containerFlags(name, stage, "none", limits), image, "node", "/work/probe.mjs"];
+  // Runtime setup owns image acquisition. A missing local image is an infrastructure result;
+  // this probe must not turn it into a registry request or an authentication dependency.
+  const argv = [
+    ...containerFlags(name, stage, "none", limits),
+    "--pull=never",
+    image,
+    "node",
+    "/work/probe.mjs",
+  ];
   if (!readiness.available) {
     return { ran: false, image, limits, argv, facts: null, violations: [], detail: readiness.detail };
   }
@@ -485,12 +493,15 @@ export function containerDryRun(
   try {
     raw = execFileSync("docker", argv, {
       encoding: "utf8",
+      stdio: ["ignore", "pipe", "pipe"],
       timeout: limits.wallClockMs,
       maxBuffer: 8 * 1024 * 1024,
       env: { PATH: process.env["PATH"] ?? "", HOME: process.env["HOME"] ?? "" },
     });
   } catch (err) {
     forceRemove(name);
+    const failure = err as Error & { stderr?: Buffer | string };
+    const diagnostic = failure.stderr?.toString().trim() || failure.message;
     return {
       ran: false,
       image,
@@ -498,7 +509,7 @@ export function containerDryRun(
       argv,
       facts: null,
       violations: [],
-      detail: `container did not start: ${(err as Error).message.slice(0, 300)}`,
+      detail: `container did not start: ${diagnostic.slice(0, 300)}`,
     };
   }
   const facts = JSON.parse(raw) as ContainerFacts;

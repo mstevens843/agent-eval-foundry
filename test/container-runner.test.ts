@@ -174,6 +174,9 @@ describe("a container that could not start is infrastructure, never a capability
     () => {
       const dry = containerDryRun("foundry-no-such-image:absent");
       expect(dry.ran).toBe(false);
+      expect(dry.argv).toContain("--pull=never");
+      expect(dry.detail).toContain("container did not start:");
+      expect(dry.detail).toContain("foundry-no-such-image:absent");
       expect(containerAttempt(dry).classification).toBe("infrastructure_error");
     },
     120_000,

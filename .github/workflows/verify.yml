@@ -48,12 +48,14 @@ jobs:
         run: pnpm verify
       - name: Build and inspect intended source snapshot without ambient dist
         run: pnpm verify:candidate .local/ci-candidate
-      - name: Preserve tier summaries
+      - name: Preserve test results and diagnostics
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: local-verification-summaries
           path: |
             .local/test-runs/*/summary.json
+            .local/test-runs/*/tests.json
+            .local/test-runs/*/runtime.log
             .local/ci-integration/progress.json
           if-no-files-found: warn
