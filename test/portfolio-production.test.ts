@@ -99,11 +99,18 @@ describe("professional portfolio contracts", () => {
       historicalGeneratorSha256: string;
       generatorSha256: string;
     }[];
+    const audited = JSON.parse(
+      readFileSync("reports/screening/evidence/2026-09-11-queue-eleven-fifteen-checker-audit.json", "utf8"),
+    ).packages as { id: string; sourceFiles: { path: string; sha256: string }[] }[];
     for (const { id, generatorSha256 } of ledger.generators) {
       const successor = successors.find((row) => row.id === id);
       if (successor) expect(successor.historicalGeneratorSha256).toBe(generatorSha256);
       expect(sha256(readFileSync(`tasks/${id}/private/scenarios.mjs`))).toBe(
-        successor?.generatorSha256 ?? generatorSha256,
+        audited
+          .find((task) => task.id === id)
+          ?.sourceFiles.find((file) => file.path === "private/scenarios.mjs")?.sha256 ??
+          successor?.generatorSha256 ??
+          generatorSha256,
       );
     }
     expect(ledger.validationControls).toHaveLength(4);

@@ -117,6 +117,12 @@ export const SCREENING_FOLLOWUPS = [
   "evidence/2026-09-11-hardened-next-five-trial-four.json",
   "hardened-six-continuation-2026-09-11.md",
   "evidence/2026-09-11-hardened-six-continuation.json",
+  "queue-eleven-fifteen-successors-2026-09-11.md",
+  "queue-eleven-fifteen-checker-audit-2026-09-11.md",
+  "evidence/2026-09-11-queue-eleven-fifteen-checker-audit.json",
+  "evidence/2026-09-11-successor-adaptive-trials-preparation.json",
+  "evidence/2026-09-11-successor-adaptive-trials-review.json",
+  "successor-adaptive-trials-setup-review-2026-09-11.md",
 ];
 
 export function verifyPublication(root = process.cwd()) {
@@ -1257,6 +1263,7 @@ export function verifyPublication(root = process.cwd()) {
     "docs/hardened-next-five-trial-three-handoff.md",
     "docs/hardened-next-five-trial-four-handoff.md",
     "docs/hardened-next-five-trial-five-handoff.md",
+    "docs/successor-adaptive-trials-handoff.md",
     "docs/hardened-six-continuation-handoff.md",
     "docs/hardened-next-five-trial-three-browser-retry-handoff.md",
     "docs/next-five-implementation.md",

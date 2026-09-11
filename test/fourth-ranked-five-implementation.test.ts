@@ -7,7 +7,8 @@ import { expect, it } from "vitest";
 const load = (path: string) => import(pathToFileURL(join(process.cwd(), path)).href);
 async function fixture(id: string) {
   const dir = mkdtempSync(join(tmpdir(), "fourth-successor-"));
-  copyFileSync(`tasks/${id}/private/domain.mjs`, join(dir, "domain.mjs"));
+  for (const file of readdirSync(`tasks/${id}/private`).filter((name) => name.endsWith(".mjs")))
+    copyFileSync(`tasks/${id}/private/${file}`, join(dir, file));
   copyFileSync("tasks/portfolio-runtime/adapter.mjs", join(dir, "adapter.mjs"));
   return {
     dir,
@@ -149,10 +150,14 @@ it("judges rollout health at binding time even when the final fleet and report a
       },
       bind,
       { method: "warm", request: { service: "svc", release: "new", abi: "a" }, value: { ok: true } },
+      { method: "cleanup", request: { id: "own-stage" }, value: { ok: true } },
     ];
     const state = [["svc", final]];
     expect(
       check({
+        actions: [
+          { kind: "stage", job: 0, service: "svc", release: "new", generation: 2, stageId: "own-stage" },
+        ],
         input: {
           services: [initial],
           stages: [],
@@ -168,6 +173,7 @@ it("judges rollout health at binding time even when the final fleet and report a
             entry: [["svc", initial]],
             state,
             stages: [],
+            stagesAtEntry: [],
             observations,
             report: { job: 0, results: [{ service: "svc", status: "deployed", release: "new" }] },
           },

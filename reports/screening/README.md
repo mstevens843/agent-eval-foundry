@@ -20,6 +20,8 @@ Browser replay, Recurring calendar, Workflow authority and Delegated budget are 
 
 ## Implementation and campaign history
 
+The next five audited successor packages are prepared for an adaptive campaign: three Claude trials, then two Codex trials, with a sixth Codex trial after five clean failures. Each package stops at its first valid pass. Preparation adds no model trials to the standings above. See the [setup review](successor-adaptive-trials-setup-review-2026-09-11.md), [operator handoff](../../docs/successor-adaptive-trials-handoff.md), [successor implementation](queue-eleven-fifteen-successors-2026-09-11.md), and [checker audit](queue-eleven-fifteen-checker-audit-2026-09-11.md).
+
 The following records preserve what was prepared and observed at each stage. Use the final results above for current standings.
 
 The [completed five-package implementation](top-five-implementation-plan-2026-09-09.md)

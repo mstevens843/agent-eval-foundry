@@ -39,11 +39,18 @@ it("freezes scenario generation before post-selection controls and retains compl
   const successors = JSON.parse(
     readFileSync("reports/screening/evidence/2026-09-09-final-five-generators.json", "utf8"),
   ) as { id: string; historicalGeneratorSha256: string; generatorSha256: string }[];
+  const audited = JSON.parse(
+    readFileSync("reports/screening/evidence/2026-09-11-queue-eleven-fifteen-checker-audit.json", "utf8"),
+  ).packages as { id: string; sourceFiles: { path: string; sha256: string }[] }[];
   for (const generator of ledger.generators) {
     const successor = successors.find((row) => row.id === generator.id);
     if (successor) expect(successor.historicalGeneratorSha256).toBe(generator.generatorSha256);
     expect(sha256(readFileSync(`tasks/${generator.id}/private/scenarios.mjs`))).toBe(
-      successor?.generatorSha256 ?? generator.generatorSha256,
+      audited
+        .find((task) => task.id === generator.id)
+        ?.sourceFiles.find((file) => file.path === "private/scenarios.mjs")?.sha256 ??
+        successor?.generatorSha256 ??
+        generator.generatorSha256,
     );
   }
   const inventory = JSON.parse(readFileSync("data/next-portfolio-opportunity-audit.json", "utf8"));

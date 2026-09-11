@@ -104,9 +104,10 @@ it("provides checker stimulus data without leaking maintenance invariant verdict
       }
     }
     if (id === "verified-installation-repair") {
-      expect(result.initial).toEqual(scenario.initial);
-      expect(result.blobs).toEqual(scenario.blobs);
-      expect(result.cache).toEqual(scenario.cache);
+      expect(result.attempts[0].initial).toEqual(scenario.initial);
+      expect(result.attempts[0].blobs).toEqual(scenario.attempts[0].blobs);
+      expect(result.attempts[0].cache).toEqual(scenario.attempts[0].cache);
+      for (const attempt of result.attempts) expect(attempt).not.toHaveProperty("legal");
     }
     if (id === "route-policy-repair") expect(result.routes).toEqual(scenario.routes);
     if (id === "rule-index-repair") expect(result.documents).toEqual(scenario.documents);
@@ -123,6 +124,9 @@ it("preserves generator hashes through post-selection validation", () => {
       readFileSync("reports/screening/evidence/2026-09-09-third-ranked-five-generators.json", "utf8"),
     ),
   ] as { id: string; historicalGeneratorSha256: string; generatorSha256: string }[];
+  const audited = JSON.parse(
+    readFileSync("reports/screening/evidence/2026-09-11-queue-eleven-fifteen-checker-audit.json", "utf8"),
+  ).packages as { id: string; sourceFiles: { path: string; sha256: string }[] }[];
   for (const g of ledger.generators) {
     const successor = successors.find((s) => s.id === g.id);
     if (successor) expect(successor.historicalGeneratorSha256).toBe(g.generatorSha256);
@@ -130,7 +134,13 @@ it("preserves generator hashes through post-selection validation", () => {
       createHash("sha256")
         .update(readFileSync(`tasks/${g.id}/private/scenarios.mjs`))
         .digest("hex"),
-    ).toBe(successor?.generatorSha256 ?? g.generatorSha256);
+    ).toBe(
+      audited
+        .find((task) => task.id === g.id)
+        ?.sourceFiles.find((file) => file.path === "private/scenarios.mjs")?.sha256 ??
+        successor?.generatorSha256 ??
+        g.generatorSha256,
+    );
   }
   expect(ledger.validationControls).toHaveLength(5);
 });
@@ -207,6 +217,7 @@ it("rejects an unsafe maintenance transition even when the final state is restor
     const p = s.placement[0];
     await call(api, "remove", p);
     await call(api, "add", p);
+    await call(api, "activate", p);
   });
   expect(result.failures).toContain("availability");
 });
@@ -289,10 +300,7 @@ it("fuzzes layer ordering and file-directory replacement against actual filesyst
     }
     const s = {
       id: `fuzz-${sample}`,
-      release: "local",
-      descriptors,
-      blobs,
-      cache: {},
+      attempts: [{ release: "local", descriptors, blobs, cache: {} }],
       initial: { previous: { kind: "file", mode: 420, data: "b2xk" } },
     };
     for (const variant of ["reference", "alternative"])

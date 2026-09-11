@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "at": "2026-09-11T14:28:35.164Z",
+  "preparation": {
+    "path": "reports/screening/evidence/2026-09-11-successor-adaptive-trials-preparation.json",
+    "sha256": "d4344e17a82be0b899609aca8ef276c3754331b9b6c7e06b60f15fa37183c4ef"
+  },
+  "purpose": "Reviewed scheduler, evidence-backed completion verification and credential preflight over unchanged prepared task bytes, profiles and READY files",
+  "files": [
+    {
+      "path": "scripts/run-successor-adaptive-trials-reviewed.mjs",
+      "sha256": "8e8b25005413b3806114561fb51effd03ab8064253b8748e334aee83cd6a9d37"
+    },
+    {
+      "path": "scripts/successor-campaign-control.mjs",
+      "sha256": "99a17e880999f704424b491f1832727ce24ab8076269daa66be82996dfaa3dfa"
+    },
+    {
+      "path": "scripts/successor-campaign-control.d.mts",
+      "sha256": "b80fac7348811bd127e72bd4b01c20c1676f928bce66bd6e28f08be55cdf9d27"
+    },
+    {
+      "path": "test/successor-adaptive-controller.test.ts",
+      "sha256": "be207ffc9b35cb91433e89703d547edf049b271dee67c44b5ef83b7e20554526"
+    },
+    {
+      "path": "test/successor-adaptive-policy.test.ts",
+      "sha256": "accd7f49c97cbf9db06f65d5474ba74d35658ef33e661a53f1e9e5d7ea43c2ce"
+    },
+    {
+      "path": "test/successor-adaptive-evidence.test.ts",
+      "sha256": "c21c1a3c465ae50e7705607a25a8e490c8a6a6f98bae0027905ea947b6bb4e0c"
+    },
+    {
+      "path": "scripts/run-successor-adaptive-trials-reviewed.d.mts",
+      "sha256": "f99231cf9df2db8f3b4dd0f6fb5fb4d8c573a0ddcf6e48512bf83c2e954ee4ca"
+    }
+  ],
+  "runtimeTrees": [
+    {
+      "path": ".local/successor-adaptive-trials-2026-09-11/frozen-source/dist",
+      "entries": 22,
+      "sha256": "44b9027b2eb2d255f60ceb6dcd89ba3e6ea4e25014ee79f61092169553368947"
+    },
+    {
+      "path": ".local/successor-adaptive-trials-2026-09-11/frozen-source/node_modules",
+      "entries": 2088,
+      "sha256": "7903725ba823e8a56003556854432410bddb0de1cbd50ee8fe850fff68301d5e"
+    }
+  ],
+  "providerCallsMade": 0
+}
