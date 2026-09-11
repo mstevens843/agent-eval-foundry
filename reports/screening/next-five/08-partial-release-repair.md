@@ -279,3 +279,42 @@ claims for those bytes. The final audit passed 4,146 individual-cell comparisons
 28 checker mutations against both local and protected candidate banks, all 40 native
 integrity checks and 105 Foundry assurance operations. No model trials were run, and
 historical trial counts were not changed.
+
+
+## 2026-09-11 — corrected-package trial 3 pass audit
+
+The Claude trial-3 pass on corrected v2.0.2 is retained as valid. No false accept
+or false reject was reproduced: the service passed 2,028 generated scenarios, and
+the checker matched independent rule evaluation on 4,609 cells. The exact service
+also passed 114 protected RPC executions; 60 additional protected strategy
+executions matched their expected results, and a separately isolated checker run
+classified 252/252 cells correctly. Generation-bearing valid round trips passed,
+and illegal generation-bearing writes remained rejected.
+
+The package digest remains
+`1422a83d7860f81e2bf9bdb52ce634887f2e8da4edcccbe8870cdcfebaadf897`.
+No task or grader changes were needed. Trial 2's historical pass also remains
+valid; neither trial is null. Original evidence is preserved.
+
+The user's explicit request for another trial after a retained pass authorizes
+one fresh confirmation attempt: trial 4 on Codex, prepared in a new namespace.
+No model was dispatched by the audit. This exception does not rewrite the prior
+stop-on-pass history or turn those passes into failures.
+
+See [the detailed pass audit](../../pass-audits/partial-release-trial-three-2026-09-11.md),
+[the machine-readable record](../../pass-audits/partial-release-trial-three-2026-09-11.json),
+and [the trial-4 handoff prompt](../../pass-audits/partial-release-trial-four-prompt-2026-09-11.md).
+
+
+## 2026-09-11 — published successor trial checkpoint
+
+| Physical trial | Provider | Recorded reward | Counted reward | Service | Required checker |
+| --- | --- | ---: | ---: | --- | --- |
+| 1 | Claude | 0 | 0 | 65/65 pass | Output validation failed |
+| 2 | Claude | 1 | 1 | 65/65 pass | 17/17; 0 valid rejected, 0 invalid accepted |
+| 3 | Claude | 1 | 1 | 65/65 pass | 22/22; 0 valid rejected, 0 invalid accepted |
+| 4 | Codex | 1 | 1 | 65/65 pass | 22/22; 0 valid rejected, 0 invalid accepted; audit pending |
+
+This table is derived from the [published successor evidence](../evidence/2026-09-11-successor-results.json), with exact package/profile identities and completion, result, grade and submitted-code hashes. [Campaign report](../successor-results-2026-09-11.md). Trials here are physical identities within the September 11 successor campaign; earlier trials above belong to their own versions.
+
+T2 and T3 retain audited valid passes. The additional Codex T4 is a recorded pass, pending a separate audit of that submission. These confirmation trials are kept distinct by package digest and do not qualify this solved task for a six-failure set.

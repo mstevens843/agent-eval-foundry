@@ -18,7 +18,7 @@ additional metadata fields not needed to establish a public obligation.
 
 - `initialRows`: original snapshot rows; `allowedTenants`: view.tenants.
 - `requestedTeam`, `requestedMarker`: the original task parameters.
-- `directory`: authoritative target-owner IDs by allowed tenant for requestedTeam, available through api.resolve during execution.
+- `directory`: an object mapping each exact allowed tenant ID to its authoritative target-owner string for requestedTeam, available through api.resolve during execution. Keys are literal tenant IDs, not encoded tenant/team pairs; values are owner strings, not nested maps. Do not normalize or decode the keys.
 - `actual`: final ticket rows.
 - `edits`: [JSON.stringify([tenant,id]), count] pairs for injected concurrent edits. Each edit adds concurrent-N to labels, sets note to edited-N and increments revision, starting N at zero. These are external edit facts, not candidate verdicts.
 - `concurrentStatusFlips`: {tenant, id, status} entries recording a selected row whose status was externally forced away from "open" mid-run. Like `edits`, this is an external fact, not a candidate verdict: the row remains part of the frozen migration population and must still be fully migrated, and its final `status` in `actual` is expected to equal the forced value here rather than its original snapshot value. Absent an entry for a row, its expected final status is unchanged from `initialRows`.
@@ -34,6 +34,22 @@ additional metadata fields not needed to establish a public obligation.
   to the candidate as view.operationBudget. A count above the cap is invalid, even if the
   requested final rows were already correct when the extra operation was attempted.
 Already-correct work does not require redundant reads or writes. Judge required outcomes and permitted mutations, not one implementation's call pattern.
+
+Check frozen selection membership and the permitted patch fields/types for
+every `calls` entry, including `CONFLICT` and `MISSING`. These are request
+obligations, even when the request has no effect. Check landed effects, such
+as label preservation and revision changes, according to the actual status.
+The patch labels array contains strings only, even on a conflicting request.
+An update request may carry additional outer metadata fields; these are ignored
+by the API and do not change ticket columns. Do not reject them or confuse them
+with forbidden fields inside patch, which remains exactly owner and labels.
+Do not reject a correctly shaped selected-row request merely because it
+conflicts or contains stale labels. The target owner is a final-state
+requirement; a different intermediate string owner is permitted as described
+in SEMANTICS.md. Likewise, require the marker in the final labels, not on every
+intermediate successful update: a correct migration may settle ownership first
+without changing labels, then add the marker before completion. Every landed
+write must still preserve the current labels.
 
 ## Verdicts
 

@@ -118,5 +118,35 @@
     },
     "check": "completion",
     "selectionRole": "correction-regression"
+  },
+  {
+    "id": "generation-wrong-payload",
+    "overlay": {
+      "entry.mjs": "controls/generation-wrong-payload.mjs",
+      "src/generation-probe.mjs": "controls/generation-probe.mjs"
+    },
+    "check": "dependency_order",
+    "clean": "case-trivial-empty",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "generation-missing-parent",
+    "overlay": {
+      "entry.mjs": "controls/generation-missing-parent.mjs",
+      "src/generation-probe.mjs": "controls/generation-probe.mjs"
+    },
+    "check": "dependency_order",
+    "clean": "case-trivial-empty",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "generation-outside",
+    "overlay": {
+      "entry.mjs": "controls/generation-outside.mjs",
+      "src/generation-probe.mjs": "controls/generation-probe.mjs"
+    },
+    "check": "preservation",
+    "clean": "case-trivial-empty",
+    "selectionRole": "correction-regression"
   }
 ]

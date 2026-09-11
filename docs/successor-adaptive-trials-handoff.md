@@ -1,5 +1,7 @@
 # Five hardened successors: adaptive trial campaign
 
+> **Historical campaign instructions; do not relaunch this controller.** The original campaign and installation continuation have ended. Three packages reached 6/6; Partial Release was solved; Ticket Consolidation requires the corrected continuation. The main controller error remains preserved. See the [published successor checkpoint](../reports/screening/successor-results-2026-09-11.md) and its separate reconciliation.
+
 Work only in `/Users/devlegacy/Desktop/projects/ai-gap-coverage-projects/agent-eval-foundry`.
 
 The successor implementation and checker audit were committed as `23aad5a` and merged into main as `4a78cf2`. This campaign uses the audited **2.0.1** packages, with **3.0.1** for Compatible Rollout. The earlier 2.0.0/3.0.0 handoff is superseded by those hardened versions.

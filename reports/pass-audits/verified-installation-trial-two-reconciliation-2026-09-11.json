@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "at": "2026-09-11T16:45:04.880Z",
+  "task": "verified-installation-repair",
+  "purpose": "Link the original trial-2 unscored infrastructure incident to the completed linked-regrade grading result. The submitted code and captured provider transcript are unchanged; only the interrupted grading stage was rerun offline against the exact retained submission.",
+  "original": {
+    "trial": 2,
+    "target": "claude",
+    "record": ".local/successor-adaptive-trials-2026-09-11/slots/verified-installation-repair/trial-2/real-campaign-frozen/jobs/real-provider/records/verified-installation-repair-attempt-1",
+    "completionSha256": "8fcdd5a3304f63abbecfa157dbfb9c2d0f9200fec1937594e3d4eb89fe2f0609",
+    "gradeSha256": "e0daf661d56a6a0f2869c494f8f8b683980b62cb429749b11f7fc20f0a0d4faa",
+    "classification": "invalid-execution",
+    "stage": "grading",
+    "error": "Error: LOCAL_PROCESS docker: input: Error: write EPIPE\nCannot connect to the Docker daemon at unix:///Users/devlegacy/.docker/run/docker.sock. Is the docker daemon running?\n\n",
+    "preserved": true
+  },
+  "regrade": {
+    "record": ".local/verified-installation-t2-grading-recovery-2026-09-11/grading-only",
+    "resultSha256": "ea4cc1d065410f95c8cd486fdfea78c3f8c655ccf59cefb90f35bc7f2dc7364d",
+    "kind": "linked-regrade",
+    "newAgentAttempts": 0,
+    "countsAsModelFailure": false,
+    "service": "semantic-pass",
+    "serviceComplete": true,
+    "checkerPassed": false,
+    "checkerRequired": true
+  },
+  "recoveredReward": 0,
+  "reconciledOutcome": "clean-fail",
+  "note": "Trial 2's model attempt already happened at original dispatch time; this regrade invoked no model and is not counted as an additional provider attempt. For continuation purposes trial 2 is treated as a counted clean failure (service passed, checker failed), not as remaining unscored."
+}

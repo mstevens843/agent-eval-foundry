@@ -1,0 +1,3685 @@
+{
+  "schemaVersion": 1,
+  "providerCallsMade": 0,
+  "packageDigest": "39f2a285b88072ca203ca0ad1998517269e0a376daa00b52cc252dffa79916cb",
+  "record": ".local/successor-adaptive-trials-2026-09-11/slots/ticket-consolidation-repair/trial-4/real-campaign-frozen/jobs/real-provider/records/ticket-consolidation-repair-attempt-1",
+  "originalReward": 1,
+  "filesVerifiedBefore": 924,
+  "filesVerifiedAfter": 924,
+  "issuedContracts": [
+    {
+      "executable": false,
+      "path": "public/SEMANTICS.md",
+      "sha256": "76ede30e733799b9ffe4dd2cf31ef51eb07d72cd4ad9515961f6f0ffb54f0e16",
+      "size": 4652
+    },
+    {
+      "executable": false,
+      "path": "public/instruction.md",
+      "sha256": "c3c6d449ed5e3939345c73e4eaf76ccc53677438df945e85c7394680edb71f4e",
+      "size": 501
+    },
+    {
+      "executable": false,
+      "path": "public/CHECKER-INPUT.md",
+      "sha256": "3fc6b3d0a95f313009c4a0f4188a671d797c9040c684ca95528e8529b22515c9",
+      "size": 4592
+    },
+    {
+      "executable": false,
+      "path": "public/api.d.ts",
+      "sha256": "ea0578477d676b2050f9ee0310b6a1cc3715436ace20362208f0a83960d79e2e",
+      "size": 1180
+    }
+  ],
+  "originalGrade": {
+    "path": ".local/successor-adaptive-trials-2026-09-11/slots/ticket-consolidation-repair/trial-4/real-campaign-frozen/jobs/real-provider/records/ticket-consolidation-repair-attempt-1/grade.json",
+    "sha256": "cf3b5bb4c01ce2f59460e3f3f54626620e5f0757db06f0af7bce1571d34fa501"
+  },
+  "originalCompletion": {
+    "path": ".local/successor-adaptive-trials-2026-09-11/slots/ticket-consolidation-repair/trial-4/real-campaign-frozen/jobs/real-provider/records/ticket-consolidation-repair-attempt-1/completion.json",
+    "sha256": "8fe87dc13d2679db5b089a4360f5f180acbd38ac71ff900c0b19abecd5ab6a5e"
+  },
+  "submission": [
+    {
+      "path": ".local/successor-adaptive-trials-2026-09-11/slots/ticket-consolidation-repair/trial-4/real-campaign-frozen/jobs/real-provider/records/ticket-consolidation-repair-attempt-1/submission/entry.mjs",
+      "sha256": "e4446cebaef971d7be38a8b4c18e9729437b528773f4f4186bbaca24632539c3"
+    },
+    {
+      "path": ".local/successor-adaptive-trials-2026-09-11/slots/ticket-consolidation-repair/trial-4/real-campaign-frozen/jobs/real-provider/records/ticket-consolidation-repair-attempt-1/submission/checker.mjs",
+      "sha256": "e3a013392b3759962099cf511a8101bd2104503eea8604274855a6afe3b99fa3"
+    }
+  ],
+  "sources": [
+    {
+      "path": "scripts/audit-ticket-consolidation-trial-four.mjs",
+      "sha256": "a610765bbbb7235ee88f13d397e8c8714308ac157a0c37036e7e31fa346a50cf"
+    },
+    {
+      "path": "data/ticket-consolidation-trial-four-pass-audit/strategies.mjs",
+      "sha256": "9cc1b943978bfa401a8ca7aac92e349c6a4e5bc85705c6a3a0de421276223f3c"
+    }
+  ],
+  "service": {
+    "label": "submitted-service",
+    "total": 213,
+    "passed": 213,
+    "failed": 0,
+    "invalid": 0,
+    "evidence": {
+      "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/submitted-service.json",
+      "sha256": "0fedf370120ddf7e13786316a73feb689e41890a20e6e44ee68c11e5a130ef6c"
+    }
+  },
+  "freshServiceScenarios": 144,
+  "variants": [
+    {
+      "label": "sequential",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/sequential.json",
+        "sha256": "ff1bc5a62d215cedf6bdf96d1f0dc5cac609e8e9c616870437cb1059d2c199fd"
+      }
+    },
+    {
+      "label": "two-stage",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/two-stage.json",
+        "sha256": "e0d435102f3abed65907f6e13c26263be58ae9cadc3cdb3fc6eeb0ba75502d35"
+      }
+    },
+    {
+      "label": "redundant",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/redundant.json",
+        "sha256": "3be3aa9ca39528282bba9869c90046599895a520ea977c3d406e4b90b56ec5f8"
+      }
+    },
+    {
+      "label": "conflict-valid-patch",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/conflict-valid-patch.json",
+        "sha256": "b1daa80ea82ba4819a8e8e2b3389fa0c0a0e08ba6aeb9e834c562a6bec23059f"
+      }
+    },
+    {
+      "label": "stale-valid-labels",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/stale-valid-labels.json",
+        "sha256": "5b9618916e01e07c57b352ae4d4cb298d9e55c8194a8704dc634cbf5d4f1c863"
+      }
+    },
+    {
+      "label": "closed-conflict",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/closed-conflict.json",
+        "sha256": "276d207d698f607711b1423f7570e5ac7e3b2b6e1bab7436ed1c37e857a68412"
+      }
+    },
+    {
+      "label": "outside-conflict",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/outside-conflict.json",
+        "sha256": "f4d1e928f05218da721a6ad20c4cb97105069f971f318106a9468c4fcde81844"
+      }
+    },
+    {
+      "label": "outside-missing",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/outside-missing.json",
+        "sha256": "e0c2ebeb86dd9ea485be6bf7253fb7c08d10eb67fbd85dcd2313b800e16449d0"
+      }
+    },
+    {
+      "label": "conflict-forbidden-note",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/conflict-forbidden-note.json",
+        "sha256": "f0894ebeb878373fbc2bfa205328abee2f64d5503e966294db3060f606fa6524"
+      }
+    },
+    {
+      "label": "conflict-forbidden-status",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/conflict-forbidden-status.json",
+        "sha256": "db4b50ad734073edea410704097aa2aa603e35224d8b84a44b3f795ede6bc272"
+      }
+    },
+    {
+      "label": "conflict-forbidden-revision",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/conflict-forbidden-revision.json",
+        "sha256": "208a3c483774301eddb198a32a0546e76bb7fee67c7a90d8e0236feb8f177861"
+      }
+    },
+    {
+      "label": "conflict-invalid-owner",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/conflict-invalid-owner.json",
+        "sha256": "b09827f1c2cf7ec0b7d7d2af073f163ae84721fc939b047bd5f89fee54d8f676"
+      }
+    },
+    {
+      "label": "conflict-invalid-labels",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/conflict-invalid-labels.json",
+        "sha256": "bf6a786825d2bb556c4d9b959e610e6ac3d49730b5948638481445070ad34b18"
+      }
+    },
+    {
+      "label": "applied-forbidden-note",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/applied-forbidden-note.json",
+        "sha256": "287abadce92bcd79d683eb86ef922a80105f62d43ba09cb1d6a741985a6c3414"
+      }
+    },
+    {
+      "label": "applied-label-loss-then-restore",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/applied-label-loss-then-restore.json",
+        "sha256": "77c56069b72fc951c5e6f80e937a35eaa22f51d12886b0d9e6a34225a52596cb"
+      }
+    },
+    {
+      "label": "closed-applied",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/closed-applied.json",
+        "sha256": "a2c4329e739bcf0194a3d002d1c571915c4d3c601c06602974e04c384a273315"
+      }
+    },
+    {
+      "label": "wrong-owner",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/wrong-owner.json",
+        "sha256": "6a7a0e98edf271bbb8727d457b23f18a185f60d9cef9b353604e29545479daa3"
+      }
+    },
+    {
+      "label": "missing-marker",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/missing-marker.json",
+        "sha256": "a84f8057e1129503b95232f920d0a9c88d2c62a28fa8b64c018d010baea4804e"
+      }
+    },
+    {
+      "label": "live-membership",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/live-membership.json",
+        "sha256": "f9d33c59b3d062b8813fc7f63430e95bfe758c9ff2af5cb43d4ac7eb3ee00d0d"
+      }
+    },
+    {
+      "label": "complete-then-throw",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/complete-then-throw.json",
+        "sha256": "5fb798d8ba9640e53a81123beb82c59717eccd6c3f24c5ca2ae0fdf820ead020"
+      }
+    },
+    {
+      "label": "complete-then-budget",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/complete-then-budget.json",
+        "sha256": "3d31aefe50baa2f11f904839c5854a7840ebc968fe644321d06573871414c439"
+      }
+    },
+    {
+      "label": "temporary-owner",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/temporary-owner.json",
+        "sha256": "0b43a6bdfd472ba08266d11cc90e13527396f39658f96aba1474f1c1945ce7d1"
+      }
+    }
+  ],
+  "fullBankControls": [
+    {
+      "label": "full-bank-closed-conflict",
+      "total": 69,
+      "passed": 4,
+      "failed": 65,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/full-bank-closed-conflict.json",
+        "sha256": "951a5d4e68eb9f45eb10aeb99c1cec683fe967782051b0961c077fd6bf0375d4"
+      }
+    },
+    {
+      "label": "full-bank-conflict-forbidden-note",
+      "total": 69,
+      "passed": 1,
+      "failed": 68,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/full-bank-conflict-forbidden-note.json",
+        "sha256": "573ff1e4ce2b7c10e6587c9a6b298f7d28eca6ee0a2aa2e9d0dbdf1c1c898ca0"
+      }
+    }
+  ],
+  "submittedChecker": {
+    "total": 461,
+    "correct": 289,
+    "milliseconds": 50.001125,
+    "mismatches": [
+      {
+        "token": "audit:250",
+        "label": "closed-conflict",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:251",
+        "label": "closed-conflict:closed-conflict-0",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:252",
+        "label": "closed-conflict:closed-conflict-1",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:253",
+        "label": "closed-conflict:closed-conflict-2",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:254",
+        "label": "outside-conflict",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:255",
+        "label": "outside-conflict:outside-conflict-0",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:256",
+        "label": "outside-conflict:outside-conflict-1",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:257",
+        "label": "outside-conflict:outside-conflict-2",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:258",
+        "label": "outside-missing",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:259",
+        "label": "outside-missing:outside-missing-0",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:260",
+        "label": "outside-missing:outside-missing-1",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:261",
+        "label": "outside-missing:outside-missing-2",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:262",
+        "label": "conflict-forbidden-note",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:263",
+        "label": "conflict-forbidden-note:conflict-forbidden-note-0",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:264",
+        "label": "conflict-forbidden-note:conflict-forbidden-note-1",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:265",
+        "label": "conflict-forbidden-note:conflict-forbidden-note-2",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:266",
+        "label": "conflict-forbidden-status",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:267",
+        "label": "conflict-forbidden-status:conflict-forbidden-status-0",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:268",
+        "label": "conflict-forbidden-status:conflict-forbidden-status-1",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:269",
+        "label": "conflict-forbidden-status:conflict-forbidden-status-2",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:270",
+        "label": "conflict-forbidden-revision",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:271",
+        "label": "conflict-forbidden-revision:conflict-forbidden-revision-0",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:272",
+        "label": "conflict-forbidden-revision:conflict-forbidden-revision-1",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:273",
+        "label": "conflict-forbidden-revision:conflict-forbidden-revision-2",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:274",
+        "label": "conflict-invalid-owner",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:275",
+        "label": "conflict-invalid-owner:conflict-invalid-owner-0",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:276",
+        "label": "conflict-invalid-owner:conflict-invalid-owner-1",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:277",
+        "label": "conflict-invalid-owner:conflict-invalid-owner-2",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:278",
+        "label": "conflict-invalid-labels",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:279",
+        "label": "conflict-invalid-labels:conflict-invalid-labels-0",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:280",
+        "label": "conflict-invalid-labels:conflict-invalid-labels-1",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:281",
+        "label": "conflict-invalid-labels:conflict-invalid-labels-2",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:314",
+        "label": "temporary-owner",
+        "expected": true,
+        "cellTruth": [
+          {
+            "ok": true,
+            "errors": []
+          },
+          {
+            "ok": true,
+            "errors": []
+          },
+          {
+            "ok": true,
+            "errors": []
+          }
+        ],
+        "actual": false,
+        "reasons": [
+          "cell 0: applied update was not a preserving migration [\"A\",\"selected\"]",
+          "cell 1: applied update was not a preserving migration [\"A\",\"selected\"]",
+          "cell 2: applied update was not a preserving migration [\"A\",\"selected\"]"
+        ]
+      },
+      {
+        "token": "audit:315",
+        "label": "temporary-owner:temporary-owner-0",
+        "expected": true,
+        "cellTruth": [
+          {
+            "ok": true,
+            "errors": []
+          }
+        ],
+        "actual": false,
+        "reasons": [
+          "cell 0: applied update was not a preserving migration [\"A\",\"selected\"]"
+        ]
+      },
+      {
+        "token": "audit:316",
+        "label": "temporary-owner:temporary-owner-1",
+        "expected": true,
+        "cellTruth": [
+          {
+            "ok": true,
+            "errors": []
+          }
+        ],
+        "actual": false,
+        "reasons": [
+          "cell 0: applied update was not a preserving migration [\"A\",\"selected\"]"
+        ]
+      },
+      {
+        "token": "audit:317",
+        "label": "temporary-owner:temporary-owner-2",
+        "expected": true,
+        "cellTruth": [
+          {
+            "ok": true,
+            "errors": []
+          }
+        ],
+        "actual": false,
+        "reasons": [
+          "cell 0: applied update was not a preserving migration [\"A\",\"selected\"]"
+        ]
+      },
+      {
+        "token": "audit:318",
+        "label": "full-bank-closed-conflict",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": true,
+            "errors": []
+          },
+          {
+            "ok": true,
+            "errors": []
+          },
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          },
+          {
+            "ok": true,
+            "errors": []
+          },
+          {
+            "ok": true,
+            "errors": []
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:319",
+        "label": "full-bank-closed-conflict:case-000",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:320",
+        "label": "full-bank-closed-conflict:case-001",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:321",
+        "label": "full-bank-closed-conflict:case-002",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:322",
+        "label": "full-bank-closed-conflict:case-003",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:323",
+        "label": "full-bank-closed-conflict:case-004",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:324",
+        "label": "full-bank-closed-conflict:case-005",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:325",
+        "label": "full-bank-closed-conflict:case-006",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:326",
+        "label": "full-bank-closed-conflict:case-007",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:327",
+        "label": "full-bank-closed-conflict:case-008",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:328",
+        "label": "full-bank-closed-conflict:case-009",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:329",
+        "label": "full-bank-closed-conflict:case-010",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:330",
+        "label": "full-bank-closed-conflict:case-011",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:331",
+        "label": "full-bank-closed-conflict:case-012",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:332",
+        "label": "full-bank-closed-conflict:case-013",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:333",
+        "label": "full-bank-closed-conflict:case-014",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:334",
+        "label": "full-bank-closed-conflict:case-015",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:335",
+        "label": "full-bank-closed-conflict:case-016",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:336",
+        "label": "full-bank-closed-conflict:case-017",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:337",
+        "label": "full-bank-closed-conflict:case-018",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:338",
+        "label": "full-bank-closed-conflict:case-019",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:339",
+        "label": "full-bank-closed-conflict:case-020",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:340",
+        "label": "full-bank-closed-conflict:case-021",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:341",
+        "label": "full-bank-closed-conflict:case-022",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:342",
+        "label": "full-bank-closed-conflict:case-023",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:343",
+        "label": "full-bank-closed-conflict:case-024",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:344",
+        "label": "full-bank-closed-conflict:case-025",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:345",
+        "label": "full-bank-closed-conflict:case-026",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:346",
+        "label": "full-bank-closed-conflict:case-027",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:347",
+        "label": "full-bank-closed-conflict:case-028",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:348",
+        "label": "full-bank-closed-conflict:case-029",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:349",
+        "label": "full-bank-closed-conflict:case-030",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:350",
+        "label": "full-bank-closed-conflict:case-031",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:351",
+        "label": "full-bank-closed-conflict:case-032",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:352",
+        "label": "full-bank-closed-conflict:case-033",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:353",
+        "label": "full-bank-closed-conflict:case-034",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:354",
+        "label": "full-bank-closed-conflict:case-035",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:355",
+        "label": "full-bank-closed-conflict:case-036",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:356",
+        "label": "full-bank-closed-conflict:case-037",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:357",
+        "label": "full-bank-closed-conflict:case-038",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:358",
+        "label": "full-bank-closed-conflict:case-039",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:359",
+        "label": "full-bank-closed-conflict:case-040",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:360",
+        "label": "full-bank-closed-conflict:case-041",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:361",
+        "label": "full-bank-closed-conflict:case-042",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:362",
+        "label": "full-bank-closed-conflict:case-043",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:363",
+        "label": "full-bank-closed-conflict:case-044",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:364",
+        "label": "full-bank-closed-conflict:case-045",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:365",
+        "label": "full-bank-closed-conflict:case-046",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:366",
+        "label": "full-bank-closed-conflict:case-047",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:367",
+        "label": "full-bank-closed-conflict:case-048",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:368",
+        "label": "full-bank-closed-conflict:case-049",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:369",
+        "label": "full-bank-closed-conflict:case-050",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:370",
+        "label": "full-bank-closed-conflict:case-051",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:371",
+        "label": "full-bank-closed-conflict:case-052",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:372",
+        "label": "full-bank-closed-conflict:case-053",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:373",
+        "label": "full-bank-closed-conflict:case-054",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:374",
+        "label": "full-bank-closed-conflict:case-055",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:375",
+        "label": "full-bank-closed-conflict:case-056",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:376",
+        "label": "full-bank-closed-conflict:case-057",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:377",
+        "label": "full-bank-closed-conflict:case-058",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:378",
+        "label": "full-bank-closed-conflict:case-059",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:379",
+        "label": "full-bank-closed-conflict:case-060",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:380",
+        "label": "full-bank-closed-conflict:case-061",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:381",
+        "label": "full-bank-closed-conflict:case-062",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:382",
+        "label": "full-bank-closed-conflict:case-063",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:385",
+        "label": "full-bank-closed-conflict:case-loose-budget-crash",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "nonselected-write-attempt"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:388",
+        "label": "full-bank-conflict-forbidden-note",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": true,
+            "errors": []
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          },
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:389",
+        "label": "full-bank-conflict-forbidden-note:case-000",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:390",
+        "label": "full-bank-conflict-forbidden-note:case-001",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:391",
+        "label": "full-bank-conflict-forbidden-note:case-002",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:392",
+        "label": "full-bank-conflict-forbidden-note:case-003",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:393",
+        "label": "full-bank-conflict-forbidden-note:case-004",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:394",
+        "label": "full-bank-conflict-forbidden-note:case-005",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:395",
+        "label": "full-bank-conflict-forbidden-note:case-006",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:396",
+        "label": "full-bank-conflict-forbidden-note:case-007",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:397",
+        "label": "full-bank-conflict-forbidden-note:case-008",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:398",
+        "label": "full-bank-conflict-forbidden-note:case-009",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:399",
+        "label": "full-bank-conflict-forbidden-note:case-010",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:400",
+        "label": "full-bank-conflict-forbidden-note:case-011",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:401",
+        "label": "full-bank-conflict-forbidden-note:case-012",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:402",
+        "label": "full-bank-conflict-forbidden-note:case-013",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:403",
+        "label": "full-bank-conflict-forbidden-note:case-014",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:404",
+        "label": "full-bank-conflict-forbidden-note:case-015",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:405",
+        "label": "full-bank-conflict-forbidden-note:case-016",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:406",
+        "label": "full-bank-conflict-forbidden-note:case-017",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:407",
+        "label": "full-bank-conflict-forbidden-note:case-018",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:408",
+        "label": "full-bank-conflict-forbidden-note:case-019",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:409",
+        "label": "full-bank-conflict-forbidden-note:case-020",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:410",
+        "label": "full-bank-conflict-forbidden-note:case-021",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:411",
+        "label": "full-bank-conflict-forbidden-note:case-022",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:412",
+        "label": "full-bank-conflict-forbidden-note:case-023",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:413",
+        "label": "full-bank-conflict-forbidden-note:case-024",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:414",
+        "label": "full-bank-conflict-forbidden-note:case-025",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:415",
+        "label": "full-bank-conflict-forbidden-note:case-026",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:416",
+        "label": "full-bank-conflict-forbidden-note:case-027",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:417",
+        "label": "full-bank-conflict-forbidden-note:case-028",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:418",
+        "label": "full-bank-conflict-forbidden-note:case-029",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:419",
+        "label": "full-bank-conflict-forbidden-note:case-030",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:420",
+        "label": "full-bank-conflict-forbidden-note:case-031",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:421",
+        "label": "full-bank-conflict-forbidden-note:case-032",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:422",
+        "label": "full-bank-conflict-forbidden-note:case-033",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:423",
+        "label": "full-bank-conflict-forbidden-note:case-034",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:424",
+        "label": "full-bank-conflict-forbidden-note:case-035",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:425",
+        "label": "full-bank-conflict-forbidden-note:case-036",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:426",
+        "label": "full-bank-conflict-forbidden-note:case-037",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:427",
+        "label": "full-bank-conflict-forbidden-note:case-038",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:428",
+        "label": "full-bank-conflict-forbidden-note:case-039",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:429",
+        "label": "full-bank-conflict-forbidden-note:case-040",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:430",
+        "label": "full-bank-conflict-forbidden-note:case-041",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:431",
+        "label": "full-bank-conflict-forbidden-note:case-042",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:432",
+        "label": "full-bank-conflict-forbidden-note:case-043",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:433",
+        "label": "full-bank-conflict-forbidden-note:case-044",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:434",
+        "label": "full-bank-conflict-forbidden-note:case-045",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:435",
+        "label": "full-bank-conflict-forbidden-note:case-046",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:436",
+        "label": "full-bank-conflict-forbidden-note:case-047",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:437",
+        "label": "full-bank-conflict-forbidden-note:case-048",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:438",
+        "label": "full-bank-conflict-forbidden-note:case-049",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:439",
+        "label": "full-bank-conflict-forbidden-note:case-050",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:440",
+        "label": "full-bank-conflict-forbidden-note:case-051",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:441",
+        "label": "full-bank-conflict-forbidden-note:case-052",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:442",
+        "label": "full-bank-conflict-forbidden-note:case-053",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:443",
+        "label": "full-bank-conflict-forbidden-note:case-054",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:444",
+        "label": "full-bank-conflict-forbidden-note:case-055",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:445",
+        "label": "full-bank-conflict-forbidden-note:case-056",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:446",
+        "label": "full-bank-conflict-forbidden-note:case-057",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:447",
+        "label": "full-bank-conflict-forbidden-note:case-058",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:448",
+        "label": "full-bank-conflict-forbidden-note:case-059",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:449",
+        "label": "full-bank-conflict-forbidden-note:case-060",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:450",
+        "label": "full-bank-conflict-forbidden-note:case-061",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:451",
+        "label": "full-bank-conflict-forbidden-note:case-062",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:452",
+        "label": "full-bank-conflict-forbidden-note:case-063",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:453",
+        "label": "full-bank-conflict-forbidden-note:case-solo",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:455",
+        "label": "full-bank-conflict-forbidden-note:case-loose-budget-crash",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:456",
+        "label": "full-bank-conflict-forbidden-note:case-already-complete",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "audit:457",
+        "label": "full-bank-conflict-forbidden-note:case-complete-status-drift",
+        "expected": false,
+        "cellTruth": [
+          {
+            "ok": false,
+            "errors": [
+              "forbidden-or-malformed-patch"
+            ]
+          }
+        ],
+        "actual": true
+      },
+      {
+        "token": "constructor",
+        "label": "opaque-token:constructor",
+        "expected": false,
+        "actual": true
+      }
+    ],
+    "deterministic": true,
+    "inputUnchanged": true,
+    "evidence": {
+      "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/submitted-checker.json",
+      "sha256": "c58627a7cd39e11cfe8af11528e972944dba95d78266b663bc6f5296ef418cce"
+    }
+  },
+  "referenceChecker": {
+    "total": 461,
+    "correct": 461,
+    "milliseconds": 68.774542,
+    "mismatches": [],
+    "deterministic": true,
+    "inputUnchanged": true,
+    "evidence": {
+      "path": ".local/ticket-consolidation-trial-four-pass-audit-2026-09-11-final/reference-checker.json",
+      "sha256": "a685f695a67f18792a1f0e3706ef855d687cfef62c26c426d678514ba1725062"
+    }
+  },
+  "independentAuthorityDiscrepancies": []
+}

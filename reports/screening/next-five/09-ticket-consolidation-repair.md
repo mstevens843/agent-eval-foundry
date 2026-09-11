@@ -222,3 +222,113 @@ claims for those bytes. The final audit passed 4,146 individual-cell comparisons
 28 checker mutations against both local and protected candidate banks, all 40 native
 integrity checks and 105 Foundry assurance operations. No model trials were run, and
 historical trial counts were not changed.
+
+
+## 2026-09-11 — attempt 5 audit and directory-key correction
+
+The recorded v2.0.2 Codex physical attempt-5 pass is a second audited benchmark
+false pass. Its checker interprets a JSON-encoded tenant/team key before the exact
+tenant key, accepting wrong-owner migrations and rejecting valid migrations when
+those literal tenant strings coexist. Forty-eight protected witnesses reproduce
+each direction; the saved service passes all 261 audit scenarios. The earlier
+request-membership/schema correction remains effective.
+
+The corrected v2.0.3 digest is
+`bde0e2b5f7329bf06bea37992b7348a16f3ecd9c9178be9efcbf0d9cdd3344ac`.
+It has 73 scenarios and 32 checker candidates (six valid, 26 faulty), with new
+literal-key collision, case-folding, whitespace, and numeric normalization coverage.
+Validation passed: 35/35 assurance, 32/32 reference checker, Docker oracle 1/nop 0,
+8/8 integrity checks, 2,336 independent protected trace comparisons, and 15 caught
+checker mutations. The exact saved attempt-5 checker now scores 25/32, reward 0;
+its service remains 73/73. All five original submissions were consistently regraded
+without rerunning a model or changing original evidence.
+
+Attempts 4 and 5 are separate audited nulls; their original reward-1 records are
+preserved. There are three eligible historical Claude failures and five physical
+provider calls before continuation. Physical attempt 6 is prepared on Codex in a
+new namespace; if scored, it would be eligible counted trial 4. No model trial,
+commit, or push was performed by this audit/correction.
+
+See [the complete audit and correction](../../pass-audits/ticket-consolidation-attempt-five-2026-09-11.md),
+[the machine-readable disposition](../../pass-audits/ticket-consolidation-attempt-five-2026-09-11.json),
+and [the next-attempt prompt](../../pass-audits/ticket-consolidation-v3-next-attempt-prompt-2026-09-11.md).
+
+
+## 2026-09-11 — attempt 6 audit and deferred-marker correction
+
+Physical attempt 6 (Codex, v2.0.3) is another reproduced benchmark false pass.
+Its required checker demands the marker on every landed write and rejects a
+valid migration that settles ownership first, then adds the marker before
+completion. The issued contract and frozen verifier already permit this.
+The submitted service passes all 265 audit scenarios; no accepted invalid
+execution was found in 658 checker judgments. Four false-reject judgments
+reproduce one omission in the required-checker bank.
+
+The gap is fixed in v2.0.4, digest
+`6d8179c6d01c8bbd4def8e1537292b34325691c8320f321faa07bb2e65191729`.
+A valid deferred-marker strategy and faulty owner-only unfinished strategy
+raise the bank to 34 candidates (seven valid, 27 faulty), with the 73 service
+scenarios and authoritative verifier unchanged. Validation passes 37/37
+assurance, 34/34 reference checker, Docker oracle 1/nop 0, 8/8 integrity,
+2,482 protected comparisons, and 17 checker mutations. The exact saved attempt-6
+checker now scores 33/34, reward 0, while its service remains 73/73.
+
+Original evidence is unchanged. Attempts 4, 5, and 6 are separately audited
+nulls; their reward-1 records remain historical. There are six physical calls
+and three eligible historical Claude failures. Physical attempt 7 is prepared
+on Codex in a new namespace and would be eligible counted trial 4 if scored.
+No model trial, commit, or push was performed by this audit/correction.
+
+See [the full audit](../../pass-audits/ticket-consolidation-attempt-six-2026-09-11.md),
+[the null disposition](../../pass-audits/ticket-consolidation-attempt-six-2026-09-11.json),
+and [the next-attempt prompt](../../pass-audits/ticket-consolidation-v4-next-attempt-prompt-2026-09-11.md).
+
+
+## 2026-09-11 — published successor trial checkpoint
+
+| Physical trial | Provider | Recorded reward | Counted reward | Service | Required checker |
+| --- | --- | ---: | ---: | --- | --- |
+| 1 | Claude | 0 | 0 | 69/69 pass | Output validation failed |
+| 2 | Claude | 0 | 0 | 69/69 pass | Output validation failed |
+| 3 | Claude | 0 | 0 | 69/69 pass | Output validation failed |
+| 4 | Codex | 1 | null | 69/69 pass | 17/17; 0 valid rejected, 0 invalid accepted; audited false pass |
+| 5 | Codex | 1 | null | 69/69 pass | 28/28; 0 valid rejected, 0 invalid accepted; audited false pass |
+| 6 | Codex | 1 | null | 73/73 pass | 32/32; 0 valid rejected, 0 invalid accepted; audited false pass |
+
+This table is derived from the [published successor evidence](../evidence/2026-09-11-successor-results.json), with exact package/profile identities and completion, result, grade and submitted-code hashes. [Campaign report](../successor-results-2026-09-11.md). Trials here are physical identities within the September 11 successor campaign; earlier trials above belong to their own versions.
+
+Attempts 4–6 retain original reward 1 but have audited counted reward null. At this checkpoint there are three historical counted failures and three remaining counted slots; corrected v2.0.4 and further physical attempts are outside this table. No false pass is converted into a counted failure.
+
+## 2026-09-11 — attempt 7 false pass; request metadata and label-type correction
+
+Physical attempt 7 (Codex, v2.0.4, digest `6d8179c6d01c8bbd4def8e1537292b34325691c8320f321faa07bb2e65191729`)
+recorded reward 1 and checker 34/34. The separate audit reproduces another
+benchmark false pass: the submitted checker rejects valid updates carrying
+ignored outer metadata, although only the patch has an exact-field restriction.
+Two valid implementations pass all 73 service scenarios. The saved service
+passes 265/265 audit scenarios; its checker has zero false accepts and 144
+false-reject judgments out of 1,104, from one root cause.
+
+The audit also finds and fixes an authoritative verifier/reference-checker
+omission: conflicting patches with numeric or object label elements violated
+the issued `string[]` type but were accepted. This is separate from the saved
+checker's over-strictness. Both directions now have executable coverage.
+
+Corrected v2.0.5, digest `186b34f818022cc0274c0fb684a665d5d86ffde2b146a1d0fb7076b6a712a3ed`,
+has 39 candidates (nine valid, 30 faulty), with the same 73 scenarios. Validation
+passes 42/42 assurance, 39/39 reference checker, Docker oracle 1/nop 0, 8/8
+integrity, 2,847 independent protected comparisons and 20 checker mutations.
+The corrected checker also classifies all 1,104 retained audit judgments correctly.
+Attempt 7's linked regrade is service 73/73, checker 37/39 and diagnostic reward
+0; it rejects exactly the two new valid metadata candidates.
+
+Original evidence is unchanged. Attempts 4–7 are audited nulls, leaving three
+counted historical Claude failures and zero counted Codex outcomes across seven
+physical calls. New Codex slots 8–10 are prepared, undispatched, for eligible
+counted trials 4–6, continuing only after clean failure and stopping on a pass
+or unscored incident. No model calls, commits or pushes were made by this audit.
+The earlier published checkpoint remains unchanged and ends at attempt 6.
+
+See [the full audit](../../pass-audits/ticket-consolidation-attempt-seven-2026-09-11.md),
+[the null disposition](../../pass-audits/ticket-consolidation-attempt-seven-2026-09-11.json),
+and [the continuation prompt](../../pass-audits/ticket-consolidation-v5-next-attempt-prompt-2026-09-11.md).

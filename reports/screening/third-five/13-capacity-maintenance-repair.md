@@ -1,5 +1,7 @@
 # 13 — Capacity maintenance repair
 
+**Current successor screening result (September 11, version 2.0.1): 6/6 counted reward-zero outcomes, three Claude and three Codex.** All six service grades pass; the failures are in the required checker. See the [current results](../final-results-2026-09-11.md) and the dated successor history below. Earlier versions and grades remain historical.
+
 One Claude attempt, requested Opus 5 / max. Authoring **24m 26s**. Recorded reward **1**: service **138/138 scenarios**, checker **12/12 candidates**. Both correct implementations were accepted and all ten negative controls rejected with the required obligation named. No trial execution error or retry was recorded.
 
 ## What the task was, in plain English
@@ -244,3 +246,19 @@ claims for those bytes. The final audit passed 4,146 individual-cell comparisons
 28 checker mutations against both local and protected candidate banks, all 40 native
 integrity checks and 105 Foundry assurance operations. No model trials were run, and
 historical trial counts were not changed.
+
+
+## 2026-09-11 — published successor trial checkpoint
+
+| Physical trial | Provider | Recorded reward | Counted reward | Service | Required checker |
+| --- | --- | ---: | ---: | --- | --- |
+| 1 | Claude | 0 | 0 | 30/30 pass | Output validation failed |
+| 2 | Claude | 0 | 0 | 30/30 pass | Output validation failed |
+| 3 | Claude | 0 | 0 | 30/30 pass | Output validation failed |
+| 4 | Codex | 0 | 0 | 30/30 pass | 17/19; 2 valid rejected, 0 invalid accepted |
+| 5 | Codex | 0 | 0 | 30/30 pass | 17/19; 2 valid rejected, 0 invalid accepted |
+| 6 | Codex | 0 | 0 | 30/30 pass | 17/19; 2 valid rejected, 0 invalid accepted |
+
+This table is derived from the [published successor evidence](../evidence/2026-09-11-successor-results.json), with exact package/profile identities and completion, result, grade and submitted-code hashes. [Campaign report](../successor-results-2026-09-11.md). Trials here are physical identities within the September 11 successor campaign; earlier trials above belong to their own versions.
+
+All six attempts use version 2.0.1, package digest `3c17fef32da7bc83ea82ac8f94fc7eabb4cccdb05a86a47d8991c8dec4b5f684`. The six saved checker hashes are distinct. Six service passes plus six required-checker failures complete the screening set; they do not establish six service-implementation failures.

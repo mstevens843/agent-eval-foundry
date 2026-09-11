@@ -1,0 +1,253 @@
+{
+  "schemaVersion": 1,
+  "kind": "pass-audit-checker-bank-correction-and-trial-disposition",
+  "taskId": "ticket-consolidation-repair",
+  "version": "2.0.3",
+  "status": "validated",
+  "providerCallsMade": 0,
+  "newAgentAttempts": 0,
+  "dispatched": false,
+  "packageDigest": "bde0e2b5f7329bf06bea37992b7348a16f3ecd9c9178be9efcbf0d9cdd3344ac",
+  "priorPackageDigest": "f01f00452514cce2527710420055fd93994f115d7bae7b1008a8ca598d3fad33",
+  "packageDirectory": ".local/ticket-directory-correction-2026-09-11-validated/build",
+  "nativeDigest": "7e2e7843963abe745268acd30852140546812e4a64076c2a306e57d5549b696c",
+  "ready": {
+    "path": ".local/ticket-directory-correction-2026-09-11-validated/READY.json",
+    "sha256": "32709241d9300f9a2cf1c8c2a9caf8501c8903a7497e94ecfb097071c0c72e2b"
+  },
+  "audit": {
+    "summary": {
+      "path": ".local/ticket-consolidation-attempt-five-audit-bounded-2026-09-11/summary.json",
+      "sha256": "45dce1b450d03fcc617a879cb10b416801ddce22f380f6d23405552194edbda6"
+    },
+    "servicePassed": 261,
+    "serviceTotal": 261,
+    "freshServiceScenarios": 192,
+    "collisionScenarios": 48,
+    "checkerJudgments": 638,
+    "checkerCorrect": 541,
+    "falseAcceptCells": 48,
+    "falseAcceptAggregateCandidates": 1,
+    "falseRejectCells": 48,
+    "referenceCorrect": 638,
+    "primaryRootCauses": 1,
+    "originalGrade": {
+      "path": ".local/ticket-consolidation-continuation-v2-2026-09-11/slots/attempt-5/real-campaign-frozen/jobs/real-provider/records/ticket-consolidation-repair-attempt-1/grade.json",
+      "sha256": "cf3b5bb4c01ce2f59460e3f3f54626620e5f0757db06f0af7bce1571d34fa501"
+    },
+    "originalCompletion": {
+      "path": ".local/ticket-consolidation-continuation-v2-2026-09-11/slots/attempt-5/real-campaign-frozen/jobs/real-provider/records/ticket-consolidation-repair-attempt-1/completion.json",
+      "sha256": "2271d9df6d48c01326a8bef1a4a616447067ffd28394873683d944e058c8dba2"
+    },
+    "submission": [
+      {
+        "path": ".local/ticket-consolidation-continuation-v2-2026-09-11/slots/attempt-5/real-campaign-frozen/jobs/real-provider/records/ticket-consolidation-repair-attempt-1/submission/entry.mjs",
+        "sha256": "bc581b66f599feb2d23c8cc5b22ebbd5c11c04ab6723c94ec113b93992c2b967"
+      },
+      {
+        "path": ".local/ticket-consolidation-continuation-v2-2026-09-11/slots/attempt-5/real-campaign-frozen/jobs/real-provider/records/ticket-consolidation-repair-attempt-1/submission/checker.mjs",
+        "sha256": "e82bd55c2b369821cac0eb7df7c003c82f99a0fa6e5078f7e1715b3e259c3527"
+      }
+    ],
+    "sources": [
+      {
+        "path": "scripts/audit-ticket-consolidation-attempt-five.mjs",
+        "sha256": "7d26655491e244c97a0265517dcf7af0bf4adf47412d82d865149f0dcadd964e"
+      },
+      {
+        "path": "data/ticket-consolidation-trial-four-pass-audit/strategies.mjs",
+        "sha256": "9cc1b943978bfa401a8ca7aac92e349c6a4e5bc85705c6a3a0de421276223f3c"
+      }
+    ]
+  },
+  "finding": {
+    "publicRule": "Directory keys are exact allowed tenant IDs; selected rows must finish at their own tenant-specific resolved owner.",
+    "submittedDefect": "Prioritizes JSON.stringify([tenant, team]) over the literal tenant key, confusing two valid tenant IDs.",
+    "bankGap": "The 69-scenario, 28-candidate bank never distinguished literal tenant IDs from paired or normalized lookup.",
+    "reproducedWithProtectedExecutions": true,
+    "allFinalAuditFixturesWithinFourTotalTenants": true
+  },
+  "originalAttempt5": {
+    "physicalAttempt": 5,
+    "provider": "codex",
+    "packageDigest": "f01f00452514cce2527710420055fd93994f115d7bae7b1008a8ca598d3fad33",
+    "record": ".local/ticket-consolidation-continuation-v2-2026-09-11/slots/attempt-5/real-campaign-frozen/jobs/real-provider/records/ticket-consolidation-repair-attempt-1",
+    "recordedReward": 1,
+    "auditDisposition": "false-pass",
+    "auditedReward": null,
+    "countsAsCleanPass": false,
+    "countsAsCleanFailure": false,
+    "originalRecordUnchanged": true,
+    "originalEvidenceFilesVerified": 1598
+  },
+  "originalAttempt4": {
+    "disposition": {
+      "path": "reports/pass-audits/ticket-consolidation-checker-correction-2026-09-11.json",
+      "sha256": "fc51acfee87e0b353806f976268d7bbd7283f2431e70d10abd0e4c636a1b8e5e"
+    },
+    "auditDisposition": "false-pass",
+    "auditedReward": null,
+    "countsAsCleanPass": false,
+    "countsAsCleanFailure": false,
+    "originalRecordUnchanged": true
+  },
+  "validation": {
+    "fastComparisons": 2267,
+    "assuranceChecks": 35,
+    "checkerCandidates": 32,
+    "serviceScenarios": 73,
+    "validCandidates": 6,
+    "faultyCandidates": 26,
+    "protectedCellsCompared": 2336,
+    "independentDiscrepancies": 0,
+    "nativeOracleReward": 1,
+    "nativeNopReward": 0,
+    "nativeIntegrityChecks": 8,
+    "mutationsCaught": 15,
+    "savedAttempt5Checker": {
+      "correct": 25,
+      "total": 32,
+      "invalidCandidatesAccepted": 1,
+      "validCandidatesRejected": 6
+    },
+    "originalEvidenceFilesVerified": 5335,
+    "sourceMatchesFrozen": true,
+    "sourceFilesCompared": 78,
+    "typecheck": "pass",
+    "lint": "pass",
+    "secretScan": "pass",
+    "javascriptSyntax": "pass",
+    "diffCheck": "pass"
+  },
+  "linkedRegrades": [
+    {
+      "physicalAttempt": 1,
+      "result": {
+        "path": ".local/ticket-directory-correction-2026-09-11-validated/regrades/trial-1/result.json",
+        "sha256": "ef0274b69b5fcd76509571c83dec4a17ba0ca2ae43731bbf2b544f611515ad5d"
+      },
+      "service": "semantic-pass",
+      "serviceCases": 73,
+      "checkerCorrect": null,
+      "checkerTotal": null,
+      "reward": 0,
+      "newAgentAttempts": 0,
+      "countsAsModelFailure": false
+    },
+    {
+      "physicalAttempt": 2,
+      "result": {
+        "path": ".local/ticket-directory-correction-2026-09-11-validated/regrades/trial-2/result.json",
+        "sha256": "35437942111f2deb5beb3cfc37153ee0be93dee2fb1bfbd773943f346f456e05"
+      },
+      "service": "semantic-pass",
+      "serviceCases": 73,
+      "checkerCorrect": null,
+      "checkerTotal": null,
+      "reward": 0,
+      "newAgentAttempts": 0,
+      "countsAsModelFailure": false
+    },
+    {
+      "physicalAttempt": 3,
+      "result": {
+        "path": ".local/ticket-directory-correction-2026-09-11-validated/regrades/trial-3/result.json",
+        "sha256": "793510b6ae715b57357ac96dba064efe361bf49e9d78cfe300191b72f471bd95"
+      },
+      "service": "semantic-pass",
+      "serviceCases": 73,
+      "checkerCorrect": null,
+      "checkerTotal": null,
+      "reward": 0,
+      "newAgentAttempts": 0,
+      "countsAsModelFailure": false
+    },
+    {
+      "physicalAttempt": 4,
+      "result": {
+        "path": ".local/ticket-directory-correction-2026-09-11-validated/regrades/trial-4/result.json",
+        "sha256": "79b7bfd92d9baf668a4f9ff0db89d98220b346b0653504099f66f15c99a207de"
+      },
+      "service": "semantic-pass",
+      "serviceCases": 73,
+      "checkerCorrect": 23,
+      "checkerTotal": 32,
+      "reward": 0,
+      "newAgentAttempts": 0,
+      "countsAsModelFailure": false
+    },
+    {
+      "physicalAttempt": 5,
+      "result": {
+        "path": ".local/ticket-directory-correction-2026-09-11-validated/regrades/trial-5/result.json",
+        "sha256": "72200b7fac436b2fb46ba1230901fb2eccad9639091e20ce8661f050d08841ce"
+      },
+      "service": "semantic-pass",
+      "serviceCases": 73,
+      "checkerCorrect": 25,
+      "checkerTotal": 32,
+      "reward": 0,
+      "newAgentAttempts": 0,
+      "countsAsModelFailure": false
+    }
+  ],
+  "evidence": [
+    {
+      "path": ".local/ticket-directory-correction-2026-09-11-validated/PREPARED.json",
+      "sha256": "12ee0b83e120ffae52398e1120433e4646506bb0c227f9c5e12f5dbf02a1100b"
+    },
+    {
+      "path": ".local/ticket-directory-correction-2026-09-11-validated/foundry.json",
+      "sha256": "d44f764dba5866955d0c131eef3142d5d4d0dff860f4943183bfefa758d26ba4"
+    },
+    {
+      "path": ".local/ticket-directory-correction-2026-09-11-validated/native.json",
+      "sha256": "a357b7d8e79ccd3af374a14e968fa10a7fa16ee64f7fc4c72efc232156452aed"
+    },
+    {
+      "path": ".local/ticket-directory-correction-2026-09-11-validated/regrades.json",
+      "sha256": "696bc7374cb715e9cfaa5d54e880b0b307a51d88bf04ba2f6827050fafaea2a7"
+    },
+    {
+      "path": ".local/ticket-directory-correction-2026-09-11-validated/regressions.json",
+      "sha256": "71eb01e5d9c42a494706f6f7901cd30ff75fa62ac6ce165dcbc78a18662b8dbd"
+    }
+  ],
+  "accounting": {
+    "historicalProviderCalls": 5,
+    "historicalProviderCallsByProvider": {
+      "claude": 3,
+      "codex": 2
+    },
+    "auditedNullPhysicalAttempts": [
+      4,
+      5
+    ],
+    "eligibleCountedTrialsBeforeNextDispatch": 3,
+    "eligibleCountedProviderTrials": {
+      "claude": 3,
+      "codex": 0
+    },
+    "nextPhysicalAttempt": 6,
+    "nextEligibleCountedTrialIfScored": 4,
+    "nextProvider": "codex",
+    "newPackageProviderCalls": 0,
+    "originalLedgersUnchanged": true,
+    "oldContinuationCountedTrialLabelIsOffByOne": true,
+    "regradesAreDiagnosticNotNewTrials": true
+  },
+  "continuation": {
+    "prompt": "reports/pass-audits/ticket-consolidation-v3-next-attempt-prompt-2026-09-11.md",
+    "slot": ".local/ticket-consolidation-continuation-v3-2026-09-11/slots/attempt-6/slot.json",
+    "maxNewProviderCalls": 1,
+    "automaticRetries": false,
+    "stopAfterThisAttempt": true,
+    "billingMode": "subscription-only",
+    "noPaidApiFallback": true
+  },
+  "limitations": [
+    "Finite audit-authored regressions, not proof of universal checker completeness.",
+    "No independently held-out author/model candidate bank.",
+    "Earlier unbounded author-validation drafts are explicitly superseded and support no final claim."
+  ]
+}

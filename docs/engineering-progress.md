@@ -2,13 +2,21 @@
 
 The goal is a portfolio of fair, useful tasks that agents genuinely fail—not a large pile of generated exercises or zero rewards caused by bad measurement. Progress includes discovering that a candidate is easy, identifying our own mistakes, and making the next decision better informed.
 
-## September 11: nine completed finalists, seven at 6/6 and two at 5/6
+## September 11 successor checkpoint: twelve finalists, ten at 6/6 and two at 5/6
+
+Compatible rollout, Verified installation and Capacity maintenance each completed six counted reward-zero trials, balanced three Claude and three Codex. The qualifying portfolio now totals **12 tasks, 70 failures in 72 counted trials, and 36 trials per provider**. All 18 newly qualifying outcomes passed their service suites and failed the required checker; this measures the complete deliverable, not 18 failed service implementations.
+
+The same campaign exposed further measurement work. Partial Release's audited passes remain valid. Ticket Consolidation's three apparent Codex passes became audited nulls after executable probes exposed omitted request/schema coverage, literal directory-key handling, and rejection of a valid deferred-marker strategy. Those records remain unchanged, and the corrected v2.0.4 package is prepared for another attempt. Ticket has three historical counted failures and is excluded from the qualifying total.
+
+Installation's second solver run completed, but Docker failed during grading. A linked grading-only recovery on the same package supplied reward 0 without a second model call. A later continuation caused the original controller's shared-slot integrity assertion to fail; both ledgers and that error are preserved, and a separate reconciliation accounts for every launch. The [successor checkpoint](../reports/screening/successor-results-2026-09-11.md) and [current combined results](../reports/screening/final-results-2026-09-11.md) retain these distinctions.
+
+## Earlier September 11 milestone: nine completed finalists, seven at 6/6 and two at 5/6
 
 Browser replay, Recurring calendar, Workflow authority and Delegated budget each completed a balanced 6/6 reward-zero set. Together with the first five finalists, that makes **nine qualifying tasks, 52 failures in 54 counted trials, and 27 trials per provider**.
 
 The new group also retained a negative selection result: Route policy stopped at 3/5 failures after two Codex passes survived additional audits. Browser's interrupted and grading-void attempts remain excluded; fresh trials completed its provider balance. Calendar and Budget's already-graded first attempts were recovered after a publication storage incident without another model call.
 
-The [combined results](../reports/screening/final-results-2026-09-11.md) connect each total to the original trial history. The latest campaign executed 11 new attempts, not 12: five initial plus six of seven authorized continuation slots. This arithmetic correction changes no task reward or standing.
+The [combined results](../reports/screening/final-results-2026-09-11.md) connect each total to the original trial history. That earlier campaign executed 11 new attempts, not 12: five initial plus six of seven authorized continuation slots. This arithmetic correction changes no task reward or standing.
 
 ## September 9: five completed finalists, three at 6/6 and two at 5/6
 
@@ -134,6 +142,6 @@ The historical outbox case must be read with its [qualified evidence and correct
 
 ## Next steps after the completed screening campaign
 
-Carry the nine completed task sets and their evidence into submission review and the required destination checks. Keep Route's passing submissions and unsuccessful selection result available when considering a future successor. Preserve original rewards, grading corrections and excluded attempts; a new public task version needs its own clearly identified trial set.
+Carry the twelve qualifying task sets and their evidence into submission review and the required destination checks. Continue Ticket Consolidation separately on its corrected package, excluding its audited nulls and stopping on a pass or the counted-trial limit. Keep Partial Release and Route's passing submissions available as solved-task evidence. Preserve original rewards, grading corrections and excluded attempts; a new public task version needs its own clearly identified trial set.
 
 The [trial index](../reports/screening/README.md), [portfolio](project-status.md) and [combined results](../reports/screening/final-results-2026-09-11.md) link the detailed evidence. No new model attempts are launched by documentation or local verification.

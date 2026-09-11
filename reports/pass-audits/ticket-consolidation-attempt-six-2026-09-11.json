@@ -1,0 +1,585 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-11",
+  "task": "ticket-consolidation-repair",
+  "physicalAttempt": 6,
+  "target": "codex",
+  "originalVersion": "2.0.3",
+  "originalPackageDigest": "bde0e2b5f7329bf06bea37992b7348a16f3ecd9c9178be9efcbf0d9cdd3344ac",
+  "originalRecord": ".local/ticket-consolidation-continuation-v3-2026-09-11/slots/attempt-6/real-campaign-frozen/jobs/real-provider/records/ticket-consolidation-repair-attempt-1",
+  "recordedReward": 1,
+  "auditDisposition": "false-pass",
+  "auditedReward": null,
+  "countsAsCleanPass": false,
+  "countsAsCleanFailure": false,
+  "originalRecordUnchanged": true,
+  "finding": {
+    "kind": "required-checker-bank-missed-false-rejection",
+    "summary": "The submitted checker requires the marker on every APPLIED write and rejects a valid ownership-first, deferred-marker migration. The issued rule requires the marker at completion.",
+    "submittedServiceFailureReproduced": false,
+    "submittedCheckerInvalidExecutionAccepted": false,
+    "submittedCheckerValidExecutionRejected": true,
+    "reproducedRootCauses": 1,
+    "witnesses": 3,
+    "mismatchedJudgments": 4,
+    "issuedRule": "At completion the marker occurs once (labels are sets)."
+  },
+  "witness": {
+    "scenarioId": "two-stage-0",
+    "initialRows": [
+      {
+        "tenant": "A",
+        "id": "selected",
+        "status": "open",
+        "revision": 10,
+        "owner": "old",
+        "labels": [
+          "keep"
+        ],
+        "note": "original"
+      },
+      {
+        "tenant": "A",
+        "id": "closed",
+        "status": "closed",
+        "revision": 10,
+        "owner": "old",
+        "labels": [
+          "private"
+        ],
+        "note": "original"
+      },
+      {
+        "tenant": "X",
+        "id": "outside",
+        "status": "open",
+        "revision": 10,
+        "owner": "old",
+        "labels": [
+          "private"
+        ],
+        "note": "original"
+      }
+    ],
+    "allowedTenants": [
+      "A"
+    ],
+    "directory": {
+      "A": "A:care"
+    },
+    "calls": [
+      {
+        "request": {
+          "tenant": "A",
+          "id": "selected",
+          "revision": 10,
+          "patch": {
+            "owner": "A:care",
+            "labels": [
+              "keep"
+            ]
+          }
+        },
+        "before": {
+          "tenant": "A",
+          "id": "selected",
+          "status": "closed",
+          "revision": 10,
+          "owner": "old",
+          "labels": [
+            "keep"
+          ],
+          "note": "original"
+        },
+        "status": "APPLIED"
+      },
+      {
+        "request": {
+          "tenant": "A",
+          "id": "selected",
+          "revision": 11,
+          "patch": {
+            "owner": "A:care",
+            "labels": [
+              "keep",
+              "migrated"
+            ]
+          }
+        },
+        "before": {
+          "tenant": "A",
+          "id": "selected",
+          "status": "closed",
+          "revision": 11,
+          "owner": "A:care",
+          "labels": [
+            "keep"
+          ],
+          "note": "original"
+        },
+        "status": "APPLIED"
+      }
+    ],
+    "actual": [
+      {
+        "tenant": "A",
+        "id": "selected",
+        "status": "closed",
+        "revision": 12,
+        "owner": "A:care",
+        "labels": [
+          "keep",
+          "migrated"
+        ],
+        "note": "original"
+      },
+      {
+        "tenant": "A",
+        "id": "closed",
+        "status": "closed",
+        "revision": 10,
+        "owner": "old",
+        "labels": [
+          "private"
+        ],
+        "note": "original"
+      },
+      {
+        "tenant": "X",
+        "id": "outside",
+        "status": "open",
+        "revision": 10,
+        "owner": "old",
+        "labels": [
+          "private"
+        ],
+        "note": "original"
+      }
+    ],
+    "concurrentStatusFlips": [
+      {
+        "tenant": "A",
+        "id": "selected",
+        "status": "closed"
+      }
+    ],
+    "execution": {
+      "outcome": "returned"
+    },
+    "checks": {
+      "execution": true,
+      "completion": true,
+      "ownership": true,
+      "labels": true,
+      "preservation": true,
+      "conditional_writes": true,
+      "membership": true
+    },
+    "failures": [],
+    "operationCount": 12,
+    "operationBudget": 4000
+  },
+  "originalEvidence": {
+    "grade": {
+      "path": ".local/ticket-consolidation-continuation-v3-2026-09-11/slots/attempt-6/real-campaign-frozen/jobs/real-provider/records/ticket-consolidation-repair-attempt-1/grade.json",
+      "sha256": "a1dbf906e2e847eb6e1d098389c138247a164092911803cf8d1b8eb9ec5fadcc"
+    },
+    "completion": {
+      "path": ".local/ticket-consolidation-continuation-v3-2026-09-11/slots/attempt-6/real-campaign-frozen/jobs/real-provider/records/ticket-consolidation-repair-attempt-1/completion.json",
+      "sha256": "53abf4f51db7c04da4820e9b41a0b17ea1e7635fa3e64ace90bc1d06cc07eda5"
+    },
+    "submission": [
+      {
+        "path": ".local/ticket-consolidation-continuation-v3-2026-09-11/slots/attempt-6/real-campaign-frozen/jobs/real-provider/records/ticket-consolidation-repair-attempt-1/submission/entry.mjs",
+        "sha256": "192e8a3f443fe1806e1bd47c0be2ff27830e1b2cd486da6390387906d626ecaa"
+      },
+      {
+        "path": ".local/ticket-consolidation-continuation-v3-2026-09-11/slots/attempt-6/real-campaign-frozen/jobs/real-provider/records/ticket-consolidation-repair-attempt-1/submission/checker.mjs",
+        "sha256": "244941f37849c958f11e9ed62bd4169966b70bbae9057de767b279cf32595f9a"
+      }
+    ],
+    "issuedContracts": [
+      {
+        "executable": false,
+        "path": "public/SEMANTICS.md",
+        "sha256": "69a8d3b12817433cd8454c62ca6648a781907f8ce08c45e07170fa1761b6af34",
+        "size": 5553
+      },
+      {
+        "executable": false,
+        "path": "public/instruction.md",
+        "sha256": "c3c6d449ed5e3939345c73e4eaf76ccc53677438df945e85c7394680edb71f4e",
+        "size": 501
+      },
+      {
+        "executable": false,
+        "path": "public/CHECKER-INPUT.md",
+        "sha256": "46a8bcbca0ff94a9874f002a108f1ed3062d7c7db8344f06dad22e7696e41931",
+        "size": 5311
+      },
+      {
+        "executable": false,
+        "path": "public/api.d.ts",
+        "sha256": "ea0578477d676b2050f9ee0310b6a1cc3715436ace20362208f0a83960d79e2e",
+        "size": 1180
+      }
+    ],
+    "attempt6FilesVerifiedBefore": 2333,
+    "attempt6FilesVerifiedAfter": 2333,
+    "allSixOriginalFilesVerified": 7668
+  },
+  "audit": {
+    "summary": {
+      "path": ".local/ticket-consolidation-attempt-six-audit-2026-09-11/summary.json",
+      "sha256": "343cf00492f768ad39f5d041031a52510941f9de38712f9c2947eb3df9063279"
+    },
+    "isolatedReplay": {
+      "path": ".local/ticket-consolidation-attempt-six-audit-2026-09-11/isolated-checker-replay.json",
+      "sha256": "8aabd73b34e268177437ccc0d459cf99de74412a3403cfbc30ff24b777ae192f"
+    },
+    "protectedServiceExecutions": 598,
+    "savedService": {
+      "label": "submitted-service",
+      "total": 265,
+      "passed": 265,
+      "failed": 0,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/ticket-consolidation-attempt-six-audit-2026-09-11/submitted-service.json",
+        "sha256": "8ded7978b12ddfbbc7fae5180134190efe50578516eea803eddb5b3ffc5ae7f7"
+      }
+    },
+    "submittedChecker": {
+      "total": 658,
+      "correct": 654,
+      "milliseconds": 153.80658299999993,
+      "mismatches": [
+        {
+          "token": "audit:301",
+          "label": "two-stage",
+          "expected": true,
+          "cellTruth": [
+            {
+              "ok": true,
+              "errors": []
+            },
+            {
+              "ok": true,
+              "errors": []
+            },
+            {
+              "ok": true,
+              "errors": []
+            }
+          ],
+          "actual": false,
+          "reasons": [
+            "cell 0: an applied update did not add the marker exactly once",
+            "cell 1: an applied update did not add the marker exactly once",
+            "cell 2: an applied update did not add the marker exactly once"
+          ]
+        },
+        {
+          "token": "audit:302",
+          "label": "two-stage:two-stage-0",
+          "expected": true,
+          "cellTruth": [
+            {
+              "ok": true,
+              "errors": []
+            }
+          ],
+          "actual": false,
+          "reasons": [
+            "cell 0: an applied update did not add the marker exactly once"
+          ]
+        },
+        {
+          "token": "audit:303",
+          "label": "two-stage:two-stage-1",
+          "expected": true,
+          "cellTruth": [
+            {
+              "ok": true,
+              "errors": []
+            }
+          ],
+          "actual": false,
+          "reasons": [
+            "cell 0: an applied update did not add the marker exactly once"
+          ]
+        },
+        {
+          "token": "audit:304",
+          "label": "two-stage:two-stage-2",
+          "expected": true,
+          "cellTruth": [
+            {
+              "ok": true,
+              "errors": []
+            }
+          ],
+          "actual": false,
+          "reasons": [
+            "cell 0: an applied update did not add the marker exactly once"
+          ]
+        }
+      ],
+      "deterministic": true,
+      "inputUnchanged": true,
+      "evidence": {
+        "path": ".local/ticket-consolidation-attempt-six-audit-2026-09-11/submitted-checker.json",
+        "sha256": "0a39be8c4139032faf77ce10a3738ea048b13832ebf4b4a8c6f6910c8fa15d65"
+      }
+    },
+    "referenceChecker": {
+      "total": 658,
+      "correct": 658,
+      "milliseconds": 208.47504200000003,
+      "mismatches": [],
+      "deterministic": true,
+      "inputUnchanged": true,
+      "evidence": {
+        "path": ".local/ticket-consolidation-attempt-six-audit-2026-09-11/reference-checker.json",
+        "sha256": "a6303b0990cc2c719094995e8c787e2f5fa248bca8efefdfaf41ae19e31ff672"
+      }
+    },
+    "falseAccepts": 0,
+    "falseRejects": 4,
+    "independentAuthorityDiscrepancies": [],
+    "independentlyHeldOutAuthorOrModelBank": false
+  },
+  "correction": {
+    "version": "2.0.4",
+    "packageDigest": "6d8179c6d01c8bbd4def8e1537292b34325691c8320f321faa07bb2e65191729",
+    "packageDirectory": ".local/ticket-marker-correction-2026-09-11/build",
+    "nativeDigest": "3e1de71b0703050959d996b544b8a375e97af0f1ae6edc880a8cfe637670125c",
+    "ready": {
+      "path": ".local/ticket-marker-correction-2026-09-11/READY.json",
+      "sha256": "ea04bf258c12c082a778b0f1a61163a23bfb8bc6dc55499bbf824dedc13adbcc"
+    },
+    "scenarios": 73,
+    "checkerCandidates": 34,
+    "validCandidates": 7,
+    "faultyCandidates": 27,
+    "newPositive": "variant-deferred-marker",
+    "newNegative": "owner-only-unfinished",
+    "assuranceChecks": 37,
+    "referenceCheckerCorrect": 34,
+    "nativeOracleReward": 1,
+    "nativeNopReward": 0,
+    "nativeIntegrityChecks": 8,
+    "protectedCellsCompared": 2482,
+    "checkerMutationsCaught": 17,
+    "localAuthorComparisons": 2413,
+    "serviceVerifierChanged": false,
+    "existingReferenceCheckerChanged": false,
+    "scenarioBytesChanged": false,
+    "linkedRegrades": [
+      {
+        "physicalAttempt": 1,
+        "record": ".local/ticket-marker-correction-2026-09-11/regrades/trial-1",
+        "evidence": {
+          "path": ".local/ticket-marker-correction-2026-09-11/regrades/trial-1/result.json",
+          "sha256": "411102519d78c0c2f213946448ffd8095ad419199edcdda854ea72230c35ecb5"
+        },
+        "service": "semantic-pass",
+        "serviceComplete": true,
+        "reward": 0,
+        "checkerPassed": false,
+        "checker": null,
+        "newAgentAttempts": 0,
+        "countsAsModelFailure": false
+      },
+      {
+        "physicalAttempt": 2,
+        "record": ".local/ticket-marker-correction-2026-09-11/regrades/trial-2",
+        "evidence": {
+          "path": ".local/ticket-marker-correction-2026-09-11/regrades/trial-2/result.json",
+          "sha256": "c0beaf6286da402806d40c4fc0acdf30dfbc53c15b5d6f2ed34d39620c82faf7"
+        },
+        "service": "semantic-pass",
+        "serviceComplete": true,
+        "reward": 0,
+        "checkerPassed": false,
+        "checker": null,
+        "newAgentAttempts": 0,
+        "countsAsModelFailure": false
+      },
+      {
+        "physicalAttempt": 3,
+        "record": ".local/ticket-marker-correction-2026-09-11/regrades/trial-3",
+        "evidence": {
+          "path": ".local/ticket-marker-correction-2026-09-11/regrades/trial-3/result.json",
+          "sha256": "51064653d85f2558a7bf14e7e98d9cb555f2c6c27cbd975cea02287c346f7448"
+        },
+        "service": "semantic-pass",
+        "serviceComplete": true,
+        "reward": 0,
+        "checkerPassed": false,
+        "checker": null,
+        "newAgentAttempts": 0,
+        "countsAsModelFailure": false
+      },
+      {
+        "physicalAttempt": 4,
+        "record": ".local/ticket-marker-correction-2026-09-11/regrades/trial-4",
+        "evidence": {
+          "path": ".local/ticket-marker-correction-2026-09-11/regrades/trial-4/result.json",
+          "sha256": "6a0d825c111e64cf5be711f1314ed60dafcdf2b3dbaffaf0d6652018d4f1f0f7"
+        },
+        "service": "semantic-pass",
+        "serviceComplete": true,
+        "reward": 0,
+        "checkerPassed": false,
+        "checker": {
+          "correct": 25,
+          "total": 34,
+          "falsePositives": 1,
+          "missed": 8
+        },
+        "newAgentAttempts": 0,
+        "countsAsModelFailure": false
+      },
+      {
+        "physicalAttempt": 5,
+        "record": ".local/ticket-marker-correction-2026-09-11/regrades/trial-5",
+        "evidence": {
+          "path": ".local/ticket-marker-correction-2026-09-11/regrades/trial-5/result.json",
+          "sha256": "3ef3f2ac73235ef40950d2dbc848600969d8852f48b5fdd7a3de902f9884bfe5"
+        },
+        "service": "semantic-pass",
+        "serviceComplete": true,
+        "reward": 0,
+        "checkerPassed": false,
+        "checker": {
+          "correct": 26,
+          "total": 34,
+          "falsePositives": 7,
+          "missed": 1
+        },
+        "newAgentAttempts": 0,
+        "countsAsModelFailure": false
+      },
+      {
+        "physicalAttempt": 6,
+        "record": ".local/ticket-marker-correction-2026-09-11/regrades/trial-6",
+        "evidence": {
+          "path": ".local/ticket-marker-correction-2026-09-11/regrades/trial-6/result.json",
+          "sha256": "811ee45893125df00a5d7d1ab026360c073421c89e21725862c87672b1a2f28e"
+        },
+        "service": "semantic-pass",
+        "serviceComplete": true,
+        "reward": 0,
+        "checkerPassed": false,
+        "checker": {
+          "correct": 33,
+          "total": 34,
+          "falsePositives": 1,
+          "missed": 0
+        },
+        "newAgentAttempts": 0,
+        "countsAsModelFailure": false
+      }
+    ],
+    "evidence": [
+      {
+        "path": ".local/ticket-marker-correction-2026-09-11/PREPARED.json",
+        "sha256": "f69d2811862e6087b48e4950f84a23d2d0b4d1c3aa6ed3dddb1be785c631e69b"
+      },
+      {
+        "path": ".local/ticket-marker-correction-2026-09-11/foundry.json",
+        "sha256": "34f8892f9716d4af26dfbff2d9e43c2ccc2467c3f4c89d56e00afbb65e3fbc61"
+      },
+      {
+        "path": ".local/ticket-marker-correction-2026-09-11/native.json",
+        "sha256": "eadf9f54f4e5f271162400afd89ff86a7962ab96a4b430f638c13c77eb5b89bf"
+      },
+      {
+        "path": ".local/ticket-marker-correction-2026-09-11/regrades.json",
+        "sha256": "9a7ef20537654410d091cb2c427ac2be60b94f16b978e223231f41c6c34873e0"
+      },
+      {
+        "path": ".local/ticket-marker-correction-2026-09-11/regressions.json",
+        "sha256": "60430c40fb4b9a3c6aace59058860108299b258d7175ba25c38d5e1558854b9c"
+      }
+    ]
+  },
+  "accounting": {
+    "historicalPhysicalProviderCalls": 6,
+    "historicalPhysicalProviders": {
+      "claude": 3,
+      "codex": 3
+    },
+    "excludedNullPhysicalAttempts": [
+      4,
+      5,
+      6
+    ],
+    "eligibleCountedOutcomes": 3,
+    "eligibleHistoricalClaudeFailures": 3,
+    "eligibleHistoricalCodexOutcomes": 0,
+    "freshTrialsOnCorrectedDigest": 0,
+    "regradesContributeModelAttempts": 0,
+    "regradesContributeCountedFailures": 0,
+    "keepVersionsSeparate": true
+  },
+  "preparedNextAttempt": {
+    "schemaVersion": 1,
+    "id": "ticket-consolidation-repair",
+    "physicalAttempt": 7,
+    "eligibleCountedTrialIfScored": 4,
+    "target": "codex",
+    "packageDigest": "6d8179c6d01c8bbd4def8e1537292b34325691c8320f321faa07bb2e65191729",
+    "version": "2.0.4",
+    "verified": true,
+    "dispatched": false,
+    "providerCallsMade": 0,
+    "maxProviderCalls": 1,
+    "automaticRetries": false,
+    "frozenSlot": {
+      "path": ".local/ticket-consolidation-continuation-v4-2026-09-11/slots/attempt-7/slot.json",
+      "sha256": "29b7efc7b33e5f4069a180e589f7b2dfc6f9f7e19cf00146d270124b49bf2e28"
+    },
+    "runnerReady": {
+      "path": ".local/ticket-consolidation-continuation-v4-2026-09-11/slots/attempt-7/real-campaign-frozen/READY.json",
+      "sha256": "98afbe0a700d613eb77cdc7d5b338a318e95e6755bfcaa4eebb55d1386522207"
+    },
+    "correctionReady": {
+      "path": ".local/ticket-marker-correction-2026-09-11/READY.json",
+      "sha256": "ea04bf258c12c082a778b0f1a61163a23bfb8bc6dc55499bbf824dedc13adbcc"
+    },
+    "historicalPhysicalProviderCalls": 6,
+    "historicalEligibleCountedOutcomes": 3,
+    "historicalEligibleProviderCounts": {
+      "claude": 3,
+      "codex": 0
+    },
+    "excludedNullPhysicalAttempts": [
+      4,
+      5,
+      6
+    ],
+    "stopAfterThisAttempt": true
+  },
+  "providerCallsMadeByAuditAndCorrection": 0,
+  "newSourceFiles": [
+    {
+      "path": "scripts/audit-ticket-consolidation-attempt-six.mjs",
+      "sha256": "7b78c522159122f29d7ce8f095841135eb8d1f2e73772060bffd0cba590f90a7"
+    },
+    {
+      "path": "scripts/replay-ticket-six-checker-isolated.mjs",
+      "sha256": "646c19b6fa157f698086bd483d0cc2542bcdbbf93ce853a9ce43c533ff4a9494"
+    },
+    {
+      "path": "scripts/validate-ticket-marker-correction.mjs",
+      "sha256": "8e01b2644ca66077487840d0b72ecc492a99d4ee1562cb6c6bda4912666f40bf"
+    },
+    {
+      "path": "scripts/regress-ticket-marker-correction.mjs",
+      "sha256": "fa50ec67bdb75eea36dc57a7acd91bdc38a516a50a9d882c5544d5aa5c18f4d6"
+    }
+  ],
+  "limitations": "Finite executable probes and an independent rule predicate support this reproduced defect and correction, not universal correctness or an independently held-out author/model set."
+}

@@ -1,6 +1,6 @@
 # 03 — Browser replay repair
 
-**Final 3.0.0 screening result (September 11): 6/6 counted trials returned reward=0, with three Codex and three Claude trials.** This task is one of the [nine qualifying tasks](../final-results-2026-09-11.md). Full historical trials, audits and excluded attempts remain below.
+**Final 3.0.0 screening result (September 11): 6/6 counted trials returned reward=0, with three Codex and three Claude trials.** This task is one of the [qualifying tasks](../final-results-2026-09-11.md). Full historical trials, audits and excluded attempts remain below.
 
 Claude solved the frozen browser task: reward 1, **16/16 scenarios**, reported duration **25m 35s** for the completed retry. The earlier 9m 54s attempt ended in a capture infrastructure error, not a model failure.
 

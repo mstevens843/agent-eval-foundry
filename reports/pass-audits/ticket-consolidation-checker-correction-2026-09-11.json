@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "kind": "checker-bank-correction-and-trial-disposition",
+  "taskId": "ticket-consolidation-repair",
+  "version": "2.0.2",
+  "status": "validated",
+  "packageDigest": "f01f00452514cce2527710420055fd93994f115d7bae7b1008a8ca598d3fad33",
+  "priorPackageDigest": "39f2a285b88072ca203ca0ad1998517269e0a376daa00b52cc252dffa79916cb",
+  "packageDirectory": ".local/ticket-checker-correction-2026-09-11-validated/build",
+  "nativeDigest": "80f11b84c9c9663a530057580b58e41a39dd534699a4242c6aed7ea2203039b1",
+  "ready": {
+    "path": ".local/ticket-checker-correction-2026-09-11-validated/READY.json",
+    "sha256": "85bed660542ea1ef8c2f70e0fc0c3cc7375d35e251396e64c5d6ab5541d00362"
+  },
+  "providerCallsMade": 0,
+  "newAgentAttempts": 0,
+  "dispatched": false,
+  "trialDisposition": {
+    "trial": 4,
+    "provider": "codex",
+    "recordedReward": 1,
+    "auditDisposition": "false-pass",
+    "auditedReward": null,
+    "countsAsCleanPass": false,
+    "countsAsCleanFailure": false,
+    "originalRecordUnchanged": true,
+    "record": ".local/successor-adaptive-trials-2026-09-11/slots/ticket-consolidation-repair/trial-4/real-campaign-frozen/jobs/real-provider/records/ticket-consolidation-repair-attempt-1",
+    "originalCompletion": {
+      "path": ".local/successor-adaptive-trials-2026-09-11/slots/ticket-consolidation-repair/trial-4/real-campaign-frozen/jobs/real-provider/records/ticket-consolidation-repair-attempt-1/completion.json",
+      "sha256": "8fe87dc13d2679db5b089a4360f5f180acbd38ac71ff900c0b19abecd5ab6a5e"
+    },
+    "originalGrade": {
+      "path": ".local/successor-adaptive-trials-2026-09-11/slots/ticket-consolidation-repair/trial-4/real-campaign-frozen/jobs/real-provider/records/ticket-consolidation-repair-attempt-1/grade.json",
+      "sha256": "cf3b5bb4c01ce2f59460e3f3f54626620e5f0757db06f0af7bce1571d34fa501"
+    }
+  },
+  "validation": {
+    "fastComparisons": 1867,
+    "assuranceChecks": 31,
+    "checkerCandidates": 28,
+    "positiveCandidates": 6,
+    "negativeCandidates": 22,
+    "nativeOracleReward": 1,
+    "nativeNopReward": 0,
+    "nativeIntegrityChecks": 8,
+    "protectedCellsCompared": 1932,
+    "independentDiscrepancies": 0,
+    "mutationsCaught": 11,
+    "savedTrial4Checker": {
+      "correct": 19,
+      "total": 28,
+      "invalidCandidatesAccepted": 8,
+      "validCandidatesRejected": 1
+    },
+    "originalEvidenceFilesVerified": 3737
+  },
+  "linkedRegrades": [
+    {
+      "trial": 1,
+      "path": ".local/ticket-checker-correction-2026-09-11-validated/regrades/trial-1",
+      "result": {
+        "path": ".local/ticket-checker-correction-2026-09-11-validated/regrades/trial-1/result.json",
+        "sha256": "7732a83b7c4a76d7442dfd2e350b26fa3a7b3fd3b485802dafdf253420275eca"
+      },
+      "service": "semantic-pass",
+      "serviceCases": 69,
+      "reward": 0,
+      "checkerPassed": false,
+      "newAgentAttempts": 0,
+      "countsAsModelFailure": false
+    },
+    {
+      "trial": 2,
+      "path": ".local/ticket-checker-correction-2026-09-11-validated/regrades/trial-2",
+      "result": {
+        "path": ".local/ticket-checker-correction-2026-09-11-validated/regrades/trial-2/result.json",
+        "sha256": "4d8da4bf0aecab8559ffb38d30c82ccead5ef5e9f8f44917f1373b6716bf877a"
+      },
+      "service": "semantic-pass",
+      "serviceCases": 69,
+      "reward": 0,
+      "checkerPassed": false,
+      "newAgentAttempts": 0,
+      "countsAsModelFailure": false
+    },
+    {
+      "trial": 3,
+      "path": ".local/ticket-checker-correction-2026-09-11-validated/regrades/trial-3",
+      "result": {
+        "path": ".local/ticket-checker-correction-2026-09-11-validated/regrades/trial-3/result.json",
+        "sha256": "ead1b0c2de062b80c7d8efd3a78151c433bc3a6087c8dc0633f6814496d3ae77"
+      },
+      "service": "semantic-pass",
+      "serviceCases": 69,
+      "reward": 0,
+      "checkerPassed": false,
+      "newAgentAttempts": 0,
+      "countsAsModelFailure": false
+    },
+    {
+      "trial": 4,
+      "path": ".local/ticket-checker-correction-2026-09-11-validated/regrades/trial-4",
+      "result": {
+        "path": ".local/ticket-checker-correction-2026-09-11-validated/regrades/trial-4/result.json",
+        "sha256": "0a22869775a55ef4db27d4a02a7ab1540a34eaf462b49a424f68736a6ba4ba70"
+      },
+      "service": "semantic-pass",
+      "serviceCases": 69,
+      "reward": 0,
+      "checkerPassed": false,
+      "newAgentAttempts": 0,
+      "countsAsModelFailure": false
+    }
+  ],
+  "evidence": [
+    {
+      "path": ".local/ticket-checker-correction-2026-09-11-validated/PREPARED.json",
+      "sha256": "4e8f3304d98db935a9090ed43916242af1259990de9bd170435e8538b5787b07"
+    },
+    {
+      "path": ".local/ticket-checker-correction-2026-09-11-validated/foundry.json",
+      "sha256": "ef8cb41dd082bb3251d07b2d10a695ce19dfc87d69e6bb5ff3f12ea80a334a1e"
+    },
+    {
+      "path": ".local/ticket-checker-correction-2026-09-11-validated/native.json",
+      "sha256": "c84fc67194b7c95524f986c9c50823cc434a1788244658258f9cf501c62bec08"
+    },
+    {
+      "path": ".local/ticket-checker-correction-2026-09-11-validated/regrades.json",
+      "sha256": "2db183009c8be9a7c68a212df1e36a7679043b0f283606d9fc3ca4d5d2bd7156"
+    },
+    {
+      "path": ".local/ticket-checker-correction-2026-09-11-validated/regressions.json",
+      "sha256": "f40ab6aef8c48598e27b022f4f7160e4782ffb880e25e9134700331d2604891d"
+    }
+  ],
+  "sources": [
+    {
+      "path": "scripts/validate-ticket-checker-correction.mjs",
+      "sha256": "701e65c9a9d525cbbaab51112a1cf2e1c22237e44e0b0c08c9408258a36e6013"
+    },
+    {
+      "path": "scripts/regress-ticket-checker-correction.mjs",
+      "sha256": "d61a9c54524383fa9485320a40c41697af1afa6634f8fa44a0a1176a4cb1f95f"
+    },
+    {
+      "path": "tasks/ticket-consolidation-repair/private/control-manifest.json",
+      "sha256": "365bb35241c0c4b127fe805120ef717773e6916c4a09f6f5d4d421dfe0f03faa"
+    },
+    {
+      "path": "tasks/ticket-consolidation-repair/private/controls/request-probe.mjs",
+      "sha256": "d13056a1659553f1e2862e514f89b49810ba0b0e63b976ca508c9cf5ef5d1407"
+    },
+    {
+      "path": "tasks/ticket-consolidation-repair/public/SEMANTICS.md",
+      "sha256": "7e67ee85c2703f5d894eed56d1e4421c5fc5a855b970ab1d9c65c5b8f4b4ef50"
+    },
+    {
+      "path": "tasks/ticket-consolidation-repair/public/CHECKER-INPUT.md",
+      "sha256": "54308e40dd78898d6db2d0e8d8a59f4f86a40f1f8d5132b87b646b490858b55b"
+    }
+  ],
+  "report": {
+    "path": "reports/pass-audits/ticket-consolidation-checker-correction-2026-09-11.md",
+    "sha256": "f615f16b50b157b32040fdac8207be836664addf7f8a490f38d67d5977107ae9"
+  },
+  "continuation": "New trials must use this corrected digest in a separate prepared campaign. No trials dispatched by this validation."
+}

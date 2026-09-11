@@ -1,0 +1,204 @@
+{
+  "schemaVersion": 1,
+  "kind": "generation-contract-correction",
+  "taskId": "partial-release-repair",
+  "version": "2.0.2",
+  "status": "validated",
+  "packageDigest": "1422a83d7860f81e2bf9bdb52ce634887f2e8da4edcccbe8870cdcfebaadf897",
+  "priorPackageDigest": "9bd1c3ae996492793bc3f01264c28a3ed327836f2ae16b7353f8f1571cc0a612",
+  "packageDirectory": ".local/partial-release-generation-correction-2026-09-11/build",
+  "nativeDigest": "60c0b7e7675b401730272ed39b17c4e525b94ea45d99181478191957081ee9f5",
+  "ready": {
+    "path": ".local/partial-release-generation-correction-2026-09-11/READY.json",
+    "sha256": "480a2d7b941e665bde616fbb1600736b0fb6e196b6597eae84f403cf3ae52e86"
+  },
+  "providerCallsMade": 0,
+  "newAgentAttempts": 0,
+  "dispatched": false,
+  "historicalTrial2": {
+    "recordedReward": 1,
+    "auditDisposition": "retain-pass",
+    "correctedPackageDiagnosticReward": 1,
+    "originalRecordUnchanged": true
+  },
+  "validation": {
+    "fastComparisons": 1367,
+    "assuranceChecks": 25,
+    "checkerCandidates": 22,
+    "positiveCandidates": 5,
+    "negativeCandidates": 17,
+    "nativeOracleReward": 1,
+    "nativeNopReward": 0,
+    "nativeIntegrityChecks": 8,
+    "generationRegressions": {
+      "schemaVersion": 1,
+      "providerCallsMade": 0,
+      "protectedExecution": false,
+      "passed": true,
+      "exactOldFailures": 3,
+      "exactCorrectedPasses": 3,
+      "counterAndReceiptScenarios": 6,
+      "illegalGenerationRequestsRejected": 9,
+      "mutations": [
+        {
+          "name": "compare-generation-as-content",
+          "caught": true,
+          "error": "legal generation-bearing request was rejected\n+ actual - expected\n\n+ 'REJECTED'\n- 'UNKNOWN'\n"
+        },
+        {
+          "name": "store-caller-generation",
+          "caught": true,
+          "error": "caller bookkeeping leaked into stored content"
+        },
+        {
+          "name": "trust-caller-counter",
+          "caught": true,
+          "error": "Expected values to be strictly equal:\n\n1000 !== 1\n"
+        },
+        {
+          "name": "increment-counter-on-noop",
+          "caught": true,
+          "error": "idempotent create changed the server counter\n\n2 !== 1\n"
+        },
+        {
+          "name": "receipt-follows-current-incarnation",
+          "caught": true,
+          "error": "old call receipt changed after a later incarnation\n+ actual - expected\n\n  {\n+   generation: 3,\n-   generation: 1,\n    status: 'DONE'\n  }\n"
+        },
+        {
+          "name": "checker-compares-generation-as-content",
+          "caught": true,
+          "witnesses": 3
+        },
+        {
+          "name": "checker-skips-generation-bearing-requests",
+          "caught": true,
+          "witnesses": 9
+        }
+      ],
+      "originalPassDisposition": "retain-pass"
+    },
+    "protectedGenerationChecks": {
+      "schemaVersion": 1,
+      "passed": true,
+      "providerCallsMade": 0,
+      "protectedCells": 1430,
+      "inspectedResources": 10176,
+      "receiptResponses": 7148,
+      "suppliedGenerations": 707,
+      "counterRule": "Increment only when an absent resource becomes present; retain counters after removal.",
+      "storedContentHasNoGeneration": true,
+      "receiptsRemainCallBound": true,
+      "casesSha256": "0caa792d286b237053479a6e54dd7d69ab86e28b7f5e3083ff966efeded67bb3"
+    },
+    "savedTrial2Checker": {
+      "correct": 22,
+      "total": 22,
+      "passed": true
+    },
+    "originalEvidenceFilesVerified": 1793
+  },
+  "linkedRegrades": [
+    {
+      "trial": 1,
+      "path": ".local/partial-release-generation-correction-2026-09-11/regrades/trial-1",
+      "result": {
+        "path": ".local/partial-release-generation-correction-2026-09-11/regrades/trial-1/result.json",
+        "sha256": "3927e96bae609e83913b9fbd2f00bddd95155f7cde02044a5a3d6430639a2334"
+      },
+      "service": "semantic-pass",
+      "serviceCases": 65,
+      "reward": 0,
+      "checkerPassed": false,
+      "newAgentAttempts": 0,
+      "countsAsModelFailure": false
+    },
+    {
+      "trial": 2,
+      "path": ".local/partial-release-generation-correction-2026-09-11/regrades/trial-2",
+      "result": {
+        "path": ".local/partial-release-generation-correction-2026-09-11/regrades/trial-2/result.json",
+        "sha256": "81a14da2c5002a98f2cfc8e9315d979bf47a3a2f5e02edc613871910a7ff8430"
+      },
+      "service": "semantic-pass",
+      "serviceCases": 65,
+      "reward": 1,
+      "checkerPassed": true,
+      "newAgentAttempts": 0,
+      "countsAsModelFailure": false
+    }
+  ],
+  "evidence": [
+    {
+      "path": ".local/partial-release-generation-correction-2026-09-11/PREPARED.json",
+      "sha256": "09ce547fccfdbf28db0a7a644672e751c02ba65d21f7245e8dacea665b940ad5"
+    },
+    {
+      "path": ".local/partial-release-generation-correction-2026-09-11/foundry.json",
+      "sha256": "6dc7e4278a089a47186efa748b4aa6c4ba3746921e040908492fa0b9c8e329f8"
+    },
+    {
+      "path": ".local/partial-release-generation-correction-2026-09-11/native.json",
+      "sha256": "cc0f8523180dc9c94d284bda1380618e84d2149ed14cdb9185dd4d3a1a94066c"
+    },
+    {
+      "path": ".local/partial-release-generation-correction-2026-09-11/regrades.json",
+      "sha256": "11f2e9790bb44841203a9834e7e925a66b314a176dfbe85070fb063257eeb778"
+    },
+    {
+      "path": ".local/partial-release-generation-correction-2026-09-11/generation-regressions/summary.json",
+      "sha256": "5fb9fc0e574022da64f9ed088e149d3f839209aa7de76c002aedb2f21c876f46"
+    },
+    {
+      "path": ".local/partial-release-generation-correction-2026-09-11/generation-traces.json",
+      "sha256": "a6d9c60888026980984ce0d640d6b086dd07794e71d75a4c6d486a99cd18ff66"
+    }
+  ],
+  "sources": [
+    {
+      "path": "scripts/validate-partial-release-generation-correction.mjs",
+      "sha256": "bb68a14b1162c45caf4c8bcc6afff1e9ea048bc0e305cc4841025f27277fb33c"
+    },
+    {
+      "path": "scripts/regress-partial-release-generation.mjs",
+      "sha256": "959b8d21f0c8c557883010e5cf38cf3425faeeb1b952b2c0a3b58d85558f02f2"
+    },
+    {
+      "path": "scripts/verify-partial-release-generation-traces.mjs",
+      "sha256": "bede05a7d7ed3cb83f50eff68f406172602f44b990d988f9089391262d6cadc0"
+    },
+    {
+      "path": "tasks/partial-release-repair/private/domain.mjs",
+      "sha256": "a3f128cb29543b978df70bb07e87ce69f109338013fda196e622f5b55a5651b7"
+    },
+    {
+      "path": "tasks/partial-release-repair/private/reference/checker.mjs",
+      "sha256": "316626e403dcc0b3bbdf9bb14d3ccf61623362d1a858ee671027a368a8688c1b"
+    },
+    {
+      "path": "tasks/partial-release-repair/private/control-manifest.json",
+      "sha256": "2b111aed32289468e78bb8ab7495b8495d14a5f5bda165294a48010be06fdf06"
+    },
+    {
+      "path": "tasks/partial-release-repair/private/controls/generation-probe.mjs",
+      "sha256": "0b4631631cd2296377399652fe1899fa0bc0891696fc157a0da5b72298c76d54"
+    },
+    {
+      "path": "tasks/partial-release-repair/public/SEMANTICS.md",
+      "sha256": "89d0dcf272b30dd4896eb8650f4a3e6b6cde73c6b4ef1f7ddfee397baa6105f5"
+    },
+    {
+      "path": "tasks/partial-release-repair/public/api.d.ts",
+      "sha256": "6b18f1569f36e6234302d2f248ed854df8a46ffdf89bd86a5dc306fde1fe3f2a"
+    },
+    {
+      "path": "tasks/partial-release-repair/public/CHECKER-INPUT.md",
+      "sha256": "f2d7e765dc546353b885866d5a82566e28e4c7ae77197aa117f0809c5b615a76"
+    }
+  ],
+  "report": {
+    "path": "reports/pass-audits/partial-release-generation-correction-2026-09-11.md",
+    "sha256": "f4c0d8d108a279a56a89cef00e5c7754c3f870b7f5a12080fc0d7bbb80afe1fe"
+  },
+  "continuation": "The original pass remains valid. Any user-requested fresh trials must use this corrected digest and a separate continuation namespace. This correction runs no model trials."
+}

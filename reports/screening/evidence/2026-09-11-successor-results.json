@@ -1,0 +1,1580 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-11",
+  "checkpoint": "successor-three-qualifiers-before-ticket-attempt-7",
+  "physicalProviderAttempts": 28,
+  "providerCallsMadeByPublication": 0,
+  "originalCampaign": {
+    "preparedSlots": 30,
+    "physicalAttempts": 24,
+    "mainLedgerLaunches": 20,
+    "continuationLedgerLaunches": 4,
+    "everyDispatchedSlotHasExactlyOneLaunch": true,
+    "mainFinalPresent": false,
+    "controllerErrorPreserved": true,
+    "controllerErrorSha256": "2301c9d9f86415a8e4670ed3b26dc557632725669fc44aac541d55d66ce58ec2",
+    "reconciliationSha256": "3dcf9eabe9657277065ca5e0737a7ea7e23b73c38e48e7e5580b90a68736eb72",
+    "mainEventsSha256": "46cfe444b4fc20078db2051de8e075bf19eb3ebe8fbf60ddcdec1a5b1c3fc4c6",
+    "continuationEventsSha256": "d24a1d82e395602ab6a7057787804731cff2bdce9ee71e6f249303320919419b"
+  },
+  "supplementaryAttempts": 4,
+  "verifiedManifestFiles": 37792,
+  "sources": [
+    {
+      "path": "reports/screening/evidence/2026-09-11-successor-adaptive-trials-preparation.json",
+      "sha256": "d4344e17a82be0b899609aca8ef276c3754331b9b6c7e06b60f15fa37183c4ef"
+    },
+    {
+      "path": "reports/screening/evidence/2026-09-11-successor-adaptive-trials-review.json",
+      "sha256": "b23e1ae8cb26a7f387cbb5618048bed80c0e5b9536c7ac5cebd9798a1402f20b"
+    },
+    {
+      "path": "reports/pass-audits/verified-installation-trial-two-reconciliation-2026-09-11.json",
+      "sha256": "1322a21e48a2579ca376b4ddf7d0ebb1d14cca36c013dfb2108ab4a1b90f800c"
+    },
+    {
+      "path": "reports/pass-audits/partial-release-trial-three-2026-09-11.json",
+      "sha256": "3bda5ba2bd76660b6ca98be8a9e5f857601d4151ce15737e9fe49af748c10a68"
+    },
+    {
+      "path": "reports/pass-audits/ticket-consolidation-attempt-six-2026-09-11.json",
+      "sha256": "abb6e9fa4bb10e11bee9588f50bb2f0c8a02bffa329bb6ae69c0f2b7f30fce89"
+    }
+  ],
+  "packages": [
+    {
+      "id": "compatible-rollout-repair",
+      "number": 5,
+      "name": "Compatible rollout",
+      "analysis": "reports/screening/original-five/05-compatible-rollout-repair.md",
+      "attempts": [
+        {
+          "trial": 1,
+          "provider": "claude",
+          "version": "3.0.1",
+          "packageDigest": "c55fbadc8e541790289e7f30dc6cb6742eac0fee0bc9ea790d36fdd8fb0bcef0",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "a36fd20ea55816023410ec97cfde381f2c917740ab49e350fd90acd95767f8a8",
+          "gradeSha256": "1c5ad1f6276695366d1065a0f5976081349e961741e9f6fa1df8f8b1b92a52ed",
+          "resultSha256": "da50b18cf6a0a17f1119f76c1f38c5f44ca97a72e29bb360789c6bc6ff71c5c6",
+          "captureSha256": "31ca319955108398f03b950b0da54945f1e0f4bb13d38cfa71a4b280fe21fc5a",
+          "submissionEntrySha256": "ad4764f9b6ac5f30c019991278ac19cae455943a80606fd1157333aca6e9ed8b",
+          "submissionCheckerSha256": "9cd14d2c2c87030ebc5abfed662ddd93e06b2791be2596ddb3b87ba4635c4692",
+          "manifestFilesVerified": 1431,
+          "manifestBytesVerified": 41919134,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 25
+          },
+          "checkerPassed": false,
+          "checker": null,
+          "checkerFailureKind": "output-validation-failure",
+          "requested": {
+            "effort": "max",
+            "model": "anthropic/claude-opus-5",
+            "provider": "anthropic",
+            "scaffold": "claude-code"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 2137376
+        },
+        {
+          "trial": 2,
+          "provider": "claude",
+          "version": "3.0.1",
+          "packageDigest": "c55fbadc8e541790289e7f30dc6cb6742eac0fee0bc9ea790d36fdd8fb0bcef0",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "1c0e920f9566d4d6b9c5af27d323cd4b99dd9c12f27e760eed92135468d13101",
+          "gradeSha256": "1c5ad1f6276695366d1065a0f5976081349e961741e9f6fa1df8f8b1b92a52ed",
+          "resultSha256": "cecba792b8518c3c2018b52b458cf41c17ee4548c617ee58a4950630efeb6fcf",
+          "captureSha256": "c0331b9801e52698be2b230be62125309285350a82be63c989e4cc185f71aa58",
+          "submissionEntrySha256": "d26fec6bfe665a3adf896942aab2dafd8eeccff43739cd3314145942118084a7",
+          "submissionCheckerSha256": "251a5da8597429c3e45668f8c369eaefe45e92f9c55988bc431490d7527caabf",
+          "manifestFilesVerified": 1491,
+          "manifestBytesVerified": 44209129,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 25
+          },
+          "checkerPassed": false,
+          "checker": null,
+          "checkerFailureKind": "output-validation-failure",
+          "requested": {
+            "effort": "max",
+            "model": "anthropic/claude-opus-5",
+            "provider": "anthropic",
+            "scaffold": "claude-code"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 2416505
+        },
+        {
+          "trial": 3,
+          "provider": "claude",
+          "version": "3.0.1",
+          "packageDigest": "c55fbadc8e541790289e7f30dc6cb6742eac0fee0bc9ea790d36fdd8fb0bcef0",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "08c19d9f2cce3608c6346c235472ce207d5a2bd5ae783e848ea0c55a326eb534",
+          "gradeSha256": "1c5ad1f6276695366d1065a0f5976081349e961741e9f6fa1df8f8b1b92a52ed",
+          "resultSha256": "f2e9bf540f060811fc5bbbe01c91efffdf25b69eeb382ad4539765f772dfdc5e",
+          "captureSha256": "a2a783ad224e05ea2340e0b2357d962b0703983a6d86f4192e1a6c02c721e3f1",
+          "submissionEntrySha256": "cabcd0e2c44ceb2bb91b46ddabf3d94d3e01d4f4abc4b332e9a2af1074e1ce87",
+          "submissionCheckerSha256": "bc73923eee7c6d8e47a992ac8aa3e68590bb010fbf8563a9b049c889c579587c",
+          "manifestFilesVerified": 1431,
+          "manifestBytesVerified": 42900297,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 25
+          },
+          "checkerPassed": false,
+          "checker": null,
+          "checkerFailureKind": "output-validation-failure",
+          "requested": {
+            "effort": "max",
+            "model": "anthropic/claude-opus-5",
+            "provider": "anthropic",
+            "scaffold": "claude-code"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 1952785
+        },
+        {
+          "trial": 4,
+          "provider": "codex",
+          "version": "3.0.1",
+          "packageDigest": "c55fbadc8e541790289e7f30dc6cb6742eac0fee0bc9ea790d36fdd8fb0bcef0",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "054f915cdd79901794e781ac7a3f0542aee5b7f13212e91b62dcef34875ae9de",
+          "gradeSha256": "1c5ad1f6276695366d1065a0f5976081349e961741e9f6fa1df8f8b1b92a52ed",
+          "resultSha256": "329713a92bbf99d3805607be2719c4aa414311288a30f19dc292b823e5309b53",
+          "captureSha256": "4532aa69c3d8aef22edfb06fad53f42f84dd3b4419cddcce7681ab30c820e4f2",
+          "submissionEntrySha256": "e70e5b8117fecfd329331c18111f29fa27f6ae39bd89a0acb9e118ab3f081271",
+          "submissionCheckerSha256": "ef4a2ea2c583eaee9a1f96d6c9e8dbde6d07b5887f0d4d87fa2e2edfdf9d7516",
+          "manifestFilesVerified": 1432,
+          "manifestBytesVerified": 40363395,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 25
+          },
+          "checkerPassed": false,
+          "checker": {
+            "correct": 14,
+            "total": 17,
+            "rejectedValid": 3,
+            "acceptedInvalid": 0
+          },
+          "checkerFailureKind": "classification-error",
+          "requested": {
+            "effort": "xhigh",
+            "model": "openai/gpt-5.6-sol",
+            "provider": "openai",
+            "scaffold": "codex"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 1199152
+        },
+        {
+          "trial": 5,
+          "provider": "codex",
+          "version": "3.0.1",
+          "packageDigest": "c55fbadc8e541790289e7f30dc6cb6742eac0fee0bc9ea790d36fdd8fb0bcef0",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "e51edab979e2c937eb093cec9ca0956ac8ea49e5606c67eb5309d8142b898ff5",
+          "gradeSha256": "1c5ad1f6276695366d1065a0f5976081349e961741e9f6fa1df8f8b1b92a52ed",
+          "resultSha256": "3a61e7045ed195d379d6c38333dd9f3bd429be6ddd68decee268383c2451eac7",
+          "captureSha256": "996a8590d0dc51fa1f777bc4daf90a19c2e795d7b1388a194e96169b11996c5a",
+          "submissionEntrySha256": "a91a88b793bd43ee70a64721e6c1b4e4d1cfe5f2987c43eb3b45a1918117b5f6",
+          "submissionCheckerSha256": "f8c684833e8118581891f7b1dc4b3cb57ba28ec917bfa63448dc5016a0ccf545",
+          "manifestFilesVerified": 1432,
+          "manifestBytesVerified": 40402330,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 25
+          },
+          "checkerPassed": false,
+          "checker": {
+            "correct": 14,
+            "total": 17,
+            "rejectedValid": 3,
+            "acceptedInvalid": 0
+          },
+          "checkerFailureKind": "classification-error",
+          "requested": {
+            "effort": "xhigh",
+            "model": "openai/gpt-5.6-sol",
+            "provider": "openai",
+            "scaffold": "codex"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 1181004
+        },
+        {
+          "trial": 6,
+          "provider": "codex",
+          "version": "3.0.1",
+          "packageDigest": "c55fbadc8e541790289e7f30dc6cb6742eac0fee0bc9ea790d36fdd8fb0bcef0",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "9fe152a41c1e4606fbf228fbffbb1121e3d04c69b835310797681442862fef39",
+          "gradeSha256": "1c5ad1f6276695366d1065a0f5976081349e961741e9f6fa1df8f8b1b92a52ed",
+          "resultSha256": "8d803c043720c46ba1249ddd84794d90b834d560d633912b62ba693c12b00632",
+          "captureSha256": "ee9cacc4b1a7ee7f6d0155106d73c69942a836bddd24a4f2b3b338651fff8501",
+          "submissionEntrySha256": "434bbc3239b54dd53c65e4870235f6d8b70322d4e591acd0324edb48add877c3",
+          "submissionCheckerSha256": "2d74d0947cd26c826b52bb95d44833eb7b46e22eeefe63c737283698a35b776d",
+          "manifestFilesVerified": 1431,
+          "manifestBytesVerified": 40324771,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 25
+          },
+          "checkerPassed": false,
+          "checker": null,
+          "checkerFailureKind": "output-validation-failure",
+          "requested": {
+            "effort": "xhigh",
+            "model": "openai/gpt-5.6-sol",
+            "provider": "openai",
+            "scaffold": "codex"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 1496847
+        }
+      ]
+    },
+    {
+      "id": "partial-release-repair",
+      "number": 8,
+      "name": "Partial release",
+      "analysis": "reports/screening/next-five/08-partial-release-repair.md",
+      "attempts": [
+        {
+          "trial": 1,
+          "provider": "claude",
+          "version": "2.0.1",
+          "packageDigest": "9bd1c3ae996492793bc3f01264c28a3ed327836f2ae16b7353f8f1571cc0a612",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "46a5951906f52565c065a79b757a92520bf44aad50f6ad1dc4afb0fbe21f19d0",
+          "gradeSha256": "1630e180d226842cc04fa7e1fa08a89e1205c2a430e9222dc2729023ae00d682",
+          "resultSha256": "22c255b92f339f5c7e697fd26701a66ba73707f97ad5a84e568d735f4ce03c54",
+          "captureSha256": "1dead364855fd7ce2bb4c4cc99cf2ff5442fcb7dc36772eb3957531e1f5bf33d",
+          "submissionEntrySha256": "3c1ff63fdaa09c6a3466df072ff1bafee860563eede56c856e15451b7b3cfa8e",
+          "submissionCheckerSha256": "8721f726513cedc600aa8282d1faa91c57952f38fd4c0ef75336031a132c7cbf",
+          "manifestFilesVerified": 896,
+          "manifestBytesVerified": 17205476,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 65
+          },
+          "checkerPassed": false,
+          "checker": null,
+          "checkerFailureKind": "output-validation-failure",
+          "requested": {
+            "effort": "max",
+            "model": "anthropic/claude-opus-5",
+            "provider": "anthropic",
+            "scaffold": "claude-code"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 1156354
+        },
+        {
+          "trial": 2,
+          "provider": "claude",
+          "version": "2.0.1",
+          "packageDigest": "9bd1c3ae996492793bc3f01264c28a3ed327836f2ae16b7353f8f1571cc0a612",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "0058828ac8217fdfa75afbf0a09375c3e55289b394559bcbc646f702b606408d",
+          "gradeSha256": "cc7203342cc7a49d98b2512c91d3e6cb21bce877c9e01d830a73818bdd8b399d",
+          "resultSha256": "c60667a9f3417eccdf337cd042e3fb30ef2e397a429efc366d70cad6cdb077a0",
+          "captureSha256": "04d37809f30d35cb98efbeb62bf27b9c1323312d6da8aa652987e8db310fc7dc",
+          "submissionEntrySha256": "c76717123f49d2a9d2231b326fcbfaa2110bb955e81cefd8da87d48b5a899860",
+          "submissionCheckerSha256": "0f57f46bc9cfc6af2c77798e57d867599a11a9bd86a6e815ef482f44ff890b01",
+          "manifestFilesVerified": 897,
+          "manifestBytesVerified": 17060088,
+          "recordedReward": 1,
+          "countedReward": 1,
+          "disposition": "pass-audit-retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 65
+          },
+          "checkerPassed": true,
+          "checker": {
+            "correct": 17,
+            "total": 17,
+            "rejectedValid": 0,
+            "acceptedInvalid": 0
+          },
+          "checkerFailureKind": null,
+          "requested": {
+            "effort": "max",
+            "model": "anthropic/claude-opus-5",
+            "provider": "anthropic",
+            "scaffold": "claude-code"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 1025853,
+          "audit": {
+            "path": "reports/pass-audits/partial-release-trial-three-2026-09-11.json",
+            "sha256": "3bda5ba2bd76660b6ca98be8a9e5f857601d4151ce15737e9fe49af748c10a68",
+            "auditedReward": 1
+          }
+        },
+        {
+          "trial": 3,
+          "provider": "claude",
+          "version": "2.0.2",
+          "packageDigest": "1422a83d7860f81e2bf9bdb52ce634887f2e8da4edcccbe8870cdcfebaadf897",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "9f39519051765bfe099c2ef177593701a7521e49deac40486e3d0f3e3ad2051d",
+          "gradeSha256": "cc7203342cc7a49d98b2512c91d3e6cb21bce877c9e01d830a73818bdd8b399d",
+          "resultSha256": "1cace7ff957061bb91f21af166147c3beed029abaf37d93002ceb2a134b02c0a",
+          "captureSha256": "70339b344105d7d26652b2cd268e88833a119eaf9b05b88f083361c6c30ceb16",
+          "submissionEntrySha256": "9afb4077224d6858e6fcaf4b4a687ae315880dad6c4babe73bcd6d8be5601dc7",
+          "submissionCheckerSha256": "e22711d92549156e97bbcd41ab6d704f5ea3419fa6a6de647a05de676aff7293",
+          "manifestFilesVerified": 1241,
+          "manifestBytesVerified": 23829904,
+          "recordedReward": 1,
+          "countedReward": 1,
+          "disposition": "pass-audit-retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 65
+          },
+          "checkerPassed": true,
+          "checker": {
+            "correct": 22,
+            "total": 22,
+            "rejectedValid": 0,
+            "acceptedInvalid": 0
+          },
+          "checkerFailureKind": null,
+          "requested": {
+            "effort": "max",
+            "model": "anthropic/claude-opus-5",
+            "provider": "anthropic",
+            "scaffold": "claude-code"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 1220399,
+          "authorizedConfirmation": true,
+          "audit": {
+            "path": "reports/pass-audits/partial-release-trial-three-2026-09-11.json",
+            "sha256": "3bda5ba2bd76660b6ca98be8a9e5f857601d4151ce15737e9fe49af748c10a68",
+            "auditedReward": 1
+          }
+        },
+        {
+          "trial": 4,
+          "provider": "codex",
+          "version": "2.0.2",
+          "packageDigest": "1422a83d7860f81e2bf9bdb52ce634887f2e8da4edcccbe8870cdcfebaadf897",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "0360c10ce0a9872858d5dda328e39cd222586f3aa668873e5d1f11fe10204369",
+          "gradeSha256": "cc7203342cc7a49d98b2512c91d3e6cb21bce877c9e01d830a73818bdd8b399d",
+          "resultSha256": "c2bf30d62d12e580133ebafc85b444157294d2de53b861007be8974262b43aae",
+          "captureSha256": "a1644b01b49027d8f0961aaafbfa9fb9436712472635d590b8871f661731902a",
+          "submissionEntrySha256": "dd741a7a7f3e7ee725bc77b5202bbf84669d6333e8259c4f4628bb844c314d95",
+          "submissionCheckerSha256": "668a1c7ba075b97a859f82e8862238d1afdabb978ee61a25e22e209c97148601",
+          "manifestFilesVerified": 1205,
+          "manifestBytesVerified": 22921327,
+          "recordedReward": 1,
+          "countedReward": 1,
+          "disposition": "recorded-pass-awaiting-audit",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 65
+          },
+          "checkerPassed": true,
+          "checker": {
+            "correct": 22,
+            "total": 22,
+            "rejectedValid": 0,
+            "acceptedInvalid": 0
+          },
+          "checkerFailureKind": null,
+          "requested": {
+            "effort": "xhigh",
+            "model": "openai/gpt-5.6-sol",
+            "provider": "openai",
+            "scaffold": "codex"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 566080,
+          "authorizedConfirmation": true
+        }
+      ]
+    },
+    {
+      "id": "ticket-consolidation-repair",
+      "number": 9,
+      "name": "Ticket consolidation",
+      "analysis": "reports/screening/next-five/09-ticket-consolidation-repair.md",
+      "attempts": [
+        {
+          "trial": 1,
+          "provider": "claude",
+          "version": "2.0.1",
+          "packageDigest": "39f2a285b88072ca203ca0ad1998517269e0a376daa00b52cc252dffa79916cb",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "8ce215a041eaf4cc03f68be547a0841f8c84edef09893ab91e73a5df3ef56ccb",
+          "gradeSha256": "f45b312a0657914f38df755647b498249de1c2e74f7022d507cc6ea978796ec7",
+          "resultSha256": "615590d9a1098702d96c1371a3a3694c6d033dd68a30d630c9ae51a90f3b331d",
+          "captureSha256": "5bfb4aff06fa98364deffb6c6705fc70b6aedd44c78d68e90f9a63553608d839",
+          "submissionEntrySha256": "f3834e8881020d6f90e3a74b39136fad495197955d252417dcfcc5cbaa56e682",
+          "submissionCheckerSha256": "5a8a8e6dcf6e2835961b428a6cec87843149d52516788834086c542c66b2a2a0",
+          "manifestFilesVerified": 923,
+          "manifestBytesVerified": 35601644,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 69
+          },
+          "checkerPassed": false,
+          "checker": null,
+          "checkerFailureKind": "output-validation-failure",
+          "requested": {
+            "effort": "max",
+            "model": "anthropic/claude-opus-5",
+            "provider": "anthropic",
+            "scaffold": "claude-code"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 1505406
+        },
+        {
+          "trial": 2,
+          "provider": "claude",
+          "version": "2.0.1",
+          "packageDigest": "39f2a285b88072ca203ca0ad1998517269e0a376daa00b52cc252dffa79916cb",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "14cb99e7e7c950ac16bc1741e6b6056344078b469b99d9ebd63dbb91ad53330f",
+          "gradeSha256": "f45b312a0657914f38df755647b498249de1c2e74f7022d507cc6ea978796ec7",
+          "resultSha256": "d5ce2258bdc4e60036149bef5510f4ef37b212c575d6d54f4830b3ab4fadae80",
+          "captureSha256": "1393d9fa3fc73457fe26d3c6f135d536562aa92079b0c72602dfddb98e1dacf1",
+          "submissionEntrySha256": "2f84ef4be624756af3c3b62eae1f3f3ac15b760a4b444e936991f92c2a8a43d1",
+          "submissionCheckerSha256": "c94f4c662cefd94825da401351ee29d9267125c1a346270b37b5f8160bcfc6cd",
+          "manifestFilesVerified": 923,
+          "manifestBytesVerified": 35960289,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 69
+          },
+          "checkerPassed": false,
+          "checker": null,
+          "checkerFailureKind": "output-validation-failure",
+          "requested": {
+            "effort": "max",
+            "model": "anthropic/claude-opus-5",
+            "provider": "anthropic",
+            "scaffold": "claude-code"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 2112321
+        },
+        {
+          "trial": 3,
+          "provider": "claude",
+          "version": "2.0.1",
+          "packageDigest": "39f2a285b88072ca203ca0ad1998517269e0a376daa00b52cc252dffa79916cb",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "f5911449b11f48e6415090baabef0d24878f981d213bd4ebe7607b433485551c",
+          "gradeSha256": "f45b312a0657914f38df755647b498249de1c2e74f7022d507cc6ea978796ec7",
+          "resultSha256": "64f32eb6fb832863a3f35f055686bc19c706f085fb32f33524306d8fb6f503a4",
+          "captureSha256": "53262f658b2eb04208f998f48ab669c24a3c266f7f52b150f620b5d00eb559bf",
+          "submissionEntrySha256": "529d84cc1167f06e07ae8f01bd3c46aa3e85bf7ba6c915e1bc560b8099f3354b",
+          "submissionCheckerSha256": "029206934e87d22adfa35839624b66186e4a3b95653419f25b38d74809542bb7",
+          "manifestFilesVerified": 967,
+          "manifestBytesVerified": 36470632,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 69
+          },
+          "checkerPassed": false,
+          "checker": null,
+          "checkerFailureKind": "output-validation-failure",
+          "requested": {
+            "effort": "max",
+            "model": "anthropic/claude-opus-5",
+            "provider": "anthropic",
+            "scaffold": "claude-code"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 1974451
+        },
+        {
+          "trial": 4,
+          "provider": "codex",
+          "version": "2.0.1",
+          "packageDigest": "39f2a285b88072ca203ca0ad1998517269e0a376daa00b52cc252dffa79916cb",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "8fe87dc13d2679db5b089a4360f5f180acbd38ac71ff900c0b19abecd5ab6a5e",
+          "gradeSha256": "cf3b5bb4c01ce2f59460e3f3f54626620e5f0757db06f0af7bce1571d34fa501",
+          "resultSha256": "4466c8460e492841f9aacdd3e1fefdd3f8d2a251c6f69eac600be1173fca8ae1",
+          "captureSha256": "e413f9aec50c92e5ea6bbd71749fd95e70dbd0924db4e6fb71b719ed976d1252",
+          "submissionEntrySha256": "e4446cebaef971d7be38a8b4c18e9729437b528773f4f4186bbaca24632539c3",
+          "submissionCheckerSha256": "e3a013392b3759962099cf511a8101bd2104503eea8604274855a6afe3b99fa3",
+          "manifestFilesVerified": 924,
+          "manifestBytesVerified": 34409651,
+          "recordedReward": 1,
+          "countedReward": null,
+          "disposition": "false-pass",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 69
+          },
+          "checkerPassed": true,
+          "checker": {
+            "correct": 17,
+            "total": 17,
+            "rejectedValid": 0,
+            "acceptedInvalid": 0
+          },
+          "checkerFailureKind": null,
+          "requested": {
+            "effort": "xhigh",
+            "model": "openai/gpt-5.6-sol",
+            "provider": "openai",
+            "scaffold": "codex"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 887954,
+          "audit": {
+            "path": "reports/pass-audits/ticket-consolidation-attempt-six-2026-09-11.json",
+            "sha256": "abb6e9fa4bb10e11bee9588f50bb2f0c8a02bffa329bb6ae69c0f2b7f30fce89",
+            "auditedReward": null
+          },
+          "falsePassCause": "request-membership-and-patch-schema"
+        },
+        {
+          "trial": 5,
+          "provider": "codex",
+          "version": "2.0.2",
+          "packageDigest": "f01f00452514cce2527710420055fd93994f115d7bae7b1008a8ca598d3fad33",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "2271d9df6d48c01326a8bef1a4a616447067ffd28394873683d944e058c8dba2",
+          "gradeSha256": "cf3b5bb4c01ce2f59460e3f3f54626620e5f0757db06f0af7bce1571d34fa501",
+          "resultSha256": "07f140fecd3842b6a645ab84e17ce4e012a47ffb4601881b5fbf3ed364f9bbb7",
+          "captureSha256": "d349adbd7f31e279878f3f68e75eb8d73d2402406a4d58a5698100710da6c661",
+          "submissionEntrySha256": "bc581b66f599feb2d23c8cc5b22ebbd5c11c04ab6723c94ec113b93992c2b967",
+          "submissionCheckerSha256": "e82bd55c2b369821cac0eb7df7c003c82f99a0fa6e5078f7e1715b3e259c3527",
+          "manifestFilesVerified": 1598,
+          "manifestBytesVerified": 67270722,
+          "recordedReward": 1,
+          "countedReward": null,
+          "disposition": "false-pass",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 69
+          },
+          "checkerPassed": true,
+          "checker": {
+            "correct": 28,
+            "total": 28,
+            "rejectedValid": 0,
+            "acceptedInvalid": 0
+          },
+          "checkerFailureKind": null,
+          "requested": {
+            "effort": "xhigh",
+            "model": "openai/gpt-5.6-sol",
+            "provider": "openai",
+            "scaffold": "codex"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 921253,
+          "audit": {
+            "path": "reports/pass-audits/ticket-consolidation-attempt-six-2026-09-11.json",
+            "sha256": "abb6e9fa4bb10e11bee9588f50bb2f0c8a02bffa329bb6ae69c0f2b7f30fce89",
+            "auditedReward": null
+          },
+          "falsePassCause": "literal-directory-identity"
+        },
+        {
+          "trial": 6,
+          "provider": "codex",
+          "version": "2.0.3",
+          "packageDigest": "bde0e2b5f7329bf06bea37992b7348a16f3ecd9c9178be9efcbf0d9cdd3344ac",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "53abf4f51db7c04da4820e9b41a0b17ea1e7635fa3e64ace90bc1d06cc07eda5",
+          "gradeSha256": "a1dbf906e2e847eb6e1d098389c138247a164092911803cf8d1b8eb9ec5fadcc",
+          "resultSha256": "17a57b46a1bedf37649f1de610c80ba2c016bef951652ae13927960d1d4028cf",
+          "captureSha256": "4cd8bacf4a05163553d240610b8e814be14313cad4b0cbe10f0d1bb9f5d3c8a7",
+          "submissionEntrySha256": "192e8a3f443fe1806e1bd47c0be2ff27830e1b2cd486da6390387906d626ecaa",
+          "submissionCheckerSha256": "244941f37849c958f11e9ed62bd4169966b70bbae9057de767b279cf32595f9a",
+          "manifestFilesVerified": 2333,
+          "manifestBytesVerified": 87127005,
+          "recordedReward": 1,
+          "countedReward": null,
+          "disposition": "false-pass",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 73
+          },
+          "checkerPassed": true,
+          "checker": {
+            "correct": 32,
+            "total": 32,
+            "rejectedValid": 0,
+            "acceptedInvalid": 0
+          },
+          "checkerFailureKind": null,
+          "requested": {
+            "effort": "xhigh",
+            "model": "openai/gpt-5.6-sol",
+            "provider": "openai",
+            "scaffold": "codex"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 924151,
+          "audit": {
+            "path": "reports/pass-audits/ticket-consolidation-attempt-six-2026-09-11.json",
+            "sha256": "abb6e9fa4bb10e11bee9588f50bb2f0c8a02bffa329bb6ae69c0f2b7f30fce89",
+            "auditedReward": null
+          },
+          "falsePassCause": "valid-deferred-marker-rejected"
+        }
+      ]
+    },
+    {
+      "id": "verified-installation-repair",
+      "number": 12,
+      "name": "Verified installation",
+      "analysis": "reports/screening/third-five/12-verified-installation-repair.md",
+      "attempts": [
+        {
+          "trial": 1,
+          "provider": "claude",
+          "version": "2.0.1",
+          "packageDigest": "5796a522e5ca55610974eba98e43b43d3d47266e458274eb50d4e23aa264ef45",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "05ffc217e5ff2c0687389e94fe5a99f9bb442ca5e0c3cb342229654566736f6a",
+          "gradeSha256": "80dfc990eb7d066a5753d655a9ec96f52ce59bf38df51a33aaaf0a13fc0b9bef",
+          "resultSha256": "dbf35dcf3fa0fe79b3374fc098ac8d7dbd707203b3930bbf5d10709cedebeaf4",
+          "captureSha256": "f2ecff6ea690907570b933dbde9a7372d091fa5f30825d8dd123f98857443075",
+          "submissionEntrySha256": "2188dae4641c5f09bb8399f3de6470aacb566f0cccf5db4981075f33002a31fc",
+          "submissionCheckerSha256": "c3771a180e3883f9ab7ec44a20391b97295efc94e04cfd7d2ae73596d241a3aa",
+          "manifestFilesVerified": 1571,
+          "manifestBytesVerified": 17718870,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 55
+          },
+          "checkerPassed": false,
+          "checker": null,
+          "checkerFailureKind": "output-validation-failure",
+          "requested": {
+            "effort": "max",
+            "model": "anthropic/claude-opus-5",
+            "provider": "anthropic",
+            "scaffold": "claude-code"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 1359359
+        },
+        {
+          "trial": 2,
+          "provider": "claude",
+          "version": "2.0.1",
+          "packageDigest": "5796a522e5ca55610974eba98e43b43d3d47266e458274eb50d4e23aa264ef45",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "8fcdd5a3304f63abbecfa157dbfb9c2d0f9200fec1937594e3d4eb89fe2f0609",
+          "gradeSha256": "e0daf661d56a6a0f2869c494f8f8b683980b62cb429749b11f7fc20f0a0d4faa",
+          "resultSha256": "10de6e4d7cb38c831d89e4ec31f781de3e7c302bb1f12d1c0b8336f8e86c03dc",
+          "captureSha256": "b471bb4430242abf24b464a9258794e7cc296d1a7bd910c72609851778963ff2",
+          "submissionEntrySha256": "02c3e3d9070e8cbaf786f4855f5b27404ac1c9b1652b85483f0f16c430f1792c",
+          "submissionCheckerSha256": "c631310730d40d8a02eae79d55fe615e42361e7ebd2e439d748ed9081813ccb0",
+          "manifestFilesVerified": 950,
+          "manifestBytesVerified": 4645524,
+          "recordedReward": null,
+          "countedReward": 0,
+          "disposition": "grading-recovered",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 55
+          },
+          "checkerPassed": false,
+          "checker": null,
+          "checkerFailureKind": "output-validation-failure",
+          "requested": {
+            "effort": "max",
+            "model": "anthropic/claude-opus-5",
+            "provider": "anthropic",
+            "scaffold": "claude-code"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 1279195,
+          "recovery": {
+            "originalCompletionDigest": "8fcdd5a3304f63abbecfa157dbfb9c2d0f9200fec1937594e3d4eb89fe2f0609",
+            "packageDigest": "5796a522e5ca55610974eba98e43b43d3d47266e458274eb50d4e23aa264ef45",
+            "reward": 0,
+            "newAgentAttempts": 0,
+            "countsAsNewModelFailure": false,
+            "resultSha256": "ea4cc1d065410f95c8cd486fdfea78c3f8c655ccf59cefb90f35bc7f2dc7364d",
+            "completionSha256": "ad65fa01c056d2b590a137234006914a502e089ab209e8d05edfa8d03604cb71",
+            "manifestFilesVerified": 1455,
+            "reconciliation": {
+              "path": "reports/pass-audits/verified-installation-trial-two-reconciliation-2026-09-11.json",
+              "sha256": "1322a21e48a2579ca376b4ddf7d0ebb1d14cca36c013dfb2108ab4a1b90f800c"
+            }
+          }
+        },
+        {
+          "trial": 3,
+          "provider": "claude",
+          "version": "2.0.1",
+          "packageDigest": "5796a522e5ca55610974eba98e43b43d3d47266e458274eb50d4e23aa264ef45",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "6f6298c26888253d79d98ab3d78751c040042c4ab3c74fe85e47430f20631083",
+          "gradeSha256": "80dfc990eb7d066a5753d655a9ec96f52ce59bf38df51a33aaaf0a13fc0b9bef",
+          "resultSha256": "b93b9ed45e6ecef528035dd0712855cfc6c0fd9afd6898882a331654c6e1b637",
+          "captureSha256": "a2f0c7e466dd9a9a1fb2b1e27758e026edf2bf0f18707e78be2311a4a9f686d6",
+          "submissionEntrySha256": "5ebc80e6937a23c7850cbb7e11ad311aa0fb104e95d4e5a4002aabdbc5e83302",
+          "submissionCheckerSha256": "e2e569baa9c121662a5e886adfc22a1b960222264d1d448757df03ccf8c1f9bc",
+          "manifestFilesVerified": 1567,
+          "manifestBytesVerified": 18951202,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 55
+          },
+          "checkerPassed": false,
+          "checker": null,
+          "checkerFailureKind": "output-validation-failure",
+          "requested": {
+            "effort": "max",
+            "model": "anthropic/claude-opus-5",
+            "provider": "anthropic",
+            "scaffold": "claude-code"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 1638601
+        },
+        {
+          "trial": 4,
+          "provider": "codex",
+          "version": "2.0.1",
+          "packageDigest": "5796a522e5ca55610974eba98e43b43d3d47266e458274eb50d4e23aa264ef45",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "066d29d810d7edf572fbb180d50448f6e07a090aa608487bc25950645508d0e7",
+          "gradeSha256": "80dfc990eb7d066a5753d655a9ec96f52ce59bf38df51a33aaaf0a13fc0b9bef",
+          "resultSha256": "f327562f4c50b0f1ee0be36930bd8c89ac54f6e9a66ec4ceb49a824dc25b048a",
+          "captureSha256": "29b55d56e30400e4a7625c544aebc2323b1df582f1afd0b4a4ae5c9c0c761dbf",
+          "submissionEntrySha256": "7505040a51b422d3a9d8979ede021dae1a8822c6e2145dfc57136721500bc798",
+          "submissionCheckerSha256": "be64a3b547e67f609c3e38a8e6487517668484b5597555adc6451127d4d756c3",
+          "manifestFilesVerified": 1544,
+          "manifestBytesVerified": 16436207,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 55
+          },
+          "checkerPassed": false,
+          "checker": {
+            "correct": 17,
+            "total": 20,
+            "rejectedValid": 3,
+            "acceptedInvalid": 0
+          },
+          "checkerFailureKind": "classification-error",
+          "requested": {
+            "effort": "xhigh",
+            "model": "openai/gpt-5.6-sol",
+            "provider": "openai",
+            "scaffold": "codex"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 1171446
+        },
+        {
+          "trial": 5,
+          "provider": "codex",
+          "version": "2.0.1",
+          "packageDigest": "5796a522e5ca55610974eba98e43b43d3d47266e458274eb50d4e23aa264ef45",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "af1c0c75e01ef2511e096ff4c97b72a49e1099d39cf650b5e8a8a29e4000f0f2",
+          "gradeSha256": "80dfc990eb7d066a5753d655a9ec96f52ce59bf38df51a33aaaf0a13fc0b9bef",
+          "resultSha256": "755aa139e5c05739117865000cda0023cff3d88353f21df037fcecbfd7300137",
+          "captureSha256": "23328af7ca3cf36fdcdc88a0e1cfdb1f9da5248c0dd75e2bcb74725870ca54e2",
+          "submissionEntrySha256": "d70b170088dc09f8ada9c18dddd2f642d25482295c3b4dd58af172a191f0172e",
+          "submissionCheckerSha256": "3be2c787c7fa17c31f298cfdcbe06f2473c14b14e88e71414d05602eeb3f4101",
+          "manifestFilesVerified": 1544,
+          "manifestBytesVerified": 16508184,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 55
+          },
+          "checkerPassed": false,
+          "checker": {
+            "correct": 17,
+            "total": 20,
+            "rejectedValid": 3,
+            "acceptedInvalid": 0
+          },
+          "checkerFailureKind": "classification-error",
+          "requested": {
+            "effort": "xhigh",
+            "model": "openai/gpt-5.6-sol",
+            "provider": "openai",
+            "scaffold": "codex"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 767573
+        },
+        {
+          "trial": 6,
+          "provider": "codex",
+          "version": "2.0.1",
+          "packageDigest": "5796a522e5ca55610974eba98e43b43d3d47266e458274eb50d4e23aa264ef45",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "5682834c6dc48577a83f70bc63edefa21b6ede8aa3a049fe044bd99444c37fc3",
+          "gradeSha256": "80dfc990eb7d066a5753d655a9ec96f52ce59bf38df51a33aaaf0a13fc0b9bef",
+          "resultSha256": "e7a156313c35ba508f8abf2ecac9312a99d53034627bea1a26bc1b6108e25c9b",
+          "captureSha256": "51d2a4beb1b5f38c5367588931ad3d6ad7acdc813721a6252b9861dd2d39a066",
+          "submissionEntrySha256": "5d523d74cde33760e53c9a78f04a6e9198fc92599d38cd0cb714ab7a0617346d",
+          "submissionCheckerSha256": "1df3c1020bbb1acd47ae23df0be89615b259b9c016e67c7190316fe5f7cd4db3",
+          "manifestFilesVerified": 1544,
+          "manifestBytesVerified": 16377244,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 55
+          },
+          "checkerPassed": false,
+          "checker": {
+            "correct": 17,
+            "total": 20,
+            "rejectedValid": 3,
+            "acceptedInvalid": 0
+          },
+          "checkerFailureKind": "classification-error",
+          "requested": {
+            "effort": "xhigh",
+            "model": "openai/gpt-5.6-sol",
+            "provider": "openai",
+            "scaffold": "codex"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 1092041
+        }
+      ]
+    },
+    {
+      "id": "capacity-maintenance-repair",
+      "number": 13,
+      "name": "Capacity maintenance",
+      "analysis": "reports/screening/third-five/13-capacity-maintenance-repair.md",
+      "attempts": [
+        {
+          "trial": 1,
+          "provider": "claude",
+          "version": "2.0.1",
+          "packageDigest": "3c17fef32da7bc83ea82ac8f94fc7eabb4cccdb05a86a47d8991c8dec4b5f684",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "9bd0220527d206630b1aa81441d60923ff20c44023d6157fdd82d68ecc46129e",
+          "gradeSha256": "c8d5f82389fd1b43c970bbfa43cf6f1b4d971848cffb3cdf0392bdf480137b7b",
+          "resultSha256": "d39a0c781a59bd61576e10983add92fcf1da8dabab7dcebaf18c3f684075c6de",
+          "captureSha256": "1388222ef3bc768900e457473aa0c149e55ba1e671c452a80f11f527005af33b",
+          "submissionEntrySha256": "7073a7c0222899ef29f821a80ca253afa15aa40562f3dbe1233f52d1c90f9bf4",
+          "submissionCheckerSha256": "5fda1766ddbe8f3e8f699f78b626d17c19c686bb6b5ab12032c2a340816cc9bd",
+          "manifestFilesVerified": 1435,
+          "manifestBytesVerified": 13302381,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 30
+          },
+          "checkerPassed": false,
+          "checker": null,
+          "checkerFailureKind": "output-validation-failure",
+          "requested": {
+            "effort": "max",
+            "model": "anthropic/claude-opus-5",
+            "provider": "anthropic",
+            "scaffold": "claude-code"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 1389276
+        },
+        {
+          "trial": 2,
+          "provider": "claude",
+          "version": "2.0.1",
+          "packageDigest": "3c17fef32da7bc83ea82ac8f94fc7eabb4cccdb05a86a47d8991c8dec4b5f684",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "e92dea5537212ce93b1e662ac47cdf091f0e0f0500cb35025dc023b0ee5aadca",
+          "gradeSha256": "c8d5f82389fd1b43c970bbfa43cf6f1b4d971848cffb3cdf0392bdf480137b7b",
+          "resultSha256": "78281c06028d885a3c075054076457c0b4802e197e48a29713555010dc7c0714",
+          "captureSha256": "df03f27bcce424ca6f325e2e527821b01403cc76f95b861be9b73cff1b35c122",
+          "submissionEntrySha256": "0aa6770efafedd2a43e5868f8208289acb8348b4e2d9f306d0d0c24ff9c7350a",
+          "submissionCheckerSha256": "a31cb6c2cccaa3bc1af5ef9b9d06ded19a08835a23c444adaf91f94006c7aa6e",
+          "manifestFilesVerified": 1435,
+          "manifestBytesVerified": 14277210,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 30
+          },
+          "checkerPassed": false,
+          "checker": null,
+          "checkerFailureKind": "output-validation-failure",
+          "requested": {
+            "effort": "max",
+            "model": "anthropic/claude-opus-5",
+            "provider": "anthropic",
+            "scaffold": "claude-code"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 2572683
+        },
+        {
+          "trial": 3,
+          "provider": "claude",
+          "version": "2.0.1",
+          "packageDigest": "3c17fef32da7bc83ea82ac8f94fc7eabb4cccdb05a86a47d8991c8dec4b5f684",
+          "profileDigest": "d0d1158ec7232862c2797058afbf4012d25357161e274feabff65cb957d34794",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "e1fb8e6d96152285801306ed5113136de31470cd5be76393d740e5264b3cda9a",
+          "gradeSha256": "c8d5f82389fd1b43c970bbfa43cf6f1b4d971848cffb3cdf0392bdf480137b7b",
+          "resultSha256": "a620f9ed99929763534f29f3be89aa0da43a943475136d8cd9ee41b68854139e",
+          "captureSha256": "7ce5232a3abfaae6d0bfe805bc73920182ff9fca03147e9d2ab3b005210988fa",
+          "submissionEntrySha256": "80f0be555537cc80f43026fb26110663e527b18a7fd2eb1ee7bf76a892484a73",
+          "submissionCheckerSha256": "d60ef884bbf8d1762c91de10ccc04c49437deeef6cfee9f14a082ac5d1d67b21",
+          "manifestFilesVerified": 1471,
+          "manifestBytesVerified": 14336904,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 30
+          },
+          "checkerPassed": false,
+          "checker": null,
+          "checkerFailureKind": "output-validation-failure",
+          "requested": {
+            "effort": "max",
+            "model": "anthropic/claude-opus-5",
+            "provider": "anthropic",
+            "scaffold": "claude-code"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 2024338
+        },
+        {
+          "trial": 4,
+          "provider": "codex",
+          "version": "2.0.1",
+          "packageDigest": "3c17fef32da7bc83ea82ac8f94fc7eabb4cccdb05a86a47d8991c8dec4b5f684",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "6ecbfbde8594825050d7085fdd826e4b16d12fcad8d7d2843b6736b889dfff92",
+          "gradeSha256": "c8d5f82389fd1b43c970bbfa43cf6f1b4d971848cffb3cdf0392bdf480137b7b",
+          "resultSha256": "336c766b93aa22921dbaec2b1a667bf2e5b8d4c7fbea2ac7a8a4da029f6ad48b",
+          "captureSha256": "8001b108f02a097e4bf0772be774b880dfa11d86382b4c295ef72c258a317423",
+          "submissionEntrySha256": "b3fc2e6e918d36c5c15a96802ba29c8ab8973cbab6a403da1661352d2b90b043",
+          "submissionCheckerSha256": "eaec528fb957b4134aba34bcb2b27e03c1a8e79435bd8752ce9e4e4d7039f467",
+          "manifestFilesVerified": 1392,
+          "manifestBytesVerified": 12104726,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 30
+          },
+          "checkerPassed": false,
+          "checker": {
+            "correct": 17,
+            "total": 19,
+            "rejectedValid": 2,
+            "acceptedInvalid": 0
+          },
+          "checkerFailureKind": "classification-error",
+          "requested": {
+            "effort": "xhigh",
+            "model": "openai/gpt-5.6-sol",
+            "provider": "openai",
+            "scaffold": "codex"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 1006135
+        },
+        {
+          "trial": 5,
+          "provider": "codex",
+          "version": "2.0.1",
+          "packageDigest": "3c17fef32da7bc83ea82ac8f94fc7eabb4cccdb05a86a47d8991c8dec4b5f684",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "f368ce763ef08feb4c808834edd02984a54c80a7d851e6f8911ce783181165d3",
+          "gradeSha256": "c8d5f82389fd1b43c970bbfa43cf6f1b4d971848cffb3cdf0392bdf480137b7b",
+          "resultSha256": "a70c1de44dce99aeee19b4b9e16c44fa76bd3a0eb5852f37c0a9be1a632604da",
+          "captureSha256": "1feea5b3cff33d7614fd440a5b359723bee548375cb341a80d849364676d4db2",
+          "submissionEntrySha256": "880e0179c69a2bc6b4f457295764a5448acab2549e9ce7a56b9ee342ee9013f2",
+          "submissionCheckerSha256": "87630262a7f830c6c27a74182082d7c6e9f2dc3c5ead32f330cccf28a7969203",
+          "manifestFilesVerified": 1392,
+          "manifestBytesVerified": 11695447,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 30
+          },
+          "checkerPassed": false,
+          "checker": {
+            "correct": 17,
+            "total": 19,
+            "rejectedValid": 2,
+            "acceptedInvalid": 0
+          },
+          "checkerFailureKind": "classification-error",
+          "requested": {
+            "effort": "xhigh",
+            "model": "openai/gpt-5.6-sol",
+            "provider": "openai",
+            "scaffold": "codex"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 737055
+        },
+        {
+          "trial": 6,
+          "provider": "codex",
+          "version": "2.0.1",
+          "packageDigest": "3c17fef32da7bc83ea82ac8f94fc7eabb4cccdb05a86a47d8991c8dec4b5f684",
+          "profileDigest": "a6848fd807cf46e419bc5c01a1d24cf91938075550559775aa8f8f952b901641",
+          "executionSourceDigest": "4ec4f340226a8478e63435e9f429fd8cae7037dec8d8131a9afb5c882a899523",
+          "completionSha256": "bc9243a941fd74acc8034253e223618202bb5ec37d44ba945e2f5a3d98db773f",
+          "gradeSha256": "c8d5f82389fd1b43c970bbfa43cf6f1b4d971848cffb3cdf0392bdf480137b7b",
+          "resultSha256": "b682474803bdc20abc3dc331229df4f6cf4d3106e718a2a012bf586e873f7caa",
+          "captureSha256": "955d2c35aa85cf51ebfe6dc6e670f6b9bc4a7bf441144bad96da8d811161537a",
+          "submissionEntrySha256": "f33be4695f06963832772d427c48f13c1f2c422945990ea3899948be005088d4",
+          "submissionCheckerSha256": "8e9ec20c646fd04d8a0b646138ea5223cf8bf4cfd08cf567a5ee89d49f7b17ba",
+          "manifestFilesVerified": 1392,
+          "manifestBytesVerified": 11592652,
+          "recordedReward": 0,
+          "countedReward": 0,
+          "disposition": "retained",
+          "captureCompleted": true,
+          "checkerRequired": true,
+          "service": {
+            "outcome": "semantic-pass",
+            "complete": true,
+            "cases": 30
+          },
+          "checkerPassed": false,
+          "checker": {
+            "correct": 17,
+            "total": 19,
+            "rejectedValid": 2,
+            "acceptedInvalid": 0
+          },
+          "checkerFailureKind": "classification-error",
+          "requested": {
+            "effort": "xhigh",
+            "model": "openai/gpt-5.6-sol",
+            "provider": "openai",
+            "scaffold": "codex"
+          },
+          "observedModel": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "observedEffort": {
+            "source": "no trusted runtime observation",
+            "status": "unobservable",
+            "value": null
+          },
+          "runtimeModelEvidenceEligible": false,
+          "runtimeCountsAsModelFailure": false,
+          "billingMode": "subscription-only",
+          "milliseconds": 769767
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Sanitized checkpoint of retained records; subsequent Ticket attempts are outside this snapshot.",
+    "Reward-zero screening counts include required-checker failures, not only service failures.",
+    "Requested model settings do not attest actual model identity or effort; runtime eligibility flags are preserved.",
+    "The same __proto__ output mistake may recur across tasks; task counts are not independent mechanism counts.",
+    "This publication verifies evidence integrity and accounting, not an independent false-pass/failure audit of every submission.",
+    "Raw captures and full execution artifacts remain local; this portable subset is not complete raw-trial reproduction."
+  ]
+}

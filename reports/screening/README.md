@@ -1,26 +1,29 @@
 # Screening results and trial histories
 
-**Nine tasks meet the ≥5/6 target: seven at 6/6 reward=0 and two at 5/6.** There are 52 failures across 54 counted finalist trials, with three Codex and three Claude trials per task.
+**Twelve tasks meet the ≥5/6 target: ten at 6/6 reward=0 and two at 5/6.** There are 70 failures across 72 counted finalist trials, with three Codex and three Claude trials per task.
 
 | Task and full trial history | Reward=0 / counted trials | Codex reward=0 | Claude reward=0 |
 | --- | ---: | ---: | ---: |
-| [03 — Browser replay](../../reports/screening/original-five/03-browser-replay-repair.md) | **6/6** | 3/3 | 3/3 |
-| [04 — Delegated budget](../../reports/screening/original-five/04-delegated-budget-repair.md) | **6/6** | 3/3 | 3/3 |
-| [18 — Recurring calendar](../../reports/screening/fourth-five/18-recurring-calendar-repair.md) | **6/6** | 3/3 | 3/3 |
-| [19 — Variant cache](../../reports/screening/fourth-five/19-variant-cache-repair.md) | **6/6** | 3/3 | 3/3 |
-| [20 — Workflow authority](../../reports/screening/fourth-five/20-workflow-authority-repair.md) | **6/6** | 3/3 | 3/3 |
-| [21 — Incremental build](../../reports/screening/fifth-five/21-incremental-build-repair.md) | **6/6** | 3/3 | 3/3 |
-| [25 — Issued report](../../reports/screening/fifth-five/25-issued-report-repair.md) | **6/6** | 3/3 | 3/3 |
-| [10 — Temporal capacity](../../reports/screening/next-five/10-temporal-capacity-repair.md) | **5/6** | 2/3 | 3/3 |
-| [11 — Snapshot recovery](../../reports/screening/third-five/11-snapshot-recovery-repair.md) | **5/6** | 3/3 | 2/3 |
+| [03 — Browser replay](original-five/03-browser-replay-repair.md) | **6/6** | 3/3 | 3/3 |
+| [04 — Delegated budget](original-five/04-delegated-budget-repair.md) | **6/6** | 3/3 | 3/3 |
+| [05 — Compatible rollout](original-five/05-compatible-rollout-repair.md) | **6/6** | 3/3 | 3/3 |
+| [12 — Verified installation](third-five/12-verified-installation-repair.md) | **6/6** | 3/3 | 3/3 |
+| [13 — Capacity maintenance](third-five/13-capacity-maintenance-repair.md) | **6/6** | 3/3 | 3/3 |
+| [18 — Recurring calendar](fourth-five/18-recurring-calendar-repair.md) | **6/6** | 3/3 | 3/3 |
+| [19 — Variant cache](fourth-five/19-variant-cache-repair.md) | **6/6** | 3/3 | 3/3 |
+| [20 — Workflow authority](fourth-five/20-workflow-authority-repair.md) | **6/6** | 3/3 | 3/3 |
+| [21 — Incremental build](fifth-five/21-incremental-build-repair.md) | **6/6** | 3/3 | 3/3 |
+| [25 — Issued report](fifth-five/25-issued-report-repair.md) | **6/6** | 3/3 | 3/3 |
+| [10 — Temporal capacity](next-five/10-temporal-capacity-repair.md) | **5/6** | 2/3 | 3/3 |
+| [11 — Snapshot recovery](third-five/11-snapshot-recovery-repair.md) | **5/6** | 3/3 | 2/3 |
 
-[Results and counting method](final-results-2026-09-11.md) · [Machine-readable evidence](evidence/2026-09-11-final-results.json) · [Latest campaign](hardened-six-continuation-2026-09-11.md).
+[Results and counting method](final-results-2026-09-11.md) · [Machine-readable evidence](evidence/2026-09-11-twelve-finalists.json) · [Latest campaign checkpoint](successor-results-2026-09-11.md).
 
-Browser replay, Recurring calendar, Workflow authority and Delegated budget are the four newly completed 6/6 tasks. Route policy stopped at 3/5 failures; its two Codex passes remain counted after independent audits. All nine qualifying sets are complete. Original trial numbers, grading corrections, voids and infrastructure interruptions remain in the histories below.
+Compatible rollout, Verified installation and Capacity maintenance add three new 6/6 sets. Partial release has audited valid passes. Ticket consolidation has three counted failures; physical attempts 4–7 are now [audited nulls](../pass-audits/ticket-consolidation-attempt-seven-2026-09-11.md), and it remains outside the qualifying total. Corrected v2.0.5 is prepared for physical attempt 8 onward. The fixed successor checkpoint below ends at attempt 6. Route policy previously stopped at 3/5 failures. All twelve qualifying sets are complete. Original trial numbers, grading corrections, voids and infrastructure interruptions remain in the histories below.
 
 ## Implementation and campaign history
 
-The next five audited successor packages are prepared for an adaptive campaign: three Claude trials, then two Codex trials, with a sixth Codex trial after five clean failures. Each package stops at its first valid pass. Preparation adds no model trials to the standings above. See the [setup review](successor-adaptive-trials-setup-review-2026-09-11.md), [operator handoff](../../docs/successor-adaptive-trials-handoff.md), [successor implementation](queue-eleven-fifteen-successors-2026-09-11.md), and [checker audit](queue-eleven-fifteen-checker-audit-2026-09-11.md).
+The five-successor campaign has completed its original dispatches and a separate installation continuation. Its [results checkpoint](successor-results-2026-09-11.md) records three new 6/6 sets, the recovered grading incident, controller reconciliation, retained Partial Release passes and Ticket Consolidation's exclusions. Further Ticket trials use a corrected build and separate slots. The original [setup review](successor-adaptive-trials-setup-review-2026-09-11.md), [operator handoff](../../docs/successor-adaptive-trials-handoff.md), [implementation](queue-eleven-fifteen-successors-2026-09-11.md), and [checker audit](queue-eleven-fifteen-checker-audit-2026-09-11.md) remain historical records.
 
 The following records preserve what was prepared and observed at each stage. Use the final results above for current standings.
 

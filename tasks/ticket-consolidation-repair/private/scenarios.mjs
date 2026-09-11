@@ -126,5 +126,25 @@ export function scenarios() {
   complete.rows[0].owner = "A:care";
   complete.rows[0].labels.push(complete.marker);
   cases.push(complete, { ...structuredClone(complete), id: "case-complete-status-drift", statusFlipKey: '["A","one"]' });
+  // Tenant IDs are literal strings, including strings resembling another key format.
+  // Each population separates exact lookup from one tempting normalization.
+  const encoded = JSON.stringify(['A', 'care']);
+  const identities = [
+    ['paired', ['A', encoded, JSON.stringify([encoded, 'care'])]],
+    ['case-folded', ['Tenant', 'tenant']],
+    ['trimmed', ['team', ' team ']],
+    ['numeric', ['0', '00', '1', '01']],
+  ];
+  for (const [kind, tenants] of identities) {
+    const rows = tenants.map(tenant => ({ tenant, id: 'same', status: 'open',
+      revision: 1, owner: 'old', labels: ['keep-' + tenant], note: 'original' }));
+    rows.push({ ...rows[0], id: 'closed', status: 'closed' });
+    if (tenants.length < 4) rows.push({ tenant: 'unrelated', id: 'private', status: 'open',
+      revision: 1, owner: 'old', labels: ['private'], note: 'original' });
+    cases.push({ id: 'case-directory-' + kind, rows, tenants, team: 'care', marker: 'migrated',
+      emptyPage: true, expire: true, overlap: true, conflicts: 0,
+      conflictMap: Object.fromEntries(tenants.map((tenant, i) => [JSON.stringify([tenant, 'same']), i % 3])),
+      crashAfterBatch: 1, statusFlipKey: JSON.stringify([tenants[0], 'same']), opBudget: 4000 });
+  }
   return cases;
 }

@@ -1,6 +1,6 @@
 # 04 — Delegated budget repair
 
-**Final 3.0.0 screening result (September 11): 6/6 counted trials returned reward=0, with three Codex and three Claude trials.** This task is one of the [nine qualifying tasks](../final-results-2026-09-11.md). Full historical trials, audits and excluded attempts remain below.
+**Final 3.0.0 screening result (September 11): 6/6 counted trials returned reward=0, with three Codex and three Claude trials.** This task is one of the [qualifying tasks](../final-results-2026-09-11.md). Full historical trials, audits and excluded attempts remain below.
 
 Claude solved the frozen service: reward 1, **12/12 scenarios**, reported duration **11m 59s** for the completed retry. The retained earlier capture failure is infrastructure-invalid.
 

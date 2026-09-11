@@ -119,5 +119,165 @@
     },
     "check": "execution",
     "selectionRole": "correction-regression"
+  },
+  {
+    "id": "closed-conflict",
+    "overlay": {
+      "entry.mjs": "controls/closed-conflict.mjs",
+      "src/request-probe.mjs": "controls/request-probe.mjs"
+    },
+    "check": "membership",
+    "clean": "case-solo",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "outside-conflict",
+    "overlay": {
+      "entry.mjs": "controls/outside-conflict.mjs",
+      "src/request-probe.mjs": "controls/request-probe.mjs"
+    },
+    "check": "membership",
+    "clean": "case-solo",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "outside-missing",
+    "overlay": {
+      "entry.mjs": "controls/outside-missing.mjs",
+      "src/request-probe.mjs": "controls/request-probe.mjs"
+    },
+    "check": "membership",
+    "clean": "case-tight-budget-crash",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "conflict-forbidden-note",
+    "overlay": {
+      "entry.mjs": "controls/conflict-forbidden-note.mjs",
+      "src/request-probe.mjs": "controls/request-probe.mjs"
+    },
+    "check": "preservation",
+    "clean": "case-tight-budget-crash",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "conflict-forbidden-status",
+    "overlay": {
+      "entry.mjs": "controls/conflict-forbidden-status.mjs",
+      "src/request-probe.mjs": "controls/request-probe.mjs"
+    },
+    "check": "preservation",
+    "clean": "case-tight-budget-crash",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "conflict-forbidden-revision",
+    "overlay": {
+      "entry.mjs": "controls/conflict-forbidden-revision.mjs",
+      "src/request-probe.mjs": "controls/request-probe.mjs"
+    },
+    "check": "preservation",
+    "clean": "case-tight-budget-crash",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "conflict-invalid-owner",
+    "overlay": {
+      "entry.mjs": "controls/conflict-invalid-owner.mjs",
+      "src/request-probe.mjs": "controls/request-probe.mjs"
+    },
+    "check": "preservation",
+    "clean": "case-tight-budget-crash",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "conflict-invalid-labels",
+    "overlay": {
+      "entry.mjs": "controls/conflict-invalid-labels.mjs",
+      "src/request-probe.mjs": "controls/request-probe.mjs"
+    },
+    "check": "preservation",
+    "clean": "case-tight-budget-crash",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "paired-directory-owner",
+    "overlay": {
+      "entry.mjs": "controls/paired-directory-owner.mjs",
+      "src/directory-owner-probe.mjs": "controls/directory-owner-probe.mjs"
+    },
+    "check": "ownership",
+    "clean": "case-solo",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "case-folded-directory-owner",
+    "overlay": {
+      "entry.mjs": "controls/case-folded-directory-owner.mjs",
+      "src/directory-owner-probe.mjs": "controls/directory-owner-probe.mjs"
+    },
+    "check": "ownership",
+    "clean": "case-solo",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "trimmed-directory-owner",
+    "overlay": {
+      "entry.mjs": "controls/trimmed-directory-owner.mjs",
+      "src/directory-owner-probe.mjs": "controls/directory-owner-probe.mjs"
+    },
+    "check": "ownership",
+    "clean": "case-solo",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "numeric-directory-owner",
+    "overlay": {
+      "entry.mjs": "controls/numeric-directory-owner.mjs",
+      "src/directory-owner-probe.mjs": "controls/directory-owner-probe.mjs"
+    },
+    "check": "ownership",
+    "clean": "case-solo",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "owner-only-unfinished",
+    "overlay": {
+      "entry.mjs": "controls/owner-only-unfinished.mjs",
+      "src/staged-marker.mjs": "controls/staged-marker.mjs"
+    },
+    "check": "completion",
+    "clean": "case-already-complete",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "conflict-nonstring-labels",
+    "overlay": {
+      "entry.mjs": "controls/conflict-nonstring-labels.mjs",
+      "src/schema-probe.mjs": "controls/schema-probe.mjs"
+    },
+    "check": "preservation",
+    "clean": "case-tight-budget-crash",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "conflict-object-labels",
+    "overlay": {
+      "entry.mjs": "controls/conflict-object-labels.mjs",
+      "src/schema-probe.mjs": "controls/schema-probe.mjs"
+    },
+    "check": "preservation",
+    "clean": "case-tight-budget-crash",
+    "selectionRole": "correction-regression"
+  },
+  {
+    "id": "annotated-forbidden-note",
+    "overlay": {
+      "entry.mjs": "controls/annotated-forbidden-note.mjs",
+      "src/schema-probe.mjs": "controls/schema-probe.mjs"
+    },
+    "check": "preservation",
+    "clean": "case-tight-budget-crash",
+    "selectionRole": "correction-regression"
   }
 ]

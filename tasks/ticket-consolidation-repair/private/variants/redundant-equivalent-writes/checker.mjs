@@ -20,7 +20,8 @@ export function check(c) {
     const u = call.request, k = key(u), before = call.before;
     if (!wanted.has(k) || !before || !u.patch ||
         !Object.keys(u.patch).every(k => ['owner','labels'].includes(k)) ||
-        typeof u.patch.owner !== 'string' || !Array.isArray(u.patch.labels)) return false;
+        typeof u.patch.owner !== 'string' || !Array.isArray(u.patch.labels) ||
+        !u.patch.labels.every(label => typeof label === 'string')) return false;
     const status = before.revision === u.revision ? 'APPLIED' : 'CONFLICT';
     if (call.status !== status) return false;
     if (status === 'APPLIED') {

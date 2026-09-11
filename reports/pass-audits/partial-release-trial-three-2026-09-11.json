@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-pass-audit",
+  "taskId": "partial-release-repair",
+  "version": "2.0.2",
+  "trial": 3,
+  "provider": "claude",
+  "packageDigest": "1422a83d7860f81e2bf9bdb52ce634887f2e8da4edcccbe8870cdcfebaadf897",
+  "record": ".local/partial-release-generation-continuation-2026-09-11/slots/trial-3/real-campaign-frozen/jobs/real-provider/records/partial-release-repair-attempt-1",
+  "disposition": "retain-valid-pass",
+  "recordedReward": 1,
+  "auditedReward": 1,
+  "countsAsCleanPass": true,
+  "countsAsCleanFailure": false,
+  "originalRecordUnchanged": true,
+  "providerCallsMade": 0,
+  "newAgentAttempts": 0,
+  "taskOrGraderBytesChanged": false,
+  "auditSummary": {
+    "path": ".local/partial-release-trial-three-pass-audit-2026-09-11/summary.json",
+    "sha256": "3c7de33f54c0e20f5f0e9a8050f3ca1fd213344eca4a6819b596e9b689799ac1"
+  },
+  "historyEvidence": {
+    "path": ".local/partial-release-trial-three-pass-audit-2026-09-11/history.json",
+    "sha256": "0b09ab9db2f92d5d89fd2d68157d635ef935f41d61f05a73f51246a366d101cc"
+  },
+  "grade": {
+    "path": ".local/partial-release-generation-continuation-2026-09-11/slots/trial-3/real-campaign-frozen/jobs/real-provider/records/partial-release-repair-attempt-1/grade.json",
+    "sha256": "cc7203342cc7a49d98b2512c91d3e6cb21bce877c9e01d830a73818bdd8b399d"
+  },
+  "completion": {
+    "path": ".local/partial-release-generation-continuation-2026-09-11/slots/trial-3/real-campaign-frozen/jobs/real-provider/records/partial-release-repair-attempt-1/completion.json",
+    "sha256": "9f39519051765bfe099c2ef177593701a7521e49deac40486e3d0f3e3ad2051d"
+  },
+  "submission": [
+    {
+      "path": ".local/partial-release-generation-continuation-2026-09-11/slots/trial-3/real-campaign-frozen/jobs/real-provider/records/partial-release-repair-attempt-1/submission/entry.mjs",
+      "sha256": "9afb4077224d6858e6fcaf4b4a687ae315880dad6c4babe73bcd6d8be5601dc7"
+    },
+    {
+      "path": ".local/partial-release-generation-continuation-2026-09-11/slots/trial-3/real-campaign-frozen/jobs/real-provider/records/partial-release-repair-attempt-1/submission/checker.mjs",
+      "sha256": "e22711d92549156e97bbcd41ab6d704f5ea3419fa6a6de647a05de676aff7293"
+    }
+  ],
+  "auditSources": [
+    {
+      "path": "scripts/audit-partial-release-trial-three.mjs",
+      "sha256": "54a4cd1df2e5f4308843f0050c8a3826f465b70742e201abc1d6547f83e6a835"
+    },
+    {
+      "path": "data/partial-release-trial-three-pass-audit/probes.mjs",
+      "sha256": "00368d25f089e39fc1b89e973cc966e1e1c872e09a19f851bb986d3f044b2e2b"
+    },
+    {
+      "path": "data/partial-release-trial-three-pass-audit/strategies.mjs",
+      "sha256": "dc4a839f33b96531472bbfcd7c44a8665191bdd2f0fb2304d144f67a2a578ba8"
+    }
+  ],
+  "sweepAdapter": {
+    "synchronousPublicApi": true,
+    "copiedAdapter": {
+      "path": ".local/partial-release-trial-three-pass-audit-2026-09-11/sweep-authority/adapter.mjs",
+      "sha256": "2d31cfdefbc2d86d931894bf725477b7ce37682d7700376ccc6ba921fe9960f8"
+    },
+    "protectedReplaysUseFrozenAdapter": true
+  },
+  "validation": {
+    "freshServiceScenariosPassed": 2028,
+    "independentCellComparisons": 4609,
+    "positiveCells": 3608,
+    "negativeCells": 1001,
+    "checkerJudgmentsIncludingRepetitions": 13831,
+    "falseAccepts": 0,
+    "falseRejects": 0,
+    "authorityDisagreements": 0,
+    "validAlternativeExecutions": 678,
+    "independentApiExecutions": 360,
+    "maxSubmittedApiCalls": 248,
+    "protectedServicePassed": 114,
+    "protectedServiceTotal": 114,
+    "protectedStrategyExecutions": 60,
+    "protectedChecker": {
+      "total": 252,
+      "correct": 252,
+      "inputUnchanged": true,
+      "deterministic": true
+    },
+    "generationRoundtrip": [
+      {
+        "uncertain": 0,
+        "independent": {
+          "ok": true,
+          "errors": []
+        },
+        "authorityFailures": [],
+        "submittedChecker": true
+      },
+      {
+        "uncertain": 1,
+        "independent": {
+          "ok": true,
+          "errors": []
+        },
+        "authorityFailures": [],
+        "submittedChecker": true
+      },
+      {
+        "uncertain": 2,
+        "independent": {
+          "ok": true,
+          "errors": []
+        },
+        "authorityFailures": [],
+        "submittedChecker": true
+      }
+    ],
+    "originalEvidenceFilesVerified": 1241,
+    "allHistoricalEvidenceFilesVerified": 3034,
+    "packageAssuranceReceiptVerified": true
+  },
+  "history": [
+    {
+      "trial": 1,
+      "target": "claude",
+      "packageDigest": "9bd1c3ae996492793bc3f01264c28a3ed327836f2ae16b7353f8f1571cc0a612",
+      "reward": 0,
+      "record": ".local/successor-adaptive-trials-2026-09-11/slots/partial-release-repair/trial-1/real-campaign-frozen/jobs/real-provider/records/partial-release-repair-attempt-1",
+      "verifiedFiles": 896,
+      "completionSha256": "46a5951906f52565c065a79b757a92520bf44aad50f6ad1dc4afb0fbe21f19d0"
+    },
+    {
+      "trial": 2,
+      "target": "claude",
+      "packageDigest": "9bd1c3ae996492793bc3f01264c28a3ed327836f2ae16b7353f8f1571cc0a612",
+      "reward": 1,
+      "record": ".local/successor-adaptive-trials-2026-09-11/slots/partial-release-repair/trial-2/real-campaign-frozen/jobs/real-provider/records/partial-release-repair-attempt-1",
+      "verifiedFiles": 897,
+      "completionSha256": "0058828ac8217fdfa75afbf0a09375c3e55289b394559bcbc646f702b606408d"
+    },
+    {
+      "trial": 3,
+      "target": "claude",
+      "packageDigest": "1422a83d7860f81e2bf9bdb52ce634887f2e8da4edcccbe8870cdcfebaadf897",
+      "reward": 1,
+      "record": ".local/partial-release-generation-continuation-2026-09-11/slots/trial-3/real-campaign-frozen/jobs/real-provider/records/partial-release-repair-attempt-1",
+      "verifiedFiles": 1241,
+      "completionSha256": "9f39519051765bfe099c2ef177593701a7521e49deac40486e3d0f3e3ad2051d"
+    }
+  ],
+  "continuation": {
+    "userRequestedAdditionalTrialAfterPass": true,
+    "retainedPassTrials": [
+      2,
+      3
+    ],
+    "nullTrials": [],
+    "nextTrial": 4,
+    "nextProvider": "codex",
+    "samePackageDigest": true,
+    "slot": ".local/partial-release-confirmation-2026-09-11/slots/trial-4/slot.json",
+    "maxNewProviderCalls": 1,
+    "automaticRetries": false,
+    "stopAfterThisAttempt": true,
+    "billingMode": "subscription-only",
+    "noPaidApiFallback": true,
+    "prompt": "reports/pass-audits/partial-release-trial-four-prompt-2026-09-11.md"
+  },
+  "limitations": [
+    "Finite audit coverage, not universal correctness.",
+    "Audit-authored variants, not a held-out independent author/model bank.",
+    "Broad sweep uses a synchronous in-process facade; selected evidence is independently replayed through the unchanged protected RPC host."
+  ]
+}

@@ -22,8 +22,13 @@ Every resource returned by api.inspect carries a generation: number, counting ho
 times that id has been created -- 1 the first time it is created, incrementing by 1 each
 subsequent time it is created again after having been removed. Generation is server-tracked
 bookkeeping: it plays no part in whether a same-content create is a safe idempotent no-op
-(that comparison still looks only at parents and payload), and you never supply it when
-constructing a resource to create. A receipt for a create's token, once resolved to DONE,
+(that comparison still looks only at parents and payload). You may omit generation when
+constructing a resource to create, or pass through an inspected resource including it.
+Any supplied generation is ignored, is not stored as resource content, and never sets,
+resets, or increments the server's counter. An idempotent create leaves the generation
+unchanged; a landed creation after removal increments it regardless of a stale supplied
+generation. All scope, dependency, and immutable-content rules still apply.
+A receipt for a create's token, once resolved to DONE,
 additionally reports the generation that specific create call produced (a receipt for a
 remove's token never does, and neither does one still PENDING). A receipt is bound to the
 specific create or remove call that produced its token, not to the resource's current

@@ -1,5 +1,7 @@
 # 12 — Verified installation repair
 
+**Current successor screening result (September 11, version 2.0.1): 6/6 counted reward-zero outcomes, three Claude and three Codex.** All six service grades pass; the failures are in the required checker. See the [current results](../final-results-2026-09-11.md) and the dated successor history below. Earlier versions and grades remain historical.
+
 One Codex attempt, requested Sol / xhigh. Authoring **16m 27s**. Recorded reward **1**: service **44/44 scenarios**, checker **13/13 candidates**, comprising two correct implementations and eleven negative controls. No execution error or retry was recorded.
 
 ## What the task was, in plain English
@@ -233,3 +235,21 @@ claims for those bytes. The final audit passed 4,146 individual-cell comparisons
 28 checker mutations against both local and protected candidate banks, all 40 native
 integrity checks and 105 Foundry assurance operations. No model trials were run, and
 historical trial counts were not changed.
+
+
+## 2026-09-11 — published successor trial checkpoint
+
+| Physical trial | Provider | Recorded reward | Counted reward | Service | Required checker |
+| --- | --- | ---: | ---: | --- | --- |
+| 1 | Claude | 0 | 0 | 55/55 pass | Output validation failed |
+| 2 | Claude | null | 0 | 55/55 pass | Output validation failed (linked recovery) |
+| 3 | Claude | 0 | 0 | 55/55 pass | Output validation failed |
+| 4 | Codex | 0 | 0 | 55/55 pass | 17/20; 3 valid rejected, 0 invalid accepted |
+| 5 | Codex | 0 | 0 | 55/55 pass | 17/20; 3 valid rejected, 0 invalid accepted |
+| 6 | Codex | 0 | 0 | 55/55 pass | 17/20; 3 valid rejected, 0 invalid accepted |
+
+This table is derived from the [published successor evidence](../evidence/2026-09-11-successor-results.json), with exact package/profile identities and completion, result, grade and submitted-code hashes. [Campaign report](../successor-results-2026-09-11.md). Trials here are physical identities within the September 11 successor campaign; earlier trials above belong to their own versions.
+
+All six attempts use version 2.0.1, package digest `5796a522e5ca55610974eba98e43b43d3d47266e458274eb50d4e23aa264ef45`. The six saved checker hashes are distinct. Six service passes plus six required-checker failures complete the screening set; they do not establish six service-implementation failures.
+
+T2 counts the resolved grade for its original provider attempt after the same-package grading-only recovery. Its original Docker incident remains unscored in the immutable source record; the linked disposition supplies counted reward 0 without a second model call. The separate continuation and main-controller error are preserved in the campaign report.

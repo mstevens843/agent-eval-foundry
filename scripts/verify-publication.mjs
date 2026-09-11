@@ -6,6 +6,7 @@ import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { makeContinuationPlan } from "./hardened-continuation-policy.mjs";
 import { buildFinalResults } from "./final-screening-results.mjs";
+import { buildSuccessorResults } from "./successor-screening-results.mjs";
 
 export const SCREENING_BATCHES = [
   ["original-five", "2026-09-07-original-five"],
@@ -20,6 +21,9 @@ export const SCREENING_BATCHES = [
 export const SCREENING_FOLLOWUPS = [
   "final-results-2026-09-11.md",
   "evidence/2026-09-11-final-results.json",
+  "successor-results-2026-09-11.md",
+  "evidence/2026-09-11-successor-results.json",
+  "evidence/2026-09-11-twelve-finalists.json",
   "route-trial-seven-pass-audit-2026-09-11.md",
   "evidence/2026-09-11-route-trial-seven-pass-audit.json",
   "hardened-six-continuation-preparation-2026-09-11.md",
@@ -1224,6 +1228,42 @@ export function verifyPublication(root = process.cwd()) {
   for (const source of currentFinalResults.sources) assert.equal(source.sha256, sha(source.path));
   const combined = buildFinalResults(finalResults, hardenedLedger, completedContinuation);
   for (const key of Object.keys(combined)) assert.deepEqual(currentFinalResults[key], combined[key], `current results: ${key}`);
+  const successorCheckpoint = read("reports/screening/evidence/2026-09-11-successor-results.json");
+  const successorPreparation = read("reports/screening/evidence/2026-09-11-successor-adaptive-trials-preparation.json");
+  const twelveFinalists = read("reports/screening/evidence/2026-09-11-twelve-finalists.json");
+  assert.deepEqual(twelveFinalists.target, currentFinalResults.target);
+  assert.deepEqual(twelveFinalists.sources.map(s => s.path), [
+    "reports/screening/evidence/2026-09-11-final-results.json",
+    "reports/screening/evidence/2026-09-11-successor-results.json",
+  ]);
+  for (const source of [...twelveFinalists.sources, ...successorCheckpoint.sources])
+    assert.equal(source.sha256, sha(source.path), `successor source: ${source.path}`);
+  const latestCombined = buildSuccessorResults(currentFinalResults, successorCheckpoint);
+  for (const key of Object.keys(latestCombined))
+    assert.deepEqual(twelveFinalists[key], latestCombined[key], `successor results: ${key}`);
+  assert.equal(successorCheckpoint.providerCallsMadeByPublication, 0);
+  assert.equal(successorCheckpoint.physicalProviderAttempts, successorCheckpoint.originalCampaign.physicalAttempts + successorCheckpoint.supplementaryAttempts);
+  assert.equal(successorCheckpoint.originalCampaign.mainLedgerLaunches + successorCheckpoint.originalCampaign.continuationLedgerLaunches, successorCheckpoint.originalCampaign.physicalAttempts);
+  assert.equal(successorCheckpoint.originalCampaign.everyDispatchedSlotHasExactlyOneLaunch, true);
+  assert.equal(successorCheckpoint.originalCampaign.controllerErrorPreserved, true);
+  assert.equal(successorCheckpoint.originalCampaign.mainFinalPresent, false);
+  const successorAttempts = successorCheckpoint.packages.flatMap(p => p.attempts);
+  assert.equal(successorAttempts.reduce((n, a) => n + a.manifestFilesVerified, 0), successorCheckpoint.verifiedManifestFiles);
+  for (const row of successorAttempts) {
+    if (row.audit) assert.equal(row.audit.sha256, sha(row.audit.path));
+    if (row.recovery) assert.equal(row.recovery.reconciliation.sha256, sha(row.recovery.reconciliation.path));
+    assert.equal(row.billingMode, "subscription-only");
+  }
+  for (const task of successorCheckpoint.packages) {
+    const declared = successorPreparation.packages.find(p => p.id === task.id);
+    assert(declared, `undeclared successor: ${task.id}`);
+    for (const row of task.attempts.filter(a => a.trial <= (task.id === "partial-release-repair" ? 2 : task.id === "ticket-consolidation-repair" ? 4 : 6)))
+      assert.equal(row.packageDigest, declared.packageDigest, `prepared identity: ${task.id}`);
+    if (["capacity-maintenance-repair", "compatible-rollout-repair", "verified-installation-repair"].includes(task.id))
+      assert.equal(new Set(task.attempts.map(a => a.submissionCheckerSha256)).size, 6, "distinct submitted checkers");
+  }
+  for (const path of ["reports/screening/evidence/2026-09-11-successor-results.json", "reports/screening/evidence/2026-09-11-twelve-finalists.json"])
+    assert(!/\/Users\/|\.local\//.test(readFileSync(join(root, path), "utf8")), "nonportable successor evidence");
   assert.equal(completedContinuation.counts.totalNewModelCallsThisSession, combined.latestCampaign.totalAttempts);
   assert.equal(completedContinuation.counts.zeroRewards, combined.latestCampaign.zeroRewards);
   assert.equal(completedContinuation.counts.oneRewards, combined.latestCampaign.oneRewards);
@@ -1284,6 +1324,19 @@ export function verifyPublication(root = process.cwd()) {
       assert.ok(existsSync(path), `${doc}: missing ${target}`);
     }
   }
+  for (const doc of ["README.md", "docs/project-status.md", "reports/screening/README.md", "reports/screening/final-results-2026-09-11.md"]) {
+    const text = readFileSync(join(root, doc), "utf8");
+    const rows = [...text.matchAll(/^\| \[(\d+) — [^\]]+\]\([^)]+\) \| \*\*(\d)\/6\*\* \| (\d)\/3 \| (\d)\/3 \|$/gm)];
+    assert.equal(rows.length, latestCombined.summary.packages, `${doc}: stale scorecard size`);
+    assert.equal(new Set(rows.map(r => Number(r[1]))).size, rows.length, `${doc}: duplicate scorecard row`);
+    for (const row of rows) {
+      const task = latestCombined.packages.find(p => p.number === Number(row[1]));
+      assert(task, `${doc}: unknown scorecard task`);
+      assert.equal(Number(row[2]), task.failures, `${doc}: stale task score`);
+      for (const [column, provider] of [[3, "codex"], [4, "claude"]])
+        assert.equal(Number(row[column]), task.countedAttempts.filter(a => a.provider === provider && a.countedReward === 0).length, `${doc}: stale provider score`);
+    }
+  }
   const promotion = read("reports/portfolio-promotion-manifest.json");
   assert.equal(promotion.kind, "source-promotion-receipt");
   assert.ok(promotion.paths.length > 0);
@@ -1342,16 +1395,20 @@ export function verifyPublication(root = process.cwd()) {
     successorCountedTrials: disposition.totals.countedTrials + threeReplacementsAttempts,
     successorGradingVoids: disposition.totals.gradingVoids,
     remainingAuditAdditionalFalsePasses: remainingAudit.correctedPasses.length,
-    completedFinalistsMeetingTarget: combined.summary.packages,
-    pendingFinalists: combined.summary.pendingFinalistTrials,
-    finalistCountedTrials: combined.summary.countedTrials,
-    finalistZeroRewards: combined.summary.zeroRewards,
-    finalistsAtSixOfSix: combined.summary.sixOfSix,
-    finalistsAtFiveOfSix: combined.summary.fiveOfSix,
-    newlyQualifiedFinalists: combined.summary.newlyQualifiedPackages,
-    latestCampaignAttempts: combined.latestCampaign.totalAttempts,
-    latestCampaignZeroRewards: combined.latestCampaign.zeroRewards,
-    latestContinuationAttempts: combined.latestCampaign.continuationAttempts,
+    completedFinalistsMeetingTarget: latestCombined.summary.packages,
+    pendingFinalists: latestCombined.summary.pendingFinalistTrials,
+    finalistCountedTrials: latestCombined.summary.countedTrials,
+    finalistZeroRewards: latestCombined.summary.zeroRewards,
+    finalistsAtSixOfSix: latestCombined.summary.sixOfSix,
+    finalistsAtFiveOfSix: latestCombined.summary.fiveOfSix,
+    newlyQualifiedFinalists: latestCombined.summary.newlyQualifiedPackages,
+    successorCheckpointPhysicalAttempts: successorCheckpoint.physicalProviderAttempts,
+    successorCheckpointCountedOutcomes: latestCombined.campaignSummary.countedOutcomes,
+    successorCheckpointNullAttempts: latestCombined.campaignSummary.nullAttempts,
+    successorCheckpointRecoveredGradingIncidents: latestCombined.campaignSummary.recoveredGradingIncidents,
+    earlierHardenedCampaignAttempts: combined.latestCampaign.totalAttempts,
+    earlierHardenedCampaignZeroRewards: combined.latestCampaign.zeroRewards,
+    earlierHardenedContinuationAttempts: combined.latestCampaign.continuationAttempts,
     publishedScreeningCampaignEntries: finalCampaignTotals.publishedCampaignEntries,
     preparedReplacementAttempts: replacements.slots.length,
     threeReplacementsAttemptsMade: threeReplacementsAttempts,

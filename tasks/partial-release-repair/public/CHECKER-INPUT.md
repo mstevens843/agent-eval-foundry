@@ -14,9 +14,12 @@ independent execution. Accept a case exactly when every cell satisfies SEMANTICS
 - observations: actual inspect/create/remove/receipt calls and responses.
   Resource arrays and parent sets have no significant ordering. Every resource inside an
   inspect response, and every DONE receipt response for a create token, additionally
-  carries a generation number (see SEMANTICS.md). This is informational only: it appears
-  nowhere else (not in actual, requestedTarget, initialResources, or operations[].before,
-  all of which stay the plain {id,parents,payload} shape); final correctness is fully
+  carries a server-assigned generation number (see SEMANTICS.md). A caller may also supply
+  an ignored generation in a create request: that value remains visible in
+  operations[].args.resource and the corresponding observation request, and must not
+  affect content equality or request legality. Stored actual and operations[].before
+  contain no generation. The provided initialResources and requestedTarget use the plain
+  {id,parents,payload} shape. Final correctness is fully
   determined from actual/operations/before exactly as for every other field, and a checker
   is not required to inspect generation to grade correctly.
 

@@ -85,7 +85,8 @@ export async function runScenario(s, execute, storage) {
             u.patch &&
             Object.keys(u.patch).every((k) => ["owner", "labels"].includes(k)) &&
             typeof u.patch.owner === "string" &&
-            Array.isArray(u.patch.labels);
+            Array.isArray(u.patch.labels) &&
+            u.patch.labels.every((label) => typeof label === "string");
           calls.push({
             request: structuredClone(u),
             before,

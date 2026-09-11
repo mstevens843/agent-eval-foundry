@@ -4,8 +4,9 @@ export interface Resource {
   payload: string;
   // Present on every resource returned by api.inspect(); counts how many times this id has been
   // created (1 the first time, +1 each time it is created again after having been removed).
-  // Server-assigned bookkeeping only: not part of content equality, and not supplied (ignored if
-  // present) when constructing a resource for api.create().
+  // Server-assigned bookkeeping only: not part of content equality. Clients may omit it or pass
+  // through an inspected resource to api.create(); any supplied generation is ignored and never
+  // sets, resets, or increments the server's generation counter.
   generation?: number;
 }
 export interface View {

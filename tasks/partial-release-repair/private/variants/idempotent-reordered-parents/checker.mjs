@@ -1,5 +1,5 @@
 import { equal, verdicts } from "./checker-utils.mjs";
-const normalized = r => ({ ...r, parents: [...new Set(r.parents)].sort() });
+const normalized = ({ generation, ...r }) => ({ ...r, parents: [...new Set(r.parents)].sort() });
 const same = (a, b) => Boolean(a && b && equal(normalized(a), normalized(b)));
 function check(c) {
   const scope = new Set(c.requestedScope), target = new Map(c.requestedTarget.map(r => [r.id, r]));

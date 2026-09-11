@@ -1,7 +1,10 @@
 import { session, checks, equal } from "./adapter.mjs";
-const normalized = (r) => ({ ...r, parents: [...new Set(r.parents)].sort() });
+// A caller may pass an inspected resource back to create. Generation belongs to
+// the server, so it must not enter stored content or same-content comparisons.
+const content = ({ generation, ...resource }) => resource;
+const normalized = (r) => ({ ...content(r), parents: [...new Set(r.parents)].sort() });
 export async function runScenario(s, execute, storage) {
-  const actual = new Map(s.current.map((r) => [r.id, structuredClone(r)])),
+  const actual = new Map(s.current.map((r) => [r.id, structuredClone(content(r))])),
     // Server-tracked incarnation bookkeeping, kept OUTSIDE `actual`'s own content on purpose: it
     // must never affect the "same-content create is a safe idempotent no-op" comparison below,
     // which still looks only at {parents,payload}. Every id ever present starts at generation 1
@@ -42,7 +45,7 @@ export async function runScenario(s, execute, storage) {
     if (landed) {
       if (method === "create") {
         if (!wasPresent) generationOf.set(id, (generationOf.get(id) || 0) + 1);
-        actual.set(id, structuredClone(resource));
+        actual.set(id, structuredClone(content(resource)));
       } else actual.delete(id);
     }
     if (first && s.uncertain) {
@@ -92,7 +95,7 @@ export async function runScenario(s, execute, storage) {
       dependency_order: operations.every((o) => o.valid),
       preservation:
         operations.every((o) => o.scope) &&
-        s.current.filter((r) => !s.scope.includes(r.id)).every((r) => equal(actual.get(r.id), r)),
+        s.current.filter((r) => !s.scope.includes(r.id)).every((r) => equal(actual.get(r.id), content(r))),
     }),
     actual: [...actual.values()],
     expected: s.target,
@@ -107,8 +110,8 @@ export async function runScenario(s, execute, storage) {
     // scenario-specific structured data with no way to be derived purely from the candidate's own
     // (possibly wrong) actions.
     //
-    // Note on `generation`: it appears only on resources inside `observations` entries (the
-    // candidate's own api.inspect/api.receipt call records) -- never inside `actual`,
+    // Note on `generation`: server values appear in inspect/receipt observations. A caller's
+    // optional ignored value also appears in the recorded create arguments, never in `actual`,
     // `expected`, `requestedTarget`, `initialResources`, or `operations[].before`, all of which
     // stay exactly the {id,parents,payload} shape they always were. A checker does not need
     // `generation` to grade correctly: final-state correctness (derived exactly as before from

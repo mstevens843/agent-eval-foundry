@@ -1,0 +1,379 @@
+{
+  "schemaVersion": 1,
+  "providerCallsMade": 0,
+  "packageDigest": "9bd1c3ae996492793bc3f01264c28a3ed327836f2ae16b7353f8f1571cc0a612",
+  "record": ".local/successor-adaptive-trials-2026-09-11/slots/partial-release-repair/trial-2/real-campaign-frozen/jobs/real-provider/records/partial-release-repair-attempt-1",
+  "filesVerifiedBefore": 897,
+  "filesVerifiedAfter": 897,
+  "issuedContracts": [
+    {
+      "executable": false,
+      "path": "public/SEMANTICS.md",
+      "sha256": "ccacfb1d3d0151823694188a813749b0ae4f3780a1b777f6b5a85c4efcee6816",
+      "size": 3809
+    },
+    {
+      "executable": false,
+      "path": "public/instruction.md",
+      "sha256": "f532c88607122feadba0011f10ecd5eac329af455867874586b949eff121856c",
+      "size": 597
+    },
+    {
+      "executable": false,
+      "path": "public/CHECKER-INPUT.md",
+      "sha256": "1e4f9af2f89d7e9f9d334daa39a5c1db10fcfcf8390fc3d0259dd10cd222f8b9",
+      "size": 2310
+    },
+    {
+      "executable": false,
+      "path": "public/api.d.ts",
+      "sha256": "779ca0e60dfa1a6d9ce0ef2cb7980e1637ed36f22001f9337f64c6e18377d2d8",
+      "size": 1222
+    }
+  ],
+  "grade": {
+    "path": ".local/successor-adaptive-trials-2026-09-11/slots/partial-release-repair/trial-2/real-campaign-frozen/jobs/real-provider/records/partial-release-repair-attempt-1/grade.json",
+    "sha256": "cc7203342cc7a49d98b2512c91d3e6cb21bce877c9e01d830a73818bdd8b399d"
+  },
+  "completion": {
+    "path": ".local/successor-adaptive-trials-2026-09-11/slots/partial-release-repair/trial-2/real-campaign-frozen/jobs/real-provider/records/partial-release-repair-attempt-1/completion.json",
+    "sha256": "0058828ac8217fdfa75afbf0a09375c3e55289b394559bcbc646f702b606408d"
+  },
+  "submission": [
+    {
+      "path": ".local/successor-adaptive-trials-2026-09-11/slots/partial-release-repair/trial-2/real-campaign-frozen/jobs/real-provider/records/partial-release-repair-attempt-1/submission/entry.mjs",
+      "sha256": "c76717123f49d2a9d2231b326fcbfaa2110bb955e81cefd8da87d48b5a899860"
+    },
+    {
+      "path": ".local/successor-adaptive-trials-2026-09-11/slots/partial-release-repair/trial-2/real-campaign-frozen/jobs/real-provider/records/partial-release-repair-attempt-1/submission/checker.mjs",
+      "sha256": "0f57f46bc9cfc6af2c77798e57d867599a11a9bd86a6e815ef482f44ff890b01"
+    }
+  ],
+  "auditSources": [
+    {
+      "path": "scripts/audit-partial-release-trial-two.mjs",
+      "sha256": "188a7d3ac8557d27605e0e2fd6e83ac4393c0d763df130c25866147990fc9ef6"
+    },
+    {
+      "path": "data/partial-release-trial-two-pass-audit/probes.mjs",
+      "sha256": "ab5e403c50f6c3ce6f7b6058611ff8853e23fa74700de7eee543fc7f541c7453"
+    },
+    {
+      "path": "data/partial-release-trial-two-pass-audit/strategies.mjs",
+      "sha256": "dc4a839f33b96531472bbfcd7c44a8665191bdd2f0fb2304d144f67a2a578ba8"
+    }
+  ],
+  "sweep": {
+    "seed": "0x20260911",
+    "providerCallsMade": 0,
+    "freshScenarios": 2028,
+    "labels": {
+      "recorded-service": 65,
+      "recorded-checker-cell": 1105,
+      "submitted-fresh": 2028,
+      "valid-planned": 226,
+      "valid-broad": 226,
+      "valid-idempotent": 226,
+      "fault-wrong-payload": 3,
+      "fault-wrong-parents": 3,
+      "fault-missing-restoration": 3,
+      "fault-extra-scoped": 3,
+      "fault-no-work": 3,
+      "fault-illegal-remove-then-repair": 3,
+      "fault-illegal-create-then-repair": 3,
+      "fault-immutable-edit-then-repair": 3,
+      "fault-out-of-scope-create-noop": 3,
+      "fault-out-of-scope-remove-absent": 3,
+      "fault-out-of-scope-create-new": 3,
+      "fault-non-string-payload-then-repair": 3,
+      "fault-non-array-parents-then-repair": 3,
+      "fault-non-string-parent-then-repair": 3,
+      "fault-self-cycle-then-repair": 3,
+      "fault-abandon-absent-restore": 3,
+      "independent-API": 360
+    },
+    "cellComparisons": 4284,
+    "checkerJudgements": 12856,
+    "positiveCells": 3475,
+    "negativeCells": 809,
+    "baselineCandidatesCorrect": 17,
+    "maxSubmittedApiCalls": 321,
+    "maxCheckerDoubleInvocationMs": 349.24354200000016,
+    "mismatches": [],
+    "authorityDisagreements": []
+  },
+  "protectedService": {
+    "label": "protected-submitted-service",
+    "total": 114,
+    "passed": 114,
+    "failed": 0,
+    "invalid": 0,
+    "evidence": {
+      "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-submitted-service.json",
+      "sha256": "fc933fe232d93d8c61e6bd547a1d2fec2a895ced6c2fa080a2860ddf394ad1f8"
+    }
+  },
+  "protectedStrategies": [
+    {
+      "label": "protected-planned",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-planned.json",
+        "sha256": "4cf839280b5aa83912cd03a70b94ac1c905f4411f5063a448ec8531340b841ae"
+      }
+    },
+    {
+      "label": "protected-broad",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-broad.json",
+        "sha256": "9e5fd7fe76fff76644d8783bfb87168e891debd7ca0d5db220d9d4784aeecebd"
+      }
+    },
+    {
+      "label": "protected-idempotent",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-idempotent.json",
+        "sha256": "db5660bd786dd27e1cb421c47829a31d6578fbb8bfa127f7588ce42ebf41ad94"
+      }
+    },
+    {
+      "label": "protected-wrong-payload",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-wrong-payload.json",
+        "sha256": "a73d87ce567413be26b785c168817ed28020bc2d55b3b17694ad98a4f41795b2"
+      }
+    },
+    {
+      "label": "protected-wrong-parents",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-wrong-parents.json",
+        "sha256": "25469c219328009f5b1a994c1646e01d69ea6acdde58612f8a6e2f38c31d871c"
+      }
+    },
+    {
+      "label": "protected-missing-restoration",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-missing-restoration.json",
+        "sha256": "4ca5014cdb4899361d36d823cb67cb84f1b9b7d6545ebc54e3a9ace433fd367a"
+      }
+    },
+    {
+      "label": "protected-extra-scoped",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-extra-scoped.json",
+        "sha256": "0fc4c177901f8827f10ead260037770c8fa62f9460307217f14d79a346a069e3"
+      }
+    },
+    {
+      "label": "protected-no-work",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-no-work.json",
+        "sha256": "4c1f4f6245120358043189b473029c49eff1bbd0f7ad91e4e65f7a66c0082025"
+      }
+    },
+    {
+      "label": "protected-illegal-remove-then-repair",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-illegal-remove-then-repair.json",
+        "sha256": "559911e427674580018bd57cc0752fb6e9c1653b56e021e5424c91f70b7b1595"
+      }
+    },
+    {
+      "label": "protected-illegal-create-then-repair",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-illegal-create-then-repair.json",
+        "sha256": "41c604b6167bb3854221d207c7d2869b45bf1508be60fd42c1a432a7ae07576b"
+      }
+    },
+    {
+      "label": "protected-immutable-edit-then-repair",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-immutable-edit-then-repair.json",
+        "sha256": "89dac4e9f6fce3d327b8c48254c1a07515c95db50496d4f57208de48183f9bc2"
+      }
+    },
+    {
+      "label": "protected-out-of-scope-create-noop",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-out-of-scope-create-noop.json",
+        "sha256": "7c3b3c2bab0696abd818837f3c40018b828b2081cfa4adb7466fa56403a642fb"
+      }
+    },
+    {
+      "label": "protected-out-of-scope-remove-absent",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-out-of-scope-remove-absent.json",
+        "sha256": "532193d1943eddc72f21583ccb55c06ba3638268d6f100eedc421429e677aa4e"
+      }
+    },
+    {
+      "label": "protected-out-of-scope-create-new",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-out-of-scope-create-new.json",
+        "sha256": "51d00107a328f14e79eb2d3c3cc619800473f900512a73e54c224dc8358d024b"
+      }
+    },
+    {
+      "label": "protected-non-string-payload-then-repair",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-non-string-payload-then-repair.json",
+        "sha256": "b92f4e6bb47905c9e831776d9564a3e548d65b70c00ab52133147b1792d75f00"
+      }
+    },
+    {
+      "label": "protected-non-array-parents-then-repair",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-non-array-parents-then-repair.json",
+        "sha256": "576518d20f701f1ca1e397d95e1d0b73692d8742bd2f118fafe3cb1bccefa9a6"
+      }
+    },
+    {
+      "label": "protected-non-string-parent-then-repair",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-non-string-parent-then-repair.json",
+        "sha256": "d5941ee94797dde83ecf00072ba26d5a41adf6bf988c2eb5dd54e09ff78c5eac"
+      }
+    },
+    {
+      "label": "protected-self-cycle-then-repair",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-self-cycle-then-repair.json",
+        "sha256": "8289fab4eb11b1e48206468a0106c1e94f759b16ea50c3ad8e584b1c205e4386"
+      }
+    },
+    {
+      "label": "protected-abandon-absent-restore",
+      "total": 3,
+      "passed": 2,
+      "failed": 1,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-abandon-absent-restore.json",
+        "sha256": "8c50d1d1c229d39ca62028c1baf5deb8cbf6f403c09a86f8216a803ef27b4892"
+      }
+    },
+    {
+      "label": "protected-generation-roundtrip",
+      "total": 3,
+      "passed": 0,
+      "failed": 3,
+      "invalid": 0,
+      "evidence": {
+        "path": ".local/partial-release-trial-two-pass-audit-2026-09-11-final/protected-generation-roundtrip.json",
+        "sha256": "6f9a8db8fb291a8da90715fcbc3ee75aff872e75fb3b2106f751ab0118e436b2"
+      }
+    }
+  ],
+  "protectedChecker": {
+    "total": 249,
+    "correct": 249,
+    "inputUnchanged": true,
+    "deterministic": true
+  },
+  "generationRoundtrip": [
+    {
+      "uncertain": 0,
+      "independent": {
+        "ok": true,
+        "errors": []
+      },
+      "authorityFailures": [
+        "dependency_order"
+      ],
+      "submittedChecker": false
+    },
+    {
+      "uncertain": 1,
+      "independent": {
+        "ok": true,
+        "errors": []
+      },
+      "authorityFailures": [
+        "dependency_order"
+      ],
+      "submittedChecker": false
+    },
+    {
+      "uncertain": 2,
+      "independent": {
+        "ok": true,
+        "errors": []
+      },
+      "authorityFailures": [
+        "dependency_order"
+      ],
+      "submittedChecker": false
+    }
+  ]
+}

@@ -12,12 +12,21 @@ status is "open" AT SNAPSHOT TIME (the page data). This membership is frozen:
 a row's later status or content drift never removes it from, or adds another
 row to, the population. Never use a live read to decide whether a row belongs;
 only the frozen page data determines membership. Closed and unrelated-tenant
-tickets (at snapshot time) must never be written. Directory resolution is
+tickets (at snapshot time) must never be targets of attempted batch writes,
+including attempts that return CONFLICT or MISSING. Directory resolution is
 tenant-specific: api.resolve({tenant,team}) returns {owner:string}.
+Tenant and ticket IDs are opaque, exact strings. Case, whitespace, and numeric
+or structured-looking text carry no special meaning; do not normalize or decode
+an identity when selecting its directory entry or matching a ticket.
 
 For every selected ticket, set owner to its tenant's resolved target and add
 view.marker to its labels, preserving all other labels and every other field.
-At completion the marker occurs once (labels are sets). api.read({tenant,id})
+At completion the marker occurs once (labels are sets).
+The marker is a completion requirement, not a requirement on every intermediate
+write: ownership may be settled first while preserving the current labels, and
+the marker added by a later write before returning. Label preservation still
+applies to every landed write.
+api.read({tenant,id})
 returns the CURRENT row, which may differ from the frozen page data (see
 below); it is never itself a membership signal.
 api.batch({updates:[{tenant,id,revision,patch:{owner,labels}}]}) returns
@@ -27,6 +36,18 @@ success. A stale revision causes CONFLICT with no effect. Refresh and settle
 conflicts. A selected row is never deleted. At most two conflicts per selected
 row; after that a current-revision patch succeeds. Do not overwrite notes,
 status, revision or other columns. Already-complete rows need no write.
+Every attempted patch, including a conflicting or missing-row attempt, must
+contain an owner string and a labels array, and may contain no other fields.
+Every labels element must be a string, including on non-landed requests, as in
+api.d.ts. Extra fields beside tenant, id, revision and patch on an update request
+are ignored request metadata; only patch fields can change ticket columns.
+The exact-field restriction applies to patch, not to this outer request object.
+Request membership and patch shape apply regardless of the returned status.
+An otherwise valid selected-row request that conflicts has no write effect;
+it need not contain the current labels. Label preservation applies to updates
+that land. The resolved owner is required at completion; a selected ticket may
+temporarily have another string owner if all other rules remain satisfied and
+its correct target owner is restored before returning.
 All operations are synchronous and finish. At most 100 rows, 30 pages and 4
 tenants. Returning a claim does not migrate anything; grader reads its own
 backing state and log. Repeated equivalent updates are allowed but do not
