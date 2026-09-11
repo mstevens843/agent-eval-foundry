@@ -43,6 +43,7 @@ export const tierFor = (path) => {
       "axis-meter.test.ts",
       "import-swebench.test.ts",
       "engineering-integration.test.ts",
+      "integration-exports.test.ts",
       "runtime-readiness.test.ts",
       "report-readonly.test.ts",
       "test-result-diagnostics.test.ts",

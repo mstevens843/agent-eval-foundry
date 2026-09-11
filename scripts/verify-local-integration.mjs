@@ -5,6 +5,7 @@ import { mkdirSync, readFileSync, statfsSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { performance } from "node:perf_hooks";
 import { promisify } from "node:util";
+import { integrationExports } from "./integration-exports.mjs";
 const exec = promisify(execFile);
 const requested = process.argv[2];
 if (!requested) throw Error("usage: verify-local-integration.mjs FRESH_OUTPUT");
@@ -91,7 +92,7 @@ try {
       ...JSON.parse(readFileSync(join(recipient, "package.json"), "utf8")),
     });
   }
-  const exports = packages.map((p) => p.export);
+  const exports = integrationExports(packages);
   await stage("unapproved reservations fail before dispatch", async () => {
     const store = new api.JobStore(join(output, "denied-jobs"));
     try {
